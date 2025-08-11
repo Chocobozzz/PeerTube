@@ -726,9 +726,9 @@
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6517624161149187953" datatype="html">
+      <trans-unit id="6517624161149187953" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ config.instance.name }}"/> is dedicated to sensitive content.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ config.instance.name }}"/> is dedicated to sensitive content.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ config.instance.name }}"/> khusus untuk konten sensitif.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-home.component.html</context>
           <context context-type="linenumber">14,17</context>
@@ -8528,9 +8528,9 @@
           <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3809414664640924954" datatype="html">
+      <trans-unit id="3809414664640924954" datatype="html" xml:space="preserve">
         <source>Video import finished</source>
-        <target/>
+        <target state="translated">Impor video selesai</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">100</context>
@@ -8592,17 +8592,17 @@
           <context context-type="linenumber">107</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2764971902180889905" datatype="html">
+      <trans-unit id="2764971902180889905" datatype="html" xml:space="preserve">
         <source>A new PeerTube version is available</source>
-        <target state="new">A new PeerTube version is available</target>
+        <target state="translated">Versi PeerTube baru tersedia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">108</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2560339336098442670" datatype="html">
+      <trans-unit id="2560339336098442670" datatype="html" xml:space="preserve">
         <source>One of your plugin/theme has a new available version</source>
-        <target state="new">One of your plugin/theme has a new available version</target>
+        <target state="translated">Salah satu plugin/tema kamu ada versi terbarunya</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">109</context>
@@ -8616,25 +8616,25 @@
           <context context-type="linenumber">110</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4190395479539865710" datatype="html">
+      <trans-unit id="4190395479539865710" datatype="html" xml:space="preserve">
         <source>The transcription of your video has been generated</source>
-        <target state="new">The transcription of your video has been generated</target>
+        <target state="translated">Transkrip dari video kamu telah dibuat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">111</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5095562193296630034" datatype="html">
+      <trans-unit id="5095562193296630034" datatype="html" xml:space="preserve">
         <source>Preferences saved</source>
-        <target/>
+        <target state="translated">Pengaturan disimpan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6721822899525405039" datatype="html">
+      <trans-unit id="6721822899525405039" datatype="html" xml:space="preserve">
         <source>People can find you using @<x id="INTERPOLATION" equiv-text="{{ user.username }}"/>@<x id="INTERPOLATION_1" equiv-text="{{ instanceHost }}"/> </source>
-        <target/>
+        <target state="translated">Orang-orang dapat menemukan kamu menggunakan @<x id="INTERPOLATION" equiv-text="{{ user.username }}"/>@<x id="INTERPOLATION_1" equiv-text="{{ instanceHost }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.html</context>
           <context context-type="linenumber">12</context>
@@ -8708,9 +8708,9 @@
           <context context-type="linenumber">14,15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5141290027775290309" datatype="html">
+      <trans-unit id="5141290027775290309" datatype="html" xml:space="preserve">
         <source>There are errors in the configuration:</source>
-        <target state="new">There are errors in the configuration:</target>
+        <target state="translated">Ada kesalahan dalam konfigurasi:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/admin-save-bar.component.html</context>
           <context context-type="linenumber">18</context>
@@ -8796,9 +8796,9 @@
           <context context-type="linenumber">214</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7846454630805382470" datatype="html">
+      <trans-unit id="7846454630805382470" datatype="html" xml:space="preserve">
         <source>Cannot parse subtitles</source>
-        <target state="new">Cannot parse subtitles</target>
+        <target state="translated">Tidak dapat membaca takarir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.ts</context>
           <context context-type="linenumber">318</context>
@@ -8812,9 +8812,9 @@
           <context context-type="linenumber">345</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4967231969832964676" datatype="html">
+      <trans-unit id="4967231969832964676" datatype="html" xml:space="preserve">
         <source>Profile updated.</source>
-        <target/>
+        <target state="translated">Profil diperbarui.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.ts</context>
           <context context-type="linenumber">63</context>
@@ -11279,17 +11279,17 @@
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3642535017283477339" datatype="html">
+      <trans-unit id="3642535017283477339" datatype="html" xml:space="preserve">
         <source>Medium (4-10 min)</source>
-        <target/>
+        <target state="translated">Medium (4-10 mnt)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.ts</context>
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6613870447286561244" datatype="html">
+      <trans-unit id="6613870447286561244" datatype="html" xml:space="preserve">
         <source>Long (&gt; 10 min)</source>
-        <target/>
+        <target state="translated">Panjang (&gt; 10 mnt)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.ts</context>
           <context context-type="linenumber">70</context>
@@ -11303,9 +11303,9 @@
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7944277186358179990" datatype="html">
+      <trans-unit id="7944277186358179990" datatype="html" xml:space="preserve">
         <source>Publish date</source>
-        <target/>
+        <target state="translated">Tanggal penerbitan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.ts</context>
           <context context-type="linenumber">81</context>
@@ -11375,9 +11375,9 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="761579517995454927" datatype="html">
+      <trans-unit id="761579517995454927" datatype="html" xml:space="preserve">
         <source>on the vidiverse</source>
-        <target/>
+        <target state="translated">di vidiverse</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">8</context>
@@ -11391,17 +11391,17 @@
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="180660177324430106" datatype="html">
+      <trans-unit id="180660177324430106" datatype="html" xml:space="preserve">
         <source>Filters</source>
-        <target state="new"> Filters </target>
+        <target state="translated">Filter</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">20,21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2236371857137398396" datatype="html">
+      <trans-unit id="2236371857137398396" datatype="html" xml:space="preserve">
         <source>No results found</source>
-        <target/>
+        <target state="translated">Tidak ada hasil yang ditemukan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">35</context>
@@ -11455,9 +11455,9 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2770947245861951784" datatype="html">
+      <trans-unit id="2770947245861951784" datatype="html" xml:space="preserve">
         <source>Signup is not enabled on this instance.</source>
-        <target state="new">Signup is not enabled on this instance.</target>
+        <target state="translated">Pendaftaran tidak diaktifkan di peladen ini.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">4</context>
@@ -11503,25 +11503,25 @@
           <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3071761663064320665" datatype="html">
+      <trans-unit id="3071761663064320665" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Create<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your first channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new"><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Create<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your first channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Buat<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>kanal pertamamu<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">77,79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3761381527105312450" datatype="html">
+      <trans-unit id="3761381527105312450" datatype="html" xml:space="preserve">
         <source>I don't want to create a channel</source>
-        <target state="new">I don't want to create a channel</target>
+        <target state="translated">Saya tidak ingin membuat kanal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">91,92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1792963373738226329" datatype="html">
+      <trans-unit id="1792963373738226329" datatype="html" xml:space="preserve">
         <source>You will be able to create a channel later</source>
-        <target state="new">You will be able to create a channel later</target>
+        <target state="translated">Kamu dapat membuat kanal nanti waktu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">94,95</context>
@@ -11551,9 +11551,9 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="27494409477574248" datatype="html">
+      <trans-unit id="27494409477574248" datatype="html" xml:space="preserve">
         <source>Registration reason is required.</source>
-        <target state="new">Registration reason is required.</target>
+        <target state="translated">Alasan pendaftaran diperlukan.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">14</context>
@@ -11591,9 +11591,9 @@
           <context context-type="linenumber">7,8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4088688473818160303" datatype="html">
+      <trans-unit id="4088688473818160303" datatype="html" xml:space="preserve">
         <source>Why create an account?</source>
-        <target state="new">Why create an account?</target>
+        <target state="translated">Kenapa buat akun?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">12,14</context>
@@ -24234,17 +24234,17 @@
           <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8585240607880065845" datatype="html">
+      <trans-unit id="8585240607880065845" datatype="html" xml:space="preserve">
         <source>More information/options</source>
-        <target state="new">More information/options</target>
+        <target state="translated">Lebih banyak informasi/pilihan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/video-files-download.component.html</context>
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6712332946289982150" datatype="html">
+      <trans-unit id="6712332946289982150" datatype="html" xml:space="preserve">
         <source>Less information/options</source>
-        <target state="new">Less information/options</target>
+        <target state="translated">Lebih sedikit informasi/pilihan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/video-files-download.component.html</context>
           <context context-type="linenumber">119</context>
@@ -24302,17 +24302,17 @@
           <context context-type="linenumber">71,72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3628699893924130182" datatype="html">
+      <trans-unit id="3628699893924130182" datatype="html" xml:space="preserve">
         <source>User export is not enabled by your administrator.</source>
-        <target state="new">User export is not enabled by your administrator.</target>
+        <target state="translated">Ekspor per pengguna tidak diaktifkan oleh administrator.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">75,77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3775513643932382075" datatype="html">
+      <trans-unit id="3775513643932382075" datatype="html" xml:space="preserve">
         <source>Archive settings</source>
-        <target state="new">Archive settings</target>
+        <target state="translated">Pengaturan arsip</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">83,85</context>
@@ -24326,9 +24326,9 @@
           <context context-type="linenumber">93,94</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1865500141682414508" datatype="html">
+      <trans-unit id="1865500141682414508" datatype="html" xml:space="preserve">
         <source>Include video files in archive file</source>
-        <target state="new">Include video files in archive file</target>
+        <target state="translated">Masukkan berkas video ke berkas arsip</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">100,102</context>
@@ -24350,9 +24350,9 @@
           <context context-type="linenumber">104,105</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1662178629537553910" datatype="html">
+      <trans-unit id="1662178629537553910" datatype="html" xml:space="preserve">
         <source>Request an archive</source>
-        <target state="new">Request an archive</target>
+        <target state="translated">Minta arsip</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">117</context>
@@ -24390,17 +24390,17 @@
           <context context-type="linenumber">13,17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2367276729368583390" datatype="html">
+      <trans-unit id="2367276729368583390" datatype="html" xml:space="preserve">
         <source>The import process will automatically:</source>
-        <target state="new">The import process will automatically:</target>
+        <target state="translated">Proses impor akan secara otomatis:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">17,19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3383933587008035091" datatype="html">
+      <trans-unit id="3383933587008035091" datatype="html" xml:space="preserve">
         <source>Update your account metadata (display name, description, avatar...)</source>
-        <target state="new">Update your account metadata (display name, description, avatar...)</target>
+        <target state="translated">Perbarui metadata akunmu (nama tampilan, deskripsi, avatar...)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">20,21</context>
@@ -24470,9 +24470,9 @@
           <context context-type="linenumber">28,31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3920743519289818329" datatype="html">
+      <trans-unit id="3920743519289818329" datatype="html" xml:space="preserve">
         <source>The following data objects are not imported:</source>
-        <target state="new">The following data objects are not imported:</target>
+        <target state="translated">Data berikut tidak dapat diimpor:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">31,33</context>
@@ -24542,17 +24542,17 @@
           <context context-type="linenumber">79,81</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1842877412269588224" datatype="html">
+      <trans-unit id="1842877412269588224" datatype="html" xml:space="preserve">
         <source>Your archive file is not uploaded yet, are you sure you want to leave this page?</source>
-        <target state="new">Your archive file is not uploaded yet, are you sure you want to leave this page?</target>
+        <target state="translated">Berkas arsipmu belum diunggah, apakah yakin ingin meninggalkan halaman ini?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.ts</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1335600007725669502" datatype="html">
+      <trans-unit id="1335600007725669502" datatype="html" xml:space="preserve">
         <source>Cannot import this file as your video quota would be exceeded (import size: <x id="PH" equiv-text="fileSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</source>
-        <target state="new">Cannot import this file as your video quota would be exceeded (import size: <x id="PH" equiv-text="fileSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
+        <target state="translated">Tidak dapat mengimpor berkas ini karena batas kuota video kamu akan terlampaui (ukuran impor: <x id="PH" equiv-text="fileSizeBytes"/>, terpakai: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, kuota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.ts</context>
           <context context-type="linenumber">122</context>
@@ -24946,17 +24946,17 @@
           <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5722034318470457785" datatype="html">
+      <trans-unit id="5722034318470457785" datatype="html" xml:space="preserve">
         <source>Your video file is being processed.</source>
-        <target state="new">Your video file is being processed.</target>
+        <target state="translated">Berkas videomu sedang diproses.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5489245301010887885" datatype="html">
+      <trans-unit id="5489245301010887885" datatype="html" xml:space="preserve">
         <source>This can take a while and some features may not be available until it is complete.</source>
-        <target state="new">This can take a while and some features may not be available until it is complete.</target>
+        <target state="translated">Ini mungkin akan memakan waktu dan beberapa fitur mungkin tidak akan tersedia hingga selesai.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">10</context>
@@ -25022,9 +25022,9 @@
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8780054161177843365" datatype="html">
+      <trans-unit id="8780054161177843365" datatype="html" xml:space="preserve">
         <source>The video is being moved to the file system.</source>
-        <target state="new">The video is being moved to the file system.</target>
+        <target state="translated">Video sedang dipindahkan ke sistem berkas.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">44</context>
