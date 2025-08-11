@@ -1,7 +1,8 @@
 import videojs from 'video.js'
+import { VideojsPlayer, VideojsPlugin } from '../../types'
 import { PeerTubeDockComponent } from './peertube-dock-component'
 
-const Plugin = videojs.getPlugin('plugin')
+const Plugin = videojs.getPlugin('plugin') as typeof VideojsPlugin
 
 export type PeerTubeDockPluginOptions = {
   title?: string
@@ -12,8 +13,8 @@ export type PeerTubeDockPluginOptions = {
 class PeerTubeDockPlugin extends Plugin {
   declare private dockComponent: PeerTubeDockComponent
 
-  constructor (player: videojs.Player, options: videojs.PlayerOptions & PeerTubeDockPluginOptions) {
-    super(player, options)
+  constructor (player: VideojsPlayer, options: PeerTubeDockPluginOptions) {
+    super(player)
 
     player.ready(() => {
       player.addClass('peertube-dock')

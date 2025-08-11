@@ -1,13 +1,14 @@
 import { timeToInt } from '@peertube/peertube-core-utils'
-import videojs, { VideoJsPlayer } from 'video.js'
+import videojs from 'video.js'
+import { VideojsTimeTooltip } from '../../types'
 
-const TimeToolTip = videojs.getComponent('TimeTooltip') as any // FIXME: typings don't have write method
+const TimeToolTip = videojs.getComponent('TimeTooltip') as typeof VideojsTimeTooltip
 
 class TimeTooltip extends TimeToolTip {
   declare private currentTimecode: string
 
   write (timecode: string) {
-    const player: VideoJsPlayer = this.player()
+    const player = this.player()
 
     if (player.usingPlugin('chapters')) {
       if (timecode === this.currentTimecode) return

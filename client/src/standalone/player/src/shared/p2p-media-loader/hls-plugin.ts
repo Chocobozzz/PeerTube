@@ -1,12 +1,13 @@
 // Thanks https://github.com/streamroot/videojs-hlsjs-plugin
 // We duplicated this plugin to choose the hls.js version we want, because streamroot only provide a bundled file
 
+import { omit } from '@peertube/peertube-core-utils'
 import { logger } from '@root-helpers/logger'
 import Hlsjs, { ErrorData, Level, LevelSwitchingData, ManifestParsedData } from 'hls.js'
-import videojs from 'video.js'
-import { HLSPluginOptions, HlsjsConfigHandlerOptions, PeerTubeResolution, VideoJSTechHLS } from '../../types'
 import { HlsJsP2PEngine, HlsWithP2PInstance } from 'p2p-media-loader-hlsjs'
-import { omit } from '@peertube/peertube-core-utils'
+import videojs from 'video.js'
+import Tech, { SourceObject } from 'video.js/dist/types/tech/tech'
+import { HLSPluginOptions, HlsjsConfigHandlerOptions, PeerTubeResolution, VideoJSTechHLS, VideojsPlayer, VideojsPlugin } from '../../types'
 
 const HlsWithP2P = HlsJsP2PEngine.injectMixin(Hlsjs)
 
@@ -37,7 +38,7 @@ const registerSourceHandler = function (vjs: typeof videojs) {
 
   alreadyRegistered = true // FIXME: typings
   ;(html5 as any).registerSourceHandler({
-    canHandleSource: function (source: videojs.Tech.SourceObject) {
+    canHandleSource: function (source: SourceObject) {
       const hlsTypeRE = /^application\/x-mpegURL|application\/vnd\.apple\.mpegurl$/i
       const hlsExtRE = /\.m3u8/i
 
@@ -47,7 +48,7 @@ const registerSourceHandler = function (vjs: typeof videojs) {
       return ''
     },
 
-    handleSource: function (source: videojs.Tech.SourceObject, tech: VideoJSTechHLS) {
+    handleSource: function (source: SourceObject, tech: VideoJSTechHLS) {
       if (tech.hlsProvider) {
         tech.hlsProvider.dispose()
       }
@@ -64,11 +65,11 @@ const registerSourceHandler = function (vjs: typeof videojs) {
 // HLS options plugin
 // ---------------------------------------------------------------------------
 
-const Plugin = videojs.getPlugin('plugin')
+const Plugin = videojs.getPlugin('plugin') as typeof VideojsPlugin
 
 class HLSJSConfigHandler extends Plugin {
-  constructor (player: videojs.Player, options: HlsjsConfigHandlerOptions) {
-    super(player, options)
+  constructor (player: VideojsPlayer, options: HlsjsConfigHandlerOptions) {
+    super(player)
 
     if (!options) return
 
@@ -109,9 +110,9 @@ videojs.registerPlugin('hlsjs', HLSJSConfigHandler)
 export class Html5Hlsjs {
   private readonly videoElement: HTMLVideoElement
   private readonly errorCounts: ErrorCounts = {}
-  private readonly player: videojs.Player
-  private readonly tech: videojs.Tech
-  private readonly source: videojs.Tech.SourceObject
+  private readonly player: VideojsPlayer
+  private readonly tech: Tech
+  private readonly source: SourceObject
   private readonly vjs: typeof videojs
 
   private maxNetworkErrorRecovery = 5
@@ -134,7 +135,7 @@ export class Html5Hlsjs {
 
   private audioMode = false
 
-  constructor (vjs: typeof videojs, source: videojs.Tech.SourceObject, tech: videojs.Tech) {
+  constructor (vjs: typeof videojs, source: SourceObject, tech: Tech) {
     this.vjs = vjs
     this.source = source
 
@@ -142,7 +143,7 @@ export class Html5Hlsjs {
     ;(this.tech as any).name_ = 'Hlsjs'
 
     this.videoElement = tech.el() as HTMLVideoElement
-    this.player = vjs((tech.options_ as any).playerId)
+    this.player = vjs(tech.options_.playerId) as VideojsPlayer
 
     this.handlers.error = event => {
       let errorTxt: string

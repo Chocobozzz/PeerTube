@@ -1,8 +1,9 @@
 import videojs from 'video.js'
-import { PlayerNetworkInfo } from '../../types'
+import { PlayerNetworkInfo, VideojsButton } from '../../types'
 import { bytes } from '../common'
 
-const Button = videojs.getComponent('Button')
+const Button = videojs.getComponent('Button') as typeof VideojsButton
+
 class P2PInfoButton extends Button {
   createEl () {
     const div = videojs.dom.createEl('div', { className: 'vjs-peertube' })
@@ -87,7 +88,7 @@ class P2PInfoButton extends Button {
       subDivP2P.className = 'vjs-peertube-displayed'
     })
 
-    this.player_.on('network-info', (_event, data: PlayerNetworkInfo) => {
+    this.player_.on('network-info', (_event: any, data: PlayerNetworkInfo) => {
       if (data.p2p) return
 
       if (data.source === 'web-video') subDivHttpText.textContent = 'HTTP'

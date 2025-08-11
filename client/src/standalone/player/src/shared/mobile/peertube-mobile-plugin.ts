@@ -1,11 +1,14 @@
+import { logger } from '@root-helpers/logger'
 import debug from 'debug'
 import videojs from 'video.js'
-import { logger } from '@root-helpers/logger'
+import { VideojsPlayer, VideojsPlugin } from '../../types'
 import { PeerTubeMobileButtons } from './peertube-mobile-buttons'
 
 const debugLogger = debug('peertube:player:mobile')
 
-const Plugin = videojs.getPlugin('plugin')
+const Plugin = videojs.getPlugin('plugin') as typeof VideojsPlugin
+
+type SeekBar = VideojsPlayer['controlBar']['progressControl']['seekBar']
 
 class PeerTubeMobilePlugin extends Plugin {
   private static readonly DOUBLE_TAP_DELAY_MS = 250
@@ -29,10 +32,10 @@ class PeerTubeMobilePlugin extends Plugin {
   declare private sliderActiveHandler: () => void
   declare private sliderInactiveHandler: () => void
 
-  declare private seekBar: videojs.Component
+  declare private seekBar: SeekBar
 
-  constructor (player: videojs.Player, options: videojs.PlayerOptions) {
-    super(player, options)
+  constructor (player: VideojsPlayer) {
+    super(player)
 
     this.seekAmount = 0
 
@@ -45,16 +48,14 @@ class PeerTubeMobilePlugin extends Plugin {
 
     this.peerTubeMobileButtons = player.addChild('PeerTubeMobileButtons', { reportTouchActivity: false }) as PeerTubeMobileButtons
 
-    if (!this.player.options_.userActions) this.player.options_.userActions = {};
-
-    // FIXME: typings
-    (this.player.options_.userActions as any).click = false
+    if (!this.player.options_.userActions) this.player.options_.userActions = {}
+    this.player.options_.userActions.click = false
     this.player.options_.userActions.doubleClick = false
 
     this.onPlayHandler = () => this.initTouchStartEvents()
     this.player.one('play', this.onPlayHandler)
 
-    this.seekBar = this.player.getDescendant([ 'controlBar', 'progressControl', 'seekBar' ])
+    this.seekBar = this.player.getDescendant([ 'controlBar', 'progressControl', 'seekBar' ]) as SeekBar
 
     this.sliderActiveHandler = () => this.player.addClass('vjs-mobile-sliding')
     this.sliderInactiveHandler = () => this.player.removeClass('vjs-mobile-sliding')
@@ -76,10 +77,9 @@ class PeerTubeMobilePlugin extends Plugin {
 
   private handleFullscreenRotation () {
     this.onFullScreenChangeHandler = () => {
-      if (!this.player.isFullscreen() || this.isPortraitVideo()) return;
-
       // https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1615
-      (screen.orientation as any).lock('landscape')
+      if (!this.player.isFullscreen() || this.isPortraitVideo()) return
+      ;(screen.orientation as any).lock('landscape')
         .catch((err: Error) => logger.error('Cannot lock screen to landscape.', err))
     }
 
@@ -151,7 +151,7 @@ class PeerTubeMobilePlugin extends Plugin {
   private onDoubleTap (event: TouchEvent) {
     const playerWidth = this.player.currentWidth()
 
-    const rect = this.findPlayerTarget((event.target as HTMLElement)).getBoundingClientRect()
+    const rect = this.findPlayerTarget(event.target as HTMLElement).getBoundingClientRect()
     const offsetX = event.targetTouches[0].pageX - rect.left
 
     debugLogger('Calculating double tap zone (player width: %d, offset X: %d)', playerWidth, offsetX)

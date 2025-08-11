@@ -1,8 +1,9 @@
 import videojs from 'video.js'
-import { PeerTubeNSFWInfoComponent } from './peertube-nsfw-info-component'
+import { VideojsPlayer, VideojsPlugin } from '../../types'
 import { PeerTubeNSFWDetailsComponent } from './peertube-nsfw-details-component'
+import { PeerTubeNSFWInfoComponent } from './peertube-nsfw-info-component'
 
-const Plugin = videojs.getPlugin('plugin')
+const Plugin = videojs.getPlugin('plugin') as typeof VideojsPlugin
 
 export type PeerTubeNSFWPluginOptions = {
   summary: string
@@ -13,8 +14,8 @@ class PeerTubeNSFWPlugin extends Plugin {
   declare private nsfwInfoComponent: PeerTubeNSFWInfoComponent
   declare private nsfwDetailsComponent: PeerTubeNSFWDetailsComponent
 
-  constructor (player: videojs.Player, options: videojs.PlayerOptions & PeerTubeNSFWPluginOptions) {
-    super(player, options)
+  constructor (player: VideojsPlayer, options: PeerTubeNSFWPluginOptions) {
+    super(player)
 
     player.ready(() => {
       player.addClass('peertube-nsfw')

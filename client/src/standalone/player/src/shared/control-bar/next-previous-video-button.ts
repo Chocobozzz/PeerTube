@@ -1,12 +1,12 @@
 import videojs from 'video.js'
-import { NextPreviousVideoButtonOptions } from '../../types'
+import { NextPreviousVideoButtonOptions, VideojsButton, VideojsButtonOptions, VideojsPlayer } from '../../types'
 
-const Button = videojs.getComponent('Button')
+const Button = videojs.getComponent('Button') as typeof VideojsButton
 
 class NextPreviousVideoButton extends Button {
-  declare options_: NextPreviousVideoButtonOptions & videojs.ComponentOptions
+  declare options_: NextPreviousVideoButtonOptions & VideojsButtonOptions
 
-  constructor (player: videojs.Player, options?: NextPreviousVideoButtonOptions & videojs.ComponentOptions) {
+  constructor (player: VideojsPlayer, options?: NextPreviousVideoButtonOptions & VideojsButtonOptions) {
     super(player, options)
 
     this.player().on('video-change', () => {

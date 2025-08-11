@@ -1,17 +1,17 @@
 import videojs from 'video.js'
-import { ContextMenuItemOptions } from '../../types'
+import { ContextMenuItemOptions, VideojsComponentOptions, VideojsMenuItem, VideojsPlayer } from '../../types'
 
-const MenuItem = videojs.getComponent('MenuItem')
+const MenuItem = videojs.getComponent('MenuItem') as typeof VideojsMenuItem
 
 class ContextMenuItem extends MenuItem {
   declare options_: ContextMenuItemOptions
 
   // eslint-disable-next-line @typescript-eslint/no-useless-constructor
-  constructor (player: videojs.Player, options: ContextMenuItemOptions) {
+  constructor (player: VideojsPlayer, options: VideojsComponentOptions & ContextMenuItemOptions) {
     super(player, options)
   }
 
-  handleClick (e: videojs.EventTarget.Event) {
+  handleClick (e: Event) {
     super.handleClick(e)
 
     this.options_.listener(e)

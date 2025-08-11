@@ -1,6 +1,7 @@
 import videojs from 'video.js'
+import { VideojsComponent, VideojsComponentOptions, VideojsPlayer } from '../../types'
 
-const Component = videojs.getComponent('Component')
+const Component = videojs.getComponent('Component') as typeof VideojsComponent
 
 export type PeerTubeDockComponentOptions = {
   title?: string
@@ -9,10 +10,10 @@ export type PeerTubeDockComponentOptions = {
 }
 
 class PeerTubeDockComponent extends Component {
-  declare options_: videojs.ComponentOptions & PeerTubeDockComponentOptions
+  declare options_: VideojsComponentOptions & PeerTubeDockComponentOptions
 
   // eslint-disable-next-line @typescript-eslint/no-useless-constructor
-  constructor (player: videojs.Player, options: videojs.ComponentOptions & PeerTubeDockComponentOptions) {
+  constructor (player: VideojsPlayer, options: VideojsComponentOptions & PeerTubeDockComponentOptions) {
     super(player, options)
   }
 

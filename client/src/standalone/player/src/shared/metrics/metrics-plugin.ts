@@ -1,12 +1,12 @@
-import debug from 'debug'
-import videojs from 'video.js'
 import { PlaybackMetricCreate, VideoResolutionType } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
-import { MetricsPluginOptions, PlayerNetworkInfo } from '../../types'
+import debug from 'debug'
+import videojs from 'video.js'
+import { MetricsPluginOptions, PlayerNetworkInfo, VideojsPlayer, VideojsPlugin } from '../../types'
 
 const debugLogger = debug('peertube:player:metrics')
 
-const Plugin = videojs.getPlugin('plugin')
+const Plugin = videojs.getPlugin('plugin') as typeof VideojsPlugin
 
 class MetricsPlugin extends Plugin {
   declare options_: MetricsPluginOptions
@@ -27,7 +27,7 @@ class MetricsPlugin extends Plugin {
 
   declare private metricsInterval: any
 
-  constructor (player: videojs.Player, options: MetricsPluginOptions) {
+  constructor (player: VideojsPlayer, options: MetricsPluginOptions) {
     super(player)
 
     this.options_ = options
@@ -154,7 +154,7 @@ class MetricsPlugin extends Plugin {
   }
 
   private trackBytes () {
-    this.player.on('network-info', (_event, data: PlayerNetworkInfo) => {
+    this.player.on('network-info', (_event: any, data: PlayerNetworkInfo) => {
       this.downloadedBytesHTTP += Math.max(Math.round(data.http.downloaded - (this.lastPlayerNetworkInfo?.http.downloaded || 0)), 0)
       this.downloadedBytesP2P += Math.max(Math.round((data.p2p?.downloaded || 0) - (this.lastPlayerNetworkInfo?.p2p?.downloaded || 0)), 0)
 

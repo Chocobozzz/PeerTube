@@ -5,7 +5,7 @@ import { TranslationsManager } from '@root-helpers/translations-manager'
 import { copyToClipboard } from '@root-helpers/utils'
 import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
 import { isMobile } from '@root-helpers/web-browser'
-import videojs, { VideoJsPlayer } from 'video.js'
+import videojs from 'video.js'
 import { saveAverageBandwidth } from './peertube-player-local-storage'
 import './shared/bezels/bezels-plugin'
 import './shared/context-menu'
@@ -20,12 +20,12 @@ import './shared/control-bar/theater-button'
 import './shared/control-bar/time-tooltip'
 import './shared/dock/peertube-dock-component'
 import './shared/dock/peertube-dock-plugin'
-import './shared/nsfw/peertube-nsfw-info-component'
-import './shared/nsfw/peertube-nsfw-plugin'
 import './shared/hotkeys/peertube-hotkeys-plugin'
 import './shared/metrics/metrics-plugin'
 import './shared/mobile/peertube-mobile-buttons'
 import './shared/mobile/peertube-mobile-plugin'
+import './shared/nsfw/peertube-nsfw-info-component'
+import './shared/nsfw/peertube-nsfw-plugin'
 import './shared/p2p-media-loader/hls-plugin'
 import './shared/p2p-media-loader/p2p-media-loader-plugin'
 import './shared/peertube/peertube-plugin'
@@ -45,7 +45,15 @@ import './shared/stats/stats-plugin'
 import './shared/upnext/end-card'
 import './shared/upnext/upnext-plugin'
 import './shared/web-video/web-video-plugin'
-import { PeerTubePlayerConstructorOptions, PeerTubePlayerLoadOptions, PlayerNetworkInfo, VideoJSPluginOptions } from './types'
+import {
+  PeerTubePlayerConstructorOptions,
+  PeerTubePlayerLoadOptions,
+  PlayerNetworkInfo,
+  VideojsAutoplay,
+  VideojsPlayer,
+  VideojsPlayerOptions,
+  VideoJSPluginOptions
+} from './types'
 
 const CaptionsButton = videojs.getComponent('CaptionsButton') as any
 // Change Captions to Subtitles/CC
@@ -70,7 +78,7 @@ export class PeerTubePlayer {
 
   private videojsDecodeErrors = 0
 
-  private player: VideoJsPlayer
+  private player: VideojsPlayer
 
   private currentLoadOptions: PeerTubePlayerLoadOptions
 
@@ -210,7 +218,7 @@ export class PeerTubePlayer {
       this.getVideojsOptions()
     )
 
-    this.player = videojs(this.options.playerElement(), videojsOptions)
+    this.player = videojs(this.options.playerElement(), videojsOptions) as VideojsPlayer
 
     this.player.ready(() => {
       if (!isNaN(+this.options.playbackRate)) {
@@ -233,7 +241,7 @@ export class PeerTubePlayer {
       this.player.on('video-change', () => alreadyFallback = false)
       this.player.on('error', () => handleError())
 
-      this.player.on('network-info', (_, data: PlayerNetworkInfo) => {
+      this.player.on('network-info', (_: any, data: PlayerNetworkInfo) => {
         if (data.source !== 'p2p-media-loader' || isNaN(data.bandwidthEstimate)) return
 
         saveAverageBandwidth(data.bandwidthEstimate)
@@ -366,7 +374,7 @@ export class PeerTubePlayer {
     })
   }
 
-  getVideojsOptions (): videojs.PlayerOptions {
+  getVideojsOptions (): VideojsPlayerOptions {
     const html5 = {
       preloadTextTracks: false,
       // Prevent a bug on iOS where the text tracks added by peertube plugin are removed on play
@@ -422,7 +430,7 @@ export class PeerTubePlayer {
       html5,
 
       // We don't use text track settings for now
-      textTrackSettings: false as any, // FIXME: typings
+      textTrackSettings: false,
       controls: this.options.controls !== undefined ? this.options.controls : true,
       loop: this.options.loop !== undefined ? this.options.loop : false,
 
@@ -441,18 +449,20 @@ export class PeerTubePlayer {
       plugins,
 
       controlBar: {
-        children: controlBarOptionsBuilder.getChildrenOptions() as any // FIXME: typings
+        children: controlBarOptionsBuilder.getChildrenOptions()
       },
 
       language: this.options.language && !isDefaultLocale(this.options.language)
         ? this.options.language
-        : undefined
-    }
+        : undefined,
+
+      enableSmoothSeeking: true
+    } satisfies VideojsPlayerOptions
 
     return videojsOptions
   }
 
-  private getAutoPlayValue (autoplay: boolean): videojs.Autoplay {
+  private getAutoPlayValue (autoplay: boolean): VideojsAutoplay {
     if (autoplay !== true) return false
 
     return this.currentLoadOptions.forceAutoplay
@@ -500,14 +510,14 @@ export class PeerTubePlayer {
       const player = this.player
 
       const shortUUID = self.currentLoadOptions.videoShortUUID
-      const isLoopEnabled = player.options_['loop']
+      const isLoopEnabled = player.options_.loop
 
       const items = [
         {
           icon: 'repeat',
           label: player.localize('Play in loop') + (isLoopEnabled ? '<span class="vjs-icon-tick-white"></span>' : ''),
           listener: function () {
-            player.options_['loop'] = !isLoopEnabled
+            player.options_.loop = !isLoopEnabled
           }
         },
         {

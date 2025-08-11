@@ -1,5 +1,5 @@
 import videojs from 'video.js'
-import { UpNextPluginOptions } from '../../types'
+import { UpNextPluginOptions, VideojsComponent, VideojsComponentOptions, VideojsPlayer } from '../../types'
 
 function getMainTemplate (options: EndCardOptions) {
   return `
@@ -24,13 +24,14 @@ function getMainTemplate (options: EndCardOptions) {
   `
 }
 
-export interface EndCardOptions extends videojs.ComponentOptions, UpNextPluginOptions {
+export interface EndCardOptions extends VideojsComponentOptions, UpNextPluginOptions {
   cancelText: string
   headText: string
   suspendedText: string
 }
 
-const Component = videojs.getComponent('Component')
+const Component = videojs.getComponent('Component') as typeof VideojsComponent
+
 export class EndCard extends Component {
   declare options_: EndCardOptions
 
@@ -53,7 +54,7 @@ export class EndCard extends Component {
   declare private onEndedHandler: () => void
   declare private onPlayingHandler: () => void
 
-  constructor (player: videojs.Player, options: EndCardOptions) {
+  constructor (player: VideojsPlayer, options: EndCardOptions) {
     super(player, options)
 
     this.dashOffsetTotal = 586

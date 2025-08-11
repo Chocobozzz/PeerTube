@@ -1,10 +1,11 @@
 import videojs from 'video.js'
-import { StoryboardOptions } from '../../types'
+import { StoryboardOptions, VideojsPlayer, VideojsPlugin } from '../../types'
+import Tech from 'video.js/dist/types/tech/tech'
 
 // Big thanks to this beautiful plugin: https://github.com/phloxic/videojs-sprite-thumbnails
 // Adapted to respect peertube player style
 
-const Plugin = videojs.getPlugin('plugin')
+const Plugin = videojs.getPlugin('plugin') as typeof VideojsPlugin
 
 class StoryboardPlugin extends Plugin {
   declare private url: string
@@ -14,9 +15,9 @@ class StoryboardPlugin extends Plugin {
 
   declare private cached: boolean
 
-  declare private mouseTimeTooltip: videojs.MouseTimeDisplay
-  declare private seekBar: { el(): HTMLElement, mouseTimeDisplay: any, playProgressBar: any }
-  declare private progress: any
+  declare private mouseTimeTooltip: VideojsPlayer['controlBar']['progressControl']['seekBar']['mouseTimeDisplay']['timeTooltip']
+  declare private seekBar: VideojsPlayer['controlBar']['progressControl']['seekBar']
+  declare private progress: VideojsPlayer['controlBar']['progressControl']
 
   declare private spritePlaceholder: HTMLElement
 
@@ -26,8 +27,8 @@ class StoryboardPlugin extends Plugin {
 
   declare private onReadyOrLoadstartHandler: (event: { type: 'ready' }) => void
 
-  constructor (player: videojs.Player, options: videojs.ComponentOptions & StoryboardOptions) {
-    super(player, options)
+  constructor (player: VideojsPlayer, options: StoryboardOptions) {
+    super(player)
 
     this.url = options.url
     this.height = options.height
@@ -46,7 +47,7 @@ class StoryboardPlugin extends Plugin {
   }
 
   init () {
-    const controls = this.player.controlBar as any
+    const controls = this.player.controlBar
 
     // default control bar component tree is expected
     // https://docs.videojs.com/tutorial-components.html#default-component-tree
@@ -60,7 +61,8 @@ class StoryboardPlugin extends Plugin {
 
     this.onReadyOrLoadstartHandler = event => {
       if (event.type !== 'ready') {
-        const spriteSource = this.player.currentSources().find(source => {
+        // FIXME: typings
+        const spriteSource = (this.player.currentSources() as unknown as Tech[]).find(source => {
           return Object.prototype.hasOwnProperty.call(source, 'storyboard')
         }) as any
         const spriteOpts = spriteSource?.['storyboard'] as StoryboardOptions
@@ -97,7 +99,7 @@ class StoryboardPlugin extends Plugin {
       if (!this.cached) {
         this.sprites[this.url] = videojs.dom.createEl('img', {
           src: this.url
-        })
+        }) as HTMLImageElement
       }
       this.progress.on(spriteEvents, this.boundedHijackMouseTooltip)
     } else {

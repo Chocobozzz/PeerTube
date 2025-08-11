@@ -1,7 +1,7 @@
 import { LiveVideoLatencyModeType, VideoChapter, VideoFile } from '@peertube/peertube-models'
 import { PluginsManager } from '@root-helpers/plugins-manager'
 import { PeerTubeDockPluginOptions } from '../shared/dock/peertube-dock-plugin'
-import { PlaylistPluginOptions, VideoJSCaption, VideoJSStoryboard } from './peertube-videojs-typings'
+import { PlaylistPluginOptions, VideoJSCaption, VideojsPlayer, VideoJSStoryboard } from './peertube-videojs-typings'
 
 export type PlayerMode = 'web-video' | 'p2p-media-loader'
 
@@ -106,7 +106,7 @@ export type PeerTubePlayerLoadOptions = {
 
   upnext?: {
     isEnabled: () => boolean
-    isSuspended: (player: videojs.VideoJsPlayer) => boolean
+    isSuspended: (player: VideojsPlayer) => boolean
     timeout: number
   }
 

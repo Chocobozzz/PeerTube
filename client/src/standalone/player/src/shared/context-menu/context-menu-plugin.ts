@@ -1,18 +1,18 @@
-import videojs, { VideoJsPlayer } from 'video.js'
-import { ContextMenuPluginOptions } from '../../types'
+import videojs from 'video.js'
+import { ContextMenuPluginOptions, VideojsMenuItemOptions, VideojsPlayer, VideojsPlugin } from '../../types'
 import { ContextMenu } from './context-menu'
 import { getPointerPosition } from './util'
 
-const Plugin = videojs.getPlugin('plugin')
+const Plugin = videojs.getPlugin('plugin') as typeof VideojsPlugin
 
 class ContextMenuPlugin extends Plugin {
-  declare options_: ContextMenuPluginOptions & videojs.MenuOptions
+  declare options_: ContextMenuPluginOptions & VideojsMenuItemOptions
   declare menu: ContextMenu
 
   declare private onContextMenuBind: (e: TouchEvent & MouseEvent) => void
 
-  constructor (player: videojs.Player, options: ContextMenuPluginOptions & videojs.MenuOptions) {
-    super(player, options)
+  constructor (player: VideojsPlayer, options: ContextMenuPluginOptions & VideojsMenuItemOptions) {
+    super(player)
 
     this.options_ = options
 
@@ -96,7 +96,7 @@ export { ContextMenuPlugin }
 // Private
 // ---------------------------------------------------------------------------
 
-function hasMenu (player: VideoJsPlayer) {
+function hasMenu (player: VideojsPlayer) {
   if (!player.usingPlugin('contextMenu')) return false
 
   return !!player.contextMenu().menu?.el()

@@ -1,15 +1,15 @@
 import videojs from 'video.js'
 import { getStoredTheater, saveTheaterInStore } from '../../peertube-player-local-storage'
-import { TheaterButtonOptions } from '../../types'
+import { TheaterButtonOptions, VideojsButton, VideojsButtonOptions, VideojsPlayer } from '../../types'
 
-const Button = videojs.getComponent('Button')
+const Button = videojs.getComponent('Button') as typeof VideojsButton
+
 class TheaterButton extends Button {
-
   private static readonly THEATER_MODE_CLASS = 'vjs-theater-enabled'
 
   declare private theaterButtonOptions: TheaterButtonOptions
 
-  constructor (player: videojs.Player, options: TheaterButtonOptions & videojs.ComponentOptions) {
+  constructor (player: VideojsPlayer, options: TheaterButtonOptions & VideojsButtonOptions) {
     super(player, options)
 
     this.theaterButtonOptions = options

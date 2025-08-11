@@ -1,12 +1,13 @@
 import videojs from 'video.js'
+import { VideojsPlayer, VideojsPlugin } from '../../types'
 import { StatsCard, StatsCardOptions } from './stats-card'
 
-const Plugin = videojs.getPlugin('plugin')
+const Plugin = videojs.getPlugin('plugin') as typeof VideojsPlugin
 
 class StatsForNerdsPlugin extends Plugin {
   declare private statsCard: StatsCard
 
-  constructor (player: videojs.Player, options: StatsCardOptions) {
+  constructor (player: VideojsPlayer, options: StatsCardOptions) {
     super(player)
 
     this.player.ready(() => {

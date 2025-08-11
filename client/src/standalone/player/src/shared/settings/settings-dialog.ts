@@ -1,9 +1,10 @@
 import videojs from 'video.js'
+import { VideojsComponent, VideojsPlayer } from '../../types'
 
-const Component = videojs.getComponent('Component')
+const Component = videojs.getComponent('Component') as typeof VideojsComponent
 
 class SettingsDialog extends Component {
-  constructor (player: videojs.Player) {
+  constructor (player: VideojsPlayer) {
     super(player)
 
     this.hide()
@@ -41,6 +42,6 @@ class SettingsDialog extends Component {
   }
 }
 
-Component.registerComponent('SettingsDialog', SettingsDialog)
+videojs.registerComponent('SettingsDialog', SettingsDialog)
 
 export { SettingsDialog }

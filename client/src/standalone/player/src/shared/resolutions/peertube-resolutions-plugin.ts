@@ -1,7 +1,7 @@
 import videojs from 'video.js'
-import { PeerTubeResolution } from '../../types'
+import { PeerTubeResolution, VideojsPlayer, VideojsPlugin } from '../../types'
 
-const Plugin = videojs.getPlugin('plugin')
+const Plugin = videojs.getPlugin('plugin') as typeof VideojsPlugin
 
 class PeerTubeResolutionsPlugin extends Plugin {
   declare private currentSelection: PeerTubeResolution
@@ -9,7 +9,7 @@ class PeerTubeResolutionsPlugin extends Plugin {
 
   declare private autoResolutionChosenId: number
 
-  constructor (player: videojs.Player) {
+  constructor (player: VideojsPlayer) {
     super(player)
 
     this.resolutions = []
@@ -85,7 +85,6 @@ class PeerTubeResolutionsPlugin extends Plugin {
       return 1
     })
   }
-
 }
 
 videojs.registerPlugin('peertubeResolutions', PeerTubeResolutionsPlugin)

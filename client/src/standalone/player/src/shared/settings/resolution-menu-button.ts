@@ -1,12 +1,14 @@
 import videojs from 'video.js'
+import { VideojsMenu, VideojsMenuButton, VideojsMenuButtonOptions, VideojsPlayer } from '../../types'
 import { ResolutionMenuItem } from './resolution-menu-item'
 
-const Menu = videojs.getComponent('Menu')
-const MenuButton = videojs.getComponent('MenuButton')
+const Menu = videojs.getComponent('Menu') as typeof VideojsMenu
+const MenuButton = videojs.getComponent('MenuButton') as typeof VideojsMenuButton
+
 class ResolutionMenuButton extends MenuButton {
   declare labelEl_: HTMLElement
 
-  constructor (player: videojs.Player, options?: videojs.MenuButtonOptions) {
+  constructor (player: VideojsPlayer, options?: VideojsMenuButtonOptions) {
     super(player, options)
 
     this.controlText('Quality')
@@ -37,7 +39,7 @@ class ResolutionMenuButton extends MenuButton {
   }
 
   createMenu () {
-    const menu: videojs.Menu = new Menu(this.player_, { menuButton: this })
+    const menu = new Menu(this.player_, { menuButton: this })
     const resolutions = this.player().peertubeResolutions().getResolutions()
 
     for (const r of resolutions) {

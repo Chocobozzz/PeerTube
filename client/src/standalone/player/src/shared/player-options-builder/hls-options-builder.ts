@@ -7,7 +7,13 @@ import debug from 'debug'
 import { Level } from 'hls.js'
 import type { CoreConfig, StreamConfig } from 'p2p-media-loader-core'
 import { getAverageBandwidthInStore } from '../../peertube-player-local-storage'
-import { HLSPluginOptions, P2PMediaLoaderPluginOptions, PeerTubePlayerConstructorOptions, PeerTubePlayerLoadOptions } from '../../types'
+import {
+  HLSPluginOptions,
+  P2PMediaLoaderPluginOptions,
+  PeerTubePlayerConstructorOptions,
+  PeerTubePlayerLoadOptions,
+  VideojsPlayer
+} from '../../types'
 import { getRtcConfig } from '../common'
 import { RedundancyUrlManager } from '../p2p-media-loader/redundancy-url-manager'
 import { SegmentValidator } from '../p2p-media-loader/segment-validator'
@@ -67,7 +73,7 @@ export class HLSOptionsBuilder {
     const hlsjs = {
       hlsjsConfig: this.getHLSJSOptions(p2pMediaLoaderConfig),
 
-      levelLabelHandler: (level: Level, player: videojs.VideoJsPlayer) => {
+      levelLabelHandler: (level: Level, player: VideojsPlayer) => {
         const resolution = Math.min(level.height || 0, level.width || 0)
         const file = this.options.hls.videoFiles.find(f => f.resolution.id === resolution)
 

@@ -1,12 +1,12 @@
 import videojs from 'video.js'
+import { VideojsMenu } from '../../types'
 
-const Menu = videojs.getComponent('Menu')
-const Component = videojs.getComponent('Component')
+const Menu = videojs.getComponent('Menu') as typeof VideojsMenu
 
 // Default menu doesn't check if the child is disabled/hidden
 
 class MenuFocusFixed extends Menu {
-  declare private focusedChild_: number
+  declare focusedChild_: number
 
   stepForward () {
     let stepChild = 0
@@ -72,5 +72,5 @@ class MenuFocusFixed extends Menu {
   }
 }
 
-Component.registerComponent('MenuFocusFixed', MenuFocusFixed)
+videojs.registerComponent('MenuFocusFixed', MenuFocusFixed)
 export { MenuFocusFixed }

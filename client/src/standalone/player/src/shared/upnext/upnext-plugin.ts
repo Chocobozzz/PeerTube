@@ -1,12 +1,11 @@
 import videojs from 'video.js'
-import { UpNextPluginOptions } from '../../types'
+import { UpNextPluginOptions, VideojsPlayer, VideojsPlugin } from '../../types'
 import { EndCard, EndCardOptions } from './end-card'
 
-const Plugin = videojs.getPlugin('plugin')
+const Plugin = videojs.getPlugin('plugin') as typeof VideojsPlugin
 
 class UpNextPlugin extends Plugin {
-
-  constructor (player: videojs.Player, options: UpNextPluginOptions) {
+  constructor (player: VideojsPlayer, options: UpNextPluginOptions) {
     super(player)
 
     const settings: EndCardOptions = {

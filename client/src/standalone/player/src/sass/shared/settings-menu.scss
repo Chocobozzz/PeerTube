@@ -40,7 +40,6 @@ $setting-transition-easing: ease-out;
     }
 
     .vjs-settings-sub-menu-title {
-      text-align: start;
       font-weight: $font-semibold;
     }
 
@@ -118,16 +117,19 @@ $setting-transition-easing: ease-out;
         .vjs-menu-item {
           outline: 0;
           font-weight: $font-semibold;
-          text-align: end;
+          justify-content: flex-end;
           padding: 8px 15px;
 
           &.vjs-back-button {
             padding: 12px 15px;
             margin-bottom: 5px;
             border-bottom: 1px solid #808080;
-            text-align: start;
+            justify-content: flex-start;
+            align-items: center;
 
             &::before {
+              top: -1px;
+
               @include chevron-left(9px, 2px);
               @include margin-right(10px);
             }

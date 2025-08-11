@@ -1,5 +1,6 @@
 import debug from 'debug'
 import videojs from 'video.js'
+import { VideojsButton, VideojsComponent, VideojsComponentOptions, VideojsPlayer } from '../../types'
 import { toTitleCase } from '../common'
 import { MenuFocusFixed } from './menu-focus-fixed'
 import { SettingsDialog } from './settings-dialog'
@@ -9,10 +10,10 @@ import { SettingsPanelChild } from './settings-panel-child'
 
 const debugLogger = debug('peertube:player:settings')
 
-const Button = videojs.getComponent('Button')
-const Component = videojs.getComponent('Component')
+const Button = videojs.getComponent('Button') as typeof VideojsButton
+const Component = videojs.getComponent('Component') as typeof VideojsComponent
 
-export interface SettingsButtonOptions extends videojs.ComponentOptions {
+export interface SettingsButtonOptions extends VideojsComponentOptions {
   entries: any[]
   setup?: {
     maxHeightOffset: number
@@ -33,18 +34,18 @@ class SettingsButton extends Button {
 
   declare private settingsButtonOptions: SettingsButtonOptions
 
-  constructor (player: videojs.Player, options?: SettingsButtonOptions) {
+  constructor (player: VideojsPlayer, options?: SettingsButtonOptions) {
     super(player, options)
 
     this.settingsButtonOptions = options
 
     this.controlText('Settings')
 
-    this.dialog = this.player().addChild('settingsDialog')
+    this.dialog = this.player().addChild('settingsDialog') as SettingsDialog
     this.dialogEl = this.dialog.el() as HTMLElement
     this.menu = null
-    this.panel = this.dialog.addChild('settingsPanel')
-    this.panelChild = this.panel.addChild('settingsPanelChild')
+    this.panel = this.dialog.addChild('settingsPanel') as SettingsPanel
+    this.panelChild = this.panel.addChild('settingsPanelChild') as SettingsPanelChild
 
     this.addClass('vjs-settings')
     this.setAttribute('aria-controls', 'vjs-settings-dialog-' + this.player().id())
@@ -170,7 +171,7 @@ class SettingsButton extends Button {
     this.resetChildren()
   }
 
-  getComponentSize (element: videojs.Component | HTMLElement) {
+  getComponentSize (element: VideojsComponent | HTMLElement) {
     let width: number = null
     let height: number = null
 
@@ -217,7 +218,7 @@ class SettingsButton extends Button {
       this.focus()
     })
 
-    this.menu.on('arrow-right', (_, el) => {
+    this.menu.on('arrow-right', (_: any, el: HTMLElement) => {
       debugLogger('Detected arrow right on menu item', el)
 
       el.click()
@@ -257,7 +258,7 @@ class SettingsButton extends Button {
 
     // Hide children to avoid sub menus stacking on top of each other
     // or having multiple menus open
-    settingsMenuItem.on('click', videojs.bind(this, this.hideChildren))
+    settingsMenuItem.on('click', () => this.hideChildren())
 
     // Whether to add or remove selected class on the settings sub menu element
     settingsMenuItem.on('click', openSubMenu)
@@ -288,6 +289,6 @@ class SettingsButton extends Button {
   }
 }
 
-Component.registerComponent('SettingsButton', SettingsButton)
+videojs.registerComponent('SettingsButton', SettingsButton)
 
 export { SettingsButton }

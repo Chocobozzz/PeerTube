@@ -1,37 +1,40 @@
 import debug from 'debug'
 import videojs from 'video.js'
+import { VideojsComponent, VideojsMenu, VideojsMenuItem, VideojsMenuItemOptions, VideojsPlayer } from '../../types'
 import { toTitleCase } from '../common'
 import { SettingsDialog } from './settings-dialog'
 import { SettingsButton } from './settings-menu-button'
 import { SettingsPanel } from './settings-panel'
 import { SettingsPanelChild } from './settings-panel-child'
+import Button from 'video.js/dist/types/button'
+import MenuButton from 'video.js/dist/types/menu/menu-button'
 
 const debugLogger = debug('peertube:player:settings')
 
-const MenuItem = videojs.getComponent('MenuItem')
-const Component = videojs.getComponent('Component')
+const MenuItem = videojs.getComponent('MenuItem') as typeof VideojsMenuItem
+const Component = videojs.getComponent('Component') as typeof VideojsComponent
 
-interface MenuItemExtended extends videojs.MenuItem {
+interface MenuItemExtended extends VideojsMenuItem {
   isSelected_: boolean
 
   getLabel?: () => string
 }
 
-export interface SettingsMenuItemOptions extends videojs.MenuItemOptions {
-  entry: string
-  menuButton: SettingsButton
+export interface SettingsMenuItemOptions extends VideojsMenuItemOptions {
+  entry?: string
+  menuButton?: SettingsButton
 }
 
 class SettingsMenuItem extends MenuItem {
   declare settingsButton: SettingsButton
   declare dialog: SettingsDialog
-  declare mainMenu: videojs.Menu
+  declare mainMenu: VideojsMenu
   declare panel: SettingsPanel
   declare panelChild: SettingsPanelChild
   declare panelChildEl: HTMLElement
   declare size: number[]
   declare menuToLoad: string
-  declare subMenu: SettingsButton
+  declare subMenu: MenuButton
 
   declare submenuClickHandler: typeof SettingsMenuItem.prototype.onSubmenuClick
   declare transitionEndHandler: typeof SettingsMenuItem.prototype.onTransitionEnd
@@ -40,14 +43,14 @@ class SettingsMenuItem extends MenuItem {
   declare settingsSubMenuValueEl_: HTMLElement
   declare settingsSubMenuEl_: HTMLElement
 
-  constructor (player: videojs.Player, options?: SettingsMenuItemOptions) {
+  constructor (player: VideojsPlayer, options?: SettingsMenuItemOptions) {
     super(player, options)
 
     this.settingsButton = options.menuButton
     this.dialog = this.settingsButton.dialog
     this.mainMenu = this.settingsButton.menu
-    this.panel = this.dialog.getChild('settingsPanel')
-    this.panelChild = this.panel.getChild('settingsPanelChild')
+    this.panel = this.dialog.getChild('settingsPanel') as SettingsPanel
+    this.panelChild = this.panel.getChild('settingsPanelChild') as SettingsPanelChild
     this.panelChildEl = this.panelChild.el() as HTMLElement
 
     this.size = null
@@ -56,15 +59,15 @@ class SettingsMenuItem extends MenuItem {
     this.menuToLoad = 'mainmenu'
 
     const subMenuName = toTitleCase(options.entry)
-    const SubMenuComponent = videojs.getComponent(subMenuName)
+    const SubMenuComponent = videojs.getComponent(subMenuName) as typeof MenuButton
+
+    console.log(options.entry)
 
     if (!SubMenuComponent) {
       throw new Error(`Component ${subMenuName} does not exist`)
     }
 
-    const newOptions = Object.assign({}, options, { entry: options.menuButton, menuButton: this })
-
-    this.subMenu = new SubMenuComponent(this.player(), newOptions) as SettingsButton
+    this.subMenu = new SubMenuComponent(this.player(), { ...options })
     const subMenuClass = this.subMenu.buildCSSClass().split(' ')[0]
     this.settingsSubMenuEl_.className += ' ' + subMenuClass
 
@@ -174,7 +177,7 @@ class SettingsMenuItem extends MenuItem {
    *
    * @method handleClick
    */
-  handleClick (event: videojs.EventTarget.Event) {
+  handleClick (event: Event) {
     this.menuToLoad = 'submenu'
     // Remove open class to ensure only the open submenu gets this class
     videojs.dom.removeClass(this.el(), 'open')
@@ -239,8 +242,7 @@ class SettingsMenuItem extends MenuItem {
     mainMenuEl.style.opacity = '0'
 
     // back button will always take you to main menu, so set dialog sizes
-    const mainMenuAny = this.mainMenu
-    this.settingsButton.setDialogSize([ mainMenuAny.width() as number, mainMenuAny.height() as number ])
+    this.settingsButton.setDialogSize([ this.mainMenu.width(), this.mainMenu.height() ])
 
     // animation not triggered without timeout (some async stuff ?!?)
     setTimeout(() => {
@@ -376,7 +378,6 @@ class SettingsMenuItem extends MenuItem {
   }
 }
 
-;(SettingsMenuItem as any).prototype.contentElType = 'button'
 videojs.registerComponent('SettingsMenuItem', SettingsMenuItem)
 
 export { SettingsMenuItem }

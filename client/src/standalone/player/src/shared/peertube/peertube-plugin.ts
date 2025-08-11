@@ -5,6 +5,8 @@ import { isIOS, isMobile, isSafari } from '@root-helpers/web-browser'
 import debug from 'debug'
 import { UAParser } from 'ua-parser-js'
 import videojs from 'video.js'
+import type MediaError from 'video.js/dist/types/media-error'
+import type ModalDialog from 'video.js/dist/types/modal-dialog'
 import {
   getPlayerSessionId,
   getStoredLastSubtitle,
@@ -16,19 +18,26 @@ import {
   saveVideoWatchHistory,
   saveVolumeInStore
 } from '../../peertube-player-local-storage'
-import { PeerTubePluginOptions } from '../../types'
+import type {
+  PeerTubePluginOptions,
+  VideojsAutoplay,
+  VideojsCaptionsButton,
+  VideojsPlayer,
+  VideojsPlayerOptions,
+  VideojsPlugin
+} from '../../types'
 import { SettingsButton } from '../settings/settings-menu-button'
 
 const debugLogger = debug('peertube:player:peertube')
 
-const Plugin = videojs.getPlugin('plugin')
+const Plugin = videojs.getPlugin('plugin') as typeof VideojsPlugin
 
 class PeerTubePlugin extends Plugin {
   declare private readonly videoViewUrl: () => string
   declare private readonly authorizationHeader: () => string
   declare private readonly initialInactivityTimeout: number
 
-  declare private readonly hasAutoplay: () => videojs.Autoplay
+  declare private readonly hasAutoplay: () => VideojsAutoplay
 
   declare private currentSubtitle: string
   declare private currentPlaybackRate: number
@@ -39,7 +48,7 @@ class PeerTubePlugin extends Plugin {
   declare private mouseInControlBar: boolean
   declare private mouseInSettings: boolean
 
-  declare private errorModal: videojs.ModalDialog
+  declare private errorModal: ModalDialog
 
   declare private hasInitialSeek: boolean
 
@@ -56,7 +65,7 @@ class PeerTubePlugin extends Plugin {
     os: string
   }
 
-  constructor (player: videojs.Player, private readonly options: PeerTubePluginOptions) {
+  constructor (player: VideojsPlayer, private readonly options: PeerTubePluginOptions) {
     super(player)
 
     this.setUserAgentInfo()
@@ -99,7 +108,7 @@ class PeerTubePlugin extends Plugin {
     })
 
     this.player.one('canplay', () => {
-      const playerOptions = this.player.options_
+      const playerOptions = this.player.options_ as VideojsPlayerOptions
 
       const volume = getStoredVolume()
       if (volume !== undefined) this.player.volume(volume)
@@ -298,7 +307,7 @@ class PeerTubePlugin extends Plugin {
 
     this.player.on('video-change', () => tryToUpdateRatioFromOptions())
 
-    this.player.on('video-ratio-changed', (_event, data: { ratio: number }) => {
+    this.player.on('video-ratio-changed', (_event: any, data: { ratio: number }) => {
       if (this.options.videoRatio()) return
 
       this.adaptPlayerFromRatio({ ratio: data.ratio, defaultRatio })
@@ -497,7 +506,7 @@ class PeerTubePlugin extends Plugin {
 
   private listenControlBarMouse () {
     const controlBar = this.player.controlBar
-    const settingsButton: SettingsButton = (controlBar as any).settingsButton
+    const settingsButton = controlBar.settingsButton
 
     controlBar.on('mouseenter', () => {
       this.mouseInControlBar = true
@@ -635,24 +644,6 @@ class PeerTubePlugin extends Plugin {
 
   // Thanks: https://github.com/videojs/video.js/issues/4460#issuecomment-312861657
   private initSmoothProgressBar () {
-    const SeekBar = videojs.getComponent('SeekBar') as any
-    SeekBar.prototype.getPercent = function getPercent () {
-      // Allows for smooth scrubbing, when player can't keep up.
-      // const time = (this.player_.scrubbing()) ?
-      //   this.player_.getCache().currentTime :
-      //   this.player_.currentTime()
-      const time = this.player_.currentTime()
-      const percent = time / this.player_.duration()
-      return percent >= 1 ? 1 : percent
-    }
-    SeekBar.prototype.handleMouseMove = function handleMouseMove (event: any) {
-      let newTime = this.calculateDistance(event) * this.player_.duration()
-      if (newTime === this.player_.duration()) {
-        newTime = newTime - 0.1
-      }
-      this.player_.currentTime(newTime)
-      this.update()
-    }
   }
 
   private patchMenuEscapeKey () {
@@ -688,7 +679,7 @@ class PeerTubePlugin extends Plugin {
   private getCaptionsButton () {
     const settingsButton = this.player.controlBar.getDescendant([ 'settingsButton' ]) as SettingsButton
 
-    return settingsButton.menu.getChild('captionsButton') as videojs.CaptionsButton
+    return settingsButton.menu.getChild('captionsButton') as unknown as VideojsCaptionsButton
   }
 
   private getPlaybackRateButton () {

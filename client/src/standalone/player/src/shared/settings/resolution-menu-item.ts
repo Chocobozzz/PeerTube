@@ -1,9 +1,10 @@
 import videojs from 'video.js'
+import { VideojsMenuItem, VideojsMenuItemOptions, VideojsPlayer } from '../../types'
 
-const MenuItem = videojs.getComponent('MenuItem')
+const MenuItem = videojs.getComponent('MenuItem') as typeof VideojsMenuItem
 
-export interface ResolutionMenuItemOptions extends videojs.MenuItemOptions {
-  resolutionId: number
+export interface ResolutionMenuItemOptions extends VideojsMenuItemOptions {
+  resolutionId?: number
 }
 
 class ResolutionMenuItem extends MenuItem {
@@ -14,7 +15,7 @@ class ResolutionMenuItem extends MenuItem {
 
   declare private updateSelectionHandler: () => void
 
-  constructor (player: videojs.Player, options?: ResolutionMenuItemOptions) {
+  constructor (player: VideojsPlayer, options?: ResolutionMenuItemOptions) {
     super(player, { ...options, selectable: true })
 
     this.autoResolutionChosen = ''

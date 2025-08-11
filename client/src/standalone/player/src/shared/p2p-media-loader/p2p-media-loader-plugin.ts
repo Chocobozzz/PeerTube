@@ -5,12 +5,13 @@ import { FragLoadedData, default as Hlsjs } from 'hls.js'
 import type { DownloadSource, SegmentErrorDetails, SegmentLoadDetails } from 'p2p-media-loader-core'
 import type { HlsWithP2PInstance } from 'p2p-media-loader-hlsjs'
 import videojs from 'video.js'
-import { P2PMediaLoaderPluginOptions, PlayerNetworkInfo } from '../../types'
+import { P2PMediaLoaderPluginOptions, PlayerNetworkInfo, VideojsPlayer, VideojsPlugin } from '../../types'
 import { SettingsButton } from '../settings/settings-menu-button'
 
 const debugLogger = debug('peertube:player:p2p-media-loader')
 
-const Plugin = videojs.getPlugin('plugin')
+const Plugin = videojs.getPlugin('plugin') as typeof VideojsPlugin
+
 class P2pMediaLoaderPlugin extends Plugin {
   declare private readonly options: P2PMediaLoaderPluginOptions
 
@@ -35,7 +36,7 @@ class P2pMediaLoaderPlugin extends Plugin {
   declare private connectedPeers: Set<string>
   declare private totalHTTPPeers: number
 
-  constructor (player: videojs.Player, options?: P2PMediaLoaderPluginOptions) {
+  constructor (player: VideojsPlayer, options?: P2PMediaLoaderPluginOptions) {
     super(player)
 
     this.options = options

@@ -1,10 +1,11 @@
-import videojs from 'video.js'
-import { logger } from '@root-helpers/logger'
 import { secondsToTime } from '@peertube/peertube-core-utils'
-import { PlayerNetworkInfo as EventPlayerNetworkInfo } from '../../types'
+import { logger } from '@root-helpers/logger'
+import videojs from 'video.js'
+import { TimeRange } from 'video.js/dist/types/utils/time'
+import { PlayerNetworkInfo as EventPlayerNetworkInfo, VideojsComponent, VideojsComponentOptions, VideojsPlayer } from '../../types'
 import { bytes } from '../common'
 
-interface StatsCardOptions extends videojs.ComponentOptions {
+interface StatsCardOptions extends VideojsComponentOptions {
   videoUUID: string
   videoIsLive: boolean
   mode: 'web-video' | 'p2p-media-loader'
@@ -28,7 +29,8 @@ interface InfoElement {
   value: HTMLElement
 }
 
-const Component = videojs.getComponent('Component')
+const Component = videojs.getComponent('Component') as typeof VideojsComponent
+
 class StatsCard extends Component {
   declare options_: StatsCardOptions
 
@@ -65,7 +67,7 @@ class StatsCard extends Component {
 
   declare private onNetworkInfoHandler: (_event: any, data: EventPlayerNetworkInfo) => void
 
-  constructor (player: videojs.Player, options?: StatsCardOptions) {
+  constructor (player: VideojsPlayer, options?: StatsCardOptions) {
     super(player, options)
 
     this.metadataStore = {}
@@ -365,7 +367,7 @@ class StatsCard extends Component {
     return { root, value }
   }
 
-  private timeRangesToString (r: videojs.TimeRange) {
+  private timeRangesToString (r: TimeRange) {
     let result = ''
 
     for (let i = 0; i < r.length; i++) {

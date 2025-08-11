@@ -52,7 +52,8 @@ import {
   PeerTubePlayerConstructorOptions,
   PeerTubePlayerLoadOptions,
   PlayerMode,
-  videojs
+  videojs,
+  VideojsPlayer
 } from '@peertube/player'
 import { logger } from '@root-helpers/logger'
 import { isP2PEnabled, videoRequiresFileToken, videoRequiresUserAuth } from '@root-helpers/video'
@@ -885,7 +886,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           return loggedInOrAnonymousUser?.autoPlayNextVideo
         },
 
-        isSuspended: (player: videojs.Player) => {
+        isSuspended: (player: VideojsPlayer) => {
           return !isXPercentInViewport(player.el() as HTMLElement, 80)
         },
 

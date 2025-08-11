@@ -693,18 +693,15 @@ importers:
       '@types/sha.js':
         specifier: ^2.4.0
         version: 2.4.4
-      '@types/video.js':
-        specifier: ^7.3.40
-        version: 7.3.58
       '@wdio/browserstack-service':
         specifier: ^9.12.7
-        version: 9.19.2(@wdio/cli@9.19.2(@types/node@20.19.13)(bufferutil@4.0.9)(expect-webdriverio@5.4.2)(utf-8-validate@6.0.5))(bufferutil@4.0.9)(debug@4.4.1)(utf-8-validate@6.0.5)
+        version: 9.19.2(@wdio/cli@9.19.2(@types/node@20.19.13)(bufferutil@4.0.9)(expect-webdriverio@5.4.2(@wdio/globals@9.17.0)(@wdio/logger@9.18.0)(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5)))(utf-8-validate@6.0.5))(bufferutil@4.0.9)(debug@4.4.1)(utf-8-validate@6.0.5)
       '@wdio/cli':
         specifier: ^9.12.7
-        version: 9.19.2(@types/node@20.19.13)(bufferutil@4.0.9)(expect-webdriverio@5.4.2)(utf-8-validate@6.0.5)
+        version: 9.19.2(@types/node@20.19.13)(bufferutil@4.0.9)(expect-webdriverio@5.4.2(@wdio/globals@9.17.0)(@wdio/logger@9.18.0)(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5)))(utf-8-validate@6.0.5)
       '@wdio/globals':
         specifier: ^9.17.0
-        version: 9.17.0(expect-webdriverio@5.4.2)(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5))
+        version: 9.17.0(expect-webdriverio@5.4.2(@wdio/globals@9.17.0)(@wdio/logger@9.18.0)(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5)))(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5))
       '@wdio/local-runner':
         specifier: ^9.12.7
         version: 9.19.2(@wdio/globals@9.17.0)(bufferutil@4.0.9)(utf-8-validate@6.0.5)(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5))
@@ -823,8 +820,8 @@ importers:
         specifier: ^2.0.3
         version: 2.0.4(encoding@0.1.13)
       video.js:
-        specifier: ^7.19.2
-        version: 7.21.7
+        specifier: ^8.23.4
+        version: 8.23.4
       vite:
         specifier: ^6.0.11
         version: 6.3.5(@types/node@20.19.13)(sass-embedded@1.92.0)(sass@1.85.0)(tsx@4.20.5)
@@ -4257,9 +4254,6 @@ packages:
   '@types/validator@13.15.2':
     resolution: {integrity: sha512-y7pa/oEJJ4iGYBxOpfAKn5b9+xuihvzDVnC/OSvlVnGxVg0pOqmjiMafiJ1KVNQEaPZf9HsEp5icEwGg8uIe5Q==}
 
-  '@types/video.js@7.3.58':
-    resolution: {integrity: sha512-1CQjuSrgbv1/dhmcfQ83eVyYbvGyqhTvb2Opxr0QCV+iJ4J6/J+XWQ3Om59WiwCd1MN3rDUHasx5XRrpUtewYQ==}
-
   '@types/webtorrent@0.110.0':
     resolution: {integrity: sha512-f2Moh9KWdHqYT1N5hxbaCw213SyYyyHhxOoxJI4c53nwAiq4JCytpySV8cM5FC9oPOE7Y/4nPYbnreJNl9lJRA==}
 
@@ -4378,18 +4372,18 @@ packages:
     resolution: {integrity: sha512-e1swq86y3+88vXk0cA+gc+wztDZ7boLtbAUVeooxsipIVRMRrc7xU5vKAyoXHnciTA7s28J7W8xyq/HCJN9r0w==}
     engines: {node: '>=14.18.20'}
 
-  '@videojs/http-streaming@2.16.3':
-    resolution: {integrity: sha512-91CJv5PnFBzNBvyEjt+9cPzTK/xoVixARj2g7ZAvItA+5bx8VKdk5RxCz/PP2kdzz9W+NiDUMPkdmTsosmy69Q==}
+  '@videojs/http-streaming@3.17.2':
+    resolution: {integrity: sha512-VBQ3W4wnKnVKb/limLdtSD2rAd5cmHN70xoMf4OmuDd0t2kfJX04G+sfw6u2j8oOm2BXYM9E1f4acHruqKnM1g==}
     engines: {node: '>=8', npm: '>=5'}
     peerDependencies:
-      video.js: ^6 || ^7
+      video.js: ^8.19.0
 
-  '@videojs/vhs-utils@3.0.5':
-    resolution: {integrity: sha512-PKVgdo8/GReqdx512F+ombhS+Bzogiofy1LgAj4tN8PfdBx3HSS7V5WfJotKTqtOWGwVfSWsrYN/t09/DSryrw==}
+  '@videojs/vhs-utils@4.1.1':
+    resolution: {integrity: sha512-5iLX6sR2ownbv4Mtejw6Ax+naosGvoT9kY+gcuHzANyUZZ+4NpeNdKMUhb6ag0acYej1Y7cmr/F2+4PrggMiVA==}
     engines: {node: '>=8', npm: '>=5'}
 
-  '@videojs/xhr@2.6.0':
-    resolution: {integrity: sha512-7J361GiN1tXpm+gd0xz2QWr3xNWBE+rytvo8J3KuggFaLg+U37gZQ2BuPLcnkfGffy2e+ozY70RHC8jt7zjA6Q==}
+  '@videojs/xhr@2.7.0':
+    resolution: {integrity: sha512-giab+EVRanChIupZK7gXjHy90y3nncA2phIOyG3Ne5fvpiMJzvqYwiTOnEVW2S4CoYcuKJkomat7bMXA/UoUZQ==}
 
   '@vitejs/plugin-basic-ssl@1.2.0':
     resolution: {integrity: sha512-mkQnxTkcldAzIsomk1UuLfAu9n+kpQ3JbHcpCp7d2Oo6ITtji8pHS3QToOWjhPFvNQSnhlkAjmGbhv2QvwO/7Q==}
@@ -4560,8 +4554,8 @@ packages:
   addressparser@1.0.1:
     resolution: {integrity: sha512-aQX7AISOMM7HFE0iZ3+YnD07oIeJqWGVnJ+ZIKaBZAk03ftmVYVqsGas/rbXKR21n4D/hKCSHypvcyOkds/xzg==}
 
-  aes-decrypter@3.1.3:
-    resolution: {integrity: sha512-VkG9g4BbhMBy+N5/XodDeV6F02chEk9IpgRTq/0bS80y4dzy79VH2Gtms02VXomf3HmyRe3yyJYkJ990ns+d6A==}
+  aes-decrypter@4.0.2:
+    resolution: {integrity: sha512-lc+/9s6iJvuaRe5qDlMTpCFjnwpkeOXp8qP3oiZ5jsj1MRg+SBVUmmICrhxHvc8OELSmc+fEyyxAuppY6hrWzw==}
 
   agent-base@6.0.2:
     resolution: {integrity: sha512-RZNwNclF7+MS/8bDg70amg32dyeZGZxiDuQmZxKLAlQjr3jGyLx+4Kkk58UO7D2QdgFIQCovuSuZESne6RG6XQ==}
@@ -7146,9 +7140,6 @@ packages:
   indexof@0.0.1:
     resolution: {integrity: sha512-i0G7hLJ1z0DE8dsqJa2rycj9dBmNKgXBvotXtZYXakU9oivfB9Uj2ZBC27qqef2U58/ZLwalxa1X/RDCdkHtVg==}
 
-  individual@2.0.0:
-    resolution: {integrity: sha512-pWt8hBCqJsUWI/HtcfWod7+N9SgAqyPEaF7JQjwzjn5vGrpg6aQ5qeAFQ7dx//UH4J1O+7xqew+gCeeFt6xN/g==}
-
   inflection@1.13.4:
     resolution: {integrity: sha512-6I/HUDeYFfuNCVS3td055BaXBwKYuzw7K3ExVMStBowKo9oOAMJIXIHvdyR3iboTCp1b+1i5DSkIZTcwIktuDw==}
     engines: {'0': node >= 0.4.0}
@@ -7639,9 +7630,6 @@ packages:
   k-rpc@5.1.0:
     resolution: {integrity: sha512-FGc+n70Hcjoa/X2JTwP+jMIOpBz+pkRffHnSl9yrYiwUxg3FIgD50+u1ePfJUOnRCnx6pbjmVk5aAeB1wIijuQ==}
 
-  keycode@2.2.1:
-    resolution: {integrity: sha512-Rdgz9Hl9Iv4QKi8b0OlCRQEzp4AgVxyCtz5S/+VIHezDmrDhkp2N2TqBWOLz0/gbeREXOOiI9/4b8BY9uw2vFg==}
-
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
 
@@ -7891,8 +7879,8 @@ packages:
     resolution: {integrity: sha512-RkRWjA926cTvz5rAb1BqyWkKbbjzCGchDUIKMCUvNi17j6f6j8uHGDV82Aqcqtzd+icoYpELmG3ksgGiFNNcNg==}
     engines: {node: '>=12'}
 
-  m3u8-parser@4.8.0:
-    resolution: {integrity: sha512-UqA2a/Pw3liR6Df3gwxrqghCP17OpPlQj6RBPLYygf/ZSQ4MoSgvdvhvt35qV+3NaaA0FSZx93Ix+2brT1U7cA==}
+  m3u8-parser@7.2.0:
+    resolution: {integrity: sha512-CRatFqpjVtMiMaKXxNvuI3I++vUumIXVVT/JpCpdU/FynV/ceVw1qpPyyBNindL+JlPMSesx+WX1QJaZEJSaMQ==}
 
   magic-string@0.30.17:
     resolution: {integrity: sha512-sNPKHvyjVf7gyjwS4xGTaW/mCnF8wnjtifKBEhxfZ7E/S8tQ0rssrwGNn6q8JH/ohItJfSQp9mBtQYuTlH5QnA==}
@@ -8206,8 +8194,8 @@ packages:
     resolution: {integrity: sha512-223dMRJtI/l25dJKWpgij2cMtywuG/WiUKXdvwfbhGKBhy1puASqXwFzmWZ7+K73vUPoR7SS2Qz2cI/g9MKw0A==}
     engines: {node: '>= 0.8.0'}
 
-  mpd-parser@0.22.1:
-    resolution: {integrity: sha512-fwBebvpyPUU8bOzvhX0VQZgSohncbgYwUyJJoTSNpmy7ccD2ryiCvM7oRkn/xQH5cv73/xU7rJSNCLjdGFor0Q==}
+  mpd-parser@1.3.1:
+    resolution: {integrity: sha512-1FuyEWI5k2HcmhS1HkKnUAQV7yFPfXPht2DnRRGtoiiAAW+ESTbtEXIDpRkwdU+XyrQuwrIym7UkoPKsZ0SyFw==}
     hasBin: true
 
   mri@1.1.4:
@@ -8258,8 +8246,8 @@ packages:
     resolution: {integrity: sha512-WWdIxpyjEn+FhQJQQv9aQAYlHoNVdzIzUySNV1gHUPDSdZJ3yZn7pAAbQcV7B56Mvu881q9FZV+0Vx2xC44VWA==}
     engines: {node: ^18.17.0 || >=20.5.0}
 
-  mux.js@6.0.1:
-    resolution: {integrity: sha512-22CHb59rH8pWGcPGW5Og7JngJ9s+z4XuSlYvnxhLuc58cA1WqGDQPzuG8I+sPm1/p0CdgpzVTaKW408k5DNn8w==}
+  mux.js@7.1.0:
+    resolution: {integrity: sha512-NTxawK/BBELJrYsZThEulyUMDVlLizKdxyAsMuzoCD1eFj97BVaA8D/CvKsKu6FOLYkFojN5CbM9h++ZTZtknA==}
     engines: {node: '>=8', npm: '>=5'}
     hasBin: true
 
@@ -9513,9 +9501,6 @@ packages:
   run-series@1.1.9:
     resolution: {integrity: sha512-Arc4hUN896vjkqCYrUXquBFtRZdv1PfLbTYP71efP6butxyQ0kWpiNJyAgsxscmQg1cqvHY32/UCBzXedTpU2g==}
 
-  rust-result@1.0.0:
-    resolution: {integrity: sha512-6cJzSBU+J/RJCF063onnQf0cDUOHs9uZI1oroSGnHOph+CQTIJ5Pp2hK5kEQq1+7yE/EEWfulSNXAQ2jikPthA==}
-
   rxjs@7.8.1:
     resolution: {integrity: sha512-AA3TVj+0A2iuIoQkWEK/tqFjBq2j+6PO6Y0zJcvzLAFhEFIO3HL0vls9hWLncZbAAbK0mar7oZ4V079I/qPMxg==}
 
@@ -9538,9 +9523,6 @@ packages:
 
   safe-identifier@0.4.2:
     resolution: {integrity: sha512-6pNbSMW6OhAi9j+N8V+U715yBQsaWJ7eyEUaOrawX+isg5ZxhUlV1NipNtgaKHmFGiABwt+ZF04Ii+3Xjkg+8w==}
-
-  safe-json-parse@4.0.0:
-    resolution: {integrity: sha512-RjZPPHugjK0TOzFrLZ8inw44s9bKox99/0AZW9o/BEQVrJfhI+fIHMErnPyRa89/yRXUUr93q+tiN6zhoVV4wQ==}
 
   safe-push-apply@1.0.0:
     resolution: {integrity: sha512-iKE9w/Z7xCzUMIZqdBsp6pEQvwuEebH4vdpjcDWnyzaI6yl6O9FHvVpmGelvEHNsoY6wGblkxR6Zty/h00WiSA==}
@@ -10646,9 +10628,6 @@ packages:
   url-parse@1.5.10:
     resolution: {integrity: sha512-WypcfiRhfeUP9vvF0j6rw0J3hrWrw6iZv3+22h6iRMJ/8z1Tj6XfLP4DsUix5MhMPnXpiHDoKyoZ/bdCkwBCiQ==}
 
-  url-toolkit@2.2.5:
-    resolution: {integrity: sha512-mtN6xk+Nac+oyJ/PrI7tzfmomRVNFIWKUbG8jdYFt52hxbiReFAXIjYskvu64/dvuW71IcB7lV8l0HvZMac6Jg==}
-
   url@0.11.4:
     resolution: {integrity: sha512-oCwdVC7mTuWiPyjLUz/COz5TLk6wgp0RCsN+wHZ2Ekneac9w8uuV0njcbbie2ME+Vs+d6duwmYuR3HgQXs1fOg==}
     engines: {node: '>= 0.4'}
@@ -10745,11 +10724,17 @@ packages:
     resolution: {integrity: sha512-ZZKSmDAEFOijERBLkmYfJ+vmk3w+7hOLYDNkRCuRuMJGEmqYNCNLyBBFwWKVMhfwaEF3WOd0Zlw86U/WC/+nYw==}
     engines: {'0': node >=0.6.0}
 
-  video.js@7.21.7:
-    resolution: {integrity: sha512-T2s3WFAht7Zjr2OSJamND9x9Dn2O+Z5WuHGdh8jI5SYh5mkMdVTQ7vSRmA5PYpjXJ2ycch6jpMjkJEIEU2xxqw==}
+  video.js@8.23.4:
+    resolution: {integrity: sha512-qI0VTlYmKzEqRsz1Nppdfcaww4RSxZAq77z2oNSl3cNg2h6do5C8Ffl0KqWQ1OpD8desWXsCrde7tKJ9gGTEyQ==}
 
-  videojs-font@3.2.0:
-    resolution: {integrity: sha512-g8vHMKK2/JGorSfqAZQUmYYNnXmfec4MLhwtEFS+mMs2IDY398GLysy6BH6K+aS1KMNu/xWZ8Sue/X/mdQPliA==}
+  videojs-contrib-quality-levels@4.1.0:
+    resolution: {integrity: sha512-TfrXJJg1Bv4t6TOCMEVMwF/CoS8iENYsWNKip8zfhB5kTcegiFYezEA0eHAJPU64ZC8NQbxQgOwAsYU8VXbOWA==}
+    engines: {node: '>=16', npm: '>=8'}
+    peerDependencies:
+      video.js: ^8
+
+  videojs-font@4.2.0:
+    resolution: {integrity: sha512-YPq+wiKoGy2/M7ccjmlvwi58z2xsykkkfNMyIg4xb7EZQQNwB71hcSsB3o75CqQV7/y5lXkXhI/rsGAS7jfEmQ==}
 
   videojs-vtt.js@0.15.5:
     resolution: {integrity: sha512-yZbBxvA7QMYn15Lr/ZfhhLPrNpI/RmCSCqgIff57GC2gIrV5YfyzLfLyZMj0NnZSAz8syB4N0nHXpZg9MyrMOQ==}
@@ -14860,8 +14845,6 @@ snapshots:
 
   '@types/validator@13.15.2': {}
 
-  '@types/video.js@7.3.58': {}
-
   '@types/webtorrent@0.110.0':
     dependencies:
       '@types/bittorrent-protocol': 3.1.6
@@ -15116,24 +15099,23 @@ snapshots:
       bytes: 3.1.2
       multiparty: 4.2.3
 
-  '@videojs/http-streaming@2.16.3(video.js@7.21.7)':
+  '@videojs/http-streaming@3.17.2(video.js@8.23.4)':
     dependencies:
       '@babel/runtime': 7.28.3
-      '@videojs/vhs-utils': 3.0.5
-      aes-decrypter: 3.1.3
+      '@videojs/vhs-utils': 4.1.1
+      aes-decrypter: 4.0.2
       global: 4.4.0
-      m3u8-parser: 4.8.0
-      mpd-parser: 0.22.1
-      mux.js: 6.0.1
-      video.js: 7.21.7
+      m3u8-parser: 7.2.0
+      mpd-parser: 1.3.1
+      mux.js: 7.1.0
+      video.js: 8.23.4
 
-  '@videojs/vhs-utils@3.0.5':
+  '@videojs/vhs-utils@4.1.1':
     dependencies:
       '@babel/runtime': 7.28.3
       global: 4.4.0
-      url-toolkit: 2.2.5
 
-  '@videojs/xhr@2.6.0':
+  '@videojs/xhr@2.7.0':
     dependencies:
       '@babel/runtime': 7.28.3
       global: 4.4.0
@@ -15195,13 +15177,13 @@ snapshots:
 
   '@vue/shared@3.5.18': {}
 
-  '@wdio/browserstack-service@9.19.2(@wdio/cli@9.19.2(@types/node@20.19.13)(bufferutil@4.0.9)(expect-webdriverio@5.4.2)(utf-8-validate@6.0.5))(bufferutil@4.0.9)(debug@4.4.1)(utf-8-validate@6.0.5)':
+  '@wdio/browserstack-service@9.19.2(@wdio/cli@9.19.2(@types/node@20.19.13)(bufferutil@4.0.9)(expect-webdriverio@5.4.2(@wdio/globals@9.17.0)(@wdio/logger@9.18.0)(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5)))(utf-8-validate@6.0.5))(bufferutil@4.0.9)(debug@4.4.1)(utf-8-validate@6.0.5)':
     dependencies:
       '@browserstack/ai-sdk-node': 1.5.17(debug@4.4.1)
       '@percy/appium-app': 2.1.0
       '@percy/selenium-webdriver': 2.2.3
       '@types/gitconfiglocal': 2.0.3
-      '@wdio/cli': 9.19.2(@types/node@20.19.13)(bufferutil@4.0.9)(expect-webdriverio@5.4.2)(utf-8-validate@6.0.5)
+      '@wdio/cli': 9.19.2(@types/node@20.19.13)(bufferutil@4.0.9)(expect-webdriverio@5.4.2(@wdio/globals@9.17.0)(@wdio/logger@9.18.0)(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5)))(utf-8-validate@6.0.5)
       '@wdio/logger': 9.18.0
       '@wdio/reporter': 9.19.2
       '@wdio/types': 9.19.2
@@ -15224,11 +15206,11 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@wdio/cli@9.19.2(@types/node@20.19.13)(bufferutil@4.0.9)(expect-webdriverio@5.4.2)(utf-8-validate@6.0.5)':
+  '@wdio/cli@9.19.2(@types/node@20.19.13)(bufferutil@4.0.9)(expect-webdriverio@5.4.2(@wdio/globals@9.17.0)(@wdio/logger@9.18.0)(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5)))(utf-8-validate@6.0.5)':
     dependencies:
       '@vitest/snapshot': 2.1.9
       '@wdio/config': 9.19.2
-      '@wdio/globals': 9.17.0(expect-webdriverio@5.4.2)(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5))
+      '@wdio/globals': 9.17.0(expect-webdriverio@5.4.2(@wdio/globals@9.17.0)(@wdio/logger@9.18.0)(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5)))(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5))
       '@wdio/logger': 9.18.0
       '@wdio/protocols': 9.16.2
       '@wdio/types': 9.19.2
@@ -15273,7 +15255,7 @@ snapshots:
       '@wdio/types': 9.19.2
       chalk: 5.6.0
 
-  '@wdio/globals@9.17.0(expect-webdriverio@5.4.2)(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5))':
+  '@wdio/globals@9.17.0(expect-webdriverio@5.4.2(@wdio/globals@9.17.0)(@wdio/logger@9.18.0)(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5)))(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5))':
     dependencies:
       expect-webdriverio: 5.4.2(@wdio/globals@9.17.0)(@wdio/logger@9.18.0)(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5))
       webdriverio: 9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -15283,7 +15265,7 @@ snapshots:
       '@types/node': 20.19.13
       '@wdio/logger': 9.18.0
       '@wdio/repl': 9.16.2
-      '@wdio/runner': 9.19.2(bufferutil@4.0.9)(expect-webdriverio@5.4.2)(utf-8-validate@6.0.5)(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5))
+      '@wdio/runner': 9.19.2(bufferutil@4.0.9)(expect-webdriverio@5.4.2(@wdio/globals@9.17.0)(@wdio/logger@9.18.0)(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5)))(utf-8-validate@6.0.5)(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5))
       '@wdio/types': 9.19.2
       '@wdio/xvfb': 9.19.2
       exit-hook: 4.0.0
@@ -15332,12 +15314,12 @@ snapshots:
       diff: 8.0.2
       object-inspect: 1.13.4
 
-  '@wdio/runner@9.19.2(bufferutil@4.0.9)(expect-webdriverio@5.4.2)(utf-8-validate@6.0.5)(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5))':
+  '@wdio/runner@9.19.2(bufferutil@4.0.9)(expect-webdriverio@5.4.2(@wdio/globals@9.17.0)(@wdio/logger@9.18.0)(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5)))(utf-8-validate@6.0.5)(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5))':
     dependencies:
       '@types/node': 20.19.13
       '@wdio/config': 9.19.2
       '@wdio/dot-reporter': 9.19.2
-      '@wdio/globals': 9.17.0(expect-webdriverio@5.4.2)(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5))
+      '@wdio/globals': 9.17.0(expect-webdriverio@5.4.2(@wdio/globals@9.17.0)(@wdio/logger@9.18.0)(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5)))(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5))
       '@wdio/logger': 9.18.0
       '@wdio/types': 9.19.2
       '@wdio/utils': 9.19.2
@@ -15446,10 +15428,10 @@ snapshots:
 
   addressparser@1.0.1: {}
 
-  aes-decrypter@3.1.3:
+  aes-decrypter@4.0.2:
     dependencies:
       '@babel/runtime': 7.28.3
-      '@videojs/vhs-utils': 3.0.5
+      '@videojs/vhs-utils': 4.1.1
       global: 4.4.0
       pkcs7: 1.0.4
 
@@ -17869,7 +17851,7 @@ snapshots:
   expect-webdriverio@5.4.2(@wdio/globals@9.17.0)(@wdio/logger@9.18.0)(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5)):
     dependencies:
       '@vitest/snapshot': 3.2.4
-      '@wdio/globals': 9.17.0(expect-webdriverio@5.4.2)(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5))
+      '@wdio/globals': 9.17.0(expect-webdriverio@5.4.2(@wdio/globals@9.17.0)(@wdio/logger@9.18.0)(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5)))(webdriverio@9.19.2(bufferutil@4.0.9)(utf-8-validate@6.0.5))
       '@wdio/logger': 9.18.0
       deep-eql: 5.0.2
       expect: 30.1.2
@@ -18769,7 +18751,7 @@ snapshots:
 
   i18next@24.2.3(typescript@5.8.3):
     dependencies:
-      '@babel/runtime': 7.28.2
+      '@babel/runtime': 7.28.3
     optionalDependencies:
       typescript: 5.8.3
 
@@ -18838,8 +18820,6 @@ snapshots:
   imurmurhash@0.1.4: {}
 
   indexof@0.0.1: {}
-
-  individual@2.0.0: {}
 
   inflection@1.13.4: {}
 
@@ -19380,8 +19360,6 @@ snapshots:
       randombytes: 2.1.0
     optional: true
 
-  keycode@2.2.1: {}
-
   keyv@4.5.4:
     dependencies:
       json-buffer: 3.0.1
@@ -19635,10 +19613,10 @@ snapshots:
 
   luxon@3.7.1: {}
 
-  m3u8-parser@4.8.0:
+  m3u8-parser@7.2.0:
     dependencies:
       '@babel/runtime': 7.28.3
-      '@videojs/vhs-utils': 3.0.5
+      '@videojs/vhs-utils': 4.1.1
       global: 4.4.0
 
   magic-string@0.30.17:
@@ -20002,10 +19980,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  mpd-parser@0.22.1:
+  mpd-parser@1.3.1:
     dependencies:
       '@babel/runtime': 7.28.3
-      '@videojs/vhs-utils': 3.0.5
+      '@videojs/vhs-utils': 4.1.1
       '@xmldom/xmldom': 0.8.11
       global: 4.4.0
 
@@ -20065,7 +20043,7 @@ snapshots:
 
   mute-stream@2.0.0: {}
 
-  mux.js@6.0.1:
+  mux.js@7.1.0:
     dependencies:
       '@babel/runtime': 7.28.3
       global: 4.4.0
@@ -21562,10 +21540,6 @@ snapshots:
 
   run-series@1.1.9: {}
 
-  rust-result@1.0.0:
-    dependencies:
-      individual: 2.0.0
-
   rxjs@7.8.1:
     dependencies:
       tslib: 2.8.1
@@ -21589,10 +21563,6 @@ snapshots:
   safe-buffer@5.2.1: {}
 
   safe-identifier@0.4.2: {}
-
-  safe-json-parse@4.0.0:
-    dependencies:
-      rust-result: 1.0.0
 
   safe-push-apply@1.0.0:
     dependencies:
@@ -22876,8 +22846,6 @@ snapshots:
       querystringify: 2.2.0
       requires-port: 1.0.0
 
-  url-toolkit@2.2.5: {}
-
   url@0.11.4:
     dependencies:
       punycode: 1.4.1
@@ -22974,23 +22942,27 @@ snapshots:
       core-util-is: 1.0.2
       extsprintf: 1.4.1
 
-  video.js@7.21.7:
+  video.js@8.23.4:
     dependencies:
       '@babel/runtime': 7.28.3
-      '@videojs/http-streaming': 2.16.3(video.js@7.21.7)
-      '@videojs/vhs-utils': 3.0.5
-      '@videojs/xhr': 2.6.0
-      aes-decrypter: 3.1.3
+      '@videojs/http-streaming': 3.17.2(video.js@8.23.4)
+      '@videojs/vhs-utils': 4.1.1
+      '@videojs/xhr': 2.7.0
+      aes-decrypter: 4.0.2
       global: 4.4.0
-      keycode: 2.2.1
-      m3u8-parser: 4.8.0
-      mpd-parser: 0.22.1
-      mux.js: 6.0.1
-      safe-json-parse: 4.0.0
-      videojs-font: 3.2.0
+      m3u8-parser: 7.2.0
+      mpd-parser: 1.3.1
+      mux.js: 7.1.0
+      videojs-contrib-quality-levels: 4.1.0(video.js@8.23.4)
+      videojs-font: 4.2.0
       videojs-vtt.js: 0.15.5
 
-  videojs-font@3.2.0: {}
+  videojs-contrib-quality-levels@4.1.0(video.js@8.23.4):
+    dependencies:
+      global: 4.4.0
+      video.js: 8.23.4
+
+  videojs-font@4.2.0: {}
 
   videojs-vtt.js@0.15.5:
     dependencies:

@@ -1,6 +1,8 @@
 import videojs from 'video.js'
+import { VideojsComponent } from '../../types'
 
-const Component = videojs.getComponent('Component')
+const Component = videojs.getComponent('Component') as typeof VideojsComponent
+
 class PeerTubeMobileButtons extends Component {
   declare private mainButton: HTMLDivElement
 

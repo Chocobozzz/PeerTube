@@ -1,15 +1,15 @@
 import videojs from 'video.js'
-import { PeerTubeLinkButtonOptions } from '../../types'
+import { PeerTubeLinkButtonOptions, VideojsClickableComponent, VideojsClickableComponentOptions, VideojsPlayer } from '../../types'
 
-const ClickableComponent = videojs.getComponent('ClickableComponent')
+const ClickableComponent = videojs.getComponent('ClickableComponent') as typeof VideojsClickableComponent
 
 class PeerTubeLiveDisplay extends ClickableComponent {
   declare private interval: any
 
-  declare private contentEl_: any
+  declare private contentEl_: HTMLElement
 
-  constructor (player: videojs.Player, options?: PeerTubeLinkButtonOptions) {
-    super(player, options as any)
+  constructor (player: VideojsPlayer, options?: VideojsClickableComponentOptions & PeerTubeLinkButtonOptions) {
+    super(player, options)
 
     this.interval = this.setInterval(() => this.updateClass(), 1000)
 
@@ -36,7 +36,7 @@ class PeerTubeLiveDisplay extends ClickableComponent {
       className: 'vjs-live-display'
     }, {
       'aria-live': 'off'
-    })
+    }) as HTMLElement
 
     this.contentEl_.appendChild(videojs.dom.createEl('span', {
       className: 'vjs-control-text',

@@ -1,33 +1,32 @@
 import videojs from 'video.js'
+import { ContextMenuPluginOptions, VideojsMenu, VideojsMenuOptions, VideojsPlayer } from '../../types'
 import { ContextMenuItem } from './context-menu-item'
-import { ContextMenuPluginOptions } from '../../types'
 
-const Menu = videojs.getComponent('Menu')
+const Menu = videojs.getComponent('Menu') as typeof VideojsMenu
 
 type ContextMenuOptions = ContextMenuPluginOptions & { position: { left: number, top: number } }
 
 class ContextMenu extends Menu {
-  declare options_: ContextMenuOptions & videojs.MenuOptions
+  declare options_: ContextMenuOptions & VideojsMenuOptions
 
-  constructor (player: videojs.Player, options: ContextMenuOptions) {
+  constructor (player: VideojsPlayer, options: ContextMenuOptions) {
     super(player, { ...options, menuButton: undefined })
 
-    // Each menu component has its own `dispose` method that can be
-    // safely bound and unbound to events while maintaining its context.
-    this.dispose = videojs.bind(this, this.dispose)
+    // TODO: explain why we need this (I don't understand it)
+    this.dispose = this.dispose.bind(this)
 
     for (const c of options.content()) {
       this.addItem(
         new ContextMenuItem(player, {
           label: c.label,
-          listener: videojs.bind(player, c.listener)
+          listener: c.listener.bind(player)
         })
       )
     }
   }
 
   createEl () {
-    const el = super.createEl()
+    const el = super.createEl() as HTMLElement
 
     videojs.dom.addClass(el, 'vjs-contextmenu-ui-menu')
     el.style.left = this.options_.position.left + 'px'

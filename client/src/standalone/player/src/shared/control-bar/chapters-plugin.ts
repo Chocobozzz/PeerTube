@@ -1,9 +1,9 @@
 import { VideoChapter } from '@peertube/peertube-models'
 import videojs from 'video.js'
-import { ChaptersOptions } from '../../types'
+import { ChaptersOptions, VideojsPlayer, VideojsPlugin } from '../../types'
 import { ProgressBarMarkerComponent } from './progress-bar-marker-component'
 
-const Plugin = videojs.getPlugin('plugin')
+const Plugin = videojs.getPlugin('plugin') as typeof VideojsPlugin
 
 class ChaptersPlugin extends Plugin {
   declare private chapters: VideoChapter[]
@@ -11,8 +11,8 @@ class ChaptersPlugin extends Plugin {
 
   private activeChapter: VideoChapter
 
-  constructor (player: videojs.Player, options: videojs.ComponentOptions & ChaptersOptions) {
-    super(player, options)
+  constructor (player: VideojsPlayer, options: ChaptersOptions) {
+    super(player)
 
     this.markers = []
     this.chapters = options.chapters
@@ -25,8 +25,13 @@ class ChaptersPlugin extends Plugin {
 
         const marker = new ProgressBarMarkerComponent(player, { timecode: chapter.timecode })
 
-        marker.on('mouseenter', () => this.activeChapter = chapter)
-        marker.on('mouseleave', () => this.activeChapter = undefined)
+        marker.on('mouseenter', () => {
+          this.activeChapter = chapter
+        })
+
+        marker.on('mouseleave', () => {
+          this.activeChapter = undefined
+        })
 
         this.markers.push(marker)
         this.getSeekBar().addChild(marker)

@@ -1,12 +1,12 @@
 import videojs from 'video.js'
-import { ProgressBarMarkerComponentOptions } from '../../types'
+import { ProgressBarMarkerComponentOptions, VideojsClickableComponent, VideojsClickableComponentOptions, VideojsPlayer } from '../../types'
 
-const ClickableComponent = videojs.getComponent('ClickableComponent')
+const ClickableComponent = videojs.getComponent('ClickableComponent') as typeof VideojsClickableComponent
 
 export class ProgressBarMarkerComponent extends ClickableComponent {
-  declare options_: ProgressBarMarkerComponentOptions & videojs.ComponentOptions
+  declare options_: ProgressBarMarkerComponentOptions & VideojsClickableComponentOptions
 
-  constructor (player: videojs.Player, options?: ProgressBarMarkerComponentOptions & videojs.ComponentOptions) {
+  constructor (player: VideojsPlayer, options?: ProgressBarMarkerComponentOptions & VideojsClickableComponentOptions) {
     super(player, options)
 
     const updateMarker = () => {

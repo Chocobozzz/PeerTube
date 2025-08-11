@@ -1,11 +1,11 @@
 import videojs from 'video.js'
-import { TheaterButtonOptions } from '../../types'
 import { getStoredPreferredSubtitle } from '../../peertube-player-local-storage'
+import { TheaterButtonOptions, VideojsButton, VideojsButtonOptions, VideojsPlayer } from '../../types'
 
-const Button = videojs.getComponent('Button')
+const Button = videojs.getComponent('Button') as typeof VideojsButton
+
 class CaptionToggleButton extends Button {
-
-  constructor (player: videojs.Player, options: TheaterButtonOptions & videojs.ComponentOptions) {
+  constructor (player: VideojsPlayer, options: TheaterButtonOptions & VideojsButtonOptions) {
     super(player, options)
 
     player.on('texttrackchange', () => this.update())

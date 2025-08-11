@@ -1,16 +1,16 @@
 import videojs from 'video.js'
-import { PlaylistPluginOptions } from '../../types'
+import { PlaylistPluginOptions, VideojsPlayer, VideojsPlugin } from '../../types'
 import { PlaylistButton } from './playlist-button'
 import { PlaylistMenu } from './playlist-menu'
 
-const Plugin = videojs.getPlugin('plugin')
+const Plugin = videojs.getPlugin('plugin') as typeof VideojsPlugin
 
 class PlaylistPlugin extends Plugin {
   declare private playlistMenu: PlaylistMenu
   declare private playlistButton: PlaylistButton
 
-  constructor (player: videojs.Player, options?: PlaylistPluginOptions) {
-    super(player, options)
+  constructor (player: VideojsPlayer, options?: PlaylistPluginOptions) {
+    super(player)
 
     this.player.addClass('vjs-playlist')
 

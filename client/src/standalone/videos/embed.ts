@@ -7,7 +7,7 @@ import {
   VideoPlaylistElement,
   VideoState
 } from '@peertube/peertube-models'
-import type { PeerTubePlayer } from '@peertube/player'
+import type { PeerTubePlayer, VideojsPlayer } from '@peertube/player'
 import { TranslationsManager } from '@root-helpers/translations-manager'
 import { PeerTubeServerError } from 'src/types'
 import type videojs from 'video.js'
@@ -29,7 +29,7 @@ import {
 import { PlayerHTML } from './shared/player-html'
 
 export class PeerTubeEmbed {
-  player: videojs.Player
+  player: VideojsPlayer
   api: PeerTubeEmbedApi = null
 
   config: HTMLServerConfig

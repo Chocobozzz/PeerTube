@@ -1,16 +1,16 @@
-import videojs from 'video.js'
 import { buildVideoLink, decorateVideoLink } from '@peertube/peertube-core-utils'
-import { PeerTubeLinkButtonOptions } from '../../types'
+import videojs from 'video.js'
+import { PeerTubeLinkButtonOptions, VideojsComponent, VideojsComponentOptions, VideojsPlayer } from '../../types'
 
-const Component = videojs.getComponent('Component')
+const Component = videojs.getComponent('Component') as typeof VideojsComponent
 
 class PeerTubeLinkButton extends Component {
   declare private mouseEnterHandler: () => void
   declare private clickHandler: () => void
 
-  declare options_: PeerTubeLinkButtonOptions & videojs.ComponentOptions
+  declare options_: PeerTubeLinkButtonOptions & VideojsComponentOptions
 
-  constructor (player: videojs.Player, options?: PeerTubeLinkButtonOptions & videojs.ComponentOptions) {
+  constructor (player: VideojsPlayer, options?: PeerTubeLinkButtonOptions & VideojsComponentOptions) {
     super(player, options)
 
     this.updateShowing()

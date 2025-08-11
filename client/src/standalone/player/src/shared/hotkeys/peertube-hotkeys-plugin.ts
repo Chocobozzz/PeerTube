@@ -1,8 +1,9 @@
 import videojs from 'video.js'
+import { VideojsPlayer, VideojsPlugin } from '../../types'
 
 type KeyHandler = { accept: (event: KeyboardEvent) => boolean, cb: (e: KeyboardEvent) => void }
 
-const Plugin = videojs.getPlugin('plugin')
+const Plugin = videojs.getPlugin('plugin') as typeof VideojsPlugin
 
 export type HotkeysOptions = {
   isLive: boolean
@@ -18,8 +19,8 @@ class PeerTubeHotkeysPlugin extends Plugin {
 
   declare private readonly isLive: boolean
 
-  constructor (player: videojs.Player, options: videojs.PlayerOptions & HotkeysOptions) {
-    super(player, options)
+  constructor (player: VideojsPlayer, options: HotkeysOptions) {
+    super(player)
 
     this.isLive = options.isLive
 

@@ -1,9 +1,9 @@
 import videojs from 'video.js'
+import { VideojsComponent } from '../../types'
 
-const Component = videojs.getComponent('Component')
+const Component = videojs.getComponent('Component') as typeof VideojsComponent
 
 class SettingsPanelChild extends Component {
-
   createEl () {
     return super.createEl('div', {
       className: 'vjs-settings-panel-child',
@@ -12,6 +12,6 @@ class SettingsPanelChild extends Component {
   }
 }
 
-Component.registerComponent('SettingsPanelChild', SettingsPanelChild)
+videojs.registerComponent('SettingsPanelChild', SettingsPanelChild)
 
 export { SettingsPanelChild }

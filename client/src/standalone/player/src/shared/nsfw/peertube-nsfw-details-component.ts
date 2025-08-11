@@ -1,14 +1,15 @@
 import { NSFWFlag } from '@peertube/peertube-models'
 import videojs from 'video.js'
+import { VideojsComponent, VideojsComponentOptions, VideojsPlayer } from '../../types'
 import { type PeerTubeNSFWPluginOptions } from './peertube-nsfw-plugin'
 
-const Component = videojs.getComponent('Component')
+const Component = videojs.getComponent('Component') as typeof VideojsComponent
 
 class PeerTubeNSFWDetailsComponent extends Component {
-  declare options_: videojs.ComponentOptions & PeerTubeNSFWPluginOptions
+  declare options_: VideojsComponentOptions & PeerTubeNSFWPluginOptions
 
   // eslint-disable-next-line @typescript-eslint/no-useless-constructor
-  constructor (player: videojs.Player, options: videojs.ComponentOptions & PeerTubeNSFWPluginOptions) {
+  constructor (player: VideojsPlayer, options: VideojsComponentOptions & PeerTubeNSFWPluginOptions) {
     super(player, options)
   }
 
