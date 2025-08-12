@@ -107,6 +107,7 @@
     "Your video has been unblocked": "Din video är inte längre blockerad",
     "Your video <strong>{videoName}</strong> has been unblocked by {instanceName} moderators.": "Din video <strong>{videoName}</strong> har fått blockeringen lyft av moderatorerna på {instanceName}.",
     "{language} is not a valid language": "{language} är inte ett valbart språk",
+    "The provided thumbnail file is invalid.": "The provided thumbnail file is invalid.",
     "Reset your account password": "Återställ lösenordet för ditt konto",
     "Create your account password": "Skapa ett lösenord för ditt konto",
     "Verify your email on {instanceName}": "Verifiera din e-postadress på {instanceName}",
@@ -158,5 +159,6 @@
     "Your subscription {channelName} is live streaming {videoName}": "Din kanalprenumeration {channelName} direktsänder videon {videoName}",
     "Edition of your video has finished": "Redigeringen av din video är klar",
     "Edition of your video {videoName} has finished.": "Redigeringen av din video {videoName} är klar.",
-    "Video edition has finished": "Videoredigeringen är klar"
+    "Video edition has finished": "Videoredigeringen är klar",
+    "The token session does not exist or does not belong to the user.": "The token session does not exist or does not belong to the user."
 }

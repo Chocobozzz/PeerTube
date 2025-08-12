@@ -107,6 +107,7 @@
     "Your video has been unblocked": "El vostre vídeo s'ha desblocat",
     "Your video <strong>{videoName}</strong> has been unblocked by {instanceName} moderators.": "La moderació de {instanceName} ha desblocat el vostre vídeo <strong>{videoName}</strong>.",
     "{language} is not a valid language": "{language} no és un idioma vàlid",
+    "The provided thumbnail file is invalid.": "The provided thumbnail file is invalid.",
     "Reset your account password": "Restablir la contrasenya",
     "Create your account password": "Crear la contrasenya",
     "Verify your email on {instanceName}": "Verificar el correu electrònic a {instanceName}",
@@ -158,5 +159,6 @@
     "Your subscription {channelName} is live streaming {videoName}": "La subscripció a {channelName} està emetent en directe {videoName}",
     "Edition of your video has finished": "L'edició del vídeo ha finalitzat",
     "Edition of your video {videoName} has finished.": "L'edició del vídeo {videoName} ha finalitzat.",
-    "Video edition has finished": "L'edició del vídeo ha acabat"
+    "Video edition has finished": "L'edició del vídeo ha acabat",
+    "The token session does not exist or does not belong to the user.": "The token session does not exist or does not belong to the user."
 }
