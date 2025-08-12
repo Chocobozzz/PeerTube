@@ -35,6 +35,8 @@ export interface RegisterServerExternalAuthenticatedResult extends RegisterServe
   res: express.Response
   // Redirect the user to this external URI after the external auth has been verified.
   externalRedirectUri?: string
+  // Respond with a 200 OK and JSON body instead of redirecting, to allow API access.
+  returnJsonNoRedirect?: boolean
 }
 
 interface RegisterServerAuthBase {
