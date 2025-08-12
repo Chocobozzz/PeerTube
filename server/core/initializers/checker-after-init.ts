@@ -54,6 +54,7 @@ function checkConfig () {
   checkObjectStorageConfig()
   checkVideoStudioConfig()
   checkThumbnailsConfig()
+  checkBrowseVideosConfig()
 }
 
 // We get db by param to not import it in this file (import orders)
@@ -383,5 +384,31 @@ function checkThumbnailsConfig () {
 
   if (!isArray(CONFIG.THUMBNAILS.SIZES) || CONFIG.THUMBNAILS.SIZES.length !== 2) {
     throw new Error('thumbnails.sizes must be an array of 2 sizes')
+  }
+}
+
+function checkBrowseVideosConfig () {
+  const trendingSort = '-trending'
+  const hotSort = '-hot'
+  const likesSort = '-likes'
+  const availableSortOptions = [ '-publishedAt', '-originallyPublishedAt', 'name', trendingSort, hotSort, likesSort, '-views' ]
+  const currentDefaultSort = CONFIG.BROWSE.VIDEOS.DEFAULT_SORT
+
+  if (availableSortOptions.includes(currentDefaultSort) === false) {
+    throw new Error('Browse videos default sort should be \'' + availableSortOptions.join('\' or \'') + 
+      '\', instead of \'' + currentDefaultSort + '\'')
+  }
+
+  const enabledTrendingAlgorithms = CONFIG.TRENDING.VIDEOS.ALGORITHMS.ENABLED
+  const trendingSortAlgorithmMap = new Map<string, string>([
+    [ trendingSort, 'most-viewed' ],
+    [ hotSort, 'hot' ],
+    [ likesSort, 'most-liked' ]
+  ])
+  const currentTrendingSortAlgorithm = trendingSortAlgorithmMap.get(currentDefaultSort)
+
+  if (currentTrendingSortAlgorithm && enabledTrendingAlgorithms.includes(currentTrendingSortAlgorithm) === false) {
+    throw new Error('Trending videos algorithm \'' + currentTrendingSortAlgorithm + 
+      '\' should be enabled if browse videos default sort is \'' + currentDefaultSort + '\'')
   }
 }
