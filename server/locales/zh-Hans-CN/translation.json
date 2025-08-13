@@ -107,7 +107,7 @@
     "Your video has been unblocked": "你的视频已解封",
     "Your video <strong>{videoName}</strong> has been unblocked by {instanceName} moderators.": "{instanceName} 的 moderators 已经解封了你的视频 <strong>{videoName}</strong>。",
     "{language} is not a valid language": "{language} 不是有效的语言",
-    "The provided thumbnail file is invalid.": "The provided thumbnail file is invalid.",
+    "The provided thumbnail file is invalid.": "提供的缩略图文件无效。",
     "Reset your account password": "重置你的账户密码",
     "Create your account password": "创建你账户的密码",
     "Verify your email on {instanceName}": "验证你在 {instanceName} 上的邮箱",
@@ -160,5 +160,5 @@
     "Edition of your video has finished": "你视频的编辑已完成",
     "Edition of your video {videoName} has finished.": "你视频 {videoName} 的编辑已完成。",
     "Video edition has finished": "视频编辑已完成",
-    "The token session does not exist or does not belong to the user.": "The token session does not exist or does not belong to the user."
+    "The token session does not exist or does not belong to the user.": "令牌会话不存在或不属于该用户。"
 }
