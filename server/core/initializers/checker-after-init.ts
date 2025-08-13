@@ -388,10 +388,7 @@ function checkThumbnailsConfig () {
 }
 
 function checkBrowseVideosConfig () {
-  const trendingSort = '-trending'
-  const hotSort = '-hot'
-  const likesSort = '-likes'
-  const availableSortOptions = [ '-publishedAt', '-originallyPublishedAt', 'name', trendingSort, hotSort, likesSort, '-views' ]
+  const availableSortOptions = [ '-publishedAt', '-originallyPublishedAt', 'name', '-trending', '-hot', '-likes', '-views' ]
   const currentDefaultSort = CONFIG.BROWSE.VIDEOS.DEFAULT_SORT
 
   if (availableSortOptions.includes(currentDefaultSort) === false) {
@@ -401,9 +398,9 @@ function checkBrowseVideosConfig () {
 
   const enabledTrendingAlgorithms = CONFIG.TRENDING.VIDEOS.ALGORITHMS.ENABLED
   const trendingSortAlgorithmMap = new Map<string, string>([
-    [ trendingSort, 'most-viewed' ],
-    [ hotSort, 'hot' ],
-    [ likesSort, 'most-liked' ]
+    [ '-trending', 'most-viewed' ],
+    [ '-hot', 'hot' ],
+    [ '-likes', 'most-liked' ]
   ])
   const currentTrendingSortAlgorithm = trendingSortAlgorithmMap.get(currentDefaultSort)
 
