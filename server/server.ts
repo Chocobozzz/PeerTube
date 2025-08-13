@@ -283,6 +283,8 @@ app.use((err, req, res: express.Response, _next) => {
 
 const { server, trackerServer } = createWebsocketTrackerServer(app)
 
+server.requestTimeout = CONFIG.HTTP_TIMEOUTS.REQUEST
+
 // ----------- Run -----------
 
 async function startApplication () {

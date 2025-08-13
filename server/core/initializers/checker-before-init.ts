@@ -14,6 +14,7 @@ export function checkMissedConfig () {
     'webserver.hostname',
     'webserver.port',
     'secrets.peertube',
+    'http_timeouts.request',
     'trust_proxy',
     'oauth2.token_lifetime.access_token',
     'oauth2.token_lifetime.refresh_token',

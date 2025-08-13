@@ -1,5 +1,5 @@
 {
-    "New message on abuse report": "New message on abuse report",
+    "New message on abuse report": "Nova raporto pri mistrakta konduto",
     "A new message by {messageAccountName} was posted on <a href=\"{abuseUrl}\">abuse report #{abuseId}</a>": "A new message by {messageAccountName} was posted on <a href=\"{abuseUrl}\">abuse report #{abuseId}</a>",
     "Abuse report state changed": "Abuse report state changed",
     "<a href=\"{abuseUrl}\">Your abuse report #{abuseId}</a> on {instanceName} has been accepted.": "<a href=\"{abuseUrl}\">Your abuse report #{abuseId}</a> on {instanceName} has been accepted.",
@@ -107,6 +107,7 @@
     "Your video has been unblocked": "Your video has been unblocked",
     "Your video <strong>{videoName}</strong> has been unblocked by {instanceName} moderators.": "Your video <strong>{videoName}</strong> has been unblocked by {instanceName} moderators.",
     "{language} is not a valid language": "{language} is not a valid language",
+    "The provided thumbnail file is invalid.": "The provided thumbnail file is invalid.",
     "Reset your account password": "Reset your account password",
     "Create your account password": "Create your account password",
     "Verify your email on {instanceName}": "Verify your email on {instanceName}",
@@ -158,5 +159,6 @@
     "Your subscription {channelName} is live streaming {videoName}": "Your subscription {channelName} is live streaming {videoName}",
     "Edition of your video has finished": "Edition of your video has finished",
     "Edition of your video {videoName} has finished.": "Edition of your video {videoName} has finished.",
-    "Video edition has finished": "Video edition has finished"
+    "Video edition has finished": "Video edition has finished",
+    "The token session does not exist or does not belong to the user.": "The token session does not exist or does not belong to the user."
 }

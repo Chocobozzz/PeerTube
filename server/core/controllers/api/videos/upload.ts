@@ -8,7 +8,7 @@ import { setupUploadResumableRoutes, uploadx } from '@server/lib/uploadx.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
 import { openapiOperationDoc } from '@server/middlewares/doc.js'
 import express from 'express'
-import { VideoAuditView, auditLoggerFactory, getAuditIdFromRes } from '../../../helpers/audit-logger.js'
+import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger.js'
 import { createReqFiles } from '../../../helpers/express-utils.js'
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
 import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../../initializers/constants.js'
@@ -17,7 +17,6 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
-  setReqTimeout,
   videosAddLegacyValidator,
   videosAddResumableInitValidator,
   videosAddResumableValidator
@@ -42,7 +41,6 @@ uploadRouter.post(
   '/upload',
   openapiOperationDoc({ operationId: 'uploadLegacy' }),
   authenticate,
-  setReqTimeout(1000 * 60 * 10), // Uploading the video could be long
   reqVideoFileAdd,
   asyncMiddleware(videosAddLegacyValidator),
   asyncRetryTransactionMiddleware(addVideoLegacy)
