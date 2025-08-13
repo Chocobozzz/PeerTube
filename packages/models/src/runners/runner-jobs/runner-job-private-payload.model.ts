@@ -9,7 +9,8 @@ export type RunnerJobPrivatePayload =
   RunnerJobVODPrivatePayload |
   RunnerJobLiveRTMPHLSTranscodingPrivatePayload |
   RunnerJobVideoStudioTranscodingPrivatePayload |
-  RunnerJobTranscriptionPrivatePayload
+  RunnerJobTranscriptionPrivatePayload |
+  RunnerJobGenerateStoryboardPrivatePayload
 
 // ---------------------------------------------------------------------------
 
@@ -51,4 +52,9 @@ export interface RunnerJobVideoStudioTranscodingPrivatePayload {
 
 export interface RunnerJobTranscriptionPrivatePayload {
   videoUUID: string
+}
+
+export interface RunnerJobGenerateStoryboardPrivatePayload {
+  videoUUID: string
+  federate?: boolean
 }

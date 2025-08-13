@@ -16,7 +16,15 @@ import { exists, isArray, isFileValid, isSafeFilename } from '../misc.js'
 
 const RUNNER_JOBS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.RUNNER_JOBS
 
-const runnerJobTypes = new Set([ 'vod-hls-transcoding', 'vod-web-video-transcoding', 'vod-audio-merge-transcoding' ])
+const runnerJobTypes = new Set([
+  'vod-hls-transcoding',
+  'vod-web-video-transcoding',
+  'vod-audio-merge-transcoding',
+  'live-rtmp-hls-transcoding',
+  'video-studio-transcoding',
+  'video-transcription',
+  'generate-video-storyboard'
+])
 export function isRunnerJobTypeValid (value: RunnerJobType) {
   return runnerJobTypes.has(value)
 }
@@ -27,7 +35,8 @@ export function isRunnerJobSuccessPayloadValid (value: RunnerJobSuccessPayload, 
     isRunnerJobVODAudioMergeResultPayloadValid(value as VODHLSTranscodingSuccess, type, files) ||
     isRunnerJobLiveRTMPHLSResultPayloadValid(value as LiveRTMPHLSTranscodingSuccess, type) ||
     isRunnerJobVideoStudioResultPayloadValid(value as VideoStudioTranscodingSuccess, type, files) ||
-    isRunnerJobTranscriptionResultPayloadValid(value as TranscriptionSuccess, type, files)
+    isRunnerJobTranscriptionResultPayloadValid(value as TranscriptionSuccess, type, files) ||
+    isRunnerJobGenerateStoryboardResultPayloadValid(value as any, type, files)
 }
 
 // ---------------------------------------------------------------------------
@@ -42,7 +51,8 @@ export function isRunnerJobUpdatePayloadValid (value: RunnerJobUpdatePayload, ty
     isRunnerJobVideoStudioUpdatePayloadValid(value, type, files) ||
     isRunnerJobVODAudioMergeUpdatePayloadValid(value, type, files) ||
     isRunnerJobLiveRTMPHLSUpdatePayloadValid(value, type, files) ||
-    isRunnerJobTranscriptionUpdatePayloadValid(value, type, files)
+    isRunnerJobTranscriptionUpdatePayloadValid(value, type, files) ||
+    isRunnerJobGenerateStoryboardUpdatePayloadValid(value, type, files)
 }
 
 // ---------------------------------------------------------------------------
@@ -124,6 +134,15 @@ function isRunnerJobTranscriptionResultPayloadValid (
     isFileValid({ files, field: 'payload[vttFile]', mimeTypeRegex: null, maxSize: null })
 }
 
+function isRunnerJobGenerateStoryboardResultPayloadValid (
+  _value: any,
+  type: RunnerJobType,
+  files: UploadFilesForCheck
+) {
+  return type === 'generate-video-storyboard' &&
+    isFileValid({ files, field: 'payload[storyboardFile]', mimeTypeRegex: null, maxSize: null })
+}
+
 // ---------------------------------------------------------------------------
 
 function isRunnerJobVODWebVideoUpdatePayloadValid (
@@ -202,5 +221,14 @@ function isRunnerJobVideoStudioUpdatePayloadValid (
   _files: UploadFilesForCheck
 ) {
   return type === 'video-studio-transcoding' &&
+    (!value || (typeof value === 'object' && Object.keys(value).length === 0))
+}
+
+function isRunnerJobGenerateStoryboardUpdatePayloadValid (
+  value: RunnerJobUpdatePayload,
+  type: RunnerJobType,
+  _files: UploadFilesForCheck
+) {
+  return type === 'generate-video-storyboard' &&
     (!value || (typeof value === 'object' && Object.keys(value).length === 0))
 }
