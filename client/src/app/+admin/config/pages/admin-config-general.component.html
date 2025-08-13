@@ -463,7 +463,7 @@
         <ng-container formGroupName="videos">
           <label i18n for="browseVideosDefaultSort">Default sort</label>
 
-          <my-select-options inputId="browseVideosDefaultSort" [items]="browseVideosDefaultSortOptions" formControlName="defaultSort"></my-select-options>
+          <my-select-videos-sort inputId="browseVideosDefaultSort" formControlName="defaultSort"></my-select-videos-sort>
 
           <div *ngIf="formErrors.browse.videos.defaultSort" class="form-error" role="alert">{{ formErrors.browse.videos.defaultSort }}</div>
         </ng-container>
