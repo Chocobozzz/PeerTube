@@ -18,7 +18,7 @@ import {
   ProcessOptions,
   scheduleTranscodingProgress
 } from './common.js'
-import { acquireCachedVideoInputFile } from './video-cache.js'
+import { acquireCachedVideoInputFile, acquireCachedInputFile } from './video-cache.js'
 
 export async function processWebVideoTranscoding (options: ProcessOptions<RunnerJobVODWebVideoTranscodingPayload>) {
   const { server, job, runnerToken } = options
@@ -29,6 +29,7 @@ export async function processWebVideoTranscoding (options: ProcessOptions<Runner
   let videoInputPath: string
   let videoCacheRelease: undefined | (() => Promise<void> | void)
   let separatedAudioInputPath: string
+  let separatedAudioCacheRelease: undefined | (() => Promise<void> | void)
 
   const outputPath = join(ConfigManager.Instance.getTranscodingDirectory(), `output-${buildUUID()}.mp4`)
 
@@ -45,7 +46,13 @@ export async function processWebVideoTranscoding (options: ProcessOptions<Runner
     const cache = await acquireCachedVideoInputFile({ url: payload.input.videoFileUrl, runnerToken, job, server })
     videoInputPath = cache.path
     videoCacheRelease = cache.release
-    separatedAudioInputPath = await downloadSeparatedAudioFileIfNeeded({ urls: payload.input.separatedAudioFileUrl, runnerToken, job })
+    if (payload.input.separatedAudioFileUrl && payload.input.separatedAudioFileUrl.length > 0) {
+      const audioCache = await acquireCachedInputFile({ url: payload.input.separatedAudioFileUrl[0], runnerToken, job, server })
+      separatedAudioInputPath = audioCache.path
+      separatedAudioCacheRelease = audioCache.release
+    } else {
+      separatedAudioInputPath = await downloadSeparatedAudioFileIfNeeded({ urls: payload.input.separatedAudioFileUrl, runnerToken, job })
+    }
 
     logger.info(`Downloaded input file ${payload.input.videoFileUrl} for job ${job.jobToken}. Running web video transcoding.`)
 
@@ -81,7 +88,7 @@ export async function processWebVideoTranscoding (options: ProcessOptions<Runner
   } finally {
     // Cache manager owns lifecycle. Release our reference (it will delete file if non-cached fallback was used)
     if (videoCacheRelease) await videoCacheRelease()
-    if (separatedAudioInputPath) await remove(separatedAudioInputPath)
+    if (separatedAudioCacheRelease) await separatedAudioCacheRelease()
     if (outputPath) await remove(outputPath)
     if (updateProgressInterval) clearInterval(updateProgressInterval)
   }
@@ -95,6 +102,7 @@ export async function processHLSTranscoding (options: ProcessOptions<RunnerJobVO
   let videoInputPath: string
   let videoCacheRelease: undefined | (() => Promise<void> | void)
   let separatedAudioInputPath: string
+  let separatedAudioCacheRelease: undefined | (() => Promise<void> | void)
 
   const uuid = buildUUID()
   const outputPath = join(ConfigManager.Instance.getTranscodingDirectory(), `${uuid}-${payload.output.resolution}.m3u8`)
@@ -114,7 +122,13 @@ export async function processHLSTranscoding (options: ProcessOptions<RunnerJobVO
     const cache = await acquireCachedVideoInputFile({ url: payload.input.videoFileUrl, runnerToken, job, server })
     videoInputPath = cache.path
     videoCacheRelease = cache.release
-    separatedAudioInputPath = await downloadSeparatedAudioFileIfNeeded({ urls: payload.input.separatedAudioFileUrl, runnerToken, job })
+    if (payload.input.separatedAudioFileUrl && payload.input.separatedAudioFileUrl.length > 0) {
+      const audioCache = await acquireCachedInputFile({ url: payload.input.separatedAudioFileUrl[0], runnerToken, job, server })
+      separatedAudioInputPath = audioCache.path
+      separatedAudioCacheRelease = audioCache.release
+    } else {
+      separatedAudioInputPath = await downloadSeparatedAudioFileIfNeeded({ urls: payload.input.separatedAudioFileUrl, runnerToken, job })
+    }
 
     logger.info(`Downloaded input file ${payload.input.videoFileUrl} for job ${job.jobToken}. Running HLS transcoding.`)
 
@@ -153,7 +167,7 @@ export async function processHLSTranscoding (options: ProcessOptions<RunnerJobVO
     })
   } finally {
     if (videoCacheRelease) await videoCacheRelease()
-    if (separatedAudioInputPath) await remove(separatedAudioInputPath)
+    if (separatedAudioCacheRelease) await separatedAudioCacheRelease()
     if (outputPath) await remove(outputPath)
     if (videoPath) await remove(videoPath)
     if (updateProgressInterval) clearInterval(updateProgressInterval)
