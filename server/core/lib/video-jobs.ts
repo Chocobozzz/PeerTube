@@ -1,5 +1,7 @@
 import { ManageVideoTorrentPayload, VideoPrivacy, VideoPrivacyType, VideoState, VideoStateType } from '@peertube/peertube-models'
 import { CONFIG } from '@server/initializers/config.js'
+import { VideoStoryboardJobHandler } from './runners/index.js'
+import { getTranscodingJobPriority } from './transcoding/transcoding-priority.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { MVideo, MVideoFile, MVideoFullLight, MVideoUUID } from '@server/types/models/index.js'
 import { CreateJobArgument, CreateJobOptions, JobQueue } from './job-queue/job-queue.js'
@@ -33,6 +35,9 @@ export function buildStoryboardJobIfNeeded (options: {
   const { video, federate } = options
 
   if (CONFIG.STORYBOARDS.ENABLED) {
+    // If remote runners are enabled, do not enqueue a local job queue task for storyboard generation
+    if (CONFIG.TRANSCODING.REMOTE_RUNNERS.ENABLED === true) return undefined
+
     return {
       type: 'generate-video-storyboard' as 'generate-video-storyboard',
       payload: {
@@ -61,6 +66,12 @@ export async function addVideoJobsAfterCreation (options: {
   generateTranscription: boolean
 }) {
   const { video, videoFile, generateTranscription } = options
+
+  // If remote runners are enabled, schedule the remote storyboard job immediately instead of enqueuing a local job
+  if (CONFIG.STORYBOARDS.ENABLED && CONFIG.TRANSCODING.REMOTE_RUNNERS.ENABLED === true) {
+    const priority = await getTranscodingJobPriority({ user: null, type: 'vod', fallback: 0 })
+    await new VideoStoryboardJobHandler().create({ videoUUID: video.uuid, priority, federateAfter: false })
+  }
 
   const jobs: (CreateJobArgument & CreateJobOptions)[] = [
     {
