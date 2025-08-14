@@ -11308,7 +11308,7 @@
       </trans-unit>
       <trans-unit id="5240371005291842688" datatype="html" xml:space="preserve">
         <source>This setting is not retroactive: current followers of your platform will not be affected</source>
-        <target state="needs-translation">Ce paramètre n'est pas rétroactif : les abonné·e·s actuels de votre plateforme ne seront pas affecté·e·s.</target>
+        <target state="translated">Ce paramètre n'est pas rétroactif : les abonné·e·s actuel•le•s de votre plateforme ne seront pas affecté·e·s.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">501,502</context>
@@ -11316,7 +11316,7 @@
       </trans-unit>
       <trans-unit id="4899539058271084907" datatype="html" xml:space="preserve">
         <source>Manually approve new followers that follow your platform</source>
-        <target state="needs-translation">Approuver manuellement les nouveaux abonné·e·s qui suivent votre plateforme</target>
+        <target state="translated">Approuver manuellement les nouvelle•aux abonné·e·s qui suivent votre plateforme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">509,510</context>
@@ -11324,7 +11324,7 @@
       </trans-unit>
       <trans-unit id="6240145294614933263" datatype="html" xml:space="preserve">
         <source>Automatically follow back followers that follow your platform</source>
-        <target state="needs-translation">Suivez automatiquement les abonné·e·s qui suivent votre plateforme</target>
+        <target state="translated">Suivre automatiquement les abonné·e·s qui suivent votre instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">522,523</context>
@@ -11332,7 +11332,7 @@
       </trans-unit>
       <trans-unit id="2362368426377094869" datatype="html" xml:space="preserve">
         <source>Automatically follow platforms of a public index</source>
-        <target state="needs-translation">Suivre automatiquement les plateformes d'un index public</target>
+        <target state="translated">Suivre automatiquement les instances d'un index public</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">535,536</context>
@@ -11364,7 +11364,7 @@
       </trans-unit>
       <trans-unit id="2709958363414972972" datatype="html" xml:space="preserve">
         <source>PLAYER</source>
-        <target state="needs-translation">JOUEUR</target>
+        <target state="translated">LECTEUR</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">567,568</context>
@@ -11372,7 +11372,7 @@
       </trans-unit>
       <trans-unit id="286395473992592179" datatype="html" xml:space="preserve">
         <source>Automatically play videos in the player</source>
-        <target state="needs-translation">Lecture automatique des vidéos dans le lecteur</target>
+        <target state="translated">Lire automatiquement les vidéos dans le lecteur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">576,577</context>
@@ -11380,7 +11380,7 @@
       </trans-unit>
       <trans-unit id="3184039004441581991" datatype="html" xml:space="preserve">
         <source>Enable P2P streaming by default on your platform</source>
-        <target state="needs-translation">Activer le streaming P2P par défaut sur votre plateforme</target>
+        <target state="translated">Activer le streaming P2P par défaut sur votre instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">585,586</context>
@@ -11428,7 +11428,7 @@
       </trans-unit>
       <trans-unit id="1244629318108208810" datatype="html" xml:space="preserve">
         <source>PLATFORM</source>
-        <target state="needs-translation">PLATEFORME</target>
+        <target state="translated">INSTANCE</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">37,38</context>
@@ -11476,7 +11476,7 @@
       </trans-unit>
       <trans-unit id="1226896451128473265" datatype="html" xml:space="preserve">
         <source>Advanced configuration updated.</source>
-        <target state="needs-translation">Configuration avancée mise à jour.</target>
+        <target state="translated">Configuration avancée mise à jour.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.ts</context>
           <context context-type="linenumber">126</context>
@@ -11532,7 +11532,7 @@
       </trans-unit>
       <trans-unit id="1905144662537747797" datatype="html" xml:space="preserve">
         <source>Enable users of your platform to stream a live.</source>
-        <target state="needs-translation">Permettez aux utilisateurs·ices de votre plateforme de diffuser un live.</target>
+        <target state="translated">Permettre aux utilisateurs·ices de votre instance de diffuser en direct.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.html</context>
           <context context-type="linenumber">10,11</context>
@@ -11580,7 +11580,7 @@
       </trans-unit>
       <trans-unit id="2268673016709678600" datatype="html" xml:space="preserve">
         <source>Max simultaneous lives created on your platform</source>
-        <target state="needs-translation">Nombre maximal de vies simultanées créées sur votre plateforme</target>
+        <target state="translated">Nombre maximal de direct simultanés créés sur votre instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.html</context>
           <context context-type="linenumber">51,53</context>
@@ -11744,7 +11744,7 @@
       </trans-unit>
       <trans-unit id="210131859223873198" datatype="html" xml:space="preserve">
         <source>Edit your platform homepage</source>
-        <target state="needs-translation">Modifier la page d'accueil de votre plateforme</target>
+        <target state="translated">Modifier la page d'accueil de votre instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">98</context>
@@ -11752,7 +11752,7 @@
       </trans-unit>
       <trans-unit id="1577436512754482869" datatype="html" xml:space="preserve">
         <source>Platform customization</source>
-        <target state="needs-translation">Personnalisation de la plateforme</target>
+        <target state="translated">Personnalisation de l'instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">108</context>
@@ -11764,7 +11764,7 @@
       </trans-unit>
       <trans-unit id="1717475601341178176" datatype="html" xml:space="preserve">
         <source>Platform information</source>
-        <target state="needs-translation">Informations sur la plateforme</target>
+        <target state="translated">Informations sur l'instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">122</context>
@@ -11780,7 +11780,7 @@
       </trans-unit>
       <trans-unit id="8169800528565475866" datatype="html" xml:space="preserve">
         <source>Platform logos</source>
-        <target state="needs-translation">Logos des plateformes</target>
+        <target state="translated">Logos de l'instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">135</context>
@@ -11800,7 +11800,7 @@
       </trans-unit>
       <trans-unit id="5637037987059793432" datatype="html" xml:space="preserve">
         <source>VOD configuration</source>
-        <target state="needs-translation">Configuration VOD</target>
+        <target state="translated">Configuration VOD</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">160</context>
@@ -11812,7 +11812,7 @@
       </trans-unit>
       <trans-unit id="7545205559638195390" datatype="html" xml:space="preserve">
         <source>Live configuration</source>
-        <target state="needs-translation">Configuration en direct</target>
+        <target state="translated">Configuration des directs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">170</context>
@@ -12200,7 +12200,7 @@
       </trans-unit>
       <trans-unit id="4221025784332707" datatype="html" xml:space="preserve">
         <source>VOD configuration updated.</source>
-        <target state="needs-translation">Configuration VOD mise à jour.</target>
+        <target state="translated">Configuration VOD mise à jour.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.ts</context>
           <context context-type="linenumber">296</context>
@@ -12208,7 +12208,7 @@
       </trans-unit>
       <trans-unit id="8895123182110799512" datatype="html" xml:space="preserve">
         <source>Open config wizard</source>
-        <target state="needs-translation">Ouvrir l'assistant de configuration</target>
+        <target state="translated">Ouvrir l'assistant de configuration</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/admin-save-bar.component.html</context>
           <context context-type="linenumber">6</context>
@@ -12326,7 +12326,7 @@
       </trans-unit>
       <trans-unit id="5389274721155083635" datatype="html" xml:space="preserve">
         <source>Primary color</source>
-        <target state="needs-translation">Couleur primaire</target>
+        <target state="translated">Couleur principale</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">121</context>
@@ -12338,7 +12338,7 @@
       </trans-unit>
       <trans-unit id="7134158175957628957" datatype="html" xml:space="preserve">
         <source>Foreground color</source>
-        <target state="needs-translation">Couleur de premier plan</target>
+        <target state="translated">Couleur de premier plan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">122</context>
@@ -12346,7 +12346,7 @@
       </trans-unit>
       <trans-unit id="238646176953521330" datatype="html" xml:space="preserve">
         <source>Background color</source>
-        <target state="needs-translation">Couleur d'arrière-plan</target>
+        <target state="translated">Couleur d'arrière-plan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">123</context>
@@ -12354,7 +12354,7 @@
       </trans-unit>
       <trans-unit id="1622932496860359706" datatype="html" xml:space="preserve">
         <source>Secondary background color</source>
-        <target state="needs-translation">Couleur d'arrière-plan secondaire</target>
+        <target state="translated">Couleur d'arrière-plan secondaire</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">125</context>
