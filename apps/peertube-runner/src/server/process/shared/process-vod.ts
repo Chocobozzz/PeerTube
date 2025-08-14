@@ -18,6 +18,7 @@ import {
   ProcessOptions,
   scheduleTranscodingProgress
 } from './common.js'
+import { acquireCachedVideoInputFile } from './video-cache.js'
 
 export async function processWebVideoTranscoding (options: ProcessOptions<RunnerJobVODWebVideoTranscodingPayload>) {
   const { server, job, runnerToken } = options
@@ -26,6 +27,7 @@ export async function processWebVideoTranscoding (options: ProcessOptions<Runner
 
   let ffmpegProgress: number
   let videoInputPath: string
+  let videoCacheRelease: undefined | (() => Promise<void> | void)
   let separatedAudioInputPath: string
 
   const outputPath = join(ConfigManager.Instance.getTranscodingDirectory(), `output-${buildUUID()}.mp4`)
@@ -38,9 +40,11 @@ export async function processWebVideoTranscoding (options: ProcessOptions<Runner
   })
 
   try {
-    logger.info(`Downloading input file ${payload.input.videoFileUrl} for web video transcoding job ${job.jobToken}`)
+    logger.info(`Acquiring input file ${payload.input.videoFileUrl} for web video transcoding job ${job.jobToken}`)
 
-    videoInputPath = await downloadInputFile({ url: payload.input.videoFileUrl, runnerToken, job })
+    const cache = await acquireCachedVideoInputFile({ url: payload.input.videoFileUrl, runnerToken, job, server })
+    videoInputPath = cache.path
+    videoCacheRelease = cache.release
     separatedAudioInputPath = await downloadSeparatedAudioFileIfNeeded({ urls: payload.input.separatedAudioFileUrl, runnerToken, job })
 
     logger.info(`Downloaded input file ${payload.input.videoFileUrl} for job ${job.jobToken}. Running web video transcoding.`)
@@ -75,7 +79,8 @@ export async function processWebVideoTranscoding (options: ProcessOptions<Runner
       reqPayload: payload
     })
   } finally {
-    if (videoInputPath) await remove(videoInputPath)
+    // Cache manager owns lifecycle. Release our reference (it will delete file if non-cached fallback was used)
+    if (videoCacheRelease) await videoCacheRelease()
     if (separatedAudioInputPath) await remove(separatedAudioInputPath)
     if (outputPath) await remove(outputPath)
     if (updateProgressInterval) clearInterval(updateProgressInterval)
@@ -88,6 +93,7 @@ export async function processHLSTranscoding (options: ProcessOptions<RunnerJobVO
 
   let ffmpegProgress: number
   let videoInputPath: string
+  let videoCacheRelease: undefined | (() => Promise<void> | void)
   let separatedAudioInputPath: string
 
   const uuid = buildUUID()
@@ -103,9 +109,11 @@ export async function processHLSTranscoding (options: ProcessOptions<RunnerJobVO
   })
 
   try {
-    logger.info(`Downloading input file ${payload.input.videoFileUrl} for HLS transcoding job ${job.jobToken}`)
+    logger.info(`Acquiring input file ${payload.input.videoFileUrl} for HLS transcoding job ${job.jobToken}`)
 
-    videoInputPath = await downloadInputFile({ url: payload.input.videoFileUrl, runnerToken, job })
+    const cache = await acquireCachedVideoInputFile({ url: payload.input.videoFileUrl, runnerToken, job, server })
+    videoInputPath = cache.path
+    videoCacheRelease = cache.release
     separatedAudioInputPath = await downloadSeparatedAudioFileIfNeeded({ urls: payload.input.separatedAudioFileUrl, runnerToken, job })
 
     logger.info(`Downloaded input file ${payload.input.videoFileUrl} for job ${job.jobToken}. Running HLS transcoding.`)
@@ -144,7 +152,7 @@ export async function processHLSTranscoding (options: ProcessOptions<RunnerJobVO
       reqPayload: payload
     })
   } finally {
-    if (videoInputPath) await remove(videoInputPath)
+    if (videoCacheRelease) await videoCacheRelease()
     if (separatedAudioInputPath) await remove(separatedAudioInputPath)
     if (outputPath) await remove(outputPath)
     if (videoPath) await remove(videoPath)
