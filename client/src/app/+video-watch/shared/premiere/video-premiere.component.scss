@@ -1,0 +1,140 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_bootstrap-variables';
+
+.premiere-widget {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: 20px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  pointer-events: auto;
+
+  .premiere-info {
+    max-width: 500px;
+
+    .premiere-title {
+      margin-bottom: 20px;
+
+      h2 {
+        font-size: 1.8em;
+        font-weight: 600;
+        color: #fff;
+        margin: 0;
+      }
+    }
+
+    .premiere-countdown {
+      margin-bottom: 30px;
+
+      .countdown-timer {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+
+        .countdown-unit {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          background-color: rgba(255, 255, 255, 0.1);
+          border-radius: 8px;
+          padding: 12px 16px;
+          min-width: 70px;
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+
+          .countdown-number {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1;
+            margin-bottom: 5px;
+            font-family: 'Roboto Mono', monospace;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+          }
+
+          .countdown-label {
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          }
+        }
+      }
+
+      .countdown-expired {
+        font-size: 1.4em;
+        color: #ff6b6b;
+        font-weight: 600;
+        margin-bottom: 15px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    .premiere-actions {
+      .premiere-subscribe-button {
+        ::ng-deep .btn {
+          padding: 10px 20px;
+          font-size: 1em;
+          background-color: rgba(255, 255, 255, 0.1);
+          border-color: rgba(255, 255, 255, 0.3);
+          color: #fff;
+          
+          &:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+          }
+          
+          my-global-icon {
+            margin-right: 5px;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Mobile responsive styles
+@media screen and (max-width: 600px) {
+  .premiere-widget {
+    padding: 15px;
+
+    .premiere-info {
+      max-width: 100%;
+
+      .premiere-title h2 {
+        font-size: 1.4em;
+      }
+
+      .premiere-countdown {
+        .countdown-timer {
+          gap: 8px;
+
+          .countdown-unit {
+            padding: 8px 12px;
+            min-width: 55px;
+
+            .countdown-number {
+              font-size: 1.8em;
+            }
+
+            .countdown-label {
+              font-size: 0.75em;
+            }
+          }
+        }
+      }
+    }
+  }
+}
