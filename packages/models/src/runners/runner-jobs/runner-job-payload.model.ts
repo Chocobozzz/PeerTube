@@ -14,7 +14,8 @@ export type RunnerJobPayload =
   RunnerJobVODPayload |
   RunnerJobLiveRTMPHLSTranscodingPayload |
   RunnerJobStudioTranscodingPayload |
-  RunnerJobTranscriptionPayload
+  RunnerJobTranscriptionPayload |
+  RunnerJobGenerateStoryboardPayload
 
 // ---------------------------------------------------------------------------
 
@@ -87,6 +88,24 @@ export interface RunnerJobTranscriptionPayload {
   output: {
     // To upload on an external URL
     vttFileCustomUpload?: RunnerJobCustomUpload
+  }
+}
+
+export interface RunnerJobGenerateStoryboardPayload {
+  input: {
+    videoFileUrl: string
+  }
+
+  // Computed server-side for consistency across runners
+  sprites: {
+    size: { width: number, height: number }
+    count: { width: number, height: number }
+    duration: number
+  }
+
+  output: {
+    // To upload on an external URL
+    storyboardFileCustomUpload?: RunnerJobCustomUpload
   }
 }
 

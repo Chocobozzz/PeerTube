@@ -7,7 +7,8 @@ import {
   RunnerJobVODAudioMergeTranscodingPayload,
   RunnerJobVODHLSTranscodingPayload,
   RunnerJobVODWebVideoTranscodingPayload,
-  VideoStudioTaskPayload
+  VideoStudioTaskPayload,
+  RunnerJobGenerateStoryboardPayload
 } from '@peertube/peertube-models'
 
 const supportedMatrix: { [ id in RunnerJobType ]: (payload: RunnerJobPayload) => boolean } = {
@@ -33,7 +34,8 @@ const supportedMatrix: { [ id in RunnerJobType ]: (payload: RunnerJobPayload) =>
   },
   'video-transcription': (_payload: RunnerJobTranscriptionPayload) => {
     return true
-  }
+  },
+  'generate-video-storyboard': (_payload: RunnerJobGenerateStoryboardPayload) => true
 }
 
 export function isJobSupported (job: { type: RunnerJobType, payload: RunnerJobPayload }, enabledJobs?: Set<RunnerJobType>) {

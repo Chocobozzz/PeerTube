@@ -109,8 +109,13 @@ export async function onVideoStudioEnded (options: {
   video.aspectRatio = buildAspectRatio({ width: newFile.width, height: newFile.height })
   await video.save()
 
+  // If remote runners are enabled, schedule storyboard generation remotely; otherwise, keep local job in the flow
+  const storyboardJob = CONFIG.TRANSCODING.REMOTE_RUNNERS.ENABLED
+    ? undefined
+    : buildStoryboardJobIfNeeded({ video, federate: false })
+
   await JobQueue.Instance.createSequentialJobFlow(
-    buildStoryboardJobIfNeeded({ video, federate: false }),
+    storyboardJob,
     {
       type: 'federate-video' as 'federate-video',
       payload: {

@@ -23,6 +23,7 @@ import {
   RunnerJobVODAudioMergeTranscodingPayload,
   RunnerJobVODHLSTranscodingPayload,
   RunnerJobVODPayload,
+  GenerateStoryboardSuccess,
   TranscriptionSuccess,
   VODHLSTranscodingSuccess,
   VODWebVideoTranscodingSuccess,
@@ -263,6 +264,19 @@ export class RunnerJobsCommand extends AbstractCommand {
       })
 
       payloadWithoutFiles = omit(payloadWithoutFiles as TranscriptionSuccess, [ 'vttFile' ])
+    }
+
+    // Generate storyboard success payload contains a storyboard image file
+    if ((payload as GenerateStoryboardSuccess)?.storyboardFile) {
+      this.updateUploadPayloads({
+        attachesStore: attaches,
+        customUploadsStore: customUploads,
+
+        file: (payload as GenerateStoryboardSuccess).storyboardFile,
+        attachName: 'storyboardFile'
+      })
+
+      payloadWithoutFiles = omit(payloadWithoutFiles as GenerateStoryboardSuccess, [ 'storyboardFile' ])
     }
 
     return this.uploadRunnerJobRequest({

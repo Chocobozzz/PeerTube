@@ -1,5 +1,5 @@
 import { pick } from '@peertube/peertube-core-utils'
-import { FFmpegEdition, FFmpegLive, FFmpegVOD, getDefaultAvailableEncoders, getDefaultEncodersToTry } from '@peertube/peertube-ffmpeg'
+import { FFmpegEdition, FFmpegImage, FFmpegLive, FFmpegVOD, getDefaultAvailableEncoders, getDefaultEncodersToTry } from '@peertube/peertube-ffmpeg'
 import { RunnerJob, RunnerJobPayload } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { PeerTubeServer } from '@peertube/peertube-server-commands'
@@ -106,6 +106,10 @@ export function buildFFmpegLive () {
 
 export function buildFFmpegEdition () {
   return new FFmpegEdition(getCommonFFmpegOptions())
+}
+
+export function buildFFmpegImage () {
+  return new FFmpegImage(getCommonFFmpegOptions())
 }
 
 function getCommonFFmpegOptions () {
