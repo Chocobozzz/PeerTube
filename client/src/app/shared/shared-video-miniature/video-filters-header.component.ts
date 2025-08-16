@@ -13,6 +13,7 @@ import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.com
 import { SelectCategoriesComponent } from '../shared-forms/select/select-categories.component'
 import { SelectLanguagesComponent } from '../shared-forms/select/select-languages.component'
 import { SelectOptionsComponent } from '../shared-forms/select/select-options.component'
+import { SelectVideosSortComponent } from '../shared-forms/select/select-videos-sort.component'
 import { GlobalIconComponent, GlobalIconName } from '../shared-icons/global-icon.component'
 import { InstanceFollowService } from '../shared-instance/instance-follow.service'
 import { ButtonComponent } from '../shared-main/buttons/button.component'
@@ -44,7 +45,8 @@ type QuickFilter = {
     SelectCategoriesComponent,
     PeertubeCheckboxComponent,
     SelectOptionsComponent,
-    ButtonComponent
+    ButtonComponent,
+    SelectVideosSortComponent
   ],
   providers: [ InstanceFollowService ]
 })
@@ -65,7 +67,6 @@ export class VideoFiltersHeaderComponent implements OnInit {
 
   form: FormGroup
 
-  sortItems: SelectOptionsItem[] = []
   availableScopes: SelectOptionsItem[] = []
 
   quickFilters: QuickFilter[] = []
@@ -114,7 +115,6 @@ export class VideoFiltersHeaderComponent implements OnInit {
       { id: 'federated', label: $localize`Videos from all platforms` }
     ]
 
-    this.buildSortItems()
     this.buildQuickFilters()
   }
 
@@ -148,34 +148,6 @@ export class VideoFiltersHeaderComponent implements OnInit {
   }
 
   // ---------------------------------------------------------------------------
-
-  private buildSortItems () {
-    this.sortItems = [
-      { id: '-publishedAt', label: $localize`Recently Added` },
-      { id: '-originallyPublishedAt', label: $localize`Original Publication Date` },
-      { id: 'name', label: $localize`Name` }
-    ]
-
-    if (this.isTrendingSortEnabled('most-viewed')) {
-      this.sortItems.push({ id: '-trending', label: $localize`Recent Views` })
-    }
-
-    if (this.isTrendingSortEnabled('hot')) {
-      this.sortItems.push({ id: '-hot', label: $localize`Hot` })
-    }
-
-    if (this.isTrendingSortEnabled('most-liked')) {
-      this.sortItems.push({ id: '-likes', label: $localize`Likes` })
-    }
-
-    this.sortItems.push({ id: '-views', label: $localize`Global Views` })
-  }
-
-  private isTrendingSortEnabled (sort: 'most-viewed' | 'hot' | 'most-liked') {
-    const serverConfig = this.serverService.getHTMLConfig()
-
-    return serverConfig.trending.videos.algorithms.enabled.includes(sort)
-  }
 
   getFilterValue (filter: VideoFilterActive) {
     if ((filter.key === 'categoryOneOf' || filter.key === 'languageOneOf') && Array.isArray(filter.rawValue)) {

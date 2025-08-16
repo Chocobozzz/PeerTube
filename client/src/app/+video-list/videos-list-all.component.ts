@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { ComponentPaginationLight, DisableForReuseHook, MetaService } from '@app/core'
+import { ComponentPaginationLight, DisableForReuseHook, MetaService, ServerService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { VideoFilterScope, VideoFilters } from '@app/shared/shared-video-miniature/video-filters.model'
 import { VideosListComponent } from '@app/shared/shared-video-miniature/videos-list.component'
-import { VideoSortField } from '@peertube/peertube-models'
+import { HTMLServerConfig, VideoSortField } from '@peertube/peertube-models'
 import { Subscription } from 'rxjs'
 
 @Component({
@@ -19,6 +19,7 @@ export class VideosListAllComponent implements OnInit, OnDestroy, DisableForReus
   private videoService = inject(VideoService)
   private hooks = inject(HooksService)
   private meta = inject(MetaService)
+  private serverService = inject(ServerService)
 
   getVideosObservableFunction = this.getVideosObservable.bind(this)
   getSyndicationItemsFunction = this.getSyndicationItems.bind(this)
@@ -37,10 +38,13 @@ export class VideosListAllComponent implements OnInit, OnDestroy, DisableForReus
   disabled = false
 
   private routeSub: Subscription
+  private serverConfig: HTMLServerConfig
 
   ngOnInit () {
+    this.serverConfig = this.serverService.getHTMLConfig()
+
     const queryParams = this.route.snapshot.queryParams
-    this.defaultSort = queryParams.sort || '-publishedAt'
+    this.defaultSort = queryParams.sort || this.serverConfig.browse.videos.defaultSort
     this.defaultScope = queryParams.scope || 'federated'
 
     this.routeSub = this.route.params.subscribe(() => this.update())

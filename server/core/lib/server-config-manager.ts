@@ -389,6 +389,12 @@ class ServerConfigManager {
 
       nsfwFlagsSettings: {
         enabled: CONFIG.NSFW_FLAGS_SETTINGS.ENABLED
+      },
+
+      browse: {
+        videos: {
+          defaultSort: CONFIG.BROWSE.VIDEOS.DEFAULT_SORT
+        }
       }
     }
   }

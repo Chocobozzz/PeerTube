@@ -430,6 +430,12 @@ export interface ServerConfig {
   nsfwFlagsSettings: {
     enabled: boolean
   }
+
+  browse: {
+    videos: {
+      defaultSort: string
+    }
+  }
 }
 
 export type HTMLServerConfig = Omit<ServerConfig, 'signup'>
