@@ -4,7 +4,8 @@ import { remove } from 'fs-extra/esm'
 import { join } from 'path'
 import { ConfigManager } from '../../../shared/config-manager.js'
 import { logger } from '../../../shared/index.js'
-import { buildFFmpegImage, downloadInputFile, ProcessOptions, scheduleTranscodingProgress } from './common.js'
+import { buildFFmpegImage, ProcessOptions, scheduleTranscodingProgress } from './common.js'
+import { acquireCachedVideoInputFile } from './video-cache.js'
 
 export async function processGenerateStoryboard (options: ProcessOptions<RunnerJobGenerateStoryboardPayload>) {
   const { server, job, runnerToken } = options
@@ -13,6 +14,7 @@ export async function processGenerateStoryboard (options: ProcessOptions<RunnerJ
 
   let ffmpegProgress: number
   let videoInputPath: string
+  let videoCacheRelease: undefined | (() => Promise<void> | void)
 
   const outputPath = join(ConfigManager.Instance.getTranscodingDirectory(), `storyboard-${buildUUID()}.jpg`)
 
@@ -24,11 +26,13 @@ export async function processGenerateStoryboard (options: ProcessOptions<RunnerJ
   })
 
   try {
-    logger.info(`Downloading input file ${payload.input.videoFileUrl} for storyboard job ${job.jobToken}`)
+    logger.info(`Acquiring input file ${payload.input.videoFileUrl} for storyboard job ${job.jobToken}`)
 
-    videoInputPath = await downloadInputFile({ url: payload.input.videoFileUrl, runnerToken, job })
+    const cache = await acquireCachedVideoInputFile({ url: payload.input.videoFileUrl, runnerToken, job, server })
+    videoInputPath = cache.path
+    videoCacheRelease = cache.release
 
-    logger.info(`Downloaded input file ${payload.input.videoFileUrl} for job ${job.jobToken}. Generating storyboard.`)
+    logger.info(`Acquired input file ${payload.input.videoFileUrl} for job ${job.jobToken}. Generating storyboard.`)
 
     const ffmpegImage = buildFFmpegImage()
 
@@ -51,7 +55,7 @@ export async function processGenerateStoryboard (options: ProcessOptions<RunnerJ
       reqPayload: payload
     })
   } finally {
-    if (videoInputPath) await remove(videoInputPath)
+    if (videoCacheRelease) await videoCacheRelease()
     if (outputPath) await remove(outputPath)
     if (updateProgressInterval) clearInterval(updateProgressInterval)
   }
