@@ -148,9 +148,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="nd so on.    *"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="nd so on.    *"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="nd so on.    *"/>
         </target>
@@ -256,9 +254,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
-        <source>
-          <x id="INTERPOLATION"/>
-        </source>
+        <source><x id="INTERPOLATION"/> </source>
         <target state="translated">
           <x id="INTERPOLATION"/>
         </target>
@@ -2742,8 +2738,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
-        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>.
-The link will expire within 1 hour.</source>
+        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
         <target state="translated">Un courrier électronique contenant les instructions de réinitialisation du mot de passe sera envoyé à <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Le lien expirera dans 1 heure.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
@@ -2952,7 +2947,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8149121824813323170" datatype="html" xml:space="preserve">
         <source>Search index is unavailable. Retrying with local platform results instead.</source>
-        <target state="needs-translation">L'index de recherche n'est pas disponible. Nouvelle tentative avec les résultats locaux.</target>
+        <target state="translated">L'index de recherche n'est pas disponible. Nouvelle tentative avec les résultats locaux.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.ts</context>
           <context context-type="linenumber">188</context>
@@ -2992,7 +2987,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="123842545276072825" datatype="html" xml:space="preserve">
         <source>General information</source>
-        <target state="needs-translation">Informations générales</target>
+        <target state="translated">Informations générales</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-edit-info.component.html</context>
           <context context-type="linenumber">12,14</context>
@@ -3072,7 +3067,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5155290888522084933" datatype="html" xml:space="preserve">
         <source>Community-based</source>
-        <target state="needs-translation">Communautaire</target>
+        <target state="translated">Communautaire</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-form.component.html</context>
           <context context-type="linenumber">32,34</context>
@@ -3168,7 +3163,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1443195823760151170" datatype="html" xml:space="preserve">
         <source>Let's go!</source>
-        <target state="needs-translation">Allons-y !</target>
+        <target state="translated">Allons-y !</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-welcome.component.html</context>
           <context context-type="linenumber">15</context>
@@ -3184,7 +3179,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1202582215608581565" datatype="html" xml:space="preserve">
         <source>CLI:</source>
-        <target state="needs-translation">CLI :</target>
+        <target state="translated">CLI :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">59,60</context>
@@ -4379,7 +4374,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="48442969542452939" datatype="html" xml:space="preserve">
         <source>Insights</source>
-        <target state="needs-translation">Perspectives</target>
+        <target state="translated">Perspectives</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">135</context>
@@ -8371,10 +8366,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="7134156816820861655" datatype="html">
-        <source>
-          <x id="START_TAG_NG_TEMPLATE" ctype="x-ng_template" equiv-text="&lt;ng-template *ngTemplateOutlet=&quot;totalTitle; context: { $implicit: totalRecords }&quot;&gt;"/>
-          <x id="CLOSE_TAG_NG_TEMPLATE" ctype="x-ng_template" equiv-text="&lt;/ng-template&gt;"/>
-        </source>
+        <source><x id="START_TAG_NG_TEMPLATE" ctype="x-ng_template" equiv-text="&lt;ng-template *ngTemplateOutlet=&quot;totalTitle; context: { $implicit: totalRecords }&quot;&gt;"/> <x id="CLOSE_TAG_NG_TEMPLATE" ctype="x-ng_template" equiv-text="&lt;/ng-template&gt;"/> </source>
         <target state="new">
           <x id="START_TAG_NG_TEMPLATE" ctype="x-ng_template" equiv-text="&lt;ng-template *ngTemplateOutlet=&quot;totalTitle; context: { $implicit: totalRecords }&quot;&gt;"/>
           <x id="CLOSE_TAG_NG_TEMPLATE" ctype="x-ng_template" equiv-text="&lt;/ng-template&gt;"/>
@@ -8977,11 +8969,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="5026011498416291967" datatype="html">
-        <source>
-          <x id="ICU" equiv-text="{abuse().countReportsForReporter, plural, =1 {1 report} other {{{ abuse().countReportsForReporter }} reports}}" xid="1879828604800763221"/>
-          <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/>
-          <x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/>
-        </source>
+        <source><x id="ICU" equiv-text="{abuse().countReportsForReporter, plural, =1 {1 report} other {{{ abuse().countReportsForReporter }} reports}}" xid="1879828604800763221"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/> <x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/> </source>
         <target state="translated">
           <x id="ICU" xid="1879828604800763221" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 rapport} other {{{ abuse.countReportsForReporter }} rapports}}"/>
           <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/>
@@ -14269,9 +14257,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
-        <source>
-          <x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/>
-        </source>
+        <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/> </source>
         <target state="translated">
           <x id="ICU" xid="8553183884518584864" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 vidéo} other {{{ getTotalVideosOf(videoChannel) }} vidéos}}"/>
         </target>
@@ -19637,8 +19623,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
-        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>.
-Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
+        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
         <target state="translated">Impossible de récupérer les identifiants du Client OAuth : <x id="PH" equiv-text="error.text"/>. Assurez-vous d'avoir correctement configuré PeerTube (dossier config/), en particulier la section "serveur web".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
@@ -20010,10 +19995,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="7804724824750282316" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/>
-          <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/> <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/>
           <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {résultat} other {résultats}}"/>
@@ -24836,9 +24818,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="187187500641108332" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
         </target>
