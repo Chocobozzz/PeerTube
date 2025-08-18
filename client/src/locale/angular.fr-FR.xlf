@@ -8327,7 +8327,7 @@
       </trans-unit>
       <trans-unit id="5910947217931634219" datatype="html" xml:space="preserve">
         <source>Warn</source>
-        <target state="needs-translation">Avertir</target>
+        <target state="translated">Avertir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.ts</context>
           <context context-type="linenumber">122</context>
@@ -8343,7 +8343,7 @@
       </trans-unit>
       <trans-unit id="5416471102816014001" datatype="html" xml:space="preserve">
         <source>Blur</source>
-        <target state="needs-translation">Flou</target>
+        <target state="translated">Flouter</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.ts</context>
           <context context-type="linenumber">126</context>
@@ -8365,12 +8365,9 @@
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7134156816820861655" datatype="html">
+      <trans-unit id="7134156816820861655" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_NG_TEMPLATE" ctype="x-ng_template" equiv-text="&lt;ng-template *ngTemplateOutlet=&quot;totalTitle; context: { $implicit: totalRecords }&quot;&gt;"/> <x id="CLOSE_TAG_NG_TEMPLATE" ctype="x-ng_template" equiv-text="&lt;/ng-template&gt;"/> </source>
-        <target state="new">
-          <x id="START_TAG_NG_TEMPLATE" ctype="x-ng_template" equiv-text="&lt;ng-template *ngTemplateOutlet=&quot;totalTitle; context: { $implicit: totalRecords }&quot;&gt;"/>
-          <x id="CLOSE_TAG_NG_TEMPLATE" ctype="x-ng_template" equiv-text="&lt;/ng-template&gt;"/>
-        </target>
+        <target state="translated">&lt;x id="START_TAG_NG_TEMPLATE" ctype="x-ng_template" equiv-text="&amp;lt ;ng-template *ngTemplateOutlet=&amp;quot ;totalTitle ; context : { $implicit : totalRecords }&amp;quot ;&amp;gt ;"/&gt; &lt;x id="CLOSE_TAG_NG_TEMPLATE" ctype="x-ng_template" equiv-text="&amp;lt ;/ng-template&amp;gt ;"/&gt; </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-tables/table.component.html</context>
           <context context-type="linenumber">31,34</context>
@@ -8402,7 +8399,7 @@
       </trans-unit>
       <trans-unit id="6410388482930606788" datatype="html" xml:space="preserve">
         <source>This video has been reported multiple times</source>
-        <target state="needs-translation">Cette vidéo a été signalée plusieurs fois.</target>
+        <target state="translated">Cette vidéo a été signalée plusieurs fois.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">54</context>
@@ -8410,7 +8407,7 @@
       </trans-unit>
       <trans-unit id="5216288352598663055" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {1 abuse} other {<x id="INTERPOLATION"/> abuses}}</source>
-        <target state="needs-translation">{VAR_PLURAL, plural, =1 {1 signalement} autre {<x id="INTERPOLATION"/> s signalements}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 signalement} other {<x id="INTERPOLATION"/> signalements}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">55</context>
@@ -8418,7 +8415,7 @@
       </trans-unit>
       <trans-unit id="4984728317230462494" datatype="html" xml:space="preserve">
         <source>The video is blocked</source>
-        <target state="needs-translation">La vidéo est bloquée.</target>
+        <target state="translated">La vidéo est bloquée.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">58</context>
@@ -8426,7 +8423,7 @@
       </trans-unit>
       <trans-unit id="8507166195543036644" datatype="html" xml:space="preserve">
         <source>Account deleted</source>
-        <target state="needs-translation">Compte supprimé</target>
+        <target state="translated">Compte supprimé</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">81,82</context>
