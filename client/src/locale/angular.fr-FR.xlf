@@ -5882,7 +5882,7 @@
       </trans-unit>
       <trans-unit id="9202777795323261347" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No list} =1 {1 list} other {<x id="INTERPOLATION"/> lists}}</source>
-        <target state="needs-translation">{VAR_PLURAL, plural, =0 {Aucune liste} =1 {une liste} other {<x id="INTERPOLATION"/> s listes}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Aucune liste} =1 {une liste} other {<x id="INTERPOLATION"/> s listes}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-admin-owner.component.html</context>
           <context context-type="linenumber">12</context>
@@ -6627,7 +6627,7 @@
       </trans-unit>
       <trans-unit id="6707674956431605440" datatype="html" xml:space="preserve">
         <source>Users can stream lives</source>
-        <target state="needs-translation">Les utilisateurs·ices peuvent diffuser des lives</target>
+        <target state="translated">Les utilisateurs·ices peuvent diffuser des lives</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/private-instance-config.component.html</context>
           <context context-type="linenumber">9,11</context>
@@ -6635,7 +6635,7 @@
       </trans-unit>
       <trans-unit id="8597081746599886768" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Allow&lt;/strong&gt; any user &lt;strong&gt;to register&lt;/strong&gt;</source>
-        <target state="needs-translation">&lt;strong&gt;Autoriser&lt;/strong&gt; tout utilisateur·ice &lt;strong&gt;à s'inscrire&lt;/strong&gt;</target>
+        <target state="translated">&lt;strong&gt;Autoriser&lt;/strong&gt; tout utilisateur·ice &lt;strong&gt;à s'inscrire&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">163</context>
@@ -6643,7 +6643,7 @@
       </trans-unit>
       <trans-unit id="801162573289021003" datatype="html" xml:space="preserve">
         <source>Allow users to &lt;strong&gt;apply for registration&lt;/strong&gt; on your platform</source>
-        <target state="needs-translation">Autoriser les utilisateurs·ices à &lt;strong&gt;demander l'enregistrement&lt;/strong&gt; sur votre plateforme</target>
+        <target state="translated">Autoriser les utilisateurs·ices à &lt;strong&gt;demander l'enregistrement&lt;/strong&gt; sur votre plateforme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">172</context>
@@ -6651,7 +6651,7 @@
       </trans-unit>
       <trans-unit id="7806027071187877900" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Disable&lt;/strong&gt; user &lt;strong&gt;registration&lt;/strong&gt;</source>
-        <target state="needs-translation">&lt;&gt;forte Désactiver /strong utilisateur·ice  forte Inscription /strong&lt;&gt; &lt;&gt;&lt;&gt;</target>
+        <target state="translated">&lt;strong&gt; Désactiver l'inscription de &lt;/strong&gt; l'utilisateur·ice</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">181</context>
@@ -6659,7 +6659,7 @@
       </trans-unit>
       <trans-unit id="3048784583227512257" datatype="html" xml:space="preserve">
         <source>Require &lt;strong&gt;moderator approval&lt;/strong&gt; for videos published by your community</source>
-        <target state="needs-translation">Exigez l'&lt;l'&gt;l'approbation du modérateur&lt;/strong&gt; pour les vidéos publiées par votre communauté.</target>
+        <target state="translated">Exigez &lt;strong&gt;l'approbation du modérateur&lt;/strong&gt; pour les vidéos publiées par votre communauté.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">191</context>
@@ -6667,7 +6667,7 @@
       </trans-unit>
       <trans-unit id="5342918468732313132" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Prevent&lt;/strong&gt; new users &lt;strong&gt;from uploading videos&lt;/strong&gt; (can be changed by moderators)</source>
-        <target state="needs-translation">&lt;strong&gt;Empêcher&lt;/strong&gt; les nouveaux utilisateurs·ices &lt;strong&gt;de télécharger des vidéos&lt;/strong&gt; (peut être modifié par les modérateurs)</target>
+        <target state="translated">&lt;strong&gt;Empêcher&lt;/strong&gt; les nouveaux utilisateurs·ices &lt;strong&gt;de télécharger des vidéos&lt;/strong&gt; (modifiable par les modérateurs)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">216</context>
@@ -6675,7 +6675,7 @@
       </trans-unit>
       <trans-unit id="4019771625870459687" datatype="html" xml:space="preserve">
         <source>Will &lt;strong&gt;not limit the amount of videos&lt;/strong&gt; new users can upload</source>
-        <target state="needs-translation">&lt;strong&gt;ne limitera-t-il pas le nombre de vidéos&lt;/strong&gt; que les nouveaux utilisateurs·ices pourront télécharger ?</target>
+        <target state="translated">&lt;strong&gt;ne limitera-t-il pas le nombre de vidéos&lt;/strong&gt; que les nouveaux utilisateurs·ices pourront télécharger ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">219</context>
@@ -6683,7 +6683,7 @@
       </trans-unit>
       <trans-unit id="6750683208657917557" datatype="html" xml:space="preserve">
         <source>Set &lt;strong&gt;video quota to <x id="PH" equiv-text="getBytes(this.videoQuota, 0)"/>&lt;/strong&gt; for new users (can be changed by moderators)</source>
-        <target state="needs-translation">Définir &lt;strong&gt;quota vidéo à <x id="PH" equiv-text="getBytes(this.videoQuota, 0)"/>&lt;/strong&gt; pour les nouveaux utilisateurs·ices (peut être modifié par les modérateurs)</target>
+        <target state="translated">Définir un &lt;strong&gt;quota de vidéo à <x id="PH" equiv-text="getBytes(this.videoQuota, 0)"/>&lt;/strong&gt; pour les nouveaux utilisateurs·ices (modifiable par les modérateurs)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">222</context>
@@ -6691,7 +6691,7 @@
       </trans-unit>
       <trans-unit id="5663976721315204489" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Allow&lt;/strong&gt; your users &lt;strong&gt;to import and synchronize&lt;/strong&gt; videos from remote platforms (YouTube, Vimeo...)</source>
-        <target state="needs-translation">&lt;&gt;Autorisez /strong vos utilisateurs·ices strong à importer et synchroniser /strong des vidéos depuis des plateformes distantes (YouTube, Vimeo...)&lt;&gt; &lt;&gt;&lt;&gt;</target>
+        <target state="translated">&lt;strong&gt;Autorisez &lt;/strong&gt; vos utilisateurs·ices &lt;strong&gt; à importer et synchroniser &lt;/strong&gt; des vidéos depuis des plateformes distantes (YouTube, Vimeo...)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">246</context>
@@ -6699,7 +6699,7 @@
       </trans-unit>
       <trans-unit id="4936759942517379026" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Prevent&lt;/strong&gt; your users &lt;strong&gt;from importing videos&lt;/strong&gt; from remote platforms</source>
-        <target state="needs-translation">&lt;&gt;forte Empêcher /strong vos utilisateurs·ices forte d'importer des vidéos /strong depuis des plateformes distantes&lt;&gt; &lt;&gt;&lt;&gt;</target>
+        <target state="translated">&lt;strong&gt; Empêcher &lt;/strong&gt; vos utilisateurs·ices &lt;strong&gt; d'importer des vidéos &lt;/strong&gt; depuis des plateformes distantes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">249</context>
