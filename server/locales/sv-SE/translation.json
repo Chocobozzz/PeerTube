@@ -107,7 +107,7 @@
     "Your video has been unblocked": "Din video är inte längre blockerad",
     "Your video <strong>{videoName}</strong> has been unblocked by {instanceName} moderators.": "Din video <strong>{videoName}</strong> har fått blockeringen lyft av moderatorerna på {instanceName}.",
     "{language} is not a valid language": "{language} är inte ett valbart språk",
-    "The provided thumbnail file is invalid.": "The provided thumbnail file is invalid.",
+    "The provided thumbnail file is invalid.": "Den angivna miniatyrbilden är ogiltig.",
     "Reset your account password": "Återställ lösenordet för ditt konto",
     "Create your account password": "Skapa ett lösenord för ditt konto",
     "Verify your email on {instanceName}": "Verifiera din e-postadress på {instanceName}",
@@ -142,8 +142,8 @@
     "A new user registered on {instanceName}": "En ny användarkontoregistering på {instanceName}",
     "View users": "Visa användare",
     "A new PeerTube version is available: {latestVersion}": "En ny version av PeerTube-plattformen är tillgänglig: {latestVersion}",
-    "A new version of the plugin {pluginName} is available: {latestVersion}": "En ny version av tillägget {pluginName} är tillgänglig: {latestVersion}.",
-    "A new version of the theme {pluginName} is available: {latestVersion}": "En ny version av temat {pluginName} är tillgängligt: {latestVersion}.",
+    "A new version of the plugin {pluginName} is available: {latestVersion}": "En ny version av tillägget {pluginName} är tillgänglig: {latestVersion}",
+    "A new version of the theme {pluginName} is available: {latestVersion}": "En ny version av temat {pluginName} är tillgängligt: {latestVersion}",
     "A new user wants to register: {username}": "En ny användare vill registrera konto: {username}",
     "View registration request": "Visa registreringsförfrågningar",
     "Your video has been published": "Din video har publicerats",
@@ -160,5 +160,5 @@
     "Edition of your video has finished": "Redigeringen av din video är klar",
     "Edition of your video {videoName} has finished.": "Redigeringen av din video {videoName} är klar.",
     "Video edition has finished": "Videoredigeringen är klar",
-    "The token session does not exist or does not belong to the user.": "The token session does not exist or does not belong to the user."
+    "The token session does not exist or does not belong to the user.": "Nyckelsessionen finns inte eller tillhör inte användaren."
 }
