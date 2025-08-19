@@ -160,7 +160,7 @@ export class UsageType {
     if (!exists(this.registration)) return
 
     if (this.registration === 'open') {
-      this.addExplanation($localize`<strong>Allow</strong> any user <strong>to register</strong>`)
+      this.addExplanation($localize`:bullet point of "PeerTube will\:":<strong>Allow</strong> any user <strong>to register</strong>`)
 
       this.addConfig({
         signup: {
@@ -169,7 +169,9 @@ export class UsageType {
         }
       })
     } else if (this.registration === 'approval') {
-      this.addExplanation($localize`Allow users to <strong>apply for registration</strong> on your platform`)
+      this.addExplanation(
+        $localize`:bullet point of "PeerTube will\:":Allow users to <strong>apply for registration</strong> on your platform`
+      )
 
       this.addConfig({
         signup: {
@@ -178,7 +180,7 @@ export class UsageType {
         }
       })
     } else if (this.registration === 'closed') {
-      this.addExplanation($localize`<strong>Disable</strong> user <strong>registration</strong>`)
+      this.addExplanation($localize`:bullet point of "PeerTube will\:":<strong>Disable</strong> user <strong>registration</strong>`)
 
       this.addConfig({
         signup: {
@@ -188,7 +190,9 @@ export class UsageType {
     }
 
     if (this.registration === 'approval' || this.registration === 'open') {
-      this.addExplanation($localize`Require <strong>moderator approval</strong> for videos published by your community`)
+      this.addExplanation(
+        $localize`:bullet point of "PeerTube will\:":Require <strong>moderator approval</strong> for videos published by your community`
+      )
 
       this.addConfig({
         autoBlacklist: {
@@ -213,13 +217,18 @@ export class UsageType {
 
     if (this.videoQuota === 0) {
       this.addExplanation(
-        $localize`<strong>Prevent</strong> new users <strong>from uploading videos</strong> (can be changed by moderators)`
+        // eslint-disable-next-line max-len
+        $localize`:bullet point of "PeerTube will\:":<strong>Prevent</strong> new users <strong>from uploading videos</strong> (can be changed by moderators)`
       )
     } else if (this.videoQuota === -1) {
-      this.addExplanation($localize`Will <strong>not limit the amount of videos</strong> new users can upload`)
+      this.addExplanation(
+        $localize`:bullet point of "PeerTube will\:":<strong>Not limit the amount of videos</strong> new users can upload`
+      )
     } else {
       this.addExplanation(
-        $localize`Set <strong>video quota to ${getBytes(this.videoQuota, 0)}</strong> for new users (can be changed by moderators)`
+        $localize`:bullet point of "PeerTube will\:":Set <strong>video quota to ${
+          getBytes(this.videoQuota, 0)
+        }</strong> for new users (can be changed by moderators)`
       )
     }
   }
@@ -243,10 +252,13 @@ export class UsageType {
     if (this.remoteImport === 'enabled') {
       this.addExplanation(
         // eslint-disable-next-line max-len
-        $localize`<strong>Allow</strong> your users <strong>to import and synchronize</strong> videos from remote platforms (YouTube, Vimeo...)`
+        $localize`:bullet point of "PeerTube will\:":<strong>Allow</strong> your users <strong>to import and synchronize</strong> videos from remote platforms (YouTube, Vimeo...)`
       )
     } else {
-      this.addExplanation($localize`<strong>Prevent</strong> your users <strong>from importing videos</strong> from remote platforms`)
+      this.addExplanation(
+        // eslint-disable-next-line max-len
+        $localize`:bullet point of "PeerTube will\:":<strong>Prevent</strong> your users <strong>from importing videos</strong> from remote platforms`
+      )
     }
   }
 
@@ -264,10 +276,12 @@ export class UsageType {
 
       this.addExplanation(
         // eslint-disable-next-line max-len
-        $localize`<strong>Allow</strong> your users <strong>to stream lives</strong> and chat with their viewers using the <strong>Livechat</strong> plugin`
+        $localize`:bullet point of "PeerTube will\:":<strong>Allow</strong> your users <strong>to stream lives</strong> and chat with their viewers using the <strong>Livechat</strong> plugin`
       )
     } else {
-      this.addExplanation($localize`<strong>Prevent</strong> your users from running <strong>live streams</strong>`)
+      this.addExplanation(
+        $localize`:bullet point of "PeerTube will\:":<strong>Prevent</strong> your users from running <strong>live streams</strong>`
+      )
     }
   }
 
@@ -283,9 +297,13 @@ export class UsageType {
     })
 
     if (this.defaultPrivacy === VideoPrivacy.INTERNAL) {
-      this.addExplanation($localize`Set the <strong>default video privacy</strong> to <strong>Internal</strong>`)
+      this.addExplanation(
+        $localize`:bullet point of "PeerTube will\:":Set the <strong>default video privacy</strong> to <strong>Internal</strong>`
+      )
     } else if (this.defaultPrivacy === VideoPrivacy.PUBLIC) {
-      this.addExplanation($localize`Set the <strong>default video privacy</strong> to <strong>Public</strong>`)
+      this.addExplanation(
+        $localize`:bullet point of "PeerTube will\:":Set the <strong>default video privacy</strong> to <strong>Public</strong>`
+      )
     }
   }
 
@@ -300,7 +318,7 @@ export class UsageType {
       }
     })
 
-    this.addExplanation($localize`<strong>Require approval</strong> by default of new video comment`)
+    this.addExplanation($localize`:bullet point of "PeerTube will\:":<strong>Require approval</strong> by default of new video comment`)
   }
 
   private computeP2P () {
@@ -320,9 +338,13 @@ export class UsageType {
     })
 
     if (this.p2p === 'enabled') {
-      this.addExplanation($localize`<strong>Enable P2P streaming</strong> by default for anonymous and new users`)
+      this.addExplanation(
+        $localize`:bullet point of "PeerTube will\:":<strong>Enable P2P streaming</strong> by default for anonymous and new users`
+      )
     } else {
-      this.addExplanation($localize`<strong>Disable P2P streaming</strong> by default for anonymous and new users`)
+      this.addExplanation(
+        $localize`:bullet point of "PeerTube will\:":<strong>Disable P2P streaming</strong> by default for anonymous and new users`
+      )
     }
   }
 
@@ -341,9 +363,15 @@ export class UsageType {
     })
 
     if (this.federation === 'enabled') {
-      this.addExplanation($localize`<strong>Allow</strong> external platforms/users to <strong>subscribe</strong> to your content`)
+      this.addExplanation(
+        // eslint-disable-next-line max-len
+        $localize`:bullet point of "PeerTube will\:":<strong>Allow</strong> external platforms/users to <strong>subscribe</strong> to your content`
+      )
     } else {
-      this.addExplanation($localize`<strong>Prevent</strong> external platforms/users to <strong>subscribe to your content</strong>`)
+      this.addExplanation(
+        // eslint-disable-next-line max-len
+        $localize`:bullet point of "PeerTube will\:":<strong>Prevent</strong> external platforms/users to <strong>subscribe to your content</strong>`
+      )
     }
   }
 
@@ -359,7 +387,7 @@ export class UsageType {
     })
 
     if (this.keepOriginalVideo === 'enabled') {
-      this.addExplanation($localize`Will <strong>save a copy</strong> of the uploaded video file`)
+      this.addExplanation($localize`:bullet point of "PeerTube will\:":<strong>Save a copy</strong> of the uploaded video file`)
     }
   }
 
@@ -376,7 +404,8 @@ export class UsageType {
 
     if (this.allowReplaceFile === 'enabled') {
       this.addExplanation(
-        $localize`Will <strong>allow</strong> your users <strong>to replace a video</strong> that has already been published`
+        // eslint-disable-next-line max-len
+        $localize`:bullet point of "PeerTube will\:":<strong>Allow</strong> your users <strong>to replace a video</strong> that has already been published`
       )
     }
   }
@@ -410,7 +439,8 @@ export class UsageType {
 
     if (this.globalSearch === 'enabled') {
       this.addExplanation(
-        $localize`Set <a href="https://sepiasearch.org" target="_blank">SepiaSearch</a> as <strong>default search engine</strong>`
+        // eslint-disable-next-line max-len
+        $localize`:bullet point of "PeerTube will\:":Set <a href="https://sepiasearch.org" target="_blank">SepiaSearch</a> as <strong>default search engine</strong>`
       )
     }
   }
@@ -426,7 +456,8 @@ export class UsageType {
 
     if (this.transcription === 'enabled') {
       this.addExplanation(
-        $localize`<strong>Enable automatic transcription</strong> of videos to create subtitles and improve accessibility`
+        // eslint-disable-next-line max-len
+        $localize`:bullet point of "PeerTube will\:":<strong>Enable automatic transcription</strong> of videos to create subtitles and improve accessibility`
       )
     }
   }
@@ -434,18 +465,26 @@ export class UsageType {
   private computeAuth () {
     if (!exists(this.authType)) return
 
-    const configStr = $localize` The plugin <strong>must be configured</strong> after the pre-configuration wizard confirmation.`
+    const configStr =
+      // eslint-disable-next-line max-len
+      $localize`:bullet point of "PeerTube will\:": The plugin <strong>must be configured</strong> after the pre-configuration wizard confirmation.`
 
     if (this.authType === 'ldap') {
-      this.addExplanation($localize`Install the <strong>LDAP</strong> authentication plugin.` + configStr)
+      this.addExplanation(
+        $localize`:bullet point of "PeerTube will\:":Install the <strong>LDAP</strong> authentication plugin.` + configStr
+      )
 
       this.plugins.push('peertube-plugin-auth-ldap')
     } else if (this.authType === 'saml') {
-      this.addExplanation($localize`Install the <strong>SAML 2.0</strong> authentication plugin.` + configStr)
+      this.addExplanation(
+        $localize`:bullet point of "PeerTube will\:":Install the <strong>SAML 2.0</strong> authentication plugin.` + configStr
+      )
 
       this.plugins.push('peertube-plugin-auth-saml2')
     } else if (this.authType === 'oidc') {
-      this.addExplanation($localize`Install the <strong>OpenID Connect</strong> authentication plugin.` + configStr)
+      this.addExplanation(
+        $localize`:bullet point of "PeerTube will\:":Install the <strong>OpenID Connect</strong> authentication plugin.` + configStr
+      )
 
       this.plugins.push('peertube-plugin-auth-openid-connect')
     }
