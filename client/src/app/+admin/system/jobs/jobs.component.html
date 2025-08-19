@@ -11,7 +11,7 @@
   [customUpdateUrl]="customUpdateUrl"
 >
   <ng-template #totalTitle let-totalRecords>
-    <ng-container i18n>{ totalRecords, plural, =0 {No jobs} =1 {1 job} other {{{ totalRecords | myNumberFormatter }} jobs}}</ng-container>
+    <ng-container i18n>{ totalRecords, plural, =0 {No job} =1 {1 job} other {{{ totalRecords | myNumberFormatter }} jobs}}</ng-container>
   </ng-template>
 
   <ng-template #captionRight>
