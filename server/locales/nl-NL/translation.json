@@ -8,7 +8,7 @@
     "{instanceName} received an abuse report for the account: <a href=\"{accountUrl}\">{accountDisplayName}</a>": "{instanceName} received an abuse report for the account: <a href=\"{accountUrl}\">{accountDisplayName}</a>",
     "{instanceName} received an abuse report for the remote account: <a href=\"{accountUrl}\">{accountDisplayName}</a>": "{instanceName} received an abuse report for the remote account: <a href=\"{accountUrl}\">{accountDisplayName}</a>",
     "The reporter, {reporter}, cited the following reason(s):": "The reporter, {reporter}, cited the following reason(s):",
-    "Someone just used the contact form": "Someone just used the contact form",
+    "Someone just used the contact form": "Iemand heeft zojuist het contactformulier gebruikt",
     "{fromName} sent you a message via the contact form on <a href=\"{webserverUrl}\">{instanceName}</a>: ": "{fromName} sent you a message via the contact form on <a href=\"{webserverUrl}\">{instanceName}</a>: ",
     "You can contact them at <a href=\"mailto:{fromEmail}\">{fromEmail}</a>, or simply reply to this email to get in touch.": "You can contact them at <a href=\"mailto:{fromEmail}\">{fromEmail}</a>, or simply reply to this email to get in touch.",
     "New follower on your channel": "New follower on your channel",
