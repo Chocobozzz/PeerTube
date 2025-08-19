@@ -10,9 +10,9 @@
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ngb.carousel.slide-number" datatype="html">
+      <trans-unit id="ngb.carousel.slide-number" datatype="html" xml:space="preserve">
         <source>Slide <x id="INTERPOLATION" equiv-text="get wrap("/> of <x id="INTERPOLATION_1" equiv-text=".value; }"/> </source>
-        <target state="translated">Diapositive <x id="INTERPOLATION" equiv-text="get wrap("/> de <x id="INTERPOLATION_1" equiv-text=".value; }"/> </target>
+        <target state="translated">Diapositive <x id="INTERPOLATION" equiv-text="get wrap("/> sur <x id="INTERPOLATION_1" equiv-text=".value; }"/> </target>
         <note priority="1" from="description">Currently selected slide number read by screen reader</note>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/carousel/carousel.ts</context>
@@ -148,9 +148,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="nd so on.    *"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="nd so on.    *"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="nd so on.    *"/>
         </target>
@@ -256,9 +254,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
-        <source>
-          <x id="INTERPOLATION"/>
-        </source>
+        <source><x id="INTERPOLATION"/> </source>
         <target state="translated">
           <x id="INTERPOLATION"/>
         </target>
@@ -585,7 +581,7 @@
       </trans-unit>
       <trans-unit id="7235777177623270068" datatype="html" xml:space="preserve">
         <source>PeerTube considers video "<x id="PH" equiv-text="video.name"/>" is already being transcoded.</source>
-        <target state="translated">PeerTube considère que la video "<x id="PH" equiv-text="video.name"/>" a déjà été transcodé</target>
+        <target state="translated">PeerTube considère que la vidéo "<x id="PH" equiv-text="video.name"/>" a déjà été transcodée.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">411</context>
@@ -625,7 +621,7 @@
       </trans-unit>
       <trans-unit id="1330168808014223711" datatype="html" xml:space="preserve">
         <source>max size: 192*192px, <x id="PH" equiv-text="getBytes(this.maxAvatarSize)"/> extensions: <x id="PH_1" equiv-text="this.avatarExtensions"/></source>
-        <target state="translated">taille maximum : 192*192px, <x id="PH" equiv-text="getBytes(this.maxAvatarSize)"/> extensions: <x id="PH_1" equiv-text="this.avatarExtensions"/></target>
+        <target state="translated">taille maximum : 192*192px, <x id="PH" equiv-text="getBytes(this.maxAvatarSize)"/> extensions : <x id="PH_1" equiv-text="this.avatarExtensions"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.ts</context>
           <context context-type="linenumber">54</context>
@@ -1819,7 +1815,7 @@
       </trans-unit>
       <trans-unit id="6323039311444223540" datatype="html" xml:space="preserve">
         <source>Transcription job created for "<x id="PH" equiv-text="video.name"/>".</source>
-        <target state="translated">Travail de transcription créé pour  "<x id="PH" equiv-text="video.name"/>".</target>
+        <target state="translated">Travail de transcription créé pour "<x id="PH" equiv-text="video.name"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">397</context>
@@ -2207,7 +2203,7 @@
       </trans-unit>
       <trans-unit id="4776113937628941635" datatype="html" xml:space="preserve">
         <source>This platform has been created in <x id="INTERPOLATION" equiv-text="{{ config.instance.serverCountry }}"/></source>
-        <target state="translated">Cette plateforme a été créée en  <x id="INTERPOLATION" equiv-text="{{ config.instance.serverCountry }}"/></target>
+        <target state="translated">Cette plateforme a été créée en <x id="INTERPOLATION" equiv-text="{{ config.instance.serverCountry }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">60,61</context>
@@ -2742,8 +2738,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
-        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>.
-The link will expire within 1 hour.</source>
+        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
         <target state="translated">Un courrier électronique contenant les instructions de réinitialisation du mot de passe sera envoyé à <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Le lien expirera dans 1 heure.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
@@ -2932,9 +2927,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5716290603546738313" datatype="html">
+      <trans-unit id="5716290603546738313" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> administrators allow you to publish up to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ videoQuota | bytes: 0 }}"/> of videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on their website. </source>
-        <target state="translated">Les administrateur·ices de <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> vous permettent de publier jusqu'à <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ videoQuota | bytes: 0 }}"/> de videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> sur leur site web. </target>
+        <target state="translated">Les administrateur·ices de <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> vous permettent de publier jusqu'à <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ videoQuota | bytes: 0 }}"/> de vidéos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> sur leur site web. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">12</context>
@@ -2998,9 +2993,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">12,14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2810794032670562031" datatype="html">
+      <trans-unit id="2810794032670562031" datatype="html" xml:space="preserve">
         <source>You can edit this information later</source>
-        <target state="new">You can edit this information later</target>
+        <target state="translated">Vous pouvez modifier ces informations ultérieurement</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-edit-info.component.html</context>
           <context context-type="linenumber">14,16</context>
@@ -3072,7 +3067,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1452446159629727078" datatype="html" xml:space="preserve">
         <source>My platform is more like...</source>
-        <target state="translated">Ma plateformeest plutôt...</target>
+        <target state="translated">Ma plateforme est plutôt...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-form.component.html</context>
           <context context-type="linenumber">18,20</context>
@@ -3144,7 +3139,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7106510114370231860" datatype="html" xml:space="preserve">
         <source>Confirm this configuration</source>
-        <target state="translated">Confirmer cette configuration.</target>
+        <target state="translated">Confirmer cette configuration</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-preview.component.html</context>
           <context context-type="linenumber">33</context>
@@ -3314,49 +3309,49 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">21,23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7593555694782789615" datatype="html">
+      <trans-unit id="7593555694782789615" datatype="html" xml:space="preserve">
         <source>Open</source>
-        <target state="new">Open</target>
+        <target state="translated">Ouvert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1560828454806370515" datatype="html">
+      <trans-unit id="1560828454806370515" datatype="html" xml:space="preserve">
         <source>Anyone can register and use the platform</source>
-        <target state="new">Anyone can register and use the platform</target>
+        <target state="translated">Tout le monde peut s'inscrire et utiliser la plateforme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8247087079730523783" datatype="html">
+      <trans-unit id="8247087079730523783" datatype="html" xml:space="preserve">
         <source>Requires approval</source>
-        <target state="new">Requires approval</target>
+        <target state="translated">Nécessite une approbation</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8305610685019836481" datatype="html">
+      <trans-unit id="8305610685019836481" datatype="html" xml:space="preserve">
         <source>Anyone can register, but a moderator must approve their account before they can use the platform</source>
-        <target state="new">Anyone can register, but a moderator must approve their account before they can use the platform</target>
+        <target state="translated">Tout le monde peut s'inscrire, mais un modérateur doit approuver le compte avant que l'utilisateur puisse utiliser la plateforme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7860418101283165917" datatype="html">
+      <trans-unit id="7860418101283165917" datatype="html" xml:space="preserve">
         <source>Closed</source>
-        <target state="new">Closed</target>
+        <target state="translated">Fermé</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2224797757421461675" datatype="html">
+      <trans-unit id="2224797757421461675" datatype="html" xml:space="preserve">
         <source>Only an administrator can create users on the platform</source>
-        <target state="new">Only an administrator can create users on the platform</target>
+        <target state="translated">Seul un administrateur peut créer des utilisateurs·ices sur la plateforme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">62</context>
@@ -3824,7 +3819,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4742783116161192467" datatype="html" xml:space="preserve">
         <source>allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart</source>
-        <target state="translated">permet d'importer plusieurs vidéos en parallèle. ⚠️ Nécessite un redémarrage de PeerTube.</target>
+        <target state="translated">permet d'importer plusieurs vidéos en parallèle. ⚠️ Nécessite un redémarrage de PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">256,258</context>
@@ -5091,9 +5086,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5199584494687692924" datatype="html">
+      <trans-unit id="5199584494687692924" datatype="html" xml:space="preserve">
         <source>Moderation response:</source>
-        <target state="translated">Réponse de la modération:</target>
+        <target state="translated">Réponse de la modération :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">81</context>
@@ -5357,9 +5352,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7840115150430999864" datatype="html">
+      <trans-unit id="7840115150430999864" datatype="html" xml:space="preserve">
         <source>Timecode</source>
-        <target state="translated">Timecode</target>
+        <target state="translated">Code temporel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/chapters/video-chapters.component.html</context>
           <context context-type="linenumber">24</context>
@@ -5703,7 +5698,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3603659973330861834" datatype="html" xml:space="preserve">
         <source>For example, to put <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>text in bold<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> (**text in bold**) or <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>text in italic<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> (*text in italic*)</source>
-        <target state="translated">Par exemple, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>pour mettre en gras le texte , écrivez<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> (**texte en gras**) ou <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>pour mettre en italique le texte, écrivez<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> (*texte en italique*).</target>
+        <target state="translated">Par exemple, pour mettre <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>en gras le texte<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> (**texte en gras**) ou <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>en italique<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> (*texte en italique*)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">32,33</context>
@@ -6272,7 +6267,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3327538490069601336" datatype="html" xml:space="preserve">
         <source>Cannot create live because this platform has too many created lives</source>
-        <target state="translated">Impossible de créer un direct car cette plateforme en diffuse déjà trop.</target>
+        <target state="translated">Impossible de créer un direct car cette plateforme en diffuse déjà trop</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/live/video-go-live.component.ts</context>
           <context context-type="linenumber">126</context>
@@ -6686,41 +6681,41 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">21,23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8957518618758248715" datatype="html">
+      <trans-unit id="8957518618758248715" datatype="html" xml:space="preserve">
         <source>Enable P2P streaming by default for anonymous and new users</source>
-        <target state="new">Enable P2P streaming by default for anonymous and new users</target>
+        <target state="translated">Activer la diffusion P2P par défaut pour les utilisateurs anonymes et nouveaux inscrits</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5752446567652282010" datatype="html">
+      <trans-unit id="5752446567652282010" datatype="html" xml:space="preserve">
         <source>Disable P2P streaming</source>
-        <target state="new">Disable P2P streaming</target>
+        <target state="translated">Désactiver la diffusion P2P</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7226802129401776886" datatype="html">
+      <trans-unit id="7226802129401776886" datatype="html" xml:space="preserve">
         <source>Enable automatic transcription of videos to automatically generate subtitles</source>
-        <target state="new">Enable automatic transcription of videos to automatically generate subtitles</target>
+        <target state="translated">Activer la transcription automatique des vidéos pour générer automatiquement des sous-titres</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8032065084506853091" datatype="html">
+      <trans-unit id="8032065084506853091" datatype="html" xml:space="preserve">
         <source>Disable automatic transcription of videos</source>
-        <target state="new">Disable automatic transcription of videos</target>
+        <target state="translated">Désactiver la transcription automatique des vidéos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
           <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2670441785851471375" datatype="html">
+      <trans-unit id="2670441785851471375" datatype="html" xml:space="preserve">
         <source>Keep the original video file on the server</source>
-        <target state="new">Keep the original video file on the server</target>
+        <target state="translated">Conserver le fichier vidéo original sur le serveur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
           <context context-type="linenumber">75</context>
@@ -6730,9 +6725,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="223200561643857771" datatype="html">
+      <trans-unit id="223200561643857771" datatype="html" xml:space="preserve">
         <source>Delete the original video file after processing</source>
-        <target state="new">Delete the original video file after processing</target>
+        <target state="translated">Supprimer le fichier vidéo original après traitement</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
           <context context-type="linenumber">80</context>
@@ -6742,57 +6737,57 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7520555213647127837" datatype="html">
+      <trans-unit id="7520555213647127837" datatype="html" xml:space="preserve">
         <source>Your platform will manage user registration and login internally</source>
-        <target state="new">Your platform will manage user registration and login internally</target>
+        <target state="translated">Votre plateforme gérera en interne l'inscription et la connexion des utilisateur·ices</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
           <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5196199609108381046" datatype="html">
+      <trans-unit id="5196199609108381046" datatype="html" xml:space="preserve">
         <source>LDAP</source>
-        <target state="new">LDAP</target>
+        <target state="translated">LDAP</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2949181755376921921" datatype="html">
+      <trans-unit id="2949181755376921921" datatype="html" xml:space="preserve">
         <source>Use LDAP for user authentication</source>
-        <target state="new">Use LDAP for user authentication</target>
+        <target state="translated">Utiliser LDAP pour l'authentification des utilisateurs·ices</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
           <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6588415724080421242" datatype="html">
+      <trans-unit id="6588415724080421242" datatype="html" xml:space="preserve">
         <source>OIDC</source>
-        <target state="new">OIDC</target>
+        <target state="translated">OIDC</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
           <context context-type="linenumber">97</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3878179588051422018" datatype="html">
+      <trans-unit id="3878179588051422018" datatype="html" xml:space="preserve">
         <source>Use OpenID Connect for user authentication</source>
-        <target state="new">Use OpenID Connect for user authentication</target>
+        <target state="translated">Utiliser OpenID Connect pour l'authentification des utilisateur·ices</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
           <context context-type="linenumber">98</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8652485418991083880" datatype="html">
+      <trans-unit id="8652485418991083880" datatype="html" xml:space="preserve">
         <source>SAML</source>
-        <target state="new">SAML</target>
+        <target state="translated">SAML</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
           <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8689905109127955928" datatype="html">
+      <trans-unit id="8689905109127955928" datatype="html" xml:space="preserve">
         <source>Use SAML 2.0 for user authentication</source>
-        <target state="new">Use SAML 2.0 for user authentication</target>
+        <target state="translated">Utiliser SAML 2.0 pour l'authentification des utilisateurs·ices</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
           <context context-type="linenumber">103</context>
@@ -6806,17 +6801,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">9,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7890140515099242444" datatype="html">
+      <trans-unit id="7890140515099242444" datatype="html" xml:space="preserve">
         <source>Users can import videos from remote platforms (YouTube, Vimeo...) and automatically synchronize remote channels</source>
-        <target state="new">Users can import videos from remote platforms (YouTube, Vimeo...) and automatically synchronize remote channels</target>
+        <target state="translated">Les utilisateurs·ices peuvent importer des vidéos depuis des plateformes distantes (YouTube, Vimeo...) et synchroniser automatiquement les chaînes distantes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/private-instance-config.component.ts</context>
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3818007889408286818" datatype="html">
+      <trans-unit id="3818007889408286818" datatype="html" xml:space="preserve">
         <source>Disable video import and channel synchronization</source>
-        <target state="new">Disable video import and channel synchronization</target>
+        <target state="translated">Désactiver l'importation vidéo et la synchronisation des chaînes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/private-instance-config.component.ts</context>
           <context context-type="linenumber">54</context>
@@ -6824,35 +6819,52 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8597081746599886768" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Allow&lt;/strong&gt; any user &lt;strong&gt;to register&lt;/strong&gt;</source>
-        <target state="translated">&lt;strong&gt;Autoriser&lt;/strong&gt; tout utilisateur·ice &lt;strong&gt;à s'inscrire&lt;/strong&gt;</target>
+        <target state="translated">&lt;strong&gt;Autorisera&lt;/strong&gt; tout utilisateur·ice &lt;strong&gt;à s'inscrire&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">163</context>
         </context-group>
-      <note from="description" priority="1">bullet point of "PeerTube will:"</note></trans-unit>
+        <note from="description" priority="1">bullet point of "PeerTube will:"</note>
+      </trans-unit>
       <trans-unit id="801162573289021003" datatype="html" xml:space="preserve">
         <source>Allow users to &lt;strong&gt;apply for registration&lt;/strong&gt; on your platform</source>
-        <target state="translated">Autoriser les utilisateurs·ices à &lt;strong&gt;demander l'enregistrement&lt;/strong&gt; sur votre plateforme</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context><context context-type="linenumber">173</context></context-group><note from="description" priority="1">bullet point of "PeerTube will:"</note></trans-unit>
+        <target state="translated">Autorisera les utilisateurs·ices à &lt;strong&gt;demander l'enregistrement&lt;/strong&gt; sur votre plateforme</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
+          <context context-type="linenumber">173</context>
+        </context-group>
+        <note from="description" priority="1">bullet point of "PeerTube will:"</note>
+      </trans-unit>
       <trans-unit id="7806027071187877900" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Disable&lt;/strong&gt; user &lt;strong&gt;registration&lt;/strong&gt;</source>
-        <target state="translated">&lt;strong&gt; Désactiver l'inscription de &lt;/strong&gt; l'utilisateur·ice</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context><context context-type="linenumber">183</context></context-group><note from="description" priority="1">bullet point of "PeerTube will:"</note></trans-unit>
+        <target state="translated">&lt;strong&gt; Désactivera l'inscription de &lt;/strong&gt; l'utilisateur·ice</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
+          <context context-type="linenumber">183</context>
+        </context-group>
+        <note from="description" priority="1">bullet point of "PeerTube will:"</note>
+      </trans-unit>
       <trans-unit id="3048784583227512257" datatype="html" xml:space="preserve">
         <source>Require &lt;strong&gt;moderator approval&lt;/strong&gt; for videos published by your community</source>
-        <target state="translated">Exigez &lt;strong&gt;l'approbation du modérateur&lt;/strong&gt; pour les vidéos publiées par votre communauté.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context><context context-type="linenumber">194</context></context-group><note from="description" priority="1">bullet point of "PeerTube will:"</note></trans-unit>
+        <target state="translated">Exigera &lt;strong&gt;l'approbation de modérateurs&lt;/strong&gt; avant de publier les vidéos de votre communauté</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
+          <context context-type="linenumber">194</context>
+        </context-group>
+        <note from="description" priority="1">bullet point of "PeerTube will:"</note>
+      </trans-unit>
       <trans-unit id="5342918468732313132" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Prevent&lt;/strong&gt; new users &lt;strong&gt;from uploading videos&lt;/strong&gt; (can be changed by moderators)</source>
-        <target state="translated">&lt;strong&gt;Empêcher&lt;/strong&gt; les nouveaux utilisateurs·ices &lt;strong&gt;de télécharger des vidéos&lt;/strong&gt; (modifiable par les modérateurs)</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context><context context-type="linenumber">221</context></context-group><note from="description" priority="1">bullet point of "PeerTube will:"</note></trans-unit>
-      <trans-unit id="8937536900458817451" datatype="html">
+        <target state="translated">&lt;strong&gt;Empêchera&lt;/strong&gt; les nouveaux utilisateurs·ices &lt;strong&gt;de télécharger des vidéos&lt;/strong&gt; (modifiable par les modérateurs)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
+          <context context-type="linenumber">221</context>
+        </context-group>
+        <note from="description" priority="1">bullet point of "PeerTube will:"</note>
+      </trans-unit>
+      <trans-unit id="8937536900458817451" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Not limit the amount of videos&lt;/strong&gt; new users can upload</source>
-        <target state="new">&lt;strong&gt;Not limit the amount of videos&lt;/strong&gt; new users can upload</target>
+        <target state="translated">&lt;strong&gt;Ne limitera pas la quantité de vidéos&lt;/strong&gt; que les nouveaux utilisateurs pourront publier</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">225</context>
@@ -6861,76 +6873,124 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6750683208657917557" datatype="html" xml:space="preserve">
         <source>Set &lt;strong&gt;video quota to <x id="PH" equiv-text="getBytes(this.videoQuota, 0)"/>&lt;/strong&gt; for new users (can be changed by moderators)</source>
-        <target state="translated">Définir un &lt;strong&gt;quota de vidéo à <x id="PH" equiv-text="getBytes(this.videoQuota, 0)"/>&lt;/strong&gt; pour les nouveaux utilisateurs·ices (modifiable par les modérateurs)</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context><context context-type="linenumber">229</context></context-group><note from="description" priority="1">bullet point of "PeerTube will:"</note></trans-unit>
+        <target state="translated">Définira un &lt;strong&gt;quota de vidéo à <x id="PH" equiv-text="getBytes(this.videoQuota, 0)"/>&lt;/strong&gt; pour les nouveaux utilisateurs·ices (modifiable par les modérateurs)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
+          <context context-type="linenumber">229</context>
+        </context-group>
+        <note from="description" priority="1">bullet point of "PeerTube will:"</note>
+      </trans-unit>
       <trans-unit id="5663976721315204489" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Allow&lt;/strong&gt; your users &lt;strong&gt;to import and synchronize&lt;/strong&gt; videos from remote platforms (YouTube, Vimeo...)</source>
-        <target state="translated">&lt;strong&gt;Autorisez &lt;/strong&gt; vos utilisateurs·ices &lt;strong&gt; à importer et synchroniser &lt;/strong&gt; des vidéos depuis des plateformes distantes (YouTube, Vimeo...)</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context><context context-type="linenumber">255</context></context-group><note from="description" priority="1">bullet point of "PeerTube will:"</note></trans-unit>
+        <target state="translated">&lt;strong&gt;Autorisera &lt;/strong&gt; vos utilisateurs·ices &lt;strong&gt; à importer et à synchroniser &lt;/strong&gt; des vidéos depuis des plateformes distantes (YouTube, Vimeo...)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
+          <context context-type="linenumber">255</context>
+        </context-group>
+        <note from="description" priority="1">bullet point of "PeerTube will:"</note>
+      </trans-unit>
       <trans-unit id="4936759942517379026" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Prevent&lt;/strong&gt; your users &lt;strong&gt;from importing videos&lt;/strong&gt; from remote platforms</source>
-        <target state="translated">&lt;strong&gt; Empêcher &lt;/strong&gt; vos utilisateurs·ices &lt;strong&gt; d'importer des vidéos &lt;/strong&gt; depuis des plateformes distantes</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context><context context-type="linenumber">260</context></context-group><note from="description" priority="1">bullet point of "PeerTube will:"</note></trans-unit>
+        <target state="translated">&lt;strong&gt; Empêchera &lt;/strong&gt; vos utilisateurs·ices &lt;strong&gt; d'importer des vidéos &lt;/strong&gt; depuis des plateformes distantes</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
+          <context context-type="linenumber">260</context>
+        </context-group>
+        <note from="description" priority="1">bullet point of "PeerTube will:"</note>
+      </trans-unit>
       <trans-unit id="7110073515390971316" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Allow&lt;/strong&gt; your users &lt;strong&gt;to stream lives&lt;/strong&gt; and chat with their viewers using the &lt;strong&gt;Livechat&lt;/strong&gt; plugin</source>
-        <target state="translated">&lt;&gt;Autorisez&lt;/strong&gt; vos utilisateurs·ices &lt;strong&gt; à diffuser des lives&lt;/strong&gt; et à discuter avec leurs spectateurs·rices à l'aide du plugin &lt;strong&gt;Livechat&lt;/strong&gt;</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context><context context-type="linenumber">279</context></context-group><note from="description" priority="1">bullet point of "PeerTube will:"</note></trans-unit>
+        <target state="translated">&lt;strong&gt;Autorisera&lt;/strong&gt; vos utilisateurs·ices &lt;strong&gt; à diffuser des lives&lt;/strong&gt; et à discuter avec leurs spectateurs·rices à l'aide du plugin &lt;strong&gt;Livechat&lt;/strong&gt;</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
+          <context context-type="linenumber">279</context>
+        </context-group>
+        <note from="description" priority="1">bullet point of "PeerTube will:"</note>
+      </trans-unit>
       <trans-unit id="3769529336397241157" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Prevent&lt;/strong&gt; your users from running &lt;strong&gt;live streams&lt;/strong&gt;</source>
-        <target state="translated">&lt;strong&gt;Empéchez &lt;/strong&gt; vos utilisateurs·ices &lt;strong&gt; de faire des diffusions en direct&lt;/strong&gt;</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context><context context-type="linenumber">283</context></context-group><note from="description" priority="1">bullet point of "PeerTube will:"</note></trans-unit>
+        <target state="translated">&lt;strong&gt;Empêchera &lt;/strong&gt; vos utilisateurs·ices &lt;strong&gt; de faire des diffusions en direct&lt;/strong&gt;</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
+          <context context-type="linenumber">283</context>
+        </context-group>
+        <note from="description" priority="1">bullet point of "PeerTube will:"</note>
+      </trans-unit>
       <trans-unit id="3112814596265051794" datatype="html" xml:space="preserve">
         <source>Set the &lt;strong&gt;default video privacy&lt;/strong&gt; to &lt;strong&gt;Internal&lt;/strong&gt;</source>
-        <target state="translated">Définissez la &lt;strong&gt;visibilité par défaut des vidéos&lt;/strong&gt; à &lt;strong&gt;Interne&lt;/strong&gt;</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context><context context-type="linenumber">301</context></context-group><note from="description" priority="1">bullet point of "PeerTube will:"</note></trans-unit>
+        <target state="translated">Définira la &lt;strong&gt;visibilité par défaut des vidéos&lt;/strong&gt; à &lt;strong&gt;Interne&lt;/strong&gt;</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
+          <context context-type="linenumber">301</context>
+        </context-group>
+        <note from="description" priority="1">bullet point of "PeerTube will:"</note>
+      </trans-unit>
       <trans-unit id="4274451041982561878" datatype="html" xml:space="preserve">
         <source>Set the &lt;strong&gt;default video privacy&lt;/strong&gt; to &lt;strong&gt;Public&lt;/strong&gt;</source>
-        <target state="translated">Définissez la &lt;strong&gt;confidentialité par défaut des vidéos &lt;/strong&gt; sur &lt;strong&gt;Public&lt;/strong&gt;</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context><context context-type="linenumber">305</context></context-group><note from="description" priority="1">bullet point of "PeerTube will:"</note></trans-unit>
+        <target state="translated">Définira la &lt;strong&gt;confidentialité par défaut des vidéos &lt;/strong&gt; sur &lt;strong&gt;Public&lt;/strong&gt;</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
+          <context context-type="linenumber">305</context>
+        </context-group>
+        <note from="description" priority="1">bullet point of "PeerTube will:"</note>
+      </trans-unit>
       <trans-unit id="8003967585929454038" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Require approval&lt;/strong&gt; by default of new video comment</source>
         <target state="translated">&lt;strong&gt;Nécessitera une approbation&lt;/strong&gt; par défaut pour les nouveaux commentaires vidéo</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context><context context-type="linenumber">321</context></context-group><note from="description" priority="1">bullet point of "PeerTube will:"</note></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
+          <context context-type="linenumber">321</context>
+        </context-group>
+        <note from="description" priority="1">bullet point of "PeerTube will:"</note>
+      </trans-unit>
       <trans-unit id="4418462159149044975" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Enable P2P streaming&lt;/strong&gt; by default for anonymous and new users</source>
         <target state="translated">&lt;strong&gt;Activera le streaming P2P&lt;/strong&gt; par défaut pour les utilisateurs anonymes et nouveaux inscrits</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context><context context-type="linenumber">342</context></context-group><note from="description" priority="1">bullet point of "PeerTube will:"</note></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
+          <context context-type="linenumber">342</context>
+        </context-group>
+        <note from="description" priority="1">bullet point of "PeerTube will:"</note>
+      </trans-unit>
       <trans-unit id="168249800849144901" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Disable P2P streaming&lt;/strong&gt; by default for anonymous and new users</source>
         <target state="translated">&lt;strong&gt;Désactivera le streaming P2P&lt;/strong&gt; par défaut pour les utilisateurs anonymes et nouveaux inscrits</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context><context context-type="linenumber">346</context></context-group><note from="description" priority="1">bullet point of "PeerTube will:"</note></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
+          <context context-type="linenumber">346</context>
+        </context-group>
+        <note from="description" priority="1">bullet point of "PeerTube will:"</note>
+      </trans-unit>
       <trans-unit id="3562838477245844067" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Allow&lt;/strong&gt; external platforms/users to &lt;strong&gt;subscribe&lt;/strong&gt; to your content</source>
         <target state="translated">&lt;strong&gt;Autorisera&lt;/strong&gt; les plateformes externes/utilisateurs à &lt;strong&gt;s'abonner&lt;/strong&gt; à votre contenu</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context><context context-type="linenumber">368</context></context-group><note from="description" priority="1">bullet point of "PeerTube will:"</note></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
+          <context context-type="linenumber">368</context>
+        </context-group>
+        <note from="description" priority="1">bullet point of "PeerTube will:"</note>
+      </trans-unit>
       <trans-unit id="3834301287198491897" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Prevent&lt;/strong&gt; external platforms/users to &lt;strong&gt;subscribe to your content&lt;/strong&gt;</source>
         <target state="translated">&lt;strong&gt;Préviendra &lt;/strong&gt; les plateformes externes/utilisateurs de &lt;strong&gt;s'abonner à votre contenu&lt;/strong&gt;</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context><context context-type="linenumber">373</context></context-group><note from="description" priority="1">bullet point of "PeerTube will:"</note></trans-unit>
-      <trans-unit id="2421351872465897229" datatype="html">
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
+          <context context-type="linenumber">373</context>
+        </context-group>
+        <note from="description" priority="1">bullet point of "PeerTube will:"</note>
+      </trans-unit>
+      <trans-unit id="2421351872465897229" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Save a copy&lt;/strong&gt; of the uploaded video file</source>
-        <target state="new">&lt;strong&gt;Save a copy&lt;/strong&gt; of the uploaded video file</target>
+        <target state="translated">&lt;strong&gt;Sauvegardera une copie&lt;/strong&gt; du fichier vidéo publié</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">390</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="3196732949948954586" datatype="html">
+      <trans-unit id="3196732949948954586" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Allow&lt;/strong&gt; your users &lt;strong&gt;to replace a video&lt;/strong&gt; that has already been published</source>
-        <target state="new">&lt;strong&gt;Allow&lt;/strong&gt; your users &lt;strong&gt;to replace a video&lt;/strong&gt; that has already been published</target>
+        <target state="translated">&lt;strong&gt;Autorisera &lt;/strong&gt; vos utilisateurs·ices &lt;strong&gt;à remplacer une vidéo&lt;/strong&gt; qui a déjà été publiée</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">408</context>
@@ -6940,33 +7000,57 @@ The link will expire within 1 hour.</source>
       <trans-unit id="1216660260185422329" datatype="html" xml:space="preserve">
         <source>Set &lt;a href="https://sepiasearch.org" target="_blank"&gt;SepiaSearch&lt;/a&gt; as &lt;strong&gt;default search engine&lt;/strong&gt;</source>
         <target state="translated">Définira l'&lt;a href="https://sepiasearch.org" target="_blank"&gt;SepiaSearch&lt;/a&gt; comme &lt;strong&gt;moteur de recherche par défaut&lt;/strong&gt;</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context><context context-type="linenumber">443</context></context-group><note from="description" priority="1">bullet point of "PeerTube will:"</note></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
+          <context context-type="linenumber">443</context>
+        </context-group>
+        <note from="description" priority="1">bullet point of "PeerTube will:"</note>
+      </trans-unit>
       <trans-unit id="7258464719094694611" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Enable automatic transcription&lt;/strong&gt; of videos to create subtitles and improve accessibility</source>
         <target state="translated">&lt;strong&gt;Activera la transcription automatique&lt;/strong&gt; des vidéos pour créer des sous-titres et améliorer l'accessibilité</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context><context context-type="linenumber">460</context></context-group><note from="description" priority="1">bullet point of "PeerTube will:"</note></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
+          <context context-type="linenumber">460</context>
+        </context-group>
+        <note from="description" priority="1">bullet point of "PeerTube will:"</note>
+      </trans-unit>
       <trans-unit id="8115142822298621193" datatype="html" xml:space="preserve">
         <source>The plugin &lt;strong&gt;must be configured&lt;/strong&gt; after the pre-configuration wizard confirmation.</source>
         <target state="translated">Le plugin &lt;strong&gt;doit être configuré&lt;/strong&gt; après confirmation de l'assistant de configuration.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context><context context-type="linenumber">470</context></context-group><note from="description" priority="1">bullet point of "PeerTube will:"</note></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
+          <context context-type="linenumber">470</context>
+        </context-group>
+        <note from="description" priority="1">bullet point of "PeerTube will:"</note>
+      </trans-unit>
       <trans-unit id="7555586666437103751" datatype="html" xml:space="preserve">
         <source>Install the &lt;strong&gt;LDAP&lt;/strong&gt; authentication plugin.</source>
         <target state="translated">Installera le plugin d'authentification &lt;strong&gt;LDAP&lt;/strong&gt;.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context><context context-type="linenumber">474</context></context-group><note from="description" priority="1">bullet point of "PeerTube will:"</note></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
+          <context context-type="linenumber">474</context>
+        </context-group>
+        <note from="description" priority="1">bullet point of "PeerTube will:"</note>
+      </trans-unit>
       <trans-unit id="6740504336459164358" datatype="html" xml:space="preserve">
         <source>Install the &lt;strong&gt;SAML 2.0&lt;/strong&gt; authentication plugin.</source>
         <target state="translated">Installera le plugin d'authentification &lt;strong&gt;SAML 2.0&lt;/strong&gt;.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context><context context-type="linenumber">480</context></context-group><note from="description" priority="1">bullet point of "PeerTube will:"</note></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
+          <context context-type="linenumber">480</context>
+        </context-group>
+        <note from="description" priority="1">bullet point of "PeerTube will:"</note>
+      </trans-unit>
       <trans-unit id="5853661417734866559" datatype="html" xml:space="preserve">
         <source>Install the &lt;strong&gt;OpenID Connect&lt;/strong&gt; authentication plugin.</source>
         <target state="translated">Installera le plugin d'authentification &lt;strong&gt;OpenID Connect&lt;/strong&gt;.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context><context context-type="linenumber">486</context></context-group><note from="description" priority="1">bullet point of "PeerTube will:"</note></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
+          <context context-type="linenumber">486</context>
+        </context-group>
+        <note from="description" priority="1">bullet point of "PeerTube will:"</note>
+      </trans-unit>
       <trans-unit id="1068153312491986796">
         <source>Display privacy warning</source>
         <target>Afficher l'avertissement de confidentialité</target>
@@ -7853,7 +7937,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="896330674868470367" datatype="html" xml:space="preserve">
         <source>A directory containing an export in custom PeerTube JSON format that can be used to re-import your account on another PeerTube instance</source>
-        <target state="translated">Un dossier contenant une exportation au format PeerTube JSON personnalisé qui peut être utilisé pour réimporter votre compte sur une autre instance PeerTube.</target>
+        <target state="translated">Un dossier contenant une exportation au format PeerTube JSON personnalisé qui peut être utilisé pour réimporter votre compte sur une autre instance PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">29</context>
@@ -8175,9 +8259,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8168516547268350654" datatype="html">
+      <trans-unit id="8168516547268350654" datatype="html" xml:space="preserve">
         <source>Do you really want to unfollow {count, plural, =1 {<x id="entryName"/>?} other {<x id="count"/> entries?}}</source>
-        <target state="translated">Souhaitez-vous réellement vous désabonner {count, plural, =1 {de <x id="entryName"/>?} other {des <x id="count"/> entrées?}}</target>
+        <target state="translated">Souhaitez-vous réellement vous désabonner {count, plural, =1 {de <x id="entryName"/> ?} other {des <x id="count"/> entrées ?}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context>
           <context context-type="linenumber">86</context>
@@ -8525,7 +8609,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6410388482930606788" datatype="html" xml:space="preserve">
         <source>This video has been reported multiple times</source>
-        <target state="translated">Cette vidéo a été signalée plusieurs fois.</target>
+        <target state="translated">Cette vidéo a été signalée plusieurs fois</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">54</context>
@@ -8541,7 +8625,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4984728317230462494" datatype="html" xml:space="preserve">
         <source>The video is blocked</source>
-        <target state="translated">La vidéo est bloquée.</target>
+        <target state="translated">La vidéo est bloquée</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">58</context>
@@ -8565,7 +8649,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1595048378944989469" datatype="html" xml:space="preserve">
         <source>Two factor authentication is enabled</source>
-        <target state="translated">L'authentification à deux facteurs est activée.</target>
+        <target state="translated">L'authentification à deux facteurs est activée</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">76</context>
@@ -9092,11 +9176,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="5026011498416291967" datatype="html">
-        <source>
-          <x id="ICU" equiv-text="{abuse().countReportsForReporter, plural, =1 {1 report} other {{{ abuse().countReportsForReporter }} reports}}" xid="1879828604800763221"/>
-          <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/>
-          <x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/>
-        </source>
+        <source><x id="ICU" equiv-text="{abuse().countReportsForReporter, plural, =1 {1 report} other {{{ abuse().countReportsForReporter }} reports}}" xid="1879828604800763221"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/> <x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/> </source>
         <target state="translated">
           <x id="ICU" xid="1879828604800763221" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 rapport} other {{{ abuse.countReportsForReporter }} rapports}}"/>
           <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/>
@@ -10111,7 +10191,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3324015640819511842" datatype="html" xml:space="preserve">
         <source>Useful for example if your "Desktop header logo" already includes your platform name</source>
-        <target state="translated">Utile par exemple si votre « logo de l'en-tête pour version ordinateur » comprend déjà le nom de votre plateforme.</target>
+        <target state="translated">Utile par exemple si votre « logo de l'en-tête pour version ordinateur » comprend déjà le nom de votre plateforme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">89</context>
@@ -10247,7 +10327,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7971232255104545985" datatype="html" xml:space="preserve">
         <source>The web interface still uses the web browser preferred language if not overridden by user preference</source>
-        <target state="translated">L'interface web utilise toujours la langue préférée du navigateur web si elle n'est pas remplacée par les préférences de l'utilisateur·ice.</target>
+        <target state="translated">L'interface web utilise toujours la langue préférée du navigateur web si elle n'est pas remplacée par les préférences de l'utilisateur·ice</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">80,81</context>
@@ -10375,7 +10455,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5509417153332543255" datatype="html" xml:space="preserve">
         <source>Who moderates the instance? What is the policy regarding sensitive content? Political videos? etc</source>
-        <target state="translated">Qui modère l'instance ? Quelle est la politique concernant le contenu sensible ? Des Vidéos politiques ? Etc.</target>
+        <target state="translated">Qui modère l'instance ? Quelle est la politique concernant le contenu sensible ? Des Vidéos politiques ? Etc</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">245</context>
@@ -10691,7 +10771,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2040129064263999708" datatype="html" xml:space="preserve">
         <source>⚠️ You don't have any external auth plugin enabled</source>
-        <target state="translated">⚠️ Vous n'avez aucun module d'extension d'authentification externe activé.</target>
+        <target state="translated">⚠️ Vous n'avez aucun module d'extension d'authentification externe activé</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">56,57</context>
@@ -10699,7 +10779,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2678071949007349214" datatype="html" xml:space="preserve">
         <source>⚠️ You have multiple external auth plugins enabled</source>
-        <target state="translated">⚠️ Vous avez plusieurs modules d'authentification externe activés.</target>
+        <target state="translated">⚠️ Vous avez plusieurs modules d'authentification externe activés</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">58,59</context>
@@ -10795,7 +10875,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8766972676494797493" datatype="html" xml:space="preserve">
         <source>Signup won't be limited to a fixed number of users</source>
-        <target state="translated">L'inscription ne sera pas limitée à un nombre fixe d'utilisateur·ices.</target>
+        <target state="translated">L'inscription ne sera pas limitée à un nombre fixe d'utilisateur·ices</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">174,175</context>
@@ -10835,7 +10915,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4924378635140045267" datatype="html" xml:space="preserve">
         <source>⚠️ This functionality requires a lot of attention and extra moderation</source>
-        <target state="translated">⚠️ Cette fonctionnalité nécessite beaucoup d'attention et une modération supplémentaire.</target>
+        <target state="translated">⚠️ Cette fonctionnalité nécessite beaucoup d'attention et une modération supplémentaire</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">140,142</context>
@@ -11235,7 +11315,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7372107248244982956" datatype="html" xml:space="preserve">
         <source>Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>anonymous users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors that may not be federated with your platform</source>
-        <target state="translated">Autoriser <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>les utilisateurs anonymes<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> à rechercher des vidéos/acteurs distants qui ne sont pas fédérés avec votre plateforme.</target>
+        <target state="translated">Autoriser <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>les utilisateurs anonymes<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> à rechercher des vidéos/acteurs distants qui ne sont pas fédérés avec votre plateforme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">627,628</context>
@@ -11339,7 +11419,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8981181756195068779" datatype="html" xml:space="preserve">
         <source>The archive file is deleted after this period</source>
-        <target state="translated">Le fichier d'archive est supprimé après cette période.</target>
+        <target state="translated">Le fichier d'archive est supprimé après cette période</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">749,751</context>
@@ -11355,7 +11435,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4557533619513324614" datatype="html" xml:space="preserve">
         <source>Otherwise, the local search will be used by default</source>
-        <target state="translated">Sinon, la recherche locale sera utilisée par défaut.</target>
+        <target state="translated">Sinon, la recherche locale sera utilisée par défaut</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">673,674</context>
@@ -11375,7 +11455,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4519166881363617842" datatype="html" xml:space="preserve">
         <source>⚠️ This functionality depends heavily on the moderation of platforms followed by the search index you select</source>
-        <target state="translated">⚠️ Cette fonctionnalité dépend fortement de la modération des plateformes suivies par l'index de recherche que vous sélectionnez.</target>
+        <target state="translated">⚠️ Cette fonctionnalité dépend fortement de la modération des plateformes suivies par l'index de recherche que vous sélectionnez</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">641,642</context>
@@ -11407,7 +11487,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5447937522004012434" datatype="html" xml:space="preserve">
         <source>This setting is not retroactive: current remote comments platform will not be deleted</source>
-        <target state="translated">Ce paramètre n'est pas rétroactif : les commentaires distants actuels ne seront pas supprimés.</target>
+        <target state="translated">Ce paramètre n'est pas rétroactif : les commentaires distants actuels ne seront pas supprimés</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">473,474</context>
@@ -11423,7 +11503,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7331615583751184681" datatype="html" xml:space="preserve">
         <source>This setting is not retroactive: current followers of channels of your platform will not be affected</source>
-        <target state="translated">Ce paramètre n'est pas rétroactif : les abonné·e·s actuels des chaînes de votre plateforme ne seront pas affecté·e·s.</target>
+        <target state="translated">Ce paramètre n'est pas rétroactif : les abonné·e·s actuels des chaînes de votre plateforme ne seront pas affecté·e·s</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">487,488</context>
@@ -11439,7 +11519,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5240371005291842688" datatype="html" xml:space="preserve">
         <source>This setting is not retroactive: current followers of your platform will not be affected</source>
-        <target state="translated">Ce paramètre n'est pas rétroactif : les abonné·e·s actuel•le•s de votre plateforme ne seront pas affecté·e·s.</target>
+        <target state="translated">Ce paramètre n'est pas rétroactif : les abonné·e·s actuel•le•s de votre plateforme ne seront pas affecté·e·s</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">501,502</context>
@@ -12449,13 +12529,13 @@ The link will expire within 1 hour.</source>
   color: red;
   <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
   <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="translated">&lt;x id="START_PARAGRAPH" ctype="x-p" equiv-text="&amp;lt ;p class=&amp;quot ;mb-2&amp;quot ;&amp;gt ;"/&gt;Écrivez directement le code CSS. Exemple : &lt;x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&amp;lt ;/p&amp;gt ;"/&gt;&lt;x id="START_TAG_PRE" ctype="x-pre" equiv-text="&amp;lt ;pre&amp;gt ;"/&gt;  #custom-css &lt;x id="INTERPOLATION" equiv-text="{{ '{' }}"/&gt;
-  color : red ;
-  &lt;x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/&gt;
-  &lt;x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&amp;lt ;/pre&amp;gt ;"/&gt;&lt;x id="START_PARAGRAPH" ctype="x-p" equiv-text="&amp;lt ;p class=&amp;quot ;mb-2&amp;quot ;&amp;gt ;"/&gt;Prepend with &lt;x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&amp;lt ;em&amp;gt ;"/&gt;#custom-css&lt;x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&amp;lt ;/em&amp;gt ;"/&gt; to override styles. Example :&lt;x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&amp;lt ;/p&amp;gt ;"/&gt;&lt;x id="START_TAG_PRE" ctype="x-pre" equiv-text="&amp;lt ;pre&amp;gt ;"/&gt;  #custom-css .logged-in-email &lt;x id="INTERPOLATION" equiv-text="{{ '{' }}"/&gt;
-  color : red ;
-  &lt;x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/&gt;
-  &lt;x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&amp;lt ;/pre&amp;gt ;"/&gt;</target>
+        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Écrivez du code CSS directement. Exemple : <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>  #custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
+  color: red;
+  <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
+  <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Ajouter au début <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> pour surcharger les styles. Exemple : <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>  #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
+  color: red;
+  <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
+  <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">182</context>
@@ -12805,9 +12885,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2990026202987449106" datatype="html">
+      <trans-unit id="2990026202987449106" datatype="html" xml:space="preserve">
         <source>Confirm your password to enable two factor authentication</source>
-        <target state="translated">Confirmez votre mot de passe pour activer l'authentification à deux facteurs.</target>
+        <target state="translated">Confirmez votre mot de passe pour activer l'authentification à deux facteurs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">10</context>
@@ -12995,7 +13075,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2925767298386605760" datatype="html" xml:space="preserve">
         <source>Original Publication Date</source>
-        <target state="translated">Date originale de publication</target>
+        <target state="translated">Date Originale de Publication</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">155</context>
@@ -13107,7 +13187,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8534731544752464794" datatype="html" xml:space="preserve">
         <source>PeerTube uses this setting to explain to your users which law they must follow in the "About" pages</source>
-        <target state="translated">PeerTube utilise ce paramètre pour expliquer à vos utilisateur·ices quelle loi ils doivent respecter dans les pages « À propos ».</target>
+        <target state="translated">PeerTube utilise ce paramètre pour expliquer à vos utilisateur·ices quelle loi ils doivent respecter dans les pages « À propos »</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">118</context>
@@ -13451,7 +13531,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2630714876280650406" datatype="html" xml:space="preserve">
         <source>This video has been deleted</source>
-        <target state="translated">Cette vidéo a été supprimée.</target>
+        <target state="translated">Cette vidéo a été supprimée</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context>
           <context context-type="linenumber">34</context>
@@ -14394,9 +14474,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
-        <source>
-          <x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/>
-        </source>
+        <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/> </source>
         <target state="translated">
           <x id="ICU" xid="8553183884518584864" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 vidéo} other {{{ getTotalVideosOf(videoChannel) }} vidéos}}"/>
         </target>
@@ -15215,7 +15293,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="603966779971722604" datatype="html" xml:space="preserve">
         <source>I am at least <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> years old and agree to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> and to the <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Code of Conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> of <x id="INTERPOLATION_1" equiv-text="{{ instanceName }}"/> </source>
-        <target state="translated">Je suis au moins âgé·e de  <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> ans et j'accepte les <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Conditions d'utilisation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> et le <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Code de conduite<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> de <x id="INTERPOLATION_1" equiv-text="{{ instanceName }}"/> </target>
+        <target state="translated">Je suis au moins âgé·e de <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> ans et j'accepte les <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Conditions d'utilisation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> et le <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Code de conduite<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> de <x id="INTERPOLATION_1" equiv-text="{{ instanceName }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-terms.component.html</context>
           <context context-type="linenumber">18</context>
@@ -16606,9 +16684,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2493388551376623687" datatype="html">
+      <trans-unit id="2493388551376623687" datatype="html" xml:space="preserve">
         <source>Hateful or Abusive</source>
-        <target state="translated">Haineux ou abusif</target>
+        <target state="translated">Haineux ou Abusif</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.ts</context>
           <context context-type="linenumber">28</context>
@@ -17213,7 +17291,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6697903271806267937" datatype="html" xml:space="preserve">
         <source>Send test emails to this address</source>
-        <target state="translated">Envoyez des e-mails de test à cette adresse.</target>
+        <target state="translated">Envoyez des e-mails de test à cette adresse</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">25,26</context>
@@ -19758,8 +19836,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
-        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>.
-Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
+        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
         <target state="translated">Impossible de récupérer les identifiants du Client OAuth : <x id="PH" equiv-text="error.text"/>. Assurez-vous d'avoir correctement configuré PeerTube (dossier config/), en particulier la section "serveur web".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
@@ -20131,10 +20208,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="7804724824750282316" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/>
-          <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/> <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/>
           <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {résultat} other {résultats}}"/>
@@ -21776,7 +21850,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1048926006551468313" datatype="html" xml:space="preserve">
         <source>A word must be between 1 and 100 characters and the total number of words must not exceed 500 items</source>
-        <target state="translated">Un mot doit faire entre 1 et 100 caractères et le nombre total de mots ne peut dépasser 500 entrées.</target>
+        <target state="translated">Un mot doit faire entre 1 et 100 caractères et le nombre total de mots ne peut dépasser 500 entrées</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">49</context>
@@ -22359,17 +22433,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7401094473118142911" datatype="html">
+      <trans-unit id="7401094473118142911" datatype="html" xml:space="preserve">
         <source>Your community cannot import or synchronize content from remote platforms</source>
-        <target state="new">Your community cannot import or synchronize content from remote platforms</target>
+        <target state="translated">Votre communauté ne peut pas importer ou synchroniser du contenu provenant de plateformes distantes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2807800733729323332" datatype="html">
+      <trans-unit id="2807800733729323332" datatype="html" xml:space="preserve">
         <source>Yes</source>
-        <target state="new">Yes</target>
+        <target state="translated">Oui</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">83</context>
@@ -22387,17 +22461,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3757873457081573953" datatype="html">
+      <trans-unit id="3757873457081573953" datatype="html" xml:space="preserve">
         <source>Your community can live stream on the platform (this requires extra moderation work)</source>
-        <target state="new">Your community can live stream on the platform (this requires extra moderation work)</target>
+        <target state="translated">Votre communauté peut diffuser en direct sur la plateforme (cela nécessite un travail de modération supplémentaire)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3542042671420335679" datatype="html">
+      <trans-unit id="3542042671420335679" datatype="html" xml:space="preserve">
         <source>No</source>
-        <target state="new">No</target>
+        <target state="translated">Non</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">88</context>
@@ -22415,33 +22489,33 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2137796204126498003" datatype="html">
+      <trans-unit id="2137796204126498003" datatype="html" xml:space="preserve">
         <source>Your community is not permitted to run live streams on the platform</source>
-        <target state="new">Your community is not permitted to run live streams on the platform</target>
+        <target state="translated">Votre communauté n'est pas autorisée à diffuser des flux en direct sur la plateforme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3636710796900562394" datatype="html">
+      <trans-unit id="3636710796900562394" datatype="html" xml:space="preserve">
         <source>Use https://sepiasearch.org as default search engine to search for content across all known peertube platforms</source>
-        <target state="new">Use https://sepiasearch.org as default search engine to search for content across all known peertube platforms</target>
+        <target state="translated">Utiliser https://sepiasearch.org comme moteur de recherche par défaut pour rechercher du contenu sur toutes les plateformes Peertube connues</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">97</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3246080307662107611" datatype="html">
+      <trans-unit id="3246080307662107611" datatype="html" xml:space="preserve">
         <source>Disable global search</source>
-        <target state="new">Disable global search</target>
+        <target state="translated">Désactiver la recherche globale</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6733232584668337124" datatype="html">
+      <trans-unit id="6733232584668337124" datatype="html" xml:space="preserve">
         <source>Use your platform search engine which only displays local content</source>
-        <target state="new">Use your platform search engine which only displays local content</target>
+        <target state="translated">Utiliser le moteur de recherche de votre plateforme qui affiche uniquement le contenu local</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">102</context>
@@ -23850,7 +23924,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2723142545112770414" datatype="html" xml:space="preserve">
         <source>(extension: .zip)</source>
-        <target state="translated">(extension: .zip)</target>
+        <target state="translated">(extension : .zip)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">66</context>
@@ -23890,7 +23964,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1335600007725669502" datatype="html" xml:space="preserve">
         <source>Cannot import this file as your video quota would be exceeded (import size: <x id="PH" equiv-text="fileSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</source>
-        <target state="translated">Impossible d'importer ce fichier car votre quota de vidéo serait dépassé (taille de l'import : <x id="PH" equiv-text="fileSizeBytes"/>, quota utilisé: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota disponible : <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
+        <target state="translated">Impossible d'importer ce fichier car votre quota de vidéo serait dépassé (taille de l'import : <x id="PH" equiv-text="fileSizeBytes"/>, quota utilisé : <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota disponible : <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.ts</context>
           <context context-type="linenumber">122</context>
@@ -25081,9 +25155,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="187187500641108332" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
         </target>
@@ -25330,7 +25402,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8977658296907974818" datatype="html" xml:space="preserve">
         <source>explicit sex</source>
-        <target state="translated">Sexe explicite</target>
+        <target state="translated">sexe explicite</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">588</context>
@@ -25442,7 +25514,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7894988827815329889" datatype="html" xml:space="preserve">
         <source>Are you sure you want to create studio tasks for "<x id="PH" equiv-text="this.videoEdit.getVideoAttributes().name"/>"?</source>
-        <target state="translated">Êtes-vous certain·e de vouloir créer des tâches Studio pour "<x id="PH" equiv-text="this.videoEdit.getVideoAttributes().name"/>"?</target>
+        <target state="translated">Êtes-vous certain·e de vouloir créer des tâches de studio pour "<x id="PH" equiv-text="this.videoEdit.getVideoAttributes().name"/>" ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-controller.service.ts</context>
           <context context-type="linenumber">393</context>
@@ -25612,9 +25684,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">478</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6566384659758828708" datatype="html">
+      <trans-unit id="6566384659758828708" datatype="html" xml:space="preserve">
         <source>Incorrect password, please enter a correct password</source>
-        <target state="translated">Mot de passe incorrect. Veuillez corriger le mot de passe.</target>
+        <target state="translated">Mot de passe incorrect, veuillez corriger le mot de passe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">479</context>
