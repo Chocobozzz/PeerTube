@@ -1,5 +1,5 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
 
 img {
   border-radius: 50%;
@@ -10,8 +10,15 @@ img {
 
 .muted {
   font-size: 90%;
+  line-height: 1.2;
+  display: block;
+  white-space: normal;
 }
 
 .item-label {
   min-height: 24px;
+}
+
+p-select ::ng-deep p-overlay {
+  max-width: 100%;
 }
