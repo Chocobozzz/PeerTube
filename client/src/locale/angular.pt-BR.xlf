@@ -1183,7 +1183,7 @@
       </trans-unit>
       <trans-unit id="6083161764743152765" datatype="html" xml:space="preserve">
         <source>No videos found matching current filters.</source>
-        <target state="needs-translation">Nenhum vídeo encontrado correspondente aos filtros selecionados.</target>
+        <target state="translated">Nenhum vídeo encontrado correspondente aos filtros atuais.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">141</context>
@@ -1191,7 +1191,7 @@
       </trans-unit>
       <trans-unit id="8613376202616911579" datatype="html" xml:space="preserve">
         <source>Your platform doesn't have videos.</source>
-        <target state="needs-translation">Sua plataforma não contém vídeos.</target>
+        <target state="translated">Sua plataforma não contém vídeos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">143</context>
