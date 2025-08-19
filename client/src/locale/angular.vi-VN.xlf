@@ -17080,14 +17080,6 @@ Link hết hạn sau 1 giờ.</target>
           <context context-type="linenumber">7,8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5118360887574741206" datatype="html" xml:space="preserve">
-        <source>{VAR_PLURAL, plural, =0 {No jobs} =1 {1 job} other {<x id="INTERPOLATION"/> jobs}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Chưa có công việc} =1 {1 công việc} other {<x id="INTERPOLATION"/> công việc}}</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
-          <context context-type="linenumber">14</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="7591870443991978948" datatype="html">
         <source>Last week</source>
         <target state="translated">Tuần trước</target>
@@ -17339,11 +17331,8 @@ Link hết hạn sau 1 giờ.</target>
       <trans-unit id="5182966734308933786" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No job} =1 {1 job} other {<x id="INTERPOLATION"/> jobs}}</source>
         <target state="translated">{VAR_PLURAL, plural, =0 {Chưa có công việc} =1 {1 công việc} other {<x id="INTERPOLATION"/> công việc}}</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
-          <context context-type="linenumber">13</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">14</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context><context context-type="linenumber">13</context></context-group></trans-unit>
       <trans-unit id="7716208024960184784" datatype="html">
         <source>UUID</source>
         <target state="translated">UUID</target>

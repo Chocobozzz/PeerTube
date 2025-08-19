@@ -2168,6 +2168,10 @@
         <source>{VAR_PLURAL, plural, =0 {No job} =1 {1 job} other {<x id="INTERPOLATION"/> jobs}}</source>
         <target state="new">{VAR_PLURAL, plural, =0 {No job} =1 {1 job} other {<x id="INTERPOLATION"/> jobs}}</target>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">13</context>
         </context-group>
@@ -2750,14 +2754,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">7,8</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5118360887574741206" datatype="html">
-        <source>{VAR_PLURAL, plural, =0 {No jobs} =1 {1 job} other {<x id="INTERPOLATION"/> jobs}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No jobs} =1 {1 job} other {<x id="INTERPOLATION"/> jobs}}</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
-          <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7378878529334768232" datatype="html">
