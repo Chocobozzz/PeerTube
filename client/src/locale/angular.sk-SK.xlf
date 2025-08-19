@@ -578,13 +578,13 @@
         <source>PeerTube considers video "<x id="PH" equiv-text="video.name"/>" is already being transcoded.</source>
         <target state="translated">PeerTube považuje video "<x id="PH" equiv-text="video.name"/>" za už transkódované.</target>
 
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">409</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">411</context></context-group></trans-unit>
       <trans-unit id="5630101530611188113" datatype="html">
         <source>If you think PeerTube is wrong (video in broken state after a crash etc.), you can force transcoding on this video.</source>
         <target state="translated">Ak si myslíte, že PeerTube sa mýli (video je pokazené po páde atď.), môžete toto video nechať prekódovať.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">411</context>
+          <context context-type="linenumber">413</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3524359509497681458" datatype="html">
@@ -592,7 +592,7 @@
         <target state="translated">Vynútiť prekódovanie</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">414</context>
+          <context context-type="linenumber">416</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4873265433447388314" datatype="html">
@@ -16581,22 +16581,22 @@ The link will expire within 1 hour.</source>
         <source>Comments are disabled</source>
         <target state="translated">Komentáre sú vypnuté</target>
 
-      <context-group purpose="location"><context context-type="sourcefile">src/app/core/server/server.service.ts</context><context context-type="linenumber">108</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/core/server/server.service.ts</context><context context-type="linenumber">109</context></context-group></trans-unit>
       <trans-unit id="5018413305553485964" datatype="html" xml:space="preserve">
         <source>Comments are enabled</source>
         <target state="translated">Komentáre sú zapnuté</target>
 
-      <context-group purpose="location"><context context-type="sourcefile">src/app/core/server/server.service.ts</context><context context-type="linenumber">112</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/core/server/server.service.ts</context><context context-type="linenumber">113</context></context-group></trans-unit>
       <trans-unit id="63077766244971546" datatype="html" xml:space="preserve">
         <source>Comments may require approval depending on your auto tag policies</source>
         <target state="translated">Komentáre môžu vyžadovať schválenie, záleží to od vašich pravidiel pre automatické označovanie</target>
 
-      <context-group purpose="location"><context context-type="sourcefile">src/app/core/server/server.service.ts</context><context context-type="linenumber">113</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/core/server/server.service.ts</context><context context-type="linenumber">114</context></context-group></trans-unit>
       <trans-unit id="8069667549070509050" datatype="html" xml:space="preserve">
         <source>Any new comment requires approval</source>
         <target state="translated">Akýkoľvek nový komentár vyžaduje schválenie</target>
 
-      <context-group purpose="location"><context context-type="sourcefile">src/app/core/server/server.service.ts</context><context context-type="linenumber">117</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/core/server/server.service.ts</context><context context-type="linenumber">118</context></context-group></trans-unit>
       <trans-unit id="5217863338130648698" datatype="html" xml:space="preserve">
         <source>Light (Beige) or Dark (Brown)</source>
         <target state="translated">Svetlá (Béžová) alebo Tmavá (Hnedá)</target>
@@ -24091,7 +24091,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Len ja vidím toto video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">531</context>
+          <context context-type="linenumber">535</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6767380569816110388" datatype="html">
@@ -24099,7 +24099,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Len zdieľateľné cez súkromný odkaz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">532</context>
+          <context context-type="linenumber">536</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6828965264297239528" datatype="html">
@@ -24107,7 +24107,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Ktokoľvek vidí toto video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">533</context>
+          <context context-type="linenumber">537</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5731228558519519588" datatype="html">
@@ -24115,7 +24115,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Only users of this platform can see this video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">534</context>
+          <context context-type="linenumber">538</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6173113330681958102" datatype="html">
@@ -24123,7 +24123,63 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Len používateľlia s heslo vidia toto video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">535</context>
+          <context context-type="linenumber">539</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8976313793734636314" datatype="html">
+        <source>CC-BY</source>
+        <target state="new">CC-BY</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
+          <context context-type="linenumber">558</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1256008580886882898" datatype="html">
+        <source>CC-BY-SA</source>
+        <target state="new">CC-BY-SA</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
+          <context context-type="linenumber">559</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8077240690934035882" datatype="html">
+        <source>CC-BY-ND</source>
+        <target state="new">CC-BY-ND</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
+          <context context-type="linenumber">560</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5730960273819949495" datatype="html">
+        <source>CC-BY-NC</source>
+        <target state="new">CC-BY-NC</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
+          <context context-type="linenumber">561</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="893990935328461810" datatype="html">
+        <source>CC-BY-NC-SA</source>
+        <target state="new">CC-BY-NC-SA</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
+          <context context-type="linenumber">562</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5533720746883435346" datatype="html">
+        <source>CC-BY-NC-ND</source>
+        <target state="new">CC-BY-NC-ND</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
+          <context context-type="linenumber">563</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3796514789644247978" datatype="html">
+        <source>Public domain mark</source>
+        <target state="new">Public domain mark</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
+          <context context-type="linenumber">565</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7556792076818503558" datatype="html">
@@ -24131,7 +24187,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">violence</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">556</context>
+          <context context-type="linenumber">584</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8977658296907974818" datatype="html">
@@ -24139,7 +24195,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">explicit sex</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">560</context>
+          <context context-type="linenumber">588</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2249128431249193118" datatype="html">
@@ -24147,7 +24203,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">This video contains sensitive content</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">564</context>
+          <context context-type="linenumber">592</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4189036340433233769" datatype="html">
@@ -24155,7 +24211,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">This video contains sensitive content: <x id="PH" equiv-text="flags.join(' - ')"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">567</context>
+          <context context-type="linenumber">595</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1219739004043110649" datatype="html">

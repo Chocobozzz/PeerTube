@@ -586,17 +586,14 @@
       <trans-unit id="7235777177623270068" datatype="html" xml:space="preserve">
         <source>PeerTube considers video "<x id="PH" equiv-text="video.name"/>" is already being transcoded.</source>
         <target state="translated">PeerTube 認為影片「<x id="PH" equiv-text="video.name"/>」已轉換編碼。</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">409</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">411</context></context-group></trans-unit>
       <trans-unit id="5630101530611188113" datatype="html">
         <source>If you think PeerTube is wrong (video in broken state after a crash etc.), you can force transcoding on this video.</source>
         <target state="translated">若您認為 PeerTube 是錯的（當機後影片處於損毀狀態等），您可以強制對該影片進行轉換編碼。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">411</context>
+          <context context-type="linenumber">413</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3524359509497681458" datatype="html">
@@ -604,7 +601,7 @@
         <target state="translated">強制轉換編碼</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">414</context>
+          <context context-type="linenumber">416</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4873265433447388314" datatype="html">
@@ -17268,35 +17265,23 @@ The link will expire within 1 hour.</source>
       <trans-unit id="8447575918459582040" datatype="html" xml:space="preserve">
         <source>Comments are disabled</source>
         <target state="translated">留言已停用</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
-          <context context-type="linenumber">108</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/core/server/server.service.ts</context><context context-type="linenumber">109</context></context-group></trans-unit>
       <trans-unit id="5018413305553485964" datatype="html" xml:space="preserve">
         <source>Comments are enabled</source>
         <target state="translated">留言已啟用</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
-          <context context-type="linenumber">112</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/core/server/server.service.ts</context><context context-type="linenumber">113</context></context-group></trans-unit>
       <trans-unit id="63077766244971546" datatype="html" xml:space="preserve">
         <source>Comments may require approval depending on your auto tag policies</source>
         <target state="translated">根據您的自動標籤政策，留言可能需要核准</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
-          <context context-type="linenumber">113</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/core/server/server.service.ts</context><context context-type="linenumber">114</context></context-group></trans-unit>
       <trans-unit id="8069667549070509050" datatype="html" xml:space="preserve">
         <source>Any new comment requires approval</source>
         <target state="translated">任何新留言都需要核准</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
-          <context context-type="linenumber">117</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/core/server/server.service.ts</context><context context-type="linenumber">118</context></context-group></trans-unit>
       <trans-unit id="5217863338130648698" datatype="html" xml:space="preserve">
         <source>Light (Beige) or Dark (Brown)</source>
         <target state="translated">淺色（米色）或深色（棕色）</target>
@@ -24982,7 +24967,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target>只有我可以看見此影片</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">531</context>
+          <context context-type="linenumber">535</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6767380569816110388" datatype="html">
@@ -24990,7 +24975,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">僅可透過私人連結分享</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">532</context>
+          <context context-type="linenumber">536</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6828965264297239528">
@@ -24998,57 +24983,98 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target>任何人都可以看到此影片</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">533</context>
+          <context context-type="linenumber">537</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5731228558519519588" datatype="html" xml:space="preserve">
         <source>Only users of this platform can see this video</source>
         <target state="translated">僅此平台的使用者才能看到此影片</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">534</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">538</context></context-group></trans-unit>
       <trans-unit id="6173113330681958102" datatype="html">
         <source>Only users with the appropriate password can see this video</source>
         <target state="translated">只有擁有適當密碼的使用者才能觀看此影片</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">535</context>
+          <context context-type="linenumber">539</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7556792076818503558" datatype="html" xml:space="preserve">
-        <source>violence</source>
-        <target state="translated">暴力</target>
+      <trans-unit id="8976313793734636314" datatype="html">
+        <source>CC-BY</source>
+        <target state="new">CC-BY</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">556</context>
+          <context context-type="linenumber">558</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8977658296907974818" datatype="html" xml:space="preserve">
-        <source>explicit sex</source>
-        <target state="translated">露骨性行為</target>
+      <trans-unit id="1256008580886882898" datatype="html">
+        <source>CC-BY-SA</source>
+        <target state="new">CC-BY-SA</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
+          <context context-type="linenumber">559</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8077240690934035882" datatype="html">
+        <source>CC-BY-ND</source>
+        <target state="new">CC-BY-ND</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">560</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="5730960273819949495" datatype="html">
+        <source>CC-BY-NC</source>
+        <target state="new">CC-BY-NC</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
+          <context context-type="linenumber">561</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="893990935328461810" datatype="html">
+        <source>CC-BY-NC-SA</source>
+        <target state="new">CC-BY-NC-SA</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
+          <context context-type="linenumber">562</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5533720746883435346" datatype="html">
+        <source>CC-BY-NC-ND</source>
+        <target state="new">CC-BY-NC-ND</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
+          <context context-type="linenumber">563</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3796514789644247978" datatype="html">
+        <source>Public domain mark</source>
+        <target state="new">Public domain mark</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
+          <context context-type="linenumber">565</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7556792076818503558" datatype="html" xml:space="preserve">
+        <source>violence</source>
+        <target state="translated">暴力</target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">584</context></context-group></trans-unit>
+      <trans-unit id="8977658296907974818" datatype="html" xml:space="preserve">
+        <source>explicit sex</source>
+        <target state="translated">露骨性行為</target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">588</context></context-group></trans-unit>
       <trans-unit id="2249128431249193118" datatype="html" xml:space="preserve">
         <source>This video contains sensitive content</source>
         <target state="translated">此影片包含敏感內容</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">564</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">592</context></context-group></trans-unit>
       <trans-unit id="4189036340433233769" datatype="html" xml:space="preserve">
         <source>This video contains sensitive content: <x id="PH" equiv-text="flags.join(' - ')"/></source>
         <target state="translated">此影片包含敏感內容：<x id="PH" equiv-text="flags.join(' - ')"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">567</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">595</context></context-group></trans-unit>
       <trans-unit id="1219739004043110649">
         <source>Your video is not uploaded yet, are you sure you want to leave this page?</source>
         <target>您的影片尚未上傳，您確定您想要離開此頁面嗎？</target>
