@@ -148,9 +148,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="nd so on.    *"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="nd so on.    *"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="nd so on.    *"/>
         </target>
@@ -256,9 +254,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
-        <source>
-          <x id="INTERPOLATION"/>
-        </source>
+        <source><x id="INTERPOLATION"/> </source>
         <target state="translated">
           <x id="INTERPOLATION"/>
         </target>
@@ -1043,7 +1039,7 @@
       </trans-unit>
       <trans-unit id="459680083614731900" datatype="html" xml:space="preserve">
         <source>Total uploaded</source>
-        <target state="translated">Total téléversé</target>
+        <target state="translated">Total envoyé</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-upload/upload-progress.component.html</context>
           <context context-type="linenumber">22</context>
@@ -2742,8 +2738,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
-        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>.
-The link will expire within 1 hour.</source>
+        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
         <target state="translated">Un courrier électronique contenant les instructions de réinitialisation du mot de passe sera envoyé à <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Le lien expirera dans 1 heure.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
@@ -2960,7 +2955,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="199127249622290422" xml:space="preserve">
         <source>Upload or import videos, parse logs, prune storage directories, reset user password...</source>
-        <target state="translated">Téléverser ou importer des vidéos, parcourir les journaux, nettoyer les dossiers de stockage, réinitialiser les mots de passe des utilisateur·ices...</target>
+        <target state="translated">Publier ou importer des vidéos, parcourir les journaux, nettoyer les dossiers de stockage, réinitialiser les mots de passe des utilisateur·ices...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">60</context>
@@ -3064,7 +3059,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1452446159629727078" datatype="html" xml:space="preserve">
         <source>My platform is more like...</source>
-        <target state="translated">Mon instance ressemble davantage à...</target>
+        <target state="translated">Ma plateformeest plutôt...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-form.component.html</context>
           <context context-type="linenumber">18,20</context>
@@ -3088,7 +3083,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="9053431081731437649" datatype="html" xml:space="preserve">
         <source>Institutional</source>
-        <target state="translated">Institutionnel</target>
+        <target state="translated">Institutionnelle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-form.component.html</context>
           <context context-type="linenumber">48,50</context>
@@ -3308,7 +3303,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8779076495329736288" datatype="html" xml:space="preserve">
         <source>Save a copy of the uploaded video</source>
-        <target state="translated">Enregistrer une copie de la vidéo téléversée</target>
+        <target state="translated">Enregistrer une copie de la vidéo publiée</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.html</context>
           <context context-type="linenumber">3,5</context>
@@ -4305,9 +4300,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8151924435547335490" datatype="html">
+      <trans-unit id="8151924435547335490" datatype="html" xml:space="preserve">
         <source>Upload failed</source>
-        <target state="translated">Le téléversement a échoué</target>
+        <target state="translated">La publication a échoué</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">13</context>
@@ -4779,9 +4774,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6259523075362402245" datatype="html">
+      <trans-unit id="6259523075362402245" datatype="html" xml:space="preserve">
         <source>Upload a new banner</source>
-        <target state="translated">Téléverser une nouvelle bannière</target>
+        <target state="translated">Mettre en ligne une nouvelle bannière</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.html</context>
           <context context-type="linenumber">33</context>
@@ -5507,7 +5502,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1582661564914737553" datatype="html" xml:space="preserve">
         <source>Name of the uploaded file.</source>
-        <target state="translated">Nom du fichier téléversé.</target>
+        <target state="translated">Nom du fichier publié.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/customization/video-customization.component.html</context>
           <context context-type="linenumber">14,15</context>
@@ -5749,9 +5744,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">38,40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6722765664648523978">
+      <trans-unit id="6722765664648523978" xml:space="preserve">
         <source>Select the file to upload</source>
-        <target>Sélectionner le fichier à téléverser</target>
+        <target state="translated">Sélectionner le fichier à publier</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/upload/video-upload.component.html</context>
           <context context-type="linenumber">7</context>
@@ -5855,7 +5850,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3319838915969302847" datatype="html" xml:space="preserve">
         <source>File uploaded! Your video is now available in your private library.</source>
-        <target state="translated">Fichier téléversé ! Votre vidéo est désormais disponible dans votre bibliothèque privée.</target>
+        <target state="translated">Fichier publié ! Votre vidéo est désormais disponible dans votre bibliothèque privée.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/upload/video-upload.component.html</context>
           <context context-type="linenumber">47</context>
@@ -6038,9 +6033,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">189</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6161604372916832458" datatype="html">
+      <trans-unit id="6161604372916832458" datatype="html" xml:space="preserve">
         <source>Upload on hold</source>
-        <target state="translated">Téléversement en attente</target>
+        <target state="translated">Upload en attente</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-controller.service.ts</context>
           <context context-type="linenumber">510</context>
@@ -6078,9 +6073,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">190</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7042425445354775897" datatype="html">
+      <trans-unit id="7042425445354775897" datatype="html" xml:space="preserve">
         <source>⚠️ Uploading a new version of your video will completely erase the current version</source>
-        <target state="translated">⚠️ Téléverser une nouvelle version de votre vidéo effacera définitivement la version actuelle</target>
+        <target state="translated">⚠️ Publier une nouvelle version de votre vidéo effacera définitivement la version actuelle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/replace-file/video-replace-file.component.html</context>
           <context context-type="linenumber">23</context>
@@ -6116,7 +6111,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4434906642654067529" datatype="html" xml:space="preserve">
         <source>Instead, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline alert-link&quot; routerLink=&quot;/admin/users&quot;&gt;"/>create a dedicated account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to upload your videos.</source>
-        <target state="translated">À la place, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline alert-link&quot; routerLink=&quot;/admin/users&quot;&gt;"/>créez un compte dédié<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> pour téléverser vos vidéos.</target>
+        <target state="translated">À la place, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline alert-link&quot; routerLink=&quot;/admin/users&quot;&gt;"/>créez un compte dédié<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> pour publier vos vidéos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/video-publish.component.html</context>
           <context context-type="linenumber">22</context>
@@ -6222,9 +6217,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">126</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7003826819757856838">
+      <trans-unit id="7003826819757856838" xml:space="preserve">
         <source>Upload a file</source>
-        <target>Téléverser un fichier</target>
+        <target state="translated">Envoyer un fichier</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/video-publish.component.html</context>
           <context context-type="linenumber">61</context>
@@ -8971,11 +8966,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="5026011498416291967" datatype="html">
-        <source>
-          <x id="ICU" equiv-text="{abuse().countReportsForReporter, plural, =1 {1 report} other {{{ abuse().countReportsForReporter }} reports}}" xid="1879828604800763221"/>
-          <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/>
-          <x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/>
-        </source>
+        <source><x id="ICU" equiv-text="{abuse().countReportsForReporter, plural, =1 {1 report} other {{{ abuse().countReportsForReporter }} reports}}" xid="1879828604800763221"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/> <x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/> </source>
         <target state="translated">
           <x id="ICU" xid="1879828604800763221" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 rapport} other {{{ abuse.countReportsForReporter }} rapports}}"/>
           <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/>
@@ -10234,7 +10225,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7611566203467532051" datatype="html" xml:space="preserve">
         <source>Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Moreover, the "sensitive content" checkbox on video upload will be automatically checked by default. </source>
-        <target state="translated">L'activer permettra aux autres administrateurs de savoir que vous fédérez principalement du contenu sensible.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> De plus, la case à cocher "contenu sensible" lors du téléversement d'une vidéo sera cochée par défaut. </target>
+        <target state="translated">L'activer permettra aux autres administrateurs de savoir que vous fédérez principalement du contenu sensible.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> De plus, la case à cocher "contenu sensible" lors de la publication d'une vidéo sera cochée par défaut. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">208</context>
@@ -10968,9 +10959,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">340</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7055002182446434458" datatype="html">
+      <trans-unit id="7055002182446434458" datatype="html" xml:space="preserve">
         <source>Allow users to upload a new version of their video</source>
-        <target state="translated">Autoriser les utilisateurs à téléverser une nouvelle version de leur vidéo</target>
+        <target state="translated">Autoriser les utilisateurs à publier une nouvelle version de leur vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">354</context>
@@ -11002,7 +10993,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8008057374731814667" datatype="html" xml:space="preserve">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin/configuration#automatic-transcription&quot; target=&quot;_blank&quot;&gt;"/>Automatically create subtitles<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for uploaded/imported VOD videos</source>
-        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin/configuration#automatic-transcription&quot; target=&quot;_blank&quot;&gt;"/>Créer des sous-titres automatiquement<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> pour les vidéos VOD téléversées/importées</target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin/configuration#automatic-transcription&quot; target=&quot;_blank&quot;&gt;"/>Créer des sous-titres automatiquement<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> pour les vidéos VOD publiées/importées</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">381</context>
@@ -11910,15 +11901,15 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8340360585610503574" datatype="html" xml:space="preserve">
         <source>Allows users to upload .mp3, .ogg, .wma, .flac, .aac, or .ac3 audio files.</source>
-        <target state="translated">Permet aux utilisateur·ices de téléverser des fichiers audio .mp3, .ogg, .wma, .flac, .aac ou .ac3.</target>
+        <target state="translated">Permet aux utilisateur·ices de publier des fichiers audio .mp3, .ogg, .wma, .flac, .aac ou .ac3.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5867513506373651775" datatype="html">
+      <trans-unit id="5867513506373651775" datatype="html" xml:space="preserve">
         <source>The file will be merged in a still image video with the preview file on upload.</source>
-        <target state="translated">Le fichier sera fusionné dans une image vidéo fixe avec le fichier de prévisualisation lors du téléversement.</target>
+        <target state="translated">Le fichier sera fusionné dans une image vidéo fixe avec le fichier de prévisualisation lors de la publication.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">58</context>
@@ -14269,9 +14260,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
-        <source>
-          <x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/>
-        </source>
+        <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/> </source>
         <target state="translated">
           <x id="ICU" xid="8553183884518584864" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 vidéo} other {{{ getTotalVideosOf(videoChannel) }} vidéos}}"/>
         </target>
@@ -16012,9 +16001,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5504952199515017930" datatype="html">
+      <trans-unit id="5504952199515017930" datatype="html" xml:space="preserve">
         <source>None - no upload possible</source>
-        <target state="translated">Aucun - le téléversement est impossible</target>
+        <target state="translated">Aucun - la publicaiton est impossible</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-quota-options.ts</context>
           <context context-type="linenumber">6</context>
@@ -17393,8 +17382,15 @@ The link will expire within 1 hour.</source>
       <trans-unit id="5182966734308933786" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No job} =1 {1 job} other {<x id="INTERPOLATION"/> jobs}}</source>
         <target state="translated">{VAR_PLURAL, plural, =0 {Aucune tâche} =1 {1 tâche} other {<x id="INTERPOLATION"/> tâches}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">14</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context><context context-type="linenumber">13</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7716208024960184784" datatype="html">
         <source>UUID</source>
         <target state="translated">UUID</target>
@@ -19626,8 +19622,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
-        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>.
-Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
+        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
         <target state="translated">Impossible de récupérer les identifiants du Client OAuth : <x id="PH" equiv-text="error.text"/>. Assurez-vous d'avoir correctement configuré PeerTube (dossier config/), en particulier la section "serveur web".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
@@ -19984,7 +19979,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6180920471345723927" datatype="html" xml:space="preserve">
         <source>The video quota only takes into account the size of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>uploaded<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videos, not transcoded files or user export archives (which may contain video files). </source>
-        <target state="translated">Ce quota vidéo ne prend en compte que la taille des vidéos <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>téléversées<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, pas la taille des fichiers transcodés ou des exports d'archives des utilisateur⋅rices (qui peuvent contenir des fichiers vidéos). </target>
+        <target state="translated">Ce quota vidéo ne prend en compte que la taille des vidéos <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publiées<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, pas la taille des fichiers transcodés ou des exports d'archives des utilisateur⋅rices (qui peuvent contenir des fichiers vidéos). </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-real-quota-info.component.html</context>
           <context context-type="linenumber">4</context>
@@ -19999,10 +19994,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="7804724824750282316" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/>
-          <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/> <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/>
           <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {résultat} other {résultats}}"/>
@@ -20842,17 +20834,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">108</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1220179061234048936">
+      <trans-unit id="1220179061234048936" xml:space="preserve">
         <source>Daily upload limit is required.</source>
-        <target>Un quota journalier de téléversement est requis.</target>
+        <target state="translated">Un quota journalier d'upload est requis.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">114</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8959404382357999234">
+      <trans-unit id="8959404382357999234" xml:space="preserve">
         <source>Daily upload limit must be greater than -1.</source>
-        <target>Le quota journalier de téléversement doit être supérieur à -1.</target>
+        <target state="translated">Le quota journalier d'upload doit être supérieur à -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">115</context>
@@ -23586,7 +23578,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1473104874710475790" datatype="html" xml:space="preserve">
         <source>Upload completed. Your archive import will be processed as soon as possible.</source>
-        <target state="translated">Téléversement terminé. Votre importation d'archives sera traitée dès que possible.</target>
+        <target state="translated">Envoi terminé. Votre importation d'archives sera traitée dès que possible.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">63</context>
@@ -23626,7 +23618,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1842877412269588224" datatype="html" xml:space="preserve">
         <source>Your archive file is not uploaded yet, are you sure you want to leave this page?</source>
-        <target state="translated">Votre fichier d'archive n'est pas encore téléversé, êtes-vous sûr de vouloir quitter cette page ?</target>
+        <target state="translated">Votre fichier d'archive n'est pas encore envoyé, êtes-vous sûr de vouloir quitter cette page ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.ts</context>
           <context context-type="linenumber">61</context>
@@ -24825,9 +24817,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="187187500641108332" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
         </target>
@@ -25096,9 +25086,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">595</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1219739004043110649">
+      <trans-unit id="1219739004043110649" xml:space="preserve">
         <source>Your video is not uploaded yet, are you sure you want to leave this page?</source>
-        <target>Votre vidéo n'est pas encore téléversée ; êtes-vous sûr de vouloir quitter cette page ?</target>
+        <target state="translated">Votre vidéo n'est pas encore publiée ; êtes-vous sûr de vouloir quitter cette page ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/upload/video-upload.component.ts</context>
           <context context-type="linenumber">117</context>
@@ -25128,11 +25118,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8278735427925094503">
+      <trans-unit id="8278735427925094503" xml:space="preserve">
         <source>Upload <x id="PH"/> </source>
-        <target>Téléverser
-          <x id="PH"/>
-        </target>
+        <target state="translated">Publier <x id="PH"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/upload/video-upload.component.ts</context>
           <context context-type="linenumber">179</context>
@@ -25162,9 +25150,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">376</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6552806326413045734" datatype="html">
+      <trans-unit id="6552806326413045734" datatype="html" xml:space="preserve">
         <source>Uploading a new version of your video will completely erase the current version.</source>
-        <target state="translated">Téléverser une nouvelle version de cette vidéo remplacera définitivement la version actuelle.</target>
+        <target state="translated">Publier une nouvelle version de cette vidéo remplacera définitivement la version actuelle.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-controller.service.ts</context>
           <context context-type="linenumber">379</context>
