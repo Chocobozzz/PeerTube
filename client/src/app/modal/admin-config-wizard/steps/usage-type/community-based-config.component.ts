@@ -47,59 +47,59 @@ export class CommunityBasedConfigComponent implements OnInit {
   registrationOptions: SelectOptionsItem<RegistrationType>[] = [
     {
       id: 'open',
-      label: 'Open',
-      description: 'Anyone can register and use the platform'
+      label: $localize`Open`,
+      description: $localize`Anyone can register and use the platform`
     },
 
     {
       id: 'approval',
-      label: 'Requires approval',
-      description: 'Anyone can register, but a moderator must approve their account before they can use the platform'
+      label: $localize`Requires approval`,
+      description: $localize`Anyone can register, but a moderator must approve their account before they can use the platform`
     },
     {
       id: 'closed',
-      label: 'Closed',
-      description: 'Only an administrator can create users on the platform'
+      label: $localize`Closed`,
+      description: $localize`Only an administrator can create users on the platform`
     }
   ]
 
   importOptions: SelectOptionsItem<EnabledDisabled>[] = [
     {
       id: 'enabled',
-      label: 'Enabled',
+      label: $localize`Enabled`,
       description:
         'Your community can import videos from remote platforms (YouTube, Vimeo...) and automatically synchronize remote channels'
     },
     {
       id: 'disabled',
-      label: 'Disabled',
-      description: 'Your community cannot import or synchronize content from remote platforms'
+      label: $localize`Disabled`,
+      description: $localize`Your community cannot import or synchronize content from remote platforms`
     }
   ]
 
   liveOptions: SelectOptionsItem<EnabledDisabled>[] = [
     {
       id: 'enabled',
-      label: 'Yes',
-      description: 'Your community can live stream on the platform (this requires extra moderation work)'
+      label: $localize`Yes`,
+      description: $localize`Your community can live stream on the platform (this requires extra moderation work)`
     },
     {
       id: 'disabled',
-      label: 'No',
-      description: 'Your community is not permitted to run live streams on the platform'
+      label: $localize`No`,
+      description: $localize`Your community is not permitted to run live streams on the platform`
     }
   ]
 
   globalSearchOptions: SelectOptionsItem<string>[] = [
     {
       id: 'enabled',
-      label: 'Enable global search',
-      description: 'Use https://sepiasearch.org as default search engine to search for content across all known peertube platforms'
+      label: $localize`Enable global search`,
+      description: $localize`Use https://sepiasearch.org as default search engine to search for content across all known peertube platforms`
     },
     {
       id: 'disabled',
-      label: 'Disable global search',
-      description: 'Use your platform search engine which only displays local content'
+      label: $localize`Disable global search`,
+      description: $localize`Use your platform search engine which only displays local content`
     }
   ]
 
