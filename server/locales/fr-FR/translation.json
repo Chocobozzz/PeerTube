@@ -106,8 +106,8 @@
     "Your video <strong>{videoName}</strong> has been blocked by {instanceName} moderators.": "Votre vidéo <strong>{videoName}</strong> a été bloquée par les modérateurs de {instanceName}.",
     "Your video has been unblocked": "Votre vidéo a été débloquée",
     "Your video <strong>{videoName}</strong> has been unblocked by {instanceName} moderators.": "Votre vidéo <strong>{videoName}</strong> a été débloquée par les modérateurs de {instanceName}.",
-    "{language} is not a valid language": "{language} n'est pas une langue valide.",
-    "The provided thumbnail file is invalid.": "The provided thumbnail file is invalid.",
+    "{language} is not a valid language": "{language} n'est pas une langue valide",
+    "The provided thumbnail file is invalid.": "La miniature fournie n'est pas valide.",
     "Reset your account password": "Réinitialiser le mot de passe de votre compte",
     "Create your account password": "Créer le mot de passe de votre compte",
     "Verify your email on {instanceName}": "Vérifiez votre e-mail sur {instanceName}",
@@ -160,5 +160,5 @@
     "Edition of your video has finished": "L'édition de votre vidéo est terminée",
     "Edition of your video {videoName} has finished.": "L'édition de votre vidéo {videoName} est terminée.",
     "Video edition has finished": "L'édition de la vidéo est terminée",
-    "The token session does not exist or does not belong to the user.": "The token session does not exist or does not belong to the user."
+    "The token session does not exist or does not belong to the user.": "La session n'existe pas ou n'appartient pas à l'utilisateur·ice."
 }

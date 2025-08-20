@@ -8,6 +8,7 @@ import {
   ServerStats,
   VideoCommentPolicy,
   VideoConstant,
+  VideoLicenceType,
   VideoPlaylistPrivacyType,
   VideoPrivacyType
 } from '@peertube/peertube-models'
@@ -30,7 +31,7 @@ export class ServerService {
   configReloaded = new Subject<ServerConfig>()
 
   private localeObservable: Observable<any>
-  private videoLicensesObservable: Observable<VideoConstant<number>[]>
+  private videoLicensesObservable: Observable<VideoConstant<VideoLicenceType>[]>
   private videoCategoriesObservable: Observable<VideoConstant<number>[]>
   private videoPrivaciesObservable: Observable<VideoConstant<VideoPrivacyType>[]>
   private videoPlaylistPrivaciesObservable: Observable<VideoConstant<VideoPlaylistPrivacyType>[]>
@@ -129,7 +130,7 @@ export class ServerService {
 
   getVideoLicences () {
     if (!this.videoLicensesObservable) {
-      this.videoLicensesObservable = this.loadAttributeEnum<number>(ServerService.BASE_VIDEO_URL, 'licences')
+      this.videoLicensesObservable = this.loadAttributeEnum<VideoLicenceType>(ServerService.BASE_VIDEO_URL, 'licences')
     }
 
     return this.videoLicensesObservable.pipe(first())

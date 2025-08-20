@@ -24,6 +24,8 @@ import {
   VideoCommentPolicyType,
   VideoImportState,
   VideoImportStateType,
+  VideoLicence,
+  VideoLicenceType,
   VideoPlaylistPrivacy,
   VideoPlaylistPrivacyType,
   VideoPlaylistType,
@@ -578,14 +580,16 @@ export const VIDEO_CATEGORIES = {
 }
 
 // See https://creativecommons.org/licenses/?lang=en
-export const VIDEO_LICENCES = {
-  1: 'Attribution',
-  2: 'Attribution - Share Alike',
-  3: 'Attribution - No Derivatives',
-  4: 'Attribution - Non Commercial',
-  5: 'Attribution - Non Commercial - Share Alike',
-  6: 'Attribution - Non Commercial - No Derivatives',
-  7: 'Public Domain Dedication'
+export const VIDEO_LICENCES: { [id in VideoLicenceType]: string } = {
+  [VideoLicence['CC-BY']]: 'Attribution',
+  [VideoLicence['CC-BY-SA']]: 'Attribution - Share Alike',
+  [VideoLicence['CC-BY-ND']]: 'Attribution - No Derivatives',
+  [VideoLicence['CC-BY-NC']]: 'Attribution - Non Commercial',
+  [VideoLicence['CC-BY-NC-SA']]: 'Attribution - Non Commercial - Share Alike',
+  [VideoLicence['CC-BY-NC-ND']]: 'Attribution - Non Commercial - No Derivatives',
+  [VideoLicence['CC0']]: 'Public Domain Dedication',
+  [VideoLicence['PDM']]: 'Free of known copyright restrictions',
+  [VideoLicence['COPYRIGHT']]: 'Copyrighted - All Rights Reserved'
 }
 
 export const VIDEO_LANGUAGES: { [id: string]: string } = {}

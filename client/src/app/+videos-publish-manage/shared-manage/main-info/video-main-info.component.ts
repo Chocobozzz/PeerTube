@@ -184,7 +184,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
       .subscribe(res => this.videoCategories = res)
 
     this.serverService.getVideoLicences()
-      .subscribe(res => this.videoLicences = res)
+      .subscribe(res => this.videoLicences = this.videoService.explainedLicenceLabels(res))
 
     this.buildLanguages()
     this.buildPrivacies()

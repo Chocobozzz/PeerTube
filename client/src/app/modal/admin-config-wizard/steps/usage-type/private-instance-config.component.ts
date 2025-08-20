@@ -44,37 +44,38 @@ export class PrivateInstanceConfigComponent implements OnInit {
   importOptions: SelectOptionsItem<EnabledDisabled>[] = [
     {
       id: 'enabled',
-      label: 'Enabled',
-      description: 'Users can import videos from remote platforms (YouTube, Vimeo...) and automatically synchronize remote channels'
+      label: $localize`Enabled`,
+      description:
+        $localize`Users can import videos from remote platforms (YouTube, Vimeo...) and automatically synchronize remote channels`
     },
     {
       id: 'disabled',
-      label: 'Disabled',
-      description: 'Disable video import and channel synchronization'
+      label: $localize`Disabled`,
+      description: $localize`Disable video import and channel synchronization`
     }
   ]
 
   liveOptions: SelectOptionsItem<EnabledDisabled>[] = [
     {
       id: 'enabled',
-      label: 'Yes'
+      label: $localize`Yes`
     },
     {
       id: 'disabled',
-      label: 'No'
+      label: $localize`No`
     }
   ]
 
   keepOriginalVideoOptions: SelectOptionsItem<EnabledDisabled>[] = [
     {
       id: 'enabled',
-      label: 'Yes',
-      description: 'Keep the original video file on the server'
+      label: $localize`Yes`,
+      description: $localize`Keep the original video file on the server`
     },
     {
       id: 'disabled',
-      label: 'No',
-      description: 'Delete the original video file after processing'
+      label: $localize`No`,
+      description: $localize`Delete the original video file after processing`
     }
   ]
 

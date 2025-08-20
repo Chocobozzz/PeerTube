@@ -45,62 +45,62 @@ export class InstitutionalConfigComponent implements OnInit {
   p2pOptions: SelectOptionsItem<EnabledDisabled>[] = [
     {
       id: 'enabled',
-      label: 'Enabled',
-      description: 'Enable P2P streaming by default for anonymous and new users'
+      label: $localize`Enabled`,
+      description: $localize`Enable P2P streaming by default for anonymous and new users`
     },
     {
       id: 'disabled',
-      label: 'Disabled',
-      description: 'Disable P2P streaming'
+      label: $localize`Disabled`,
+      description: $localize`Disable P2P streaming`
     }
   ]
 
   transcriptionOptions: SelectOptionsItem<EnabledDisabled>[] = [
     {
       id: 'enabled',
-      label: 'Enabled',
-      description: 'Enable automatic transcription of videos to automatically generate subtitles'
+      label: $localize`Enabled`,
+      description: $localize`Enable automatic transcription of videos to automatically generate subtitles`
     },
     {
       id: 'disabled',
-      label: 'Disabled',
-      description: 'Disable automatic transcription of videos'
+      label: $localize`Disabled`,
+      description: $localize`Disable automatic transcription of videos`
     }
   ]
 
   keepOriginalVideoOptions: SelectOptionsItem<EnabledDisabled>[] = [
     {
       id: 'enabled',
-      label: 'Yes',
-      description: 'Keep the original video file on the server'
+      label: $localize`Yes`,
+      description: $localize`Keep the original video file on the server`
     },
     {
       id: 'disabled',
-      label: 'No',
-      description: 'Delete the original video file after processing'
+      label: $localize`No`,
+      description: $localize`Delete the original video file after processing`
     }
   ]
 
   authenticationOptions: SelectOptionsItem<AuthType>[] = [
     {
       id: 'local',
-      label: 'Disabled',
-      description: 'Your platform will manage user registration and login internally'
+      label: $localize`Disabled`,
+      description: $localize`Your platform will manage user registration and login internally`
     },
     {
       id: 'ldap',
-      label: 'LDAP',
-      description: 'Use LDAP for user authentication'
+      label: $localize`LDAP`,
+      description: $localize`Use LDAP for user authentication`
     },
     {
       id: 'oidc',
-      label: 'OIDC',
-      description: 'Use OpenID Connect for user authentication'
+      label: $localize`OIDC`,
+      description: $localize`Use OpenID Connect for user authentication`
     },
     {
       id: 'saml',
-      label: 'SAML',
-      description: 'Use SAML 2.0 for user authentication'
+      label: $localize`SAML`,
+      description: $localize`Use SAML 2.0 for user authentication`
     }
   ]
 
