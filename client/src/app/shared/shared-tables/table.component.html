@@ -27,7 +27,7 @@
         @if (isInSelectionMode()) {
           <my-action-dropdown i18n-label label="Batch actions" theme="primary" [actions]="bulkActions()" [entry]="selectedRows"></my-action-dropdown>
         } @else {
-          <strong *ngIf="totalTitle" i18n [ngClass]="{ 'opacity-0': loading }">
+          <strong *ngIf="totalTitle" [ngClass]="{ 'opacity-0': loading }">
             <ng-template *ngTemplateOutlet="totalTitle; context: { $implicit: totalRecords }"></ng-template>
           </strong>
 
