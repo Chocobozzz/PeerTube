@@ -2,25 +2,18 @@ import { NSFWPolicyType } from '@peertube/peertube-models'
 import { browserSleep, go, setCheckboxEnabled } from '../utils'
 
 export class AdminConfigPage {
-  async navigateTo (tab: 'instance-homepage' | 'basic-configuration' | 'instance-information' | 'live') {
-    const waitTitles = {
-      'instance-homepage': 'INSTANCE HOMEPAGE',
-      'basic-configuration': 'APPEARANCE',
-      'instance-information': 'INSTANCE',
-      'live': 'LIVE'
-    }
-
-    const url = '/admin/settings/config/edit-custom#' + tab
+  async navigateTo (page: 'information' | 'live' | 'general' | 'homepage') {
+    const url = '/admin/settings/config/' + page
 
     if (await browser.getUrl() !== url) {
-      await go('/admin/settings/config/edit-custom#' + tab)
+      await go(url)
     }
 
-    await $('h2=' + waitTitles[tab]).waitForDisplayed()
+    await $('a.active[href=' + url + ']').waitForDisplayed()
   }
 
   async updateNSFWSetting (newValue: NSFWPolicyType) {
-    await this.navigateTo('instance-information')
+    await this.navigateTo('information')
 
     const elem = $(`#instanceDefaultNSFWPolicy-${newValue} + label`)
 
@@ -32,25 +25,25 @@ export class AdminConfigPage {
   }
 
   async updateHomepage (newValue: string) {
-    await this.navigateTo('instance-homepage')
+    await this.navigateTo('homepage')
 
     return $('#instanceCustomHomepageContent').setValue(newValue)
   }
 
   async toggleSignup (enabled: boolean) {
-    await this.navigateTo('basic-configuration')
+    await this.navigateTo('general')
 
     return setCheckboxEnabled('signupEnabled', enabled)
   }
 
   async toggleSignupApproval (required: boolean) {
-    await this.navigateTo('basic-configuration')
+    await this.navigateTo('general')
 
     return setCheckboxEnabled('signupRequiresApproval', required)
   }
 
   async toggleSignupEmailVerification (required: boolean) {
-    await this.navigateTo('basic-configuration')
+    await this.navigateTo('general')
 
     return setCheckboxEnabled('signupRequiresEmailVerification', required)
   }
