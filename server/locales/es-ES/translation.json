@@ -19,7 +19,7 @@
     "Your account <strong>{username}</strong> has been blocked by {instanceName} moderators.": "Your account <strong>{username}</strong> has been blocked by {instanceName} moderators.",
     "Your account has been unblocked": "Your account has been unblocked",
     "Your account <strong>{username}</strong> has been unblocked by {instanceName} moderators.": "Your account <strong>{username}</strong> has been unblocked by {instanceName} moderators.",
-    "Hi {username},": "Hi {username},",
+    "Hi {username},": "Hola {username},",
     "View in your notifications": "View in your notifications",
     "Manage your notification preferences in your profile": "Manage your notification preferences in your profile",
     "Password creation for your account": "Password creation for your account",
