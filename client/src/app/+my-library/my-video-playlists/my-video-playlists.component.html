@@ -56,7 +56,7 @@
     </td>
 
     <td *ngIf="table.isColumnDisplayed('videos')">
-      <my-video-playlist-miniature [playlist]="playlist" thumbnailOnly="true"></my-video-playlist-miniature>
+      <my-video-playlist-miniature [playlist]="playlist" thumbnailOnly="true" toManage="true"></my-video-playlist-miniature>
     </td>
 
     <td *ngIf="table.isColumnDisplayed('name')">

@@ -73,7 +73,7 @@
 
     <div *ngIf="isPlaylist(result)" class="entry video-playlist">
       <my-video-playlist-miniature
-        [playlist]="result" [displayAsRow]="true" [displayChannel]="true"
+        [playlist]="result" displayAsRow="true" displayChannel="true" toManage="false"
         [linkType]="getLinkType()"
       ></my-video-playlist-miniature>
     </div>

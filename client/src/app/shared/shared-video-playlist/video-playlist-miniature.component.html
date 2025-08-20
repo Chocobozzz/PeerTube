@@ -3,7 +3,7 @@
     [internalLink]="playlistRouterLink" [href]="playlistHref" [target]="playlistTarget" inheritParentStyle="true" inheritParentDimension="true"
     [title]="playlist().description" class="miniature-thumbnail" tabindex="-1"
   >
-    <img alt="" [attr.aria-labelledby]="playlist().displayName" [attr.src]="playlist().thumbnailUrl" />
+    <img alt="" [attr.aria-label]="playlist().displayName" [attr.src]="playlist().thumbnailUrl" />
 
     <div class="miniature-playlist-info-overlay">
       <ng-container i18n>{playlist().videosLength, plural, =0 {No videos} =1 {1 video} other {{{ playlist().videosLength }} videos}}</ng-container>
