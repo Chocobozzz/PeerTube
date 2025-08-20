@@ -5,11 +5,12 @@ export class AdminConfigPage {
   async navigateTo (page: 'information' | 'live' | 'general' | 'homepage') {
     const url = '/admin/settings/config/' + page
 
-    if (await browser.getUrl() !== url) {
+    const currentUrl = await browser.getUrl()
+    if (!currentUrl.endsWith(url)) {
       await go(url)
     }
 
-    await $('a.active[href=' + url + ']').waitForDisplayed()
+    await $('a.active[href="' + url + '"]').waitForDisplayed()
   }
 
   async updateNSFWSetting (newValue: NSFWPolicyType) {
@@ -27,7 +28,7 @@ export class AdminConfigPage {
   async updateHomepage (newValue: string) {
     await this.navigateTo('homepage')
 
-    return $('#instanceCustomHomepageContent').setValue(newValue)
+    return $('#homepageContent').setValue(newValue)
   }
 
   async toggleSignup (enabled: boolean) {
@@ -55,11 +56,18 @@ export class AdminConfigPage {
   }
 
   async save () {
-    const button = $('input[type=submit]')
+    const button = $('my-admin-save-bar .save-button')
 
-    await button.waitForClickable()
+    try {
+      await button.waitForClickable()
+    } catch {
+      // The config may have not been changed
+      return
+    } finally {
+      await browserSleep(1000) // Wait for the button to be clickable
+    }
+
     await button.click()
-
-    await browserSleep(1000)
+    await button.waitForClickable({ reverse: true })
   }
 }

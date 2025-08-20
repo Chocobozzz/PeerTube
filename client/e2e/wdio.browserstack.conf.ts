@@ -95,18 +95,18 @@ module.exports = {
       {
         browserName: 'Chrome',
 
-        ...buildBStackMobileOptions({ sessionName: 'Latest Chrome Android', deviceName: 'Samsung Galaxy S8', osVersion: '7.0' })
+        ...buildBStackMobileOptions({ sessionName: 'Latest Chrome Android', deviceName: 'Samsung Galaxy S10', osVersion: '9.0' })
       },
       {
         browserName: 'Safari',
 
-        ...buildBStackMobileOptions({ sessionName: 'Safari iPhone', deviceName: 'iPhone 11', osVersion: '14' })
+        ...buildBStackMobileOptions({ sessionName: 'Safari iPhone', deviceName: 'iPhone 12', osVersion: '14' })
       },
 
       {
         browserName: 'Safari',
 
-        ...buildBStackMobileOptions({ sessionName: 'Safari iPad', deviceName: 'iPad Pro 11 2020', osVersion: '14' })
+        ...buildBStackMobileOptions({ sessionName: 'Safari iPad', deviceName: 'iPad Pro 12.9 2021', osVersion: '14' })
       }
     ],
 
@@ -121,7 +121,8 @@ module.exports = {
 
     services: [
       [
-        'browserstack', { browserstackLocal: true }
+        'browserstack',
+        { browserstackLocal: true }
       ]
     ],
 
@@ -174,6 +175,5 @@ module.exports = {
 
     onPrepare: onBrowserStackPrepare,
     onComplete: onBrowserStackComplete
-
   } as WebdriverIO.Config
 }

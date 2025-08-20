@@ -66,7 +66,7 @@ export class LoginPage {
   }
 
   async logout () {
-    const loggedInDropdown = $('.logged-in-container .logged-in-info')
+    const loggedInDropdown = $('.logged-in-container .dropdown-toggle')
 
     await loggedInDropdown.waitForClickable()
     await loggedInDropdown.click()

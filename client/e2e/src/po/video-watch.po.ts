@@ -167,6 +167,7 @@ export class VideoWatchPage {
 
   async clickOnMoreDropdownIcon () {
     const dropdown = $('my-video-actions-dropdown .action-button')
+    await dropdown.scrollIntoView({ block: 'center' })
     await dropdown.click()
 
     await $('.dropdown-menu.show .dropdown-item').waitForDisplayed()
@@ -176,8 +177,12 @@ export class VideoWatchPage {
   // Playlists
   // ---------------------------------------------------------------------------
 
-  clickOnSave () {
-    return $('.action-button-save').click()
+  async clickOnSave () {
+    const button = $('.action-button-save')
+
+    await button.scrollIntoView({ block: 'center' })
+
+    return button.click()
   }
 
   async createPlaylist (name: string) {

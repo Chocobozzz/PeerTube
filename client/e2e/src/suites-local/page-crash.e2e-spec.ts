@@ -1,10 +1,8 @@
 import { AdminConfigPage } from '../po/admin-config.po'
 import { LoginPage } from '../po/login.po'
-import { MyAccountPage } from '../po/my-account.po'
-import { SignupPage } from '../po/signup.po'
 import { VideoPublishPage } from '../po/video-publish.po'
 import { VideoWatchPage } from '../po/video-watch.po'
-import { getScreenshotPath, go, isMobileDevice, isSafari, selectCustomSelect, waitServerUp } from '../utils'
+import { getScreenshotPath, go, isMobileDevice, isSafari, prepareWebBrowser, selectCustomSelect, waitServerUp } from '../utils'
 
 // These tests help to notice crash with invalid translated strings
 describe('Page crash', () => {
@@ -12,9 +10,6 @@ describe('Page crash', () => {
   let loginPage: LoginPage
   let videoWatchPage: VideoWatchPage
   let adminConfigPage: AdminConfigPage
-  let myAccountPage: MyAccountPage
-
-  let lastLanguage = ''
 
   const languages = [
     'العربية',
@@ -56,66 +51,69 @@ describe('Page crash', () => {
     '繁體中文（台灣）'
   ]
 
-  async function testForAllLanguages (action: () => Promise<void>) {
-    for (const language of languages) {
-      lastLanguage = language
-
-      await go('/')
-
-      await $('.settings-button').waitForClickable()
-      await $('.settings-button').click()
-
-      await selectCustomSelect('language', language)
-
-      await action()
-    }
-  }
-
   before(async () => {
     await waitServerUp()
 
-    myAccountPage = new MyAccountPage()
     adminConfigPage = new AdminConfigPage()
     loginPage = new LoginPage(isMobileDevice())
     videoPublishPage = new VideoPublishPage()
     videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
 
-    await browser.maximizeWindow()
+    await prepareWebBrowser()
 
     await loginPage.loginAsRootUser()
   })
 
-  it('Should set a homepage', async function () {
-    await testForAllLanguages(async () => {
-      await adminConfigPage.updateHomepage('My custom homepage content')
+  for (const language of languages) {
+    describe('For language: ' + language, () => {
+      it('Should change the language', async function () {
+        await go('/')
 
-      // All tests
-      await go('/home')
+        await $('.settings-button').waitForClickable()
+        await $('.settings-button').click()
 
-      await $('*=My custom homepage content').waitForDisplayed()
+        await selectCustomSelect('language', language)
+
+        await $('my-user-interface-settings .primary-button').waitForClickable()
+        await $('my-user-interface-settings .primary-button').click()
+      })
+
+      it('Should upload and watch a video', async function () {
+        await videoPublishPage.navigateTo()
+        await videoPublishPage.uploadVideo('video3.mp4')
+        await videoPublishPage.validSecondStep('video')
+
+        await videoPublishPage.clickOnWatch()
+        await videoWatchPage.waitWatchVideoName('video')
+      })
+
+      it('Should set a homepage', async function () {
+        await adminConfigPage.updateHomepage('My custom homepage content')
+        await adminConfigPage.save()
+
+        // All tests
+        await go('/home')
+
+        await $('*=My custom homepage content').waitForDisplayed()
+      })
+
+      it('Should go on client pages and not crash', async function () {
+        await $('a[href="/videos/overview"]').waitForClickable()
+        await $('a[href="/videos/overview"]').click()
+
+        await $('my-video-overview').waitForExist()
+      })
+
+      it('Should go on videos from subscriptions pages', async function () {
+        await $('a[href="/videos/subscriptions"]').waitForClickable()
+        await $('a[href="/videos/subscriptions"]').click()
+
+        await $('my-videos-user-subscriptions').waitForExist()
+      })
+
+      after(async () => {
+        await browser.saveScreenshot(getScreenshotPath(`after-page-crash-test-${language}.png`))
+      })
     })
-  })
-
-  it('Should upload and watch a video', async function () {
-    await testForAllLanguages(async () => {
-      await videoPublishPage.navigateTo()
-      await videoPublishPage.uploadVideo('video3.mp4')
-      await videoPublishPage.validSecondStep('video')
-
-      await videoPublishPage.clickOnWatch()
-      await videoWatchPage.waitWatchVideoName('video')
-    })
-  })
-
-  it('Should go on client pages and not crash', async function () {
-    await testForAllLanguages(async () => {
-      await go('/videos/overview')
-
-      await $('h1*=Home').waitForDisplayed()
-    })
-  })
-
-  after(async () => {
-    await browser.saveScreenshot(getScreenshotPath(`after-page-crash-test-${lastLanguage}.png`))
-  })
+  }
 })

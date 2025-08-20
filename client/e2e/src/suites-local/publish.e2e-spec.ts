@@ -1,7 +1,7 @@
 import { LoginPage } from '../po/login.po'
 import { VideoPublishPage } from '../po/video-publish.po'
 import { VideoWatchPage } from '../po/video-watch.po'
-import { getScreenshotPath, isMobileDevice, isSafari, waitServerUp } from '../utils'
+import { getScreenshotPath, isMobileDevice, isSafari, prepareWebBrowser, waitServerUp } from '../utils'
 
 describe('Publish video', () => {
   let videoPublishPage: VideoPublishPage
@@ -15,7 +15,7 @@ describe('Publish video', () => {
     videoPublishPage = new VideoPublishPage()
     videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
 
-    await browser.maximizeWindow()
+    await prepareWebBrowser()
 
     await loginPage.loginAsRootUser()
   })
