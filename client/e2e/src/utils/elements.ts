@@ -38,6 +38,8 @@ export async function clickOnRadio (name: string) {
 export async function selectCustomSelect (id: string, valueLabel: string) {
   const wrapper = $(`[formcontrolname=${id}] span[role=combobox]`)
 
+  await wrapper.waitForExist()
+  await wrapper.scrollIntoView({ block: 'center' })
   await wrapper.waitForClickable()
   await wrapper.click()
 

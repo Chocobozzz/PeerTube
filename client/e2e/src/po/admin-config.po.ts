@@ -2,25 +2,19 @@ import { NSFWPolicyType } from '@peertube/peertube-models'
 import { browserSleep, go, setCheckboxEnabled } from '../utils'
 
 export class AdminConfigPage {
-  async navigateTo (tab: 'instance-homepage' | 'basic-configuration' | 'instance-information' | 'live') {
-    const waitTitles = {
-      'instance-homepage': 'INSTANCE HOMEPAGE',
-      'basic-configuration': 'APPEARANCE',
-      'instance-information': 'INSTANCE',
-      'live': 'LIVE'
+  async navigateTo (page: 'information' | 'live' | 'general' | 'homepage') {
+    const url = '/admin/settings/config/' + page
+
+    const currentUrl = await browser.getUrl()
+    if (!currentUrl.endsWith(url)) {
+      await go(url)
     }
 
-    const url = '/admin/settings/config/edit-custom#' + tab
-
-    if (await browser.getUrl() !== url) {
-      await go('/admin/settings/config/edit-custom#' + tab)
-    }
-
-    await $('h2=' + waitTitles[tab]).waitForDisplayed()
+    await $('a.active[href="' + url + '"]').waitForDisplayed()
   }
 
   async updateNSFWSetting (newValue: NSFWPolicyType) {
-    await this.navigateTo('instance-information')
+    await this.navigateTo('information')
 
     const elem = $(`#instanceDefaultNSFWPolicy-${newValue} + label`)
 
@@ -32,25 +26,25 @@ export class AdminConfigPage {
   }
 
   async updateHomepage (newValue: string) {
-    await this.navigateTo('instance-homepage')
+    await this.navigateTo('homepage')
 
-    return $('#instanceCustomHomepageContent').setValue(newValue)
+    return $('#homepageContent').setValue(newValue)
   }
 
   async toggleSignup (enabled: boolean) {
-    await this.navigateTo('basic-configuration')
+    await this.navigateTo('general')
 
     return setCheckboxEnabled('signupEnabled', enabled)
   }
 
   async toggleSignupApproval (required: boolean) {
-    await this.navigateTo('basic-configuration')
+    await this.navigateTo('general')
 
     return setCheckboxEnabled('signupRequiresApproval', required)
   }
 
   async toggleSignupEmailVerification (required: boolean) {
-    await this.navigateTo('basic-configuration')
+    await this.navigateTo('general')
 
     return setCheckboxEnabled('signupRequiresEmailVerification', required)
   }
@@ -62,11 +56,18 @@ export class AdminConfigPage {
   }
 
   async save () {
-    const button = $('input[type=submit]')
+    const button = $('my-admin-save-bar .save-button')
 
-    await button.waitForClickable()
+    try {
+      await button.waitForClickable()
+    } catch {
+      // The config may have not been changed
+      return
+    } finally {
+      await browserSleep(1000) // Wait for the button to be clickable
+    }
+
     await button.click()
-
-    await browserSleep(1000)
+    await button.waitForClickable({ reverse: true })
   }
 }

@@ -382,34 +382,44 @@ export async function checkVideoFileTokenReinjection (options: {
 }) {
   const { server, resolutions, videoFileToken, videoUUID, isLive } = options
 
-  const video = await server.videos.getWithToken({ id: videoUUID })
-  const hls = video.streamingPlaylists[0]
+  const action = async () => {
+    const video = await server.videos.getWithToken({ id: videoUUID })
+    const hls = video.streamingPlaylists[0]
 
-  const query = { videoFileToken, reinjectVideoFileToken: 'true' }
-  const { text } = await makeRawRequest({ url: hls.playlistUrl, query, expectedStatus: HttpStatusCode.OK_200 })
+    const query = { videoFileToken, reinjectVideoFileToken: 'true' }
+    const { text } = await makeRawRequest({ url: hls.playlistUrl, query, expectedStatus: HttpStatusCode.OK_200 })
 
-  for (let i = 0; i < resolutions.length; i++) {
-    const resolution = resolutions[i]
+    for (let i = 0; i < resolutions.length; i++) {
+      const resolution = resolutions[i]
 
-    const suffix = isLive
-      ? i
-      : `-${resolution}`
+      const suffix = isLive
+        ? i
+        : `-${resolution}`
 
-    expect(text).to.contain(`${suffix}.m3u8?videoFileToken=${videoFileToken}&reinjectVideoFileToken=true`)
+      expect(text).to.contain(`${suffix}.m3u8?videoFileToken=${videoFileToken}&reinjectVideoFileToken=true`)
+    }
+
+    const resolutionPlaylists = extractResolutionPlaylistUrls(hls.playlistUrl, text)
+    expect(resolutionPlaylists).to.have.lengthOf(resolutions.length)
+
+    for (const url of resolutionPlaylists) {
+      const { text } = await makeRawRequest({ url, query, expectedStatus: HttpStatusCode.OK_200 })
+
+      const extension = isLive
+        ? '.ts'
+        : '.mp4'
+
+      expect(text).to.contain(`${extension}?videoFileToken=${videoFileToken}`)
+      expect(text).not.to.contain(`reinjectVideoFileToken=true`)
+    }
   }
 
-  const resolutionPlaylists = extractResolutionPlaylistUrls(hls.playlistUrl, text)
-  expect(resolutionPlaylists).to.have.lengthOf(resolutions.length)
+  try {
+    await action()
+  } catch (err) {
+    await wait(2000)
 
-  for (const url of resolutionPlaylists) {
-    const { text } = await makeRawRequest({ url, query, expectedStatus: HttpStatusCode.OK_200 })
-
-    const extension = isLive
-      ? '.ts'
-      : '.mp4'
-
-    expect(text).to.contain(`${extension}?videoFileToken=${videoFileToken}`)
-    expect(text).not.to.contain(`reinjectVideoFileToken=true`)
+    await action()
   }
 }
 

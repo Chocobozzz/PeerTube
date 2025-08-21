@@ -185,7 +185,7 @@ export class MyAccountPage {
     const playlist = () => {
       return $$('my-video-playlist-miniature')
         .filter(async e => {
-          const t = await e.$('.miniature-name').getText()
+          const t = await e.$('img').getAttribute('aria-label')
 
           return t.includes(name)
         })

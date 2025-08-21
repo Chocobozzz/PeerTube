@@ -76,7 +76,7 @@ export abstract class VideoManage {
     await input.waitForClickable()
     await input.click()
 
-    const nextMonth = $('.p-datepicker-next')
+    const nextMonth = $('.p-datepicker-next-button')
     await nextMonth.click()
 
     await $('.p-datepicker-calendar td[aria-label="1"] > span').click()
@@ -135,7 +135,13 @@ export abstract class VideoManage {
   }
 
   protected async goOnPage (page: 'Main information' | 'Moderation' | 'Live settings') {
-    const el = $('my-video-manage-container .menu').$('*=' + page)
+    const urls = {
+      'Main information': '',
+      'Moderation': 'moderation',
+      'Live settings': 'live'
+    }
+
+    const el = $(`my-video-manage-container .menu a[href*="/${urls[page]}"]`)
     await el.waitForClickable()
     await el.click()
   }

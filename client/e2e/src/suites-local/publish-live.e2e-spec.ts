@@ -2,7 +2,7 @@ import { AdminConfigPage } from '../po/admin-config.po'
 import { LoginPage } from '../po/login.po'
 import { VideoPublishPage } from '../po/video-publish.po'
 import { VideoWatchPage } from '../po/video-watch.po'
-import { getScreenshotPath, isMobileDevice, isSafari, waitServerUp } from '../utils'
+import { getScreenshotPath, isMobileDevice, isSafari, prepareWebBrowser, waitServerUp } from '../utils'
 
 describe('Publish live', function () {
   let videoPublishPage: VideoPublishPage
@@ -18,7 +18,7 @@ describe('Publish live', function () {
     adminConfigPage = new AdminConfigPage()
     videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
 
-    await browser.maximizeWindow()
+    await prepareWebBrowser()
 
     await loginPage.loginAsRootUser()
   })

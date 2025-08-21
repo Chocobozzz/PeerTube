@@ -17,7 +17,7 @@ export class VideoPlaylistMiniatureComponent implements OnInit {
 
   readonly playlist = input<VideoPlaylist>(undefined)
 
-  readonly toManage = input(false)
+  readonly toManage = input.required({ transform: booleanAttribute })
 
   readonly thumbnailOnly = input(false, { transform: booleanAttribute })
 

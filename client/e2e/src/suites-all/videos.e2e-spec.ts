@@ -5,7 +5,7 @@ import { VideoListPage } from '../po/video-list.po'
 import { VideoPublishPage } from '../po/video-publish.po'
 import { VideoUpdatePage } from '../po/video-update.po'
 import { VideoWatchPage } from '../po/video-watch.po'
-import { FIXTURE_URLS, go, isIOS, isMobileDevice, isSafari, waitServerUp } from '../utils'
+import { FIXTURE_URLS, go, isIOS, isMobileDevice, isSafari, prepareWebBrowser, waitServerUp } from '../utils'
 
 function isUploadUnsupported () {
   if (isMobileDevice() || isSafari()) {
@@ -53,9 +53,7 @@ describe('Videos all workflow', () => {
     playerPage = new PlayerPage()
     videoListPage = new VideoListPage(isMobileDevice(), isSafari())
 
-    if (!isMobileDevice()) {
-      await browser.maximizeWindow()
-    }
+    await prepareWebBrowser()
   })
 
   it('Should log in', async () => {
