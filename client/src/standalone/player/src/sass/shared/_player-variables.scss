@@ -1,5 +1,5 @@
-@use 'sass:color';
-@use 'bootstrap/scss/functions' as *;
+@use "sass:color";
+@use "bootstrap/scss/functions" as *;
 
 $primary-foreground-color: #fff;
 $primary-foreground-opacity: 0.9;
@@ -10,14 +10,10 @@ $font-size: 13px;
 
 $control-bar-height: 38px;
 $control-bar-icon-size: 26px;
-$control-bar-volume-slider-height: 16px;
-$control-bar-slider-top: -15px;
 $control-bar-font-size: 14px;
 $control-bar-play-font-size: 34px;
 $control-bar-next-previous-play-font-size: 14px;
 $control-bar-button-width: 34px;
-
-$control-bar-total-height: $control-bar-height - $control-bar-slider-top;
 
 $progress-margin: 10px;
 

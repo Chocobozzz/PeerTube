@@ -34,8 +34,9 @@ export class ControlBarOptionsBuilder {
 
       p2PInfoButton: {},
 
-      muteToggle: {},
-      volumeControl: {},
+      volumePanel: {
+        inline: false
+      },
 
       captionToggleButton: {},
 
