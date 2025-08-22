@@ -96,7 +96,8 @@ const playerKeys = {
   'Upload speed:': 'Upload speed:',
   'Download speed:': 'Download speed:',
   'Uploader note:': 'Uploader note:',
-  'Close': 'Close'
+  'Close': 'Close',
+  '(skipped {1} buffers) ': '(skipped {1} buffers) '
 }
 Object.assign(playerKeys, videojs)
 
