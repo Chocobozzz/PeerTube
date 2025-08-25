@@ -1164,5 +1164,5 @@ email:
 
 video_comments:
   # Accept or not comments from remote instances
-  # This setting is not retroactive: current remote comments of your instance will not be affected
+  # This setting is not retroactive: current comments from remote platforms will not be deleted
   accept_remote_comments: true

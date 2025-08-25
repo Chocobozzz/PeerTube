@@ -94,7 +94,7 @@ export class CommunityBasedConfigComponent implements OnInit {
     {
       id: 'enabled',
       label: $localize`Enable global search`,
-      description: $localize`Use https://sepiasearch.org as default search engine to search for content across all known peertube platforms`
+      description: $localize`Use https://sepiasearch.org as default search engine to search for content across all known PeerTube platforms`
     },
     {
       id: 'disabled',
