@@ -1,5 +1,4 @@
 @use "sass:color";
-@use "bootstrap/scss/functions" as *;
 
 $primary-foreground-color: #fff;
 $primary-foreground-opacity: 0.9;
@@ -7,14 +6,5 @@ $primary-foreground-opacity-hover: 1;
 $primary-background-color: rgba(0, 0, 0, 0.8);
 
 $font-size: 13px;
-
-$control-bar-height: 38px;
-$control-bar-icon-size: 26px;
-$control-bar-font-size: 14px;
-$control-bar-play-font-size: 34px;
-$control-bar-next-previous-play-font-size: 14px;
-$control-bar-button-width: 34px;
-
-$progress-margin: 10px;
 
 $dock-padding: 20px;

@@ -84,7 +84,7 @@ export class ControlBarOptionsBuilder {
       progressControl: {
         children: {
           seekBar: {
-            children: [ 'loadProgressBar', 'mouseTimeDisplay', 'playProgressBar' ]
+            children: [ 'loadProgressBar', 'playProgressBar' ]
           }
         }
       }

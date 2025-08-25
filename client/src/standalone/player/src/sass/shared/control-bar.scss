@@ -2,6 +2,7 @@
 @use "_variables" as *;
 @use "_mixins" as *;
 @use "./_player-variables" as *;
+@use "./_player-mixins" as *;
 
 $slider-height: 3px;
 $slider-hover-height: 5px;
@@ -42,12 +43,16 @@ $chapter-marker-size: 9px;
 
 .video-js.vjs-peertube-skin .vjs-control-bar {
   --first-last-element-margin: 10px;
+  --icon-size: 26px;
+  --control-bar-height: 38px;
+  --control-bar-font-size: 14px;
+  --button-width: 34px;
+  --button-implicit-padding-x: calc((var(--button-width) - var(--icon-size)) / 2);
+  --peertube-link-max-width: 150px;
 
   z-index: 100;
 
-  height: $control-bar-height;
-  background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6));
-  box-shadow: 0 -15px 40px 10px rgba(0, 0, 0, 0.2);
+  height: var(--control-bar-height);
   text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
   transition: visibility 0.3s, opacity 0.3s !important;
 
@@ -67,6 +72,8 @@ $chapter-marker-size: 9px;
   }
 
   .vjs-progress-control,
+  .vjs-next-video,
+  .vjs-previous-video,
   .vjs-play-control,
   .vjs-playback-rate,
   .vjs-mute-control,
@@ -76,18 +83,35 @@ $chapter-marker-size: 9px;
   .vjs-theater-control,
   .vjs-caption-toggle-control,
   .vjs-settings {
-    color: pvar(--embed-fg) !important;
+    color: pvar(--embed-fg);
 
-    opacity: $primary-foreground-opacity;
     transition: opacity 0.1s;
 
-    &:hover {
-      opacity: $primary-foreground-opacity-hover;
+    &:not(.vjs-disabled) {
+      opacity: $primary-foreground-opacity;
+
+      &:hover {
+        opacity: $primary-foreground-opacity-hover;
+      }
     }
   }
 
+  .vjs-next-video,
+  .vjs-previous-video {
+    @include inject-icon("./svg/next.svg", 15px);
+  }
+
+  .vjs-previous-video .vjs-icon-placeholder {
+    transform: rotate(180deg);
+  }
+
+  .vjs-volume-panel,
+  .vjs-mute-control {
+    width: var(--button-width);
+  }
+
   .vjs-volume-panel {
-    width: $control-bar-button-width;
+    transition: none; // Override videojs style to not have a transition when we increase icon sizes
 
     &.vjs-hover .vjs-volume-control,
     &:active .vjs-volume-control,
@@ -101,18 +125,18 @@ $chapter-marker-size: 9px;
     &.vjs-hover .vjs-mute-control ~ .vjs-volume-control,
     & .vjs-volume-control.vjs-slider-active {
       &.vjs-volume-vertical {
-        left: -2.5em;
+        // Adjust the relative position of the bar
+        left: calc(var(--button-width) * -1);
       }
     }
   }
 
-  .vjs-volume-vertical {
-    bottom: 6.75em;
-    height: 7em;
-  }
-
   .vjs-volume-bar.vjs-slider-vertical {
     margin: 1em auto;
+
+    .vjs-volume-level::before {
+      left: -0.35em;
+    }
   }
 
   .vjs-volume-vertical {
@@ -120,6 +144,10 @@ $chapter-marker-size: 9px;
     z-index: 120;
     background-color: var(--embed-background-color);
     border-radius: 10px;
+    bottom: 6.75em;
+    height: 7em;
+    width: var(--button-width);
+    font-size: var(--control-bar-font-size);
   }
 
   .vjs-current-time,
@@ -129,46 +157,104 @@ $chapter-marker-size: 9px;
     opacity: $primary-foreground-opacity;
   }
 
-  .vjs-progress-control {
-    position: absolute;
-    top: -18px;
-    z-index: 100; // On top of the progress bar
-    width: calc(100% - 2 * #{$progress-margin});
-    height: 20px;
-    align-items: flex-end;
+  .vjs-time-control {
+    line-height: var(--control-bar-height);
 
-    @include margin-left($progress-margin);
+    &.vjs-current-time {
+      font-size: var(--control-bar-font-size);
+      display: inline-block;
+      padding: 0;
 
-    .vjs-slider {
-      margin: 0 0 5px;
-      border-radius: 0;
-      background-color: rgba(255, 255, 255, 0.2);
-      height: $slider-height;
-      transition: none;
+      @include margin-left(var(--button-implicit-padding-x));
 
-      .vjs-play-progress {
-        background: pvar(--embed-fg);
+      .vjs-current-time-display {
+        &::after {
+          content: "/";
 
-        // Not display the circle if the progress is not hovered
-        &::before {
-          opacity: 0;
-          transition: opacity 0.1s ease;
-          font-size: 15px;
-          z-index: 3; // On top of chapter marker
-        }
-
-        // Only used on mobile
-        .vjs-time-tooltip {
-          display: none;
+          @include margin(0, 1px, 0, 2px);
         }
       }
+    }
 
-      .vjs-load-progress {
-        &,
-        div {
-          background: rgba(255, 255, 255, 0.2);
-        }
+    &.vjs-duration {
+      font-size: var(--control-bar-font-size);
+      display: inline-block;
+      padding: 0;
+
+      @include margin-right(var(--button-implicit-padding-x));
+
+      .vjs-duration-display {
+        line-height: calc(var(--control-bar-height) - 1px);
       }
+    }
+
+    &.vjs-remaining-time {
+      display: none;
+    }
+  }
+
+  .vjs-pt-live-control {
+    width: auto;
+    opacity: $primary-foreground-opacity; // videojs adds a .vjs-disabled when the live is synced
+    font-size: var(--control-bar-font-size);
+
+    @include margin-right(auto);
+
+    &:not(.synced-with-live-edge) {
+      cursor: pointer;
+
+      &:hover {
+        opacity: $primary-foreground-opacity-hover;
+      }
+    }
+
+    .vjs-live-display {
+      white-space: nowrap;
+    }
+  }
+
+  .vjs-settings {
+    cursor: pointer;
+    width: var(--button-width);
+
+    @include disable-outline;
+    @include inject-icon("./svg/settings.svg", calc(var(--icon-size) - 4px));
+  }
+
+  .vjs-fullscreen-control {
+    width: var(--button-width);
+    margin-inline-start: 2px;
+
+    @include disable-outline;
+    @include inject-icon("./svg/fullscreen.svg", var(--icon-size));
+  }
+
+  .vjs-peertube-link {
+    text-decoration: none;
+    line-height: var(--control-bar-height);
+    padding: 0 5px;
+    max-width: var(--peertube-link-max-width);
+    font-size: var(--control-bar-font-size);
+
+    @include ellipsis;
+    @include disable-outline;
+    @include disable-default-a-behaviour;
+  }
+
+  .vjs-caption-toggle-control {
+    // Redefined if the player parent has captions class
+    display: none;
+  }
+
+  .vjs-theater-control {
+    width: var(--button-width);
+    cursor: pointer;
+
+    @include disable-outline;
+    @include inject-icon("./svg/theater.svg", calc(var(--icon-size) - 4px));
+
+    .vjs-icon-placeholder {
+      transition: transform 0.2s ease;
     }
   }
 
@@ -185,91 +271,148 @@ $chapter-marker-size: 9px;
     }
   }
 
+  .vjs-slider {
+    background-color: rgba(255, 255, 255, 0.2);
+
+    .vjs-play-progress {
+      background: pvar(--embed-fg);
+
+      // Not display the circle if the progress is not hovered
+      &::before {
+        opacity: 0;
+        transition: opacity 0.1s ease;
+        font-size: 15px;
+        z-index: 3; // On top of chapter marker
+      }
+
+      // Only used on mobile
+      .vjs-time-tooltip {
+        display: none;
+      }
+    }
+
+    .vjs-load-progress {
+      &,
+      div {
+        background: rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+
+  .vjs-caption-toggle-control {
+    width: var(--button-width);
+  }
+}
+
+.vjs-peertube-skin.vjs-has-captions .vjs-caption-toggle-control {
+  display: block !important;
+}
+
+.vjs-peertube-skin.vjs-fullscreen .vjs-control-bar {
+  --peertube-link-max-width: 200px;
+}
+
+// ---------------------------------------------------------------------------
+// PeerTube Default Theme
+// ---------------------------------------------------------------------------
+
+// Play/pause animations
+.video-js.vjs-peertube-theme-default.vjs-has-started .vjs-play-control {
+  &.vjs-playing {
+    animation: remove-pause-button 0.25s ease;
+  }
+
+  &.vjs-paused {
+    animation: add-play-button 0.25s ease;
+  }
+
+  @keyframes remove-pause-button {
+    0% {
+      transform: rotate(90deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+
+  @keyframes add-play-button {
+    0% {
+      transform: rotate(-90deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+}
+
+.video-js.vjs-peertube-theme-default .vjs-control-bar {
+  background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6));
+  box-shadow: 0 -15px 40px 10px rgba(0, 0, 0, 0.2);
+
+  .vjs-progress-control {
+    $progress-margin: 10px;
+
+    position: absolute;
+    top: -18px;
+    z-index: 100; // On top of the progress bar
+    width: calc(100% - 2 * #{$progress-margin});
+    height: 20px;
+    align-items: flex-end;
+
+    @include margin-left($progress-margin);
+
+    .vjs-slider {
+      margin: 0 0 3px;
+      height: 3px;
+    }
+  }
+
   .vjs-play-control {
     cursor: pointer;
-    width: $control-bar-button-width;
+    width: var(--button-width);
 
     @include disable-outline;
 
     .vjs-icon-placeholder::before {
-      font-size: $control-bar-play-font-size;
-      line-height: unset;
-      position: relative;
-      top: -1px;
+      font-size: 34px;
+      line-height: var(--control-bar-height);
     }
   }
 
-  .vjs-time-control {
-    line-height: inherit;
-
-    &.vjs-current-time {
-      font-size: $control-bar-font-size;
-      display: inline-block;
-      padding: 0;
-
-      @include margin-left(0.5em);
-
-      .vjs-current-time-display {
-        line-height: calc(#{$control-bar-height} - 1px);
-
-        &::after {
-          content: "/";
-
-          @include margin(0, 1px, 0, 2px);
-        }
-      }
-    }
-
-    &.vjs-duration {
-      font-size: $control-bar-font-size;
-      display: inline-block;
-      padding: 0;
-
-      .vjs-duration-display {
-        line-height: calc(#{$control-bar-height} - 1px);
-      }
-    }
-
-    &.vjs-remaining-time {
-      display: none;
-    }
+  .vjs-current-time {
+    @include margin-left(0.5rem !important);
   }
 
   .vjs-pt-live-control {
+    margin: auto 10px;
     padding: 5px 7px;
     border-radius: 3px;
     height: fit-content;
-    margin: auto 10px;
     font-weight: bold;
     max-width: fit-content;
-    opacity: 1 !important;
     line-height: normal;
     position: relative;
-    top: -1px;
     width: auto;
+
+    @include margin-right(auto);
 
     &.synced-with-live-edge {
       background: #d7281c;
     }
 
     &:not(.synced-with-live-edge) {
-      cursor: pointer;
       background: #80807f;
     }
   }
 
-  .vjs-live-display {
-    white-space: nowrap;
-  }
-
   .vjs-peertube {
-    line-height: $control-bar-height;
+    line-height: var(--control-bar-height);
     text-align: end;
     overflow: hidden;
-    font-size: $control-bar-font-size;
+    font-size: var(--control-bar-font-size);
 
-    @include margin-right(6px);
     @include margin-left(auto);
+    @include margin-right(6px);
 
     .vjs-peertube-displayed {
       display: block;
@@ -315,126 +458,29 @@ $chapter-marker-size: 9px;
     }
   }
 
-  .vjs-next-video,
-  .vjs-previous-video {
-    width: $control-bar-button-width - 4px;
-    cursor: pointer;
-
-    &.vjs-disabled {
-      cursor: default;
-    }
-
-    .icon {
-      &.icon-next,
-      &.icon-previous {
-        mask-image: url("./svg/next.svg");
-        -webkit-mask-image: url("./svg/next.svg");
-        mask-size: cover;
-        -webkit-mask-size: cover;
-
-        background-color: #fff;
-        width: $control-bar-next-previous-play-font-size;
-        height: $control-bar-next-previous-play-font-size;
-        display: inline-block;
-      }
-
-      &.icon-previous {
-        transform: rotate(180deg);
-      }
-    }
-  }
-
   .vjs-mute-control {
     padding: 0;
-    width: $control-bar-icon-size;
 
     @include disable-outline;
 
-    .vjs-icon-placeholder {
-      display: inline-block;
-      width: $control-bar-icon-size;
-      height: $control-bar-icon-size;
-      vertical-align: middle;
-      background: url("./svg/volume.svg") no-repeat;
-      background-size: contain;
-
-      &::before {
-        content: "";
-      }
+    &:not(.vjs-vol-0) {
+      @include inject-icon("./svg/volume.svg", var(--icon-size));
     }
 
-    &.vjs-vol-0 .vjs-icon-placeholder {
-      background: url("./svg/volume-mute.svg") no-repeat;
-      background-size: contain;
-    }
-  }
-
-  .vjs-settings {
-    cursor: pointer;
-    width: $control-bar-button-width;
-
-    @include disable-outline;
-
-    .vjs-icon-placeholder {
-      display: inline-block;
-      height: $control-bar-icon-size - 4px;
-      width: $control-bar-icon-size - 4px;
-      vertical-align: middle;
-      background: url("./svg/settings.svg") no-repeat;
-      background-size: contain;
-
-      &::before {
-        content: "";
-      }
-    }
-  }
-
-  .vjs-peertube-link {
-    text-decoration: none;
-    line-height: $control-bar-height;
-    font-weight: $font-semibold;
-    padding: 0 5px;
-    max-width: 150px;
-
-    @include ellipsis;
-    @include disable-outline;
-    @include disable-default-a-behaviour;
-  }
-
-  .vjs-theater-control {
-    width: $control-bar-button-width;
-    cursor: pointer;
-
-    @include disable-outline;
-
-    .vjs-icon-placeholder {
-      transition: transform 0.2s ease;
-      display: inline-block;
-      width: $control-bar-icon-size - 4px;
-      height: $control-bar-icon-size - 4px;
-      vertical-align: middle;
-      background: url("./svg/theater.svg") no-repeat;
-      background-size: contain;
-
-      &::before {
-        content: "";
-      }
+    &.vjs-vol-0 {
+      @include inject-icon("./svg/volume-mute.svg", var(--icon-size));
     }
   }
 
   .vjs-caption-toggle-control {
-    // Redefined if the player parent has captions class
-    display: none;
-    width: $control-bar-button-width;
-
     &,
     &:hover {
-      opacity: 0.5;
+      opacity: 0.5 !important;
     }
 
     &.enabled,
     &.enabled:hover {
-      opacity: $primary-foreground-opacity;
+      opacity: $primary-foreground-opacity !important;
     }
 
     &:focus {
@@ -447,29 +493,134 @@ $chapter-marker-size: 9px;
     }
   }
 
-  .vjs-fullscreen-control {
-    width: $control-bar-button-width;
-    margin-inline-start: 2px;
-
-    @include disable-outline;
-
-    .vjs-icon-placeholder {
-      display: inline-block;
-      width: $control-bar-icon-size;
-      height: $control-bar-icon-size;
-      vertical-align: middle;
-      background: url("./svg/fullscreen.svg") no-repeat;
-      background-size: contain;
-
-      &::before {
-        content: "";
-      }
-    }
+  .vjs-peertube-link {
+    font-weight: $font-semibold;
   }
 }
 
-.vjs-peertube-skin.vjs-has-captions .vjs-caption-toggle-control {
-  display: block !important;
+// ---------------------------------------------------------------------------
+// Lucide theme
+// ---------------------------------------------------------------------------
+
+.video-js.vjs-peertube-theme-lucide {
+  .vjs-control-bar {
+    --first-last-element-margin: 1rem;
+    --control-bar-height: 3.5rem;
+    --icon-size: 1.375rem; // 22px
+    --button-width: 2.25rem;
+
+    font-family: Roboto, "helvetica neue", "segoe ui", arial, sans-serif;
+    background: linear-gradient(to bottom, hsl(0 0% 0% / 0) 0%, hsl(0 0% 0%) 100%);
+
+    .vjs-play-control {
+      width: var(--button-width);
+    }
+
+    .vjs-play-control:not(.vjs-paused) {
+      @include inject-icon("./svg/theme-lucide/pause-lucide.svg", var(--icon-size));
+    }
+
+    .vjs-play-control.vjs-paused:not(.vjs-ended) {
+      @include inject-icon("./svg/theme-lucide/play-lucide.svg", var(--icon-size));
+    }
+
+    .vjs-play-control.vjs-paused.vjs-ended {
+      @include inject-icon("./svg/theme-lucide/restart-lucide.svg", var(--icon-size));
+    }
+
+    .vjs-peertube {
+      display: none;
+    }
+
+    .vjs-settings {
+      @include update-icon("./svg/theme-lucide/settings-lucide.svg", var(--icon-size));
+    }
+
+    .vjs-fullscreen-control {
+      @include update-icon("./svg/theme-lucide/open-fullscreen-lucide.svg", var(--icon-size));
+    }
+
+    .vjs-caption-toggle-control:not(.enabled) {
+      @include inject-icon("./svg/theme-lucide/cc-disabled-lucide.svg", var(--icon-size));
+    }
+
+    .vjs-caption-toggle-control.enabled {
+      @include inject-icon("./svg/theme-lucide/cc-enabled-lucide.svg", var(--icon-size));
+    }
+
+    .vjs-mute-control {
+      @include inject-icon("./svg/theme-lucide/volume-lucide.svg", var(--icon-size));
+    }
+
+    .vjs-mute-control.vjs-vol-2 {
+      @include update-icon("./svg/theme-lucide/volume-2-lucide.svg", var(--icon-size));
+    }
+
+    .vjs-mute-control.vjs-vol-1 {
+      @include update-icon("./svg/theme-lucide/volume-1-lucide.svg", var(--icon-size));
+    }
+
+    .vjs-mute-control.vjs-vol-0 {
+      @include update-icon("./svg/theme-lucide/volume-0-lucide.svg", var(--icon-size));
+    }
+
+    .vjs-progress-control {
+      .vjs-slider,
+      .vjs-load-progress,
+      .vjs-play-progress {
+        border-radius: 8px;
+      }
+    }
+
+    .vjs-next-video,
+    .vjs-previous-video {
+      @include update-icon("./svg/theme-lucide/next-lucide.svg", var(--icon-size));
+    }
+
+    .vjs-pt-live-control {
+      margin: auto var(--button-implicit-padding-x);
+      line-height: var(--control-bar-height);
+
+      @include margin-right(auto);
+
+      .vjs-live-display::before {
+        width: 8px;
+        height: 8px;
+        border-radius: 8px;
+        content: "";
+        display: inline-block;
+        position: relative;
+        top: -1px;
+
+        @include margin-right(5px);
+      }
+
+      &.synced-with-live-edge .vjs-live-display::before {
+        background: rgba(225, 0, 45);
+      }
+
+      &:not(.synced-with-live-edge) .vjs-live-display::before {
+        background: #80807f;
+      }
+    }
+  }
+
+  &.vjs-fullscreen .vjs-control-bar {
+    --control-bar-height: 60px;
+    --icon-size: 1.625rem; // 26px;
+    --button-width: 2.5rem;
+    --control-bar-font-size: 1rem;
+  }
+}
+
+.video-js.vjs-peertube-theme-lucide.vjs-fullscreen .vjs-control-bar {
+  .vjs-fullscreen-control {
+    @include update-icon("./svg/theme-lucide/close-fullscreen-lucide.svg", var(--icon-size));
+  }
+}
+
+.video-js.vjs-peertube-theme-lucide.vjs-size-570 .vjs-control-bar {
+  --first-last-element-margin: 10px;
 }
 
 // ---------------------------------------------------------------------------

@@ -25,7 +25,7 @@ class NextPreviousVideoButton extends Button {
       className: 'vjs-' + type + '-video'
     }) as HTMLButtonElement
     const nextIcon = videojs.dom.createEl('span', {
-      className: 'icon icon-' + type
+      className: 'vjs-icon-placeholder vjs-icon-' + type
     })
     button.appendChild(nextIcon)
 

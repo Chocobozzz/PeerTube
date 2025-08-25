@@ -24,7 +24,14 @@ import {
   UserLocalStorageKeys,
   videoRequiresUserAuth
 } from '../../../root-helpers'
-import { HLSOptions, PeerTubePlayerConstructorOptions, PeerTubePlayerLoadOptions, PlayerMode, VideoJSCaption } from '../../player'
+import {
+  HLSOptions,
+  PeerTubePlayerConstructorOptions,
+  PeerTubePlayerLoadOptions,
+  PeerTubePlayerTheme,
+  PlayerMode,
+  VideoJSCaption
+} from '../../player'
 import { PeerTubePlugin } from './peertube-plugin'
 import { PlayerHTML } from './player-html'
 import { PlaylistTracker } from './playlist-tracker'
@@ -52,6 +59,7 @@ export class PlayerOptionsBuilder {
   private p2pEnabled: boolean
   private bigPlayBackgroundColor: string
   private foregroundColor: string
+  private playerTheme: PeerTubePlayerTheme
 
   private waitPasswordFromEmbedAPI = false
 
@@ -141,6 +149,8 @@ export class PlayerOptionsBuilder {
 
       this.bigPlayBackgroundColor = getParamString(params, 'bigPlayBackgroundColor')
       this.foregroundColor = getParamString(params, 'foregroundColor')
+
+      this.playerTheme = getParamString(params, 'playerTheme', 'default') as PeerTubePlayerTheme
     } catch (err) {
       logger.error('Cannot get params from URL.', err)
     }
@@ -275,6 +285,7 @@ export class PlayerOptionsBuilder {
 
     return {
       mode: this.mode,
+      theme: this.playerTheme,
 
       autoplay: !nsfwWarn && (forceAutoplay || alreadyPlayed || this.autoplay),
       forceAutoplay,

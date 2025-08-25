@@ -1,0 +1,32 @@
+@use "sass:color";
+
+@mixin inject-icon($svg-path, $size) {
+  .vjs-icon-placeholder {
+    display: inline-block;
+    width: $size;
+    height: $size;
+    vertical-align: middle;
+
+    mask-image: url($svg-path);
+    -webkit-mask-image: url($svg-path);
+    mask-size: cover;
+    -webkit-mask-size: cover;
+    background-color: currentColor;
+
+    &::before {
+      content: "";
+    }
+  }
+}
+
+@mixin update-icon($svg-path, $size: "") {
+  .vjs-icon-placeholder {
+    mask-image: url($svg-path);
+    -webkit-mask-image: url($svg-path);
+
+    @if ($size) {
+      width: $size;
+      height: $size;
+    }
+  }
+}

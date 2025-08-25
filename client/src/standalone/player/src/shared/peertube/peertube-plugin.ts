@@ -262,7 +262,6 @@ class PeerTubePlugin extends Plugin {
   private initializePlayer () {
     if (isMobile()) this.player.addClass('vjs-is-mobile')
 
-    this.initSmoothProgressBar()
     this.patchMenuEscapeKey()
 
     this.player.ready(() => {
@@ -640,10 +639,6 @@ class PeerTubePlugin extends Plugin {
         this.player.on('timeupdate', this.stopTimeHandler)
       }
     })
-  }
-
-  // Thanks: https://github.com/videojs/video.js/issues/4460#issuecomment-312861657
-  private initSmoothProgressBar () {
   }
 
   private patchMenuEscapeKey () {

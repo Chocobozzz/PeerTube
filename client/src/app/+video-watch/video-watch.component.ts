@@ -51,6 +51,7 @@ import {
   PeerTubePlayer,
   PeerTubePlayerConstructorOptions,
   PeerTubePlayerLoadOptions,
+  PeerTubePlayerTheme,
   PlayerMode,
   videojs,
   VideojsPlayer
@@ -79,6 +80,7 @@ const debugLogger = debug('peertube:watch:VideoWatchComponent')
 
 type URLOptions = {
   playerMode: PlayerMode
+  playerTheme?: PeerTubePlayerTheme
 
   startTime: number | string
   stopTime: number | string
@@ -814,6 +816,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     return {
       mode,
+      theme: urlOptions.playerTheme || 'default',
 
       autoplay: this.isAutoplay(video, loggedInOrAnonymousUser),
       forceAutoplay,
@@ -1032,6 +1035,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       subtitle: queryParams.subtitle,
 
       playerMode: queryParams.mode,
+      playerTheme: queryParams.playerTheme,
       playbackRate: queryParams.playbackRate,
 
       controlBar: toBoolean(queryParams.controlBar),

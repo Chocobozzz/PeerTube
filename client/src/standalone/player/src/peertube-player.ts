@@ -103,6 +103,12 @@ export class PeerTubePlayer {
 
     await this.buildPlayerIfNeeded()
 
+    for (const theme of [ 'default', 'lucide' ]) {
+      this.player.removeClass('vjs-peertube-theme-' + theme)
+    }
+
+    this.player.addClass('vjs-peertube-theme-' + loadOptions.theme)
+
     if (this.currentLoadOptions.mode === 'p2p-media-loader') {
       await this.loadP2PMediaLoader()
     } else {

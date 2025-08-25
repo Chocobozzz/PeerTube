@@ -14,7 +14,7 @@
     --nsfw-info-margin-y: 10px;
   }
 
-  button {
+  button:not(.vjs-disabled) {
     cursor: pointer;
   }
 

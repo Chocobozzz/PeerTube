@@ -4,6 +4,7 @@ import { PeerTubeDockPluginOptions } from '../shared/dock/peertube-dock-plugin'
 import { PlaylistPluginOptions, VideoJSCaption, VideojsPlayer, VideoJSStoryboard } from './peertube-videojs-typings'
 
 export type PlayerMode = 'web-video' | 'p2p-media-loader'
+export type PeerTubePlayerTheme = 'default' | 'lucide'
 
 export type PeerTubePlayerConstructorOptions = {
   playerElement: () => HTMLVideoElement
@@ -51,6 +52,8 @@ export type PeerTubePlayerConstructorOptions = {
 
 export type PeerTubePlayerLoadOptions = {
   mode: PlayerMode
+
+  theme: PeerTubePlayerTheme
 
   startTime?: number | string
   stopTime?: number | string
