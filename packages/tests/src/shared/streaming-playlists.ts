@@ -76,7 +76,7 @@ export async function checkLiveSegmentHash (options: {
 
     await wait(250)
 
-    return this.checkLiveSegmentHash({
+    return checkLiveSegmentHash({
       ...options,
 
       withRetry,
