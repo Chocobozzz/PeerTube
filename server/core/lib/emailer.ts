@@ -498,7 +498,7 @@ export class Emailer {
   }
 
   private async _initHandlebarsIfNeeded () {
-    const partialsPath = join(root(), 'server', 'core', 'assets', 'email-templates', 'partials')
+    const partialsPath = join(root(), 'dist', 'core', 'assets', 'email-templates', 'partials')
     const partialFiles = await readdir(partialsPath)
 
     for (const partialFile of partialFiles) {

@@ -159,7 +159,7 @@
 
               <div [ngClass]="getDisabledSignupClass()">
                 <label i18n for="signupLimit">Signup limit</label>
-                <span i18n class="small muted ms-1">When the total number of users in your platform reaches this limit, registrations are disabled. -1 == unlimited</span>
+                <span i18n class="small muted ms-1">When the total number of users in your platform reaches this limit, registrations are disabled. -1 = unlimited</span>
 
                 <div class="number-with-unit">
                   <input
@@ -488,7 +488,7 @@
             i18n-labelText labelText="Accept comments made on remote platforms"
           >
             <ng-container ngProjectAs="description">
-              <span i18n>This setting is not retroactive: current remote comments platform will not be deleted</span>
+              <span i18n>This setting is not retroactive: current comments from remote platforms will not be deleted</span>
             </ng-container>
           </my-peertube-checkbox>
         </div>
@@ -664,7 +664,7 @@
                   <label i18n for="searchIndexUrl">Search index URL</label>
 
                   <div i18n class="form-group-description">
-                    Use your <a class="link-primary" target="_blank" href="https://framagit.org/framasoft/peertube/search-index">your own search index</a> or choose the official one, <a class="link-primary" target="_blank" href="https://sepiasearch.org">https://sepiasearch.org</a>, that is not moderated.
+                    Use <a class="link-primary" target="_blank" href="https://framagit.org/framasoft/peertube/search-index">your own search index</a> or choose the official one, <a class="link-primary" target="_blank" href="https://sepiasearch.org">https://sepiasearch.org</a>, that is not moderated.
                   </div>
 
                   <input
