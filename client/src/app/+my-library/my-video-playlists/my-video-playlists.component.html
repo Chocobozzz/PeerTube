@@ -1,15 +1,13 @@
-@if (user.videoChannels.length > 1) {
-  <div class="form-group">
-    <div class="label" i18n>Filter by a channel</div>
-    <div class="form-group-description" i18n>This allows you to reorder playlists assigned to it</div>
+<div class="form-group">
+  <div class="label" i18n>Filter by a channel</div>
+  <div class="form-group-description" i18n>This allows you to reorder playlists assigned to it</div>
 
-    <div class="channel-filters">
-      @for (channel of channels; track channel.id) {
-        <my-channel-toggle [channel]="channel" [(ngModel)]="channel.selected" (ngModelChange)="onChannelFilter(channel)"></my-channel-toggle>
-      }
-    </div>
+  <div class="channel-filters">
+    @for (channel of channels; track channel.id) {
+      <my-channel-toggle [channel]="channel" [(ngModel)]="channel.selected" (ngModelChange)="onChannelFilter(channel)"></my-channel-toggle>
+    }
   </div>
-}
+</div>
 
 <my-table
   #table
