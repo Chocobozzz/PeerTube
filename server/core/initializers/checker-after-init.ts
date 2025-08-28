@@ -391,6 +391,6 @@ function checkThumbnailsConfig () {
 function checkBrowseVideosConfig () {
   const defaultSortCheck = isBrowseVideosDefaultSortValid(CONFIG.BROWSE.VIDEOS.DEFAULT_SORT, CONFIG.TRENDING.VIDEOS.ALGORITHMS.ENABLED)
   if (defaultSortCheck.isValid === false){
-    throw new Error(defaultSortCheck.errorMessage)
+    throw new Error(defaultSortCheck.validationError)
   }
 }

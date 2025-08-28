@@ -4,7 +4,7 @@ export function isBrowseVideosDefaultSortValid (value: string, enabledTrendingAl
   if (availableOptions.includes(value) === false) {
     return {
       isValid: false,
-      errorMessage: `Browse videos default sort should be '${availableOptions.join('\' or \'')}', instead of '${value}'`
+      validationError: `Browse videos default sort should be '${availableOptions.join('\' or \'')}', instead of '${value}'`
     }
   }
 
@@ -18,10 +18,10 @@ export function isBrowseVideosDefaultSortValid (value: string, enabledTrendingAl
   if (currentTrendingSortAlgorithm && enabledTrendingAlgorithms.includes(currentTrendingSortAlgorithm) === false) {
     return {
       isValid: false,
-      errorMessage:
+      validationError:
         `Trending videos algorithm '${currentTrendingSortAlgorithm}' should be enabled if browse videos default sort is '${value}'`
     }
   }
 
-  return { isValid: true, errorMessage: null }
+  return { isValid: true, validationError: null }
 }
