@@ -185,6 +185,49 @@ describe('Test config API validators', function () {
       })
     })
 
+    it('Should fail with a browse videos invalid default sort', async function () {
+      const newUpdateParams: CustomConfig = merge({}, {}, updateParams, {
+        browse: {
+          videos: {
+            defaultSort: 'hello'
+          }
+        }
+      })
+
+      await makePutBodyRequest({
+        url: server.url,
+        path,
+        fields: newUpdateParams,
+        token: server.accessToken,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail with a browse videos trending default sort & disabled trending algorithm', async function () {
+      const newUpdateParams: CustomConfig = merge({}, {}, updateParams, {
+        trending: {
+          videos: {
+            algorithms: {
+              enabled: [ 'hot', 'most-liked' ]
+            }
+          }
+        },
+        browse: {
+          videos: {
+            defaultSort: '-trending'
+          }
+        }
+      })
+
+      await makePutBodyRequest({
+        url: server.url,
+        path,
+        fields: newUpdateParams,
+        token: server.accessToken,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
     it('Should succeed with the correct parameters', async function () {
       await makePutBodyRequest({
         url: server.url,

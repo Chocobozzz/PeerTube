@@ -8,6 +8,7 @@ import express from 'express'
 import { body, param } from 'express-validator'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins.js'
 import { isUserNSFWPolicyValid, isUserVideoQuotaDailyValid, isUserVideoQuotaValid } from '../../helpers/custom-validators/users.js'
+import { isBrowseVideosDefaultSortValid } from '../../helpers/custom-validators/browse-videos.js'
 import { isThemeRegistered } from '../../lib/plugins/theme-utils.js'
 import { areValidationErrors, updateActorImageValidatorFactory } from './shared/index.js'
 
@@ -151,8 +152,6 @@ export const customConfigUpdateValidator = [
 
   body('videoComments.acceptRemoteComments').isBoolean(),
 
-  body('browse.videos.defaultSort').exists(),
-
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
     if (!checkInvalidConfigIfEmailDisabled(req.body, res)) return
@@ -160,6 +159,7 @@ export const customConfigUpdateValidator = [
     if (!checkInvalidSynchronizationConfig(req.body, res)) return
     if (!checkInvalidLiveConfig(req.body, res)) return
     if (!checkInvalidVideoStudioConfig(req.body, res)) return
+    if (!checkInvalidBrowseVideosConfig(req.body, res)) return
 
     return next()
   }
@@ -239,6 +239,19 @@ function checkInvalidVideoStudioConfig (customConfig: CustomConfig, res: express
 
   if (customConfig.videoStudio.enabled === true && customConfig.transcoding.enabled === false) {
     res.fail({ message: 'You cannot enable video studio if transcoding is not enabled' })
+    return false
+  }
+
+  return true
+}
+
+function checkInvalidBrowseVideosConfig (customConfig: CustomConfig, res: express.Response) {
+  const defaultSortCheck = isBrowseVideosDefaultSortValid(
+    customConfig.browse.videos.defaultSort,
+    customConfig.trending.videos.algorithms.enabled
+  )
+  if (defaultSortCheck.isValid === false){
+    res.fail({ message: defaultSortCheck.validationError })
     return false
   }
 
