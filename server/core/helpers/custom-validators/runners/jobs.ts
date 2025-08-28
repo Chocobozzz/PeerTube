@@ -7,7 +7,8 @@ import {
   VODAudioMergeTranscodingSuccess,
   VODHLSTranscodingSuccess,
   VODWebVideoTranscodingSuccess,
-  VideoStudioTranscodingSuccess
+  VideoStudioTranscodingSuccess,
+  GenerateStoryboardSuccess
 } from '@peertube/peertube-models'
 import { CONSTRAINTS_FIELDS, RUNNER_JOB_STATES } from '@server/initializers/constants.js'
 import { UploadFilesForCheck } from 'express'
@@ -36,7 +37,7 @@ export function isRunnerJobSuccessPayloadValid (value: RunnerJobSuccessPayload, 
     isRunnerJobLiveRTMPHLSResultPayloadValid(value as LiveRTMPHLSTranscodingSuccess, type) ||
     isRunnerJobVideoStudioResultPayloadValid(value as VideoStudioTranscodingSuccess, type, files) ||
     isRunnerJobTranscriptionResultPayloadValid(value as TranscriptionSuccess, type, files) ||
-    isRunnerJobGenerateStoryboardResultPayloadValid(value as any, type, files)
+    isRunnerJobGenerateStoryboardResultPayloadValid(value as GenerateStoryboardSuccess, type, files)
 }
 
 // ---------------------------------------------------------------------------
@@ -135,7 +136,7 @@ function isRunnerJobTranscriptionResultPayloadValid (
 }
 
 function isRunnerJobGenerateStoryboardResultPayloadValid (
-  _value: any,
+  value: GenerateStoryboardSuccess,
   type: RunnerJobType,
   files: UploadFilesForCheck
 ) {

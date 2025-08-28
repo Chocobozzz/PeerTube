@@ -14,7 +14,7 @@ export async function processGenerateStoryboard (options: ProcessOptions<RunnerJ
   let ffmpegProgress: number
   let videoInputPath: string
 
-  const outputPath = join(ConfigManager.Instance.getTranscodingDirectory(), `storyboard-${buildUUID()}.jpg`)
+  const outputPath = join(ConfigManager.Instance.getStoryboardDirectory(), `storyboard-${buildUUID()}.jpg`)
 
   const updateProgressInterval = scheduleTranscodingProgress({
     job,

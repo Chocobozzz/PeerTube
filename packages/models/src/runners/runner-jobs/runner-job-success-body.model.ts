@@ -60,3 +60,7 @@ export function isHLSTranscodingPayloadSuccess (payload: RunnerJobSuccessPayload
 export function isTranscriptionPayloadSuccess (payload: RunnerJobSuccessPayload): payload is TranscriptionSuccess {
   return !!(payload as TranscriptionSuccess)?.vttFile
 }
+
+export function isGenerateStoryboardSuccess (payload: RunnerJobSuccessPayload): payload is GenerateStoryboardSuccess {
+  return !!(payload as GenerateStoryboardSuccess)?.storyboardFile
+}

@@ -66,4 +66,3 @@ yarn-error.log
 
 # Compiled output
 dist
-config/default.yaml

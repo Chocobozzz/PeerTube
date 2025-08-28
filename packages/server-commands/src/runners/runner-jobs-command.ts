@@ -18,6 +18,7 @@ import {
   RunnerJobSuccessBody,
   RunnerJobSuccessPayload,
   RunnerJobTranscriptionPayload,
+  RunnerJobGenerateStoryboardPayload,
   RunnerJobType,
   RunnerJobUpdateBody,
   RunnerJobVODAudioMergeTranscodingPayload,
@@ -30,6 +31,7 @@ import {
   isHLSTranscodingPayloadSuccess,
   isLiveRTMPHLSTranscodingUpdatePayload,
   isTranscriptionPayloadSuccess,
+  isGenerateStoryboardSuccess,
   isWebVideoOrAudioMergeTranscodingPayloadSuccess
 } from '@peertube/peertube-models'
 import { unwrapBody } from '../requests/index.js'
@@ -267,13 +269,16 @@ export class RunnerJobsCommand extends AbstractCommand {
     }
 
     // Generate storyboard success payload contains a storyboard image file
-    if ((payload as GenerateStoryboardSuccess)?.storyboardFile) {
+    if (isGenerateStoryboardSuccess(payload) && payload.storyboardFile) {
+      const reqPayload = options.reqPayload as RunnerJobGenerateStoryboardPayload
+
       this.updateUploadPayloads({
         attachesStore: attaches,
         customUploadsStore: customUploads,
 
-        file: (payload as GenerateStoryboardSuccess).storyboardFile,
-        attachName: 'storyboardFile'
+        file: payload.storyboardFile,
+        attachName: 'storyboardFile',
+        customUpload: reqPayload?.output?.storyboardFileCustomUpload
       })
 
       payloadWithoutFiles = omit(payloadWithoutFiles as GenerateStoryboardSuccess, [ 'storyboardFile' ])
