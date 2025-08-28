@@ -3223,7 +3223,7 @@
       </trans-unit>
       <trans-unit id="931415109224027105" datatype="html" xml:space="preserve">
         <source>Public PeerTube index:</source>
-        <target state="translated">Öppet PeerTube-index:</target>
+        <target state="translated">Öppet PeerTube-register:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">34,36</context>
@@ -3231,7 +3231,7 @@
       </trans-unit>
       <trans-unit id="1498251075459491982" datatype="html" xml:space="preserve">
         <source>Put your platform on the official PeerTube public index</source>
-        <target state="translated">Lägg till din plattform till det öppna oficiella PeerTube-indexet</target>
+        <target state="translated">Lägg till din plattform till det öppna oficiella PeerTube-registret</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">36,37</context>
@@ -4278,7 +4278,7 @@
       </trans-unit>
       <trans-unit id="4070041848101291003" datatype="html" xml:space="preserve">
         <source>Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</source>
-        <target state="translated">Resultaten kommer kompletteras med träffar från ett tredjepartssökindex. Endast data som är nödvändig för sökningen kommer skickas.</target>
+        <target state="translated">Resultaten kommer kompletteras med träffar från ett tredjepartssökregister. Endast data som är nödvändig för sökningen kommer skickas.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">36</context>
