@@ -1,0 +1,30 @@
+export function isBrowseVideosDefaultSortValid (value: string, enabledTrendingAlgorithms: string[]) {
+  const availableOptions = [ '-publishedAt', '-originallyPublishedAt', 'name', '-trending', '-hot', '-likes', '-views' ]
+
+  if (availableOptions.includes(value) === false) {
+    return {
+      isValid: false,
+      errorMessage:
+        'Browse videos default sort should be \'' + availableOptions.join('\' or \'') +
+        '\', instead of \'' + value + '\''
+    }
+  }
+
+  const trendingSortAlgorithmMap = new Map<string, string>([
+    [ '-trending', 'most-viewed' ],
+    [ '-hot', 'hot' ],
+    [ '-likes', 'most-liked' ]
+  ])
+  const currentTrendingSortAlgorithm = trendingSortAlgorithmMap.get(value)
+
+  if (currentTrendingSortAlgorithm && enabledTrendingAlgorithms.includes(currentTrendingSortAlgorithm) === false) {
+    return {
+      isValid: false,
+      errorMessage:
+        'Trending videos algorithm \'' + currentTrendingSortAlgorithm +
+        '\' should be enabled if browse videos default sort is \'' + value + '\''
+    }
+  }
+
+  return { isValid: true, errorMessage: null }
+}

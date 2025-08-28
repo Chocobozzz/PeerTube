@@ -8,6 +8,7 @@ import { basename } from 'path'
 import { URL } from 'url'
 import { parseBytes, parseSemVersion } from '../helpers/core-utils.js'
 import { isArray } from '../helpers/custom-validators/misc.js'
+import { isBrowseVideosDefaultSortValid } from '../helpers/custom-validators/browse-videos.js'
 import { logger } from '../helpers/logger.js'
 import { ApplicationModel, getServerActor } from '../models/application/application.js'
 import { OAuthClientModel } from '../models/oauth/oauth-client.js'
@@ -388,24 +389,8 @@ function checkThumbnailsConfig () {
 }
 
 function checkBrowseVideosConfig () {
-  const availableSortOptions = [ '-publishedAt', '-originallyPublishedAt', 'name', '-trending', '-hot', '-likes', '-views' ]
-  const currentDefaultSort = CONFIG.BROWSE.VIDEOS.DEFAULT_SORT
-
-  if (availableSortOptions.includes(currentDefaultSort) === false) {
-    throw new Error('Browse videos default sort should be \'' + availableSortOptions.join('\' or \'') + 
-      '\', instead of \'' + currentDefaultSort + '\'')
-  }
-
-  const enabledTrendingAlgorithms = CONFIG.TRENDING.VIDEOS.ALGORITHMS.ENABLED
-  const trendingSortAlgorithmMap = new Map<string, string>([
-    [ '-trending', 'most-viewed' ],
-    [ '-hot', 'hot' ],
-    [ '-likes', 'most-liked' ]
-  ])
-  const currentTrendingSortAlgorithm = trendingSortAlgorithmMap.get(currentDefaultSort)
-
-  if (currentTrendingSortAlgorithm && enabledTrendingAlgorithms.includes(currentTrendingSortAlgorithm) === false) {
-    throw new Error('Trending videos algorithm \'' + currentTrendingSortAlgorithm + 
-      '\' should be enabled if browse videos default sort is \'' + currentDefaultSort + '\'')
+  const defaultSortCheck = isBrowseVideosDefaultSortValid(CONFIG.BROWSE.VIDEOS.DEFAULT_SORT, CONFIG.TRENDING.VIDEOS.ALGORITHMS.ENABLED)
+  if (defaultSortCheck.isValid === false){
+    throw new Error(defaultSortCheck.errorMessage)
   }
 }
