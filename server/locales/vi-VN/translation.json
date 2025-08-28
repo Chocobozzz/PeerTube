@@ -107,7 +107,7 @@
     "Your video has been unblocked": "Video của bạn đã được bỏ chặn",
     "Your video <strong>{videoName}</strong> has been unblocked by {instanceName} moderators.": "Video <strong>{videoName}</strong> của bạn đã được bỏ chặn bởi kiểm duyệt viên {instanceName}.",
     "{language} is not a valid language": "{language} không phải là ngôn ngữ hợp lệ",
-    "The provided thumbnail file is invalid.": "The provided thumbnail file is invalid.",
+    "The provided thumbnail file is invalid.": "Tệp hình thu nhỏ được cung cấp không hợp lệ.",
     "Reset your account password": "Đặt lại mật khẩu tài khoản của bạn",
     "Create your account password": "Tạo mật khẩu tài khoản của bạn",
     "Verify your email on {instanceName}": "Xác minh email của bạn trên {instanceName}",
@@ -160,5 +160,5 @@
     "Edition of your video has finished": "Phiên bản video của bạn đã hoàn tất",
     "Edition of your video {videoName} has finished.": "Phiên bản video {videoName} đã hoàn tất.",
     "Video edition has finished": "Phiên bản video đã hoàn tất",
-    "The token session does not exist or does not belong to the user.": "The token session does not exist or does not belong to the user."
+    "The token session does not exist or does not belong to the user.": "Phiên token không tồn tại hoặc không thuộc về người dùng."
 }

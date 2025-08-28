@@ -2196,12 +2196,12 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4070550899383572841" datatype="html">
-        <source>Go to the manage your account page</source>
-        <target state="new">Go to the manage your account page</target>
+      <trans-unit id="27173108314474680" datatype="html">
+        <source>Go to the page where you can manage your account</source>
+        <target state="new">Go to the page where you can manage your account</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">40,41</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1519954996184640001" datatype="html">
@@ -5503,9 +5503,9 @@
           <context context-type="linenumber">161</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3119016832984727691" datatype="html">
-        <source>When the total number of users in your platform reaches this limit, registrations are disabled. -1 == unlimited</source>
-        <target state="new">When the total number of users in your platform reaches this limit, registrations are disabled. -1 == unlimited</target>
+      <trans-unit id="4328465163710612366" datatype="html">
+        <source>When the total number of users in your platform reaches this limit, registrations are disabled. -1 = unlimited</source>
+        <target state="new">When the total number of users in your platform reaches this limit, registrations are disabled. -1 = unlimited</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">162,164</context>
@@ -5831,12 +5831,12 @@
           <context context-type="linenumber">646</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1672554591873419319" datatype="html">
-        <source> Use your <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>your own search index<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> or choose the official one, <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://sepiasearch.org&quot;&gt;"/>https://sepiasearch.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, that is not moderated. </source>
-        <target state="new"> Use your <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>your own search index<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> or choose the official one, <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://sepiasearch.org&quot;&gt;"/>https://sepiasearch.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, that is not moderated. </target>
+      <trans-unit id="2653219516680751118" datatype="html">
+        <source> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>your own search index<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> or choose the official one, <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://sepiasearch.org&quot;&gt;"/>https://sepiasearch.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, that is not moderated. </source>
+        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>your own search index<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> or choose the official one, <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://sepiasearch.org&quot;&gt;"/>https://sepiasearch.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, that is not moderated. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">649</context>
+          <context context-type="linenumber">649,650</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8524278911521465398" datatype="html">
@@ -5967,9 +5967,9 @@
           <context context-type="linenumber">470,471</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5447937522004012434" datatype="html">
-        <source>This setting is not retroactive: current remote comments platform will not be deleted</source>
-        <target state="new">This setting is not retroactive: current remote comments platform will not be deleted</target>
+      <trans-unit id="5963121551419269989" datatype="html">
+        <source>This setting is not retroactive: current comments from remote platforms will not be deleted</source>
+        <target state="new">This setting is not retroactive: current comments from remote platforms will not be deleted</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">473,474</context>
@@ -12766,7 +12766,7 @@
         <target state="new">Filter by a channel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
-          <context context-type="linenumber">3,4</context>
+          <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5434235221870482011" datatype="html">
@@ -12774,7 +12774,7 @@
         <target state="new">This allows you to reorder playlists assigned to it</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
-          <context context-type="linenumber">4,6</context>
+          <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3371925892115176358" datatype="html">
@@ -12782,7 +12782,7 @@
         <target state="new">playlists per page</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
-          <context context-type="linenumber">20,21</context>
+          <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3108012194945806606" datatype="html">
@@ -12790,7 +12790,7 @@
         <target state="new">Drag and drop this row to reorder playlists in your channel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
-          <context context-type="linenumber">29,30</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7319525983375433281" datatype="html">
@@ -12798,11 +12798,11 @@
         <target state="new">{VAR_PLURAL, plural, =0 {No playlist} =1 {1 playlist} other {<x id="INTERPOLATION"/> playlists}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
-          <context context-type="linenumber">34</context>
+          <context context-type="linenumber">32</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
-          <context context-type="linenumber">36</context>
+          <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
       <trans-unit id="358453340357015692" datatype="html">
@@ -12810,7 +12810,7 @@
         <target state="new"><x id="ICU" equiv-text="{ totalRecords, plural, =0 {No playlist} =1 {1 playlist} other {{{ totalRecords | myNumberFormatter }} playlists}}" xid="3031081109030852848"/> in <x id="INTERPOLATION_1" equiv-text="{{ getFilteredChannel().displayName }}"/> channel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
-          <context context-type="linenumber">34,35</context>
+          <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4311110442674793732" datatype="html">
@@ -12818,7 +12818,7 @@
         <target state="new">Search your playlists</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
-          <context context-type="linenumber">42,43</context>
+          <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="420763834450076269" datatype="html">
@@ -21297,9 +21297,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3636710796900562394" datatype="html">
-        <source>Use https://sepiasearch.org as default search engine to search for content across all known peertube platforms</source>
-        <target state="new">Use https://sepiasearch.org as default search engine to search for content across all known peertube platforms</target>
+      <trans-unit id="3203530711190558690" datatype="html">
+        <source>Use https://sepiasearch.org as default search engine to search for content across all known PeerTube platforms</source>
+        <target state="new">Use https://sepiasearch.org as default search engine to search for content across all known PeerTube platforms</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">97</context>
@@ -24334,7 +24334,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
-          <context context-type="linenumber">48</context>
+          <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1172866303261737245" datatype="html">

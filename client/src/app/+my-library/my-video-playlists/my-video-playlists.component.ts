@@ -212,7 +212,7 @@ export class MyVideoPlaylistsComponent implements OnInit, OnDestroy {
   }
 
   hasReorderableRows () {
-    return !!this.getFilteredChannel() || this.user.videoChannels.length === 1
+    return !!this.getFilteredChannel()
   }
 
   private _dataLoader (options: {
