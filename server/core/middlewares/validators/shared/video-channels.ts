@@ -8,26 +8,28 @@ export async function doesChannelIdExist (options: {
   id: number
   checkManage: boolean // Also check the user can manage the account
   checkIsLocal: boolean // Also check this is a local channel
+  req: express.Request
   res: express.Response
 }) {
-  const { id, checkManage, checkIsLocal, res } = options
+  const { id, checkManage, checkIsLocal, req, res } = options
 
   const channel = await VideoChannelModel.loadAndPopulateAccount(+id)
 
-  return processVideoChannelExist({ channel, checkManage, checkIsLocal, res })
+  return processVideoChannelExist({ channel, checkManage, checkIsLocal, req, res })
 }
 
 export async function doesChannelHandleExist (options: {
   handle: string
   checkManage: boolean // Also check the user can manage the account
   checkIsLocal: boolean // Also check this is a local channel
+  req: express.Request
   res: express.Response
 }) {
-  const { handle, checkManage, checkIsLocal, res } = options
+  const { handle, checkManage, checkIsLocal, req, res } = options
 
   const channel = await VideoChannelModel.loadByHandleAndPopulateAccount(handle)
 
-  return processVideoChannelExist({ channel, checkManage, checkIsLocal, res })
+  return processVideoChannelExist({ channel, checkManage, checkIsLocal, req, res })
 }
 
 // ---------------------------------------------------------------------------
@@ -36,16 +38,17 @@ export async function doesChannelHandleExist (options: {
 
 function processVideoChannelExist (options: {
   channel: MChannelBannerAccountDefault
+  req: express.Request
   res: express.Response
   checkManage: boolean
   checkIsLocal: boolean
 }) {
-  const { channel, res, checkManage, checkIsLocal } = options
+  const { channel, req, res, checkManage, checkIsLocal } = options
 
   if (!channel) {
     res.fail({
       status: HttpStatusCode.NOT_FOUND_404,
-      message: 'Video channel not found'
+      message: req.t('Video channel not found')
     })
     return false
   }
@@ -53,7 +56,7 @@ function processVideoChannelExist (options: {
   if (checkManage) {
     const user = res.locals.oauth.token.User
 
-    if (!checkUserCanManageAccount({ account: channel.Account, user, res, specialRight: UserRight.MANAGE_ANY_VIDEO_CHANNEL })) {
+    if (!checkUserCanManageAccount({ account: channel.Account, user, req, res, specialRight: UserRight.MANAGE_ANY_VIDEO_CHANNEL })) {
       return false
     }
   }
@@ -61,7 +64,7 @@ function processVideoChannelExist (options: {
   if (checkIsLocal && channel.Actor.isOwned() === false) {
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
-      message: 'This channel is not owned.'
+      message: req.t('This channel is not owned.')
     })
 
     return false

@@ -1,6 +1,7 @@
 import './channel-import-videos.js'
 import './generate-download.js'
 import './multiple-servers.js'
+import './player-settings.js'
 import './resumable-upload.js'
 import './single-server.js'
 import './video-captions.js'

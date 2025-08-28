@@ -166,16 +166,16 @@ body {
 }
 
 // ---------------------------------------------------------------------------
-// Default theme
+// Galaxy (original) theme
 // ---------------------------------------------------------------------------
 
-.video-js.vjs-peertube-theme-default {
+.video-js.vjs-peertube-theme-galaxy {
   .vjs-big-play-button {
     border: 2px solid #fff;
   }
 }
 
-.video-js.vjs-peertube-theme-default.vjs-size-570 {
+.video-js.vjs-peertube-theme-galaxy.vjs-size-570 {
   .vjs-big-play-button {
     --big-play-button-size: 78px;
     --big-play-button-icon-size: 32px;
@@ -184,7 +184,7 @@ body {
   }
 }
 
-.video-js.vjs-peertube-theme-default.vjs-size-350 {
+.video-js.vjs-peertube-theme-galaxy.vjs-size-350 {
   .vjs-big-play-button {
     --big-play-button-size: 46px;
     --big-play-button-icon-size: 20px;

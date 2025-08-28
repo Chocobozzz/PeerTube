@@ -29,9 +29,9 @@ export const addVideoCaptionValidator = [
     .custom((_, { req }) => isVideoCaptionFile(req.files, 'captionfile'))
     .withMessage(
       'This caption file is not supported or too large. ' +
-      `Please, make sure it is under ${CONSTRAINTS_FIELDS.VIDEO_CAPTIONS.CAPTION_FILE.FILE_SIZE.max} bytes ` +
-      'and one of the following mimetypes: ' +
-      Object.keys(MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT).map(key => `${key} (${MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT[key]})`).join(', ')
+        `Please, make sure it is under ${CONSTRAINTS_FIELDS.VIDEO_CAPTIONS.CAPTION_FILE.FILE_SIZE.max} bytes ` +
+        'and one of the following mimetypes: ' +
+        Object.keys(MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT).map(key => `${key} (${MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT[key]})`).join(', ')
     ),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -40,7 +40,9 @@ export const addVideoCaptionValidator = [
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.UPDATE_ANY_VIDEO, res)) return cleanUpReqFiles(req)
+    if (!checkUserCanManageVideo({ user, video: res.locals.videoAll, right: UserRight.UPDATE_ANY_VIDEO, req, res })) {
+      return cleanUpReqFiles(req)
+    }
 
     return next()
   }
@@ -72,7 +74,7 @@ export const generateVideoCaptionValidator = [
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, video, UserRight.UPDATE_ANY_VIDEO, res)) return
+    if (!checkUserCanManageVideo({ user, video, right: UserRight.UPDATE_ANY_VIDEO, req, res })) return
 
     // Check the video has not already a caption
     const captions = await VideoCaptionModel.listVideoCaptions(video.id)
@@ -123,7 +125,7 @@ export const deleteVideoCaptionValidator = [
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.UPDATE_ANY_VIDEO, res)) return
+    if (!checkUserCanManageVideo({ user, video: res.locals.videoAll, right: UserRight.UPDATE_ANY_VIDEO, req, res })) return
 
     return next()
   }

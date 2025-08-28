@@ -3,6 +3,7 @@ import { Video, VideoChannel, VideoChannelSync, VideoCreateResult, VideoDetails 
 import { parallelTests, root } from '@peertube/peertube-node-utils'
 import { ChildProcess, fork } from 'child_process'
 import { copy } from 'fs-extra/esm'
+import merge from 'lodash-es/merge.js'
 import { join } from 'path'
 import { BulkCommand } from '../bulk/index.js'
 import { CLICommand } from '../cli/index.js'
@@ -36,6 +37,7 @@ import {
   CommentsCommand,
   HistoryCommand,
   LiveCommand,
+  PlayerSettingsCommand,
   PlaylistsCommand,
   ServicesCommand,
   StoryboardCommand,
@@ -58,7 +60,6 @@ import { PluginsCommand } from './plugins-command.js'
 import { RedundancyCommand } from './redundancy-command.js'
 import { ServersCommand } from './servers-command.js'
 import { StatsCommand } from './stats-command.js'
-import merge from 'lodash-es/merge.js'
 
 export type RunServerOptions = {
   autoEnableImportProxy?: boolean
@@ -154,6 +155,7 @@ export class PeerTubeServer {
   videoToken?: VideoTokenCommand
   registrations?: RegistrationsCommand
   videoPasswords?: VideoPasswordsCommand
+  playerSettings?: PlayerSettingsCommand
 
   storyboard?: StoryboardCommand
   chapters?: ChaptersCommand
@@ -459,6 +461,8 @@ export class PeerTubeServer {
     this.twoFactor = new TwoFactorCommand(this)
     this.videoToken = new VideoTokenCommand(this)
     this.registrations = new RegistrationsCommand(this)
+
+    this.playerSettings = new PlayerSettingsCommand(this)
 
     this.storyboard = new StoryboardCommand(this)
     this.chapters = new ChaptersCommand(this)

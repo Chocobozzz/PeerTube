@@ -4,6 +4,7 @@ import { getContextFilter } from '@server/lib/activitypub/context.js'
 import { buildChaptersAPHasPart } from '@server/lib/activitypub/video-chapters.js'
 import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 import { getServerActor } from '@server/models/application/application.js'
+import { PlayerSettingModel } from '@server/models/video/player-setting.js'
 import { VideoChapterModel } from '@server/models/video/video-chapter.js'
 import { MAccountId, MActorId, MChannelId, MVideoId } from '@server/types/models/index.js'
 import cors from 'cors'
@@ -177,6 +178,13 @@ activityPubClientRouter.get(
   asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
   asyncMiddleware(videoDislikesController)
 )
+activityPubClientRouter.get(
+  '/videos/watch/:id/player-settings',
+  executeIfActivityPub,
+  activityPubRateLimiter,
+  asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
+  asyncMiddleware(videoPlayerSettingsController)
+)
 
 // ---------------------------------------------------------------------------
 
@@ -227,6 +235,13 @@ activityPubClientRouter.get(
   activityPubRateLimiter,
   asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: false })),
   asyncMiddleware(videoChannelPlaylistsController)
+)
+activityPubClientRouter.get(
+  '/video-channels/:handle/player-settings',
+  executeIfActivityPub,
+  activityPubRateLimiter,
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: false })),
+  asyncMiddleware(channelPlayerSettingsController)
 )
 
 activityPubClientRouter.get(
@@ -398,6 +413,30 @@ async function videoCommentsController (req: express.Request, res: express.Respo
 
   return activityPubResponse(activityPubContextify(json, 'Collection', getContextFilter()), res)
 }
+
+// ---------------------------------------------------------------------------
+
+async function videoPlayerSettingsController (req: express.Request, res: express.Response) {
+  const video = res.locals.onlyVideo
+
+  if (redirectIfNotOwned(video.url, res)) return
+
+  const settings = await PlayerSettingModel.loadByVideoId(video.id)
+  const json = PlayerSettingModel.formatAPPlayerSetting({ channel: undefined, video, settings })
+
+  return activityPubResponse(activityPubContextify(json, 'PlayerSettings', getContextFilter()), res)
+}
+
+async function channelPlayerSettingsController (req: express.Request, res: express.Response) {
+  const channel = res.locals.videoChannel
+
+  const settings = await PlayerSettingModel.loadByChannelId(channel.id)
+  const json = PlayerSettingModel.formatAPPlayerSetting({ channel, video: undefined, settings })
+
+  return activityPubResponse(activityPubContextify(json, 'PlayerSettings', getContextFilter()), res)
+}
+
+// ---------------------------------------------------------------------------
 
 async function videoChannelController (req: express.Request, res: express.Response) {
   const videoChannel = res.locals.videoChannel

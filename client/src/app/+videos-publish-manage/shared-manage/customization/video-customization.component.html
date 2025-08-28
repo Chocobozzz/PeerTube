@@ -31,8 +31,15 @@
         </div>
 
         <p-datepicker
-          inputId="originallyPublishedAt" formControlName="originallyPublishedAt" [dateFormat]="calendarDateFormat" [firstDayOfWeek]="0"
-          [showTime]="true" [hideOnDateTimeSelect]="true" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="myYearRange"
+          inputId="originallyPublishedAt"
+          formControlName="originallyPublishedAt"
+          [dateFormat]="calendarDateFormat"
+          [firstDayOfWeek]="0"
+          [showTime]="true"
+          [hideOnDateTimeSelect]="true"
+          [monthNavigator]="true"
+          [yearNavigator]="true"
+          [yearRange]="myYearRange"
           baseZIndex="20000"
         >
         </p-datepicker>
@@ -42,10 +49,15 @@
         </div>
       </div>
 
-      <my-peertube-checkbox
-        inputName="downloadEnabled" formControlName="downloadEnabled"
-        i18n-labelText labelText="Enable download"
-      ></my-peertube-checkbox>
+      <my-peertube-checkbox inputName="downloadEnabled" formControlName="downloadEnabled" i18n-labelText labelText="Enable download"></my-peertube-checkbox>
+
+      <div class="form-group" formGroupName="playerSettings">
+        <label i18n for="playerSettingsTheme">Player Theme</label>
+
+        <my-select-player-theme formControlName="theme" inputId="playerSettingsTheme" mode="video" [channel]="videoChannel">
+        </my-select-player-theme>
+      </div>
     </div>
+
   </div>
 </div>

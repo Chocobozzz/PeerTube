@@ -313,11 +313,11 @@ $chapter-marker-size: 9px;
 }
 
 // ---------------------------------------------------------------------------
-// PeerTube Default Theme
+// PeerTube Galaxy (original) Theme
 // ---------------------------------------------------------------------------
 
 // Play/pause animations
-.video-js.vjs-peertube-theme-default.vjs-has-started .vjs-play-control {
+.video-js.vjs-peertube-theme-galaxy.vjs-has-started .vjs-play-control {
   &.vjs-playing {
     animation: remove-pause-button 0.25s ease;
   }
@@ -345,7 +345,7 @@ $chapter-marker-size: 9px;
   }
 }
 
-.video-js.vjs-peertube-theme-default .vjs-control-bar {
+.video-js.vjs-peertube-theme-galaxy .vjs-control-bar {
   background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6));
   box-shadow: 0 -15px 40px 10px rgba(0, 0, 0, 0.2);
 

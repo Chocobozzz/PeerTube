@@ -127,7 +127,7 @@ export async function checkCanSeeVideo (options: {
   throw new Error('Unknown video privacy when checking video right ' + video.url)
 }
 
-export async function checkCanSeeUserAuthVideo (options: {
+async function checkCanSeeUserAuthVideo (options: {
   req: Request
   res: Response
   video: MVideoId | MVideoWithRights
@@ -173,7 +173,7 @@ export async function checkCanSeeUserAuthVideo (options: {
   return fail()
 }
 
-export async function checkCanSeePasswordProtectedVideo (options: {
+async function checkCanSeePasswordProtectedVideo (options: {
   req: Request
   res: Response
   video: MVideo
@@ -214,13 +214,13 @@ export async function checkCanSeePasswordProtectedVideo (options: {
   return false
 }
 
-export function canUserAccessVideo (user: MUser, video: MVideoWithRights | MVideoAccountLight, right: UserRightType) {
+function canUserAccessVideo (user: MUser, video: MVideoWithRights | MVideoAccountLight, right: UserRightType) {
   const isOwnedByUser = video.VideoChannel.Account.userId === user.id
 
   return isOwnedByUser || user.hasRight(right)
 }
 
-export async function getVideoWithRights (video: MVideoWithRights): Promise<MVideoWithRights> {
+async function getVideoWithRights (video: MVideoWithRights): Promise<MVideoWithRights> {
   return video.VideoChannel?.Account?.userId
     ? video
     : VideoModel.loadFull(video.id)
@@ -284,11 +284,27 @@ function assignVideoTokenIfNeeded (req: Request, res: Response, video: MVideoUUI
 
 // ---------------------------------------------------------------------------
 
-export function checkUserCanManageVideo (user: MUser, video: MVideoAccountLight, right: UserRightType, res: Response, onlyOwned = true) {
+export function checkUserCanManageVideo (options: {
+  user: MUser
+  video: MVideoAccountLight
+  right: UserRightType
+  req: Request
+  res: Response
+  onlyOwned?: boolean
+}) {
+  const { user, video, right, req, res, onlyOwned = true } = options
+
+  if (!user) {
+    res.fail({
+      status: HttpStatusCode.UNAUTHORIZED_401,
+      message: req.t('Authentication is required.')
+    })
+  }
+
   if (onlyOwned && video.isOwned() === false) {
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
-      message: 'Cannot manage a video of another server.'
+      message: req.t('Cannot manage a video of another server.')
     })
     return false
   }
@@ -297,7 +313,7 @@ export function checkUserCanManageVideo (user: MUser, video: MVideoAccountLight,
   if (user.hasRight(right) === false && account.userId !== user.id) {
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
-      message: 'Cannot manage a video of another user.'
+      message: req.t('Cannot manage a video of another user.')
     })
     return false
   }

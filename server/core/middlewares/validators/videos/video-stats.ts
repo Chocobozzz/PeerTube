@@ -89,7 +89,11 @@ export const videoTimeseriesStatsValidator = [
 
 async function commonStatsCheck (req: express.Request, res: express.Response) {
   if (!await doesVideoExist(req.params.videoId, res, 'all')) return false
-  if (!checkUserCanManageVideo(res.locals.oauth.token.User, res.locals.videoAll, UserRight.SEE_ALL_VIDEOS, res)) return false
+  if (
+    !checkUserCanManageVideo({ user: res.locals.oauth.token.User, video: res.locals.videoAll, right: UserRight.SEE_ALL_VIDEOS, req, res })
+  ) {
+    return false
+  }
 
   return true
 }

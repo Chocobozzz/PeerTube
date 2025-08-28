@@ -52,7 +52,8 @@ export const listAllVideoCommentsForAdminValidator = [
 
     if (req.query.videoId && !await doesVideoExist(req.query.videoId, res, 'unsafe-only-immutable-attributes')) return
     if (
-      req.query.videoChannelId && !await doesChannelIdExist({ id: req.query.videoChannelId, checkManage: true, checkIsLocal: true, res })
+      req.query.videoChannelId &&
+      !await doesChannelIdExist({ id: req.query.videoChannelId, checkManage: true, checkIsLocal: true, req, res })
     ) return
 
     return next()
@@ -73,16 +74,19 @@ export const listCommentsOnUserVideosValidator = [
 
     if (req.query.videoId && !await doesVideoExist(req.query.videoId, res, 'all')) return
     if (
-      req.query.videoChannelId && !await doesChannelIdExist({ id: req.query.videoChannelId, checkManage: true, checkIsLocal: true, res })
+      req.query.videoChannelId &&
+      !await doesChannelIdExist({ id: req.query.videoChannelId, checkManage: true, checkIsLocal: true, req, res })
     ) return
 
     const user = res.locals.oauth.token.User
 
     const video = res.locals.videoAll
-    if (video && !checkUserCanManageVideo(user, video, UserRight.SEE_ALL_COMMENTS, res)) return
+    if (video && !checkUserCanManageVideo({ user, video, right: UserRight.SEE_ALL_COMMENTS, req, res })) return
 
     const channel = res.locals.videoChannel
-    if (channel && !checkUserCanManageAccount({ account: channel.Account, user, res, specialRight: UserRight.SEE_ALL_COMMENTS })) return
+    if (channel && !checkUserCanManageAccount({ account: channel.Account, user, req, res, specialRight: UserRight.SEE_ALL_COMMENTS })) {
+      return
+    }
 
     return next()
   }

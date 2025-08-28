@@ -5,6 +5,7 @@ import {
   ActivityObject,
   APObjectId,
   CacheFileObject,
+  PlayerSettingsObject,
   PlaylistObject,
   VideoCommentObject,
   VideoObject,
@@ -12,7 +13,7 @@ import {
 } from './objects/index.js'
 
 export type ActivityUpdateObject =
-  | Extract<ActivityObject, VideoObject | CacheFileObject | PlaylistObject | ActivityPubActor | string>
+  | Extract<ActivityObject, VideoObject | CacheFileObject | PlaylistObject | ActivityPubActor | PlayerSettingsObject | string>
   | ActivityPubActor
 
 // Cannot Extract from Activity because of circular reference

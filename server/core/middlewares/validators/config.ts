@@ -1,6 +1,7 @@
 import { CustomConfig, HttpStatusCode } from '@peertube/peertube-models'
 import { isConfigLogoTypeValid } from '@server/helpers/custom-validators/config.js'
 import { isIntOrNull } from '@server/helpers/custom-validators/misc.js'
+import { isPlayerThemeValid } from '@server/helpers/custom-validators/player-settings.js'
 import { isNumberArray, isStringArray } from '@server/helpers/custom-validators/search.js'
 import { isVideoCommentsPolicyValid, isVideoLicenceValid, isVideoPrivacyValid } from '@server/helpers/custom-validators/videos.js'
 import { guessLanguageFromReq } from '@server/helpers/i18n.js'
@@ -148,6 +149,7 @@ export const customConfigUpdateValidator = [
   body('defaults.p2p.webapp.enabled').isBoolean(),
   body('defaults.p2p.embed.enabled').isBoolean(),
   body('defaults.player.autoPlay').isBoolean(),
+  body('defaults.player.theme').custom(isPlayerThemeValid),
 
   body('email.body.signature').exists(),
   body('email.subject.prefix').exists(),

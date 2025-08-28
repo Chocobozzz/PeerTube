@@ -8,6 +8,8 @@ import {
   FollowState,
   JobType,
   NSFWPolicyType,
+  PlayerThemeChannelSetting,
+  PlayerThemeVideoSetting,
   RunnerJobState,
   RunnerJobStateType,
   UploadImageType,
@@ -50,7 +52,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 925
+export const LAST_MIGRATION_VERSION = 930
 
 // ---------------------------------------------------------------------------
 
@@ -1177,7 +1179,9 @@ export const PLUGIN_GLOBAL_CSS_PATH = join(CONFIG.STORAGE.TMP_DIR, PLUGIN_GLOBAL
 export let PLUGIN_EXTERNAL_AUTH_TOKEN_LIFETIME = 1000 * 60 * 5 // 5 minutes
 
 export const DEFAULT_THEME_NAME = 'default'
-export const DEFAULT_USER_THEME_NAME = 'instance-default'
+export const DEFAULT_INSTANCE_THEME_NAME = 'instance-default'
+export const DEFAULT_CHANNEL_PLAYER_SETTING_VALUE: PlayerThemeVideoSetting = 'channel-default'
+export const DEFAULT_INSTANCE_PLAYER_SETTING_VALUE: PlayerThemeVideoSetting | PlayerThemeChannelSetting = 'instance-default'
 
 // ---------------------------------------------------------------------------
 

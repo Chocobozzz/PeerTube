@@ -6,6 +6,8 @@ import {
   LiveVideoCreate,
   LiveVideoUpdate,
   NSFWFlag,
+  PlayerVideoSettings,
+  PlayerVideoSettingsUpdate,
   VideoCaption,
   VideoChapter,
   VideoCreate,
@@ -65,6 +67,8 @@ type StudioForm = {
   'add-watermark'?: { file?: File }
 }
 
+type PlayerSettingsForm = PlayerVideoSettingsUpdate
+
 // ---------------------------------------------------------------------------
 
 type LoadFromPublishOptions = Required<Pick<VideoCreate, 'channelId' | 'support'>> & Partial<Pick<VideoCreate, 'name'>>
@@ -115,6 +119,7 @@ type UpdateFromAPIOptions = {
   captions?: VideoCaption[]
   videoPasswords?: string[]
   videoSource?: VideoSource
+  playerSettings?: PlayerVideoSettings
 }
 
 // ---------------------------------------------------------------------------
@@ -143,6 +148,7 @@ export class VideoEdit {
   private live: LiveUpdate
   private replaceFile: File
   private studioTasks: VideoStudioTask[] = []
+  private playerSettings: PlayerVideoSettings
 
   private videoImport: Pick<VideoImportCreate, 'magnetUri' | 'torrentfile' | 'targetUrl'>
 
@@ -185,6 +191,7 @@ export class VideoEdit {
     previewfile?: { size: number }
 
     live?: LiveUpdate
+    playerSettings?: PlayerVideoSettings
 
     pluginData?: any
     pluginDefaults?: Record<string, string | boolean>
@@ -294,12 +301,13 @@ export class VideoEdit {
   }
 
   async loadFromAPI (options: UpdateFromAPIOptions & { loadPrivacy?: boolean }) {
-    const { video, videoPasswords, live, chapters, captions, videoSource, loadPrivacy = true } = options
+    const { video, videoPasswords, live, chapters, captions, videoSource, playerSettings, loadPrivacy = true } = options
 
     debugLogger('Load from API', options)
 
     this.loadVideo({ video, videoPasswords, saveInStore: true, loadPrivacy })
     this.loadLive(live)
+    this.loadPlayerSettings(playerSettings)
 
     if (captions !== undefined) {
       this.captions = captions
@@ -447,6 +455,17 @@ export class VideoEdit {
     this.saveStore.live = buildObj()
 
     this.metadata.live = pick(live, [ 'rtmpUrl', 'rtmpsUrl', 'streamKey' ])
+  }
+
+  private loadPlayerSettings (playerSettings: UpdateFromAPIOptions['playerSettings']) {
+    const buildObj = () => {
+      return {
+        theme: playerSettings.theme
+      }
+    }
+
+    this.playerSettings = buildObj()
+    this.saveStore.playerSettings = buildObj()
   }
 
   loadAfterPublish (options: {
@@ -797,6 +816,26 @@ export class VideoEdit {
 
   // ---------------------------------------------------------------------------
 
+  loadFromPlayerSettingsForm (values: PlayerSettingsForm) {
+    this.playerSettings = values
+  }
+
+  toPlayerSettingsFormPatch (): Required<PlayerSettingsForm> {
+    return {
+      theme: this.playerSettings?.theme ?? 'channel-default'
+    }
+  }
+
+  toPlayerSettingsUpdate (): PlayerVideoSettingsUpdate {
+    if (!this.playerSettings) return undefined
+
+    return {
+      theme: this.playerSettings.theme
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+
   getVideoSource () {
     return this.metadata.videoSource
   }
@@ -823,6 +862,10 @@ export class VideoEdit {
 
   getStudioTasks () {
     return this.studioTasks
+  }
+
+  getPlayerSettings () {
+    return this.playerSettings
   }
 
   getStudioTasksSummary () {
@@ -941,6 +984,21 @@ export class VideoEdit {
     return changes
   }
 
+  hasPlayerSettingsChanges () {
+    if (!this.playerSettings) return false
+    if (!this.saveStore.playerSettings) return true
+
+    const changes = !this.areSameObjects(this.playerSettings, this.saveStore.playerSettings)
+
+    debugLogger('Check if player settings has changes', {
+      playerSettings: this.playerSettings,
+      savePlayerSettings: this.saveStore.playerSettings,
+      changes
+    })
+
+    return changes
+  }
+
   // ---------------------------------------------------------------------------
 
   hasPendingChanges () {
@@ -950,7 +1008,8 @@ export class VideoEdit {
       this.hasStudioTasks() ||
       this.hasChaptersChanges() ||
       this.hasCommonChanges() ||
-      this.hasPluginDataChanges()
+      this.hasPluginDataChanges() ||
+      this.hasPlayerSettingsChanges()
   }
 
   // ---------------------------------------------------------------------------

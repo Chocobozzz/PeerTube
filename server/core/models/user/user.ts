@@ -64,7 +64,7 @@ import {
   isUserVideosHistoryEnabledValid
 } from '../../helpers/custom-validators/users.js'
 import { comparePassword, cryptPassword } from '../../helpers/peertube-crypto.js'
-import { DEFAULT_USER_THEME_NAME, NSFW_POLICY_TYPES } from '../../initializers/constants.js'
+import { DEFAULT_INSTANCE_THEME_NAME, NSFW_POLICY_TYPES } from '../../initializers/constants.js'
 import { getThemeOrDefault } from '../../lib/plugins/theme-utils.js'
 import { AccountModel } from '../account/account.js'
 import { ActorFollowModel } from '../actor/actor-follow.js'
@@ -417,7 +417,7 @@ export class UserModel extends SequelizeModel<UserModel> {
   declare videoQuotaDaily: number
 
   @AllowNull(false)
-  @Default(DEFAULT_USER_THEME_NAME)
+  @Default(DEFAULT_INSTANCE_THEME_NAME)
   @Is('UserTheme', value => throwIfNotValid(value, isThemeNameValid, 'theme'))
   @Column
   declare theme: string
@@ -1010,7 +1010,7 @@ export class UserModel extends SequelizeModel<UserModel> {
       id: this.id,
       username: this.username,
       email: this.email,
-      theme: getThemeOrDefault(this.theme, DEFAULT_USER_THEME_NAME),
+      theme: getThemeOrDefault(this.theme, DEFAULT_INSTANCE_THEME_NAME),
 
       pendingEmail: this.pendingEmail,
       emailPublic: this.emailPublic,

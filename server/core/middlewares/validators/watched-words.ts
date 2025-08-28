@@ -16,7 +16,7 @@ export const manageAccountWatchedWordsListValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesAccountHandleExist({ handle: req.params.accountName, res, checkIsLocal: true, checkManage: true })) return
+    if (!await doesAccountHandleExist({ handle: req.params.accountName, req, res, checkIsLocal: true, checkManage: true })) return
 
     return next()
   }

@@ -193,10 +193,24 @@ function runTest (withObjectStorage: boolean) {
       expect(importedMain.avatars).to.have.lengthOf(0)
       expect(importedMain.banners).to.have.lengthOf(0)
 
+      const playerSettingMain = await remoteServer.playerSettings.getForChannel({
+        channelHandle: 'noah_remote_channel',
+        token: remoteServer.accessToken,
+        raw: true
+      })
+      expect(playerSettingMain.theme).to.equal('instance-default')
+
       const importedSecond = await remoteServer.channels.get({ token: remoteNoahToken, channelName: 'noah_second_channel' })
       expect(importedSecond.displayName).to.equal('noah display name')
       expect(importedSecond.description).to.equal('noah description')
       expect(importedSecond.support).to.equal('noah support')
+
+      const playerSettingSecond = await remoteServer.playerSettings.getForChannel({
+        channelHandle: 'noah_second_channel',
+        token: remoteServer.accessToken,
+        raw: true
+      })
+      expect(playerSettingSecond.theme).to.equal('galaxy')
 
       for (const banner of importedSecond.banners) {
         await testImage({ url: banner.fileUrl, name: `banner-user-import-resized-${banner.width}.jpg` })
@@ -376,6 +390,13 @@ function runTest (withObjectStorage: boolean) {
         expect(publicVideo).to.exist
         expect(publicVideo.privacy.id).to.equal(VideoPrivacy.PUBLIC)
 
+        const playerSetting = await remoteServer.playerSettings.getForVideo({
+          videoId: publicVideo.uuid,
+          token: remoteServer.accessToken,
+          raw: true
+        })
+        expect(playerSetting.theme).to.equal('lucide')
+
         // Federated
         await server.videos.get({ id: publicVideo.uuid })
       }
@@ -384,6 +405,13 @@ function runTest (withObjectStorage: boolean) {
         const passwordVideo = data.find(v => v.name === 'noah password video')
         expect(passwordVideo).to.exist
         expect(passwordVideo.privacy.id).to.equal(VideoPrivacy.PASSWORD_PROTECTED)
+
+        const playerSetting = await remoteServer.playerSettings.getForVideo({
+          videoId: passwordVideo.uuid,
+          token: remoteServer.accessToken,
+          raw: true
+        })
+        expect(playerSetting.theme).to.equal('channel-default')
 
         const { data: passwords } = await remoteServer.videoPasswords.list({ videoId: passwordVideo.uuid })
         expect(passwords.map(p => p.password).sort()).to.deep.equal([ 'password1', 'password2' ])

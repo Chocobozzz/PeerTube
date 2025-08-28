@@ -14,6 +14,7 @@ import { jobsRouter } from './jobs.js'
 import { metricsRouter } from './metrics.js'
 import { oauthClientsRouter } from './oauth-clients.js'
 import { overviewsRouter } from './overviews.js'
+import { playerSettingsRouter } from './player-settings.js'
 import { pluginRouter } from './plugins.js'
 import { runnersRouter } from './runners/index.js'
 import { searchRouter } from './search/index.js'
@@ -48,6 +49,7 @@ apiRouter.use('/jobs', jobsRouter)
 apiRouter.use('/metrics', metricsRouter)
 apiRouter.use('/search', searchRouter)
 apiRouter.use('/overviews', overviewsRouter)
+apiRouter.use('/player-settings', playerSettingsRouter)
 apiRouter.use('/plugins', pluginRouter)
 apiRouter.use('/custom-pages', customPageRouter)
 apiRouter.use('/blocklist', blocklistRouter)

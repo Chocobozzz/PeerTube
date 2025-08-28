@@ -1,6 +1,6 @@
 <div class="actor" *ngIf="actor">
   <div class="position-relative me-3">
-    <my-actor-avatar [actor]="actor" [actorType]="actorType()" [previewImage]="preview" size="100"></my-actor-avatar>
+    <my-actor-avatar [actor]="actor" [actorType]="actorType()" [previewImage]="previewUrl" size="100"></my-actor-avatar>
 
     @if (editable()) {
       @if (hasAvatar()) {

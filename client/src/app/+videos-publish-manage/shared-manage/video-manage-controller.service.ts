@@ -9,6 +9,7 @@ import { VideoChapterService } from '@app/shared/shared-main/video/video-chapter
 import { VideoPasswordService } from '@app/shared/shared-main/video/video-password.service'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
+import { PlayerSettingsService } from '@app/shared/shared-video/player-settings.service'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import {
   HTMLServerConfig,
@@ -47,6 +48,7 @@ export class VideoManageController implements OnDestroy {
   private formReactiveService = inject(FormReactiveService)
   private videoStudio = inject(VideoStudioService)
   private peertubeRouter = inject(PeerTubeRouterService)
+  private playerSettingsService = inject(PlayerSettingsService)
 
   private videoEdit: VideoEdit
   private userChannels: SelectChannelItem[]
@@ -246,6 +248,16 @@ export class VideoManageController implements OnDestroy {
         return this.videoChapterService.updateChapters(videoAttributes.uuid, this.videoEdit.getChaptersEdit())
       }),
       switchMap(() => {
+        if (!this.videoEdit.hasPlayerSettingsChanges()) return of(true)
+
+        debugLogger('Update player settings')
+
+        return this.playerSettingsService.updateVideoSettings({
+          videoId: videoAttributes.uuid,
+          settings: this.videoEdit.getPlayerSettings()
+        })
+      }),
+      switchMap(() => {
         if (!isLive || !this.videoEdit.hasLiveChanges()) return of(true)
 
         debugLogger('Update live')
@@ -283,16 +295,19 @@ export class VideoManageController implements OnDestroy {
 
           !isLive
             ? this.videoCaptionService.listCaptions(videoAttributes.uuid)
-            : of(undefined)
+            : of(undefined),
+
+          this.playerSettingsService.getVideoSettings({ videoId: videoAttributes.uuid, raw: true })
         ])
       }),
-      switchMap(([ video, videoPasswords, live, chaptersRes, captionsRes ]) => {
+      switchMap(([ video, videoPasswords, live, chaptersRes, captionsRes, playerSettings ]) => {
         return this.videoEdit.loadFromAPI({
           video,
           videoPasswords: videoPasswords.map(p => p.password),
           live,
           chapters: chaptersRes?.chapters,
-          captions: captionsRes?.data
+          captions: captionsRes?.data,
+          playerSettings
         })
       }),
       first(), // To complete

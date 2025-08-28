@@ -24,7 +24,7 @@ const listVideoPasswordValidator = [
 
     // Check if the user who did the request is able to access video password list
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.SEE_ALL_VIDEOS, res)) return
+    if (!checkUserCanManageVideo({ user, video: res.locals.videoAll, right: UserRight.SEE_ALL_VIDEOS, req, res })) return
 
     return next()
   }
@@ -44,7 +44,7 @@ const updateVideoPasswordListValidator = [
 
     // Check if the user who did the request is able to update video passwords
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.UPDATE_ANY_VIDEO, res)) return
+    if (!checkUserCanManageVideo({ user, video: res.locals.videoAll, right: UserRight.UPDATE_ANY_VIDEO, req, res })) return
 
     return next()
   }

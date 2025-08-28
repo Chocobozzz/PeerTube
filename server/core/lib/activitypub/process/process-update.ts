@@ -5,6 +5,7 @@ import {
   ActivityUpdate,
   ActivityUpdateObject,
   CacheFileObject,
+  PlayerSettingsObject,
   PlaylistObject,
   VideoObject
 } from '@peertube/peertube-models'
@@ -17,13 +18,15 @@ import { logger } from '../../../helpers/logger.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import { ActorModel } from '../../../models/actor/actor.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
-import { MActorFull, MActorSignature } from '../../../types/models/index.js'
+import { MActorAccountChannelId, MActorFull, MActorSignature } from '../../../types/models/index.js'
 import { fetchAPObjectIfNeeded } from '../activity.js'
+import { getOrCreateAPActor } from '../actors/get.js'
 import { APActorUpdater } from '../actors/updater.js'
 import { createOrUpdateCacheFile } from '../cache-file.js'
+import { upsertAPPlayerSettings } from '../player-settings.js'
 import { createOrUpdateVideoPlaylist } from '../playlists/index.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
-import { APVideoUpdater, canVideoBeFederated, getOrCreateAPVideo } from '../videos/index.js'
+import { APVideoUpdater, canVideoBeFederated, getOrCreateAPVideo, maybeGetOrCreateAPVideo } from '../videos/index.js'
 
 async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate<ActivityUpdateObject>>) {
   const { activity, byActor } = options
@@ -49,6 +52,10 @@ async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate
 
   if (objectType === 'Playlist') {
     return retryTransactionWrapper(processUpdatePlaylist, byActor, activity, object)
+  }
+
+  if (objectType === 'PlayerSettings') {
+    return retryTransactionWrapper(processUpdatePlayerSettings, byActor, object)
   }
 
   return undefined
@@ -129,4 +136,35 @@ async function processUpdatePlaylist (
   if (!byAccount) throw new Error('Cannot update video playlist with the non account actor ' + byActor.url)
 
   await createOrUpdateVideoPlaylist({ playlistObject, contextUrl: byActor.url, to: arrayify(activity.to) })
+}
+
+async function processUpdatePlayerSettings (
+  byActor: MActorSignature,
+  settingsObject: PlayerSettingsObject
+) {
+  let actor: MActorAccountChannelId
+
+  const { video } = await maybeGetOrCreateAPVideo({ videoObject: settingsObject.object })
+
+  if (!video) {
+    try {
+      actor = await getOrCreateAPActor(settingsObject.object)
+    } catch {
+      actor = undefined
+    }
+  }
+
+  if (!video && !actor?.VideoChannel) {
+    logger.warn(`Do not process update player settings on unknown video/channel`)
+    return
+  }
+
+  await upsertAPPlayerSettings({
+    settingsObject,
+    contextUrl: byActor.url,
+    video,
+    channel: actor
+      ? Object.assign(actor.VideoChannel, { Actor: actor })
+      : undefined
+  })
 }

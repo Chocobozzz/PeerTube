@@ -69,7 +69,7 @@ export class PeerTubeEmbed {
     this.peertubePlugin = new PeerTubePlugin(this.http)
     this.peertubeTheme = new PeerTubeTheme(this.peertubePlugin)
     this.playerHTML = new PlayerHTML(videoWrapperId)
-    this.playerOptionsBuilder = new PlayerOptionsBuilder(this.playerHTML, this.videoFetcher, this.peertubePlugin)
+    this.playerOptionsBuilder = new PlayerOptionsBuilder(this.playerHTML, this.videoFetcher, this.peertubePlugin, this.config)
     this.liveManager = new LiveManager(this.playerHTML)
     this.requiresPassword = false
 
@@ -220,10 +220,18 @@ export class PeerTubeEmbed {
         videoResponse,
         captionsPromise,
         chaptersPromise,
-        storyboardsPromise
+        storyboardsPromise,
+        playerSettingsPromise
       } = await this.videoFetcher.loadVideo({ videoId: uuid, videoPassword: this.videoPassword })
 
-      return this.buildVideoPlayer({ videoResponse, captionsPromise, chaptersPromise, storyboardsPromise, forceAutoplay })
+      return this.buildVideoPlayer({
+        videoResponse,
+        captionsPromise,
+        chaptersPromise,
+        storyboardsPromise,
+        playerSettingsPromise,
+        forceAutoplay
+      })
     } catch (err) {
       if (await this.handlePasswordError(err)) this.loadVideoAndBuildPlayer({ ...options })
       else this.playerHTML.displayError(err.message, await this.translationsPromise)
@@ -235,9 +243,10 @@ export class PeerTubeEmbed {
     storyboardsPromise: Promise<Response>
     captionsPromise: Promise<Response>
     chaptersPromise: Promise<Response>
+    playerSettingsPromise: Promise<Response>
     forceAutoplay: boolean
   }) {
-    const { videoResponse, captionsPromise, chaptersPromise, storyboardsPromise, forceAutoplay } = options
+    const { videoResponse, captionsPromise, chaptersPromise, storyboardsPromise, playerSettingsPromise, forceAutoplay } = options
 
     const videoInfoPromise = videoResponse.json()
       .then(async (videoInfo: VideoDetails) => {
@@ -259,13 +268,15 @@ export class PeerTubeEmbed {
       translations,
       captionsResponse,
       chaptersResponse,
-      storyboardsResponse
+      storyboardsResponse,
+      playerSettingsResponse
     ] = await Promise.all([
       videoInfoPromise,
       this.translationsPromise,
       captionsPromise,
       chaptersPromise,
       storyboardsPromise,
+      playerSettingsPromise,
       this.buildPlayerIfNeeded()
     ])
 
@@ -283,6 +294,7 @@ export class PeerTubeEmbed {
       video,
       captionsResponse,
       chaptersResponse,
+      playerSettingsResponse,
 
       config: this.config,
       translations,

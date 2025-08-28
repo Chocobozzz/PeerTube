@@ -1,13 +1,12 @@
 import debug from 'debug'
 import videojs from 'video.js'
+import MenuButton from 'video.js/dist/types/menu/menu-button'
 import { VideojsComponent, VideojsMenu, VideojsMenuItem, VideojsMenuItemOptions, VideojsPlayer } from '../../types'
 import { toTitleCase } from '../common'
 import { SettingsDialog } from './settings-dialog'
 import { SettingsButton } from './settings-menu-button'
 import { SettingsPanel } from './settings-panel'
 import { SettingsPanelChild } from './settings-panel-child'
-import Button from 'video.js/dist/types/button'
-import MenuButton from 'video.js/dist/types/menu/menu-button'
 
 const debugLogger = debug('peertube:player:settings')
 

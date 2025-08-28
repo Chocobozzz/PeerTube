@@ -2,10 +2,10 @@ import { arrayify } from '@peertube/peertube-core-utils'
 import { ContextType } from '@peertube/peertube-models'
 import { ACTIVITY_PUB, REMOTE_SCHEME } from '@server/initializers/constants.js'
 import { isArray } from './custom-validators/misc.js'
+import { logger } from './logger.js'
 import { buildDigest } from './peertube-crypto.js'
 import type { signJsonLDObject } from './peertube-jsonld.js'
 import { doJSONRequest } from './requests.js'
-import { logger } from './logger.js'
 
 export type ContextFilter = <T>(arg: T) => Promise<T>
 
@@ -75,6 +75,8 @@ type ContextValue = { [id: string]: string | { '@type': string, '@id': string } 
 
 const contextStore: { [id in ContextType]: (string | { [id: string]: string })[] } = {
   Video: buildContext({
+    ...getPlayerSettingsTypeContext(),
+
     Hashtag: 'as:Hashtag',
     category: 'sc:category',
     licence: 'sc:license',
@@ -99,6 +101,7 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
     },
 
     Infohash: 'pt:Infohash',
+
     SensitiveTag: 'pt:SensitiveTag',
 
     tileWidth: {
@@ -130,6 +133,8 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
     uploadDate: 'sc:uploadDate',
 
     hasParts: 'sc:hasParts',
+
+    playerSettings: 'pt:playerSettings',
 
     views: {
       '@type': 'sc:Number',
@@ -236,6 +241,8 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
   }),
 
   Actor: buildContext({
+    ...getPlayerSettingsTypeContext(),
+
     playlists: {
       '@id': 'pt:playlists',
       '@type': '@id'
@@ -303,7 +310,22 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
     hasPart: 'sc:hasPart',
     endOffset: 'sc:endOffset',
     startOffset: 'sc:startOffset'
+  }),
+
+  PlayerSettings: buildContext({
+    ...getPlayerSettingsTypeContext(),
+
+    theme: 'pt:theme'
   })
+}
+
+function getPlayerSettingsTypeContext () {
+  return {
+    PlayerSettings: {
+      '@type': '@id',
+      '@id': 'pt:PlayerSettings'
+    }
+  }
 }
 
 let allContext: (string | ContextValue)[]

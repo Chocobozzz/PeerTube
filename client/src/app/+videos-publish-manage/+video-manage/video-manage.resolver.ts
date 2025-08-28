@@ -10,6 +10,7 @@ import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
 import {
   LiveVideo,
+  PlayerVideoSettings,
   UserVideoQuota,
   VideoCaption,
   VideoChapter,
@@ -22,6 +23,8 @@ import {
 import { forkJoin, of } from 'rxjs'
 import { map, switchMap } from 'rxjs/operators'
 import { SelectChannelItem } from '../../../types'
+import { VideoEdit } from '../shared-manage/common/video-edit.model'
+import { PlayerSettingsService } from '@app/shared/shared-video/player-settings.service'
 
 export type VideoManageResolverData = {
   video: VideoDetails
@@ -33,6 +36,8 @@ export type VideoManageResolverData = {
   videoPasswords: VideoPassword[]
   userQuota: UserVideoQuota
   privacies: VideoConstant<VideoPrivacyType>[]
+  videoEdit: VideoEdit
+  playerSettings: PlayerVideoSettings
 }
 
 @Injectable()
@@ -45,6 +50,7 @@ export class VideoManageResolver {
   private videoPasswordService = inject(VideoPasswordService)
   private userService = inject(UserService)
   private serverService = inject(ServerService)
+  private playerSettingsService = inject(PlayerSettingsService)
 
   resolve (route: ActivatedRouteSnapshot) {
     const uuid: string = route.params['uuid']
@@ -52,18 +58,32 @@ export class VideoManageResolver {
     return this.videoService.getVideo({ videoId: uuid })
       .pipe(
         switchMap(video => forkJoin(this.buildObservables(video))),
-        map(([ video, videoSource, userChannels, captions, chapters, live, videoPasswords, userQuota, privacies ]) =>
-          ({
-            video,
-            userChannels,
-            captions,
-            chapters,
-            videoSource,
-            live,
-            videoPasswords,
-            userQuota,
-            privacies
-          }) as VideoManageResolverData
+        switchMap(
+          async ([ video, videoSource, userChannels, captions, chapters, live, videoPasswords, userQuota, privacies, playerSettings ]) => {
+            const videoEdit = await VideoEdit.createFromAPI(this.serverService.getHTMLConfig(), {
+              video,
+              captions,
+              chapters,
+              live,
+              videoSource,
+              playerSettings,
+              videoPasswords: videoPasswords.map(p => p.password)
+            })
+
+            return {
+              video,
+              userChannels,
+              captions,
+              chapters,
+              videoSource,
+              live,
+              videoPasswords,
+              userQuota,
+              privacies,
+              videoEdit,
+              playerSettings
+            } satisfies VideoManageResolverData
+          }
         )
       )
   }
@@ -94,11 +114,13 @@ export class VideoManageResolver {
 
       video.privacy.id === VideoPrivacy.PASSWORD_PROTECTED
         ? this.videoPasswordService.getVideoPasswords({ videoUUID: video.uuid })
-        : of([]),
+        : of([] as VideoPassword[]),
 
       this.userService.getMyVideoQuotaUsed(),
 
-      this.serverService.getVideoPrivacies()
-    ]
+      this.serverService.getVideoPrivacies(),
+
+      this.playerSettingsService.getVideoSettings({ videoId: video.uuid, raw: true })
+    ] as const
   }
 }

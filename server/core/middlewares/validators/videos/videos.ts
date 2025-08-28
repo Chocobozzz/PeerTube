@@ -231,7 +231,9 @@ export const videosUpdateValidator = getCommonVideoEditAttributes().concat([
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.UPDATE_ANY_VIDEO, res)) return cleanUpReqFiles(req)
+    if (!checkUserCanManageVideo({ user, video: res.locals.videoAll, right: UserRight.UPDATE_ANY_VIDEO, req, res })) {
+      return cleanUpReqFiles(req)
+    }
 
     if (req.body.channelId && !await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
 
@@ -343,7 +345,15 @@ export const videosRemoveValidator = [
     if (!await doesVideoExist(req.params.id, res)) return
 
     // Check if the user who did the request is able to delete the video
-    if (!checkUserCanManageVideo(res.locals.oauth.token.User, res.locals.videoAll, UserRight.REMOVE_ANY_VIDEO, res)) return
+    if (
+      !checkUserCanManageVideo({
+        user: res.locals.oauth.token.User,
+        video: res.locals.videoAll,
+        right: UserRight.REMOVE_ANY_VIDEO,
+        req,
+        res
+      })
+    ) return
 
     return next()
   }

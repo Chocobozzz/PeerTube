@@ -1,6 +1,10 @@
+import { inject } from '@angular/core'
 import { RedirectCommand, Router, Routes } from '@angular/router'
 import { CanDeactivateGuard, LoginGuard } from '@app/core'
 import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
+import { PlayerSettingsService } from '@app/shared/shared-video/player-settings.service'
+import { VideoStateMessageService } from '@app/shared/shared-video/video-state-message.service'
+import debug from 'debug'
 import { I18nPrimengCalendarService } from '../shared-manage/common/i18n-primeng-calendar.service'
 import { VideoUploadService } from '../shared-manage/common/video-upload.service'
 import { manageRoutes } from '../shared-manage/routes'
@@ -8,9 +12,6 @@ import { VideoStudioService } from '../shared-manage/studio/video-studio.service
 import { VideoManageController } from '../shared-manage/video-manage-controller.service'
 import { VideoPublishComponent } from './video-publish.component'
 import { VideoPublishResolver } from './video-publish.resolver'
-import { inject } from '@angular/core'
-import debug from 'debug'
-import { VideoStateMessageService } from '@app/shared/shared-video/video-state-message.service'
 
 const debugLogger = debug('peertube:video-publish')
 
@@ -43,6 +44,7 @@ export default [
     providers: [
       VideoPublishResolver,
       VideoManageController,
+      PlayerSettingsService,
       VideoStateMessageService,
       LiveVideoService,
       I18nPrimengCalendarService,

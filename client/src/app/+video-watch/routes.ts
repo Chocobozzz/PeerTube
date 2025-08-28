@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router'
 import { AbuseService } from '@app/shared/shared-moderation/abuse.service'
 import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
+import { BulkService } from '@app/shared/shared-moderation/bulk.service'
 import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
 import { SearchService } from '@app/shared/shared-search/search.service'
 import { UserSubscriptionService } from '@app/shared/shared-user-subscription/user-subscription.service'
@@ -8,11 +9,11 @@ import { UserAdminService } from '@app/shared/shared-users/user-admin.service'
 import { VideoCommentService } from '@app/shared/shared-video-comment/video-comment.service'
 import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
+import { PlayerSettingsService } from '@app/shared/shared-video/player-settings.service'
+import { VideoStateMessageService } from '@app/shared/shared-video/video-state-message.service'
 import { OverviewService } from '../+video-list'
 import { VideoRecommendationService } from './shared'
 import { VideoWatchComponent } from './video-watch.component'
-import { BulkService } from '@app/shared/shared-moderation/bulk.service'
-import { VideoStateMessageService } from '@app/shared/shared-video/video-state-message.service'
 
 export default [
   {
@@ -30,7 +31,8 @@ export default [
       AbuseService,
       UserAdminService,
       BulkService,
-      VideoStateMessageService
+      VideoStateMessageService,
+      PlayerSettingsService
     ],
     children: [
       {

@@ -1,92 +1,65 @@
-import { NgClass, NgIf } from '@angular/common'
-import { HttpErrorResponse } from '@angular/common/http'
-import { AfterViewInit, Component, OnDestroy, OnInit, inject } from '@angular/core'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { AfterViewInit, Component, inject, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, HooksService, Notifier, RedirectService } from '@app/core'
 import { genericUploadErrorHandler } from '@app/helpers'
-import {
-  VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
-  VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
-  VIDEO_CHANNEL_SUPPORT_VALIDATOR
-} from '@app/shared/form-validators/video-channel-validators'
-import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
-import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { shallowCopy } from '@peertube/peertube-core-utils'
-import { VideoChannelUpdate } from '@peertube/peertube-models'
-import { Subscription } from 'rxjs'
-import { ActorAvatarEditComponent } from '../shared-actor-image-edit/actor-avatar-edit.component'
-import { ActorBannerEditComponent } from '../shared-actor-image-edit/actor-banner-edit.component'
-import { MarkdownTextareaComponent } from '../shared-forms/markdown-textarea.component'
-import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
-import { HelpComponent } from '../shared-main/buttons/help.component'
-import { MarkdownHintComponent } from '../shared-main/text/markdown-hint.component'
-import { VideoChannelEdit } from './video-channel-edit'
+import { PlayerChannelSettings, VideoChannelUpdate } from '@peertube/peertube-models'
+import { catchError, forkJoin, Subscription, switchMap, tap, throwError } from 'rxjs'
+import { VideoChannel } from '../shared-main/channel/video-channel.model'
+import { PlayerSettingsService } from '../shared-video/player-settings.service'
+import { FormValidatedOutput, VideoChannelEditComponent } from './video-channel-edit.component'
 
 @Component({
   selector: 'my-video-channel-update',
-  templateUrl: './video-channel-edit.component.html',
-  styleUrls: [ './video-channel-edit.component.scss' ],
+  template: `
+  @if (channel && rawPlayerSettings) {
+    <my-video-channel-edit
+      mode="update" [channel]="channel" [rawPlayerSettings]="rawPlayerSettings" [error]="error"
+      (formValidated)="onFormValidated($event)"
+    >
+    </my-video-channel-edit>
+  }
+  `,
   imports: [
-    NgIf,
-    FormsModule,
-    ReactiveFormsModule,
-    ActorBannerEditComponent,
-    ActorAvatarEditComponent,
-    NgClass,
-    HelpComponent,
-    MarkdownTextareaComponent,
-    PeertubeCheckboxComponent,
-    AlertComponent,
-    MarkdownHintComponent
+    VideoChannelEditComponent
+  ],
+  providers: [
+    PlayerSettingsService
   ]
 })
-export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnInit, AfterViewInit, OnDestroy {
-  protected formReactiveService = inject(FormReactiveService)
+export class VideoChannelUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
   private authService = inject(AuthService)
   private notifier = inject(Notifier)
   private route = inject(ActivatedRoute)
   private videoChannelService = inject(VideoChannelService)
+  private playerSettingsService = inject(PlayerSettingsService)
   private redirectService = inject(RedirectService)
   private hooks = inject(HooksService)
 
+  channel: VideoChannel
+  rawPlayerSettings: PlayerChannelSettings
   error: string
 
   private paramsSub: Subscription
-  private oldSupportField: string
 
   ngOnInit () {
-    this.buildForm({
-      'display-name': VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
-      'description': VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
-      'support': VIDEO_CHANNEL_SUPPORT_VALIDATOR,
-      'bulkVideosSupportUpdate': null
-    })
-
     this.paramsSub = this.route.params.subscribe(routeParams => {
       const videoChannelName = routeParams['videoChannelName']
 
-      this.videoChannelService.getVideoChannel(videoChannelName)
-        .subscribe({
-          next: videoChannelToUpdate => {
-            this.videoChannel = videoChannelToUpdate
+      forkJoin([
+        this.videoChannelService.getVideoChannel(videoChannelName),
+        this.playerSettingsService.getChannelSettings({ channelHandle: videoChannelName, raw: true })
+      ]).subscribe({
+        next: ([ channel, rawPlayerSettings ]) => {
+          this.channel = channel
+          this.rawPlayerSettings = rawPlayerSettings
 
-            this.hooks.runAction('action:video-channel-update.video-channel.loaded', 'video-channel', { videoChannel: this.videoChannel })
+          this.hooks.runAction('action:video-channel-update.video-channel.loaded', 'video-channel', { videoChannel: this.channel })
+        },
 
-            this.oldSupportField = videoChannelToUpdate.support
-
-            this.form.patchValue({
-              'display-name': videoChannelToUpdate.displayName,
-              'description': videoChannelToUpdate.description,
-              'support': videoChannelToUpdate.support
-            })
-          },
-
-          error: err => {
-            this.error = err.message
-          }
-        })
+        error: err => this.notifier.error(err.message)
+      })
     })
   }
 
@@ -98,112 +71,84 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
     if (this.paramsSub) this.paramsSub.unsubscribe()
   }
 
-  formValidated () {
+  onFormValidated (output: FormValidatedOutput) {
     this.error = undefined
 
-    const body = this.form.value
     const videoChannelUpdate: VideoChannelUpdate = {
-      displayName: body['display-name'],
-      description: body.description || null,
-      support: body.support || null,
-      bulkVideosSupportUpdate: body.bulkVideosSupportUpdate || false
+      displayName: output.channel.displayName,
+      description: output.channel.description,
+      support: output.channel.support,
+      bulkVideosSupportUpdate: output.channel.bulkVideosSupportUpdate
     }
 
-    this.videoChannelService.updateVideoChannel(this.videoChannel.name, videoChannelUpdate)
+    this.videoChannelService.updateVideoChannel(this.channel.name, videoChannelUpdate)
+      .pipe(
+        switchMap(() => {
+          return this.playerSettingsService.updateChannelSettings({
+            channelHandle: this.channel.name,
+            settings: {
+              theme: output.playerSettings.theme
+            }
+          })
+        }),
+        switchMap(() => this.updateOrDeleteAvatar(output.avatar)),
+        switchMap(() => this.updateOrDeleteBanner(output.banner))
+      )
       .subscribe({
         next: () => {
+          // So my-actor-avatar component detects changes
+          this.channel = shallowCopy(this.channel)
+
           this.authService.refreshUserInformation()
 
           this.notifier.success($localize`Video channel ${videoChannelUpdate.displayName} updated.`)
 
-          this.redirectService.redirectToPreviousRoute('/c/' + this.videoChannel.name)
-        },
-
-        error: err => {
-          this.error = err.message
-        }
-      })
-  }
-
-  onAvatarChange (formData: FormData) {
-    this.videoChannelService.changeVideoChannelImage(this.videoChannel.name, formData, 'avatar')
-      .subscribe({
-        next: data => {
-          this.notifier.success($localize`Avatar changed.`)
-
-          this.videoChannel.updateAvatar(data.avatars)
-
-          // So my-actor-avatar component detects changes
-          this.videoChannel = shallowCopy(this.videoChannel)
-        },
-
-        error: (err: HttpErrorResponse) =>
-          genericUploadErrorHandler({
-            err,
-            name: $localize`avatar`,
-            notifier: this.notifier
-          })
-      })
-  }
-
-  onAvatarDelete () {
-    this.videoChannelService.deleteVideoChannelImage(this.videoChannel.name, 'avatar')
-      .subscribe({
-        next: () => {
-          this.notifier.success($localize`Avatar deleted.`)
-
-          this.videoChannel.resetAvatar()
-
-          // So my-actor-avatar component detects changes
-          this.videoChannel = shallowCopy(this.videoChannel)
+          this.redirectService.redirectToPreviousRoute('/c/' + this.channel.name)
         },
 
         error: err => this.notifier.error(err.message)
       })
   }
 
-  onBannerChange (formData: FormData) {
-    this.videoChannelService.changeVideoChannelImage(this.videoChannel.name, formData, 'banner')
-      .subscribe({
-        next: data => {
-          this.notifier.success($localize`Banner changed.`)
+  private updateOrDeleteAvatar (avatar: FormData) {
+    if (!avatar) {
+      return this.videoChannelService.deleteVideoChannelImage(this.channel.name, 'avatar')
+        .pipe(tap(() => this.channel.resetAvatar()))
+    }
 
-          this.videoChannel.updateBanner(data.banners)
-        },
-
-        error: (err: HttpErrorResponse) =>
-          genericUploadErrorHandler({
-            err,
-            name: $localize`banner`,
-            notifier: this.notifier
+    return this.videoChannelService.changeVideoChannelImage(this.channel.name, avatar, 'avatar')
+      .pipe(
+        tap(data => this.channel.updateAvatar(data.avatars)),
+        catchError(err =>
+          throwError(() => {
+            return new Error(genericUploadErrorHandler({
+              err,
+              name: $localize`avatar`,
+              notifier: this.notifier
+            }))
           })
-      })
+        )
+      )
   }
 
-  onBannerDelete () {
-    this.videoChannelService.deleteVideoChannelImage(this.videoChannel.name, 'banner')
-      .subscribe({
-        next: () => {
-          this.notifier.success($localize`Banner deleted.`)
+  private updateOrDeleteBanner (banner: FormData) {
+    if (!banner) {
+      return this.videoChannelService.deleteVideoChannelImage(this.channel.name, 'banner')
+        .pipe(tap(() => this.channel.resetBanner()))
+    }
 
-          this.videoChannel.resetBanner()
-        },
-
-        error: err => this.notifier.error(err.message)
-      })
-  }
-
-  isCreation () {
-    return false
-  }
-
-  getFormButtonTitle () {
-    return $localize`Update ${this.videoChannel?.name}`
-  }
-
-  isBulkUpdateVideosDisplayed () {
-    if (this.oldSupportField === undefined) return false
-
-    return this.oldSupportField !== this.form.value['support']
+    return this.videoChannelService.changeVideoChannelImage(this.channel.name, banner, 'banner')
+      .pipe(
+        tap(data => this.channel.updateBanner(data.banners)),
+        catchError(err =>
+          throwError(() => {
+            return new Error(genericUploadErrorHandler({
+              err,
+              name: $localize`banner`,
+              notifier: this.notifier
+            }))
+          })
+        )
+      )
   }
 }

@@ -103,7 +103,7 @@ export class PeerTubePlayer {
 
     await this.buildPlayerIfNeeded()
 
-    for (const theme of [ 'default', 'lucide' ]) {
+    for (const theme of [ 'galaxy', 'lucide' ]) {
       this.player.removeClass('vjs-peertube-theme-' + theme)
     }
 

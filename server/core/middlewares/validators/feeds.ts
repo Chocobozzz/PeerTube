@@ -91,7 +91,7 @@ const feedsAccountOrChannelFiltersValidator = [
     if (areValidationErrors(req, res)) return
 
     const { accountId, videoChannelId, accountName, videoChannelName } = req.query
-    const commonOptions = { res, checkManage: false, checkIsLocal: false }
+    const commonOptions = { req, res, checkManage: false, checkIsLocal: false }
 
     if (accountId && !await doesAccountIdExist({ id: accountId, ...commonOptions })) return
     if (videoChannelId && !await doesChannelIdExist({ id: videoChannelId, ...commonOptions })) return
@@ -111,7 +111,7 @@ const videoFeedsPodcastValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesChannelIdExist({ id: req.query.videoChannelId, checkManage: false, checkIsLocal: false, res })) return
+    if (!await doesChannelIdExist({ id: req.query.videoChannelId, checkManage: false, checkIsLocal: false, req, res })) return
 
     return next()
   }
@@ -129,7 +129,7 @@ const videoSubscriptionFeedsValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    if (!await doesAccountIdExist({ id: req.query.accountId, res, checkIsLocal: true, checkManage: false })) return
+    if (!await doesAccountIdExist({ id: req.query.accountId, req, res, checkIsLocal: true, checkManage: false })) return
     if (!await doesUserFeedTokenCorrespond(res.locals.account.userId, req.query.token, res)) return
 
     return next()

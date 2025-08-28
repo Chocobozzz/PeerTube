@@ -92,7 +92,7 @@ export const videoChannelsHandleValidatorFactory = (options: {
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       if (areValidationErrors(req, res)) return
 
-      if (!await doesChannelHandleExist({ handle: req.params.handle, checkManage, checkIsLocal, res })) return
+      if (!await doesChannelHandleExist({ handle: req.params.handle, checkManage, checkIsLocal, req, res })) return
 
       return next()
     }

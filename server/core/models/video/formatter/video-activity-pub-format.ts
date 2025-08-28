@@ -22,6 +22,7 @@ import {
   getLocalVideoCommentsActivityPubUrl,
   getLocalVideoDislikesActivityPubUrl,
   getLocalVideoLikesActivityPubUrl,
+  getLocalVideoPlayerSettingsActivityPubUrl,
   getLocalVideoSharesActivityPubUrl
 } from '../../../lib/activitypub/url.js'
 import { MStreamingPlaylistFiles, MUserId, MVideo, MVideoAP, MVideoFile } from '../../../types/models/index.js'
@@ -123,6 +124,7 @@ export function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
     shares: getLocalVideoSharesActivityPubUrl(video),
     comments: getLocalVideoCommentsActivityPubUrl(video),
     hasParts: getLocalVideoChaptersActivityPubUrl(video),
+    playerSettings: getLocalVideoPlayerSettingsActivityPubUrl(video),
 
     attributedTo: [
       video.VideoChannel.Account.Actor.url,

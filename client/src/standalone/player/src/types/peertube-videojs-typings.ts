@@ -1,4 +1,4 @@
-import { VideoChapter, VideoFile, VideoPlaylist, VideoPlaylistElement } from '@peertube/peertube-models'
+import { PlayerMode, VideoChapter, VideoFile, VideoPlaylist, VideoPlaylistElement } from '@peertube/peertube-models'
 import type { HlsConfig, Level, Loader, LoaderContext } from 'hls.js'
 import type { CoreConfig } from 'p2p-media-loader-core'
 import type { HlsJsP2PEngine } from 'p2p-media-loader-hlsjs'
@@ -34,12 +34,11 @@ import { SegmentValidator } from '../shared/p2p-media-loader/segment-validator'
 import { PeerTubePlugin } from '../shared/peertube/peertube-plugin'
 import { PlaylistPlugin } from '../shared/playlist/playlist-plugin'
 import { PeerTubeResolutionsPlugin } from '../shared/resolutions/peertube-resolutions-plugin'
+import { SettingsButton } from '../shared/settings/settings-menu-button'
 import { StatsCardOptions } from '../shared/stats/stats-card'
 import { StatsForNerdsPlugin } from '../shared/stats/stats-plugin'
 import { UpNextPlugin } from '../shared/upnext/upnext-plugin'
 import { WebVideoPlugin } from '../shared/web-video/web-video-plugin'
-import { PlayerMode } from './peertube-player-options'
-import { SettingsButton } from '../shared/settings/settings-menu-button'
 
 declare module 'video.js' {
   export interface VideoJsPlayer {

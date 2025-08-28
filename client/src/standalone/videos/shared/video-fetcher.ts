@@ -5,9 +5,7 @@ import { AuthHTTP } from './auth-http'
 import { getBackendUrl } from './url'
 
 export class VideoFetcher {
-
   constructor (private readonly http: AuthHTTP) {
-
   }
 
   async loadVideo ({ videoId, videoPassword }: { videoId: string, videoPassword?: string }) {
@@ -39,8 +37,9 @@ export class VideoFetcher {
     const captionsPromise = this.loadVideoCaptions({ videoId, videoPassword })
     const chaptersPromise = this.loadVideoChapters({ videoId, videoPassword })
     const storyboardsPromise = this.loadStoryboards(videoId)
+    const playerSettingsPromise = this.loadPlayerSettings({ videoId, videoPassword })
 
-    return { captionsPromise, chaptersPromise, storyboardsPromise, videoResponse }
+    return { captionsPromise, chaptersPromise, storyboardsPromise, videoResponse, playerSettingsPromise }
   }
 
   loadLive (video: VideoDetails) {
@@ -70,8 +69,16 @@ export class VideoFetcher {
     return this.http.fetch(this.getVideoUrl(videoId) + '/chapters', { optionalAuth: true }, videoPassword)
   }
 
+  private loadPlayerSettings ({ videoId, videoPassword }: { videoId: string, videoPassword?: string }): Promise<Response> {
+    return this.http.fetch(this.getPlayerSettingsUrl(videoId), { optionalAuth: true }, videoPassword)
+  }
+
   private getVideoUrl (id: string) {
     return getBackendUrl() + '/api/v1/videos/' + id
+  }
+
+  private getPlayerSettingsUrl (id: string) {
+    return getBackendUrl() + '/api/v1/player-settings/videos/' + id
   }
 
   private getLiveUrl (videoId: string) {

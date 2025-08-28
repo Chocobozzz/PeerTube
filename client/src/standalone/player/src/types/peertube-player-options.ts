@@ -1,10 +1,7 @@
-import { LiveVideoLatencyModeType, VideoChapter, VideoFile } from '@peertube/peertube-models'
+import { LiveVideoLatencyModeType, PlayerMode, PlayerTheme, VideoChapter, VideoFile } from '@peertube/peertube-models'
 import { PluginsManager } from '@root-helpers/plugins-manager'
 import { PeerTubeDockPluginOptions } from '../shared/dock/peertube-dock-plugin'
 import { PlaylistPluginOptions, VideoJSCaption, VideojsPlayer, VideoJSStoryboard } from './peertube-videojs-typings'
-
-export type PlayerMode = 'web-video' | 'p2p-media-loader'
-export type PeerTubePlayerTheme = 'default' | 'lucide'
 
 export type PeerTubePlayerConstructorOptions = {
   playerElement: () => HTMLVideoElement
@@ -53,7 +50,7 @@ export type PeerTubePlayerConstructorOptions = {
 export type PeerTubePlayerLoadOptions = {
   mode: PlayerMode
 
-  theme: PeerTubePlayerTheme
+  theme: PlayerTheme
 
   startTime?: number | string
   stopTime?: number | string

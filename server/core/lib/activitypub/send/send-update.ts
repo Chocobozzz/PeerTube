@@ -1,5 +1,7 @@
 import { ActivityAudience, ActivityUpdate, ActivityUpdateObject, VideoPlaylistPrivacy } from '@peertube/peertube-models'
 import { getServerActor } from '@server/models/application/application.js'
+import { PlayerSettingModel } from '@server/models/video/player-setting.js'
+import { MPlayerSetting } from '@server/types/models/video/player-setting.js'
 import { Transaction } from 'sequelize'
 import { logger } from '../../../helpers/logger.js'
 import { AccountModel } from '../../../models/account/account.js'
@@ -11,11 +13,12 @@ import {
   MActorLight,
   MChannelDefault,
   MVideoAPLight,
+  MVideoFullLight,
   MVideoPlaylistFull,
   MVideoRedundancyVideo
 } from '../../../types/models/index.js'
 import { audiencify, getPlaylistAudience, getPublicAudience, getVideoAudience } from '../audience.js'
-import { getUpdateActivityPubUrl } from '../url.js'
+import { getLocalChannelPlayerSettingsActivityPubUrl, getLocalVideoPlayerSettingsActivityPubUrl, getUpdateActivityPubUrl } from '../url.js'
 import { canVideoBeFederated } from '../videos/federate.js'
 import { getActorsInvolvedInVideo } from './shared/index.js'
 import { broadcastToFollowers, sendVideoRelatedActivity } from './shared/send-utils.js'
@@ -58,21 +61,10 @@ export async function sendUpdateActor (accountOrChannel: MChannelDefault | MAcco
   const audience = getPublicAudience(byActor)
   const updateActivity = buildUpdateActivity(url, byActor, accountOrChannelObject, audience)
 
-  let actorsInvolved: MActor[]
-  if (accountOrChannel instanceof AccountModel) {
-    // Actors that shared my videos are involved too
-    actorsInvolved = await VideoShareModel.loadActorsWhoSharedVideosOf(byActor.id, transaction)
-  } else {
-    // Actors that shared videos of my channel are involved too
-    actorsInvolved = await VideoShareModel.loadActorsByVideoChannel(accountOrChannel.id, transaction)
-  }
-
-  actorsInvolved.push(byActor)
-
   return broadcastToFollowers({
     data: updateActivity,
     byActor,
-    toFollowersOf: actorsInvolved,
+    toFollowersOf: await getToFollowersOfForActor(accountOrChannel, transaction),
     transaction,
     contextType: 'Actor'
   })
@@ -127,6 +119,53 @@ export async function sendUpdateVideoPlaylist (videoPlaylist: MVideoPlaylistFull
   })
 }
 
+export async function sendUpdateVideoPlayerSettings (video: MVideoFullLight, settings: MPlayerSetting, transaction: Transaction) {
+  if (!canVideoBeFederated(video, false)) return
+
+  const byActor = video.VideoChannel.Account.Actor
+  const settingsUrl = getLocalVideoPlayerSettingsActivityPubUrl(video)
+
+  logger.info('Creating job to update video player settings ' + settingsUrl)
+
+  const updateUrl = getUpdateActivityPubUrl(settingsUrl, settings.updatedAt.toISOString())
+
+  const object = PlayerSettingModel.formatAPPlayerSetting({ settings, video, channel: undefined })
+  const audience = getVideoAudience(byActor, video.privacy)
+
+  const updateActivity = buildUpdateActivity(updateUrl, byActor, object, audience)
+
+  const toFollowersOf = await getActorsInvolvedInVideo(video, transaction)
+
+  return broadcastToFollowers({
+    data: updateActivity,
+    byActor,
+    toFollowersOf,
+    transaction,
+    contextType: 'PlayerSettings'
+  })
+}
+
+export async function sendUpdateChannelPlayerSettings (channel: MChannelDefault, settings: MPlayerSetting, transaction: Transaction) {
+  const byActor = channel.Actor
+  const settingsUrl = getLocalChannelPlayerSettingsActivityPubUrl(channel.Actor.preferredUsername)
+
+  logger.info('Creating job to update channel player settings actor ' + settingsUrl)
+
+  const url = getUpdateActivityPubUrl(byActor.url, byActor.updatedAt.toISOString())
+  const object = PlayerSettingModel.formatAPPlayerSetting({ settings, video: undefined, channel })
+
+  const audience = getPublicAudience(byActor)
+  const updateActivity = buildUpdateActivity(url, byActor, object, audience)
+
+  return broadcastToFollowers({
+    data: updateActivity,
+    byActor,
+    toFollowersOf: await getToFollowersOfForActor(channel, transaction),
+    transaction,
+    contextType: 'PlayerSettings'
+  })
+}
+
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------
@@ -148,4 +187,19 @@ function buildUpdateActivity (
     },
     audience
   )
+}
+
+async function getToFollowersOfForActor (accountOrChannel: MChannelDefault | MAccountDefault, transaction?: Transaction) {
+  let actorsInvolved: MActor[]
+  if (accountOrChannel instanceof AccountModel) {
+    // Actors that shared my videos are involved too
+    actorsInvolved = await VideoShareModel.loadActorsWhoSharedVideosOf(accountOrChannel.Actor.id, transaction)
+  } else {
+    // Actors that shared videos of my channel are involved too
+    actorsInvolved = await VideoShareModel.loadActorsByVideoChannel(accountOrChannel.id, transaction)
+  }
+
+  actorsInvolved.push(accountOrChannel.Actor)
+
+  return actorsInvolved
 }

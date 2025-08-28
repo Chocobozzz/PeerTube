@@ -26,7 +26,7 @@ export const videoSourceGetLatestValidator = [
     const video = getVideoWithAttributes(res) as MVideoFullLight
 
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, video, UserRight.UPDATE_ANY_VIDEO, res)) return
+    if (!checkUserCanManageVideo({ user, video, right: UserRight.UPDATE_ANY_VIDEO, req, res })) return
 
     res.locals.videoSource = await VideoSourceModel.loadLatest(video.id)
 
@@ -123,7 +123,7 @@ async function checkCanUpdateVideoFile (options: {
   const user = res.locals.oauth.token.User
   const video = res.locals.videoAll
 
-  if (!checkUserCanManageVideo(user, video, UserRight.UPDATE_ANY_VIDEO, res)) return false
+  if (!checkUserCanManageVideo({ user, video, right: UserRight.UPDATE_ANY_VIDEO, req, res })) return false
 
   if (!checkVideoFileCanBeEdited(video, res)) return false
 

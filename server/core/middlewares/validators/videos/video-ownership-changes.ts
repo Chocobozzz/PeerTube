@@ -23,7 +23,15 @@ export const videosChangeOwnershipValidator = [
     if (!await doesVideoExist(req.params.videoId, res)) return
 
     // Check if the user who did the request is able to change the ownership of the video
-    if (!checkUserCanManageVideo(res.locals.oauth.token.User, res.locals.videoAll, UserRight.CHANGE_VIDEO_OWNERSHIP, res)) return
+    if (
+      !checkUserCanManageVideo({
+        user: res.locals.oauth.token.User,
+        video: res.locals.videoAll,
+        right: UserRight.CHANGE_VIDEO_OWNERSHIP,
+        req,
+        res
+      })
+    ) return
 
     const nextOwner = await AccountModel.loadLocalByName(req.body.username)
     if (!nextOwner) {
@@ -82,7 +90,6 @@ export const videosAcceptChangeOwnershipValidator = [
 
 async function checkCanAccept (video: MVideoWithAllFiles, res: express.Response): Promise<boolean> {
   if (video.isLive) {
-
     if (video.state !== VideoState.WAITING_FOR_LIVE) {
       res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,

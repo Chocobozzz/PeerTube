@@ -369,7 +369,9 @@ export const usersVideosValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    if (req.query.channelId && !await doesChannelIdExist({ id: req.query.channelId, checkManage: true, checkIsLocal: true, res })) return
+    if (req.query.channelId && !await doesChannelIdExist({ id: req.query.channelId, checkManage: true, checkIsLocal: true, req, res })) {
+      return
+    }
 
     return next()
   }

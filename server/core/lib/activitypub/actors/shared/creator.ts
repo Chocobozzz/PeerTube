@@ -1,5 +1,5 @@
-import { Op, Transaction } from 'sequelize'
 import { ActivityPubActor, ActorImageType, ActorImageType_Type } from '@peertube/peertube-models'
+import { isAccountActor, isChannelActor } from '@server/helpers/actors.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { ActorModel } from '@server/models/actor/actor.js'
@@ -15,18 +15,17 @@ import {
   MChannel,
   MServer
 } from '@server/types/models/index.js'
+import { Op, Transaction } from 'sequelize'
+import { upsertAPPlayerSettings } from '../../player-settings.js'
 import { updateActorImages } from '../image.js'
 import { getActorAttributesFromObject, getActorDisplayNameFromObject, getImagesInfoFromObject } from './object-to-model-attributes.js'
 import { fetchActorFollowsCount } from './url-to-object.js'
-import { isAccountActor, isChannelActor } from '@server/helpers/actors.js'
 
 export class APActorCreator {
-
   constructor (
     private readonly actorObject: ActivityPubActor,
     private readonly ownerActor?: MActorFullActor
   ) {
-
   }
 
   async create (): Promise<MActorFullActor> {
@@ -34,7 +33,7 @@ export class APActorCreator {
 
     const actorInstance = new ActorModel(getActorAttributesFromObject(this.actorObject, followersCount, followingCount))
 
-    return sequelizeTypescript.transaction(async t => {
+    const actor = await sequelizeTypescript.transaction(async t => {
       const server = await this.setServer(actorInstance, t)
 
       const { actorCreated, created } = await this.saveActor(actorInstance, t)
@@ -58,6 +57,17 @@ export class APActorCreator {
 
       return actorCreated
     })
+
+    if (isChannelActor(actor.type) && typeof this.actorObject.playerSettings === 'string') {
+      await upsertAPPlayerSettings({
+        settingsObject: this.actorObject.playerSettings,
+        video: undefined,
+        channel: actor.VideoChannel,
+        contextUrl: actor.url
+      })
+    }
+
+    return actor
   }
 
   private async setServer (actor: MActor, t: Transaction) {

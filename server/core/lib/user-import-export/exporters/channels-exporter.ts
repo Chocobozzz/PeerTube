@@ -1,12 +1,13 @@
+import { ChannelExportJSON, PlayerChannelSettings } from '@peertube/peertube-models'
 import { logger } from '@server/helpers/logger.js'
+import { PlayerSettingModel } from '@server/models/video/player-setting.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
-import { ExportResult } from './abstract-user-exporter.js'
-import { ChannelExportJSON } from '@peertube/peertube-models'
 import { MChannelBannerAccountDefault } from '@server/types/models/index.js'
+import { MPlayerSetting } from '@server/types/models/video/player-setting.js'
+import { ExportResult } from './abstract-user-exporter.js'
 import { ActorExporter } from './actor-exporter.js'
 
-export class ChannelsExporter extends ActorExporter <ChannelExportJSON> {
-
+export class ChannelsExporter extends ActorExporter<ChannelExportJSON> {
   async export () {
     const channelsJSON: ChannelExportJSON['channels'] = []
     let staticFiles: ExportResult<ChannelExportJSON>['staticFiles'] = []
@@ -31,12 +32,15 @@ export class ChannelsExporter extends ActorExporter <ChannelExportJSON> {
   }
 
   private async exportChannel (channelId: number) {
-    const channel = await VideoChannelModel.loadAndPopulateAccount(channelId)
+    const [ channel, playerSettings ] = await Promise.all([
+      VideoChannelModel.loadAndPopulateAccount(channelId),
+      PlayerSettingModel.loadByChannelId(channelId)
+    ])
 
     const { relativePathsFromJSON, staticFiles } = this.exportActorFiles(channel.Actor)
 
     return {
-      json: this.exportChannelJSON(channel, relativePathsFromJSON),
+      json: this.exportChannelJSON(channel, playerSettings, relativePathsFromJSON),
       staticFiles
     }
   }
@@ -45,6 +49,7 @@ export class ChannelsExporter extends ActorExporter <ChannelExportJSON> {
 
   private exportChannelJSON (
     channel: MChannelBannerAccountDefault,
+    playerSettings: MPlayerSetting,
     archiveFiles: { avatar: string, banner: string }
   ): ChannelExportJSON['channels'][0] {
     return {
@@ -54,6 +59,8 @@ export class ChannelsExporter extends ActorExporter <ChannelExportJSON> {
       description: channel.description,
       support: channel.support,
 
+      playerSettings: this.exportPlayerSettingsJSON(playerSettings),
+
       updatedAt: channel.updatedAt.toISOString(),
       createdAt: channel.createdAt.toISOString(),
 
@@ -61,4 +68,11 @@ export class ChannelsExporter extends ActorExporter <ChannelExportJSON> {
     }
   }
 
+  private exportPlayerSettingsJSON (playerSettings: MPlayerSetting) {
+    if (!playerSettings) return null
+
+    return {
+      theme: playerSettings.theme as PlayerChannelSettings['theme']
+    }
+  }
 }

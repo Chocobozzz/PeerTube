@@ -1,6 +1,7 @@
 import {
   BroadcastMessageLevel,
   NSFWPolicyType,
+  PlayerTheme,
   VideoCommentPolicyType,
   VideoPrivacyType,
   VideoRedundancyConfigFilter,
@@ -172,6 +173,9 @@ const CONFIG = {
       }
     },
     PLAYER: {
+      get THEME () {
+        return config.get<PlayerTheme>('defaults.player.theme')
+      },
       get AUTO_PLAY () {
         return config.get<boolean>('defaults.player.auto_play')
       }

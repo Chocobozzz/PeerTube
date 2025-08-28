@@ -1,26 +1,31 @@
-import { ActorImageType, ChannelExportJSON } from '@peertube/peertube-models'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { pick } from '@peertube/peertube-core-utils'
-import { AbstractUserImporter } from './abstract-user-importer.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
-import { createLocalVideoChannelWithoutKeys } from '@server/lib/video-channel.js'
-import { JobQueue } from '@server/lib/job-queue/job-queue.js'
-import { updateLocalActorImageFiles } from '@server/lib/local-actor.js'
-import { VideoChannelModel } from '@server/models/video/video-channel.js'
+import { ActorImageType, ChannelExportJSON } from '@peertube/peertube-models'
+import { isPlayerChannelThemeSettingValid } from '@server/helpers/custom-validators/player-settings.js'
 import {
   isVideoChannelDescriptionValid,
   isVideoChannelDisplayNameValid,
   isVideoChannelSupportValid,
   isVideoChannelUsernameValid
 } from '@server/helpers/custom-validators/video-channels.js'
+import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
+import { sequelizeTypescript } from '@server/initializers/database.js'
+import { JobQueue } from '@server/lib/job-queue/job-queue.js'
+import { updateLocalActorImageFiles } from '@server/lib/local-actor.js'
+import { createLocalVideoChannelWithoutKeys } from '@server/lib/video-channel.js'
+import { PlayerSettingModel } from '@server/models/video/player-setting.js'
+import { VideoChannelModel } from '@server/models/video/video-channel.js'
+import { MChannelId } from '@server/types/models/index.js'
+import { AbstractUserImporter } from './abstract-user-importer.js'
 
 const lTags = loggerTagsFactory('user-import')
 
-type SanitizedObject = Pick<ChannelExportJSON['channels'][0], 'name' | 'displayName' | 'description' | 'support' | 'archiveFiles'>
+type SanitizedObject = Pick<
+  ChannelExportJSON['channels'][0],
+  'name' | 'displayName' | 'description' | 'support' | 'playerSettings' | 'archiveFiles'
+>
 
-export class ChannelsImporter extends AbstractUserImporter <ChannelExportJSON, ChannelExportJSON['channels'][0], SanitizedObject> {
-
+export class ChannelsImporter extends AbstractUserImporter<ChannelExportJSON, ChannelExportJSON['channels'][0], SanitizedObject> {
   protected getImportObjects (json: ChannelExportJSON) {
     return json.channels
   }
@@ -32,7 +37,11 @@ export class ChannelsImporter extends AbstractUserImporter <ChannelExportJSON, C
     if (!isVideoChannelDescriptionValid(channelImportData.description)) channelImportData.description = null
     if (!isVideoChannelSupportValid(channelImportData.support)) channelImportData.support = null
 
-    return pick(channelImportData, [ 'name', 'displayName', 'description', 'support', 'archiveFiles' ])
+    if (channelImportData.playerSettings) {
+      if (!isPlayerChannelThemeSettingValid(channelImportData.playerSettings.theme)) channelImportData.playerSettings.theme = undefined
+    }
+
+    return pick(channelImportData, [ 'name', 'displayName', 'description', 'support', 'playerSettings', 'archiveFiles' ])
   }
 
   protected async importObject (channelImportData: SanitizedObject) {
@@ -45,6 +54,8 @@ export class ChannelsImporter extends AbstractUserImporter <ChannelExportJSON, C
       const videoChannelCreated = await sequelizeTypescript.transaction(async t => {
         return createLocalVideoChannelWithoutKeys(pick(channelImportData, [ 'displayName', 'name', 'description', 'support' ]), account, t)
       })
+
+      await this.importPlayerSettings(videoChannelCreated, channelImportData)
 
       await JobQueue.Instance.createJob({ type: 'actor-keys', payload: { actorId: videoChannelCreated.actorId } })
 
@@ -72,5 +83,15 @@ export class ChannelsImporter extends AbstractUserImporter <ChannelExportJSON, C
     return {
       duplicate: !!existingChannel
     }
+  }
+
+  private async importPlayerSettings (channel: MChannelId, channelImportData: SanitizedObject) {
+    const playerSettings = channelImportData.playerSettings
+    if (!playerSettings?.theme) return
+
+    await PlayerSettingModel.create({
+      theme: playerSettings.theme,
+      channelId: channel.id
+    })
   }
 }

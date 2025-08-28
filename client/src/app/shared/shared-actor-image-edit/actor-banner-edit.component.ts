@@ -1,8 +1,8 @@
-import { NgIf, NgTemplateOutlet } from '@angular/common'
-import { Component, ElementRef, OnInit, inject, input, output, viewChild } from '@angular/core'
+import { CommonModule, NgTemplateOutlet } from '@angular/common'
+import { Component, ElementRef, OnInit, booleanAttribute, inject, input, output, viewChild } from '@angular/core'
 import { SafeResourceUrl } from '@angular/platform-browser'
 import { Notifier, ServerService } from '@app/core'
-import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle, NgbPopover, NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { NgbDropdownModule, NgbPopover, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { getBytes } from '@root-helpers/bytes'
 import { imageToDataURL } from '@root-helpers/images'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
@@ -14,7 +14,7 @@ import { GlobalIconComponent } from '../shared-icons/global-icon.component'
     './actor-image-edit.scss',
     './actor-banner-edit.component.scss'
   ],
-  imports: [ NgIf, NgbTooltip, NgTemplateOutlet, NgbDropdown, NgbDropdownToggle, GlobalIconComponent, NgbDropdownMenu ]
+  imports: [ CommonModule, NgbTooltipModule, NgTemplateOutlet, NgbDropdownModule, GlobalIconComponent ]
 })
 export class ActorBannerEditComponent implements OnInit {
   private serverService = inject(ServerService)
@@ -23,8 +23,8 @@ export class ActorBannerEditComponent implements OnInit {
   readonly bannerfileInput = viewChild<ElementRef<HTMLInputElement>>('bannerfileInput')
   readonly bannerPopover = viewChild<NgbPopover>('bannerPopover')
 
-  readonly bannerUrl = input<string>(undefined)
-  readonly previewImage = input(false)
+  readonly bannerUrl = input<string>()
+  readonly previewImage = input(false, { transform: booleanAttribute })
 
   readonly bannerChange = output<FormData>()
   readonly bannerDelete = output()
@@ -63,11 +63,23 @@ export class ActorBannerEditComponent implements OnInit {
   }
 
   deleteBanner () {
-    this.preview = undefined
+    if (this.previewImage()) {
+      this.preview = null
+    }
+
     this.bannerDelete.emit()
   }
 
   hasBanner () {
+    // User deleted the avatar
+    if (this.preview === null) return false
+
     return !!this.preview || !!this.bannerUrl()
+  }
+
+  getBannerUrl () {
+    if (this.preview === null) return ''
+
+    return this.preview || this.bannerUrl()
   }
 }

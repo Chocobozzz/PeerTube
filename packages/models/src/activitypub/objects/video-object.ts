@@ -64,6 +64,7 @@ export interface VideoObject {
   shares: string
   comments: string
   hasParts: string | VideoChapterObject[]
+  playerSettings: string
 
   attributedTo: ActivityPubAttributedTo[]
 

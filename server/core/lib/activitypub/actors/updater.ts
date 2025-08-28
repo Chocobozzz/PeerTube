@@ -4,6 +4,7 @@ import { logger } from '@server/helpers/logger.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { MAccount, MActor, MActorFull, MChannel } from '@server/types/models/index.js'
+import { upsertAPPlayerSettings } from '../player-settings.js'
 import { getOrCreateAPOwner } from './get.js'
 import { updateActorImages } from './image.js'
 import { fetchActorFollowsCount } from './shared/index.js'
@@ -36,6 +37,15 @@ export class APActorUpdater {
         this.accountOrChannel.Account = owner.Account as AccountModel
 
         this.accountOrChannel.support = this.actorObject.support
+
+        if (typeof this.actorObject.playerSettings === 'string') {
+          await upsertAPPlayerSettings({
+            settingsObject: this.actorObject.playerSettings,
+            video: undefined,
+            channel: this.accountOrChannel,
+            contextUrl: this.actor.url
+          })
+        }
       }
 
       await runInReadCommittedTransaction(async t => {

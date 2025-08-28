@@ -32,6 +32,7 @@ import {
 import { CreationAttributes, Transaction } from 'sequelize'
 import { fetchAP } from '../../activity.js'
 import { findOwner, getOrCreateAPActor } from '../../actors/index.js'
+import { upsertAPPlayerSettings } from '../../player-settings.js'
 import {
   getCaptionAttributesFromObject,
   getFileAttributesFromUrl,
@@ -160,7 +161,7 @@ export abstract class APVideoAbstractBuilder {
     video.VideoFiles = await Promise.all(upsertTasks)
   }
 
-  protected async updateChaptersOutsideTransaction (video: MVideoFullLight) {
+  protected async updateChapters (video: MVideoFullLight) {
     if (!this.videoObject.hasParts || typeof this.videoObject.hasParts !== 'string') return
 
     const { body } = await fetchAP<VideoChaptersObject>(this.videoObject.hasParts)
@@ -177,6 +178,17 @@ export abstract class APVideoAbstractBuilder {
 
         await replaceChapters({ chapters, transaction: t, video })
       })
+    })
+  }
+
+  protected async upsertPlayerSettings (video: MVideoFullLight) {
+    if (typeof this.videoObject.playerSettings !== 'string') return
+
+    await upsertAPPlayerSettings({
+      settingsObject: this.videoObject.playerSettings,
+      video,
+      channel: undefined,
+      contextUrl: video.url
     })
   }
 

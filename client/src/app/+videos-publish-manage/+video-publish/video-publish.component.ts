@@ -41,8 +41,7 @@ import { VideoPublishResolverData } from './video-publish.resolver'
     VideoImportUrlComponent,
     VideoUploadComponent,
     HelpComponent
-  ],
-  providers: [ VideoManageController ]
+  ]
 })
 export class VideoPublishComponent implements OnInit, CanComponentDeactivate {
   private auth = inject(AuthService)

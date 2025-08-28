@@ -38,4 +38,7 @@ export interface ActivityPubActor {
   // Used by the user export feature
   likes?: string
   dislikes?: string
+
+  // On channels only
+  playerSettings?: string
 }

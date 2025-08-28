@@ -1,144 +1,98 @@
-import { NgClass, NgIf } from '@angular/common'
-import { AfterViewInit, Component, OnInit, inject } from '@angular/core'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { AfterViewInit, Component, inject } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService, HooksService, Notifier } from '@app/core'
-import {
-  VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
-  VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
-  VIDEO_CHANNEL_NAME_VALIDATOR,
-  VIDEO_CHANNEL_SUPPORT_VALIDATOR
-} from '@app/shared/form-validators/video-channel-validators'
-import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
-import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
-import { HttpStatusCode, VideoChannelCreate } from '@peertube/peertube-models'
+import { HttpStatusCode, PlayerChannelSettings, VideoChannelCreate } from '@peertube/peertube-models'
 import { of } from 'rxjs'
 import { switchMap } from 'rxjs/operators'
-import { ActorAvatarEditComponent } from '../shared-actor-image-edit/actor-avatar-edit.component'
-import { ActorBannerEditComponent } from '../shared-actor-image-edit/actor-banner-edit.component'
-import { MarkdownTextareaComponent } from '../shared-forms/markdown-textarea.component'
-import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
-import { HelpComponent } from '../shared-main/buttons/help.component'
-import { MarkdownHintComponent } from '../shared-main/text/markdown-hint.component'
-import { VideoChannelEdit } from './video-channel-edit'
+import { PlayerSettingsService } from '../shared-video/player-settings.service'
+import { FormValidatedOutput, VideoChannelEditComponent } from './video-channel-edit.component'
 
 @Component({
-  templateUrl: './video-channel-edit.component.html',
-  styleUrls: [ './video-channel-edit.component.scss' ],
+  template: `
+  <my-video-channel-edit
+    mode="create" [channel]="channel" [rawPlayerSettings]="rawPlayerSettings" [error]="error"
+    (formValidated)="onFormValidated($event)"
+  >
+  </my-video-channel-edit>
+  `,
   imports: [
-    NgIf,
-    FormsModule,
-    ReactiveFormsModule,
-    ActorBannerEditComponent,
-    ActorAvatarEditComponent,
-    NgClass,
-    HelpComponent,
-    MarkdownTextareaComponent,
-    PeertubeCheckboxComponent,
-    AlertComponent,
-    MarkdownHintComponent
+    VideoChannelEditComponent
+  ],
+  providers: [
+    PlayerSettingsService
   ]
 })
-export class VideoChannelCreateComponent extends VideoChannelEdit implements OnInit, AfterViewInit {
-  protected formReactiveService = inject(FormReactiveService)
+export class VideoChannelCreateComponent implements AfterViewInit {
   private authService = inject(AuthService)
   private notifier = inject(Notifier)
   private router = inject(Router)
   private videoChannelService = inject(VideoChannelService)
   private hooks = inject(HooksService)
+  private playerSettingsService = inject(PlayerSettingsService)
 
   error: string
-  videoChannel = new VideoChannel({})
-
-  private avatar: FormData
-  private banner: FormData
-
-  ngOnInit () {
-    this.buildForm({
-      'name': VIDEO_CHANNEL_NAME_VALIDATOR,
-      'display-name': VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
-      'description': VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
-      'support': VIDEO_CHANNEL_SUPPORT_VALIDATOR
-    })
+  channel = new VideoChannel({})
+  rawPlayerSettings: PlayerChannelSettings = {
+    theme: 'instance-default'
   }
 
   ngAfterViewInit () {
     this.hooks.runAction('action:video-channel-create.init', 'video-channel')
   }
 
-  formValidated () {
+  onFormValidated (output: FormValidatedOutput) {
     this.error = undefined
 
-    const body = this.form.value
-    const videoChannelCreate: VideoChannelCreate = {
-      name: body.name,
-      displayName: body['display-name'],
-      description: body.description || null,
-      support: body.support || null
+    const channelCreate: VideoChannelCreate = {
+      name: output.channel.name,
+      displayName: output.channel.displayName,
+      description: output.channel.description,
+      support: output.channel.support
     }
 
-    this.videoChannelService.createVideoChannel(videoChannelCreate)
+    this.videoChannelService.createVideoChannel(channelCreate)
       .pipe(
-        switchMap(() => this.uploadAvatar()),
-        switchMap(() => this.uploadBanner())
+        switchMap(() => {
+          return this.playerSettingsService.updateChannelSettings({
+            channelHandle: output.channel.name,
+            settings: {
+              theme: output.playerSettings.theme
+            }
+          })
+        }),
+        switchMap(() => this.uploadAvatar(output.channel.name, output.avatar)),
+        switchMap(() => this.uploadBanner(output.channel.name, output.banner))
       ).subscribe({
         next: () => {
           this.authService.refreshUserInformation()
 
-          this.notifier.success($localize`Video channel ${videoChannelCreate.displayName} created.`)
+          this.notifier.success($localize`Video channel ${channelCreate.displayName} created.`)
           this.router.navigate([ '/my-library', 'video-channels' ])
         },
 
         error: err => {
+          let message = err.message
+
           if (err.status === HttpStatusCode.CONFLICT_409) {
-            this.error = $localize`This name already exists on this platform.`
-            return
+            message = $localize`Channel name "${channelCreate.name}" already exists on this platform.`
           }
 
-          this.error = err.message
+          this.notifier.error(message)
         }
       })
   }
 
-  onAvatarChange (formData: FormData) {
-    this.avatar = formData
+  private uploadAvatar (username: string, avatar?: FormData) {
+    if (!avatar) return of(undefined)
+
+    return this.videoChannelService.changeVideoChannelImage(username, avatar, 'avatar')
   }
 
-  onAvatarDelete () {
-    this.avatar = null
-  }
+  private uploadBanner (username: string, banner?: FormData) {
+    if (!banner) return of(undefined)
 
-  onBannerChange (formData: FormData) {
-    this.banner = formData
-  }
-
-  onBannerDelete () {
-    this.banner = null
-  }
-
-  isCreation () {
-    return true
-  }
-
-  getFormButtonTitle () {
-    return $localize`Create your channel`
-  }
-
-  getUsername () {
-    return this.form.value.name
-  }
-
-  private uploadAvatar () {
-    if (!this.avatar) return of(undefined)
-
-    return this.videoChannelService.changeVideoChannelImage(this.getUsername(), this.avatar, 'avatar')
-  }
-
-  private uploadBanner () {
-    if (!this.banner) return of(undefined)
-
-    return this.videoChannelService.changeVideoChannelImage(this.getUsername(), this.banner, 'banner')
+    return this.videoChannelService.changeVideoChannelImage(username, banner, 'banner')
   }
 }

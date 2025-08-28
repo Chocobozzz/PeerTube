@@ -8,6 +8,8 @@ import { manageRoutes } from '../shared-manage/routes'
 import { VideoStudioService } from '../shared-manage/studio/video-studio.service'
 import { VideoManageComponent } from './video-manage.component'
 import { VideoManageResolver } from './video-manage.resolver'
+import { VideoManageController } from '../shared-manage/video-manage-controller.service'
+import { PlayerSettingsService } from '@app/shared/shared-video/player-settings.service'
 
 export default [
   {
@@ -16,12 +18,14 @@ export default [
     canActivate: [ LoginGuard ],
     canDeactivate: [ CanDeactivateGuard ],
     providers: [
+      VideoManageController,
       VideoManageResolver,
       LiveVideoService,
       I18nPrimengCalendarService,
       VideoUploadService,
       VideoStudioService,
-      VideoStateMessageService
+      VideoStateMessageService,
+      PlayerSettingsService
     ],
     resolve: {
       resolverData: VideoManageResolver

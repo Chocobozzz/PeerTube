@@ -48,7 +48,7 @@ describe('Test video passwords validator', function () {
         },
         import: {
           videos: {
-            http:{
+            http: {
               enabled: true
             }
           }
@@ -132,7 +132,6 @@ describe('Test video passwords validator', function () {
   }
 
   function validateVideoPasswordList (mode: 'uploadLegacy' | 'uploadResumable' | 'import' | 'updateVideo' | 'updatePasswords' | 'live') {
-
     it('Should fail with a password protected privacy without providing a password', async function () {
       await checkVideoPasswordOptions({
         server,
@@ -268,7 +267,17 @@ describe('Test video passwords validator', function () {
     token?: string
     videoPassword?: string
     expectedStatus: HttpStatusCodeType
-    mode: 'get' | 'getWithPassword' | 'getWithToken' | 'listCaptions' | 'createThread' | 'listThreads' | 'replyThread' | 'rate' | 'token'
+    mode:
+      | 'get'
+      | 'getWithPassword'
+      | 'getWithToken'
+      | 'listCaptions'
+      | 'createThread'
+      | 'listThreads'
+      | 'replyThread'
+      | 'rate'
+      | 'token'
+      | 'getPlayerSettings'
   }) {
     const { server, token = null, videoPassword, expectedStatus, mode } = options
 
@@ -351,6 +360,15 @@ describe('Test video passwords validator', function () {
       })
     }
 
+    if (mode === 'getPlayerSettings') {
+      return server.playerSettings.getForVideo({
+        videoId: video.id,
+        token,
+        expectedStatus,
+        videoPassword
+      })
+    }
+
     if (mode === 'token') {
       return server.videoToken.create({
         videoId: video.id,
@@ -380,9 +398,12 @@ describe('Test video passwords validator', function () {
     expect(error.status).to.equal(HttpStatusCode.FORBIDDEN_403)
   }
 
-  function validateVideoAccess (mode: 'get' | 'listCaptions' | 'createThread' | 'listThreads' | 'replyThread' | 'rate' | 'token') {
+  function validateVideoAccess (
+    mode: 'get' | 'listCaptions' | 'createThread' | 'listThreads' | 'replyThread' | 'getPlayerSettings' | 'rate' | 'token'
+  ) {
     const requiresUserAuth = [ 'createThread', 'replyThread', 'rate' ].includes(mode)
     let tokens: string[]
+
     if (!requiresUserAuth) {
       it('Should fail without providing a password for an unlogged user', async function () {
         const body = await checkVideoAccessOptions({ server, expectedStatus: HttpStatusCode.FORBIDDEN_403, mode })
@@ -482,7 +503,6 @@ describe('Test video passwords validator', function () {
   }
 
   describe('When accessing password protected video', function () {
-
     describe('For getting a password protected video', function () {
       validateVideoAccess('get')
     })
@@ -505,6 +525,10 @@ describe('Test video passwords validator', function () {
 
     describe('For getting captions', function () {
       validateVideoAccess('listCaptions')
+    })
+
+    describe('For getting player settings', function () {
+      validateVideoAccess('getPlayerSettings')
     })
 
     describe('For creating video file token', function () {

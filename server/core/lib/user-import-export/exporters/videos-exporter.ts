@@ -13,6 +13,7 @@ import {
 } from '@server/lib/object-storage/videos.js'
 import { VideoDownload } from '@server/lib/video-download.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
+import { PlayerSettingModel } from '@server/models/video/player-setting.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { VideoChapterModel } from '@server/models/video/video-chapter.js'
@@ -33,6 +34,7 @@ import {
   MVideoLiveWithSettingSchedules,
   MVideoPassword
 } from '@server/types/models/index.js'
+import { MPlayerSetting } from '@server/types/models/video/player-setting.js'
 import { MVideoSource } from '@server/types/models/video/video-source.js'
 import Bluebird from 'bluebird'
 import { createReadStream } from 'fs'
@@ -80,11 +82,12 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
   }
 
   private async exportVideo (videoId: number) {
-    const [ video, captions, source, chapters ] = await Promise.all([
+    const [ video, captions, source, chapters, playerSettings ] = await Promise.all([
       VideoModel.loadFull(videoId),
       VideoCaptionModel.listVideoCaptions(videoId),
       VideoSourceModel.loadLatest(videoId),
-      VideoChapterModel.listChaptersOfVideo(videoId)
+      VideoChapterModel.listChaptersOfVideo(videoId),
+      PlayerSettingModel.loadByVideoId(videoId)
     ])
 
     const passwords = video.privacy === VideoPrivacy.PASSWORD_PROTECTED
@@ -101,7 +104,16 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
     const { relativePathsFromJSON, staticFiles, exportedVideoFileOrSource } = await this.exportVideoFiles({ video, captions })
 
     return {
-      json: this.exportVideoJSON({ video, captions, live, passwords, source, chapters, archiveFiles: relativePathsFromJSON }),
+      json: this.exportVideoJSON({
+        video,
+        captions,
+        live,
+        passwords,
+        source,
+        chapters,
+        playerSettings,
+        archiveFiles: relativePathsFromJSON
+      }),
       staticFiles,
       relativePathsFromJSON,
       activityPubOutbox: await this.exportVideoAP(videoAP, chapters, exportedVideoFileOrSource)
@@ -116,10 +128,11 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
     live: MVideoLiveWithSettingSchedules
     passwords: MVideoPassword[]
     source: MVideoSource
+    playerSettings: MPlayerSetting
     chapters: MVideoChapter[]
     archiveFiles: VideoExportJSON['videos'][0]['archiveFiles']
   }): VideoExportJSON['videos'][0] {
-    const { video, captions, live, passwords, source, chapters, archiveFiles } = options
+    const { video, captions, live, passwords, source, chapters, playerSettings, archiveFiles } = options
 
     return {
       uuid: video.uuid,
@@ -181,6 +194,8 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
       streamingPlaylists: this.exportStreamingPlaylistsJSON(video, video.VideoStreamingPlaylists),
 
       source: this.exportVideoSourceJSON(source),
+
+      playerSettings: this.exportPlayerSettingsJSON(playerSettings),
 
       archiveFiles
     }
@@ -258,6 +273,14 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
       fps: source.fps,
 
       metadata: source.metadata
+    }
+  }
+
+  private exportPlayerSettingsJSON (playerSettings: MPlayerSetting) {
+    if (!playerSettings) return null
+
+    return {
+      theme: playerSettings.theme
     }
   }
 

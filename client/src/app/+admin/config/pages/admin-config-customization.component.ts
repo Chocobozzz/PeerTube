@@ -9,7 +9,7 @@ import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-che
 import { SelectCustomValueComponent } from '@app/shared/shared-forms/select/select-custom-value.component'
 import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-options.component'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
-import { CustomConfig } from '@peertube/peertube-models'
+import { CustomConfig, PlayerTheme } from '@peertube/peertube-models'
 import { capitalizeFirstLetter } from '@root-helpers/string'
 import { ColorPaletteThemeConfig, ThemeCustomizationKey } from '@root-helpers/theme-manager'
 import debug from 'debug'
@@ -20,6 +20,7 @@ import { AdminConfigService } from '../../../shared/shared-admin/admin-config.se
 import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
 import { AlertComponent } from '../../../shared/shared-main/common/alert.component'
 import { AdminSaveBarComponent } from '../shared/admin-save-bar.component'
+import { SelectPlayerThemeComponent } from '@app/shared/shared-forms/select/select-player-theme.component'
 
 const debugLogger = debug('peertube:config')
 
@@ -65,6 +66,12 @@ type Form = {
       inputBorderRadius: FormControl<string>
     }>
   }>
+
+  defaults: FormGroup<{
+    player: FormGroup<{
+      theme: FormControl<PlayerTheme>
+    }>
+  }>
 }
 
 type FieldType = 'color' | 'radius'
@@ -84,7 +91,8 @@ type FieldType = 'color' | 'radius'
     SelectOptionsComponent,
     HelpComponent,
     PeertubeCheckboxComponent,
-    SelectCustomValueComponent
+    SelectCustomValueComponent,
+    SelectPlayerThemeComponent
   ]
 })
 export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, CanComponentDeactivate {
@@ -108,6 +116,7 @@ export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, Can
   }[] = []
 
   availableThemes: SelectOptionsItem[]
+  availablePlayerThemes: SelectOptionsItem<PlayerTheme>[] = []
 
   private customizationResetFields = new Set<ThemeCustomizationKey>()
   private customConfig: CustomConfig
@@ -162,6 +171,11 @@ export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, Can
       this.themeService.getDefaultThemeItem(),
 
       ...this.themeService.buildAvailableThemes()
+    ]
+
+    this.availablePlayerThemes = [
+      { id: 'galaxy', label: $localize`Galaxy`, description: $localize`Original theme` },
+      { id: 'lucide', label: $localize`Lucide`, description: $localize`A clean and modern theme` }
     ]
 
     this.buildForm()
@@ -264,6 +278,11 @@ export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, Can
           headerForegroundColor: null,
           headerBackgroundColor: null,
           inputBorderRadius: null
+        }
+      },
+      defaults: {
+        player: {
+          theme: null
         }
       }
     }

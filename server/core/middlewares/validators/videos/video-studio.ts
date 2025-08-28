@@ -82,7 +82,7 @@ const videoStudioAddEditionValidator = [
     if (!checkVideoFileCanBeEdited(video, res)) return cleanUpReqFiles(req)
 
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, video, UserRight.UPDATE_ANY_VIDEO, res)) return cleanUpReqFiles(req)
+    if (!checkUserCanManageVideo({ user, video, right: UserRight.UPDATE_ANY_VIDEO, req, res })) return cleanUpReqFiles(req)
 
     // Try to make an approximation of bytes added by the intro/outro
     const additionalBytes = await approximateIntroOutroAdditionalSize(video, body.tasks, i => getTaskFileFromReq(files, i).path)

@@ -3,7 +3,6 @@ import { Component, HostListener, inject, OnDestroy, OnInit } from '@angular/cor
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { CanComponentDeactivate, Notifier, ServerService } from '@app/core'
-import { VideoEdit } from '../shared-manage/common/video-edit.model'
 import { VideoManageContainerComponent } from '../shared-manage/video-manage-container.component'
 import { VideoManageController } from '../shared-manage/video-manage-controller.service'
 import { VideoManageResolverData } from './video-manage.resolver'
@@ -16,8 +15,7 @@ import { VideoManageResolverData } from './video-manage.resolver'
     FormsModule,
     ReactiveFormsModule,
     VideoManageContainerComponent
-  ],
-  providers: [ VideoManageController ]
+  ]
 })
 export class VideoManageComponent implements OnInit, OnDestroy, CanComponentDeactivate {
   private route = inject(ActivatedRoute)
@@ -29,18 +27,9 @@ export class VideoManageComponent implements OnInit, OnDestroy, CanComponentDeac
   isUpdatingVideo = false
   loaded = false
 
-  async ngOnInit () {
+  ngOnInit () {
     const data = this.route.snapshot.data.resolverData as VideoManageResolverData
-    const { video, userChannels, captions, chapters, videoSource, live, videoPasswords, userQuota, privacies } = data
-
-    const videoEdit = await VideoEdit.createFromAPI(this.serverService.getHTMLConfig(), {
-      video,
-      captions,
-      chapters,
-      live,
-      videoSource,
-      videoPasswords: videoPasswords.map(p => p.password)
-    })
+    const { userChannels, userQuota, privacies, videoEdit } = data
 
     this.manageController.setStore({
       videoEdit,
@@ -50,8 +39,6 @@ export class VideoManageComponent implements OnInit, OnDestroy, CanComponentDeac
     })
 
     this.manageController.setConfig({ manageType: 'update', serverConfig: this.serverService.getHTMLConfig() })
-
-    this.loaded = true
   }
 
   ngOnDestroy () {

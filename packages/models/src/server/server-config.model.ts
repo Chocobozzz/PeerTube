@@ -1,4 +1,4 @@
-import { ActorImage, LogoType, VideoCommentPolicyType } from '../index.js'
+import { ActorImage, LogoType, PlayerTheme, VideoCommentPolicyType } from '../index.js'
 import { ClientScriptJSON } from '../plugins/plugin-package-json.model.js'
 import { NSFWPolicyType } from '../videos/nsfw-policy.type.js'
 import { VideoPrivacyType } from '../videos/video-privacy.enum.js'
@@ -103,6 +103,7 @@ export interface ServerConfig {
     }
 
     player: {
+      theme: PlayerTheme
       autoPlay: boolean
     }
   }

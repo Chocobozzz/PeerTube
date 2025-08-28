@@ -95,9 +95,18 @@ export function checkUserCanManageAccount (options: {
   user: MUserAccountId
   account: MAccountId
   specialRight: UserRightType
+  req: express.Request
   res: express.Response
 }) {
-  const { user, account, specialRight, res } = options
+  const { user, account, specialRight, res, req } = options
+
+  if (!user) {
+    res.fail({
+      status: HttpStatusCode.UNAUTHORIZED_401,
+      message: req.t('Authentication is required')
+    })
+    return false
+  }
 
   if (account.id === user.Account.id) return true
   if (specialRight && user.hasRight(specialRight) === true) return true
@@ -105,7 +114,7 @@ export function checkUserCanManageAccount (options: {
   if (!specialRight) {
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
-      message: 'Only the owner of this account can manage this account resource.'
+      message: req.t('Only the owner of this account can manage this account resource.')
     })
 
     return false
@@ -113,7 +122,7 @@ export function checkUserCanManageAccount (options: {
 
   res.fail({
     status: HttpStatusCode.FORBIDDEN_403,
-    message: 'Only a user with sufficient right can access this account resource.'
+    message: req.t('Only a user with sufficient right can access this account resource.')
   })
 
   return false

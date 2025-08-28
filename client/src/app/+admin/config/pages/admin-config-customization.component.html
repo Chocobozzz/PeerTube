@@ -7,26 +7,32 @@
     </div>
 
     <div class="content-col">
-      <ng-container formGroupName="theme">
-        <div class="form-group">
-          <label i18n for="themeDefault">Theme</label>
+      <div class="form-group" formGroupName="theme">
+        <label i18n for="themeDefault">Theme</label>
 
-          <my-select-options formControlName="default" inputId="themeDefault" [items]="availableThemes"></my-select-options>
-        </div>
-      </ng-container>
+        <my-select-options formControlName="default" inputId="themeDefault" [items]="availableThemes"></my-select-options>
+      </div>
 
       <ng-container formGroupName="client">
         <ng-container formGroupName="videos">
-          <ng-container formGroupName="miniature">
-            <div class="form-group">
-              <my-peertube-checkbox
-                inputName="clientVideosMiniaturePreferAuthorDisplayName"
-                formControlName="preferAuthorDisplayName"
-                i18n-labelText
-                labelText="Prefer author display name in video miniature"
-              ></my-peertube-checkbox>
-            </div>
-          </ng-container>
+          <div class="form-group" formGroupName="miniature">
+            <my-peertube-checkbox
+              inputName="clientVideosMiniaturePreferAuthorDisplayName"
+              formControlName="preferAuthorDisplayName"
+              i18n-labelText
+              labelText="Prefer author display name in video miniature"
+            ></my-peertube-checkbox>
+          </div>
+        </ng-container>
+      </ng-container>
+
+      <ng-container formGroupName="defaults">
+        <ng-container formGroupName="player">
+          <div class="form-group">
+            <label i18n for="defaultsPlayerTheme">Player Theme</label>
+
+            <my-select-player-theme mode="instance" formControlName="theme" inputId="defaultsPlayerTheme"></my-select-player-theme>
+          </div>
         </ng-container>
       </ng-container>
     </div>

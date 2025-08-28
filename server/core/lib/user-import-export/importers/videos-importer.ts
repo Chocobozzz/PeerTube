@@ -10,6 +10,7 @@ import {
 } from '@peertube/peertube-models'
 import { buildUUID, getFileSize } from '@peertube/peertube-node-utils'
 import { isArray, isBooleanValid, isUUIDValid } from '@server/helpers/custom-validators/misc.js'
+import { isPlayerVideoThemeSettingValid } from '@server/helpers/custom-validators/player-settings.js'
 import { isVideoCaptionLanguageValid } from '@server/helpers/custom-validators/video-captions.js'
 import { isVideoChannelUsernameValid } from '@server/helpers/custom-validators/video-channels.js'
 import { isVideoChapterTimecodeValid, isVideoChapterTitleValid } from '@server/helpers/custom-validators/video-chapters.js'
@@ -39,6 +40,7 @@ import { Hooks } from '@server/lib/plugins/hooks.js'
 import { isUserQuotaValid } from '@server/lib/user.js'
 import { createLocalCaption, updateHLSMasterOnCaptionChange } from '@server/lib/video-captions.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
+import { PlayerSettingModel } from '@server/models/video/player-setting.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MChannelId, MVideoFullLight } from '@server/types/models/index.js'
@@ -73,6 +75,7 @@ type SanitizedObject = Pick<
   | 'passwords'
   | 'source'
   | 'chapters'
+  | 'playerSettings'
 >
 
 export class VideosImporter extends AbstractUserImporter<VideoExportJSON, ImportObject, SanitizedObject> {
@@ -139,6 +142,10 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
       o.live.schedules = o.live.schedules.filter(s => isLiveScheduleValid(s))
     }
 
+    if (o.playerSettings) {
+      if (!isPlayerVideoThemeSettingValid(o.playerSettings.theme)) o.playerSettings.theme = undefined
+    }
+
     if (o.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
       if (!isArray(o.passwords)) return undefined
       // Refuse the import rather than handle only a portion of the passwords, which can be difficult for video owners to debug
@@ -167,7 +174,8 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
       'live',
       'passwords',
       'source',
-      'chapters'
+      'chapters',
+      'playerSettings'
     ])
   }
 
@@ -274,6 +282,7 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
     const { video } = await localVideoCreator.create()
 
     await this.importCaptions(video, videoImportData)
+    await this.importPlayerSettings(video, videoImportData)
 
     logger.info('Video %s imported.', video.name, lTags(video.uuid))
 
@@ -313,6 +322,16 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
     }
 
     return captionPaths
+  }
+
+  private async importPlayerSettings (video: MVideoFullLight, videoImportData: SanitizedObject) {
+    const playerSettings = videoImportData.playerSettings
+    if (!playerSettings?.theme) return
+
+    await PlayerSettingModel.create({
+      theme: playerSettings.theme,
+      videoId: video.id
+    })
   }
 
   private async checkVideoFileIsAcceptedOrThrow (options: {

@@ -135,6 +135,7 @@ export function checkMissedConfig () {
     'defaults.publish.privacy',
     'defaults.publish.licence',
     'defaults.player.auto_play',
+    'defaults.player.theme',
     'instance.name',
     'instance.short_description',
     'instance.default_language',

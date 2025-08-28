@@ -79,7 +79,8 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
 
       await runInReadCommittedTransaction(t => this.setCaptions(videoUpdated, t))
 
-      await this.updateChaptersOutsideTransaction(videoUpdated)
+      await this.updateChapters(videoUpdated)
+      await this.upsertPlayerSettings(videoUpdated)
 
       await autoBlacklistVideoIfNeeded({
         video: videoUpdated,

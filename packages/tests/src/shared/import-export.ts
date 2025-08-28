@@ -211,13 +211,17 @@ export async function prepareImportExportTests (options: {
     fixture: 'avatar.png',
     type: 'avatar'
   })
+  await server.playerSettings.updateForChannel({ channelHandle: 'noah_second_channel', theme: 'galaxy' })
 
   // Videos
   const externalVideo = await remoteServer.videos.quickUpload({ name: 'external video', privacy: VideoPrivacy.PUBLIC })
 
   // eslint-disable-next-line max-len
   const noahPrivateVideo = await server.videos.quickUpload({ name: 'noah private video', token: noahToken, privacy: VideoPrivacy.PRIVATE })
+
   const noahVideo = await server.videos.quickUpload({ name: 'noah public video', token: noahToken, privacy: VideoPrivacy.PUBLIC })
+  await server.playerSettings.updateForVideo({ videoId: noahVideo.uuid, theme: 'lucide' })
+
   // eslint-disable-next-line max-len
   const noahVideo2 = await server.videos.upload({
     token: noahToken,

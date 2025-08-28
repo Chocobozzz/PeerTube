@@ -6,7 +6,8 @@ import {
   MActorFollow,
   MActorId,
   MActorUrl,
-  MCommentId, MLocalVideoViewer,
+  MCommentId,
+  MLocalVideoViewer,
   MVideoId,
   MVideoPlaylistElement,
   MVideoUUID,
@@ -38,6 +39,10 @@ export function getLocalVideoCommentActivityPubUrl (video: MVideoUUID, videoComm
 
 export function getLocalVideoChannelActivityPubUrl (videoChannelName: string) {
   return WEBSERVER.URL + '/video-channels/' + videoChannelName
+}
+
+export function getLocalChannelPlayerSettingsActivityPubUrl (videoChannelName: string) {
+  return WEBSERVER.URL + '/video-channels/' + videoChannelName + '/player-settings'
 }
 
 export function getLocalAccountActivityPubUrl (accountName: string) {
@@ -74,6 +79,10 @@ export function getLocalVideoCommentsActivityPubUrl (video: MVideoUrl) {
 
 export function getLocalVideoChaptersActivityPubUrl (video: MVideoUrl) {
   return video.url + '/chapters'
+}
+
+export function getLocalVideoPlayerSettingsActivityPubUrl (video: MVideoUrl) {
+  return video.url + '/player-settings'
 }
 
 export function getLocalVideoLikesActivityPubUrl (video: MVideoUrl) {

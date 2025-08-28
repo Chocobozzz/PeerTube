@@ -41,7 +41,7 @@ export class ActorAvatarEditComponent implements OnInit, OnChanges {
   maxAvatarSize = 0
   avatarExtensions = ''
 
-  preview: string
+  previewUrl: string
 
   actor: ActorAvatarInput
 
@@ -55,6 +55,8 @@ export class ActorAvatarEditComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges () {
+    this.previewUrl = undefined
+
     this.actor = {
       avatars: this.avatars(),
       name: this.username()
@@ -73,16 +75,23 @@ export class ActorAvatarEditComponent implements OnInit, OnChanges {
     this.avatarChange.emit(formData)
 
     if (this.previewImage()) {
-      imageToDataURL(avatarfile).then(result => this.preview = result)
+      imageToDataURL(avatarfile).then(result => this.previewUrl = result)
     }
   }
 
   deleteAvatar () {
-    this.preview = undefined
+    if (this.previewImage()) {
+      this.previewUrl = null
+      this.actor.avatars = []
+    }
+
     this.avatarDelete.emit()
   }
 
   hasAvatar () {
-    return !!this.preview || this.avatars().length !== 0
+    // User deleted the avatar
+    if (this.previewUrl === null) return false
+
+    return !!this.previewUrl || this.avatars().length !== 0
   }
 }

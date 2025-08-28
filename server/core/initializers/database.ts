@@ -69,6 +69,7 @@ import { VideoTagModel } from '../models/video/video-tag.js'
 import { VideoModel } from '../models/video/video.js'
 import { VideoViewModel } from '../models/view/video-view.js'
 import { CONFIG } from './config.js'
+import { PlayerSettingModel } from '@server/models/video/player-setting.js'
 
 pg.defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -189,7 +190,8 @@ export async function initDatabaseModels (silent: boolean) {
     WatchedWordsListModel,
     AccountAutomaticTagPolicyModel,
     UploadImageModel,
-    VideoLiveScheduleModel
+    VideoLiveScheduleModel,
+    PlayerSettingModel
   ])
 
   // Check extensions exist in the database

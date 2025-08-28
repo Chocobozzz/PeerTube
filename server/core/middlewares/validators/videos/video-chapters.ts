@@ -1,10 +1,7 @@
 import express from 'express'
 import { body } from 'express-validator'
 import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
-import {
-  areValidationErrors, checkUserCanManageVideo, doesVideoExist,
-  isValidVideoIdParam
-} from '../shared/index.js'
+import { areValidationErrors, checkUserCanManageVideo, doesVideoExist, isValidVideoIdParam } from '../shared/index.js'
 import { areVideoChaptersValid } from '@server/helpers/custom-validators/video-chapters.js'
 
 export const updateVideoChaptersValidator = [
@@ -27,7 +24,7 @@ export const updateVideoChaptersValidator = [
 
     // Check if the user who did the request is able to update video chapters (same right as updating the video)
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.UPDATE_ANY_VIDEO, res)) return
+    if (!checkUserCanManageVideo({ user, video: res.locals.videoAll, right: UserRight.UPDATE_ANY_VIDEO, req, res })) return
 
     return next()
   }

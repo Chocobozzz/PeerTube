@@ -455,6 +455,7 @@ function runTest (withObjectStorage: boolean) {
         expect(secondaryChannel.displayName).to.equal('noah display name')
         expect(secondaryChannel.description).to.equal('noah description')
         expect(secondaryChannel.support).to.equal('noah support')
+        expect(secondaryChannel.playerSettings.theme).to.equal('galaxy')
 
         expect(secondaryChannel.avatars).to.have.lengthOf(4)
         expect(secondaryChannel.banners).to.have.lengthOf(2)
@@ -554,6 +555,8 @@ function runTest (withObjectStorage: boolean) {
         expect(publicVideo.source.metadata?.streams).to.exist
         expect(publicVideo.source.resolution).to.equal(720)
         expect(publicVideo.source.size).to.equal(218910)
+
+        expect(publicVideo.playerSettings.theme).to.equal('lucide')
       }
 
       {

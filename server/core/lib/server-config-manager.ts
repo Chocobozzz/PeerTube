@@ -116,6 +116,7 @@ class ServerConfigManager {
           }
         },
         player: {
+          theme: CONFIG.DEFAULTS.PLAYER.THEME,
           autoPlay: CONFIG.DEFAULTS.PLAYER.AUTO_PLAY
         }
       },

@@ -211,7 +211,7 @@ const videoLiveUpdateValidator = [
 
     // Check the user can manage the live
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.GET_ANY_LIVE, res)) return
+    if (!checkUserCanManageVideo({ user, video: res.locals.videoAll, right: UserRight.GET_ANY_LIVE, req, res })) return
 
     return next()
   }
@@ -221,7 +221,7 @@ const videoLiveListSessionsValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     // Check the user can manage the live
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.GET_ANY_LIVE, res)) return
+    if (!checkUserCanManageVideo({ user, video: res.locals.videoAll, right: UserRight.GET_ANY_LIVE, req, res })) return
 
     return next()
   }

@@ -17,7 +17,7 @@ export const manageTokenSessionsValidator = [
     const authUser = res.locals.oauth.token.User
     const targetUser = res.locals.user
 
-    if (!checkUserCanManageAccount({ account: targetUser.Account, user: authUser, res, specialRight: UserRight.MANAGE_USERS })) return
+    if (!checkUserCanManageAccount({ account: targetUser.Account, user: authUser, req, res, specialRight: UserRight.MANAGE_USERS })) return
 
     return next()
   }
