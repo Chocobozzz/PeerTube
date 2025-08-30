@@ -459,13 +459,13 @@
     </div>
 
     <div class="content-col">
-      <div class="form-group" formGroupName="browse">
-        <ng-container formGroupName="videos">
+      <div class="form-group" formGroupName="client">
+        <ng-container formGroupName="browseVideos">
           <label i18n for="browseVideosDefaultSort">Default sort</label>
 
           <my-select-videos-sort inputId="browseVideosDefaultSort" formControlName="defaultSort"></my-select-videos-sort>
 
-          <div *ngIf="formErrors.browse.videos.defaultSort" class="form-error" role="alert">{{ formErrors.browse.videos.defaultSort }}</div>
+          <div *ngIf="formErrors.client.browseVideos.defaultSort" class="form-error" role="alert">{{ formErrors.client.browseVideos.defaultSort }}</div>
         </ng-container>
       </div>
     </div>

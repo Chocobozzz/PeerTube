@@ -125,6 +125,7 @@ export function checkMissedConfig () {
     'auto_blacklist.videos.of_users.enabled',
     'trending.videos.interval_days',
     'client.videos.miniature.prefer_author_display_name',
+    'client.browse_videos.default_sort',
     'client.menu.login.redirect_on_single_external_auth',
     'client.header.hide_instance_name',
     'defaults.publish.download_enabled',
@@ -256,8 +257,7 @@ export function checkMissedConfig () {
     'webrtc.stun_servers',
     'nsfw_flags_settings.enabled',
     'download_generate_video.max_parallel_downloads',
-    'video_comments.accept_remote_comments',
-    'browse.videos.default_sort'
+    'video_comments.accept_remote_comments'
   ]
 
   const requiredAlternatives = [

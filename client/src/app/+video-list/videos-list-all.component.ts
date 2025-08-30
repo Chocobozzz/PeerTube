@@ -44,7 +44,7 @@ export class VideosListAllComponent implements OnInit, OnDestroy, DisableForReus
     this.serverConfig = this.serverService.getHTMLConfig()
 
     const queryParams = this.route.snapshot.queryParams
-    this.defaultSort = queryParams.sort || this.serverConfig.browse.videos.defaultSort
+    this.defaultSort = queryParams.sort || this.serverConfig.client.browseVideos.defaultSort
     this.defaultScope = queryParams.scope || 'federated'
 
     this.routeSub = this.route.params.subscribe(() => this.update())

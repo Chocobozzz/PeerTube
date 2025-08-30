@@ -198,8 +198,8 @@ describe('Test config API validators', function () {
     describe('Browse videos section', function () {
       it('Should fail with an invalid default sort', async function () {
         const newUpdateParams: CustomConfig = merge({}, {}, updateParams, {
-          browse: {
-            videos: {
+          client: {
+            browseVideos: {
               defaultSort: 'hello'
             }
           }
@@ -223,8 +223,8 @@ describe('Test config API validators', function () {
               }
             }
           },
-          browse: {
-            videos: {
+          client: {
+            browseVideos: {
               defaultSort: '-trending'
             }
           }

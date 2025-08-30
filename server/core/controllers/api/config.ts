@@ -366,6 +366,9 @@ function customConfig (): CustomConfig {
           preferAuthorDisplayName: CONFIG.CLIENT.VIDEOS.MINIATURE.PREFER_AUTHOR_DISPLAY_NAME
         }
       },
+      browseVideos: {
+        defaultSort: CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SORT
+      },
       menu: {
         login: {
           redirectOnSingleExternalAuth: CONFIG.CLIENT.MENU.LOGIN.REDIRECT_ON_SINGLE_EXTERNAL_AUTH
@@ -612,12 +615,6 @@ function customConfig (): CustomConfig {
 
     videoComments: {
       acceptRemoteComments: CONFIG.VIDEO_COMMENTS.ACCEPT_REMOTE_COMMENTS
-    },
-
-    browse: {
-      videos: {
-        defaultSort: CONFIG.BROWSE.VIDEOS.DEFAULT_SORT
-      }
     }
   }
 }

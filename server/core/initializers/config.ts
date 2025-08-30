@@ -95,6 +95,11 @@ const CONFIG = {
         }
       }
     },
+    BROWSE_VIDEOS: {
+      get DEFAULT_SORT () {
+        return config.get<string>('client.browse_videos.default_sort')
+      }
+    },
     MENU: {
       LOGIN: {
         get REDIRECT_ON_SINGLE_EXTERNAL_AUTH () {
@@ -1108,13 +1113,6 @@ const CONFIG = {
   VIDEO_COMMENTS: {
     get ACCEPT_REMOTE_COMMENTS () {
       return config.get<boolean>('video_comments.accept_remote_comments')
-    }
-  },
-  BROWSE: {
-    VIDEOS: {
-      get DEFAULT_SORT () {
-        return config.get<string>('browse.videos.default_sort')
-      }
     }
   }
 }

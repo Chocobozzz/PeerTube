@@ -1088,6 +1088,18 @@ client:
       # If null, it will be calculated based on network speed
       max_chunk_size: null
 
+  browse_videos:
+    # Default sort option
+    # Available options:
+    #  '-publishedAt'
+    #  '-originallyPublishedAt'
+    #  'name'
+    #  '-trending' (requires the 'most-viewed' trending videos algorithm to be enabled)
+    #  '-hot' (requires the 'hot' trending videos algorithm to be enabled)
+    #  '-likes' (requires the 'most-liked' trending videos algorithm to be enabled)
+    #  '-views'
+    default_sort: '-publishedAt'
+
   menu:
     login:
       # If you enable only one external auth plugin
@@ -1166,16 +1178,3 @@ video_comments:
   # Accept or not comments from remote instances
   # This setting is not retroactive: current comments from remote platforms will not be deleted
   accept_remote_comments: true
-
-browse:
-  videos:
-    # Default sort option
-    # Available options:
-    #  '-publishedAt'
-    #  '-originallyPublishedAt'
-    #  'name'
-    #  '-trending' (requires the 'most-viewed' trending videos algorithm to be enabled)
-    #  '-hot' (requires the 'hot' trending videos algorithm to be enabled)
-    #  '-likes' (requires the 'most-liked' trending videos algorithm to be enabled)
-    #  '-views'
-    default_sort: '-publishedAt'

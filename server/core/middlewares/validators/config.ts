@@ -247,7 +247,7 @@ function checkInvalidVideoStudioConfig (customConfig: CustomConfig, res: express
 
 function checkInvalidBrowseVideosConfig (customConfig: CustomConfig, res: express.Response) {
   const defaultSortCheck = isBrowseVideosDefaultSortValid(
-    customConfig.browse.videos.defaultSort,
+    customConfig.client.browseVideos.defaultSort,
     customConfig.trending.videos.algorithms.enabled
   )
   if (defaultSortCheck.isValid === false){

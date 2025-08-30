@@ -50,6 +50,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
 
   expect(data.client.header.hideInstanceName).to.be.false
   expect(data.client.videos.miniature.preferAuthorDisplayName).to.be.false
+  expect(data.client.browseVideos.defaultSort).to.equal('-publishedAt')
   expect(data.client.menu.login.redirectOnSingleExternalAuth).to.be.false
 
   expect(data.cache.previews.size).to.equal(1)
@@ -162,8 +163,6 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.email.subject.prefix).to.equal('[{{instanceName}}] ')
 
   expect(data.videoComments.acceptRemoteComments).to.be.true
-
-  expect(data.browse.videos.defaultSort).to.equal('-publishedAt')
 }
 
 function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
@@ -234,6 +233,9 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
         miniature: {
           preferAuthorDisplayName: true
         }
+      },
+      browseVideos: {
+        defaultSort: '-trending'
       },
       menu: {
         login: {
@@ -477,11 +479,6 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
     },
     videoComments: {
       acceptRemoteComments: false
-    },
-    browse: {
-      videos: {
-        defaultSort: '-trending'
-      }
     }
   }
 }

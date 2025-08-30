@@ -389,7 +389,10 @@ function checkThumbnailsConfig () {
 }
 
 function checkBrowseVideosConfig () {
-  const defaultSortCheck = isBrowseVideosDefaultSortValid(CONFIG.BROWSE.VIDEOS.DEFAULT_SORT, CONFIG.TRENDING.VIDEOS.ALGORITHMS.ENABLED)
+  const defaultSortCheck = isBrowseVideosDefaultSortValid(
+    CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SORT,
+    CONFIG.TRENDING.VIDEOS.ALGORITHMS.ENABLED
+  )
   if (defaultSortCheck.isValid === false){
     throw new Error(defaultSortCheck.validationError)
   }

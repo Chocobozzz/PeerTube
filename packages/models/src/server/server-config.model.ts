@@ -50,6 +50,10 @@ export interface ServerConfig {
       }
     }
 
+    browseVideos: {
+      defaultSort: string
+    }
+
     menu: {
       login: {
         redirectOnSingleExternalAuth: boolean
@@ -429,12 +433,6 @@ export interface ServerConfig {
 
   nsfwFlagsSettings: {
     enabled: boolean
-  }
-
-  browse: {
-    videos: {
-      defaultSort: string
-    }
   }
 }
 

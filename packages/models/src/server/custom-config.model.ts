@@ -91,6 +91,10 @@ export interface CustomConfig {
       }
     }
 
+    browseVideos: {
+      defaultSort: string
+    }
+
     menu: {
       login: {
         redirectOnSingleExternalAuth: boolean
@@ -367,11 +371,5 @@ export interface CustomConfig {
 
   videoComments: {
     acceptRemoteComments: boolean
-  }
-
-  browse: {
-    videos: {
-      defaultSort: string
-    }
   }
 }

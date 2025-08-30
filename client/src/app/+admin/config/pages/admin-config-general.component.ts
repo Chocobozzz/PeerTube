@@ -44,6 +44,10 @@ type Form = {
   }>
 
   client: FormGroup<{
+    browseVideos: FormGroup<{
+      defaultSort: FormControl<string>
+    }>
+
     menu: FormGroup<{
       login: FormGroup<{
         redirectOnSingleExternalAuth: FormControl<boolean>
@@ -203,12 +207,6 @@ type Form = {
   videoComments: FormGroup<{
     acceptRemoteComments: FormControl<boolean>
   }>
-
-  browse: FormGroup<{
-    videos: FormGroup<{
-      defaultSort: FormControl<string>
-    }>
-  }>
 }
 
 @Component({
@@ -303,6 +301,9 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
         defaultClientRoute: null
       },
       client: {
+        browseVideos: {
+          defaultSort: null
+        },
         menu: {
           login: {
             redirectOnSingleExternalAuth: null
@@ -440,11 +441,6 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
       },
       videoComments: {
         acceptRemoteComments: null
-      },
-      browse: {
-        videos: {
-          defaultSort: null
-        }
       }
     }
 

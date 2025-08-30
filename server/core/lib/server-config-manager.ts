@@ -69,6 +69,9 @@ class ServerConfigManager {
             maxChunkSize: CONFIG.CLIENT.VIDEOS.RESUMABLE_UPLOAD.MAX_CHUNK_SIZE
           }
         },
+        browseVideos: {
+          defaultSort: CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SORT
+        },
         menu: {
           login: {
             redirectOnSingleExternalAuth: CONFIG.CLIENT.MENU.LOGIN.REDIRECT_ON_SINGLE_EXTERNAL_AUTH
@@ -389,12 +392,6 @@ class ServerConfigManager {
 
       nsfwFlagsSettings: {
         enabled: CONFIG.NSFW_FLAGS_SETTINGS.ENABLED
-      },
-
-      browse: {
-        videos: {
-          defaultSort: CONFIG.BROWSE.VIDEOS.DEFAULT_SORT
-        }
       }
     }
   }
