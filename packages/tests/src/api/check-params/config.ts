@@ -238,6 +238,24 @@ describe('Test config API validators', function () {
           expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
       })
+
+      it('Should fail with an invalid default scope', async function () {
+        const newUpdateParams: CustomConfig = merge({}, {}, updateParams, {
+          client: {
+            browseVideos: {
+              defaultScope: 'hello'
+            }
+          }
+        })
+
+        await makePutBodyRequest({
+          url: server.url,
+          path,
+          fields: newUpdateParams,
+          token: server.accessToken,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      })
     })
   })
 

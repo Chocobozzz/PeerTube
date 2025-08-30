@@ -25,3 +25,16 @@ export function isBrowseVideosDefaultSortValid (value: string, enabledTrendingAl
 
   return { isValid: true, validationError: null }
 }
+
+export function isBrowseVideosDefaultScopeValid (value: string) {
+  const availableOptions = [ 'local', 'federated' ]
+
+  if (availableOptions.includes(value) === false) {
+    return {
+      isValid: false,
+      validationError: `Browse videos default scope should be '${availableOptions.join('\' or \'')}', instead of '${value}'`
+    }
+  }
+
+  return { isValid: true, validationError: null }
+}

@@ -126,6 +126,7 @@ export function checkMissedConfig () {
     'trending.videos.interval_days',
     'client.videos.miniature.prefer_author_display_name',
     'client.browse_videos.default_sort',
+    'client.browse_videos.default_scope',
     'client.menu.login.redirect_on_single_external_auth',
     'client.header.hide_instance_name',
     'defaults.publish.download_enabled',

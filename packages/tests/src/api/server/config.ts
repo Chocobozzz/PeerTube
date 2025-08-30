@@ -51,6 +51,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.client.header.hideInstanceName).to.be.false
   expect(data.client.videos.miniature.preferAuthorDisplayName).to.be.false
   expect(data.client.browseVideos.defaultSort).to.equal('-publishedAt')
+  expect(data.client.browseVideos.defaultScope).to.equal('federated')
   expect(data.client.menu.login.redirectOnSingleExternalAuth).to.be.false
 
   expect(data.cache.previews.size).to.equal(1)
@@ -235,7 +236,8 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
         }
       },
       browseVideos: {
-        defaultSort: '-trending'
+        defaultSort: '-trending',
+        defaultScope: 'local'
       },
       menu: {
         login: {

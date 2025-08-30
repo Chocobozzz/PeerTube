@@ -1107,6 +1107,10 @@ client:
     #  '-views'
     default_sort: '-publishedAt'
 
+    # Default scope option
+    # Available options: 'local' or 'federated'
+    default_scope: 'federated'
+
   menu:
     login:
       # If you enable only one external auth plugin

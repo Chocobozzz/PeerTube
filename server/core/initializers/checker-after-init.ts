@@ -8,7 +8,7 @@ import { basename } from 'path'
 import { URL } from 'url'
 import { parseBytes, parseSemVersion } from '../helpers/core-utils.js'
 import { isArray } from '../helpers/custom-validators/misc.js'
-import { isBrowseVideosDefaultSortValid } from '../helpers/custom-validators/browse-videos.js'
+import { isBrowseVideosDefaultSortValid, isBrowseVideosDefaultScopeValid } from '../helpers/custom-validators/browse-videos.js'
 import { logger } from '../helpers/logger.js'
 import { ApplicationModel, getServerActor } from '../models/application/application.js'
 import { OAuthClientModel } from '../models/oauth/oauth-client.js'
@@ -395,5 +395,10 @@ function checkBrowseVideosConfig () {
   )
   if (defaultSortCheck.isValid === false){
     throw new Error(defaultSortCheck.validationError)
+  }
+
+  const defaultScopeCheck = isBrowseVideosDefaultScopeValid(CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SCOPE)
+  if (defaultScopeCheck.isValid === false){
+    throw new Error(defaultScopeCheck.validationError)
   }
 }

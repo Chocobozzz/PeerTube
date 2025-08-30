@@ -8,7 +8,7 @@ import express from 'express'
 import { body, param } from 'express-validator'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins.js'
 import { isUserNSFWPolicyValid, isUserVideoQuotaDailyValid, isUserVideoQuotaValid } from '../../helpers/custom-validators/users.js'
-import { isBrowseVideosDefaultSortValid } from '../../helpers/custom-validators/browse-videos.js'
+import { isBrowseVideosDefaultSortValid, isBrowseVideosDefaultScopeValid } from '../../helpers/custom-validators/browse-videos.js'
 import { isThemeRegistered } from '../../lib/plugins/theme-utils.js'
 import { areValidationErrors, updateActorImageValidatorFactory } from './shared/index.js'
 
@@ -252,6 +252,12 @@ function checkInvalidBrowseVideosConfig (customConfig: CustomConfig, res: expres
   )
   if (defaultSortCheck.isValid === false){
     res.fail({ message: defaultSortCheck.validationError })
+    return false
+  }
+
+  const defaultScopeCheck = isBrowseVideosDefaultScopeValid(customConfig.client.browseVideos.defaultScope)
+  if (defaultScopeCheck.isValid === false){
+    res.fail({ message: defaultScopeCheck.validationError })
     return false
   }
 

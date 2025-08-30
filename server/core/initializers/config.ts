@@ -98,6 +98,9 @@ const CONFIG = {
     BROWSE_VIDEOS: {
       get DEFAULT_SORT () {
         return config.get<string>('client.browse_videos.default_sort')
+      },
+      get DEFAULT_SCOPE () {
+        return config.get<string>('client.browse_videos.default_scope')
       }
     },
     MENU: {
