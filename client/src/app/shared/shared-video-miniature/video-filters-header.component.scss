@@ -122,9 +122,9 @@ $filters-background: pvar(--bg-secondary-400);
 }
 
 my-select-videos-sort,
+my-select-videos-scope,
 my-select-languages,
-my-select-categories,
-my-select-options {
+my-select-categories {
   max-width: 300px;
   display: inline-block;
 }

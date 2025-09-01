@@ -8,12 +8,11 @@ import { NgbCollapse } from '@ng-bootstrap/ng-bootstrap'
 import { UserRight, VideoConstant } from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import debug from 'debug'
-import { SelectOptionsItem } from 'src/types'
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
 import { SelectCategoriesComponent } from '../shared-forms/select/select-categories.component'
 import { SelectLanguagesComponent } from '../shared-forms/select/select-languages.component'
-import { SelectOptionsComponent } from '../shared-forms/select/select-options.component'
 import { SelectVideosSortComponent } from '../shared-forms/select/select-videos-sort.component'
+import { SelectVideosScopeComponent } from '../shared-forms/select/select-videos-scope.component'
 import { GlobalIconComponent, GlobalIconName } from '../shared-icons/global-icon.component'
 import { InstanceFollowService } from '../shared-instance/instance-follow.service'
 import { ButtonComponent } from '../shared-main/buttons/button.component'
@@ -44,9 +43,9 @@ type QuickFilter = {
     SelectLanguagesComponent,
     SelectCategoriesComponent,
     PeertubeCheckboxComponent,
-    SelectOptionsComponent,
     ButtonComponent,
-    SelectVideosSortComponent
+    SelectVideosSortComponent,
+    SelectVideosScopeComponent
   ],
   providers: [ InstanceFollowService ]
 })
@@ -66,8 +65,6 @@ export class VideoFiltersHeaderComponent implements OnInit {
   areFiltersCollapsed = true
 
   form: FormGroup
-
-  availableScopes: SelectOptionsItem[] = []
 
   quickFilters: QuickFilter[] = []
 
@@ -109,11 +106,6 @@ export class VideoFiltersHeaderComponent implements OnInit {
 
     this.followService.getFollowing({ pagination: { count: 1, start: 0 }, state: 'accepted' })
       .subscribe(({ total }) => this.totalFollowing = total)
-
-    this.availableScopes = [
-      { id: 'local', label: $localize`Only videos from this platform` },
-      { id: 'federated', label: $localize`Videos from all platforms` }
-    ]
 
     this.buildQuickFilters()
   }
