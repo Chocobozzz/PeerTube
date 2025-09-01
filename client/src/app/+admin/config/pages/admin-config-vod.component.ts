@@ -112,7 +112,7 @@ export class AdminConfigVODComponent implements OnInit, OnDestroy, CanComponentD
     this.customConfig = this.route.parent.snapshot.data['customConfig']
 
     this.transcodingThreadOptions = this.configService.transcodingThreadOptions
-    this.resolutions = this.adminConfigService.transcodingResolutionOptions
+    this.resolutions = this.adminConfigService.getTranscodingOptions('vod')
     this.additionalVideoExtensions = serverConfig.video.file.extensions.join(' ')
     this.transcodingProfiles = this.adminConfigService.buildTranscodingProfiles(serverConfig.transcoding.availableProfiles)
 
@@ -156,7 +156,7 @@ export class AdminConfigVODComponent implements OnInit, OnDestroy, CanComponentD
           max: TRANSCODING_MAX_FPS_VALIDATOR
         },
 
-        resolutions: this.adminConfigService.buildFormResolutions(),
+        resolutions: this.adminConfigService.buildFormResolutions('vod'),
         alwaysTranscodeOriginalResolution: null,
 
         remoteRunners: {

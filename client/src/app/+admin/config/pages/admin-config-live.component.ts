@@ -107,7 +107,7 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
       { id: 1000 * 3600 * 10, label: $localize`10 hours` }
     ]
 
-    this.liveResolutions = this.adminConfigService.transcodingResolutionOptions
+    this.liveResolutions = this.adminConfigService.getTranscodingOptions('live')
     this.transcodingProfiles = this.adminConfigService.buildTranscodingProfiles(
       this.server.getHTMLConfig().live.transcoding.availableProfiles
     )
@@ -143,7 +143,7 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
           enabled: null,
           threads: TRANSCODING_THREADS_VALIDATOR,
           profile: null,
-          resolutions: this.adminConfigService.buildFormResolutions(),
+          resolutions: this.adminConfigService.buildFormResolutions('live'),
           alwaysTranscodeOriginalResolution: null,
           remoteRunners: {
             enabled: null

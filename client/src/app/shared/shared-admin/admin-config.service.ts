@@ -35,7 +35,6 @@ export class AdminConfigService {
   private static BASE_APPLICATION_URL = environment.apiUrl + '/api/v1/config'
 
   transcodingThreadOptions: SelectOptionsItem[] = []
-  transcodingResolutionOptions: ResolutionOption[] = []
 
   constructor () {
     this.transcodingThreadOptions = [
@@ -48,13 +47,18 @@ export class AdminConfigService {
       { id: 16, label: '16' },
       { id: 32, label: '32' }
     ]
+  }
 
-    this.transcodingResolutionOptions = [
+  // ---------------------------------------------------------------------------
+
+  getTranscodingOptions (type: 'live' | 'vod'): ResolutionOption[] {
+    return [
       {
         id: '0p',
         label: $localize`Audio-only`,
-        description:
-          $localize`"Split audio and video" must be enabled for the PeerTube player to propose an "Audio only" resolution to users`
+        description: type === 'vod'
+          ? $localize`"Split audio and video" must be enabled for the PeerTube player to propose an "Audio only" resolution to users`
+          : undefined
       },
       {
         id: '144p',
@@ -141,10 +145,10 @@ export class AdminConfigService {
 
   // ---------------------------------------------------------------------------
 
-  buildFormResolutions () {
+  buildFormResolutions (type: 'live' | 'vod') {
     const formResolutions = {} as Record<keyof FormResolutions, BuildFormValidator>
 
-    for (const resolution of this.transcodingResolutionOptions) {
+    for (const resolution of this.getTranscodingOptions(type)) {
       formResolutions[resolution.id] = null
     }
 
