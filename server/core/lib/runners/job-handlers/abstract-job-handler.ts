@@ -8,6 +8,7 @@ import {
   RunnerJobSuccessPayload,
   RunnerJobTranscriptionPayload,
   RunnerJobTranscriptionPrivatePayload,
+  RunnerJobGenerateStoryboardPayload,
   RunnerJobType,
   RunnerJobUpdatePayload,
   RunnerJobVODAudioMergeTranscodingPayload,
@@ -55,7 +56,7 @@ type CreateRunnerJobArg =
   } |
   {
     type: Extract<RunnerJobType, 'generate-video-storyboard'>
-    payload: import('@peertube/peertube-models').RunnerJobGenerateStoryboardPayload
+    payload: RunnerJobGenerateStoryboardPayload
     privatePayload: import('@peertube/peertube-models').RunnerJobGenerateStoryboardPrivatePayload
   } |
   {
