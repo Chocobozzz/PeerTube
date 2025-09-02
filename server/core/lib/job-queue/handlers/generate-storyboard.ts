@@ -80,16 +80,19 @@ async function processGenerateStoryboard (job: Job): Promise<void> {
         maxEdgeCount: STORYBOARD.SPRITES_MAX_EDGE_COUNT
       })
 
-      logger.debug(
-        `Generating storyboard for video ${video.uuid} (runner: ${runOnRunner})`,
-        { ...lTags, totalSprites, spritesCount, spriteDuration, videoDuration: video.duration, spriteHeight, spriteWidth }
-      )
-
       if (runOnRunner) {
+        logger.debug(
+          `Generating storyboard job for remote runners for video ${video.uuid}`,
+          { ...lTags, totalSprites, spritesCount, spriteDuration, videoDuration: video.duration, spriteHeight, spriteWidth }
+        )
         const priority = await getTranscodingJobPriority({ user: null, type: 'vod', fallback: 0 })
         await new VideoStoryboardJobHandler().create({ videoUUID: video.uuid, priority, federateAfter: payload.federate })
         return
       } else {
+        logger.debug(
+          `Generating storyboard from video of ${video.uuid} to ${destination}`,
+          { ...lTags, totalSprites, spritesCount, spriteDuration, videoDuration: video.duration, spriteHeight, spriteWidth }
+        )
         await ffmpeg.generateStoryboardFromVideo({
           destination,
           path: videoPath,
