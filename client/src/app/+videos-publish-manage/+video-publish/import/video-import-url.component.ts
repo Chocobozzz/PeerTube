@@ -130,7 +130,7 @@ export class VideoImportUrlComponent implements OnInit, AfterViewInit, CanCompon
       )
       .subscribe({
         next: async ({ video, captions, chapters }) => {
-          await videoEdit.loadFromAPI({ video, captions, chapters })
+          await videoEdit.loadFromAPI({ video, captions, chapters, loadPrivacy: false })
 
           this.loadingBar.useRef().complete()
 

@@ -105,7 +105,7 @@ export class VideoGoLiveComponent implements OnInit, AfterViewInit, CanComponent
       .subscribe({
         next: async ({ video: { id, uuid, shortUUID }, live }) => {
           videoEdit.loadAfterPublish({ video: { id, uuid, shortUUID } })
-          await videoEdit.loadFromAPI({ live })
+          await videoEdit.loadFromAPI({ live, loadPrivacy: false })
 
           debugLogger(`Live published`)
 

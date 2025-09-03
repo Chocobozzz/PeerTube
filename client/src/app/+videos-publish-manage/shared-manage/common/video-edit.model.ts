@@ -293,12 +293,12 @@ export class VideoEdit {
     return videoEdit
   }
 
-  async loadFromAPI (options: UpdateFromAPIOptions) {
-    const { video, videoPasswords, live, chapters, captions, videoSource } = options
+  async loadFromAPI (options: UpdateFromAPIOptions & { loadPrivacy?: boolean }) {
+    const { video, videoPasswords, live, chapters, captions, videoSource, loadPrivacy = true } = options
 
     debugLogger('Load from API', options)
 
-    this.loadVideo({ video, videoPasswords, saveInStore: true })
+    this.loadVideo({ video, videoPasswords, saveInStore: true, loadPrivacy })
     this.loadLive(live)
 
     if (captions !== undefined) {
@@ -322,18 +322,21 @@ export class VideoEdit {
   private loadVideo (options: {
     video: UpdateFromAPIOptions['video']
     videoPasswords?: string[]
+    loadPrivacy?: boolean // default true
     saveInStore: boolean
   }) {
-    const { video, saveInStore, videoPasswords = [] } = options
+    const { video, saveInStore, loadPrivacy = true, videoPasswords = [] } = options
 
     if (video === undefined) return
 
-    const buildObj: () => CommonUpdate = () => {
-      return {
+    const buildObj: (options: { loadPrivacy: boolean }) => CommonUpdate = () => {
+      const { loadPrivacy } = options
+
+      const base = {
         ...this.common,
 
         name: video.name || '',
-        privacy: video.privacy?.id ?? null,
+
         channelId: video.channel?.id ?? null,
         category: video.category?.id ?? null,
         licence: video.licence?.id ?? null,
@@ -361,12 +364,18 @@ export class VideoEdit {
 
         videoPasswords: videoPasswords ?? []
       }
+
+      if (loadPrivacy) {
+        return { ...base, privacy: video.privacy?.id ?? null }
+      }
+
+      return base
     }
 
-    this.common = buildObj()
+    this.common = buildObj({ loadPrivacy })
 
     if (saveInStore) {
-      const obj = buildObj()
+      const obj = buildObj({ loadPrivacy: true })
       this.saveStore.common = omit(obj, [ 'pluginData', 'previewfile' ])
 
       // Apply plugin defaults so we correctly detect changes
