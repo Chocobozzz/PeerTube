@@ -66,7 +66,8 @@ export async function synchronizeChannel (options: {
           targetUrl,
           channelSync,
           importDataOverride: {
-            privacy: VideoPrivacy.PUBLIC
+            privacy: VideoPrivacy.PUBLIC,
+            support: channel.support
           }
         })
 
