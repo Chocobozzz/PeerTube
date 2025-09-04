@@ -86,13 +86,12 @@ export class ScrollService {
       if (e.position) {
         debugLogger('Scroll to position.', { e, resetScroll: this.resetScroll })
 
-        setTimeout(() => {
-          this.viewportScroller.scrollToPosition(e.position)
-          if (e.position[1] > document.documentElement.scrollHeight) {
-            debugLogger('Could not scroll to position, marking scroll event as unhandled')
-            unhandledScrollEvent = e
-          }
-        })
+        this.viewportScroller.scrollToPosition(e.position)
+
+        if (e.position[1] > document.documentElement.scrollHeight) {
+          debugLogger('Could not scroll to position, marking scroll event as unhandled')
+          unhandledScrollEvent = e
+        }
 
         return
       }
