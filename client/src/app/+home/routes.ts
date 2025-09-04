@@ -28,6 +28,10 @@ export default [
     data: {
       meta: {
         title: $localize`Homepage`
+      },
+      reuse: {
+        enabled: true,
+        key: 'home'
       }
     }
   }
