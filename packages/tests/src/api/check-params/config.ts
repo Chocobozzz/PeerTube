@@ -13,6 +13,7 @@ import {
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
 import merge from 'lodash-es/merge.js'
+import { DeepPartial } from '../../../../typescript-utils/src/types.js'
 
 describe('Test config API validators', function () {
   const path = '/api/v1/config/custom'
@@ -175,6 +176,32 @@ describe('Test config API validators', function () {
           videoChannelSynchronization: { enabled: true }
         }
       })
+
+      await makePutBodyRequest({
+        url: server.url,
+        path,
+        fields: newUpdateParams,
+        token: server.accessToken,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail with an invalid search configuration', async function () {
+      const newUpdateParams = merge(
+        {},
+        {},
+        updateParams,
+        {
+          search: {
+            remoteUri: {
+              users: false
+            },
+            searchIndex: {
+              enabled: true
+            }
+          }
+        } satisfies DeepPartial<CustomConfig>
+      )
 
       await makePutBodyRequest({
         url: server.url,
