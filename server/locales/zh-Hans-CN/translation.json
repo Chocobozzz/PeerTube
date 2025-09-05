@@ -160,5 +160,12 @@
     "Edition of your video has finished": "你视频的编辑已完成",
     "Edition of your video {videoName} has finished.": "你视频 {videoName} 的编辑已完成。",
     "Video edition has finished": "视频编辑已完成",
+    "Server configuration is static and cannot be edited": "Server configuration is static and cannot be edited",
+    "SMTP is not configured but you require signup email verification.": "SMTP is not configured but you require signup email verification.",
+    "You need to enable at least web_videos transcoding or hls transcoding": "You need to enable at least web_videos transcoding or hls transcoding",
+    "You need to enable HTTP video import in order to enable channel synchronization": "You need to enable HTTP video import in order to enable channel synchronization",
+    "You cannot allow live replay if transcoding is not enabled": "You cannot allow live replay if transcoding is not enabled",
+    "You cannot enable video studio if transcoding is not enabled": "You cannot enable video studio if transcoding is not enabled",
+    "You cannot enable search index without enabling remote URI search for users.": "You cannot enable search index without enabling remote URI search for users.",
     "The token session does not exist or does not belong to the user.": "令牌会话不存在或不属于该用户。"
 }
