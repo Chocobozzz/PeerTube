@@ -154,12 +154,13 @@ export const customConfigUpdateValidator = [
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!checkInvalidConfigIfEmailDisabled(req.body, res)) return
-    if (!checkInvalidTranscodingConfig(req.body, res)) return
-    if (!checkInvalidSynchronizationConfig(req.body, res)) return
-    if (!checkInvalidLiveConfig(req.body, res)) return
-    if (!checkInvalidVideoStudioConfig(req.body, res)) return
-    if (!checkInvalidBrowseVideosConfig(req.body, res)) return
+    if (!checkInvalidConfigIfEmailDisabled(req.body, req, res)) return
+    if (!checkInvalidTranscodingConfig(req.body, req, res)) return
+    if (!checkInvalidSynchronizationConfig(req.body, req, res)) return
+    if (!checkInvalidLiveConfig(req.body, req, res)) return
+    if (!checkInvalidVideoStudioConfig(req.body, req, res)) return
+    if (!checkInvalidSearchConfig(req.body, req, res)) return
+    if (!checkInvalidBrowseVideosConfig(req.body, req, res)) return
 
     return next()
   }
@@ -169,7 +170,7 @@ export function ensureConfigIsEditable (req: express.Request, res: express.Respo
   if (!CONFIG.WEBADMIN.CONFIGURATION.EDITION.ALLOWED) {
     return res.fail({
       status: HttpStatusCode.METHOD_NOT_ALLOWED_405,
-      message: 'Server configuration is static and cannot be edited'
+      message: req.t('Server configuration is static and cannot be edited')
     })
   }
 
@@ -193,71 +194,82 @@ export const updateInstanceLogoValidator = updateActorImageValidatorFactory('log
 // Private
 // ---------------------------------------------------------------------------
 
-function checkInvalidConfigIfEmailDisabled (customConfig: CustomConfig, res: express.Response) {
+function checkInvalidConfigIfEmailDisabled (customConfig: CustomConfig, req: express.Request, res: express.Response) {
   if (isEmailEnabled()) return true
 
   if (customConfig.signup.requiresEmailVerification === true) {
-    res.fail({ message: 'SMTP is not configured but you require signup email verification.' })
+    res.fail({ message: req.t('SMTP is not configured but you require signup email verification.') })
     return false
   }
 
   return true
 }
 
-function checkInvalidTranscodingConfig (customConfig: CustomConfig, res: express.Response) {
+function checkInvalidTranscodingConfig (customConfig: CustomConfig, req: express.Request, res: express.Response) {
   if (customConfig.transcoding.enabled === false) return true
 
   if (customConfig.transcoding.webVideos.enabled === false && customConfig.transcoding.hls.enabled === false) {
-    res.fail({ message: 'You need to enable at least web_videos transcoding or hls transcoding' })
+    res.fail({ message: req.t('You need to enable at least web_videos transcoding or hls transcoding') })
     return false
   }
 
   return true
 }
 
-function checkInvalidSynchronizationConfig (customConfig: CustomConfig, res: express.Response) {
+function checkInvalidSynchronizationConfig (customConfig: CustomConfig, req: express.Request, res: express.Response) {
   if (customConfig.import.videoChannelSynchronization.enabled && !customConfig.import.videos.http.enabled) {
-    res.fail({ message: 'You need to enable HTTP video import in order to enable channel synchronization' })
+    res.fail({ message: req.t('You need to enable HTTP video import in order to enable channel synchronization') })
     return false
   }
   return true
 }
 
-function checkInvalidLiveConfig (customConfig: CustomConfig, res: express.Response) {
+function checkInvalidLiveConfig (customConfig: CustomConfig, req: express.Request, res: express.Response) {
   if (customConfig.live.enabled === false) return true
 
   if (customConfig.live.allowReplay === true && customConfig.transcoding.enabled === false) {
-    res.fail({ message: 'You cannot allow live replay if transcoding is not enabled' })
+    res.fail({ message: req.t('You cannot allow live replay if transcoding is not enabled') })
     return false
   }
 
   return true
 }
 
-function checkInvalidVideoStudioConfig (customConfig: CustomConfig, res: express.Response) {
+function checkInvalidVideoStudioConfig (customConfig: CustomConfig, req: express.Request, res: express.Response) {
   if (customConfig.videoStudio.enabled === false) return true
 
   if (customConfig.videoStudio.enabled === true && customConfig.transcoding.enabled === false) {
-    res.fail({ message: 'You cannot enable video studio if transcoding is not enabled' })
+    res.fail({ message: req.t('You cannot enable video studio if transcoding is not enabled') })
     return false
   }
 
   return true
 }
 
-function checkInvalidBrowseVideosConfig (customConfig: CustomConfig, res: express.Response) {
+function checkInvalidSearchConfig (customConfig: CustomConfig, req: express.Request, res: express.Response) {
+  if (customConfig.search.searchIndex.enabled === false) return true
+
+  if (customConfig.search.searchIndex.enabled === true && customConfig.search.remoteUri.users === false) {
+    res.fail({ message: req.t('You cannot enable search index without enabling remote URI search for users.') })
+    return false
+  }
+
+  return true
+}
+
+function checkInvalidBrowseVideosConfig (customConfig: CustomConfig, req: express.Request, res: express.Response) {
   const defaultSortCheck = isBrowseVideosDefaultSortValid(
     customConfig.client.browseVideos.defaultSort,
     customConfig.trending.videos.algorithms.enabled
   )
   if (defaultSortCheck.isValid === false){
-    res.fail({ message: defaultSortCheck.validationError })
+    res.fail({ message: req.t(defaultSortCheck.validationError) })
     return false
   }
 
   const defaultScopeCheck = isBrowseVideosDefaultScopeValid(customConfig.client.browseVideos.defaultScope)
   if (defaultScopeCheck.isValid === false){
-    res.fail({ message: defaultScopeCheck.validationError })
+    res.fail({ message: req.t(defaultScopeCheck.validationError) })
     return false
   }
 

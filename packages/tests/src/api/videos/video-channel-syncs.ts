@@ -285,7 +285,8 @@ describe('Test channel synchronizations', function () {
 
         const { id: channelId } = await servers[0].channels.create({
           attributes: {
-            name: 'channel2'
+            name: 'channel2',
+            support: 'my support test'
           }
         })
 
@@ -306,6 +307,11 @@ describe('Test channel synchronizations', function () {
           expect(data[1].name).to.equal('small video - youtube')
 
           videoToDelete = data[1].id
+
+          for (const { uuid } of data) {
+            const video = await servers[0].videos.get({ id: uuid })
+            expect(video.support).to.equal('my support test')
+          }
         }
       })
 

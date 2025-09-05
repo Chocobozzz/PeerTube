@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common'
 import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
 import { RouterLink } from '@angular/router'
-import { DisableForReuseHook, Notifier, ServerService, User, UserService } from '@app/core'
+import { DisableForReuseHook, Notifier, PeerTubeRouterService, ServerService, User, UserService } from '@app/core'
 import { ActorAvatarComponent, ActorAvatarInput } from '@app/shared/shared-actor-image/actor-avatar.component'
 import { ButtonComponent } from '@app/shared/shared-main/buttons/button.component'
 import { InfiniteScrollerDirective } from '@app/shared/shared-main/common/infinite-scroller.directive'
@@ -29,6 +29,7 @@ export class VideoOverviewComponent implements OnInit, OnDestroy, AfterViewCheck
   private overviewService = inject(OverviewService)
   private cd = inject(ChangeDetectorRef)
   private server = inject(ServerService)
+  private peertubeRouter = inject(PeerTubeRouterService)
 
   readonly quickAccessContent = viewChild<ElementRef>('quickAccessContent')
 
@@ -110,6 +111,10 @@ export class VideoOverviewComponent implements OnInit, OnDestroy, AfterViewCheck
     if (this.lastWasEmpty) return
     if (this.isLoading) return
     if (this.disabled) return
+
+    if (window.location.pathname === '/') {
+      this.peertubeRouter.silentNavigate([], {})
+    }
 
     this.currentPage++
     this.loadMoreResults()

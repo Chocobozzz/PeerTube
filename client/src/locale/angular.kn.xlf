@@ -1137,7 +1137,7 @@
         <target state="new">Browse "<x id="PH" equiv-text="value.category.label"/>" videos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
-          <context context-type="linenumber">138</context>
+          <context context-type="linenumber">143</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6981830104215014781" datatype="html">
@@ -1145,7 +1145,7 @@
         <target state="new">category</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
-          <context context-type="linenumber">143</context>
+          <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8844207666221087270" datatype="html">
@@ -1153,7 +1153,7 @@
         <target state="new">Browse "#<x id="PH" equiv-text="value.tag"/>" videos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
-          <context context-type="linenumber">149</context>
+          <context context-type="linenumber">154</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6402703264596649214" datatype="html">
@@ -1161,7 +1161,7 @@
         <target state="new">tag</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
-          <context context-type="linenumber">154</context>
+          <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7116189699742808060" datatype="html">
@@ -1169,7 +1169,7 @@
         <target state="new">Browse <x id="PH" equiv-text="channelName"/> channel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
-          <context context-type="linenumber">164</context>
+          <context context-type="linenumber">169</context>
         </context-group>
       </trans-unit>
       <trans-unit id="674351509173816083" datatype="html">
@@ -1177,7 +1177,7 @@
         <target state="new">channel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
-          <context context-type="linenumber">170</context>
+          <context context-type="linenumber">175</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1726363342938046830" datatype="html">
@@ -4352,7 +4352,7 @@
         <target/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5508725342419733476" datatype="html">
@@ -4360,7 +4360,7 @@
         <target state="new">"Split audio and video" must be enabled for the PeerTube player to propose an "Audio only" resolution to users</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">57</context>
+          <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7756250490108954499" datatype="html">
@@ -4368,7 +4368,7 @@
         <target state="new">144p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">61</context>
+          <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3768852440495368591" datatype="html">
@@ -4376,7 +4376,7 @@
         <target/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">65</context>
+          <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6824490596490222280" datatype="html">
@@ -4384,7 +4384,7 @@
         <target/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">69</context>
+          <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4039682741786530029" datatype="html">
@@ -4392,7 +4392,7 @@
         <target/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">73</context>
+          <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5165245100010036661" datatype="html">
@@ -4400,7 +4400,7 @@
         <target/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">77</context>
+          <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7709767791012306261" datatype="html">
@@ -4408,7 +4408,7 @@
         <target/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3671005503070777897" datatype="html">
@@ -4416,7 +4416,7 @@
         <target state="new">1440p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">85</context>
+          <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
       <trans-unit id="597839553814574067" datatype="html">
@@ -4424,7 +4424,7 @@
         <target/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">89</context>
+          <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5921284055608402352" datatype="html">
@@ -4432,7 +4432,7 @@
         <target state="new">{value, plural, =1 {thread} other {threads}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">193</context>
+          <context context-type="linenumber">197</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3072354262521481761" datatype="html">
@@ -4440,7 +4440,7 @@
         <target state="new">You cannot allow live replay if you don't enable transcoding.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">210</context>
+          <context context-type="linenumber">214</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1305357231288135414" datatype="html">
@@ -4580,7 +4580,7 @@
         <target/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3008420115644088420" datatype="html">
@@ -6288,7 +6288,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">157</context>
+          <context context-type="linenumber">161</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
@@ -6300,7 +6300,7 @@
         <target state="new">x264, targeting maximum device compatibility</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">157</context>
+          <context context-type="linenumber">161</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1473738049081128420" datatype="html">
@@ -12854,7 +12854,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">222</context>
+          <context context-type="linenumber">219</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5254305728396198887" datatype="html">
@@ -12866,7 +12866,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">205</context>
+          <context context-type="linenumber">202</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9158483906909080531" datatype="html">
@@ -12926,7 +12926,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">232</context>
+          <context context-type="linenumber">229</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1744425032255703211" datatype="html">
@@ -13006,7 +13006,7 @@
         <target state="new">Scope</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">212</context>
+          <context context-type="linenumber">209</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1840036002282013872" datatype="html">
@@ -13014,7 +13014,7 @@
         <target state="new">All platforms</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">214</context>
+          <context context-type="linenumber">211</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8317194248349445422" datatype="html">
@@ -13022,7 +13022,7 @@
         <target state="new">This platform</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">215</context>
+          <context context-type="linenumber">212</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4019185430150596533" datatype="html">
@@ -13030,7 +13030,7 @@
         <target state="new">Only lives</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">250</context>
+          <context context-type="linenumber">247</context>
         </context-group>
       </trans-unit>
       <trans-unit id="403276015827477743" datatype="html">
@@ -13038,7 +13038,7 @@
         <target state="new">Only VOD</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">256</context>
+          <context context-type="linenumber">253</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7216759144314993217" datatype="html">
@@ -13046,7 +13046,7 @@
         <target state="new"> Some videos with a specific sensitive content category have a different policy.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">353</context>
+          <context context-type="linenumber">350</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3343072271931497433" datatype="html">
@@ -13054,7 +13054,7 @@
         <target state="new">Sensitive content hidden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">360</context>
+          <context context-type="linenumber">357</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4167711622812285080" datatype="html">
@@ -13062,7 +13062,7 @@
         <target state="new">Sensitive content has a warning.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">361</context>
+          <context context-type="linenumber">358</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2995961823224509765" datatype="html">
@@ -13070,7 +13070,7 @@
         <target state="new">Sensitive content has a warning and the thumbnail is blurred.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">362</context>
+          <context context-type="linenumber">359</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6447635594696346395" datatype="html">
@@ -13078,7 +13078,7 @@
         <target state="new">Sensitive content is displayed.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">364</context>
+          <context context-type="linenumber">361</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8383768985718581098" datatype="html">
@@ -13086,7 +13086,7 @@
         <target state="new">hidden (with exceptions)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">369</context>
+          <context context-type="linenumber">366</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4104450881162058902" datatype="html">
@@ -13094,7 +13094,7 @@
         <target state="new">warned (with exceptions)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">370</context>
+          <context context-type="linenumber">367</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8042820180196501836" datatype="html">
@@ -13102,7 +13102,7 @@
         <target state="new">blurred (with exceptions)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">371</context>
+          <context context-type="linenumber">368</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5493896943986215282" datatype="html">
@@ -13110,7 +13110,7 @@
         <target state="new">displayed (with exceptions)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">373</context>
+          <context context-type="linenumber">370</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7054829409324166420" datatype="html">
@@ -13118,7 +13118,7 @@
         <target state="new">hidden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">376</context>
+          <context context-type="linenumber">373</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8640163781966564737" datatype="html">
@@ -13126,7 +13126,7 @@
         <target state="new">warned</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">377</context>
+          <context context-type="linenumber">374</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5766954855630346873" datatype="html">
@@ -13134,7 +13134,7 @@
         <target state="new">blurred</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">378</context>
+          <context context-type="linenumber">375</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1833483831276078393" datatype="html">
@@ -13142,7 +13142,7 @@
         <target state="new">displayed</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">380</context>
+          <context context-type="linenumber">377</context>
         </context-group>
       </trans-unit>
       <trans-unit id="166448092104563965" datatype="html">
@@ -13986,7 +13986,7 @@
         <target/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.ts</context>
-          <context context-type="linenumber">356</context>
+          <context context-type="linenumber">360</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-selection.component.ts</context>
@@ -17227,7 +17227,7 @@
         <target state="new">"<x id="PH" equiv-text="t.options.file as File).name"/>" will be added at the beginning of the video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context>
-          <context context-type="linenumber">822</context>
+          <context context-type="linenumber">831</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4952096817126306891" datatype="html">
@@ -17235,7 +17235,7 @@
         <target state="new">"<x id="PH" equiv-text="t.options.file as File).name"/>" will be added at the end of the video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context>
-          <context context-type="linenumber">826</context>
+          <context context-type="linenumber">835</context>
         </context-group>
       </trans-unit>
       <trans-unit id="665518679871959619" datatype="html">
@@ -17243,7 +17243,7 @@
         <target state="new">"<x id="PH" equiv-text="t.options.file as File).name"/>" image watermark will be added to the video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context>
-          <context context-type="linenumber">830</context>
+          <context context-type="linenumber">839</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2677581013897190613" datatype="html">
@@ -17251,7 +17251,7 @@
         <target state="new">Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/> and stop at <x id="PH_1" equiv-text="secondsToTime(end)"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context>
-          <context context-type="linenumber">837</context>
+          <context context-type="linenumber">846</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2299077646120636288" datatype="html">
@@ -17259,7 +17259,7 @@
         <target state="new">Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context>
-          <context context-type="linenumber">841</context>
+          <context context-type="linenumber">850</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7209039243783736285" datatype="html">
@@ -17267,7 +17267,7 @@
         <target state="new">Video will stop at <x id="PH" equiv-text="secondsToTime(end)"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context>
-          <context context-type="linenumber">845</context>
+          <context context-type="linenumber">854</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6995024616159044376" datatype="html">
@@ -25074,7 +25074,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">242</context>
+          <context context-type="linenumber">239</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2150280748663310169" datatype="html">

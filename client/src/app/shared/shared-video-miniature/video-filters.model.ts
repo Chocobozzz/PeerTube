@@ -95,9 +95,6 @@ export class VideoFilters {
 
     if (noChanges) return
 
-    console.log(currentFormObjectString)
-    console.log(this.oldFormObjectString)
-
     this.oldFormObjectString = currentFormObjectString
 
     for (const cb of this.onChangeCallbacks) {

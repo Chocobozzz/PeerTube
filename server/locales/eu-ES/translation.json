@@ -160,5 +160,12 @@
     "Edition of your video has finished": "Edition of your video has finished",
     "Edition of your video {videoName} has finished.": "Edition of your video {videoName} has finished.",
     "Video edition has finished": "Video edition has finished",
+    "Server configuration is static and cannot be edited": "Server configuration is static and cannot be edited",
+    "SMTP is not configured but you require signup email verification.": "SMTP is not configured but you require signup email verification.",
+    "You need to enable at least web_videos transcoding or hls transcoding": "You need to enable at least web_videos transcoding or hls transcoding",
+    "You need to enable HTTP video import in order to enable channel synchronization": "You need to enable HTTP video import in order to enable channel synchronization",
+    "You cannot allow live replay if transcoding is not enabled": "You cannot allow live replay if transcoding is not enabled",
+    "You cannot enable video studio if transcoding is not enabled": "You cannot enable video studio if transcoding is not enabled",
+    "You cannot enable search index without enabling remote URI search for users.": "You cannot enable search index without enabling remote URI search for users.",
     "The token session does not exist or does not belong to the user.": "The token session does not exist or does not belong to the user."
 }

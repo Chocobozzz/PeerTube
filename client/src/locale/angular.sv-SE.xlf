@@ -1480,51 +1480,33 @@
       <trans-unit id="7855115715004732406" datatype="html" xml:space="preserve">
         <source>Browse "<x id="PH" equiv-text="value.category.label"/>" videos</source>
         <target state="translated">Bläddra igenom "<x id="PH" equiv-text="value.category.label"/>"-videor</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
-          <context context-type="linenumber">138</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context><context context-type="linenumber">143</context></context-group></trans-unit>
       <trans-unit id="6981830104215014781" datatype="html" xml:space="preserve">
         <source>category</source>
         <target state="translated">kategori</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
-          <context context-type="linenumber">143</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context><context context-type="linenumber">148</context></context-group></trans-unit>
       <trans-unit id="8844207666221087270" datatype="html" xml:space="preserve">
         <source>Browse "#<x id="PH" equiv-text="value.tag"/>" videos</source>
         <target state="translated">Bläddra igenom "#<x id="PH" equiv-text="value.tag"/>"-videor</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
-          <context context-type="linenumber">149</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context><context context-type="linenumber">154</context></context-group></trans-unit>
       <trans-unit id="6402703264596649214" datatype="html" xml:space="preserve">
         <source>tag</source>
         <target state="translated">etikett</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
-          <context context-type="linenumber">154</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context><context context-type="linenumber">159</context></context-group></trans-unit>
       <trans-unit id="7116189699742808060" datatype="html" xml:space="preserve">
         <source>Browse <x id="PH" equiv-text="channelName"/> channel</source>
         <target state="translated">Utforska kanalen <x id="PH" equiv-text="channelName"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
-          <context context-type="linenumber">164</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context><context context-type="linenumber">169</context></context-group></trans-unit>
       <trans-unit id="674351509173816083" datatype="html" xml:space="preserve">
         <source>channel</source>
         <target state="translated">kanal</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
-          <context context-type="linenumber">170</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context><context context-type="linenumber">175</context></context-group></trans-unit>
       <trans-unit id="7585826646011739428">
         <source>Edit</source>
         <target>Redigera</target>
@@ -3228,7 +3210,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="931415109224027105" datatype="html" xml:space="preserve">
         <source>Public PeerTube index:</source>
-        <target state="translated">Öppet PeerTube-index:</target>
+        <target state="translated">Öppet PeerTube-register:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">34,36</context>
@@ -3236,7 +3218,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1498251075459491982" datatype="html" xml:space="preserve">
         <source>Put your platform on the official PeerTube public index</source>
-        <target state="translated">Lägg till din plattform till det öppna oficiella PeerTube-indexet</target>
+        <target state="translated">Lägg till din plattform till det öppna oficiella PeerTube-registret</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">36,37</context>
@@ -4283,7 +4265,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4070041848101291003" datatype="html" xml:space="preserve">
         <source>Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</source>
-        <target state="translated">Resultaten kommer kompletteras med träffar från ett tredjepartssökindex. Endast data som är nödvändig för sökningen kommer skickas.</target>
+        <target state="translated">Resultaten kommer kompletteras med träffar från ett tredjepartssökregister. Endast data som är nödvändig för sökningen kommer skickas.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">36</context>
@@ -5634,7 +5616,7 @@ The link will expire within 1 hour.</source>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">157</context>
+          <context context-type="linenumber">161</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
@@ -10858,9 +10840,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">161</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4328465163710612366" datatype="html">
+      <trans-unit id="4328465163710612366" datatype="html" xml:space="preserve">
         <source>When the total number of users in your platform reaches this limit, registrations are disabled. -1 = unlimited</source>
-        <target state="new">When the total number of users in your platform reaches this limit, registrations are disabled. -1 = unlimited</target>
+        <target state="translated">När det totala antalet användare på plattformen når den här nivån slås nyregistreringar av. -1 = obegränsat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">162,164</context>
@@ -11330,9 +11312,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">646</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2653219516680751118" datatype="html">
-        <source> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>your own search index<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> or choose the official one, <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://sepiasearch.org&quot;&gt;"/>https://sepiasearch.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, that is not moderated. </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>your own search index<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> or choose the official one, <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://sepiasearch.org&quot;&gt;"/>https://sepiasearch.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, that is not moderated. </target>
+      <trans-unit id="2653219516680751118" datatype="html" xml:space="preserve">
+        <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>your own search index<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> or choose the official one, <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://sepiasearch.org&quot;&gt;"/>https://sepiasearch.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, that is not moderated. </source>
+        <target state="translated">Använd ditt <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>eget sökregister<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> eller välj det officiella, <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://sepiasearch.org&quot;&gt;"/>https://sepiasearch.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, som inte är modererat. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">649,650</context>
@@ -11486,9 +11468,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">470,471</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5963121551419269989" datatype="html">
+      <trans-unit id="5963121551419269989" datatype="html" xml:space="preserve">
         <source>This setting is not retroactive: current comments from remote platforms will not be deleted</source>
-        <target state="new">This setting is not retroactive: current comments from remote platforms will not be deleted</target>
+        <target state="translated">Denna inställning är inte retroaktiv: aktuella kommentarer från fjärrplattformar kommer inte att raderas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">473,474</context>
@@ -15438,15 +15420,9 @@ color: red;
       <trans-unit id="5254305728396198887" datatype="html" xml:space="preserve">
         <source>Sensitive content</source>
         <target state="translated">Känsligt eller oförbehållsamt innehåll</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
-          <context context-type="linenumber">89</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">205</context>
-        </context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">89</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">202</context></context-group></trans-unit>
       <trans-unit id="9158483906909080531" datatype="html" xml:space="preserve">
         <source>Update your policy in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;video-sensitive-content-policy&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>your settings<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
         <target state="translated">Uppdatera din policy i <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;video-sensitive-content-policy&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>dina inställningar<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
@@ -15500,25 +15476,19 @@ color: red;
         <target state="translated">Omfång</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">212</context>
+          <context context-type="linenumber">209</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1840036002282013872" datatype="html" xml:space="preserve">
         <source>All platforms</source>
         <target state="translated">Alla plattformar</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">214</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">211</context></context-group></trans-unit>
       <trans-unit id="8317194248349445422" datatype="html" xml:space="preserve">
         <source>This platform</source>
         <target state="translated">Den här plattformen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">215</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">212</context></context-group></trans-unit>
       <trans-unit id="1949800099101277248" datatype="html">
         <source>Languages</source>
         <target state="translated">Språk</target>
@@ -15528,7 +15498,7 @@ color: red;
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">222</context>
+          <context context-type="linenumber">219</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1902100407096396858" datatype="html">
@@ -15540,7 +15510,7 @@ color: red;
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">232</context>
+          <context context-type="linenumber">229</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3599150758014724057" datatype="html">
@@ -15552,7 +15522,7 @@ color: red;
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">242</context>
+          <context context-type="linenumber">239</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2150280748663310169" datatype="html" xml:space="preserve">
@@ -15634,123 +15604,81 @@ color: red;
       <trans-unit id="4019185430150596533" datatype="html" xml:space="preserve">
         <source>Only lives</source>
         <target state="translated">Endast direktsändningar</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">250</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">247</context></context-group></trans-unit>
       <trans-unit id="403276015827477743" datatype="html" xml:space="preserve">
         <source>Only VOD</source>
         <target state="translated">Endast VOD</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">256</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">253</context></context-group></trans-unit>
       <trans-unit id="7216759144314993217" datatype="html" xml:space="preserve">
         <source>Some videos with a specific sensitive content category have a different policy.</source>
         <target state="translated">Vissa videor med en specifik kategori för känsligt eller oförbehållsamt material har en annan policy.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">353</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">350</context></context-group></trans-unit>
       <trans-unit id="3343072271931497433" datatype="html" xml:space="preserve">
         <source>Sensitive content hidden.</source>
         <target state="translated">Känsligt och oförbehållsamt material dolt.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">360</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">357</context></context-group></trans-unit>
       <trans-unit id="4167711622812285080" datatype="html" xml:space="preserve">
         <source>Sensitive content has a warning.</source>
         <target state="translated">Känsligt och oförbehållsamt material har en varning.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">361</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">358</context></context-group></trans-unit>
       <trans-unit id="2995961823224509765" datatype="html" xml:space="preserve">
         <source>Sensitive content has a warning and the thumbnail is blurred.</source>
         <target state="translated">Känsligt och oförbehållsamt material har en varning och miniatyrbilden är suddig.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">362</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">359</context></context-group></trans-unit>
       <trans-unit id="6447635594696346395" datatype="html" xml:space="preserve">
         <source>Sensitive content is displayed.</source>
         <target state="translated">Känsligt och oförbehållsamt innehåll visas.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">364</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">361</context></context-group></trans-unit>
       <trans-unit id="8383768985718581098" datatype="html" xml:space="preserve">
         <source>hidden (with exceptions)</source>
         <target state="translated">dolt (med undantag)</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">369</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">366</context></context-group></trans-unit>
       <trans-unit id="4104450881162058902" datatype="html" xml:space="preserve">
         <source>warned (with exceptions)</source>
         <target state="translated">med varning (med undantag)</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">370</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">367</context></context-group></trans-unit>
       <trans-unit id="8042820180196501836" datatype="html" xml:space="preserve">
         <source>blurred (with exceptions)</source>
         <target state="translated">suddigt (med undantag)</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">371</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">368</context></context-group></trans-unit>
       <trans-unit id="5493896943986215282" datatype="html" xml:space="preserve">
         <source>displayed (with exceptions)</source>
         <target state="translated">visas (med undantag)</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">373</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">370</context></context-group></trans-unit>
       <trans-unit id="7054829409324166420" datatype="html" xml:space="preserve">
         <source>hidden</source>
         <target state="translated">dolt</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">376</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">373</context></context-group></trans-unit>
       <trans-unit id="8640163781966564737" datatype="html" xml:space="preserve">
         <source>warned</source>
         <target state="translated">med varning</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">377</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">374</context></context-group></trans-unit>
       <trans-unit id="5766954855630346873" datatype="html">
         <source>blurred</source>
         <target state="translated">suddig</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">378</context>
+          <context context-type="linenumber">375</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1833483831276078393" datatype="html" xml:space="preserve">
         <source>displayed</source>
         <target state="translated">visas</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">380</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">377</context></context-group></trans-unit>
       <trans-unit id="166448092104563965" datatype="html">
         <source>Password protected</source>
         <target state="translated">Lösenordsskyddad</target>
@@ -15840,23 +15768,20 @@ color: red;
         <target state="translated">Endast ljud</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5508725342419733476" datatype="html" xml:space="preserve">
         <source>"Split audio and video" must be enabled for the PeerTube player to propose an "Audio only" resolution to users</source>
         <target state="translated">"Dela upp ljud och video" måste vara påslaget för att PeerTube-spelaren ska erbjuda "Endast ljud"-upplösning till tittare</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">57</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context><context context-type="linenumber">60</context></context-group></trans-unit>
       <trans-unit id="7756250490108954499" datatype="html">
         <source>144p</source>
         <target state="translated">144p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">61</context>
+          <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3768852440495368591">
@@ -15864,7 +15789,7 @@ color: red;
         <target>240p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">65</context>
+          <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6824490596490222280">
@@ -15872,7 +15797,7 @@ color: red;
         <target>360p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">69</context>
+          <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4039682741786530029">
@@ -15880,7 +15805,7 @@ color: red;
         <target>480p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">73</context>
+          <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5165245100010036661">
@@ -15888,7 +15813,7 @@ color: red;
         <target>720p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">77</context>
+          <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7709767791012306261">
@@ -15896,7 +15821,7 @@ color: red;
         <target>1080p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3671005503070777897" datatype="html">
@@ -15904,7 +15829,7 @@ color: red;
         <target state="translated">1440p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">85</context>
+          <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
       <trans-unit id="597839553814574067">
@@ -15912,7 +15837,7 @@ color: red;
         <target>2160p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">89</context>
+          <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5921284055608402352" datatype="html">
@@ -15920,23 +15845,20 @@ color: red;
         <target state="translated">{value, plural, =1 {tråd} other {trådar}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">193</context>
+          <context context-type="linenumber">197</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3072354262521481761" datatype="html" xml:space="preserve">
         <source>You cannot allow live replay if you don't enable transcoding.</source>
         <target state="translated">Du kan inte tillåta återuppspelning i direktsändningar utan att slå på omkodning.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">210</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context><context context-type="linenumber">214</context></context-group></trans-unit>
       <trans-unit id="3957742085471141221">
         <source>Auto (via ffmpeg)</source>
         <target>Automatiskt (via ffmpeg)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
       <trans-unit id="931255636742351800" datatype="html">
@@ -15992,7 +15914,7 @@ color: red;
         <target state="translated">x264, för att stödja flest enheter</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">157</context>
+          <context context-type="linenumber">161</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1473738049081128420" datatype="html">
@@ -17545,9 +17467,9 @@ color: red;
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="27173108314474680" datatype="html">
+      <trans-unit id="27173108314474680" datatype="html" xml:space="preserve">
         <source>Go to the page where you can manage your account</source>
-        <target state="new">Go to the page where you can manage your account</target>
+        <target state="translated">Gå till sidan där du kan hantera ditt konto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
           <context context-type="linenumber">40,41</context>
@@ -19993,7 +19915,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Kan inte ladda in fler videor, försök gärna igen om en stund.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.ts</context>
-          <context context-type="linenumber">356</context>
+          <context context-type="linenumber">360</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-selection.component.ts</context>
@@ -22510,9 +22432,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3203530711190558690" datatype="html">
+      <trans-unit id="3203530711190558690" datatype="html" xml:space="preserve">
         <source>Use https://sepiasearch.org as default search engine to search for content across all known PeerTube platforms</source>
-        <target state="new">Use https://sepiasearch.org as default search engine to search for content across all known PeerTube platforms</target>
+        <target state="translated">Använd https://sepiasearch.org som standardsökmotor för att söka efter material på alla kända PeerTube-plattformar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">97</context>
@@ -24218,39 +24140,63 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="6426647253249467388" datatype="html" xml:space="preserve">
         <source>Filter by a channel</source>
         <target state="translated">Filtrera utifrån kanal</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context><context context-type="linenumber">2</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5434235221870482011" datatype="html" xml:space="preserve">
         <source>This allows you to reorder playlists assigned to it</source>
         <target state="translated">Det här medger omsortering av kopplade spellistor</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context><context context-type="linenumber">3</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3371925892115176358" datatype="html" xml:space="preserve">
         <source>playlists per page</source>
         <target state="translated">spellistor per sida</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context><context context-type="linenumber">18</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3108012194945806606" datatype="html" xml:space="preserve">
         <source>Drag and drop this row to reorder playlists in your channel</source>
         <target state="translated">Dra-och-släpp raden för att sortera om spellistorna i kanalen</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context><context context-type="linenumber">27</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7319525983375433281" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No playlist} =1 {1 playlist} other {<x id="INTERPOLATION"/> playlists}}</source>
         <target state="translated">{VAR_PLURAL, plural, =0 {Ingen spellista} =1 {1 spellista} other {<x id="INTERPOLATION"/> spellistor}}</target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context><context context-type="linenumber">32</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context><context context-type="linenumber">34</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="358453340357015692" datatype="html" xml:space="preserve">
         <source><x id="ICU" equiv-text="{ totalRecords, plural, =0 {No playlist} =1 {1 playlist} other {{{ totalRecords | myNumberFormatter }} playlists}}" xid="3031081109030852848"/> in <x id="INTERPOLATION_1" equiv-text="{{ getFilteredChannel().displayName }}"/> channel</source>
         <target state="translated"><x id="ICU" xid="3031081109030852848" equiv-text="{ totalRecords, plural, =0 {No playlist} =1 {1 playlist} other {{{ totalRecords | myNumberFormatter }} playlists}}"/> i <x id="INTERPOLATION_1" equiv-text="{{ getFilteredChannel().displayName }}"/>-kanalen</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context><context context-type="linenumber">32</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4311110442674793732" datatype="html" xml:space="preserve">
         <source>Search your playlists</source>
         <target state="translated">Sök bland dina spellistor</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context><context context-type="linenumber">40</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="420763834450076269" datatype="html">
         <source>Block</source>
         <target state="translated">Blockera</target>
@@ -25564,51 +25510,33 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="2763845919408843325" datatype="html" xml:space="preserve">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the beginning of the video</source>
         <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" kommer att läggas till i början av videon</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context>
-          <context context-type="linenumber">822</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context><context context-type="linenumber">831</context></context-group></trans-unit>
       <trans-unit id="4952096817126306891" datatype="html" xml:space="preserve">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the end of the video</source>
         <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" kommer att läggas till i slutet av videon</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context>
-          <context context-type="linenumber">826</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context><context context-type="linenumber">835</context></context-group></trans-unit>
       <trans-unit id="665518679871959619" datatype="html" xml:space="preserve">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" image watermark will be added to the video</source>
         <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" vattenstämpel för bild kommer att läggas till i videon</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context>
-          <context context-type="linenumber">830</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context><context context-type="linenumber">839</context></context-group></trans-unit>
       <trans-unit id="2677581013897190613" datatype="html" xml:space="preserve">
         <source>Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/> and stop at <x id="PH_1" equiv-text="secondsToTime(end)"/></source>
         <target state="translated">Videon börjar på <x id="PH" equiv-text="secondsToTime(start)"/> och slutar på <x id="PH_1" equiv-text="secondsToTime(end)"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context>
-          <context context-type="linenumber">837</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context><context context-type="linenumber">846</context></context-group></trans-unit>
       <trans-unit id="2299077646120636288" datatype="html" xml:space="preserve">
         <source>Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/></source>
         <target state="translated">Videon kommer att börja på <x id="PH" equiv-text="secondsToTime(start)"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context>
-          <context context-type="linenumber">841</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context><context context-type="linenumber">850</context></context-group></trans-unit>
       <trans-unit id="7209039243783736285" datatype="html" xml:space="preserve">
         <source>Video will stop at <x id="PH" equiv-text="secondsToTime(end)"/></source>
         <target state="translated">Videon kommer att stanna vid <x id="PH" equiv-text="secondsToTime(end)"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context>
-          <context context-type="linenumber">845</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context><context context-type="linenumber">854</context></context-group></trans-unit>
       <trans-unit id="5512208811126492983" datatype="html">
         <source>Report comment</source>
         <target state="translated">Anmäl kommentar</target>

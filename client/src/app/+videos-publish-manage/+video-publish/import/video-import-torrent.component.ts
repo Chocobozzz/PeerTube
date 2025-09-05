@@ -132,7 +132,7 @@ export class VideoImportTorrentComponent implements OnInit, AfterViewInit, CanCo
       .pipe(switchMap(({ video }) => this.videoService.getVideo({ videoId: video.uuid })))
       .subscribe({
         next: async video => {
-          await videoEdit.loadFromAPI({ video })
+          await videoEdit.loadFromAPI({ video, loadPrivacy: false })
 
           this.loadingBar.useRef().complete()
 
