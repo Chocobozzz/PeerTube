@@ -386,13 +386,21 @@ export class RunnerJobsCommand extends AbstractCommand {
 
     if (!jobUUID) {
       const { availableJobs } = await this.request({ runnerToken })
-      jobUUID = availableJobs[0].uuid
+      // Find a web video transcoding job specifically
+      const webVideoJob = availableJobs.find(j => j.type === 'vod-web-video-transcoding')
+      if (!webVideoJob) {
+        throw new Error('No web video transcoding jobs available')
+      }
+      jobUUID = webVideoJob.uuid
     }
 
     const { job } = await this.accept({ runnerToken, jobUUID })
     const jobToken = job.jobToken
 
-    const payload: RunnerJobSuccessPayload = { videoFile: 'video_short.mp4' }
+    // Use a proper fixture file path for testing
+    const { buildAbsoluteFixturePath } = await import('@peertube/peertube-node-utils')
+    const videoFile = buildAbsoluteFixturePath('video_short.mp4')
+    const payload: RunnerJobSuccessPayload = { videoFile }
     await this.success({ runnerToken, jobUUID, jobToken, payload, reqPayload: undefined })
 
     await waitJobs([ this.server ])
