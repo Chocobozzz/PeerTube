@@ -578,7 +578,10 @@ function customConfig (): CustomConfig {
       }
     },
     storyboards: {
-      enabled: CONFIG.STORYBOARDS.ENABLED
+      enabled: CONFIG.STORYBOARDS.ENABLED,
+      remoteRunners: {
+        enabled: CONFIG.STORYBOARDS.REMOTE_RUNNERS.ENABLED
+      }
     },
     defaults: {
       publish: {

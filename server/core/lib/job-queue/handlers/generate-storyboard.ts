@@ -78,7 +78,7 @@ async function processGenerateStoryboard (job: Job): Promise<void> {
         maxEdgeCount: STORYBOARD.SPRITES_MAX_EDGE_COUNT
       })
 
-      const runOnRunner = CONFIG.STORYBOARDS.REMOTE_RUNNERS.ENABLED === true
+      const runOnRunner = CONFIG.TRANSCODING.REMOTE_RUNNERS.ENABLED === true && CONFIG.STORYBOARDS.REMOTE_RUNNERS.ENABLED === true
 
       if (runOnRunner) {
         logger.debug(

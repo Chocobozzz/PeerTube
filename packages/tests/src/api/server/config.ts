@@ -437,7 +437,10 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       }
     },
     storyboards: {
-      enabled: false
+      enabled: false,
+      remoteRunners: {
+        enabled: false
+      }
     },
     export: {
       users: {

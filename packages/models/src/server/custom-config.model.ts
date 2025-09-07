@@ -340,6 +340,9 @@ export interface CustomConfig {
 
   storyboards: {
     enabled: boolean
+    remoteRunners: {
+      enabled: boolean
+    }
   }
 
   defaults: {
