@@ -35,8 +35,8 @@ export function buildStoryboardJobIfNeeded (options: {
   const { video, federate } = options
 
   if (CONFIG.STORYBOARDS.ENABLED) {
-    // If remote runners are enabled, do not enqueue a local job queue task for storyboard generation
-    if (CONFIG.STORYBOARDS.REMOTE_RUNNERS.ENABLED === true) return undefined
+    // If remote runners are enabled and storyboards processing by remote runners is enabled, do not enqueue a local job queue task for storyboard generation
+    if (CONFIG.TRANSCODING.REMOTE_RUNNERS.ENABLED && CONFIG.STORYBOARDS.REMOTE_RUNNERS.ENABLED === true) return undefined
 
     return {
       type: 'generate-video-storyboard' as 'generate-video-storyboard',
@@ -68,7 +68,7 @@ export async function addVideoJobsAfterCreation (options: {
   const { video, videoFile, generateTranscription } = options
 
   // If remote runners are enabled, schedule the remote storyboard job immediately instead of enqueuing a local job
-  if (CONFIG.STORYBOARDS.ENABLED && CONFIG.TRANSCODING.REMOTE_RUNNERS.ENABLED === true) {
+  if (CONFIG.STORYBOARDS.ENABLED && CONFIG.TRANSCODING.REMOTE_RUNNERS.ENABLED && CONFIG.STORYBOARDS.REMOTE_RUNNERS.ENABLED === true) {
     const priority = await getTranscodingJobPriority({ user: null, type: 'vod', fallback: 0 })
     await new VideoStoryboardJobHandler().create({ videoUUID: video.uuid, priority, federateAfter: false })
   }
