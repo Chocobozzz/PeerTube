@@ -82,6 +82,10 @@ export function isRunnerJobArrayOfStateValid (value: any) {
 // Private
 // ---------------------------------------------------------------------------
 
+function isEmptyUpdatePayload (value: RunnerJobUpdatePayload): boolean {
+  return !value || (typeof value === 'object' && Object.keys(value).length === 0)
+}
+
 function isRunnerJobVODWebVideoResultPayloadValid (
   _value: VODWebVideoTranscodingSuccess,
   type: RunnerJobType,
@@ -114,7 +118,7 @@ function isRunnerJobLiveRTMPHLSResultPayloadValid (
   value: LiveRTMPHLSTranscodingSuccess,
   type: RunnerJobType
 ) {
-  return type === 'live-rtmp-hls-transcoding' && (!value || (typeof value === 'object' && Object.keys(value).length === 0))
+  return type === 'live-rtmp-hls-transcoding' && isEmptyUpdatePayload(value as any)
 }
 
 function isRunnerJobVideoStudioResultPayloadValid (
@@ -152,7 +156,7 @@ function isRunnerJobVODWebVideoUpdatePayloadValid (
   _files: UploadFilesForCheck
 ) {
   return type === 'vod-web-video-transcoding' &&
-    (!value || (typeof value === 'object' && Object.keys(value).length === 0))
+    isEmptyUpdatePayload(value)
 }
 
 function isRunnerJobVODHLSUpdatePayloadValid (
@@ -161,7 +165,7 @@ function isRunnerJobVODHLSUpdatePayloadValid (
   _files: UploadFilesForCheck
 ) {
   return type === 'vod-hls-transcoding' &&
-    (!value || (typeof value === 'object' && Object.keys(value).length === 0))
+    isEmptyUpdatePayload(value)
 }
 
 function isRunnerJobVODAudioMergeUpdatePayloadValid (
@@ -170,7 +174,7 @@ function isRunnerJobVODAudioMergeUpdatePayloadValid (
   _files: UploadFilesForCheck
 ) {
   return type === 'vod-audio-merge-transcoding' &&
-    (!value || (typeof value === 'object' && Object.keys(value).length === 0))
+    isEmptyUpdatePayload(value)
 }
 
 function isRunnerJobTranscriptionUpdatePayloadValid (
@@ -179,7 +183,7 @@ function isRunnerJobTranscriptionUpdatePayloadValid (
   _files: UploadFilesForCheck
 ) {
   return type === 'video-transcription' &&
-    (!value || (typeof value === 'object' && Object.keys(value).length === 0))
+    isEmptyUpdatePayload(value)
 }
 
 function isRunnerJobLiveRTMPHLSUpdatePayloadValid (
@@ -222,7 +226,7 @@ function isRunnerJobVideoStudioUpdatePayloadValid (
   _files: UploadFilesForCheck
 ) {
   return type === 'video-studio-transcoding' &&
-    (!value || (typeof value === 'object' && Object.keys(value).length === 0))
+    isEmptyUpdatePayload(value)
 }
 
 function isRunnerJobGenerateStoryboardUpdatePayloadValid (
@@ -231,5 +235,5 @@ function isRunnerJobGenerateStoryboardUpdatePayloadValid (
   _files: UploadFilesForCheck
 ) {
   return type === 'generate-video-storyboard' &&
-    (!value || (typeof value === 'object' && Object.keys(value).length === 0))
+    isEmptyUpdatePayload(value)
 }
