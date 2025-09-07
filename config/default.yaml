@@ -1122,7 +1122,7 @@ storyboards:
   enabled: true
   remote_runners:
     # Use remote runners to generate storyboards instead of processing them locally
-    enabled: false
+    enabled: true
 
 # Update default PeerTube values
 # Set by API when the field is not provided and put as default value in client

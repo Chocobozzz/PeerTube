@@ -74,9 +74,11 @@ export class RunnerServer {
 
     // Process jobs
     await ensureDir(ConfigManager.Instance.getTranscodingDirectory())
+    await ensureDir(ConfigManager.Instance.getStoryboardDirectory())
     await this.cleanupTMP()
 
     logger.info(`Using ${ConfigManager.Instance.getTranscodingDirectory()} for transcoding directory`)
+    logger.info(`Using ${ConfigManager.Instance.getStoryboardDirectory()} for storyboard directory`)
 
     this.initialized = true
     await this.checkAvailableJobs()
