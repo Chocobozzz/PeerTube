@@ -1091,6 +1091,11 @@ const CONFIG = {
   STORYBOARDS: {
     get ENABLED () {
       return config.get<boolean>('storyboards.enabled')
+    },
+    REMOTE_RUNNERS: {
+      get ENABLED () {
+        return config.get<boolean>('storyboards.remote_runners.enabled')
+      }
     }
   },
   EMAIL: {

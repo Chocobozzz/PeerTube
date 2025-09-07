@@ -36,7 +36,7 @@ export function buildStoryboardJobIfNeeded (options: {
 
   if (CONFIG.STORYBOARDS.ENABLED) {
     // If remote runners are enabled, do not enqueue a local job queue task for storyboard generation
-    if (CONFIG.TRANSCODING.REMOTE_RUNNERS.ENABLED === true) return undefined
+    if (CONFIG.STORYBOARDS.REMOTE_RUNNERS.ENABLED === true) return undefined
 
     return {
       type: 'generate-video-storyboard' as 'generate-video-storyboard',

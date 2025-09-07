@@ -47,8 +47,6 @@ async function processGenerateStoryboard (job: Job): Promise<void> {
       return
     }
 
-    const runOnRunner = CONFIG.TRANSCODING.REMOTE_RUNNERS.ENABLED === true
-
     await VideoPathManager.Instance.makeAvailableVideoFile(inputFile, async videoPath => {
       const probe = await ffprobePromise(videoPath)
 
@@ -79,6 +77,8 @@ async function processGenerateStoryboard (job: Job): Promise<void> {
         toFind: totalSprites,
         maxEdgeCount: STORYBOARD.SPRITES_MAX_EDGE_COUNT
       })
+
+      const runOnRunner = CONFIG.STORYBOARDS.REMOTE_RUNNERS.ENABLED === true
 
       if (runOnRunner) {
         logger.debug(
