@@ -86,7 +86,7 @@ export class VideoListPage {
   async expectVideoNSFWTooltip (name: string, summary?: string) {
     const miniature = await this.getVideoMiniature(name)
 
-    const warning = await miniature.$('.nsfw-warning')
+    const warning = miniature.$('.nsfw-warning')
     await warning.waitForDisplayed()
 
     expect(await warning.getAttribute('aria-label')).toEqual(summary)
