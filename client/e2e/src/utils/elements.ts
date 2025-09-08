@@ -67,9 +67,9 @@ export async function selectCustomSelect (id: string, valueLabel: string) {
 
 export async function findParentElement (
   el: ChainablePromiseElement,
-  finder: (el: WebdriverIO.Element) => Promise<boolean>
+  finder: (el: ChainablePromiseElement) => Promise<boolean>
 ) {
   if (await finder(el) === true) return el
 
-  return findParentElement(await el.parentElement(), finder)
+  return findParentElement(el.parentElement(), finder)
 }
