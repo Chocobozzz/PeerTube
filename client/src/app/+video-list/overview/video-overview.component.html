@@ -26,7 +26,7 @@
           <h1 class="section-title">
             <my-actor-avatar *ngIf="object.channel" size="40px" actorType="channel" [actor]="object.channel"></my-actor-avatar>
 
-            <span class="text-fg border-highlight text-decoration-none">{{ object.label }}</span>
+            <span class="ellipsis text-fg border-highlight text-decoration-none">{{ object.label }}</span>
 
             <span class="fg-100 fs-7 mx-2">·</span>
             <span i18n class="fg-100 fs-7">{{ object.type }}</span>
