@@ -148,9 +148,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="nd so on.    *"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="nd so on.    *"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="und so weiter.    *"/>
         </target>
@@ -256,9 +254,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
-        <source>
-          <x id="INTERPOLATION"/>
-        </source>
+        <source><x id="INTERPOLATION"/> </source>
         <target state="translated">
           <x id="INTERPOLATION"/>
         </target>
@@ -1480,33 +1476,51 @@
       <trans-unit id="7855115715004732406" datatype="html" xml:space="preserve">
         <source>Browse "<x id="PH" equiv-text="value.category.label"/>" videos</source>
         <target state="translated">„<x id="PH" equiv-text="value.category.label"/>“ Videos durchsuchen</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context><context context-type="linenumber">143</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
+          <context context-type="linenumber">143</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6981830104215014781" datatype="html" xml:space="preserve">
         <source>category</source>
         <target state="translated">Kategorie</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context><context context-type="linenumber">148</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
+          <context context-type="linenumber">148</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8844207666221087270" datatype="html" xml:space="preserve">
         <source>Browse "#<x id="PH" equiv-text="value.tag"/>" videos</source>
         <target state="translated">„#<x id="PH" equiv-text="value.tag"/>“ Videos durchsuchen</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context><context context-type="linenumber">154</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
+          <context context-type="linenumber">154</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6402703264596649214" datatype="html" xml:space="preserve">
         <source>tag</source>
         <target state="translated">Schlagwort</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context><context context-type="linenumber">159</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
+          <context context-type="linenumber">159</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7116189699742808060" datatype="html" xml:space="preserve">
         <source>Browse <x id="PH" equiv-text="channelName"/> channel</source>
         <target state="translated">Kanal <x id="PH" equiv-text="channelName"/> durchsuchen</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context><context context-type="linenumber">169</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
+          <context context-type="linenumber">169</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="674351509173816083" datatype="html" xml:space="preserve">
         <source>channel</source>
         <target state="translated">Kanal</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context><context context-type="linenumber">175</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
+          <context context-type="linenumber">175</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7585826646011739428">
         <source>Edit</source>
         <target>Bearbeiten</target>
@@ -2726,8 +2740,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
-        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>.
-The link will expire within 1 hour.</source>
+        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
         <target state="translated">Es wird eine E-Mail zum Zurücksetzen des Passworts an <x id="PH" equiv-text="this.forgotPasswordEmail"/> gesendet. Der Link wird in einer Stunde ablaufen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
@@ -9173,11 +9186,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="5026011498416291967" datatype="html">
-        <source>
-          <x id="ICU" equiv-text="{abuse().countReportsForReporter, plural, =1 {1 report} other {{{ abuse().countReportsForReporter }} reports}}" xid="1879828604800763221"/>
-          <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/>
-          <x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/>
-        </source>
+        <source><x id="ICU" equiv-text="{abuse().countReportsForReporter, plural, =1 {1 report} other {{{ abuse().countReportsForReporter }} reports}}" xid="1879828604800763221"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/> <x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/> </source>
         <target state="translated">
           <x id="ICU" xid="1879828604800763221" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}"/>
           <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/>
@@ -10858,9 +10867,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">161</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4328465163710612366" datatype="html">
+      <trans-unit id="4328465163710612366" datatype="html" xml:space="preserve">
         <source>When the total number of users in your platform reaches this limit, registrations are disabled. -1 = unlimited</source>
-        <target state="new">When the total number of users in your platform reaches this limit, registrations are disabled. -1 = unlimited</target>
+        <target state="translated">Wenn die Gesamtzahl deiner Benutzer auf deiner Plattform diese Grenze erreicht, werden Registrierungen deaktiviert. -1 = unbegrenzt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">162,164</context>
@@ -11330,9 +11339,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">646</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2653219516680751118" datatype="html">
-        <source> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>your own search index<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> or choose the official one, <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://sepiasearch.org&quot;&gt;"/>https://sepiasearch.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, that is not moderated. </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>your own search index<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> or choose the official one, <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://sepiasearch.org&quot;&gt;"/>https://sepiasearch.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, that is not moderated. </target>
+      <trans-unit id="2653219516680751118" datatype="html" xml:space="preserve">
+        <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>your own search index<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> or choose the official one, <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://sepiasearch.org&quot;&gt;"/>https://sepiasearch.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, that is not moderated. </source>
+        <target state="translated">Benutze <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>deinen eigenen Suchindex<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> oder wähle den offiziellen, <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://sepiasearch.org&quot;&gt;"/>https://sepiasearch.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, der nicht moderiert wird. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">649,650</context>
@@ -11486,9 +11495,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">470,471</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5963121551419269989" datatype="html">
+      <trans-unit id="5963121551419269989" datatype="html" xml:space="preserve">
         <source>This setting is not retroactive: current comments from remote platforms will not be deleted</source>
-        <target state="new">This setting is not retroactive: current comments from remote platforms will not be deleted</target>
+        <target state="translated">Diese Einstellung ist nicht rückwirkend: Aktuelle Kommentare von entfernten Plattformen werden nicht gelöscht.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">473,474</context>
@@ -14450,9 +14459,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
-        <source>
-          <x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/>
-        </source>
+        <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/> </source>
         <target state="translated">
           <x id="ICU" xid="8553183884518584864" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 Video} other {{{ getTotalVideosOf(videoChannel) }} Videos}}"/>
         </target>
@@ -15484,13 +15491,19 @@ The link will expire within 1 hour.</source>
       <trans-unit id="1840036002282013872" datatype="html" xml:space="preserve">
         <source>All platforms</source>
         <target state="translated">Alle Plattformen</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">211</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
+          <context context-type="linenumber">211</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8317194248349445422" datatype="html" xml:space="preserve">
         <source>This platform</source>
         <target state="translated">Diese Plattform</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">212</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
+          <context context-type="linenumber">212</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1949800099101277248" datatype="html">
         <source>Languages</source>
         <target state="translated">Sprachen</target>
@@ -15606,58 +15619,91 @@ The link will expire within 1 hour.</source>
       <trans-unit id="4019185430150596533" datatype="html" xml:space="preserve">
         <source>Only lives</source>
         <target state="translated">Nur Lives</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">247</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
+          <context context-type="linenumber">247</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="403276015827477743" datatype="html" xml:space="preserve">
         <source>Only VOD</source>
         <target state="translated">Nur Abrufvideo</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">253</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
+          <context context-type="linenumber">253</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7216759144314993217" datatype="html" xml:space="preserve">
         <source>Some videos with a specific sensitive content category have a different policy.</source>
         <target state="translated">Für manche Videos mit einer bestimmten Kategorie sensibler Inhalte gelten andere Richtlinien.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">350</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
+          <context context-type="linenumber">350</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3343072271931497433" datatype="html" xml:space="preserve">
         <source>Sensitive content hidden.</source>
         <target state="translated">Sensibler Inhalt wird ausgeblendet.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">357</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
+          <context context-type="linenumber">357</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4167711622812285080" datatype="html" xml:space="preserve">
         <source>Sensitive content has a warning.</source>
         <target state="translated">Sensibler Inhalt ist mit einer Warnung versehen.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">358</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
+          <context context-type="linenumber">358</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2995961823224509765" datatype="html" xml:space="preserve">
         <source>Sensitive content has a warning and the thumbnail is blurred.</source>
         <target state="translated">Sensibler Inhalt ist mit einer Warnung versehen und die Miniaturansicht ist unscharf.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">359</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
+          <context context-type="linenumber">359</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6447635594696346395" datatype="html" xml:space="preserve">
         <source>Sensitive content is displayed.</source>
         <target state="translated">Sensibler Inhalt wird angezeigt.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">361</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
+          <context context-type="linenumber">361</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8383768985718581098" datatype="html" xml:space="preserve">
         <source>hidden (with exceptions)</source>
         <target state="translated">verborgen (mit Ausnahmen)</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">366</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
+          <context context-type="linenumber">366</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4104450881162058902" datatype="html" xml:space="preserve">
         <source>warned (with exceptions)</source>
         <target state="translated">gewarnt (mit Ausnahmen)</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">367</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
+          <context context-type="linenumber">367</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8042820180196501836" datatype="html" xml:space="preserve">
         <source>blurred (with exceptions)</source>
         <target state="translated">verschwommen (mit Ausnahmen)</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">368</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
+          <context context-type="linenumber">368</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5493896943986215282" datatype="html" xml:space="preserve">
         <source>displayed (with exceptions)</source>
         <target state="translated">angezeigt (mit Ausnahmen)</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">370</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
+          <context context-type="linenumber">370</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7054829409324166420" datatype="html">
         <source>hidden</source>
         <target state="translated">versteckt</target>
@@ -15669,8 +15715,11 @@ The link will expire within 1 hour.</source>
       <trans-unit id="8640163781966564737" datatype="html" xml:space="preserve">
         <source>warned</source>
         <target state="translated">gewarnt</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">374</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
+          <context context-type="linenumber">374</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5766954855630346873" datatype="html">
         <source>blurred</source>
         <target state="translated">verschwommen</target>
@@ -15774,13 +15823,19 @@ The link will expire within 1 hour.</source>
       <trans-unit id="1035838766454786107" datatype="html" xml:space="preserve">
         <source>Audio-only</source>
         <target state="translated">Nur Audio</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context><context context-type="linenumber">58</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5508725342419733476" datatype="html" xml:space="preserve">
         <source>"Split audio and video" must be enabled for the PeerTube player to propose an "Audio only" resolution to users</source>
         <target state="translated">„Audio- und Videostreams aufteilen“ muss für den PeerTube-Player aktiviert werden, um für Benutzer eine „Nur Audio“-Auflösung vorschlagen zu können</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context><context context-type="linenumber">60</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7756250490108954499" datatype="html">
         <source>144p</source>
         <target state="translated">144p</target>
@@ -15856,8 +15911,11 @@ The link will expire within 1 hour.</source>
       <trans-unit id="3072354262521481761" datatype="html" xml:space="preserve">
         <source>You cannot allow live replay if you don't enable transcoding.</source>
         <target state="translated">Du kannst Live-Wiederholungen nicht erlauben, wenn du die Transkodierung nicht aktivierst.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context><context context-type="linenumber">214</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
+          <context context-type="linenumber">214</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3957742085471141221">
         <source>Auto (via ffmpeg)</source>
         <target>Automatisch (über ffmpeg)</target>
@@ -17472,9 +17530,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="27173108314474680" datatype="html">
+      <trans-unit id="27173108314474680" datatype="html" xml:space="preserve">
         <source>Go to the page where you can manage your account</source>
-        <target state="new">Go to the page where you can manage your account</target>
+        <target state="translated">Geh zur Seite, auf der du deinen Account verwalten kannst</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
           <context context-type="linenumber">40,41</context>
@@ -22430,9 +22488,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3203530711190558690" datatype="html">
+      <trans-unit id="3203530711190558690" datatype="html" xml:space="preserve">
         <source>Use https://sepiasearch.org as default search engine to search for content across all known PeerTube platforms</source>
-        <target state="new">Use https://sepiasearch.org as default search engine to search for content across all known PeerTube platforms</target>
+        <target state="translated">Benutze https://sepiasearch.org als Standardsuchmaschine, um nach Inhalt über allen bekannten PeerTube-Plattformen zu suchen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">97</context>
@@ -24136,39 +24194,63 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="6426647253249467388" datatype="html" xml:space="preserve">
         <source>Filter by a channel</source>
         <target state="translated">Nach einem Kanal filtern</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context><context context-type="linenumber">2</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5434235221870482011" datatype="html" xml:space="preserve">
         <source>This allows you to reorder playlists assigned to it</source>
         <target state="translated">Dies ermöglicht es dir, Wiedergabelisten, die dem zugewiesen wurden, umzusortieren</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context><context context-type="linenumber">3</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3371925892115176358" datatype="html" xml:space="preserve">
         <source>playlists per page</source>
         <target state="translated">Wiedergabelisten pro Seite</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context><context context-type="linenumber">18</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3108012194945806606" datatype="html" xml:space="preserve">
         <source>Drag and drop this row to reorder playlists in your channel</source>
         <target state="translated">Ziehe diese Zeile und lass sie fallen, um Wiedergabelisten in deinem Kanal umzusortieren</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context><context context-type="linenumber">27</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7319525983375433281" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No playlist} =1 {1 playlist} other {<x id="INTERPOLATION"/> playlists}}</source>
         <target state="translated">{VAR_PLURAL, plural, =0 {Keine Wiedergabeliste} =1 {1 playlist} other {<x id="INTERPOLATION"/> Wiedergabelisten}}</target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context><context context-type="linenumber">32</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context><context context-type="linenumber">34</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="358453340357015692" datatype="html" xml:space="preserve">
         <source><x id="ICU" equiv-text="{ totalRecords, plural, =0 {No playlist} =1 {1 playlist} other {{{ totalRecords | myNumberFormatter }} playlists}}" xid="3031081109030852848"/> in <x id="INTERPOLATION_1" equiv-text="{{ getFilteredChannel().displayName }}"/> channel</source>
         <target state="translated"><x id="ICU" xid="3031081109030852848" equiv-text="{ totalRecords, plural, =0 {No playlist} =1 {1 playlist} other {{{ totalRecords | myNumberFormatter }} playlists}}"/> in <x id="INTERPOLATION_1" equiv-text="{{ getFilteredChannel().displayName }}"/> Kanal</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context><context context-type="linenumber">32</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4311110442674793732" datatype="html" xml:space="preserve">
         <source>Search your playlists</source>
         <target state="translated">Durchsuche deine Wiedergabelisten</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context><context context-type="linenumber">40</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="420763834450076269" datatype="html">
         <source>Block</source>
         <target state="translated">Blockieren</target>
@@ -25066,9 +25148,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="187187500641108332" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
         </target>
