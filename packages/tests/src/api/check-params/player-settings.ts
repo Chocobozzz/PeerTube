@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { HttpStatusCode, PlayerSettings, VideoCreateResult, VideoPrivacy } from '@peertube/peertube-models'
+import { HttpStatusCode, PlayerChannelSettings, PlayerVideoSettings, VideoCreateResult, VideoPrivacy } from '@peertube/peertube-models'
 import {
   PeerTubeServer,
   cleanupTests,
@@ -76,7 +76,7 @@ describe('Test player settings API validator', function () {
 
   it('Should only allow to update player settings of a video by owner/moderators', async function () {
     const videoId = video.uuid
-    const playerSettings: PlayerSettings = { theme: 'lucide' }
+    const playerSettings: PlayerVideoSettings = { theme: 'lucide' }
 
     await server.playerSettings.updateForVideo({ token: server.accessToken, videoId, ...playerSettings })
     await server.playerSettings.updateForVideo({ token: ownerAccessToken, videoId, ...playerSettings })
@@ -93,7 +93,7 @@ describe('Test player settings API validator', function () {
 
   it('Should only allow to update player settings of a channel by owner/moderators', async function () {
     const channelHandle = 'owner_channel'
-    const playerSettings: PlayerSettings = { theme: 'lucide' }
+    const playerSettings: PlayerChannelSettings = { theme: 'lucide' }
 
     await server.playerSettings.updateForChannel({ token: server.accessToken, channelHandle, ...playerSettings })
     await server.playerSettings.updateForChannel({ token: ownerAccessToken, channelHandle, ...playerSettings })
