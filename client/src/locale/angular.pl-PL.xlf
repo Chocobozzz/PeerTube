@@ -1027,7 +1027,7 @@
       </trans-unit>
       <trans-unit id="7688104409544625220" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {1 view} other {<x id="INTERPOLATION"/> views}}</source>
-        <target state="translated"><x id="INTERPOLATION"/>{VAR_PLURAL, plural, =1 {1 wyświetlenie} few {<x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> wyświetlenia} many {<x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> wyświetleń} other {<x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> wyświetleń}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 wyświetlenie} few {<x id="INTERPOLATION"/> wyświetlenia} many {<x id="INTERPOLATION"/> wyświetleń} other {<x id="INTERPOLATION"/> wyświetleń}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context>
           <context context-type="linenumber">8</context>
