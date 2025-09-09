@@ -7,7 +7,7 @@ import {
   RunnerJobVODWebVideoTranscodingPayload
 } from '@peertube/peertube-models'
 import { logger } from '../../shared/index.js'
-import { processAudioMergeTranscoding, processHLSTranscoding, ProcessOptions, processWebVideoTranscoding } from './shared/index.js'
+import { processAudioMergeTranscoding, processHLSTranscoding, ProcessOptions, processWebVideoTranscoding, processGenerateStoryboard } from './shared/index.js'
 import { ProcessLiveRTMPHLSTranscoding } from './shared/process-live.js'
 import { processStudioTranscoding } from './shared/process-studio.js'
 import { processVideoTranscription } from './shared/process-transcription.js'
@@ -40,6 +40,10 @@ export async function processJob (options: ProcessOptions) {
 
     case 'video-transcription':
       await processVideoTranscription(options as ProcessOptions<RunnerJobTranscriptionPayload>)
+      break
+
+    case 'generate-video-storyboard':
+      await processGenerateStoryboard(options as any)
       break
 
     default:

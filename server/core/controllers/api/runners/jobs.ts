@@ -15,6 +15,7 @@ import {
   RunnerJobUpdatePayload,
   ServerErrorCode,
   TranscriptionSuccess,
+  GenerateStoryboardSuccess,
   UserRight,
   VODAudioMergeTranscodingSuccess,
   VODHLSTranscodingSuccess,
@@ -56,8 +57,13 @@ import { RunnerModel } from '@server/models/runner/runner.js'
 import express, { UploadFiles } from 'express'
 
 const postRunnerJobSuccessVideoFiles = createReqFiles(
-  [ 'payload[videoFile]', 'payload[resolutionPlaylistFile]', 'payload[vttFile]' ],
-  { ...MIMETYPES.VIDEO.MIMETYPE_EXT, ...MIMETYPES.M3U8.MIMETYPE_EXT, ...MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT }
+  [ 'payload[videoFile]', 'payload[resolutionPlaylistFile]', 'payload[vttFile]', 'payload[storyboardFile]' ],
+  {
+    ...MIMETYPES.VIDEO.MIMETYPE_EXT,
+    ...MIMETYPES.M3U8.MIMETYPE_EXT,
+    ...MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT,
+    ...MIMETYPES.IMAGE.MIMETYPE_EXT
+  }
 )
 
 const runnerJobUpdateVideoFiles = createReqFiles(
@@ -383,6 +389,14 @@ const jobSuccessPayloadBuilders: {
       ...payload,
 
       vttFile: files['payload[vttFile]'][0].path
+    }
+  },
+
+  'generate-video-storyboard': (payload: GenerateStoryboardSuccess, files) => {
+    return {
+      ...payload,
+
+      storyboardFile: files['payload[storyboardFile]'][0].path
     }
   }
 }

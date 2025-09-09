@@ -54,6 +54,11 @@ type CreateRunnerJobArg =
     privatePayload: RunnerJobVideoStudioTranscodingPrivatePayload
   } |
   {
+    type: Extract<RunnerJobType, 'generate-video-storyboard'>
+    payload: import('@peertube/peertube-models').RunnerJobGenerateStoryboardPayload
+    privatePayload: import('@peertube/peertube-models').RunnerJobGenerateStoryboardPrivatePayload
+  } |
+  {
     type: Extract<RunnerJobType, 'video-transcription'>
     payload: RunnerJobTranscriptionPayload
     privatePayload: RunnerJobTranscriptionPrivatePayload

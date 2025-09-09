@@ -1,5 +1,7 @@
 import { FFmpegImage, ffprobePromise, getVideoStreamDimensionsInfo } from '@peertube/peertube-ffmpeg'
 import { GenerateStoryboardPayload, VideoFileStream } from '@peertube/peertube-models'
+import { getTranscodingJobPriority } from '@server/lib/transcoding/transcoding-priority.js'
+import { VideoStoryboardJobHandler } from '@server/lib/runners/index.js'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg/index.js'
 import { generateImageFilename } from '@server/helpers/image-utils.js'
@@ -45,6 +47,8 @@ async function processGenerateStoryboard (job: Job): Promise<void> {
       return
     }
 
+    const runOnRunner = CONFIG.TRANSCODING.REMOTE_RUNNERS.ENABLED === true
+
     await VideoPathManager.Instance.makeAvailableVideoFile(inputFile, async videoPath => {
       const probe = await ffprobePromise(videoPath)
 
@@ -77,23 +81,29 @@ async function processGenerateStoryboard (job: Job): Promise<void> {
       })
 
       logger.debug(
-        `Generating storyboard from video of ${video.uuid} to ${destination}`,
+        `Generating storyboard for video ${video.uuid} (runner: ${runOnRunner})`,
         { ...lTags, totalSprites, spritesCount, spriteDuration, videoDuration: video.duration, spriteHeight, spriteWidth }
       )
 
-      await ffmpeg.generateStoryboardFromVideo({
-        destination,
-        path: videoPath,
-        inputFileMutexReleaser,
-        sprites: {
-          size: {
-            height: spriteHeight,
-            width: spriteWidth
-          },
-          count: spritesCount,
-          duration: spriteDuration
-        }
-      })
+      if (runOnRunner) {
+        const priority = await getTranscodingJobPriority({ user: null, type: 'vod', fallback: 0 })
+        await new VideoStoryboardJobHandler().create({ videoUUID: video.uuid, priority, federateAfter: payload.federate })
+        return
+      } else {
+        await ffmpeg.generateStoryboardFromVideo({
+          destination,
+          path: videoPath,
+          inputFileMutexReleaser,
+          sprites: {
+            size: {
+              height: spriteHeight,
+              width: spriteWidth
+            },
+            count: spritesCount,
+            duration: spriteDuration
+          }
+        })
+      }
 
       const imageSize = await getImageSizeFromWorker(destination)
 
@@ -106,23 +116,25 @@ async function processGenerateStoryboard (job: Job): Promise<void> {
             return
           }
 
-          const existing = await StoryboardModel.loadByVideo(video.id, transaction)
-          if (existing) await existing.destroy({ transaction })
+          if (runOnRunner !== true) {
+            const existing = await StoryboardModel.loadByVideo(video.id, transaction)
+            if (existing) await existing.destroy({ transaction })
 
-          await StoryboardModel.create({
-            filename,
-            totalHeight: imageSize.height,
-            totalWidth: imageSize.width,
-            spriteHeight,
-            spriteWidth,
-            spriteDuration,
-            videoId: video.id
-          }, { transaction })
+            await StoryboardModel.create({
+              filename,
+              totalHeight: imageSize.height,
+              totalWidth: imageSize.width,
+              spriteHeight,
+              spriteWidth,
+              spriteDuration,
+              videoId: video.id
+            }, { transaction })
 
-          logger.info(`Storyboard generation ${destination} ended for video ${video.uuid}.`, lTags)
+            logger.info(`Storyboard generation ${destination} ended for video ${video.uuid}.`, lTags)
 
-          if (payload.federate) {
-            await federateVideoIfNeeded(video, false, transaction)
+            if (payload.federate) {
+              await federateVideoIfNeeded(video, false, transaction)
+            }
           }
         })
       })
