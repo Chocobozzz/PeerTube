@@ -1,6 +1,6 @@
 {
-    "New message on abuse report": "New message on abuse report",
-    "A new message by {messageAccountName} was posted on <a href=\"{abuseUrl}\">abuse report #{abuseId}</a>": "A new message by {messageAccountName} was posted on <a href=\"{abuseUrl}\">abuse report #{abuseId}</a>",
+    "New message on abuse report": "Nova poruka na izvještaju o zloupotrebi",
+    "A new message by {messageAccountName} was posted on <a href=\"{abuseUrl}\">abuse report #{abuseId}</a>": "Nova poruka od {messageAccountName} objavljena je na <a href=\"{abuseUrl}\">izvještaju o zloupotrebi #{abuseId}</a>",
     "Abuse report state changed": "Abuse report state changed",
     "<a href=\"{abuseUrl}\">Your abuse report #{abuseId}</a> on {instanceName} has been accepted.": "<a href=\"{abuseUrl}\">Your abuse report #{abuseId}</a> on {instanceName} has been accepted.",
     "<a href=\"{abuseUrl}\">Your abuse report #{abuseId}</a> on {instanceName} has been rejected.": "<a href=\"{abuseUrl}\">Your abuse report #{abuseId}</a> on {instanceName} has been rejected.",
