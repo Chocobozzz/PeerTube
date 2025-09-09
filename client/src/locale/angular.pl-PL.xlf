@@ -252,9 +252,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
-        <source>
-          <x id="INTERPOLATION"/>
-        </source>
+        <source><x id="INTERPOLATION"/> </source>
         <target state="translated">
           <x id="INTERPOLATION"/>
         </target>
@@ -2742,8 +2740,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
-        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>.
-The link will expire within 1 hour.</source>
+        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
         <target state="translated">E-mail z instrukcjami resetowania hasła został wysłany na <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Odnośnik wygaśnie w ciągu 1 godziny.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
@@ -9153,11 +9150,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="5026011498416291967" datatype="html">
-        <source>
-          <x id="ICU" equiv-text="{abuse().countReportsForReporter, plural, =1 {1 report} other {{{ abuse().countReportsForReporter }} reports}}" xid="1879828604800763221"/>
-          <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/>
-          <x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/>
-        </source>
+        <source><x id="ICU" equiv-text="{abuse().countReportsForReporter, plural, =1 {1 report} other {{{ abuse().countReportsForReporter }} reports}}" xid="1879828604800763221"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/> <x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/> </source>
         <target state="new">
           <x id="ICU" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}" xid="1879828604800763221"/>
           <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/>
@@ -12176,81 +12169,81 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">97</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4354548488369167450" datatype="html">
+      <trans-unit id="4354548488369167450" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with Web Videos:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled Web Videos support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with Web Videos:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled Web Videos support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Wymaga oprogramowania ffmpeg w wersji 4.1 lub nowszej<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generuj playlisty HLS oraz pliki MP4 podzielone na fragmenty, dzięki czemu zyskujesz lepsze doświadczenia z oglądania niż w przypadku Web Videos:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Zmiana rozdzielczości jest płynniejsza<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Szybsze odtwarzanie w szczególności długich filmów<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Bardziej stabilne odtwarzanie (mniej problemów/nieskończonego ładowania się filmów)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Jeżeli wsparcie dla Web Videos zostało włączone, musisz zagospodarować dwukrotnie większą przestrzeń dyskową na filmy<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1638224906868555688" datatype="html">
+      <trans-unit id="1638224906868555688" datatype="html" xml:space="preserve">
         <source>Split audio and video streams</source>
-        <target state="new">Split audio and video streams</target>
+        <target state="translated">Podziel ścieżki dźwięku oraz obrazu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="443904340561625146" datatype="html">
+      <trans-unit id="443904340561625146" datatype="html" xml:space="preserve">
         <source>If enabled, remote PeerTube instances &lt; 6.3.0 won't be able to play these videos</source>
-        <target state="new">If enabled, remote PeerTube instances &lt; 6.3.0 won't be able to play these videos</target>
+        <target state="translated">Jeżeli włączone, zewnętrzne instancje PeerTube'a poniżej wersji 6.3.0 nie będą w stanie odtwarzać tych filmów</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">122</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8778692018772808354" datatype="html">
+      <trans-unit id="8778692018772808354" datatype="html" xml:space="preserve">
         <source>Store the audio stream in a separate file from the video.</source>
-        <target state="new">Store the audio stream in a separate file from the video.</target>
+        <target state="translated">Przechowuj ścieżkę dźwiękową w osobnym pliku od pliku wideo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4806060468959678872" datatype="html">
+      <trans-unit id="4806060468959678872" datatype="html" xml:space="preserve">
         <source>This option adds the ability for the HLS player to propose the "Audio only" quality to users.</source>
-        <target state="new">This option adds the ability for the HLS player to propose the "Audio only" quality to users.</target>
+        <target state="translated">Ta opcja włącza możliwość odtwarzaczowi HLS proponowanie użytkownikom jakości pn. „tylko ścieżka dźwiękowa”.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">126</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7702925566184017292" datatype="html">
+      <trans-unit id="7702925566184017292" datatype="html" xml:space="preserve">
         <source>It also saves disk space by not duplicating the audio stream in each resolution file</source>
-        <target state="new">It also saves disk space by not duplicating the audio stream in each resolution file</target>
+        <target state="translated">W ten sposób przestrzeń dyskowa jest oszczędzana dzięki pomijaniu duplikatów ścieżek dźwiękowych w każdym pliku</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2798443406255719006" datatype="html">
+      <trans-unit id="2798443406255719006" datatype="html" xml:space="preserve">
         <source>Max video FPS</source>
-        <target state="new">Max video FPS</target>
+        <target state="translated">Maksymalna liczba klatek na sekundę w filmie</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">139</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6032385969775568523" datatype="html">
+      <trans-unit id="6032385969775568523" datatype="html" xml:space="preserve">
         <source>Cap transcoded video FPS. Max resolution file still keeps the original FPS.</source>
-        <target state="new">Cap transcoded video FPS. Max resolution file still keeps the original FPS.</target>
+        <target state="translated">Ogranicz liczbę klatek na sekundę w transkodowanych filmach. Plik w maksymalnej rozdzielczości zachowuje oryginalną liczbę klatek na sekundę.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">141</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6698240176427495644" datatype="html">
+      <trans-unit id="6698240176427495644" datatype="html" xml:space="preserve">
         <source>Resolutions to generate</source>
-        <target state="new">Resolutions to generate</target>
+        <target state="translated">Rozdzielczości do wygenerowania</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">152</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2720128810058691158" datatype="html">
+      <trans-unit id="2720128810058691158" datatype="html" xml:space="preserve">
         <source>Even if it's above your maximum enabled resolution</source>
-        <target state="new">Even if it's above your maximum enabled resolution</target>
+        <target state="translated">Nawet jeżeli jest powyżej Twojego limitu maksymalnej rozdzielczości</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">172</context>
@@ -12497,13 +12490,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="7396819983420487866" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Write CSS code directly. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>  #custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
-  color: red;
-  <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
-  <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>  #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
-  color: red;
-  <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
-  <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Write CSS code directly. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
         <target state="new"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Write CSS code directly. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>  #custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
   color: red;
   <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
@@ -14435,9 +14422,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
-        <source>
-          <x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/>
-        </source>
+        <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/> </source>
         <target state="translated">
           <x id="ICU" equiv-text="{video.views, plural, =1 {1 wyświetlenie} few {{{ video.views | myNumberFormatter }} wyświetlenia}} many {{{ video.views | myNumberFormatter }} wyświetleń}} other {{{ video.views | myNumberFormatter }} wyświetleń}}"/>
         </target>
@@ -19813,8 +19798,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
-        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>.
-Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
+        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
         <target state="translated">Nie można uzyskać danych uwierzytelniających klienta OAuth: <x id="PH" equiv-text="error.text"/>. Upewnij się, że PeerTube jest prawidłowo skonfigurowane (katalog config/), szczególnie w sekcji „webserver”.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
@@ -20186,10 +20170,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="7804724824750282316" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/>
-          <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/> <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/>
           <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {wynik} few {wyniki} many {wyników} other {wyniki}}"/>
@@ -25137,9 +25118,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="187187500641108332" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
         </target>
