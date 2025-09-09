@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.0.3
 info:
   title: PeerTube
   version: 7.1.0
@@ -453,7 +453,7 @@ paths:
         '404':
           description: not found
 
-  '/download/videos/generate/:videoId':
+  '/download/videos/generate/{videoId}':
     get:
       tags:
         - Video Download
@@ -490,7 +490,7 @@ paths:
         - name: format
           in: path
           required: true
-          description: 'format expected (we focus on making `rss` the most featureful ; it serves [Media RSS](https://www.rssboard.org/media-rss))'
+          description: 'format expected (we focus on making `rss` the most feature-rich ; it serves [Media RSS](https://www.rssboard.org/media-rss))'
           schema:
             type: string
             enum:
@@ -585,7 +585,7 @@ paths:
         - name: format
           in: path
           required: true
-          description: 'format expected (we focus on making `rss` the most featureful ; it serves [Media RSS](https://www.rssboard.org/media-rss))'
+          description: 'format expected (we focus on making `rss` the most feature-rich ; it serves [Media RSS](https://www.rssboard.org/media-rss))'
           schema:
             type: string
             enum:
@@ -677,7 +677,7 @@ paths:
         - name: format
           in: path
           required: true
-          description: 'format expected (we focus on making `rss` the most featureful ; it serves [Media RSS](https://www.rssboard.org/media-rss))'
+          description: 'format expected (we focus on making `rss` the most feature-rich ; it serves [Media RSS](https://www.rssboard.org/media-rss))'
           schema:
             type: string
             enum:
@@ -1569,6 +1569,7 @@ paths:
               oneOf:
                 - $ref: '#/components/schemas/OAuthToken-password'
                 - $ref: '#/components/schemas/OAuthToken-refresh_token'
+                - $ref: '#/components/schemas/OAuthToken-external_token'
               discriminator:
                 propertyName: grant_type
                 mapping:
@@ -3728,7 +3729,8 @@ paths:
                   type: boolean
                 latencyMode:
                   description: User can select live latency mode if enabled by the instance
-                  $ref: '#/components/schemas/LiveVideoLatencyMode'
+                  allOf:
+                    - $ref: '#/components/schemas/LiveVideoLatencyMode'
                 thumbnailfile:
                   description: Live video/replay thumbnail file
                   type: string
@@ -5991,9 +5993,6 @@ paths:
           description: Get videos that have this maximum duration
           schema:
             type: integer
-      callbacks:
-        'searchTarget === search-index':
-          $ref: '#/components/callbacks/searchIndex'
       responses:
         '200':
           description: successful operation
@@ -6027,9 +6026,6 @@ paths:
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/host'
         - $ref: '#/components/parameters/handles'
-      callbacks:
-        'searchTarget === search-index':
-          $ref: '#/components/callbacks/searchIndex'
       responses:
         '200':
           description: successful operation
@@ -6063,9 +6059,6 @@ paths:
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/host'
         - $ref: '#/components/parameters/uuids'
-      callbacks:
-        'searchTarget === search-index':
-          $ref: '#/components/callbacks/searchIndex'
       responses:
         '200':
           description: successful operation
@@ -8694,7 +8687,6 @@ components:
           allOf:
             - $ref: '#/components/schemas/Video'
     VideoFile:
-      readOnly: true
       properties:
         id:
           $ref: '#/components/schemas/id'
@@ -9123,9 +9115,7 @@ components:
     VideoImport:
       properties:
         id:
-          readOnly: true
-          allOf:
-            - $ref: '#/components/schemas/id'
+          $ref: '#/components/schemas/id'
         targetUrl:
           type: string
           format: url
@@ -9137,30 +9127,23 @@ components:
           description: magnet URI allowing to resolve the import's source video
           pattern: /magnet:\?xt=urn:[a-z0-9]+:[a-z0-9]{32}/i
         torrentfile:
-          writeOnly: true
           type: string
           format: binary
           description: Torrent file containing only the video file
         torrentName:
-          readOnly: true
           type: string
         state:
-          readOnly: true
           allOf:
             - $ref: '#/components/schemas/VideoImportStateConstant'
         error:
-          readOnly: true
           type: string
         createdAt:
-          readOnly: true
           type: string
           format: date-time
         updatedAt:
-          readOnly: true
           type: string
           format: date-time
         video:
-          readOnly: true
           nullable: true
           allOf:
             - $ref: '#/components/schemas/Video'
@@ -9435,8 +9418,9 @@ components:
           type: string
           description: "**PeerTube >= 6.1** If enabled by the admin, the video source file is kept on the server and can be downloaded by the owner"
         resolution:
-          $ref: '#/components/schemas/VideoResolutionConstant'
           description: "**PeerTube >= 6.1**"
+          allOf:
+           - $ref: '#/components/schemas/VideoResolutionConstant'
         size:
           type: integer
           description: "**PeerTube >= 6.1** Video file size in bytes"
@@ -9564,9 +9548,10 @@ components:
           description: >
             Client software used to watch the video. For example "Firefox", "PeerTube Approval Android", etc.
         device:
-          $ref: '#/components/schemas/VideoStatsUserAgentDevice'
           description: >
             Device used to watch the video. For example "desktop", "mobile", "smarttv", etc.
+          allOf:
+            - $ref: '#/components/schemas/VideoStatsUserAgentDevice'
         operatingSystem:
           type: string
           description: >
@@ -10692,9 +10677,7 @@ components:
           type: boolean
           description: Has the user confirmed their email address?
         id:
-          allOf:
-            - $ref: '#/components/schemas/id'
-          readOnly: true
+          $ref: '#/components/schemas/id'
         pluginAuth:
           type: string
           description: Auth plugin to use to authenticate the user
@@ -11039,8 +11022,6 @@ components:
               type: string
               enum:
                 - password
-                - refresh_token
-              default: password
             username:
               $ref: '#/components/schemas/User/properties/username'
             password:
@@ -11059,9 +11040,7 @@ components:
             grant_type:
               type: string
               enum:
-                - password
                 - refresh_token
-              default: password
             refresh_token:
               type: string
               example: 2e0d675df9fc96d2e4ec8a3ebbbf45eca9137bb7
@@ -11070,6 +11049,26 @@ components:
         - client_secret
         - grant_type
         - refresh_token
+    OAuthToken-external_token:
+      allOf:
+        - $ref: '#/components/schemas/OAuthClient'
+        - type: object
+          properties:
+            grant_type:
+              type: string
+              enum:
+                - password
+            username:
+              $ref: '#/components/schemas/User/properties/username'
+            externalAuthToken:
+              type: string
+              description: If you want to authenticate using an external authentication token you got from an auth plugin (like `peertube-plugin-auth-openid-connect` for example) instead of a username/password or a refresh token, provide it here.
+      required:
+        - client_id
+        - client_secret
+        - grant_type
+        - username
+        - externalAuthToken
 
     VideoChannel:
       allOf:
@@ -11096,10 +11095,8 @@ components:
               minLength: 3
               maxLength: 1000
             isLocal:
-              readOnly: true
               type: boolean
             updatedAt:
-              readOnly: true
               type: string
               format: date-time
             banners:
@@ -11497,7 +11494,8 @@ components:
               $ref: '#/components/schemas/id'
             video:
               nullable: true
-              $ref: '#/components/schemas/VideoInfo'
+              allOf:
+                - $ref: '#/components/schemas/VideoInfo'
             torrentName:
               type: string
               nullable: true
@@ -11652,7 +11650,8 @@ components:
           type: boolean
         latencyMode:
           description: User can select live latency mode if enabled by the instance
-          $ref: '#/components/schemas/LiveVideoLatencyMode'
+          allOf:
+            - $ref: '#/components/schemas/LiveVideoLatencyMode'
         schedules:
           type: array
           items:
@@ -11678,7 +11677,8 @@ components:
           type: boolean
         latencyMode:
           description: User can select live latency mode if enabled by the instance
-          $ref: '#/components/schemas/LiveVideoLatencyMode'
+          allOf:
+            - $ref: '#/components/schemas/LiveVideoLatencyMode'
         schedules:
           type: array
           items:
@@ -12195,15 +12195,3 @@ components:
         The file storage type:
           - `0` File system
           - `1` Object storage
-  callbacks:
-    searchIndex:
-      'https://search.example.org/api/v1/search/videos':
-        post:
-          summary: third-party search index MAY be used instead of the local index, if enabled by the instance admin. see `searchTarget`
-          responses:
-            '200':
-              description: successful operation
-              content:
-                application/json:
-                  schema:
-                    $ref: '#/components/schemas/VideoListResponse'
