@@ -12,6 +12,7 @@
 
 ### Plugins/Themes/Embed API
 
+  * **Breaking change** Plugin and themes must use `:root` CSS selector instead of `body` to inject CSS variables
   * Add server API (https://docs.joinpeertube.org/api/plugins):
     * Support `externalRedirectUri` for `registerExternalAuth` so PeerTube redirects users on another URL set by the plugin
     * If your plugin uses `filter:email.template-path.result` server hook: emails now use Handlebars template engine instead of Pug template engine
