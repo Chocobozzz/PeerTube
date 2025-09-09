@@ -260,6 +260,8 @@ tags:
     description: Operations dealing with managing chapters of a video.
   - name: Video Channels
     description: Operations dealing with the creation, modification and listing of videos within a channel.
+  - name: Player Settings
+    description: Operations dealing with video player settings for videos and channels.
   - name: Video Comments
     description: >
       Operations dealing with comments to a video. Comments are organized in threads: adding a
@@ -5061,6 +5063,107 @@ paths:
       responses:
         '204':
           description: successful operation
+
+
+  '/api/v1/player-settings/videos/{videoId}':
+    get:
+      summary: Get video player settings
+      description: Get player settings for a specific video. Returns video-specific settings merged with channel player settings.
+      operationId: getVideoPlayerSettings
+      tags:
+        - Player Settings
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+        - name: raw
+          in: query
+          required: false
+          description: Return raw settings without merging channel defaults
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerVideoSettings'
+        '404':
+          description: video not found
+    put:
+      summary: Update video player settings
+      description: Update player settings for a specific video
+      operationId: updateVideoPlayerSettings
+      security:
+        - OAuth2: []
+      tags:
+        - Player Settings
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlayerVideoSettingsUpdate'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerVideoSettings'
+        '404':
+          description: video not found
+
+  '/api/v1/player-settings/video-channels/{handle}':
+    get:
+      summary: Get channel player settings
+      description: Get player settings for a video channel.
+      operationId: getChannelPlayerSettings
+      tags:
+        - Player Settings
+      parameters:
+        - $ref: '#/components/parameters/channelHandle'
+        - name: raw
+          in: query
+          required: false
+          description: Return raw settings without applying instance defaults
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerChannelSettings'
+        '404':
+          description: video channel not found
+    put:
+      summary: Update channel player settings
+      description: Update default player settings for a video channel.
+      operationId: updateChannelPlayerSettings
+      security:
+        - OAuth2: []
+      tags:
+        - Player Settings
+      parameters:
+        - $ref: '#/components/parameters/channelHandle'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlayerChannelSettingsUpdate'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerChannelSettings'
+        '404':
+          description: video channel not found
 
 
   /api/v1/video-playlists/privacies:
@@ -12017,6 +12120,71 @@ components:
       items:
         $ref: "#/components/schemas/VideoPassword/properties/password"
       uniqueItems: true
+
+    PlayerTheme:
+      type: string
+      enum:
+        - galaxy
+        - lucide
+      description: The player theme to use
+
+    PlayerThemeChannelSetting:
+      type: string
+      enum:
+        - instance-default
+        - galaxy
+        - lucide
+      description: >
+        Player theme setting for a channel:
+          - `instance-default` Use the instance default theme
+          - `galaxy` Use the galaxy theme
+          - `lucide` Use the lucide theme
+
+    PlayerThemeVideoSetting:
+      type: string
+      enum:
+        - channel-default
+        - instance-default
+        - galaxy
+        - lucide
+      description: >
+        Player theme setting for a video:
+          - `channel-default` Use the channel default theme
+          - `instance-default` Use the instance default theme
+          - `galaxy` Use the galaxy theme
+          - `lucide` Use the lucide theme
+
+    PlayerVideoSettings:
+      type: object
+      properties:
+        theme:
+          $ref: '#/components/schemas/PlayerThemeVideoSetting'
+      description: Player settings for a video
+
+    PlayerChannelSettings:
+      type: object
+      properties:
+        theme:
+          $ref: '#/components/schemas/PlayerThemeChannelSetting'
+      description: Player settings for a channel
+
+    PlayerVideoSettingsUpdate:
+      type: object
+      properties:
+        theme:
+          $ref: '#/components/schemas/PlayerThemeVideoSetting'
+      required:
+        - theme
+      description: Player settings update for a video
+
+    PlayerChannelSettingsUpdate:
+      type: object
+      properties:
+        theme:
+          $ref: '#/components/schemas/PlayerThemeChannelSetting'
+      required:
+        - theme
+      description: Player settings update for a channel
 
     FileStorage:
       type: integer
