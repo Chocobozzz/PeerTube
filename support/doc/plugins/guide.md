@@ -878,7 +878,7 @@ You can take inspiration from core PeerTube themes in [client/src/sass/applicati
 :::
 
 ```css
-body {
+:root {
   --is-dark: 0; /* Or --is-dark: 1 if it's a dark theme */
 
   --primary: #FD9C50;
