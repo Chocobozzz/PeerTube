@@ -1,4 +1,4 @@
-import { Client as NetIPC } from '@peertube/net-ipc'
+import { Client as NetIPC } from 'net-ipc'
 import CliTable3 from 'cli-table3'
 import { ensureDir } from 'fs-extra/esm'
 import { ConfigManager } from '../config-manager.js'
@@ -20,7 +20,7 @@ export class IPCClient {
       if (err.code === 'ECONNREFUSED') {
         throw new Error(
           'This runner is not currently running in server mode on this system. ' +
-          'Please run it using the `server` command first (in another terminal for example) and then retry your command.'
+            'Please run it using the `server` command first (in another terminal for example) and then retry your command.'
         )
       }
 

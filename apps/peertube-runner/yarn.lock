@@ -37,14 +37,6 @@
   resolved "https://registry.yarnpkg.com/@msgpackr-extract/msgpackr-extract-win32-x64/-/msgpackr-extract-win32-x64-3.0.3.tgz#0aa5502d547b57abfc4ac492de68e2006e417242"
   integrity sha512-x0fWaQtYp4E6sktbsdAqnehxDgEc/VwM7uLsRCYWaiGu0ykYdZPiS8zCWdnjHwyiumousxfBm4SO31eXqwEZhQ==
 
-"@peertube/net-ipc@^2.2.0":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@peertube/net-ipc/-/net-ipc-2.2.1.tgz#3d1c154a08b57cfea31ed760ec76fe2f69e35a19"
-  integrity sha512-RyKIGC3EeQ+xnSccf592qqsaXWrGp4wGfGl4W+wxDoZkwsThZJuiSbX8aCC1qZBHaDo3EuRH3ZrwsKpNjnyDAQ==
-  optionalDependencies:
-    fast-zlib "^2.0.1"
-    msgpackr "^1.3.2"
-
 "@types/follow-redirects@1.14.4":
   version "1.14.4"
   resolved "https://registry.yarnpkg.com/@types/follow-redirects/-/follow-redirects-1.14.4.tgz#ca054d72ef574c77949fc5fff278b430fcd508ec"
@@ -106,7 +98,7 @@ fast-safe-stringify@^2.1.1:
   resolved "https://registry.yarnpkg.com/fast-safe-stringify/-/fast-safe-stringify-2.1.1.tgz#c406a83b6e70d9e35ce3b30a81141df30aeba884"
   integrity sha512-W+KJc2dmILlPplD/H4K9l9LcAHAfPtP6BY84uVLXQ6Evcz9Lcg33Y2z1IVblT6xdY54PXYVHEv+0Wpq8Io6zkA==
 
-fast-zlib@^2.0.1:
+fast-zlib@2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/fast-zlib/-/fast-zlib-2.0.1.tgz#be624f592fc80ad8019ee2025d16a367a4e9b024"
   integrity sha512-DCoYgNagM2Bt1VIpXpdGnRx4LzqJeYG0oh6Nf/7cWo6elTXkFGMw9CrRCYYUIapYNrozYMoyDRflx9mgT3Awyw==
@@ -145,12 +137,20 @@ msgpackr-extract@^3.0.2:
     "@msgpackr-extract/msgpackr-extract-linux-x64" "3.0.3"
     "@msgpackr-extract/msgpackr-extract-win32-x64" "3.0.3"
 
-msgpackr@^1.3.2:
+msgpackr@1.11.5:
   version "1.11.5"
   resolved "https://registry.yarnpkg.com/msgpackr/-/msgpackr-1.11.5.tgz#edf0b9d9cb7d8ed6897dd0e42cfb865a2f4b602e"
   integrity sha512-UjkUHN0yqp9RWKy0Lplhh+wlpdt9oQBYgULZOiFhV3VclSF1JnSQWZ5r9gORQlNYaUKQoR8itv7g7z1xDDuACA==
   optionalDependencies:
     msgpackr-extract "^3.0.2"
+
+net-ipc@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/net-ipc/-/net-ipc-2.2.2.tgz#2c5e6042f2a7c1f388ab86744b8c0f0c2b3eb173"
+  integrity sha512-HGXL5ql3Moru1xaS79zEscXpoUyUwVy9arOplClKHDaEWfUaoyOtSLXLe1xUOHoyZ0aM61WtZg0TCYYRheYMvw==
+  optionalDependencies:
+    fast-zlib "2.0.1"
+    msgpackr "1.11.5"
 
 node-gyp-build-optional-packages@5.2.2:
   version "5.2.2"

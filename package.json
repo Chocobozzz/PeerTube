@@ -198,7 +198,6 @@
     "yauzl": "^3.1.0"
   },
   "devDependencies": {
-    "@peertube/maildev": "^1.2.0",
     "@peertube/resolve-tspaths": "^0.8.14",
     "@stylistic/eslint-plugin": "^4.2.0",
     "@types/archiver": "^6.0.2",
