@@ -15,8 +15,8 @@ export function extractVideo (videoOrPlaylist: MVideo | MStreamingPlaylistVideo)
 
 export function getPrivaciesForFederation () {
   return (CONFIG.FEDERATION.VIDEOS.FEDERATE_UNLISTED === true)
-    ? [ { privacy: VideoPrivacy.PUBLIC }, { privacy: VideoPrivacy.UNLISTED } ]
-    : [ { privacy: VideoPrivacy.PUBLIC } ]
+    ? [ { privacy: VideoPrivacy.PUBLIC }, { privacy: VideoPrivacy.UNLISTED }, { privacy: VideoPrivacy.PREMIERE } ]
+    : [ { privacy: VideoPrivacy.PUBLIC }, { privacy: VideoPrivacy.PREMIERE } ]
 }
 
 export function getExtFromMimetype (mimeTypes: { [id: string]: string | string[] }, mimeType: string) {
