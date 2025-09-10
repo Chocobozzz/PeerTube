@@ -418,6 +418,9 @@ export interface ServerConfig {
 
   storyboards: {
     enabled: boolean
+    remoteRunners: {
+      enabled: boolean
+    }
   }
 
   videoTranscription: {

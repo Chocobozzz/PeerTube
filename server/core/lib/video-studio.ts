@@ -12,7 +12,7 @@ import { VideoStudioTranscodingJobHandler } from './runners/index.js'
 import { getTranscodingJobPriority } from './transcoding/transcoding-priority.js'
 import { regenerateTranscriptionTaskIfNeeded } from './video-captions.js'
 import { buildNewFile, removeHLSPlaylist, removeWebVideoFile } from './video-file.js'
-import { buildStoryboardJobIfNeeded } from './video-jobs.js'
+import { addRemoteStoryboardJobIfNeeded, buildLocalStoryboardJobIfNeeded } from './video-jobs.js'
 import { VideoPathManager } from './video-path-manager.js'
 
 const lTags = loggerTagsFactory('video-studio')
@@ -110,7 +110,7 @@ export async function onVideoStudioEnded (options: {
   await video.save()
 
   await JobQueue.Instance.createSequentialJobFlow(
-    buildStoryboardJobIfNeeded({ video, federate: false }),
+    buildLocalStoryboardJobIfNeeded({ video, federate: false }),
     {
       type: 'federate-video' as 'federate-video',
       payload: {
@@ -129,6 +129,7 @@ export async function onVideoStudioEnded (options: {
     }
   )
 
+  await addRemoteStoryboardJobIfNeeded(video)
   await regenerateTranscriptionTaskIfNeeded(video)
 }
 

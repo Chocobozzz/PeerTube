@@ -384,7 +384,10 @@ class ServerConfigManager {
       },
 
       storyboards: {
-        enabled: CONFIG.STORYBOARDS.ENABLED
+        enabled: CONFIG.STORYBOARDS.ENABLED,
+        remoteRunners: {
+          enabled: CONFIG.STORYBOARDS.REMOTE_RUNNERS.ENABLED
+        }
       },
 
       webrtc: {

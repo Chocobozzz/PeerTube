@@ -108,6 +108,10 @@ export class ConfigManager {
 
   // ---------------------------------------------------------------------------
 
+  getStoryboardDirectory () {
+    return join(paths.cache, this.id, 'storyboard')
+  }
+
   getTranscodingDirectory () {
     return join(paths.cache, this.id, 'transcoding')
   }

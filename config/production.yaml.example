@@ -340,6 +340,9 @@ security:
   powered_by_header:
     enabled: true
 
+http_server:
+  request_timeout: '5 minutes'
+
 tracker:
   # If you disable the tracker, you disable the P2P on your PeerTube instance
   enabled: true
@@ -1143,6 +1146,10 @@ client:
 storyboards:
   # Generate storyboards of local videos using ffmpeg so users can see the video preview in the player while scrubbing the video
   enabled: true
+
+  remote_runners:
+    # Use remote runners to generate storyboards instead of processing them locally
+    enabled: false
 
 # Update default PeerTube values
 # Set by API when the field is not provided and put as default value in client

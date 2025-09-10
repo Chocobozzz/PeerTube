@@ -291,6 +291,7 @@ export const REPEAT_JOBS: { [id in JobType]?: RepeatOptions } = {
   }
 }
 export const JOB_PRIORITY = {
+  STORYBOARD: 95,
   TRANSCODING: 100,
   VIDEO_STUDIO: 150,
   TRANSCRIPTION: 200

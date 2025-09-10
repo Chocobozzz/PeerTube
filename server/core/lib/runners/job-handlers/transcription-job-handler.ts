@@ -72,7 +72,7 @@ export class TranscriptionJobHandler extends AbstractJobHandler<CreateOptions, R
       jobUUID,
       payload,
       privatePayload,
-      priority: JOB_PRIORITY.TRANSCODING
+      priority: JOB_PRIORITY.TRANSCRIPTION
     })
 
     return job

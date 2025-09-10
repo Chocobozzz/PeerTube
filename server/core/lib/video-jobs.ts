@@ -3,6 +3,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { MVideo, MVideoFile, MVideoFullLight, MVideoUUID } from '@server/types/models/index.js'
 import { CreateJobArgument, CreateJobOptions, JobQueue } from './job-queue/job-queue.js'
+import { VideoStoryboardJobHandler } from './runners/index.js'
 import { createTranscriptionTaskIfNeeded } from './video-captions.js'
 import { moveFilesIfPrivacyChanged } from './video-privacy.js'
 
@@ -26,13 +27,13 @@ export async function buildMoveVideoJob (options: {
   }
 }
 
-export function buildStoryboardJobIfNeeded (options: {
+export function buildLocalStoryboardJobIfNeeded (options: {
   video: MVideo
   federate: boolean
 }) {
   const { video, federate } = options
 
-  if (CONFIG.STORYBOARDS.ENABLED) {
+  if (CONFIG.STORYBOARDS.ENABLED && !CONFIG.STORYBOARDS.REMOTE_RUNNERS.ENABLED) {
     return {
       type: 'generate-video-storyboard' as 'generate-video-storyboard',
       payload: {
@@ -55,6 +56,28 @@ export function buildStoryboardJobIfNeeded (options: {
   return undefined
 }
 
+export function addRemoteStoryboardJobIfNeeded (video: MVideo) {
+  if (CONFIG.STORYBOARDS.ENABLED !== true) return
+  if (CONFIG.STORYBOARDS.REMOTE_RUNNERS.ENABLED !== true) return
+
+  return new VideoStoryboardJobHandler().create({ videoUUID: video.uuid })
+}
+
+export async function addLocalOrRemoteStoryboardJobIfNeeded (options: {
+  video: MVideo
+  federate: boolean
+}) {
+  const { video, federate } = options
+
+  if (CONFIG.STORYBOARDS.ENABLED !== true) return
+
+  if (CONFIG.STORYBOARDS.REMOTE_RUNNERS.ENABLED === true) {
+    await addRemoteStoryboardJobIfNeeded(video)
+  } else {
+    await JobQueue.Instance.createJob(buildLocalStoryboardJobIfNeeded({ video, federate }))
+  }
+}
+
 export async function addVideoJobsAfterCreation (options: {
   video: MVideo
   videoFile: MVideoFile
@@ -72,7 +95,7 @@ export async function addVideoJobsAfterCreation (options: {
       }
     },
 
-    buildStoryboardJobIfNeeded({ video, federate: false }),
+    buildLocalStoryboardJobIfNeeded({ video, federate: false }),
 
     {
       type: 'notify',
@@ -108,6 +131,8 @@ export async function addVideoJobsAfterCreation (options: {
   }
 
   await JobQueue.Instance.createSequentialJobFlow(...jobs)
+
+  await addRemoteStoryboardJobIfNeeded(video)
 
   if (generateTranscription === true) {
     await createTranscriptionTaskIfNeeded(video)

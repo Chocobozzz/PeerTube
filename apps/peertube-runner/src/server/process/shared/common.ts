@@ -1,5 +1,12 @@
 import { pick } from '@peertube/peertube-core-utils'
-import { FFmpegEdition, FFmpegLive, FFmpegVOD, getDefaultAvailableEncoders, getDefaultEncodersToTry } from '@peertube/peertube-ffmpeg'
+import {
+  FFmpegEdition,
+  FFmpegImage,
+  FFmpegLive,
+  FFmpegVOD,
+  getDefaultAvailableEncoders,
+  getDefaultEncodersToTry
+} from '@peertube/peertube-ffmpeg'
 import { RunnerJob, RunnerJobPayload } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { PeerTubeServer } from '@peertube/peertube-server-commands'
@@ -8,9 +15,9 @@ import { join } from 'path'
 import { ConfigManager, downloadFile, logger } from '../../../shared/index.js'
 import { getWinstonLogger } from './winston-logger.js'
 
-export type JobWithToken <T extends RunnerJobPayload = RunnerJobPayload> = RunnerJob<T> & { jobToken: string }
+export type JobWithToken<T extends RunnerJobPayload = RunnerJobPayload> = RunnerJob<T> & { jobToken: string }
 
-export type ProcessOptions <T extends RunnerJobPayload = RunnerJobPayload> = {
+export type ProcessOptions<T extends RunnerJobPayload = RunnerJobPayload> = {
   server: PeerTubeServer
   job: JobWithToken<T>
   runnerToken: string
@@ -106,6 +113,10 @@ export function buildFFmpegLive () {
 
 export function buildFFmpegEdition () {
   return new FFmpegEdition(getCommonFFmpegOptions())
+}
+
+export function buildFFmpegImage () {
+  return new FFmpegImage(getCommonFFmpegOptions())
 }
 
 function getCommonFFmpegOptions () {

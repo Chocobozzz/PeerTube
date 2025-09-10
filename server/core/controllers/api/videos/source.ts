@@ -8,7 +8,7 @@ import { setupUploadResumableRoutes } from '@server/lib/uploadx.js'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
 import { regenerateTranscriptionTaskIfNeeded } from '@server/lib/video-captions.js'
 import { buildNewFile, createVideoSource } from '@server/lib/video-file.js'
-import { buildMoveVideoJob, buildStoryboardJobIfNeeded } from '@server/lib/video-jobs.js'
+import { addRemoteStoryboardJobIfNeeded, buildLocalStoryboardJobIfNeeded, buildMoveVideoJob } from '@server/lib/video-jobs.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
 import { openapiOperationDoc } from '@server/middlewares/doc.js'
@@ -172,7 +172,7 @@ async function addVideoJobsAfterUpload (video: MVideoFullLight, videoFile: MVide
       }
     },
 
-    buildStoryboardJobIfNeeded({ video, federate: false }),
+    buildLocalStoryboardJobIfNeeded({ video, federate: false }),
 
     {
       type: 'federate-video' as const,
@@ -201,6 +201,7 @@ async function addVideoJobsAfterUpload (video: MVideoFullLight, videoFile: MVide
 
   await JobQueue.Instance.createSequentialJobFlow(...jobs)
 
+  await addRemoteStoryboardJobIfNeeded(video)
   await regenerateTranscriptionTaskIfNeeded(video)
 }
 

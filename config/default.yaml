@@ -1137,6 +1137,10 @@ storyboards:
   # Generate storyboards of local videos using ffmpeg so users can see the video preview in the player while scrubbing the video
   enabled: true
 
+  remote_runners:
+    # Use remote runners to generate storyboards instead of processing them locally
+    enabled: false
+
 # Update default PeerTube values
 # Set by API when the field is not provided and put as default value in client
 defaults:
