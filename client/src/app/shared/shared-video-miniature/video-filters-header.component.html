@@ -59,7 +59,7 @@
     <div class="d-flex flex-wrap align-items-center mb-2">
       <label for="sort-videos" i18n class="select-label">Sort by:</label>
 
-      <my-select-options inputId="sort-videos" class="d-inline-block me-2" formControlName="sort" [items]="sortItems"></my-select-options>
+      <my-select-videos-sort inputId="sort-videos" class="d-inline-block me-2" formControlName="sort"></my-select-videos-sort>
     </div>
   </div>
 
@@ -115,7 +115,7 @@
         <div class="form-group">
           <label for="scope" i18n>Displayed videos</label>
 
-          <my-select-options inputId="scope" class="scope-select" formControlName="scope" [items]="availableScopes"></my-select-options>
+          <my-select-videos-scope inputId="scope" class="scope-select" formControlName="scope"></my-select-videos-scope>
         </div>
       </div>
 

@@ -33,6 +33,8 @@ import { MarkdownTextareaComponent } from '../../../shared/shared-forms/markdown
 import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
 import { SelectCustomValueComponent } from '../../../shared/shared-forms/select/select-custom-value.component'
 import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
+import { SelectVideosSortComponent } from '../../../shared/shared-forms/select/select-videos-sort.component'
+import { SelectVideosScopeComponent } from '../../../shared/shared-forms/select/select-videos-scope.component'
 import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
 import { UserRealQuotaInfoComponent } from '../../shared/user-real-quota-info.component'
 import { AdminSaveBarComponent } from '../shared/admin-save-bar.component'
@@ -43,6 +45,11 @@ type Form = {
   }>
 
   client: FormGroup<{
+    browseVideos: FormGroup<{
+      defaultSort: FormControl<string>
+      defaultScope: FormControl<string>
+    }>
+
     menu: FormGroup<{
       login: FormGroup<{
         redirectOnSingleExternalAuth: FormControl<boolean>
@@ -220,7 +227,9 @@ type Form = {
     UserRealQuotaInfoComponent,
     SelectOptionsComponent,
     AlertComponent,
-    AdminSaveBarComponent
+    AdminSaveBarComponent,
+    SelectVideosSortComponent,
+    SelectVideosScopeComponent
   ]
 })
 export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanComponentDeactivate {
@@ -295,6 +304,10 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
         defaultClientRoute: null
       },
       client: {
+        browseVideos: {
+          defaultSort: null,
+          defaultScope: null
+        },
         menu: {
           login: {
             redirectOnSingleExternalAuth: null

@@ -36,6 +36,8 @@ input[type="checkbox"] {
   @include peertube-select-container($form-base-input-width);
 }
 
+my-select-videos-sort,
+my-select-videos-scope,
 my-select-checkbox,
 my-select-options,
 my-select-custom-value {

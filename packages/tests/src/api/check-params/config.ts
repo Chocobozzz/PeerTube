@@ -221,6 +221,69 @@ describe('Test config API validators', function () {
         expectedStatus: HttpStatusCode.OK_200
       })
     })
+
+    describe('Browse videos section', function () {
+      it('Should fail with an invalid default sort', async function () {
+        const newUpdateParams: CustomConfig = merge({}, {}, updateParams, {
+          client: {
+            browseVideos: {
+              defaultSort: 'hello'
+            }
+          }
+        })
+
+        await makePutBodyRequest({
+          url: server.url,
+          path,
+          fields: newUpdateParams,
+          token: server.accessToken,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      })
+
+      it('Should fail with a trending default sort & disabled trending algorithm', async function () {
+        const newUpdateParams: CustomConfig = merge({}, {}, updateParams, {
+          trending: {
+            videos: {
+              algorithms: {
+                enabled: [ 'hot', 'most-liked' ]
+              }
+            }
+          },
+          client: {
+            browseVideos: {
+              defaultSort: '-trending'
+            }
+          }
+        })
+
+        await makePutBodyRequest({
+          url: server.url,
+          path,
+          fields: newUpdateParams,
+          token: server.accessToken,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      })
+
+      it('Should fail with an invalid default scope', async function () {
+        const newUpdateParams: CustomConfig = merge({}, {}, updateParams, {
+          client: {
+            browseVideos: {
+              defaultScope: 'hello'
+            }
+          }
+        })
+
+        await makePutBodyRequest({
+          url: server.url,
+          path,
+          fields: newUpdateParams,
+          token: server.accessToken,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      })
+    })
   })
 
   describe('When deleting the configuration', function () {

@@ -50,6 +50,11 @@ export interface ServerConfig {
       }
     }
 
+    browseVideos: {
+      defaultSort: string
+      defaultScope: string
+    }
+
     menu: {
       login: {
         redirectOnSingleExternalAuth: boolean

@@ -366,6 +366,10 @@ function customConfig (): CustomConfig {
           preferAuthorDisplayName: CONFIG.CLIENT.VIDEOS.MINIATURE.PREFER_AUTHOR_DISPLAY_NAME
         }
       },
+      browseVideos: {
+        defaultSort: CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SORT,
+        defaultScope: CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SCOPE
+      },
       menu: {
         login: {
           redirectOnSingleExternalAuth: CONFIG.CLIENT.MENU.LOGIN.REDIRECT_ON_SINGLE_EXTERNAL_AUTH

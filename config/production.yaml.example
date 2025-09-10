@@ -1095,6 +1095,22 @@ client:
       # If null, it will be calculated based on network speed
       max_chunk_size: null
 
+  browse_videos:
+    # Default sort option
+    # Available options:
+    #  '-publishedAt'
+    #  '-originallyPublishedAt'
+    #  'name'
+    #  '-trending' (requires the 'most-viewed' trending videos algorithm to be enabled)
+    #  '-hot' (requires the 'hot' trending videos algorithm to be enabled)
+    #  '-likes' (requires the 'most-liked' trending videos algorithm to be enabled)
+    #  '-views'
+    default_sort: '-publishedAt'
+
+    # Default scope option
+    # Available options: 'local' or 'federated'
+    default_scope: 'federated'
+
   menu:
     login:
       # If you enable only one external auth plugin
