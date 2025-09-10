@@ -3,7 +3,6 @@ import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
 type UpdatePayload = {
-  id: number
   lastActivityDate: Date
   lastActivityIP: string
   lastActivityDevice: string
@@ -14,29 +13,27 @@ export class UpdateTokenSessionScheduler extends AbstractScheduler {
 
   protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.UPDATE_TOKEN_SESSION
 
-  private readonly toUpdate = new Set<UpdatePayload>()
+  private toUpdate = new Map<number, UpdatePayload>()
 
   private constructor () {
     super()
   }
 
-  addToUpdate (payload: UpdatePayload) {
-    this.toUpdate.add(payload)
+  addToUpdate (id: number, payload: UpdatePayload) {
+    this.toUpdate.set(id, payload)
   }
 
   protected async internalExecute () {
-    const toUpdate = Array.from(this.toUpdate)
-    this.toUpdate.clear()
+    const entriesToUpdate = this.toUpdate.entries()
+    this.toUpdate = new Map()
 
-    for (const payload of toUpdate) {
+    for (const [ id, payload ] of entriesToUpdate) {
       await OAuthTokenModel.update({
         lastActivityDate: payload.lastActivityDate,
         lastActivityIP: payload.lastActivityIP,
         lastActivityDevice: payload.lastActivityDevice
       }, {
-        where: {
-          id: payload.id
-        },
+        where: { id },
         // Prevent tokens cache invalidation, we don't update fields that are meaningful for this cache
         hooks: false
       })

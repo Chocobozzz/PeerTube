@@ -13,8 +13,7 @@ export function authenticate (req: express.Request, res: express.Response, next:
       res.locals.oauth = { token }
       res.locals.authenticated = true
 
-      UpdateTokenSessionScheduler.Instance.addToUpdate({
-        id: token.id,
+      UpdateTokenSessionScheduler.Instance.addToUpdate(token.id, {
         lastActivityDate: new Date(),
         lastActivityIP: req.ip,
         lastActivityDevice: req.header('user-agent')
