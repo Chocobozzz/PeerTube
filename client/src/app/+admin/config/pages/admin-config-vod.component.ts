@@ -226,7 +226,7 @@ export class AdminConfigVODComponent implements OnInit, OnDestroy, CanComponentD
     return { 'disabled-checkbox-extra': !this.isTranscodingEnabled() || this.isRemoteRunnerVODEnabled() }
   }
 
-  getStudioDisabledClass () {
+  getStudioRunnerDisabledClass () {
     return { 'disabled-checkbox-extra': !this.isStudioEnabled() }
   }
 

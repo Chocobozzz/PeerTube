@@ -4,6 +4,7 @@ import {
   AcceptRunnerJobBody,
   AcceptRunnerJobResult,
   ErrorRunnerJobBody,
+  GenerateStoryboardSuccess,
   HttpStatusCode,
   ListRunnerJobsQuery,
   RequestRunnerJobBody,
@@ -11,6 +12,7 @@ import {
   ResultList,
   RunnerJobAdmin,
   RunnerJobCustomUpload,
+  RunnerJobGenerateStoryboardPayload,
   RunnerJobLiveRTMPHLSTranscodingPayload,
   RunnerJobPayload,
   RunnerJobState,
@@ -18,20 +20,18 @@ import {
   RunnerJobSuccessBody,
   RunnerJobSuccessPayload,
   RunnerJobTranscriptionPayload,
-  RunnerJobGenerateStoryboardPayload,
   RunnerJobType,
   RunnerJobUpdateBody,
   RunnerJobVODAudioMergeTranscodingPayload,
   RunnerJobVODHLSTranscodingPayload,
   RunnerJobVODPayload,
-  GenerateStoryboardSuccess,
   TranscriptionSuccess,
   VODHLSTranscodingSuccess,
   VODWebVideoTranscodingSuccess,
+  isGenerateStoryboardSuccess,
   isHLSTranscodingPayloadSuccess,
   isLiveRTMPHLSTranscodingUpdatePayload,
   isTranscriptionPayloadSuccess,
-  isGenerateStoryboardSuccess,
   isWebVideoOrAudioMergeTranscodingPayloadSuccess
 } from '@peertube/peertube-models'
 import { unwrapBody } from '../requests/index.js'
@@ -388,9 +388,8 @@ export class RunnerJobsCommand extends AbstractCommand {
       const { availableJobs } = await this.request({ runnerToken })
       // Find a web video transcoding job specifically
       const webVideoJob = availableJobs.find(j => j.type === 'vod-web-video-transcoding')
-      if (!webVideoJob) {
-        throw new Error('No web video transcoding jobs available')
-      }
+      if (!webVideoJob) throw new Error('No web video transcoding jobs available')
+
       jobUUID = webVideoJob.uuid
     }
 
@@ -398,9 +397,7 @@ export class RunnerJobsCommand extends AbstractCommand {
     const jobToken = job.jobToken
 
     // Use a proper fixture file path for testing
-    const { buildAbsoluteFixturePath } = await import('@peertube/peertube-node-utils')
-    const videoFile = buildAbsoluteFixturePath('video_short.mp4')
-    const payload: RunnerJobSuccessPayload = { videoFile }
+    const payload: RunnerJobSuccessPayload = { videoFile: 'video_short.mp4' }
     await this.success({ runnerToken, jobUUID, jobToken, payload, reqPayload: undefined })
 
     await waitJobs([ this.server ])

@@ -175,6 +175,10 @@ type Form = {
 
   storyboards: FormGroup<{
     enabled: FormControl<boolean>
+
+    remoteRunners: FormGroup<{
+      enabled: FormControl<boolean>
+    }>
   }>
 
   defaults: FormGroup<{
@@ -410,7 +414,10 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
         }
       },
       storyboards: {
-        enabled: null
+        enabled: null,
+        remoteRunners: {
+          enabled: null
+        }
       },
       defaults: {
         publish: {
@@ -519,6 +526,16 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
 
   getTranscriptionRunnerDisabledClass () {
     return { 'disabled-checkbox-extra': !this.isTranscriptionEnabled() }
+  }
+
+  // ---------------------------------------------------------------------------
+
+  isStoryboardEnabled () {
+    return this.form.value.storyboards.enabled === true
+  }
+
+  getStoryboardRunnerDisabledClass () {
+    return { 'disabled-checkbox-extra': !this.isStoryboardEnabled() }
   }
 
   // ---------------------------------------------------------------------------

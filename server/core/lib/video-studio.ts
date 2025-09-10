@@ -12,7 +12,7 @@ import { VideoStudioTranscodingJobHandler } from './runners/index.js'
 import { getTranscodingJobPriority } from './transcoding/transcoding-priority.js'
 import { regenerateTranscriptionTaskIfNeeded } from './video-captions.js'
 import { buildNewFile, removeHLSPlaylist, removeWebVideoFile } from './video-file.js'
-import { buildStoryboardJobIfNeeded } from './video-jobs.js'
+import { addRemoteStoryboardJobIfNeeded, buildLocalStoryboardJobIfNeeded } from './video-jobs.js'
 import { VideoPathManager } from './video-path-manager.js'
 
 const lTags = loggerTagsFactory('video-studio')
@@ -109,13 +109,8 @@ export async function onVideoStudioEnded (options: {
   video.aspectRatio = buildAspectRatio({ width: newFile.width, height: newFile.height })
   await video.save()
 
-  // If remote runners are enabled, schedule storyboard generation remotely; otherwise, keep local job in the flow
-  const storyboardJob = CONFIG.TRANSCODING.REMOTE_RUNNERS.ENABLED
-    ? undefined
-    : buildStoryboardJobIfNeeded({ video, federate: false })
-
   await JobQueue.Instance.createSequentialJobFlow(
-    storyboardJob,
+    buildLocalStoryboardJobIfNeeded({ video, federate: false }),
     {
       type: 'federate-video' as 'federate-video',
       payload: {
@@ -134,6 +129,7 @@ export async function onVideoStudioEnded (options: {
     }
   )
 
+  await addRemoteStoryboardJobIfNeeded(video)
   await regenerateTranscriptionTaskIfNeeded(video)
 }
 

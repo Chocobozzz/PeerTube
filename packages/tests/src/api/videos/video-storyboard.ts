@@ -1,17 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { readdir } from 'fs/promises'
-import { basename } from 'path'
-import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
+import { VideoPrivacy } from '@peertube/peertube-models'
 import { areHttpImportTestsDisabled } from '@peertube/peertube-node-utils'
-import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
-  makeGetRequest,
-  makeRawRequest,
   PeerTubeServer,
   sendRTMPStream,
   setAccessTokensToServers,
@@ -19,44 +13,11 @@ import {
   stopFfmpeg,
   waitJobs
 } from '@peertube/peertube-server-commands'
-
-async function checkStoryboard (options: {
-  server: PeerTubeServer
-  uuid: string
-  spriteHeight?: number
-  spriteWidth?: number
-  tilesCount?: number
-  minSize?: number
-  spriteDuration?: number
-}) {
-  const { server, uuid, tilesCount, spriteDuration = 1, spriteHeight = 108, spriteWidth = 192, minSize = 1000 } = options
-
-  const { storyboards } = await server.storyboard.list({ id: uuid })
-
-  expect(storyboards).to.have.lengthOf(1)
-
-  const storyboard = storyboards[0]
-
-  expect(storyboard.spriteDuration).to.equal(spriteDuration)
-  expect(storyboard.spriteHeight).to.equal(spriteHeight)
-  expect(storyboard.spriteWidth).to.equal(spriteWidth)
-  expect(storyboard.storyboardPath).to.exist
-
-  if (tilesCount) {
-    expect(storyboard.totalWidth).to.equal(spriteWidth * Math.min(tilesCount, 11))
-    expect(storyboard.totalHeight).to.equal(spriteHeight * Math.max((tilesCount / 11), 1))
-  }
-
-  {
-    const { body } = await makeGetRequest({ url: server.url, path: storyboard.storyboardPath, expectedStatus: HttpStatusCode.OK_200 })
-    expect(body.length).to.be.above(minSize)
-  }
-
-  {
-    const { body } = await makeRawRequest({ url: storyboard.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
-    expect(body.length).to.be.above(minSize)
-  }
-}
+import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
+import { checkStoryboard } from '@tests/shared/storyboard.js'
+import { expect } from 'chai'
+import { readdir } from 'fs/promises'
+import { basename } from 'path'
 
 describe('Test video storyboard', function () {
   let servers: PeerTubeServer[]
@@ -205,16 +166,16 @@ describe('Test video storyboard', function () {
     }
 
     {
-      const storyboads = await listFiles()
-      expect(storyboads).to.include(storyboardName)
+      const storyboards = await listFiles()
+      expect(storyboards).to.include(storyboardName)
     }
 
     await servers[0].videos.remove({ id: baseUUID })
     await waitJobs(servers)
 
     {
-      const storyboads = await listFiles()
-      expect(storyboads).to.not.include(storyboardName)
+      const storyboards = await listFiles()
+      expect(storyboards).to.not.include(storyboardName)
     }
   })
 

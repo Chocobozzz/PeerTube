@@ -1,16 +1,16 @@
 import { VideoStudioTaskPayload } from '../../server/index.js'
 
 export type RunnerJobVODPrivatePayload =
-  RunnerJobVODWebVideoTranscodingPrivatePayload |
-  RunnerJobVODAudioMergeTranscodingPrivatePayload |
-  RunnerJobVODHLSTranscodingPrivatePayload
+  | RunnerJobVODWebVideoTranscodingPrivatePayload
+  | RunnerJobVODAudioMergeTranscodingPrivatePayload
+  | RunnerJobVODHLSTranscodingPrivatePayload
 
 export type RunnerJobPrivatePayload =
-  RunnerJobVODPrivatePayload |
-  RunnerJobLiveRTMPHLSTranscodingPrivatePayload |
-  RunnerJobVideoStudioTranscodingPrivatePayload |
-  RunnerJobTranscriptionPrivatePayload |
-  RunnerJobGenerateStoryboardPrivatePayload
+  | RunnerJobVODPrivatePayload
+  | RunnerJobLiveRTMPHLSTranscodingPrivatePayload
+  | RunnerJobVideoStudioTranscodingPrivatePayload
+  | RunnerJobTranscriptionPrivatePayload
+  | RunnerJobGenerateStoryboardPrivatePayload
 
 // ---------------------------------------------------------------------------
 
@@ -56,5 +56,4 @@ export interface RunnerJobTranscriptionPrivatePayload {
 
 export interface RunnerJobGenerateStoryboardPrivatePayload {
   videoUUID: string
-  federate?: boolean
 }
