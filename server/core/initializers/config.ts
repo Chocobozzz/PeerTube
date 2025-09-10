@@ -507,6 +507,7 @@ const CONFIG = {
     get MINIMUM_AGE () {
       return config.get<number>('signup.minimum_age')
     },
+
     FILTERS: {
       CIDR: {
         get WHITELIST () {
@@ -519,9 +520,6 @@ const CONFIG = {
     }
   },
   USER: {
-    SIGNUP: {
-      get MINIMUM_PASSWORD_LENGTH () { return config.get<number>('user.signup.mininum_password_length') },
-    },
     HISTORY: {
       VIDEOS: {
         get ENABLED () {
@@ -537,6 +535,11 @@ const CONFIG = {
     },
     get DEFAULT_CHANNEL_NAME () {
       return config.get<string>('user.default_channel_name')
+    },
+    PASSWORD_CONSTRAINTS: {
+      get MIN_LENGTH () {
+        return config.get<number>('user.password_constraints.min_length')
+      }
     }
   },
   VIDEO_CHANNELS: {

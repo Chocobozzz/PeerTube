@@ -266,8 +266,7 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       limit: 5,
       requiresApproval: false,
       requiresEmailVerification: false,
-      minimumAge: 10,
-      minimum_password_length: 8
+      minimumAge: 10
     },
     admin: {
       email: `admin${server.internalServerNumber}@example.com`
@@ -1017,6 +1016,69 @@ describe('Test config', function () {
 
       await testImage({ url: server.url + icon.src, name: `avatar-resized-48x48.png` })
     })
+  })
+
+  after(async function () {
+    await cleanupTests([ server ])
+  })
+})
+
+describe('YAML config', function () {
+  let server: PeerTubeServer
+  let userToken: string
+
+  before(async function () {
+    this.timeout(30000)
+
+    server = await createSingleServer(1, {
+      user: {
+        password_constraints: {
+          min_length: 10
+        }
+      }
+    })
+    await setAccessTokensToServers([ server ])
+  })
+
+  it('Should update the minimum length of a password', async function () {
+    await server.users.create({ username: 'user10', password: 'short', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+
+    await server.users.create({ username: 'user10', password: 's'.repeat(10) })
+  })
+
+  it('Should still be able to login with an old password', async function () {
+  })
+
+  it('Should update the minimum length of a password but still allow to login', async function () {
+    await server.kill()
+
+    await server.run({
+      user: {
+        password_constraints: {
+          min_length: 12
+        }
+      }
+    })
+
+    const res = await server.login.login({ user: { username: 'user10', password: 's'.repeat(10) } })
+    userToken = res.access_token
+  })
+
+  it('Should be able to change the password', async function () {
+    await server.users.updateMe({
+      token: userToken,
+      currentPassword: 's'.repeat(10),
+      password: 'password',
+      expectedStatus: HttpStatusCode.BAD_REQUEST_400
+    })
+
+    await server.users.updateMe({
+      token: userToken,
+      currentPassword: 's'.repeat(10),
+      password: 's'.repeat(12)
+    })
+
+    await server.login.login({ user: { username: 'user10', password: 's'.repeat(12) } })
   })
 
   after(async function () {

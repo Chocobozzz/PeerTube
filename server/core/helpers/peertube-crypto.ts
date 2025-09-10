@@ -20,6 +20,10 @@ function createPrivateAndPublicKeys () {
 async function comparePassword (plainPassword: string, hashPassword: string) {
   if (!plainPassword) return false
 
+  if (Buffer.byteLength(plainPassword, 'utf8') > 72) {
+    throw new Error('Cannot compare more than 72 bytes with bcrypt')
+  }
+
   const { compare } = await import('bcrypt')
 
   return compare(plainPassword, hashPassword)
@@ -110,7 +114,6 @@ export {
   comparePassword,
   createPrivateAndPublicKeys,
   cryptPassword,
-
   encrypt,
   decrypt
 }

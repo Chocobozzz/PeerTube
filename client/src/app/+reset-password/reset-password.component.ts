@@ -1,12 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Notifier, ServerService, UserService } from '@app/core'
 import { RESET_PASSWORD_CONFIRM_VALIDATOR } from '@app/shared/form-validators/reset-password-validators'
-import { getUserPasswordValidator } from '@app/shared/form-validators/user-validators'
+import { getUserNewPasswordValidator } from '@app/shared/form-validators/user-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { InputTextComponent } from '../shared/shared-forms/input-text.component'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 @Component({
   templateUrl: './reset-password.component.html',
@@ -20,17 +20,16 @@ export class ResetPasswordComponent extends FormReactive implements OnInit {
   private notifier = inject(Notifier)
   private router = inject(Router)
   private route = inject(ActivatedRoute)
-  
 
   private userId: number
   private verificationString: string
 
   ngOnInit () {
-    this.serverService.getConfig().subscribe(config => {
-        this.buildForm({
-        'password': getUserPasswordValidator(config.signup.minimum_password_length),
-        'password-confirm': RESET_PASSWORD_CONFIRM_VALIDATOR
-      })
+    const { minLength, maxLength } = this.serverService.getHTMLConfig().fieldsConstraints.users.password
+
+    this.buildForm({
+      'password': getUserNewPasswordValidator(minLength, maxLength),
+      'password-confirm': RESET_PASSWORD_CONFIRM_VALIDATOR
     })
 
     this.userId = this.route.snapshot.queryParams['userId']

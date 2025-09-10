@@ -366,7 +366,7 @@ export const CONSTRAINTS_FIELDS = {
     NAME: { min: 1, max: 120 }, // Length
     DESCRIPTION: { min: 3, max: 1000 }, // Length
     USERNAME: { min: 1, max: 50 }, // Length
-    PASSWORD: { min: CONFIG.USER.SIGNUP.MINIMUM_PASSWORD_LENGTH, max: 255 }, // Length
+    PASSWORD: { min: CONFIG.USER.PASSWORD_CONSTRAINTS.MIN_LENGTH, max: 50 }, // Length
     VIDEO_QUOTA: { min: -1 },
     VIDEO_QUOTA_DAILY: { min: -1 },
     VIDEO_LANGUAGES: { max: 500 }, // Array length

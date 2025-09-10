@@ -244,7 +244,7 @@ describe('Test id and pass auth plugins', function () {
 
   it('Should not update a user if not owned by the plugin auth', async function () {
     {
-      await server.users.update({ userId: lagunaId, videoQuota: 43000, password: 'coucoucou', pluginAuth: null })
+      await server.users.update({ userId: lagunaId, videoQuota: 43000, password: 'coucou', pluginAuth: null })
 
       const body = await server.users.get({ userId: lagunaId })
       expect(body.videoQuota).to.equal(43000)

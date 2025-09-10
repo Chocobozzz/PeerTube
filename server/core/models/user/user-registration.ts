@@ -1,3 +1,4 @@
+import { forceNumber } from '@peertube/peertube-core-utils'
 import { UserRegistration, UserRegistrationState, type UserRegistrationStateType } from '@peertube/peertube-models'
 import {
   isRegistrationModerationResponseValid,
@@ -22,10 +23,9 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { isUserDisplayNameValid, isUserEmailVerifiedValid, isUserPasswordValid } from '../../helpers/custom-validators/users.js'
-import { SequelizeModel, getSort, parseAggregateResult, throwIfNotValid } from '../shared/index.js'
+import { isUserDisplayNameValid, isUserEmailVerifiedValid } from '../../helpers/custom-validators/users.js'
+import { getSort, parseAggregateResult, SequelizeModel, throwIfNotValid } from '../shared/index.js'
 import { UserModel } from './user.js'
-import { forceNumber } from '@peertube/peertube-core-utils'
 
 @Table({
   tableName: 'userRegistration',
@@ -65,7 +65,6 @@ export class UserRegistrationModel extends SequelizeModel<UserRegistrationModel>
   declare moderationResponse: string
 
   @AllowNull(true)
-  @Is('RegistrationPassword', value => throwIfNotValid(value, isUserPasswordValid, 'registration password', true))
   @Column
   declare password: string
 

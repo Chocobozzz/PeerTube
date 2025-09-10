@@ -57,7 +57,6 @@ import {
   isUserNoModal,
   isUserNSFWPolicyValid,
   isUserP2PEnabledValid,
-  isUserPasswordValid,
   isUserRoleValid,
   isUserVideoLanguages,
   isUserVideoQuotaDailyValid,
@@ -290,7 +289,6 @@ type WhereUserIdScopeOptions = { whereUserId?: '$userId' | '"UserModel"."id"' }
 })
 export class UserModel extends SequelizeModel<UserModel> {
   @AllowNull(true)
-  @Is('UserPassword', value => throwIfNotValid(value, isUserPasswordValid, 'user password', true))
   @Column
   declare password: string
 

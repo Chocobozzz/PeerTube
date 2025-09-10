@@ -127,8 +127,7 @@ export interface CustomConfig {
     limit: number
     requiresApproval: boolean
     requiresEmailVerification: boolean
-    minimumAge: number,
-    minimum_password_length: number
+    minimumAge: number
   }
 
   admin: {

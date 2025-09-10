@@ -37,7 +37,6 @@ describe('Test abuses', function () {
   })
 
   describe('Video abuses', function () {
-
     before(async function () {
       this.timeout(50000)
 
@@ -315,8 +314,8 @@ describe('Test abuses', function () {
         const abuse = body.data.find(a => a.id === createRes.abuse.id)
         expect(abuse.reason).to.equals(reason5)
         expect(abuse.predefinedReasons).to.deep.equals(predefinedReasons5, 'predefined reasons do not match the one reported')
-        expect(abuse.video.startAt).to.equal(1, "starting timestamp doesn't match the one reported")
-        expect(abuse.video.endAt).to.equal(5, "ending timestamp doesn't match the one reported")
+        expect(abuse.video.startAt).to.equal(1, 'starting timestamp doesn\'t match the one reported')
+        expect(abuse.video.endAt).to.equal(5, 'ending timestamp doesn\'t match the one reported')
       }
     })
 
@@ -374,7 +373,6 @@ describe('Test abuses', function () {
   })
 
   describe('Comment abuses', function () {
-
     async function getComment (server: PeerTubeServer, videoIdArg: number | string) {
       const videoId = typeof videoIdArg === 'string'
         ? await server.videos.getId({ uuid: videoIdArg })
@@ -570,7 +568,6 @@ describe('Test abuses', function () {
   })
 
   describe('Account abuses', function () {
-
     function getAccountFromServer (server: PeerTubeServer, targetName: string, targetServer: PeerTubeServer) {
       return server.accounts.get({ accountName: targetName + '@' + targetServer.host })
     }
@@ -578,7 +575,7 @@ describe('Test abuses', function () {
     before(async function () {
       this.timeout(50000)
 
-      await servers[0].users.create({ username: 'user_1', password: 'donald duck' })
+      await servers[0].users.create({ username: 'user_1', password: 'donald' })
 
       const token = await servers[1].users.generateUserAndToken('user_2')
       await servers[1].videos.upload({ token, attributes: { name: 'super video' } })
@@ -711,7 +708,6 @@ describe('Test abuses', function () {
   })
 
   describe('Common actions on abuses', function () {
-
     it('Should update the state of an abuse', async function () {
       await commands[0].update({ abuseId: abuseServer1.id, body: { state: AbuseState.REJECTED } })
 

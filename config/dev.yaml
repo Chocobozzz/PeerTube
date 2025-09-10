@@ -141,3 +141,7 @@ video_studio:
 
 transcoding:
   keep_original_file: false
+
+user:
+  password_constraints:
+    min_length: 6

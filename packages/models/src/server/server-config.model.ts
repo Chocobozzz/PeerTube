@@ -211,7 +211,6 @@ export interface ServerConfig {
     requiresEmailVerification: boolean
     requiresApproval: boolean
     minimumAge: number
-    minimum_password_length: number
   }
 
   transcoding: {
@@ -439,6 +438,15 @@ export interface ServerConfig {
 
   nsfwFlagsSettings: {
     enabled: boolean
+  }
+
+  fieldsConstraints: {
+    users: {
+      password: {
+        minLength: number
+        maxLength: number
+      }
+    }
   }
 }
 

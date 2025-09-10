@@ -1,12 +1,12 @@
+import { NgClass, NgIf } from '@angular/common'
 import { Component, OnInit, inject, input } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier, ServerService } from '@app/core'
-import { getUserPasswordValidator } from '@app/shared/form-validators/user-validators'
+import { getUserNewPasswordValidator } from '@app/shared/form-validators/user-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
-import { UserUpdate } from '@peertube/peertube-models'
-import { NgClass, NgIf } from '@angular/common'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { UserAdminService } from '@app/shared/shared-users/user-admin.service'
+import { UserUpdate } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-user-password',
@@ -25,16 +25,11 @@ export class UserPasswordComponent extends FormReactive implements OnInit {
 
   error: string
   showPassword = false
-  userPasswordValidator: ReturnType<typeof getUserPasswordValidator>
 
   ngOnInit () {
-    this.serverService.getConfig().subscribe(config => {
-      this.userPasswordValidator = getUserPasswordValidator(config.signup.minimum_password_length)
-    })
+    const { minLength, maxLength } = this.serverService.getHTMLConfig().fieldsConstraints.users.password
 
-    this.buildForm({
-      password: this.userPasswordValidator
-    })
+    this.buildForm({ password: getUserNewPasswordValidator(minLength, maxLength) })
   }
 
   formValidated () {

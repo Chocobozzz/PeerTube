@@ -5,7 +5,7 @@ import { AuthService, Notifier, ServerService, UserService } from '@app/core'
 import {
   USER_CONFIRM_PASSWORD_VALIDATOR,
   USER_EXISTING_PASSWORD_VALIDATOR,
-  getUserPasswordValidator
+  getUserNewPasswordValidator
 } from '@app/shared/form-validators/user-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
@@ -29,15 +29,13 @@ export class MyAccountChangePasswordComponent extends FormReactive implements On
 
   error: string
   user: User
-  userPasswordValidator: ReturnType<typeof getUserPasswordValidator>
 
   ngOnInit () {
-    this.serverService.getConfig().subscribe(config => {
-      this.userPasswordValidator = getUserPasswordValidator(config.signup.minimum_password_length)
-    })
+    const { minLength, maxLength } = this.serverService.getHTMLConfig().fieldsConstraints.users.password
+
     this.buildForm({
       'current-password': USER_EXISTING_PASSWORD_VALIDATOR,
-      'new-password': this.userPasswordValidator,
+      'new-password': getUserNewPasswordValidator(minLength, maxLength),
       'new-confirmed-password': USER_CONFIRM_PASSWORD_VALIDATOR
     })
 

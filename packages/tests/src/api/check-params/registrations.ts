@@ -27,10 +27,10 @@ describe('Test registrations API validators', function () {
     await setDefaultAccountAvatar([ server ])
     await setDefaultChannelAvatar([ server ])
 
-    await server.config.enableSignup(false);
+    await server.config.enableSignup(false)
 
-    ({ token: moderatorToken } = await server.users.generate('moderator', UserRole.MODERATOR));
-    ({ token: userToken } = await server.users.generate('user', UserRole.USER))
+    ;({ token: moderatorToken } = await server.users.generate('moderator', UserRole.MODERATOR))
+    ;({ token: userToken } = await server.users.generate('user', UserRole.USER))
   })
 
   describe('Register', function () {
@@ -46,7 +46,6 @@ describe('Test registrations API validators', function () {
     }
 
     describe('When registering a new user or requesting user registration', function () {
-
       async function check (fields: any, expectedStatus: HttpStatusCodeType = HttpStatusCode.BAD_REQUEST_400) {
         await server.config.enableSignup(false)
         await makePostBodyRequest({ url: server.url, path: registrationPath, fields, expectedStatus })
@@ -209,7 +208,6 @@ describe('Test registrations API validators', function () {
     })
 
     describe('On direct registration', function () {
-
       it('Should succeed with the correct params', async function () {
         await server.config.enableSignup(false)
 
@@ -233,7 +231,6 @@ describe('Test registrations API validators', function () {
     })
 
     describe('On registration request', function () {
-
       before(async function () {
         this.timeout(60000)
 
@@ -321,10 +318,10 @@ describe('Test registrations API validators', function () {
     before(async function () {
       this.timeout(60000)
 
-      await server.config.enableSignup(true);
+      await server.config.enableSignup(true)
 
-      ({ id: id1 } = await server.registrations.requestRegistration({ username: 'request_2', registrationReason: 'toto' }));
-      ({ id: id2 } = await server.registrations.requestRegistration({ username: 'request_3', registrationReason: 'toto' }))
+      ;({ id: id1 } = await server.registrations.requestRegistration({ username: 'request_2', registrationReason: 'toto' }))
+      ;({ id: id2 } = await server.registrations.requestRegistration({ username: 'request_3', registrationReason: 'toto' }))
     })
 
     it('Should fail to accept/reject registration without token', async function () {
@@ -384,9 +381,9 @@ describe('Test registrations API validators', function () {
     let id3: number
 
     before(async function () {
-      ({ id: id1 } = await server.registrations.requestRegistration({ username: 'request_4', registrationReason: 'toto' }));
-      ({ id: id2 } = await server.registrations.requestRegistration({ username: 'request_5', registrationReason: 'toto' }));
-      ({ id: id3 } = await server.registrations.requestRegistration({ username: 'request_6', registrationReason: 'toto' }))
+      ;({ id: id1 } = await server.registrations.requestRegistration({ username: 'request_4', registrationReason: 'toto' }))
+      ;({ id: id2 } = await server.registrations.requestRegistration({ username: 'request_5', registrationReason: 'toto' }))
+      ;({ id: id3 } = await server.registrations.requestRegistration({ username: 'request_6', registrationReason: 'toto' }))
 
       await server.registrations.accept({ id: id2, moderationResponse: 'tt' })
       await server.registrations.reject({ id: id3, moderationResponse: 'tt' })

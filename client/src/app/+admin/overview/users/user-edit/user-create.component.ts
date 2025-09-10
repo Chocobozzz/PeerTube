@@ -6,12 +6,12 @@ import { AuthService, Notifier, ScreenService, ServerService } from '@app/core'
 import {
   USER_CHANNEL_NAME_VALIDATOR,
   USER_EMAIL_VALIDATOR,
-  getUserPasswordOptionalValidator,
-  getUserPasswordValidator,
   USER_ROLE_VALIDATOR,
   USER_USERNAME_VALIDATOR,
   USER_VIDEO_QUOTA_DAILY_VALIDATOR,
-  USER_VIDEO_QUOTA_VALIDATOR
+  USER_VIDEO_QUOTA_VALIDATOR,
+  getUserNewPasswordOptionalValidator,
+  getUserNewPasswordValidator
 } from '@app/shared/form-validators/user-validators'
 import { AdminConfigService } from '@app/shared/shared-admin/admin-config.service'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
@@ -60,8 +60,6 @@ export class UserCreateComponent extends UserEdit implements OnInit {
   private userAdminService = inject(UserAdminService)
 
   error: string
-  userPasswordValidator: ReturnType<typeof getUserPasswordValidator>
-  userPasswordOptionalValidator: ReturnType<typeof getUserPasswordOptionalValidator>
 
   constructor () {
     super()
@@ -71,11 +69,6 @@ export class UserCreateComponent extends UserEdit implements OnInit {
 
   ngOnInit () {
     super.ngOnInit()
-    this.serverService.getConfig().subscribe(config => {
-      const minLength = config.signup.minimum_password_length
-      this.userPasswordValidator = getUserPasswordValidator(minLength)
-      this.userPasswordOptionalValidator = getUserPasswordOptionalValidator(minLength)
-    })
 
     const defaultValues = {
       role: UserRole.USER.toString(),
@@ -83,11 +76,17 @@ export class UserCreateComponent extends UserEdit implements OnInit {
       videoQuotaDaily: -1
     }
 
+    const passwordConstraints = this.serverService.getHTMLConfig().fieldsConstraints.users.password
+
     this.buildForm({
       username: USER_USERNAME_VALIDATOR,
       channelName: USER_CHANNEL_NAME_VALIDATOR,
       email: USER_EMAIL_VALIDATOR,
-      password: this.isPasswordOptional() ? this.userPasswordOptionalValidator : this.userPasswordValidator,
+
+      password: this.isPasswordOptional()
+        ? getUserNewPasswordOptionalValidator(passwordConstraints.minLength, passwordConstraints.maxLength)
+        : getUserNewPasswordValidator(passwordConstraints.minLength, passwordConstraints.maxLength),
+
       role: USER_ROLE_VALIDATOR,
       videoQuota: USER_VIDEO_QUOTA_VALIDATOR,
       videoQuotaDaily: USER_VIDEO_QUOTA_DAILY_VALIDATOR,
