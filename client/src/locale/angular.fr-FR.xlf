@@ -16073,7 +16073,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="525871656034789056">
-        <source>Password must be at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters long.</source>
+        <source>Password must be at least 6 characters long.</source>
         <target>Le mot de passe doit être composé d'au moins 6 caractères.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
@@ -16085,7 +16085,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="1099684476181448167">
-        <source>Password cannot be more than <x id="INTERPOLATION" equiv-text="{{ maxLength }}"/> characters long.</source>
+        <source>Password cannot be more than 255 characters long.</source>
         <target>Le mot de passe ne peut pas faire plus de 255 caractères.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>

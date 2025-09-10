@@ -19163,7 +19163,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
         </context-group>
       </trans-unit>
       <trans-unit id="525871656034789056" xml:space="preserve">
-        <source>Password must be at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters long.</source>
+        <source>Password must be at least 6 characters long.</source>
         <target state="translated">La contrasenya ha de tindre com a mínim 6 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
@@ -19175,7 +19175,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
         </context-group>
       </trans-unit>
       <trans-unit id="1099684476181448167" xml:space="preserve">
-        <source>Password cannot be more than <x id="INTERPOLATION" equiv-text="{{ maxLength }}"/> characters long.</source>
+        <source>Password cannot be more than 255 characters long.</source>
         <target state="translated">La contrasenya no pot tindre més de 255 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
