@@ -7,8 +7,9 @@ type Use<K extends keyof OAuthTokenModel, M> = PickWith<OAuthTokenModel, K, M>
 // ############################################################################
 
 export type MOAuthToken = Omit<OAuthTokenModel, 'User' | 'OAuthClients'>
+export type MOAuthTokenLight = Omit<MOAuthToken, 'lastActivityDate' | 'lastActivityDevice' | 'lastActivityIP'>
 
 export type MOAuthTokenUser =
-  & MOAuthToken
+  & MOAuthTokenLight
   & Use<'User', MUserAccountUrl>
   & { user?: MUserAccountUrl }

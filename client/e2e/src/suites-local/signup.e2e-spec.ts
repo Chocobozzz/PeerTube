@@ -11,6 +11,7 @@ import {
   go,
   isMobileDevice,
   MockSMTPServer,
+  prepareWebBrowser,
   waitServerUp
 } from '../utils'
 
@@ -76,6 +77,7 @@ describe('Signup', () => {
   }) {
     await loginPage.loginAsRootUser()
 
+    // Ensure we change the state of the form to "dirty" so we can save the form
     await adminConfigPage.toggleSignup(options.enabled)
 
     if (options.enabled) {
@@ -104,7 +106,7 @@ describe('Signup', () => {
     signupPage = new SignupPage()
     adminRegistrationPage = new AdminRegistrationPage()
 
-    await browser.maximizeWindow()
+    await prepareWebBrowser()
   })
 
   describe('Signup disabled', function () {

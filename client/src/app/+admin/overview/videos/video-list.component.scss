@@ -1,11 +1,6 @@
 @use "_variables" as *;
 @use "_mixins" as *;
 
-td {
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
-}
-
 my-embed {
   display: block;
   max-width: 500px;
@@ -13,12 +8,12 @@ my-embed {
 }
 
 .pt-badge,
-my-video-privacy-badge,
+my-privacy-badge,
 my-video-nsfw-badge {
   @include margin-right(5px);
 }
 
-.video-info > div {
+.video-expanded-info {
   display: flex;
 
   my-global-icon {
@@ -27,19 +22,5 @@ my-video-nsfw-badge {
 
     @include global-icon-size(16px);
     @include margin-left(3px);
-  }
-}
-
-.loading {
-  opacity: 0.5;
-}
-
-.right-form {
-  display: flex;
-  flex-wrap: wrap;
-  row-gap: 0.5rem;
-
-  > *:not(:last-child) {
-    @include margin-right(10px);
   }
 }

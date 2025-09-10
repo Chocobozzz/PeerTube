@@ -94,6 +94,10 @@ export function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
       ? video.originallyPublishedAt.toISOString()
       : null,
 
+    schedules: (video.VideoLive?.LiveSchedules || []).map(s => ({
+      startDate: s.startAt
+    })),
+
     updated: video.updatedAt.toISOString(),
 
     uploadDate: video.inputFileUpdatedAt?.toISOString(),
@@ -121,14 +125,8 @@ export function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
     hasParts: getLocalVideoChaptersActivityPubUrl(video),
 
     attributedTo: [
-      {
-        type: 'Person',
-        id: video.VideoChannel.Account.Actor.url
-      },
-      {
-        type: 'Group',
-        id: video.VideoChannel.Actor.url
-      }
+      video.VideoChannel.Account.Actor.url,
+      video.VideoChannel.Actor.url
     ],
 
     ...buildLiveAPAttributes(video)

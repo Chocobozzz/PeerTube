@@ -1,7 +1,6 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_form-mixins' as *;
-@import 'bootstrap/scss/mixins';
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
 
 .root {
   display: flex;
@@ -22,7 +21,8 @@
   position: sticky;
   top: pvar(--header-height);
   background-color: pvar(--bg);
-  z-index: 1;
+  // On top of input group addons
+  z-index: 3;
 }
 
 .video-actions {

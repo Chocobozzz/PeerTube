@@ -1,5 +1,5 @@
-import express from 'express'
-import { ScopedToken } from '@peertube/peertube-models'
+import { ResultList, ScopedToken, TokenSession } from '@peertube/peertube-models'
+import { buildUUID } from '@peertube/peertube-node-utils'
 import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { OTP } from '@server/initializers/constants.js'
@@ -7,8 +7,19 @@ import { getAuthNameFromRefreshGrant, getBypassFromExternalAuth, getBypassFromPa
 import { BypassLogin, revokeToken } from '@server/lib/auth/oauth-model.js'
 import { handleOAuthToken, MissingTwoFactorError } from '@server/lib/auth/oauth.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
-import { asyncMiddleware, authenticate, buildRateLimiter, openapiOperationDoc } from '@server/middlewares/index.js'
-import { buildUUID } from '@peertube/peertube-node-utils'
+import {
+  asyncMiddleware,
+  authenticate,
+  buildRateLimiter,
+  openapiOperationDoc,
+  paginationValidator,
+  setDefaultPagination,
+  setDefaultSort,
+  tokenSessionsSortValidator
+} from '@server/middlewares/index.js'
+import { manageTokenSessionsValidator, revokeTokenSessionValidator } from '@server/middlewares/validators/token.js'
+import { OAuthTokenModel } from '@server/models/oauth/oauth-token.js'
+import express from 'express'
 
 const tokensRouter = express.Router()
 
@@ -17,24 +28,51 @@ const loginRateLimiter = buildRateLimiter({
   max: CONFIG.RATES_LIMIT.LOGIN.MAX
 })
 
-tokensRouter.post('/token',
+tokensRouter.post(
+  '/token',
   loginRateLimiter,
   openapiOperationDoc({ operationId: 'getOAuthToken' }),
   asyncMiddleware(handleToken)
 )
 
-tokensRouter.post('/revoke-token',
+tokensRouter.post(
+  '/revoke-token',
   openapiOperationDoc({ operationId: 'revokeOAuthToken' }),
   authenticate,
   asyncMiddleware(handleTokenRevocation)
 )
 
-tokensRouter.get('/scoped-tokens',
+// ---------------------------------------------------------------------------
+
+tokensRouter.get(
+  '/:userId/token-sessions',
+  authenticate,
+  asyncMiddleware(manageTokenSessionsValidator),
+  paginationValidator,
+  tokenSessionsSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  asyncMiddleware(listTokenSessions)
+)
+
+tokensRouter.post(
+  '/:userId/token-sessions/:tokenSessionId/revoke',
+  authenticate,
+  asyncMiddleware(manageTokenSessionsValidator),
+  asyncMiddleware(revokeTokenSessionValidator),
+  asyncMiddleware(revokeTokenSession)
+)
+
+// ---------------------------------------------------------------------------
+
+tokensRouter.get(
+  '/scoped-tokens',
   authenticate,
   getScopedTokens
 )
 
-tokensRouter.post('/scoped-tokens',
+tokensRouter.post(
+  '/scoped-tokens',
   authenticate,
   asyncMiddleware(renewScopedTokens)
 )
@@ -100,6 +138,36 @@ async function handleTokenRevocation (req: express.Request, res: express.Respons
 
   return res.json(result)
 }
+
+// ---------------------------------------------------------------------------
+
+async function listTokenSessions (req: express.Request, res: express.Response) {
+  const currentToken = res.locals.oauth.token
+
+  const { total, data } = await OAuthTokenModel.listSessionsOf({
+    start: req.query.start as number,
+    count: req.query.count as number,
+    sort: req.query.sort as string,
+    userId: res.locals.user.id
+  })
+
+  return res.json(
+    {
+      total,
+      data: data.map(session => session.toSessionFormattedJSON(currentToken.accessToken))
+    } satisfies ResultList<TokenSession>
+  )
+}
+
+async function revokeTokenSession (req: express.Request, res: express.Response) {
+  const token = res.locals.tokenSession
+
+  const result = await revokeToken(token, { req, explicitLogout: true })
+
+  return res.json(result)
+}
+
+// ---------------------------------------------------------------------------
 
 function getScopedTokens (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.user

@@ -60,7 +60,6 @@ describe('Test admin notifications', function () {
   })
 
   describe('Latest PeerTube version notification', function () {
-
     it('Should not send a notification to admins if there is no new version', async function () {
       this.timeout(30000)
 
@@ -104,7 +103,6 @@ describe('Test admin notifications', function () {
   })
 
   describe('Latest plugin version notification', function () {
-
     it('Should not send a notification to admins if there is no new plugin version', async function () {
       this.timeout(30000)
 
@@ -146,7 +144,7 @@ describe('Test admin notifications', function () {
   })
 
   after(async function () {
-    MockSmtpServer.Instance.kill()
+    await MockSmtpServer.Instance.kill()
 
     await sqlCommand.cleanup()
     await cleanupTests([ server ])

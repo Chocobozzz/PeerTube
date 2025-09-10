@@ -1,11 +1,12 @@
-import { Component, forwardRef, OnInit, inject, input } from '@angular/core'
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
+import { CommonModule } from '@angular/common'
+import { booleanAttribute, Component, forwardRef, inject, input, OnInit } from '@angular/core'
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { ServerService } from '@app/core'
-import { imageToDataURL } from '@root-helpers/images'
 import { HTMLServerConfig } from '@peertube/peertube-models'
-import { NgIf, NgStyle } from '@angular/common'
-import { ReactiveFileComponent } from './reactive-file.component'
+import { imageToDataURL } from '@root-helpers/images'
 import { BytesPipe } from '../shared-main/common/bytes.pipe'
+import { ReactiveFileComponent } from './reactive-file.component'
+import { DeleteButtonComponent } from '../shared-main/buttons/delete-button.component'
 
 @Component({
   selector: 'my-preview-upload',
@@ -18,23 +19,24 @@ import { BytesPipe } from '../shared-main/common/bytes.pipe'
       multi: true
     }
   ],
-  imports: [ ReactiveFileComponent, NgIf, NgStyle ]
+  imports: [ CommonModule, FormsModule, ReactiveFileComponent, DeleteButtonComponent ]
 })
 export class PreviewUploadComponent implements OnInit, ControlValueAccessor {
   private serverService = inject(ServerService)
 
+  readonly inputName = input.required<string>()
   readonly inputLabel = input<string>(undefined)
-  readonly inputName = input<string>(undefined)
-  readonly previewWidth = input<string>(undefined)
-  readonly previewHeight = input<string>(undefined)
+  readonly displayDelete = input(false, { transform: booleanAttribute })
+  readonly buttonsAside = input(false, { transform: booleanAttribute })
+  readonly previewSize = input<{ width: string, height: string }>(undefined)
 
   imageSrc: string
   allowedExtensionsMessage = ''
   maxSizeText: string
+  file: Blob
 
   private serverConfig: HTMLServerConfig
   private bytesPipe: BytesPipe
-  private file: Blob
 
   constructor () {
     this.bytesPipe = new BytesPipe()
@@ -90,6 +92,8 @@ export class PreviewUploadComponent implements OnInit, ControlValueAccessor {
   private updatePreview () {
     if (this.file) {
       imageToDataURL(this.file).then(result => this.imageSrc = result)
+    } else {
+      this.imageSrc = undefined
     }
   }
 }

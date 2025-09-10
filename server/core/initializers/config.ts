@@ -1,7 +1,3 @@
-import bytes from 'bytes'
-import { IConfig } from 'config'
-import { createRequire } from 'module'
-import { dirname, join } from 'path'
 import {
   BroadcastMessageLevel,
   NSFWPolicyType,
@@ -10,10 +6,14 @@ import {
   VideoRedundancyConfigFilter,
   VideosRedundancyStrategy
 } from '@peertube/peertube-models'
-import { decacheModule } from '@server/helpers/decache.js'
 import { buildPath, root } from '@peertube/peertube-node-utils'
-import { parseBytes, parseDurationToMs } from '../helpers/core-utils.js'
 import { TranscriptionEngineName, WhisperBuiltinModelName } from '@peertube/peertube-transcription'
+import { decacheModule } from '@server/helpers/decache.js'
+import bytes from 'bytes'
+import { IConfig } from 'config'
+import { createRequire } from 'module'
+import { dirname, join } from 'path'
+import { parseBytes, parseDurationToMs } from '../helpers/core-utils.js'
 
 const require = createRequire(import.meta.url)
 let config: IConfig = require('config')
@@ -28,6 +28,9 @@ const CONFIG = {
   },
   SECRETS: {
     PEERTUBE: config.get<string>('secrets.peertube')
+  },
+  HTTP_TIMEOUTS: {
+    REQUEST: parseDurationToMs(config.get<number>('http_timeouts.request'))
   },
   DATABASE: {
     DBNAME: config.has('database.name') ? config.get<string>('database.name') : 'peertube' + config.get<string>('database.suffix'),
@@ -65,14 +68,6 @@ const CONFIG = {
     CA_FILE: config.get<string>('smtp.ca_file'),
     FROM_ADDRESS: config.get<string>('smtp.from_address')
   },
-  EMAIL: {
-    BODY: {
-      SIGNATURE: config.get<string>('email.body.signature')
-    },
-    SUBJECT: {
-      PREFIX: config.get<string>('email.subject.prefix') + ' '
-    }
-  },
 
   NSFW_FLAGS_SETTINGS: {
     ENABLED: config.get<boolean>('nsfw_flags_settings.enabled')
@@ -83,6 +78,11 @@ const CONFIG = {
   },
 
   CLIENT: {
+    HEADER: {
+      get HIDE_INSTANCE_NAME () {
+        return config.get<boolean>('client.header.hide_instance_name')
+      }
+    },
     VIDEOS: {
       MINIATURE: {
         get PREFER_AUTHOR_DISPLAY_NAME () {
@@ -93,6 +93,14 @@ const CONFIG = {
         get MAX_CHUNK_SIZE () {
           return parseBytes(config.get<number>('client.videos.resumable_upload.max_chunk_size') || 0)
         }
+      }
+    },
+    BROWSE_VIDEOS: {
+      get DEFAULT_SORT () {
+        return config.get<string>('client.browse_videos.default_sort')
+      },
+      get DEFAULT_SCOPE () {
+        return config.get<string>('client.browse_videos.default_scope')
       }
     },
     MENU: {
@@ -138,17 +146,29 @@ const CONFIG = {
 
   DEFAULTS: {
     PUBLISH: {
-      DOWNLOAD_ENABLED: config.get<boolean>('defaults.publish.download_enabled'),
-      COMMENTS_POLICY: config.get<VideoCommentPolicyType>('defaults.publish.comments_policy'),
-      PRIVACY: config.get<VideoPrivacyType>('defaults.publish.privacy'),
-      LICENCE: config.get<number>('defaults.publish.licence')
+      get DOWNLOAD_ENABLED () {
+        return config.get<boolean>('defaults.publish.download_enabled')
+      },
+      get COMMENTS_POLICY () {
+        return config.get<VideoCommentPolicyType>('defaults.publish.comments_policy')
+      },
+      get PRIVACY () {
+        return config.get<VideoPrivacyType>('defaults.publish.privacy')
+      },
+      get LICENCE () {
+        return config.get<number>('defaults.publish.licence')
+      }
     },
     P2P: {
       WEBAPP: {
-        ENABLED: config.get<boolean>('defaults.p2p.webapp.enabled')
+        get ENABLED () {
+          return config.get<boolean>('defaults.p2p.webapp.enabled')
+        }
       },
       EMBED: {
-        ENABLED: config.get<boolean>('defaults.p2p.embed.enabled')
+        get ENABLED () {
+          return config.get<boolean>('defaults.p2p.embed.enabled')
+        }
       }
     },
     PLAYER: {
@@ -176,7 +196,8 @@ const CONFIG = {
     CACHE_DIR: buildPath(config.get<string>('storage.cache')),
     PLUGINS_DIR: buildPath(config.get<string>('storage.plugins')),
     CLIENT_OVERRIDES_DIR: buildPath(config.get<string>('storage.client_overrides')),
-    WELL_KNOWN_DIR: buildPath(config.get<string>('storage.well_known'))
+    WELL_KNOWN_DIR: buildPath(config.get<string>('storage.well_known')),
+    UPLOADS_DIR: buildPath(config.get<string>('storage.uploads'))
   },
   STATIC_FILES: {
     PRIVATE_FILES_REQUIRE_AUTH: config.get<boolean>('static_files.private_files_require_auth')
@@ -432,7 +453,9 @@ const CONFIG = {
   REMOTE_RUNNERS: {
     STALLED_JOBS: {
       LIVE: parseDurationToMs(config.get<string>('remote_runners.stalled_jobs.live')),
-      VOD: parseDurationToMs(config.get<string>('remote_runners.stalled_jobs.vod'))
+      VOD: parseDurationToMs(config.get<string>('remote_runners.stalled_jobs.vod')),
+      STUDIO: parseDurationToMs(config.get<string>('remote_runners.stalled_jobs.studio')),
+      TRANSCRIPTION: parseDurationToMs(config.get<string>('remote_runners.stalled_jobs.transcription'))
     }
   },
   THUMBNAILS: {
@@ -903,6 +926,9 @@ const CONFIG = {
       return config.get<string>('instance.hardware_information')
     },
 
+    get DEFAULT_LANGUAGE () {
+      return config.get<string>('instance.default_language')
+    },
     get LANGUAGES () {
       return config.get<string[]>('instance.languages') || []
     },
@@ -936,6 +962,9 @@ const CONFIG = {
       },
       get BLUESKY () {
         return config.get<string>('instance.social.bluesky_link')
+      },
+      get X_LINK () {
+        return config.get<string>('instance.social.x_link')
       }
     },
 
@@ -973,6 +1002,11 @@ const CONFIG = {
       get MANUAL_APPROVAL () {
         return config.get<boolean>('followers.instance.manual_approval')
       }
+    },
+    CHANNELS: {
+      get ENABLED () {
+        return config.get<boolean>('followers.channels.enabled')
+      }
     }
   },
   FOLLOWINGS: {
@@ -995,6 +1029,39 @@ const CONFIG = {
   THEME: {
     get DEFAULT () {
       return config.get<string>('theme.default')
+    },
+
+    CUSTOMIZATION: {
+      get PRIMARY_COLOR () {
+        return config.get<string>('theme.customization.primary_color')
+      },
+      get FOREGROUND_COLOR () {
+        return config.get<string>('theme.customization.foreground_color')
+      },
+      get BACKGROUND_COLOR () {
+        return config.get<string>('theme.customization.background_color')
+      },
+      get BACKGROUND_SECONDARY_COLOR () {
+        return config.get<string>('theme.customization.background_secondary_color')
+      },
+      get MENU_FOREGROUND_COLOR () {
+        return config.get<string>('theme.customization.menu_foreground_color')
+      },
+      get MENU_BACKGROUND_COLOR () {
+        return config.get<string>('theme.customization.menu_background_color')
+      },
+      get MENU_BORDER_RADIUS () {
+        return config.get<string>('theme.customization.menu_border_radius')
+      },
+      get HEADER_BACKGROUND_COLOR () {
+        return config.get<string>('theme.customization.header_background_color')
+      },
+      get HEADER_FOREGROUND_COLOR () {
+        return config.get<string>('theme.customization.header_foreground_color')
+      },
+      get INPUT_BORDER_RADIUS () {
+        return config.get<string>('theme.customization.input_border_radius')
+      }
     }
   },
   BROADCAST_MESSAGE: {
@@ -1038,6 +1105,28 @@ const CONFIG = {
   STORYBOARDS: {
     get ENABLED () {
       return config.get<boolean>('storyboards.enabled')
+    },
+    REMOTE_RUNNERS: {
+      get ENABLED () {
+        return config.get<boolean>('storyboards.remote_runners.enabled')
+      }
+    }
+  },
+  EMAIL: {
+    BODY: {
+      get SIGNATURE () {
+        return config.get<string>('email.body.signature')
+      }
+    },
+    SUBJECT: {
+      get PREFIX () {
+        return config.get<string>('email.subject.prefix')
+      }
+    }
+  },
+  VIDEO_COMMENTS: {
+    get ACCEPT_REMOTE_COMMENTS () {
+      return config.get<boolean>('video_comments.accept_remote_comments')
     }
   }
 }
@@ -1074,8 +1163,8 @@ export {
   CONFIG,
   getConfigModule,
   getLocalConfigFilePath,
-  registerConfigChangedHandler,
-  isEmailEnabled
+  isEmailEnabled,
+  registerConfigChangedHandler
 }
 
 // ---------------------------------------------------------------------------

@@ -8,7 +8,6 @@ import { AbstractScheduler } from './abstract-scheduler.js'
 const lTags = loggerTagsFactory('runner')
 
 export class RunnerJobWatchDogScheduler extends AbstractScheduler {
-
   private static instance: AbstractScheduler
 
   protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.RUNNER_JOB_WATCH_DOG
@@ -28,7 +27,17 @@ export class RunnerJobWatchDogScheduler extends AbstractScheduler {
       types: [ 'live-rtmp-hls-transcoding' ]
     })
 
-    for (const stalled of [ ...vodStalledJobs, ...liveStalledJobs ]) {
+    const transcriptionStalledJobs = await RunnerJobModel.listStalledJobs({
+      staleTimeMS: CONFIG.REMOTE_RUNNERS.STALLED_JOBS.TRANSCRIPTION,
+      types: [ 'video-transcription' ]
+    })
+
+    const studioStalledJobs = await RunnerJobModel.listStalledJobs({
+      staleTimeMS: CONFIG.REMOTE_RUNNERS.STALLED_JOBS.STUDIO,
+      types: [ 'video-studio-transcoding' ]
+    })
+
+    for (const stalled of [ ...vodStalledJobs, ...liveStalledJobs, ...transcriptionStalledJobs, ...studioStalledJobs ]) {
       logger.info('Abort stalled runner job %s (%s)', stalled.uuid, stalled.type, lTags(stalled.uuid, stalled.type))
 
       const Handler = getRunnerJobHandlerClass(stalled)

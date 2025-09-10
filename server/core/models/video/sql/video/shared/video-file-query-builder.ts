@@ -13,14 +13,10 @@ export type FileQueryOptions = {
 }
 
 /**
- *
  * Fetch files (web videos and streaming playlist) according to a video
- *
  */
 
 export class VideoFileQueryBuilder extends AbstractVideoQueryBuilder {
-  protected attributes: { [key: string]: string }
-
   constructor (protected readonly sequelize: Sequelize) {
     super(sequelize, 'get')
   }

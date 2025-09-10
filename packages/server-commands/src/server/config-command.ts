@@ -1,4 +1,4 @@
-import { About, ActorImageType, ActorImageType_Type, CustomConfig, HttpStatusCode, ServerConfig } from '@peertube/peertube-models'
+import { About, ActorImageType, ActorImageType_Type, CustomConfig, HttpStatusCode, LogoType, ServerConfig } from '@peertube/peertube-models'
 import { DeepPartial } from '@peertube/peertube-typescript-utils'
 import merge from 'lodash-es/merge.js'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/abstract-command.js'
@@ -531,6 +531,45 @@ export class ConfigCommand extends AbstractCommand {
       ...options,
 
       path,
+
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  updateInstanceLogo (
+    options: OverrideCommandOptions & {
+      fixture: string
+      type: LogoType
+    }
+  ) {
+    const { fixture, type } = options
+
+    return this.updateImageRequest({
+      ...options,
+
+      path: '/api/v1/config/instance-logo/' + type + '/pick',
+      fixture,
+      fieldname: 'logofile',
+
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  deleteInstanceLogo (
+    options: OverrideCommandOptions & {
+      type: LogoType
+    }
+  ) {
+    const { type } = options
+
+    return this.deleteRequest({
+      ...options,
+
+      path: '/api/v1/config/instance-logo/' + type,
 
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204

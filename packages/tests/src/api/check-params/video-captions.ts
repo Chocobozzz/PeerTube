@@ -35,7 +35,7 @@ describe('Test video captions API validator', function () {
   })
 
   describe('When adding video caption', function () {
-    const fields = { }
+    const fields = {}
     const attaches = {
       captionfile: buildAbsoluteFixturePath('subtitle-good1.vtt')
     }
@@ -183,7 +183,7 @@ describe('Test video captions API validator', function () {
     //   })
     // })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should succeed with the correct parameters', async function () {
       const captionPath = path + video.uuid + '/captions/fr'
       await makeUploadRequest({
         method: 'PUT',
@@ -227,7 +227,7 @@ describe('Test video captions API validator', function () {
       })
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({ url: server.url, path: path + video.shortUUID + '/captions', expectedStatus: HttpStatusCode.OK_200 })
 
       await makeGetRequest({
@@ -295,7 +295,7 @@ describe('Test video captions API validator', function () {
       })
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should succeed with the correct parameters', async function () {
       const captionPath = path + video.shortUUID + '/captions/fr'
       await makeDeleteRequest({
         url: server.url,

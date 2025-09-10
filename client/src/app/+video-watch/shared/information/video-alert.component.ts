@@ -46,4 +46,11 @@ export class VideoAlertComponent {
   isVideoPasswordProtected () {
     return this.video()?.privacy.id === VideoPrivacy.PASSWORD_PROTECTED
   }
+
+  scheduledLiveDate () {
+    const liveSchedules = this.video()?.liveSchedules
+    if (!liveSchedules || liveSchedules.length === 0) return undefined
+
+    return liveSchedules[0].startAt
+  }
 }

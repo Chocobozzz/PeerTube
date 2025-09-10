@@ -1,139 +1,97 @@
-<p-table
-  [value]="registrations" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
-  [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id"
-  [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
-  [(selection)]="selectedRows" [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()"
-  [expandedRowKeys]="expandedRows"
+<my-table
+  #table
+  key="RegistrationListComponent"
+  [defaultColumns]="columns"
+  i18n-paginatorText
+  paginatorText="registrations per page"
+  [dataLoader]="dataLoader"
+  columnConfig="true"
+  [bulkActions]="bulkActions"
 >
-  <ng-template pTemplate="caption">
-    <div class="caption">
-      <div class="left-buttons">
-        <my-action-dropdown
-          *ngIf="isInSelectionMode()" i18n-label label="Batch actions" theme="primary"
-          [actions]="bulkActions" [entry]="selectedRows"
-        >
-        </my-action-dropdown>
-      </div>
+  <ng-template #totalTitle let-totalRecords>
+    <ng-container i18n>{ totalRecords, plural, =0 {No registration} =1 {1 registration} other {{{ totalRecords | myNumberFormatter }} registrations}}</ng-container>
+  </ng-template>
 
-      <div class="ms-auto">
-        <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
+  <ng-template #captionRight>
+    <my-advanced-input-filter (search)="table.onSearch($event)"></my-advanced-input-filter>
+  </ng-template>
+
+  <ng-template #tableCells let-registration>
+    <td *ngIf="table.isColumnDisplayed('account')">
+      <div class="chip two-lines">
+        <div>
+          <span>{{ registration.username }}</span>
+          <span class="muted">{{ registration.accountDisplayName }}</span>
+        </div>
+      </div>
+    </td>
+
+    <td *ngIf="table.isColumnDisplayed('email')">
+      <my-user-email-info [entry]="registration" [showEmailVerifyInformation]="requiresEmailVerification"></my-user-email-info>
+    </td>
+
+    <td *ngIf="table.isColumnDisplayed('channel')">
+      <div class="chip two-lines">
+        <div>
+          <span>{{ registration.channelHandle }}</span>
+          <span class="muted">{{ registration.channelDisplayName }}</span>
+        </div>
+      </div>
+    </td>
+
+    <td *ngIf="table.isColumnDisplayed('registrationReason')" class="max-width-300px ellipsis" container="body" placement="left auto" [ngbTooltip]="registration.registrationReason">
+      {{ registration.registrationReason }}
+    </td>
+
+    <td *ngIf="table.isColumnDisplayed('state')" class="abuse-states">
+      @if (isRegistrationAccepted(registration)) {
+        <div [title]="registration.state.label" class="pt-badge badge-success">
+          <my-global-icon iconName="tick"></my-global-icon>
+        </div>
+      } @else if (isRegistrationRejected(registration)) {
+        <div [title]="registration.state.label" class="pt-badge badge-danger">
+          <my-global-icon iconName="cross"></my-global-icon>
+        </div>
+      }
+    </td>
+
+    <td *ngIf="table.isColumnDisplayed('moderationResponse')" class="max-width-300px ellipsis" container="body" placement="left auto" [ngbTooltip]="registration.moderationResponse">
+      {{ registration.moderationResponse }}
+    </td>
+
+    <td *ngIf="table.isColumnDisplayed('createdAt')">{{ registration.createdAt | ptDate: 'short'  }}</td>
+  </ng-template>
+
+  <ng-template #actionCell let-registration>
+    <my-action-dropdown
+      placement="bottom-right top-right left auto" container="body"
+      i18n-label label="Actions" [actions]="registrationActions" [entry]="registration"
+    ></my-action-dropdown>
+  </ng-template>
+
+  <ng-template #expandedRow let-registration>
+    <div class="moderation-expanded">
+      <div class="left">
+        <div class="d-flex">
+          <span class="moderation-expanded-label" i18n>Registration reason:</span>
+          <span class="moderation-expanded-text" [innerHTML]="registration.registrationReasonHTML"></span>
+        </div>
+
+        <div *ngIf="registration.moderationResponse">
+          <span class="moderation-expanded-label" i18n>Moderation response:</span>
+          <span class="moderation-expanded-text" [innerHTML]="registration.moderationResponseHTML"></span>
+        </div>
       </div>
     </div>
   </ng-template>
 
-  <ng-template pTemplate="header">
-    <tr> <!-- header -->
-      <th scope="col" style="width: 40px">
-        <p-tableHeaderCheckbox ariaLabel="Select all rows" i18n-ariaLabel></p-tableHeaderCheckbox>
-      </th>
-      <th scope="col" style="width: 40px;">
-        <span i18n class="visually-hidden">More information</span>
-      </th>
-      <th scope="col" style="width: 150px;">
-        <span i18n class="visually-hidden">Actions</span>
-      </th>
-      <th scope="col" i18n>Account</th>
-      <th scope="col" i18n>Email</th>
-      <th scope="col" i18n>Channel</th>
-      <th scope="col" i18n>Registration reason</th>
-      <th scope="col" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="state" style="width: 80px;">State <p-sortIcon field="state"></p-sortIcon></th>
-      <th scope="col" i18n>Moderation response</th>
-      <th scope="col" style="width: 150px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Requested on <p-sortIcon field="createdAt"></p-sortIcon></th>
-    </tr>
+  <ng-template #noResults let-search>
+    @if (search) {
+      <ng-container i18n>No registrations found matching current filters.</ng-container>
+    } @else {
+      <ng-container i18n>No registrations found.</ng-container>
+    }
   </ng-template>
-
-  <ng-template pTemplate="body" let-expanded="expanded" let-registration>
-    <tr [pSelectableRow]="registration">
-      <td class="checkbox-cell">
-        <p-tableCheckbox [value]="registration" ariaLabel="Select this row" i18n-ariaLabel></p-tableCheckbox>
-      </td>
-
-      <td class="expand-cell">
-        <my-table-expander-icon [pRowToggler]="registration" [expanded]="expanded"></my-table-expander-icon>
-      </td>
-
-      <td class="action-cell">
-        <my-action-dropdown
-          [ngClass]="{ 'show': expanded }" placement="bottom-right top-right left auto" container="body"
-          i18n-label label="Actions" [actions]="registrationActions" [entry]="registration" buttonSize="small"
-        ></my-action-dropdown>
-      </td>
-
-      <td>
-        <div class="chip two-lines">
-          <div>
-            <span>{{ registration.username }}</span>
-            <span class="muted">{{ registration.accountDisplayName }}</span>
-          </div>
-        </div>
-      </td>
-
-      <td>
-        <my-user-email-info [entry]="registration" [showEmailVerifyInformation]="requiresEmailVerification"></my-user-email-info>
-      </td>
-
-      <td>
-        <div class="chip two-lines">
-          <div>
-            <span>{{ registration.channelHandle }}</span>
-            <span class="muted">{{ registration.channelDisplayName }}</span>
-          </div>
-        </div>
-      </td>
-
-      <td container="body" placement="left auto" [ngbTooltip]="registration.registrationReason">
-        {{ registration.registrationReason }}
-      </td>
-
-      <td class="c-hand abuse-states" [pRowToggler]="registration">
-
-        <div *ngIf="isRegistrationAccepted(registration)" [title]="registration.state.label" class="pt-badge badge-success">
-          <my-global-icon iconName="tick"></my-global-icon>
-        </div>
-
-        <div *ngIf="isRegistrationRejected(registration)" [title]="registration.state.label" class="pt-badge badge-danger">
-          <my-global-icon iconName="cross"></my-global-icon>
-        </div>
-      </td>
-
-      <td container="body" placement="left auto" [ngbTooltip]="registration.moderationResponse">
-        {{ registration.moderationResponse }}
-      </td>
-
-      <td class="c-hand" [pRowToggler]="registration">{{ registration.createdAt | ptDate: 'short'  }}</td>
-    </tr>
-  </ng-template>
-
-  <ng-template pTemplate="rowexpansion" let-registration>
-    <tr>
-      <td myAutoColspan>
-        <div class="moderation-expanded">
-          <div class="left">
-            <div class="d-flex">
-              <span class="moderation-expanded-label" i18n>Registration reason:</span>
-              <span class="moderation-expanded-text" [innerHTML]="registration.registrationReasonHTML"></span>
-            </div>
-
-            <div *ngIf="registration.moderationResponse">
-              <span class="moderation-expanded-label" i18n>Moderation response:</span>
-              <span class="moderation-expanded-text" [innerHTML]="registration.moderationResponseHTML"></span>
-            </div>
-          </div>
-        </div>
-      </td>
-    </tr>
-  </ng-template>
-
-  <ng-template pTemplate="emptymessage">
-    <tr>
-      <td myAutoColspan>
-        <div class="no-results">
-          <ng-container *ngIf="search" i18n>No registrations found matching current filters.</ng-container>
-          <ng-container *ngIf="!search" i18n>No registrations found.</ng-container>
-        </div>
-      </td>
-    </tr>
-  </ng-template>
-</p-table>
+</my-table>
 
 <my-process-registration-modal #processRegistrationModal (registrationProcessed)="onRegistrationProcessed()"></my-process-registration-modal>

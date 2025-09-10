@@ -75,44 +75,44 @@ const videoAttributes = [ 'id', 'name', 'remote', 'uuid', 'url', 'state', 'priva
 })
 export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @AllowNull(false)
   @Is('VideoCaptionLanguage', value => throwIfNotValid(value, isVideoCaptionLanguageValid, 'language'))
   @Column
-  language: string
+  declare language: string
 
   @AllowNull(false)
   @Column
-  filename: string
+  declare filename: string
 
   @AllowNull(true)
   @Column
-  m3u8Filename: string
+  declare m3u8Filename: string
 
   @AllowNull(false)
   @Default(FileStorage.FILE_SYSTEM)
   @Column
-  storage: FileStorageType
+  declare storage: FileStorageType
 
   @AllowNull(true)
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.COMMONS.URL.max))
-  fileUrl: string
+  declare fileUrl: string
 
   @AllowNull(true)
   @Column
-  m3u8Url: string
+  declare m3u8Url: string
 
   @AllowNull(false)
   @Column
-  automaticallyGenerated: boolean
+  declare automaticallyGenerated: boolean
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -120,7 +120,7 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
     },
     onDelete: 'CASCADE'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   @BeforeDestroy
   static async removeFiles (instance: VideoCaptionModel, options) {

@@ -378,7 +378,7 @@ function register (...) {
     // Will be displayed in a button next to the login form
     authDisplayName: () => 'Auth method'
 
-    // If the user click on the auth button, PeerTube will forward the request in this function
+    // If the user click on the auth button, PeerTube will forward the request to this function
     onAuthRequest: (req, res) => {
       res.redirect('https://external-auth.example.com/auth')
     },
@@ -873,8 +873,14 @@ PeerTube creates gradients of some CSS variables so you don't have to specify al
 
 You can take inspiration from core PeerTube themes in [client/src/sass/application.scss](https://github.com/Chocobozzz/PeerTube/blob/develop/client/src/sass/application.scss) file:
 
+::: info
+`--is-dark` CSS variable must be provided when you define a new theme
+:::
+
 ```css
-body {
+:root {
+  --is-dark: 0; /* Or --is-dark: 1 if it's a dark theme */
+
   --primary: #FD9C50;
   --on-primary: #111;
   --border-primary: #F2690D;

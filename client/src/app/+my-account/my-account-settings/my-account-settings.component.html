@@ -21,6 +21,7 @@
 
 <div class="pt-two-cols mt-5"> <!-- interface grid -->
   <div class="title-col">
+    <div class="anchor" id="interface-settings"></div> <!-- interface settings anchor -->
     <h2 i18n>INTERFACE</h2>
   </div>
 
@@ -68,6 +69,18 @@
 
   <div class="content-col">
     <my-account-two-factor-button [user]="user"></my-account-two-factor-button>
+  </div>
+</div>
+
+<div class="pt-two-cols mt-5">
+  <div class="title-col">
+    <h2 i18n>ACCOUNT SESSIONS</h2>
+  </div>
+
+  <div class="content-col">
+    <p i18n>These are the devices currently logged in to your account.</p>
+
+    <my-account-token-sessions [user]="user"></my-account-token-sessions>
   </div>
 </div>
 

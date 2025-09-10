@@ -10,6 +10,8 @@ import {
   NSFWPolicyType,
   RunnerJobState,
   RunnerJobStateType,
+  UploadImageType,
+  UploadImageType_Type,
   UserExportState,
   UserExportStateType,
   UserImportState,
@@ -22,6 +24,8 @@ import {
   VideoCommentPolicyType,
   VideoImportState,
   VideoImportStateType,
+  VideoLicence,
+  VideoLicenceType,
   VideoPlaylistPrivacy,
   VideoPlaylistPrivacyType,
   VideoPlaylistType,
@@ -46,7 +50,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 895
+export const LAST_MIGRATION_VERSION = 925
 
 // ---------------------------------------------------------------------------
 
@@ -107,6 +111,8 @@ export const SORTABLE_COLUMNS = {
 
   USER_REGISTRATIONS: [ 'createdAt', 'state' ],
 
+  TOKEN_SESSIONS: [ 'createdAt' ],
+
   RUNNERS: [ 'createdAt' ],
   RUNNER_REGISTRATION_TOKENS: [ 'createdAt' ],
   RUNNER_JOBS: [ 'updatedAt', 'createdAt', 'priority', 'state', 'progress' ],
@@ -141,7 +147,7 @@ export const SORTABLE_COLUMNS = {
 
   USER_NOTIFICATIONS: [ 'createdAt', 'read' ],
 
-  VIDEO_PLAYLISTS: [ 'name', 'displayName', 'createdAt', 'updatedAt' ],
+  VIDEO_PLAYLISTS: [ 'name', 'displayName', 'createdAt', 'updatedAt', 'videoChannelPosition' ],
 
   PLUGINS: [ 'name', 'createdAt', 'updatedAt' ],
 
@@ -285,6 +291,7 @@ export const REPEAT_JOBS: { [id in JobType]?: RepeatOptions } = {
   }
 }
 export const JOB_PRIORITY = {
+  STORYBOARD: 95,
   TRANSCODING: 100,
   VIDEO_STUDIO: 150,
   TRANSCRIPTION: 200
@@ -337,6 +344,7 @@ export const SCHEDULER_INTERVALS_MS = {
   ACTOR_FOLLOW_SCORES: 60000 * 60, // 1 hour
   REMOVE_OLD_JOBS: 60000 * 60, // 1 hour
   UPDATE_VIDEOS: 60000, // 1 minute
+  UPDATE_TOKEN_SESSION: 60000, // 1 minute
   YOUTUBE_DL_UPDATE: 60000 * 60 * 24, // 1 day
   GEO_IP_UPDATE: 60000 * 60 * 24, // 1 day
   VIDEO_VIEWS_BUFFER_UPDATE: CONFIG.VIEWS.VIDEOS.LOCAL_BUFFER_UPDATE_INTERVAL,
@@ -573,14 +581,16 @@ export const VIDEO_CATEGORIES = {
 }
 
 // See https://creativecommons.org/licenses/?lang=en
-export const VIDEO_LICENCES = {
-  1: 'Attribution',
-  2: 'Attribution - Share Alike',
-  3: 'Attribution - No Derivatives',
-  4: 'Attribution - Non Commercial',
-  5: 'Attribution - Non Commercial - Share Alike',
-  6: 'Attribution - Non Commercial - No Derivatives',
-  7: 'Public Domain Dedication'
+export const VIDEO_LICENCES: { [id in VideoLicenceType]: string } = {
+  [VideoLicence['CC-BY']]: 'Attribution',
+  [VideoLicence['CC-BY-SA']]: 'Attribution - Share Alike',
+  [VideoLicence['CC-BY-ND']]: 'Attribution - No Derivatives',
+  [VideoLicence['CC-BY-NC']]: 'Attribution - Non Commercial',
+  [VideoLicence['CC-BY-NC-SA']]: 'Attribution - Non Commercial - Share Alike',
+  [VideoLicence['CC-BY-NC-ND']]: 'Attribution - Non Commercial - No Derivatives',
+  [VideoLicence['CC0']]: 'Public Domain Dedication',
+  [VideoLicence['PDM']]: 'Free of known copyright restrictions',
+  [VideoLicence['COPYRIGHT']]: 'Copyrighted - All Rights Reserved'
 }
 
 export const VIDEO_LANGUAGES: { [id: string]: string } = {}
@@ -865,7 +875,9 @@ export const STATIC_PATHS = {
   STREAMING_PLAYLISTS: {
     HLS: '/static/streaming-playlists/hls',
     PRIVATE_HLS: '/static/streaming-playlists/hls/private/'
-  }
+  },
+
+  UPLOAD_IMAGES: '/static/uploads/images/'
 }
 export const DOWNLOAD_PATHS = {
   TORRENTS: '/download/torrents/',
@@ -942,6 +954,32 @@ export const ACTOR_IMAGES_SIZE: { [key in ActorImageType_Type]: { width: number,
     }
   ]
 }
+export const UPLOAD_IMAGES_SIZE: { [key in UploadImageType_Type]: { width: number, height: number }[] } = {
+  [UploadImageType.INSTANCE_FAVICON]: [
+    {
+      width: 32,
+      height: 32
+    }
+  ],
+  [UploadImageType.INSTANCE_HEADER_SQUARE]: [
+    {
+      width: 48,
+      height: 48
+    }
+  ],
+  [UploadImageType.INSTANCE_HEADER_WIDE]: [
+    {
+      width: null, // Auto
+      height: 48
+    }
+  ],
+  [UploadImageType.INSTANCE_OPENGRAPH]: [
+    {
+      width: 1200,
+      height: 650
+    }
+  ]
+}
 
 export const STORYBOARD = {
   SPRITE_MAX_SIZE: 192,
@@ -1014,7 +1052,9 @@ export const DIRECTORIES = {
 
   HLS_REDUNDANCY: join(CONFIG.STORAGE.REDUNDANCY_DIR, 'hls'),
 
-  LOCAL_PIP_DIRECTORY: join(CONFIG.STORAGE.BIN_DIR, 'pip')
+  LOCAL_PIP_DIRECTORY: join(CONFIG.STORAGE.BIN_DIR, 'pip'),
+
+  UPLOAD_IMAGES: join(CONFIG.STORAGE.UPLOADS_DIR, 'images')
 }
 
 export const RESUMABLE_UPLOAD_SESSION_LIFETIME = SCHEDULER_INTERVALS_MS.REMOVE_DANGLING_RESUMABLE_UPLOADS
@@ -1087,6 +1127,9 @@ export const REDUNDANCY = {
 }
 
 export const ACCEPT_HEADERS = [ 'html', 'application/json' ].concat(ACTIVITY_PUB.POTENTIAL_ACCEPT_HEADERS)
+export const LANGUAGE_COOKIE_NAME = 'clientLanguage'
+export const LANGUAGE_HEADER = 'x-peertube-language'
+
 export const OTP = {
   HEADER_NAME: 'x-peertube-otp',
   HEADER_REQUIRED_VALUE: 'required; app'
@@ -1096,6 +1139,8 @@ export const ASSETS_PATH = {
   DEFAULT_AUDIO_BACKGROUND: join(root(), 'dist', 'core', 'assets', 'default-audio-background.jpg'),
   DEFAULT_LIVE_BACKGROUND: join(root(), 'dist', 'core', 'assets', 'default-live-background.jpg')
 }
+
+export const SERVER_INTERNAL_LOCALES_BASE_PATH = join(root(), 'dist', 'locales')
 
 // ---------------------------------------------------------------------------
 
@@ -1171,6 +1216,7 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
     SCHEDULER_INTERVALS_MS.AUTO_FOLLOW_INDEX_INSTANCES = 5000
     SCHEDULER_INTERVALS_MS.UPDATE_INBOX_STATS = 5000
     SCHEDULER_INTERVALS_MS.CHECK_PEERTUBE_VERSION = 2000
+    SCHEDULER_INTERVALS_MS.UPDATE_TOKEN_SESSION = 2000
 
     REPEAT_JOBS['videos-views-stats'] = { every: 5000 }
 
@@ -1236,9 +1282,7 @@ export async function loadLanguages () {
 // ---------------------------------------------------------------------------
 
 export const FILES_CONTENT_HASH = {
-  MANIFEST: generateContentHash(),
-  FAVICON: generateContentHash(),
-  LOGO: generateContentHash()
+  MANIFEST: generateContentHash()
 }
 
 // ---------------------------------------------------------------------------
@@ -1317,6 +1361,10 @@ export async function buildLanguages () {
 
   // Catalan languages
   languages['ca-valencia'] = 'Valencian'
+
+  // Creole French languages
+  languages['rcf'] = 'Réunion Creole French'
+  languages['gcr'] = 'Guianese Creole French'
 
   return languages
 }

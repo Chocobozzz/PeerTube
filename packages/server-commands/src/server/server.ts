@@ -65,7 +65,7 @@ export type RunServerOptions = {
   hideLogs?: boolean
   nodeArgs?: string[]
   peertubeArgs?: string[]
-  env?: { [ id: string ]: string }
+  env?: { [id: string]: string }
 }
 
 export class PeerTubeServer {
@@ -400,6 +400,7 @@ export class PeerTubeServer {
         captions: this.getDirectoryPath('captions') + '/',
         cache: this.getDirectoryPath('cache') + '/',
         plugins: this.getDirectoryPath('plugins') + '/',
+        uploads: this.getDirectoryPath('uploads') + '/',
         well_known: this.getDirectoryPath('well-known') + '/'
       },
       admin: {

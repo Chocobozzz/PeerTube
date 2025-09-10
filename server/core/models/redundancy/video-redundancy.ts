@@ -78,31 +78,31 @@ export enum ScopeNames {
 })
 export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @AllowNull(true)
   @Column
-  expiresOn: Date
+  declare expiresOn: Date
 
   @AllowNull(false)
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS_REDUNDANCY.URL.max))
-  fileUrl: string
+  declare fileUrl: string
 
   @AllowNull(false)
   @Is('VideoRedundancyUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS_REDUNDANCY.URL.max))
-  url: string
+  declare url: string
 
   @AllowNull(true)
   @Column
-  strategy: string // Only used by us
+  declare strategy: string // Only used by us
 
   @ForeignKey(() => VideoStreamingPlaylistModel)
   @Column
-  videoStreamingPlaylistId: number
+  declare videoStreamingPlaylistId: number
 
   @BelongsTo(() => VideoStreamingPlaylistModel, {
     foreignKey: {
@@ -110,11 +110,11 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
     },
     onDelete: 'cascade'
   })
-  VideoStreamingPlaylist: Awaited<VideoStreamingPlaylistModel>
+  declare VideoStreamingPlaylist: Awaited<VideoStreamingPlaylistModel>
 
   @ForeignKey(() => ActorModel)
   @Column
-  actorId: number
+  declare actorId: number
 
   @BelongsTo(() => ActorModel, {
     foreignKey: {
@@ -122,7 +122,7 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
     },
     onDelete: 'cascade'
   })
-  Actor: Awaited<ActorModel>
+  declare Actor: Awaited<ActorModel>
 
   @BeforeDestroy
   static async removeFile (instance: VideoRedundancyModel) {

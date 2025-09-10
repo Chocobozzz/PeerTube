@@ -34,17 +34,17 @@
             <div *ngIf="formErrors.nsfwSummary" class="form-error" role="alert">{{ formErrors.nsfwSummary }}</div>
           </div>
 
-          <div class="label" i18n>Help viewers to identify your sensitive content</div>
+          <div class="label" i18n>Help viewers identify your sensitive content</div>
 
           <my-peertube-checkbox inputName="nsfwFlagViolent" formControlName="nsfwFlagViolent">
             <ng-template ptTemplate="label">
-              <ng-container i18n>Some images may be violent</ng-container>
+              <ng-container i18n>Potentially violent content</ng-container>
             </ng-template>
           </my-peertube-checkbox>
 
           <my-peertube-checkbox inputName="nsfwFlagSex" formControlName="nsfwFlagSex">
             <ng-template ptTemplate="label">
-              <ng-container i18n>Content may be perceived as sexually explicit material</ng-container>
+              <ng-container i18n>Potentially sexually explicit content</ng-container>
             </ng-template>
           </my-peertube-checkbox>
 

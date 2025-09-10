@@ -32,6 +32,8 @@ export class VideoPlaylist implements ServerVideoPlaylist {
   updatedAt: Date | string
 
   ownerAccount: AccountSummary
+
+  videoChannelPosition: number
   videoChannel?: VideoChannelSummary
 
   thumbnailPath: string
@@ -79,6 +81,8 @@ export class VideoPlaylist implements ServerVideoPlaylist {
 
     this.ownerAccount = hash.ownerAccount
     this.ownerBy = Actor.CREATE_BY_STRING(hash.ownerAccount.name, hash.ownerAccount.host)
+
+    this.videoChannelPosition = hash.videoChannelPosition
 
     if (hash.videoChannel) {
       this.videoChannel = hash.videoChannel

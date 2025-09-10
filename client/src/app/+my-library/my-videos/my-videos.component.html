@@ -1,210 +1,126 @@
 <div class="channel-filters">
-  <div class="channels-label" i18n>Per channel:</div>
+  <div class="channel-label" i18n>Per channel:</div>
 
   @for (channel of channels; track channel.id) {
-    <my-channel-toggle [channel]="channel" [(ngModel)]="channel.selected" (ngModelChange)="onFilter()"></my-channel-toggle>
+    <my-channel-toggle [channel]="channel" [(ngModel)]="channel.selected" (ngModelChange)="table.onFilter()"></my-channel-toggle>
   }
 </div>
 
-<p-table
-  [value]="videos" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
-  [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id" [resizableColumns]="true"
-  [(selection)]="selectedRows" [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false" [selectionPageOnly]="true"
-  [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()"
-  [expandedRowKeys]="expandedRows" [ngClass]="{ loading: loading }"
-  class="new-p-table sticky-p-table cell-wrap"
+<my-table
+  #table
+  key="MyVideosComponent"
+  [defaultColumns]="columns"
+  defaultSort="publishedAt"
+  i18n-paginatorText
+  paginatorText="videos per page"
+  defaultRowsPerPage="5"
+  [bulkActions]="bulkActions"
+  [dataLoader]="dataLoader"
+  [customParseQueryParams]="customParseQueryParams"
+  [customUpdateUrl]="customUpdateUrl"
 >
-  <ng-template pTemplate="caption">
-    <div class="caption">
-      <div class="left-buttons">
-        @if (isInSelectionMode()) {
-        <my-action-dropdown
-          i18n-label label="Batch actions" theme="primary"
-          [actions]="bulkActions" [entry]="selectedRows"
-        >
-        </my-action-dropdown>
-      } @else {
-        <strong i18n [hidden]="loading">
-          { totalRecords, plural, =0 {No videos} =1 {1 video} other {{{ totalRecords | myNumberFormatter }} videos}}
-        </strong>
-      }
-      </div>
 
-      <div class="ms-auto right-form">
-        <div class="d-flex align-items-center">
-          <label class="label-inline d-none d-inline-block-mw" for="table-search" i18n>Search</label>
+  <ng-template #totalTitle let-totalRecords>
+    <ng-container i18n>{ totalRecords, plural, =0 {No videos} =1 {1 video} other {{{ totalRecords | myNumberFormatter }} videos}}</ng-container>
+  </ng-template>
 
-          <my-advanced-input-filter
-            inputId="table-search" icon="true" emitOnInit="false" i18n-placeholder placeholder="Search your videos"
-            (search)="onSearch($event)"
-          ></my-advanced-input-filter>
-        </div>
+  <ng-template #captionRight>
+    <div class="d-flex align-items-center">
+      <label class="label-inline d-none d-inline-block-mw" for="table-search" i18n>Search</label>
 
-        <div class="d-flex align-items-center">
-          <label class="label-inline" for="table-filter" i18n>Filter</label>
+      <my-advanced-input-filter
+        inputId="table-search" icon="true" emitOnInit="false" i18n-placeholder placeholder="Search your videos"
+        (search)="table.onSearch($event, true)"
+      ></my-advanced-input-filter>
+    </div>
 
-          <my-select-checkbox
-            inputId="table-filter"
-            showToggleAll="false"
-            showClear="true"
+    <div class="d-flex align-items-center">
+      <label class="label-inline" for="table-filter" i18n>Filter</label>
 
-            [availableItems]="filterItems"
-            [selectableGroup]="false"
-            [(ngModel)]="selectedFilterItems"
-            i18n-placeholder placeholder="All videos"
-            (ngModelChange)="onFilter()"
-          >
-          </my-select-checkbox>
-        </div>
-      </div>
+      <my-select-checkbox
+        inputId="table-filter"
+        showToggleAll="false"
+        showClear="true"
 
+        [availableItems]="filterItems"
+        [selectableGroup]="false"
+        [(ngModel)]="selectedFilterItems"
+        i18n-placeholder placeholder="All videos"
+        (ngModelChange)="table.onFilter()"
+      >
+      </my-select-checkbox>
     </div>
   </ng-template>
 
-  <ng-template pTemplate="sorticon" let-sortOrder>
-    @if (sortOrder === 1) {
-      <my-button class="ms-2" small="true" active="true" rounded="true" theme="tertiary" icon="chevron-up"></my-button>
-    } @else if (sortOrder === -1) {
-      <my-button class="ms-2" small="true" active="true" rounded="true" theme="tertiary" icon="chevron-down"></my-button>
-    } @else if (sortOrder === 0) {
-      <my-button class="ms-2" small="true" rounded="true" theme="tertiary" icon="chevron-down"></my-button>
-    }
-  </ng-template>
+  <ng-template #tableCells let-video>
 
-  <ng-template pTemplate="paginatorright" let-item>
-    <ng-container i18n>videos per page</ng-container>
-  </ng-template>
+    <td *ngIf="table.isColumnDisplayed('duration')">
+      <my-video-cell [video]="video" thumbnail="true" title="false"></my-video-cell>
+    </td>
 
-  <ng-template pTemplate="header">
-    <tr>
-      <th scope="col" width="25px" class="checkbox-cell">
-        <p-tableHeaderCheckbox ariaLabel="Select all rows" i18n-ariaLabel></p-tableHeaderCheckbox>
-      </th>
+    <td *ngIf="table.isColumnDisplayed('name')">
+      <my-video-cell class="video-cell-name" [video]="video" thumbnail="false" title="true"></my-video-cell>
+    </td>
 
-      <th scope="col" *ngIf="isSelected('duration')" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="duration">{{ getColumn('duration').label }} <p-sortIcon field="duration"></p-sortIcon></th>
-      <th scope="col" *ngIf="isSelected('name')" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="name">{{ getColumn('name').label }} <p-sortIcon field="name"></p-sortIcon></th>
-      <th scope="col" *ngIf="isSelected('privacy')">{{ getColumn('privacy').label }}</th>
-      <th scope="col" *ngIf="isSelected('sensitive')">{{ getColumn('sensitive').label }}</th>
-      <th scope="col" *ngIf="isSelected('playlists')">{{ getColumn('playlists').label }}</th>
-      <th scope="col" *ngIf="isSelected('insights')" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="views">{{ getColumn('insights').label }} <p-sortIcon field="views"></p-sortIcon></th>
-      <th scope="col" *ngIf="isSelected('comments')" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="comments">{{ getColumn('comments').label }} <p-sortIcon field="comments"></p-sortIcon></th>
-      <th scope="col" *ngIf="isSelected('published')" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="publishedAt">{{ getColumn('published').label }} <p-sortIcon field="publishedAt"></p-sortIcon></th>
-      <th scope="col" *ngIf="isSelected('state')">{{ getColumn('state').label }}</th>
+    <td *ngIf="table.isColumnDisplayed('privacy')">
+      <div class="d-flex flex-wrap gap-1">
+        <my-privacy-badge [video]="video"></my-privacy-badge>
 
-      <th scope="col" width="250px" class="action-head">
-        <div class="d-flex align-items-center justify-content-between">
-          <span i18>Actions</span>
+        <span *ngIf="video.blacklisted" class="pt-badge badge-red" i18n [ngbTooltip]="video.blacklistedReason">Blocked</span>
+      </div>
+    </td>
 
-          <span class="c-hand column-toggle" >
-            <div ngbDropdown placement="bottom-left auto" container="body" autoClose="outside" #columnsDropdown="ngbDropdown">
-              <my-button theme="tertiary" icon="columns" ngbDropdownToggle i18n-title title="Open table configuration" [show]="columnsDropdown.isOpen()"></my-button>
+    <td *ngIf="table.isColumnDisplayed('sensitive')">
+      <my-video-nsfw-badge [video]="video"></my-video-nsfw-badge>
+    </td>
 
-              <div ngbDropdownMenu class="p-3">
-                <div class="form-group">
-                  <div class="muted small mb-2" i18n>Column displayed:</div>
-
-                  @for (column of columns; track column) {
-                    <div class="ms-1 mb-1">
-                      <my-peertube-checkbox
-                        [inputName]="'column-' + column.id" [(ngModel)]="column.selected"
-                        i18n-labelText [labelText]="column.label"
-                        (ngModelChange)="saveSelectedColumns()"
-                      ></my-peertube-checkbox>
-                    </div>
-                  }
-                </div>
-              </div>
-            </div>
-          </span>
-        </div>
-      </th>
-    </tr>
-  </ng-template>
-
-  <ng-template pTemplate="body" let-video>
-
-    <tr [pSelectableRow]="video">
-      <td class="checkbox-cell">
-        <p-tableCheckbox [value]="video" ariaLabel="Select this row" i18n-ariaLabel></p-tableCheckbox>
-      </td>
-
-      <td *ngIf="isSelected('duration')">
-        <my-video-cell [video]="video" thumbnail="true" title="false"></my-video-cell>
-      </td>
-
-      <td *ngIf="isSelected('name')">
-        <my-video-cell class="video-cell-name" [video]="video" thumbnail="false" title="true"></my-video-cell>
-      </td>
-
-      <td *ngIf="isSelected('privacy')">
-        <div class="d-flex flex-wrap gap-1">
-          <my-video-privacy-badge [video]="video"></my-video-privacy-badge>
-
-          <span *ngIf="video.blacklisted" class="pt-badge badge-red" i18n [ngbTooltip]="video.blacklistedReason">Blocked</span>
-        </div>
-      </td>
-
-      <td *ngIf="isSelected('sensitive')">
-        <my-video-nsfw-badge [video]="video"></my-video-nsfw-badge>
-      </td>
-
-      <td *ngIf="isSelected('playlists')">
-        <div class="badges playlists">
-          <a *ngFor="let playlist of (videosContainedInPlaylists[video.id] || [])" class="pt-badge badge-secondary" [routerLink]="['/w/p/', playlist.playlistShortUUID]">
-            {{ playlist.playlistDisplayName }}
-          </a>
-        </div>
-      </td>
-
-      <td *ngIf="isSelected('insights')">
-        <a class="pt" [routerLink]="[ '/videos/manage', video.shortUUID, 'stats' ]" i18n-title title="Navigate to the video stats page">
-          <ng-container i18n>{video.views, plural, =0 {No views} =1 {1 view} other {{{ video.views | myNumberFormatter }} views}}</ng-container>
-
-          <br />
-
-          @if (video.isLive) {
-            <ng-container i18n>{video.viewers, plural, =0 {No viewers} =1 {1 viewer} other {{{ video.views | myNumberFormatter }} viewers}}</ng-container>
-          }
+    <td *ngIf="table.isColumnDisplayed('playlists')">
+      <div class="badges playlists">
+        <a *ngFor="let playlist of (videosContainedInPlaylists[video.id] || [])" class="pt-badge badge-secondary pt-badge-keep-case" [routerLink]="['/w/p/', playlist.playlistShortUUID]">
+          {{ playlist.playlistDisplayName }}
         </a>
-      </td>
+      </div>
+    </td>
 
-      <td *ngIf="isSelected('comments')">
-        <span i18n>{video.comments, plural, =0 {No comments} =1 {1 comment} other {{{ video.comments | myNumberFormatter }} comments}}</span>
-      </td>
+    <td *ngIf="table.isColumnDisplayed('insights')">
+      <a class="pt" [routerLink]="[ '/videos/manage', video.shortUUID, 'stats' ]" i18n-title title="Navigate to the video stats page">
+        <ng-container i18n>{video.views, plural, =0 {No views} =1 {1 view} other {{{ video.views | myNumberFormatter }} views}}</ng-container>
 
-      <td *ngIf="isSelected('published')">
-        {{ video.publishedAt | ptDate: 'short' }}
-      </td>
+        <br />
 
-      <td *ngIf="isSelected('state')">
-        <my-video-state-badge [video]="video"></my-video-state-badge>
-      </td>
+        @if (video.isLive) {
+          <ng-container i18n>{video.viewers, plural, =0 {No viewers} =1 {1 viewer} other {{{ video.views | myNumberFormatter }} viewers}}</ng-container>
+        }
+      </a>
+    </td>
 
-      <td class="action-cell">
-        <div class="d-flex justify-content-end">
-          <my-button class="me-3" i18n-label label="Manage" [ptRouterLink]="[ '/videos', 'manage', video.shortUUID ]" theme="secondary" icon="film" responsiveLabel="true"></my-button>
+    <td *ngIf="table.isColumnDisplayed('comments')">
+      <span i18n>{video.comments, plural, =0 {No comments} =1 {1 comment} other {{{ video.comments | myNumberFormatter }} comments}}</span>
+    </td>
 
-          <my-video-actions-dropdown
-            placement="bottom auto" buttonDirection="horizontal" buttonStyled="true" [video]="video" [displayOptions]="videoActionsOptions"
-            [moreActions]="moreVideoActions"
-            (videoRemoved)="reloadData()" (videoFilesRemoved)="reloadData()" (transcodingCreated)="reloadData()" (videoExistsInPlaylistChange)="fetchVideosContainedInPlaylists([ video ])"
-          ></my-video-actions-dropdown>
-        </div>
-      </td>
+    <td *ngIf="table.isColumnDisplayed('published')">
+      {{ video.publishedAt | ptDate: 'short' }}
+    </td>
 
-    </tr>
+    <td *ngIf="table.isColumnDisplayed('state')">
+      <my-video-state-badge [video]="video"></my-video-state-badge>
+    </td>
   </ng-template>
 
-  <ng-template pTemplate="emptymessage">
-    <tr>
-      <td myAutoColspan>
-        <div class="no-results">
-          <ng-container *ngIf="search" i18n>No video found matching current filters.</ng-container>
-          <ng-container *ngIf="!search" i18n>You don't have any videos published yet.</ng-container>
-        </div>
-      </td>
-    </tr>
+  <ng-template #actionCell let-video>
+    <my-button class="me-3" i18n-label label="Manage" [ptRouterLink]="[ '/videos', 'manage', video.shortUUID ]" theme="secondary" icon="film" responsiveLabel="true"></my-button>
+
+    <my-video-actions-dropdown
+      placement="bottom auto" buttonDirection="horizontal" buttonStyled="true" [video]="video" [displayOptions]="videoActionsOptions"
+      [moreActions]="moreVideoActions"
+      (videoRemoved)="table.loadData()" (videoFilesRemoved)="table.loadData()" (transcodingCreated)="table.loadData()" (videoExistsInPlaylistChange)="fetchVideosContainedInPlaylists([ video ])"
+    ></my-video-actions-dropdown>
   </ng-template>
-</p-table>
+
+  <ng-template #noResults let-search>
+    {{ getNoResults(search) }}
+  </ng-template>
+
+</my-table>
 
 <my-video-change-ownership #videoChangeOwnershipModal></my-video-change-ownership>

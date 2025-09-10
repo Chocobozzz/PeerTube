@@ -1,12 +1,13 @@
+import { isStableOrUnstableVersionValid } from '@server/helpers/custom-validators/misc.js'
 import { outputJSON, pathExists } from 'fs-extra/esm'
 import { join } from 'path'
 import { execShell } from '../../helpers/core-utils.js'
-import { isNpmPluginNameValid, isPluginStableOrUnstableVersionValid } from '../../helpers/custom-validators/plugins.js'
+import { isNpmPluginNameValid } from '../../helpers/custom-validators/plugins.js'
 import { logger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { getLatestPluginVersion } from './plugin-index.js'
 
-async function installNpmPlugin (npmName: string, versionArg?: string) {
+export async function installNpmPlugin (npmName: string, versionArg?: string) {
   // Security check
   checkNpmPluginNameOrThrow(npmName)
   if (versionArg) checkPluginVersionOrThrow(versionArg)
@@ -21,27 +22,18 @@ async function installNpmPlugin (npmName: string, versionArg?: string) {
   logger.debug('Added a yarn package.', { yarnStdout: stdout })
 }
 
-async function installNpmPluginFromDisk (path: string) {
+export async function installNpmPluginFromDisk (path: string) {
   await execYarn('add file:' + path)
 }
 
-async function removeNpmPlugin (name: string) {
+export async function removeNpmPlugin (name: string) {
   checkNpmPluginNameOrThrow(name)
 
   await execYarn('remove ' + name)
 }
 
-async function rebuildNativePlugins () {
+export async function rebuildNativePlugins () {
   await execYarn('install --pure-lockfile')
-}
-
-// ############################################################################
-
-export {
-  installNpmPlugin,
-  installNpmPluginFromDisk,
-  rebuildNativePlugins,
-  removeNpmPlugin
 }
 
 // ############################################################################
@@ -69,5 +61,5 @@ function checkNpmPluginNameOrThrow (name: string) {
 }
 
 function checkPluginVersionOrThrow (name: string) {
-  if (!isPluginStableOrUnstableVersionValid(name)) throw new Error('Invalid NPM plugin version to install')
+  if (!isStableOrUnstableVersionValid(name)) throw new Error('Invalid NPM plugin version to install')
 }

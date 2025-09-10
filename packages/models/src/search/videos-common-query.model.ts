@@ -13,6 +13,7 @@ export interface VideosCommonQuery {
   nsfwFlagsExcluded?: number
 
   isLive?: boolean
+  includeScheduledLive?: boolean
 
   isLocal?: boolean
   include?: VideoIncludeType

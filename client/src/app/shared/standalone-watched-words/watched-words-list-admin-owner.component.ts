@@ -1,18 +1,15 @@
-import { NgClass, NgIf } from '@angular/common'
-import { Component, OnInit, inject, input, viewChild } from '@angular/core'
+import { Component, inject, input, viewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { AuthService, ConfirmService, Notifier, RestPagination } from '@app/core'
 import { UserRight, WatchedWordsList } from '@peertube/peertube-models'
-import { SharedModule, SortMeta } from 'primeng/api'
-import { TableModule } from 'primeng/table'
-import { first } from 'rxjs'
+import { SortMeta } from 'primeng/api'
+import { first, switchMap } from 'rxjs'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { ActionDropdownComponent, DropdownAction } from '../shared-main/buttons/action-dropdown.component'
 import { ButtonComponent } from '../shared-main/buttons/button.component'
-import { AutoColspanDirective } from '../shared-main/common/auto-colspan.directive'
 import { PTDatePipe } from '../shared-main/common/date.pipe'
-import { TableExpanderIconComponent } from '../shared-tables/table-expander-icon.component'
+import { NumberFormatterPipe } from '../shared-main/common/number-formatter.pipe'
+import { TableColumnInfo, TableComponent } from '../shared-tables/table.component'
 import { WatchedWordsListSaveModalComponent } from './watched-words-list-save-modal.component'
 import { WatchedWordsListService } from './watched-words-list.service'
 
@@ -21,20 +18,15 @@ import { WatchedWordsListService } from './watched-words-list.service'
   templateUrl: './watched-words-list-admin-owner.component.html',
   imports: [
     GlobalIconComponent,
-    TableModule,
-    SharedModule,
-    NgIf,
     ActionDropdownComponent,
     ButtonComponent,
-    TableExpanderIconComponent,
-    NgClass,
-    AutoColspanDirective,
     PTDatePipe,
-    NgbTooltip,
-    WatchedWordsListSaveModalComponent
+    WatchedWordsListSaveModalComponent,
+    NumberFormatterPipe,
+    TableComponent
   ]
 })
-export class WatchedWordsListAdminOwnerComponent extends RestTable<WatchedWordsList> implements OnInit {
+export class WatchedWordsListAdminOwnerComponent {
   protected router = inject(Router)
   protected route = inject(ActivatedRoute)
   private auth = inject(AuthService)
@@ -45,28 +37,37 @@ export class WatchedWordsListAdminOwnerComponent extends RestTable<WatchedWordsL
   readonly mode = input.required<'user' | 'admin'>()
 
   readonly saveModal = viewChild<WatchedWordsListSaveModalComponent>('saveModal')
-
-  lists: WatchedWordsList[]
-  totalRecords = 0
-  sort: SortMeta = { field: 'createdAt', order: -1 }
-  pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
+  readonly table = viewChild<TableComponent<WatchedWordsList>>('table')
 
   actions: DropdownAction<WatchedWordsList>[][] = []
 
-  get authUser () {
-    return this.auth.getUser()
-  }
+  columns: TableColumnInfo<string>[] = [
+    {
+      id: 'listName',
+      label: $localize`List name`,
+      selected: true,
+      sortable: true
+    },
+    {
+      id: 'words',
+      label: $localize`Words`,
+      selected: true,
+      sortable: false
+    },
+    {
+      id: 'updatedAt',
+      label: $localize`Date`,
+      selected: true,
+      sortable: true
+    }
+  ]
 
-  get accountNameParam () {
-    if (this.mode() === 'admin') return undefined
-
-    return this.authUser.account.name
-  }
+  dataLoader: typeof this._dataLoader
 
   constructor () {
-    super()
+    this.dataLoader = this._dataLoader.bind(this)
 
-    const isDisplayed = () => this.mode() === 'user' || this.authUser.hasRight(UserRight.MANAGE_INSTANCE_WATCHED_WORDS)
+    const isDisplayed = () => this.mode() === 'user' || this.auth.getUser().hasRight(UserRight.MANAGE_INSTANCE_WATCHED_WORDS)
 
     this.actions = [
       [
@@ -88,32 +89,31 @@ export class WatchedWordsListAdminOwnerComponent extends RestTable<WatchedWordsL
     ]
   }
 
-  ngOnInit () {
-    this.initialize()
-
-    this.auth.userInformationLoaded
-      .pipe(first())
-      .subscribe(() => this.reloadData())
-  }
-
-  getIdentifier () {
-    return 'WatchedWordsListAdminOwnerComponent'
-  }
-
   openCreateOrUpdateList (list?: WatchedWordsList) {
     this.saveModal().show(list)
   }
 
-  protected reloadDataInternal () {
-    this.watchedWordsListService.list({ pagination: this.pagination, sort: this.sort, accountName: this.accountNameParam })
-      .subscribe({
-        next: resultList => {
-          this.totalRecords = resultList.total
-          this.lists = resultList.data
-        },
+  onListAddedOrUpdated () {
+    this.table().reloadData({ field: 'updatedAt', order: -1 })
+  }
 
-        error: err => this.notifier.error(err.message)
-      })
+  getAccountNameParam () {
+    if (this.mode() === 'admin') return undefined
+
+    return this.auth.getUser().account.name
+  }
+
+  private _dataLoader (options: {
+    pagination: RestPagination
+    sort: SortMeta
+  }) {
+    const { pagination, sort } = options
+
+    return this.auth.userInformationLoaded
+      .pipe(
+        first(),
+        switchMap(() => this.watchedWordsListService.list({ pagination, sort, accountName: this.getAccountNameParam() }))
+      )
   }
 
   private async removeList (list: WatchedWordsList) {
@@ -123,12 +123,12 @@ export class WatchedWordsListAdminOwnerComponent extends RestTable<WatchedWordsL
 
     this.watchedWordsListService.deleteList({
       listId: list.id,
-      accountName: this.accountNameParam
+      accountName: this.getAccountNameParam()
     }).subscribe({
       next: () => {
         this.notifier.success($localize`${list.listName} removed`)
 
-        this.reloadData()
+        this.table().loadData()
       },
 
       error: err => this.notifier.error(err.message)

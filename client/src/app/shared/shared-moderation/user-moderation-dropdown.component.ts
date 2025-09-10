@@ -370,7 +370,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           isDisplayed: ({ user }) => !this.isMyUser(user) && user.blocked
         },
         {
-          label: $localize`Set Email as Verified`,
+          label: $localize`Set email as verified`,
           handler: ({ user }) => this.setEmailAsVerified(user),
           isDisplayed: ({ user }) => !user.blocked && user.emailVerified !== true
         }

@@ -1,0 +1,7 @@
+{{#> base title=(t "Registration request of your account {username} has rejected" username=username)}}
+  <p>{{t "Your registration request has been rejected." }}</p>
+
+  <p>{{t "Moderators sent you the following message:" }}</p>
+
+  <blockquote style="white-space: pre-wrap">{{moderationResponse}}</blockquote>
+{{/base}}

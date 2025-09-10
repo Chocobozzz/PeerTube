@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { wait } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, OAuth2ErrorCode, PeerTubeProblemDocument } from '@peertube/peertube-models'
+import { HttpStatusCode, MyUser, OAuth2ErrorCode, PeerTubeProblemDocument } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createSingleServer,
@@ -38,7 +38,6 @@ describe('Test oauth', function () {
   })
 
   describe('OAuth client', function () {
-
     function expectInvalidClient (body: PeerTubeProblemDocument) {
       expect(body.code).to.equal(OAuth2ErrorCode.INVALID_CLIENT)
       expect(body.detail).to.contain('client is invalid')
@@ -68,7 +67,6 @@ describe('Test oauth', function () {
   })
 
   describe('Login', function () {
-
     function expectInvalidCredentials (body: PeerTubeProblemDocument) {
       expect(body.code).to.equal(OAuth2ErrorCode.INVALID_GRANT)
       expect(body.detail).to.contain('credentials are invalid')
@@ -126,7 +124,6 @@ describe('Test oauth', function () {
   })
 
   describe('Logout', function () {
-
     it('Should logout (revoke token)', async function () {
       await server.login.logout({ token: server.accessToken })
     })
@@ -184,6 +181,222 @@ describe('Test oauth', function () {
     })
   })
 
+  describe('Token sessions', function () {
+    let user10: MyUser
+    let user10Token: string
+
+    let user20: MyUser
+    let user20Token: string
+    let user20RefreshToken: string
+
+    const beforeAllDate = new Date().getTime()
+
+    before(async function () {
+      this.timeout(120_000)
+
+      {
+        await server.users.create({ username: 'user10', password: 'password' })
+
+        const res = await server.login.login({
+          user: { username: 'user10', password: 'password' },
+          userAgent: 'web',
+          xForwardedFor: '0.0.0.42,127.0.0.1'
+        })
+
+        user10Token = res.access_token
+        user10 = await server.users.getMyInfo({ token: user10Token })
+      }
+
+      {
+        await server.users.create({ username: 'user20', password: 'password' })
+
+        const res = await server.login.login({
+          user: { username: 'user20', password: 'password' }
+        })
+
+        user20Token = res.access_token
+        user20RefreshToken = res.refresh_token
+        user20 = await server.users.getMyInfo({ token: user20Token })
+      }
+    })
+
+    it('Should create multiple token sessions', async function () {
+      await server.login.getAccessToken({ username: 'user10', password: 'password' })
+      await server.login.getAccessToken({ username: 'user10', password: 'password' })
+    })
+
+    it('Should list sessions of a user', async function () {
+      {
+        const { data, total } = await server.login.listSessions({ userId: user20.id })
+        expect(total).to.equal(1)
+        expect(data.length).to.equal(1)
+
+        const session = data[0]
+        expect(session.currentSession).to.be.false
+      }
+
+      {
+        const { data, total } = await server.login.listSessions({ userId: user20.id, token: user20Token })
+        expect(total).to.equal(1)
+        expect(data.length).to.equal(1)
+
+        const session = data[0]
+        expect(session.currentSession).to.be.true
+      }
+
+      {
+        const { data, total } = await server.login.listSessions({ userId: user10.id, token: user10Token, sort: 'createdAt' })
+        expect(total).to.equal(3)
+        expect(data.length).to.equal(3)
+
+        const session = data[0]
+        expect(session.currentSession).to.be.true
+
+        expect(new Date(session.lastActivityDate).getTime()).to.be.above(beforeAllDate)
+        expect(new Date(session.createdAt).getTime()).to.be.above(beforeAllDate)
+        expect(new Date(session.lastActivityDate).getTime()).to.equal(new Date(session.loginDate).getTime())
+
+        expect(session.loginIP).to.equal('0.0.0.42')
+        expect(session.lastActivityIP).to.equal(session.loginIP)
+
+        expect(session.loginDevice).to.equal('web')
+        expect(session.lastActivityDevice).to.equal(session.loginDevice)
+
+        expect(data[1].currentSession).to.be.false
+        expect(data[2].currentSession).to.be.false
+      }
+
+      {
+        const { data, total } = await server.login.listSessions({
+          userId: user10.id,
+          token: user10Token,
+          sort: '-createdAt',
+          start: 0,
+          count: 1
+        })
+        expect(total).to.equal(3)
+        expect(data.length).to.equal(1)
+        expect(data[0].currentSession).to.be.false
+      }
+
+      {
+        const { data, total } = await server.login.listSessions({
+          userId: user10.id,
+          token: user10Token,
+          sort: '-createdAt',
+          start: 1,
+          count: 2
+        })
+        expect(total).to.equal(3)
+        expect(data.length).to.equal(2)
+        expect(data[0].currentSession).to.be.false
+        expect(data[1].currentSession).to.be.true
+      }
+    })
+
+    it('Should refresh a token session and have appropriate metadata', async function () {
+      const now = new Date()
+
+      const { body } = await server.login.refreshToken({
+        refreshToken: user20RefreshToken,
+        userAgent: 'user agent 2',
+        xForwardedFor: '0.0.0.1,127.0.0.1'
+      })
+      const newAccessToken = body.access_token
+
+      {
+        const { data, total } = await server.login.listSessions({ userId: user20.id, token: newAccessToken })
+        expect(total).to.equal(1)
+        expect(data.length).to.equal(1)
+
+        const session = data[0]
+
+        expect(session.currentSession).to.be.true
+
+        expect(new Date(session.loginDate).getTime()).to.be.below(now.getTime())
+        expect(new Date(session.lastActivityDate).getTime()).to.be.above(now.getTime())
+
+        expect(session.loginDevice).to.not.equal(session.lastActivityDevice)
+        expect(session.loginIP).to.not.equal(session.lastActivityIP)
+
+        expect(session.lastActivityDevice).to.equal('user agent 2')
+        expect(session.lastActivityIP).to.equal('0.0.0.1')
+      }
+    })
+
+    it('Should update last activity of a session', async function () {
+      const now = new Date()
+
+      await server.users.getMyInfo({ token: user10Token, userAgent: 'web 2', xForwardedFor: '0.0.0.43,127.0.0.1' })
+      await wait(3000)
+
+      {
+        const { data, total } = await server.login.listSessions({ userId: user10.id, token: user10Token, sort: 'createdAt' })
+        expect(total).to.equal(3)
+        expect(data.length).to.equal(3)
+
+        const session = data[0]
+        expect(session.currentSession).to.be.true
+
+        expect(new Date(session.lastActivityDate).getTime()).to.be.above(now.getTime())
+        expect(new Date(session.loginDate).getTime()).to.be.below(now.getTime())
+
+        expect(session.loginIP).to.equal('0.0.0.42')
+        expect(session.lastActivityIP).to.equal('0.0.0.43')
+
+        expect(session.loginDevice).to.equal('web')
+        expect(session.lastActivityDevice).to.equal('web 2')
+      }
+    })
+
+    it('Should update last activity of a session even after a server restart', async function () {
+      this.timeout(60000)
+
+      await server.kill()
+      await server.run()
+
+      {
+        const { data } = await server.login.listSessions({ userId: user10.id, token: user10Token, sort: 'createdAt' })
+        const session = data[0]
+        expect(session.currentSession).to.be.true
+
+        expect(session.lastActivityIP).to.not.equal('0.0.0.42')
+        expect(session.lastActivityDevice).to.not.equal('web')
+      }
+    })
+
+    it('Should revoke a token session', async function () {
+      const token4 = await server.login.getAccessToken({ username: 'user10', password: 'password' })
+      await server.users.getMyInfo({ token: token4 })
+
+      const { data } = await server.login.listSessions({ userId: user10.id, token: user10Token, sort: '-createdAt' })
+      const tokenSession4 = data[0]
+
+      await server.login.revokeSession({
+        sessionId: tokenSession4.id,
+        userId: user10.id,
+        token: user10Token
+      })
+
+      await server.users.getMyInfo({ token: token4, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+    })
+
+    it('Should revoke a token session of another user', async function () {
+      const token5 = await server.login.getAccessToken({ username: 'user10', password: 'password' })
+      await server.users.getMyInfo({ token: token5 })
+
+      const { data } = await server.login.listSessions({ userId: user10.id, token: user10Token, sort: '-createdAt' })
+      const tokenSession4 = data[0]
+
+      await server.login.revokeSession({
+        sessionId: tokenSession4.id,
+        userId: user10.id
+      })
+
+      await server.users.getMyInfo({ token: token5, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+    })
+  })
+
   describe('Custom token lifetime', function () {
     before(async function () {
       this.timeout(120_000)
@@ -219,7 +432,6 @@ describe('Test oauth', function () {
       await server.login.refreshToken({ refreshToken, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
   })
-
   after(async function () {
     await sqlCommand.cleanup()
     await cleanupTests([ server ])

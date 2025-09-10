@@ -1,32 +1,33 @@
-import debug from 'debug'
-import { merge, Observable, of, ReplaySubject, Subject } from 'rxjs'
-import { catchError, filter, map, share, switchMap, tap } from 'rxjs/operators'
 import { HttpClient, HttpContext, HttpParams } from '@angular/common/http'
-import { Injectable, inject } from '@angular/core'
-import { AuthService, AuthUser, ComponentPaginationLight, RestExtractor, RestService, ServerService } from '@app/core'
+import { inject, Injectable } from '@angular/core'
+import { AuthService, AuthUser, ComponentPaginationLight, RestExtractor, RestPagination, RestService, ServerService } from '@app/core'
 import { buildBulkObservable, objectToFormData } from '@app/helpers'
 import { NGX_LOADING_BAR_IGNORED } from '@ngx-loading-bar/http-client'
 import {
   CachedVideoExistInPlaylist,
   CachedVideosExistInPlaylists,
   ResultList,
-  VideoExistInPlaylist,
-  VideoPlaylist as VideoPlaylistServerModel,
-  VideoPlaylistCreate,
   VideoPlaylistElement as ServerVideoPlaylistElement,
+  VideoExistInPlaylist,
+  VideoPlaylistCreate,
   VideoPlaylistElementCreate,
   VideoPlaylistElementUpdate,
   VideoPlaylistReorder,
+  VideoPlaylist as VideoPlaylistServerModel,
   VideoPlaylistUpdate,
   VideosExistInPlaylists
 } from '@peertube/peertube-models'
+import debug from 'debug'
+import { SortMeta } from 'primeng/api'
+import { merge, Observable, of, ReplaySubject, Subject } from 'rxjs'
+import { catchError, filter, map, share, switchMap, tap } from 'rxjs/operators'
 import { environment } from '../../../environments/environment'
-import { VideoPlaylistElement } from './video-playlist-element.model'
-import { VideoPlaylist } from './video-playlist.model'
+import { Account } from '../shared-main/account/account.model'
+import { AccountService } from '../shared-main/account/account.service'
 import { VideoChannel } from '../shared-main/channel/video-channel.model'
 import { VideoChannelService } from '../shared-main/channel/video-channel.service'
-import { AccountService } from '../shared-main/account/account.service'
-import { Account } from '../shared-main/account/account.model'
+import { VideoPlaylistElement } from './video-playlist-element.model'
+import { VideoPlaylist } from './video-playlist.model'
 
 const debugLogger = debug('peertube:playlists:VideoPlaylistService')
 
@@ -73,12 +74,52 @@ export class VideoPlaylistService {
     )
   }
 
-  listChannelPlaylists (videoChannel: VideoChannel, componentPagination: ComponentPaginationLight): Observable<ResultList<VideoPlaylist>> {
+  listChannelPlaylists (options: {
+    videoChannel: Pick<VideoChannel, 'nameWithHost'>
+    sort?: SortMeta | string
+    componentPagination?: ComponentPaginationLight
+    restPagination?: RestPagination
+    search?: string
+  }): Observable<ResultList<VideoPlaylist>> {
+    const { videoChannel } = options
+
     const url = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.nameWithHost + '/video-playlists'
-    const pagination = this.restService.componentToRestPagination(componentPagination)
+
+    return this.listPlaylists({ url, ...options })
+  }
+
+  listAccountPlaylists (options: {
+    account: Account
+    sort: SortMeta | string
+    restPagination?: RestPagination
+    search?: string
+  }): Observable<ResultList<VideoPlaylist>> {
+    const { account } = options
+
+    const url = AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/video-playlists'
+
+    return this.listPlaylists({ url, ...options })
+  }
+
+  private listPlaylists (options: {
+    url: string
+    sort?: SortMeta | string
+    componentPagination?: ComponentPaginationLight
+    restPagination?: RestPagination
+    search?: string
+  }) {
+    const { url, sort, search } = options
 
     let params = new HttpParams()
-    params = this.restService.addRestGetParams(params, pagination)
+
+    let restPagination = options.restPagination
+    if (!restPagination && options.componentPagination) {
+      restPagination = this.restService.componentToRestPagination(options.componentPagination)
+    }
+
+    params = this.restService.addRestGetParams(params, restPagination, sort)
+
+    if (search) params = this.restService.addObjectParams(params, { search })
 
     return this.authHttp.get<ResultList<VideoPlaylist>>(url, { params })
       .pipe(
@@ -93,42 +134,25 @@ export class VideoPlaylistService {
       if (this.myAccountPlaylistCache) return of(this.myAccountPlaylistCache)
     }
 
-    const obs = this.listAccountPlaylists(user.account, undefined, '-updatedAt', search)
-      .pipe(
-        tap(result => {
-          if (!search) {
-            this.myAccountPlaylistCacheRunning = undefined
-            this.myAccountPlaylistCache = result
-          }
-        }),
-        share()
-      )
+    const obs = this.listAccountPlaylists({
+      account: user.account,
+      sort: '-updatedAt',
+      search
+    }).pipe(
+      tap(result => {
+        if (!search) {
+          this.myAccountPlaylistCacheRunning = undefined
+          this.myAccountPlaylistCache = result
+        }
+      }),
+      share()
+    )
 
     if (!search) this.myAccountPlaylistCacheRunning = obs
     return obs
   }
 
-  listAccountPlaylists (
-    account: Account,
-    componentPagination: ComponentPaginationLight,
-    sort: string,
-    search?: string
-  ): Observable<ResultList<VideoPlaylist>> {
-    const url = AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/video-playlists'
-    const pagination = componentPagination
-      ? this.restService.componentToRestPagination(componentPagination)
-      : undefined
-
-    let params = new HttpParams()
-    params = this.restService.addRestGetParams(params, pagination, sort)
-    if (search) params = this.restService.addObjectParams(params, { search })
-
-    return this.authHttp.get<ResultList<VideoPlaylist>>(url, { params })
-      .pipe(
-        switchMap(res => this.extractPlaylists(res)),
-        catchError(err => this.restExtractor.handleError(err))
-      )
-  }
+  // ---------------------------------------------------------------------------
 
   getVideoPlaylist (id: string | number) {
     const url = VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + id
@@ -258,7 +282,19 @@ export class VideoPlaylistService {
       )
   }
 
-  reorderPlaylist (playlistId: number, oldPosition: number, newPosition: number) {
+  // ---------------------------------------------------------------------------
+
+  reorderPlaylistsOfChannel (channelName: string, oldPosition: number, newPosition: number) {
+    const body: VideoPlaylistReorder = {
+      startPosition: oldPosition,
+      insertAfterPosition: newPosition
+    }
+
+    return this.authHttp.post(VideoChannelService.BASE_VIDEO_CHANNEL_URL + channelName + '/video-playlists/reorder', body)
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
+  reorderVideosOfPlaylist (playlistId: number, oldPosition: number, newPosition: number) {
     const body: VideoPlaylistReorder = {
       startPosition: oldPosition,
       insertAfterPosition: newPosition
@@ -267,6 +303,8 @@ export class VideoPlaylistService {
     return this.authHttp.post(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + playlistId + '/videos/reorder', body)
       .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
+
+  // ---------------------------------------------------------------------------
 
   getPlaylistVideos (options: {
     videoPlaylistId: number | string

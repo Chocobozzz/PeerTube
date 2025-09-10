@@ -119,6 +119,8 @@ plugins:
     check_latest_versions_interval: '10 minutes'
 
 federation:
+  # We use internal IP address in PeerTube tests
+  prevent_ssrf: false
   videos:
     cleanup_remote_interactions: false
 

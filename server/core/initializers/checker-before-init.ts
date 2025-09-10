@@ -14,6 +14,7 @@ export function checkMissedConfig () {
     'webserver.hostname',
     'webserver.port',
     'secrets.peertube',
+    'http_timeouts.request',
     'trust_proxy',
     'oauth2.token_lifetime.access_token',
     'oauth2.token_lifetime.refresh_token',
@@ -42,6 +43,7 @@ export function checkMissedConfig () {
     'storage.streaming_playlists',
     'storage.plugins',
     'storage.well_known',
+    'storage.uploads',
     'log.level',
     'log.rotation.enabled',
     'log.rotation.max_file_size',
@@ -123,7 +125,10 @@ export function checkMissedConfig () {
     'auto_blacklist.videos.of_users.enabled',
     'trending.videos.interval_days',
     'client.videos.miniature.prefer_author_display_name',
+    'client.browse_videos.default_sort',
+    'client.browse_videos.default_scope',
     'client.menu.login.redirect_on_single_external_auth',
+    'client.header.hide_instance_name',
     'defaults.publish.download_enabled',
     'defaults.publish.comments_policy',
     'defaults.publish.privacy',
@@ -131,6 +136,7 @@ export function checkMissedConfig () {
     'defaults.player.auto_play',
     'instance.name',
     'instance.short_description',
+    'instance.default_language',
     'instance.description',
     'instance.terms',
     'instance.default_client_route',
@@ -143,9 +149,11 @@ export function checkMissedConfig () {
     'instance.social.external_link',
     'instance.social.mastodon_link',
     'instance.social.bluesky_link',
+    'instance.social.x_link',
     'services.twitter.username',
     'followers.instance.enabled',
     'followers.instance.manual_approval',
+    'followers.channels.enabled',
     'tracker.enabled',
     'tracker.private',
     'tracker.reject_too_many_announces',
@@ -250,7 +258,8 @@ export function checkMissedConfig () {
     'storyboards.enabled',
     'webrtc.stun_servers',
     'nsfw_flags_settings.enabled',
-    'download_generate_video.max_parallel_downloads'
+    'download_generate_video.max_parallel_downloads',
+    'video_comments.accept_remote_comments'
   ]
 
   const requiredAlternatives = [

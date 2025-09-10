@@ -38,6 +38,8 @@ export async function clickOnRadio (name: string) {
 export async function selectCustomSelect (id: string, valueLabel: string) {
   const wrapper = $(`[formcontrolname=${id}] span[role=combobox]`)
 
+  await wrapper.waitForExist()
+  await wrapper.scrollIntoView({ block: 'center' })
   await wrapper.waitForClickable()
   await wrapper.click()
 
@@ -65,9 +67,9 @@ export async function selectCustomSelect (id: string, valueLabel: string) {
 
 export async function findParentElement (
   el: ChainablePromiseElement,
-  finder: (el: WebdriverIO.Element) => Promise<boolean>
+  finder: (el: ChainablePromiseElement) => Promise<boolean>
 ) {
   if (await finder(el) === true) return el
 
-  return findParentElement(await el.parentElement(), finder)
+  return findParentElement(el.parentElement(), finder)
 }

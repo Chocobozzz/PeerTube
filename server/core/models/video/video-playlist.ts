@@ -24,7 +24,8 @@ import {
   HasMany,
   HasOne,
   Is,
-  IsUUID, Scopes,
+  IsUUID,
+  Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -67,6 +68,7 @@ import {
   setAsUpdated,
   throwIfNotValid
 } from '../shared/index.js'
+import { getNextPositionOf, increasePositionOf, reassignPositionOf } from '../shared/position.js'
 import { ThumbnailModel } from './thumbnail.js'
 import { VideoChannelModel, ScopeNames as VideoChannelScopeNames } from './video-channel.js'
 import { VideoPlaylistElementModel } from './video-playlist-element.js'
@@ -89,6 +91,7 @@ type AvailableForListOptions = {
   search?: string
   host?: string
   uuids?: string[]
+  channelNameOneOf?: string[]
   withVideos?: boolean
   forCount?: boolean
 }
@@ -269,7 +272,6 @@ function getVideoLengthSelect () {
     } as FindOptions
   }
 }))
-
 @Table({
   tableName: 'videoPlaylist',
   indexes: [
@@ -289,45 +291,49 @@ function getVideoLengthSelect () {
 })
 export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @AllowNull(false)
   @Is('VideoPlaylistName', value => throwIfNotValid(value, isVideoPlaylistNameValid, 'name'))
   @Column
-  name: string
+  declare name: string
 
   @AllowNull(true)
   @Is('VideoPlaylistDescription', value => throwIfNotValid(value, isVideoPlaylistDescriptionValid, 'description', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_PLAYLISTS.DESCRIPTION.max))
-  description: string
+  declare description: string
 
   @AllowNull(false)
   @Is('VideoPlaylistPrivacy', value => throwIfNotValid(value, isVideoPlaylistPrivacyValid, 'privacy'))
   @Column
-  privacy: VideoPlaylistPrivacyType
+  declare privacy: VideoPlaylistPrivacyType
 
   @AllowNull(false)
   @Is('VideoPlaylistUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_PLAYLISTS.URL.max))
-  url: string
+  declare url: string
 
   @AllowNull(false)
   @Default(DataType.UUIDV4)
   @IsUUID(4)
   @Column(DataType.UUID)
-  uuid: string
+  declare uuid: string
 
   @AllowNull(false)
   @Default(VideoPlaylistType.REGULAR)
   @Column
-  type: VideoPlaylistType_Type
+  declare type: VideoPlaylistType_Type
+
+  @AllowNull(true)
+  @Column
+  declare videoChannelPosition: number
 
   @ForeignKey(() => AccountModel)
   @Column
-  ownerAccountId: number
+  declare ownerAccountId: number
 
   @BelongsTo(() => AccountModel, {
     foreignKey: {
@@ -335,11 +341,11 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
     },
     onDelete: 'CASCADE'
   })
-  OwnerAccount: Awaited<AccountModel>
+  declare OwnerAccount: Awaited<AccountModel>
 
   @ForeignKey(() => VideoChannelModel)
   @Column
-  videoChannelId: number
+  declare videoChannelId: number
 
   @BelongsTo(() => VideoChannelModel, {
     foreignKey: {
@@ -347,7 +353,7 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
     },
     onDelete: 'CASCADE'
   })
-  VideoChannel: Awaited<VideoChannelModel>
+  declare VideoChannel: Awaited<VideoChannelModel>
 
   @HasMany(() => VideoPlaylistElementModel, {
     foreignKey: {
@@ -356,7 +362,7 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
     },
     onDelete: 'CASCADE'
   })
-  VideoPlaylistElements: Awaited<VideoPlaylistElementModel>[]
+  declare VideoPlaylistElements: Awaited<VideoPlaylistElementModel>[]
 
   @HasOne(() => ThumbnailModel, {
     foreignKey: {
@@ -366,13 +372,15 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
     onDelete: 'CASCADE',
     hooks: true
   })
-  Thumbnail: Awaited<ThumbnailModel>
+  declare Thumbnail: Awaited<ThumbnailModel>
 
-  static listForApi (options: AvailableForListOptions & {
-    start: number
-    count: number
-    sort: string
-  }) {
+  static listForApi (
+    options: AvailableForListOptions & {
+      start: number
+      count: number
+      sort: string
+    }
+  ) {
     const query = {
       offset: options.start,
       limit: options.count,
@@ -387,6 +395,7 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
       'listMyPlaylists',
       'search',
       'host',
+      'channelNameOneOf',
       'uuids'
     ])
 
@@ -427,11 +436,13 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
     ]).then(([ count, rows ]) => ({ total: count, data: rows }))
   }
 
-  static searchForApi (options: Pick<AvailableForListOptions, 'followerActorId' | 'search' | 'host' | 'uuids'> & {
-    start: number
-    count: number
-    sort: string
-  }) {
+  static searchForApi (
+    options: Pick<AvailableForListOptions, 'followerActorId' | 'search' | 'host' | 'uuids'> & {
+      start: number
+      count: number
+      sort: string
+    }
+  ) {
     return VideoPlaylistModel.listForApi({
       ...options,
 
@@ -505,6 +516,18 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
           ownerAccountId: accountId
         },
         limit: USER_EXPORT_MAX_ITEMS
+      })
+  }
+
+  static listPlaylistOfChannel (channelId: number, transaction: Transaction): Promise<MVideoPlaylistFull[]> {
+    return VideoPlaylistModel
+      .scope([ ScopeNames.WITH_ACCOUNT_AND_CHANNEL, ScopeNames.WITH_VIDEOS_LENGTH, ScopeNames.WITH_THUMBNAIL ])
+      .findAll({
+        where: {
+          videoChannelId: channelId
+        },
+        limit: 150,
+        transaction
       })
   }
 
@@ -597,6 +620,64 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
       .findOne(query)
   }
 
+  // ---------------------------------------------------------------------------
+
+  static getNextPositionOf (options: {
+    videoChannelId: number
+    transaction?: Transaction
+  }) {
+    const { videoChannelId, transaction } = options
+
+    return getNextPositionOf({
+      model: VideoPlaylistModel,
+      columnName: 'videoChannelPosition',
+      where: { videoChannelId },
+      transaction
+    })
+  }
+
+  static reassignPositionOf (options: {
+    videoChannelId: number
+    firstPosition: number
+    endPosition: number
+    newPosition: number
+    transaction?: Transaction
+  }) {
+    const { videoChannelId, firstPosition, endPosition, newPosition, transaction } = options
+
+    return reassignPositionOf({
+      model: VideoPlaylistModel,
+      columnName: 'videoChannelPosition',
+      where: { videoChannelId },
+      transaction,
+
+      firstPosition,
+      endPosition,
+      newPosition
+    })
+  }
+
+  static increasePositionOf (options: {
+    videoChannelId: number
+    fromPosition: number
+    by: number
+    transaction?: Transaction
+  }) {
+    const { videoChannelId, fromPosition, by, transaction } = options
+
+    return increasePositionOf({
+      model: VideoPlaylistModel,
+      columnName: 'videoChannelPosition',
+      where: { videoChannelId },
+      transaction,
+
+      fromPosition,
+      by
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
   static getPrivacyLabel (privacy: VideoPlaylistPrivacyType) {
     return VIDEO_PLAYLIST_PRIVACIES[privacy] || 'Unknown'
   }
@@ -613,7 +694,11 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
       transaction
     }
 
-    return VideoPlaylistModel.update({ privacy: VideoPlaylistPrivacy.PRIVATE, videoChannelId: null }, query)
+    return VideoPlaylistModel.update({
+      privacy: VideoPlaylistPrivacy.PRIVATE,
+      videoChannelId: null,
+      videoChannelPosition: null
+    }, query)
   }
 
   async setAndSaveThumbnail (thumbnail: MThumbnail, t: Transaction) {
@@ -739,6 +824,8 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
       updatedAt: this.updatedAt,
 
       ownerAccount: this.OwnerAccount.toFormattedSummaryJSON(),
+
+      videoChannelPosition: this.videoChannelPosition,
       videoChannel: this.VideoChannel
         ? this.VideoChannel.toFormattedSummaryJSON()
         : null
@@ -769,6 +856,7 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
           content: this.description,
           mediaType: 'text/markdown' as 'text/markdown',
           uuid: this.uuid,
+          videoChannelPosition: this.videoChannelPosition,
           published: this.createdAt.toISOString(),
           updated: this.updatedAt.toISOString(),
           attributedTo: this.VideoChannel ? [ this.VideoChannel.Actor.url ] : [],

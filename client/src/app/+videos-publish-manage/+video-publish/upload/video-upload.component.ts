@@ -1,11 +1,11 @@
-import { NgIf } from '@angular/common'
+import { CommonModule } from '@angular/common'
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, inject, input, output, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute } from '@angular/router'
 import { VideoEdit } from '@app/+videos-publish-manage/shared-manage/common/video-edit.model'
 import { VideoUploadService } from '@app/+videos-publish-manage/shared-manage/common/video-upload.service'
 import { VideoManageController } from '@app/+videos-publish-manage/shared-manage/video-manage-controller.service'
-import { CanComponentDeactivate, CanDeactivateGuard, HooksService, MetaService, Notifier, ServerService } from '@app/core'
+import { CanComponentDeactivate, HooksService, MetaService, Notifier, ServerService } from '@app/core'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { UserVideoQuota, VideoPrivacyType } from '@peertube/peertube-models'
 import debug from 'debug'
@@ -29,7 +29,7 @@ const debugLogger = debug('peertube:video-publish')
     './video-upload.component.scss'
   ],
   imports: [
-    NgIf,
+    CommonModule,
     DragDropDirective,
     GlobalIconComponent,
     NgbTooltip,
@@ -49,8 +49,6 @@ export class VideoUploadComponent implements OnInit, OnDestroy, AfterViewInit, C
   private route = inject(ActivatedRoute)
   private videoUploadService = inject(VideoUploadService)
   private manageController = inject(VideoManageController)
-  private router = inject(Router)
-  private canDeactivateGuard = inject(CanDeactivateGuard)
 
   readonly userChannels = input.required<SelectChannelItem[]>()
   readonly userQuota = input.required<UserVideoQuota>()
@@ -74,6 +72,8 @@ export class VideoUploadComponent implements OnInit, OnDestroy, AfterViewInit, C
   ngOnInit () {
     this.uploadEventsSubscription = this.manageController.getUploadEventsObs()
       .subscribe(state => {
+        this.updateTitle()
+
         if (state.status === 'cancelled') {
           debugLogger('Upload cancelled', state)
 
@@ -94,8 +94,6 @@ export class VideoUploadComponent implements OnInit, OnDestroy, AfterViewInit, C
           this.manageController.silentRedirectOnManage(shortUUID, this.route)
           return
         }
-
-        this.updateTitle()
       })
 
     this.firstStepChannelId = this.userChannels()[0].id
@@ -167,6 +165,7 @@ export class VideoUploadComponent implements OnInit, OnDestroy, AfterViewInit, C
     this.firstStep = true
     this.videoEdit = undefined
     this.uploadingAudioFile = false
+    this.audioPreviewFile = undefined
   }
 
   uploadAudio () {

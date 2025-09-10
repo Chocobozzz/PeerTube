@@ -42,8 +42,7 @@ export async function processMoveToFileSystem (job: Job) {
       moveVideoSourceFile,
       moveCaptionFiles,
 
-      doAfterLastMove: video => doAfterLastMove({ video, previousVideoState: payload.previousVideoState, isNewVideo: payload.isNewVideo }),
-      moveToFailedState: moveToFailedMoveToFileSystemState
+      doAfterLastMove: video => doAfterLastMove({ video, previousVideoState: payload.previousVideoState, isNewVideo: payload.isNewVideo })
     })
   } else if (isMoveCaptionPayload(payload)) { // Only caption file
     logger.info(`Moving video caption ${payload.captionId} to file system in job ${job.id}.`)

@@ -4,17 +4,17 @@ import {
   booleanAttribute,
   ChangeDetectorRef,
   Component,
+  contentChildren,
   forwardRef,
   HostListener,
-  numberAttribute,
-  TemplateRef,
   inject,
   input,
-  contentChildren
+  numberAttribute,
+  TemplateRef
 } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { PeerTubeTemplateDirective } from '@app/shared/shared-main/common/peertube-template.directive'
-import { DropdownModule } from 'primeng/dropdown'
+import { SelectModule } from 'primeng/select'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
 
 @Component({
@@ -30,7 +30,7 @@ import { SelectOptionsItem } from '../../../../types/select-options-item.model'
       multi: true
     }
   ],
-  imports: [ DropdownModule, FormsModule, CommonModule ]
+  imports: [ SelectModule, FormsModule, CommonModule ]
 })
 export class SelectOptionsComponent implements AfterContentInit, ControlValueAccessor {
   private cd = inject(ChangeDetectorRef)

@@ -1,53 +1,24 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_form-mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
+@use "_actor" as *;
 
-input[type=text] {
-  @include peertube-input-text(300px);
+.channel-label {
+  @include channel-label;
 }
 
-.video-playlist {
-  @include row-blocks($column-responsive: false);
+.channel-filters {
+  @include channel-filters;
 }
 
-.video-playlist-buttons {
-  display: flex;
-  align-self: flex-end;
-
-  @include margin-left(10px);
-}
-
-.video-playlists-header {
-  margin-bottom: 30px;
+.name {
+  color: var(--fg);
+  line-height: 1rem;
+  font-weight: $font-bold;
+  text-decoration: none;
 }
 
 my-video-playlist-miniature {
   display: block;
-  flex-grow: 1;
-}
-
-my-delete-button {
-  @include margin-right(10px);
-}
-
-@include on-small-main-col {
-  .video-playlists-header {
-    text-align: center;
-  }
-
-  .video-playlist {
-    flex-wrap: wrap;
-  }
-
-  .video-playlist-buttons {
-    margin-top: 10px;
-
-    @include margin-left(auto);
-  }
-}
-
-@include on-mobile-main-col {
-  .action-button {
-    @include margin-left(0);
-  }
+  width: 130px;
 }

@@ -11,8 +11,11 @@
 <div class="root" [ngClass]="{ 'search-hidden': searchHidden }">
   <a class="peertube-title" [routerLink]="getDefaultRoute()" [queryParams]="getDefaultRouteQuery()">
 
-    <span class="icon-logo"></span>
-    <span class="instance-name">{{ instanceName }}</span>
+    <img [src]="getLogoUrl()" alt="" [title]="instanceName" class="logo" />
+
+    @if (isInstanceNameDisplayed()) {
+      <span class="instance-name">{{ instanceName }}</span>
+    }
   </a>
 
   <my-search-typeahead *ngIf="!searchHidden" [hidden]="!isLoaded()"></my-search-typeahead>
@@ -34,7 +37,7 @@
       <my-notification-dropdown class="margin-button"></my-notification-dropdown>
 
       <my-button
-        i18n-title title="Go to the manage your account page"
+        i18n-title title="Go to the page where you can manage your account"
         theme="tertiary" rounded="true" class="margin-button settings-button" icon="cog" ptRouterLink="/my-account"
       ></my-button>
 
@@ -62,23 +65,20 @@
 
           <div class="dropdown-divider"></div>
 
-          <a
-            *ngIf="user.account" ngbDropdownItem class="dropdown-item" routerLink="/my-account"
-            #manageAccount
-          >
+          <a *ngIf="user.account" ngbDropdownItem class="dropdown-item" routerLink="/my-account">
             <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon> <ng-container i18n>Manage my account</ng-container>
           </a>
 
           <div class="dropdown-divider"></div>
 
-          <button
+          <a
             myPluginSelector pluginSelectorId="menu-user-dropdown-language-item"
-            ngbDropdownItem class="dropdown-item" (click)="openLanguageChooser()"
+            ngbDropdownItem class="dropdown-item" routerLink="/my-account/settings" fragment="interface-settings"
           >
             <my-global-icon iconName="language" aria-hidden="true"></my-global-icon>
             <span i18n>Interface:</span>
             <span class="ms-auto ps-2 muted">{{ currentInterfaceLanguage }}</span>
-          </button>
+          </a>
 
           <button *ngIf="!isInMobileView" ngbDropdownItem class="dropdown-item" (click)="openHotkeysCheatSheet()">
             <my-global-icon iconName="keyboard" aria-hidden="true"></my-global-icon>
@@ -97,5 +97,4 @@
   <my-button theme="tertiary" rounded="true" class="menu-button margin-button" icon="menu" (click)="toggleMenu()"></my-button>
 </div>
 
-<my-language-chooser #languageChooserModal></my-language-chooser>
-<my-quick-settings #quickSettingsModal (openLanguageModal)="languageChooserModal.show()"></my-quick-settings>
+<my-quick-settings #quickSettingsModal></my-quick-settings>

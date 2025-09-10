@@ -1,7 +1,7 @@
 import { NgFor, NgIf } from '@angular/common'
 import { Component, OnInit, inject } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
+import { PluginApiService } from '@app/shared/shared-admin/plugin-api.service'
 import { ComponentPagination, ConfirmService, hasMoreItems, Notifier, PluginService, resetCurrentPage } from '@app/core'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { PeerTubePluginIndex, PluginType, PluginType_Type } from '@peertube/peertube-models'

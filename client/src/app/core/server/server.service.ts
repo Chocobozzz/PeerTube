@@ -1,7 +1,5 @@
-import { Observable, of, Subject } from 'rxjs'
-import { first, map, share, shareReplay, switchMap, tap } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
-import { Injectable, LOCALE_ID, inject } from '@angular/core'
+import { inject, Injectable, LOCALE_ID } from '@angular/core'
 import { getDevLocale, isOnDevLocale } from '@app/helpers'
 import { getCompleteLocale, isDefaultLocale, peertubeTranslate } from '@peertube/peertube-core-utils'
 import {
@@ -10,10 +8,13 @@ import {
   ServerStats,
   VideoCommentPolicy,
   VideoConstant,
+  VideoLicenceType,
   VideoPlaylistPrivacyType,
   VideoPrivacyType
 } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
+import { Observable, of, Subject } from 'rxjs'
+import { first, map, share, shareReplay, switchMap, tap } from 'rxjs/operators'
 import { environment } from '../../../environments/environment'
 
 @Injectable()
@@ -30,14 +31,12 @@ export class ServerService {
   configReloaded = new Subject<ServerConfig>()
 
   private localeObservable: Observable<any>
-  private videoLicensesObservable: Observable<VideoConstant<number>[]>
+  private videoLicensesObservable: Observable<VideoConstant<VideoLicenceType>[]>
   private videoCategoriesObservable: Observable<VideoConstant<number>[]>
   private videoPrivaciesObservable: Observable<VideoConstant<VideoPrivacyType>[]>
   private videoPlaylistPrivaciesObservable: Observable<VideoConstant<VideoPlaylistPrivacyType>[]>
   private videoLanguagesObservable: Observable<VideoConstant<string>[]>
   private configObservable: Observable<ServerConfig>
-
-  private configReset = false
 
   private configLoaded = false
   private config: ServerConfig
@@ -68,13 +67,15 @@ export class ServerService {
 
   resetConfig () {
     this.configLoaded = false
-    this.configReset = true
+    this.configObservable = undefined
 
     // Notify config update
-    return this.getConfig()
+    return this.getConfig({ isReset: true })
   }
 
-  getConfig () {
+  getConfig (options: {
+    isReset?: boolean
+  } = {}) {
     if (this.configLoaded) return of(this.config)
 
     if (!this.configObservable) {
@@ -86,9 +87,8 @@ export class ServerService {
             this.configLoaded = true
           }),
           tap(config => {
-            if (this.configReset) {
+            if (options.isReset) {
               this.configReloaded.next(config)
-              this.configReset = false
             }
           }),
           share()
@@ -130,7 +130,7 @@ export class ServerService {
 
   getVideoLicences () {
     if (!this.videoLicensesObservable) {
-      this.videoLicensesObservable = this.loadAttributeEnum<number>(ServerService.BASE_VIDEO_URL, 'licences')
+      this.videoLicensesObservable = this.loadAttributeEnum<VideoLicenceType>(ServerService.BASE_VIDEO_URL, 'licences')
     }
 
     return this.videoLicensesObservable.pipe(first())

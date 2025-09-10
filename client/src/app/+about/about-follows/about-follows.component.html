@@ -19,7 +19,7 @@
       <div *ngFor="let subscription of subscriptions" class="follow-block">
         <my-actor-avatar [actor]="subscription" actorType="instance" size="32"></my-actor-avatar>
 
-        <div>
+        <div class="ellipsis">
           <a class="follow-name" [href]="subscription.url" target="_blank" rel="noopener noreferrer">{{ subscription.name }}</a>
         </div>
       </div>
@@ -68,7 +68,7 @@
       <div *ngFor="let follower of followers" class="follow-block">
         <my-actor-avatar [actor]="follower" actorType="instance" size="32"></my-actor-avatar>
 
-        <div>
+        <div class="ellipsis">
           <a class="follow-name" [href]="follower.url" target="_blank" rel="noopener noreferrer">{{ follower.name }}</a>
         </div>
       </div>

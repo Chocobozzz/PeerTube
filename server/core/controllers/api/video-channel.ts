@@ -3,10 +3,13 @@ import {
   HttpStatusCode,
   VideoChannelCreate,
   VideoChannelUpdate,
+  VideoPlaylistReorder,
+  VideoPlaylistsListQuery,
   VideosImportInChannelCreate
 } from '@peertube/peertube-models'
 import { pickCommonVideoQuery } from '@server/helpers/query.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { reorderPlaylistOrElementsPosition, sendPlaylistPositionUpdateOfChannel } from '@server/lib/video-playlist.js'
 import { ActorFollowModel } from '@server/models/actor/actor-follow.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { MChannelBannerAccountDefault } from '@server/types/models/index.js'
@@ -48,7 +51,10 @@ import {
   videoChannelsListValidator,
   videosSortValidator
 } from '../../middlewares/validators/index.js'
-import { commonVideoPlaylistFiltersValidator } from '../../middlewares/validators/videos/video-playlists.js'
+import {
+  commonVideoPlaylistFiltersValidator,
+  videoPlaylistsReorderInChannelValidator
+} from '../../middlewares/validators/videos/video-playlists.js'
 import { AccountModel } from '../../models/account/account.js'
 import { guessAdditionalAttributesFromQuery } from '../../models/video/formatter/index.js'
 import { VideoChannelModel } from '../../models/video/video-channel.js'
@@ -129,6 +135,8 @@ videoChannelRouter.get(
   asyncMiddleware(getVideoChannel)
 )
 
+// ---------------------------------------------------------------------------
+
 videoChannelRouter.get(
   '/:handle/video-playlists',
   optionalAuthenticate,
@@ -140,6 +148,16 @@ videoChannelRouter.get(
   commonVideoPlaylistFiltersValidator,
   asyncMiddleware(listVideoChannelPlaylists)
 )
+
+videoChannelRouter.post(
+  '/:handle/video-playlists/reorder',
+  authenticate,
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: true })),
+  asyncMiddleware(videoPlaylistsReorderInChannelValidator),
+  asyncRetryTransactionMiddleware(reorderPlaylistsInChannel)
+)
+
+// ---------------------------------------------------------------------------
 
 videoChannelRouter.get(
   '/:handle/videos',
@@ -360,23 +378,75 @@ async function getVideoChannel (req: express.Request, res: express.Response) {
   return res.json(videoChannel.toFormattedJSON())
 }
 
+// ---------------------------------------------------------------------------
+// Playlists
+// ---------------------------------------------------------------------------
+
 async function listVideoChannelPlaylists (req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
+  const { count, playlistType, sort, start, search } = req.query as VideoPlaylistsListQuery
+  const videoChannel = res.locals.videoChannel
+
+  // Allow users to see their private/unlisted video playlists
+  const listMyPlaylists = !!res.locals.oauth && res.locals.oauth.token.User.Account.id === videoChannel.accountId
 
   const resultList = await VideoPlaylistModel.listForApi({
     followerActorId: isUserAbleToSearchRemoteURI(res)
       ? null
       : serverActor.id,
 
-    start: req.query.start,
-    count: req.query.count,
-    sort: req.query.sort,
-    videoChannelId: res.locals.videoChannel.id,
-    type: req.query.playlistType
+    videoChannelId: videoChannel.id,
+    listMyPlaylists,
+
+    start,
+    count,
+    sort,
+    search,
+    type: playlistType
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
+
+async function reorderPlaylistsInChannel (req: express.Request, res: express.Response) {
+  const body: VideoPlaylistReorder = req.body
+  const videoChannel = res.locals.videoChannel
+
+  const start: number = body.startPosition
+  const insertAfter: number = body.insertAfterPosition
+  const reorderLength: number = body.reorderLength || 1
+
+  if (start === insertAfter) {
+    return res.status(HttpStatusCode.NO_CONTENT_204).end()
+  }
+
+  await sequelizeTypescript.transaction(async t => {
+    await reorderPlaylistOrElementsPosition({
+      model: VideoPlaylistModel,
+      instance: videoChannel,
+      start,
+      insertAfter,
+      reorderLength,
+      transaction: t
+    })
+
+    videoChannel.changed('updatedAt', true)
+    await videoChannel.save({ transaction: t })
+
+    await sendUpdateActor(videoChannel, t)
+    await sendPlaylistPositionUpdateOfChannel(videoChannel.id, t)
+  })
+
+  logger.info(
+    `Reordered playlist of channel ${videoChannel.name} (inserted after position ${insertAfter} elements ${start} - ${
+      start + reorderLength - 1
+    }).`
+  )
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+}
+
+// ---------------------------------------------------------------------------
 
 async function listVideoChannelVideos (req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()

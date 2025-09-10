@@ -106,7 +106,7 @@ export class RedirectService {
 
     this.redirectingToHomepage = true
 
-    logger.info(`Redirecting to ${this.defaultRoute}...`)
+    logger.info(`Redirecting to default route ${this.defaultRoute}...`, { skipLocationChange })
 
     this.router.navigateByUrl(this.defaultRoute, { skipLocationChange })
       .then(() => this.redirectingToHomepage = false)

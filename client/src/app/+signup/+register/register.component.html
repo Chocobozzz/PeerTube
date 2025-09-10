@@ -6,7 +6,7 @@
 
   <ng-container *ngIf="!signupDisabled">
     <div class="register-content">
-      <my-custom-stepper linear>
+      <my-register-stepper linear>
 
         <cdk-step i18n-label label="About" [editable]="!signupSuccess">
           <my-signup-step-title mascotImageName="about">
@@ -119,7 +119,7 @@
             <button class="peertube-button-big secondary-button" cdkStepperPrevious>{{ defaultPreviousStepButtonLabel }}</button>
           </div>
         </cdk-step>
-      </my-custom-stepper>
+      </my-register-stepper>
     </div>
   </ng-container>
 

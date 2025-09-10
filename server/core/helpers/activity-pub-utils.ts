@@ -5,6 +5,7 @@ import { isArray } from './custom-validators/misc.js'
 import { buildDigest } from './peertube-crypto.js'
 import type { signJsonLDObject } from './peertube-jsonld.js'
 import { doJSONRequest } from './requests.js'
+import { logger } from './logger.js'
 
 export type ContextFilter = <T>(arg: T) => Promise<T>
 
@@ -36,7 +37,13 @@ export async function signAndContextify<T> (options: {
     ? await activityPubContextify(data, contextType, contextFilter)
     : data
 
-  return signerFunction({ byActor, data: activity })
+  try {
+    return await signerFunction({ byActor, data: activity })
+  } catch (err) {
+    logger.debug('Cannot sign activity', { activity, err })
+
+    throw err
+  }
 }
 
 export async function getApplicationActorOfHost (host: string) {
@@ -54,10 +61,10 @@ export function getAPPublicValue (): 'https://www.w3.org/ns/activitystreams#Publ
   return 'https://www.w3.org/ns/activitystreams#Public'
 }
 
-export function hasAPPublic (toOrCC: string[] | string) {
+export function hasAPPublic (collection: string[] | string) {
   const publicValue = getAPPublicValue()
 
-  return arrayify(toOrCC).some(f => f === 'as:Public' || publicValue)
+  return arrayify(collection).some(f => f === 'as:Public' || publicValue)
 }
 
 // ---------------------------------------------------------------------------
@@ -117,6 +124,8 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
     },
 
     originallyPublishedAt: 'sc:datePublished',
+    schedules: 'sc:eventSchedule',
+    startDate: 'sc:startDate',
 
     uploadDate: 'sc:uploadDate',
 
@@ -188,6 +197,10 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
     Playlist: 'pt:Playlist',
     PlaylistElement: 'pt:PlaylistElement',
     position: {
+      '@type': 'sc:Number',
+      '@id': 'pt:position'
+    },
+    videoChannelPosition: {
       '@type': 'sc:Number',
       '@id': 'pt:position'
     },

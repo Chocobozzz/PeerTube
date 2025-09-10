@@ -1,6 +1,6 @@
 {
   "name": "peertube-client",
-  "version": "7.2.0-rc.1",
+  "version": "7.3.0",
   "private": true,
   "license": "AGPL-3.0",
   "author": {
@@ -56,6 +56,7 @@
     "@peertube/xliffmerge": "^2.0.3",
     "@plussub/srt-vtt-parser": "^2.0.5",
     "@popperjs/core": "^2.11.5",
+    "@primeng/themes": "^19.1.2",
     "@types/core-js": "^2.5.2",
     "@types/debug": "^4.1.5",
     "@types/jschannel": "^1.0.0",
@@ -83,7 +84,7 @@
     "debug": "^4.3.1",
     "dompurify": "^3.1.6",
     "expect-webdriverio": "^5.1.0",
-    "hls.js": "~1.5.11",
+    "hls.js": "~1.6.7",
     "intl-messageformat": "^10.1.0",
     "jschannel": "^1.0.2",
     "linkify-html": "^4.0.2",
@@ -94,7 +95,7 @@
     "ngx-uploadx": "^7.0.0",
     "p2p-media-loader-core": "^2.2.1",
     "p2p-media-loader-hlsjs": "^2.2.1",
-    "primeng": "^17",
+    "primeng": "^19.1.2",
     "rxjs": "^7.3.0",
     "sass-embedded": "^1.83.4",
     "sha.js": "^2.4.11",
@@ -111,7 +112,7 @@
     "video.js": "^7.19.2",
     "vite": "^6.0.11",
     "vite-plugin-checker": "^0.9.3",
-    "vite-plugin-node-polyfills": "^0.23.0",
+    "vite-plugin-node-polyfills": "^0.24.0",
     "zone.js": "~0.15.0"
   },
   "dependencies": {

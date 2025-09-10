@@ -103,7 +103,7 @@ export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
     this.playlistElements.splice(previousIndex, 1)
     this.playlistElements.splice(newIndex, 0, element)
 
-    this.videoPlaylistService.reorderPlaylist(this.playlist.id, oldPosition, insertAfter)
+    this.videoPlaylistService.reorderVideosOfPlaylist(this.playlist.id, oldPosition, insertAfter)
       .subscribe({
         next: () => {
           this.reorderClientPositions()

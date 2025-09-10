@@ -16,6 +16,7 @@ const icons = {
   'flame': require('../../../assets/images/misc/flame.svg'),
   'fediverse': require('../../../assets/images/misc/fediverse.svg'),
   'mastodon': require('../../../assets/images/misc/mastodon.svg'),
+  'x-twitter': require('../../../assets/images/misc/x-twitter.svg'),
   'bluesky': require('../../../assets/images/misc/bluesky.svg'),
 
   // feather/lucide icons
@@ -97,6 +98,7 @@ const icons = {
   'user-add': require('../../../assets/images/feather/user-plus.svg'),
   'user-x': require('../../../assets/images/feather/user-x.svg'),
   'user': require('../../../assets/images/feather/user.svg'),
+  'grip-horizontal': require('../../../assets/images/feather/grip-horizontal.svg'),
   'users': require('../../../assets/images/feather/users.svg')
 }
 
@@ -105,7 +107,7 @@ export type GlobalIconName = keyof typeof icons
 @Component({
   selector: 'my-global-icon',
   template: '',
-  styleUrls: [ './global-icon.component.scss' ],
+  styleUrls: [ './common-icon.component.scss' ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true
 })

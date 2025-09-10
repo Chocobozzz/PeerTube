@@ -81,6 +81,10 @@ class SettingsMenuItem extends MenuItem {
         // Update on rate change
         if (subMenuName === 'PlaybackRateMenuButton') {
           player.on('ratechange', this.submenuClickHandler)
+
+          player.on('playbackrateschange', () => {
+            setTimeout(() => this.rebuildAfterMenuChange())
+          })
         }
 
         if (subMenuName === 'CaptionsButton') {
@@ -139,7 +143,6 @@ class SettingsMenuItem extends MenuItem {
 
   /**
    * Create the component's DOM element
-   *
    */
   createEl () {
     const el = videojs.dom.createEl('li', {
@@ -176,9 +179,8 @@ class SettingsMenuItem extends MenuItem {
     // Remove open class to ensure only the open submenu gets this class
     videojs.dom.removeClass(this.el(), 'open')
 
-    super.handleClick(event);
-
-    (this.mainMenu.el() as HTMLElement).style.opacity = '0'
+    super.handleClick(event)
+    ;(this.mainMenu.el() as HTMLElement).style.opacity = '0'
     // Whether to add or remove vjs-hidden class on the settingsSubMenuEl element
     if (videojs.dom.hasClass(this.settingsSubMenuEl_, 'vjs-hidden')) {
       videojs.dom.removeClass(this.settingsSubMenuEl_, 'vjs-hidden')
@@ -206,9 +208,8 @@ class SettingsMenuItem extends MenuItem {
     const button = this.subMenu.menu.addChild('MenuItem', {}, 0)
 
     button.setAttribute('aria-label', this.player().localize('Go back'))
-    button.addClass('vjs-back-button');
-
-    (button.el() as HTMLElement).innerHTML = this.player().localize(this.subMenu.controlText())
+    button.addClass('vjs-back-button')
+    ;(button.el() as HTMLElement).innerHTML = this.player().localize(this.subMenu.controlText())
   }
 
   onTransitionEnd (event: any) {
@@ -265,6 +266,7 @@ class SettingsMenuItem extends MenuItem {
     this.createBackButton()
     this.setSize()
     this.bindClickEvents()
+    this.bindKeyEvents()
 
     this.settingsSubMenuEl_.addEventListener('transitionend', this.transitionEndHandler, false)
   }
@@ -284,7 +286,6 @@ class SettingsMenuItem extends MenuItem {
 
         const subMenuItemExtended = subMenuItem as MenuItemExtended
         if (subMenuItemExtended.isSelected_) {
-
           // Prefer to use the function
           if (typeof subMenuItemExtended.getLabel === 'function') {
             this.settingsSubMenuValueEl_.innerHTML = subMenuItemExtended.getLabel()
@@ -310,11 +311,22 @@ class SettingsMenuItem extends MenuItem {
 
   bindClickEvents () {
     for (const item of this.subMenu.menu.children()) {
-      if (!(item instanceof Component)) {
-        continue
-      }
+      if (!(item instanceof Component)) continue
+
       item.on([ 'tap', 'click' ], this.submenuClickHandler)
     }
+  }
+
+  bindKeyEvents () {
+    this.subMenu.menu.on('escaped-key', () => {
+      this.trigger('escaped-key')
+    })
+
+    this.subMenu.menu.on('arrow-left', () => {
+      debugLogger('Detected arrow left on sub menu ' + this.subMenu.name())
+
+      this.loadMainMenu()
+    })
   }
 
   // save size of submenus on first init
@@ -360,11 +372,11 @@ class SettingsMenuItem extends MenuItem {
     this.createBackButton()
     this.setSize()
     this.bindClickEvents()
+    this.bindKeyEvents()
   }
-
 }
 
-(SettingsMenuItem as any).prototype.contentElType = 'button'
+;(SettingsMenuItem as any).prototype.contentElType = 'button'
 videojs.registerComponent('SettingsMenuItem', SettingsMenuItem)
 
 export { SettingsMenuItem }

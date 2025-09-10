@@ -10,17 +10,16 @@ import { SequelizeModel } from '../shared/index.js'
   tableName: 'videoLiveReplaySetting'
 })
 export class VideoLiveReplaySettingModel extends SequelizeModel<VideoLiveReplaySettingModel> {
-
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @AllowNull(false)
   @Is('VideoPrivacy', value => throwIfNotValid(value, isVideoPrivacyValid, 'privacy'))
   @Column
-  privacy: VideoPrivacyType
+  declare privacy: VideoPrivacyType
 
   static load (id: number, transaction?: Transaction): Promise<MLiveReplaySetting> {
     return VideoLiveReplaySettingModel.findOne({
@@ -29,9 +28,10 @@ export class VideoLiveReplaySettingModel extends SequelizeModel<VideoLiveReplayS
     })
   }
 
-  static removeSettings (id: number) {
+  static removeSettings (id: number, transaction?: Transaction) {
     return VideoLiveReplaySettingModel.destroy({
-      where: { id }
+      where: { id },
+      transaction
     })
   }
 

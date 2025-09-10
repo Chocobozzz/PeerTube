@@ -1,46 +1,35 @@
-import { NgClass, NgIf } from '@angular/common'
-import { Component, OnInit, inject } from '@angular/core'
-
-import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
+import { CommonModule } from '@angular/common'
+import { Component, OnInit, inject, viewChild } from '@angular/core'
+import { ConfirmService, Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { RunnerJob, RunnerJobState } from '@peertube/peertube-models'
-import { SharedModule, SortMeta } from 'primeng/api'
-import { TableModule } from 'primeng/table'
 import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../../shared/shared-forms/advanced-input-filter.component'
-
-import { AutoColspanDirective } from '../../../../shared/shared-main/common/auto-colspan.directive'
 import { ActionDropdownComponent, DropdownAction } from '../../../../shared/shared-main/buttons/action-dropdown.component'
 import { ButtonComponent } from '../../../../shared/shared-main/buttons/button.component'
-import { TableExpanderIconComponent } from '../../../../shared/shared-tables/table-expander-icon.component'
+import { NumberFormatterPipe } from '../../../../shared/shared-main/common/number-formatter.pipe'
+import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../../../../shared/shared-tables/table.component'
 import { RunnerJobFormatted, RunnerService } from '../runner.service'
+
+type ColumnName = 'uuid' | 'type' | 'state' | 'priority' | 'progress' | 'runner' | 'createdAt' | 'processed'
 
 @Component({
   selector: 'my-runner-job-list',
   templateUrl: './runner-job-list.component.html',
   imports: [
-    TableModule,
-    SharedModule,
-    NgbTooltip,
-    NgIf,
+    CommonModule,
     ActionDropdownComponent,
     AdvancedInputFilterComponent,
     ButtonComponent,
-    TableExpanderIconComponent,
-    NgClass,
-    AutoColspanDirective
+    TableComponent,
+    NumberFormatterPipe
   ]
 })
-export class RunnerJobListComponent extends RestTable<RunnerJob> implements OnInit {
+export class RunnerJobListComponent implements OnInit {
   private runnerService = inject(RunnerService)
   private notifier = inject(Notifier)
   private confirmService = inject(ConfirmService)
 
-  runnerJobs: RunnerJobFormatted[] = []
-  totalRecords = 0
-
-  sort: SortMeta = { field: 'createdAt', order: -1 }
-  pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
+  readonly table = viewChild<TableComponent<RunnerJobFormatted, ColumnName>>('table')
 
   actions: DropdownAction<RunnerJob>[][] = []
   bulkActions: DropdownAction<RunnerJob[]>[][] = []
@@ -68,6 +57,23 @@ export class RunnerJobListComponent extends RestTable<RunnerJob> implements OnIn
       ]
     }
   ]
+
+  columns: TableColumnInfo<ColumnName>[] = [
+    { id: 'uuid', label: $localize`UUID`, sortable: false },
+    { id: 'type', label: $localize`Type`, sortable: false },
+    { id: 'state', label: $localize`State`, sortable: true },
+    { id: 'priority', label: $localize`Priority`, sortable: true },
+    { id: 'progress', label: $localize`Progress`, sortable: true },
+    { id: 'runner', label: $localize`Runner`, sortable: false },
+    { id: 'createdAt', label: $localize`Created`, sortable: true },
+    { id: 'processed', label: $localize`Processed/Finished`, sortable: false }
+  ]
+
+  dataLoader: typeof this._dataLoader
+
+  constructor () {
+    this.dataLoader = this._dataLoader.bind(this)
+  }
 
   ngOnInit () {
     this.actions = [
@@ -101,12 +107,6 @@ export class RunnerJobListComponent extends RestTable<RunnerJob> implements OnIn
         }
       ]
     ]
-
-    this.initialize()
-  }
-
-  getIdentifier () {
-    return 'RunnerJobListComponent'
   }
 
   async cancelJobs (jobs: RunnerJob[]) {
@@ -122,7 +122,7 @@ export class RunnerJobListComponent extends RestTable<RunnerJob> implements OnIn
     this.runnerService.cancelJobs(jobs)
       .subscribe({
         next: () => {
-          this.reloadData()
+          this.table().loadData()
 
           this.notifier.success(
             formatICU(
@@ -149,7 +149,7 @@ export class RunnerJobListComponent extends RestTable<RunnerJob> implements OnIn
     this.runnerService.removeJobs(jobs)
       .subscribe({
         next: () => {
-          this.reloadData()
+          this.table().loadData()
 
           this.notifier.success(
             formatICU(
@@ -182,23 +182,17 @@ export class RunnerJobListComponent extends RestTable<RunnerJob> implements OnIn
   }
 
   getRandomRunnerNameBadge (value: string) {
-    return this.getRandomBadge('runner', value)
+    return this.table().getRandomBadge('runner', value)
   }
 
   getRandomRunnerTypeBadge (value: string) {
-    return this.getRandomBadge('type', value)
+    return this.table().getRandomBadge('type', value)
   }
 
-  protected reloadDataInternal () {
-    this.runnerService.listRunnerJobs({ pagination: this.pagination, sort: this.sort, search: this.search })
-      .subscribe({
-        next: resultList => {
-          this.runnerJobs = resultList.data
-          this.totalRecords = resultList.total
-        },
+  private _dataLoader (options: DataLoaderOptions) {
+    const { pagination, sort, search } = options
 
-        error: err => this.notifier.error(err.message)
-      })
+    return this.runnerService.listRunnerJobs({ pagination, sort, search })
   }
 
   private canCancelJob (job: RunnerJob) {

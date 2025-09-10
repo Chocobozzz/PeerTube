@@ -23,6 +23,12 @@ type TokenInfo = {
   refreshToken: string
   accessTokenExpiresAt: Date
   refreshTokenExpiresAt: Date
+  loginDevice: string
+  loginIP: string
+  loginDate: Date
+  lastActivityDevice: string
+  lastActivityIP: string
+  lastActivityDate: Date
 }
 
 export type BypassLogin = {
@@ -194,13 +200,21 @@ async function saveToken (
     authName = refreshTokenAuthName
   }
 
-  logger.debug('Saving token ' + token.accessToken + ' for client ' + client.id + ' and user ' + user.id + '.')
+  logger.debug(`Saving token ${token.accessToken} for client ${client.id} and user ${user.id}.`)
 
   const tokenToCreate = {
-    accessToken: token.accessToken,
-    accessTokenExpiresAt: token.accessTokenExpiresAt,
-    refreshToken: token.refreshToken,
-    refreshTokenExpiresAt: token.refreshTokenExpiresAt,
+    ...pick(token, [
+      'accessToken',
+      'refreshToken',
+      'accessTokenExpiresAt',
+      'refreshTokenExpiresAt',
+      'loginDevice',
+      'loginIP',
+      'loginDate',
+      'lastActivityDate',
+      'lastActivityDevice',
+      'lastActivityIP'
+    ]),
     authName,
     oAuthClientId: client.id,
     userId: user.id

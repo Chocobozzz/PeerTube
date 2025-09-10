@@ -148,7 +148,11 @@ export class MarkdownService {
         return this.htmlRenderer.toCustomPageSafeHtml(html, additionalAllowedTags)
       }
 
-      return this.htmlRenderer.toSimpleSafeHtml(html)
+      if (name === 'enhancedMarkdownIt' || name === 'enhancedWithHTMLMarkdownIt') {
+        return this.htmlRenderer.toSimpleSafeHtmlWithLinks(html, { allowImages: true })
+      }
+
+      return this.htmlRenderer.toSimpleSafeHtmlWithLinks(html)
     }
 
     return html

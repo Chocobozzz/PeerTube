@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
 import { MyUser } from '@peertube/peertube-models'
 import {
   cleanupTests,
@@ -14,7 +13,8 @@ import {
 import { checkActorFilesWereRemoved } from '@tests/shared/actors.js'
 import { testImage } from '@tests/shared/checks.js'
 import { checkTmpIsEmpty } from '@tests/shared/directories.js'
-import { saveVideoInServers, checkVideoFilesWereRemoved } from '@tests/shared/videos.js'
+import { checkVideoFilesWereRemoved, saveVideoInServers } from '@tests/shared/videos.js'
+import { expect } from 'chai'
 
 describe('Test users with multiple servers', function () {
   let servers: PeerTubeServer[] = []
@@ -94,7 +94,7 @@ describe('Test users with multiple servers', function () {
     userAvatarFilenames = user.account.avatars.map(({ path }) => path)
 
     for (const avatar of user.account.avatars) {
-      await testImage(servers[0].url, `avatar2-resized-${avatar.width}x${avatar.width}`, avatar.path, '.png')
+      await testImage({ url: servers[0].url + avatar.path, name: `avatar2-resized-${avatar.width}x${avatar.width}.png` })
     }
 
     await waitJobs(servers)
@@ -126,7 +126,7 @@ describe('Test users with multiple servers', function () {
       }
 
       for (const avatar of account.avatars) {
-        await testImage(server.url, `avatar2-resized-${avatar.width}x${avatar.width}`, avatar.path, '.png')
+        await testImage({ url: server.url + avatar.path, name: `avatar2-resized-${avatar.width}x${avatar.width}.png` })
       }
     }
   })

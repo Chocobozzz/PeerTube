@@ -1,0 +1,13 @@
+{{#> base title=(t "A video is pending moderation")}}
+  <p>
+    {{{t "A recently added video was automatically blocked and requires moderator review before going public: <a href=\"{videoUrl}\">{videoName}</a> by <a href=\"{channelUrl}\">{channelDisplayName}</a>." videoUrl=videoUrl videoName=videoName channelUrl=channelUrl channelDisplayName=channelDisplayName}}}
+  </p>
+
+  <p>
+    {{t "Apart from the publisher and the moderation team, no one will be able to see the video until you unblock it."}}
+  </p>
+
+  <p>
+    {{t "If you trust the publisher, any admin can whitelist the user for later videos so that they don't require approval before going public."}}
+  </p>
+{{/base}}

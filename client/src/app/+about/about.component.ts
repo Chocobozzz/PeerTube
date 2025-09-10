@@ -40,7 +40,7 @@ export class AboutComponent implements OnInit {
     this.menuEntries = [
       {
         label: $localize`Platform`,
-        routerLink: '/about/instance/home',
+        routerLink: '/about/instance',
         pluginSelectorId: 'about-menu-instance'
       },
       {

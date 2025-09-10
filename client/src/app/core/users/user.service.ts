@@ -1,9 +1,10 @@
+import { HttpClient, HttpParams } from '@angular/common/http'
+import { Injectable, LOCALE_ID, inject } from '@angular/core'
+import { AuthService } from '@app/core/auth'
+import { getCompleteLocale } from '@peertube/peertube-core-utils'
+import { ActorImage, User as UserServerModel, UserUpdateMe, UserVideoQuota } from '@peertube/peertube-models'
 import { Observable, of } from 'rxjs'
 import { catchError, first, map, shareReplay } from 'rxjs/operators'
-import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable, inject } from '@angular/core'
-import { AuthService } from '@app/core/auth'
-import { ActorImage, User as UserServerModel, UserUpdateMe, UserVideoQuota } from '@peertube/peertube-models'
 import { environment } from '../../../environments/environment'
 import { RestExtractor } from '../rest'
 import { UserLocalStorageService } from './user-local-storage.service'
@@ -14,9 +15,11 @@ export class UserService {
   private authHttp = inject(HttpClient)
   private authService = inject(AuthService)
   private restExtractor = inject(RestExtractor)
+  private localeId = inject(LOCALE_ID)
   private userLocalStorageService = inject(UserLocalStorageService)
 
   static BASE_USERS_URL = environment.apiUrl + '/api/v1/users/'
+  static BASE_CLIENT_CONFIG_URL = environment.apiUrl + '/api/v1/client-config/'
 
   private userCache: { [id: number]: Observable<UserServerModel> } = {}
   private signupInThisSession = false
@@ -60,7 +63,11 @@ export class UserService {
   }
 
   getAnonymousUser () {
-    return new User(this.userLocalStorageService.getUserInfo())
+    return new User({
+      ...this.userLocalStorageService.getUserInfo(),
+
+      language: getCompleteLocale(this.localeId)
+    })
   }
 
   getAnonymousOrLoggedUser () {
@@ -187,5 +194,13 @@ export class UserService {
     return this.authHttp
       .get<string[]>(url, { params })
       .pipe(catchError(res => this.restExtractor.handleError(res)))
+  }
+
+  updateInterfaceLanguage (language: string) {
+    const url = UserService.BASE_CLIENT_CONFIG_URL + 'update-interface-language'
+    const body = { language }
+
+    return this.authHttp.post(url, body)
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 }

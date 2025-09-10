@@ -1,6 +1,7 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_form-mixins' as *;
+@use "_variables" as *;
+@use "_css-variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
 
 $width-size: 275px;
 
@@ -13,11 +14,11 @@ $width-size: 275px;
 }
 
 .first-step-block {
-  --input-bg: #{pvar(--bg-secondary-500)};
-
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @include define-input-css-variables-in-modal;
 
   .upload-icon {
     width: 90px;
@@ -45,7 +46,7 @@ $width-size: 275px;
     white-space: nowrap;
   }
 
-  input[type=text] {
+  input[type="text"] {
     display: block;
 
     @include peertube-input-text($width-size);

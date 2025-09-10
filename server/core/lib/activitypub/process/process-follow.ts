@@ -90,12 +90,22 @@ async function processFollow (byActor: MActorSignature, activityId: string, targ
 }
 
 async function rejectIfInstanceFollowDisabled (byActor: MActorSignature, activityId: string, targetActor: MActorFull) {
-  if (await isFollowingInstance(targetActor) && CONFIG.FOLLOWERS.INSTANCE.ENABLED === false) {
-    logger.info('Rejecting %s because instance followers are disabled.', targetActor.url)
+  if (await isFollowingInstance(targetActor)) {
+    if (CONFIG.FOLLOWERS.INSTANCE.ENABLED === false) {
+      logger.info('Rejecting %s because instance followers are disabled.', targetActor.url)
 
-    sendReject(activityId, byActor, targetActor)
+      sendReject(activityId, byActor, targetActor)
 
-    return true
+      return true
+    }
+  } else {
+    if (CONFIG.FOLLOWERS.CHANNELS.ENABLED === false) {
+      logger.info('Rejecting %s because channel followers are disabled.', targetActor.url)
+
+      sendReject(activityId, byActor, targetActor)
+
+      return true
+    }
   }
 
   return false

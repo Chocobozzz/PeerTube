@@ -9,15 +9,22 @@ export class PeerTubeTheme {
   constructor (private readonly pluginPlugin: PeerTubePlugin) {
   }
 
-  loadTheme (config: HTMLServerConfig) {
+  loadThemeStyle (config: HTMLServerConfig) {
     for (const theme of config.theme.registered) {
       this.themeManager.injectTheme(theme, getBackendUrl())
     }
 
     const themeName = this.getCurrentThemeName(config)
-    logger.info(`Enabling ${themeName} theme.`)
+    logger.info(`Enabling ${themeName} theme style.`)
 
     this.themeManager.loadThemeStyle(themeName)
+
+    this.themeManager.injectColorPalette({ config: config.theme, currentTheme: themeName })
+  }
+
+  loadThemePlugins (config: HTMLServerConfig) {
+    const themeName = this.getCurrentThemeName(config)
+    logger.info(`Loading ${themeName} theme plugins.`)
 
     const theme = config.theme.registered.find(t => t.name === themeName)
     const isInternalTheme = config.theme.builtIn.map(t => t.name as string).includes(themeName)
@@ -31,8 +38,6 @@ export class PeerTubeTheme {
       pluginManager.addPlugin(theme, true)
       pluginManager.reloadLoadedScopes()
     }
-
-    this.themeManager.injectCoreColorPalette()
   }
 
   private getCurrentThemeName (config: HTMLServerConfig) {

@@ -1,6 +1,6 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use 'form-mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "form-mixins" as *;
 
 .select-job-state {
   display: block;
@@ -29,14 +29,6 @@
 
   .job-date {
     width: 200px !important;
-  }
-}
-
-.admin-sub-header {
-  justify-content: flex-end;
-
-  .peertube-select-container {
-    @include peertube-select-container(auto);
   }
 }
 

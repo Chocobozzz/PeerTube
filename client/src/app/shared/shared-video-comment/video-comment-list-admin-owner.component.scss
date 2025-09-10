@@ -1,10 +1,5 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-
-my-global-icon {
-  width: 24px;
-  height: 24px;
-}
+@use "_variables" as *;
+@use "_mixins" as *;
 
 .video {
   display: flex;
@@ -28,30 +23,18 @@ my-global-icon {
   }
 }
 
-.comment-html {
+.comment-html > div {
+  max-width: 30vw;
+  overflow: hidden;
+
   ::ng-deep {
-    > div {
-      max-height: 22px;
+    * {
+      display: inline;
     }
 
-    div,
-    p {
-      @include ellipsis;
+    br {
+      display: none;
     }
-
-    p {
-      margin: 0;
-    }
-  }
-}
-
-.right-form {
-  display: flex;
-  flex-wrap: wrap;
-  row-gap: 0.5rem;
-
-  > *:not(:last-child) {
-    @include margin-right(10px);
   }
 }
 

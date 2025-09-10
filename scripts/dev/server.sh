@@ -19,6 +19,7 @@ mkdir -p "./dist/core/lib"
 npm run tsc -- -b -v --incremental server/tsconfig.json
 npm run resolve-tspaths:server
 
-cp -r ./server/core/static ./server/core/assets ./dist/core
+cp -r "./server/core/static" "./server/core/assets" ./dist/core
+cp -r "./server/locales" ./dist
 
 ./node_modules/.bin/tsc-watch --build --preserveWatchOutput --verbose --onSuccess 'sh -c "npm run resolve-tspaths:server && NODE_ENV=dev node dist/server"' server/tsconfig.json

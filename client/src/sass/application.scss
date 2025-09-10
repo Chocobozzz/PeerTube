@@ -1,16 +1,16 @@
-@use 'sass:math';
-@use 'sass:color';
-@use '_variables' as *;
-@use '_bootstrap-variables' as *;
-@use '_mixins' as *;
-@use '_icons' as *;
-@use '_fonts';
-@use './custom-markup';
-@use './bootstrap';
-@use './primeng-custom';
-@use './z-index';
-@use './class-helpers/index.scss';
-@use '_css-variables' as *;
+@use "sass:math";
+@use "sass:color";
+@use "_variables" as *;
+@use "_bootstrap-variables" as *;
+@use "_mixins" as *;
+@use "_icons" as *;
+@use "_fonts";
+@use "./custom-markup";
+@use "./bootstrap";
+@use "./z-index";
+@use "./class-helpers/index.scss";
+@use "_css-variables" as *;
+@use "./primeng";
 
 @mixin main-col-expanded {
   --menu-width: #{$menu-collapsed-width};
@@ -20,25 +20,29 @@
 input[type="search"]::-webkit-search-decoration,
 input[type="search"]::-webkit-search-cancel-button,
 input[type="search"]::-webkit-search-results-button,
-input[type="search"]::-webkit-search-results-decoration { display: none; }
+input[type="search"]::-webkit-search-results-decoration {
+  display: none;
+}
+
+// ---------------------------------------------------------------------------
+
+:root {
+  @include define-css-variables();
+}
 
 body {
-  @include define-css-variables();
+  font-family: $main-fonts;
+  font-weight: $font-regular;
+  color: pvar(--fg);
+  background-color: pvar(--bg);
 
-  & {
-    font-family: $main-fonts;
-    font-weight: $font-regular;
-    color: pvar(--fg);
-    background-color: pvar(--bg);
+  // On desktop browsers, make sure vertical scroll bar is always visible
+  // Allow to disable the scrollbar instead of hide it when the content fit the body
+  // And not move the content and header horizontally sticked to right when the content is updating
+  overflow-y: scroll;
 
-    // On desktop browsers, make sure vertical scroll bar is always visible
-    // Allow to disable the scrollbar instead of hide it when the content fit the body
-    // And not move the content and header horizontally sticked to right when the content is updating
-    overflow-y: scroll;
-
-    // Fix "reboot" style that set text-align: left
-    text-align: start;
-  }
+  // Fix "reboot" style that set text-align: left
+  text-align: start;
 }
 
 ::selection {
@@ -65,7 +69,7 @@ strong {
 
 input[readonly] {
   // Force blank on readonly inputs
-  background-color: pvar(--input-bg) !important;
+  background-color: pvar(--input-bg);
 }
 
 input,
@@ -96,8 +100,8 @@ code {
   background-color: pvar(--bg-secondary-500);
   color: pvar(--fg-400);
   border-radius: 3px;
-  padding: .2em .4em;
-  margin: auto .4em;
+  padding: 0.2em 0.4em;
+  margin: auto 0.4em;
   font-size: 75%;
   display: inline-block;
   vertical-align: middle;
@@ -142,7 +146,8 @@ a.pt {
     @include main-col-expanded();
   }
 
-  &.lock-scroll .main-row > router-outlet + * {  /* stylelint-disable-line selector-max-compound-selectors */
+  &.lock-scroll .main-row > router-outlet + * {
+    /* stylelint-disable-line selector-max-compound-selectors */
     // Lock and hide body scrollbars
     position: fixed;
   }
@@ -152,7 +157,7 @@ a.pt {
   overflow: hidden !important;
 }
 
-my-global-icon[iconName=external-link] {
+my-global-icon[iconName="external-link"] {
   margin: 0 0.3em;
   width: 0.9em;
   height: 0.9em;
@@ -184,15 +189,15 @@ my-global-icon[iconName=external-link] {
     }
   }
 
-  input[type=text],
-  input[type=password],
-  input[type=email],
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
   textarea,
   .peertube-select-container {
     flex-grow: 1;
   }
 
-  .caption input[type=text] {
+  .caption input[type="text"] {
     width: unset !important;
     flex-grow: 1;
   }

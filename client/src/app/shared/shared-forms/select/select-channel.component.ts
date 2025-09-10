@@ -1,8 +1,7 @@
 import { CommonModule } from '@angular/common'
-import { Component, forwardRef, OnChanges, input } from '@angular/core'
+import { Component, forwardRef, input, OnChanges } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
-import { DropdownModule } from 'primeng/dropdown'
 import { SelectChannelItem, SelectOptionsItem } from '../../../../types/select-options-item.model'
 import { SelectOptionsComponent } from './select-options.component'
 
@@ -27,7 +26,7 @@ import { SelectOptionsComponent } from './select-options.component'
       multi: true
     }
   ],
-  imports: [ DropdownModule, FormsModule, CommonModule, SelectOptionsComponent ]
+  imports: [ FormsModule, CommonModule, SelectOptionsComponent ]
 })
 export class SelectChannelComponent implements ControlValueAccessor, OnChanges {
   readonly inputId = input.required<string>()

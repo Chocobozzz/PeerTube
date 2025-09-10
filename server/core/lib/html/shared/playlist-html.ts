@@ -1,6 +1,5 @@
 import { addQueryParams, escapeHTML, getDefaultRSSFeeds } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoPlaylistPrivacy } from '@peertube/peertube-models'
-import { toCompleteUUID } from '@server/helpers/custom-validators/misc.js'
 import { Memoize } from '@server/helpers/memoize.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { MVideoPlaylist, MVideoPlaylistFull } from '@server/types/models/index.js'
@@ -13,9 +12,7 @@ import { PageHtml } from './page-html.js'
 import { TagsHtml } from './tags-html.js'
 
 export class PlaylistHtml {
-  static async getWatchPlaylistHTML (videoPlaylistIdArg: string, req: express.Request, res: express.Response) {
-    const videoPlaylistId = toCompleteUUID(videoPlaylistIdArg)
-
+  static async getWatchPlaylistHTML (videoPlaylistId: string, req: express.Request, res: express.Response) {
     // Let Angular application handle errors
     if (!validator.default.isInt(videoPlaylistId) && !validator.default.isUUID(videoPlaylistId, 4)) {
       res.status(HttpStatusCode.NOT_FOUND_404)
@@ -46,9 +43,7 @@ export class PlaylistHtml {
   }
 
   @Memoize({ maxAge: MEMOIZE_TTL.EMBED_HTML })
-  static async getEmbedPlaylistHTML (playlistIdArg: string) {
-    const playlistId = toCompleteUUID(playlistIdArg)
-
+  static async getEmbedPlaylistHTML (playlistId: string) {
     const playlistPromise: Promise<MVideoPlaylistFull> = validator.default.isInt(playlistId) || validator.default.isUUID(playlistId, 4)
       ? VideoPlaylistModel.loadWithAccountAndChannel(playlistId, null)
       : Promise.resolve(undefined)

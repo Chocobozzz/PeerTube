@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.3.0
+
+ * Add generate storyboard support (PeerTube >= 8.0)
+
+## v0.2.0
+
+ * Add runner version in request and register payloads
+ * Update dependencies to fix vulnerabilities
+
 ## v0.1.3
 
  * Disable log coloring when TTY does not support it

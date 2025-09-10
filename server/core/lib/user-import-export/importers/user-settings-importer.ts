@@ -1,22 +1,23 @@
+import { pick } from '@peertube/peertube-core-utils'
 import { UserNotificationSetting, UserSettingsExportJSON } from '@peertube/peertube-models'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
-import { AbstractUserImporter } from './abstract-user-importer.js'
-import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
-import { UserNotificationSettingModel } from '@server/models/user/user-notification-setting.js'
 import { exists } from '@server/helpers/custom-validators/misc.js'
+import { isThemeNameValid } from '@server/helpers/custom-validators/plugins.js'
+import { isUserNotificationSettingValid } from '@server/helpers/custom-validators/user-notifications.js'
 import {
   isUserAutoPlayNextVideoPlaylistValid,
   isUserAutoPlayNextVideoValid,
   isUserAutoPlayVideoValid,
+  isUserLanguage,
   isUserNSFWPolicyValid,
   isUserP2PEnabledValid,
   isUserVideoLanguages,
   isUserVideosHistoryEnabledValid
 } from '@server/helpers/custom-validators/users.js'
-import { isThemeNameValid } from '@server/helpers/custom-validators/plugins.js'
+import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
+import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { isThemeRegistered } from '@server/lib/plugins/theme-utils.js'
-import { isUserNotificationSettingValid } from '@server/helpers/custom-validators/user-notifications.js'
-import { pick } from '@peertube/peertube-core-utils'
+import { UserNotificationSettingModel } from '@server/models/user/user-notification-setting.js'
+import { AbstractUserImporter } from './abstract-user-importer.js'
 
 const lTags = loggerTagsFactory('user-import')
 
@@ -29,6 +30,7 @@ type SanitizedObject = Pick<
   | 'p2pEnabled'
   | 'videosHistoryEnabled'
   | 'videoLanguages'
+  | 'language'
   | 'theme'
   | 'notificationSettings'
 >
@@ -46,6 +48,7 @@ export class UserSettingsImporter extends AbstractUserImporter<UserSettingsExpor
     if (!isUserP2PEnabledValid(o.p2pEnabled)) o.p2pEnabled = undefined
     if (!isUserVideosHistoryEnabledValid(o.videosHistoryEnabled)) o.videosHistoryEnabled = undefined
     if (!isUserVideoLanguages(o.videoLanguages)) o.videoLanguages = undefined
+    if (!isUserLanguage(o.language)) o.language = undefined
     if (!isThemeNameValid(o.theme) || !isThemeRegistered(o.theme)) o.theme = undefined
 
     for (const key of Object.keys(o.notificationSettings || {})) {
@@ -60,6 +63,7 @@ export class UserSettingsImporter extends AbstractUserImporter<UserSettingsExpor
       'p2pEnabled',
       'videosHistoryEnabled',
       'videoLanguages',
+      'language',
       'theme',
       'notificationSettings'
     ])
@@ -73,6 +77,7 @@ export class UserSettingsImporter extends AbstractUserImporter<UserSettingsExpor
     if (exists(userImportData.p2pEnabled)) this.user.p2pEnabled = userImportData.p2pEnabled
     if (exists(userImportData.videosHistoryEnabled)) this.user.videosHistoryEnabled = userImportData.videosHistoryEnabled
     if (exists(userImportData.videoLanguages)) this.user.videoLanguages = userImportData.videoLanguages
+    if (exists(userImportData.language)) this.user.language = userImportData.language
     if (exists(userImportData.theme)) this.user.theme = userImportData.theme
 
     await saveInTransactionWithRetries(this.user)

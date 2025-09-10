@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common'
 import { Component, OnDestroy, OnInit, inject } from '@angular/core'
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { BuildFormArgument } from '@app/shared/form-validators/form-validator.model'
-import { FormReactiveErrors, FormReactiveService, FormReactiveValidationMessages } from '@app/shared/shared-forms/form-reactive.service'
+import { FormReactiveErrors, FormReactiveService, FormReactiveMessages } from '@app/shared/shared-forms/form-reactive.service'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import {
@@ -16,7 +16,6 @@ import {
   VideoState
 } from '@peertube/peertube-models'
 import debug from 'debug'
-import { CalendarModule } from 'primeng/calendar'
 import { Subscription } from 'rxjs'
 import { SelectOptionsItem } from 'src/types/select-options-item.model'
 import { InputTextComponent } from '../../../shared/shared-forms/input-text.component'
@@ -29,6 +28,8 @@ import { VideoEdit } from '../common/video-edit.model'
 import { VideoManageController } from '../video-manage-controller.service'
 import { LiveDocumentationLinkComponent } from './live-documentation-link.component'
 import { LiveStreamInformationComponent } from './live-stream-information.component'
+import { I18nPrimengCalendarService } from '../common/i18n-primeng-calendar.service'
+import { DatePickerModule } from 'primeng/datepicker'
 
 const debugLogger = debug('peertube:video-manage')
 
@@ -38,6 +39,12 @@ type Form = {
   latencyMode: FormControl<LiveVideoLatencyModeType>
   saveReplay: FormControl<boolean>
   replayPrivacy: FormControl<VideoPrivacyType>
+
+  schedules: FormArray<
+    FormGroup<{
+      startAt: FormControl<Date>
+    }>
+  >
 }
 
 @Component({
@@ -53,7 +60,7 @@ type Form = {
     PeerTubeTemplateDirective,
     SelectOptionsComponent,
     InputTextComponent,
-    CalendarModule,
+    DatePickerModule,
     PeertubeCheckboxComponent,
     LiveDocumentationLinkComponent,
     AlertComponent,
@@ -66,13 +73,17 @@ export class VideoLiveSettingsComponent implements OnInit, OnDestroy {
   private formReactiveService = inject(FormReactiveService)
   private videoService = inject(VideoService)
   private serverService = inject(ServerService)
+  private i18nPrimengCalendarService = inject(I18nPrimengCalendarService)
   private manageController = inject(VideoManageController)
 
   form: FormGroup<Form>
   formErrors: FormReactiveErrors = {}
-  validationMessages: FormReactiveValidationMessages = {}
+  validationMessages: FormReactiveMessages = {}
 
   videoEdit: VideoEdit
+
+  calendarDateFormat: string
+  myYearRange: string
 
   replayPrivacies: VideoConstant<VideoPrivacyType>[] = []
 
@@ -97,6 +108,11 @@ export class VideoLiveSettingsComponent implements OnInit, OnDestroy {
   serverConfig: HTMLServerConfig
 
   private updatedSub: Subscription
+
+  constructor () {
+    this.calendarDateFormat = this.i18nPrimengCalendarService.getDateFormat()
+    this.myYearRange = this.i18nPrimengCalendarService.getVideoPublicationYearRange()
+  }
 
   ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
@@ -138,6 +154,15 @@ export class VideoLiveSettingsComponent implements OnInit, OnDestroy {
     this.form = form
     this.formErrors = formErrors
     this.validationMessages = validationMessages
+
+    this.form.addControl(
+      'schedules',
+      new FormArray([
+        new FormGroup({
+          startAt: new FormControl<Date>(defaultValues.schedules?.[0]?.startAt, null)
+        })
+      ])
+    )
 
     this.form.valueChanges.subscribe(() => {
       this.manageController.setFormError($localize`Live settings`, 'live-settings', this.formErrors)
@@ -197,5 +222,19 @@ export class VideoLiveSettingsComponent implements OnInit, OnDestroy {
 
   getInstanceName () {
     return this.serverConfig.instance.name
+  }
+
+  hasScheduledDate () {
+    return !!this.form.value.schedules?.length && this.form.value.schedules[0].startAt
+  }
+
+  resetSchedule () {
+    this.form.patchValue({
+      schedules: [
+        {
+          startAt: null
+        }
+      ]
+    })
   }
 }

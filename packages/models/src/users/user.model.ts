@@ -31,6 +31,7 @@ export interface User {
 
   videosHistoryEnabled: boolean
   videoLanguages: string[]
+  language: string
 
   role: {
     id: UserRoleType

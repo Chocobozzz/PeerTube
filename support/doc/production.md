@@ -357,11 +357,18 @@ cd /var/www/peertube && \
 
 ### Update PeerTube configuration
 
-Check for configuration changes, and report them in your `config/production.yaml` file:
+If your system has `git` installed, the auto upgrade script should have created a `config/production.yaml.new` file that merges your current configuration file with the new configuration keys introduced by the new PeerTube version.
+
+Review the file, check and fix any potential conflicts:
 
 ```bash
-cd /var/www/peertube/versions
-diff -u "$(ls -t | head -2 | tail -1)/config/production.yaml.example" "$(ls -t | head -1)/config/production.yaml.example"
+cd /var/www/peertube && sudo -u peertube vimdiff config/production.yaml config/production.yaml.new
+```
+
+Then replace your current configuration file by the new one:
+
+```bash
+cd /var/www/peertube && sudo -u peertube cp config/production.yaml.new config/production.yaml
 ```
 
 ### Update nginx configuration
@@ -417,9 +424,9 @@ sudo systemctl restart peertube && sudo journalctl -fu peertube
 Change `peertube-latest` destination to the previous version and restore your SQL backup:
 
 ```bash
-OLD_VERSION="v0.42.42" && SQL_BACKUP_PATH="backup/sql-peertube_prod-2018-01-19T10:18+01:00.bak" && \
+OLD_VERSION="v0.42.42" && SQL_BACKUP_PATH="backup/sql-peertube_prod-20180119-1018.bak" && \
   cd /var/www/peertube && sudo -u peertube unlink ./peertube-latest && \
   sudo -u peertube ln -s "versions/peertube-$OLD_VERSION" peertube-latest && \
-  sudo -u postgres pg_restore -c -C -d postgres "$SQL_BACKUP_PATH" && \
+  sudo -u postgres pg_restore -c -C -d peertube_prod "$SQL_BACKUP_PATH" && \
   sudo systemctl restart peertube
 ```

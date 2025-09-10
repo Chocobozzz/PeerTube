@@ -1,6 +1,6 @@
 import { FormGroup } from '@angular/forms'
-import { BuildFormArgument, BuildFormDefaultValues } from '../form-validators/form-validator.model'
-import { FormReactiveService, FormReactiveValidationMessages } from './form-reactive.service'
+import { BuildFormArgument, FormDefault } from '../form-validators/form-validator.model'
+import { FormReactiveService, FormReactiveMessages } from './form-reactive.service'
 
 export abstract class FormReactive {
   protected abstract formReactiveService: FormReactiveService
@@ -8,9 +8,9 @@ export abstract class FormReactive {
 
   form: FormGroup
   formErrors: any // To avoid casting in template because of string | FormReactiveErrors
-  validationMessages: FormReactiveValidationMessages
+  validationMessages: FormReactiveMessages
 
-  buildForm (obj: BuildFormArgument, defaultValues: BuildFormDefaultValues = {}) {
+  buildForm (obj: BuildFormArgument, defaultValues: FormDefault = {}) {
     const { formErrors, validationMessages, form } = this.formReactiveService.buildForm(obj, defaultValues)
 
     this.form = form

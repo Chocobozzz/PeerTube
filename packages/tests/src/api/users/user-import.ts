@@ -170,6 +170,7 @@ function runTest (withObjectStorage: boolean) {
         const me = await remoteServer.users.getMyInfo({ token: remoteNoahToken })
 
         expect(me.p2pEnabled).to.be.false
+        expect(me.language).to.equal('fr')
 
         const settings = me.notificationSettings
 
@@ -198,11 +199,11 @@ function runTest (withObjectStorage: boolean) {
       expect(importedSecond.support).to.equal('noah support')
 
       for (const banner of importedSecond.banners) {
-        await testImage(remoteServer.url, `banner-user-import-resized-${banner.width}`, banner.path)
+        await testImage({ url: banner.fileUrl, name: `banner-user-import-resized-${banner.width}.jpg` })
       }
 
       for (const avatar of importedSecond.avatars) {
-        await testImage(remoteServer.url, `avatar-resized-${avatar.width}x${avatar.width}`, avatar.path, '.png')
+        await testImage({ url: remoteServer.url + avatar.path, name: `avatar-resized-${avatar.width}x${avatar.width}.png` })
       }
 
       {
@@ -491,6 +492,7 @@ function runTest (withObjectStorage: boolean) {
         expect(live.permanentLive).to.be.true
         expect(live.streamKey).to.exist
         expect(live.replaySettings.privacy).to.equal(VideoPrivacy.PUBLIC)
+        expect(live.schedules[0].startAt).to.exist
 
         expect(video.channel.name).to.equal('noah_second_channel')
         expect(video.privacy.id).to.equal(VideoPrivacy.PASSWORD_PROTECTED)
@@ -593,11 +595,11 @@ function runTest (withObjectStorage: boolean) {
     it('Should have received an email on finished import', async function () {
       const email = emails.reverse().find(e => {
         return e['to'][0]['address'] === 'noah_remote@example.com' &&
-          e['subject'].includes('archive import has finished')
+          e['subject'].includes('importation de votre archive est terminée')
       })
 
       expect(email).to.exist
-      expect(email['text']).to.contain('as considered duplicate: 5') // 5 videos are considered as duplicates
+      expect(email['text']).to.contain('considéré comme doublon : 5') // 5 videos are considered as duplicates
     })
 
     it('Should auto blacklist imported videos if enabled by the administrator', async function () {
@@ -715,7 +717,7 @@ function runTest (withObjectStorage: boolean) {
   })
 
   after(async function () {
-    MockSmtpServer.Instance.kill()
+    await MockSmtpServer.Instance.kill()
 
     await cleanupTests([ server, remoteServer, blockedServer ])
   })

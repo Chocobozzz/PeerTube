@@ -1,8 +1,9 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_miniature' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_miniature" as *;
 
-.section-header {
+.section-header,
+my-button {
   // make the element span a full grid row within .videos grid
   grid-column: 1 / -1;
 }
@@ -10,7 +11,8 @@
 .section-title,
 .section-header {
   display: flex;
-  align-items: center
+  align-items: center;
+  min-width: 1px;
 }
 
 .section-title {
@@ -30,7 +32,6 @@
 }
 
 .quick-access-links {
-
   a {
     color: pvar(--fg-300);
     text-decoration: underline;
@@ -66,8 +67,10 @@
 }
 
 my-actor-avatar {
-  width: 40px;
-  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  max-width: 40px;
+  max-height: 40px;
 
   @include margin-right(10px);
 }

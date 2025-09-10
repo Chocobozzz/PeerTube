@@ -1,7 +1,7 @@
-@use 'sass:math';
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_button-mixins' as *;
+@use "sass:math";
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_button-mixins" as *;
 
 .menu-container {
   --co-menu-x-padding: 1.5rem;
@@ -81,7 +81,7 @@
   position: relative;
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
-  border-radius: 14px;
+  border-radius: pvar(--menu-border-radius);
   background-color: pvar(--menu-bg);
 }
 
@@ -99,7 +99,7 @@
 .collapsed .toggle-menu-container,
 .about-top {
   &::after {
-    content: '';
+    content: "";
     display: block;
     height: 2px;
     margin: 1rem var(--co-menu-x-padding);
@@ -123,7 +123,7 @@
 
   white-space: normal;
   word-break: break-word;
-  transition: background-color .1s ease-in-out;
+  transition: background-color 0.1s ease-in-out;
   width: 100%;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
@@ -245,7 +245,7 @@
   width: 100vw;
   height: 100vh;
   opacity: 0.75;
-  content: '';
+  content: "";
   display: none;
   position: fixed;
   z-index: z(overlay);

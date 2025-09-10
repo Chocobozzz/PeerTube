@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
-import { decode } from 'querystring'
-import request from 'supertest'
-import { URL } from 'url'
 import { pick, queryParamsToObject } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, HttpStatusCodeType } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
+import { decode } from 'querystring'
+import request from 'supertest'
+import { URL } from 'url'
 
 export type CommonRequestParams = {
   url: string
@@ -32,16 +32,19 @@ export function makeRawRequest (options: {
   responseType?: string
   range?: string
   query?: { [id: string]: string }
+  fields?: { [fieldName: string]: any }
   method?: 'GET' | 'POST'
   accept?: string
   headers?: { [name: string]: string }
   redirects?: number
+  requestType?: 'form'
 }) {
   const { host, protocol, pathname, searchParams } = new URL(options.url)
 
   const reqOptions = {
     url: `${protocol}//${host}`,
     path: pathname,
+    type: options.requestType,
 
     contentType: undefined,
 
@@ -51,7 +54,7 @@ export function makeRawRequest (options: {
       ...queryParamsToObject(searchParams)
     },
 
-    ...pick(options, [ 'expectedStatus', 'range', 'token', 'headers', 'responseType', 'accept', 'redirects' ])
+    ...pick(options, [ 'expectedStatus', 'range', 'token', 'headers', 'responseType', 'accept', 'redirects', 'fields' ])
   }
 
   if (options.method === 'POST') {
@@ -161,12 +164,19 @@ export function makeUploadRequest (
 export function makePostBodyRequest (
   options: CommonRequestParams & {
     fields?: { [fieldName: string]: any }
+    requestType?: 'form'
   }
 ) {
   const req = request(options.url).post(options.path)
     .send(options.fields)
 
-  return buildRequest(req, { accept: 'application/json', expectedStatus: HttpStatusCode.BAD_REQUEST_400, ...options })
+  return buildRequest(req, {
+    accept: 'application/json',
+    type: options.requestType,
+    expectedStatus: HttpStatusCode.BAD_REQUEST_400,
+
+    ...options
+  })
 }
 
 export function makePutBodyRequest (options: {

@@ -16,6 +16,7 @@ export function playlistObjectToDBAttributes (playlistObject: PlaylistObject, to
     privacy,
     url: playlistObject.id,
     uuid: playlistObject.uuid,
+    videoChannelPosition: playlistObject.videoChannelPosition,
     videoChannelId: null,
     ownerAccountId: null,
     createdAt: new Date(playlistObject.published),

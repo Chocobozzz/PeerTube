@@ -1,14 +1,15 @@
+import { UserNotificationType } from '@peertube/peertube-models'
+import { t } from '@server/helpers/i18n.js'
 import { logger } from '@server/helpers/logger.js'
 import { toSafeHtml } from '@server/helpers/markdown.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { isBlockedByServerOrAccount } from '@server/lib/blocklist.js'
-import { UserModel } from '@server/models/user/user.js'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
+import { UserModel } from '@server/models/user/user.js'
 import { MCommentOwnerVideo, MUserDefault, MUserWithNotificationSetting, UserNotificationModelForApi } from '@server/types/models/index.js'
-import { UserNotificationType } from '@peertube/peertube-models'
 import { AbstractNotification } from '../common/abstract-notification.js'
 
-export class NewCommentForVideoOwner extends AbstractNotification <MCommentOwnerVideo> {
+export class NewCommentForVideoOwner extends AbstractNotification<MCommentOwnerVideo> {
   private user: MUserDefault
 
   async prepare () {
@@ -49,7 +50,9 @@ export class NewCommentForVideoOwner extends AbstractNotification <MCommentOwner
     return notification
   }
 
-  createEmail (to: string) {
+  createEmail (user: MUserWithNotificationSetting) {
+    const to = { email: user.email, language: user.getLanguage() }
+
     const comment = this.payload
 
     const video = comment.Video
@@ -63,19 +66,20 @@ export class NewCommentForVideoOwner extends AbstractNotification <MCommentOwner
     return {
       template: 'video-comment-new',
       to,
-      subject: 'New comment on your video ' + video.name,
+      subject: t('New comment on your video', to.language),
       locals: {
         accountName: this.payload.Account.getDisplayName(),
-        accountUrl: this.payload.Account.Actor.url,
+        accountUrl: this.payload.Account.getClientUrl(),
         comment: this.payload,
         commentHtml,
         video,
         videoUrl,
         requiresApproval: this.payload.heldForReview,
+
         action: {
           text: comment.heldForReview
-            ? 'Review comment'
-            : 'View comment',
+            ? t('Review comment', to.language)
+            : t('View comment', to.language),
           url: commentUrl
         }
       }

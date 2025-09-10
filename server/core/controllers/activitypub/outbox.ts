@@ -1,11 +1,11 @@
-import { Activity, VideoPrivacy } from '@peertube/peertube-models'
+import { Activity } from '@peertube/peertube-models'
 import { activityPubContextify } from '@server/helpers/activity-pub-utils.js'
 import { activityPubCollectionPagination } from '@server/lib/activitypub/collection.js'
 import { getContextFilter } from '@server/lib/activitypub/context.js'
 import { MActorLight } from '@server/types/models/index.js'
 import express from 'express'
 import { logger } from '../../helpers/logger.js'
-import { buildAudience } from '../../lib/activitypub/audience.js'
+import { getVideoAudience } from '../../lib/activitypub/audience.js'
 import { buildAnnounceActivity, buildCreateActivity } from '../../lib/activitypub/send/index.js'
 import {
   accountHandleGetValidatorFactory,
@@ -62,7 +62,7 @@ async function buildActivities (actor: MActorLight, start: number, count: number
 
   for (const video of data.data) {
     const byActor = video.VideoChannel.Account.Actor
-    const createActivityAudience = buildAudience([ byActor.followersUrl ], video.privacy === VideoPrivacy.PUBLIC)
+    const createActivityAudience = getVideoAudience(byActor, video.privacy)
 
     // This is a shared video
     if (video.VideoShares !== undefined && video.VideoShares.length !== 0) {

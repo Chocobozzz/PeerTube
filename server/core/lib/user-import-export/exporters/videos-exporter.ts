@@ -2,7 +2,7 @@ import { pick } from '@peertube/peertube-core-utils'
 import { ActivityCreate, FileStorage, VideoCommentPolicy, VideoExportJSON, VideoObject, VideoPrivacy } from '@peertube/peertube-models'
 import { logger } from '@server/helpers/logger.js'
 import { USER_EXPORT_MAX_ITEMS } from '@server/initializers/constants.js'
-import { audiencify, getAudience } from '@server/lib/activitypub/audience.js'
+import { audiencify, getVideoAudience } from '@server/lib/activitypub/audience.js'
 import { buildCreateActivity } from '@server/lib/activitypub/send/send-create.js'
 import { buildChaptersAPHasPart } from '@server/lib/activitypub/video-chapters.js'
 import {
@@ -30,7 +30,7 @@ import {
   MVideoChapter,
   MVideoFile,
   MVideoFullLight,
-  MVideoLiveWithSetting,
+  MVideoLiveWithSettingSchedules,
   MVideoPassword
 } from '@server/types/models/index.js'
 import { MVideoSource } from '@server/types/models/video/video-source.js'
@@ -92,7 +92,7 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
       : []
 
     const live = video.isLive
-      ? await VideoLiveModel.loadByVideoIdWithSettings(videoId)
+      ? await VideoLiveModel.loadByVideoIdFull(videoId)
       : undefined // We already have captions, so we can set it to the video object
     ;(video as any).VideoCaptions = captions
     // Then fetch more attributes for AP serialization
@@ -113,7 +113,7 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
   private exportVideoJSON (options: {
     video: MVideoFullLight
     captions: MVideoCaption[]
-    live: MVideoLiveWithSetting
+    live: MVideoLiveWithSettingSchedules
     passwords: MVideoPassword[]
     source: MVideoSource
     chapters: MVideoChapter[]
@@ -186,7 +186,7 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
     }
   }
 
-  private exportLiveJSON (video: MVideo, live: MVideoLiveWithSetting) {
+  private exportLiveJSON (video: MVideo, live: MVideoLiveWithSettingSchedules) {
     if (!video.isLive) return undefined
 
     return {
@@ -197,7 +197,11 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
 
       replaySettings: live.ReplaySetting
         ? { privacy: live.ReplaySetting.privacy }
-        : undefined
+        : undefined,
+
+      schedules: live.LiveSchedules?.map(s => ({
+        startAt: s.startAt.toISOString()
+      }))
     }
   }
 
@@ -266,7 +270,7 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
   ): Promise<ActivityCreate<VideoObject>> {
     const icon = video.getPreview()
 
-    const audience = getAudience(video.VideoChannel.Account.Actor, video.privacy === VideoPrivacy.PUBLIC)
+    const audience = getVideoAudience(video.VideoChannel.Account.Actor, video.privacy, { skipPrivacyCheck: true })
     const videoObject = {
       ...audiencify(await video.toActivityPubObject(), audience),
 

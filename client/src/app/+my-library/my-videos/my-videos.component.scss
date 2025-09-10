@@ -1,5 +1,6 @@
 @use "_variables" as *;
 @use "_mixins" as *;
+@use "_actor" as *;
 
 my-select-checkbox {
   min-width: 250px;
@@ -12,6 +13,7 @@ my-select-checkbox {
 .playlists {
   .pt-badge {
     max-width: 200px;
+    vertical-align: bottom;
 
     @include ellipsis;
   }
@@ -29,35 +31,17 @@ my-select-checkbox {
   }
 }
 
-.right-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-}
-
 td {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
 }
 
+.channel-label {
+  @include channel-label;
+}
+
 .channel-filters {
-  display: flex;
-  align-items: center;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid $separator-border-color;
-  margin-bottom: 1rem;
-  gap: 1rem;
-  overflow: hidden;
-
-  &:hover {
-    overflow: auto;
-  }
-
-  .channels-label {
-    color: pvar(--fg-200);
-    font-weight: $font-bold;
-    white-space: nowrap;
-  }
+  @include channel-filters;
 }
 
 @media screen and (min-width: $small-view) {

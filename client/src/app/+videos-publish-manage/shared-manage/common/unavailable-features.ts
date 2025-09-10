@@ -13,7 +13,7 @@ export function getReplaceFileUnavailability (options: {
 
   if (!canVideoFileBeEdited(state)) {
     if (isLive) return $localize`File replacement is not available on a live.`
-    if (state === VideoState.TO_TRANSCODE) return $localize`File replacement is not available while the video is being transcoding.`
+    if (state === VideoState.TO_TRANSCODE) return $localize`File replacement is not available while the video is being transcoded.`
     if (state === VideoState.TO_EDIT) return $localize`File replacement is not available while the video is being edited.`
     if (state === VideoState.TO_IMPORT) return $localize`File replacement is not available while the video is being imported.`
 
@@ -35,7 +35,7 @@ export function getStudioUnavailability (options: {
 
   if (!canVideoFileBeEdited(state)) {
     if (isLive) return $localize`Studio is not available on a live.`
-    if (state === VideoState.TO_TRANSCODE) return $localize`Studio is not available while the video is being transcoding.`
+    if (state === VideoState.TO_TRANSCODE) return $localize`Studio is not available while the video is being transcoded.`
     if (state === VideoState.TO_EDIT) return $localize`Studio is not available while the video is being edited.`
     if (state === VideoState.TO_IMPORT) return $localize`Studio is not available while the video is being imported.`
 

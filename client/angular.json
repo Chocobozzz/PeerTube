@@ -189,8 +189,7 @@
               }
             },
             "assets": [
-              "src/assets/images",
-              "src/manifest.webmanifest"
+              "src/assets/images"
             ],
             "styles": [
               "src/sass/application.scss"
@@ -214,7 +213,6 @@
               "escape-string-regexp",
               "is-plain-object",
               "parse-srcset",
-              "deepmerge",
               "core-js/features/reflect",
               "hammerjs",
               "jschannel"

@@ -2,7 +2,7 @@ import { NgFor, NgIf } from '@angular/common'
 import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ServerService } from '@app/core'
-import { FormReactiveErrors, FormReactiveService, FormReactiveValidationMessages } from '@app/shared/shared-forms/form-reactive.service'
+import { FormReactiveErrors, FormReactiveService, FormReactiveMessages } from '@app/shared/shared-forms/form-reactive.service'
 import { ReactiveFileComponent } from '@app/shared/shared-forms/reactive-file.component'
 import { TimestampInputComponent } from '@app/shared/shared-forms/timestamp-input.component'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
@@ -49,7 +49,7 @@ export class VideoStudioEditComponent implements OnInit, OnDestroy {
 
   form: FormGroup<Form>
   formErrors: FormReactiveErrors = {}
-  validationMessages: FormReactiveValidationMessages = {}
+  validationMessages: FormReactiveMessages = {}
 
   isRunningEdit = false
 

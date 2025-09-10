@@ -1,5 +1,7 @@
 import { pick } from '@peertube/peertube-core-utils'
 import {
+  RunnerJobGenerateStoryboardPayload,
+  RunnerJobGenerateStoryboardPrivatePayload,
   RunnerJobLiveRTMPHLSTranscodingPayload,
   RunnerJobLiveRTMPHLSTranscodingPrivatePayload,
   RunnerJobState,
@@ -28,50 +30,56 @@ import { setAsUpdated } from '@server/models/shared/update.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
 
 type CreateRunnerJobArg =
-  {
+  | {
     type: Extract<RunnerJobType, 'vod-web-video-transcoding'>
     payload: RunnerJobVODWebVideoTranscodingPayload
     privatePayload: RunnerJobVODWebVideoTranscodingPrivatePayload
-  } |
-  {
+  }
+  | {
     type: Extract<RunnerJobType, 'vod-hls-transcoding'>
     payload: RunnerJobVODHLSTranscodingPayload
     privatePayload: RunnerJobVODHLSTranscodingPrivatePayload
-  } |
-  {
+  }
+  | {
     type: Extract<RunnerJobType, 'vod-audio-merge-transcoding'>
     payload: RunnerJobVODAudioMergeTranscodingPayload
     privatePayload: RunnerJobVODAudioMergeTranscodingPrivatePayload
-  } |
-  {
+  }
+  | {
     type: Extract<RunnerJobType, 'live-rtmp-hls-transcoding'>
     payload: RunnerJobLiveRTMPHLSTranscodingPayload
     privatePayload: RunnerJobLiveRTMPHLSTranscodingPrivatePayload
-  } |
-  {
+  }
+  | {
     type: Extract<RunnerJobType, 'video-studio-transcoding'>
     payload: RunnerJobStudioTranscodingPayload
     privatePayload: RunnerJobVideoStudioTranscodingPrivatePayload
-  } |
-  {
+  }
+  | {
+    type: Extract<RunnerJobType, 'generate-video-storyboard'>
+    payload: RunnerJobGenerateStoryboardPayload
+    privatePayload: RunnerJobGenerateStoryboardPrivatePayload
+  }
+  | {
     type: Extract<RunnerJobType, 'video-transcription'>
     payload: RunnerJobTranscriptionPayload
     privatePayload: RunnerJobTranscriptionPrivatePayload
   }
 
-export abstract class AbstractJobHandler <C, U extends RunnerJobUpdatePayload, S extends RunnerJobSuccessPayload> {
-
+export abstract class AbstractJobHandler<C, U extends RunnerJobUpdatePayload, S extends RunnerJobSuccessPayload> {
   protected readonly lTags = loggerTagsFactory('runner')
 
   // ---------------------------------------------------------------------------
 
   abstract create (options: C): Promise<MRunnerJob>
 
-  protected async createRunnerJob (options: CreateRunnerJobArg & {
-    jobUUID: string
-    priority: number
-    dependsOnRunnerJob?: MRunnerJob
-  }): Promise<MRunnerJob> {
+  protected async createRunnerJob (
+    options: CreateRunnerJobArg & {
+      jobUUID: string
+      priority: number
+      dependsOnRunnerJob?: MRunnerJob
+    }
+  ): Promise<MRunnerJob> {
     const { priority, dependsOnRunnerJob } = options
 
     logger.debug('Creating runner job', { options, dependsOnRunnerJob, ...this.lTags(options.type) })

@@ -12,7 +12,7 @@ export class AuthHTTP {
 
   private headers = new Headers()
 
-  constructor (private readonly serverUrl: string) {
+  constructor (private readonly serverUrl: string, private readonly language: string) {
     this.userOAuthTokens = OAuthUserTokens.getUserTokens(peertubeLocalStorage)
 
     if (this.userOAuthTokens) this.setHeadersFromTokens()
@@ -22,6 +22,8 @@ export class AuthHTTP {
     let refreshFetchOptions: { headers?: Headers } = {}
 
     if (isSameOrigin(this.serverUrl, url)) {
+      if (this.language) this.headers.set('x-peertube-language', this.language)
+
       if (videoPassword) this.headers.set('x-peertube-video-password', videoPassword)
 
       if (videoPassword || optionalAuth) refreshFetchOptions = { headers: this.headers }

@@ -1,4 +1,4 @@
-import { ActivityAudience, ActivityUpdate, ActivityUpdateObject, VideoPlaylistPrivacy, VideoPrivacy } from '@peertube/peertube-models'
+import { ActivityAudience, ActivityUpdate, ActivityUpdateObject, VideoPlaylistPrivacy } from '@peertube/peertube-models'
 import { getServerActor } from '@server/models/application/application.js'
 import { Transaction } from 'sequelize'
 import { logger } from '../../../helpers/logger.js'
@@ -14,7 +14,7 @@ import {
   MVideoPlaylistFull,
   MVideoRedundancyVideo
 } from '../../../types/models/index.js'
-import { audiencify, getAudience } from '../audience.js'
+import { audiencify, getPlaylistAudience, getPublicAudience, getVideoAudience } from '../audience.js'
 import { getUpdateActivityPubUrl } from '../url.js'
 import { canVideoBeFederated } from '../videos/federate.js'
 import { getActorsInvolvedInVideo } from './shared/index.js'
@@ -32,7 +32,7 @@ export async function sendUpdateVideo (videoArg: MVideoAPLight, transaction: Tra
   const url = getUpdateActivityPubUrl(video.url, video.updatedAt.toISOString())
 
   const videoObject = await video.toActivityPubObject()
-  const audience = getAudience(byActor, video.privacy === VideoPrivacy.PUBLIC)
+  const audience = getVideoAudience(byActor, video.privacy)
 
   const updateActivity = buildUpdateActivity(url, byActor, videoObject, audience)
 
@@ -55,7 +55,7 @@ export async function sendUpdateActor (accountOrChannel: MChannelDefault | MAcco
 
   const url = getUpdateActivityPubUrl(byActor.url, byActor.updatedAt.toISOString())
   const accountOrChannelObject = await (accountOrChannel as any).toActivityPubObject() // FIXME: typescript bug?
-  const audience = getAudience(byActor)
+  const audience = getPublicAudience(byActor)
   const updateActivity = buildUpdateActivity(url, byActor, accountOrChannelObject, audience)
 
   let actorsInvolved: MActor[]
@@ -109,7 +109,7 @@ export async function sendUpdateVideoPlaylist (videoPlaylist: MVideoPlaylistFull
   const url = getUpdateActivityPubUrl(videoPlaylist.url, videoPlaylist.updatedAt.toISOString())
 
   const object = await videoPlaylist.toActivityPubObject(null, transaction)
-  const audience = getAudience(byActor, videoPlaylist.privacy === VideoPlaylistPrivacy.PUBLIC)
+  const audience = getPlaylistAudience(byActor, videoPlaylist.privacy)
 
   const updateActivity = buildUpdateActivity(url, byActor, object, audience)
 
@@ -137,7 +137,7 @@ function buildUpdateActivity (
   object: ActivityUpdateObject,
   audience?: ActivityAudience
 ): ActivityUpdate<ActivityUpdateObject> {
-  if (!audience) audience = getAudience(byActor)
+  if (!audience) audience = getPublicAudience(byActor)
 
   return audiencify(
     {

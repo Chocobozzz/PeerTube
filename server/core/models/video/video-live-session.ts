@@ -56,34 +56,34 @@ export enum ScopeNames {
 })
 export class VideoLiveSessionModel extends SequelizeModel<VideoLiveSessionModel> {
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @AllowNull(false)
   @Column(DataType.DATE)
-  startDate: Date
+  declare startDate: Date
 
   @AllowNull(true)
   @Column(DataType.DATE)
-  endDate: Date
+  declare endDate: Date
 
   @AllowNull(true)
   @Column
-  error: LiveVideoErrorType
+  declare error: LiveVideoErrorType
 
   @AllowNull(false)
   @Column
-  saveReplay: boolean
+  declare saveReplay: boolean
 
   @AllowNull(false)
   @Column
-  endingProcessed: boolean
+  declare endingProcessed: boolean
 
   @ForeignKey(() => VideoModel)
   @Column
-  replayVideoId: number
+  declare replayVideoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -93,11 +93,11 @@ export class VideoLiveSessionModel extends SequelizeModel<VideoLiveSessionModel>
     as: 'ReplayVideo',
     onDelete: 'set null'
   })
-  ReplayVideo: Awaited<VideoModel>
+  declare ReplayVideo: Awaited<VideoModel>
 
   @ForeignKey(() => VideoModel)
   @Column
-  liveVideoId: number
+  declare liveVideoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -107,11 +107,11 @@ export class VideoLiveSessionModel extends SequelizeModel<VideoLiveSessionModel>
     as: 'LiveVideo',
     onDelete: 'set null'
   })
-  LiveVideo: Awaited<VideoModel>
+  declare LiveVideo: Awaited<VideoModel>
 
   @ForeignKey(() => VideoLiveReplaySettingModel)
   @Column
-  replaySettingId: number
+  declare replaySettingId: number
 
   @BelongsTo(() => VideoLiveReplaySettingModel, {
     foreignKey: {
@@ -119,7 +119,7 @@ export class VideoLiveSessionModel extends SequelizeModel<VideoLiveSessionModel>
     },
     onDelete: 'set null'
   })
-  ReplaySetting: Awaited<VideoLiveReplaySettingModel>
+  declare ReplaySetting: Awaited<VideoLiveReplaySettingModel>
 
   @BeforeDestroy
   static deleteReplaySetting (instance: VideoLiveSessionModel) {

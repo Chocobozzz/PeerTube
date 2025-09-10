@@ -7,6 +7,7 @@ import { VideoStudioTranscodingJobHandler } from './video-studio-transcoding-job
 import { VODAudioMergeTranscodingJobHandler } from './vod-audio-merge-transcoding-job-handler.js'
 import { VODHLSTranscodingJobHandler } from './vod-hls-transcoding-job-handler.js'
 import { VODWebVideoTranscodingJobHandler } from './vod-web-video-transcoding-job-handler.js'
+import { VideoStoryboardJobHandler } from './video-storyboard-job-handler.js'
 
 const processors: Record<RunnerJobType, new() => AbstractJobHandler<unknown, RunnerJobUpdatePayload, RunnerJobSuccessPayload>> = {
   'vod-web-video-transcoding': VODWebVideoTranscodingJobHandler,
@@ -14,7 +15,8 @@ const processors: Record<RunnerJobType, new() => AbstractJobHandler<unknown, Run
   'vod-audio-merge-transcoding': VODAudioMergeTranscodingJobHandler,
   'live-rtmp-hls-transcoding': LiveRTMPHLSTranscodingJobHandler,
   'video-studio-transcoding': VideoStudioTranscodingJobHandler,
-  'video-transcription': TranscriptionJobHandler
+  'video-transcription': TranscriptionJobHandler,
+  'generate-video-storyboard': VideoStoryboardJobHandler
 }
 
 export function getRunnerJobHandlerClass (job: MRunnerJob) {

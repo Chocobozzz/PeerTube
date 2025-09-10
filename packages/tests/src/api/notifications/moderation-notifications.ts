@@ -427,7 +427,6 @@ describe('Test moderation notifications', function () {
     let videoName: string
 
     before(async function () {
-
       adminBaseParamsServer1 = {
         server: servers[0],
         emails,
@@ -583,7 +582,7 @@ describe('Test moderation notifications', function () {
   })
 
   after(async function () {
-    MockSmtpServer.Instance.kill()
+    await MockSmtpServer.Instance.kill()
 
     await cleanupTests(servers)
   })

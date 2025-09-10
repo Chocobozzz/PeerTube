@@ -48,8 +48,10 @@ export class MyVideoSpaceComponent implements OnInit {
       },
 
       {
-        label: $localize`Settings`,
-        routerLink: '/my-library/video-imports',
+        label: $localize`More`,
+        routerLink: this.isVideoImportEnabled()
+          ? '/my-library/video-imports'
+          : '/my-library/ownership',
         children: [
           {
             label: $localize`Imports`,

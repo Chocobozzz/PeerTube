@@ -9,9 +9,23 @@ npm run build:embed
 cd client
 npm run ng -- extract-i18n --out-file src/locale/angular.xlf
 
+locales=$(find src/locale -type f | grep -e 'angular\.[^.]\+\.xlf' | sed 's#^src/locale/angular.##' | sed 's/\.xlf$//' | sort -u | tr '\n' ' ')
+
 # Merge new translations in other language files
-node ./node_modules/.bin/xliffmerge -p ./.xliffmerge.json "ar" "is" "hr" "ca-ES" "gl-ES" "cs-CZ" "da-DK" "de-DE" "el-GR" "en-GB" "en-US" "eo" "es-ES" "eu-ES" "fa-IR" "fi-FI" "fr-FR" "gd" "gl-ES" "hu-HU" "it-IT" "ja-JP" "jbo" "kab" "ko-KR" "lt-LT" "nb-NO" "nl-NL" "oc" "pl-PL" "pt-BR" "pt-PT" "ru-RU" "sk-SK" "sl-SI" "sv-SE" "ta" "th-TH" "tr-TR" "uk-UA" "vi-VN" "zh-Hans-CN" "zh-Hant-TW" "nn" "nb-NO" "tok" "sk-SK"
+node ./node_modules/.bin/xliffmerge -p ./.xliffmerge.json $locales
+
+(
+  cd src/locale
+
+  for file in angular.*.xlf; do
+    xmllint --format $file > "$file.tmp" && mv "$file.tmp" "$file"
+  done
+)
 
 # Add our strings too
 cd ../
 npm run i18n:create-custom-files
+
+# Generate server translations
+node ./node_modules/.bin/i18next -c server/.i18next-parser.config.ts 'server/core/**/*.{ts,hbs}'
+

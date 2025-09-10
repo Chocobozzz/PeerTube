@@ -1,5 +1,6 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_css-variables" as *;
+@use "_mixins" as *;
 
 $filters-background: pvar(--bg-secondary-400);
 
@@ -51,17 +52,15 @@ $filters-background: pvar(--bg-secondary-400);
 }
 
 .filters {
-  --input-bg: #{pvar(--input-bg-in-secondary)};
-  --input-border-color: #{pvar(--input-bg-in-secondary)};
-
   display: flex;
   flex-wrap: wrap;
   background-color: $filters-background;
   border-radius: 14px;
 
+  @include define-input-css-variables-in-secondary;
   @include rfs(1.5rem, padding);
 
-  input[type=radio] + label {
+  input[type="radio"] + label {
     font-weight: $font-regular;
   }
 
@@ -78,7 +77,7 @@ $filters-background: pvar(--bg-secondary-400);
 
 .active-filters {
   .active-filter:not(:last-child)::after {
-    content: '•';
+    content: "•";
     font-weight: normal;
     display: inline-block;
     margin: 0 5px;
@@ -122,9 +121,10 @@ $filters-background: pvar(--bg-secondary-400);
   height: min-content;
 }
 
+my-select-videos-sort,
+my-select-videos-scope,
 my-select-languages,
-my-select-categories,
-my-select-options {
+my-select-categories {
   max-width: 300px;
   display: inline-block;
 }

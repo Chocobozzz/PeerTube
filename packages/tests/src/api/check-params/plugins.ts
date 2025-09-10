@@ -214,7 +214,7 @@ describe('Test server plugins API validators', function () {
       })
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({
         url: server.url,
         path,
@@ -274,7 +274,7 @@ describe('Test server plugins API validators', function () {
       })
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({
         url: server.url,
         path,

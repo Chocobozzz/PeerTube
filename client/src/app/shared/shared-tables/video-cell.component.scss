@@ -1,7 +1,7 @@
-@use 'sass:math';
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_miniature' as *;
+@use "sass:math";
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_miniature" as *;
 
 .root {
   --co-image-height: 78px;
@@ -34,6 +34,7 @@ my-video-thumbnail {
   line-height: 1rem;
   font-weight: $font-bold;
   text-decoration: none;
+  max-width: 300px;
 }
 
 .channel {

@@ -78,6 +78,14 @@ staticRouter.use(
 )
 
 // ---------------------------------------------------------------------------
+// Uploads
+// ---------------------------------------------------------------------------
+
+staticRouter.use(
+  STATIC_PATHS.UPLOAD_IMAGES,
+  express.static(DIRECTORIES.UPLOAD_IMAGES, { fallthrough: false }),
+  handleStaticError
+)
 
 export {
   staticRouter

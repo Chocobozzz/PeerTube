@@ -1,0 +1,31 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+
+form {
+  @include rfs(2rem, margin-top);
+}
+
+.mascot {
+  margin-top: -90px;
+  width: 170px;
+  height: 190px;
+}
+
+.avatar-preview {
+  width: 128px;
+  height: 128px;
+}
+
+@media screen and (max-width: $small-view) {
+  .mascot {
+    display: none;
+  }
+
+  .two-columns {
+    justify-content: center;
+  }
+}
+
+textarea {
+  min-height: 150px;
+}

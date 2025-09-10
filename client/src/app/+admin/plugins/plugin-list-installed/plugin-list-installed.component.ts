@@ -1,7 +1,7 @@
 import { NgFor, NgIf } from '@angular/common'
 import { Component, OnInit, inject } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
+import { PluginApiService } from '@app/shared/shared-admin/plugin-api.service'
 import { ComponentPagination, ConfirmService, hasMoreItems, Notifier, resetCurrentPage, updatePaginationOnDelete } from '@app/core'
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { compareSemVer } from '@peertube/peertube-core-utils'

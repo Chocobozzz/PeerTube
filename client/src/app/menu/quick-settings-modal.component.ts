@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnDestroy, OnInit, inject, output, viewChild } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, AuthStatus, LocalStorageService, PeerTubeRouterService, User, UserService } from '@app/core'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
-import { ButtonComponent } from '@app/shared/shared-main/buttons/button.component'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { UserInterfaceSettingsComponent } from '@app/shared/shared-user-settings/user-interface-settings.component'
 import { UserVideoSettingsComponent } from '@app/shared/shared-user-settings/user-video-settings.component'
@@ -15,13 +14,17 @@ import { filter } from 'rxjs/operators'
 @Component({
   selector: 'my-quick-settings',
   templateUrl: './quick-settings-modal.component.html',
+  styles: [
+    `h5 {
+      font-size: 1rem;
+    }`
+  ],
   imports: [
     CommonModule,
     GlobalIconComponent,
     UserVideoSettingsComponent,
     UserInterfaceSettingsComponent,
-    AlertComponent,
-    ButtonComponent
+    AlertComponent
   ]
 })
 export class QuickSettingsModalComponent implements OnInit, OnDestroy {
@@ -35,8 +38,6 @@ export class QuickSettingsModalComponent implements OnInit, OnDestroy {
   private static readonly QUERY_MODAL_NAME = 'quick-settings'
 
   readonly modal = viewChild<NgbModal>('modal')
-
-  readonly openLanguageModal = output()
 
   user: User
   userInformationLoaded = new ReplaySubject<boolean>(1)
@@ -87,11 +88,6 @@ export class QuickSettingsModalComponent implements OnInit, OnDestroy {
 
   show () {
     this.setModalQuery('add')
-  }
-
-  changeLanguage () {
-    this.openedModal.close()
-    this.openLanguageModal.emit()
   }
 
   private setModalQuery (type: 'add' | 'remove') {

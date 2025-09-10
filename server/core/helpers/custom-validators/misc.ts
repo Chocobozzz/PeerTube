@@ -1,8 +1,8 @@
-import 'multer'
+import { isShortUUID, shortToUUID } from '@peertube/peertube-node-utils'
 import { UploadFilesForCheck } from 'express'
+import 'multer'
 import { sep } from 'path'
 import validator from 'validator'
-import { isShortUUID, shortToUUID } from '@peertube/peertube-node-utils'
 
 export function exists (value: any) {
   return value !== undefined && value !== null
@@ -170,4 +170,27 @@ export function toIntArray (value: any) {
   if (isArray(value) === false) return [ validator.default.toInt(value) ]
 
   return value.map(v => validator.default.toInt(v))
+}
+
+// ---------------------------------------------------------------------------
+
+export function isStableVersionValid (value: string) {
+  if (!exists(value)) return false
+
+  const parts = (value + '').split('.')
+
+  return parts.length === 3 && parts.every(p => validator.default.isInt(p))
+}
+
+export function isStableOrUnstableVersionValid (value: string) {
+  if (!exists(value)) return false
+
+  // suffix is beta.x or alpha.x
+  const [ stable, suffix ] = value.split('-')
+  if (!isStableVersionValid(stable)) return false
+
+  const suffixRegex = /^(rc|alpha|beta)\.\d+$/
+  if (suffix && !suffixRegex.test(suffix)) return false
+
+  return true
 }

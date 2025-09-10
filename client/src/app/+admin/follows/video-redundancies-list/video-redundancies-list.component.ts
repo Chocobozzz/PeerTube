@@ -1,55 +1,50 @@
-import { NgFor, NgIf } from '@angular/common'
-import { Component, OnInit, inject } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { ConfirmService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
+import { ConfirmService, Notifier, ServerService } from '@app/core'
 import { BytesPipe } from '@app/shared/shared-main/common/bytes.pipe'
 import { RedundancyService } from '@app/shared/shared-main/video/redundancy.service'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { VideoRedundanciesTarget, VideoRedundancy, VideosRedundancyStats } from '@peertube/peertube-models'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { ChartData, ChartOptions, TooltipItem } from 'chart.js'
-import { SharedModule, SortMeta } from 'primeng/api'
 import { ChartModule } from 'primeng/chart'
-import { TableModule } from 'primeng/table'
+import { tap } from 'rxjs'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
-import { AutoColspanDirective } from '../../../shared/shared-main/common/auto-colspan.directive'
-import { TableExpanderIconComponent } from '../../../shared/shared-tables/table-expander-icon.component'
+import { NumberFormatterPipe } from '../../../shared/shared-main/common/number-formatter.pipe'
+import { DataLoaderOptions, TableColumnInfo, TableComponent, TableQueryParams } from '../../../shared/shared-tables/table.component'
 import { VideoRedundancyInformationComponent } from './video-redundancy-information.component'
+
+type QueryParams = TableQueryParams & {
+  displayType: VideoRedundanciesTarget
+}
 
 @Component({
   selector: 'my-video-redundancies-list',
   templateUrl: './video-redundancies-list.component.html',
   styleUrls: [ './video-redundancies-list.component.scss' ],
   imports: [
+    CommonModule,
     GlobalIconComponent,
     FormsModule,
-    TableModule,
-    SharedModule,
-    NgIf,
-    NgbTooltip,
-    TableExpanderIconComponent,
     DeleteButtonComponent,
-    AutoColspanDirective,
-    NgFor,
     VideoRedundancyInformationComponent,
     ChartModule,
-    BytesPipe
+    BytesPipe,
+    TableComponent,
+    NumberFormatterPipe
   ]
 })
-export class VideoRedundanciesListComponent extends RestTable implements OnInit {
+export class VideoRedundanciesListComponent implements OnInit {
+  private static LS_DISPLAY_TYPE = 'video-redundancies-list-display-type'
+
   private notifier = inject(Notifier)
   private confirmService = inject(ConfirmService)
   private redundancyService = inject(RedundancyService)
   private serverService = inject(ServerService)
 
-  private static LS_DISPLAY_TYPE = 'video-redundancies-list-display-type'
+  readonly table = viewChild<TableComponent<VideoRedundancy>>('table')
 
-  videoRedundancies: VideoRedundancy[] = []
-  totalRecords = 0
-
-  sort: SortMeta = { field: 'name', order: 1 }
-  pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
   displayType: VideoRedundanciesTarget = 'my-videos'
 
   redundanciesGraphsData: { stats: VideosRedundancyStats, graphData: ChartData, options: ChartOptions, ariaLabel: string }[] = []
@@ -61,20 +56,22 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
 
   private bytesPipe: BytesPipe
 
+  columns: TableColumnInfo<string>[]
+
+  dataLoader: typeof this._dataLoader
+  customUpdateUrl: typeof this._customUpdateUrl
+  customParseQueryParams: typeof this._customParseQueryParams
+
   constructor () {
-    super()
-
     this.bytesPipe = new BytesPipe()
-  }
-
-  getIdentifier () {
-    return 'VideoRedundanciesListComponent'
+    this.customUpdateUrl = this._customUpdateUrl.bind(this)
+    this.customParseQueryParams = this._customParseQueryParams.bind(this)
+    this.dataLoader = this._dataLoader.bind(this)
   }
 
   ngOnInit () {
     this.loadSelectLocalStorage()
-
-    this.initialize()
+    this.buildColumns()
 
     this.serverService.getServerStats()
       .subscribe(res => {
@@ -97,10 +94,12 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
   }
 
   onDisplayTypeChanged () {
-    this.pagination.start = 0
-    this.saveSelectLocalStorage()
+    this.dataLoaded = false
 
-    this.reloadData()
+    this.saveSelectLocalStorage()
+    this.buildColumns()
+
+    this.table().reloadData()
   }
 
   getRedundancyStrategy (redundancy: VideoRedundancy) {
@@ -179,33 +178,42 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
       .subscribe({
         next: () => {
           this.notifier.success($localize`Video redundancies removed!`)
-          this.reloadData()
+          this.table().loadData()
         },
 
         error: err => this.notifier.error(err.message)
       })
   }
 
-  protected reloadDataInternal () {
-    this.dataLoaded = false
+  private _dataLoader (options: DataLoaderOptions) {
+    return this.redundancyService.listVideoRedundancies({ ...options, target: this.displayType })
+      .pipe(tap(() => this.dataLoaded = true))
+  }
 
-    const options = {
-      pagination: this.pagination,
-      sort: this.sort,
-      target: this.displayType
+  private _customUpdateUrl (): Partial<QueryParams> {
+    return {
+      displayType: this.displayType
     }
+  }
 
-    this.redundancyService.listVideoRedundancies(options)
-      .subscribe({
-        next: resultList => {
-          this.videoRedundancies = resultList.data
-          this.totalRecords = resultList.total
+  private _customParseQueryParams (queryParams: QueryParams) {
+    if (queryParams.displayType) {
+      this.displayType = queryParams.displayType
+    }
+  }
 
-          this.dataLoaded = true
-        },
+  private buildColumns () {
+    this.columns = [ { id: 'name', label: $localize`Name`, sortable: true } ]
 
-        error: err => this.notifier.error(err.message)
-      })
+    if (this.isDisplayingRemoteVideos()) {
+      this.columns = [
+        { id: 'strategy', label: $localize`Strategy`, sortable: false },
+
+        ...this.columns,
+
+        { id: 'totalSize', label: $localize`Total size`, sortable: false }
+      ]
+    }
   }
 
   private loadSelectLocalStorage () {

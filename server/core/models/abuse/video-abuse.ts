@@ -16,31 +16,30 @@ import { SequelizeModel } from '../shared/index.js'
   ]
 })
 export class VideoAbuseModel extends SequelizeModel<VideoAbuseModel> {
-
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @AllowNull(true)
   @Default(null)
   @Column
-  startAt: number
+  declare startAt: number
 
   @AllowNull(true)
   @Default(null)
   @Column
-  endAt: number
+  declare endAt: number
 
   @AllowNull(true)
   @Default(null)
   @Column(DataType.JSONB)
-  deletedVideo: VideoDetails
+  declare deletedVideo: VideoDetails
 
   @ForeignKey(() => AbuseModel)
   @Column
-  abuseId: number
+  declare abuseId: number
 
   @BelongsTo(() => AbuseModel, {
     foreignKey: {
@@ -48,11 +47,11 @@ export class VideoAbuseModel extends SequelizeModel<VideoAbuseModel> {
     },
     onDelete: 'cascade'
   })
-  Abuse: Awaited<AbuseModel>
+  declare Abuse: Awaited<AbuseModel>
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -60,5 +59,5 @@ export class VideoAbuseModel extends SequelizeModel<VideoAbuseModel> {
     },
     onDelete: 'set null'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 }

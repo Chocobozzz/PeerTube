@@ -1,126 +1,102 @@
-<div class="admin-sub-header">
-  <div class="select-filter-block">
-    <label for="jobType" i18n>Job type</label>
-
-    <my-select-options
-      class="select-job-type" inputId="jobType" filter="true"
-      [items]="jobTypeItems" [(ngModel)]="jobType" (ngModelChange)="onJobStateOrTypeChanged()"
-    ></my-select-options>
-  </div>
-
-  <div class="select-filter-block">
-    <label for="jobState" i18n>Job state</label>
-
-    <my-select-options
-      class="select-job-state" inputId="jobState"
-      [items]="jobStateItems" [(ngModel)]="jobState" (ngModelChange)="onJobStateOrTypeChanged()"
-    ></my-select-options>
-  </div>
-
-  <div class="align-self-end">
-    <my-button i18n-label label="Refresh" icon="refresh" (click)="refresh()"></my-button>
-  </div>
-</div>
-
-<p-table
-  [value]="jobs" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
-  [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order"
-  (onLazyLoad)="loadLazy($event)" dataKey="uniqId" [first]="pagination.start" [tableStyle]="{'table-layout':'auto'}"
-  [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()" [expandedRowKeys]="expandedRows"
+<my-table
+  #table
+  key="JobsComponent"
+  dataKey="uniqId"
+  [defaultColumns]="columns"
+  i18n-paginatorText
+  paginatorText="jobs per page"
+  columnConfig="true"
+  [dataLoader]="dataLoader"
+  [customParseQueryParams]="customParseQueryParams"
+  [customUpdateUrl]="customUpdateUrl"
 >
-  <ng-template pTemplate="header">
-    <tr>
-      <th scope="col" style="width: 40px;">
-        <span i18n class="visually-hidden">More information</span>
-      </th>
-      <th scope="col" class="job-id" i18n>ID</th>
-      <th scope="col" style="width: 200px" class="job-type" i18n>Type</th>
-      <th scope="col" style="width: 200px" class="job-priority" i18n>Priority <small>(1 = highest priority)</small></th>
-      <th scope="col" style="width: 200px" class="job-state" i18n *ngIf="jobState === 'all'">State</th>
-      <th scope="col" style="width: 100px" class="job-progress" i18n *ngIf="hasGlobalProgress()">Progress</th>
-      <th scope="col" style="width: 200px" class="job-date" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th scope="col" style="width: 230px;" i18n>Processed/Finished</th>
-    </tr>
+  <ng-template #totalTitle let-totalRecords>
+    <ng-container i18n>{ totalRecords, plural, =0 {No job} =1 {1 job} other {{{ totalRecords | myNumberFormatter }} jobs}}</ng-container>
   </ng-template>
 
-  <ng-template pTemplate="body" let-expanded="expanded" let-job>
-    <tr>
-      <td class="expand-cell">
-        <my-table-expander-icon [pRowToggler]="job" [expanded]="expanded"></my-table-expander-icon>
-      </td>
+  <ng-template #captionRight>
+    <div class="select-filter-block">
+      <label for="jobType" i18n>Job type</label>
 
-      <td class="job-id c-hand" [pRowToggler]="job" [title]="job.id">{{ job.id }}</td>
+      <my-select-options
+        class="select-job-type" inputId="jobType" filter="true"
+        [items]="jobTypeItems" [(ngModel)]="jobType" (ngModelChange)="onJobStateOrTypeChanged()"
+      ></my-select-options>
+    </div>
 
-      <td class="job-type c-hand" [pRowToggler]="job">
-        <span class="pt-badge ellipsis" [ngClass]="getRandomJobTypeBadge(job.type)">{{ job.type }}</span>
-      </td>
+    <div class="select-filter-block">
+      <label for="jobState" i18n>Job state</label>
 
-      <td class="job-priority c-hand" [pRowToggler]="job">{{ job.priority }}</td>
+      <my-select-options
+        class="select-job-state" inputId="jobState"
+        [items]="jobStateItems" [(ngModel)]="jobState" (ngModelChange)="onJobStateOrTypeChanged()"
+      ></my-select-options>
+    </div>
 
-      <td class="job-state c-hand" [pRowToggler]="job" *ngIf="jobState === 'all'">
-        <span class="ellipsis" [ngClass]="getJobStateClasses(job.state)">{{ job.state }}</span>
-      </td>
-
-      <td *ngIf="hasGlobalProgress()" class="job-progress c-hand" [pRowToggler]="job">
-        <ng-container *ngIf="hasProgress(job)">{{ getProgress(job) }}</ng-container>
-      </td>
-
-      <td class="job-date c-hand" [pRowToggler]="job">{{ job.createdAt }}</td>
-
-      <td class="fs-7">
-        <div>{{ job.processedOn }}</div>
-        <div>{{ job.finishedOn}}</div>
-      </td>
-    </tr>
+    <div class="align-self-end">
+      <my-button i18n-label label="Refresh" icon="refresh" (click)="table.loadData()"></my-button>
+    </div>
   </ng-template>
 
-  <ng-template pTemplate="rowexpansion" let-job>
-    <tr>
-      <td myAutoColspan>
-        <pre>{{ [
-          'Job: ' + job.id,
-          'Type: ' + job.type,
-          'Processed on ' + (job.processedOn || '-'),
-          'Finished on ' + (job.finishedOn || '-')
-        ].join('\n') }}</pre>
-      </td>
-    </tr>
+  <ng-template #tableCells let-job>
+    <td *ngIf="table.isColumnDisplayed('id')" class="job-id c-hand" [title]="job.id">{{ job.id }}</td>
 
-    <tr>
-      <td myAutoColspan>
-        <pre>{{ job.data }}</pre>
-      </td>
-    </tr>
+    <td *ngIf="table.isColumnDisplayed('type')" class="job-type c-hand" >
+      <span class="pt-badge ellipsis" [ngClass]="getRandomJobTypeBadge(job.type)">{{ job.type }}</span>
+    </td>
 
-    <tr class="job-error" *ngIf="job.error">
-      <td myAutoColspan>
-        <pre>{{ job.error }}</pre>
-      </td>
-    </tr>
+    <td *ngIf="table.isColumnDisplayed('priority')" class="job-priority c-hand" >{{ job.priority }}</td>
+
+    <td *ngIf="table.isColumnDisplayed('state') && table.isColumnDisplayed('state')" class="job-state c-hand" >
+      <span class="ellipsis" [ngClass]="getJobStateClasses(job.state)">{{ job.state }}</span>
+    </td>
+
+    <td *ngIf="table.isColumnDisplayed('progress')" class="job-progress c-hand" >
+      <ng-container *ngIf="hasProgress(job)">{{ getProgress(job) }}</ng-container>
+    </td>
+
+    <td *ngIf="table.isColumnDisplayed('createdAt')" class="job-date c-hand" >{{ job.createdAt }}</td>
+
+    <td *ngIf="table.isColumnDisplayed('processed')" class="fs-7">
+      <div>{{ job.processedOn }}</div>
+      <div>{{ job.finishedOn}}</div>
+    </td>
   </ng-template>
 
-  <ng-template pTemplate="emptymessage">
-    <tr>
-      <td myAutoColspan>
-        <div class="no-results">
-          <div class="d-block">
-            @if (jobState === 'all') {
-              @if (jobType === 'all') {
-                <ng-container i18n>No jobs found.</ng-container>
-              } @else {
-                <ng-container i18n>No <code>{{ jobType }}</code> jobs found.</ng-container>
-              }
-            } @else {
-              @if (jobType === 'all') {
-                <ng-container i18n>No <span [ngClass]="getJobStateClasses(jobState)">{{ jobState }}</span> jobs found.</ng-container>
-              } @else {
-                <ng-container i18n>No <code>{{ jobType }}</code> jobs found that are <span [ngClass]="getJobStateClasses(jobState)">{{ jobState }}</span>.</ng-container>
-              }
-            }
-          </div>
-        </div>
-      </td>
-    </tr>
+  <ng-template #expandedRow let-job>
+    <div>
+      <pre>{{ [
+        'Job: ' + job.id,
+        'Type: ' + job.type,
+        'Processed on ' + (job.processedOn || '-'),
+        'Finished on ' + (job.finishedOn || '-')
+      ].join('\n') }}</pre>
+    </div>
+
+    <div>
+      <pre>{{ job.data }}</pre>
+    </div>
+
+    <div>
+      <pre>{{ job.error }}</pre>
+    </div>
   </ng-template>
-</p-table>
+
+  <ng-template #noResults>
+    @if (jobState === 'all') {
+      @if (jobType === 'all') {
+        <ng-container i18n>No jobs found.</ng-container>
+      } @else {
+        <ng-container i18n>No <code>{{ jobType }}</code> jobs found.</ng-container>
+      }
+    } @else {
+      @if (jobType === 'all') {
+        <ng-container i18n>No <span [ngClass]="getJobStateClasses(jobState)">{{ jobState }}</span> jobs found.</ng-container>
+      } @else {
+        <ng-container i18n>No <code>{{ jobType }}</code> jobs found that are <span [ngClass]="getJobStateClasses(jobState)">{{ jobState }}</span>.</ng-container>
+      }
+    }
+  </ng-template>
+
+</my-table>
 

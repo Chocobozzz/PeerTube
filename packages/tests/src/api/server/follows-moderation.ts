@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { expectStartWith } from '@tests/shared/checks.js'
 import { ActorFollow, FollowState } from '@peertube/peertube-models'
 import {
   cleanupTests,
@@ -11,6 +9,8 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { expectStartWith } from '@tests/shared/checks.js'
+import { expect } from 'chai'
 
 async function checkServer1And2HasFollowers (servers: PeerTubeServer[], state = 'accepted') {
   const fns = [
@@ -97,7 +97,6 @@ describe('Test follows moderation', function () {
   })
 
   describe('Default behaviour', function () {
-
     it('Should have server 1 following server 2', async function () {
       this.timeout(30000)
 
@@ -121,8 +120,61 @@ describe('Test follows moderation', function () {
     })
   })
 
-  describe('Disabled/Enabled followers', function () {
+  describe('Disabled/Enabled followers for the channel', function () {
+    let channel: string
 
+    before(async function () {
+      channel = `root_channel@${servers[1].host}`
+    })
+
+    it('Should disable followers for channels on server 2', async function () {
+      const subConfig = {
+        followers: {
+          channels: {
+            enabled: false
+          }
+        }
+      }
+
+      await servers[1].config.updateExistingConfig({ newConfig: subConfig })
+
+      await commands[0].follow({ handles: [ channel ] })
+      await waitJobs(servers)
+
+      for (const server of [ servers[0], servers[1] ]) {
+        const { data, total } = await server.channels.listFollowers({ channelName: channel })
+        expect(total).to.equal(0)
+        expect(data).to.have.lengthOf(0)
+      }
+    })
+
+    it('Should re enable followers for channels on server 2', async function () {
+      const subConfig = {
+        followers: {
+          channels: {
+            enabled: true
+          }
+        }
+      }
+
+      await servers[1].config.updateExistingConfig({ newConfig: subConfig })
+
+      await commands[0].follow({ handles: [ channel ] })
+      await waitJobs(servers)
+
+      for (const server of [ servers[0], servers[1] ]) {
+        const { data, total } = await server.channels.listFollowers({ channelName: channel })
+        expect(total).to.equal(1)
+        expect(data).to.have.lengthOf(1)
+      }
+    })
+
+    after(async function () {
+      await commands[0].unfollow({ target: channel })
+    })
+  })
+
+  describe('Disabled/Enabled followers for the instance', function () {
     it('Should disable followers on server 2', async function () {
       const subConfig = {
         followers: {
@@ -160,8 +212,7 @@ describe('Test follows moderation', function () {
     })
   })
 
-  describe('Manual approbation', function () {
-
+  describe('Manual approbation for the instance', function () {
     it('Should manually approve followers', async function () {
       this.timeout(20000)
 
@@ -257,7 +308,6 @@ describe('Test follows moderation', function () {
   })
 
   describe('Accept/reject state', function () {
-
     it('Should not change the follow on refollow with and without auto accept', async function () {
       const run = async () => {
         await commands[0].follow({ hosts: [ servers[2].url ] })
@@ -331,7 +381,6 @@ describe('Test follows moderation', function () {
   })
 
   describe('Muted servers', function () {
-
     it('Should ignore follow requests of muted servers', async function () {
       await servers[1].blocklist.addToServerBlocklist({ server: servers[0].host })
 

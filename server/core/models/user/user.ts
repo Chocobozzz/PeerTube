@@ -292,79 +292,79 @@ export class UserModel extends SequelizeModel<UserModel> {
   @AllowNull(true)
   @Is('UserPassword', value => throwIfNotValid(value, isUserPasswordValid, 'user password', true))
   @Column
-  password: string
+  declare password: string
 
   @AllowNull(false)
   @Column
-  username: string
+  declare username: string
 
   @AllowNull(false)
   @IsEmail
   @Column(DataType.STRING(400))
-  email: string
+  declare email: string
 
   @AllowNull(true)
   @IsEmail
   @Column(DataType.STRING(400))
-  pendingEmail: string
+  declare pendingEmail: string
 
   @AllowNull(true)
   @Default(null)
   @Is('UserEmailVerified', value => throwIfNotValid(value, isUserEmailVerifiedValid, 'email verified boolean', true))
   @Column
-  emailVerified: boolean
+  declare emailVerified: boolean
 
   @AllowNull(false)
   @Is('UserNSFWPolicy', value => throwIfNotValid(value, isUserNSFWPolicyValid, 'NSFW policy'))
   @Column(DataType.ENUM(...Object.values(NSFW_POLICY_TYPES)))
-  nsfwPolicy: NSFWPolicyType
+  declare nsfwPolicy: NSFWPolicyType
 
   @AllowNull(false)
   @Default(0)
   @Is('UserNSFWFlagsDisplayed', value => throwIfNotValid(value, isNSFWFlagsValid, 'NSFW flags'))
   @Column
-  nsfwFlagsDisplayed: number
+  declare nsfwFlagsDisplayed: number
 
   @AllowNull(false)
   @Default(0)
   @Is('UserNSFWFlagsHidden', value => throwIfNotValid(value, isNSFWFlagsValid, 'NSFW flags'))
   @Column
-  nsfwFlagsHidden: number
+  declare nsfwFlagsHidden: number
 
   @AllowNull(false)
   @Default(0)
   @Is('nsfwFlagsBlurred', value => throwIfNotValid(value, isNSFWFlagsValid, 'NSFW flags'))
   @Column
-  nsfwFlagsBlurred: number
+  declare nsfwFlagsBlurred: number
 
   @AllowNull(false)
   @Default(0)
   @Is('UserNSFWFlagsWarned', value => throwIfNotValid(value, isNSFWFlagsValid, 'NSFW flags'))
   @Column
-  nsfwFlagsWarned: number
+  declare nsfwFlagsWarned: number
 
   @AllowNull(false)
   @Is('p2pEnabled', value => throwIfNotValid(value, isUserP2PEnabledValid, 'P2P enabled'))
   @Column
-  p2pEnabled: boolean
+  declare p2pEnabled: boolean
 
   @AllowNull(false)
   @Default(true)
   @Is('UserVideosHistoryEnabled', value => throwIfNotValid(value, isUserVideosHistoryEnabledValid, 'Videos history enabled'))
   @Column
-  videosHistoryEnabled: boolean
+  declare videosHistoryEnabled: boolean
 
   @AllowNull(false)
   @Default(true)
   @Is('UserAutoPlayVideo', value => throwIfNotValid(value, isUserAutoPlayVideoValid, 'auto play video boolean'))
   @Column
-  autoPlayVideo: boolean
+  declare autoPlayVideo: boolean
 
   @AllowNull(false)
   @Default(false)
   @Is('UserAutoPlayNextVideo', value => throwIfNotValid(value, isUserAutoPlayNextVideoValid, 'auto play next video boolean'))
   @Column
-  autoPlayNextVideo: boolean
+  declare autoPlayNextVideo: boolean
 
   @AllowNull(false)
   @Default(true)
@@ -373,52 +373,56 @@ export class UserModel extends SequelizeModel<UserModel> {
     value => throwIfNotValid(value, isUserAutoPlayNextVideoPlaylistValid, 'auto play next video for playlists boolean')
   )
   @Column
-  autoPlayNextVideoPlaylist: boolean
+  declare autoPlayNextVideoPlaylist: boolean
+
+  @AllowNull(true)
+  @Column(DataType.STRING)
+  declare language: string
 
   @AllowNull(true)
   @Default(null)
   @Is('UserVideoLanguages', value => throwIfNotValid(value, isUserVideoLanguages, 'video languages'))
   @Column(DataType.ARRAY(DataType.STRING))
-  videoLanguages: string[]
+  declare videoLanguages: string[]
 
   @AllowNull(false)
   @Default(UserAdminFlag.NONE)
   @Is('UserAdminFlags', value => throwIfNotValid(value, isUserAdminFlagsValid, 'user admin flags'))
   @Column
-  adminFlags?: UserAdminFlagType
+  declare adminFlags: UserAdminFlagType
 
   @AllowNull(false)
   @Default(false)
   @Is('UserBlocked', value => throwIfNotValid(value, isUserBlockedValid, 'blocked boolean'))
   @Column
-  blocked: boolean
+  declare blocked: boolean
 
   @AllowNull(true)
   @Default(null)
   @Is('UserBlockedReason', value => throwIfNotValid(value, isUserBlockedReasonValid, 'blocked reason', true))
   @Column
-  blockedReason: string
+  declare blockedReason: string
 
   @AllowNull(false)
   @Is('UserRole', value => throwIfNotValid(value, isUserRoleValid, 'role'))
   @Column
-  role: UserRoleType
+  declare role: UserRoleType
 
   @AllowNull(false)
   @Is('UserVideoQuota', value => throwIfNotValid(value, isUserVideoQuotaValid, 'video quota'))
   @Column(DataType.BIGINT)
-  videoQuota: number
+  declare videoQuota: number
 
   @AllowNull(false)
   @Is('UserVideoQuotaDaily', value => throwIfNotValid(value, isUserVideoQuotaDailyValid, 'video quota daily'))
   @Column(DataType.BIGINT)
-  videoQuotaDaily: number
+  declare videoQuotaDaily: number
 
   @AllowNull(false)
   @Default(DEFAULT_USER_THEME_NAME)
   @Is('UserTheme', value => throwIfNotValid(value, isThemeNameValid, 'theme'))
   @Column
-  theme: string
+  declare theme: string
 
   @AllowNull(false)
   @Default(false)
@@ -427,7 +431,7 @@ export class UserModel extends SequelizeModel<UserModel> {
     value => throwIfNotValid(value, isUserNoModal, 'no instance config warning modal')
   )
   @Column
-  noInstanceConfigWarningModal: boolean
+  declare noInstanceConfigWarningModal: boolean
 
   @AllowNull(false)
   @Default(false)
@@ -436,7 +440,7 @@ export class UserModel extends SequelizeModel<UserModel> {
     value => throwIfNotValid(value, isUserNoModal, 'no welcome modal')
   )
   @Column
-  noWelcomeModal: boolean
+  declare noWelcomeModal: boolean
 
   @AllowNull(false)
   @Default(false)
@@ -445,72 +449,72 @@ export class UserModel extends SequelizeModel<UserModel> {
     value => throwIfNotValid(value, isUserNoModal, 'no account setup warning modal')
   )
   @Column
-  noAccountSetupWarningModal: boolean
+  declare noAccountSetupWarningModal: boolean
 
   @AllowNull(true)
   @Default(null)
   @Column
-  pluginAuth: string
+  declare pluginAuth: string
 
   @AllowNull(false)
   @Default(DataType.UUIDV4)
   @IsUUID(4)
   @Column(DataType.UUID)
-  feedToken: string
+  declare feedToken: string
 
   @AllowNull(true)
   @Default(null)
   @Column
-  lastLoginDate: Date
+  declare lastLoginDate: Date
 
   @AllowNull(false)
   @Default(false)
   @Column
-  emailPublic: boolean
+  declare emailPublic: boolean
 
   @AllowNull(true)
   @Default(null)
   @Column
-  otpSecret: string
+  declare otpSecret: string
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @HasOne(() => AccountModel, {
     foreignKey: 'userId',
     onDelete: 'cascade',
     hooks: true
   })
-  Account: Awaited<AccountModel>
+  declare Account: Awaited<AccountModel>
 
   @HasOne(() => UserNotificationSettingModel, {
     foreignKey: 'userId',
     onDelete: 'cascade',
     hooks: true
   })
-  NotificationSetting: Awaited<UserNotificationSettingModel>
+  declare NotificationSetting: Awaited<UserNotificationSettingModel>
 
   @HasMany(() => VideoImportModel, {
     foreignKey: 'userId',
     onDelete: 'cascade'
   })
-  VideoImports: Awaited<VideoImportModel>[]
+  declare VideoImports: Awaited<VideoImportModel>[]
 
   @HasMany(() => OAuthTokenModel, {
     foreignKey: 'userId',
     onDelete: 'cascade'
   })
-  OAuthTokens: Awaited<OAuthTokenModel>[]
+  declare OAuthTokens: Awaited<OAuthTokenModel>[]
 
   @HasMany(() => UserExportModel, {
     foreignKey: 'userId',
     onDelete: 'cascade',
     hooks: true
   })
-  UserExports: Awaited<UserExportModel>[]
+  declare UserExports: Awaited<UserExportModel>[]
 
   // Used if we already set an encrypted password in user model
   skipPasswordEncryption = false
@@ -872,6 +876,16 @@ export class UserModel extends SequelizeModel<UserModel> {
     return UserModel.unscoped().findOne(query)
   }
 
+  static async loadForEmail (id: number) {
+    const user = await UserModel.unscoped().findByPk(id)
+
+    if (!user) return undefined
+
+    return { email: user.email, language: user.getLanguage() }
+  }
+
+  // ---------------------------------------------------------------------------
+
   static generateUserQuotaBaseSQL (options: {
     daily: boolean
     whereUserId: '$userId' | '"UserModel"."id"'
@@ -981,6 +995,10 @@ export class UserModel extends SequelizeModel<UserModel> {
     return comparePassword(password, this.password)
   }
 
+  getLanguage () {
+    return this.language || CONFIG.INSTANCE.DEFAULT_LANGUAGE
+  }
+
   toFormattedJSON (this: MUserFormattable, parameters: { withAdminFlags?: boolean } = {}): User {
     const videoQuotaUsed = this.get('videoQuotaUsed')
     const videoQuotaUsedDaily = this.get('videoQuotaUsedDaily')
@@ -1025,6 +1043,8 @@ export class UserModel extends SequelizeModel<UserModel> {
       autoPlayNextVideo: this.autoPlayNextVideo,
       autoPlayNextVideoPlaylist: this.autoPlayNextVideoPlaylist,
       videoLanguages: this.videoLanguages,
+
+      language: this.getLanguage(),
 
       role: {
         id: this.role,

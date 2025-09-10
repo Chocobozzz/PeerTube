@@ -15,6 +15,10 @@ secrets:
   # Generate one using `openssl rand -hex 32`
   peertube: ''
 
+# How long PeerTube should wait to receive the entire request
+http_timeouts:
+  request: '5 minutes'
+
 rates_limit:
   api:
     # 50 attempts in 10 seconds
@@ -60,7 +64,6 @@ rates_limit:
     # 5 attempts in 5 seconds
     window: 5 seconds
     max: 5
-
 
 oauth2:
   token_lifetime:
@@ -115,45 +118,6 @@ smtp:
   ca_file: null # Used for self signed certificates
   from_address: 'admin@example.com'
 
-email:
-  body:
-    signature: 'PeerTube'
-  subject:
-    prefix: '[PeerTube]'
-
-# Update default PeerTube values
-# Set by API when the field is not provided and put as default value in client
-defaults:
-  # Change default values when publishing a video (upload/import/go Live)
-  publish:
-    download_enabled: true
-
-    # enabled = 1, disabled = 2, requires_approval = 3
-    comments_policy: 1
-
-    # public = 1, unlisted = 2, private = 3, internal = 4
-    privacy: 1
-
-    # CC-BY = 1, CC-SA = 2, CC-ND = 3, CC-NC = 4, CC-NC-SA = 5, CC-NC-ND = 6, Public Domain = 7
-    # You can also choose a custom licence value added by a plugin
-    # No licence by default
-    licence: null
-
-  p2p:
-    # Enable P2P by default in PeerTube client
-    # Can be enabled/disabled by anonymous users and logged in users
-    webapp:
-      enabled: true
-
-    # Enable P2P by default in PeerTube embed
-    # Can be enabled/disabled by URL option
-    embed:
-      enabled: true
-
-  player:
-    # By default, playback starts automatically when opening a video
-    auto_play: true
-
 # From the project root directory
 storage:
   tmp: 'storage/tmp/' # Use to download data (imports etc), store uploaded files before and during processing...
@@ -173,14 +137,15 @@ storage:
   cache: 'storage/cache/'
   plugins: 'storage/plugins/'
   well_known: 'storage/well-known/'
+  # Various admin/user uploads that are not suitable for the folders above
+  uploads: 'storage/uploads/'
   # Overridable client files in client/dist/assets/images:
-  # - logo.svg
-  # - favicon.png
-  # - default-playlist.jpg
+  # - default-avatar-account-48x48.png
   # - default-avatar-account.png
+  # - default-avatar-video-channel-48x48.png
   # - default-avatar-video-channel.png
-  # - and icons/*.png (PWA)
-  # Could contain for example assets/images/favicon.png
+  # - default-playlist.jpg
+  # Could contain for example "assets/images/default-playlist.jpg"
   # If the file exists, peertube will serve it
   # If not, peertube will fallback to the default file
   client_overrides: 'storage/client-overrides/'
@@ -377,6 +342,9 @@ security:
   powered_by_header:
     enabled: true
 
+http_server:
+  request_timeout: '5 minutes'
+
 tracker:
   # If you disable the tracker, you disable the P2P on your PeerTube instance
   enabled: true
@@ -493,6 +461,8 @@ remote_runners:
   stalled_jobs:
     live: '30 seconds'
     vod: '2 minutes'
+    studio: '2 minutes'
+    transcription: '2 minutes'
 
 thumbnails:
   # When automatically generating a thumbnail from the video
@@ -588,7 +558,7 @@ user:
     mininum_password_length: 8
   history:
     videos:
-      # Enable or disable video history by default for new users.
+      # Enable or disable video history by default for new users
       enabled: true
 
   # Default value of maximum video bytes the user can upload
@@ -657,7 +627,6 @@ transcoding:
 
   # Generate videos in a web compatible format
   # If you also enabled the hls format, it will multiply videos storage by 2
-  # If disabled, breaks federation with PeerTube instances < 2.1
   web_videos:
     enabled: false
 
@@ -883,6 +852,7 @@ import:
     # Max number of videos to import when the user asks for full sync
     full_sync_videos_limit: 1000
 
+  # Add ability for your users to import a PeerTube archive file to automatically create videos, channels, captions, etc
   users:
     # Video quota is checked on import so the user doesn't upload a too big archive file
     # Video quota (daily quota is not taken into account) is also checked for each video when PeerTube is processing the import
@@ -933,6 +903,10 @@ instance:
   # If you want to explain on what type of hardware your PeerTube instance runs
   # Example: '2 vCore, 2GB RAM...'
   hardware_information: '' # Supports Markdown
+
+  # Default language of your instance, used in emails for example
+  # The web interface still uses the web browser preferred language
+  default_language: 'en'
 
   # Describe the languages spoken on your instance, to interact with your users for example
   # Uncomment or add the languages you want
@@ -993,6 +967,8 @@ instance:
     mastodon_link: ''
     # Bluesky
     bluesky_link: ''
+    # X
+    x_link: ''
 
   customizations:
     javascript: '' # Directly your JavaScript code (without <script> tags). Will be eval at runtime
@@ -1019,10 +995,15 @@ services:
 
 followers:
   instance:
-    # Allow or not other instances to follow yours
+    # Allow remote actors to follow your instance
+    # This setting is not retroactive: current followers of your instance will not be affected
     enabled: true
     # Whether or not an administrator must manually validate a new follower
     manual_approval: false
+  channels:
+    # Allow remote actors to follow channels/accounts of your instance
+    # This setting is not retroactive: current followers of local channels/accounts will not be affected
+    enabled: true
 
 followings:
   instance:
@@ -1042,6 +1023,25 @@ followings:
 
 theme:
   default: 'default'
+
+  # Easily redefine the client UI when the user is using your default instance theme
+  # Use null to keep the default values
+  # If you need more advanced customizations, install or develop a dedicated theme: https://docs.joinpeertube.org/contribute/plugins
+  customization:
+    primary_color: null # Hex color. Example: '#FF8F37'
+
+    foreground_color: null # Hex color
+    background_color: null # Hex color
+    background_secondary_color: null # Hex color
+
+    menu_foreground_color: null # Hex color
+    menu_background_color: null # Hex color
+    menu_border_radius: null # Pixels. Example: '5px'
+
+    header_background_color: null # Hex color
+    header_foreground_color: null # Hex color
+
+    input_border_radius: null # Pixels
 
 broadcast_message:
   enabled: false
@@ -1077,6 +1077,12 @@ search:
 
 # PeerTube client/interface configuration
 client:
+
+  header:
+    # Hide the instance name in the header on desktop
+    # Useful if your logo already contains the instance name
+    hide_instance_name: false
+
   videos:
     miniature:
       # By default PeerTube client displays author username
@@ -1086,6 +1092,22 @@ client:
       # Max size of upload chunks, e.g. '90MB'
       # If null, it will be calculated based on network speed
       max_chunk_size: null
+
+  browse_videos:
+    # Default sort option
+    # Available options:
+    #  '-publishedAt'
+    #  '-originallyPublishedAt'
+    #  'name'
+    #  '-trending' (requires the 'most-viewed' trending videos algorithm to be enabled)
+    #  '-hot' (requires the 'hot' trending videos algorithm to be enabled)
+    #  '-likes' (requires the 'most-liked' trending videos algorithm to be enabled)
+    #  '-views'
+    default_sort: '-publishedAt'
+
+    # Default scope option
+    # Available options: 'local' or 'federated'
+    default_scope: 'federated'
 
   menu:
     login:
@@ -1119,3 +1141,53 @@ client:
 storyboards:
   # Generate storyboards of local videos using ffmpeg so users can see the video preview in the player while scrubbing the video
   enabled: true
+
+  remote_runners:
+    # Use remote runners to generate storyboards instead of processing them locally
+    enabled: false
+
+# Update default PeerTube values
+# Set by API when the field is not provided and put as default value in client
+defaults:
+  # Change default values when publishing a video (upload/import/go Live)
+  publish:
+    download_enabled: true
+
+    # enabled = 1, disabled = 2, requires_approval = 3
+    comments_policy: 1
+
+    # public = 1, unlisted = 2, private = 3, internal = 4
+    privacy: 1
+
+    # CC-BY = 1, CC-SA = 2, CC-ND = 3, CC-NC = 4, CC-NC-SA = 5, CC-NC-ND = 6, Public Domain = 7
+    # You can also choose a custom licence value added by a plugin
+    # No licence by default
+    licence: null
+
+  p2p:
+    # Enable P2P by default in PeerTube client
+    # Can be enabled/disabled by anonymous users and logged in users
+    webapp:
+      enabled: true
+
+    # Enable P2P by default in PeerTube embed
+    # Can be enabled/disabled by URL option
+    embed:
+      enabled: true
+
+  player:
+    # By default, playback starts automatically when opening a video
+    auto_play: true
+
+email:
+  body:
+    # Support {{instanceName}} template variable
+    signature: ''
+  subject:
+    # Support {{instanceName}} template variable
+    prefix: '[{{instanceName}}] '
+
+video_comments:
+  # Accept or not comments from remote instances
+  # This setting is not retroactive: current comments from remote platforms will not be deleted
+  accept_remote_comments: true

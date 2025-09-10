@@ -1,102 +1,70 @@
-<p-table
-  [value]="blocklist" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
-  [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id"
-  [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
-  [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()"
-  [expandedRowKeys]="expandedRows"
+<my-table
+  #table
+  key="VideoBlockListComponent"
+  [defaultColumns]="columns"
+  i18n-paginatorText
+  paginatorText="videos per page"
+  [dataLoader]="dataLoader"
+  columnConfig="false"
 >
-  <ng-template pTemplate="caption">
-    <div class="caption">
-      <div class="ms-auto">
-        <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
+  <ng-template #totalTitle let-totalRecords>
+    <ng-container i18n>{ totalRecords, plural, =0 {No video} =1 {1 video} other {{{ totalRecords | myNumberFormatter }} videos}}</ng-container>
+  </ng-template>
+
+  <ng-template #captionRight>
+    <my-advanced-input-filter [filters]="inputFilters" (search)="table.onSearch($event)"></my-advanced-input-filter>
+  </ng-template>
+
+  <ng-template #tableCells let-videoBlock>
+    <td>
+      <my-video-cell [video]="videoBlock.video" size="small">
+        <div>
+          @if (videoBlock.type === 2) {
+            <span i18n-title title="The video was blocked due to automatic blocking of new videos" class="pt-badge badge-info badge-small" i18n>Auto block</span>
+          }
+        </div>
+      </my-video-cell>
+    </td>
+
+    <td>
+      <my-video-nsfw-badge [video]="videoBlock.video" theme="red"></my-video-nsfw-badge>
+    </td>
+
+    <td>
+      <span *ngIf="videoBlock.unfederated" class="pt-badge badge-blue" i18n>Unfederated</span>
+    </td>
+
+    <td>
+      {{ videoBlock.createdAt | ptDate: 'short' }}
+    </td>
+  </ng-template>
+
+  <ng-template #actionCell let-videoBlock>
+    <my-action-dropdown
+      placement="bottom-right auto" container="body"
+      i18n-label label="Actions" [actions]="videoBlocklistActions" [entry]="videoBlock"
+    ></my-action-dropdown>
+  </ng-template>
+
+  <ng-template #expandedRow let-videoBlock>
+    <div *ngIf="videoBlock" class="d-flex moderation-expanded">
+      <div class="left">
+        <span class="moderation-expanded-label" i18n>Block reason:</span>
+        <span class="moderation-expanded-text" [innerHTML]="videoBlock.reasonHtml"></span>
+      </div>
+
+      <div class="right">
+        <my-embed [video]="videoBlock.video"></my-embed>
       </div>
     </div>
   </ng-template>
 
-  <ng-template pTemplate="header">
-    <tr>
-      <th scope="col" style="width: 40px;">
-        <span i18n class="visually-hidden">More information</span>
-      </th>
-      <th scope="col" style="width: 150px;">
-        <span i18n class="visually-hidden">Actions</span>
-      </th>
-      <th scope="col" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="name">Video <p-sortIcon field="name"></p-sortIcon></th>
-      <th scope="col" style="width: 100px;" i18n>Sensitive</th>
-      <th scope="col" style="width: 120px;" i18n>Unfederated</th>
-      <th scope="col" style="width: 150px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Date <p-sortIcon field="createdAt"></p-sortIcon></th>
-    </tr>
+  <ng-template #noResults let-search>
+    @if (search) {
+      <ng-container i18n>No blocked video found matching current filters.</ng-container>
+    } @else {
+      <ng-container i18n>No blocked video found.</ng-container>
+    }
   </ng-template>
-
-  <ng-template pTemplate="body" let-videoBlock let-expanded="expanded">
-    <tr>
-      <td *ngIf="!videoBlock.reason">
-        <span i18n class="visually-hidden">No more information is available for this row</span>
-      </td>
-
-      <td class="expand-cell" *ngIf="videoBlock.reason" >
-        <my-table-expander-icon [pRowToggler]="videoBlock" [expanded]="expanded"></my-table-expander-icon>
-      </td>
-
-      <td class="action-cell">
-        <my-action-dropdown
-          [ngClass]="{ 'show': expanded }" placement="bottom-right auto" container="body"
-          i18n-label label="Actions" [actions]="videoBlocklistActions" [entry]="videoBlock" buttonSize="small"
-        ></my-action-dropdown>
-      </td>
-
-      <td>
-        <my-video-cell [video]="videoBlock.video" size="small">
-          <div>
-            @if (videoBlock.type === 2) {
-              <span i18n-title title="The video was blocked due to automatic blocking of new videos" class="pt-badge badge-info badge-small" i18n>Auto block</span>
-            }
-          </div>
-        </my-video-cell>
-      </td>
-
-      <td>
-        <my-video-nsfw-badge [video]="videoBlock.video" theme="red"></my-video-nsfw-badge>
-      </td>
-
-      <td>
-        <span *ngIf="videoBlock.unfederated" class="pt-badge badge-blue" i18n>Unfederated</span>
-      </td>
-
-      <td>
-        {{ videoBlock.createdAt | ptDate: 'short' }}
-      </td>
-    </tr>
-  </ng-template>
-
-  <ng-template pTemplate="rowexpansion" let-videoBlock>
-    <tr>
-      <td class="expand-cell" myAutoColspan>
-        <div class="d-flex moderation-expanded">
-
-          <div class="left">
-            <span class="moderation-expanded-label" i18n>Block reason:</span>
-            <span class="moderation-expanded-text" [innerHTML]="videoBlock.reasonHtml"></span>
-          </div>
-
-          <div class="right">
-            <my-embed [video]="videoBlock.video"></my-embed>
-          </div>
-
-        </div>
-      </td>
-    </tr>
-  </ng-template>
-
-  <ng-template pTemplate="emptymessage">
-    <tr>
-      <td myAutoColspan>
-        <div class="no-results">
-          <ng-container *ngIf="search" i18n>No blocked video found matching current filters.</ng-container>
-          <ng-container *ngIf="!search" i18n>No blocked video found.</ng-container>
-        </div>
-      </td>
-    </tr>
-  </ng-template>
-</p-table>
+</my-table>
 

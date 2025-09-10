@@ -1,9 +1,9 @@
-import { of } from 'rxjs'
-import { catchError } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
 import { RestExtractor } from '@app/core'
 import { CustomPage } from '@peertube/peertube-models'
+import { Observable, of } from 'rxjs'
+import { catchError } from 'rxjs/operators'
 import { environment } from '../../../../environments/environment'
 
 @Injectable()
@@ -13,7 +13,7 @@ export class CustomPageService {
 
   static BASE_INSTANCE_HOMEPAGE_URL = environment.apiUrl + '/api/v1/custom-pages/homepage/instance'
 
-  getInstanceHomepage () {
+  getInstanceHomepage (): Observable<CustomPage> {
     return this.authHttp.get<CustomPage>(CustomPageService.BASE_INSTANCE_HOMEPAGE_URL)
       .pipe(
         catchError(err => {

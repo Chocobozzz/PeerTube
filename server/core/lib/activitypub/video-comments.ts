@@ -20,6 +20,7 @@ import { fetchAP } from './activity.js'
 import { getOrCreateAPActor } from './actors/index.js'
 import { checkUrlsSameHost } from './url.js'
 import { canVideoBeFederated, getOrCreateAPVideo } from './videos/index.js'
+import { CONFIG } from '@server/initializers/config.js'
 
 type ResolveThreadParams = {
   url: string
@@ -30,6 +31,8 @@ type ResolveThreadParams = {
 type ResolveThreadResult = Promise<{ video: MVideoAccountLightBlacklistAllFiles, comment: MCommentOwnerVideo, commentCreated: boolean }>
 
 export async function addVideoComments (commentUrls: string[]) {
+  if (CONFIG.VIDEO_COMMENTS.ACCEPT_REMOTE_COMMENTS !== true) return
+
   return Bluebird.map(commentUrls, async commentUrl => {
     try {
       await resolveThread({ url: commentUrl, isVideo: false })

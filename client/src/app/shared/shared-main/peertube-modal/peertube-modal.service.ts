@@ -4,4 +4,5 @@ import { Subject } from 'rxjs'
 @Injectable({ providedIn: 'root' })
 export class PeertubeModalService {
   openQuickSettingsSubject = new Subject<void>()
+  openAdminConfigWizardSubject = new Subject<{ showWelcome: boolean }>()
 }

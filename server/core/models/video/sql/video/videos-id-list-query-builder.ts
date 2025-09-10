@@ -37,6 +37,7 @@ export type BuildVideosListQueryOptions = {
   isLive?: boolean
   isLocal?: boolean
   include?: VideoIncludeType
+  includeScheduledLive?: boolean
 
   categoryOneOf?: number[]
   licenceOneOf?: number[]
@@ -158,7 +159,9 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     // Only list published videos
     if (!(options.include & VideoInclude.NOT_PUBLISHED_STATE)) {
-      this.whereStateAvailable()
+      if (options.includeScheduledLive) this.joinLiveSchedules()
+
+      this.whereStateAvailable({ includeScheduledLive: options.includeScheduledLive ?? false })
     }
 
     if (options.videoPlaylistId) {
@@ -349,11 +352,26 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     this.replacements.videoPlaylistId = playlistId
   }
 
-  private whereStateAvailable () {
-    this.and.push(
-      `("video"."state" = ${VideoState.PUBLISHED} OR ` +
-        `("video"."state" = ${VideoState.TO_TRANSCODE} AND "video"."waitTranscoding" IS false))`
+  private joinLiveSchedules () {
+    this.joins.push(
+      'LEFT JOIN "videoLive" ON "video"."id" = "videoLive"."videoId"',
+      'LEFT JOIN "videoLiveSchedule" ON "videoLiveSchedule"."liveVideoId" = "videoLive"."id"'
     )
+  }
+
+  private whereStateAvailable (options: {
+    includeScheduledLive: boolean
+  }) {
+    const or: string[] = []
+
+    or.push(`"video"."state" = ${VideoState.PUBLISHED}`)
+    or.push(`("video"."state" = ${VideoState.TO_TRANSCODE} AND "video"."waitTranscoding" IS false)`)
+
+    if (options.includeScheduledLive) {
+      or.push(`("video"."state" = ${VideoState.WAITING_FOR_LIVE} AND "videoLiveSchedule"."startAt" > NOW())`)
+    }
+
+    this.and.push(`(${or.join(' OR ')})`)
   }
 
   private wherePrivacyAvailable (user?: MUserAccountId) {

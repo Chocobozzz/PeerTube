@@ -35,7 +35,7 @@ export interface ActivityPubActor {
 
   published?: string
 
-  // For export
+  // Used by the user export feature
   likes?: string
   dislikes?: string
 }

@@ -1,3 +1,4 @@
+import { arrayify } from '@peertube/peertube-core-utils'
 import {
   AbuseObject,
   ActivityCreate,
@@ -9,6 +10,7 @@ import {
   VideoObject,
   WatchActionObject
 } from '@peertube/peertube-models'
+import { CONFIG } from '@server/initializers/config.js'
 import { isBlockedByServerOrAccount } from '@server/lib/blocklist.js'
 import { isRedundancyAccepted } from '@server/lib/redundancy.js'
 import { VideoCommentModel } from '@server/models/video/video-comment.js'
@@ -27,7 +29,6 @@ import { sendReplyApproval } from '../send/send-reply-approval.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
 import { resolveThread } from '../video-comments.js'
 import { canVideoBeFederated, getOrCreateAPVideo } from '../videos/index.js'
-import { arrayify } from '@peertube/peertube-core-utils'
 
 async function processCreateActivity (options: APProcessorOptions<ActivityCreate<ActivityCreateObject>>) {
   const { activity, byActor } = options
@@ -123,10 +124,11 @@ async function processCreateVideoComment (
   byActor: MActorSignature,
   fromFetch: false
 ) {
+  if (CONFIG.VIDEO_COMMENTS.ACCEPT_REMOTE_COMMENTS !== true) return
+
   if (fromFetch) throw new Error('Processing create video comment from fetch is not supported')
 
   const byAccount = byActor.Account
-
   if (!byAccount) throw new Error('Cannot create video comment with the non account actor ' + byActor.url)
 
   let video: MVideoAccountLightBlacklistAllFiles

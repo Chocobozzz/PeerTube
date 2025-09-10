@@ -13,7 +13,7 @@ import { SignupLabelComponent } from '../../shared/shared-main/users/signup-labe
 import { SignupStepTitleComponent } from '../shared/signup-step-title.component'
 import { SignupSuccessBeforeEmailComponent } from '../shared/signup-success-before-email.component'
 import { SignupService } from '../shared/signup.service'
-import { CustomStepperComponent } from './custom-stepper.component'
+import { RegisterStepperComponent } from './register-stepper.component'
 import { RegisterStepAboutComponent } from './steps/register-step-about.component'
 import { RegisterStepChannelComponent } from './steps/register-step-channel.component'
 import { RegisterStepTermsComponent } from './steps/register-step-terms.component'
@@ -26,7 +26,7 @@ import { RegisterStepUserComponent } from './steps/register-step-user.component'
   imports: [
     NgIf,
     SignupLabelComponent,
-    CustomStepperComponent,
+    RegisterStepperComponent,
     CdkStep,
     SignupStepTitleComponent,
     RegisterStepAboutComponent,

@@ -1,7 +1,7 @@
 import { logger } from '@server/helpers/logger.js'
 import { getAbuseIdentifier } from '@server/lib/activitypub/url.js'
 import { UserModel } from '@server/models/user/user.js'
-import { MUserDefault } from '@server/types/models/index.js'
+import { MUserDefault, MUserWithNotificationSetting } from '@server/types/models/index.js'
 import { AbstractNewAbuseMessage } from './abstract-new-abuse-message.js'
 
 export class NewAbuseMessageForReporter extends AbstractNewAbuseMessage {
@@ -30,7 +30,9 @@ export class NewAbuseMessageForReporter extends AbstractNewAbuseMessage {
     return [ this.reporter ]
   }
 
-  createEmail (to: string) {
+  createEmail (user: MUserWithNotificationSetting) {
+    const to = { email: user.email, language: user.getLanguage() }
+
     return this.createEmailFor(to, 'reporter')
   }
 }

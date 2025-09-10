@@ -1,8 +1,8 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_form-mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
 
-input:not([type=submit]) {
+input:not([type="submit"]) {
   max-width: 340px;
   width: 100%;
 
@@ -19,10 +19,6 @@ textarea {
 
 .peertube-select-container {
   @include peertube-select-container(340px);
-}
-
-my-peertube-checkbox + .label-small-info {
-  margin-top: 5px;
 }
 
 my-markdown-textarea {

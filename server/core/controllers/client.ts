@@ -1,13 +1,14 @@
-import express from 'express'
-import { constants, promises as fs } from 'fs'
-import { readFile } from 'fs/promises'
-import { join } from 'path'
 import { buildFileLocale, getCompleteLocale, is18nLocale, LOCALE_FILES } from '@peertube/peertube-core-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
+import { currentDir, root } from '@peertube/peertube-node-utils'
+import { toCompleteUUID } from '@server/helpers/custom-validators/misc.js'
 import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
-import { currentDir, root } from '@peertube/peertube-node-utils'
+import { getServerActor } from '@server/models/application/application.js'
+import express from 'express'
+import { constants, promises as fs } from 'fs'
+import { join } from 'path'
 import { STATIC_MAX_AGE } from '../initializers/constants.js'
 import { ClientHtml, sendHTML, serveIndexHTML } from '../lib/html/client-html.js'
 import { asyncMiddleware, buildRateLimiter, embedCSP } from '../middlewares/index.js'
@@ -20,7 +21,6 @@ const clientsRateLimiter = buildRateLimiter({
 })
 
 const distPath = join(root(), 'client', 'dist')
-const testEmbedPath = join(distPath, 'standalone', 'videos', 'test-embed.html')
 
 // Special route that add OpenGraph and oEmbed tags
 // Do not use a template engine for a so little thing
@@ -59,6 +59,7 @@ clientsRouter.use('/video-playlists/embed/:id', ...embedMiddlewares, asyncMiddle
 
 // ---------------------------------------------------------------------------
 
+const testEmbedPath = join(distPath, 'standalone', 'videos', 'test-embed.html')
 const testEmbedController = (req: express.Request, res: express.Response) => res.sendFile(testEmbedPath)
 
 clientsRouter.use('/videos/test-embed', clientsRateLimiter, testEmbedController)
@@ -72,15 +73,6 @@ clientsRouter.get('/manifest.webmanifest', clientsRateLimiter, asyncMiddleware(g
 // Static client overrides
 // Must be consistent with static client overrides redirections in /support/nginx/peertube
 const staticClientOverrides = [
-  'assets/images/logo.svg',
-  'assets/images/favicon.png',
-  'assets/images/icons/icon-36x36.png',
-  'assets/images/icons/icon-48x48.png',
-  'assets/images/icons/icon-72x72.png',
-  'assets/images/icons/icon-96x96.png',
-  'assets/images/icons/icon-144x144.png',
-  'assets/images/icons/icon-192x192.png',
-  'assets/images/icons/icon-512x512.png',
   'assets/images/default-playlist.jpg',
   'assets/images/default-avatar-account.png',
   'assets/images/default-avatar-account-48x48.png',
@@ -129,6 +121,8 @@ function serveServerTranslations (req: express.Request, res: express.Response) {
 }
 
 async function generateVideoEmbedHtmlPage (req: express.Request, res: express.Response) {
+  req.params.id = toCompleteUUID(req.params.id)
+
   const allowParameters = { req }
 
   const allowedResult = await Hooks.wrapFun(
@@ -149,6 +143,8 @@ async function generateVideoEmbedHtmlPage (req: express.Request, res: express.Re
 }
 
 async function generateVideoPlaylistEmbedHtmlPage (req: express.Request, res: express.Response) {
+  req.params.id = toCompleteUUID(req.params.id)
+
   const allowParameters = { req }
 
   const allowedResult = await Hooks.wrapFun(
@@ -176,12 +172,16 @@ async function generateWatchHtmlPage (req: express.Request, res: express.Respons
   const threadIdIndex = videoId.indexOf(';threadId')
   if (threadIdIndex !== -1) videoId = videoId.substring(0, threadIdIndex)
 
+  videoId = toCompleteUUID(videoId)
+
   const html = await ClientHtml.getWatchHTMLPage(videoId, req, res)
 
   return sendHTML(html, res, true)
 }
 
 async function generateWatchPlaylistHtmlPage (req: express.Request, res: express.Response) {
+  req.params.id = toCompleteUUID(req.params.id)
+
   const html = await ClientHtml.getWatchPlaylistHTMLPage(req.params.id + '', req, res)
 
   return sendHTML(html, res, true)
@@ -206,15 +206,34 @@ async function generateActorHtmlPage (req: express.Request, res: express.Respons
 }
 
 async function generateManifest (req: express.Request, res: express.Response) {
-  const manifestPhysicalPath = join(root(), 'client', 'dist', 'manifest.webmanifest')
-  const manifestJson = await readFile(manifestPhysicalPath, 'utf8')
-  const manifest = JSON.parse(manifestJson)
+  const serverActor = await getServerActor()
 
-  manifest.name = CONFIG.INSTANCE.NAME
-  manifest.short_name = CONFIG.INSTANCE.NAME
-  manifest.description = CONFIG.INSTANCE.SHORT_DESCRIPTION
+  const defaultIcons = [ 192, 512 ].map(size => {
+    return {
+      src: `/client/assets/images/icons/icon-${size}x${size}.png`,
+      sizes: `${size}x${size}`,
+      type: 'image/png'
+    }
+  })
 
-  res.json(manifest)
+  const icons = Array.isArray(serverActor.Avatars) && serverActor.Avatars.length > 0
+    ? serverActor.Avatars.map(avatar => ({
+      src: avatar.getStaticPath(),
+      sizes: `${avatar.width}x${avatar.height}`,
+      type: avatar.getMimeType()
+    }))
+    : defaultIcons
+
+  return res.json({
+    name: CONFIG.INSTANCE.NAME,
+    short_name: CONFIG.INSTANCE.NAME,
+    start_url: '/',
+    background_color: '#fff',
+    theme_color: '#fff',
+    description: CONFIG.INSTANCE.SHORT_DESCRIPTION,
+    display: 'standalone',
+    icons
+  })
 }
 
 function serveClientOverride (path: string) {

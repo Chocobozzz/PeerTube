@@ -1,16 +1,16 @@
 import { Injectable, inject } from '@angular/core'
 import { AsyncValidatorFn, FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn } from '@angular/forms'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
-import { BuildFormArgument, BuildFormDefaultValues } from '../form-validators/form-validator.model'
-import { FormReactiveErrors, FormReactiveValidationMessages } from './form-reactive.service'
+import { BuildFormArgument, FormDefault } from '../form-validators/form-validator.model'
+import { FormReactiveErrors, FormReactiveMessages } from './form-reactive.service'
 
 @Injectable()
 export class FormValidatorService {
   private formBuilder = inject(FormBuilder)
 
-  internalBuildForm<T = any> (obj: BuildFormArgument, defaultValues: BuildFormDefaultValues = {}) {
+  internalBuildForm<T = any> (obj: BuildFormArgument, defaultValues: FormDefault = {}) {
     const formErrors: FormReactiveErrors = {}
-    const validationMessages: FormReactiveValidationMessages = {}
+    const validationMessages: FormReactiveMessages = {}
     const group: { [key: string]: any } = {}
 
     for (const name of Object.keys(obj)) {
@@ -18,7 +18,7 @@ export class FormValidatorService {
 
       const field = obj[name]
       if (this.isRecursiveField(field)) {
-        const result = this.internalBuildForm(field as BuildFormArgument, defaultValues[name] as BuildFormDefaultValues)
+        const result = this.internalBuildForm(field as BuildFormArgument, defaultValues[name] as FormDefault)
         group[name] = result.form
         formErrors[name] = result.formErrors
         validationMessages[name] = result.validationMessages
@@ -28,7 +28,9 @@ export class FormValidatorService {
 
       if (field?.MESSAGES) validationMessages[name] = field.MESSAGES as { [name: string]: string }
 
-      const defaultValue = defaultValues[name] ?? ''
+      const defaultValue = defaultValues[name] !== undefined
+        ? defaultValues[name]
+        : ''
 
       if (field?.VALIDATORS) group[name] = [ defaultValue, field.VALIDATORS ]
       else group[name] = [ defaultValue ]
@@ -41,9 +43,9 @@ export class FormValidatorService {
   updateFormGroup (
     form: FormGroup,
     formErrors: FormReactiveErrors,
-    validationMessages: FormReactiveValidationMessages,
+    validationMessages: FormReactiveMessages,
     formToBuild: BuildFormArgument,
-    defaultValues: BuildFormDefaultValues = {}
+    defaultValues: FormDefault = {}
   ) {
     for (const name of objectKeysTyped(formToBuild)) {
       const field = formToBuild[name]
@@ -55,9 +57,9 @@ export class FormValidatorService {
           // FIXME: typings
           (form as any)[name],
           formErrors[name],
-          validationMessages[name] as FormReactiveValidationMessages,
+          validationMessages[name] as FormReactiveMessages,
           formToBuild[name] as BuildFormArgument,
-          defaultValues[name] as BuildFormDefaultValues
+          defaultValues[name] as FormDefault
         )
         continue
       }
@@ -77,11 +79,11 @@ export class FormValidatorService {
 
   addControlInFormArray (options: {
     formErrors: FormReactiveErrors
-    validationMessages: FormReactiveValidationMessages
+    validationMessages: FormReactiveMessages
     formArray: FormArray
     controlName: string
     formToBuild: BuildFormArgument
-    defaultValues?: BuildFormDefaultValues
+    defaultValues?: FormDefault
   }) {
     const { formArray, formErrors, validationMessages, controlName, formToBuild, defaultValues = {} } = options
 
@@ -90,7 +92,7 @@ export class FormValidatorService {
     if (!validationMessages[controlName]) validationMessages[controlName] = []
 
     const formArrayErrors = formErrors[controlName] as FormReactiveErrors[]
-    const formArrayValidationMessages = validationMessages[controlName] as FormReactiveValidationMessages[]
+    const formArrayValidationMessages = validationMessages[controlName] as FormReactiveMessages[]
 
     const totalControls = formArray.controls.length
     formArrayErrors.push({})
@@ -109,7 +111,7 @@ export class FormValidatorService {
 
   removeControlFromFormArray (options: {
     formErrors: FormReactiveErrors
-    validationMessages: FormReactiveValidationMessages
+    validationMessages: FormReactiveMessages
     index: number
     formArray: FormArray
     controlName: string
@@ -117,7 +119,7 @@ export class FormValidatorService {
     const { formArray, formErrors, validationMessages, index, controlName } = options
 
     const formArrayErrors = formErrors[controlName] as FormReactiveErrors[]
-    const formArrayValidationMessages = validationMessages[controlName] as FormReactiveValidationMessages[]
+    const formArrayValidationMessages = validationMessages[controlName] as FormReactiveMessages[]
 
     formArrayErrors.splice(index, 1)
     formArrayValidationMessages.splice(index, 1)

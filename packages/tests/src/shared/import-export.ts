@@ -262,7 +262,7 @@ export async function prepareImportExportTests (options: {
   })
 
   // My settings
-  await server.users.updateMe({ token: noahToken, description: 'super noah description', p2pEnabled: false })
+  await server.users.updateMe({ token: noahToken, description: 'super noah description', p2pEnabled: false, language: 'fr' })
 
   // My notification settings
   await server.notifications.updateMySettings({
@@ -337,7 +337,10 @@ export async function prepareImportExportTests (options: {
       videoPasswords: [ 'password1' ],
       channelId: noahSecondChannelId,
       name: 'noah live video',
-      privacy: VideoPrivacy.PASSWORD_PROTECTED
+      privacy: VideoPrivacy.PASSWORD_PROTECTED,
+      schedules: [
+        { startAt: new Date(Date.now() + 1000 * 60 * 60).toISOString() }
+      ]
     },
     token: noahToken
   })

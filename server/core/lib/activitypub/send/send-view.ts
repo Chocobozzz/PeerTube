@@ -3,7 +3,7 @@ import { VideoViewsManager } from '@server/lib/views/video-views-manager.js'
 import { MActorAudience, MActorLight, MVideoImmutable, MVideoUrl } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 import { logger } from '../../../helpers/logger.js'
-import { audiencify, getAudience } from '../audience.js'
+import { audiencify, getPublicAudience } from '../audience.js'
 import { getLocalVideoViewActivityPubUrl } from '../url.js'
 import { sendVideoRelatedActivity } from './shared/send-utils.js'
 
@@ -42,7 +42,7 @@ function buildViewActivity (options: {
   viewersCount?: number
   audience?: ActivityAudience
 }): ActivityView {
-  const { url, byActor, viewersCount, video, audience = getAudience(byActor) } = options
+  const { url, byActor, viewersCount, video, audience = getPublicAudience(byActor) } = options
 
   const base = {
     id: url,

@@ -1,29 +1,31 @@
-async function browserSleep (amount: number) {
+export async function browserSleep (amount: number) {
   await browser.pause(amount)
 }
 
-function isMobileDevice () {
+// ---------------------------------------------------------------------------
+
+export function isMobileDevice () {
   const platformName = (browser.capabilities['platformName'] || '').toLowerCase()
 
   return platformName === 'android' || platformName === 'ios'
 }
 
-function isAndroid () {
+export function isAndroid () {
   const platformName = (browser.capabilities['platformName'] || '').toLowerCase()
 
   return platformName === 'android'
 }
 
-function isSafari () {
+export function isSafari () {
   return browser.capabilities['browserName'] &&
-         browser.capabilities['browserName'].toLowerCase() === 'safari'
+    browser.capabilities['browserName'].toLowerCase() === 'safari'
 }
 
-function isIOS () {
+export function isIOS () {
   return isMobileDevice() && isSafari()
 }
 
-async function go (url: string) {
+export async function go (url: string) {
   await browser.url(url)
 
   await browser.execute(() => {
@@ -33,21 +35,24 @@ async function go (url: string) {
   })
 }
 
-async function waitServerUp () {
+// ---------------------------------------------------------------------------
+
+export async function prepareWebBrowser () {
+  if (isMobileDevice()) return
+
+  // Window size on chromium doesn't seem to work in "new" headless mode
+  if (process.env.MOZ_HEADLESS_WIDTH) {
+    await browser.setWindowSize(+process.env.MOZ_HEADLESS_WIDTH, +process.env.MOZ_HEADLESS_HEIGHT)
+  }
+
+  await browser.maximizeWindow()
+}
+
+export async function waitServerUp () {
   await browser.waitUntil(async () => {
     await go('/')
     await browserSleep(500)
 
     return $('<my-app>').isDisplayed()
   }, { timeout: 20 * 1000 })
-}
-
-export {
-  isMobileDevice,
-  isSafari,
-  isIOS,
-  isAndroid,
-  waitServerUp,
-  go,
-  browserSleep
 }

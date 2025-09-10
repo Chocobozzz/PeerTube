@@ -51,15 +51,14 @@ export class AccountVideosComponent implements OnInit, OnDestroy, DisableForReus
   }
 
   getVideosObservable (pagination: ComponentPaginationLight, filters: VideoFilters) {
-    const options = {
+    return this.videoService.listAccountVideos({
       ...filters.toVideosAPIObject(),
 
       videoPagination: pagination,
       account: this.account,
-      skipCount: true
-    }
-
-    return this.videoService.listAccountVideos(options)
+      skipCount: true,
+      includeScheduledLive: true
+    })
   }
 
   getSyndicationItems () {

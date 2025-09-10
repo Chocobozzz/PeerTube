@@ -2,7 +2,14 @@ import httpSignature from '@peertube/http-signature'
 import { CONFIG } from '@server/initializers/config.js'
 import { createWriteStream } from 'fs'
 import { remove } from 'fs-extra/esm'
-import got, { CancelableRequest, OptionsInit, OptionsOfTextResponseBody, OptionsOfUnknownResponseBody, RequestError, Response } from 'got'
+import got, {
+  CancelableRequest,
+  OptionsInit,
+  OptionsOfTextResponseBody,
+  OptionsOfUnknownResponseBodyWrapped,
+  RequestError,
+  Response
+} from 'got'
 import { gotSsrf } from 'got-ssrf'
 import http from 'http'
 import https from 'https'
@@ -241,7 +248,7 @@ function getUserAgent () {
   return `PeerTube/${PEERTUBE_VERSION} (+${WEBSERVER.URL})`
 }
 
-function buildGotOptions (options: PeerTubeRequestOptions): OptionsOfUnknownResponseBody {
+function buildGotOptions (options: PeerTubeRequestOptions): OptionsOfUnknownResponseBodyWrapped {
   const { activityPub, bodyKBLimit = 3000 } = options
 
   const context = { bodyKBLimit, httpSignature: options.httpSignature }
@@ -259,6 +266,7 @@ function buildGotOptions (options: PeerTubeRequestOptions): OptionsOfUnknownResp
   return {
     method: options.method,
     dnsCache: true,
+    resolveBodyOnly: false,
     timeout: {
       request: options.timeout ?? REQUEST_TIMEOUTS.DEFAULT
     },

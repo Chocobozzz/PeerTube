@@ -1,11 +1,4 @@
-import {
-  HttpStatusCode,
-  VideoChaptersObject,
-  VideoCommentObject,
-  VideoPlaylistPrivacy,
-  VideoPrivacy,
-  VideoRateType
-} from '@peertube/peertube-models'
+import { HttpStatusCode, VideoChaptersObject, VideoCommentObject, VideoRateType } from '@peertube/peertube-models'
 import { activityPubCollectionPagination } from '@server/lib/activitypub/collection.js'
 import { getContextFilter } from '@server/lib/activitypub/context.js'
 import { buildChaptersAPHasPart } from '@server/lib/activitypub/video-chapters.js'
@@ -17,7 +10,7 @@ import cors from 'cors'
 import express from 'express'
 import { activityPubContextify } from '../../helpers/activity-pub-utils.js'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers/constants.js'
-import { audiencify, getAudience } from '../../lib/activitypub/audience.js'
+import { audiencify, getPlaylistAudience, getPublicAudience, getVideoAudience } from '../../lib/activitypub/audience.js'
 import { buildAnnounceWithVideoAudience, buildApprovalActivity, buildLikeActivity } from '../../lib/activitypub/send/index.js'
 import { buildCreateActivity } from '../../lib/activitypub/send/send-create.js'
 import { buildDislikeActivity } from '../../lib/activitypub/send/send-dislike.js'
@@ -330,7 +323,7 @@ async function videoController (req: express.Request, res: express.Response) {
   // We need captions to render AP object
   const videoAP = await video.lightAPToFullAP(undefined)
 
-  const audience = getAudience(videoAP.VideoChannel.Account.Actor, videoAP.privacy === VideoPrivacy.PUBLIC)
+  const audience = getVideoAudience(videoAP.VideoChannel.Account.Actor, videoAP.privacy)
   const videoObject = audiencify(await videoAP.toActivityPubObject(), audience)
 
   if (req.path.endsWith('/activity')) {
@@ -434,11 +427,10 @@ async function videoCommentController (req: express.Request, res: express.Respon
 
   const threadParentComments = await VideoCommentModel.listThreadParentComments({ comment: videoComment })
 
-  const isPublic = true // Comments are always public
   let videoCommentObject = videoComment.toActivityPubObject(threadParentComments)
 
   if (videoComment.Account) {
-    const audience = getAudience(videoComment.Account.Actor, isPublic)
+    const audience = getPublicAudience(videoComment.Account.Actor)
     videoCommentObject = audiencify(videoCommentObject, audience)
 
     if (req.path.endsWith('/activity')) {
@@ -482,7 +474,7 @@ async function videoRedundancyController (req: express.Request, res: express.Res
 
   const serverActor = await getServerActor()
 
-  const audience = getAudience(serverActor)
+  const audience = getPublicAudience(serverActor)
   const object = audiencify(videoRedundancy.toActivityPubObject(), audience)
 
   if (req.path.endsWith('/activity')) {
@@ -502,7 +494,7 @@ async function videoPlaylistController (req: express.Request, res: express.Respo
   playlist.OwnerAccount = await AccountModel.load(playlist.ownerAccountId)
 
   const json = await playlist.toActivityPubObject(req.query.page, null)
-  const audience = getAudience(playlist.OwnerAccount.Actor, playlist.privacy === VideoPlaylistPrivacy.PUBLIC)
+  const audience = getPlaylistAudience(playlist.OwnerAccount.Actor, playlist.privacy)
   const object = audiencify(json, audience)
 
   return activityPubResponse(activityPubContextify(object, 'Playlist', getContextFilter()), res)

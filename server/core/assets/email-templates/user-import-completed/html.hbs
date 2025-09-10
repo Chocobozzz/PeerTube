@@ -1,0 +1,68 @@
+{{#> base title=(t "Your archive import has finished")}}
+  {{#* inline "displaySummary"}}
+    <ul>
+      {{#if stats.success}}
+        <li>{{t "Imported: {success}" success=stats.success}}</li>
+      {{/if}}
+      {{#if stats.duplicates}}
+        <li>{{t "Not imported as considered duplicate: {duplicates}" duplicates=stats.duplicates}}</li>
+      {{/if}}
+      {{#if stats.errors}}
+        <li>{{t "Not imported due to error: {errors}" errors=stats.errors}}</li>
+      {{/if}}
+    </ul>
+  {{/inline}}
+
+  <p>{{t "Your archive import has finished. Here is the summary of imported objects:"}}</p>
+
+  <ul>
+    <li>
+      <strong>{{t "User settings:"}}</strong>
+      {{> displaySummary stats=resultStats.userSettings}}
+    </li>
+    <li>
+      <strong>{{t "Account (name, description, avatar...):"}}</strong>
+      {{> displaySummary stats=resultStats.account}}
+    </li>
+    <li>
+      <strong>{{t "Blocklist:"}}</strong>
+      {{> displaySummary stats=resultStats.blocklist}}
+    </li>
+    <li>
+      <strong>{{t "Channels:"}}</strong>
+      {{> displaySummary stats=resultStats.channels}}
+    </li>
+    <li>
+      <strong>{{t "Likes:"}}</strong>
+      {{> displaySummary stats=resultStats.likes}}
+    </li>
+    <li>
+      <strong>{{t "Dislikes:"}}</strong>
+      {{> displaySummary stats=resultStats.dislikes}}
+    </li>
+    <li>
+      <strong>{{t "Subscriptions:"}}</strong>
+      {{> displaySummary stats=resultStats.following}}
+    </li>
+    <li>
+      <strong>{{t "Video Playlists:"}}</strong>
+      {{> displaySummary stats=resultStats.videoPlaylists}}
+    </li>
+    <li>
+      <strong>{{t "Videos:"}}</strong>
+      {{> displaySummary stats=resultStats.videos}}
+    </li>
+    <li>
+      <strong>{{t "Video history:"}}</strong>
+      {{> displaySummary stats=resultStats.userVideoHistory}}
+    </li>
+    <li>
+      <strong>{{t "Watched Words Lists:"}}</strong>
+      {{> displaySummary stats=resultStats.watchedWordsLists}}
+    </li>
+    <li>
+      <strong>{{t "Comment auto tag policies:"}}</strong>
+      {{> displaySummary stats=resultStats.commentAutoTagPolicies}}
+    </li>
+  </ul>
+{{/base}}

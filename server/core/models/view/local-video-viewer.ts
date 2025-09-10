@@ -35,53 +35,53 @@ import { LocalVideoViewerWatchSectionModel } from './local-video-viewer-watch-se
 })
 export class LocalVideoViewerModel extends SequelizeModel<LocalVideoViewerModel> {
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @AllowNull(false)
   @Column(DataType.DATE)
-  startDate: Date
+  declare startDate: Date
 
   @AllowNull(false)
   @Column(DataType.DATE)
-  endDate: Date
+  declare endDate: Date
 
   @AllowNull(false)
   @Column
-  watchTime: number
+  declare watchTime: number
 
   @AllowNull(true)
   @Column
-  client: string
+  declare client: string
 
   @AllowNull(true)
   @Column
-  device: string
+  declare device: string
 
   @AllowNull(true)
   @Column
-  operatingSystem: string
+  declare operatingSystem: string
 
   @AllowNull(true)
   @Column
-  country: string
+  declare country: string
 
   @AllowNull(true)
   @Column
-  subdivisionName: string
+  declare subdivisionName: string
 
   @AllowNull(false)
   @Default(DataType.UUIDV4)
   @IsUUID(4)
   @Column(DataType.UUID)
-  uuid: string
+  declare uuid: string
 
   @AllowNull(false)
   @Column
-  url: string
+  declare url: string
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -89,7 +89,7 @@ export class LocalVideoViewerModel extends SequelizeModel<LocalVideoViewerModel>
     },
     onDelete: 'CASCADE'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   @HasMany(() => LocalVideoViewerWatchSectionModel, {
     foreignKey: {
@@ -97,7 +97,7 @@ export class LocalVideoViewerModel extends SequelizeModel<LocalVideoViewerModel>
     },
     onDelete: 'cascade'
   })
-  WatchSections: Awaited<LocalVideoViewerWatchSectionModel>[]
+  declare WatchSections: Awaited<LocalVideoViewerWatchSectionModel>[]
 
   static loadByUrl (url: string): Promise<MLocalVideoViewer> {
     return this.findOne({

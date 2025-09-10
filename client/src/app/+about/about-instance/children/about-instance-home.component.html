@@ -14,16 +14,20 @@
   <div i18n *ngIf="config.instance.isNSFW" class="fw-bold text-content mt-3">{{ config.instance.name }} is dedicated to sensitive content.</div>
 </div>
 
+@if (descriptionElement) {
 <div class="block description">
   <h4 i18n>Description</h4>
 
   <my-custom-markup-container class="text-content" [content]="descriptionElement"></my-custom-markup-container>
 </div>
+}
 
-<div class="block terms">
-  <h4 i18n class="section-title">Terms</h4>
+@if (aboutHTML.terms) {
+  <div class="block terms">
+    <h4 i18n class="section-title">Terms</h4>
 
-  <div class="text-content" [innerHTML]="aboutHTML.terms"></div>
-</div>
+    <div class="text-content" [innerHTML]="aboutHTML.terms"></div>
+  </div>
+}
 
 <my-support-modal #supportModal [name]="config.instance.name" [content]="config.instance.support.text"></my-support-modal>

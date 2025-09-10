@@ -1,12 +1,11 @@
-import { readJsonSync, writeJSON } from 'fs-extra/esm'
-import { join } from 'path'
-import { I18N_LOCALES, USER_ROLE_LABELS } from '@peertube/peertube-core-utils'
+import { USER_ROLE_LABELS } from '@peertube/peertube-core-utils'
 import { root } from '@peertube/peertube-node-utils'
 import {
   ABUSE_STATES,
   buildLanguages,
   RUNNER_JOB_STATES,
   USER_EXPORT_STATES,
+  USER_IMPORT_STATES,
   USER_REGISTRATION_STATES,
   VIDEO_CATEGORIES,
   VIDEO_CHANNEL_SYNC_STATE,
@@ -15,9 +14,11 @@ import {
   VIDEO_PLAYLIST_PRIVACIES,
   VIDEO_PLAYLIST_TYPES,
   VIDEO_PRIVACIES,
-  USER_IMPORT_STATES,
   VIDEO_STATES
 } from '@peertube/peertube-server/core/initializers/constants.js'
+import { readJsonSync, writeJSON } from 'fs-extra/esm'
+import { readdir } from 'fs/promises'
+import { join } from 'path'
 
 const videojs = readJsonSync(join(root(), 'client', 'src', 'locale', 'videojs.en-US.json'))
 const playerKeys = {
@@ -86,11 +87,16 @@ const playerKeys = {
   'Audio only': 'Audio only',
   'Sensitive content': 'Sensitive content',
   'This video contains sensitive content.': 'This video contains sensitive content.',
+  'This video contains sensitive content, including:': 'This video contains sensitive content, including:',
   'Learn more': 'Learn more',
   'Content warning': 'Content warning',
   'Violence': 'Violence',
   'Shocking Content': 'Shocking Content',
-  'Explicit Sex': 'Explicit Sex'
+  'Explicit Sex': 'Explicit Sex',
+  'Upload speed:': 'Upload speed:',
+  'Download speed:': 'Download speed:',
+  'Uploader note:': 'Uploader note:',
+  'Close': 'Close'
 }
 Object.assign(playerKeys, videojs)
 
@@ -150,17 +156,21 @@ async function writeAll () {
   await writeJSON(join(localePath, 'player.en-US.json'), playerKeys, { spaces: 4 })
   await writeJSON(join(localePath, 'server.en-US.json'), serverKeys, { spaces: 4 })
 
-  for (const key of Object.keys(I18N_LOCALES)) {
-    const playerJsonPath = join(localePath, `player.${key}.json`)
-    const translatedPlayer = readJsonSync(playerJsonPath)
+  for (const file of await readdir(localePath)) {
+    if (file.match(/^player\.[^.]+\.json$/)) {
+      const playerJsonPath = join(localePath, file)
+      const translatedPlayer = readJsonSync(playerJsonPath)
 
-    const newTranslatedPlayer = Object.assign({}, playerKeys, translatedPlayer)
-    await writeJSON(playerJsonPath, newTranslatedPlayer, { spaces: 4 })
+      const newTranslatedPlayer = Object.assign({}, playerKeys, translatedPlayer)
+      await writeJSON(playerJsonPath, newTranslatedPlayer, { spaces: 4 })
+    }
 
-    const serverJsonPath = join(localePath, `server.${key}.json`)
-    const translatedServer = readJsonSync(serverJsonPath)
+    if (file.match(/^server\.[^.]+\.json$/)) {
+      const serverJsonPath = join(localePath, file)
+      const translatedServer = readJsonSync(serverJsonPath)
 
-    const newTranslatedServer = Object.assign({}, serverKeys, translatedServer)
-    await writeJSON(serverJsonPath, newTranslatedServer, { spaces: 4 })
+      const newTranslatedServer = Object.assign({}, serverKeys, translatedServer)
+      await writeJSON(serverJsonPath, newTranslatedServer, { spaces: 4 })
+    }
   }
 }

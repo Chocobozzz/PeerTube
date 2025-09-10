@@ -8,20 +8,6 @@ const Component = videojs.getComponent('Component')
 class MenuFocusFixed extends Menu {
   declare private focusedChild_: number
 
-  handleKeyDown (event: KeyboardEvent) {
-    if (event.key === 'Escape') {
-      event.preventDefault()
-      event.stopPropagation()
-      this.trigger('escaped-key')
-      return
-    }
-
-    // FIXME: super misses handleKeyDown
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    return super.handleKeyDown(event)
-  }
-
   stepForward () {
     let stepChild = 0
 
@@ -40,7 +26,17 @@ class MenuFocusFixed extends Menu {
     this.focus(stepChild)
   }
 
-  focus (item = 0): void {
+  focus (item?: number): void {
+    // Reset focus
+    if (item === undefined) {
+      this.focusedChild_ = -1
+      item = 0
+    }
+
+    this._focus(item)
+  }
+
+  private _focus (item: number) {
     const children = this.children().slice()
     const haveTitle = children.length && children[0].hasClass('vjs-menu-title')
 

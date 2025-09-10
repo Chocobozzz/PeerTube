@@ -1,55 +1,58 @@
-import { NgIf } from '@angular/common'
-import { Component, OnInit, inject } from '@angular/core'
-import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
+import { CommonModule } from '@angular/common'
+import { Component, OnInit, inject, viewChild } from '@angular/core'
+import { ConfirmService, Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { InstanceFollowService } from '@app/shared/shared-instance/instance-follow.service'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { DataLoaderOptions, TableColumnInfo, TableComponent } from '@app/shared/shared-tables/table.component'
 import { ActorFollow } from '@peertube/peertube-models'
-import { SharedModule, SortMeta } from 'primeng/api'
-import { TableModule } from 'primeng/table'
 import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
-import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
+import { DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
-import { AutoColspanDirective } from '../../../shared/shared-main/common/auto-colspan.directive'
+import { NumberFormatterPipe } from '../../../shared/shared-main/common/number-formatter.pipe'
 
 @Component({
   selector: 'my-followers-list',
   templateUrl: './followers-list.component.html',
   styleUrls: [ './followers-list.component.scss' ],
   imports: [
+    CommonModule,
     GlobalIconComponent,
-    TableModule,
-    SharedModule,
-    NgIf,
-    ActionDropdownComponent,
     AdvancedInputFilterComponent,
-    NgbTooltip,
     ButtonComponent,
     DeleteButtonComponent,
-    AutoColspanDirective,
-    PTDatePipe
+    PTDatePipe,
+    NumberFormatterPipe,
+    TableComponent
   ]
 })
-export class FollowersListComponent extends RestTable<ActorFollow> implements OnInit {
+export class FollowersListComponent implements OnInit {
   private confirmService = inject(ConfirmService)
   private notifier = inject(Notifier)
   private followService = inject(InstanceFollowService)
 
-  followers: ActorFollow[] = []
-  totalRecords = 0
-  sort: SortMeta = { field: 'createdAt', order: -1 }
-  pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
+  readonly table = viewChild<TableComponent<ActorFollow>>('table')
 
   searchFilters: AdvancedInputFilter[] = []
 
   bulkActions: DropdownAction<ActorFollow[]>[] = []
 
-  ngOnInit () {
-    this.initialize()
+  columns: TableColumnInfo<string>[] = [
+    { id: 'follower', label: $localize`Follower`, sortable: false },
+    { id: 'state', label: $localize`State`, sortable: true },
+    { id: 'score', label: $localize`Reliability`, sortable: true },
+    { id: 'createdAt', label: $localize`Created`, sortable: true }
+  ]
 
+  dataLoader: typeof this._dataLoader
+
+  constructor () {
+    this.dataLoader = this._dataLoader.bind(this)
+  }
+
+  ngOnInit () {
     this.searchFilters = this.followService.buildFollowsListFilters()
 
     this.bulkActions = [
@@ -71,10 +74,6 @@ export class FollowersListComponent extends RestTable<ActorFollow> implements On
     ]
   }
 
-  getIdentifier () {
-    return 'FollowersListComponent'
-  }
-
   acceptFollower (follows: ActorFollow[]) {
     this.followService.acceptFollower(follows)
       .subscribe({
@@ -85,7 +84,7 @@ export class FollowersListComponent extends RestTable<ActorFollow> implements On
           )
           this.notifier.success(message)
 
-          this.reloadData()
+          this.table().loadData()
         },
 
         error: err => this.notifier.error(err.message)
@@ -110,7 +109,7 @@ export class FollowersListComponent extends RestTable<ActorFollow> implements On
           )
           this.notifier.success(message)
 
-          this.reloadData()
+          this.table().loadData()
         },
 
         error: err => this.notifier.error(err.message)
@@ -141,7 +140,7 @@ export class FollowersListComponent extends RestTable<ActorFollow> implements On
 
           this.notifier.success(message)
 
-          this.reloadData()
+          this.table().loadData()
         },
 
         error: err => this.notifier.error(err.message)
@@ -152,15 +151,9 @@ export class FollowersListComponent extends RestTable<ActorFollow> implements On
     return follow.follower.name + '@' + follow.follower.host
   }
 
-  protected reloadDataInternal () {
-    this.followService.getFollowers({ pagination: this.pagination, sort: this.sort, search: this.search })
-      .subscribe({
-        next: resultList => {
-          this.followers = resultList.data
-          this.totalRecords = resultList.total
-        },
+  private _dataLoader (options: DataLoaderOptions) {
+    const { pagination, sort, search } = options
 
-        error: err => this.notifier.error(err.message)
-      })
+    return this.followService.getFollowers({ pagination, sort, search })
   }
 }

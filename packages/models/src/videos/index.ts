@@ -24,6 +24,7 @@ export * from './video-constant.model.js'
 export * from './video-create.model.js'
 export * from './video-create-update-common.model.js'
 
+export * from './video-licence.enum.js'
 export * from './video-privacy.enum.js'
 export * from './video-include.enum.js'
 export * from './video-rate.type.js'

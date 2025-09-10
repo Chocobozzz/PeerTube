@@ -151,23 +151,23 @@ export type SummaryOptions = {
 export class AccountModel extends SequelizeModel<AccountModel> {
   @AllowNull(false)
   @Column
-  name: string
+  declare name: string
 
   @AllowNull(true)
   @Default(null)
   @Is('AccountDescription', value => throwIfNotValid(value, isAccountDescriptionValid, 'description', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.USERS.DESCRIPTION.max))
-  description: string
+  declare description: string
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @ForeignKey(() => ActorModel)
   @Column
-  actorId: number
+  declare actorId: number
 
   @BelongsTo(() => ActorModel, {
     foreignKey: {
@@ -175,11 +175,11 @@ export class AccountModel extends SequelizeModel<AccountModel> {
     },
     onDelete: 'cascade'
   })
-  Actor: Awaited<ActorModel>
+  declare Actor: Awaited<ActorModel>
 
   @ForeignKey(() => UserModel)
   @Column
-  userId: number
+  declare userId: number
 
   @BelongsTo(() => UserModel, {
     foreignKey: {
@@ -187,11 +187,11 @@ export class AccountModel extends SequelizeModel<AccountModel> {
     },
     onDelete: 'cascade'
   })
-  User: Awaited<UserModel>
+  declare User: Awaited<UserModel>
 
   @ForeignKey(() => ApplicationModel)
   @Column
-  applicationId: number
+  declare applicationId: number
 
   @BelongsTo(() => ApplicationModel, {
     foreignKey: {
@@ -199,7 +199,7 @@ export class AccountModel extends SequelizeModel<AccountModel> {
     },
     onDelete: 'cascade'
   })
-  Application: Awaited<ApplicationModel>
+  declare Application: Awaited<ApplicationModel>
 
   @HasMany(() => VideoChannelModel, {
     foreignKey: {
@@ -208,7 +208,7 @@ export class AccountModel extends SequelizeModel<AccountModel> {
     onDelete: 'cascade',
     hooks: true
   })
-  VideoChannels: Awaited<VideoChannelModel>[]
+  declare VideoChannels: Awaited<VideoChannelModel>[]
 
   @HasMany(() => VideoPlaylistModel, {
     foreignKey: {
@@ -217,7 +217,7 @@ export class AccountModel extends SequelizeModel<AccountModel> {
     onDelete: 'cascade',
     hooks: true
   })
-  VideoPlaylists: Awaited<VideoPlaylistModel>[]
+  declare VideoPlaylists: Awaited<VideoPlaylistModel>[]
 
   @HasMany(() => VideoCommentModel, {
     foreignKey: {
@@ -226,7 +226,7 @@ export class AccountModel extends SequelizeModel<AccountModel> {
     onDelete: 'cascade',
     hooks: true
   })
-  VideoComments: Awaited<VideoCommentModel>[]
+  declare VideoComments: Awaited<VideoCommentModel>[]
 
   @HasMany(() => AccountBlocklistModel, {
     foreignKey: {
@@ -236,7 +236,7 @@ export class AccountModel extends SequelizeModel<AccountModel> {
     as: 'BlockedBy',
     onDelete: 'CASCADE'
   })
-  BlockedBy: Awaited<AccountBlocklistModel>[]
+  declare BlockedBy: Awaited<AccountBlocklistModel>[]
 
   @HasMany(() => AccountAutomaticTagPolicyModel, {
     foreignKey: {
@@ -245,19 +245,19 @@ export class AccountModel extends SequelizeModel<AccountModel> {
     },
     onDelete: 'cascade'
   })
-  AccountAutomaticTagPolicies: Awaited<AccountAutomaticTagPolicyModel>[]
+  declare AccountAutomaticTagPolicies: Awaited<AccountAutomaticTagPolicyModel>[]
 
   @HasMany(() => CommentAutomaticTagModel, {
     foreignKey: 'accountId',
     onDelete: 'CASCADE'
   })
-  CommentAutomaticTags: Awaited<CommentAutomaticTagModel>[]
+  declare CommentAutomaticTags: Awaited<CommentAutomaticTagModel>[]
 
   @HasMany(() => VideoAutomaticTagModel, {
     foreignKey: 'accountId',
     onDelete: 'CASCADE'
   })
-  VideoAutomaticTags: Awaited<VideoAutomaticTagModel>[]
+  declare VideoAutomaticTags: Awaited<VideoAutomaticTagModel>[]
 
   @BeforeDestroy
   static async sendDeleteIfOwned (instance: AccountModel, options) {

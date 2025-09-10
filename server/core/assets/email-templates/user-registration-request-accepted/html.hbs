@@ -1,0 +1,11 @@
+{{#> base title=(t "Congratulation {username}, your registration request has been accepted!" username=username)}}
+  <p>
+    {{t "Your registration request has been accepted."}}
+  </p>
+
+  <p>
+    {{t "Moderators sent you the following message:"}}
+  </p>
+
+  <blockquote style="white-space: pre-wrap">{{moderationResponse}}</blockquote>
+{{/base}}

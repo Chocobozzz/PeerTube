@@ -14,7 +14,7 @@ import {
 import { generateLocalVideoMiniature, regenerateMiniaturesIfNeeded, updateLocalVideoMiniatureFromExisting } from '@server/lib/thumbnail.js'
 import { generateHlsPlaylistResolutionFromTS } from '@server/lib/transcoding/hls-transcoding.js'
 import { createTranscriptionTaskIfNeeded } from '@server/lib/video-captions.js'
-import { buildStoryboardJobIfNeeded } from '@server/lib/video-jobs.js'
+import { addLocalOrRemoteStoryboardJobIfNeeded } from '@server/lib/video-jobs.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { isVideoInPublicDirectory } from '@server/lib/video-privacy.js'
 import { moveToNextState } from '@server/lib/video-state.js'
@@ -41,7 +41,6 @@ import { pathExists, remove } from 'fs-extra/esm'
 import { readdir } from 'fs/promises'
 import { isAbsolute, join } from 'path'
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
-import { JobQueue } from '../job-queue.js'
 
 const lTags = loggerTagsFactory('live', 'job')
 
@@ -362,7 +361,7 @@ async function cleanupLiveAndFederate (options: {
 }
 
 function createStoryboardJob (video: MVideo) {
-  return JobQueue.Instance.createJob(buildStoryboardJobIfNeeded({ video, federate: true }))
+  return addLocalOrRemoteStoryboardJobIfNeeded({ video, federate: true })
 }
 
 async function hasReplayFiles (replayDirectory: string) {

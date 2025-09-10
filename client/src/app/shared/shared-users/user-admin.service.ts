@@ -1,12 +1,29 @@
-import { SortMeta } from 'primeng/api'
-import { from, Observable } from 'rxjs'
-import { catchError, concatMap, map, switchMap, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable, inject } from '@angular/core'
+import { inject, Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService, ServerService, UserService } from '@app/core'
-import { getBytes } from '@root-helpers/bytes'
 import { arrayify, peertubeTranslate } from '@peertube/peertube-core-utils'
-import { ResultList, User as UserServerModel, UserCreate, UserUpdate } from '@peertube/peertube-models'
+import { ResultList, UserCreate, UserRoleType, User as UserServerModel, UserUpdate } from '@peertube/peertube-models'
+import { getBytes } from '@root-helpers/bytes'
+import { SortMeta } from 'primeng/api'
+import { from } from 'rxjs'
+import { catchError, concatMap, map, switchMap, toArray } from 'rxjs/operators'
+
+export type UserAdmin = UserServerModel & {
+  role: {
+    id: UserRoleType
+    label: string
+  }
+
+  videoQuota: string
+  videoQuotaUsed: string
+  rawVideoQuota: number
+  rawVideoQuotaUsed: number
+
+  videoQuotaDaily: string
+  videoQuotaUsedDaily: string
+  rawVideoQuotaDaily: number
+  rawVideoQuotaUsedDaily: number
+}
 
 @Injectable()
 export class UserAdminService {
@@ -34,11 +51,11 @@ export class UserAdminService {
       )
   }
 
-  getUsers (parameters: {
+  listUsers (parameters: {
     pagination: RestPagination
     sort: SortMeta
     search?: string
-  }): Observable<ResultList<UserServerModel>> {
+  }) {
     const { pagination, sort, search } = parameters
 
     let params = new HttpParams()
@@ -102,7 +119,7 @@ export class UserAdminService {
       )
   }
 
-  private formatUser (user: UserServerModel, translations: { [id: string]: string } = {}) {
+  private formatUser (user: UserServerModel, translations: { [id: string]: string } = {}): UserAdmin {
     let videoQuota
     if (user.videoQuota === -1) {
       videoQuota = '∞'

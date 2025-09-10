@@ -17,6 +17,7 @@ export interface UserUpdateMe {
   autoPlayNextVideoPlaylist?: boolean
   videosHistoryEnabled?: boolean
   videoLanguages?: string[]
+  language?: string
 
   email?: string
   emailPublic?: boolean

@@ -22,7 +22,6 @@ import { unwrapBody } from '../requests/index.js'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class PlaylistsCommand extends AbstractCommand {
-
   list (options: OverrideCommandOptions & {
     start?: number
     count?: number
@@ -42,13 +41,15 @@ export class PlaylistsCommand extends AbstractCommand {
     })
   }
 
-  listByChannel (options: OverrideCommandOptions & {
-    handle: string
-    start?: number
-    count?: number
-    sort?: string
-    playlistType?: VideoPlaylistType_Type
-  }) {
+  listByChannel (
+    options: OverrideCommandOptions & {
+      handle: string
+      start?: number
+      count?: number
+      sort?: string
+      playlistType?: VideoPlaylistType_Type
+    }
+  ) {
     const path = '/api/v1/video-channels/' + options.handle + '/video-playlists'
     const query = pick(options, [ 'start', 'count', 'sort', 'playlistType' ])
 
@@ -62,14 +63,16 @@ export class PlaylistsCommand extends AbstractCommand {
     })
   }
 
-  listByAccount (options: OverrideCommandOptions & {
-    handle: string
-    start?: number
-    count?: number
-    sort?: string
-    search?: string
-    playlistType?: VideoPlaylistType_Type
-  }) {
+  listByAccount (
+    options: OverrideCommandOptions & {
+      handle: string
+      start?: number
+      count?: number
+      sort?: string
+      search?: string
+      playlistType?: VideoPlaylistType_Type
+    }
+  ) {
     const path = '/api/v1/accounts/' + options.handle + '/video-playlists'
     const query = pick(options, [ 'start', 'count', 'sort', 'search', 'playlistType' ])
 
@@ -85,9 +88,11 @@ export class PlaylistsCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  get (options: OverrideCommandOptions & {
-    playlistId: number | string
-  }) {
+  get (
+    options: OverrideCommandOptions & {
+      playlistId: number | string
+    }
+  ) {
     const { playlistId } = options
     const path = '/api/v1/video-playlists/' + playlistId
 
@@ -100,9 +105,11 @@ export class PlaylistsCommand extends AbstractCommand {
     })
   }
 
-  async getWatchLater (options: OverrideCommandOptions & {
-    handle: string
-  }) {
+  async getWatchLater (
+    options: OverrideCommandOptions & {
+      handle: string
+    }
+  ) {
     const { data: playlists } = await this.listByAccount({
       ...options,
 
@@ -114,12 +121,14 @@ export class PlaylistsCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  listVideos (options: OverrideCommandOptions & {
-    playlistId: number | string
-    start?: number
-    count?: number
-    query?: { nsfw?: BooleanBothQuery }
-  }) {
+  listVideos (
+    options: OverrideCommandOptions & {
+      playlistId: number | string
+      start?: number
+      count?: number
+      query?: { nsfw?: BooleanBothQuery }
+    }
+  ) {
     const path = '/api/v1/video-playlists/' + options.playlistId + '/videos'
     const query = options.query ?? {}
 
@@ -137,9 +146,11 @@ export class PlaylistsCommand extends AbstractCommand {
     })
   }
 
-  delete (options: OverrideCommandOptions & {
-    playlistId: number | string
-  }) {
+  delete (
+    options: OverrideCommandOptions & {
+      playlistId: number | string
+    }
+  ) {
     const path = '/api/v1/video-playlists/' + options.playlistId
 
     return this.deleteRequest({
@@ -151,9 +162,11 @@ export class PlaylistsCommand extends AbstractCommand {
     })
   }
 
-  async create (options: OverrideCommandOptions & {
-    attributes: VideoPlaylistCreate
-  }) {
+  async create (
+    options: OverrideCommandOptions & {
+      attributes: VideoPlaylistCreate
+    }
+  ) {
     const path = '/api/v1/video-playlists'
 
     const fields = omit(options.attributes, [ 'thumbnailfile' ])
@@ -175,10 +188,12 @@ export class PlaylistsCommand extends AbstractCommand {
     return body.videoPlaylist
   }
 
-  async quickCreate (options: OverrideCommandOptions & {
-    displayName: string
-    privacy?: VideoPlaylistPrivacyType
-  }) {
+  async quickCreate (
+    options: OverrideCommandOptions & {
+      displayName: string
+      privacy?: VideoPlaylistPrivacyType
+    }
+  ) {
     const { displayName, privacy = VideoPlaylistPrivacy.PUBLIC } = options
 
     const { videoChannels } = await this.server.users.getMyInfo({ token: options.token })
@@ -196,10 +211,12 @@ export class PlaylistsCommand extends AbstractCommand {
     })
   }
 
-  update (options: OverrideCommandOptions & {
-    attributes: VideoPlaylistUpdate
-    playlistId: number | string
-  }) {
+  update (
+    options: OverrideCommandOptions & {
+      attributes: VideoPlaylistUpdate
+      playlistId: number | string
+    }
+  ) {
     const path = '/api/v1/video-playlists/' + options.playlistId
 
     const fields = omit(options.attributes, [ 'thumbnailfile' ])
@@ -219,10 +236,12 @@ export class PlaylistsCommand extends AbstractCommand {
     })
   }
 
-  async addElement (options: OverrideCommandOptions & {
-    playlistId: number | string
-    attributes: VideoPlaylistElementCreate | { videoId: string }
-  }) {
+  async addElement (
+    options: OverrideCommandOptions & {
+      playlistId: number | string
+      attributes: VideoPlaylistElementCreate | { videoId: string }
+    }
+  ) {
     const attributes = {
       ...options.attributes,
 
@@ -243,11 +262,13 @@ export class PlaylistsCommand extends AbstractCommand {
     return body.videoPlaylistElement
   }
 
-  updateElement (options: OverrideCommandOptions & {
-    playlistId: number | string
-    elementId: number | string
-    attributes: VideoPlaylistElementUpdate
-  }) {
+  updateElement (
+    options: OverrideCommandOptions & {
+      playlistId: number | string
+      elementId: number | string
+      attributes: VideoPlaylistElementUpdate
+    }
+  ) {
     const path = '/api/v1/video-playlists/' + options.playlistId + '/videos/' + options.elementId
 
     return this.putBodyRequest({
@@ -260,10 +281,12 @@ export class PlaylistsCommand extends AbstractCommand {
     })
   }
 
-  removeElement (options: OverrideCommandOptions & {
-    playlistId: number | string
-    elementId: number
-  }) {
+  removeElement (
+    options: OverrideCommandOptions & {
+      playlistId: number | string
+      elementId: number
+    }
+  ) {
     const path = '/api/v1/video-playlists/' + options.playlistId + '/videos/' + options.elementId
 
     return this.deleteRequest({
@@ -275,10 +298,30 @@ export class PlaylistsCommand extends AbstractCommand {
     })
   }
 
-  reorderElements (options: OverrideCommandOptions & {
-    playlistId: number | string
-    attributes: VideoPlaylistReorder
-  }) {
+  reorderPlaylistsOfChannel (
+    options: OverrideCommandOptions & {
+      channelName: string
+      attributes: VideoPlaylistReorder
+    }
+  ) {
+    const path = '/api/v1/video-channels/' + options.channelName + '/video-playlists/reorder'
+
+    return this.postBodyRequest({
+      ...options,
+
+      path,
+      fields: options.attributes,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  reorderElements (
+    options: OverrideCommandOptions & {
+      playlistId: number | string
+      attributes: VideoPlaylistReorder
+    }
+  ) {
     const path = '/api/v1/video-playlists/' + options.playlistId + '/videos/reorder'
 
     return this.postBodyRequest({
@@ -294,7 +337,7 @@ export class PlaylistsCommand extends AbstractCommand {
   getPrivacies (options: OverrideCommandOptions = {}) {
     const path = '/api/v1/video-playlists/privacies'
 
-    return this.getRequestBody<{ [ id: number ]: string }>({
+    return this.getRequestBody<{ [id: number]: string }>({
       ...options,
 
       path,
@@ -303,9 +346,11 @@ export class PlaylistsCommand extends AbstractCommand {
     })
   }
 
-  videosExist (options: OverrideCommandOptions & {
-    videoIds: number[]
-  }) {
+  videosExist (
+    options: OverrideCommandOptions & {
+      videoIds: number[]
+    }
+  ) {
     const { videoIds } = options
     const path = '/api/v1/users/me/video-playlists/videos-exist'
 

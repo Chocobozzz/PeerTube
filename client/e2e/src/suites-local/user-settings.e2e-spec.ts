@@ -10,6 +10,7 @@ import {
   go,
   isMobileDevice,
   MockSMTPServer,
+  prepareWebBrowser,
   waitServerUp
 } from '../utils'
 
@@ -29,7 +30,7 @@ describe('User settings', () => {
 
     await MockSMTPServer.Instance.collectEmails(await getEmailPort(), emails)
 
-    await browser.maximizeWindow()
+    await prepareWebBrowser()
   })
 
   describe('Email', function () {

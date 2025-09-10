@@ -66,6 +66,7 @@ export function buildUser (options: {
     videosHistoryEnabled: CONFIG.USER.HISTORY.VIDEOS.ENABLED,
 
     autoPlayVideo: CONFIG.DEFAULTS.PLAYER.AUTO_PLAY,
+    language: null,
 
     role,
     emailVerified,
@@ -188,6 +189,7 @@ export async function sendVerifyUserChangeEmail (user: MUser) {
   Emailer.Instance.addUserVerifyChangeEmailJob({
     username: user.username,
     to: user.pendingEmail,
+    language: user.getLanguage(),
     verifyEmailUrl: await buildUserVerifyEmail(user, true)
   })
 }
@@ -196,6 +198,7 @@ export async function sendVerifyRegistrationRequestEmail (registration: MRegistr
   Emailer.Instance.addRegistrationVerifyEmailJob({
     username: registration.username,
     to: registration.email,
+    language: CONFIG.INSTANCE.DEFAULT_LANGUAGE,
     verifyEmailUrl: await buildRegistrationRequestVerifyEmail(registration),
     isRegistrationRequest: true
   })
@@ -205,6 +208,7 @@ export async function sendVerifyRegistrationEmail (user: MUser) {
   Emailer.Instance.addRegistrationVerifyEmailJob({
     username: user.username,
     to: user.email,
+    language: user.getLanguage(),
     verifyEmailUrl: await buildUserVerifyEmail(user, false),
     isRegistrationRequest: true
   })

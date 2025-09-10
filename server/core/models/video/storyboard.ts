@@ -24,38 +24,37 @@ import { SequelizeModel } from '../shared/index.js'
   ]
 })
 export class StoryboardModel extends SequelizeModel<StoryboardModel> {
+  @AllowNull(false)
+  @Column
+  declare filename: string
 
   @AllowNull(false)
   @Column
-  filename: string
+  declare totalHeight: number
 
   @AllowNull(false)
   @Column
-  totalHeight: number
+  declare totalWidth: number
 
   @AllowNull(false)
   @Column
-  totalWidth: number
+  declare spriteHeight: number
 
   @AllowNull(false)
   @Column
-  spriteHeight: number
+  declare spriteWidth: number
 
   @AllowNull(false)
   @Column
-  spriteWidth: number
-
-  @AllowNull(false)
-  @Column
-  spriteDuration: number
+  declare spriteDuration: number
 
   @AllowNull(true)
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.COMMONS.URL.max))
-  fileUrl: string
+  declare fileUrl: string
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -63,13 +62,13 @@ export class StoryboardModel extends SequelizeModel<StoryboardModel> {
     },
     onDelete: 'CASCADE'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @AfterDestroy
   static removeInstanceFile (instance: StoryboardModel) {
@@ -77,7 +76,7 @@ export class StoryboardModel extends SequelizeModel<StoryboardModel> {
 
     // Don't block the transaction
     instance.removeFile()
-            .catch(err => logger.error('Cannot remove storyboard file %s.', instance.filename, { err }))
+      .catch(err => logger.error('Cannot remove storyboard file %s.', instance.filename, { err }))
   }
 
   static loadByVideo (videoId: number, transaction?: Transaction): Promise<MStoryboard> {

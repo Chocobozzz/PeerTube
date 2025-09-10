@@ -6,7 +6,7 @@ const dictionary: { max: number, type: string }[] = [
   { max: 1.125899906842624e15, type: 'TB' }
 ]
 
-function getBytes (value: number, precision?: number): string | number {
+export function getBytes (value: number, precision?: number) {
   const format = dictionary.find(d => value < d.max) || dictionary[dictionary.length - 1]
   const calc = value / (format.max / 1024)
 
@@ -17,6 +17,10 @@ function getBytes (value: number, precision?: number): string | number {
   return `${num} ${format.type}`
 }
 
+// ---------------------------------------------------------------------------
+// Private
+// ---------------------------------------------------------------------------
+
 function applyPrecision (num: number, precision: number) {
   if (precision <= 0) {
     return Math.round(num)
@@ -25,8 +29,4 @@ function applyPrecision (num: number, precision: number) {
   const tho = 10 ** precision
 
   return Math.round(num * tho) / tho
-}
-
-export {
-  getBytes
 }

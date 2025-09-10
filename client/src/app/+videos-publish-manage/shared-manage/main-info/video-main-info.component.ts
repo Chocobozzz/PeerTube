@@ -18,7 +18,7 @@ import {
   VIDEO_TAGS_ARRAY_VALIDATOR
 } from '@app/shared/form-validators/video-validators'
 import { DynamicFormFieldComponent } from '@app/shared/shared-forms/dynamic-form-field.component'
-import { FormReactiveErrors, FormReactiveService, FormReactiveValidationMessages } from '@app/shared/shared-forms/form-reactive.service'
+import { FormReactiveErrors, FormReactiveService, FormReactiveMessages } from '@app/shared/shared-forms/form-reactive.service'
 import { FormValidatorService } from '@app/shared/shared-forms/form-validator.service'
 import { InputTextComponent } from '@app/shared/shared-forms/input-text.component'
 import { MarkdownTextareaComponent } from '@app/shared/shared-forms/markdown-textarea.component'
@@ -40,7 +40,7 @@ import {
 import { logger } from '@root-helpers/logger'
 import { PluginInfo } from '@root-helpers/plugins-manager'
 import debug from 'debug'
-import { CalendarModule } from 'primeng/calendar'
+import { DatePickerModule } from 'primeng/datepicker'
 import { forkJoin, Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { SelectChannelItem } from 'src/types/select-options-item.model'
@@ -94,7 +94,7 @@ type Form = {
     SelectChannelComponent,
     SelectOptionsComponent,
     InputTextComponent,
-    CalendarModule,
+    DatePickerModule,
     PeertubeCheckboxComponent,
     ThumbnailManagerComponent,
     GlobalIconComponent,
@@ -120,7 +120,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
 
   form: FormGroup<Form>
   formErrors: FormReactiveErrors = {}
-  validationMessages: FormReactiveValidationMessages = {}
+  validationMessages: FormReactiveMessages = {}
 
   forbidScheduledPublication: boolean
   hideWaitTranscoding: boolean
@@ -184,7 +184,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
       .subscribe(res => this.videoCategories = res)
 
     this.serverService.getVideoLicences()
-      .subscribe(res => this.videoLicences = res)
+      .subscribe(res => this.videoLicences = this.videoService.explainedLicenceLabels(res))
 
     this.buildLanguages()
     this.buildPrivacies()
@@ -337,7 +337,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
     const { pluginData } = this.videoEdit.toCommonFormPatch()
 
     const pluginObj: { [id: string]: BuildFormValidator } = {}
-    const pluginValidationMessages: FormReactiveValidationMessages = {}
+    const pluginValidationMessages: FormReactiveMessages = {}
     const pluginFormErrors: FormReactiveErrors = {}
     const pluginDefaults: Record<string, string | boolean> = {}
 
@@ -410,7 +410,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
 
       waitTranscodingControl.disable()
       if (!isInitialPatch) waitTranscodingControl.setValue(false)
-    } else {
+    } else if (waitTranscodingControl.disabled) {
       scheduleControl.clearValidators()
       waitTranscodingControl.enable()
 

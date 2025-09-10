@@ -1,7 +1,7 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_icons' as *;
-@use './_player-variables' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_icons" as *;
+@use "./_player-variables" as *;
 
 $setting-transition-duration: 0.15s;
 $setting-transition-easing: ease-out;
@@ -9,7 +9,6 @@ $setting-transition-easing: ease-out;
 /* Sass for videojs-settings-menu */
 
 .video-js {
-
   .vjs-settings-sub-menu-title {
     width: 4em;
     text-transform: initial;
@@ -17,19 +16,21 @@ $setting-transition-easing: ease-out;
 
   .vjs-settings-dialog {
     position: absolute;
-    right: .5em;
+    right: 0.5em;
     bottom: 4em;
     color: pvar(--embed-fg);
-    opacity: $primary-foreground-opacity;
     margin: 0 auto;
     font-size: $font-size !important;
     z-index: 100;
     border-radius: 10px;
+    background-color: var(--embed-background-color);
 
     width: auto;
     overflow: hidden;
 
-    transition: width $setting-transition-duration $setting-transition-easing,  height $setting-transition-duration $setting-transition-easing;
+    transition:
+      width $setting-transition-duration $setting-transition-easing,
+      height $setting-transition-duration $setting-transition-easing;
 
     .vjs-settings-sub-menu-value,
     .vjs-settings-sub-menu-title {
@@ -143,9 +144,9 @@ $setting-transition-easing: ease-out;
 
             &::before {
               position: absolute;
-              content: ' ';
+              content: " ";
               margin-top: 1px;
-              background-image: url('./svg/tick-white.svg');
+              background-image: url("./svg/tick-white.svg");
 
               @include icon(15px);
               @include left(15px);
@@ -183,7 +184,7 @@ $setting-transition-easing: ease-out;
   }
 }
 
-:root[dir=rtl] {
+:root[dir="rtl"] {
   .vjs-back-button::before {
     transform: rotate(45deg) !important;
   }

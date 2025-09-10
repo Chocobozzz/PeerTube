@@ -1,0 +1,60 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
+
+.root {
+  position: sticky;
+  top: pvar(--header-height);
+  z-index: 11;
+  background-color: pvar(--bg);
+
+  @include rfs(3rem, margin-bottom);
+}
+
+.root-bar {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+  min-width: 0;
+  justify-content: center;
+
+  border-radius: 14px;
+  background-color: pvar(--bg-secondary-350);
+
+  @include rfs(1.5rem, padding);
+}
+
+.buttons {
+  @include margin-left(auto);
+}
+
+.pre-config {
+  display: inline-block;
+
+  @include margin-right(0.5rem);
+}
+
+h2 {
+  flex-shrink: 1;
+  color: pvar(--fg-350);
+  font-weight: $font-bold;
+  margin-bottom: 0;
+  line-height: normal;
+
+  @include margin-left(auto);
+  @include font-size(1.5rem);
+  @include ellipsis;
+}
+
+@media screen and (max-width: $small-view) {
+  .root-bar {
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem;
+  }
+
+  .buttons,
+  h2 {
+    @include margin-left(0);
+  }
+}

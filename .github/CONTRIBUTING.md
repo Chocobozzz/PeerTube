@@ -223,8 +223,19 @@ Instance configurations are in `config/test-{1,2,3}.yaml`.
 
 To test emails with PeerTube:
 
- * Run [mailslurper](http://mailslurper.com/)
- * Run PeerTube using mailslurper SMTP port: `NODE_CONFIG='{ "smtp": { "hostname": "localhost", "port": 2500, "tls": false } }' NODE_ENV=dev node dist/server`
+ * Run [MailDev](https://github.com/maildev/maildev) using Docker
+ * Run PeerTube using MailDev SMTP port: `NODE_CONFIG='{ "smtp": { "hostname": "localhost", "port": 2500, "tls": false } }' NODE_ENV=dev node dist/server`
+
+To test all emails without having to run actions manually on the web interface, you can run notification unit tests with environment variables to relay emails to your MailDev instance. For example:
+
+```sh
+MAILDEV_RELAY_HOST=localhost MAILDEV_RELAY_PORT=2500 mocha --exit --bail packages/tests/src/api/notifications/comments-notifications.ts
+```
+
+You can then go to the MailDev web interface and see how emails look like.
+
+The admin web interface also have a button to send some email templates to a specific email address.
+
 
 ### Environment variables
 

@@ -40,6 +40,10 @@ export interface VideoExportJSON {
       replaySettings?: {
         privacy: VideoPrivacyType
       }
+
+      schedules?: {
+        startAt: string
+      }[]
     }
 
     url: string

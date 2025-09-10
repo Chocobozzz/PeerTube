@@ -1,19 +1,21 @@
+import { HttpStatusCode, InstallOrUpdatePlugin, PluginType_Type } from '@peertube/peertube-models'
 import express from 'express'
 import { body, param, query, ValidationChain } from 'express-validator'
-import { HttpStatusCode, InstallOrUpdatePlugin, PluginType_Type } from '@peertube/peertube-models'
-import { exists, isBooleanValid, isSafePath, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc.js'
 import {
-  isNpmPluginNameValid,
-  isPluginNameValid,
-  isPluginStableOrUnstableVersionValid,
-  isPluginTypeValid
-} from '../../helpers/custom-validators/plugins.js'
+  exists,
+  isBooleanValid,
+  isSafePath,
+  isStableOrUnstableVersionValid,
+  toBooleanOrNull,
+  toIntOrNull
+} from '../../helpers/custom-validators/misc.js'
+import { isNpmPluginNameValid, isPluginNameValid, isPluginTypeValid } from '../../helpers/custom-validators/plugins.js'
 import { CONFIG } from '../../initializers/config.js'
 import { PluginManager } from '../../lib/plugins/plugin-manager.js'
 import { PluginModel } from '../../models/server/plugin.js'
 import { areValidationErrors } from './shared/index.js'
 
-const getPluginValidator = (pluginType: PluginType_Type, withVersion = true) => {
+export const getPluginValidator = (pluginType: PluginType_Type, withVersion = true) => {
   const validators: (ValidationChain | express.Handler)[] = [
     param('pluginName')
       .custom(isPluginNameValid)
@@ -22,7 +24,7 @@ const getPluginValidator = (pluginType: PluginType_Type, withVersion = true) => 
   if (withVersion) {
     validators.push(
       param('pluginVersion')
-        .custom(isPluginStableOrUnstableVersionValid)
+        .custom(isStableOrUnstableVersionValid)
     )
   }
 
@@ -53,7 +55,7 @@ const getPluginValidator = (pluginType: PluginType_Type, withVersion = true) => 
   ])
 }
 
-const getExternalAuthValidator = [
+export const getExternalAuthValidator = [
   param('authName')
     .custom(exists),
 
@@ -82,7 +84,7 @@ const getExternalAuthValidator = [
   }
 ]
 
-const pluginStaticDirectoryValidator = [
+export const pluginStaticDirectoryValidator = [
   param('staticEndpoint')
     .custom(isSafePath),
 
@@ -93,7 +95,7 @@ const pluginStaticDirectoryValidator = [
   }
 ]
 
-const listPluginsValidator = [
+export const listPluginsValidator = [
   query('pluginType')
     .optional()
     .customSanitizer(toIntOrNull)
@@ -110,13 +112,13 @@ const listPluginsValidator = [
   }
 ]
 
-const installOrUpdatePluginValidator = [
+export const installOrUpdatePluginValidator = [
   body('npmName')
     .optional()
     .custom(isNpmPluginNameValid),
   body('pluginVersion')
     .optional()
-    .custom(isPluginStableOrUnstableVersionValid),
+    .custom(isStableOrUnstableVersionValid),
   body('path')
     .optional()
     .custom(isSafePath),
@@ -136,7 +138,7 @@ const installOrUpdatePluginValidator = [
   }
 ]
 
-const uninstallPluginValidator = [
+export const uninstallPluginValidator = [
   body('npmName')
     .custom(isNpmPluginNameValid),
 
@@ -147,7 +149,7 @@ const uninstallPluginValidator = [
   }
 ]
 
-const existingPluginValidator = [
+export const existingPluginValidator = [
   param('npmName')
     .custom(isNpmPluginNameValid),
 
@@ -167,7 +169,7 @@ const existingPluginValidator = [
   }
 ]
 
-const updatePluginSettingsValidator = [
+export const updatePluginSettingsValidator = [
   body('settings')
     .exists(),
 
@@ -178,7 +180,7 @@ const updatePluginSettingsValidator = [
   }
 ]
 
-const listAvailablePluginsValidator = [
+export const listAvailablePluginsValidator = [
   query('search')
     .optional()
     .exists(),
@@ -188,7 +190,7 @@ const listAvailablePluginsValidator = [
     .custom(isPluginTypeValid),
   query('currentPeerTubeEngine')
     .optional()
-    .custom(isPluginStableOrUnstableVersionValid),
+    .custom(isStableOrUnstableVersionValid),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
@@ -200,17 +202,3 @@ const listAvailablePluginsValidator = [
     return next()
   }
 ]
-
-// ---------------------------------------------------------------------------
-
-export {
-  pluginStaticDirectoryValidator,
-  getPluginValidator,
-  updatePluginSettingsValidator,
-  uninstallPluginValidator,
-  listAvailablePluginsValidator,
-  existingPluginValidator,
-  installOrUpdatePluginValidator,
-  listPluginsValidator,
-  getExternalAuthValidator
-}

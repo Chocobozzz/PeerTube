@@ -1,21 +1,23 @@
-import { NgClass, NgIf } from '@angular/common'
+import { CommonModule } from '@angular/common'
 import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
+import { ConfirmService, MarkdownService, Notifier, ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { UserRegistration, UserRegistrationState } from '@peertube/peertube-models'
-import { SharedModule, SortMeta } from 'primeng/api'
-import { TableModule } from 'primeng/table'
+import { ResultList, UserRegistration as UserRegistrationServer, UserRegistrationState } from '@peertube/peertube-models'
+import { switchMap } from 'rxjs'
 import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
-import { AutoColspanDirective } from '../../../shared/shared-main/common/auto-colspan.directive'
-import { TableExpanderIconComponent } from '../../../shared/shared-tables/table-expander-icon.component'
+import { NumberFormatterPipe } from '../../../shared/shared-main/common/number-formatter.pipe'
+import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../../../shared/shared-tables/table.component'
 import { UserEmailInfoComponent } from '../../shared/user-email-info.component'
 import { AdminRegistrationService } from './admin-registration.service'
 import { ProcessRegistrationModalComponent } from './process-registration-modal.component'
+
+type UserRegistration = UserRegistrationServer & { registrationReasonHTML?: string, moderationResponseHTML?: string }
+type ColumnName = 'account' | 'email' | 'channel' | 'registrationReason' | 'state' | 'moderationResponse' | 'createdAt'
 
 @Component({
   selector: 'my-registration-list',
@@ -23,21 +25,18 @@ import { ProcessRegistrationModalComponent } from './process-registration-modal.
   styleUrls: [ '../../../shared/shared-moderation/moderation.scss', './registration-list.component.scss' ],
   imports: [
     GlobalIconComponent,
-    TableModule,
-    SharedModule,
-    NgIf,
+    CommonModule,
     ActionDropdownComponent,
     AdvancedInputFilterComponent,
     NgbTooltip,
-    TableExpanderIconComponent,
-    NgClass,
     UserEmailInfoComponent,
-    AutoColspanDirective,
     ProcessRegistrationModalComponent,
-    PTDatePipe
+    PTDatePipe,
+    NumberFormatterPipe,
+    TableComponent
   ]
 })
-export class RegistrationListComponent extends RestTable<UserRegistration> implements OnInit {
+export class RegistrationListComponent implements OnInit {
   protected route = inject(ActivatedRoute)
   protected router = inject(Router)
   private server = inject(ServerService)
@@ -47,11 +46,7 @@ export class RegistrationListComponent extends RestTable<UserRegistration> imple
   private adminRegistrationService = inject(AdminRegistrationService)
 
   readonly processRegistrationModal = viewChild<ProcessRegistrationModalComponent>('processRegistrationModal')
-
-  registrations: (UserRegistration & { registrationReasonHTML?: string, moderationResponseHTML?: string })[] = []
-  totalRecords = 0
-  sort: SortMeta = { field: 'createdAt', order: -1 }
-  pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
+  readonly table = viewChild<TableComponent<UserRegistration, ColumnName>>('table')
 
   registrationActions: DropdownAction<UserRegistration>[][] = []
   bulkActions: DropdownAction<UserRegistration[]>[] = []
@@ -60,8 +55,20 @@ export class RegistrationListComponent extends RestTable<UserRegistration> imple
 
   requiresEmailVerification: boolean
 
+  columns: TableColumnInfo<ColumnName>[] = [
+    { id: 'account', label: $localize`Account`, sortable: false },
+    { id: 'email', label: $localize`Email`, sortable: false },
+    { id: 'channel', label: $localize`Channel`, sortable: false },
+    { id: 'registrationReason', label: $localize`Registration reason`, sortable: false },
+    { id: 'state', label: $localize`State`, sortable: true },
+    { id: 'moderationResponse', label: $localize`Moderation response`, sortable: false },
+    { id: 'createdAt', label: $localize`Requested on`, sortable: true }
+  ]
+
+  dataLoader: typeof this._dataLoader
+
   constructor () {
-    super()
+    this.dataLoader = this._dataLoader.bind(this)
 
     this.registrationActions = [
       [
@@ -92,16 +99,10 @@ export class RegistrationListComponent extends RestTable<UserRegistration> imple
   }
 
   ngOnInit () {
-    this.initialize()
-
     this.server.getConfig()
       .subscribe(config => {
         this.requiresEmailVerification = config.signup.requiresEmailVerification
       })
-  }
-
-  getIdentifier () {
-    return 'RegistrationListComponent'
   }
 
   isRegistrationAccepted (registration: UserRegistration) {
@@ -113,27 +114,21 @@ export class RegistrationListComponent extends RestTable<UserRegistration> imple
   }
 
   onRegistrationProcessed () {
-    this.reloadData()
+    this.table().reloadData({ field: 'createdAt', order: -1 })
   }
 
-  protected reloadDataInternal () {
-    this.adminRegistrationService.listRegistrations({
-      pagination: this.pagination,
-      sort: this.sort,
-      search: this.search
-    }).subscribe({
-      next: async resultList => {
-        this.totalRecords = resultList.total
-        this.registrations = resultList.data
+  private _dataLoader (options: DataLoaderOptions) {
+    return this.adminRegistrationService.listRegistrations(options)
+      .pipe(
+        switchMap(async (resultList: ResultList<UserRegistration>) => {
+          for (const registration of resultList.data) {
+            registration.registrationReasonHTML = await this.toHtml(registration.registrationReason)
+            registration.moderationResponseHTML = await this.toHtml(registration.moderationResponse)
+          }
 
-        for (const registration of this.registrations) {
-          registration.registrationReasonHTML = await this.toHtml(registration.registrationReason)
-          registration.moderationResponseHTML = await this.toHtml(registration.moderationResponse)
-        }
-      },
-
-      error: err => this.notifier.error(err.message)
-    })
+          return resultList
+        })
+      )
   }
 
   private openRegistrationRequestProcessModal (registration: UserRegistration, mode: 'accept' | 'reject') {
@@ -160,7 +155,7 @@ export class RegistrationListComponent extends RestTable<UserRegistration> imple
           )
 
           this.notifier.success(message)
-          this.reloadData()
+          this.table().loadData()
         },
 
         error: err => this.notifier.error(err.message)

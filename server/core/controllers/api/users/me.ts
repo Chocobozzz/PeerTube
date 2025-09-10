@@ -278,6 +278,7 @@ async function updateMe (req: express.Request, res: express.Response) {
     'autoPlayNextVideoPlaylist',
     'videosHistoryEnabled',
     'videoLanguages',
+    'language',
     'theme',
     'noInstanceConfigWarningModal',
     'noAccountSetupWarningModal',

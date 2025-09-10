@@ -82,8 +82,29 @@ label,
 }
 
 label + .form-group-description,
+label + my-help + .form-group-description,
 .label + .form-group-description,
 .label-container + .form-group-description {
   margin-bottom: 10px;
-  margin-top: -0.5rem;
+  margin-top: -0.4rem;
+}
+
+.number-with-unit {
+  position: relative;
+  width: fit-content;
+
+  input[type="number"] + span {
+    position: absolute;
+    top: 0.4em;
+    right: 3em;
+
+    @media screen and (max-width: $mobile-view) {
+      display: none;
+    }
+  }
+
+  input[disabled] {
+    opacity: 0.8;
+    pointer-events: none;
+  }
 }

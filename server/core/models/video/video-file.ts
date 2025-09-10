@@ -12,11 +12,7 @@ import { logger } from '@server/helpers/logger.js'
 import { extractVideo } from '@server/helpers/video.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { buildRemoteUrl } from '@server/lib/activitypub/url.js'
-import {
-  getHLSPrivateFileUrl,
-  getObjectStoragePublicFileUrl,
-  getWebVideoPrivateFileUrl
-} from '@server/lib/object-storage/index.js'
+import { getHLSPrivateFileUrl, getObjectStoragePublicFileUrl, getWebVideoPrivateFileUrl } from '@server/lib/object-storage/index.js'
 import { getFSTorrentFilePath } from '@server/lib/paths.js'
 import { getVideoFileMimeType } from '@server/lib/video-file.js'
 import { isVideoInPrivateDirectory } from '@server/lib/video-privacy.js'
@@ -34,7 +30,8 @@ import {
   Default,
   DefaultScope,
   ForeignKey,
-  Is, Scopes,
+  Is,
+  Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -46,14 +43,7 @@ import {
   isVideoFileResolutionValid,
   isVideoFileSizeValid
 } from '../../helpers/custom-validators/videos.js'
-import {
-  DOWNLOAD_PATHS,
-  LAZY_STATIC_PATHS,
-  MEMOIZE_LENGTH,
-  MEMOIZE_TTL,
-  STATIC_PATHS,
-  WEBSERVER
-} from '../../initializers/constants.js'
+import { DOWNLOAD_PATHS, LAZY_STATIC_PATHS, MEMOIZE_LENGTH, MEMOIZE_TTL, STATIC_PATHS, WEBSERVER } from '../../initializers/constants.js'
 import { MVideoFile, MVideoFileStreamingPlaylistVideo, MVideoFileVideo } from '../../types/models/video/video-file.js'
 import { SequelizeModel, doesExist, parseAggregateResult, throwIfNotValid } from '../shared/index.js'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist.js'
@@ -146,89 +136,89 @@ export enum ScopeNames {
 })
 export class VideoFileModel extends SequelizeModel<VideoFileModel> {
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @AllowNull(false)
   @Is('VideoFileResolution', value => throwIfNotValid(value, isVideoFileResolutionValid, 'resolution'))
   @Column
-  resolution: number
+  declare resolution: number
 
   @AllowNull(true)
   @Column
-  width: number
+  declare width: number
 
   @AllowNull(true)
   @Column
-  height: number
+  declare height: number
 
   @AllowNull(false)
   @Is('VideoFileSize', value => throwIfNotValid(value, isVideoFileSizeValid, 'size'))
   @Column(DataType.BIGINT)
-  size: number
+  declare size: number
 
   @AllowNull(false)
   @Is('VideoFileExtname', value => throwIfNotValid(value, isVideoFileExtnameValid, 'extname'))
   @Column
-  extname: string
+  declare extname: string
 
   @AllowNull(true)
   @Is('VideoFileInfohash', value => throwIfNotValid(value, isVideoFileInfoHashValid, 'info hash', true))
   @Column
-  infoHash: string
+  declare infoHash: string
 
   @AllowNull(false)
   @Default(-1)
   @Is('VideoFileFPS', value => throwIfNotValid(value, isVideoFPSResolutionValid, 'fps'))
   @Column
-  fps: number
+  declare fps: number
 
   @AllowNull(false)
   @Column
-  formatFlags: VideoFileFormatFlagType
+  declare formatFlags: VideoFileFormatFlagType
 
   @AllowNull(false)
   @Column
-  streams: VideoFileStreamType
+  declare streams: VideoFileStreamType
 
   @AllowNull(true)
   @Column(DataType.JSONB)
-  metadata: any
+  declare metadata: any
 
   @AllowNull(true)
   @Column
-  metadataUrl: string
-
-  // Could be null for remote files
-  @AllowNull(true)
-  @Column
-  fileUrl: string
-
-  // Could be null for live files
-  @AllowNull(true)
-  @Column
-  filename: string
+  declare metadataUrl: string
 
   // Could be null for remote files
   @AllowNull(true)
   @Column
-  torrentUrl: string
+  declare fileUrl: string
 
   // Could be null for live files
   @AllowNull(true)
   @Column
-  torrentFilename: string
+  declare filename: string
+
+  // Could be null for remote files
+  @AllowNull(true)
+  @Column
+  declare torrentUrl: string
+
+  // Could be null for live files
+  @AllowNull(true)
+  @Column
+  declare torrentFilename: string
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @AllowNull(false)
   @Default(FileStorage.FILE_SYSTEM)
   @Column
-  storage: FileStorageType
+  declare storage: FileStorageType
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -236,11 +226,11 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
     },
     onDelete: 'CASCADE'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   @ForeignKey(() => VideoStreamingPlaylistModel)
   @Column
-  videoStreamingPlaylistId: number
+  declare videoStreamingPlaylistId: number
 
   @BelongsTo(() => VideoStreamingPlaylistModel, {
     foreignKey: {
@@ -248,7 +238,7 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
     },
     onDelete: 'CASCADE'
   })
-  VideoStreamingPlaylist: Awaited<VideoStreamingPlaylistModel>
+  declare VideoStreamingPlaylist: Awaited<VideoStreamingPlaylistModel>
 
   static doesInfohashExistCached = memoizee(VideoFileModel.doesInfohashExist.bind(VideoFileModel), {
     promise: true,
@@ -270,10 +260,10 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
 
   static async doesOwnedTorrentFileExist (filename: string) {
     const query = 'SELECT 1 FROM "videoFile" ' +
-                  'LEFT JOIN "video" "webvideo" ON "webvideo"."id" = "videoFile"."videoId" AND "webvideo"."remote" IS FALSE ' +
-                  'LEFT JOIN "videoStreamingPlaylist" ON "videoStreamingPlaylist"."id" = "videoFile"."videoStreamingPlaylistId" ' +
-                  'LEFT JOIN "video" "hlsVideo" ON "hlsVideo"."id" = "videoStreamingPlaylist"."videoId" AND "hlsVideo"."remote" IS FALSE ' +
-                  'WHERE "torrentFilename" = $filename AND ("hlsVideo"."id" IS NOT NULL OR "webvideo"."id" IS NOT NULL) LIMIT 1'
+      'LEFT JOIN "video" "webvideo" ON "webvideo"."id" = "videoFile"."videoId" AND "webvideo"."remote" IS FALSE ' +
+      'LEFT JOIN "videoStreamingPlaylist" ON "videoStreamingPlaylist"."id" = "videoFile"."videoStreamingPlaylistId" ' +
+      'LEFT JOIN "video" "hlsVideo" ON "hlsVideo"."id" = "videoStreamingPlaylist"."videoId" AND "hlsVideo"."remote" IS FALSE ' +
+      'WHERE "torrentFilename" = $filename AND ("hlsVideo"."id" IS NOT NULL OR "webvideo"."id" IS NOT NULL) LIMIT 1'
 
     return doesExist({ sequelize: this.sequelize, query, bind: { filename } })
   }

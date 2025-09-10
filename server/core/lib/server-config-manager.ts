@@ -1,5 +1,8 @@
+import { findAppropriateImage, maxBy } from '@peertube/peertube-core-utils'
 import {
+  ActorImageType,
   HTMLServerConfig,
+  LogoType,
   RegisteredExternalAuthConfig,
   RegisteredIdAndPassAuthConfig,
   ServerConfig,
@@ -8,15 +11,19 @@ import {
 } from '@peertube/peertube-models'
 import { getServerCommit } from '@server/helpers/version.js'
 import { CONFIG, isEmailEnabled } from '@server/initializers/config.js'
-import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME, PEERTUBE_VERSION } from '@server/initializers/constants.js'
+import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME, PEERTUBE_VERSION, WEBSERVER } from '@server/initializers/constants.js'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '@server/lib/signup.js'
 import { ActorCustomPageModel } from '@server/models/account/actor-custom-page.js'
+import { ActorImageModel } from '@server/models/actor/actor-image.js'
 import { getServerActor } from '@server/models/application/application.js'
+import { UploadImageModel } from '@server/models/application/upload-image.js'
 import { PluginModel } from '@server/models/server/plugin.js'
+import { MActorImage, MActorUploadImages, MUploadImage } from '@server/types/models/index.js'
 import { Hooks } from './plugins/hooks.js'
 import { PluginManager } from './plugins/plugin-manager.js'
 import { getThemeOrDefault } from './plugins/theme-utils.js'
 import { VideoTranscodingProfilesManager } from './transcoding/default-transcoding-profiles.js'
+import { logoTypeToUploadImageEnum } from './upload-image.js'
 
 /**
  * Used to send the server config to clients (using REST/API or plugins API)
@@ -51,6 +58,9 @@ class ServerConfigManager {
 
     return {
       client: {
+        header: {
+          hideInstanceName: CONFIG.CLIENT.HEADER.HIDE_INSTANCE_NAME
+        },
         videos: {
           miniature: {
             preferAuthorDisplayName: CONFIG.CLIENT.VIDEOS.MINIATURE.PREFER_AUTHOR_DISPLAY_NAME
@@ -58,6 +68,10 @@ class ServerConfigManager {
           resumableUpload: {
             maxChunkSize: CONFIG.CLIENT.VIDEOS.RESUMABLE_UPLOAD.MAX_CHUNK_SIZE
           }
+        },
+        browseVideos: {
+          defaultSort: CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SORT,
+          defaultScope: CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SCOPE
         },
         menu: {
           login: {
@@ -127,14 +141,25 @@ class ServerConfigManager {
         social: {
           blueskyLink: CONFIG.INSTANCE.SOCIAL.BLUESKY,
           mastodonLink: CONFIG.INSTANCE.SOCIAL.MASTODON_LINK,
+          xLink: CONFIG.INSTANCE.SOCIAL.X_LINK,
           externalLink: CONFIG.INSTANCE.SOCIAL.EXTERNAL_LINK
         },
         customizations: {
           javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT,
           css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS
         },
+
+        defaultLanguage: CONFIG.INSTANCE.DEFAULT_LANGUAGE,
+
         avatars: serverActor.Avatars.map(a => a.toFormattedJSON()),
-        banners: serverActor.Banners.map(b => b.toFormattedJSON())
+        banners: serverActor.Banners.map(b => b.toFormattedJSON()),
+
+        logo: [
+          ...this.getFaviconLogos(serverActor),
+          ...this.getMobileHeaderLogos(serverActor),
+          ...this.getDesktopHeaderLogos(serverActor),
+          ...this.getOpenGraphLogos(serverActor)
+        ]
       },
       search: {
         remoteUri: {
@@ -156,7 +181,19 @@ class ServerConfigManager {
       theme: {
         registered: this.getRegisteredThemes(),
         builtIn: this.getBuiltInThemes(),
-        default: defaultTheme
+        default: defaultTheme,
+        customization: {
+          primaryColor: CONFIG.THEME.CUSTOMIZATION.PRIMARY_COLOR,
+          foregroundColor: CONFIG.THEME.CUSTOMIZATION.FOREGROUND_COLOR,
+          backgroundColor: CONFIG.THEME.CUSTOMIZATION.BACKGROUND_COLOR,
+          backgroundSecondaryColor: CONFIG.THEME.CUSTOMIZATION.BACKGROUND_SECONDARY_COLOR,
+          menuForegroundColor: CONFIG.THEME.CUSTOMIZATION.MENU_FOREGROUND_COLOR,
+          menuBackgroundColor: CONFIG.THEME.CUSTOMIZATION.MENU_BACKGROUND_COLOR,
+          menuBorderRadius: CONFIG.THEME.CUSTOMIZATION.MENU_BORDER_RADIUS,
+          headerForegroundColor: CONFIG.THEME.CUSTOMIZATION.HEADER_FOREGROUND_COLOR,
+          headerBackgroundColor: CONFIG.THEME.CUSTOMIZATION.HEADER_BACKGROUND_COLOR,
+          inputBorderRadius: CONFIG.THEME.CUSTOMIZATION.INPUT_BORDER_RADIUS
+        }
       },
       email: {
         enabled: isEmailEnabled()
@@ -348,7 +385,10 @@ class ServerConfigManager {
       },
 
       storyboards: {
-        enabled: CONFIG.STORYBOARDS.ENABLED
+        enabled: CONFIG.STORYBOARDS.ENABLED,
+        remoteRunners: {
+          enabled: CONFIG.STORYBOARDS.REMOTE_RUNNERS.ENABLED
+        }
       },
 
       webrtc: {
@@ -469,6 +509,135 @@ class ServerConfigManager {
     }
 
     return result
+  }
+
+  // ---------------------------------------------------------------------------
+  // Logo
+  // ---------------------------------------------------------------------------
+
+  getFavicon (serverActor: MActorUploadImages) {
+    return findAppropriateImage(this.getFaviconLogos(serverActor), 32)
+  }
+
+  getDefaultOpenGraph (serverActor: MActorUploadImages) {
+    return maxBy(this.getOpenGraphLogos(serverActor), 'width')
+  }
+
+  getLogoUrl (serverActor: MActorUploadImages, width: 192 | 512) {
+    const customLogo = this.getLogo(serverActor, width)
+
+    if (customLogo) {
+      return WEBSERVER.URL + customLogo.getStaticPath()
+    }
+
+    return `${WEBSERVER.URL}/client/assets/images/icons/icon-${width}x${width}.png`
+  }
+
+  getLogo (serverActor: MActorUploadImages, width: 192 | 512) {
+    if (serverActor.Avatars.length > 0) {
+      return findAppropriateImage(serverActor.Avatars, width)
+    }
+
+    return undefined
+  }
+
+  private getFaviconLogos (serverActor: MActorUploadImages) {
+    return this.getLogoWithFallbacks({
+      serverActor,
+      logoType: 'favicon',
+
+      defaultLogo: {
+        fileUrl: WEBSERVER.URL + '/client/assets/images/favicon.png',
+        width: 32,
+        height: 32
+      }
+    })
+  }
+
+  private getMobileHeaderLogos (serverActor: MActorUploadImages) {
+    return this.getLogoWithFallbacks({
+      serverActor,
+      logoType: 'header-square',
+
+      defaultLogo: {
+        fileUrl: WEBSERVER.URL + '/client/assets/images/logo.svg',
+        width: 34,
+        height: 34
+      }
+    })
+  }
+
+  private getDesktopHeaderLogos (serverActor: MActorUploadImages) {
+    return this.getLogoWithFallbacks({
+      serverActor,
+      logoType: 'header-wide',
+
+      defaultLogo: {
+        fileUrl: WEBSERVER.URL + '/client/assets/images/logo.svg',
+        width: 34,
+        height: 34
+      }
+    })
+  }
+
+  private getOpenGraphLogos (serverActor: MActorUploadImages) {
+    return this.getLogoWithFallbacks({
+      serverActor,
+      logoType: 'opengraph',
+
+      defaultLogo: undefined
+    })
+  }
+
+  private getLogoWithFallbacks (options: {
+    serverActor: MActorUploadImages
+    logoType: LogoType
+
+    defaultLogo: {
+      fileUrl: string
+      width: number
+      height: number
+    }
+  }) {
+    const { serverActor, logoType, defaultLogo } = options
+
+    const uploadImageType = logoTypeToUploadImageEnum(logoType)
+
+    const uploaded = serverActor.UploadImages
+      .filter(i => i.type === uploadImageType)
+      .map(i => this.formatUploadImageForLogo(i, logoType, false))
+
+    if (uploaded.length !== 0) return uploaded
+
+    // Avatar fallback?
+    if (serverActor.hasImage(ActorImageType.AVATAR)) {
+      return serverActor.Avatars.map(a => this.formatActorImageForLogo(a, logoType, true))
+    }
+
+    // Default mobile header logo?
+    if (!defaultLogo) return []
+
+    return [ { ...defaultLogo, type: logoType, isFallback: true } ]
+  }
+
+  private formatUploadImageForLogo (logo: MUploadImage, type: LogoType, isFallback: boolean) {
+    return {
+      height: logo.height,
+      width: logo.width,
+      type,
+      fileUrl: UploadImageModel.getImageUrl(logo),
+      isFallback
+    }
+  }
+
+  private formatActorImageForLogo (logo: MActorImage, type: LogoType, isFallback: boolean) {
+    return {
+      height: logo.height,
+      width: logo.width,
+      type,
+      fileUrl: ActorImageModel.getImageUrl(logo),
+      isFallback
+    }
   }
 
   static get Instance () {

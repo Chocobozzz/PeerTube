@@ -18,10 +18,11 @@ import { unwrapBody } from '../requests/index.js'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class UsersCommand extends AbstractCommand {
-
-  askResetPassword (options: OverrideCommandOptions & {
-    email: string
-  }) {
+  askResetPassword (
+    options: OverrideCommandOptions & {
+      email: string
+    }
+  ) {
     const { email } = options
     const path = '/api/v1/users/ask-reset-password'
 
@@ -35,11 +36,13 @@ export class UsersCommand extends AbstractCommand {
     })
   }
 
-  resetPassword (options: OverrideCommandOptions & {
-    userId: number
-    verificationString: string
-    password: string
-  }) {
+  resetPassword (
+    options: OverrideCommandOptions & {
+      userId: number
+      verificationString: string
+      password: string
+    }
+  ) {
     const { userId, verificationString, password } = options
     const path = '/api/v1/users/' + userId + '/reset-password'
 
@@ -55,9 +58,11 @@ export class UsersCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  askSendVerifyEmail (options: OverrideCommandOptions & {
-    email: string
-  }) {
+  askSendVerifyEmail (
+    options: OverrideCommandOptions & {
+      email: string
+    }
+  ) {
     const { email } = options
     const path = '/api/v1/users/ask-send-verify-email'
 
@@ -71,11 +76,13 @@ export class UsersCommand extends AbstractCommand {
     })
   }
 
-  verifyEmail (options: OverrideCommandOptions & {
-    userId: number
-    verificationString: string
-    isPendingEmail?: boolean // default false
-  }) {
+  verifyEmail (
+    options: OverrideCommandOptions & {
+      userId: number
+      verificationString: string
+      isPendingEmail?: boolean // default false
+    }
+  ) {
     const { userId, verificationString, isPendingEmail = false } = options
     const path = '/api/v1/users/' + userId + '/verify-email'
 
@@ -94,10 +101,12 @@ export class UsersCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  banUser (options: OverrideCommandOptions & {
-    userId: number
-    reason?: string
-  }) {
+  banUser (
+    options: OverrideCommandOptions & {
+      userId: number
+      reason?: string
+    }
+  ) {
     const { userId, reason } = options
     const path = '/api/v1/users' + '/' + userId + '/block'
 
@@ -111,9 +120,11 @@ export class UsersCommand extends AbstractCommand {
     })
   }
 
-  unbanUser (options: OverrideCommandOptions & {
-    userId: number
-  }) {
+  unbanUser (
+    options: OverrideCommandOptions & {
+      userId: number
+    }
+  ) {
     const { userId } = options
     const path = '/api/v1/users' + '/' + userId + '/unblock'
 
@@ -154,15 +165,17 @@ export class UsersCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  create (options: OverrideCommandOptions & {
-    username: string
-    password?: string
-    videoQuota?: number
-    videoQuotaDaily?: number
-    role?: UserRoleType
-    adminFlags?: UserAdminFlagType
-    email?: string
-  }) {
+  create (
+    options: OverrideCommandOptions & {
+      username: string
+      password?: string
+      videoQuota?: number
+      videoQuotaDaily?: number
+      role?: UserRoleType
+      adminFlags?: UserAdminFlagType
+      email?: string
+    }
+  ) {
     const {
       username,
       adminFlags,
@@ -219,13 +232,22 @@ export class UsersCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  getMyInfo (options: OverrideCommandOptions = {}) {
+  getMyInfo (options: OverrideCommandOptions & {
+    userAgent?: string
+    xForwardedFor?: string
+  } = {}) {
     const path = '/api/v1/users/me'
+
+    const headers = options.userAgent
+      ? { 'user-agent': options.userAgent }
+      : {}
 
     return this.getRequestBody<MyUser>({
       ...options,
 
       path,
+      headers,
+      xForwardedFor: options.xForwardedFor,
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
@@ -243,9 +265,11 @@ export class UsersCommand extends AbstractCommand {
     })
   }
 
-  getMyRating (options: OverrideCommandOptions & {
-    videoId: number | string
-  }) {
+  getMyRating (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+    }
+  ) {
     const { videoId } = options
     const path = '/api/v1/users/me/videos/' + videoId + '/rating'
 
@@ -285,9 +309,11 @@ export class UsersCommand extends AbstractCommand {
     })
   }
 
-  updateMyAvatar (options: OverrideCommandOptions & {
-    fixture: string
-  }) {
+  updateMyAvatar (
+    options: OverrideCommandOptions & {
+      fixture: string
+    }
+  ) {
     const { fixture } = options
     const path = '/api/v1/users/me/avatar/pick'
 
@@ -305,10 +331,12 @@ export class UsersCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  get (options: OverrideCommandOptions & {
-    userId: number
-    withStats?: boolean // default false
-  }) {
+  get (
+    options: OverrideCommandOptions & {
+      userId: number
+      withStats?: boolean // default false
+    }
+  ) {
     const { userId, withStats } = options
     const path = '/api/v1/users/' + userId
 
@@ -341,9 +369,11 @@ export class UsersCommand extends AbstractCommand {
     })
   }
 
-  remove (options: OverrideCommandOptions & {
-    userId: number
-  }) {
+  remove (
+    options: OverrideCommandOptions & {
+      userId: number
+    }
+  ) {
     const { userId } = options
     const path = '/api/v1/users/' + userId
 
@@ -356,17 +386,19 @@ export class UsersCommand extends AbstractCommand {
     })
   }
 
-  update (options: OverrideCommandOptions & {
-    userId: number
-    email?: string
-    emailVerified?: boolean
-    videoQuota?: number
-    videoQuotaDaily?: number
-    password?: string
-    adminFlags?: UserAdminFlagType
-    pluginAuth?: string
-    role?: UserRoleType
-  }) {
+  update (
+    options: OverrideCommandOptions & {
+      userId: number
+      email?: string
+      emailVerified?: boolean
+      videoQuota?: number
+      videoQuotaDaily?: number
+      password?: string
+      adminFlags?: UserAdminFlagType
+      pluginAuth?: string
+      role?: UserRoleType
+    }
+  ) {
     const path = '/api/v1/users/' + options.userId
 
     const toSend: UserUpdate = {}
@@ -385,6 +417,26 @@ export class UsersCommand extends AbstractCommand {
       path,
       fields: toSend,
       implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  updateInterfaceLanguage (
+    options: OverrideCommandOptions & {
+      language: string
+    }
+  ) {
+    const { language } = options
+    const path = '/api/v1/client-config/update-interface-language'
+
+    return this.postBodyRequest({
+      ...options,
+
+      path,
+      fields: { language },
+      implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }

@@ -13,13 +13,7 @@ info:
     altText: PeerTube Project Homepage
   description: |
     The PeerTube API is built on HTTP(S) and is RESTful. You can use your favorite
-    HTTP/REST library for your programming language to use PeerTube. The spec API is fully compatible with
-    [openapi-generator](https://github.com/OpenAPITools/openapi-generator/wiki/API-client-generator-HOWTO)
-    which generates a client SDK in the language of your choice - we generate some client SDKs automatically:
-
-    - [Python](https://framagit.org/framasoft/peertube/clients/python)
-    - [Go](https://framagit.org/framasoft/peertube/clients/go)
-    - [Kotlin](https://framagit.org/framasoft/peertube/clients/kotlin)
+    HTTP/REST library for your programming language to use PeerTube.
 
     See the [REST API quick start](https://docs.joinpeertube.org/api/rest-getting-started) for a few
     examples of using the PeerTube API.
@@ -315,6 +309,8 @@ tags:
       Manage runner registration token
   - name: Video Passwords
     description: Operation on video passwords
+  - name: Client Config
+    description: Configuration of the web client
 
 x-tagGroups:
   - name: Static endpoints
@@ -373,6 +369,7 @@ x-tagGroups:
   - name: Instance
     tags:
       - Config
+      - Client Config
       - Homepage
       - Instance Follows
       - Instance Redundancy
@@ -795,6 +792,7 @@ paths:
         - $ref: '#/components/parameters/nsfwFlagsIncluded'
         - $ref: '#/components/parameters/nsfwFlagsExcluded'
         - $ref: '#/components/parameters/isLive'
+        - $ref: '#/components/parameters/includeScheduledLive'
         - $ref: '#/components/parameters/categoryOneOf'
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
@@ -1072,6 +1070,55 @@ paths:
           - admin
       tags:
         - Config
+      responses:
+        '204':
+          description: successful operation
+
+  '/api/v1/config/instance-logo/:logoType/pick':
+    post:
+      summary: Update instance logo
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Config
+      parameters:
+        - $ref: '#/components/parameters/logoTypeParam'
+      responses:
+        '204':
+          description: successful operation
+        '413':
+          description: image file too large
+          headers:
+            X-File-Maximum-Size:
+              schema:
+                type: string
+                format: Nginx size
+              description: Maximum file size for the banner
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                logofile:
+                  description: The file to upload.
+                  type: string
+                  format: binary
+            encoding:
+              logofile:
+                contentType: image/png, image/jpeg
+
+  '/api/v1/config/instance-logo/:logoType':
+    delete:
+      summary: Delete instance logo
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Config
+      parameters:
+        - $ref: '#/components/parameters/logoTypeParam'
       responses:
         '204':
           description: successful operation
@@ -1589,6 +1636,45 @@ paths:
       summary: Logout
       description: Revokes your access token and its associated refresh token, destroying your current session.
       operationId: revokeOAuthToken
+      tags:
+        - Session
+      security:
+        - OAuth2: []
+      responses:
+        '200':
+          description: successful operation
+
+  /api/v1/users/{id}/token-sessions:
+    get:
+      summary: List token sessions
+      parameters:
+        - $ref: '#/components/parameters/id'
+      tags:
+        - Session
+      security:
+        - OAuth2: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TokenSession'
+
+  /api/v1/users/{id}/token-sessions/{tokenSessionId}/revoke:
+    get:
+      summary: List token sessions
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/tokenSessionId'
       tags:
         - Session
       security:
@@ -2239,6 +2325,7 @@ paths:
         - $ref: '#/components/parameters/nsfwFlagsIncluded'
         - $ref: '#/components/parameters/nsfwFlagsExcluded'
         - $ref: '#/components/parameters/isLive'
+        - $ref: '#/components/parameters/includeScheduledLive'
         - $ref: '#/components/parameters/categoryOneOf'
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
@@ -2344,6 +2431,7 @@ paths:
         - $ref: '#/components/parameters/nsfwFlagsIncluded'
         - $ref: '#/components/parameters/nsfwFlagsExcluded'
         - $ref: '#/components/parameters/isLive'
+        - $ref: '#/components/parameters/includeScheduledLive'
         - $ref: '#/components/parameters/categoryOneOf'
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
@@ -2922,6 +3010,7 @@ paths:
         - $ref: '#/components/parameters/nsfwFlagsIncluded'
         - $ref: '#/components/parameters/nsfwFlagsExcluded'
         - $ref: '#/components/parameters/isLive'
+        - $ref: '#/components/parameters/includeScheduledLive'
         - $ref: '#/components/parameters/categoryOneOf'
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
@@ -3039,6 +3128,11 @@ paths:
             schema:
               type: object
               properties:
+                channelId:
+                  type: integer
+                  description:
+                    New channel of the video. The channel must be owned by the same account as the previous one.
+                    Use the "change ownership" endpoints to give a video to a channel owned by another account on the local PeerTube instance.
                 thumbnailfile:
                   description: Video thumbnail file
                   type: string
@@ -3686,6 +3780,10 @@ paths:
                 downloadEnabled:
                   description: Enable or disable downloading for the replay of this live video
                   type: boolean
+                schedules:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/LiveSchedule'
               required:
                 - channelId
                 - name
@@ -4663,6 +4761,7 @@ paths:
         - $ref: '#/components/parameters/nsfwFlagsIncluded'
         - $ref: '#/components/parameters/nsfwFlagsExcluded'
         - $ref: '#/components/parameters/isLive'
+        - $ref: '#/components/parameters/includeScheduledLive'
         - $ref: '#/components/parameters/categoryOneOf'
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
@@ -4712,6 +4811,42 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/VideoPlaylist'
+
+  '/api/v1/video-channels/{channelHandle}/video-playlists/reorder':
+    post:
+      summary: Reorder channel playlists
+      operationId: reorderVideoPlaylistsOfChannel
+      security:
+        - OAuth2: []
+      tags:
+        - Video Playlists
+        - Video Channels
+      parameters:
+        - $ref: '#/components/parameters/channelHandle'
+      responses:
+        '204':
+          description: successful operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                startPosition:
+                  type: integer
+                  description: 'Start position of the element to reorder'
+                  minimum: 1
+                insertAfterPosition:
+                  type: integer
+                  description: 'New position for the block to reorder, to add the block before the first element'
+                  minimum: 0
+                reorderLength:
+                  type: integer
+                  description: 'How many element from `startPosition` to reorder'
+                  minimum: 1
+              required:
+                - startPosition
+                - insertAfterPosition
 
   '/api/v1/video-channels/{channelHandle}/followers':
     get:
@@ -5120,7 +5255,7 @@ paths:
                     type: array
                     maxItems: 100
                     items:
-                    
+
                       type: object
                       properties:
                         id:
@@ -5190,7 +5325,7 @@ paths:
 
   /api/v1/video-playlists/{playlistId}/videos/reorder:
     post:
-      summary: 'Reorder a playlist'
+      summary: Reorder playlist elements
       operationId: reorderVideoPlaylist
       security:
         - OAuth2: []
@@ -5705,6 +5840,7 @@ paths:
         - $ref: '#/components/parameters/nsfwFlagsIncluded'
         - $ref: '#/components/parameters/nsfwFlagsExcluded'
         - $ref: '#/components/parameters/isLive'
+        - $ref: '#/components/parameters/includeScheduledLive'
         - $ref: '#/components/parameters/categoryOneOf'
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
@@ -7237,6 +7373,28 @@ paths:
       responses:
         '204':
           description: successful operation
+  /api/v1/client-config/update-language:
+    post:
+      tags:
+        - Client Config
+      summary: Update client language
+      description: Set a cookie so that, the next time the client refreshes the HTML of the web interface, PeerTube will use the next language
+      operationId: updateClientLanguage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                language:
+                  type: string
+                  description: Language code to set
+                  example: 'en-US'
+              required:
+                - language
+      responses:
+        '204':
+          description: successful operation
 
 servers:
   - url: 'https://peertube2.cpy.re'
@@ -7477,6 +7635,13 @@ components:
       description: Entity id
       schema:
         $ref: '#/components/schemas/id'
+    tokenSessionId:
+      name: tokenSessionId
+      in: path
+      required: true
+      description: Token session Id
+      schema:
+        $ref: '#/components/schemas/id'
     userId:
       name: userId
       in: path
@@ -7578,6 +7743,13 @@ components:
       in: query
       required: false
       description: whether or not the video is a live
+      schema:
+        type: boolean
+    includeScheduledLive:
+      name: includeScheduledLive
+      in: query
+      required: false
+      description: whether or not include live that are scheduled for later
       schema:
         type: boolean
     categoryOneOf:
@@ -8017,7 +8189,17 @@ components:
         not valid anymore and you need to initialize a new upload.
       schema:
         type: string
-
+    logoTypeParam:
+      name: logoType
+      in: path
+      required: true
+      schema:
+        type: string
+        enum:
+          - 'favicon'
+          - 'header-wide'
+          - 'header-square'
+          - 'opengraph'
 
   securitySchemes:
     OAuth2:
@@ -8528,6 +8710,10 @@ components:
             - $ref: '#/components/schemas/shortUUID'
         isLive:
           type: boolean
+        liveSchedules:
+          type: array
+          items:
+            $ref: '#/components/schemas/LiveSchedule'
         createdAt:
           type: string
           format: date-time
@@ -9020,6 +9206,10 @@ components:
           $ref: '#/components/schemas/AccountSummary'
         videoChannel:
           $ref: '#/components/schemas/VideoChannelSummary'
+        videoChannelPosition:
+          type: integer
+          minimum: 1
+          description: Position of the playlist in the channel
     VideoComment:
       properties:
         id:
@@ -9151,10 +9341,10 @@ components:
           type: number
           description: "**PeerTube >= 6.1** Frames per second of the video file"
         width:
-          type: number
+          type: integer
           description: "**PeerTube >= 6.1** Video stream width"
         height:
-          type: number
+          type: integer
           description: "**PeerTube >= 6.1** Video stream height"
         createdAt:
           type: string
@@ -9165,6 +9355,9 @@ components:
           type: string
         width:
           type: integer
+        height:
+          type: integer
+          description: "**PeerTube >= 7.3** ImportVideosInChannelCreate:mage height"
         createdAt:
           type: string
           format: date-time
@@ -9284,6 +9477,8 @@ components:
           type: number
         viewersPeak:
           type: number
+        totalViewers:
+          type: number
         viewersPeakDate:
           type: string
           format: date-time
@@ -9293,6 +9488,15 @@ components:
             type: object
             properties:
               isoCode:
+                type: string
+              viewers:
+                type: number
+        subdivisions:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
                 type: string
               viewers:
                 type: number
@@ -9379,6 +9583,8 @@ components:
               type: string
             serverCountry:
               type: string
+            defaultLanguage:
+              type: string
             support:
               type: object
               properties:
@@ -9392,6 +9598,8 @@ components:
                 mastodonLink:
                   type: string
                 blueskyLink:
+                  type: string
+                xLink:
                   type: string
             customizations:
               type: object
@@ -9866,6 +10074,8 @@ components:
                   type: string
                 blueskyLink:
                   type: string
+                xLink:
+                  type: string
             defaultClientRoute:
               type: string
             customizations:
@@ -10037,6 +10247,43 @@ components:
                 enabled:
                   type: boolean
                 manualApproval:
+                  type: boolean
+        storyboard:
+          type: object
+          properties:
+            enabled:
+              type: boolean
+        defaults:
+          type: object
+          properties:
+            publish:
+              type: object
+              properties:
+                downloadEnabled:
+                  type: boolean
+                commentsPolicy:
+                  $ref: '#/components/schemas/VideoCommentsPolicySet'
+                privacy:
+                  $ref: '#/components/schemas/VideoPrivacySet'
+                licence:
+                  $ref: '#/components/schemas/VideoLicenceSet'
+            p2p:
+              type: object
+              properties:
+                webapp:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+                embed:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+            player:
+              type: object
+              properties:
+                autoPlay:
                   type: boolean
 
     CustomHomepage:
@@ -10525,6 +10772,9 @@ components:
           items:
             type: string
           description: list of languages to filter videos down to
+        language:
+          type: string
+          description: default language for this user
         theme:
           type: string
         noInstanceConfigWarningModal:
@@ -11300,6 +11550,10 @@ components:
         latencyMode:
           description: User can select live latency mode if enabled by the instance
           $ref: '#/components/schemas/LiveVideoLatencyMode'
+        schedules:
+          type: array
+          items:
+            $ref: '#/components/schemas/LiveSchedule'
 
     LiveVideoResponse:
       properties:
@@ -11322,6 +11576,47 @@ components:
         latencyMode:
           description: User can select live latency mode if enabled by the instance
           $ref: '#/components/schemas/LiveVideoLatencyMode'
+        schedules:
+          type: array
+          items:
+            $ref: '#/components/schemas/LiveSchedule'
+
+    LiveSchedule:
+      properties:
+        startAt:
+          type: string
+          format: date-time
+          description: Date when the stream is scheduled to air at
+
+    TokenSession:
+      properties:
+        id:
+          type: integer
+        currentSession:
+          type: boolean
+          description: Is this session the current one?
+        loginDevice:
+          type: string
+          description: Device used to login
+        loginIP:
+          type: string
+          format: ipv4
+          description: IP address used to login
+        loginDate:
+          type: string
+          format: date-time
+          description: Date of the login
+        lastActivityDevice:
+          type: string
+        lastActivityIP:
+          type: string
+          format: ipv4
+        lastActivityDate:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
 
     RequestTwoFactorResponse:
       properties:

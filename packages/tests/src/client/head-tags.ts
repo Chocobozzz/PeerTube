@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { config, expect } from 'chai'
+import { findAppropriateImage } from '@peertube/peertube-core-utils'
 import { Account, HttpStatusCode, VideoPlaylistCreateResult } from '@peertube/peertube-models'
 import { cleanupTests, makeGetRequest, PeerTubeServer } from '@peertube/peertube-server-commands'
 import { getWatchPlaylistBasePaths, getWatchVideoBasePaths, prepareClientTests } from '@tests/shared/client.js'
+import { config, expect } from 'chai'
 
 config.truncateThreshold = 0
 
@@ -47,6 +48,32 @@ describe('Test <head> HTML tags', function () {
     } = await prepareClientTests())
   })
 
+  describe('Icons', function () {
+    async function indexPageTest (path: string) {
+      const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
+      const text = res.text
+
+      const config = await servers[0].config.getConfig()
+
+      {
+        const favicon = config.instance.logo.find(l => l.type === 'favicon')
+        expect(text).to.contain(`<link rel="icon" type="image/png" href="${favicon.fileUrl}" />`)
+      }
+
+      {
+        const appleTouchIcon = findAppropriateImage(config.instance.avatars, 192)
+        expect(text).to.contain(`<link rel="apple-touch-icon" href="${appleTouchIcon.fileUrl}" />`)
+      }
+    }
+
+    it('Should have valid favicon/ Graph tags on the common page', async function () {
+      await indexPageTest('/about/peertube')
+      await indexPageTest('/videos')
+      await indexPageTest('/homepage')
+      await indexPageTest('/')
+    })
+  })
+
   describe('Open Graph', function () {
     async function indexPageTest (path: string) {
       const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
@@ -59,7 +86,7 @@ describe('Test <head> HTML tags', function () {
       expect(text).to.contain(`<meta property="og:description" content="${instanceConfig.shortDescription}" />`)
       expect(text).to.contain('<meta property="og:type" content="website" />')
       expect(text).to.contain(`<meta property="og:url" content="${url}`)
-      expect(text).to.contain(`<meta property="og:image:url" content="${servers[0].url}/`)
+      expect(text).to.contain(`<meta property="og:image" content="${servers[0].url}/`)
     }
 
     async function accountPageTest (path: string) {
@@ -70,7 +97,7 @@ describe('Test <head> HTML tags', function () {
       expect(text).to.contain(`<meta property="og:description" content="${account.description}" />`)
       expect(text).to.contain('<meta property="og:type" content="website" />')
       expect(text).to.contain(`<meta property="og:url" content="${servers[0].url}/a/${servers[0].store.user.username}/video-channels" />`)
-      expect(text).to.not.contain(`<meta property="og:image:url"`)
+      expect(text).to.not.contain(`<meta property="og:image"`)
     }
 
     async function channelPageTest (path: string) {
@@ -81,7 +108,7 @@ describe('Test <head> HTML tags', function () {
       expect(text).to.contain(`<meta property="og:description" content="${channelDescription}" />`)
       expect(text).to.contain('<meta property="og:type" content="website" />')
       expect(text).to.contain(`<meta property="og:url" content="${servers[0].url}/c/${servers[0].store.channel.name}/videos" />`)
-      expect(text).to.contain(`<meta property="og:image:url" content="${servers[0].url}/`)
+      expect(text).to.contain(`<meta property="og:image" content="${servers[0].url}/`)
     }
 
     async function watchVideoPageTest (path: string) {
@@ -92,7 +119,7 @@ describe('Test <head> HTML tags', function () {
       expect(text).to.contain(`<meta property="og:description" content="${videoDescriptionPlainText}" />`)
       expect(text).to.contain('<meta property="og:type" content="video" />')
       expect(text).to.contain(`<meta property="og:url" content="${servers[0].url}/w/${servers[0].store.video.shortUUID}" />`)
-      expect(text).to.contain(`<meta property="og:image:url" content="${servers[0].url}/`)
+      expect(text).to.contain(`<meta property="og:image" content="${servers[0].url}/`)
     }
 
     async function watchPlaylistPageTest (path: string) {
@@ -103,7 +130,7 @@ describe('Test <head> HTML tags', function () {
       expect(text).to.contain(`<meta property="og:description" content="${playlistDescription}" />`)
       expect(text).to.contain('<meta property="og:type" content="video" />')
       expect(text).to.contain(`<meta property="og:url" content="${servers[0].url}/w/p/${playlist.shortUUID}" />`)
-      expect(text).to.contain(`<meta property="og:image:url" content="${servers[0].url}/`)
+      expect(text).to.contain(`<meta property="og:image" content="${servers[0].url}/`)
     }
 
     it('Should have valid Open Graph tags on the common page', async function () {
@@ -160,6 +187,15 @@ describe('Test <head> HTML tags', function () {
       await servers[0].config.updateCustomConfig({ newCustomConfig: config })
     })
 
+    async function indexPageTest (path: string) {
+      const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
+      const text = res.text
+
+      expect(text).to.contain('<meta property="twitter:card" content="summary_large_image" />')
+      expect(text).to.contain('<meta property="twitter:site" content="@Kuja" />')
+      expect(text).to.contain(`<meta property="twitter:image:url" content="${servers[0].url}`)
+    }
+
     async function accountPageTest (path: string) {
       const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
       const text = res.text
@@ -195,6 +231,13 @@ describe('Test <head> HTML tags', function () {
       expect(text).to.contain('<meta property="twitter:site" content="@Kuja" />')
       expect(text).to.contain(`<meta property="twitter:image:url" content="${servers[0].url}`)
     }
+
+    it('Should have valid Open Graph tags on the common page', async function () {
+      await indexPageTest('/about/peertube')
+      await indexPageTest('/videos')
+      await indexPageTest('/homepage')
+      await indexPageTest('/')
+    })
 
     it('Should have valid twitter card on the watch video page', async function () {
       for (const path of getWatchVideoBasePaths()) {

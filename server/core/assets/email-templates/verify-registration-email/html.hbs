@@ -1,0 +1,19 @@
+{{#> base title=(t "Email verification")}}
+  {{#if isRegistrationRequest}}
+    <p>{{{t "You requested an account on <a href=\"{webserverUrl}\">{instanceName}</a>." webserverUrl=WEBSERVER.URL instanceName=instanceName}}}</p>
+    <p>{{t "To complete your registration request you must verify your email first!"}}</p>
+  {{else}}
+    <p>{{{t "You created an account on <a href=\"{webserverUrl}\">{instanceName}</a>." webserverUrl=WEBSERVER.URL instanceName=instanceName}}}</p>
+    <p>{{t "To start using your account you must verify your email first!"}}</p>
+  {{/if}}
+
+  <p>
+    {{t "Please click on the link below to verify this email belongs to you (the link will expire within 1 hour):"}}
+  </p>
+
+  {{> button actionUrl=verifyEmailUrl actionText=(t "Verify my email")}}
+
+  <p>
+    {{t "If you are not the person who initiated this request, please let us know by replying to this email."}}
+  </p>
+{{/base}}

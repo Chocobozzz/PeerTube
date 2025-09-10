@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { getHLS, removeFragmentedMP4Ext, uuidRegex } from '@peertube/peertube-core-utils'
+import { getHLS, removeFragmentedMP4Ext, uuidRegex, wait } from '@peertube/peertube-core-utils'
 import {
   FileStorage,
   HttpStatusCode,
@@ -61,14 +61,28 @@ export async function checkLiveSegmentHash (options: {
   segmentName: string
   hlsPlaylist: VideoStreamingPlaylist
   withRetry?: boolean
+  currentRetry?: number
 }) {
-  const { server, baseUrlSegment, videoUUID, segmentName, hlsPlaylist, withRetry = false } = options
+  const { server, baseUrlSegment, videoUUID, segmentName, hlsPlaylist, withRetry = false, currentRetry = 1 } = options
   const command = server.streamingPlaylists
 
-  const segmentBody = await command.getFragmentedSegment({ url: `${baseUrlSegment}/${videoUUID}/${segmentName}`, withRetry })
-  const shaBody = await command.getSegmentSha256({ url: hlsPlaylist.segmentsSha256Url, withRetry })
+  try {
+    const segmentBody = await command.getFragmentedSegment({ url: `${baseUrlSegment}/${videoUUID}/${segmentName}`, withRetry: false })
+    const shaBody = await command.getSegmentSha256({ url: hlsPlaylist.segmentsSha256Url, withRetry: false })
 
-  expect(sha256(segmentBody)).to.equal(shaBody[segmentName])
+    expect(sha256(segmentBody)).to.equal(shaBody[segmentName])
+  } catch (err) {
+    if (!withRetry || currentRetry > 10) throw err
+
+    await wait(250)
+
+    return checkLiveSegmentHash({
+      ...options,
+
+      withRetry,
+      currentRetry: currentRetry + 1
+    })
+  }
 }
 
 export async function checkPlaylistInfohash (options: {
@@ -368,34 +382,44 @@ export async function checkVideoFileTokenReinjection (options: {
 }) {
   const { server, resolutions, videoFileToken, videoUUID, isLive } = options
 
-  const video = await server.videos.getWithToken({ id: videoUUID })
-  const hls = video.streamingPlaylists[0]
+  const action = async () => {
+    const video = await server.videos.getWithToken({ id: videoUUID })
+    const hls = video.streamingPlaylists[0]
 
-  const query = { videoFileToken, reinjectVideoFileToken: 'true' }
-  const { text } = await makeRawRequest({ url: hls.playlistUrl, query, expectedStatus: HttpStatusCode.OK_200 })
+    const query = { videoFileToken, reinjectVideoFileToken: 'true' }
+    const { text } = await makeRawRequest({ url: hls.playlistUrl, query, expectedStatus: HttpStatusCode.OK_200 })
 
-  for (let i = 0; i < resolutions.length; i++) {
-    const resolution = resolutions[i]
+    for (let i = 0; i < resolutions.length; i++) {
+      const resolution = resolutions[i]
 
-    const suffix = isLive
-      ? i
-      : `-${resolution}`
+      const suffix = isLive
+        ? i
+        : `-${resolution}`
 
-    expect(text).to.contain(`${suffix}.m3u8?videoFileToken=${videoFileToken}&reinjectVideoFileToken=true`)
+      expect(text).to.contain(`${suffix}.m3u8?videoFileToken=${videoFileToken}&reinjectVideoFileToken=true`)
+    }
+
+    const resolutionPlaylists = extractResolutionPlaylistUrls(hls.playlistUrl, text)
+    expect(resolutionPlaylists).to.have.lengthOf(resolutions.length)
+
+    for (const url of resolutionPlaylists) {
+      const { text } = await makeRawRequest({ url, query, expectedStatus: HttpStatusCode.OK_200 })
+
+      const extension = isLive
+        ? '.ts'
+        : '.mp4'
+
+      expect(text).to.contain(`${extension}?videoFileToken=${videoFileToken}`)
+      expect(text).not.to.contain(`reinjectVideoFileToken=true`)
+    }
   }
 
-  const resolutionPlaylists = extractResolutionPlaylistUrls(hls.playlistUrl, text)
-  expect(resolutionPlaylists).to.have.lengthOf(resolutions.length)
+  try {
+    await action()
+  } catch (err) {
+    await wait(2000)
 
-  for (const url of resolutionPlaylists) {
-    const { text } = await makeRawRequest({ url, query, expectedStatus: HttpStatusCode.OK_200 })
-
-    const extension = isLive
-      ? '.ts'
-      : '.mp4'
-
-    expect(text).to.contain(`${extension}?videoFileToken=${videoFileToken}`)
-    expect(text).not.to.contain(`reinjectVideoFileToken=true`)
+    await action()
   }
 }
 

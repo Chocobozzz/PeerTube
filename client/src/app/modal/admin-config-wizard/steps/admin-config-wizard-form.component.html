@@ -1,0 +1,90 @@
+<div class="root">
+  <div class="two-columns mb-4">
+    <div>
+      <img class="mascot" src="/client/assets/images/mascot/default.svg" alt="mascot">
+    </div>
+
+    <div>
+      <div class="steps">
+        <div class="header-steps" i18n>STEP {{ currentStep() }}/{{ totalSteps() }}</div>
+      </div>
+
+      <h4 i18n class="title">Usage type</h4>
+
+      <div class="text-content">You can also edit your platform configuration at a later time</div>
+    </div>
+  </div>
+
+  <div class="label" i18n>My platform is more like...</div>
+
+  <div class="two-columns width-50">
+    <div class="platform-types" [ngClass]="{ 'platform-type-selected': platformType }">
+      <ul class="ul-unstyle">
+        <li class="platform-type">
+          <input type="radio" name="platformType" id="platformTypeCommunity" value="community" [(ngModel)]="platformType">
+
+          <label for="platformTypeCommunity">
+            <div>
+              <my-global-icon iconName="users"></my-global-icon>
+            </div>
+
+            <div>
+              <div class="type-label" i18n>Community-based</div>
+
+              <div class="type-description" i18n>Enable a community to publish content and interact together.</div>
+            </div>
+          </label>
+        </li>
+
+        <li class="platform-type">
+          <input type="radio" name="platformType" id="platformTypeInstitution" value="institution" [(ngModel)]="platformType">
+
+          <label for="platformTypeInstitution">
+            <div>
+              <my-custom-icon [html]="iconInstitution"></my-custom-icon>
+            </div>
+
+            <div>
+              <div class="type-label" i18n>Institutional</div>
+
+              <div class="type-description" i18n>To broadcast your videos. Recommended for public institutions, association and companies.</div>
+            </div>
+          </label>
+        </li>
+
+        <li class="platform-type">
+          <input type="radio" name="platformType" id="platformTypePrivate" value="private" [(ngModel)]="platformType">
+
+          <label for="platformTypePrivate">
+            <div>
+              <my-custom-icon [html]="iconKey"></my-custom-icon>
+            </div>
+
+            <div>
+              <div class="type-label" i18n>Private</div>
+
+              <div class="type-description" i18n>Only certain people can access content. Recommended for families and closed communities.</div>
+            </div>
+          </label>
+        </li>
+      </ul>
+    </div>
+
+    <div class="platform-config">
+      @if (platformType === 'community') {
+        <my-community-based-config [usageType]="usageType[platformType]"></my-community-based-config>
+      } @else if (platformType === 'institution') {
+        <my-institutional-config [usageType]="usageType[platformType]"></my-institutional-config>
+      } @else if (platformType === 'private') {
+        <my-private-instance-config [usageType]="usageType[platformType]"></my-private-instance-config>
+      }
+    </div>
+
+  </div>
+
+  <div class="buttons">
+    <my-button i18n icon="arrow-left" (click)="back.emit()" theme="secondary">Back</my-button>
+    <my-button i18n theme="primary" (click)="next.emit(usageType[platformType])" [disabled]="!platformType">Preview configuration</my-button>
+    <button i18n (click)="hide.emit()" class="button-as-link">Ignore for now</button>
+  </div>
+</div>

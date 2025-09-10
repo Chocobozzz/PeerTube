@@ -1,5 +1,5 @@
 import { ensureDir } from 'fs-extra/esm'
-import { Server as NetIPC } from '@peertube/net-ipc'
+import { Server as NetIPC } from 'net-ipc'
 import { pick } from '@peertube/peertube-core-utils'
 import { RunnerServer } from '../../server/index.js'
 import { ConfigManager } from '../config-manager.js'
@@ -58,7 +58,7 @@ export class IPCServer {
     }
   }
 
-  private sendResponse <T extends IPCResponseData> (
+  private sendResponse<T extends IPCResponseData> (
     response: (data: any) => Promise<void>,
     body: IPCResponse<T>
   ) {

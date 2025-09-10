@@ -17,7 +17,6 @@ export async function moveVideoToStorageJob (options: {
   moveVideoSourceFile: (source: MVideoSource) => Promise<void>
   moveCaptionFiles: (captions: MVideoCaption[], hls: MStreamingPlaylistVideoUUID) => Promise<void>
 
-  moveToFailedState: (video: MVideoWithAllFiles) => Promise<void>
   doAfterLastMove: (video: MVideoWithAllFiles) => Promise<void>
 }) {
   const {
@@ -28,7 +27,6 @@ export async function moveVideoToStorageJob (options: {
     moveHLSFiles,
     moveWebVideoFiles,
     moveCaptionFiles,
-    moveToFailedState,
     doAfterLastMove
   } = options
 
@@ -83,11 +81,7 @@ export async function moveVideoToStorageJob (options: {
 
       await doAfterLastMove(video)
     }
-  } catch (err) {
-    await onMoveVideoToStorageFailure({ videoUUID, err, lTags, moveToFailedState })
-
-    throw err
-  } finally {
+  } finally { // Error handling is managed by the job queue
     fileMutexReleaser()
   }
 }

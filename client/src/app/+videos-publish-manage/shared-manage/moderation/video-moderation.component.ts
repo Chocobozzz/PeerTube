@@ -5,10 +5,9 @@ import { RouterLink } from '@angular/router'
 import { ServerService } from '@app/core'
 import { BuildFormArgument } from '@app/shared/form-validators/form-validator.model'
 import { VIDEO_NSFW_SUMMARY_VALIDATOR } from '@app/shared/form-validators/video-validators'
-import { FormReactiveErrors, FormReactiveService, FormReactiveValidationMessages } from '@app/shared/shared-forms/form-reactive.service'
+import { FormReactiveErrors, FormReactiveService, FormReactiveMessages } from '@app/shared/shared-forms/form-reactive.service'
 import { HTMLServerConfig, VideoCommentPolicyType, VideoConstant } from '@peertube/peertube-models'
 import debug from 'debug'
-import { CalendarModule } from 'primeng/calendar'
 import { Subscription } from 'rxjs'
 import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
 import { SelectRadioComponent } from '../../../shared/shared-forms/select/select-radio.component'
@@ -40,7 +39,6 @@ type Form = {
     FormsModule,
     ReactiveFormsModule,
     PeerTubeTemplateDirective,
-    CalendarModule,
     PeertubeCheckboxComponent,
     GlobalIconComponent,
     SelectRadioComponent
@@ -53,7 +51,7 @@ export class VideoModerationComponent implements OnInit, OnDestroy {
 
   form: FormGroup<Form>
   formErrors: FormReactiveErrors = {}
-  validationMessages: FormReactiveValidationMessages = {}
+  validationMessages: FormReactiveMessages = {}
 
   commentPolicies: VideoConstant<VideoCommentPolicyType>[] = []
   serverConfig: HTMLServerConfig

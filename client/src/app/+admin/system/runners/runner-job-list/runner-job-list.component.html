@@ -1,129 +1,82 @@
-<p-table
-  [value]="runnerJobs" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
-  [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order"
-  [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
-  [(selection)]="selectedRows" [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()"
-  [expandedRowKeys]="expandedRows" dataKey="uuid"
+<my-table
+  #table
+  key="RunnerJobListComponent"
+  dataKey="uuid"
+  [defaultColumns]="columns"
+  i18n-paginatorText
+  paginatorText="jobs per page"
+  columnConfig="true"
+  [dataLoader]="dataLoader"
+  [bulkActions]="bulkActions"
 >
-  <ng-template pTemplate="header">
-    <tr>
-      <th scope="col" style="width: 40px">
-        <p-tableHeaderCheckbox ariaLabel="Select all rows" i18n-ariaLabel></p-tableHeaderCheckbox>
-      </th>
-      <th scope="col" style="width: 40px;">
-        <span i18n class="visually-hidden">More information</span>
-      </th>
-      <th scope="col" style="width: 120px;">
-        <span i18n class="visually-hidden">Actions</span>
-      </th>
-      <th scope="col" i18n>UUID</th>
-      <th scope="col" i18n>Type</th>
-      <th scope="col" style="width: 150px" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="state">State <p-sortIcon field="state"></p-sortIcon></th>
-      <th scope="col" style="width: 100px" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="priority">Priority <p-sortIcon field="priority"></p-sortIcon></th>
-      <th scope="col" style="width: 100px" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="progress">Progress <p-sortIcon field="progress"></p-sortIcon></th>
-      <th scope="col" style="width: 100px;" i18n>Runner</th>
-      <th scope="col" style="width: 200px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th scope="col" style="width: 230px;" i18n>Processed/Finished</th>
-    </tr>
+  <ng-template #totalTitle let-totalRecords>
+    <ng-container i18n>{ totalRecords, plural, =0 {No job} =1 {1 job} other {{{ totalRecords | myNumberFormatter }} jobs}}</ng-container>
   </ng-template>
 
-  <ng-template pTemplate="caption">
+  <ng-template #captionRight>
+    <my-advanced-input-filter class="me-2" [filters]="inputFilters" (search)="table.onSearch($event)"></my-advanced-input-filter>
 
-    <div class="caption">
-      <div class="left-buttons">
-        <my-action-dropdown
-          *ngIf="isInSelectionMode()" i18n-label label="Batch actions" theme="primary"
-          [actions]="bulkActions" [entry]="selectedRows"
-        >
-        </my-action-dropdown>
+    <my-button i18n-label label="Refresh" icon="refresh" (click)="table.loadData()"></my-button>
+  </ng-template>
+
+  <ng-template #tableCells let-runnerJob>
+    <td *ngIf="table.isColumnDisplayed('uuid')">{{ runnerJob.uuid }}</td>
+
+    <td *ngIf="table.isColumnDisplayed('type')">
+      <span class="pt-badge ellipsis" [title]="runnerJob.type" [ngClass]="getRandomRunnerTypeBadge(runnerJob.type)">{{ runnerJob.type }}</span>
+    </td>
+
+    <td *ngIf="table.isColumnDisplayed('state')">
+      <span class="pt-badge ellipsis" [title]="runnerJob.state.label" [ngClass]="getStateBadgeColor(runnerJob)">{{ runnerJob.state.label }}</span>
+    </td>
+
+    <td *ngIf="table.isColumnDisplayed('priority')">{{ runnerJob.priority }}</td>
+
+    <td *ngIf="table.isColumnDisplayed('progress')">
+      <ng-container *ngIf="runnerJob.progress">{{ runnerJob.progress }}%</ng-container>
+    </td>
+
+    <td *ngIf="table.isColumnDisplayed('runner')">
+      <div *ngIf="runnerJob.runner?.name" class="pt-badge" [ngClass]="getRandomRunnerNameBadge(runnerJob.runner.name)">
+        {{ runnerJob.runner.name }}
       </div>
+    </td>
+    <td *ngIf="table.isColumnDisplayed('createdAt')">{{ runnerJob.createdAt }}</td>
 
-      <div class="ms-auto d-flex flex-wrap gap-2">
-        <my-advanced-input-filter class="me-2" [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
+    <td *ngIf="table.isColumnDisplayed('processed')" class="fs-7">
+      <div>{{ runnerJob.startedAt }}</div>
+      <div>{{ runnerJob.finishedAt}}</div>
+    </td>
+  </ng-template>
 
-        <my-button i18n-label label="Refresh" icon="refresh" (click)="reloadData()"></my-button>
-      </div>
+  <ng-template #actionCell let-runnerJob>
+    <my-action-dropdown
+      placement="bottom-right top-right left auto" container="body"
+      i18n-label label="Actions" [actions]="actions" [entry]="runnerJob"
+    ></my-action-dropdown>
+  </ng-template>
+
+  <ng-template #expandedRow let-runnerJob>
+    <div class="mt-2 fs-7 font-monospace">
+      Parent job: {{ runnerJob.parent?.uuid || '-' }} <br />
+      Processed on {{ (runnerJob.startedAt || '-') }} <br />
+      Finished on {{ (runnerJob.finishedAt || '-') }} <br />
     </div>
+
+    <div class="mt-2">
+      <strong i18n>Payload:</strong>
+      <pre>{{ runnerJob.payload }}</pre>
+    </div>
+
+    <div class="mt-2">
+      <strong i18n>Private payload:</strong>
+      <pre>{{ runnerJob.privatePayload }}</pre>
+    </div>
+
+    <pre *ngIf="runnerJob.error" class="text-danger" >{{ runnerJob.error }}</pre>
   </ng-template>
 
-  <ng-template pTemplate="body" let-expanded="expanded" let-runnerJob>
-    <tr [pSelectableRow]="runnerJob">
-      <td class="checkbox-cell">
-        <p-tableCheckbox [value]="runnerJob" ariaLabel="Select this row" i18n-ariaLabel></p-tableCheckbox>
-      </td>
-
-      <td class="expand-cell">
-        <my-table-expander-icon [pRowToggler]="runnerJob" [expanded]="expanded"></my-table-expander-icon>
-      </td>
-
-      <td class="action-cell">
-        <my-action-dropdown
-          placement="bottom-right top-right left auto" container="body"
-          i18n-label label="Actions" [actions]="actions" [entry]="runnerJob" buttonSize="small"
-        ></my-action-dropdown>
-      </td>
-
-      <td>{{ runnerJob.uuid }}</td>
-
-      <td>
-        <span class="pt-badge ellipsis" [title]="runnerJob.type" [ngClass]="getRandomRunnerTypeBadge(runnerJob.type)">{{ runnerJob.type }}</span>
-      </td>
-
-      <td>
-        <span class="pt-badge ellipsis" [title]="runnerJob.state.label" [ngClass]="getStateBadgeColor(runnerJob)">{{ runnerJob.state.label }}</span>
-      </td>
-
-      <td>{{ runnerJob.priority }}</td>
-
-      <td>
-        <ng-container *ngIf="runnerJob.progress">{{ runnerJob.progress }}%</ng-container>
-      </td>
-
-      <td>
-        <div *ngIf="runnerJob.runner?.name" class="pt-badge" [ngClass]="getRandomRunnerNameBadge(runnerJob.runner.name)">
-          {{ runnerJob.runner.name }}
-        </div>
-      </td>
-      <td>{{ runnerJob.createdAt }}</td>
-
-      <td class="fs-7">
-        <div>{{ runnerJob.startedAt }}</div>
-        <div>{{ runnerJob.finishedAt}}</div>
-      </td>
-    </tr>
+  <ng-template #noResults>
+    <ng-container i18n>No runner jobs found.</ng-container>
   </ng-template>
-
-  <ng-template pTemplate="rowexpansion" let-runnerJob>
-    <tr>
-      <td myAutoColspan>
-        <div class="mt-2 fs-7 font-monospace">
-          Parent job: {{ runnerJob.parent?.uuid || '-' }} <br />
-          Processed on {{ (runnerJob.startedAt || '-') }} <br />
-          Finished on {{ (runnerJob.finishedAt || '-') }} <br />
-        </div>
-
-        <div class="mt-2">
-          <strong i18n>Payload:</strong>
-          <pre>{{ runnerJob.payload }}</pre>
-        </div>
-
-        <div class="mt-2">
-          <strong i18n>Private payload:</strong>
-          <pre>{{ runnerJob.privatePayload }}</pre>
-        </div>
-
-        <pre *ngIf="runnerJob.error" class="text-danger" >{{ runnerJob.error }}</pre>
-      </td>
-    </tr>
-  </ng-template>
-
-  <ng-template pTemplate="emptymessage">
-    <tr>
-      <td myAutoColspan>
-        <div class="no-results">
-          <ng-container i18n>No runner jobs found.</ng-container>
-        </div>
-      </td>
-    </tr>
-  </ng-template>
-</p-table>
+</my-table>

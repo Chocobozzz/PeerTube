@@ -24,7 +24,7 @@ function sanitizeAndCheckVideoCommentObject (comment: VideoCommentObject | Activ
     isDateValid(comment.published) &&
     isActivityPubUrlValid(comment.url) &&
     (!exists(comment.replyApproval) || isActivityPubUrlValid(comment.replyApproval)) &&
-    (hasAPPublic(comment.to) || hasAPPublic(comment.cc)) // Only accept public comments
+    (hasAPPublic(comment.to) || hasAPPublic(comment.cc)) // Only accept public or unlisted comments
 }
 
 // ---------------------------------------------------------------------------

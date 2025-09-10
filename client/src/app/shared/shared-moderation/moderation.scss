@@ -1,7 +1,7 @@
-@use 'sass:math';
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_miniature' as *;
+@use "sass:math";
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_miniature" as *;
 
 .moderation-expanded {
   font-size: 90%;
@@ -37,12 +37,6 @@
     .right {
       width: 100%;
     }
-  }
-}
-
-my-action-dropdown.show {
-  ::ng-deep .dropdown-root {
-    display: block !important;
   }
 }
 

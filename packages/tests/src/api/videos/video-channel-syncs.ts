@@ -22,7 +22,6 @@ describe('Test channel synchronizations', function () {
   if (areYoutubeImportTestsDisabled()) return
 
   function runSuite (mode: 'youtube-dl' | 'yt-dlp') {
-
     describe('Sync using ' + mode, function () {
       let servers: PeerTubeServer[]
       let sqlCommands: SQLCommand[] = []
@@ -30,6 +29,8 @@ describe('Test channel synchronizations', function () {
       let startTestDate: Date
 
       let rootChannelSyncId: number
+      let videoToDelete: number
+
       const userInfo = {
         accessToken: '',
         username: 'user1',
@@ -41,8 +42,8 @@ describe('Test channel synchronizations', function () {
       async function changeDateForSync (channelSyncId: number, newDate: string) {
         await sqlCommands[0].updateQuery(
           `UPDATE "videoChannelSync" ` +
-          `SET "createdAt"='${newDate}', "lastSyncAt"='${newDate}' ` +
-          `WHERE id=${channelSyncId}`
+            `SET "createdAt"='${newDate}', "lastSyncAt"='${newDate}' ` +
+            `WHERE id=${channelSyncId}`
         )
       }
 
@@ -284,25 +285,44 @@ describe('Test channel synchronizations', function () {
 
         const { id: channelId } = await servers[0].channels.create({
           attributes: {
-            name: 'channel2'
+            name: 'channel2',
+            support: 'my support test'
           }
         })
 
-        const { videoChannelSync: { id: videoChannelSyncId } } = await servers[0].channelSyncs.create({
+        const { videoChannelSync } = await servers[0].channelSyncs.create({
           attributes: {
             externalChannelUrl: FIXTURE_URLS.youtubePlaylist,
             videoChannelId: channelId
           }
         })
+        rootChannelSyncId = videoChannelSync.id
 
-        await forceSyncAll(videoChannelSyncId)
+        await forceSyncAll(rootChannelSyncId)
 
         {
-
           const { total, data } = await listAllVideosOfChannel('channel2')
           expect(total).to.equal(2)
           expect(data[0].name).to.equal('test')
           expect(data[1].name).to.equal('small video - youtube')
+
+          videoToDelete = data[1].id
+
+          for (const { uuid } of data) {
+            const video = await servers[0].videos.get({ id: uuid })
+            expect(video.support).to.equal('my support test')
+          }
+        }
+      })
+
+      it('Should not re-import deleted videos', async function () {
+        await servers[0].videos.remove({ id: videoToDelete })
+        await forceSyncAll(rootChannelSyncId)
+
+        {
+          const { total, data } = await listAllVideosOfChannel('channel2')
+          expect(total).to.equal(1)
+          expect(data[0].name).to.equal('test')
         }
       })
 

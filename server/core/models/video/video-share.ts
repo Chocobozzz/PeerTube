@@ -52,21 +52,20 @@ enum ScopeNames {
   ]
 })
 export class VideoShareModel extends SequelizeModel<VideoShareModel> {
-
   @AllowNull(false)
   @Is('VideoShareUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_SHARE.URL.max))
-  url: string
+  declare url: string
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @ForeignKey(() => ActorModel)
   @Column
-  actorId: number
+  declare actorId: number
 
   @BelongsTo(() => ActorModel, {
     foreignKey: {
@@ -74,11 +73,11 @@ export class VideoShareModel extends SequelizeModel<VideoShareModel> {
     },
     onDelete: 'cascade'
   })
-  Actor: Awaited<ActorModel>
+  declare Actor: Awaited<ActorModel>
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -86,7 +85,7 @@ export class VideoShareModel extends SequelizeModel<VideoShareModel> {
     },
     onDelete: 'cascade'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   static load (actorId: number | string, videoId: number | string, t?: Transaction): Promise<MVideoShareActor> {
     return VideoShareModel.scope(ScopeNames.WITH_ACTOR).findOne({
@@ -109,9 +108,9 @@ export class VideoShareModel extends SequelizeModel<VideoShareModel> {
 
   static listActorIdsAndFollowerUrlsByShare (videoId: number, t: Transaction) {
     const query = `SELECT "actor"."id" AS "id", "actor"."followersUrl" AS "followersUrl" ` +
-                  `FROM "videoShare" ` +
-                  `INNER JOIN "actor" ON "actor"."id" = "videoShare"."actorId" ` +
-                  `WHERE "videoShare"."videoId" = :videoId`
+      `FROM "videoShare" ` +
+      `INNER JOIN "actor" ON "actor"."id" = "videoShare"."actorId" ` +
+      `WHERE "videoShare"."videoId" = :videoId`
 
     const options = {
       type: QueryTypes.SELECT as QueryTypes.SELECT,
@@ -131,13 +130,13 @@ export class VideoShareModel extends SequelizeModel<VideoShareModel> {
         [Op.and]: [
           literal(
             `EXISTS (` +
-            `  SELECT 1 FROM "videoShare" ` +
-            `  INNER JOIN "video" ON "videoShare"."videoId" = "video"."id" ` +
-            `  INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ` +
-            `  INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ` +
-            `  WHERE "videoShare"."actorId" = "ActorModel"."id" AND "account"."actorId" = ${safeOwnerId} ` +
-            `  LIMIT 1` +
-            `)`
+              `  SELECT 1 FROM "videoShare" ` +
+              `  INNER JOIN "video" ON "videoShare"."videoId" = "video"."id" ` +
+              `  INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ` +
+              `  INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ` +
+              `  WHERE "videoShare"."actorId" = "ActorModel"."id" AND "account"."actorId" = ${safeOwnerId} ` +
+              `  LIMIT 1` +
+              `)`
           )
         ]
       },
@@ -156,11 +155,11 @@ export class VideoShareModel extends SequelizeModel<VideoShareModel> {
         [Op.and]: [
           literal(
             `EXISTS (` +
-            `  SELECT 1 FROM "videoShare" ` +
-            `  INNER JOIN "video" ON "videoShare"."videoId" = "video"."id" ` +
-            `  WHERE "videoShare"."actorId" = "ActorModel"."id" AND "video"."channelId" = ${safeChannelId} ` +
-            `  LIMIT 1` +
-            `)`
+              `  SELECT 1 FROM "videoShare" ` +
+              `  INNER JOIN "video" ON "videoShare"."videoId" = "video"."id" ` +
+              `  WHERE "videoShare"."actorId" = "ActorModel"."id" AND "video"."channelId" = ${safeChannelId} ` +
+              `  LIMIT 1` +
+              `)`
           )
         ]
       },

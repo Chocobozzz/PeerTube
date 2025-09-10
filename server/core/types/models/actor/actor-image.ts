@@ -11,4 +11,4 @@ export type MActorImagePath = Pick<MActorImage, 'type' | 'filename' | 'getStatic
 
 export type MActorImageFormattable =
   & FunctionProperties<MActorImage>
-  & Pick<MActorImage, 'type' | 'getStaticPath' | 'width' | 'filename' | 'createdAt' | 'updatedAt'>
+  & Pick<MActorImage, 'type' | 'getStaticPath' | 'width' | 'height' | 'filename' | 'createdAt' | 'updatedAt'>

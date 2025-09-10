@@ -439,156 +439,156 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   @Default(DataType.UUIDV4)
   @IsUUID(4)
   @Column(DataType.UUID)
-  uuid: string
+  declare uuid: string
 
   @AllowNull(false)
   @Is('VideoName', value => throwIfNotValid(value, isVideoNameValid, 'name'))
   @Column
-  name: string
+  declare name: string
 
   @AllowNull(true)
   @Default(null)
   @Column
-  category: number
+  declare category: number
 
   @AllowNull(true)
   @Default(null)
   @Column
-  licence: number
+  declare licence: number
 
   @AllowNull(true)
   @Default(null)
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.LANGUAGE.max))
-  language: string
+  declare language: string
 
   @AllowNull(false)
   @Is('VideoPrivacy', value => throwIfNotValid(value, isVideoPrivacyValid, 'privacy'))
   @Column(DataType.INTEGER)
-  privacy: VideoPrivacyType
+  declare privacy: VideoPrivacyType
 
   @AllowNull(false)
   @Is('VideoNSFW', value => throwIfNotValid(value, isBooleanValid, 'NSFW boolean'))
   @Column
-  nsfw: boolean
+  declare nsfw: boolean
 
   @AllowNull(false)
   @Default(0)
   @Is('VideoNSFWFlags', value => throwIfNotValid(value, isNSFWFlagsValid, 'NSFW flags'))
   @Column
-  nsfwFlags: number // NSFWFlagType
+  declare nsfwFlags: number // NSFWFlagType
 
   @AllowNull(true)
   @Default(null)
   @Is('VideoNSFWSummary', value => throwIfNotValid(value, isNSFWSummaryValid, 'NSFW summary'))
   @Column
-  nsfwSummary: string
+  declare nsfwSummary: string
 
   @AllowNull(true)
   @Default(null)
   @Is('VideoDescription', value => throwIfNotValid(value, isVideoDescriptionValid, 'description', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.DESCRIPTION.max))
-  description: string
+  declare description: string
 
   @AllowNull(true)
   @Default(null)
   @Is('VideoSupport', value => throwIfNotValid(value, isVideoSupportValid, 'support', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.SUPPORT.max))
-  support: string
+  declare support: string
 
   @AllowNull(false)
   @Is('VideoDuration', value => throwIfNotValid(value, isVideoDurationValid, 'duration'))
   @Column
-  duration: number
+  declare duration: number
 
   @AllowNull(false)
   @Default(0)
   @IsInt
   @Min(0)
   @Column
-  views: number
+  declare views: number
 
   @AllowNull(false)
   @Default(0)
   @IsInt
   @Min(0)
   @Column
-  likes: number
+  declare likes: number
 
   @AllowNull(false)
   @Default(0)
   @IsInt
   @Min(0)
   @Column
-  dislikes: number
+  declare dislikes: number
 
   @AllowNull(false)
   @Default(0)
   @IsInt
   @Min(0)
   @Column
-  comments: number
+  declare comments: number
 
   @AllowNull(false)
   @Column
-  remote: boolean
+  declare remote: boolean
 
   @AllowNull(false)
   @Default(false)
   @Column
-  isLive: boolean
+  declare isLive: boolean
 
   @AllowNull(false)
   @Is('VideoUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.URL.max))
-  url: string
+  declare url: string
 
   @AllowNull(false)
   @Column
-  commentsPolicy: VideoCommentPolicyType
+  declare commentsPolicy: VideoCommentPolicyType
 
   @AllowNull(false)
   @Column
-  downloadEnabled: boolean
+  declare downloadEnabled: boolean
 
   @AllowNull(false)
   @Column
-  waitTranscoding: boolean
+  declare waitTranscoding: boolean
 
   @AllowNull(false)
   @Default(null)
   @Is('VideoState', value => throwIfNotValid(value, isVideoStateValid, 'state'))
   @Column
-  state: VideoStateType
+  declare state: VideoStateType
 
   @AllowNull(true)
   @Column(DataType.FLOAT)
-  aspectRatio: number
+  declare aspectRatio: number
 
   // We already have the information in videoSource table for local videos, but we prefer to normalize it for performance
   // And also to store the info from remote instances
   @AllowNull(true)
   @Column
-  inputFileUpdatedAt: Date
+  declare inputFileUpdatedAt: Date
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @AllowNull(false)
   @Default(DataType.NOW)
   @Column
-  publishedAt: Date
+  declare publishedAt: Date
 
   @AllowNull(true)
   @Default(null)
   @Column
-  originallyPublishedAt: Date
+  declare originallyPublishedAt: Date
 
   @ForeignKey(() => VideoChannelModel)
   @Column
-  channelId: number
+  declare channelId: number
 
   @BelongsTo(() => VideoChannelModel, {
     foreignKey: {
@@ -596,21 +596,21 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     },
     onDelete: 'cascade'
   })
-  VideoChannel: Awaited<VideoChannelModel>
+  declare VideoChannel: Awaited<VideoChannelModel>
 
   @BelongsToMany(() => TagModel, {
     foreignKey: 'videoId',
     through: () => VideoTagModel,
     onDelete: 'CASCADE'
   })
-  Tags: Awaited<TagModel>[]
+  declare Tags: Awaited<TagModel>[]
 
   @BelongsToMany(() => TrackerModel, {
     foreignKey: 'videoId',
     through: () => VideoTrackerModel,
     onDelete: 'CASCADE'
   })
-  Trackers: Awaited<TrackerModel>[]
+  declare Trackers: Awaited<TrackerModel>[]
 
   @HasMany(() => ThumbnailModel, {
     foreignKey: {
@@ -620,7 +620,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     hooks: true,
     onDelete: 'cascade'
   })
-  Thumbnails: Awaited<ThumbnailModel>[]
+  declare Thumbnails: Awaited<ThumbnailModel>[]
 
   @HasMany(() => VideoPlaylistElementModel, {
     foreignKey: {
@@ -629,7 +629,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     },
     onDelete: 'set null'
   })
-  VideoPlaylistElements: Awaited<VideoPlaylistElementModel>[]
+  declare VideoPlaylistElements: Awaited<VideoPlaylistElementModel>[]
 
   @HasOne(() => VideoSourceModel, {
     foreignKey: {
@@ -638,7 +638,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     },
     onDelete: 'CASCADE'
   })
-  VideoSource: Awaited<VideoSourceModel>
+  declare VideoSource: Awaited<VideoSourceModel>
 
   @HasMany(() => VideoAbuseModel, {
     foreignKey: {
@@ -647,7 +647,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     },
     onDelete: 'set null'
   })
-  VideoAbuses: Awaited<VideoAbuseModel>[]
+  declare VideoAbuses: Awaited<VideoAbuseModel>[]
 
   @HasMany(() => VideoFileModel, {
     foreignKey: {
@@ -656,7 +656,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     },
     onDelete: 'cascade'
   })
-  VideoFiles: Awaited<VideoFileModel>[]
+  declare VideoFiles: Awaited<VideoFileModel>[]
 
   @HasMany(() => VideoStreamingPlaylistModel, {
     foreignKey: {
@@ -665,7 +665,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     },
     onDelete: 'cascade'
   })
-  VideoStreamingPlaylists: Awaited<VideoStreamingPlaylistModel>[]
+  declare VideoStreamingPlaylists: Awaited<VideoStreamingPlaylistModel>[]
 
   @HasMany(() => VideoShareModel, {
     foreignKey: {
@@ -674,7 +674,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     },
     onDelete: 'cascade'
   })
-  VideoShares: Awaited<VideoShareModel>[]
+  declare VideoShares: Awaited<VideoShareModel>[]
 
   @HasMany(() => AccountVideoRateModel, {
     foreignKey: {
@@ -683,7 +683,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     },
     onDelete: 'cascade'
   })
-  AccountVideoRates: Awaited<AccountVideoRateModel>[]
+  declare AccountVideoRates: Awaited<AccountVideoRateModel>[]
 
   @HasMany(() => VideoCommentModel, {
     foreignKey: {
@@ -693,7 +693,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     onDelete: 'cascade',
     hooks: true
   })
-  VideoComments: Awaited<VideoCommentModel>[]
+  declare VideoComments: Awaited<VideoCommentModel>[]
 
   @HasMany(() => VideoViewModel, {
     foreignKey: {
@@ -702,7 +702,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     },
     onDelete: 'cascade'
   })
-  VideoViews: Awaited<VideoViewModel>[]
+  declare VideoViews: Awaited<VideoViewModel>[]
 
   @HasMany(() => UserVideoHistoryModel, {
     foreignKey: {
@@ -711,7 +711,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     },
     onDelete: 'cascade'
   })
-  UserVideoHistories: Awaited<UserVideoHistoryModel>[]
+  declare UserVideoHistories: Awaited<UserVideoHistoryModel>[]
 
   @HasOne(() => ScheduleVideoUpdateModel, {
     foreignKey: {
@@ -720,7 +720,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     },
     onDelete: 'cascade'
   })
-  ScheduleVideoUpdate: Awaited<ScheduleVideoUpdateModel>
+  declare ScheduleVideoUpdate: Awaited<ScheduleVideoUpdateModel>
 
   @HasOne(() => VideoBlacklistModel, {
     foreignKey: {
@@ -729,7 +729,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     },
     onDelete: 'cascade'
   })
-  VideoBlacklist: Awaited<VideoBlacklistModel>
+  declare VideoBlacklist: Awaited<VideoBlacklistModel>
 
   @HasOne(() => VideoLiveModel, {
     foreignKey: {
@@ -739,7 +739,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     hooks: true,
     onDelete: 'cascade'
   })
-  VideoLive: Awaited<VideoLiveModel>
+  declare VideoLive: Awaited<VideoLiveModel>
 
   @HasOne(() => VideoImportModel, {
     foreignKey: {
@@ -748,7 +748,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     },
     onDelete: 'set null'
   })
-  VideoImport: Awaited<VideoImportModel>
+  declare VideoImport: Awaited<VideoImportModel>
 
   @HasMany(() => VideoCaptionModel, {
     foreignKey: {
@@ -759,7 +759,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     hooks: true,
     ['separate' as any]: true
   })
-  VideoCaptions: Awaited<VideoCaptionModel>[]
+  declare VideoCaptions: Awaited<VideoCaptionModel>[]
 
   @HasMany(() => VideoPasswordModel, {
     foreignKey: {
@@ -768,13 +768,13 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     },
     onDelete: 'cascade'
   })
-  VideoPasswords: Awaited<VideoPasswordModel>[]
+  declare VideoPasswords: Awaited<VideoPasswordModel>[]
 
   @HasMany(() => VideoAutomaticTagModel, {
     foreignKey: 'videoId',
     onDelete: 'CASCADE'
   })
-  VideoAutomaticTags: Awaited<VideoAutomaticTagModel>[]
+  declare VideoAutomaticTags: Awaited<VideoAutomaticTagModel>[]
 
   @HasOne(() => VideoJobInfoModel, {
     foreignKey: {
@@ -783,7 +783,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     },
     onDelete: 'cascade'
   })
-  VideoJobInfo: Awaited<VideoJobInfoModel>
+  declare VideoJobInfo: Awaited<VideoJobInfoModel>
 
   @HasOne(() => StoryboardModel, {
     foreignKey: {
@@ -793,7 +793,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     onDelete: 'cascade',
     hooks: true
   })
-  Storyboard: Awaited<StoryboardModel>
+  declare Storyboard: Awaited<StoryboardModel>
 
   @AfterCreate
   static notifyCreate (video: MVideo) {
@@ -1064,6 +1064,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     isLive?: boolean
     isLocal?: boolean
     include?: VideoIncludeType
+    includeScheduledLive?: boolean
 
     hasFiles?: boolean // default false
 
@@ -1126,6 +1127,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         'privacyOneOf',
         'isLocal',
         'include',
+        'includeScheduledLive',
         'displayOnlyForFollower',
         'hasFiles',
         'accountId',
@@ -1166,6 +1168,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     tagsOneOf?: string[]
     tagsAllOf?: string[]
     privacyOneOf?: VideoPrivacyType[]
+    includeScheduledLive?: boolean
 
     displayOnlyForFollower: DisplayOnlyForFollowerOptions | null
 

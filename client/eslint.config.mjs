@@ -150,6 +150,7 @@ export default defineConfig([
       'no-return-assign': 'off',
       '@typescript-eslint/unbound-method': 'off',
       'import/no-named-default': 'off',
+      '@typescript-eslint/prefer-reduce-type-parameter': 'off',
 
       "@typescript-eslint/no-deprecated": [ 'error', {
         allow: [

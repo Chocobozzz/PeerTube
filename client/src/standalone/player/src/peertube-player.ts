@@ -20,7 +20,7 @@ import './shared/control-bar/theater-button'
 import './shared/control-bar/time-tooltip'
 import './shared/dock/peertube-dock-component'
 import './shared/dock/peertube-dock-plugin'
-import './shared/nsfw/peertube-nsfw-component'
+import './shared/nsfw/peertube-nsfw-info-component'
 import './shared/nsfw/peertube-nsfw-plugin'
 import './shared/hotkeys/peertube-hotkeys-plugin'
 import './shared/metrics/metrics-plugin'
@@ -433,6 +433,7 @@ export class PeerTubePlayer {
       autoplay: this.getAutoPlayValue(this.currentLoadOptions.autoplay),
 
       poster: this.currentLoadOptions.poster,
+      preload: 'none' as 'none',
 
       inactivityTimeout: this.options.inactivityTimeout,
       playbackRates: [ 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2 ],

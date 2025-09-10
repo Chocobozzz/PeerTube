@@ -4,7 +4,8 @@ import { CustomConfig, HttpStatusCode, Video, VideoImportState, VideoPrivacy, Vi
 import { areHttpImportTestsDisabled, areYoutubeImportTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   PeerTubeServer,
-  cleanupTests, createMultipleServers,
+  cleanupTests,
+  createMultipleServers,
   createSingleServer,
   doubleFollow,
   getServerImportConfig,
@@ -80,11 +81,9 @@ async function checkVideoServer2 (server: PeerTubeServer, id: number | string) {
 }
 
 describe('Test video imports', function () {
-
   if (areHttpImportTestsDisabled()) return
 
   function runSuite (mode: 'youtube-dl' | 'yt-dlp') {
-
     describe('Import ' + mode, function () {
       let servers: PeerTubeServer[] = []
 
@@ -396,7 +395,12 @@ describe('Test video imports', function () {
         // test resolution
         const video = await servers[0].videos.get({ id: videoUUID })
         expect(video.name).to.equal('hdr video')
-        const maxResolution = Math.max.apply(Math, video.files.map(function (o) { return o.resolution.id }))
+        const maxResolution = Math.max.apply(
+          Math,
+          video.files.map(function (o) {
+            return o.resolution.id
+          })
+        )
         expect(maxResolution, 'expected max resolution not met').to.equals(VideoResolution.H_240P)
       })
 
@@ -470,7 +474,7 @@ describe('Test video imports', function () {
         expect(video.name).to.equal('bigger resolution video')
 
         expect(video.files).to.have.lengthOf(2)
-        expect(video.files.find(f => f.resolution.id === 240)).to.exist
+        expect(video.files.find(f => f.resolution.id === 320)).to.exist
         expect(video.files.find(f => f.resolution.id === 144)).to.exist
       })
 
@@ -507,9 +511,9 @@ describe('Test video imports', function () {
             expect(captions[0].language.id).to.equal('fr')
 
             const str = `WEBVTT FILE\r?\n\r?\n` +
-            `1\r?\n` +
-            `00:00:04.000 --> 00:00:09.000\r?\n` +
-            `January 1, 1994. The North American`
+              `1\r?\n` +
+              `00:00:04.000 --> 00:00:09.000\r?\n` +
+              `January 1, 1994. The North American`
             await testCaptionFile(captions[0].fileUrl, new RegExp(str))
           }
         }

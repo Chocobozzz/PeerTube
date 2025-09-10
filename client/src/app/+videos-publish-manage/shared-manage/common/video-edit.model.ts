@@ -46,9 +46,12 @@ type CommonUpdateForm =
     nsfwFlagSex?: boolean
   }
 
-type LiveUpdateForm = Omit<LiveVideoUpdate, 'replaySettings'> & {
+type LiveUpdateForm = Omit<LiveVideoUpdate, 'replaySettings' | 'schedules'> & {
   replayPrivacy?: VideoPrivacyType
   liveStreamKey?: string
+  schedules?: {
+    startAt?: Date
+  }[]
 }
 
 type ReplaceFileForm = {
@@ -72,7 +75,7 @@ type CreateFromImportOptions = LoadFromPublishOptions & Pick<VideoImportCreate, 
 
 type CreateFromLiveOptions =
   & CreateFromUploadOptions
-  & Required<Pick<LiveVideoCreate, 'permanentLive' | 'latencyMode' | 'saveReplay' | 'replaySettings'>>
+  & Required<Pick<LiveVideoCreate, 'permanentLive' | 'latencyMode' | 'saveReplay' | 'replaySettings' | 'schedules'>>
 
 type UpdateFromAPIOptions = {
   video?: Pick<
@@ -124,6 +127,12 @@ type CommonUpdate = Omit<VideoUpdate, 'thumbnailfile' | 'originallyPublishedAt' 
   }
 }
 
+type LiveUpdate = Omit<LiveVideoUpdate, 'schedules'> & {
+  schedules?: {
+    startAt: string
+  }[]
+}
+
 export class VideoEdit {
   static readonly SPECIAL_SCHEDULED_PRIVACY = -1
 
@@ -131,7 +140,7 @@ export class VideoEdit {
   private common: CommonUpdate = {}
   private captions: VideoCaptionWithPathEdit[] = []
   private chapters: VideoChaptersEdit = new VideoChaptersEdit()
-  private live: LiveVideoUpdate
+  private live: LiveUpdate
   private replaceFile: File
   private studioTasks: VideoStudioTask[] = []
 
@@ -175,7 +184,7 @@ export class VideoEdit {
     common?: Omit<CommonUpdate, 'pluginData' | 'previewfile'>
     previewfile?: { size: number }
 
-    live?: LiveVideoUpdate
+    live?: LiveUpdate
 
     pluginData?: any
     pluginDefaults?: Record<string, string | boolean>
@@ -236,8 +245,13 @@ export class VideoEdit {
       permanentLive: options.permanentLive,
 
       saveReplay: options.saveReplay,
+
       replaySettings: options.replaySettings
         ? { privacy: options.replaySettings.privacy }
+        : undefined,
+
+      schedules: options.schedules
+        ? options.schedules.map(s => ({ startAt: new Date(s.startAt).toISOString() }))
         : undefined
     }
 
@@ -251,6 +265,7 @@ export class VideoEdit {
 
     this.common.name = options.name
     this.common.channelId = options.channelId
+    this.common.support = options.support
     this.metadata.isLive = isLive
 
     this.common.privacy = serverDefaults.publish.privacy
@@ -278,12 +293,12 @@ export class VideoEdit {
     return videoEdit
   }
 
-  async loadFromAPI (options: UpdateFromAPIOptions) {
-    const { video, videoPasswords, live, chapters, captions, videoSource } = options
+  async loadFromAPI (options: UpdateFromAPIOptions & { loadPrivacy?: boolean }) {
+    const { video, videoPasswords, live, chapters, captions, videoSource, loadPrivacy = true } = options
 
     debugLogger('Load from API', options)
 
-    this.loadVideo({ video, videoPasswords, saveInStore: true })
+    this.loadVideo({ video, videoPasswords, saveInStore: true, loadPrivacy })
     this.loadLive(live)
 
     if (captions !== undefined) {
@@ -307,18 +322,21 @@ export class VideoEdit {
   private loadVideo (options: {
     video: UpdateFromAPIOptions['video']
     videoPasswords?: string[]
+    loadPrivacy?: boolean // default true
     saveInStore: boolean
   }) {
-    const { video, saveInStore, videoPasswords = [] } = options
+    const { video, saveInStore, loadPrivacy = true, videoPasswords = [] } = options
 
     if (video === undefined) return
 
-    const buildObj: () => CommonUpdate = () => {
-      return {
+    const buildObj: (options: { loadPrivacy: boolean }) => CommonUpdate = () => {
+      const { loadPrivacy } = options
+
+      const base = {
         ...this.common,
 
         name: video.name || '',
-        privacy: video.privacy?.id ?? null,
+
         channelId: video.channel?.id ?? null,
         category: video.category?.id ?? null,
         licence: video.licence?.id ?? null,
@@ -346,12 +364,18 @@ export class VideoEdit {
 
         videoPasswords: videoPasswords ?? []
       }
+
+      if (loadPrivacy) {
+        return { ...base, privacy: video.privacy?.id ?? null }
+      }
+
+      return base
     }
 
-    this.common = buildObj()
+    this.common = buildObj({ loadPrivacy })
 
     if (saveInStore) {
-      const obj = buildObj()
+      const obj = buildObj({ loadPrivacy: true })
       this.saveStore.common = omit(obj, [ 'pluginData', 'previewfile' ])
 
       // Apply plugin defaults so we correctly detect changes
@@ -410,6 +434,10 @@ export class VideoEdit {
 
         replaySettings: live.replaySettings
           ? { privacy: live.replaySettings.privacy }
+          : undefined,
+
+        schedules: live.schedules
+          ? live.schedules.map(s => ({ startAt: new Date(s.startAt).toISOString() }))
           : undefined
       }
     }
@@ -619,6 +647,16 @@ export class VideoEdit {
         : undefined
     }
 
+    if (values.schedules !== undefined) {
+      if (values.schedules === null || values.schedules.length === 0 || !values.schedules[0].startAt) {
+        this.live.schedules = []
+      } else {
+        this.live.schedules = values.schedules.map(s => ({
+          startAt: new Date(s.startAt).toISOString()
+        }))
+      }
+    }
+
     this.updateAfterChange()
   }
 
@@ -631,7 +669,11 @@ export class VideoEdit {
 
       replayPrivacy: this.live.replaySettings
         ? this.live.replaySettings.privacy
-        : VideoPrivacy.PRIVATE
+        : VideoPrivacy.PRIVATE,
+
+      schedules: this.live.schedules?.map(s => ({
+        startAt: new Date(s.startAt)
+      }))
     }
   }
 
@@ -642,7 +684,9 @@ export class VideoEdit {
       replaySettings: this.live.saveReplay
         ? this.live.replaySettings
         : undefined,
-      latencyMode: this.live.latencyMode
+      latencyMode: this.live.latencyMode,
+
+      schedules: this.live.schedules
     }
   }
 
@@ -653,7 +697,8 @@ export class VideoEdit {
       permanentLive: this.live.permanentLive,
       latencyMode: this.live.latencyMode,
       saveReplay: this.live.saveReplay,
-      replaySettings: this.live.replaySettings
+      replaySettings: this.live.replaySettings,
+      schedules: this.live.schedules
     }
   }
 

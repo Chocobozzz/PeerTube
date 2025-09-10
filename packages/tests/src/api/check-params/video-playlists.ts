@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
 import {
   HttpStatusCode,
   VideoPlaylistCreate,
@@ -20,6 +19,7 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '@peertube/peertube-server-commands'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
 
 describe('Test video playlists API validator', function () {
   let server: PeerTubeServer
@@ -146,7 +146,7 @@ describe('Test video playlists API validator', function () {
       })
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({ url: server.url, path: globalPath, expectedStatus: HttpStatusCode.OK_200, token: server.accessToken })
       await makeGetRequest({ url: server.url, path: accountPath, expectedStatus: HttpStatusCode.OK_200, token: server.accessToken })
       await makeGetRequest({
@@ -169,7 +169,7 @@ describe('Test video playlists API validator', function () {
       await checkBadCountPagination(server.url, path + playlist.shortUUID + '/videos', server.accessToken)
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({ url: server.url, path: path + playlist.shortUUID + '/videos', expectedStatus: HttpStatusCode.OK_200 })
     })
   })
@@ -478,13 +478,13 @@ describe('Test video playlists API validator', function () {
     })
   })
 
-  describe('When reordering elements of a playlist', function () {
+  describe('When reordering elements of a playlist or playlists in a channel', function () {
     let videoId3: number
     let videoId4: number
 
     const getBase = (
       attributes?: Partial<VideoPlaylistReorder>,
-      wrapper?: Partial<Parameters<PlaylistsCommand['reorderElements']>[0]>
+      wrapper?: Partial<Parameters<PlaylistsCommand['reorderElements'] | PlaylistsCommand['reorderPlaylistsOfChannel']>[0]>
     ) => {
       return {
         attributes: {
@@ -495,6 +495,7 @@ describe('Test video playlists API validator', function () {
           ...attributes
         },
 
+        channelName: server.store.channel.name,
         playlistId: playlist.shortUUID,
         expectedStatus: HttpStatusCode.BAD_REQUEST_400,
 
@@ -506,87 +507,129 @@ describe('Test video playlists API validator', function () {
       videoId3 = (await server.videos.quickUpload({ name: 'video 3' })).id
       videoId4 = (await server.videos.quickUpload({ name: 'video 4' })).id
 
+      await command.create({
+        attributes: {
+          displayName: 'super playlist 2',
+          privacy: VideoPlaylistPrivacy.PUBLIC,
+          videoChannelId: server.store.channel.id
+        }
+      })
+
       for (const id of [ videoId3, videoId4 ]) {
         await command.addElement({ playlistId: playlist.shortUUID, attributes: { videoId: id } })
       }
     })
 
-    it('Should fail with an unauthenticated user', async function () {
-      const params = getBase({}, { token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
-      await command.reorderElements(params)
+    describe('Common checks', function () {
+      it('Should fail with an unauthenticated user', async function () {
+        const params = getBase({}, { token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+        await command.reorderElements(params)
+        await command.reorderPlaylistsOfChannel(params)
+      })
+
+      it('Should fail with an invalid start position', async function () {
+        {
+          const params = getBase({ startPosition: -1 })
+          await command.reorderElements(params)
+          await command.reorderPlaylistsOfChannel(params)
+        }
+
+        {
+          const params = getBase({ startPosition: 'toto' as any })
+          await command.reorderElements(params)
+          await command.reorderPlaylistsOfChannel(params)
+        }
+
+        {
+          const params = getBase({ startPosition: 42 })
+          await command.reorderElements(params)
+          await command.reorderPlaylistsOfChannel(params)
+        }
+      })
+
+      it('Should fail with an invalid insert after position', async function () {
+        {
+          const params = getBase({ insertAfterPosition: 'toto' as any })
+          await command.reorderElements(params)
+          await command.reorderPlaylistsOfChannel(params)
+        }
+
+        {
+          const params = getBase({ insertAfterPosition: -2 })
+          await command.reorderElements(params)
+          await command.reorderPlaylistsOfChannel(params)
+        }
+
+        {
+          const params = getBase({ insertAfterPosition: 42 })
+          await command.reorderElements(params)
+          await command.reorderPlaylistsOfChannel(params)
+        }
+      })
+
+      it('Should fail with an invalid reorder length', async function () {
+        {
+          const params = getBase({ reorderLength: 'toto' as any })
+          await command.reorderElements(params)
+          await command.reorderPlaylistsOfChannel(params)
+        }
+
+        {
+          const params = getBase({ reorderLength: -2 })
+          await command.reorderElements(params)
+          await command.reorderPlaylistsOfChannel(params)
+        }
+
+        {
+          const params = getBase({ reorderLength: 42 })
+          await command.reorderElements(params)
+          await command.reorderPlaylistsOfChannel(params)
+        }
+      })
+
+      it('Succeed with the correct params', async function () {
+        const params = getBase({}, { expectedStatus: HttpStatusCode.NO_CONTENT_204 })
+        await command.reorderElements(params)
+        await command.reorderPlaylistsOfChannel(params)
+      })
     })
 
-    it('Should fail with the playlist of another user', async function () {
-      const params = getBase({}, { token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
-      await command.reorderElements(params)
+    describe('Reordering elements of a playlist checks', function () {
+      it('Should fail with the playlist of another user', async function () {
+        const params = getBase({}, { token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+        await command.reorderElements(params)
+      })
+
+      it('Should fail with an invalid playlist', async function () {
+        {
+          const params = getBase({}, { playlistId: 'toto' })
+          await command.reorderElements(params)
+        }
+
+        {
+          const params = getBase({}, { playlistId: 42, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+          await command.reorderElements(params)
+        }
+      })
     })
 
-    it('Should fail with an invalid playlist', async function () {
-      {
-        const params = getBase({}, { playlistId: 'toto' })
-        await command.reorderElements(params)
-      }
+    describe('Reordering playlists of a channel checks', function () {
+      it('Should fail with the channel of another user', async function () {
+        const params = getBase({}, { token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+        await command.reorderPlaylistsOfChannel(params)
+      })
 
-      {
-        const params = getBase({}, { playlistId: 42, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
-        await command.reorderElements(params)
-      }
-    })
+      it('Should fail with an unknown channel', async function () {
+        const params = getBase({}, { channelName: 'toto', expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+        await command.reorderPlaylistsOfChannel(params)
+      })
 
-    it('Should fail with an invalid start position', async function () {
-      {
-        const params = getBase({ startPosition: -1 })
-        await command.reorderElements(params)
-      }
-
-      {
-        const params = getBase({ startPosition: 'toto' as any })
-        await command.reorderElements(params)
-      }
-
-      {
-        const params = getBase({ startPosition: 42 })
-        await command.reorderElements(params)
-      }
-    })
-
-    it('Should fail with an invalid insert after position', async function () {
-      {
-        const params = getBase({ insertAfterPosition: 'toto' as any })
-        await command.reorderElements(params)
-      }
-
-      {
-        const params = getBase({ insertAfterPosition: -2 })
-        await command.reorderElements(params)
-      }
-
-      {
-        const params = getBase({ insertAfterPosition: 42 })
-        await command.reorderElements(params)
-      }
-    })
-
-    it('Should fail with an invalid reorder length', async function () {
-      {
-        const params = getBase({ reorderLength: 'toto' as any })
-        await command.reorderElements(params)
-      }
-
-      {
-        const params = getBase({ reorderLength: -2 })
-        await command.reorderElements(params)
-      }
-
-      {
-        const params = getBase({ reorderLength: 42 })
-        await command.reorderElements(params)
-      }
-    })
-
-    it('Succeed with the correct params', async function () {
-      const params = getBase({}, { expectedStatus: HttpStatusCode.NO_CONTENT_204 })
-      await command.reorderElements(params)
+      it('Should fail with an invalid channel', async function () {
+        {
+          const params = getBase({}, { channelName: 42 as any, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+          await command.reorderPlaylistsOfChannel(params)
+        }
+      })
     })
   })
 

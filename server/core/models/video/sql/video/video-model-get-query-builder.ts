@@ -6,21 +6,19 @@ import { VideoModelBuilder } from './shared/video-model-builder.js'
 import { VideoTableAttributes } from './shared/video-table-attributes.js'
 
 /**
- *
  * Build a GET SQL query, fetch rows and create the video model
- *
  */
 
 export type GetType =
-  'api' |
-  'full' |
-  'account-blacklist-files' |
-  'account' |
-  'all-files' |
-  'thumbnails' |
-  'thumbnails-blacklist' |
-  'id' |
-  'blacklist-rights'
+  | 'api'
+  | 'full'
+  | 'account-blacklist-files'
+  | 'account'
+  | 'all-files'
+  | 'thumbnails'
+  | 'thumbnails-blacklist'
+  | 'id'
+  | 'blacklist-rights'
 
 export type BuildVideoGetQueryOptions = {
   id?: number | string
@@ -91,8 +89,6 @@ export class VideoModelGetQueryBuilder {
 }
 
 export class VideosModelGetQuerySubBuilder extends AbstractVideoQueryBuilder {
-  protected attributes: { [key: string]: string }
-
   protected webVideoFilesQuery: string
   protected streamingPlaylistFilesQuery: string
 
@@ -159,6 +155,7 @@ export class VideosModelGetQuerySubBuilder extends AbstractVideoQueryBuilder {
 
     if (VideosModelGetQuerySubBuilder.liveInclude.has(options.type)) {
       this.includeLive()
+      this.includeLiveSchedules()
     }
 
     if (options.userId && VideosModelGetQuerySubBuilder.userHistoryInclude.has(options.type)) {

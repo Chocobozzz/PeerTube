@@ -55,6 +55,7 @@ export class Video implements VideoServerModel {
   aspectRatio: number
 
   isLive: boolean
+  liveSchedules: { startAt: Date | string }[]
 
   previewPath: string
   previewUrl: string
@@ -148,6 +149,9 @@ export class Video implements VideoServerModel {
     this.description = hash.description
 
     this.isLive = hash.isLive
+    this.liveSchedules = hash.liveSchedules
+      ? hash.liveSchedules.map(schedule => ({ startAt: new Date(schedule.startAt.toString()) }))
+      : null
 
     this.duration = hash.duration
     this.durationLabel = Video.buildDurationLabel(this)
@@ -195,7 +199,9 @@ export class Video implements VideoServerModel {
     this.privacy.label = peertubeTranslate(this.privacy.label, translations)
 
     this.scheduledUpdate = hash.scheduledUpdate
-    this.originallyPublishedAt = hash.originallyPublishedAt ? new Date(hash.originallyPublishedAt.toString()) : null
+    this.originallyPublishedAt = hash.originallyPublishedAt
+      ? new Date(hash.originallyPublishedAt.toString())
+      : null
 
     if (this.state) this.state.label = peertubeTranslate(this.state.label, translations)
 

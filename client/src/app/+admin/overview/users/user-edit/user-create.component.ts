@@ -1,8 +1,7 @@
-import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
+import { CommonModule, NgTemplateOutlet } from '@angular/common'
 import { Component, OnInit, inject } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Router, RouterLink } from '@angular/router'
-import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { AuthService, Notifier, ScreenService, ServerService } from '@app/core'
 import {
   USER_CHANNEL_NAME_VALIDATOR,
@@ -14,15 +13,16 @@ import {
   USER_VIDEO_QUOTA_DAILY_VALIDATOR,
   USER_VIDEO_QUOTA_VALIDATOR
 } from '@app/shared/form-validators/user-validators'
+import { AdminConfigService } from '@app/shared/shared-admin/admin-config.service'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
+import { AccountTokenSessionsComponent } from '@app/shared/shared-users/account-token-sessions.component'
 import { UserAdminService } from '@app/shared/shared-users/user-admin.service'
 import { UserCreate, UserRole } from '@peertube/peertube-models'
 import { ActorAvatarEditComponent } from '../../../../shared/shared-actor-image-edit/actor-avatar-edit.component'
 import { InputTextComponent } from '../../../../shared/shared-forms/input-text.component'
 import { PeertubeCheckboxComponent } from '../../../../shared/shared-forms/peertube-checkbox.component'
 import { SelectCustomValueComponent } from '../../../../shared/shared-forms/select/select-custom-value.component'
-import { HelpComponent } from '../../../../shared/shared-main/buttons/help.component'
 import { BytesPipe } from '../../../../shared/shared-main/common/bytes.pipe'
 import { UserRealQuotaInfoComponent } from '../../../shared/user-real-quota-info.component'
 import { UserEdit } from './user-edit'
@@ -34,27 +34,25 @@ import { UserPasswordComponent } from './user-password.component'
   styleUrls: [ './user-edit.component.scss' ],
   imports: [
     RouterLink,
-    NgIf,
+    CommonModule,
     NgTemplateOutlet,
     ActorAvatarEditComponent,
     FormsModule,
     ReactiveFormsModule,
-    NgClass,
-    HelpComponent,
     InputTextComponent,
-    NgFor,
     SelectCustomValueComponent,
     UserRealQuotaInfoComponent,
     PeertubeCheckboxComponent,
     UserPasswordComponent,
     BytesPipe,
+    AccountTokenSessionsComponent,
     AlertComponent
   ]
 })
 export class UserCreateComponent extends UserEdit implements OnInit {
   protected serverService = inject(ServerService)
   protected formReactiveService = inject(FormReactiveService)
-  protected configService = inject(ConfigService)
+  protected configService = inject(AdminConfigService)
   protected screenService = inject(ScreenService)
   protected auth = inject(AuthService)
   private router = inject(Router)

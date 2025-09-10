@@ -396,7 +396,6 @@ describe('Test user notifications', function () {
   })
 
   describe('My live replay is published', function () {
-
     let baseParams: CheckerBaseParams
 
     before(() => {
@@ -640,7 +639,7 @@ describe('Test user notifications', function () {
   })
 
   after(async function () {
-    MockSmtpServer.Instance.kill()
+    await MockSmtpServer.Instance.kill()
 
     await cleanupTests(servers)
   })

@@ -1,6 +1,6 @@
-import express from 'express'
 import { UserAdminFlagType, UserRoleType } from '@peertube/peertube-models'
-import { MOAuthToken, MUser } from '../models/index.js'
+import express from 'express'
+import { MOAuthTokenLight, MUser } from '../models/index.js'
 
 export type RegisterServerAuthOptions = RegisterServerAuthPassOptions | RegisterServerAuthExternalOptions
 
@@ -33,6 +33,8 @@ export interface RegisterServerAuthenticatedResult {
 export interface RegisterServerExternalAuthenticatedResult extends RegisterServerAuthenticatedResult {
   req: express.Request
   res: express.Response
+  // Redirect the user to this external URI after the external auth has been verified.
+  externalRedirectUri?: string
 }
 
 interface RegisterServerAuthBase {
@@ -45,7 +47,7 @@ interface RegisterServerAuthBase {
 
   // Your plugin can hook PeerTube access/refresh token validity
   // So you can control for your plugin the user session lifetime
-  hookTokenValidity?(options: { token: MOAuthToken, type: 'access' | 'refresh' }): Promise<{ valid: boolean }>
+  hookTokenValidity?(options: { token: MOAuthTokenLight, type: 'access' | 'refresh' }): Promise<{ valid: boolean }>
 }
 
 export interface RegisterServerAuthPassOptions extends RegisterServerAuthBase {

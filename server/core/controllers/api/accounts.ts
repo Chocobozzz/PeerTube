@@ -1,3 +1,4 @@
+import { VideoPlaylistsListQuery } from '@peertube/peertube-models'
 import { pickCommonVideoQuery } from '@server/helpers/query.js'
 import { ActorFollowModel } from '@server/models/actor/actor-follow.js'
 import { getServerActor } from '@server/models/application/application.js'
@@ -182,6 +183,7 @@ async function listAccountChannelsSync (req: express.Request, res: express.Respo
 
 async function listAccountPlaylists (req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
+  const query = req.query as VideoPlaylistsListQuery
 
   // Allow users to see their private/unlisted video playlists
   let listMyPlaylists = false
@@ -190,18 +192,19 @@ async function listAccountPlaylists (req: express.Request, res: express.Response
   }
 
   const resultList = await VideoPlaylistModel.listForApi({
-    search: req.query.search,
-
     followerActorId: isUserAbleToSearchRemoteURI(res)
       ? null
       : serverActor.id,
 
-    start: req.query.start,
-    count: req.query.count,
-    sort: req.query.sort,
     accountId: res.locals.account.id,
     listMyPlaylists,
-    type: req.query.playlistType
+
+    start: query.start,
+    count: query.count,
+    sort: query.sort,
+    search: query.search,
+
+    type: query.playlistType
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))

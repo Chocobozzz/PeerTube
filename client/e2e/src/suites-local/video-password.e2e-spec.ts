@@ -4,7 +4,7 @@ import { PlayerPage } from '../po/player.po'
 import { SignupPage } from '../po/signup.po'
 import { VideoPublishPage } from '../po/video-publish.po'
 import { VideoWatchPage } from '../po/video-watch.po'
-import { getScreenshotPath, go, isMobileDevice, isSafari, waitServerUp } from '../utils'
+import { getScreenshotPath, go, isMobileDevice, isSafari, prepareWebBrowser, waitServerUp } from '../utils'
 
 describe('Password protected videos', () => {
   let videoPublishPage: VideoPublishPage
@@ -50,7 +50,7 @@ describe('Password protected videos', () => {
     playerPage = new PlayerPage()
     myAccountPage = new MyAccountPage()
 
-    await browser.maximizeWindow()
+    await prepareWebBrowser()
   })
 
   describe('Owner', function () {

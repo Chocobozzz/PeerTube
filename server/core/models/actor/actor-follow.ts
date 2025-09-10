@@ -26,7 +26,8 @@ import {
   ForeignKey,
   Is,
   IsInt,
-  Max, Table,
+  Max,
+  Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { logger } from '../../helpers/logger.js'
@@ -70,33 +71,32 @@ import { InstanceListFollowingQueryBuilder, ListFollowingOptions } from './sql/i
   ]
 })
 export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
-
   @AllowNull(false)
   @Column(DataType.ENUM(...Object.values(FOLLOW_STATES)))
-  state: FollowState
+  declare state: FollowState
 
   @AllowNull(false)
   @Default(ACTOR_FOLLOW_SCORE.BASE)
   @IsInt
   @Max(ACTOR_FOLLOW_SCORE.MAX)
   @Column
-  score: number
+  declare score: number
 
   // Allow null because we added this column in PeerTube v3, and don't want to generate fake URLs of remote follows
   @AllowNull(true)
   @Is('ActorFollowUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.COMMONS.URL.max))
-  url: string
+  declare url: string
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @ForeignKey(() => ActorModel)
   @Column
-  actorId: number
+  declare actorId: number
 
   @BelongsTo(() => ActorModel, {
     foreignKey: {
@@ -106,11 +106,11 @@ export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
     as: 'ActorFollower',
     onDelete: 'CASCADE'
   })
-  ActorFollower: Awaited<ActorModel>
+  declare ActorFollower: Awaited<ActorModel>
 
   @ForeignKey(() => ActorModel)
   @Column
-  targetActorId: number
+  declare targetActorId: number
 
   @BelongsTo(() => ActorModel, {
     foreignKey: {
@@ -120,25 +120,47 @@ export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
     as: 'ActorFollowing',
     onDelete: 'CASCADE'
   })
-  ActorFollowing: Awaited<ActorModel>
+  declare ActorFollowing: Awaited<ActorModel>
 
   @AfterCreate
-  @AfterUpdate
   static incrementFollowerAndFollowingCount (instance: ActorFollowModel, options: any) {
+    let by = 0
+
+    if (instance.state === 'accepted') by = 1
+
     return afterCommitIfTransaction(options.transaction, () => {
       return Promise.all([
-        ActorModel.rebuildFollowsCount(instance.actorId, 'following'),
-        ActorModel.rebuildFollowsCount(instance.targetActorId, 'followers')
+        ActorModel.recalculateFollowsCount({ ofId: instance.actorId, type: 'following', by }),
+        ActorModel.recalculateFollowsCount({ ofId: instance.targetActorId, type: 'followers', by })
+      ])
+    })
+  }
+
+  @AfterUpdate
+  static incrementOrDecrementFollowerAndFollowingCount (instance: ActorFollowModel, options: any) {
+    let by = 0
+
+    if (instance.previous('state') !== 'accepted' && instance.state === 'accepted') by = 1
+    else if (instance.previous('state') === 'accepted' && instance.state !== 'accepted') by = -1
+
+    return afterCommitIfTransaction(options.transaction, () => {
+      return Promise.all([
+        ActorModel.recalculateFollowsCount({ ofId: instance.actorId, type: 'following', by }),
+        ActorModel.recalculateFollowsCount({ ofId: instance.targetActorId, type: 'followers', by })
       ])
     })
   }
 
   @AfterDestroy
   static decrementFollowerAndFollowingCount (instance: ActorFollowModel, options: any) {
+    let by = 0
+
+    if (instance.state === 'accepted') by = -1
+
     return afterCommitIfTransaction(options.transaction, () => {
       return Promise.all([
-        ActorModel.rebuildFollowsCount(instance.actorId, 'following'),
-        ActorModel.rebuildFollowsCount(instance.targetActorId, 'followers')
+        ActorModel.recalculateFollowsCount({ ofId: instance.actorId, type: 'following', by }),
+        ActorModel.recalculateFollowsCount({ ofId: instance.targetActorId, type: 'followers', by })
       ])
     })
   }
@@ -157,7 +179,7 @@ export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
 
   /*
    * @deprecated Use `findOrCreateCustom` instead
-  */
+   */
   static findOrCreate (): any {
     throw new Error('Must not be called')
   }
@@ -169,7 +191,7 @@ export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
     activityId: string
     state: FollowState
     transaction: Transaction
-  }): Promise<[ MActorFollowActors, boolean ]> {
+  }): Promise<[MActorFollowActors, boolean]> {
     const { byActor, targetActor, activityId, state, transaction } = options
 
     let created = false
@@ -614,9 +636,9 @@ export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
   static updateScore (inboxUrl: string, value: number, t?: Transaction) {
     const query = `UPDATE "actorFollow" SET "score" = LEAST("score" + ${value}, ${ACTOR_FOLLOW_SCORE.MAX}) ` +
       'WHERE id IN (' +
-        'SELECT "actorFollow"."id" FROM "actorFollow" ' +
-        'INNER JOIN "actor" ON "actor"."id" = "actorFollow"."actorId" ' +
-        `WHERE "actor"."inboxUrl" = '${inboxUrl}' OR "actor"."sharedInboxUrl" = '${inboxUrl}'` +
+      'SELECT "actorFollow"."id" FROM "actorFollow" ' +
+      'INNER JOIN "actor" ON "actor"."id" = "actorFollow"."actorId" ' +
+      `WHERE "actor"."inboxUrl" = '${inboxUrl}' OR "actor"."sharedInboxUrl" = '${inboxUrl}'` +
       ')'
 
     const options = {
@@ -635,10 +657,10 @@ export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
 
     const query = `UPDATE "actorFollow" SET "score" = LEAST("score" + ${value}, ${ACTOR_FOLLOW_SCORE.MAX}) ` +
       'WHERE id IN (' +
-        'SELECT "actorFollow"."id" FROM "actorFollow" ' +
-        'INNER JOIN "actor" ON "actor"."id" = "actorFollow"."targetActorId" ' +
-        `WHERE "actorFollow"."actorId" = ${me.Account.actorId} ` + // I'm the follower
-        `AND "actor"."serverId" IN (${serverIdsString})` + // Criteria on followings
+      'SELECT "actorFollow"."id" FROM "actorFollow" ' +
+      'INNER JOIN "actor" ON "actor"."id" = "actorFollow"."targetActorId" ' +
+      `WHERE "actorFollow"."actorId" = ${me.Account.actorId} ` + // I'm the follower
+      `AND "actor"."serverId" IN (${serverIdsString})` + // Criteria on followings
       ')'
 
     const options = {

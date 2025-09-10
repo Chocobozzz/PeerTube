@@ -1,7 +1,7 @@
-@use 'sass:color';
-@use '_variables' as *;
-@use '_mixins' as *;
-@use 'bootstrap/scss/functions' as *;
+@use "sass:color";
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "bootstrap/scss/functions" as *;
 
 .banned-info {
   font-style: italic;
@@ -15,13 +15,7 @@
   @include margin-left(15px);
 }
 
-p-tableCheckbox {
-  position: relative;
-  top: -2.5px;
-}
-
-@media screen and (max-width: $medium-view) {
-  .empty-cell {
-    padding: 0;
-  }
+my-progress-bar {
+  display: block;
+  min-width: 120px;
 }

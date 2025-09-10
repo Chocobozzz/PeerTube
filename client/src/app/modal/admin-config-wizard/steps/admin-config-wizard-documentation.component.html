@@ -1,0 +1,70 @@
+<div class="root">
+  <div class="one-column">
+    <div class="mascot-container">
+      <img class="mascot" src="/client/assets/images/mascot/happy.svg" alt="mascot" />
+    </div>
+
+    <h4>
+      <div i18n class="title">Congratulations</div>
+
+      <div i18n class="sub-title">Your platform has been configured!</div>
+    </h4>
+  </div>
+
+  <div class="mt-4">
+    <span class="text-content" i18n>
+      It's time to add information about your platform!
+      <strong>Setting up a description</strong>, specifying <strong>who you are</strong>, why <strong>you created your platform</strong> and
+      <strong>how long</strong> you plan to <strong>maintain it</strong>
+      is very important for visitors to understand on what type of website they are.
+    </span>
+  </div>
+
+  <div class="mt-4">
+    <h5 i18n>Useful links</h5>
+
+    <ul class="text-content">
+      <li>
+        <a class="link-primary me-1" href="https://joinpeertube.org" target="_blank" i18n>Official PeerTube website:</a>
+
+        <span i18n>Blog post, get help or discover PeerTube</span>
+      </li>
+
+      <li>
+        <a class="link-primary me-1" href="https://instances.joinpeertube.org/instances" target="_blank" i18n>Public PeerTube index:</a>
+
+        <span i18n>Put your platform on the official PeerTube public index</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="mt-4">
+    <h5 i18n>Documentation</h5>
+
+    <ul class="text-content">
+      <li>
+        <a class="link-primary me-1" href="https://docs.joinpeertube.org/admin/following-instances" target="_blank" i18n>Admin:</a>
+
+        <span i18n>Managing users, following other platforms, dealing with spammers, configure object storage or remote transcoding...</span>
+      </li>
+
+      <li>
+        <a class="link-primary me-1" href="https://docs.joinpeertube.org/use/setup-account" target="_blank">User:</a>
+
+        <span i18n>Setup your account, managing video playlists, discover third-party applications...</span>
+      </li>
+
+      <li>
+        <a class="link-primary me-1" href="https://docs.joinpeertube.org/maintain/tools" target="_blank" i18n>CLI:</a>
+
+        <span i18n>Upload or import videos, parse logs, prune storage directories, reset user password...</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="buttons">
+    <my-button i18n (click)="hide.emit()" theme="secondary">Close</my-button>
+
+    <my-button i18n theme="primary" ptRouterLink="/admin/settings/config" (click)="hide.emit()">Fill platform information</my-button>
+  </div>
+</div>

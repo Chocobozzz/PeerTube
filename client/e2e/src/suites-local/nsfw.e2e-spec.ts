@@ -9,7 +9,7 @@ import { VideoListPage } from '../po/video-list.po'
 import { VideoPublishPage } from '../po/video-publish.po'
 import { VideoSearchPage } from '../po/video-search.po'
 import { VideoWatchPage } from '../po/video-watch.po'
-import { getScreenshotPath, go, isMobileDevice, isSafari, waitServerUp } from '../utils'
+import { getScreenshotPath, go, isMobileDevice, isSafari, prepareWebBrowser, waitServerUp } from '../utils'
 
 describe('NSFW', () => {
   let videoListPage: VideoListPage
@@ -102,6 +102,8 @@ describe('NSFW', () => {
 
     for (const video of videos) {
       await videoSearchPage.search(video)
+
+      await browser.saveScreenshot(getScreenshotPath('before-test.png'))
       await checkVideo({ policy, videoName: video, nsfwTooltip })
     }
   }
@@ -153,7 +155,7 @@ describe('NSFW', () => {
     videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
     anonymousSettingsPage = new AnonymousSettingsPage()
 
-    await browser.maximizeWindow()
+    await prepareWebBrowser()
   })
 
   describe('Preparation', function () {
@@ -265,10 +267,10 @@ describe('NSFW', () => {
         expect(await moreButton.isDisplayed()).toBeTruthy()
 
         await moreButton.click()
-        await playerPage.getNSFWMoreContent().waitForDisplayed()
+        await playerPage.getNSFWDetailsContent().waitForDisplayed()
 
-        const moreContent = await playerPage.getNSFWMoreContent().getText()
-        expect(moreContent).toContain('Violence')
+        const moreContent = await playerPage.getNSFWDetailsContent().getText()
+        expect(moreContent).toContain('Potentially violent content')
         expect(moreContent).toContain('bibi is violent')
       }
 

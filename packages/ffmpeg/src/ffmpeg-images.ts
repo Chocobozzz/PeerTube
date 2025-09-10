@@ -19,7 +19,7 @@ export class FFmpegImage {
 
     const command = this.commandWrapper.buildCommand(path)
 
-    if (newSize) command.size(`${newSize.width}x${newSize.height}`)
+    if (newSize) command.size(`${newSize.width ?? '?'}x${newSize.height ?? '?'}`)
 
     command.output(destination)
 

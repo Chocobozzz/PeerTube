@@ -1,8 +1,8 @@
 import { NgIf } from '@angular/common'
-import { Component, OnDestroy, OnInit, inject, input } from '@angular/core'
+import { Component, OnDestroy, OnInit, booleanAttribute, inject, input } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AuthService, Notifier, ServerService, User, UserService } from '@app/core'
-import { FormReactiveErrors, FormReactiveService, FormReactiveValidationMessages } from '@app/shared/shared-forms/form-reactive.service'
+import { FormReactiveErrors, FormReactiveMessages, FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { NSFWFlag, NSFWFlagType, NSFWPolicyType, UserUpdateMe } from '@peertube/peertube-models'
 import { pick } from 'lodash-es'
 import { Subject, Subscription } from 'rxjs'
@@ -49,13 +49,13 @@ export class UserVideoSettingsComponent implements OnInit, OnDestroy {
   private serverService = inject(ServerService)
 
   readonly user = input<User>(null)
-  readonly reactiveUpdate = input(false)
-  readonly notifyOnUpdate = input(true)
+  readonly reactiveUpdate = input(false, { transform: booleanAttribute })
+  readonly notifyOnUpdate = input(true, { transform: booleanAttribute })
   readonly userInformationLoaded = input<Subject<any>>(undefined)
 
   form: FormGroup<Form>
   formErrors: FormReactiveErrors = {}
-  validationMessages: FormReactiveValidationMessages = {}
+  validationMessages: FormReactiveMessages = {}
 
   nsfwItems: SelectOptionsItem[] = [
     {

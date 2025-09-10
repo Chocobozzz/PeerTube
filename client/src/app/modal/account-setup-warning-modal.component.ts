@@ -50,7 +50,7 @@ export class AccountSetupWarningModalComponent implements OnInit {
     return !!user.account.description
   }
 
-  shouldOpen (user: User) {
+  shouldAutoOpen (user: User) {
     if (this.modalService.hasOpenModals()) return false
     if (user.noAccountSetupWarningModal === true) return false
     if (peertubeLocalStorage.getItem(this.LS_KEYS.NO_ACCOUNT_SETUP_WARNING_MODAL) === 'true') return false

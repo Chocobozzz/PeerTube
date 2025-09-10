@@ -12,7 +12,8 @@ import {
   Default,
   DefaultScope,
   ForeignKey,
-  Is, Table,
+  Is,
+  Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { isVideoImportStateValid, isVideoImportTargetUrlValid } from '../../helpers/custom-validators/video-imports.js'
@@ -47,7 +48,6 @@ const defaultVideoScope = () => {
     }
   ]
 }))
-
 @Table({
   tableName: 'videoImport',
   indexes: [
@@ -62,42 +62,42 @@ const defaultVideoScope = () => {
 })
 export class VideoImportModel extends SequelizeModel<VideoImportModel> {
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @AllowNull(true)
   @Default(null)
   @Is('VideoImportTargetUrl', value => throwIfNotValid(value, isVideoImportTargetUrlValid, 'targetUrl', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_IMPORTS.URL.max))
-  targetUrl: string
+  declare targetUrl: string
 
   @AllowNull(true)
   @Default(null)
   @Is('VideoImportMagnetUri', value => throwIfNotValid(value, isVideoMagnetUriValid, 'magnetUri', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_IMPORTS.URL.max)) // Use the same constraints than URLs
-  magnetUri: string
+  declare magnetUri: string
 
   @AllowNull(true)
   @Default(null)
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_IMPORTS.TORRENT_NAME.max))
-  torrentName: string
+  declare torrentName: string
 
   @AllowNull(false)
   @Default(null)
   @Is('VideoImportState', value => throwIfNotValid(value, isVideoImportStateValid, 'state'))
   @Column
-  state: VideoImportStateType
+  declare state: VideoImportStateType
 
   @AllowNull(true)
   @Default(null)
   @Column(DataType.TEXT)
-  error: string
+  declare error: string
 
   @ForeignKey(() => UserModel)
   @Column
-  userId: number
+  declare userId: number
 
   @BelongsTo(() => UserModel, {
     foreignKey: {
@@ -105,11 +105,11 @@ export class VideoImportModel extends SequelizeModel<VideoImportModel> {
     },
     onDelete: 'cascade'
   })
-  User: Awaited<UserModel>
+  declare User: Awaited<UserModel>
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -117,11 +117,11 @@ export class VideoImportModel extends SequelizeModel<VideoImportModel> {
     },
     onDelete: 'set null'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   @ForeignKey(() => VideoChannelSyncModel)
   @Column
-  videoChannelSyncId: number
+  declare videoChannelSyncId: number
 
   @BelongsTo(() => VideoChannelSyncModel, {
     foreignKey: {
@@ -129,7 +129,7 @@ export class VideoImportModel extends SequelizeModel<VideoImportModel> {
     },
     onDelete: 'set null'
   })
-  VideoChannelSync: Awaited<VideoChannelSyncModel>
+  declare VideoChannelSync: Awaited<VideoChannelSyncModel>
 
   @AfterUpdate
   static deleteVideoIfFailed (instance: VideoImportModel, options) {
@@ -208,17 +208,35 @@ export class VideoImportModel extends SequelizeModel<VideoImportModel> {
     ]).then(([ total, data ]) => ({ total, data }))
   }
 
-  static async urlAlreadyImported (channelId: number, targetUrl: string): Promise<boolean> {
-    const element = await VideoImportModel.unscoped().findOne({
-      where: {
-        targetUrl,
-        state: {
-          [Op.in]: [ VideoImportState.PENDING, VideoImportState.PROCESSING, VideoImportState.SUCCESS ]
+  static async urlAlreadyImported (options: {
+    targetUrl: string
+    channelId: number
+    channelSyncId?: number
+  }): Promise<boolean> {
+    const { channelSyncId, channelId, targetUrl } = options
+
+    const baseWhere = {
+      targetUrl,
+      state: {
+        [Op.in]: [ VideoImportState.PENDING, VideoImportState.PROCESSING, VideoImportState.SUCCESS ]
+      }
+    }
+
+    const bySyncId = channelSyncId
+      ? VideoImportModel.unscoped().findOne({
+        where: {
+          ...baseWhere,
+
+          videoChannelSyncId: channelSyncId
         }
-      },
+      })
+      : Promise.resolve(undefined)
+
+    const byChannelId = VideoImportModel.unscoped().findOne({
+      where: baseWhere,
       include: [
         {
-          model: VideoModel,
+          model: VideoModel.unscoped(),
           required: true,
           where: {
             channelId
@@ -227,7 +245,7 @@ export class VideoImportModel extends SequelizeModel<VideoImportModel> {
       ]
     })
 
-    return !!element
+    return (await Promise.all([ bySyncId, byChannelId ])).some(e => !!e)
   }
 
   getTargetIdentifier () {

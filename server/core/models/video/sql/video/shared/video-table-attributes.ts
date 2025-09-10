@@ -167,6 +167,15 @@ export class VideoTableAttributes {
     ]
   }
 
+  getLiveScheduleAttributes () {
+    return [
+      'id',
+      'startAt',
+      'createdAt',
+      'updatedAt'
+    ]
+  }
+
   getVideoSourceAttributes () {
     return [
       'id',

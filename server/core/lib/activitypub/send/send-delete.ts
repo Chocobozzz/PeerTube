@@ -1,6 +1,7 @@
-import { Transaction } from 'sequelize'
-import { getServerActor } from '@server/models/application/application.js'
 import { ActivityAudience, ActivityDelete } from '@peertube/peertube-models'
+import { AccountModel } from '@server/models/account/account.js'
+import { getServerActor } from '@server/models/application/application.js'
+import { Transaction } from 'sequelize'
 import { logger } from '../../../helpers/logger.js'
 import { ActorModel } from '../../../models/actor/actor.js'
 import { VideoCommentModel } from '../../../models/video/video-comment.js'
@@ -11,7 +12,6 @@ import { audiencify } from '../audience.js'
 import { getDeleteActivityPubUrl } from '../url.js'
 import { getActorsInvolvedInVideo, getVideoCommentAudience } from './shared/index.js'
 import { broadcastToActors, broadcastToFollowers, sendVideoRelatedActivity, unicastTo } from './shared/send-utils.js'
-import { AccountModel } from '@server/models/account/account.js'
 
 async function sendDeleteVideo (video: MVideoAccountLight, transaction: Transaction) {
   logger.info('Creating job to broadcast delete of video %s.', video.url)
@@ -140,8 +140,8 @@ async function sendDeleteVideoPlaylist (videoPlaylist: MVideoPlaylistFullSummary
 // ---------------------------------------------------------------------------
 
 export {
-  sendDeleteVideo,
   sendDeleteActor,
+  sendDeleteVideo,
   sendDeleteVideoComment,
   sendDeleteVideoPlaylist
 }

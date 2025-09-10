@@ -3,7 +3,7 @@ import { LoginPage } from '../po/login.po'
 import { MyAccountPage } from '../po/my-account.po'
 import { VideoPublishPage } from '../po/video-publish.po'
 import { VideoWatchPage } from '../po/video-watch.po'
-import { getScreenshotPath, go, isMobileDevice, isSafari, waitServerUp } from '../utils'
+import { getScreenshotPath, go, isMobileDevice, isSafari, prepareWebBrowser, waitServerUp } from '../utils'
 
 describe('Player settings', () => {
   let videoPublishPage: VideoPublishPage
@@ -21,7 +21,7 @@ describe('Player settings', () => {
     myAccountPage = new MyAccountPage()
     anonymousSettingsPage = new AnonymousSettingsPage()
 
-    await browser.maximizeWindow()
+    await prepareWebBrowser()
   })
 
   describe('P2P', function () {

@@ -13,7 +13,7 @@ import { isArray, isBooleanValid, isUUIDValid } from '@server/helpers/custom-val
 import { isVideoCaptionLanguageValid } from '@server/helpers/custom-validators/video-captions.js'
 import { isVideoChannelUsernameValid } from '@server/helpers/custom-validators/video-channels.js'
 import { isVideoChapterTimecodeValid, isVideoChapterTitleValid } from '@server/helpers/custom-validators/video-chapters.js'
-import { isLiveLatencyModeValid } from '@server/helpers/custom-validators/video-lives.js'
+import { isLiveLatencyModeValid, isLiveScheduleValid } from '@server/helpers/custom-validators/video-lives.js'
 import {
   isPasswordValid,
   isVideoCategoryValid,
@@ -133,6 +133,10 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
 
       if (!o.live.streamKey) o.live.streamKey = buildUUID()
       else if (!isUUIDValid(o.live.streamKey)) return undefined
+
+      if (!isArray(o.live.schedules)) o.live.schedules = []
+
+      o.live.schedules = o.live.schedules.filter(s => isLiveScheduleValid(s))
     }
 
     if (o.privacy === VideoPrivacy.PASSWORD_PROTECTED) {

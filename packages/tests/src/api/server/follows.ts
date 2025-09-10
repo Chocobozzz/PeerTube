@@ -9,7 +9,6 @@ import { completeVideoCheck } from '@tests/shared/videos.js'
 import { expect } from 'chai'
 
 describe('Test follows', function () {
-
   describe('Complex follow', function () {
     let servers: PeerTubeServer[] = []
 
@@ -23,7 +22,6 @@ describe('Test follows', function () {
     })
 
     describe('Data propagation after follow', function () {
-
       it('Should not have followers/followings', async function () {
         for (const server of servers) {
           const bodies = await Promise.all([
@@ -430,12 +428,12 @@ describe('Test follows', function () {
         await expectChannelsFollows({ server: servers[0], handle: 'root_channel@' + servers[1].host, followers: 1, following: 0 })
         await expectAccountFollows({ server: servers[0], handle: 'peertube@' + servers[2].host, followers: 1, following: 0 })
 
-        await expectAccountFollows({ server: servers[1], handle: 'peertube@' + servers[0].host, followers: 0, following: 1 })
+        await expectAccountFollows({ server: servers[1], handle: 'peertube@' + servers[0].host, followers: 0, following: 0 })
         await expectAccountFollows({ server: servers[1], handle: 'peertube@' + servers[1].host, followers: 0, following: 0 })
         await expectAccountFollows({ server: servers[1], handle: 'root@' + servers[1].host, followers: 0, following: 0 })
         await expectChannelsFollows({ server: servers[1], handle: 'root_channel@' + servers[1].host, followers: 1, following: 0 })
 
-        await expectAccountFollows({ server: servers[2], handle: 'peertube@' + servers[0].host, followers: 0, following: 1 })
+        await expectAccountFollows({ server: servers[2], handle: 'peertube@' + servers[0].host, followers: 0, following: 2 })
         await expectAccountFollows({ server: servers[2], handle: 'peertube@' + servers[2].host, followers: 1, following: 0 })
       })
 

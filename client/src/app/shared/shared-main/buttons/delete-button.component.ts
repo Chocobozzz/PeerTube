@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnChanges, input, model } from '@angular/core'
-import { ButtonComponent } from './button.component'
+import { ButtonComponent, ButtonTheme } from './button.component'
 
 @Component({
   selector: 'my-delete-button',
@@ -7,7 +7,7 @@ import { ButtonComponent } from './button.component'
     <my-button
       icon="delete" theme="secondary"
       [disabled]="disabled()" [label]="label()" [title]="title()"
-      [responsiveLabel]="responsiveLabel()"
+      [responsiveLabel]="responsiveLabel()" [theme]="theme()"
     ></my-button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,6 +18,7 @@ export class DeleteButtonComponent implements OnChanges {
   readonly title = model<string>(undefined)
   readonly responsiveLabel = input(false)
   readonly disabled = input<boolean>(undefined)
+  readonly theme = input<ButtonTheme>('secondary')
 
   ngOnChanges () {
     const label = this.label()

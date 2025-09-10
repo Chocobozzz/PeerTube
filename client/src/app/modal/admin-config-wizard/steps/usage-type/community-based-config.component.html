@@ -1,0 +1,31 @@
+<form [formGroup]="form">
+  <div class="form-group">
+    <label i18n for="">Registration policy</label>
+
+    <my-select-options inputId="registration" [items]="registrationOptions" formControlName="registration"></my-select-options>
+  </div>
+
+  <div class="form-group">
+    <label i18n for="">Video quota for new users</label>
+
+    <my-select-options inputId="videoQuota" [items]="videoQuotaOptions" formControlName="videoQuota"></my-select-options>
+  </div>
+
+  <div class="form-group">
+    <label i18n for="remoteImport">Video import and synchronization</label>
+
+    <my-select-options inputId="remoteImport" [items]="importOptions" formControlName="remoteImport"></my-select-options>
+  </div>
+
+  <div class="form-group">
+    <label i18n for="">My community can stream lives</label>
+
+    <my-select-options inputId="live" [items]="liveOptions" formControlName="live"></my-select-options>
+  </div>
+
+  <div class="form-group">
+    <label i18n for="">Search</label>
+
+    <my-select-options inputId="globalSearch" [items]="globalSearchOptions" formControlName="globalSearch"></my-select-options>
+  </div>
+</form>

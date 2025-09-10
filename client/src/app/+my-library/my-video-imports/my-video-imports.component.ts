@@ -1,53 +1,49 @@
-import { NgClass, NgIf } from '@angular/common'
-import { Component, OnInit, inject } from '@angular/core'
-import { Notifier, RestPagination, RestTable } from '@app/core'
+import { CommonModule, NgClass } from '@angular/common'
+import { Component, inject, viewChild } from '@angular/core'
+import { Notifier } from '@app/core'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { VideoImportService } from '@app/shared/shared-main/video/video-import.service'
 import { Video } from '@app/shared/shared-main/video/video.model'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { VideoImport, VideoImportState, VideoImportStateType } from '@peertube/peertube-models'
-import { SharedModule, SortMeta } from 'primeng/api'
-import { TableModule } from 'primeng/table'
 import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
 import { ButtonComponent } from '../../shared/shared-main/buttons/button.component'
 import { DeleteButtonComponent } from '../../shared/shared-main/buttons/delete-button.component'
 import { EditButtonComponent } from '../../shared/shared-main/buttons/edit-button.component'
-import { AutoColspanDirective } from '../../shared/shared-main/common/auto-colspan.directive'
-import { TableExpanderIconComponent } from '../../shared/shared-tables/table-expander-icon.component'
+import { NumberFormatterPipe } from '../../shared/shared-main/common/number-formatter.pipe'
+import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../../shared/shared-tables/table.component'
 
 @Component({
   templateUrl: './my-video-imports.component.html',
   styleUrls: [ './my-video-imports.component.scss' ],
   imports: [
     AdvancedInputFilterComponent,
-    TableModule,
-    SharedModule,
-    NgbTooltip,
-    NgIf,
-    TableExpanderIconComponent,
+    CommonModule,
     ButtonComponent,
     DeleteButtonComponent,
     EditButtonComponent,
     NgClass,
-    AutoColspanDirective,
-    PTDatePipe
+    PTDatePipe,
+    TableComponent,
+    NumberFormatterPipe
   ]
 })
-export class MyVideoImportsComponent extends RestTable implements OnInit {
+export class MyVideoImportsComponent {
   private notifier = inject(Notifier)
   private videoImportService = inject(VideoImportService)
 
-  videoImports: VideoImport[] = []
-  totalRecords = 0
-  sort: SortMeta = { field: 'createdAt', order: 1 }
-  pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
+  readonly table = viewChild<TableComponent<VideoImport>>('table')
 
-  ngOnInit () {
-    this.initialize()
-  }
+  columns: TableColumnInfo<string>[] = [
+    { id: 'target', label: $localize`Target`, sortable: false },
+    { id: 'video', label: $localize`Video`, sortable: false },
+    { id: 'state', label: $localize`State`, sortable: false },
+    { id: 'createdAt', label: $localize`Created`, sortable: true }
+  ]
 
-  getIdentifier () {
-    return 'MyVideoImportsComponent'
+  dataLoader: typeof this._dataLoader
+
+  constructor () {
+    this.dataLoader = this._dataLoader.bind(this)
   }
 
   getVideoImportStateClass (state: VideoImportStateType) {
@@ -96,7 +92,7 @@ export class MyVideoImportsComponent extends RestTable implements OnInit {
   deleteImport (videoImport: VideoImport) {
     this.videoImportService.deleteVideoImport(videoImport)
       .subscribe({
-        next: () => this.reloadData(),
+        next: () => this.table().loadData(),
 
         error: err => this.notifier.error(err.message)
       })
@@ -105,21 +101,13 @@ export class MyVideoImportsComponent extends RestTable implements OnInit {
   cancelImport (videoImport: VideoImport) {
     this.videoImportService.cancelVideoImport(videoImport)
       .subscribe({
-        next: () => this.reloadData(),
+        next: () => this.table().loadData(),
 
         error: err => this.notifier.error(err.message)
       })
   }
 
-  protected reloadDataInternal () {
-    this.videoImportService.getMyVideoImports(this.pagination, this.sort, this.search)
-      .subscribe({
-        next: resultList => {
-          this.videoImports = resultList.data
-          this.totalRecords = resultList.total
-        },
-
-        error: err => this.notifier.error(err.message)
-      })
+  private _dataLoader (options: DataLoaderOptions) {
+    return this.videoImportService.getMyVideoImports(options)
   }
 }

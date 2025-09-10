@@ -1,4 +1,4 @@
-import { ActorImage, VideoCommentPolicyType } from '../index.js'
+import { ActorImage, LogoType, VideoCommentPolicyType } from '../index.js'
 import { ClientScriptJSON } from '../plugins/plugin-package-json.model.js'
 import { NSFWPolicyType } from '../videos/nsfw-policy.type.js'
 import { VideoPrivacyType } from '../videos/video-privacy.enum.js'
@@ -37,6 +37,10 @@ export interface ServerConfig {
   serverCommit?: string
 
   client: {
+    header: {
+      hideInstanceName: boolean
+    }
+
     videos: {
       miniature: {
         preferAuthorDisplayName: boolean
@@ -44,6 +48,11 @@ export interface ServerConfig {
       resumableUpload: {
         maxChunkSize: number
       }
+    }
+
+    browseVideos: {
+      defaultSort: string
+      defaultScope: string
     }
 
     menu: {
@@ -122,6 +131,7 @@ export interface ServerConfig {
       externalLink: string
       mastodonLink: string
       blueskyLink: string
+      xLink: string
     }
 
     defaultClientRoute: string
@@ -132,6 +142,16 @@ export interface ServerConfig {
 
     avatars: ActorImage[]
     banners: ActorImage[]
+
+    defaultLanguage: string
+
+    logo: {
+      type: LogoType
+      width: number
+      height: number
+      fileUrl: string
+      isFallback: boolean
+    }[]
   }
 
   search: {
@@ -162,6 +182,19 @@ export interface ServerConfig {
     builtIn: { name: 'peertube-core-light-beige' | 'peertube-core-dark-brown' }[]
 
     default: string
+
+    customization: {
+      primaryColor: string
+      foregroundColor: string
+      backgroundColor: string
+      backgroundSecondaryColor: string
+      menuForegroundColor: string
+      menuBackgroundColor: string
+      menuBorderRadius: string
+      headerForegroundColor: string
+      headerBackgroundColor: string
+      inputBorderRadius: string
+    }
   }
 
   email: {
@@ -387,6 +420,9 @@ export interface ServerConfig {
 
   storyboards: {
     enabled: boolean
+    remoteRunners: {
+      enabled: boolean
+    }
   }
 
   videoTranscription: {

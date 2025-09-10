@@ -1,7 +1,7 @@
-@use '_icons' as *;
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_button-mixins' as *;
+@use "_icons" as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_button-mixins" as *;
 
 .no-results {
   height: 40vh;
@@ -68,13 +68,12 @@
 
 .anchor {
   position: relative;
-  top: -calc(#{pvar(--header-height)} + 20px);
+  top: calc((#{pvar(--header-height)} + 20px) * -1);
 }
 
 // ---------------------------------------------------------------------------
 
 .alert {
-
   &.pt-alert-primary {
     color: pvar(--alert-primary-fg);
     background-color: pvar(--alert-primary-bg);

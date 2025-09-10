@@ -93,7 +93,7 @@ describe('Test user notifications API validators', function () {
         url: server.url,
         path,
         fields: {
-          ids: [ ]
+          ids: []
         },
         token: server.accessToken,
         expectedStatus: HttpStatusCode.BAD_REQUEST_400
@@ -235,7 +235,6 @@ describe('Test user notifications API validators', function () {
   })
 
   describe('When connecting to my notification socket', function () {
-
     it('Should fail with no token', function (next) {
       const socket = io(`${server.url}/user-notifications`, { reconnection: false })
 
@@ -267,7 +266,7 @@ describe('Test user notifications API validators', function () {
       })
     })
 
-    it('Should success with the correct token', function (next) {
+    it('Should succeed with the correct token', function (next) {
       const socket = io(`${server.url}/user-notifications`, {
         query: { accessToken: server.accessToken },
         reconnection: false

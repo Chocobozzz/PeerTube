@@ -1,0 +1,7 @@
+{{#> base title=(t "A new user wants to register")}}
+  <p>
+    {{t "User {registrationUsername} wants to register on {instanceName} for the following reason:" registrationUsername=registration.username instanceName=instanceName}}
+  </p>
+
+  <blockquote style="white-space: pre-wrap">{{registration.registrationReason}}</blockquote>
+{{/base}}

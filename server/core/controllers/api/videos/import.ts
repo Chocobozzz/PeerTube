@@ -1,19 +1,20 @@
-import express from 'express'
-import { move } from 'fs-extra/esm'
-import { readFile } from 'fs/promises'
-import { decode } from 'magnet-uri'
-import parseTorrent, { Instance } from 'parse-torrent'
-import { join } from 'path'
-import { buildVideoFromImport, buildYoutubeDLImport, insertFromImportIntoDB, YoutubeDlImportError } from '@server/lib/video-pre-import.js'
-import { MThumbnail, MVideoThumbnail } from '@server/types/models/index.js'
 import {
   HttpStatusCode,
+  HttpStatusCodeType,
   ServerErrorCode,
   ThumbnailType,
   VideoImportCreate,
   VideoImportPayload,
   VideoImportState
 } from '@peertube/peertube-models'
+import { buildVideoFromImport, buildYoutubeDLImport, insertFromImportIntoDB, YoutubeDlImportError } from '@server/lib/video-pre-import.js'
+import { MThumbnail, MVideoThumbnail } from '@server/types/models/index.js'
+import express from 'express'
+import { move } from 'fs-extra/esm'
+import { readFile } from 'fs/promises'
+import { decode } from 'magnet-uri'
+import parseTorrent, { Instance } from 'parse-torrent'
+import { join } from 'path'
 import { auditLoggerFactory, getAuditIdFromRes, VideoImportAuditView } from '../../../helpers/audit-logger.js'
 import { isArray } from '../../../helpers/custom-validators/misc.js'
 import { cleanUpReqFiles, createReqFiles } from '../../../helpers/express-utils.js'
@@ -40,20 +41,23 @@ const reqVideoFileImport = createReqFiles(
   { ...MIMETYPES.TORRENT.MIMETYPE_EXT, ...MIMETYPES.IMAGE.MIMETYPE_EXT }
 )
 
-videoImportsRouter.post('/imports',
+videoImportsRouter.post(
+  '/imports',
   authenticate,
   reqVideoFileImport,
   asyncMiddleware(videoImportAddValidator),
   asyncRetryTransactionMiddleware(handleVideoImport)
 )
 
-videoImportsRouter.post('/imports/:id/cancel',
+videoImportsRouter.post(
+  '/imports/:id/cancel',
   authenticate,
   asyncMiddleware(videoImportCancelValidator),
   asyncRetryTransactionMiddleware(cancelVideoImport)
 )
 
-videoImportsRouter.delete('/imports/:id',
+videoImportsRouter.delete(
+  '/imports/:id',
   authenticate,
   asyncMiddleware(videoImportDeleteValidator),
   asyncRetryTransactionMiddleware(deleteVideoImport)
@@ -152,7 +156,7 @@ async function handleTorrentImport (req: express.Request, res: express.Response,
   return res.json(videoImport.toFormattedJSON()).end()
 }
 
-function statusFromYtDlImportError (err: YoutubeDlImportError): number {
+function statusFromYtDlImportError (err: YoutubeDlImportError): HttpStatusCodeType {
   switch (err.code) {
     case YoutubeDlImportError.CODE.NOT_ONLY_UNICAST_URL:
       return HttpStatusCode.FORBIDDEN_403

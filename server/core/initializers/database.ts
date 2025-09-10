@@ -1,5 +1,6 @@
 import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { ActorCustomPageModel } from '@server/models/account/actor-custom-page.js'
+import { UploadImageModel } from '@server/models/application/upload-image.js'
 import { AccountAutomaticTagPolicyModel } from '@server/models/automatic-tag/account-automatic-tag-policy.js'
 import { AutomaticTagModel } from '@server/models/automatic-tag/automatic-tag.js'
 import { CommentAutomaticTagModel } from '@server/models/automatic-tag/comment-automatic-tag.js'
@@ -20,6 +21,7 @@ import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync.j
 import { VideoChapterModel } from '@server/models/video/video-chapter.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting.js'
+import { VideoLiveScheduleModel } from '@server/models/video/video-live-schedule.js'
 import { VideoLiveSessionModel } from '@server/models/video/video-live-session.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
@@ -116,7 +118,6 @@ export function checkDatabaseConnectionOrDie () {
   sequelizeTypescript.authenticate()
     .then(() => logger.debug('Connection to PostgreSQL has been established successfully.'))
     .catch(err => {
-
       logger.error('Unable to connect to PostgreSQL database.', { err })
       process.exit(-1)
     })
@@ -186,7 +187,9 @@ export async function initDatabaseModels (silent: boolean) {
     CommentAutomaticTagModel,
     AutomaticTagModel,
     WatchedWordsListModel,
-    AccountAutomaticTagPolicyModel
+    AccountAutomaticTagPolicyModel,
+    UploadImageModel,
+    VideoLiveScheduleModel
   ])
 
   // Check extensions exist in the database
@@ -223,7 +226,6 @@ async function checkPostgresExtension (extension: string) {
     // Try to create the extension ourselves
     try {
       await sequelizeTypescript.query(`CREATE EXTENSION ${extension};`, { raw: true })
-
     } catch {
       const errorMessage = `You need to enable ${extension} extension in PostgreSQL. ` +
         `You can do so by running 'CREATE EXTENSION ${extension};' as a PostgreSQL super user in ${CONFIG.DATABASE.DBNAME} database.`

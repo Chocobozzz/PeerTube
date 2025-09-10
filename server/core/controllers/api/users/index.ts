@@ -1,6 +1,7 @@
 import { pick } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, UserCreate, UserCreateResult, UserRight, UserUpdate } from '@peertube/peertube-models'
 import { tokensRouter } from '@server/controllers/api/users/token.js'
+import { getResetPasswordUrl } from '@server/lib/client-urls.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { OAuthTokenModel } from '@server/models/oauth/oauth-token.js'
 import { MUserAccountDefault } from '@server/types/models/index.js'
@@ -8,7 +9,6 @@ import express from 'express'
 import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../helpers/audit-logger.js'
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
 import { generateRandomString, getFormattedObjects } from '../../../helpers/utils.js'
-import { WEBSERVER } from '../../../initializers/constants.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import { Emailer } from '../../../lib/emailer.js'
 import { Redis } from '../../../lib/redis.js'
@@ -161,11 +161,17 @@ async function createUser (req: express.Request, res: express.Response) {
   logger.info('User %s with its channel and account created.', body.username, lTags(user.username))
 
   if (createPassword) {
-    // this will send an email for newly created users, so then can set their first password.
+    // This will send an email for newly created users, so then can set their first password
     logger.info('Sending to user %s a create password email', body.username, lTags(user.username))
+
     const verificationString = await Redis.Instance.setCreatePasswordVerificationString(user.id)
-    const url = WEBSERVER.URL + '/reset-password?userId=' + user.id + '&verificationString=' + verificationString
-    Emailer.Instance.addPasswordCreateEmailJob(userToCreate.username, user.email, url)
+
+    Emailer.Instance.addPasswordCreateEmailJob({
+      username: userToCreate.username,
+      to: user.email,
+      language: user.getLanguage(),
+      createPasswordUrl: getResetPasswordUrl(user, verificationString)
+    })
   }
 
   Hooks.runAction('action:api.user.created', { body, user, account, videoChannel, req, res })
@@ -289,8 +295,12 @@ async function askResetUserPassword (req: express.Request, res: express.Response
   const user = res.locals.user
 
   const verificationString = await Redis.Instance.setResetPasswordVerificationString(user.id)
-  const url = WEBSERVER.URL + '/reset-password?userId=' + user.id + '&verificationString=' + verificationString
-  Emailer.Instance.addPasswordResetEmailJob(user.username, user.email, url)
+  Emailer.Instance.addPasswordResetEmailJob({
+    username: user.username,
+    to: user.email,
+    language: user.getLanguage(),
+    resetPasswordUrl: getResetPasswordUrl(user, verificationString)
+  })
 
   logger.info(`User ${user.username} asked password reset.`, lTags(user.username))
 
@@ -321,7 +331,7 @@ async function changeUserBlock (res: express.Response, user: MUserAccountDefault
     await user.save({ transaction: t })
   })
 
-  Emailer.Instance.addUserBlockJob(user, block, reason)
+  Emailer.Instance.addUserBlockJob({ username: user.username, email: user.email, language: user.getLanguage(), blocked: block, reason })
 
   auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()), oldUserAuditView)
 }

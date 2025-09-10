@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common'
-import { Component, OnInit, inject, input } from '@angular/core'
+import { Component, OnInit, booleanAttribute, inject, input } from '@angular/core'
 import { MarkdownService } from '@app/core'
 import { LinkType } from 'src/types/link.type'
 import { LinkComponent } from '../shared-main/common/link.component'
@@ -17,12 +17,14 @@ export class VideoPlaylistMiniatureComponent implements OnInit {
 
   readonly playlist = input<VideoPlaylist>(undefined)
 
-  readonly toManage = input(false)
+  readonly toManage = input.required({ transform: booleanAttribute })
 
-  readonly displayChannel = input(false)
-  readonly displayDescription = input(false)
-  readonly displayPrivacy = input(false)
-  readonly displayAsRow = input(false)
+  readonly thumbnailOnly = input(false, { transform: booleanAttribute })
+
+  readonly displayChannel = input(false, { transform: booleanAttribute })
+  readonly displayDescription = input(false, { transform: booleanAttribute })
+  readonly displayPrivacy = input(false, { transform: booleanAttribute })
+  readonly displayAsRow = input(false, { transform: booleanAttribute })
 
   readonly linkType = input<LinkType>('internal')
 

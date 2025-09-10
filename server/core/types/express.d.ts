@@ -1,4 +1,11 @@
-import { HttpMethodType, PeerTubeProblemDocumentData, ServerErrorCodeType, ServerLogLevel, VideoCreate } from '@peertube/peertube-models'
+import {
+  HttpMethodType,
+  HttpStatusCodeType,
+  PeerTubeProblemDocumentData,
+  ServerErrorCodeType,
+  ServerLogLevel,
+  VideoCreate
+} from '@peertube/peertube-models'
 import { RegisterServerAuthExternalOptions } from '@server/types/index.js'
 import {
   MAbuseMessage,
@@ -17,14 +24,14 @@ import {
   MVideoFormattableDetails,
   MVideoId,
   MVideoImmutable,
-  MVideoLiveFormattable,
+  MVideoLiveSessionReplay,
   MVideoPassword,
   MVideoPlaylistFull,
   MVideoPlaylistFullSummary,
   MVideoThumbnailBlacklist,
   MWatchedWordsList
 } from '@server/types/models/index.js'
-import { MOAuthTokenUser } from '@server/types/models/oauth/oauth-token.js'
+import { MOAuthToken, MOAuthTokenUser } from '@server/types/models/oauth/oauth-token.js'
 import { MPlugin, MServer, MServerBlocklist } from '@server/types/models/server.js'
 import { MVideoImportDefault } from '@server/types/models/video/video-import.js'
 import { MVideoPlaylistElement, MVideoPlaylistElementVideoUrlPlaylistPrivacy } from '@server/types/models/video/video-playlist-element.js'
@@ -56,6 +63,8 @@ declare module 'express' {
     query: any
     method: HttpMethodType
     rawBody: Buffer // Allow plugin routes to access the raw body
+
+    t: (key: string, context?: Record<string, string | number>) => string
   }
 
   // ---------------------------------------------------------------------------
@@ -105,7 +114,7 @@ declare module 'express' {
       message: string
 
       title?: string
-      status?: number
+      status?: HttpStatusCodeType
       type?: ServerErrorCodeType
       instance?: string
 
@@ -139,8 +148,8 @@ declare module 'express' {
       onlyVideo?: MVideoThumbnailBlacklist
       videoId?: MVideoId
 
-      videoLive?: MVideoLiveFormattable
-      videoLiveSession?: MVideoLiveSession
+      videoLive?: MVideoLiveWithSettingSchedules
+      videoLiveSession?: MVideoLiveSessionReplay
 
       videoShare?: MVideoShareActor
 
@@ -237,6 +246,8 @@ declare module 'express' {
       userExport?: MUserExport
 
       watchedWordsList?: MWatchedWordsList
+
+      tokenSession?: MOAuthToken
     }
   }
 }
