@@ -7,7 +7,7 @@ export function getCSSConfig (root: string) {
         api: 'modern-compiler',
         loadPaths: [ resolve(root, './src/sass/include') ],
         // FIXME: Wait for bootstrap upgrade that fixes deprecated sass utils
-        silenceDeprecations: [ 'import', 'mixed-decls', 'color-functions', 'global-builtin' ]
+        silenceDeprecations: [ 'import', 'color-functions', 'global-builtin' ]
       }
     }
   }
