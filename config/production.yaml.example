@@ -577,6 +577,9 @@ user:
 
   default_channel_name: 'Main $1 channel' # The placeholder $1 is used to represent the user's username
 
+  password_constraints:
+    min_length: 8
+
 video_channels:
   max_per_user: 20 # Allows each user to create up to 20 video channels.
 
@@ -1196,5 +1199,5 @@ email:
 
 video_comments:
   # Accept or not comments from remote instances
-  # This setting is not retroactive: current remote comments of your instance will not be affected
+  # This setting is not retroactive: current comments from remote platforms will not be deleted
   accept_remote_comments: true

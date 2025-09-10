@@ -567,6 +567,9 @@ user:
 
   default_channel_name: 'Main $1 channel' # The placeholder $1 is used to represent the user's username
 
+  password_constraints:
+    min_length: 8
+
 video_channels:
   max_per_user: 20 # Allows each user to create up to 20 video channels.
 

@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
 import { UserRegistrationState, UserRole } from '@peertube/peertube-models'
 import {
   cleanupTests,
@@ -11,6 +9,8 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
+import { expect } from 'chai'
 
 describe('Test registrations', function () {
   let server: PeerTubeServer

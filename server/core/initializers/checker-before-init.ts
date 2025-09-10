@@ -63,6 +63,7 @@ export function checkMissedConfig () {
     'user.history.videos.enabled',
     'user.video_quota',
     'user.video_quota_daily',
+    'user.password_constraints.min_length',
     'video_channels.max_per_user',
     'csp.enabled',
     'csp.report_only',

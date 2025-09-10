@@ -439,6 +439,15 @@ export interface ServerConfig {
   nsfwFlagsSettings: {
     enabled: boolean
   }
+
+  fieldsConstraints: {
+    users: {
+      password: {
+        minLength: number
+        maxLength: number
+      }
+    }
+  }
 }
 
 export type HTMLServerConfig = Omit<ServerConfig, 'signup'>

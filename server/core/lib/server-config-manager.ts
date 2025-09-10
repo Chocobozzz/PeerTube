@@ -397,6 +397,15 @@ class ServerConfigManager {
 
       nsfwFlagsSettings: {
         enabled: CONFIG.NSFW_FLAGS_SETTINGS.ENABLED
+      },
+
+      fieldsConstraints: {
+        users: {
+          password: {
+            minLength: CONSTRAINTS_FIELDS.USERS.PASSWORD.min,
+            maxLength: CONSTRAINTS_FIELDS.USERS.PASSWORD.max
+          }
+        }
       }
     }
   }
@@ -423,7 +432,7 @@ class ServerConfigManager {
       minimumAge: CONFIG.SIGNUP.MINIMUM_AGE,
       requiresApproval: CONFIG.SIGNUP.REQUIRES_APPROVAL,
       requiresEmailVerification: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION
-    }
+    } satisfies ServerConfig['signup']
 
     const htmlConfig = await this.getHTMLServerConfig()
 
