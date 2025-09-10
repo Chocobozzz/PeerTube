@@ -3,12 +3,13 @@ import { isConfigLogoTypeValid } from '@server/helpers/custom-validators/config.
 import { isIntOrNull } from '@server/helpers/custom-validators/misc.js'
 import { isNumberArray, isStringArray } from '@server/helpers/custom-validators/search.js'
 import { isVideoCommentsPolicyValid, isVideoLicenceValid, isVideoPrivacyValid } from '@server/helpers/custom-validators/videos.js'
+import { guessLanguageFromReq } from '@server/helpers/i18n.js'
 import { CONFIG, isEmailEnabled } from '@server/initializers/config.js'
 import express from 'express'
 import { body, param } from 'express-validator'
+import { getBrowseVideosDefaultScopeError, getBrowseVideosDefaultSortError } from '../../helpers/custom-validators/browse-videos.js'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins.js'
 import { isUserNSFWPolicyValid, isUserVideoQuotaDailyValid, isUserVideoQuotaValid } from '../../helpers/custom-validators/users.js'
-import { isBrowseVideosDefaultSortValid, isBrowseVideosDefaultScopeValid } from '../../helpers/custom-validators/browse-videos.js'
 import { isThemeRegistered } from '../../lib/plugins/theme-utils.js'
 import { areValidationErrors, updateActorImageValidatorFactory } from './shared/index.js'
 
@@ -258,18 +259,19 @@ function checkInvalidSearchConfig (customConfig: CustomConfig, req: express.Requ
 }
 
 function checkInvalidBrowseVideosConfig (customConfig: CustomConfig, req: express.Request, res: express.Response) {
-  const defaultSortCheck = isBrowseVideosDefaultSortValid(
+  const sortError = getBrowseVideosDefaultSortError(
     customConfig.client.browseVideos.defaultSort,
-    customConfig.trending.videos.algorithms.enabled
+    customConfig.trending.videos.algorithms.enabled,
+    guessLanguageFromReq(req, res)
   )
-  if (defaultSortCheck.isValid === false){
-    res.fail({ message: req.t(defaultSortCheck.validationError) })
+  if (sortError) {
+    res.fail({ message: sortError })
     return false
   }
 
-  const defaultScopeCheck = isBrowseVideosDefaultScopeValid(customConfig.client.browseVideos.defaultScope)
-  if (defaultScopeCheck.isValid === false){
-    res.fail({ message: req.t(defaultScopeCheck.validationError) })
+  const scopeError = getBrowseVideosDefaultScopeError(customConfig.client.browseVideos.defaultScope, guessLanguageFromReq(req, res))
+  if (scopeError) {
+    res.fail({ message: scopeError })
     return false
   }
 

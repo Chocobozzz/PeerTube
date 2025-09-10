@@ -1,11 +1,10 @@
-export function isBrowseVideosDefaultSortValid (value: string, enabledTrendingAlgorithms: string[]) {
+import { t } from '../i18n.js'
+
+export function getBrowseVideosDefaultSortError (value: string, enabledTrendingAlgorithms: string[], language: string) {
   const availableOptions = [ '-publishedAt', '-originallyPublishedAt', 'name', '-trending', '-hot', '-likes', '-views' ]
 
   if (availableOptions.includes(value) === false) {
-    return {
-      isValid: false,
-      validationError: `Browse videos default sort should be '${availableOptions.join('\' or \'')}', instead of '${value}'`
-    }
+    return t('Browse videos default sort should be \'' + availableOptions.join('\' or \'') + '\', instead of \'' + value + '\'', language)
   }
 
   const trendingSortAlgorithmMap = new Map<string, string>([
@@ -16,25 +15,21 @@ export function isBrowseVideosDefaultSortValid (value: string, enabledTrendingAl
   const currentTrendingSortAlgorithm = trendingSortAlgorithmMap.get(value)
 
   if (currentTrendingSortAlgorithm && enabledTrendingAlgorithms.includes(currentTrendingSortAlgorithm) === false) {
-    return {
-      isValid: false,
-      validationError:
-        `Trending videos algorithm '${currentTrendingSortAlgorithm}' should be enabled if browse videos default sort is '${value}'`
-    }
+    return t(
+      `Trending videos algorithm '${currentTrendingSortAlgorithm}' should be enabled if browse videos default sort is '${value}'`,
+      language
+    )
   }
 
-  return { isValid: true, validationError: null }
+  return null
 }
 
-export function isBrowseVideosDefaultScopeValid (value: string) {
+export function getBrowseVideosDefaultScopeError (value: string, language: string) {
   const availableOptions = [ 'local', 'federated' ]
 
   if (availableOptions.includes(value) === false) {
-    return {
-      isValid: false,
-      validationError: `Browse videos default scope should be '${availableOptions.join('\' or \'')}', instead of '${value}'`
-    }
+    return t('Browse videos default scope should be \'' + availableOptions.join('\' or \'') + '\', instead of \'' + value + '\'', language)
   }
 
-  return { isValid: true, validationError: null }
+  return null
 }

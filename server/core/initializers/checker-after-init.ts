@@ -8,13 +8,14 @@ import { basename } from 'path'
 import { URL } from 'url'
 import { parseBytes, parseSemVersion } from '../helpers/core-utils.js'
 import { isArray } from '../helpers/custom-validators/misc.js'
-import { isBrowseVideosDefaultSortValid, isBrowseVideosDefaultScopeValid } from '../helpers/custom-validators/browse-videos.js'
+import { getBrowseVideosDefaultSortError, getBrowseVideosDefaultScopeError } from '../helpers/custom-validators/browse-videos.js'
 import { logger } from '../helpers/logger.js'
 import { ApplicationModel, getServerActor } from '../models/application/application.js'
 import { OAuthClientModel } from '../models/oauth/oauth-client.js'
 import { UserModel } from '../models/user/user.js'
 import { CONFIG, getLocalConfigFilePath, isEmailEnabled, reloadConfig } from './config.js'
 import { WEBSERVER } from './constants.js'
+import { englishLanguage } from '@server/helpers/i18n.js'
 
 async function checkActivityPubUrls () {
   const actor = await getServerActor()
@@ -389,16 +390,14 @@ function checkThumbnailsConfig () {
 }
 
 function checkBrowseVideosConfig () {
-  const defaultSortCheck = isBrowseVideosDefaultSortValid(
+  const sortError = getBrowseVideosDefaultSortError(
     CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SORT,
-    CONFIG.TRENDING.VIDEOS.ALGORITHMS.ENABLED
+    CONFIG.TRENDING.VIDEOS.ALGORITHMS.ENABLED,
+    englishLanguage
   )
-  if (defaultSortCheck.isValid === false){
-    throw new Error(defaultSortCheck.validationError)
-  }
 
-  const defaultScopeCheck = isBrowseVideosDefaultScopeValid(CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SCOPE)
-  if (defaultScopeCheck.isValid === false){
-    throw new Error(defaultScopeCheck.validationError)
-  }
+  if (sortError) throw new Error(sortError)
+
+  const scopeError = getBrowseVideosDefaultScopeError(CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SCOPE, englishLanguage)
+  if (scopeError) throw new Error(scopeError)
 }
