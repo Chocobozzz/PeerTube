@@ -322,6 +322,34 @@
 
   <div class="pt-two-cols mt-4">
     <div class="title-col">
+      <h2 i18n>BROWSE VIDEOS</h2>
+    </div>
+
+    <div class="content-col">
+      <div class="form-group" formGroupName="client">
+        <ng-container formGroupName="browseVideos">
+          <div class="form-group">
+            <label i18n for="browseVideosDefaultSort">Default sort</label>
+
+            <my-select-videos-sort inputId="browseVideosDefaultSort" formControlName="defaultSort"></my-select-videos-sort>
+
+            <div *ngIf="formErrors.client.browseVideos.defaultSort" class="form-error" role="alert">{{ formErrors.client.browseVideos.defaultSort }}</div>
+          </div>
+
+          <div class="form-group">
+            <label i18n for="browseVideosDefaultScope">Default scope</label>
+
+            <my-select-videos-scope inputId="browseVideosDefaultScope" formControlName="defaultScope"></my-select-videos-scope>
+
+            <div *ngIf="formErrors.client.browseVideos.defaultScope" class="form-error" role="alert">{{ formErrors.client.browseVideos.defaultScope }}</div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <div class="pt-two-cols mt-4">
+    <div class="title-col">
       <h2 i18n>VIDEOS</h2>
     </div>
 
@@ -449,34 +477,6 @@
         </div>
 
         <div *ngIf="formErrors.videoChannels.maxPerUser" class="form-error" role="alert">{{ formErrors.videoChannels.maxPerUser }}</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="pt-two-cols mt-4">
-    <div class="title-col">
-      <h2 i18n>BROWSE VIDEOS</h2>
-    </div>
-
-    <div class="content-col">
-      <div class="form-group" formGroupName="client">
-        <ng-container formGroupName="browseVideos">
-          <div class="form-group">
-            <label i18n for="browseVideosDefaultSort">Default sort</label>
-
-            <my-select-videos-sort inputId="browseVideosDefaultSort" formControlName="defaultSort"></my-select-videos-sort>
-
-            <div *ngIf="formErrors.client.browseVideos.defaultSort" class="form-error" role="alert">{{ formErrors.client.browseVideos.defaultSort }}</div>
-          </div>
-
-          <div class="form-group">
-            <label i18n for="browseVideosDefaultScope">Default scope</label>
-
-            <my-select-videos-scope inputId="browseVideosDefaultScope" formControlName="defaultScope"></my-select-videos-scope>
-
-            <div *ngIf="formErrors.client.browseVideos.defaultScope" class="form-error" role="alert">{{ formErrors.client.browseVideos.defaultScope }}</div>
-          </div>
-        </ng-container>
       </div>
     </div>
   </div>
