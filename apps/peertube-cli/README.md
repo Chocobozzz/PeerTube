@@ -10,8 +10,7 @@ See https://docs.joinpeertube.org/maintain/tools#remote-tools
 
 ```bash
 cd peertube-root
-yarn install --pure-lockfile
-cd apps/peertube-cli && yarn install --pure-lockfile
+npm run install-node-dependencies
 ```
 
 ## Develop

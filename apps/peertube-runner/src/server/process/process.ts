@@ -21,7 +21,7 @@ import { processVideoTranscription } from './shared/process-transcription.js'
 export async function processJob (options: ProcessOptions) {
   const { server, job } = options
 
-  logger.info(`[${server.url}] Processing job of type ${job.type}: ${job.uuid}`, { payload: job.payload })
+  logger.info({ payload: job.payload }, `[${server.url}] Processing job of type ${job.type}: ${job.uuid}`)
 
   switch (job.type) {
     case 'vod-audio-merge-transcoding':

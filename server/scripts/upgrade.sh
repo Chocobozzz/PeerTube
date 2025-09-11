@@ -78,7 +78,7 @@ RELEASE_PAGE_URL="https://github.com/Chocobozzz/PeerTube/releases/tag/${VERSION}
 LATEST_VERSION_DIRECTORY="$PEERTUBE_PATH/versions/peertube-${VERSION}"
 cd "$LATEST_VERSION_DIRECTORY"
 
-NOCLIENT=1 npm run install-node-dependencies -- --production
+npm run install-node-dependencies -- --production
 
 OLD_VERSION_DIRECTORY=$(readlink "$PEERTUBE_PATH/peertube-latest")
 

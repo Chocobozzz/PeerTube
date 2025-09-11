@@ -110,7 +110,7 @@ async function jimpProcessor (options: {
   }
 }
 
-async function autoResize (options: {
+function autoResize (options: {
   sourceImage: Jimp
   newSize: { width: number, height: number }
   destination: string

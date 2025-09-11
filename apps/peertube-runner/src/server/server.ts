@@ -57,7 +57,7 @@ export class RunnerServer {
     try {
       await ipcServer.run(this)
     } catch (err) {
-      logger.error('Cannot start local socket for IPC communication', err)
+      logger.error(err, 'Cannot start local socket for IPC communication')
       process.exit(-1)
     }
 

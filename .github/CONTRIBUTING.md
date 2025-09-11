@@ -79,7 +79,7 @@ First, you should use a server or PC with at least 4GB of RAM. Less RAM may lead
 git clone https://github.com/Chocobozzz/PeerTube
 cd PeerTube
 git remote add me git@github.com:YOUR_GITHUB_USERNAME/PeerTube.git
-yarn install --pure-lockfile
+npm run install-node-dependencies
 ```
 
 Note that development is done on the `develop` branch. If you want to hack on

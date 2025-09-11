@@ -6,7 +6,7 @@
   "licence": "AGPL-3.0",
   "engines": {
     "node": ">=20.x",
-    "yarn": ">=1.x"
+    "pnpm": ">=10.9"
   },
   "type": "module",
   "author": {
@@ -19,12 +19,8 @@
     "url": "git+https://github.com/Chocobozzz/PeerTube.git"
   },
   "typings": "*.d.ts",
-  "workspaces": [
-    "packages/*",
-    "server"
-  ],
   "scripts": {
-    "install-node-dependencies": "yarn install --pure-lockfile",
+    "install-node-dependencies": "pnpm install --frozen-lockfile",
     "benchmark-server": "tsx --conditions=peertube:tsx ./scripts/benchmark.ts",
     "benchmark-transcription": "tsx --conditions=peertube:tsx --tsconfig ./packages/transcription/tsconfig.json ./packages/transcription/src/benchmark.ts",
     "build:client": "bash ./scripts/build/client.sh",
@@ -67,7 +63,6 @@
     "parse-log": "node ./dist/scripts/parse-log.js",
     "plugin:install": "node ./dist/scripts/plugin/install.js",
     "plugin:uninstall": "node ./dist/scripts/plugin/uninstall.js",
-    "postinstall": "test -n \"$NOCLIENT\" || (cd client && yarn install --pure-lockfile)",
     "prune-storage": "LOGGER_LEVEL=warn node ./dist/scripts/prune-storage.js",
     "regenerate-thumbnails": "node ./dist/scripts/regenerate-thumbnails.js",
     "release-embed-api": "bash ./scripts/release-embed-api.sh",
@@ -99,6 +94,7 @@
     "@aws-sdk/lib-storage": "^3.190.0",
     "@aws-sdk/s3-request-presigner": "^3.345.0",
     "@commander-js/extra-typings": "^13.1.0",
+    "@jimp/plugin-color": "^1.6.0",
     "@node-oauth/oauth2-server": "^5.1.0",
     "@opentelemetry/api": "^1.1.0",
     "@opentelemetry/exporter-jaeger": "^2.0.0",
@@ -118,9 +114,18 @@
     "@peertube/bittorrent-tracker-server": "^11.1.2",
     "@peertube/feed": "^5.4.1",
     "@peertube/http-signature": "^1.7.0",
+    "@peertube/peertube-core-utils": "workspace:*",
+    "@peertube/peertube-ffmpeg": "workspace:*",
+    "@peertube/peertube-models": "workspace:*",
+    "@peertube/peertube-node-utils": "workspace:*",
+    "@peertube/peertube-server-commands": "workspace:*",
+    "@peertube/peertube-transcription": "workspace:*",
+    "@peertube/peertube-typescript-utils": "workspace:*",
     "@smithy/node-http-handler": "^4.0.2",
+    "@types/parse-torrent": "^5.8.7",
     "@uploadx/core": "^6.1.8",
     "archiver": "^7.0.1",
+    "async": "^3.2.6",
     "async-mutex": "^0.5.0",
     "bcrypt": "5.1.1",
     "bencode": "^4.0.0",
@@ -212,6 +217,7 @@
     "@types/config": "^3.3.0",
     "@types/create-torrent": "^5.0.0",
     "@types/express": "4.17.9",
+    "@types/express-serve-static-core": "4.19.5",
     "@types/fluent-ffmpeg": "^2.1.16",
     "@types/fs-extra": "^11.0.1",
     "@types/jsonld": "^1.5.9",
@@ -227,7 +233,6 @@
     "@types/node": "22.14.1",
     "@types/nodemailer": "^6.2.0",
     "@types/pug": "^2.0.10",
-    "@types/supertest": "^6.0.2",
     "@types/validator": "^13.9.0",
     "@types/webtorrent": "^0.110.0",
     "@types/ws": "^8.2.0",
@@ -254,7 +259,6 @@
     "rollup": "^4.20.0",
     "rollup-plugin-dts": "^6.1.1",
     "socket.io-client": "^4.5.4",
-    "supertest": "^7.0.0",
     "swagger-cli": "^4.0.2",
     "tsc-watch": "^6.0.0",
     "tsx": "^4.7.1",
@@ -262,5 +266,5 @@
     "typescript": "~5.8.3",
     "ua-parser-js": "^2.0.1"
   },
-  "packageManager": "yarn@1.22.21+sha1.1959a18351b811cdeedbd484a8f86c3cc3bbaf72"
+  "packageManager": "pnpm@10.15.1+sha512.34e538c329b5553014ca8e8f4535997f96180a1d0f614339357449935350d924e22f8614682191264ec33d1462ac21561aff97f6bb18065351c162c7e8f6de67"
 }

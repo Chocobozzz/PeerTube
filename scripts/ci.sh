@@ -150,7 +150,7 @@ elif [ "$1" = "lint" ]; then
 
     ( cd client && npm run lint )
 elif [ "$1" = "transcription" ]; then
-    npm run install-dependencies:transcription --workspace=@peertube/tests
+    pnpm run --filter=@peertube/tests install-dependencies:transcription
 
     npm run build:server
     npm run build:tests

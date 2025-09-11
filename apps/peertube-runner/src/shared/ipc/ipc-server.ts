@@ -63,6 +63,6 @@ export class IPCServer {
     body: IPCResponse<T>
   ) {
     response(body)
-      .catch(err => logger.error('Cannot send response after IPC request', err))
+      .catch(err => logger.error(err, 'Cannot send response after IPC request'))
   }
 }

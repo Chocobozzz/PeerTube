@@ -11,32 +11,20 @@ runs:
   using: "composite"
 
   steps:
+    - uses: pnpm/action-setup@v4
+      name: Install pnpm
+      with:
+        run_install: false
+
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
-
-    - name: Cache Node.js modules
-      uses: actions/cache@v4
-      with:
-        path: |
-          **/node_modules
-        key: ${{ runner.OS }}-node-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.OS }}-node-
-          ${{ runner.OS }}-
+        cache: 'pnpm'
 
     - name: Install dependencies
       shell: bash
-      run: yarn install --frozen-lockfile
-
-    - name: Install peertube runner dependencies
-      shell: bash
-      run: cd apps/peertube-runner && yarn install --frozen-lockfile
-
-    - name: Install peertube CLI dependencies
-      shell: bash
-      run: cd apps/peertube-cli && yarn install --frozen-lockfile
+      run: npm run install-node-dependencies
 
     - name: Display PeerTube dependencies
       shell: bash

@@ -3,11 +3,16 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "devDependencies": {},
+  "devDependencies": {
+    "@peertube/peertube-server": "workspace:*",
+    "@peertube/peertube-transcription-devtools": "workspace:*",
+    "@types/superagent": "^8.1.9",
+    "@types/supertest": "^6.0.3",
+    "supertest": "^7.1.4"
+  },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
     "install-dependencies:transcription": "pip install -r ./requirements.txt -r ../transcription-devtools/requirements.txt"
-  },
-  "dependencies": {}
+  }
 }

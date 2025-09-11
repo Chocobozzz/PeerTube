@@ -1,9 +1,7 @@
 # NPM instalation
 node_modules
 *npm-debug.log
-yarn-error.log
 *-ci.log
-.yarn
 
 # Testing
 /test1/

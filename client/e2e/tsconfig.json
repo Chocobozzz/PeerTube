@@ -7,6 +7,7 @@
     "module": "commonjs",
     "target": "ES2018",
     "typeRoots": [
+      "../node_modules/@wdio",
       "../node_modules/@types",
       "../node_modules"
     ],

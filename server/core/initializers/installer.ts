@@ -15,6 +15,7 @@ import { applicationExist, clientsExist, usersExist } from './checker-after-init
 import { CONFIG } from './config.js'
 import { DIRECTORIES, FILES_CACHE, LAST_MIGRATION_VERSION } from './constants.js'
 import { sequelizeTypescript } from './database.js'
+import { initPNPM } from '@server/lib/plugins/package-manager.js'
 
 async function installApplication () {
   try {
@@ -26,7 +27,8 @@ async function installApplication () {
             createApplicationIfNotExist(),
             createOAuthClientIfNotExist(),
             createOAuthAdminIfNotExist(),
-            createRunnerRegistrationTokenIfNotExist()
+            createRunnerRegistrationTokenIfNotExist(),
+            initPNPM()
           ])
         }),
 
@@ -81,7 +83,7 @@ async function removeDirectoryOrContent (dir: string) {
 function createDirectoriesIfNotExist () {
   const storage = CONFIG.STORAGE
   const cacheDirectories = Object.keys(FILES_CACHE)
-                                 .map(k => FILES_CACHE[k].DIRECTORY)
+    .map(k => FILES_CACHE[k].DIRECTORY)
 
   const tasks: Promise<void>[] = []
   for (const key of Object.keys(storage)) {

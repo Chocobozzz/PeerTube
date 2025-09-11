@@ -20,23 +20,19 @@ export type PickWithOpt<T, KT extends keyof T, V> = {
 
 // https://github.com/krzkaczor/ts-essentials Rocks!
 export type DeepPartial<T> = {
-  [P in keyof T]?: T[P] extends Array<infer U>
-    ? Array<DeepPartial<U>>
-    : T[P] extends ReadonlyArray<infer U>
-      ? ReadonlyArray<DeepPartial<U>>
-      : DeepPartial<T[P]>
+  [P in keyof T]?: T[P] extends Array<infer U> ? Array<DeepPartial<U>>
+    : T[P] extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+    : DeepPartial<T[P]>
 }
 
 type Primitive = string | Function | number | boolean | symbol | undefined | null
 export type DeepOmitHelper<T, K extends keyof T> = {
   [P in K]: // extra level of indirection needed to trigger homomorhic behavior
-  T[P] extends infer TP // distribute over unions
-    ? TP extends Primitive
-      ? TP // leave primitives and functions alone
-      : TP extends any[]
-        ? DeepOmitArray<TP, K> // Array special handling
-        : DeepOmit<TP, K>
-    : never
+    T[P] extends infer TP // distribute over unions
+      ? TP extends Primitive ? TP // leave primitives and functions alone
+      : TP extends any[] ? DeepOmitArray<TP, K> // Array special handling
+      : DeepOmit<TP, K>
+      : never
 }
 export type DeepOmit<T, K> = T extends Primitive ? T : DeepOmitHelper<T, Exclude<keyof T, K>>
 
@@ -47,3 +43,12 @@ export type DeepOmitArray<T extends any[], K> = {
 export type Unpacked<T> = T extends (infer U)[] ? U : T
 
 export type Awaitable<T> = T | PromiseLike<T>
+
+// Thanks https://stackoverflow.com/a/52761156
+export type OverloadedParameters<T> =
+  // eslint-disable-next-line max-len
+  T extends { (...args: infer A1): any, (...args: infer A2): any, (...args: infer A3): any, (...args: infer A4): any } ? A1 | A2 | A3 | A4 :
+    T extends { (...args: infer A1): any, (...args: infer A2): any, (...args: infer A3): any } ? A1 | A2 | A3 :
+    T extends { (...args: infer A1): any, (...args: infer A2): any } ? A1 | A2 :
+    T extends (...args: infer A) => any ? A
+    : any

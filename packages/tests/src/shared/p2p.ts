@@ -1,8 +1,10 @@
 import { VideoFile } from '@peertube/peertube-models'
 import { PeerTubeServer } from '@peertube/peertube-server-commands'
+import { OverloadedParameters } from '@peertube/peertube-typescript-utils'
 import { expect } from 'chai'
 import { readFile } from 'fs/promises'
 import type { Instance as MagnetUriInstance } from 'magnet-uri'
+import type { ParseTorrent } from 'parse-torrent'
 import { basename, join } from 'path'
 import type { Torrent } from 'webtorrent'
 import WebTorrent from 'webtorrent'
@@ -32,7 +34,7 @@ export async function checkWebTorrentWorks (magnetUri: string, pathMatch?: RegEx
   webtorrent.destroy()
 }
 
-export async function parseTorrentVideo (server: PeerTubeServer, file: VideoFile) {
+export async function parseTorrentVideo (server: PeerTubeServer, file: VideoFile): Promise<OverloadedParameters<ReturnType<ParseTorrent>>> {
   const torrentName = basename(file.torrentUrl)
   const torrentPath = server.servers.buildDirectory(join('torrents', torrentName))
 

@@ -32,7 +32,7 @@ import {
 } from '../../types/plugins/index.js'
 import { ClientHtml } from '../html/client-html.js'
 import { RegisterHelpers } from './register-helpers.js'
-import { installNpmPlugin, installNpmPluginFromDisk, rebuildNativePlugins, removeNpmPlugin } from './yarn.js'
+import { installNpmPlugin, installNpmPluginFromDisk, rebuildNativePlugins, removeNpmPlugin } from './package-manager.js'
 
 const require = createRequire(import.meta.url)
 
@@ -451,6 +451,8 @@ export class PluginManager implements ServerHook {
 
   async rebuildNativePluginsIfNeeded () {
     if (!await ApplicationModel.nodeABIChanged()) return
+
+    logger.info('Node ABI has changed, rebuilding native plugins')
 
     return rebuildNativePlugins()
   }

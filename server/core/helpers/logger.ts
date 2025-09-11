@@ -33,11 +33,11 @@ const consoleLoggerFormat = format.printf(info => {
   return `[${info.label}] ${info.timestamp} ${info.level}: ${info.message}${additionalInfos}`
 })
 
-export const jsonLoggerFormat = format.printf(info => {
+export const jsonLoggerFormat: ReturnType<typeof format.printf> = format.printf(info => {
   return JSON.stringify(info, removeCyclicValues())
 })
 
-export const labelFormatter = (suffix?: string) => {
+export const labelFormatter: (suffix?: string) => ReturnType<typeof format.printf> = (suffix?: string) => {
   return format.label({
     label: suffix ? `${label} ${suffix}` : label
   })

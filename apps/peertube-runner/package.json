@@ -5,10 +5,10 @@
   "main": "dist/peertube-runner.js",
   "bin": "dist/peertube-runner.js",
   "license": "AGPL-3.0",
-  "dependencies": {},
   "devDependencies": {
     "@iarna/toml": "^2.2.5",
     "@types/follow-redirects": "1.14.4",
+    "cli-table3": "^0.6.5",
     "env-paths": "^3.0.0",
     "follow-redirects": "^1.15.5",
     "net-ipc": "^2.2.2",

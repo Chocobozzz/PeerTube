@@ -151,10 +151,7 @@ export class VideoWatchPage {
     await this.clickOnMoreDropdownIcon()
 
     // We need the await expression
-    // eslint-disable-next-line @typescript-eslint/await-thenable
-    const items = await $$('.dropdown-menu.show .dropdown-item')
-
-    for (const item of items) {
+    return $$('.dropdown-menu.show .dropdown-item').mapSeries(async item => {
       const content = await item.getText()
 
       if (content.includes('Manage')) {
@@ -162,7 +159,7 @@ export class VideoWatchPage {
         await $('#name').waitForClickable()
         return
       }
-    }
+    })
   }
 
   async clickOnMoreDropdownIcon () {

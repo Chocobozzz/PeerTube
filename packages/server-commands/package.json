@@ -3,17 +3,28 @@
   "private": true,
   "version": "0.0.0",
   "main": "dist/index.js",
-  "files": [ "dist" ],
+  "files": [
+    "dist"
+  ],
   "exports": {
     "types": "./dist/index.d.ts",
     "peertube:tsx": "./src/index.ts",
     "default": "./dist/index.js"
   },
   "type": "module",
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/superagent": "^8.1.9",
+    "@types/supertest": "^6.0.3",
+    "supertest": "^7.1.4"
+  },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@peertube/peertube-core-utils": "workspace:*",
+    "@peertube/peertube-models": "workspace:*",
+    "@peertube/peertube-node-utils": "workspace:*",
+    "@peertube/peertube-typescript-utils": "workspace:*"
+  }
 }

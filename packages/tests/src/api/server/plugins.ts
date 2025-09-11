@@ -379,7 +379,6 @@ describe('Test plugins', function () {
     await wait(3000)
 
     expect(await pathExists(join(baseNativeModule, 'build'))).to.be.true
-    expect(await pathExists(join(baseNativeModule, 'prebuilds'))).to.be.true
 
     await makeGetRequest({
       url: server.url,
@@ -393,7 +392,6 @@ describe('Test plugins', function () {
     await server.run()
 
     expect(await pathExists(join(baseNativeModule, 'build'))).to.be.false
-    expect(await pathExists(join(baseNativeModule, 'prebuilds'))).to.be.false
 
     await makeGetRequest({
       url: server.url,
