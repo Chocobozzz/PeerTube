@@ -2417,17 +2417,17 @@
           <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3083362298006411773" datatype="html">
+      <trans-unit id="3083362298006411773" datatype="html" xml:space="preserve">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout.</source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout.</target>
+        <target state="translated">Tu archivo <x id="PH" equiv-text="name"/> no se pudo transferir antes del tiempo de espera del proxy del servidor.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5514835993053540551" datatype="html">
+      <trans-unit id="5514835993053540551" datatype="html" xml:space="preserve">
         <source>Your <x id="PH" equiv-text="name"/> file was too large.</source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file was too large.</target>
+        <target state="translated">Tu archivo <x id="PH" equiv-text="name"/> era demasiado grande.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">72</context>
@@ -6860,9 +6860,9 @@
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="8937536900458817451" datatype="html">
+      <trans-unit id="8937536900458817451" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Not limit the amount of videos&lt;/strong&gt; new users can upload</source>
-        <target state="new">&lt;strong&gt;Not limit the amount of videos&lt;/strong&gt; new users can upload</target>
+        <target state="translated">&lt;strong&gt;No limitar la cantidad de vídeos&lt;/strong&gt; que los usuarios nuevos pueden subir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">225</context>
