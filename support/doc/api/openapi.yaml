@@ -5067,7 +5067,7 @@ paths:
           description: successful operation
 
 
-  '/api/v1/player-settings/videos/{videoId}':
+  '/api/v1/player-settings/videos/{id}':
     get:
       summary: Get video player settings
       description: Get player settings for a specific video. Returns video-specific settings merged with channel player settings.
@@ -5117,7 +5117,7 @@ paths:
         '404':
           description: video not found
 
-  '/api/v1/player-settings/video-channels/{handle}':
+  '/api/v1/player-settings/video-channels/{channelHandle}':
     get:
       summary: Get channel player settings
       description: Get player settings for a video channel.
