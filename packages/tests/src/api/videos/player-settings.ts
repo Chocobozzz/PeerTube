@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import { VideoCreateResult } from '@peertube/peertube-models'
 import {
   PeerTubeServer,
   cleanupTests,
@@ -10,7 +11,6 @@ import {
   waitJobs
 } from '@peertube/peertube-server-commands'
 import { expect } from 'chai'
-import { VideoCreateResult } from '../../../../models/src/videos/video-create-result.model.js'
 
 describe('Test player settings', function () {
   let servers: PeerTubeServer[]

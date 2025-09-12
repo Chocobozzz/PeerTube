@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import { VideoCreateResult } from '@peertube/peertube-models'
 import {
   CommentsCommand,
   PeerTubeServer,
@@ -13,7 +14,6 @@ import {
 } from '@peertube/peertube-server-commands'
 import { dateIsValid, testImage } from '@tests/shared/checks.js'
 import { expect } from 'chai'
-import { VideoCreateResult } from '../../../../models/src/videos/video-create-result.model.js'
 
 describe('Test video comments', function () {
   let server: PeerTubeServer

@@ -1,7 +1,7 @@
+import { PlayerChannelSettings, PlayerVideoSettings } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { PlayerSettingModel } from '@server/models/video/player-setting.js'
-import { PlayerChannelSettings, PlayerVideoSettings } from '../../../packages/models/src/videos/player-settings.js'
 import { MChannelId, MVideoId } from '@server/types/models/index.js'
 
 export async function upsertPlayerSettings (options: {

@@ -16,8 +16,6 @@ export * from './chapter/index.js'
 
 export * from './nsfw-flag.enum.js'
 export * from './nsfw-policy.type.js'
-export * from './player-settings.js'
-export * from './player-settings-update.js'
 
 export * from './storyboard.model.js'
 export * from './thumbnail.type.js'
