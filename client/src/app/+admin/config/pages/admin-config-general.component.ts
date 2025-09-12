@@ -24,14 +24,7 @@ import { USER_VIDEO_QUOTA_DAILY_VALIDATOR, USER_VIDEO_QUOTA_VALIDATOR } from '@a
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
-import {
-  BroadcastMessageLevel,
-  CustomConfig,
-  PlayerTheme,
-  VideoCommentPolicyType,
-  VideoConstant,
-  VideoPrivacyType
-} from '@peertube/peertube-models'
+import { BroadcastMessageLevel, CustomConfig, VideoCommentPolicyType, VideoConstant, VideoPrivacyType } from '@peertube/peertube-models'
 import { Subscription } from 'rxjs'
 import { pairwise } from 'rxjs/operators'
 import { SelectOptionsItem } from 'src/types/select-options-item.model'
@@ -40,8 +33,8 @@ import { MarkdownTextareaComponent } from '../../../shared/shared-forms/markdown
 import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
 import { SelectCustomValueComponent } from '../../../shared/shared-forms/select/select-custom-value.component'
 import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
-import { SelectVideosSortComponent } from '../../../shared/shared-forms/select/select-videos-sort.component'
 import { SelectVideosScopeComponent } from '../../../shared/shared-forms/select/select-videos-scope.component'
+import { SelectVideosSortComponent } from '../../../shared/shared-forms/select/select-videos-sort.component'
 import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
 import { UserRealQuotaInfoComponent } from '../../shared/user-real-quota-info.component'
 import { AdminSaveBarComponent } from '../shared/admin-save-bar.component'

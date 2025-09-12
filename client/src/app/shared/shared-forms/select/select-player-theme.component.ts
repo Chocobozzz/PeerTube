@@ -4,7 +4,6 @@ import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/f
 import { ServerService } from '@app/core'
 import { PlayerSettingsService } from '@app/shared/shared-video/player-settings.service'
 import { PlayerChannelSettings, PlayerTheme, PlayerVideoSettings, VideoChannel } from '@peertube/peertube-models'
-import { of } from 'rxjs'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
 import { SelectOptionsComponent } from './select-options.component'
 
