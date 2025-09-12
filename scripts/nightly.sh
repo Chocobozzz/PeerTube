@@ -47,7 +47,7 @@ sed -i 's/"version": "\([^"]\+\)"/"version": "\1-'"$nightly_version"'"/' ./packa
                           "$directory_name/scripts/upgrade.sh" "$directory_name/support/doc" "$directory_name/support/freebsd" \
                           "$directory_name/support/init.d" "$directory_name/support/nginx" "$directory_name/support/openapi" \
                           "$directory_name/support/sysctl.d" "$directory_name/support/systemd" \
-                          "$directory_name/pnpm-lock.yaml" "$directory_name/pnpm-workspace.yaml")
+                          "$directory_name/pnpm-patches" "$directory_name/pnpm-lock.yaml" "$directory_name/pnpm-workspace.yaml")
 
   # temporary setup
   cd ..

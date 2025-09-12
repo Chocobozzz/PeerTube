@@ -20,3 +20,6 @@ onlyBuiltDependencies:
   - node-datachannel
   - utf-8-validate
   - utp-native
+
+patchedDependencies:
+  video.js: pnpm-patches/video.js.patch
