@@ -418,7 +418,12 @@ function register (...) {
         if (fieldName === 'videoQuotaDaily') return currentValue
 
         return newValue
-      }
+      },
+
+      // Ask PeerTube to redirect on this URL instead of classic `/login` page
+      // The URL will contain an `externalAuthToken` param that can be reused to authenticate to the PeerTube REST API
+      // Introduced in PeerTube >= 7.3
+      externalRedirectUri: 'https://mywebsite.example.com/peertube-login-cb'
     })
   })
 
