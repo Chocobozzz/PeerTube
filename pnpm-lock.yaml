@@ -194,6 +194,9 @@ importers:
       got-ssrf:
         specifier: ^3.0.0
         version: 3.0.0(got@14.4.7)
+      handlebars:
+        specifier: ^4.7.8
+        version: 4.7.8
       helmet:
         specifier: ^8.0.0
         version: 8.1.0
@@ -483,9 +486,6 @@ importers:
       fast-xml-parser:
         specifier: ^5.2.2
         version: 5.2.5
-      handlebars:
-        specifier: ^4.7.8
-        version: 4.7.8
       i18next-parser:
         specifier: ^9.3.0
         version: 9.3.0
