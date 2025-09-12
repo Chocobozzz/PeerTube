@@ -173,9 +173,11 @@ export function isValidPasswordProtectedPrivacy (req: Request, res: Response) {
 
   if (privacy !== VideoPrivacy.PASSWORD_PROTECTED) return true
 
-  if (!exists(req.body.videoPasswords) && !exists(req.body.passwords)) return fail('Video passwords are missing.')
+  if (!exists(req.body.videoPasswords) && !exists(req.body.passwords) && !exists(req.body.password)) {
+    return fail('Video passwords are missing.')
+  }
 
-  const passwords = req.body.videoPasswords || req.body.passwords
+  const passwords = req.body.videoPasswords || req.body.passwords || [ req.body.password ]
 
   if (passwords.length === 0) return fail('At least one video password is required.')
 
