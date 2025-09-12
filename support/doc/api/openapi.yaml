@@ -4576,6 +4576,7 @@ paths:
     get:
       summary: List video passwords
       description: "**PeerTube >= 6.0**"
+      operationId: listVideoPasswords
       security:
         - OAuth2:
           - user
@@ -4598,6 +4599,7 @@ paths:
     put:
       summary: Update video passwords
       description: "**PeerTube >= 6.0**"
+      operationId: updateVideoPasswordList
       security:
         - OAuth2:
           - user
@@ -4618,11 +4620,36 @@ paths:
           description: successful operation
         '400':
           description: video is not password protected
+    patch:
+      summary: Add a video password
+      description: "**PeerTube >=7.4**"
+      operationId: addVideoPassword
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - Video Passwords
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                passwords:
+                  type: string
+      responses:
+        '201':
+          description: created
+        '400':
+          description: video is not password protected
 
   /api/v1/videos/{id}/passwords/{videoPasswordId}:
     delete:
       summary: Delete a video password
       description: "**PeerTube >= 6.0**"
+      operationId: removeVideoPassword
       security:
         - OAuth2:
           - user

@@ -13,6 +13,7 @@ import {
   setDefaultSort
 } from '../../../middlewares/index.js'
 import {
+  addVideoPasswordValidator,
   listVideoPasswordValidator,
   paginationValidator,
   removeVideoPasswordValidator,
@@ -39,6 +40,12 @@ videoPasswordRouter.put(
   authenticate,
   asyncMiddleware(updateVideoPasswordListValidator),
   asyncMiddleware(updateVideoPasswordList)
+)
+
+videoPasswordRouter.patch('/:videoId/passwords',
+  authenticate,
+  asyncMiddleware(addVideoPasswordValidator),
+  asyncMiddleware(addVideoPassword)
 )
 
 videoPasswordRouter.delete(
@@ -96,6 +103,30 @@ async function updateVideoPasswordList (req: express.Request, res: express.Respo
   )
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+}
+
+async function addVideoPassword (req: express.Request, res: express.Response) {
+  const videoInstance = res.locals.videoAll
+  const videoId = videoInstance.id
+
+  const newPassword = req.body.password as string
+
+  const newPasswordModel = await VideoPasswordModel.sequelize.transaction(async (t: Transaction) => {
+    return await VideoPasswordModel.addPassword(newPassword, videoId, t)
+  })
+
+  logger.info(
+    `Video password for video with name %s and uuid %s have been added`,
+    videoInstance.name,
+    videoInstance.uuid,
+    lTags(videoInstance.uuid)
+  )
+
+  const result = {
+    password: newPasswordModel.toFormattedJSON()
+  }
+
+  return res.json(result).sendStatus(HttpStatusCode.CREATED_201)
 }
 
 async function removeVideoPassword (req: express.Request, res: express.Response) {

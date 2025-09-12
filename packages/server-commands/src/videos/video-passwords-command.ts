@@ -38,6 +38,22 @@ export class VideoPasswordsCommand extends AbstractCommand {
     })
   }
 
+  addOne (options: OverrideCommandOptions & {
+    videoId: number | string
+    password: string
+  }) {
+    const { videoId, password } = options
+    const path = `/api/v1/videos/${videoId}/passwords`
+
+    return this.patchBodyRequest({
+      ...options,
+      path,
+      fields: { password },
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
   remove (options: OverrideCommandOptions & {
     id: number
     videoId: number | string

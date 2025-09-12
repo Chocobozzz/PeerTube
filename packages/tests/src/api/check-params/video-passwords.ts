@@ -646,6 +646,51 @@ describe('Test video passwords validator', function () {
     })
   })
 
+  describe('When adding a password', async function () {
+    const passwords = (await server.videoPasswords.list({ videoId: video.id })).data
+    const newPassword = "password123"
+    const emptyPassword = ""
+
+    it('Should fail with duplicate password', async function () {
+      await server.videoPasswords.addOne({ 
+        videoId: video.id, 
+        password: passwords[0].password, 
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400 
+      })
+    })
+
+    it('Should fail with empty password', async function () {
+      await server.videoPasswords.addOne({ videoId: video.id, password: emptyPassword, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should fail for unauthenticated user', async function () {
+      await server.videoPasswords.addOne({
+        password: newPassword,
+        token: null,
+        videoId: video.id,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should fail for unauthorized user', async function () {
+      await server.videoPasswords.addOne({
+        password: newPassword,
+        token: userAccessToken,
+        videoId: video.id,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail for non password protected video', async function () {
+      publicVideo = await server.videos.quickUpload({ name: 'public video' })
+      await server.videoPasswords.addOne({ password: newPassword, videoId: publicVideo.id, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should succeed with correct parameter', async function () {
+      await server.videoPasswords.addOne({ password: newPassword, videoId: video.id, expectedStatus: HttpStatusCode.NO_CONTENT_204 })
+    })
+  })
+
   after(async function () {
     await cleanupTests([ server ])
   })
