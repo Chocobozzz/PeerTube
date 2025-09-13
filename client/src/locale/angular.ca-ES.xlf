@@ -252,9 +252,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
-        <source>
-          <x id="INTERPOLATION"/>
-        </source>
+        <source><x id="INTERPOLATION"/> </source>
         <target state="translated">
           <x id="INTERPOLATION"/>
         </target>
@@ -1133,7 +1131,7 @@
       </trans-unit>
       <trans-unit id="164330487270229823" datatype="html" xml:space="preserve">
         <source>Download this file</source>
-        <target state="translated">Baixar aquest fitxer</target>
+        <target state="translated">Baixa aquest fitxer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">90</context>
@@ -5748,7 +5746,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="8896564060463626070" datatype="html" xml:space="preserve">
         <source>Enable download</source>
-        <target state="translated">Habilitar la baixada</target>
+        <target state="translated">Habilita la baixada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/customization/video-customization.component.html</context>
           <context context-type="linenumber">47</context>
@@ -6385,7 +6383,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="7419704019640008953" xml:space="preserve">
         <source>Share</source>
-        <target state="translated">Compartir</target>
+        <target state="translated">Comparteix</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.html</context>
           <context context-type="linenumber">11</context>
@@ -6397,7 +6395,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="6599497107591892109" datatype="html" xml:space="preserve">
         <source>Share the playlist</source>
-        <target state="translated">Compartir la llista de reproducció</target>
+        <target state="translated">Comparteix la llista de reproducció</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">14</context>
@@ -6429,7 +6427,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="6460270615876918310" datatype="html" xml:space="preserve">
         <source>Share the playlist at this video position</source>
-        <target state="translated">Compartir la llista de reproducció en aquesta posició de vídeo</target>
+        <target state="translated">Comparteix la llista de reproducció en aquesta posició de vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">78</context>
@@ -6461,7 +6459,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="1253396341165671470" datatype="html" xml:space="preserve">
         <source>Share the video</source>
-        <target state="translated">Compartir el vídeo</target>
+        <target state="translated">Comparteix el vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">104</context>
@@ -7127,7 +7125,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="9219888125536520293" datatype="html" xml:space="preserve">
         <source>SHARE</source>
-        <target state="translated">COMPARTIR</target>
+        <target state="translated">COMPARTEIX</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/action-buttons/action-buttons.component.html</context>
           <context context-type="linenumber">18</context>
@@ -7141,9 +7139,9 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="647016352598204238" datatype="html">
+      <trans-unit id="647016352598204238" datatype="html" xml:space="preserve">
         <source>DOWNLOAD</source>
-        <target state="translated">DESCARREGAR</target>
+        <target state="translated">DESCARREGA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/action-buttons/action-buttons.component.html</context>
           <context context-type="linenumber">43</context>
@@ -24063,7 +24061,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="3099741642167775297" datatype="html" xml:space="preserve">
         <source>Download</source>
-        <target state="translated">Baixar</target>
+        <target state="translated">Baixa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/subtitle-files-download.component.html</context>
           <context context-type="linenumber">26</context>
