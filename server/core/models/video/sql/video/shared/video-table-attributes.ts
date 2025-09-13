@@ -20,6 +20,7 @@ export class VideoTableAttributes {
 
     if (this.mode === 'get') {
       attributeKeys = attributeKeys.concat([
+        'isApproved',
         'support',
         'createdAt',
         'updatedAt'

@@ -297,6 +297,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return genericChannelDisplayName.includes(this.video.channel.displayName)
   }
 
+  isChannelApproved () {
+    return this.video.channel.isApproved ?? false
+  }
+
   displayOtherVideosAsRow () {
     // Use the same value as in the SASS file
     return this.screenService.getWindowInnerWidth() <= 1100
@@ -1065,10 +1069,5 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.video.state.id = VideoState.LIVE_ENDED
 
     this.updatePlayerOnNoLive({ hasPlayed: true })
-  }
-
-  isChannelApproved() {
-    // TODO check why undefined
-    return this.video.channel.isApproved ?? false
   }
 }
