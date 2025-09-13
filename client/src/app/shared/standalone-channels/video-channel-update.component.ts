@@ -78,6 +78,7 @@ export class VideoChannelUpdateComponent implements OnInit, AfterViewInit, OnDes
       displayName: output.channel.displayName,
       description: output.channel.description,
       support: output.channel.support,
+      isApproved: output.channel.isApproved,
       bulkVideosSupportUpdate: output.channel.bulkVideosSupportUpdate
     }
 

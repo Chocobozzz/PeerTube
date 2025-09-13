@@ -86,6 +86,7 @@
                   <a [routerLink]="[ '/a', video.byAccount ]" i18n-title title="Account page">
                     <span i18n>By {{ video.byAccount }}</span>
                   </a>
+                  <my-global-icon *ngIf="isChannelApproved()" iconName="green-check" aria-hidden="true"></my-global-icon>
                 </ng-container>
 
                 <ng-container *ngIf="isChannelDisplayNameGeneric()">

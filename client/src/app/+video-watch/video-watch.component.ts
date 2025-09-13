@@ -77,6 +77,7 @@ import { VideoDescriptionComponent } from './shared/metadata/video-description.c
 import { VideoTranscriptionComponent } from './shared/player-widgets/video-transcription.component'
 import { VideoWatchPlaylistComponent } from './shared/player-widgets/video-watch-playlist.component'
 import { RecommendedVideosComponent } from './shared/recommendations/recommended-videos.component'
+import { GlobalIconComponent } from "@app/shared/shared-icons/global-icon.component"
 
 const debugLogger = debug('peertube:watch:VideoWatchComponent')
 
@@ -124,8 +125,9 @@ type URLOptions = {
     PrivacyConcernsComponent,
     PlayerStylesComponent,
     VideoWatchPlaylistComponent,
-    VideoTranscriptionComponent
-  ]
+    VideoTranscriptionComponent,
+    GlobalIconComponent
+]
 })
 export class VideoWatchComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute)
@@ -1063,5 +1065,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.video.state.id = VideoState.LIVE_ENDED
 
     this.updatePlayerOnNoLive({ hasPlayed: true })
+  }
+
+  isChannelApproved() {
+    // TODO check why undefined
+    return this.video.channel.isApproved ?? false
   }
 }

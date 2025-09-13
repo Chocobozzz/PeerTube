@@ -308,7 +308,7 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
     await sequelizeTypescript.transaction(async t => {
       if (videoChannelInfoToUpdate.displayName !== undefined) videoChannelInstance.name = videoChannelInfoToUpdate.displayName
       if (videoChannelInfoToUpdate.description !== undefined) videoChannelInstance.description = videoChannelInfoToUpdate.description
-
+      if (videoChannelInfoToUpdate.isApproved !== undefined) videoChannelInstance.isApproved = videoChannelInfoToUpdate.isApproved
       if (videoChannelInfoToUpdate.support !== undefined) {
         const oldSupportField = videoChannelInstance.support
         videoChannelInstance.support = videoChannelInfoToUpdate.support

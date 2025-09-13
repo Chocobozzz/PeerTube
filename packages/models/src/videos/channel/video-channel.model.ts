@@ -19,6 +19,7 @@ export interface VideoChannel extends Actor {
   videosCount?: number
   viewsPerDay?: ViewsPerDate[] // chronologically ordered
   totalViews?: number
+  isApproved?: boolean
 
   banners: ActorImage[]
 }
