@@ -7,6 +7,7 @@ const icons = {
   'language': require('../../../assets/images/misc/language.svg'),
   'video-lang': require('../../../assets/images/misc/video-lang.svg'),
   'support': require('../../../assets/images/misc/support.svg'),
+  'green-check': require('../../../assets/images/misc/green-check.svg'),
   'peertube-x': require('../../../assets/images/misc/peertube-x.svg'),
   'robot': require('../../../assets/images/misc/miscellaneous-services.svg'), // material ui
   'playlist-add': require('../../../assets/images/misc/playlist-add.svg'), // material ui

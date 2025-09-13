@@ -23,7 +23,8 @@ import { MarkdownHintComponent } from '../shared-main/text/markdown-hint.compone
 type Form = {
   name: FormControl<string>
   displayName: FormControl<string>
-  description: FormControl<string>
+  description: FormControl<string>,
+  isApproved: FormControl<boolean>,
   support: FormControl<string>
   playerTheme: FormControl<PlayerChannelSettings['theme']>
   bulkVideosSupportUpdate: FormControl<boolean>
@@ -41,7 +42,8 @@ export type FormValidatedOutput = {
     name: string
     displayName: string
     description: string
-    support: string
+    support: string,
+    isApproved: boolean,
     bulkVideosSupportUpdate: boolean
   }
 }
@@ -96,6 +98,7 @@ export class VideoChannelEditComponent implements OnInit {
       displayName: VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
       description: VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
       support: VIDEO_CHANNEL_SUPPORT_VALIDATOR,
+      isApproved: null,
       bulkVideosSupportUpdate: null,
       playerTheme: null
     }
@@ -104,6 +107,7 @@ export class VideoChannelEditComponent implements OnInit {
       displayName: this.channel().displayName,
       description: this.channel().description,
       support: this.channel().support,
+      isApproved: this.channel().isApproved,
       playerTheme: this.rawPlayerSettings().theme
     }
 
@@ -168,6 +172,7 @@ export class VideoChannelEditComponent implements OnInit {
         displayName: body.displayName,
         description: body.description || null,
         support: body.support || null,
+        isApproved: body.isApproved || false,
 
         bulkVideosSupportUpdate: this.mode() === 'update'
           ? body.bulkVideosSupportUpdate || false

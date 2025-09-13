@@ -371,6 +371,11 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNELS.SUPPORT.max))
   declare support: string
 
+  @AllowNull(false)
+  @Default(false)
+  @Column
+  declare isApproved: boolean
+
   @CreatedAt
   declare createdAt: Date
 
@@ -836,6 +841,7 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
       videosCount,
       viewsPerDay,
       totalViews,
+      isApproved: this.isApproved,
 
       avatars: actor.avatars
     }

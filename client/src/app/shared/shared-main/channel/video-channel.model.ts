@@ -24,6 +24,7 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
 
   viewsPerDay?: ViewsPerDate[]
   totalViews?: number
+  isApproved?: boolean
 
   static GET_ACTOR_AVATAR_URL (
     actor: {
@@ -83,6 +84,10 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
 
     if (hash.totalViews !== null && hash.totalViews !== undefined) {
       this.totalViews = hash.totalViews
+    }
+
+    if (hash.isApproved !== null && hash.isApproved !== undefined) {
+      this.isApproved = hash.isApproved
     }
 
     if (hash.ownerAccount) {
