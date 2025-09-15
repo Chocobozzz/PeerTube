@@ -1569,7 +1569,6 @@ paths:
               oneOf:
                 - $ref: '#/components/schemas/OAuthToken-password'
                 - $ref: '#/components/schemas/OAuthToken-refresh_token'
-                - $ref: '#/components/schemas/OAuthToken-external_token'
               discriminator:
                 propertyName: grant_type
                 mapping:
@@ -11026,12 +11025,14 @@ components:
               $ref: '#/components/schemas/User/properties/username'
             password:
               $ref: '#/components/schemas/password'
+            externalAuthToken:
+              type: string
+              description: If you want to authenticate using an external authentication token you got from an auth plugin (like `peertube-plugin-auth-openid-connect` for example) instead of a password or a refresh token, provide it here.
       required:
         - client_id
         - client_secret
         - grant_type
         - username
-        - password
     OAuthToken-refresh_token:
       allOf:
         - $ref: '#/components/schemas/OAuthClient'
@@ -11049,26 +11050,6 @@ components:
         - client_secret
         - grant_type
         - refresh_token
-    OAuthToken-external_token:
-      allOf:
-        - $ref: '#/components/schemas/OAuthClient'
-        - type: object
-          properties:
-            grant_type:
-              type: string
-              enum:
-                - password
-            username:
-              $ref: '#/components/schemas/User/properties/username'
-            externalAuthToken:
-              type: string
-              description: If you want to authenticate using an external authentication token you got from an auth plugin (like `peertube-plugin-auth-openid-connect` for example) instead of a username/password or a refresh token, provide it here.
-      required:
-        - client_id
-        - client_secret
-        - grant_type
-        - username
-        - externalAuthToken
 
     VideoChannel:
       allOf:
