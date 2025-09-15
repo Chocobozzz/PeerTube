@@ -53,6 +53,12 @@ export class ProcessRegistrationModalComponent extends FormReactive implements O
     this.processMode = mode
     this.registration = registration
 
+    if (this.registration.emailVerified !== true || !this.isEmailEnabled()) {
+      this.form.get('preventEmailDelivery').disable()
+    } else {
+      this.form.get('preventEmailDelivery').enable()
+    }
+
     this.form.patchValue({
       preventEmailDelivery: !this.isEmailEnabled() || registration.emailVerified !== true
     })
