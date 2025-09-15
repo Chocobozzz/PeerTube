@@ -45,6 +45,8 @@ export type TableQueryParams = {
   sortOrder?: number
   sortField?: string
   search?: string
+
+  state?: number
 }
 
 export type TableColumnInfo<ColumnName> = {
@@ -250,7 +252,7 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
     if (sort) this.sort = sort
 
     this.resetPagination()
-    this.updateUrl()
+    this.updateUrl({ reset: true })
   }
 
   private resetPagination () {
@@ -379,7 +381,11 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
     this.loadData()
   }
 
-  private updateUrl () {
+  private updateUrl (options: {
+    reset?: boolean
+  } = {}) {
+    const { reset = false } = options
+
     const newParams: TableQueryParams = {
       ...this.route.snapshot.queryParams,
       ...this.customUpdateUrl()(),
@@ -389,6 +395,12 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
       count: this.pagination.count,
       sortOrder: this.sort.order,
       sortField: this.sort.field
+    }
+
+    if (reset) {
+      const baseState = this.route.snapshot.queryParams.state || 0
+
+      newParams.state = +baseState + 1
     }
 
     debugLogger('Update URL', { newParams })
