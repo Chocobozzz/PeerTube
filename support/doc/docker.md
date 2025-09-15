@@ -165,6 +165,123 @@ Rerun PeerTube:
 docker compose up -d
 ```
 
+## Upgrade PostgreSQL container
+
+If you want to upgrade your PostgreSQL container version (for example because your current version is about to no longer be supported),
+you need to plan downtime (to export current cluster and re-import data in new one).
+
+When you're ready, go inside your PeerTube docker compose directory:
+
+```sh
+cd /docker-compose/directory
+```
+
+Prepare the backups directory and stop all containers except the database:
+
+```sh
+mkdir -p backups
+docker compose stop peertube webserver certbot
+```
+
+Go inside the database container:
+
+```sh
+docker compose exec -it postgres /bin/bash
+```
+
+And export the database (you don't need to replace `$POSTGRES_*` variables, they are automatically set by your env file from docker compose):
+
+```sh
+export PGUSER="$POSTGRES_USER"
+export PGDATABASE="$POSTGRES_DB"
+export PGPASSWORD="$POSTGRES_PASSWORD"
+pg_dumpall > "/tmp/pg.dump"
+```
+
+Exit the container:
+
+```sh
+exit
+```
+
+Copy the dump from the container:
+
+```sh
+docker compose cp postgres:/tmp/pg.dump backups/pg.dump
+```
+
+
+Stop the database container and prepare the data for the new cluster:
+
+```sh
+docker compose stop postgres
+mv ./docker-volume/db ./docker-volume/db.bak
+mkdir ./docker-volume/db && chmod 700 ./docker-volume/db
+```
+
+Upgrade your PostgreSQL container version (for example replace `postgres:13-alpine` by `postgres:17-alpine`):
+
+```sh
+vim docker-compose.yml
+```
+
+Pull new PostgreSQL Docker image:
+
+```sh
+docker compose pull
+```
+
+Restart PostgreSQL only container and wait until you see: `database system is ready to accept connections`
+
+```sh
+docker compose up -d postgres
+docker compose logs -f postgres
+```
+
+Copy the database dump inside the container:
+
+```sh
+docker compose cp "backups/pg.dump" postgres:/tmp/pg.dump
+```
+
+Go inside the container
+
+```sh
+docker compose exec -it postgres /bin/bash
+```
+
+Check the PostgreSQL version and re-import database data.
+Then, reset the PeerTube database user password to fix a potential authentication issue if the old password hash algorithm has been deprecated.
+
+```sh
+export PGUSER="$POSTGRES_USER"
+export PGDATABASE="$POSTGRES_DB"
+export PGPASSWORD="$POSTGRES_PASSWORD"
+psql -U "$POSTGRES_USER" -c "SELECT version();"
+psql -U "$POSTGRES_USER" -f /tmp/pg_13.dump
+psql -U "$POSTGRES_USER" -c "ALTER USER $POSTGRES_USER WITH PASSWORD '$POSTGRES_PASSWORD'"
+```
+
+Exit the container:
+
+```sh
+exit
+```
+
+Restart other services and check everything is fine:
+
+```sh
+docker compose up -d peertube webserver certbot
+docker compose logs -f peertube
+```
+
+
+If you're happy with the results, you can remove backups directory and old data directories:
+
+```sh
+rm -rf ./docker-volume/db.bak backups
+```
+
 ## Build
 
 ### Production
