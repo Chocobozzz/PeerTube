@@ -4,7 +4,7 @@ export function getBrowseVideosDefaultSortError (value: string, enabledTrendingA
   const availableOptions = [ '-publishedAt', '-originallyPublishedAt', 'name', '-trending', '-hot', '-likes', '-views' ]
 
   if (availableOptions.includes(value) === false) {
-    const error = 'Browse videos default sort should be \'' + availableOptions.join('\' or \'') + '\', instead of \'' + value + '\''
+    const error = `Browse videos default sort should be '${availableOptions.join('\' or \'')}', instead of '${value}'`
     return language ? t(error, language) : error
   }
 
@@ -28,7 +28,7 @@ export function getBrowseVideosDefaultScopeError (value: string, language?: stri
   const availableOptions = [ 'local', 'federated' ]
 
   if (availableOptions.includes(value) === false) {
-    const error = 'Browse videos default scope should be \'' + availableOptions.join('\' or \'') + '\', instead of \'' + value + '\''
+    const error = `Browse videos default scope should be '${availableOptions.join('\' or \'')}', instead of '${value}'`
     return language ? t(error, language) : error
   }
 
