@@ -82,7 +82,3 @@ export function setClientLanguageCookie (res: express.Response, language: string
     maxAge: 1000 * 3600 * 24 * 90 // 3 months
   })
 }
-
-// ---------------------------------------------------------------------------
-
-export const englishLanguage = 'en-US'
