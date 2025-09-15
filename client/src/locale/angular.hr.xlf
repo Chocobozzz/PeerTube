@@ -1665,9 +1665,9 @@
           <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8434025273758786182" datatype="html">
+      <trans-unit id="8434025273758786182" datatype="html" xml:space="preserve">
         <source>Used as a background for inputs, overlays...</source>
-        <target state="new">Used as a background for inputs, overlays...</target>
+        <target state="translated">Koristi se kao pozadina za unose, slojeve za prekrivanje</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">126</context>
