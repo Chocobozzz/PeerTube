@@ -1,6 +1,6 @@
 import { t } from '../i18n.js'
 
-export function getBrowseVideosDefaultSortError (value: string, enabledTrendingAlgorithms: string[], language: string) {
+export function getBrowseVideosDefaultSortError (value: string, enabledTrendingAlgorithms: string[], language?: string) {
   const availableOptions = [ '-publishedAt', '-originallyPublishedAt', 'name', '-trending', '-hot', '-likes', '-views' ]
 
   if (availableOptions.includes(value) === false) {
@@ -24,7 +24,7 @@ export function getBrowseVideosDefaultSortError (value: string, enabledTrendingA
   return null
 }
 
-export function getBrowseVideosDefaultScopeError (value: string, language: string) {
+export function getBrowseVideosDefaultScopeError (value: string, language?: string) {
   const availableOptions = [ 'local', 'federated' ]
 
   if (availableOptions.includes(value) === false) {

@@ -389,14 +389,9 @@ function checkThumbnailsConfig () {
 }
 
 function checkBrowseVideosConfig () {
-  const sortError = getBrowseVideosDefaultSortError(
-    CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SORT,
-    CONFIG.TRENDING.VIDEOS.ALGORITHMS.ENABLED,
-    null
-  )
-
+  const sortError = getBrowseVideosDefaultSortError(CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SORT, CONFIG.TRENDING.VIDEOS.ALGORITHMS.ENABLED)
   if (sortError) throw new Error(sortError)
 
-  const scopeError = getBrowseVideosDefaultScopeError(CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SCOPE, null)
+  const scopeError = getBrowseVideosDefaultScopeError(CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SCOPE)
   if (scopeError) throw new Error(scopeError)
 }
