@@ -362,7 +362,7 @@ If your system has `git` installed, the auto upgrade script should have created 
 Review the file, check and fix any potential conflicts:
 
 ```bash
-cd /var/www/peertube && sudo -u peertube vimdiff config/production.yaml config/production.yaml.new
+cd /var/www/peertube && sudo -u peertube diff config/production.yaml config/production.yaml.new
 ```
 
 Then replace your current configuration file by the new one:
