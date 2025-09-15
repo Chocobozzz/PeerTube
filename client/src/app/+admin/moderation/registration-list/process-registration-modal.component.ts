@@ -1,4 +1,4 @@
-import { NgClass, NgIf } from '@angular/common'
+import { CommonModule, NgClass } from '@angular/common'
 import { Component, OnInit, inject, output, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier, ServerService } from '@app/core'
@@ -16,7 +16,7 @@ import { REGISTRATION_MODERATION_RESPONSE_VALIDATOR } from './process-registrati
 @Component({
   selector: 'my-process-registration-modal',
   templateUrl: './process-registration-modal.component.html',
-  imports: [ NgIf, GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, PeertubeCheckboxComponent, AlertComponent ]
+  imports: [ CommonModule, GlobalIconComponent, FormsModule, ReactiveFormsModule, PeertubeCheckboxComponent, AlertComponent ]
 })
 export class ProcessRegistrationModalComponent extends FormReactive implements OnInit {
   protected formReactiveService = inject(FormReactiveService)
