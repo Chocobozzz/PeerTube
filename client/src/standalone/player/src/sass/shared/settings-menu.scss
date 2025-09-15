@@ -88,7 +88,7 @@ $setting-transition-easing: ease-out;
 
           &:hover {
             cursor: pointer;
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: var(--embed-background-color-hover);
           }
 
           &.disabled {

@@ -88,10 +88,10 @@ $chapter-marker-size: 9px;
     transition: opacity 0.1s;
 
     &:not(.vjs-disabled) {
-      opacity: $primary-foreground-opacity;
+      opacity: $fg-opacity;
 
       &:hover {
-        opacity: $primary-foreground-opacity-hover;
+        opacity: $fg-opacity-hover;
       }
     }
   }
@@ -154,7 +154,7 @@ $chapter-marker-size: 9px;
   .vjs-duration,
   .vjs-peertube {
     color: pvar(--embed-fg);
-    opacity: $primary-foreground-opacity;
+    opacity: $fg-opacity;
   }
 
   .vjs-time-control {
@@ -195,7 +195,7 @@ $chapter-marker-size: 9px;
 
   .vjs-pt-live-control {
     width: auto;
-    opacity: $primary-foreground-opacity; // videojs adds a .vjs-disabled when the live is synced
+    opacity: $fg-opacity; // videojs adds a .vjs-disabled when the live is synced
     font-size: var(--control-bar-font-size);
 
     @include margin-right(auto);
@@ -204,7 +204,7 @@ $chapter-marker-size: 9px;
       cursor: pointer;
 
       &:hover {
-        opacity: $primary-foreground-opacity-hover;
+        opacity: $fg-opacity-hover;
       }
     }
 
@@ -480,7 +480,7 @@ $chapter-marker-size: 9px;
 
     &.enabled,
     &.enabled:hover {
-      opacity: $primary-foreground-opacity !important;
+      opacity: $fg-opacity !important;
     }
 
     &:focus {

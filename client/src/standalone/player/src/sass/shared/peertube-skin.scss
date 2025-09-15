@@ -5,10 +5,11 @@
 @use "./_player-mixins" as *;
 
 body {
-  --embed-foreground-color: #{$primary-foreground-color};
-  --embed-background-color: #{$primary-background-color};
+  --embed-foreground-color: #fff;
+  --embed-background-color: rgba(0, 0, 0, 0.6);
+  --embed-background-color-hover: rgba(255, 255, 255, 0.1);
 
-  --embed-big-play-background-color: #{$primary-background-color};
+  --embed-big-play-background-color: rgba(0, 0, 0, 0.8);
 
   // Prevent z-index bug with Firefox PiP button
   // See:
@@ -85,7 +86,7 @@ body {
     }
 
     .vjs-control-bar {
-      opacity: $primary-foreground-opacity-hover;
+      opacity: $fg-opacity-hover;
     }
   }
 
