@@ -1,4 +1,4 @@
-FROM node:20-bookworm-slim
+FROM node:20-trixie-slim
 
 ARG ALREADY_BUILT=0
 
@@ -7,6 +7,8 @@ RUN apt update \
  && apt install -y --no-install-recommends openssl ffmpeg python3 python3-pip ca-certificates gnupg gosu build-essential curl git \
  && gosu nobody true \
  && rm /var/lib/apt/lists/* -fR
+
+RUN npm install -g pnpm
 
 # Node images hardcode the node uid to 1000 so that number is not available.
 # The "peertube" user is created as a system account which selects a UID from
