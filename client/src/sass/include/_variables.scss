@@ -203,10 +203,10 @@ $variables: (
   --alert-primary-fg: var(--alert-primary-fg),
   --alert-primary-bg: var(--alert-primary-bg),
   --alert-primary-border-color: var(--alert-primary-border-color),
-  --embed-fg: var(--embed-fg),
-  --embed-big-play-bg: var(--embed-big-play-bg),
-  --player-overlay-fg: var(--player-overlay-fg),
-  --player-overlay-bg: var(--player-overlay-bg)
+  --pt-player-fg: var(--pt-player-fg),
+  --pt-player-big-play-bg: var(--pt-player-big-play-bg),
+  --pt-player-overlay-secondary-fg: var(--pt-player-overlay-secondary-fg),
+  --pt-player-overlay-secondary-bg: var(--pt-player-overlay-secondary-bg)
 );
 
 // SASS type check our CSS variables

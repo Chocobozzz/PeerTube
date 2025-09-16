@@ -6,7 +6,7 @@ $context-menu-width: 350px;
 
 .video-js .vjs-contextmenu-ui-menu {
   position: absolute;
-  background-color: var(--embed-background-color);
+  background-color: var(--pt-player-overlay-bg);
   padding: 8px 0;
   border-radius: 4px;
   width: $context-menu-width;
@@ -14,7 +14,7 @@ $context-menu-width: 350px;
 
   .vjs-menu-content {
     opacity: $fg-opacity;
-    color: pvar(--embed-fg);
+    color: pvar(--pt-player-fg);
     font-size: $font-size !important;
     font-weight: $font-semibold;
   }
@@ -27,7 +27,7 @@ $context-menu-width: 350px;
     justify-content: flex-start;
 
     &:hover {
-      background-color: var(--embed-background-color-hover);
+      background-color: var(--pt-player-overlay-bg-hover);
     }
 
     [class^="vjs-icon-"] {

@@ -5,11 +5,10 @@
 @use "./_player-mixins" as *;
 
 body {
-  --embed-foreground-color: #fff;
-  --embed-background-color: rgba(0, 0, 0, 0.6);
-  --embed-background-color-hover: rgba(255, 255, 255, 0.1);
+  --pt-player-overlay-bg: rgba(0, 0, 0, 0.6);
+  --pt-player-overlay-bg-hover: rgba(255, 255, 255, 0.15);
 
-  --embed-big-play-background-color: rgba(0, 0, 0, 0.8);
+  --pt-player-big-play-background-color: rgba(0, 0, 0, 0.8);
 
   // Prevent z-index bug with Firefox PiP button
   // See:
@@ -17,7 +16,7 @@ body {
   // * https://bugzilla.mozilla.org/show_bug.cgi?id=1742585
   // * https://bugzilla.mozilla.org/show_bug.cgi?id=1754604
   @supports (-moz-orient: block) {
-    --embed-background-color: #000;
+    --pt-player-overlay-bg: #000;
   }
 }
 
@@ -28,7 +27,7 @@ body {
 
 .video-js.vjs-peertube-skin {
   font-size: $font-size;
-  color: pvar(--embed-fg);
+  color: pvar(--pt-player-fg);
 
   &.disabled {
     cursor: default;
@@ -54,7 +53,7 @@ body {
     height: calc(var(--big-play-button-size));
     margin-top: calc(var(--big-play-button-size) / 2 * -1);
     line-height: 1;
-    background-color: pvar(--embed-big-play-bg);
+    background-color: pvar(--pt-player-big-play-bg);
     border-radius: 100%;
     transition: 0.2s background-color;
 

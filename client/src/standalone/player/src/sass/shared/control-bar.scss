@@ -83,7 +83,7 @@ $chapter-marker-size: 9px;
   .vjs-theater-control,
   .vjs-caption-toggle-control,
   .vjs-settings {
-    color: pvar(--embed-fg);
+    color: pvar(--pt-player-fg);
 
     transition: opacity 0.1s;
 
@@ -142,7 +142,7 @@ $chapter-marker-size: 9px;
   .vjs-volume-vertical {
     // On top of the progress bar
     z-index: 120;
-    background-color: var(--embed-background-color);
+    background-color: var(--pt-player-overlay-bg);
     border-radius: 10px;
     bottom: 6.75em;
     height: 7em;
@@ -153,7 +153,7 @@ $chapter-marker-size: 9px;
   .vjs-current-time,
   .vjs-duration,
   .vjs-peertube {
-    color: pvar(--embed-fg);
+    color: pvar(--pt-player-fg);
     opacity: $fg-opacity;
   }
 
@@ -275,7 +275,7 @@ $chapter-marker-size: 9px;
     background-color: rgba(255, 255, 255, 0.2);
 
     .vjs-play-progress {
-      background: pvar(--embed-fg);
+      background: pvar(--pt-player-fg);
 
       // Not display the circle if the progress is not hovered
       &::before {

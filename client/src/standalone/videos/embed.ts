@@ -361,11 +361,11 @@ export class PeerTubeEmbed {
     const body = document.getElementById('custom-css')
 
     if (this.playerOptionsBuilder.hasBigPlayBackgroundColor()) {
-      body.style.setProperty('--embed-big-play-background-color', this.playerOptionsBuilder.getBigPlayBackgroundColor())
+      body.style.setProperty('--pt-player-big-play-background-color', this.playerOptionsBuilder.getBigPlayBackgroundColor())
     }
 
     if (this.playerOptionsBuilder.hasForegroundColor()) {
-      body.style.setProperty('--embed-foreground-color', this.playerOptionsBuilder.getForegroundColor())
+      body.style.setProperty('--pt-player-fg', this.playerOptionsBuilder.getForegroundColor())
     }
   }
 
