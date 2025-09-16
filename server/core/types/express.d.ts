@@ -14,7 +14,9 @@ import {
   MActorFollowActorsDefault,
   MActorUrl,
   MChannelBannerAccountDefault,
+  MChannelCollaboratorAccount,
   MChannelSyncChannel,
+  MLocalVideoViewerWithWatchSections,
   MRegistration,
   MStreamingPlaylist,
   MUserAccountUrl,
@@ -25,6 +27,7 @@ import {
   MVideoId,
   MVideoImmutable,
   MVideoLiveSessionReplay,
+  MVideoLiveWithSettingSchedules,
   MVideoPassword,
   MVideoPlaylistFull,
   MVideoPlaylistFullSummary,
@@ -248,6 +251,8 @@ declare module 'express' {
       watchedWordsList?: MWatchedWordsList
 
       tokenSession?: MOAuthToken
+
+      channelCollaborator?: MChannelCollaboratorAccount
     }
   }
 }

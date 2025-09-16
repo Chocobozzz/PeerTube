@@ -4,12 +4,10 @@ import { VideoLoadType, loadVideo } from '@server/lib/model-loaders/index.js'
 import { isUserQuotaValid } from '@server/lib/user.js'
 import { VideoTokensManager } from '@server/lib/video-tokens-manager.js'
 import { authenticatePromise } from '@server/middlewares/auth.js'
-import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { VideoModel } from '@server/models/video/video.js'
 import {
-  MUser,
   MUserAccountId,
   MUserId,
   MVideo,
@@ -23,6 +21,7 @@ import {
   MVideoWithRights
 } from '@server/types/models/index.js'
 import { Request, Response } from 'express'
+import { canManageChannel } from './video-channels.js'
 
 export async function doesVideoExist (id: number | string, res: Response, fetchType: VideoLoadType = 'all') {
   const userId = res.locals.oauth ? res.locals.oauth.token.User.id : undefined
@@ -79,31 +78,6 @@ export async function doesVideoFileOfVideoExist (id: number, videoIdOrUUID: numb
 
 // ---------------------------------------------------------------------------
 
-export async function doesVideoChannelOfAccountExist (channelId: number, user: MUserAccountId, res: Response) {
-  const videoChannel = await VideoChannelModel.loadAndPopulateAccount(channelId)
-
-  if (videoChannel === null) {
-    res.fail({ message: `Unknown ${channelId} on this instance.` })
-    return false
-  }
-
-  // Don't check account id if the user can update any video
-  if (user.hasRight(UserRight.UPDATE_ANY_VIDEO) === true) {
-    res.locals.videoChannel = videoChannel
-    return true
-  }
-
-  if (videoChannel.Account.id !== user.Account.id) {
-    res.fail({ message: `Unknown channel ${channelId} for this account.` })
-    return false
-  }
-
-  res.locals.videoChannel = videoChannel
-  return true
-}
-
-// ---------------------------------------------------------------------------
-
 export async function checkCanSeeVideo (options: {
   req: Request
   res: Response
@@ -137,7 +111,7 @@ async function checkCanSeeUserAuthVideo (options: {
   const fail = () => {
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
-      message: 'Cannot fetch information of private/internal/blocked video'
+      message: req.t('Cannot fetch information of private/internal/blocked video')
     })
 
     return false
@@ -158,13 +132,13 @@ async function checkCanSeeUserAuthVideo (options: {
   }
 
   if (videoWithRights.isBlacklisted()) {
-    if (canUserAccessVideo(user, videoWithRights, UserRight.MANAGE_VIDEO_BLACKLIST)) return true
+    if (await canUserAccessVideo({ user, req, video: videoWithRights, right: UserRight.MANAGE_VIDEO_BLACKLIST })) return true
 
     return fail()
   }
 
   if (privacy === VideoPrivacy.PRIVATE || privacy === VideoPrivacy.UNLISTED) {
-    if (canUserAccessVideo(user, videoWithRights, UserRight.SEE_ALL_VIDEOS)) return true
+    if (await canUserAccessVideo({ user, req, video: videoWithRights, right: UserRight.SEE_ALL_VIDEOS })) return true
 
     return fail()
   }
@@ -192,7 +166,7 @@ async function checkCanSeePasswordProtectedVideo (options: {
       await authenticatePromise({ req, res, errorMessage, errorStatus: HttpStatusCode.FORBIDDEN_403, errorType })
       const user = res.locals.oauth?.token.User
 
-      if (canUserAccessVideo(user, videoWithRights, UserRight.SEE_ALL_VIDEOS)) return true
+      if (await canUserAccessVideo({ user, req, video: videoWithRights, right: UserRight.SEE_ALL_VIDEOS })) return true
     }
 
     res.fail({
@@ -214,16 +188,31 @@ async function checkCanSeePasswordProtectedVideo (options: {
   return false
 }
 
-function canUserAccessVideo (user: MUser, video: MVideoWithRights | MVideoAccountLight, right: UserRightType) {
-  const isOwnedByUser = video.VideoChannel.Account.userId === user.id
+async function canUserAccessVideo (options: {
+  req: Request
+  user: MUserAccountId
+  video: MVideoWithRights | MVideoAccountLight
+  right: UserRightType
+}) {
+  const { user, video, right, req } = options
 
-  return isOwnedByUser || user.hasRight(right)
+  return canManageChannel({
+    channel: video.VideoChannel,
+    user,
+    req,
+    res: null,
+    checkCanManage: true,
+    checkIsOwner: false,
+    specialRight: right
+  })
 }
 
 async function getVideoWithRights (video: MVideoWithRights): Promise<MVideoWithRights> {
-  return video.VideoChannel?.Account?.userId
-    ? video
-    : VideoModel.loadFull(video.id)
+  const channel = video.VideoChannel
+
+  if (channel?.id && channel?.Account?.userId && channel?.Account?.id) return video
+
+  return VideoModel.loadFull(video.id)
 }
 
 // ---------------------------------------------------------------------------
@@ -259,7 +248,7 @@ export async function checkCanAccessVideoSourceFile (options: {
   const video = await VideoModel.loadFull(videoId)
 
   if (res.locals.oauth?.token.User) {
-    if (canUserAccessVideo(res.locals.oauth.token.User, video, UserRight.SEE_ALL_VIDEOS) === true) return true
+    if (await canUserAccessVideo({ user: res.locals.oauth.token.User, req, video, right: UserRight.SEE_ALL_VIDEOS }) === true) return true
 
     res.sendStatus(HttpStatusCode.FORBIDDEN_403)
     return false
@@ -284,34 +273,45 @@ function assignVideoTokenIfNeeded (req: Request, res: Response, video: MVideoUUI
 
 // ---------------------------------------------------------------------------
 
-export function checkUserCanManageVideo (options: {
-  user: MUser
+export async function checkCanManageVideo (options: {
+  user: MUserAccountId
   video: MVideoAccountLight
   right: UserRightType
   req: Request
-  res: Response
-  onlyOwned?: boolean
+  res: Response | null
+  checkIsLocal: boolean
+  checkIsOwner: boolean
 }) {
-  const { user, video, right, req, res, onlyOwned = true } = options
+  const { user, video, right, req, res, checkIsLocal, checkIsOwner } = options
 
   if (!user) {
-    res.fail({
+    res?.fail({
       status: HttpStatusCode.UNAUTHORIZED_401,
       message: req.t('Authentication is required.')
     })
+    return false
   }
 
-  if (onlyOwned && video.isOwned() === false) {
-    res.fail({
+  if (checkIsLocal && video.isLocal() === false) {
+    res?.fail({
       status: HttpStatusCode.FORBIDDEN_403,
       message: req.t('Cannot manage a video of another server.')
     })
     return false
   }
 
-  const account = video.VideoChannel.Account
-  if (user.hasRight(right) === false && account.userId !== user.id) {
-    res.fail({
+  if (
+    !await canManageChannel({
+      channel: video.VideoChannel,
+      user,
+      req,
+      res: null,
+      checkCanManage: true,
+      checkIsOwner,
+      specialRight: right
+    })
+  ) {
+    res?.fail({
       status: HttpStatusCode.FORBIDDEN_403,
       message: req.t('Cannot manage a video of another user.')
     })

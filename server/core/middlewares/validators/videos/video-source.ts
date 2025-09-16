@@ -10,7 +10,7 @@ import { param } from 'express-validator'
 import {
   areValidationErrors,
   checkCanAccessVideoSourceFile,
-  checkUserCanManageVideo,
+  checkCanManageVideo,
   doesVideoExist,
   isValidVideoIdParam
 } from '../shared/index.js'
@@ -26,7 +26,9 @@ export const videoSourceGetLatestValidator = [
     const video = getVideoWithAttributes(res) as MVideoFullLight
 
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo({ user, video, right: UserRight.UPDATE_ANY_VIDEO, req, res })) return
+    if (!await checkCanManageVideo({ user, video, right: UserRight.UPDATE_ANY_VIDEO, req, res, checkIsLocal: true, checkIsOwner: false })) {
+      return
+    }
 
     res.locals.videoSource = await VideoSourceModel.loadLatest(video.id)
 
@@ -123,7 +125,9 @@ async function checkCanUpdateVideoFile (options: {
   const user = res.locals.oauth.token.User
   const video = res.locals.videoAll
 
-  if (!checkUserCanManageVideo({ user, video, right: UserRight.UPDATE_ANY_VIDEO, req, res })) return false
+  if (!await checkCanManageVideo({ user, video, right: UserRight.UPDATE_ANY_VIDEO, req, res, checkIsLocal: true, checkIsOwner: false })) {
+    return false
+  }
 
   if (!checkVideoFileCanBeEdited(video, res)) return false
 

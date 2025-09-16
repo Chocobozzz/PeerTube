@@ -29,7 +29,7 @@ function getEndpointParsed () {
 
 let s3ClientPromise: Promise<S3Client>
 function getClient () {
-  if (s3ClientPromise) return s3ClientPromise
+  if (s3ClientPromise !== undefined) return s3ClientPromise
 
   s3ClientPromise = (async () => {
     const OBJECT_STORAGE = CONFIG.OBJECT_STORAGE

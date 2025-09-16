@@ -438,7 +438,10 @@ class MuxingSession extends EventEmitter implements MuxingSession {
     setTimeout(() => {
       // Wait latest segments generation, and close watchers
 
-      const promise = this.filesWatcher?.close() || Promise.resolve()
+      const promise = this.filesWatcher
+        ? this.filesWatcher.close()
+        : Promise.resolve()
+
       promise
         .then(() => {
           // Process remaining segments hash

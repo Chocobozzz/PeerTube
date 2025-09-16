@@ -61,28 +61,28 @@ activityPubClientRouter.get(
   [ '/accounts?/:handle', '/accounts?/:handle/video-channels', '/a/:handle', '/a/:handle/video-channels' ],
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkManage: false })),
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkCanManage: false })),
   asyncMiddleware(accountController)
 )
 activityPubClientRouter.get(
   '/accounts?/:handle/followers',
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkManage: false })),
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkCanManage: false })),
   asyncMiddleware(accountFollowersController)
 )
 activityPubClientRouter.get(
   '/accounts?/:handle/following',
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkManage: false })),
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkCanManage: false })),
   asyncMiddleware(accountFollowingController)
 )
 activityPubClientRouter.get(
   '/accounts?/:handle/playlists',
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkManage: false })),
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkCanManage: false })),
   asyncMiddleware(accountPlaylistsController)
 )
 activityPubClientRouter.get(
@@ -212,35 +212,35 @@ activityPubClientRouter.get(
   [ '/video-channels/:handle', '/video-channels/:handle/videos', '/c/:handle', '/c/:handle/videos' ],
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: false })),
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: false, checkIsOwner: false })),
   asyncMiddleware(videoChannelController)
 )
 activityPubClientRouter.get(
   '/video-channels/:handle/followers',
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: false })),
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: false, checkIsOwner: false })),
   asyncMiddleware(videoChannelFollowersController)
 )
 activityPubClientRouter.get(
   '/video-channels/:handle/following',
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: false })),
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: false, checkIsOwner: false })),
   asyncMiddleware(videoChannelFollowingController)
 )
 activityPubClientRouter.get(
   '/video-channels/:handle/playlists',
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: false })),
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: false, checkIsOwner: false })),
   asyncMiddleware(videoChannelPlaylistsController)
 )
 activityPubClientRouter.get(
   '/video-channels/:handle/player-settings',
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: false })),
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: false, checkIsOwner: false })),
   asyncMiddleware(channelPlayerSettingsController)
 )
 
@@ -462,7 +462,7 @@ async function videoCommentController (req: express.Request, res: express.Respon
   const videoComment = res.locals.videoCommentFull
 
   if (redirectIfNotOwned(videoComment.url, res)) return
-  if (videoComment.Video.isOwned() && videoComment.heldForReview === true) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+  if (videoComment.Video.isLocal() && videoComment.heldForReview === true) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
   const threadParentComments = await VideoCommentModel.listThreadParentComments({ comment: videoComment })
 
@@ -484,7 +484,7 @@ async function videoCommentController (req: express.Request, res: express.Respon
 async function videoCommentApprovedController (req: express.Request, res: express.Response) {
   const comment = res.locals.videoCommentFull
 
-  if (!comment.Video.isOwned() || comment.heldForReview === true) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+  if (!comment.Video.isLocal() || comment.heldForReview === true) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
   const activity = buildApprovalActivity({ comment, type: 'ApproveReply' })
 

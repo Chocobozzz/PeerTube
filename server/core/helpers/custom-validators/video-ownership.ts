@@ -1,20 +1,25 @@
-import { Response } from 'express'
-import { HttpStatusCode } from '@peertube/peertube-models'
-import { MUserId } from '@server/types/models/index.js'
+import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
+import { checkCanManageAccount } from '@server/middlewares/validators/shared/users.js'
+import { MUserAccountId } from '@server/types/models/index.js'
 import { MVideoChangeOwnershipFull } from '@server/types/models/video/video-change-ownership.js'
+import { Request, Response } from 'express'
 
-function checkUserCanTerminateOwnershipChange (user: MUserId, videoChangeOwnership: MVideoChangeOwnershipFull, res: Response) {
-  if (videoChangeOwnership.NextOwner.userId === user.id) {
-    return true
+export function checkCanTerminateOwnershipChange (options: {
+  user: MUserAccountId
+  videoChangeOwnership: MVideoChangeOwnershipFull
+  req: Request
+  res: Response
+}) {
+  const { user, videoChangeOwnership, req, res } = options
+
+  if (!checkCanManageAccount({ user, account: videoChangeOwnership.NextOwner, req, res: null, specialRight: UserRight.MANAGE_USERS })) {
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: req.t('Cannot terminate an ownership change of another user')
+    })
+
+    return false
   }
 
-  res.fail({
-    status: HttpStatusCode.FORBIDDEN_403,
-    message: 'Cannot terminate an ownership change of another user'
-  })
-  return false
-}
-
-export {
-  checkUserCanTerminateOwnershipChange
+  return true
 }

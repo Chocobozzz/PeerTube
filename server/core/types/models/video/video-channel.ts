@@ -5,6 +5,7 @@ import {
   MAccountActor,
   MAccountDefault,
   MAccountFormattable,
+  MAccountId,
   MAccountIdActorId,
   MAccountLight,
   MAccountSummaryBlocks,
@@ -48,8 +49,13 @@ export type MChannelIdActor =
   & Use<'Actor', MActorAccountChannelId>
 
 export type MChannelUserId =
-  & Pick<MChannel, 'accountId'>
-  & Use<'Account', MAccountUserId>
+  & Pick<MChannel, 'id' | 'accountId'>
+  & Use<'Account', MAccountId & MAccountUserId>
+
+export type MChannelAccountId =
+  & Pick<MChannel, 'id' | 'accountId'>
+  & Use<'Actor', MActorId>
+  & Use<'Account', MAccountIdActorId>
 
 export type MChannelAccountIdUrl =
   & Pick<MChannel, 'id' | 'accountId'>

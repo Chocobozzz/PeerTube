@@ -22,6 +22,7 @@ import { UserNotificationListQueryBuilder } from './sql/user-notification-list-q
 import { UserRegistrationModel } from './user-registration.js'
 import { UserModel } from './user.js'
 import { ActorImageModel } from '../actor/actor-image.js'
+import { VideoChannelCollaboratorModel } from '../video/video-channel-collaborator.js'
 
 @Table({
   tableName: 'userNotification',
@@ -105,6 +106,14 @@ import { ActorImageModel } from '../actor/actor-image.js'
       fields: [ 'userRegistrationId' ],
       where: {
         userRegistrationId: {
+          [Op.ne]: null
+        }
+      }
+    },
+    {
+      fields: [ 'channelCollaboratorId' ],
+      where: {
+        channelCollaboratorId: {
           [Op.ne]: null
         }
       }
@@ -273,6 +282,18 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     onDelete: 'cascade'
   })
   declare VideoCaption: Awaited<VideoCaptionModel>
+
+  @ForeignKey(() => VideoChannelCollaboratorModel)
+  @Column
+  declare channelCollaboratorId: number
+
+  @BelongsTo(() => VideoChannelCollaboratorModel, {
+    foreignKey: {
+      allowNull: true
+    },
+    onDelete: 'cascade'
+  })
+  declare VideoChannelCollaborator: Awaited<VideoChannelCollaboratorModel>
 
   static listForApi (options: {
     userId: number
@@ -477,6 +498,18 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
       }
       : undefined
 
+    const videoChannelCollaborator = this.VideoChannelCollaborator
+      ? {
+        id: this.VideoChannelCollaborator.id,
+        channel: this.formatActor(this.VideoChannelCollaborator.Channel),
+        account: this.formatActor(this.VideoChannelCollaborator.Account),
+        state: {
+          id: this.VideoChannelCollaborator.state,
+          label: VideoChannelCollaboratorModel.getStateLabel(this.VideoChannelCollaborator.state)
+        }
+      }
+      : undefined
+
     return {
       id: this.id,
       type: this.type,
@@ -492,6 +525,7 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
       peertube,
       registration,
       videoCaption,
+      videoChannelCollaborator,
       createdAt: this.createdAt.toISOString(),
       updatedAt: this.updatedAt.toISOString()
     }

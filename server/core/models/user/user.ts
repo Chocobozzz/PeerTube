@@ -730,6 +730,8 @@ export class UserModel extends SequelizeModel<UserModel> {
     return UserModel.findAll(query)
   }
 
+  // ---------------------------------------------------------------------------
+
   static loadByVideoId (videoId: number): Promise<MUserDefault> {
     const query = {
       include: [

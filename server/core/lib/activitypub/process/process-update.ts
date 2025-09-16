@@ -103,7 +103,7 @@ async function processUpdateCacheFile (
 
   const { video } = await getOrCreateAPVideo({ videoObject: cacheFileObject.object })
 
-  if (video.isOwned() && !canVideoBeFederated(video)) {
+  if (video.isLocal() && !canVideoBeFederated(video)) {
     logger.warn(`Do not process update cache file on video ${activity.object} that cannot be federated`)
     return
   }
@@ -112,7 +112,7 @@ async function processUpdateCacheFile (
     await createOrUpdateCacheFile(cacheFileObject, video, byActor, t)
   })
 
-  if (video.isOwned()) {
+  if (video.isLocal()) {
     // Don't resend the activity to the sender
     const exceptions = [ byActor ]
 

@@ -55,6 +55,7 @@ import {
   setAsUpdated,
   throwIfNotValid
 } from '../shared/index.js'
+import { VideoChannelCollaboratorModel } from './video-channel-collaborator.js'
 import { VideoPlaylistModel } from './video-playlist.js'
 import { VideoModel } from './video.js'
 
@@ -69,11 +70,14 @@ export enum ScopeNames {
 }
 
 type AvailableForListOptions = {
-  actorId: number
+  actorId?: number
   search?: string
   host?: string
   handles?: string[]
   forCount?: boolean
+
+  ownerOrCollaboratorId?: number
+  includeCollaboration?: boolean // If accountId is provided, include channels where the account is a collaborator
 }
 
 type AvailableWithStatsOptions = {
@@ -96,11 +100,14 @@ export type SummaryOptions = {
 }))
 @Scopes(() => ({
   [ScopeNames.FOR_API]: (options: AvailableForListOptions) => {
-    // Only list local channels OR channels that are on an instance followed by actorId
-    const inQueryInstanceFollow = buildServerIdsFollowedBy(options.actorId)
+    const whereActorAnd: WhereOptions[] = []
+    const baseInclude: Includeable[] = []
 
-    const whereActorAnd: WhereOptions[] = [
-      {
+    // Only list local channels OR channels that are on an instance followed by actorId
+    if (options.actorId) {
+      const inQueryInstanceFollow = buildServerIdsFollowedBy(options.actorId)
+
+      whereActorAnd.push({
         [Op.or]: [
           {
             serverId: null
@@ -111,8 +118,22 @@ export type SummaryOptions = {
             }
           }
         ]
-      }
-    ]
+      })
+    }
+
+    if (options.ownerOrCollaboratorId) {
+      baseInclude.push({
+        model: VideoChannelCollaboratorModel.unscoped(),
+        required: false
+      })
+
+      whereActorAnd.push({
+        [Op.or]: [
+          { accountId: options.ownerOrCollaboratorId },
+          { '$VideoChannelCollaborator.accountId$': options.ownerOrCollaboratorId }
+        ]
+      })
+    }
 
     let serverRequired = false
     let whereServer: WhereOptions
@@ -140,12 +161,7 @@ export type SummaryOptions = {
         if (!host || host === WEBSERVER.HOST) {
           or.push(`(LOWER("preferredUsername") = ${sanitizedPreferredUsername} AND "serverId" IS NULL)`)
         } else {
-          or.push(
-            `(` +
-              `LOWER("preferredUsername") = ${sanitizedPreferredUsername} ` +
-              `AND "host" = ${sanitizedHost}` +
-              `)`
-          )
+          or.push(`(LOWER("preferredUsername") = ${sanitizedPreferredUsername} AND "host" = ${sanitizedHost})`)
         }
       }
 
@@ -195,6 +211,8 @@ export type SummaryOptions = {
 
     return {
       include: [
+        ...baseInclude,
+
         {
           attributes: {
             exclude: unusedActorAttributesForAPI
@@ -442,7 +460,7 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
 
     await ActorFollowModel.removeFollowsOf(instance.Actor.id, options.transaction)
 
-    if (instance.Actor.isOwned()) {
+    if (instance.Actor.isLocal()) {
       return sendDeleteActor(instance.Actor, options.transaction)
     }
 
@@ -536,8 +554,11 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
       .findAll(query)
   }
 
+  // ---------------------------------------------------------------------------
+
   static listForApi (
-    parameters: Pick<AvailableForListOptions, 'actorId'> & {
+    parameters: {
+      actorId: number
       start: number
       count: number
       sort: string
@@ -675,6 +696,34 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
       VideoChannelModel.scope(findScopes).findAll(getQuery(false))
     ]).then(([ total, data ]) => ({ total, data }))
   }
+
+  static listOwnedAndCollaborationsForApi (
+    parameters: {
+      accountId: number
+      start: number
+      count: number
+      sort: string
+    }
+  ) {
+    const { accountId } = parameters
+
+    const query = {
+      offset: parameters.start,
+      limit: parameters.count,
+      order: getSort(parameters.sort)
+    }
+
+    const getScope = (forCount: boolean) => {
+      return { method: [ ScopeNames.FOR_API, { ownerOrCollaboratorId: accountId, forCount } satisfies AvailableForListOptions ] }
+    }
+
+    return Promise.all([
+      VideoChannelModel.scope(getScope(true)).count(),
+      VideoChannelModel.scope(getScope(false)).findAll(query)
+    ]).then(([ total, data ]) => ({ total, data }))
+  }
+
+  // ---------------------------------------------------------------------------
 
   static listAllByAccount (accountId: number): Promise<MChannelDefault[]> {
     const query = {
@@ -828,7 +877,7 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
       displayName: this.getDisplayName(),
       description: this.description,
       support: this.support,
-      isLocal: this.Actor.isOwned(),
+      isLocal: this.Actor.isLocal(),
       updatedAt: this.updatedAt,
 
       ownerAccount: undefined,
@@ -888,6 +937,10 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
       : ''
 
     return WEBSERVER.URL + '/c/' + this.Actor.getIdentifier() + suffix
+  }
+
+  getClientManageUrl (this: MAccountIdHost | MChannelIdHost) {
+    return WEBSERVER.URL + '/my-library/video-channels/update/' + this.Actor.getIdentifier()
   }
 
   getDisplayName () {

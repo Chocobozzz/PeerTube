@@ -91,17 +91,17 @@ export async function checkUserExist (finder: () => Promise<MUserDefault>, res: 
   return true
 }
 
-export function checkUserCanManageAccount (options: {
+export function checkCanManageAccount (options: {
   user: MUserAccountId
   account: MAccountId
   specialRight: UserRightType
   req: express.Request
-  res: express.Response
+  res: express.Response | null
 }) {
   const { user, account, specialRight, res, req } = options
 
   if (!user) {
-    res.fail({
+    res?.fail({
       status: HttpStatusCode.UNAUTHORIZED_401,
       message: req.t('Authentication is required')
     })
@@ -112,7 +112,7 @@ export function checkUserCanManageAccount (options: {
   if (specialRight && user.hasRight(specialRight) === true) return true
 
   if (!specialRight) {
-    res.fail({
+    res?.fail({
       status: HttpStatusCode.FORBIDDEN_403,
       message: req.t('Only the owner of this account can manage this account resource.')
     })
@@ -120,7 +120,7 @@ export function checkUserCanManageAccount (options: {
     return false
   }
 
-  res.fail({
+  res?.fail({
     status: HttpStatusCode.FORBIDDEN_403,
     message: req.t('Only a user with sufficient right can access this account resource.')
   })

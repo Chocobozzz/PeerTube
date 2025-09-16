@@ -12,6 +12,7 @@ import { UserAuditView, auditLoggerFactory, getAuditIdFromRes } from '@server/he
 import { pickCommonVideoQuery } from '@server/helpers/query.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { guessAdditionalAttributesFromQuery } from '@server/models/video/formatter/video-api-format.js'
+import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { VideoCommentModel } from '@server/models/video/video-comment.js'
 import express from 'express'
 import 'multer'
@@ -96,6 +97,12 @@ meRouter.get(
 )
 
 meRouter.get(
+  '/me/video-channels',
+  authenticate,
+  asyncMiddleware(listUserChannels)
+)
+
+meRouter.get(
   '/me/videos/:videoId/rating',
   authenticate,
   asyncMiddleware(usersVideoRatingValidator),
@@ -165,6 +172,19 @@ async function listUserVideos (req: express.Request, res: express.Response) {
   )
 
   return res.json(getFormattedObjects(resultList.data, resultList.total, guessAdditionalAttributesFromQuery({ include })))
+}
+
+async function listUserChannels (req: express.Request, res: express.Response) {
+  const user = res.locals.oauth.token.User
+
+  const resultList = await VideoChannelModel.listOwnedAndCollaborationsForApi({
+    accountId: user.Account.id,
+    start: 0,
+    count: 100,
+    sort: '-createdAt'
+  })
+
+  return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
 async function listCommentsOnUserVideos (req: express.Request, res: express.Response) {

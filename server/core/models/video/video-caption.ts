@@ -128,7 +128,7 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
       instance.Video = await instance.$get('Video', { transaction: options.transaction })
     }
 
-    if (instance.isOwned()) {
+    if (instance.isLocal()) {
       logger.info('Removing caption %s.', instance.filename)
 
       instance.removeAllCaptionFiles()
@@ -278,7 +278,7 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
       },
       automaticallyGenerated: this.automaticallyGenerated,
 
-      captionPath: this.Video.isOwned() && this.fileUrl
+      captionPath: this.Video.isLocal() && this.fileUrl
         ? null // On object storage
         : this.getFileStaticPath(),
 
@@ -315,7 +315,7 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
 
   // ---------------------------------------------------------------------------
 
-  isOwned () {
+  isLocal () {
     return this.Video.remote === false
   }
 
@@ -382,7 +382,7 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
   // ---------------------------------------------------------------------------
 
   getFileUrl (this: MVideoCaptionUrl, video: MVideoOwned) {
-    if (video.isOwned() && this.storage === FileStorage.OBJECT_STORAGE) {
+    if (video.isLocal() && this.storage === FileStorage.OBJECT_STORAGE) {
       return getObjectStoragePublicFileUrl(this.fileUrl, CONFIG.OBJECT_STORAGE.CAPTIONS)
     }
 
@@ -390,7 +390,7 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
   }
 
   getOriginFileUrl (this: MVideoCaptionUrl, video: MVideoOwned) {
-    if (video.isOwned()) return this.getFileUrl(video)
+    if (video.isLocal()) return this.getFileUrl(video)
 
     return this.fileUrl
   }
@@ -400,7 +400,7 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
   getM3U8Url (this: MVideoCaptionUrl, video: MVideoOwned & MVideoPrivacy) {
     if (!this.m3u8Filename) return null
 
-    if (video.isOwned()) {
+    if (video.isLocal()) {
       if (this.storage === FileStorage.OBJECT_STORAGE) {
         return getObjectStoragePublicFileUrl(this.m3u8Url, CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
       }

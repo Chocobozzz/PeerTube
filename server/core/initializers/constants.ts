@@ -20,6 +20,8 @@ import {
   UserImportStateType,
   UserRegistrationState,
   UserRegistrationStateType,
+  VideoChannelCollaboratorState,
+  VideoChannelCollaboratorStateType,
   VideoChannelSyncState,
   VideoChannelSyncStateType,
   VideoCommentPolicy,
@@ -688,6 +690,12 @@ export const VIDEO_COMMENTS_POLICY: { [id in VideoCommentPolicyType]: string } =
   [VideoCommentPolicy.DISABLED]: 'Disabled',
   [VideoCommentPolicy.ENABLED]: 'Enabled',
   [VideoCommentPolicy.REQUIRES_APPROVAL]: 'Requires approval'
+}
+
+export const CHANNEL_COLLABORATOR_STATE: { [id in VideoChannelCollaboratorStateType]: string } = {
+  [VideoChannelCollaboratorState.ACCEPTED]: 'Accepted',
+  [VideoChannelCollaboratorState.PENDING]: 'Pending',
+  [VideoChannelCollaboratorState.REJECTED]: 'Rejected'
 }
 
 export const MIMETYPES = {

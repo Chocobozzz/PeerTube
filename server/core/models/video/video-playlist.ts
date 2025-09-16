@@ -783,12 +783,12 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
     this.set('videosLength' as any, videosLength, { raw: true })
   }
 
-  isOwned () {
-    return this.OwnerAccount.isOwned()
+  isLocal () {
+    return this.OwnerAccount.isLocal()
   }
 
   isOutdated () {
-    if (this.isOwned()) return false
+    if (this.isLocal()) return false
 
     return isOutdated(this, ACTIVITY_PUB.VIDEO_PLAYLIST_REFRESH_INTERVAL)
   }
@@ -799,7 +799,7 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
       uuid: this.uuid,
       shortUUID: uuidToShort(this.uuid),
 
-      isLocal: this.isOwned(),
+      isLocal: this.isLocal(),
 
       url: this.url,
 

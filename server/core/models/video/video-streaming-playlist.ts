@@ -272,7 +272,7 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
   // ---------------------------------------------------------------------------
 
   getMasterPlaylistUrl (video: MVideo) {
-    if (video.isOwned()) {
+    if (video.isLocal()) {
       if (this.storage === FileStorage.OBJECT_STORAGE) {
         return this.getMasterPlaylistObjectStorageUrl(video)
       }
@@ -294,7 +294,7 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
   // ---------------------------------------------------------------------------
 
   getSha256SegmentsUrl (video: MVideo) {
-    if (video.isOwned()) {
+    if (video.isLocal()) {
       if (!this.segmentsSha256Filename) return null
 
       if (this.storage === FileStorage.OBJECT_STORAGE) {

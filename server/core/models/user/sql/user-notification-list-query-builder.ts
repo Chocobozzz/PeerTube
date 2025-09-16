@@ -84,37 +84,22 @@ export class UserNotificationListQueryBuilder extends AbstractRunQuery {
       "UserNotificationModel"."read",
       "UserNotificationModel"."createdAt",
       "UserNotificationModel"."updatedAt",
+
       "Video"."id" AS "Video.id",
       "Video"."uuid" AS "Video.uuid",
       "Video"."name" AS "Video.name",
       "Video"."state" AS "Video.state",
-      "Video->VideoChannel"."id" AS "Video.VideoChannel.id",
-      "Video->VideoChannel"."name" AS "Video.VideoChannel.name",
-      "Video->VideoChannel->Actor"."id" AS "Video.VideoChannel.Actor.id",
-      "Video->VideoChannel->Actor"."preferredUsername" AS "Video.VideoChannel.Actor.preferredUsername",
-      "Video->VideoChannel->Actor->Avatars"."id" AS "Video.VideoChannel.Actor.Avatars.id",
-      "Video->VideoChannel->Actor->Avatars"."width" AS "Video.VideoChannel.Actor.Avatars.width",
-      "Video->VideoChannel->Actor->Avatars"."type" AS "Video.VideoChannel.Actor.Avatars.type",
-      "Video->VideoChannel->Actor->Avatars"."filename" AS "Video.VideoChannel.Actor.Avatars.filename",
-      "Video->VideoChannel->Actor->Server"."id" AS "Video.VideoChannel.Actor.Server.id",
-      "Video->VideoChannel->Actor->Server"."host" AS "Video.VideoChannel.Actor.Server.host",
+      ${this.buildAccountOrChannelSelect('Video->VideoChannel', 'Video.VideoChannel')},
+
       "VideoComment"."id" AS "VideoComment.id",
       "VideoComment"."originCommentId" AS "VideoComment.originCommentId",
       "VideoComment"."heldForReview" AS "VideoComment.heldForReview",
-      "VideoComment->Account"."id" AS "VideoComment.Account.id",
-      "VideoComment->Account"."name" AS "VideoComment.Account.name",
-      "VideoComment->Account->Actor"."id" AS "VideoComment.Account.Actor.id",
-      "VideoComment->Account->Actor"."preferredUsername" AS "VideoComment.Account.Actor.preferredUsername",
-      "VideoComment->Account->Actor->Avatars"."id" AS "VideoComment.Account.Actor.Avatars.id",
-      "VideoComment->Account->Actor->Avatars"."width" AS "VideoComment.Account.Actor.Avatars.width",
-      "VideoComment->Account->Actor->Avatars"."type" AS "VideoComment.Account.Actor.Avatars.type",
-      "VideoComment->Account->Actor->Avatars"."filename" AS "VideoComment.Account.Actor.Avatars.filename",
-      "VideoComment->Account->Actor->Server"."id" AS "VideoComment.Account.Actor.Server.id",
-      "VideoComment->Account->Actor->Server"."host" AS "VideoComment.Account.Actor.Server.host",
       "VideoComment->Video"."id" AS "VideoComment.Video.id",
       "VideoComment->Video"."uuid" AS "VideoComment.Video.uuid",
       "VideoComment->Video"."name" AS "VideoComment.Video.name",
       "VideoComment->Video"."state" AS "VideoComment.Video.state",
+      ${this.buildAccountOrChannelSelect('VideoComment->Account', 'VideoComment.Account')}
+
       "Abuse"."id" AS "Abuse.id",
       "Abuse"."state" AS "Abuse.state",
       "Abuse->VideoAbuse"."id" AS "Abuse.VideoAbuse.id",
@@ -129,27 +114,14 @@ export class UserNotificationListQueryBuilder extends AbstractRunQuery {
       "Abuse->VideoCommentAbuse->VideoComment->Video"."name" AS "Abuse.VideoCommentAbuse.VideoComment.Video.name",
       "Abuse->VideoCommentAbuse->VideoComment->Video"."uuid" AS "Abuse.VideoCommentAbuse.VideoComment.Video.uuid",
       "Abuse->VideoCommentAbuse->VideoComment->Video"."state" AS "Abuse.VideoCommentAbuse.VideoComment.Video.state",
-      "Abuse->FlaggedAccount"."id" AS "Abuse.FlaggedAccount.id",
-      "Abuse->FlaggedAccount"."name" AS "Abuse.FlaggedAccount.name",
-      "Abuse->FlaggedAccount"."description" AS "Abuse.FlaggedAccount.description",
-      "Abuse->FlaggedAccount"."actorId" AS "Abuse.FlaggedAccount.actorId",
-      "Abuse->FlaggedAccount"."userId" AS "Abuse.FlaggedAccount.userId",
-      "Abuse->FlaggedAccount"."applicationId" AS "Abuse.FlaggedAccount.applicationId",
-      "Abuse->FlaggedAccount"."createdAt" AS "Abuse.FlaggedAccount.createdAt",
-      "Abuse->FlaggedAccount"."updatedAt" AS "Abuse.FlaggedAccount.updatedAt",
-      "Abuse->FlaggedAccount->Actor"."id" AS "Abuse.FlaggedAccount.Actor.id",
-      "Abuse->FlaggedAccount->Actor"."preferredUsername" AS "Abuse.FlaggedAccount.Actor.preferredUsername",
-      "Abuse->FlaggedAccount->Actor->Avatars"."id" AS "Abuse.FlaggedAccount.Actor.Avatars.id",
-      "Abuse->FlaggedAccount->Actor->Avatars"."width" AS "Abuse.FlaggedAccount.Actor.Avatars.width",
-      "Abuse->FlaggedAccount->Actor->Avatars"."type" AS "Abuse.FlaggedAccount.Actor.Avatars.type",
-      "Abuse->FlaggedAccount->Actor->Avatars"."filename" AS "Abuse.FlaggedAccount.Actor.Avatars.filename",
-      "Abuse->FlaggedAccount->Actor->Server"."id" AS "Abuse.FlaggedAccount.Actor.Server.id",
-      "Abuse->FlaggedAccount->Actor->Server"."host" AS "Abuse.FlaggedAccount.Actor.Server.host",
+      ${this.buildAccountOrChannelSelect('Abuse->FlaggedAccount', 'Abuse.FlaggedAccount')}
+
       "VideoBlacklist"."id" AS "VideoBlacklist.id",
       "VideoBlacklist->Video"."id" AS "VideoBlacklist.Video.id",
       "VideoBlacklist->Video"."uuid" AS "VideoBlacklist.Video.uuid",
       "VideoBlacklist->Video"."name" AS "VideoBlacklist.Video.name",
       "VideoBlacklist->Video"."state" AS "VideoBlacklist.Video.state",
+
       "VideoImport"."id" AS "VideoImport.id",
       "VideoImport"."magnetUri" AS "VideoImport.magnetUri",
       "VideoImport"."targetUrl" AS "VideoImport.targetUrl",
@@ -158,12 +130,15 @@ export class UserNotificationListQueryBuilder extends AbstractRunQuery {
       "VideoImport->Video"."uuid" AS "VideoImport.Video.uuid",
       "VideoImport->Video"."name" AS "VideoImport.Video.name",
       "VideoImport->Video"."state" AS "VideoImport.Video.state",
+
       "Plugin"."id" AS "Plugin.id",
       "Plugin"."name" AS "Plugin.name",
       "Plugin"."type" AS "Plugin.type",
       "Plugin"."latestVersion" AS "Plugin.latestVersion",
+
       "Application"."id" AS "Application.id",
       "Application"."latestPeerTubeVersion" AS "Application.latestPeerTubeVersion",
+
       "ActorFollow"."id" AS "ActorFollow.id",
       "ActorFollow"."state" AS "ActorFollow.state",
       "ActorFollow->ActorFollower"."id" AS "ActorFollow.ActorFollower.id",
@@ -185,48 +160,35 @@ export class UserNotificationListQueryBuilder extends AbstractRunQuery {
       "ActorFollow->ActorFollowing->Account"."name" AS "ActorFollow.ActorFollowing.Account.name",
       "ActorFollow->ActorFollowing->Server"."id" AS "ActorFollow.ActorFollowing.Server.id",
       "ActorFollow->ActorFollowing->Server"."host" AS "ActorFollow.ActorFollowing.Server.host",
-      "Account"."id" AS "Account.id",
-      "Account"."name" AS "Account.name",
-      "Account->Actor"."id" AS "Account.Actor.id",
-      "Account->Actor"."preferredUsername" AS "Account.Actor.preferredUsername",
-      "Account->Actor->Avatars"."id" AS "Account.Actor.Avatars.id",
-      "Account->Actor->Avatars"."width" AS "Account.Actor.Avatars.width",
-      "Account->Actor->Avatars"."type" AS "Account.Actor.Avatars.type",
-      "Account->Actor->Avatars"."filename" AS "Account.Actor.Avatars.filename",
-      "Account->Actor->Server"."id" AS "Account.Actor.Server.id",
-      "Account->Actor->Server"."host" AS "Account.Actor.Server.host",
+
+      ${this.buildAccountOrChannelSelect('Account', 'Account')},
+
       "UserRegistration"."id" AS "UserRegistration.id",
       "UserRegistration"."username" AS "UserRegistration.username",
+
       "VideoCaption"."id" AS "VideoCaption.id",
       "VideoCaption"."language" AS "VideoCaption.language",
       "VideoCaption->Video"."id" AS "VideoCaption.Video.id",
       "VideoCaption->Video"."uuid" AS "VideoCaption.Video.uuid",
       "VideoCaption->Video"."name" AS "VideoCaption.Video.name",
-      "VideoCaption->Video"."state" AS "VideoCaption.Video.state"`
+      "VideoCaption->Video"."state" AS "VideoCaption.Video.state",
+
+      "VideoChannelCollaborator"."id" AS "VideoChannelCollaborator.id",
+      "VideoChannelCollaborator"."state" AS "VideoChannelCollaborator.state",
+      ${this.buildAccountOrChannelSelect('VideoChannelCollaborator->Account', 'VideoChannelCollaborator.Account')},
+      ${this.buildAccountOrChannelSelect('VideoChannelCollaborator->VideoChannel', 'VideoChannelCollaborator.VideoChannel')}`
   }
 
   private getJoins () {
     return `
     LEFT JOIN (
       "video" AS "Video"
-      INNER JOIN "videoChannel" AS "Video->VideoChannel" ON "Video"."channelId" = "Video->VideoChannel"."id"
-      INNER JOIN "actor" AS "Video->VideoChannel->Actor" ON "Video->VideoChannel"."actorId" = "Video->VideoChannel->Actor"."id"
-      LEFT JOIN "actorImage" AS "Video->VideoChannel->Actor->Avatars"
-        ON "Video->VideoChannel->Actor"."id" = "Video->VideoChannel->Actor->Avatars"."actorId"
-        AND "Video->VideoChannel->Actor->Avatars"."type" = ${ActorImageType.AVATAR}
-      LEFT JOIN "server" AS "Video->VideoChannel->Actor->Server"
-        ON "Video->VideoChannel->Actor"."serverId" = "Video->VideoChannel->Actor->Server"."id"
+      ${this.buildChannelJoin('Video', 'channelId')}
     ) ON "UserNotificationModel"."videoId" = "Video"."id"
 
     LEFT JOIN (
       "videoComment" AS "VideoComment"
-      INNER JOIN "account" AS "VideoComment->Account" ON "VideoComment"."accountId" = "VideoComment->Account"."id"
-      INNER JOIN "actor" AS "VideoComment->Account->Actor" ON "VideoComment->Account"."actorId" = "VideoComment->Account->Actor"."id"
-      LEFT JOIN "actorImage" AS "VideoComment->Account->Actor->Avatars"
-        ON "VideoComment->Account->Actor"."id" = "VideoComment->Account->Actor->Avatars"."actorId"
-        AND "VideoComment->Account->Actor->Avatars"."type" = ${ActorImageType.AVATAR}
-      LEFT JOIN "server" AS "VideoComment->Account->Actor->Server"
-        ON "VideoComment->Account->Actor"."serverId" = "VideoComment->Account->Actor->Server"."id"
+      ${this.buildAccountJoin('VideoComment', 'accountId')}
       INNER JOIN "video" AS "VideoComment->Video" ON "VideoComment"."videoId" = "VideoComment->Video"."id"
     ) ON "UserNotificationModel"."commentId" = "VideoComment"."id"
 
@@ -240,12 +202,7 @@ export class UserNotificationListQueryBuilder extends AbstractRunQuery {
       ON "Abuse->VideoCommentAbuse->VideoComment"."videoId" = "Abuse->VideoCommentAbuse->VideoComment->Video"."id"
     LEFT JOIN (
       "account" AS "Abuse->FlaggedAccount"
-      INNER JOIN "actor" AS "Abuse->FlaggedAccount->Actor" ON "Abuse->FlaggedAccount"."actorId" = "Abuse->FlaggedAccount->Actor"."id"
-      LEFT JOIN "actorImage" AS "Abuse->FlaggedAccount->Actor->Avatars"
-        ON "Abuse->FlaggedAccount->Actor"."id" = "Abuse->FlaggedAccount->Actor->Avatars"."actorId"
-        AND "Abuse->FlaggedAccount->Actor->Avatars"."type" = ${ActorImageType.AVATAR}
-      LEFT JOIN "server" AS "Abuse->FlaggedAccount->Actor->Server"
-        ON "Abuse->FlaggedAccount->Actor"."serverId" = "Abuse->FlaggedAccount->Actor->Server"."id"
+      ${this.buildActorJoin('Abuse->FlaggedAccount')}
     ) ON "Abuse"."flaggedAccountId" = "Abuse->FlaggedAccount"."id"
 
     LEFT JOIN (
@@ -265,27 +222,20 @@ export class UserNotificationListQueryBuilder extends AbstractRunQuery {
       INNER JOIN "actor" AS "ActorFollow->ActorFollower" ON "ActorFollow"."actorId" = "ActorFollow->ActorFollower"."id"
       INNER JOIN "account" AS "ActorFollow->ActorFollower->Account"
         ON "ActorFollow->ActorFollower"."id" = "ActorFollow->ActorFollower->Account"."actorId"
-      LEFT JOIN "actorImage" AS "ActorFollow->ActorFollower->Avatars"
-        ON "ActorFollow->ActorFollower"."id" = "ActorFollow->ActorFollower->Avatars"."actorId"
-        AND "ActorFollow->ActorFollower->Avatars"."type" = ${ActorImageType.AVATAR}
-      LEFT JOIN "server" AS "ActorFollow->ActorFollower->Server"
-        ON "ActorFollow->ActorFollower"."serverId" = "ActorFollow->ActorFollower->Server"."id"
+      ${this.buildActorImageJoin('ActorFollow->ActorFollower')}
+      ${this.buildActorServerJoin('ActorFollow->ActorFollower')}
+
       INNER JOIN "actor" AS "ActorFollow->ActorFollowing" ON "ActorFollow"."targetActorId" = "ActorFollow->ActorFollowing"."id"
       LEFT JOIN "videoChannel" AS "ActorFollow->ActorFollowing->VideoChannel"
         ON "ActorFollow->ActorFollowing"."id" = "ActorFollow->ActorFollowing->VideoChannel"."actorId"
       LEFT JOIN "account" AS "ActorFollow->ActorFollowing->Account"
         ON "ActorFollow->ActorFollowing"."id" = "ActorFollow->ActorFollowing->Account"."actorId"
-      LEFT JOIN "server" AS "ActorFollow->ActorFollowing->Server"
-        ON "ActorFollow->ActorFollowing"."serverId" = "ActorFollow->ActorFollowing->Server"."id"
+      ${this.buildActorServerJoin('ActorFollow->ActorFollowing')}
     ) ON "UserNotificationModel"."actorFollowId" = "ActorFollow"."id"
 
     LEFT JOIN (
       "account" AS "Account"
-      INNER JOIN "actor" AS "Account->Actor" ON "Account"."actorId" = "Account->Actor"."id"
-      LEFT JOIN "actorImage" AS "Account->Actor->Avatars"
-        ON "Account->Actor"."id" = "Account->Actor->Avatars"."actorId"
-        AND "Account->Actor->Avatars"."type" = ${ActorImageType.AVATAR}
-      LEFT JOIN "server" AS "Account->Actor->Server" ON "Account->Actor"."serverId" = "Account->Actor->Server"."id"
+      ${this.buildActorJoin('Account')}
     ) ON "UserNotificationModel"."accountId" = "Account"."id"
 
     LEFT JOIN "userRegistration" as "UserRegistration" ON "UserNotificationModel"."userRegistrationId" = "UserRegistration"."id"
@@ -293,6 +243,56 @@ export class UserNotificationListQueryBuilder extends AbstractRunQuery {
     LEFT JOIN (
       "videoCaption" AS "VideoCaption"
       INNER JOIN "video" AS "VideoCaption->Video" ON "VideoCaption"."videoId" = "VideoCaption->Video"."id"
-    ) ON "UserNotificationModel"."videoCaptionId" = "VideoCaption"."id"`
+    ) ON "UserNotificationModel"."videoCaptionId" = "VideoCaption"."id"
+
+    LEFT JOIN (
+      "videoChannelCollaborator" AS "VideoChannelCollaborator"
+      ${this.buildAccountJoin('VideoChannelCollaborator', 'accountId')}
+      ${this.buildChannelJoin('VideoChannelCollaborator', 'channelId')}
+    ) ON "UserNotificationModel"."channelCollaboratorId" = "VideoChannelCollaborator"."id"
+    `
+  }
+
+  private buildAccountOrChannelSelect (tableName: string, alias: string) {
+    return `
+      "${tableName}"."id" AS "${alias}.id",
+      "${tableName}"."name" AS "${alias}.name",
+      "${tableName}->Actor"."id" AS "${alias}.Actor.id",
+      "${tableName}->Actor"."preferredUsername" AS "${alias}.Actor.preferredUsername",
+      "${tableName}->Actor->Avatars"."id" AS "${alias}.Actor.Avatars.id",
+      "${tableName}->Actor->Avatars"."width" AS "${alias}.Actor.Avatars.width",
+      "${tableName}->Actor->Avatars"."type" AS "${alias}.Actor.Avatars.type",
+      "${tableName}->Actor->Avatars"."filename" AS "${alias}.Actor.Avatars.filename",
+      "${tableName}->Actor->Server"."id" AS "${alias}.Actor.Server.id",
+      "${tableName}->Actor->Server"."host" AS "${alias}.Actor.Server.host"
+    `
+  }
+
+  private buildAccountJoin (tableName: string, columnJoin: string) {
+    return `INNER JOIN "account" AS "${tableName}->Account" ON "${tableName}"."${columnJoin}" = "${tableName}->Account"."id"` +
+      this.buildActorJoin(`${tableName}->Account`)
+  }
+
+  private buildChannelJoin (tableName: string, columnJoin: string) {
+    // eslint-disable-next-line max-len
+    return `INNER JOIN "videoChannel" AS "${tableName}->VideoChannel" ON "${tableName}"."${columnJoin}" = "${tableName}->VideoChannel"."id"` +
+      this.buildActorJoin(`${tableName}->VideoChannel`)
+  }
+
+  private buildActorJoin (tableName: string) {
+    return `INNER JOIN "actor" AS "${tableName}->Actor" ON "${tableName}"."actorId" = "${tableName}->Actor"."id"` +
+      this.buildActorImageJoin(`${tableName}->Actor`) +
+      this.buildActorServerJoin(`${tableName}->Actor`)
+  }
+
+  private buildActorImageJoin (tableName: string) {
+    return `LEFT JOIN "actorImage" AS "${tableName}->Avatars"
+        ON "${tableName}"."id" = "${tableName}->Avatars"."actorId"
+        AND "${tableName}->Avatars"."type" = ${ActorImageType.AVATAR}`
+  }
+
+  private buildActorServerJoin (tableName: string) {
+    return `LEFT JOIN "server" AS "${tableName}->Server"
+        ON "${tableName}"."serverId" = "${tableName}->Server"."id"`
   }
 }

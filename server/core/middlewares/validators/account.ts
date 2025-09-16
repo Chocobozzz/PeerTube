@@ -1,13 +1,13 @@
 import { UserRight } from '@peertube/peertube-models'
 import express from 'express'
 import { param } from 'express-validator'
-import { areValidationErrors, checkUserCanManageAccount, doesAccountHandleExist } from './shared/index.js'
+import { areValidationErrors, checkCanManageAccount, doesAccountHandleExist } from './shared/index.js'
 
 export const accountHandleGetValidatorFactory = (options: {
-  checkManage: boolean
+  checkCanManage: boolean
   checkIsLocal: boolean
 }) => {
-  const { checkManage, checkIsLocal } = options
+  const { checkCanManage, checkIsLocal } = options
 
   return [
     param('handle')
@@ -15,12 +15,12 @@ export const accountHandleGetValidatorFactory = (options: {
 
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       if (areValidationErrors(req, res)) return
-      if (!await doesAccountHandleExist({ handle: req.params.handle, req, res, checkIsLocal, checkManage })) return
+      if (!await doesAccountHandleExist({ handle: req.params.handle, req, res, checkIsLocal, checkCanManage })) return
 
-      if (options.checkManage) {
+      if (checkCanManage) {
         const user = res.locals.oauth.token.User
 
-        if (!checkUserCanManageAccount({ account: res.locals.account, user, req, res, specialRight: UserRight.MANAGE_USERS })) {
+        if (!checkCanManageAccount({ account: res.locals.account, user, req, res, specialRight: UserRight.MANAGE_USERS })) {
           return false
         }
       }

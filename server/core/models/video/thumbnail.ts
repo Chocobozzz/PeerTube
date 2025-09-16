@@ -192,7 +192,7 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
     const staticPath = ThumbnailModel.types[this.type].staticPath + this.filename
 
     // FIXME: typings
-    if ((videoOrPlaylist as MVideo).isOwned()) return WEBSERVER.URL + staticPath
+    if ((videoOrPlaylist as MVideo).isLocal()) return WEBSERVER.URL + staticPath
 
     return this.fileUrl
   }
@@ -223,7 +223,7 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
     this.previousThumbnailFilename = undefined
   }
 
-  isOwned () {
+  isLocal () {
     return !this.fileUrl
   }
 

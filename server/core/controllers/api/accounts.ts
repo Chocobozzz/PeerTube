@@ -54,13 +54,13 @@ accountsRouter.get(
 
 accountsRouter.get(
   '/:handle',
-  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkManage: false })),
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkCanManage: false })),
   getAccount
 )
 
 accountsRouter.get(
   '/:handle/videos',
-  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkManage: false })),
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkCanManage: false })),
   paginationValidator,
   videosSortValidator,
   setDefaultVideosSort,
@@ -72,7 +72,7 @@ accountsRouter.get(
 
 accountsRouter.get(
   '/:handle/video-channels',
-  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkManage: false })),
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkCanManage: false })),
   videoChannelStatsValidator,
   paginationValidator,
   videoChannelsSortValidator,
@@ -84,7 +84,7 @@ accountsRouter.get(
 accountsRouter.get(
   '/:handle/video-playlists',
   optionalAuthenticate,
-  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkManage: false })),
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkCanManage: false })),
   paginationValidator,
   videoPlaylistsSortValidator,
   setDefaultSort,
@@ -97,7 +97,7 @@ accountsRouter.get(
 accountsRouter.get(
   '/:handle/video-channel-syncs',
   authenticate,
-  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkManage: true })),
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkCanManage: true })),
   paginationValidator,
   videoChannelSyncsSortValidator,
   setDefaultSort,
@@ -108,7 +108,7 @@ accountsRouter.get(
 accountsRouter.get(
   '/:handle/ratings',
   authenticate,
-  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkManage: true })),
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkCanManage: true })),
   paginationValidator,
   videoRatesSortValidator,
   setDefaultSort,
@@ -120,7 +120,7 @@ accountsRouter.get(
 accountsRouter.get(
   '/:handle/followers',
   authenticate,
-  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkManage: true })),
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkCanManage: true })),
   paginationValidator,
   accountsFollowersSortValidator,
   setDefaultSort,

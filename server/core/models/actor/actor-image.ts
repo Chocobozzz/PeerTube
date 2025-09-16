@@ -190,7 +190,7 @@ export class ActorImageModel extends SequelizeModel<ActorImageModel> {
     return remove(imagePath)
   }
 
-  isOwned () {
+  isLocal () {
     return !this.fileUrl
   }
 

@@ -678,7 +678,7 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     return this.url + '#main-key'
   }
 
-  isOwned () {
+  isLocal () {
     return this.serverId === null
   }
 
@@ -733,7 +733,7 @@ export class ActorModel extends SequelizeModel<ActorModel> {
   }
 
   isOutdated () {
-    if (this.isOwned()) return false
+    if (this.isLocal()) return false
 
     return isOutdated(this, ACTIVITY_PUB.ACTOR_REFRESH_INTERVAL)
   }

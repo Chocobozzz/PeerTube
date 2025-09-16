@@ -14,17 +14,17 @@ import { ActorFollowModel } from '@server/models/actor/actor-follow.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { MChannelBannerAccountDefault } from '@server/types/models/index.js'
 import express from 'express'
-import { auditLoggerFactory, getAuditIdFromRes, VideoChannelAuditView } from '../../helpers/audit-logger.js'
-import { resetSequelizeInstance } from '../../helpers/database-utils.js'
-import { buildNSFWFilters, createReqFiles, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils.js'
-import { logger } from '../../helpers/logger.js'
-import { getFormattedObjects } from '../../helpers/utils.js'
-import { MIMETYPES } from '../../initializers/constants.js'
-import { sequelizeTypescript } from '../../initializers/database.js'
-import { sendUpdateActor } from '../../lib/activitypub/send/index.js'
-import { JobQueue } from '../../lib/job-queue/index.js'
-import { deleteLocalActorImageFile, updateLocalActorImageFiles } from '../../lib/local-actor.js'
-import { createLocalVideoChannelWithoutKeys, federateAllVideosOfChannel } from '../../lib/video-channel.js'
+import { auditLoggerFactory, getAuditIdFromRes, VideoChannelAuditView } from '../../../helpers/audit-logger.js'
+import { resetSequelizeInstance } from '../../../helpers/database-utils.js'
+import { buildNSFWFilters, createReqFiles, getCountVideos, isUserAbleToSearchRemoteURI } from '../../../helpers/express-utils.js'
+import { logger } from '../../../helpers/logger.js'
+import { getFormattedObjects } from '../../../helpers/utils.js'
+import { MIMETYPES } from '../../../initializers/constants.js'
+import { sequelizeTypescript } from '../../../initializers/database.js'
+import { sendUpdateActor } from '../../../lib/activitypub/send/index.js'
+import { JobQueue } from '../../../lib/job-queue/index.js'
+import { deleteLocalActorImageFile, updateLocalActorImageFiles } from '../../../lib/local-actor.js'
+import { createLocalVideoChannelWithoutKeys, federateAllVideosOfChannel } from '../../../lib/video-channel.js'
 import {
   apiRateLimiter,
   asyncMiddleware,
@@ -41,8 +41,8 @@ import {
   videoChannelsSortValidator,
   videoChannelsUpdateValidator,
   videoPlaylistsSortValidator
-} from '../../middlewares/index.js'
-import { updateAvatarValidator, updateBannerValidator } from '../../middlewares/validators/actor-image.js'
+} from '../../../middlewares/index.js'
+import { updateAvatarValidator, updateBannerValidator } from '../../../middlewares/validators/actor-image.js'
 import {
   ensureChannelOwnerCanUpload,
   videoChannelImportVideosValidator,
@@ -50,16 +50,17 @@ import {
   videoChannelsHandleValidatorFactory,
   videoChannelsListValidator,
   videosSortValidator
-} from '../../middlewares/validators/index.js'
+} from '../../../middlewares/validators/index.js'
 import {
   commonVideoPlaylistFiltersValidator,
   videoPlaylistsReorderInChannelValidator
-} from '../../middlewares/validators/videos/video-playlists.js'
-import { AccountModel } from '../../models/account/account.js'
-import { guessAdditionalAttributesFromQuery } from '../../models/video/formatter/index.js'
-import { VideoChannelModel } from '../../models/video/video-channel.js'
-import { VideoPlaylistModel } from '../../models/video/video-playlist.js'
-import { VideoModel } from '../../models/video/video.js'
+} from '../../../middlewares/validators/videos/video-playlists.js'
+import { AccountModel } from '../../../models/account/account.js'
+import { guessAdditionalAttributesFromQuery } from '../../../models/video/formatter/index.js'
+import { VideoChannelModel } from '../../../models/video/video-channel.js'
+import { VideoPlaylistModel } from '../../../models/video/video-playlist.js'
+import { VideoModel } from '../../../models/video/video.js'
+import { channelCollaborators } from './video-channel-collaborators.js'
 
 const auditLogger = auditLoggerFactory('channels')
 const reqAvatarFile = createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT)
@@ -68,6 +69,7 @@ const reqBannerFile = createReqFiles([ 'bannerfile' ], MIMETYPES.IMAGE.MIMETYPE_
 const videoChannelRouter = express.Router()
 
 videoChannelRouter.use(apiRateLimiter)
+videoChannelRouter.use(channelCollaborators)
 
 videoChannelRouter.get(
   '/',
@@ -85,7 +87,7 @@ videoChannelRouter.post(
   '/:handle/avatar/pick',
   authenticate,
   reqAvatarFile,
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: true })),
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: true, checkIsOwner: false })),
   updateAvatarValidator,
   asyncMiddleware(updateVideoChannelAvatar)
 )
@@ -94,7 +96,7 @@ videoChannelRouter.post(
   '/:handle/banner/pick',
   authenticate,
   reqBannerFile,
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: true })),
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: true, checkIsOwner: false })),
   updateBannerValidator,
   asyncMiddleware(updateVideoChannelBanner)
 )
@@ -102,21 +104,21 @@ videoChannelRouter.post(
 videoChannelRouter.delete(
   '/:handle/avatar',
   authenticate,
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: true })),
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: true, checkIsOwner: false })),
   asyncMiddleware(deleteVideoChannelAvatar)
 )
 
 videoChannelRouter.delete(
   '/:handle/banner',
   authenticate,
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: true })),
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: true, checkIsOwner: false })),
   asyncMiddleware(deleteVideoChannelBanner)
 )
 
 videoChannelRouter.put(
   '/:handle',
   authenticate,
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: true })),
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: true, checkIsOwner: false })),
   videoChannelsUpdateValidator,
   asyncRetryTransactionMiddleware(updateVideoChannel)
 )
@@ -124,14 +126,14 @@ videoChannelRouter.put(
 videoChannelRouter.delete(
   '/:handle',
   authenticate,
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: true })),
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: true, checkIsOwner: true })),
   asyncMiddleware(videoChannelsRemoveValidator),
   asyncRetryTransactionMiddleware(removeVideoChannel)
 )
 
 videoChannelRouter.get(
   '/:handle',
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkManage: false })),
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
   asyncMiddleware(getVideoChannel)
 )
 
@@ -140,7 +142,7 @@ videoChannelRouter.get(
 videoChannelRouter.get(
   '/:handle/video-playlists',
   optionalAuthenticate,
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkManage: false })),
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
   paginationValidator,
   videoPlaylistsSortValidator,
   setDefaultSort,
@@ -152,7 +154,7 @@ videoChannelRouter.get(
 videoChannelRouter.post(
   '/:handle/video-playlists/reorder',
   authenticate,
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: true })),
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: true, checkIsOwner: false })),
   asyncMiddleware(videoPlaylistsReorderInChannelValidator),
   asyncRetryTransactionMiddleware(reorderPlaylistsInChannel)
 )
@@ -161,7 +163,7 @@ videoChannelRouter.post(
 
 videoChannelRouter.get(
   '/:handle/videos',
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkManage: false })),
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
   paginationValidator,
   videosSortValidator,
   setDefaultVideosSort,
@@ -174,7 +176,7 @@ videoChannelRouter.get(
 videoChannelRouter.get(
   '/:handle/followers',
   authenticate,
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkManage: true })),
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: true, checkIsOwner: false })),
   paginationValidator,
   videoChannelsFollowersSortValidator,
   setDefaultSort,
@@ -185,7 +187,7 @@ videoChannelRouter.get(
 videoChannelRouter.post(
   '/:handle/import-videos',
   authenticate,
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: true })),
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: true, checkIsOwner: false })),
   asyncMiddleware(videoChannelImportVideosValidator),
   asyncMiddleware(ensureChannelOwnerCanUpload),
   asyncMiddleware(importVideosInChannel)

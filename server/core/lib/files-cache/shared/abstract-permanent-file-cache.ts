@@ -12,13 +12,13 @@ type ImageModel = {
   filename: string
   onDisk: boolean
 
-  isOwned (): boolean
-  getPath (): string
+  isLocal(): boolean
+  getPath(): string
 
-  save (): Promise<Model>
+  save(): Promise<Model>
 }
 
-export abstract class AbstractPermanentFileCache <M extends ImageModel> {
+export abstract class AbstractPermanentFileCache<M extends ImageModel> {
   // Unsafe because it can return paths that do not exist anymore
   private readonly filenameToPathUnsafeCache = new LRUCache<string, string>({
     max: LRU_CACHE.FILENAME_TO_PATH_PERMANENT_FILE_CACHE.MAX_SIZE
@@ -28,7 +28,6 @@ export abstract class AbstractPermanentFileCache <M extends ImageModel> {
   protected abstract loadModel (filename: string): Promise<M>
 
   constructor (private readonly directory: string) {
-
   }
 
   async lazyServe (options: {
@@ -102,7 +101,7 @@ export abstract class AbstractPermanentFileCache <M extends ImageModel> {
     const { err, image, filename, next } = options
 
     // It seems this actor image is not on the disk anymore
-    if (err.status === HttpStatusCode.NOT_FOUND_404 && !image.isOwned()) {
+    if (err.status === HttpStatusCode.NOT_FOUND_404 && !image.isLocal()) {
       logger.error('Cannot lazy serve image %s.', filename, { err })
 
       this.filenameToPathUnsafeCache.delete(filename)

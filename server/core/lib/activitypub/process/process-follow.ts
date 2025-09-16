@@ -38,7 +38,7 @@ async function processFollow (byActor: MActorSignature, activityId: string, targ
     const targetActor = await ActorModel.loadByUrlAndPopulateAccountAndChannel(targetActorURL, t)
 
     if (!targetActor) throw new Error('Unknown actor')
-    if (targetActor.isOwned() === false) throw new Error('This is not a local actor.')
+    if (targetActor.isLocal() === false) throw new Error('This is not a local actor.')
 
     if (await rejectIfInstanceFollowDisabled(byActor, activityId, targetActor)) return { actorFollow: undefined }
     if (await rejectIfMuted(byActor, activityId, targetActor)) return { actorFollow: undefined }

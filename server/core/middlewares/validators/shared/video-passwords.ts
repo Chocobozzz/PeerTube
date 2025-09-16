@@ -1,22 +1,24 @@
-import express from 'express'
-import { HttpStatusCode, UserRight, VideoPrivacy } from '@peertube/peertube-models'
 import { forceNumber } from '@peertube/peertube-core-utils'
-import { VideoPasswordModel } from '@server/models/video/video-password.js'
-import { header } from 'express-validator'
+import { HttpStatusCode, UserRight, VideoPrivacy } from '@peertube/peertube-models'
 import { getVideoWithAttributes } from '@server/helpers/video.js'
+import { VideoPasswordModel } from '@server/models/video/video-password.js'
+import { MUserAccountId, MVideoAccountLight } from '@server/types/models/index.js'
+import express from 'express'
+import { header } from 'express-validator'
+import { checkCanManageVideo } from './videos.js'
 
-function isValidVideoPasswordHeader () {
+export function isValidVideoPasswordHeader () {
   return header('x-peertube-video-password')
     .optional()
     .isString()
 }
 
-function checkVideoIsPasswordProtected (res: express.Response) {
+export function checkVideoIsPasswordProtected (req: express.Request, res: express.Response) {
   const video = getVideoWithAttributes(res)
   if (video.privacy !== VideoPrivacy.PASSWORD_PROTECTED) {
     res.fail({
       status: HttpStatusCode.BAD_REQUEST_400,
-      message: 'Video is not password protected'
+      message: req.t('Video is not password protected')
     })
     return false
   }
@@ -24,15 +26,21 @@ function checkVideoIsPasswordProtected (res: express.Response) {
   return true
 }
 
-async function doesVideoPasswordExist (idArg: number | string, res: express.Response) {
+export async function doesVideoPasswordExist (options: {
+  id: number | string
+  req: express.Request
+  res: express.Response
+}) {
+  const { req, res } = options
+
   const video = getVideoWithAttributes(res)
-  const id = forceNumber(idArg)
+  const id = forceNumber(options.id)
   const videoPassword = await VideoPasswordModel.loadByIdAndVideo({ id, videoId: video.id })
 
   if (!videoPassword) {
     res.fail({
       status: HttpStatusCode.NOT_FOUND_404,
-      message: 'Video password not found'
+      message: req.t('Video password not found')
     })
     return false
   }
@@ -42,39 +50,23 @@ async function doesVideoPasswordExist (idArg: number | string, res: express.Resp
   return true
 }
 
-async function isVideoPasswordDeletable (res: express.Response) {
-  const user = res.locals.oauth.token.User
-  const userAccount = user.Account
-  const video = res.locals.videoAll
-
-  // Check if the user who did the request is able to delete the video passwords
-  if (
-    user.hasRight(UserRight.UPDATE_ANY_VIDEO) === false && // Not a moderator
-    video.VideoChannel.accountId !== userAccount.id // Not the video owner
-  ) {
-    res.fail({
-      status: HttpStatusCode.FORBIDDEN_403,
-      message: 'Cannot remove passwords of another user\'s video'
-    })
-    return false
-  }
+export async function checkCanDeleteVideoPassword (options: {
+  user: MUserAccountId
+  video: MVideoAccountLight
+  req: express.Request
+  res: express.Response
+}) {
+  const { user, video, req, res } = options
 
   const passwordCount = await VideoPasswordModel.countByVideoId(video.id)
 
   if (passwordCount <= 1) {
     res.fail({
       status: HttpStatusCode.BAD_REQUEST_400,
-      message: 'Cannot delete the last password of the protected video'
+      message: req.t('Cannot delete the last password of the protected video')
     })
     return false
   }
 
-  return true
-}
-
-export {
-  isValidVideoPasswordHeader,
-  checkVideoIsPasswordProtected as isVideoPasswordProtected,
-  doesVideoPasswordExist,
-  isVideoPasswordDeletable
+  return checkCanManageVideo({ user, video, right: UserRight.UPDATE_ANY_VIDEO, req, res, checkIsLocal: true, checkIsOwner: false })
 }

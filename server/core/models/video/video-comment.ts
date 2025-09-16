@@ -686,10 +686,10 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
     return this.originCommentId || this.id
   }
 
-  isOwned () {
+  isLocal () {
     if (!this.Account) return false
 
-    return this.Account.isOwned()
+    return this.Account.isLocal()
   }
 
   markAsDeleted () {
@@ -703,7 +703,7 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
   }
 
   extractMentions () {
-    return extractMentions(this.text, this.isOwned())
+    return extractMentions(this.text, this.isLocal())
   }
 
   toFormattedJSON (this: MCommentFormattable) {
@@ -792,7 +792,7 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
     }
 
     let replyApproval = this.replyApproval
-    if (this.Video.isOwned() && !this.heldForReview) {
+    if (this.Video.isLocal() && !this.heldForReview) {
       replyApproval = getLocalApproveReplyActivityPubUrl(this.Video, this)
     }
 

@@ -29,7 +29,9 @@ export const videoChannelSyncValidator = [
     if (areValidationErrors(req, res)) return
 
     const body: VideoChannelSyncCreate = req.body
-    if (!await doesChannelIdExist({ id: body.videoChannelId, checkManage: true, checkIsLocal: true, req, res })) return
+    if (!await doesChannelIdExist({ id: body.videoChannelId, checkCanManage: true, checkIsOwner: false, checkIsLocal: true, req, res })) {
+      return
+    }
 
     const count = await VideoChannelSyncModel.countByAccount(res.locals.videoChannel.accountId)
     if (count >= CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.MAX_PER_USER) {
@@ -49,7 +51,16 @@ export const ensureSyncExists = [
     if (areValidationErrors(req, res)) return
 
     if (!await doesVideoChannelSyncIdExist(+req.params.id, res)) return
-    if (!await doesChannelIdExist({ id: res.locals.videoChannelSync.videoChannelId, checkManage: true, checkIsLocal: true, req, res })) {
+    if (
+      !await doesChannelIdExist({
+        id: res.locals.videoChannelSync.videoChannelId,
+        checkCanManage: true,
+        checkIsOwner: false,
+        checkIsLocal: true,
+        req,
+        res
+      })
+    ) {
       return
     }
 

@@ -55,7 +55,7 @@ async function processDeleteActivity (options: APProcessorOptions<ActivityDelete
   {
     const videoInstance = await VideoModel.loadByUrlAndPopulateAccountAndFiles(objectUrl)
     if (videoInstance) {
-      if (videoInstance.isOwned()) throw new Error(`Remote instance cannot delete owned video ${videoInstance.url}.`)
+      if (videoInstance.isLocal()) throw new Error(`Remote instance cannot delete owned video ${videoInstance.url}.`)
 
       return retryTransactionWrapper(processDeleteVideo, byActor, videoInstance)
     }
@@ -64,7 +64,7 @@ async function processDeleteActivity (options: APProcessorOptions<ActivityDelete
   {
     const videoPlaylist = await VideoPlaylistModel.loadByUrlAndPopulateAccount(objectUrl)
     if (videoPlaylist) {
-      if (videoPlaylist.isOwned()) throw new Error(`Remote instance cannot delete owned playlist ${videoPlaylist.url}.`)
+      if (videoPlaylist.isLocal()) throw new Error(`Remote instance cannot delete owned playlist ${videoPlaylist.url}.`)
 
       return retryTransactionWrapper(processDeleteVideoPlaylist, byActor, videoPlaylist)
     }
@@ -144,7 +144,7 @@ function processDeleteVideoComment (byActor: MActorSignature, videoComment: MCom
 
     await videoComment.save({ transaction: t })
 
-    if (videoComment.Video.isOwned()) {
+    if (videoComment.Video.isLocal()) {
       // Don't resend the activity to the sender
       const exceptions = [ byActor ]
       await forwardVideoRelatedActivity(activity, t, exceptions, videoComment.Video)

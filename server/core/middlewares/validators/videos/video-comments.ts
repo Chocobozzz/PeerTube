@@ -2,6 +2,7 @@ import { arrayify } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, UserRight, VideoCommentPolicy } from '@peertube/peertube-models'
 import { isStringArray } from '@server/helpers/custom-validators/search.js'
 import { canVideoBeFederated } from '@server/lib/activitypub/videos/federate.js'
+import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { MUserAccountUrl } from '@server/types/models/index.js'
 import express from 'express'
 import { body, param, query } from 'express-validator'
@@ -21,9 +22,10 @@ import { Hooks } from '../../../lib/plugins/hooks.js'
 import { MCommentOwnerVideoReply, MVideo, MVideoFullLight } from '../../../types/models/video/index.js'
 import {
   areValidationErrors,
+  canManageChannel,
+  checkCanManageAccount,
+  checkCanManageVideo,
   checkCanSeeVideo,
-  checkUserCanManageAccount,
-  checkUserCanManageVideo,
   doesChannelIdExist,
   doesVideoCommentExist,
   doesVideoCommentThreadExist,
@@ -53,7 +55,7 @@ export const listAllVideoCommentsForAdminValidator = [
     if (req.query.videoId && !await doesVideoExist(req.query.videoId, res, 'unsafe-only-immutable-attributes')) return
     if (
       req.query.videoChannelId &&
-      !await doesChannelIdExist({ id: req.query.videoChannelId, checkManage: true, checkIsLocal: true, req, res })
+      !await doesChannelIdExist({ id: req.query.videoChannelId, checkCanManage: true, checkIsOwner: false, checkIsLocal: true, req, res })
     ) return
 
     return next()
@@ -75,16 +77,19 @@ export const listCommentsOnUserVideosValidator = [
     if (req.query.videoId && !await doesVideoExist(req.query.videoId, res, 'all')) return
     if (
       req.query.videoChannelId &&
-      !await doesChannelIdExist({ id: req.query.videoChannelId, checkManage: true, checkIsLocal: true, req, res })
+      !await doesChannelIdExist({ id: req.query.videoChannelId, checkCanManage: true, checkIsLocal: true, checkIsOwner: false, req, res })
     ) return
 
     const user = res.locals.oauth.token.User
 
     const video = res.locals.videoAll
-    if (video && !checkUserCanManageVideo({ user, video, right: UserRight.SEE_ALL_COMMENTS, req, res })) return
+    if (
+      video &&
+      !await checkCanManageVideo({ user, video, right: UserRight.SEE_ALL_COMMENTS, req, res, checkIsLocal: true, checkIsOwner: false })
+    ) return
 
     const channel = res.locals.videoChannel
-    if (channel && !checkUserCanManageAccount({ account: channel.Account, user, req, res, specialRight: UserRight.SEE_ALL_COMMENTS })) {
+    if (channel && !checkCanManageAccount({ account: channel.Account, user, req, res, specialRight: UserRight.SEE_ALL_COMMENTS })) {
       return
     }
 
@@ -197,7 +202,9 @@ export const removeVideoCommentValidator = [
     if (!await doesVideoExist(req.params.videoId, res)) return
     if (!await doesVideoCommentExist(req.params.commentId, res.locals.videoAll, res)) return
 
-    if (!checkUserCanDeleteVideoComment(res.locals.oauth.token.User, res.locals.videoCommentFull, res)) return
+    if (!await checkCanDeleteVideoComment({ user: res.locals.oauth.token.User, videoComment: res.locals.videoCommentFull, req, res })) {
+      return
+    }
 
     return next()
   }
@@ -214,7 +221,9 @@ export const approveVideoCommentValidator = [
     if (!await doesVideoExist(req.params.videoId, res)) return
     if (!await doesVideoCommentExist(req.params.commentId, res.locals.videoAll, res)) return
 
-    if (!checkUserCanApproveVideoComment(res.locals.oauth.token.User, res.locals.videoCommentFull, res)) return
+    if (!await checkCanApproveVideoComment({ user: res.locals.oauth.token.User, videoComment: res.locals.videoCommentFull, req, res })) {
+      return
+    }
 
     return next()
   }
@@ -236,39 +245,39 @@ function isVideoCommentsEnabled (video: MVideo, res: express.Response) {
   return true
 }
 
-function checkUserCanDeleteVideoComment (user: MUserAccountUrl, videoComment: MCommentOwnerVideoReply, res: express.Response) {
+function checkCanDeleteVideoComment (options: {
+  user: MUserAccountUrl
+  videoComment: MCommentOwnerVideoReply
+  req: express.Request
+  res: express.Response
+}): Promise<boolean> {
+  const { videoComment, req, res } = options
+
   if (videoComment.isDeleted()) {
     res.fail({
       status: HttpStatusCode.CONFLICT_409,
-      message: 'This comment is already deleted'
+      message: req.t('This comment is already deleted')
     })
-    return false
+    return Promise.resolve(false)
   }
 
-  const userAccount = user.Account
-
-  if (
-    user.hasRight(UserRight.MANAGE_ANY_VIDEO_COMMENT) === false && // Not a moderator
-    videoComment.accountId !== userAccount.id && // Not the comment owner
-    videoComment.Video.VideoChannel.accountId !== userAccount.id // Not the video owner
-  ) {
-    res.fail({
-      status: HttpStatusCode.FORBIDDEN_403,
-      message: 'Cannot remove video comment of another user'
-    })
-    return false
-  }
-
-  return true
+  return checkCanManageComment(options)
 }
 
-function checkUserCanApproveVideoComment (user: MUserAccountUrl, videoComment: MCommentOwnerVideoReply, res: express.Response) {
+function checkCanApproveVideoComment (options: {
+  user: MUserAccountUrl
+  videoComment: MCommentOwnerVideoReply
+  req: express.Request
+  res: express.Response
+}): Promise<boolean> {
+  const { user, videoComment, req, res } = options
+
   if (videoComment.isDeleted()) {
     res.fail({
       status: HttpStatusCode.CONFLICT_409,
       message: 'This comment is deleted'
     })
-    return false
+    return Promise.resolve(false)
   }
 
   if (videoComment.heldForReview !== true) {
@@ -276,23 +285,35 @@ function checkUserCanApproveVideoComment (user: MUserAccountUrl, videoComment: M
       status: HttpStatusCode.BAD_REQUEST_400,
       message: 'This comment is not held for review'
     })
-    return false
+    return Promise.resolve(false)
   }
+
+  return checkCanManageComment({ user, videoComment, req, res })
+}
+
+async function checkCanManageComment (options: {
+  user: MUserAccountUrl
+  videoComment: MCommentOwnerVideoReply
+  req: express.Request
+  res: express.Response
+}) {
+  const { user, videoComment, req, res } = options
 
   const userAccount = user.Account
 
-  if (
-    user.hasRight(UserRight.MANAGE_ANY_VIDEO_COMMENT) === false && // Not a moderator
-    videoComment.Video.VideoChannel.accountId !== userAccount.id // Not the video owner
-  ) {
-    res.fail({
-      status: HttpStatusCode.FORBIDDEN_403,
-      message: 'Cannot approve video comment of another user'
-    })
-    return false
-  }
+  if (user.hasRight(UserRight.MANAGE_ANY_VIDEO_COMMENT)) return true
+  // Owner of the comment
+  if (videoComment.accountId !== userAccount.id) return true
 
-  return true
+  const channel = await VideoChannelModel.loadAndPopulateAccount(videoComment.Video.VideoChannel.id)
+  if (await canManageChannel({ channel, user, req, res, checkCanManage: true, checkIsOwner: false })) return true
+
+  res.fail({
+    status: HttpStatusCode.FORBIDDEN_403,
+    message: req.t('User does not have the permission to delete this comment')
+  })
+
+  return false
 }
 
 async function isVideoCommentAccepted (req: express.Request, res: express.Response, video: MVideoFullLight, isReply: boolean) {

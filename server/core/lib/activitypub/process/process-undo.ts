@@ -68,7 +68,7 @@ async function processUndoLike (byActor: MActorSignature, activity: ActivityUndo
   const likeActivity = activity.object
 
   const { video: onlyVideo } = await maybeGetOrCreateAPVideo({ videoObject: likeActivity.object })
-  if (!onlyVideo?.isOwned()) return
+  if (!onlyVideo?.isLocal()) return
 
   return sequelizeTypescript.transaction(async t => {
     if (!byActor.Account) throw new Error('Unknown account ' + byActor.url)
@@ -92,7 +92,7 @@ async function processUndoDislike (byActor: MActorSignature, activity: ActivityU
   const dislikeActivity = activity.object
 
   const { video: onlyVideo } = await maybeGetOrCreateAPVideo({ videoObject: dislikeActivity.object })
-  if (!onlyVideo?.isOwned()) return
+  if (!onlyVideo?.isLocal()) return
 
   return sequelizeTypescript.transaction(async t => {
     if (!byActor.Account) throw new Error('Unknown account ' + byActor.url)
@@ -132,7 +132,7 @@ async function processUndoCacheFile (
 
     await cacheFile.destroy({ transaction: t })
 
-    if (video.isOwned()) {
+    if (video.isLocal()) {
       // Don't resend the activity to the sender
       const exceptions = [ byActor ]
 
@@ -153,7 +153,7 @@ function processUndoAnnounce (byActor: MActorSignature, announceActivity: Activi
 
     await share.destroy({ transaction: t })
 
-    if (share.Video.isOwned()) {
+    if (share.Video.isLocal()) {
       // Don't resend the activity to the sender
       const exceptions = [ byActor ]
 

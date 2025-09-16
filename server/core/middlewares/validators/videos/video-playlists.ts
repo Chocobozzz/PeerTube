@@ -8,6 +8,7 @@ import {
   VideoPlaylistType,
   VideoPlaylistUpdate
 } from '@peertube/peertube-models'
+import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { ExpressPromiseHandler } from '@server/types/express-handler.js'
 import { MUserAccountId } from '@server/types/models/index.js'
@@ -34,11 +35,13 @@ import { isVideoImageValid } from '../../../helpers/custom-validators/videos.js'
 import { cleanUpReqFiles } from '../../../helpers/express-utils.js'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants.js'
 import { VideoPlaylistElementModel } from '../../../models/video/video-playlist-element.js'
-import { MVideoPlaylist } from '../../../types/models/video/video-playlist.js'
+import { MVideoPlaylistFullSummary } from '../../../types/models/video/video-playlist.js'
 import { authenticatePromise } from '../../auth.js'
 import {
   areValidationErrors,
-  doesVideoChannelOfAccountExist,
+  canManageChannel,
+  checkCanManageAccount,
+  doesChannelIdExist,
   doesVideoExist,
   doesVideoPlaylistExist,
   isValidPlaylistIdParam,
@@ -53,7 +56,10 @@ export const videoPlaylistsAddValidator = getCommonPlaylistEditAttributes().conc
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
 
     const body: VideoPlaylistCreate = req.body
-    if (body.videoChannelId && !await doesVideoChannelOfAccountExist(body.videoChannelId, res.locals.oauth.token.User, res)) {
+    if (
+      body.videoChannelId &&
+      !await doesChannelIdExist({ id: body.videoChannelId, req, res, checkCanManage: true, checkIsLocal: true, checkIsOwner: false })
+    ) {
       return cleanUpReqFiles(req)
     }
 
@@ -84,7 +90,15 @@ export const videoPlaylistsUpdateValidator = getCommonPlaylistEditAttributes().c
 
     const videoPlaylist = getPlaylist(res)
 
-    if (!checkUserCanManageVideoPlaylist(res.locals.oauth.token.User, videoPlaylist, UserRight.REMOVE_ANY_VIDEO_PLAYLIST, res)) {
+    if (
+      !await checkCanManagePlaylist({
+        user: res.locals.oauth.token.User,
+        videoPlaylist,
+        right: UserRight.REMOVE_ANY_VIDEO_PLAYLIST,
+        req,
+        res
+      })
+    ) {
       return cleanUpReqFiles(req)
     }
 
@@ -109,7 +123,10 @@ export const videoPlaylistsUpdateValidator = getCommonPlaylistEditAttributes().c
       return res.fail({ message: 'Cannot update a watch later playlist.' })
     }
 
-    if (body.videoChannelId && !await doesVideoChannelOfAccountExist(body.videoChannelId, res.locals.oauth.token.User, res)) {
+    if (
+      body.videoChannelId &&
+      !await doesChannelIdExist({ id: body.videoChannelId, req, res, checkCanManage: true, checkIsLocal: true, checkIsOwner: false })
+    ) {
       return cleanUpReqFiles(req)
     }
 
@@ -130,7 +147,15 @@ export const videoPlaylistsDeleteValidator = [
       return res.fail({ message: 'Cannot delete a watch later playlist.' })
     }
 
-    if (!checkUserCanManageVideoPlaylist(res.locals.oauth.token.User, videoPlaylist, UserRight.REMOVE_ANY_VIDEO_PLAYLIST, res)) {
+    if (
+      !await checkCanManagePlaylist({
+        user: res.locals.oauth.token.User,
+        videoPlaylist,
+        right: UserRight.REMOVE_ANY_VIDEO_PLAYLIST,
+        req,
+        res
+      })
+    ) {
       return
     }
 
@@ -215,7 +240,15 @@ export const videoPlaylistsAddVideoValidator = [
 
     const videoPlaylist = getPlaylist(res)
 
-    if (!checkUserCanManageVideoPlaylist(res.locals.oauth.token.User, videoPlaylist, UserRight.UPDATE_ANY_VIDEO_PLAYLIST, res)) {
+    if (
+      !await checkCanManagePlaylist({
+        user: res.locals.oauth.token.User,
+        videoPlaylist,
+        right: UserRight.UPDATE_ANY_VIDEO_PLAYLIST,
+        req,
+        res
+      })
+    ) {
       return
     }
 
@@ -225,9 +258,11 @@ export const videoPlaylistsAddVideoValidator = [
 
 export const videoPlaylistsUpdateOrRemoveVideoValidator = [
   isValidPlaylistIdParam('playlistId'),
+
   param('playlistElementId')
     .customSanitizer(toCompleteUUID)
     .custom(isIdValid).withMessage('Should have an element id/uuid/short uuid'),
+
   body('startTimestamp')
     .optional()
     .custom(isVideoPlaylistTimestampValid),
@@ -252,7 +287,15 @@ export const videoPlaylistsUpdateOrRemoveVideoValidator = [
     }
     res.locals.videoPlaylistElement = videoPlaylistElement
 
-    if (!checkUserCanManageVideoPlaylist(res.locals.oauth.token.User, videoPlaylist, UserRight.UPDATE_ANY_VIDEO_PLAYLIST, res)) return
+    if (
+      !await checkCanManagePlaylist({
+        user: res.locals.oauth.token.User,
+        videoPlaylist,
+        right: UserRight.UPDATE_ANY_VIDEO_PLAYLIST,
+        req,
+        res
+      })
+    ) return
 
     return next()
   }
@@ -339,7 +382,15 @@ export const videoPlaylistsReorderVideosValidator = [
     if (!await doesVideoPlaylistExist(req.params.playlistId, res, 'all')) return
 
     const videoPlaylist = getPlaylist(res)
-    if (!checkUserCanManageVideoPlaylist(res.locals.oauth.token.User, videoPlaylist, UserRight.UPDATE_ANY_VIDEO_PLAYLIST, res)) return
+    if (
+      !await checkCanManagePlaylist({
+        user: res.locals.oauth.token.User,
+        videoPlaylist,
+        right: UserRight.UPDATE_ANY_VIDEO_PLAYLIST,
+        req,
+        res
+      })
+    ) return
 
     const nextPosition = await VideoPlaylistElementModel.getNextPositionOf(videoPlaylist.id)
     const startPosition: number = req.body.startPosition
@@ -385,6 +436,8 @@ export const doVideosInPlaylistExistValidator = [
 ]
 
 // ---------------------------------------------------------------------------
+// Private
+// ---------------------------------------------------------------------------
 
 function getCommonPlaylistEditAttributes () {
   return [
@@ -409,32 +462,49 @@ function getCommonPlaylistEditAttributes () {
   ] as (ValidationChain | ExpressPromiseHandler)[]
 }
 
-function checkUserCanManageVideoPlaylist (
-  user: MUserAccountId,
-  videoPlaylist: MVideoPlaylist,
-  right: UserRightType,
+async function checkCanManagePlaylist (options: {
+  user: MUserAccountId
+  videoPlaylist: MVideoPlaylistFullSummary
+  right: UserRightType
+  req: express.Request
   res: express.Response
-) {
-  if (videoPlaylist.isOwned() === false) {
+}) {
+  const { user, videoPlaylist, right, res, req } = options
+
+  if (videoPlaylist.isLocal() === false) {
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
-      message: 'Cannot manage video playlist of another server.'
+      message: req.t('Cannot manage video playlist of another server.')
     })
     return false
   }
 
-  // Check if the user can manage the video playlist
-  // The user can delete it if s/he is an admin
-  // Or if s/he is the video playlist's owner
-  if (user.hasRight(right) === false && videoPlaylist.ownerAccountId !== user.Account.id) {
-    res.fail({
-      status: HttpStatusCode.FORBIDDEN_403,
-      message: 'Cannot manage video playlist of another user'
-    })
-    return false
+  if (checkCanManageAccount({ user, account: videoPlaylist.OwnerAccount, specialRight: right, req, res })) return true
+
+  if (videoPlaylist.videoChannelId) {
+    const channel = await VideoChannelModel.loadAndPopulateAccount(videoPlaylist.videoChannelId)
+
+    if (
+      await canManageChannel({
+        channel,
+        user,
+        req,
+        res: null,
+        checkCanManage: true,
+        checkIsOwner: false,
+        specialRight: right
+      })
+    ) {
+      return true
+    }
   }
 
-  return true
+  res.fail({
+    status: HttpStatusCode.FORBIDDEN_403,
+    message: req.t('Cannot manage video playlist of another user')
+  })
+
+  return false
 }
 
 function getPlaylist (res: express.Response) {

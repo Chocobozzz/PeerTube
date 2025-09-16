@@ -24,7 +24,7 @@ export class FollowForUser extends AbstractNotification<MActorFollowFull> {
   }
 
   async isDisabled () {
-    if (this.payload.ActorFollowing.isOwned() === false) return true
+    if (this.payload.ActorFollowing.isLocal() === false) return true
 
     const followerAccount = this.actorFollow.ActorFollower.Account
     const followerAccountWithActor = Object.assign(followerAccount, { Actor: this.actorFollow.ActorFollower })

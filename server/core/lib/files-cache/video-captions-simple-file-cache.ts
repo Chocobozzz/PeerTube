@@ -21,8 +21,8 @@ class VideoCaptionsSimpleFileCache extends AbstractSimpleFileCache<string> {
     const videoCaption = await VideoCaptionModel.loadWithVideoByFilename(filename)
     if (!videoCaption) return undefined
 
-    if (videoCaption.isOwned()) {
-      return { isOwned: true, path: videoCaption.getFSFilePath() }
+    if (videoCaption.isLocal()) {
+      return { isLocal: true, path: videoCaption.getFSFilePath() }
     }
 
     return this.loadRemoteFile(filename)
@@ -33,7 +33,7 @@ class VideoCaptionsSimpleFileCache extends AbstractSimpleFileCache<string> {
     const videoCaption = await VideoCaptionModel.loadWithVideoByFilename(key)
     if (!videoCaption) return undefined
 
-    if (videoCaption.isOwned()) throw new Error('Cannot load remote caption of owned video.')
+    if (videoCaption.isLocal()) throw new Error('Cannot load remote caption of owned video.')
 
     // Used to fetch the path
     const video = await VideoModel.loadFull(videoCaption.videoId)
@@ -45,7 +45,7 @@ class VideoCaptionsSimpleFileCache extends AbstractSimpleFileCache<string> {
     try {
       await doRequestAndSaveToFile(remoteUrl, destPath)
 
-      return { isOwned: false, path: destPath }
+      return { isLocal: false, path: destPath }
     } catch (err) {
       logger.info('Cannot fetch remote caption file %s.', remoteUrl, { err })
 

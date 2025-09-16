@@ -12,7 +12,7 @@ export const bulkRemoveCommentsOfValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesAccountHandleExist({ handle: req.body.accountName, req, res, checkIsLocal: false, checkManage: false })) return
+    if (!await doesAccountHandleExist({ handle: req.body.accountName, req, res, checkIsLocal: false, checkCanManage: false })) return
 
     const user = res.locals.oauth.token.User
     const body = req.body as BulkRemoveCommentsOfBody

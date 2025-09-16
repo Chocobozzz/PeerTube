@@ -527,7 +527,7 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
   // ---------------------------------------------------------------------------
 
   getFileUrl (video: MVideo) {
-    if (video.isOwned()) {
+    if (video.isLocal()) {
       if (this.storage === FileStorage.OBJECT_STORAGE) {
         return this.getObjectStorageUrl(video)
       }
@@ -569,14 +569,14 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
       ? join(DOWNLOAD_PATHS.HLS_VIDEOS, `${video.uuid}-${this.resolution}-fragmented${this.extname}`)
       : join(DOWNLOAD_PATHS.WEB_VIDEOS, `${video.uuid}-${this.resolution}${this.extname}`)
 
-    if (video.isOwned()) return WEBSERVER.URL + path
+    if (video.isLocal()) return WEBSERVER.URL + path
 
     // FIXME: don't guess remote URL
     return buildRemoteUrl(video, path)
   }
 
   getRemoteTorrentUrl (video: MVideo) {
-    if (video.isOwned()) throw new Error(`Video ${video.url} is not a remote video`)
+    if (video.isLocal()) throw new Error(`Video ${video.url} is not a remote video`)
 
     return this.torrentUrl
   }

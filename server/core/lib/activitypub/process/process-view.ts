@@ -38,7 +38,7 @@ async function processCreateView (activity: ActivityView, byActor: MActorSignatu
     viewerResultCounter: getViewerResultCounter(activity)
   })
 
-  if (video.isOwned()) {
+  if (video.isLocal()) {
     // Forward the view but don't resend the activity to the sender
     const exceptions = [ byActor ]
     await forwardVideoRelatedActivity(activity, undefined, exceptions, video)

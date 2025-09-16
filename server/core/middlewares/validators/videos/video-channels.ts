@@ -81,9 +81,10 @@ export const videoChannelsRemoveValidator = [
 
 export const videoChannelsHandleValidatorFactory = (options: {
   checkIsLocal: boolean
-  checkManage: boolean
+  checkCanManage: boolean
+  checkIsOwner: boolean
 }) => {
-  const { checkIsLocal, checkManage } = options
+  const { checkIsLocal, checkCanManage, checkIsOwner } = options
 
   return [
     param('handle')
@@ -92,7 +93,7 @@ export const videoChannelsHandleValidatorFactory = (options: {
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       if (areValidationErrors(req, res)) return
 
-      if (!await doesChannelHandleExist({ handle: req.params.handle, checkManage, checkIsLocal, req, res })) return
+      if (!await doesChannelHandleExist({ handle: req.params.handle, checkCanManage, checkIsLocal, checkIsOwner, req, res })) return
 
       return next()
     }

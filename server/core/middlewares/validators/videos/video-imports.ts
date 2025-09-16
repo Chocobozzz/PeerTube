@@ -3,7 +3,7 @@ import { HttpStatusCode, UserRight, VideoImportCreate, VideoImportState } from '
 import { isResolvingToUnicastOnly } from '@server/helpers/dns.js'
 import { isPreImportVideoAccepted } from '@server/lib/moderation.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
-import { MUserAccountId, MVideoImport } from '@server/types/models/index.js'
+import { MUserAccountId, MVideoImportDefault } from '@server/types/models/index.js'
 import express from 'express'
 import { body, param, query } from 'express-validator'
 import { isIdValid, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
@@ -13,10 +13,10 @@ import { cleanUpReqFiles } from '../../../helpers/express-utils.js'
 import { logger } from '../../../helpers/logger.js'
 import { CONFIG } from '../../../initializers/config.js'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants.js'
-import { areValidationErrors, doesVideoChannelOfAccountExist, doesVideoImportExist } from '../shared/index.js'
+import { areValidationErrors, checkCanManageVideo, doesChannelIdExist, doesVideoImportExist } from '../shared/index.js'
 import { areErrorsInNSFW, getCommonVideoEditAttributes } from './videos.js'
 
-const videoImportAddValidator = getCommonVideoEditAttributes().concat([
+export const videoImportAddValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
     .customSanitizer(toIntOrNull)
     .custom(isIdValid),
@@ -43,7 +43,6 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
     .withMessage('Video passwords should be an array.'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const user = res.locals.oauth.token.User
     const torrentFile = req.files?.['torrentfile'] ? req.files['torrentfile'][0] : undefined
 
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
@@ -69,7 +68,9 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
       })
     }
 
-    if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
+    if (!await doesChannelIdExist({ id: req.body.channelId, req, res, checkCanManage: true, checkIsLocal: true, checkIsOwner: false })) {
+      return cleanUpReqFiles(req)
+    }
 
     // Check we have at least 1 required param
     if (!req.body.targetUrl && !req.body.magnetUri && !torrentFile) {
@@ -97,7 +98,7 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
   }
 ])
 
-const getMyVideoImportsValidator = [
+export const getMyVideoImportsValidator = [
   query('videoChannelSyncId')
     .optional()
     .custom(isIdValid),
@@ -109,7 +110,7 @@ const getMyVideoImportsValidator = [
   }
 ]
 
-const videoImportDeleteValidator = [
+export const videoImportDeleteValidator = [
   param('id')
     .custom(isIdValid),
 
@@ -117,7 +118,7 @@ const videoImportDeleteValidator = [
     if (areValidationErrors(req, res)) return
 
     if (!await doesVideoImportExist(parseInt(req.params.id), res)) return
-    if (!checkUserCanManageImport(res.locals.oauth.token.user, res.locals.videoImport, res)) return
+    if (!await checkCanManageImport({ user: res.locals.oauth.token.User, videoImport: res.locals.videoImport, req, res })) return
 
     if (res.locals.videoImport.state === VideoImportState.PENDING) {
       return res.fail({
@@ -130,7 +131,7 @@ const videoImportDeleteValidator = [
   }
 ]
 
-const videoImportCancelValidator = [
+export const videoImportCancelValidator = [
   param('id')
     .custom(isIdValid),
 
@@ -138,7 +139,7 @@ const videoImportCancelValidator = [
     if (areValidationErrors(req, res)) return
 
     if (!await doesVideoImportExist(forceNumber(req.params.id), res)) return
-    if (!checkUserCanManageImport(res.locals.oauth.token.user, res.locals.videoImport, res)) return
+    if (!await checkCanManageImport({ user: res.locals.oauth.token.User, videoImport: res.locals.videoImport, req, res })) return
 
     if (res.locals.videoImport.state !== VideoImportState.PENDING) {
       return res.fail({
@@ -152,14 +153,7 @@ const videoImportCancelValidator = [
 ]
 
 // ---------------------------------------------------------------------------
-
-export {
-  getMyVideoImportsValidator,
-  videoImportAddValidator,
-  videoImportCancelValidator,
-  videoImportDeleteValidator
-}
-
+// Private
 // ---------------------------------------------------------------------------
 
 async function isImportAccepted (req: express.Request, res: express.Response) {
@@ -192,14 +186,34 @@ async function isImportAccepted (req: express.Request, res: express.Response) {
   return true
 }
 
-function checkUserCanManageImport (user: MUserAccountId, videoImport: MVideoImport, res: express.Response) {
-  if (user.hasRight(UserRight.MANAGE_VIDEO_IMPORTS) === false && videoImport.userId !== user.id) {
-    res.fail({
-      status: HttpStatusCode.FORBIDDEN_403,
-      message: 'Cannot manage video import of another user'
+async function checkCanManageImport (options: {
+  user: MUserAccountId
+  videoImport: MVideoImportDefault
+  req: express.Request
+  res: express.Response
+}) {
+  const { user, videoImport, req, res } = options
+
+  if (user.hasRight(UserRight.MANAGE_VIDEO_IMPORTS) === false) return true
+  if (videoImport.userId === user.id) return true
+  if (
+    videoImport.Video &&
+    await checkCanManageVideo({
+      user,
+      video: videoImport.Video,
+      req,
+      res,
+      right: UserRight.MANAGE_VIDEO_IMPORTS,
+      checkIsLocal: true,
+      checkIsOwner: false
     })
-    return false
+  ) {
+    return true
   }
 
-  return true
+  res.fail({
+    status: HttpStatusCode.FORBIDDEN_403,
+    message: req.t('Cannot manage video import of another user')
+  })
+  return false
 }

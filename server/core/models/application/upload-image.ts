@@ -121,7 +121,7 @@ export class UploadImageModel extends SequelizeModel<UploadImageModel> {
     return remove(this.getPath())
   }
 
-  isOwned () {
+  isLocal () {
     return !this.fileUrl
   }
 }

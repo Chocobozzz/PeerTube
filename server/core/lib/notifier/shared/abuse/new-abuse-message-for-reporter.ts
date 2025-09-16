@@ -9,7 +9,7 @@ export class NewAbuseMessageForReporter extends AbstractNewAbuseMessage {
 
   async prepare () {
     // Only notify our users
-    if (this.abuse.ReporterAccount.isOwned() !== true) return
+    if (this.abuse.ReporterAccount.isLocal() !== true) return
 
     await this.loadMessageAccount()
 

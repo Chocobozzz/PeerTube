@@ -16,7 +16,9 @@ import { UserNotificationModel } from '@server/models/user/user-notification.js'
 import { UserRegistrationModel } from '@server/models/user/user-registration.js'
 import { UserVideoHistoryModel } from '@server/models/user/user-video-history.js'
 import { UserModel } from '@server/models/user/user.js'
+import { PlayerSettingModel } from '@server/models/video/player-setting.js'
 import { StoryboardModel } from '@server/models/video/storyboard.js'
+import { VideoChannelCollaboratorModel } from '@server/models/video/video-channel-collaborator.js'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync.js'
 import { VideoChapterModel } from '@server/models/video/video-chapter.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
@@ -69,7 +71,6 @@ import { VideoTagModel } from '../models/video/video-tag.js'
 import { VideoModel } from '../models/video/video.js'
 import { VideoViewModel } from '../models/view/video-view.js'
 import { CONFIG } from './config.js'
-import { PlayerSettingModel } from '@server/models/video/player-setting.js'
 
 pg.defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -191,7 +192,8 @@ export async function initDatabaseModels (silent: boolean) {
     AccountAutomaticTagPolicyModel,
     UploadImageModel,
     VideoLiveScheduleModel,
-    PlayerSettingModel
+    PlayerSettingModel,
+    VideoChannelCollaboratorModel
   ])
 
   // Check extensions exist in the database

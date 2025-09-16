@@ -267,7 +267,7 @@ export class AccountModel extends SequelizeModel<AccountModel> {
 
     await ActorFollowModel.removeFollowsOf(instance.Actor.id, options.transaction)
 
-    if (instance.isOwned()) {
+    if (instance.isLocal()) {
       return sendDeleteActor(instance.Actor, options.transaction)
     }
 
@@ -505,8 +505,8 @@ export class AccountModel extends SequelizeModel<AccountModel> {
     })
   }
 
-  isOwned () {
-    return this.Actor.isOwned()
+  isLocal () {
+    return this.Actor.isLocal()
   }
 
   isOutdated () {

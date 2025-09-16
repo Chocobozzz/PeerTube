@@ -98,7 +98,7 @@ export function checkVideoFileCanBeEdited (video: MVideo, res: express.Response)
   return true
 }
 
-export function checkVideoCanBeTranscribedOrTranscripted (video: MVideo, res: express.Response) {
+export function checkVideoCanBeTranscribed (video: MVideo, res: express.Response) {
   if (video.remote) {
     res.fail({
       status: HttpStatusCode.BAD_REQUEST_400,

@@ -1,16 +1,16 @@
 import { HttpStatusCode, UserRight, VideoChangeOwnershipAccept, VideoChangeOwnershipStatus, VideoState } from '@peertube/peertube-models'
 import { isIdValid } from '@server/helpers/custom-validators/misc.js'
-import { checkUserCanTerminateOwnershipChange } from '@server/helpers/custom-validators/video-ownership.js'
+import { checkCanTerminateOwnershipChange } from '@server/helpers/custom-validators/video-ownership.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { MVideoWithAllFiles } from '@server/types/models/index.js'
 import express from 'express'
 import { param } from 'express-validator'
 import {
   areValidationErrors,
-  checkUserCanManageVideo,
+  checkCanManageVideo,
   checkUserQuota,
   doesChangeVideoOwnershipExist,
-  doesVideoChannelOfAccountExist,
+  doesChannelIdExist,
   doesVideoExist,
   isValidVideoIdParam
 } from '../shared/index.js'
@@ -24,10 +24,12 @@ export const videosChangeOwnershipValidator = [
 
     // Check if the user who did the request is able to change the ownership of the video
     if (
-      !checkUserCanManageVideo({
+      !await checkCanManageVideo({
         user: res.locals.oauth.token.User,
         video: res.locals.videoAll,
         right: UserRight.CHANGE_VIDEO_OWNERSHIP,
+        checkIsOwner: true,
+        checkIsLocal: true,
         req,
         res
       })
@@ -53,7 +55,14 @@ export const videosTerminateChangeOwnershipValidator = [
     if (!await doesChangeVideoOwnershipExist(req.params.id, res)) return
 
     // Check if the user who did the request is able to change the ownership of the video
-    if (!checkUserCanTerminateOwnershipChange(res.locals.oauth.token.User, res.locals.videoChangeOwnership, res)) return
+    if (
+      !checkCanTerminateOwnershipChange({
+        user: res.locals.oauth.token.User,
+        videoChangeOwnership: res.locals.videoChangeOwnership,
+        req,
+        res
+      })
+    ) return
 
     const videoChangeOwnership = res.locals.videoChangeOwnership
 
@@ -72,7 +81,7 @@ export const videosTerminateChangeOwnershipValidator = [
 export const videosAcceptChangeOwnershipValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const body = req.body as VideoChangeOwnershipAccept
-    if (!await doesVideoChannelOfAccountExist(body.channelId, res.locals.oauth.token.User, res)) return
+    if (!await doesChannelIdExist({ id: body.channelId, req, res, checkCanManage: true, checkIsLocal: true, checkIsOwner: true })) return
 
     const videoChangeOwnership = res.locals.videoChangeOwnership
 

@@ -133,7 +133,7 @@ export class StoryboardModel extends SequelizeModel<StoryboardModel> {
   // ---------------------------------------------------------------------------
 
   getOriginFileUrl (video: MVideo) {
-    if (video.isOwned()) {
+    if (video.isLocal()) {
       return WEBSERVER.URL + this.getLocalStaticPath()
     }
 

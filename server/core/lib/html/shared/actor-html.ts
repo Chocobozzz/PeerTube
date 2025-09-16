@@ -108,7 +108,7 @@ export class ActorHtml {
         updatedAt: entity.updatedAt
       },
 
-      forbidIndexation: !entity.Actor.isOwned(),
+      forbidIndexation: !entity.Actor.isLocal(),
       embedIndexation: false,
 
       rssFeeds: getRSSFeeds(entity)

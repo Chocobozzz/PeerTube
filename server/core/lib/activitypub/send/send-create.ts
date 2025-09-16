@@ -110,7 +110,7 @@ export async function sendCreateVideoPlaylist (playlist: MVideoPlaylistFull, tra
 }
 
 export async function sendCreateVideoCommentIfNeeded (comment: MCommentOwnerVideoReply, transaction: Transaction) {
-  const isOrigin = comment.Video.isOwned()
+  const isOrigin = comment.Video.isLocal()
 
   if (isOrigin) {
     const videoWithBlacklist = await VideoModel.loadWithBlacklist(comment.Video.id)

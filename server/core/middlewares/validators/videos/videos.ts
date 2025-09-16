@@ -59,8 +59,8 @@ import {
   areValidationErrors,
   checkCanAccessVideoStaticFiles,
   checkCanSeeVideo,
-  checkUserCanManageVideo,
-  doesVideoChannelOfAccountExist,
+  checkCanManageVideo,
+  doesChannelIdExist,
   doesVideoExist,
   doesVideoFileOfVideoExist,
   isValidVideoIdParam,
@@ -122,7 +122,6 @@ export const videosAddLegacyValidator = [
  */
 export const videosAddResumableValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const user = res.locals.oauth.token.User
     const file = buildUploadXFile(req.body as express.CustomUploadXFile<express.UploadNewVideoXFileMetadata>)
     const cleanup = () => {
       safeUploadXCleanup(file)
@@ -145,7 +144,12 @@ export const videosAddResumableValidator = [
 
     await Redis.Instance.setUploadSession(uploadId)
 
-    if (!await doesVideoChannelOfAccountExist(file.metadata.channelId, user, res)) return cleanup()
+    if (
+      !await doesChannelIdExist({ id: file.metadata.channelId, req, res, checkCanManage: true, checkIsLocal: true, checkIsOwner: false })
+    ) {
+      return cleanup()
+    }
+
     if (!await addDurationToVideoFileIfNeeded({ videoFile: file, res, middlewareName: 'videosAddResumableValidator' })) return cleanup()
     if (!await isVideoFileAccepted({ req, res, videoFile: file, hook: 'filter:api.video.upload.accept.result' })) return cleanup()
 
@@ -231,12 +235,26 @@ export const videosUpdateValidator = getCommonVideoEditAttributes().concat([
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo({ user, video: res.locals.videoAll, right: UserRight.UPDATE_ANY_VIDEO, req, res })) {
+    if (
+      !await checkCanManageVideo({
+        user,
+        video: res.locals.videoAll,
+        right: UserRight.UPDATE_ANY_VIDEO,
+        req,
+        res,
+        checkIsLocal: true,
+        checkIsOwner: false
+      })
+    ) {
       return cleanUpReqFiles(req)
     }
 
-    if (req.body.channelId && !await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
-
+    if (
+      req.body.channelId &&
+      !await doesChannelIdExist({ id: req.body.channelId, req, res, checkCanManage: true, checkIsLocal: true, checkIsOwner: false })
+    ) {
+      return cleanUpReqFiles(req)
+    }
     return next()
   }
 ])
@@ -245,7 +263,7 @@ export async function checkVideoFollowConstraints (req: express.Request, res: ex
   const video = getVideoWithAttributes(res)
 
   // Anybody can watch local videos
-  if (video.isOwned() === true) return next()
+  if (video.isLocal() === true) return next()
 
   // Logged user
   if (res.locals.oauth) {
@@ -346,12 +364,14 @@ export const videosRemoveValidator = [
 
     // Check if the user who did the request is able to delete the video
     if (
-      !checkUserCanManageVideo({
+      !await checkCanManageVideo({
         user: res.locals.oauth.token.User,
         video: res.locals.videoAll,
         right: UserRight.REMOVE_ANY_VIDEO,
         req,
-        res
+        res,
+        checkIsLocal: true,
+        checkIsOwner: false
       })
     ) return
 
@@ -625,12 +645,14 @@ async function commonVideoChecksPass (options: {
   videoFileSize: number
   files: express.UploadFilesForCheck
 }): Promise<boolean> {
-  const { req, res, user } = options
+  const { req, res } = options
 
   if (areErrorsInScheduleUpdate(req, res)) return false
   if (areErrorsInNSFW(req, res)) return false
 
-  if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return false
+  if (!await doesChannelIdExist({ id: req.body.channelId, req, res, checkCanManage: true, checkIsLocal: true, checkIsOwner: false })) {
+    return false
+  }
 
   if (!await commonVideoFileChecks(options)) return false
 

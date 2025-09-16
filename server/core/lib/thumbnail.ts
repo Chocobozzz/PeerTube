@@ -56,7 +56,7 @@ export function updateRemotePlaylistMiniatureFromUrl (options: {
   const type = ThumbnailType.MINIATURE
 
   // Only save the file URL if it is a remote playlist
-  const fileUrl = playlist.isOwned()
+  const fileUrl = playlist.isLocal()
     ? null
     : downloadUrl
 
@@ -124,27 +124,30 @@ export function generateLocalVideoMiniature (options: {
       let thumbnailCreator: () => Promise<any>
 
       if (videoFile.isAudio()) {
-        thumbnailCreator = () => processImageFromWorker({
-          path: ASSETS_PATH.DEFAULT_AUDIO_BACKGROUND,
-          destination: outputPath,
-          newSize: { width, height },
-          keepOriginal: true
-        })
+        thumbnailCreator = () =>
+          processImageFromWorker({
+            path: ASSETS_PATH.DEFAULT_AUDIO_BACKGROUND,
+            destination: outputPath,
+            newSize: { width, height },
+            keepOriginal: true
+          })
       } else if (biggestImagePath) {
-        thumbnailCreator = () => processImageFromWorker({
-          path: biggestImagePath,
-          destination: outputPath,
-          newSize: { width, height },
-          keepOriginal: true
-        })
+        thumbnailCreator = () =>
+          processImageFromWorker({
+            path: biggestImagePath,
+            destination: outputPath,
+            newSize: { width, height },
+            keepOriginal: true
+          })
       } else {
-        thumbnailCreator = () => generateImageFromVideoFile({
-          fromPath: input,
-          folder: basePath,
-          imageName: filename,
-          size: { height, width },
-          ffprobe
-        })
+        thumbnailCreator = () =>
+          generateImageFromVideoFile({
+            fromPath: input,
+            folder: basePath,
+            imageName: filename,
+            size: { height, width },
+            ffprobe
+          })
       }
 
       if (!biggestImagePath) biggestImagePath = outputPath
@@ -175,7 +178,7 @@ export function updateLocalVideoMiniatureFromUrl (options: {
   const { filename: updatedFilename, basePath, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
 
   // Only save the file URL if it is a remote video
-  const fileUrl = video.isOwned()
+  const fileUrl = video.isLocal()
     ? null
     : downloadUrl
 

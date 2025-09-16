@@ -70,7 +70,7 @@ export class NewAbuseForModerators extends AbstractNotification<NewAbusePayload>
         channelDisplayName: channel.getDisplayName(),
         channelUrl: channel.getClientUrl(),
         reporter: this.payload.reporter,
-        action: this.buildEmailAction()
+        action: this.buildEmailAction(to)
       }
     }
   }
@@ -85,12 +85,12 @@ export class NewAbuseForModerators extends AbstractNotification<NewAbusePayload>
       locals: {
         commentUrl: WEBSERVER.URL + comment.getCommentStaticPath(),
         videoName: comment.Video.name,
-        isLocal: comment.isOwned(),
+        isLocal: comment.isLocal(),
         commentCreatedAt: new Date(comment.createdAt).toLocaleString(),
         reason: this.payload.abuse.reason,
         flaggedAccount: this.payload.abuseInstance.FlaggedAccount.getDisplayName(),
         reporter: this.payload.reporter,
-        action: this.buildEmailAction()
+        action: this.buildEmailAction(to)
       }
     }
   }
@@ -106,17 +106,17 @@ export class NewAbuseForModerators extends AbstractNotification<NewAbusePayload>
       locals: {
         accountUrl,
         accountDisplayName: account.getDisplayName(),
-        isLocal: account.isOwned(),
+        isLocal: account.isLocal(),
         reason: this.payload.abuse.reason,
         reporter: this.payload.reporter,
-        action: this.buildEmailAction()
+        action: this.buildEmailAction(to)
       }
     }
   }
 
-  private buildEmailAction () {
+  private buildEmailAction (to: To) {
     return {
-      text: 'View report #' + this.payload.abuseInstance.id,
+      text: t('View report #' + this.payload.abuseInstance.id, to.language),
       url: getAdminAbuseUrl(this.payload.abuseInstance)
     }
   }

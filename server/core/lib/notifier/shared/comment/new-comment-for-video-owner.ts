@@ -21,7 +21,7 @@ export class NewCommentForVideoOwner extends AbstractNotification<MCommentOwnerV
   }
 
   isDisabled () {
-    if (this.payload.Video.isOwned() === false) return true
+    if (this.payload.Video.isLocal() === false) return true
 
     // Not our user or user comments its own video
     if (!this.user || this.payload.Account.userId === this.user.id) return true

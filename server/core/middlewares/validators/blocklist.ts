@@ -17,7 +17,7 @@ const blockAccountValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesAccountHandleExist({ handle: req.body.accountName, req, res, checkIsLocal: false, checkManage: false })) return
+    if (!await doesAccountHandleExist({ handle: req.body.accountName, req, res, checkIsLocal: false, checkCanManage: false })) return
 
     const user = res.locals.oauth.token.User
     const accountToBlock = res.locals.account
@@ -40,7 +40,7 @@ const unblockAccountByAccountValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesAccountHandleExist({ handle: req.params.accountName, req, res, checkIsLocal: false, checkManage: false })) return
+    if (!await doesAccountHandleExist({ handle: req.params.accountName, req, res, checkIsLocal: false, checkCanManage: false })) return
 
     const user = res.locals.oauth.token.User
     const targetAccount = res.locals.account
@@ -56,7 +56,7 @@ const unblockAccountByServerValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesAccountHandleExist({ handle: req.params.accountName, req, res, checkIsLocal: false, checkManage: false })) return
+    if (!await doesAccountHandleExist({ handle: req.params.accountName, req, res, checkIsLocal: false, checkCanManage: false })) return
 
     const serverActor = await getServerActor()
     const targetAccount = res.locals.account
