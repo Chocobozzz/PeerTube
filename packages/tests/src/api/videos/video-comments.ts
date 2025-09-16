@@ -273,6 +273,8 @@ describe('Test video comments', function () {
         expect(data[0].account.name).to.equal('root')
         expect(data[0].account.displayName).to.equal('root')
         expect(data[0].account.avatars).to.have.lengthOf(4)
+        expect(data[0].video.uuid).to.equal(videoUUID)
+        expect(data[0].video.channel.name).to.equal('root_channel')
       }
 
       for (const fn of listFunctions()) {

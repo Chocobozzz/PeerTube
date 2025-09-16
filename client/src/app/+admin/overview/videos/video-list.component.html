@@ -75,7 +75,7 @@
 
   <ng-template #actionCell let-video>
     <my-video-actions-dropdown
-      placement="bottom auto" buttonDirection="horizontal" buttonStyled="true" [video]="video" [displayOptions]="videoActionsOptions"
+      placement="bottom auto" buttonIcon="more-horizontal" buttonStyled="true" [video]="video" [displayOptions]="videoActionsOptions"
       (videoRemoved)="table.loadData()" (videoFilesRemoved)="table.loadData()" (transcodingCreated)="table.loadData()"
     ></my-video-actions-dropdown>
   </ng-template>

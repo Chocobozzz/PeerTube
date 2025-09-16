@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
 import { wait } from '@peertube/peertube-core-utils'
 import { PluginType, UserNotification, UserNotificationType } from '@peertube/peertube-models'
 import { cleanupTests, PeerTubeServer } from '@peertube/peertube-server-commands'
 import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
 import { MockJoinPeerTubeVersions } from '@tests/shared/mock-servers/mock-joinpeertube-versions.js'
-import { CheckerBaseParams, prepareNotificationsTest, checkNewPeerTubeVersion, checkNewPluginVersion } from '@tests/shared/notifications.js'
+import { checkNewPeerTubeVersion, checkNewPluginVersion } from '@tests/shared/notifications/check-admin-notifications.js'
+import { prepareNotificationsTest } from '@tests/shared/notifications/notifications-common.js'
+import { CheckerBaseParams } from '@tests/shared/notifications/shared/notification-checker.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
+import { expect } from 'chai'
 
 describe('Test admin notifications', function () {
   let server: PeerTubeServer

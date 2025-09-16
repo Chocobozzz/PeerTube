@@ -4,6 +4,7 @@ import { Notifier } from '@app/core'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { VideoImportService } from '@app/shared/shared-main/video/video-import.service'
 import { Video } from '@app/shared/shared-main/video/video.model'
+import { ActorCellComponent } from '@app/shared/shared-tables/actor-cell.component'
 import { VideoImport, VideoImportState, VideoImportStateType } from '@peertube/peertube-models'
 import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
 import { ButtonComponent } from '../../shared/shared-main/buttons/button.component'
@@ -24,7 +25,8 @@ import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../../shared
     NgClass,
     PTDatePipe,
     TableComponent,
-    NumberFormatterPipe
+    NumberFormatterPipe,
+    ActorCellComponent
   ]
 })
 export class MyVideoImportsComponent {
@@ -35,6 +37,7 @@ export class MyVideoImportsComponent {
 
   columns: TableColumnInfo<string>[] = [
     { id: 'target', label: $localize`Target`, sortable: false },
+    { id: 'channel', label: $localize`Channel`, sortable: false },
     { id: 'video', label: $localize`Video`, sortable: false },
     { id: 'state', label: $localize`State`, sortable: false },
     { id: 'createdAt', label: $localize`Created`, sortable: true }
@@ -108,6 +111,6 @@ export class MyVideoImportsComponent {
   }
 
   private _dataLoader (options: DataLoaderOptions) {
-    return this.videoImportService.getMyVideoImports(options)
+    return this.videoImportService.listMyVideoImports({ ...options, includeCollaborations: true })
   }
 }

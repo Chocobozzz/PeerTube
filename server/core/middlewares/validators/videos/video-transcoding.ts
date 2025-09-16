@@ -6,7 +6,7 @@ import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import express from 'express'
 import { body } from 'express-validator'
 import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from '../shared/index.js'
-import { checkVideoCanBeTranscribedOrTranscripted } from './shared/video-validators.js'
+import { checkVideoCanBeTranscribed } from './shared/video-validators.js'
 
 const createTranscodingValidator = [
   isValidVideoIdParam('videoId'),
@@ -25,7 +25,7 @@ const createTranscodingValidator = [
 
     const video = res.locals.videoAll
 
-    if (!checkVideoCanBeTranscribedOrTranscripted(video, res)) return
+    if (!checkVideoCanBeTranscribed(video, req, res)) return
 
     if (CONFIG.TRANSCODING.ENABLED !== true) {
       return res.fail({

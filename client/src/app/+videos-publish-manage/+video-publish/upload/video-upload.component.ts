@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router'
 import { VideoEdit } from '@app/+videos-publish-manage/shared-manage/common/video-edit.model'
 import { VideoUploadService } from '@app/+videos-publish-manage/shared-manage/common/video-upload.service'
 import { VideoManageController } from '@app/+videos-publish-manage/shared-manage/video-manage-controller.service'
-import { CanComponentDeactivate, HooksService, MetaService, Notifier, ServerService } from '@app/core'
+import { AuthService, CanComponentDeactivate, HooksService, MetaService, Notifier, ServerService } from '@app/core'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { UserVideoQuota, VideoPrivacyType } from '@peertube/peertube-models'
 import debug from 'debug'
@@ -43,6 +43,7 @@ const debugLogger = debug('peertube:video-publish')
 })
 export class VideoUploadComponent implements OnInit, OnDestroy, AfterViewInit, CanComponentDeactivate {
   private notifier = inject(Notifier)
+  private authService = inject(AuthService)
   private serverService = inject(ServerService)
   private hooks = inject(HooksService)
   private metaService = inject(MetaService)
@@ -213,7 +214,8 @@ export class VideoUploadComponent implements OnInit, OnDestroy, AfterViewInit, C
     this.videoEdit = VideoEdit.createFromUpload(serverConfig, {
       name: this.buildVideoFilename(file.name),
       channelId: this.firstStepChannelId,
-      support: this.userChannels().find(c => c.id === this.firstStepChannelId).support ?? ''
+      support: this.userChannels().find(c => c.id === this.firstStepChannelId).support ?? '',
+      user: this.authService.getUser()
     })
 
     this.manageController.setConfig({ manageType: 'upload', serverConfig: this.serverService.getHTMLConfig() })

@@ -12,7 +12,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import { approximateIntroOutroAdditionalSize, getTaskFileFromReq } from '@server/lib/video-studio.js'
 import { isAudioFile } from '@peertube/peertube-ffmpeg'
 import { HttpStatusCode, UserRight, VideoStudioCreateEdition, VideoStudioTask } from '@peertube/peertube-models'
-import { areValidationErrors, checkUserCanManageVideo, checkUserQuota, doesVideoExist } from '../shared/index.js'
+import { areValidationErrors, checkCanManageVideo, checkUserQuota, doesVideoExist } from '../shared/index.js'
 import { checkVideoFileCanBeEdited } from './shared/index.js'
 
 const videoStudioAddEditionValidator = [
@@ -79,14 +79,16 @@ const videoStudioAddEditionValidator = [
       }
     }
 
-    if (!checkVideoFileCanBeEdited(video, res)) return cleanUpReqFiles(req)
+    if (!checkVideoFileCanBeEdited(video, req, res)) return cleanUpReqFiles(req)
 
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo({ user, video, right: UserRight.UPDATE_ANY_VIDEO, req, res })) return cleanUpReqFiles(req)
+    if (!await checkCanManageVideo({ user, video, right: UserRight.UPDATE_ANY_VIDEO, req, res, checkIsLocal: true, checkIsOwner: false })) {
+      return cleanUpReqFiles(req)
+    }
 
     // Try to make an approximation of bytes added by the intro/outro
     const additionalBytes = await approximateIntroOutroAdditionalSize(video, body.tasks, i => getTaskFileFromReq(files, i).path)
-    if (await checkUserQuota(user, additionalBytes, res) === false) return cleanUpReqFiles(req)
+    if (await checkUserQuota({ user, videoFileSize: additionalBytes, req, res }) === false) return cleanUpReqFiles(req)
 
     return next()
   }

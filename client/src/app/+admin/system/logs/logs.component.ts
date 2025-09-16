@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms'
 import { LocalStorageService, Notifier } from '@app/core'
 import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-options.component'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
-import { PeerTubeTemplateDirective } from '@app/shared/shared-main/common/peertube-template.directive'
 import { ServerLogLevel } from '@peertube/peertube-models'
 import { SelectTagsComponent } from '../../../shared/shared-forms/select/select-tags.component'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
@@ -24,8 +23,7 @@ import { LogsService } from './logs.service'
     ButtonComponent,
     PTDatePipe,
     CopyButtonComponent,
-    SelectOptionsComponent,
-    PeerTubeTemplateDirective
+    SelectOptionsComponent
   ]
 })
 export class LogsComponent implements OnInit {

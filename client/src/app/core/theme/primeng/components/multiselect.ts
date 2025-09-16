@@ -13,7 +13,7 @@ export default {
     invalidBorderColor: '{form.field.invalid.border.color}',
     color: '{form.field.color}',
     disabledColor: '{form.field.disabled.color}',
-    placeholderColor: '{form.field.placeholder.color}',
+    placeholderColor: '{form.field.color}',
     invalidPlaceholderColor: '{form.field.invalid.placeholder.color}',
     shadow: '{form.field.shadow}',
     paddingX: '{form.field.padding.x}',

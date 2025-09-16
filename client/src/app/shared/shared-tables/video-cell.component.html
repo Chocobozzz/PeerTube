@@ -15,11 +15,11 @@
     </div>
 
     <a *ngIf="video().channel" [routerLink]="getChannelUrl()" class="channel" [ngClass]="{ ellipsis: ellipsis }">
-      {{ video().channel?.displayName }}
+      <span>{{ video().channel?.displayName }}</span>
 
-      <ng-container *ngIf="hostInfo()" i18n>
-        on {{ video().channel?.host }}
-      </ng-container>
+      @if (displayEditorInfo() && user.isEditorOfChannel(video().channel)) {
+        <my-collaborator-state class="ms-2" type="accepted" small="true"></my-collaborator-state>
+      }
     </a>
   </div>
 

@@ -1,5 +1,5 @@
 import { randomInt } from '@peertube/peertube-core-utils'
-import { Video, VideoChannel, VideoChannelSync, VideoCreateResult, VideoDetails } from '@peertube/peertube-models'
+import { User, Video, VideoChannelSync, VideoCreateResult, VideoDetails } from '@peertube/peertube-models'
 import { parallelTests, root } from '@peertube/peertube-node-utils'
 import { ChildProcess, fork } from 'child_process'
 import { copy } from 'fs-extra/esm'
@@ -31,6 +31,7 @@ import {
   BlacklistCommand,
   CaptionsCommand,
   ChangeOwnershipCommand,
+  ChannelCollaboratorsCommand,
   ChannelSyncsCommand,
   ChannelsCommand,
   ChaptersCommand,
@@ -82,6 +83,7 @@ export class PeerTubeServer {
 
   parallel?: boolean
   internalServerNumber: number
+  adminEmail: string
 
   serverNumber?: number
   customConfigFile?: string
@@ -97,7 +99,7 @@ export class PeerTubeServer {
       password: string
     }
 
-    channel?: VideoChannel
+    channel?: User['videoChannels'][0]
     videoChannelSync?: Partial<VideoChannelSync>
 
     video?: Video
@@ -170,6 +172,8 @@ export class PeerTubeServer {
   watchedWordsLists?: WatchedWordsCommand
   autoTags?: AutomaticTagsCommand
 
+  channelCollaborators?: ChannelCollaboratorsCommand
+
   constructor (options: { serverNumber: number } | { url: string }) {
     if ((options as any).url) {
       this.setUrl((options as any).url)
@@ -188,6 +192,7 @@ export class PeerTubeServer {
       }
     }
 
+    this.adminEmail = this.buildEmail()
     this.assignCommands()
   }
 
@@ -406,7 +411,7 @@ export class PeerTubeServer {
         well_known: this.getDirectoryPath('well-known') + '/'
       },
       admin: {
-        email: `admin${this.internalServerNumber}@example.com`
+        email: this.buildEmail()
       },
       live: {
         rtmp: {
@@ -477,5 +482,11 @@ export class PeerTubeServer {
 
     this.watchedWordsLists = new WatchedWordsCommand(this)
     this.autoTags = new AutomaticTagsCommand(this)
+
+    this.channelCollaborators = new ChannelCollaboratorsCommand(this)
+  }
+
+  private buildEmail () {
+    return `admin${this.internalServerNumber}@example.com`
   }
 }

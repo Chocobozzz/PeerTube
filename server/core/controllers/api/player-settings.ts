@@ -1,4 +1,5 @@
 import { PlayerChannelSettingsUpdate, PlayerVideoSettingsUpdate } from '@peertube/peertube-models'
+import { sendUpdateChannelPlayerSettings, sendUpdateVideoPlayerSettings } from '@server/lib/activitypub/send/send-update.js'
 import { upsertPlayerSettings } from '@server/lib/player-settings.js'
 import {
   getChannelPlayerSettingsValidator,
@@ -15,7 +16,6 @@ import {
   optionalAuthenticate,
   videoChannelsHandleValidatorFactory
 } from '../../middlewares/index.js'
-import { sendUpdateChannelPlayerSettings, sendUpdateVideoPlayerSettings } from '@server/lib/activitypub/send/send-update.js'
 
 const playerSettingsRouter = express.Router()
 
@@ -39,15 +39,15 @@ playerSettingsRouter.put(
 playerSettingsRouter.get(
   '/video-channels/:handle',
   optionalAuthenticate,
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkManage: false })),
-  getChannelPlayerSettingsValidator,
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
+  asyncMiddleware(getChannelPlayerSettingsValidator),
   asyncMiddleware(getChannelPlayerSettings)
 )
 
 playerSettingsRouter.put(
   '/video-channels/:handle',
   authenticate,
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: true })),
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: true, checkIsOwner: false })),
   updatePlayerSettingsValidatorFactory('channel'),
   asyncMiddleware(updateChannelPlayerSettings)
 )

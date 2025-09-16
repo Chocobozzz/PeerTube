@@ -510,7 +510,7 @@ function runTest (withObjectStorage: boolean) {
         const liveVideo = data.find(v => v.name === 'noah live video')
         expect(liveVideo).to.exist
 
-        await remoteServer.videos.get({ id: liveVideo.uuid, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+        await remoteServer.videos.get({ id: liveVideo.uuid, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
         const video = await remoteServer.videos.getWithPassword({ id: liveVideo.uuid, password: 'password1' })
         const live = await remoteServer.live.get({ videoId: liveVideo.uuid, token: remoteNoahToken })
 

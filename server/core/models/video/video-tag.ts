@@ -1,7 +1,7 @@
 import { Column, CreatedAt, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
+import { SequelizeModel } from '../shared/index.js'
 import { TagModel } from './tag.js'
 import { VideoModel } from './video.js'
-import { SequelizeModel } from '../shared/index.js'
 
 @Table({
   tableName: 'videoTag',

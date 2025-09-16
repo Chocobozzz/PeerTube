@@ -6,6 +6,7 @@ import { RouterLink } from '@angular/router'
 import { AuthService, AuthUser, ConfirmService, Notifier, RestPagination, ScreenService } from '@app/core'
 import { HeaderService } from '@app/header/header.service'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
+import { CollaboratorStateComponent } from '@app/shared/shared-main/channel/collaborator-state.component'
 import { TableColumnInfo, TableComponent, TableQueryParams } from '@app/shared/shared-tables/table.component'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
@@ -49,7 +50,8 @@ const debugLogger = debug('peertube:my-video-playlists')
     NumberFormatterPipe,
     PrivacyBadgeComponent,
     PTDatePipe,
-    DragDropModule
+    DragDropModule,
+    CollaboratorStateComponent
   ]
 })
 export class MyVideoPlaylistsComponent implements OnInit, OnDestroy {
@@ -112,7 +114,7 @@ export class MyVideoPlaylistsComponent implements OnInit, OnDestroy {
 
   private _customParseQueryParams (queryParams: QueryParams) {
     this.user = this.auth.getUser()
-    this.channels = this.user.videoChannels.map(c => ({
+    this.channels = [ ...this.user.videoChannels, ...this.user.videoChannelCollaborations ].map(c => ({
       ...c,
 
       selected: queryParams.channelName === c.name
@@ -228,12 +230,14 @@ export class MyVideoPlaylistsComponent implements OnInit, OnDestroy {
     const obs = channel
       ? this.videoPlaylistService.listChannelPlaylists({
         videoChannel: { nameWithHost: Actor.CREATE_BY_STRING(channel.name, channel.host) },
+        includeCollaborations: true,
         restPagination: pagination,
         sort,
         search
       })
       : this.videoPlaylistService.listAccountPlaylists({
         account: this.user.account,
+        includeCollaborations: true,
         restPagination: pagination,
         sort,
         search

@@ -10,17 +10,21 @@ import express from 'express'
 import { checkUserQuota } from '../../shared/index.js'
 
 export async function commonVideoFileChecks (options: {
+  req: express.Request
   res: express.Response
   user: MUserAccountId
   videoFileSize: number
   files: express.UploadFilesForCheck
 }): Promise<boolean> {
-  const { res, user, videoFileSize, files } = options
+  const { req, res, user, videoFileSize, files } = options
 
   if (!isVideoFileMimeTypeValid(files)) {
     res.fail({
       status: HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415,
-      message: `This file is not supported. Please, make sure it is of the following type: ${CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ')}`
+      message: req.t(
+        'This file is not supported. Please, make sure it is of the following type: {types}',
+        { types: CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ') }
+      )
     })
     return false
   }
@@ -28,13 +32,13 @@ export async function commonVideoFileChecks (options: {
   if (!isVideoFileSizeValid(videoFileSize.toString())) {
     res.fail({
       status: HttpStatusCode.PAYLOAD_TOO_LARGE_413,
-      message: 'This file is too large. It exceeds the maximum file size authorized.',
+      message: req.t('This file is too large. It exceeds the maximum file size authorized'),
       type: ServerErrorCode.MAX_FILE_SIZE_REACHED
     })
     return false
   }
 
-  if (await checkUserQuota(user, videoFileSize, res) === false) return false
+  if (await checkUserQuota({ user, videoFileSize, req, res }) === false) return false
 
   return true
 }
@@ -59,7 +63,7 @@ export async function isVideoFileAccepted (options: {
     logger.info('Refused local video file.', { acceptedResult, acceptParameters })
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
-      message: acceptedResult.errorMessage || 'Refused local video file'
+      message: acceptedResult.errorMessage || req.t('Refused local video file')
     })
     return false
   }
@@ -67,11 +71,11 @@ export async function isVideoFileAccepted (options: {
   return true
 }
 
-export function checkVideoFileCanBeEdited (video: MVideo, res: express.Response) {
+export function checkVideoFileCanBeEdited (video: MVideo, req: express.Request, res: express.Response) {
   if (video.isLive) {
     res.fail({
       status: HttpStatusCode.BAD_REQUEST_400,
-      message: 'Cannot edit a live video'
+      message: req.t('Cannot edit a live video')
     })
 
     return false
@@ -80,7 +84,7 @@ export function checkVideoFileCanBeEdited (video: MVideo, res: express.Response)
   if (video.state === VideoState.TO_TRANSCODE || video.state === VideoState.TO_EDIT) {
     res.fail({
       status: HttpStatusCode.CONFLICT_409,
-      message: 'Cannot edit video that is already waiting for transcoding/edition'
+      message: req.t('Cannot edit video that is already waiting for transcoding/edition')
     })
 
     return false
@@ -89,7 +93,7 @@ export function checkVideoFileCanBeEdited (video: MVideo, res: express.Response)
   if (!canVideoFileBeEdited(video.state)) {
     res.fail({
       status: HttpStatusCode.BAD_REQUEST_400,
-      message: 'Video state is not compatible with edition'
+      message: req.t('Video state is not compatible with edition')
     })
 
     return false
@@ -98,11 +102,11 @@ export function checkVideoFileCanBeEdited (video: MVideo, res: express.Response)
   return true
 }
 
-export function checkVideoCanBeTranscribedOrTranscripted (video: MVideo, res: express.Response) {
+export function checkVideoCanBeTranscribed (video: MVideo, req: express.Request, res: express.Response) {
   if (video.remote) {
     res.fail({
       status: HttpStatusCode.BAD_REQUEST_400,
-      message: 'Cannot run this task on a remote video'
+      message: req.t('Cannot run this task on a remote video')
     })
     return false
   }
@@ -110,7 +114,7 @@ export function checkVideoCanBeTranscribedOrTranscripted (video: MVideo, res: ex
   if (video.isLive) {
     res.fail({
       status: HttpStatusCode.BAD_REQUEST_400,
-      message: 'Cannot run this task on a live'
+      message: req.t('Cannot run this task on a live video')
     })
     return false
   }
@@ -124,7 +128,7 @@ export function checkVideoCanBeTranscribedOrTranscripted (video: MVideo, res: ex
   if (incompatibleStates.has(video.state)) {
     res.fail({
       status: HttpStatusCode.BAD_REQUEST_400,
-      message: `Cannot run this task on a video with "${VIDEO_STATES[video.state]}" state`
+      message: req.t('Cannot run this task on a video with "{state}" state', { state: VIDEO_STATES[video.state] })
     })
     return false
   }

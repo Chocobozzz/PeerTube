@@ -1,0 +1,18 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+
+.channel-sub-link-in-cell {
+  color: pvar(--fg-200);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  margin-top: 0.25rem;
+
+  @include font-size(14px);
+
+  &:hover {
+    opacity: 1;
+    color: pvar(--fg-300);
+  }
+}

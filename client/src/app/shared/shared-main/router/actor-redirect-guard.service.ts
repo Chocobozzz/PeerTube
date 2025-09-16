@@ -16,7 +16,7 @@ export class ActorRedirectGuard {
 
     return forkJoin([
       this.accountService.getAccount(actorName).pipe(this.orUndefined()),
-      this.channelService.getVideoChannel(actorName).pipe(this.orUndefined())
+      this.channelService.get(actorName).pipe(this.orUndefined())
     ]).pipe(
       map(([ account, channel ]) => {
         if (account) {

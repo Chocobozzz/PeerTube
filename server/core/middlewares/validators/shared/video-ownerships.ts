@@ -3,14 +3,14 @@ import { VideoChangeOwnershipModel } from '@server/models/video/video-change-own
 import { forceNumber } from '@peertube/peertube-core-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
 
-async function doesChangeVideoOwnershipExist (idArg: number | string, res: express.Response) {
+export async function doesChangeVideoOwnershipExist (idArg: number | string, req: express.Request, res: express.Response) {
   const id = forceNumber(idArg)
   const videoChangeOwnership = await VideoChangeOwnershipModel.load(id)
 
   if (!videoChangeOwnership) {
     res.fail({
       status: HttpStatusCode.NOT_FOUND_404,
-      message: 'Video change ownership not found'
+      message: req.t('Video change ownership not found')
     })
     return false
   }
@@ -18,8 +18,4 @@ async function doesChangeVideoOwnershipExist (idArg: number | string, res: expre
   res.locals.videoChangeOwnership = videoChangeOwnership
 
   return true
-}
-
-export {
-  doesChangeVideoOwnershipExist
 }

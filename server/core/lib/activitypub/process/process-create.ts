@@ -91,7 +91,7 @@ async function processCreateCacheFile (
 
   const { video } = await getOrCreateAPVideo({ videoObject: cacheFile.object })
 
-  if (video.isOwned() && !canVideoBeFederated(video)) {
+  if (video.isLocal() && !canVideoBeFederated(video)) {
     logger.warn(`Do not process create cache file ${cacheFile.object} on a video that cannot be federated`)
     return
   }
@@ -100,7 +100,7 @@ async function processCreateCacheFile (
     return createOrUpdateCacheFile(cacheFile, video, byActor, t)
   })
 
-  if (video.isOwned()) {
+  if (video.isLocal()) {
     // Don't resend the activity to the sender
     const exceptions = [ byActor ]
     await forwardVideoRelatedActivity(activity, undefined, exceptions, video)
@@ -152,7 +152,7 @@ async function processCreateVideoComment (
   }
 
   // Try to not forward unwanted comments on our videos
-  if (video.isOwned()) {
+  if (video.isLocal()) {
     if (!canVideoBeFederated(video)) {
       logger.info('Skip comment forward on non federated video' + video.url)
       return

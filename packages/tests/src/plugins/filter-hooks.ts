@@ -262,7 +262,7 @@ describe('Test plugin filter hooks', function () {
       await waitJobs(servers)
 
       {
-        const body = await servers[0].videoImports.getMyVideoImports()
+        const body = await servers[0].videoImports.listMyVideoImports()
         const videoImports = body.data
 
         const videoImport = videoImports.find(i => i.id === videoImportId)
@@ -291,7 +291,7 @@ describe('Test plugin filter hooks', function () {
       await waitJobs(servers)
 
       {
-        const { data: videoImports } = await servers[0].videoImports.getMyVideoImports()
+        const { data: videoImports } = await servers[0].videoImports.listMyVideoImports()
 
         const videoImport = videoImports.find(i => i.id === videoImportId)
 

@@ -65,12 +65,15 @@ export class NewVideoOrLiveForSubscribers extends AbstractNotification<MVideoAcc
   private createVideoEmail (to: To, channelName: string, videoUrl: string) {
     return {
       to,
-      subject: channelName + ' just published a new video',
-      text: `Your subscription ${channelName} just published a new video: ${this.payload.name}.`,
+      subject: t('{channelName} just published a new video', to.language, { channelName }),
+      text: t('Your subscription {channelName} just published a new video: {videoName}.', to.language, {
+        channelName,
+        videoName: this.payload.name
+      }),
       locals: {
-        title: channelName + ' just published a new video',
+        title: t('{channelName} just published a new video', to.language, { channelName }),
         action: {
-          text: 'View video',
+          text: t('View video', to.language),
           url: videoUrl
         }
       }

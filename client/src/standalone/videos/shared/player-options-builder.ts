@@ -65,8 +65,7 @@ export class PlayerOptionsBuilder {
   constructor (
     private readonly playerHTML: PlayerHTML,
     private readonly videoFetcher: VideoFetcher,
-    private readonly peertubePlugin: PeerTubePlugin,
-    private readonly serverConfig: HTMLServerConfig
+    private readonly peertubePlugin: PeerTubePlugin
   ) {}
 
   hasAPIEnabled () {

@@ -37,7 +37,7 @@ export type MVideoCaptionLanguageUrl = Pick<
 
 export type MVideoCaptionVideo =
   & MVideoCaption
-  & Use<'Video', Pick<MVideo, 'id' | 'name' | 'remote' | 'uuid' | 'url' | 'state' | 'getWatchStaticPath' | 'isOwned' | 'privacy'>>
+  & Use<'Video', Pick<MVideo, 'id' | 'name' | 'remote' | 'uuid' | 'url' | 'state' | 'getWatchStaticPath' | 'isLocal' | 'privacy'>>
 
 // ############################################################################
 

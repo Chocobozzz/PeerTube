@@ -3,13 +3,13 @@ import { WEBSERVER } from '@server/initializers/constants.js'
 import { actorNameAlphabet } from './custom-validators/activitypub/actor.js'
 import { regexpCapture } from './regexp.js'
 
-export function extractMentions (text: string, isOwned: boolean) {
+export function extractMentions (text: string, isLocal: boolean) {
   let result: string[] = []
 
   const localMention = `@(${actorNameAlphabet}+)`
   const remoteMention = `${localMention}@${WEBSERVER.HOST}`
 
-  const mentionRegex = isOwned
+  const mentionRegex = isLocal
     ? '(?:(?:' + remoteMention + ')|(?:' + localMention + '))' // Include local mentions?
     : '(?:' + remoteMention + ')'
 
@@ -20,16 +20,14 @@ export function extractMentions (text: string, isOwned: boolean) {
   result = result.concat(
     regexpCapture(text, firstMentionRegex)
       .map(([ , username1, username2 ]) => username1 || username2),
-
     regexpCapture(text, endMentionRegex)
       .map(([ , username1, username2 ]) => username1 || username2),
-
     regexpCapture(text, remoteMentionsRegex)
       .map(([ , username ]) => username)
   )
 
   // Include local mentions
-  if (isOwned) {
+  if (isLocal) {
     const localMentionsRegex = new RegExp(' ' + localMention + ' ', 'g')
 
     result = result.concat(

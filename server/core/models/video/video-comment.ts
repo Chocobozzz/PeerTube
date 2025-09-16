@@ -259,7 +259,7 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
             heldForReview: false,
             notDeleted: true,
             transaction
-          }).countComments()
+          }).count()
 
           await video.save({ transaction })
         })
@@ -340,7 +340,7 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
 
   // ---------------------------------------------------------------------------
 
-  static listCommentsForApi (parameters: {
+  static listForApi (parameters: {
     start: number
     count: number
     sort: string
@@ -348,6 +348,8 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
     autoTagOfAccountId: number
 
     videoAccountOwnerId?: number
+    videoAccountOwnerIncludeCollaborations?: boolean
+
     videoChannelOwnerId?: number
 
     onLocalVideo?: boolean
@@ -378,6 +380,7 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
         'autoTagOneOf',
         'autoTagOfAccountId',
         'videoAccountOwnerId',
+        'videoAccountOwnerIncludeCollaborations',
         'videoChannelOwnerId',
         'heldForReview'
       ]),
@@ -387,8 +390,8 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
     }
 
     return Promise.all([
-      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, queryOptions).listComments<MCommentAdminOrUserFormattable>(),
-      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, queryOptions).countComments()
+      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, queryOptions).list<MCommentAdminOrUserFormattable>(),
+      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, queryOptions).count()
     ]).then(([ rows, count ]) => {
       return { total: count, data: rows }
     })
@@ -437,9 +440,9 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
     }
 
     return Promise.all([
-      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, listOptions).listComments<MCommentAdminOrUserFormattable>(),
-      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, countOptions).countComments(),
-      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, notDeletedCountOptions).countComments()
+      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, listOptions).list<MCommentAdminOrUserFormattable>(),
+      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, countOptions).count(),
+      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, notDeletedCountOptions).count()
     ]).then(([ rows, count, totalNotDeletedComments ]) => {
       return { total: count, data: rows, totalNotDeletedComments }
     })
@@ -471,8 +474,8 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
     }
 
     return Promise.all([
-      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, queryOptions).listComments<MCommentAdminOrUserFormattable>(),
-      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, queryOptions).countComments()
+      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, queryOptions).list<MCommentAdminOrUserFormattable>(),
+      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, queryOptions).count()
     ]).then(([ rows, count ]) => {
       return { total: count, data: rows }
     })
@@ -533,8 +536,8 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
     }
 
     return Promise.all([
-      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, queryOptions).listComments<MComment>(),
-      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, queryOptions).countComments()
+      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, queryOptions).list<MComment>(),
+      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, queryOptions).count()
     ]).then(([ rows, count ]) => {
       return { total: count, data: rows }
     })
@@ -563,15 +566,22 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
       blockerAccountIds
     }
 
-    return new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, queryOptions).listComments<MCommentOwnerVideoFeed>()
+    return new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, queryOptions).list<MCommentOwnerVideoFeed>()
   }
 
-  static listForBulkDelete (ofAccount: MAccount, filter: { onVideosOfAccount?: MAccountId } = {}) {
+  static listForBulkDelete (
+    ofAccount: MAccount,
+    filter: {
+      onVideosOfAccount?: MAccountId
+      includeCollaborations?: boolean
+    } = {}
+  ) {
     const queryOptions: ListVideoCommentsOptions = {
       selectType: 'comment-only',
 
       accountId: ofAccount.id,
       videoAccountOwnerId: filter.onVideosOfAccount?.id,
+      videoAccountOwnerIncludeCollaborations: filter.includeCollaborations,
 
       heldForReview: undefined,
 
@@ -579,7 +589,7 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
       count: 5000
     }
 
-    return new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, queryOptions).listComments<MComment>()
+    return new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, queryOptions).list<MComment>()
   }
 
   static listForExport (ofAccountId: number): Promise<MCommentExport[]> {
@@ -686,10 +696,10 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
     return this.originCommentId || this.id
   }
 
-  isOwned () {
+  isLocal () {
     if (!this.Account) return false
 
-    return this.Account.isOwned()
+    return this.Account.isLocal()
   }
 
   markAsDeleted () {
@@ -703,7 +713,7 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
   }
 
   extractMentions () {
-    return extractMentions(this.text, this.isOwned())
+    return extractMentions(this.text, this.isLocal())
   }
 
   toFormattedJSON (this: MCommentFormattable) {
@@ -752,7 +762,9 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
       video: {
         id: this.Video.id,
         uuid: this.Video.uuid,
-        name: this.Video.name
+        name: this.Video.name,
+
+        channel: this.Video.VideoChannel.toFormattedSummaryJSON()
       },
 
       account: this.Account
@@ -792,7 +804,7 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
     }
 
     let replyApproval = this.replyApproval
-    if (this.Video.isOwned() && !this.heldForReview) {
+    if (this.Video.isLocal() && !this.heldForReview) {
       replyApproval = getLocalApproveReplyActivityPubUrl(this.Video, this)
     }
 

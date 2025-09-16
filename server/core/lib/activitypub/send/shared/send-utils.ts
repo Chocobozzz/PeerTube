@@ -29,7 +29,7 @@ async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAud
   const { byActor, video, transaction, contextType, parallelizable } = options
 
   // Send to origin
-  if (video.isOwned() === false) {
+  if (video.isLocal() === false) {
     return sendVideoActivityToOrigin(activityBuilder, options)
   }
 
@@ -62,7 +62,7 @@ async function sendVideoActivityToOrigin (activityBuilder: (audience: ActivityAu
 }) {
   const { byActor, video, actorsInvolvedInVideo, transaction, contextType } = options
 
-  if (video.isOwned()) throw new Error('Cannot send activity to owned video origin ' + video.url)
+  if (video.isLocal()) throw new Error('Cannot send activity to owned video origin ' + video.url)
 
   let accountActor: MActorLight = (video as MVideoAccountLight).VideoChannel?.Account?.Actor
   if (!accountActor) accountActor = await ActorModel.loadAccountActorByVideoId(video.id, transaction)

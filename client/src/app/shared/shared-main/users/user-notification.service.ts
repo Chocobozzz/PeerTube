@@ -36,7 +36,7 @@ export class UserNotificationService {
       ? new HttpContext().set(NGX_LOADING_BAR_IGNORED, true)
       : undefined
 
-    return this.authHttp.get<ResultList<UserNotification>>(UserNotificationService.BASE_NOTIFICATIONS_URL, { params, context })
+    return this.authHttp.get<ResultList<UserNotificationServer>>(UserNotificationService.BASE_NOTIFICATIONS_URL, { params, context })
       .pipe(
         map(res => this.restExtractor.applyToResultListData(res, this.formatNotification.bind(this))),
         catchError(err => this.restExtractor.handleError(err))
@@ -51,7 +51,7 @@ export class UserNotificationService {
   markAsRead (notification: UserNotification) {
     const url = UserNotificationService.BASE_NOTIFICATIONS_URL + '/read'
 
-    const body = { ids: [ notification.id ] }
+    const body = { ids: [ notification.payload.id ] }
     const context = new HttpContext().set(NGX_LOADING_BAR_IGNORED, true)
 
     return this.authHttp.post(url, body, { context })

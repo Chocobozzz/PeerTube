@@ -4,10 +4,10 @@ import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import Bluebird from 'bluebird'
 import { FfprobeData } from 'fluent-ffmpeg'
 import { remove } from 'fs-extra/esm'
-import { join } from 'path'
+import { extname, join } from 'path'
 import { generateImageFilename } from '../helpers/image-utils.js'
 import { CONFIG } from '../initializers/config.js'
-import { ASSETS_PATH, PREVIEWS_SIZE, THUMBNAILS_SIZE } from '../initializers/constants.js'
+import { ASSETS_PATH, MIMETYPES, PREVIEWS_SIZE, THUMBNAILS_SIZE } from '../initializers/constants.js'
 import { ThumbnailModel } from '../models/video/thumbnail.js'
 import { MVideoFile, MVideoThumbnail, MVideoUUID, MVideoWithAllFiles } from '../types/models/index.js'
 import { MThumbnail } from '../types/models/video/thumbnail.js'
@@ -56,7 +56,7 @@ export function updateRemotePlaylistMiniatureFromUrl (options: {
   const type = ThumbnailType.MINIATURE
 
   // Only save the file URL if it is a remote playlist
-  const fileUrl = playlist.isOwned()
+  const fileUrl = playlist.isLocal()
     ? null
     : downloadUrl
 
@@ -79,7 +79,12 @@ export function updateLocalVideoMiniatureFromExisting (options: {
 }) {
   const { inputPath, video, type, automaticallyGenerated, size, keepOriginal = false } = options
 
-  const { filename, outputPath, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
+  const { filename, outputPath, height, width, existingThumbnail } = buildMetadataFromVideo({
+    video,
+    type,
+    size,
+    extension: getImageExtension(inputPath)
+  })
 
   const thumbnailCreator = () => {
     return processImageFromWorker({ path: inputPath, destination: outputPath, newSize: { width, height }, keepOriginal })
@@ -110,7 +115,7 @@ export function generateLocalVideoMiniature (options: {
 
   return VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(video), input => {
     // Get bigger images to generate first
-    const metadatas = types.map(type => buildMetadataFromVideo(video, type))
+    const metadatas = types.map(type => buildMetadataFromVideo({ video, type }))
       .sort((a, b) => {
         if (a.height < b.height) return 1
         if (a.height === b.height) return 0
@@ -124,27 +129,30 @@ export function generateLocalVideoMiniature (options: {
       let thumbnailCreator: () => Promise<any>
 
       if (videoFile.isAudio()) {
-        thumbnailCreator = () => processImageFromWorker({
-          path: ASSETS_PATH.DEFAULT_AUDIO_BACKGROUND,
-          destination: outputPath,
-          newSize: { width, height },
-          keepOriginal: true
-        })
+        thumbnailCreator = () =>
+          processImageFromWorker({
+            path: ASSETS_PATH.DEFAULT_AUDIO_BACKGROUND,
+            destination: outputPath,
+            newSize: { width, height },
+            keepOriginal: true
+          })
       } else if (biggestImagePath) {
-        thumbnailCreator = () => processImageFromWorker({
-          path: biggestImagePath,
-          destination: outputPath,
-          newSize: { width, height },
-          keepOriginal: true
-        })
+        thumbnailCreator = () =>
+          processImageFromWorker({
+            path: biggestImagePath,
+            destination: outputPath,
+            newSize: { width, height },
+            keepOriginal: true
+          })
       } else {
-        thumbnailCreator = () => generateImageFromVideoFile({
-          fromPath: input,
-          folder: basePath,
-          imageName: filename,
-          size: { height, width },
-          ffprobe
-        })
+        thumbnailCreator = () =>
+          generateImageFromVideoFile({
+            fromPath: input,
+            folder: basePath,
+            imageName: filename,
+            size: { height, width },
+            ffprobe
+          })
       }
 
       if (!biggestImagePath) biggestImagePath = outputPath
@@ -172,10 +180,16 @@ export function updateLocalVideoMiniatureFromUrl (options: {
   size?: ImageSize
 }) {
   const { downloadUrl, video, type, size } = options
-  const { filename: updatedFilename, basePath, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
+
+  const { filename: updatedFilename, basePath, height, width, existingThumbnail } = buildMetadataFromVideo({
+    video,
+    type,
+    size,
+    extension: getImageExtension(downloadUrl)
+  })
 
   // Only save the file URL if it is a remote video
-  const fileUrl = video.isOwned()
+  const fileUrl = video.isLocal()
     ? null
     : downloadUrl
 
@@ -205,7 +219,12 @@ export function updateRemoteVideoThumbnail (options: {
   onDisk: boolean
 }) {
   const { fileUrl, video, type, size, onDisk } = options
-  const { filename: generatedFilename, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
+  const { filename: generatedFilename, height, width, existingThumbnail } = buildMetadataFromVideo({
+    video,
+    type,
+    size,
+    extension: getImageExtension(fileUrl)
+  })
 
   const thumbnail = existingThumbnail || new ThumbnailModel()
 
@@ -276,13 +295,20 @@ function buildMetadataFromPlaylist (playlist: MVideoPlaylistThumbnail, size: Ima
   }
 }
 
-function buildMetadataFromVideo (video: MVideoThumbnail, type: ThumbnailType_Type, size?: ImageSize) {
+function buildMetadataFromVideo (options: {
+  video: MVideoThumbnail
+  type: ThumbnailType_Type
+  extension?: string
+  size?: ImageSize
+}) {
+  const { video, type, extension, size } = options
+
   const existingThumbnail = Array.isArray(video.Thumbnails)
     ? video.Thumbnails.find(t => t.type === type)
     : undefined
 
   if (type === ThumbnailType.MINIATURE) {
-    const filename = generateImageFilename()
+    const filename = generateImageFilename(extension)
     const basePath = CONFIG.STORAGE.THUMBNAILS_DIR
 
     return {
@@ -297,7 +323,7 @@ function buildMetadataFromVideo (video: MVideoThumbnail, type: ThumbnailType_Typ
   }
 
   if (type === ThumbnailType.PREVIEW) {
-    const filename = generateImageFilename()
+    const filename = generateImageFilename(extension)
     const basePath = CONFIG.STORAGE.PREVIEWS_DIR
 
     return {
@@ -389,4 +415,14 @@ async function generateImageFromVideoFile (options: {
 
     throw err
   }
+}
+
+function getImageExtension (input: string) {
+  const extension = extname(input).toLowerCase()
+
+  if (MIMETYPES.IMAGE.EXT_MIMETYPE[extension]) return extension
+
+  logger.warn('Cannot determine image extension from input ' + input, lTags())
+
+  return '.jpg'
 }

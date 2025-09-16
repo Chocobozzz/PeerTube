@@ -20,7 +20,7 @@ export class VideoPublishResolver {
 
   resolve () {
     return forkJoin([
-      listUserChannelsForSelect(this.authService),
+      listUserChannelsForSelect(this.authService, { includeCollaborations: true }),
       this.userService.getMyVideoQuotaUsed(),
       this.serverService.getVideoPrivacies()
     ]).pipe(map(([ videoChannels, userQuota, privacies ]) => ({ videoChannels, userQuota, privacies } as VideoPublishResolverData)))

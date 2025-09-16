@@ -15,12 +15,13 @@ import {
   waitJobs
 } from '@peertube/peertube-server-commands'
 import { expectStartWith } from '@tests/shared/checks.js'
-import { checkVideoFileTokenReinjection } from '@tests/shared/streaming-playlists.js'
 import { magnetUriDecode, parseTorrentVideo } from '@tests/shared/p2p.js'
+import { checkVideoFileTokenReinjection } from '@tests/shared/streaming-playlists.js'
 import { expect } from 'chai'
 
 describe('Test video static file privacy', function () {
   let server: PeerTubeServer
+  let editorToken: string
   let userToken: string
 
   before(async function () {
@@ -30,13 +31,12 @@ describe('Test video static file privacy', function () {
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 
-    userToken = await server.users.generateUserAndToken('user1')
+    userToken = await server.users.generateUserAndToken('user')
+    editorToken = await server.channelCollaborators.createEditor('editor', 'root_channel')
   })
 
   describe('VOD static file path', function () {
-
     function runSuite () {
-
       async function checkPrivateFiles (uuid: string) {
         const video = await server.videos.getWithToken({ id: uuid })
 
@@ -178,7 +178,6 @@ describe('Test video static file privacy', function () {
     })
 
     describe('With transcoding', function () {
-
       before(async function () {
         await server.config.enableMinimumTranscoding()
       })
@@ -202,30 +201,28 @@ describe('Test video static file privacy', function () {
       const video = await server.videos.getWithToken({ id })
 
       for (const file of getAllFiles(video)) {
-        await makeRawRequest({ url: file.fileUrl, token, expectedStatus })
-        await makeRawRequest({ url: file.fileDownloadUrl, token, expectedStatus })
+        for (const url of [ file.fileUrl, file.fileDownloadUrl ]) {
+          await makeRawRequest({ url, token, expectedStatus })
 
-        await makeRawRequest({ url: file.fileUrl, query: { videoFileToken }, expectedStatus })
-        await makeRawRequest({ url: file.fileDownloadUrl, query: { videoFileToken }, expectedStatus })
+          await makeRawRequest({ url, query: { videoFileToken }, expectedStatus })
 
-        if (videoPassword) {
-          const headers = { 'x-peertube-video-password': videoPassword }
-          await makeRawRequest({ url: file.fileUrl, headers, expectedStatus })
-          await makeRawRequest({ url: file.fileDownloadUrl, headers, expectedStatus })
+          if (videoPassword) {
+            const headers = { 'x-peertube-video-password': videoPassword }
+            await makeRawRequest({ url, headers, expectedStatus })
+          }
         }
       }
 
       const hls = video.streamingPlaylists[0]
-      await makeRawRequest({ url: hls.playlistUrl, token, expectedStatus })
-      await makeRawRequest({ url: hls.segmentsSha256Url, token, expectedStatus })
 
-      await makeRawRequest({ url: hls.playlistUrl, query: { videoFileToken }, expectedStatus })
-      await makeRawRequest({ url: hls.segmentsSha256Url, query: { videoFileToken }, expectedStatus })
+      for (const url of [ hls.playlistUrl, hls.segmentsSha256Url ]) {
+        await makeRawRequest({ url, token, expectedStatus })
+        await makeRawRequest({ url, query: { videoFileToken }, expectedStatus })
 
-      if (videoPassword) {
-        const headers = { 'x-peertube-video-password': videoPassword }
-        await makeRawRequest({ url: hls.playlistUrl, token: null, headers, expectedStatus })
-        await makeRawRequest({ url: hls.segmentsSha256Url, token: null, headers, expectedStatus })
+        if (videoPassword) {
+          const headers = { 'x-peertube-video-password': videoPassword }
+          await makeRawRequest({ url, token: null, headers, expectedStatus })
+        }
       }
     }
 
@@ -236,16 +233,16 @@ describe('Test video static file privacy', function () {
       unrelatedFileToken = await server.videoToken.getVideoFileToken({ videoId: uuid })
     })
 
-    it('Should not be able to access a private video files without OAuth token and file token', async function () {
+    it('Should not be able to access a private video files without user token and file token', async function () {
       this.timeout(120000)
 
       const { uuid } = await server.videos.quickUpload({ name: 'video', privacy: VideoPrivacy.PRIVATE })
       await waitJobs([ server ])
 
-      await checkVideoFiles({ id: uuid, expectedStatus: HttpStatusCode.FORBIDDEN_403, token: null, videoFileToken: null })
+      await checkVideoFiles({ id: uuid, expectedStatus: HttpStatusCode.UNAUTHORIZED_401, token: null, videoFileToken: null })
     })
 
-    it('Should not be able to access password protected video files without OAuth token, file token and password', async function () {
+    it('Should not be able to access password protected video files without user token, file token and password', async function () {
       this.timeout(120000)
       const videoPassword = 'my super password'
 
@@ -258,14 +255,14 @@ describe('Test video static file privacy', function () {
 
       await checkVideoFiles({
         id: uuid,
-        expectedStatus: HttpStatusCode.FORBIDDEN_403,
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401,
         token: null,
         videoFileToken: null,
         videoPassword: null
       })
     })
 
-    it('Should not be able to access an password video files with incorrect OAuth token, file token and password', async function () {
+    it('Should not be able to access an password video files with incorrect user token, file token and password', async function () {
       this.timeout(120000)
       const videoPassword = 'my super password'
 
@@ -285,7 +282,7 @@ describe('Test video static file privacy', function () {
       })
     })
 
-    it('Should not be able to access an private video files without appropriate OAuth token and file token', async function () {
+    it('Should not be able to access an private video files without appropriate user token and file token', async function () {
       this.timeout(120000)
 
       const { uuid } = await server.videos.quickUpload({ name: 'video', privacy: VideoPrivacy.PRIVATE })
@@ -299,18 +296,20 @@ describe('Test video static file privacy', function () {
       })
     })
 
-    it('Should be able to access a private video files with appropriate OAuth token or file token', async function () {
+    it('Should be able to access a private video files with appropriate user token or file token', async function () {
       this.timeout(120000)
 
       const { uuid } = await server.videos.quickUpload({ name: 'video', privacy: VideoPrivacy.PRIVATE })
-      const videoFileToken = await server.videoToken.getVideoFileToken({ videoId: uuid })
-
       await waitJobs([ server ])
 
-      await checkVideoFiles({ id: uuid, expectedStatus: HttpStatusCode.OK_200, token: server.accessToken, videoFileToken })
+      for (const token of [ server.accessToken, editorToken ]) {
+        const videoFileToken = await server.videoToken.getVideoFileToken({ videoId: uuid, token })
+
+        await checkVideoFiles({ id: uuid, expectedStatus: HttpStatusCode.OK_200, token, videoFileToken })
+      }
     })
 
-    it('Should be able to access a password protected video files with appropriate OAuth token or file token', async function () {
+    it('Should be able to access a password protected video files with appropriate user token or file token', async function () {
       this.timeout(120000)
       const videoPassword = 'my super password'
 
@@ -325,6 +324,7 @@ describe('Test video static file privacy', function () {
       await waitJobs([ server ])
 
       await checkVideoFiles({ id: uuid, expectedStatus: HttpStatusCode.OK_200, token: server.accessToken, videoFileToken, videoPassword })
+      await checkVideoFiles({ id: uuid, expectedStatus: HttpStatusCode.OK_200, token: editorToken, videoFileToken, videoPassword })
     })
 
     it('Should reinject video file token', async function () {
@@ -355,7 +355,7 @@ describe('Test video static file privacy', function () {
       }
     })
 
-    it('Should be able to access a private video of another user with an admin OAuth token or file token', async function () {
+    it('Should be able to access a private video of another user with an admin user token or file token', async function () {
       this.timeout(120000)
 
       const { uuid } = await server.videos.quickUpload({ name: 'video', token: userToken, privacy: VideoPrivacy.PRIVATE })
@@ -389,6 +389,7 @@ describe('Test video static file privacy', function () {
       const video = await server.videos.getWithToken({ id: liveId })
 
       const fileToken = await server.videoToken.getVideoFileToken({ videoId: video.uuid })
+      const editorFileToken = await server.videoToken.getVideoFileToken({ videoId: video.uuid, token: editorToken })
 
       const hls = video.streamingPlaylists[0]
 
@@ -398,8 +399,11 @@ describe('Test video static file privacy', function () {
         await makeRawRequest({ url, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
         await makeRawRequest({ url, query: { videoFileToken: fileToken }, expectedStatus: HttpStatusCode.OK_200 })
 
+        await makeRawRequest({ url, token: editorToken, expectedStatus: HttpStatusCode.OK_200 })
+        await makeRawRequest({ url, query: { videoFileToken: editorFileToken }, expectedStatus: HttpStatusCode.OK_200 })
+
         await makeRawRequest({ url, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
-        await makeRawRequest({ url, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+        await makeRawRequest({ url, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
         await makeRawRequest({ url, query: { videoFileToken: unrelatedFileToken }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
 
         if (videoPassword) {
@@ -410,7 +414,6 @@ describe('Test video static file privacy', function () {
             expectedStatus: HttpStatusCode.FORBIDDEN_403
           })
         }
-
       }
 
       await stopFfmpeg(ffmpegCommand)
@@ -418,6 +421,7 @@ describe('Test video static file privacy', function () {
 
     async function checkReplay (replay: VideoDetails) {
       const fileToken = await server.videoToken.getVideoFileToken({ videoId: replay.uuid })
+      const editorFileToken = await server.videoToken.getVideoFileToken({ videoId: replay.uuid, token: editorToken })
 
       const hls = replay.streamingPlaylists[0]
       expect(hls.files).to.not.have.lengthOf(0)
@@ -426,8 +430,11 @@ describe('Test video static file privacy', function () {
         await makeRawRequest({ url: file.fileUrl, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
         await makeRawRequest({ url: file.fileUrl, query: { videoFileToken: fileToken }, expectedStatus: HttpStatusCode.OK_200 })
 
+        await makeRawRequest({ url: file.fileUrl, token: editorToken, expectedStatus: HttpStatusCode.OK_200 })
+        await makeRawRequest({ url: file.fileUrl, query: { videoFileToken: editorFileToken }, expectedStatus: HttpStatusCode.OK_200 })
+
         await makeRawRequest({ url: file.fileUrl, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
-        await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+        await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
         await makeRawRequest({
           url: file.fileUrl,
           query: { videoFileToken: unrelatedFileToken },
@@ -441,8 +448,11 @@ describe('Test video static file privacy', function () {
         await makeRawRequest({ url, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
         await makeRawRequest({ url, query: { videoFileToken: fileToken }, expectedStatus: HttpStatusCode.OK_200 })
 
+        await makeRawRequest({ url, token: editorToken, expectedStatus: HttpStatusCode.OK_200 })
+        await makeRawRequest({ url, query: { videoFileToken: editorFileToken }, expectedStatus: HttpStatusCode.OK_200 })
+
         await makeRawRequest({ url, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
-        await makeRawRequest({ url, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+        await makeRawRequest({ url, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
         await makeRawRequest({ url, query: { videoFileToken: unrelatedFileToken }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
       }
     }

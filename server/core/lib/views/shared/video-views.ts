@@ -12,7 +12,6 @@ import { CONFIG } from '@server/initializers/config.js'
 const lTags = loggerTagsFactory('views')
 
 export class VideoViews {
-
   private readonly viewsCache = new LRUCache<string, boolean>({
     max: 10_000,
     ttl: VIEW_LIFETIME.VIEW
@@ -58,7 +57,7 @@ export class VideoViews {
   private async addView (video: MVideoImmutable) {
     const promises: Promise<any>[] = []
 
-    if (video.isOwned()) {
+    if (video.isLocal()) {
       promises.push(Redis.Instance.addLocalVideoView(video.id))
     }
 

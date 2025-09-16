@@ -40,7 +40,7 @@
 
   &[disabled] {
     pointer-events: none;
-    opacity: 0.8;
+    opacity: 0.6;
   }
 
   &:not(.icon-only) my-global-icon {
@@ -128,22 +128,6 @@
   }
 }
 
-@mixin rounded-icon-button {
-  padding: 0.5rem !important;
-  border-radius: 100% !important;
-
-  &.small-button {
-    padding: 6px !important;
-    line-height: 0 !important;
-
-    my-global-icon {
-      line-height: 0;
-
-      @include global-icon-size(12px);
-    }
-  }
-}
-
 @mixin danger-button {
   background-color: pvar(--input-danger-bg);
   color: pvar(--input-danger-fg);
@@ -184,9 +168,29 @@
     padding: pvar(--input-y-padding) 8px;
   }
 
-  &:is(input[type="button"]) {
-    // Because of primeng that redefines border-radius of all input[type="..."]
-    border-radius: pvar(--input-border-radius) !important;
+  &.small-button {
+    font-size: $button-font-size * 0.9;
+    padding: calc(#{pvar(--input-y-padding)} / 2) calc(#{pvar(--input-x-padding)} / 2) !important;
+
+    my-global-icon {
+      @include global-icon-size(18px !important);
+    }
+  }
+}
+
+@mixin rounded-icon-button {
+  padding: 0.5rem !important;
+  border-radius: 100% !important;
+
+  &.small-button {
+    padding: calc(#{pvar(--input-x-padding)} / 4) !important;
+    line-height: 0 !important;
+
+    my-global-icon {
+      line-height: 0;
+
+      @include global-icon-size(12px !important);
+    }
   }
 }
 

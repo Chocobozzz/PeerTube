@@ -1,13 +1,23 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core'
+import { CommonModule, NgTemplateOutlet } from '@angular/common'
+import { booleanAttribute, ChangeDetectionStrategy, Component, ContentChild, input, OnChanges, output, TemplateRef } from '@angular/core'
 import { Params, RouterLink } from '@angular/router'
+import { ActorAvatarComponent, ActorAvatarInput, ActorAvatarType } from '@app/shared/shared-actor-image/actor-avatar.component'
 import { GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
+import { NgbDropdownMenu, NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
-import { NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { NgIf, NgClass, NgFor, NgTemplateOutlet } from '@angular/common'
+import { CollaboratorStateType } from '../channel/collaborator-state.component'
 
-export type DropdownAction<T> = {
-  label?: string
+export type DropdownAction<T, D = never> = {
+  label: string
+
   iconName?: GlobalIconName
+
+  actorAvatar?: {
+    actor: ActorAvatarInput
+    type: ActorAvatarType
+  }
+  collaboratorBadge?: CollaboratorStateType
+
   description?: string
   title?: string
   handler?: (a: T) => any
@@ -21,11 +31,13 @@ export type DropdownAction<T> = {
   isHeader?: boolean
 
   ownerOrModeratorPrivilege?: () => string
+
+  data?: D
 }
 
 export type DropdownButtonSize = 'normal' | 'small'
 export type DropdownTheme = 'primary' | 'secondary'
-export type DropdownDirection = 'horizontal' | 'vertical'
+export type DropdownButtonIcon = 'more-horizontal' | 'more-vertical' | 'chevron-down'
 
 @Component({
   selector: 'my-action-dropdown',
@@ -33,48 +45,65 @@ export type DropdownDirection = 'horizontal' | 'vertical'
   templateUrl: './action-dropdown.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    NgIf,
-    NgbTooltip,
-    NgbDropdown,
-    NgbDropdownToggle,
-    NgClass,
+    CommonModule,
+    NgbTooltipModule,
+    NgbDropdownModule,
     GlobalIconComponent,
     NgbDropdownMenu,
-    NgFor,
     RouterLink,
-    NgTemplateOutlet
+    NgTemplateOutlet,
+    ActorAvatarComponent
   ]
 })
-export class ActionDropdownComponent<T> {
-  readonly actions = input<DropdownAction<T>[] | DropdownAction<T>[][]>([])
+export class ActionDropdownComponent<T, D = never> implements OnChanges {
+  readonly actions = input<DropdownAction<T, D>[] | DropdownAction<T, D>[][]>([])
   readonly entry = input<T>(undefined)
 
   readonly placement = input('bottom-left auto')
   readonly container = input<null | 'body'>(undefined)
 
   readonly buttonSize = input<DropdownButtonSize>('normal')
-  readonly buttonDirection = input<DropdownDirection>('horizontal')
-  readonly buttonStyled = input(true)
+  readonly buttonIcon = input<DropdownButtonIcon>('more-horizontal')
+  readonly buttonStyled = input(true, { transform: booleanAttribute })
 
   readonly label = input<string>(undefined)
   readonly theme = input<DropdownTheme>('secondary')
 
   readonly openChange = output<boolean>()
 
-  getActions (): DropdownAction<T>[][] {
-    const actions = this.actions()
-    if (actions.length !== 0 && Array.isArray(actions[0])) return actions as DropdownAction<T>[][]
+  @ContentChild('dropdownItemExtra', { descendants: false })
+  dropdownItemExtra: TemplateRef<any>
 
-    return [ actions as DropdownAction<T>[] ]
+  @ContentChild('labelExtra', { descendants: false })
+  labelExtra: TemplateRef<any>
+
+  buttonClasses: Record<string, boolean> = {}
+
+  ngOnChanges () {
+    this.buttonClasses = {
+      'icon-only': !this.label(),
+      'peertube-button': this.buttonStyled(),
+      'peertube-button-small': this.buttonSize() === 'small',
+      'secondary-button': this.buttonStyled() && this.theme() === 'secondary',
+      'primary-button': this.buttonStyled() && this.theme() === 'primary',
+      'button-unstyle': !this.buttonStyled()
+    }
   }
 
-  getQueryParams (action: DropdownAction<T>, entry: T) {
+  getActions (): DropdownAction<T, D>[][] {
+    const actions = this.actions()
+    if (actions.length !== 0 && Array.isArray(actions[0])) return actions as DropdownAction<T, D>[][]
+
+    return [ actions as DropdownAction<T, D>[] ]
+  }
+
+  getQueryParams (action: DropdownAction<T, D>, entry: T) {
     if (action.queryParamsBuilder) return action.queryParamsBuilder(entry)
 
     return {}
   }
 
-  areActionsDisplayed (actions: (DropdownAction<T> | DropdownAction<T>[])[], entry: T): boolean {
+  areActionsDisplayed (actions: (DropdownAction<T, D> | DropdownAction<T, D>[])[], entry: T): boolean {
     return actions.some(a => {
       if (Array.isArray(a)) return this.areActionsDisplayed(a, entry)
 
@@ -82,7 +111,7 @@ export class ActionDropdownComponent<T> {
     })
   }
 
-  isBlockDisplayed (allActions: (DropdownAction<T> | DropdownAction<T>[])[], action: DropdownAction<T>, entry: T) {
+  isBlockDisplayed (allActions: (DropdownAction<T, D> | DropdownAction<T, D>[])[], action: DropdownAction<T, D>, entry: T) {
     // Do not display only the header
     if (action.isHeader && !this.areActionsDisplayed(allActions, entry)) return false
 

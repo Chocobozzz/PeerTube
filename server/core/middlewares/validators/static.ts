@@ -196,7 +196,7 @@ function extractTokenOrDie (req: express.Request, res: express.Response) {
   if (!token) {
     return res.fail({
       message: 'Video password header, video file token query parameter and bearer token are all missing', //
-      status: HttpStatusCode.FORBIDDEN_403
+      status: HttpStatusCode.UNAUTHORIZED_401
     })
   }
 

@@ -56,7 +56,7 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
     const activityPubOutbox: ActivityCreate<VideoObject>[] = []
     let staticFiles: ExportResult<VideoExportJSON>['staticFiles'] = []
 
-    const channels = await VideoChannelModel.listAllByAccount(this.user.Account.id)
+    const channels = await VideoChannelModel.listAllOwnedByAccount(this.user.Account.id)
 
     for (const channel of channels) {
       const videoIds = await VideoModel.getAllIdsFromChannel(channel, USER_EXPORT_MAX_ITEMS)

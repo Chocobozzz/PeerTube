@@ -154,8 +154,8 @@
 @mixin row-blocks($column-responsive: true, $min-height: 130px, $separator: true) {
   display: flex;
   min-height: $min-height;
-  padding-bottom: 20px;
-  margin-bottom: 20px;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.25rem;
 
   @if $separator {
     border-bottom: 1px solid pvar(--input-border-color);
@@ -168,14 +168,14 @@
       align-items: center;
     } @else {
       min-height: initial;
-      padding-bottom: 10px;
-      margin-bottom: 10px;
+      padding-bottom: 0.5rem;
+      margin-bottom: 0.5rem;
     }
   }
 }
 
 @mixin dropdown-with-icon-item {
-  padding: pvar(--input-y-padding) 15px;
+  padding: pvar(--input-y-padding) 1rem;
 
   my-global-icon {
     width: 22px;
@@ -183,7 +183,11 @@
     position: relative;
     top: -2px;
 
-    @include margin-right(10px);
+    @include margin-right($dropdown-icon-margin-right);
+  }
+
+  my-actor-avatar {
+    @include margin-right($dropdown-icon-margin-right);
   }
 }
 

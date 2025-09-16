@@ -23,11 +23,11 @@ import { ConfigManager } from '../../../shared/config-manager.js'
 import { logger } from '../../../shared/index.js'
 import { buildFFmpegLive, ProcessOptions } from './common.js'
 
-type CustomLiveRTMPHLSTranscodingUpdatePayload =
-  Omit<LiveRTMPHLSTranscodingUpdatePayload, 'resolutionPlaylistFile'> & { resolutionPlaylistFile?: [ Buffer, string ] | Blob | string }
+type CustomLiveRTMPHLSTranscodingUpdatePayload = Omit<LiveRTMPHLSTranscodingUpdatePayload, 'resolutionPlaylistFile'> & {
+  resolutionPlaylistFile?: [Buffer, string] | Blob | string
+}
 
 export class ProcessLiveRTMPHLSTranscoding {
-
   private readonly outputPath: string
   private readonly fsWatchers: FSWatcher[] = []
 
@@ -326,7 +326,7 @@ export class ProcessLiveRTMPHLSTranscoding {
 
         const p = payloadBuilder().then(p => this.updateWithRetry(p))
 
-        if (!sequentialPromises) sequentialPromises = p
+        if (sequentialPromises === undefined) sequentialPromises = p
         else sequentialPromises = sequentialPromises.then(() => p)
       }
 
@@ -388,7 +388,7 @@ export class ProcessLiveRTMPHLSTranscoding {
     return [
       Buffer.from(this.latestFilteredPlaylistContent[playlistName], 'utf-8'),
       join(this.outputPath, 'master.m3u8')
-    ] as [ Buffer, string ]
+    ] as [Buffer, string]
   }
 
   // ---------------------------------------------------------------------------

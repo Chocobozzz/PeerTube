@@ -1,4 +1,5 @@
 import { Account, AccountSummary, ActivityPubActor, VideoPrivacy } from '@peertube/peertube-models'
+import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { ModelCache } from '@server/models/shared/model-cache.js'
 import { FindOptions, IncludeOptions, Includeable, Op, Transaction, WhereOptions, literal } from 'sequelize'
 import {
@@ -33,15 +34,16 @@ import {
 } from '../../types/models/index.js'
 import { ActorFollowModel } from '../actor/actor-follow.js'
 import { ActorImageModel } from '../actor/actor-image.js'
-import { ActorModel } from '../actor/actor.js'
+import { ActorModel, actorSummaryAttributes } from '../actor/actor.js'
 import { ApplicationModel } from '../application/application.js'
 import { AccountAutomaticTagPolicyModel } from '../automatic-tag/account-automatic-tag-policy.js'
 import { CommentAutomaticTagModel } from '../automatic-tag/comment-automatic-tag.js'
 import { VideoAutomaticTagModel } from '../automatic-tag/video-automatic-tag.js'
 import { ServerBlocklistModel } from '../server/server-blocklist.js'
-import { ServerModel } from '../server/server.js'
+import { ServerModel, serverSummaryAttributes } from '../server/server.js'
 import { SequelizeModel, buildSQLAttributes, getSort, throwIfNotValid } from '../shared/index.js'
 import { UserModel } from '../user/user.js'
+import { VideoChannelCollaboratorModel } from '../video/video-channel-collaborator.js'
 import { VideoChannelModel } from '../video/video-channel.js'
 import { VideoCommentModel } from '../video/video-comment.js'
 import { VideoPlaylistModel } from '../video/video-playlist.js'
@@ -51,6 +53,8 @@ import { AccountBlocklistModel } from './account-blocklist.js'
 export enum ScopeNames {
   SUMMARY = 'SUMMARY'
 }
+
+const accountSummaryAttributes = [ 'id', 'name', 'actorId' ] as const satisfies (keyof AttributesOnly<AccountModel>)[]
 
 export type SummaryOptions = {
   actorRequired?: boolean // Default: true
@@ -71,14 +75,14 @@ export type SummaryOptions = {
 @Scopes(() => ({
   [ScopeNames.SUMMARY]: (options: SummaryOptions = {}) => {
     const serverInclude: IncludeOptions = {
-      attributes: [ 'host' ],
+      attributes: serverSummaryAttributes,
       model: ServerModel.unscoped(),
       required: !!options.whereServer,
       where: options.whereServer
     }
 
     const actorInclude: Includeable = {
-      attributes: [ 'id', 'preferredUsername', 'url', 'serverId' ],
+      attributes: actorSummaryAttributes,
       model: ActorModel.unscoped(),
       required: options.actorRequired ?? true,
       where: options.whereActor,
@@ -98,7 +102,7 @@ export type SummaryOptions = {
     ]
 
     const query: FindOptions = {
-      attributes: [ 'id', 'name', 'actorId' ]
+      attributes: accountSummaryAttributes
     }
 
     if (options.withAccountBlockerIds) {
@@ -259,6 +263,12 @@ export class AccountModel extends SequelizeModel<AccountModel> {
   })
   declare VideoAutomaticTags: Awaited<VideoAutomaticTagModel>[]
 
+  @HasMany(() => VideoChannelCollaboratorModel, {
+    foreignKey: 'accountId',
+    onDelete: 'CASCADE'
+  })
+  declare VideoChannelCollaborators: Awaited<VideoChannelCollaboratorModel>[]
+
   @BeforeDestroy
   static async sendDeleteIfOwned (instance: AccountModel, options) {
     if (!instance.Actor) {
@@ -267,7 +277,7 @@ export class AccountModel extends SequelizeModel<AccountModel> {
 
     await ActorFollowModel.removeFollowsOf(instance.Actor.id, options.transaction)
 
-    if (instance.isOwned()) {
+    if (instance.isLocal()) {
       return sendDeleteActor(instance.Actor, options.transaction)
     }
 
@@ -293,6 +303,15 @@ export class AccountModel extends SequelizeModel<AccountModel> {
       model: this,
       tableName,
       aliasPrefix
+    })
+  }
+
+  static getSQLSummaryAttributes (tableName: string, aliasPrefix = '') {
+    return buildSQLAttributes({
+      model: this,
+      tableName,
+      aliasPrefix,
+      includeAttributes: accountSummaryAttributes
     })
   }
 
@@ -505,8 +524,8 @@ export class AccountModel extends SequelizeModel<AccountModel> {
     })
   }
 
-  isOwned () {
-    return this.Actor.isOwned()
+  isLocal () {
+    return this.Actor.isLocal()
   }
 
   isOutdated () {

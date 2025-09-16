@@ -1,0 +1,23 @@
+<div class="root ">
+  @if (showChannel()) {
+    <my-actor-avatar
+      class="channel"
+      [actor]="channel()" actorType="channel"
+      [size]="size()"
+      [title]="linkTitle"
+      [internalHref]="internalHref()"
+    ></my-actor-avatar>
+  }
+
+  @if (showAccount()) {
+    <my-actor-avatar
+      class="account"
+      [class.second-avatar]="showChannel()"
+      [actor]="account()" actorType="account"
+      [size]="getAccountSize()"
+      [title]="linkTitle"
+      [internalHref]="internalHref()"
+    >
+    </my-actor-avatar>
+  }
+</div>

@@ -39,7 +39,7 @@ export async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylis
 
   // Ensure the file is on disk
   const videoMiniaturePermanentFileCache = new VideoMiniaturePermanentFileCache()
-  const inputPath = videoMiniature.isOwned()
+  const inputPath = videoMiniature.isLocal()
     ? videoMiniature.getPath()
     : await videoMiniaturePermanentFileCache.downloadRemoteFile(videoMiniature)
 

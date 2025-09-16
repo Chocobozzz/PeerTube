@@ -385,15 +385,15 @@ export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
 
   static listInstanceFollowingForApi (options: ListFollowingOptions) {
     return Promise.all([
-      new InstanceListFollowingQueryBuilder(this.sequelize, options).countFollowing(),
-      new InstanceListFollowingQueryBuilder(this.sequelize, options).listFollowing()
+      new InstanceListFollowingQueryBuilder(this.sequelize, options).count(),
+      new InstanceListFollowingQueryBuilder(this.sequelize, options).list<MActorFollowFormattable>()
     ]).then(([ total, data ]) => ({ total, data }))
   }
 
   static listFollowersForApi (options: ListFollowersOptions) {
     return Promise.all([
-      new InstanceListFollowersQueryBuilder(this.sequelize, options).countFollowers(),
-      new InstanceListFollowersQueryBuilder(this.sequelize, options).listFollowers()
+      new InstanceListFollowersQueryBuilder(this.sequelize, options).count(),
+      new InstanceListFollowersQueryBuilder(this.sequelize, options).list<MActorFollowFormattable>()
     ]).then(([ total, data ]) => ({ total, data }))
   }
 

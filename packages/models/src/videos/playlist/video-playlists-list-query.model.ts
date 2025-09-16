@@ -7,3 +7,8 @@ export interface VideoPlaylistsListQuery {
   search?: string
   playlistType?: VideoPlaylistType_Type
 }
+
+export interface VideoPlaylistForAccountListQuery extends VideoPlaylistsListQuery {
+  includeCollaborations?: boolean
+  channelNameOneOf?: string[]
+}

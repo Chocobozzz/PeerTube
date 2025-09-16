@@ -3,7 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { VideoEdit } from '@app/+videos-publish-manage/shared-manage/common/video-edit.model'
 import { VideoManageController } from '@app/+videos-publish-manage/shared-manage/video-manage-controller.service'
-import { CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
+import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { VideoImportService } from '@app/shared/shared-main/video/video-import.service'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
@@ -41,6 +41,7 @@ const debugLogger = debug('peertube:video-publish')
   ]
 })
 export class VideoImportTorrentComponent implements OnInit, AfterViewInit, CanComponentDeactivate {
+  private authService = inject(AuthService)
   private loadingBar = inject(LoadingBarService)
   private notifier = inject(Notifier)
   private videoService = inject(VideoService)
@@ -121,7 +122,8 @@ export class VideoImportTorrentComponent implements OnInit, AfterViewInit, CanCo
       torrentfile,
       magnetUri: this.firstStepMagnetUri,
       channelId: this.firstStepChannelId,
-      support: this.userChannels().find(c => c.id === this.firstStepChannelId).support ?? ''
+      support: this.userChannels().find(c => c.id === this.firstStepChannelId).support ?? '',
+      user: this.authService.getUser()
     })
     this.manageController.setConfig({ manageType: 'import-torrent', serverConfig: this.serverService.getHTMLConfig() })
     this.manageController.setVideoEdit(videoEdit)

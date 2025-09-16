@@ -10,6 +10,7 @@ import { sequelizeTypescript } from '@server/initializers/database.js'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
 import { LocalVideoCreator } from '@server/lib/local-video-creator.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { checkCanManageVideo } from '@server/middlewares/validators/shared/videos.js'
 import {
   videoLiveAddValidator,
   videoLiveFindReplaySessionValidator,
@@ -44,21 +45,30 @@ liveRouter.get(
   '/live/:videoId/sessions',
   authenticate,
   asyncMiddleware(videoLiveGetValidator),
-  videoLiveListSessionsValidator,
+  asyncMiddleware(videoLiveListSessionsValidator),
   asyncMiddleware(getLiveVideoSessions)
 )
 
-liveRouter.get('/live/:videoId', optionalAuthenticate, asyncMiddleware(videoLiveGetValidator), getLiveVideo)
+liveRouter.get(
+  '/live/:videoId',
+  optionalAuthenticate,
+  asyncMiddleware(videoLiveGetValidator),
+  asyncMiddleware(getLiveVideo)
+)
 
 liveRouter.put(
   '/live/:videoId',
   authenticate,
   asyncMiddleware(videoLiveGetValidator),
-  videoLiveUpdateValidator,
+  asyncMiddleware(videoLiveUpdateValidator),
   asyncRetryTransactionMiddleware(updateLiveVideo)
 )
 
-liveRouter.get('/:videoId/live-session', asyncMiddleware(videoLiveFindReplaySessionValidator), getLiveReplaySession)
+liveRouter.get(
+  '/:videoId/live-session',
+  asyncMiddleware(videoLiveFindReplaySessionValidator),
+  getLiveReplaySession
+)
 
 // ---------------------------------------------------------------------------
 
@@ -68,10 +78,10 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function getLiveVideo (req: express.Request, res: express.Response) {
+async function getLiveVideo (req: express.Request, res: express.Response) {
   const videoLive = res.locals.videoLive
 
-  return res.json(videoLive.toFormattedJSON(canSeePrivateLiveInformation(res)))
+  return res.json(videoLive.toFormattedJSON(await canSeePrivateLiveInformation(req, res)))
 }
 
 function getLiveReplaySession (req: express.Request, res: express.Response) {
@@ -88,14 +98,16 @@ async function getLiveVideoSessions (req: express.Request, res: express.Response
   return res.json(getFormattedObjects(data, data.length))
 }
 
-function canSeePrivateLiveInformation (res: express.Response) {
-  const user = res.locals.oauth?.token.User
-  if (!user) return false
-
-  if (user.hasRight(UserRight.GET_ANY_LIVE)) return true
-
-  const video = res.locals.videoAll
-  return video.VideoChannel.Account.userId === user.id
+function canSeePrivateLiveInformation (req: express.Request, res: express.Response) {
+  return checkCanManageVideo({
+    user: res.locals.oauth?.token.User,
+    video: res.locals.videoAll,
+    right: UserRight.GET_ANY_LIVE,
+    req,
+    res: null,
+    checkIsLocal: true,
+    checkIsOwner: false
+  })
 }
 
 async function updateLiveVideo (req: express.Request, res: express.Response) {

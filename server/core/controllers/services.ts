@@ -12,7 +12,7 @@ servicesRouter.use('/oembed', cors(), apiRateLimiter, asyncMiddleware(oembedVali
 servicesRouter.use(
   '/redirect/accounts/:handle',
   apiRateLimiter,
-  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkManage: false })),
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkCanManage: false })),
   redirectToAccountUrl
 )
 

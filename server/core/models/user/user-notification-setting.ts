@@ -15,7 +15,7 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { isUserNotificationSettingValid } from '../../helpers/custom-validators/user-notifications.js'
-import { SequelizeModel, throwIfNotValid } from '../shared/index.js'
+import { buildSQLAttributes, SequelizeModel, throwIfNotValid } from '../shared/index.js'
 import { UserModel } from './user.js'
 
 @Table({
@@ -213,6 +213,18 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
   static removeTokenCache (instance: UserNotificationSettingModel) {
     return TokensCache.Instance.clearCacheByUserId(instance.userId)
   }
+
+  // ---------------------------------------------------------------------------
+
+  static getSQLAttributes (tableName: string, aliasPrefix = '') {
+    return buildSQLAttributes({
+      model: this,
+      tableName,
+      aliasPrefix
+    })
+  }
+
+  // ---------------------------------------------------------------------------
 
   static updateUserSettings (settings: UserNotificationSetting, userId: number) {
     const query = {

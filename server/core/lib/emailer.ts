@@ -490,7 +490,7 @@ export class Emailer {
   }
 
   private initHandlebarsIfNeeded () {
-    if (this.registeringHandlebars) return this.registeringHandlebars
+    if (this.registeringHandlebars !== undefined) return this.registeringHandlebars
 
     this.registeringHandlebars = this._initHandlebarsIfNeeded()
 

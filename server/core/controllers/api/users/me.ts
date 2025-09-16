@@ -38,9 +38,9 @@ import { updateAvatarValidator } from '../../../middlewares/validators/actor-ima
 import {
   commonVideosFiltersValidator,
   deleteMeValidator,
-  getMyVideoImportsValidator,
+  listMyVideoImportsValidator,
   listCommentsOnUserVideosValidator,
-  usersVideosValidator,
+  listMyVideosValidator,
   videoImportsSortValidator,
   videosSortValidator
 } from '../../../middlewares/validators/index.js'
@@ -56,10 +56,10 @@ const reqAvatarFile = createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_
 
 const meRouter = express.Router()
 
-meRouter.get('/me', authenticate, asyncMiddleware(getUserInformation))
+meRouter.get('/me', authenticate, asyncMiddleware(getMyInformation))
 meRouter.delete('/me', authenticate, deleteMeValidator, asyncMiddleware(deleteMe))
 
-meRouter.get('/me/video-quota-used', authenticate, asyncMiddleware(getUserVideoQuotaUsed))
+meRouter.get('/me/video-quota-used', authenticate, asyncMiddleware(getMyVideoQuotaUsed))
 
 meRouter.get(
   '/me/videos/imports',
@@ -68,8 +68,8 @@ meRouter.get(
   videoImportsSortValidator,
   setDefaultSort,
   setDefaultPagination,
-  getMyVideoImportsValidator,
-  asyncMiddleware(getUserVideoImports)
+  listMyVideoImportsValidator,
+  asyncMiddleware(listMyVideoImports)
 )
 
 meRouter.get(
@@ -91,15 +91,15 @@ meRouter.get(
   setDefaultVideosSort,
   setDefaultPagination,
   commonVideosFiltersValidator,
-  asyncMiddleware(usersVideosValidator),
-  asyncMiddleware(listUserVideos)
+  asyncMiddleware(listMyVideosValidator),
+  asyncMiddleware(listMyVideos)
 )
 
 meRouter.get(
   '/me/videos/:videoId/rating',
   authenticate,
   asyncMiddleware(usersVideoRatingValidator),
-  asyncMiddleware(getUserVideoRating)
+  asyncMiddleware(getMyVideoRating)
 )
 
 meRouter.put(
@@ -131,7 +131,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function listUserVideos (req: express.Request, res: express.Response) {
+async function listMyVideos (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.User
   const countVideos = getCountVideos(req)
   const query = pickCommonVideoQuery(req.query)
@@ -139,25 +139,29 @@ async function listUserVideos (req: express.Request, res: express.Response) {
   const include = (query.include || VideoInclude.NONE) | VideoInclude.BLACKLISTED | VideoInclude.NOT_PUBLISHED_STATE |
     VideoInclude.BLOCKED_OWNER
 
-  const apiOptions = await Hooks.wrapObject({
-    privacyOneOf: getAllPrivacies(),
+  const apiOptions = await Hooks.wrapObject(
+    {
+      privacyOneOf: getAllPrivacies(),
 
-    ...query,
+      ...query,
 
-    // Display all
-    nsfw: null,
+      // Display all
+      nsfw: null,
 
-    user,
-    accountId: user.Account.id,
-    displayOnlyForFollower: null,
+      user,
+      accountId: user.Account.id,
+      displayOnlyForFollower: null,
 
-    videoChannelId: res.locals.videoChannel?.id,
-    channelNameOneOf: req.query.channelNameOneOf,
+      videoChannelId: res.locals.videoChannel?.id,
+      channelNameOneOf: req.query.channelNameOneOf,
+      includeCollaborations: req.query.includeCollaborations || false,
 
-    countVideos,
+      countVideos,
 
-    include
-  }, 'filter:api.user.me.videos.list.params')
+      include
+    } satisfies Parameters<typeof VideoModel.listForApi>[0],
+    'filter:api.user.me.videos.list.params'
+  )
 
   const resultList = await Hooks.wrapPromiseFun(
     VideoModel.listForApi.bind(VideoModel),
@@ -171,7 +175,7 @@ async function listUserVideos (req: express.Request, res: express.Response) {
 async function listCommentsOnUserVideos (req: express.Request, res: express.Response) {
   const userAccount = res.locals.oauth.token.User.Account
 
-  const options = {
+  const resultList = await VideoCommentModel.listForApi({
     ...pick(req.query, [
       'start',
       'count',
@@ -183,14 +187,15 @@ async function listCommentsOnUserVideos (req: express.Request, res: express.Resp
     ]),
 
     autoTagOfAccountId: userAccount.id,
+
     videoAccountOwnerId: userAccount.id,
+    videoAccountOwnerIncludeCollaborations: req.query.includeCollaborations || false,
+
     heldForReview: req.query.isHeldForReview,
 
     videoChannelOwnerId: res.locals.videoChannel?.id,
     videoId: res.locals.videoAll?.id
-  }
-
-  const resultList = await VideoCommentModel.listCommentsForApi(options)
+  })
 
   return res.json({
     total: resultList.total,
@@ -198,18 +203,22 @@ async function listCommentsOnUserVideos (req: express.Request, res: express.Resp
   })
 }
 
-async function getUserVideoImports (req: express.Request, res: express.Response) {
+async function listMyVideoImports (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.User
   const resultList = await VideoImportModel.listUserVideoImportsForApi({
     userId: user.id,
 
-    ...pick(req.query, [ 'targetUrl', 'start', 'count', 'sort', 'search', 'videoChannelSyncId' ])
+    collaborationAccountId: req.query.includeCollaborations
+      ? user.Account.id
+      : undefined,
+
+    ...pick(req.query, [ 'targetUrl', 'start', 'count', 'sort', 'search', 'videoChannelSyncId', 'includeCollaborations' ])
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function getUserInformation (req: express.Request, res: express.Response) {
+async function getMyInformation (req: express.Request, res: express.Response) {
   // We did not load channels in res.locals.user
   const user = await UserModel.loadForMeAPI(res.locals.oauth.token.user.id)
 
@@ -222,7 +231,7 @@ async function getUserInformation (req: express.Request, res: express.Response) 
   return res.json(result)
 }
 
-async function getUserVideoQuotaUsed (req: express.Request, res: express.Response) {
+async function getMyVideoQuotaUsed (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.user
   const videoQuotaUsed = await getOriginalVideoFileTotalFromUser(user)
   const videoQuotaUsedDaily = await getOriginalVideoFileTotalDailyFromUser(user)
@@ -234,7 +243,7 @@ async function getUserVideoQuotaUsed (req: express.Request, res: express.Respons
   return res.json(data)
 }
 
-async function getUserVideoRating (req: express.Request, res: express.Response) {
+async function getMyVideoRating (req: express.Request, res: express.Response) {
   const videoId = res.locals.videoId.id
   const accountId = +res.locals.oauth.token.User.Account.id
 

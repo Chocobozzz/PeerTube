@@ -27,9 +27,7 @@ async function doesExist (options: {
 function createSimilarityAttribute (col: string, value: string): Fn {
   return Sequelize.fn(
     'similarity',
-
     searchTrigramNormalizeCol(col),
-
     searchTrigramNormalizeValue(value)
   )
 }
@@ -47,7 +45,7 @@ function parseAggregateResult (result: any) {
   return total
 }
 
-function parseRowCountResult (result: any) {
+function parseRowCountResult (result: any): number {
   if (result.length !== 0) return result[0].total
 
   return 0
@@ -73,8 +71,13 @@ function searchAttribute (sourceField?: string, targetField?: string) {
 }
 
 export {
-  buildWhereIdOrUUID, createSafeIn, createSimilarityAttribute, doesExist, parseAggregateResult,
-  parseRowCountResult, searchAttribute
+  buildWhereIdOrUUID,
+  createSafeIn,
+  createSimilarityAttribute,
+  doesExist,
+  parseAggregateResult,
+  parseRowCountResult,
+  searchAttribute
 }
 
 // ---------------------------------------------------------------------------

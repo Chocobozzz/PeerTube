@@ -95,7 +95,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
         distinctUntilChanged(),
         switchMap(accountId => this.accountService.getAccount(accountId)),
         tap(account => this.onAccount(account)),
-        switchMap(account => this.videoChannelService.listAccountVideoChannels({ account })),
+        switchMap(account => this.videoChannelService.listAccountChannels({ account })),
         catchError(err =>
           this.restExtractor.redirectTo404IfNotFound(err, 'other', [
             HttpStatusCode.BAD_REQUEST_400,

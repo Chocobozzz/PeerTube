@@ -18,8 +18,9 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { AccountModel } from '../account/account.js'
-import { SequelizeModel, getChannelSyncSort, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, buildSQLAttributes, throwIfNotValid } from '../shared/index.js'
 import { UserModel } from '../user/user.js'
+import { VideoChannelSyncListQueryBuilder } from './sql/video-channel-sync/video-channel-sync-list-query-builder.js'
 import { VideoChannelModel } from './video-channel.js'
 
 @DefaultScope(() => ({
@@ -73,57 +74,35 @@ export class VideoChannelSyncModel extends SequelizeModel<VideoChannelSyncModel>
   })
   declare VideoChannel: Awaited<VideoChannelModel>
 
+  // ---------------------------------------------------------------------------
+
+  static getSQLAttributes (tableName: string, aliasPrefix = '') {
+    return buildSQLAttributes({
+      model: this,
+      tableName,
+      aliasPrefix
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
   static listByAccountForAPI (options: {
     accountId: number
     start: number
     count: number
     sort: string
+    includeCollaborations: boolean
   }) {
-    const getQuery = (forCount: boolean) => {
-      const videoChannelModel = forCount
-        ? VideoChannelModel.unscoped()
-        : VideoChannelModel
-
-      return {
-        offset: options.start,
-        limit: options.count,
-        order: getChannelSyncSort(options.sort),
-        include: [
-          {
-            model: videoChannelModel,
-            required: true,
-            where: {
-              accountId: options.accountId
-            }
-          }
-        ]
-      }
-    }
-
     return Promise.all([
-      VideoChannelSyncModel.unscoped().count(getQuery(true)),
-      VideoChannelSyncModel.unscoped().findAll(getQuery(false))
-    ]).then(([ total, data ]) => ({ total, data }))
+      new VideoChannelSyncListQueryBuilder(VideoChannelSyncModel.sequelize, options).list<MChannelSyncFormattable>(),
+      new VideoChannelSyncListQueryBuilder(VideoChannelSyncModel.sequelize, options).count()
+    ]).then(([ rows, count ]) => {
+      return { total: count, data: rows }
+    })
   }
 
   static countByAccount (accountId: number) {
-    const query = {
-      include: [
-        {
-          model: VideoChannelModel.unscoped(),
-          required: true,
-          where: {
-            accountId
-          }
-        }
-      ]
-    }
-
-    return VideoChannelSyncModel.unscoped().count(query)
-  }
-
-  static loadWithChannel (id: number): Promise<MChannelSyncChannel> {
-    return VideoChannelSyncModel.findByPk(id)
+    return new VideoChannelSyncListQueryBuilder(VideoChannelSyncModel.sequelize, { accountId }).count()
   }
 
   static async listSyncs (): Promise<MChannelSync[]> {
@@ -156,6 +135,12 @@ export class VideoChannelSyncModel extends SequelizeModel<VideoChannelSyncModel>
     }
     return VideoChannelSyncModel.unscoped().findAll(query)
   }
+
+  static loadWithChannel (id: number): Promise<MChannelSyncChannel> {
+    return VideoChannelSyncModel.findByPk(id)
+  }
+
+  // ---------------------------------------------------------------------------
 
   toFormattedJSON (this: MChannelSyncFormattable): VideoChannelSync {
     return {

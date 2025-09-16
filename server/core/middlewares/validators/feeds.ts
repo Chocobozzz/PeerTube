@@ -14,7 +14,7 @@ import {
   doesVideoExist
 } from './shared/index.js'
 
-const feedsFormatValidator = [
+export const feedsFormatValidator = [
   param('format')
     .optional()
     .custom(isValidRSSFeed).withMessage('Should have a valid format (rss, atom, json)'),
@@ -29,7 +29,7 @@ const feedsFormatValidator = [
   }
 ]
 
-function setFeedFormatContentType (req: express.Request, res: express.Response, next: express.NextFunction) {
+export function setFeedFormatContentType (req: express.Request, res: express.Response, next: express.NextFunction) {
   const format = req.query.format || req.params.format || 'rss'
 
   let acceptableContentTypes: string[]
@@ -46,13 +46,13 @@ function setFeedFormatContentType (req: express.Request, res: express.Response, 
   return feedContentTypeResponse(req, res, next, acceptableContentTypes)
 }
 
-function setFeedPodcastContentType (req: express.Request, res: express.Response, next: express.NextFunction) {
+export function setFeedPodcastContentType (req: express.Request, res: express.Response, next: express.NextFunction) {
   const acceptableContentTypes = [ 'application/rss+xml', 'application/xml', 'text/xml' ]
 
   return feedContentTypeResponse(req, res, next, acceptableContentTypes)
 }
 
-function feedContentTypeResponse (
+export function feedContentTypeResponse (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction,
@@ -72,7 +72,7 @@ function feedContentTypeResponse (
 
 // ---------------------------------------------------------------------------
 
-const feedsAccountOrChannelFiltersValidator = [
+export const feedsAccountOrChannelFiltersValidator = [
   query('accountId')
     .optional()
     .custom(isIdValid),
@@ -91,7 +91,7 @@ const feedsAccountOrChannelFiltersValidator = [
     if (areValidationErrors(req, res)) return
 
     const { accountId, videoChannelId, accountName, videoChannelName } = req.query
-    const commonOptions = { req, res, checkManage: false, checkIsLocal: false }
+    const commonOptions = { req, res, checkCanManage: false, checkIsLocal: false, checkIsOwner: false }
 
     if (accountId && !await doesAccountIdExist({ id: accountId, ...commonOptions })) return
     if (videoChannelId && !await doesChannelIdExist({ id: videoChannelId, ...commonOptions })) return
@@ -105,13 +105,23 @@ const feedsAccountOrChannelFiltersValidator = [
 
 // ---------------------------------------------------------------------------
 
-const videoFeedsPodcastValidator = [
+export const videoFeedsPodcastValidator = [
   query('videoChannelId')
     .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesChannelIdExist({ id: req.query.videoChannelId, checkManage: false, checkIsLocal: false, req, res })) return
+
+    if (
+      !await doesChannelIdExist({
+        id: req.query.videoChannelId,
+        checkCanManage: false,
+        checkIsLocal: false,
+        checkIsOwner: false,
+        req,
+        res
+      })
+    ) return
 
     return next()
   }
@@ -119,7 +129,7 @@ const videoFeedsPodcastValidator = [
 
 // ---------------------------------------------------------------------------
 
-const videoSubscriptionFeedsValidator = [
+export const videoSubscriptionFeedsValidator = [
   query('accountId')
     .custom(isIdValid),
 
@@ -129,14 +139,14 @@ const videoSubscriptionFeedsValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    if (!await doesAccountIdExist({ id: req.query.accountId, req, res, checkIsLocal: true, checkManage: false })) return
+    if (!await doesAccountIdExist({ id: req.query.accountId, req, res, checkIsLocal: true, checkCanManage: false })) return
     if (!await doesUserFeedTokenCorrespond(res.locals.account.userId, req.query.token, res)) return
 
     return next()
   }
 ]
 
-const videoCommentsFeedsValidator = [
+export const videoCommentsFeedsValidator = [
   query('videoId')
     .optional()
     .customSanitizer(toCompleteUUID)
@@ -157,15 +167,3 @@ const videoCommentsFeedsValidator = [
     return next()
   }
 ]
-
-// ---------------------------------------------------------------------------
-
-export {
-  feedsAccountOrChannelFiltersValidator,
-  feedsFormatValidator,
-  setFeedFormatContentType,
-  setFeedPodcastContentType,
-  videoCommentsFeedsValidator,
-  videoFeedsPodcastValidator,
-  videoSubscriptionFeedsValidator
-}

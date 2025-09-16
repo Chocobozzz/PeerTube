@@ -12,7 +12,7 @@ export class ChannelsExporter extends ActorExporter<ChannelExportJSON> {
     const channelsJSON: ChannelExportJSON['channels'] = []
     let staticFiles: ExportResult<ChannelExportJSON>['staticFiles'] = []
 
-    const channels = await VideoChannelModel.listAllByAccount(this.user.Account.id)
+    const channels = await VideoChannelModel.listAllOwnedByAccount(this.user.Account.id)
 
     for (const channel of channels) {
       try {

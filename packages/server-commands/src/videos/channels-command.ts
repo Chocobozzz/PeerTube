@@ -39,6 +39,7 @@ export class ChannelsCommand extends AbstractCommand {
       sort?: string
       withStats?: boolean
       search?: string
+      includeCollaborations?: boolean
     }
   ) {
     const { accountName, sort = 'createdAt' } = options
@@ -48,7 +49,7 @@ export class ChannelsCommand extends AbstractCommand {
       ...options,
 
       path,
-      query: { sort, ...pick(options, [ 'start', 'count', 'withStats', 'search' ]) },
+      query: { sort, ...pick(options, [ 'start', 'count', 'withStats', 'search', 'includeCollaborations' ]) },
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
@@ -142,6 +143,12 @@ export class ChannelsCommand extends AbstractCommand {
     const { id } = await this.get(options)
 
     return id
+  }
+
+  async getDefaultId (options: OverrideCommandOptions) {
+    const { videoChannels } = await this.server.users.getMyInfo(options)
+
+    return videoChannels[0].id
   }
 
   // ---------------------------------------------------------------------------

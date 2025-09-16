@@ -12,4 +12,6 @@ export interface SelectChannelItem extends SelectOptionsItem {
   name: string
   avatarPath: string
   support: string
+
+  editor: boolean
 }

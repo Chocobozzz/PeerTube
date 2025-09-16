@@ -100,6 +100,16 @@ function runTest (withObjectStorage: boolean) {
       server,
       remoteServer
     } = await prepareImportExportTests({ emails, objectStorage, withBlockedServer: false }))
+
+    // Create collaboration to ensure we don't export them
+    const userToken = await server.users.generateUserAndToken('user')
+    const { id } = await server.channelCollaborators.invite({ target: 'noah', channel: 'user_channel', token: userToken })
+    await server.channelCollaborators.accept({ id, channel: 'user_channel', token: noahToken })
+    await server.videos.quickUpload({
+      name: 'collab video',
+      token: userToken,
+      channelId: await server.channels.getIdOf({ channelName: 'user_channel' })
+    })
   })
 
   it('Should export root account', async function () {
@@ -143,6 +153,9 @@ function runTest (withObjectStorage: boolean) {
     }
 
     await waitJobs([ server ])
+  })
+
+  it('Should not export collaborations', async function () {
   })
 
   it('Should have received an email on archive creation', async function () {

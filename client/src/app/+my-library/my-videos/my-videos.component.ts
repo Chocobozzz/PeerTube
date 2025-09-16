@@ -57,7 +57,6 @@ type QueryParams = TableQueryParams & {
     VideoCellComponent,
     RouterLink,
     NumberFormatterPipe,
-    VideoChangeOwnershipComponent,
     VideoStateBadgeComponent,
     ChannelToggleComponent,
     SelectCheckboxComponent,
@@ -96,8 +95,6 @@ export class MyVideosComponent implements OnInit, OnDestroy {
     removeFiles: false,
     transcoding: false
   }
-
-  moreVideoActions: DropdownAction<{ video: Video }>[][] = []
 
   user: AuthUser
   channels: (VideoChannel & { selected: boolean })[] = []
@@ -183,7 +180,7 @@ export class MyVideosComponent implements OnInit, OnDestroy {
         : new Set<string>()
 
       this.user = this.auth.getUser()
-      this.channels = this.user.videoChannels.map(c => ({
+      this.channels = [ ...this.user.videoChannels, ...this.user.videoChannelCollaborations ].map(c => ({
         ...c,
 
         selected: enabledChannels.has(c.name)
@@ -281,6 +278,7 @@ export class MyVideosComponent implements OnInit, OnDestroy {
       restPagination: pagination,
       sort,
       search,
+      includeCollaborations: true,
 
       channelNameOneOf: channelNameOneOf.length !== 0
         ? channelNameOneOf
@@ -327,16 +325,6 @@ export class MyVideosComponent implements OnInit, OnDestroy {
   }
 
   private buildActions () {
-    this.moreVideoActions = [
-      [
-        {
-          label: $localize`Change ownership`,
-          handler: ({ video }) => this.videoChangeOwnershipModal().show(video),
-          iconName: 'ownership-change'
-        }
-      ]
-    ]
-
     this.bulkActions = [
       [
         {

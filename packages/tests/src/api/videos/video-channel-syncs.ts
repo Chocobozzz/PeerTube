@@ -212,7 +212,7 @@ describe('Test channel synchronizations', function () {
       })
 
       it('Should list imports of a channel synchronization', async function () {
-        const { total, data } = await servers[0].videoImports.getMyVideoImports({ videoChannelSyncId: rootChannelSyncId })
+        const { total, data } = await servers[0].videoImports.listMyVideoImports({ videoChannelSyncId: rootChannelSyncId })
 
         expect(total).to.equal(1)
         expect(data).to.have.lengthOf(1)

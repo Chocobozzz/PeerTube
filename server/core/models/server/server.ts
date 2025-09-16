@@ -5,6 +5,9 @@ import { isHostValid } from '../../helpers/custom-validators/servers.js'
 import { ActorModel } from '../actor/actor.js'
 import { SequelizeModel, buildSQLAttributes, throwIfNotValid } from '../shared/index.js'
 import { ServerBlocklistModel } from './server-blocklist.js'
+import { AttributesOnly } from '@peertube/peertube-typescript-utils'
+
+export const serverSummaryAttributes = [ 'id', 'host' ] as const satisfies (keyof AttributesOnly<ServerModel>)[]
 
 @Table({
   tableName: 'server',
@@ -57,6 +60,15 @@ export class ServerModel extends SequelizeModel<ServerModel> {
       model: this,
       tableName,
       aliasPrefix
+    })
+  }
+
+  static getSQLSummaryAttributes (tableName: string, aliasPrefix = '') {
+    return buildSQLAttributes({
+      model: this,
+      tableName,
+      aliasPrefix,
+      includeAttributes: serverSummaryAttributes
     })
   }
 

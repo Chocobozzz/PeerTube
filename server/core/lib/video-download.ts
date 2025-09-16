@@ -217,7 +217,7 @@ export class VideoDownload {
   private async buildCoverInput () {
     const preview = this.video.getPreview()
 
-    if (this.video.isOwned()) return { coverPath: preview?.getPath() }
+    if (this.video.isLocal()) return { coverPath: preview?.getPath() }
 
     if (preview.fileUrl) {
       const destination = VideoPathManager.Instance.buildTMPDestination(preview.filename)

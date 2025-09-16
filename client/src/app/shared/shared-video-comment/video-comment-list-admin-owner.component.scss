@@ -4,16 +4,13 @@
 .video {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+}
 
-  em {
-    font-size: 11px;
-  }
+.video-name {
+  max-width: 300px;
 
-  a {
-    color: pvar(--fg);
-
-    @include ellipsis;
-  }
+  @include ellipsis;
 }
 
 .comment-content-cell {
@@ -35,11 +32,5 @@
     br {
       display: none;
     }
-  }
-}
-
-@media screen and (max-width: $medium-view) {
-  .video {
-    align-items: flex-start !important;
   }
 }

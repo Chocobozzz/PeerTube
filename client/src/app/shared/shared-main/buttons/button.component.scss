@@ -30,7 +30,7 @@
 
   &:not(.rounded-icon-button) {
     &.has-icon {
-      @include button-with-icon(24px, 0);
+      @include button-with-icon(24px, 0, 0);
     }
   }
 

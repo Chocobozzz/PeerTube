@@ -59,7 +59,7 @@
     </td>
 
     <td *ngIf="table.isColumnDisplayed('name')">
-      <my-video-cell class="video-cell-name" [video]="video" thumbnail="false" title="true"></my-video-cell>
+      <my-video-cell class="video-cell-name" [video]="video" thumbnail="false" title="true" displayEditorInfo="true"></my-video-cell>
     </td>
 
     <td *ngIf="table.isColumnDisplayed('privacy')">
@@ -111,8 +111,7 @@
     <my-button class="me-3" i18n-label label="Manage" [ptRouterLink]="[ '/videos', 'manage', video.shortUUID ]" theme="secondary" icon="film" responsiveLabel="true"></my-button>
 
     <my-video-actions-dropdown
-      placement="bottom auto" buttonDirection="horizontal" buttonStyled="true" [video]="video" [displayOptions]="videoActionsOptions"
-      [moreActions]="moreVideoActions"
+      placement="bottom auto" buttonIcon="more-horizontal" buttonStyled="true" [video]="video" [displayOptions]="videoActionsOptions"
       (videoRemoved)="table.loadData()" (videoFilesRemoved)="table.loadData()" (transcodingCreated)="table.loadData()" (videoExistsInPlaylistChange)="fetchVideosContainedInPlaylists([ video ])"
     ></my-video-actions-dropdown>
   </ng-template>
@@ -123,4 +122,3 @@
 
 </my-table>
 
-<my-video-change-ownership #videoChangeOwnershipModal></my-video-change-ownership>

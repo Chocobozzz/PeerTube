@@ -3,9 +3,9 @@ import { isBooleanValid, toBooleanOrNull } from '@server/helpers/custom-validato
 import { isPlayerChannelThemeSettingValid, isPlayerVideoThemeSettingValid } from '@server/helpers/custom-validators/player-settings.js'
 import express from 'express'
 import { body, query } from 'express-validator'
-import { checkUserCanManageAccount } from './shared/users.js'
 import { areValidationErrors, isValidVideoIdParam } from './shared/utils.js'
-import { checkCanSeeVideo, checkUserCanManageVideo, doesVideoExist } from './shared/videos.js'
+import { checkCanManageChannel } from './shared/video-channels.js'
+import { checkCanManageVideo, checkCanSeeVideo, doesVideoExist } from './shared/videos.js'
 
 export const getVideoPlayerSettingsValidator = [
   isValidVideoIdParam('videoId'),
@@ -28,7 +28,17 @@ export const getVideoPlayerSettingsValidator = [
     if (raw === true) {
       const user = res.locals.oauth?.token.User
 
-      if (!checkUserCanManageVideo({ user, video: res.locals.videoAll, right: UserRight.UPDATE_ANY_VIDEO, req, res })) return
+      if (
+        !await checkCanManageVideo({
+          user,
+          video: res.locals.videoAll,
+          right: UserRight.UPDATE_ANY_VIDEO,
+          req,
+          res,
+          checkIsLocal: true,
+          checkIsOwner: false
+        })
+      ) return
     }
 
     return next()
@@ -41,14 +51,25 @@ export const getChannelPlayerSettingsValidator = [
     .customSanitizer(toBooleanOrNull)
     .custom(isBooleanValid),
 
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
     if (req.query.raw === true) {
-      const account = res.locals.videoChannel.Account
       const user = res.locals.oauth?.token.User
 
-      if (!checkUserCanManageAccount({ account, user, req, res, specialRight: UserRight.MANAGE_ANY_VIDEO_CHANNEL })) return false
+      if (
+        !await checkCanManageChannel({
+          channel: res.locals.videoChannel,
+          user,
+          req,
+          res,
+          checkCanManage: true,
+          checkIsOwner: false,
+          specialRight: UserRight.MANAGE_ANY_VIDEO_CHANNEL
+        })
+      ) {
+        return false
+      }
     }
 
     return next()
@@ -64,7 +85,17 @@ export const updateVideoPlayerSettingsValidator = [
     if (!await doesVideoExist(req.params.videoId, res, 'all')) return
 
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo({ user, video: res.locals.videoAll, right: UserRight.UPDATE_ANY_VIDEO, req, res })) return
+    if (
+      !await checkCanManageVideo({
+        user,
+        video: res.locals.videoAll,
+        right: UserRight.UPDATE_ANY_VIDEO,
+        req,
+        res,
+        checkIsLocal: true,
+        checkIsOwner: false
+      })
+    ) return
 
     return next()
   }

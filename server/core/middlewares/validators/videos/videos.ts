@@ -58,9 +58,9 @@ import { VideoModel } from '../../../models/video/video.js'
 import {
   areValidationErrors,
   checkCanAccessVideoStaticFiles,
+  checkCanManageVideo,
   checkCanSeeVideo,
-  checkUserCanManageVideo,
-  doesVideoChannelOfAccountExist,
+  doesChannelIdExist,
   doesVideoExist,
   doesVideoFileOfVideoExist,
   isValidVideoIdParam,
@@ -122,7 +122,6 @@ export const videosAddLegacyValidator = [
  */
 export const videosAddResumableValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const user = res.locals.oauth.token.User
     const file = buildUploadXFile(req.body as express.CustomUploadXFile<express.UploadNewVideoXFileMetadata>)
     const cleanup = () => {
       safeUploadXCleanup(file)
@@ -139,13 +138,18 @@ export const videosAddResumableValidator = [
 
       return res.fail({
         status: HttpStatusCode.SERVICE_UNAVAILABLE_503,
-        message: 'The upload is already being processed'
+        message: req.t('The upload is already being processed')
       })
     }
 
     await Redis.Instance.setUploadSession(uploadId)
 
-    if (!await doesVideoChannelOfAccountExist(file.metadata.channelId, user, res)) return cleanup()
+    if (
+      !await doesChannelIdExist({ id: file.metadata.channelId, req, res, checkCanManage: true, checkIsLocal: true, checkIsOwner: false })
+    ) {
+      return cleanup()
+    }
+
     if (!await addDurationToVideoFileIfNeeded({ videoFile: file, res, middlewareName: 'videosAddResumableValidator' })) return cleanup()
     if (!await isVideoFileAccepted({ req, res, videoFile: file, hook: 'filter:api.video.upload.accept.result' })) return cleanup()
 
@@ -224,18 +228,42 @@ export const videosUpdateValidator = getCommonVideoEditAttributes().concat([
 
     if (!isValidPasswordProtectedPrivacy(req, res)) return cleanUpReqFiles(req)
 
-    const video = getVideoWithAttributes(res)
+    const video = res.locals.videoAll
     if (exists(req.body.privacy) && video.isLive && video.privacy !== req.body.privacy && video.state !== VideoState.WAITING_FOR_LIVE) {
-      return res.fail({ message: 'Cannot update privacy of a live that has already started' })
+      return res.fail({ message: req.t('Cannot update privacy of a live that has already started') })
     }
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo({ user, video: res.locals.videoAll, right: UserRight.UPDATE_ANY_VIDEO, req, res })) {
+    if (
+      !await checkCanManageVideo({
+        user,
+        video: res.locals.videoAll,
+        right: UserRight.UPDATE_ANY_VIDEO,
+        req,
+        res,
+        checkIsLocal: true,
+        checkIsOwner: false
+      })
+    ) {
       return cleanUpReqFiles(req)
     }
 
-    if (req.body.channelId && !await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
+    if (
+      req.body.channelId &&
+      !await doesChannelIdExist({ id: req.body.channelId, req, res, checkCanManage: true, checkIsLocal: true, checkIsOwner: false })
+    ) {
+      return cleanUpReqFiles(req)
+    }
+
+    if (res.locals.videoChannel && res.locals.videoChannel.accountId !== video.VideoChannel.accountId) {
+      res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: req.t('The channel must belong to the same account as the original channel')
+      })
+
+      return cleanUpReqFiles(req)
+    }
 
     return next()
   }
@@ -245,7 +273,7 @@ export async function checkVideoFollowConstraints (req: express.Request, res: ex
   const video = getVideoWithAttributes(res)
 
   // Anybody can watch local videos
-  if (video.isOwned() === true) return next()
+  if (video.isLocal() === true) return next()
 
   // Logged user
   if (res.locals.oauth) {
@@ -262,7 +290,7 @@ export async function checkVideoFollowConstraints (req: express.Request, res: ex
 
   return res.fail({
     status: HttpStatusCode.FORBIDDEN_403,
-    message: 'Cannot get this video regarding follow constraints',
+    message: req.t('Cannot get this video regarding follow constraints'),
     type: ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS,
     data: {
       originUrl: video.url
@@ -346,12 +374,14 @@ export const videosRemoveValidator = [
 
     // Check if the user who did the request is able to delete the video
     if (
-      !checkUserCanManageVideo({
+      !await checkCanManageVideo({
         user: res.locals.oauth.token.User,
         video: res.locals.videoAll,
         right: UserRight.REMOVE_ANY_VIDEO,
         req,
-        res
+        res,
+        checkIsLocal: true,
+        checkIsOwner: false
       })
     ) return
 
@@ -548,7 +578,7 @@ export const commonVideosFiltersValidator = [
     if (((query.nsfwFlagsExcluded || 0) & (query.nsfwFlagsIncluded || 0)) !== 0) {
       return res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
-        message: 'Cannot use same flags in nsfwFlagsIncluded and nsfwFlagsExcluded at the same time'
+        message: req.t('Cannot use same flags in nsfwFlagsIncluded and nsfwFlagsExcluded at the same time')
       })
     }
 
@@ -558,7 +588,7 @@ export const commonVideosFiltersValidator = [
       if (query.include || query.privacyOneOf || query.autoTagOneOf) {
         return res.fail({
           status: HttpStatusCode.UNAUTHORIZED_401,
-          message: 'You are not allowed to see all videos, specify a custom include or auto tags filter.'
+          message: req.t('You are not allowed to see all videos, specify a custom include or auto tags filter')
         })
       }
     }
@@ -566,7 +596,7 @@ export const commonVideosFiltersValidator = [
     if (!user && exists(query.excludeAlreadyWatched)) {
       res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
-        message: 'Cannot use excludeAlreadyWatched parameter when auth token is not provided'
+        message: req.t('Cannot use excludeAlreadyWatched parameter when auth token is not provided')
       })
       return false
     }
@@ -574,7 +604,7 @@ export const commonVideosFiltersValidator = [
     if (req.query.filter) {
       res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
-        message: '"filter" query parameter is not supported anymore by PeerTube. Please use "isLocal" and "include" instead'
+        message: req.t('"filter" query parameter is not supported anymore by PeerTube. Please use "isLocal" and "include" instead')
       })
       return false
     }
@@ -588,12 +618,12 @@ export function areErrorsInNSFW (req: express.Request, res: express.Response) {
 
   if (!body.nsfw) {
     if (body.nsfwFlags) {
-      res.fail({ message: 'Cannot set nsfwFlags if the video is not NSFW.' })
+      res.fail({ message: req.t('Cannot set nsfwFlags if the video is not NSFW') })
       return true
     }
 
     if (body.nsfwSummary) {
-      res.fail({ message: 'Cannot set nsfwSummary if the video is not NSFW.' })
+      res.fail({ message: req.t('Cannot set nsfwSummary if the video is not NSFW') })
       return true
     }
   }
@@ -610,7 +640,7 @@ function areErrorsInScheduleUpdate (req: express.Request, res: express.Response)
     if (!req.body.scheduleUpdate.updateAt) {
       logger.warn('Invalid parameters: scheduleUpdate.updateAt is mandatory.')
 
-      res.fail({ message: 'Schedule update at is mandatory.' })
+      res.fail({ message: req.t('Schedule update at is mandatory') })
       return true
     }
   }
@@ -625,12 +655,14 @@ async function commonVideoChecksPass (options: {
   videoFileSize: number
   files: express.UploadFilesForCheck
 }): Promise<boolean> {
-  const { req, res, user } = options
+  const { req, res } = options
 
   if (areErrorsInScheduleUpdate(req, res)) return false
   if (areErrorsInNSFW(req, res)) return false
 
-  if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return false
+  if (!await doesChannelIdExist({ id: req.body.channelId, req, res, checkCanManage: true, checkIsLocal: true, checkIsOwner: false })) {
+    return false
+  }
 
   if (!await commonVideoFileChecks(options)) return false
 

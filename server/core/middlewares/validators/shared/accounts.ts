@@ -3,34 +3,34 @@ import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { AccountModel } from '@server/models/account/account.js'
 import { MAccountDefault } from '@server/types/models/index.js'
 import { Request, Response } from 'express'
-import { checkUserCanManageAccount } from './users.js'
+import { checkCanManageAccount } from './users.js'
 
 export async function doesAccountIdExist (options: {
   id: string | number
   req: Request
   res: Response
-  checkManage: boolean // Also check the user can manage the account
+  checkCanManage: boolean // Also check the user can manage the account
   checkIsLocal: boolean // Also check this is a local channel
 }) {
-  const { id, req, res, checkIsLocal, checkManage } = options
+  const { id, req, res, checkIsLocal, checkCanManage } = options
 
   const account = await AccountModel.load(forceNumber(id))
 
-  return doesAccountExist({ account, req, res, checkIsLocal, checkManage })
+  return doesAccountExist({ account, req, res, checkIsLocal, checkCanManage })
 }
 
 export async function doesAccountHandleExist (options: {
   handle: string
   req: Request
   res: Response
-  checkManage: boolean // Also check the user can manage the account
+  checkCanManage: boolean // Also check the user can manage the account
   checkIsLocal: boolean // Also check this is a local channel
 }) {
-  const { handle, req, res, checkIsLocal, checkManage } = options
+  const { handle, req, res, checkIsLocal, checkCanManage } = options
 
   const account = await AccountModel.loadByHandle(handle)
 
-  return doesAccountExist({ account, req, res, checkIsLocal, checkManage })
+  return doesAccountExist({ account, req, res, checkIsLocal, checkCanManage })
 }
 
 // ---------------------------------------------------------------------------
@@ -41,10 +41,10 @@ function doesAccountExist (options: {
   account: MAccountDefault
   req: Request
   res: Response
-  checkManage: boolean
+  checkCanManage: boolean
   checkIsLocal: boolean
 }) {
-  const { account, req, res, checkIsLocal, checkManage } = options
+  const { account, req, res, checkIsLocal, checkCanManage } = options
 
   if (!account) {
     res.fail({
@@ -54,15 +54,15 @@ function doesAccountExist (options: {
     return false
   }
 
-  if (checkManage) {
+  if (checkCanManage) {
     const user = res.locals.oauth.token.User
 
-    if (!checkUserCanManageAccount({ account, user, req, res, specialRight: UserRight.MANAGE_USERS })) {
+    if (!checkCanManageAccount({ account, user, req, res, specialRight: UserRight.MANAGE_USERS })) {
       return false
     }
   }
 
-  if (checkIsLocal && account.Actor.isOwned() === false) {
+  if (checkIsLocal && account.Actor.isLocal() === false) {
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
       message: 'This account is not owned.'

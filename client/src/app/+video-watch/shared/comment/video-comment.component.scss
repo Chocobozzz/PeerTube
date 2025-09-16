@@ -1,5 +1,5 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
 
 .root-comment {
   display: flex;
@@ -107,7 +107,7 @@
 
   // Paragraphs
   ::ng-deep p {
-    margin-bottom: .3rem;
+    margin-bottom: 0.3rem;
   }
 
   &.comment-html-deleted {
@@ -120,7 +120,6 @@
   margin-bottom: 10px;
   display: flex;
 
-  ::ng-deep .dropdown-toggle,
   .comment-action-reply {
     color: pvar(--fg-300);
     cursor: pointer;
@@ -133,12 +132,6 @@
     &:focus-visible {
       color: pvar(--fg);
     }
-  }
-
-  ::ng-deep .action-button {
-    background-color: transparent;
-    padding: 0;
-    font-weight: unset;
   }
 }
 

@@ -27,7 +27,10 @@ import { expect } from 'chai'
 describe('Test video lives API validator', function () {
   const path = '/api/v1/videos/live'
   let server: PeerTubeServer
-  let userAccessToken = ''
+
+  let userAccessToken: string
+  let editorToken: string
+
   let channelId: number
   let video: VideoCreateResult
   let videoIdNotLive: number
@@ -57,10 +60,8 @@ describe('Test video lives API validator', function () {
       }
     })
 
-    const username = 'user1'
-    const password = 'my super password'
-    await server.users.create({ username, password })
-    userAccessToken = await server.login.getAccessToken({ username, password })
+    userAccessToken = await server.users.generateUserAndToken('user1')
+    editorToken = await server.channelCollaborators.createEditor('editor', 'root_channel')
 
     {
       const { videoChannels } = await server.users.getMyInfo()
@@ -186,7 +187,7 @@ describe('Test video lives API validator', function () {
     it('Should fail with a bad channel', async function () {
       const fields = { ...baseCorrectParams, channelId: 545454 }
 
-      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should fail with a bad privacy for replay settings', async function () {
@@ -208,7 +209,7 @@ describe('Test video lives API validator', function () {
 
       const fields = { ...baseCorrectParams, channelId: customChannelId }
 
-      await makePostBodyRequest({ url: server.url, path, token: userAccessToken, fields })
+      await makePostBodyRequest({ url: server.url, path, token: userAccessToken, fields, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should fail with too many tags', async function () {
@@ -296,15 +297,17 @@ describe('Test video lives API validator', function () {
     it('Should succeed with the correct parameters', async function () {
       this.timeout(30000)
 
-      const res = await makePostBodyRequest({
-        url: server.url,
-        path,
-        token: server.accessToken,
-        fields: baseCorrectParams,
-        expectedStatus: HttpStatusCode.OK_200
-      })
+      for (const token of [ server.accessToken, editorToken ]) {
+        const res = await makePostBodyRequest({
+          url: server.url,
+          path,
+          token,
+          fields: baseCorrectParams,
+          expectedStatus: HttpStatusCode.OK_200
+        })
 
-      video = res.body.video
+        video = res.body.video
+      }
     })
 
     it('Should forbid if live is disabled', async function () {
@@ -415,11 +418,13 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should display private information with appropriate token', async function () {
-      const live = await command.get({ videoId: video.id })
+      for (const token of [ server.accessToken, editorToken ]) {
+        const live = await command.get({ videoId: video.id, token })
 
-      expect(live.rtmpUrl).to.exist
-      expect(live.streamKey).to.exist
-      expect(live.latencyMode).to.exist
+        expect(live.rtmpUrl).to.exist
+        expect(live.streamKey).to.exist
+        expect(live.latencyMode).to.exist
+      }
     })
 
     it('Should fail with a bad video id', async function () {
@@ -467,7 +472,9 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should succeed with the correct params', async function () {
-      await command.listSessions({ videoId: video.id })
+      for (const token of [ server.accessToken, editorToken ]) {
+        await command.listSessions({ videoId: video.id, token })
+      }
     })
   })
 
@@ -567,7 +574,11 @@ describe('Test video lives API validator', function () {
       await command.update({ videoId: video.uuid, fields: { saveReplay: false } })
       await command.update({ videoId: video.shortUUID, fields: { saveReplay: false } })
 
-      await command.update({ videoId: video.id, fields: { saveReplay: true, replaySettings: { privacy: VideoPrivacy.PUBLIC } } })
+      await command.update({
+        videoId: video.id,
+        token: editorToken,
+        fields: { saveReplay: true, replaySettings: { privacy: VideoPrivacy.PUBLIC } }
+      })
     })
 
     it('Should fail to update replay status if replay is not allowed on the instance', async function () {

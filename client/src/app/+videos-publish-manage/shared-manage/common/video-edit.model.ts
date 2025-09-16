@@ -28,6 +28,7 @@ import debug from 'debug'
 import { Jsonify, SharedUnionFieldsDeep } from 'type-fest'
 import { VideoCaptionWithPathEdit } from './video-caption-edit.model'
 import { VideoChaptersEdit } from './video-chapters-edit.model'
+import { AuthUser } from '@app/core'
 
 const debugLogger = debug('peertube:video-manage:video-edit')
 
@@ -71,7 +72,9 @@ type PlayerSettingsForm = PlayerVideoSettingsUpdate
 
 // ---------------------------------------------------------------------------
 
-type LoadFromPublishOptions = Required<Pick<VideoCreate, 'channelId' | 'support'>> & Partial<Pick<VideoCreate, 'name'>>
+type LoadFromPublishOptions = Required<Pick<VideoCreate, 'channelId' | 'support'>> & Partial<Pick<VideoCreate, 'name'>> & {
+  user: AuthUser
+}
 
 type CreateFromUploadOptions = LoadFromPublishOptions & Required<Pick<VideoCreate, 'name'>>
 
@@ -164,6 +167,9 @@ export class VideoEdit {
     likes: number
     blacklisted: boolean
 
+    ownerAccountId: number
+    ownerAccountDisplayName: string
+
     live: Pick<LiveVideo, 'rtmpUrl' | 'rtmpsUrl' | 'streamKey'>
     videoSource: VideoSource
   }> = {}
@@ -182,6 +188,9 @@ export class VideoEdit {
     likes: number
 
     blacklisted: boolean
+
+    ownerAccountId: number
+    ownerAccountDisplayName: string
 
     live?: Pick<LiveVideo, 'rtmpUrl' | 'rtmpsUrl' | 'streamKey'>
   }
@@ -287,6 +296,9 @@ export class VideoEdit {
 
     this.metadata.views = 0
     this.metadata.likes = 0
+
+    this.metadata.ownerAccountDisplayName = options.user.account.displayName
+    this.metadata.ownerAccountId = options.user.account.id
 
     this.updateAfterChange()
   }
@@ -405,6 +417,9 @@ export class VideoEdit {
     this.metadata.blacklisted = video.blacklisted
 
     this.metadata.isLive = video.isLive
+
+    this.metadata.ownerAccountDisplayName = video.channel.ownerAccount.displayName
+    this.metadata.ownerAccountId = video.channel.ownerAccount.id
   }
 
   loadPluginDataDefaults (pluginDefaults: Record<string, string | boolean>) {
@@ -1032,6 +1047,9 @@ export class VideoEdit {
       likes: this.metadata.likes,
       duration: this.metadata.duration,
       blacklisted: this.metadata.blacklisted,
+
+      ownerAccountId: this.metadata.ownerAccountId,
+      ownerAccountDisplayName: this.metadata.ownerAccountDisplayName,
 
       live: this.metadata.live
     }

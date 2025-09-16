@@ -4,14 +4,13 @@ import {
   ActorImage,
   HTMLServerConfig,
   NSFWPolicyType,
-  User as UserServerModel,
   UserAdminFlag,
   UserAdminFlagType,
   UserNotificationSetting,
   UserRightType,
   UserRole,
   UserRoleType,
-  VideoChannel
+  User as UserServerModel
 } from '@peertube/peertube-models'
 
 export class User implements UserServerModel {
@@ -61,7 +60,8 @@ export class User implements UserServerModel {
 
   account: Account
   notificationSettings?: UserNotificationSetting
-  videoChannels?: VideoChannel[]
+
+  videoChannels?: UserServerModel['videoChannels']
 
   blocked: boolean
   blockedReason?: string

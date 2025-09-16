@@ -271,7 +271,7 @@ class FSPruner {
 
       if (keepOnlyOwned) {
         const video = await VideoModel.load(thumbnail.videoId)
-        if (video.isOwned() === false) return false
+        if (video.isLocal() === false) return false
       }
 
       return true
@@ -343,6 +343,6 @@ async function askPruneConfirmation (yes?: boolean) {
 
   return askConfirmation(
     'These unknown files can be deleted, but please check your backups first (bugs happen). ' +
-    'Can we delete these files?'
+      'Can we delete these files?'
   )
 }

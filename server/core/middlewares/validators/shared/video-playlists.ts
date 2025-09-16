@@ -4,33 +4,36 @@ import { MVideoPlaylist } from '@server/types/models/index.js'
 import { HttpStatusCode } from '@peertube/peertube-models'
 
 export type VideoPlaylistFetchType = 'summary' | 'all'
-async function doesVideoPlaylistExist (id: number | string, res: express.Response, fetchType: VideoPlaylistFetchType = 'summary') {
+
+export async function doesVideoPlaylistExist (options: {
+  id: number | string
+  req: express.Request
+  res: express.Response
+  fetchType?: VideoPlaylistFetchType
+}) {
+  const { id, req, res, fetchType = 'summary' } = options
+
   if (fetchType === 'summary') {
     const videoPlaylist = await VideoPlaylistModel.loadWithAccountAndChannelSummary(id, undefined)
     res.locals.videoPlaylistSummary = videoPlaylist
 
-    return handleVideoPlaylist(videoPlaylist, res)
+    return handleVideoPlaylist(videoPlaylist, req, res)
   }
 
   const videoPlaylist = await VideoPlaylistModel.loadWithAccountAndChannel(id, undefined)
   res.locals.videoPlaylistFull = videoPlaylist
 
-  return handleVideoPlaylist(videoPlaylist, res)
+  return handleVideoPlaylist(videoPlaylist, req, res)
 }
-
+// ---------------------------------------------------------------------------
+// Private
 // ---------------------------------------------------------------------------
 
-export {
-  doesVideoPlaylistExist
-}
-
-// ---------------------------------------------------------------------------
-
-function handleVideoPlaylist (videoPlaylist: MVideoPlaylist, res: express.Response) {
-  if (!videoPlaylist) {
+function handleVideoPlaylist (playlist: MVideoPlaylist, req: express.Request, res: express.Response) {
+  if (!playlist) {
     res.fail({
       status: HttpStatusCode.NOT_FOUND_404,
-      message: 'Video playlist not found'
+      message: req.t('Video playlist not found')
     })
     return false
   }

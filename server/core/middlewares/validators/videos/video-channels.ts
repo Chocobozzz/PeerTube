@@ -81,9 +81,10 @@ export const videoChannelsRemoveValidator = [
 
 export const videoChannelsHandleValidatorFactory = (options: {
   checkIsLocal: boolean
-  checkManage: boolean
+  checkCanManage: boolean
+  checkIsOwner: boolean
 }) => {
-  const { checkIsLocal, checkManage } = options
+  const { checkIsLocal, checkCanManage, checkIsOwner } = options
 
   return [
     param('handle')
@@ -92,7 +93,7 @@ export const videoChannelsHandleValidatorFactory = (options: {
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       if (areValidationErrors(req, res)) return
 
-      if (!await doesChannelHandleExist({ handle: req.params.handle, checkManage, checkIsLocal, req, res })) return
+      if (!await doesChannelHandleExist({ handle: req.params.handle, checkCanManage, checkIsLocal, checkIsOwner, req, res })) return
 
       return next()
     }
@@ -104,20 +105,24 @@ export const ensureChannelOwnerCanUpload = [
     const channel = res.locals.videoChannel
     const user = { id: channel.Account.userId }
 
-    if (!await checkUserQuota(user, 1, res)) return
+    if (!await checkUserQuota({ user, videoFileSize: 1, req, res })) return
 
     next()
   }
 ]
 
-export const videoChannelStatsValidator = [
+export const listAccountChannelsValidator = [
   query('withStats')
     .optional()
-    .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid stats flag boolean'),
+    .customSanitizer(toBooleanOrNull),
+
+  query('includeCollaborations')
+    .optional()
+    .customSanitizer(toBooleanOrNull),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
+
     return next()
   }
 ]

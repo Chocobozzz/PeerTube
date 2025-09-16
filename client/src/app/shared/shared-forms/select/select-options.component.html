@@ -23,14 +23,22 @@
   fluid="true"
 >
   <ng-template #itemTemplate let-item let-description="description">
-    @if (customItemTemplate) {
-      <ng-template [ngTemplateOutlet]="customItemTemplate" [ngTemplateOutletContext]="{ $implicit: item }"></ng-template>
+    @if (selectOptionTemplate) {
+      <ng-template [ngTemplateOutlet]="selectOptionTemplate" [ngTemplateOutletContext]="{ $implicit: item }"></ng-template>
+
+      @if (itemExtraTemplate) {
+        <ng-template [ngTemplateOutlet]="itemExtraTemplate" [ngTemplateOutletContext]="{ $implicit: item }"></ng-template>
+      }
     } @else {
       <div>
         <div class="d-flex align-items-center item-label custom-item">
           <img *ngIf="item.imageUrl" alt="" class="me-2" [src]="item.imageUrl" />
 
           <span class="ellipsis" [ngClass]="item.classes">{{ item.label }}</span>
+
+          @if (itemExtraTemplate) {
+            <ng-template [ngTemplateOutlet]="itemExtraTemplate" [ngTemplateOutletContext]="{ $implicit: item }"></ng-template>
+          }
         </div>
 
         <span *ngIf="description" class="muted">{{ description }}</span>

@@ -229,14 +229,18 @@ export class VideosCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  listMyVideos (options: OverrideCommandOptions & VideosCommonQuery & { channelId?: number, channelNameOneOf?: string[] } = {}) {
+  listMyVideos (options: OverrideCommandOptions & VideosCommonQuery & {
+    channelId?: number
+    channelNameOneOf?: string[]
+    includeCollaborations?: boolean
+  } = {}) {
     const path = '/api/v1/users/me/videos'
 
     return this.getRequestBody<ResultList<Video>>({
       ...options,
 
       path,
-      query: { ...this.buildListQuery(options), ...pick(options, [ 'channelId', 'channelNameOneOf' ]) },
+      query: { ...this.buildListQuery(options), ...pick(options, [ 'channelId', 'channelNameOneOf', 'includeCollaborations' ]) },
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })

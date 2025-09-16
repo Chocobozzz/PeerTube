@@ -55,6 +55,13 @@ import { VideoModel } from '../video/video.js'
 import { ActorFollowModel } from './actor-follow.js'
 import { ActorImageModel } from './actor-image.js'
 
+export const actorSummaryAttributes = [
+  'id',
+  'preferredUsername',
+  'url',
+  'serverId'
+] as const satisfies (keyof AttributesOnly<ActorModel>)[]
+
 enum ScopeNames {
   FULL = 'FULL'
 }
@@ -327,6 +334,15 @@ export class ActorModel extends SequelizeModel<ActorModel> {
       tableName,
       aliasPrefix,
       excludeAttributes: unusedActorAttributesForAPI
+    })
+  }
+
+  static getSQLSummaryAttributes (tableName: string, aliasPrefix = '') {
+    return buildSQLAttributes({
+      model: ActorModel,
+      tableName,
+      aliasPrefix,
+      includeAttributes: actorSummaryAttributes
     })
   }
 
@@ -678,7 +694,7 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     return this.url + '#main-key'
   }
 
-  isOwned () {
+  isLocal () {
     return this.serverId === null
   }
 
@@ -733,7 +749,7 @@ export class ActorModel extends SequelizeModel<ActorModel> {
   }
 
   isOutdated () {
-    if (this.isOwned()) return false
+    if (this.isLocal()) return false
 
     return isOutdated(this, ACTIVITY_PUB.ACTOR_REFRESH_INTERVAL)
   }

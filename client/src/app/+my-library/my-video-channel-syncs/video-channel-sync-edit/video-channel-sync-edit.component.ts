@@ -41,7 +41,7 @@ export class VideoChannelSyncEditComponent extends FormReactive implements OnIni
       existingVideoStrategy: REQUIRED_VALIDATOR
     })
 
-    listUserChannelsForSelect(this.authService)
+    listUserChannelsForSelect(this.authService, { includeCollaborations: true })
       .subscribe(channels => this.userVideoChannels = channels)
   }
 
@@ -60,7 +60,7 @@ export class VideoChannelSyncEditComponent extends FormReactive implements OnIni
 
     const importExistingVideos = body['existingVideoStrategy'] === 'import'
 
-    this.videoChannelSyncService.createSync(videoChannelSyncCreate)
+    this.videoChannelSyncService.create(videoChannelSyncCreate)
       .pipe(mergeMap(({ videoChannelSync }) => {
         return importExistingVideos
           ? this.videoChannelService.importVideos(videoChannelSync.channel.name, videoChannelSync.externalChannelUrl, videoChannelSync.id)

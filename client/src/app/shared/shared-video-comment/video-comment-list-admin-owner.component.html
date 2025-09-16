@@ -20,6 +20,27 @@
   </ng-template>
 
   <ng-template #tableCells let-comment>
+
+    <td *ngIf="table.isColumnDisplayed('video')">
+      <div class="video">
+        <a [href]="comment.localUrl" target="_blank" rel="noopener noreferrer" class="text-decoration-none d-inline-flex align-items-baseline">
+          <span class="video-name">{{ comment.video.name }}</span>
+
+          <my-global-icon iconName="external-link"></my-global-icon>
+        </a>
+
+        @if (comment.video.channel) {
+          <a [routerLink]="[ '/c', comment.video.channel.name]" class="channel-sub-link-in-cell">
+            <span>{{ comment.video.channel.displayName }}</span>
+
+            @if (mode() === 'user' && user.isEditorOfChannel(comment.video.channel)) {
+              <my-collaborator-state class="ms-2" type="accepted" small="true"></my-collaborator-state>
+            }
+          </a>
+        }
+      </div>
+    </td>
+
     <td *ngIf="table.isColumnDisplayed('account')">
       <a [href]="comment.account.localUrl" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
         <div class="chip two-lines">
@@ -30,12 +51,6 @@
           </div>
         </div>
       </a>
-    </td>
-
-    <td *ngIf="table.isColumnDisplayed('video')" class="video">
-      <em i18n>Commented video</em>
-
-      <a [href]="comment.localUrl" target="_blank" rel="noopener noreferrer" class="text-decoration-none">{{ comment.video.name }}</a>
     </td>
 
     <td *ngIf="table.isColumnDisplayed('comment')" class="comment-content-cell">

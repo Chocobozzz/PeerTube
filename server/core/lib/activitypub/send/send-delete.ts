@@ -53,13 +53,13 @@ async function sendDeleteActor (byActor: ActorModel, transaction: Transaction) {
 async function sendDeleteVideoComment (videoComment: MCommentOwnerVideo, transaction: Transaction) {
   logger.info('Creating job to send delete of comment %s.', videoComment.url)
 
-  const isVideoOrigin = videoComment.Video.isOwned()
+  const isVideoOrigin = videoComment.Video.isLocal()
 
   const url = getDeleteActivityPubUrl(videoComment.url)
 
   const videoAccount = await AccountModel.load(videoComment.Video.VideoChannel.Account.id, transaction)
 
-  const byActor = videoComment.isOwned()
+  const byActor = videoComment.isLocal()
     ? videoComment.Account.Actor
     : videoAccount.Actor
 

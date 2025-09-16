@@ -1,12 +1,13 @@
-import { HttpStatusCode, ResultList, VideoImport, VideoImportCreate } from '@peertube/peertube-models'
+import { HttpStatusCode, ResultList, VideoImport, VideoImportCreate, VideoImportState } from '@peertube/peertube-models'
 import { unwrapBody } from '../requests/index.js'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class VideoImportsCommand extends AbstractCommand {
-
-  async importVideo (options: OverrideCommandOptions & {
-    attributes: (Partial<VideoImportCreate> | { torrentfile?: string, previewfile?: string, thumbnailfile?: string })
-  }) {
+  async importVideo (
+    options: OverrideCommandOptions & {
+      attributes: Partial<VideoImportCreate> | { torrentfile?: string, previewfile?: string, thumbnailfile?: string }
+    }
+  ) {
     const { attributes } = options
     const path = '/api/v1/videos/imports'
 
@@ -37,9 +38,35 @@ export class VideoImportsCommand extends AbstractCommand {
     }))
   }
 
-  delete (options: OverrideCommandOptions & {
-    importId: number
-  }) {
+  async quickImport (
+    options: OverrideCommandOptions & {
+      name: string
+      targetUrl: string
+      channelId?: number
+    }
+  ) {
+    const { name, targetUrl } = options
+
+    const channelId = options.channelId ?? await this.server.channels.getDefaultId(options)
+
+    return this.importVideo({
+      ...options,
+
+      attributes: {
+        name,
+        targetUrl,
+        channelId
+      }
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  delete (
+    options: OverrideCommandOptions & {
+      importId: number
+    }
+  ) {
     const path = '/api/v1/videos/imports/' + options.importId
 
     return this.deleteRequest({
@@ -51,9 +78,11 @@ export class VideoImportsCommand extends AbstractCommand {
     })
   }
 
-  cancel (options: OverrideCommandOptions & {
-    importId: number
-  }) {
+  cancel (
+    options: OverrideCommandOptions & {
+      importId: number
+    }
+  ) {
     const path = '/api/v1/videos/imports/' + options.importId + '/cancel'
 
     return this.postBodyRequest({
@@ -65,22 +94,45 @@ export class VideoImportsCommand extends AbstractCommand {
     })
   }
 
-  getMyVideoImports (options: OverrideCommandOptions & {
+  listMyVideoImports (options: OverrideCommandOptions & {
     sort?: string
     targetUrl?: string
     videoChannelSyncId?: number
     search?: string
+    includeCollaborations?: boolean
   } = {}) {
-    const { sort, targetUrl, videoChannelSyncId, search } = options
+    const { sort, targetUrl, videoChannelSyncId, search, includeCollaborations } = options
     const path = '/api/v1/users/me/videos/imports'
 
     return this.getRequestBody<ResultList<VideoImport>>({
       ...options,
 
       path,
-      query: { sort, targetUrl, videoChannelSyncId, search },
+      query: { sort, targetUrl, videoChannelSyncId, search, includeCollaborations },
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  async getVideoId (
+    options: OverrideCommandOptions & {
+      importId: number
+    }
+  ) {
+    const { data } = await this.listMyVideoImports(options)
+
+    return data.find(i => i.id === options.importId)?.video?.id
+  }
+
+  async cancelAll (options: OverrideCommandOptions = {}) {
+    const { data } = await this.listMyVideoImports(options)
+
+    for (const videoImport of data) {
+      if (videoImport.state.id === VideoImportState.PENDING) {
+        await this.cancel({ ...options, importId: videoImport.id })
+      }
+    }
   }
 }

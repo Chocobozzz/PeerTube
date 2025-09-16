@@ -23,7 +23,7 @@ export type FormDefaultTyped<Form> = Partial<UnwrapForm<Form>>
 // ---------------------------------------------------------------------------
 
 export type FormReactiveMessages = {
-  [id: string]: { [name: string]: string } | FormReactiveMessages | FormReactiveMessages[]
+  [id: string]: { [name: string]: string } | FormReactiveMessages | FormReactiveMessages[] | string
 }
 
 export type FormReactiveMessagesTyped<Form> = Partial<ReplaceForm<Form, string>>

@@ -28,19 +28,7 @@
     </td>
 
     <td>
-      <a [routerLink]="[ '/c', sync.channel.name ]" i18n-title title="Channel page">
-        <div class="chip two-lines">
-          <my-actor-avatar
-            [actor]="sync.channel" actorType="channel"
-            [internalHref]="[ '/c', sync.channel.name ]" size="32"
-          ></my-actor-avatar>
-
-          <div>
-            <span class="fw-semibold">{{ sync.channel.displayName }}</span>
-            <span class="muted">{{ sync.channel.name }}</span>
-          </div>
-        </div>
-      </a>
+      <my-actor-cell [actor]="sync.channel" actorType="channel"></my-actor-cell>
     </td>
 
     <td>

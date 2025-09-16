@@ -1,11 +1,11 @@
+import { PickWith, PickWithOpt } from '@peertube/peertube-typescript-utils'
 import { AccountModel } from '@server/models/account/account.js'
 import { UserModel } from '@server/models/user/user.js'
-import { MVideoPlaylist } from '@server/types/models/index.js'
-import { PickWith, PickWithOpt } from '@peertube/peertube-typescript-utils'
+import { MChannelCollaboratorChannel, MVideoPlaylist } from '@server/types/models/index.js'
 import {
   MAccount,
   MAccountDefault,
-  MAccountDefaultChannelDefault,
+  MAccountDefaultAllChannelDefault,
   MAccountFormattable,
   MAccountId,
   MAccountIdActorId,
@@ -50,7 +50,7 @@ export type MUserAccountDefault =
 export type MUserNotifSettingChannelDefault =
   & MUser
   & Use<'NotificationSetting', MNotificationSetting>
-  & Use<'Account', MAccountDefaultChannelDefault>
+  & Use<'Account', MAccountDefaultAllChannelDefault>
 
 // With notification settings
 
@@ -75,8 +75,11 @@ export type MUserDefault =
 // Format for API or AP object
 
 type MAccountWithChannels = MAccountFormattable & PickWithOpt<AccountModel, 'VideoChannels', MChannelFormattable[]>
-type MAccountWithChannelsAndSpecialPlaylists =
-  & MAccountWithChannels
+
+type MAccountWithAllChannels = MAccountWithChannels & PickWithOpt<AccountModel, 'VideoChannelCollaborators', MChannelCollaboratorChannel[]>
+
+type MAccountWithAllChannelsAndSpecialPlaylists =
+  & MAccountWithAllChannels
   & PickWithOpt<AccountModel, 'VideoPlaylists', MVideoPlaylist[]>
 
 export type MUserFormattable =
@@ -86,4 +89,4 @@ export type MUserFormattable =
 
 export type MMyUserFormattable =
   & MUserFormattable
-  & Use<'Account', MAccountWithChannelsAndSpecialPlaylists>
+  & Use<'Account', MAccountWithAllChannelsAndSpecialPlaylists>

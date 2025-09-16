@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core'
-import { ActivatedRouteSnapshot } from '@angular/router'
+import { ActivatedRouteSnapshot, Router } from '@angular/router'
 import { AuthService, ServerService, UserService } from '@app/core'
 import { listUserChannelsForSelect } from '@app/helpers'
 import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
@@ -8,6 +8,7 @@ import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 import { VideoPasswordService } from '@app/shared/shared-main/video/video-password.service'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
+import { PlayerSettingsService } from '@app/shared/shared-video/player-settings.service'
 import {
   LiveVideo,
   PlayerVideoSettings,
@@ -20,11 +21,11 @@ import {
   VideoPrivacyType,
   VideoSource
 } from '@peertube/peertube-models'
-import { forkJoin, of } from 'rxjs'
-import { map, switchMap } from 'rxjs/operators'
+import { logger } from '@root-helpers/logger'
+import { forkJoin, of, throwError } from 'rxjs'
+import { catchError, map, switchMap } from 'rxjs/operators'
 import { SelectChannelItem } from '../../../types'
 import { VideoEdit } from '../shared-manage/common/video-edit.model'
-import { PlayerSettingsService } from '@app/shared/shared-video/player-settings.service'
 
 export type VideoManageResolverData = {
   video: VideoDetails
@@ -42,6 +43,7 @@ export type VideoManageResolverData = {
 
 @Injectable()
 export class VideoManageResolver {
+  private router = inject(Router)
   private videoService = inject(VideoService)
   private liveVideoService = inject(LiveVideoService)
   private authService = inject(AuthService)
@@ -59,7 +61,18 @@ export class VideoManageResolver {
       .pipe(
         switchMap(video => forkJoin(this.buildObservables(video))),
         switchMap(
-          async ([ video, videoSource, userChannels, captions, chapters, live, videoPasswords, userQuota, privacies, playerSettings ]) => {
+          async ([
+            video,
+            videoSource,
+            allUserChannels,
+            captions,
+            chapters,
+            live,
+            videoPasswords,
+            userQuota,
+            privacies,
+            playerSettings
+          ]) => {
             const videoEdit = await VideoEdit.createFromAPI(this.serverService.getHTMLConfig(), {
               video,
               captions,
@@ -72,7 +85,7 @@ export class VideoManageResolver {
 
             return {
               video,
-              userChannels,
+              userChannels: allUserChannels.filter(c => c.ownerAccountId === video.channel.ownerAccount.id),
               captions,
               chapters,
               videoSource,
@@ -84,7 +97,14 @@ export class VideoManageResolver {
               playerSettings
             } satisfies VideoManageResolverData
           }
-        )
+        ),
+        catchError(err => {
+          logger.error('Cannot fetch video information', err)
+
+          this.router.navigate([ '/401' ], { state: { obj: err }, skipLocationChange: true })
+
+          return throwError(() => err)
+        })
       )
   }
 
@@ -94,7 +114,7 @@ export class VideoManageResolver {
 
       this.videoService.getSource(video.id),
 
-      listUserChannelsForSelect(this.authService),
+      listUserChannelsForSelect(this.authService, { includeCollaborations: true }),
 
       this.videoCaptionService
         .listCaptions(video.uuid)

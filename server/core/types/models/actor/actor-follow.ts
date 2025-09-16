@@ -1,4 +1,5 @@
 import { PickWith } from '@peertube/peertube-typescript-utils'
+import { Model } from 'sequelize-typescript'
 import { ActorFollowModel } from '../../../models/actor/actor-follow.js'
 import {
   MActor,
@@ -60,6 +61,7 @@ export type MActorFollowSubscriptions =
 // Format for API or AP object
 
 export type MActorFollowFormattable =
-  & Pick<MActorFollow, 'id' | 'score' | 'state' | 'createdAt' | 'updatedAt'>
+  & Model<Pick<MActorFollow, 'id' | 'score' | 'state' | 'createdAt' | 'updatedAt'>>
+  & Pick<MActorFollow, 'id' | 'score' | 'state' | 'createdAt' | 'updatedAt' | 'toFormattedJSON'>
   & Use<'ActorFollower', MActorFormattable>
   & Use<'ActorFollowing', MActorFormattable>

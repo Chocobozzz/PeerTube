@@ -20,9 +20,10 @@ import {
 import { logger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, WEBSERVER } from '../../initializers/constants.js'
+import { SequelizeModel } from '../shared/sequelize-type.js'
+import { buildSQLAttributes } from '../shared/table.js'
 import { VideoPlaylistModel } from './video-playlist.js'
 import { VideoModel } from './video.js'
-import { SequelizeModel } from '../shared/sequelize-type.js'
 
 @Table({
   tableName: 'thumbnail',
@@ -132,6 +133,18 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
       .catch(err => logger.error('Cannot remove thumbnail file %s.', instance.filename, { err }))
   }
 
+  // ---------------------------------------------------------------------------
+
+  static getSQLAttributes (tableName: string, aliasPrefix = '') {
+    return buildSQLAttributes({
+      model: this,
+      tableName,
+      aliasPrefix
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
   static loadByFilename (filename: string, thumbnailType: ThumbnailType_Type): Promise<MThumbnail> {
     const query = {
       where: {
@@ -192,7 +205,7 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
     const staticPath = ThumbnailModel.types[this.type].staticPath + this.filename
 
     // FIXME: typings
-    if ((videoOrPlaylist as MVideo).isOwned()) return WEBSERVER.URL + staticPath
+    if ((videoOrPlaylist as MVideo).isLocal()) return WEBSERVER.URL + staticPath
 
     return this.fileUrl
   }
@@ -223,7 +236,7 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
     this.previousThumbnailFilename = undefined
   }
 
-  isOwned () {
+  isLocal () {
     return !this.fileUrl
   }
 

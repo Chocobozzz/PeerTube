@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { VideoEdit } from '@app/+videos-publish-manage/shared-manage/common/video-edit.model'
 import { VideoManageController } from '@app/+videos-publish-manage/shared-manage/video-manage-controller.service'
-import { CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
+import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
 import { VideoChapterService } from '@app/shared/shared-main/video/video-chapter.service'
@@ -40,6 +40,7 @@ const debugLogger = debug('peertube:video-publish')
   ]
 })
 export class VideoImportUrlComponent implements OnInit, AfterViewInit, CanComponentDeactivate {
+  private authService = inject(AuthService)
   private loadingBar = inject(LoadingBarService)
   private notifier = inject(Notifier)
   private videoService = inject(VideoService)
@@ -111,7 +112,8 @@ export class VideoImportUrlComponent implements OnInit, AfterViewInit, CanCompon
     const videoEdit = VideoEdit.createFromImport(serverConfig, {
       targetUrl: this.targetUrl,
       channelId: this.firstStepChannelId,
-      support: this.userChannels().find(c => c.id === this.firstStepChannelId).support ?? ''
+      support: this.userChannels().find(c => c.id === this.firstStepChannelId).support ?? '',
+      user: this.authService.getUser()
     })
     this.manageController.setConfig({ manageType: 'import-url', serverConfig: this.serverService.getHTMLConfig() })
     this.manageController.setVideoEdit(videoEdit)

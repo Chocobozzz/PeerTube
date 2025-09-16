@@ -130,7 +130,7 @@ export const usersRemoveValidator = [
       return res.fail({ message: 'Cannot remove the root user' })
     }
 
-    if (!checkUserCanModerate(user, res)) return
+    if (!checkCanModerate(user, res)) return
 
     return next()
   }
@@ -152,7 +152,7 @@ export const usersBlockToggleValidator = [
       return res.fail({ message: 'Cannot block the root user' })
     }
 
-    if (!checkUserCanModerate(user, res)) return
+    if (!checkCanModerate(user, res)) return
 
     return next()
   }
@@ -207,7 +207,7 @@ export const usersUpdateValidator = [
       return res.fail({ message: 'Cannot change root role.' })
     }
 
-    if (!checkUserCanModerate(user, res)) return
+    if (!checkCanModerate(user, res)) return
 
     if (req.body.email && req.body.email !== user.email && !await checkEmailDoesNotAlreadyExist(req.body.email, res)) return
 
@@ -355,7 +355,7 @@ export const usersVideoRatingValidator = [
   }
 ]
 
-export const usersVideosValidator = [
+export const listMyVideosValidator = [
   query('channelId')
     .optional()
     .customSanitizer(toIntOrNull)
@@ -366,10 +366,17 @@ export const usersVideosValidator = [
     .customSanitizer(arrayify)
     .custom(isStringArray).withMessage('Should have a valid channelNameOneOf array'),
 
+  query('includeCollaborations')
+    .optional()
+    .customSanitizer(toBooleanOrNull),
+
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    if (req.query.channelId && !await doesChannelIdExist({ id: req.query.channelId, checkManage: true, checkIsLocal: true, req, res })) {
+    if (
+      req.query.channelId &&
+      !await doesChannelIdExist({ id: req.query.channelId, checkCanManage: true, checkIsLocal: true, checkIsOwner: false, req, res })
+    ) {
       return
     }
 
@@ -478,7 +485,7 @@ export const userAutocompleteValidator = [
 // Private
 // ---------------------------------------------------------------------------
 
-function checkUserCanModerate (onUser: MUser, res: express.Response) {
+function checkCanModerate (onUser: MUser, res: express.Response) {
   const authUser = res.locals.oauth.token.User
 
   if (authUser.role === UserRole.ADMINISTRATOR) return true

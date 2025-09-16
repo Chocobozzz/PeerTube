@@ -1,22 +1,16 @@
-import { Sequelize } from 'sequelize'
-import { ModelBuilder } from '@server/models/shared/index.js'
-import { MActorFollowActorsDefault } from '@server/types/models/index.js'
 import { ActivityPubActorType, FollowState } from '@peertube/peertube-models'
-import { parseRowCountResult } from '../../shared/index.js'
+import { AbstractListQueryOptions } from '@server/models/shared/abstract-list-query.js'
+import { Sequelize } from 'sequelize'
 import { InstanceListFollowsQueryBuilder } from './shared/instance-list-follows-query-builder.js'
 
-export interface ListFollowingOptions {
+export interface ListFollowingOptions extends AbstractListQueryOptions {
   followerId: number
-  start: number
-  count: number
-  sort: string
   state?: FollowState
   actorType?: ActivityPubActorType
   search?: string
 }
 
-export class InstanceListFollowingQueryBuilder extends InstanceListFollowsQueryBuilder <ListFollowingOptions> {
-
+export class InstanceListFollowingQueryBuilder extends InstanceListFollowsQueryBuilder<ListFollowingOptions> {
   constructor (
     protected readonly sequelize: Sequelize,
     protected readonly options: ListFollowingOptions
@@ -24,46 +18,29 @@ export class InstanceListFollowingQueryBuilder extends InstanceListFollowsQueryB
     super(sequelize, options)
   }
 
-  async listFollowing () {
-    this.buildListQuery()
+  protected buildSubQueryWhere () {
+    this.buildActorFollowingJoin()
 
-    const results = await this.runQuery({ nest: true })
-    const modelBuilder = new ModelBuilder<MActorFollowActorsDefault>(this.sequelize)
-
-    return modelBuilder.createModels(results, 'ActorFollow')
-  }
-
-  async countFollowing () {
-    this.buildCountQuery()
-
-    const result = await this.runQuery()
-
-    return parseRowCountResult(result)
-  }
-
-  protected getWhere () {
-    let where = 'WHERE "ActorFollowModel"."actorId" = :followerId '
+    this.subQueryWhere = 'WHERE "ActorFollowModel"."actorId" = :followerId '
     this.replacements.followerId = this.options.followerId
 
     if (this.options.state) {
-      where += 'AND "ActorFollowModel"."state" = :state '
+      this.subQueryWhere += 'AND "ActorFollowModel"."state" = :state '
       this.replacements.state = this.options.state
     }
 
     if (this.options.search) {
       const escapedLikeSearch = this.sequelize.escape('%' + this.options.search + '%')
 
-      where += `AND (` +
+      this.subQueryWhere += `AND (` +
         `"ActorFollowing->Server"."host" ILIKE ${escapedLikeSearch} ` +
         `OR "ActorFollowing"."preferredUsername" ILIKE ${escapedLikeSearch} ` +
-      `)`
+        `)`
     }
 
     if (this.options.actorType) {
-      where += `AND "ActorFollowing"."type" = :actorType `
+      this.subQueryWhere += `AND "ActorFollowing"."type" = :actorType `
       this.replacements.actorType = this.options.actorType
     }
-
-    return where
   }
 }

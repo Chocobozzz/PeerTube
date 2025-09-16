@@ -109,7 +109,7 @@ async function tryToResolveThreadFromVideo (params: ResolveThreadParams) {
   const syncParam = { rates: true, shares: true, comments: false, refreshVideo: false }
   const { video } = await getOrCreateAPVideo({ videoObject: url, syncParam })
 
-  if (video.isOwned() && !canVideoBeFederated(video)) {
+  if (video.isLocal() && !canVideoBeFederated(video)) {
     throw new Error('Cannot resolve thread of video that is not compatible with federation')
   }
 
@@ -169,7 +169,7 @@ async function getAutomaticTagsAndAssignReview (comment: MComment, video: MVideo
   const automaticTags = await new AutomaticTagger().buildCommentsAutomaticTags({ ownerAccount, text: comment.text })
 
   // Third parties rely on origin, so if origin has the comment it's not held for review
-  if (video.isOwned() || comment.isOwned()) {
+  if (video.isLocal() || comment.isLocal()) {
     comment.heldForReview = await shouldCommentBeHeldForReview({ user: null, video, automaticTags })
   } else {
     comment.heldForReview = false

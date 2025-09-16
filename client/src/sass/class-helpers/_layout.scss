@@ -17,7 +17,8 @@
       @include make-col(3);
     }
 
-    h2 {
+    h2,
+    h3 {
       font-size: 1rem;
       margin-bottom: 10px;
 
@@ -51,6 +52,12 @@
 .max-width-300px {
   max-width: 300px;
 }
+
+.w-fit-content {
+  width: fit-content;
+}
+
+// ---------------------------------------------------------------------------
 
 .d-none-mw {
   @include on-mobile-main-col {

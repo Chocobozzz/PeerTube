@@ -3,7 +3,9 @@
 import { UserNotification, UserNotificationType, VideoCommentPolicy } from '@peertube/peertube-models'
 import { PeerTubeServer, cleanupTests, setDefaultAccountAvatar, waitJobs } from '@peertube/peertube-server-commands'
 import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
-import { CheckerBaseParams, checkCommentMention, checkNewCommentOnMyVideo, prepareNotificationsTest } from '@tests/shared/notifications.js'
+import { checkCommentMention, checkNewCommentOnMyVideo } from '@tests/shared/notifications/check-comment-notifications.js'
+import { prepareNotificationsTest } from '@tests/shared/notifications/notifications-common.js'
+import { CheckerBaseParams } from '@tests/shared/notifications/shared/notification-checker.js'
 import { expect } from 'chai'
 
 describe('Test comments notifications', function () {

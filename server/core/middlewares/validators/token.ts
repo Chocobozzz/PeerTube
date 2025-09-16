@@ -3,7 +3,7 @@ import { isIdValid } from '@server/helpers/custom-validators/misc.js'
 import { OAuthTokenModel } from '@server/models/oauth/oauth-token.js'
 import express from 'express'
 import { param } from 'express-validator'
-import { checkUserCanManageAccount, checkUserIdExist } from './shared/users.js'
+import { checkCanManageAccount, checkUserIdExist } from './shared/users.js'
 import { areValidationErrors } from './shared/utils.js'
 
 export const manageTokenSessionsValidator = [
@@ -17,7 +17,7 @@ export const manageTokenSessionsValidator = [
     const authUser = res.locals.oauth.token.User
     const targetUser = res.locals.user
 
-    if (!checkUserCanManageAccount({ account: targetUser.Account, user: authUser, req, res, specialRight: UserRight.MANAGE_USERS })) return
+    if (!checkCanManageAccount({ account: targetUser.Account, user: authUser, req, res, specialRight: UserRight.MANAGE_USERS })) return
 
     return next()
   }

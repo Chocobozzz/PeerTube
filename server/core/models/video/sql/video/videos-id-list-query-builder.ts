@@ -1,5 +1,12 @@
 import { forceNumber } from '@peertube/peertube-core-utils'
-import { VideoInclude, VideoIncludeType, VideoPrivacy, VideoPrivacyType, VideoState } from '@peertube/peertube-models'
+import {
+  VideoChannelCollaboratorState,
+  VideoInclude,
+  VideoIncludeType,
+  VideoPrivacy,
+  VideoPrivacyType,
+  VideoState
+} from '@peertube/peertube-models'
 import { exists } from '@server/helpers/custom-validators/misc.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { buildSortDirectionAndField } from '@server/models/shared/index.js'
@@ -58,6 +65,7 @@ export type BuildVideosListQueryOptions = {
   hasWebVideoFiles?: boolean
 
   accountId?: number
+  includeCollaborations?: boolean
 
   videoChannelId?: number
   channelNameOneOf?: string[]
@@ -177,14 +185,14 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     }
 
     if (options.accountId) {
-      this.whereAccountId(options.accountId)
+      this.whereAccountId({ accountId: options.accountId, includeCollaborations: options.includeCollaborations })
     }
 
     if (options.videoChannelId) {
       this.whereChannelId(options.videoChannelId)
     }
 
-    if (options.channelNameOneOf) {
+    if (options.channelNameOneOf && options.channelNameOneOf.length !== 0) {
       this.whereChannelOneOf(options.channelNameOneOf)
     }
 
@@ -405,9 +413,27 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     this.replacements.host = host
   }
 
-  private whereAccountId (accountId: number) {
-    this.and.push('"account"."id" = :accountId')
-    this.replacements.accountId = accountId
+  private whereAccountId (options: {
+    accountId: number
+    includeCollaborations: boolean
+  }) {
+    if (options.includeCollaborations !== true) {
+      this.and.push('"account"."id" = :accountId')
+      this.replacements.accountId = options.accountId
+      return
+    }
+
+    this.joins.push(
+      'LEFT JOIN "videoChannelCollaborator" ON "videoChannelCollaborator"."channelId" = "videoChannel".id ' +
+        'AND "videoChannelCollaborator"."state" = :channelCollaboratorState ' +
+        // Ensure we join with max 1 collaborator to not duplicate rows
+        'AND "videoChannelCollaborator"."accountId" = :accountId'
+    )
+
+    this.and.push('("account"."id" = :accountId OR "videoChannelCollaborator"."accountId" = :accountId)')
+
+    this.replacements.accountId = options.accountId
+    this.replacements.channelCollaboratorState = VideoChannelCollaboratorState.ACCEPTED
   }
 
   private whereChannelId (channelId: number) {

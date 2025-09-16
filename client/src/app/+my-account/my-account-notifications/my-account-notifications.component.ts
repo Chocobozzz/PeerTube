@@ -32,7 +32,7 @@ export class MyAccountNotificationsComponent {
   }
 
   hasUnreadNotifications () {
-    return this.userNotification().notifications.filter(n => n.read === false).length !== 0
+    return this.userNotification().notifications.filter(n => n.payload.read === false).length !== 0
   }
 
   onChangeSortColumn () {

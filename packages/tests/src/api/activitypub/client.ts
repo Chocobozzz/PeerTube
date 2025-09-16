@@ -5,8 +5,11 @@ import {
   ActivityPubActor,
   HttpStatusCode,
   VideoComment,
+  VideoCreateResult,
   VideoObject,
+  VideoPlaylistCreateResult,
   VideoPlaylistPrivacy,
+  VideoPrivacy,
   WatchActionObject
 } from '@peertube/peertube-models'
 import {
@@ -25,8 +28,13 @@ import { expect } from 'chai'
 
 describe('Test ActivityPub', function () {
   let servers: PeerTubeServer[] = []
-  let video: { id: number, uuid: string, shortUUID: string }
-  let playlist: { id: number, uuid: string, shortUUID: string }
+
+  let video: VideoCreateResult
+  let privateVideo: VideoCreateResult
+
+  let playlist: VideoPlaylistCreateResult
+  let privatePlaylist: VideoPlaylistCreateResult
+
   let comment: VideoComment
 
   async function testAccount (path: string, hasIcon: boolean) {
@@ -132,11 +140,24 @@ describe('Test ActivityPub', function () {
 
     {
       video = await servers[0].videos.quickUpload({ name: 'video' })
+      privateVideo = await servers[0].videos.quickUpload({ name: 'private video', privacy: VideoPrivacy.PRIVATE })
     }
 
     {
-      const attributes = { displayName: 'playlist', privacy: VideoPlaylistPrivacy.PUBLIC, videoChannelId: servers[0].store.channel.id }
-      playlist = await servers[0].playlists.create({ attributes })
+      playlist = await servers[0].playlists.create({
+        attributes: {
+          displayName: 'playlist',
+          privacy: VideoPlaylistPrivacy.PUBLIC,
+          videoChannelId: servers[0].store.channel.id
+        }
+      })
+      privatePlaylist = await servers[0].playlists.create({
+        attributes: {
+          displayName: 'private playlist',
+          privacy: VideoPlaylistPrivacy.PRIVATE,
+          videoChannelId: servers[0].store.channel.id
+        }
+      })
     }
 
     comment = await servers[0].comments.createThread({ text: 'thread', videoId: video.id })
@@ -211,6 +232,11 @@ describe('Test ActivityPub', function () {
     expect(object.watchSections).to.have.lengthOf(1)
     expect(object.watchSections[0].startTimestamp).to.equal(0)
     expect(object.watchSections[0].endTimestamp).to.equal(2)
+  })
+
+  it('Should not return private video or private playlist', async function () {
+    await makeActivityPubGetRequest(servers[0].url, '/videos/watch/' + privateVideo.uuid, HttpStatusCode.UNAUTHORIZED_401)
+    await makeActivityPubGetRequest(servers[0].url, '/video-playlists/' + privatePlaylist.uuid, HttpStatusCode.UNAUTHORIZED_401)
   })
 
   after(async function () {

@@ -66,7 +66,7 @@ class MockSmtpServer {
   async kill () {
     if (!this.maildev) return
 
-    if (this.relayingEmail) {
+    if (this.relayingEmail !== undefined) {
       await this.relayingEmail
     }
 

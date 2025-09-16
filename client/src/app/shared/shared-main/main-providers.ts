@@ -6,6 +6,7 @@ import { CustomPageService } from './custom-page/custom-page.service'
 import { FromNowPipe } from './date/from-now.pipe'
 import { AUTH_INTERCEPTOR_PROVIDER } from './http/auth-interceptor.service'
 import { InstanceService } from './instance/instance.service'
+import { HorizontalMenuService } from './menu/horizontal-menu.service'
 import { ActorRedirectGuard } from './router/actor-redirect-guard.service'
 import { UserHistoryService } from './users/user-history.service'
 import { UserNotificationService } from './users/user-notification.service'
@@ -40,6 +41,7 @@ export function getMainProviders () {
     CustomPageService,
     ActorRedirectGuard,
     InstanceService,
-    VideoChannelSyncService
+    VideoChannelSyncService,
+    HorizontalMenuService
   ]
 }

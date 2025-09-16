@@ -29,7 +29,7 @@ inboxRouter.post(
   activityPubRateLimiter,
   signatureValidator,
   asyncMiddleware(checkSignature),
-  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkManage: false })),
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkCanManage: false })),
   asyncMiddleware(activityPubValidator),
   inboxController
 )
@@ -39,7 +39,7 @@ inboxRouter.post(
   activityPubRateLimiter,
   signatureValidator,
   asyncMiddleware(checkSignature),
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: false })),
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: false, checkIsOwner: false })),
   asyncMiddleware(activityPubValidator),
   inboxController
 )

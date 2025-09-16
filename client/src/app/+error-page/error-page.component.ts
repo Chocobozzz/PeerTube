@@ -18,6 +18,7 @@ export class ErrorPageComponent implements OnInit {
   type: 'video' | 'other' = 'other'
 
   public constructor () {
+    // Keep this in constructor so we getCurrentNavigation() doesn't return null
     const state = this.router.getCurrentNavigation()?.extras.state
     this.type = state?.type || this.type
     this.status = state?.obj.status || this.status

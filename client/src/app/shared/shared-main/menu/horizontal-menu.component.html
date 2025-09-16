@@ -1,4 +1,4 @@
-<div class="root" [ngClass]="{ 'with-mb': withMarginBottom() }">
+<div class="root" [ngClass]="{ 'with-mb': withMarginBottom() }" [hidden]="isHidden()">
   <h1 *ngIf="h1()">
     <my-global-icon *ngIf="h1Icon()" [iconName]="h1Icon()"></my-global-icon>
 

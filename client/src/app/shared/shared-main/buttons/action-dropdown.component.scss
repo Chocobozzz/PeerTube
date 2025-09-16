@@ -1,6 +1,6 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_button-mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_button-mixins" as *;
 
 .dropdown-divider:last-child {
   display: none;
@@ -18,9 +18,28 @@
   }
 }
 
-.dropdown-toggle::after {
-  position: relative;
-  top: 1px;
+// So we can style the chevron color
+button {
+  color: inherit;
+}
+
+.chevron-down {
+  color: inherit;
+}
+
+.dropdown-toggle {
+  color: pvar(--fg-300);
+
+  &:hover,
+  &:active,
+  &:focus,
+  &:focus-visible {
+    color: pvar(--fg);
+  }
+
+  &::after {
+    display: none;
+  }
 }
 
 .dropdown-menu {
@@ -54,10 +73,11 @@
   display: flex;
   flex-direction: column;
   min-width: 1px;
+}
 
-  > * {
-    @include ellipsis;
-  }
+.action-description {
+  max-width: 300px;
+  white-space: normal;
 }
 
 .owner-moderator-privilege {

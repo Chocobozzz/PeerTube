@@ -64,6 +64,18 @@
       <div class="form-group">
         <label for="videoChannelId" i18n>Channel</label>
 
+        @if (isEditor()) {
+          <div class="form-group-description">
+            <div i18n>
+              Only {{ getOwnerAccountDisplayName() }}'s channels are listed
+            </div>
+
+            <div i18n>
+              Changing the owner of a playlist is not supported
+            </div>
+          </div>
+        }
+
         <my-select-channel inputId="videoChannelId" [items]="userVideoChannels" formControlName="videoChannelId"></my-select-channel>
 
         <div *ngIf="formErrors['videoChannelId']" class="form-error" role="alert">{{ formErrors['videoChannelId'] }}</div>

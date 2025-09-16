@@ -86,6 +86,7 @@ export class VideoCommentService {
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
+    params = params.set('includeCollaborations', 'true')
 
     if (search) {
       params = this.buildParamsFromSearch(search, params)

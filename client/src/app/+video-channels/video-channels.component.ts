@@ -72,7 +72,7 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
       .pipe(
         map(params => params['videoChannelName']),
         distinctUntilChanged(),
-        switchMap(videoChannelName => this.videoChannelService.getVideoChannel(videoChannelName)),
+        switchMap(videoChannelName => this.videoChannelService.get(videoChannelName)),
         catchError(err =>
           this.restExtractor.redirectTo404IfNotFound(err, 'other', [
             HttpStatusCode.BAD_REQUEST_400,

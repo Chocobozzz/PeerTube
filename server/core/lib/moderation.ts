@@ -129,7 +129,7 @@ async function createVideoAbuse (options: {
     videoAbuseInstance.Video = videoInstance
     abuseInstance.VideoAbuse = videoAbuseInstance
 
-    return { isOwned: videoInstance.isOwned() }
+    return { isLocal: videoInstance.isLocal() }
   }
 
   return createAbuse({
@@ -160,7 +160,7 @@ function createVideoCommentAbuse (options: {
     commentAbuseInstance.VideoComment = commentInstance
     abuseInstance.VideoCommentAbuse = commentAbuseInstance
 
-    return { isOwned: commentInstance.isOwned() }
+    return { isLocal: commentInstance.isLocal() }
   }
 
   return createAbuse({
@@ -183,7 +183,7 @@ function createAccountAbuse (options: {
   const { baseAbuse, accountInstance, transaction, reporterAccount, skipNotification } = options
 
   const associateFun = () => {
-    return Promise.resolve({ isOwned: accountInstance.isOwned() })
+    return Promise.resolve({ isLocal: accountInstance.isLocal() })
   }
 
   return createAbuse({
@@ -217,7 +217,7 @@ async function createAbuse (options: {
   base: FilteredModelAttributes<AbuseModel>
   reporterAccount: MAccountDefault
   flaggedAccount: MAccountLight
-  associateFun: (abuseInstance: MAbuseFull) => Promise<{ isOwned: boolean }>
+  associateFun: (abuseInstance: MAbuseFull) => Promise<{ isLocal: boolean }>
   skipNotification: boolean
   transaction: Transaction
 }) {
@@ -230,9 +230,9 @@ async function createAbuse (options: {
   abuseInstance.ReporterAccount = reporterAccount
   abuseInstance.FlaggedAccount = flaggedAccount
 
-  const { isOwned } = await associateFun(abuseInstance)
+  const { isLocal } = await associateFun(abuseInstance)
 
-  if (isOwned === false) {
+  if (isLocal === false) {
     sendAbuse(reporterAccount.Actor, abuseInstance, abuseInstance.FlaggedAccount, transaction)
   }
 

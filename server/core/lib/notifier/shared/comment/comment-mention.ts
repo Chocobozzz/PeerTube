@@ -40,7 +40,7 @@ export class CommentMention extends AbstractNotification<MCommentOwnerVideo, MUs
 
     this.users = await UserModel.listByUsernames(extractedUsernames)
 
-    if (this.payload.Video.isOwned()) {
+    if (this.payload.Video.isLocal()) {
       const userException = await UserModel.loadByVideoId(this.payload.videoId)
       this.users = this.users.filter(u => u.id !== userException.id)
     }

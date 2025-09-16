@@ -30,7 +30,10 @@ export class GeoIP {
     if (CONFIG.GEO_IP.ENABLED === false) return emptyResult
 
     try {
-      if (!this.initReadersPromise) this.initReadersPromise = this.initReadersIfNeeded()
+      if (this.initReadersPromise === undefined) {
+        this.initReadersPromise = this.initReadersIfNeeded()
+      }
+
       await this.initReadersPromise
       this.initReadersPromise = undefined
 

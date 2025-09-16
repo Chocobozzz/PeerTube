@@ -48,10 +48,11 @@ export class PlaylistsCommand extends AbstractCommand {
       count?: number
       sort?: string
       playlistType?: VideoPlaylistType_Type
+      includeCollaborations?: boolean
     }
   ) {
     const path = '/api/v1/video-channels/' + options.handle + '/video-playlists'
-    const query = pick(options, [ 'start', 'count', 'sort', 'playlistType' ])
+    const query = pick(options, [ 'start', 'count', 'sort', 'playlistType', 'includeCollaborations' ])
 
     return this.getRequestBody<ResultList<VideoPlaylist>>({
       ...options,
@@ -71,10 +72,12 @@ export class PlaylistsCommand extends AbstractCommand {
       sort?: string
       search?: string
       playlistType?: VideoPlaylistType_Type
+      includeCollaborations?: boolean
+      channelNameOneOf?: string[]
     }
   ) {
     const path = '/api/v1/accounts/' + options.handle + '/video-playlists'
-    const query = pick(options, [ 'start', 'count', 'sort', 'search', 'playlistType' ])
+    const query = pick(options, [ 'start', 'count', 'sort', 'search', 'playlistType', 'includeCollaborations', 'channelNameOneOf' ])
 
     return this.getRequestBody<ResultList<VideoPlaylist>>({
       ...options,

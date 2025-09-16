@@ -38,7 +38,7 @@ export class MyAcceptOwnershipComponent extends FormReactive implements OnInit {
   ngOnInit () {
     this.videoChannels = []
 
-    listUserChannelsForSelect(this.authService)
+    listUserChannelsForSelect(this.authService, { includeCollaborations: false })
       .subscribe(channels => this.videoChannels = channels)
 
     this.buildForm({

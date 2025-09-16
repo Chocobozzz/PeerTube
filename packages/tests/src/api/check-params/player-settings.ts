@@ -11,8 +11,12 @@ import {
 
 describe('Test player settings API validator', function () {
   let server: PeerTubeServer
+
   let ownerAccessToken: string
   let userAccessToken: string
+  let editorAccessToken: string
+  let invitedEditorAccessToken: string
+
   let video: VideoCreateResult
   let privateVideo: VideoCreateResult
 
@@ -28,6 +32,8 @@ describe('Test player settings API validator', function () {
 
     ownerAccessToken = await server.users.generateUserAndToken('owner')
     userAccessToken = await server.users.generateUserAndToken('user1')
+    editorAccessToken = await server.channelCollaborators.createEditor('accepted_editor', 'owner_channel')
+    invitedEditorAccessToken = await server.channelCollaborators.createInvited('invited_editor', 'owner_channel')
 
     video = await server.videos.upload({ token: ownerAccessToken })
     privateVideo = await server.videos.upload({ token: ownerAccessToken, attributes: { privacy: VideoPrivacy.PRIVATE } })
@@ -42,6 +48,8 @@ describe('Test player settings API validator', function () {
 
     await server.playerSettings.getForVideo({ token: server.accessToken, videoId })
     await server.playerSettings.getForVideo({ token: ownerAccessToken, videoId })
+    await server.playerSettings.getForVideo({ token: editorAccessToken, videoId })
+    await server.playerSettings.getForVideo({ token: invitedEditorAccessToken, videoId, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     await server.playerSettings.getForVideo({ token: userAccessToken, videoId, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     await server.playerSettings.getForVideo({ token: null, videoId, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
   })
@@ -54,12 +62,20 @@ describe('Test player settings API validator', function () {
     })
   })
 
-  it('Should only allow to get raw player settings of a channel by owner/moderators', async function () {
+  it('Should only allow to get raw player settings of a channel by owner/editors/moderators', async function () {
     const channelHandle = 'owner_channel'
     const videoId = video.uuid
 
     await server.playerSettings.getForChannel({ token: server.accessToken, channelHandle, raw: true })
     await server.playerSettings.getForChannel({ token: ownerAccessToken, channelHandle, raw: true })
+    await server.playerSettings.getForChannel({ token: editorAccessToken, channelHandle, raw: true })
+
+    await server.playerSettings.getForChannel({
+      token: invitedEditorAccessToken,
+      channelHandle,
+      expectedStatus: HttpStatusCode.FORBIDDEN_403,
+      raw: true
+    })
     await server.playerSettings.getForChannel({
       token: userAccessToken,
       channelHandle,
@@ -79,7 +95,15 @@ describe('Test player settings API validator', function () {
     const playerSettings: PlayerVideoSettings = { theme: 'lucide' }
 
     await server.playerSettings.updateForVideo({ token: server.accessToken, videoId, ...playerSettings })
+    await server.playerSettings.updateForVideo({ token: editorAccessToken, videoId, ...playerSettings })
     await server.playerSettings.updateForVideo({ token: ownerAccessToken, videoId, ...playerSettings })
+
+    await server.playerSettings.updateForVideo({
+      token: invitedEditorAccessToken,
+      videoId,
+      ...playerSettings,
+      expectedStatus: HttpStatusCode.FORBIDDEN_403
+    })
 
     await server.playerSettings.updateForVideo({
       token: userAccessToken,
@@ -97,6 +121,14 @@ describe('Test player settings API validator', function () {
 
     await server.playerSettings.updateForChannel({ token: server.accessToken, channelHandle, ...playerSettings })
     await server.playerSettings.updateForChannel({ token: ownerAccessToken, channelHandle, ...playerSettings })
+    await server.playerSettings.updateForChannel({ token: editorAccessToken, channelHandle, ...playerSettings })
+
+    await server.playerSettings.updateForChannel({
+      token: invitedEditorAccessToken,
+      channelHandle,
+      ...playerSettings,
+      expectedStatus: HttpStatusCode.FORBIDDEN_403
+    })
 
     await server.playerSettings.updateForChannel({
       token: userAccessToken,

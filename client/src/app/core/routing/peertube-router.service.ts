@@ -1,7 +1,6 @@
 import { Injectable, inject } from '@angular/core'
 import { ActivatedRoute, Event, NavigationEnd, Params, Router, Scroll } from '@angular/router'
 import { filter } from 'rxjs/operators'
-import { ServerService } from '../server'
 
 export const enum RouterSetting {
   NONE = 0,
@@ -10,9 +9,7 @@ export const enum RouterSetting {
 
 @Injectable()
 export class PeerTubeRouterService {
-  private route = inject(ActivatedRoute)
   private router = inject(Router)
-  private server = inject(ServerService)
 
   getNavigationEndEvents () {
     return this.router.events.pipe(

@@ -109,7 +109,7 @@
                 <div class="form-group">
                   <div class="muted small mb-2" i18n>Column displayed:</div>
 
-                  @for (column of columns; track column) {
+                  @for (column of columns; track column.id) {
                     <div class="ms-1 mb-1">
                       <my-peertube-checkbox
                         [inputName]="'column-' + column.id"

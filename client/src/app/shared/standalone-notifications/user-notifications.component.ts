@@ -1,20 +1,23 @@
-import { Subject } from 'rxjs'
-import { Component, OnInit, inject, input, output } from '@angular/core'
-import { ComponentPagination, hasMoreItems, Notifier } from '@app/core'
-import { AbuseState, VideoState } from '@peertube/peertube-models'
 import { CommonModule } from '@angular/common'
-import { GlobalIconComponent } from '../shared-icons/global-icon.component'
+import { Component, inject, input, OnInit, output } from '@angular/core'
 import { RouterLink } from '@angular/router'
-import { FromNowPipe } from '../shared-main/date/from-now.pipe'
+import { ComponentPagination, hasMoreItems, Notifier } from '@app/core'
+import { Subject } from 'rxjs'
 import { InfiniteScrollerDirective } from '../shared-main/common/infinite-scroller.directive'
-import { UserNotificationService } from '../shared-main/users/user-notification.service'
 import { UserNotification } from '../shared-main/users/user-notification.model'
+import { UserNotificationService } from '../shared-main/users/user-notification.service'
+import { UserNotificationContentComponent } from './user-notification-content.component'
 
 @Component({
   selector: 'my-user-notifications',
   templateUrl: 'user-notifications.component.html',
   styleUrls: [ 'user-notifications.component.scss' ],
-  imports: [ CommonModule, GlobalIconComponent, RouterLink, FromNowPipe, InfiniteScrollerDirective ]
+  imports: [
+    CommonModule,
+    RouterLink,
+    InfiniteScrollerDirective,
+    UserNotificationContentComponent
+  ]
 })
 export class UserNotificationsComponent implements OnInit {
   private userNotificationService = inject(UserNotificationService)
@@ -94,12 +97,12 @@ export class UserNotificationsComponent implements OnInit {
   }
 
   markAsRead (notification: UserNotification) {
-    if (notification.read) return
+    if (notification.payload.read) return
 
     this.userNotificationService.markAsRead(notification)
       .subscribe({
         next: () => {
-          notification.read = true
+          notification.payload.read = true
         },
 
         error: err => this.notifier.error(err.message)
@@ -111,7 +114,7 @@ export class UserNotificationsComponent implements OnInit {
       .subscribe({
         next: () => {
           for (const notification of this.notifications) {
-            notification.read = true
+            notification.payload.read = true
           }
         },
 
@@ -127,13 +130,5 @@ export class UserNotificationsComponent implements OnInit {
     }
     this.sortField = column
     this.loadNotifications(true)
-  }
-
-  isAbuseAccepted (notification: UserNotification) {
-    return notification.abuse.state === AbuseState.ACCEPTED
-  }
-
-  isVideoPublished (notification: UserNotification) {
-    return notification.video.state.id === VideoState.PUBLISHED
   }
 }

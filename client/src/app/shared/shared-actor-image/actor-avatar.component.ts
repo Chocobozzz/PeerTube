@@ -1,4 +1,4 @@
-import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common'
+import { CommonModule, NgTemplateOutlet } from '@angular/common'
 import { Component, ElementRef, OnChanges, OnInit, booleanAttribute, inject, input, numberAttribute, viewChild } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
@@ -11,19 +11,21 @@ export type ActorAvatarInput = {
   avatars: { width: number, url?: string, path: string }[]
 }
 
+export type ActorAvatarType = 'channel' | 'account' | 'instance' | 'unlogged'
+
 @Component({
   selector: 'my-actor-avatar',
   styleUrls: [ './actor-avatar.component.scss' ],
   templateUrl: './actor-avatar.component.html',
-  imports: [ NgIf, NgClass, NgTemplateOutlet, RouterLink ]
+  imports: [ CommonModule, NgTemplateOutlet, RouterLink ]
 })
 export class ActorAvatarComponent implements OnInit, OnChanges {
   private el = inject(ElementRef)
 
   readonly avatarEl = viewChild<ElementRef>('avatarEl')
 
-  readonly actor = input<ActorAvatarInput>(undefined)
-  readonly actorType = input<'channel' | 'account' | 'instance' | 'unlogged'>(undefined)
+  readonly actor = input.required<ActorAvatarInput>()
+  readonly actorType = input.required<ActorAvatarType>()
 
   readonly previewImage = input<string>(undefined)
 

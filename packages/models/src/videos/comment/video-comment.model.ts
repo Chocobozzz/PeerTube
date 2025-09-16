@@ -1,5 +1,6 @@
 import { ResultList } from '../../common/index.js'
 import { Account } from '../../actors/index.js'
+import { VideoChannelSummary } from '../channel/video-channel.model.js'
 
 export interface VideoComment {
   id: number
@@ -40,6 +41,8 @@ export interface VideoCommentForAdminOrUser {
     id: number
     uuid: string
     name: string
+
+    channel: VideoChannelSummary
   }
 
   heldForReview: boolean

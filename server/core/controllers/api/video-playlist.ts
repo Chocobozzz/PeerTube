@@ -109,7 +109,7 @@ videoPlaylistRouter.get(
   paginationValidator,
   setDefaultPagination,
   optionalAuthenticate,
-  asyncMiddleware(getVideoPlaylistVideos)
+  asyncMiddleware(listVideosOfPlaylist)
 )
 
 videoPlaylistRouter.post(
@@ -181,7 +181,7 @@ async function createVideoPlaylist (req: express.Request, res: express.Response)
     name: videoPlaylistInfo.displayName,
     description: videoPlaylistInfo.description,
     privacy: videoPlaylistInfo.privacy || VideoPlaylistPrivacy.PRIVATE,
-    ownerAccountId: user.Account.id
+    ownerAccountId: res.locals.videoChannel?.Account.id ?? user.Account.id
   }) as MVideoPlaylistFull
 
   videoPlaylist.url = getLocalVideoPlaylistActivityPubUrl(videoPlaylist) // We use the UUID, so set the URL after building the object
@@ -517,7 +517,7 @@ async function reorderVideosOfPlaylist (req: express.Request, res: express.Respo
   return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
-async function getVideoPlaylistVideos (req: express.Request, res: express.Response) {
+async function listVideosOfPlaylist (req: express.Request, res: express.Response) {
   const videoPlaylistInstance = res.locals.videoPlaylistSummary
   const user = res.locals.oauth ? res.locals.oauth.token.User : undefined
   const server = await getServerActor()

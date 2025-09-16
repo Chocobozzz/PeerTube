@@ -1,4 +1,4 @@
-import { NgClass, NgIf, NgTemplateOutlet, PlatformLocation } from '@angular/common'
+import { CommonModule, NgTemplateOutlet, PlatformLocation } from '@angular/common'
 import { Component, ElementRef, inject, LOCALE_ID, NgZone, OnDestroy, OnInit, viewChild } from '@angular/core'
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router'
 import {
@@ -63,6 +63,7 @@ import { isP2PEnabled, videoRequiresFileToken, videoRequiresUserAuth } from '@ro
 import debug from 'debug'
 import { forkJoin, map, Observable, of, Subscription, switchMap } from 'rxjs'
 import { environment } from '../../environments/environment'
+import { AccountOnChannelAvatarComponent } from '../shared/shared-actor-image/account-on-channel-avatar.component'
 import { DateToggleComponent } from '../shared/shared-main/date/date-toggle.component'
 import { PluginPlaceholderComponent } from '../shared/shared-main/plugins/plugin-placeholder.component'
 import { VideoViewsCounterComponent } from '../shared/shared-video/video-views-counter.component'
@@ -72,7 +73,6 @@ import { VideoCommentsComponent } from './shared/comment/video-comments.componen
 import { PrivacyConcernsComponent } from './shared/information/privacy-concerns.component'
 import { VideoAlertComponent } from './shared/information/video-alert.component'
 import { VideoAttributesComponent } from './shared/metadata/video-attributes.component'
-import { VideoAvatarChannelComponent } from './shared/metadata/video-avatar-channel.component'
 import { VideoDescriptionComponent } from './shared/metadata/video-description.component'
 import { VideoTranscriptionComponent } from './shared/player-widgets/video-transcription.component'
 import { VideoWatchPlaylistComponent } from './shared/player-widgets/video-watch-playlist.component'
@@ -105,8 +105,7 @@ type URLOptions = {
   templateUrl: './video-watch.component.html',
   styleUrls: [ './video-watch.component.scss' ],
   imports: [
-    NgClass,
-    NgIf,
+    CommonModule,
     VideoWatchPlaylistComponent,
     PluginPlaceholderComponent,
     VideoAlertComponent,
@@ -114,7 +113,7 @@ type URLOptions = {
     VideoViewsCounterComponent,
     NgTemplateOutlet,
     ActionButtonsComponent,
-    VideoAvatarChannelComponent,
+    AccountOnChannelAvatarComponent,
     RouterLink,
     SubscribeButtonComponent,
     VideoDescriptionComponent,
@@ -293,6 +292,14 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     ]
 
     return genericChannelDisplayName.includes(this.video.channel.displayName)
+  }
+
+  getAccountOrChannelRouterLink () {
+    if (!this.isChannelDisplayNameGeneric()) {
+      return `/c/${this.video.byVideoChannel}`
+    }
+
+    return `/a/${this.video.byAccount}`
   }
 
   displayOtherVideosAsRow () {

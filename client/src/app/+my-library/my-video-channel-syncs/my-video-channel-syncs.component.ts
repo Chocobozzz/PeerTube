@@ -5,9 +5,9 @@ import { AuthService, Notifier, ServerService } from '@app/core'
 import { VideoChannelSyncService } from '@app/shared/shared-main/channel/video-channel-sync.service'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
+import { ActorCellComponent } from '@app/shared/shared-tables/actor-cell.component'
 import { HTMLServerConfig, VideoChannelSync, VideoChannelSyncState, VideoChannelSyncStateType } from '@peertube/peertube-models'
 import { first, mergeMap } from 'rxjs'
-import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
 import { ActionDropdownComponent, DropdownAction } from '../../shared/shared-main/buttons/action-dropdown.component'
 import { NumberFormatterPipe } from '../../shared/shared-main/common/number-formatter.pipe'
@@ -20,10 +20,10 @@ import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../../shared
     GlobalIconComponent,
     RouterLink,
     ActionDropdownComponent,
-    ActorAvatarComponent,
     PTDatePipe,
     TableComponent,
-    NumberFormatterPipe
+    NumberFormatterPipe,
+    ActorCellComponent
   ]
 })
 export class MyVideoChannelSyncsComponent implements OnInit {
@@ -55,6 +55,10 @@ export class MyVideoChannelSyncsComponent implements OnInit {
   ]
 
   dataLoader: typeof this._dataLoader
+
+  get user () {
+    return this.authService.getUser()
+  }
 
   constructor () {
     this.dataLoader = this._dataLoader.bind(this)
@@ -93,9 +97,10 @@ export class MyVideoChannelSyncsComponent implements OnInit {
       .pipe(
         first(),
         mergeMap(() => {
-          return this.videoChannelsSyncService.listAccountVideoChannelsSyncs({
+          return this.videoChannelsSyncService.listByAccount({
             sort: options.sort,
             pagination: options.pagination,
+            includeCollaborations: true,
             account: this.authService.getUser().account
           })
         })
@@ -107,7 +112,7 @@ export class MyVideoChannelSyncsComponent implements OnInit {
   }
 
   deleteSync (videoChannelSync: VideoChannelSync) {
-    this.videoChannelsSyncService.deleteSync(videoChannelSync.id)
+    this.videoChannelsSyncService.delete(videoChannelSync.id)
       .subscribe({
         next: () => {
           this.notifier.success($localize`Synchronization removed successfully for ${videoChannelSync.channel.displayName}.`)

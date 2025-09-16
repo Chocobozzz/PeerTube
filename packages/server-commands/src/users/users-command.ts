@@ -12,7 +12,8 @@ import {
   UserUpdate,
   UserUpdateMe,
   UserVideoQuota,
-  UserVideoRate
+  UserVideoRate,
+  VideoChannel
 } from '@peertube/peertube-models'
 import { unwrapBody } from '../requests/index.js'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
@@ -281,6 +282,20 @@ export class UsersCommand extends AbstractCommand {
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
+
+  listMyChannels (options: OverrideCommandOptions = {}) {
+    const path = '/api/v1/users/me/video-channels'
+
+    return this.getRequestBody<ResultList<VideoChannel>>({
+      ...options,
+
+      path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
+  // ---------------------------------------------------------------------------
 
   deleteMe (options: OverrideCommandOptions = {}) {
     const path = '/api/v1/users/me'

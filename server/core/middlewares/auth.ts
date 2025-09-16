@@ -55,36 +55,41 @@ export function authenticateSocket (socket: Socket, next: (err?: any) => void) {
     .catch(err => logger.error('Cannot get access token.', { err }))
 }
 
-export function authenticatePromise (options: {
-  req: express.Request
-  res: express.Response
-  errorMessage?: string
-  errorStatus?: HttpStatusCodeType
-  errorType?: ServerErrorCodeType
-}) {
-  const { req, res, errorMessage = 'Not authenticated', errorStatus = HttpStatusCode.UNAUTHORIZED_401, errorType } = options
-  return new Promise<void>(resolve => {
-    // Already authenticated? (or tried to)
-    if (res.locals.oauth?.token.User) return resolve()
-
-    if (res.locals.authenticated === false) {
-      return res.fail({
-        status: errorStatus,
-        type: errorType,
-        message: errorMessage
-      })
-    }
-
-    authenticate(req, res, () => resolve())
-  })
-}
-
 export function optionalAuthenticate (req: express.Request, res: express.Response, next: express.NextFunction) {
   if (req.header('authorization')) return authenticate(req, res, next)
 
   res.locals.authenticated = false
 
   return next()
+}
+
+export function authenticateOrFail (options: {
+  req: express.Request
+  res: express.Response
+  errorMessage?: string
+  errorStatus?: HttpStatusCodeType
+  errorType?: ServerErrorCodeType
+}) {
+  const { req, res, errorMessage = req.t('Authentication is required'), errorStatus = HttpStatusCode.UNAUTHORIZED_401, errorType } = options
+
+  return new Promise<boolean>(resolve => {
+    // Already authenticated? (or tried to)
+    if (res.locals.oauth?.token.User) return resolve(true)
+
+    if (res.locals.authenticated === false || !req.header('authorization')) {
+      res.fail({ status: errorStatus, type: errorType, message: errorMessage })
+
+      return resolve(false)
+    }
+
+    authenticate(req, res, () => {
+      if (res.locals.oauth?.token.User) return resolve(true)
+
+      res.fail({ status: errorStatus, type: errorType, message: errorMessage })
+
+      resolve(false)
+    })
+  })
 }
 
 // ---------------------------------------------------------------------------

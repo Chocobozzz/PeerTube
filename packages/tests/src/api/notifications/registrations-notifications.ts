@@ -3,7 +3,9 @@
 import { UserNotification } from '@peertube/peertube-models'
 import { cleanupTests, PeerTubeServer, waitJobs } from '@peertube/peertube-server-commands'
 import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
-import { CheckerBaseParams, prepareNotificationsTest, checkUserRegistered, checkRegistrationRequest } from '@tests/shared/notifications.js'
+import { checkRegistrationRequest, checkUserRegistered } from '@tests/shared/notifications/check-moderation-notifications.js'
+import { prepareNotificationsTest } from '@tests/shared/notifications/notifications-common.js'
+import { CheckerBaseParams } from '@tests/shared/notifications/shared/notification-checker.js'
 
 describe('Test registrations notifications', function () {
   let server: PeerTubeServer

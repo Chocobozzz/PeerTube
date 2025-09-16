@@ -3,10 +3,6 @@
 @use "_form-mixins" as *;
 @use "_actor" as *;
 
-.channel-label {
-  @include channel-label;
-}
-
 .channel-filters {
   @include channel-filters;
 }
@@ -16,6 +12,12 @@
   line-height: 1rem;
   font-weight: $font-bold;
   text-decoration: none;
+}
+
+.name-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 my-video-playlist-miniature {

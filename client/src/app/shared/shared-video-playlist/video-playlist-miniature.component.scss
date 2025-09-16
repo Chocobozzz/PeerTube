@@ -1,10 +1,11 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_miniature' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_miniature" as *;
 
 .miniature {
   display: inline-block;
   width: 100%;
+  vertical-align: middle;
 
   &.no-videos:not(.to-manage) {
     a {
@@ -42,8 +43,12 @@
 }
 
 .miniature-info {
+  display: flex;
+  flex-direction: column;
 
   .miniature-name {
+    display: inline-block;
+
     @include miniature-name;
   }
 
@@ -55,7 +60,6 @@
   }
 
   .privacy-date {
-    margin-top: 5px;
     color: pvar(--fg-200);
     font-size: $miniature-fs-small;
 
@@ -63,7 +67,7 @@
       font-weight: $font-semibold;
 
       &::after {
-        content: '-';
+        content: "-";
         margin: 0 3px;
       }
     }
@@ -78,17 +82,13 @@
 }
 
 .miniature:not(.display-as-row) {
-
   .miniature-name {
+    margin-top: 0.5rem;
     font-size: $miniature-fs-big;
-    margin-top: 10px;
-    margin-bottom: 5px;
   }
 
   .miniature-thumbnail {
-    margin-bottom: 5px;
-
-    @include block-ratio($selector: '::ng-deep a');
+    @include block-ratio($selector: "::ng-deep a");
   }
 }
 
@@ -104,6 +104,7 @@
 
   .privacy-date {
     font-size: $miniature-fs-row-small;
+    margin-top: 0.25rem;
   }
 
   .miniature-thumbnail {

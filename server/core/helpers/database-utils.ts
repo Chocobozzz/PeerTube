@@ -5,7 +5,7 @@ import { Model } from 'sequelize-typescript'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { logger } from './logger.js'
 
-function retryTransactionWrapper<T, A, B, C, D> (
+export function retryTransactionWrapper<T, A, B, C, D> (
   functionToRetry: (arg1: A, arg2: B, arg3: C, arg4: D) => Promise<T>,
   arg1: A,
   arg2: B,
@@ -13,29 +13,29 @@ function retryTransactionWrapper<T, A, B, C, D> (
   arg4: D
 ): Promise<T>
 
-function retryTransactionWrapper<T, A, B, C> (
+export function retryTransactionWrapper<T, A, B, C> (
   functionToRetry: (arg1: A, arg2: B, arg3: C) => Promise<T>,
   arg1: A,
   arg2: B,
   arg3: C
 ): Promise<T>
 
-function retryTransactionWrapper<T, A, B> (
+export function retryTransactionWrapper<T, A, B> (
   functionToRetry: (arg1: A, arg2: B) => Promise<T>,
   arg1: A,
   arg2: B
 ): Promise<T>
 
-function retryTransactionWrapper<T, A> (
+export function retryTransactionWrapper<T, A> (
   functionToRetry: (arg1: A) => Promise<T>,
   arg1: A
 ): Promise<T>
 
-function retryTransactionWrapper<T> (
+export function retryTransactionWrapper<T> (
   functionToRetry: () => Promise<T> | Bluebird<T>
 ): Promise<T>
 
-function retryTransactionWrapper<T> (
+export function retryTransactionWrapper<T> (
   functionToRetry: (...args: any[]) => Promise<T>,
   ...args: any[]
 ): Promise<T> {
@@ -50,7 +50,7 @@ function retryTransactionWrapper<T> (
     })
 }
 
-function transactionRetryer<T> (func: (err: any, data: T) => any) {
+export function transactionRetryer<T> (func: (err: any, data: T) => any) {
   return new Promise<T>((res, rej) => {
     retry(
       {
@@ -68,7 +68,7 @@ function transactionRetryer<T> (func: (err: any, data: T) => any) {
   })
 }
 
-function saveInTransactionWithRetries<T extends Pick<Model, 'save' | 'changed'>> (model: T) {
+export function saveInTransactionWithRetries<T extends Pick<Model, 'save' | 'changed'>> (model: T) {
   const changedKeys = model.changed() || []
 
   return retryTransactionWrapper(() => {
@@ -87,46 +87,41 @@ function saveInTransactionWithRetries<T extends Pick<Model, 'save' | 'changed'>>
   })
 }
 
+export function deleteInTransactionWithRetries<T extends Pick<Model, 'destroy'>> (model: T) {
+  return retryTransactionWrapper(() => {
+    return sequelizeTypescript.transaction(async transaction => {
+      await model.destroy({ transaction })
+    })
+  })
+}
+
 // ---------------------------------------------------------------------------
 
-function resetSequelizeInstance<T> (instance: Model<T>) {
+export function resetSequelizeInstance<T> (instance: Model<T>) {
   return instance.reload()
 }
 
-function filterNonExistingModels<T extends { hasSameUniqueKeysThan(other: T): boolean }> (
+export function filterNonExistingModels<T extends { hasSameUniqueKeysThan(other: T): boolean }> (
   fromDatabase: T[],
   newModels: T[]
 ) {
   return fromDatabase.filter(f => !newModels.find(newModel => newModel.hasSameUniqueKeysThan(f)))
 }
 
-function deleteAllModels<T extends Pick<Model, 'destroy'>> (models: T[], transaction: Transaction) {
+export function deleteAllModels<T extends Pick<Model, 'destroy'>> (models: T[], transaction: Transaction) {
   return Promise.all(models.map(f => f.destroy({ transaction })))
 }
 
 // ---------------------------------------------------------------------------
 
-function runInReadCommittedTransaction<T> (fn: (t: Transaction) => Promise<T>) {
+export function runInReadCommittedTransaction<T> (fn: (t: Transaction) => Promise<T>) {
   const options = { isolationLevel: Transaction.ISOLATION_LEVELS.READ_COMMITTED }
 
   return sequelizeTypescript.transaction(options, t => fn(t))
 }
 
-function afterCommitIfTransaction (t: Transaction, fn: Function) {
+export function afterCommitIfTransaction (t: Transaction, fn: Function) {
   if (t) return t.afterCommit(() => fn())
 
   return fn()
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  resetSequelizeInstance,
-  retryTransactionWrapper,
-  transactionRetryer,
-  saveInTransactionWithRetries,
-  afterCommitIfTransaction,
-  filterNonExistingModels,
-  deleteAllModels,
-  runInReadCommittedTransaction
 }

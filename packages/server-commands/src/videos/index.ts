@@ -1,5 +1,6 @@
 export * from './blacklist-command.js'
 export * from './captions-command.js'
+export * from './channel-collaborators-command.js'
 export * from './change-ownership-command.js'
 export * from './channels.js'
 export * from './channels-command.js'

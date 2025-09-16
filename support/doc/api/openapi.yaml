@@ -2201,6 +2201,7 @@ paths:
         - $ref: '#/components/parameters/videoChannelId'
         - $ref: '#/components/parameters/autoTagOneOfComment'
         - $ref: '#/components/parameters/isHeldForReview'
+        - $ref: '#/components/parameters/includeCollaborations'
       responses:
         '200':
           description: successful operation
@@ -2230,6 +2231,7 @@ paths:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/includeCollaborations'
         -
           name: targetUrl
           in: query
@@ -2342,6 +2344,7 @@ paths:
         - $ref: '#/components/parameters/privacyOneOf'
         - $ref: '#/components/parameters/excludeAlreadyWatched'
         - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/includeCollaborations'
       responses:
         '200':
           description: successful operation
@@ -5515,6 +5518,19 @@ paths:
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/search'
         - $ref: '#/components/parameters/videoPlaylistType'
+        - $ref: '#/components/parameters/includeCollaborations'
+        - name: channelNameOneOf
+          in: query
+          required: false
+          description: "**PeerTube >= 8.0** Filter on playlists that are published on a channel with one of these names"
+          schema:
+            oneOf:
+            - type: string
+            - type: array
+              items:
+                type: string
+          style: form
+          explode: true
       responses:
         '200':
           description: successful operation
@@ -5541,12 +5557,14 @@ paths:
         - $ref: '#/components/parameters/name'
         - name: withStats
           in: query
-          description: include daily view statistics for the last 30 days and total views (only if authentified as the account user)
+          description: include daily view statistics for the last 30 days and total views (only if authenticated as the account user)
           schema:
             type: boolean
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/search'
         - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/includeCollaborations'
       responses:
         '200':
           description: successful operation
@@ -5567,6 +5585,7 @@ paths:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/includeCollaborations'
       responses:
         '200':
           description: successful operation
@@ -7447,6 +7466,111 @@ paths:
         '204':
           description: successful operation
 
+  /api/v1/video-channels/{channelHandle}/collaborators:
+    get:
+      tags:
+        - Video Channels
+      summary: List channel collaborators
+      operationId: listVideoChannelCollaborators
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/channelHandle'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VideoChannelCollaborator'
+
+  /api/v1/video-channels/{channelHandle}/collaborators/invite:
+    post:
+      tags:
+        - Video Channels
+      summary: Invite a collaborator
+      operationId: inviteVideoChannelCollaborator
+      description: >
+        Invite a local user to collaborate on the specified video channel.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/channelHandle'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                accountHandle:
+                  type: string
+                  description: Local user username to invite
+      responses:
+        '200':
+          description: Collaborator invited
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  collaborator:
+                    $ref: '#/components/schemas/VideoChannelCollaborator'
+
+  /api/v1/video-channels/{channelHandle}/collaborators/{collaboratorId}/accept:
+    post:
+      tags:
+        - Video Channels
+      summary: Accept a collaboration invitation
+      operationId: acceptVideoChannelCollaborator
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/channelHandle'
+        - $ref: '#/components/parameters/collaboratorId'
+      responses:
+        '204':
+          description: Collaboration accepted
+
+  /api/v1/video-channels/{channelHandle}/collaborators/{collaboratorId}/reject:
+    post:
+      tags:
+        - Video Channels
+      summary: Reject a collaboration invitation
+      operationId: rejectVideoChannelCollaborator
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/channelHandle'
+        - $ref: '#/components/parameters/collaboratorId'
+      responses:
+        '204':
+          description: Collaboration rejected
+
+  /api/v1/video-channels/{channelHandle}/collaborators/{collaboratorId}:
+    delete:
+      tags:
+        - Video Channels
+      summary: Remove a channel collaborator
+      description: Only the channel owner or the collaborator themselves can remove a collaborator from a channel
+      operationId: removeVideoChannelCollaborator
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/channelHandle'
+        - $ref: '#/components/parameters/collaboratorId'
+      responses:
+        '204':
+          description: successful operation
+
 servers:
   - url: 'https://peertube2.cpy.re'
     description: Live Test Server (live data - latest nightly version)
@@ -8251,6 +8375,20 @@ components:
           - 'header-wide'
           - 'header-square'
           - 'opengraph'
+    includeCollaborations:
+      name: includeCollaborations
+      in: query
+      required: false
+      description: "**PeerTube >= 8.0** Include objects from collaborated channels"
+      schema:
+        type: boolean
+    collaboratorId:
+      name: collaboratorId
+      in: path
+      required: true
+      description: The collaborator id
+      schema:
+        $ref: '#/components/schemas/id'
 
   securitySchemes:
     OAuth2:
@@ -12217,3 +12355,35 @@ components:
         The file storage type:
           - `0` File system
           - `1` Object storage
+
+    VideoChannelCollaborator:
+      type: object
+      description: Representation of a channel collaboration
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        account:
+          $ref: '#/components/schemas/AccountSummary'
+        state:
+          type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/VideoChannelCollaboratorState'
+            label:
+              type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    VideoChannelCollaboratorState:
+      type: integer
+      enum:
+        - 1
+        - 2
+      description: |
+        The user import state:
+          - `1`: Pending
+          - `2`: Accepted

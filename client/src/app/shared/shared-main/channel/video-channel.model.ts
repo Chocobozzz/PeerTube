@@ -34,8 +34,8 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
     return Actor.GET_ACTOR_AVATAR_URL(actor, size)
   }
 
-  static GET_ACTOR_BANNER_URL (channel: ServerVideoChannel) {
-    if (!channel || channel.banners.length === 0) {
+  static GET_ACTOR_BANNER_URL (channel: Partial<Pick<ServerVideoChannel, 'banners'>>) {
+    if (!channel || !Array.isArray(channel.banners) || channel.banners.length === 0) {
       return ''
     }
 
@@ -91,26 +91,6 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
     }
 
     this.updateComputedAttributes()
-  }
-
-  updateAvatar (newAvatars: ActorImage[]) {
-    this.avatars = newAvatars
-
-    this.updateComputedAttributes()
-  }
-
-  resetAvatar () {
-    this.updateAvatar([])
-  }
-
-  updateBanner (newBanners: ActorImage[]) {
-    this.banners = newBanners
-
-    this.updateComputedAttributes()
-  }
-
-  resetBanner () {
-    this.updateBanner([])
   }
 
   updateComputedAttributes () {

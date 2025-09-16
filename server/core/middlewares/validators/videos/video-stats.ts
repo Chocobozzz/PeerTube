@@ -4,7 +4,7 @@ import { isDateValid } from '@server/helpers/custom-validators/misc.js'
 import { isValidStatTimeserieMetric } from '@server/helpers/custom-validators/video-stats.js'
 import { STATS_TIMESERIE } from '@server/initializers/constants.js'
 import { HttpStatusCode, UserRight, VideoStatsTimeserieQuery } from '@peertube/peertube-models'
-import { areValidationErrors, checkUserCanManageVideo, doesVideoExist, isValidVideoIdParam } from '../shared/index.js'
+import { areValidationErrors, checkCanManageVideo, doesVideoExist, isValidVideoIdParam } from '../shared/index.js'
 
 export const videoOverallOrUserAgentStatsValidator = [
   isValidVideoIdParam('videoId'),
@@ -89,8 +89,17 @@ export const videoTimeseriesStatsValidator = [
 
 async function commonStatsCheck (req: express.Request, res: express.Response) {
   if (!await doesVideoExist(req.params.videoId, res, 'all')) return false
+
   if (
-    !checkUserCanManageVideo({ user: res.locals.oauth.token.User, video: res.locals.videoAll, right: UserRight.SEE_ALL_VIDEOS, req, res })
+    !await checkCanManageVideo({
+      user: res.locals.oauth.token.User,
+      video: res.locals.videoAll,
+      right: UserRight.SEE_ALL_VIDEOS,
+      req,
+      res,
+      checkIsLocal: true,
+      checkIsOwner: false
+    })
   ) {
     return false
   }

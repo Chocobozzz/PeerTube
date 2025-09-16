@@ -124,12 +124,14 @@ export class VideoService {
     sort: VideoSortField | SortMeta
     userChannels?: VideoChannelServerModel[]
 
+    includeCollaborations?: boolean
+
     isLive?: boolean
     privacyOneOf?: VideoPrivacyType[]
     channelNameOneOf: string[]
     search?: string
   }): Observable<ResultList<Video>> {
-    const { videoPagination, restPagination, sort, channelNameOneOf, privacyOneOf, search } = options
+    const { videoPagination, restPagination, sort, channelNameOneOf, privacyOneOf, search, includeCollaborations } = options
 
     const pagination = videoPagination
       ? this.restService.componentToRestPagination(videoPagination)
@@ -149,6 +151,8 @@ export class VideoService {
     if (channelNameOneOf !== undefined && channelNameOneOf.length !== 0) {
       params = this.restService.addArrayParams(params, 'channelNameOneOf', channelNameOneOf)
     }
+
+    if (includeCollaborations) params = params.set('includeCollaborations', 'true')
 
     return this.authHttp
       .get<ResultList<Video>>(UserService.BASE_USERS_URL + 'me/videos', { params })

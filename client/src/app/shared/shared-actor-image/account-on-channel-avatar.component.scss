@@ -1,0 +1,15 @@
+@use "_mixins" as *;
+
+.root {
+  position: relative;
+  margin-bottom: 5px;
+
+  @include margin-right(5px);
+
+  .second-avatar {
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    background-color: rgba(0, 0, 0, 0);
+  }
+}

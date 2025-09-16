@@ -1,21 +1,23 @@
 <ng-template #img>
-  <img #avatarEl *ngIf="displayImage()" [ngClass]="classes" [src]="previewImage() || avatarUrl || defaultAvatarUrl" alt="" />
-
-  <div #avatarEl *ngIf="displayActorInitial()" [ngClass]="classes">
-    <span>{{ getActorInitial() }}</span>
-  </div>
-
-  <div #avatarEl *ngIf="displayPlaceholder()" [ngClass]="classes"></div>
+  @if (displayImage()) {
+    <img #avatarEl [ngClass]="classes" [src]="previewImage() || avatarUrl || defaultAvatarUrl" alt="" />
+  } @else if (displayActorInitial()) {
+    <div #avatarEl [ngClass]="classes">
+      <span>{{ getActorInitial() }}</span>
+    </div>
+  } @else if (displayPlaceholder()) {
+    <div #avatarEl [ngClass]="classes"></div>
+  }
 </ng-template>
 
-<a *ngIf="actor() && href()" [href]="href()" target="_blank" rel="noopener noreferrer" [title]="getTitle()">
+@if (actor() && href()) {
+  <a [href]="href()" target="_blank" rel="noopener noreferrer" [title]="getTitle()">
+    <ng-template *ngTemplateOutlet="img"></ng-template>
+  </a>
+} @else if (actor() && internalHref()) {
+  <a [routerLink]="internalHref()" [title]="getTitle()">
+    <ng-template *ngTemplateOutlet="img"></ng-template>
+  </a>
+} @else {
   <ng-template *ngTemplateOutlet="img"></ng-template>
-</a>
-
-<a *ngIf="actor() && internalHref()" [routerLink]="internalHref()" [title]="getTitle()">
-  <ng-template *ngTemplateOutlet="img"></ng-template>
-</a>
-
-<ng-container *ngIf="!actor() || (!href() && !internalHref())">
-  <ng-template *ngTemplateOutlet="img"></ng-template>
-</ng-container>
+}

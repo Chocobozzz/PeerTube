@@ -11,13 +11,13 @@ import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../../initializers/constants.j
 import {
   areValidationErrors,
   checkCanSeeVideo,
-  checkUserCanManageVideo,
+  checkCanManageVideo,
   doesVideoCaptionExist,
   doesVideoExist,
   isValidVideoIdParam,
   isValidVideoPasswordHeader
 } from '../shared/index.js'
-import { checkVideoCanBeTranscribedOrTranscripted } from './shared/video-validators.js'
+import { checkVideoCanBeTranscribed } from './shared/video-validators.js'
 
 export const addVideoCaptionValidator = [
   isValidVideoIdParam('videoId'),
@@ -40,7 +40,17 @@ export const addVideoCaptionValidator = [
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo({ user, video: res.locals.videoAll, right: UserRight.UPDATE_ANY_VIDEO, req, res })) {
+    if (
+      !await checkCanManageVideo({
+        user,
+        video: res.locals.videoAll,
+        right: UserRight.UPDATE_ANY_VIDEO,
+        req,
+        res,
+        checkIsLocal: true,
+        checkIsOwner: false
+      })
+    ) {
       return cleanUpReqFiles(req)
     }
 
@@ -70,11 +80,13 @@ export const generateVideoCaptionValidator = [
 
     const video = res.locals.videoAll
 
-    if (!checkVideoCanBeTranscribedOrTranscripted(video, res)) return
+    if (!checkVideoCanBeTranscribed(video, req, res)) return
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo({ user, video, right: UserRight.UPDATE_ANY_VIDEO, req, res })) return
+    if (!await checkCanManageVideo({ user, video, right: UserRight.UPDATE_ANY_VIDEO, req, res, checkIsLocal: true, checkIsOwner: false })) {
+      return
+    }
 
     // Check the video has not already a caption
     const captions = await VideoCaptionModel.listVideoCaptions(video.id)
@@ -125,7 +137,17 @@ export const deleteVideoCaptionValidator = [
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo({ user, video: res.locals.videoAll, right: UserRight.UPDATE_ANY_VIDEO, req, res })) return
+    if (
+      !await checkCanManageVideo({
+        user,
+        video: res.locals.videoAll,
+        right: UserRight.UPDATE_ANY_VIDEO,
+        req,
+        res,
+        checkIsLocal: true,
+        checkIsOwner: false
+      })
+    ) return
 
     return next()
   }

@@ -1,8 +1,8 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_miniature' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_miniature" as *;
 
-$more-button-width: 40px;
+$more-button-width: 30px;
 
 .video-miniature {
   --co-fs-small: #{$miniature-fs-small};
@@ -70,6 +70,7 @@ my-actor-host {
 
 .video-actions {
   width: $more-button-width;
+  text-align: end;
 
   ::ng-deep .dropdown-root:not(.show) {
     opacity: 0;
@@ -107,7 +108,7 @@ my-actor-host {
   my-video-thumbnail {
     margin-bottom: 0.35rem;
 
-    @include block-ratio($selector: '::ng-deep .video-thumbnail');
+    @include block-ratio($selector: "::ng-deep .video-thumbnail");
   }
 
   &.has-avatar .video-info {
@@ -123,11 +124,11 @@ my-actor-host {
 
     @include left(-2px);
 
-    &[actorType=account] {
+    &[actorType="account"] {
       border-radius: $account-avatar-radius;
     }
 
-    &[actorType=channel] {
+    &[actorType="channel"] {
       border-radius: $channel-avatar-radius;
     }
 

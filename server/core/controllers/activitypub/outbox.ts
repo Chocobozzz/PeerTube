@@ -23,7 +23,7 @@ outboxRouter.get(
   '/accounts/:handle/outbox',
   activityPubRateLimiter,
   apPaginationValidator,
-  accountHandleGetValidatorFactory({ checkIsLocal: true, checkManage: false }),
+  accountHandleGetValidatorFactory({ checkIsLocal: true, checkCanManage: false }),
   asyncMiddleware(outboxController)
 )
 
@@ -31,7 +31,7 @@ outboxRouter.get(
   '/video-channels/:handle/outbox',
   activityPubRateLimiter,
   apPaginationValidator,
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: false })),
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: false, checkIsOwner: false })),
   asyncMiddleware(outboxController)
 )
 

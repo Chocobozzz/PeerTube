@@ -1,7 +1,9 @@
 import { PickWith, PickWithOpt } from '@peertube/peertube-typescript-utils'
+import { VideoModel } from '@server/models/video/video.js'
 import { VideoCommentModel } from '../../../models/video/video-comment.js'
 import { MAccountDefault, MAccountFormattable, MAccountUrl } from '../account/index.js'
 import { MCommentAutomaticTagWithTag } from '../automatic-tag/comment-automatic-tag.js'
+import { MChannelSummary } from './video-channel.js'
 import { MVideo, MVideoAccountIdUrl, MVideoAccountLight, MVideoFeed, MVideoIdUrl, MVideoImmutable, MVideoUUID } from './video.js'
 
 type Use<K extends keyof VideoCommentModel, M> = PickWith<VideoCommentModel, K, M>
@@ -74,7 +76,7 @@ export type MCommentFormattable =
 export type MCommentAdminOrUserFormattable =
   & MComment
   & Use<'Account', MAccountFormattable>
-  & Use<'Video', MVideo>
+  & Use<'Video', MVideo & PickWith<VideoModel, 'VideoChannel', MChannelSummary>>
   & Use<'CommentAutomaticTags', MCommentAutomaticTagWithTag[]>
 
 export type MCommentAP =

@@ -3,15 +3,14 @@ import { FollowersExportJSON } from '@peertube/peertube-models'
 import { ActorFollowModel } from '@server/models/actor/actor-follow.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
 
-export class FollowersExporter extends AbstractUserExporter <FollowersExportJSON> {
-
+export class FollowersExporter extends AbstractUserExporter<FollowersExportJSON> {
   async export () {
     let followersJSON = this.formatFollowersJSON(
       await ActorFollowModel.listAcceptedFollowersForExport(this.user.Account.actorId),
       this.user.Account.Actor.getFullIdentifier()
     )
 
-    const channels = await VideoChannelModel.listAllByAccount(this.user.Account.id)
+    const channels = await VideoChannelModel.listAllOwnedByAccount(this.user.Account.id)
 
     for (const channel of channels) {
       followersJSON = followersJSON.concat(

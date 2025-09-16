@@ -126,7 +126,7 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
 
   @BeforeDestroy
   static async removeFile (instance: VideoRedundancyModel) {
-    if (!instance.isOwned()) return
+    if (!instance.isLocal()) return
 
     const videoStreamingPlaylist = await VideoStreamingPlaylistModel.loadWithVideo(instance.videoStreamingPlaylistId)
 
@@ -578,7 +578,7 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
     return this.getVideo()?.uuid
   }
 
-  isOwned () {
+  isLocal () {
     return !!this.strategy
   }
 

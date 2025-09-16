@@ -10,6 +10,7 @@ import {
   OnDestroy,
   OnInit,
   output,
+  SimpleChanges,
   TemplateRef
 } from '@angular/core'
 import { FormsModule } from '@angular/forms'
@@ -189,19 +190,21 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
     this.routeSubscription?.unsubscribe()
   }
 
-  ngOnChanges () {
-    this.columns = this.defaultColumns().map(c => ({
-      id: c.id,
+  ngOnChanges (changes: SimpleChanges) {
+    if (changes['defaultColumns']) {
+      this.columns = this.defaultColumns().map(c => ({
+        id: c.id,
 
-      label: c.label,
-      labelSmall: c.labelSmall,
-      sortable: c.sortable,
+        label: c.label,
+        labelSmall: c.labelSmall,
+        sortable: c.sortable,
 
-      class: c.class || '',
-      selected: c.selected ?? true,
-      sortKey: c.sortKey || c.id as string,
-      isDisplayed: c.isDisplayed || (() => true)
-    }))
+        class: c.class || '',
+        selected: c.selected ?? true,
+        sortKey: c.sortKey || c.id as string,
+        isDisplayed: c.isDisplayed || (() => true)
+      }))
+    }
   }
 
   // ---------------------------------------------------------------------------

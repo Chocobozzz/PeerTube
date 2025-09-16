@@ -9,13 +9,7 @@ import { updateRemotePlaylistMiniatureFromUrl } from '@server/lib/thumbnail.js'
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { FilteredModelAttributes } from '@server/types/index.js'
-import {
-  MAccountHost,
-  MThumbnail,
-  MVideoPlaylist,
-  MVideoPlaylistFull,
-  MVideoPlaylistVideosLength
-} from '@server/types/models/index.js'
+import { MAccountHost, MThumbnail, MVideoPlaylist, MVideoPlaylistFull, MVideoPlaylistVideosLength } from '@server/types/models/index.js'
 import Bluebird from 'bluebird'
 import { getAPId } from '../activity.js'
 import { getOrCreateAPActor } from '../actors/index.js'
@@ -33,6 +27,11 @@ import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activit
 const lTags = loggerTagsFactory('ap', 'video-playlist')
 
 export async function createAccountPlaylists (playlistUrls: string[], account: MAccountHost) {
+  logger.info(
+    `Creating or updating ${playlistUrls.length} playlists for account ${account.Actor.preferredUsername}`,
+    lTags()
+  )
+
   await Bluebird.map(playlistUrls, async playlistUrl => {
     if (!checkUrlsSameHost(playlistUrl, account.Actor.url)) {
       logger.warn(`Playlist ${playlistUrl} is not on the same host as owner account ${account.Actor.url}`, lTags(playlistUrl))
@@ -68,6 +67,8 @@ export async function createOrUpdateVideoPlaylist (options: {
   if (!checkUrlsSameHost(playlistObject.id, contextUrl)) {
     throw new Error(`Playlist ${playlistObject.id} is not on the same host as context URL ${contextUrl}`)
   }
+
+  logger.debug(`Creating or updating playlist ${playlistObject.id}`, lTags(playlistObject.id))
 
   const playlistAttributes = playlistObjectToDBAttributes(playlistObject, to || playlistObject.to)
 

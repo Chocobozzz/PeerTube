@@ -1,9 +1,17 @@
 <my-channels-setup-message [hideLink]="true"></my-channels-setup-message>
 
-<div class="video-channels-header d-flex align-items-end gap-2 flex-wrap">
+<div class="d-flex align-items-end gap-2 flex-wrap mb-4">
   <span *ngIf="pagination.totalItems" class="total-items">{{ getTotalTitle() }}</span>
 
-  <my-advanced-input-filter class="d-block ms-auto" (search)="onSearch($event)" emitOnInit="true"></my-advanced-input-filter>
+  <my-advanced-input-filter class="d-block ms-auto" (search)="onSearch($event)" emitOnInit="true" i18n-placeholder placeholder="Search a channel"></my-advanced-input-filter>
+
+  @if (user.isCollaboratingToChannels()) {
+    <div class="d-flex align-items-center">
+      <label class="label-inline" for="display-filter" i18n>Filter</label>
+
+      <my-select-options inputId="display-filter" [items]="displayFilterItems" [(ngModel)]="displayFilter" (ngModelChange)="onDisplayFilterChanged()"></my-select-options>
+    </div>
+  }
 
   <a class="peertube-create-button" routerLink="/manage/create">
     <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
@@ -11,34 +19,46 @@
   </a>
 </div>
 
-<div class="no-results" i18n *ngIf="this.pagination.totalItems === 0">No channel found.</div>
+<div class="results-container">
+  <div class="no-results" i18n *ngIf="this.pagination.totalItems === 0">No channel found.</div>
 
-<div class="video-channels" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onChannelDataSubject.asObservable()">
-  <div *ngFor="let videoChannel of videoChannels; let i = index" class="video-channel">
-    <my-actor-avatar [actor]="videoChannel" actorType="channel" [internalHref]="[ '/c', videoChannel.nameWithHost ]" size="80"></my-actor-avatar>
+  <div class="video-channels" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onChannelDataSubject.asObservable()">
+    <div *ngFor="let videoChannel of videoChannels; let i = index" class="channel">
+      <div class="channel-info">
+        <my-actor-avatar [actor]="videoChannel" actorType="channel" [internalHref]="[ '/c', videoChannel.nameWithHost ]" size="120"></my-actor-avatar>
 
-    <div class="video-channel-info">
-      <a [routerLink]="[ '/c', videoChannel.nameWithHost ]" class="video-channel-names" i18n-title title="Channel page">
-        <div class="video-channel-display-name">{{ videoChannel.displayName }}</div>
-        <div class="video-channel-name">{{ videoChannel.nameWithHost }}</div>
-      </a>
+        <div class="metadata">
+          <div class="min-width-0 d-flex flex-wrap w-fit-content align-items-center">
+            <a class="display-name" [routerLink]="[ '/c', videoChannel.nameWithHost ]" i18n-title title="Channel page">{{ videoChannel.displayName }}</a>
 
-      <a
-        i18n class="video-channel-followers"
-        [routerLink]="[ '/my-library', 'followers' ]" [queryParams]="{ search: 'channel:' + videoChannel.name }"
-      >
-        {videoChannel.followersCount, plural, =0 {No subscribers} =1 {1 subscriber} other {{{ videoChannel.followersCount }} subscribers}}
-      </a>
+            @if (user.isCollaboratingToChannels() && user.isEditorOfChannel(videoChannel)) {
+              <my-collaborator-state class="d-inline-block ms-2" type="accepted"></my-collaborator-state>
+            }
+          </div>
 
-      <div class="channel-videos">
-        <span i18n>{videoChannel.videosCount, plural, =0 {No videos} =1 {1 video} other {{{ videoChannel.videosCount }} videos}}</span>
-        <span class="mx-1">·</span>
-        <span i18n>{videoChannel.totalViews, plural, =0 {No views} =1 {1 view} other {{{ videoChannel.totalViews | myNumberFormatter }} views}}</span>
-      </div>
+          <span class="handle">{{ videoChannel.nameWithHost }}</span>
 
-      <div class="video-channel-buttons">
-        <my-edit-button label [ptRouterLink]="[ '/my-library/video-channels/update', videoChannel.nameWithHost ]"></my-edit-button>
-        <my-delete-button label (click)="deleteVideoChannel(videoChannel)"></my-delete-button>
+          <a
+            i18n class="followers"
+            [routerLink]="[ '/my-library', 'followers' ]" [queryParams]="{ search: 'channel:' + videoChannel.name }"
+          >
+            {videoChannel.followersCount, plural, =0 {No subscribers} =1 {1 subscriber} other {{{ videoChannel.followersCount }} subscribers}}
+          </a>
+
+          <div class="videos-info">
+            <span i18n>{videoChannel.videosCount, plural, =0 {No videos} =1 {1 video} other {{{ videoChannel.videosCount }} videos}}</span>
+            <span class="mx-1">·</span>
+            <span i18n>{videoChannel.totalViews, plural, =0 {No views} =1 {1 view} other {{{ videoChannel.totalViews | myNumberFormatter }} views}}</span>
+          </div>
+        </div>
+
+        <div class="buttons">
+          <my-edit-button i18n-label label="Manage" [ptRouterLink]="[ '/my-library/video-channels/manage', videoChannel.nameWithHost ]"></my-edit-button>
+
+          @if (isOwned(videoChannel)) {
+            <my-delete-button label (click)="deleteVideoChannel(videoChannel)"></my-delete-button>
+          }
+        </div>
       </div>
 
       <div *ngIf="!isInSmallView" class="w-100 d-flex justify-content-end chart-container">

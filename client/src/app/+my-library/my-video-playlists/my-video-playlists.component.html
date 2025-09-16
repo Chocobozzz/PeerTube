@@ -58,9 +58,21 @@
     </td>
 
     <td *ngIf="table.isColumnDisplayed('name')">
-      <a [routerLink]="[ '/my-library/video-playlists', playlist.shortUUID ]" class="name">
-        {{ playlist.displayName }}
-      </a>
+      <div class="name-container">
+        <a [routerLink]="[ '/my-library/video-playlists', playlist.shortUUID ]" class="name">
+          {{ playlist.displayName }}
+        </a>
+
+        @if (playlist.videoChannel) {
+          <a [routerLink]="[ '/c', playlist.videoChannel.name]" class="channel-sub-link-in-cell">
+            <span>{{ playlist.videoChannel.displayName }}</span>
+
+            @if (user.isEditorOfChannel(playlist.videoChannel)) {
+              <my-collaborator-state class="ms-2" type="accepted" small="true"></my-collaborator-state>
+            }
+          </a>
+        }
+      </div>
     </td>
 
     <td *ngIf="table.isColumnDisplayed('privacy')">

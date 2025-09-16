@@ -33,7 +33,7 @@ import { tmpdir } from 'os'
 import { basename, join, resolve } from 'path'
 import { testFileExistsOnFSOrNot } from './checks.js'
 import { MockSmtpServer } from './mock-servers/mock-email.js'
-import { getAllNotificationsSettings } from './notifications.js'
+import { getAllNotificationsSettings } from './notifications/notifications-common.js'
 
 type ExportOutbox = ActivityPubOrderedCollection<ActivityCreate<VideoObject | VideoCommentObject>>
 

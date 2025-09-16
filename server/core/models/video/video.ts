@@ -122,6 +122,7 @@ import { TrackerModel } from '../server/tracker.js'
 import { VideoTrackerModel } from '../server/video-tracker.js'
 import {
   SequelizeModel,
+  buildSQLAttributes,
   buildTrigramSearchIndex,
   buildWhereIdOrUUID,
   doesExist,
@@ -826,7 +827,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
   @BeforeDestroy
   static async sendDelete (instance: MVideoAccountLight, options: { transaction: Transaction }) {
-    if (!instance.isOwned()) return undefined
+    if (!instance.isLocal()) return undefined
 
     // Lazy load channels
     if (!instance.VideoChannel) {
@@ -848,7 +849,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
     logger.info('Removing files of video ' + instance.url)
 
-    if (instance.isOwned()) {
+    if (instance.isLocal()) {
       if (!Array.isArray(instance.VideoFiles)) {
         instance.VideoFiles = await instance.$get('VideoFiles', { transaction: options.transaction })
       }
@@ -905,6 +906,18 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
     await Promise.all(tasks)
   }
+
+  // ---------------------------------------------------------------------------
+
+  static getSQLAttributes (tableName: string, aliasPrefix = '') {
+    return buildSQLAttributes({
+      model: this,
+      tableName,
+      aliasPrefix
+    })
+  }
+
+  // ---------------------------------------------------------------------------
 
   static listLocalIds (): Promise<number[]> {
     const query = {
@@ -1102,6 +1115,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     excludeAlreadyWatched?: boolean // default false
 
     autoTagOneOf?: string[]
+
+    includeCollaborations?: boolean // default false
   }) {
     VideoModel.throwIfPrivateIncludeWithoutUser(options)
     VideoModel.throwIfPrivacyOneOfWithoutUser(options)
@@ -1131,6 +1146,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         'displayOnlyForFollower',
         'hasFiles',
         'accountId',
+        'includeCollaborations',
         'videoChannelId',
         'channelNameOneOf',
         'videoPlaylistId',
@@ -1848,7 +1864,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
   // ---------------------------------------------------------------------------
 
-  isOwned (this: MVideoOwned) {
+  isLocal (this: MVideoOwned) {
     return this.remote === false
   }
 
@@ -2133,7 +2149,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   // ---------------------------------------------------------------------------
 
   isOutdated () {
-    if (this.isOwned()) return false
+    if (this.isLocal()) return false
 
     return isOutdated(this, ACTIVITY_PUB.VIDEO_REFRESH_INTERVAL)
   }
@@ -2194,7 +2210,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   }
 
   getTrackerUrls () {
-    if (this.isOwned()) {
+    if (this.isLocal()) {
       return [
         WEBSERVER.URL + '/tracker/announce',
         WEBSERVER.WS + '://' + WEBSERVER.HOSTNAME + ':' + WEBSERVER.PORT + '/tracker/socket'

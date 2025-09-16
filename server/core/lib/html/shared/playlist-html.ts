@@ -113,7 +113,7 @@ export class PlaylistHtml {
 
       forbidIndexation: isEmbed
         ? playlist.privacy !== VideoPlaylistPrivacy.PUBLIC && playlist.privacy !== VideoPlaylistPrivacy.UNLISTED
-        : !playlist.isOwned() || playlist.privacy !== VideoPlaylistPrivacy.PUBLIC,
+        : !playlist.isLocal() || playlist.privacy !== VideoPlaylistPrivacy.PUBLIC,
 
       embedIndexation: isEmbed,
 

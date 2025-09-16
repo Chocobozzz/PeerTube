@@ -1,6 +1,9 @@
 <ng-template #notificationNumber>
-  <div *ngIf="unreadNotifications > 0 && unreadNotifications < 100" class="unread-notifications">{{ unreadNotifications }}</div>
-  <div *ngIf="unreadNotifications >= 100" class="unread-notifications">99+</div>
+  @if (unreadNotifications > 0 && unreadNotifications < 100) {
+    <div class="unread-notifications">{{ unreadNotifications }}</div>
+  } @else if (unreadNotifications >= 100) {
+    <div class="unread-notifications">99+</div>
+  }
 </ng-template>
 
 <ng-template #notificationIcon>
@@ -64,6 +67,7 @@
           <my-user-notifications
             [ignoreLoadingBar]="true" [infiniteScroll]="false" [itemsPerPage]="10"
             [markAllAsReadSubject]="markAllAsReadSubject" (notificationsLoaded)="onNotificationLoaded()"
+            [userNotificationReload]="userNotificationReload"
           ></my-user-notifications>
         }
 

@@ -1,5 +1,5 @@
 import { buildAspectRatio } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, UserRight, VideoState } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoState } from '@peertube/peertube-models'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { CreateJobArgument, CreateJobOptions, JobQueue } from '@server/lib/job-queue/index.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
@@ -20,7 +20,6 @@ import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
 import {
   asyncMiddleware,
   authenticate,
-  ensureUserHasRight,
   replaceVideoSourceResumableInitValidator,
   replaceVideoSourceResumableValidator,
   videoSourceGetLatestValidator
@@ -42,7 +41,6 @@ videoSourceRouter.delete(
   '/:id/source/file',
   openapiOperationDoc({ operationId: 'deleteVideoSourceFile' }),
   authenticate,
-  ensureUserHasRight(UserRight.MANAGE_VIDEO_FILES),
   asyncMiddleware(videoSourceGetLatestValidator),
   asyncMiddleware(deleteVideoLatestSourceFile)
 )

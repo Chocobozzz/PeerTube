@@ -1,6 +1,7 @@
 import { getBackendHost } from '@app/helpers'
 import {
   Account as AccountInterface,
+  VideoChannelSummary,
   VideoCommentForAdminOrUser as VideoCommentForAdminOrUserServerModel,
   VideoComment as VideoCommentServerModel
 } from '@peertube/peertube-models'
@@ -70,6 +71,8 @@ export class VideoCommentForAdminOrUser implements VideoCommentForAdminOrUserSer
     uuid: string
     name: string
     localUrl: string
+
+    channel: VideoChannelSummary
   }
 
   heldForReview: boolean
@@ -98,7 +101,9 @@ export class VideoCommentForAdminOrUser implements VideoCommentForAdminOrUserSer
       id: hash.video.id,
       uuid: hash.video.uuid,
       name: hash.video.name,
-      localUrl: Video.buildWatchUrl(hash.video)
+      localUrl: Video.buildWatchUrl(hash.video),
+
+      channel: hash.video.channel
     }
 
     this.localUrl = this.video.localUrl + ';threadId=' + this.threadId

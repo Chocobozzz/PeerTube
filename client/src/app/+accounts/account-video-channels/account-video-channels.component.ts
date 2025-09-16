@@ -93,7 +93,7 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
       sort: '-updatedAt'
     }
 
-    this.videoChannelService.listAccountVideoChannels(options)
+    this.videoChannelService.listAccountChannels(options)
       .pipe(
         tap(res => {
           this.channelPagination.totalItems = res.total

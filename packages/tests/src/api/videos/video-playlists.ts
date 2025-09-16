@@ -3,6 +3,7 @@
 import { wait } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
+  ResultList,
   VideoPlaylist,
   VideoPlaylistCreateResult,
   VideoPlaylistElementType,
@@ -70,6 +71,7 @@ describe('Test video playlists', function () {
   let nsfwVideoServer1: number
 
   let userTokenServer1: string
+  let editorToken: string
 
   let commands: PlaylistsCommand[]
 
@@ -112,6 +114,8 @@ describe('Test video playlists', function () {
     nsfwVideoServer1 = (await servers[0].videos.quickUpload({ name: 'NSFW video', nsfw: true })).id
 
     userTokenServer1 = await servers[0].users.generateUserAndToken('user1')
+
+    editorToken = await servers[0].channelCollaborators.createEditor('editor', 'root_channel')
 
     await waitJobs(servers)
   })
@@ -205,20 +209,23 @@ describe('Test video playlists', function () {
     it('Should get private playlist for a classic user', async function () {
       const token = await servers[0].users.generateUserAndToken('toto')
 
-      const body = await commands[0].listByAccount({ token, handle: 'toto' })
+      for (
+        const body of [
+          await commands[0].listByAccount({ token, handle: 'toto' }),
+          await commands[0].listByAccount({ token, handle: 'toto', sort: 'updatedAt' })
+        ]
+      ) {
+        expect(body.total).to.equal(1)
+        expect(body.data).to.have.lengthOf(1)
 
-      expect(body.total).to.equal(1)
-      expect(body.data).to.have.lengthOf(1)
-
-      const playlistId = body.data[0].id
-      await commands[0].listVideos({ token, playlistId })
+        const playlistId = body.data[0].id
+        await commands[0].listVideos({ token, playlistId })
+      }
     })
   })
 
   describe('Create and federate playlists', function () {
     it('Should create a playlist on server 1 and have the playlist on server 2 and 3', async function () {
-      this.timeout(30000)
-
       await commands[0].create({
         attributes: {
           displayName: 'my super playlist',
@@ -230,8 +237,6 @@ describe('Test video playlists', function () {
       })
 
       await waitJobs(servers)
-      // Processing a playlist by the receiver could be long
-      await wait(3000)
 
       for (const server of servers) {
         const body = await server.playlists.list({ start: 0, count: 5 })
@@ -267,8 +272,6 @@ describe('Test video playlists', function () {
     })
 
     it('Should create a playlist on server 2 and have the playlist on server 1 but not on server 3', async function () {
-      this.timeout(30000)
-
       {
         const playlist = await servers[1].playlists.create({
           attributes: {
@@ -306,7 +309,6 @@ describe('Test video playlists', function () {
       }
 
       await waitJobs(servers)
-      await wait(3000)
 
       for (const server of [ servers[0], servers[1] ]) {
         const body = await server.playlists.list({ start: 0, count: 5 })
@@ -369,8 +371,8 @@ describe('Test video playlists', function () {
     it('Should list video channel playlists', async function () {
       this.timeout(30000)
 
-      {
-        const body = await commands[0].listByChannel({ handle: 'root_channel', start: 0, count: 2, sort: '-createdAt' })
+      for (const token of [ undefined, editorToken ]) {
+        const body = await commands[0].listByChannel({ handle: 'root_channel', start: 0, count: 2, sort: '-createdAt', token })
         expect(body.total).to.equal(1)
 
         const data = body.data
@@ -417,33 +419,64 @@ describe('Test video playlists', function () {
         expect(data).to.have.lengthOf(0)
       }
     })
+
+    it('Should filter on channels when listing account playlists', async function () {
+      {
+        const { total, data } = await servers[1].playlists.listByAccount({ handle: 'root', channelNameOneOf: [ 'root_channel' ] })
+        expect(total).to.equal(2)
+        expect(data.map(p => p.displayName)).to.have.members([ 'playlist 2', 'playlist 3' ])
+      }
+
+      {
+        const { total, data } = await servers[1].playlists.listByAccount({ handle: 'root', channelNameOneOf: [ 'toto' ] })
+        expect(total).to.equal(0)
+        expect(data).to.have.lengthOf(0)
+      }
+
+      {
+        const { total, data } = await servers[1].playlists.listByAccount({ handle: 'root', channelNameOneOf: [ 'toto', 'root_channel' ] })
+        expect(total).to.equal(2)
+        expect(data.map(p => p.displayName)).to.have.members([ 'playlist 2', 'playlist 3' ])
+      }
+    })
   })
 
   describe('Playlist rights', function () {
     let unlistedPlaylist: VideoPlaylistCreateResult
     let privatePlaylist: VideoPlaylistCreateResult
+    let privatePlaylistWithChannel: VideoPlaylistCreateResult
+
+    let editorTokenServer2: string
+    let editorServer2AccountId: number
 
     before(async function () {
       this.timeout(30000)
 
-      {
-        unlistedPlaylist = await servers[1].playlists.create({
-          attributes: {
-            displayName: 'playlist unlisted',
-            privacy: VideoPlaylistPrivacy.UNLISTED,
-            videoChannelId: servers[1].store.channel.id
-          }
-        })
-      }
+      unlistedPlaylist = await servers[1].playlists.create({
+        attributes: {
+          displayName: 'playlist unlisted',
+          privacy: VideoPlaylistPrivacy.UNLISTED,
+          videoChannelId: servers[1].store.channel.id
+        }
+      })
 
-      {
-        privatePlaylist = await servers[1].playlists.create({
-          attributes: {
-            displayName: 'playlist private',
-            privacy: VideoPlaylistPrivacy.PRIVATE
-          }
-        })
-      }
+      privatePlaylist = await servers[1].playlists.create({
+        attributes: {
+          displayName: 'playlist private',
+          privacy: VideoPlaylistPrivacy.PRIVATE
+        }
+      })
+
+      privatePlaylistWithChannel = await servers[1].playlists.create({
+        attributes: {
+          displayName: 'playlist private with channel',
+          privacy: VideoPlaylistPrivacy.PRIVATE,
+          videoChannelId: servers[1].store.channel.id
+        }
+      })
+
+      editorTokenServer2 = await servers[1].channelCollaborators.createEditor('editor', 'root_channel')
+      editorServer2AccountId = (await servers[1].users.getMyInfo({ token: editorTokenServer2 })).id
 
       await waitJobs(servers)
       await wait(3000)
@@ -452,12 +485,24 @@ describe('Test video playlists', function () {
     it('Should not list unlisted or private playlists', async function () {
       for (const server of servers) {
         const results = [
+          await server.playlists.listByChannel({ handle: 'root_channel@' + servers[1].host, sort: '-createdAt' }),
           await server.playlists.listByAccount({ handle: 'root@' + servers[1].host, sort: '-createdAt' }),
+
+          await server.playlists.listByChannel({
+            handle: 'root_channel@' + servers[1].host,
+            sort: '-createdAt',
+            includeCollaborations: true
+          }),
+          await server.playlists.listByAccount({ handle: 'root@' + servers[1].host, sort: '-createdAt', includeCollaborations: true }),
+
           await server.playlists.list({ start: 0, count: 2, sort: '-createdAt' })
         ]
 
         expect(results[0].total).to.equal(2)
-        expect(results[1].total).to.equal(3)
+        expect(results[1].total).to.equal(2)
+        expect(results[2].total).to.equal(2)
+        expect(results[3].total).to.equal(2)
+        expect(results[4].total).to.equal(3)
 
         for (const body of results) {
           const data = body.data
@@ -465,6 +510,106 @@ describe('Test video playlists', function () {
           expect(data[0].displayName).to.equal('playlist 3')
           expect(data[1].displayName).to.equal('playlist 2')
         }
+      }
+    })
+
+    it('Should list unlisted or private playlists with appropriate tokens', async function () {
+      const checkAllResult = (result: ResultList<VideoPlaylist>) => {
+        expect(result.total).to.equal(6)
+        expect(result.data).to.have.lengthOf(6)
+
+        expect(result.data.map(p => p.displayName)).to.have.members([
+          'Watch later',
+          'playlist 2',
+          'playlist 3',
+          'playlist unlisted',
+          'playlist private',
+          'playlist private with channel'
+        ])
+      }
+
+      // Owner token
+      {
+        const result = await servers[1].playlists.listByAccount({ handle: 'root@' + servers[1].host, token: servers[1].accessToken })
+        checkAllResult(result)
+      }
+
+      {
+        const result = await servers[1].playlists.listByAccount({
+          handle: 'root@' + servers[1].host,
+          channelNameOneOf: [ 'root_channel' ],
+          token: servers[1].accessToken
+        })
+        expect(result.total).to.equal(4)
+        expect(result.data).to.have.lengthOf(4)
+
+        expect(result.data.map(p => p.displayName)).to.have.members([
+          'playlist 2',
+          'playlist 3',
+          'playlist unlisted',
+          'playlist private with channel'
+        ])
+      }
+
+      // Editor token
+      {
+        const result = await servers[1].playlists.listByAccount({
+          handle: 'editor@' + servers[1].host,
+          token: editorTokenServer2,
+          includeCollaborations: false
+        })
+        expect(result.total).to.equal(1)
+        expect(result.data).to.have.lengthOf(1)
+      }
+
+      {
+        const result = await servers[1].playlists.listByAccount({
+          handle: 'editor@' + servers[1].host,
+          token: editorTokenServer2,
+          includeCollaborations: true
+        })
+
+        expect(result.total).to.equal(5)
+        expect(result.data).to.have.lengthOf(5)
+
+        expect(result.data.map(p => p.displayName)).to.have.members([
+          'playlist 2',
+          'playlist 3',
+          'playlist unlisted',
+          'playlist private with channel',
+          'Watch later'
+        ])
+
+        expect(result.data.find(p => p.type.id === VideoPlaylistType.WATCH_LATER).ownerAccount.id === editorServer2AccountId)
+      }
+
+      {
+        const result = await servers[1].playlists.listByAccount({
+          handle: 'editor@' + servers[1].host,
+          channelNameOneOf: [ 'root_channel' ],
+          token: editorTokenServer2
+        })
+        expect(result.total).to.equal(0)
+        expect(result.data).to.have.lengthOf(0)
+      }
+
+      {
+        const result = await servers[1].playlists.listByAccount({
+          handle: 'editor@' + servers[1].host,
+          channelNameOneOf: [ 'root_channel' ],
+          token: editorTokenServer2,
+          includeCollaborations: true
+        })
+
+        expect(result.total).to.equal(4)
+        expect(result.data).to.have.lengthOf(4)
+
+        expect(result.data.map(p => p.displayName)).to.have.members([
+          'playlist 2',
+          'playlist 3',
+          'playlist unlisted',
+          'playlist private with channel'
+        ])
       }
     })
 
@@ -483,9 +628,20 @@ describe('Test video playlists', function () {
       }
     })
 
-    it('Should get private playlist with a token', async function () {
+    it('Should get private playlist with the owner token', async function () {
       for (const id of [ privatePlaylist.id, privatePlaylist.uuid, privatePlaylist.shortUUID ]) {
         await servers[1].playlists.get({ token: servers[1].accessToken, playlistId: id })
+      }
+    })
+
+    it('Should get private playlist with the editor token', async function () {
+      for (const id of [ privatePlaylist.id, privatePlaylist.uuid, privatePlaylist.shortUUID ]) {
+        await servers[1].playlists.get({ token: editorTokenServer2, playlistId: id, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      }
+
+      for (const id of [ privatePlaylistWithChannel.id, privatePlaylistWithChannel.uuid, privatePlaylistWithChannel.shortUUID ]) {
+        await servers[1].playlists.get({ token: editorTokenServer2, playlistId: id })
+        await servers[1].playlists.listVideos({ token: editorTokenServer2, playlistId: id })
       }
     })
   })

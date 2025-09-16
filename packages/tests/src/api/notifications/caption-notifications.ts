@@ -3,7 +3,10 @@
 import { UserNotification } from '@peertube/peertube-models'
 import { PeerTubeServer, cleanupTests, waitJobs } from '@peertube/peertube-server-commands'
 import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
-import { CheckerBaseParams, checkMyVideoTranscriptionGenerated, prepareNotificationsTest } from '@tests/shared/notifications.js'
+import { checkMyVideoTranscriptionGenerated } from '@tests/shared/notifications/check-video-notifications.js'
+import { prepareNotificationsTest } from '@tests/shared/notifications/notifications-common.js'
+import { CheckerBaseParams } from '@tests/shared/notifications/shared/notification-checker.js'
+
 import { join } from 'path'
 
 describe('Test caption notifications', function () {

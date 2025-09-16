@@ -3,7 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { VideoEdit } from '@app/+videos-publish-manage/shared-manage/common/video-edit.model'
 import { VideoManageController } from '@app/+videos-publish-manage/shared-manage/video-manage-controller.service'
-import { CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
+import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
 import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
 import { LiveVideoLatencyMode, PeerTubeProblemDocument, ServerErrorCode, UserVideoQuota, VideoPrivacyType } from '@peertube/peertube-models'
 import debug from 'debug'
@@ -32,6 +32,7 @@ const debugLogger = debug('peertube:video-publish')
 })
 export class VideoGoLiveComponent implements OnInit, AfterViewInit, CanComponentDeactivate {
   private notifier = inject(Notifier)
+  private authService = inject(AuthService)
   private serverService = inject(ServerService)
   private liveVideoService = inject(LiveVideoService)
   private hooks = inject(HooksService)
@@ -90,7 +91,8 @@ export class VideoGoLiveComponent implements OnInit, AfterViewInit, CanComponent
       latencyMode: LiveVideoLatencyMode.DEFAULT,
       saveReplay: this.isReplayAllowed(),
       replaySettings: { privacy: this.highestPrivacy() },
-      schedules: []
+      schedules: [],
+      user: this.authService.getUser()
     })
     this.manageController.setConfig({ manageType: 'go-live', serverConfig: this.serverService.getHTMLConfig() })
     this.manageController.setVideoEdit(videoEdit)

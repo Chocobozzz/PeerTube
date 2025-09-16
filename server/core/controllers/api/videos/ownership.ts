@@ -23,27 +23,31 @@ import { VideoModel } from '../../../models/video/video.js'
 
 const ownershipVideoRouter = express.Router()
 
-ownershipVideoRouter.post('/:videoId/give-ownership',
+ownershipVideoRouter.post(
+  '/:videoId/give-ownership',
   authenticate,
   asyncMiddleware(videosChangeOwnershipValidator),
   asyncRetryTransactionMiddleware(giveVideoOwnership)
 )
 
-ownershipVideoRouter.get('/ownership',
+ownershipVideoRouter.get(
+  '/ownership',
   authenticate,
   paginationValidator,
   setDefaultPagination,
   asyncRetryTransactionMiddleware(listVideoOwnership)
 )
 
-ownershipVideoRouter.post('/ownership/:id/accept',
+ownershipVideoRouter.post(
+  '/ownership/:id/accept',
   authenticate,
   asyncMiddleware(videosTerminateChangeOwnershipValidator),
   asyncMiddleware(videosAcceptChangeOwnershipValidator),
   asyncRetryTransactionMiddleware(acceptOwnership)
 )
 
-ownershipVideoRouter.post('/ownership/:id/refuse',
+ownershipVideoRouter.post(
+  '/ownership/:id/refuse',
   authenticate,
   asyncMiddleware(videosTerminateChangeOwnershipValidator),
   asyncRetryTransactionMiddleware(refuseOwnership)
@@ -82,8 +86,8 @@ async function giveVideoOwnership (req: express.Request, res: express.Response) 
 
   logger.info('Ownership change for video %s created.', videoInstance.name)
   return res.type('json')
-            .status(HttpStatusCode.NO_CONTENT_204)
-            .end()
+    .status(HttpStatusCode.NO_CONTENT_204)
+    .end()
 }
 
 async function listVideoOwnership (req: express.Request, res: express.Response) {
@@ -91,8 +95,8 @@ async function listVideoOwnership (req: express.Request, res: express.Response) 
 
   const resultList = await VideoChangeOwnershipModel.listForApi(
     currentAccountId,
-    req.query.start || 0,
-    req.query.count || 10,
+    req.query.start,
+    req.query.count,
     req.query.sort || 'createdAt'
   )
 

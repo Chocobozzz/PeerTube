@@ -3,7 +3,7 @@ import { QueryTypes, Sequelize, Transaction } from 'sequelize'
 const updating = new Set<string>()
 
 // Sequelize always skip the update if we only update updatedAt field
-async function setAsUpdated (options: {
+export async function setAsUpdated (options: {
   sequelize: Sequelize
   table: string
   id: number
@@ -27,8 +27,4 @@ async function setAsUpdated (options: {
   } finally {
     updating.delete(key)
   }
-}
-
-export {
-  setAsUpdated
 }

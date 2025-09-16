@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common'
 import { booleanAttribute, Component, inject, input, OnInit } from '@angular/core'
 import { RouterLink } from '@angular/router'
-import { ScreenService } from '@app/core'
+import { AuthService, ScreenService } from '@app/core'
+import { CollaboratorStateComponent } from '../shared-main/channel/collaborator-state.component'
 import { VideoChannel } from '../shared-main/channel/video-channel.model'
 import { Video } from '../shared-main/video/video.model'
 import { VideoThumbnailComponent } from '../shared-thumbnail/video-thumbnail.component'
@@ -14,19 +15,25 @@ import { VideoThumbnailComponent } from '../shared-thumbnail/video-thumbnail.com
   imports: [
     CommonModule,
     RouterLink,
-    VideoThumbnailComponent
+    VideoThumbnailComponent,
+    CollaboratorStateComponent
   ]
 })
 export class VideoCellComponent implements OnInit {
   private readonly screenService = inject(ScreenService)
+  private readonly authService = inject(AuthService)
 
   readonly video = input.required<Video>()
   readonly size = input<'small' | 'normal'>('normal')
-  readonly thumbnail = input<boolean, boolean | string>(true, { transform: booleanAttribute })
-  readonly title = input<boolean, boolean | string>(true, { transform: booleanAttribute })
-  readonly hostInfo = input<boolean, boolean | string>(true, { transform: booleanAttribute })
+  readonly thumbnail = input(true, { transform: booleanAttribute })
+  readonly title = input(true, { transform: booleanAttribute })
+  readonly displayEditorInfo = input(false, { transform: booleanAttribute })
 
   ellipsis: boolean
+
+  get user () {
+    return this.authService.getUser()
+  }
 
   ngOnInit () {
     this.ellipsis = !this.screenService.isInMobileView()

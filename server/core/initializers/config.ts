@@ -552,6 +552,9 @@ const CONFIG = {
   VIDEO_CHANNELS: {
     get MAX_PER_USER () {
       return config.get<number>('video_channels.max_per_user')
+    },
+    get MAX_COLLABORATORS_PER_CHANNEL () {
+      return config.get<number>('video_channels.max_collaborators_per_channel')
     }
   },
   TRANSCODING: {

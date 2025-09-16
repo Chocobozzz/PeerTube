@@ -152,7 +152,7 @@ export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
   private setQueryParams (search: string) {
     const searchParams = search
       ? { search: search.trim() }
-      : {}
+      : { search: undefined }
 
     this.router.navigate([ '.' ], { relativeTo: this.route, queryParams: { ...this.route.snapshot.queryParams, ...searchParams } })
   }

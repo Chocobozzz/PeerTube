@@ -6,21 +6,19 @@ import { buildUUID } from '@peertube/peertube-node-utils'
 import { cleanupTests, PeerTubeServer, waitJobs } from '@peertube/peertube-server-commands'
 import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
 import { MockInstancesIndex } from '@tests/shared/mock-servers/mock-instances-index.js'
+import { checkAutoInstanceFollowing, checkNewInstanceFollower } from '@tests/shared/notifications/check-follow-notifications.js'
 import {
-  prepareNotificationsTest,
-  CheckerBaseParams,
-  checkNewVideoAbuseForModerators,
-  checkNewCommentAbuseForModerators,
-  checkNewAccountAbuseForModerators,
   checkAbuseStateChange,
   checkNewAbuseMessage,
+  checkNewAccountAbuseForModerators,
   checkNewBlacklistOnMyVideo,
-  checkNewInstanceFollower,
-  checkAutoInstanceFollowing,
-  checkVideoAutoBlacklistForModerators,
-  checkMyVideoIsPublished,
-  checkNewVideoFromSubscription
-} from '@tests/shared/notifications.js'
+  checkNewCommentAbuseForModerators,
+  checkNewVideoAbuseForModerators,
+  checkVideoAutoBlacklistForModerators
+} from '@tests/shared/notifications/check-moderation-notifications.js'
+import { checkMyVideoIsPublished, checkNewVideoFromSubscription } from '@tests/shared/notifications/check-video-notifications.js'
+import { prepareNotificationsTest } from '@tests/shared/notifications/notifications-common.js'
+import { CheckerBaseParams } from '@tests/shared/notifications/shared/notification-checker.js'
 
 describe('Test moderation notifications', function () {
   let servers: PeerTubeServer[] = []

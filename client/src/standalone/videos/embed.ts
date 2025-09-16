@@ -69,7 +69,7 @@ export class PeerTubeEmbed {
     this.peertubePlugin = new PeerTubePlugin(this.http)
     this.peertubeTheme = new PeerTubeTheme(this.peertubePlugin)
     this.playerHTML = new PlayerHTML(videoWrapperId)
-    this.playerOptionsBuilder = new PlayerOptionsBuilder(this.playerHTML, this.videoFetcher, this.peertubePlugin, this.config)
+    this.playerOptionsBuilder = new PlayerOptionsBuilder(this.playerHTML, this.videoFetcher, this.peertubePlugin)
     this.liveManager = new LiveManager(this.playerHTML)
     this.requiresPassword = false
 

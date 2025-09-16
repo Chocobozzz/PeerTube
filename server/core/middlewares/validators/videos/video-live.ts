@@ -7,7 +7,7 @@ import {
   UserRight,
   VideoState
 } from '@peertube/peertube-models'
-import { isLiveLatencyModeValid, areLiveSchedulesValid } from '@server/helpers/custom-validators/video-lives.js'
+import { areLiveSchedulesValid, isLiveLatencyModeValid } from '@server/helpers/custom-validators/video-lives.js'
 import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import { isLocalLiveVideoAccepted } from '@server/lib/moderation.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
@@ -21,16 +21,10 @@ import { isValidPasswordProtectedPrivacy, isVideoNameValid, isVideoReplayPrivacy
 import { cleanUpReqFiles } from '../../../helpers/express-utils.js'
 import { logger } from '../../../helpers/logger.js'
 import { CONFIG } from '../../../initializers/config.js'
-import {
-  areValidationErrors,
-  checkUserCanManageVideo,
-  doesVideoChannelOfAccountExist,
-  doesVideoExist,
-  isValidVideoIdParam
-} from '../shared/index.js'
+import { areValidationErrors, checkCanManageVideo, doesChannelIdExist, doesVideoExist, isValidVideoIdParam } from '../shared/index.js'
 import { areErrorsInNSFW, getCommonVideoEditAttributes } from './videos.js'
 
-const videoLiveGetValidator = [
+export const videoLiveGetValidator = [
   isValidVideoIdParam('videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -51,7 +45,7 @@ const videoLiveGetValidator = [
   }
 ]
 
-const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
+export const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
     .customSanitizer(toIntOrNull)
     .custom(isIdValid),
@@ -127,8 +121,9 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
       })
     }
 
-    const user = res.locals.oauth.token.User
-    if (!await doesVideoChannelOfAccountExist(body.channelId, user, res)) return cleanUpReqFiles(req)
+    if (!await doesChannelIdExist({ id: body.channelId, req, res, checkCanManage: true, checkIsLocal: true, checkIsOwner: false })) {
+      return cleanUpReqFiles(req)
+    }
 
     if (CONFIG.LIVE.MAX_INSTANCE_LIVES !== -1) {
       const totalInstanceLives = await VideoModel.countLives({ remote: false, mode: 'not-ended' })
@@ -145,6 +140,8 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
     }
 
     if (CONFIG.LIVE.MAX_USER_LIVES !== -1) {
+      const user = res.locals.oauth.token.User
+
       const totalUserLives = await VideoModel.countLivesOfAccount(user.Account.id)
 
       if (totalUserLives >= CONFIG.LIVE.MAX_USER_LIVES) {
@@ -164,7 +161,7 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
   }
 ])
 
-const videoLiveUpdateValidator = [
+export const videoLiveUpdateValidator = [
   body('saveReplay')
     .optional()
     .customSanitizer(toBooleanOrNull)
@@ -184,7 +181,7 @@ const videoLiveUpdateValidator = [
     .optional()
     .custom(areLiveSchedulesValid).withMessage('Should have a valid schedules array'),
 
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
     const body: LiveVideoUpdate = req.body
@@ -211,23 +208,43 @@ const videoLiveUpdateValidator = [
 
     // Check the user can manage the live
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo({ user, video: res.locals.videoAll, right: UserRight.GET_ANY_LIVE, req, res })) return
+    if (
+      !await checkCanManageVideo({
+        user,
+        video: res.locals.videoAll,
+        right: UserRight.GET_ANY_LIVE,
+        req,
+        res,
+        checkIsLocal: true,
+        checkIsOwner: false
+      })
+    ) return
 
     return next()
   }
 ]
 
-const videoLiveListSessionsValidator = [
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+export const videoLiveListSessionsValidator = [
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     // Check the user can manage the live
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo({ user, video: res.locals.videoAll, right: UserRight.GET_ANY_LIVE, req, res })) return
+    if (
+      !await checkCanManageVideo({
+        user,
+        video: res.locals.videoAll,
+        right: UserRight.GET_ANY_LIVE,
+        req,
+        res,
+        checkIsLocal: true,
+        checkIsOwner: false
+      })
+    ) return
 
     return next()
   }
 ]
 
-const videoLiveFindReplaySessionValidator = [
+export const videoLiveFindReplaySessionValidator = [
   isValidVideoIdParam('videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -249,15 +266,7 @@ const videoLiveFindReplaySessionValidator = [
 ]
 
 // ---------------------------------------------------------------------------
-
-export {
-  videoLiveAddValidator,
-  videoLiveFindReplaySessionValidator,
-  videoLiveGetValidator,
-  videoLiveListSessionsValidator,
-  videoLiveUpdateValidator
-}
-
+// Private
 // ---------------------------------------------------------------------------
 
 async function isLiveVideoAccepted (req: express.Request, res: express.Response) {

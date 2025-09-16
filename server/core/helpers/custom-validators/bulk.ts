@@ -1,9 +1,5 @@
-function isBulkRemoveCommentsOfScopeValid (value: string) {
-  return value === 'my-videos' || value === 'instance'
-}
+import { BulkRemoveCommentsOfBody } from '@peertube/peertube-models'
 
-// ---------------------------------------------------------------------------
-
-export {
-  isBulkRemoveCommentsOfScopeValid
+export function isBulkRemoveCommentsOfScopeValid (value: BulkRemoveCommentsOfBody['scope']) {
+  return value === 'my-videos' || value === 'instance' || value === 'my-videos-and-collaborations'
 }

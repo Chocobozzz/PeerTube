@@ -66,7 +66,7 @@ export class MyVideoPlaylistCreateComponent extends MyVideoPlaylistEdit implemen
       setPlaylistChannelValidator(this.form.get('videoChannelId'), privacy)
     })
 
-    listUserChannelsForSelect(this.authService)
+    listUserChannelsForSelect(this.authService, { includeCollaborations: true })
       .subscribe(channels => this.userVideoChannels = channels)
 
     this.serverService.getVideoPlaylistPrivacies()
@@ -120,6 +120,14 @@ export class MyVideoPlaylistCreateComponent extends MyVideoPlaylistEdit implemen
 
   isCreation () {
     return true
+  }
+
+  isEditor () {
+    return false
+  }
+
+  getOwnerAccountDisplayName () {
+    return this.authService.getUser().account.displayName
   }
 
   getFormButtonTitle () {

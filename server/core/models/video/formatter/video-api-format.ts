@@ -105,7 +105,7 @@ export function videoModelToFormattedJSON (video: MVideoFormattable, options: Vi
       ? video.description
       : video.getTruncatedDescription(),
 
-    isLocal: video.isOwned(),
+    isLocal: video.isLocal(),
     duration: video.duration,
 
     aspectRatio: video.aspectRatio,

@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common'
-import { Component, forwardRef, input, model } from '@angular/core'
+import { Component, forwardRef, inject, input, model } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
+import { AuthService } from '@app/core'
 import { VideoChannel } from '@peertube/peertube-models'
 import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
+import { CollaboratorStateComponent } from '../shared-main/channel/collaborator-state.component'
 
 @Component({
   selector: 'my-channel-toggle',
@@ -18,14 +20,21 @@ import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.compone
   standalone: true,
   imports: [
     CommonModule,
-    ActorAvatarComponent
+    ActorAvatarComponent,
+    CollaboratorStateComponent
   ]
 })
 export class ChannelToggleComponent implements ControlValueAccessor {
+  private authService = inject(AuthService)
+
   readonly checked = model(false)
   readonly channel = input.required<VideoChannel>()
   readonly inputName = input<string>(undefined)
   readonly label = input($localize`Toggle this channel`)
+
+  get user () {
+    return this.authService.getUser()
+  }
 
   propagateChange = (_: any) => {
     // empty

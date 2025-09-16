@@ -13,7 +13,10 @@ import {
 describe('Test video studio API validator', function () {
   let server: PeerTubeServer
   let command: VideoStudioCommand
+
   let userAccessToken: string
+  let editorToken: string
+
   let videoUUID: string
 
   // ---------------------------------------------------------------
@@ -25,6 +28,7 @@ describe('Test video studio API validator', function () {
 
     await setAccessTokensToServers([ server ])
     userAccessToken = await server.users.generateUserAndToken('user1')
+    editorToken = await server.channelCollaborators.createEditor('editor', 'root_channel')
 
     await server.config.enableMinimumTranscoding()
 
@@ -37,9 +41,7 @@ describe('Test video studio API validator', function () {
   })
 
   describe('Task creation', function () {
-
     describe('Config settings', function () {
-
       it('Should fail if studio is disabled', async function () {
         await server.config.updateExistingConfig({
           newConfig: {
@@ -85,7 +87,6 @@ describe('Test video studio API validator', function () {
     })
 
     describe('Common tasks', function () {
-
       it('Should fail without token', async function () {
         await command.createEditionTasks({
           token: null,
@@ -188,12 +189,13 @@ describe('Test video studio API validator', function () {
         })
       })
 
-      it('Should succeed with correct parameters', async function () {
+      it('Should succeed with correct parameters and editor token', async function () {
         await server.jobs.pauseJobQueue()
 
         await command.createEditionTasks({
           videoId: videoUUID,
           tasks: VideoStudioCommand.getComplexTask(),
+          token: editorToken,
           expectedStatus: HttpStatusCode.NO_CONTENT_204
         })
       })
@@ -214,7 +216,6 @@ describe('Test video studio API validator', function () {
     })
 
     describe('Cut task', function () {
-
       async function cut (start: number, end: number, expectedStatus: HttpStatusCodeType = HttpStatusCode.BAD_REQUEST_400) {
         await command.createEditionTasks({
           videoId: videoUUID,
@@ -266,7 +267,6 @@ describe('Test video studio API validator', function () {
     })
 
     describe('Watermark task', function () {
-
       async function addWatermark (file: string, expectedStatus: HttpStatusCodeType = HttpStatusCode.BAD_REQUEST_400) {
         await command.createEditionTasks({
           videoId: videoUUID,
@@ -300,7 +300,6 @@ describe('Test video studio API validator', function () {
     })
 
     describe('Intro/Outro task', function () {
-
       async function addIntroOutro (
         type: 'add-intro' | 'add-outro',
         file: string,
@@ -333,7 +332,6 @@ describe('Test video studio API validator', function () {
       it('Should fail with a file that does not contain video stream', async function () {
         await addIntroOutro('add-intro', 'sample.ogg')
         await addIntroOutro('add-outro', 'sample.ogg')
-
       })
 
       it('Should succeed with the correct params', async function () {

@@ -57,7 +57,7 @@ const abuseReportValidator = [
     const body: AbuseCreate = req.body
 
     if (body.video?.id && !await doesVideoExist(body.video.id, res)) return
-    if (body.account?.id && !await doesAccountIdExist({ id: body.account.id, req, res, checkIsLocal: false, checkManage: false })) return
+    if (body.account?.id && !await doesAccountIdExist({ id: body.account.id, req, res, checkIsLocal: false, checkCanManage: false })) return
     if (body.comment?.id && !await doesCommentIdExist(body.comment.id, res)) return
 
     if (!body.video?.id && !body.account?.id && !body.comment?.id) {
@@ -187,7 +187,7 @@ const getAbuseValidator = [
 const checkAbuseValidForMessagesValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const abuse = res.locals.abuse
-    if (abuse.ReporterAccount.isOwned() === false) {
+    if (abuse.ReporterAccount.isLocal() === false) {
       return res.fail({ message: 'This abuse was created by a user of your instance.' })
     }
 

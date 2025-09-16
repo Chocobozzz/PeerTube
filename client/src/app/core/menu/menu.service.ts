@@ -46,7 +46,13 @@ export class MenuService {
   }
 
   private hasMenuCollapsedByUrl (url: string) {
-    const collapsedBaseUrls = [ '/videos/publish', '/videos/manage/' ]
+    const collapsedBaseUrls = [
+      '/videos/publish',
+      '/videos/manage/',
+      '/admin/settings/config',
+      '/my-library/video-channels/manage',
+      '/my-library/video-channels/create'
+    ]
 
     for (const collapsedBaseUrl of collapsedBaseUrls) {
       if (url.startsWith(collapsedBaseUrl)) {

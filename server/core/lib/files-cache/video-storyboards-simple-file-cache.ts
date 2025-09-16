@@ -1,12 +1,11 @@
-import { join } from 'path'
 import { logger } from '@server/helpers/logger.js'
 import { doRequestAndSaveToFile } from '@server/helpers/requests.js'
 import { StoryboardModel } from '@server/models/video/storyboard.js'
+import { join } from 'path'
 import { FILES_CACHE } from '../../initializers/constants.js'
 import { AbstractSimpleFileCache } from './shared/abstract-simple-file-cache.js'
 
-class VideoStoryboardsSimpleFileCache extends AbstractSimpleFileCache <string> {
-
+class VideoStoryboardsSimpleFileCache extends AbstractSimpleFileCache<string> {
   private static instance: VideoStoryboardsSimpleFileCache
 
   private constructor () {
@@ -21,7 +20,7 @@ class VideoStoryboardsSimpleFileCache extends AbstractSimpleFileCache <string> {
     const storyboard = await StoryboardModel.loadWithVideoByFilename(filename)
     if (!storyboard) return undefined
 
-    if (storyboard.Video.isOwned()) return { isOwned: true, path: storyboard.getPath() }
+    if (storyboard.Video.isLocal()) return { isLocal: true, path: storyboard.getPath() }
 
     return this.loadRemoteFile(storyboard.filename)
   }
@@ -39,7 +38,7 @@ class VideoStoryboardsSimpleFileCache extends AbstractSimpleFileCache <string> {
 
       logger.debug('Fetched remote storyboard %s to %s.', remoteUrl, destPath)
 
-      return { isOwned: false, path: destPath }
+      return { isLocal: false, path: destPath }
     } catch (err) {
       logger.info('Cannot fetch remote storyboard file %s.', remoteUrl, { err })
 

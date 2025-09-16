@@ -15,7 +15,7 @@
       <label i18n for="log-start-date">Start date</label>
 
       <my-select-options inputId="log-start-date" [items]="timeChoices" [(ngModel)]="startDate" (ngModelChange)="refresh()">
-        <ng-template ptTemplate="item" let-item>
+        <ng-template #selectOption let-item>
           {{ item.label }} ({{ item.id | ptDate: item.dateFormat }} - <span i18n>now</span>)
         </ng-template>
       </my-select-options>
@@ -25,7 +25,7 @@
       <label i18n for="log-level">Log level</label>
 
       <my-select-options inputId="log-level" [items]="levelChoices" [(ngModel)]="level" (ngModelChange)="refresh()">
-        <ng-template ptTemplate="item" let-item>
+        <ng-template #selectOption let-item>
           <span class="level-choice me-1" [ngClass]="item.id">&#11044;</span> {{ item.label }}
         </ng-template>
       </my-select-options>

@@ -29,7 +29,8 @@ import { searchLocalUrl } from './shared/index.js'
 
 const searchChannelsRouter = express.Router()
 
-searchChannelsRouter.get('/video-channels',
+searchChannelsRouter.get(
+  '/video-channels',
   openapiOperationDoc({ operationId: 'searchChannels' }),
   paginationValidator,
   setDefaultPagination,
@@ -102,7 +103,7 @@ async function searchVideoChannelsDB (query: VideoChannelsSearchQueryAfterSaniti
   }, 'filter:api.search.video-channels.local.list.params')
 
   const resultList = await Hooks.wrapPromiseFun(
-    VideoChannelModel.searchForApi.bind(VideoChannelModel),
+    VideoChannelModel.listForApi.bind(VideoChannelModel),
     apiOptions,
     'filter:api.search.video-channels.local.list.result'
   )

@@ -2,10 +2,9 @@ import { remove } from 'fs-extra/esm'
 import { logger } from '../../../helpers/logger.js'
 import memoizee from 'memoizee'
 
-type GetFilePathResult = { isOwned: boolean, path: string, downloadName?: string } | undefined
+type GetFilePathResult = { isLocal: boolean, path: string, downloadName?: string } | undefined
 
-export abstract class AbstractSimpleFileCache <T> {
-
+export abstract class AbstractSimpleFileCache<T> {
   getFilePath: (params: T) => Promise<GetFilePathResult>
 
   abstract getFilePathImpl (params: T): Promise<GetFilePathResult>
@@ -19,7 +18,7 @@ export abstract class AbstractSimpleFileCache <T> {
       max,
       promise: true,
       dispose: (result?: GetFilePathResult) => {
-        if (result && result.isOwned !== true) {
+        if (result && result.isLocal !== true) {
           remove(result.path)
             .then(() => logger.debug('%s removed from %s', result.path, this.constructor.name))
             .catch(err => logger.error('Cannot remove %s from cache %s.', result.path, this.constructor.name, { err }))

@@ -7,6 +7,7 @@ import { filter, Subscription } from 'rxjs'
 import { PluginSelectorDirective } from '../plugins/plugin-selector.directive'
 import { ListOverflowComponent } from './list-overflow.component'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { HorizontalMenuService } from './horizontal-menu.service'
 
 export type HorizontalMenuEntry = {
   label: string
@@ -41,6 +42,7 @@ export type HorizontalMenuEntry = {
   ]
 })
 export class HorizontalMenuComponent implements OnInit, OnChanges, OnDestroy {
+  private horizontalMenuService = inject(HorizontalMenuService)
   private router = inject(Router)
   private route = inject(ActivatedRoute)
   private modal = inject(NgbModal)
@@ -76,6 +78,10 @@ export class HorizontalMenuComponent implements OnInit, OnChanges, OnDestroy {
     if (modal) {
       this.modal.dismissAll()
     }
+  }
+
+  isHidden () {
+    return this.horizontalMenuService.isMenuHidden()
   }
 
   private buildChildren () {

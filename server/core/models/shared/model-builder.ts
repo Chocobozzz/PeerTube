@@ -3,7 +3,6 @@ import isPlainObject from 'lodash-es/isPlainObject.js'
 import { ModelStatic, Sequelize, Model as SequelizeModel } from 'sequelize'
 
 /**
- *
  * Build Sequelize models from sequelize raw query (that must use { nest: true } options)
  *
  * In order to sequelize to correctly build the JSON this class will ingest,
@@ -19,11 +18,32 @@ import { ModelStatic, Sequelize, Model as SequelizeModel } from 'sequelize'
  *   * All tables must contain the row id
  */
 
-export class ModelBuilder <T extends SequelizeModel> {
+export class ModelBuilder<T extends SequelizeModel> {
   private readonly modelRegistry = new Map<string, T>()
 
-  constructor (private readonly sequelize: Sequelize) {
+  private readonly aliasToTableName = {
+    ChannelCollab: 'VideoChannelCollaborator',
+    Collabs: 'VideoChannelCollaborators'
+  }
 
+  private readonly tableNameToModelName = {
+    Avatars: 'ActorImageModel',
+    Banners: 'ActorImageModel',
+    ActorFollowing: 'ActorModel',
+    ActorFollower: 'ActorModel',
+    FlaggedAccount: 'AccountModel',
+    CommentAutomaticTags: 'CommentAutomaticTagModel',
+    OwnerAccount: 'AccountModel',
+    Thumbnails: 'ThumbnailModel',
+    Channel: 'VideoChannelModel',
+    VideoChannels: 'VideoChannelModel',
+    VideoPlaylists: 'VideoPlaylistModel',
+    NotificationSetting: 'UserNotificationSettingModel',
+    VideoChannelCollaborators: 'VideoChannelCollaboratorModel',
+    Tags: 'TagModel'
+  }
+
+  constructor (private readonly sequelize: Sequelize) {
   }
 
   createModels (jsonArray: any[], baseModelName: string): T[] {
@@ -38,34 +58,41 @@ export class ModelBuilder <T extends SequelizeModel> {
     return result
   }
 
-  private createModel (json: any, modelName: string, keyPath: string) {
+  private createModel (json: any, rootTableName: string, keyPath: string) {
     if (!json.id) return { created: false, model: null }
 
-    const { created, model } = this.createOrFindModel(json, modelName, keyPath)
+    const { created, model } = this.createOrFindModel(json, rootTableName, keyPath)
 
     for (const key of Object.keys(json)) {
       const value = json[key]
       if (!value) continue
 
+      const tableName = this.buildTableName(key)
+
       // Child model
       if (isPlainObject(value)) {
-        const { created, model: subModel } = this.createModel(value, key, `${keyPath}.${json.id}.${key}`)
-        if (!created || !subModel) continue
-
-        const Model = this.findModelBuilder(modelName)
-        const association = Model.associations[key]
+        const Model = this.findModelBuilder(rootTableName)
+        const association = Model.associations[tableName]
 
         if (!association) {
-          logger.error('Cannot find association %s of model %s', key, modelName, { associations: Object.keys(Model.associations) })
+          logger.error(`Cannot find association ${tableName} from key ${key} of model ${rootTableName}`, {
+            associations: Object.keys(Model.associations)
+          })
           continue
         }
 
-        if (association.isMultiAssociation) {
-          if (!Array.isArray(model[key])) model[key] = []
+        const { created, model: subModel } = this.createModel(value, tableName, `${keyPath}.${json.id}.${key}`)
 
-          model[key].push(subModel)
+        if (association.isMultiAssociation && !Array.isArray(model[tableName])) {
+          model[tableName] = []
+        }
+
+        if (!created || !subModel) continue
+
+        if (Array.isArray(model[tableName])) {
+          model[tableName].push(subModel)
         } else {
-          model[key] = subModel
+          model[tableName] = subModel
         }
       }
     }
@@ -73,7 +100,7 @@ export class ModelBuilder <T extends SequelizeModel> {
     return { created, model }
   }
 
-  private createOrFindModel (json: any, modelName: string, keyPath: string) {
+  private createOrFindModel (json: any, tableName: string, keyPath: string) {
     const registryKey = this.getModelRegistryKey(json, keyPath)
     if (this.modelRegistry.has(registryKey)) {
       return {
@@ -82,11 +109,15 @@ export class ModelBuilder <T extends SequelizeModel> {
       }
     }
 
-    const Model = this.findModelBuilder(modelName)
+    const Model = this.findModelBuilder(tableName)
+    if (!Model) {
+      throw new Error(`Cannot find model builder for ${tableName}. You may have to add an alias in ModelBuilder class`)
+    }
 
     if (!Model) {
       logger.error(
-        'Cannot build model %s that does not exist', this.buildSequelizeModelName(modelName),
+        'Cannot build model %s that does not exist',
+        this.buildSequelizeModelName(tableName),
         { existing: this.sequelize.modelManager.all.map(m => m.name) }
       )
       return { created: false, model: null }
@@ -99,18 +130,18 @@ export class ModelBuilder <T extends SequelizeModel> {
     return { created: true, model }
   }
 
-  private findModelBuilder (modelName: string) {
-    return this.sequelize.modelManager.getModel(this.buildSequelizeModelName(modelName)) as ModelStatic<T>
+  private findModelBuilder (tableName: string) {
+    return this.sequelize.modelManager.getModel(this.buildSequelizeModelName(tableName)) as ModelStatic<T>
   }
 
-  private buildSequelizeModelName (modelName: string) {
-    if (modelName === 'Avatars') return 'ActorImageModel'
-    if (modelName === 'ActorFollowing') return 'ActorModel'
-    if (modelName === 'ActorFollower') return 'ActorModel'
-    if (modelName === 'FlaggedAccount') return 'AccountModel'
-    if (modelName === 'CommentAutomaticTags') return 'CommentAutomaticTagModel'
+  private buildSequelizeModelName (tableNameArg: string) {
+    const tableName = this.buildTableName(tableNameArg)
 
-    return modelName + 'Model'
+    return this.tableNameToModelName[tableName] ?? tableName + 'Model'
+  }
+
+  private buildTableName (tableName: string) {
+    return this.aliasToTableName[tableName] ?? tableName
   }
 
   private getModelRegistryKey (json: any, keyPath: string) {

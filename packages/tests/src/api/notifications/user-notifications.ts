@@ -6,17 +6,16 @@ import { buildUUID } from '@peertube/peertube-node-utils'
 import { cleanupTests, findExternalSavedVideo, PeerTubeServer, stopFfmpeg, waitJobs } from '@peertube/peertube-server-commands'
 import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
+import { checkNewActorFollow } from '@tests/shared/notifications/check-follow-notifications.js'
 import {
-  CheckerBaseParams,
   checkMyVideoImportIsFinished,
   checkMyVideoIsPublished,
-  checkNewActorFollow,
   checkNewLiveFromSubscription,
   checkNewVideoFromSubscription,
-  checkVideoStudioEditionIsFinished,
-  prepareNotificationsTest,
-  waitUntilNotification
-} from '@tests/shared/notifications.js'
+  checkVideoStudioEditionIsFinished
+} from '@tests/shared/notifications/check-video-notifications.js'
+import { prepareNotificationsTest, waitUntilNotification } from '@tests/shared/notifications/notifications-common.js'
+import { CheckerBaseParams } from '@tests/shared/notifications/shared/notification-checker.js'
 import { uploadRandomVideoOnServers } from '@tests/shared/videos.js'
 import { expect } from 'chai'
 

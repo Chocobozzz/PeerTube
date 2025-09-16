@@ -1,41 +1,25 @@
-import { minBy } from '@peertube/peertube-core-utils'
+import { minBy, sortBy } from '@peertube/peertube-core-utils'
 import { VideoChannel } from '@peertube/peertube-models'
 import { first, map } from 'rxjs/operators'
-import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { AuthService } from '../../core/auth'
 
-function listUserChannelsForSelect (authService: AuthService) {
+export function listUserChannelsForSelect (authService: AuthService, options: { includeCollaborations: boolean }) {
   return authService.userInformationLoaded
     .pipe(
       first(),
       map(() => {
         const user = authService.getUser()
-        if (!user) return undefined
 
-        const videoChannels = user.videoChannels
-        if (Array.isArray(videoChannels) === false) return undefined
+        const allChannels = options.includeCollaborations
+          ? [
+            ...formatChannels(user.videoChannels, { editor: false }),
+            ...formatChannels(user.videoChannelCollaborations, { editor: true })
+          ]
+          : formatChannels(user.videoChannels, { editor: false })
 
-        return videoChannels
-          .sort((a, b) => {
-            if (a.updatedAt < b.updatedAt) return 1
-            if (a.updatedAt > b.updatedAt) return -1
-            return 0
-          })
-          .map(c =>
-            ({
-              id: c.id,
-              name: c.name,
-              label: c.displayName,
-              support: c.support,
-              avatarPath: getAvatarPath(c)
-            }) as SelectChannelItem
-          )
+        return sortBy(allChannels, 'updatedAt').reverse()
       })
     )
-}
-
-export {
-  listUserChannelsForSelect
 }
 
 // ---------------------------------------------------------------------------
@@ -44,4 +28,18 @@ function getAvatarPath (c: VideoChannel) {
   if (!c.avatars || c.avatars.length === 0) return undefined
 
   return minBy(c.avatars, 'width')?.path || c.avatars[0].path
+}
+
+function formatChannels (channel: (VideoChannel & { ownerAccountId?: number })[], { editor }: { editor: boolean }) {
+  return channel
+    .map(c => ({
+      id: c.id,
+      name: c.name,
+      label: c.displayName,
+      support: c.support,
+      editor,
+      avatarPath: getAvatarPath(c),
+      ownerAccountId: c.ownerAccountId,
+      updatedAt: c.updatedAt
+    }))
 }

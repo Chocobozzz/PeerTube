@@ -1,5 +1,5 @@
 import { CommonModule, NgTemplateOutlet } from '@angular/common'
-import { Component, ElementRef, OnInit, booleanAttribute, inject, input, output, viewChild } from '@angular/core'
+import { Component, ElementRef, OnChanges, OnInit, booleanAttribute, inject, input, output, viewChild } from '@angular/core'
 import { SafeResourceUrl } from '@angular/platform-browser'
 import { Notifier, ServerService } from '@app/core'
 import { NgbDropdownModule, NgbPopover, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
@@ -16,7 +16,7 @@ import { GlobalIconComponent } from '../shared-icons/global-icon.component'
   ],
   imports: [ CommonModule, NgbTooltipModule, NgTemplateOutlet, NgbDropdownModule, GlobalIconComponent ]
 })
-export class ActorBannerEditComponent implements OnInit {
+export class ActorBannerEditComponent implements OnInit, OnChanges {
   private serverService = inject(ServerService)
   private notifier = inject(Notifier)
 
@@ -43,6 +43,10 @@ export class ActorBannerEditComponent implements OnInit {
     this.bannerFormat = $localize`ratio 6/1, recommended size: 1920x317, max size: ${
       getBytes(this.maxBannerSize)
     }, extensions: ${this.bannerExtensions}`
+  }
+
+  ngOnChanges () {
+    this.preview = undefined
   }
 
   onBannerChange () {

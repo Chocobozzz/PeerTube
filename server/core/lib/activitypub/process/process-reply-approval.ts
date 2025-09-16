@@ -16,7 +16,7 @@ export function processReplyApprovalFactory (type: Extract<ActivityType, 'Approv
       throw new Error(`Cannot process reply approval on comment ${comment.url} that doesn't exist`)
     }
 
-    if (comment.isOwned() !== true) {
+    if (comment.isLocal() !== true) {
       throw new Error(`Cannot process reply approval on non-owned comment ${comment.url}`)
     }
 

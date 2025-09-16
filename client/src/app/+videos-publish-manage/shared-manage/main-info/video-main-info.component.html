@@ -1,4 +1,4 @@
-<h2>
+<h2 class="form-title">
   <my-global-icon iconName="film"></my-global-icon>
 
   <ng-container i18n>Main information</ng-container>
@@ -82,6 +82,25 @@
     <div>
       <div class="form-group">
         <label i18n for="channel">Channel</label>
+
+        @if (manageType === 'update') {
+          @if (isEditor()) {
+            <div class="form-group-description">
+              <div i18n>
+                Only {{ videoEdit.getVideoAttributes().ownerAccountDisplayName }}'s channels are listed
+              </div>
+
+              <div i18n>
+                You do not have the right to <a href="https://docs.joinpeertube.org/use/library#change-ownership-of-a-video" target="_blank">transfer ownership <my-global-icon iconName="external-link"></my-global-icon></a> of this video but {{ videoEdit.getVideoAttributes().ownerAccountDisplayName }} can do it
+              </div>
+            </div>
+          } @else {
+            <div class="form-group-description" i18n>
+              You can also <a href="https://docs.joinpeertube.org/use/library#change-ownership-of-a-video" target="_blank">transfer this video <my-global-icon iconName="external-link"></my-global-icon></a> to another account
+            </div>
+          }
+        }
+
         <my-select-channel class="d-block" inputId="channel" [items]="userChannels" formControlName="channelId"></my-select-channel>
       </div>
 
@@ -166,9 +185,30 @@
   </div>
 </div>
 
-<div *ngIf="canBeDeleted()">
+@if (canBeDeletedOrTransferred()) {
   <div class="danger-zone mt-5">
     <h3 class="mb-3" i18n>DANGER ZONE</h3>
+
+    @if (!isEditor()) {
+      <div class="form-group">
+        <label i18n for="deleteVideo">Change ownership of your video</label>
+        <div class="form-group-description" i18n>A modal window will open for you to specify the local account to which you want to transfer your video</div>
+
+        <button class="peertube-button danger-button" (click)="showChangeOwnershipModal()" [disabled]="ownershipRequestSent" i18n>Transfer ownership</button>
+
+        @if (ownershipRequestSent) {
+          <my-alert class="d-block mt-3" type="success">
+            <ng-container i18n>
+              <a routerLink="/my-library/ownership">Ownership change request</a> sent to {{ ownershipRequestSent }}</ng-container>
+          </my-alert>
+        }
+      </div>
+
+      <my-video-change-ownership
+        #videoChangeOwnershipModal
+        [videoId]="videoEdit.getVideoAttributes().id" (requestSent)="onChangeOwnershipRequest($event)"
+      ></my-video-change-ownership>
+    }
 
     <div class="form-group">
       <label i18n for="deleteVideo">Delete your video</label>
@@ -177,4 +217,5 @@
       <button class="peertube-button danger-button" (click)="deleteVideo()" i18n>Delete</button>
     </div>
   </div>
-</div>
+}
+
