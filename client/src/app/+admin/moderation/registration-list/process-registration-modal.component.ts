@@ -1,4 +1,4 @@
-import { CommonModule, NgClass } from '@angular/common'
+import { CommonModule } from '@angular/common'
 import { Component, OnInit, inject, output, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier, ServerService } from '@app/core'
