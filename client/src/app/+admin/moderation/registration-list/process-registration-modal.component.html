@@ -13,23 +13,27 @@
   <form novalidate [formGroup]="form" (ngSubmit)="processRegistration()">
     <div class="modal-body mb-3">
 
-      <my-alert i18n *ngIf="!registration.emailVerified" type="warning">
-        Registration email has not been verified. Email delivery has been disabled by default.
-      </my-alert>
-
       <div class="description">
         <ng-container *ngIf="isAccept()">
           <p i18n>
             <strong>Accepting</strong>&nbsp;<em>{{ registration.username }}</em> registration will create the account and channel.
           </p>
 
-          <p *ngIf="isEmailEnabled()" i18n [ngClass]="{ 'text-decoration-line-through': isPreventEmailDeliveryChecked() }">
-            An email will be sent to <em>{{ registration.email }}</em> explaining its account has been created with the moderation response you'll write below.
-          </p>
-
-          <my-alert *ngIf="!isEmailEnabled()" type="warning" i18n>
-            Emails are not enabled on this instance so PeerTube won't be able to send an email to <em>{{ registration.email }}</em> explaining its account has been created.
-          </my-alert>
+          @if (isEmailEnabled()) {
+            @if (!registration.emailVerified) {
+              <my-alert i18n type="warning">
+                Registration email has not been verified. Email delivery has been disabled by default.
+              </my-alert>
+            } @else {
+              <p i18n [ngClass]="{ 'text-decoration-line-through': isPreventEmailDeliveryChecked() }">
+                An email will be sent to <em>{{ registration.email }}</em> explaining its account has been created with the moderation response you'll write below.
+              </p>
+            }
+          } @else {
+            <my-alert type="warning" i18n>
+              Emails are not enabled on this instance so PeerTube won't be able to send an email to <em>{{ registration.email }}</em> explaining its account has been created.
+            </my-alert>
+          }
         </ng-container>
 
         <ng-container *ngIf="isReject()">
@@ -58,7 +62,7 @@
 
       <div class="form-group">
         <my-peertube-checkbox
-          inputName="preventEmailDelivery" formControlName="preventEmailDelivery" [disabled]="!isEmailEnabled()"
+          inputName="preventEmailDelivery" formControlName="preventEmailDelivery"
           i18n-labelText labelText="Prevent email from being sent to the user"
         ></my-peertube-checkbox>
       </div>

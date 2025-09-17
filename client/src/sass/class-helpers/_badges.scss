@@ -1,7 +1,7 @@
-@use '_icons' as *;
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_button-mixins' as *;
+@use "_icons" as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_button-mixins" as *;
 
 // Badge color variables
 $badge-red-light: #ffcdd2;
@@ -109,7 +109,7 @@ $badge-grey-dark: #2D3448;
   }
 }
 
-[data-bs-theme=dark] {
+[data-bs-theme="dark"] {
   .pt-badge {
     &.badge-banned,
     &.badge-danger,
@@ -151,4 +151,11 @@ $badge-grey-dark: #2D3448;
       background-color: $badge-grey-dark;
     }
   }
+}
+
+.pt-badges-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.25rem;
 }

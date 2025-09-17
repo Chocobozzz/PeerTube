@@ -22,8 +22,8 @@
   .nsfw-details {
     width: 100%;
     width: fit-content;
-    background-color: pvar(--player-overlay-bg);
-    color: pvar(--player-overlay-fg);
+    background-color: pvar(--pt-player-overlay-secondary-bg);
+    color: pvar(--pt-player-overlay-secondary-fg);
     max-width: calc(40% - 2 * var(--nsfw-info-margin-x));
     padding: 1rem;
   }
@@ -109,7 +109,7 @@
       -webkit-mask-size: cover;
       width: 20px;
       height: 20px;
-      background-color: pvar(--player-overlay-fg);
+      background-color: pvar(--pt-player-overlay-secondary-fg);
       display: block;
 
       @include margin-left(auto);

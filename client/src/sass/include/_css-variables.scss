@@ -69,8 +69,8 @@
   --alert-primary-bg: #{pvar(--primary-200)};
   --alert-primary-border-color: #{pvar(--primary-300)};
 
-  --embed-fg: #fff;
-  --embed-big-play-bg: rgba(0, 0, 0, 0.8);
+  --pt-player-fg: #fff;
+  --pt-player-big-play-bg: rgba(0, 0, 0, 0.8);
 
   --menu-fg: #{pvar(--fg-400)};
   --menu-bg: #{pvar(--bg-secondary-400)};
@@ -78,8 +78,8 @@
   --header-fg: #{pvar(--fg)};
   --header-bg: #{pvar(--bg)};
 
-  --player-overlay-fg: #{pvar(--fg-400)};
-  --player-overlay-bg: #{pvar(--bg-secondary-400)};
+  --pt-player-overlay-secondary-fg: #{pvar(--fg-400)};
+  --pt-player-overlay-secondary-bg: #{pvar(--bg-secondary-400)};
 
   // ---------------------------------------------------------------------------
 

@@ -63,7 +63,7 @@
     </td>
 
     <td *ngIf="table.isColumnDisplayed('privacy')">
-      <div class="d-flex flex-wrap gap-1">
+      <div class="pt-badges-container">
         <my-privacy-badge [video]="video"></my-privacy-badge>
 
         <span *ngIf="video.blacklisted" class="pt-badge badge-red" i18n [ngbTooltip]="video.blacklistedReason">Blocked</span>
