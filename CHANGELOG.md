@@ -4,7 +4,7 @@
 
 ### IMPORTANT NOTES
 
-  * Minimum supported NodeJS version is `20.17`
+  * Minimum supported NodeJS version is `20.19`
 
 ### NGINX
 
