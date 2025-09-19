@@ -31,6 +31,7 @@ const listVideoPasswordValidator = [
 ]
 
 const updateVideoPasswordListValidator = [
+  isValidVideoIdParam('videoId'),
   body('passwords')
     .optional()
     .isArray()
@@ -45,6 +46,28 @@ const updateVideoPasswordListValidator = [
     // Check if the user who did the request is able to update video passwords
     const user = res.locals.oauth.token.User
     if (!checkUserCanManageVideo({ user, video: res.locals.videoAll, right: UserRight.UPDATE_ANY_VIDEO, req, res })) return
+
+    return next()
+  }
+]
+
+const addVideoPasswordValidator = [
+  isValidVideoIdParam('videoId'),
+  body('password')
+    .isString()
+    .withMessage('Video password should be a string.')
+    .notEmpty()
+    .withMessage("Password string should not be emoty"),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    if (!await doesVideoExist(req.params.videoId, res)) return
+    if (!isValidPasswordProtectedPrivacy(req, res)) return
+
+    // Check if the user who did the request is able to update video passwords
+    const user = res.locals.oauth.token.User
+    if (!checkUserCanManageVideo({ user, video: res.locals.videoAll, right: UserRight.UPDATE_ANY_VIDEO, req, res } )) return
 
     return next()
   }
@@ -73,5 +96,6 @@ const removeVideoPasswordValidator = [
 export {
   listVideoPasswordValidator,
   updateVideoPasswordListValidator,
-  removeVideoPasswordValidator
+  removeVideoPasswordValidator,
+  addVideoPasswordValidator
 }
