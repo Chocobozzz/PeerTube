@@ -2630,9 +2630,9 @@ Een verbannen gebruiker kan niet langer inloggen.</target>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7036955472108988787" datatype="html">
+      <trans-unit id="7036955472108988787" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> doesn't allow for user registration. You may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find a PeerTube platform that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple platforms at: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-primary&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> doesn't allow for user registration. You may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find a PeerTube platform that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple platforms at: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-primary&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Bij <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> kun je geen account aanmaken. Zie de <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>Voorwaarden<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot;&gt;"/>Voorwaarden<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> voor meer details of vind een PeerTube-platform die je de mogelijkheid geeft een account aan te maken en je video's te uploaden. Vind platformen via: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-primary&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">26</context>
@@ -3137,9 +3137,9 @@ Geen resultaten gevonden</target>
           <context context-type="linenumber">24,25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7106510114370231860" datatype="html">
+      <trans-unit id="7106510114370231860" datatype="html" xml:space="preserve">
         <source>Confirm this configuration</source>
-        <target state="new">Confirm this configuration</target>
+        <target state="translated">Instellingen bevestigen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-preview.component.html</context>
           <context context-type="linenumber">33</context>
@@ -3161,9 +3161,9 @@ Geen resultaten gevonden</target>
           <context context-type="linenumber">9,10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4023399618862728868" datatype="html">
+      <trans-unit id="4023399618862728868" datatype="html" xml:space="preserve">
         <source>Sepia, the cuttlefish, has a few questions to help you <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>quickly pre-configure your platform<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</source>
-        <target state="new">Sepia, the cuttlefish, has a few questions to help you <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>quickly pre-configure your platform<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
+        <target state="translated">Sepia de zeekat heeft wat vragen om je <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>op weg te helpen<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-welcome.component.html</context>
           <context context-type="linenumber">12,14</context>
@@ -3185,9 +3185,9 @@ Geen resultaten gevonden</target>
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1202582215608581565" datatype="html">
+      <trans-unit id="1202582215608581565" datatype="html" xml:space="preserve">
         <source>CLI:</source>
-        <target state="new">CLI:</target>
+        <target state="translated">CLI:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">59,60</context>
@@ -3201,9 +3201,9 @@ Geen resultaten gevonden</target>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3736279079808209047" datatype="html">
+      <trans-unit id="3736279079808209047" datatype="html" xml:space="preserve">
         <source>Official PeerTube website:</source>
-        <target state="new">Official PeerTube website:</target>
+        <target state="translated">Officiële PeerTube-website:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">28,30</context>
@@ -3217,41 +3217,41 @@ Geen resultaten gevonden</target>
           <context context-type="linenumber">30,31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="931415109224027105" datatype="html">
+      <trans-unit id="931415109224027105" datatype="html" xml:space="preserve">
         <source>Public PeerTube index:</source>
-        <target state="new">Public PeerTube index:</target>
+        <target state="translated">Openbare PeerTube-index:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">34,36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1498251075459491982" datatype="html">
+      <trans-unit id="1498251075459491982" datatype="html" xml:space="preserve">
         <source>Put your platform on the official PeerTube public index</source>
-        <target state="new">Put your platform on the official PeerTube public index</target>
+        <target state="translated">Zet je platform op de officiële openbare index van PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">36,37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4895326106573044490" datatype="html">
+      <trans-unit id="4895326106573044490" datatype="html" xml:space="preserve">
         <source>Documentation</source>
-        <target state="new">Documentation</target>
+        <target state="translated">Documentatie</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">42,44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1498236237234691799" datatype="html">
+      <trans-unit id="1498236237234691799" datatype="html" xml:space="preserve">
         <source>Admin:</source>
-        <target state="new">Admin:</target>
+        <target state="translated">Beheerder</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">46,48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1561366846864007609" datatype="html">
+      <trans-unit id="1561366846864007609" datatype="html" xml:space="preserve">
         <source>Managing users, following other platforms, dealing with spammers, configure object storage or remote transcoding...</source>
-        <target state="new">Managing users, following other platforms, dealing with spammers, configure object storage or remote transcoding...</target>
+        <target state="translated">Gebruikers beheren, andere platforms volgen, omgaan met spammers, objectopslag of externe transcodering instellen...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">48,49</context>
@@ -3265,33 +3265,33 @@ Geen resultaten gevonden</target>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="795989016417948119" datatype="html">
+      <trans-unit id="795989016417948119" datatype="html" xml:space="preserve">
         <source>Do not display again</source>
-        <target state="new">Do not display again</target>
+        <target state="translated">Niet opnieuw weergeven</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-welcome.component.html</context>
           <context context-type="linenumber">17,18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9079166010714549602" datatype="html">
+      <trans-unit id="9079166010714549602" datatype="html" xml:space="preserve">
         <source>Registration policy</source>
-        <target state="new">Registration policy</target>
+        <target state="translated">Registratiebeleid</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.html</context>
           <context context-type="linenumber">3,5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4252012934127630804" datatype="html">
+      <trans-unit id="4252012934127630804" datatype="html" xml:space="preserve">
         <source>Video quota for new users</source>
-        <target state="new">Video quota for new users</target>
+        <target state="translated">Videoquota voor nieuwe gebruikers</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.html</context>
           <context context-type="linenumber">9,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6113440087593374795" datatype="html">
+      <trans-unit id="6113440087593374795" datatype="html" xml:space="preserve">
         <source>Video import and synchronization</source>
-        <target state="new">Video import and synchronization</target>
+        <target state="translated">import en synchronisatie van video's</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.html</context>
           <context context-type="linenumber">15,17</context>
@@ -3301,65 +3301,65 @@ Geen resultaten gevonden</target>
           <context context-type="linenumber">3,5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5103781513612689881" datatype="html">
+      <trans-unit id="5103781513612689881" datatype="html" xml:space="preserve">
         <source>My community can stream lives</source>
-        <target state="new">My community can stream lives</target>
+        <target state="translated">Mijn gemeenschap mag livestreamen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.html</context>
           <context context-type="linenumber">21,23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7593555694782789615" datatype="html">
+      <trans-unit id="7593555694782789615" datatype="html" xml:space="preserve">
         <source>Open</source>
-        <target state="new">Open</target>
+        <target state="translated">Openen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1560828454806370515" datatype="html">
+      <trans-unit id="1560828454806370515" datatype="html" xml:space="preserve">
         <source>Anyone can register and use the platform</source>
-        <target state="new">Anyone can register and use the platform</target>
+        <target state="translated">Iedereen kan zich registreren en het platform gebruiken.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8247087079730523783" datatype="html">
+      <trans-unit id="8247087079730523783" datatype="html" xml:space="preserve">
         <source>Requires approval</source>
-        <target state="new">Requires approval</target>
+        <target state="translated">Heeft goedkeuring nodig</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8305610685019836481" datatype="html">
+      <trans-unit id="8305610685019836481" datatype="html" xml:space="preserve">
         <source>Anyone can register, but a moderator must approve their account before they can use the platform</source>
-        <target state="new">Anyone can register, but a moderator must approve their account before they can use the platform</target>
+        <target state="translated">Iedereen kan zich registreren, maar een moderator moet accounts goedkeuren voordat ze gebruikt kunnen worden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7860418101283165917" datatype="html">
+      <trans-unit id="7860418101283165917" datatype="html" xml:space="preserve">
         <source>Closed</source>
-        <target state="new">Closed</target>
+        <target state="translated">Gesloten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2224797757421461675" datatype="html">
+      <trans-unit id="2224797757421461675" datatype="html" xml:space="preserve">
         <source>Only an administrator can create users on the platform</source>
-        <target state="new">Only an administrator can create users on the platform</target>
+        <target state="translated">Enkel beheerders kunnen gebruikersaccounts aanmaken.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8779076495329736288" datatype="html">
+      <trans-unit id="8779076495329736288" datatype="html" xml:space="preserve">
         <source>Save a copy of the uploaded video</source>
-        <target state="new">Save a copy of the uploaded video</target>
+        <target state="translated">Een kopie van de geüploade video opslaan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.html</context>
           <context context-type="linenumber">3,5</context>
@@ -3377,25 +3377,25 @@ Geen resultaten gevonden</target>
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5858148127589953031" datatype="html">
+      <trans-unit id="5858148127589953031" datatype="html" xml:space="preserve">
         <source>Welcome introduction</source>
-        <target state="new">Welcome introduction</target>
+        <target state="translated">Introductie</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/admin-config-wizard-modal.component.html</context>
           <context context-type="linenumber">5,6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="874940026211412710" datatype="html">
+      <trans-unit id="874940026211412710" datatype="html" xml:space="preserve">
         <source>Edit general information</source>
-        <target state="new">Edit general information</target>
+        <target state="needs-translation">Algemene informatie bewerken</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/admin-config-wizard-modal.component.html</context>
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5218253483948833494" datatype="html">
+      <trans-unit id="5218253483948833494" datatype="html" xml:space="preserve">
         <source>Usage type</source>
-        <target state="new">Usage type</target>
+        <target state="translated">Soort gebruik</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/admin-config-wizard-modal.component.html</context>
           <context context-type="linenumber">18,19</context>
@@ -3405,9 +3405,9 @@ Geen resultaten gevonden</target>
           <context context-type="linenumber">12,14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5674681810331219328" datatype="html">
+      <trans-unit id="5674681810331219328" datatype="html" xml:space="preserve">
         <source>Configuration preview</source>
-        <target state="new">Configuration preview</target>
+        <target state="translated">Voorvertoning van de configuratie</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/admin-config-wizard-modal.component.html</context>
           <context context-type="linenumber">25,26</context>
@@ -3417,33 +3417,33 @@ Geen resultaten gevonden</target>
           <context context-type="linenumber">12,14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7312794732031642219" datatype="html">
+      <trans-unit id="7312794732031642219" datatype="html" xml:space="preserve">
         <source>Post configuration documentation</source>
-        <target state="new">Post configuration documentation</target>
+        <target state="translated">Postconfiguratie-documentatie</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/admin-config-wizard-modal.component.html</context>
           <context context-type="linenumber">34,35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="855735721940425245" datatype="html">
+      <trans-unit id="855735721940425245" datatype="html" xml:space="preserve">
         <source>Congratulations</source>
-        <target state="new">Congratulations</target>
+        <target state="translated">Gefeliciteerd</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">8,10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3654500320542675985" datatype="html">
+      <trans-unit id="3654500320542675985" datatype="html" xml:space="preserve">
         <source>Your platform has been configured!</source>
-        <target state="new">Your platform has been configured!</target>
+        <target state="translated">Je platform is ingesteld!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8900807565018046089" datatype="html">
+      <trans-unit id="8900807565018046089" datatype="html" xml:space="preserve">
         <source>It's time to add information about your platform! <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Setting up a description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, specifying <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, why <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>you created your platform<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>how long<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> you plan to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>maintain it<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is very important for visitors to understand on what type of website they are. </source>
-        <target state="new"> It's time to add information about your platform! <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Setting up a description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, specifying <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, why <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>you created your platform<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>how long<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> you plan to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>maintain it<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is very important for visitors to understand on what type of website they are. </target>
+        <target state="translated">Tijd om informatie over je platform toe te voegen! <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Een beschrijving instellen<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, vertellen <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>wie je bent<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, waarom <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>je het platform bent gestart<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> en <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>voor hoelang<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> je van plan bent <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>het te onderhouden<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is voor bezoekers heel belangrijk om te begrijpen met wat voor soort website ze te maken hebben. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">16,21</context>
@@ -3817,9 +3817,9 @@ Geen resultaten gevonden</target>
           <context context-type="linenumber">255</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4742783116161192467" datatype="html">
+      <trans-unit id="4742783116161192467" datatype="html" xml:space="preserve">
         <source>allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart</source>
-        <target state="new">allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart</target>
+        <target state="translated">maakt het mogelijk om gelijktijdig meerdere video's te importeren. ⚠️ Opnieuw opstarten van PeerTube vereist.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">256,258</context>
@@ -5069,9 +5069,9 @@ Dit zal een bestaande ondertiteling vervangen!</target>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7778624117300606589" datatype="html">
+      <trans-unit id="7778624117300606589" datatype="html" xml:space="preserve">
         <source>Requested on</source>
-        <target state="new">Requested on</target>
+        <target state="translated">Verzocht op</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">65</context>
@@ -5189,9 +5189,9 @@ Dit zal een bestaande ondertiteling vervangen!</target>
           <context context-type="linenumber">37,39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1540765026346951304" datatype="html">
+      <trans-unit id="1540765026346951304" datatype="html" xml:space="preserve">
         <source>Potentially violent content</source>
-        <target state="new">Potentially violent content</target>
+        <target state="translated">Inhoud kan gewelddadig zijn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
           <context context-type="linenumber">41</context>
