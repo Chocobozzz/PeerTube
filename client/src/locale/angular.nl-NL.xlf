@@ -5197,9 +5197,9 @@ Dit zal een bestaande ondertiteling vervangen!</target>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8289970439779040385" datatype="html">
+      <trans-unit id="8289970439779040385" datatype="html" xml:space="preserve">
         <source>Potentially sexually explicit content</source>
-        <target state="new">Potentially sexually explicit content</target>
+        <target state="translated">Inhoud kan seksueel expliciet zijn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
           <context context-type="linenumber">47</context>
@@ -5454,9 +5454,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">112,114</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6927421881663431816" datatype="html">
+      <trans-unit id="6927421881663431816" datatype="html" xml:space="preserve">
         <source>This date is used for displaying the live in your channel when it's not currently streaming. Scheduling a live does not prevent you from starting the live at a different time.</source>
-        <target state="new"> This date is used for displaying the live in your channel when it's not currently streaming. Scheduling a live does not prevent you from starting the live at a different time. </target>
+        <target state="translated">Deze datum wordt gebruikt voor het weergeven van de livestream op je kanaal als die nog niet bezig is. Het inplannen weerhoudt je er niet van om de livestream op een ander moment te starten.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">120,121</context>
@@ -5934,9 +5934,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">7,8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9202777795323261347" datatype="html">
+      <trans-unit id="9202777795323261347" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No list} =1 {1 list} other {<x id="INTERPOLATION"/> lists}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No list} =1 {1 list} other {<x id="INTERPOLATION"/> lists}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Geen lijst} =1 {Eén lijst} other {<x id="INTERPOLATION"/> lijsten}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-admin-owner.component.html</context>
           <context context-type="linenumber">12</context>
@@ -6495,9 +6495,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4631262903114543634" datatype="html">
+      <trans-unit id="4631262903114543634" datatype="html" xml:space="preserve">
         <source>Video URL</source>
-        <target state="new">Video URL</target>
+        <target state="translated">Video-URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">126,127</context>
@@ -6635,9 +6635,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">241</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4235020544266215264" datatype="html">
+      <trans-unit id="4235020544266215264" datatype="html" xml:space="preserve">
         <source>The user is banned</source>
-        <target state="new">The user is banned</target>
+        <target state="translated">Deze gebruiker is verbannen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">45</context>
@@ -6679,9 +6679,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">270</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1026007885641869192" datatype="html">
+      <trans-unit id="1026007885641869192" datatype="html" xml:space="preserve">
         <source>Video transcription</source>
-        <target state="new">Video transcription</target>
+        <target state="translated">Videotranscriptie</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.html</context>
           <context context-type="linenumber">15,17</context>
