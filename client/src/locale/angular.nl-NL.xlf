@@ -11495,9 +11495,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">470,471</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5963121551419269989" datatype="html">
+      <trans-unit id="5963121551419269989" datatype="html" xml:space="preserve">
         <source>This setting is not retroactive: current comments from remote platforms will not be deleted</source>
-        <target state="new">This setting is not retroactive: current comments from remote platforms will not be deleted</target>
+        <target state="translated">Deze instelling werkt niet met terugwerkende kracht: bestaande reacties van andere platforms worden niet verwijderd.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">473,474</context>
@@ -11511,9 +11511,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">484,485</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7331615583751184681" datatype="html">
+      <trans-unit id="7331615583751184681" datatype="html" xml:space="preserve">
         <source>This setting is not retroactive: current followers of channels of your platform will not be affected</source>
-        <target state="new">This setting is not retroactive: current followers of channels of your platform will not be affected</target>
+        <target state="translated">Deze instelling werkt niet met terugwerkende kracht: bestaande volgers van kanalen op je platform worden niet beïnvloed</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">487,488</context>
@@ -11527,33 +11527,33 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">498,499</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5240371005291842688" datatype="html">
+      <trans-unit id="5240371005291842688" datatype="html" xml:space="preserve">
         <source>This setting is not retroactive: current followers of your platform will not be affected</source>
-        <target state="new">This setting is not retroactive: current followers of your platform will not be affected</target>
+        <target state="translated">Deze instelling werk niet met terugwerkende kracht: bestaande volgers van je platform worden niet beïnvloed</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">501,502</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4899539058271084907" datatype="html">
+      <trans-unit id="4899539058271084907" datatype="html" xml:space="preserve">
         <source>Manually approve new followers that follow your platform</source>
-        <target state="new">Manually approve new followers that follow your platform</target>
+        <target state="translated">Nieuwe volgers van je platform handmatig goedkeuren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">509,510</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6240145294614933263" datatype="html">
+      <trans-unit id="6240145294614933263" datatype="html" xml:space="preserve">
         <source>Automatically follow back followers that follow your platform</source>
-        <target state="new">Automatically follow back followers that follow your platform</target>
+        <target state="translated">Volgers van je platform automatisch terugvolgen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">522,523</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2362368426377094869" datatype="html">
+      <trans-unit id="2362368426377094869" datatype="html" xml:space="preserve">
         <source>Automatically follow platforms of a public index</source>
-        <target state="new">Automatically follow platforms of a public index</target>
+        <target state="translated">Platforms uit de publieke index automatisch volgen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">535,536</context>
@@ -11583,33 +11583,33 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">547</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2709958363414972972" datatype="html">
+      <trans-unit id="2709958363414972972" datatype="html" xml:space="preserve">
         <source>PLAYER</source>
-        <target state="new">PLAYER</target>
+        <target state="translated">SPELER</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">567,568</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="286395473992592179" datatype="html">
+      <trans-unit id="286395473992592179" datatype="html" xml:space="preserve">
         <source>Automatically play videos in the player</source>
-        <target state="new">Automatically play videos in the player</target>
+        <target state="translated">Speel video's automatisch af in de speler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">576,577</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3184039004441581991" datatype="html">
+      <trans-unit id="3184039004441581991" datatype="html" xml:space="preserve">
         <source>Enable P2P streaming by default on your platform</source>
-        <target state="new">Enable P2P streaming by default on your platform</target>
+        <target state="translated">Schakel P2P-streaming standaard in op je platform</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">585,586</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6069715963308979270" datatype="html">
+      <trans-unit id="6069715963308979270" datatype="html" xml:space="preserve">
         <source>Enable P2P streaming by default for videos embedded on external websites</source>
-        <target state="new">Enable P2P streaming by default for videos embedded on external websites</target>
+        <target state="translated">Standaard P2P-streaming inschakelen voor video's die zijn ingebed op externe websites</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">592,593</context>
@@ -11647,9 +11647,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1244629318108208810" datatype="html">
+      <trans-unit id="1244629318108208810" datatype="html" xml:space="preserve">
         <source>PLATFORM</source>
-        <target state="new">PLATFORM</target>
+        <target state="translated">PLATFORM</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">37,38</context>
@@ -11799,9 +11799,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2268673016709678600" datatype="html">
+      <trans-unit id="2268673016709678600" datatype="html" xml:space="preserve">
         <source>Max simultaneous lives created on your platform</source>
-        <target state="new">Max simultaneous lives created on your platform</target>
+        <target state="translated">Maximum aantal gelijktijdige livestreams op je platform</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.html</context>
           <context context-type="linenumber">51,53</context>
@@ -11963,9 +11963,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="210131859223873198" datatype="html">
+      <trans-unit id="210131859223873198" datatype="html" xml:space="preserve">
         <source>Edit your platform homepage</source>
-        <target state="new">Edit your platform homepage</target>
+        <target state="translated">De thuispagina bewerken</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">98</context>
@@ -11983,9 +11983,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1717475601341178176" datatype="html">
+      <trans-unit id="1717475601341178176" datatype="html" xml:space="preserve">
         <source>Platform information</source>
-        <target state="new">Platform information</target>
+        <target state="translated">Platforminformatie</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">122</context>
@@ -11995,9 +11995,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8169800528565475866" datatype="html">
+      <trans-unit id="8169800528565475866" datatype="html" xml:space="preserve">
         <source>Platform logos</source>
-        <target state="new">Platform logos</target>
+        <target state="translated">Platformlogo's</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">135</context>
@@ -12015,9 +12015,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5637037987059793432" datatype="html">
+      <trans-unit id="5637037987059793432" datatype="html" xml:space="preserve">
         <source>VOD configuration</source>
-        <target state="new">VOD configuration</target>
+        <target state="translated">VOD-configuratie</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">160</context>
@@ -12027,9 +12027,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7545205559638195390" datatype="html">
+      <trans-unit id="7545205559638195390" datatype="html" xml:space="preserve">
         <source>Live configuration</source>
-        <target state="new">Live configuration</target>
+        <target state="translated">Live-configuratie</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">170</context>
@@ -12039,9 +12039,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7368823469700320150" datatype="html">
+      <trans-unit id="7368823469700320150" datatype="html" xml:space="preserve">
         <source>Advanced configuration</source>
-        <target state="new">Advanced configuration</target>
+        <target state="translated">Geavanceerde configuratie</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">180</context>
@@ -12415,17 +12415,17 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">271</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4221025784332707" datatype="html">
+      <trans-unit id="4221025784332707" datatype="html" xml:space="preserve">
         <source>VOD configuration updated.</source>
-        <target state="new">VOD configuration updated.</target>
+        <target state="translated">VOD-configuratie bijgewerkt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.ts</context>
           <context context-type="linenumber">296</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8895123182110799512" datatype="html">
+      <trans-unit id="8895123182110799512" datatype="html" xml:space="preserve">
         <source>Open config wizard</source>
-        <target state="new">Open config wizard</target>
+        <target state="translated">Configuratiewizard openen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/admin-save-bar.component.html</context>
           <context context-type="linenumber">6</context>
@@ -12541,9 +12541,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5389274721155083635" datatype="html">
+      <trans-unit id="5389274721155083635" datatype="html" xml:space="preserve">
         <source>Primary color</source>
-        <target state="new">Primary color</target>
+        <target state="translated">Hoofdkleur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">121</context>
@@ -12553,33 +12553,33 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7134158175957628957" datatype="html">
+      <trans-unit id="7134158175957628957" datatype="html" xml:space="preserve">
         <source>Foreground color</source>
-        <target state="new">Foreground color</target>
+        <target state="translated">Voorgrondkleur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">122</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="238646176953521330" datatype="html">
+      <trans-unit id="238646176953521330" datatype="html" xml:space="preserve">
         <source>Background color</source>
-        <target state="new">Background color</target>
+        <target state="translated">Achtergrondkleur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1622932496860359706" datatype="html">
+      <trans-unit id="1622932496860359706" datatype="html" xml:space="preserve">
         <source>Secondary background color</source>
-        <target state="new">Secondary background color</target>
+        <target state="translated">Secundaire achtergrondkleur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8434025273758786182" datatype="html">
+      <trans-unit id="8434025273758786182" datatype="html" xml:space="preserve">
         <source>Used as a background for inputs, overlays...</source>
-        <target state="new">Used as a background for inputs, overlays...</target>
+        <target state="translated">Gebruikt als achtergrond voor invoer, overlays...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">126</context>
@@ -12609,9 +12609,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="274625412449467803" datatype="html">
+      <trans-unit id="274625412449467803" datatype="html" xml:space="preserve">
         <source>Not rounded</source>
-        <target state="new">Not rounded</target>
+        <target state="translated">Niet afgerond</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">136</context>
@@ -12621,9 +12621,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">150</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6332243464031230843" datatype="html">
+      <trans-unit id="6332243464031230843" datatype="html" xml:space="preserve">
         <source>Slightly rounded</source>
-        <target state="new">Slightly rounded</target>
+        <target state="translated">Lichtelijk afgerond</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">137</context>
@@ -12637,9 +12637,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">138</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8021098849992891394" datatype="html">
+      <trans-unit id="8021098849992891394" datatype="html" xml:space="preserve">
         <source>Rounded</source>
-        <target state="new">Rounded</target>
+        <target state="translated">Afgerond</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">139</context>
@@ -12673,9 +12673,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7646288536359666196" datatype="html">
+      <trans-unit id="7646288536359666196" datatype="html" xml:space="preserve">
         <source>Slightly rounded (default)</source>
-        <target state="new">Slightly rounded (default)</target>
+        <target state="translated">Lichtelijk afgerond (standaard)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">151</context>
@@ -12689,17 +12689,17 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">152</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1631750873832492109" datatype="html">
+      <trans-unit id="1631750873832492109" datatype="html" xml:space="preserve">
         <source>Platform customization updated.</source>
-        <target state="new">Platform customization updated.</target>
+        <target state="translated">Platformaanpassing bijgewerkt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">326</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2478663882166889191" datatype="html">
+      <trans-unit id="2478663882166889191" datatype="html" xml:space="preserve">
         <source>BEHAVIOR</source>
-        <target state="new">BEHAVIOR</target>
+        <target state="translated">GEDRAG</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">6,7</context>
@@ -12749,17 +12749,17 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4101055224952526966" datatype="html">
+      <trans-unit id="4101055224952526966" datatype="html" xml:space="preserve">
         <source>ACCOUNT SESSIONS</source>
-        <target state="new">ACCOUNT SESSIONS</target>
+        <target state="translated">ACCOUNTSESSIES</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">77,78</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5931890111155614195" datatype="html">
+      <trans-unit id="5931890111155614195" datatype="html" xml:space="preserve">
         <source>These are the devices currently logged in to your account.</source>
-        <target state="new">These are the devices currently logged in to your account.</target>
+        <target state="translated">Dit zijn de apparaten die momenteel zijn ingelogd in je account.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">81,83</context>
@@ -12777,17 +12777,17 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7772317372473797900" datatype="html">
+      <trans-unit id="7772317372473797900" datatype="html" xml:space="preserve">
         <source>Subject prefix</source>
-        <target state="new">Subject prefix</target>
+        <target state="translated">Onderwerpvoorvoegsel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">119</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="320264913023489501" datatype="html">
+      <trans-unit id="320264913023489501" datatype="html" xml:space="preserve">
         <source>Support <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre class=&quot;d-inline&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ '{{instanceName}}' }}"/><x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> template variable</source>
-        <target state="new">Support <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre class=&quot;d-inline&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ '{{instanceName}}' }}"/><x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> template variable</target>
+        <target state="translated">Ondersteun <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre class=&quot;d-inline&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ '{{instanceName}}' }}"/><x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> sjabloonvariable</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">120</context>
@@ -12805,9 +12805,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">131</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3284638679883263272" datatype="html">
+      <trans-unit id="3284638679883263272" datatype="html" xml:space="preserve">
         <source>ADVANCED</source>
-        <target state="new">ADVANCED</target>
+        <target state="translated">GEAVANCEERD</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">148</context>
