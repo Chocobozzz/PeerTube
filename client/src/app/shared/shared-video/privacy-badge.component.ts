@@ -20,7 +20,8 @@ export class PrivacyBadgeComponent implements OnChanges {
     [VideoPrivacy.INTERNAL]: 'badge-yellow',
     [VideoPrivacy.PRIVATE]: 'badge-grey',
     [VideoPrivacy.PASSWORD_PROTECTED]: 'badge-purple',
-    [VideoPrivacy.UNLISTED]: 'badge-blue'
+    [VideoPrivacy.UNLISTED]: 'badge-blue',
+    [VideoPrivacy.PREMIERE]: 'badge-yellow'
   }
 
   private playlistBadges: { [id in VideoPlaylistPrivacyType]: string } = {
@@ -49,6 +50,12 @@ export class PrivacyBadgeComponent implements OnChanges {
 
   private buildLabel () {
     if (this.video()) {
+      // For PREMIERE videos, always show "Premiere" even if scheduled
+      if (this.video().privacy.id === VideoPrivacy.PREMIERE) {
+        return this.video().privacy.label
+      }
+      
+      // For other privacy types, show "Scheduled" if there's a scheduled update
       if (this.video().scheduledUpdate) return $localize`Scheduled`
 
       return this.video().privacy.label
@@ -64,6 +71,11 @@ export class PrivacyBadgeComponent implements OnChanges {
   private buildTooltip () {
     if (this.video()?.scheduledUpdate) {
       const updateAt = new Date(this.video().scheduledUpdate.updateAt.toString()).toLocaleString(this.localeId)
+      
+      if (this.video().privacy.id === VideoPrivacy.PREMIERE) {
+        return $localize`Premieres on ${updateAt}`
+      }
+      
       return $localize`Scheduled on ${updateAt}`
     }
 
