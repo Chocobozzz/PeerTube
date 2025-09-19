@@ -154,7 +154,7 @@ export type MChannelAccountSummaryFormattable =
 
 export type MChannelFormattable =
   & FunctionProperties<MChannel>
-  & Pick<MChannel, 'id' | 'name' | 'description' | 'createdAt' | 'updatedAt' | 'support'>
+  & Pick<MChannel, 'id' | 'name' | 'description' | 'createdAt' | 'updatedAt' | 'support' | 'isApproved'>
   & Use<'Actor', MActorFormattable>
   & PickWithOpt<VideoChannelModel, 'Account', MAccountFormattable>
 

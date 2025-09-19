@@ -69,6 +69,7 @@
 
             <div class="actor-handle">
               <span>&#64;{{ videoChannel.nameWithHost }}</span>
+              <my-global-icon *ngIf="videoChannel.isApproved" iconName="green-check" aria-hidden="true"></my-global-icon>
 
               <my-copy-button
                 [value]="videoChannel.nameWithHostForced" i18n-notification notification="Handle copied"
