@@ -39,23 +39,23 @@
   </ng-template>
 
   <ng-template #tableCells let-job>
-    <td *ngIf="table.isColumnDisplayed('id')" class="job-id c-hand" [title]="job.id">{{ job.id }}</td>
+    <td *ngIf="table.isColumnDisplayed('id')" class="job-i" [title]="job.id">{{ job.id }}</td>
 
-    <td *ngIf="table.isColumnDisplayed('type')" class="job-type c-hand" >
+    <td *ngIf="table.isColumnDisplayed('type')" class="job-typ" >
       <span class="pt-badge ellipsis" [ngClass]="getRandomJobTypeBadge(job.type)">{{ job.type }}</span>
     </td>
 
-    <td *ngIf="table.isColumnDisplayed('priority')" class="job-priority c-hand" >{{ job.priority }}</td>
+    <td *ngIf="table.isColumnDisplayed('priority')" class="job-priorit" >{{ job.priority }}</td>
 
-    <td *ngIf="table.isColumnDisplayed('state') && table.isColumnDisplayed('state')" class="job-state c-hand" >
+    <td *ngIf="table.isColumnDisplayed('state') && table.isColumnDisplayed('state')" class="job-stat" >
       <span class="ellipsis" [ngClass]="getJobStateClasses(job.state)">{{ job.state }}</span>
     </td>
 
-    <td *ngIf="table.isColumnDisplayed('progress')" class="job-progress c-hand" >
+    <td *ngIf="table.isColumnDisplayed('progress')" class="job-progres" >
       <ng-container *ngIf="hasProgress(job)">{{ getProgress(job) }}</ng-container>
     </td>
 
-    <td *ngIf="table.isColumnDisplayed('createdAt')" class="job-date c-hand" >{{ job.createdAt }}</td>
+    <td *ngIf="table.isColumnDisplayed('createdAt')" class="job-dat" >{{ job.createdAt }}</td>
 
     <td *ngIf="table.isColumnDisplayed('processed')" class="fs-7">
       <div>{{ job.processedOn }}</div>
