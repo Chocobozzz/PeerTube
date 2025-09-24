@@ -9,7 +9,7 @@
 } @else if (hasEnded()) {
   <my-alert type="primary" i18n>Your live has ended.</my-alert>
 } @else {
-  <div [formGroup]="form">
+  <form [formGroup]="form" id="video-manage-form">
     <my-alert class="d-block mb-4" type="primary">
       @if (isStreaming()) {
         <ng-container i18n>Live configuration is unavailable because you are streaming in this live.</ng-container>
@@ -138,5 +138,5 @@
         </div>
       </div>
     </div>
-  </div>
+  </form>
 }

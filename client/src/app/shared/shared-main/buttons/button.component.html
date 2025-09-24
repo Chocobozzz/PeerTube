@@ -15,7 +15,7 @@
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </a>
 } @else {
-  <button type="button" class="action-button ellipsis" [ngClass]="classes" [disabled]="disabled()" [ngbTooltip]="tooltip()" [attr.title]="title()">
+  <button type="button" class="action-button ellipsis" [ngClass]="classes" [disabled]="disabled()" [ngbTooltip]="tooltip()" [attr.title]="title()" [attr.form]="form()">
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </button>
 }

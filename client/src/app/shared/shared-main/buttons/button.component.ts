@@ -66,6 +66,7 @@ export class ButtonComponent implements OnChanges, AfterViewInit {
   readonly rounded = input(false, { transform: booleanAttribute })
   readonly small = input(false, { transform: booleanAttribute })
   readonly show = input(false, { transform: booleanAttribute })
+  readonly form = input<string>()
 
   readonly labelContent = viewChild<ElementRef>('labelContent')
 

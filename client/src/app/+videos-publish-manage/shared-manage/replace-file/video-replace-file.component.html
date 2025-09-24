@@ -7,7 +7,7 @@
 @if (getUnavailability()) {
   <my-alert type="primary" i18n>{{ getUnavailability() }}</my-alert>
 } @else {
-  <div class="root" myDragDrop (fileDropped)="onFileDropped($event)">
+  <form class="root" myDragDrop (fileDropped)="onFileDropped($event)" id="video-manage-form">
     <div *ngIf="videoEdit.getVideoSource()" class="current-filename">
       <div class="fs-7" i18n>Current uploaded file:</div>
 
@@ -30,5 +30,5 @@
         </my-reactive-file>
       </div>
     </div>
-  </div>
+  </form>
 }

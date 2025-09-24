@@ -20,6 +20,7 @@
             theme="primary" class="save-button"
             icon="circle-tick"
             [disabled]="!canUpdate() || !hasPendingChanges()"  (click)="onWantToUpdate()"
+            form="video-manage-form"
           >
             @if (hasStudioTasks()) {
               <ng-container i18n>Save and run studio tasks</ng-container>

@@ -7,7 +7,7 @@
 @if (isLive()) {
   <my-alert type="primary" i18n>Chapters are not available on a live.</my-alert>
 } @else {
-  <div [formGroup]="form">
+  <form [formGroup]="form" id="video-manage-form">
     <div class="row mb-5">
       <div class="chapters col-md-12 col-xl-6" formArrayName="chapters">
         <my-alert type="primary" i18n>
@@ -58,5 +58,5 @@
 
       <my-embed *ngIf="videoEdit.isPublishedVOD()" class="col-md-12 col-xl-6" [video]="videoEdit.getVideoAttributes()" [version]="getEmbedVersion()"></my-embed>
     </div>
-  </div>
+  </form>
 }

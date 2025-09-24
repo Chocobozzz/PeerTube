@@ -5,7 +5,7 @@
     <div class="buttons">
       <my-button theme="secondary" class="pre-config" (click)="openConfigWizard()" i18n>Open config wizard</my-button>
 
-      <my-button theme="primary" class="save-button" icon="circle-tick" [disabled]="!canUpdate()" (click)="onSave($event)" i18n>Save</my-button>
+      <my-button form="admin-config-form" theme="primary" class="save-button" icon="circle-tick" [disabled]="!canUpdate()" (click)="onSave($event)" i18n>Save</my-button>
     </div>
   </div>
 

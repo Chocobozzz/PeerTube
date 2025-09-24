@@ -7,7 +7,7 @@
 @if (isLive()) {
   <my-alert type="primary" i18n>Captions are not available on a live.</my-alert>
 } @else {
-  <div class="captions">
+  <form class="captions" id="video-manage-form">
     <my-alert type="primary" *ngIf="displayTranscriptionInfo && isTranscriptionEnabled() && !hasCaptions()" i18n>
       Subtitles will be automatically generated from your video.
     </my-alert>
@@ -69,7 +69,7 @@
       </button>
     </div>
 
-  </div>
+  </form>
 }
 
 <my-video-caption-add-modal
