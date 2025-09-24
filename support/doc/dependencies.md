@@ -4,7 +4,7 @@
 
 Main dependencies supported by PeerTube:
 
- * `node` LTS (>= 20.19 or >= 22.12)
+ * `node` LTS (**>= 20.19 and < 21** or **>= 22.12 and <23**)
  * `yarn` 1.x for **PeerTube <= 7.3** or `pnpm` >= 10.x for **PeerTube next**
  * `postgres` >=10.x
  * `redis-server` >=6.x
