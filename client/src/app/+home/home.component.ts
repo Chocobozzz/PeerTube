@@ -12,6 +12,7 @@ export class HomeComponent implements OnInit, OnDestroy, DisableForReuseHook {
   private customPageService = inject(CustomPageService)
   private sub: Subscription
   private peertubeRouter = inject(PeerTubeRouterService)
+  private disabled = false
 
   readonly contentWrapper = viewChild<ElementRef<HTMLInputElement>>('contentWrapper')
 
@@ -27,6 +28,8 @@ export class HomeComponent implements OnInit, OnDestroy, DisableForReuseHook {
       this.sub = fromEvent(window, 'scroll')
         .pipe(debounceTime(250))
         .subscribe(() => {
+          if (this.disabled) return
+
           if (window.pageYOffset > 300) {
             this.peertubeRouter.silentNavigate([], {})
             this.sub.unsubscribe()
@@ -41,8 +44,10 @@ export class HomeComponent implements OnInit, OnDestroy, DisableForReuseHook {
   }
 
   disableForReuse () {
+    this.disabled = true
   }
 
   enabledForReuse () {
+    this.disabled = true
   }
 }
