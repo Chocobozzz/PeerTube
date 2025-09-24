@@ -51,7 +51,7 @@ export class ActorAvatarEditComponent implements OnInit, OnChanges {
     this.maxAvatarSize = config.avatar.file.size.max
     this.avatarExtensions = config.avatar.file.extensions.join(', ')
 
-    this.avatarFormat = $localize`max size: 192*192px, ${getBytes(this.maxAvatarSize)} extensions: ${this.avatarExtensions}`
+    this.avatarFormat = $localize`max size: ${getBytes(this.maxAvatarSize)} extensions: ${this.avatarExtensions}`
   }
 
   ngOnChanges () {
