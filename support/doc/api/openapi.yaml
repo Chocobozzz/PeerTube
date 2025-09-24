@@ -2563,52 +2563,8 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                abuseAsModerator:
-                  $ref: '#/components/schemas/NotificationSettingValue'
-                videoAutoBlacklistAsModerator:
-                  $ref: '#/components/schemas/NotificationSettingValue'
-                newUserRegistration:
-                  $ref: '#/components/schemas/NotificationSettingValue'
+              $ref: '#/components/schemas/UserNotificationSettings'
 
-                newVideoFromSubscription:
-                  $ref: '#/components/schemas/NotificationSettingValue'
-
-                blacklistOnMyVideo:
-                  $ref: '#/components/schemas/NotificationSettingValue'
-                myVideoPublished:
-                  $ref: '#/components/schemas/NotificationSettingValue'
-                myVideoImportFinished:
-                  $ref: '#/components/schemas/NotificationSettingValue'
-
-                commentMention:
-                  $ref: '#/components/schemas/NotificationSettingValue'
-                newCommentOnMyVideo:
-                  $ref: '#/components/schemas/NotificationSettingValue'
-
-                newFollow:
-                  $ref: '#/components/schemas/NotificationSettingValue'
-                newInstanceFollower:
-                  $ref: '#/components/schemas/NotificationSettingValue'
-                autoInstanceFollowing:
-                  $ref: '#/components/schemas/NotificationSettingValue'
-
-                abuseStateChange:
-                  $ref: '#/components/schemas/NotificationSettingValue'
-                abuseNewMessage:
-                  $ref: '#/components/schemas/NotificationSettingValue'
-
-                newPeerTubeVersion:
-                  $ref: '#/components/schemas/NotificationSettingValue'
-                newPluginVersion:
-                  $ref: '#/components/schemas/NotificationSettingValue'
-
-                myVideoStudioEditionFinished:
-                  $ref: '#/components/schemas/NotificationSettingValue'
-
-                myVideoTranscriptionGenerated:
-                  $ref: '#/components/schemas/NotificationSettingValue'
       responses:
         '204':
           description: successful operation
@@ -10649,25 +10605,60 @@ components:
           maxItems: 100
           items:
             $ref: '#/components/schemas/Video'
+
+    UserNotificationSettings:
+      properties:
+        abuseAsModerator:
+          $ref: '#/components/schemas/NotificationSettingValue'
+        videoAutoBlacklistAsModerator:
+          $ref: '#/components/schemas/NotificationSettingValue'
+        newUserRegistration:
+          $ref: '#/components/schemas/NotificationSettingValue'
+
+        newVideoFromSubscription:
+          $ref: '#/components/schemas/NotificationSettingValue'
+
+        blacklistOnMyVideo:
+          $ref: '#/components/schemas/NotificationSettingValue'
+        myVideoPublished:
+          $ref: '#/components/schemas/NotificationSettingValue'
+        myVideoImportFinished:
+          $ref: '#/components/schemas/NotificationSettingValue'
+
+        commentMention:
+          $ref: '#/components/schemas/NotificationSettingValue'
+        newCommentOnMyVideo:
+          $ref: '#/components/schemas/NotificationSettingValue'
+
+        newFollow:
+          $ref: '#/components/schemas/NotificationSettingValue'
+        newInstanceFollower:
+          $ref: '#/components/schemas/NotificationSettingValue'
+        autoInstanceFollowing:
+          $ref: '#/components/schemas/NotificationSettingValue'
+
+        abuseStateChange:
+          $ref: '#/components/schemas/NotificationSettingValue'
+        abuseNewMessage:
+          $ref: '#/components/schemas/NotificationSettingValue'
+
+        newPeerTubeVersion:
+          $ref: '#/components/schemas/NotificationSettingValue'
+        newPluginVersion:
+          $ref: '#/components/schemas/NotificationSettingValue'
+
+        myVideoStudioEditionFinished:
+          $ref: '#/components/schemas/NotificationSettingValue'
+
+        myVideoTranscriptionGenerated:
+          $ref: '#/components/schemas/NotificationSettingValue'
+
     User:
       properties:
-        account:
-          $ref: '#/components/schemas/Account'
-        autoPlayNextVideo:
-          type: boolean
-          description: Automatically start playing the upcoming video after the currently playing video
-        autoPlayNextVideoPlaylist:
-          type: boolean
-          description: Automatically start playing the video on the playlist after the currently playing video
-        autoPlayVideo:
-          type: boolean
-          description: Automatically start playing the video on the watch page
-        blocked:
-          type: boolean
-        blockedReason:
-          type: string
-        createdAt:
-          type: string
+        id:
+          $ref: '#/components/schemas/id'
+        username:
+          $ref: '#/components/schemas/username'
         email:
           type: string
           format: email
@@ -10675,20 +10666,9 @@ components:
         emailVerified:
           type: boolean
           description: Has the user confirmed their email address?
-        id:
-          $ref: '#/components/schemas/id'
-        pluginAuth:
-          type: string
-          description: Auth plugin to use to authenticate the user
-        lastLoginDate:
-          type: string
-          format: date-time
-        noInstanceConfigWarningModal:
+        emailPublic:
           type: boolean
-        noAccountSetupWarningModal:
-          type: boolean
-        noWelcomeModal:
-          type: boolean
+          description: Has the user accepted to display the email publicly?
 
         nsfwPolicy:
           $ref: '#/components/schemas/NSFWPolicy'
@@ -10701,6 +10681,44 @@ components:
         nsfwFlagsBlurred:
           $ref: '#/components/schemas/NSFWFlag'
 
+        adminFlags:
+          $ref: '#/components/schemas/UserAdminFlags'
+
+        autoPlayNextVideo:
+          type: boolean
+          description: Automatically start playing the upcoming video after the currently playing video
+        autoPlayNextVideoPlaylist:
+          type: boolean
+          description: Automatically start playing the video on the playlist after the currently playing video
+        autoPlayVideo:
+          type: boolean
+          description: Automatically start playing the video on the watch page
+
+        p2pEnabled:
+          type: boolean
+          description: whether to enable P2P in the player or not
+
+        videosHistoryEnabled:
+          type: boolean
+          description: whether to keep track of watched history or not
+        videoLanguages:
+          type: array
+          items:
+            type: string
+          description: list of languages to filter videos down to
+        language:
+          type: string
+          description: default language for this user
+
+        videoQuota:
+          type: integer
+          description: The user video quota in bytes
+          example: -1
+        videoQuotaDaily:
+          type: integer
+          description: The user daily video quota in bytes
+          example: -1
+
         role:
           type: object
           properties:
@@ -10712,26 +10730,49 @@ components:
                 - User
                 - Moderator
                 - Administrator
+
         theme:
           type: string
           description: Theme enabled by this user
-        username:
-          $ref: '#/components/schemas/username'
+
+        account:
+          $ref: '#/components/schemas/Account'
+
+        notificationSettings:
+          $ref: '#/components/schemas/UserNotificationSettings'
+
         videoChannels:
           type: array
           items:
             $ref: '#/components/schemas/VideoChannel'
-        videoQuota:
-          type: integer
-          description: The user video quota in bytes
-          example: -1
-        videoQuotaDaily:
-          type: integer
-          description: The user daily video quota in bytes
-          example: -1
-        p2pEnabled:
+
+        blocked:
           type: boolean
-          description: Enable P2P in the player
+        blockedReason:
+          type: string
+
+        noInstanceConfigWarningModal:
+          type: boolean
+        noAccountSetupWarningModal:
+          type: boolean
+        noWelcomeModal:
+          type: boolean
+
+        createdAt:
+          type: string
+
+        pluginAuth:
+          type: string
+          description: Auth plugin to use to authenticate the user
+
+        lastLoginDate:
+          type: string
+          format: date-time
+
+        twoFactorEnabled:
+          type: boolean
+          description: Whether the user has enabled two-factor authentication or not
+
     UserWithStats:
       allOf:
         - $ref: '#/components/schemas/User'
