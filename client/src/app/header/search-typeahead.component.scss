@@ -1,6 +1,6 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_form-mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
 
 #search-video {
   text-overflow: ellipsis;
@@ -13,7 +13,7 @@
   }
 
   &::placeholder {
-    color: pvar(--input-placeholder);
+    color: pvar(--input-placeholder-color);
   }
 }
 
@@ -40,7 +40,7 @@
 .jump-to-suggestions {
   top: 100%;
   left: 0;
-  z-index: z('search-typeahead');
+  z-index: z("search-typeahead");
   width: 100%;
 }
 
@@ -49,7 +49,7 @@
 .suggestion {
   border: 1px solid pvar(--bg);
   background: pvar(--bg-secondary-400);
-  transition: .3s ease;
+  transition: 0.3s ease;
   transition-property: box-shadow;
   cursor: pointer;
 }
@@ -65,13 +65,13 @@
 #typeahead-input-help {
   margin-top: 9px;
   width: 100%;
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
   white-space: normal;
 
   ul {
     list-style: none;
     padding: 0;
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
 
     em {
       font-weight: 600;

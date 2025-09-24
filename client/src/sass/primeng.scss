@@ -18,6 +18,10 @@
 .p-inputchips-input {
   // TODO: fix in upstream?
   gap: 1rem !important;
+
+  input::placeholder {
+    font-size: pvar(--input-placeholder-font-size);
+  }
 }
 
 .p-inputchips-input:has(.p-inputchips-chip) {

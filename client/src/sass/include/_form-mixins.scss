@@ -18,8 +18,8 @@
   @include rounded-line-height-1-5($font-size);
 
   &::placeholder {
-    color: pvar(--input-placeholder);
-    font-size: 14px;
+    color: pvar(--input-placeholder-color);
+    font-size: pvar(--input-placeholder-font-size);
   }
 
   &[readonly] {

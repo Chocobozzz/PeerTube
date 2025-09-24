@@ -154,7 +154,7 @@ export default {
           invalidBorderColor: 'var(--red)',
           color: 'var(--input-fg)',
           disabledColor: 'var(--fg-300)',
-          placeholderColor: 'var(--input-placeholder)',
+          placeholderColor: 'var(--input-placeholder-color)',
           invalidPlaceholderColor: 'var(--red)',
           floatLabelColor: 'var(--fg-300)',
           floatLabelFocusColor: 'var(--primary)',

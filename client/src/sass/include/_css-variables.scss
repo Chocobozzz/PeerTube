@@ -33,7 +33,9 @@
   --input-danger-fg: #9C221C;
   --input-danger-bg: #FEBBB2;
 
-  --input-placeholder: var(--inputPlaceholderColor, #{pvar(--fg-50)});
+  --input-placeholder-color: var(--inputPlaceholderColor, #{pvar(--fg-50)});
+  --input-placeholder-font-size: 0.875rem;
+
   --input-border-color: var(--inputBorderColor, #{pvar(--input-bg)});
   --input-border-width: 1px;
 
@@ -128,7 +130,7 @@
     --menu-bg: hsl(0 19% 89%);
 
     --secondary-icon-color: hsl(0, 9%, 51%);
-    --input-placeholder: hsl(0, 9%, 51%);
+    --input-placeholder-color: hsl(0, 9%, 51%);
 
     --input-check-active-fg: #{pvar(--bg)};
     --input-check-active-bg: #{pvar(--fg-250)};

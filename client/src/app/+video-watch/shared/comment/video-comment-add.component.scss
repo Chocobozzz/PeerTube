@@ -1,7 +1,7 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_button-mixins' as *;
-@use '_form-mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_button-mixins" as *;
+@use "_form-mixins" as *;
 
 $markdown-icon-height: 18px;
 $markdown-icon-width: 30px;
@@ -53,7 +53,7 @@ form {
 
   ::ng-deep .help-tooltip-button {
     my-global-icon {
-      color: pvar(--input-placeholder);
+      color: pvar(--input-placeholder-color);
       height: $markdown-icon-height;
       width: $markdown-icon-width;
 
