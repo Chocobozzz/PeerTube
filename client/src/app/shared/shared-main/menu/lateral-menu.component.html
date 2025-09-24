@@ -24,7 +24,7 @@
             <span class="label" *ngTemplateOutlet="label"></span>
           </my-unavailable-menu-entry>
         } @else {
-          <a [routerLink]="entry.routerLink" queryParamsHandling="merge" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a [routerLink]="entry.routerLink" [queryParams]="globalQueryParams()" queryParamsHandling="merge" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
             <ng-container *ngTemplateOutlet="icon"></ng-container>
             <ng-container *ngTemplateOutlet="label"></ng-container>
           </a>

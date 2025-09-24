@@ -1,4 +1,4 @@
-import { NgFor, NgIf } from '@angular/common'
+import { CommonModule } from '@angular/common'
 import { Component, LOCALE_ID, OnInit, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
@@ -6,7 +6,7 @@ import { Notifier, PeerTubeRouterService } from '@app/core'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 import { NumberFormatterPipe } from '@app/shared/shared-main/common/number-formatter.pipe'
 import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
-import { NgbNav, NgbNavContent, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap'
+import { NgbNavModule, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap'
 import { secondsToTime } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
@@ -63,20 +63,14 @@ ChartJSDefaults.color = getComputedStyle(document.documentElement).getPropertyVa
   ],
   providers: [ NumberFormatterPipe ],
   imports: [
-    NgFor,
-    NgIf,
+    CommonModule,
     HelpComponent,
     EmbedComponent,
     SelectOptionsComponent,
     FormsModule,
-    NgbNav,
-    NgbNavItem,
-    NgbNavLink,
-    NgbNavLinkBase,
-    NgbNavContent,
+    NgbNavModule,
     ChartModule,
     ButtonComponent,
-    NgbNavOutlet,
     GlobalIconComponent
   ]
 })
@@ -184,6 +178,10 @@ export class VideoStatsComponent implements OnInit {
       this.statsEndDate = params.endDate
         ? new Date(params.endDate)
         : undefined
+
+      if (!this.statsStartDate && !this.statsEndDate) {
+        this.currentDateFilter = 'all'
+      }
 
       this.loadChart()
       this.loadOverallStats()

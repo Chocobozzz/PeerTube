@@ -41,6 +41,7 @@ export type LateralMenuConfig = {
 })
 export class LateralMenuComponent {
   config = input.required<LateralMenuConfig>()
+  globalQueryParams = input<Record<string, any>>()
 
   isDisplayed (entry: LateralMenuLinkEntry) {
     if (!entry.isDisplayed) return true

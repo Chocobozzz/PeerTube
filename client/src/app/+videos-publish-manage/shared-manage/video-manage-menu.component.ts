@@ -8,7 +8,7 @@ import { VideoManageController } from './video-manage-controller.service'
 
 @Component({
   selector: 'my-video-manage-menu',
-  template: '<my-lateral-menu [config]="menuConfig" />',
+  template: '<my-lateral-menu [config]="menuConfig" [globalQueryParams]="globalQueryParams" />',
   imports: [
     CommonModule,
     LateralMenuComponent
@@ -21,6 +21,13 @@ export class VideoManageMenuComponent implements OnInit {
   readonly canWatch = input.required<boolean, string | boolean>({ transform: booleanAttribute })
 
   menuConfig: LateralMenuConfig
+
+  // Remove these query params when navigating between pages
+  // They are added by the stats page
+  globalQueryParams: Record<string, any> = {
+    startDate: null,
+    endDate: null
+  }
 
   private videoEdit: VideoEdit
   private replaceFileEnabled: boolean
