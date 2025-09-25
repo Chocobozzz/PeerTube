@@ -4063,7 +4063,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="5108072242786374364" datatype="html" xml:space="preserve">
         <source>Welcome to <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>, dear user!</source>
-        <target state="translated">Et donem la benvinguda a <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>!</target>
+        <target state="translated">Us donem la benvinguda a <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">3</context>
