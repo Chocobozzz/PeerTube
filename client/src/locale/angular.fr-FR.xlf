@@ -16213,7 +16213,7 @@
       </trans-unit>
       <trans-unit id="5504952199515017930" datatype="html" xml:space="preserve">
         <source>None - no upload possible</source>
-        <target state="translated">Aucun - la publicaiton est impossible</target>
+        <target state="translated">Aucun - la publication est impossible</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-quota-options.ts</context>
           <context context-type="linenumber">6</context>
