@@ -1895,7 +1895,7 @@
       </trans-unit>
       <trans-unit id="227566219157426488" datatype="html" xml:space="preserve">
         <source>Default sensitive content policy</source>
-        <target state="translated">Standaard gevoelige inhoud beleid</target>
+        <target state="translated">Standaardbeleid voor gevoelige inhoud</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">13,14</context>
@@ -6687,9 +6687,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">15,17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5044207350353038684" datatype="html">
+      <trans-unit id="5044207350353038684" datatype="html" xml:space="preserve">
         <source>Remote authentication</source>
-        <target state="new">Remote authentication</target>
+        <target state="translated">Authenticatie van elders</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.html</context>
           <context context-type="linenumber">21,23</context>
