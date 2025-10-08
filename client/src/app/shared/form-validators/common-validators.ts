@@ -9,7 +9,7 @@ export const REQUIRED_VALIDATOR: BuildFormValidator = {
 }
 
 export const URL_VALIDATOR: BuildFormValidator = {
-  VALIDATORS: [ Validators.pattern(/^https:\/\//) ],
+  VALIDATORS: [ Validators.pattern(/^https?:\/\//) ],
   MESSAGES: {
     pattern: $localize`This field must be a URL`
   }
