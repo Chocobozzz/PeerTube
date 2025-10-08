@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, forwardRef, inject, input } from '@angular/core'
+import { booleanAttribute, Component, forwardRef, inject, input, OnChanges } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -34,7 +34,7 @@ import { SelectCheckboxComponent } from './select-checkbox.component'
   ],
   imports: [ SelectCheckboxComponent, FormsModule ]
 })
-export class SelectCheckboxDefaultAllComponent implements ControlValueAccessor {
+export class SelectCheckboxDefaultAllComponent implements ControlValueAccessor, OnChanges {
   private notifier = inject(Notifier)
 
   readonly inputId = input.required<string>()
@@ -56,8 +56,13 @@ export class SelectCheckboxDefaultAllComponent implements ControlValueAccessor {
   }
 
   writeValue (items: string[]) {
-    if (items) this.selectedItems = items
-    else this.selectAll()
+    if (items) {
+      this.selectedItems = items
+      this.updateLabel()
+      return
+    }
+
+    this.selectAll()
   }
 
   registerOnChange (fn: (_: any) => void) {
@@ -66,6 +71,10 @@ export class SelectCheckboxDefaultAllComponent implements ControlValueAccessor {
 
   registerOnTouched () {
     // Unused
+  }
+
+  ngOnChanges () {
+    this.updateLabel()
   }
 
   onModelChange () {
@@ -82,7 +91,7 @@ export class SelectCheckboxDefaultAllComponent implements ControlValueAccessor {
       this.selectAll()
     }
 
-    this.checkMaxItems()
+    this.checkMaxItemsOrSelectAll()
   }
 
   private isMaxItemsValid () {
@@ -97,7 +106,7 @@ export class SelectCheckboxDefaultAllComponent implements ControlValueAccessor {
     return true
   }
 
-  private checkMaxItems () {
+  private checkMaxItemsOrSelectAll () {
     if (!this.isMaxItemsValid()) {
       this.notifier.error(
         formatICU(
@@ -118,6 +127,7 @@ export class SelectCheckboxDefaultAllComponent implements ControlValueAccessor {
 
   private updateLabel () {
     const availableItems = this.availableItems()
+
     if (this.selectedItems && availableItems && this.selectedItems.length === availableItems.length) {
       this.selectedItemsLabel = this.allSelectedLabel()
     } else {
