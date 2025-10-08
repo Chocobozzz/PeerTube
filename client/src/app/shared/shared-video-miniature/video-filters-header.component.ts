@@ -211,9 +211,9 @@ export class VideoFiltersHeaderComponent implements OnInit {
   }
 
   private patchForm (emitEvent: boolean) {
-    const defaultValues = this.filters().toFormObject()
-    this.form.patchValue(defaultValues, { emitEvent })
+    const values = this.filters().toFormObject()
+    this.form.patchValue(values, { emitEvent })
 
-    debugLogger('Patch form', { values: defaultValues })
+    debugLogger('Patch form', { values })
   }
 }
