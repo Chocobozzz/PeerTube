@@ -1,5 +1,6 @@
 import { VideoFileStream, VideoInclude } from '@peertube/peertube-models'
 import { logger } from '@server/helpers/logger.js'
+import { ServerConfigManager } from '@server/lib/server-config-manager.js'
 import { getServerActor } from '@server/models/application/application.js'
 import express from 'express'
 import truncate from 'lodash-es/truncate.js'
@@ -132,9 +133,13 @@ async function getSitemapLocalVideoUrls () {
 
 function getSitemapBasicUrls () {
   const paths = [
-    '/about/instance',
-    '/videos/local'
+    '/about/instance/home',
+    '/videos/browse?scope=local'
   ]
+
+  if (ServerConfigManager.Instance.isHomepageEnabled()) {
+    paths.push('/home')
+  }
 
   return paths.map(p => ({ url: WEBSERVER.URL + p }))
 }

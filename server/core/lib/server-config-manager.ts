@@ -49,6 +49,10 @@ class ServerConfigManager {
     this.homepageEnabled = !!content
   }
 
+  isHomepageEnabled () {
+    return this.homepageEnabled
+  }
+
   async getHTMLServerConfig (): Promise<HTMLServerConfig> {
     if (this.serverCommit === undefined) this.serverCommit = await getServerCommit()
 
