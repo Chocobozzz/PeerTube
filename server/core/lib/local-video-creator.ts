@@ -314,6 +314,10 @@ export class LocalVideoCreator {
         ? new Date(videoInfo.originallyPublishedAt)
         : null,
 
+      publishedAt: this.videoAttributes.scheduleUpdate?.updateAt
+        ? new Date(this.videoAttributes.scheduleUpdate?.updateAt)
+        : undefined,
+
       uuid: buildUUID(),
       duration: videoInfo.duration
     }

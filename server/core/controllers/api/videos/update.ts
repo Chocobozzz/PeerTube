@@ -247,15 +247,27 @@ async function updateVideoPrivacy (options: {
   return isNewVideoForFederation
 }
 
-function updateSchedule (videoInstance: MVideoFullLight, videoInfoToUpdate: VideoUpdate, transaction: Transaction) {
+async function updateSchedule (videoInstance: MVideoFullLight, videoInfoToUpdate: VideoUpdate, transaction: Transaction) {
   if (videoInfoToUpdate.scheduleUpdate) {
-    return ScheduleVideoUpdateModel.upsert({
+    const updateAt = new Date(videoInfoToUpdate.scheduleUpdate.updateAt)
+
+    videoInstance.publishedAt = updateAt
+    await videoInstance.save({ transaction })
+
+    await ScheduleVideoUpdateModel.upsert({
       videoId: videoInstance.id,
-      updateAt: new Date(videoInfoToUpdate.scheduleUpdate.updateAt),
+      updateAt,
       privacy: videoInfoToUpdate.scheduleUpdate.privacy || null
     }, { transaction })
-  } else if (videoInfoToUpdate.scheduleUpdate === null) {
-    return ScheduleVideoUpdateModel.deleteByVideoId(videoInstance.id, transaction)
+
+    return
+  }
+
+  if (videoInfoToUpdate.scheduleUpdate === null) {
+    videoInstance.publishedAt = new Date()
+    await videoInstance.save({ transaction })
+
+    await ScheduleVideoUpdateModel.deleteByVideoId(videoInstance.id, transaction)
   }
 }
 
