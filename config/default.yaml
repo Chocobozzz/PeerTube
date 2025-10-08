@@ -342,9 +342,6 @@ security:
   powered_by_header:
     enabled: true
 
-http_server:
-  request_timeout: '5 minutes'
-
 tracker:
   # If you disable the tracker, you disable the P2P on your PeerTube instance
   enabled: true
