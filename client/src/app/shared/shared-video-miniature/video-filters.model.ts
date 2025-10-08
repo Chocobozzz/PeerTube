@@ -112,6 +112,10 @@ export class VideoFilters {
     this.defaultValues.set('sort', sort)
   }
 
+  setDefaultLanguages (languages: string[]) {
+    this.defaultValues.set('languageOneOf', languages)
+  }
+
   setNSFWPolicy (user: Pick<User, 'nsfwPolicy' | 'nsfwFlagsDisplayed' | 'nsfwFlagsHidden' | 'nsfwFlagsWarned' | 'nsfwFlagsBlurred'>) {
     this.nsfwPolicy = user.nsfwPolicy
     this.nsfwFlagsDisplayed = user.nsfwFlagsDisplayed

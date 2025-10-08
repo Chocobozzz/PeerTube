@@ -1,5 +1,5 @@
-import { NgIf } from '@angular/common'
-import { Component, forwardRef, OnInit, inject, input } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { Component, forwardRef, inject, input, OnInit } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
@@ -35,7 +35,7 @@ import { SelectCheckboxDefaultAllComponent } from './select-checkbox-default-all
       multi: true
     }
   ],
-  imports: [ SelectCheckboxDefaultAllComponent, FormsModule, NgIf ]
+  imports: [ SelectCheckboxDefaultAllComponent, FormsModule, CommonModule ]
 })
 export class SelectLanguagesComponent implements ControlValueAccessor, OnInit {
   private server = inject(ServerService)

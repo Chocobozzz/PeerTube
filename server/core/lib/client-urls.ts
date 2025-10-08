@@ -16,7 +16,7 @@ export function getAdminAbuseUrl (abuse: MAbuseId) {
     ? '?search=%23' + abuse.id
     : ''
 
-  return WEBSERVER.URL + 'admin/moderation/abuses/list' + suffix
+  return WEBSERVER.URL + '/admin/moderation/abuses/list' + suffix
 }
 
 export function getUserAbuseUrl (abuse: MAbuseId) {

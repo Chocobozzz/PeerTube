@@ -270,7 +270,7 @@ export class VideosListComponent implements OnInit, OnDestroy {
   private loadUserSettings (user: User) {
     this.filters.setNSFWPolicy(user)
 
-    this.filters.load({ languageOneOf: user.videoLanguages })
+    this.filters.setDefaultLanguages(user.videoLanguages)
   }
 
   private reloadSyndicationItems () {
