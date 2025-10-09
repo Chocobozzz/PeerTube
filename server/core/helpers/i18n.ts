@@ -58,8 +58,18 @@ export function guessLanguageFromReq (req: express.Request, res: express.Respons
     CONFIG.INSTANCE.DEFAULT_LANGUAGE
 }
 
-export function t (key: string, language: string, context: Record<string, string | number> = {}) {
+export function t (
+  key: string,
+  language: string,
+  context: Record<string, string | number> = {}
+) {
   if (!language) throw new Error('Language is required for translation')
+
+  if (!i18next.isInitialized) {
+    logger.warn('i18next is not initialized, translation will not work')
+
+    return key
+  }
 
   return i18next.t(key, { lng: getCompleteLocale(language), ...context })
 }
@@ -82,3 +92,7 @@ export function setClientLanguageCookie (res: express.Response, language: string
     maxAge: 1000 * 3600 * 24 * 90 // 3 months
   })
 }
+
+// ---------------------------------------------------------------------------
+
+export const englishLanguage = 'en-US'

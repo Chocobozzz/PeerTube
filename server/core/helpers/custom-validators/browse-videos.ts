@@ -4,8 +4,14 @@ export function getBrowseVideosDefaultSortError (value: string, enabledTrendingA
   const availableOptions = [ '-publishedAt', '-originallyPublishedAt', 'name', '-trending', '-hot', '-likes', '-views' ]
 
   if (availableOptions.includes(value) === false) {
-    const error = `Browse videos default sort should be '${availableOptions.join('\' or \'')}', instead of '${value}'`
-    return language ? t(error, language) : error
+    const options = availableOptions.join('\' or \'')
+
+    // Only use `t` if language is provided, because i18n might not be initialized yet and can return `undefined`
+    if (language) {
+      return t(`Browse videos default sort should be '{options}', instead of '{value}'`, language, { options, value })
+    }
+
+    return `Browse videos default sort should be '${options}', instead of '${value}'`
   }
 
   const trendingSortAlgorithmMap = new Map<string, string>([
@@ -16,9 +22,15 @@ export function getBrowseVideosDefaultSortError (value: string, enabledTrendingA
   const currentTrendingSortAlgorithm = trendingSortAlgorithmMap.get(value)
 
   if (currentTrendingSortAlgorithm && enabledTrendingAlgorithms.includes(currentTrendingSortAlgorithm) === false) {
-    const error =
-      `Trending videos algorithm '${currentTrendingSortAlgorithm}' should be enabled if browse videos default sort is '${value}'`
-    return language ? t(error, language) : error
+    if (language) {
+      return t(
+        `Trending videos algorithm '{currentTrendingSortAlgorithm}' should be enabled if browse videos default sort is '{value}'`,
+        language,
+        { currentTrendingSortAlgorithm, value }
+      )
+    }
+
+    return `Trending videos algorithm '${currentTrendingSortAlgorithm}' should be enabled if browse videos default sort is '${value}'`
   }
 
   return null
@@ -28,8 +40,13 @@ export function getBrowseVideosDefaultScopeError (value: string, language?: stri
   const availableOptions = [ 'local', 'federated' ]
 
   if (availableOptions.includes(value) === false) {
-    const error = `Browse videos default scope should be '${availableOptions.join('\' or \'')}', instead of '${value}'`
-    return language ? t(error, language) : error
+    const options = availableOptions.join('\' or \'')
+
+    if (language) {
+      return t(`Browse videos default scope should be '{options}', instead of '{value}'`, language, { options, value })
+    }
+
+    return `Browse videos default scope should be '${options}', instead of '${value}'`
   }
 
   return null
