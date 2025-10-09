@@ -15,7 +15,6 @@ import { OAuthClientModel } from '../models/oauth/oauth-client.js'
 import { UserModel } from '../models/user/user.js'
 import { CONFIG, getLocalConfigFilePath, isEmailEnabled, reloadConfig } from './config.js'
 import { WEBSERVER } from './constants.js'
-import { englishLanguage } from '@server/helpers/i18n.js'
 
 async function checkActivityPubUrls () {
   const actor = await getServerActor()
@@ -390,14 +389,9 @@ function checkThumbnailsConfig () {
 }
 
 function checkBrowseVideosConfig () {
-  const sortError = getBrowseVideosDefaultSortError(
-    CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SORT,
-    CONFIG.TRENDING.VIDEOS.ALGORITHMS.ENABLED,
-    englishLanguage
-  )
-
+  const sortError = getBrowseVideosDefaultSortError(CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SORT, CONFIG.TRENDING.VIDEOS.ALGORITHMS.ENABLED)
   if (sortError) throw new Error(sortError)
 
-  const scopeError = getBrowseVideosDefaultScopeError(CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SCOPE, englishLanguage)
+  const scopeError = getBrowseVideosDefaultScopeError(CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SCOPE)
   if (scopeError) throw new Error(scopeError)
 }
