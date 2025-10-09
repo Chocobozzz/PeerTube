@@ -12,8 +12,7 @@ import { buildOriginalFileResolution, computeResolutionsToTranscode } from '../.
 
 const lTags = loggerTagsFactory('transcoding')
 
-export abstract class AbstractJobBuilder <P> {
-
+export abstract class AbstractJobBuilder<P> {
   async createOptimizeOrMergeAudioJobs (options: {
     video: MVideoFullLight
     videoFile: MVideoFile
@@ -74,9 +73,6 @@ export abstract class AbstractJobBuilder <P> {
         if (CONFIG.TRANSCODING.HLS.ENABLED === true) {
           const hasSplitAudioTranscoding = CONFIG.TRANSCODING.HLS.SPLIT_AUDIO_AND_VIDEO && videoFile.hasAudio()
 
-          // We had some issues with a web video quick transcoded while producing a HLS version of it
-          const copyCodecs = !quickTranscode
-
           const hlsPayloads: (P & { higherPriority?: boolean })[] = []
 
           hlsPayloads.push(
@@ -85,7 +81,7 @@ export abstract class AbstractJobBuilder <P> {
 
               separatedAudio: hasSplitAudioTranscoding,
 
-              copyCodecs,
+              copyCodecs: true,
 
               resolution: maxResolution,
               fps: maxFPS,
@@ -105,7 +101,7 @@ export abstract class AbstractJobBuilder <P> {
                   deleteWebVideoFiles: !CONFIG.TRANSCODING.WEB_VIDEOS.ENABLED,
                   separatedAudio: hasSplitAudioTranscoding,
 
-                  copyCodecs,
+                  copyCodecs: true,
                   resolution: 0,
                   fps: 0,
                   video,
@@ -183,7 +179,7 @@ export abstract class AbstractJobBuilder <P> {
       : this.buildWebVideoJobPayload({ video, resolution: maxResolution, fps, isNewVideo })
 
     // Low resolutions use the biggest one as ffmpeg input so we need to process max resolution (with audio) independently
-    const payloads: [ [ P ], ...(P[][]) ] = [ [ parent ] ]
+    const payloads: [[P], ...(P[][])] = [ [ parent ] ]
 
     // Process audio first to not override the max resolution where the audio stream will be removed
     if (transcodingType === 'hls' && separatedAudio) {
@@ -267,7 +263,7 @@ export abstract class AbstractJobBuilder <P> {
   protected abstract createJobs (options: {
     video: MVideoFullLight
     // Array of sequential jobs to create that depend on parent job
-    payloads: [ [ (P & { higherPriority?: boolean }) ], ...((P & { higherPriority?: boolean })[][]) ]
+    payloads: [[(P & { higherPriority?: boolean })], ...((P & { higherPriority?: boolean })[][])]
     user: MUserId | null
   }): Promise<void>
 
@@ -304,5 +300,4 @@ export abstract class AbstractJobBuilder <P> {
     fps: number
     isNewVideo: boolean
   }): P
-
 }
