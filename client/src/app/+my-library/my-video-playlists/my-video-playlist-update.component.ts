@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common'
-import { Component, OnDestroy, OnInit, inject } from '@angular/core'
+import { Component, inject, OnDestroy, OnInit } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, Notifier, ServerService } from '@app/core'
@@ -12,6 +12,7 @@ import {
   VIDEO_PLAYLIST_PRIVACY_VALIDATOR
 } from '@app/shared/form-validators/video-playlist-validators'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 import { VideoPlaylistUpdate } from '@peertube/peertube-models'
@@ -38,7 +39,8 @@ import { MyVideoPlaylistEdit } from './my-video-playlist-edit'
     MarkdownTextareaComponent,
     SelectOptionsComponent,
     SelectChannelComponent,
-    AlertComponent
+    AlertComponent,
+    PeertubeCheckboxComponent
   ]
 })
 export class MyVideoPlaylistUpdateComponent extends MyVideoPlaylistEdit implements OnInit, OnDestroy {

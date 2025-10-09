@@ -1,5 +1,5 @@
-import { NgClass, NgIf } from '@angular/common'
-import { Component, OnInit, inject } from '@angular/core'
+import { CommonModule, NgClass } from '@angular/common'
+import { Component, inject, OnInit } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Router, RouterLink } from '@angular/router'
 import { AuthService, Notifier, ServerService } from '@app/core'
@@ -12,9 +12,11 @@ import {
   VIDEO_PLAYLIST_PRIVACY_VALIDATOR
 } from '@app/shared/form-validators/video-playlist-validators'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 import { VideoPlaylistCreate, VideoPlaylistPrivacy } from '@peertube/peertube-models'
+import { of, switchMap } from 'rxjs'
 import { MarkdownTextareaComponent } from '../../shared/shared-forms/markdown-textarea.component'
 import { PreviewUploadComponent } from '../../shared/shared-forms/preview-upload.component'
 import { SelectChannelComponent } from '../../shared/shared-forms/select/select-channel.component'
@@ -26,7 +28,7 @@ import { MyVideoPlaylistEdit } from './my-video-playlist-edit'
   templateUrl: './my-video-playlist-edit.component.html',
   styleUrls: [ './my-video-playlist-edit.component.scss' ],
   imports: [
-    NgIf,
+    CommonModule,
     RouterLink,
     FormsModule,
     ReactiveFormsModule,
@@ -36,7 +38,8 @@ import { MyVideoPlaylistEdit } from './my-video-playlist-edit'
     MarkdownTextareaComponent,
     SelectOptionsComponent,
     SelectChannelComponent,
-    AlertComponent
+    AlertComponent,
+    PeertubeCheckboxComponent
   ]
 })
 export class MyVideoPlaylistCreateComponent extends MyVideoPlaylistEdit implements OnInit {
@@ -55,6 +58,7 @@ export class MyVideoPlaylistCreateComponent extends MyVideoPlaylistEdit implemen
       privacy: VIDEO_PLAYLIST_PRIVACY_VALIDATOR,
       description: VIDEO_PLAYLIST_DESCRIPTION_VALIDATOR,
       videoChannelId: VIDEO_PLAYLIST_CHANNEL_ID_VALIDATOR,
+      insertAtFirstPosition: null,
       thumbnailfile: null
     })
 
@@ -88,6 +92,20 @@ export class MyVideoPlaylistCreateComponent extends MyVideoPlaylistEdit implemen
     }
 
     this.videoPlaylistService.createVideoPlaylist(videoPlaylistCreate)
+      .pipe(
+        switchMap(({ videoPlaylist: { id } }) => {
+          if (body.insertAtFirstPosition !== true || !body.videoChannelId) return of(true)
+
+          const channelName = this.userVideoChannels.find(c => c.id === body.videoChannelId)?.name
+
+          return this.videoPlaylistService.getVideoPlaylist(id)
+            .pipe(
+              switchMap(playlist => {
+                return this.videoPlaylistService.reorderPlaylistsOfChannel(channelName, playlist.videoChannelPosition, 0)
+              })
+            )
+        })
+      )
       .subscribe({
         next: () => {
           this.notifier.success($localize`Playlist ${videoPlaylistCreate.displayName} created.`)
