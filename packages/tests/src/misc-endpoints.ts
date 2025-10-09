@@ -28,7 +28,6 @@ describe('Test misc endpoints', function () {
   })
 
   describe('Test a well known endpoints', function () {
-
     it('Should get security.txt', async function () {
       const res = await makeGetRequest({
         url: server.url,
@@ -134,7 +133,6 @@ describe('Test misc endpoints', function () {
   })
 
   describe('Test classic static endpoints', function () {
-
     it('Should get robots.txt', async function () {
       const res = await makeGetRequest({
         url: server.url,
@@ -167,7 +165,6 @@ describe('Test misc endpoints', function () {
   })
 
   describe('Test bots endpoints', function () {
-
     it('Should get the empty sitemap', async function () {
       const res = await makeGetRequest({
         url: server.url,
@@ -176,7 +173,7 @@ describe('Test misc endpoints', function () {
       })
 
       expect(res.text).to.contain('xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"')
-      expect(res.text).to.contain('<url><loc>' + server.url + '/about/instance</loc></url>')
+      expect(res.text).to.contain('<url><loc>' + server.url + '/about/instance/home</loc></url>')
     })
 
     it('Should get the empty cached sitemap', async function () {
@@ -187,7 +184,7 @@ describe('Test misc endpoints', function () {
       })
 
       expect(res.text).to.contain('xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"')
-      expect(res.text).to.contain('<url><loc>' + server.url + '/about/instance</loc></url>')
+      expect(res.text).to.contain('<url><loc>' + server.url + '/about/instance/home</loc></url>')
     })
 
     it('Should add videos, channel and accounts and get sitemap', async function () {
@@ -228,7 +225,7 @@ describe('Test misc endpoints', function () {
       })
 
       expect(res.text).to.contain('xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"')
-      expect(res.text).to.contain('<url><loc>' + server.url + '/about/instance</loc></url>')
+      expect(res.text).to.contain('<url><loc>' + server.url + '/about/instance/home</loc></url>')
 
       expect(res.text).to.contain('<video:title>video 1</video:title>')
       expect(res.text).to.contain('<video:title>video 2</video:title>')
