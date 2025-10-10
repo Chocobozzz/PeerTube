@@ -18,6 +18,13 @@ import {
   ProcessOptions,
   scheduleTranscodingProgress
 } from './common.js'
+import {
+  canDoQuickAudioTranscode,
+  canDoQuickVideoTranscode,
+  ffprobePromise,
+  getVideoStreamDimensionsInfo,
+  getVideoStreamFPS
+} from '@peertube/peertube-ffmpeg'
 
 export async function processWebVideoTranscoding (options: ProcessOptions<RunnerJobVODWebVideoTranscodingPayload>) {
   const { server, job, runnerToken } = options
@@ -46,7 +53,9 @@ export async function processWebVideoTranscoding (options: ProcessOptions<Runner
     logger.info(`Downloaded input file ${payload.input.videoFileUrl} for job ${job.jobToken}. Running web video transcoding.`)
 
     const ffmpegVod = buildFFmpegVOD({
-      onJobProgress: progress => { ffmpegProgress = progress }
+      onJobProgress: progress => {
+        ffmpegProgress = progress
+      }
     })
 
     await ffmpegVod.transcode({
@@ -108,15 +117,28 @@ export async function processHLSTranscoding (options: ProcessOptions<RunnerJobVO
     videoInputPath = await downloadInputFile({ url: payload.input.videoFileUrl, runnerToken, job })
     separatedAudioInputPath = await downloadSeparatedAudioFileIfNeeded({ urls: payload.input.separatedAudioFileUrl, runnerToken, job })
 
+    const inputProbe = await ffprobePromise(videoInputPath)
+    const { resolution } = await getVideoStreamDimensionsInfo(videoInputPath, inputProbe)
+    const fps = await getVideoStreamFPS(videoInputPath, inputProbe)
+
+    // Copy codecs if the input file can be quick transcoded (appropriate bitrate, codecs, etc.)
+    // And if the input resolution/fps are the same as the output resolution/fps
+    const copyCodecs = await canDoQuickAudioTranscode(videoInputPath, inputProbe) &&
+      await canDoQuickVideoTranscode(videoInputPath, fps) &&
+      resolution === payload.output.resolution &&
+      (!resolution || fps === payload.output.fps)
+
     logger.info(`Downloaded input file ${payload.input.videoFileUrl} for job ${job.jobToken}. Running HLS transcoding.`)
 
     const ffmpegVod = buildFFmpegVOD({
-      onJobProgress: progress => { ffmpegProgress = progress }
+      onJobProgress: progress => {
+        ffmpegProgress = progress
+      }
     })
 
     await ffmpegVod.transcode({
       type: 'hls',
-      copyCodecs: false,
+      copyCodecs,
 
       videoInputPath,
       separatedAudioInputPath,
@@ -172,7 +194,7 @@ export async function processAudioMergeTranscoding (options: ProcessOptions<Runn
   try {
     logger.info(
       `Downloading input files ${payload.input.audioFileUrl} and ${payload.input.previewFileUrl} ` +
-      `for audio merge transcoding job ${job.jobToken}`
+        `for audio merge transcoding job ${job.jobToken}`
     )
 
     audioPath = await downloadInputFile({ url: payload.input.audioFileUrl, runnerToken, job })
@@ -180,11 +202,13 @@ export async function processAudioMergeTranscoding (options: ProcessOptions<Runn
 
     logger.info(
       `Downloaded input files ${payload.input.audioFileUrl} and ${payload.input.previewFileUrl} ` +
-      `for job ${job.jobToken}. Running audio merge transcoding.`
+        `for job ${job.jobToken}. Running audio merge transcoding.`
     )
 
     const ffmpegVod = buildFFmpegVOD({
-      onJobProgress: progress => { ffmpegProgress = progress }
+      onJobProgress: progress => {
+        ffmpegProgress = progress
+      }
     })
 
     await ffmpegVod.transcode({

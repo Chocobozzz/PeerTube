@@ -128,6 +128,8 @@ export async function canDoQuickAudioTranscode (path: string, probe?: FfprobeDat
 
 export async function canDoQuickVideoTranscode (path: string, maxFPS: number, probe?: FfprobeData): Promise<boolean> {
   const videoStream = await getVideoStream(path, probe)
+  if (!videoStream) return true
+
   const fps = await getVideoStreamFPS(path, probe)
   const bitRate = await getVideoStreamBitrate(path, probe)
   const resolutionData = await getVideoStreamDimensionsInfo(path, probe)
