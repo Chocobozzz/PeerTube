@@ -129,6 +129,9 @@ views:
     remote:
       max_age: -1
 
+    local:
+      max_age: '15 years'
+
     watching_interval:
       anonymous: '6 seconds'
       users: '4 seconds'

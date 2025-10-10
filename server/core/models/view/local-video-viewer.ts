@@ -6,12 +6,13 @@ import {
   VideoStatsUserAgent,
   WatchActionObject
 } from '@peertube/peertube-models'
+import { MAX_SQL_DELETE_ITEMS } from '@server/initializers/constants.js'
 import { getActivityStreamDuration } from '@server/lib/activitypub/activity.js'
 import { buildGroupByAndBoundaries } from '@server/lib/timeserie.js'
 import { MLocalVideoViewer, MLocalVideoViewerWithWatchSections, MVideo } from '@server/types/models/index.js'
-import { QueryOptionsWithType, QueryTypes } from 'sequelize'
+import { Op, QueryOptionsWithType, QueryTypes } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, HasMany, IsUUID, Table } from 'sequelize-typescript'
-import { SequelizeModel } from '../shared/index.js'
+import { safeBulkDestroy, SequelizeModel } from '../shared/index.js'
 import { VideoModel } from '../video/video.js'
 import { LocalVideoViewerWatchSectionModel } from './local-video-viewer-watch-section.js'
 
@@ -433,5 +434,20 @@ export class LocalVideoViewerModel extends SequelizeModel<LocalVideoViewerModel>
 
       ...location
     }
+  }
+
+  // ---------------------------------------------------------------------------
+
+  static removeOldViews (beforeDate: string) {
+    return safeBulkDestroy(() => {
+      return LocalVideoViewerModel.destroy({
+        where: {
+          startDate: {
+            [Op.lt]: beforeDate
+          }
+        },
+        limit: MAX_SQL_DELETE_ITEMS
+      })
+    })
   }
 }

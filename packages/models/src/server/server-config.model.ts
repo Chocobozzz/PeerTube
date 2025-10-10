@@ -408,6 +408,16 @@ export interface ServerConfig {
 
   views: {
     videos: {
+      remote: {
+        // milliseconds
+        maxAge: number
+      }
+
+      local: {
+        // milliseconds
+        maxAge: number
+      }
+
       watchingInterval: {
         // milliseconds
         anonymous: number

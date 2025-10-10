@@ -75,7 +75,7 @@ export const videoTimeseriesStatsValidator = [
     if (query.startDate && getIntervalByDays(query.startDate, query.endDate) > STATS_TIMESERIE.MAX_DAYS) {
       return res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
-        message: 'Star date and end date interval is too big'
+        message: 'Start date and end date interval is too big'
       })
     }
 

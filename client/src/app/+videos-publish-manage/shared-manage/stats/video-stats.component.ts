@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common'
 import { Component, LOCALE_ID, OnInit, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
-import { Notifier, PeerTubeRouterService } from '@app/core'
+import { Notifier, PeerTubeRouterService, ServerService } from '@app/core'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 import { NumberFormatterPipe } from '@app/shared/shared-main/common/number-formatter.pipe'
 import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
@@ -83,6 +83,7 @@ export class VideoStatsComponent implements OnInit {
   private numberFormatter = inject(NumberFormatterPipe)
   private liveService = inject(LiveVideoService)
   private manageController = inject(VideoManageController)
+  private serverService = inject(ServerService)
 
   // Cannot handle date filters
   globalStatsCards: Card[] = []
@@ -750,5 +751,19 @@ export class VideoStatsComponent implements OnInit {
       minute: 'numeric',
       second: 'numeric'
     })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  hasMaxViewsAge () {
+    return this.getMaxViewsAge() !== -1
+  }
+
+  getMaxViewsAgeDate () {
+    return new Date(Date.now() - this.getMaxViewsAge())
+  }
+
+  private getMaxViewsAge () {
+    return this.serverService.getHTMLConfig().views.videos.local.maxAge
   }
 }

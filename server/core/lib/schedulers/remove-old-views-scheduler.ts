@@ -1,3 +1,4 @@
+import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer.js'
 import { VideoViewModel } from '@server/models/view/video-view.js'
 import { logger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
@@ -5,7 +6,6 @@ import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
 export class RemoveOldViewsScheduler extends AbstractScheduler {
-
   private static instance: AbstractScheduler
 
   protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.REMOVE_OLD_VIEWS
@@ -14,15 +14,32 @@ export class RemoveOldViewsScheduler extends AbstractScheduler {
     super()
   }
 
-  protected internalExecute () {
-    if (CONFIG.VIEWS.VIDEOS.REMOTE.MAX_AGE === -1) return
+  protected async internalExecute () {
+    await this.removeRemoteViews()
+    await this.removeLocalViews()
+  }
 
-    logger.info('Removing old videos views.')
+  private removeRemoteViews () {
+    if (CONFIG.VIEWS.VIDEOS.REMOTE.MAX_AGE <= 0) return
+
+    logger.info('Removing old views from remote videos.')
 
     const now = new Date()
     const beforeDate = new Date(now.getTime() - CONFIG.VIEWS.VIDEOS.REMOTE.MAX_AGE).toISOString()
 
-    return VideoViewModel.removeOldRemoteViewsHistory(beforeDate)
+    return VideoViewModel.removeOldRemoteViews(beforeDate)
+  }
+
+  private async removeLocalViews () {
+    if (CONFIG.VIEWS.VIDEOS.LOCAL.MAX_AGE <= 0) return
+
+    logger.info('Removing old views from local videos.')
+
+    const now = new Date()
+    const beforeDate = new Date(now.getTime() - CONFIG.VIEWS.VIDEOS.LOCAL.MAX_AGE).toISOString()
+
+    await VideoViewModel.removeOldLocalViews(beforeDate)
+    await LocalVideoViewerModel.removeOldViews(beforeDate)
   }
 
   static get Instance () {

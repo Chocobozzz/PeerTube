@@ -25,7 +25,13 @@
 <div class="stats-with-date">
 
   <div class="overall-stats">
-    <h2>{{ getViewersStatsTitle() }}</h2>
+    <div class="title-container mb-4">
+      <h3 class="mb-0">{{ getViewersStatsTitle() }}</h3>
+
+      @if (hasMaxViewsAge()) {
+        <div class="muted-2 small" i18n>Views made before {{ getMaxViewsAgeDate() | date }} are not taken into account</div>
+      }
+    </div>
 
     <div class="date-filter-wrapper">
       <label class="visually-hidden" for="date-filter">Filter viewers stats by date</label>

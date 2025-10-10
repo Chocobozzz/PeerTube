@@ -50,7 +50,8 @@ const timeTable = {
   hour: 3600000,
   day: 3600000 * 24,
   week: 3600000 * 24 * 7,
-  month: 3600000 * 24 * 30
+  month: 3600000 * 24 * 30,
+  year: 3600000 * 24 * 365
 }
 
 export function parseDurationToMs (duration: number | string): number {
@@ -68,7 +69,10 @@ export function parseDurationToMs (duration: number | string): number {
         unit = 'ms'
       }
 
-      return (len || 1) * (timeTable[unit] || 0)
+      const multiplier = timeTable[unit]
+      if (!multiplier) throw new Error('Cannot parse datetime unit ' + unit)
+
+      return (len || 1) * multiplier
     }
   }
 
@@ -271,19 +275,19 @@ const pipelinePromise = promisify(pipeline)
 // ---------------------------------------------------------------------------
 
 export {
-  objectConverter,
-  mapToJSON,
-  sanitizeUrl,
-  sanitizeHost,
-  execShell,
-  pageToStartAndCount,
-  peertubeTruncate,
-  scryptPromise,
-  randomBytesPromise,
-  generateRSAKeyPairPromise,
-  generateED25519KeyPairPromise,
-  execPromise2,
   execPromise,
+  execPromise2,
+  execShell,
+  generateED25519KeyPairPromise,
+  generateRSAKeyPairPromise,
+  mapToJSON,
+  objectConverter,
+  pageToStartAndCount,
+  parseSemVersion,
+  peertubeTruncate,
   pipelinePromise,
-  parseSemVersion
+  randomBytesPromise,
+  sanitizeHost,
+  sanitizeUrl,
+  scryptPromise
 }

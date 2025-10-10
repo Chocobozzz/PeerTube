@@ -61,6 +61,7 @@ describe('Parse duration', function () {
     expect(parseDurationToMs('1 minute')).to.equal(60 * 1000)
     expect(parseDurationToMs('1 hour')).to.equal(3600 * 1000)
     expect(parseDurationToMs('35 hours')).to.equal(3600 * 35 * 1000)
+    expect(parseDurationToMs('15 years')).to.equal(15 * 3600 * 24 * 365 * 1000)
   })
 
   it('Should be invalid when given invalid value', function () {

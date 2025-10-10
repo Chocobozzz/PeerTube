@@ -1,6 +1,7 @@
 import { forceNumber } from '@peertube/peertube-core-utils'
 import { FollowState } from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
+import { MAX_SQL_DELETE_ITEMS } from '@server/initializers/constants.js'
 import { literal, Model, ModelStatic } from 'sequelize'
 import { Literal } from 'sequelize/types/utils'
 
@@ -71,4 +72,12 @@ export function buildSQLAttributes<M extends Model> (options: {
   }
 
   return builtAttributes
+}
+
+export async function safeBulkDestroy (destroyFn: () => Promise<number>) {
+  const destroyedRows = await destroyFn()
+
+  if (destroyedRows === MAX_SQL_DELETE_ITEMS) {
+    return safeBulkDestroy(destroyFn)
+  }
 }

@@ -382,6 +382,14 @@ class ServerConfigManager {
 
       views: {
         videos: {
+          remote: {
+            maxAge: CONFIG.VIEWS.VIDEOS.REMOTE.MAX_AGE
+          },
+
+          local: {
+            maxAge: CONFIG.VIEWS.VIDEOS.LOCAL.MAX_AGE
+          },
+
           watchingInterval: {
             anonymous: CONFIG.VIEWS.VIDEOS.WATCHING_INTERVAL.ANONYMOUS,
             users: CONFIG.VIEWS.VIDEOS.WATCHING_INTERVAL.USERS

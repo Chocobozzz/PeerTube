@@ -398,6 +398,9 @@ const CONFIG = {
       REMOTE: {
         MAX_AGE: parseDurationToMs(config.get('views.videos.remote.max_age'))
       },
+      LOCAL: {
+        MAX_AGE: parseDurationToMs(config.get('views.videos.local.max_age'))
+      },
       LOCAL_BUFFER_UPDATE_INTERVAL: parseDurationToMs(config.get('views.videos.local_buffer_update_interval')),
       VIEW_EXPIRATION: parseDurationToMs(config.get('views.videos.view_expiration')),
       COUNT_VIEW_AFTER: parseDurationToMs(config.get<number>('views.videos.count_view_after')),

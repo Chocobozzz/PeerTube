@@ -1200,6 +1200,10 @@ export const STATS_TIMESERIE = {
 
 // ---------------------------------------------------------------------------
 
+export const MAX_SQL_DELETE_ITEMS = 10000
+
+// ---------------------------------------------------------------------------
+
 // Special constants for a test instance
 if (process.env.PRODUCTION_CONSTANTS !== 'true') {
   if (isTestOrDevInstance()) {
@@ -1215,7 +1219,6 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
     SCHEDULER_INTERVALS_MS.ACTOR_FOLLOW_SCORES = 1000
     SCHEDULER_INTERVALS_MS.REMOVE_OLD_JOBS = 10000
     SCHEDULER_INTERVALS_MS.REMOVE_OLD_HISTORY = 5000
-    SCHEDULER_INTERVALS_MS.REMOVE_OLD_VIEWS = 5000
     SCHEDULER_INTERVALS_MS.UPDATE_VIDEOS = 5000
     SCHEDULER_INTERVALS_MS.AUTO_FOLLOW_INDEX_INSTANCES = 5000
     SCHEDULER_INTERVALS_MS.UPDATE_INBOX_STATS = 5000

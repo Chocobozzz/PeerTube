@@ -21,6 +21,7 @@ import { VideoViewsBufferScheduler } from '@server/lib/schedulers/video-views-bu
 import { VideoViewsManager } from '@server/lib/views/video-views-manager.js'
 import express from 'express'
 import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../../middlewares/index.js'
+import { RemoveOldViewsScheduler } from '@server/lib/schedulers/remove-old-views-scheduler.js'
 
 const debugRouter = express.Router()
 
@@ -63,6 +64,7 @@ async function runCommand (req: express.Request, res: express.Response) {
     'process-video-viewers': () => VideoViewsManager.Instance.processViewerStats(),
     'process-update-videos-scheduler': () => UpdateVideosScheduler.Instance.execute(),
     'process-video-channel-sync-latest': () => VideoChannelSyncLatestScheduler.Instance.execute(),
+    'process-remove-old-views': () => RemoveOldViewsScheduler.Instance.execute(),
     'test-emails': () => testEmails(req, res)
   }
 
