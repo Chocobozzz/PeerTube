@@ -45,7 +45,7 @@ export class VideoPasswordsCommand extends AbstractCommand {
     const { videoId, password } = options
     const path = `/api/v1/videos/${videoId}/passwords`
 
-    return this.patchBodyRequest({
+    return this.postBodyRequest({
       ...options,
       path,
       fields: { password },

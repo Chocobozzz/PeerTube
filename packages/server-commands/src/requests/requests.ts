@@ -193,20 +193,6 @@ export function makePutBodyRequest (options: {
   return buildRequest(req, { accept: 'application/json', expectedStatus: HttpStatusCode.BAD_REQUEST_400, ...options })
 }
 
-export function makePatchBodyRequest (options: {
-  url: string
-  path: string
-  token?: string
-  fields: { [fieldName: string]: any }
-  expectedStatus?: HttpStatusCodeType
-  headers?: { [name: string]: string }
-}) {
-  const req = request(options.url).patch(options.path)
-    .send(options.fields)
-
-  return buildRequest(req, { accept: 'application/json', expectedStatus: HttpStatusCode.BAD_REQUEST_400, ...options })
-}
-
 // ---------------------------------------------------------------------------
 
 export async function getRedirectionUrl (url: string, token?: string) {

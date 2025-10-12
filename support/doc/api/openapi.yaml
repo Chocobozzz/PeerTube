@@ -4620,7 +4620,7 @@ paths:
           description: successful operation
         '400':
           description: video is not password protected
-    patch:
+    post:
       summary: Add a video password
       description: "**PeerTube >=7.4**"
       operationId: addVideoPassword

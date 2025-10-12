@@ -8,7 +8,6 @@ import { isAbsolute } from 'path'
 import {
   makeDeleteRequest,
   makeGetRequest,
-  makePatchBodyRequest,
   makePostBodyRequest,
   makePutBodyRequest,
   makeUploadRequest,
@@ -96,22 +95,6 @@ export abstract class AbstractCommand {
     const { fields, headers } = options
 
     return makePutBodyRequest({
-      ...this.buildCommonRequestOptions(options),
-
-      fields,
-      headers
-    })
-  }
-
-  protected patchBodyRequest (
-    options: InternalCommonCommandOptions & {
-      fields?: { [fieldName: string]: any }
-      headers?: { [name: string]: string }
-    }
-  ) {
-    const { fields, headers } = options
-
-    return makePatchBodyRequest({
       ...this.buildCommonRequestOptions(options),
 
       fields,

@@ -42,7 +42,7 @@ videoPasswordRouter.put(
   asyncMiddleware(updateVideoPasswordList)
 )
 
-videoPasswordRouter.patch('/:videoId/passwords',
+videoPasswordRouter.post('/:videoId/passwords',
   authenticate,
   asyncMiddleware(addVideoPasswordValidator),
   asyncMiddleware(addVideoPassword)
