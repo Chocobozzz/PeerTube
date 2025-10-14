@@ -427,17 +427,17 @@
           <context context-type="linenumber">134</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3371351937331192777" datatype="html">
+      <trans-unit id="3371351937331192777" datatype="html" xml:space="preserve">
         <source>User <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> registered on your instance </source>
-        <target state="translated">User <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> hat sich bei ihrer Instanz registriert </target>
+        <target state="translated">User <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> hat sich bei deiner Instanz registriert </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-notifications/user-notifications.component.html</context>
           <context context-type="linenumber">142</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4404295482394146814" datatype="html">
+      <trans-unit id="4404295482394146814" datatype="html" xml:space="preserve">
         <source><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> is following <x id="START_TAG_NG_CONTAINER"/>your channel <x id="INTERPOLATION_1"/><x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>your account<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target state="translated"><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> hat <x id="START_TAG_NG_CONTAINER"/>ihren Kanal <x id="INTERPOLATION_1"/><x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>ihr Konto<x id="CLOSE_TAG_NG_CONTAINER"/> abonniert</target>
+        <target state="translated"><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> hat <x id="START_TAG_NG_CONTAINER"/>deinen Kanal <x id="INTERPOLATION_1"/><x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>dein Konto<x id="CLOSE_TAG_NG_CONTAINER"/> abonniert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-notifications/user-notifications.component.html</context>
           <context context-type="linenumber">152</context>
@@ -451,9 +451,9 @@
           <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5354239156470982824" datatype="html">
+      <trans-unit id="5354239156470982824" datatype="html" xml:space="preserve">
         <source>Your instance has <x id="START_LINK"/>a new follower<x id="CLOSE_LINK"/> (<x id="INTERPOLATION"/>) <x id="START_TAG_NG_CONTAINER"/> awaiting your approval<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target state="translated">Ihre Instanz hat <x id="START_LINK"/>einen neuen Abonnent<x id="CLOSE_LINK"/> (<x id="INTERPOLATION"/>) <x id="START_TAG_NG_CONTAINER"/>wartend auf ihre Bestätigung<x id="CLOSE_TAG_NG_CONTAINER"/></target>
+        <target state="translated">Deine Instanz hat <x id="START_LINK"/>einen neuen Abonnenten<x id="CLOSE_LINK"/> (<x id="INTERPOLATION"/>), <x id="START_TAG_NG_CONTAINER"/>der auf deine Bestätigung wartet<x id="CLOSE_TAG_NG_CONTAINER"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-notifications/user-notifications.component.html</context>
           <context context-type="linenumber">183</context>
@@ -4017,9 +4017,9 @@
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="403762424689874454">
+      <trans-unit id="403762424689874454" xml:space="preserve">
         <source>View your notifications</source>
-        <target>Zeige ihre Benachrichtigungen</target>
+        <target state="translated">Zeige deine Benachrichtigungen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/notification-dropdown.component.html</context>
           <context context-type="linenumber">16</context>
@@ -6889,7 +6889,7 @@
       </trans-unit>
       <trans-unit id="6750683208657917557" datatype="html" xml:space="preserve">
         <source>Set &lt;strong&gt;video quota to <x id="PH" equiv-text="getBytes(this.videoQuota, 0)"/>&lt;/strong&gt; for new users (can be changed by moderators)</source>
-        <target state="translated">Ein &lt;strong&gt;Video-Kontingent von <x id="PH" equiv-text="getBytes(this.videoQuota, 0)"/>/strong&gt; für neue Benutzer festlegen (kann von Moderatoren geändert werden)</target>
+        <target state="translated">Ein &lt;strong&gt;Video-Kontingent von <x id="PH" equiv-text="getBytes(this.videoQuota, 0)"/>&lt;/strong&gt; für neue Benutzer festlegen (kann von Moderatoren geändert werden)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">229</context>
@@ -11497,7 +11497,7 @@
       </trans-unit>
       <trans-unit id="5963121551419269989" datatype="html" xml:space="preserve">
         <source>This setting is not retroactive: current comments from remote platforms will not be deleted</source>
-        <target state="translated">Diese Einstellung ist nicht rückwirkend: Aktuelle Kommentare von entfernten Plattformen werden nicht gelöscht.</target>
+        <target state="translated">Diese Einstellung ist nicht rückwirkend: Aktuelle Kommentare von entfernten Plattformen werden nicht gelöscht</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">473,474</context>
@@ -11759,9 +11759,9 @@
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8894612824234881672" datatype="html">
+      <trans-unit id="8894612824234881672" datatype="html" xml:space="preserve">
         <source>⚠️ Enabling live streaming requires trust in your users and extra moderation work</source>
-        <target state="translated">⚠️ Die Aktivierung des Live-Stream Features erfordert hohe Vertrauenswürdigkeit ihrer Benutzer und zusätzliche Moderation</target>
+        <target state="translated">⚠️ Die Aktivierung des Live-Streamings erfordert hohe Vertrauenswürdigkeit deiner Benutzer und zusätzliche Moderation</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.html</context>
           <context context-type="linenumber">25</context>
@@ -19831,7 +19831,8 @@
       <trans-unit id="2013324644839511073" datatype="html" xml:space="preserve">
         <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>.
 Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
-        <target state="translated">Referenzen des OAuth-Clients können nicht abgerufen werden: <x id="PH" equiv-text="err.message"/>. Stelle sicher, dass PeerTube korrekt konfiguriert ist (Ordner config/), speziell der Abschnitt „webserver“.</target>
+        <target state="translated">Referenzen des OAuth-Clients können nicht abgerufen werden: <x id="PH" equiv-text="err.message"/>.
+Stell sicher, dass PeerTube korrekt konfiguriert ist (Ordner config/), speziell der Abschnitt „webserver“.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">102</context>
