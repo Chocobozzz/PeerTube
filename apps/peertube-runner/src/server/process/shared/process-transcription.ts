@@ -17,12 +17,16 @@ export async function processVideoTranscription (options: ProcessOptions<RunnerJ
   const payload = job.payload
 
   let inputPath: string
+  let jobAborted = false
 
   const updateProgressInterval = scheduleTranscodingProgress({
     job,
     server,
     runnerToken,
-    progressGetter: () => undefined
+    progressGetter: () => undefined,
+    onAbort: () => {
+      jobAborted = true
+    }
   })
 
   const outputPath = join(ConfigManager.Instance.getTranscriptionDirectory(), buildSUUID())
@@ -38,6 +42,11 @@ export async function processVideoTranscription (options: ProcessOptions<RunnerJ
 
     inputPath = await downloadInputFile({ url: payload.input.videoFileUrl, runnerToken, job })
 
+    if (jobAborted) {
+      logger.info(`Job ${job.uuid} was aborted, stopping processing`)
+      return
+    }
+
     logger.info(`Downloaded input file ${payload.input.videoFileUrl} for job ${job.jobToken}. Running transcription.`)
 
     if (await hasAudioStream(inputPath) !== true) {
@@ -51,6 +60,11 @@ export async function processVideoTranscription (options: ProcessOptions<RunnerJ
       return
     }
 
+    if (jobAborted) {
+      logger.info(`Job ${job.uuid} was aborted, stopping processing`)
+      return
+    }
+
     const transcriptFile = await transcriber.transcribe({
       mediaFilePath: inputPath,
       model: config.modelPath
@@ -59,6 +73,11 @@ export async function processVideoTranscription (options: ProcessOptions<RunnerJ
       format: 'vtt',
       transcriptDirectory: outputPath
     })
+
+    if (jobAborted) {
+      logger.info(`Job ${job.uuid} was aborted during transcription, stopping processing`)
+      return
+    }
 
     const successBody: TranscriptionSuccess = {
       inputLanguage: transcriptFile.language,
@@ -72,6 +91,13 @@ export async function processVideoTranscription (options: ProcessOptions<RunnerJ
       payload: successBody,
       reqPayload: payload
     })
+  } catch (err) {
+    // If job was aborted, don't report the error
+    if (jobAborted) {
+      logger.info(`Job ${job.uuid} processing stopped after abort`)
+      return
+    }
+    throw err
   } finally {
     if (inputPath) await remove(inputPath)
     if (outputPath) await remove(outputPath)
