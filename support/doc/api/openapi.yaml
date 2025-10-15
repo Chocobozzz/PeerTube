@@ -11136,6 +11136,8 @@ components:
           description: Channel description
         support:
           description: How to support/fund the channel
+        isApproved:
+          description: Channel Approval
 
     VideoChannelCreate:
       allOf:
