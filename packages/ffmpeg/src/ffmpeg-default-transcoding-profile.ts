@@ -11,6 +11,8 @@ import {
 import { EncoderOptionsBuilder, EncoderOptionsBuilderParams } from '@peertube/peertube-models'
 import { FfprobeData } from 'fluent-ffmpeg'
 
+const LOUDNORM_FILTER = 'loudnorm=I=-14:TP=-1:LRA=11:linear=false'
+
 const defaultX264VODOptionsBuilder: EncoderOptionsBuilder = (options: EncoderOptionsBuilderParams) => {
   const { fps, inputRatio, inputBitrate, resolution } = options
 
@@ -40,7 +42,7 @@ const defaultX264LiveOptionsBuilder: EncoderOptionsBuilder = (options: EncoderOp
   }
 }
 
-const defaultAACOptionsBuilder: EncoderOptionsBuilder = async ({ input, streamNum, canCopyAudio, inputProbe }) => {
+const defaultAACOptionsBuilder: EncoderOptionsBuilder = async ({ input, streamNum, canCopyAudio, inputProbe, audioLoudnorm }) => {
   if (canCopyAudio && await canDoQuickAudioTranscode(input, inputProbe)) {
     return { copy: true, outputOptions: [] }
   }
@@ -57,15 +59,29 @@ const defaultAACOptionsBuilder: EncoderOptionsBuilder = async ({ input, streamNu
   // Force stereo as it causes some issues with HLS playback in Chrome
   const base = [ '-channel_layout', 'stereo' ]
 
-  if (bitrate !== -1) {
-    return { outputOptions: base.concat([ buildStreamSuffix('-b:a', streamNum), bitrate + 'k' ]) }
+  const opts = base.slice()
+
+  if (audioLoudnorm) {
+    opts.push(buildStreamSuffix('-filter:a', streamNum), LOUDNORM_FILTER)
   }
 
-  return { outputOptions: base }
+  if (bitrate !== -1) {
+    return { outputOptions: opts.concat([ buildStreamSuffix('-b:a', streamNum), bitrate + 'k' ]) }
+  }
+
+  return { outputOptions: opts }
 }
 
-const defaultLibFDKAACVODOptionsBuilder: EncoderOptionsBuilder = ({ streamNum }) => {
-  return { outputOptions: [ buildStreamSuffix('-q:a', streamNum), '5' ] }
+const defaultLibFDKAACVODOptionsBuilder: EncoderOptionsBuilder = ({ streamNum, audioLoudnorm }) => {
+  const outputOptions: string[] = []
+
+  if (audioLoudnorm) {
+    outputOptions.push(buildStreamSuffix('-filter:a', streamNum), LOUDNORM_FILTER)
+  }
+
+  outputOptions.push(buildStreamSuffix('-q:a', streamNum), '5')
+
+  return { outputOptions }
 }
 
 export function getDefaultAvailableEncoders () {

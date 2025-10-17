@@ -21,6 +21,8 @@ export interface FFmpegCommandWrapperOptions {
   logger: SimpleLogger
   lTags?: { tags: string[] }
 
+  audioLoudnorm?: boolean
+
   updateJobProgress?: (progress?: number) => void
   onEnd?: () => void
   onError?: (err: Error) => void
@@ -39,6 +41,8 @@ export class FFmpegCommandWrapper {
   private readonly logger: SimpleLogger
   private readonly lTags: { tags: string[] }
 
+  private readonly audioLoudnorm: boolean
+
   private readonly updateJobProgress: (progress?: number) => void
   private readonly onEnd?: () => void
   private readonly onError?: (err: Error) => void
@@ -53,6 +57,8 @@ export class FFmpegCommandWrapper {
     this.threads = options.threads
     this.logger = options.logger
     this.lTags = options.lTags || { tags: [] }
+
+    this.audioLoudnorm = options.audioLoudnorm === true
 
     this.updateJobProgress = options.updateJobProgress
 
@@ -70,6 +76,10 @@ export class FFmpegCommandWrapper {
 
   getCommand () {
     return this.command
+  }
+
+  isAudioLoudnormEnabled () {
+    return this.audioLoudnorm === true
   }
 
   // ---------------------------------------------------------------------------
@@ -182,6 +192,11 @@ export class FFmpegCommandWrapper {
 
     const { streamType, videoType } = options
 
+    // Force re-encode audio if loudnorm is enabled
+    if (streamType === 'audio' && this.audioLoudnorm) {
+      options.canCopyAudio = false
+    }
+
     const encodersToTry = this.availableEncoders.encodersToTry[videoType][streamType]
     const encoders = this.availableEncoders.available[videoType]
 
@@ -210,6 +225,9 @@ export class FFmpegCommandWrapper {
         }
       }
 
+      // propagate audioLoudnorm flag to the profile builder
+      ;(options as any).audioLoudnorm = this.audioLoudnorm
+
       const result = await builder(
         pick(options, [
           'input',
@@ -220,7 +238,8 @@ export class FFmpegCommandWrapper {
           'inputProbe',
           'fps',
           'inputRatio',
-          'streamNum'
+          'streamNum',
+          'audioLoudnorm'
         ])
       )
 
