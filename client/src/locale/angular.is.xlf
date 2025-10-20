@@ -1769,15 +1769,9 @@
           <context context-type="linenumber">161</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7396819983420487866" datatype="html">
+      <trans-unit id="7396819983420487866" datatype="html" xml:space="preserve">
         <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Write CSS code directly. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="new"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Write CSS code directly. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>  #custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
-  color: red;
-  <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
-  <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>  #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
-  color: red;
-  <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
-  <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
+        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Skrifaðu CSS-kóða beint. Dæmi:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Settu<x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> á undan til að yfirtaka stíla. Dæmi:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">182</context>
@@ -1931,9 +1925,9 @@
           <context context-type="linenumber">152</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1631750873832492109" datatype="html">
+      <trans-unit id="1631750873832492109" datatype="html" xml:space="preserve">
         <source>Platform customization updated.</source>
-        <target state="new">Platform customization updated.</target>
+        <target state="translated">Sérsníðing að stýrikerfi uppfærð.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">326</context>
@@ -2085,9 +2079,9 @@
           <context context-type="linenumber">37,39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="246592664950440386" datatype="html">
+      <trans-unit id="246592664950440386" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; routerLink=&quot;/admin/settings/plugins&quot;&gt;"/>plugins &amp; themes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more involved changes </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; routerLink=&quot;/admin/settings/plugins&quot;&gt;"/>plugins &amp; themes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more involved changes </target>
+        <target state="translated">Notaðu <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; routerLink=&quot;/admin/settings/plugins&quot;&gt;"/>viðbætur og þemu<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> fyrir róttækari breytingar </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">40,42</context>
@@ -2141,17 +2135,17 @@
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2040129064263999708" datatype="html">
+      <trans-unit id="2040129064263999708" datatype="html" xml:space="preserve">
         <source>⚠️ You don't have any external auth plugin enabled</source>
-        <target state="new">⚠️ You don't have any external auth plugin enabled</target>
+        <target state="translated">⚠️ Þú hefur ekki virkjað neina utanaðkomandi auðkenningarviðbót</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">56,57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2678071949007349214" datatype="html">
+      <trans-unit id="2678071949007349214" datatype="html" xml:space="preserve">
         <source>⚠️ You have multiple external auth plugins enabled</source>
-        <target state="new">⚠️ You have multiple external auth plugins enabled</target>
+        <target state="translated">⚠️ Þú hefur virkjað margar utanaðkomandi auðkenningarviðbætur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">58,59</context>
@@ -2165,9 +2159,9 @@
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8147283395759737895" datatype="html">
+      <trans-unit id="8147283395759737895" datatype="html" xml:space="preserve">
         <source>Display a message on your platform</source>
-        <target state="new"> Display a message on your platform </target>
+        <target state="translated">Birtu kynningartexta á kerfinu þínu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">74,75</context>
@@ -2221,9 +2215,9 @@
           <context context-type="linenumber">137</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4924378635140045267" datatype="html">
+      <trans-unit id="4924378635140045267" datatype="html" xml:space="preserve">
         <source>⚠️ This functionality requires a lot of attention and extra moderation</source>
-        <target state="new">⚠️ This functionality requires a lot of attention and extra moderation</target>
+        <target state="translated">⚠️ Þessi virkni krefst mikillar viðveru og meiri vinnu við umsjón</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">140,142</context>
@@ -2265,9 +2259,9 @@
           <context context-type="linenumber">161</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4328465163710612366" datatype="html">
+      <trans-unit id="4328465163710612366" datatype="html" xml:space="preserve">
         <source>When the total number of users in your platform reaches this limit, registrations are disabled. -1 = unlimited</source>
-        <target state="new">When the total number of users in your platform reaches this limit, registrations are disabled. -1 = unlimited</target>
+        <target state="translated">Þegar heildarfjöldi notenda á netþjóninum þínum nær þessum mörkum, verða nýskráningar gerðar óvirkar. -1 = ótakmarkað</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">162,164</context>
@@ -2281,9 +2275,9 @@
           <context context-type="linenumber">169</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8766972676494797493" datatype="html">
+      <trans-unit id="8766972676494797493" datatype="html" xml:space="preserve">
         <source>Signup won't be limited to a fixed number of users</source>
-        <target state="new">Signup won't be limited to a fixed number of users</target>
+        <target state="translated">Nýskráningar munu ekki takmarkast við fastan fjölda notenda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">174,175</context>
@@ -2305,9 +2299,9 @@
           <context context-type="linenumber">185</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1980878931796709542" datatype="html">
+      <trans-unit id="1980878931796709542" datatype="html" xml:space="preserve">
         <source>Default video quota for a new user</source>
-        <target state="new">Default video quota for a new user</target>
+        <target state="translated">Sjálfgefinn myndskeiðakvóti á hvern nýjan notanda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">197,199</context>
@@ -2345,25 +2339,25 @@
           <context context-type="linenumber">177</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8819364692199793780" datatype="html">
+      <trans-unit id="8819364692199793780" datatype="html" xml:space="preserve">
         <source>Default daily upload limit for a new user</source>
-        <target state="new">Default daily upload limit for a new user</target>
+        <target state="translated">Sjálfgefin dagleg takmörk innsendinga myndskeiða á hvern nýjan notanda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">214,216</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3841475259822163079" datatype="html">
+      <trans-unit id="3841475259822163079" datatype="html" xml:space="preserve">
         <source>Automatically enable video history for a new user</source>
-        <target state="new">Automatically enable video history for a new user</target>
+        <target state="translated">Virkja sjálfkrafa feril myndskeiða fyrir nýja notendur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">232,233</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7567466559668450627" datatype="html">
+      <trans-unit id="7567466559668450627" datatype="html" xml:space="preserve">
         <source>VIDEO IMPORTS</source>
-        <target state="new">VIDEO IMPORTS</target>
+        <target state="translated">INNFLUTNINGUR MYNDSKEIÐA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">245,246</context>
@@ -2533,25 +2527,25 @@
           <context context-type="linenumber">392</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5960828389062108087" datatype="html">
+      <trans-unit id="5960828389062108087" datatype="html" xml:space="preserve">
         <source>Default video privacy</source>
-        <target state="new">Default video privacy</target>
+        <target state="translated">Sjálfgefin gagnaleynd myndskeiða</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">407,409</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3734974125618373942" datatype="html">
+      <trans-unit id="3734974125618373942" datatype="html" xml:space="preserve">
         <source>Default video licence</source>
-        <target state="new">Default video licence</target>
+        <target state="translated">Sjálfgefið notkunarleyfi myndskeiða</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">415,417</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8251821314400241425" datatype="html">
+      <trans-unit id="8251821314400241425" datatype="html" xml:space="preserve">
         <source>Default comment policy</source>
-        <target state="new">Default comment policy</target>
+        <target state="translated">Sjálfgefin stefna varðandi athugasemdir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">423,425</context>
@@ -2597,9 +2591,9 @@
           <context context-type="linenumber">613</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="481446928803565156" datatype="html">
+      <trans-unit id="481446928803565156" datatype="html" xml:space="preserve">
         <source>Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors that may not be federated with your platform</source>
-        <target state="new">Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors that may not be federated with your platform</target>
+        <target state="translated">Leyfa <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>notendum þínum<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> að leita að fjartengdum myndskeiðum/leikurum sem gætu verið utan skýjasambands netþjónsins þíns</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">616,617</context>
@@ -2613,9 +2607,9 @@
           <context context-type="linenumber">624</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7372107248244982956" datatype="html">
+      <trans-unit id="7372107248244982956" datatype="html" xml:space="preserve">
         <source>Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>anonymous users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors that may not be federated with your platform</source>
-        <target state="new">Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>anonymous users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors that may not be federated with your platform</target>
+        <target state="translated">Leyfa <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nafnlausum notendum<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> að leita að fjartengdum myndskeiðum/leikurum sem gætu verið utan skýjasambands netþjónsins þíns</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">627,628</context>
@@ -2633,9 +2627,9 @@
           <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4519166881363617842" datatype="html">
+      <trans-unit id="4519166881363617842" datatype="html" xml:space="preserve">
         <source>⚠️ This functionality depends heavily on the moderation of platforms followed by the search index you select</source>
-        <target state="new">⚠️ This functionality depends heavily on the moderation of platforms followed by the search index you select</target>
+        <target state="translated">⚠️ Þessi virkni er verulega háð umsjón með netþjónum auk þess hvaða leitaryfirlit þú velur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">641,642</context>
@@ -2649,9 +2643,9 @@
           <context context-type="linenumber">646</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2653219516680751118" datatype="html">
+      <trans-unit id="2653219516680751118" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>your own search index<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> or choose the official one, <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://sepiasearch.org&quot;&gt;"/>https://sepiasearch.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, that is not moderated. </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>your own search index<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> or choose the official one, <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://sepiasearch.org&quot;&gt;"/>https://sepiasearch.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, that is not moderated. </target>
+        <target state="translated">Notaðu <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>þitt eigið leitaryfirlit<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> eða veldu það opinbera, <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://sepiasearch.org&quot;&gt;"/>https://sepiasearch.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, sem er ekki yfirfarið af umsjónaraðilum. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">649,650</context>
@@ -2673,9 +2667,9 @@
           <context context-type="linenumber">670</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4557533619513324614" datatype="html">
+      <trans-unit id="4557533619513324614" datatype="html" xml:space="preserve">
         <source>Otherwise, the local search will be used by default</source>
-        <target state="new">Otherwise, the local search will be used by default</target>
+        <target state="translated">Annars verður staðvær leit áfram notuð sjálfgefið</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">673,674</context>
@@ -2753,9 +2747,9 @@
           <context context-type="linenumber">745</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8981181756195068779" datatype="html">
+      <trans-unit id="8981181756195068779" datatype="html" xml:space="preserve">
         <source>The archive file is deleted after this period</source>
-        <target state="new">The archive file is deleted after this period</target>
+        <target state="translated">Safnskránni er eytt eftir þennan tíma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">749,751</context>
@@ -2769,17 +2763,17 @@
           <context context-type="linenumber">458</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="75928143875482960" datatype="html">
+      <trans-unit id="75928143875482960" datatype="html" xml:space="preserve">
         <source>Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; routerLink=&quot;/admin/settings/follows&quot;&gt;"/>relations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> with other platforms. </source>
-        <target state="new"> Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; routerLink=&quot;/admin/settings/follows&quot;&gt;"/>relations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> with other platforms. </target>
+        <target state="translated">Sýslaðu með <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; routerLink=&quot;/admin/settings/follows&quot;&gt;"/>vensl<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> við aðra netþjóna. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">460,462</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2072884891614263775" datatype="html">
+      <trans-unit id="2072884891614263775" datatype="html" xml:space="preserve">
         <source>Accept comments made on remote platforms</source>
-        <target state="new">Accept comments made on remote platforms</target>
+        <target state="translated">Samþykkja athugasemdir gerðar á fjartengdum netþjónum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">470,471</context>
@@ -2793,9 +2787,9 @@
           <context context-type="linenumber">473,474</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="735929773748569631" datatype="html">
+      <trans-unit id="735929773748569631" datatype="html" xml:space="preserve">
         <source>Remote actors can follow channels of your platform</source>
-        <target state="new">Remote actors can follow channels of your platform</target>
+        <target state="translated">Fjarvistaðir aðilar geta fylgst með rásum á kerfinu þínu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">484,485</context>
@@ -2809,9 +2803,9 @@
           <context context-type="linenumber">487,488</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4707019046470605528" datatype="html">
+      <trans-unit id="4707019046470605528" datatype="html" xml:space="preserve">
         <source>Remote actors can follow your platform</source>
-        <target state="new">Remote actors can follow your platform</target>
+        <target state="translated">Fjarvistaðir aðilar geta fylgst með kerfinu þínu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">498,499</context>
@@ -2825,17 +2819,17 @@
           <context context-type="linenumber">501,502</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4899539058271084907" datatype="html">
+      <trans-unit id="4899539058271084907" datatype="html" xml:space="preserve">
         <source>Manually approve new followers that follow your platform</source>
-        <target state="new">Manually approve new followers that follow your platform</target>
+        <target state="translated">Samþykkja handvirkt nýja fylgjendur þessa netþjóns</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">509,510</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6240145294614933263" datatype="html">
+      <trans-unit id="6240145294614933263" datatype="html" xml:space="preserve">
         <source>Automatically follow back followers that follow your platform</source>
-        <target state="new">Automatically follow back followers that follow your platform</target>
+        <target state="translated">Fylgjast sjálfvirkt til baka með þeim sem fylgjast með kerfinu þínu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">522,523</context>
@@ -2873,25 +2867,25 @@
           <context context-type="linenumber">567,568</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="286395473992592179" datatype="html">
+      <trans-unit id="286395473992592179" datatype="html" xml:space="preserve">
         <source>Automatically play videos in the player</source>
-        <target state="new">Automatically play videos in the player</target>
+        <target state="translated">Spila myndskeið sjálfvirkt í spilaranum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">576,577</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3184039004441581991" datatype="html">
+      <trans-unit id="3184039004441581991" datatype="html" xml:space="preserve">
         <source>Enable P2P streaming by default on your platform</source>
-        <target state="new">Enable P2P streaming by default on your platform</target>
+        <target state="translated">Sjálfgefið virkja P2P-streymi á netþjóninum þínum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">585,586</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6069715963308979270" datatype="html">
+      <trans-unit id="6069715963308979270" datatype="html" xml:space="preserve">
         <source>Enable P2P streaming by default for videos embedded on external websites</source>
-        <target state="new">Enable P2P streaming by default for videos embedded on external websites</target>
+        <target state="translated">Sjálfgefið virkja P2P-streymi fyrir ívafin myndskeið á utanaðkomandi vefsvæðum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">592,593</context>
@@ -2921,9 +2915,9 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1244629318108208810" datatype="html">
+      <trans-unit id="1244629318108208810" datatype="html" xml:space="preserve">
         <source>PLATFORM</source>
-        <target state="new">PLATFORM</target>
+        <target state="translated">KERFI</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">37,38</context>
@@ -3037,17 +3031,17 @@
           <context context-type="linenumber">224</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3763350567349374283" datatype="html">
+      <trans-unit id="3763350567349374283" datatype="html" xml:space="preserve">
         <source>Upload logos</source>
-        <target state="new">Upload logos</target>
+        <target state="translated">Senda inn táknmerki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="931264342164481222" datatype="html">
+      <trans-unit id="931264342164481222" datatype="html" xml:space="preserve">
         <source>Edit your homepage</source>
-        <target state="new">Edit your homepage</target>
+        <target state="translated">Breyttu heimasíðunni þinni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-homepage.component.html</context>
           <context context-type="linenumber">1</context>
@@ -3061,17 +3055,17 @@
           <context context-type="linenumber">5,6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="640634155992036798" datatype="html">
+      <trans-unit id="640634155992036798" datatype="html" xml:space="preserve">
         <source>Homepage content</source>
-        <target state="new">Homepage content</target>
+        <target state="translated">Efni heimasíðu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-homepage.component.html</context>
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5084959442263173366" datatype="html">
+      <trans-unit id="5084959442263173366" datatype="html" xml:space="preserve">
         <source>Homepage updated.</source>
-        <target state="new">Homepage updated.</target>
+        <target state="translated">Heimasíða uppfærð.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-homepage.component.ts</context>
           <context context-type="linenumber">61</context>
@@ -3217,9 +3211,9 @@
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="210131859223873198" datatype="html">
+      <trans-unit id="210131859223873198" datatype="html" xml:space="preserve">
         <source>Edit your platform homepage</source>
-        <target state="new">Edit your platform homepage</target>
+        <target state="translated">Breyttu heimasíðu netþjónsins þíns</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">98</context>
@@ -3249,9 +3243,9 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8169800528565475866" datatype="html">
+      <trans-unit id="8169800528565475866" datatype="html" xml:space="preserve">
         <source>Platform logos</source>
-        <target state="new">Platform logos</target>
+        <target state="translated">Táknmerki kerfis</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">135</context>
@@ -3353,9 +3347,9 @@
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6889832108716754007" datatype="html">
+      <trans-unit id="6889832108716754007" datatype="html" xml:space="preserve">
         <source>Favicon</source>
-        <target state="new">Favicon</target>
+        <target state="translated">Veftáknmynd</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">38</context>
@@ -3461,33 +3455,33 @@
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1557050723140613812" datatype="html">
+      <trans-unit id="1557050723140613812" datatype="html" xml:space="preserve">
         <source>Social media logo</source>
-        <target state="new">Social media logo</target>
+        <target state="translated">Táknmerki á samfélagsmiðlum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">117</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="292602388224793614" datatype="html">
+      <trans-unit id="292602388224793614" datatype="html" xml:space="preserve">
         <source>Default logo displayed on social media.</source>
-        <target state="new">Default logo displayed on social media. </target>
+        <target state="translated">Sjálfgefið táknmerki sem mun birtast á samfélagsmiðlum.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8756577993740241555" datatype="html">
+      <trans-unit id="8756577993740241555" datatype="html" xml:space="preserve">
         <source>It will be resized to 1200x650 pixels.</source>
-        <target state="new">It will be resized to 1200x650 pixels.</target>
+        <target state="translated">Það mun verða lagað niður í 1200x650 mynddíla.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2910903458139645161" datatype="html">
+      <trans-unit id="2910903458139645161" datatype="html" xml:space="preserve">
         <source>Logos updated</source>
-        <target state="new">Logos updated</target>
+        <target state="translated">Táknmerki uppfærð</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.ts</context>
           <context context-type="linenumber">134</context>
@@ -3549,9 +3543,9 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4014604069358445532" datatype="html">
+      <trans-unit id="4014604069358445532" datatype="html" xml:space="preserve">
         <source>Default language</source>
-        <target state="new">Default language</target>
+        <target state="translated">Sjálfgefið tungumál</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">77,78</context>
@@ -3745,9 +3739,9 @@
           <context context-type="linenumber">245</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1969113117715295994" datatype="html">
+      <trans-unit id="1969113117715295994" datatype="html" xml:space="preserve">
         <source>YOU AND YOUR PLATFORM</source>
-        <target state="new">YOU AND YOUR PLATFORM</target>
+        <target state="translated">ÞÚ OG KERFIÐ ÞITT</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">258</context>
@@ -3829,9 +3823,9 @@
           <context context-type="linenumber">98</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6377618413283681806" datatype="html">
+      <trans-unit id="6377618413283681806" datatype="html" xml:space="preserve">
         <source>Information updated.</source>
-        <target state="new">Information updated.</target>
+        <target state="translated">Upplýsingar uppfærðar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.ts</context>
           <context context-type="linenumber">246</context>
@@ -3937,9 +3931,9 @@
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1905144662537747797" datatype="html">
+      <trans-unit id="1905144662537747797" datatype="html" xml:space="preserve">
         <source>Enable users of your platform to stream a live.</source>
-        <target state="new"> Enable users of your platform to stream a live. </target>
+        <target state="translated">Leyfa notendum á netþjóninum þínum að streyma beint.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.html</context>
           <context context-type="linenumber">10,11</context>
@@ -3993,9 +3987,9 @@
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2268673016709678600" datatype="html">
+      <trans-unit id="2268673016709678600" datatype="html" xml:space="preserve">
         <source>Max simultaneous lives created on your platform</source>
-        <target state="new">Max simultaneous lives created on your platform</target>
+        <target state="translated">Hámarksfjöldi samhliða beinna streyma á netþjóninum þínum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.html</context>
           <context context-type="linenumber">51,53</context>
@@ -4821,9 +4815,9 @@
           <context context-type="linenumber">155</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8692634109890521682" datatype="html">
+      <trans-unit id="8692634109890521682" datatype="html" xml:space="preserve">
         <source>No results found.</source>
-        <target state="new">No results found.</target>
+        <target state="translated">Engar niðurstöður fundust.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-tables/table.component.html</context>
           <context context-type="linenumber">186</context>
@@ -5141,17 +5135,17 @@
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5320464639563693648" datatype="html">
+      <trans-unit id="5320464639563693648" datatype="html" xml:space="preserve">
         <source>subscriptions per page</source>
-        <target state="new">subscriptions per page</target>
+        <target state="translated">áskriftir á síðu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">6,7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9645096038052385" datatype="html">
+      <trans-unit id="9645096038052385" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No subscription} =1 {1 subscription} other {<x id="INTERPOLATION"/> subscriptions}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No subscription} =1 {1 subscription} other {<x id="INTERPOLATION"/> subscriptions}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Engin áskrift} =1 {1 áskrift} other {<x id="INTERPOLATION"/> áskriftir}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">12</context>
@@ -5541,9 +5535,9 @@
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="176106920593910856" datatype="html">
+      <trans-unit id="176106920593910856" datatype="html" xml:space="preserve">
         <source>registrations per page</source>
-        <target state="new">registrations per page</target>
+        <target state="translated">nýskráningar á síðu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">6,7</context>
@@ -5593,9 +5587,9 @@
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8906065447450776604" datatype="html">
+      <trans-unit id="8906065447450776604" datatype="html" xml:space="preserve">
         <source>Auto block</source>
-        <target state="new">Auto block</target>
+        <target state="translated">Sjálfvirk útilokun</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">23</context>
@@ -6637,17 +6631,17 @@
           <context context-type="linenumber">162</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8537094305418766438" datatype="html">
+      <trans-unit id="8537094305418766438" datatype="html" xml:space="preserve">
         <source>users per page</source>
-        <target state="new">users per page</target>
+        <target state="translated">notendur á síðu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">7,8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4878174417621522676" datatype="html">
+      <trans-unit id="4878174417621522676" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No users} =1 {1 user} other {<x id="INTERPOLATION"/> users}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No users} =1 {1 user} other {<x id="INTERPOLATION"/> users}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Engir notendur} =1 {1 notandi} other {<x id="INTERPOLATION"/> notendur}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">15</context>
@@ -6677,9 +6671,9 @@
           <context context-type="linenumber">241</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4235020544266215264" datatype="html">
+      <trans-unit id="4235020544266215264" datatype="html" xml:space="preserve">
         <source>The user is banned</source>
-        <target state="new">The user is banned</target>
+        <target state="translated">Notandinn er bannaður</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">45</context>
@@ -6705,9 +6699,9 @@
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1595048378944989469" datatype="html">
+      <trans-unit id="1595048378944989469" datatype="html" xml:space="preserve">
         <source>Two factor authentication is enabled</source>
-        <target state="new">Two factor authentication is enabled</target>
+        <target state="translated">Tveggja-þátta auðkenning er virk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">76</context>
@@ -7285,9 +7279,9 @@
           <context context-type="linenumber">141</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8613376202616911579" datatype="html">
+      <trans-unit id="8613376202616911579" datatype="html" xml:space="preserve">
         <source>Your platform doesn't have videos.</source>
-        <target state="new">Your platform doesn't have videos.</target>
+        <target state="translated">Kerfið þitt er ekki með nein myndskeið.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">143</context>
@@ -8033,9 +8027,9 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9215315749822099607" datatype="html">
+      <trans-unit id="9215315749822099607" datatype="html" xml:space="preserve">
         <source>jobs per page</source>
-        <target state="new">jobs per page</target>
+        <target state="translated">verk á síðu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">7,8</context>
@@ -8097,9 +8091,9 @@
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="769258115649723950" datatype="html">
+      <trans-unit id="769258115649723950" datatype="html" xml:space="preserve">
         <source>(1 = highest priority)</source>
-        <target state="new">(1 = highest priority)</target>
+        <target state="translated">(1 = mesti forgangur)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
           <context context-type="linenumber">91</context>
@@ -8149,9 +8143,9 @@
           <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7227590042704998799" datatype="html">
+      <trans-unit id="7227590042704998799" datatype="html" xml:space="preserve">
         <source>Reliability</source>
-        <target state="new">Reliability</target>
+        <target state="translated">Áreiðanleiki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">45</context>
@@ -8385,9 +8379,9 @@
           <context context-type="linenumber">168</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5182966734308933786" datatype="html">
+      <trans-unit id="5182966734308933786" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No job} =1 {1 job} other {<x id="INTERPOLATION"/> jobs}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No job} =1 {1 job} other {<x id="INTERPOLATION"/> jobs}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Ekkert verk} =1 {1 verk} other {<x id="INTERPOLATION"/> verk}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">14</context>
@@ -8521,9 +8515,9 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2724055831234181057" datatype="html">
+      <trans-unit id="2724055831234181057" datatype="html" xml:space="preserve">
         <source>Version</source>
-        <target state="new">Version</target>
+        <target state="translated">Útgáfa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
           <context context-type="linenumber">35</context>
@@ -9165,9 +9159,9 @@
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6426647253249467388" datatype="html">
+      <trans-unit id="6426647253249467388" datatype="html" xml:space="preserve">
         <source>Filter by a channel</source>
-        <target state="new">Filter by a channel</target>
+        <target state="translated">Sía eftir rás</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
           <context context-type="linenumber">2</context>
@@ -9181,25 +9175,25 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3371925892115176358" datatype="html">
+      <trans-unit id="3371925892115176358" datatype="html" xml:space="preserve">
         <source>playlists per page</source>
-        <target state="new">playlists per page</target>
+        <target state="translated">spilunarlistar á síðu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3108012194945806606" datatype="html">
+      <trans-unit id="3108012194945806606" datatype="html" xml:space="preserve">
         <source>Drag and drop this row to reorder playlists in your channel</source>
-        <target state="new">Drag and drop this row to reorder playlists in your channel</target>
+        <target state="translated">Notaðu draga og sleppa til að endurraða spilunarlistum í rásinni þinni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7319525983375433281" datatype="html">
+      <trans-unit id="7319525983375433281" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No playlist} =1 {1 playlist} other {<x id="INTERPOLATION"/> playlists}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No playlist} =1 {1 playlist} other {<x id="INTERPOLATION"/> playlists}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Enginn spilunarlisti} =1 {1 spilunarlisti} other {<x id="INTERPOLATION"/> spilunarlistar}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
           <context context-type="linenumber">32</context>
@@ -9209,9 +9203,9 @@
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="358453340357015692" datatype="html">
+      <trans-unit id="358453340357015692" datatype="html" xml:space="preserve">
         <source><x id="ICU" equiv-text="{ totalRecords, plural, =0 {No playlist} =1 {1 playlist} other {{{ totalRecords | myNumberFormatter }} playlists}}" xid="3031081109030852848"/> in <x id="INTERPOLATION_1" equiv-text="{{ getFilteredChannel().displayName }}"/> channel</source>
-        <target state="new"><x id="ICU" equiv-text="{ totalRecords, plural, =0 {No playlist} =1 {1 playlist} other {{{ totalRecords | myNumberFormatter }} playlists}}" xid="3031081109030852848"/> in <x id="INTERPOLATION_1" equiv-text="{{ getFilteredChannel().displayName }}"/> channel</target>
+        <target state="translated"><x id="ICU" xid="3031081109030852848" equiv-text="{ totalRecords, plural, =0 {Enginn spilunarlisti} =1 {1 spilunarlisti} other {{{ totalRecords | myNumberFormatter }} spilunarlistar}}"/> í <x id="INTERPOLATION_1" equiv-text="{{ getFilteredChannel().displayName }}"/> rásinni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
           <context context-type="linenumber">32</context>
@@ -17539,17 +17533,17 @@
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5858148127589953031" datatype="html">
+      <trans-unit id="5858148127589953031" datatype="html" xml:space="preserve">
         <source>Welcome introduction</source>
-        <target state="new">Welcome introduction</target>
+        <target state="translated">Upphafskynning</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/admin-config-wizard-modal.component.html</context>
           <context context-type="linenumber">5,6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="874940026211412710" datatype="html">
+      <trans-unit id="874940026211412710" datatype="html" xml:space="preserve">
         <source>Edit general information</source>
-        <target state="new">Edit general information</target>
+        <target state="translated">Breyta almennum upplýsingum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/admin-config-wizard-modal.component.html</context>
           <context context-type="linenumber">10,11</context>
@@ -17619,9 +17613,9 @@
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="304750832760838492" datatype="html">
+      <trans-unit id="304750832760838492" datatype="html" xml:space="preserve">
         <source>Fill platform information</source>
-        <target state="new">Fill platform information</target>
+        <target state="translated">Fylltu inn upplýsingar um kerfið</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">68</context>
@@ -17659,17 +17653,17 @@
           <context context-type="linenumber">14,16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="149227559940853875" datatype="html">
+      <trans-unit id="149227559940853875" datatype="html" xml:space="preserve">
         <source>Platform name</source>
-        <target state="new">Platform name</target>
+        <target state="translated">Heiti kerfis</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-edit-info.component.html</context>
           <context context-type="linenumber">18,20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8513759773687345464" datatype="html">
+      <trans-unit id="8513759773687345464" datatype="html" xml:space="preserve">
         <source>Platform icon</source>
-        <target state="new">Platform icon</target>
+        <target state="translated">Táknmynd kerfis</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-edit-info.component.html</context>
           <context context-type="linenumber">37,38</context>
@@ -17723,9 +17717,9 @@
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1452446159629727078" datatype="html">
+      <trans-unit id="1452446159629727078" datatype="html" xml:space="preserve">
         <source>My platform is more like...</source>
-        <target state="new">My platform is more like...</target>
+        <target state="translated">Kerfið mitt er meira í líkingu við...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-form.component.html</context>
           <context context-type="linenumber">18,20</context>
@@ -17883,9 +17877,9 @@
           <context context-type="linenumber">34,36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1498251075459491982" datatype="html">
+      <trans-unit id="1498251075459491982" datatype="html" xml:space="preserve">
         <source>Put your platform on the official PeerTube public index</source>
-        <target state="new">Put your platform on the official PeerTube public index</target>
+        <target state="translated">Settu kerfið þitt á opinberan netþjónalista PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">36,37</context>
@@ -22467,7 +22461,7 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1394835141143590910" datatype="html">
+      <trans-unit id="1394835141143590910" datatype="html" xml:space="preserve">
         <source>Start at</source>
         <target state="translated">Byrjar á</target>
         <context-group purpose="location">
@@ -23821,9 +23815,9 @@
           <context context-type="linenumber">31,32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9105013661444128554" datatype="html">
+      <trans-unit id="9105013661444128554" datatype="html" xml:space="preserve">
         <source>Sexually explicit content</source>
-        <target state="new">Sexually explicit content</target>
+        <target state="translated">Kynferðislega bersögult efni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">43,44</context>
@@ -24141,17 +24135,17 @@
           <context context-type="linenumber">7,8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6834395686870336612" datatype="html">
+      <trans-unit id="6834395686870336612" datatype="html" xml:space="preserve">
         <source>No active sessions</source>
-        <target state="new">No active sessions</target>
+        <target state="translated">Engar virkar setur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-users/account-token-sessions.component.html</context>
           <context context-type="linenumber">15,16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4972213921522701981" datatype="html">
+      <trans-unit id="4972213921522701981" datatype="html" xml:space="preserve">
         <source>Current Session</source>
-        <target state="new">Current Session</target>
+        <target state="translated">Núverandi seta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-users/account-token-sessions.component.html</context>
           <context context-type="linenumber">25,26</context>
@@ -24189,9 +24183,9 @@
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3577095634541271860" datatype="html">
+      <trans-unit id="3577095634541271860" datatype="html" xml:space="preserve">
         <source>comments per page</source>
-        <target state="new">comments per page</target>
+        <target state="translated">athugasemdir á síðu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.html</context>
           <context context-type="linenumber">7,8</context>
@@ -24533,17 +24527,17 @@
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="341953445829629390" datatype="html">
+      <trans-unit id="341953445829629390" datatype="html" xml:space="preserve">
         <source>Videos on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="ICU" equiv-text="{totalFollowing, plural, =1 {other platform} other {other platforms}}" xid="3907811049330252725"/> </source>
-        <target state="new"> Videos on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="ICU" equiv-text="{totalFollowing, plural, =1 {other platform} other {other platforms}}" xid="3907811049330252725"/> </target>
+        <target state="translated">Myndskeið á <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> og <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="ICU" xid="3907811049330252725" equiv-text="{totalFollowing, plural, =1 {öðru kerfi} other {öðrum kerfum}}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">24,26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3907811049330252725" datatype="html">
+      <trans-unit id="3907811049330252725" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {other platform} other {other platforms}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {other platform} other {other platforms}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {öðru kerfi} other {öðrum kerfum}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">24,25</context>
@@ -25101,9 +25095,9 @@
           <context context-type="linenumber">136</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5630677130087951545" datatype="html">
+      <trans-unit id="5630677130087951545" datatype="html" xml:space="preserve">
         <source>Display all videos (private, unlisted, password protected, not yet published or sensitive videos)</source>
-        <target state="new">Display all videos (private, unlisted, password protected, not yet published or sensitive videos)</target>
+        <target state="translated">Birta öll myndskeið (einka, óskráð, varin með lykilorði, ekki enn útgefin eða með viðkvæmu efni)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">159</context>
@@ -25177,9 +25171,9 @@
           <context context-type="linenumber">202</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9158483906909080531" datatype="html">
+      <trans-unit id="9158483906909080531" datatype="html" xml:space="preserve">
         <source>Update your policy in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;video-sensitive-content-policy&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>your settings<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> Update your policy in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;video-sensitive-content-policy&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>your settings<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Uppfærðu stefnu þína í <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;video-sensitive-content-policy&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>stillingunum þínum<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">95</context>
@@ -25317,9 +25311,9 @@
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4708684903894580151" datatype="html">
+      <trans-unit id="4708684903894580151" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No video} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No video} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {ekkert myndskeið} =1 {1 myndskeið} other {<x id="INTERPOLATION"/> myndskeið}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">11</context>
@@ -25577,17 +25571,17 @@
           <context context-type="linenumber">168</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4655201341187940011" datatype="html">
+      <trans-unit id="4655201341187940011" datatype="html" xml:space="preserve">
         <source>No videos found matching your filters.</source>
-        <target state="new">No videos found matching your filters.</target>
+        <target state="translated">Engin myndskeið fundust sem samsvara síum þínum.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">216</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4762602763077950998" datatype="html">
+      <trans-unit id="4762602763077950998" datatype="html" xml:space="preserve">
         <source>No videos found in selected channels.</source>
-        <target state="new">No videos found in selected channels.</target>
+        <target state="translated">Engin myndskeið fundust í völdum rásum.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">220</context>
@@ -25685,17 +25679,17 @@
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3911848809598246025" datatype="html">
+      <trans-unit id="3911848809598246025" datatype="html" xml:space="preserve">
         <source>Contact your administrator to fix it.</source>
-        <target state="new">Contact your administrator to fix it.</target>
+        <target state="translated">Hafðu samband við kerfisstjórann þinn til að laga þetta.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6610623780037367849" datatype="html">
+      <trans-unit id="6610623780037367849" datatype="html" xml:space="preserve">
         <source>Your web browser may not be able to play it.</source>
-        <target state="new">Your web browser may not be able to play it.</target>
+        <target state="translated">Vafrinn þinn getur mögulega ekki spilað þetta.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">12</context>
