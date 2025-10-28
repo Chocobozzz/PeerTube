@@ -49,7 +49,7 @@ function doesAccountExist (options: {
   if (!account) {
     res.fail({
       status: HttpStatusCode.NOT_FOUND_404,
-      message: 'Account not found'
+      message: req.t('Account not found')
     })
     return false
   }
@@ -65,7 +65,7 @@ function doesAccountExist (options: {
   if (checkIsLocal && account.Actor.isLocal() === false) {
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
-      message: 'This account is not owned.'
+      message: req.t('This account is not owned by the platform')
     })
 
     return false

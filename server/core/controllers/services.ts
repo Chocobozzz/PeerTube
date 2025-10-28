@@ -1,19 +1,33 @@
-import express from 'express'
-import cors from 'cors'
 import { escapeHTML, forceNumber } from '@peertube/peertube-core-utils'
+import { HttpStatusCode } from '@peertube/peertube-models'
+import { getOrCreateAPActor } from '@server/lib/activitypub/actors/get.js'
+import { loadActorUrlOrGetFromWebfinger } from '@server/lib/activitypub/actors/webfinger.js'
+import { AccountModel } from '@server/models/account/account.js'
+import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { MChannelSummary } from '@server/types/models/index.js'
+import cors from 'cors'
+import express from 'express'
 import { EMBED_SIZE, PREVIEWS_SIZE, THUMBNAILS_SIZE, WEBSERVER } from '../initializers/constants.js'
 import { apiRateLimiter, asyncMiddleware, oembedValidator } from '../middlewares/index.js'
 import { accountHandleGetValidatorFactory } from '../middlewares/validators/index.js'
+import { logger } from '@server/helpers/logger.js'
 
 const servicesRouter = express.Router()
 
 servicesRouter.use('/oembed', cors(), apiRateLimiter, asyncMiddleware(oembedValidator), generateOEmbed)
+
+// TODO: deprecated, remove in PeerTube 8.1
 servicesRouter.use(
   '/redirect/accounts/:handle',
   apiRateLimiter,
   asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkCanManage: false })),
   redirectToAccountUrl
+)
+
+servicesRouter.use(
+  '/redirect/actors/:handle',
+  apiRateLimiter,
+  asyncMiddleware(redirectToActorUrl)
 )
 
 // ---------------------------------------------------------------------------
@@ -161,6 +175,32 @@ function buildOEmbed (options: {
   return json
 }
 
+// ---------------------------------------------------------------------------
 function redirectToAccountUrl (req: express.Request, res: express.Response, next: express.NextFunction) {
   return res.redirect(res.locals.account.Actor.url)
+}
+
+async function redirectToActorUrl (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const handle = req.params.handle
+
+  if (handle.includes('@')) {
+    try {
+      const actorUrl = await loadActorUrlOrGetFromWebfinger(handle)
+      const actor = await getOrCreateAPActor(actorUrl, 'all')
+
+      if (actor) return res.redirect(actor.url)
+    } catch (error) {
+      logger.info('Cannot redirect to actor URL from handle.', { handle, error })
+
+      return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+    }
+  } else {
+    const account = await AccountModel.loadByHandle(handle)
+    if (account) return res.redirect(account.Actor.url)
+
+    const channel = await VideoChannelModel.loadByHandleAndPopulateAccount(handle)
+    if (channel) return res.redirect(channel.Actor.url)
+  }
+
+  return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 }

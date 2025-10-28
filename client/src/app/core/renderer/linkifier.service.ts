@@ -19,7 +19,7 @@ export class LinkifierService {
     },
     formatHref: {
       mention: (href: string) => {
-        return getAPIUrl() + '/services/redirect/accounts/' + href.substring(1)
+        return getAPIUrl() + '/services/redirect/actors/' + href.substring(1)
       }
     }
   }

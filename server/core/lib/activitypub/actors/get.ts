@@ -16,6 +16,7 @@ import { checkUrlsSameHost } from '../url.js'
 import { refreshActorIfNeeded } from './refresh.js'
 import { APActorCreator, fetchRemoteActor } from './shared/index.js'
 
+// FIXME: use an object for params
 function getOrCreateAPActor (
   activityActor: string | ActivityPubActor,
   fetchType: 'all',
