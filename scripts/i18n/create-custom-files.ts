@@ -15,7 +15,7 @@ import {
   VIDEO_PLAYLIST_TYPES,
   VIDEO_PRIVACIES,
   VIDEO_STATES
-} from '@peertube/peertube-server/core/initializers/constants.js'
+} from '../../server/core/initializers/constants.js'
 import { readJsonSync, writeJSON } from 'fs-extra/esm'
 import { readdir } from 'fs/promises'
 import { join } from 'path'
