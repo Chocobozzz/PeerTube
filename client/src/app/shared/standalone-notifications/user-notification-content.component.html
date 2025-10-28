@@ -1,4 +1,4 @@
-<div class="root">
+<div class="root" [ngClass]="{ unread: !n.payload.read }">
   @switch (n.payload.type) {
     @case (1) { <!-- UserNotificationType.NEW_VIDEO_FROM_SUBSCRIPTION -->
       @if (n.payload.video) {
@@ -232,26 +232,26 @@
         <div i18n>
           <strong>{{ n.payload.videoChannelCollaborator.channelOwner.displayName }}</strong> invited you to become an editor of their channel <strong>{{ n.payload.videoChannelCollaborator.channel.displayName }}</strong>
         </div>
-
-        @if (isChannelCollabRejected(n)) {
-          <div class="d-flex gap-1 mt-2 align-items-center">
-            <my-global-icon iconName="cross"></my-global-icon>
-
-            <div i18n>Invitation declined</div>
-          </div>
-        } @else if (isChannelCollabInvitation(n)) {
-          <div class="d-flex gap-1 mt-2">
-            <my-button small="true" icon="tick" (click)="acceptChannelCollab()" i18n>Accept</my-button>
-            <my-button small="true" icon="cross" (click)="rejectChannelCollab()" i18n>Decline</my-button>
-          </div>
-        } @else if (isChannelCollabAccepted(n)) {
-          <div class="d-flex gap-1 mt-2 align-items-center">
-            <my-global-icon iconName="tick"></my-global-icon>
-
-            <div i18n>Invitation accepted</div>
-          </div>
-        }
       </div>
+
+      @if (isChannelCollabRejected(n)) {
+        <div class="action-button">
+          <my-global-icon iconName="cross"></my-global-icon>
+
+          <div i18n>Invitation declined</div>
+        </div>
+      } @else if (isChannelCollabInvitation(n)) {
+        <div class="action-button">
+          <my-button small="true" icon="tick" (click)="acceptChannelCollab()" i18n theme="primary">Accept</my-button>
+          <my-button small="true" icon="cross" (click)="rejectChannelCollab()" i18n theme="secondary">Decline</my-button>
+        </div>
+      } @else if (isChannelCollabAccepted(n)) {
+        <div class="action-button">
+          <my-global-icon iconName="tick"></my-global-icon>
+
+          <div i18n>Invitation accepted</div>
+        </div>
+      }
     }
 
     @case (24) { <!-- UserNotificationType.ACCEPTED_TO_COLLABORATE_TO_CHANNEL -->

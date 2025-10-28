@@ -1,7 +1,7 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_button-mixins' as *;
-@use '_form-mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_button-mixins" as *;
+@use "_form-mixins" as *;
 
 .header {
   display: flex;
@@ -12,4 +12,9 @@
   .peertube-select-container {
     @include peertube-select-container(auto);
   }
+}
+
+.user-notifications-container {
+  padding: 1rem;
+  background-color: pvar(--bg-secondary-400);
 }

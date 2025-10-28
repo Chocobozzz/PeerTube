@@ -9,6 +9,7 @@ import { UserNotificationsComponent } from '@app/shared/standalone-notifications
 import { NgbDropdown, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap'
 import { Subject, Subscription } from 'rxjs'
 import { filter } from 'rxjs/operators'
+import { ButtonComponent } from '@app/shared/shared-main/buttons/button.component'
 
 @Component({
   selector: 'my-notification-dropdown',
@@ -21,7 +22,8 @@ import { filter } from 'rxjs/operators'
     LoaderComponent,
     RouterLink,
     RouterLinkActive,
-    NgbDropdownModule
+    NgbDropdownModule,
+    ButtonComponent
   ]
 })
 export class NotificationDropdownComponent implements OnInit, OnDestroy {
@@ -32,8 +34,6 @@ export class NotificationDropdownComponent implements OnInit, OnDestroy {
   private router = inject(Router)
 
   readonly dropdown = viewChild<NgbDropdown>('dropdown')
-
-  readonly navigate = output<HTMLAnchorElement>()
 
   unreadNotifications = 0
   loaded = false
@@ -91,7 +91,6 @@ export class NotificationDropdownComponent implements OnInit, OnDestroy {
 
   onNavigate (link: HTMLAnchorElement) {
     this.closeDropdown()
-    this.navigate.emit(link)
   }
 
   markAllAsRead () {

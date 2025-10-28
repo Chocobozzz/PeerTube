@@ -19,19 +19,21 @@ li {
 
 .notification {
   display: block;
-  border-bottom: 1px solid $separator-border-color-on-secondary;
+  margin-bottom: 0.5rem;
   text-decoration: none;
 
   &.unread {
-    background-color: pvar(--bg-secondary-400);
+    border-top: 2px solid pvar(--primary);
+    background-color: pvar(--bg);
+  }
 
-    &:hover {
-      opacity: 1;
-    }
+  &:not(.unread) {
+    background-color: pvar(--bg-secondary-350);
   }
 
   &:hover {
-    background-color: pvar(--bg-secondary-350);
+    opacity: 1;
+    background-color: pvar(--bg-secondary-300);
   }
 
   &.button-unstyle {

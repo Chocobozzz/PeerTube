@@ -1,17 +1,41 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
 
 .content {
   scrollbar-color: auto;
+  background: pvar(--bg-secondary-400);
+
+  @include padding(2rem);
+}
+
+header,
+footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header {
+  @include margin-bottom(1.5rem);
+
+  .title {
+    color: pvar(--fg-300);
+    font-size: 22px;
+    font-weight: $font-bold;
+  }
+}
+
+footer {
+  @include margin-top(1.5rem);
 }
 
 ::ng-deep {
   .dropdown-notifications {
     .dropdown-menu {
       padding: 0;
-      font-size: 14px;
       font-family: $main-fonts;
-      width: 400px;
+      width: 550px;
+      max-width: 75vw;
 
       .loader {
         display: flex;
@@ -22,7 +46,7 @@
       }
 
       .content {
-        max-height: 150px;
+        max-height: 250px;
         transition: max-height 0.15s ease-out;
         display: flex;
         height: 500px;
@@ -36,27 +60,6 @@
           overflow-y: auto;
           flex-grow: 1;
         }
-      }
-
-      .notifications-header {
-        display: flex;
-        justify-content: space-between;
-
-        border-bottom: 1px solid $separator-border-color-on-secondary;
-        align-items: center;
-        padding: 0 12px;
-        font-size: 14px;
-        line-height: normal;
-        font-weight: bold;
-        text-transform: uppercase;
-        min-height: 50px;
-      }
-
-      .all-notifications {
-        border-top: 1px solid $separator-border-color-on-secondary;
-        margin-top: -1px; // To not have 2 borders with the last notification
-        text-align: center;
-        padding: 0.75rem 0;
       }
     }
   }
