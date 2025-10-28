@@ -74,6 +74,7 @@
     "Download speed:": "Tốc độ tải xuống:",
     "Uploader note:": "Lưu ý tải lên:",
     "Close": "Đóng",
+    "(skipped {1} buffers) ": "(skipped {1} buffers) ",
     "Audio Player": "Trình phát Âm thanh",
     "Video Player": "Trình phát Video",
     "Play": "Phát",

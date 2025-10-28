@@ -74,6 +74,7 @@
     "Download speed:": "ダウンロード速度:",
     "Uploader note:": "投稿者のノート:",
     "Close": "閉じる",
+    "(skipped {1} buffers) ": "(skipped {1} buffers) ",
     "Audio Player": "音楽プレーヤー",
     "Video Player": "動画プレーヤー",
     "Play": "再生",

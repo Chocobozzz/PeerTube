@@ -74,6 +74,7 @@
     "Download speed:": "Downloadsnelheid:",
     "Uploader note:": "Opmerking van uploader:",
     "Close": "Sluiten",
+    "(skipped {1} buffers) ": "(skipped {1} buffers) ",
     "Audio Player": "Audiospeler",
     "Video Player": "Videospeler",
     "Play": "Afspelen",

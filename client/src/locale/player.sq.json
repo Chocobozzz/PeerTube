@@ -74,6 +74,7 @@
     "Download speed:": "Download speed:",
     "Uploader note:": "Uploader note:",
     "Close": "Mbylle",
+    "(skipped {1} buffers) ": "(skipped {1} buffers) ",
     "Audio Player": "Lojtës Audiosh",
     "Video Player": "Lojtës Videosh",
     "Play": "Luaje",

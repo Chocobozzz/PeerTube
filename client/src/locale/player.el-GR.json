@@ -74,6 +74,7 @@
     "Download speed:": "Download speed:",
     "Uploader note:": "Uploader note:",
     "Close": "Κλείσιμο",
+    "(skipped {1} buffers) ": "(skipped {1} buffers) ",
     "Audio Player": "Αναπαραγωγή Ήχου",
     "Video Player": "Αναπαραγωγή Βίντεο",
     "Play": "Αναπαραγωγή",

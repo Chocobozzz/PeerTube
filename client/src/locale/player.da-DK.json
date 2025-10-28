@@ -74,6 +74,7 @@
     "Download speed:": "Download speed:",
     "Uploader note:": "Uploader note:",
     "Close": "Luk",
+    "(skipped {1} buffers) ": "(skipped {1} buffers) ",
     "Audio Player": "Lydafspiller",
     "Video Player": "Videoafspiller",
     "Play": "Afspil",

@@ -74,6 +74,7 @@
     "Download speed:": "Download speed:",
     "Uploader note:": "Uploader note:",
     "Close": "Pechar",
+    "(skipped {1} buffers) ": "(skipped {1} buffers) ",
     "Audio Player": "Reprodutor de audio",
     "Video Player": "Reprodutor de vídeo",
     "Play": "Reproducir",

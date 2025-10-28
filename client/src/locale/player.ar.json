@@ -74,6 +74,7 @@
     "Download speed:": "Download speed:",
     "Uploader note:": "Uploader note:",
     "Close": "أغلق",
+    "(skipped {1} buffers) ": "(skipped {1} buffers) ",
     "Audio Player": "مشغل الصوت",
     "Video Player": "مشغل الفيديو",
     "Play": "شغل",

@@ -74,6 +74,7 @@
     "Download speed:": "Download speed:",
     "Uploader note:": "Uploader note:",
     "Close": "Жабу",
+    "(skipped {1} buffers) ": "(skipped {1} buffers) ",
     "Audio Player": "Аудио ойнатқыш",
     "Video Player": "Бейне ойнатқыш",
     "Play": "Ойнату",

@@ -74,6 +74,7 @@
     "Download speed:": "Download speed:",
     "Uploader note:": "Uploader note:",
     "Close": "Uždaryti",
+    "(skipped {1} buffers) ": "(skipped {1} buffers) ",
     "Audio Player": "Garso grotuvas",
     "Video Player": "Vaizdo grotuvas",
     "Play": "Paleisti",

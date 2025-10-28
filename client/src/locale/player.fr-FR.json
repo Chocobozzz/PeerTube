@@ -74,6 +74,7 @@
     "Download speed:": "Vitesse de téléchargement :",
     "Uploader note:": "Remarque de l'auteur :",
     "Close": "Fermer",
+    "(skipped {1} buffers) ": "(skipped {1} buffers) ",
     "Audio Player": "Lecteur audio",
     "Video Player": "Lecteur vidéo",
     "Play": "Lecture",

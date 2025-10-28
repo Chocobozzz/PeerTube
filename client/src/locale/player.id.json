@@ -74,6 +74,7 @@
     "Download speed:": "Download speed:",
     "Uploader note:": "Uploader note:",
     "Close": "Tutup",
+    "(skipped {1} buffers) ": "(skipped {1} buffers) ",
     "Audio Player": "Pemutar Audio",
     "Video Player": "Pemutar Video",
     "Play": "Putar",

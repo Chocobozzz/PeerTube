@@ -74,6 +74,7 @@
     "Download speed:": "Download speed:",
     "Uploader note:": "Uploader note:",
     "Close": "Zatvoriť",
+    "(skipped {1} buffers) ": "(skipped {1} buffers) ",
     "Audio Player": "Zvukový prehrávač",
     "Video Player": "Video Prehrávač",
     "Play": "Prehrať",

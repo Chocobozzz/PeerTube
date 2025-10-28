@@ -74,6 +74,7 @@
     "Download speed:": "Download speed:",
     "Uploader note:": "Uploader note:",
     "Close": "বন্ধ করুন",
+    "(skipped {1} buffers) ": "(skipped {1} buffers) ",
     "Audio Player": "শব্দ প্লেয়ার",
     "Video Player": "ভিডিও প্লেয়ার",
     "Play": "চালু",

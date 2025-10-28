@@ -74,6 +74,7 @@
     "Download speed:": "Скорость скачивания:",
     "Uploader note:": "Заметка загружающего:",
     "Close": "Закрыть",
+    "(skipped {1} buffers) ": "(skipped {1} buffers) ",
     "Audio Player": "Звуковой проигрыватель",
     "Video Player": "Видеопроигрыватель",
     "Play": "Воспроизвести",

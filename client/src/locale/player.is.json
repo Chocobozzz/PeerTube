@@ -74,6 +74,7 @@
     "Download speed:": "Download speed:",
     "Uploader note:": "Uploader note:",
     "Close": "Loka",
+    "(skipped {1} buffers) ": "(skipped {1} buffers) ",
     "Audio Player": "Tónlistarspilari",
     "Video Player": "Myndbandsspilari",
     "Play": "Afspilun",
