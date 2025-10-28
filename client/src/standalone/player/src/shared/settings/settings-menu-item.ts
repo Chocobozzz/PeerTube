@@ -60,8 +60,6 @@ class SettingsMenuItem extends MenuItem {
     const subMenuName = toTitleCase(options.entry)
     const SubMenuComponent = videojs.getComponent(subMenuName) as typeof MenuButton
 
-    console.log(options.entry)
-
     if (!SubMenuComponent) {
       throw new Error(`Component ${subMenuName} does not exist`)
     }

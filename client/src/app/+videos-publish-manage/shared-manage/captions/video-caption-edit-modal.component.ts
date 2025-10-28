@@ -341,7 +341,6 @@ export class VideoCaptionEditModalComponent extends FormReactive implements OnIn
 
   updateCaption () {
     if (this.segmentToUpdate) {
-      console.log(this.segmentToUpdate)
       this.notifier.error($localize`A segment is being edited. Save or cancel your edits first.`)
       return
     }
