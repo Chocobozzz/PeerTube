@@ -230,9 +230,9 @@ export class VideoService {
     let newParams = this.restService.addRestGetParams(params, pagination, this.buildListSort(sort))
 
     if (skipCount) newParams = newParams.set('skipCount', skipCount + '')
-    if (languageOneOf !== undefined) newParams = this.restService.addArrayParams(newParams, 'languageOneOf', languageOneOf)
-    if (categoryOneOf !== undefined) newParams = this.restService.addArrayParams(newParams, 'categoryOneOf', categoryOneOf)
-    if (privacyOneOf !== undefined) newParams = this.restService.addArrayParams(newParams, 'privacyOneOf', privacyOneOf)
+    if (Array.isArray(languageOneOf)) newParams = this.restService.addArrayParams(newParams, 'languageOneOf', languageOneOf)
+    if (Array.isArray(categoryOneOf)) newParams = this.restService.addArrayParams(newParams, 'categoryOneOf', categoryOneOf)
+    if (Array.isArray(privacyOneOf)) newParams = this.restService.addArrayParams(newParams, 'privacyOneOf', privacyOneOf)
     if (search) newParams = newParams.set('search', search)
 
     newParams = this.buildNSFWParams(newParams, { nsfw, nsfwFlagsExcluded, nsfwFlagsIncluded })
