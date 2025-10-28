@@ -51,7 +51,7 @@ describe('Test generate download API validator', function () {
     })
 
     it('Should fail without user token or video file token', async function () {
-      await server.videos.generateDownload({ videoId, videoFileIds, token: null, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await server.videos.generateDownload({ videoId, videoFileIds, token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with an invalid user token', async function () {
