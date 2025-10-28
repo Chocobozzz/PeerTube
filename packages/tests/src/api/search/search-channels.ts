@@ -95,6 +95,19 @@ describe('Test channels search', function () {
     }
   })
 
+  it('Should also search by account display name', async function () {
+    {
+      const body = await command.searchChannels({ search: 'roat' })
+      expect(body.total).to.equal(0)
+      expect(body.data).to.have.lengthOf(0)
+    }
+
+    {
+      const body = await command.searchChannels({ search: 'root' })
+      expect(body.data.map(c => c.displayName)).to.have.members([ 'Squall channel', 'Main root channel', 'Zell channel' ])
+    }
+  })
+
   it('Should filter by host', async function () {
     {
       const search = { search: 'channel', host: remoteServer.host }

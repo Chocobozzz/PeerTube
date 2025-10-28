@@ -107,6 +107,8 @@ export class VideoChannelListQueryBuilder extends AbstractListQuery {
     }
 
     if (this.options.search) {
+      this.buildAccountJoin()
+
       const escapedSearch = this.sequelize.escape(this.options.search)
       const escapedLikeSearch = this.sequelize.escape('%' + this.options.search + '%')
 
@@ -117,7 +119,8 @@ export class VideoChannelListQueryBuilder extends AbstractListQuery {
       where.push(
         `(` +
           `lower(immutable_unaccent(${escapedSearch})) <% lower(immutable_unaccent("VideoChannelModel"."name")) OR ` +
-          `lower(immutable_unaccent("VideoChannelModel"."name")) LIKE lower(immutable_unaccent(${escapedLikeSearch}))` +
+          `lower(immutable_unaccent("VideoChannelModel"."name")) LIKE lower(immutable_unaccent(${escapedLikeSearch})) OR ` +
+          `lower(immutable_unaccent("Account"."name")) LIKE lower(immutable_unaccent(${escapedLikeSearch}))` +
           `)`
       )
     } else {
