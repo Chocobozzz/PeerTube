@@ -84,20 +84,28 @@ jobs:
             ${{ runner.OS }}-fixtures-
             ${{ runner.OS }}-
 
-      # We run out of disk space with the caches
-      # - name: Cache PeerTube pip directory
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: |
-      #       ~/.cache/pip
-      #     key: ${{ runner.OS }}-${{ matrix.test_suite }}-pip-v1
+      - name: Cache PeerTube pip directory
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pip
+          key: ${{ runner.OS }}-${{ matrix.test_suite }}-pip-v1
 
-      # - name: Cache Hugging Face models
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: |
-      #       ~/.cache/huggingface
-      #     key: ${{ runner.OS }}-${{ matrix.test_suite }}-hugging-face-v1
+      - name: Cache Hugging Face models
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/huggingface
+          key: ${{ runner.OS }}-${{ matrix.test_suite }}-hugging-face-v1
+
+      # Transcription tools take a lot of disk space, we need to cleanup before running transcription tests
+      - name: Cleanup disk space
+        if: matrix.test_suite == 'transcription' || matrix.test_suite == 'external-plugins'
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force
+          sudo docker builder prune -a
+          df -h
 
       - name: Set env test variable (schedule)
         if: github.event_name != 'schedule'
