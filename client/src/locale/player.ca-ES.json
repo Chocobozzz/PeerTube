@@ -74,7 +74,7 @@
     "Download speed:": "Velocitat de baixada:",
     "Uploader note:": "Nota de qui ho ha pujat:",
     "Close": "Tancar",
-    "(skipped {1} buffers) ": "(skipped {1} buffers) ",
+    "(skipped {1} buffers) ": "(s'han omès {1} «buffers») ",
     "Audio Player": "Reproductor d'àudio",
     "Video Player": "Reproductor de vídeo",
     "Play": "Reproduir",
