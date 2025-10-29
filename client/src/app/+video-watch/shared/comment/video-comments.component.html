@@ -4,7 +4,7 @@
       {totalNotDeletedComments, plural, =0 {Comments} =1 {1 Comment} other {{{totalNotDeletedComments}} Comments}}
     </h2>
 
-    <my-feed [syndicationItems]="syndicationItems"></my-feed>
+    <my-feed class="me-1" [syndicationItems]="syndicationItems"></my-feed>
 
     <div ngbDropdown class="d-inline-block ms-auto dropdown-root">
       <button class="peertube-button tertiary-button" id="dropdown-sort-comments" ngbDropdownToggle i18n>
