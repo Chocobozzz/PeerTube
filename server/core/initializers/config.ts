@@ -789,6 +789,9 @@ const CONFIG = {
     get MODEL_PATH () {
       return config.get<string>('video_transcription.model_path')
     },
+    get TIMEOUT () {
+      return parseDurationToMs(config.get<string>('video_transcription.timeout'))
+    },
     REMOTE_RUNNERS: {
       get ENABLED () {
         return config.get<boolean>('video_transcription.remote_runners.enabled')

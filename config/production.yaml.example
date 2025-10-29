@@ -793,6 +793,9 @@ video_transcription:
   # If not provided, PeerTube will automatically download the model
   model_path: null
 
+  # Increase this value if you plan to transcribe long videos and if your video doesn't have a GPU
+  timeout: '6 hours'
+
   # Enable remote runners to transcribe videos
   # If enabled, your instance won't transcribe the videos itself
   # At least 1 remote runner must be configured to transcribe your videos

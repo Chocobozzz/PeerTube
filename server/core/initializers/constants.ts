@@ -284,7 +284,7 @@ export const JOB_TTL: { [id in JobType]: number } = {
   'federate-video': 60000 * 5, // 5 minutes,
   'create-user-export': 60000 * 60 * 24, // 24 hours
   'import-user-archive': 60000 * 60 * 24, // 24 hours
-  'video-transcription': 1000 * 3600 * 6 // 6 hours
+  'video-transcription': CONFIG.VIDEO_TRANSCRIPTION.TIMEOUT
 }
 export const REPEAT_JOBS: { [id in JobType]?: RepeatOptions } = {
   'videos-views-stats': {
