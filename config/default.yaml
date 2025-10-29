@@ -505,11 +505,13 @@ stats:
     enabled: true
 
 webrtc:
+  # STUN servers used by web browser to discover its public IP address, used by the player to establish P2P connections
+  # You can add or replace these STUN server URLs, or install your own
   stun_servers:
     - 'stun:stunserver2025.stunprotocol.org'
     - 'stun:stun.framasoft.org'
-    - 'stun.ekiga.net'
-    - 'stun.freeswitch.org'
+    - 'stun:stun.ekiga.net'
+    - 'stun:stun.freeswitch.org'
 
 nsfw_flags_settings:
   # Allow logged-in/anonymous users to have a more granular control over their NSFW policy
