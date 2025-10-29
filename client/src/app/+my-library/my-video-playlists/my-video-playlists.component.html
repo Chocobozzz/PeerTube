@@ -86,9 +86,9 @@
 
   <ng-template #actionCell let-playlist>
     @if(isRegularPlaylist(playlist)) {
-      <my-delete-button label (click)="deleteVideoPlaylist(playlist)"></my-delete-button>
-
       <my-edit-button label [ptRouterLink]="[ 'update', playlist.shortUUID ]"></my-edit-button>
+
+      <my-delete-button label (click)="deleteVideoPlaylist(playlist)"></my-delete-button>
     }
   </ng-template>
 
