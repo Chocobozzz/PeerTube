@@ -80,14 +80,20 @@ describe('Test video update scheduler', function () {
   it('Should wait some seconds and have the video in public privacy', async function () {
     this.timeout(50000)
 
-    await wait(15000)
-    await waitJobs(servers)
-
-    for (const server of servers) {
+    const check = async (server: PeerTubeServer) => {
       const { total, data } = await server.videos.list()
 
-      expect(total).to.equal(1)
-      expect(data[0].name).to.equal('video 1')
+      return total === 1 && data[0].name === 'video 1'
+    }
+
+    while (true) {
+      const allGood = await Promise.all(servers.map(s => check(s)))
+
+      if (allGood.every(g => g)) {
+        break
+      }
+
+      await wait(500)
     }
   })
 

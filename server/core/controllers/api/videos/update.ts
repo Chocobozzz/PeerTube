@@ -264,10 +264,12 @@ async function updateSchedule (videoInstance: MVideoFullLight, videoInfoToUpdate
   }
 
   if (videoInfoToUpdate.scheduleUpdate === null) {
-    videoInstance.publishedAt = new Date()
-    await videoInstance.save({ transaction })
+    const deleted = await ScheduleVideoUpdateModel.deleteByVideoId(videoInstance.id, transaction)
 
-    await ScheduleVideoUpdateModel.deleteByVideoId(videoInstance.id, transaction)
+    if (deleted) {
+      videoInstance.publishedAt = new Date()
+      await videoInstance.save({ transaction })
+    }
   }
 }
 
