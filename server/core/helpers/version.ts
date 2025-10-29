@@ -1,7 +1,7 @@
 import { execPromise, execPromise2 } from './core-utils.js'
 import { logger } from './logger.js'
 
-async function getServerCommit () {
+export async function getServerCommit () {
   try {
     const tag = await execPromise2(
       '[ ! -d .git ] || git name-rev --name-only --tags --no-undefined HEAD 2>/dev/null || true',
@@ -24,13 +24,6 @@ async function getServerCommit () {
   return ''
 }
 
-function getNodeABIVersion () {
-  const version = process.versions.modules
-
-  return parseInt(version)
-}
-
-export {
-  getServerCommit,
-  getNodeABIVersion
+export function getNodeABIVersion () {
+  return process.versions.modules
 }

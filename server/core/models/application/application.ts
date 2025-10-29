@@ -52,7 +52,7 @@ export class ApplicationModel extends SequelizeModel<ApplicationModel> {
 
   @AllowNull(false)
   @Column
-  declare nodeABIVersion: number
+  declare nodeABIVersion: string
 
   @HasOne(() => AccountModel, {
     foreignKey: {

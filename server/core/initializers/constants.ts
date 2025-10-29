@@ -54,7 +54,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 935
+export const LAST_MIGRATION_VERSION = 940
 
 // ---------------------------------------------------------------------------
 
