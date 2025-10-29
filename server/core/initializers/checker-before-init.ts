@@ -1,5 +1,5 @@
-import config from 'config'
 import { promisify0 } from '@peertube/peertube-core-utils'
+import config from 'config'
 import { parseSemVersion } from '../helpers/core-utils.js'
 import { logger } from '../helpers/logger.js'
 
@@ -321,11 +321,19 @@ export async function checkFFmpeg (CONFIG: { TRANSCODING: { ENABLED: boolean } }
 
 export function checkNodeVersion () {
   const v = process.version
-  const { major } = parseSemVersion(v)
+  const { major, minor } = parseSemVersion(v)
 
-  logger.debug('Checking NodeJS version %s.', v)
+  logger.debug(`Checking NodeJS version ${v}`)
 
-  if (major <= 12) {
-    throw new Error('Your NodeJS version ' + v + ' is not supported. Please upgrade.')
+  if (major < 20) {
+    throw new Error(`Your NodeJS version ${v} is not supported. Please upgrade.`)
+  }
+
+  if (major === 20 && minor < 19) {
+    throw new Error(`NodeJS v20.19 and above is required`)
+  }
+
+  if (major === 22 && minor < 12) {
+    throw new Error(`NodeJS v22.12 and above is required`)
   }
 }
