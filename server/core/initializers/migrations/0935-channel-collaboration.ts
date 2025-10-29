@@ -24,14 +24,15 @@ async function up (utils: {
       type: Sequelize.JSONB,
       allowNull: true
     }
-    await utils.queryInterface.addColumn('userNotification', 'data', metadata)
+    await utils.queryInterface.addColumn('userNotification', 'data', metadata, { transaction: utils.transaction })
   }
 
   {
-    await utils.sequelize.query(`
-      ALTER TABLE "userNotification"
-      ADD COLUMN "channelCollaboratorId" INTEGER REFERENCES "videoChannelCollaborator" ("id") ON DELETE CASCADE ON UPDATE CASCADE
-    `)
+    await utils.sequelize.query(
+      `ALTER TABLE "userNotification" ` +
+        `ADD COLUMN "channelCollaboratorId" INTEGER REFERENCES "videoChannelCollaborator" ("id") ON DELETE CASCADE ON UPDATE CASCADE`,
+      { transaction: utils.transaction }
+    )
   }
 }
 
