@@ -93,7 +93,7 @@ find dist/ packages/core-utils/dist/ \
                           "$directory_name/dist" "$directory_name/package.json" \
                           "$directory_name/scripts/upgrade.sh" "$directory_name/support/doc" "$directory_name/support/freebsd" \
                           "$directory_name/support/init.d" "$directory_name/support/nginx" "$directory_name/support/openapi" \
-                          "$directory_name/support/sysctl.d" "$directory_name/support/systemd" \
+                          "$directory_name/support/sysctl.d" "$directory_name/support/conf.d" "$directory_name/support/systemd"  \
                           "$directory_name/pnpm-patches" "$directory_name/pnpm-lock.yaml" "$directory_name/pnpm-workspace.yaml")
 
   # temporary setup
