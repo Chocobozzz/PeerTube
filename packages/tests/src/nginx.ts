@@ -1,12 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { HttpStatusCode } from '@peertube/peertube-models'
-import {
-  makeRawRequest
-} from '@peertube/peertube-server-commands'
+import { makeRawRequest } from '@peertube/peertube-server-commands'
 
 describe('Test nginx', function () {
-
   it('Should serve public HLS/web video files', async function () {
     const urls = [
       // eslint-disable-next-line max-len
@@ -36,7 +33,7 @@ describe('Test nginx', function () {
     ]
 
     for (const url of urls) {
-      await makeRawRequest({ url, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await makeRawRequest({ url, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     }
   })
 })
