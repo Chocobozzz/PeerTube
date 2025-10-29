@@ -511,10 +511,11 @@ describe('Test video channels', function () {
   it('Should search among account video channels', async function () {
     {
       const body = await servers[0].channels.listByAccount({ accountName, search: 'root' })
-      expect(body.total).to.equal(1)
+      expect(body.total).to.equal(2)
 
       const channels = body.data
-      expect(channels).to.have.lengthOf(1)
+      expect(channels).to.have.lengthOf(2)
+      expect(channels.map(c => c.name)).to.have.members([ 'root_channel', 'toto_channel' ])
     }
 
     {
