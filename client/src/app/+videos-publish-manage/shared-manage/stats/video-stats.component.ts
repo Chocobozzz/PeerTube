@@ -203,9 +203,9 @@ export class VideoStatsComponent implements OnInit {
     this.activeGraphId = newActive
 
     if (newActive === 'countries') {
-      this.chartHeight = `${Math.max(this.countries.length * 20, 300)}px`
+      this.chartHeight = `${Math.max(this.countries.length * 25, 300)}px`
     } else if (newActive === 'regions') {
-      this.chartHeight = `${Math.max(this.regions.length * 20, 300)}px`
+      this.chartHeight = `${Math.max(this.regions.length * 25, 300)}px`
     } else {
       this.chartHeight = '300px'
     }
