@@ -505,10 +505,11 @@ stats:
     enabled: true
 
 webrtc:
-  # 1 or 2 STUN servers are sufficient
   stun_servers:
-    - 'stun:stunserver2024.stunprotocol.org'
+    - 'stun:stunserver2025.stunprotocol.org'
     - 'stun:stun.framasoft.org'
+    - 'stun.ekiga.net'
+    - 'stun.freeswitch.org'
 
 nsfw_flags_settings:
   # Allow logged-in/anonymous users to have a more granular control over their NSFW policy
