@@ -382,7 +382,7 @@ export class Html5Hlsjs {
   }
 
   private _startLoad () {
-    this.hls.startLoad(-1)
+    this.hls.startLoad(this.hlsjsConfig.startPosition || -1)
     this.videoElement.removeEventListener('play', this.handlers.play)
   }
 

@@ -1,4 +1,4 @@
-import { getResolutionAndFPSLabel, getResolutionLabel } from '@peertube/peertube-core-utils'
+import { getResolutionAndFPSLabel, getResolutionLabel, timeToInt } from '@peertube/peertube-core-utils'
 import { LiveVideoLatencyMode } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
@@ -24,7 +24,15 @@ type ConstructorOptions =
   & Pick<PeerTubePlayerConstructorOptions, 'pluginsManager' | 'serverUrl' | 'authorizationHeader' | 'stunServers'>
   & Pick<
     PeerTubePlayerLoadOptions,
-    'videoPassword' | 'requiresUserAuth' | 'videoFileToken' | 'requiresPassword' | 'isLive' | 'liveOptions' | 'p2pEnabled' | 'hls'
+    | 'videoPassword'
+    | 'requiresUserAuth'
+    | 'videoFileToken'
+    | 'requiresPassword'
+    | 'isLive'
+    | 'liveOptions'
+    | 'p2pEnabled'
+    | 'hls'
+    | 'startTime'
   >
 
 export class HLSOptionsBuilder {
@@ -210,6 +218,7 @@ export class HLSOptionsBuilder {
     const base: HLSPluginOptions = {
       capLevelToPlayerSize: true,
       autoStartLoad: false,
+      startPosition: timeToInt(this.options.startTime),
 
       p2pMediaLoaderOptions: p2pMediaLoaderConfig.loader,
 
