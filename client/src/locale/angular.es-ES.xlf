@@ -8163,7 +8163,7 @@
       </trans-unit>
       <trans-unit id="6339334908260162420" datatype="html" xml:space="preserve">
         <source>Your videos with thumbnail, caption files. Video files can also be included in the archive</source>
-        <target state="translated">Tus vídeos con miniaturas, archivos de leyendas. Los archivos de vídeo pueden ser también incluidos en el archivo.</target>
+        <target state="translated">Tus videos con miniaturas, archivos de leyendas. Los archivos de video pueden ser también incluidos en el archivo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">21</context>
