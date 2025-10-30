@@ -1,5 +1,13 @@
 import { pick } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, LiveVideoCreate, LiveVideoUpdate, ThumbnailType, UserRight, VideoState } from '@peertube/peertube-models'
+import {
+  HttpStatusCode,
+  LiveVideoCreate,
+  LiveVideoUpdate,
+  ThumbnailType,
+  UserRight,
+  VideoChannelActivityAction,
+  VideoState
+} from '@peertube/peertube-models'
 import { uuidToShort } from '@peertube/peertube-node-utils'
 import { exists, isArray } from '@server/helpers/custom-validators/misc.js'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
@@ -26,6 +34,7 @@ import express from 'express'
 import { Transaction } from 'sequelize'
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, optionalAuthenticate } from '../../../middlewares/index.js'
+import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 
 const lTags = loggerTagsFactory('api', 'live')
 
@@ -134,10 +143,18 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
           videoLive.LiveSchedules = await VideoLiveScheduleModel.addToLiveId(videoLive.id, body.schedules.map(s => s.startAt), t)
         }
       }
+
+      video.VideoLive = await videoLive.save({ transaction: t })
+
+      await VideoChannelActivityModel.addVideoActivity({
+        action: VideoChannelActivityAction.UPDATE,
+        user: res.locals.oauth.token.User,
+        channel: video.VideoChannel,
+        video,
+        transaction: t
+      })
     })
   })
-
-  video.VideoLive = await videoLive.save()
 
   await federateVideoIfNeeded(video, false)
 

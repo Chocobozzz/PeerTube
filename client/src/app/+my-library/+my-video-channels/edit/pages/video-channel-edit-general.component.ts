@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject, OnInit } from '@angular/core'
+import { Component, inject, OnDestroy, OnInit } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import {
   BuildFormArgumentTyped,
@@ -53,7 +53,7 @@ type Form = {
     GlobalIconComponent
   ]
 })
-export class VideoChannelEditGeneralComponent implements OnInit {
+export class VideoChannelEditGeneralComponent implements OnInit, OnDestroy {
   private formReactiveService = inject(FormReactiveService)
   private editController = inject(VideoChannelEditControllerService)
 
@@ -64,6 +64,7 @@ export class VideoChannelEditGeneralComponent implements OnInit {
   videoChannelEdit: VideoChannelEdit
 
   private formSub: Subscription
+  private storeSub: Subscription
 
   get instanceHost () {
     return window.location.host
@@ -75,7 +76,7 @@ export class VideoChannelEditGeneralComponent implements OnInit {
     this.videoChannelEdit = this.editController.getStore()
     this.buildForm()
 
-    this.editController.getStoreChangesObs()
+    this.storeSub = this.editController.getStoreChangesObs()
       .subscribe(() => {
         this.videoChannelEdit = this.editController.getStore()
 
@@ -87,6 +88,11 @@ export class VideoChannelEditGeneralComponent implements OnInit {
 
       this.editController.setFormError($localize`General`, 'general', this.formErrors)
     })
+  }
+
+  ngOnDestroy () {
+    this.storeSub?.unsubscribe()
+    this.editController.unregisterSaveHook()
   }
 
   private buildForm () {

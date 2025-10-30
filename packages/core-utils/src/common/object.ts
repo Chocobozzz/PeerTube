@@ -1,6 +1,7 @@
 import { Jsonify } from 'type-fest'
 
-export function pick<O extends object, K extends keyof O> (object: O, keys: K[]): Pick<O, K> {
+// Forbid _attributes key to prevent pick on a sequelize model, that doesn't work for attributes
+export function pick<O extends (object & { _attributes?: never }), K extends keyof O> (object: O, keys: K[]): Pick<O, K> {
   const result: any = {}
 
   for (const key of keys) {

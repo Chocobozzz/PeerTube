@@ -1,5 +1,5 @@
 import { buildAspectRatio } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, VideoState } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoChannelActivityAction, VideoState } from '@peertube/peertube-models'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { CreateJobArgument, CreateJobOptions, JobQueue } from '@server/lib/job-queue/index.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
@@ -12,6 +12,7 @@ import { addRemoteStoryboardJobIfNeeded, buildLocalStoryboardJobIfNeeded, buildM
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
 import { openapiOperationDoc } from '@server/middlewares/doc.js'
+import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MStreamingPlaylistFiles, MVideo, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
 import express from 'express'
@@ -73,6 +74,14 @@ async function deleteVideoLatestSourceFile (req: express.Request, res: express.R
 
   await videoSource.save()
 
+  await VideoChannelActivityModel.addVideoActivity({
+    action: VideoChannelActivityAction.UPDATE_SOURCE_FILE,
+    user: res.locals.oauth.token.User,
+    channel: video.VideoChannel,
+    video,
+    transaction: null
+  })
+
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
@@ -132,6 +141,14 @@ async function replaceVideoSourceResumable (req: express.Request, res: express.R
         transaction
       })
 
+      await VideoChannelActivityModel.addVideoActivity({
+        action: VideoChannelActivityAction.UPDATE_SOURCE_FILE,
+        user,
+        channel: video.VideoChannel,
+        video,
+        transaction
+      })
+
       return video
     })
 
@@ -147,6 +164,7 @@ async function replaceVideoSourceResumable (req: express.Request, res: express.R
 
     await regenerateMiniaturesIfNeeded(video, res.locals.ffprobe)
     await video.VideoChannel.setAsUpdated()
+
     await addVideoJobsAfterUpload(video, videoFile.withVideoOrPlaylist(video))
 
     logger.info('Replaced video file of video %s with uuid %s.', video.name, video.uuid, lTags(video.uuid))

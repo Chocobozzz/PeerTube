@@ -3,6 +3,7 @@ import {
   HttpStatusCode,
   NSFWFlag,
   ThumbnailType,
+  VideoChannelActivityAction,
   VideoCommentPolicy,
   VideoPrivacy,
   VideoPrivacyType,
@@ -36,6 +37,7 @@ import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist.js'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videosUpdateValidator } from '../../../middlewares/index.js'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update.js'
 import { VideoModel } from '../../../models/video/video.js'
+import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -64,6 +66,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
   const videoFromReq = res.locals.videoAll
   const oldVideoAuditView = new VideoAuditView(videoFromReq.toFormattedDetailsJSON())
   const body: VideoUpdate = req.body
+  const user = res.locals.oauth.token.User
 
   const hadPrivacyForFederation = isPrivacyForFederation(videoFromReq.privacy)
   const oldPrivacy = videoFromReq.privacy
@@ -148,13 +151,40 @@ async function updateVideo (req: express.Request, res: express.Response) {
       }
 
       // Video channel update?
-      if (res.locals.videoChannel && videoInstanceUpdated.channelId !== res.locals.videoChannel.id) {
-        await videoInstanceUpdated.$set('VideoChannel', res.locals.videoChannel, { transaction: t })
-        videoInstanceUpdated.VideoChannel = res.locals.videoChannel
+      const newChannel = res.locals.videoChannel
+      if (newChannel && videoInstanceUpdated.channelId !== newChannel.id) {
+        const oldChannel = videoInstanceUpdated.VideoChannel
+
+        await VideoChannelActivityModel.addVideoActivity({
+          action: VideoChannelActivityAction.REMOVE_CHANNEL_OWNERSHIP,
+          user,
+          channel: oldChannel,
+          video: videoInstanceUpdated,
+          transaction: t
+        })
+
+        await VideoChannelActivityModel.addVideoActivity({
+          action: VideoChannelActivityAction.CREATE_CHANNEL_OWNERSHIP,
+          user,
+          channel: newChannel,
+          video: videoInstanceUpdated,
+          transaction: t
+        })
+
+        await videoInstanceUpdated.$set('VideoChannel', newChannel, { transaction: t })
+        videoInstanceUpdated.VideoChannel = newChannel
 
         if (hadPrivacyForFederation === true) {
           await changeVideoChannelShare(videoInstanceUpdated, oldVideoChannel, t)
         }
+      } else {
+        await VideoChannelActivityModel.addVideoActivity({
+          action: VideoChannelActivityAction.UPDATE,
+          user: res.locals.oauth.token.User,
+          channel: videoInstanceUpdated.VideoChannel,
+          video: videoInstanceUpdated,
+          transaction: t
+        })
       }
 
       // Schedule an update in the future?
@@ -176,7 +206,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
 
       await autoBlacklistVideoIfNeeded({
         video: videoInstanceUpdated,
-        user: res.locals.oauth.token.User,
+        user,
         isRemote: false,
         isNew: false,
         isNewFile: false,

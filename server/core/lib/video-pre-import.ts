@@ -2,6 +2,7 @@ import {
   NSFWFlag,
   ThumbnailType,
   ThumbnailType_Type,
+  VideoChannelActivityAction,
   VideoImportCreate,
   VideoImportPayload,
   VideoImportState,
@@ -19,6 +20,7 @@ import { Hooks } from '@server/lib/plugins/hooks.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
 import { buildCommentsPolicy, setVideoTags } from '@server/lib/video.js'
+import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoImportModel } from '@server/models/video/video-import.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { VideoModel } from '@server/models/video/video.js'
@@ -27,7 +29,7 @@ import {
   MChannelAccountDefault,
   MChannelSync,
   MThumbnail,
-  MUser,
+  MUserAccountId,
   MVideo,
   MVideoAccountDefault,
   MVideoImportFormattable,
@@ -73,7 +75,7 @@ async function insertFromImportIntoDB (parameters: {
   videoChannel: MChannelAccountDefault
   tags: string[]
   videoImportAttributes: FilteredModelAttributes<VideoImportModel>
-  user: MUser
+  user: MUserAccountId
   videoPasswords?: string[]
 }): Promise<MVideoImportFormattable> {
   const { video, thumbnailModel, previewModel, videoChannel, tags, videoImportAttributes, user, videoPasswords } = parameters
@@ -112,6 +114,15 @@ async function insertFromImportIntoDB (parameters: {
       sequelizeOptions
     ) as MVideoImportFormattable
     videoImport.Video = videoCreated
+
+    await VideoChannelActivityModel.addVideoImportActivity({
+      action: VideoChannelActivityAction.CREATE,
+      channel: videoChannel,
+      videoImport,
+      video: videoCreated,
+      user,
+      transaction: t
+    })
 
     return videoImport
   })
@@ -164,7 +175,7 @@ async function buildVideoFromImport ({ channelId, importData, importDataOverride
 async function buildYoutubeDLImport (options: {
   targetUrl: string
   channel: MChannelAccountDefault
-  user: MUser
+  user: MUserAccountId
   channelSync?: MChannelSync
   importDataOverride?: Partial<VideoImportCreate>
   thumbnailFilePath?: string

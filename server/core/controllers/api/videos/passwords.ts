@@ -1,9 +1,9 @@
+import { HttpStatusCode, VideoChannelActivityAction } from '@peertube/peertube-models'
+import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
+import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import express from 'express'
 import { Transaction } from 'sequelize'
-import { HttpStatusCode } from '@peertube/peertube-models'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
-import { getVideoWithAttributes } from '@server/helpers/video.js'
-import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import {
   asyncMiddleware,
@@ -23,7 +23,8 @@ import {
 const lTags = loggerTagsFactory('api', 'video')
 const videoPasswordRouter = express.Router()
 
-videoPasswordRouter.get('/:videoId/passwords',
+videoPasswordRouter.get(
+  '/:videoId/passwords',
   authenticate,
   paginationValidator,
   videoPasswordsSortValidator,
@@ -33,13 +34,15 @@ videoPasswordRouter.get('/:videoId/passwords',
   asyncMiddleware(listVideoPasswords)
 )
 
-videoPasswordRouter.put('/:videoId/passwords',
+videoPasswordRouter.put(
+  '/:videoId/passwords',
   authenticate,
   asyncMiddleware(updateVideoPasswordListValidator),
   asyncMiddleware(updateVideoPasswordList)
 )
 
-videoPasswordRouter.delete('/:videoId/passwords/:passwordId',
+videoPasswordRouter.delete(
+  '/:videoId/passwords/:passwordId',
   authenticate,
   asyncMiddleware(removeVideoPasswordValidator),
   asyncRetryTransactionMiddleware(removeVideoPassword)
@@ -67,7 +70,7 @@ async function listVideoPasswords (req: express.Request, res: express.Response) 
 }
 
 async function updateVideoPasswordList (req: express.Request, res: express.Response) {
-  const videoInstance = getVideoWithAttributes(res)
+  const videoInstance = res.locals.videoAll
   const videoId = videoInstance.id
 
   const passwordArray = req.body.passwords as string[]
@@ -75,6 +78,14 @@ async function updateVideoPasswordList (req: express.Request, res: express.Respo
   await VideoPasswordModel.sequelize.transaction(async (t: Transaction) => {
     await VideoPasswordModel.deleteAllPasswords(videoId, t)
     await VideoPasswordModel.addPasswords(passwordArray, videoId, t)
+
+    await VideoChannelActivityModel.addVideoActivity({
+      action: VideoChannelActivityAction.UPDATE_PASSWORDS,
+      user: res.locals.oauth.token.User,
+      channel: videoInstance.VideoChannel,
+      video: videoInstance,
+      transaction: t
+    })
   })
 
   logger.info(
@@ -88,10 +99,19 @@ async function updateVideoPasswordList (req: express.Request, res: express.Respo
 }
 
 async function removeVideoPassword (req: express.Request, res: express.Response) {
-  const videoInstance = getVideoWithAttributes(res)
+  const videoInstance = res.locals.videoAll
   const password = res.locals.videoPassword
 
   await VideoPasswordModel.deletePassword(password.id)
+
+  await VideoChannelActivityModel.addVideoActivity({
+    action: VideoChannelActivityAction.UPDATE_PASSWORDS,
+    user: res.locals.oauth.token.User,
+    channel: videoInstance.VideoChannel,
+    video: videoInstance,
+    transaction: null
+  })
+
   logger.info(
     'Password with id %d of video named %s and uuid %s has been deleted.',
     password.id,

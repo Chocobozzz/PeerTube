@@ -18,6 +18,7 @@ import { UserVideoHistoryModel } from '@server/models/user/user-video-history.js
 import { UserModel } from '@server/models/user/user.js'
 import { PlayerSettingModel } from '@server/models/video/player-setting.js'
 import { StoryboardModel } from '@server/models/video/storyboard.js'
+import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoChannelCollaboratorModel } from '@server/models/video/video-channel-collaborator.js'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync.js'
 import { VideoChapterModel } from '@server/models/video/video-chapter.js'
@@ -148,6 +149,7 @@ export async function initDatabaseModels (silent: boolean) {
     VideoShareModel,
     VideoFileModel,
     VideoSourceModel,
+    VideoChannelActivityModel,
     VideoChapterModel,
     VideoCaptionModel,
     VideoBlacklistModel,

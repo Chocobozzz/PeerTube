@@ -93,7 +93,7 @@ async function updateVideoPlayerSettings (req: express.Request, res: express.Res
   const body: PlayerVideoSettingsUpdate = req.body
   const video = res.locals.videoAll
 
-  const setting = await upsertPlayerSettings({ settings: body, channel: undefined, video })
+  const setting = await upsertPlayerSettings({ user: res.locals.oauth.token.User, settings: body, channel: undefined, video })
 
   await sendUpdateVideoPlayerSettings(video, setting, undefined)
 
@@ -104,7 +104,7 @@ async function updateChannelPlayerSettings (req: express.Request, res: express.R
   const body: PlayerChannelSettingsUpdate = req.body
   const channel = res.locals.videoChannel
 
-  const settings = await upsertPlayerSettings({ settings: body, channel, video: undefined })
+  const settings = await upsertPlayerSettings({ user: res.locals.oauth.token.User, settings: body, channel, video: undefined })
 
   await sendUpdateChannelPlayerSettings(channel, settings, undefined)
 

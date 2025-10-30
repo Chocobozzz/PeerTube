@@ -1,3 +1,4 @@
+import './channel-activities.js'
 import './channel-import-videos.js'
 import './generate-download.js'
 import './multiple-servers.js'

@@ -4,6 +4,7 @@ import { ComponentPaginationLight, RestExtractor, RestService, ServerService } f
 import {
   ActorImage,
   ResultList,
+  VideoChannelActivity,
   VideoChannelCollaborator,
   VideoChannelCreate,
   VideoChannel as VideoChannelServer,
@@ -160,6 +161,24 @@ export class VideoChannelService {
     const url = VideoChannelService.BASE_VIDEO_CHANNEL_URL + channelName + '/collaborators/' + collaboratorId
 
     return this.authHttp.delete(url)
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
+  // ---------------------------------------------------------------------------
+
+  listActivities (options: {
+    channelName: string
+    componentPagination: ComponentPaginationLight
+  }) {
+    const { channelName, componentPagination } = options
+
+    const pagination = this.restService.componentToRestPagination(componentPagination)
+
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination)
+
+    const url = VideoChannelService.BASE_VIDEO_CHANNEL_URL + channelName + '/activities'
+    return this.authHttp.get<ResultList<VideoChannelActivity>>(url, { params })
       .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 }

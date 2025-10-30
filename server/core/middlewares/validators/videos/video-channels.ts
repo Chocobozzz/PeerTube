@@ -35,14 +35,17 @@ export const videoChannelsAddValidator = [
     if (actor) {
       res.fail({
         status: HttpStatusCode.CONFLICT_409,
-        message: 'Another actor (account/channel) with this name on this instance already exists or has already existed.'
+        message: req.t(
+          'Another actor (account/channel) with name {name} on this instance already exists or has already existed.',
+          { name: req.body.name }
+        )
       })
       return false
     }
 
     const count = await VideoChannelModel.countByAccount(res.locals.oauth.token.User.Account.id)
     if (count >= CONFIG.VIDEO_CHANNELS.MAX_PER_USER) {
-      res.fail({ message: `You cannot create more than ${CONFIG.VIDEO_CHANNELS.MAX_PER_USER} channels` })
+      res.fail({ message: req.t('You cannot create more than {count} channels', { count: CONFIG.VIDEO_CHANNELS.MAX_PER_USER }) })
       return false
     }
 
@@ -73,7 +76,7 @@ export const videoChannelsUpdateValidator = [
 
 export const videoChannelsRemoveValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (!await checkVideoChannelIsNotTheLastOne(res.locals.videoChannel, res)) return
+    if (!await checkVideoChannelIsNotTheLastOne(res.locals.videoChannel, req, res)) return
 
     return next()
   }
@@ -99,17 +102,6 @@ export const videoChannelsHandleValidatorFactory = (options: {
     }
   ]
 }
-
-export const ensureChannelOwnerCanUpload = [
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const channel = res.locals.videoChannel
-    const user = { id: channel.Account.userId }
-
-    if (!await checkUserQuota({ user, videoFileSize: 1, req, res })) return
-
-    next()
-  }
-]
 
 export const listAccountChannelsValidator = [
   query('withStats')
@@ -155,7 +147,7 @@ export const videoChannelImportVideosValidator = [
     if (!CONFIG.IMPORT.VIDEOS.HTTP.ENABLED) {
       return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Channel import is impossible as video upload via HTTP is not enabled on the server'
+        message: req.t('Channel import is impossible as video upload via HTTP is not enabled on the server')
       })
     }
 
@@ -164,9 +156,12 @@ export const videoChannelImportVideosValidator = [
     if (res.locals.videoChannelSync && res.locals.videoChannelSync.videoChannelId !== res.locals.videoChannel.id) {
       return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
-        message: 'This channel sync is not owned by this channel'
+        message: req.t('This channel sync is not owned by this channel')
       })
     }
+
+    const user = { id: res.locals.videoChannel.Account.userId }
+    if (!await checkUserQuota({ user, videoFileSize: 1, req, res })) return
 
     return next()
   }
@@ -174,13 +169,13 @@ export const videoChannelImportVideosValidator = [
 
 // ---------------------------------------------------------------------------
 
-async function checkVideoChannelIsNotTheLastOne (videoChannel: MChannelAccountDefault, res: express.Response) {
+async function checkVideoChannelIsNotTheLastOne (videoChannel: MChannelAccountDefault, req: express.Request, res: express.Response) {
   const count = await VideoChannelModel.countByAccount(videoChannel.Account.id)
 
   if (count <= 1) {
     res.fail({
       status: HttpStatusCode.CONFLICT_409,
-      message: 'Cannot remove the last channel of this user'
+      message: req.t('Cannot remove the last channel of this user')
     })
     return false
   }

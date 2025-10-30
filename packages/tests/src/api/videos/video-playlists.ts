@@ -135,7 +135,7 @@ describe('Test video playlists', function () {
 
       await commands[0].create({
         attributes: {
-          displayName: 'my super playlist',
+          displayName: 'my normal playlist',
           privacy: VideoPlaylistPrivacy.PUBLIC,
           description: 'my super description',
           thumbnailfile: 'custom-thumbnail.jpg',
@@ -176,7 +176,7 @@ describe('Test video playlists', function () {
           expect(body.data).to.have.lengthOf(1)
 
           playlist = body.data[0]
-          expect(playlist.displayName).to.equal('my super playlist')
+          expect(playlist.displayName).to.equal('my normal playlist')
           expect(playlist.privacy.id).to.equal(VideoPlaylistPrivacy.PUBLIC)
           expect(playlist.type.id).to.equal(VideoPlaylistType.REGULAR)
         }

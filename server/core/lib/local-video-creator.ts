@@ -6,6 +6,7 @@ import {
   PeerTubeError,
   ThumbnailType,
   ThumbnailType_Type,
+  VideoChannelActivityAction,
   VideoCreate,
   VideoPrivacy,
   VideoStateType
@@ -16,12 +17,13 @@ import { LoggerTagsFn, logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { ScheduleVideoUpdateModel } from '@server/models/video/schedule-video-update.js'
+import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting.js'
 import { VideoLiveScheduleModel } from '@server/models/video/video-live-schedule.js'
 import { VideoLiveModel } from '@server/models/video/video-live.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MChannel, MChannelAccountLight, MThumbnail, MUser, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
+import { MChannel, MChannelAccountLight, MThumbnail, MUserAccountId, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
 import { FilteredModelAttributes } from '@server/types/sequelize.js'
 import { FfprobeData } from 'fluent-ffmpeg'
 import { move } from 'fs-extra/esm'
@@ -92,7 +94,7 @@ export class LocalVideoCreator {
       liveAttributes: LiveAttributes
 
       channel: MChannelAccountLight
-      user: MUser
+      user: MUserAccountId
       videoAttributeResultHook: VideoAttributeHookFilter
       thumbnails: ThumbnailOptions
 
@@ -138,6 +140,14 @@ export class LocalVideoCreator {
     await retryTransactionWrapper(() => {
       return sequelizeTypescript.transaction(async transaction => {
         await this.video.save({ transaction })
+
+        await VideoChannelActivityModel.addVideoActivity({
+          action: VideoChannelActivityAction.CREATE,
+          user: this.options.user,
+          channel: this.channel,
+          video: this.video,
+          transaction
+        })
 
         for (const thumbnail of thumbnails) {
           await this.video.addAndSaveThumbnail(thumbnail, transaction)

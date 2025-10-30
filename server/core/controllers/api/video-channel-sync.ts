@@ -1,6 +1,7 @@
-import { HttpStatusCode, VideoChannelSyncState } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoChannelActivityAction, VideoChannelSyncState } from '@peertube/peertube-models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoChannelSyncAuditView } from '@server/helpers/audit-logger.js'
 import { logger } from '@server/helpers/logger.js'
+import { sequelizeTypescript } from '@server/initializers/database.js'
 import {
   apiRateLimiter,
   asyncMiddleware,
@@ -10,6 +11,7 @@ import {
   ensureSyncIsEnabled,
   videoChannelSyncValidator
 } from '@server/middlewares/index.js'
+import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync.js'
 import { MChannelSyncFormattable } from '@server/types/models/index.js'
 import express from 'express'
@@ -45,8 +47,18 @@ async function createVideoChannelSync (req: express.Request, res: express.Respon
     state: VideoChannelSyncState.WAITING_FIRST_RUN
   })
 
-  await syncCreated.save()
-  syncCreated.VideoChannel = res.locals.videoChannel
+  await sequelizeTypescript.transaction(async transaction => {
+    await syncCreated.save({ transaction })
+    syncCreated.VideoChannel = res.locals.videoChannel
+
+    await VideoChannelActivityModel.addChannelSyncActivity({
+      action: VideoChannelActivityAction.CREATE,
+      user: res.locals.oauth.token.User,
+      channel: res.locals.videoChannel,
+      sync: syncCreated,
+      transaction
+    })
+  })
 
   auditLogger.create(getAuditIdFromRes(res), new VideoChannelSyncAuditView(syncCreated.toFormattedJSON()))
 
@@ -64,7 +76,17 @@ async function createVideoChannelSync (req: express.Request, res: express.Respon
 async function removeVideoChannelSync (req: express.Request, res: express.Response) {
   const syncInstance = res.locals.videoChannelSync
 
-  await syncInstance.destroy()
+  await sequelizeTypescript.transaction(async transaction => {
+    await syncInstance.destroy({ transaction })
+
+    await VideoChannelActivityModel.addChannelSyncActivity({
+      action: VideoChannelActivityAction.DELETE,
+      user: res.locals.oauth.token.User,
+      channel: res.locals.videoChannel,
+      sync: syncInstance,
+      transaction
+    })
+  })
 
   auditLogger.delete(getAuditIdFromRes(res), new VideoChannelSyncAuditView(syncInstance.toFormattedJSON()))
 

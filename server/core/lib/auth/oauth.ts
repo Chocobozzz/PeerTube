@@ -232,11 +232,9 @@ async function handleRefreshGrant (options: {
     lastActivityIP: options.ip,
     lastActivityDate: new Date(),
 
-    ...pick(refreshToken.token, [
-      'loginDevice',
-      'loginIP',
-      'loginDate'
-    ])
+    loginIP: refreshToken.token.loginIP,
+    loginDate: refreshToken.token.loginDate,
+    loginDevice: refreshToken.token.loginDevice
   })
 
   return saveToken(token, client, refreshToken.user, { refreshTokenAuthName })

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject, OnInit } from '@angular/core'
+import { Component, inject, OnDestroy, OnInit } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Router } from '@angular/router'
 import { AuthService, ConfirmService, Notifier } from '@app/core'
@@ -12,6 +12,7 @@ import { CollaboratorStateComponent } from '@app/shared/shared-main/channel/coll
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
 import { VideoChannelCollaborator, VideoChannelCollaboratorState } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
+import { Subscription } from 'rxjs'
 import { VideoChannelEditControllerService } from '../video-channel-edit-controller.service'
 import { VideoChannelEdit } from '../video-channel-edit.model'
 
@@ -31,7 +32,7 @@ import { VideoChannelEdit } from '../video-channel-edit.model'
     CollaboratorStateComponent
   ]
 })
-export class VideoChannelEditEditorsComponent implements OnInit {
+export class VideoChannelEditEditorsComponent implements OnInit, OnDestroy {
   private confirmService = inject(ConfirmService)
   private notifier = inject(Notifier)
   private channelService = inject(VideoChannelService)
@@ -44,10 +45,21 @@ export class VideoChannelEditEditorsComponent implements OnInit {
   newEditorUsername: string
   collaboratorActions: DropdownAction<VideoChannelCollaborator>[] = []
 
+  private storeSub: Subscription
+
   ngOnInit () {
     this.videoChannelEdit = this.editController.getStore()
 
+    this.storeSub = this.editController.getStoreChangesObs()
+      .subscribe(() => {
+        this.videoChannelEdit = this.editController.getStore()
+      })
+
     this.buildActions()
+  }
+
+  ngOnDestroy () {
+    this.storeSub?.unsubscribe()
   }
 
   private buildActions () {

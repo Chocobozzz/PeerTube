@@ -1,6 +1,7 @@
 import { forceNumber } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
+  VideoChannelActivityAction,
   VideoPlaylistCreate,
   VideoPlaylistCreateResult,
   VideoPlaylistElementCreate,
@@ -20,6 +21,7 @@ import {
   sendPlaylistPositionUpdateOfChannel
 } from '@server/lib/video-playlist.js'
 import { getServerActor } from '@server/models/application/application.js'
+import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { MVideoPlaylistFull, MVideoPlaylistThumbnail } from '@server/types/models/index.js'
 import express from 'express'
 import { resetSequelizeInstance, retryTransactionWrapper } from '../../helpers/database-utils.js'
@@ -186,9 +188,9 @@ async function createVideoPlaylist (req: express.Request, res: express.Response)
 
   videoPlaylist.url = getLocalVideoPlaylistActivityPubUrl(videoPlaylist) // We use the UUID, so set the URL after building the object
 
-  if (videoPlaylistInfo.videoChannelId) {
-    const videoChannel = res.locals.videoChannel
+  const videoChannel = res.locals.videoChannel
 
+  if (videoChannel && videoPlaylistInfo.videoChannelId) {
     videoPlaylist.videoChannelId = videoChannel.id
     videoPlaylist.VideoChannel = videoChannel
   }
@@ -221,6 +223,16 @@ async function createVideoPlaylist (req: express.Request, res: express.Response)
       videoPlaylistCreated.OwnerAccount = await AccountModel.load(user.Account.id, t)
       await sendCreateVideoPlaylist(videoPlaylistCreated, t)
 
+      if (videoChannel) {
+        await VideoChannelActivityModel.addPlaylistActivity({
+          action: VideoChannelActivityAction.CREATE,
+          user,
+          channel: videoChannel,
+          playlist: videoPlaylistCreated,
+          transaction: t
+        })
+      }
+
       return videoPlaylistCreated
     })
   })
@@ -238,7 +250,7 @@ async function createVideoPlaylist (req: express.Request, res: express.Response)
 
 async function updateVideoPlaylist (req: express.Request, res: express.Response) {
   const playlist = res.locals.videoPlaylistFull
-  const videoPlaylistInfoToUpdate = req.body as VideoPlaylistUpdate
+  const body = req.body as VideoPlaylistUpdate
 
   const wasPrivatePlaylist = playlist.privacy === VideoPlaylistPrivacy.PRIVATE
   const wasNotPrivatePlaylist = playlist.privacy !== VideoPlaylistPrivacy.PRIVATE
@@ -256,39 +268,59 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
 
   try {
     await sequelizeTypescript.transaction(async t => {
-      if (videoPlaylistInfoToUpdate.videoChannelId !== undefined) {
-        if (videoPlaylistInfoToUpdate.videoChannelId === null) {
-          removedFromChannel = {
-            id: playlist.videoChannelId,
-            position: playlist.videoChannelPosition
-          }
+      const newChannel = res.locals.videoChannel
+      const user = res.locals.oauth.token.User
 
-          playlist.videoChannelId = null
-        } else {
-          const videoChannel = res.locals.videoChannel
+      // Had a channel, but the user changed it (to null or another channel)
+      if (playlist.videoChannelId && body.videoChannelId !== undefined && body.videoChannelId !== playlist.videoChannelId) {
+        await VideoChannelActivityModel.addPlaylistActivity({
+          action: VideoChannelActivityAction.REMOVE_CHANNEL_OWNERSHIP,
+          user,
+          channel: playlist.VideoChannel,
+          playlist,
+          transaction: t
+        })
 
-          if (playlist.videoChannelId !== videoPlaylistInfoToUpdate.videoChannelId) {
-            removedFromChannel = {
-              id: playlist.videoChannelId,
-              position: playlist.videoChannelPosition
-            }
-
-            playlist.videoChannelPosition = await VideoPlaylistModel.getNextPositionOf({
-              videoChannelId: videoChannel.id,
-              transaction: t
-            })
-          }
-
-          playlist.videoChannelId = videoChannel.id
-          playlist.VideoChannel = videoChannel
+        removedFromChannel = {
+          id: playlist.videoChannelId,
+          position: playlist.videoChannelPosition
         }
+
+        playlist.videoChannelId = null
+        playlist.VideoChannel = null
       }
 
-      if (videoPlaylistInfoToUpdate.displayName !== undefined) playlist.name = videoPlaylistInfoToUpdate.displayName
-      if (videoPlaylistInfoToUpdate.description !== undefined) playlist.description = videoPlaylistInfoToUpdate.description
+      if (newChannel && newChannel.id !== playlist.videoChannelId) {
+        await VideoChannelActivityModel.addPlaylistActivity({
+          action: VideoChannelActivityAction.CREATE_CHANNEL_OWNERSHIP,
+          user,
+          channel: newChannel,
+          playlist,
+          transaction: t
+        })
 
-      if (videoPlaylistInfoToUpdate.privacy !== undefined) {
-        playlist.privacy = forceNumber(videoPlaylistInfoToUpdate.privacy) as VideoPlaylistPrivacyType
+        playlist.videoChannelPosition = await VideoPlaylistModel.getNextPositionOf({
+          videoChannelId: newChannel.id,
+          transaction: t
+        })
+
+        playlist.videoChannelId = newChannel.id
+        playlist.VideoChannel = newChannel
+      } else if (newChannel) {
+        await VideoChannelActivityModel.addPlaylistActivity({
+          action: VideoChannelActivityAction.UPDATE,
+          user: res.locals.oauth.token.User,
+          channel: newChannel,
+          playlist,
+          transaction: t
+        })
+      }
+
+      if (body.displayName !== undefined) playlist.name = body.displayName
+      if (body.description !== undefined) playlist.description = body.description
+
+      if (body.privacy !== undefined) {
+        playlist.privacy = forceNumber(body.privacy) as VideoPlaylistPrivacyType
 
         if (wasNotPrivatePlaylist === true && playlist.privacy === VideoPlaylistPrivacy.PRIVATE) {
           await sendDeleteVideoPlaylist(playlist, t)
@@ -360,6 +392,14 @@ async function removeVideoPlaylist (req: express.Request, res: express.Response)
 
     if (videoPlaylistInstance.videoChannelId) {
       await sendPlaylistPositionUpdateOfChannel(videoPlaylistInstance.videoChannelId, t)
+
+      await VideoChannelActivityModel.addPlaylistActivity({
+        action: VideoChannelActivityAction.DELETE,
+        user: res.locals.oauth.token.User,
+        channel: videoPlaylistInstance.VideoChannel,
+        playlist: videoPlaylistInstance,
+        transaction: t
+      })
     }
 
     logger.info('Video playlist %s deleted.', videoPlaylistInstance.uuid)
@@ -393,6 +433,16 @@ async function addVideoInPlaylist (req: express.Request, res: express.Response) 
 
     videoPlaylist.changed('updatedAt', true)
     await videoPlaylist.save({ transaction: t })
+
+    if (videoPlaylist.VideoChannel) {
+      await VideoChannelActivityModel.addPlaylistActivity({
+        action: VideoChannelActivityAction.UPDATE_ELEMENTS,
+        user: res.locals.oauth.token.User,
+        channel: videoPlaylist.VideoChannel,
+        playlist: videoPlaylist,
+        transaction: t
+      })
+    }
 
     return playlistElement
   })
@@ -432,6 +482,16 @@ async function updateVideoPlaylistElement (req: express.Request, res: express.Re
 
     await sendUpdateVideoPlaylist(videoPlaylist, t)
 
+    if (videoPlaylist.VideoChannel) {
+      await VideoChannelActivityModel.addPlaylistActivity({
+        action: VideoChannelActivityAction.UPDATE_ELEMENTS,
+        user: res.locals.oauth.token.User,
+        channel: videoPlaylist.VideoChannel,
+        playlist: videoPlaylist,
+        transaction: t
+      })
+    }
+
     return element
   })
 
@@ -458,6 +518,16 @@ async function removeVideoFromPlaylist (req: express.Request, res: express.Respo
 
     videoPlaylist.changed('updatedAt', true)
     await videoPlaylist.save({ transaction: t })
+
+    if (videoPlaylist.VideoChannel) {
+      await VideoChannelActivityModel.addPlaylistActivity({
+        action: VideoChannelActivityAction.UPDATE_ELEMENTS,
+        user: res.locals.oauth.token.User,
+        channel: videoPlaylist.VideoChannel,
+        playlist: videoPlaylist,
+        transaction: t
+      })
+    }
 
     logger.info('Video playlist element %d of playlist %s deleted.', videoPlaylistElement.position, videoPlaylist.uuid)
   })

@@ -18,7 +18,7 @@ import { logger } from '../../../helpers/logger.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import { ActorModel } from '../../../models/actor/actor.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
-import { MActorAccountChannelId, MActorFull, MActorSignature } from '../../../types/models/index.js'
+import { MActorFull, MActorSignature } from '../../../types/models/index.js'
 import { fetchAPObjectIfNeeded } from '../activity.js'
 import { getOrCreateAPActor } from '../actors/get.js'
 import { APActorUpdater } from '../actors/updater.js'
@@ -142,13 +142,13 @@ async function processUpdatePlayerSettings (
   byActor: MActorSignature,
   settingsObject: PlayerSettingsObject
 ) {
-  let actor: MActorAccountChannelId
+  let actor: MActorFull
 
   const { video } = await maybeGetOrCreateAPVideo({ videoObject: settingsObject.object })
 
   if (!video) {
     try {
-      actor = await getOrCreateAPActor(settingsObject.object)
+      actor = await getOrCreateAPActor(settingsObject.object, 'all')
     } catch {
       actor = undefined
     }

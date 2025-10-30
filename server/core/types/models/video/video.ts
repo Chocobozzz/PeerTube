@@ -1,5 +1,6 @@
 import { PickWith, PickWithOpt } from '@peertube/peertube-typescript-utils'
 import { VideoModel } from '../../../models/video/video.js'
+import { MVideoAutomaticTagWithTag } from '../automatic-tag/video-automatic-tag.js'
 import { MTrackerUrl } from '../server/tracker.js'
 import { MUserVideoHistoryTime } from '../user/user-video-history.js'
 import { MScheduleVideoUpdate } from './schedule-video-update.js'
@@ -20,6 +21,7 @@ import {
 } from './video-channel.js'
 import { MVideoFile } from './video-file.js'
 import { MVideoLiveWithSchedules } from './video-live.js'
+import { MVideoSource } from './video-source.js'
 import {
   MStreamingPlaylistFiles,
   MStreamingPlaylistRedundancies,
@@ -54,6 +56,9 @@ export type MVideo = Omit<
   | 'VideoPasswords'
   | 'Storyboard'
   | 'AutomaticTags'
+  | 'VideoSource'
+  | 'VideoJobInfo'
+  | 'VideoAutomaticTags'
 >
 
 // ############################################################################
@@ -245,6 +250,8 @@ export type MVideoFormattable =
   & PickWithOpt<VideoModel, 'VideoStreamingPlaylists', MStreamingPlaylistFiles[]>
   & PickWithOpt<VideoModel, 'VideoFiles', MVideoFile[]>
   & PickWithOpt<VideoModel, 'VideoLive', MVideoLiveWithSchedules>
+  & PickWithOpt<VideoModel, 'VideoAutomaticTags', MVideoAutomaticTagWithTag[]>
+  & PickWithOpt<VideoModel, 'VideoSource', MVideoSource>
 
 export type MVideoFormattableDetails =
   & MVideoFormattable

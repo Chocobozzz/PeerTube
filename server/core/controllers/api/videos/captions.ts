@@ -1,4 +1,4 @@
-import { HttpStatusCode, VideoCaptionGenerate } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoCaptionGenerate, VideoChannelActivityAction } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { createLocalCaption, createTranscriptionTaskIfNeeded, updateHLSMasterOnCaptionChangeIfNeeded } from '@server/lib/video-captions.js'
@@ -18,6 +18,7 @@ import {
   listVideoCaptionsValidator
 } from '../../../middlewares/validators/index.js'
 import { VideoCaptionModel } from '../../../models/video/video-caption.js'
+import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 
 const lTags = loggerTagsFactory('api', 'video-caption')
 
@@ -94,7 +95,17 @@ async function createVideoCaption (req: express.Request, res: express.Response) 
   }
 
   await retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction(t => federateVideoIfNeeded(video, false, t))
+    return sequelizeTypescript.transaction(async t => {
+      await VideoChannelActivityModel.addVideoActivity({
+        action: VideoChannelActivityAction.UPDATE_CAPTIONS,
+        user: res.locals.oauth.token.User,
+        channel: video.VideoChannel,
+        video,
+        transaction: t
+      })
+
+      return federateVideoIfNeeded(video, false, t)
+    })
   })
 
   Hooks.runAction('action:api.video-caption.created', { caption: videoCaption, req, res })
@@ -116,7 +127,17 @@ async function deleteVideoCaption (req: express.Request, res: express.Response) 
   }
 
   await retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction(t => federateVideoIfNeeded(video, false, t))
+    return sequelizeTypescript.transaction(async t => {
+      await VideoChannelActivityModel.addVideoActivity({
+        action: VideoChannelActivityAction.UPDATE_CAPTIONS,
+        user: res.locals.oauth.token.User,
+        channel: video.VideoChannel,
+        video,
+        transaction: t
+      })
+
+      return federateVideoIfNeeded(video, false, t)
+    })
   })
 
   logger.info('Video caption %s of video %s deleted.', videoCaption.language, video.uuid, lTags(video.uuid))

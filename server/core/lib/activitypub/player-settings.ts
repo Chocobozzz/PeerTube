@@ -1,13 +1,13 @@
 import { PlayerSettingsObject } from '@peertube/peertube-models'
 import { sanitizeAndCheckPlayerSettingsObject } from '@server/helpers/custom-validators/activitypub/player-settings.js'
-import { MChannelId, MChannelUrl, MVideoIdUrl } from '../../types/models/index.js'
+import { MChannelDefault, MVideoIdUrl } from '../../types/models/index.js'
 import { upsertPlayerSettings } from '../player-settings.js'
 import { fetchAPObjectIfNeeded } from './activity.js'
 import { checkUrlsSameHost } from './url.js'
 
 export async function upsertAPPlayerSettings (options: {
   video: MVideoIdUrl
-  channel: MChannelUrl & MChannelId
+  channel: MChannelDefault
   settingsObject: PlayerSettingsObject | string
   contextUrl: string
 }) {
@@ -30,7 +30,7 @@ export async function upsertAPPlayerSettings (options: {
     throw new Error(`Player settings ${settingsObject.id} object is not on the same host as context URL ${contextUrl}`)
   }
 
-  await upsertPlayerSettings({ settings: getPlayerSettingsAttributesFromObject(settingsObject), channel, video })
+  await upsertPlayerSettings({ user: null, settings: getPlayerSettingsAttributesFromObject(settingsObject), channel, video })
 }
 
 // ---------------------------------------------------------------------------

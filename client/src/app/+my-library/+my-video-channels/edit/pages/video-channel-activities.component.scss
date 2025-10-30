@@ -1,0 +1,13 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+
+.activity-container {
+  margin-bottom: 0.75rem;
+  border-radius: 24px;
+  background-color: pvar(--bg-secondary-400);
+  padding: 1rem 1.5rem;
+
+  &:nth-child(2n) {
+    background-color: pvar(--bg-secondary-350);
+  }
+}

@@ -99,6 +99,7 @@ const icons = {
   'user-x': require('../../../assets/images/feather/user-x.svg'),
   'user': require('../../../assets/images/feather/user.svg'),
   'grip-horizontal': require('../../../assets/images/feather/grip-horizontal.svg'),
+  'calendar': require('../../../assets/images/feather/calendar.svg'),
   'users': require('../../../assets/images/feather/users.svg')
 }
 

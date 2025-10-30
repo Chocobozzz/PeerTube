@@ -1,0 +1,20 @@
+<div>
+  <h2 class="form-title">
+    <my-global-icon iconName="calendar"></my-global-icon>
+
+    <ng-container i18n>Activity</ng-container>
+  </h2>
+
+  <div class="no-results" *ngIf="pagination.totalItems === 0" i18n>
+    No activity in the channel yet
+  </div>
+
+  <div class="activities" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
+    @for (activity of activities; track activity.id) {
+      <div class="activity-container">
+        <my-video-channel-activity [activity]="activity"></my-video-channel-activity>
+      </div>
+    }
+  </div>
+
+</div>

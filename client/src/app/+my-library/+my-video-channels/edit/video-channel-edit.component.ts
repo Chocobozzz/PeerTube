@@ -72,6 +72,18 @@ export class VideoChannelEditComponent implements OnInit, OnDestroy {
           label: $localize`Editors`,
           routerLink: 'editors',
           isDisplayed: () => this.mode === 'update'
+        },
+
+        {
+          type: 'separator'
+        },
+
+        {
+          type: 'link',
+          icon: 'calendar',
+          label: $localize`Activity`,
+          routerLink: 'activities',
+          isDisplayed: () => this.mode === 'update'
         }
       ]
     }

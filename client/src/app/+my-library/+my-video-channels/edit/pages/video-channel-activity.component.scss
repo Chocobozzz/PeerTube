@@ -1,0 +1,20 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.message {
+  color: pvar(--fg-300);
+  word-break: break-word;
+}
+
+.date {
+  color: pvar(--fg-200);
+
+  @include font-size(14px);
+}

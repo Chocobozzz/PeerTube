@@ -4,14 +4,15 @@ import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class CaptionsCommand extends AbstractCommand {
-
-  add (options: OverrideCommandOptions & {
-    videoId: string | number
-    language: string
-    fixture: string
-    mimeType?: string
-  }) {
-    const { videoId, language, fixture, mimeType } = options
+  add (
+    options: OverrideCommandOptions & {
+      videoId: string | number
+      language: string
+      fixture?: string
+      mimeType?: string
+    }
+  ) {
+    const { videoId, language, fixture = 'subtitle-good2.vtt', mimeType } = options
 
     const path = '/api/v1/videos/' + videoId + '/captions/' + language
 
@@ -33,10 +34,12 @@ export class CaptionsCommand extends AbstractCommand {
     })
   }
 
-  runGenerate (options: OverrideCommandOptions & {
-    videoId: string | number
-    forceTranscription?: boolean
-  }) {
+  runGenerate (
+    options: OverrideCommandOptions & {
+      videoId: string | number
+      forceTranscription?: boolean
+    }
+  ) {
     const { videoId } = options
     const path = '/api/v1/videos/' + videoId + '/captions/generate'
 
@@ -50,10 +53,12 @@ export class CaptionsCommand extends AbstractCommand {
     })
   }
 
-  list (options: OverrideCommandOptions & {
-    videoId: string | number
-    videoPassword?: string
-  }) {
+  list (
+    options: OverrideCommandOptions & {
+      videoId: string | number
+      videoPassword?: string
+    }
+  ) {
     const { videoId, videoPassword } = options
     const path = '/api/v1/videos/' + videoId + '/captions'
 
@@ -67,10 +72,12 @@ export class CaptionsCommand extends AbstractCommand {
     })
   }
 
-  delete (options: OverrideCommandOptions & {
-    videoId: string | number
-    language: string
-  }) {
+  delete (
+    options: OverrideCommandOptions & {
+      videoId: string | number
+      language: string
+    }
+  ) {
     const { videoId, language } = options
     const path = '/api/v1/videos/' + videoId + '/captions/' + language
 

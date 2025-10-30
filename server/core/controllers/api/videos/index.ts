@@ -1,7 +1,8 @@
-import { HttpStatusCode } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoChannelActivityAction } from '@peertube/peertube-models'
 import { pickCommonVideoQuery } from '@server/helpers/query.js'
 import { openapiOperationDoc } from '@server/middlewares/doc.js'
 import { getServerActor } from '@server/models/application/application.js'
+import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import express from 'express'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger.js'
 import { buildNSFWFilters, getCountVideos } from '../../../helpers/express-utils.js'
@@ -178,6 +179,14 @@ async function removeVideo (req: express.Request, res: express.Response) {
 
   await sequelizeTypescript.transaction(async t => {
     await videoInstance.destroy({ transaction: t })
+
+    await VideoChannelActivityModel.addVideoActivity({
+      action: VideoChannelActivityAction.DELETE,
+      user: res.locals.oauth.token.User,
+      channel: videoInstance.VideoChannel,
+      video: videoInstance,
+      transaction: t
+    })
   })
 
   auditLogger.delete(getAuditIdFromRes(res), new VideoAuditView(videoInstance.toFormattedDetailsJSON()))

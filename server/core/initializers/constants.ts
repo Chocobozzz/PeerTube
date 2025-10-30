@@ -20,6 +20,10 @@ import {
   UserImportStateType,
   UserRegistrationState,
   UserRegistrationStateType,
+  VideoChannelActivityAction,
+  VideoChannelActivityActionType,
+  VideoChannelActivityTarget,
+  VideoChannelActivityTargetType,
   VideoChannelCollaboratorState,
   VideoChannelCollaboratorStateType,
   VideoChannelSyncState,
@@ -54,7 +58,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 940
+export const LAST_MIGRATION_VERSION = 945
 
 // ---------------------------------------------------------------------------
 
@@ -157,7 +161,9 @@ export const SORTABLE_COLUMNS = {
 
   AVAILABLE_PLUGINS: [ 'npmName', 'popularity', 'trending' ],
 
-  VIDEO_REDUNDANCIES: [ 'name' ]
+  VIDEO_REDUNDANCIES: [ 'name' ],
+
+  VIDEO_CHANNEL_ACTIVITIES: [ 'createdAt' ]
 }
 
 export const ROUTE_CACHE_LIFETIME = {
@@ -696,6 +702,28 @@ export const CHANNEL_COLLABORATOR_STATE: { [id in VideoChannelCollaboratorStateT
   [VideoChannelCollaboratorState.ACCEPTED]: 'Accepted',
   [VideoChannelCollaboratorState.PENDING]: 'Pending',
   [VideoChannelCollaboratorState.REJECTED]: 'Rejected'
+}
+
+export const VIDEO_CHANNEL_ACTIVITY_ACTIONS: { [id in VideoChannelActivityActionType]: string } = {
+  [VideoChannelActivityAction.CREATE]: 'Create',
+  [VideoChannelActivityAction.UPDATE]: 'Update',
+  [VideoChannelActivityAction.DELETE]: 'Delete',
+  [VideoChannelActivityAction.UPDATE_CAPTIONS]: 'Update captions',
+  [VideoChannelActivityAction.UPDATE_CHAPTERS]: 'Update chapters',
+  [VideoChannelActivityAction.UPDATE_PASSWORDS]: 'Update passwords',
+  [VideoChannelActivityAction.CREATE_STUDIO_TASKS]: 'Create studio tasks',
+  [VideoChannelActivityAction.UPDATE_SOURCE_FILE]: 'Update source file',
+  [VideoChannelActivityAction.UPDATE_ELEMENTS]: 'Update elements',
+  [VideoChannelActivityAction.REMOVE_CHANNEL_OWNERSHIP]: 'Remove channel ownership',
+  [VideoChannelActivityAction.CREATE_CHANNEL_OWNERSHIP]: 'Create channel ownership'
+}
+
+export const VIDEO_CHANNEL_ACTIVITY_TARGETS: { [id in VideoChannelActivityTargetType]: string } = {
+  [VideoChannelActivityTarget.CHANNEL]: 'Channel',
+  [VideoChannelActivityTarget.CHANNEL_SYNC]: 'Channel synchronization',
+  [VideoChannelActivityTarget.PLAYLIST]: 'Playlist',
+  [VideoChannelActivityTarget.VIDEO]: 'Video',
+  [VideoChannelActivityTarget.VIDEO_IMPORT]: 'Video import'
 }
 
 export const MIMETYPES = {
