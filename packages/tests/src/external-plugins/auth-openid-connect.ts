@@ -39,7 +39,7 @@ describe('Official plugin auth-openid-connect', function () {
     const peertubeRes = await getOpenIdUrl(openIdLoginUrl)
     const kcRes = await loginOnKeycloak({ loginPageUrl: extractLocation(peertubeRes) })
 
-    const ptBypassPath = await sendBackKeycloakCode({ peertubeRes, kcRes })
+    const ptBypassPath = await sendBackKeycloakCode({ peertubeRes, kcRes, success: true })
     const externalAuthToken = new URL(ptBypassPath, server.url).searchParams.get('externalAuthToken')
 
     const { body } = await server.login.loginUsingExternalToken({ username: 'myuser_example.com', externalAuthToken })
@@ -75,7 +75,7 @@ describe('Official plugin auth-openid-connect', function () {
     const peertubeRes = await getOpenIdUrl(openIdLoginUrl, 'http://example.com')
     const kcRes = await loginOnKeycloak({ loginPageUrl: extractLocation(peertubeRes) })
 
-    const ptBypassPath = await sendBackKeycloakCode({ peertubeRes, kcRes, redirectUrl: 'http://example.com' })
+    const ptBypassPath = await sendBackKeycloakCode({ peertubeRes, kcRes, redirectUrl: 'http://example.com', success: true })
     const externalAuthToken = new URL(ptBypassPath, server.url).searchParams.get('externalAuthToken')
 
     const { body } = await server.login.loginUsingExternalToken({ username: 'myuser_example.com', externalAuthToken })
@@ -102,7 +102,8 @@ describe('Official plugin auth-openid-connect', function () {
 
       const peertubeRes = await getOpenIdUrl(openIdLoginUrl)
       const kcRes = await loginOnKeycloak({ loginPageUrl: extractLocation(peertubeRes), username: 'user_group1' })
-      await sendBackKeycloakCode({ peertubeRes, kcRes, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      const redirectUrl = await sendBackKeycloakCode({ peertubeRes, kcRes, success: false })
+      expect(redirectUrl).to.equal('/login?externalAuthError=true')
     }
 
     {
@@ -113,7 +114,7 @@ describe('Official plugin auth-openid-connect', function () {
 
       const peertubeRes = await getOpenIdUrl(openIdLoginUrl)
       const kcRes = await loginOnKeycloak({ loginPageUrl: extractLocation(peertubeRes), username: 'user_group1' })
-      await sendBackKeycloakCode({ peertubeRes, kcRes, expectedStatus: HttpStatusCode.FOUND_302, username: 'user_group1_example.com' })
+      await sendBackKeycloakCode({ peertubeRes, kcRes, username: 'user_group1_example.com', success: true })
     }
 
     {
@@ -124,7 +125,8 @@ describe('Official plugin auth-openid-connect', function () {
 
       const peertubeRes = await getOpenIdUrl(openIdLoginUrl)
       const kcRes = await loginOnKeycloak({ loginPageUrl: extractLocation(peertubeRes), username: 'user_group1' })
-      await sendBackKeycloakCode({ peertubeRes, kcRes, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      const redirectUrl = await sendBackKeycloakCode({ peertubeRes, kcRes, success: false })
+      expect(redirectUrl).to.equal('/login?externalAuthError=true')
     }
   })
 
@@ -134,7 +136,7 @@ describe('Official plugin auth-openid-connect', function () {
     {
       const peertubeRes = await getOpenIdUrl(openIdLoginUrl)
       const kcRes = await loginOnKeycloak({ loginPageUrl: extractLocation(peertubeRes), username: 'moderator' })
-      const ptBypassPath = await sendBackKeycloakCode({ peertubeRes, kcRes, username: 'moderator_example.com' })
+      const ptBypassPath = await sendBackKeycloakCode({ peertubeRes, kcRes, username: 'moderator_example.com', success: true })
 
       const externalAuthToken = new URL(ptBypassPath, server.url).searchParams.get('externalAuthToken')
 
@@ -146,7 +148,7 @@ describe('Official plugin auth-openid-connect', function () {
     {
       const peertubeRes = await getOpenIdUrl(openIdLoginUrl)
       const kcRes = await loginOnKeycloak({ loginPageUrl: extractLocation(peertubeRes), username: 'user_group2' })
-      const ptBypassPath = await sendBackKeycloakCode({ peertubeRes, kcRes, username: 'user_group2_example.com' })
+      const ptBypassPath = await sendBackKeycloakCode({ peertubeRes, kcRes, username: 'user_group2_example.com', success: true })
 
       const externalAuthToken = new URL(ptBypassPath, server.url).searchParams.get('externalAuthToken')
 
@@ -240,11 +242,11 @@ async function loginOnKeycloak (options: {
 async function sendBackKeycloakCode (options: {
   peertubeRes: Response
   kcRes: Response
+  success: boolean
   redirectUrl?: string
-  expectedStatus?: HttpStatusCodeType
   username?: string
 }) {
-  const { peertubeRes, kcRes, redirectUrl = '/login', expectedStatus = HttpStatusCode.FOUND_302, username = 'myuser_example.com' } = options
+  const { peertubeRes, kcRes, redirectUrl = '/login', success, username = 'myuser_example.com' } = options
 
   const kcText = kcRes.text
 
@@ -261,15 +263,16 @@ async function sendBackKeycloakCode (options: {
       state: extractInputValue(kcText, 'state'),
       session_state: extractInputValue(kcText, 'session_state')
     },
-    expectedStatus
+    expectedStatus: HttpStatusCode.FOUND_302
   })
 
-  if (expectedStatus !== HttpStatusCode.FOUND_302) return undefined
-
   const ptBypassPath = res.headers['location']
-  expect(ptBypassPath).to.include(redirectUrl)
-  expect(ptBypassPath).to.include('?externalAuthToken=')
-  expect(ptBypassPath).to.include('username=' + username)
+
+  if (success) {
+    expect(ptBypassPath).to.include(redirectUrl)
+    expect(ptBypassPath).to.include('?externalAuthToken=')
+    expect(ptBypassPath).to.include('username=' + username)
+  }
 
   return ptBypassPath
 }
