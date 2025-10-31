@@ -5426,7 +5426,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="2387076994218428275" datatype="html" xml:space="preserve">
         <source>A modal window will open for you to specify the local account to which you want to transfer your video</source>
-        <target state="translated">S'obrirà una finestra perquè especifiqueu el compte local al qual voleu transferir el vídeo.</target>
+        <target state="translated">S'obrirà una finestra perquè especifiqueu el compte local al qual voleu transferir el vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">195,197</context>
@@ -10075,9 +10075,9 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">262</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2712688659924558571" datatype="html">
+      <trans-unit id="2712688659924558571" datatype="html" xml:space="preserve">
         <source>Do you really want to delete all comments of <x id="PH" equiv-text="comment.by"/>? Comments are deleted after a few minutes.</source>
-        <target state="new">Do you really want to delete all comments of <x id="PH" equiv-text="comment.by"/>? Comments are deleted after a few minutes.</target>
+        <target state="translated">Realment voleu suprimir tots els comentaris de <x id="PH" equiv-text="comment.by"/>? Els comentaris s'eliminen al cap d'uns minuts.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">284</context>
@@ -10979,9 +10979,9 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6787748814515031203" datatype="html">
+      <trans-unit id="6787748814515031203" datatype="html" xml:space="preserve">
         <source>Player Theme</source>
-        <target state="new">Player Theme</target>
+        <target state="translated">Tema del reproductor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">32,34</context>
@@ -11451,25 +11451,25 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">337</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5959922792614518034" datatype="html">
+      <trans-unit id="5959922792614518034" datatype="html" xml:space="preserve">
         <source>BROWSE VIDEOS</source>
-        <target state="new">BROWSE VIDEOS</target>
+        <target state="translated">NAVEGAR PELS VÍDEOS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">351,352</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5668816720700287117" datatype="html">
+      <trans-unit id="5668816720700287117" datatype="html" xml:space="preserve">
         <source>Default sort</source>
-        <target state="new">Default sort</target>
+        <target state="translated">Ordenació per defecte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">358,360</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8230654187625869910" datatype="html">
+      <trans-unit id="8230654187625869910" datatype="html" xml:space="preserve">
         <source>Default scope</source>
-        <target state="new">Default scope</target>
+        <target state="translated">Àmbit per defecte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">366,368</context>
@@ -11507,25 +11507,25 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">420</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2791679701370281550" datatype="html">
+      <trans-unit id="2791679701370281550" datatype="html" xml:space="preserve">
         <source>Enable remote runners to generate storyboards</source>
-        <target state="new">Enable remote runners to generate storyboards</target>
+        <target state="translated">Habilitar els executors remots per generar guions gràfics</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">427,428</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3150443263101390303" datatype="html">
+      <trans-unit id="3150443263101390303" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to generate storyboards.</source>
-        <target state="new">Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to generate storyboards.</target>
+        <target state="translated">Utilitzar <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>executors remots<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> per generar guions gràfics.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">430,431</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9163699669526337385" datatype="html">
+      <trans-unit id="9163699669526337385" datatype="html" xml:space="preserve">
         <source>Remote runners have to register on your instance first.</source>
-        <target state="new">Remote runners have to register on your instance first.</target>
+        <target state="translated">Els executors remots primer s'han de registrar a la vostra instància.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">431,432</context>
@@ -11571,9 +11571,9 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">454</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5060595856718581647" datatype="html">
+      <trans-unit id="5060595856718581647" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process transcription tasks.</source>
-        <target state="new">Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process transcription tasks.</target>
+        <target state="translated">Utilitzar <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>executors remots<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> per processar tasques de transcripció.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">457,458</context>
@@ -12267,9 +12267,9 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">167</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2752892225115021926" datatype="html">
+      <trans-unit id="2752892225115021926" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process live transcoding.</source>
-        <target state="new">Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process live transcoding.</target>
+        <target state="translated">Utilitzar <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>executors remots<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> per processar la transcodificació de directes.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.html</context>
           <context context-type="linenumber">170,171</context>
@@ -12631,9 +12631,9 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">185</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4869944184588194039" datatype="html">
+      <trans-unit id="4869944184588194039" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process VOD transcoding.</source>
-        <target state="new">Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process VOD transcoding.</target>
+        <target state="translated">Utilitzar <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>executors remots<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> per processar la transcodificació de vídeos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">188,189</context>
@@ -12735,9 +12735,9 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">268</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5159526565235763891" datatype="html">
+      <trans-unit id="5159526565235763891" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process studio transcoding tasks.</source>
-        <target state="new">Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process studio transcoding tasks.</target>
+        <target state="translated">Utilitzar <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>executors remots<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> per processar la transcodificació de Studio.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">271,272</context>
@@ -13039,9 +13039,9 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">161</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5345478017898998436" datatype="html">
+      <trans-unit id="5345478017898998436" datatype="html" xml:space="preserve">
         <source>Galaxy</source>
-        <target state="new">Galaxy</target>
+        <target state="translated">Galàxia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">177</context>
@@ -13051,9 +13051,9 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="52101650994758228" datatype="html">
+      <trans-unit id="52101650994758228" datatype="html" xml:space="preserve">
         <source>Original theme</source>
-        <target state="new">Original theme</target>
+        <target state="translated">Tema original</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">177</context>
@@ -13063,9 +13063,9 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6469361534730294652" datatype="html">
+      <trans-unit id="6469361534730294652" datatype="html" xml:space="preserve">
         <source>Lucide</source>
-        <target state="new">Lucide</target>
+        <target state="translated">Lúcid</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">178</context>
@@ -13075,9 +13075,9 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2084331848321952851" datatype="html">
+      <trans-unit id="2084331848321952851" datatype="html" xml:space="preserve">
         <source>A clean and modern theme</source>
-        <target state="new">A clean and modern theme</target>
+        <target state="translated">Un tema net i modern</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">178</context>
@@ -13647,9 +13647,9 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">165</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8866534111912344413" datatype="html">
+      <trans-unit id="8866534111912344413" datatype="html" xml:space="preserve">
         <source>X link</source>
-        <target state="new">X link</target>
+        <target state="translated">Enllaç X</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">176,178</context>
@@ -13939,9 +13939,9 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7555885526560969469" datatype="html">
+      <trans-unit id="7555885526560969469" datatype="html" xml:space="preserve">
         <source>Update the video</source>
-        <target state="new">Update the video</target>
+        <target state="translated">Actualitzar el vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context>
           <context context-type="linenumber">64</context>
@@ -14019,9 +14019,9 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">107</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7052583210032452554" datatype="html">
+      <trans-unit id="7052583210032452554" datatype="html" xml:space="preserve">
         <source>Manage <x id="PH" equiv-text="this.videoChannelEdit.channel.displayName"/></source>
-        <target state="new">Manage <x id="PH" equiv-text="this.videoChannelEdit.channel.displayName"/></target>
+        <target state="translated">Gestionar <x id="PH" equiv-text="this.videoChannelEdit.channel.displayName"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-general.component.ts</context>
           <context context-type="linenumber">130</context>
@@ -14207,49 +14207,49 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9193001935256028830" datatype="html">
+      <trans-unit id="9193001935256028830" datatype="html" xml:space="preserve">
         <source>Owner</source>
-        <target state="new"> Owner </target>
+        <target state="translated">Propietari(a)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.html</context>
           <context context-type="linenumber">3,4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8958007499282871351" datatype="html">
+      <trans-unit id="8958007499282871351" datatype="html" xml:space="preserve">
         <source>Editor</source>
-        <target state="new"> Editor </target>
+        <target state="translated">Editor(a)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.html</context>
           <context context-type="linenumber">7,8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8310012947639468553" datatype="html">
+      <trans-unit id="8310012947639468553" datatype="html" xml:space="preserve">
         <source>Invitation sent</source>
-        <target state="new"> Invitation sent </target>
+        <target state="translated">Invitació enviada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.html</context>
           <context context-type="linenumber">11,12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1748358381815739866" datatype="html">
+      <trans-unit id="1748358381815739866" datatype="html" xml:space="preserve">
         <source>You are an editor of this channel</source>
-        <target state="new">You are an editor of this channel</target>
+        <target state="translated">Ets editor(a) d'aquest canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.ts</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5012792802148276029" datatype="html">
+      <trans-unit id="5012792802148276029" datatype="html" xml:space="preserve">
         <source>You are the owner of this channel</source>
-        <target state="new">You are the owner of this channel</target>
+        <target state="translated">Aquest canal és vostre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.ts</context>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8934176101492370342" datatype="html">
+      <trans-unit id="8934176101492370342" datatype="html" xml:space="preserve">
         <source>You have been invited to be an editor of this channel</source>
-        <target state="new">You have been invited to be an editor of this channel</target>
+        <target state="translated">Us han convidat a ser editor(a) d'aquest canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -14395,9 +14395,9 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6239458663385170891" datatype="html">
+      <trans-unit id="6239458663385170891" datatype="html" xml:space="preserve">
         <source>Manage video channel</source>
-        <target state="new">Manage video channel</target>
+        <target state="translated">Gestionar el canal de vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/routes.ts</context>
           <context context-type="linenumber">79</context>
@@ -17176,9 +17176,9 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7979398873614233600" datatype="html">
+      <trans-unit id="7979398873614233600" datatype="html" xml:space="preserve">
         <source>Only <x id="INTERPOLATION" equiv-text="{{ getOwnerAccountDisplayName() }}"/>'s channels are listed </source>
-        <target state="new"> Only <x id="INTERPOLATION" equiv-text="{{ getOwnerAccountDisplayName() }}"/>'s channels are listed </target>
+        <target state="translated">Només es llisten els canals de <x id="INTERPOLATION" equiv-text="{{ getOwnerAccountDisplayName() }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context>
           <context context-type="linenumber">70,71</context>
@@ -17192,9 +17192,9 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">90,91</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4529793995164677962" datatype="html">
+      <trans-unit id="4529793995164677962" datatype="html" xml:space="preserve">
         <source>Changing the owner of a playlist is not supported</source>
-        <target state="new"> Changing the owner of a playlist is not supported </target>
+        <target state="translated">No es permet canviar la propietat d'una llista de reproducció</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context>
           <context context-type="linenumber">74</context>
@@ -17204,9 +17204,9 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6216661324057095572" datatype="html">
+      <trans-unit id="6216661324057095572" datatype="html" xml:space="preserve">
         <source>Insert at the first position in your channel's playlist list</source>
-        <target state="new">Insert at the first position in your channel's playlist list</target>
+        <target state="translated">Inserir a la primera posició de la llista de reproducció del vostre canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context>
           <context context-type="linenumber">90,91</context>
@@ -17216,9 +17216,9 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">90,91</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="751822067989856554" datatype="html">
+      <trans-unit id="751822067989856554" datatype="html" xml:space="preserve">
         <source>Playlists can be manually sorted in your channel.</source>
-        <target state="new">Playlists can be manually sorted in your channel.</target>
+        <target state="translated">Les llistes de reproducció es poden ordenar manualment al vostre canal.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context>
           <context context-type="linenumber">93,94</context>
@@ -17228,9 +17228,9 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">93,94</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7121846193303332590" datatype="html">
+      <trans-unit id="7121846193303332590" datatype="html" xml:space="preserve">
         <source>By default, new playlists are added at the end of the list.</source>
-        <target state="new">By default, new playlists are added at the end of the list.</target>
+        <target state="translated">Per defecte, les noves llistes de reproducció s'afegeixen al final de la llista.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context>
           <context context-type="linenumber">95,96</context>
@@ -19364,33 +19364,33 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">18,20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7567105424101611852" datatype="html">
+      <trans-unit id="7567105424101611852" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="instanceName"/> setting (<x id="PH_1" equiv-text="instancePlayerTheme"/>)</source>
-        <target state="new"><x id="PH" equiv-text="instanceName"/> setting (<x id="PH_1" equiv-text="instancePlayerTheme"/>)</target>
+        <target state="translated"><x id="PH" equiv-text="instanceName"/> configuració (<x id="PH_1" equiv-text="instancePlayerTheme"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-player-theme.component.ts</context>
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1215596414248521739" datatype="html">
+      <trans-unit id="1215596414248521739" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.channel().displayName"/> setting</source>
-        <target state="new"><x id="PH" equiv-text="this.channel().displayName"/> setting</target>
+        <target state="translated"><x id="PH" equiv-text="this.channel().displayName"/> configuració</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-player-theme.component.ts</context>
           <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6940712673291978979" datatype="html">
+      <trans-unit id="6940712673291978979" datatype="html" xml:space="preserve">
         <source>from <x id="PH" equiv-text="instanceName"/> setting: <x id="PH_1" equiv-text="instancePlayerTheme"/></source>
-        <target state="new">from <x id="PH" equiv-text="instanceName"/> setting: <x id="PH_1" equiv-text="instancePlayerTheme"/></target>
+        <target state="translated">des de <x id="PH" equiv-text="instanceName"/> configuració: <x id="PH_1" equiv-text="instancePlayerTheme"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-player-theme.component.ts</context>
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="394587885009969736" datatype="html">
+      <trans-unit id="394587885009969736" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.channel().displayName"/> channel setting (<x id="PH_1" equiv-text="channelPlayerTheme"/>)</source>
-        <target state="new"><x id="PH" equiv-text="this.channel().displayName"/> channel setting (<x id="PH_1" equiv-text="channelPlayerTheme"/>)</target>
+        <target state="translated"><x id="PH" equiv-text="this.channel().displayName"/> configuració del canal (<x id="PH_1" equiv-text="channelPlayerTheme"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-player-theme.component.ts</context>
           <context context-type="linenumber">115</context>
@@ -19452,9 +19452,9 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6726731995452198855" datatype="html">
+      <trans-unit id="6726731995452198855" datatype="html" xml:space="preserve">
         <source>Channel name "<x id="PH" equiv-text="this.videoChannelEdit.channel.name"/>" already exists on this platform.</source>
-        <target state="new">Channel name "<x id="PH" equiv-text="this.videoChannelEdit.channel.name"/>" already exists on this platform.</target>
+        <target state="translated">El nom del canal "<x id="PH" equiv-text="this.videoChannelEdit.channel.name"/>" ja existeix en aquesta plataforma.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/video-channel-create.component.ts</context>
           <context context-type="linenumber">86</context>
@@ -19468,9 +19468,9 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5389185875019765464" datatype="html">
+      <trans-unit id="5389185875019765464" datatype="html" xml:space="preserve">
         <source>Editors</source>
-        <target state="new">Editors</target>
+        <target state="translated">Editor(e)s</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">5</context>
@@ -19480,209 +19480,209 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7988117381662962564" datatype="html">
+      <trans-unit id="7988117381662962564" datatype="html" xml:space="preserve">
         <source>OWNER</source>
-        <target state="new">OWNER</target>
+        <target state="translated">PROPIETARI(A)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3560799758233130163" datatype="html">
+      <trans-unit id="3560799758233130163" datatype="html" xml:space="preserve">
         <source>(you)</source>
-        <target state="new">(you)</target>
+        <target state="translated">(vos)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">24,25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8692176668095407729" datatype="html">
+      <trans-unit id="8692176668095407729" datatype="html" xml:space="preserve">
         <source>EDITORS</source>
-        <target state="new">EDITORS</target>
+        <target state="translated">EDITOR(E)S</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">36,37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2648594810167531503" datatype="html">
+      <trans-unit id="2648594810167531503" datatype="html" xml:space="preserve">
         <source>Editors <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>can:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Editors <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>can:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Els(els) editor(e)s <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>poden:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">40,43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3790361059881359024" datatype="html">
+      <trans-unit id="3790361059881359024" datatype="html" xml:space="preserve">
         <source>Publish videos in this channel</source>
-        <target state="new">Publish videos in this channel</target>
+        <target state="translated">Publicar vídeos en aquest canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">43,44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2328126264669408590" datatype="html">
+      <trans-unit id="2328126264669408590" datatype="html" xml:space="preserve">
         <source>Manage, update or delete videos, comments, playlists of this channel</source>
-        <target state="new">Manage, update or delete videos, comments, playlists of this channel</target>
+        <target state="translated">Gestionar, actualitzar o eliminar vídeos, comentaris i llistes de reproducció d'aquest canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">44,45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6753681732976615521" datatype="html">
+      <trans-unit id="6753681732976615521" datatype="html" xml:space="preserve">
         <source>Add or delete channel synchronization</source>
-        <target state="new">Add or delete channel synchronization</target>
+        <target state="translated">Afegir o suprimir la sincronització de canals</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">45,46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8868828786989275402" datatype="html">
+      <trans-unit id="8868828786989275402" datatype="html" xml:space="preserve">
         <source>Update information of this channel (title, description, banner...)</source>
-        <target state="new">Update information of this channel (title, description, banner...)</target>
+        <target state="translated">Actualitzar la informació d'aquest canal (títol, descripció, bàner…)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">46,47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="566992019450450500" datatype="html">
+      <trans-unit id="566992019450450500" datatype="html" xml:space="preserve">
         <source>But editors <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>cannot:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">But editors <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>cannot:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Però els(les) editor(e)s <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>no poden:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">49,52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="217345434594735009" datatype="html">
+      <trans-unit id="217345434594735009" datatype="html" xml:space="preserve">
         <source>Delete the channel</source>
-        <target state="new">Delete the channel</target>
+        <target state="translated">Suprimir el canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">52,53</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5864968016757262571" datatype="html">
+      <trans-unit id="5864968016757262571" datatype="html" xml:space="preserve">
         <source>Add or remove other editors</source>
-        <target state="new">Add or remove other editors</target>
+        <target state="translated">Afegir o eliminar altres editor(e)s</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">53,54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3684779884984833882" datatype="html">
+      <trans-unit id="3684779884984833882" datatype="html" xml:space="preserve">
         <source>Current editors</source>
-        <target state="new">Current editors</target>
+        <target state="translated">Editor(e)s actuals</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">56,58</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5874570330774661733" datatype="html">
+      <trans-unit id="5874570330774661733" datatype="html" xml:space="preserve">
         <source>No editors at the moment</source>
-        <target state="new">No editors at the moment</target>
+        <target state="translated">No hi ha editor(e)s en aquest moment</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">83,84</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7704259175174094901" datatype="html">
+      <trans-unit id="7704259175174094901" datatype="html" xml:space="preserve">
         <source>New editor</source>
-        <target state="new">New editor</target>
+        <target state="translated">Nou(va) editor(a)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">89,91</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8488228014293021599" datatype="html">
+      <trans-unit id="8488228014293021599" datatype="html" xml:space="preserve">
         <source>Editor handle</source>
-        <target state="new">Editor handle</target>
+        <target state="translated">Identificador de l'editor(a)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">91,93</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3463797202358605584" datatype="html">
+      <trans-unit id="3463797202358605584" datatype="html" xml:space="preserve">
         <source>Invite</source>
-        <target state="new">Invite</target>
+        <target state="translated">Convidar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8065180360788653509" datatype="html">
+      <trans-unit id="8065180360788653509" datatype="html" xml:space="preserve">
         <source>Are you sure you want to remove invitation of &lt;strong&gt;<x id="PH" equiv-text="collaborator.account.displayName"/>&lt;/strong&gt; to collaborate on your channel?</source>
-        <target state="new">Are you sure you want to remove invitation of &lt;strong&gt;<x id="PH" equiv-text="collaborator.account.displayName"/>&lt;/strong&gt; to collaborate on your channel?</target>
+        <target state="translated">Realment voleu eliminar la invitació de &lt;strong&gt;<x id="PH" equiv-text="collaborator.account.displayName"/>&lt;/strong&gt; per col·laborar al vostre canal?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.ts</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1861878820024137953" datatype="html">
+      <trans-unit id="1861878820024137953" datatype="html" xml:space="preserve">
         <source>Are you sure you want to remove &lt;strong&gt;<x id="PH" equiv-text="collaborator.account.displayName"/>&lt;/strong&gt; as a collaborator?</source>
-        <target state="new">Are you sure you want to remove &lt;strong&gt;<x id="PH" equiv-text="collaborator.account.displayName"/>&lt;/strong&gt; as a collaborator?</target>
+        <target state="translated">Realment voleu eliminar &lt;strong&gt;<x id="PH" equiv-text="collaborator.account.displayName"/>&lt;/strong&gt; com a col·laborador(a)?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.ts</context>
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="751060137543557029" datatype="html">
+      <trans-unit id="751060137543557029" datatype="html" xml:space="preserve">
         <source>Remove collaborator</source>
-        <target state="new">Remove collaborator</target>
+        <target state="translated">Eliminar col·laborador(a)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.ts</context>
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="405732769723561556" datatype="html">
+      <trans-unit id="405732769723561556" datatype="html" xml:space="preserve">
         <source>You have been removed as a collaborator from <x id="PH" equiv-text="this.videoChannelEdit.channel.name"/> channel</source>
-        <target state="new">You have been removed as a collaborator from <x id="PH" equiv-text="this.videoChannelEdit.channel.name"/> channel</target>
+        <target state="translated">Us han eliminat com a col·laborador(a) del canal <x id="PH" equiv-text="this.videoChannelEdit.channel.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.ts</context>
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5832118307296065997" datatype="html">
+      <trans-unit id="5832118307296065997" datatype="html" xml:space="preserve">
         <source>Do you want to send an invitation to &lt;strong&gt;<x id="PH" equiv-text="this.newEditorUsername"/>&lt;/strong&gt; to collaborate on &lt;strong&gt;<x id="PH_1" equiv-text="this.videoChannelEdit.channel.name"/>&lt;/strong&gt;?</source>
-        <target state="new">Do you want to send an invitation to &lt;strong&gt;<x id="PH" equiv-text="this.newEditorUsername"/>&lt;/strong&gt; to collaborate on &lt;strong&gt;<x id="PH_1" equiv-text="this.videoChannelEdit.channel.name"/>&lt;/strong&gt;?</target>
+        <target state="translated">Voleu enviar una invitació a &lt;strong&gt;<x id="PH" equiv-text="this.newEditorUsername"/>&lt;/strong&gt; per col·laborar en &lt;strong&gt;<x id="PH_1" equiv-text="this.videoChannelEdit.channel.name"/>&lt;/strong&gt;?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.ts</context>
           <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="864409889618580451" datatype="html">
+      <trans-unit id="864409889618580451" datatype="html" xml:space="preserve">
         <source>Invite new editor</source>
-        <target state="new">Invite new editor</target>
+        <target state="translated">Convidar nou(va) editor(a)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.ts</context>
           <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1426719913849129925" datatype="html">
+      <trans-unit id="1426719913849129925" datatype="html" xml:space="preserve">
         <source>Create a new channel</source>
-        <target state="new">Create a new channel</target>
+        <target state="translated">Crea un canal nou</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/video-channel-edit.component.html</context>
           <context context-type="linenumber">36,37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4866329251811877580" datatype="html">
+      <trans-unit id="4866329251811877580" datatype="html" xml:space="preserve">
         <source>Go to the public page</source>
-        <target state="new">Go to the public page</target>
+        <target state="translated">Anar a la pàgina pública</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/video-channel-edit.component.html</context>
           <context context-type="linenumber">42,43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3620188369327429839" datatype="html">
+      <trans-unit id="3620188369327429839" datatype="html" xml:space="preserve">
         <source>Save</source>
-        <target state="new"> Save </target>
+        <target state="translated">Desar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/video-channel-edit.component.html</context>
           <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4580094510133881726" datatype="html">
+      <trans-unit id="4580094510133881726" datatype="html" xml:space="preserve">
         <source>There are errors in your channel settings.</source>
-        <target state="new">There are errors in your channel settings.</target>
+        <target state="translated">Hi ha errors a la configuració del vostre canal.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/video-channel-edit.component.html</context>
           <context context-type="linenumber">64,66</context>
@@ -20100,17 +20100,17 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3333895277843282593" datatype="html">
+      <trans-unit id="3333895277843282593" datatype="html" xml:space="preserve">
         <source>IMAGES</source>
-        <target state="new">IMAGES</target>
+        <target state="translated">IMATGES</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-general.component.html</context>
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="78618503822933431" datatype="html">
+      <trans-unit id="78618503822933431" datatype="html" xml:space="preserve">
         <source>INFORMATION</source>
-        <target state="new">INFORMATION</target>
+        <target state="translated">INFORMACIÓ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-general.component.html</context>
           <context context-type="linenumber">37,38</context>
@@ -20204,17 +20204,17 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">476</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3004701943093671049" datatype="html">
+      <trans-unit id="3004701943093671049" datatype="html" xml:space="preserve">
         <source>All channels</source>
-        <target state="new">All channels</target>
+        <target state="translated">Tots els canals</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2366460080111451942" datatype="html">
+      <trans-unit id="2366460080111451942" datatype="html" xml:space="preserve">
         <source>Only channels owned by me</source>
-        <target state="new">Only channels owned by me</target>
+        <target state="translated">Només canals meus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">88</context>
@@ -21576,17 +21576,17 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3898758382962222093" datatype="html">
+      <trans-unit id="3898758382962222093" datatype="html" xml:space="preserve">
         <source>Password must be at least <x id="PH" equiv-text="minLength"/> characters long.</source>
-        <target state="new">Password must be at least <x id="PH" equiv-text="minLength"/> characters long.</target>
+        <target state="translated">La contrasenya ha de tenir com a mínim <x id="PH" equiv-text="minLength"/> caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">97</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="946785469642901177" datatype="html">
+      <trans-unit id="946785469642901177" datatype="html" xml:space="preserve">
         <source>Password cannot be more than <x id="PH" equiv-text="maxLength"/> characters long.</source>
-        <target state="new">Password cannot be more than <x id="PH" equiv-text="maxLength"/> characters long.</target>
+        <target state="translated">La contrasenya no pot tenir més de <x id="PH" equiv-text="maxLength"/> caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">98</context>
@@ -23093,41 +23093,41 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2689998308942961784" datatype="html">
+      <trans-unit id="2689998308942961784" datatype="html" xml:space="preserve">
         <source>Create channel</source>
-        <target state="new">Create channel</target>
+        <target state="translated">Crear canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/video-channel-edit.component.ts</context>
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2046341807280119595" datatype="html">
+      <trans-unit id="2046341807280119595" datatype="html" xml:space="preserve">
         <source>Manage my channel</source>
-        <target state="new">Manage my channel</target>
+        <target state="translated">Gestionar el meu canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/video-channel-edit.component.ts</context>
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1212827186952717848" datatype="html">
+      <trans-unit id="1212827186952717848" datatype="html" xml:space="preserve">
         <source>General channel configuration</source>
-        <target state="new">General channel configuration</target>
+        <target state="translated">Configuració general del canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/video-channel-edit.routes.ts</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3756117891382518335" datatype="html">
+      <trans-unit id="3756117891382518335" datatype="html" xml:space="preserve">
         <source>Channel editors</source>
-        <target state="new">Channel editors</target>
+        <target state="translated">Editor(e)s del canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/video-channel-edit.routes.ts</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3242444609132964678" datatype="html">
+      <trans-unit id="3242444609132964678" datatype="html" xml:space="preserve">
         <source>Search a channel</source>
-        <target state="new">Search a channel</target>
+        <target state="translated">Cercar un canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context>
           <context context-type="linenumber">6</context>
@@ -24217,7 +24217,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="790075089238274258" datatype="html" xml:space="preserve">
         <source>Are you sure you want to revoke this token session? The device will be logged out and will need to log in again.</source>
-        <target state="translated">De veritat voleu revocar aquesta sessió de token? Es tancarà la sessió del dispositiu i caldrà tornar-la a iniciar.</target>
+        <target state="translated">Realment voleu revocar aquesta sessió de token? Es tancarà la sessió del dispositiu i caldrà tornar-la a iniciar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-users/account-token-sessions.component.ts</context>
           <context context-type="linenumber">30</context>
@@ -26151,9 +26151,9 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
           <context context-type="linenumber">569</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="342764856805181985" datatype="html">
+      <trans-unit id="342764856805181985" datatype="html" xml:space="preserve">
         <source>You are the owner of the content or you have the rights of the copyright holders</source>
-        <target state="new">You are the owner of the content or you have the rights of the copyright holders</target>
+        <target state="translated">El contingut és vostre o teniu llicència dels titulars dels seus drets</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">570</context>
