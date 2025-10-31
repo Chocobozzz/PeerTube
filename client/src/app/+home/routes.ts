@@ -7,7 +7,6 @@ import { BlocklistService } from '@app/shared/shared-moderation/blocklist.servic
 import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
 import { FindInBulkService } from '@app/shared/shared-search/find-in-bulk.service'
 import { SearchService } from '@app/shared/shared-search/search.service'
-import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 import { AbuseService } from '@app/shared/shared-moderation/abuse.service'
 
 export default [
@@ -18,7 +17,6 @@ export default [
       CustomPageService,
       FindInBulkService,
       SearchService,
-      VideoPlaylistService,
       CustomMarkupService,
       DynamicElementService,
       BlocklistService,

@@ -79,7 +79,7 @@
       <my-privacy-badge [playlist]="playlist"></my-privacy-badge>
     </td>
 
-    <td *ngIf="table.isColumnDisplayed('updated')">
+    <td *ngIf="table.isColumnDisplayed('updatedAt')">
       {{ playlist.updatedAt | ptDate: 'short' }}
     </td>
   </ng-template>

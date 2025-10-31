@@ -87,7 +87,8 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
 
   private disabled = false
 
-  private listenToPlaylistChangeSub: Subscription
+  private listenToVideoPlaylistChangeSub: Subscription
+  private listenToAccountPlaylistsChangeSub: Subscription
   private playlistsData: CachedPlaylist[] = []
 
   private pendingAddId: number
@@ -101,7 +102,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
       displayName: VIDEO_PLAYLIST_DISPLAY_NAME_VALIDATOR
     })
 
-    this.videoPlaylistService.listenToMyAccountPlaylistsChange()
+    this.listenToAccountPlaylistsChangeSub = this.videoPlaylistService.listenToMyAccountPlaylistsChange()
       .subscribe(result => {
         this.playlistsData = result.data
 
@@ -121,6 +122,8 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
 
   ngOnDestroy () {
     this.unsubscribePlaylistChanges()
+
+    this.listenToAccountPlaylistsChangeSub?.unsubscribe()
   }
 
   disableForReuse () {
@@ -338,15 +341,15 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
   private listenToVideoPlaylistChange () {
     this.unsubscribePlaylistChanges()
 
-    this.listenToPlaylistChangeSub = this.videoPlaylistService.listenToVideoPlaylistChange(this.video().id)
+    this.listenToVideoPlaylistChangeSub = this.videoPlaylistService.listenToVideoPlaylistChange(this.video().id)
       .pipe(filter(() => this.disabled === false))
       .subscribe(existResult => this.rebuildPlaylists(existResult))
   }
 
   private unsubscribePlaylistChanges () {
-    if (this.listenToPlaylistChangeSub) {
-      this.listenToPlaylistChangeSub.unsubscribe()
-      this.listenToPlaylistChangeSub = undefined
+    if (this.listenToVideoPlaylistChangeSub) {
+      this.listenToVideoPlaylistChangeSub.unsubscribe()
+      this.listenToVideoPlaylistChangeSub = undefined
     }
   }
 

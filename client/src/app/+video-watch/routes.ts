@@ -8,7 +8,6 @@ import { UserSubscriptionService } from '@app/shared/shared-user-subscription/us
 import { UserAdminService } from '@app/shared/shared-users/user-admin.service'
 import { VideoCommentService } from '@app/shared/shared-video-comment/video-comment.service'
 import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
-import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 import { PlayerSettingsService } from '@app/shared/shared-video/player-settings.service'
 import { VideoStateMessageService } from '@app/shared/shared-video/video-state-message.service'
 import { OverviewService } from '../+video-list'
@@ -21,7 +20,6 @@ export default [
     providers: [
       OverviewService,
       UserSubscriptionService,
-      VideoPlaylistService,
       BlocklistService,
       VideoBlockService,
       LiveVideoService,

@@ -16,7 +16,6 @@ import { SearchService } from '@app/shared/shared-search/search.service'
 import { TwoFactorService } from '@app/shared/shared-users/two-factor.service'
 import { UserAdminService } from '@app/shared/shared-users/user-admin.service'
 import { VideoCommentService } from '@app/shared/shared-video-comment/video-comment.service'
-import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 import { WatchedWordsListService } from '@app/shared/standalone-watched-words/watched-words-list.service'
 import { AdminModerationComponent } from './admin-moderation.component'
 import { AdminOverviewComponent } from './admin-overview.component'
@@ -52,7 +51,6 @@ const commonConfig = {
     DynamicElementService,
     FindInBulkService,
     SearchService,
-    VideoPlaylistService,
     WatchedWordsListService
   ]
 }

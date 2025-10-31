@@ -5,10 +5,10 @@ import { AbuseService } from '@app/shared/shared-moderation/abuse.service'
 import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
 import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
 import { UserSubscriptionService } from '@app/shared/shared-user-subscription/user-subscription.service'
-import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
-import { OverviewService, VideosListAllComponent } from '.'
+import { OverviewService } from './overview'
 import { VideoOverviewComponent } from './overview/video-overview.component'
 import { VideoUserSubscriptionsComponent } from './video-user-subscriptions.component'
+import { VideosListAllComponent } from './videos-list-all.component'
 
 export default [
   {
@@ -16,7 +16,6 @@ export default [
     providers: [
       OverviewService,
       UserSubscriptionService,
-      VideoPlaylistService,
       BlocklistService,
       VideoBlockService,
       AbuseService

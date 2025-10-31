@@ -25,7 +25,7 @@ import { VideoPlaylistMiniatureComponent } from '../../shared/shared-video-playl
 import { PrivacyBadgeComponent } from '../../shared/shared-video/privacy-badge.component'
 import { ChannelToggleComponent } from '../../shared/standalone-channels/channel-toggle.component'
 
-type ColumnName = 'videoChannelPosition' | 'videos' | 'name' | 'privacy' | 'updated'
+type ColumnName = 'videoChannelPosition' | 'videos' | 'name' | 'privacy' | 'updatedAt'
 
 type QueryParams = TableQueryParams & {
   channelName?: string
@@ -104,7 +104,7 @@ export class MyVideoPlaylistsComponent implements OnInit, OnDestroy {
       { id: 'videos', label: $localize`Videos`, selected: true, sortable: false },
       { id: 'name', label: $localize`Name`, selected: true, sortable: true },
       { id: 'privacy', label: $localize`Privacy`, selected: true, sortable: false },
-      { id: 'updated', label: $localize`Updated`, selected: true, sortable: false }
+      { id: 'updatedAt', label: $localize`Updated`, selected: true, sortable: true }
     ]
   }
 

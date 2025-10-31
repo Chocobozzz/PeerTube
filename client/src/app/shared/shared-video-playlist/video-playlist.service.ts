@@ -33,7 +33,7 @@ const debugLogger = debug('peertube:playlists:VideoPlaylistService')
 
 export type CachedPlaylist = VideoPlaylist | { id: number, displayName: string }
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class VideoPlaylistService {
   private authHttp = inject(HttpClient)
   private auth = inject(AuthService)

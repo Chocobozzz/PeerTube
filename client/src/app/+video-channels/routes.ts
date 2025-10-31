@@ -7,14 +7,12 @@ import { BlocklistService } from '@app/shared/shared-moderation/blocklist.servic
 import { BulkService } from '@app/shared/shared-moderation/bulk.service'
 import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
 import { UserSubscriptionService } from '@app/shared/shared-user-subscription/user-subscription.service'
-import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 
 export default [
   {
     path: ':videoChannelName',
     component: VideoChannelsComponent,
     providers: [
-      VideoPlaylistService,
       UserSubscriptionService,
       BlocklistService,
       BulkService,
