@@ -1,10 +1,11 @@
-import { Component, OnChanges, inject, input, model } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnChanges, inject, input, model } from '@angular/core'
 import { FromNowPipe } from './from-now.pipe'
 
 @Component({
   selector: 'my-date-toggle',
   templateUrl: './date-toggle.component.html',
   styleUrls: [ './date-toggle.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true
 })
 export class DateToggleComponent implements OnChanges {
@@ -40,6 +41,6 @@ export class DateToggleComponent implements OnChanges {
 
   private updateDates () {
     this.dateRelative = this.fromNowPipe.transform(this.date())
-    this.dateAbsolute = this.date().toLocaleDateString()
+    this.dateAbsolute = this.date().toLocaleString()
   }
 }
