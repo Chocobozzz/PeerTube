@@ -10,10 +10,10 @@
   </div>
 
   <div class="activities" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
-    @for (activity of activities; track activity.id) {
+    @for (activity of activities; track activity.id; let i = $index) {
       <my-date-group-label [date]="activity.createdAt" [store]="groupByDateStore"></my-date-group-label>
 
-      <div class="activity-container">
+      <div class="activity-container" [ngClass]="{ even: i % 2 === 0 }">
         <my-video-channel-activity [activity]="activity"></my-video-channel-activity>
       </div>
     }
