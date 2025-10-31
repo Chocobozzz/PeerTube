@@ -254,7 +254,7 @@
     "The channel must belong to the same account as the original channel": "El canal ha de pertànyer al mateix compte que el canal original",
     "Cannot get this video regarding follow constraints": "No es pot obtenir aquest vídeo per les restriccions de seguiment",
     "Cannot use same flags in nsfwFlagsIncluded and nsfwFlagsExcluded at the same time": "No es poden utilitzar els mateixos indicadors a nsfwFlagsIncluded i nsfwFlagsExcluded alhora",
-    "You are not allowed to see all videos, specify a custom include or auto tags filter": "No teniu permís per veure tots els vídeos. Especifiqueu un filtre d'inclusió personalitzat o d'etiquetes automàtiques",
+    "You are not allowed to see all videos, specify a custom include or auto tags filter": "No teniu permís per veure tots els vídeos. Especifiqueu un filtre d'inclusió personalitzat o etiquetes automàtiques",
     "Cannot use excludeAlreadyWatched parameter when auth token is not provided": "No es pot utilitzar el paràmetre excludeAlreadyWatched quan no es proporciona el testimoni d'autorització",
     "\"filter\" query parameter is not supported anymore by PeerTube. Please use \"isLocal\" and \"include\" instead": "El paràmetre de consulta «filter» ja no està suportat per PeerTube. Utilitzeu «isLocal» i «include» al seu lloc",
     "Cannot set nsfwFlags if the video is not NSFW": "No es poden establir nsfwFlags si el vídeo no és NSFW",
