@@ -1,5 +1,5 @@
 import { Component, viewChild } from '@angular/core'
-import { UserNotificationsComponent } from '@app/shared/standalone-notifications/user-notifications.component'
+import { UserNotificationsComponent } from '@app/shared/shared-notifications/user-notifications.component'
 import { NgIf } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'

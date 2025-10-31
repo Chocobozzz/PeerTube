@@ -23,7 +23,7 @@ import { PTDatePipe } from '../../shared/shared-main/common/date.pipe'
 import { NumberFormatterPipe } from '../../shared/shared-main/common/number-formatter.pipe'
 import { VideoPlaylistMiniatureComponent } from '../../shared/shared-video-playlist/video-playlist-miniature.component'
 import { PrivacyBadgeComponent } from '../../shared/shared-video/privacy-badge.component'
-import { ChannelToggleComponent } from '../../shared/standalone-channels/channel-toggle.component'
+import { ChannelToggleComponent } from '../../shared/shared-channels/channel-toggle.component'
 
 type ColumnName = 'videoChannelPosition' | 'videos' | 'name' | 'privacy' | 'updatedAt'
 

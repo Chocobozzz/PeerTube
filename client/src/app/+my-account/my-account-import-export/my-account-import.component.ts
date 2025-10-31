@@ -10,7 +10,7 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { HttpStatusCode, UserImport, UserImportState } from '@peertube/peertube-models'
 import { UploadState, UploaderX, UploadxService } from 'ngx-uploadx'
 import { Subscription } from 'rxjs'
-import { UploadProgressComponent } from '../../shared/standalone-upload/upload-progress.component'
+import { UploadProgressComponent } from '../../shared/shared-upload/upload-progress.component'
 import { UserImportExportService } from './user-import-export.service'
 
 @Component({

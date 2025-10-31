@@ -444,6 +444,8 @@ async function listVideoChannelActivities (req: express.Request, res: express.Re
 async function importVideosInChannel (req: express.Request, res: express.Response) {
   const { externalChannelUrl } = req.body as VideosImportInChannelCreate
 
+  // TODO: add channel activity for this endpoint
+
   await JobQueue.Instance.createJob({
     type: 'video-channel-import',
     payload: {
