@@ -385,7 +385,7 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
         'heldForReview'
       ]),
 
-      selectType: 'api',
+      selectType: 'api-list',
       notDeleted: true
     }
 
@@ -409,7 +409,7 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
     const { blockerAccountIds, canSeeHeldForReview } = await VideoCommentModel.buildBlockerAccountIdsAndCanSeeHeldForReview({ user, video })
 
     const commonOptions: ListVideoCommentsOptions = {
-      selectType: 'api',
+      selectType: 'api-video',
       videoId: video.id,
       blockerAccountIds,
 
@@ -461,7 +461,7 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
       threadId,
 
       videoId: video.id,
-      selectType: 'api',
+      selectType: 'api-video',
       sort: 'createdAt',
 
       blockerAccountIds,

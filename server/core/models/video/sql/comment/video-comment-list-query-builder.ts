@@ -6,7 +6,7 @@ import { createSafeIn } from '../../../shared/index.js'
 import { VideoCommentTableAttributes } from './video-comment-table-attributes.js'
 
 export interface ListVideoCommentsOptions extends AbstractListQueryOptions {
-  selectType: 'api' | 'feed' | 'comment-only'
+  selectType: 'api-list' | 'api-video' | 'feed' | 'comment-only'
 
   autoTagOfAccountId?: number
 
@@ -46,7 +46,8 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
   private builtVideoJoin = false
   private builtVideoChannelJoin = false
   private builtVideoChannelCollaboratorsJoin = false
-  private builtAvatarJoin = false
+  private builtAccountAvatarJoin = false
+  private builtChannelAvatarJoin = false
   private builtAutomaticTagsJoin = false
 
   constructor (
@@ -275,50 +276,73 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
 
   // ---------------------------------------------------------------------------
 
-  private buildAvatarsJoin () {
-    if (this.builtAvatarJoin) return
+  private buildAccountAvatarsJoin () {
+    if (this.builtAccountAvatarJoin) return
 
     this.join += getAvatarsJoin({
       base: 'Account->Actor->',
       on: '"VideoCommentModel"."Account.Actor.id"'
     })
 
+    this.builtAccountAvatarJoin = true
+  }
+
+  private buildChannelAvatarsJoin () {
+    if (this.builtChannelAvatarJoin) return
+
     this.join += getAvatarsJoin({
       base: 'Video->VideoChannel->Actor->',
       on: '"VideoCommentModel"."Video.VideoChannel.Actor.id"'
     })
 
-    this.builtAvatarJoin = true
+    this.builtChannelAvatarJoin = true
   }
 
   // ---------------------------------------------------------------------------
 
   protected buildQueryJoin () {
-    if (this.options.selectType === 'api' || this.options.selectType === 'feed') {
-      this.buildAvatarsJoin()
+    const selectType = this.options.selectType
+
+    if (selectType === 'api-list' || selectType === 'api-video' || selectType === 'feed') {
+      this.buildAccountAvatarsJoin()
+    }
+
+    if (selectType === 'api-list') {
+      this.buildChannelAvatarsJoin()
     }
   }
 
   protected buildQueryAttributes () {
-    if (this.options.selectType === 'api' || this.options.selectType === 'feed') {
+    const selectType = this.options.selectType
+
+    if (selectType === 'api-list' || selectType === 'api-video' || selectType === 'feed') {
       this.attributes.push(this.tableAttributes.getAccountAvatarAttributes())
+    }
+
+    if (selectType === 'api-list') {
       this.attributes.push(this.tableAttributes.getChannelAvatarAttributes())
     }
   }
 
   protected buildSubQueryJoin () {
-    if (this.options.selectType === 'api' || this.options.selectType === 'feed') {
+    const selectType = this.options.selectType
+
+    if (selectType === 'api-list' || selectType === 'api-video' || selectType === 'feed') {
       this.buildAccountJoin()
-      this.buildVideoJoin()
     }
 
-    if (this.options.autoTagOfAccountId && this.options.selectType === 'api') {
+    if (selectType === 'api-list') {
+      this.buildVideoJoin()
+      this.buildVideoChannelJoin()
+    }
+
+    if (this.options.autoTagOfAccountId && selectType === 'api-list') {
       this.buildAutomaticTagsJoin()
     }
   }
 
   protected buildSubQueryAttributes () {
-    this.buildVideoChannelJoin()
+    const selectType = this.options.selectType
 
     this.subQueryAttributes = [
       ...this.subQueryAttributes,
@@ -326,15 +350,11 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
       this.tableAttributes.getVideoCommentAttributes()
     ]
 
-    if (this.options.selectType === 'api' || this.options.selectType === 'feed') {
+    if (selectType === 'api-list' || selectType === 'api-video' || selectType === 'feed') {
       this.subQueryAttributes = [
         ...this.subQueryAttributes,
 
         this.tableAttributes.getVideoAttributes(),
-
-        this.tableAttributes.getChannelAttributes(),
-        this.tableAttributes.getChannelActorAttributes(),
-        this.tableAttributes.getChannelServerAttributes(),
 
         this.tableAttributes.getAccountAttributes(),
         this.tableAttributes.getAccountActorAttributes(),
@@ -342,7 +362,17 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
       ]
     }
 
-    if (this.options.autoTagOfAccountId && this.options.selectType === 'api') {
+    if (selectType === 'api-list') {
+      this.subQueryAttributes = [
+        ...this.subQueryAttributes,
+
+        this.tableAttributes.getChannelAttributes(),
+        this.tableAttributes.getChannelActorAttributes(),
+        this.tableAttributes.getChannelServerAttributes()
+      ]
+    }
+
+    if (this.options.autoTagOfAccountId && this.options.selectType === 'api-list') {
       this.subQueryAttributes = [
         ...this.subQueryAttributes,
 
