@@ -4746,6 +4746,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/VideoListResponse'
 
+  '/api/v1/video-channels/{channelHandle}/activities':
+    get:
+      summary: List activities of a video channel
+      operationId: listVideoChannelActivities
+      tags:
+        - Video Channels
+      parameters:
+        - $ref: '#/components/parameters/channelHandle'
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChannelActivityListResponse'
+
   '/api/v1/video-channels/{channelHandle}/video-playlists':
     get:
       summary: List playlists of a channel
@@ -8619,6 +8638,49 @@ components:
           # description: Video playlist privacy policy (see [../video-playlists/privacies])
           $ref: '#/components/schemas/VideoPrivacySet'
 
+    VideoChannelActivityAction:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
+        - 10
+        - 11
+      description: |
+        The activity action:
+          - CREATE: 1
+          - UPDATE: 2
+          - DELETE: 3
+          - UPDATE_CAPTIONS: 4
+          - UPDATE_CHAPTERS: 5
+          - UPDATE_PASSWORDS: 6
+          - CREATE_STUDIO_TASKS: 7
+          - UPDATE_SOURCE_FILE: 8
+          - UPDATE_ELEMENTS: 9
+          - REMOVE_CHANNEL_OWNERSHIP: 10
+          - CREATE_CHANNEL_OWNERSHIP: 11
+
+    VideoChannelActivityTarget:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+      description: |
+        The activity target:
+          - VIDEO: 1,
+          - PLAYLIST: 2,
+          - CHANNEL: 3,
+          - CHANNEL_SYNC: 4,
+          - VIDEO_IMPORT: 5
 
     VideoStateConstant:
       properties:
@@ -10743,6 +10805,114 @@ components:
           maxItems: 100
           items:
             $ref: '#/components/schemas/Video'
+
+    ChannelActivityListResponse:
+      properties:
+        total:
+          type: integer
+          example: 1
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              account:
+                nullable: true
+                description: The account may have been deleted
+                $ref: '#/components/schemas/AccountSummary'
+              action:
+                type: object
+                properties:
+                  id:
+                    $ref: '#/components/schemas/VideoChannelActivityAction'
+                  label:
+                    type: string
+              targetType:
+                type: object
+                properties:
+                  id:
+                    $ref: '#/components/schemas/VideoChannelActivityTarget'
+                  label:
+                    type: string
+              details:
+                type: object
+                additionalProperties: true
+              createdAt:
+                type: string
+                format: date-time
+              channel:
+                type: object
+                properties:
+                  id:
+                    $ref: '#/components/schemas/id'
+                  name:
+                    type: string
+                  displayName:
+                    type: string
+                  url:
+                    type: string
+                    format: url
+              video:
+                nullable: true
+                type: object
+                properties:
+                  id:
+                    $ref: '#/components/schemas/id'
+                  name:
+                    type: string
+                  uuid:
+                    $ref: '#/components/schemas/UUIDv4'
+                  shortUUID:
+                    $ref: '#/components/schemas/shortUUID'
+                  url:
+                    type: string
+                    format: url
+                  isLive:
+                    type: boolean
+              videoImport:
+                nullable: true
+                type: object
+                properties:
+                  id:
+                    $ref: '#/components/schemas/id'
+                  name:
+                    type: string
+                  uuid:
+                    $ref: '#/components/schemas/UUIDv4'
+                  shortUUID:
+                    $ref: '#/components/schemas/shortUUID'
+                  url:
+                    type: string
+                    format: url
+                  targetUrl:
+                    type: string
+                    format: uri
+              playlist:
+                nullable: true
+                type: object
+                properties:
+                  id:
+                    $ref: '#/components/schemas/id'
+                  name:
+                    type: string
+                  uuid:
+                    $ref: '#/components/schemas/UUIDv4'
+                  shortUUID:
+                    $ref: '#/components/schemas/shortUUID'
+                  url:
+                    type: string
+                    format: url
+              channelSync:
+                nullable: true
+                type: object
+                properties:
+                  id:
+                    $ref: '#/components/schemas/id'
+                  externalChannelUrl:
+                    type: string
+                    format: uri
 
     UserNotificationSettings:
       properties:
