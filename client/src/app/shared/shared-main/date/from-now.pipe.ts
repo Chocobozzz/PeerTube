@@ -7,12 +7,11 @@ import { formatICU } from '@app/helpers'
   standalone: true
 })
 export class FromNowPipe implements PipeTransform {
-
   transform (arg: number | Date | string) {
     const argDate = new Date(arg)
-    const seconds = Math.trunc((Date.now() - argDate.getTime()) / 1000)
+    const seconds = Math.round((Date.now() - argDate.getTime()) / 1000)
 
-    let interval = Math.trunc(seconds / 31536000)
+    let interval = Math.round(seconds / 31536000)
     if (interval >= 1) {
       return formatICU($localize`{interval, plural, =1 {1 year ago} other {{interval} years ago}}`, { interval })
     }
@@ -20,7 +19,7 @@ export class FromNowPipe implements PipeTransform {
       return formatICU($localize`{interval, plural, =1 {in 1 year} other {in {interval} years}}`, { interval: -interval })
     }
 
-    interval = Math.trunc(seconds / 2419200)
+    interval = Math.round(seconds / 2419200)
     // 12 months = 360 days, but a year ~ 365 days
     // Display "1 year ago" rather than "12 months ago"
     if (interval >= 12) return $localize`1 year ago`
@@ -33,7 +32,7 @@ export class FromNowPipe implements PipeTransform {
       return formatICU($localize`{interval, plural, =1 {in 1 month} other {in {interval} months}}`, { interval: -interval })
     }
 
-    interval = Math.trunc(seconds / 604800)
+    interval = Math.round(seconds / 604800)
     // 4 weeks ~ 28 days, but our month is 30 days
     // Display "1 month ago" rather than "4 weeks ago"
     if (interval >= 4) return $localize`1 month ago`
@@ -46,7 +45,7 @@ export class FromNowPipe implements PipeTransform {
       return formatICU($localize`{interval, plural, =1 {in 1 week} other {in {interval} weeks}}`, { interval: -interval })
     }
 
-    interval = Math.trunc(seconds / 86400)
+    interval = Math.round(seconds / 86400)
     if (interval >= 1) {
       return formatICU($localize`{interval, plural, =1 {1 day ago} other {{interval} days ago}}`, { interval })
     }
@@ -54,7 +53,7 @@ export class FromNowPipe implements PipeTransform {
       return formatICU($localize`{interval, plural, =1 {in 1 day} other {in {interval} days}}`, { interval: -interval })
     }
 
-    interval = Math.trunc(seconds / 3600)
+    interval = Math.round(seconds / 3600)
     if (interval >= 1) {
       return formatICU($localize`{interval, plural, =1 {1 hour ago} other {{interval} hours ago}}`, { interval })
     }
@@ -62,9 +61,9 @@ export class FromNowPipe implements PipeTransform {
       return formatICU($localize`{interval, plural, =1 {in 1 hour} other {in {interval} hours}}`, { interval: -interval })
     }
 
-    interval = Math.trunc(seconds / 60)
+    interval = Math.round(seconds / 60)
     if (interval >= 1) return $localize`${interval} min ago`
-    if (interval <= -1) return $localize`in ${ -interval } min`
+    if (interval <= -1) return $localize`in ${-interval} min`
 
     return $localize`just now`
   }
