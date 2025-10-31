@@ -8219,9 +8219,9 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6525091553306665705" datatype="html">
+      <trans-unit id="6525091553306665705" datatype="html" xml:space="preserve">
         <source>Videos and playlists from collaborated channels, as well as your channel collaborators, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>will not<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> be included in the archive.</source>
-        <target state="new">Videos and playlists from collaborated channels, as well as your channel collaborators, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>will not<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> be included in the archive.</target>
+        <target state="translated">Els vídeos i les llistes de reproducció dels canals amb els quals col·laboreu, així com els dels vostres col·laboradors del canal, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>no s'inclouran<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> a l'arxiu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">33,34</context>
@@ -10035,25 +10035,25 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">110</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7366387646685791945" datatype="html">
+      <trans-unit id="7366387646685791945" datatype="html" xml:space="preserve">
         <source>Whether they're from channels you own or channels for which you're an editor</source>
-        <target state="new">Whether they're from channels you own or channels for which you're an editor</target>
+        <target state="translated">Tant si són de canals que teniu com de canals dels quals sou editor(a)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">114</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1899610511598634736" datatype="html">
+      <trans-unit id="1899610511598634736" datatype="html" xml:space="preserve">
         <source>This will delete comments on all your videos</source>
-        <target state="new">This will delete comments on all your videos</target>
+        <target state="translated">Això suprimirà els comentaris de tots els vostres vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="784223184153447251" datatype="html">
+      <trans-unit id="784223184153447251" datatype="html" xml:space="preserve">
         <source>This will delete comments on all videos from your platform</source>
-        <target state="new">This will delete comments on all videos from your platform</target>
+        <target state="translated">Això eliminarà els comentaris de tots els vídeos de la vostra plataforma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">116</context>
