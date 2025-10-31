@@ -6,13 +6,13 @@
         @switch (a.targetType.id) {
           @case (1) { <!-- VideoChannelActivityTargetType.VIDEO) -->
             <ng-container i18n>
-              <strong>{{ account }}</strong> published video <a [routerLink]="[ '/w', a.video.shortUUID ]">{{ a.video.name }}</a>
+              <strong>{{ account }}</strong> created video <a [routerLink]="[ '/w', a.video.shortUUID ]">{{ a.video.name }}</a>
             </ng-container>
           }
 
           @case (2) { <!-- VideoChannelActivityTargetType.PLAYLIST) -->
             <ng-container i18n>
-              <strong>{{ account }}</strong> published playlist <a [routerLink]="[ '/my-library/video-playlists/', a.playlist.shortUUID ]">{{ a.playlist.name }}</a>
+              <strong>{{ account }}</strong> created playlist <a [routerLink]="[ '/my-library/video-playlists/', a.playlist.shortUUID ]">{{ a.playlist.name }}</a>
             </ng-container>
           }
 

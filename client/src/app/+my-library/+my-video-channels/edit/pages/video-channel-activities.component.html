@@ -11,6 +11,8 @@
 
   <div class="activities" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
     @for (activity of activities; track activity.id) {
+      <my-date-group-label [date]="activity.createdAt" [store]="groupByDateStore"></my-date-group-label>
+
       <div class="activity-container">
         <my-video-channel-activity [activity]="activity"></my-video-channel-activity>
       </div>

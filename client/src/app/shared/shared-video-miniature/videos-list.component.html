@@ -21,7 +21,7 @@
     class="videos" [ngClass]="{ 'display-as-row': displayAsRow() }"
   >
     <ng-container *ngIf="highlightedLives.length !== 0">
-      <h2 class="date-title">
+      <h2 class="videos-section-title">
         <my-global-icon class="pt-icon me-1 top--1px" iconName="live"></my-global-icon>
         <ng-container i18n>Lives</ng-container>
       </h2>
@@ -37,15 +37,17 @@
         </div>
       </ng-container>
 
-      <h2 *ngIf="!groupByDate()" class="date-title">
-        <my-global-icon class="pt-icon me-1" iconName="videos"></my-global-icon> Videos
+      <h2 class="date-title" [ngClass]="{ 'visually-hidden': groupByDate() }">
+        <my-global-icon class="pt-icon me-1" iconName="videos"></my-global-icon>
+
+        <ng-container i18n>Videos</ng-container>
       </h2>
     </ng-container>
 
     <ng-container *ngFor="let video of videos; trackBy: videoById;">
-      <h2 class="date-title" *ngIf="getCurrentGroupedDateLabel(video)">
-        {{ getCurrentGroupedDateLabel(video) }}
-      </h2>
+      @if (groupByDate()) {
+        <my-date-group-label [date]="video.publishedAt" [store]="groupByDateStore" [groupedDateLabels]="groupedDateLabels"></my-date-group-label>
+      }
 
       <div class="video-wrapper">
         <my-video-miniature

@@ -13,7 +13,6 @@ import {
   updatePaginationOnDelete
 } from '@app/core'
 import { GlobalIconComponent, GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
-import { isLastMonth, isLastWeek, isThisMonth, isToday, isYesterday } from '@peertube/peertube-core-utils'
 import { ResultList, VideoSortField } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import debug from 'debug'
@@ -21,6 +20,7 @@ import { Observable, Subject, Subscription, forkJoin, fromEvent, of } from 'rxjs
 import { concatMap, debounceTime, map, switchMap } from 'rxjs/operators'
 import { ButtonComponent } from '../shared-main/buttons/button.component'
 import { InfiniteScrollerDirective } from '../shared-main/common/infinite-scroller.directive'
+import { DateGroupLabelComponent, GroupDate, GroupDateLabels } from '../shared-main/date/date-group-label.component'
 import { Syndication } from '../shared-main/feeds/syndication.model'
 import { Video } from '../shared-main/video/video.model'
 import { VideoFiltersHeaderComponent } from './video-filters-header.component'
@@ -35,16 +35,6 @@ export type HeaderAction = {
   routerLink?: string
 }
 
-enum GroupDate {
-  UNKNOWN = 0,
-  TODAY = 1,
-  YESTERDAY = 2,
-  THIS_WEEK = 3,
-  THIS_MONTH = 4,
-  LAST_MONTH = 5,
-  OLDER = 6
-}
-
 @Component({
   selector: 'my-videos-list',
   templateUrl: './videos-list.component.html',
@@ -56,7 +46,8 @@ enum GroupDate {
     VideoFiltersHeaderComponent,
     InfiniteScrollerDirective,
     VideoMiniatureComponent,
-    GlobalIconComponent
+    GlobalIconComponent,
+    DateGroupLabelComponent
   ]
 })
 export class VideosListComponent implements OnInit, OnDestroy {
@@ -111,6 +102,16 @@ export class VideosListComponent implements OnInit, OnDestroy {
   }
   displayModerationBlock = true
 
+  groupByDateStore = new Set<number>()
+  groupedDateLabels: GroupDateLabels = {
+    [GroupDate.TODAY]: $localize`Today's videos`,
+    [GroupDate.YESTERDAY]: $localize`Yesterday's videos`,
+    [GroupDate.THIS_WEEK]: $localize`This week's videos`,
+    [GroupDate.THIS_MONTH]: $localize`This month's videos`,
+    [GroupDate.LAST_MONTH]: $localize`Last month's videos`,
+    [GroupDate.OLDER]: $localize`Older videos`
+  }
+
   private routeSub: Subscription
   private userSub: Subscription
   private resizeSub: Subscription
@@ -120,17 +121,6 @@ export class VideosListComponent implements OnInit, OnDestroy {
     itemsPerPage: 25,
     totalItems: null
   }
-
-  private groupedDateLabels: { [id in GroupDate]: string } = {
-    [GroupDate.UNKNOWN]: null,
-    [GroupDate.TODAY]: $localize`Today's videos`,
-    [GroupDate.YESTERDAY]: $localize`Yesterday's videos`,
-    [GroupDate.THIS_WEEK]: $localize`This week's videos`,
-    [GroupDate.THIS_MONTH]: $localize`This month's videos`,
-    [GroupDate.LAST_MONTH]: $localize`Last month's videos`,
-    [GroupDate.OLDER]: $localize`Older videos`
-  }
-  private groupedDates: { [id: number]: GroupDate } = {}
 
   private lastQueryLength: number
 
@@ -226,6 +216,7 @@ export class VideosListComponent implements OnInit, OnDestroy {
       this.hasDoneFirstQuery = false
       this.videos = []
       this.highlightedLives = []
+      this.groupByDateStore.clear()
 
       if (this.highlightLives() && (!this.filters.live || this.filters.live === 'both')) {
         liveFilters = this.filters.clone()
@@ -350,8 +341,6 @@ export class VideosListComponent implements OnInit, OnDestroy {
 
           this.videos = this.videos.concat(videos)
 
-          if (this.groupByDate()) this.buildGroupedDateLabels()
-
           this.onVideosDataSubject.next(videos)
           this.videosLoaded.emit(this.videos)
         },
@@ -363,66 +352,5 @@ export class VideosListComponent implements OnInit, OnDestroy {
           this.notifier.error(message)
         }
       })
-  }
-
-  // ---------------------------------------------------------------------------
-
-  private buildGroupedDateLabels () {
-    let currentGroupedDate: GroupDate = GroupDate.UNKNOWN
-
-    const periods = [
-      {
-        value: GroupDate.TODAY,
-        validator: (d: Date) => isToday(d)
-      },
-      {
-        value: GroupDate.YESTERDAY,
-        validator: (d: Date) => isYesterday(d)
-      },
-      {
-        value: GroupDate.THIS_WEEK,
-        validator: (d: Date) => isLastWeek(d)
-      },
-      {
-        value: GroupDate.THIS_MONTH,
-        validator: (d: Date) => isThisMonth(d)
-      },
-      {
-        value: GroupDate.LAST_MONTH,
-        validator: (d: Date) => isLastMonth(d)
-      },
-      {
-        value: GroupDate.OLDER,
-        validator: () => true
-      }
-    ]
-
-    let onlyOlderPeriod = true
-
-    for (const video of this.videos) {
-      const publishedDate = video.publishedAt
-
-      for (const period of periods) {
-        if (currentGroupedDate <= period.value && period.validator(publishedDate)) {
-          if (currentGroupedDate !== period.value) {
-            if (period.value !== GroupDate.OLDER) onlyOlderPeriod = false
-
-            currentGroupedDate = period.value
-            this.groupedDates[video.id] = currentGroupedDate
-          }
-
-          break
-        }
-      }
-    }
-
-    // No need to group by date, there is only "Older" period available
-    if (onlyOlderPeriod) this.groupedDates = {}
-  }
-
-  getCurrentGroupedDateLabel (video: Video) {
-    if (this.groupByDate() === false) return undefined
-
-    return this.groupedDateLabels[this.groupedDates[video.id]]
   }
 }

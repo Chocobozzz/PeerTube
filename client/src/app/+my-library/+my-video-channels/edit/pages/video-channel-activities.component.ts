@@ -10,6 +10,7 @@ import { Subject, Subscription } from 'rxjs'
 import { VideoChannelEditControllerService } from '../video-channel-edit-controller.service'
 import { VideoChannelEdit } from '../video-channel-edit.model'
 import { VideoChannelActivityComponent } from './video-channel-activity.component'
+import { DateGroupLabelComponent } from '@app/shared/shared-main/date/date-group-label.component'
 
 @Component({
   selector: 'my-video-channel-activities',
@@ -21,7 +22,8 @@ import { VideoChannelActivityComponent } from './video-channel-activity.componen
     ReactiveFormsModule,
     GlobalIconComponent,
     InfiniteScrollerDirective,
-    VideoChannelActivityComponent
+    VideoChannelActivityComponent,
+    DateGroupLabelComponent
   ]
 })
 export class VideoChannelActivitiesComponent implements OnInit, OnDestroy {
@@ -40,6 +42,8 @@ export class VideoChannelActivitiesComponent implements OnInit, OnDestroy {
   activities: VideoChannelActivity[] = []
 
   onDataSubject = new Subject<any[]>()
+
+  groupByDateStore = new Set<number>()
 
   private storeSub: Subscription
 

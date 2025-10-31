@@ -12,7 +12,7 @@ import { VIDEO_CHANNEL_ACTIVITY_ACTIONS, VIDEO_CHANNEL_ACTIVITY_TARGETS } from '
 import { MChannelId, MChannelSync, MUserAccountId, MVideo, MVideoImport, MVideoPlaylist } from '@server/types/models/index.js'
 import { MChannelActivityFormattable } from '@server/types/models/video/video-channel-activity.js'
 import { Op, Transaction } from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Table } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
 import { AccountModel } from '../account/account.js'
 import { ActorModel } from '../actor/actor.js'
 import { getSort, SequelizeModel } from '../shared/index.js'
@@ -123,6 +123,9 @@ export class VideoChannelActivityModel extends SequelizeModel<VideoChannelActivi
 
   @CreatedAt
   declare createdAt: Date
+
+  @UpdatedAt
+  declare updatedAt: Date
 
   @ForeignKey(() => VideoChannelModel)
   @Column

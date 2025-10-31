@@ -1,7 +1,7 @@
-@use '_bootstrap-variables';
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_miniature' as *;
+@use "_bootstrap-variables";
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_miniature" as *;
 
 // Cannot set margin top to videos-header because of the main header fixed position
 $margin-top: 2rem;
@@ -21,7 +21,12 @@ $margin-top: 2rem;
   }
 }
 
-.date-title {
+my-date-group-label:not(.date-displayed) {
+  display: none;
+}
+
+my-date-group-label.date-displayed,
+.videos-section-title {
   font-weight: $font-semibold;
   margin-bottom: 20px;
   font-size: 1rem;
@@ -30,7 +35,7 @@ $margin-top: 2rem;
   grid-column: 1 / -1;
 
   &:not(:first-child) {
-    margin-top: .5rem;
+    margin-top: 0.5rem;
     padding-top: 20px;
     border-top: 1px solid $separator-border-color;
   }

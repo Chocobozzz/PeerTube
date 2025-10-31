@@ -11,3 +11,23 @@
     background-color: pvar(--bg-secondary-350);
   }
 }
+
+my-date-group-label:not(.date-displayed) {
+  display: none;
+}
+
+my-date-group-label.date-displayed {
+  color: pvar(--fg-300);
+  font-weight: $font-bold;
+  display: block;
+
+  @include padding-bottom(1.5rem);
+  @include font-size(18px);
+
+  &:not(:first-child) {
+    border-top: 1px solid pvar(--bg-secondary-500);
+
+    @include padding-top(1.5rem);
+    @include margin-top(1.5rem);
+  }
+}
