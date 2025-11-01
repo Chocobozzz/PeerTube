@@ -74,7 +74,7 @@
     "Download speed:": "下载速度：",
     "Uploader note:": "上传者附注：",
     "Close": "关闭",
-    "(skipped {1} buffers) ": "(skipped {1} buffers) ",
+    "(skipped {1} buffers) ": "(跳过了 {1} 个缓冲) ",
     "Audio Player": "音频播放器",
     "Video Player": "视频播放器",
     "Play": "播放",
