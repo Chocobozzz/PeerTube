@@ -355,9 +355,9 @@
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2323167442415708263" datatype="html">
+      <trans-unit id="2323167442415708263" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.video.channel.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> published a new video: <x id="INTERPOLATION_1" equiv-text="{{ n.payload.video.name }}"/> </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.video.channel.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> published a new video: <x id="INTERPOLATION_1" equiv-text="{{ n.payload.video.name }}"/> </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.video.channel.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> ha publicado un nuevo video: <x id="INTERPOLATION_1" equiv-text="{{ n.payload.video.name }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">8,10</context>
@@ -519,9 +519,9 @@
           <context context-type="linenumber">79,81</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6465007199578220942" datatype="html">
+      <trans-unit id="6465007199578220942" datatype="html" xml:space="preserve">
         <source>The recently added video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.videoBlacklist.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been automatically blocked</source>
-        <target state="new">The recently added video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.videoBlacklist.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been automatically blocked</target>
+        <target state="translated">El video añadido recientemente <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.videoBlacklist.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> ha sido automáticamente bloqueado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">86,89</context>
@@ -535,9 +535,9 @@
           <context context-type="linenumber">94,100</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5426784154028076896" datatype="html">
+      <trans-unit id="5426784154028076896" datatype="html" xml:space="preserve">
         <source>The notification concerns a comment now unavailable</source>
-        <target state="new">The notification concerns a comment now unavailable</target>
+        <target state="translated">La notificación hace referencia a un comentario no disponible en este momento</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">103,104</context>
@@ -3341,9 +3341,9 @@
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1202582215608581565" datatype="html">
+      <trans-unit id="1202582215608581565" datatype="html" xml:space="preserve">
         <source>CLI:</source>
-        <target state="new">CLI:</target>
+        <target state="translated">CLI:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">59,60</context>
@@ -6987,9 +6987,9 @@
           <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5196199609108381046" datatype="html">
+      <trans-unit id="5196199609108381046" datatype="html" xml:space="preserve">
         <source>LDAP</source>
-        <target state="new">LDAP</target>
+        <target state="translated">LDAP</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
           <context context-type="linenumber">92</context>
@@ -7003,9 +7003,9 @@
           <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6588415724080421242" datatype="html">
+      <trans-unit id="6588415724080421242" datatype="html" xml:space="preserve">
         <source>OIDC</source>
-        <target state="new">OIDC</target>
+        <target state="translated">OIDC</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
           <context context-type="linenumber">97</context>
@@ -7019,9 +7019,9 @@
           <context context-type="linenumber">98</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8652485418991083880" datatype="html">
+      <trans-unit id="8652485418991083880" datatype="html" xml:space="preserve">
         <source>SAML</source>
-        <target state="new">SAML</target>
+        <target state="translated">SAML</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
           <context context-type="linenumber">102</context>
@@ -7095,9 +7095,9 @@
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="5342918468732313132" datatype="html">
+      <trans-unit id="5342918468732313132" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Prevent&lt;/strong&gt; new users &lt;strong&gt;from uploading videos&lt;/strong&gt; (can be changed by moderators)</source>
-        <target state="new">&lt;strong&gt;Prevent&lt;/strong&gt; new users &lt;strong&gt;from uploading videos&lt;/strong&gt; (can be changed by moderators)</target>
+        <target state="translated">&lt;strong&gt;Evitar que &lt;/strong&gt;los nuevos usuarios &lt;strong&gt;suban videos &lt;/strong&gt; (puede ser modificado por moderadores)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">221</context>
@@ -7131,9 +7131,9 @@
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="4936759942517379026" datatype="html">
+      <trans-unit id="4936759942517379026" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Prevent&lt;/strong&gt; your users &lt;strong&gt;from importing videos&lt;/strong&gt; from remote platforms</source>
-        <target state="new">&lt;strong&gt;Prevent&lt;/strong&gt; your users &lt;strong&gt;from importing videos&lt;/strong&gt; from remote platforms</target>
+        <target state="translated">&lt;strong&gt;Evitar que &lt;/strong&gt;tus usuarios &lt;strong&gt;importen videos &lt;/strong&gt; de plataformas remotas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">260</context>
@@ -7221,27 +7221,27 @@
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="2421351872465897229" datatype="html">
+      <trans-unit id="2421351872465897229" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Save a copy&lt;/strong&gt; of the uploaded video file</source>
-        <target state="new">&lt;strong&gt;Save a copy&lt;/strong&gt; of the uploaded video file</target>
+        <target state="translated">&lt;strong&gt;Guardar una copia &lt;/strong&gt; del archivo del video subido</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">390</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="3196732949948954586" datatype="html">
+      <trans-unit id="3196732949948954586" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Allow&lt;/strong&gt; your users &lt;strong&gt;to replace a video&lt;/strong&gt; that has already been published</source>
-        <target state="new">&lt;strong&gt;Allow&lt;/strong&gt; your users &lt;strong&gt;to replace a video&lt;/strong&gt; that has already been published</target>
+        <target state="translated">&lt;strong&gt;Permitir que &lt;/strong&gt; tus usuarios &lt;strong&gt;reemplacen un video&lt;/strong&gt; que ya ha sido publicado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">408</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="1216660260185422329" datatype="html">
+      <trans-unit id="1216660260185422329" datatype="html" xml:space="preserve">
         <source>Set &lt;a href="https://sepiasearch.org" target="_blank"&gt;SepiaSearch&lt;/a&gt; as &lt;strong&gt;default search engine&lt;/strong&gt;</source>
-        <target state="new">Set &lt;a href="https://sepiasearch.org" target="_blank"&gt;SepiaSearch&lt;/a&gt; as &lt;strong&gt;default search engine&lt;/strong&gt;</target>
+        <target state="translated">Establecer &lt;a href="https://sepiasearch.org" target="_blank"&gt;SepiaSearch&lt;/a&gt;como &lt;strong&gt;motor de búsqueda predeterminado&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">443</context>
