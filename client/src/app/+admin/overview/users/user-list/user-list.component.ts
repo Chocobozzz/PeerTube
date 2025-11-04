@@ -151,6 +151,14 @@ export class UserListComponent implements OnInit, OnDestroy {
           isDisplayed: users => {
             return users.every(u => this.authUser.canManage(u) && !u.blocked && u.emailVerified !== true)
           }
+        },
+        {
+          label: $localize`Re-send verification emails`,
+          description: $localize`Send verification emails to unverified users`,
+          handler: users => this.resendVerificationEmails(users),
+          isDisplayed: users => {
+            return users.every(u => this.authUser.canManage(u) && !u.blocked && u.emailVerified !== true && !u.pluginAuth)
+          }
         }
       ]
     ]
@@ -259,6 +267,22 @@ export class UserListComponent implements OnInit, OnDestroy {
           )
 
           this.table().loadData()
+        },
+
+        error: err => this.notifier.error(err.message)
+      })
+  }
+
+  resendVerificationEmails (users: User[]) {
+    this.userAdminService.resendVerificationEmails(users.map(u => u.email))
+      .subscribe({
+        next: () => {
+          this.notifier.success(
+            formatICU(
+              $localize`{count, plural, =1 {1 verification email sent.} other {{count} verification emails sent.}}`,
+              { count: users.length }
+            )
+          )
         },
 
         error: err => this.notifier.error(err.message)

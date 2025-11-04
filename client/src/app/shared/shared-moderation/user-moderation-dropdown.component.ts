@@ -135,6 +135,17 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
       })
   }
 
+  resendVerificationEmail (user: User) {
+    this.userAdminService.resendVerificationEmail(user.email)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Verification email sent to ${user.email}`)
+        },
+
+        error: err => this.notifier.error(err.message)
+      })
+  }
+
   blockAccountByUser (account: AccountMutedStatus) {
     this.blocklistService.blockAccountByUser(account)
       .subscribe({
@@ -373,6 +384,12 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           label: $localize`Set email as verified`,
           handler: ({ user }) => this.setEmailAsVerified(user),
           isDisplayed: ({ user }) => !user.blocked && user.emailVerified !== true
+        },
+        {
+          label: $localize`Re-send verification email`,
+          description: $localize`Send email verification link to user`,
+          handler: ({ user }) => this.resendVerificationEmail(user),
+          isDisplayed: ({ user }) => !user.blocked && user.emailVerified !== true && !user.pluginAuth
         }
       ])
     }
