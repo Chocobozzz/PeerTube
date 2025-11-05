@@ -8917,9 +8917,9 @@
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7501659511961314738" datatype="html">
+      <trans-unit id="7501659511961314738" datatype="html" xml:space="preserve">
         <source>2FA</source>
-        <target state="new">2FA</target>
+        <target state="translated">2FA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">76,77</context>
@@ -10037,17 +10037,17 @@
           <context context-type="linenumber">114</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1899610511598634736" datatype="html">
+      <trans-unit id="1899610511598634736" datatype="html" xml:space="preserve">
         <source>This will delete comments on all your videos</source>
-        <target state="new">This will delete comments on all your videos</target>
+        <target state="translated">Esto eliminará comentarios en todos tus videos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="784223184153447251" datatype="html">
+      <trans-unit id="784223184153447251" datatype="html" xml:space="preserve">
         <source>This will delete comments on all videos from your platform</source>
-        <target state="new">This will delete comments on all videos from your platform</target>
+        <target state="translated">Esto eliminará comentarios en todos los videos de tu plataforma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">116</context>
@@ -10069,9 +10069,9 @@
           <context context-type="linenumber">262</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2712688659924558571" datatype="html">
+      <trans-unit id="2712688659924558571" datatype="html" xml:space="preserve">
         <source>Do you really want to delete all comments of <x id="PH" equiv-text="comment.by"/>? Comments are deleted after a few minutes.</source>
-        <target state="new">Do you really want to delete all comments of <x id="PH" equiv-text="comment.by"/>? Comments are deleted after a few minutes.</target>
+        <target state="translated">Estás seguro de querer eliminar todos los comentarios de <x id="PH" equiv-text="comment.by"/>? Los comentarios se borrarán tras unos minutos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">284</context>
