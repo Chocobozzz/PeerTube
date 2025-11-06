@@ -995,9 +995,9 @@
           <context context-type="linenumber">119</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1006562256968398209" datatype="html">
+      <trans-unit id="1006562256968398209" datatype="html" xml:space="preserve">
         <source>video</source>
-        <target state="translated">ویدئو</target>
+        <target state="translated">ویدیو</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-controller.service.ts</context>
           <context context-type="linenumber">541</context>
@@ -2015,9 +2015,9 @@
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6086125715086510222" datatype="html">
+      <trans-unit id="6086125715086510222" datatype="html" xml:space="preserve">
         <source>PROFILE SETTINGS</source>
-        <target state="translated">تنظیمات پروفایل</target>
+        <target state="translated">تنظیمات نمایه</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">5</context>
@@ -3871,9 +3871,9 @@
           <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5464118521750361406" datatype="html">
+      <trans-unit id="5464118521750361406" datatype="html" xml:space="preserve">
         <source>Public profile</source>
-        <target state="translated">پروفایل عمومی</target>
+        <target state="translated">نمایه عمومی</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
           <context context-type="linenumber">63</context>
@@ -5467,9 +5467,9 @@
           <context context-type="linenumber">215</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4525569337497033381" datatype="html">
+      <trans-unit id="4525569337497033381" datatype="html" xml:space="preserve">
         <source>See the subtitle file</source>
-        <target state="translated">فایل زیرنویس را ببینید</target>
+        <target state="translated">مشاهده پرونده زیرنویس</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-captions.component.html</context>
           <context context-type="linenumber">49</context>
@@ -8974,9 +8974,9 @@
           <context context-type="linenumber">152</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="17234570072885140" datatype="html">
+      <trans-unit id="17234570072885140" datatype="html" xml:space="preserve">
         <source>Registrations</source>
-        <target state="translated">ثبت‌نام‌ها</target>
+        <target state="translated">نام‌نویسی‌ها</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-moderation.component.ts</context>
           <context context-type="linenumber">36</context>
@@ -13276,9 +13276,9 @@
           <context context-type="linenumber">190</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4915431133669985304" datatype="html">
+      <trans-unit id="4915431133669985304" datatype="html" xml:space="preserve">
         <source>Profile</source>
-        <target state="translated">مشخصات</target>
+        <target state="translated">نمایه</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/video-files-download.component.ts</context>
           <context context-type="linenumber">204</context>
@@ -19254,9 +19254,9 @@
           <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4967231969832964676" datatype="html">
+      <trans-unit id="4967231969832964676" datatype="html" xml:space="preserve">
         <source>Profile updated.</source>
-        <target state="translated">پروفایل به روز شد.</target>
+        <target state="translated">نمایه به‌روز شد.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.ts</context>
           <context context-type="linenumber">63</context>
@@ -19270,9 +19270,9 @@
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6328734173672096825" datatype="html">
+      <trans-unit id="6328734173672096825" datatype="html" xml:space="preserve">
         <source>Save profile</source>
-        <target state="new">Save profile</target>
+        <target state="translated">ذخیره نمایه</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.html</context>
           <context context-type="linenumber">42</context>
@@ -24842,9 +24842,9 @@
           <context context-type="linenumber">430</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7165751653955793192" datatype="html">
+      <trans-unit id="7165751653955793192" datatype="html" xml:space="preserve">
         <source>Subtitle files</source>
-        <target state="new">Subtitle files</target>
+        <target state="translated">پرونده‌های زیرنویس</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/video-download.component.html</context>
           <context context-type="linenumber">10,11</context>
