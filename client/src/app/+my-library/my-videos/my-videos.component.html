@@ -86,9 +86,9 @@
       <a class="pt" [routerLink]="[ '/videos/manage', video.shortUUID, 'stats' ]" i18n-title title="Navigate to the video stats page">
         <ng-container i18n>{video.views, plural, =0 {No views} =1 {1 view} other {{{ video.views | myNumberFormatter }} views}}</ng-container>
 
-        <br />
-
         @if (video.isLive) {
+          <br />
+
           <ng-container i18n>{video.viewers, plural, =0 {No viewers} =1 {1 viewer} other {{{ video.views | myNumberFormatter }} viewers}}</ng-container>
         }
       </a>
