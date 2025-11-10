@@ -14094,9 +14094,9 @@
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6500762313951857695" datatype="html">
+      <trans-unit id="6500762313951857695" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No views} =1 {1 view} other {<x id="INTERPOLATION"/> views}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Keine Aufrufe} =1 {1 Aufruf other {<x id="INTERPOLATION"/> Aufrufe}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Keine Aufrufe} =1 {1 Aufruf} other {<x id="INTERPOLATION"/> Aufrufe}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context>
           <context context-type="linenumber">51</context>
