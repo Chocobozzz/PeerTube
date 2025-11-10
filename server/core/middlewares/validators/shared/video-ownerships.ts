@@ -10,7 +10,7 @@ export async function doesChangeVideoOwnershipExist (idArg: number | string, req
   if (!videoChangeOwnership) {
     res.fail({
       status: HttpStatusCode.NOT_FOUND_404,
-      message: req.t('Video change ownership not found')
+      message: req.t('Video ownership change not found')
     })
     return false
   }
