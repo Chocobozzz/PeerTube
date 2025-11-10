@@ -74,7 +74,7 @@
     "Download speed:": "Brzina preuzimanja:",
     "Uploader note:": "Napomena prenositelja:",
     "Close": "Zatvori",
-    "(skipped {1} buffers) ": "(skipped {1} buffers) ",
+    "(skipped {1} buffers) ": "(preskočeno {1} međuspremnika) ",
     "Audio Player": "Audio player",
     "Video Player": "Video player",
     "Play": "Pokreni",
