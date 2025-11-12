@@ -301,10 +301,10 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
   private buildAutomaticTagsJoin () {
     if (this.builtAutomaticTagsJoin) return
 
-    this.subQueryJoin += 'LEFT JOIN (' +
+    this.subQueryJoin += ' LEFT JOIN (' +
       '"commentAutomaticTag" AS "CommentAutomaticTags" INNER JOIN "automaticTag" AS "CommentAutomaticTags->AutomaticTag" ' +
       'ON "CommentAutomaticTags->AutomaticTag"."id" = "CommentAutomaticTags"."automaticTagId" ' +
-      ') ON "VideoCommentModel"."id" = "CommentAutomaticTags"."commentId" AND "CommentAutomaticTags"."accountId" = :autoTagOfAccountId'
+      ') ON "VideoCommentModel"."id" = "CommentAutomaticTags"."commentId" AND "CommentAutomaticTags"."accountId" = :autoTagOfAccountId '
 
     this.replacements.autoTagOfAccountId = this.options.autoTagOfAccountId
     this.builtAutomaticTagsJoin = true

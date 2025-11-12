@@ -56,7 +56,7 @@ export function getAccountJoin (options: {
     ? getActorJoin({ base: `${base}Account->`, on: `"${base}Account"."actorId"`, includeAvatars })
     : ''
 
-  return `LEFT JOIN "account" "${base}Account" ON "${base}Account"."id" = ${on} ` +
+  return ` LEFT JOIN "account" "${base}Account" ON "${base}Account"."id" = ${on} ` +
     actorJoin
 }
 
@@ -66,7 +66,7 @@ export function getAvatarsJoin (options: {
 }) {
   const { base = '', on } = options
 
-  return `LEFT JOIN "actorImage" "${base}Avatars" ` +
+  return ` LEFT JOIN "actorImage" "${base}Avatars" ` +
     `ON "${base}Avatars"."actorId" = ${on} ` +
     `AND "${base}Avatars"."type" = ${ActorImageType.AVATAR} `
 }
