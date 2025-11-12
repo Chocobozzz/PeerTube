@@ -16054,9 +16054,9 @@
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5707577756171682456" datatype="html">
+      <trans-unit id="5707577756171682456" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No comments} =1 {1 comment} other {<x id="INTERPOLATION"/> comments}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No comments} =1 {1 comment} other {<x id="INTERPOLATION"/> comments}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Sin comentarios} =1 {1 comentario} other {<x id="INTERPOLATION"/> comentarios}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context>
           <context context-type="linenumber">98</context>
