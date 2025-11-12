@@ -20,6 +20,7 @@ import { SelectChannelComponent } from '../../../shared/shared-forms/select/sele
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
 import { VideoManageContainerComponent } from '../../shared-manage/video-manage-container.component'
+import { PlayerSettingsService } from '@app/shared/shared-video/player-settings.service'
 
 const debugLogger = debug('peertube:video-publish')
 
@@ -51,6 +52,7 @@ export class VideoImportUrlComponent implements OnInit, AfterViewInit, CanCompon
   private route = inject(ActivatedRoute)
   private chapterService = inject(VideoChapterService)
   private captionService = inject(VideoCaptionService)
+  private playerSettingsService = inject(PlayerSettingsService)
 
   readonly userChannels = input.required<SelectChannelItem[]>()
   readonly userQuota = input.required<UserVideoQuota>()
@@ -122,17 +124,18 @@ export class VideoImportUrlComponent implements OnInit, AfterViewInit, CanCompon
 
     this.videoImportService.importVideo(videoEdit.toVideoImportCreate(this.highestPrivacy()))
       .pipe(
-        switchMap(previous => {
+        switchMap(({ video }) => {
           return forkJoin([
-            this.captionService.listCaptions(previous.video.uuid),
-            this.chapterService.getChapters({ videoId: previous.video.uuid }),
-            this.videoService.getVideo({ videoId: previous.video.uuid })
-          ]).pipe(map(([ { data: captions }, { chapters }, video ]) => ({ captions, chapters, video })))
+            this.captionService.listCaptions(video.uuid),
+            this.chapterService.getChapters({ videoId: video.uuid }),
+            this.playerSettingsService.getVideoSettings({ videoId: video.uuid, raw: true }),
+            this.videoService.getVideo({ videoId: video.uuid })
+          ]).pipe(map(([ { data: captions }, { chapters }, playerSettings, video ]) => ({ captions, chapters, playerSettings, video })))
         })
       )
       .subscribe({
-        next: async ({ video, captions, chapters }) => {
-          await videoEdit.loadFromAPI({ video, captions, chapters, loadPrivacy: false })
+        next: async ({ video, playerSettings, captions, chapters }) => {
+          await videoEdit.loadFromAPI({ video, captions, playerSettings, chapters, loadPrivacy: false })
 
           this.loadingBar.useRef().complete()
 

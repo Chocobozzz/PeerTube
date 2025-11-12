@@ -75,9 +75,13 @@ export class ModelBuilder<T extends SequelizeModel> {
         const association = Model.associations[tableName]
 
         if (!association) {
-          logger.error(`Cannot find association ${tableName} from key ${key} of model ${rootTableName}`, {
-            associations: Object.keys(Model.associations)
-          })
+          if (!Model.getAttributes()[tableName]) {
+            logger.error(`Cannot find association ${tableName} from key ${key} of model ${rootTableName}`, {
+              associations: Object.keys(Model.associations),
+              model: Model.getAttributes()
+            })
+          }
+
           continue
         }
 

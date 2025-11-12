@@ -806,6 +806,9 @@ const CONFIG = {
       get TIMEOUT () {
         return parseDurationToMs(config.get<string>('import.videos.timeout'))
       },
+      get MAX_ATTEMPTS () {
+        return config.get<number>('import.videos.max_attempts')
+      },
 
       HTTP: {
         get ENABLED () {

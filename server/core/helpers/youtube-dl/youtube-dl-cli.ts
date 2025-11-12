@@ -213,7 +213,8 @@ export class YoutubeDLCLI {
   }) {
     const { url, args, timeout, processOptions } = options
 
-    let completeArgs = this.wrapWithProxyOptions(args)
+    let completeArgs = this.wrapWithJSRuntimeOptions(args)
+    completeArgs = this.wrapWithProxyOptions(completeArgs)
     completeArgs = this.wrapWithIPOptions(completeArgs)
     completeArgs = this.wrapWithFFmpegOptions(completeArgs)
 
@@ -234,6 +235,14 @@ export class YoutubeDLCLI {
     return output.stdout
       ? output.stdout.trim().split(/\r?\n/)
       : undefined
+  }
+
+  private wrapWithJSRuntimeOptions (args: string[]) {
+    if (CONFIG.IMPORT.VIDEOS.HTTP.YOUTUBE_DL_RELEASE.NAME === 'yt-dlp') {
+      return [ '--js-runtimes', 'node' ].concat(args)
+    }
+
+    return args
   }
 
   private wrapWithProxyOptions (args: string[]) {

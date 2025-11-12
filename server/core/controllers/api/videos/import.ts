@@ -7,6 +7,7 @@ import {
   VideoImportPayload,
   VideoImportState
 } from '@peertube/peertube-models'
+import { retryImport } from '@server/lib/video-post-import.js'
 import { buildVideoFromImport, buildYoutubeDLImport, insertFromImportIntoDB, YoutubeDlImportError } from '@server/lib/video-pre-import.js'
 import { MThumbnail, MVideoThumbnail } from '@server/types/models/index.js'
 import express from 'express'
@@ -30,7 +31,8 @@ import {
   authenticate,
   videoImportAddValidator,
   videoImportCancelValidator,
-  videoImportDeleteValidator
+  videoImportDeleteValidator,
+  videoImportRetryValidator
 } from '../../../middlewares/index.js'
 
 const auditLogger = auditLoggerFactory('video-imports')
@@ -54,6 +56,13 @@ videoImportsRouter.post(
   authenticate,
   asyncMiddleware(videoImportCancelValidator),
   asyncRetryTransactionMiddleware(cancelVideoImport)
+)
+
+videoImportsRouter.post(
+  '/imports/:id/retry',
+  authenticate,
+  asyncMiddleware(videoImportRetryValidator),
+  asyncRetryTransactionMiddleware(retryVideoImport)
 )
 
 videoImportsRouter.delete(
@@ -84,6 +93,14 @@ async function cancelVideoImport (req: express.Request, res: express.Response) {
 
   videoImport.state = VideoImportState.CANCELLED
   await videoImport.save()
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+}
+
+async function retryVideoImport (req: express.Request, res: express.Response) {
+  const videoImport = res.locals.videoImport
+
+  await retryImport(videoImport)
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
@@ -149,6 +166,10 @@ async function handleTorrentImport (req: express.Request, res: express.Response,
     preventException: false,
     generateTranscription: body.generateTranscription
   }
+
+  videoImport.payload = payload
+  await videoImport.save()
+
   await JobQueue.Instance.createJob({ type: 'video-import', payload })
 
   auditLogger.create(getAuditIdFromRes(res), new VideoImportAuditView(videoImport.toFormattedJSON()))

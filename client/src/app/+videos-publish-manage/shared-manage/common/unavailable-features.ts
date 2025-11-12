@@ -15,7 +15,10 @@ export function getReplaceFileUnavailability (options: {
     if (isLive) return $localize`File replacement is not available on a live.`
     if (state === VideoState.TO_TRANSCODE) return $localize`File replacement is not available while the video is being transcoded.`
     if (state === VideoState.TO_EDIT) return $localize`File replacement is not available while the video is being edited.`
-    if (state === VideoState.TO_IMPORT) return $localize`File replacement is not available while the video is being imported.`
+
+    if (state === VideoState.TO_IMPORT || state === VideoState.TO_IMPORT_FAILED) {
+      return $localize`File replacement is not available while the video is being imported.`
+    }
 
     return $localize`File replacement is not available.`
   }
@@ -37,7 +40,10 @@ export function getStudioUnavailability (options: {
     if (isLive) return $localize`Studio is not available on a live.`
     if (state === VideoState.TO_TRANSCODE) return $localize`Studio is not available while the video is being transcoded.`
     if (state === VideoState.TO_EDIT) return $localize`Studio is not available while the video is being edited.`
-    if (state === VideoState.TO_IMPORT) return $localize`Studio is not available while the video is being imported.`
+
+    if (state === VideoState.TO_IMPORT || state === VideoState.TO_IMPORT_FAILED) {
+      return $localize`Studio is not available while the video is being imported.`
+    }
 
     return $localize`Studio is not available.`
   }

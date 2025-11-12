@@ -17,6 +17,7 @@ import { DeepPartial } from '@peertube/peertube-typescript-utils'
 import { testCaptionFile } from '@tests/shared/captions.js'
 import { testImageGeneratedByFFmpeg } from '@tests/shared/checks.js'
 import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
+import { SQLCommand } from '@tests/shared/sql-command.js'
 import { expect } from 'chai'
 import { pathExists, remove } from 'fs-extra/esm'
 import { readdir } from 'fs/promises'
@@ -86,6 +87,8 @@ describe('Test video imports', function () {
   function runSuite (mode: 'youtube-dl' | 'yt-dlp') {
     describe('Import ' + mode, function () {
       let servers: PeerTubeServer[] = []
+      let importId: number
+      let importVideoId: number
 
       before(async function () {
         this.timeout(60_000)
@@ -114,7 +117,10 @@ describe('Test video imports', function () {
         this.timeout(60_000)
 
         const attributes = { privacy: VideoPrivacy.PUBLIC, targetUrl: FIXTURE_URLS.youtube }
-        const { video } = await servers[0].videoImports.importVideo({ attributes })
+        const { video, id } = await servers[0].videoImports.importVideo({ attributes })
+        importId = id
+        importVideoId = video.id
+
         expect(video.name).to.equal('small video - youtube')
 
         {
@@ -240,6 +246,26 @@ describe('Test video imports', function () {
           expect(videoImport.torrentName).to.equal('video-720p.torrent')
           expect(videoImport.video.name).to.equal('你好 世界 720p.mp4')
         }
+      })
+
+      it('Should filter my imports on id', async function () {
+        if (areYoutubeImportTestsDisabled()) return
+
+        const { total, data: videoImports } = await servers[0].videoImports.listMyVideoImports({ id: importId })
+        expect(total).to.equal(1)
+        expect(videoImports).to.have.lengthOf(1)
+
+        expect(videoImports[0].id).to.equal(importId)
+      })
+
+      it('Should filter my imports on videoId', async function () {
+        if (areYoutubeImportTestsDisabled()) return
+
+        const { total, data: videoImports } = await servers[0].videoImports.listMyVideoImports({ videoId: importVideoId })
+        expect(total).to.equal(1)
+        expect(videoImports).to.have.lengthOf(1)
+
+        expect(videoImports[0].id).to.equal(importId)
       })
 
       it('Should filter my imports on target URL', async function () {
@@ -531,8 +557,9 @@ describe('Test video imports', function () {
 
   runSuite('yt-dlp')
 
-  describe('Delete/cancel an import', function () {
+  describe('Managing an import', function () {
     let server: PeerTubeServer
+    let sqlCommand: SQLCommand
 
     let finishedImportId: number
     let finishedVideo: Video
@@ -549,6 +576,7 @@ describe('Test video imports', function () {
       this.timeout(120_000)
 
       server = await createSingleServer(1)
+      sqlCommand = new SQLCommand(server)
 
       await setAccessTokensToServers([ server ])
       await setDefaultVideoChannel([ server ])
@@ -609,7 +637,39 @@ describe('Test video imports', function () {
       expect(data).to.have.lengthOf(0)
     })
 
+    it('Should fail an import', async function () {
+      await server.jobs.pauseJobQueue()
+
+      pendingImportId = await importVideo('to retry')
+
+      await sqlCommand.setImportUrl(pendingImportId, FIXTURE_URLS.badVideo)
+      await server.jobs.resumeJobQueue()
+
+      await waitJobs([ server ])
+
+      const { data } = await server.videoImports.listMyVideoImports()
+      expect(data[0].state.id).to.equal(VideoImportState.FAILED)
+
+      const video = await server.videos.getWithToken({ id: data[0].video.id })
+      expect(video.state.id).to.equal(VideoState.TO_IMPORT_FAILED)
+    })
+
+    it('Should retry an import job', async function () {
+      await sqlCommand.setImportUrl(pendingImportId, FIXTURE_URLS.goodVideo)
+
+      await server.videoImports.retry({ importId: pendingImportId })
+      await waitJobs([ server ])
+
+      const { data } = await server.videoImports.listMyVideoImports()
+      expect(data[0].state.id).to.equal(VideoImportState.SUCCESS)
+
+      const video = await server.videos.getWithToken({ id: data[0].video.id })
+      expect(video.state.id).to.equal(VideoState.PUBLISHED)
+    })
+
     after(async function () {
+      await sqlCommand?.cleanup()
+
       await cleanupTests([ server ])
     })
   })

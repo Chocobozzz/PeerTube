@@ -2228,10 +2228,18 @@ paths:
         - Videos
         - My User
       parameters:
+        - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/includeCollaborations'
+        -
+          name: videoId
+          in: query
+          required: false
+          description: Filter on import video ID
+          schema:
+            type: integer
         -
           name: targetUrl
           in: query
@@ -3625,6 +3633,20 @@ paths:
         '204':
           description: successful operation
 
+  /api/v1/videos/imports/{id}/retry:
+    post:
+      summary: Retry video import
+      description: "**PeerTube >= 8.0** Retry a pending video import"
+      security:
+        - OAuth2: []
+      tags:
+        - Video Imports
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          description: successful operation
+
   /api/v1/videos/imports/{id}:
     delete:
       summary: Delete video import
@@ -4749,6 +4771,7 @@ paths:
   '/api/v1/video-channels/{channelHandle}/activities':
     get:
       summary: List activities of a video channel
+      description: "**PeerTube >= 8.0**"
       operationId: listVideoChannelActivities
       tags:
         - Video Channels
@@ -7489,7 +7512,7 @@ paths:
     get:
       tags:
         - Video Channels
-      summary: List channel collaborators
+      summary: "**PeerTube >= 8.0** List channel collaborators"
       operationId: listVideoChannelCollaborators
       security:
         - OAuth2: []
@@ -7517,8 +7540,7 @@ paths:
         - Video Channels
       summary: Invite a collaborator
       operationId: inviteVideoChannelCollaborator
-      description: >
-        Invite a local user to collaborate on the specified video channel.
+      description: "**PeerTube >= 8.0**  Invite a local user to collaborate on the specified video channel."
       security:
         - OAuth2: []
       parameters:
@@ -7549,6 +7571,7 @@ paths:
       tags:
         - Video Channels
       summary: Accept a collaboration invitation
+      description: "**PeerTube >= 8.0**"
       operationId: acceptVideoChannelCollaborator
       security:
         - OAuth2: []
@@ -7564,6 +7587,7 @@ paths:
       tags:
         - Video Channels
       summary: Reject a collaboration invitation
+      description: "**PeerTube >= 8.0**"
       operationId: rejectVideoChannelCollaborator
       security:
         - OAuth2: []
@@ -7579,7 +7603,7 @@ paths:
       tags:
         - Video Channels
       summary: Remove a channel collaborator
-      description: Only the channel owner or the collaborator themselves can remove a collaborator from a channel
+      description: "**PeerTube >= 8.0** Only the channel owner or the collaborator themselves can remove a collaborator from a channel"
       operationId: removeVideoChannelCollaborator
       security:
         - OAuth2: []

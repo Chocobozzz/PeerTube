@@ -99,6 +99,14 @@ export const videoImportAddValidator = getCommonVideoEditAttributes().concat([
 ])
 
 export const listMyVideoImportsValidator = [
+  query('id')
+    .optional()
+    .custom(isIdValid),
+
+  query('videoId')
+    .optional()
+    .custom(isIdValid),
+
   query('videoChannelSyncId')
     .optional()
     .custom(isIdValid),
@@ -149,6 +157,41 @@ export const videoImportCancelValidator = [
       return res.fail({
         status: HttpStatusCode.CONFLICT_409,
         message: req.t('Cannot cancel a non pending video import')
+      })
+    }
+
+    return next()
+  }
+]
+
+export const videoImportRetryValidator = [
+  param('id')
+    .custom(isIdValid),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    if (!await doesVideoImportExist(forceNumber(req.params.id), res)) return
+    if (!await checkCanManageImport({ user: res.locals.oauth.token.User, videoImport: res.locals.videoImport, req, res })) return
+
+    if (res.locals.videoImport.state !== VideoImportState.FAILED) {
+      return res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: req.t('Cannot retry a non failed video import')
+      })
+    }
+
+    if (!res.locals.videoImport.Video) {
+      return res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: req.t('Cannot retry video import because the associated video metadata has been deleted')
+      })
+    }
+
+    if (res.locals.videoImport.attempts >= CONFIG.IMPORT.VIDEOS.MAX_ATTEMPTS) {
+      return res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: req.t('Cannot retry video import since it has reached the maximum number of attempts')
       })
     }
 

@@ -75,7 +75,9 @@ export class VideoManageContainerComponent implements OnInit, OnDestroy {
   // ---------------------------------------------------------------------------
 
   getStateWarning () {
-    return this.videoStateMessage.buildWarn(this.videoEdit.getVideoAttributes().state)
+    const video = this.videoEdit.getVideoAttributes()
+
+    return this.videoStateMessage.buildWarn(video.id, video.state)
   }
 
   // ---------------------------------------------------------------------------

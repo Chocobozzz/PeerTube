@@ -122,7 +122,7 @@ type UpdateFromAPIOptions = {
   captions?: VideoCaption[]
   videoPasswords?: string[]
   videoSource?: VideoSource
-  playerSettings?: PlayerVideoSettings
+  playerSettings: PlayerVideoSettings
 }
 
 // ---------------------------------------------------------------------------

@@ -123,7 +123,8 @@ export function checkVideoCanBeTranscribed (video: MVideo, req: express.Request,
     VideoState.TO_IMPORT,
     VideoState.TO_EDIT,
     VideoState.TO_MOVE_TO_EXTERNAL_STORAGE,
-    VideoState.TO_MOVE_TO_FILE_SYSTEM
+    VideoState.TO_MOVE_TO_FILE_SYSTEM,
+    VideoState.TO_IMPORT_FAILED
   ])
   if (incompatibleStates.has(video.state)) {
     res.fail({

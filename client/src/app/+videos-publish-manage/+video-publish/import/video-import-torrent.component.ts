@@ -11,13 +11,14 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { PeerTubeProblemDocument, ServerErrorCode, UserVideoQuota, VideoPrivacyType } from '@peertube/peertube-models'
 import debug from 'debug'
-import { switchMap } from 'rxjs'
+import { forkJoin, switchMap } from 'rxjs'
 import { SelectChannelItem } from 'src/types'
 import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
 import { VideoManageContainerComponent } from '../../shared-manage/video-manage-container.component'
 import { DragDropDirective } from '../shared/drag-drop.directive'
+import { PlayerSettingsService } from '@app/shared/shared-video/player-settings.service'
 
 const debugLogger = debug('peertube:video-publish')
 
@@ -45,6 +46,7 @@ export class VideoImportTorrentComponent implements OnInit, AfterViewInit, CanCo
   private loadingBar = inject(LoadingBarService)
   private notifier = inject(Notifier)
   private videoService = inject(VideoService)
+  private playerSettingsService = inject(PlayerSettingsService)
   private videoImportService = inject(VideoImportService)
   private hooks = inject(HooksService)
   private serverService = inject(ServerService)
@@ -131,10 +133,15 @@ export class VideoImportTorrentComponent implements OnInit, AfterViewInit, CanCo
     this.loadingBar.useRef().start()
 
     this.videoImportService.importVideo(videoEdit.toVideoImportCreate(this.highestPrivacy()))
-      .pipe(switchMap(({ video }) => this.videoService.getVideo({ videoId: video.uuid })))
+      .pipe(switchMap(({ video }) => {
+        return forkJoin([
+          this.videoService.getVideo({ videoId: video.uuid }),
+          this.playerSettingsService.getVideoSettings({ videoId: video.uuid, raw: true })
+        ])
+      }))
       .subscribe({
-        next: async video => {
-          await videoEdit.loadFromAPI({ video, loadPrivacy: false })
+        next: async ([ video, playerSettings ]) => {
+          await videoEdit.loadFromAPI({ video, playerSettings, loadPrivacy: false })
 
           this.loadingBar.useRef().complete()
 

@@ -58,7 +58,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 945
+export const LAST_MIGRATION_VERSION = 950
 
 // ---------------------------------------------------------------------------
 
@@ -624,7 +624,8 @@ export const VIDEO_STATES: { [id in VideoStateType]: string } = {
   [VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED]: 'External storage move failed',
   [VideoState.TO_EDIT]: 'To edit',
   [VideoState.TO_MOVE_TO_FILE_SYSTEM]: 'To move to file system',
-  [VideoState.TO_MOVE_TO_FILE_SYSTEM_FAILED]: 'Move to file system failed'
+  [VideoState.TO_MOVE_TO_FILE_SYSTEM_FAILED]: 'Move to file system failed',
+  [VideoState.TO_IMPORT_FAILED]: 'Import failed'
 }
 
 export const VIDEO_IMPORT_STATES: { [id in VideoImportStateType]: string } = {

@@ -1,9 +1,7 @@
-import { VideoImport, VideoImportState, type VideoImportStateType } from '@peertube/peertube-models'
-import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
-import { MVideoImportDefault, MVideoImportFormattable } from '@server/types/models/video/video-import.js'
+import { VideoImport, type VideoImportPayload, VideoImportState, type VideoImportStateType } from '@peertube/peertube-models'
+import { MVideoImport, MVideoImportDefault, MVideoImportFormattable } from '@server/types/models/video/video-import.js'
 import { Op } from 'sequelize'
 import {
-  AfterUpdate,
   AllowNull,
   BelongsTo,
   Column,
@@ -24,6 +22,7 @@ import { UserModel } from '../user/user.js'
 import { ListVideoImportsOptions, VideoImportListQueryBuilder } from './sql/import/video-import-list-query-builder.js'
 import { VideoChannelSyncModel } from './video-channel-sync.js'
 import { VideoModel, ScopeNames as VideoModelScopeNames } from './video.js'
+import { CONFIG } from '@server/initializers/config.js'
 
 const defaultVideoScope = () => {
   return VideoModel.scope([
@@ -96,6 +95,15 @@ export class VideoImportModel extends SequelizeModel<VideoImportModel> {
   @Column(DataType.TEXT)
   declare error: string
 
+  @AllowNull(false)
+  @Default(0)
+  @Column
+  declare attempts: number
+
+  @AllowNull(true)
+  @Column(DataType.JSONB)
+  declare payload: VideoImportPayload
+
   @ForeignKey(() => UserModel)
   @Column
   declare userId: number
@@ -132,15 +140,6 @@ export class VideoImportModel extends SequelizeModel<VideoImportModel> {
   })
   declare VideoChannelSync: Awaited<VideoChannelSyncModel>
 
-  @AfterUpdate
-  static deleteVideoIfFailed (instance: VideoImportModel, options) {
-    if (instance.state === VideoImportState.FAILED) {
-      return afterCommitIfTransaction(options.transaction, () => instance.Video.destroy())
-    }
-
-    return undefined
-  }
-
   // ---------------------------------------------------------------------------
 
   static getSQLAttributes (tableName: string, aliasPrefix = '') {
@@ -173,12 +172,7 @@ export class VideoImportModel extends SequelizeModel<VideoImportModel> {
   }): Promise<boolean> {
     const { channelSyncId, channelId, targetUrl } = options
 
-    const baseWhere = {
-      targetUrl,
-      state: {
-        [Op.in]: [ VideoImportState.PENDING, VideoImportState.PROCESSING, VideoImportState.SUCCESS ]
-      }
-    }
+    const baseWhere = { targetUrl }
 
     const bySyncId = channelSyncId
       ? VideoImportModel.unscoped().findOne({
@@ -206,6 +200,31 @@ export class VideoImportModel extends SequelizeModel<VideoImportModel> {
     return (await Promise.all([ bySyncId, byChannelId ])).some(e => !!e)
   }
 
+  static listFailedBySyncId (options: {
+    channelSyncId?: number
+  }): Promise<MVideoImport[]> {
+    return VideoImportModel.unscoped().findAll({
+      include: [
+        {
+          model: VideoModel.unscoped(),
+          required: true
+        }
+      ],
+      where: {
+        videoChannelSyncId: options.channelSyncId,
+        state: {
+          [Op.in]: [ VideoImportState.FAILED ]
+        },
+        attempts: {
+          [Op.lt]: CONFIG.IMPORT.VIDEOS.MAX_ATTEMPTS
+        }
+      },
+      limit: 100
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
   getTargetIdentifier () {
     return this.targetUrl || this.magnetUri || this.torrentName
   }
@@ -229,6 +248,8 @@ export class VideoImportModel extends SequelizeModel<VideoImportModel> {
       targetUrl: this.targetUrl,
       magnetUri: this.magnetUri,
       torrentName: this.torrentName,
+
+      attempts: this.attempts,
 
       state: {
         id: this.state,

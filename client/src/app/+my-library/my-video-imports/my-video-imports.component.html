@@ -52,17 +52,7 @@
   </ng-template>
 
   <ng-template #actionCell let-videoImport>
-    @if (isVideoImportPending(videoImport)) {
-      <my-button i18n-label label="Cancel" icon="no" (click)="cancelImport(videoImport)"></my-button>
-    }
-
-    @if (isVideoImportFailed(videoImport) || isVideoImportCancelled(videoImport) || !videoImport.video) {
-      <my-delete-button (click)="deleteImport(videoImport)"></my-delete-button>
-    }
-
-    @if (isVideoImportSuccess(videoImport) && videoImport.video) {
-      <my-edit-button [ptRouterLink]="getEditVideoUrl(videoImport.video)" i18n-title title="Update the video"></my-edit-button>
-    }
+    <my-action-dropdown i18n-label label="Actions" [actions]="videoImportActions" [entry]="videoImport" container="body"></my-action-dropdown>
   </ng-template>
 
   <ng-template #expandedRow let-videoImport>

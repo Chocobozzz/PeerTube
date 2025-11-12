@@ -99,26 +99,23 @@ export type VideoFileImportPayload = {
 export type VideoImportTorrentPayloadType = 'magnet-uri' | 'torrent-file'
 export type VideoImportYoutubeDLPayloadType = 'youtube-dl'
 
-export interface VideoImportYoutubeDLPayload {
-  type: VideoImportYoutubeDLPayloadType
+interface VideoImportAbstractPayload {
+  preventException: boolean
   videoImportId: number
-
   generateTranscription: boolean
+}
+
+export interface VideoImportYoutubeDLPayload extends VideoImportAbstractPayload {
+  type: VideoImportYoutubeDLPayloadType
 
   fileExt?: string
 }
 
-export interface VideoImportTorrentPayload {
+export interface VideoImportTorrentPayload extends VideoImportAbstractPayload {
   type: VideoImportTorrentPayloadType
-
-  generateTranscription: boolean
-
-  videoImportId: number
 }
 
-export type VideoImportPayload = (VideoImportYoutubeDLPayload | VideoImportTorrentPayload) & {
-  preventException: boolean
-}
+export type VideoImportPayload = VideoImportYoutubeDLPayload | VideoImportTorrentPayload
 
 export interface VideoImportPreventExceptionResult {
   resultType: 'success' | 'error'

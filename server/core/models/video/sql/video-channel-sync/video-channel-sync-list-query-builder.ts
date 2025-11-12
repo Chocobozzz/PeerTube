@@ -56,7 +56,12 @@ export class VideoChannelSyncListQueryBuilder extends AbstractListQuery {
   private buildChannelJoin () {
     if (this.builtChannelJoin) return
 
-    this.subQueryJoin += getChannelJoin({ on: `"VideoChannelSyncModel"."videoChannelId"` })
+    this.subQueryJoin += getChannelJoin({
+      on: `"VideoChannelSyncModel"."videoChannelId"`,
+      includeAccount: false,
+      includeAvatars: false,
+      includeActors: true
+    })
     this.builtChannelJoin = true
   }
 

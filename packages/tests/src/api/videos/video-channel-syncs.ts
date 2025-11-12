@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { VideoChannelSyncState, VideoInclude, VideoPrivacy } from '@peertube/peertube-models'
+import { VideoChannelSyncState, VideoImportState, VideoInclude, VideoPrivacy } from '@peertube/peertube-models'
 import { areHttpImportTestsDisabled, areYoutubeImportTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
@@ -224,6 +224,33 @@ describe('Test channel synchronizations', function () {
 
         const { total } = await servers[0].channelSyncs.listByAccount({ accountName: userInfo.username })
         expect(total).to.equal(0)
+      })
+
+      it('Should retry failed import jobs', async function () {
+        this.timeout(120_000)
+
+        const { data } = await servers[0].videoImports.listMyVideoImports({ videoChannelSyncId: rootChannelSyncId })
+        const importId = data[0].id
+
+        await sqlCommands[0].setImportUrl(importId, 'http://fail.example.com')
+        await sqlCommands[0].setImportState(importId, VideoImportState.FAILED)
+
+        for (let i = 2; i < 7; i++) {
+          await servers[0].debug.sendCommand({
+            body: {
+              command: 'process-video-channel-sync-latest'
+            }
+          })
+
+          await waitJobs(servers)
+
+          {
+            const { data } = await servers[0].videoImports.listMyVideoImports({ videoChannelSyncId: rootChannelSyncId })
+            expect(data[0].state.id).to.equal(VideoImportState.FAILED)
+            expect(data[0].error).to.include('fail.example.com')
+            expect(data[0].attempts).to.equal(Math.min(3, i))
+          }
+        }
       })
 
       // FIXME: youtube-dl/yt-dlp doesn't work when speicifying a port after the hostname

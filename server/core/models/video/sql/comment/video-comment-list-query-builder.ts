@@ -1,6 +1,6 @@
 import { VideoChannelCollaboratorState, VideoPrivacy } from '@peertube/peertube-models'
 import { AbstractListQuery, AbstractListQueryOptions } from '@server/models/shared/abstract-list-query.js'
-import { getAvatarsJoin, getChannelJoin } from '@server/models/shared/sql/actor-helpers.js'
+import { getAccountJoin, getActorJoin, getAvatarsJoin, getChannelJoin } from '@server/models/shared/sql/actor-helpers.js'
 import { Sequelize } from 'sequelize'
 import { createSafeIn } from '../../../shared/index.js'
 import { VideoCommentTableAttributes } from './video-comment-table-attributes.js'
@@ -43,8 +43,10 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
   private readonly tableAttributes = new VideoCommentTableAttributes()
 
   private builtAccountJoin = false
+  private builtAccountActorJoin = false
   private builtVideoJoin = false
   private builtVideoChannelJoin = false
+  private builtVideoChannelActorJoin = false
   private builtVideoChannelCollaboratorsJoin = false
   private builtAccountAvatarJoin = false
   private builtChannelAvatarJoin = false
@@ -120,10 +122,12 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
 
     if (this.options.isLocal === true) {
       this.buildAccountJoin()
+      this.buildAccountActorJoin()
 
       where.push('"Account->Actor"."serverId" IS NULL')
     } else if (this.options.isLocal === false) {
       this.buildAccountJoin()
+      this.buildAccountActorJoin()
 
       where.push('"Account->Actor"."serverId" IS NOT NULL')
     }
@@ -174,6 +178,7 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
     if (this.options.search) {
       this.buildVideoJoin()
       this.buildAccountJoin()
+      this.buildAccountActorJoin()
 
       const escapedLikeSearch = this.sequelize.escape('%' + this.options.search + '%')
 
@@ -189,6 +194,7 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
 
     if (this.options.searchAccount) {
       this.buildAccountJoin()
+      this.buildAccountActorJoin()
 
       const escapedLikeSearch = this.sequelize.escape('%' + this.options.searchAccount + '%')
 
@@ -218,11 +224,25 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
   private buildAccountJoin () {
     if (this.builtAccountJoin) return
 
-    this.subQueryJoin += ' LEFT JOIN "account" "Account" ON "Account"."id" = "VideoCommentModel"."accountId" ' +
-      'LEFT JOIN "actor" "Account->Actor" ON "Account->Actor"."id" = "Account"."actorId" ' +
-      'LEFT JOIN "server" "Account->Actor->Server" ON "Account->Actor"."serverId" = "Account->Actor->Server"."id" '
+    this.subQueryJoin += getAccountJoin({
+      on: `"VideoCommentModel"."accountId"`,
+      includeAvatars: false,
+      includeActor: false
+    })
 
     this.builtAccountJoin = true
+  }
+
+  private buildAccountActorJoin () {
+    if (this.builtAccountActorJoin) return
+
+    this.subQueryJoin += getActorJoin({
+      base: 'Account->',
+      on: `"Account"."actorId"`,
+      includeAvatars: false
+    })
+
+    this.builtAccountActorJoin = true
   }
 
   private buildVideoJoin () {
@@ -240,11 +260,27 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
 
     this.subQueryJoin += getChannelJoin({
       base: 'Video->',
-      on: '"Video"."channelId"'
+      on: '"Video"."channelId"',
+      includeAccount: false,
+      includeAvatars: false,
+      includeActors: false
     })
 
     this.builtVideoChannelJoin = true
   }
+
+  private buildVideoChannelActorJoin () {
+    if (this.builtVideoChannelActorJoin) return
+
+    this.subQueryJoin += getActorJoin({
+      base: 'Video->VideoChannel->',
+      on: '"Video->VideoChannel"."actorId"',
+      includeAvatars: false
+    })
+
+    this.builtVideoChannelActorJoin = true
+  }
+
   private buildVideoChannelCollaboratorsJoin () {
     if (this.builtVideoChannelCollaboratorsJoin) return
 
@@ -329,11 +365,13 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
 
     if (selectType === 'api-list' || selectType === 'api-video' || selectType === 'feed') {
       this.buildAccountJoin()
+      this.buildAccountActorJoin()
     }
 
     if (selectType === 'api-list') {
       this.buildVideoJoin()
       this.buildVideoChannelJoin()
+      this.buildVideoChannelActorJoin()
     }
 
     if (this.options.autoTagOfAccountId && selectType === 'api-list') {

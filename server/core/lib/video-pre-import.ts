@@ -83,7 +83,6 @@ async function insertFromImportIntoDB (parameters: {
   const videoImport = await sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
 
-    // eslint-disable-next-line max-len
     const videoCreated = await video.save(
       sequelizeOptions
     ) as (MVideoAccountDefault & MVideoWithBlacklistLight & MVideoTag & MVideoThumbnail)
@@ -282,6 +281,9 @@ async function buildYoutubeDLImport (options: {
     // If part of a sync process, there is a parent job that will aggregate children results
     preventException: !!channelSync
   }
+
+  videoImport.payload = payload
+  await videoImport.save()
 
   return {
     videoImport,

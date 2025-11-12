@@ -7,6 +7,8 @@ import { VideoImportTableAttributes } from './video-import-table-attributes.js'
 export interface ListVideoImportsOptions extends AbstractListQueryOptions {
   userId: number
 
+  id?: number
+  videoId?: number
   search?: string
   targetUrl?: string
   videoChannelSyncId?: number
@@ -62,6 +64,18 @@ export class VideoImportListQueryBuilder extends AbstractListQuery {
       this.replacements.userId = this.options.userId
     }
 
+    if (this.options.id) {
+      where.push('"VideoImportModel"."id" = :id')
+
+      this.replacements.id = this.options.id
+    }
+
+    if (this.options.videoId) {
+      where.push('"VideoImportModel"."videoId" = :videoId')
+
+      this.replacements.videoId = this.options.videoId
+    }
+
     if (this.options.targetUrl) {
       where.push('"VideoImportModel"."targetUrl" = :targetUrl')
 
@@ -96,7 +110,7 @@ export class VideoImportListQueryBuilder extends AbstractListQuery {
     if (this.builtVideoJoin) return
 
     this.subQueryJoin += ` LEFT JOIN "video" "Video" ON "Video"."id" = "VideoImportModel"."videoId" ` +
-      getChannelJoin({ base: 'Video->', on: '"Video"."channelId"', includeAccount: true })
+      getChannelJoin({ base: 'Video->', on: '"Video"."channelId"', includeAccount: true, includeActors: true, includeAvatars: false })
 
     this.builtVideoJoin = true
   }

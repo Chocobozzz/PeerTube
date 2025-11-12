@@ -194,7 +194,9 @@ export class VideoListComponent implements OnInit {
   }
 
   isImport (video: Video) {
-    return video.state.id === VideoState.TO_IMPORT
+    const state = video.state.id
+
+    return state === VideoState.TO_IMPORT || state === VideoState.TO_IMPORT_FAILED
   }
 
   hasOriginalFile (video: Video) {

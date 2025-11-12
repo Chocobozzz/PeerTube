@@ -94,21 +94,39 @@ export class VideoImportsCommand extends AbstractCommand {
     })
   }
 
+  retry (
+    options: OverrideCommandOptions & {
+      importId: number
+    }
+  ) {
+    const path = '/api/v1/videos/imports/' + options.importId + '/retry'
+
+    return this.postBodyRequest({
+      ...options,
+
+      path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
   listMyVideoImports (options: OverrideCommandOptions & {
+    id?: number
+    videoId?: number
     sort?: string
     targetUrl?: string
     videoChannelSyncId?: number
     search?: string
     includeCollaborations?: boolean
   } = {}) {
-    const { sort, targetUrl, videoChannelSyncId, search, includeCollaborations } = options
+    const { id, videoId, sort, targetUrl, videoChannelSyncId, search, includeCollaborations } = options
     const path = '/api/v1/users/me/videos/imports'
 
     return this.getRequestBody<ResultList<VideoImport>>({
       ...options,
 
       path,
-      query: { sort, targetUrl, videoChannelSyncId, search, includeCollaborations },
+      query: { id, videoId, sort, targetUrl, videoChannelSyncId, search, includeCollaborations },
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })

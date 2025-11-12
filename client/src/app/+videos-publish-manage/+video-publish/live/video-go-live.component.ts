@@ -5,9 +5,10 @@ import { VideoEdit } from '@app/+videos-publish-manage/shared-manage/common/vide
 import { VideoManageController } from '@app/+videos-publish-manage/shared-manage/video-manage-controller.service'
 import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
 import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
+import { PlayerSettingsService } from '@app/shared/shared-video/player-settings.service'
 import { LiveVideoLatencyMode, PeerTubeProblemDocument, ServerErrorCode, UserVideoQuota, VideoPrivacyType } from '@peertube/peertube-models'
 import debug from 'debug'
-import { map, switchMap } from 'rxjs'
+import { forkJoin, map, switchMap } from 'rxjs'
 import { SelectChannelItem } from 'src/types'
 import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
@@ -38,6 +39,7 @@ export class VideoGoLiveComponent implements OnInit, AfterViewInit, CanComponent
   private hooks = inject(HooksService)
   private manageController = inject(VideoManageController)
   private route = inject(ActivatedRoute)
+  private playerSettingsService = inject(PlayerSettingsService)
 
   readonly userChannels = input.required<SelectChannelItem[]>()
   readonly userQuota = input.required<UserVideoQuota>()
@@ -100,14 +102,16 @@ export class VideoGoLiveComponent implements OnInit, AfterViewInit, CanComponent
     this.liveVideoService.goLive(videoEdit.toLiveCreate(this.highestPrivacy()))
       .pipe(
         switchMap(({ video }) => {
-          return this.liveVideoService.getVideoLive(video.uuid)
-            .pipe(map(live => ({ live, video })))
+          return forkJoin([
+            this.liveVideoService.getVideoLive(video.uuid),
+            this.playerSettingsService.getVideoSettings({ videoId: video.uuid, raw: true })
+          ]).pipe(map(([ live, playerSettings ]) => ({ live, playerSettings, video })))
         })
       )
       .subscribe({
-        next: async ({ video: { id, uuid, shortUUID }, live }) => {
+        next: async ({ video: { id, uuid, shortUUID }, live, playerSettings }) => {
           videoEdit.loadAfterPublish({ video: { id, uuid, shortUUID } })
-          await videoEdit.loadFromAPI({ live, loadPrivacy: false })
+          await videoEdit.loadFromAPI({ live, playerSettings, loadPrivacy: false })
 
           debugLogger(`Live published`)
 

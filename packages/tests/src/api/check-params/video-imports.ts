@@ -16,6 +16,7 @@ import {
 } from '@peertube/peertube-server-commands'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
 import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
+import { SQLCommand } from '@tests/shared/sql-command.js'
 
 describe('Test video imports API validator', function () {
   const path = '/api/v1/videos/imports'
@@ -60,6 +61,14 @@ describe('Test video imports API validator', function () {
 
     it('Should fail with an incorrect sort', async function () {
       await checkBadSortPagination(server.url, myPath, server.accessToken)
+    })
+
+    it('Should fail with a bad id param', async function () {
+      await makeGetRequest({ url: server.url, path: myPath, query: { id: 'toto' }, token: server.accessToken })
+    })
+
+    it('Should fail with a bad video id param', async function () {
+      await makeGetRequest({ url: server.url, path: myPath, query: { videoId: 'toto' }, token: server.accessToken })
     })
 
     it('Should fail with a bad videoChannelSyncId param', async function () {
@@ -488,6 +497,73 @@ describe('Test video imports API validator', function () {
 
       await server.videoImports.delete({ importId, token: editorToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
       await server.videoImports.delete({ importId, token: server.accessToken })
+    })
+  })
+
+  describe('Retrying a video import', function () {
+    let sqlCommand: SQLCommand
+    let importId: number
+    let successId: number
+
+    before(async function () {
+      this.timeout(60000)
+
+      sqlCommand = new SQLCommand(server)
+
+      await server.jobs.pauseJobQueue()
+
+      {
+        const res = await server.videoImports.quickImport({ name: 'To retry', targetUrl: FIXTURE_URLS.goodVideo })
+        importId = res.id
+      }
+
+      await sqlCommand.setImportUrl(importId, FIXTURE_URLS.badVideo)
+      await server.jobs.resumeJobQueue()
+
+      {
+        const res = await server.videoImports.quickImport({ name: 'Success', targetUrl: FIXTURE_URLS.goodVideo })
+        successId = res.id
+      }
+
+      await waitJobs([ server ])
+    })
+
+    it('Should fail with an invalid import id', async function () {
+      await server.videoImports.retry({ importId: 'artyom' as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should fail with an unknown import id', async function () {
+      await server.videoImports.retry({ importId: 42, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+    })
+
+    it('Should fail without token', async function () {
+      await server.videoImports.retry({ importId, token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+    })
+
+    it('Should fail with another user token', async function () {
+      await server.videoImports.retry({ importId, token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should fail with non failed import', async function () {
+      this.timeout(60000)
+
+      await server.videoImports.retry({ importId: successId, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should succeed to retry', async function () {
+      await server.videoImports.retry({ importId, token: editorToken })
+    })
+
+    it('Should fail to retry too many times an import', async function () {
+      await waitJobs([ server ])
+
+      await server.videoImports.retry({ importId, token: editorToken })
+
+      await server.videoImports.retry({ importId, token: editorToken, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    after(async function () {
+      await sqlCommand?.cleanup()
     })
   })
 

@@ -57,6 +57,13 @@ async function processVideoImport (job: Job): Promise<VideoImportPreventExceptio
     return { resultType: 'success' }
   }
 
+  if (videoImport.attempts >= CONFIG.IMPORT.VIDEOS.MAX_ATTEMPTS) {
+    logger.info('Do not process import since it has reached the maximum number of attempts', { payload, attempts: videoImport.attempts })
+
+    return { resultType: 'error' }
+  }
+
+  videoImport.attempts += 1
   videoImport.state = VideoImportState.PROCESSING
   await videoImport.save()
 
@@ -66,6 +73,8 @@ async function processVideoImport (job: Job): Promise<VideoImportPreventExceptio
 
     return { resultType: 'success' }
   } catch (err) {
+    // Processors already handle video import state change on error
+
     if (!payload.preventException) throw err
 
     logger.warn('Catch error in video import to send value to parent job.', { payload, err })
@@ -87,7 +96,9 @@ async function processTorrentImport (job: Job, videoImport: MVideoImportDefault,
   const options = { type: payload.type, generateTranscription: payload.generateTranscription, videoImportId: payload.videoImportId }
 
   const target = {
-    torrentName: videoImport.torrentName ? getSecureTorrentName(videoImport.torrentName) : undefined,
+    torrentName: videoImport.torrentName
+      ? getSecureTorrentName(videoImport.torrentName)
+      : undefined,
     uri: videoImport.magnetUri
   }
   return processFile(() => downloadWebTorrentVideo(target, JOB_TTL['video-import']), videoImport, options)
@@ -113,8 +124,16 @@ async function processYoutubeDLImport (job: Job, videoImport: MVideoImportDefaul
 
 async function getVideoImportOrDie (payload: VideoImportPayload) {
   const videoImport = await VideoImportModel.loadAndPopulateVideo(payload.videoImportId)
-  if (!videoImport?.Video) {
-    throw new Error(`Cannot import video ${payload.videoImportId}: the video import or video linked to this import does not exist anymore.`)
+  if (!videoImport) throw new Error('Video import not found')
+
+  if (!videoImport.Video) {
+    const err = new Error(
+      `Cannot process video import ${payload.videoImportId}: the video import or video linked to this import does not exist anymore.`
+    )
+
+    await onImportError(err, null, videoImport)
+
+    throw err
   }
 
   return videoImport
@@ -328,11 +347,22 @@ async function onImportError (err: Error, tempVideoPath: string, videoImport: MV
     logger.warn('Cannot cleanup files after a video import error.', { err: errUnlink })
   }
 
-  videoImport.error = err.message
-  if (videoImport.state !== VideoImportState.REJECTED) {
-    videoImport.state = VideoImportState.FAILED
-  }
-  await videoImport.save()
+  await sequelizeTypescript.transaction(async t => {
+    videoImport.error = err.message
+
+    if (videoImport.state !== VideoImportState.REJECTED) {
+      videoImport.state = VideoImportState.FAILED
+    }
+
+    await videoImport.save({ transaction: t })
+
+    const video = await VideoModel.load(videoImport.videoId, t)
+
+    if (video) {
+      video.state = VideoState.TO_IMPORT_FAILED
+      await video.save({ transaction: t })
+    }
+  })
 
   Notifier.Instance.notifyOnFinishedVideoImport({ videoImport, success: false })
 }

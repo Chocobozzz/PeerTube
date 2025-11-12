@@ -14,6 +14,7 @@ export class VideoStateBadgeComponent implements OnChanges {
     [VideoState.PUBLISHED]: 'badge-green',
     [VideoState.TO_TRANSCODE]: 'badge-brown',
     [VideoState.TO_IMPORT]: 'badge-brown',
+    [VideoState.TO_IMPORT_FAILED]: 'badge-red',
     [VideoState.WAITING_FOR_LIVE]: 'badge-blue',
     [VideoState.LIVE_ENDED]: 'badge-green',
     [VideoState.TO_MOVE_TO_EXTERNAL_STORAGE]: 'badge-brown',
@@ -95,6 +96,10 @@ export class VideoStateBadgeComponent implements OnChanges {
 
       case VideoState.TO_IMPORT:
         this.label = $localize`To import`
+        return
+
+      case VideoState.TO_IMPORT_FAILED:
+        this.label = $localize`Import failed`
         return
 
       case VideoState.TO_EDIT:

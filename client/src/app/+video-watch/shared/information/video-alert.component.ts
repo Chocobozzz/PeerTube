@@ -28,7 +28,7 @@ export class VideoAlertComponent {
     const video = this.video()
     if (!video) return undefined
 
-    return this.videoStateMessage.buildWarn(video.state.id)
+    return this.videoStateMessage.buildWarn(video.id, video.state.id)
   }
 
   hasVideoScheduledPublication () {

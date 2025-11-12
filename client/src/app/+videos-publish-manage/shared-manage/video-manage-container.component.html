@@ -39,6 +39,12 @@
 
       <strong class="me-1">{{ getStateWarning().manageMain }}</strong>
       <span>{{ getStateWarning().manageSecondary }}</span>
+
+      @if (getStateWarning().routerLink) {
+        <span class="ms-1">
+          <a [routerLink]="getStateWarning().routerLink.link" [queryParams]="getStateWarning().routerLink.queryParams">{{ getStateWarning().routerLink.text }}</a>
+        </span>
+      }
     </div>
 
     <my-manage-errors *ngIf="displayFormErrorsMsg && hasFormErrors()" class="d-block mt-2"></my-manage-errors>

@@ -320,6 +320,7 @@ export class Video implements VideoServerModel {
   private transcodingAndTranscriptionIncompatibleStates () {
     return new Set<VideoStateType>([
       VideoState.TO_IMPORT,
+      VideoState.TO_IMPORT_FAILED,
       VideoState.TO_EDIT,
       VideoState.TO_MOVE_TO_EXTERNAL_STORAGE,
       VideoState.TO_MOVE_TO_FILE_SYSTEM

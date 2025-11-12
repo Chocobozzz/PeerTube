@@ -41,6 +41,12 @@ export class VideoImportService {
 
     if (search) {
       const filters = this.restService.parseQueryStringFilter(search, {
+        id: {
+          prefix: 'id:'
+        },
+        videoId: {
+          prefix: 'videoId:'
+        },
         videoChannelSyncId: {
           prefix: 'videoChannelSyncId:'
         },
@@ -67,6 +73,11 @@ export class VideoImportService {
 
   cancelVideoImport (videoImport: VideoImport) {
     return this.authHttp.post(VideoImportService.BASE_VIDEO_IMPORT_URL + videoImport.id + '/cancel', {})
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
+  retryVideoImport (videoImport: VideoImport) {
+    return this.authHttp.post(VideoImportService.BASE_VIDEO_IMPORT_URL + videoImport.id + '/retry', {})
       .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 

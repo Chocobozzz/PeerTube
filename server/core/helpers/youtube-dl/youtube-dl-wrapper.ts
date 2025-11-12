@@ -23,13 +23,11 @@ const processOptions = {
 }
 
 class YoutubeDLWrapper {
-
   constructor (
     private readonly url: string,
     private readonly enabledResolutions: VideoResolutionType[],
     private readonly useBestFormat: boolean
   ) {
-
   }
 
   async getInfoForDownload (youtubeDLArgs: string[] = []): Promise<YoutubeDLInfo> {
