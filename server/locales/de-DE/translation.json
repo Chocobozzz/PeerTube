@@ -186,7 +186,7 @@
     "This user has not owner rights on this channel": "Dieser Benutzer hat keine Eigentumsrechte auf diesen Kanal",
     "This user cannot manage this channel": "Dieser Benutzer kann diesen Kanal nicht verwalten",
     "The channel must be local.": "Der Kanal muss lokal sein.",
-    "Video change ownership not found": "Videoänderungseigentum nicht gefunden",
+    "Video ownership change not found": "Video ownership change not found",
     "Video is not password protected": "Video ist nicht passwortgeschützt",
     "Video password not found": "Videopasswort nicht gefunden",
     "Cannot delete the last password of the protected video": "Das letzte Passwort des geschützten Videos kann nicht gelöscht werden",
@@ -216,6 +216,12 @@
     "Collaborator is not in pending state": "Mitwirkender befindet sicht nicht im Zustand „ausstehend“",
     "Collaborator is not the current user": "Mitwirkender ist nicht der aktuelle Benutzer",
     "Channel collaborator does not exist": "Kanalmitwirkender existiert nicht",
+    "Another actor (account/channel) with name {name} on this instance already exists or has already existed.": "Another actor (account/channel) with name {name} on this instance already exists or has already existed.",
+    "You cannot create more than {count} channels_one": "You cannot create more than {count} channels",
+    "You cannot create more than {count} channels_other": "You cannot create more than {count} channels",
+    "Channel import is impossible as video upload via HTTP is not enabled on the server": "Channel import is impossible as video upload via HTTP is not enabled on the server",
+    "This channel sync is not owned by this channel": "This channel sync is not owned by this channel",
+    "Cannot remove the last channel of this user": "Cannot remove the last channel of this user",
     "This comment is already deleted": "Dieser Kommentar wurde bereits gelöscht",
     "This comment is deleted": "Dieser Kommentar ist gelöscht",
     "This comment is not held for review": "Dieser Kommentar hat keine ausstehende Überprüfung",
@@ -226,6 +232,9 @@
     "Cannot use non unicast IP as targetUrl": "Eine Nicht-Unicast-IP kann nicht als targetUrl verwendet werden",
     "Cannot delete a pending video import. Cancel it or wait for the end of the import first": "Ein ausstehender Videoimport kann nicht gelöscht werden. Brich ihn ab, oder warte das Ende des Imports ab",
     "Cannot cancel a non pending video import": "Ein nicht ausstehender Videoimport kann nicht abgebrochen werden",
+    "Cannot retry a non failed video import": "Cannot retry a non failed video import",
+    "Cannot retry video import because the associated video metadata has been deleted": "Cannot retry video import because the associated video metadata has been deleted",
+    "Cannot retry video import since it has reached the maximum number of attempts": "Cannot retry video import since it has reached the maximum number of attempts",
     "Refused to import video": "Videoimport abgelehnt",
     "Cannot manage video import of another user": "Videoimport eines anderen Benutzers kann nicht verwaltet werden",
     "{username} does not exist on {instanceName}": "{username} existiert nicht auf {instanceName}",
@@ -259,5 +268,5 @@
     "\"filter\" query parameter is not supported anymore by PeerTube. Please use \"isLocal\" and \"include\" instead": "Der Anfrageparameter „filter“ wird von PeerTube nicht mehr unterstützt. Bitte benutze stattdessen „isLocal“ und „include“",
     "Cannot set nsfwFlags if the video is not NSFW": "Es kann nicht nsfwFlags gesetzt werden, wenn das Video nicht NSFW ist",
     "Cannot set nsfwSummary if the video is not NSFW": "Es kann nicht nsfwSummary gesetzt werden, wenn das Video nicht NSFW ist",
-    "Schedule update at is mandatory": "Zeitplanaktualisierung am ist verpflichtend"
+    "\"scheduleUpdate.updateAt\" parameter is mandatory": "\"scheduleUpdate.updateAt\" parameter is mandatory"
 }

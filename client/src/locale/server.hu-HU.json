@@ -42,6 +42,7 @@
     "To edit": "Szerkesztendő",
     "To move to file system": "Külső tárolóra áthelyezendő",
     "Move to file system failed": "Áthelyezés a fájlrendszerre nem sikerült",
+    "Import failed": "Import failed",
     "Pending": "Függőben",
     "Success": "Sikerült",
     "Failed": "Sikertelen",

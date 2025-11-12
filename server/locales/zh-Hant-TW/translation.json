@@ -186,7 +186,7 @@
     "This user has not owner rights on this channel": "此使用者對此頻道不具備擁有者權限",
     "This user cannot manage this channel": "此使用者無法管理此頻道",
     "The channel must be local.": "頻道必須為本機頻道。",
-    "Video change ownership not found": "找不到影片所有權變更",
+    "Video ownership change not found": "Video ownership change not found",
     "Video is not password protected": "影片未設密碼保護",
     "Video password not found": "找不到影片密碼",
     "Cannot delete the last password of the protected video": "無法刪除受保護影片的最後一組密碼",
@@ -216,6 +216,11 @@
     "Collaborator is not in pending state": "協作者未處於待處理狀態",
     "Collaborator is not the current user": "協作者並非目前使用者",
     "Channel collaborator does not exist": "頻道協作者不存在",
+    "Another actor (account/channel) with name {name} on this instance already exists or has already existed.": "Another actor (account/channel) with name {name} on this instance already exists or has already existed.",
+    "You cannot create more than {count} channels_other": "You cannot create more than {count} channels",
+    "Channel import is impossible as video upload via HTTP is not enabled on the server": "Channel import is impossible as video upload via HTTP is not enabled on the server",
+    "This channel sync is not owned by this channel": "This channel sync is not owned by this channel",
+    "Cannot remove the last channel of this user": "Cannot remove the last channel of this user",
     "This comment is already deleted": "此留言已被刪除",
     "This comment is deleted": "此留言已被刪除",
     "This comment is not held for review": "此留言無須審核",
@@ -226,6 +231,9 @@
     "Cannot use non unicast IP as targetUrl": "無法使用非單播 IP 作為 targetUrl",
     "Cannot delete a pending video import. Cancel it or wait for the end of the import first": "無法刪除正在進行的影片匯入作業。請先取消該作業或等待匯入完成",
     "Cannot cancel a non pending video import": "無法取消非待處理的影片匯入",
+    "Cannot retry a non failed video import": "Cannot retry a non failed video import",
+    "Cannot retry video import because the associated video metadata has been deleted": "Cannot retry video import because the associated video metadata has been deleted",
+    "Cannot retry video import since it has reached the maximum number of attempts": "Cannot retry video import since it has reached the maximum number of attempts",
     "Refused to import video": "拒絕匯入影片",
     "Cannot manage video import of another user": "無法管理其他使用者的影片匯入",
     "{username} does not exist on {instanceName}": "{username} 在 {instanceName} 上不存在",
@@ -259,5 +267,5 @@
     "\"filter\" query parameter is not supported anymore by PeerTube. Please use \"isLocal\" and \"include\" instead": "PeerTube 不再支援「filter」查詢參數。請改用「isLocal」與「include」參數代替",
     "Cannot set nsfwFlags if the video is not NSFW": "若影片不屬於 NSFW 內容，則無法設定 nsfwFlags",
     "Cannot set nsfwSummary if the video is not NSFW": "若影片不屬於 NSFW 內容，則無法設定 nsfwSummary",
-    "Schedule update at is mandatory": "排定更新為強制要求"
+    "\"scheduleUpdate.updateAt\" parameter is mandatory": "\"scheduleUpdate.updateAt\" parameter is mandatory"
 }

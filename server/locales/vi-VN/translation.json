@@ -186,7 +186,7 @@
     "This user has not owner rights on this channel": "Người dùng này không có quyền sở hữu kênh này",
     "This user cannot manage this channel": "Người dùng này không thể quản lý kênh này",
     "The channel must be local.": "Kênh phải thuộc máy chủ này.",
-    "Video change ownership not found": "Không tìm thấy quyền sở hữu thay đổi video",
+    "Video ownership change not found": "Video ownership change not found",
     "Video is not password protected": "Video không được bảo vệ bằng mật khẩu",
     "Video password not found": "Không tìm thấy mật khẩu video",
     "Cannot delete the last password of the protected video": "Không thể xóa mật khẩu cuối cùng của video được bảo vệ",
@@ -216,6 +216,11 @@
     "Collaborator is not in pending state": "Cộng tác viên không ở trạng thái chờ xử lý",
     "Collaborator is not the current user": "Cộng tác viên không phải là người dùng hiện tại",
     "Channel collaborator does not exist": "Cộng tác viên kênh không tồn tại",
+    "Another actor (account/channel) with name {name} on this instance already exists or has already existed.": "Another actor (account/channel) with name {name} on this instance already exists or has already existed.",
+    "You cannot create more than {count} channels_other": "You cannot create more than {count} channels",
+    "Channel import is impossible as video upload via HTTP is not enabled on the server": "Channel import is impossible as video upload via HTTP is not enabled on the server",
+    "This channel sync is not owned by this channel": "This channel sync is not owned by this channel",
+    "Cannot remove the last channel of this user": "Cannot remove the last channel of this user",
     "This comment is already deleted": "Bình luận này đã bị xóa",
     "This comment is deleted": "Bình luận này đã bị xóa",
     "This comment is not held for review": "Bình luận này không được giữ lại để xem xét",
@@ -226,6 +231,9 @@
     "Cannot use non unicast IP as targetUrl": "Không thể sử dụng IP không unicast làm targetUrl",
     "Cannot delete a pending video import. Cancel it or wait for the end of the import first": "Không thể xóa quá trình nhập video đang chờ xử lý. Hủy nó hoặc đợi kết thúc quá trình nhập trước",
     "Cannot cancel a non pending video import": "Không thể hủy quá trình nhập video không đang chờ xử lý",
+    "Cannot retry a non failed video import": "Cannot retry a non failed video import",
+    "Cannot retry video import because the associated video metadata has been deleted": "Cannot retry video import because the associated video metadata has been deleted",
+    "Cannot retry video import since it has reached the maximum number of attempts": "Cannot retry video import since it has reached the maximum number of attempts",
     "Refused to import video": "Từ chối nhập video",
     "Cannot manage video import of another user": "Không thể quản lý việc nhập video của người dùng khác",
     "{username} does not exist on {instanceName}": "{username} không tồn tại trên {instanceName}",
@@ -259,5 +267,5 @@
     "\"filter\" query parameter is not supported anymore by PeerTube. Please use \"isLocal\" and \"include\" instead": "\"filter\" query parameter is not supported anymore by PeerTube. Please use \"isLocal\" and \"include\" instead",
     "Cannot set nsfwFlags if the video is not NSFW": "Cannot set nsfwFlags if the video is not NSFW",
     "Cannot set nsfwSummary if the video is not NSFW": "Cannot set nsfwSummary if the video is not NSFW",
-    "Schedule update at is mandatory": "Schedule update at is mandatory"
+    "\"scheduleUpdate.updateAt\" parameter is mandatory": "\"scheduleUpdate.updateAt\" parameter is mandatory"
 }

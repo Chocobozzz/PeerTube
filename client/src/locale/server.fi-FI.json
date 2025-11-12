@@ -42,6 +42,7 @@
     "To edit": "Muokataksesi",
     "To move to file system": "Siirtääksesi tiedostojärjestelmään",
     "Move to file system failed": "Siirto tiedostojärjestelmään ei onnistunut",
+    "Import failed": "Import failed",
     "Pending": "Odottaa",
     "Success": "Onnistui",
     "Failed": "Epäonnistui",

@@ -186,7 +186,7 @@
     "This user has not owner rights on this channel": "This user has not owner rights on this channel",
     "This user cannot manage this channel": "This user cannot manage this channel",
     "The channel must be local.": "The channel must be local.",
-    "Video change ownership not found": "Video change ownership not found",
+    "Video ownership change not found": "Video ownership change not found",
     "Video is not password protected": "Video is not password protected",
     "Video password not found": "Video password not found",
     "Cannot delete the last password of the protected video": "Cannot delete the last password of the protected video",
@@ -216,6 +216,12 @@
     "Collaborator is not in pending state": "Collaborator is not in pending state",
     "Collaborator is not the current user": "Collaborator is not the current user",
     "Channel collaborator does not exist": "Channel collaborator does not exist",
+    "Another actor (account/channel) with name {name} on this instance already exists or has already existed.": "Another actor (account/channel) with name {name} on this instance already exists or has already existed.",
+    "You cannot create more than {count} channels_one": "You cannot create more than {count} channels",
+    "You cannot create more than {count} channels_other": "You cannot create more than {count} channels",
+    "Channel import is impossible as video upload via HTTP is not enabled on the server": "Channel import is impossible as video upload via HTTP is not enabled on the server",
+    "This channel sync is not owned by this channel": "This channel sync is not owned by this channel",
+    "Cannot remove the last channel of this user": "Cannot remove the last channel of this user",
     "This comment is already deleted": "This comment is already deleted",
     "This comment is deleted": "This comment is deleted",
     "This comment is not held for review": "This comment is not held for review",
@@ -226,6 +232,9 @@
     "Cannot use non unicast IP as targetUrl": "Cannot use non unicast IP as targetUrl",
     "Cannot delete a pending video import. Cancel it or wait for the end of the import first": "Cannot delete a pending video import. Cancel it or wait for the end of the import first",
     "Cannot cancel a non pending video import": "Cannot cancel a non pending video import",
+    "Cannot retry a non failed video import": "Cannot retry a non failed video import",
+    "Cannot retry video import because the associated video metadata has been deleted": "Cannot retry video import because the associated video metadata has been deleted",
+    "Cannot retry video import since it has reached the maximum number of attempts": "Cannot retry video import since it has reached the maximum number of attempts",
     "Refused to import video": "Refused to import video",
     "Cannot manage video import of another user": "Cannot manage video import of another user",
     "{username} does not exist on {instanceName}": "{username} does not exist on {instanceName}",
@@ -259,5 +268,5 @@
     "\"filter\" query parameter is not supported anymore by PeerTube. Please use \"isLocal\" and \"include\" instead": "\"filter\" query parameter is not supported anymore by PeerTube. Please use \"isLocal\" and \"include\" instead",
     "Cannot set nsfwFlags if the video is not NSFW": "Cannot set nsfwFlags if the video is not NSFW",
     "Cannot set nsfwSummary if the video is not NSFW": "Cannot set nsfwSummary if the video is not NSFW",
-    "Schedule update at is mandatory": "Schedule update at is mandatory"
+    "\"scheduleUpdate.updateAt\" parameter is mandatory": "\"scheduleUpdate.updateAt\" parameter is mandatory"
 }

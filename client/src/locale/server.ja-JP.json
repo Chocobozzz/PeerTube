@@ -42,6 +42,7 @@
     "To edit": "編集に移動",
     "To move to file system": "ファイルシステムへの移動",
     "Move to file system failed": "ファイルシステムへの移動に失敗",
+    "Import failed": "Import failed",
     "Pending": "保留中",
     "Success": "完了",
     "Failed": "失敗",
