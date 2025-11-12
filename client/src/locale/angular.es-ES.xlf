@@ -14212,33 +14212,33 @@
           <context context-type="linenumber">7,8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8310012947639468553" datatype="html">
+      <trans-unit id="8310012947639468553" datatype="html" xml:space="preserve">
         <source>Invitation sent</source>
-        <target state="new"> Invitation sent </target>
+        <target state="translated">Invitación enviada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.html</context>
           <context context-type="linenumber">11,12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1748358381815739866" datatype="html">
+      <trans-unit id="1748358381815739866" datatype="html" xml:space="preserve">
         <source>You are an editor of this channel</source>
-        <target state="new">You are an editor of this channel</target>
+        <target state="translated">Eres un editor de este canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.ts</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5012792802148276029" datatype="html">
+      <trans-unit id="5012792802148276029" datatype="html" xml:space="preserve">
         <source>You are the owner of this channel</source>
-        <target state="new">You are the owner of this channel</target>
+        <target state="translated">Eres el propietario de este canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.ts</context>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8934176101492370342" datatype="html">
+      <trans-unit id="8934176101492370342" datatype="html" xml:space="preserve">
         <source>You have been invited to be an editor of this channel</source>
-        <target state="new">You have been invited to be an editor of this channel</target>
+        <target state="translated">Has sido invitado a ser un editor de este canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -14268,17 +14268,17 @@
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5946328882313242926" datatype="html">
+      <trans-unit id="5946328882313242926" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.pendingEmail }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is awaiting email verification. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.pendingEmail }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is awaiting email verification. </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.pendingEmail }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> está esperando verificación de email. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">6,9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8737239042780015707" datatype="html">
+      <trans-unit id="8737239042780015707" datatype="html" xml:space="preserve">
         <source>Email verification sent!</source>
-        <target state="new">Email verification sent!</target>
+        <target state="translated">¡Verificación email enviada!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">10,11</context>
@@ -14352,9 +14352,9 @@
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1172866303261737245" datatype="html">
+      <trans-unit id="1172866303261737245" datatype="html" xml:space="preserve">
         <source>Position</source>
-        <target state="new">Position</target>
+        <target state="translated">Posición</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.ts</context>
           <context context-type="linenumber">99</context>
@@ -14564,17 +14564,17 @@
           <context context-type="linenumber">146</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3719027099325959755" datatype="html">
+      <trans-unit id="3719027099325959755" datatype="html" xml:space="preserve">
         <source>Devices</source>
-        <target state="new">Devices</target>
+        <target state="translated">Dispositivos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">151</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2852782118363573273" datatype="html">
+      <trans-unit id="2852782118363573273" datatype="html" xml:space="preserve">
         <source>Operating systems</source>
-        <target state="new">Operating systems</target>
+        <target state="translated">Sistemas operativos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">156</context>
@@ -14696,9 +14696,9 @@
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7678377121420709355" datatype="html">
+      <trans-unit id="7678377121420709355" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> does not require email verification.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> does not require email verification.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> no requiere de verificación email.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-new-account-ask-send-email/verify-new-account-ask-send-email.component.html</context>
           <context context-type="linenumber">20,22</context>
@@ -15438,9 +15438,9 @@
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6517624161149187953" datatype="html">
+      <trans-unit id="6517624161149187953" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ config.instance.name }}"/> is dedicated to sensitive content.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ config.instance.name }}"/> is dedicated to sensitive content.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ config.instance.name }}"/> está dedicado a contenido sensible.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-home.component.html</context>
           <context context-type="linenumber">14,17</context>
@@ -15990,9 +15990,9 @@
           <context context-type="linenumber">243</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2150280748663310169" datatype="html">
+      <trans-unit id="2150280748663310169" datatype="html" xml:space="preserve">
         <source>videos per page</source>
-        <target state="new">videos per page</target>
+        <target state="translated">videos por página</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">6</context>
@@ -16006,9 +16006,9 @@
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4708684903894580151" datatype="html">
+      <trans-unit id="4708684903894580151" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No video} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No video} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Sin videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">11</context>
@@ -16038,9 +16038,9 @@
           <context context-type="linenumber">144</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4942346691669949289" datatype="html">
+      <trans-unit id="4942346691669949289" datatype="html" xml:space="preserve">
         <source>Navigate to the video stats page</source>
-        <target state="new">Navigate to the video stats page</target>
+        <target state="translated">Navegar a la página de estadísticas del video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context>
           <context context-type="linenumber">86</context>
