@@ -7248,45 +7248,45 @@
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="7258464719094694611" datatype="html">
+      <trans-unit id="7258464719094694611" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Enable automatic transcription&lt;/strong&gt; of videos to create subtitles and improve accessibility</source>
-        <target state="new">&lt;strong&gt;Enable automatic transcription&lt;/strong&gt; of videos to create subtitles and improve accessibility</target>
+        <target state="translated">&lt;strong&gt;Permitir transcripción automática &lt;/strong&gt;de los videos para crear subtítulos y mejorar la accesibilidad</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">460</context>
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="8115142822298621193" datatype="html">
+      <trans-unit id="8115142822298621193" datatype="html" xml:space="preserve">
         <source>The plugin &lt;strong&gt;must be configured&lt;/strong&gt; after the pre-configuration wizard confirmation.</source>
-        <target state="new"> The plugin &lt;strong&gt;must be configured&lt;/strong&gt; after the pre-configuration wizard confirmation.</target>
+        <target state="translated">El plugin &lt;strong&gt;debe ser configurado &lt;/strong&gt;tras la confirmación del asistente de pre-configuración.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">470</context>
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="7555586666437103751" datatype="html">
+      <trans-unit id="7555586666437103751" datatype="html" xml:space="preserve">
         <source>Install the &lt;strong&gt;LDAP&lt;/strong&gt; authentication plugin.</source>
-        <target state="new">Install the &lt;strong&gt;LDAP&lt;/strong&gt; authentication plugin.</target>
+        <target state="translated">Instalar el plugin de autenticación &lt;strong&gt;LDAP&lt;/strong&gt;.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">474</context>
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="6740504336459164358" datatype="html">
+      <trans-unit id="6740504336459164358" datatype="html" xml:space="preserve">
         <source>Install the &lt;strong&gt;SAML 2.0&lt;/strong&gt; authentication plugin.</source>
-        <target state="new">Install the &lt;strong&gt;SAML 2.0&lt;/strong&gt; authentication plugin.</target>
+        <target state="translated">Instalar el plugin de autenticación &lt;strong&gt;SAML 2.0&lt;/strong&gt;.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">480</context>
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="5853661417734866559" datatype="html">
+      <trans-unit id="5853661417734866559" datatype="html" xml:space="preserve">
         <source>Install the &lt;strong&gt;OpenID Connect&lt;/strong&gt; authentication plugin.</source>
-        <target state="new">Install the &lt;strong&gt;OpenID Connect&lt;/strong&gt; authentication plugin.</target>
+        <target state="translated">Instalar el plugin de autenticación &lt;strong&gt;OpenID Connect&lt;/strong&gt;.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">486</context>
@@ -7349,17 +7349,17 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5256472549326274222" datatype="html">
+      <trans-unit id="5256472549326274222" datatype="html" xml:space="preserve">
         <source>Go to the channel page</source>
-        <target state="new">Go to the channel page</target>
+        <target state="translated">Ir a la página del canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7883181802464579797" datatype="html">
+      <trans-unit id="7883181802464579797" datatype="html" xml:space="preserve">
         <source>Go to the account page</source>
-        <target state="new">Go to the account page</target>
+        <target state="translated">Ir a la página de la cuenta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">90</context>
@@ -7681,9 +7681,9 @@
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1382247797971338819" datatype="html">
+      <trans-unit id="1382247797971338819" datatype="html" xml:space="preserve">
         <source>It will start on <x id="INTERPOLATION" equiv-text="{{ scheduledLiveDate() | ptDate: 'short' }}"/>. </source>
-        <target state="new"> It will start on <x id="INTERPOLATION" equiv-text="{{ scheduledLiveDate() | ptDate: 'short' }}"/>. </target>
+        <target state="translated">Empezará en <x id="INTERPOLATION" equiv-text="{{ scheduledLiveDate() | ptDate: 'short' }}"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">10,11</context>
@@ -10029,9 +10029,9 @@
           <context context-type="linenumber">110</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7366387646685791945" datatype="html">
+      <trans-unit id="7366387646685791945" datatype="html" xml:space="preserve">
         <source>Whether they're from channels you own or channels for which you're an editor</source>
-        <target state="new">Whether they're from channels you own or channels for which you're an editor</target>
+        <target state="translated">Ya sea de canales de los que eres propietario o canales de los que eres editor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">114</context>
@@ -10401,9 +10401,9 @@
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5274450200795156583" datatype="html">
+      <trans-unit id="5274450200795156583" datatype="html" xml:space="preserve">
         <source>If not set, the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Square icon<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> will be used.</source>
-        <target state="new">If not set, the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Square icon<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> will be used.</target>
+        <target state="translated">Si no se establece , se usará el <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>icono Cuadrado<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">43</context>
@@ -10485,9 +10485,9 @@
           <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5056137165350591880" datatype="html">
+      <trans-unit id="5056137165350591880" datatype="html" xml:space="preserve">
         <source>It will be resized to 48x48 pixels.</source>
-        <target state="new">It will be resized to 48x48 pixels.</target>
+        <target state="translated">Será redimensionado a 48x48 pixeles.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">103</context>
@@ -10509,25 +10509,25 @@
           <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8756577993740241555" datatype="html">
+      <trans-unit id="8756577993740241555" datatype="html" xml:space="preserve">
         <source>It will be resized to 1200x650 pixels.</source>
-        <target state="new">It will be resized to 1200x650 pixels.</target>
+        <target state="translated">Será redimensionado a 1200x650 pixeles.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2910903458139645161" datatype="html">
+      <trans-unit id="2910903458139645161" datatype="html" xml:space="preserve">
         <source>Logos updated</source>
-        <target state="new">Logos updated</target>
+        <target state="translated">Logos actualizados</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.ts</context>
           <context context-type="linenumber">134</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8447390787456867619" datatype="html">
+      <trans-unit id="8447390787456867619" datatype="html" xml:space="preserve">
         <source>Process uploaded videos so that they are streamable on any device. Although this is costly in terms of resources, it is a critical part of PeerTube, so proceed with caution.</source>
-        <target state="new"> Process uploaded videos so that they are streamable on any device. Although this is costly in terms of resources, it is a critical part of PeerTube, so proceed with caution. </target>
+        <target state="translated">Procesar videos subidos para que se pueden retransmitir a cualquier dispositivo. Aunque esto es costoso en términos de recursos, es una parte crítica de PeerTube, así que procede con precaución.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">10,11</context>
@@ -10577,25 +10577,25 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4014604069358445532" datatype="html">
+      <trans-unit id="4014604069358445532" datatype="html" xml:space="preserve">
         <source>Default language</source>
-        <target state="new">Default language</target>
+        <target state="translated">Lenguaje por defecto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">77,78</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="977381557718671058" datatype="html">
+      <trans-unit id="977381557718671058" datatype="html" xml:space="preserve">
         <source>Default language used for users, in emails for example.</source>
-        <target state="new">Default language used for users, in emails for example.</target>
+        <target state="translated">Lenguaje por defecto utilizado para los usuarios, en emails por ejemplo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">79,80</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7971232255104545985" datatype="html">
+      <trans-unit id="7971232255104545985" datatype="html" xml:space="preserve">
         <source>The web interface still uses the web browser preferred language if not overridden by user preference</source>
-        <target state="new">The web interface still uses the web browser preferred language if not overridden by user preference</target>
+        <target state="translated">La interfaz web sigue usando el lenguaje preferido por el navegador si no está sobrescrito por las preferencias del usuario</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">80,81</context>
@@ -10693,17 +10693,17 @@
           <context context-type="linenumber">206</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8817920941077743476" datatype="html">
+      <trans-unit id="8817920941077743476" datatype="html" xml:space="preserve">
         <source>This instance is dedicated to sensitive content</source>
-        <target state="new">This instance is dedicated to sensitive content</target>
+        <target state="translated">Esta instancia está dedicada a contenido sensible</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">214</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7611566203467532051" datatype="html">
+      <trans-unit id="7611566203467532051" datatype="html" xml:space="preserve">
         <source>Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Moreover, the "sensitive content" checkbox on video upload will be automatically checked by default. </source>
-        <target state="new"> Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Moreover, the "sensitive content" checkbox on video upload will be automatically checked by default. </target>
+        <target state="translated">Activarlo permitirá a otros administradores saber que estás principalmente federando contenido sensible.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Incluso, el checkbox de "contenido sensible" en la subida de videos se marcará automáticamente por defecto. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">219</context>
@@ -10721,17 +10721,17 @@
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5509417153332543255" datatype="html">
+      <trans-unit id="5509417153332543255" datatype="html" xml:space="preserve">
         <source>Who moderates the instance? What is the policy regarding sensitive content? Political videos? etc</source>
-        <target state="new">Who moderates the instance? What is the policy regarding sensitive content? Political videos? etc</target>
+        <target state="translated">¿Quién modera la instancia? ¿Cuál es la política respecto a contenido sensible? ¿Videos políticos? Etc...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">256</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1969113117715295994" datatype="html">
+      <trans-unit id="1969113117715295994" datatype="html" xml:space="preserve">
         <source>YOU AND YOUR PLATFORM</source>
-        <target state="new">YOU AND YOUR PLATFORM</target>
+        <target state="translated">TÚ Y TU PLATAFORMA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">269</context>
@@ -10757,9 +10757,9 @@
           <context context-type="linenumber">98</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6377618413283681806" datatype="html">
+      <trans-unit id="6377618413283681806" datatype="html" xml:space="preserve">
         <source>Information updated.</source>
-        <target state="new">Information updated.</target>
+        <target state="translated">Información actualizada.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.ts</context>
           <context context-type="linenumber">248</context>
@@ -10973,9 +10973,9 @@
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6787748814515031203" datatype="html">
+      <trans-unit id="6787748814515031203" datatype="html" xml:space="preserve">
         <source>Player Theme</source>
-        <target state="new">Player Theme</target>
+        <target state="translated">Tema del reproductor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">32,34</context>
@@ -10989,9 +10989,9 @@
           <context context-type="linenumber">55,57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6869761334286813295" datatype="html">
+      <trans-unit id="6869761334286813295" datatype="html" xml:space="preserve">
         <source>CUSTOMIZATION</source>
-        <target state="new">CUSTOMIZATION</target>
+        <target state="translated">PERSONALIZACIÓN</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">43</context>
@@ -11005,41 +11005,41 @@
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6283491362360619064" datatype="html">
+      <trans-unit id="6283491362360619064" datatype="html" xml:space="preserve">
         <source>UI customization only applies if the user is using the default platform theme.</source>
-        <target state="new">UI customization only applies if the user is using the default platform theme.</target>
+        <target state="translated">La personalización de la UI solo se aplicará si el usuario está usando el tema por defecto de la plataforma.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3907392983067010584" datatype="html">
+      <trans-unit id="3907392983067010584" datatype="html" xml:space="preserve">
         <source>You can't preview the changes because you aren't using your platform's default theme.</source>
-        <target state="new">You can't preview the changes because you aren't using your platform's default theme.</target>
+        <target state="translated">No puedes previsualizar los cambios porque no estás usando el tema por defecto de tu plataforma.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8175005229347122523" datatype="html">
+      <trans-unit id="8175005229347122523" datatype="html" xml:space="preserve">
         <source>Current theme: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ getCurrentThemeLabel() }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Current theme: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ getCurrentThemeLabel() }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Tema actual: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ getCurrentThemeLabel() }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3909063823582797870" datatype="html">
+      <trans-unit id="3909063823582797870" datatype="html" xml:space="preserve">
         <source>Platform theme: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ getDefaultThemeLabel() }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</source>
-        <target state="new">Platform theme: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ getDefaultThemeLabel() }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
+        <target state="translated">Tema de la plataforma: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ getDefaultThemeLabel() }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2281003783374799495" datatype="html">
+      <trans-unit id="2281003783374799495" datatype="html" xml:space="preserve">
         <source>You can preview your UI customization but <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>don't forget to save your changes<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> once you are happy with the results.</source>
-        <target state="new">You can preview your UI customization but <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>don't forget to save your changes<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> once you are happy with the results.</target>
+        <target state="translated">Puedes previsualizar tu personalización de la UI pero <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>no olvides guardar tus cambios<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> una vez estés contento con los resultados.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">67</context>
@@ -11053,17 +11053,17 @@
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2040129064263999708" datatype="html">
+      <trans-unit id="2040129064263999708" datatype="html" xml:space="preserve">
         <source>⚠️ You don't have any external auth plugin enabled</source>
-        <target state="new">⚠️ You don't have any external auth plugin enabled</target>
+        <target state="translated">⚠️ No tienes activado ningún plugin de autenticación externa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">56,57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2678071949007349214" datatype="html">
+      <trans-unit id="2678071949007349214" datatype="html" xml:space="preserve">
         <source>⚠️ You have multiple external auth plugins enabled</source>
-        <target state="new">⚠️ You have multiple external auth plugins enabled</target>
+        <target state="translated">⚠️ Tienes activados múltiples plugins de autenticación externa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">58,59</context>
@@ -11141,9 +11141,9 @@
           <context context-type="linenumber">165</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4328465163710612366" datatype="html">
+      <trans-unit id="4328465163710612366" datatype="html" xml:space="preserve">
         <source>When the total number of users in your platform reaches this limit, registrations are disabled. -1 = unlimited</source>
-        <target state="new">When the total number of users in your platform reaches this limit, registrations are disabled. -1 = unlimited</target>
+        <target state="translated">Cuando el numero total de usuarios en tu plataforma alcance el límite, se desactivan los registros. -1 = ilimitado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">166</context>
@@ -11181,9 +11181,9 @@
           <context context-type="linenumber">197</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1980878931796709542" datatype="html">
+      <trans-unit id="1980878931796709542" datatype="html" xml:space="preserve">
         <source>Default video quota for a new user</source>
-        <target state="new">Default video quota for a new user</target>
+        <target state="translated">Cuota por defecto para un nuevo usuario</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">209</context>
@@ -11197,9 +11197,9 @@
           <context context-type="linenumber">136</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4924378635140045267" datatype="html">
+      <trans-unit id="4924378635140045267" datatype="html" xml:space="preserve">
         <source>⚠️ This functionality requires a lot of attention and extra moderation</source>
-        <target state="new">⚠️ This functionality requires a lot of attention and extra moderation</target>
+        <target state="translated">⚠️ Esta funcionalidad requiere mucha atención y moderación adicional</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">138</context>
@@ -11373,17 +11373,17 @@
           <context context-type="linenumber">177</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8819364692199793780" datatype="html">
+      <trans-unit id="8819364692199793780" datatype="html" xml:space="preserve">
         <source>Default daily upload limit for a new user</source>
-        <target state="new">Default daily upload limit for a new user</target>
+        <target state="translated">Limite de subidas diaria por defecto para un nuevo usuario</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">228</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3841475259822163079" datatype="html">
+      <trans-unit id="3841475259822163079" datatype="html" xml:space="preserve">
         <source>Automatically enable video history for a new user</source>
-        <target state="new">Automatically enable video history for a new user</target>
+        <target state="translated">Activar automáticamente el historial de videos para un nuevo usuario</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">250</context>
@@ -11573,25 +11573,25 @@
           <context context-type="linenumber">457,458</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5960828389062108087" datatype="html">
+      <trans-unit id="5960828389062108087" datatype="html" xml:space="preserve">
         <source>Default video privacy</source>
-        <target state="new">Default video privacy</target>
+        <target state="translated">Privacidad por defecto del video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">470</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3734974125618373942" datatype="html">
+      <trans-unit id="3734974125618373942" datatype="html" xml:space="preserve">
         <source>Default video licence</source>
-        <target state="new">Default video licence</target>
+        <target state="translated">Licencia por defecto del video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">478</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8251821314400241425" datatype="html">
+      <trans-unit id="8251821314400241425" datatype="html" xml:space="preserve">
         <source>Default comment policy</source>
-        <target state="new">Default comment policy</target>
+        <target state="translated">Política de comentario por defecto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">486</context>
@@ -11765,9 +11765,9 @@
           <context context-type="linenumber">831</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8981181756195068779" datatype="html">
+      <trans-unit id="8981181756195068779" datatype="html" xml:space="preserve">
         <source>The archive file is deleted after this period</source>
-        <target state="new">The archive file is deleted after this period</target>
+        <target state="translated">El archivo archivado es eliminado tras este periodo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">839</context>
@@ -11781,9 +11781,9 @@
           <context context-type="linenumber">768</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4557533619513324614" datatype="html">
+      <trans-unit id="4557533619513324614" datatype="html" xml:space="preserve">
         <source>Otherwise, the local search will be used by default</source>
-        <target state="new">Otherwise, the local search will be used by default</target>
+        <target state="translated">De lo contrario, la búsqueda local será utilizada por defecto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">771</context>
@@ -11825,17 +11825,17 @@
           <context context-type="linenumber">527</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2072884891614263775" datatype="html">
+      <trans-unit id="2072884891614263775" datatype="html" xml:space="preserve">
         <source>Accept comments made on remote platforms</source>
-        <target state="new">Accept comments made on remote platforms</target>
+        <target state="translated">Aceptar comentario hechos en plataformas remotas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">538</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5963121551419269989" datatype="html">
+      <trans-unit id="5963121551419269989" datatype="html" xml:space="preserve">
         <source>This setting is not retroactive: current comments from remote platforms will not be deleted</source>
-        <target state="new">This setting is not retroactive: current comments from remote platforms will not be deleted</target>
+        <target state="translated">Este ajuste no es retroactivo: los comentarios ya existentes de plataformas remotas no serán eliminados</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">541</context>
@@ -11849,9 +11849,9 @@
           <context context-type="linenumber">554</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7331615583751184681" datatype="html">
+      <trans-unit id="7331615583751184681" datatype="html" xml:space="preserve">
         <source>This setting is not retroactive: current followers of channels of your platform will not be affected</source>
-        <target state="new">This setting is not retroactive: current followers of channels of your platform will not be affected</target>
+        <target state="translated">Este ajuste no es retroactivo: los seguidores actuales de canales de tu plataforma no se verán afectados</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">557</context>
@@ -11865,33 +11865,33 @@
           <context context-type="linenumber">569</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5240371005291842688" datatype="html">
+      <trans-unit id="5240371005291842688" datatype="html" xml:space="preserve">
         <source>This setting is not retroactive: current followers of your platform will not be affected</source>
-        <target state="new">This setting is not retroactive: current followers of your platform will not be affected</target>
+        <target state="translated">Este ajuste no es retroactivo: los seguidores actuales de tu plataforma no se verán afectados</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">572</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4899539058271084907" datatype="html">
+      <trans-unit id="4899539058271084907" datatype="html" xml:space="preserve">
         <source>Manually approve new followers that follow your platform</source>
-        <target state="new">Manually approve new followers that follow your platform</target>
+        <target state="translated">Aprobar manualmente nuevos seguidores que sigan tu plataforma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">582</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6240145294614933263" datatype="html">
+      <trans-unit id="6240145294614933263" datatype="html" xml:space="preserve">
         <source>Automatically follow back followers that follow your platform</source>
-        <target state="new">Automatically follow back followers that follow your platform</target>
+        <target state="translated">Automáticamente seguir de vuelta a seguidores que sigan tu plataforma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">596</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2362368426377094869" datatype="html">
+      <trans-unit id="2362368426377094869" datatype="html" xml:space="preserve">
         <source>Automatically follow platforms of a public index</source>
-        <target state="new">Automatically follow platforms of a public index</target>
+        <target state="translated">Automáticamente seguir plataformas de un índice público</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">611</context>
@@ -11937,17 +11937,17 @@
           <context context-type="linenumber">663</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3184039004441581991" datatype="html">
+      <trans-unit id="3184039004441581991" datatype="html" xml:space="preserve">
         <source>Enable P2P streaming by default on your platform</source>
-        <target state="new">Enable P2P streaming by default on your platform</target>
+        <target state="translated">Activar la retransmisión P2P por defecto en tu plataforma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">674</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6069715963308979270" datatype="html">
+      <trans-unit id="6069715963308979270" datatype="html" xml:space="preserve">
         <source>Enable P2P streaming by default for videos embedded on external websites</source>
-        <target state="new">Enable P2P streaming by default for videos embedded on external websites</target>
+        <target state="translated">Activar la retransmisión P2P por defecto para videos embebidos en sitios externos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">683</context>
@@ -11985,9 +11985,9 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1244629318108208810" datatype="html">
+      <trans-unit id="1244629318108208810" datatype="html" xml:space="preserve">
         <source>PLATFORM</source>
-        <target state="new">PLATFORM</target>
+        <target state="translated">PLATAFORMA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">37,38</context>
@@ -12033,9 +12033,9 @@
           <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1226896451128473265" datatype="html">
+      <trans-unit id="1226896451128473265" datatype="html" xml:space="preserve">
         <source>Advanced configuration updated.</source>
-        <target state="new">Advanced configuration updated.</target>
+        <target state="translated">Configuración avanzada actualizada.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.ts</context>
           <context context-type="linenumber">126</context>
@@ -12089,9 +12089,9 @@
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1905144662537747797" datatype="html">
+      <trans-unit id="1905144662537747797" datatype="html" xml:space="preserve">
         <source>Enable users of your platform to stream a live.</source>
-        <target state="new"> Enable users of your platform to stream a live. </target>
+        <target state="translated">Permitir a usuarios en tu plataforma que retransmitan en directo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.html</context>
           <context context-type="linenumber">10,11</context>
@@ -12137,9 +12137,9 @@
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2268673016709678600" datatype="html">
+      <trans-unit id="2268673016709678600" datatype="html" xml:space="preserve">
         <source>Max simultaneous lives created on your platform</source>
-        <target state="new">Max simultaneous lives created on your platform</target>
+        <target state="translated">Máximo de retransmisiones en directo simultaneas en tu plataforma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.html</context>
           <context context-type="linenumber">51,53</context>
@@ -12309,9 +12309,9 @@
           <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1577436512754482869" datatype="html">
+      <trans-unit id="1577436512754482869" datatype="html" xml:space="preserve">
         <source>Platform customization</source>
-        <target state="new">Platform customization</target>
+        <target state="translated">Personalización de la plataforma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">110</context>
@@ -12321,9 +12321,9 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1717475601341178176" datatype="html">
+      <trans-unit id="1717475601341178176" datatype="html" xml:space="preserve">
         <source>Platform information</source>
-        <target state="new">Platform information</target>
+        <target state="translated">Información de la plataforma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">124</context>
@@ -12333,17 +12333,17 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8169800528565475866" datatype="html">
+      <trans-unit id="8169800528565475866" datatype="html" xml:space="preserve">
         <source>Platform logos</source>
-        <target state="new">Platform logos</target>
+        <target state="translated">Logos de la plataforma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">137</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6105834577396901822" datatype="html">
+      <trans-unit id="6105834577396901822" datatype="html" xml:space="preserve">
         <source>General configuration</source>
-        <target state="new">General configuration</target>
+        <target state="translated">Configuración general</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">152</context>
@@ -12353,9 +12353,9 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5637037987059793432" datatype="html">
+      <trans-unit id="5637037987059793432" datatype="html" xml:space="preserve">
         <source>VOD configuration</source>
-        <target state="new">VOD configuration</target>
+        <target state="translated">Configuración de VOD</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">162</context>
@@ -12365,9 +12365,9 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7545205559638195390" datatype="html">
+      <trans-unit id="7545205559638195390" datatype="html" xml:space="preserve">
         <source>Live configuration</source>
-        <target state="new">Live configuration</target>
+        <target state="translated">Configuración de directo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">172</context>
@@ -12377,9 +12377,9 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7368823469700320150" datatype="html">
+      <trans-unit id="7368823469700320150" datatype="html" xml:space="preserve">
         <source>Advanced configuration</source>
-        <target state="new">Advanced configuration</target>
+        <target state="translated">Configuración avanzada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">182</context>
@@ -12753,17 +12753,17 @@
           <context context-type="linenumber">271</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4221025784332707" datatype="html">
+      <trans-unit id="4221025784332707" datatype="html" xml:space="preserve">
         <source>VOD configuration updated.</source>
-        <target state="new">VOD configuration updated.</target>
+        <target state="translated">Configuración VOD actualizada.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.ts</context>
           <context context-type="linenumber">296</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8895123182110799512" datatype="html">
+      <trans-unit id="8895123182110799512" datatype="html" xml:space="preserve">
         <source>Open config wizard</source>
-        <target state="new">Open config wizard</target>
+        <target state="translated">Abrir asistente de configuración</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/admin-save-bar.component.html</context>
           <context context-type="linenumber">6</context>
@@ -12857,9 +12857,9 @@
           <context context-type="linenumber">164</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7207368259170794965" datatype="html">
+      <trans-unit id="7207368259170794965" datatype="html" xml:space="preserve">
         <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Write JavaScript code directly. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="new"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Write JavaScript code directly. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
+        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Escribe código JavaScript directamente. Ejemplo: <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">167</context>
@@ -12879,9 +12879,9 @@
           <context context-type="linenumber">188</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5389274721155083635" datatype="html">
+      <trans-unit id="5389274721155083635" datatype="html" xml:space="preserve">
         <source>Primary color</source>
-        <target state="new">Primary color</target>
+        <target state="translated">Color primario</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">130</context>
@@ -12891,25 +12891,25 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7134158175957628957" datatype="html">
+      <trans-unit id="7134158175957628957" datatype="html" xml:space="preserve">
         <source>Foreground color</source>
-        <target state="new">Foreground color</target>
+        <target state="translated">Color de primer plano</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">131</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="238646176953521330" datatype="html">
+      <trans-unit id="238646176953521330" datatype="html" xml:space="preserve">
         <source>Background color</source>
-        <target state="new">Background color</target>
+        <target state="translated">Color de fondo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">132</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1622932496860359706" datatype="html">
+      <trans-unit id="1622932496860359706" datatype="html" xml:space="preserve">
         <source>Secondary background color</source>
-        <target state="new">Secondary background color</target>
+        <target state="translated">Color de fondo secundario</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">134</context>
@@ -12923,33 +12923,33 @@
           <context context-type="linenumber">135</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1306050686222010125" datatype="html">
+      <trans-unit id="1306050686222010125" datatype="html" xml:space="preserve">
         <source>Menu foreground color</source>
-        <target state="new">Menu foreground color</target>
+        <target state="translated">Color de primer plano de menú</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">138</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1252284935573007320" datatype="html">
+      <trans-unit id="1252284935573007320" datatype="html" xml:space="preserve">
         <source>Menu background color</source>
-        <target state="new">Menu background color</target>
+        <target state="translated">Color de fondo de menú</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">139</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8579382810547275940" datatype="html">
+      <trans-unit id="8579382810547275940" datatype="html" xml:space="preserve">
         <source>Menu rounding</source>
-        <target state="new">Menu rounding</target>
+        <target state="translated">Redondeo de menú</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">142</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="274625412449467803" datatype="html">
+      <trans-unit id="274625412449467803" datatype="html" xml:space="preserve">
         <source>Not rounded</source>
-        <target state="new">Not rounded</target>
+        <target state="translated">Sin redondeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">145</context>
@@ -12959,25 +12959,25 @@
           <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6332243464031230843" datatype="html">
+      <trans-unit id="6332243464031230843" datatype="html" xml:space="preserve">
         <source>Slightly rounded</source>
-        <target state="new">Slightly rounded</target>
+        <target state="translated">Ligeramente redondeado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">146</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5230468881050489759" datatype="html">
+      <trans-unit id="5230468881050489759" datatype="html" xml:space="preserve">
         <source>Moderately rounded (default)</source>
-        <target state="new">Moderately rounded (default)</target>
+        <target state="translated">Moderadamente redondeado (por defecto)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8021098849992891394" datatype="html">
+      <trans-unit id="8021098849992891394" datatype="html" xml:space="preserve">
         <source>Rounded</source>
-        <target state="new">Rounded</target>
+        <target state="translated">Redondeado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">148</context>
@@ -12987,49 +12987,49 @@
           <context context-type="linenumber">162</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6299251653148331963" datatype="html">
+      <trans-unit id="6299251653148331963" datatype="html" xml:space="preserve">
         <source>Header foreground color</source>
-        <target state="new">Header foreground color</target>
+        <target state="translated">Color de primer plano de encabezado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">152</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8514898546534078404" datatype="html">
+      <trans-unit id="8514898546534078404" datatype="html" xml:space="preserve">
         <source>Header background color</source>
-        <target state="new">Header background color</target>
+        <target state="translated">Color de fondo de encabezado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">153</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2234379386639718019" datatype="html">
+      <trans-unit id="2234379386639718019" datatype="html" xml:space="preserve">
         <source>Input rounding</source>
-        <target state="new">Input rounding</target>
+        <target state="translated">Redondeo de entrada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7646288536359666196" datatype="html">
+      <trans-unit id="7646288536359666196" datatype="html" xml:space="preserve">
         <source>Slightly rounded (default)</source>
-        <target state="new">Slightly rounded (default)</target>
+        <target state="translated">Ligeramente redondeado (por defecto)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">160</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8530055725227539871" datatype="html">
+      <trans-unit id="8530055725227539871" datatype="html" xml:space="preserve">
         <source>Moderately rounded</source>
-        <target state="new">Moderately rounded</target>
+        <target state="translated">Moderadamente redondeado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">161</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5345478017898998436" datatype="html">
+      <trans-unit id="5345478017898998436" datatype="html" xml:space="preserve">
         <source>Galaxy</source>
-        <target state="new">Galaxy</target>
+        <target state="translated">Galaxia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">177</context>
@@ -13039,9 +13039,9 @@
           <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="52101650994758228" datatype="html">
+      <trans-unit id="52101650994758228" datatype="html" xml:space="preserve">
         <source>Original theme</source>
-        <target state="new">Original theme</target>
+        <target state="translated">Tema original</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">177</context>
@@ -13063,9 +13063,9 @@
           <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2084331848321952851" datatype="html">
+      <trans-unit id="2084331848321952851" datatype="html" xml:space="preserve">
         <source>A clean and modern theme</source>
-        <target state="new">A clean and modern theme</target>
+        <target state="translated">Un tema limpio y moderno</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">178</context>
@@ -13075,17 +13075,17 @@
           <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1631750873832492109" datatype="html">
+      <trans-unit id="1631750873832492109" datatype="html" xml:space="preserve">
         <source>Platform customization updated.</source>
-        <target state="new">Platform customization updated.</target>
+        <target state="translated">Personalización de la plataforma actualizada.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">345</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2478663882166889191" datatype="html">
+      <trans-unit id="2478663882166889191" datatype="html" xml:space="preserve">
         <source>BEHAVIOR</source>
-        <target state="new">BEHAVIOR</target>
+        <target state="translated">COMPORTAMIENTO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">6,7</context>
@@ -13143,9 +13143,9 @@
           <context context-type="linenumber">77,78</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5931890111155614195" datatype="html">
+      <trans-unit id="5931890111155614195" datatype="html" xml:space="preserve">
         <source>These are the devices currently logged in to your account.</source>
-        <target state="new">These are the devices currently logged in to your account.</target>
+        <target state="translated">Estos son los dispositivos con sesión iniciada en tu cuenta.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">81,83</context>
@@ -13191,17 +13191,17 @@
           <context context-type="linenumber">137</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3284638679883263272" datatype="html">
+      <trans-unit id="3284638679883263272" datatype="html" xml:space="preserve">
         <source>ADVANCED</source>
-        <target state="new">ADVANCED</target>
+        <target state="translated">AVANZADO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">154</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4290238541645115340" datatype="html">
+      <trans-unit id="4290238541645115340" datatype="html" xml:space="preserve">
         <source>Advanced modifications to your PeerTube platform if creating a plugin or a theme is overkill.</source>
-        <target state="new"> Advanced modifications to your PeerTube platform if creating a plugin or a theme is overkill. </target>
+        <target state="translated">Modificaciones avanzadas de tu plataforma PeerTube si crear un plugin o un tema es excesivo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">156</context>
@@ -13413,7 +13413,7 @@
       </trans-unit>
       <trans-unit id="2939244215860150958" datatype="html" xml:space="preserve">
         <source>Update your <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;video-languages-subtitles&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>default settings<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="needs-translation">Actualiza tus <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;video-languages-subtitles&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>ajustes por defecto<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">Actualiza tus <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;video-languages-subtitles&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>ajustes por defecto<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">76</context>
@@ -13427,9 +13427,9 @@
           <context context-type="linenumber">136</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5630677130087951545" datatype="html">
+      <trans-unit id="5630677130087951545" datatype="html" xml:space="preserve">
         <source>Display all videos (private, unlisted, password protected, not yet published or sensitive videos)</source>
-        <target state="new">Display all videos (private, unlisted, password protected, not yet published or sensitive videos)</target>
+        <target state="translated">Muestra todos los videos (privados, sin listar, protegidos por contraseña, sin publicar o videos sensibles)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">159</context>
@@ -13635,9 +13635,9 @@
           <context context-type="linenumber">165</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8866534111912344413" datatype="html">
+      <trans-unit id="8866534111912344413" datatype="html" xml:space="preserve">
         <source>X link</source>
-        <target state="new">X link</target>
+        <target state="translated">Enlace a X</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">176,178</context>
@@ -13651,9 +13651,9 @@
           <context context-type="linenumber">187</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4258030282828995238" datatype="html">
+      <trans-unit id="4258030282828995238" datatype="html" xml:space="preserve">
         <source>MODERATION &amp; SENSITIVE CONTENT</source>
-        <target state="new">MODERATION &amp; SENSITIVE CONTENT</target>
+        <target state="translated">MODERACION DE &amp;CONTENIDO SENSIBLE</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">204</context>
@@ -13751,9 +13751,9 @@
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="189557136346634598" datatype="html">
+      <trans-unit id="189557136346634598" datatype="html" xml:space="preserve">
         <source>syncs per page</source>
-        <target state="new">syncs per page</target>
+        <target state="translated">sincronizaciones por página</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.html</context>
           <context context-type="linenumber">10,11</context>
@@ -13903,9 +13903,9 @@
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7299578819450935756" datatype="html">
+      <trans-unit id="7299578819450935756" datatype="html" xml:space="preserve">
         <source>imports per page</source>
-        <target state="new">imports per page</target>
+        <target state="translated">importaciones por página</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context>
           <context context-type="linenumber">6,7</context>
@@ -13919,25 +13919,25 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2630714876280650406" datatype="html">
+      <trans-unit id="2630714876280650406" datatype="html" xml:space="preserve">
         <source>This video has been deleted</source>
-        <target state="new">This video has been deleted</target>
+        <target state="translated">Este video ha sido eliminado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7555885526560969469" datatype="html">
+      <trans-unit id="7555885526560969469" datatype="html" xml:space="preserve">
         <source>Update the video</source>
-        <target state="new">Update the video</target>
+        <target state="translated">Actualiza el video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8293800276606426758" datatype="html">
+      <trans-unit id="8293800276606426758" datatype="html" xml:space="preserve">
         <source>No video import found.</source>
-        <target state="new">No video import found.</target>
+        <target state="translated">No se ha encontrado una importación de video.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context>
           <context context-type="linenumber">73</context>
@@ -14196,9 +14196,9 @@
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9193001935256028830" datatype="html">
+      <trans-unit id="9193001935256028830" datatype="html" xml:space="preserve">
         <source>Owner</source>
-        <target state="new"> Owner </target>
+        <target state="translated">Propietario</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.html</context>
           <context context-type="linenumber">3,4</context>
