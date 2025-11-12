@@ -7,6 +7,9 @@
 
   <div class="form-group">
     <label i18n for="p2p">P2P</label>
+    <div class="form-group-description" i18n>
+      Helps your platform to distribute video content, but <a href="https://docs.joinpeertube.org/admin/privacy-guide#player-p2p" target="_blank">decreases privacy <my-global-icon iconName="external-link"></my-global-icon></a> of your users
+    </div>
 
     <my-select-options inputId="p2p" [items]="p2pOptions" formControlName="p2p"></my-select-options>
   </div>

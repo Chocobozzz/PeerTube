@@ -13,6 +13,7 @@ import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-o
 import { ColorPickerModule } from 'primeng/colorpicker'
 import { SelectOptionsItem } from 'src/types'
 import { AuthType, EnabledDisabled, UsageType } from './usage-type.model'
+import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 
 type Form = {
   keepOriginalVideo: FormControl<EnabledDisabled>
@@ -30,7 +31,8 @@ type Form = {
     ReactiveFormsModule,
     ColorPickerModule,
     CdkStepperModule,
-    SelectOptionsComponent
+    SelectOptionsComponent,
+    GlobalIconComponent
   ]
 })
 export class InstitutionalConfigComponent implements OnInit {
