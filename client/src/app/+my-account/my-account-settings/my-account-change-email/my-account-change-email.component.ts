@@ -1,4 +1,4 @@
-import { NgClass, NgIf } from '@angular/common'
+import { CommonModule, NgClass } from '@angular/common'
 import { Component, OnInit, inject } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AuthService, ServerService, UserService } from '@app/core'
@@ -16,7 +16,7 @@ import { InputTextComponent } from '../../../shared/shared-forms/input-text.comp
   selector: 'my-account-change-email',
   templateUrl: './my-account-change-email.component.html',
   styleUrls: [ './my-account-change-email.component.scss' ],
-  imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, InputTextComponent, AlertComponent ]
+  imports: [ CommonModule, FormsModule, ReactiveFormsModule, NgClass, InputTextComponent, AlertComponent ]
 })
 export class MyAccountChangeEmailComponent extends FormReactive implements OnInit {
   protected formReactiveService = inject(FormReactiveService)

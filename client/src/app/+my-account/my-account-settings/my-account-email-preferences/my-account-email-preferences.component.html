@@ -1,10 +1,11 @@
 <form (ngSubmit)="updateEmailPublic()" [formGroup]="form">
 
   <div class="form-group">
-    <my-peertube-checkbox
-      inputName="email-public" formControlName="email-public"
-      i18n-labelText labelText="Allow email to be publicly displayed"
-    >
+    <my-peertube-checkbox inputName="email-public" formControlName="email-public">
+      <ng-template ptTemplate="label">
+        <ng-container i18n>Allow email <strong>{{ user().email }}</strong> to be publicly displayed</ng-container>
+      </ng-template>
+
       <ng-container ngProjectAs="description">
         <p class="mb-0">
           @if (user().emailVerified) {

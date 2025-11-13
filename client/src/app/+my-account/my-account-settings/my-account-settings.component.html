@@ -84,7 +84,7 @@
   </div>
 </div>
 
-<div class="pt-two-cols mt-5" *ngIf="user.pluginAuth === null"> <!-- email grid -->
+<div class="pt-two-cols mt-5"> <!-- email grid -->
   <div class="title-col">
     <h2 i18n>EMAIL</h2>
   </div>
@@ -92,7 +92,9 @@
   <div class="content-col">
     <my-account-email-preferences class="d-block mb-5" [user]="user"></my-account-email-preferences>
 
-    <my-account-change-email></my-account-change-email>
+    @if (user.pluginAuth === null) {
+      <my-account-change-email></my-account-change-email>
+    }
   </div>
 </div>
 
