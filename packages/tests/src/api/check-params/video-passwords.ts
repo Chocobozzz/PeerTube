@@ -648,14 +648,14 @@ describe('Test video passwords validator', function () {
 
   describe('When adding a password', async function () {
     const passwords = (await server.videoPasswords.list({ videoId: video.id })).data
-    const newPassword = "password123"
-    const emptyPassword = ""
+    const newPassword = 'password123'
+    const emptyPassword = ''
 
     it('Should fail with duplicate password', async function () {
-      await server.videoPasswords.addOne({ 
-        videoId: video.id, 
-        password: passwords[0].password, 
-        expectedStatus: HttpStatusCode.BAD_REQUEST_400 
+      await server.videoPasswords.addOne({
+        videoId: video.id,
+        password: passwords[0].password,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -683,11 +683,14 @@ describe('Test video passwords validator', function () {
 
     it('Should fail for non password protected video', async function () {
       publicVideo = await server.videos.quickUpload({ name: 'public video' })
+
       await server.videoPasswords.addOne({ password: newPassword, videoId: publicVideo.id, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should succeed with correct parameter', async function () {
-      await server.videoPasswords.addOne({ password: newPassword, videoId: video.id, expectedStatus: HttpStatusCode.NO_CONTENT_204 })
+      for (const token of [ server.accessToken, editorToken ]) {
+        await server.videoPasswords.addOne({ password: token, videoId: video.id })
+      }
     })
   })
 

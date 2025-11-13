@@ -4622,7 +4622,7 @@ paths:
           description: video is not password protected
     post:
       summary: Add a video password
-      description: "**PeerTube >=7.4**"
+      description: "**PeerTube >= 8.0**"
       operationId: addVideoPassword
       security:
         - OAuth2:
@@ -4637,11 +4637,11 @@ paths:
             schema:
               type: object
               properties:
-                passwords:
+                password:
                   type: string
       responses:
-        '201':
-          description: created
+        '204':
+          description: successful operation
         '400':
           description: video is not password protected
 
