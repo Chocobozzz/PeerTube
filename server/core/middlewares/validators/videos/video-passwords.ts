@@ -41,6 +41,8 @@ export const listVideoPasswordValidator = [
 ]
 
 export const updateVideoPasswordListValidator = [
+  isValidVideoIdParam('videoId'),
+
   body('passwords')
     .optional()
     .isArray()
@@ -49,22 +51,24 @@ export const updateVideoPasswordListValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    if (!await doesVideoExist(req.params.videoId, res)) return
-    if (!isValidPasswordProtectedPrivacy(req, res)) return
+    if (!await checkAddOrUpdatePasswords(req, res)) return
 
-    // Check if the user who did the request is able to update video passwords
-    const user = res.locals.oauth.token.User
-    if (
-      !await checkCanManageVideo({
-        user,
-        video: res.locals.videoAll,
-        right: UserRight.UPDATE_ANY_VIDEO,
-        req,
-        res,
-        checkIsLocal: true,
-        checkIsOwner: false
-      })
-    ) return
+    return next()
+  }
+]
+
+export const addVideoPasswordValidator = [
+  isValidVideoIdParam('videoId'),
+
+  body('password')
+    .isString()
+    .withMessage('Video password should be a string')
+    .notEmpty()
+    .withMessage('Password string should not be empty'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+    if (!await checkAddOrUpdatePasswords(req, res)) return
 
     return next()
   }
@@ -88,3 +92,28 @@ export const removeVideoPasswordValidator = [
     return next()
   }
 ]
+
+// ---------------------------------------------------------------------------
+// Private
+// ---------------------------------------------------------------------------
+
+async function checkAddOrUpdatePasswords (req: express.Request, res: express.Response) {
+  if (!await doesVideoExist(req.params.videoId, res)) return false
+  if (!isValidPasswordProtectedPrivacy(req, res)) return false
+
+  // Check if the user who did the request is able to update video passwords
+  const user = res.locals.oauth.token.User
+  if (
+    !await checkCanManageVideo({
+      user,
+      video: res.locals.videoAll,
+      right: UserRight.UPDATE_ANY_VIDEO,
+      req,
+      res,
+      checkIsLocal: true,
+      checkIsOwner: false
+    })
+  ) return false
+
+  return true
+}

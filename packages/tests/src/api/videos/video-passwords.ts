@@ -80,15 +80,29 @@ describe('Test video passwords', function () {
       expect(body.total).to.equal(2)
       expect(body.data).to.be.an('array')
       expect(body.data).to.have.lengthOf(2)
+
       await command.remove({ id: body.data[0].id, videoId: videoUUID })
     }
+
     {
       const body = await command.list({ videoId: videoUUID })
 
       expect(body.total).to.equal(1)
       expect(body.data).to.be.an('array')
       expect(body.data).to.have.lengthOf(1)
+      expect(body.data[0].password).to.equal('my super new password 1')
     }
+  })
+
+  it('Should add one password', async function () {
+    await command.addOne({ password: 'the last password', videoId: videoUUID })
+    const body = await command.list({ videoId: videoUUID, sort: 'createdAt' })
+
+    expect(body.total).to.equal(2)
+    expect(body.data).to.be.an('array')
+    expect(body.data).to.have.lengthOf(2)
+    expect(body.data[0].password).to.equal('my super new password 1')
+    expect(body.data[1].password).to.equal('the last password')
   })
 
   after(async function () {
