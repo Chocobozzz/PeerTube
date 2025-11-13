@@ -1373,7 +1373,9 @@ export async function buildLanguages () {
     jbo: true, // Lojban
     avk: true, // Kotava
 
-    zxx: true // No linguistic content (ISO-639-2)
+    zxx: true, // No linguistic content (ISO-639-2),
+
+    gsw: true // Swiss German (ISO-639-3)
   }
 
   // Only add ISO639-1 languages and some sign languages (ISO639-3)
