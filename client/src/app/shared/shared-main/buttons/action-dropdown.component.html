@@ -92,9 +92,9 @@
                   <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
                 </span>
               } @else if (areActionsDisplayed(actions, entry())) {
-                <h6 [ngClass]="{ 'with-icon': !!action.iconName || !!action.actorAvatar }" class="dropdown-header" [title]="action.title || ''">
+                <div [ngClass]="{ 'with-icon': !!action.iconName || !!action.actorAvatar }" class="dropdown-header" [title]="action.title || ''">
                   <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
-                </h6>
+                </div>
               }
             }
           </div>

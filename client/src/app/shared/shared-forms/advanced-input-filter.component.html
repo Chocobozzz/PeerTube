@@ -6,7 +6,7 @@
 
     <div role="menu" ngbDropdownMenu>
       <ng-container *ngFor="let group of filters()">
-        <h6 class="dropdown-header">{{ group.title }}</h6>
+        <div class="dropdown-header">{{ group.title }}</div>
 
         <button *ngFor="let filter of group.children" (click)="onFilterClick(filter)" class="dropdown-item">
           <my-global-icon [ngClass]="{ 'no-visible': !isFilterEnabled(filter) }" iconName="tick"></my-global-icon>

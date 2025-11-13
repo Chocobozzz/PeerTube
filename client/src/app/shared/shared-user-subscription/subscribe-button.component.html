@@ -43,7 +43,7 @@
 
   <div class="dropdown-menu" ngbDropdownMenu>
 
-    <h6 class="dropdown-header" i18n>Using an ActivityPub account</h6>
+    <div class="dropdown-header" i18n>Using an ActivityPub account</div>
 
     <button type="button" class="dropdown-item" (click)="subscribe()">
       @if (isUserLoggedIn()) {
@@ -60,7 +60,7 @@
 
     <div class="dropdown-divider"></div>
 
-    <h6 class="dropdown-header" i18n>Using a syndication feed</h6>
+    <div class="dropdown-header" i18n>Using a syndication feed</div>
     <a *ngIf="podcastFeedUri" [href]="podcastFeedUri" target="_blank" class="dropdown-item" i18n>Subscribe via Podcast Feed</a>
     <a [href]="rssUri" target="_blank" class="dropdown-item" i18n>Subscribe via RSS</a>
 
