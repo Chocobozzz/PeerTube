@@ -1,8 +1,8 @@
-@use 'sass:math';
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_bootstrap-variables';
-@use '_miniature' as *;
+@use "sass:math";
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_bootstrap-variables";
+@use "_miniature" as *;
 
 $video-default-height: 66vh;
 $video-max-height: calc(100vh - #{pvar(--header-height)} - #{$theater-bottom-space});
@@ -53,7 +53,7 @@ $video-max-height: calc(100vh - #{pvar(--header-height)} - #{$theater-bottom-spa
   background-color: #000;
   display: flex;
   justify-content: center;
-  border-radius:5px;
+  border-radius: 5px;
 
   #videojs-wrapper {
     display: flex;
@@ -144,13 +144,13 @@ $video-max-height: calc(100vh - #{pvar(--header-height)} - #{$theater-bottom-spa
 .video-info-first-row-bottom {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
   width: 100%;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-direction: column;
 }
 
 .video-info-date-views {
-  margin-bottom: 10px;
-  align-self: start;
   font-size: 14px;
 
   @include margin-right(10px);
@@ -204,10 +204,6 @@ my-video-attributes {
 
 my-action-buttons {
   display: block;
-  margin-top: 0;
-  margin-bottom: 10px;
-
-  align-items: start;
   width: max-content;
 
   @include margin-left(auto);
@@ -287,10 +283,6 @@ my-video-comments {
 
   .video-info-date-views {
     font-size: 14px;
-  }
-
-  my-action-buttons {
-    margin-top: 10px;
   }
 }
 

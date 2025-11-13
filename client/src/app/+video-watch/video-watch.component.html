@@ -40,28 +40,14 @@
     <div class="video-info">
       <div class="video-info-first-row">
         <div>
-          <ng-template #publishedTemplate>
-            <ng-container i18n>Published <my-date-toggle [date]="video.publishedAt"></my-date-toggle></ng-container>
-            •
-            <my-video-views-counter [isLive]="video.isLive" [viewers]="video.viewers" [views]="video.views"></my-video-views-counter>
-          </ng-template>
-
-          <div class="d-block d-md-none"> <!-- only shown on medium devices, has its counterpart for larger viewports below -->
+          <div class="d-flex justify-content-between flex-direction-column">
             <h1 class="video-info-name">{{ video.name }}</h1>
 
-            <div class="video-info-date-views">
-              <ng-template *ngTemplateOutlet="publishedTemplate"></ng-template>
-            </div>
-          </div>
-
-          <div class="d-flex justify-content-between flex-direction-column">
-            <div class="d-none d-md-block">
-              <h1 class="video-info-name">{{ video.name }}</h1>
-            </div>
-
             <div class="video-info-first-row-bottom">
-              <div class="d-none d-md-block video-info-date-views">
-                <ng-template *ngTemplateOutlet="publishedTemplate"></ng-template>
+              <div class="video-info-date-views">
+                <ng-container i18n>Published <my-date-toggle [date]="video.publishedAt"></my-date-toggle></ng-container>
+                •
+                <my-video-views-counter [isLive]="video.isLive" [viewers]="video.viewers" [views]="video.views"></my-video-views-counter>
               </div>
 
               <my-action-buttons
