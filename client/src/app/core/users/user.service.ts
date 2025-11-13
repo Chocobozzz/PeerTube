@@ -1,10 +1,10 @@
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable, LOCALE_ID, inject } from '@angular/core'
+import { inject, Injectable, LOCALE_ID } from '@angular/core'
 import { AuthService } from '@app/core/auth'
-import { getCompleteLocale } from '@peertube/peertube-core-utils'
+import { arrayify, getCompleteLocale } from '@peertube/peertube-core-utils'
 import { ActorImage, User as UserServerModel, UserUpdateMe, UserVideoQuota } from '@peertube/peertube-models'
-import { Observable, of } from 'rxjs'
-import { catchError, first, map, shareReplay } from 'rxjs/operators'
+import { from, Observable, of } from 'rxjs'
+import { catchError, concatMap, first, map, shareReplay, toArray } from 'rxjs/operators'
 import { environment } from '../../../environments/environment'
 import { RestExtractor } from '../rest'
 import { UserLocalStorageService } from './user-local-storage.service'
@@ -108,11 +108,16 @@ export class UserService {
       .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  askSendVerifyEmail (email: string) {
+  askSendVerifyEmail (emailArg: string | string[]) {
+    const emails = arrayify(emailArg)
     const url = UserService.BASE_USERS_URL + 'ask-send-verify-email'
 
-    return this.authHttp.post(url, { email })
-      .pipe(catchError(err => this.restExtractor.handleError(err)))
+    return from(emails)
+      .pipe(
+        concatMap(email => this.authHttp.post(url, { email })),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   verifyUserEmail (options: {
