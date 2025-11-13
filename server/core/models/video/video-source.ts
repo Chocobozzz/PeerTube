@@ -31,10 +31,13 @@ export class VideoSourceModel extends SequelizeModel<VideoSourceModel> {
   @UpdatedAt
   declare updatedAt: Date
 
+  // The name of the uploaded file
   @AllowNull(false)
   @Column
   declare inputFilename: string
 
+  // The name of the file stored on disk
+  // null means we don't have the file
   @AllowNull(true)
   @Column
   declare keptOriginalFilename: string
