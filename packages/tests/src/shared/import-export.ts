@@ -374,6 +374,11 @@ export async function prepareImportExportTests (options: {
     token: noahToken
   })
 
+  await waitJobs([ server, remoteServer ])
+
+  const { data: noahVideos } = await server.videos.listMyVideos({ token: noahToken, sort: '-publishedAt' })
+  const noahVODNames = noahVideos.filter(v => !v.isLive).map(v => v.name)
+
   return {
     rootId,
 
@@ -395,6 +400,8 @@ export async function prepareImportExportTests (options: {
 
     server,
     remoteServer,
-    blockedServer
+    blockedServer,
+
+    noahVODNames
   }
 }

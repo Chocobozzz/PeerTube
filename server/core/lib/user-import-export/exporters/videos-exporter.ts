@@ -1,7 +1,6 @@
-import { pick } from '@peertube/peertube-core-utils'
+import { pick, sortBy } from '@peertube/peertube-core-utils'
 import { ActivityCreate, FileStorage, VideoCommentPolicy, VideoExportJSON, VideoObject, VideoPrivacy } from '@peertube/peertube-models'
 import { logger } from '@server/helpers/logger.js'
-import { USER_EXPORT_MAX_ITEMS } from '@server/initializers/constants.js'
 import { audiencify, getVideoAudience } from '@server/lib/activitypub/audience.js'
 import { buildCreateActivity } from '@server/lib/activitypub/send/send-create.js'
 import { buildChaptersAPHasPart } from '@server/lib/activitypub/video-chapters.js'
@@ -15,7 +14,6 @@ import { VideoDownload } from '@server/lib/video-download.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { PlayerSettingModel } from '@server/models/video/player-setting.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
-import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { VideoChapterModel } from '@server/models/video/video-chapter.js'
 import { VideoLiveModel } from '@server/models/video/video-live.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
@@ -56,10 +54,13 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
     const activityPubOutbox: ActivityCreate<VideoObject>[] = []
     let staticFiles: ExportResult<VideoExportJSON>['staticFiles'] = []
 
-    const channels = await VideoChannelModel.listAllOwnedByAccount(this.user.Account.id)
+    let videoIds: number[] = []
+    let start = 0
+    const chunkSize = 100
 
-    for (const channel of channels) {
-      const videoIds = await VideoModel.getAllIdsFromChannel(channel, USER_EXPORT_MAX_ITEMS)
+    do {
+      videoIds = await VideoModel.getAllIdsByAccount({ account: this.user.Account, start, count: chunkSize })
+      start += videoIds.length
 
       await Bluebird.map(videoIds, async id => {
         try {
@@ -72,10 +73,10 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
           logger.warn('Cannot export video %d.', id, { err })
         }
       }, { concurrency: 10 })
-    }
+    } while (videoIds.length === chunkSize)
 
     return {
-      json: { videos: videosJSON },
+      json: { videos: sortBy(videosJSON, 'publishedAt') },
       activityPubOutbox,
       staticFiles
     }

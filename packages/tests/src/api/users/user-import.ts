@@ -41,6 +41,8 @@ function runTest (withObjectStorage: boolean) {
   let remoteNoahToken: string
   let remoteNoahId: number
 
+  let noahVODNames: string[]
+
   let archivePath: string
 
   let objectStorage: ObjectStorageCommand
@@ -63,7 +65,8 @@ function runTest (withObjectStorage: boolean) {
       remoteNoahToken,
       remoteServer,
       mouskaVideo,
-      blockedServer
+      blockedServer,
+      noahVODNames
     } = await prepareImportExportTests({ emails, objectStorage, withBlockedServer: true }))
 
     await blockedServer.videos.quickUpload({ name: 'blocked video' })
@@ -92,6 +95,7 @@ function runTest (withObjectStorage: boolean) {
         videoPasswords: [ 'password1', 'password2' ]
       }
     })
+    noahVODNames.unshift('noah password video')
 
     // Add a video in watch later playlist
     await server.playlists.addElement({
@@ -373,8 +377,12 @@ function runTest (withObjectStorage: boolean) {
       // We observe weird behaviour in the CI, so re-wait jobs here just to be sure
       await waitJobs([ remoteServer, server ])
 
-      const { data } = await remoteServer.videos.listMyVideos({ token: remoteNoahToken })
+      const { data } = await remoteServer.videos.listMyVideos({ token: remoteNoahToken, sort: '-publishedAt' })
       expect(data).to.have.lengthOf(5)
+
+      // Correct order
+      const vodNames = data.filter(v => !v.isLive).map(v => v.name)
+      expect(vodNames).to.deep.equal(noahVODNames)
 
       {
         const privateVideo = data.find(v => v.name === 'noah private video')

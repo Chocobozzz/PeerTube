@@ -82,6 +82,7 @@ import { CONFIG } from '../../initializers/config.js'
 import { ACTIVITY_PUB, API_VERSION, CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants.js'
 import { sendDeleteVideo } from '../../lib/activitypub/send/index.js'
 import {
+  MAccountId,
   MChannel,
   MChannelAccountDefault,
   MChannelId,
@@ -1562,13 +1563,44 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return VideoModel.update({ support: ofChannel.support }, options)
   }
 
-  static async getAllIdsFromChannel (videoChannel: MChannelId, limit?: number): Promise<number[]> {
+  static async getAllIdsFromChannel (options: {
+    videoChannel: MChannelId
+    count: number
+  }): Promise<number[]> {
+    const { videoChannel, count } = options
+
     const videos = await VideoModel.findAll({
       attributes: [ 'id' ],
       where: {
         channelId: videoChannel.id
       },
-      limit
+      limit: count
+    })
+
+    return videos.map(v => v.id)
+  }
+
+  static async getAllIdsByAccount (options: {
+    account: MAccountId
+    start: number
+    count: number
+  }): Promise<number[]> {
+    const { account, start, count } = options
+
+    const videos = await VideoModel.findAll({
+      attributes: [ 'id' ],
+      include: [
+        {
+          attributes: [ 'accountId' ],
+          model: VideoChannelModel.unscoped(),
+          required: true,
+          where: {
+            accountId: account.id
+          }
+        }
+      ],
+      offset: start,
+      limit: count
     })
 
     return videos.map(v => v.id)
