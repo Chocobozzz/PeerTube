@@ -1,6 +1,6 @@
 import { NgIf } from '@angular/common'
 import { Component, OnChanges, OnInit, inject, input, output, viewChild } from '@angular/core'
-import { AuthService, ConfirmService, HooksService, Notifier, ServerService } from '@app/core'
+import { AuthService, ConfirmService, HooksService, Notifier, ServerService, UserService } from '@app/core'
 import { BulkRemoveCommentsOfBody, User, UserRight } from '@peertube/peertube-models'
 import { Account } from '../shared-main/account/account.model'
 import { ActionDropdownComponent, DropdownAction } from '../shared-main/buttons/action-dropdown.component'
@@ -33,6 +33,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
   private userAdminService = inject(UserAdminService)
   private blocklistService = inject(BlocklistService)
   private bulkService = inject(BulkService)
+  private userService = inject(UserService)
   private hooks = inject(HooksService)
 
   readonly userBanModal = viewChild<UserBanModalComponent>('userBanModal')
@@ -136,7 +137,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
   }
 
   resendVerificationEmail (user: User) {
-    this.userAdminService.resendVerificationEmail(user.email)
+    this.userService.askSendVerifyEmail(user.email)
       .subscribe({
         next: () => {
           this.notifier.success($localize`Verification email sent to ${user.email}`)
@@ -387,7 +388,6 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
         },
         {
           label: $localize`Re-send verification email`,
-          description: $localize`Send email verification link to user`,
           handler: ({ user }) => this.resendVerificationEmail(user),
           isDisplayed: ({ user }) => !user.blocked && user.emailVerified !== true && !user.pluginAuth
         }

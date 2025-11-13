@@ -2,7 +2,7 @@ import { CommonModule, NgClass } from '@angular/common'
 import { Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { RouterLink } from '@angular/router'
-import { AuthService, ConfirmService, HooksService, Notifier, PluginService } from '@app/core'
+import { AuthService, ConfirmService, HooksService, Notifier, PluginService, UserService } from '@app/core'
 import { formatICU, getBackendHost } from '@app/helpers'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
@@ -72,6 +72,7 @@ export class UserListComponent implements OnInit, OnDestroy {
   private userAdminService = inject(UserAdminService)
   private hooks = inject(HooksService)
   private pluginService = inject(PluginService)
+  private userService = inject(UserService)
 
   readonly userBanModal = viewChild<UserBanModalComponent>('userBanModal')
   readonly table = viewChild<TableComponent<User, ColumnName>>('table')
@@ -154,7 +155,6 @@ export class UserListComponent implements OnInit, OnDestroy {
         },
         {
           label: $localize`Re-send verification emails`,
-          description: $localize`Send verification emails to unverified users`,
           handler: users => this.resendVerificationEmails(users),
           isDisplayed: users => {
             return users.every(u => this.authUser.canManage(u) && !u.blocked && u.emailVerified !== true && !u.pluginAuth)
@@ -274,7 +274,7 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   resendVerificationEmails (users: User[]) {
-    this.userAdminService.resendVerificationEmails(users.map(u => u.email))
+    this.userService.askSendVerifyEmail(users.map(u => u.email))
       .subscribe({
         next: () => {
           this.notifier.success(

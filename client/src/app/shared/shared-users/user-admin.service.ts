@@ -119,20 +119,6 @@ export class UserAdminService {
       )
   }
 
-  resendVerificationEmail (userEmail: string) {
-    return this.authHttp.post(UserService.BASE_USERS_URL + 'ask-send-verify-email', { email: userEmail })
-      .pipe(catchError(err => this.restExtractor.handleError(err)))
-  }
-
-  resendVerificationEmails (userEmails: string[]) {
-    return from(userEmails)
-      .pipe(
-        concatMap(email => this.resendVerificationEmail(email)),
-        toArray(),
-        catchError(err => this.restExtractor.handleError(err))
-      )
-  }
-
   private formatUser (user: UserServerModel, translations: { [id: string]: string } = {}): UserAdmin {
     let videoQuota
     if (user.videoQuota === -1) {
