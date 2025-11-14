@@ -110,7 +110,14 @@ export class VideoImportListQueryBuilder extends AbstractListQuery {
     if (this.builtVideoJoin) return
 
     this.subQueryJoin += ` LEFT JOIN "video" "Video" ON "Video"."id" = "VideoImportModel"."videoId" ` +
-      getChannelJoin({ base: 'Video->', on: '"Video"."channelId"', includeAccount: true, includeActors: true, includeAvatars: false })
+      getChannelJoin({
+        base: 'Video->',
+        on: '"Video"."channelId"',
+        includeAccount: true,
+        includeActors: true,
+        includeAvatars: false,
+        required: false
+      })
 
     this.builtVideoJoin = true
   }

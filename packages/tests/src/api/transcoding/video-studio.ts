@@ -118,7 +118,6 @@ describe('Test video studio', function () {
         await servers[0].config.save()
         await servers[0].config.enableMinimumTranscoding({ splitAudioAndVideo: true })
         await renewVideo('video_short1.webm')
-        await servers[0].config.rollback()
 
         const video = await servers[0].videos.get({ id: videoUUID })
         for (const file of video.files) {
@@ -146,6 +145,8 @@ describe('Test video studio', function () {
         for (const server of servers) {
           await checkVideoDuration(server, videoUUID, 4)
         }
+
+        await servers[0].config.rollback()
       })
     })
 

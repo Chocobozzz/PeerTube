@@ -60,7 +60,8 @@ export class VideoChannelSyncListQueryBuilder extends AbstractListQuery {
       on: `"VideoChannelSyncModel"."videoChannelId"`,
       includeAccount: false,
       includeAvatars: false,
-      includeActors: true
+      includeActors: true,
+      required: true
     })
     this.builtChannelJoin = true
   }

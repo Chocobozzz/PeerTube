@@ -227,7 +227,8 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
     this.subQueryJoin += getAccountJoin({
       on: `"VideoCommentModel"."accountId"`,
       includeAvatars: false,
-      includeActor: false
+      includeActor: false,
+      required: false
     })
 
     this.builtAccountJoin = true
@@ -239,7 +240,8 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
     this.subQueryJoin += getActorJoin({
       base: 'Account->',
       on: `"Account"."actorId"`,
-      includeAvatars: false
+      includeAvatars: false,
+      required: false
     })
 
     this.builtAccountActorJoin = true
@@ -248,7 +250,7 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
   private buildVideoJoin () {
     if (this.builtVideoJoin) return
 
-    this.subQueryJoin += ' LEFT JOIN "video" "Video" ON "Video"."id" = "VideoCommentModel"."videoId" '
+    this.subQueryJoin += ' INNER JOIN "video" "Video" ON "Video"."id" = "VideoCommentModel"."videoId" '
 
     this.builtVideoJoin = true
   }
@@ -263,7 +265,8 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
       on: '"Video"."channelId"',
       includeAccount: false,
       includeAvatars: false,
-      includeActors: false
+      includeActors: false,
+      required: true
     })
 
     this.builtVideoChannelJoin = true
@@ -275,7 +278,8 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
     this.subQueryJoin += getActorJoin({
       base: 'Video->VideoChannel->',
       on: '"Video->VideoChannel"."actorId"',
-      includeAvatars: false
+      includeAvatars: false,
+      required: true
     })
 
     this.builtVideoChannelActorJoin = true
