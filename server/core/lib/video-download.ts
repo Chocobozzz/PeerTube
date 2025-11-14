@@ -76,11 +76,11 @@ export class VideoDownload {
             return
           }
 
-          logger.warn(`Cannot mux files of video ${this.video.url}`, { err, inputs: this.inputsToLog(), ...lTags(this.video.uuid) })
-
           if (err.inputStreamError) {
             err.inputStreamError = buildRequestError(err.inputStreamError)
           }
+
+          logger.warn(`Cannot mux files of video ${this.video.url}`, { err, inputs: this.inputsToLog(), ...lTags(this.video.uuid) })
 
           throw err
         } finally {
