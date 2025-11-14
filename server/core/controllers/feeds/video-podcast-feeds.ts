@@ -267,7 +267,7 @@ function buildVODWebVideoFile (video: MVideo, videoFile: VideoFile) {
     type: getAppleMimeType(extname(videoFile.fileUrl), videoFile.resolution.id === VideoResolution.H_NOVIDEO),
     title: videoFile.resolution.label,
     length: videoFile.size,
-    bitrate: videoFile.size / video.duration * 8,
+    bitrate: Math.round(videoFile.size / video.duration * 8),
     language: video.language,
     sources
   }
