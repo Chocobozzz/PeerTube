@@ -6,7 +6,7 @@
   paginatorText="abuses per page"
   [dataLoader]="dataLoader"
   columnConfig="false"
->
+  >
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No abuse} =1 {1 abuse} other {{{ totalRecords | myNumberFormatter }} abuses}}</ng-container>
   </ng-template>
@@ -16,21 +16,23 @@
   </ng-template>
 
   <ng-template #tableCells let-abuse>
-    <td *ngIf="isAdminView()">
-      @if (abuse.reporterAccount) {
-        <a [href]="abuse.reporterAccount.url" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
-          <div class="chip two-lines">
-            <my-actor-avatar [actor]="abuse.reporterAccount" actorType="account" size="32"></my-actor-avatar>
-            <div>
-              {{ abuse.reporterAccount.displayName }}
-              <span>{{ abuse.reporterAccount.nameWithHost }}</span>
+    @if (isAdminView()) {
+      <td>
+        @if (abuse.reporterAccount) {
+          <a [href]="abuse.reporterAccount.url" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
+            <div class="chip two-lines">
+              <my-actor-avatar [actor]="abuse.reporterAccount" actorType="account" size="32"></my-actor-avatar>
+              <div>
+                {{ abuse.reporterAccount.displayName }}
+                <span>{{ abuse.reporterAccount.nameWithHost }}</span>
+              </div>
             </div>
-          </div>
-        </a>
-      } @else {
-        <span i18n>Deleted account</span>
-      }
-    </td>
+          </a>
+        } @else {
+          <span i18n>Deleted account</span>
+        }
+      </td>
+    }
 
     @if (abuse.video) {
       @if (abuse.video.deleted) {
@@ -51,11 +53,15 @@
         <td>
           <my-video-cell [video]="abuse.video" size="small">
             <div>
-              <span *ngIf="abuse.count > 1" class="pt-badge badge-secondary me-1" i18n-title title="This video has been reported multiple times" i18n>
+              @if (abuse.count > 1) {
+                <span class="pt-badge badge-secondary me-1" i18n-title title="This video has been reported multiple times" i18n>
                 {abuse.count, plural, =1 {1 abuse} other {{{ abuse.count }} abuses}}
               </span>
+              }
 
-              <span *ngIf="abuse.video.blacklisted" class="pt-badge badge-red" i18n-title title="The video is blocked" i18n>Blocked</span>
+              @if (abuse.video.blacklisted) {
+                <span class="pt-badge badge-red" i18n-title title="The video is blocked" i18n>Blocked</span>
+              }
             </div>
           </my-video-cell>
         </td>
@@ -67,7 +73,9 @@
           [title]="abuse.comment.video.name" target="_blank" rel="noopener noreferrer"
         ></a>
 
-        <div class="comment-flagged-account" *ngIf="abuse.flaggedAccount">by {{ abuse.flaggedAccount.displayName }}</div>
+        @if (abuse.flaggedAccount) {
+          <div class="comment-flagged-account">by {{ abuse.flaggedAccount.displayName }}</div>
+        }
       </td>
     } @else if(abuse.flaggedAccount) {
       <td>
@@ -84,31 +92,38 @@
     <td>{{ abuse.createdAt | ptDate: 'short'  }}</td>
 
     <td class="abuse-states">
-      <div *ngIf="isAbuseAccepted(abuse)" [title]="abuse.state.label" class="pt-badge badge-success">
-        <my-global-icon iconName="tick"></my-global-icon>
-      </div>
+      @if (isAbuseAccepted(abuse)) {
+        <div [title]="abuse.state.label" class="pt-badge badge-success">
+          <my-global-icon iconName="tick"></my-global-icon>
+        </div>
+      }
 
-      <div *ngIf="isAbuseRejected(abuse)" [title]="abuse.state.label" class="pt-badge badge-danger">
-        <my-global-icon iconName="cross"></my-global-icon>
-      </div>
+      @if (isAbuseRejected(abuse)) {
+        <div [title]="abuse.state.label" class="pt-badge badge-danger">
+          <my-global-icon iconName="cross"></my-global-icon>
+        </div>
+      }
     </td>
 
     <td class="abuse-messages">
-      <button
-        *ngIf="isLocalAbuse(abuse)" (click)="openAbuseMessagesModal(abuse)"
-        class="peertube-button secondary-button icon-only"
-        [ariaLabel]="getSendMessageButtonLabel(abuse)"
-        [title]="getSendMessageButtonLabel(abuse)"
-      >
-        {{ abuse.countMessages }}
-
-        <my-global-icon aria- iconName="message-circle"></my-global-icon>
-      </button>
+      @if (isLocalAbuse(abuse)) {
+        <button
+          (click)="openAbuseMessagesModal(abuse)"
+          class="peertube-button secondary-button icon-only"
+          [ariaLabel]="getSendMessageButtonLabel(abuse)"
+          [title]="getSendMessageButtonLabel(abuse)"
+          >
+          {{ abuse.countMessages }}
+          <my-global-icon aria- iconName="message-circle"></my-global-icon>
+        </button>
+      }
     </td>
 
-    <td *ngIf="isAdminView()" class="internal-note max-width-300px ellipsis" container="body" placement="left auto" [ngbTooltip]="abuse.moderationComment">
-      {{ abuse.moderationComment }}
-    </td>
+    @if (isAdminView()) {
+      <td class="internal-note max-width-300px ellipsis" container="body" placement="left auto" [ngbTooltip]="abuse.moderationComment">
+        {{ abuse.moderationComment }}
+      </td>
+    }
   </ng-template>
 
   <ng-template #actionCell let-abuse>

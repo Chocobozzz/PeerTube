@@ -1,5 +1,5 @@
-import { ChildProcessWithoutNullStreams } from 'child_process'
-import { basename } from 'path'
+import { ChildProcessWithoutNullStreams } from 'node:child_process'
+import { basename } from 'node:path'
 import { setValue } from '@wdio/shared-store-service'
 import { createScreenshotsDirectory } from './files'
 import { runCommand, runServer } from './server'

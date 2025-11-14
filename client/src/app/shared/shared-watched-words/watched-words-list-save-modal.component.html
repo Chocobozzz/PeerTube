@@ -1,6 +1,5 @@
 <ng-template #modal>
   <ng-container [formGroup]="form">
-
     <div class="modal-header">
       <h4 i18n class="modal-title">Save watched words list</h4>
 
@@ -10,16 +9,14 @@
     </div>
 
     <div class="modal-body">
-
       <div class="form-group">
         <label i18n for="listName">List name</label>
 
-        <input
-          type="text" id="listName" class="form-control"
-          formControlName="listName" [ngClass]="{ 'input-error': formErrors['listName'] }"
-        >
+        <input type="text" id="listName" class="form-control" formControlName="listName" [ngClass]="{ 'input-error': formErrors['listName'] }">
 
-        <div *ngIf="formErrors.listName" class="form-error" role="alert">{{ formErrors.listName }}</div>
+        @if (formErrors.listName) {
+          <div class="form-error" role="alert">{{ formErrors.listName }}</div>
+        }
       </div>
 
       <div class="form-group">
@@ -27,23 +24,18 @@
 
         <div i18n class="form-group-description">One word or group of words per line.</div>
 
-        <textarea id="words" formControlName="words" class="form-control"[ngClass]="{ 'input-error': formErrors['words'] }"></textarea>
+        <textarea id="words" formControlName="words" class="form-control" [ngClass]="{ 'input-error': formErrors['words'] }"></textarea>
 
-        <div *ngIf="formErrors.words" class="form-error" role="alert">{{ formErrors.words }}</div>
+        @if (formErrors.words) {
+          <div class="form-error" role="alert">{{ formErrors.words }}</div>
+        }
       </div>
-
     </div>
 
     <div class="modal-footer inputs">
-      <input
-        type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button"
-        (click)="hide()" (key.enter)="hide()"
-      >
+      <input type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button" (click)="hide()" (key.enter)="hide()">
 
-      <input
-        type="submit" i18n-value value="Save" class="peertube-button primary-button"
-        [disabled]="!form.valid" (click)="addOrUpdate()"
-      >
+      <input type="submit" i18n-value value="Save" class="peertube-button primary-button" [disabled]="!form.valid" (click)="addOrUpdate()">
     </div>
   </ng-container>
 </ng-template>

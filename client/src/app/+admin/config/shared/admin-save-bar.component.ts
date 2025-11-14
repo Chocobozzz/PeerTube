@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, inject, input, OnDestroy, OnInit, output } from '@angular/core'
 import { FormGroup } from '@angular/forms'
 import { RouterModule } from '@angular/router'
@@ -14,7 +13,6 @@ import { AlertComponent } from '../../../shared/shared-main/common/alert.compone
   styleUrls: [ './admin-save-bar.component.scss' ],
   templateUrl: './admin-save-bar.component.html',
   imports: [
-    CommonModule,
     RouterModule,
     ButtonComponent,
     AlertComponent

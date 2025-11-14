@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common'
+
 import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { ConfirmService, Notifier } from '@app/core'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
@@ -12,12 +12,11 @@ import { RunnerService } from '../runner.service'
   selector: 'my-runner-list',
   templateUrl: './runner-list.component.html',
   imports: [
-    CommonModule,
     ActionDropdownComponent,
     PTDatePipe,
     TableComponent,
     NumberFormatterPipe
-  ]
+]
 })
 export class RunnerListComponent implements OnInit {
   private runnerService = inject(RunnerService)

@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common'
 import { booleanAttribute, Component, input, OnChanges, OnInit } from '@angular/core'
 import { GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
@@ -9,7 +8,7 @@ import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
   selector: 'my-help',
   styleUrls: [ './help.component.scss' ],
   templateUrl: './help.component.html',
-  imports: [ NgIf, NgbPopover, GlobalIconComponent ]
+  imports: [ NgbPopover, GlobalIconComponent ]
 })
 export class HelpComponent implements OnInit, OnChanges {
   readonly helpTitle = input('')

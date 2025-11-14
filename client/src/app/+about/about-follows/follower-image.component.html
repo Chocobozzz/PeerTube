@@ -47,5 +47,7 @@
     </defs>
   </svg>
 
-  <img *ngIf="avatarUrl" [src]="avatarUrl" alt="">
+  @if (avatarUrl) {
+    <img [src]="avatarUrl" alt="">
+  }
 </div>

@@ -1,5 +1,7 @@
 <ng-template #content>
-  <my-global-icon *ngIf="icon()" [iconName]="icon()"></my-global-icon>
+  @if (icon()) {
+    <my-global-icon [iconName]="icon()"></my-global-icon>
+  }
 
   <ng-content></ng-content>
 </ng-template>

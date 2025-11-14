@@ -1,4 +1,4 @@
-import { NgClass, NgIf } from '@angular/common'
+import { NgClass } from '@angular/common'
 import { Component, OnInit, inject, output, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
@@ -8,8 +8,7 @@ import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { InstanceFollowService } from '@app/shared/shared-instance/instance-follow.service'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { splitAndGetNotEmpty } from '@root-helpers/string'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 
@@ -17,7 +16,7 @@ import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.co
   selector: 'my-follow-modal',
   templateUrl: './follow-modal.component.html',
   styleUrls: [ './follow-modal.component.scss' ],
-  imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, NgIf, AlertComponent ]
+  imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, AlertComponent ]
 })
 export class FollowModalComponent extends FormReactive implements OnInit {
   protected formReactiveService = inject(FormReactiveService)

@@ -4,7 +4,9 @@
       @if (entry().emailVerified === true) {
         &#x2713; {{ entry().email }}
       } @else {
-        <em *ngIf="!entry().emailVerified">? {{ entry().email }}</em>
+        @if (!entry().emailVerified) {
+          <em>? {{ entry().email }}</em>
+        }
       }
     } @else {
       {{ entry().email }}

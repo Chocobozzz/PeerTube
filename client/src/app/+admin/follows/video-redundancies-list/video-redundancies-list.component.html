@@ -10,8 +10,8 @@
   [customParseQueryParams]="customParseQueryParams"
   [customUpdateUrl]="customUpdateUrl"
   columnConfig="false"
->
-<ng-template #totalTitle let-totalRecords>
+  >
+  <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No redundancy} =1 {1 redundancy} other {{{ totalRecords | myNumberFormatter }} redundancies}}</ng-container>
   </ng-template>
 
@@ -29,7 +29,9 @@
   </ng-template>
 
   <ng-template #tableCells let-redundancy>
-    <td *ngIf="isDisplayingRemoteVideos()">{{ getRedundancyStrategy(redundancy) }}</td>
+    @if (isDisplayingRemoteVideos()) {
+      <td>{{ getRedundancyStrategy(redundancy) }}</td>
+    }
 
     <td>
       <a [href]="redundancy.url" i18n-title title="Open video in a new tab" target="_blank" rel="noopener noreferrer">
@@ -38,7 +40,9 @@
       </a>
     </td>
 
-    <td *ngIf="isDisplayingRemoteVideos()">{{ getTotalSize(redundancy) | bytes: 1 }}</td>
+    @if (isDisplayingRemoteVideos()) {
+      <td>{{ getTotalSize(redundancy) | bytes: 1 }}</td>
+    }
   </ng-template>
 
   <ng-template #actionCell let-redundancy>
@@ -46,9 +50,11 @@
   </ng-template>
 
   <ng-template #expandedRow let-redundancy>
-    <div *ngFor="let playlist of redundancy.redundancies.streamingPlaylists">
-      <my-video-redundancy-information [redundancyElement]="playlist"></my-video-redundancy-information>
-    </div>
+    @for (playlist of redundancy.redundancies.streamingPlaylists; track playlist) {
+      <div>
+        <my-video-redundancy-information [redundancyElement]="playlist"></my-video-redundancy-information>
+      </div>
+    }
   </ng-template>
 
   <ng-template #noResults>
@@ -60,18 +66,19 @@
   </ng-template>
 </my-table>
 
-<div class="redundancies-charts" *ngIf="isDisplayingRemoteVideos() && dataLoaded">
-  <h6 i18n>Enabled strategies stats</h6>
+@if (isDisplayingRemoteVideos() && dataLoaded) {
+  <div class="redundancies-charts">
+    <h6 i18n>Enabled strategies stats</h6>
+    <div class="chart-blocks">
+      @if (noRedundancies) {
+        <div i18n class="no-results">No redundancy strategy is enabled on your instance.</div>
+      }
 
-  <div class="chart-blocks">
-
-    <div *ngIf="noRedundancies" i18n class="no-results">
-      No redundancy strategy is enabled on your instance.
+      @for (r of redundanciesGraphsData; track r) {
+        <div class="chart-block">
+          <p-chart [ariaLabel]="r.ariaLabel" type="pie" [data]="r.graphData" [options]="r.options" width="300px" height="300px"></p-chart>
+        </div>
+      }
     </div>
-
-    <div class="chart-block" *ngFor="let r of redundanciesGraphsData">
-      <p-chart [ariaLabel]="r.ariaLabel" type="pie" [data]="r.graphData" [options]="r.options" width="300px" height="300px"></p-chart>
-    </div>
-
   </div>
-</div>
+}

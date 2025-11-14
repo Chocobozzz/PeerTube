@@ -1,4 +1,4 @@
-import { NgFor, NgIf } from '@angular/common'
+
 import { Component, OnInit, input, output } from '@angular/core'
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCaption } from '@peertube/peertube-models'
@@ -9,11 +9,9 @@ import { InputTextComponent } from '../../shared-forms/input-text.component'
   selector: 'my-subtitle-files-download',
   templateUrl: './subtitle-files-download.component.html',
   imports: [
-    NgIf,
-    NgFor,
     InputTextComponent,
     NgbNavModule
-  ]
+]
 })
 export class SubtitleFilesDownloadComponent implements OnInit {
   readonly videoCaptions = input.required<VideoCaption[]>()

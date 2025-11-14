@@ -6,12 +6,12 @@ import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { VideoOwnershipService } from '@app/shared/shared-main/video/video-ownership.service'
 import { DataLoaderOptions, TableColumnInfo, TableComponent } from '@app/shared/shared-tables/table.component'
 import { VideoChangeOwnership, VideoChangeOwnershipStatus, VideoChangeOwnershipStatusType } from '@peertube/peertube-models'
+import { map } from 'rxjs'
 import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
 import { ButtonComponent } from '../../shared/shared-main/buttons/button.component'
 import { NumberFormatterPipe } from '../../shared/shared-main/common/number-formatter.pipe'
 import { VideoCellComponent } from '../../shared/shared-tables/video-cell.component'
 import { MyAcceptOwnershipComponent } from './my-accept-ownership/my-accept-ownership.component'
-import { map } from 'rxjs'
 
 @Component({
   templateUrl: './my-ownership.component.html',

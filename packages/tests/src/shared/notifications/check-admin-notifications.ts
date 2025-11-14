@@ -22,7 +22,7 @@ export async function checkNewPeerTubeVersion (
       expect(notification.peertube.latestVersion).to.equal(latestVersion)
     } else {
       expect(notification).to.satisfy((n: UserNotification) => {
-        return n?.peertube === undefined || n.peertube.latestVersion !== latestVersion
+        return n?.peertube?.latestVersion !== latestVersion
       })
     }
   }
@@ -55,7 +55,7 @@ export async function checkNewPluginVersion (
       expect(notification.plugin.type).to.equal(pluginType)
     } else {
       expect(notification).to.satisfy((n: UserNotification) => {
-        return n?.plugin === undefined || n.plugin.name !== pluginName
+        return n?.plugin?.name !== pluginName
       })
     }
   }

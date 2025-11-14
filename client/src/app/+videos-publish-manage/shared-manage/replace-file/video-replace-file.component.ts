@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common'
+
 import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ServerService } from '@app/core'
@@ -29,14 +29,13 @@ type Form = {
   ],
   templateUrl: './video-replace-file.component.html',
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     ReactiveFileComponent,
     AlertComponent,
     GlobalIconComponent,
     DragDropDirective
-  ]
+]
 })
 export class VideoReplaceFileComponent implements OnInit, OnDestroy {
   private formReactiveService = inject(FormReactiveService)

@@ -48,8 +48,8 @@ $context-menu-width: 350px;
 
       @each $icon in $icons {
         &[class$="-#{$icon}"] {
-          mask-image: url("./svg/#{$icon}.svg");
-          -webkit-mask-image: url("./svg/#{$icon}.svg");
+          mask-image: url("../svg/#{$icon}.svg");
+          -webkit-mask-image: url("../svg/#{$icon}.svg");
         }
       }
 

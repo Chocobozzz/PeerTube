@@ -39,12 +39,12 @@ async function processDislike (activity: ActivityDislike, byActor: MActorSignatu
     const video = await VideoModel.loadFull(onlyVideo.id, t)
 
     const existingRate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byAccount.id, video.id, activity.id, t)
-    if (existingRate && existingRate.type === 'dislike') return
+    if (existingRate?.type === 'dislike') return
 
     await video.increment('dislikes', { transaction: t })
     video.dislikes++
 
-    if (existingRate && existingRate.type === 'like') {
+    if (existingRate?.type === 'like') {
       await video.decrement('likes', { transaction: t })
       video.likes--
     }

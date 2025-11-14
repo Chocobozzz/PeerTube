@@ -1,4 +1,3 @@
-import { NgFor, NgIf } from '@angular/common'
 import { Component, OnChanges, inject, input } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { HooksService } from '@app/core'
@@ -18,7 +17,7 @@ type PluginMetadata = {
   selector: 'my-video-attributes',
   templateUrl: './video-attributes.component.html',
   styleUrls: [ './video-attributes.component.scss' ],
-  imports: [ NgIf, RouterLink, GlobalIconComponent, NgFor, TimeDurationFormatterPipe, PTDatePipe ]
+  imports: [ RouterLink, GlobalIconComponent, TimeDurationFormatterPipe, PTDatePipe ]
 })
 export class VideoAttributesComponent implements OnChanges {
   private hooks = inject(HooksService)

@@ -1,4 +1,4 @@
-import { CommonModule, DecimalPipe, NgIf } from '@angular/common'
+import { CommonModule, DecimalPipe } from '@angular/common'
 import { Component, inject, input } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { BytesPipe } from '@app/shared/shared-main/common/bytes.pipe'
@@ -15,7 +15,6 @@ import { AuthService } from '@app/core'
   styleUrls: [ './instance-stat-rules.component.scss' ],
   imports: [
     CommonModule,
-    NgIf,
     GlobalIconComponent,
     DecimalPipe,
     DaysDurationFormatterPipe,

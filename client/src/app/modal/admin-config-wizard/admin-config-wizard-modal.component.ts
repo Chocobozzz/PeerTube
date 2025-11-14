@@ -1,5 +1,4 @@
 import { CdkStepperModule } from '@angular/cdk/stepper'
-import { CommonModule } from '@angular/common'
 import { Component, ElementRef, OnInit, inject, output, viewChild } from '@angular/core'
 import { User } from '@app/core'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
@@ -18,7 +17,6 @@ import { UsageType } from './steps/usage-type/usage-type.model'
   templateUrl: './admin-config-wizard-modal.component.html',
   styleUrls: [ './admin-config-wizard-modal.component.scss' ],
   imports: [
-    CommonModule,
     CdkStepperModule,
     AdminConfigWizardStepperComponent,
     AdminConfigWizardWelcomeComponent,

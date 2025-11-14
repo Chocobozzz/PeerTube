@@ -1,4 +1,4 @@
-import { NgClass, NgFor, NgIf } from '@angular/common'
+import { NgClass } from '@angular/common'
 import { Component, ElementRef, OnInit, inject, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { LocalStorageService, Notifier } from '@app/core'
@@ -16,8 +16,6 @@ import { LogsService } from './logs.service'
   styleUrls: [ './logs.component.scss' ],
   imports: [
     FormsModule,
-    NgFor,
-    NgIf,
     NgClass,
     SelectTagsComponent,
     ButtonComponent,

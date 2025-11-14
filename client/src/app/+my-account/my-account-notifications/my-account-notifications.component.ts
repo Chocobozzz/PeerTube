@@ -1,16 +1,16 @@
 import { Component, viewChild } from '@angular/core'
 import { UserNotificationsComponent } from '@app/shared/shared-notifications/user-notifications.component'
-import { NgIf } from '@angular/common'
+
 import { FormsModule } from '@angular/forms'
-import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
 import { RouterLink } from '@angular/router'
+import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
 
 type NotificationSortType = 'createdAt' | 'read'
 
 @Component({
   templateUrl: './my-account-notifications.component.html',
   styleUrls: [ './my-account-notifications.component.scss' ],
-  imports: [ RouterLink, GlobalIconComponent, FormsModule, NgIf, UserNotificationsComponent ]
+  imports: [ RouterLink, GlobalIconComponent, FormsModule, UserNotificationsComponent ]
 })
 export class MyAccountNotificationsComponent {
   readonly userNotification = viewChild<UserNotificationsComponent>('userNotification')

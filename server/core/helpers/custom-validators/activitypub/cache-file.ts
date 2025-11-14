@@ -5,7 +5,7 @@ import { isDateValid } from '../misc.js'
 import { isActivityPubUrlValid } from './misc.js'
 
 export function isCacheFileObjectValid (object: CacheFileObject) {
-  if (!object || object.type !== 'CacheFile') return false
+  if (object?.type !== 'CacheFile') return false
 
   return (!object.expires || isDateValid(object.expires)) &&
     isActivityPubUrlValid(object.object) &&

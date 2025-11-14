@@ -1,62 +1,81 @@
 <div class="margin-content">
   <div class="videos-header">
-    <div *ngIf="headerActions().length !== 0" class="action-block mb-4">
-      <ng-container *ngFor="let action of headerActions()">
-        @if (action.routerLink) {
-          <my-button theme="secondary" [ptRouterLink]="action.routerLink" [icon]="action.iconName">{{ action.label }}</my-button>
+    @if (headerActions().length !== 0) {
+      <div class="action-block mb-4">
+        @for (action of headerActions(); track action) {
+          @if (action.routerLink) {
+            <my-button theme="secondary" [ptRouterLink]="action.routerLink" [icon]="action.iconName">{{ action.label }}</my-button>
+          }
         }
-      </ng-container>
-    </div>
+      </div>
+    }
   </div>
 
-  <my-video-filters-header
-    *ngIf="displayFilters()" class="d-block"
-    [displayModerationBlock]="displayModerationBlock" [hideScope]="hideScopeFilter()" [filters]="filters"
-  ></my-video-filters-header>
+  @if (displayFilters()) {
+    <my-video-filters-header
+      class="d-block"
+      [displayModerationBlock]="displayModerationBlock"
+      [hideScope]="hideScopeFilter()"
+      [filters]="filters"
+    ></my-video-filters-header>
+  }
 
-  <div class="no-results" i18n *ngIf="hasDoneFirstQuery && videos.length === 0 && highlightedLives.length === 0">No results.</div>
+  @if (hasDoneFirstQuery && videos.length === 0 && highlightedLives.length === 0) {
+    <div class="no-results" i18n>No results.</div>
+  }
 
   <div
-    myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onVideosDataSubject.asObservable()"
-    class="videos" [ngClass]="{ 'display-as-row': displayAsRow() }"
+    myInfiniteScroller
+    (nearOfBottom)="onNearOfBottom()"
+    [dataObservable]="onVideosDataSubject.asObservable()"
+    class="videos"
+    [ngClass]="{ 'display-as-row': displayAsRow() }"
   >
-    <ng-container *ngIf="highlightedLives.length !== 0">
+    @if (highlightedLives.length !== 0) {
       <h2 class="videos-section-title">
         <my-global-icon class="pt-icon me-1 top--1px" iconName="live"></my-global-icon>
         <ng-container i18n>Lives</ng-container>
       </h2>
 
-      <ng-container *ngFor="let live of highlightedLives; trackBy: videoById;">
+      @for (live of highlightedLives; track videoById($index, live)) {
         <div class="video-wrapper">
           <my-video-miniature
-            [video]="live" [user]="user" [displayAsRow]="displayAsRow()"
-            [displayVideoActions]="displayVideoActions()" [displayOptions]="displayOptions"
-            (videoBlocked)="removeVideoFromArray(live)" (videoRemoved)="removeVideoFromArray(live)"
+            [video]="live"
+            [user]="user"
+            [displayAsRow]="displayAsRow()"
+            [displayVideoActions]="displayVideoActions()"
+            [displayOptions]="displayOptions"
+            (videoBlocked)="removeVideoFromArray(live)"
+            (videoRemoved)="removeVideoFromArray(live)"
           >
           </my-video-miniature>
         </div>
-      </ng-container>
+      }
 
       <h2 class="date-title" [ngClass]="{ 'visually-hidden': groupByDate() }">
         <my-global-icon class="pt-icon me-1" iconName="videos"></my-global-icon>
-
         <ng-container i18n>Videos</ng-container>
       </h2>
-    </ng-container>
+    }
 
-    <ng-container *ngFor="let video of videos; trackBy: videoById;">
+    @for (video of videos; track videoById($index, video)) {
+
       @if (groupByDate()) {
         <my-date-group-label [date]="video.publishedAt" [store]="groupByDateStore" [groupedDateLabels]="groupedDateLabels"></my-date-group-label>
       }
 
       <div class="video-wrapper">
         <my-video-miniature
-          [video]="video" [user]="user" [displayAsRow]="displayAsRow()"
-          [displayVideoActions]="displayVideoActions()" [displayOptions]="displayOptions"
-          (videoBlocked)="removeVideoFromArray(video)" (videoRemoved)="removeVideoFromArray(video)"
+          [video]="video"
+          [user]="user"
+          [displayAsRow]="displayAsRow()"
+          [displayVideoActions]="displayVideoActions()"
+          [displayOptions]="displayOptions"
+          (videoBlocked)="removeVideoFromArray(video)"
+          (videoRemoved)="removeVideoFromArray(video)"
         >
         </my-video-miniature>
       </div>
-    </ng-container>
+    }
   </div>
 </div>

@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, HostListener, inject, OnDestroy, OnInit } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
@@ -11,7 +10,6 @@ import { VideoManageResolverData } from './video-manage.resolver'
   selector: 'my-video-manage',
   templateUrl: './video-manage.component.html',
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     VideoManageContainerComponent

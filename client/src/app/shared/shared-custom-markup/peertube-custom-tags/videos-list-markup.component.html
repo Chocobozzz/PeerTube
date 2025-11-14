@@ -1,13 +1,15 @@
 <div class="root">
   <div class="videos" [ngStyle]="limitRowsStyle()">
 
-    <div class="video-wrapper" *ngFor="let video of videos">
-      <my-video-miniature
-        [video]="video" [user]="user" [displayAsRow]="false"
-        [displayVideoActions]="true" [displayOptions]="displayOptions"
-      >
-      </my-video-miniature>
-    </div>
+    @for (video of videos; track video) {
+      <div class="video-wrapper">
+        <my-video-miniature
+          [video]="video" [user]="user" [displayAsRow]="false"
+          [displayVideoActions]="true" [displayOptions]="displayOptions"
+          >
+        </my-video-miniature>
+      </div>
+    }
 
   </div>
 </div>

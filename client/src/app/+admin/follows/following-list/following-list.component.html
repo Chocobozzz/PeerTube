@@ -7,7 +7,7 @@
   [dataLoader]="dataLoader"
   columnConfig="false"
   [bulkActions]="bulkActions"
->
+  >
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No subscription} =1 {1 subscription} other {{{ totalRecords | myNumberFormatter }} subscriptions}}</ng-container>
   </ng-template>
@@ -32,17 +32,25 @@
     </td>
 
     <td>
-      <span *ngIf="follow.state === 'accepted'" class="pt-badge badge-green" i18n>Accepted</span>
-      <span *ngIf="follow.state === 'pending'" class="pt-badge badge-yellow" i18n>Pending</span>
-      <span *ngIf="follow.state === 'rejected'" class="pt-badge badge-red" i18n>Rejected</span>
+      @if (follow.state === 'accepted') {
+        <span class="pt-badge badge-green" i18n>Accepted</span>
+      }
+      @if (follow.state === 'pending') {
+        <span class="pt-badge badge-yellow" i18n>Pending</span>
+      }
+      @if (follow.state === 'rejected') {
+        <span class="pt-badge badge-red" i18n>Rejected</span>
+      }
     </td>
 
     <td>{{ follow.createdAt | ptDate: 'short' }}</td>
+
     <td>
-      <my-redundancy-checkbox
-        *ngIf="isInstanceFollowing(follow)"
-        [host]="follow.following.host" [redundancyAllowed]="follow.following.hostRedundancyAllowed"
-      ></my-redundancy-checkbox>
+      @if (isInstanceFollowing(follow)) {
+        <my-redundancy-checkbox
+          [host]="follow.following.host" [redundancyAllowed]="follow.following.hostRedundancyAllowed"
+        ></my-redundancy-checkbox>
+      }
     </td>
   </ng-template>
 

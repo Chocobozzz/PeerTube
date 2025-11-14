@@ -1,4 +1,4 @@
-import { NgClass, NgIf } from '@angular/common'
+import { NgClass } from '@angular/common'
 import { Component, OnInit, booleanAttribute, inject, input } from '@angular/core'
 import { MarkdownService } from '@app/core'
 import { LinkType } from 'src/types/link.type'
@@ -10,7 +10,7 @@ import { VideoPlaylist } from './video-playlist.model'
   selector: 'my-video-playlist-miniature',
   styleUrls: [ './video-playlist-miniature.component.scss' ],
   templateUrl: './video-playlist-miniature.component.html',
-  imports: [ NgClass, LinkComponent, NgIf, FromNowPipe ]
+  imports: [ NgClass, LinkComponent, FromNowPipe ]
 })
 export class VideoPlaylistMiniatureComponent implements OnInit {
   private markdownService = inject(MarkdownService)

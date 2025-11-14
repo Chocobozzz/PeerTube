@@ -14,7 +14,7 @@
           [items]="commentPolicies"
           inputId="commentsPolicy"
           formControlName="commentsPolicy"
-        >
+          >
           <div class="form-group-description" i18n>
             You can require comments to be approved depending on <a routerLink="/my-account/auto-tag-policies" target="_blank">your auto-tags policies</a>
           </div>
@@ -31,7 +31,9 @@
             <label i18n for="nsfwSummary">Describe what makes your content sensitive</label>
             <input type="text" id="nsfwSummary" class="form-control" formControlName="nsfwSummary" [ngClass]="{ 'input-error': formErrors.nsfwSummary }" />
 
-            <div *ngIf="formErrors.nsfwSummary" class="form-error" role="alert">{{ formErrors.nsfwSummary }}</div>
+            @if (formErrors.nsfwSummary) {
+              <div class="form-error" role="alert">{{ formErrors.nsfwSummary }}</div>
+            }
           </div>
 
           <div class="label" i18n>Help viewers identify your sensitive content</div>
@@ -49,7 +51,7 @@
           </my-peertube-checkbox>
 
 
-       </ng-container>
+        </ng-container>
 
       </my-peertube-checkbox>
     </div>

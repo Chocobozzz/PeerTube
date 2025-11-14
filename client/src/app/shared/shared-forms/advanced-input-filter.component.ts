@@ -1,4 +1,4 @@
-import { NgClass, NgFor, NgIf } from '@angular/common'
+import { NgClass } from '@angular/common'
 import { AfterViewInit, Component, OnInit, booleanAttribute, inject, input, output } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -26,7 +26,7 @@ const debugLogger = debug('peertube:AdvancedInputFilterComponent')
   selector: 'my-advanced-input-filter',
   templateUrl: './advanced-input-filter.component.html',
   styleUrls: [ './advanced-input-filter.component.scss' ],
-  imports: [ NgbDropdown, NgIf, NgbDropdownToggle, NgbDropdownMenu, NgFor, GlobalIconComponent, NgClass, FormsModule ]
+  imports: [ NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, GlobalIconComponent, NgClass, FormsModule ]
 })
 export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
   private route = inject(ActivatedRoute)

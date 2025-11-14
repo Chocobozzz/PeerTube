@@ -7,7 +7,7 @@ import { CustomMarkupComponent } from './shared'
 import { VideoMiniatureMarkupComponent } from './video-miniature-markup.component'
 import { RouterLink } from '@angular/router'
 import { ActorAvatarComponent } from '../../shared-actor-image/actor-avatar.component'
-import { NgIf } from '@angular/common'
+
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { Video } from '@app/shared/shared-main/video/video.model'
@@ -22,7 +22,7 @@ import { FindInBulkService } from '@app/shared/shared-search/find-in-bulk.servic
   templateUrl: 'channel-miniature-markup.component.html',
   styleUrls: [ 'channel-miniature-markup.component.scss' ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ NgIf, ActorAvatarComponent, RouterLink, VideoMiniatureMarkupComponent ]
+  imports: [ ActorAvatarComponent, RouterLink, VideoMiniatureMarkupComponent ]
 })
 export class ChannelMiniatureMarkupComponent implements CustomMarkupComponent, OnInit {
   private markdown = inject(MarkdownService)

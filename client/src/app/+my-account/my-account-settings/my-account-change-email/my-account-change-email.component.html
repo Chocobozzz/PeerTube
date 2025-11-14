@@ -1,17 +1,23 @@
-<my-alert *ngIf="error" type="danger">{{ error }}</my-alert>
-<my-alert *ngIf="success" type="success">{{ success }}</my-alert>
+@if (error) {
+  <my-alert type="danger">{{ error }}</my-alert>
+}
+@if (success) {
+  <my-alert type="success">{{ success }}</my-alert>
+}
 
-<div class="pending-email" *ngIf="user.pendingEmail">
-  <div i18n>
-    <strong>{{ user.pendingEmail }}</strong> is awaiting email verification.
+@if (user.pendingEmail) {
+  <div class="pending-email">
+    <div i18n>
+      <strong>{{ user.pendingEmail }}</strong> is awaiting email verification.
+    </div>
+
+    @if (verificationEmailSent) {
+      <div i18n>Email verification sent!</div>
+    } @else {
+      <button type="button" class="peertube-button-like-link" i18n (click)="resendVerificationEmail()">Resend your verification email</button>
+    }
   </div>
-
-  @if (verificationEmailSent) {
-    <div i18n>Email verification sent!</div>
-  } @else {
-    <button type="button" class="peertube-button-like-link" i18n (click)="resendVerificationEmail()">Resend your verification email</button>
-  }
-</div>
+}
 
 <form class="change-email" (ngSubmit)="changeEmail()" [formGroup]="form">
 
@@ -25,10 +31,11 @@
     <input
       type="email" id="new-email" i18n-placeholder placeholder="New email" class="form-control"
       formControlName="new-email" [ngClass]="{ 'input-error': formErrors['new-email'] }"
-    >
-    <div *ngIf="formErrors['new-email']" class="form-error" role="alert">
-      {{ formErrors['new-email'] }}
-    </div>
+      >
+
+    @if (formErrors['new-email']) {
+      <div class="form-error" role="alert">{{ formErrors['new-email'] }}</div>
+    }
   </div>
 
   <div class="form-group">

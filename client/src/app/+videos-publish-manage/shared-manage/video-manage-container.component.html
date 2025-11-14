@@ -12,16 +12,18 @@
         <h2>{{ getVideo().name }}</h2>
 
         <div class="watch-save">
-          <my-button *ngIf="canWatch()" class="watch-button" icon="external-link" theme="secondary" class="me-3" [href]="getWatchUrl()">
-            <span i18n class="watch-button-label">Watch the video</span>
-          </my-button>
+          @if (canWatch()) {
+            <my-button class="watch-button" icon="external-link" theme="secondary" class="me-3" [href]="getWatchUrl()">
+              <span i18n class="watch-button-label">Watch the video</span>
+            </my-button>
+          }
 
           <my-button
             theme="primary" class="save-button"
             icon="circle-tick"
             [disabled]="!canUpdate() || !hasPendingChanges()"  (click)="onWantToUpdate()"
             form="video-manage-form"
-          >
+            >
             @if (hasStudioTasks()) {
               <ng-container i18n>Save and run studio tasks</ng-container>
             } @else if (hasReplaceFile()) {
@@ -34,20 +36,23 @@
       </div>
     </div>
 
-    <div *ngIf="getStateWarning()?.title" class="video-state video-header-block mt-2">
-      <div class="alert-title">{{ getStateWarning().title }}</div>
+    @if (getStateWarning()?.title) {
+      <div class="video-state video-header-block mt-2">
+        <div class="alert-title">{{ getStateWarning().title }}</div>
+        <strong class="me-1">{{ getStateWarning().manageMain }}</strong>
+        <span>{{ getStateWarning().manageSecondary }}</span>
 
-      <strong class="me-1">{{ getStateWarning().manageMain }}</strong>
-      <span>{{ getStateWarning().manageSecondary }}</span>
+        @if (getStateWarning().routerLink) {
+          <span class="ms-1">
+            <a [routerLink]="getStateWarning().routerLink.link" [queryParams]="getStateWarning().routerLink.queryParams">{{ getStateWarning().routerLink.text }}</a>
+          </span>
+        }
+      </div>
+    }
 
-      @if (getStateWarning().routerLink) {
-        <span class="ms-1">
-          <a [routerLink]="getStateWarning().routerLink.link" [queryParams]="getStateWarning().routerLink.queryParams">{{ getStateWarning().routerLink.text }}</a>
-        </span>
-      }
-    </div>
-
-    <my-manage-errors *ngIf="displayFormErrorsMsg && hasFormErrors()" class="d-block mt-2"></my-manage-errors>
+    @if (displayFormErrorsMsg && hasFormErrors()) {
+      <my-manage-errors class="d-block mt-2"></my-manage-errors>
+    }
 
     <my-upload-progress
       class="d-block mt-2"
@@ -55,7 +60,7 @@
       [uploadPercents]="getUploadPercents()" [error]="getUploadError()" [uploaded]="hasUploadedFile()"
       [enableRetryAfterError]="canRetryUpload" (retry)="retryUpload()"
       [uploadedLabel]="uploadedLabel()"
-    >
+      >
     </my-upload-progress>
 
     <div class="mt-2">

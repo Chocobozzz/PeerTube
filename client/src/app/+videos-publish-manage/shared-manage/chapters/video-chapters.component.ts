@@ -1,4 +1,4 @@
-import { NgClass, NgFor, NgIf } from '@angular/common'
+import { NgClass } from '@angular/common'
 import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { VIDEO_CHAPTERS_ARRAY_VALIDATOR, VIDEO_CHAPTER_TITLE_VALIDATOR } from '@app/shared/form-validators/video-chapter-validators'
@@ -35,8 +35,6 @@ type Form = {
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgIf,
-    NgFor,
     NgClass,
     TimestampInputComponent,
     DeleteButtonComponent,

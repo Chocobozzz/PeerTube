@@ -1,10 +1,9 @@
-import { NgClass, NgIf } from '@angular/common'
+import { NgClass } from '@angular/common'
 import { Component, OnInit, inject, input, output, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { splitAndGetNotEmpty } from '@root-helpers/string'
 import { UNIQUE_HOSTS_VALIDATOR } from '../form-validators/host-validators'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
@@ -13,7 +12,7 @@ import { GlobalIconComponent } from '../shared-icons/global-icon.component'
   selector: 'my-batch-domains-modal',
   templateUrl: './batch-domains-modal.component.html',
   styleUrls: [ './batch-domains-modal.component.scss' ],
-  imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, NgIf ]
+  imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass ]
 })
 export class BatchDomainsModalComponent extends FormReactive implements OnInit {
   protected formReactiveService = inject(FormReactiveService)

@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common'
 import { Component, OnInit, inject } from '@angular/core'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { SignupService } from '@app/+signup/shared/signup.service'
@@ -9,7 +8,7 @@ import { SignupSuccessAfterEmailComponent } from '../../shared/signup-success-af
 @Component({
   selector: 'my-verify-account-email',
   templateUrl: './verify-account-email.component.html',
-  imports: [ NgIf, SignupSuccessAfterEmailComponent, RouterLink, AlertComponent ]
+  imports: [ SignupSuccessAfterEmailComponent, RouterLink, AlertComponent ]
 })
 export class VerifyAccountEmailComponent implements OnInit {
   private signupService = inject(SignupService)

@@ -136,8 +136,8 @@ module.exports = {
       require('./src/commands/upload')
 
       // Force keep alive: https://www.browserstack.com/docs/automate/selenium/error-codes/keep-alive-not-used#Node_JS
-      const http = require('http')
-      const https = require('https')
+      const http = require('node:http')
+      const https = require('node:https')
 
       const keepAliveTimeout = 30 * 1000
 

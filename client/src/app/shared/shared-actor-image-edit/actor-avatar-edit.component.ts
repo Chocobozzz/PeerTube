@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common'
 import { Component, ElementRef, OnChanges, OnInit, booleanAttribute, inject, input, output, viewChild } from '@angular/core'
 import { Notifier, ServerService } from '@app/core'
 import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle, NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
@@ -15,7 +14,7 @@ import { GlobalIconComponent } from '../shared-icons/global-icon.component'
     './actor-image-edit.scss',
     './actor-avatar-edit.component.scss'
   ],
-  imports: [ NgIf, ActorAvatarComponent, NgbTooltip, GlobalIconComponent, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu ]
+  imports: [ ActorAvatarComponent, NgbTooltip, GlobalIconComponent, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu ]
 })
 export class ActorAvatarEditComponent implements OnInit, OnChanges {
   private serverService = inject(ServerService)

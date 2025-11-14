@@ -1,7 +1,9 @@
 <div class="actor">
   <div class="actor-img-edit-container">
     <div class="banner-placeholder">
-      <img *ngIf="hasBanner()" [src]="getBannerUrl()" alt="Banner" />
+      @if (hasBanner()) {
+        <img [src]="getBannerUrl()" alt="Banner" />
+      }
     </div>
 
     @if (!hasBanner()) {

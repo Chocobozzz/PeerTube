@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common'
+
 import { Component, inject, input, OnInit } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { Video } from '@app/shared/shared-main/video/video.model'
@@ -11,10 +11,9 @@ import { LiveVideoService } from '../../../shared/shared-video-live/live-video.s
   templateUrl: './live-stream-information.component.html',
   styleUrls: [ './live-stream-information.component.scss' ],
   imports: [
-    CommonModule,
     RouterLink,
     PTDatePipe
-  ],
+],
   providers: [ LiveVideoService ]
 })
 export class LiveStreamInformationComponent implements OnInit {

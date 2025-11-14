@@ -3,7 +3,7 @@
     class="action-button ellipsis"
     [ngClass]="classes" [ngbTooltip]="tooltip()" [attr.title]="title()"
     [routerLink]="ptRouterLink()" [queryParams]="ptQueryParams()" [queryParamsHandling]="ptQueryParamsHandling()" [routerLinkActive]="ptRouterLinkActive()"
-  >
+    >
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </a>
 } @else if (href()) {
@@ -11,7 +11,7 @@
     class="action-button ellipsis"
     [ngClass]="classes" [ngbTooltip]="tooltip()" [attr.title]="title()"
     [href]="href()" target="_blank"
-  >
+    >
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </a>
 } @else {
@@ -22,7 +22,9 @@
 
 <ng-template #content>
   <my-loader size="sm" [ngClass]="{ displayed: loading() }" [loading]="loading()"></my-loader>
-  <my-global-icon *ngIf="icon() && !loading()" [iconName]="icon()"></my-global-icon>
+  @if (icon() && !loading()) {
+    <my-global-icon [iconName]="icon()"></my-global-icon>
+  }
 
   <span class="button-label" #labelContent (cdkObserveContent)="ngOnChanges()">
     @if (label()) {

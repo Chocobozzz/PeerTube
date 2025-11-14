@@ -1,16 +1,16 @@
-<div *ngIf="mobileMsg" class="mobile-msg">
-  <div class="msg ellipsis me-auto" i18n>Open in the application?</div>
+@if (mobileMsg) {
+  <div class="mobile-msg">
+    <div class="msg ellipsis me-auto" i18n>Open in the application?</div>
+    <a class="peertube-button-link secondary-button me-3" [href]="androidAppUrl || iosAppUrl" (click)="onOpenClientClick()">Open</a>
 
-  <a class="peertube-button-link secondary-button me-3" [href]="androidAppUrl || iosAppUrl" (click)="onOpenClientClick()">Open</a>
-
-  <button class="border-0 p-0" title="Close this message" i18n-title (click)="hideMobileMsg()">
-    <my-global-icon iconName="cross"></my-global-icon>
-  </button>
-</div>
+    <button class="border-0 p-0" title="Close this message" i18n-title (click)="hideMobileMsg()">
+      <my-global-icon iconName="cross"></my-global-icon>
+    </button>
+  </div>
+}
 
 <div class="root" [ngClass]="{ 'search-hidden': searchHidden }">
   <a class="peertube-title" [routerLink]="getDefaultRoute()" [queryParams]="getDefaultRouteQuery()">
-
     <img [src]="getLogoUrl()" alt="" [title]="instanceName" class="logo" />
 
     @if (isInstanceNameDisplayed()) {
@@ -18,7 +18,9 @@
     }
   </a>
 
-  <my-search-typeahead *ngIf="!searchHidden" [hidden]="!isLoaded()"></my-search-typeahead>
+  @if (!searchHidden) {
+    <my-search-typeahead [hidden]="!isLoaded()"></my-search-typeahead>
+  }
 
   <div class="d-flex align-items-center buttons-container" [hidden]="!isLoaded()">
     @if (!loggedIn) {
@@ -27,9 +29,11 @@
         theme="tertiary" rounded="true" class="margin-button settings-button" icon="cog" (click)="openQuickSettings()"
       ></my-button>
 
-      <a *ngIf="isRegistrationAllowed()" routerLink="/signup" class="peertube-button-link secondary-button w-100 ellipsis margin-button create-account-button">
-        <my-signup-label [requiresApproval]="requiresApproval"></my-signup-label>
-      </a>
+      @if (isRegistrationAllowed()) {
+        <a routerLink="/signup" class="peertube-button-link secondary-button w-100 ellipsis margin-button create-account-button">
+          <my-signup-label [requiresApproval]="requiresApproval"></my-signup-label>
+        </a>
+      }
 
       <my-login-link class="login-label" className="peertube-button-link primary-button w-100 ellipsis"></my-login-link>
       <my-login-link class="login-icon" className="peertube-button-link primary-button icon-only w-100 ellipsis" icon="true" label=""></my-login-link>
@@ -44,7 +48,7 @@
       <div
         class="logged-in-container" ngbDropdown #dropdown="ngbDropdown" placement="bottom-left auto"
         container="body"
-      >
+        >
         <button class="tertiary-button" ngbDropdownToggle>
           <my-actor-avatar [actor]="user.account" actorType="account" size="34" responseSize="true"></my-actor-avatar>
 
@@ -56,34 +60,40 @@
         </button>
 
         <div ngbDropdownMenu>
-          <a
-            *ngIf="user.account" ngbDropdownItem class="dropdown-item" [routerLink]="[ '/a', user.account.nameWithHost ]"
-            #profile
-          >
-            <my-global-icon iconName="user" aria-hidden="true"></my-global-icon> <ng-container i18n>Public profile</ng-container>
-          </a>
+          @if (user.account) {
+            <a
+              ngbDropdownItem class="dropdown-item" [routerLink]="[ '/a', user.account.nameWithHost ]"
+              #profile
+              >
+              <my-global-icon iconName="user" aria-hidden="true"></my-global-icon> <ng-container i18n>Public profile</ng-container>
+            </a>
+          }
 
           <div class="dropdown-divider"></div>
 
-          <a *ngIf="user.account" ngbDropdownItem class="dropdown-item" routerLink="/my-account">
-            <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon> <ng-container i18n>Manage my account</ng-container>
-          </a>
+          @if (user.account) {
+            <a ngbDropdownItem class="dropdown-item" routerLink="/my-account">
+              <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon> <ng-container i18n>Manage my account</ng-container>
+            </a>
+          }
 
           <div class="dropdown-divider"></div>
 
           <a
             myPluginSelector pluginSelectorId="menu-user-dropdown-language-item"
             ngbDropdownItem class="dropdown-item" routerLink="/my-account/settings" fragment="interface-settings"
-          >
+            >
             <my-global-icon iconName="language" aria-hidden="true"></my-global-icon>
             <span i18n>Interface:</span>
             <span class="ms-auto ps-2 muted">{{ currentInterfaceLanguage }}</span>
           </a>
 
-          <button *ngIf="!isInMobileView" ngbDropdownItem class="dropdown-item" (click)="openHotkeysCheatSheet()">
-            <my-global-icon iconName="keyboard" aria-hidden="true"></my-global-icon>
-            <ng-container i18n>Keyboard shortcuts</ng-container>
-          </button>
+          @if (!isInMobileView) {
+            <button ngbDropdownItem class="dropdown-item" (click)="openHotkeysCheatSheet()">
+              <my-global-icon iconName="keyboard" aria-hidden="true"></my-global-icon>
+              <ng-container i18n>Keyboard shortcuts</ng-container>
+            </button>
+          }
 
           <button ngbDropdownItem (click)="logout($event)" class="dropdown-item">
             <my-global-icon iconName="sign-out" aria-hidden="true"></my-global-icon>

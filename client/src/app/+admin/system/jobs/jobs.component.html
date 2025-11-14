@@ -9,7 +9,7 @@
   [dataLoader]="dataLoader"
   [customParseQueryParams]="customParseQueryParams"
   [customUpdateUrl]="customUpdateUrl"
->
+  >
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No job} =1 {1 job} other {{{ totalRecords | myNumberFormatter }} jobs}}</ng-container>
   </ng-template>
@@ -39,28 +39,44 @@
   </ng-template>
 
   <ng-template #tableCells let-job>
-    <td *ngIf="table.isColumnDisplayed('id')" class="job-i" [title]="job.id">{{ job.id }}</td>
+    @if (table.isColumnDisplayed('id')) {
+      <td class="job-i" [title]="job.id">{{ job.id }}</td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('type')" class="job-typ" >
-      <span class="pt-badge ellipsis" [ngClass]="getRandomJobTypeBadge(job.type)">{{ job.type }}</span>
-    </td>
+    @if (table.isColumnDisplayed('type')) {
+      <td class="job-typ" >
+        <span class="pt-badge ellipsis" [ngClass]="getRandomJobTypeBadge(job.type)">{{ job.type }}</span>
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('priority')" class="job-priorit" >{{ job.priority }}</td>
+    @if (table.isColumnDisplayed('priority')) {
+      <td class="job-priorit" >{{ job.priority }}</td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('state') && table.isColumnDisplayed('state')" class="job-stat" >
-      <span class="ellipsis" [ngClass]="getJobStateClasses(job.state)">{{ job.state }}</span>
-    </td>
+    @if (table.isColumnDisplayed('state') && table.isColumnDisplayed('state')) {
+      <td class="job-stat" >
+        <span class="ellipsis" [ngClass]="getJobStateClasses(job.state)">{{ job.state }}</span>
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('progress')" class="job-progres" >
-      <ng-container *ngIf="hasProgress(job)">{{ getProgress(job) }}</ng-container>
-    </td>
+    @if (table.isColumnDisplayed('progress')) {
+      <td class="job-progres" >
+        @if (hasProgress(job)) {
+          {{ getProgress(job) }}
+        }
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('createdAt')" class="job-dat" >{{ job.createdAt }}</td>
+    @if (table.isColumnDisplayed('createdAt')) {
+      <td class="job-dat" >{{ job.createdAt }}</td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('processed')" class="fs-7">
-      <div>{{ job.processedOn }}</div>
-      <div>{{ job.finishedOn}}</div>
-    </td>
+    @if (table.isColumnDisplayed('processed')) {
+      <td class="fs-7">
+        <div>{{ job.processedOn }}</div>
+        <div>{{ job.finishedOn}}</div>
+      </td>
+    }
   </ng-template>
 
   <ng-template #expandedRow let-job>

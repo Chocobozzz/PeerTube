@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, forwardRef, OnInit, input } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
@@ -23,7 +22,7 @@ import { SelectOptionsComponent } from './select-options.component'
       multi: true
     }
   ],
-  imports: [ FormsModule, CommonModule, SelectOptionsComponent ]
+  imports: [ FormsModule, SelectOptionsComponent ]
 })
 export class SelectVideosScopeComponent implements ControlValueAccessor, OnInit {
   readonly inputId = input.required<string>()

@@ -19,36 +19,39 @@
       </details>
     }
 
-    <div *ngIf="inputLabel" class="form-group mt-3">
-      <label for="confirmInput">{{ inputLabel }}</label>
+    @if (inputLabel) {
+      <div class="form-group mt-3">
+        <label for="confirmInput">{{ inputLabel }}</label>
 
-      @if (isPasswordInput) {
-        <my-input-text
-          [autofocus]="true" autocomplete="on"
-          inputId="confirmInput" [(ngModel)]="inputValue" (keyup.enter)="confirm()"
-        ></my-input-text>
-      } @else {
-        <input
-          type="text" myAutofocus id="confirmInput" name="confirmInput"
-          [(ngModel)]="inputValue" (keyup.enter)="confirm()"
-        />
-      }
+        @if (isPasswordInput) {
+          <my-input-text
+            [autofocus]="true" autocomplete="on"
+            inputId="confirmInput" [(ngModel)]="inputValue" (keyup.enter)="confirm()"
+          ></my-input-text>
+        } @else {
+          <input
+            type="text" myAutofocus id="confirmInput" name="confirmInput"
+            [(ngModel)]="inputValue" (keyup.enter)="confirm()"
+            />
+        }
+      </div>
+    }
 
-    </div>
-
-    <div *ngIf="hasError()" class="text-danger">{{ errorMessage }}</div>
+    @if (hasError()) {
+      <div class="text-danger">{{ errorMessage }}</div>
+    }
   </div>
 
   <div class="modal-footer inputs">
     <input
       type="button" role="button" [value]="cancelButtonText" class="peertube-button secondary-button"
       (click)="dismiss()" (key.enter)="dismiss()"
-    >
+      >
 
     <input
       ngbAutofocus
       type="submit" [value]="confirmButtonText" class="peertube-button primary-button" [disabled]="isConfirmationDisabled()"
       (click)="close()" (key.enter)="confirm()"
-    >
+      >
   </div>
 </ng-template>

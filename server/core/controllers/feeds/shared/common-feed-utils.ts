@@ -129,7 +129,8 @@ export async function buildFeedMetadata (options: {
   if (videoChannel) {
     name = videoChannel.getDisplayName()
     description = videoChannel.description
-    ownerLink = link = videoChannel.getClientUrl()
+    ownerLink = videoChannel.getClientUrl()
+    link = ownerLink
 
     if (videoChannel.Actor.hasImage(ActorImageType.AVATAR)) {
       imageUrl = WEBSERVER.URL + videoChannel.Actor.getMaxQualityImage(ActorImageType.AVATAR).getStaticPath()
@@ -140,7 +141,8 @@ export async function buildFeedMetadata (options: {
   } else if (account) {
     name = account.getDisplayName()
     description = account.description
-    ownerLink = link = account.getClientUrl()
+    ownerLink = account.getClientUrl()
+    link = ownerLink
 
     if (account.Actor.hasImage(ActorImageType.AVATAR)) {
       imageUrl = WEBSERVER.URL + account.Actor.getMaxQualityImage(ActorImageType.AVATAR).getStaticPath()

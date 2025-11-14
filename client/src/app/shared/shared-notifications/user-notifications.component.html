@@ -1,4 +1,6 @@
-<div *ngIf="componentPagination.totalItems === 0" class="no-notification" i18n>You don't have notifications.</div>
+@if (componentPagination.totalItems === 0) {
+  <div class="no-notification" i18n>You don't have notifications.</div>
+}
 
 <ul class="notifications" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
   @for (notification of notifications; track notification.payload.id) {
@@ -13,7 +15,7 @@
           [href]="notification.externalUrl"
           target="_blank"
           rel="noopener nofollow"
-        >
+          >
           <my-user-notification-content [notification]="notification"></my-user-notification-content>
         </a>
       } @else if (notification.url) {
@@ -25,7 +27,7 @@
           title="New message"
           [routerLink]="notification.url"
           [queryParams]="notification.queryParams"
-        >
+          >
           <my-user-notification-content [notification]="notification"></my-user-notification-content>
         </a>
       } @else if (notification.payload.read === false) {
@@ -35,10 +37,10 @@
           (click)="markAsRead(notification)"
           i18n-title
           title="Mark as read"
-        >
+          >
           <my-user-notification-content [notification]="notification"></my-user-notification-content>
         </button>
-      }@else {
+        }@else {
         <div class="notification">
           <my-user-notification-content [notification]="notification"></my-user-notification-content>
         </div>

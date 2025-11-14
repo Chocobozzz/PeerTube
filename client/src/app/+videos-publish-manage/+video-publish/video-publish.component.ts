@@ -1,4 +1,4 @@
-import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common'
+import { NgClass, NgTemplateOutlet } from '@angular/common'
 import { Component, HostListener, OnInit, inject, viewChild } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, AuthUser, CanComponentDeactivate, CanDeactivateGuard, HooksService, ServerService } from '@app/core'
@@ -23,7 +23,6 @@ import { VideoPublishResolverData } from './video-publish.resolver'
   templateUrl: './video-publish.component.html',
   styleUrls: [ './video-publish.component.scss' ],
   imports: [
-    NgIf,
     RouterLink,
     NgTemplateOutlet,
     UserQuotaComponent,

@@ -11,7 +11,9 @@
 
     <div class="row">
 
-      <my-embed *ngIf="videoEdit.isPublishedVOD()" #embed class="col-md-12 col-xl-6 mb-3" [video]="videoEdit.getVideoAttributes()" enableAPI="true"></my-embed>
+      @if (videoEdit.isPublishedVOD()) {
+        <my-embed #embed class="col-md-12 col-xl-6 mb-3" [video]="videoEdit.getVideoAttributes()" enableAPI="true"></my-embed>
+      }
 
       <div [ngClass]="videoEdit.isPublishedVOD() ? 'col-xl-6 col-md-12' : ''">
 
@@ -22,8 +24,10 @@
             i18n-labelText labelText="Edit raw"
           ></my-peertube-checkbox>
 
-          <my-button *ngIf="!rawEdit && !segmentToUpdate" i18n-label label="Add a new segment" (click)="addSegmentToEdit()">
-          </my-button>
+          @if (!rawEdit && !segmentToUpdate) {
+            <my-button i18n-label label="Add a new segment" (click)="addSegmentToEdit()">
+            </my-button>
+          }
         </div>
 
         <div [hidden]="!rawEdit" [formGroup]="form">
@@ -34,12 +38,14 @@
             class="form-control caption-raw-textarea fs-7"
             [ngClass]="{ 'input-error': formErrors['captionFileContent'] }"
             #textarea
-          >
+            >
           </textarea>
 
-          <div *ngIf="formErrors.captionFileContent" class="form-error" role="alert">
-            {{ formErrors.captionFileContent }}
-          </div>
+          @if (formErrors.captionFileContent) {
+            <div class="form-error" role="alert">
+              {{ formErrors.captionFileContent }}
+            </div>
+          }
         </div>
 
         <div class="text-start segments pe-2 ps-2" [hidden]="rawEdit">
@@ -57,11 +63,13 @@
                         [(ngModel)]="segment.startMs" [parser]="timestampParser" [formatter]="timestampFormatter"
                       ></my-timestamp-input>
 
-                      <my-button
-                        *ngIf="videoEdit.isPublishedVOD()" icon="clock-arrow-down"
-                        i18n-title title="Use video current time as start time" (click)="videoTimeForSegmentStart(segment)"
-                      >
-                      </my-button>
+                      @if (videoEdit.isPublishedVOD()) {
+                        <my-button
+                          icon="clock-arrow-down"
+                          i18n-title title="Use video current time as start time" (click)="videoTimeForSegmentStart(segment)"
+                          >
+                        </my-button>
+                      }
                     </div>
 
                     <my-global-icon class="d-inline-block ms-2 me-2" iconName="move-right"></my-global-icon>
@@ -75,11 +83,13 @@
                         [(ngModel)]="segment.endMs" [parser]="timestampParser" [formatter]="timestampFormatter"
                       ></my-timestamp-input>
 
-                      <my-button
-                        *ngIf="videoEdit.isPublishedVOD()" icon="clock-arrow-down"
-                        i18n-title title="Use video current time as end time" (click)="videoTimeForSegmentEnd(segment)"
-                      >
-                      </my-button>
+                      @if (videoEdit.isPublishedVOD()) {
+                        <my-button
+                          icon="clock-arrow-down"
+                          i18n-title title="Use video current time as end time" (click)="videoTimeForSegmentEnd(segment)"
+                          >
+                        </my-button>
+                      }
                     </div>
                   </div>
 
@@ -89,7 +99,9 @@
 
                       <textarea  id="segment-edit" name="segment-edit" class="form-control fs-7" [(ngModel)]="segment.text"></textarea>
 
-                      <div *ngIf="segmentEditError" class="form-error" role="alert">{{ segmentEditError }}</div>
+                      @if (segmentEditError) {
+                        <div class="form-error" role="alert">{{ segmentEditError }}</div>
+                      }
                     </div>
 
                     <div class="d-flex flex-column ms-3">
@@ -104,37 +116,37 @@
                     class="flex-grow-1 segment-text ps-1 pe-1" role="button" tabindex="0" i18n-title title="Jump to this segment"
                     (keyup.enter)="onSegmentClick($event, segment)" (click)="onSegmentClick($event, segment)"
                     [ngClass]="{ active: segment === activeSegment }"
-                  >
+                    >
                     <strong class="segment-start me-2 d-block">{{ segment.startFormatted }} -> {{ segment.endFormatted }}</strong>
                     <span class="segment-text fs-7">{{ segment.text }}</span>
                   </div>
 
                   <div class="d-flex flex-column ms-3" [ngClass]="{ 'opacity-0': !!segmentToUpdate }">
-                      @defer (on viewport) {
-                        <my-edit-button i18n-title title="Edit this segment" (click)="updateSegment(segment)"></my-edit-button>
-                        <my-delete-button class="mt-1" i18n-title title="Delete this segment" (click)="deleteSegment(segment)"></my-delete-button>
-                      } @placeholder {
-                        <div style="height: 100%; width: 40px"></div>
-                      }
-                    </div>
+                    @defer (on viewport) {
+                    <my-edit-button i18n-title title="Edit this segment" (click)="updateSegment(segment)"></my-edit-button>
+                    <my-delete-button class="mt-1" i18n-title title="Delete this segment" (click)="deleteSegment(segment)"></my-delete-button>
+                    } @placeholder {
+                    <div style="height: 100%; width: 40px"></div>
+                  }
                 </div>
-              }
-            </div>
-          }
-        </div>
+              </div>
+            }
+          </div>
+        }
       </div>
     </div>
   </div>
+</div>
 
-  <div class="modal-footer inputs">
-    <input
-      type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button"
-      (click)="hide()" (key.enter)="hide()"
+<div class="modal-footer inputs">
+  <input
+    type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button"
+    (click)="hide()" (key.enter)="hide()"
     >
 
-    <input
-      type="button" i18n-value value="Edit this caption" class="peertube-button primary-button"
-      [disabled]="rawEdit && !form.valid" (click)="updateCaption()"
+  <input
+    type="button" i18n-value value="Edit this caption" class="peertube-button primary-button"
+    [disabled]="rawEdit && !form.valid" (click)="updateCaption()"
     >
-  </div>
+</div>
 </ng-template>

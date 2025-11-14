@@ -14,9 +14,12 @@
           formControlName="moderationComment" ngbAutofocus i18-placeholder placeholder="Comment this report…"
           [ngClass]="{ 'input-error': formErrors['moderationComment'] }" class="form-control">
         </textarea>
-        <div *ngIf="formErrors.moderationComment" class="form-error" role="alert">
-          {{ formErrors.moderationComment }}
-        </div>
+
+        @if (formErrors.moderationComment) {
+          <div class="form-error" role="alert">
+            {{ formErrors.moderationComment }}
+          </div>
+        }
       </div>
 
       <div class="form-group" i18n>
@@ -27,7 +30,7 @@
         <input
           type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button"
           (click)="hide()" (key.enter)="hide()"
-        >
+          >
 
         <input type="submit" i18n-value value="Update this comment" class="peertube-button primary-button" [disabled]="!form.valid" />
       </div>

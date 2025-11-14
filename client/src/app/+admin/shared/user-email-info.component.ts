@@ -1,12 +1,11 @@
 import { Component, booleanAttribute, input } from '@angular/core'
 import { User, UserRegistration } from '@peertube/peertube-models'
-import { NgIf } from '@angular/common'
 
 @Component({
   selector: 'my-user-email-info',
   templateUrl: './user-email-info.component.html',
   styleUrls: [ './user-email-info.component.scss' ],
-  imports: [ NgIf ]
+  imports: []
 })
 export class UserEmailInfoComponent {
   readonly entry = input<User | UserRegistration>(undefined)

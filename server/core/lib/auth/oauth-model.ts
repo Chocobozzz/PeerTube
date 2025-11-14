@@ -90,7 +90,7 @@ async function getRefreshToken (refreshToken: string) {
 
 async function getUser (usernameOrEmail?: string, password?: string, bypassLogin?: BypassLogin) {
   // Special treatment coming from a plugin
-  if (bypassLogin && bypassLogin.bypass === true) {
+  if (bypassLogin?.bypass === true) {
     logger.info('Bypassing oauth login by plugin %s.', bypassLogin.pluginName)
 
     let user = getByEmailPermissive(await UserModel.loadByEmailCaseInsensitive(bypassLogin.user.email), bypassLogin.user.email)

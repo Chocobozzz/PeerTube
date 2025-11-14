@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common'
 import { Component, inject, input } from '@angular/core'
 import { AuthUser } from '@app/core'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
@@ -11,7 +10,7 @@ import { UserRight, VideoPrivacy, VideoState } from '@peertube/peertube-models'
   selector: 'my-video-alert',
   templateUrl: './video-alert.component.html',
   styles: `my-alert { text-align: center }`,
-  imports: [ NgIf, PTDatePipe, AlertComponent ]
+  imports: [ PTDatePipe, AlertComponent ]
 })
 export class VideoAlertComponent {
   readonly user = input<AuthUser>(undefined)

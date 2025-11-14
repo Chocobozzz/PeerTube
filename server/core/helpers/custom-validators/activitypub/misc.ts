@@ -47,8 +47,7 @@ export function isObjectValid (object: any) {
 }
 
 export function isActivityPubHTMLUrlValid (url: ActivityHtmlUrlObject) {
-  return url &&
-    url.type === 'Link' &&
+  return url?.type === 'Link' &&
     url.mediaType === 'text/html' &&
     isActivityPubUrlValid(url.href)
 }

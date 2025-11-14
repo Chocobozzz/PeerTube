@@ -3,13 +3,13 @@ import { ServerService, User, UserService } from '@app/core'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { isP2PEnabled } from '@root-helpers/video'
 import { HTMLServerConfig, Video } from '@peertube/peertube-models'
-import { NgIf } from '@angular/common'
+
 
 @Component({
   selector: 'my-privacy-concerns',
   templateUrl: './privacy-concerns.component.html',
   styleUrls: [ './privacy-concerns.component.scss' ],
-  imports: [ NgIf ]
+  imports: []
 })
 export class PrivacyConcernsComponent implements OnInit {
   private serverService = inject(ServerService)

@@ -1,28 +1,34 @@
 <section>
-  <header *ngIf="steps.length > 2">
-    <div class="header-steps">
-      <ng-container *ngFor="let step of steps; let i = index; let isLast = last;">
-        <button
-          class="step-info button-unstyle" [ngClass]="{ active: selectedIndex === i, completed: isCompleted(step) }"
-          [disabled]="!isAccessible(step)"
-          [attr.aria-current]="selectedIndex === i" (click)="onClick(i)"
-        >
-          <div class="step-index">
-            <span class="visually-hidden" i18n>Step</span> {{ i + 1 }}
+  @if (steps.length > 2) {
+    <header>
+      <div class="header-steps">
+        @for (step of steps; track step; let i = $index; let isLast = $last) {
+          <button
+            class="step-info button-unstyle" [ngClass]="{ active: selectedIndex === i, completed: isCompleted(step) }"
+            [disabled]="!isAccessible(step)"
+            [attr.aria-current]="selectedIndex === i" (click)="onClick(i)"
+          >
+            <div class="step-index">
+              <span class="visually-hidden" i18n>Step</span> {{ i + 1 }}
 
-            <div class="completed-icon" *ngIf="isCompleted(step)">
-              <my-global-icon iconName="tick"></my-global-icon>
+              @if (isCompleted(step)) {
+                <div class="completed-icon">
+                  <my-global-icon iconName="tick"></my-global-icon>
+                </div>
+              }
             </div>
-          </div>
 
-          <div class="step-label">{{ step.label }}</div>
-        </button>
+            <div class="step-label">{{ step.label }}</div>
+          </button>
 
-        <!-- Do no display if this is the last child -->
-        <div *ngIf="!isLast" class="connector"></div>
-      </ng-container>
-    </div>
-  </header>
+          <!-- Do no display if this is the last child -->
+          @if (!isLast) {
+            <div class="connector"></div>
+          }
+        }
+      </div>
+    </header>
+  }
 
   <div class="margin-content" [style.display]="selected ? 'block' : 'none'">
     <ng-container [ngTemplateOutlet]="selected.content"></ng-container>

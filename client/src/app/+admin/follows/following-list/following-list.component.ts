@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { ConfirmService, Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -19,7 +18,6 @@ import { FollowModalComponent } from './follow-modal.component'
   templateUrl: './following-list.component.html',
   styleUrls: [ './following-list.component.scss' ],
   imports: [
-    CommonModule,
     GlobalIconComponent,
     AdvancedInputFilterComponent,
     DeleteButtonComponent,

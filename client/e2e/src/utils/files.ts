@@ -1,5 +1,5 @@
-import { mkdir, rm } from 'fs/promises'
-import { join } from 'path'
+import { mkdir, rm } from 'node:fs/promises'
+import { join } from 'node:path'
 
 const SCREENSHOTS_DIRECTORY = 'screenshots'
 

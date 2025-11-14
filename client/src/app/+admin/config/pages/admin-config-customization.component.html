@@ -75,17 +75,20 @@
             <div class="form-group">
               <label [for]="field.inputId">{{ field.label }}</label>
 
-              <button
-                *ngIf="!hasDefaultCustomizationValue(field.name)"
-                type="button"
-                i18n
-                class="reset-button reset-button-small"
-                (click)="resetCustomizationField(field.name)"
-              >
+              @if (!hasDefaultCustomizationValue(field.name)) {
+                <button
+                  type="button"
+                  i18n
+                  class="reset-button reset-button-small"
+                  (click)="resetCustomizationField(field.name)"
+                  >
                 Reset
               </button>
+              }
 
-              <div *ngIf="field.description" class="form-group-description">{{ field.description }}</div>
+              @if (field.description) {
+                <div class="form-group-description">{{ field.description }}</div>
+              }
 
               @if (field.type === 'color') {
                 <p-colorpicker class="d-block" [inputId]="field.inputId" [formControlName]="field.name" />
@@ -106,7 +109,7 @@
                   class="form-control"
                   [formControlName]="field.name"
                   [ngClass]="{ 'input-error': formErrors.theme.customization[field.name]}"
-                >
+                  >
               }
             </div>
           }
@@ -129,9 +132,11 @@
           <input
             type="text" id="emailSubjectPrefix" class="form-control"
             formControlName="prefix" [ngClass]="{ 'input-error': formErrors.email.subject.prefix }"
-          >
+            >
 
-          <div *ngIf="formErrors.email.subject.prefix" class="form-error" role="alert">{{ formErrors.email.subject.prefix }}</div>
+          @if (formErrors.email.subject.prefix) {
+            <div class="form-error" role="alert">{{ formErrors.email.subject.prefix }}</div>
+          }
         </div>
 
         <div class="form-group" formGroupName="body">
@@ -141,9 +146,11 @@
           <input
             type="text" id="emailBodySignature" class="form-control"
             formControlName="signature" [ngClass]="{ 'input-error': formErrors.email.body.signature }"
-          >
+            >
 
-          <div *ngIf="formErrors.email.body.signature" class="form-error" role="alert">{{ formErrors.email.body.signature }}</div>
+          @if (formErrors.email.body.signature) {
+            <div class="form-error" role="alert">{{ formErrors.email.body.signature }}</div>
+          }
         </div>
       </div>
     </ng-container>
@@ -178,7 +185,9 @@
               [ngClass]="{ 'input-error': formErrors.instance.customizations.javascript }"
             ></textarea>
 
-            <div *ngIf="formErrors.instance.customizations.javascript" class="form-error" role="alert">{{ formErrors.instance.customizations.javascript }}</div>
+            @if (formErrors.instance.customizations.javascript) {
+              <div class="form-error" role="alert">{{ formErrors.instance.customizations.javascript }}</div>
+            }
           </div>
 
           <div class="form-group">
@@ -208,7 +217,9 @@
               dir="ltr"
               [ngClass]="{ 'input-error': formErrors.instance.customizations.css }"
             ></textarea>
-            <div *ngIf="formErrors.instance.customizations.css" class="form-error" role="alert">{{ formErrors.instance.customizations.css }}</div>
+            @if (formErrors.instance.customizations.css) {
+              <div class="form-error" role="alert">{{ formErrors.instance.customizations.css }}</div>
+            }
           </div>
         </ng-container>
       </ng-container>

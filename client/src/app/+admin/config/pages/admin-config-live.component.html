@@ -32,7 +32,7 @@
                 <my-peertube-checkbox
                   inputName="liveAllowReplay" formControlName="allowReplay"
                   i18n-labelText labelText="Allow your users to automatically publish a replay of their live"
-                >
+                  >
                 </my-peertube-checkbox>
               </div>
 
@@ -40,7 +40,7 @@
                 <my-peertube-checkbox
                   inputName="liveLatencySettingEnabled" formControlName="enabled"
                   i18n-labelText labelText="Allow your users to change live latency"
-                >
+                  >
                   <ng-container ngProjectAs="description" i18n>
                     Small latency disables P2P and high latency can increase P2P ratio
                   </ng-container>
@@ -57,7 +57,9 @@
                   <span i18n>{form.value.live.maxInstanceLives, plural, =1 {live} other {lives}}</span>
                 </div>
 
-                <div *ngIf="formErrors.live.maxInstanceLives" class="form-error" role="alert">{{ formErrors.live.maxInstanceLives }}</div>
+                @if (formErrors.live.maxInstanceLives) {
+                  <div class="form-error" role="alert">{{ formErrors.live.maxInstanceLives }}</div>
+                }
               </div>
 
               <div class="form-group" [ngClass]="getDisabledLiveClass()">
@@ -69,7 +71,9 @@
                   <span i18n>{form.value.live.maxUserLives, plural, =1 {live} other {lives}}</span>
                 </div>
 
-                <div *ngIf="formErrors.live.maxUserLives" class="form-error" role="alert">{{ formErrors.live.maxUserLives }}</div>
+                @if (formErrors.live.maxUserLives) {
+                  <div class="form-error" role="alert">{{ formErrors.live.maxUserLives }}</div>
+                }
               </div>
 
               <div class="form-group" [ngClass]="getDisabledLiveClass()">
@@ -77,7 +81,9 @@
 
                 <my-select-options inputId="liveMaxDuration" [items]="liveMaxDurationOptions" formControlName="maxDuration"></my-select-options>
 
-                <div *ngIf="formErrors.live.maxDuration" class="form-error" role="alert">{{ formErrors.live.maxDuration }}</div>
+                @if (formErrors.live.maxDuration) {
+                  <div class="form-error" role="alert">{{ formErrors.live.maxDuration }}</div>
+                }
               </div>
 
             </ng-container>
@@ -103,7 +109,7 @@
           <div class="form-group" [ngClass]="getDisabledLiveClass()">
             <my-peertube-checkbox
               inputName="liveTranscodingEnabled" formControlName="enabled"
-            >
+              >
               <ng-template ptTemplate="label">
                 <ng-container i18n>Transcoding enabled for live streams</ng-container>
               </ng-template>
@@ -125,7 +131,9 @@
                   <span>FPS</span>
                 </div>
 
-                <div *ngIf="formErrors.live.transcoding.fps.max" class="form-error" role="alert">{{ formErrors.live.transcoding.fps.max }}</div>
+                @if (formErrors.live.transcoding.fps.max) {
+                  <div class="form-error" role="alert">{{ formErrors.live.transcoding.fps.max }}</div>
+                }
               </div>
 
               <div class="ms-2 mt-3">
@@ -134,23 +142,27 @@
                 <div class="mt-3">
 
                   <ng-container formGroupName="resolutions">
-                    <div class="form-group mb-2" *ngFor="let resolution of liveResolutions">
-                      <my-peertube-checkbox
-                        [inputName]="getResolutionKey(resolution.id)" [formControlName]="resolution.id"
-                        labelText="{{resolution.label}}"
-                      >
-                        <ng-template *ngIf="resolution.description" ptTemplate="help">
-                          <div [innerHTML]="resolution.description"></div>
-                        </ng-template>
-                      </my-peertube-checkbox>
-                    </div>
+                    @for (resolution of liveResolutions; track resolution) {
+                      <div class="form-group mb-2">
+                        <my-peertube-checkbox
+                          [inputName]="getResolutionKey(resolution.id)" [formControlName]="resolution.id"
+                          labelText="{{resolution.label}}"
+                          >
+                          @if (resolution.description) {
+                            <ng-template ptTemplate="help">
+                              <div [innerHTML]="resolution.description"></div>
+                            </ng-template>
+                          }
+                        </my-peertube-checkbox>
+                      </div>
+                    }
                   </ng-container>
 
                   <div class="form-group">
                     <my-peertube-checkbox
                       inputName="liveTranscodingAlwaysTranscodeOriginalResolution" formControlName="alwaysTranscodeOriginalResolution"
                       i18n-labelText labelText="Also transcode original resolution"
-                    >
+                      >
                       <ng-container i18n ngProjectAs="description">
                         Even if it's above your maximum enabled resolution
                       </ng-container>
@@ -165,7 +177,7 @@
             <my-peertube-checkbox
               inputName="liveTranscodingRemoteRunnersEnabled" formControlName="enabled"
               i18n-labelText labelText="Enable remote runners for lives"
-            >
+              >
               <ng-container ngProjectAs="description">
                 <div i18n>Use <a routerLink="/admin/settings/system/runners/runners-list">remote runners</a> to process live transcoding.</div>
                 <div i18n>Remote runners have to register on your instance first.</div>
@@ -177,13 +189,17 @@
             <label i18n id="liveTranscodingThreadsLabel" for="liveTranscodingThreads">Live transcoding threads</label>
 
             <span class="small muted ms-1">
-              <ng-container *ngIf="getTotalTranscodingThreads().atMost" i18n>
+              @if (getTotalTranscodingThreads().atMost) {
+                <ng-container i18n>
                 will claim at most {{ getTotalTranscodingThreads().value }} {{ getTotalTranscodingThreads().unit }} with VOD transcoding
               </ng-container>
+              }
 
-              <ng-container *ngIf="!getTotalTranscodingThreads().atMost" i18n>
+              @if (!getTotalTranscodingThreads().atMost) {
+                <ng-container i18n>
                 will claim at least {{ getTotalTranscodingThreads().value }} {{ getTotalTranscodingThreads().unit }} with VOD transcoding
               </ng-container>
+              }
             </span>
 
             <my-select-custom-value
@@ -193,7 +209,9 @@
               formControlName="threads"
               [clearable]="false"
             ></my-select-custom-value>
-            <div *ngIf="formErrors.live.transcoding.threads" class="form-error" role="alert">{{ formErrors.live.transcoding.threads }}</div>
+            @if (formErrors.live.transcoding.threads) {
+              <div class="form-error" role="alert">{{ formErrors.live.transcoding.threads }}</div>
+            }
           </div>
 
           <div class="form-group mt-4" [ngClass]="getDisabledLiveLocalTranscodingClass()">
@@ -202,7 +220,9 @@
 
             <my-select-options inputId="liveTranscodingProfile" formControlName="profile" [items]="transcodingProfiles"></my-select-options>
 
-            <div *ngIf="formErrors.live.transcoding.profile" class="form-error" role="alert">{{ formErrors.live.transcoding.profile }}</div>
+            @if (formErrors.live.transcoding.profile) {
+              <div class="form-error" role="alert">{{ formErrors.live.transcoding.profile }}</div>
+            }
           </div>
 
         </ng-container>

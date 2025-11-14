@@ -170,6 +170,7 @@ export class PlayerOptionsBuilder {
         if (modeParam === 'p2p-media-loader') this.mode = 'p2p-media-loader'
         else this.mode = 'web-video'
       } else {
+        // eslint-disable-next-line no-lonely-if
         if (Array.isArray(video.streamingPlaylists) && video.streamingPlaylists.length !== 0) this.mode = 'p2p-media-loader'
         else this.mode = 'web-video'
       }

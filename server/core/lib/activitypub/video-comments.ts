@@ -248,7 +248,7 @@ async function isRemoteCommentAccepted (comment: MComment) {
     'filter:activity-pub.remote-video-comment.create.accept.result'
   )
 
-  if (!acceptedResult || acceptedResult.accepted !== true) {
+  if (acceptedResult?.accepted !== true) {
     logger.info('Refused to create a remote comment.', { acceptedResult, acceptParameters })
 
     return false

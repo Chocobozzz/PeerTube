@@ -22,7 +22,9 @@
         monospace="true"
       ></my-markdown-textarea>
 
-      <div *ngIf="formErrors.homepageContent" class="form-error" role="alert">{{ formErrors.homepageContent }}</div>
+      @if (formErrors.homepageContent) {
+        <div class="form-error" role="alert">{{ formErrors.homepageContent }}</div>
+      }
     </div>
   </div>
 </form>

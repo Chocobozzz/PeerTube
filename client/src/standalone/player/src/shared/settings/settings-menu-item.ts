@@ -297,7 +297,7 @@ class SettingsMenuItem extends MenuItem {
     }
 
     let target: HTMLElement = null
-    if (event && event.type === 'tap') {
+    if (event?.type === 'tap') {
       target = event.target
     } else if (event) {
       target = event.currentTarget

@@ -150,7 +150,18 @@ export default defineConfig([
       '@typescript-eslint/no-unsafe-function-type': 'off',
 
       // We use many nested callbacks in our tests
-      'max-nested-callbacks': 'off'
+      'max-nested-callbacks': 'off',
+
+      'import/enforce-node-protocol-usage': 'off',
+      'no-param-reassign': 'off',
+      'no-plusplus': 'off',
+      'radix': 'off',
+      'no-negated-condition': 'off',
+      'no-promise-executor-return': 'off',
+      '@typescript-eslint/no-unnecessary-type-conversion': 'off',
+      'prefer-spread': 'off',
+      'import/enforce-node-protocol-usage': 'off',
+      'prefer-spread': 'off'
     },
 
     languageOptions: {

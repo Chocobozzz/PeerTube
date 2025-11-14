@@ -8,33 +8,38 @@
     i18n-ariaLabel aria-label="Search videos, playlists, channels…" i18n-placeholder placeholder="Search videos, channels…"
     [(ngModel)]="search" (ngModelChange)="onSearchChange()" (keydown)="handleKey($event)"
     autocomplete="off" aria-describedby="typeahead-input-help"
-  >
+    >
 
   <div class="position-absolute jump-to-suggestions">
 
     <ul [hidden]="!search || !areSuggestionsOpened" role="listbox" class="p-0 m-0">
-      <li
-        *ngFor="let result of results; let i = index" class="suggestion d-flex flex-justify-start flex-items-center p-0 f5"
-        role="option" aria-selected="true" tabindex="0"
-        (mouseenter)="onSuggestionHover(i)" (click)="onSuggestionClicked(result)" (keyup.enter)="onSuggestionClicked(result)"
-      >
-        <my-suggestion
-          [result]="result" [highlight]="search"
-          [describedby]="showSearchGlobalHelp() ? 'typeahead-help' : undefined"
-        ></my-suggestion>
-      </li>
+      @for (result of results; track result; let i = $index) {
+        <li
+          class="suggestion d-flex flex-justify-start flex-items-center p-0 f5"
+          role="option" aria-selected="true" tabindex="0"
+          (mouseenter)="onSuggestionHover(i)" (click)="onSuggestionClicked(result)" (keyup.enter)="onSuggestionClicked(result)"
+          >
+          <my-suggestion
+            [result]="result" [highlight]="search"
+            [describedby]="showSearchGlobalHelp() ? 'typeahead-help' : undefined"
+          ></my-suggestion>
+        </li>
+      }
     </ul>
 
     <!-- suggestion help, not shown until one of the suggestions is selected and specific to that suggestion -->
-    <div *ngIf="showSearchGlobalHelp()" id="typeahead-suggestion-help" class="overflow-hidden">
-      <div class="d-flex justify-content-between">
-        <div class="section-label mb-2" i18n>GLOBAL SEARCH</div>
+    @if (showSearchGlobalHelp()) {
+      <div id="typeahead-suggestion-help" class="overflow-hidden">
+        <div class="d-flex justify-content-between">
+          <div class="section-label mb-2" i18n>GLOBAL SEARCH</div>
 
-        <span *ngIf="serverConfig" class="muted" i18n>using {{ serverConfig.search.searchIndex.url }}</span>
+          @if (serverConfig) {
+            <span class="muted" i18n>using {{ serverConfig.search.searchIndex.url }}</span>
+          }
+        </div>
+        <div class="muted" i18n>Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</div>
       </div>
-
-      <div class="muted" i18n>Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</div>
-    </div>
+    }
 
     <!-- search instructions, when search input is empty -->
     <div [hidden]="this.search" id="typeahead-input-help" class="overflow-hidden">

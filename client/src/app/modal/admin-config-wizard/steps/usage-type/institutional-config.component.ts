@@ -1,5 +1,5 @@
 import { CdkStepperModule } from '@angular/cdk/stepper'
-import { CommonModule } from '@angular/common'
+
 import { Component, inject, model, OnInit } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import {
@@ -26,14 +26,13 @@ type Form = {
   selector: 'my-institutional-config',
   templateUrl: './institutional-config.component.html',
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     ColorPickerModule,
     CdkStepperModule,
     SelectOptionsComponent,
     GlobalIconComponent
-  ]
+]
 })
 export class InstitutionalConfigComponent implements OnInit {
   private formReactiveService = inject(FormReactiveService)

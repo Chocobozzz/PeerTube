@@ -4,7 +4,12 @@ import { MActorId, MVideoRedundancy, MVideoWithAllFiles } from '@server/types/mo
 import { Transaction } from 'sequelize'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy.js'
 
-async function createOrUpdateCacheFile (cacheFileObject: CacheFileObject, video: MVideoWithAllFiles, byActor: MActorId, t: Transaction) {
+export async function createOrUpdateCacheFile (
+  cacheFileObject: CacheFileObject,
+  video: MVideoWithAllFiles,
+  byActor: MActorId,
+  t: Transaction
+) {
   const redundancyModel = await VideoRedundancyModel.loadByUrl(cacheFileObject.id, t)
 
   if (redundancyModel) {
@@ -15,11 +20,7 @@ async function createOrUpdateCacheFile (cacheFileObject: CacheFileObject, video:
 }
 
 // ---------------------------------------------------------------------------
-
-export {
-  createOrUpdateCacheFile
-}
-
+// Private
 // ---------------------------------------------------------------------------
 
 function createCacheFile (cacheFileObject: CacheFileObject, video: MVideoWithAllFiles, byActor: MActorId, t: Transaction) {

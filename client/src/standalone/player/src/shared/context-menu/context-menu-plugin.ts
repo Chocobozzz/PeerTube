@@ -50,40 +50,40 @@ class ContextMenuPlugin extends Plugin {
 
     e.preventDefault()
 
-    const menu = this.menu = new ContextMenu(this.player, {
+    this.menu = new ContextMenu(this.player, {
       content: this.options_.content,
       position: menuPosition
     })
 
-    menu.on('dispose', () => {
+    this.menu.on('dispose', () => {
       for (const event of [ 'click', 'tap' ]) {
-        videojs.off(documentEl as Element, event, menu.dispose)
+        videojs.off(documentEl as Element, event, this.menu.dispose)
       }
 
-      this.player.removeChild(menu)
+      this.player.removeChild(this.menu)
       this.menu = undefined
     })
 
-    this.player.addChild(menu)
+    this.player.addChild(this.menu)
 
-    const menuEl = menu.el() as HTMLElement
+    const menuEl = this.menu.el() as HTMLElement
     const menuSize = menuEl.getBoundingClientRect()
     const bodySize = document.body.getBoundingClientRect()
 
     if (menuSize.right > bodySize.width || menuSize.bottom > bodySize.height) {
       menuEl.style.left = Math.floor(Math.min(
         menuPosition.left,
-        this.player.currentWidth() - menu.currentWidth()
+        this.player.currentWidth() - this.menu.currentWidth()
       )) + 'px'
 
       menuEl.style.top = Math.floor(Math.min(
         menuPosition.top,
-        this.player.currentHeight() - menu.currentHeight()
+        this.player.currentHeight() - this.menu.currentHeight()
       )) + 'px'
     }
 
     for (const event of [ 'click', 'tap' ]) {
-      videojs.on(documentEl as Element, event, menu.dispose)
+      videojs.on(documentEl as Element, event, this.menu.dispose)
     }
   }
 }

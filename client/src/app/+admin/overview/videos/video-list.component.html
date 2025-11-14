@@ -10,7 +10,7 @@
   [dataLoader]="dataLoader"
   (rowExpand)="onRowExpand($event)"
   columnConfig="false"
->
+  >
 
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No videos} =1 {1 video} other {{{ totalRecords | myNumberFormatter }} videos}}</ng-container>
@@ -39,12 +39,20 @@
 
         <my-video-nsfw-badge [video]="video" theme="red"></my-video-nsfw-badge>
 
-        <span *ngIf="isUnpublished(video)" class="pt-badge badge-yellow">{{ video.state.label }}</span>
+        @if (isUnpublished(video)) {
+          <span class="pt-badge badge-yellow">{{ video.state.label }}</span>
+        }
 
-        <span *ngIf="isAccountBlocked(video)" class="pt-badge badge-red" i18n>Account muted</span>
-        <span *ngIf="isServerBlocked(video)" class="pt-badge badge-red" i18n>Server muted</span>
+        @if (isAccountBlocked(video)) {
+          <span class="pt-badge badge-red" i18n>Account muted</span>
+        }
+        @if (isServerBlocked(video)) {
+          <span class="pt-badge badge-red" i18n>Server muted</span>
+        }
 
-        <span *ngIf="isVideoBlocked(video)" class="pt-badge badge-red" i18n>Blocked</span>
+        @if (isVideoBlocked(video)) {
+          <span class="pt-badge badge-red" i18n>Blocked</span>
+        }
       </div>
 
       <div>
@@ -59,13 +67,25 @@
     </td>
 
     <td>
-      <span *ngIf="hasOriginalFile(video)" class="pt-badge badge-blue" i18n>Original file</span>
-      <span *ngIf="hasHLS(video)" class="pt-badge badge-blue" i18n>HLS</span>
-      <span *ngIf="hasWebVideos(video)" class="pt-badge badge-blue" i18n>Web Videos ({{ video.files.length }})</span>
-      <span *ngIf="video.isLive" class="pt-badge badge-blue" i18n>Live</span>
-      <span *ngIf="hasObjectStorage(video)" class="pt-badge badge-purple" i18n>Object storage</span>
+      @if (hasOriginalFile(video)) {
+        <span class="pt-badge badge-blue" i18n>Original file</span>
+      }
+      @if (hasHLS(video)) {
+        <span class="pt-badge badge-blue" i18n>HLS</span>
+      }
+      @if (hasWebVideos(video)) {
+        <span class="pt-badge badge-blue" i18n>Web Videos ({{ video.files.length }})</span>
+      }
+      @if (video.isLive) {
+        <span class="pt-badge badge-blue" i18n>Live</span>
+      }
+      @if (hasObjectStorage(video)) {
+        <span class="pt-badge badge-purple" i18n>Object storage</span>
+      }
 
-      <span *ngIf="!isImport(video) && !video.isLive && video.isLocal">{{ getFilesSize(video) | bytes: 1 }}</span>
+      @if (!isImport(video) && !video.isLive && video.isLocal) {
+        <span>{{ getFilesSize(video) | bytes: 1 }}</span>
+      }
     </td>
 
     <td>
@@ -82,55 +102,63 @@
 
   <ng-template #expandedRow let-video>
     <div class="video-expanded-info">
-      <div class="me-3" *ngIf="hasOriginalFile(video)">
-        <ng-container i18n>Original file:</ng-container>
+      @if (hasOriginalFile(video)) {
+        <div class="me-3">
+          <ng-container i18n>Original file:</ng-container>
+          <ul>
+            <li>
+              <a title="Download this file" i18n-title [href]="getDownloadUrl(video, video.videoSource.fileDownloadUrl)">{{ video.videoSource.inputFilename }}</a>: {{ video.videoSource.size | bytes: 1 }}
+              <button class="border-0 p-0" i18n-title title="Delete this file" (click)="removeVideoSourceFile(video)">
+                <my-global-icon iconName="delete"></my-global-icon>
+              </button>
+            </li>
+          </ul>
+        </div>
+      }
 
-        <ul>
-          <li>
-            <a title="Download this file" i18n-title [href]="getDownloadUrl(video, video.videoSource.fileDownloadUrl)">{{ video.videoSource.inputFilename }}</a>: {{ video.videoSource.size | bytes: 1 }}
+      @if (hasWebVideos(video)) {
+        <div class="me-3">
+          <ng-container i18n>Web Videos:</ng-container>
+          <ul>
+            @for (file of video.files; track file) {
+              <li>
+                <a title="Download this file" i18n-title [href]="getDownloadUrl(video, file.fileDownloadUrl)">{{ file.resolution.label }}</a>: {{ file.size | bytes: 1 }}
+                @if (canRemoveOneFile(video)) {
+                  <button
+                    class="border-0 p-0"
+                    i18n-title title="Delete this file"
+                    (click)="removeVideoFile(video, file, 'web-videos')"
+                    >
+                    <my-global-icon iconName="delete"></my-global-icon>
+                  </button>
+                }
+              </li>
+            }
+          </ul>
+        </div>
+      }
 
-            <button class="border-0 p-0" i18n-title title="Delete this file" (click)="removeVideoSourceFile(video)">
-              <my-global-icon iconName="delete"></my-global-icon>
-            </button>
-          </li>
-        </ul>
-      </div>
-
-      <div class="me-3" *ngIf="hasWebVideos(video)">
-        <ng-container i18n>Web Videos:</ng-container>
-
-        <ul>
-          <li *ngFor="let file of video.files">
-            <a title="Download this file" i18n-title [href]="getDownloadUrl(video, file.fileDownloadUrl)">{{ file.resolution.label }}</a>: {{ file.size | bytes: 1 }}
-
-            <button
-              *ngIf="canRemoveOneFile(video)" class="border-0 p-0"
-              i18n-title title="Delete this file"
-              (click)="removeVideoFile(video, file, 'web-videos')"
-            >
-              <my-global-icon iconName="delete"></my-global-icon>
-            </button>
-          </li>
-        </ul>
-      </div>
-
-      <div *ngIf="hasHLS(video)">
-        <ng-container i18n>HLS:</ng-container>
-
-        <ul>
-          <li *ngFor="let file of video.streamingPlaylists[0].files">
-            <a title="Download this file" i18n-title [href]="getDownloadUrl(video, file.fileDownloadUrl)">{{ file.resolution.label }}</a>: {{ file.size | bytes: 1 }}
-
-            <button
-              *ngIf="canRemoveOneFile(video)" class="border-0 p-0"
-              i18n-title title="Delete this file"
-              (click)="removeVideoFile(video, file, 'hls')"
-            >
-              <my-global-icon iconName="delete"></my-global-icon>
-            </button>
-          </li>
-        </ul>
-      </div>
+      @if (hasHLS(video)) {
+        <div>
+          <ng-container i18n>HLS:</ng-container>
+          <ul>
+            @for (file of video.streamingPlaylists[0].files; track file) {
+              <li>
+                <a title="Download this file" i18n-title [href]="getDownloadUrl(video, file.fileDownloadUrl)">{{ file.resolution.label }}</a>: {{ file.size | bytes: 1 }}
+                @if (canRemoveOneFile(video)) {
+                  <button
+                    class="border-0 p-0"
+                    i18n-title title="Delete this file"
+                    (click)="removeVideoFile(video, file, 'hls')"
+                    >
+                    <my-global-icon iconName="delete"></my-global-icon>
+                  </button>
+                }
+              </li>
+            }
+          </ul>
+        </div>
+      }
 
       <my-embed class="ms-auto" [video]="video"></my-embed>
     </div>

@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, OnDestroy, OnInit, inject, input, viewChild } from '@angular/core'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { AuthService, ConfirmService, HooksService, MarkdownService, Notifier, PluginService } from '@app/core'
@@ -30,7 +29,6 @@ type ColumnName =
   templateUrl: './video-comment-list-admin-owner.component.html',
   styleUrls: [ '../shared-moderation/moderation.scss', './video-comment-list-admin-owner.component.scss' ],
   imports: [
-    CommonModule,
     ActionDropdownComponent,
     AdvancedInputFilterComponent,
     ButtonComponent,

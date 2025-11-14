@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common'
+
 import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { ConfirmService, Notifier } from '@app/core'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
@@ -15,14 +15,13 @@ import { RunnerService } from '../runner.service'
   styleUrls: [ './runner-registration-token-list.component.scss' ],
   templateUrl: './runner-registration-token-list.component.html',
   imports: [
-    CommonModule,
     ButtonComponent,
     ActionDropdownComponent,
     CopyButtonComponent,
     PTDatePipe,
     NumberFormatterPipe,
     TableComponent
-  ]
+]
 })
 export class RunnerRegistrationTokenListComponent implements OnInit {
   private runnerService = inject(RunnerService)

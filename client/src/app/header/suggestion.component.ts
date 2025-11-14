@@ -1,5 +1,4 @@
 import { ListKeyManagerOption } from '@angular/cdk/a11y'
-import { NgIf } from '@angular/common'
 import { Component, OnInit, input } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { GlobalIconComponent } from '../shared/shared-icons/global-icon.component'
@@ -17,7 +16,7 @@ export type SuggestionPayloadType = 'search-instance' | 'search-index'
   selector: 'my-suggestion',
   templateUrl: './suggestion.component.html',
   styleUrls: [ './suggestion.component.scss' ],
-  imports: [ GlobalIconComponent, NgIf ]
+  imports: [ GlobalIconComponent ]
 })
 export class SuggestionComponent implements OnInit, ListKeyManagerOption {
   readonly result = input<SuggestionPayload>(undefined)

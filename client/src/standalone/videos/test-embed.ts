@@ -22,9 +22,9 @@ window.addEventListener('load', async () => {
   mainElement.appendChild(iframe)
 
   logger.info('Document finished loading.')
-  const player = new PeerTubePlayer(document.querySelector('iframe'));
+  const player = new PeerTubePlayer(document.querySelector('iframe'))
 
-  (window as any)['player'] = player
+  ;(window as any)['player'] = player
 
   logger.info('Awaiting player ready...')
   await player.setVideoPassword('toto')
@@ -77,6 +77,7 @@ window.addEventListener('load', async () => {
         rateListEl.appendChild(itemEl)
       } else {
         const itemEl = document.createElement('a')
+        // eslint-disable-next-line no-script-url
         itemEl.href = 'javascript:;'
         itemEl.innerText = rate.toString()
         itemEl.addEventListener('click', () => {
@@ -109,6 +110,7 @@ window.addEventListener('load', async () => {
         captionEl.appendChild(itemEl)
       } else {
         const itemEl = document.createElement('a')
+        // eslint-disable-next-line no-script-url
         itemEl.href = 'javascript:;'
         itemEl.innerText = c.label
         itemEl.addEventListener('click', () => {
@@ -135,6 +137,7 @@ window.addEventListener('load', async () => {
         resolutionListEl.appendChild(itemEl)
       } else {
         const itemEl = document.createElement('a')
+        // eslint-disable-next-line no-script-url
         itemEl.href = 'javascript:;'
         itemEl.innerText = resolution.label
         itemEl.addEventListener('click', () => {
@@ -147,9 +150,9 @@ window.addEventListener('load', async () => {
   }
 
   player.getResolutions().then(
-    resolutions => updateResolutions(resolutions))
-  player.addEventListener('resolutionUpdate',
-    resolutions => updateResolutions(resolutions))
+    resolutions => updateResolutions(resolutions)
+  )
+  player.addEventListener('resolutionUpdate', resolutions => updateResolutions(resolutions))
 
   const updateVolume = (volume: number) => {
     const volumeEl = document.getElementById('volume')
@@ -157,9 +160,9 @@ window.addEventListener('load', async () => {
   }
 
   player.getVolume().then(volume => updateVolume(volume))
-  player.addEventListener('volumeChange', volume => updateVolume(volume));
+  player.addEventListener('volumeChange', volume => updateVolume(volume))
 
-  (window as any).getPlayerStatus = async () => {
+  ;(window as any).getPlayerStatus = async () => {
     try {
       const currentTime = await player.getCurrentTime()
       const currentStatus = await player.isPlaying()

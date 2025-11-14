@@ -1,4 +1,4 @@
-import { CommonModule, NgTemplateOutlet, PlatformLocation } from '@angular/common'
+import { CommonModule, PlatformLocation } from '@angular/common'
 import { Component, ElementRef, inject, LOCALE_ID, NgZone, OnDestroy, OnInit, viewChild } from '@angular/core'
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router'
 import {
@@ -111,7 +111,6 @@ type URLOptions = {
     VideoAlertComponent,
     DateToggleComponent,
     VideoViewsCounterComponent,
-    NgTemplateOutlet,
     ActionButtonsComponent,
     AccountOnChannelAvatarComponent,
     RouterLink,
@@ -775,6 +774,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       if (urlOptions.playerMode === 'p2p-media-loader') mode = 'p2p-media-loader'
       else mode = 'web-video'
     } else {
+      // eslint-disable-next-line no-lonely-if
       if (video.hasHlsPlaylist()) mode = 'p2p-media-loader'
       else mode = 'web-video'
     }

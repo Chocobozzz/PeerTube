@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
 import { Component, OnDestroy, OnInit, inject, input } from '@angular/core'
 import { AuthService, CanComponentDeactivate, Notifier, ServerService } from '@app/core'
@@ -17,7 +16,7 @@ import { UserImportExportService } from './user-import-export.service'
   selector: 'my-account-import',
   templateUrl: './my-account-import.component.html',
   styleUrls: [ './my-account-import.component.scss' ],
-  imports: [ NgIf, UploadProgressComponent, NgbTooltip, PTDatePipe, AlertComponent ]
+  imports: [ UploadProgressComponent, NgbTooltip, PTDatePipe, AlertComponent ]
 })
 export class MyAccountImportComponent implements OnInit, OnDestroy, CanComponentDeactivate {
   private authService = inject(AuthService)

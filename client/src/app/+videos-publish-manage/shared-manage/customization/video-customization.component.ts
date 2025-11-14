@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common'
+
 import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ServerService } from '@app/core'
@@ -33,14 +33,13 @@ type Form = {
   ],
   templateUrl: './video-customization.component.html',
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     DatePickerModule,
     PeertubeCheckboxComponent,
     GlobalIconComponent,
     SelectPlayerThemeComponent
-  ]
+]
 })
 export class VideoCustomizationComponent implements OnInit, OnDestroy {
   private formReactiveService = inject(FormReactiveService)

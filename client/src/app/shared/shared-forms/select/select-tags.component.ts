@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, OnInit, forwardRef, input, model } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { isMobile } from '@root-helpers/web-browser'
@@ -14,7 +13,7 @@ import { ChipsModule } from 'primeng/chips'
       multi: true
     }
   ],
-  imports: [ CommonModule, ChipsModule, FormsModule ]
+  imports: [ ChipsModule, FormsModule ]
 })
 export class SelectTagsComponent implements OnInit, ControlValueAccessor {
   readonly inputId = input.required<string>()

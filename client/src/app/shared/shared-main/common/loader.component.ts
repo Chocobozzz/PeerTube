@@ -1,10 +1,10 @@
 import { booleanAttribute, Component, input } from '@angular/core'
-import { NgIf, NgStyle } from '@angular/common'
+import { NgStyle } from '@angular/common'
 
 @Component({
   selector: 'my-loader',
-  template: `<div *ngIf="loading()" class="spinner-border" [ngStyle]="getStyle()" role="status"></div>`,
-  imports: [ NgIf, NgStyle ]
+  template: `@if (loading()) {<div class="spinner-border" [ngStyle]="getStyle()" role="status"></div>}`,
+  imports: [ NgStyle ]
 })
 export class LoaderComponent {
   readonly loading = input<boolean, unknown>(undefined, { transform: booleanAttribute })

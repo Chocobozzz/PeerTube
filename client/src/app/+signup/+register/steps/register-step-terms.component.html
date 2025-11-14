@@ -1,15 +1,18 @@
 <form [formGroup]="form">
 
-  <div *ngIf="requiresApproval()" class="form-group">
-    <label i18n for="registrationReason">Why do you want to join {{ instanceName() }}?</label>
+  @if (requiresApproval()) {
+    <div class="form-group">
+      <label i18n for="registrationReason">Why do you want to join {{ instanceName() }}?</label>
+      <textarea
+        id="registrationReason" formControlName="registrationReason" class="form-control" rows="4"
+        [ngClass]="{ 'input-error': formErrors['registrationReason'] }"
+      ></textarea>
 
-    <textarea
-      id="registrationReason" formControlName="registrationReason" class="form-control" rows="4"
-      [ngClass]="{ 'input-error': formErrors['registrationReason'] }"
-    ></textarea>
-
-    <div *ngIf="formErrors.registrationReason" class="form-error" role="alert">{{ formErrors.registrationReason }}</div>
-  </div>
+      @if (formErrors.registrationReason) {
+        <div class="form-error" role="alert">{{ formErrors.registrationReason }}</div>
+      }
+    </div>
+  }
 
   <div class="form-group">
     <my-peertube-checkbox inputName="terms" formControlName="terms">
@@ -17,12 +20,16 @@
         <ng-container i18n>
           I am at least {{ minimumAge() }} years old and agree
           to the <a class="link-primary" (click)="onTermsClick($event)" href='#'>Terms</a>
-          <ng-container *ngIf="hasCodeOfConduct()"> and to the <a class="link-primary" (click)="onCodeOfConductClick($event)" href='#'>Code of Conduct</a></ng-container>
+          @if (hasCodeOfConduct()) {
+ and to the <a class="link-primary" (click)="onCodeOfConductClick($event)" href='#'>Code of Conduct</a>
+}
           of {{ instanceName() }}
         </ng-container>
       </ng-template>
     </my-peertube-checkbox>
 
-    <div *ngIf="formErrors.terms" class="form-error" role="alert">{{ formErrors.terms }}</div>
+    @if (formErrors.terms) {
+      <div class="form-error" role="alert">{{ formErrors.terms }}</div>
+    }
   </div>
 </form>

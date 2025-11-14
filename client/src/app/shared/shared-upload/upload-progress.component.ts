@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, input, output } from '@angular/core'
 import { AlertComponent } from '../shared-main/common/alert.component'
 import { ProgressBarComponent } from '../shared-main/common/progress-bar.component'
@@ -7,7 +6,7 @@ import { ProgressBarComponent } from '../shared-main/common/progress-bar.compone
   selector: 'my-upload-progress',
   templateUrl: './upload-progress.component.html',
   styleUrls: [ './upload-progress.component.scss' ],
-  imports: [ CommonModule, ProgressBarComponent, AlertComponent ]
+  imports: [ ProgressBarComponent, AlertComponent ]
 })
 export class UploadProgressComponent {
   readonly isUploading = input<boolean>(undefined)

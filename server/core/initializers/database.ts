@@ -232,10 +232,11 @@ async function checkPostgresExtension (extension: string) {
     // Try to create the extension ourselves
     try {
       await sequelizeTypescript.query(`CREATE EXTENSION ${extension};`, { raw: true })
-    } catch {
+    } catch (err) {
       const errorMessage = `You need to enable ${extension} extension in PostgreSQL. ` +
         `You can do so by running 'CREATE EXTENSION ${extension};' as a PostgreSQL super user in ${CONFIG.DATABASE.DBNAME} database.`
-      throw new Error(errorMessage)
+
+      throw new Error(errorMessage, { cause: err })
     }
   }
 }

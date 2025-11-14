@@ -131,7 +131,7 @@ async function generateVideoEmbedHtmlPage (req: express.Request, res: express.Re
     'filter:html.embed.video.allowed.result'
   )
 
-  if (!allowedResult || allowedResult.allowed !== true) {
+  if (allowedResult?.allowed !== true) {
     logger.info('Embed is not allowed.', { allowedResult })
 
     return sendHTML(allowedResult?.html || '', res)
@@ -153,7 +153,7 @@ async function generateVideoPlaylistEmbedHtmlPage (req: express.Request, res: ex
     'filter:html.embed.video-playlist.allowed.result'
   )
 
-  if (!allowedResult || allowedResult.allowed !== true) {
+  if (allowedResult?.allowed !== true) {
     logger.info('Embed is not allowed.', { allowedResult })
 
     return sendHTML(allowedResult?.html || '', res)

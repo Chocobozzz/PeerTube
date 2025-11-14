@@ -1,23 +1,22 @@
-import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { Component, ElementRef, OnInit, inject, output, viewChild } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AuthService, Notifier } from '@app/core'
 import { listUserChannelsForSelect } from '@app/helpers'
 import { OWNERSHIP_CHANGE_CHANNEL_VALIDATOR } from '@app/shared/form-validators/video-ownership-change-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import { VideoOwnershipService } from '@app/shared/shared-main/video/video-ownership.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { VideoChangeOwnership } from '@peertube/peertube-models'
-import { NgIf } from '@angular/common'
+import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
-import { VideoOwnershipService } from '@app/shared/shared-main/video/video-ownership.service'
 
 @Component({
   selector: 'my-accept-ownership',
   templateUrl: './my-accept-ownership.component.html',
   styleUrls: [ './my-accept-ownership.component.scss' ],
-  imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, SelectChannelComponent, NgIf ]
+  imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, SelectChannelComponent ]
 })
 export class MyAcceptOwnershipComponent extends FormReactive implements OnInit {
   protected formReactiveService = inject(FormReactiveService)

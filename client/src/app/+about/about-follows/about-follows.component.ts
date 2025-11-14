@@ -1,4 +1,4 @@
-import { DecimalPipe, NgFor, NgIf } from '@angular/common'
+import { DecimalPipe } from '@angular/common'
 import { Component, OnInit, inject } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { ComponentPagination, hasMoreItems, Notifier, RestService, ServerService } from '@app/core'
@@ -17,8 +17,6 @@ import { SubscriptionImageComponent } from './subscription-image.component'
   templateUrl: './about-follows.component.html',
   styleUrls: [ './about-follows.component.scss' ],
   imports: [
-    NgIf,
-    NgFor,
     ActorAvatarComponent,
     ButtonComponent,
     PluginSelectorDirective,

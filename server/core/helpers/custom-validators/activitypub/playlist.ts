@@ -5,7 +5,7 @@ import { isVideoPlaylistNameValid } from '../video-playlists.js'
 import { isActivityPubUrlValid } from './misc.js'
 
 export function isPlaylistObjectValid (object: PlaylistObject) {
-  if (!object || object.type !== 'Playlist') return false
+  if (object?.type !== 'Playlist') return false
 
   // TODO: compat with < 6.1, remove in 8.0
   if (!object.uuid && object['identifier']) object.uuid = object['identifier']

@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import {
   Component,
   EnvironmentInjector,
@@ -26,7 +25,7 @@ import { VideoEdit } from './video-edit.model'
   selector: 'my-thumbnail-manager',
   styleUrls: [ './thumbnail-manager.component.scss' ],
   templateUrl: './thumbnail-manager.component.html',
-  imports: [ CommonModule, ReactiveFileComponent, EmbedComponent, DragDropDirective, ButtonComponent ],
+  imports: [ ReactiveFileComponent, EmbedComponent, DragDropDirective, ButtonComponent ],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

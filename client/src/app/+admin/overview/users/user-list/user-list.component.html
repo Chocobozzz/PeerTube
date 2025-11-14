@@ -10,7 +10,7 @@
   [dataLoader]="dataLoader"
   columnConfig="true"
   [hasExpandedRow]="hasExpandedRow"
->
+  >
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No users} =1 {1 user} other {{{ totalRecords | myNumberFormatter }} users}}</ng-container>
   </ng-template>
@@ -25,77 +25,104 @@
   </ng-template>
 
   <ng-template #tableCells let-user>
-    <td *ngIf="table.isColumnDisplayed('username')" class="cell-username">
-      <a i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer" [routerLink]="[ '/a/' + user.username ]">
-        <div class="chip two-lines">
-          <my-actor-avatar [actor]="user?.account" actorType="account" size="32"></my-actor-avatar>
-          <div>
-            <span>{{ user.account.displayName }}</span>
-            <span class="muted">{{ user.username }}</span>
+    @if (table.isColumnDisplayed('username')) {
+      <td class="cell-username">
+        <a i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer" [routerLink]="[ '/a/' + user.username ]">
+          <div class="chip two-lines">
+            <my-actor-avatar [actor]="user?.account" actorType="account" size="32"></my-actor-avatar>
+            <div>
+              <span>{{ user.account.displayName }}</span>
+              <span class="muted">{{ user.username }}</span>
+            </div>
           </div>
-        </div>
-      </a>
+        </a>
+        @if (user.accountMutedStatus.mutedByInstance) {
+          <div class="pt-badge badge-red" i18n>Muted</div>
+        }
+        @if (user.blocked) {
+          <div class="pt-badge badge-red" i18n>Banned</div>
+        }
+      </td>
+    }
 
-      <div *ngIf="user.accountMutedStatus.mutedByInstance" class="pt-badge badge-red" i18n>Muted</div>
-      <div *ngIf="user.blocked" class="pt-badge badge-red" i18n>Banned</div>
-    </td>
+    @if (table.isColumnDisplayed('role')) {
+      <td>
+        @if (user.blocked) {
+          <span class="pt-badge badge-banned" i18n-title title="The user is banned">{{ user.role.label }}</span>
+        } @else {
+          <span class="pt-badge" [ngClass]="getRoleClass(user.role.id)">{{ user.role.label }}</span>
+        }
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('role')">
-      @if (user.blocked) {
-        <span class="pt-badge badge-banned" i18n-title title="The user is banned">{{ user.role.label }}</span>
-      } @else {
-        <span class="pt-badge" [ngClass]="getRoleClass(user.role.id)">{{ user.role.label }}</span>
-      }
-    </td>
+    @if (table.isColumnDisplayed('email')) {
+      <td>
+        <my-user-email-info [entry]="user" showEmailVerifyInformation="true"></my-user-email-info>
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('email')">
-      <my-user-email-info [entry]="user" showEmailVerifyInformation="true"></my-user-email-info>
-    </td>
+    @if (table.isColumnDisplayed('videoQuotaUsed')) {
+      <td>
+        <my-progress-bar
+          i18n-label label="Total video quota" [max]="user.rawVideoQuota" [value]="user.rawVideoQuotaUsed"
+          [valueFormatted]="user.videoQuotaUsed" [maxFormatted]="user.videoQuota" size="small"
+          >
+        </my-progress-bar>
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('videoQuotaUsed')">
-      <my-progress-bar
-        i18n-label label="Total video quota" [max]="user.rawVideoQuota" [value]="user.rawVideoQuotaUsed"
-        [valueFormatted]="user.videoQuotaUsed" [maxFormatted]="user.videoQuota" size="small"
-      >
-      </my-progress-bar>
-    </td>
+    @if (table.isColumnDisplayed('videoQuotaDailyUsed')) {
+      <td>
+        <my-progress-bar
+          i18n-label label="Total daily video quota" [max]="user.rawVideoQuotaDaily" [value]="user.rawVideoQuotaUsedDaily"
+          [valueFormatted]="user.videoQuotaUsedDaily" [maxFormatted]="user.videoQuotaDaily" size="small"
+          >
+        </my-progress-bar>
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('videoQuotaDailyUsed')">
-      <my-progress-bar
-        i18n-label label="Total daily video quota" [max]="user.rawVideoQuotaDaily" [value]="user.rawVideoQuotaUsedDaily"
-        [valueFormatted]="user.videoQuotaUsedDaily" [maxFormatted]="user.videoQuotaDaily" size="small"
-      >
-      </my-progress-bar>
-    </td>
+    @if (table.isColumnDisplayed('totalVideoFileSize')) {
+      <td>
+        {{ user.totalVideoFileSize | bytes }}
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('totalVideoFileSize')">
-      {{ user.totalVideoFileSize | bytes }}
-    </td>
+    @if (table.isColumnDisplayed('twoFactorEnabled')) {
+      <td>
+        @if (user.twoFactorEnabled) {
+          <span i18n i18n-ngbTooltip ngbTooltip="Two factor authentication is enabled" class="pt-badge badge-green">2FA</span>
+        }
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('twoFactorEnabled')">
-      <span *ngIf="user.twoFactorEnabled" i18n i18n-ngbTooltip ngbTooltip="Two factor authentication is enabled" class="pt-badge badge-green">2FA</span>
-    </td>
+    @if (table.isColumnDisplayed('pluginAuth')) {
+      <td>
+        @if (user.pluginAuth) {
+          <span [ngbTooltip]="user.pluginAuth">{{ user.pluginAuth.replace('peertube-plugin-', '') }}</span>
+        }
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('pluginAuth')">
-      <span *ngIf="user.pluginAuth" [ngbTooltip]="user.pluginAuth">{{ user.pluginAuth.replace('peertube-plugin-', '') }}</span>
-    </td>
+    @if (table.isColumnDisplayed('createdAt')) {
+      <td [title]="user.createdAt">{{ user.createdAt | ptDate: 'short' }}</td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('createdAt')" [title]="user.createdAt">{{ user.createdAt | ptDate: 'short' }}</td>
-
-    <td *ngIf="table.isColumnDisplayed('lastLoginDate')" [title]="user.lastLoginDate">
-      @if (user.lastLoginDate) {
-        {{ user.lastLoginDate | ptDate: 'short' }}
-      } @else {
-        <span i18n>never</span>
-      }
-    </td>
+    @if (table.isColumnDisplayed('lastLoginDate')) {
+      <td [title]="user.lastLoginDate">
+        @if (user.lastLoginDate) {
+          {{ user.lastLoginDate | ptDate: 'short' }}
+        } @else {
+          <span i18n>never</span>
+        }
+      </td>
+    }
   </ng-template>
 
   <ng-template #actionCell let-user>
     <my-user-moderation-dropdown
       [user]="user" [account]="user.accountMutedStatus" [displayOptions]="userModerationDisplayOptions"
       container="body" (userChanged)="onUserChanged()" (userDeleted)="onUserChanged()"
-    >
+      >
     </my-user-moderation-dropdown>
   </ng-template>
 

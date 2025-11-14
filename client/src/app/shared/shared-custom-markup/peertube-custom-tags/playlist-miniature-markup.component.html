@@ -1,2 +1,4 @@
-<my-video-playlist-miniature *ngIf="playlist" [playlist]="playlist" toManage="false">
-</my-video-playlist-miniature>
+@if (playlist) {
+  <my-video-playlist-miniature [playlist]="playlist" toManage="false">
+  </my-video-playlist-miniature>
+}

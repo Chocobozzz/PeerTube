@@ -1,4 +1,6 @@
-<my-alert *ngIf="error" type="danger">{{ error }}</my-alert>
+@if (error) {
+  <my-alert type="danger">{{ error }}</my-alert>
+}
 
 <div class="pt-two-cols">
 
@@ -21,21 +23,21 @@
             formControlName="externalChannelUrl"
             [ngClass]="{ 'input-error': formErrors['externalChannelUrl'] }"
             class="form-control"
-          >
+            >
         </div>
 
-        <div *ngIf="formErrors['externalChannelUrl']" class="form-error" role="alert">
-          {{ formErrors['externalChannelUrl'] }}
-        </div>
+        @if (formErrors['externalChannelUrl']) {
+          <div class="form-error" role="alert">{{ formErrors['externalChannelUrl'] }}</div>
+        }
       </div>
 
       <div class="form-group">
         <label i18n for="videoChannel">Video channel</label>
         <my-select-channel inputId="videoChannel" [items]="userVideoChannels" formControlName="videoChannel"></my-select-channel>
 
-        <div *ngIf="formErrors['videoChannel']" class="form-error" role="alert">
-          {{ formErrors['videoChannel'] }}
-        </div>
+        @if (formErrors['videoChannel']) {
+          <div class="form-error" role="alert">{{ formErrors['videoChannel'] }}</div>
+        }
       </div>
 
       <div class="form-group" role="radiogroup">

@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, AuthStatus, LocalStorageService, PeerTubeRouterService, User, UserService } from '@app/core'
@@ -6,8 +5,7 @@ import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.compon
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { UserInterfaceSettingsComponent } from '@app/shared/shared-user-settings/user-interface-settings.component'
 import { UserVideoSettingsComponent } from '@app/shared/shared-user-settings/user-video-settings.component'
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { ReplaySubject, Subscription } from 'rxjs'
 import { filter } from 'rxjs/operators'
 
@@ -20,7 +18,6 @@ import { filter } from 'rxjs/operators'
     }`
   ],
   imports: [
-    CommonModule,
     GlobalIconComponent,
     UserVideoSettingsComponent,
     UserInterfaceSettingsComponent,

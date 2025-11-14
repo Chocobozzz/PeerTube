@@ -2,22 +2,29 @@
   <div class="modal-header">
     <h4 class="modal-title">{{ title }}</h4>
 
-    <button *ngIf="close" class="border-0 p-0" title="Close this modal" i18n-title (click)="onCloseClick()">
-      <my-global-icon iconName="cross"></my-global-icon>
-    </button>
+    @if (close) {
+      <button class="border-0 p-0" title="Close this modal" i18n-title (click)="onCloseClick()">
+        <my-global-icon iconName="cross"></my-global-icon>
+      </button>
+    }
   </div>
 
   <div class="modal-body" [innerHTML]="content"></div>
 
-  <div *ngIf="hasCancel() || hasConfirm()" class="modal-footer inputs">
-    <input
-      *ngIf="hasCancel()" type="button" role="button" [value]="cancel.value" class="peertube-button secondary-button"
-      (click)="onCancelClick()" (key.enter)="onCancelClick()"
-    >
-
-    <input
-      *ngIf="hasConfirm()" type="button" role="button" [value]="confirm.value" class="peertube-button primary-button"
-      (click)="onConfirmClick()" (key.enter)="onConfirmClick()"
-    >
-  </div>
+  @if (hasCancel() || hasConfirm()) {
+    <div class="modal-footer inputs">
+      @if (hasCancel()) {
+        <input
+          type="button" role="button" [value]="cancel.value" class="peertube-button secondary-button"
+          (click)="onCancelClick()" (key.enter)="onCancelClick()"
+          >
+      }
+      @if (hasConfirm()) {
+        <input
+          type="button" role="button" [value]="confirm.value" class="peertube-button primary-button"
+          (click)="onConfirmClick()" (key.enter)="onConfirmClick()"
+          >
+      }
+    </div>
+  }
 </ng-template>

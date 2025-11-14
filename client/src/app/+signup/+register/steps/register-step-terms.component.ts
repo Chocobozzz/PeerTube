@@ -1,17 +1,17 @@
+import { NgClass } from '@angular/common'
 import { Component, OnInit, inject, input, output } from '@angular/core'
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
-import { REGISTER_REASON_VALIDATOR, REGISTER_TERMS_VALIDATOR } from '../shared'
-import { PeerTubeTemplateDirective } from '../../../shared/shared-main/common/peertube-template.directive'
 import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
-import { NgIf, NgClass } from '@angular/common'
+import { PeerTubeTemplateDirective } from '../../../shared/shared-main/common/peertube-template.directive'
+import { REGISTER_REASON_VALIDATOR, REGISTER_TERMS_VALIDATOR } from '../shared'
 
 @Component({
   selector: 'my-register-step-terms',
   templateUrl: './register-step-terms.component.html',
   styleUrls: [ './step.component.scss' ],
-  imports: [ FormsModule, ReactiveFormsModule, NgIf, NgClass, PeertubeCheckboxComponent, PeerTubeTemplateDirective ]
+  imports: [ FormsModule, ReactiveFormsModule, NgClass, PeertubeCheckboxComponent, PeerTubeTemplateDirective ]
 })
 export class RegisterStepTermsComponent extends FormReactive implements OnInit {
   protected formReactiveService = inject(FormReactiveService)

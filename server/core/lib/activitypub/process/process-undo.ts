@@ -75,7 +75,7 @@ async function processUndoLike (byActor: MActorSignature, activity: ActivityUndo
 
     const video = await VideoModel.loadFull(onlyVideo.id, t)
     const rate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byActor.Account.id, video.id, likeActivity.id, t)
-    if (!rate || rate.type !== 'like') {
+    if (rate?.type !== 'like') {
       logger.warn('Unknown like by account %d for video %d.', byActor.Account.id, video.id)
       return
     }
@@ -99,7 +99,7 @@ async function processUndoDislike (byActor: MActorSignature, activity: ActivityU
 
     const video = await VideoModel.loadFull(onlyVideo.id, t)
     const rate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byActor.Account.id, video.id, dislikeActivity.id, t)
-    if (!rate || rate.type !== 'dislike') {
+    if (rate?.type !== 'dislike') {
       logger.warn(`Unknown dislike by account %d for video %d.`, byActor.Account.id, video.id)
       return
     }

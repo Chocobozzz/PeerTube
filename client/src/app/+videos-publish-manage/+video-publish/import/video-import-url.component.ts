@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common'
+
 import { AfterViewInit, Component, OnInit, inject, input, output } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, RouterLink } from '@angular/router'
@@ -29,7 +29,6 @@ const debugLogger = debug('peertube:video-publish')
   templateUrl: './video-import-url.component.html',
   styleUrls: [ '../shared/common-publish.scss' ],
   imports: [
-    NgIf,
     GlobalIconComponent,
     HelpComponent,
     FormsModule,
@@ -38,7 +37,7 @@ const debugLogger = debug('peertube:video-publish')
     ReactiveFormsModule,
     AlertComponent,
     VideoManageContainerComponent
-  ]
+]
 })
 export class VideoImportUrlComponent implements OnInit, AfterViewInit, CanComponentDeactivate {
   private authService = inject(AuthService)

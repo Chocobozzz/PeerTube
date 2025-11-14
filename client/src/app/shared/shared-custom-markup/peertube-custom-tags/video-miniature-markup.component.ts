@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject, input, model, output } from '@angular/core'
 import { AuthService, Notifier, User, UserService } from '@app/core'
 import { Video } from '@app/shared/shared-main/video/video.model'
@@ -17,7 +16,7 @@ import { CustomMarkupComponent } from './shared'
   templateUrl: 'video-miniature-markup.component.html',
   styleUrls: [ 'video-miniature-markup.component.scss' ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ NgIf, VideoMiniatureComponent ]
+  imports: [ VideoMiniatureComponent ]
 })
 export class VideoMiniatureMarkupComponent implements CustomMarkupComponent, OnInit {
   private auth = inject(AuthService)

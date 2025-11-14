@@ -449,11 +449,11 @@ $chapter-marker-size: 9px;
       @include margin-right(2px);
 
       &.icon-download {
-        background-image: url("./svg/arrow-down.svg");
+        background-image: url("../svg/arrow-down.svg");
       }
 
       &.icon-upload {
-        background-image: url("./svg/arrow-up.svg");
+        background-image: url("../svg/arrow-up.svg");
       }
     }
   }

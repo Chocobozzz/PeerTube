@@ -3,7 +3,6 @@ import { CustomMarkupComponent } from './shared'
 import { ActorAvatarInput } from '@app/shared/shared-actor-image/actor-avatar.component'
 import { ServerService } from '@app/core'
 import { ActorAvatarComponent } from '../../shared-actor-image/actor-avatar.component'
-import { NgIf } from '@angular/common'
 
 /*
  * Markup component that creates the img HTML element containing the instance avatar
@@ -13,7 +12,7 @@ import { NgIf } from '@angular/common'
   selector: 'my-instance-avatar-markup',
   templateUrl: 'instance-avatar-markup.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ NgIf, ActorAvatarComponent ]
+  imports: [ ActorAvatarComponent ]
 })
 export class InstanceAvatarMarkupComponent implements OnInit, CustomMarkupComponent {
   private cd = inject(ChangeDetectorRef)

@@ -42,7 +42,7 @@ export class LoginCommand extends AbstractCommand {
 
       return body.access_token
     } catch (err) {
-      throw new Error(`Cannot authenticate. Please check your username/password. (${err})`)
+      throw new Error(`Cannot authenticate. Please check your username/password. (${err})`, { cause: err })
     }
   }
 

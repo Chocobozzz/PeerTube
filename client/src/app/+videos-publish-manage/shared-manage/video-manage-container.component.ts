@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
 import { booleanAttribute, Component, inject, input, OnDestroy, OnInit, output } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
@@ -20,7 +19,6 @@ import { VideoManageMenuComponent } from './video-manage-menu.component'
   styleUrls: [ './video-manage-container.component.scss' ],
   templateUrl: './video-manage-container.component.html',
   imports: [
-    CommonModule,
     RouterModule,
     FormsModule,
     ReactiveFormsModule,

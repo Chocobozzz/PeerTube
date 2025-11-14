@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, OnChanges, inject, input, viewChild } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { AuthService, ServerService } from '@app/core'
@@ -11,7 +10,7 @@ import { ButtonComponent } from '../shared-main/buttons/button.component'
   selector: 'my-actor-host',
   templateUrl: 'actor-host.component.html',
   styleUrls: [ 'actor-host.component.scss' ],
-  imports: [ CommonModule, NgbDropdownModule, GlobalIconComponent, ButtonComponent, RouterLink ]
+  imports: [ NgbDropdownModule, GlobalIconComponent, ButtonComponent, RouterLink ]
 })
 export class ActorHostComponent implements OnChanges {
   readonly auth = inject(AuthService)

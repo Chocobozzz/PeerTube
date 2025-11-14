@@ -281,7 +281,7 @@ async function isLiveVideoAccepted (req: express.Request, res: express.Response)
     'filter:api.live-video.create.accept.result'
   )
 
-  if (!acceptedResult || acceptedResult.accepted !== true) {
+  if (acceptedResult?.accepted !== true) {
     logger.info('Refused local live video.', { acceptedResult, acceptParameters })
 
     res.fail({

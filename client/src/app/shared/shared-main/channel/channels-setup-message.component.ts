@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, OnInit, inject, input } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { AuthService, User } from '@app/core'
@@ -9,7 +8,7 @@ import { AlertComponent } from '../common/alert.component'
   selector: 'my-channels-setup-message',
   templateUrl: './channels-setup-message.component.html',
   styleUrls: [ './channels-setup-message.component.scss' ],
-  imports: [ CommonModule, GlobalIconComponent, RouterLink, AlertComponent ]
+  imports: [ GlobalIconComponent, RouterLink, AlertComponent ]
 })
 export class ChannelsSetupMessageComponent implements OnInit {
   private authService = inject(AuthService)

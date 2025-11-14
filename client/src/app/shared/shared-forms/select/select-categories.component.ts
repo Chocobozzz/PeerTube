@@ -3,22 +3,22 @@ import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/f
 import { ServerService } from '@app/core'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
 import { SelectCheckboxDefaultAllComponent } from './select-checkbox-default-all.component'
-import { NgIf } from '@angular/common'
 
 @Component({
   selector: 'my-select-categories',
   template: `
-<my-select-checkbox-default-all
-  *ngIf="availableCategories"
-  [inputId]="inputId()"
-  [(ngModel)]="selectedCategories"
-  (ngModelChange)="onModelChange()"
-  [availableItems]="availableCategories"
-  i18n-placeholder placeholder="Add a new category"
-  i18n-allSelectedLabel allSelectedLabel="All categories"
-  i18n-selectedLabel selectedLabel="{1} categories selected"
->
-</my-select-checkbox-default-all>
+@if (availableCategories) {
+  <my-select-checkbox-default-all
+    [inputId]="inputId()"
+    [(ngModel)]="selectedCategories"
+    (ngModelChange)="onModelChange()"
+    [availableItems]="availableCategories"
+    i18n-placeholder placeholder="Add a new category"
+    i18n-allSelectedLabel allSelectedLabel="All categories"
+    i18n-selectedLabel selectedLabel="{1} categories selected"
+    >
+  </my-select-checkbox-default-all>
+}
 `,
   providers: [
     {
@@ -27,7 +27,7 @@ import { NgIf } from '@angular/common'
       multi: true
     }
   ],
-  imports: [ SelectCheckboxDefaultAllComponent, FormsModule, NgIf ]
+  imports: [ SelectCheckboxDefaultAllComponent, FormsModule ]
 })
 export class SelectCategoriesComponent implements ControlValueAccessor, OnInit {
   private server = inject(ServerService)

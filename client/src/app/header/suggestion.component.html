@@ -2,18 +2,21 @@
   tabindex="-1" class="d-flex flex-auto align-items-center p-2" [class.focus-visible]="active"
   [attr.title]="getTitle()"
   [attr.aria-describedby]="describedby()"
->
+  >
   <my-global-icon class="me-2" iconName="search"></my-global-icon>
 
   <div
     class="flex-auto overflow-hidden no-wrap d-flex align-items-center"
     [attr.aria-label]="result().text"
-  >
+    >
     {{ result().text }}
   </div>
 
   <div class="result-type border rounded flex-shrink-0 px-1 ms-1 f6">
-    <span *ngIf="result().type === 'search-instance'" i18n>In this instance's network</span>
-    <span *ngIf="result().type === 'search-index'" i18n>In the vidiverse</span>
+    @if (result().type === 'search-instance') {
+      <span i18n>In this instance's network</span>
+    } @else if (result().type === 'search-index') {
+      <span i18n>In the vidiverse</span>
+    }
   </div>
 </a>

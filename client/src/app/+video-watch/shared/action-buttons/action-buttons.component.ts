@@ -1,4 +1,4 @@
-import { NgClass, NgIf, NgStyle } from '@angular/common'
+import { NgClass, NgStyle } from '@angular/common'
 import { Component, OnChanges, inject, input, output, viewChild } from '@angular/core'
 import { RedirectService, ScreenService } from '@app/core'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
@@ -19,7 +19,6 @@ import { VideoRateComponent } from './video-rate.component'
   styleUrls: [ './action-buttons.component.scss' ],
   imports: [
     VideoRateComponent,
-    NgIf,
     NgbTooltip,
     GlobalIconComponent,
     NgbDropdown,

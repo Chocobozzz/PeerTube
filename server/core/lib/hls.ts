@@ -156,7 +156,7 @@ function updateMasterHLSPlaylist (video: MVideo, playlistArg: MStreamingPlaylist
     }
 
     return playlist.save()
-  }, { throwOnTimeout: true })
+  })
 }
 
 // ---------------------------------------------------------------------------
@@ -209,7 +209,7 @@ function updateSha256VODSegments (video: MVideo, playlistArg: MStreamingPlaylist
     }
 
     return playlist.save()
-  }, { throwOnTimeout: true })
+  })
 }
 
 // ---------------------------------------------------------------------------

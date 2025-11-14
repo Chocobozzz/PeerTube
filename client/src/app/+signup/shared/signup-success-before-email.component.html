@@ -1,35 +1,40 @@
 <my-signup-step-title mascotImageName="success">
-  <ng-container *ngIf="requiresApproval()">
+  @if (requiresApproval()) {
     <strong i18n>Account request sent</strong>
-  </ng-container>
-
-  <ng-container *ngIf="!requiresApproval()" i18n>
-    <strong>Welcome</strong>
-    <div>on {{ instanceName() }}</div>
-  </ng-container>
+  } @else {
+    <ng-container i18n>
+      <strong>Welcome</strong>
+      <div>on {{ instanceName() }}</div>
+    </ng-container>
+  }
 </my-signup-step-title>
 
 <my-alert type="primary">
-  <p *ngIf="requiresApproval()" i18n>Your account request has been sent!</p>
-  <p *ngIf="!requiresApproval()" i18n>Your account has been created!</p>
+  @if (requiresApproval()) {
+    <p i18n>Your account request has been sent!</p>
+  } @else {
+    <p i18n>Your account has been created!</p>
+  }
 
-  <ng-container *ngIf="requiresEmailVerification()">
-    <p i18n *ngIf="requiresApproval()">
-      <strong>Check your email</strong> to validate your account and complete your registration request.
-    </p>
-
-    <p i18n *ngIf="!requiresApproval()">
-      <strong>Check your email</strong> to validate your account and complete your registration.
-    </p>
-  </ng-container>
-
-  <ng-container *ngIf="!requiresEmailVerification()">
-    <p i18n *ngIf="requiresApproval()">
-      A moderator will check your registration request soon and you'll receive an email when it is accepted or rejected.
-    </p>
-
-    <p *ngIf="!requiresApproval()" i18n>
-      If you need help using PeerTube, you can have a look at the <a class="link-primary" href="https://docs.joinpeertube.org/use/setup-account" target="_blank" rel="noopener noreferrer">documentation</a>.
-    </p>
-  </ng-container>
+  @if (requiresEmailVerification()) {
+    @if (requiresApproval()) {
+      <p i18n>
+        <strong>Check your email</strong> to validate your account and complete your registration request.
+      </p>
+    } @else {
+      <p i18n>
+        <strong>Check your email</strong> to validate your account and complete your registration.
+      </p>
+    }
+  } @else {
+    @if (requiresApproval()) {
+      <p i18n>
+        A moderator will check your registration request soon and you'll receive an email when it is accepted or rejected.
+      </p>
+    } @else {
+      <p i18n>
+        If you need help using PeerTube, you can have a look at the <a class="link-primary" href="https://docs.joinpeertube.org/use/setup-account" target="_blank" rel="noopener noreferrer">documentation</a>.
+      </p>
+    }
+  }
 </my-alert>

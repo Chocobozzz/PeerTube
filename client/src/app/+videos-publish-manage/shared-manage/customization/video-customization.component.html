@@ -7,23 +7,25 @@
 <div [formGroup]="form" id="video-manage-form">
   <div class="form-columns">
     <div>
-      <div *ngIf="videoEdit.getVideoSource()" class="form-group">
-        <label i18n for="filename">Filename</label>
-
-        <div class="form-group-description" i18n>
+      @if (videoEdit.getVideoSource()) {
+        <div class="form-group">
+          <label i18n for="filename">Filename</label>
+          <div class="form-group-description" i18n>
           Name of the uploaded file.
         </div>
-
-        <input type="text" [disabled]="true" id="filename" class="form-control" [value]="videoEdit.getVideoSource().filename" />
-      </div>
+          <input type="text" [disabled]="true" id="filename" class="form-control" [value]="videoEdit.getVideoSource().filename" />
+        </div>
+      }
 
       <div class="form-group originally-published-at">
         <div class="label-container">
           <label i18n for="originallyPublishedAt">Original publication date</label>
 
-          <button i18n class="reset-button reset-button-small" (click)="resetField('originallyPublishedAt')" *ngIf="hasPublicationDate()">
+          @if (hasPublicationDate()) {
+            <button i18n class="reset-button reset-button-small" (click)="resetField('originallyPublishedAt')">
             Reset
           </button>
+          }
         </div>
 
         <div class="form-group-description" i18n>
@@ -41,12 +43,14 @@
           [yearNavigator]="true"
           [yearRange]="myYearRange"
           baseZIndex="20000"
-        >
+          >
         </p-datepicker>
 
-        <div *ngIf="formErrors.originallyPublishedAt" class="form-error" role="alert">
-          {{ formErrors.originallyPublishedAt }}
-        </div>
+        @if (formErrors.originallyPublishedAt) {
+          <div class="form-error" role="alert">
+            {{ formErrors.originallyPublishedAt }}
+          </div>
+        }
       </div>
 
       <my-peertube-checkbox inputName="downloadEnabled" formControlName="downloadEnabled" i18n-labelText labelText="Enable download"></my-peertube-checkbox>

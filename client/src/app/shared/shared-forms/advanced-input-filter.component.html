@@ -1,25 +1,28 @@
 <div class="input-group has-clear flex-nowrap" [ngClass]="{ 'has-icon': icon() }" ngbDropdown placement="bottom-left auto" container="body">
 
-  <ng-container *ngIf="hasFilters()">
+  @if (hasFilters()) {
     <button class="input-group-text c-hand" title="Open quick filters" i18n-title ngbDropdownToggle>
     </button>
 
     <div role="menu" ngbDropdownMenu>
-      <ng-container *ngFor="let group of filters()">
+      @for (group of filters(); track group) {
         <div class="dropdown-header">{{ group.title }}</div>
 
-        <button *ngFor="let filter of group.children" (click)="onFilterClick(filter)" class="dropdown-item">
-          <my-global-icon [ngClass]="{ 'no-visible': !isFilterEnabled(filter) }" iconName="tick"></my-global-icon>
-
-          {{ filter.label }}
-        </button>
-      </ng-container>
+        @for (filter of group.children; track filter) {
+          <button (click)="onFilterClick(filter)" class="dropdown-item">
+            <my-global-icon [ngClass]="{ 'no-visible': !isFilterEnabled(filter) }" iconName="tick"></my-global-icon>
+            {{ filter.label }}
+          </button>
+        }
+      }
     </div>
-  </ng-container>
+  }
 
-  <button *ngIf="icon()" class="button-unstyle search-button" title="Search" i18n-title (click)="onSearchClick()">
-    <my-global-icon iconName="search"></my-global-icon>
-  </button>
+  @if (icon()) {
+    <button class="button-unstyle search-button" title="Search" i18n-title (click)="onSearchClick()">
+      <my-global-icon iconName="search"></my-global-icon>
+    </button>
+  }
 
   <input
     type="text" [name]="inputId()" [id]="inputId()" [placeholder]="placeholder()"
@@ -28,7 +31,7 @@
     [(ngModel)]="searchValue"
     (keyup)="onInputSearch($event)"
     #input
-  >
+    >
 
   <button class="p-0 border-0 form-control-clear" title="Clear filter" i18n-title (click)="onResetTableFilter(); input.focus()">
     <my-global-icon iconName="cross" ></my-global-icon>

@@ -2,9 +2,8 @@ import { CommonModule } from '@angular/common'
 import { Component, forwardRef, inject, input, OnChanges, OnInit, output } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { Notifier } from '@app/core'
-import { GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
+import { GlobalIconComponent, GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
-import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 
 @Component({
   selector: 'my-reactive-file',
@@ -17,7 +16,7 @@ import { GlobalIconComponent } from '../shared-icons/global-icon.component'
       multi: true
     }
   ],
-  imports: [ CommonModule, NgbTooltipModule, GlobalIconComponent, FormsModule ]
+  imports: [ CommonModule, NgbTooltipModule, FormsModule, GlobalIconComponent ]
 })
 export class ReactiveFileComponent implements OnInit, OnChanges, ControlValueAccessor {
   private notifier = inject(Notifier)

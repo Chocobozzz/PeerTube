@@ -13,7 +13,7 @@
           (change)="onFileChange($event)"
           id="videofile"
           type="file"
-        />
+          />
       </div>
 
       <div class="form-group form-group-channel">
@@ -21,23 +21,20 @@
         <my-select-channel inputId="first-step-channel" [items]="userChannels()" [(ngModel)]="firstStepChannelId"></my-select-channel>
       </div>
 
-      <ng-container *ngIf="uploadingAudioFile">
+      @if (uploadingAudioFile) {
         <div  class="form-group audio-preview">
           <label i18n for="previewfileUpload">Video background image</label>
-
           <div i18n class="audio-image-info">
             Image that will be merged with your audio file.
             <br />
             The chosen image will be definitive and cannot be modified.
           </div>
-
           <my-preview-upload i18n-inputLabel inputLabel="Edit" inputName="previewfileUpload" [(ngModel)]="audioPreviewFile"></my-preview-upload>
         </div>
-
         <div class="form-group upload-audio-button">
           <my-button theme="primary" [label]="getAudioUploadLabel()" icon="upload" (click)="uploadAudio()"></my-button>
         </div>
-      </ng-container>
+      }
     </div>
   </div>
 } @else {
@@ -45,6 +42,6 @@
     [canUpdate]="hasUploadedFile()" [canWatch]="hasUploadedFile()"
     (videoUpdated)="onVideoUpdated()" [cancelLink]="getCancelLink()"
     i18n-uploadedLabel uploadedLabel="File uploaded! Your video is now available in your private library."
-  >
+    >
   </my-video-manage-container>
 }

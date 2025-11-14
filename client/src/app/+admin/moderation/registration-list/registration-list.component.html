@@ -7,7 +7,7 @@
   [dataLoader]="dataLoader"
   columnConfig="true"
   [bulkActions]="bulkActions"
->
+  >
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No registration} =1 {1 registration} other {{{ totalRecords | myNumberFormatter }} registrations}}</ng-container>
   </ng-template>
@@ -17,49 +17,63 @@
   </ng-template>
 
   <ng-template #tableCells let-registration>
-    <td *ngIf="table.isColumnDisplayed('account')">
-      <div class="chip two-lines">
-        <div>
-          <span>{{ registration.username }}</span>
-          <span class="muted">{{ registration.accountDisplayName }}</span>
+    @if (table.isColumnDisplayed('account')) {
+      <td>
+        <div class="chip two-lines">
+          <div>
+            <span>{{ registration.username }}</span>
+            <span class="muted">{{ registration.accountDisplayName }}</span>
+          </div>
         </div>
-      </div>
-    </td>
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('email')">
-      <my-user-email-info [entry]="registration" [showEmailVerifyInformation]="requiresEmailVerification"></my-user-email-info>
-    </td>
+    @if (table.isColumnDisplayed('email')) {
+      <td>
+        <my-user-email-info [entry]="registration" [showEmailVerifyInformation]="requiresEmailVerification"></my-user-email-info>
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('channel')">
-      <div class="chip two-lines">
-        <div>
-          <span>{{ registration.channelHandle }}</span>
-          <span class="muted">{{ registration.channelDisplayName }}</span>
+    @if (table.isColumnDisplayed('channel')) {
+      <td>
+        <div class="chip two-lines">
+          <div>
+            <span>{{ registration.channelHandle }}</span>
+            <span class="muted">{{ registration.channelDisplayName }}</span>
+          </div>
         </div>
-      </div>
-    </td>
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('registrationReason')" class="max-width-300px ellipsis" container="body" placement="left auto" [ngbTooltip]="registration.registrationReason">
-      {{ registration.registrationReason }}
-    </td>
+    @if (table.isColumnDisplayed('registrationReason')) {
+      <td class="max-width-300px ellipsis" container="body" placement="left auto" [ngbTooltip]="registration.registrationReason">
+        {{ registration.registrationReason }}
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('state')" class="abuse-states">
-      @if (isRegistrationAccepted(registration)) {
-        <div [title]="registration.state.label" class="pt-badge badge-success">
-          <my-global-icon iconName="tick"></my-global-icon>
-        </div>
-      } @else if (isRegistrationRejected(registration)) {
-        <div [title]="registration.state.label" class="pt-badge badge-danger">
-          <my-global-icon iconName="cross"></my-global-icon>
-        </div>
-      }
-    </td>
+    @if (table.isColumnDisplayed('state')) {
+      <td class="abuse-states">
+        @if (isRegistrationAccepted(registration)) {
+          <div [title]="registration.state.label" class="pt-badge badge-success">
+            <my-global-icon iconName="tick"></my-global-icon>
+          </div>
+        } @else if (isRegistrationRejected(registration)) {
+          <div [title]="registration.state.label" class="pt-badge badge-danger">
+            <my-global-icon iconName="cross"></my-global-icon>
+          </div>
+        }
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('moderationResponse')" class="max-width-300px ellipsis" container="body" placement="left auto" [ngbTooltip]="registration.moderationResponse">
-      {{ registration.moderationResponse }}
-    </td>
+    @if (table.isColumnDisplayed('moderationResponse')) {
+      <td class="max-width-300px ellipsis" container="body" placement="left auto" [ngbTooltip]="registration.moderationResponse">
+        {{ registration.moderationResponse }}
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('createdAt')">{{ registration.createdAt | ptDate: 'short'  }}</td>
+    @if (table.isColumnDisplayed('createdAt')) {
+      <td>{{ registration.createdAt | ptDate: 'short'  }}</td>
+    }
   </ng-template>
 
   <ng-template #actionCell let-registration>
@@ -77,10 +91,12 @@
           <span class="moderation-expanded-text" [innerHTML]="registration.registrationReasonHTML"></span>
         </div>
 
-        <div *ngIf="registration.moderationResponse">
-          <span class="moderation-expanded-label" i18n>Moderation response:</span>
-          <span class="moderation-expanded-text" [innerHTML]="registration.moderationResponseHTML"></span>
-        </div>
+        @if (registration.moderationResponse) {
+          <div>
+            <span class="moderation-expanded-label" i18n>Moderation response:</span>
+            <span class="moderation-expanded-text" [innerHTML]="registration.moderationResponseHTML"></span>
+          </div>
+        }
       </div>
     </div>
   </ng-template>

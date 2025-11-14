@@ -1,4 +1,4 @@
-import { NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
+import { NgTemplateOutlet } from '@angular/common'
 import { AfterContentInit, Component, contentChildren, inject, input, model, TemplateRef } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ComponentPagination, Notifier, resetCurrentPage, User } from '@app/core'
@@ -18,7 +18,7 @@ export type SelectionType = { [id: number]: boolean }
   selector: 'my-videos-selection',
   templateUrl: './videos-selection.component.html',
   styleUrls: [ './videos-selection.component.scss' ],
-  imports: [ NgIf, InfiniteScrollerDirective, NgFor, PeertubeCheckboxComponent, FormsModule, VideoMiniatureComponent, NgTemplateOutlet ]
+  imports: [ InfiniteScrollerDirective, PeertubeCheckboxComponent, FormsModule, VideoMiniatureComponent, NgTemplateOutlet ]
 })
 export class VideosSelectionComponent implements AfterContentInit {
   private notifier = inject(Notifier)

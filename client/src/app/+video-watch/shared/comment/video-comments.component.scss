@@ -1,5 +1,5 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
 
 #highlighted-comment {
   margin-bottom: 25px;
@@ -25,7 +25,7 @@
 
   my-feed {
     display: inline-block;
-    transition: ease-in .2s opacity;
+    transition: ease-in 0.2s opacity;
     width: 12px;
     height: 12px;
     line-height: 12px;

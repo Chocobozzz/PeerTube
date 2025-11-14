@@ -74,12 +74,15 @@
       <my-embed [video]="videoEdit.getVideoAttributes()"></my-embed>
     </div>
 
-    <div class="tasks-container" *ngIf="!noEdit()">
-      <div class="mb-1 fw-bold" i18n>Edits to apply:</div>
-
-      <ol>
-        <li *ngFor="let task of videoEdit.getStudioTasksSummary()">{{ task }}</li>
-      </ol>
-    </div>
+    @if (!noEdit()) {
+      <div class="tasks-container">
+        <div class="mb-1 fw-bold" i18n>Edits to apply:</div>
+        <ol>
+          @for (task of videoEdit.getStudioTasksSummary(); track task) {
+            <li>{{ task }}</li>
+          }
+        </ol>
+      </div>
+    }
   </div>
 }

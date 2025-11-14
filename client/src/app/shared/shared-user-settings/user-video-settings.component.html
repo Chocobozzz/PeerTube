@@ -49,7 +49,6 @@
 
   <div class="form-group">
     <div class="anchor" id="video-languages-subtitles"></div>
-    <!-- video-languages-subtitles anchor -->
 
     <div class="pt-label-container">
       <label i18n for="videoLanguages">Only display videos in the following languages/subtitles</label>
@@ -68,10 +67,10 @@
   <div class="form-group">
     <my-peertube-checkbox inputName="p2pEnabled" formControlName="p2pEnabled" [recommended]="true" i18n-labelText labelText="Help share videos being played">
       <ng-container ngProjectAs="description">
-        <span i18n
-        >The <a class="link-primary" href="https://docs.joinpeertube.org/admin/privacy-guide#peertube-p2p-privacy" target="_blank">sharing system</a> implies
-          that some technical information about your system (such as a public IP address) can be sent to other peers, but greatly helps to reduce server
-          load.</span>
+        <span i18n>
+          The <a class="link-primary" href="https://docs.joinpeertube.org/admin/privacy-guide#peertube-p2p-privacy" target="_blank">sharing system</a> implies
+          that some technical information about your system (such as a public IP address) can be sent to other peers, but greatly helps to reduce server load.
+        </span>
       </ng-container>
     </my-peertube-checkbox>
   </div>
@@ -97,5 +96,7 @@
     </my-peertube-checkbox>
   </div>
 
-  <input *ngIf="!reactiveUpdate()" type="submit" i18n-value value="Save video settings" [disabled]="!form.valid" class="peertube-button primary-button mt-3">
+  @if (!reactiveUpdate()) {
+    <input type="submit" i18n-value value="Save video settings" [disabled]="!form.valid" class="peertube-button primary-button mt-3">
+  }
 </form>

@@ -134,7 +134,7 @@ export class PeerTubeEmbed {
       const playlistPositionParam = getParamString(params, 'playlistPosition')
 
       const position = playlistPositionParam
-        ? parseInt(playlistPositionParam + '', 10)
+        ? parseInt(playlistPositionParam, 10)
         : 1
 
       this.playlistTracker.setPosition(position)

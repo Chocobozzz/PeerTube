@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, inject, input, OnDestroy, OnInit } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule, RouterOutlet } from '@angular/router'
@@ -18,7 +17,6 @@ import { VideoChannelEdit } from './video-channel-edit.model'
   templateUrl: './video-channel-edit.component.html',
   styleUrls: [ './video-channel-edit.component.scss' ],
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     LateralMenuComponent,

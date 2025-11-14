@@ -16,22 +16,28 @@
 
   <div class="d-flex flex-wrap-reverse align-items-start justify-content-between">
     <div class="gap-3">
-      <div class="scope-info" *ngIf="!hideScope()" [ngClass]="{ 'opacity-0': totalFollowing === undefined }">
-        @if (filters().scope === 'local' || totalFollowing === 0) {
-          <ng-container i18n>Videos on <strong>{{ instanceName }}</strong></ng-container>
-        } @else {
-          <ng-container i18n>
-            Videos on <strong>{{ instanceName }}</strong> and <strong>{{ totalFollowing }}</strong> {totalFollowing, plural, =1 {other platform} other {other platforms}}
-          </ng-container>
-        }
-      </div>
+      @if (!hideScope()) {
+        <div class="scope-info" [ngClass]="{ 'opacity-0': totalFollowing === undefined }">
+          @if (filters().scope === 'local' || totalFollowing === 0) {
+            <ng-container i18n>Videos on <strong>{{ instanceName }}</strong></ng-container>
+          } @else {
+            <ng-container i18n>
+              Videos on <strong>{{ instanceName }}</strong> and <strong>{{ totalFollowing }}</strong> {totalFollowing, plural, =1 {other platform} other {other
+              platforms}}
+            </ng-container>
+          }
+        </div>
+      }
 
       <div class="filters-summary">
         <div class="d-inline-block active-filters">
           @for (filter of filters().getActiveFilters(); track filter.key + (filter.value || '')) {
             @if (filter.key !== 'scope') {
               <div class="d-inline-block active-filter">
-                <span *ngIf="filter.value">{{ filter.label }}: </span>
+                @if (filter.value) {
+                  <span>{{ filter.label }}: </span>
+                }
+
                 <strong>{{ getFilterValue(filter) || filter.label }}</strong>
               </div>
             }
@@ -72,10 +78,8 @@
           <div class="with-description">
             <span i18n>You always use the same preferences?</span>
 
-            <span i18n>
-              Update your <a routerLink="/my-account/settings" fragment="video-languages-subtitles" (click)="onAccountSettingsClick($event)"
-              >default settings</a>
-            </span>
+            <span i18n>Update your <a routerLink="/my-account/settings" fragment="video-languages-subtitles" (click)="onAccountSettingsClick($event)"
+              >default settings</a></span>
           </div>
         </div>
 
@@ -99,25 +103,26 @@
         </div>
       </div>
 
-      <div class="section" *ngIf="totalFollowing && !hideScope()">
-        <div class="section-title">
-          <ng-container i18n>Platforms order</ng-container>
+      @if (totalFollowing && !hideScope()) {
+        <div class="section">
+          <div class="section-title">
+            <ng-container i18n>Platforms order</ng-container>
 
-          <div class="with-description">
-            <div i18n>
-              {{ instanceName }} platform subscribes to content from <a routerLink="/about/follows" target="_blank">{{ totalFollowing }} {totalFollowing, plural, =1 {other platform} other {other platforms}}</a>.
+            <div class="with-description">
+              <div i18n>
+                {{ instanceName }} platform subscribes to content from <a routerLink="/about/follows" target="_blank">{{ totalFollowing }} {totalFollowing,
+                  plural, =1 {other platform} other {other platforms}}</a>.
+              </div>
+              <div i18n>Set your display preferences here.</div>
             </div>
+          </div>
 
-            <div i18n>Set your display preferences here.</div>
+          <div class="form-group">
+            <label for="scope" i18n>Displayed videos</label>
+            <my-select-videos-scope inputId="scope" class="scope-select" formControlName="scope"></my-select-videos-scope>
           </div>
         </div>
-
-        <div class="form-group">
-          <label for="scope" i18n>Displayed videos</label>
-
-          <my-select-videos-scope inputId="scope" class="scope-select" formControlName="scope"></my-select-videos-scope>
-        </div>
-      </div>
+      }
 
       <div class="section">
         <div class="section-title" i18n>Content type</div>
@@ -148,18 +153,19 @@
         </div>
       </div>
 
-      <div class="section" *ngIf="canSeeAllVideos()">
-        <div class="section-title" i18n>Moderation</div>
-
-        <div class="form-group">
-          <my-peertube-checkbox
-            formControlName="allVideos"
-            inputName="allVideos"
-            i18n-labelText
-            labelText="Display all videos (private, unlisted, password protected, not yet published or sensitive videos)"
-          ></my-peertube-checkbox>
+      @if (canSeeAllVideos()) {
+        <div class="section">
+          <div class="section-title" i18n>Moderation</div>
+          <div class="form-group">
+            <my-peertube-checkbox
+              formControlName="allVideos"
+              inputName="allVideos"
+              i18n-labelText
+              labelText="Display all videos (private, unlisted, password protected, not yet published or sensitive videos)"
+            ></my-peertube-checkbox>
+          </div>
         </div>
-      </div>
+      }
     </div>
   </div>
 </div>

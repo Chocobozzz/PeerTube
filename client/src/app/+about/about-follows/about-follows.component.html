@@ -14,39 +14,46 @@
     </div>
 
     <div class="follows">
-      <div i18n class="no-results" *ngIf="subscriptionsPagination.totalItems === 0">{{ instanceName }} does not have subscriptions.</div>
+      @if (subscriptionsPagination.totalItems === 0) {
+        <div i18n class="no-results">{{ instanceName }} does not have subscriptions.</div>
+      }
 
-      <div *ngFor="let subscription of subscriptions" class="follow-block">
-        <my-actor-avatar [actor]="subscription" actorType="instance" size="32"></my-actor-avatar>
-
-        <div class="ellipsis">
-          <a class="follow-name" [href]="subscription.url" target="_blank" rel="noopener noreferrer">{{ subscription.name }}</a>
+      @for (subscription of subscriptions; track subscription) {
+        <div class="follow-block">
+          <my-actor-avatar [actor]="subscription" actorType="instance" size="32"></my-actor-avatar>
+          <div class="ellipsis">
+            <a class="follow-name" [href]="subscription.url" target="_blank" rel="noopener noreferrer">{{ subscription.name }}</a>
+          </div>
         </div>
-      </div>
+      }
 
     </div>
 
     <div class="text-center">
-      <my-button *ngIf="canLoadMoreSubscriptions()" class="mt-3 mx-auto" (click)="loadMoreSubscriptions()" theme="secondary" i18n>Show more subscriptions</my-button>
+      @if (canLoadMoreSubscriptions()) {
+        <my-button class="mt-3 mx-auto" (click)="loadMoreSubscriptions()" theme="secondary" i18n>Show more subscriptions</my-button>
+      }
     </div>
 
-    <div *ngIf="serverStats" class="stats mt-4">
-      <h4 i18n>Our network in figures</h4>
+    @if (serverStats) {
+      <div class="stats mt-4">
+        <h4 i18n>Our network in figures</h4>
 
-      <div myPluginSelector pluginSelectorId="about-instance-network-statistics">
-        <div class="stat">
-          <strong>{{ serverStats.totalVideos | number }}</strong>
-          <a routerLink="/videos/browse" [queryParams]="{ scope: 'federated' }" i18n>total videos</a>
-          <my-global-icon iconName="videos"></my-global-icon>
-        </div>
+        <div myPluginSelector pluginSelectorId="about-instance-network-statistics">
+          <div class="stat">
+            <strong>{{ serverStats.totalVideos | number }}</strong>
+            <a routerLink="/videos/browse" [queryParams]="{ scope: 'federated' }" i18n>total videos</a>
+            <my-global-icon iconName="videos"></my-global-icon>
+          </div>
 
-        <div class="stat">
-          <strong>{{ serverStats.totalVideoComments | number }}</strong>
-          <div i18n>total comments</div>
-          <my-global-icon iconName="message-circle"></my-global-icon>
+          <div class="stat">
+            <strong>{{ serverStats.totalVideoComments | number }}</strong>
+            <div i18n>total comments</div>
+            <my-global-icon iconName="message-circle"></my-global-icon>
+          </div>
         </div>
       </div>
-    </div>
+    }
   </div>
 
   <div class="followers">
@@ -63,18 +70,24 @@
     </div>
 
     <div class="follows">
-      <div i18n class="no-results" *ngIf="followersPagination.totalItems === 0">{{ instanceName }} does not have followers.</div>
+      @if (followersPagination.totalItems === 0) {
+        <div i18n class="no-results">{{ instanceName }} does not have followers.</div>
+      }
 
-      <div *ngFor="let follower of followers" class="follow-block">
-        <my-actor-avatar [actor]="follower" actorType="instance" size="32"></my-actor-avatar>
+      @for (follower of followers; track follower) {
+        <div class="follow-block">
+          <my-actor-avatar [actor]="follower" actorType="instance" size="32"></my-actor-avatar>
 
-        <div class="ellipsis">
-          <a class="follow-name" [href]="follower.url" target="_blank" rel="noopener noreferrer">{{ follower.name }}</a>
+          <div class="ellipsis">
+            <a class="follow-name" [href]="follower.url" target="_blank" rel="noopener noreferrer">{{ follower.name }}</a>
+          </div>
         </div>
-      </div>
+      }
 
       <div class="text-center">
-        <my-button *ngIf="canLoadMoreFollowers()" class="mt-3 mx-auto" (click)="loadMoreFollowers()" theme="secondary" i18n>Show more followers</my-button>
+        @if (canLoadMoreFollowers()) {
+          <my-button class="mt-3 mx-auto" (click)="loadMoreFollowers()" theme="secondary" i18n>Show more followers</my-button>
+        }
       </div>
     </div>
   </div>

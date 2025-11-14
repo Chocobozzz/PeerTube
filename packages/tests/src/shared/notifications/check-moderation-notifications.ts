@@ -23,7 +23,7 @@ export async function checkNewVideoAbuseForModerators (
       checkVideo(notification.abuse.video, videoName, shortUUID)
     } else {
       expect(notification).to.satisfy((n: UserNotification) => {
-        return n?.abuse === undefined || n.abuse.video.shortUUID !== shortUUID
+        return n?.abuse?.video.shortUUID !== shortUUID
       })
     }
   }
@@ -55,7 +55,7 @@ export async function checkNewAbuseMessage (
       expect(notification.abuse.id).to.equal(abuseId)
     } else {
       expect(notification).to.satisfy((n: UserNotification) => {
-        return n === undefined || n.type !== notificationType || n.abuse === undefined || n.abuse.id !== abuseId
+        return n?.type !== notificationType || n.abuse?.id !== abuseId
       })
     }
   }
@@ -89,7 +89,7 @@ export async function checkAbuseStateChange (
       expect(notification.abuse.state).to.equal(state)
     } else {
       expect(notification).to.satisfy((n: UserNotification) => {
-        return n?.abuse === undefined || n.abuse.id !== abuseId
+        return n?.abuse?.id !== abuseId
       })
     }
   }
@@ -126,7 +126,7 @@ export async function checkNewCommentAbuseForModerators (
       checkVideo(notification.abuse.comment.video, videoName, shortUUID)
     } else {
       expect(notification).to.satisfy((n: UserNotification) => {
-        return n?.abuse === undefined || n.abuse.comment.video.shortUUID !== shortUUID
+        return n?.abuse?.comment.video.shortUUID !== shortUUID
       })
     }
   }
@@ -157,7 +157,7 @@ export async function checkNewAccountAbuseForModerators (
       expect(notification.abuse.account.displayName).to.equal(displayName)
     } else {
       expect(notification).to.satisfy((n: UserNotification) => {
-        return n?.abuse === undefined || n.abuse.account.displayName !== displayName
+        return n?.abuse?.account.displayName !== displayName
       })
     }
   }
@@ -189,7 +189,7 @@ export async function checkVideoAutoBlacklistForModerators (
       checkVideo(notification.videoBlacklist.video, videoName, shortUUID)
     } else {
       expect(notification).to.satisfy((n: UserNotification) => {
-        return n?.video === undefined || n.video.shortUUID !== shortUUID
+        return n?.video?.shortUUID !== shortUUID
       })
     }
   }

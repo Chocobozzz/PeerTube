@@ -1,5 +1,7 @@
 <div role="radiogroup">
-  <label *ngIf="label()" [for]="inputId()" [ngClass]="{ 'label-secondary': labelSecondary() }">{{ label() }}</label>
+  @if (label()) {
+    <label [for]="inputId()" [ngClass]="{ 'label-secondary': labelSecondary() }">{{ label() }}</label>
+  }
 
   <ng-content></ng-content>
 
@@ -10,7 +12,7 @@
           type="radio" [name]="inputId()" [id]="getRadioId(item)" [value]="item.id"
           class="btn-check"
           autocomplete="off" [(ngModel)]="value" (ngModelChange)="update()"
-        />
+          />
 
         <label class="btn btn-outline-primary" [for]="getRadioId(item)" [attr.data-label]="item.label" i18n>{{ item.label }}</label>
       }
@@ -21,13 +23,15 @@
         <input
           type="radio" [name]="inputId()" [id]="getRadioId(item)" [value]="item.id"
           autocomplete="off" [(ngModel)]="value" (ngModelChange)="update()"
-        />
+          />
 
         <label [for]="getRadioId(item)" i18n>{{ item.label }}</label>
 
-        <div *ngIf="item.description" class="form-group-description">
-          {{ item.description}}
-        </div>
+        @if (item.description) {
+          <div class="form-group-description">
+            {{ item.description}}
+          </div>
+        }
       </div>
     }
   }

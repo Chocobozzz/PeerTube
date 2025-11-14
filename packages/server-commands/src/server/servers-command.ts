@@ -77,7 +77,7 @@ export class ServersCommand extends AbstractCommand {
       const buf = await readFile(logfile)
 
       const matches = buf.toString().match(new RegExp(str, 'g'))
-      if (matches && matches.length === count) return
+      if (matches?.length === count) return
       if (matches && strictCount === false && matches.length >= count) return
 
       await wait(1000)

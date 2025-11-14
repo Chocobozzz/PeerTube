@@ -169,7 +169,7 @@ export class WatchedWordsListModel extends SequelizeModel<WatchedWordsListModel>
   }) {
     const { listName, words } = options
 
-    if (words && words.length === 0) {
+    if (words?.length === 0) {
       throw new Error('Cannot update watched words with an empty list')
     }
 

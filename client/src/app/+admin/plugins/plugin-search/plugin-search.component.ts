@@ -1,8 +1,7 @@
-import { NgFor, NgIf } from '@angular/common'
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, inject, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { PluginApiService } from '@app/shared/shared-admin/plugin-api.service'
 import { ComponentPagination, ConfirmService, hasMoreItems, Notifier, PluginService, resetCurrentPage } from '@app/core'
+import { PluginApiService } from '@app/shared/shared-admin/plugin-api.service'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { PeerTubePluginIndex, PluginType, PluginType_Type } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
@@ -20,11 +19,9 @@ import { PluginCardComponent } from '../shared/plugin-card.component'
   templateUrl: './plugin-search.component.html',
   styleUrls: [ './plugin-search.component.scss' ],
   imports: [
-    NgIf,
     GlobalIconComponent,
     AutofocusDirective,
     InfiniteScrollerDirective,
-    NgFor,
     PluginCardComponent,
     EditButtonComponent,
     ButtonComponent,

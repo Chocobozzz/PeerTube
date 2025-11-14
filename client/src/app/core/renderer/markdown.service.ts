@@ -8,7 +8,7 @@ import {
   TEXT_RULES,
   TEXT_WITH_HTML_RULES
 } from '@peertube/peertube-core-utils'
-import MarkdownIt from 'markdown-it'
+import MarkdownIt, { PluginSimple } from 'markdown-it'
 import { HtmlRendererService } from './html-renderer.service'
 
 type MarkdownParsers = {
@@ -137,7 +137,7 @@ export class MarkdownService {
           this.emojiModule = (await import('markdown-it-emoji/lib/light.mjs')).default
         }
 
-        this.markdownParsers[name].use(this.emojiModule as MarkdownIt.PluginSimple)
+        this.markdownParsers[name].use(this.emojiModule as PluginSimple)
       }
     }
 

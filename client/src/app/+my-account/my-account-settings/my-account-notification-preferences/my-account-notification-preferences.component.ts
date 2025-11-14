@@ -1,4 +1,3 @@
-import { NgFor, NgIf } from '@angular/common'
 import { Component, OnInit, inject, model } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { Notifier, ServerService, User } from '@app/core'
@@ -12,7 +11,7 @@ import { InputSwitchComponent } from '../../../shared/shared-forms/input-switch.
   selector: 'my-account-notification-preferences',
   templateUrl: './my-account-notification-preferences.component.html',
   styleUrls: [ './my-account-notification-preferences.component.scss' ],
-  imports: [ NgIf, NgFor, InputSwitchComponent, FormsModule ]
+  imports: [ InputSwitchComponent, FormsModule ]
 })
 export class MyAccountNotificationPreferencesComponent implements OnInit {
   private userNotificationService = inject(UserNotificationService)

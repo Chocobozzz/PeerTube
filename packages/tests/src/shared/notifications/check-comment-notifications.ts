@@ -66,7 +66,7 @@ export async function checkNewCommentOnMyVideo (
       expect(notification.comment.heldForReview).to.equal(approval)
     } else {
       expect(notification).to.satisfy((n: UserNotification) => {
-        return n?.comment === undefined || n.comment.id !== commentId
+        return n?.comment?.id !== commentId
       })
     }
   }

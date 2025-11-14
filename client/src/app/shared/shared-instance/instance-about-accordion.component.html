@@ -1,128 +1,136 @@
-<h2 *ngIf="displayInstanceName()" class="instance-name">{{ about?.instance.name }}</h2>
+@if (displayInstanceName()) {
+  <h2 class="instance-name">{{ about?.instance.name }}</h2>
+}
 
-<div *ngIf="displayInstanceShortDescription()" class="instance-short-description ellipsis-multiline-3">{{ about?.instance.shortDescription }}</div>
+@if (displayInstanceShortDescription()) {
+  <div class="instance-short-description ellipsis-multiline-3">{{ about?.instance.shortDescription }}</div>
+}
 
 <div ngbAccordion #accordion="ngbAccordion" [closeOthers]="true">
-  <div ngbAccordionItem="instance-features" *ngIf="panels().features">
-    <div ngbAccordionHeader>
-      <button ngbAccordionButton>
-        <my-global-icon iconName="playlists"></my-global-icon>
-
-        <ng-container i18n>Features found on this instance</ng-container>
-      </button>
-    </div>
-
-    <div ngbAccordionCollapse>
-      <div ngbAccordionBody>
-        <ng-template>
-          <my-instance-features-table></my-instance-features-table>
-        </ng-template>
-      </div>
-    </div>
-  </div>
-
-  <ng-container *ngIf="about">
-    <div ngbAccordionItem *ngIf="getAdministratorsPanel()" >
+  @if (panels().features) {
+    <div ngbAccordionItem="instance-features">
       <div ngbAccordionHeader>
         <button ngbAccordionButton>
           <my-global-icon iconName="playlists"></my-global-icon>
-
-          <ng-container i18n>Administrators & Sustainability</ng-container>
+          <ng-container i18n>Features found on this instance</ng-container>
         </button>
       </div>
 
       <div ngbAccordionCollapse>
         <div ngbAccordionBody>
           <ng-template>
-            <div class="block">
-              <strong i18n>Who are we?</strong>
-              <div [innerHTML]="aboutHtml.administrator"></div>
-            </div>
-
-            <div class="block">
-              <strong i18n>How long do we plan to maintain this instance?</strong>
-              <div [innerHTML]="about.instance.maintenanceLifetime"></div>
-            </div>
-
-            <div class="block">
-              <strong i18n>How will we finance this instance?</strong>
-              <div [innerHTML]="about.instance.businessModel"></div>
-            </div>
+            <my-instance-features-table></my-instance-features-table>
           </ng-template>
         </div>
       </div>
     </div>
+  }
 
-    <div ngbAccordionItem="terms" *ngIf="termsPanel">
-      <div ngbAccordionHeader>
-        <button ngbAccordionButton>
-          <my-global-icon iconName="playlists"></my-global-icon>
+  @if (about) {
+    @if (getAdministratorsPanel()) {
+      <div ngbAccordionItem >
+        <div ngbAccordionHeader>
+          <button ngbAccordionButton>
+            <my-global-icon iconName="playlists"></my-global-icon>
+            <ng-container i18n>Administrators & Sustainability</ng-container>
+          </button>
+        </div>
 
-          {{ getTermsTitle() }}
-        </button>
-      </div>
-
-      <div ngbAccordionCollapse>
-        <div ngbAccordionBody>
-          <ng-template>
-            <div class="block" [innerHTML]="aboutHtml.terms"></div>
-          </ng-template>
+        <div ngbAccordionCollapse>
+          <div ngbAccordionBody>
+            <ng-template>
+              <div class="block">
+                <strong i18n>Who are we?</strong>
+                <div [innerHTML]="aboutHtml.administrator"></div>
+              </div>
+              <div class="block">
+                <strong i18n>How long do we plan to maintain this instance?</strong>
+                <div [innerHTML]="about.instance.maintenanceLifetime"></div>
+              </div>
+              <div class="block">
+                <strong i18n>How will we finance this instance?</strong>
+                <div [innerHTML]="about.instance.businessModel"></div>
+              </div>
+            </ng-template>
+          </div>
         </div>
       </div>
-    </div>
+    }
 
-    <div ngbAccordionItem="moderation-information" *ngIf="moderationPanel">
-      <div ngbAccordionHeader>
-        <button ngbAccordionButton>
-          <my-global-icon iconName="playlists"></my-global-icon>
+    @if (termsPanel) {
+      <div ngbAccordionItem="terms">
+        <div ngbAccordionHeader>
+          <button ngbAccordionButton>
+            <my-global-icon iconName="playlists"></my-global-icon>
+            {{ getTermsTitle() }}
+          </button>
+        </div>
 
-          <ng-container i18n>Moderation information</ng-container>
-        </button>
-      </div>
-
-      <div ngbAccordionCollapse>
-        <div ngbAccordionBody>
-          <ng-template>
-            <div class="block" [innerHTML]="aboutHtml.moderationInformation"></div>
-          </ng-template>
+        <div ngbAccordionCollapse>
+          <div ngbAccordionBody>
+            <ng-template>
+              <div class="block" [innerHTML]="aboutHtml.terms"></div>
+            </ng-template>
+          </div>
         </div>
       </div>
-    </div>
+    }
 
-    <div ngbAccordionItem="code-of-conduct" *ngIf="codeOfConductPanel">
-      <div ngbAccordionHeader>
-        <button ngbAccordionButton>
-          <my-global-icon iconName="playlists"></my-global-icon>
+    @if (moderationPanel) {
+      <div ngbAccordionItem="moderation-information">
+        <div ngbAccordionHeader>
+          <button ngbAccordionButton>
+            <my-global-icon iconName="playlists"></my-global-icon>
+            <ng-container i18n>Moderation information</ng-container>
+          </button>
+        </div>
 
-          <ng-container i18n>Code of conduct</ng-container>
-        </button>
-      </div>
-
-      <div ngbAccordionCollapse>
-        <div ngbAccordionBody>
-          <ng-template>
-            <div class="block" [innerHTML]="aboutHtml.codeOfConduct"></div>
-          </ng-template>
+        <div ngbAccordionCollapse>
+          <div ngbAccordionBody>
+            <ng-template>
+              <div class="block" [innerHTML]="aboutHtml.moderationInformation"></div>
+            </ng-template>
+          </div>
         </div>
       </div>
-    </div>
+    }
 
-    <div ngbAccordionItem *ngFor="let pluginPanel of pluginPanels" [id]="pluginPanel.id">
-      <div ngbAccordionHeader>
-        <button ngbAccordionButton>
-          <my-global-icon iconName="playlists"></my-global-icon>
+    @if (codeOfConductPanel) {
+      <div ngbAccordionItem="code-of-conduct">
+        <div ngbAccordionHeader>
+          <button ngbAccordionButton>
+            <my-global-icon iconName="playlists"></my-global-icon>
+            <ng-container i18n>Code of conduct</ng-container>
+          </button>
+        </div>
 
-          <ng-container i18n>{{ pluginPanel.title }}</ng-container>
-        </button>
-      </div>
-
-      <div ngbAccordionCollapse>
-        <div ngbAccordionBody>
-          <ng-template>
-            <div class="block" [innerHTML]="pluginPanel.html"></div>
-          </ng-template>
+        <div ngbAccordionCollapse>
+          <div ngbAccordionBody>
+            <ng-template>
+              <div class="block" [innerHTML]="aboutHtml.codeOfConduct"></div>
+            </ng-template>
+          </div>
         </div>
       </div>
-    </div>
-  </ng-container>
+    }
+
+    @for (pluginPanel of pluginPanels; track pluginPanel) {
+      <div ngbAccordionItem [id]="pluginPanel.id">
+        <div ngbAccordionHeader>
+          <button ngbAccordionButton>
+            <my-global-icon iconName="playlists"></my-global-icon>
+            <ng-container i18n>{{ pluginPanel.title }}</ng-container>
+          </button>
+        </div>
+
+        <div ngbAccordionCollapse>
+          <div ngbAccordionBody>
+            <ng-template>
+              <div class="block" [innerHTML]="pluginPanel.html"></div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    }
+  }
 </div>

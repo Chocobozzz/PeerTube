@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common'
 import { Component, ElementRef, OnInit, inject, input, output, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ServerService } from '@app/core'
@@ -16,7 +15,7 @@ import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.co
   selector: 'my-video-caption-add-modal',
   styleUrls: [ './video-caption-add-modal.component.scss' ],
   templateUrl: './video-caption-add-modal.component.html',
-  imports: [ FormsModule, ReactiveFormsModule, GlobalIconComponent, NgIf, ReactiveFileComponent, SelectOptionsComponent ]
+  imports: [ FormsModule, ReactiveFormsModule, GlobalIconComponent, ReactiveFileComponent, SelectOptionsComponent ]
 })
 export class VideoCaptionAddModalComponent extends FormReactive implements OnInit {
   protected formReactiveService = inject(FormReactiveService)

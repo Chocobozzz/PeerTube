@@ -1,41 +1,51 @@
-<my-alert rounded="false" type="primary" i18n *ngIf="hasVideoScheduledPublication()">
+@if (hasVideoScheduledPublication()) {
+  <my-alert rounded="false" type="primary" i18n>
   This video will be published on {{ video().scheduledUpdate.updateAt | ptDate: 'full' }}.
 </my-alert>
+}
 
-<my-alert rounded="false" type="primary" *ngIf="isWaitingForLive()">
-  <ng-container i18n>This live is not currently streaming.</ng-container>
-
-  @if (scheduledLiveDate()) {
-    <ng-container i18n>
+@if (isWaitingForLive()) {
+  <my-alert rounded="false" type="primary">
+    <ng-container i18n>This live is not currently streaming.</ng-container>
+    @if (scheduledLiveDate()) {
+      <ng-container i18n>
       It will start on {{ scheduledLiveDate() | ptDate: 'short' }}.
     </ng-container>
-  }
-</my-alert>
+    }
+  </my-alert>
+}
 
-<my-alert rounded="false" type="primary" i18n *ngIf="isLiveEnded()">
+@if (isLiveEnded()) {
+  <my-alert rounded="false" type="primary" i18n>
   This live has ended.
 </my-alert>
+}
 
-<my-alert rounded="false" type="warning" *ngIf="getAlertWarning()?.title">
-  <div class="alert-title">{{ getAlertWarning()?.title }}</div>
+@if (getAlertWarning()?.title) {
+  <my-alert rounded="false" type="warning">
+    <div class="alert-title">{{ getAlertWarning()?.title }}</div>
+    @if (canSeeMoreInfo()) {
+      {{ getAlertWarning().watchSecondary }}
+    }
+    {{ getAlertWarning().watchMain }}
+  </my-alert>
+}
 
-  @if (canSeeMoreInfo()) {
-    {{ getAlertWarning().watchSecondary }}
-  }
-
-  {{ getAlertWarning().watchMain }}
-</my-alert>
-
-<my-alert rounded="false" i18n type="warning" *ngIf="noPlaylistVideoFound()">
+@if (noPlaylistVideoFound()) {
+  <my-alert rounded="false" i18n type="warning">
   There are no videos available in this playlist.
 </my-alert>
+}
 
-<my-alert rounded="false" type="danger" *ngIf="video()?.blacklisted">
-  <div class="blocked-label" i18n>This video is blocked.</div>
+@if (video()?.blacklisted) {
+  <my-alert rounded="false" type="danger">
+    <div class="blocked-label" i18n>This video is blocked.</div>
+    {{ video().blacklistedReason }}
+  </my-alert>
+}
 
-  {{ video().blacklistedReason }}
-</my-alert>
-
-<my-alert rounded="false" i18n type="warning" *ngIf="video()?.canBypassPassword(user())">
+@if (video()?.canBypassPassword(user())) {
+  <my-alert rounded="false" i18n type="warning">
   This video is password protected.
 </my-alert>
+}

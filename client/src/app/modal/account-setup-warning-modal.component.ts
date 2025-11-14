@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, ElementRef, OnInit, inject, output, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { RouterLink } from '@angular/router'
@@ -13,7 +12,7 @@ import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
   selector: 'my-account-setup-warning-modal',
   templateUrl: './account-setup-warning-modal.component.html',
   styleUrls: [ './account-setup-warning-modal.component.scss' ],
-  imports: [ CommonModule, GlobalIconComponent, PeertubeCheckboxComponent, FormsModule, RouterLink ]
+  imports: [ GlobalIconComponent, PeertubeCheckboxComponent, FormsModule, RouterLink ]
 })
 export class AccountSetupWarningModalComponent implements OnInit {
   private userService = inject(UserService)

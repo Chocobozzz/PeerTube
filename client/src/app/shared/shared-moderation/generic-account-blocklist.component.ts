@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, inject, input, viewChild } from '@angular/core'
 import { Notifier } from '@app/core'
 import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
@@ -13,7 +12,6 @@ import { BlocklistComponentType, BlocklistService } from './blocklist.service'
   selector: 'my-generic-account-blocklist',
   templateUrl: './generic-account-blocklist.component.html',
   imports: [
-    CommonModule,
     TableComponent,
     NumberFormatterPipe,
     AdvancedInputFilterComponent,

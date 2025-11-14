@@ -1,5 +1,5 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
 
 .root {
   width: 100%;
@@ -26,7 +26,7 @@ h1 {
   color: pvar(--fg);
 
   &::after {
-    content: '';
+    content: "";
     display: block;
     height: 4px;
     background-color: pvar(--border-primary);
@@ -96,7 +96,7 @@ h1 {
   &.child-active {
     color: pvar(--on-primary-450) !important;
     background-color: pvar(--primary-450);
-    opacity: .9;
+    opacity: 0.9;
   }
 }
 
@@ -107,7 +107,7 @@ h1 {
     white-space: nowrap;
 
     &:not(:first-child)::before {
-      content: '•';
+      content: "•";
 
       color: pvar(--secondary-icon-color);
 

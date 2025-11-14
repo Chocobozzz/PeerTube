@@ -215,7 +215,8 @@
               "parse-srcset",
               "core-js/features/reflect",
               "hammerjs",
-              "jschannel"
+              "jschannel",
+              "color-bits"
             ],
             "scripts": [],
             "extractLicenses": false,
@@ -324,16 +325,36 @@
       "prefix": "my",
       "style": "scss",
       "skipTests": true,
-      "flat": true
+      "flat": true,
+      "type": "component"
     },
     "@schematics/angular:directive": {
-      "prefix": "my"
+      "prefix": "my",
+      "type": "directive"
     },
     "@angular-eslint/schematics:application": {
       "setParserOptionsProject": true
     },
     "@angular-eslint/schematics:library": {
       "setParserOptionsProject": true
+    },
+    "@schematics/angular:service": {
+      "type": "service"
+    },
+    "@schematics/angular:guard": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:interceptor": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:module": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:pipe": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:resolver": {
+      "typeSeparator": "."
     }
   },
   "cli": {

@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common'
 import { Component, OnInit, inject } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
@@ -10,7 +9,7 @@ import { forkJoin } from 'rxjs'
 @Component({
   selector: 'my-remote-interaction',
   templateUrl: './remote-interaction.component.html',
-  imports: [ NgIf, AlertComponent ]
+  imports: [ AlertComponent ]
 })
 export class RemoteInteractionComponent implements OnInit {
   private route = inject(ActivatedRoute)

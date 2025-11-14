@@ -1,14 +1,14 @@
 import { CdkStep, CdkStepper } from '@angular/cdk/stepper'
+import { NgClass, NgTemplateOutlet } from '@angular/common'
 import { Component } from '@angular/core'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
-import { NgIf, NgFor, NgClass, NgTemplateOutlet } from '@angular/common'
 
 @Component({
   selector: 'my-register-stepper',
   templateUrl: './register-stepper.component.html',
   styleUrls: [ './register-stepper.component.scss' ],
   providers: [ { provide: CdkStepper, useExisting: RegisterStepperComponent } ],
-  imports: [ NgIf, NgFor, NgClass, GlobalIconComponent, NgTemplateOutlet ]
+  imports: [ NgClass, GlobalIconComponent, NgTemplateOutlet ]
 })
 export class RegisterStepperComponent extends CdkStepper {
   onClick (index: number): void {

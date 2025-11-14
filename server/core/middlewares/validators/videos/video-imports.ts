@@ -220,7 +220,7 @@ async function isImportAccepted (req: express.Request, res: express.Response) {
     hookName
   )
 
-  if (!acceptedResult || acceptedResult.accepted !== true) {
+  if (acceptedResult?.accepted !== true) {
     logger.info('Refused to import video.', { acceptedResult, acceptParameters })
 
     res.fail({

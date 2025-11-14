@@ -105,7 +105,7 @@ class PluginsManager {
   }
 
   static getDefaultLoginHref (apiUrl: string, serverConfig: HTMLServerConfig) {
-    if (!serverConfig || serverConfig.client.menu.login.redirectOnSingleExternalAuth !== true) return undefined
+    if (serverConfig?.client.menu.login.redirectOnSingleExternalAuth !== true) return undefined
 
     const externalAuths = serverConfig.plugin.registeredExternalAuths
     if (externalAuths.length !== 1) return undefined

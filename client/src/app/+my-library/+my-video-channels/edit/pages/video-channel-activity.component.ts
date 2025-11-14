@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common'
+
 import { Component, input, OnInit } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { FromNowPipe } from '@app/shared/shared-main/date/from-now.pipe'
@@ -9,10 +9,9 @@ import { VideoChannelActivity } from '@peertube/peertube-models'
   templateUrl: './video-channel-activity.component.html',
   styleUrls: [ './video-channel-activity.component.scss' ],
   imports: [
-    CommonModule,
     RouterModule,
     FromNowPipe
-  ]
+]
 })
 export class VideoChannelActivityComponent implements OnInit {
   activity = input<VideoChannelActivity>()

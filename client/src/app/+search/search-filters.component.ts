@@ -1,10 +1,9 @@
 import { Component, OnInit, inject, input, output } from '@angular/core'
+import { FormsModule } from '@angular/forms'
 import { ServerService } from '@app/core'
+import { AdvancedSearch } from '@app/shared/shared-search/advanced-search.model'
 import { HTMLServerConfig, VideoConstant } from '@peertube/peertube-models'
 import { SelectTagsComponent } from '../shared/shared-forms/select/select-tags.component'
-import { NgIf, NgFor } from '@angular/common'
-import { FormsModule } from '@angular/forms'
-import { AdvancedSearch } from '@app/shared/shared-search/advanced-search.model'
 
 type FormOption = { id: string, label: string }
 
@@ -12,7 +11,7 @@ type FormOption = { id: string, label: string }
   selector: 'my-search-filters',
   styleUrls: [ './search-filters.component.scss' ],
   templateUrl: './search-filters.component.html',
-  imports: [ FormsModule, NgIf, NgFor, SelectTagsComponent ]
+  imports: [ FormsModule, SelectTagsComponent ]
 })
 export class SearchFiltersComponent implements OnInit {
   private serverService = inject(ServerService)
@@ -131,7 +130,8 @@ export class SearchFiltersComponent implements OnInit {
   }
 
   resetOriginalPublicationYears () {
-    this.originallyPublishedStartYear = this.originallyPublishedEndYear = undefined
+    this.originallyPublishedStartYear = undefined
+    this.originallyPublishedEndYear = undefined
   }
 
   isSearchTargetEnabled () {

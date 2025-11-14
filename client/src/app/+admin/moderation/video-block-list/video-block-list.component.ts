@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { ConfirmService, MarkdownService, Notifier, ServerService } from '@app/core'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
@@ -24,7 +23,6 @@ type VideoBlacklist = VideoBlacklistServer & { reasonHtml?: string }
   templateUrl: './video-block-list.component.html',
   styleUrls: [ '../../../shared/shared-moderation/moderation.scss' ],
   imports: [
-    CommonModule,
     AdvancedInputFilterComponent,
     ActionDropdownComponent,
     VideoCellComponent,

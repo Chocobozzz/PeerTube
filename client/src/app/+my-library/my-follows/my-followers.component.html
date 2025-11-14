@@ -1,25 +1,34 @@
 <div class="followers-header d-flex justify-content-between align-items-end gap-2 flex-wrap">
-  <span class="total-items" *ngIf="pagination.totalItems"> {{ getTotalTitle() }}</span>
+  @if (pagination.totalItems) {
+    <span class="total-items"> {{ getTotalTitle() }}</span>
+  }
 
   <my-advanced-input-filter class="d-block ms-auto" [filters]="inputFilters" (search)="onSearch($event)" emitOnInit="true"></my-advanced-input-filter>
 </div>
 
-<div class="no-results" i18n *ngIf="pagination.totalItems === 0">No follower found.</div>
+@if (pagination.totalItems === 0) {
+  <div class="no-results" i18n>No follower found.</div>
+}
 
 <div class="actors" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
-  <div *ngFor="let follow of follows" class="actor">
-    <my-actor-avatar [actor]="follow.follower" actorType="account" [href]="follow.follower.url" size="40"></my-actor-avatar>
+  @for (follow of follows; track follow) {
+    <div class="actor">
+      <my-actor-avatar [actor]="follow.follower" actorType="account" [href]="follow.follower.url" size="40"></my-actor-avatar>
 
-    <div class="actor-info">
-      <a [href]="follow.follower.url" class="actor-names" rel="noopener noreferrer" target="_blank" i18n-title title="Follower page">
-        <div class="actor-display-name">{{ follow.follower.name + '@' + follow.follower.host }}</div>
-        <my-global-icon iconName="external-link"></my-global-icon>
-      </a>
+      <div class="actor-info">
+        <a [href]="follow.follower.url" class="actor-names" rel="noopener noreferrer" target="_blank" i18n-title title="Follower page">
+          <div class="actor-display-name">{{ follow.follower.name + '@' + follow.follower.host }}</div>
+          <my-global-icon iconName="external-link"></my-global-icon>
+        </a>
 
-      <div class="small muted">
-        <ng-container *ngIf="isFollowingAccount(follow)" i18n>Is following all your channels</ng-container>
-        <ng-container *ngIf="!isFollowingAccount(follow)" i18n>Is following your channel {{ follow.following.name }}</ng-container>
+        <div class="small muted">
+          @if (isFollowingAccount(follow)) {
+            <ng-container i18n>Is following all your channels</ng-container>
+          } @else {
+            <ng-container i18n>Is following your channel {{ follow.following.name }}</ng-container>
+          }
+        </div>
       </div>
     </div>
-  </div>
+  }
 </div>

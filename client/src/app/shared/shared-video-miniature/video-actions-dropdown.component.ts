@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common'
 import { Component, OnChanges, booleanAttribute, inject, input, output, viewChild } from '@angular/core'
 import { AuthService, ConfirmService, Notifier, ScreenService, ServerService } from '@app/core'
 import { NgbDropdown, NgbDropdownAnchor, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap'
@@ -44,7 +43,6 @@ export type VideoActionsDisplayType = {
   templateUrl: './video-actions-dropdown.component.html',
   styleUrls: [ './video-actions-dropdown.component.scss' ],
   imports: [
-    NgIf,
     NgbDropdown,
     NgbDropdownAnchor,
     NgbDropdownMenu,

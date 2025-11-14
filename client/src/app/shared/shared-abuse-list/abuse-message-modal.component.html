@@ -1,8 +1,12 @@
 <ng-template #modal>
   <div class="modal-header">
     <h4 class="modal-title">
-      <ng-container i18n *ngIf="isAdminView()">Messages with the reporter</ng-container>
-      <ng-container i18n *ngIf="!isAdminView()">Messages with the moderation team</ng-container>
+      @if (isAdminView()) {
+        <ng-container i18n>Messages with the reporter</ng-container>
+      }
+      @if (!isAdminView()) {
+        <ng-container i18n>Messages with the moderation team</ng-container>
+      }
     </h4>
 
     <button class="border-0 p-0" title="Close this modal" i18n-title (click)="hide()">
@@ -12,23 +16,22 @@
 
   <div class="modal-body">
     <div class="messages">
-      <div
-        *ngFor="let message of abuseMessages"
-        class="message-block" [ngClass]="{ 'by-moderator': message.byModerator, 'by-me': isMessageByMe(message) }"
-      >
-
-        <div class="author">{{ message.account.name }}</div>
-
-        <div class="bubble">
-          <div class="content" [innerHTML]="message.messageHtml"></div>
-          <div class="date">{{ message.createdAt | ptDate }}</div>
+      @for (message of abuseMessages; track message) {
+        <div
+          class="message-block" [ngClass]="{ 'by-moderator': message.byModerator, 'by-me': isMessageByMe(message) }"
+          >
+          <div class="author">{{ message.account.name }}</div>
+          <div class="bubble">
+            <div class="content" [innerHTML]="message.messageHtml"></div>
+            <div class="date">{{ message.createdAt | ptDate }}</div>
+          </div>
         </div>
-      </div>
+      }
     </div>
 
-    <div class="no-messages" *ngIf="noResults" i18n>
-      No messages for now.
-    </div>
+    @if (noResults) {
+      <div class="no-messages" i18n>No messages for now.</div>
+    }
 
     <form novalidate [formGroup]="form" (ngSubmit)="addMessage()">
       <div class="form-group">
@@ -37,9 +40,11 @@
           [ngClass]="{ 'input-error': formErrors['message'] }" class="form-control"
         ></textarea>
 
-        <div *ngIf="formErrors.message" class="form-error" role="alert">
-          {{ formErrors.message }}
-        </div>
+        @if (formErrors.message) {
+          <div class="form-error" role="alert">
+            {{ formErrors.message }}
+          </div>
+        }
       </div>
 
       <div class="form-group inputs">

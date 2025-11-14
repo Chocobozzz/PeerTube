@@ -1,5 +1,5 @@
 import { CdkStepperModule } from '@angular/cdk/stepper'
-import { CommonModule } from '@angular/common'
+
 import { Component, inject, output } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier, UserService } from '@app/core'
@@ -12,7 +12,7 @@ import { getNoWelcomeModalLocalStorageKey } from '../shared/admin-config-wizard-
   selector: 'my-admin-config-wizard-welcome',
   templateUrl: './admin-config-wizard-welcome.component.html',
   styleUrls: [ '../shared/admin-config-wizard-modal-common.scss' ],
-  imports: [ CommonModule, FormsModule, ReactiveFormsModule, CdkStepperModule, ButtonComponent ]
+  imports: [ FormsModule, ReactiveFormsModule, CdkStepperModule, ButtonComponent ]
 })
 export class AdminConfigWizardWelcomeComponent {
   private userService = inject(UserService)

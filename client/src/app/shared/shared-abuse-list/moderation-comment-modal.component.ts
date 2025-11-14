@@ -1,13 +1,12 @@
+import { NgClass } from '@angular/common'
 import { Component, OnInit, inject, output, viewChild } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { AdminAbuse } from '@peertube/peertube-models'
 import { ABUSE_MODERATION_COMMENT_VALIDATOR } from '../form-validators/abuse-validators'
-import { NgClass, NgIf } from '@angular/common'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { AbuseService } from '../shared-moderation/abuse.service'
 
@@ -15,7 +14,7 @@ import { AbuseService } from '../shared-moderation/abuse.service'
   selector: 'my-moderation-comment-modal',
   templateUrl: './moderation-comment-modal.component.html',
   styleUrls: [ './moderation-comment-modal.component.scss' ],
-  imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, NgIf ]
+  imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass ]
 })
 export class ModerationCommentModalComponent extends FormReactive implements OnInit {
   protected formReactiveService = inject(FormReactiveService)

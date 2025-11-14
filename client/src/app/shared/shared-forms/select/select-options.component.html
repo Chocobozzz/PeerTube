@@ -21,7 +21,7 @@
   [virtualScrollItemSize]="virtualScrollItemSize()"
 
   fluid="true"
->
+  >
   <ng-template #itemTemplate let-item let-description="description">
     @if (selectOptionTemplate) {
       <ng-template [ngTemplateOutlet]="selectOptionTemplate" [ngTemplateOutletContext]="{ $implicit: item }"></ng-template>
@@ -32,7 +32,9 @@
     } @else {
       <div>
         <div class="d-flex align-items-center item-label custom-item">
-          <img *ngIf="item.imageUrl" alt="" class="me-2" [src]="item.imageUrl" />
+          @if (item.imageUrl) {
+            <img alt="" class="me-2" [src]="item.imageUrl" />
+          }
 
           <span class="ellipsis" [ngClass]="item.classes">{{ item.label }}</span>
 
@@ -41,7 +43,9 @@
           }
         </div>
 
-        <span *ngIf="description" class="muted">{{ description }}</span>
+        @if (description) {
+          <span class="muted">{{ description }}</span>
+        }
       </div>
     }
   </ng-template>

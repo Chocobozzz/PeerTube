@@ -359,7 +359,7 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
     }
     const acceptedResult = await Hooks.wrapFun(isLocalVideoFileAccepted, acceptParameters, 'filter:api.video.user-import.accept.result')
 
-    if (!acceptedResult || acceptedResult.accepted !== true) {
+    if (acceptedResult?.accepted !== true) {
       logger.info('Refused local video file to import.', { acceptedResult, acceptParameters, ...lTags() })
 
       throw new Error('Video file is not accepted: ' + acceptedResult.errorMessage || 'unknown reason')

@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { booleanAttribute, Component, inject, input, OnInit } from '@angular/core'
 import { ServerService } from '@app/core'
 import { LateralMenuComponent, LateralMenuConfig } from '@app/shared/shared-main/menu/lateral-menu.component'
@@ -10,7 +9,6 @@ import { VideoManageController } from './video-manage-controller.service'
   selector: 'my-video-manage-menu',
   template: '<my-lateral-menu [config]="menuConfig" [globalQueryParams]="globalQueryParams" />',
   imports: [
-    CommonModule,
     LateralMenuComponent
   ]
 })

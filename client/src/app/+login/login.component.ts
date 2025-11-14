@@ -1,4 +1,4 @@
-import { NgClass, NgFor, NgIf } from '@angular/common'
+import { NgClass } from '@angular/common'
 import { AfterViewInit, Component, ElementRef, OnInit, inject, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
@@ -25,7 +25,6 @@ import { PluginSelectorDirective } from '../shared/shared-main/plugins/plugin-se
   templateUrl: './login.component.html',
   styleUrls: [ './login.component.scss' ],
   imports: [
-    NgIf,
     RouterLink,
     FormsModule,
     PluginSelectorDirective,
@@ -33,7 +32,6 @@ import { PluginSelectorDirective } from '../shared/shared-main/plugins/plugin-se
     AutofocusDirective,
     NgClass,
     InputTextComponent,
-    NgFor,
     InstanceBannerComponent,
     InstanceAboutAccordionComponent,
     GlobalIconComponent,

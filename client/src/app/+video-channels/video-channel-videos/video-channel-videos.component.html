@@ -1,27 +1,19 @@
 <h1 class="visually-hidden" i18n>Videos</h1>
 
-<my-videos-list
-  #videosList
-
-  *ngIf="videoChannel"
-
-  [getVideosObservableFunction]="getVideosObservableFunction"
-  [getSyndicationItemsFunction]="getSyndicationItemsFunction"
-
-  [defaultSort]="defaultSort"
-
-  displayFilters="true"
-  displayBy="false"
-  [displayAsRow]="displayAsRow()"
-
-  hideScopeFilter="true"
-
-  loadUserVideoPreferences="true"
-
-  highlightLives="true"
-
-  [disabled]="disabled"
-
-  (videosLoaded)="onVideosLoaded($event)"
->
-</my-videos-list>
+@if (videoChannel) {
+  <my-videos-list
+    #videosList
+    [getVideosObservableFunction]="getVideosObservableFunction"
+    [getSyndicationItemsFunction]="getSyndicationItemsFunction"
+    [defaultSort]="defaultSort"
+    displayFilters="true"
+    displayBy="false"
+    [displayAsRow]="displayAsRow()"
+    hideScopeFilter="true"
+    loadUserVideoPreferences="true"
+    highlightLives="true"
+    [disabled]="disabled"
+    (videosLoaded)="onVideosLoaded($event)"
+    >
+  </my-videos-list>
+}

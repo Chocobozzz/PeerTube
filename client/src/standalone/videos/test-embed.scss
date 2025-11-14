@@ -1,5 +1,5 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
 
 * {
   font-family: sans-serif;
@@ -27,7 +27,7 @@ iframe {
 
 aside {
   width: 33vw;
-  margin: 0 .5em .5em 0;
+  margin: 0 0.5em 0.5em 0;
   height: calc(33vw * 0.5625);
 }
 

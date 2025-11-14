@@ -1,4 +1,3 @@
-import { NgFor, NgIf } from '@angular/common'
 import { Component, ElementRef, inject, input, model, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
@@ -61,7 +60,6 @@ type TabId = 'url' | 'qrcode' | 'embed'
   styleUrls: [ './video-share.component.scss' ],
   imports: [
     GlobalIconComponent,
-    NgIf,
     RouterLink,
     NgbNav,
     NgbNavItem,
@@ -75,7 +73,6 @@ type TabId = 'url' | 'qrcode' | 'embed'
     FormsModule,
     PluginPlaceholderComponent,
     TimestampInputComponent,
-    NgFor,
     NgbCollapse,
     AlertComponent
   ]

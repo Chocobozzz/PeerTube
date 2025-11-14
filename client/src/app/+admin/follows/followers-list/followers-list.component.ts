@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { ConfirmService, Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -18,7 +17,6 @@ import { NumberFormatterPipe } from '../../../shared/shared-main/common/number-f
   templateUrl: './followers-list.component.html',
   styleUrls: [ './followers-list.component.scss' ],
   imports: [
-    CommonModule,
     GlobalIconComponent,
     AdvancedInputFilterComponent,
     ButtonComponent,

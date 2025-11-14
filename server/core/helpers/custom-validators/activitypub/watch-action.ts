@@ -5,7 +5,7 @@ import { isVideoTimeValid } from '../video-view.js'
 import { isActivityPubVideoDurationValid, isObjectValid } from './misc.js'
 
 function isWatchActionObjectValid (action: WatchActionObject) {
-  if (!action || action.type !== 'WatchAction') return false
+  if (action?.type !== 'WatchAction') return false
 
   // TODO: compat with < 6.1, remove in 8.0
   if (!action.uuid && action['identifier']) action.uuid = action['identifier']

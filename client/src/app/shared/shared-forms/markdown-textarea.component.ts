@@ -1,4 +1,4 @@
-import { CommonModule, ViewportScroller } from '@angular/common'
+import { CommonModule, NgTemplateOutlet, ViewportScroller } from '@angular/common'
 import { booleanAttribute, Component, ElementRef, forwardRef, inject, input, model, OnDestroy, OnInit, viewChild } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { SafeHtml } from '@angular/platform-browser'
@@ -25,6 +25,7 @@ import { FormReactiveErrors } from './form-reactive.service'
     CommonModule,
     FormsModule,
     NgbCollapseModule,
+    NgTemplateOutlet,
     GlobalIconComponent
   ]
 })

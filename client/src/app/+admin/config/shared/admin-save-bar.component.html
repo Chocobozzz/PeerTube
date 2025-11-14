@@ -18,7 +18,9 @@
       <ng-container i18n>There are errors in the configuration:</ng-container>
 
       <ul class="mb-0">
-        <li *ngFor="let error of grabAllErrors()">{{ error }}</li>
+        @for (error of grabAllErrors(); track error) {
+          <li>{{ error }}</li>
+        }
       </ul>
     </my-alert>
   }

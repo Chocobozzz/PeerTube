@@ -16,9 +16,11 @@
 
         <input type="text" id="targetUrl" [(ngModel)]="targetUrl" class="form-control" />
 
-        <div *ngIf="isChannelSyncEnabled()" class="form-group-description" i18n>
+        @if (isChannelSyncEnabled()) {
+          <div class="form-group-description" i18n>
           You can also synchronize a remote channel in <a class="text-decoration-underline" routerLink="/my-library/video-channel-syncs">your library</a>
         </div>
+        }
       </div>
 
       <div class="form-group">
@@ -29,7 +31,7 @@
       <input
         type="button" i18n-value value="Import" class="peertube-button primary-button"
         [disabled]="!isTargetUrlValid() || isImportingVideo" (click)="importVideo()"
-      />
+        />
     </div>
   </div>
 } @else {

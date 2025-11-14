@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { LateralMenuComponent, LateralMenuConfig } from '../../shared/shared-main/menu/lateral-menu.component'
@@ -8,7 +7,6 @@ import { LateralMenuComponent, LateralMenuConfig } from '../../shared/shared-mai
   styleUrls: [ './admin-config.component.scss' ],
   templateUrl: './admin-config.component.html',
   imports: [
-    CommonModule,
     RouterModule,
     LateralMenuComponent
   ]

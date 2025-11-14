@@ -1,5 +1,5 @@
 import { CdkStepperModule } from '@angular/cdk/stepper'
-import { CommonModule } from '@angular/common'
+
 import { Component, inject, model, OnInit } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import {
@@ -24,13 +24,12 @@ type Form = {
   selector: 'my-private-instance-config',
   templateUrl: './private-instance-config.component.html',
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     ColorPickerModule,
     CdkStepperModule,
     SelectOptionsComponent
-  ]
+]
 })
 export class PrivateInstanceConfigComponent implements OnInit {
   private formReactiveService = inject(FormReactiveService)

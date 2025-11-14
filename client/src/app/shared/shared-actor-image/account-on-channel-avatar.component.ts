@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, OnInit, input, numberAttribute } from '@angular/core'
 import { ActorAvatarComponent, ActorAvatarInput } from '@app/shared/shared-actor-image/actor-avatar.component'
 
@@ -6,7 +5,7 @@ import { ActorAvatarComponent, ActorAvatarInput } from '@app/shared/shared-actor
   selector: 'my-account-on-channel-avatar',
   templateUrl: './account-on-channel-avatar.component.html',
   styleUrls: [ './account-on-channel-avatar.component.scss' ],
-  imports: [ CommonModule, ActorAvatarComponent ]
+  imports: [ ActorAvatarComponent ]
 })
 export class AccountOnChannelAvatarComponent implements OnInit {
   readonly account = input.required<ActorAvatarInput>()

@@ -23,7 +23,7 @@
     routerLinkActive="active"
     #link
     (click)="onNavigate(link)"
-  >
+    >
     <ng-container *ngTemplateOutlet="notificationNumber"></ng-container>
 
     <ng-container *ngTemplateOutlet="notificationIcon"></ng-container>
@@ -37,14 +37,14 @@
     dropdownClass="dropdown-notifications"
     #dropdown="ngbDropdown"
     (openChange)="$event === true ? onDropdownShown() : onDropdownHidden()"
-  >
+    >
     <button
       i18n-title
       title="View your notifications"
       class="peertube-button tertiary-button rounded-icon-button disable-dropdown-caret notification-inbox-dropdown"
       [ngClass]="{ 'shown': opened, 'hidden': isInMobileView }"
       ngbDropdownToggle
-    >
+      >
       <ng-container *ngTemplateOutlet="notificationNumber"></ng-container>
       <ng-container *ngTemplateOutlet="notificationIcon"></ng-container>
     </button>
@@ -70,34 +70,36 @@
           ></my-user-notifications>
         }
 
-        <div *ngIf="!loaded" class="loader mt-4">
+      @if (!loaded) {
+        <div class="loader mt-4">
           <my-loader size="xl" loading="true"></my-loader>
         </div>
+      }
 
-        <footer>
-          <a
-            class="text-decoration-underline"
-            i18n-title
-            title="Update your notification preferences"
-            routerLink="/my-account/settings"
-            fragment="notifications"
-            #settingsNotifications
-            (click)="onNavigate(settingsNotifications)"
+      <footer>
+        <a
+          class="text-decoration-underline"
+          i18n-title
+          title="Update your notification preferences"
+          routerLink="/my-account/settings"
+          fragment="notifications"
+          #settingsNotifications
+          (click)="onNavigate(settingsNotifications)"
           >
-            <my-global-icon iconName="cog" class="me-1 secondary-icon-color"></my-global-icon>
+          <my-global-icon iconName="cog" class="me-1 secondary-icon-color"></my-global-icon>
 
-            <ng-container i18n>Settings</ng-container>
+          <ng-container i18n>Settings</ng-container>
+        </a>
+
+        @if (loaded) {
+          <a class="peertube-button-link secondary-button" routerLink="/my-account/notifications">
+            <ng-container i18n>View all</ng-container>
+
+            <my-global-icon iconName="arrow-left" class="rotate-180 ms-2"></my-global-icon>
           </a>
-
-          @if (loaded) {
-            <a class="peertube-button-link secondary-button" routerLink="/my-account/notifications">
-              <ng-container i18n>View all</ng-container>
-
-              <my-global-icon iconName="arrow-left" class="rotate-180 ms-2"></my-global-icon>
-            </a>
-          }
-        </footer>
-      </div>
+        }
+      </footer>
     </div>
   </div>
+</div>
 }

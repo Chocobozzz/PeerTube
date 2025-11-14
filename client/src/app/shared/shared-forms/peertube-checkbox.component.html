@@ -8,28 +8,35 @@
         [id]="inputName()"
         [disabled]="disabled"
         [attr.aria-describedby]="inputName() + '-description'"
-      />
+        />
       <span></span>
-      <span *ngIf="labelText()">{{ labelText() }}</span>
-      <span
-        *ngIf="!labelText() && labelInnerHTML()"
-        [innerHTML]="labelInnerHTML()"
-      ></span>
+      @if (labelText()) {
+        <span>{{ labelText() }}</span>
+      } @else if (labelInnerHTML()) {
+        <span
+          [innerHTML]="labelInnerHTML()"
+        ></span>
+      }
 
-      <span *ngIf="labelTemplate">
-        <ng-container *ngTemplateOutlet="labelTemplate"></ng-container>
-      </span>
+      @if (labelTemplate) {
+        <span>
+          <ng-container *ngTemplateOutlet="labelTemplate"></ng-container>
+        </span>
+      }
     </label>
 
-    <my-help
-      *ngIf="helpTemplate"
-      [tooltipPlacement]="helpPlacement()"
-      helpType="custom"
-    >
-      <ng-template *ngTemplateOutlet="helpTemplate"></ng-template>
-    </my-help>
+    @if (helpTemplate) {
+      <my-help
+        [tooltipPlacement]="helpPlacement()"
+        helpType="custom"
+        >
+        <ng-template *ngTemplateOutlet="helpTemplate"></ng-template>
+      </my-help>
+    }
 
-    <div *ngIf="recommended()" class="ms-2 pt-badge badge-secondary" i18n>Recommended</div>
+    @if (recommended()) {
+      <div class="ms-2 pt-badge badge-secondary" i18n>Recommended</div>
+    }
   </div>
 
   <div class="d-flex flex-column extra-container">

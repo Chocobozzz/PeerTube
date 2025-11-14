@@ -1,109 +1,104 @@
-<div
-  *ngIf="areActionsDisplayed(actions(), entry())"
-  class="dropdown-root"
-  ngbDropdown
-  (openChange)="openChange.emit($event)"
-  [placement]="placement()"
-  [container]="container()"
->
-  <button
-    class="action-button border-0"
-    [ngClass]="buttonClasses"
-    ngbDropdownToggle
-    aria-label="Open actions"
-    i18n-aria-label
-  >
-    @if (label()) {
-      <span class="dropdown-toggle me-2">
-        <span class="d-inline-flex align-items-center gap-2">
-          {{ label() }}
-
-          @if (labelExtra) {
-            <ng-template *ngTemplateOutlet="labelExtra"></ng-template>
-          }
-        </span>
-      </span>
-
-      <div class="chevron-down"></div>
-    } @else if (buttonIcon() === 'more-horizontal') {
-      <my-global-icon class="more-icon" iconName="more-horizontal"></my-global-icon>
-    } @else if (buttonIcon() === 'more-vertical') {
-      <my-global-icon class="more-icon" iconName="more-vertical"></my-global-icon>
-    } @else if (buttonIcon() === 'chevron-down') {
-      <div class="chevron-down"></div>
-    }
-  </button>
-
-  <div ngbDropdownMenu class="dropdown-menu">
-    @for (actions of getActions(); track $index) {
-      @for (action of actions; track action.label) {
-        @if (isBlockDisplayed(actions, action, entry())) {
-          <div [ngClass]="action.class">
-            <ng-template #templateActionLabel let-action>
-              @if (action.iconName) {
-                <my-global-icon [iconName]="action.iconName" [ngClass]="'icon-' + action.iconName" aria-hidden="true"></my-global-icon>
-              } @else if (action.actorAvatar) {
-                <my-actor-avatar size="24" [actor]="action.actorAvatar.actor" [actorType]="action.actorAvatar.type"></my-actor-avatar>
-              }
-
-              <div class="item-label">
-                <span class="d-inline-flex align-items-center">
-                  {{ action.label }}
-
-                  @if (dropdownItemExtra) {
-                    <ng-template *ngTemplateOutlet="dropdownItemExtra; context: { action }"></ng-template>
-                  }
-
-                  <my-global-icon
-                    *ngIf="action.ownerOrModeratorPrivilege && action.ownerOrModeratorPrivilege()"
-                    iconName="shield"
-                    class="owner-moderator-privilege"
-                    [ngbTooltip]="action.ownerOrModeratorPrivilege()"
-                  ></my-global-icon>
-                </span>
-
-                <small class="muted action-description" *ngIf="action.description">{{ action.description }}</small>
-              </div>
-            </ng-template>
-
-            @if (action.linkBuilder) {
-              @if (!action.isHeader) {
-                <a
-                  [ngClass]="{ 'with-icon': !!action.iconName || !!action.actorAvatar }"
-                  class="dropdown-item"
-                  [routerLink]="action.linkBuilder(entry())"
-                  [queryParams]="getQueryParams(action, entry())"
-                  [title]="action.title || ''"
-                >
-                  <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
-                </a>
-              }
-            } @else {
-              @if (!action.isHeader) {
-                <span
-                  [ngClass]="{ 'with-icon': !!action.iconName || !!action.actorAvatar }"
-                  class="custom-action dropdown-item"
-                  tabindex="0"
-                  role="button"
-                  [title]="action.title || ''"
-                  (click)="action.handler(entry())"
-                  (keyup.enter)="action.handler(entry())"
-                >
-                  <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
-                </span>
-              } @else if (areActionsDisplayed(actions, entry())) {
-                <div [ngClass]="{ 'with-icon': !!action.iconName || !!action.actorAvatar }" class="dropdown-header" [title]="action.title || ''">
-                  <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
-                </div>
-              }
+@if (areActionsDisplayed(actions(), entry())) {
+  <div
+    class="dropdown-root"
+    ngbDropdown
+    (openChange)="openChange.emit($event)"
+    [placement]="placement()"
+    [container]="container()"
+    >
+    <button
+      class="action-button border-0"
+      [ngClass]="buttonClasses"
+      ngbDropdownToggle
+      aria-label="Open actions"
+      i18n-aria-label
+      >
+      @if (label()) {
+        <span class="dropdown-toggle me-2">
+          <span class="d-inline-flex align-items-center gap-2">
+            {{ label() }}
+            @if (labelExtra) {
+              <ng-template *ngTemplateOutlet="labelExtra"></ng-template>
             }
-          </div>
+          </span>
+        </span>
+        <div class="chevron-down"></div>
+      } @else if (buttonIcon() === 'more-horizontal') {
+        <my-global-icon class="more-icon" iconName="more-horizontal"></my-global-icon>
+      } @else if (buttonIcon() === 'more-vertical') {
+        <my-global-icon class="more-icon" iconName="more-vertical"></my-global-icon>
+      } @else if (buttonIcon() === 'chevron-down') {
+        <div class="chevron-down"></div>
+      }
+    </button>
+    <div ngbDropdownMenu class="dropdown-menu">
+      @for (actions of getActions(); track $index) {
+        @for (action of actions; track action.label) {
+          @if (isBlockDisplayed(actions, action, entry())) {
+            <div [ngClass]="action.class">
+              <ng-template #templateActionLabel let-action>
+                @if (action.iconName) {
+                  <my-global-icon [iconName]="action.iconName" [ngClass]="'icon-' + action.iconName" aria-hidden="true"></my-global-icon>
+                } @else if (action.actorAvatar) {
+                  <my-actor-avatar size="24" [actor]="action.actorAvatar.actor" [actorType]="action.actorAvatar.type"></my-actor-avatar>
+                }
+                <div class="item-label">
+                  <span class="d-inline-flex align-items-center">
+                    {{ action.label }}
+                    @if (dropdownItemExtra) {
+                      <ng-template *ngTemplateOutlet="dropdownItemExtra; context: { action }"></ng-template>
+                    }
+                    @if (action.ownerOrModeratorPrivilege && action.ownerOrModeratorPrivilege()) {
+                      <my-global-icon
+                        iconName="shield"
+                        class="owner-moderator-privilege"
+                        [ngbTooltip]="action.ownerOrModeratorPrivilege()"
+                      ></my-global-icon>
+                    }
+                  </span>
+                  @if (action.description) {
+                    <small class="muted action-description">{{ action.description }}</small>
+                  }
+                </div>
+              </ng-template>
+              @if (action.linkBuilder) {
+                @if (!action.isHeader) {
+                  <a
+                    [ngClass]="{ 'with-icon': !!action.iconName || !!action.actorAvatar }"
+                    class="dropdown-item"
+                    [routerLink]="action.linkBuilder(entry())"
+                    [queryParams]="getQueryParams(action, entry())"
+                    [title]="action.title || ''"
+                    >
+                    <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
+                  </a>
+                }
+              } @else {
+                @if (!action.isHeader) {
+                  <span
+                    [ngClass]="{ 'with-icon': !!action.iconName || !!action.actorAvatar }"
+                    class="custom-action dropdown-item"
+                    tabindex="0"
+                    role="button"
+                    [title]="action.title || ''"
+                    (click)="action.handler(entry())"
+                    (keyup.enter)="action.handler(entry())"
+                    >
+                    <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
+                  </span>
+                } @else if (areActionsDisplayed(actions, entry())) {
+                  <div [ngClass]="{ 'with-icon': !!action.iconName || !!action.actorAvatar }" class="dropdown-header" [title]="action.title || ''">
+                    <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
+                  </div>
+                }
+              }
+            </div>
+          }
+        }
+        @if (areActionsDisplayed(actions, entry())) {
+          <div class="dropdown-divider"></div>
         }
       }
-
-      @if (areActionsDisplayed(actions, entry())) {
-        <div class="dropdown-divider"></div>
-      }
-    }
+    </div>
   </div>
-</div>
+}

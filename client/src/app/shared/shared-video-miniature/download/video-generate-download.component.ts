@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common'
+
 import { Component, OnInit, inject, input, output } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
@@ -16,13 +16,12 @@ import { VideoDetails } from '../../shared-main/video/video-details.model'
   templateUrl: './video-generate-download.component.html',
   styleUrls: [ './video-generate-download.component.scss' ],
   imports: [
-    NgIf,
     FormsModule,
     GlobalIconComponent,
     PeertubeCheckboxComponent,
     NgbTooltip,
     BytesPipe
-  ]
+]
 })
 export class VideoGenerateDownloadComponent implements OnInit {
   private videoService = inject(VideoService)

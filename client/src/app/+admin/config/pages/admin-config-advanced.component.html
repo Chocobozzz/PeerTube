@@ -20,11 +20,13 @@
             <input
               type="number" min="0" id="cachePreviewsSize" class="form-control"
               formControlName="size" [ngClass]="{ 'input-error': formErrors.cache.previews.size }"
-            >
+              >
             <span i18n>{getCacheSize('previews'), plural, =1 {cached image} other {cached images}}</span>
           </div>
 
-          <div *ngIf="formErrors.cache.previews.size" class="form-error" role="alert">{{ formErrors.cache.previews.size }}</div>
+          @if (formErrors.cache.previews.size) {
+            <div class="form-error" role="alert">{{ formErrors.cache.previews.size }}</div>
+          }
         </div>
 
         <div class="form-group" formGroupName="captions">
@@ -34,11 +36,13 @@
             <input
               type="number" min="0" id="cacheCaptionsSize" class="form-control"
               formControlName="size" [ngClass]="{ 'input-error': formErrors.cache.captions.size }"
-            >
+              >
             <span i18n>{getCacheSize('captions'), plural, =1 {cached caption} other {cached captions}}</span>
           </div>
 
-          <div *ngIf="formErrors.cache.captions.size" class="form-error" role="alert">{{ formErrors.cache.captions.size }}</div>
+          @if (formErrors.cache.captions.size) {
+            <div class="form-error" role="alert">{{ formErrors.cache.captions.size }}</div>
+          }
         </div>
 
         <div class="form-group" formGroupName="torrents">
@@ -48,11 +52,13 @@
             <input
               type="number" min="0" id="cacheTorrentsSize" class="form-control"
               formControlName="size" [ngClass]="{ 'input-error': formErrors.cache.torrents.size }"
-            >
+              >
             <span i18n>{getCacheSize('torrents'), plural, =1 {cached torrent} other {cached torrents}}</span>
           </div>
 
-          <div *ngIf="formErrors.cache.torrents.size" class="form-error" role="alert">{{ formErrors.cache.torrents.size }}</div>
+          @if (formErrors.cache.torrents.size) {
+            <div class="form-error" role="alert">{{ formErrors.cache.torrents.size }}</div>
+          }
         </div>
 
         <div class="form-group" formGroupName="storyboards">
@@ -62,11 +68,13 @@
             <input
               type="number" min="0" id="cacheStoryboardsSize" class="form-control"
               formControlName="size" [ngClass]="{ 'input-error': formErrors.cache.storyboards.size }"
-            >
+              >
             <span i18n>{getCacheSize('storyboards'), plural, =1 {cached storyboard} other {cached storyboards}}</span>
           </div>
 
-          <div *ngIf="formErrors.cache.storyboards.size" class="form-error" role="alert">{{ formErrors.cache.storyboards.size }}</div>
+          @if (formErrors.cache.storyboards.size) {
+            <div class="form-error" role="alert">{{ formErrors.cache.storyboards.size }}</div>
+          }
         </div>
       </ng-container>
 
@@ -99,9 +107,11 @@
             <input
               type="text" id="servicesTwitterUsername" class="form-control"
               formControlName="username" [ngClass]="{ 'input-error': formErrors.services.twitter.username }"
-            >
+              >
 
-            <div *ngIf="formErrors.services.twitter.username" class="form-error" role="alert">{{ formErrors.services.twitter.username }}</div>
+            @if (formErrors.services.twitter.username) {
+              <div class="form-error" role="alert">{{ formErrors.services.twitter.username }}</div>
+            }
           </div>
 
         </ng-container>

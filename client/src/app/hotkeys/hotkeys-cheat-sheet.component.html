@@ -10,13 +10,17 @@
     </div>
 
     <ul role="presentation">
-      <li *ngFor="let hotkey of hotkeys">
-        <div class="cfp-hotkeys-keys">
-          <span *ngFor="let key of hotkey.formatted">{{ key }}</span>
-        </div>
+      @for (hotkey of hotkeys; track hotkey) {
+        <li>
+          <div class="cfp-hotkeys-keys">
+            @for (key of hotkey.formatted; track key) {
+              <span>{{ key }}</span>
+            }
+          </div>
 
-        <div class="cfp-hotkeys-text">{{ hotkey.description }}</div>
-      </li>
+          <div class="cfp-hotkeys-text">{{ hotkey.description }}</div>
+        </li>
+      }
     </ul>
 
     <button class="button-unstyle cfp-hotkeys-close" (click)="toggleCheatSheet()">&#215;</button>

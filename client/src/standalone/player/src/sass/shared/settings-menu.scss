@@ -147,7 +147,7 @@ $setting-transition-easing: ease-out;
               position: absolute;
               content: " ";
               margin-top: 1px;
-              background-image: url("./svg/tick-white.svg");
+              background-image: url("../svg/tick-white.svg");
 
               @include icon(15px);
               @include left(15px);

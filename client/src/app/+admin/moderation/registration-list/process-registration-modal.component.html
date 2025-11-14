@@ -1,8 +1,11 @@
 <ng-template #modal>
   <div class="modal-header">
     <h4 i18n class="modal-title">
-      <ng-container *ngIf="isAccept()">Accept {{ registration.username }} registration</ng-container>
-      <ng-container *ngIf="isReject()">Reject {{ registration.username }} registration</ng-container>
+      @if (isAccept()) {
+        Accept {{ registration.username }} registration
+      } @else if (isReject()) {
+        Reject {{ registration.username }} registration
+      }
     </h4>
 
     <button class="border-0 p-0" title="Close this modal" i18n-title (click)="hide()">
@@ -12,9 +15,8 @@
 
   <form novalidate [formGroup]="form" (ngSubmit)="processRegistration()">
     <div class="modal-body mb-3">
-
       <div class="description">
-        <ng-container *ngIf="isAccept()">
+        @if (isAccept()) {
           <p i18n>
             <strong>Accepting</strong>&nbsp;<em>{{ registration.username }}</em> registration will create the account and channel.
           </p>
@@ -26,53 +28,62 @@
               </my-alert>
             } @else {
               <p i18n [ngClass]="{ 'text-decoration-line-through': isPreventEmailDeliveryChecked() }">
-                An email will be sent to <em>{{ registration.email }}</em> explaining its account has been created with the moderation response you'll write below.
+                An email will be sent to <em>{{ registration.email }}</em> explaining its account has been created with the moderation response you'll write
+                below.
               </p>
             }
           } @else {
             <my-alert type="warning" i18n>
-              Emails are not enabled on this instance so PeerTube won't be able to send an email to <em>{{ registration.email }}</em> explaining its account has been created.
+              Emails are not enabled on this instance so PeerTube won't be able to send an email to <em>{{ registration.email }}</em> explaining its account has
+              been created.
             </my-alert>
           }
-        </ng-container>
-
-        <ng-container *ngIf="isReject()">
+        } @else if (isReject()) {
           <p i18n [ngClass]="{ 'text-decoration-line-through': isPreventEmailDeliveryChecked() }">
-            An email will be sent to <em>{{ registration.email }}</em> explaining its registration request has been <strong>rejected</strong> with the moderation response you'll write below.
+            An email will be sent to <em>{{ registration.email }}</em> explaining its registration request has been <strong>rejected</strong> with the
+            moderation response you'll write below.
           </p>
 
-          <my-alert *ngIf="!isEmailEnabled()" type="warning" i18n>
-            Emails are not enabled on this instance so PeerTube won't be able to send an email to <em>{{ registration.email }}</em> explaining its registration request has been rejected.
-          </my-alert>
-        </ng-container>
+          @if (!isEmailEnabled()) {
+            <my-alert type="warning" i18n>
+              Emails are not enabled on this instance so PeerTube won't be able to send an email to <em>{{ registration.email }}</em> explaining its
+              registration request has been rejected.
+            </my-alert>
+          }
+        }
       </div>
 
       <div class="form-group">
         <label for="moderationResponse" i18n>Send a message to the user</label>
 
         <textarea
-          formControlName="moderationResponse" ngbAutofocus name="moderationResponse" id="moderationResponse"
-          [ngClass]="{ 'input-error': formErrors['moderationResponse'] }" class="form-control"
+          formControlName="moderationResponse"
+          ngbAutofocus
+          name="moderationResponse"
+          id="moderationResponse"
+          [ngClass]="{ 'input-error': formErrors['moderationResponse'] }"
+          class="form-control"
         ></textarea>
 
-        <div *ngIf="formErrors.moderationResponse" class="form-error" role="alert">
-          {{ formErrors.moderationResponse }}
-        </div>
+        @if (formErrors.moderationResponse) {
+          <div class="form-error" role="alert">
+            {{ formErrors.moderationResponse }}
+          </div>
+        }
       </div>
 
       <div class="form-group">
         <my-peertube-checkbox
-          inputName="preventEmailDelivery" formControlName="preventEmailDelivery"
-          i18n-labelText labelText="Prevent email from being sent to the user"
+          inputName="preventEmailDelivery"
+          formControlName="preventEmailDelivery"
+          i18n-labelText
+          labelText="Prevent email from being sent to the user"
         ></my-peertube-checkbox>
       </div>
     </div>
 
     <div class="modal-footer inputs">
-      <input
-        type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button"
-        (click)="hide()" (key.enter)="hide()"
-      >
+      <input type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button" (click)="hide()" (key.enter)="hide()">
 
       <input type="submit" [value]="getSubmitValue()" class="peertube-button primary-button" [disabled]="!form.valid">
     </div>

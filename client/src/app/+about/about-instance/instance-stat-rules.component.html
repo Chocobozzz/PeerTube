@@ -47,23 +47,25 @@
 
     <div class="blocks">
 
-      <div class="usage-rule" *ngIf="config().instance.serverCountry">
-        <div class="icon-container">
-          <my-global-icon iconName="message-circle"></my-global-icon>
-
-          <div class="icon-status">
-            <div class="icon-info"></div>
+      @if (config().instance.serverCountry) {
+        <div class="usage-rule">
+          <div class="icon-container">
+            <my-global-icon iconName="message-circle"></my-global-icon>
+            <div class="icon-status">
+              <div class="icon-info"></div>
+            </div>
+          </div>
+          <div>
+            <strong i18n>This platform has been created in {{ config().instance.serverCountry }}</strong>
+            <div class="rule-content">
+              <ng-container i18n>Your content (comments, videos...) must comply with the legislation in force in this country.</ng-container>
+              @if (aboutHTML().codeOfConduct) {
+                <ng-container i18n> You must also follow our <a routerLink="/about/instance/moderation">code of conduct</a>.</ng-container>
+              }
+            </div>
           </div>
         </div>
-
-        <div>
-          <strong i18n>This platform has been created in {{ config().instance.serverCountry }}</strong>
-          <div class="rule-content">
-            <ng-container i18n>Your content (comments, videos...) must comply with the legislation in force in this country.</ng-container>
-            <ng-container *ngIf="aboutHTML().codeOfConduct" i18n> You must also follow our <a routerLink="/about/instance/moderation">code of conduct</a>.</ng-container>
-          </div>
-        </div>
-      </div>
+      }
 
       <div class="usage-rule">
         <div class="icon-container">
@@ -99,21 +101,20 @@
         </div>
       </div>
 
-      <div class="usage-rule" *ngIf="config().federation.enabled">
-        <div class="icon-container">
-          <my-global-icon iconName="fediverse"></my-global-icon>
-
-          <div class="icon-status">
-            <my-global-icon iconName="tick"></my-global-icon>
+      @if (config().federation.enabled) {
+        <div class="usage-rule">
+          <div class="icon-container">
+            <my-global-icon iconName="fediverse"></my-global-icon>
+            <div class="icon-status">
+              <my-global-icon iconName="tick"></my-global-icon>
+            </div>
+          </div>
+          <div>
+            <strong i18n>This platform is compatible with Mastodon, Lemmy, Misskey and other services from the Fediverse</strong>
+            <div class="rule-content" i18n>You can use these services to interact with our videos</div>
           </div>
         </div>
-
-        <div>
-          <strong i18n>This platform is compatible with Mastodon, Lemmy, Misskey and other services from the Fediverse</strong>
-
-          <div class="rule-content" i18n>You can use these services to interact with our videos</div>
-        </div>
-      </div>
+      }
 
       <div class="usage-rule">
         @if (canUpload()) {
@@ -131,7 +132,9 @@
             <div class="rule-content">
               <ng-container i18n>By default, your account allows you to publish videos.</ng-container>
 
-              <ng-container *ngIf="canPublishLive()" i18n> You can also stream lives.</ng-container>
+              @if (canPublishLive()) {
+                <ng-container i18n> You can also stream lives.</ng-container>
+              }
             </div>
           </div>
         } @else {
@@ -153,7 +156,9 @@
             <div class="rule-content">
               <ng-container i18n>By default, your account does not allow to publish videos.</ng-container>
 
-              <ng-container *ngIf="isContactFormEnabled()" i18n> If you want to publish videos, <a routerLink="/about/contact">contact us</a>.</ng-container>
+              @if (isContactFormEnabled()) {
+                <ng-container i18n> If you want to publish videos, <a routerLink="/about/contact">contact us</a>.</ng-container>
+              }
             </div>
           </div>
         }

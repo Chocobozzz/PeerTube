@@ -6,7 +6,7 @@
   paginatorText="videos per page"
   [dataLoader]="dataLoader"
   columnConfig="false"
->
+  >
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No video} =1 {1 video} other {{{ totalRecords | myNumberFormatter }} videos}}</ng-container>
   </ng-template>
@@ -31,7 +31,9 @@
     </td>
 
     <td>
-      <span *ngIf="videoBlock.unfederated" class="pt-badge badge-blue" i18n>Unfederated</span>
+      @if (videoBlock.unfederated) {
+        <span class="pt-badge badge-blue" i18n>Unfederated</span>
+      }
     </td>
 
     <td>
@@ -47,16 +49,17 @@
   </ng-template>
 
   <ng-template #expandedRow let-videoBlock>
-    <div *ngIf="videoBlock" class="d-flex moderation-expanded">
-      <div class="left">
-        <span class="moderation-expanded-label" i18n>Block reason:</span>
-        <span class="moderation-expanded-text" [innerHTML]="videoBlock.reasonHtml"></span>
+    @if (videoBlock) {
+      <div class="d-flex moderation-expanded">
+        <div class="left">
+          <span class="moderation-expanded-label" i18n>Block reason:</span>
+          <span class="moderation-expanded-text" [innerHTML]="videoBlock.reasonHtml"></span>
+        </div>
+        <div class="right">
+          <my-embed [video]="videoBlock.video"></my-embed>
+        </div>
       </div>
-
-      <div class="right">
-        <my-embed [video]="videoBlock.video"></my-embed>
-      </div>
-    </div>
+    }
   </ng-template>
 
   <ng-template #noResults let-search>

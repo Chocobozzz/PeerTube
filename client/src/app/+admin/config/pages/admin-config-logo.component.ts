@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, inject, OnDestroy, OnInit } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
@@ -14,8 +13,8 @@ import { CustomConfig, LogoType } from '@peertube/peertube-models'
 import { of, Subscription, switchMap, tap } from 'rxjs'
 import { AdminConfigService } from '../../../shared/shared-admin/admin-config.service'
 import { PreviewUploadComponent } from '../../../shared/shared-forms/preview-upload.component'
-import { AdminSaveBarComponent } from '../shared/admin-save-bar.component'
 import { InstanceLogoService } from '../../../shared/shared-instance/instance-logo.service'
+import { AdminSaveBarComponent } from '../shared/admin-save-bar.component'
 
 type Form = {
   hideInstanceName: FormControl<boolean>
@@ -35,7 +34,6 @@ type Form = {
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    CommonModule,
     AdminSaveBarComponent,
     PreviewUploadComponent,
     PeertubeCheckboxComponent

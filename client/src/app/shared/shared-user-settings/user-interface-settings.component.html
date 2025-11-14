@@ -23,5 +23,7 @@
     <my-select-options inputId="theme" formControlName="theme" [items]="availableThemes"></my-select-options>
   </div>
 
-  <input *ngIf="!reactiveUpdate()" type="submit" class="peertube-button primary-button" [value]="getSubmitValue()" [disabled]="!form.valid">
+  @if (!reactiveUpdate()) {
+    <input type="submit" class="peertube-button primary-button" [value]="getSubmitValue()" [disabled]="!form.valid">
+  }
 </form>

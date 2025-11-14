@@ -6,17 +6,22 @@
 
 <div class="stats-embed">
   <div class="global-stats">
-    <div *ngFor="let card of globalStatsCards" class="card stats-card">
-      <div class="label">
-        {{ card.label }}
-
-        <my-help *ngIf="card.help">
-          {{ card.help }}
-        </my-help>
+    @for (card of globalStatsCards; track card) {
+      <div class="card stats-card">
+        <div class="label">
+          {{ card.label }}
+          @if (card.help) {
+            <my-help>
+              {{ card.help }}
+            </my-help>
+          }
+        </div>
+        <div class="value">{{ card.value }}</div>
+        @if (card.moreInfo) {
+          <div class="more-info">{{ card.moreInfo }}</div>
+        }
       </div>
-      <div class="value">{{ card.value }}</div>
-      <div *ngIf="card.moreInfo" class="more-info">{{ card.moreInfo }}</div>
-    </div>
+    }
   </div>
 
   <my-embed [video]="videoEdit.getVideoAttributes()"></my-embed>
@@ -39,39 +44,47 @@
     </div>
 
     <div class="cards">
-      <div *ngFor="let card of overallStatCards" class="card stats-card">
-        <div class="label">{{ card.label }}</div>
-        <div class="value">{{ card.value }}</div>
-        <div *ngIf="card.moreInfo" class="more-info">{{ card.moreInfo }}</div>
-      </div>
+      @for (card of overallStatCards; track card) {
+        <div class="card stats-card">
+          <div class="label">{{ card.label }}</div>
+          <div class="value">{{ card.value }}</div>
+          @if (card.moreInfo) {
+            <div class="more-info">{{ card.moreInfo }}</div>
+          }
+        </div>
+      }
     </div>
   </div>
 
   <div class="timeseries">
     <div ngbNav #nav="ngbNav" [activeId]="activeGraphId" (activeIdChange)="onChartChange($event)" class="nav-tabs">
 
-      <ng-container *ngFor="let availableChart of availableCharts" [ngbNavItem]="availableChart.id">
-        <a ngbNavLink>
-          <span>{{ availableChart.label }}</span>
-        </a>
-
-        <ng-template ngbNavContent>
-          <div class="chart-container">
-            <p-chart
-              *ngIf="chartOptions[availableChart.id]"
-              [height]="chartHeight" [width]="chartWidth"
-              [type]="chartOptions[availableChart.id].type" [options]="chartOptions[availableChart.id].options" [data]="chartOptions[availableChart.id].data"
-              [plugins]="chartPlugins"
-            ></p-chart>
-          </div>
-
-          <div class="zoom-container">
-            <span *ngIf="!hasZoom() && availableChart.zoomEnabled" i18n class="description">You can select a part of the graph to zoom in</span>
-
-            <my-button i18n *ngIf="hasZoom()" (click)="resetZoom()">Reset zoom</my-button>
-          </div>
-        </ng-template>
-      </ng-container>
+      @for (availableChart of availableCharts; track availableChart) {
+        <ng-container [ngbNavItem]="availableChart.id">
+          <a ngbNavLink>
+            <span>{{ availableChart.label }}</span>
+          </a>
+          <ng-template ngbNavContent>
+            <div class="chart-container">
+              @if (chartOptions[availableChart.id]) {
+                <p-chart
+                  [height]="chartHeight" [width]="chartWidth"
+                  [type]="chartOptions[availableChart.id].type" [options]="chartOptions[availableChart.id].options" [data]="chartOptions[availableChart.id].data"
+                  [plugins]="chartPlugins"
+                ></p-chart>
+              }
+            </div>
+            <div class="zoom-container">
+              @if (!hasZoom() && availableChart.zoomEnabled) {
+                <span i18n class="description">You can select a part of the graph to zoom in</span>
+              }
+              @if (hasZoom()) {
+                <my-button i18n (click)="resetZoom()">Reset zoom</my-button>
+              }
+            </div>
+          </ng-template>
+        </ng-container>
+      }
     </div>
 
     <div [ngbNavOutlet]="nav"></div>

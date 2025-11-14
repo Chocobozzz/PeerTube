@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common'
 import { Component, OnInit, inject } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AuthService, Notifier, ServerService, UserService } from '@app/core'
@@ -18,7 +17,7 @@ import { InputTextComponent } from '../../../shared/shared-forms/input-text.comp
   selector: 'my-account-change-password',
   templateUrl: './my-account-change-password.component.html',
   styleUrls: [ './my-account-change-password.component.scss' ],
-  imports: [ NgIf, FormsModule, ReactiveFormsModule, InputTextComponent, AlertComponent ]
+  imports: [ FormsModule, ReactiveFormsModule, InputTextComponent, AlertComponent ]
 })
 export class MyAccountChangePasswordComponent extends FormReactive implements OnInit {
   protected formReactiveService = inject(FormReactiveService)

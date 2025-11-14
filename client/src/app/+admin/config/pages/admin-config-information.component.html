@@ -15,9 +15,11 @@
         <input
           type="text" id="adminEmail" class="form-control"
           formControlName="email" [ngClass]="{ 'input-error': formErrors.admin.email }"
-        >
+          >
 
-        <div *ngIf="formErrors.admin.email" class="form-error" role="alert">{{ formErrors.admin.email }}</div>
+        @if (formErrors.admin.email) {
+          <div class="form-error" role="alert">{{ formErrors.admin.email }}</div>
+        }
       </div>
 
       <div class="form-group" formGroupName="contactForm">
@@ -44,9 +46,11 @@
           <input
             type="text" id="instanceName" class="form-control"
             formControlName="name" [ngClass]="{ 'input-error': formErrors.instance.name }"
-          >
+            >
 
-          <div *ngIf="formErrors.instance.name" class="form-error" role="alert">{{ formErrors.instance.name }}</div>
+          @if (formErrors.instance.name) {
+            <div class="form-error" role="alert">{{ formErrors.instance.name }}</div>
+          }
         </div>
 
         <div class="form-group">
@@ -57,7 +61,9 @@
             [ngClass]="{ 'input-error': formErrors.instance.shortDescription }"
           ></textarea>
 
-          <div *ngIf="formErrors.instance.shortDescription" class="form-error" role="alert">{{ formErrors.instance.shortDescription }}</div>
+          @if (formErrors.instance.shortDescription) {
+            <div class="form-error" role="alert">{{ formErrors.instance.shortDescription }}</div>
+          }
         </div>
 
         <div class="form-group">
@@ -94,7 +100,7 @@
               formControlName="categories" [availableItems]="categoryItems"
               [selectableGroup]="false"
               i18n-placeholder placeholder="Add a new category"
-            >
+              >
             </my-select-checkbox>
           </div>
         </div>
@@ -108,7 +114,7 @@
               formControlName="languages" [availableItems]="languageItems"
               [selectableGroup]="false"
               i18n-placeholder placeholder="Add a new language"
-            >
+              >
             </my-select-checkbox>
           </div>
         </div>
@@ -120,9 +126,11 @@
           <input
             type="text" id="instanceServerCountry" class="form-control"
             formControlName="serverCountry" [ngClass]="{ 'input-error': formErrors.instance.serverCountry }"
-          >
+            >
 
-          <div *ngIf="formErrors.instance.serverCountry" class="form-error" role="alert">{{ formErrors.instance.serverCountry }}</div>
+          @if (formErrors.instance.serverCountry) {
+            <div class="form-error" role="alert">{{ formErrors.instance.serverCountry }}</div>
+          }
         </div>
 
       </div>
@@ -156,9 +164,11 @@
             <input
               type="text" id="instanceSocialExternalLink" class="form-control"
               formControlName="externalLink" [ngClass]="{ 'input-error': formErrors.instance.social.externalLink }"
-            >
+              >
 
-            <div *ngIf="formErrors.instance.social.externalLink" class="form-error" role="alert">{{ formErrors.instance.social.externalLink }}</div>
+            @if (formErrors.instance.social.externalLink) {
+              <div class="form-error" role="alert">{{ formErrors.instance.social.externalLink }}</div>
+            }
           </div>
 
           <div class="form-group">
@@ -167,9 +177,11 @@
             <input
               type="text" id="instanceSocialMastodonLink" class="form-control"
               formControlName="mastodonLink" [ngClass]="{ 'input-error': formErrors.instance.social.mastodonLink }"
-            >
+              >
 
-            <div *ngIf="formErrors.instance.social.mastodonLink" class="form-error" role="alert">{{ formErrors.instance.social.mastodonLink }}</div>
+            @if (formErrors.instance.social.mastodonLink) {
+              <div class="form-error" role="alert">{{ formErrors.instance.social.mastodonLink }}</div>
+            }
           </div>
 
           <div class="form-group">
@@ -178,9 +190,11 @@
             <input
               type="text" id="instanceSocialXLink" class="form-control"
               formControlName="xLink" [ngClass]="{ 'input-error': formErrors.instance.social.xLink }"
-            >
+              >
 
-            <div *ngIf="formErrors.instance.social.xLink" class="form-error" role="alert">{{ formErrors.instance.social.xLink }}</div>
+            @if (formErrors.instance.social.xLink) {
+              <div class="form-error" role="alert">{{ formErrors.instance.social.xLink }}</div>
+            }
           </div>
 
           <div class="form-group">
@@ -189,9 +203,11 @@
             <input
               type="text" id="instanceSocialBlueskyLink" class="form-control"
               formControlName="blueskyLink" [ngClass]="{ 'input-error': formErrors.instance.social.blueskyLink }"
-            >
+              >
 
-            <div *ngIf="formErrors.instance.social.blueskyLink" class="form-error" role="alert">{{ formErrors.instance.social.blueskyLink }}</div>
+            @if (formErrors.instance.social.blueskyLink) {
+              <div class="form-error" role="alert">{{ formErrors.instance.social.blueskyLink }}</div>
+            }
           </div>
         </ng-container>
 
@@ -230,7 +246,9 @@
             formControlName="defaultNSFWPolicy"
           ></my-select-radio>
 
-          <div *ngIf="formErrors.instance.defaultNSFWPolicy" class="form-error" role="alert">{{ formErrors.instance.defaultNSFWPolicy }}</div>
+          @if (formErrors.instance.defaultNSFWPolicy) {
+            <div class="form-error" role="alert">{{ formErrors.instance.defaultNSFWPolicy }}</div>
+          }
         </div>
 
         <div class="form-group">

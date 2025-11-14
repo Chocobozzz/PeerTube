@@ -1,6 +1,8 @@
 <div class="root">
   <div class="button-file" [ngClass]="classes" [ngbTooltip]="buttonTooltip()">
-    <my-global-icon *ngIf="icon()" [iconName]="icon()"></my-global-icon>
+    @if (icon()) {
+      <my-global-icon [iconName]="icon()"></my-global-icon>
+    }
 
     <span>{{ inputLabel() }}</span>
 
@@ -8,12 +10,14 @@
       type="file"
       [name]="inputName()" [id]="inputName()" [accept]="extensions()"
       (change)="fileChange($event)" [(ngModel)]="fileInputValue"
-    />
+      />
   </div>
 
-  <div class="filename" *ngIf="displayFilename() === true && filename">{{ filename }}</div>
+  @if (displayFilename() === true && filename) {
+    <div class="filename">{{ filename }}</div>
+  }
 
-  <button *ngIf="displayReset() && file" i18n class="reset-button reset-button-small ms-2" (click)="reset()">
-    Reset
-  </button>
+  @if (displayReset() && file) {
+    <button i18n class="reset-button reset-button-small ms-2" (click)="reset()">Reset</button>
+  }
 </div>

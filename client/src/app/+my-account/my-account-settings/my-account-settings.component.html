@@ -6,12 +6,14 @@
   </div>
 
   <div class="content-col">
-    <my-actor-avatar-edit
-      *ngIf="user?.account" class="d-block mb-3"
-      actorType="account" [avatars]="user.account.avatars"
-      [displayName]="user.account.displayName" [username]="user.username" [subscribers]="user.account.followersCount"
-      (avatarChange)="onAvatarChange($event)" (avatarDelete)="onAvatarDelete()"
-    ></my-actor-avatar-edit>
+    @if (user?.account) {
+      <my-actor-avatar-edit
+        class="d-block mb-3"
+        actorType="account" [avatars]="user.account.avatars"
+        [displayName]="user.account.displayName" [username]="user.username" [subscribers]="user.account.followersCount"
+        (avatarChange)="onAvatarChange($event)" (avatarDelete)="onAvatarDelete()"
+      ></my-actor-avatar-edit>
+    }
 
     <my-user-quota></my-user-quota>
 
@@ -52,25 +54,27 @@
   </div>
 </div>
 
-<div class="pt-two-cols mt-5" *ngIf="user.pluginAuth === null"> <!-- password grid -->
-  <div class="title-col">
-    <h2 i18n>PASSWORD</h2>
+@if (user.pluginAuth === null) {
+  <div class="pt-two-cols mt-5"> <!-- password grid -->
+    <div class="title-col">
+      <h2 i18n>PASSWORD</h2>
+    </div>
+    <div class="content-col">
+      <my-account-change-password></my-account-change-password>
+    </div>
   </div>
+}
 
-  <div class="content-col">
-    <my-account-change-password></my-account-change-password>
+@if (user.pluginAuth === null) {
+  <div class="pt-two-cols mt-5"> <!-- two factor auth grid -->
+    <div class="title-col">
+      <h2 i18n>TWO-FACTOR AUTHENTICATION</h2>
+    </div>
+    <div class="content-col">
+      <my-account-two-factor-button [user]="user"></my-account-two-factor-button>
+    </div>
   </div>
-</div>
-
-<div class="pt-two-cols mt-5" *ngIf="user.pluginAuth === null"> <!-- two factor auth grid -->
-  <div class="title-col">
-    <h2 i18n>TWO-FACTOR AUTHENTICATION</h2>
-  </div>
-
-  <div class="content-col">
-    <my-account-two-factor-button [user]="user"></my-account-two-factor-button>
-  </div>
-</div>
+}
 
 <div class="pt-two-cols mt-5">
   <div class="title-col">

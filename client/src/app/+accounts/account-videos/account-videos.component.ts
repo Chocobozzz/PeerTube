@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common'
 import { Component, inject, OnDestroy, OnInit, viewChild } from '@angular/core'
 import { ComponentPaginationLight, DisableForReuseHook, ScreenService } from '@app/core'
 import { Account } from '@app/shared/shared-main/account/account.model'
@@ -12,7 +11,7 @@ import { VideosListComponent } from '../../shared/shared-video-miniature/videos-
 @Component({
   selector: 'my-account-videos',
   templateUrl: './account-videos.component.html',
-  imports: [ NgIf, VideosListComponent ]
+  imports: [ VideosListComponent ]
 })
 export class AccountVideosComponent implements OnInit, OnDestroy, DisableForReuseHook {
   private screenService = inject(ScreenService)

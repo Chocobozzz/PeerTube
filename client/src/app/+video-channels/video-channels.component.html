@@ -1,126 +1,123 @@
-<div class="root" *ngIf="videoChannel">
-  <div class="margin-content">
-    <div class="banner mb-4" *ngIf="videoChannel.bannerUrl">
-      <img [src]="videoChannel.bannerUrl" alt="Channel banner">
+@if (videoChannel) {
+  <div class="root">
+    <div class="margin-content">
+      @if (videoChannel.bannerUrl) {
+        <div class="banner mb-4">
+          <img [src]="videoChannel.bannerUrl" alt="Channel banner">
+        </div>
+      }
     </div>
-  </div>
 
-  <div class="margin-content channel-info">
+    <div class="margin-content channel-info">
+      <ng-template #buttonsTemplate>
+        @if (isManageable()) {
+          <a [routerLink]="[ '/manage/update', videoChannel.nameWithHost  ]" class="peertube-button-link primary-button" i18n>Manage channel</a>
+        }
 
-    <ng-template #buttonsTemplate>
-      <a *ngIf="isManageable()" [routerLink]="[ '/manage/update', videoChannel.nameWithHost  ]" class="peertube-button-link primary-button" i18n>
-        Manage channel
-      </a>
+        @if (!isOwner()) {
+          <my-subscribe-button #subscribeButton [videoChannels]="[videoChannel]"></my-subscribe-button>
+        }
 
-      <my-subscribe-button *ngIf="!isOwner()" #subscribeButton [videoChannels]="[videoChannel]"></my-subscribe-button>
+        @if (videoChannel.support) {
+          <button (click)="showSupportModal()" class="support-button peertube-button tertiary-button">
+            <my-global-icon iconName="support" aria-hidden="true"></my-global-icon>
+            <span class="icon-text" i18n>Support</span>
+          </button>
+        }
+      </ng-template>
 
-      <button *ngIf="videoChannel.support" (click)="showSupportModal()" class="support-button peertube-button tertiary-button">
-        <my-global-icon iconName="support" aria-hidden="true"></my-global-icon>
-        <span class="icon-text" i18n>Support</span>
-      </button>
-    </ng-template>
+      <ng-template #ownerTemplate>
+        <div class="owner-block">
+          <div class="section-label" i18n>OWNER ACCOUNT</div>
 
-    <ng-template #ownerTemplate>
-      <div class="owner-block">
-        <div class="section-label" i18n>OWNER ACCOUNT</div>
+          <div class="avatar-row">
+            <my-actor-avatar
+              class="account-avatar" [size]="getAccountAvatarSize()"
+              [actor]="ownerAccount" actorType="account" [internalHref]="getAccountUrl()"
+            ></my-actor-avatar>
 
-        <div class="avatar-row">
-          <my-actor-avatar
-            class="account-avatar" [size]="getAccountAvatarSize()"
-            [actor]="ownerAccount" actorType="account" [internalHref]="getAccountUrl()"
-          ></my-actor-avatar>
+            <div class="actor-info">
+              <h4>
+                <a class="text-decoration-none" [routerLink]="getAccountUrl()" title="View account" i18n-title>{{ ownerAccount.displayName }}</a>
+              </h4>
+              <div class="actor-handle">&#64;{{ videoChannel.ownerBy }}</div>
+              <my-account-block-badges [account]="ownerAccount"></my-account-block-badges>
+            </div>
+          </div>
 
+          <div class="owner-description">
+            <div class="description-html" [innerHTML]="ownerDescriptionHTML"></div>
+          </div>
+
+          <a class="view-account peertube-button-link primary-button short mt-3" [routerLink]="getAccountUrl()" i18n>View account</a>
+
+          <a class="view-account link-primary complete" [routerLink]="getAccountUrl()" i18n>View owner account</a>
+        </div>
+      </ng-template>
+
+      <div class="channel-avatar-row">
+        <my-actor-avatar [size]="getChannelAvatarSize()" [actor]="videoChannel" actorType="channel"></my-actor-avatar>
+
+        <div>
+          <div class="section-label" i18n>VIDEO CHANNEL</div>
           <div class="actor-info">
-            <h4>
-              <a class="text-decoration-none" [routerLink]="getAccountUrl()" title="View account" i18n-title>{{ ownerAccount.displayName }}</a>
-            </h4>
+            <div>
+              <div class="actor-display-name">
+                <h1>{{ videoChannel.displayName }}</h1>
+              </div>
 
-            <div class="actor-handle">&#64;{{ videoChannel.ownerBy }}</div>
+              <div class="actor-handle">
+                <span>&#64;{{ videoChannel.nameWithHost }}</span>
+                <my-copy-button
+                  [value]="videoChannel.nameWithHostForced" i18n-notification notification="Handle copied"
+                  title="Copy channel handle" i18n-title
+                ></my-copy-button>
+              </div>
 
-            <my-account-block-badges [account]="ownerAccount"></my-account-block-badges>
-          </div>
-        </div>
+              <div class="actor-counters">
+                <span i18n>{videoChannel.followersCount, plural, =0 {No subscribers} =1 {1 subscriber} other {{{ videoChannel.followersCount }} subscribers}}</span>
 
-        <div class="owner-description">
-          <div class="description-html" [innerHTML]="ownerDescriptionHTML"></div>
-        </div>
-
-        <a class="view-account peertube-button-link primary-button short mt-3" [routerLink]="getAccountUrl()" i18n>
-          View account
-        </a>
-
-        <a class="view-account link-primary complete" [routerLink]="getAccountUrl()" i18n>
-          View owner account
-        </a>
-      </div>
-    </ng-template>
-
-    <div class="channel-avatar-row">
-      <my-actor-avatar [size]="getChannelAvatarSize()" [actor]="videoChannel" actorType="channel"></my-actor-avatar>
-
-      <div>
-        <div class="section-label" i18n>VIDEO CHANNEL</div>
-
-        <div class="actor-info">
-          <div>
-            <div class="actor-display-name">
-              <h1>{{ videoChannel.displayName }}</h1>
+                @if (channelVideosCount !== undefined) {
+                  <span class="videos-count" i18n>{channelVideosCount, plural, =0 {No videos} =1 {1 video} other {{{ channelVideosCount }} videos}}</span>
+                }
+              </div>
             </div>
-
-            <div class="actor-handle">
-              <span>&#64;{{ videoChannel.nameWithHost }}</span>
-
-              <my-copy-button
-                [value]="videoChannel.nameWithHostForced" i18n-notification notification="Handle copied"
-                title="Copy channel handle" i18n-title
-              ></my-copy-button>
+            <div class="channel-buttons right">
+              <ng-template *ngTemplateOutlet="buttonsTemplate"></ng-template>
             </div>
-
-            <div class="actor-counters">
-              <span i18n>{videoChannel.followersCount, plural, =0 {No subscribers} =1 {1 subscriber} other {{{ videoChannel.followersCount }} subscribers}}</span>
-
-              <span class="videos-count" *ngIf="channelVideosCount !== undefined" i18n>
-                {channelVideosCount, plural, =0 {No videos} =1 {1 video} other {{{ channelVideosCount }} videos}}
-              </span>
-            </div>
-          </div>
-
-          <div class="channel-buttons right">
-            <ng-template *ngTemplateOutlet="buttonsTemplate"></ng-template>
           </div>
         </div>
       </div>
+
+      <div class="channel-description" [ngClass]="{ expanded: channelDescriptionExpanded }">
+        <div class="description-html" [innerHTML]="channelDescriptionHTML"></div>
+      </div>
+
+      @if (hasShowMoreDescription()) {
+        <button class="show-more peertube-button-like-link" (click)="channelDescriptionExpanded = !channelDescriptionExpanded" title="Show the complete description" i18n-title i18n>
+          Show more...
+        </button>
+      }
+
+      <div class="channel-buttons bottom">
+        <ng-template *ngTemplateOutlet="buttonsTemplate"></ng-template>
+      </div>
+
+      <div class="owner-card">
+        <ng-template *ngTemplateOutlet="ownerTemplate"></ng-template>
+      </div>
     </div>
 
-    <div class="channel-description" [ngClass]="{ expanded: channelDescriptionExpanded }">
-      <div class="description-html" [innerHTML]="channelDescriptionHTML"></div>
-    </div>
-
-    <button *ngIf="hasShowMoreDescription()" class="show-more peertube-button-like-link"
-      (click)="channelDescriptionExpanded = !channelDescriptionExpanded"
-      title="Show the complete description" i18n-title i18n
-    >
-      Show more...
-    </button>
-
-    <div class="channel-buttons bottom">
-      <ng-template *ngTemplateOutlet="buttonsTemplate"></ng-template>
-    </div>
-
-    <div class="owner-card">
+    <div class="margin-content bottom-owner">
       <ng-template *ngTemplateOutlet="ownerTemplate"></ng-template>
     </div>
-  </div>
 
-  <div class="margin-content bottom-owner">
-    <ng-template *ngTemplateOutlet="ownerTemplate"></ng-template>
-  </div>
+    <div class="margin-content mb-3">
+      <my-horizontal-menu [menuEntries]="links"></my-horizontal-menu>
+    </div>
 
-  <div class="margin-content mb-3">
-    <my-horizontal-menu [menuEntries]="links"></my-horizontal-menu>
+    <router-outlet></router-outlet>
   </div>
-
-  <router-outlet></router-outlet>
-</div>
+}
 
 <my-support-modal #supportModal [name]="videoChannel?.displayName" [content]="videoChannel?.support"></my-support-modal>

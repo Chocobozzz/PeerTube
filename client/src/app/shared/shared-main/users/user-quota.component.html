@@ -6,17 +6,18 @@
       [label]="labelQuota()" [max]="user?.videoQuota || 0" [value]="userVideoQuotaUsed"
       [valueFormatted]="userVideoQuotaUsed | bytes: 1" [maxFormatted]="userVideoQuota"
       height="2rem"
-    >
+      >
     </my-progress-bar>
   </div>
 
-  <div *ngIf="hasDailyQuota()" class="mt-3">
-    <div class="label" i18n>Daily video quota</div>
-
-    <my-progress-bar
-      [label]="labelQuotaDaily()" [max]="user?.videoQuotaDaily || 0" [value]="userVideoQuotaUsedDaily"
-      [valueFormatted]="userVideoQuotaUsedDaily | bytes: 1" [maxFormatted]="userVideoQuotaDaily"
-      height="2rem"
-    >
-    </my-progress-bar>
-</div>
+  @if (hasDailyQuota()) {
+    <div class="mt-3">
+      <div class="label" i18n>Daily video quota</div>
+      <my-progress-bar
+        [label]="labelQuotaDaily()" [max]="user?.videoQuotaDaily || 0" [value]="userVideoQuotaUsedDaily"
+        [valueFormatted]="userVideoQuotaUsedDaily | bytes: 1" [maxFormatted]="userVideoQuotaDaily"
+        height="2rem"
+        >
+      </my-progress-bar>
+    </div>
+  }

@@ -1,82 +1,100 @@
 <div myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onSearchDataSubject.asObservable()" class="search-result">
   <div class="results-header">
     <div class="first-line">
-      <div class="results-counter" *ngIf="pagination.totalItems">
-        <span class="me-1" i18n>{{ pagination.totalItems | myNumberFormatter }} {pagination.totalItems, plural, =1 {result} other {results}}</span>
+      @if (pagination.totalItems) {
+        <div class="results-counter">
+          <span class="me-1" i18n>{{ pagination.totalItems | myNumberFormatter }} {pagination.totalItems, plural, =1 {result} other {results}}</span>
 
-        <span class="me-1" i18n *ngIf="advancedSearch.searchTarget === 'local'">on this instance</span>
-        <span class="me-1" i18n *ngIf="advancedSearch.searchTarget === 'search-index'">on the vidiverse</span>
+          @if (advancedSearch.searchTarget === 'local') {
+            <span class="me-1" i18n>on this instance</span>
+          }
 
-        <span *ngIf="currentSearch" i18n>for <span class="search-value">{{ currentSearch }}</span></span>
-      </div>
+          @if (advancedSearch.searchTarget === 'search-index') {
+            <span class="me-1" i18n>on the vidiverse</span>
+          }
+
+          @if (currentSearch) {
+            <span i18n>for <span class="search-value">{{ currentSearch }}</span></span>
+          }
+        </div>
+      }
 
       <button
         class="filter-button peertube-button tertiary-button ms-auto" (click)="isSearchFilterCollapsed = !isSearchFilterCollapsed"
         [attr.aria-expanded]="!isSearchFilterCollapsed" aria-controls="search-results-filter" [title]="getFilterButtonTitle()"
-      >
+        >
         <my-global-icon iconName="filter"></my-global-icon>
 
-        <ng-container i18n>
-          Filters
-        </ng-container>
+        <ng-container i18n>Filters</ng-container>
 
-        <span *ngIf="numberOfFilters() > 0" class="pt-badge badge-secondary">{{ numberOfFilters() }}</span>
+        @if (numberOfFilters() > 0) {
+          <span class="pt-badge badge-secondary">{{ numberOfFilters() }}</span>
+        }
       </button>
     </div>
 
     <div id="search-results-filter" class="results-filter" [ngbCollapse]="isSearchFilterCollapsed" [animation]="true">
       <my-search-filters [advancedSearch]="advancedSearch" (filtered)="onFiltered()"></my-search-filters>
 
-      <my-alert *ngIf="error" type="danger">{{ error }}</my-alert>
+      @if (error) {
+        <my-alert type="danger">{{ error }}</my-alert>
+      }
     </div>
   </div>
 
-  <div i18n *ngIf="pagination.totalItems === 0 && results.length === 0" class="no-results">
-    No results found
-  </div>
+  @if (pagination.totalItems === 0 && results.length === 0) {
+    <div i18n class="no-results">No results found</div>
+  }
 
-  <ng-container *ngFor="let result of results">
-    <div *ngIf="isVideoChannel(result)" class="entry video-channel">
+  @for (result of results; track result) {
+    @if (isVideoChannel(result)) {
+      <div class="entry video-channel">
+        <my-actor-avatar
+          [actor]="result" actorType="channel" responseSize="true"
+          [internalHref]="getInternalChannelUrl(result)" [href]="getExternalChannelUrl(result)" size="120"
+        ></my-actor-avatar>
 
-      <my-actor-avatar
-        [actor]="result" actorType="channel" responseSize="true"
-        [internalHref]="getInternalChannelUrl(result)" [href]="getExternalChannelUrl(result)" size="120"
-      ></my-actor-avatar>
+        <div class="video-channel-info">
+          @if (!isExternalChannelUrl()) {
+            <a [routerLink]="getInternalChannelUrl(result)" class="video-channel-names">
+              <ng-container *ngTemplateOutlet="aContent"></ng-container>
+            </a>
+          } @else {
+            <a [href]="getExternalChannelUrl(result)" target="_blank" class="video-channel-names">
+              <ng-container *ngTemplateOutlet="aContent"></ng-container>
+            </a>
+          }
 
-      <div class="video-channel-info">
-        <a *ngIf="!isExternalChannelUrl()" [routerLink]="getInternalChannelUrl(result)" class="video-channel-names">
-          <ng-container *ngTemplateOutlet="aContent"></ng-container>
-        </a>
+          <ng-template #aContent>
+            <div class="video-channel-display-name me-2">{{ result.displayName }}</div>
+            <div class="video-channel-name">{{ result.nameWithHost }}</div>
+          </ng-template>
 
-        <a *ngIf="isExternalChannelUrl()" [href]="getExternalChannelUrl(result)" target="_blank" class="video-channel-names">
-          <ng-container *ngTemplateOutlet="aContent"></ng-container>
-        </a>
+          <div i18n class="video-channel-followers">{{ result.followersCount }} subscribers</div>
+        </div>
 
-        <ng-template #aContent>
-          <div class="video-channel-display-name me-2">{{ result.displayName }}</div>
-          <div class="video-channel-name">{{ result.nameWithHost }}</div>
-        </ng-template>
-
-        <div i18n class="video-channel-followers">{{ result.followersCount }} subscribers</div>
+        @if (!hideActions()) {
+          <my-subscribe-button [videoChannels]="[result]"></my-subscribe-button>
+        }
       </div>
-
-      <my-subscribe-button *ngIf="!hideActions()" [videoChannels]="[result]"></my-subscribe-button>
-    </div>
-
-    <div *ngIf="isVideo(result)" class="entry video">
-      <my-video-miniature
-        [video]="result" [user]="userMiniature" [displayAsRow]="true" [displayVideoActions]="!hideActions()"
-        [displayOptions]="videoDisplayOptions" [videoLinkType]="getLinkType()"
-        (videoBlocked)="removeVideoFromArray(result)" (videoRemoved)="removeVideoFromArray(result)"
-      ></my-video-miniature>
-    </div>
-
-    <div *ngIf="isPlaylist(result)" class="entry video-playlist">
-      <my-video-playlist-miniature
-        [playlist]="result" displayAsRow="true" displayChannel="true" toManage="false"
-        [linkType]="getLinkType()"
-      ></my-video-playlist-miniature>
-    </div>
-  </ng-container>
+    }
+    @if (isVideo(result)) {
+      <div class="entry video">
+        <my-video-miniature
+          [video]="result" [user]="userMiniature" [displayAsRow]="true" [displayVideoActions]="!hideActions()"
+          [displayOptions]="videoDisplayOptions" [videoLinkType]="getLinkType()"
+          (videoBlocked)="removeVideoFromArray(result)" (videoRemoved)="removeVideoFromArray(result)"
+        ></my-video-miniature>
+      </div>
+    }
+    @if (isPlaylist(result)) {
+      <div class="entry video-playlist">
+        <my-video-playlist-miniature
+          [playlist]="result" displayAsRow="true" displayChannel="true" toManage="false"
+          [linkType]="getLinkType()"
+        ></my-video-playlist-miniature>
+      </div>
+    }
+  }
 
 </div>

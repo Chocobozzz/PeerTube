@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, forwardRef, inject, input, OnInit } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { ServerService } from '@app/core'
@@ -8,26 +7,22 @@ import { SelectCheckboxDefaultAllComponent } from './select-checkbox-default-all
 @Component({
   selector: 'my-select-languages',
   template: `
-<my-select-checkbox-default-all
-  *ngIf="availableLanguages"
-
-  [availableItems]="availableLanguages"
-  [(ngModel)]="selectedLanguages"
-  (ngModelChange)="onModelChange()"
-
-  [inputId]="inputId()"
-
-  [maxIndividualItems]="maxLanguages()"
-
-  virtualScroll="true"
-  virtualScrollItemSize="37"
-
-  i18n-allSelectedLabel allSelectedLabel="All languages"
-  i18n-selectedLabel selectedLabel="{1} languages selected"
-  i18n-placeholder placeholder="Add a new language"
->
-</my-select-checkbox-default-all>
-  `,
+@if (availableLanguages) {
+  <my-select-checkbox-default-all
+    [availableItems]="availableLanguages"
+    [(ngModel)]="selectedLanguages"
+    (ngModelChange)="onModelChange()"
+    [inputId]="inputId()"
+    [maxIndividualItems]="maxLanguages()"
+    virtualScroll="true"
+    virtualScrollItemSize="37"
+    i18n-allSelectedLabel allSelectedLabel="All languages"
+    i18n-selectedLabel selectedLabel="{1} languages selected"
+    i18n-placeholder placeholder="Add a new language"
+    >
+  </my-select-checkbox-default-all>
+}
+`,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -35,7 +30,7 @@ import { SelectCheckboxDefaultAllComponent } from './select-checkbox-default-all
       multi: true
     }
   ],
-  imports: [ SelectCheckboxDefaultAllComponent, FormsModule, CommonModule ]
+  imports: [ SelectCheckboxDefaultAllComponent, FormsModule ]
 })
 export class SelectLanguagesComponent implements ControlValueAccessor, OnInit {
   private server = inject(ServerService)

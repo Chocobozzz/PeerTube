@@ -13,7 +13,9 @@
 
       <my-user-auto-complete inputName="next-ownership-username" formControlName="username"></my-user-auto-complete>
 
-      <div *ngIf="formErrors.username" class="form-error" role="alert">{{ formErrors.username }}</div>
+      @if (formErrors.username) {
+        <div class="form-error" role="alert">{{ formErrors.username }}</div>
+      }
     </div>
   </div>
 

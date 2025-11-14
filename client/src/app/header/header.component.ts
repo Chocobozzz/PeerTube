@@ -3,6 +3,7 @@ import { Component, inject, LOCALE_ID, OnDestroy, OnInit, viewChild } from '@ang
 import { NavigationEnd, Router, RouterLink } from '@angular/router'
 import { AuthService, AuthStatus, AuthUser, HotkeysService, MenuService, RedirectService, ScreenService, ServerService } from '@app/core'
 import { NotificationDropdownComponent } from '@app/header/notification-dropdown.component'
+import { getDevLocale, isOnDevLocale } from '@app/helpers'
 import { QuickSettingsModalComponent } from '@app/menu/quick-settings-modal.component'
 import { ActorAvatarComponent } from '@app/shared/shared-actor-image/actor-avatar.component'
 import { PeertubeModalService } from '@app/shared/shared-main/peertube-modal/peertube-modal.service'
@@ -19,7 +20,6 @@ import { GlobalIconComponent } from '../shared/shared-icons/global-icon.componen
 import { ButtonComponent } from '../shared/shared-main/buttons/button.component'
 import { HeaderService } from './header.service'
 import { SearchTypeaheadComponent } from './search-typeahead.component'
-import { getDevLocale, isOnDevLocale } from '@app/helpers'
 
 @Component({
   selector: 'my-header',

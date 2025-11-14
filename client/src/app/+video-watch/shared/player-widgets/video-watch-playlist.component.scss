@@ -1,7 +1,7 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_bootstrap-variables';
-@use '_miniature' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_bootstrap-variables";
+@use "_miniature" as *;
 
 .playlist {
   .playlist-by-index {
@@ -13,7 +13,7 @@
     }
 
     .playlist-index span:first-child::after {
-      content: '/';
+      content: "/";
       margin: 0 3px;
     }
   }
@@ -23,7 +23,7 @@
     margin: 10px 0;
 
     button:not(.active) {
-      opacity: .5;
+      opacity: 0.5;
     }
   }
 
@@ -52,4 +52,3 @@
     }
   }
 }
-

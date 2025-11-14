@@ -1,8 +1,12 @@
 <form novalidate [formGroup]="form" (ngSubmit)="formValidated()">
   <div class="form-group">
     <input
-      type="email" formControlName="text" class="form-control"
-      (keyup.control.enter)="onValidKey()" (keyup.meta.enter)="onValidKey()" placeholder="jane_doe@example.com"
+      type="email"
+      formControlName="text"
+      class="form-control"
+      (keyup.control.enter)="onValidKey()"
+      (keyup.meta.enter)="onValidKey()"
+      placeholder="jane_doe@example.com"
     >
   </div>
 
@@ -14,15 +18,19 @@
     }
   </button>
 
-  <my-help *ngIf="!interact() && showHelp()">
-    <ng-container i18n>
-      You can subscribe to the channel via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).
-    </ng-container>
-  </my-help>
-
-  <my-help *ngIf="showHelp() && interact()">
-    <ng-container i18n>
-      You can interact with this via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).
-    </ng-container>
-  </my-help>
+  @if (showHelp()) {
+    @if (!interact()) {
+      <my-help>
+        <ng-container i18n>
+          You can subscribe to the channel via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).
+        </ng-container>
+      </my-help>
+    } @else {
+      <my-help>
+        <ng-container i18n>
+          You can interact with this via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).
+        </ng-container>
+      </my-help>
+    }
+  }
 </form>

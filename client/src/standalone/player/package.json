@@ -16,7 +16,10 @@
   ],
   "main": "./build/peertube-player.js",
   "exports": {
-    ".": "./build/peertube-player.js"
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./build/peertube-player.js"
+    }
   },
   "types": "./src/index.ts",
   "author": "Chocobozzz",

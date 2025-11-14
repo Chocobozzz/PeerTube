@@ -1,4 +1,3 @@
-import { NgFor, NgIf } from '@angular/common'
 import { Component, input, viewChild } from '@angular/core'
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
 import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
@@ -8,7 +7,7 @@ import { Syndication } from './syndication.model'
   selector: 'my-feed',
   styleUrls: [ './feed.component.scss' ],
   templateUrl: './feed.component.html',
-  imports: [ NgIf, NgbPopover, GlobalIconComponent, NgFor ]
+  imports: [ NgbPopover, GlobalIconComponent ]
 })
 export class FeedComponent {
   readonly popover = viewChild<NgbPopover>('popover')

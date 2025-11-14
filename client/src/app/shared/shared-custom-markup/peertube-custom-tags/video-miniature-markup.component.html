@@ -1,6 +1,7 @@
-<my-video-miniature
-  *ngIf="video()"
-  [video]="video()" [user]="user" [displayAsRow]="false"
-  [displayVideoActions]="true" [displayOptions]="displayOptions"
->
-</my-video-miniature>
+@if (video()) {
+  <my-video-miniature
+    [video]="video()" [user]="user" [displayAsRow]="false"
+    [displayVideoActions]="true" [displayOptions]="displayOptions"
+    >
+  </my-video-miniature>
+}

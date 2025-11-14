@@ -1,4 +1,3 @@
-import { NgFor, NgIf } from '@angular/common'
 import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ServerService } from '@app/core'
@@ -12,8 +11,6 @@ import { ResolverData } from '../about-instance.resolver'
   templateUrl: './about-instance-home.component.html',
   styleUrls: [ './about-instance-common.component.scss' ],
   imports: [
-    NgIf,
-    NgFor,
     CustomMarkupContainerComponent,
     SupportModalComponent
   ]

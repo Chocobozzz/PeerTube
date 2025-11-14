@@ -1,63 +1,67 @@
-<div *ngIf="form()" [formGroup]="form()" class="form-group">
-  <label *ngIf="setting().label && setting().type !== 'input-checkbox'" [attr.for]="setting().name" [innerHTML]="setting().label"></label>
-
-  <my-peertube-checkbox
-    *ngIf="setting().type === 'input-checkbox'"
-    [inputName]="setting().name"
-    [formControlName]="setting().name"
-    [labelInnerHTML]="setting().label"
-  ></my-peertube-checkbox>
-
-  <div *ngIf="setting().descriptionHTML" class="form-group-description" [innerHTML]="setting().descriptionHTML"></div>
-
-  @switch (setting().type) {
-    @case ('input') {
-      <input type="text" [id]="setting().name" [formControlName]="setting().name" />
+@if (form()) {
+  <div [formGroup]="form()" class="form-group">
+    @if (setting().label && setting().type !== 'input-checkbox') {
+      <label [attr.for]="setting().name" [innerHTML]="setting().label"></label>
     }
 
-    @case ('select') {
-      <div class="peertube-select-container">
-        <select  [id]="setting().name" [formControlName]="setting().name" class="form-control">
-          <option *ngFor="let option of setting().options" [value]="option.value">{{ option.label }}</option>
-        </select>
-      </div>
+    @if (setting().type === 'input-checkbox') {
+      <my-peertube-checkbox
+        [inputName]="setting().name"
+        [formControlName]="setting().name"
+        [labelInnerHTML]="setting().label"
+      ></my-peertube-checkbox>
     }
 
-    @case ('input-password') {
-      <my-input-text [formError]="formErrors()['settings.name']" [formControlName]="setting().name" [inputId]="setting().name"></my-input-text>
+    @if (setting().descriptionHTML) {
+      <div class="form-group-description" [innerHTML]="setting().descriptionHTML"></div>
     }
 
-    @case ('input-textarea') {
-      <textarea type="text" [id]="setting().name" [formControlName]="setting().name"></textarea>
+    @switch (setting().type) {
+      @case ('input') {
+        <input type="text" [id]="setting().name" [formControlName]="setting().name" />
+      }
 
+      @case ('select') {
+        <div class="peertube-select-container">
+          <select  [id]="setting().name" [formControlName]="setting().name" class="form-control">
+            @for (option of setting().options; track option) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </div>
+      }
+
+      @case ('input-password') {
+        <my-input-text [formError]="formErrors()['settings.name']" [formControlName]="setting().name" [inputId]="setting().name"></my-input-text>
+      }
+
+      @case ('input-textarea') {
+        <textarea type="text" [id]="setting().name" [formControlName]="setting().name"></textarea>
+      }
+
+      @case ('markdown-text') {
+        <my-help helpType="markdownText"></my-help>
+        <my-markdown-textarea
+          markdownType="text" [inputId]="setting().name" [formControlName]="setting().name"
+          [formError]="formErrors()['settings.name']"
+        ></my-markdown-textarea>
+      }
+
+      @case ('markdown-enhanced') {
+        <my-help helpType="markdownEnhanced"></my-help>
+        <my-markdown-textarea
+          markdownType="enhanced" [inputId]="setting().name" [formControlName]="setting().name"
+          [formError]="formErrors()['settings.name']"
+        ></my-markdown-textarea>
+      }
+
+      @case ('html') {
+        <div [innerHTML]="setting().html"></div>
+      }
     }
 
-    @case ('markdown-text') {
-      <my-help helpType="markdownText"></my-help>
-
-      <my-markdown-textarea
-        markdownType="text" [inputId]="setting().name" [formControlName]="setting().name"
-        [formError]="formErrors()['settings.name']"
-      ></my-markdown-textarea>
+    @if (hasDedicatedFormError() && formErrors()[setting().name]) {
+      <div class="form-error" role="alert">{{ formErrors()[setting().name] }}</div>
     }
-
-    @case ('markdown-enhanced') {
-      <my-help helpType="markdownEnhanced"></my-help>
-
-      <my-markdown-textarea
-        markdownType="enhanced" [inputId]="setting().name" [formControlName]="setting().name"
-        [formError]="formErrors()['settings.name']"
-      ></my-markdown-textarea>
-
-    }
-
-    @case ('html') {
-      <div [innerHTML]="setting().html"></div>
-    }
-  }
-
-  <div *ngIf="hasDedicatedFormError() && formErrors()[setting().name]" class="form-error" role="alert">
-    {{ formErrors()[setting().name] }}
   </div>
-
-</div>
+}

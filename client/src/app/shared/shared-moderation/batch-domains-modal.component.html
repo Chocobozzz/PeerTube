@@ -17,13 +17,15 @@
           class="form-control" [ngClass]="{ 'input-error': formErrors['hosts'] }" ngbAutofocus
         ></textarea>
 
-        <div *ngIf="formErrors.hosts" class="form-error" role="alert">
-          {{ formErrors.hosts }}
+        @if (formErrors.hosts) {
+          <div class="form-error" role="alert">
+            {{ formErrors.hosts }}
 
-          <div *ngIf="form.controls['hosts'].errors.validHosts">
-            {{ form.controls['hosts'].errors.validHosts.value }}
+            @if (form.controls['hosts'].errors.validHosts) {
+              <div>{{ form.controls['hosts'].errors.validHosts.value }}</div>
+            }
           </div>
-        </div>
+        }
       </div>
 
       <ng-content select="warning"></ng-content>
@@ -32,7 +34,7 @@
         <input
           type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button"
           (click)="hide()" (key.enter)="hide()"
-        >
+          >
 
         <input type="submit" [value]="action()" class="peertube-button primary-button" [disabled]="!form.valid" />
       </div>

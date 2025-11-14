@@ -1,12 +1,11 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use './_player-variables' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "./_player-variables" as *;
 
 $stats-width: 420px;
 $contextmenu-background-color: rgba(0, 0, 0, 0.6);
 
 .video-js {
-
   .vjs-stats-content {
     transition: opacity 0.1s;
 
@@ -35,7 +34,7 @@ $contextmenu-background-color: rgba(0, 0, 0, 0.6);
   .vjs-stats-list > div > div {
     display: inline-block;
     font-weight: 600;
-    padding: 0 .5em;
+    padding: 0 0.5em;
     text-align: end;
     min-width: 11.5em;
     white-space: nowrap;

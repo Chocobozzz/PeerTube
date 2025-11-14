@@ -1,10 +1,14 @@
 <div
-  class="btn-group" role="group"
+  class="btn-group"
+  role="group"
   [ngClass]="{ 'big': isBigButton }"
-  ngbDropdown="dropdown" autoClose="outside" placement="bottom-right bottom-left bottom auto"
-  role="group" aria-label="Multiple ways to subscribe to the current channel" i18n-aria-label
+  ngbDropdown="dropdown"
+  autoClose="outside"
+  placement="bottom-right bottom-left bottom auto"
+  role="group"
+  aria-label="Multiple ways to subscribe to the current channel"
+  i18n-aria-label
 >
-
   <ng-template #subscribeContent>
     <div class="d-inline-block" [ngClass]="{ 'extra-text': isAtLeastOneChannelSubscribed }">
       @if (isSingleSubscribe) {
@@ -12,9 +16,11 @@
       } @else {
         <div i18n>Subscribe to all channels</div>
 
-        <div class="fs-8 fw-normal lh-1" *ngIf="isAtLeastOneChannelSubscribed" i18n>
-          {{ subscribeStatus(true).length }}/{{ subscribed.size }} channels subscribed
-        </div>
+        @if (isAtLeastOneChannelSubscribed) {
+          <div class="fs-8 fw-normal lh-1" i18n>
+            {{ subscribeStatus(true).length }}/{{ subscribed.size }} channels subscribed
+          </div>
+        }
       }
     </div>
   </ng-template>
@@ -33,7 +39,15 @@
         <ng-template [ngTemplateOutlet]="subscribeContent"></ng-template>
       </button>
 
-      <button type="button" [ngClass]="buttonClasses" class="btn dropdown-toggle-split" ngbDropdownToggle aria-label="Open subscription dropdown" i18n-ariaLabel></button>
+      <button
+        type="button"
+        [ngClass]="buttonClasses"
+        class="btn dropdown-toggle-split"
+        ngbDropdownToggle
+        aria-label="Open subscription dropdown"
+        i18n-ariaLabel
+      >
+      </button>
     }
   } @else {
     <button ngbDropdownToggle [ngClass]="buttonClasses" type="button" class="btn">
@@ -42,7 +56,6 @@
   }
 
   <div class="dropdown-menu" ngbDropdownMenu>
-
     <div class="dropdown-header" i18n>Using an ActivityPub account</div>
 
     <button type="button" class="dropdown-item" (click)="subscribe()">
@@ -53,16 +66,21 @@
       }
     </button>
 
-    <div type="button" *ngIf="isRemoteSubscribeAvailable()" class="dropdown-item dropdown-item-neutral">
-      <div class="mb-1" i18n>Subscribe with a remote account:</div>
-      <my-remote-subscribe [showHelp]="true" [uri]="uri"></my-remote-subscribe>
-    </div>
+    @if (isRemoteSubscribeAvailable()) {
+      <div type="button" class="dropdown-item dropdown-item-neutral">
+        <div class="mb-1" i18n>Subscribe with a remote account:</div>
+        <my-remote-subscribe [showHelp]="true" [uri]="uri"></my-remote-subscribe>
+      </div>
+    }
 
     <div class="dropdown-divider"></div>
 
     <div class="dropdown-header" i18n>Using a syndication feed</div>
-    <a *ngIf="podcastFeedUri" [href]="podcastFeedUri" target="_blank" class="dropdown-item" i18n>Subscribe via Podcast Feed</a>
-    <a [href]="rssUri" target="_blank" class="dropdown-item" i18n>Subscribe via RSS</a>
 
+    @if (podcastFeedUri) {
+      <a [href]="podcastFeedUri" target="_blank" class="dropdown-item" i18n>Subscribe via Podcast Feed</a>
+    }
+
+    <a [href]="rssUri" target="_blank" class="dropdown-item" i18n>Subscribe via RSS</a>
   </div>
 </div>

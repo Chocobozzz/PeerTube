@@ -343,7 +343,7 @@ function isGeneratedVideoDownloadAllowed (_object: {
 // ---------------------------------------------------------------------------
 
 function checkAllowResult (res: express.Response, allowParameters: any, result?: AllowedResult) {
-  if (!result || result.allowed !== true) {
+  if (result?.allowed !== true) {
     logger.info('Download is not allowed.', { result, allowParameters, ...lTags() })
 
     res.fail({

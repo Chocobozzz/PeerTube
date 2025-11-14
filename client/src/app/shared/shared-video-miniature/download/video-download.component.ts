@@ -1,4 +1,4 @@
-import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common'
+import { NgClass, NgTemplateOutlet } from '@angular/common'
 import { Component, ElementRef, inject, input, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { AuthService, HooksService } from '@app/core'
@@ -26,7 +26,6 @@ type DownloadType = 'video-generate' | 'video-files' | 'subtitle-files'
     VideoFilesDownloadComponent,
     VideoGenerateDownloadComponent,
     GlobalIconComponent,
-    NgIf,
     FormsModule,
     NgClass,
     NgTemplateOutlet

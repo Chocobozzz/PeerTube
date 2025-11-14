@@ -1,4 +1,4 @@
-import { NgClass, NgFor } from '@angular/common'
+import { NgClass } from '@angular/common'
 import { Component, ElementRef, HostListener, inject, input, OnChanges, OnInit, output, SimpleChanges, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
@@ -32,7 +32,6 @@ type Segment = {
   imports: [
     NgClass,
     GlobalIconComponent,
-    NgFor,
     NgbCollapse,
     FormsModule,
     SelectOptionsComponent,

@@ -20,26 +20,32 @@
   (onRowExpand)="rowExpand.emit($event)"
   [ngClass]="{ loading: loading, 'sticky-table': actionCell }"
   (onRowReorder)="rowReorder.emit($event)"
->
+  >
   <ng-template #caption>
     <div class="caption">
       <div class="left-buttons">
         @if (isInSelectionMode()) {
           <my-action-dropdown i18n-label label="Batch actions" theme="primary" [actions]="bulkActions()" [entry]="selectedRows"></my-action-dropdown>
         } @else {
-          <strong *ngIf="totalTitle" [ngClass]="{ 'opacity-0': loading }">
-            <ng-template *ngTemplateOutlet="totalTitle; context: { $implicit: totalRecords }"></ng-template>
-          </strong>
+          @if (totalTitle) {
+            <strong [ngClass]="{ 'opacity-0': loading }">
+              <ng-template *ngTemplateOutlet="totalTitle; context: { $implicit: totalRecords }"></ng-template>
+            </strong>
+          }
 
-          <div *ngIf="captionLeft" class="ms-auto right-block">
-            <ng-template *ngTemplateOutlet="captionLeft"></ng-template>
-          </div>
+          @if (captionLeft) {
+            <div class="ms-auto right-block">
+              <ng-template *ngTemplateOutlet="captionLeft"></ng-template>
+            </div>
+          }
         }
       </div>
 
-      <div *ngIf="captionRight" class="ms-auto right-block">
-        <ng-template *ngTemplateOutlet="captionRight"></ng-template>
-      </div>
+      @if (captionRight) {
+        <div class="ms-auto right-block">
+          <ng-template *ngTemplateOutlet="captionRight"></ng-template>
+        </div>
+      }
     </div>
   </ng-template>
 
@@ -59,24 +65,31 @@
 
   <ng-template #header>
     <tr>
-      <th *ngIf="hasBulkActions()" scope="col" width="25px" class="checkbox-cell">
-        <p-tableHeaderCheckbox ariaLabel="Select all rows" i18n-ariaLabel></p-tableHeaderCheckbox>
-      </th>
+      @if (hasBulkActions()) {
+        <th scope="col" width="25px" class="checkbox-cell">
+          <p-tableHeaderCheckbox ariaLabel="Select all rows" i18n-ariaLabel></p-tableHeaderCheckbox>
+        </th>
+      }
 
       @if (reorderableRows()) {
         <th scope="col" width="25px"></th>
       }
 
-      <th *ngIf="expandedRow">
-        <div class="visually-hidden">{{ expandedIconTooltip() }}</div>
-      </th>
+      @if (expandedRow) {
+        <th>
+          <div class="visually-hidden">{{ expandedIconTooltip() }}</div>
+        </th>
+      }
 
       @for (column of columns; track column.id) {
         @if (isColumnDisplayed(column.id)) {
           @if (column.sortable) {
             <th scope="col" [ngbTooltip]="sortTooltip" container="body" [pSortableColumn]="column.sortKey" [ngClass]="column.class">
               {{ column.label }}
-              <small *ngIf="column.labelSmall">{{ column.labelSmall }}</small>
+
+              @if (column.labelSmall) {
+                <small>{{ column.labelSmall }}</small>
+              }
 
               <p-sortIcon [field]="column.sortKey"></p-sortIcon>
             </th>
@@ -84,48 +97,56 @@
             <th scope="col" [ngClass]="column.class">
               {{ column.label }}
 
-              <small *ngIf="column.labelSmall">{{ column.labelSmall }}</small>
+              @if (column.labelSmall) {
+                <small>{{ column.labelSmall }}</small>
+              }
             </th>
           }
         }
       }
 
-      <th *ngIf="columnConfig() || actionCell" scope="col" class="action-head" [ngClass]="{ 'has-column-config': columnConfig(), 'has-action': actionCell }">
-        <div class="d-flex align-items-center justify-content-end gap-2">
-          <span *ngIf="actionCell" i18>Actions</span>
+      @if (columnConfig() || actionCell) {
+        <th scope="col" class="action-head" [ngClass]="{ 'has-column-config': columnConfig(), 'has-action': actionCell }">
+          <div class="d-flex align-items-center justify-content-end gap-2">
+            @if (actionCell) {
+              <span i18>Actions</span>
+            }
 
-          <span *ngIf="columnConfig()" class="column-toggle">
-            <div ngbDropdown placement="bottom-left auto" container="body" autoClose="outside" #columnsDropdown="ngbDropdown">
-              <my-button
-                theme="tertiary"
-                icon="columns"
-                ngbDropdownToggle
-                i18n-title
-                title="Open table configuration"
-                [show]="columnsDropdown.isOpen()"
-              ></my-button>
+            @if (columnConfig()) {
+              <span class="column-toggle">
+                <div ngbDropdown placement="bottom-left auto" container="body" autoClose="outside" #columnsDropdown="ngbDropdown">
+                  <my-button
+                    theme="tertiary"
+                    icon="columns"
+                    ngbDropdownToggle
+                    i18n-title
+                    title="Open table configuration"
+                    [show]="columnsDropdown.isOpen()"
+                  ></my-button>
 
-              <div ngbDropdownMenu class="p-3">
-                <div class="form-group">
-                  <div class="muted small mb-2" i18n>Column displayed:</div>
+                  <div ngbDropdownMenu class="p-3">
+                    <div class="form-group">
+                      <div class="muted small mb-2" i18n>Column displayed:</div>
 
-                  @for (column of columns; track column.id) {
-                    <div class="ms-1 mb-1">
-                      <my-peertube-checkbox
-                        [inputName]="'column-' + column.id"
-                        [(ngModel)]="column.selected"
-                        i18n-labelText
-                        [labelText]="column.label"
-                        (ngModelChange)="saveSelectedColumns()"
-                      ></my-peertube-checkbox>
+                      @for (column of columns; track column.id) {
+                        <div class="ms-1 mb-1">
+                          <my-peertube-checkbox
+                            [inputName]="'column-' + column.id"
+                            [(ngModel)]="column.selected"
+                            i18n-labelText
+                            [labelText]="column.label"
+                            (ngModelChange)="saveSelectedColumns()"
+                          ></my-peertube-checkbox>
+                        </div>
+                      }
                     </div>
-                  }
+                  </div>
                 </div>
-              </div>
-            </div>
-          </span>
-        </div>
-      </th>
+              </span>
+            }
+          </div>
+        </th>
+      }
     </tr>
   </ng-template>
 
@@ -151,18 +172,23 @@
         </td>
       }
 
-      <td *ngIf="hasBulkActions()" class="checkbox-cell">
-        <p-tableCheckbox [value]="item" ariaLabel="Select this row" i18n-ariaLabel></p-tableCheckbox>
-      </td>
+      @if (hasBulkActions()) {
+        <td class="checkbox-cell">
+          <p-tableCheckbox [value]="item" ariaLabel="Select this row" i18n-ariaLabel></p-tableCheckbox>
+        </td>
+      }
 
-      <td *ngIf="expandedRow" class="expand-cell">
-        <my-table-expander-icon
-          *ngIf="hasExpandedRow()(item)"
-          [pRowToggler]="item"
-          [tooltip]="expandedIconTooltip()"
-          [expanded]="expanded"
-        ></my-table-expander-icon>
-      </td>
+      @if (expandedRow) {
+        <td class="expand-cell">
+          @if (hasExpandedRow()(item)) {
+            <my-table-expander-icon
+              [pRowToggler]="item"
+              [tooltip]="expandedIconTooltip()"
+              [expanded]="expanded"
+            ></my-table-expander-icon>
+          }
+        </td>
+      }
 
       <ng-template *ngTemplateOutlet="tableCells; context: { $implicit: item }"></ng-template>
 
@@ -177,17 +203,19 @@
   </ng-template>
 
   <ng-template #emptymessage>
-    <tr *ngIf="loaded && !loading">
-      <td myAutoColspan>
-        <div class="no-results">
-          @if (noResults) {
-            <ng-template *ngTemplateOutlet="noResults; context: { $implicit: search }"></ng-template>
-          } @else {
-            <ng-container i18n>No results found.</ng-container>
-          }
-        </div>
-      </td>
-    </tr>
+    @if (loaded && !loading) {
+      <tr>
+        <td myAutoColspan>
+          <div class="no-results">
+            @if (noResults) {
+              <ng-template *ngTemplateOutlet="noResults; context: { $implicit: search }"></ng-template>
+            } @else {
+              <ng-container i18n>No results found.</ng-container>
+            }
+          </div>
+        </td>
+      </tr>
+    }
   </ng-template>
 
   @if (expandedRow) {

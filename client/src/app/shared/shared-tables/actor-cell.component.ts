@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { booleanAttribute, Component, inject, input, OnInit } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { AuthService } from '@app/core'
@@ -10,7 +9,6 @@ import { CollaboratorStateComponent } from '../shared-main/channel/collaborator-
   templateUrl: './actor-cell.component.html',
   styleUrls: [ './actor-cell.component.scss' ],
   imports: [
-    CommonModule,
     RouterModule,
     CollaboratorStateComponent,
     ActorAvatarComponent

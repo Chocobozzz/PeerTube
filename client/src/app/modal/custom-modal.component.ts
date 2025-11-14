@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common'
 import { Component, ElementRef, inject, viewChild } from '@angular/core'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { logger } from '@root-helpers/logger'
@@ -8,7 +7,7 @@ import { GlobalIconComponent } from '../shared/shared-icons/global-icon.componen
   selector: 'my-custom-modal',
   templateUrl: './custom-modal.component.html',
   styleUrls: [ './custom-modal.component.scss' ],
-  imports: [ NgIf, GlobalIconComponent ]
+  imports: [ GlobalIconComponent ]
 })
 export class CustomModalComponent {
   private modalService = inject(NgbModal)

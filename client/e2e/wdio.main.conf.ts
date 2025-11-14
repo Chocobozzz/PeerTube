@@ -102,7 +102,7 @@ export const config = {
     bail: true
   },
 
-  tsConfigPath: require('path').join(__dirname, './tsconfig.json'),
+  tsConfigPath: require('node:path').join(__dirname, './tsconfig.json'),
 
   before: function () {
     require('./src/commands/upload')

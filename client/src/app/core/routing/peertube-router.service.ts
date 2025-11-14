@@ -37,6 +37,6 @@ export class PeerTubeRouterService {
   }
 
   private getRouteSetting () {
-    return this.router.getCurrentNavigation()?.extras?.state?.routeSetting as RouterSetting
+    return this.router.currentNavigation()?.extras?.state?.routeSetting as RouterSetting
   }
 }

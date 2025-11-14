@@ -1,4 +1,4 @@
-import { NgFor, NgIf } from '@angular/common'
+
 import { Component, ElementRef, inject, input, OnChanges, OnDestroy, OnInit, output, SimpleChanges, viewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, ComponentPagination, ConfirmService, hasMoreItems, Notifier, PluginService, User } from '@app/core'
@@ -28,13 +28,11 @@ import { VideoCommentComponent } from './video-comment.component'
     NgbDropdownMenu,
     NgbDropdownButtonItem,
     NgbDropdownItem,
-    NgIf,
     VideoCommentAddComponent,
     InfiniteScrollerDirective,
     VideoCommentComponent,
-    NgFor,
     LoaderComponent
-  ]
+]
 })
 export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   private authService = inject(AuthService)

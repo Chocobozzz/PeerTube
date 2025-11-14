@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, ElementRef, OnInit, inject, input, output, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
@@ -15,7 +14,7 @@ import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.co
   selector: 'my-video-change-ownership',
   templateUrl: './video-change-ownership.component.html',
   styleUrls: [ './video-change-ownership.component.scss' ],
-  imports: [ CommonModule, GlobalIconComponent, FormsModule, ReactiveFormsModule, AutoCompleteModule, UserAutoCompleteComponent ]
+  imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, AutoCompleteModule, UserAutoCompleteComponent ]
 })
 export class VideoChangeOwnershipComponent extends FormReactive implements OnInit {
   protected formReactiveService = inject(FormReactiveService)

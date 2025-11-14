@@ -24,9 +24,8 @@ interface CacheObject {
 }
 
 export class ApiCache {
-
   private readonly options: APICacheOptions
-  private readonly timers: { [ id: string ]: NodeJS.Timeout } = {}
+  private readonly timers: { [id: string]: NodeJS.Timeout } = {}
 
   private readonly index = {
     groups: [] as string[],
@@ -251,17 +250,16 @@ export class ApiCache {
     Object.assign(headers, this.filterBlacklistedHeaders(cacheObject.headers || {}), {
       // Set properly decremented max-age header
       // This ensures that max-age is in sync with the cache expiration
-      'cache-control':
-        'max-age=' +
+      'cache-control': 'max-age=' +
         Math.max(
           0,
-          (duration / 1000 - (new Date().getTime() / 1000 - cacheObject.timestamp))
+          duration / 1000 - (new Date().getTime() / 1000 - cacheObject.timestamp)
         ).toFixed(0)
     })
 
     // unstringify buffers
     let data = cacheObject.data
-    if (data && data.type === 'Buffer') {
+    if (data?.type === 'Buffer') {
       data = typeof data.data === 'number'
         ? Buffer.alloc(data.data)
         : Buffer.from(data.data)

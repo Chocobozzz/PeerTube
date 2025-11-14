@@ -1,6 +1,8 @@
-<my-alert type="primary" i18n *ngIf="videoUploadDisabled()">
-  Video uploads are disabled on this instance, hence your account won't be able to upload videos.
-</my-alert>
+@if (videoUploadDisabled()) {
+  <my-alert type="primary" i18n>
+    Video uploads are disabled on this instance, hence your account won't be able to upload videos.
+  </my-alert>
+}
 
 <form [formGroup]="form">
   <div class="row">
@@ -17,10 +19,12 @@
           type="text" id="displayName" i18n-placeholder placeholder="Example: John Doe"
           formControlName="displayName" class="form-control" [ngClass]="{ 'input-error': formErrors['displayName'] }"
           autocomplete="nickname"
-        >
+          >
       </div>
 
-      <div *ngIf="formErrors.displayName" class="form-error" role="alert">{{ formErrors.displayName }}</div>
+      @if (formErrors.displayName) {
+        <div class="form-error" role="alert">{{ formErrors.displayName }}</div>
+      }
     </div>
 
     <div class="col-md-12 col-xl-6 form-group">
@@ -35,11 +39,13 @@
           type="text" id="username" i18n-placeholder placeholder="Example: john_doe58"
           formControlName="username" class="form-control" [ngClass]="{ 'input-error': formErrors['username'] }"
           autocomplete="username"
-        >
+          >
         <span class="input-group-text">&#64;{{ instanceHost }}</span>
       </div>
 
-      <div *ngIf="formErrors.username" class="form-error" role="alert">{{ formErrors.username }}</div>
+      @if (formErrors.username) {
+        <div class="form-error" role="alert">{{ formErrors.username }}</div>
+      }
     </div>
   </div>
 
@@ -47,16 +53,18 @@
     <div class="col-md-12 col-xl-6 form-group">
       <label for="email" i18n>Email</label>
 
-      <div *ngIf="requiresEmailVerification()" class="form-group-description" i18n>
-        This email address will be used to validate your account.
-      </div>
+      @if (requiresEmailVerification()) {
+        <div class="form-group-description" i18n>This email address will be used to validate your account.</div>
+      }
 
       <input
         type="text" id="email" i18n-placeholder placeholder="Example: john@example.com" autocomplete="email"
         formControlName="email" class="form-control" [ngClass]="{ 'input-error': formErrors['email'] }"
-      >
+        >
 
-      <div *ngIf="formErrors.email" class="form-error" role="alert">{{ formErrors.email }}</div>
+      @if (formErrors.email) {
+        <div class="form-error" role="alert">{{ formErrors.email }}</div>
+      }
     </div>
 
     <div class="col-md-12 col-xl-6 form-group">

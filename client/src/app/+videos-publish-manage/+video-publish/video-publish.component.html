@@ -29,8 +29,13 @@
 
   @if (hasNoQuotaLeft || hasNoQuotaLeftDaily) {
     <my-alert class="upload-message quota-left" type="warning">
-      <div *ngIf="hasNoQuotaLeft">{{ uploadMessages?.quotaLeft }}</div>
-      <div *ngIf="hasNoQuotaLeftDaily">{{ uploadMessages?.quotaLeftDaily }}</div>
+      @if (hasNoQuotaLeft) {
+        <div>{{ uploadMessages?.quotaLeft }}</div>
+      }
+
+      @if (hasNoQuotaLeftDaily) {
+        <div>{{ uploadMessages?.quotaLeftDaily }}</div>
+      }
 
       <ng-template [ngTemplateOutlet]="helpButtons"></ng-template>
     </my-alert>

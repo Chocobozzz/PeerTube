@@ -1,20 +1,19 @@
-import { mapValues, pickBy } from 'lodash-es'
+import { NgClass } from '@angular/common'
 import { Component, OnInit, inject, input, viewChild } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { ABUSE_REASON_VALIDATOR } from '@app/shared/form-validators/abuse-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
+import { VideoComment } from '@app/shared/shared-video-comment/video-comment.model'
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { abusePredefinedReasonsMap } from '@peertube/peertube-core-utils'
 import { AbusePredefinedReasonsString } from '@peertube/peertube-models'
-import { AbuseService } from '../abuse.service'
-import { PeerTubeTemplateDirective } from '../../shared-main/common/peertube-template.directive'
+import { mapValues, pickBy } from 'lodash-es'
 import { PeertubeCheckboxComponent } from '../../shared-forms/peertube-checkbox.component'
-import { NgFor, NgIf, NgClass } from '@angular/common'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
-import { VideoComment } from '@app/shared/shared-video-comment/video-comment.model'
+import { PeerTubeTemplateDirective } from '../../shared-main/common/peertube-template.directive'
+import { AbuseService } from '../abuse.service'
 
 @Component({
   selector: 'my-comment-report',
@@ -24,9 +23,7 @@ import { VideoComment } from '@app/shared/shared-video-comment/video-comment.mod
     GlobalIconComponent,
     FormsModule,
     ReactiveFormsModule,
-    NgFor,
     PeertubeCheckboxComponent,
-    NgIf,
     PeerTubeTemplateDirective,
     NgClass
   ]

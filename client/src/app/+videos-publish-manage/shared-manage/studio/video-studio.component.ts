@@ -1,4 +1,4 @@
-import { NgFor, NgIf } from '@angular/common'
+
 import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ServerService } from '@app/core'
@@ -36,11 +36,9 @@ type Form = {
     TimestampInputComponent,
     ReactiveFileComponent,
     EmbedComponent,
-    NgIf,
-    NgFor,
     GlobalIconComponent,
     AlertComponent
-  ]
+]
 })
 export class VideoStudioEditComponent implements OnInit, OnDestroy {
   private formReactiveService = inject(FormReactiveService)

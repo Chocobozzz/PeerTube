@@ -1,5 +1,4 @@
 import { ListKeyManager } from '@angular/cdk/a11y'
-import { NgFor, NgIf } from '@angular/common'
 import { AfterViewChecked, Component, Injector, OnDestroy, OnInit, inject, viewChildren } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute, Params, Router } from '@angular/router'
@@ -18,7 +17,7 @@ const debugLogger = debug('peertube:search')
   selector: 'my-search-typeahead',
   templateUrl: './search-typeahead.component.html',
   styleUrls: [ './search-typeahead.component.scss' ],
-  imports: [ FormsModule, GlobalIconComponent, NgFor, SuggestionComponent, NgIf ]
+  imports: [ FormsModule, GlobalIconComponent, SuggestionComponent ]
 })
 export class SearchTypeaheadComponent implements OnInit, AfterViewChecked, OnDestroy {
   private authService = inject(AuthService)

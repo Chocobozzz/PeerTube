@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { AuthService, ConfirmService, Notifier, ServerService } from '@app/core'
@@ -43,7 +42,6 @@ type ColumnName =
   templateUrl: './video-list.component.html',
   styleUrls: [ './video-list.component.scss' ],
   imports: [
-    CommonModule,
     GlobalIconComponent,
     AdvancedInputFilterComponent,
     ButtonComponent,

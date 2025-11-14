@@ -111,6 +111,7 @@ async function testImage (options: {
 
     expect(result).to.equal(0, errorMsg)
   } catch (err) {
+    // eslint-disable-next-line preserve-caught-error
     throw new Error(`${errorMsg}: ${err.message}`)
   }
 }

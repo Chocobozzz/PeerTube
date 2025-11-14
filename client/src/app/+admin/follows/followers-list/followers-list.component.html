@@ -7,7 +7,7 @@
   [dataLoader]="dataLoader"
   columnConfig="false"
   [bulkActions]="bulkActions"
->
+  >
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No follower} =1 {1 follower} other {{{ totalRecords | myNumberFormatter }} followers}}</ng-container>
   </ng-template>
@@ -39,10 +39,16 @@
   </ng-template>
 
   <ng-template #actionCell let-follow>
-    <my-button *ngIf="follow.state !== 'accepted'" i18n-title title="Accept" icon="tick" (click)="acceptFollower([ follow ])"></my-button>
-    <my-button *ngIf="follow.state !== 'rejected'" i18n-title title="Reject" icon="cross" (click)="rejectFollower([ follow ])"></my-button>
+    @if (follow.state !== 'accepted') {
+      <my-button i18n-title title="Accept" icon="tick" (click)="acceptFollower([ follow ])"></my-button>
+    }
+    @if (follow.state !== 'rejected') {
+      <my-button i18n-title title="Reject" icon="cross" (click)="rejectFollower([ follow ])"></my-button>
+    }
 
-    <my-delete-button *ngIf="follow.state === 'rejected'" (click)="deleteFollowers([ follow ])"></my-delete-button>
+    @if (follow.state === 'rejected') {
+      <my-delete-button (click)="deleteFollowers([ follow ])"></my-delete-button>
+    }
   </ng-template>
 
   <ng-template #noResults let-search>

@@ -7,7 +7,7 @@
   paginatorText="comments per page"
   [bulkActions]="bulkActions"
   [dataLoader]="dataLoader"
->
+  >
 
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No comments} =1 {1 comment} other {{{ totalRecords | myNumberFormatter }} comments}}</ng-container>
@@ -21,57 +21,68 @@
 
   <ng-template #tableCells let-comment>
 
-    <td *ngIf="table.isColumnDisplayed('video')">
-      <div class="video">
-        <a [href]="comment.localUrl" target="_blank" rel="noopener noreferrer" class="text-decoration-none d-inline-flex align-items-baseline">
-          <span class="video-name">{{ comment.video.name }}</span>
-
-          <my-global-icon iconName="external-link"></my-global-icon>
-        </a>
-
-        @if (comment.video.channel) {
-          <a [routerLink]="[ '/c', comment.video.channel.name]" class="channel-sub-link-in-cell">
-            <span>{{ comment.video.channel.displayName }}</span>
-
-            @if (mode() === 'user' && user.isEditorOfChannel(comment.video.channel)) {
-              <my-collaborator-state class="ms-2" type="accepted" small="true"></my-collaborator-state>
-            }
+    @if (table.isColumnDisplayed('video')) {
+      <td>
+        <div class="video">
+          <a [href]="comment.localUrl" target="_blank" rel="noopener noreferrer" class="text-decoration-none d-inline-flex align-items-baseline">
+            <span class="video-name">{{ comment.video.name }}</span>
+            <my-global-icon iconName="external-link"></my-global-icon>
           </a>
-        }
-      </div>
-    </td>
 
-    <td *ngIf="table.isColumnDisplayed('account')">
-      <a [href]="comment.account.localUrl" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
-        <div class="chip two-lines">
-          <my-actor-avatar [actor]="comment.account" actorType="account" size="32"></my-actor-avatar>
-          <div>
-            {{ comment.account.displayName }}
-            <span>{{ comment.by }}</span>
-          </div>
+          @if (comment.video.channel) {
+            <a [routerLink]="[ '/c', comment.video.channel.name]" class="channel-sub-link-in-cell">
+              <span>{{ comment.video.channel.displayName }}</span>
+
+              @if (mode() === 'user' && user.isEditorOfChannel(comment.video.channel)) {
+                <my-collaborator-state class="ms-2" type="accepted" small="true"></my-collaborator-state>
+              }
+            </a>
+          }
         </div>
-      </a>
-    </td>
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('comment')" class="comment-content-cell">
-      <span *ngIf="comment.heldForReview" class="pt-badge badge-red float-start me-2" i18n>Pending review</span>
+    @if (table.isColumnDisplayed('account')) {
+      <td>
+        <a [href]="comment.account.localUrl" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
+          <div class="chip two-lines">
+            <my-actor-avatar [actor]="comment.account" actorType="account" size="32"></my-actor-avatar>
+            <div>
+              {{ comment.account.displayName }}
+              <span>{{ comment.by }}</span>
+            </div>
+          </div>
+        </a>
+      </td>
+    }
 
-      <div class="comment-html">
-        <div class="ellipsis" [innerHTML]="comment.textHtml"></div>
-      </div>
-    </td>
+    @if (table.isColumnDisplayed('comment')) {
+      <td class="comment-content-cell">
+        @if (comment.heldForReview) {
+          <span class="pt-badge badge-red float-start me-2" i18n>Pending review</span>
+        }
 
-    <td *ngIf="table.isColumnDisplayed('autoTags')">
-      @for (tag of comment.automaticTags; track tag) {
-        <a
-          i18n-title title="Only display comments with this tag"
-          class="pt-badge badge-secondary me-1"
-          [routerLink]="[ '.' ]" [queryParams]="{ 'search': buildSearchAutoTag(tag) }"
-        >{{ tag }}</a>
-      }
-    </td>
+        <div class="comment-html">
+          <div class="ellipsis" [innerHTML]="comment.textHtml"></div>
+        </div>
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('createdAt')">{{ comment.createdAt | ptDate: 'short' }}</td>
+    @if (table.isColumnDisplayed('autoTags')) {
+      <td>
+        @for (tag of comment.automaticTags; track tag) {
+          <a
+            i18n-title title="Only display comments with this tag"
+            class="pt-badge badge-secondary me-1"
+            [routerLink]="[ '.' ]" [queryParams]="{ 'search': buildSearchAutoTag(tag) }"
+          >{{ tag }}</a>
+        }
+      </td>
+    }
+
+    @if (table.isColumnDisplayed('createdAt')) {
+      <td>{{ comment.createdAt | ptDate: 'short' }}</td>
+    }
   </ng-template>
 
   <ng-template #actionCell let-comment>

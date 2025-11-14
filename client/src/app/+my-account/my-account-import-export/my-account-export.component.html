@@ -37,32 +37,42 @@
         <p i18n>An email will be sent when the export archive is available.</p>
       }
 
-      <table *ngIf="userExports && userExports.length !== 0">
-        <tr>
-          <th i18n scope="column">Date</th>
-          <th i18n scope="column">State</th>
-          <th i18n scope="column">Size</th>
-          <th i18n scope="column">Expires on</th>
-          <th></th>
-        </tr>
+      @if (userExports && userExports.length !== 0) {
+        <table>
+          <tr>
+            <th i18n scope="column">Date</th>
+            <th i18n scope="column">State</th>
+            <th i18n scope="column">Size</th>
+            <th i18n scope="column">Expires on</th>
+            <th></th>
+          </tr>
 
-        <tr *ngFor="let export of userExports">
-          <td>{{ export.createdAt | ptDate: 'medium' }}</td>
-          <td>{{ export.state.label }}</td>
+          @for (export of userExports; track export) {
+            <tr>
+              <td>{{ export.createdAt | ptDate: 'medium' }}</td>
+              <td>{{ export.state.label }}</td>
 
-          <td>
-            <ng-container *ngIf="export.size">{{ export.size | bytes }}</ng-container>
-          </td>
+              <td>
+                @if (export.size) {
+                  {{ export.size | bytes }}
+                }
+              </td>
 
-          <td>
-            <ng-container *ngIf="export.expiresOn">{{ export.expiresOn | ptDate: 'medium' }}</ng-container>
-          </td>
+              <td>
+                @if (export.expiresOn) {
+                  {{ export.expiresOn | ptDate: 'medium' }}
+                }
+              </td>
 
-          <td>
-            <a i18n *ngIf="export.privateDownloadUrl" [href]="export.privateDownloadUrl" class="peertube-button-link secondary-button">Download your archive</a>
-          </td>
-        </tr>
-      </table>
+              <td>
+                @if (export.privateDownloadUrl) {
+                  <a i18n [href]="export.privateDownloadUrl" class="peertube-button-link secondary-button">Download your archive</a>
+                }
+              </td>
+            </tr>
+          }
+        </table>
+      }
 
       <div class="mt-3">
         <input
@@ -70,7 +80,7 @@
           [disabled]="isRequestArchiveDisabled()"
           (click)="openNewArchiveModal()"
           type="submit" i18n-value value="Request a new archive"
-        >
+          >
       </div>
     } @else {
       <p i18n>User export is not enabled by your administrator.</p>
@@ -90,11 +100,15 @@
 
   <div class="modal-body">
 
-    <my-alert i18n type="warning" *ngIf="hasAlreadyACompletedArchive()">
-      You already have an active archive. Requesting a new export archive will remove the current one.
-    </my-alert>
+    @if (hasAlreadyACompletedArchive()) {
+      <my-alert i18n type="warning">
+        You already have an active archive. Requesting a new export archive will remove the current one.
+      </my-alert>
+    }
 
-    <my-alert *ngIf="errorInModal" type="danger">{{ errorInModal }}</my-alert>
+    @if (errorInModal) {
+      <my-alert type="danger">{{ errorInModal }}</my-alert>
+    }
 
     <my-peertube-checkbox
       inputName="exportWithVideos" [(ngModel)]="exportWithVideosFiles"
@@ -102,7 +116,10 @@
     >
       <ng-container ngProjectAs="description">
         <div i18n>Including video files is required if you want to re-import your videos on another PeerTube website</div>
-        <div *ngIf="archiveWeightEstimation" i18n>If you include video files, the archive file will weigh <strong>approximately {{ archiveWeightEstimation | bytes }}</strong></div>
+
+        @if (archiveWeightEstimation) {
+          <div i18n>If you include video files, the archive file will weigh <strong>approximately {{ archiveWeightEstimation | bytes }}</strong></div>
+        }
       </ng-container>
     </my-peertube-checkbox>
 

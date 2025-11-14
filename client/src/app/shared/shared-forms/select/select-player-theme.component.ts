@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, forwardRef, inject, input, OnInit } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { ServerService } from '@app/core'
@@ -27,7 +26,7 @@ import { SelectOptionsComponent } from './select-options.component'
       multi: true
     }
   ],
-  imports: [ FormsModule, CommonModule, SelectOptionsComponent ]
+  imports: [ FormsModule, SelectOptionsComponent ]
 })
 export class SelectPlayerThemeComponent implements ControlValueAccessor, OnInit {
   private serverService = inject(ServerService)

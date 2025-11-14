@@ -1,4 +1,4 @@
-import { NgFor, NgIf } from '@angular/common'
+
 import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { VideoCaptionEdit, VideoCaptionWithPathEdit } from '@app/+videos-publish-manage/shared-manage/common/video-caption-edit.model'
@@ -29,8 +29,6 @@ const debugLogger = debug('peertube:video-manage')
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgIf,
-    NgFor,
     GlobalIconComponent,
     DeleteButtonComponent,
     VideoCaptionAddModalComponent,
@@ -39,7 +37,7 @@ const debugLogger = debug('peertube:video-manage')
     ButtonComponent,
     AlertComponent,
     VideoCaptionEditModalComponent
-  ]
+]
 })
 export class VideoCaptionsComponent implements OnInit {
   private serverService = inject(ServerService)

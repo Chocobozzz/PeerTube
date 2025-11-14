@@ -305,10 +305,10 @@ async function startApplication () {
 
   Redis.Instance.init()
   Emailer.Instance.init()
+  JobQueue.Instance.init()
 
   await Promise.all([
     Emailer.Instance.checkConnection(),
-    JobQueue.Instance.init(),
     ServerConfigManager.Instance.init()
   ])
 

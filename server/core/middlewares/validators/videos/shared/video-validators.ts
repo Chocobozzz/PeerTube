@@ -59,7 +59,7 @@ export async function isVideoFileAccepted (options: {
   }
   const acceptedResult = await Hooks.wrapFun(isLocalVideoFileAccepted, acceptParameters, hook)
 
-  if (!acceptedResult || acceptedResult.accepted !== true) {
+  if (acceptedResult?.accepted !== true) {
     logger.info('Refused local video file.', { acceptedResult, acceptParameters })
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,

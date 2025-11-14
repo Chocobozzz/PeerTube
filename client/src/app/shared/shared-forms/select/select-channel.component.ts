@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, forwardRef, input, OnChanges } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
@@ -33,7 +32,7 @@ import { CollaboratorStateComponent } from '@app/shared/shared-main/channel/coll
       multi: true
     }
   ],
-  imports: [ FormsModule, CommonModule, SelectOptionsComponent, CollaboratorStateComponent ]
+  imports: [ FormsModule, SelectOptionsComponent, CollaboratorStateComponent ]
 })
 export class SelectChannelComponent implements ControlValueAccessor, OnChanges {
   readonly inputId = input.required<string>()

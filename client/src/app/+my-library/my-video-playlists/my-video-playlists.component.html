@@ -26,7 +26,7 @@
   (rowReorder)="onRowReorder($event)"
   dragHandleTitle="Drag and drop this row to reorder playlists in your channel"
   i18n-dragHandleTitle
->
+  >
   <ng-template #totalTitle let-totalRecords>
     @if (getFilteredChannel()) {
       <ng-container i18n>{ totalRecords, plural, =0 {No playlist} =1 {1 playlist} other {{{ totalRecords | myNumberFormatter }} playlists}} in {{ getFilteredChannel().displayName }} channel</ng-container>
@@ -49,39 +49,47 @@
 
   <ng-template #tableCells let-playlist>
 
-    <td *ngIf="table.isColumnDisplayed('videoChannelPosition')" style="width: 10px;">
-      {{ playlist.videoChannelPosition }}
-    </td>
+    @if (table.isColumnDisplayed('videoChannelPosition')) {
+      <td style="width: 10px;">
+        {{ playlist.videoChannelPosition }}
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('videos')">
-      <my-video-playlist-miniature [playlist]="playlist" thumbnailOnly="true" toManage="true"></my-video-playlist-miniature>
-    </td>
+    @if (table.isColumnDisplayed('videos')) {
+      <td>
+        <my-video-playlist-miniature [playlist]="playlist" thumbnailOnly="true" toManage="true"></my-video-playlist-miniature>
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('name')">
-      <div class="name-container">
-        <a [routerLink]="[ '/my-library/video-playlists', playlist.shortUUID ]" class="name">
-          {{ playlist.displayName }}
-        </a>
-
-        @if (playlist.videoChannel) {
-          <a [routerLink]="[ '/c', playlist.videoChannel.name]" class="channel-sub-link-in-cell">
-            <span>{{ playlist.videoChannel.displayName }}</span>
-
-            @if (user.isEditorOfChannel(playlist.videoChannel)) {
-              <my-collaborator-state class="ms-2" type="accepted" small="true"></my-collaborator-state>
-            }
+    @if (table.isColumnDisplayed('name')) {
+      <td>
+        <div class="name-container">
+          <a [routerLink]="[ '/my-library/video-playlists', playlist.shortUUID ]" class="name">
+            {{ playlist.displayName }}
           </a>
-        }
-      </div>
-    </td>
+          @if (playlist.videoChannel) {
+            <a [routerLink]="[ '/c', playlist.videoChannel.name]" class="channel-sub-link-in-cell">
+              <span>{{ playlist.videoChannel.displayName }}</span>
+              @if (user.isEditorOfChannel(playlist.videoChannel)) {
+                <my-collaborator-state class="ms-2" type="accepted" small="true"></my-collaborator-state>
+              }
+            </a>
+          }
+        </div>
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('privacy')">
-      <my-privacy-badge [playlist]="playlist"></my-privacy-badge>
-    </td>
+    @if (table.isColumnDisplayed('privacy')) {
+      <td>
+        <my-privacy-badge [playlist]="playlist"></my-privacy-badge>
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('updatedAt')">
-      {{ playlist.updatedAt | ptDate: 'short' }}
-    </td>
+    @if (table.isColumnDisplayed('updatedAt')) {
+      <td>
+        {{ playlist.updatedAt | ptDate: 'short' }}
+      </td>
+    }
   </ng-template>
 
   <ng-template #actionCell let-playlist>

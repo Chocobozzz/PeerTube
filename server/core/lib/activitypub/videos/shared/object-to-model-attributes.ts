@@ -335,23 +335,23 @@ function isAPVideoUrlObject (url: any): url is ActivityVideoUrlObject {
 }
 
 function isAPStreamingPlaylistUrlObject (url: any): url is ActivityPlaylistUrlObject {
-  return url && url.mediaType === 'application/x-mpegURL'
+  return url?.mediaType === 'application/x-mpegURL'
 }
 
 function isAPPlaylistSegmentHashesUrlObject (tag: any): tag is ActivityPlaylistSegmentHashesObject {
-  return tag && tag.name === 'sha256' && tag.type === 'Link' && tag.mediaType === 'application/json'
+  return tag?.name === 'sha256' && tag.type === 'Link' && tag.mediaType === 'application/json'
 }
 
 function isAPMagnetUrlObject (url: any): url is ActivityMagnetUrlObject {
-  return url && url.mediaType === 'application/x-bittorrent;x-scheme-handler/magnet'
+  return url?.mediaType === 'application/x-bittorrent;x-scheme-handler/magnet'
 }
 
 function isAPHashTagObject (tag: any): tag is ActivityHashTagObject {
-  return tag && tag.type === 'Hashtag'
+  return tag?.type === 'Hashtag'
 }
 
 function isAPSensitiveTagObject (tag: any): tag is ActivitySensitiveTagObject {
-  return tag && tag.type === 'SensitiveTag'
+  return tag?.type === 'SensitiveTag'
 }
 
 function getTorrentRelatedInfo (options: {

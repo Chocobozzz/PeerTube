@@ -17,7 +17,7 @@ export abstract class InstanceListFollowsQueryBuilder<T extends AbstractListQuer
   }
 
   protected buildQueryJoin () {
-    this.join = this.join += this.getAvatarsJoin('ActorFollower')
+    this.join += this.getAvatarsJoin('ActorFollower')
     this.join += this.getAvatarsJoin('ActorFollowing')
   }
 

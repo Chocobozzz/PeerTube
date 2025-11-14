@@ -1,12 +1,14 @@
-<button
-  *ngIf="syndicationItems() && syndicationItems().length !== 0"
-  #popover="ngbPopover"
-  [ngbPopover]="feedsList" [autoClose]="true" placement="bottom left auto"
-  class="feed border-0 p-0" [title]="getTitle()"
->
-  <my-global-icon iconName="syndication"></my-global-icon>
-
-  <ng-template #feedsList>
-    <a *ngFor="let item of syndicationItems()" class="feed-link" [href]="item.url" target="_blank" rel="noopener noreferrer">{{ item.label }}</a>
-  </ng-template>
-</button>
+@if (syndicationItems() && syndicationItems().length !== 0) {
+  <button
+    #popover="ngbPopover"
+    [ngbPopover]="feedsList" [autoClose]="true" placement="bottom left auto"
+    class="feed border-0 p-0" [title]="getTitle()"
+    >
+    <my-global-icon iconName="syndication"></my-global-icon>
+    <ng-template #feedsList>
+      @for (item of syndicationItems(); track item) {
+        <a class="feed-link" [href]="item.url" target="_blank" rel="noopener noreferrer">{{ item.label }}</a>
+      }
+    </ng-template>
+  </button>
+}

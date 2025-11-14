@@ -1,5 +1,5 @@
 import { ObserversModule } from '@angular/cdk/observers'
-import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common'
+import { NgClass, NgTemplateOutlet } from '@angular/common'
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -31,7 +31,6 @@ export type ButtonTheme = 'primary' | 'secondary' | 'tertiary' | 'danger'
   templateUrl: './button.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    NgIf,
     NgClass,
     NgbTooltip,
     NgTemplateOutlet,

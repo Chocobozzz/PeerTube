@@ -348,7 +348,7 @@ async function isVideoCommentAccepted (req: express.Request, res: express.Respon
     )
   }
 
-  if (!acceptedResult || acceptedResult.accepted !== true) {
+  if (acceptedResult?.accepted !== true) {
     logger.info('Refused local comment.', { acceptedResult, acceptParameters })
 
     res.fail({

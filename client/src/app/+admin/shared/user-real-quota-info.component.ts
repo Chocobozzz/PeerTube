@@ -2,12 +2,11 @@ import { Component, OnInit, inject, input } from '@angular/core'
 import { ServerService } from '@app/core'
 import { HTMLServerConfig, VideoResolution } from '@peertube/peertube-models'
 import { BytesPipe } from '../../shared/shared-main/common/bytes.pipe'
-import { NgIf } from '@angular/common'
 
 @Component({
   selector: 'my-user-real-quota-info',
   templateUrl: './user-real-quota-info.component.html',
-  imports: [ NgIf, BytesPipe ]
+  imports: [ BytesPipe ]
 })
 export class UserRealQuotaInfoComponent implements OnInit {
   private server = inject(ServerService)

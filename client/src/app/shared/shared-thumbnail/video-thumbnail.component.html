@@ -11,19 +11,22 @@
 <ng-template #aContent>
   <img alt="" [attr.src]="getImageUrl()" [ngClass]="{ 'blur-filter': blur() }"  />
 
-  <div *ngIf="displayWatchLaterPlaylist()" class="actions-overlay">
-    <button
-      class="watch-icon-overlay button-unstyle"
-      placement="left" [ngbTooltip]="getWatchIconText()" container="body" #watchLaterTooltip="ngbTooltip"
-      (click)="onWatchLaterClick($event)" [attr.aria-label]="inWatchLaterPlaylist() ? removeFromWatchLaterText : addToWatchLaterText"
-    >
-      @if (inWatchLaterPlaylist()) {
-        <my-global-icon iconName="tick"></my-global-icon>
-      } @else {
-        <my-global-icon iconName="clock"></my-global-icon>
-      }
-    </button>
-  </div>
+  @if (displayWatchLaterPlaylist()) {
+    <div class="actions-overlay">
+      <button
+        class="watch-icon-overlay button-unstyle"
+        placement="left" [ngbTooltip]="getWatchIconText()" container="body" #watchLaterTooltip="ngbTooltip"
+        (click)="onWatchLaterClick($event)" [attr.aria-label]="inWatchLaterPlaylist() ? removeFromWatchLaterText : addToWatchLaterText"
+        >
+
+        @if (inWatchLaterPlaylist()) {
+          <my-global-icon iconName="tick"></my-global-icon>
+        } @else {
+          <my-global-icon iconName="clock"></my-global-icon>
+        }
+      </button>
+    </div>
+  }
 
   <div class="label-overlay pt-badge badge-warning"><ng-content select="label-warning"></ng-content></div>
   <div class="label-overlay pt-badge badge-danger"><ng-content select="label-danger"></ng-content></div>
@@ -45,13 +48,17 @@
     <div class="duration-overlay" [ariaLabel]="getDurationOverlayLabel()">{{ getDurationLabel() }}</div>
   }
 
-  <div *ngIf="playOverlay()" class="play-overlay">
-    <div class="icon"></div>
-  </div>
-
-  <div class="progress-bar" *ngIf="!video().isLive && video().userHistory?.currentTime">
-    <div [ngStyle]="{ 'width.%': getProgressPercent() }">
-      <span class="visually-hidden" i18n>You watched {{ getProgressPercent() }}% of this video</span>
+  @if (playOverlay()) {
+    <div class="play-overlay">
+      <div class="icon"></div>
     </div>
-  </div>
+  }
+
+  @if (!video().isLive && video().userHistory?.currentTime) {
+    <div class="progress-bar">
+      <div [ngStyle]="{ 'width.%': getProgressPercent() }">
+        <span class="visually-hidden" i18n>You watched {{ getProgressPercent() }}% of this video</span>
+      </div>
+    </div>
+  }
 </ng-template>

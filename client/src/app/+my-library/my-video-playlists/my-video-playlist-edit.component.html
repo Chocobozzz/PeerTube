@@ -1,4 +1,6 @@
-<my-alert *ngIf="error" type="danger">{{ error }}</my-alert>
+@if (error) {
+  <my-alert type="danger">{{ error }}</my-alert>
+}
 
 <div class="pt-two-cols"> <!-- playlist grid -->
   <div class="title-col">
@@ -14,9 +16,11 @@
           <li class="breadcrumb-item active" i18n>Edit</li>
 
           <li class="breadcrumb-item active" aria-current="page">
-            <a *ngIf="videoPlaylistToUpdate" [routerLink]="[ '/my-library/video-playlists/update', videoPlaylistToUpdate?.shortUUID]">
-              {{ videoPlaylistToUpdate?.displayName }}
-            </a>
+            @if (videoPlaylistToUpdate) {
+              <a [routerLink]="[ '/my-library/video-playlists/update', videoPlaylistToUpdate?.shortUUID]">
+                {{ videoPlaylistToUpdate?.displayName }}
+              </a>
+            }
           </li>
         }
       </ol>
@@ -43,10 +47,12 @@
         <input
           type="text" id="displayName" class="form-control"
           formControlName="displayName" [ngClass]="{ 'input-error': formErrors['displayName'] }"
-        >
-        <div *ngIf="formErrors['displayName']" class="form-error" role="alert">
-          {{ formErrors['displayName'] }}
-        </div>
+          >
+        @if (formErrors['displayName']) {
+          <div class="form-error" role="alert">
+            {{ formErrors['displayName'] }}
+          </div>
+        }
       </div>
 
       <div class="form-group">
@@ -58,7 +64,9 @@
         <label i18n for="privacy">Privacy</label>
         <my-select-options inputId="privacy" [items]="videoPlaylistPrivacies" formControlName="privacy"></my-select-options>
 
-        <div *ngIf="formErrors.privacy" class="form-error" role="alert">{{ formErrors.privacy }}</div>
+        @if (formErrors.privacy) {
+          <div class="form-error" role="alert">{{ formErrors.privacy }}</div>
+        }
       </div>
 
       <div class="form-group">
@@ -78,7 +86,9 @@
 
         <my-select-channel inputId="videoChannelId" [items]="userVideoChannels" formControlName="videoChannelId"></my-select-channel>
 
-        <div *ngIf="formErrors['videoChannelId']" class="form-error" role="alert">{{ formErrors['videoChannelId'] }}</div>
+        @if (formErrors['videoChannelId']) {
+          <div class="form-error" role="alert">{{ formErrors['videoChannelId'] }}</div>
+        }
       </div>
 
       @if (isCreation() && form.value['videoChannelId']) {
@@ -91,7 +101,9 @@
           >
             <ng-container ngProjectAs="description">
               <span i18n>Playlists can be manually sorted in your channel.</span>
+
               <br />
+
               <span i18n>By default, new playlists are added at the end of the list.</span>
             </ng-container>
           </my-peertube-checkbox>

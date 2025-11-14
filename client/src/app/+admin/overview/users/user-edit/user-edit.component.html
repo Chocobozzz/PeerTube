@@ -10,54 +10,60 @@
       <li class="breadcrumb-item" i18n>Edit</li>
 
       <li class="breadcrumb-item" aria-current="page">
-        <a *ngIf="user" [routerLink]="[ '/a', user?.username ]">{{ user?.username }}</a>
+        @if (user) {
+          <a [routerLink]="[ '/a', user?.username ]">{{ user?.username }}</a>
+        }
       </li>
     }
   </ol>
 </nav>
 
 <ng-template #dashboard>
-  <div *ngIf="!isCreation() && user" class="dashboard">
-    <div>
-      <a>
-        <div class="dashboard-num">{{ user.videosCount }} ({{ user.videoQuotaUsed | bytes: 0 }})</div>
-        <div class="dashboard-label" i18n>{user.videosCount, plural, =1 {Video} other {Videos}}</div>
-      </a>
+  @if (!isCreation() && user) {
+    <div class="dashboard">
+      <div>
+        <a>
+          <div class="dashboard-num">{{ user.videosCount }} ({{ user.videoQuotaUsed | bytes: 0 }})</div>
+          <div class="dashboard-label" i18n>{user.videosCount, plural, =1 {Video} other {Videos}}</div>
+        </a>
+      </div>
+      <div>
+        <a>
+          <div class="dashboard-num">{{ user.videoChannels.length || 0 }}</div>
+          <div class="dashboard-label" i18n>{user.videoChannels.length, plural, =1 {Channel} other {Channels}}</div>
+        </a>
+      </div>
+      <div>
+        <a>
+          <div class="dashboard-num">{{ subscribersCount }}</div>
+          <div class="dashboard-label" i18n>{subscribersCount, plural, =1 {Subscriber} other {Subscribers}}</div>
+        </a>
+      </div>
+      <div>
+        <a [routerLink]="[ '/admin/moderation/abuses/list' ]" [queryParams]="{ 'search': 'reportee:&quot;' + user?.account.displayName + '&quot;' }">
+          <div class="dashboard-num">{{ user.abusesCount }}</div>
+          <div class="dashboard-label" i18n>Incriminated in reports</div>
+        </a>
+      </div>
+      <div>
+        <a [routerLink]="[ '/admin/moderation/abuses/list' ]" [queryParams]="{ 'search': 'reporter:&quot;' + user?.account.displayName + '&quot; state:accepted' }">
+          <div class="dashboard-num">{{ user.abusesAcceptedCount }} / {{ user.abusesCreatedCount }}</div>
+          <div class="dashboard-label" i18n>Authored reports accepted</div>
+        </a>
+      </div>
+      <div>
+        <a>
+          <div class="dashboard-num">{{ user.videoCommentsCount }}</div>
+          <div class="dashboard-label" i18n>{user.videoCommentsCount, plural, =1 {Comment} other {Comments}}</div>
+        </a>
+      </div>
     </div>
-    <div>
-      <a>
-        <div class="dashboard-num">{{ user.videoChannels.length || 0 }}</div>
-        <div class="dashboard-label" i18n>{user.videoChannels.length, plural, =1 {Channel} other {Channels}}</div>
-      </a>
-    </div>
-    <div>
-      <a>
-        <div class="dashboard-num">{{ subscribersCount }}</div>
-        <div class="dashboard-label" i18n>{subscribersCount, plural, =1 {Subscriber} other {Subscribers}}</div>
-      </a>
-    </div>
-    <div>
-      <a [routerLink]="[ '/admin/moderation/abuses/list' ]" [queryParams]="{ 'search': 'reportee:&quot;' + user?.account.displayName + '&quot;' }">
-        <div class="dashboard-num">{{ user.abusesCount }}</div>
-        <div class="dashboard-label" i18n>Incriminated in reports</div>
-      </a>
-    </div>
-    <div>
-      <a [routerLink]="[ '/admin/moderation/abuses/list' ]" [queryParams]="{ 'search': 'reporter:&quot;' + user?.account.displayName + '&quot; state:accepted' }">
-        <div class="dashboard-num">{{ user.abusesAcceptedCount }} / {{ user.abusesCreatedCount }}</div>
-        <div class="dashboard-label" i18n>Authored reports accepted</div>
-      </a>
-    </div>
-    <div>
-      <a>
-        <div class="dashboard-num">{{ user.videoCommentsCount }}</div>
-        <div class="dashboard-label" i18n>{user.videoCommentsCount, plural, =1 {Comment} other {Comments}}</div>
-      </a>
-    </div>
-  </div>
+  }
 </ng-template>
 
-<my-alert *ngIf="error" type="danger">{{ error }}</my-alert>
+@if (error) {
+  <my-alert type="danger">{{ error }}</my-alert>
+}
 
 <div class="pt-two-cols d-xxl-none"> <!-- hidden on large screens, as it is then displayed on the right side of the form -->
   <div class="col-0 col-xl-3"></div>
@@ -86,27 +92,35 @@
   <div class="content-col">
     <div class="row">
       <form class="col" (ngSubmit)="formValidated()" [formGroup]="form">
-        <div class="form-group" *ngIf="isCreation()">
-          <label i18n for="username">Username</label>
-          <input
-            type="text" id="username" i18n-placeholder placeholder="john" class="form-control"
-            formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }"
-          >
-          <div *ngIf="formErrors.username" class="form-error" role="alert">
-            {{ formErrors.username }}
+        @if (isCreation()) {
+          <div class="form-group">
+            <label i18n for="username">Username</label>
+            <input
+              type="text" id="username" i18n-placeholder placeholder="john" class="form-control"
+              formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }"
+              >
+            @if (formErrors.username) {
+              <div class="form-error" role="alert">
+                {{ formErrors.username }}
+              </div>
+            }
           </div>
-        </div>
+        }
 
-        <div class="form-group" *ngIf="isCreation()">
-          <label i18n for="channelName">Channel name</label>
-          <input
-            type="text" id="channelName" i18n-placeholder placeholder="john_channel" class="form-control"
-            formControlName="channelName" [ngClass]="{ 'input-error': formErrors['channelName'] }"
-          >
-          <div *ngIf="formErrors.channelName" class="form-error" role="alert">
-            {{ formErrors.channelName }}
+        @if (isCreation()) {
+          <div class="form-group">
+            <label i18n for="channelName">Channel name</label>
+            <input
+              type="text" id="channelName" i18n-placeholder placeholder="john_channel" class="form-control"
+              formControlName="channelName" [ngClass]="{ 'input-error': formErrors['channelName'] }"
+              >
+            @if (formErrors.channelName) {
+              <div class="form-error" role="alert">
+                {{ formErrors.channelName }}
+              </div>
+            }
           </div>
-        </div>
+        }
 
         <div class="form-group">
           <label i18n for="email">Email</label>
@@ -114,37 +128,43 @@
             type="text" id="email" i18n-placeholder placeholder="mail@example.com" class="form-control"
             formControlName="email" [ngClass]="{ 'input-error': formErrors['email'] }"
             autocomplete="off" [readonly]="user && user.pluginAuth !== null"
-          >
-          <div *ngIf="formErrors.email" class="form-error" role="alert">
-            {{ formErrors.email }}
-          </div>
-        </div>
-
-        <div class="form-group" *ngIf="isCreation()">
-          <label i18n for="password">Password</label>
-
-          @if (isPasswordOptional()) {
-            <div class="form-group-description" i18n>
-              If you leave the password empty, an email will be sent to the user.
+            >
+          @if (formErrors.email) {
+            <div class="form-error" role="alert">
+              {{ formErrors.email }}
             </div>
           }
-
-          <my-input-text formControlName="password" inputId="password" [formError]="formErrors['password']" autocomplete="new-password"></my-input-text>
         </div>
+
+        @if (isCreation()) {
+          <div class="form-group">
+            <label i18n for="password">Password</label>
+            @if (isPasswordOptional()) {
+              <div class="form-group-description" i18n>
+              If you leave the password empty, an email will be sent to the user.
+            </div>
+            }
+            <my-input-text formControlName="password" inputId="password" [formError]="formErrors['password']" autocomplete="new-password"></my-input-text>
+          </div>
+        }
 
         <div class="form-group">
           <label i18n for="role">Role</label>
           <div class="peertube-select-container">
-              <select id="role" formControlName="role" class="form-control">
-                <option *ngFor="let role of roles" [value]="role.value">
-                {{ role.label }}
+            <select id="role" formControlName="role" class="form-control">
+              @for (role of roles; track role) {
+                <option [value]="role.value">
+                  {{ role.label }}
                 </option>
-              </select>
+              }
+            </select>
           </div>
 
-          <div *ngIf="formErrors.role" class="form-error" role="alert">
-            {{ formErrors.role }}
-          </div>
+          @if (formErrors.role) {
+            <div class="form-error" role="alert">
+              {{ formErrors.role }}
+            </div>
+          }
         </div>
 
         <div class="form-group">
@@ -161,9 +181,11 @@
 
           <my-user-real-quota-info [videoQuota]="getUserVideoQuota()"></my-user-real-quota-info>
 
-          <div *ngIf="formErrors.videoQuota" class="form-error" role="alert">
-            {{ formErrors.videoQuota }}
-          </div>
+          @if (formErrors.videoQuota) {
+            <div class="form-error" role="alert">
+              {{ formErrors.videoQuota }}
+            </div>
+          }
         </div>
 
         <div class="form-group">
@@ -178,27 +200,32 @@
             [clearable]="false"
           ></my-select-custom-value>
 
-          <div *ngIf="formErrors.videoQuotaDaily" class="form-error" role="alert">
-            {{ formErrors.videoQuotaDaily }}
-          </div>
+          @if (formErrors.videoQuotaDaily) {
+            <div class="form-error" role="alert">
+              {{ formErrors.videoQuotaDaily }}
+            </div>
+          }
         </div>
 
-        <div class="form-group" *ngIf="!isCreation() && getAuthPlugins().length !== 0">
-          <label i18n for="pluginAuth">Auth plugin</label>
-
-          <div class="peertube-select-container">
-            <select id="pluginAuth" formControlName="pluginAuth" class="form-control">
-              <option [value]="null" i18n>None (local authentication)</option>
-              <option *ngFor="let authPlugin of getAuthPlugins()" [value]="authPlugin">{{ authPlugin }}</option>
-            </select>
+        @if (!isCreation() && getAuthPlugins().length !== 0) {
+          <div class="form-group">
+            <label i18n for="pluginAuth">Auth plugin</label>
+            <div class="peertube-select-container">
+              <select id="pluginAuth" formControlName="pluginAuth" class="form-control">
+                <option [value]="null" i18n>None (local authentication)</option>
+                @for (authPlugin of getAuthPlugins(); track authPlugin) {
+                  <option [value]="authPlugin">{{ authPlugin }}</option>
+                }
+              </select>
+            </div>
           </div>
-        </div>
+        }
 
         <div class="form-group">
           <my-peertube-checkbox
             inputName="byPassAutoBlock" formControlName="byPassAutoBlock"
             i18n-labelText labelText="User bypasses video validation by moderators"
-          >
+            >
             <ng-container ngProjectAs="description" i18n>
               Enable this checkbox if this user doesn't need to have its videos reviewed by moderators.
             </ng-container>
@@ -246,10 +273,12 @@
         <my-user-password [userId]="user.id" [username]="user.username"></my-user-password>
       </div>
 
-      <div *ngIf="user.twoFactorEnabled" class="form-group">
-        <div class="mb-1 fw-bold" i18n>This user has two factor authentication enabled</div>
-        <button class="peertube-button danger-button" (click)="disableTwoFactorAuth()" i18n>Disable two factor authentication</button>
-      </div>
+      @if (user.twoFactorEnabled) {
+        <div class="form-group">
+          <div class="mb-1 fw-bold" i18n>This user has two factor authentication enabled</div>
+          <button class="peertube-button danger-button" (click)="disableTwoFactorAuth()" i18n>Disable two factor authentication</button>
+        </div>
+      }
     </div>
   </div>
 }

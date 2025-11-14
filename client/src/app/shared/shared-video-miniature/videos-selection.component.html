@@ -1,30 +1,35 @@
-<div class="no-results" i18n *ngIf="hasDoneFirstQuery && videos().length === 0">{{ noResultMessage() }}</div>
+@if (hasDoneFirstQuery && videos().length === 0) {
+  <div class="no-results" i18n>{{ noResultMessage() }}</div>
+}
 
-<div
-  class="videos"
-  myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()"
->
-  <div class="video" *ngFor="let video of videos(); let i = index; trackBy: videoById">
+<div class="videos" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
+  @for (video of videos(); track videoById(i, video); let i = $index) {
+    <div class="video">
+      @if (enableSelection()) {
+        <div class="checkbox-container">
+          <my-peertube-checkbox [inputName]="'video-check-' + video.id" [(ngModel)]="selection()[video.id]"></my-peertube-checkbox>
+        </div>
+      }
 
-    <div class="checkbox-container" *ngIf="enableSelection()">
-      <my-peertube-checkbox [inputName]="'video-check-' + video.id" [(ngModel)]="selection()[video.id]"></my-peertube-checkbox>
+      <my-video-miniature
+        [video]="video"
+        [displayAsRow]="true"
+        [displayOptions]="miniatureDisplayOptions()"
+        [displayVideoActions]="false"
+        [user]="user()"
+      ></my-video-miniature>
+
+      @if (isInSelectionMode() === false) {
+        <ng-container *ngTemplateOutlet="rowButtonsTemplate; context: {$implicit: video}"></ng-container>
+      }
     </div>
+  }
+</div>
 
-    <my-video-miniature
-      [video]="video" [displayAsRow]="true" [displayOptions]="miniatureDisplayOptions()"
-      [displayVideoActions]="false" [user]="user()"
-    ></my-video-miniature>
+@if (isInSelectionMode() === true) {
+  <div class="action-selection-mode">
+    <button i18n class="cancel-selection peertube-button secondary-button me-2" (click)="abortSelectionMode()">Cancel</button>
 
-    @if (isInSelectionMode() === false) {
-      <ng-container *ngTemplateOutlet="rowButtonsTemplate; context: {$implicit: video}"></ng-container>
-    }
+    <ng-container *ngTemplateOutlet="globalButtonsTemplate"></ng-container>
   </div>
-</div>
-
-<div class="action-selection-mode" *ngIf="isInSelectionMode() === true">
-  <button i18n class="cancel-selection peertube-button secondary-button me-2" (click)="abortSelectionMode()">
-    Cancel
-  </button>
-
-  <ng-container *ngTemplateOutlet="globalButtonsTemplate"></ng-container>
-</div>
+}

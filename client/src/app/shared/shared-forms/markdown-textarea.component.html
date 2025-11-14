@@ -12,41 +12,46 @@
     [id]="inputId()" [name]="inputId()" [dir]="dir()">
   </textarea>
 
-  <div *ngIf="maximized" class="preview-maximized muted-2">
-    <ng-container *ngTemplateOutlet="previewContent"></ng-container>
-  </div>
+  @if (maximized) {
+    <div class="preview-maximized muted-2">
+      <ng-container *ngTemplateOutlet="previewContent"></ng-container>
+    </div>
+  }
 
-  <div *ngIf="withPreview()" class="buttons mt-3">
-    <button
-      *ngIf="!maximized"
-      type="button" class="peertube-button secondary-button" (click)="previewCollapsed = !previewCollapsed"
-		  [attr.aria-expanded]="!previewCollapsed" [attr.aria-controls]="inputId() + '-collapse'"
-    >
-      <my-global-icon iconName="arrow-down" [ngClass]="{ 'scale-y--1': !previewCollapsed }"></my-global-icon>
-
-      @if (previewCollapsed) {
-        <ng-container i18n>Show preview</ng-container>
-      } @else {
-        <ng-container i18n>Hide preview</ng-container>
+  @if (withPreview()) {
+    <div class="buttons mt-3">
+      @if (!maximized) {
+        <button
+          type="button" class="peertube-button secondary-button" (click)="previewCollapsed = !previewCollapsed"
+          [attr.aria-expanded]="!previewCollapsed" [attr.aria-controls]="inputId() + '-collapse'"
+          >
+          <my-global-icon iconName="arrow-down" [ngClass]="{ 'scale-y--1': !previewCollapsed }"></my-global-icon>
+          @if (previewCollapsed) {
+            <ng-container i18n>Show preview</ng-container>
+          } @else {
+            <ng-container i18n>Hide preview</ng-container>
+          }
+        </button>
       }
-    </button>
+      <button type="button" (click)="onMaximizeClick()" class="maximize-button button-as-link" [disabled]="disabled">
+        @if (maximized) {
+          <ng-container i18n>Exit full-screen editor</ng-container>
+        } @else {
+          <ng-container i18n>Full-screen editor</ng-container>
+        }
+      </button>
+    </div>
+  }
 
-    <button type="button" (click)="onMaximizeClick()" class="maximize-button button-as-link" [disabled]="disabled">
-      @if (maximized) {
-        <ng-container i18n>Exit full-screen editor</ng-container>
-      } @else {
-        <ng-container i18n>Full-screen editor</ng-container>
-      }
-    </button>
-  </div>
-
-  <div
-    *ngIf="!maximized" class="preview-collapse preview mt-3 muted-2"
-    [ngClass]="{ 'ellipsis-multiline-3': truncated }"
-    #collapse="ngbCollapse" [(ngbCollapse)]="previewCollapsed" [id]="inputId() + '-collapse'" #previewEl
-  >
-    <ng-container *ngTemplateOutlet="previewContent"></ng-container>
-  </div>
+  @if (!maximized) {
+    <div
+      class="preview-collapse preview mt-3 muted-2"
+      [ngClass]="{ 'ellipsis-multiline-3': truncated }"
+      #collapse="ngbCollapse" [(ngbCollapse)]="previewCollapsed" [id]="inputId() + '-collapse'" #previewEl
+      >
+      <ng-container *ngTemplateOutlet="previewContent"></ng-container>
+    </div>
+  }
 </div>
 
 @if (!maximized) {
@@ -62,5 +67,7 @@
     </button>
   }
 
-  <div *ngIf="formError()" class="form-error" role="alert">{{ formError() }}</div>
+  @if (formError()) {
+    <div class="form-error" role="alert">{{ formError() }}</div>
+  }
 }

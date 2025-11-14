@@ -1,13 +1,17 @@
 <ng-template #modal>
   <div class="modal-header">
-    <ng-container *ngIf="isMultiple()">
+    @if (isMultiple()) {
       <h4 i18n class="modal-title">Block {{ videos.length }} videos</h4>
-    </ng-container>
+    }
 
-    <ng-container *ngIf="!isMultiple()">
-      <h4 i18n class="modal-title" *ngIf="!getSingleVideo().isLive">Block video "{{ getSingleVideo().name }}"</h4>
-      <h4 i18n class="modal-title" *ngIf="getSingleVideo().isLive">Block live "{{ getSingleVideo().name }}"</h4>
-    </ng-container>
+    @if (!isMultiple()) {
+      @if (!getSingleVideo().isLive) {
+        <h4 i18n class="modal-title">Block video "{{ getSingleVideo().name }}"</h4>
+      }
+      @if (getSingleVideo().isLive) {
+        <h4 i18n class="modal-title">Block live "{{ getSingleVideo().name }}"</h4>
+      }
+    }
 
     <button class="border-0 p-0" title="Close this modal" i18n-title (click)="hide()">
       <my-global-icon iconName="cross"></my-global-icon>
@@ -22,32 +26,38 @@
           i18n-placeholder placeholder="Please describe the reason..." formControlName="reason"
           [ngClass]="{ 'input-error': formErrors['reason'] }" class="form-control"
         ></textarea>
-        <div *ngIf="formErrors.reason" class="form-error" role="alert">
-          {{ formErrors.reason }}
+
+        @if (formErrors.reason) {
+          <div class="form-error" role="alert">{{ formErrors.reason }}</div>
+        }
+      </div>
+
+      @if (hasLocal()) {
+        <div class="form-group">
+          <my-peertube-checkbox
+            inputName="unfederate" formControlName="unfederate"
+            i18n-labelText labelText="Unfederate"
+          >
+            <ng-container ngProjectAs="description">
+              @if (isMultiple()) {
+                <span i18n>This will ask remote instances to delete local videos</span>
+              } @else {
+                <span i18n>This will ask remote instances to delete this video</span>
+              }
+            </ng-container>
+          </my-peertube-checkbox>
         </div>
-      </div>
+      }
 
-      <div class="form-group" *ngIf="hasLocal()">
-        <my-peertube-checkbox
-          inputName="unfederate" formControlName="unfederate"
-          i18n-labelText labelText="Unfederate"
-        >
-          <ng-container ngProjectAs="description">
-            <span *ngIf="isMultiple()" i18n>This will ask remote instances to delete local videos</span>
-            <span *ngIf="!isMultiple()" i18n>This will ask remote instances to delete this video</span>
-          </ng-container>
-        </my-peertube-checkbox>
-      </div>
-
-      <strong class="live-info" *ngIf="hasLive()" i18n>
-        Blocking a live will automatically terminate the live stream.
-      </strong>
+      @if (hasLive()) {
+        <strong class="live-info" i18n>Blocking a live will automatically terminate the live stream.</strong>
+      }
 
       <div class="form-group inputs">
         <input
           type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button"
           (click)="hide()" (key.enter)="hide()"
-        >
+          >
 
         <input type="submit" i18n-value value="Block" class="peertube-button primary-button" [disabled]="!form.valid" />
       </div>

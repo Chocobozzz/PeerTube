@@ -1,4 +1,4 @@
-import { join } from 'path'
+import { join } from 'node:path'
 import { VideoManage } from './video-manage'
 import { FIXTURE_URLS } from '../utils'
 

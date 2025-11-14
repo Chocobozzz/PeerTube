@@ -1,4 +1,4 @@
-import { CommonModule, ViewportScroller } from '@angular/common'
+import { ViewportScroller } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
 import { AfterViewChecked, Component, OnInit, inject } from '@angular/core'
 import { AuthService, Notifier, User, UserService } from '@app/core'
@@ -24,7 +24,6 @@ import { MyAccountTwoFactorButtonComponent } from './my-account-two-factor/my-ac
   templateUrl: './my-account-settings.component.html',
   styleUrls: [ './my-account-settings.component.scss' ],
   imports: [
-    CommonModule,
     ActorAvatarEditComponent,
     UserQuotaComponent,
     MyAccountProfileComponent,

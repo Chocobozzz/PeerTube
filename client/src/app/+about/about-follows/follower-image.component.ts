@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, OnInit, inject } from '@angular/core'
 import { ServerService } from '@app/core'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
@@ -8,9 +7,7 @@ import { Actor } from '@app/shared/shared-main/account/actor.model'
   templateUrl: './follower-image.component.html',
   styleUrls: [ './follower-image.component.scss' ],
   standalone: true,
-  imports: [
-    CommonModule
-  ]
+  imports: []
 })
 export class FollowerImageComponent implements OnInit {
   private server = inject(ServerService)

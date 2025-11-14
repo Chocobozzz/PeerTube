@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common'
 import { booleanAttribute, Component, inject, input, OnDestroy, OnInit } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AuthService, Notifier, ServerService, ThemeService, UserService } from '@app/core'
@@ -23,7 +22,7 @@ type Form = {
   selector: 'my-user-interface-settings',
   templateUrl: './user-interface-settings.component.html',
   styleUrls: [ './user-interface-settings.component.scss' ],
-  imports: [ FormsModule, ReactiveFormsModule, NgIf, SelectOptionsComponent ]
+  imports: [ FormsModule, ReactiveFormsModule, SelectOptionsComponent ]
 })
 export class UserInterfaceSettingsComponent implements OnInit, OnDestroy {
   private formReactiveService = inject(FormReactiveService)

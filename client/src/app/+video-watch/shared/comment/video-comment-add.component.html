@@ -9,13 +9,13 @@
         (click)="openVisitorModal($event)"
         formControlName="text" [ngClass]="{ 'input-error': formErrors['text'] }"
         (keyup.control.enter)="onValidKey()" (keyup.meta.enter)="onValidKey()" #textarea
-      >
+        >
       </textarea>
 
       <my-help
         [ngClass]="{ 'is-rtl': isRTL() }" class="markdown-guide" helpType="custom" iconName="markdown"
         tooltipPlacement="left auto" autoClose="true" i18n-title title="Markdown compatible"
-      >
+        >
         <span i18n>Markdown compatible that supports:</span>
 
         <ul>
@@ -37,9 +37,11 @@
           </li>
         </ul>
       </my-help>
-      <div *ngIf="formErrors.text" class="form-error" role="alert">
-        {{ formErrors.text }}
-      </div>
+      @if (formErrors.text) {
+        <div class="form-error" role="alert">
+          {{ formErrors.text }}
+        </div>
+      }
     </div>
   </div>
 
@@ -77,7 +79,7 @@
     <input
       type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button"
       (click)="hideModals()" (key.enter)="hideModals()"
-    >
+      >
 
     <my-login-link i18n-label label="Login to comment" className="peertube-button-link primary-button"></my-login-link>
   </div>
@@ -94,9 +96,11 @@
 
   <div class="modal-body">
     <div class="emoji-flex">
-      <div class="emoji-flex-item" *ngFor="let emojiMarkup of getEmojiMarkupList()">
-        {{ emojiMarkup.emoji }} <code>:{{ emojiMarkup.name }}:</code>
-      </div>
+      @for (emojiMarkup of getEmojiMarkupList(); track emojiMarkup) {
+        <div class="emoji-flex-item">
+          {{ emojiMarkup.emoji }} <code>:{{ emojiMarkup.name }}:</code>
+        </div>
+      }
     </div>
   </div>
 </ng-template>

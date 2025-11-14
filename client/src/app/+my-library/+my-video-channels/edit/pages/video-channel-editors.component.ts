@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common'
+
 import { Component, inject, OnDestroy, OnInit } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Router } from '@angular/router'
@@ -21,7 +21,6 @@ import { VideoChannelEdit } from '../video-channel-edit.model'
   templateUrl: './video-channel-editors.component.html',
   styleUrls: [ './video-channel-editors.component.scss' ],
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     ActorAvatarComponent,
@@ -30,7 +29,7 @@ import { VideoChannelEdit } from '../video-channel-edit.model'
     UserAutoCompleteComponent,
     GlobalIconComponent,
     CollaboratorStateComponent
-  ]
+]
 })
 export class VideoChannelEditEditorsComponent implements OnInit, OnDestroy {
   private confirmService = inject(ConfirmService)

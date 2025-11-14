@@ -1,4 +1,3 @@
-import { NgFor, NgIf } from '@angular/common'
 import { Component, OnInit, inject } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, ComponentPagination, Notifier, resetCurrentPage } from '@app/core'
@@ -14,7 +13,7 @@ import { InfiniteScrollerDirective } from '../../shared/shared-main/common/infin
 @Component({
   templateUrl: './my-followers.component.html',
   styleUrls: [ './my-followers.component.scss' ],
-  imports: [ GlobalIconComponent, NgIf, AdvancedInputFilterComponent, InfiniteScrollerDirective, NgFor, ActorAvatarComponent ]
+  imports: [ GlobalIconComponent, AdvancedInputFilterComponent, InfiniteScrollerDirective, ActorAvatarComponent ]
 })
 export class MyFollowersComponent implements OnInit {
   private route = inject(ActivatedRoute)

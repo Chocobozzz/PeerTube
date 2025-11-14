@@ -1,4 +1,4 @@
-import { NgClass, NgIf } from '@angular/common'
+import { NgClass } from '@angular/common'
 import { AfterViewInit, Component, ElementRef, forwardRef, input, model, viewChild } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
@@ -16,7 +16,7 @@ import { FormReactiveErrors } from './form-reactive.service'
       multi: true
     }
   ],
-  imports: [ FormsModule, NgClass, NgIf, GlobalIconComponent, CopyButtonComponent ]
+  imports: [ FormsModule, NgClass, GlobalIconComponent, CopyButtonComponent ]
 })
 export class InputTextComponent implements ControlValueAccessor, AfterViewInit {
   readonly inputElement = viewChild<ElementRef>('input')

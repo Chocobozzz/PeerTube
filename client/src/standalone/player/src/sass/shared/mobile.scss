@@ -1,7 +1,7 @@
-@use 'sass:math';
-@use '_variables' as *;
-@use '_mixins' as *;
-@use './_player-variables' as *;
+@use "sass:math";
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "./_player-variables" as *;
 
 /* Special mobile style */
 
@@ -17,7 +17,6 @@
   }
 
   .vjs-progress-control .vjs-sliding {
-
     .vjs-time-tooltip,
     .vjs-storyboard-sprite-placeholder {
       display: block !important;
@@ -92,7 +91,7 @@
 
       &::before {
         font-size: 20px;
-        content: '\f101';
+        content: "\f101";
         display: inline-block;
         width: 16px;
       }
@@ -140,7 +139,7 @@
 .vjs-paused {
   .main-button {
     &::before {
-      content: '\f101';
+      content: "\f101";
     }
   }
 }
@@ -148,7 +147,7 @@
 .vjs-playing {
   .main-button {
     &::before {
-      content: '\f103';
+      content: "\f103";
     }
   }
 }
@@ -156,13 +155,12 @@
 .vjs-ended {
   .main-button {
     &::before {
-      content: '\f116';
+      content: "\f116";
     }
   }
 }
 
 .vjs-can-play.vjs-has-started {
-
   &.vjs-user-active:not(.vjs-force-inactive),
   &.vjs-paused {
     .vjs-mobile-buttons-overlay {
@@ -188,7 +186,7 @@
 
 .vjs-force-inactive,
 .vjs-fast-seeking {
-   .vjs-control-bar {
+  .vjs-control-bar {
     display: none;
   }
 }

@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ConfirmService, MarkdownService, Notifier, ServerService } from '@app/core'
@@ -25,7 +24,6 @@ type ColumnName = 'account' | 'email' | 'channel' | 'registrationReason' | 'stat
   styleUrls: [ '../../../shared/shared-moderation/moderation.scss', './registration-list.component.scss' ],
   imports: [
     GlobalIconComponent,
-    CommonModule,
     ActionDropdownComponent,
     AdvancedInputFilterComponent,
     NgbTooltip,

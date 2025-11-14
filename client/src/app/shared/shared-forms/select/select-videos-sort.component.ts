@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, forwardRef, OnInit, inject, input } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { ServerService } from '@app/core'
@@ -25,7 +24,7 @@ import { HTMLServerConfig } from '@peertube/peertube-models'
       multi: true
     }
   ],
-  imports: [ FormsModule, CommonModule, SelectOptionsComponent ]
+  imports: [ FormsModule, SelectOptionsComponent ]
 })
 export class SelectVideosSortComponent implements ControlValueAccessor, OnInit {
   private server = inject(ServerService)

@@ -8,7 +8,7 @@
   columnConfig="true"
   [dataLoader]="dataLoader"
   [bulkActions]="bulkActions"
->
+  >
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No job} =1 {1 job} other {{{ totalRecords | myNumberFormatter }} jobs}}</ng-container>
   </ng-template>
@@ -20,33 +20,53 @@
   </ng-template>
 
   <ng-template #tableCells let-runnerJob>
-    <td *ngIf="table.isColumnDisplayed('uuid')">{{ runnerJob.uuid }}</td>
+    @if (table.isColumnDisplayed('uuid')) {
+      <td>{{ runnerJob.uuid }}</td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('type')">
-      <span class="pt-badge ellipsis" [title]="runnerJob.type" [ngClass]="getRandomRunnerTypeBadge(runnerJob.type)">{{ runnerJob.type }}</span>
-    </td>
+    @if (table.isColumnDisplayed('type')) {
+      <td>
+        <span class="pt-badge ellipsis" [title]="runnerJob.type" [ngClass]="getRandomRunnerTypeBadge(runnerJob.type)">{{ runnerJob.type }}</span>
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('state')">
-      <span class="pt-badge ellipsis" [title]="runnerJob.state.label" [ngClass]="getStateBadgeColor(runnerJob)">{{ runnerJob.state.label }}</span>
-    </td>
+    @if (table.isColumnDisplayed('state')) {
+      <td>
+        <span class="pt-badge ellipsis" [title]="runnerJob.state.label" [ngClass]="getStateBadgeColor(runnerJob)">{{ runnerJob.state.label }}</span>
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('priority')">{{ runnerJob.priority }}</td>
+    @if (table.isColumnDisplayed('priority')) {
+      <td>{{ runnerJob.priority }}</td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('progress')">
-      <ng-container *ngIf="runnerJob.progress">{{ runnerJob.progress }}%</ng-container>
-    </td>
+    @if (table.isColumnDisplayed('progress')) {
+      <td>
+        @if (runnerJob.progress) {
+          {{ runnerJob.progress }}%
+        }
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('runner')">
-      <div *ngIf="runnerJob.runner?.name" class="pt-badge" [ngClass]="getRandomRunnerNameBadge(runnerJob.runner.name)">
-        {{ runnerJob.runner.name }}
-      </div>
-    </td>
-    <td *ngIf="table.isColumnDisplayed('createdAt')">{{ runnerJob.createdAt }}</td>
+    @if (table.isColumnDisplayed('runner')) {
+      <td>
+        @if (runnerJob.runner?.name) {
+          <div class="pt-badge" [ngClass]="getRandomRunnerNameBadge(runnerJob.runner.name)">
+            {{ runnerJob.runner.name }}
+          </div>
+        }
+      </td>
+    }
+    @if (table.isColumnDisplayed('createdAt')) {
+      <td>{{ runnerJob.createdAt }}</td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('processed')" class="fs-7">
-      <div>{{ runnerJob.startedAt }}</div>
-      <div>{{ runnerJob.finishedAt}}</div>
-    </td>
+    @if (table.isColumnDisplayed('processed')) {
+      <td class="fs-7">
+        <div>{{ runnerJob.startedAt }}</div>
+        <div>{{ runnerJob.finishedAt}}</div>
+      </td>
+    }
   </ng-template>
 
   <ng-template #actionCell let-runnerJob>
@@ -73,7 +93,9 @@
       <pre>{{ runnerJob.privatePayload }}</pre>
     </div>
 
-    <pre *ngIf="runnerJob.error" class="text-danger" >{{ runnerJob.error }}</pre>
+    @if (runnerJob.error) {
+      <pre class="text-danger" >{{ runnerJob.error }}</pre>
+    }
   </ng-template>
 
   <ng-template #noResults>

@@ -1,1 +1,3 @@
-<span *ngIf="label" [ngClass]="badgeClass" class="pt-badge">{{ label }}</span>
+@if (label) {
+  <span [ngClass]="badgeClass" class="pt-badge">{{ label }}</span>
+}

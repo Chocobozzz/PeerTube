@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, OnInit, inject } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { ServerService } from '@app/core'
@@ -10,7 +9,7 @@ import { InstanceFeaturesTableComponent } from '@app/shared/shared-instance/inst
 @Component({
   templateUrl: './about-instance-tech.component.html',
   styleUrls: [ './about-instance-common.component.scss' ],
-  imports: [ CommonModule, PluginSelectorDirective, InstanceFeaturesTableComponent ]
+  imports: [ PluginSelectorDirective, InstanceFeaturesTableComponent ]
 })
 export class AboutInstanceTechComponent implements OnInit {
   private route = inject(ActivatedRoute)

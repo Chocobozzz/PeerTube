@@ -31,46 +31,59 @@
       </my-select-options>
     </div>
 
-    <div>
-      <label i18n for="log-tags">Filter logs by tags</label>
+    @if (!isAuditLog()) {
+      <div>
+        <label i18n for="log-tags">Filter logs by tags</label>
 
-      <my-select-tags
-        *ngIf="!isAuditLog()"
-        inputId="log-tags"
-        i18n-placeholder placeholder="Example: ffmpeg, api"
-        [(ngModel)]="tagsOneOf" (ngModelChange)="refresh()"
-      ></my-select-tags>
-    </div>
+        <my-select-tags
+          inputId="log-tags"
+          i18n-placeholder placeholder="Example: ffmpeg, api"
+          [(ngModel)]="tagsOneOf" (ngModelChange)="refresh()"
+        ></my-select-tags>
+      </div>
+    }
   }
 
   <my-button class="mt-auto" i18n-label label="Refresh" icon="refresh" (click)="refresh()"></my-button>
 </div>
 
 <div class="logs">
-  <div *ngIf="loading" i18n>Loading...</div>
+  @if (loading) {
+    <div i18n>Loading...</div>
+  }
 
   <div #logsElement>
-    <my-copy-button
-      *ngIf="logs.length !== 0"
-      i18n-notification notification="Logs copied" i18n-title title="Copy logs"
-      withBorder="true" [elementContent]="logsContent"
-    ></my-copy-button>
+    @if (logs.length !== 0) {
+      <my-copy-button
+        i18n-notification notification="Logs copied" i18n-title title="Copy logs"
+        withBorder="true" [elementContent]="logsContent"
+      ></my-copy-button>
+    }
 
-    <div *ngIf="!loading && logs.length === 0" i18n>No log.</div>
+    @if (!loading && logs.length === 0) {
+      <div i18n>No log.</div>
+    }
 
     <div #logsContent>
-      <div *ngFor="let log of logs" class="log-row" [ngClass]="{ error: log.level === 'error', warn: log.level === 'warn' }">
-        <span class="log-level">{{ log.level }}</span>
+      @for (log of logs; track log) {
+        <div class="log-row" [ngClass]="{ error: log.level === 'error', warn: log.level === 'warn' }">
+          <span class="log-level">{{ log.level }}</span>
 
-        <span class="log-date">[{{ log.localeDate }}]</span>
+          <span class="log-date">[{{ log.localeDate }}]</span>
 
-        <strong class="log-by" *ngIf="log.by" i18n>By {{ log.by }} -></strong>
-        <strong class="log-domain-action" *ngIf="log.domain">{{ log.domain }} -> {{ log.action }}</strong>
+          @if (log.by) {
+            <strong class="log-by" i18n>By {{ log.by }} -></strong>
+          }
 
-        {{ log.message }}
+          @if (log.domain) {
+            <strong class="log-domain-action">{{ log.domain }} -> {{ log.action }}</strong>
+          }
 
-        <pre>{{ log.meta }}</pre>
-      </div>
+          {{ log.message }}
+
+          <pre>{{ log.meta }}</pre>
+        </div>
+      }
     </div>
   </div>
 </div>

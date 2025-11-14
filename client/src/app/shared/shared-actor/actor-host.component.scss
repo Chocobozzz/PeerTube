@@ -1,5 +1,5 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
 
 .content {
   background-color: pvar(--bg-secondary-450);
@@ -48,7 +48,7 @@
     fill: pvar(--bg);
     z-index: 2;
     width: auto;
-    height: calc(100% + 2px);;
+    height: calc(100% + 2px);
     top: -1px;
     position: absolute;
 

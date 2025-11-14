@@ -1,4 +1,4 @@
-import { NgClass, NgFor, NgIf } from '@angular/common'
+import { NgClass } from '@angular/common'
 import { Component, inject, input, output } from '@angular/core'
 import { Router } from '@angular/router'
 import {
@@ -26,7 +26,7 @@ import { peertubeSessionStorage } from '@root-helpers/peertube-web-storage'
   selector: 'my-video-watch-playlist',
   templateUrl: './video-watch-playlist.component.html',
   styleUrls: [ './player-widget.component.scss', './video-watch-playlist.component.scss' ],
-  imports: [ NgIf, InfiniteScrollerDirective, NgClass, NgbTooltip, GlobalIconComponent, NgFor, VideoPlaylistElementMiniatureComponent ]
+  imports: [ InfiniteScrollerDirective, NgClass, NgbTooltip, GlobalIconComponent, VideoPlaylistElementMiniatureComponent ]
 })
 export class VideoWatchPlaylistComponent {
   private hooks = inject(HooksService)

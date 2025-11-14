@@ -1,5 +1,5 @@
 import { CdkStepperModule } from '@angular/cdk/stepper'
-import { CommonModule } from '@angular/common'
+
 import { booleanAttribute, Component, inject, input, numberAttribute, OnChanges, output } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { HtmlRendererService, Notifier, ServerService } from '@app/core'
@@ -20,13 +20,12 @@ import { InstanceLogoService } from '@app/shared/shared-instance/instance-logo.s
   templateUrl: './admin-config-wizard-preview.component.html',
   styleUrls: [ '../shared/admin-config-wizard-modal-common.scss' ],
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     ColorPickerModule,
     CdkStepperModule,
     ButtonComponent
-  ],
+],
   providers: [ AdminConfigService, PluginApiService, InstanceLogoService ]
 })
 export class AdminConfigWizardPreviewComponent implements OnChanges {

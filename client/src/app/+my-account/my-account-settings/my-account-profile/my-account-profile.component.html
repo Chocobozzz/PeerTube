@@ -1,13 +1,11 @@
-<my-alert *ngIf="error" type="danger">{{ error }}</my-alert>
+@if (error) {
+  <my-alert type="danger">{{ error }}</my-alert>
+}
 
 <form (ngSubmit)="updateMyProfile()" [formGroup]="form">
-
   <div class="form-group">
     <label i18n for="username">Username</label>
-    <input
-      type="text" id="username" class="form-control"
-      formControlName="username" readonly
-    >
+    <input type="text" id="username" class="form-control" formControlName="username" readonly>
     <div class="form-group-description" i18n>
       People can find you using &#64;{{ user().username }}&#64;{{ instanceHost }}
     </div>
@@ -15,13 +13,11 @@
 
   <div class="form-group">
     <label i18n for="display-name">Display name</label>
-    <input
-      type="text" id="display-name" class="form-control"
-      formControlName="display-name" [ngClass]="{ 'input-error': formErrors['display-name'] }"
-    >
-    <div *ngIf="formErrors['display-name']" class="form-error" role="alert">
-      {{ formErrors['display-name'] }}
-    </div>
+    <input type="text" id="display-name" class="form-control" formControlName="display-name" [ngClass]="{ 'input-error': formErrors['display-name'] }">
+
+    @if (formErrors['display-name']) {
+      <div class="form-error" role="alert">{{ formErrors['display-name'] }}</div>
+    }
   </div>
 
   <div class="form-group">
@@ -30,13 +26,17 @@
     <my-help helpType="markdownText" supportRelMe="true"></my-help>
 
     <my-markdown-textarea
-      inputId="description" formControlName="description"
-      markdownType="enhanced" [formError]="formErrors['description']" withEmoji="true" withHtml="true"
+      inputId="description"
+      formControlName="description"
+      markdownType="enhanced"
+      [formError]="formErrors['description']"
+      withEmoji="true"
+      withHtml="true"
     ></my-markdown-textarea>
 
-    <div *ngIf="formErrors.description" class="form-error" role="alert">
-      {{ formErrors.description }}
-    </div>
+    @if (formErrors.description) {
+      <div class="form-error" role="alert">{{ formErrors.description }}</div>
+    }
   </div>
 
   <input class="mt-3 peertube-button primary-button" type="submit" i18n-value value="Save profile" [disabled]="!form.valid">

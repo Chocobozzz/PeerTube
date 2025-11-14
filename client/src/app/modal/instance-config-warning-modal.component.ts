@@ -1,4 +1,4 @@
-import { CommonModule, Location } from '@angular/common'
+import { Location } from '@angular/common'
 import { Component, ElementRef, OnInit, inject, output, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { Notifier, User, UserService } from '@app/core'
@@ -13,7 +13,7 @@ import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
   selector: 'my-instance-config-warning-modal',
   templateUrl: './instance-config-warning-modal.component.html',
   styleUrls: [ './instance-config-warning-modal.component.scss' ],
-  imports: [ CommonModule, FormsModule, GlobalIconComponent, PeertubeCheckboxComponent ]
+  imports: [ FormsModule, GlobalIconComponent, PeertubeCheckboxComponent ]
 })
 export class InstanceConfigWarningModalComponent implements OnInit {
   private userService = inject(UserService)

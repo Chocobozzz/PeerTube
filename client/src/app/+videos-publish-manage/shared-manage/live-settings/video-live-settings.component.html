@@ -16,38 +16,44 @@
       } @else {
         <my-live-documentation-link></my-live-documentation-link>
 
-        <div class="mt-3" i18n *ngIf="getMaxLiveDuration() >= 0">
+        @if (getMaxLiveDuration() >= 0) {
+          <div class="mt-3" i18n>
           Max live duration configured on {{ getInstanceName() }} is {{ getMaxLiveDuration() | myTimeDurationFormatter }}. If your live reaches this limit, it
           will be automatically terminated.
         </div>
+        }
       }
     </my-alert>
 
     <div class="form-columns reverse" [ngClass]="{ disabled: isStreaming() }">
       <div>
-        <div *ngIf="getLive().rtmpUrl" class="form-group">
-          <label for="liveVideoRTMPUrl" i18n>Live RTMP Url</label>
-          <my-input-text
-            inputId="liveVideoRTMPUrl"
-            [value]="getLive().rtmpUrl"
-            [withToggle]="false"
-            [withCopy]="true"
-            [show]="true"
-            [readonly]="true"
-          ></my-input-text>
-        </div>
+        @if (getLive().rtmpUrl) {
+          <div class="form-group">
+            <label for="liveVideoRTMPUrl" i18n>Live RTMP Url</label>
+            <my-input-text
+              inputId="liveVideoRTMPUrl"
+              [value]="getLive().rtmpUrl"
+              [withToggle]="false"
+              [withCopy]="true"
+              [show]="true"
+              [readonly]="true"
+            ></my-input-text>
+          </div>
+        }
 
-        <div *ngIf="getLive().rtmpsUrl" class="form-group">
-          <label for="liveVideoRTMPSUrl" i18n>Live RTMPS Url</label>
-          <my-input-text
-            inputId="liveVideoRTMPSUrl"
-            [value]="getLive().rtmpsUrl"
-            [withToggle]="false"
-            [withCopy]="true"
-            [show]="true"
-            [readonly]="true"
-          ></my-input-text>
-        </div>
+        @if (getLive().rtmpsUrl) {
+          <div class="form-group">
+            <label for="liveVideoRTMPSUrl" i18n>Live RTMPS Url</label>
+            <my-input-text
+              inputId="liveVideoRTMPSUrl"
+              [value]="getLive().rtmpsUrl"
+              [withToggle]="false"
+              [withCopy]="true"
+              [show]="true"
+              [readonly]="true"
+            ></my-input-text>
+          </div>
+        }
 
         <div class="form-group">
           <label for="liveVideoStreamKey" i18n>Live stream key</label>
@@ -80,40 +86,48 @@
           </div>
         </div>
 
-        <div class="form-group" *ngIf="isSaveReplayAllowed()">
-          <my-peertube-checkbox inputName="liveVideoSaveReplay" formControlName="saveReplay">
-            <ng-template ptTemplate="label">
-              <ng-container i18n>Automatically publish a replay when your live ends</ng-container>
-            </ng-template>
-
-            <ng-container ngProjectAs="description">
-              <span i18n>⚠️ If you enable this option, your live will be terminated if you exceed your video quota</span>
-            </ng-container>
-          </my-peertube-checkbox>
-        </div>
-
-        <div class="form-group ms-4" *ngIf="isSaveReplayEnabled()">
-          <label i18n for="replayPrivacy">Privacy of the new replay</label>
-          <my-select-options inputId="replayPrivacy" [items]="replayPrivacies" formControlName="replayPrivacy"></my-select-options>
-        </div>
-
-        <div class="form-group" *ngIf="isLatencyModeEnabled()">
-          <label i18n for="latencyMode">Latency mode</label>
-          <my-select-options inputId="latencyMode" [items]="latencyModes" formControlName="latencyMode" clearable="true"></my-select-options>
-
-          <div *ngIf="formErrors.latencyMode" class="form-error" role="alert">
-            {{ formErrors.latencyMode }}
+        @if (isSaveReplayAllowed()) {
+          <div class="form-group">
+            <my-peertube-checkbox inputName="liveVideoSaveReplay" formControlName="saveReplay">
+              <ng-template ptTemplate="label">
+                <ng-container i18n>Automatically publish a replay when your live ends</ng-container>
+              </ng-template>
+              <ng-container ngProjectAs="description">
+                <span i18n>⚠️ If you enable this option, your live will be terminated if you exceed your video quota</span>
+              </ng-container>
+            </my-peertube-checkbox>
           </div>
-        </div>
+        }
+
+        @if (isSaveReplayEnabled()) {
+          <div class="form-group ms-4">
+            <label i18n for="replayPrivacy">Privacy of the new replay</label>
+            <my-select-options inputId="replayPrivacy" [items]="replayPrivacies" formControlName="replayPrivacy"></my-select-options>
+          </div>
+        }
+
+        @if (isLatencyModeEnabled()) {
+          <div class="form-group">
+            <label i18n for="latencyMode">Latency mode</label>
+            <my-select-options inputId="latencyMode" [items]="latencyModes" formControlName="latencyMode" clearable="true"></my-select-options>
+            @if (formErrors.latencyMode) {
+              <div class="form-error" role="alert">
+                {{ formErrors.latencyMode }}
+              </div>
+            }
+          </div>
+        }
 
         <div class="form-group" formArrayName="schedules">
           <ng-container formGroupName="0">
             <div class="label-container">
               <label i18n for="startAt">Live scheduled date</label>
 
-              <button i18n class="reset-button reset-button-small" (click)="resetSchedule()" *ngIf="hasScheduledDate()">
+              @if (hasScheduledDate()) {
+                <button i18n class="reset-button reset-button-small" (click)="resetSchedule()">
                 Reset
               </button>
+              }
             </div>
 
             <div class="form-group-description" i18n>
@@ -132,7 +146,7 @@
               [yearNavigator]="true"
               [yearRange]="myYearRange"
               baseZIndex="20000"
-            >
+              >
             </p-datepicker>
           </ng-container>
         </div>

@@ -1,4 +1,3 @@
-import { NgFor, NgIf } from '@angular/common'
 import { Component, OnInit, inject, model } from '@angular/core'
 import { ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -13,7 +12,7 @@ import { FeatureBooleanComponent } from './feature-boolean.component'
   selector: 'my-instance-features-table',
   templateUrl: './instance-features-table.component.html',
   styleUrls: [ './instance-features-table.component.scss' ],
-  imports: [ NgIf, FeatureBooleanComponent, HelpComponent, NgFor, BytesPipe ]
+  imports: [ FeatureBooleanComponent, HelpComponent, BytesPipe ]
 })
 export class InstanceFeaturesTableComponent implements OnInit {
   private serverService = inject(ServerService)

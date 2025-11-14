@@ -101,7 +101,7 @@ export function videoModelToFormattedJSON (video: MVideoFormattable, options: Vi
     nsfwSummary: video.nsfwSummary,
 
     truncatedDescription: video.getTruncatedDescription(),
-    description: options && options.completeDescription === true
+    description: options?.completeDescription === true
       ? video.description
       : video.getTruncatedDescription(),
 

@@ -1,23 +1,22 @@
+import { NgClass } from '@angular/common'
 import { Component, OnInit, inject, output, viewChild } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { Video } from '@app/shared/shared-main/video/video.model'
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { VIDEO_BLOCK_REASON_VALIDATOR } from '../form-validators/video-block-validators'
-import { VideoBlockService } from './video-block.service'
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
-import { NgIf, NgClass } from '@angular/common'
+import { VideoBlockService } from './video-block.service'
 
 @Component({
   selector: 'my-video-block',
   templateUrl: './video-block.component.html',
   styleUrls: [ './video-block.component.scss' ],
-  imports: [ NgIf, GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, PeertubeCheckboxComponent ]
+  imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, PeertubeCheckboxComponent ]
 })
 export class VideoBlockComponent extends FormReactive implements OnInit {
   protected formReactiveService = inject(FormReactiveService)

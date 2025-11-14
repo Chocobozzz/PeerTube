@@ -8,11 +8,12 @@
   <my-alert type="primary" i18n>{{ getUnavailability() }}</my-alert>
 } @else {
   <form class="root" myDragDrop (fileDropped)="onFileDropped($event)" id="video-manage-form">
-    <div *ngIf="videoEdit.getVideoSource()" class="current-filename">
-      <div class="fs-7" i18n>Current uploaded file:</div>
-
-      <strong class="fs-5">{{ videoEdit.getVideoSource().filename }}</strong>
-    </div>
+    @if (videoEdit.getVideoSource()) {
+      <div class="current-filename">
+        <div class="fs-7" i18n>Current uploaded file:</div>
+        <strong class="fs-5">{{ videoEdit.getVideoSource().filename }}</strong>
+      </div>
+    }
 
     <div class="mt-3">
       <div class="muted-1">

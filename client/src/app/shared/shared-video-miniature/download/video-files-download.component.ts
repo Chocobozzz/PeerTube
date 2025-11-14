@@ -1,12 +1,8 @@
-import { KeyValuePipe, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
-import { Component, LOCALE_ID, OnInit, inject, input, output } from '@angular/core'
+import { KeyValuePipe, NgTemplateOutlet } from '@angular/common'
+import { Component, OnInit, inject, input, output } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
-import {
-  NgbCollapse,
-  NgbNavModule,
-  NgbTooltip
-} from '@ng-bootstrap/ng-bootstrap'
+import { NgbCollapse, NgbNavModule, NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { objectKeysTyped, pick } from '@peertube/peertube-core-utils'
 import { VideoFile, VideoFileMetadata, VideoSource } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
@@ -28,10 +24,8 @@ type FileMetadata = { [key: string]: { label: string, value: string | number } }
   templateUrl: './video-files-download.component.html',
   styleUrls: [ './video-files-download.component.scss' ],
   imports: [
-    NgIf,
     FormsModule,
     GlobalIconComponent,
-    NgFor,
     NgbNavModule,
     InputTextComponent,
     NgbCollapse,
@@ -42,7 +36,6 @@ type FileMetadata = { [key: string]: { label: string, value: string | number } }
   ]
 })
 export class VideoFilesDownloadComponent implements OnInit {
-  private localeId = inject(LOCALE_ID)
   private videoService = inject(VideoService)
 
   readonly video = input.required<VideoDetails>()
@@ -66,7 +59,7 @@ export class VideoFilesDownloadComponent implements OnInit {
 
   constructor () {
     this.bytesPipe = new BytesPipe()
-    this.numbersPipe = new NumberFormatterPipe(this.localeId)
+    this.numbersPipe = new NumberFormatterPipe()
   }
 
   ngOnInit () {

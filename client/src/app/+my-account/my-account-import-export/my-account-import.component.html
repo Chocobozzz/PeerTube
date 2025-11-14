@@ -35,17 +35,20 @@
         <li i18n>Followers (accounts will need to re-follow your channels)</li>
       </ul>
 
-      <p *ngIf="isEmailEnabled()" i18n>An email will be sent when the import process is complete.</p>
+      @if (isEmailEnabled()) {
+        <p i18n>An email will be sent when the import process is complete.</p>
+      }
 
-      <div class="mb-3" *ngIf="latestImport">
-        <div>
-          <strong>Latest import on:</strong> {{ latestImport.createdAt | ptDate: 'medium' }}
+      @if (latestImport) {
+        <div class="mb-3">
+          <div>
+            <strong>Latest import on:</strong> {{ latestImport.createdAt | ptDate: 'medium' }}
+          </div>
+          <div>
+            <strong>Latest import state:</strong> {{ latestImport.state.label }}
+          </div>
         </div>
-
-        <div>
-          <strong>Latest import state:</strong> {{ latestImport.state.label }}
-        </div>
-      </div>
+      }
 
       @if (hasPendingImport()) {
         <my-alert i18n type="primary">
@@ -56,12 +59,12 @@
           class="d-block mt-3 mb-3"
           [isUploading]="uploadingArchive" [uploadPercents]="uploadPercents" [error]="error" [uploaded]="archiveUploadFinished"
           [enableRetryAfterError]="enableRetryAfterError" (cancelUpload)="cancelUpload()" (retry)="retryUpload()"
-        >
+          >
         </my-upload-progress>
 
-        <my-alert *ngIf="archiveUploadFinished && !error" type="primary" i18n>
-          Upload completed. Your archive import will be processed as soon as possible.
-        </my-alert>
+        @if (archiveUploadFinished && !error) {
+          <my-alert type="primary" i18n>Upload completed. Your archive import will be processed as soon as possible.</my-alert>
+        }
 
         <div [hidden]="uploadingArchive || archiveUploadFinished" class="button-file primary-button form-control" i18n-ngbTooltip ngbTooltip="(extension: .zip)">
           <span i18n>Select the archive file to import</span>
@@ -72,7 +75,7 @@
             (change)="onFileChange($event)"
             id="importfile"
             type="file"
-          />
+            />
         </div>
       }
     } @else {

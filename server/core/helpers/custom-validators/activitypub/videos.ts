@@ -33,7 +33,7 @@ export function sanitizeAndCheckVideoTorrentUpdateActivity (activity: any) {
 }
 
 export function sanitizeAndCheckVideoTorrentObject (video: VideoObject) {
-  if (!video || video.type !== 'Video') return false
+  if (video?.type !== 'Video') return false
 
   const fail = (field: string) => {
     logger.debug(`Video field is not valid to PeerTube: ${field}`, { video })
@@ -129,8 +129,7 @@ export function isRemoteVideoUrlValid (url: any) {
 }
 
 export function isAPVideoFileUrlMetadataObject (url: any): url is ActivityVideoFileMetadataUrlObject {
-  return url &&
-    url.type === 'Link' &&
+  return url?.type === 'Link' &&
     url.mediaType === 'application/json' &&
     isArray(url.rel) && url.rel.includes('metadata')
 }
@@ -142,8 +141,7 @@ export function isAPVideoTrackerUrlObject (url: any): url is ActivityTrackerUrlO
 }
 
 export function isAPCaptionUrlObject (url: any): url is ActivityCaptionUrlObject {
-  return url &&
-    url.type === 'Link' &&
+  return url?.type === 'Link' &&
     (url.mediaType === 'text/vtt' || url.mediaType === 'application/x-mpegURL') &&
     isActivityPubUrlValid(url.href)
 }

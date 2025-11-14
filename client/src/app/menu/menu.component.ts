@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common'
-import { Component, OnDestroy, OnInit, inject } from '@angular/core'
+import { CommonModule, NgTemplateOutlet } from '@angular/common'
+import { Component, inject, OnDestroy, OnInit } from '@angular/core'
 import { Params, RouterLink, RouterLinkActive } from '@angular/router'
 import { AuthService, AuthStatus, AuthUser, HooksService, MenuService, RedirectService, ServerService, UserService } from '@app/core'
 import { GlobalIconComponent, GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
@@ -43,6 +43,7 @@ const debugLogger = debug('peertube:menu:MenuComponent')
     RouterLink,
     RouterLinkActive,
     NgbDropdownModule,
+    NgTemplateOutlet,
     ButtonComponent
   ]
 })

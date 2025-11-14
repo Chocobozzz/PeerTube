@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, OnDestroy, OnInit, inject, input, viewChild } from '@angular/core'
 import { ConfirmService, HooksService, MarkdownService, Notifier, PluginService } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -35,7 +34,6 @@ const debugLogger = debug('peertube:moderation:AbuseListTableComponent')
   templateUrl: './abuse-list-table.component.html',
   styleUrls: [ '../shared-moderation/moderation.scss', './abuse-list-table.component.scss' ],
   imports: [
-    CommonModule,
     AdvancedInputFilterComponent,
     NgbTooltip,
     ActionDropdownComponent,

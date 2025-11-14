@@ -1,4 +1,4 @@
-import { NgFor, NgStyle } from '@angular/common'
+import { NgStyle } from '@angular/common'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject, input, output } from '@angular/core'
 import { AuthService, Notifier, User, UserService } from '@app/core'
 import { Video } from '@app/shared/shared-main/video/video.model'
@@ -19,7 +19,7 @@ import { CustomMarkupComponent } from './shared'
   templateUrl: 'videos-list-markup.component.html',
   styleUrls: [ 'videos-list-markup.component.scss' ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ NgStyle, NgFor, VideoMiniatureComponent ]
+  imports: [ NgStyle, VideoMiniatureComponent ]
 })
 export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit {
   private auth = inject(AuthService)

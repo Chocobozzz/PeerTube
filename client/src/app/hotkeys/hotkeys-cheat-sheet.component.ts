@@ -1,15 +1,15 @@
-import { Subscription } from 'rxjs'
+import { NgClass } from '@angular/common'
 import { Component, OnDestroy, OnInit, inject, input, output } from '@angular/core'
-import { LocalStorageService, HotkeysService, Hotkey } from '@app/core'
 import { FormsModule } from '@angular/forms'
+import { Hotkey, HotkeysService, LocalStorageService } from '@app/core'
+import { Subscription } from 'rxjs'
 import { PeertubeCheckboxComponent } from '../shared/shared-forms/peertube-checkbox.component'
-import { NgClass, NgFor } from '@angular/common'
 
 @Component({
   selector: 'my-hotkeys-cheat-sheet',
   templateUrl: './hotkeys-cheat-sheet.component.html',
   styleUrls: [ './hotkeys-cheat-sheet.component.scss' ],
-  imports: [ NgClass, PeertubeCheckboxComponent, FormsModule, NgFor ]
+  imports: [ NgClass, PeertubeCheckboxComponent, FormsModule ]
 })
 export class HotkeysCheatSheetComponent implements OnInit, OnDestroy {
   private hotkeysService = inject(HotkeysService)

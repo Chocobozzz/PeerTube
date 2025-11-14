@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { booleanAttribute, Component, input, OnChanges, OnInit } from '@angular/core'
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
 import { ENHANCED_RULES, TEXT_RULES } from '@peertube/peertube-core-utils'
@@ -7,7 +6,7 @@ import { ENHANCED_RULES, TEXT_RULES } from '@peertube/peertube-core-utils'
   selector: 'my-markdown-hint',
   styleUrls: [ './markdown-hint.component.scss' ],
   templateUrl: './markdown-hint.component.html',
-  imports: [ CommonModule, NgbPopover ]
+  imports: [ NgbPopover ]
 })
 export class MarkdownHintComponent implements OnInit, OnChanges {
   readonly helpType = input.required<'markdownText' | 'markdownEnhanced'>()

@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject, 
 import { Notifier } from '@app/core'
 import { CustomMarkupComponent } from './shared'
 import { VideoPlaylistMiniatureComponent } from '../../shared-video-playlist/video-playlist-miniature.component'
-import { NgIf } from '@angular/common'
+
 import { FindInBulkService } from '@app/shared/shared-search/find-in-bulk.service'
 import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature/video-miniature.component'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
@@ -17,7 +17,7 @@ import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.
   templateUrl: 'playlist-miniature-markup.component.html',
   styleUrls: [ 'playlist-miniature-markup.component.scss' ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ NgIf, VideoPlaylistMiniatureComponent ]
+  imports: [ VideoPlaylistMiniatureComponent ]
 })
 export class PlaylistMiniatureMarkupComponent implements CustomMarkupComponent, OnInit {
   private findInBulkService = inject(FindInBulkService)

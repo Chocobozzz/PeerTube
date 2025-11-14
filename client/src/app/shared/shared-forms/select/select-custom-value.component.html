@@ -14,8 +14,10 @@
     <input
       [attr.aria-labelledby]="labelId()" [(ngModel)]="customValue" (ngModelChange)="onModelChange()"
       [type]="inputType()" class="ms-2 form-control pt-input-text"
-    />
+      />
 
-    <span *ngIf="inputSuffix()" class="ms-1">{{ inputSuffix() }}</span>
+    @if (inputSuffix()) {
+      <span class="ms-1">{{ inputSuffix() }}</span>
+    }
   }
 </div>

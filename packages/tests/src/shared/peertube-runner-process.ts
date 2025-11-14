@@ -9,7 +9,6 @@ export class PeerTubeRunnerProcess {
   private app?: ChildProcess
 
   constructor (private readonly server: PeerTubeServer) {
-
   }
 
   runServer (options: {
@@ -59,9 +58,12 @@ export class PeerTubeRunnerProcess {
 
     const args = [
       'register',
-      '--url', this.server.url,
-      '--registration-token', registrationToken,
-      '--runner-name', runnerName,
+      '--url',
+      this.server.url,
+      '--registration-token',
+      registrationToken,
+      '--runner-name',
+      runnerName,
       ...this.buildIdArg()
     ]
 
@@ -109,7 +111,7 @@ export class PeerTubeRunnerProcess {
   }
 
   kill () {
-    if (!this.app || this.app.exitCode !== null) return
+    if (this.app?.exitCode !== null) return
 
     process.kill(this.app.pid)
 

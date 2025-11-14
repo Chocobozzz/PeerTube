@@ -1,26 +1,32 @@
 <div class="root" [ngClass]="{ 'small': size() === 'small' }">
 
-  <my-video-thumbnail
-    *ngIf="thumbnail()" blur="false"
-    [video]="video()" [videoRouterLink]="getVideoUrl()" [ariaLabel]="video().name" playOverlay="false"
-  ></my-video-thumbnail>
+  @if (thumbnail()) {
+    <my-video-thumbnail
+      blur="false"
+      [video]="video()" [videoRouterLink]="getVideoUrl()" [ariaLabel]="video().name" playOverlay="false"
+    ></my-video-thumbnail>
+  }
 
-  <div *ngIf="title()" class="min-width-0" [ngClass]="{ ellipsis: ellipsis }">
-    <div class="d-flex flex-wrap gap-2 align-items-center">
-      <a class="name" [ngClass]="{ ellipsis: ellipsis }" [routerLink]="getVideoUrl()" [title]="video().name">
-        {{ video().name }}
-      </a>
+  @if (title()) {
+    <div class="min-width-0" [ngClass]="{ ellipsis: ellipsis }">
+      <div class="d-flex flex-wrap gap-2 align-items-center">
+        <a class="name" [ngClass]="{ ellipsis: ellipsis }" [routerLink]="getVideoUrl()" [title]="video().name">
+          {{ video().name }}
+        </a>
 
-      <ng-content></ng-content>
-    </div>
+        <ng-content></ng-content>
+      </div>
 
-    <a *ngIf="video().channel" [routerLink]="getChannelUrl()" class="channel" [ngClass]="{ ellipsis: ellipsis }">
-      <span>{{ video().channel?.displayName }}</span>
+      @if (video().channel) {
+        <a [routerLink]="getChannelUrl()" class="channel" [ngClass]="{ ellipsis: ellipsis }">
+          <span>{{ video().channel?.displayName }}</span>
 
-      @if (displayEditorInfo() && user.isEditorOfChannel(video().channel)) {
-        <my-collaborator-state class="ms-2" type="accepted" small="true"></my-collaborator-state>
+          @if (displayEditorInfo() && user.isEditorOfChannel(video().channel)) {
+            <my-collaborator-state class="ms-2" type="accepted" small="true"></my-collaborator-state>
+          }
+        </a>
       }
-    </a>
-  </div>
+    </div>
+  }
 
 </div>

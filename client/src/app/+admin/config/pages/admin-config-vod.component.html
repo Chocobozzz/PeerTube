@@ -41,7 +41,7 @@
                   <my-peertube-checkbox
                     inputName="transcodingAllowAdditionalExtensions" formControlName="allowAdditionalExtensions"
                     i18n-labelText labelText="Allow additional extensions"
-                  >
+                    >
                     <ng-container ngProjectAs="description">
                       <span i18n>Allows users to upload videos with additional extensions than .mp4, .ogv and .webm (for example: .avi, .mov, .mkv etc).</span>
                     </ng-container>
@@ -52,7 +52,7 @@
                   <my-peertube-checkbox
                     inputName="transcodingAllowAudioFiles" formControlName="allowAudioFiles"
                     i18n-labelText labelText="Allow audio files upload"
-                  >
+                    >
                     <ng-container ngProjectAs="description">
                       <div i18n>Allows users to upload .mp3, .ogg, .wma, .flac, .aac, or .ac3 audio files.</div>
                       <div i18n>The file will be merged in a still image video with the preview file on upload.</div>
@@ -64,7 +64,7 @@
                   <my-peertube-checkbox
                     inputName="transcodingOriginalFileKeep" formControlName="keep"
                     i18n-labelText labelText="Keep a version of the input file"
-                  >
+                    >
                     <ng-container ngProjectAs="description">
                       <div i18n>If enabled, the input file is not deleted after transcoding but moved in a dedicated folder or object storage</div>
                     </ng-container>
@@ -80,7 +80,7 @@
                     <my-peertube-checkbox
                       inputName="transcodingWebVideosEnabled" formControlName="enabled"
                       i18n-labelText labelText="Web Videos enabled"
-                    >
+                      >
                       <ng-template ptTemplate="help">
                         <ng-container>
                           <p i18n>If you also enabled HLS support, it will multiply videos storage by 2</p>
@@ -96,7 +96,7 @@
                       inputName="transcodingHlsEnabled" formControlName="enabled"
                       i18n-labelText labelText="HLS with P2P support enabled"
                       [recommended]="true"
-                    >
+                      >
                       <ng-template ptTemplate="help">
                         <ng-container i18n>
                           <strong>Requires ffmpeg >= 4.1</strong>
@@ -118,7 +118,7 @@
                           <my-peertube-checkbox
                             inputName="transcodingHlsSplitAudioAndVideo" formControlName="splitAudioAndVideo"
                             i18n-labelText labelText="Split audio and video streams"
-                          >
+                            >
                             <ng-container i18n ngProjectAs="description">If enabled, remote PeerTube instances < 6.3.0 won't be able to play these videos</ng-container>
 
                             <ng-template ptTemplate="help">
@@ -126,7 +126,7 @@
                               <ng-container i18n>This option adds the ability for the HLS player to propose the "Audio only" quality to users.</ng-container> <br />
                               <ng-container i18n>It also saves disk space by not duplicating the audio stream in each resolution file</ng-container>
                             </ng-template>
-                        </my-peertube-checkbox>
+                          </my-peertube-checkbox>
                         </div>
 
                       </ng-container>
@@ -145,7 +145,9 @@
                     <span>FPS</span>
                   </div>
 
-                  <div *ngIf="formErrors.transcoding.fps.max" class="form-error" role="alert">{{ formErrors.transcoding.fps.max }}</div>
+                  @if (formErrors.transcoding.fps.max) {
+                    <div class="form-error" role="alert">{{ formErrors.transcoding.fps.max }}</div>
+                  }
                 </div>
 
                 <div class="form-group" [ngClass]="getTranscodingDisabledClass()">
@@ -153,22 +155,27 @@
 
                   <div class="ms-2 d-flex flex-column">
                     <ng-container formGroupName="resolutions">
-                      <div class="form-group mb-2" *ngFor="let resolution of resolutions">
-                        <my-peertube-checkbox
-                          [inputName]="getResolutionKey(resolution.id)" [formControlName]="resolution.id"
-                          labelText="{{ resolution.label }}"
-                        >
-                          <ng-template *ngIf="resolution.description" ptTemplate="help">
-                            <div [innerHTML]="resolution.description"></div>
-                          </ng-template>
-                        </my-peertube-checkbox>
-                      </div>
+                      @for (resolution of resolutions; track resolution) {
+                        <div class="form-group mb-2">
+                          <my-peertube-checkbox
+                            [inputName]="getResolutionKey(resolution.id)" [formControlName]="resolution.id"
+                            labelText="{{ resolution.label }}"
+                            >
+
+                            @if (resolution.description) {
+                              <ng-template ptTemplate="help">
+                                <div [innerHTML]="resolution.description"></div>
+                              </ng-template>
+                            }
+                          </my-peertube-checkbox>
+                        </div>
+                      }
                     </ng-container>
 
                     <my-peertube-checkbox
                       inputName="transcodingAlwaysTranscodeOriginalResolution" formControlName="alwaysTranscodeOriginalResolution"
                       i18n-labelText labelText="Also transcode original resolution"
-                    >
+                      >
                       <ng-container i18n ngProjectAs="description">Even if it's above your maximum enabled resolution</ng-container>
                     </my-peertube-checkbox>
                   </div>
@@ -183,7 +190,7 @@
           <my-peertube-checkbox
             inputName="transcodingRemoteRunnersEnabled" formControlName="enabled"
             i18n-labelText labelText="Enable remote runners for VOD"
-          >
+            >
             <ng-container ngProjectAs="description">
               <div i18n>Use <a routerLink="/admin/settings/system/runners/runners-list">remote runners</a> to process VOD transcoding.</div>
               <div i18n>Remote runners have to register on your instance first.</div>
@@ -195,13 +202,17 @@
           <label i18n id="transcodingThreadsLabel" for="transcodingThreads">Transcoding threads</label>
 
           <span class="small muted ms-1">
-            <ng-container *ngIf="getTotalTranscodingThreads().atMost" i18n>
+            @if (getTotalTranscodingThreads().atMost) {
+              <ng-container i18n>
               will claim at most {{ getTotalTranscodingThreads().value }} {{ getTotalTranscodingThreads().unit }} with live transcoding
             </ng-container>
+            }
 
-            <ng-container *ngIf="!getTotalTranscodingThreads().atMost" i18n>
+            @if (!getTotalTranscodingThreads().atMost) {
+              <ng-container i18n>
               will claim at least {{ getTotalTranscodingThreads().value }} {{ getTotalTranscodingThreads().unit }} with live transcoding
             </ng-container>
+            }
           </span>
 
           <my-select-custom-value
@@ -212,7 +223,9 @@
             [clearable]="false"
           ></my-select-custom-value>
 
-          <div *ngIf="formErrors.transcoding.threads" class="form-error" role="alert">{{ formErrors.transcoding.threads }}</div>
+          @if (formErrors.transcoding.threads) {
+            <div class="form-error" role="alert">{{ formErrors.transcoding.threads }}</div>
+          }
         </div>
 
         <div class="form-group" [ngClass]="getLocalTranscodingDisabledClass()">
@@ -224,7 +237,9 @@
             <span i18n>jobs in parallel</span>
           </div>
 
-          <div *ngIf="formErrors.transcoding.concurrency" class="form-error" role="alert">{{ formErrors.transcoding.concurrency }}</div>
+          @if (formErrors.transcoding.concurrency) {
+            <div class="form-error" role="alert">{{ formErrors.transcoding.concurrency }}</div>
+          }
         </div>
 
         <div class="form-group" [ngClass]="getLocalTranscodingDisabledClass()">
@@ -233,7 +248,9 @@
 
           <my-select-options inputId="transcodingProfile" formControlName="profile" [items]="transcodingProfiles"></my-select-options>
 
-          <div *ngIf="formErrors.transcoding.profile" class="form-error" role="alert">{{ formErrors.transcoding.profile }}</div>
+          @if (formErrors.transcoding.profile) {
+            <div class="form-error" role="alert">{{ formErrors.transcoding.profile }}</div>
+          }
         </div>
 
       </ng-container>
@@ -256,17 +273,19 @@
           <my-peertube-checkbox
             inputName="videoStudioEnabled" formControlName="enabled"
             i18n-labelText labelText="Enable video studio"
-          >
-            <ng-container ngProjectAs="description" *ngIf="!isTranscodingEnabled()">
-              <span i18n>⚠️ You need to enable transcoding first to enable video studio</span>
-            </ng-container>
+            >
+            @if (!isTranscodingEnabled()) {
+              <ng-container ngProjectAs="description">
+                <span i18n>⚠️ You need to enable transcoding first to enable video studio</span>
+              </ng-container>
+            }
 
             <ng-container ngProjectAs="extra">
               <div class="form-group" formGroupName="remoteRunners" [ngClass]="getStudioRunnerDisabledClass()">
                 <my-peertube-checkbox
                   inputName="videoStudioRemoteRunnersEnabled" formControlName="enabled"
                   i18n-labelText labelText="Enable remote runners for studio"
-                >
+                  >
                   <ng-container ngProjectAs="description">
                     <div i18n>Use <a routerLink="/admin/settings/system/runners/runners-list">remote runners</a> to process studio transcoding tasks.</div>
                     <div i18n>Remote runners have to register on your instance first.</div>

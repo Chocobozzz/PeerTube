@@ -4,14 +4,16 @@
   <ul class="ul-unstyle">
     @for (entry of config().entries; track entry) {
       @if (entry.type === 'separator') {
-      <div class="separator">
-        <div></div>
-      </div>
+        <div class="separator">
+          <div></div>
+        </div>
       } @else if (entry.type === 'link' && isDisplayed(entry)) {
         <ng-template #icon>
-          <div *ngIf="entry.icon" class="global-icon-wrapper">
-            <my-global-icon [iconName]="entry.icon"></my-global-icon>
-          </div>
+          @if (entry.icon) {
+            <div class="global-icon-wrapper">
+              <my-global-icon [iconName]="entry.icon"></my-global-icon>
+            </div>
+          }
         </ng-template>
 
         <ng-template #label>

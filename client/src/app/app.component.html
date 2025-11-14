@@ -1,4 +1,6 @@
-<div *ngIf="customCSS" [innerHTML]="customCSS"></div>
+@if (customCSS) {
+  <div [innerHTML]="customCSS"></div>
+}
 
 <a i18n class="visually-hidden-focusable skip-to-content" href="#content" (click)="$event.preventDefault(); mainContent.focus()">Skip to main content</a>
 
@@ -7,7 +9,7 @@
 <div
   class="peertube-container"
   [ngClass]="{ 'user-logged-in': isUserLoggedIn(), 'user-not-logged-in': !isUserLoggedIn(), 'hotkeys-modal-opened': hotkeysModalOpened }"
->
+  >
   <header class="root-header">
     <my-header class="w-100"></my-header>
   </header>
@@ -19,16 +21,19 @@
 
       <div class="main-row">
 
-        <div *ngIf="broadcastMessage" class="broadcast-message alert margin-content" [ngClass]="broadcastMessage.class">
-          <div class="text-break" [innerHTML]="broadcastMessage.message"></div>
-
-          <button
-            *ngIf="broadcastMessage.dismissable" (click)="hideBroadcastMessage()"
-            class="border-0" title="Close this message" i18n-title
-          >
-            <my-global-icon iconName="cross"></my-global-icon>
-          </button>
-        </div>
+        @if (broadcastMessage) {
+          <div class="broadcast-message alert margin-content" [ngClass]="broadcastMessage.class">
+            <div class="text-break" [innerHTML]="broadcastMessage.message"></div>
+            @if (broadcastMessage.dismissable) {
+              <button
+                (click)="hideBroadcastMessage()"
+                class="border-0" title="Close this message" i18n-title
+                >
+                <my-global-icon iconName="cross"></my-global-icon>
+              </button>
+            }
+          </div>
+        }
 
         <router-outlet></router-outlet>
       </div>

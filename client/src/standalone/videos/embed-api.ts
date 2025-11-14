@@ -3,6 +3,7 @@ import { logger } from '../../root-helpers'
 import { PeerTubeResolution, PeerTubeTextTrack } from '../embed-player-api/definitions'
 import { PeerTubeEmbed } from './embed'
 import './embed.scss'
+import { PeerTubePlayer } from '@peertube/player'
 
 /**
  * Embed API exposes control of the embed player to the outside world via
@@ -19,7 +20,6 @@ export class PeerTubeEmbedApi {
   private videoElInterval: any
 
   constructor (private readonly embed: PeerTubeEmbed) {
-
   }
 
   initialize () {
@@ -35,7 +35,7 @@ export class PeerTubeEmbedApi {
     }
   }
 
-  private get player () {
+  private get player (): ReturnType<PeerTubePlayer['getPlayer']> {
     return this.embed.player
   }
 
@@ -44,7 +44,7 @@ export class PeerTubeEmbedApi {
 
     channel.bind('setVideoPassword', (txn, value) => this.embed.setVideoPasswordByAPI(value))
 
-    channel.bind('isPlaying', (txn) => !this.player.paused())
+    channel.bind('isPlaying', txn => !this.player.paused())
 
     channel.bind('play', (txn, params) => {
       const p = this.player.play()
@@ -58,7 +58,7 @@ export class PeerTubeEmbedApi {
     channel.bind('pause', (txn, params) => this.player.pause())
 
     channel.bind('seek', (txn, time) => this.player.currentTime(time))
-    channel.bind('getCurrentTime', (txn) => this.player.currentTime())
+    channel.bind('getCurrentTime', txn => this.player.currentTime())
 
     channel.bind('setVolume', (txn, value) => this.player.volume(value))
     channel.bind('getVolume', (txn, value) => this.player.volume())

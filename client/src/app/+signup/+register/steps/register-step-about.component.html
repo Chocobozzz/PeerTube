@@ -1,12 +1,16 @@
 <my-instance-banner class="d-block mb-4" rounded="true"></my-instance-banner>
 
-<my-alert *ngIf="requiresApproval()" type="primary" class="text-center">
-  <p>
-    <ng-container i18n>Moderators of {{ instanceName }} will have to approve your registration request once you have completed and submitted the form.</ng-container>
+@if (requiresApproval()) {
+  <my-alert type="primary" class="text-center">
+    <p>
+      <ng-container i18n>Moderators of {{ instanceName }} will have to approve your registration request once you have completed and submitted the form.</ng-container>
 
-    <ng-container *ngIf="averageResponseTime" i18n>They usually respond within {{ averageResponseTime | myDaysDurationFormatter }}.</ng-container>
-  </p>
-</my-alert>
+      @if (averageResponseTime) {
+        <ng-container i18n>They usually respond within {{ averageResponseTime | myDaysDurationFormatter }}.</ng-container>
+      }
+    </p>
+  </my-alert>
+}
 
 <div class="why">
   <h3 i18n>Why create an account?</h3>
@@ -21,7 +25,10 @@
     <li i18n><strong>Comment</strong> on videos</li>
     <li i18n><strong>Subscribe</strong> to channels and receive notifications of new videos</li>
     <li i18n>Have access to your <strong>watch history</strong></li>
-    <li *ngIf="!videoUploadDisabled()" i18n>Create a channel to <strong>publish videos</strong></li>
+
+    @if (!videoUploadDisabled()) {
+      <li i18n>Create a channel to <strong>publish videos</strong></li>
+    }
   </ul>
 </div>
 

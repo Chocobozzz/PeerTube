@@ -1,7 +1,11 @@
 <ng-template #tooltipTemplate>
-  <strong class="help-title" *ngIf="helpTitle()">{{ helpTitle() }}</strong>
+  @if (helpTitle()) {
+    <strong class="help-title">{{ helpTitle() }}</strong>
+  }
 
-  <p *ngIf="markdownHTML" [innerHTML]="markdownHTML"></p>
+  @if (markdownHTML) {
+    <p [innerHTML]="markdownHTML"></p>
+  }
 
   <ng-content></ng-content>
 </ng-template>
@@ -18,6 +22,6 @@
   (onShown)="onPopoverShown()"
   [container]="container()"
   type="button"
->
+  >
   <my-global-icon [iconName]="iconName()"></my-global-icon>
 </button>

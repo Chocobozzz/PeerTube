@@ -98,14 +98,12 @@ async function rejectIfInstanceFollowDisabled (byActor: MActorSignature, activit
 
       return true
     }
-  } else {
-    if (CONFIG.FOLLOWERS.CHANNELS.ENABLED === false) {
-      logger.info('Rejecting %s because channel followers are disabled.', targetActor.url)
+  } else if (CONFIG.FOLLOWERS.CHANNELS.ENABLED === false) {
+    logger.info('Rejecting %s because channel followers are disabled.', targetActor.url)
 
-      sendReject(activityId, byActor, targetActor)
+    sendReject(activityId, byActor, targetActor)
 
-      return true
-    }
+    return true
   }
 
   return false

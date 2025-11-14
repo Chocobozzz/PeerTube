@@ -1,4 +1,4 @@
-import { NgClass, NgIf } from '@angular/common'
+import { NgClass } from '@angular/common'
 import { ChangeDetectorRef, Component, ElementRef, OnInit, inject, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { VideoCaptionEdit, VideoCaptionWithPathEdit } from '@app/+videos-publish-manage/shared-manage/common/video-caption-edit.model'
@@ -42,7 +42,6 @@ type Segment = {
     ReactiveFormsModule,
     GlobalIconComponent,
     NgClass,
-    NgIf,
     PeertubeCheckboxComponent,
     EmbedComponent,
     EditButtonComponent,

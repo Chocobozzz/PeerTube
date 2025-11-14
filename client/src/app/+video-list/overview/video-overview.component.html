@@ -12,7 +12,9 @@
       }
     </div>
 
-    <button *ngIf="!seeAllQuickLinks && quickAccessOverflow" type="button" class="peertube-button tertiary-button" (click)="seeAllQuickLinks = true" i18n>More</button>
+    @if (!seeAllQuickLinks && quickAccessOverflow) {
+      <button type="button" class="peertube-button tertiary-button" (click)="seeAllQuickLinks = true" i18n>More</button>
+    }
   </div>
 
   <div
@@ -24,7 +26,9 @@
       <div class="section videos">
         <div class="section-header d-flex flex-wrap justify-content-between align-items-start mb-3">
           <h1 class="section-title">
-            <my-actor-avatar *ngIf="object.channel" size="40px" actorType="channel" [actor]="object.channel"></my-actor-avatar>
+            @if (object.channel) {
+              <my-actor-avatar size="40px" actorType="channel" [actor]="object.channel"></my-actor-avatar>
+            }
 
             <span class="ellipsis text-fg border-highlight text-decoration-none">{{ object.label }}</span>
 
@@ -33,9 +37,11 @@
           </h1>
         </div>
 
-        <div class="video-wrapper" *ngFor="let video of object.videos">
-          <my-video-miniature [video]="video" [user]="userMiniature" [displayVideoActions]="true"></my-video-miniature>
-        </div>
+        @for (video of object.videos; track video) {
+          <div class="video-wrapper">
+            <my-video-miniature [video]="video" [user]="userMiniature" [displayVideoActions]="true"></my-video-miniature>
+          </div>
+        }
       </div>
 
       <div class="text-center">

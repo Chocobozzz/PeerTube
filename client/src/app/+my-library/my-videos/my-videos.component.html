@@ -47,64 +47,83 @@
         [(ngModel)]="selectedFilterItems"
         i18n-placeholder placeholder="All videos"
         (ngModelChange)="table.onFilter()"
-      >
+        >
       </my-select-checkbox>
     </div>
   </ng-template>
 
   <ng-template #tableCells let-video>
 
-    <td *ngIf="table.isColumnDisplayed('duration')">
-      <my-video-cell [video]="video" thumbnail="true" title="false"></my-video-cell>
-    </td>
+    @if (table.isColumnDisplayed('duration')) {
+      <td>
+        <my-video-cell [video]="video" thumbnail="true" title="false"></my-video-cell>
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('name')">
-      <my-video-cell class="video-cell-name" [video]="video" thumbnail="false" title="true" displayEditorInfo="true"></my-video-cell>
-    </td>
+    @if (table.isColumnDisplayed('name')) {
+      <td>
+        <my-video-cell class="video-cell-name" [video]="video" thumbnail="false" title="true" displayEditorInfo="true"></my-video-cell>
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('privacy')">
-      <div class="pt-badges-container">
-        <my-privacy-badge [video]="video"></my-privacy-badge>
+    @if (table.isColumnDisplayed('privacy')) {
+      <td>
+        <div class="pt-badges-container">
+          <my-privacy-badge [video]="video"></my-privacy-badge>
+          @if (video.blacklisted) {
+            <span class="pt-badge badge-red" i18n [ngbTooltip]="video.blacklistedReason">Blocked</span>
+          }
+        </div>
+      </td>
+    }
 
-        <span *ngIf="video.blacklisted" class="pt-badge badge-red" i18n [ngbTooltip]="video.blacklistedReason">Blocked</span>
-      </div>
-    </td>
+    @if (table.isColumnDisplayed('sensitive')) {
+      <td>
+        <my-video-nsfw-badge [video]="video"></my-video-nsfw-badge>
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('sensitive')">
-      <my-video-nsfw-badge [video]="video"></my-video-nsfw-badge>
-    </td>
+    @if (table.isColumnDisplayed('playlists')) {
+      <td>
+        <div class="badges playlists">
+          @for (playlist of (videosContainedInPlaylists[video.id] || []); track playlist) {
+            <a class="pt-badge badge-secondary pt-badge-keep-case" [routerLink]="['/w/p/', playlist.playlistShortUUID]">
+              {{ playlist.playlistDisplayName }}
+            </a>
+          }
+        </div>
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('playlists')">
-      <div class="badges playlists">
-        <a *ngFor="let playlist of (videosContainedInPlaylists[video.id] || [])" class="pt-badge badge-secondary pt-badge-keep-case" [routerLink]="['/w/p/', playlist.playlistShortUUID]">
-          {{ playlist.playlistDisplayName }}
+    @if (table.isColumnDisplayed('insights')) {
+      <td>
+        <a class="pt" [routerLink]="[ '/videos/manage', video.shortUUID, 'stats' ]" i18n-title title="Navigate to the video stats page">
+          <ng-container i18n>{video.views, plural, =0 {No views} =1 {1 view} other {{{ video.views | myNumberFormatter }} views}}</ng-container>
+          @if (video.isLive) {
+            <br />
+            <ng-container i18n>{video.viewers, plural, =0 {No viewers} =1 {1 viewer} other {{{ video.views | myNumberFormatter }} viewers}}</ng-container>
+          }
         </a>
-      </div>
-    </td>
+      </td>
+    }
 
-    <td *ngIf="table.isColumnDisplayed('insights')">
-      <a class="pt" [routerLink]="[ '/videos/manage', video.shortUUID, 'stats' ]" i18n-title title="Navigate to the video stats page">
-        <ng-container i18n>{video.views, plural, =0 {No views} =1 {1 view} other {{{ video.views | myNumberFormatter }} views}}</ng-container>
+    @if (table.isColumnDisplayed('comments')) {
+      <td>
+        <span i18n>{video.comments, plural, =0 {No comments} =1 {1 comment} other {{{ video.comments | myNumberFormatter }} comments}}</span>
+      </td>
+    }
 
-        @if (video.isLive) {
-          <br />
+    @if (table.isColumnDisplayed('published')) {
+      <td>
+        {{ video.publishedAt | ptDate: 'short' }}
+      </td>
+    }
 
-          <ng-container i18n>{video.viewers, plural, =0 {No viewers} =1 {1 viewer} other {{{ video.views | myNumberFormatter }} viewers}}</ng-container>
-        }
-      </a>
-    </td>
-
-    <td *ngIf="table.isColumnDisplayed('comments')">
-      <span i18n>{video.comments, plural, =0 {No comments} =1 {1 comment} other {{{ video.comments | myNumberFormatter }} comments}}</span>
-    </td>
-
-    <td *ngIf="table.isColumnDisplayed('published')">
-      {{ video.publishedAt | ptDate: 'short' }}
-    </td>
-
-    <td *ngIf="table.isColumnDisplayed('state')">
-      <my-video-state-badge [video]="video"></my-video-state-badge>
-    </td>
+    @if (table.isColumnDisplayed('state')) {
+      <td>
+        <my-video-state-badge [video]="video"></my-video-state-badge>
+      </td>
+    }
   </ng-template>
 
   <ng-template #actionCell let-video>

@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, OnInit, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute, RouterLink } from '@angular/router'
@@ -41,7 +40,6 @@ type DisplayFilter = 'all' | 'owned'
   styleUrls: [ './my-video-channels.component.scss' ],
   imports: [
     GlobalIconComponent,
-    CommonModule,
     FormsModule,
     RouterLink,
     ChannelsSetupMessageComponent,

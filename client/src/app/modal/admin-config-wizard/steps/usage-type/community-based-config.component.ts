@@ -1,5 +1,5 @@
 import { CdkStepperModule } from '@angular/cdk/stepper'
-import { CommonModule } from '@angular/common'
+
 import { Component, inject, model, OnInit } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { getVideoQuotaOptions } from '@app/+admin/shared/user-quota-options'
@@ -27,13 +27,12 @@ type Form = {
   selector: 'my-community-based-config',
   templateUrl: './community-based-config.component.html',
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     ColorPickerModule,
     CdkStepperModule,
     SelectOptionsComponent
-  ]
+]
 })
 export class CommunityBasedConfigComponent implements OnInit {
   private formReactiveService = inject(FormReactiveService)

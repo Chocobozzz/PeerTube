@@ -1,5 +1,4 @@
 import { DragDropModule } from '@angular/cdk/drag-drop'
-import { CommonModule } from '@angular/common'
 import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { RouterLink } from '@angular/router'
@@ -15,6 +14,7 @@ import debug from 'debug'
 import { SortMeta } from 'primeng/api'
 import { TableRowReorderEvent } from 'primeng/table'
 import { Subject, tap } from 'rxjs'
+import { ChannelToggleComponent } from '../../shared/shared-channels/channel-toggle.component'
 import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
 import { DeleteButtonComponent } from '../../shared/shared-main/buttons/delete-button.component'
@@ -23,7 +23,6 @@ import { PTDatePipe } from '../../shared/shared-main/common/date.pipe'
 import { NumberFormatterPipe } from '../../shared/shared-main/common/number-formatter.pipe'
 import { VideoPlaylistMiniatureComponent } from '../../shared/shared-video-playlist/video-playlist-miniature.component'
 import { PrivacyBadgeComponent } from '../../shared/shared-video/privacy-badge.component'
-import { ChannelToggleComponent } from '../../shared/shared-channels/channel-toggle.component'
 
 type ColumnName = 'videoChannelPosition' | 'videos' | 'name' | 'privacy' | 'updatedAt'
 
@@ -37,7 +36,6 @@ const debugLogger = debug('peertube:my-video-playlists')
   templateUrl: './my-video-playlists.component.html',
   styleUrls: [ './my-video-playlists.component.scss' ],
   imports: [
-    CommonModule,
     FormsModule,
     GlobalIconComponent,
     AdvancedInputFilterComponent,

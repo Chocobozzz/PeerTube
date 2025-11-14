@@ -1,7 +1,7 @@
 import { Component, forwardRef, OnChanges, input } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
-import { NgIf } from '@angular/common'
+
 import { SelectOptionsComponent } from './select-options.component'
 
 @Component({
@@ -14,7 +14,7 @@ import { SelectOptionsComponent } from './select-options.component'
       multi: true
     }
   ],
-  imports: [ SelectOptionsComponent, FormsModule, NgIf ]
+  imports: [ SelectOptionsComponent, FormsModule ]
 })
 export class SelectCustomValueComponent implements ControlValueAccessor, OnChanges {
   readonly inputId = input.required<string>()

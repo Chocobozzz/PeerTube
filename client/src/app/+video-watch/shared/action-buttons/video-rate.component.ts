@@ -1,4 +1,4 @@
-import { NgClass, NgIf } from '@angular/common'
+import { NgClass } from '@angular/common'
 import { Component, OnChanges, OnDestroy, OnInit, inject, input, output } from '@angular/core'
 import { Hotkey, HotkeysService, Notifier, ScreenService } from '@app/core'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
@@ -12,7 +12,7 @@ import { Observable } from 'rxjs'
   selector: 'my-video-rate',
   templateUrl: './video-rate.component.html',
   styleUrls: [ './video-rate.component.scss' ],
-  imports: [ NgbPopover, NgClass, NgbTooltip, GlobalIconComponent, NgIf ]
+  imports: [ NgbPopover, NgClass, NgbTooltip, GlobalIconComponent ]
 })
 export class VideoRateComponent implements OnInit, OnChanges, OnDestroy {
   private videoService = inject(VideoService)

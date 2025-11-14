@@ -1,21 +1,20 @@
-import { Subscription } from 'rxjs'
-import { map, switchMap } from 'rxjs/operators'
 import { Component, OnDestroy, OnInit, inject } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { HooksService, Notifier, PluginService, ServerService } from '@app/core'
+import { BuildFormArgument } from '@app/shared/form-validators/form-validator.model'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { PeerTubePlugin, RegisterServerSettingOptions } from '@peertube/peertube-models'
+import { Subscription } from 'rxjs'
+import { map, switchMap } from 'rxjs/operators'
 import { PluginApiService } from '../../../shared/shared-admin/plugin-api.service'
 import { DynamicFormFieldComponent } from '../../../shared/shared-forms/dynamic-form-field.component'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { NgIf, NgFor } from '@angular/common'
-import { BuildFormArgument } from '@app/shared/form-validators/form-validator.model'
 
 @Component({
   selector: 'my-plugin-show-installed',
   templateUrl: './plugin-show-installed.component.html',
-  imports: [ NgIf, FormsModule, ReactiveFormsModule, NgFor, DynamicFormFieldComponent ]
+  imports: [ FormsModule, ReactiveFormsModule, DynamicFormFieldComponent ]
 })
 export class PluginShowInstalledComponent extends FormReactive implements OnInit, OnDestroy {
   protected formReactiveService = inject(FormReactiveService)

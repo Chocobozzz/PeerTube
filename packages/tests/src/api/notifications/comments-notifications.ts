@@ -163,10 +163,17 @@ describe('Test comments notifications', function () {
       let localCommentId: number
       {
         const created = await servers[0].comments.createThread({ videoId: uuid, text: 'local approval', token: userToken2 })
-        const commentId = localCommentId = created.id
+        localCommentId = created.id
 
         await waitJobs(servers)
-        await checkNewCommentOnMyVideo({ ...baseParams, shortUUID, threadId: commentId, commentId, checkType: 'presence', approval: true })
+        await checkNewCommentOnMyVideo({
+          ...baseParams,
+          shortUUID,
+          threadId: localCommentId,
+          commentId: localCommentId,
+          checkType: 'presence',
+          approval: true
+        })
       }
 
       {

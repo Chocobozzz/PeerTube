@@ -1,6 +1,8 @@
-<div *ngIf="!syncEnabled()">
-  <p class="muted" i18n>⚠️ The instance doesn't allow channel synchronization</p>
-</div>
+@if (!syncEnabled()) {
+  <div>
+    <p class="muted" i18n>⚠️ The instance doesn't allow channel synchronization</p>
+  </div>
+}
 
 <my-table
   #table
@@ -10,7 +12,7 @@
   paginatorText="syncs per page"
   [dataLoader]="dataLoader"
   columnConfig="false"
->
+  >
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No sync} =1 {1 sync} other {{{ totalRecords | myNumberFormatter }} syncs}}</ng-container>
   </ng-template>

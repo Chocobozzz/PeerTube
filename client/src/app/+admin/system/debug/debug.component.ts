@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, OnInit, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { Notifier, ServerService } from '@app/core'
@@ -8,7 +7,7 @@ import { DebugService } from './debug.service'
 @Component({
   templateUrl: './debug.component.html',
   styleUrls: [ './debug.component.scss' ],
-  imports: [ CommonModule, FormsModule ]
+  imports: [ FormsModule ]
 })
 export class DebugComponent implements OnInit {
   private debugService = inject(DebugService)

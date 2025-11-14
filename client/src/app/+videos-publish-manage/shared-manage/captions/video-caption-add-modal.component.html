@@ -17,9 +17,11 @@
         clearable="true" filter="true" virtualScroll="true"
       ></my-select-options>
 
-      <div *ngIf="formErrors.language" class="form-error" role="alert">
-        {{ formErrors.language }}
-      </div>
+      @if (formErrors.language) {
+        <div class="form-error" role="alert">
+          {{ formErrors.language }}
+        </div>
+      }
 
       <div class="caption-file">
         <my-reactive-file
@@ -29,21 +31,23 @@
         ></my-reactive-file>
       </div>
 
-      <div *ngIf="isReplacingExistingCaption()" class="warning-replace-caption" i18n>
+      @if (isReplacingExistingCaption()) {
+        <div class="warning-replace-caption" i18n>
         This will replace an existing caption!
       </div>
+      }
     </div>
 
     <div class="modal-footer inputs">
       <input
         type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button"
         (click)="hide()" (key.enter)="hide()"
-      >
+        >
 
       <input
         type="submit" i18n-value value="Add this caption" class="peertube-button primary-button"
         [disabled]="!form.valid" (click)="addCaption()"
-      >
+        >
     </div>
   </ng-container>
 </ng-template>

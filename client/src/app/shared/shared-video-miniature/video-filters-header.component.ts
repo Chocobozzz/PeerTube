@@ -1,4 +1,4 @@
-import { NgClass, NgIf } from '@angular/common'
+import { NgClass } from '@angular/common'
 import { Component, OnInit, inject, input } from '@angular/core'
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterLink } from '@angular/router'
@@ -11,8 +11,8 @@ import debug from 'debug'
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
 import { SelectCategoriesComponent } from '../shared-forms/select/select-categories.component'
 import { SelectLanguagesComponent } from '../shared-forms/select/select-languages.component'
-import { SelectVideosSortComponent } from '../shared-forms/select/select-videos-sort.component'
 import { SelectVideosScopeComponent } from '../shared-forms/select/select-videos-scope.component'
+import { SelectVideosSortComponent } from '../shared-forms/select/select-videos-sort.component'
 import { GlobalIconComponent, GlobalIconName } from '../shared-icons/global-icon.component'
 import { InstanceFollowService } from '../shared-instance/instance-follow.service'
 import { ButtonComponent } from '../shared-main/buttons/button.component'
@@ -37,7 +37,6 @@ type QuickFilter = {
     FormsModule,
     ReactiveFormsModule,
     NgClass,
-    NgIf,
     GlobalIconComponent,
     NgbCollapse,
     SelectLanguagesComponent,

@@ -1,5 +1,5 @@
-import { NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
-import { Component, OnDestroy, OnInit, inject } from '@angular/core'
+import { NgTemplateOutlet } from '@angular/common'
+import { Component, inject, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, HooksService, MetaService, Notifier, ServerService, User, UserService } from '@app/core'
 import { immutableAssign, SimpleMemoize } from '@app/helpers'
@@ -29,10 +29,8 @@ import { SearchFiltersComponent } from './search-filters.component'
   templateUrl: './search.component.html',
   imports: [
     InfiniteScrollerDirective,
-    NgIf,
     NgbCollapse,
     SearchFiltersComponent,
-    NgFor,
     ActorAvatarComponent,
     RouterLink,
     NgTemplateOutlet,

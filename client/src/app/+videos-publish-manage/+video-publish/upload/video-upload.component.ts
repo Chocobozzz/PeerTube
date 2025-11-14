@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common'
+
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, inject, input, output, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
@@ -29,7 +29,6 @@ const debugLogger = debug('peertube:video-publish')
     './video-upload.component.scss'
   ],
   imports: [
-    CommonModule,
     DragDropDirective,
     GlobalIconComponent,
     NgbTooltip,
@@ -39,7 +38,7 @@ const debugLogger = debug('peertube:video-publish')
     ButtonComponent,
     ReactiveFormsModule,
     VideoManageContainerComponent
-  ]
+]
 })
 export class VideoUploadComponent implements OnInit, OnDestroy, AfterViewInit, CanComponentDeactivate {
   private notifier = inject(Notifier)

@@ -1,4 +1,4 @@
-import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common'
+import { NgClass, NgTemplateOutlet } from '@angular/common'
 import { Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
 import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router'
 import { AuthService, Hotkey, HotkeysService, MarkdownService, MetaService, RestExtractor, ScreenService, ServerService } from '@app/core'
@@ -24,7 +24,6 @@ import { AccountBlockBadgesComponent } from '../shared/shared-moderation/account
   templateUrl: './video-channels.component.html',
   styleUrls: [ './video-channels.component.scss' ],
   imports: [
-    NgIf,
     RouterLink,
     SubscribeButtonComponent,
     GlobalIconComponent,

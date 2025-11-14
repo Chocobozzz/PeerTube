@@ -1,15 +1,14 @@
-import { CommonModule } from '@angular/common'
 import { Component, inject, OnDestroy, OnInit, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { RouterLink } from '@angular/router'
 import { AuthService, AuthUser, ConfirmService, Notifier, RestPagination, ServerService } from '@app/core'
 import { HeaderService } from '@app/header/header.service'
 import { formatICU } from '@app/helpers'
+import { ChannelToggleComponent } from '@app/shared/shared-channels/channel-toggle.component'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { TableColumnInfo, TableComponent, TableQueryParams } from '@app/shared/shared-tables/table.component'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
-import { ChannelToggleComponent } from '@app/shared/shared-channels/channel-toggle.component'
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { arrayify, pick } from '@peertube/peertube-core-utils'
 import { VideoChannel, VideoExistInPlaylist, VideoPrivacy, VideoPrivacyType, VideosExistInPlaylists } from '@peertube/peertube-models'
@@ -48,7 +47,6 @@ type QueryParams = TableQueryParams & {
   templateUrl: './my-videos.component.html',
   styleUrls: [ './my-videos.component.scss' ],
   imports: [
-    CommonModule,
     FormsModule,
     AdvancedInputFilterComponent,
     ButtonComponent,
