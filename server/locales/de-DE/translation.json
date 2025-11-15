@@ -233,7 +233,7 @@
     "Cannot delete a pending video import. Cancel it or wait for the end of the import first": "Ein ausstehender Videoimport kann nicht gelöscht werden. Brich ihn ab, oder warte das Ende des Imports ab",
     "Cannot cancel a non pending video import": "Ein nicht ausstehender Videoimport kann nicht abgebrochen werden",
     "Cannot retry a non failed video import": "Cannot retry a non failed video import",
-    "Cannot retry video import because the associated video metadata has been deleted": "Cannot retry video import because the associated video metadata has been deleted",
+    "Cannot retry video import because the associated video metadata has been deleted": "Videoimport kann nicht wiederholt werden, weil die zugehörigen Videometadaten gelöscht wurden",
     "Cannot retry video import since it has reached the maximum number of attempts": "Cannot retry video import since it has reached the maximum number of attempts",
     "Refused to import video": "Videoimport abgelehnt",
     "Cannot manage video import of another user": "Videoimport eines anderen Benutzers kann nicht verwaltet werden",
