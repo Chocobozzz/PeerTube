@@ -75,8 +75,6 @@ type ContextValue = { [id: string]: string | { '@type': string, '@id': string } 
 
 const contextStore: { [id in ContextType]: (string | { [id: string]: string })[] } = {
   Video: buildContext({
-    ...getPlayerSettingsTypeContext(),
-
     Hashtag: 'as:Hashtag',
     category: 'sc:category',
     licence: 'sc:license',
@@ -241,7 +239,7 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
   }),
 
   Actor: buildContext({
-    ...getPlayerSettingsTypeContext(),
+    playerSettings: 'pt:playerSettings',
 
     playlists: {
       '@id': 'pt:playlists',
@@ -313,19 +311,13 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
   }),
 
   PlayerSettings: buildContext({
-    ...getPlayerSettingsTypeContext(),
-
-    theme: 'pt:theme'
-  })
-}
-
-function getPlayerSettingsTypeContext () {
-  return {
     PlayerSettings: {
       '@type': '@id',
       '@id': 'pt:PlayerSettings'
-    }
-  }
+    },
+
+    theme: 'pt:theme'
+  })
 }
 
 let allContext: (string | ContextValue)[]

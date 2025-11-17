@@ -121,6 +121,10 @@ export function getUndoActivityPubUrl (originalUrl: string) {
   return originalUrl + '/undo'
 }
 
+export function getLocalActorPlayerSettingsActivityPubUrl (actor: MActorUrl) {
+  return actor.url + '/player-settings'
+}
+
 export function getLocalApproveReplyActivityPubUrl (video: MVideoUUID, comment: MCommentId) {
   return getLocalVideoCommentActivityPubUrl(video, comment) + '/approve-reply'
 }

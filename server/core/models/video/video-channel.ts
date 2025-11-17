@@ -1,6 +1,7 @@
 import { ActivityPubActor, VideoChannel, VideoChannelSummary, VideoPrivacy } from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { CONFIG } from '@server/initializers/config.js'
+import { getLocalActorPlayerSettingsActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 import { MAccountIdHost } from '@server/types/models/index.js'
 import { FindOptions, Includeable, literal, Op, QueryTypes, Transaction } from 'sequelize'
@@ -590,6 +591,7 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
       // ] as ActivityUrlObject[],
 
       url: this.Actor.url,
+      playerSettings: getLocalActorPlayerSettingsActivityPubUrl(this.Actor),
 
       summary: this.description,
       support: this.support,
