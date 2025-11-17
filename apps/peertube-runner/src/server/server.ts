@@ -280,15 +280,12 @@ export class RunnerServer {
       version: process.env.PACKAGE_VERSION
     })
 
-    // FIXME: remove in PeerTube v8: jobTypes has been introduced in PeerTube v7, so do the filter here too
-    const filtered = availableJobs.filter(j => isJobSupported(j, this.enabledJobs))
-
-    if (filtered.length === 0) {
+    if (availableJobs.length === 0) {
       logger.debug(`No job available on ${server.url} for runner ${server.runnerName}`)
       return undefined
     }
 
-    return filtered[0]
+    return availableJobs[0]
   }
 
   private async tryToExecuteJobAsync (server: PeerTubeServer, jobToAccept: { uuid: string }) {

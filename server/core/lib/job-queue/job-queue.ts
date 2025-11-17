@@ -445,10 +445,7 @@ class JobQueue {
         continue
       }
 
-      let jobs = await queue.getJobs(states, 0, start + count, asc)
-
-      // FIXME: we have sometimes undefined values https://github.com/taskforcesh/bullmq/issues/248
-      jobs = jobs.filter(j => !!j)
+      const jobs = await queue.getJobs(states, 0, start + count, asc)
 
       results = results.concat(jobs)
     }

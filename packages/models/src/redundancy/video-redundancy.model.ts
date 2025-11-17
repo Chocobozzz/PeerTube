@@ -5,9 +5,6 @@ export interface VideoRedundancy {
   uuid: string
 
   redundancies: {
-    // FIXME: remove in v8
-    files: []
-
     streamingPlaylists: RedundancyInformation[]
   }
 }

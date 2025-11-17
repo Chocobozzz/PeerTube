@@ -99,7 +99,6 @@ async function listRedundanciesCLI (options: CommonProgramOptions & { target: Vi
     if (target === 'remote-videos') {
       const tmp = streamingPlaylists.reduce((a, b) => a + b.size, 0)
 
-      // FIXME: don't use external dependency to stringify bytes: we already have the functions in the client
       totalSize = bytes(tmp)
     }
 

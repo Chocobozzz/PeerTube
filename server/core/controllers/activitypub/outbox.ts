@@ -71,9 +71,7 @@ async function buildActivities (actor: MActorLight, start: number, count: number
 
       activities.push(announceActivity)
     } else {
-      // FIXME: only use the video URL to reduce load. Breaks compat with PeerTube < 6.0.0
-      const videoObject = await video.toActivityPubObject()
-      const createActivity = buildCreateActivity(video.url, byActor, videoObject, createActivityAudience)
+      const createActivity = buildCreateActivity(video.url, byActor, video.url, createActivityAudience)
 
       activities.push(createActivity)
     }

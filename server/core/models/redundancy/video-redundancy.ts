@@ -564,7 +564,6 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
       uuid: video.uuid,
 
       redundancies: {
-        files: [],
         streamingPlaylists: streamingPlaylistsRedundancies
       }
     }
