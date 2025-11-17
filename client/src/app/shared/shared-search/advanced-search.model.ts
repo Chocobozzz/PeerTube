@@ -208,13 +208,13 @@ export class AdvancedSearch {
   }
 
   private hasVideoFilter () {
+    // Do not include languagesOneOf to prevent automatically filter our channels and playlists if the user has video language preferences
     return this.startDate !== undefined ||
       this.endDate !== undefined ||
       this.originallyPublishedStartDate !== undefined ||
       this.originallyPublishedEndDate !== undefined ||
       this.categoryOneOf !== undefined ||
       this.licenceOneOf !== undefined ||
-      this.languageOneOf !== undefined ||
       this.tagsOneOf !== undefined ||
       this.tagsAllOf !== undefined ||
       this.durationMin !== undefined ||
