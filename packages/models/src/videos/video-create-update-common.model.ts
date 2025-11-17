@@ -12,8 +12,6 @@ export interface VideoCreateUpdateCommon {
   privacy?: VideoPrivacyType
   tags?: string[]
 
-  // TODO: remove, deprecated in 6.2
-  commentsEnabled?: boolean
   commentsPolicy?: VideoCommentPolicyType
 
   downloadEnabled?: boolean

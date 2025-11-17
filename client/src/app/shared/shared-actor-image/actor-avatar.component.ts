@@ -2,13 +2,14 @@ import { CommonModule, NgTemplateOutlet } from '@angular/common'
 import { Component, ElementRef, OnChanges, OnInit, booleanAttribute, inject, input, numberAttribute, viewChild } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
+import { ActorImage } from '@peertube/peertube-models'
 import { Account } from '../shared-main/account/account.model'
 import { Actor } from '../shared-main/account/actor.model'
 import { VideoChannel } from '../shared-main/channel/video-channel.model'
 
 export type ActorAvatarInput = {
   name: string
-  avatars: { width: number, url?: string, path: string }[]
+  avatars: Pick<ActorImage, 'width' | 'fileUrl'>[]
 }
 
 export type ActorAvatarType = 'channel' | 'account' | 'instance' | 'unlogged'

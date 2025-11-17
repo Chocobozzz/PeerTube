@@ -43,11 +43,11 @@ export class SelectChannelComponent implements ControlValueAccessor, OnChanges {
 
   ngOnChanges () {
     this.channels = this.items().map(c => {
-      const avatarPath = c.avatarPath
-        ? c.avatarPath
+      const avatarFileUrl = c.avatarFileUrl
+        ? c.avatarFileUrl
         : VideoChannel.GET_DEFAULT_AVATAR_URL(21)
 
-      return Object.assign({}, c, { imageUrl: avatarPath })
+      return Object.assign({}, c, { imageUrl: avatarFileUrl })
     })
   }
 

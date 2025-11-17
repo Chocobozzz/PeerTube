@@ -119,7 +119,6 @@ describe('Test manage videos redundancy', function () {
     expect(videos1.name).to.equal('video 1 server 2')
     expect(videos2.name).to.equal('video 2 server 2')
 
-    expect(videos1.redundancies.files).to.have.lengthOf(0)
     expect(videos1.redundancies.streamingPlaylists).to.have.lengthOf(1)
 
     for (const r of videos1.redundancies.streamingPlaylists) {
@@ -153,7 +152,6 @@ describe('Test manage videos redundancy', function () {
     expect(videos1.name).to.equal('video 1 server 2')
     expect(videos2.name).to.equal('video 2 server 2')
 
-    expect(videos1.redundancies.files).to.have.lengthOf(0)
     expect(videos1.redundancies.streamingPlaylists).to.have.lengthOf(1)
 
     for (const r of videos1.redundancies.streamingPlaylists) {
@@ -228,7 +226,6 @@ describe('Test manage videos redundancy', function () {
       const video = body.data[0]
 
       expect(video.name).to.equal('video 3 server 2')
-      expect(video.redundancies.files).to.have.lengthOf(0)
       expect(video.redundancies.streamingPlaylists).to.have.lengthOf(1)
 
       for (const r of video.redundancies.streamingPlaylists) {
@@ -251,7 +248,6 @@ describe('Test manage videos redundancy', function () {
 
     const video = body.data[0]
     expect(video.name).to.equal('video 3 server 2')
-    expect(video.redundancies.files).to.have.lengthOf(0)
     expect(video.redundancies.streamingPlaylists).to.have.lengthOf(1)
 
     for (const r of video.redundancies.streamingPlaylists) {
@@ -284,7 +280,6 @@ describe('Test manage videos redundancy', function () {
 
       const video = videos[0]
       expect(video.name).to.equal('video 2 server 2')
-      expect(video.redundancies.files).to.have.lengthOf(0)
       expect(video.redundancies.streamingPlaylists).to.have.lengthOf(1)
 
       redundanciesToRemove = video.redundancies.streamingPlaylists.map(r => r.id)

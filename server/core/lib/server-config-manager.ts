@@ -6,7 +6,6 @@ import {
   RegisteredExternalAuthConfig,
   RegisteredIdAndPassAuthConfig,
   ServerConfig,
-  VideoCommentPolicy,
   VideoResolutionType
 } from '@peertube/peertube-models'
 import { getServerCommit } from '@server/helpers/version.js'
@@ -105,8 +104,6 @@ class ServerConfigManager {
           downloadEnabled: CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
 
           commentsPolicy: CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY,
-          // TODO: remove, deprecated in 6.2
-          commentsEnabled: CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY !== VideoCommentPolicy.DISABLED,
 
           privacy: CONFIG.DEFAULTS.PUBLISH.PRIVACY,
           licence: CONFIG.DEFAULTS.PUBLISH.LICENCE

@@ -18,7 +18,4 @@ export interface VideoSource {
   metadata?: VideoFileMetadata
 
   createdAt: string | Date
-
-  // TODO: remove, deprecated in 6.1
-  filename: string
 }

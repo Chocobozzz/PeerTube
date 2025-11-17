@@ -18,6 +18,6 @@ export class InstanceBannerComponent implements OnInit {
   ngOnInit () {
     const { instance } = this.server.getHTMLConfig()
 
-    this.instanceBannerUrl = maxBy(instance.banners, 'width')?.path
+    this.instanceBannerUrl = maxBy(instance.banners, 'width')?.fileUrl
   }
 }

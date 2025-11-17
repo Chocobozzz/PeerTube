@@ -12,7 +12,7 @@ export interface ActivityPubActor {
   inbox: string
   outbox: string
   preferredUsername: string
-  url: ActivityUrlObject[] | string
+  url: ActivityUrlObject[]
   name: string
   endpoints: {
     sharedInbox: string

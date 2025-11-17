@@ -53,7 +53,6 @@ describe('Test config defaults', function () {
     function checkVideo (video: VideoDetails) {
       expect(video.downloadEnabled).to.be.false
       expect(video.commentsPolicy.id).to.equal(VideoCommentPolicy.DISABLED)
-      expect(video.commentsEnabled).to.be.false
       expect(video.licence.id).to.equal(4)
     }
 
@@ -66,7 +65,6 @@ describe('Test config defaults', function () {
     it('Should have the correct server configuration', async function () {
       const config = await server.config.getConfig()
 
-      expect(config.defaults.publish.commentsEnabled).to.be.false
       expect(config.defaults.publish.commentsPolicy).to.equal(VideoCommentPolicy.DISABLED)
       expect(config.defaults.publish.downloadEnabled).to.be.false
       expect(config.defaults.publish.licence).to.equal(4)

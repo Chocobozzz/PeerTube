@@ -35,8 +35,8 @@ describe('Test video channels', function () {
   let accountName: string
   let secondUserChannelName: string
 
-  const avatarPaths: { [port: number]: string } = {}
-  const bannerPaths: { [port: number]: string } = {}
+  const avatarUrls: { [port: number]: string } = {}
+  const bannerUrls: { [port: number]: string } = {}
 
   before(async function () {
     this.timeout(60000)
@@ -271,8 +271,6 @@ describe('Test video channels', function () {
   })
 
   it('Should update video channel avatar', async function () {
-    this.timeout(15000)
-
     const fixture = 'avatar.png'
 
     await servers[0].channels.updateImage({
@@ -292,11 +290,11 @@ describe('Test video channels', function () {
       expect(videoChannel.avatars.length).to.equal(expectedSizes.length, 'Expected avatars to be generated in all sizes')
 
       for (const avatar of videoChannel.avatars) {
-        avatarPaths[server.port] = avatar.path
-        await testImage({ url: server.url + avatarPaths[server.port], name: `avatar-resized-${avatar.width}x${avatar.width}.png` })
-        await testFileExistsOnFSOrNot(server, 'avatars', basename(avatarPaths[server.port]), true)
+        avatarUrls[server.port] = avatar.fileUrl
+        await testImage({ url: avatarUrls[server.port], name: `avatar-resized-${avatar.width}x${avatar.width}.png` })
+        await testFileExistsOnFSOrNot(server, 'avatars', basename(avatarUrls[server.port]), true)
 
-        const row = await sqlCommands[i].getActorImage(basename(avatarPaths[server.port]))
+        const row = await sqlCommands[i].getActorImage(basename(avatarUrls[server.port]))
 
         expect(expectedSizes.some(({ height, width }) => row.height === height && row.width === width)).to.equal(true)
       }
@@ -325,11 +323,11 @@ describe('Test video channels', function () {
       expect(videoChannel.banners.length).to.equal(expectedSizes.length, 'Expected banners to be generated in all sizes')
 
       for (const banner of videoChannel.banners) {
-        bannerPaths[server.port] = banner.path
-        await testImage({ url: server.url + bannerPaths[server.port], name: `banner-resized-${banner.width}.jpg` })
-        await testFileExistsOnFSOrNot(server, 'avatars', basename(bannerPaths[server.port]), true)
+        bannerUrls[server.port] = banner.fileUrl
+        await testImage({ url: bannerUrls[server.port], name: `banner-resized-${banner.width}.jpg` })
+        await testFileExistsOnFSOrNot(server, 'avatars', basename(bannerUrls[server.port]), true)
 
-        const row = await sqlCommands[i].getActorImage(basename(bannerPaths[server.port]))
+        const row = await sqlCommands[i].getActorImage(basename(bannerUrls[server.port]))
         expect(expectedSizes.some(({ height, width }) => row.height === height && row.width === width)).to.equal(true)
       }
     }
@@ -361,7 +359,7 @@ describe('Test video channels', function () {
 
     for (const server of servers) {
       const videoChannel = await findChannel(server, secondVideoChannelId)
-      await testFileExistsOnFSOrNot(server, 'avatars', basename(avatarPaths[server.port]), false)
+      await testFileExistsOnFSOrNot(server, 'avatars', basename(avatarUrls[server.port]), false)
 
       expect(videoChannel.avatars).to.be.empty
     }
@@ -376,7 +374,7 @@ describe('Test video channels', function () {
 
     for (const server of servers) {
       const videoChannel = await findChannel(server, secondVideoChannelId)
-      await testFileExistsOnFSOrNot(server, 'avatars', basename(bannerPaths[server.port]), false)
+      await testFileExistsOnFSOrNot(server, 'avatars', basename(bannerUrls[server.port]), false)
 
       expect(videoChannel.banners).to.be.empty
     }

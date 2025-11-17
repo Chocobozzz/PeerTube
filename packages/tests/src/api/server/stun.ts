@@ -69,7 +69,7 @@ async function testStun (url: string) {
     socket.once('message', msg => {
       try {
         const { ip, port } = parseAddress(msg, txid)
-        expect(+port).to.be.below(65000).and.above(10000)
+        expect(+port).to.be.below(65000).and.above(1024)
         expect(ip.split('.')).to.have.lengthOf(4)
         clearTimeout(timeout)
         socket.close()

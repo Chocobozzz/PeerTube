@@ -59,8 +59,6 @@ export interface VideoExportJSON {
 
     nsfw: boolean
 
-    // TODO: remove, deprecated in 6.2
-    commentsEnabled?: boolean
     commentsPolicy: VideoCommentPolicyType
 
     downloadEnabled: boolean

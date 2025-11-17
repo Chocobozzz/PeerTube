@@ -1,4 +1,4 @@
-import { Account as ServerAccount, ActorImage, BlockStatus } from '@peertube/peertube-models'
+import { ActorImage, BlockStatus, Account as ServerAccount } from '@peertube/peertube-models'
 import { Actor } from './actor.model'
 
 export class Account extends Actor implements ServerAccount {
@@ -16,10 +16,6 @@ export class Account extends Actor implements ServerAccount {
   mutedServerByInstance: boolean
 
   userId?: number
-
-  static GET_ACTOR_AVATAR_URL (actor: { avatars: { width: number, url?: string, path: string }[] }, size?: number) {
-    return Actor.GET_ACTOR_AVATAR_URL(actor, size)
-  }
 
   static GET_DEFAULT_AVATAR_URL (size?: number) {
     if (size && size <= 48) {

@@ -31,7 +31,6 @@ export interface VideoObject {
   permanentLive: boolean
   latencyMode: LiveVideoLatencyModeType
 
-  commentsEnabled?: boolean
   commentsPolicy: VideoCommentPolicyType
   canReply: 'as:Public' | 'https://www.w3.org/ns/activitystreams#Public'
 

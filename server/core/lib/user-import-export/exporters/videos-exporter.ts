@@ -1,5 +1,5 @@
 import { pick, sortBy } from '@peertube/peertube-core-utils'
-import { ActivityCreate, FileStorage, VideoCommentPolicy, VideoExportJSON, VideoObject, VideoPrivacy } from '@peertube/peertube-models'
+import { ActivityCreate, FileStorage, VideoExportJSON, VideoObject, VideoPrivacy } from '@peertube/peertube-models'
 import { logger } from '@server/helpers/logger.js'
 import { audiencify, getVideoAudience } from '@server/lib/activitypub/audience.js'
 import { buildCreateActivity } from '@server/lib/activitypub/send/send-create.js'
@@ -175,8 +175,6 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
       nsfw: video.nsfw,
 
       commentsPolicy: video.commentsPolicy,
-      // TODO: remove, deprecated in 6.2
-      commentsEnabled: video.commentsPolicy !== VideoCommentPolicy.DISABLED,
 
       downloadEnabled: video.downloadEnabled,
 
@@ -295,7 +293,7 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
     const icon = video.getPreview()
 
     const audience = getVideoAudience(video.VideoChannel.Account.Actor, video.privacy, { skipPrivacyCheck: true })
-    const videoObject = {
+    const videoObject: VideoObject = {
       ...audiencify(await video.toActivityPubObject(), audience),
 
       icon: [
@@ -309,7 +307,13 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
       subtitleLanguage: video.VideoCaptions.map(c => ({
         ...c.toActivityPubObject(video),
 
-        url: join(this.options.relativeStaticDirPath, this.getArchiveCaptionFilePath(video, c))
+        url: [
+          {
+            mediaType: 'text/vtt',
+            type: 'Link',
+            href: join(this.options.relativeStaticDirPath, this.getArchiveCaptionFilePath(video, c))
+          }
+        ]
       })),
 
       hasParts: buildChaptersAPHasPart(video, chapters),

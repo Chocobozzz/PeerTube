@@ -1,4 +1,3 @@
-import { getAPIUrl } from '@app/helpers'
 import { maxBy } from '@peertube/peertube-core-utils'
 import { ActorImage, Account as ServerAccount, VideoChannel as ServerVideoChannel, ViewsPerDate } from '@peertube/peertube-models'
 import { Actor } from '../account/actor.model'
@@ -25,15 +24,6 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
   viewsPerDay?: ViewsPerDate[]
   totalViews?: number
 
-  static GET_ACTOR_AVATAR_URL (
-    actor: {
-      avatars: { width: number, fileUrl?: string, url?: string, path: string }[]
-    },
-    size: number
-  ) {
-    return Actor.GET_ACTOR_AVATAR_URL(actor, size)
-  }
-
   static GET_ACTOR_BANNER_URL (channel: Partial<Pick<ServerVideoChannel, 'banners'>>) {
     if (!channel || !Array.isArray(channel.banners) || channel.banners.length === 0) {
       return ''
@@ -42,9 +32,7 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
     const banner = maxBy(channel.banners, 'width')
     if (!banner) return ''
 
-    if (banner.url) return banner.url
-
-    return getAPIUrl() + banner.path
+    return banner.fileUrl
   }
 
   static GET_DEFAULT_AVATAR_URL (size: number) {

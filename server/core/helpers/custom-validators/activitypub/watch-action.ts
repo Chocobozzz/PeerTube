@@ -1,4 +1,3 @@
-import { arrayify } from '@peertube/peertube-core-utils'
 import { WatchActionObject } from '@peertube/peertube-models'
 import { isDateValid, isUUIDValid } from '../misc.js'
 import { isVideoTimeValid } from '../video-view.js'
@@ -6,12 +5,6 @@ import { isActivityPubVideoDurationValid, isObjectValid } from './misc.js'
 
 function isWatchActionObjectValid (action: WatchActionObject) {
   if (action?.type !== 'WatchAction') return false
-
-  // TODO: compat with < 6.1, remove in 8.0
-  if (!action.uuid && action['identifier']) action.uuid = action['identifier']
-
-  if (action['_:actionStatus'] && !action.actionStatus) action.actionStatus = action['_:actionStatus']
-  if (action['_:watchSections'] && !action.watchSections) action.watchSections = arrayify(action['_:watchSections'])
 
   return isObjectValid(action.id) &&
     isActivityPubVideoDurationValid(action.duration) &&
@@ -43,9 +36,6 @@ function isLocationValid (location: any) {
 
 function areWatchSectionsValid (sections: WatchActionObject['watchSections']) {
   return Array.isArray(sections) && sections.every(s => {
-    // TODO: compat with < 6.1, remove in 8.0
-    if (s['_:endTimestamp'] && !s.endTimestamp) s.endTimestamp = s['_:endTimestamp']
-
     return isVideoTimeValid(s.startTimestamp) && isVideoTimeValid(s.endTimestamp)
   })
 }

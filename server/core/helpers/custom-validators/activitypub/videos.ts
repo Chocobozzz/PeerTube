@@ -49,9 +49,6 @@ export function sanitizeAndCheckVideoTorrentObject (video: VideoObject) {
   if (!setValidStoryboard(video)) return fail('preview (storyboard)')
   if (!setValidLicence(video)) return fail('licence')
 
-  // TODO: compat with < 6.1, remove in 8.0
-  if (!video.uuid && video['identifier']) video.uuid = video['identifier']
-
   // Default attributes
   if (!isVideoStateValid(video.state)) video.state = VideoState.PUBLISHED
   if (!isBooleanValid(video.waitTranscoding)) video.waitTranscoding = false
@@ -66,8 +63,6 @@ export function sanitizeAndCheckVideoTorrentObject (video: VideoObject) {
     if (!isVideoCommentsPolicyValid(video.commentsPolicy)) {
       video.commentsPolicy = VideoCommentPolicy.DISABLED
     }
-  } else if (video.commentsEnabled === true) { // Fallback to deprecated attribute
-    video.commentsPolicy = VideoCommentPolicy.ENABLED
   } else {
     video.commentsPolicy = VideoCommentPolicy.DISABLED
   }
@@ -167,21 +162,7 @@ function setValidRemoteCaptions (video: VideoObject) {
   if (Array.isArray(video.subtitleLanguage) === false) return false
 
   video.subtitleLanguage = video.subtitleLanguage.filter(caption => {
-    if (typeof caption.url === 'string') {
-      if (isActivityPubUrlValid(caption.url)) {
-        caption.url = [
-          {
-            type: 'Link',
-            href: caption.url,
-            mediaType: 'text/vtt'
-          }
-        ]
-      } else {
-        caption.url = []
-      }
-    } else {
-      caption.url = arrayify(caption.url).filter(u => isAPCaptionUrlObject(u))
-    }
+    caption.url = arrayify(caption.url).filter(u => isAPCaptionUrlObject(u))
 
     return isRemoteStringIdentifierValid(caption)
   })

@@ -127,24 +127,6 @@ describe('Test video captions API validator', function () {
       })
     })
 
-    // We accept any file now
-    // it('Should fail with an invalid captionfile extension', async function () {
-    //   const attaches = {
-    //     'captionfile': buildAbsoluteFixturePath('subtitle-bad.txt')
-    //   }
-    //
-    //   const captionPath = path + video.uuid + '/captions/fr'
-    //   await makeUploadRequest({
-    //     method: 'PUT',
-    //     url: server.url,
-    //     path: captionPath,
-    //     token: server.accessToken,
-    //     fields,
-    //     attaches,
-    //     expectedStatus: HttpStatusCode.BAD_REQUEST_400
-    //   })
-    // })
-
     // We don't check the extension yet
     // it('Should fail with an invalid captionfile extension and octet-stream mime type', async function () {
     //   await createVideoCaption({

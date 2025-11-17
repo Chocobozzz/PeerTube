@@ -462,11 +462,6 @@ export function getCommonVideoEditAttributes () {
         `Should have an array of up to ${CONSTRAINTS_FIELDS.VIDEOS.TAGS.max} tags between ` +
           `${CONSTRAINTS_FIELDS.VIDEOS.TAG.min} and ${CONSTRAINTS_FIELDS.VIDEOS.TAG.max} characters each`
       ),
-    // TODO: remove, deprecated in PeerTube 6.2
-    body('commentsEnabled')
-      .optional()
-      .customSanitizer(toBooleanOrNull)
-      .custom(isBooleanValid).withMessage('Should have valid commentsEnabled boolean'),
     body('commentsPolicy')
       .optional()
       .custom(isVideoCommentsPolicyValid),

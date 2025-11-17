@@ -278,6 +278,7 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
       },
       automaticallyGenerated: this.automaticallyGenerated,
 
+      // TODO: remove, deprecated in 8.0
       captionPath: this.Video.isLocal() && this.fileUrl
         ? null // On object storage
         : this.getFileStaticPath(),
@@ -295,21 +296,18 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
       name: VideoCaptionModel.getLanguageLabel(this.language),
       automaticallyGenerated: this.automaticallyGenerated,
 
-      // TODO: Remove break flag in v8
-      url: process.env.ENABLE_AP_BREAKING_CHANGES === 'true'
-        ? [
-          {
-            type: 'Link',
-            mediaType: 'text/vtt',
-            href: this.getOriginFileUrl(video)
-          },
-          {
-            type: 'Link',
-            mediaType: 'application/x-mpegURL',
-            href: this.getOriginFileUrl(video)
-          }
-        ]
-        : this.getOriginFileUrl(video)
+      url: [
+        {
+          type: 'Link',
+          mediaType: 'text/vtt',
+          href: this.getOriginFileUrl(video)
+        },
+        {
+          type: 'Link',
+          mediaType: 'application/x-mpegURL',
+          href: this.getOriginFileUrl(video)
+        }
+      ]
     }
   }
 

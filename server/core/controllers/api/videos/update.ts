@@ -4,7 +4,6 @@ import {
   NSFWFlag,
   ThumbnailType,
   VideoChannelActivityAction,
-  VideoCommentPolicy,
   VideoPrivacy,
   VideoPrivacyType,
   VideoUpdate
@@ -21,6 +20,7 @@ import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { setVideoPrivacy } from '@server/lib/video-privacy.js'
 import { setVideoTags } from '@server/lib/video.js'
 import { openapiOperationDoc } from '@server/middlewares/doc.js'
+import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { FilteredModelAttributes } from '@server/types/index.js'
 import { MVideoFullLight, MVideoThumbnail } from '@server/types/models/index.js'
@@ -37,7 +37,6 @@ import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist.js'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videosUpdateValidator } from '../../../middlewares/index.js'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update.js'
 import { VideoModel } from '../../../models/video/video.js'
-import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -106,13 +105,8 @@ async function updateVideo (req: express.Request, res: express.Response) {
         video.nsfwSummary = null
       }
 
-      // Special treatment for comments policy to support deprecated commentsEnabled attribute
       if (body.commentsPolicy !== undefined) {
         video.commentsPolicy = body.commentsPolicy
-      } else if (body.commentsEnabled === true) {
-        video.commentsPolicy = VideoCommentPolicy.ENABLED
-      } else if (body.commentsEnabled === false) {
-        video.commentsPolicy = VideoCommentPolicy.DISABLED
       }
 
       if (body.originallyPublishedAt !== undefined) {

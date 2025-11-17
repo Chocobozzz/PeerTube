@@ -221,7 +221,7 @@ function runTest (withObjectStorage: boolean) {
       }
 
       for (const avatar of importedSecond.avatars) {
-        await testImage({ url: remoteServer.url + avatar.path, name: `avatar-resized-${avatar.width}x${avatar.width}.png` })
+        await testImage({ url: avatar.fileUrl, name: `avatar-resized-${avatar.width}x${avatar.width}.png` })
       }
 
       {
@@ -487,7 +487,6 @@ function runTest (withObjectStorage: boolean) {
 
         const { data: captions } = await remoteServer.captions.list({ videoId: otherVideo.uuid })
 
-        // TODO: merge these functions in v8, caption playlist are not federated before v8
         await completeCheckHlsPlaylist({
           hlsOnly: false,
           servers: [ remoteServer ],
@@ -496,17 +495,8 @@ function runTest (withObjectStorage: boolean) {
           resolutions: [ 720, 240 ],
           captions
         })
-        await completeCheckHlsPlaylist({
-          hlsOnly: false,
-          servers: [ server ],
-          videoUUID: otherVideo.uuid,
-          objectStorageBaseUrl: objectStorage?.getMockPlaylistBaseUrl(),
-          resolutions: [ 720, 240 ],
-          captions: [] // Caption playlist are not federated before v8
-        })
 
         const source = await remoteServer.videos.getSource({ id: otherVideo.uuid })
-        expect(source.filename).to.equal('video_short.webm')
         expect(source.inputFilename).to.equal('video_short.webm')
         expect(source.fileDownloadUrl).to.not.exist
 
@@ -734,7 +724,6 @@ function runTest (withObjectStorage: boolean) {
         expect(data).to.have.lengthOf(1)
 
         const source = await remoteServer.videos.getSource({ id: data[0].id })
-        expect(source.filename).to.equal(fixture)
         expect(source.inputFilename).to.equal(fixture)
         expect(source.fileDownloadUrl).to.exist
 

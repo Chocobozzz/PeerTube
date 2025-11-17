@@ -124,7 +124,6 @@ describe('Test live', function () {
         expect(video.waitTranscoding).to.be.false
         expect(video.name).to.equal('my super live')
         expect(video.tags).to.deep.equal([ 'tag1', 'tag2' ])
-        expect(video.commentsEnabled).to.be.false
         expect(video.downloadEnabled).to.be.false
         expect(video.privacy.id).to.equal(VideoPrivacy.PUBLIC)
 

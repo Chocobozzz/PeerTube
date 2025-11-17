@@ -572,7 +572,7 @@ describe('Test follows', function () {
         const caption1 = body.data[0]
         expect(caption1.language.id).to.equal('ar')
         expect(caption1.language.label).to.equal('Arabic')
-        expect(caption1.captionPath).to.match(new RegExp('^/lazy-static/video-captions/.+-ar.vtt$'))
+        expect(caption1.fileUrl).to.match(new RegExp('^' + servers[0].url + '/lazy-static/video-captions/.+-ar.vtt$'))
         await testCaptionFile(caption1.fileUrl, 'Subtitle good 2.')
       })
 

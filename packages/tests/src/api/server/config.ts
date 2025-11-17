@@ -697,7 +697,7 @@ describe('Test config', function () {
     }
 
     describe('Banner', function () {
-      const bannerPaths: string[] = []
+      const bannerUrls: string[] = []
 
       it('Should update instance banner', async function () {
         await server.config.updateInstanceImage({ type: ActorImageType.BANNER, fixture: 'banner.jpg' })
@@ -708,9 +708,9 @@ describe('Test config', function () {
 
         for (const banner of banners) {
           await testImage({ url: banner.fileUrl, name: `banner-resized-${banner.width}.jpg` })
-          await testFileExistsOnFSOrNot(server, 'avatars', basename(banner.path), true)
+          await testFileExistsOnFSOrNot(server, 'avatars', basename(banner.fileUrl), true)
 
-          bannerPaths.push(banner.path)
+          bannerUrls.push(banner.fileUrl)
         }
       })
 
@@ -724,14 +724,14 @@ describe('Test config', function () {
         const { banners } = await checkAndGetServerImages()
         expect(banners).to.have.lengthOf(0)
 
-        for (const bannerPath of bannerPaths) {
-          await testFileExistsOnFSOrNot(server, 'avatars', basename(bannerPath), false)
+        for (const bannerUrl of bannerUrls) {
+          await testFileExistsOnFSOrNot(server, 'avatars', basename(bannerUrl), false)
         }
       })
     })
 
     describe('Avatar', function () {
-      const avatarPaths: string[] = []
+      const avatarUrls: string[] = []
 
       it('Should update instance avatar', async function () {
         for (const extension of [ '.png', '.gif' ]) {
@@ -743,9 +743,9 @@ describe('Test config', function () {
 
           for (const avatar of avatars) {
             await testAvatarSize({ url: server.url, avatar, imageName: `avatar-resized-${avatar.width}x${avatar.width}` })
-            await testFileExistsOnFSOrNot(server, 'avatars', basename(avatar.path), true)
+            await testFileExistsOnFSOrNot(server, 'avatars', basename(avatar.fileUrl), true)
 
-            avatarPaths.push(avatar.path)
+            avatarUrls.push(avatar.fileUrl)
           }
         }
       })
@@ -767,8 +767,8 @@ describe('Test config', function () {
         const { avatars } = await checkAndGetServerImages()
         expect(avatars).to.have.lengthOf(0)
 
-        for (const avatarPath of avatarPaths) {
-          await testFileExistsOnFSOrNot(server, 'avatars', basename(avatarPath), false)
+        for (const avatarUrl of avatarUrls) {
+          await testFileExistsOnFSOrNot(server, 'avatars', basename(avatarUrl), false)
         }
       })
 

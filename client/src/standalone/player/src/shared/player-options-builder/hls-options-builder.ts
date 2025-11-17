@@ -124,8 +124,7 @@ export class HLSOptionsBuilder {
       ? this.getP2PMediaLoaderLiveOptions()
       : this.getP2PMediaLoaderVODOptions()
 
-    // TODO: remove validateHTTPSegment typing when p2p-media-loader-core is updated
-    const loaderOptions: Partial<StreamConfig> & { validateHTTPSegment: any } = {
+    const loaderOptions: Partial<StreamConfig> = {
       announceTrackers,
       rtcConfig: getRtcConfig(this.options.stunServers),
 

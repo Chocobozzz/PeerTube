@@ -11,7 +11,6 @@ import {
   createMultipleServers,
   doubleFollow,
   killallServers,
-  makeGetRequest,
   makeRawRequest,
   setAccessTokensToServers,
   setDefaultVideoChannel,
@@ -76,22 +75,14 @@ describe('Test prune storage CLI', function () {
       const account = await servers[0].accounts.get({ accountName: 'root@' + servers[1].host })
 
       for (const avatar of account.avatars) {
-        await makeGetRequest({
-          url: servers[0].url,
-          path: avatar.path,
-          expectedStatus: HttpStatusCode.OK_200
-        })
+        await makeRawRequest({ url: avatar.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
       }
     }
 
     {
       const account = await servers[1].accounts.get({ accountName: 'root@' + servers[0].host })
       for (const avatar of account.avatars) {
-        await makeGetRequest({
-          url: servers[1].url,
-          path: avatar.path,
-          expectedStatus: HttpStatusCode.OK_200
-        })
+        await makeRawRequest({ url: avatar.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
       }
     }
 
@@ -270,9 +261,9 @@ describe('Test prune storage CLI', function () {
 
     const objectStorage = new ObjectStorageCommand()
 
-    const videoFileUrls: { [ uuid: string ]: string[] } = {}
-    const sourceFileUrls: { [ uuid: string ]: string } = {}
-    const captionFileUrls: { [ uuid: string ]: { [ language: string ]: string } } = {}
+    const videoFileUrls: { [uuid: string]: string[] } = {}
+    const sourceFileUrls: { [uuid: string]: string } = {}
+    const captionFileUrls: { [uuid: string]: { [language: string]: string } } = {}
 
     let sqlCommand: SQLCommand
     let rootId: number

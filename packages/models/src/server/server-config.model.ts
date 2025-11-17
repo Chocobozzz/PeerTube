@@ -84,8 +84,6 @@ export interface ServerConfig {
     publish: {
       downloadEnabled: boolean
 
-      // TODO: remove, deprecated in 6.2
-      commentsEnabled: boolean
       commentsPolicy: VideoCommentPolicyType
 
       privacy: VideoPrivacyType

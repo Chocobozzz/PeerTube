@@ -158,11 +158,10 @@ describe('Test video storyboard', function () {
     this.timeout(60000)
 
     const { storyboards } = await servers[0].storyboard.list({ id: baseUUID })
-    const storyboardName = basename(storyboards[0].storyboardPath)
+    const storyboardName = basename(storyboards[0].fileUrl)
 
     const listFiles = () => {
-      const storyboardPath = servers[0].getDirectoryPath('storyboards')
-      return readdir(storyboardPath)
+      return readdir(servers[0].getDirectoryPath('storyboards'))
     }
 
     {

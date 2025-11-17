@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { HttpStatusCode } from '@peertube/peertube-models'
-import { makeGetRequest, makeRawRequest, PeerTubeServer } from '@peertube/peertube-server-commands'
+import { makeRawRequest, PeerTubeServer } from '@peertube/peertube-server-commands'
 import { expect } from 'chai'
 
 export async function checkStoryboard (options: {
@@ -23,16 +23,11 @@ export async function checkStoryboard (options: {
   expect(storyboard.spriteDuration).to.equal(spriteDuration)
   expect(storyboard.spriteHeight).to.equal(spriteHeight)
   expect(storyboard.spriteWidth).to.equal(spriteWidth)
-  expect(storyboard.storyboardPath).to.exist
+  expect(storyboard.fileUrl).to.exist
 
   if (tilesCount) {
     expect(storyboard.totalWidth).to.equal(spriteWidth * Math.min(tilesCount, 11))
     expect(storyboard.totalHeight).to.equal(spriteHeight * Math.max(tilesCount / 11, 1))
-  }
-
-  {
-    const { body } = await makeGetRequest({ url: server.url, path: storyboard.storyboardPath, expectedStatus: HttpStatusCode.OK_200 })
-    expect(body.length).to.be.above(minSize)
   }
 
   {

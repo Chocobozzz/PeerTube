@@ -209,7 +209,7 @@ describe('Test video caption playlist', function () {
   describe('With AP federation breaking changes enabled', function () {
     before(async function () {
       await servers[0].kill()
-      await servers[0].run({}, { env: { ENABLE_AP_BREAKING_CHANGES: 'true' } })
+      await servers[0].run()
     })
 
     it('Should correctly federate captions m3u8 URL', async function () {
@@ -227,44 +227,6 @@ describe('Test video caption playlist', function () {
 
           await makeRawRequest({ url: caption.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
           await makeRawRequest({ url: caption.m3u8Url, expectedStatus: HttpStatusCode.OK_200 })
-        }
-      }
-    })
-  })
-
-  describe('Without AP federation breaking changes enabled', function () {
-    before(async function () {
-      this.timeout(60000)
-
-      await servers[0].kill()
-      await servers[0].run()
-    })
-
-    it('Should not federate captions m3u8 URL', async function () {
-      await renewVideo()
-      await addCaptions()
-      await waitJobs(servers)
-
-      {
-        const { data: captions } = await servers[0].captions.list({ videoId: videoUUID })
-
-        for (const caption of captions) {
-          expect(caption.fileUrl).to.exist
-          expect(caption.m3u8Url).to.exist
-
-          await makeRawRequest({ url: caption.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
-          await makeRawRequest({ url: caption.m3u8Url, expectedStatus: HttpStatusCode.OK_200 })
-        }
-      }
-
-      {
-        const { data: captions } = await servers[1].captions.list({ videoId: videoUUID })
-
-        for (const caption of captions) {
-          expect(caption.fileUrl).to.exist
-          expect(caption.m3u8Url).to.not.exist
-
-          await makeRawRequest({ url: caption.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
         }
       }
     })

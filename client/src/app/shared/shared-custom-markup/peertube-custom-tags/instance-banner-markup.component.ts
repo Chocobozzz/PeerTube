@@ -23,7 +23,7 @@ export class InstanceBannerMarkupComponent implements OnInit, CustomMarkupCompon
   ngOnInit () {
     const { instance } = this.server.getHTMLConfig()
 
-    this.instanceBannerUrl = maxBy(instance.banners, 'width')?.path
+    this.instanceBannerUrl = maxBy(instance.banners, 'width')?.fileUrl
     this.cd.markForCheck()
   }
 }

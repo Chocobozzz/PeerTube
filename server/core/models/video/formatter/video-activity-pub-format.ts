@@ -81,7 +81,6 @@ export function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
 
     state: video.state,
 
-    commentsEnabled: video.commentsPolicy !== VideoCommentPolicy.DISABLED,
     canReply: video.commentsPolicy === VideoCommentPolicy.ENABLED
       ? null
       : getAPPublicValue(), // Requires approval

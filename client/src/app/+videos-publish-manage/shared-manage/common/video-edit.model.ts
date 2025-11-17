@@ -37,7 +37,7 @@ export type VideoEditPrivacyType = VideoPrivacyType | typeof VideoEdit.SPECIAL_S
 type CommonUpdateForm =
   & Omit<
     VideoUpdate,
-    'privacy' | 'videoPasswords' | 'thumbnailfile' | 'scheduleUpdate' | 'commentsEnabled' | 'originallyPublishedAt' | 'nsfwFlags'
+    'privacy' | 'videoPasswords' | 'thumbnailfile' | 'scheduleUpdate' | 'originallyPublishedAt' | 'nsfwFlags'
   >
   & {
     schedulePublicationAt?: Date
@@ -623,7 +623,7 @@ export class VideoEdit {
     return json
   }
 
-  toVideoUpdate (): Required<Omit<VideoUpdate, 'commentsEnabled'>> {
+  toVideoUpdate (): Required<VideoUpdate> {
     return {
       ...this.toVideoCreateOrUpdate(),
 
@@ -631,7 +631,7 @@ export class VideoEdit {
     }
   }
 
-  toVideoCreate (overriddenPrivacy: VideoPrivacyType): Required<Omit<VideoCreate, 'commentsEnabled' | 'generateTranscription'>> {
+  toVideoCreate (overriddenPrivacy: VideoPrivacyType): Required<Omit<VideoCreate, 'generateTranscription'>> {
     return {
       ...this.toVideoCreateOrUpdate(),
 
@@ -639,7 +639,7 @@ export class VideoEdit {
     }
   }
 
-  private toVideoCreateOrUpdate (): Required<Omit<SharedUnionFieldsDeep<VideoCreate | VideoUpdate>, 'commentsEnabled'>> {
+  private toVideoCreateOrUpdate (): Required<SharedUnionFieldsDeep<VideoCreate | VideoUpdate>> {
     return {
       name: this.common.name,
       category: this.common.category || null,

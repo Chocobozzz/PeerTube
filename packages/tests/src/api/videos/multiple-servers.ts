@@ -137,7 +137,6 @@ describe('Test multiple servers', function () {
           expect(image.updatedAt).to.exist
           expect(image.width).to.be.above(20).and.below(2000)
           expect(image.fileUrl).to.exist
-          expect(image.path).to.exist
 
           await makeRawRequest({ url: image.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
         }
@@ -1022,7 +1021,6 @@ describe('Test multiple servers', function () {
 
       for (const server of servers) {
         const video = await server.videos.get({ id: videoUUID })
-        expect(video.commentsEnabled).to.be.false
         expect(video.commentsPolicy.id).to.equal(VideoCommentPolicy.DISABLED)
         expect(video.commentsPolicy.label).to.equal('Disabled')
         expect(video.downloadEnabled).to.be.false

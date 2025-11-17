@@ -1,4 +1,4 @@
-import { Account, AccountSummary, ActivityPubActor, VideoPrivacy } from '@peertube/peertube-models'
+import { Account, AccountSummary, ActivityPubActor, ActivityUrlObject, VideoPrivacy } from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { ModelCache } from '@server/models/shared/model-cache.js'
 import { FindOptions, IncludeOptions, Includeable, Op, Transaction, WhereOptions, literal } from 'sequelize'
@@ -500,26 +500,24 @@ export class AccountModel extends SequelizeModel<AccountModel> {
     const obj = await this.Actor.toActivityPubObject(this.name)
 
     return Object.assign(obj, {
-      // // TODO: Uncomment in v8 for backward compatibility
-      // url: [
-      //   {
-      //     type: 'Link',
-      //     mediaType: 'text/html',
-      //     href: this.getClientUrl(true)
-      //   },
-      //   {
-      //     type: 'Link',
-      //     mediaType: 'text/html',
-      //     href: this.getClientUrl(false)
-      //   },
-      //   {
-      //     type: 'Link',
-      //     mediaType: 'text/html',
-      //     href: this.Actor.url
-      //   }
-      // ] as ActivityUrlObject[],
+      url: [
+        {
+          type: 'Link',
+          mediaType: 'text/html',
+          href: this.getClientUrl(true)
+        },
+        {
+          type: 'Link',
+          mediaType: 'text/html',
+          href: this.getClientUrl(false)
+        },
+        {
+          type: 'Link',
+          mediaType: 'text/html',
+          href: this.Actor.url
+        }
+      ] as ActivityUrlObject[],
 
-      url: this.Actor.url,
       summary: this.description
     })
   }

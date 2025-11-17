@@ -2,7 +2,6 @@ import { getResolutionLabel } from '@peertube/peertube-core-utils'
 import {
   Video,
   VideoAdditionalAttributes,
-  VideoCommentPolicy,
   VideoDetails,
   VideoFile,
   VideoInclude,
@@ -170,8 +169,6 @@ export function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetail
     account: video.VideoChannel.Account.toFormattedJSON(),
     tags,
 
-    // TODO: remove, deprecated in PeerTube 6.2
-    commentsEnabled: video.commentsPolicy !== VideoCommentPolicy.DISABLED,
     commentsPolicy: {
       id: video.commentsPolicy,
       label: VIDEO_COMMENTS_POLICY[video.commentsPolicy]

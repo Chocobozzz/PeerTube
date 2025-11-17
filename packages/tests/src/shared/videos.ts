@@ -7,7 +7,6 @@ import {
   HttpStatusCode,
   HttpStatusCodeType,
   VideoCaption,
-  VideoCommentPolicy,
   VideoCommentPolicyType,
   VideoDetails,
   VideoPrivacy,
@@ -28,8 +27,8 @@ import { readdir, writeFile } from 'fs/promises'
 import { tmpdir } from 'os'
 import { basename, join } from 'path'
 import { dateIsValid, expectStartWith, testImageGeneratedByFFmpeg } from './checks.js'
-import { completeCheckHlsPlaylist } from './streaming-playlists.js'
 import { checkWebTorrentWorks } from './p2p.js'
+import { completeCheckHlsPlaylist } from './streaming-playlists.js'
 
 export async function completeWebVideoFilesCheck (options: {
   server: PeerTubeServer
@@ -242,7 +241,6 @@ export async function completeVideoCheck (options: {
   expect(video.url).to.contain(originServer.host)
   expect(video.tags).to.deep.equal(attributes.tags)
 
-  expect(video.commentsEnabled).to.equal(attributes.commentsPolicy !== VideoCommentPolicy.DISABLED)
   expect(video.commentsPolicy.id).to.equal(attributes.commentsPolicy)
   expect(video.downloadEnabled).to.equal(attributes.downloadEnabled)
 
@@ -318,12 +316,12 @@ export async function checkVideoFilesWereRemoved (options: {
 
   const torrentNames = webVideoFiles.concat(hlsFiles).map(f => basename(f.torrentUrl))
 
-  const captionNames = captions.map(c => basename(c.captionPath))
+  const captionNames = captions.map(c => basename(c.fileUrl))
 
   const webVideoFilenames = webVideoFiles.map(f => basename(f.fileUrl))
   const hlsFilenames = hlsFiles.map(f => basename(f.fileUrl))
 
-  let directories: { [ directory: string ]: string[] } = {
+  let directories: { [directory: string]: string[] } = {
     videos: webVideoFilenames,
     redundancy: webVideoFilenames,
     [join('playlists', 'hls')]: hlsFilenames,

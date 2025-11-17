@@ -1,5 +1,3 @@
-import { VideoCommentPolicy, VideoCommentPolicyType } from '@peertube/peertube-models'
-import { CONFIG } from '@server/initializers/config.js'
 import { MEMOIZE_LENGTH, MEMOIZE_TTL } from '@server/initializers/constants.js'
 import { TagModel } from '@server/models/video/tag.js'
 import { VideoModel } from '@server/models/video/video.js'
@@ -40,17 +38,3 @@ export const getCachedVideoDuration = memoizee(getVideoDuration, {
   max: MEMOIZE_LENGTH.VIDEO_DURATION,
   maxAge: MEMOIZE_TTL.VIDEO_DURATION
 })
-
-// ---------------------------------------------------------------------------
-
-export function buildCommentsPolicy (options: {
-  commentsEnabled?: boolean
-  commentsPolicy?: VideoCommentPolicyType
-}) {
-  if (options.commentsPolicy) return options.commentsPolicy
-
-  if (options.commentsEnabled === true) return VideoCommentPolicy.ENABLED
-  if (options.commentsEnabled === false) return VideoCommentPolicy.DISABLED
-
-  return CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY
-}

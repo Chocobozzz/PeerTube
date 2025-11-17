@@ -97,8 +97,6 @@ export interface VideoDetails extends Video {
   account: Account
   tags: string[]
 
-  // TODO: remove, deprecated in 6.2
-  commentsEnabled: boolean
   commentsPolicy: {
     id: VideoCommentPolicyType
     label: string

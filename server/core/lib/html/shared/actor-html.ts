@@ -1,4 +1,4 @@
-import { escapeHTML, getChannelRSSFeeds, getDefaultRSSFeeds, maxBy } from '@peertube/peertube-core-utils'
+import { escapeHTML, getChannelRSSFeeds, getDefaultRSSFeed, maxBy } from '@peertube/peertube-core-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { AccountModel } from '@server/models/account/account.js'
@@ -16,7 +16,7 @@ export class ActorHtml {
 
     return this.getAccountOrChannelHTMLPage({
       loader: () => accountModelPromise,
-      getRSSFeeds: () => getDefaultRSSFeeds(WEBSERVER.URL, CONFIG.INSTANCE.NAME),
+      getRSSFeeds: () => this.getDefaultRSSFeeds(req),
       req,
       res
     })
@@ -27,7 +27,7 @@ export class ActorHtml {
 
     return this.getAccountOrChannelHTMLPage({
       loader: () => Promise.resolve(videoChannel),
-      getRSSFeeds: () => getChannelRSSFeeds(WEBSERVER.URL, CONFIG.INSTANCE.NAME, videoChannel),
+      getRSSFeeds: () => this.getChannelRSSFeeds(videoChannel, req),
       req,
       res
     })
@@ -44,8 +44,8 @@ export class ActorHtml {
 
       getRSSFeeds: () =>
         account
-          ? getDefaultRSSFeeds(WEBSERVER.URL, CONFIG.INSTANCE.NAME)
-          : getChannelRSSFeeds(WEBSERVER.URL, CONFIG.INSTANCE.NAME, channel),
+          ? this.getDefaultRSSFeeds(req)
+          : this.getChannelRSSFeeds(channel, req),
 
       req,
       res
@@ -115,5 +115,26 @@ export class ActorHtml {
     }, {})
 
     return customHTML
+  }
+
+  private static getDefaultRSSFeeds (req: express.Request) {
+    return [
+      getDefaultRSSFeed({
+        url: WEBSERVER.URL,
+        title: req.t('{instanceName} videos feed', { instanceName: CONFIG.INSTANCE.NAME })
+      })
+    ]
+  }
+
+  private static getChannelRSSFeeds (channel: MChannelDefault, req: express.Request) {
+    return getChannelRSSFeeds({
+      url: WEBSERVER.URL,
+      channel,
+      titles: {
+        videosFeed: req.t('{instanceName} videos feed', { instanceName: CONFIG.INSTANCE.NAME }),
+        channelVideosFeed: req.t('{name} videos feed', { name: channel.getDisplayName() }),
+        channelPodcastFeed: req.t('{name} podcast feed', { name: channel.getDisplayName() })
+      }
+    })
   }
 }

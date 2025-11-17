@@ -280,7 +280,7 @@ export class VideoListComponent implements OnInit {
   onRowExpand (event: TableRowExpandEvent) {
     const video = event.data as VideoDetails
 
-    if (!video.videoSource?.filename && !videoRequiresFileToken(video)) return
+    if (!video.videoSource?.inputFilename && !videoRequiresFileToken(video)) return
 
     this.videoFileTokenService.getVideoFileToken({ videoUUID: video.uuid })
       .subscribe(({ token }) => {

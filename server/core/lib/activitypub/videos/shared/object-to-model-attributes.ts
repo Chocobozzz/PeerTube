@@ -1,6 +1,5 @@
 import { arrayify, maxBy, minBy } from '@peertube/peertube-core-utils'
 import {
-  ActivityCaptionUrlObject,
   ActivityHashTagObject,
   ActivityMagnetUrlObject,
   ActivityPlaylistSegmentHashesObject,
@@ -226,8 +225,7 @@ export function getLiveSchedulesAttributesFromObject (live: MVideoLive, videoObj
 export function getCaptionAttributesFromObject (video: MVideoId, videoObject: VideoObject) {
   return videoObject.subtitleLanguage.map(c => {
     // This field is sanitized in validators
-    // TODO: Remove as in v8
-    const url = c.url as (ActivityCaptionUrlObject | ActivityPlaylistUrlObject)[]
+    const url = c.url
 
     const filename = VideoCaptionModel.generateCaptionName(c.identifier)
 

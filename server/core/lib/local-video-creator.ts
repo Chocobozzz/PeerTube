@@ -38,7 +38,7 @@ import { replaceChapters, replaceChaptersFromDescriptionIfNeeded } from './video
 import { buildNewFile, createVideoSource } from './video-file.js'
 import { addVideoJobsAfterCreation } from './video-jobs.js'
 import { VideoPathManager } from './video-path-manager.js'
-import { buildCommentsPolicy, setVideoTags } from './video.js'
+import { setVideoTags } from './video.js'
 
 type VideoAttributes = Omit<VideoCreate, 'channelId'> & {
   duration: number
@@ -307,7 +307,7 @@ export class LocalVideoCreator {
       category: videoInfo.category,
       licence: videoInfo.licence ?? CONFIG.DEFAULTS.PUBLISH.LICENCE,
       language: videoInfo.language,
-      commentsPolicy: buildCommentsPolicy(videoInfo),
+      commentsPolicy: videoInfo.commentsPolicy ?? CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY,
       downloadEnabled: videoInfo.downloadEnabled ?? CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
       waitTranscoding: videoInfo.waitTranscoding || false,
 

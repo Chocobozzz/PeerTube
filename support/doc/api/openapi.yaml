@@ -3149,10 +3149,6 @@ paths:
                     type: string
                     minLength: 2
                     maxLength: 30
-                commentsEnabled:
-                  deprecated: true
-                  description: 'Deprecated in 6.2, use commentsPolicy instead'
-                  type: boolean
                 commentsPolicy:
                   $ref: '#/components/schemas/VideoCommentsPolicySet'
                 downloadEnabled:
@@ -3231,27 +3227,6 @@ paths:
       operationId: addView
       tags:
         - Video
-      parameters:
-        - $ref: '#/components/parameters/idOrUUID'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserViewingVideo'
-        required: true
-      responses:
-        '204':
-          description: successful operation
-
-  '/api/v1/videos/{id}/watching':
-    put:
-      summary: Set watching progress of a video
-      deprecated: true
-      description: This endpoint has been deprecated. Use `/videos/{id}/views` instead
-      tags:
-        - Video
-      security:
-        - OAuth2: []
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
       requestBody:
@@ -3755,10 +3730,6 @@ paths:
                     type: string
                     minLength: 2
                     maxLength: 30
-                commentsEnabled:
-                  deprecated: true
-                  description: 'Deprecated in 6.2, use commentsPolicy instead'
-                  type: boolean
                 commentsPolicy:
                   $ref: '#/components/schemas/VideoCommentsPolicySet'
                 downloadEnabled:
@@ -7539,7 +7510,8 @@ paths:
     get:
       tags:
         - Video Channels
-      summary: "**PeerTube >= 8.0** List channel collaborators"
+      summary: "*List channel collaborators"
+      description: "**PeerTube >= 8.0**"
       operationId: listVideoChannelCollaborators
       security:
         - OAuth2: []
@@ -9179,10 +9151,6 @@ components:
                 type: string
                 minLength: 2
                 maxLength: 30
-            commentsEnabled:
-              deprecated: true
-              description: 'Deprecated in 6.2, use commentsPolicy instead'
-              type: boolean
             commentsPolicy:
               $ref: '#/components/schemas/VideoCommentsPolicyConstant'
             downloadEnabled:
@@ -9585,6 +9553,10 @@ components:
     Storyboard:
       properties:
         storyboardPath:
+          description: Deprecated in PeerTube v8, use fileUrl instead
+          deprecated: true
+          type: string
+        fileUrl:
           type: string
         totalHeight:
           type: integer
@@ -9596,12 +9568,25 @@ components:
           type: integer
         spriteDuration:
           type: integer
+
     VideoCaption:
       properties:
         language:
           $ref: '#/components/schemas/VideoConstantString-Language'
+        automaticallyGenerated:
+          type: boolean
         captionPath:
           type: string
+          deprecated: true
+          description: Deprecated in PeerTube v8, use fileUrl instead
+        fileUrl:
+          type: string
+        m3u8Url:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+
     VideoChapters:
       properties:
         chapters:
@@ -9613,10 +9598,6 @@ components:
               type: integer
     VideoSource:
       properties:
-        filename:
-          type: string
-          deprecated: true
-          description: 'Deprecated in 6.1, use inputFilename instead'
         inputFilename:
           type: string
           description: 'Uploaded/imported filename'
@@ -9645,12 +9626,16 @@ components:
     ActorImage:
       properties:
         path:
+          description: Deprecated in PeerTube v8, use fileUrl instead
+          deprecated: true
+          type: string
+        fileUrl:
           type: string
         width:
           type: integer
         height:
           type: integer
-          description: "**PeerTube >= 7.3** ImportVideosInChannelCreate:mage height"
+          description: "**PeerTube >= 7.3**"
         createdAt:
           type: string
           format: date-time
@@ -10735,10 +10720,6 @@ components:
             type: string
             minLength: 2
             maxLength: 30
-        commentsEnabled:
-          deprecated: true
-          description: 'Deprecated in 6.2, use commentsPolicy instead'
-          type: boolean
         commentsPolicy:
           $ref: '#/components/schemas/VideoCommentsPolicySet'
         downloadEnabled:

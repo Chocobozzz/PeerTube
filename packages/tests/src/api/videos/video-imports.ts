@@ -144,7 +144,7 @@ describe('Test video imports', function () {
           const enCaption = videoCaptions.find(caption => caption.language.id === 'en')
           expect(enCaption).to.exist
           expect(enCaption.language.label).to.equal('English')
-          expect(enCaption.captionPath).to.match(new RegExp(`^/lazy-static/video-captions/.+-en.vtt$`))
+          expect(enCaption.fileUrl).to.match(new RegExp(`^${servers[0].url}/lazy-static/video-captions/.+-en.vtt$`))
 
           const regex = `WEBVTT[ \n]+Kind: captions[ \n]+` +
             `(Language: en[ \n]+)?` +
@@ -158,7 +158,7 @@ describe('Test video imports', function () {
           const frCaption = videoCaptions.find(caption => caption.language.id === 'fr')
           expect(frCaption).to.exist
           expect(frCaption.language.label).to.equal('French')
-          expect(frCaption.captionPath).to.match(new RegExp(`^/lazy-static/video-captions/.+-fr.vtt`))
+          expect(frCaption.fileUrl).to.match(new RegExp(`^${servers[0].url}/lazy-static/video-captions/.+-fr.vtt`))
 
           const regex = `WEBVTT[ \n]+Kind: captions[ \n]+` +
             `(Language: fr[ \n]+)?` +

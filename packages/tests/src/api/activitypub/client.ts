@@ -52,16 +52,15 @@ describe('Test ActivityPub', function () {
       expect(object.icon).to.not.exist
     }
 
-    // TODO: enable in v8
-    // const htmlURLs = [
-    //   servers[0].url + '/accounts/root',
-    //   servers[0].url + '/a/root',
-    //   servers[0].url + '/a/root/video-channels'
-    // ]
+    const htmlURLs = [
+      servers[0].url + '/accounts/root',
+      servers[0].url + '/a/root',
+      servers[0].url + '/a/root/video-channels'
+    ]
 
-    // for (const htmlURL of htmlURLs) {
-    //   expect(object.url.find(u => u.href === htmlURL), htmlURL).to.exist
-    // }
+    for (const htmlURL of htmlURLs) {
+      expect(object.url.find(u => u.href === htmlURL), htmlURL).to.exist
+    }
   }
 
   async function testChannel (path: string, hasIcon: boolean) {

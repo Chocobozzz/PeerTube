@@ -151,12 +151,6 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
       '@id': 'pt:fps'
     },
 
-    // Keep for federation compatibility
-    commentsEnabled: {
-      '@type': 'sc:Boolean',
-      '@id': 'pt:commentsEnabled'
-    },
-
     canReply: 'pt:canReply',
     commentsPolicy: {
       '@type': 'sc:Number',

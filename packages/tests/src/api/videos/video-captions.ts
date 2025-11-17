@@ -42,7 +42,6 @@ describe('Test video captions', function () {
   })
 
   describe('Common on filesystem', function () {
-
     it('Should list the captions and return an empty list', async function () {
       for (const server of servers) {
         const body = await server.captions.list({ videoId: videoUUID })
@@ -79,7 +78,6 @@ describe('Test video captions', function () {
         const caption1 = body.data[0]
         expect(caption1.language.id).to.equal('ar')
         expect(caption1.language.label).to.equal('Arabic')
-        expect(caption1.captionPath).to.match(new RegExp(`^/lazy-static/video-captions/${uuidRegex}-ar.vtt$`))
         expect(caption1.fileUrl).to.match(new RegExp(`^${server.url}/lazy-static/video-captions/${uuidRegex}-ar.vtt$`))
         expect(caption1.automaticallyGenerated).to.be.false
         await testCaptionFile(caption1.fileUrl, 'Subtitle good 1.')
@@ -87,7 +85,6 @@ describe('Test video captions', function () {
         const caption2 = body.data[1]
         expect(caption2.language.id).to.equal('zh')
         expect(caption2.language.label).to.equal('Chinese')
-        expect(caption2.captionPath).to.match(new RegExp(`^/lazy-static/video-captions/${uuidRegex}-zh.vtt$`))
         expect(caption2.fileUrl).to.match(new RegExp(`^${server.url}/lazy-static/video-captions/${uuidRegex}-zh.vtt$`))
         expect(caption1.automaticallyGenerated).to.be.false
         await testCaptionFile(caption2.fileUrl, 'Subtitle good 2.')
@@ -115,7 +112,6 @@ describe('Test video captions', function () {
         const caption1 = body.data[0]
         expect(caption1.language.id).to.equal('ar')
         expect(caption1.language.label).to.equal('Arabic')
-        expect(caption1.captionPath).to.match(new RegExp(`^/lazy-static/video-captions/${uuidRegex}-ar.vtt$`))
         expect(caption1.fileUrl).to.match(new RegExp(`^${server.url}/lazy-static/video-captions/${uuidRegex}-ar.vtt$`))
         await testCaptionFile(caption1.fileUrl, 'Subtitle good 2.')
       }
@@ -252,11 +248,9 @@ describe('Test video captions', function () {
 
           if (server === servers[0]) {
             expectStartWith(caption1.fileUrl, objectStorage.getMockCaptionFileBaseUrl())
-            expect(caption1.captionPath).to.be.null
 
             oldFileUrlsAr.push(caption1.fileUrl)
           } else {
-            expect(caption1.captionPath).to.match(new RegExp(`^/lazy-static/video-captions/${uuidRegex}-ar.vtt$`))
             expect(caption1.fileUrl).to.match(new RegExp(`^${server.url}/lazy-static/video-captions/${uuidRegex}-ar.vtt$`))
           }
 
@@ -269,8 +263,6 @@ describe('Test video captions', function () {
 
           if (server === servers[0]) {
             expectStartWith(caption2.fileUrl, objectStorage.getMockCaptionFileBaseUrl())
-            expect(caption2.captionPath).to.be.null
-
             oldFileUrlsZh.push(caption2.fileUrl)
           }
 
@@ -311,8 +303,6 @@ describe('Test video captions', function () {
 
         if (server === servers[0]) {
           expectStartWith(caption.fileUrl, objectStorage.getMockCaptionFileBaseUrl())
-          expect(caption.captionPath).to.be.null
-
           oldFileUrlsAr.push(caption.fileUrl)
         }
 

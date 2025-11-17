@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { remove } from 'fs-extra/esm'
-import { readdir } from 'fs/promises'
-import { join } from 'path'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
-  makeGetRequest,
+  makeRawRequest,
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { expect } from 'chai'
+import { remove } from 'fs-extra/esm'
+import { readdir } from 'fs/promises'
+import { join } from 'path'
 import { SQLCommand } from '../shared/sql-command.js'
 
 function listStoryboardFiles (server: PeerTubeServer) {
@@ -84,7 +84,7 @@ describe('Test create generate storyboard job CLI', function () {
         const { storyboards } = await server.storyboard.list({ id: uuid })
         expect(storyboards).to.have.lengthOf(1)
 
-        await makeGetRequest({ url: server.url, path: storyboards[0].storyboardPath, expectedStatus: HttpStatusCode.OK_200 })
+        await makeRawRequest({ url: storyboards[0].fileUrl, expectedStatus: HttpStatusCode.OK_200 })
       }
     }
   })
@@ -108,7 +108,7 @@ describe('Test create generate storyboard job CLI', function () {
         const { storyboards } = await server.storyboard.list({ id: uuid })
         expect(storyboards).to.have.lengthOf(1)
 
-        await makeGetRequest({ url: server.url, path: storyboards[0].storyboardPath, expectedStatus: HttpStatusCode.OK_200 })
+        await makeRawRequest({ url: storyboards[0].fileUrl, expectedStatus: HttpStatusCode.OK_200 })
       }
     }
   })

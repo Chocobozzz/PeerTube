@@ -1,5 +1,5 @@
 export interface Storyboard {
-  // TODO: remove, deprecated in 7.1
+  // TODO: remove, deprecated in 8.0
   storyboardPath: string
 
   fileUrl: string

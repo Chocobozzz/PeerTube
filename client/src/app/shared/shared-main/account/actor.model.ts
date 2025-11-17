@@ -1,4 +1,4 @@
-import { getBackendHost, getAPIUrl } from '@app/helpers'
+import { getBackendHost } from '@app/helpers'
 import { ActorImage, Actor as ServerActor } from '@peertube/peertube-models'
 
 export abstract class Actor implements ServerActor {
@@ -17,7 +17,7 @@ export abstract class Actor implements ServerActor {
 
   isLocal: boolean
 
-  static GET_ACTOR_AVATAR_URL (actor: { avatars: { width: number, fileUrl?: string, url?: string, path: string }[] }, size?: number) {
+  static GET_ACTOR_AVATAR_URL (actor: { avatars: Pick<ActorImage, 'width' | 'fileUrl'>[] }, size?: number) {
     const avatarsAscWidth = actor.avatars.sort((a, b) => a.width - b.width)
 
     const avatar = size && avatarsAscWidth.length > 1
@@ -25,10 +25,8 @@ export abstract class Actor implements ServerActor {
       : avatarsAscWidth[avatarsAscWidth.length - 1] // Biggest one
 
     if (!avatar) return ''
-    if (avatar.fileUrl) return avatar.fileUrl
-    if (avatar.url) return avatar.url
 
-    return getAPIUrl() + avatar.path
+    return avatar.fileUrl
   }
 
   static CREATE_BY_STRING (accountName: string, host: string, forceHostname = false) {

@@ -3,5 +3,5 @@ import { ActivityCaptionUrlObject, ActivityIdentifierObject, ActivityPlaylistUrl
 export interface VideoCaptionObject extends ActivityIdentifierObject {
   automaticallyGenerated: boolean
 
-  url: string | (ActivityCaptionUrlObject | ActivityPlaylistUrlObject)[]
+  url: (ActivityCaptionUrlObject | ActivityPlaylistUrlObject)[]
 }

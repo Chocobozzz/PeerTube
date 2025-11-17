@@ -1,8 +1,7 @@
 import { CacheFileObject } from '@peertube/peertube-models'
-import { MIMETYPES } from '@server/initializers/constants.js'
-import validator from 'validator'
 import { isDateValid } from '../misc.js'
 import { isActivityPubUrlValid } from './misc.js'
+import { isRemoteVideoUrlValid } from './videos.js'
 
 export function isCacheFileObjectValid (object: CacheFileObject) {
   if (object?.type !== 'CacheFile') return false
@@ -20,14 +19,6 @@ function isPlaylistRedundancyUrlValid (url: any) {
     isActivityPubUrlValid(url.href)
 }
 
-// TODO: compat with < 6.1, use isRemoteVideoUrlValid instead in 8.0
 function isRedundancyUrlVideoValid (url: any) {
-  const size = url.size || url['_:size']
-  const fps = url.fps || url['_fps']
-
-  return MIMETYPES.AP_VIDEO.MIMETYPE_EXT[url.mediaType] &&
-    isActivityPubUrlValid(url.href) &&
-    validator.default.isInt(url.height + '', { min: 0 }) &&
-    validator.default.isInt(size + '', { min: 0 }) &&
-    (!fps || validator.default.isInt(fps + '', { min: -1 }))
+  return isRemoteVideoUrlValid(url)
 }

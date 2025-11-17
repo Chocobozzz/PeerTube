@@ -1,13 +1,6 @@
 import { pick } from '@peertube/peertube-core-utils'
 import { ffprobePromise, getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
-import {
-  LiveVideoLatencyMode,
-  ThumbnailType,
-  VideoCommentPolicy,
-  VideoExportJSON,
-  VideoPrivacy,
-  VideoState
-} from '@peertube/peertube-models'
+import { LiveVideoLatencyMode, ThumbnailType, VideoExportJSON, VideoPrivacy, VideoState } from '@peertube/peertube-models'
 import { buildUUID, getFileSize } from '@peertube/peertube-node-utils'
 import { isArray, isBooleanValid, isUUIDValid } from '@server/helpers/custom-validators/misc.js'
 import { isPlayerVideoThemeSettingValid } from '@server/helpers/custom-validators/player-settings.js'
@@ -102,14 +95,7 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
     if (!isBooleanValid(o.waitTranscoding)) o.waitTranscoding = true
 
     if (!o.commentsPolicy || !isVideoCommentsPolicyValid(o.commentsPolicy)) {
-      // Fallback to deprecated property
-      if (isBooleanValid(o.commentsEnabled)) {
-        o.commentsPolicy = o.commentsEnabled === true
-          ? VideoCommentPolicy.ENABLED
-          : VideoCommentPolicy.DISABLED
-      } else {
-        o.commentsPolicy = CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY
-      }
+      o.commentsPolicy = CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY
     }
 
     if (!isVideoSourceFilenameValid(o.source?.inputFilename)) o.source = undefined

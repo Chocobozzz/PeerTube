@@ -31,7 +31,7 @@ export class AboutComponent implements OnInit {
     this.config = this.server.getHTMLConfig()
 
     this.bannerUrl = this.config.instance.banners.length !== 0
-      ? maxBy(this.config.instance.banners, 'width').path
+      ? maxBy(this.config.instance.banners, 'width').fileUrl
       : undefined
 
     this.avatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.config.instance, 110)

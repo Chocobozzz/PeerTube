@@ -92,7 +92,7 @@ describe('Test video comments', function () {
       expect(comment.account.host).to.equal(server.host)
 
       for (const avatar of comment.account.avatars) {
-        await testImage({ url: server.url + avatar.path, name: `avatar-resized-${avatar.width}x${avatar.width}.png` })
+        await testImage({ url: avatar.fileUrl, name: `avatar-resized-${avatar.width}x${avatar.width}.png` })
       }
 
       expect(comment.totalReplies).to.equal(0)
@@ -414,7 +414,6 @@ describe('Test video comments', function () {
 
     it('Should start with 0 comments', async function () {
       const video = await server.videos.get({ id: testVideoUUID })
-      expect(video.commentsEnabled).to.be.true
       expect(video.comments).to.equal(0)
     })
 

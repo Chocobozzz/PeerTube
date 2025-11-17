@@ -7,6 +7,7 @@ import {
   createMultipleServers,
   doubleFollow,
   makeGetRequest,
+  makeRawRequest,
   setAccessTokensToServers,
   setDefaultAccountAvatar,
   setDefaultChannelAvatar,
@@ -39,7 +40,7 @@ describe('House keeping CLI', function () {
 
       for (const { avatars } of [ ...accounts, ...channels ]) {
         for (const avatar of avatars) {
-          await makeGetRequest({ url: servers[0].url, path: avatar.path, expectedStatus: HttpStatusCode.OK_200 })
+          await makeRawRequest({ url: avatar.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
         }
       }
     }

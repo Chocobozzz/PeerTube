@@ -142,7 +142,6 @@ export class VideoSourceModel extends SequelizeModel<VideoSourceModel> {
 
   toFormattedJSON (this: MVideoSource): VideoSource {
     return {
-      filename: this.inputFilename,
       inputFilename: this.inputFilename,
 
       fileUrl: this.fileUrl,

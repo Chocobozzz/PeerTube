@@ -19,7 +19,7 @@ import { sequelizeTypescript } from '@server/initializers/database.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
-import { buildCommentsPolicy, setVideoTags } from '@server/lib/video.js'
+import { setVideoTags } from '@server/lib/video.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoImportModel } from '@server/models/video/video-import.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
@@ -141,7 +141,7 @@ async function buildVideoFromImport ({ channelId, importData, importDataOverride
     category: importDataOverride?.category || importData.category,
     licence: importDataOverride?.licence ?? importData.licence ?? CONFIG.DEFAULTS.PUBLISH.LICENCE,
     language: importDataOverride?.language || importData.language,
-    commentsPolicy: buildCommentsPolicy(importDataOverride),
+    commentsPolicy: importDataOverride?.commentsPolicy ?? CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY,
     downloadEnabled: importDataOverride?.downloadEnabled ?? CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
     waitTranscoding: importDataOverride?.waitTranscoding ?? true,
     state: VideoState.TO_IMPORT,

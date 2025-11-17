@@ -3,7 +3,7 @@ import { VideoConstant } from '../video-constant.model.js'
 export interface VideoCaption {
   language: VideoConstant<string>
 
-  // TODO: remove, deprecated in 7.1
+  // TODO: remove, deprecated in 8.0
   captionPath: string
 
   fileUrl: string

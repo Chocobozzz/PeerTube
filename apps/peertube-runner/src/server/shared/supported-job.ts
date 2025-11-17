@@ -1,4 +1,5 @@
 import {
+  RunnerJobGenerateStoryboardPayload,
   RunnerJobLiveRTMPHLSTranscodingPayload,
   RunnerJobPayload,
   RunnerJobStudioTranscodingPayload,
@@ -7,11 +8,10 @@ import {
   RunnerJobVODAudioMergeTranscodingPayload,
   RunnerJobVODHLSTranscodingPayload,
   RunnerJobVODWebVideoTranscodingPayload,
-  VideoStudioTaskPayload,
-  RunnerJobGenerateStoryboardPayload
+  VideoStudioTaskPayload
 } from '@peertube/peertube-models'
 
-const supportedMatrix: { [ id in RunnerJobType ]: (payload: RunnerJobPayload) => boolean } = {
+const supportedMatrix: { [id in RunnerJobType]: (payload: RunnerJobPayload) => boolean } = {
   'vod-web-video-transcoding': (_payload: RunnerJobVODWebVideoTranscodingPayload) => {
     return true
   },
@@ -36,15 +36,6 @@ const supportedMatrix: { [ id in RunnerJobType ]: (payload: RunnerJobPayload) =>
     return true
   },
   'generate-video-storyboard': (_payload: RunnerJobGenerateStoryboardPayload) => true
-}
-
-export function isJobSupported (job: { type: RunnerJobType, payload: RunnerJobPayload }, enabledJobs?: Set<RunnerJobType>) {
-  if (enabledJobs && !enabledJobs.has(job.type)) return false
-
-  const fn = supportedMatrix[job.type]
-  if (!fn) return false
-
-  return fn(job.payload as any)
 }
 
 export function getSupportedJobsList () {

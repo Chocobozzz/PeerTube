@@ -23,12 +23,8 @@ export function listUserChannelsForSelect (authService: AuthService, options: { 
 }
 
 // ---------------------------------------------------------------------------
-
-function getAvatarPath (c: VideoChannel) {
-  if (!c.avatars || c.avatars.length === 0) return undefined
-
-  return minBy(c.avatars, 'width')?.path || c.avatars[0].path
-}
+// Private
+// ---------------------------------------------------------------------------
 
 function formatChannels (channel: (VideoChannel & { ownerAccountId?: number })[], { editor }: { editor: boolean }) {
   return channel
@@ -38,8 +34,14 @@ function formatChannels (channel: (VideoChannel & { ownerAccountId?: number })[]
       label: c.displayName,
       support: c.support,
       editor,
-      avatarPath: getAvatarPath(c),
+      avatarFileUrl: getAvatarFileUrl(c),
       ownerAccountId: c.ownerAccountId,
       updatedAt: c.updatedAt
     }))
+}
+
+function getAvatarFileUrl (c: VideoChannel) {
+  if (!c.avatars || c.avatars.length === 0) return undefined
+
+  return minBy(c.avatars, 'width')?.fileUrl || c.avatars[0].fileUrl
 }

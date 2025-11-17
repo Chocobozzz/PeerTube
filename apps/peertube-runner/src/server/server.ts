@@ -9,7 +9,7 @@ import { ConfigManager } from '../shared/index.js'
 import { IPCServer } from '../shared/ipc/index.js'
 import { logger } from '../shared/logger.js'
 import { JobWithToken, processJob } from './process/index.js'
-import { getSupportedJobsList, isJobSupported } from './shared/index.js'
+import { getSupportedJobsList } from './shared/index.js'
 
 type PeerTubeServer = PeerTubeServerCommand & {
   runnerToken: string
@@ -31,7 +31,7 @@ export class RunnerServer {
 
   private readonly sockets = new Map<PeerTubeServer, Socket>()
 
-  constructor (private readonly enabledJobs?: Set<RunnerJobType>) {
+  constructor (enabledJobs?: Set<RunnerJobType>) {
     this.enabledJobsArray = enabledJobs
       ? Array.from(enabledJobs)
       : getSupportedJobsList()
