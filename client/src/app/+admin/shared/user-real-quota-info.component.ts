@@ -28,7 +28,7 @@ export class UserRealQuotaInfoComponent implements OnInit {
 
     const resolutions = transcodingConfig.enabledResolutions
     const higherResolution = VideoResolution.H_4K
-    let multiplier = 0
+    let multiplier = 1
 
     for (const resolution of resolutions) {
       multiplier += resolution / higherResolution
@@ -36,7 +36,7 @@ export class UserRealQuotaInfoComponent implements OnInit {
 
     if (transcodingConfig.hls.enabled) multiplier *= 2
 
-    return multiplier * this.getQuotaAsNumber()
+    return Math.round(multiplier * this.getQuotaAsNumber())
   }
 
   getQuotaAsNumber () {

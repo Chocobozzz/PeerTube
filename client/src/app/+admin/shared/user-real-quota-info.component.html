@@ -8,7 +8,7 @@
 
     @if (isTranscodingInformationDisplayed()) {
       <ng-container i18n>
-        Transcoding is enabled so videos size can be at most ~ {{ computeQuotaWithTranscoding() | bytes: 0 }}.
+        Transcoding is enabled so real videos size can be at most ~ {{ computeQuotaWithTranscoding() | bytes: 0 }}.
       </ng-container>
     }
   </div>
