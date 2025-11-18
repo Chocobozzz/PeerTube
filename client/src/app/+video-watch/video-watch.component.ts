@@ -30,7 +30,7 @@ import { LiveVideoService } from '@app/shared/shared-video-live/live-video.servi
 import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 import { PlayerSettingsService } from '@app/shared/shared-video/player-settings.service'
-import { getVideoWatchRSSFeeds, timeToInt } from '@peertube/peertube-core-utils'
+import { getVideoRSSFeeds, timeToInt } from '@peertube/peertube-core-utils'
 import {
   HTMLServerConfig,
   HttpStatusCode,
@@ -1036,7 +1036,14 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.metaService.setDescription(video.description)
 
     this.metaService.setRSSFeeds(
-      getVideoWatchRSSFeeds(getOriginUrl(), this.serverConfig.instance.name, { ...video, privacy: video.privacy.id })
+      getVideoRSSFeeds({
+        url: getOriginUrl(),
+        video: { ...video, privacy: video.privacy.id },
+        titles: {
+          instanceVideosFeed: `${this.serverConfig.instance.name} - Videos feed`,
+          videoCommentsFeed: `${video.name} - Comments feed`
+        }
+      })
     )
   }
 

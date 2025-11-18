@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core'
 import { Meta, Title } from '@angular/platform-browser'
 import { getOriginUrl } from '@app/helpers'
-import { getDefaultRSSFeeds } from '@peertube/peertube-core-utils'
+import { getInstanceRSSFeed } from '@peertube/peertube-core-utils'
 import { HTMLServerConfig } from '@peertube/peertube-models'
 import { ServerService } from '../server'
 
@@ -42,7 +42,12 @@ export class MetaService {
     this.setTitle()
     this.setDescription()
 
-    this.setRSSFeeds(getDefaultRSSFeeds(getOriginUrl(), this.config.instance.name))
+    this.setRSSFeeds([
+      getInstanceRSSFeed({
+        url: getOriginUrl(),
+        title: `${this.config.instance.name} - Videos feed`
+      })
+    ])
   }
 
   setRSSFeeds (rssFeeds: { title: string, url: string }[]) {

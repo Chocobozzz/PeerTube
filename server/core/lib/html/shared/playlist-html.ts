@@ -1,6 +1,7 @@
-import { addQueryParams, escapeHTML, getDefaultRSSFeeds } from '@peertube/peertube-core-utils'
+import { addQueryParams, escapeHTML } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoPlaylistPrivacy } from '@peertube/peertube-models'
 import { Memoize } from '@server/helpers/memoize.js'
+import { getDefaultRSSFeeds } from '@server/lib/rss.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { MVideoPlaylist, MVideoPlaylistFull } from '@server/types/models/index.js'
 import express from 'express'
@@ -31,6 +32,7 @@ export class PlaylistHtml {
     }
 
     return this.buildPlaylistHTML({
+      req,
       html,
       playlist: videoPlaylist,
       addEmbedInfo: true,
@@ -55,6 +57,8 @@ export class PlaylistHtml {
     }
 
     return this.buildPlaylistHTML({
+      req: null,
+
       html,
       playlist,
       addEmbedInfo: true,
@@ -72,6 +76,8 @@ export class PlaylistHtml {
   // ---------------------------------------------------------------------------
 
   private static buildPlaylistHTML (options: {
+    req: express.Request
+
     html: string
     playlist: MVideoPlaylistFull
 
@@ -83,7 +89,7 @@ export class PlaylistHtml {
 
     currentQuery: Record<string, string>
   }) {
-    const { html, playlist, addEmbedInfo, addOG, addTwitterCard, isEmbed, currentQuery = {} } = options
+    const { req, html, playlist, addEmbedInfo, addOG, addTwitterCard, isEmbed, currentQuery = {} } = options
     const escapedTruncatedDescription = TagsHtml.buildEscapedTruncatedDescription(playlist.description)
 
     let htmlResult = TagsHtml.addTitleTag(html, playlist.name)
@@ -130,7 +136,9 @@ export class PlaylistHtml {
       embed,
       oembedUrl: this.getOEmbedUrl(playlist, currentQuery),
 
-      rssFeeds: getDefaultRSSFeeds(WEBSERVER.URL, CONFIG.INSTANCE.NAME)
+      rssFeeds: req
+        ? getDefaultRSSFeeds(req)
+        : []
     }, { playlist })
   }
 

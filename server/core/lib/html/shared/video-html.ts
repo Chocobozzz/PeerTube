@@ -1,6 +1,7 @@
-import { addQueryParams, escapeHTML, getVideoWatchRSSFeeds } from '@peertube/peertube-core-utils'
+import { addQueryParams, escapeHTML } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
 import { Memoize } from '@server/helpers/memoize.js'
+import { getVideoRSSFeeds } from '@server/lib/rss.js'
 import express from 'express'
 import validator from 'validator'
 import { CONFIG } from '../../../initializers/config.js'
@@ -33,6 +34,8 @@ export class VideoHtml {
     }
 
     return this.buildVideoHTML({
+      req,
+
       html,
       video,
       currentQuery: req.query,
@@ -56,6 +59,8 @@ export class VideoHtml {
     }
 
     return this.buildVideoHTML({
+      req: null,
+
       html,
       video,
       addEmbedInfo: true,
@@ -73,6 +78,8 @@ export class VideoHtml {
   // ---------------------------------------------------------------------------
 
   private static buildVideoHTML (options: {
+    req: express.Request
+
     html: string
     video: MVideoThumbnail
 
@@ -84,7 +91,7 @@ export class VideoHtml {
 
     currentQuery: Record<string, string>
   }) {
-    const { html, video, addEmbedInfo, addOG, addTwitterCard, isEmbed, currentQuery = {} } = options
+    const { req, html, video, addEmbedInfo, addOG, addTwitterCard, isEmbed, currentQuery = {} } = options
     const escapedTruncatedDescription = TagsHtml.buildEscapedTruncatedDescription(video.description)
 
     let customHTML = TagsHtml.addTitleTag(html, video.name)
@@ -135,7 +142,9 @@ export class VideoHtml {
       twitterCard,
       schemaType,
 
-      rssFeeds: getVideoWatchRSSFeeds(WEBSERVER.URL, CONFIG.INSTANCE.NAME, video)
+      rssFeeds: req
+        ? getVideoRSSFeeds(video, req)
+        : []
     }, { video })
   }
 

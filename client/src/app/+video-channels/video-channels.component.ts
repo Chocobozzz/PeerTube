@@ -80,8 +80,20 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
         )
       )
       .subscribe(async videoChannel => {
+        const instanceName = this.server.getHTMLConfig().instance.name
+
         this.metaService.setTitle(videoChannel.displayName)
-        this.metaService.setRSSFeeds(getChannelRSSFeeds(getOriginUrl(), this.server.getHTMLConfig().instance.name, videoChannel))
+        this.metaService.setRSSFeeds(
+          getChannelRSSFeeds({
+            url: getOriginUrl(),
+            channel: videoChannel,
+            titles: {
+              instanceVideosFeed: `${instanceName} - Videos feed`,
+              channelVideosFeed: `${videoChannel.displayName} - Videos feed`,
+              channelPodcastFeed: `${videoChannel.displayName} - Podcast feed`
+            }
+          })
+        )
 
         this.channelDescriptionHTML = await this.markdown.textMarkdownToHTML({
           markdown: videoChannel.description,

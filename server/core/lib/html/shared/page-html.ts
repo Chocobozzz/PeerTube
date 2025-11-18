@@ -1,15 +1,9 @@
-import {
-  AVAILABLE_LOCALES,
-  buildFileLocale,
-  escapeHTML,
-  getDefaultLocale,
-  getDefaultRSSFeeds,
-  is18nLocale
-} from '@peertube/peertube-core-utils'
+import { AVAILABLE_LOCALES, buildFileLocale, escapeHTML, getDefaultLocale, is18nLocale } from '@peertube/peertube-core-utils'
 import { HTMLServerConfig } from '@peertube/peertube-models'
 import { isTestOrDevInstance, root, sha256 } from '@peertube/peertube-node-utils'
 import { setClientLanguageCookie } from '@server/helpers/i18n.js'
 import { CONFIG } from '@server/initializers/config.js'
+import { getDefaultRSSFeeds } from '@server/lib/rss.js'
 import { getServerActor } from '@server/models/application/application.js'
 import express from 'express'
 import { pathExists } from 'fs-extra/esm'
@@ -61,7 +55,7 @@ export class PageHtml {
       twitterCard: 'summary_large_image',
       forbidIndexation: false,
       embedIndexation: false,
-      rssFeeds: getDefaultRSSFeeds(WEBSERVER.URL, CONFIG.INSTANCE.NAME)
+      rssFeeds: getDefaultRSSFeeds(req)
     }, {})
 
     return customHTML
