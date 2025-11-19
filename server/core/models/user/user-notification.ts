@@ -380,7 +380,7 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
       buildAccountWhereQuery(
         `SELECT "userNotification"."id" FROM "userNotification" ` +
           `INNER JOIN "account" ON "userNotification"."accountId" = "account"."id" ` +
-          `INNER JOIN actor ON "actor"."id" = "account"."actorId" `
+          `INNER JOIN actor ON "actor"."accountId" = "account"."id" `
       ),
 
       // Remove notifications from muted accounts that followed ours
@@ -388,7 +388,7 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
         `SELECT "userNotification"."id" FROM "userNotification" ` +
           `INNER JOIN "actorFollow" ON "actorFollow".id = "userNotification"."actorFollowId" ` +
           `INNER JOIN actor ON actor.id = "actorFollow"."actorId" ` +
-          `INNER JOIN account ON account."actorId" = actor.id `
+          `INNER JOIN account ON account."id" = actor."accountId" `
       ),
 
       // Remove notifications from muted accounts that commented something
@@ -396,7 +396,7 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
         `SELECT "userNotification"."id" FROM "userNotification" ` +
           `INNER JOIN "actorFollow" ON "actorFollow".id = "userNotification"."actorFollowId" ` +
           `INNER JOIN actor ON actor.id = "actorFollow"."actorId" ` +
-          `INNER JOIN account ON account."actorId" = actor.id `
+          `INNER JOIN account ON account."id" = actor."accountId" `
       ),
 
       // Remove notifications of comments from muted accounts
@@ -404,7 +404,7 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
         `SELECT "userNotification"."id" FROM "userNotification" ` +
           `INNER JOIN "videoComment" ON "videoComment".id = "userNotification"."commentId" ` +
           `INNER JOIN account ON account.id = "videoComment"."accountId" ` +
-          `INNER JOIN actor ON "actor"."id" = "account"."actorId" `
+          `INNER JOIN actor ON "actor"."accountId" = "account"."id" `
       ),
 
       // Remove notifications from muted accounts that invited us to collaborate to a channel
@@ -413,7 +413,7 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
           `INNER JOIN "videoChannelCollaborator" ON "videoChannelCollaborator".id = "userNotification"."channelCollaboratorId" ` +
           `INNER JOIN "videoChannel" ON "videoChannel".id = "videoChannelCollaborator"."channelId" ` +
           `INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ` +
-          `INNER JOIN actor ON "actor"."id" = "account"."actorId" `
+          `INNER JOIN actor ON "actor"."accountId" = "account"."id" `
       )
     ]
 

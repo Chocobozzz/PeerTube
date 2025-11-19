@@ -532,6 +532,7 @@ describe('Test videos filter', function () {
 
     it('Should filter already watched videos by the user', async function () {
       const { id } = await servers[0].videos.upload({ attributes: { name: 'video for history' } })
+      await waitJobs(servers)
 
       for (const path of [ ...paths, userVideosPath ]) {
         const videos = await listVideos({ server: servers[0], path, isLocal: true, excludeAlreadyWatched: true })

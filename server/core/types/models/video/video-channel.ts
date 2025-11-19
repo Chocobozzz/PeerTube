@@ -133,7 +133,7 @@ export type MChannelVideos =
 
 export type MChannelSummary =
   & FunctionProperties<MChannel>
-  & Pick<MChannel, 'id' | 'name' | 'description' | 'actorId'>
+  & Pick<MChannel, 'id' | 'name' | 'description'>
   & Use<'Actor', MActorSummary>
 
 export type MChannelSummaryAccount =

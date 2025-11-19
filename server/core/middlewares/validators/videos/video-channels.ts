@@ -1,6 +1,7 @@
 import { HttpStatusCode, VideosImportInChannelCreate } from '@peertube/peertube-models'
 import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 import { CONFIG } from '@server/initializers/config.js'
+import { loadReservedActorName } from '@server/lib/local-actor.js'
 import { MChannelAccountDefault } from '@server/types/models/index.js'
 import express from 'express'
 import { body, param, query } from 'express-validator'
@@ -11,7 +12,6 @@ import {
   isVideoChannelSupportValid,
   isVideoChannelUsernameValid
 } from '../../../helpers/custom-validators/video-channels.js'
-import { ActorModel } from '../../../models/actor/actor.js'
 import { VideoChannelModel } from '../../../models/video/video-channel.js'
 import { areValidationErrors, checkUserQuota, doesChannelHandleExist } from '../shared/index.js'
 import { doesVideoChannelSyncIdExist } from '../shared/video-channel-syncs.js'
@@ -31,7 +31,7 @@ export const videoChannelsAddValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    const actor = await ActorModel.loadLocalByName(req.body.name)
+    const actor = await loadReservedActorName(req.body.name)
     if (actor) {
       res.fail({
         status: HttpStatusCode.CONFLICT_409,

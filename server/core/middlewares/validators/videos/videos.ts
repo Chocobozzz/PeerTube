@@ -11,7 +11,6 @@ import { isHostValid } from '@server/helpers/custom-validators/servers.js'
 import { VideoLoadType } from '@server/lib/model-loaders/video.js'
 import { Redis } from '@server/lib/redis.js'
 import { buildUploadXFile, safeUploadXCleanup } from '@server/lib/uploadx.js'
-import { getServerActor } from '@server/models/application/application.js'
 import { ExpressPromiseHandler } from '@server/types/express-handler.js'
 import { MUserAccountId, MVideoFullLight } from '@server/types/models/index.js'
 import express from 'express'
@@ -285,8 +284,7 @@ export async function checkVideoFollowConstraints (req: express.Request, res: ex
   if (CONFIG.SEARCH.REMOTE_URI.ANONYMOUS === true) return next()
 
   // Check our instance follows an actor that shared this video
-  const serverActor = await getServerActor()
-  if (await VideoModel.checkVideoHasInstanceFollow(video.id, serverActor.id) === true) return next()
+  if (await VideoModel.checkVideoHasInstanceFollow(video.id) === true) return next()
 
   return res.fail({
     status: HttpStatusCode.FORBIDDEN_403,

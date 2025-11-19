@@ -274,7 +274,7 @@ async function listAccountFollowers (req: express.Request, res: express.Response
   const account = res.locals.account
 
   const channels = await VideoChannelModel.listAllOwnedByAccount(account.id)
-  const actorIds = [ account.actorId ].concat(channels.map(c => c.actorId))
+  const actorIds = [ account.Actor.id ].concat(channels.map(c => c.Actor.id))
 
   const resultList = await ActorFollowModel.listFollowersForApi({
     actorIds,

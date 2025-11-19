@@ -75,11 +75,12 @@ export class UploadImageModel extends SequelizeModel<UploadImageModel> {
       .catch(err => logger.error('Cannot remove upload image file %s.', instance.filename, { err }))
   }
 
-  static listByActor (actor: MActorId) {
+  static listByActor (actor: MActorId, transaction: Transaction) {
     const query = {
       where: {
         actorId: actor.id
-      }
+      },
+      transaction
     }
 
     return UploadImageModel.findAll(query)

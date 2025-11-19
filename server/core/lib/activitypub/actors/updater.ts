@@ -1,6 +1,7 @@
 import { ActivityPubActor, ActorImageType } from '@peertube/peertube-models'
 import { resetSequelizeInstance, runInReadCommittedTransaction } from '@server/helpers/database-utils.js'
 import { logger } from '@server/helpers/logger.js'
+import { AccountModel } from '@server/models/account/account.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { MAccount, MActor, MActorFull, MChannel } from '@server/types/models/index.js'
 import { upsertAPPlayerSettings } from '../player-settings.js'
@@ -56,8 +57,17 @@ export class APActorUpdater {
       })
 
       await runInReadCommittedTransaction(async t => {
-        await this.actor.save({ transaction: t })
         await this.accountOrChannel.save({ transaction: t })
+
+        if (accountOrChannel instanceof VideoChannelModel) {
+          this.actor.videoChannelId = accountOrChannel.id
+          this.actor.accountId = null
+        } else if (accountOrChannel instanceof AccountModel) {
+          this.actor.accountId = accountOrChannel.id
+          this.actor.videoChannelId = null
+        }
+
+        await this.actor.save({ transaction: t })
       })
 
       // Update the following line to template string

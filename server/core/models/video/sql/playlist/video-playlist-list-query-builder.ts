@@ -162,7 +162,7 @@ export class VideoPlaylistListQueryBuilder extends AbstractListQuery {
     if (this.builtAccountJoin) return
 
     this.subQueryJoin += ' INNER JOIN "account" "OwnerAccount" ON "OwnerAccount"."id" = "VideoPlaylistModel"."ownerAccountId" ' +
-      'INNER JOIN "actor" "OwnerAccount->Actor" ON "OwnerAccount->Actor"."id" = "OwnerAccount"."actorId" ' +
+      'INNER JOIN "actor" "OwnerAccount->Actor" ON "OwnerAccount->Actor"."accountId" = "OwnerAccount"."id" ' +
       'LEFT JOIN "server" "OwnerAccount->Actor->Server" ON "OwnerAccount->Actor"."serverId" = "OwnerAccount->Actor->Server"."id" '
 
     this.builtAccountJoin = true
@@ -172,7 +172,7 @@ export class VideoPlaylistListQueryBuilder extends AbstractListQuery {
     if (this.builtVideoChannelJoin) return
 
     this.subQueryJoin += ' LEFT JOIN "videoChannel" "VideoChannel" ON "VideoPlaylistModel"."videoChannelId" = "VideoChannel"."id" ' +
-      'LEFT JOIN "actor" "VideoChannel->Actor" ON "VideoChannel->Actor"."id" = "VideoChannel"."actorId" ' +
+      'LEFT JOIN "actor" "VideoChannel->Actor" ON "VideoChannel->Actor"."videoChannelId" = "VideoChannel"."id" ' +
       'LEFT JOIN "server" "VideoChannel->Actor->Server" ON "VideoChannel->Actor"."serverId" = "VideoChannel->Actor->Server"."id" '
 
     this.builtVideoChannelJoin = true
@@ -209,7 +209,7 @@ export class VideoPlaylistListQueryBuilder extends AbstractListQuery {
     if (this.builtChannelAvatarJoin) return
 
     this.join += `LEFT JOIN "actorImage" "VideoChannel->Actor->Avatars" ` +
-      `ON "VideoChannel->Actor->Avatars"."actorId" = "VideoPlaylistModel"."VideoChannel.actorId" ` +
+      `ON "VideoChannel->Actor->Avatars"."actorId" = "VideoPlaylistModel"."VideoChannel.Actor.id" ` +
       `AND "VideoChannel->Actor->Avatars"."type" = ${ActorImageType.AVATAR} `
 
     this.builtChannelAvatarJoin = true

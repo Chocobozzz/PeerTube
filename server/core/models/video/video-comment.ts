@@ -655,7 +655,7 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
   static listRemoteCommentUrlsOfLocalVideos () {
     const query = `SELECT "videoComment".url FROM "videoComment" ` +
       `INNER JOIN account ON account.id = "videoComment"."accountId" ` +
-      `INNER JOIN actor ON actor.id = "account"."actorId" AND actor."serverId" IS NOT NULL ` +
+      `INNER JOIN actor ON actor."accountId" = "account"."id" AND actor."serverId" IS NOT NULL ` +
       `INNER JOIN video ON video.id = "videoComment"."videoId" AND video.remote IS FALSE`
 
     return VideoCommentModel.sequelize.query<{ url: string }>(query, {

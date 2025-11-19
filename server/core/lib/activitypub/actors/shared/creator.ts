@@ -1,61 +1,76 @@
 import { ActivityPubActor, ActorImageType, ActorImageType_Type } from '@peertube/peertube-models'
 import { isAccountActor, isChannelActor } from '@server/helpers/actors.js'
+import { logger, loggerTagsFactory, LoggerTagsFn } from '@server/helpers/logger.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { ServerModel } from '@server/models/server/server.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
-import {
-  MAccount,
-  MAccountDefault,
-  MActor,
-  MActorFullActor,
-  MActorId,
-  MActorImages,
-  MChannel,
-  MServer
-} from '@server/types/models/index.js'
-import { Op, Transaction } from 'sequelize'
+import { MAccount, MActor, MActorFullActor, MActorImages, MChannel, MServer } from '@server/types/models/index.js'
+import { Transaction } from 'sequelize'
 import { upsertAPPlayerSettings } from '../../player-settings.js'
 import { updateActorImages } from '../image.js'
 import { getActorAttributesFromObject, getActorDisplayNameFromObject, getImagesInfoFromObject } from './object-to-model-attributes.js'
 import { fetchActorFollowsCount } from './url-to-object.js'
 
 export class APActorCreator {
+  private readonly lTags: LoggerTagsFn
+
   constructor (
     private readonly actorObject: ActivityPubActor,
     private readonly ownerActor?: MActorFullActor
   ) {
+    this.lTags = loggerTagsFactory('ap', 'actor', 'create', this.actorObject.id)
   }
 
   async create (): Promise<MActorFullActor> {
+    logger.debug('Creating remote actor from object', { actorObject: this.actorObject, ...this.lTags() })
+
     const { followersCount, followingCount } = await fetchActorFollowsCount(this.actorObject)
 
-    const actorInstance = new ActorModel(getActorAttributesFromObject(this.actorObject, followersCount, followingCount))
+    const actorInstance = new ActorModel(getActorAttributesFromObject(this.actorObject, followersCount, followingCount)) as MActorFullActor
 
     const actor = await sequelizeTypescript.transaction(async t => {
       const server = await this.setServer(actorInstance, t)
 
-      const { actorCreated, created } = await this.saveActor(actorInstance, t)
+      // Remove
+      const existingActor = await ActorModel.loadByUniqueKeys({
+        preferredUsername: actorInstance.preferredUsername,
+        url: actorInstance.url,
+        serverId: actorInstance.serverId,
+        transaction: t
+      })
 
-      await this.setImageIfNeeded(actorCreated, ActorImageType.AVATAR, t)
-      await this.setImageIfNeeded(actorCreated, ActorImageType.BANNER, t)
+      if (existingActor) {
+        logger.debug(`Actor ${existingActor.id} already exists, removing existing one before creating a new one`, this.lTags())
 
-      await this.tryToFixActorUrlIfNeeded(actorCreated, actorInstance, created, t)
-
-      if (isAccountActor(actorCreated.type)) {
-        actorCreated.Account = await this.saveAccount(actorCreated, t) as MAccountDefault
-        actorCreated.Account.Actor = actorCreated
+        if (existingActor.videoChannelId) {
+          const channel = await VideoChannelModel.loadAndPopulateAccount(existingActor.videoChannelId, t)
+          await channel.destroy({ transaction: t })
+        } else if (existingActor.accountId) {
+          const account = await AccountModel.findByPk(existingActor.accountId, { transaction: t })
+          if (account) await account.destroy({ transaction: t })
+        }
       }
 
-      if (isChannelActor(actorCreated.type)) {
-        const channel = await this.saveVideoChannel(actorCreated, t)
-        actorCreated.VideoChannel = Object.assign(channel, { Actor: actorCreated, Account: this.ownerActor.Account })
+      if (isAccountActor(this.actorObject.type)) {
+        const account = await this.saveAccount(actorInstance, t)
+        await actorInstance.save({ transaction: t })
+
+        actorInstance.Account = Object.assign(account, { Actor: actorInstance })
+      } else if (isChannelActor(this.actorObject.type)) {
+        const channel = await this.saveVideoChannel(actorInstance, t)
+        await actorInstance.save({ transaction: t })
+
+        actorInstance.VideoChannel = Object.assign(channel, { Actor: actorInstance, Account: this.ownerActor.Account })
       }
 
-      actorCreated.Server = server
+      await this.setImageIfNeeded(actorInstance, ActorImageType.AVATAR, t)
+      await this.setImageIfNeeded(actorInstance, ActorImageType.BANNER, t)
 
-      return actorCreated
+      actorInstance.Server = server
+
+      return actorInstance
     })
 
     if (isChannelActor(actor.type) && typeof this.actorObject.playerSettings === 'string') {
@@ -97,72 +112,26 @@ export class APActorCreator {
     return updateActorImages(actor as MActorImages, type, imagesInfo, t)
   }
 
-  private async saveActor (actor: MActor, t: Transaction) {
-    // Force the actor creation using findOrCreate() instead of save()
-    // Sometimes Sequelize skips the save() when it thinks the instance already exists
-    // (which could be false in a retried query)
-    const [ actorCreated, created ] = await ActorModel.findOrCreate<MActorFullActor>({
-      defaults: actor.toJSON(),
-      where: {
-        [Op.or]: [
-          {
-            url: actor.url
-          },
-          {
-            serverId: actor.serverId,
-            preferredUsername: actor.preferredUsername
-          }
-        ]
-      },
-      transaction: t
-    })
+  private async saveAccount (actor: MActor, t: Transaction) {
+    const accountCreated = await AccountModel.create({
+      name: getActorDisplayNameFromObject(this.actorObject),
+      description: this.actorObject.summary
+    }, { transaction: t })
 
-    return { actorCreated, created }
-  }
-
-  private async tryToFixActorUrlIfNeeded (actorCreated: MActor, newActor: MActor, created: boolean, t: Transaction) {
-    // Try to fix non HTTPS accounts of remote instances that fixed their URL afterwards
-    if (created !== true && actorCreated.url !== newActor.url) {
-      // Only fix http://example.com/account/djidane to https://example.com/account/djidane
-      if (actorCreated.url.replace(/^http:\/\//, '') !== newActor.url.replace(/^https:\/\//, '')) {
-        throw new Error(`Actor from DB with URL ${actorCreated.url} does not correspond to actor ${newActor.url}`)
-      }
-
-      actorCreated.url = newActor.url
-      await actorCreated.save({ transaction: t })
-    }
-  }
-
-  private async saveAccount (actor: MActorId, t: Transaction) {
-    const [ accountCreated ] = await AccountModel.findOrCreate({
-      defaults: {
-        name: getActorDisplayNameFromObject(this.actorObject),
-        description: this.actorObject.summary,
-        actorId: actor.id
-      },
-      where: {
-        actorId: actor.id
-      },
-      transaction: t
-    })
+    actor.accountId = accountCreated.id
 
     return accountCreated as MAccount
   }
 
-  private async saveVideoChannel (actor: MActorId, t: Transaction) {
-    const [ videoChannelCreated ] = await VideoChannelModel.findOrCreate({
-      defaults: {
-        name: getActorDisplayNameFromObject(this.actorObject),
-        description: this.actorObject.summary,
-        support: this.actorObject.support,
-        actorId: actor.id,
-        accountId: this.ownerActor.Account.id
-      },
-      where: {
-        actorId: actor.id
-      },
-      transaction: t
-    })
+  private async saveVideoChannel (actor: MActor, t: Transaction) {
+    const videoChannelCreated = await VideoChannelModel.create({
+      name: getActorDisplayNameFromObject(this.actorObject),
+      description: this.actorObject.summary,
+      support: this.actorObject.support,
+      accountId: this.ownerActor.Account.id
+    }, { transaction: t })
+
+    actor.videoChannelId = videoChannelCreated.id
 
     return videoChannelCreated as MChannel
   }

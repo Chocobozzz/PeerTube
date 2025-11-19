@@ -27,7 +27,7 @@ export async function synchronizeChannel (options: {
   }
 
   try {
-    const user = await UserModel.loadByChannelActorId(channel.actorId)
+    const user = await UserModel.loadByChannelActorId(channel.Actor.id)
     const youtubeDL = new YoutubeDLWrapper(
       externalChannelUrl,
       ServerConfigManager.Instance.getEnabledResolutions('vod'),

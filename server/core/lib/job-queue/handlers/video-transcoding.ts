@@ -41,7 +41,7 @@ async function processVideoTranscoding (job: Job) {
     return undefined
   }
 
-  const user = await UserModel.loadByChannelActorId(video.VideoChannel.actorId)
+  const user = await UserModel.loadByChannelActorId(video.VideoChannel.Actor.id)
 
   const handler = handlers[payload.type]
 

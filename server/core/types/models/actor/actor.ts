@@ -138,7 +138,7 @@ export type MActorFullActor =
 
 export type MActorSummary =
   & FunctionProperties<MActor>
-  & Pick<MActor, 'id' | 'preferredUsername' | 'url' | 'serverId'>
+  & Pick<MActor, 'id' | 'preferredUsername' | 'url' | 'serverId' | 'accountId' | 'videoChannelId'>
   & Use<'Server', MServerHost>
   & Use<'Avatars', MActorImage[]>
 
@@ -166,7 +166,7 @@ export type MActorAPI = Omit<
 
 export type MActorSummaryFormattable =
   & FunctionProperties<MActor>
-  & Pick<MActor, 'url' | 'preferredUsername' | 'serverId'>
+  & Pick<MActor, 'url' | 'preferredUsername' | 'serverId' | 'accountId' | 'videoChannelId'>
   & Use<'Server', MServerHost>
   & Use<'Avatars', MActorImageFormattable[]>
 

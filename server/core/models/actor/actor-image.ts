@@ -3,7 +3,7 @@ import { getLowercaseExtension } from '@peertube/peertube-node-utils'
 import { MActorId, MActorImage, MActorImageFormattable, MActorImagePath } from '@server/types/models/index.js'
 import { remove } from 'fs-extra/esm'
 import { join } from 'path'
-import { Op } from 'sequelize'
+import { Op, Transaction } from 'sequelize'
 import { AfterDestroy, AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
 import { logger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
@@ -100,19 +100,20 @@ export class ActorImageModel extends SequelizeModel<ActorImageModel> {
     return ActorImageModel.findOne(query)
   }
 
-  static listByActor (actor: MActorId, type: ActorImageType_Type) {
+  static listByActor (actor: MActorId, type: ActorImageType_Type, transaction?: Transaction) {
     const query = {
       where: {
         actorId: actor.id,
         type
-      }
+      },
+      transaction
     }
 
     return ActorImageModel.findAll(query)
   }
 
-  static async listActorImages (actor: MActorId) {
-    const promises = [ ActorImageType.AVATAR, ActorImageType.BANNER ].map(type => ActorImageModel.listByActor(actor, type))
+  static async listActorImages (actor: MActorId, transaction?: Transaction) {
+    const promises = [ ActorImageType.AVATAR, ActorImageType.BANNER ].map(type => ActorImageModel.listByActor(actor, type, transaction))
 
     const [ avatars, banners ] = await Promise.all(promises)
 

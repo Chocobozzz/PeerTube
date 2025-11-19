@@ -79,7 +79,12 @@ videoChannelRouter.get(
   asyncMiddleware(listVideoChannels)
 )
 
-videoChannelRouter.post('/', authenticate, asyncMiddleware(videoChannelsAddValidator), asyncRetryTransactionMiddleware(createVideoChannel))
+videoChannelRouter.post(
+  '/',
+  authenticate,
+  asyncMiddleware(videoChannelsAddValidator),
+  asyncRetryTransactionMiddleware(createVideoChannel)
+)
 
 videoChannelRouter.put(
   '/:handle',
@@ -207,7 +212,7 @@ async function createVideoChannel (req: express.Request, res: express.Response) 
 
   await JobQueue.Instance.createJob({
     type: 'actor-keys',
-    payload: { actorId: videoChannelCreated.actorId }
+    payload: { actorId: videoChannelCreated.Actor.id }
   })
 
   auditLogger.create(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannelCreated.toFormattedJSON()))
@@ -417,7 +422,7 @@ async function listVideoChannelFollowers (req: express.Request, res: express.Res
   const channel = res.locals.videoChannel
 
   const resultList = await ActorFollowModel.listFollowersForApi({
-    actorIds: [ channel.actorId ],
+    actorIds: [ channel.Actor.id ],
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,

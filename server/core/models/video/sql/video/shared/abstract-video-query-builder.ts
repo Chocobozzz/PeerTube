@@ -38,7 +38,7 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
 
   protected includeChannels () {
     this.addJoin('INNER JOIN "videoChannel" AS "VideoChannel" ON "video"."channelId" = "VideoChannel"."id"')
-    this.addJoin('INNER JOIN "actor" AS "VideoChannel->Actor" ON "VideoChannel"."actorId" = "VideoChannel->Actor"."id"')
+    this.addJoin('INNER JOIN "actor" AS "VideoChannel->Actor" ON "VideoChannel"."id" = "VideoChannel->Actor"."videoChannelId"')
 
     this.addJoin(
       'LEFT OUTER JOIN "server" AS "VideoChannel->Actor->Server" ON "VideoChannel->Actor"."serverId" = "VideoChannel->Actor->Server"."id"'
@@ -63,7 +63,7 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
   protected includeAccounts () {
     this.addJoin('INNER JOIN "account" AS "VideoChannel->Account" ON "VideoChannel"."accountId" = "VideoChannel->Account"."id"')
     this.addJoin(
-      'INNER JOIN "actor" AS "VideoChannel->Account->Actor" ON "VideoChannel->Account"."actorId" = "VideoChannel->Account->Actor"."id"'
+      'INNER JOIN "actor" AS "VideoChannel->Account->Actor" ON "VideoChannel->Account"."id" = "VideoChannel->Account->Actor"."accountId"'
     )
 
     this.addJoin(
@@ -73,7 +73,7 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
 
     this.addJoin(
       'LEFT OUTER JOIN "actorImage" AS "VideoChannel->Account->Actor->Avatars" ' +
-        'ON "VideoChannel->Account"."actorId"= "VideoChannel->Account->Actor->Avatars"."actorId" ' +
+        'ON "VideoChannel->Account->Actor"."id" = "VideoChannel->Account->Actor->Avatars"."actorId" ' +
         `AND "VideoChannel->Account->Actor->Avatars"."type" = ${ActorImageType.AVATAR}`
     )
 

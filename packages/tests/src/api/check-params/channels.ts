@@ -383,6 +383,15 @@ describe('Test video channels API validator', function () {
     it('Should fail to delete the last user video channel', async function () {
       await command.delete({ channelName: 'root_channel', expectedStatus: HttpStatusCode.CONFLICT_409 })
     })
+
+    it('Should fail to create a channel with the same name as the deleted one', async function () {
+      await command.create({
+        attributes: {
+          name: 'super_channel'
+        },
+        expectedStatus: HttpStatusCode.CONFLICT_409
+      })
+    })
   })
 
   after(async function () {

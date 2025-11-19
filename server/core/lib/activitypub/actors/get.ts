@@ -38,7 +38,7 @@ async function getOrCreateAPActor (
   updateCollections = false
 ): Promise<MActorFullActor | MActorAccountChannelId> {
   const actorUrl = getAPId(activityActor)
-  let actor = await loadActorFromDB(actorUrl, fetchType)
+  let actor = await loadActorByUrl(actorUrl, fetchType)
 
   let created = false
   let accountPlaylistsUrl: string
@@ -117,24 +117,12 @@ async function findOwner (rootUrl: string, attributedTo: APObjectId[] | APObject
 // ---------------------------------------------------------------------------
 
 export {
-  getOrCreateAPOwner,
+  findOwner,
   getOrCreateAPActor,
-  findOwner
+  getOrCreateAPOwner
 }
 
 // ---------------------------------------------------------------------------
-
-async function loadActorFromDB (actorUrl: string, fetchType: ActorLoadByUrlType) {
-  let actor = await loadActorByUrl(actorUrl, fetchType)
-
-  // Orphan actor (not associated to an account of channel) so recreate it
-  if (actor && (!actor.Account && !actor.VideoChannel)) {
-    await actor.destroy()
-    actor = null
-  }
-
-  return actor
-}
 
 async function scheduleOutboxFetchIfNeeded (actor: MActor, created: boolean, refreshed: boolean, updateCollections: boolean) {
   if ((created === true || refreshed === true) && updateCollections === true) {

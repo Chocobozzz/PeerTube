@@ -10,7 +10,6 @@ import {
 import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { UserModel } from '@server/models/user/user.js'
-import { MActorDefault } from '@server/types/models/actor/index.js'
 import { Transaction } from 'sequelize'
 import { SERVER_ACTOR_NAME, WEBSERVER } from '../initializers/constants.js'
 import { sequelizeTypescript } from '../initializers/database.js'
@@ -135,22 +134,19 @@ export async function createLocalAccountWithoutKeys (parameters: {
   type?: ActivityPubActorType
 }) {
   const { name, displayName, userId, applicationId, t, type = 'Person' } = parameters
-  const url = getLocalAccountActivityPubUrl(name)
 
-  const actorInstance = buildActorInstance(type, url, name)
-  const actorInstanceCreated: MActorDefault = await actorInstance.save({ transaction: t })
-
-  const accountInstance = new AccountModel({
+  const account = await AccountModel.create({
     name: displayName || name,
     userId,
-    applicationId,
-    actorId: actorInstanceCreated.id
-  })
+    applicationId
+  }, { transaction: t })
 
-  const accountInstanceCreated: MAccountDefault = await accountInstance.save({ transaction: t })
-  accountInstanceCreated.Actor = actorInstanceCreated
+  const url = getLocalAccountActivityPubUrl(name)
+  const actor = buildActorInstance(type, url, name)
+  actor.accountId = account.id
+  await actor.save({ transaction: t })
 
-  return accountInstanceCreated
+  return Object.assign(account, { Actor: actor })
 }
 
 export async function createApplicationActor (applicationId: number) {

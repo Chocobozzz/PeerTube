@@ -182,14 +182,13 @@ describe('Test users with multiple servers', function () {
     }
   })
 
-  // FIXME: test doesn't work
-  // it('Should not have actor files', async () => {
-  //   for (const server of servers) {
-  //     for (const userAvatarFilename of userAvatarFilenames) {
-  //       await checkActorFilesWereRemoved(userAvatarFilename, server)
-  //     }
-  //   }
-  // })
+  it('Should not have actor files', async () => {
+    for (const server of servers) {
+      for (const userAvatarFilename of userAvatarFilenames) {
+        await checkActorFilesWereRemoved(userAvatarFilename, server)
+      }
+    }
+  })
 
   it('Should not have video files', async () => {
     for (const server of servers) {

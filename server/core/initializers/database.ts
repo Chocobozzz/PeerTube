@@ -1,5 +1,6 @@
 import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { ActorCustomPageModel } from '@server/models/account/actor-custom-page.js'
+import { ActorReservedModel } from '@server/models/actor/actor-reserved.js'
 import { UploadImageModel } from '@server/models/application/upload-image.js'
 import { AccountAutomaticTagPolicyModel } from '@server/models/automatic-tag/account-automatic-tag-policy.js'
 import { AutomaticTagModel } from '@server/models/automatic-tag/automatic-tag.js'
@@ -195,7 +196,8 @@ export async function initDatabaseModels (silent: boolean) {
     UploadImageModel,
     VideoLiveScheduleModel,
     PlayerSettingModel,
-    VideoChannelCollaboratorModel
+    VideoChannelCollaboratorModel,
+    ActorReservedModel
   ])
 
   // Check extensions exist in the database

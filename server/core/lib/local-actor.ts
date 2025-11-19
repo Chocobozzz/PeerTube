@@ -1,9 +1,10 @@
+import { ActivityPubActorType, ActorImageType, ActorImageType_Type } from '@peertube/peertube-models'
+import { buildUUID, getLowercaseExtension } from '@peertube/peertube-node-utils'
+import { ActorReservedModel } from '@server/models/actor/actor-reserved.js'
+import { ActorModel } from '@server/models/actor/actor.js'
 import { remove } from 'fs-extra/esm'
 import { join } from 'path'
 import { Transaction } from 'sequelize'
-import { ActivityPubActorType, ActorImageType, ActorImageType_Type } from '@peertube/peertube-models'
-import { ActorModel } from '@server/models/actor/actor.js'
-import { buildUUID, getLowercaseExtension } from '@peertube/peertube-node-utils'
 import { retryTransactionWrapper } from '../helpers/database-utils.js'
 import { CONFIG } from '../initializers/config.js'
 import { ACTOR_IMAGES_SIZE, WEBSERVER } from '../initializers/constants.js'
@@ -54,26 +55,28 @@ export async function updateLocalActorImageFiles (options: {
   const processedImages = await Promise.all(ACTOR_IMAGES_SIZE[type].map(processImageSize))
   await remove(imagePhysicalFile.path)
 
-  return retryTransactionWrapper(() => sequelizeTypescript.transaction(async t => {
-    const actorImagesInfo = processedImages.map(({ imageName, imageSize }) => ({
-      name: imageName,
-      fileUrl: null,
-      height: imageSize.height,
-      width: imageSize.width,
-      onDisk: true
-    }))
+  return retryTransactionWrapper(() =>
+    sequelizeTypescript.transaction(async t => {
+      const actorImagesInfo = processedImages.map(({ imageName, imageSize }) => ({
+        name: imageName,
+        fileUrl: null,
+        height: imageSize.height,
+        width: imageSize.width,
+        onDisk: true
+      }))
 
-    const updatedActor = await updateActorImages(accountOrChannel.Actor, type, actorImagesInfo, t)
-    await updatedActor.save({ transaction: t })
+      const updatedActor = await updateActorImages(accountOrChannel.Actor, type, actorImagesInfo, t)
+      await updatedActor.save({ transaction: t })
 
-    if (sendActorUpdate) {
-      await sendUpdateActor(accountOrChannel, t)
-    }
+      if (sendActorUpdate) {
+        await sendUpdateActor(accountOrChannel, t)
+      }
 
-    return type === ActorImageType.AVATAR
-      ? updatedActor.Avatars
-      : updatedActor.Banners
-  }))
+      return type === ActorImageType.AVATAR
+        ? updatedActor.Avatars
+        : updatedActor.Banners
+    })
+  )
 }
 
 export async function deleteLocalActorImageFile (accountOrChannel: MAccountDefault | MChannelDefault, type: ActorImageType_Type) {
@@ -91,16 +94,20 @@ export async function deleteLocalActorImageFile (accountOrChannel: MAccountDefau
 
 // ---------------------------------------------------------------------------
 
-export async function findAvailableLocalActorName (baseActorName: string, transaction?: Transaction) {
-  let actor = await ActorModel.loadLocalByName(baseActorName, transaction)
-  if (!actor) return baseActorName
+export async function findAvailableLocalActorName (baseName: string, transaction?: Transaction) {
+  let actor = await loadReservedActorName(baseName, transaction)
+  if (!actor) return baseName
 
   for (let i = 1; i < 30; i++) {
-    const name = `${baseActorName}-${i}`
+    const name = `${baseName}-${i}`
 
-    actor = await ActorModel.loadLocalByName(name, transaction)
+    actor = await loadReservedActorName(name, transaction)
     if (!actor) return name
   }
 
   throw new Error('Cannot find available actor local name (too much iterations).')
+}
+
+export async function loadReservedActorName (baseName: string, transaction?: Transaction) {
+  return await ActorModel.loadLocalByName(baseName, transaction) ?? await ActorReservedModel.loadByName(baseName, transaction)
 }

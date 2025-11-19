@@ -19,6 +19,7 @@ import {
   DefaultScope,
   ForeignKey,
   HasMany,
+  HasOne,
   Is,
   Scopes,
   Table,
@@ -42,7 +43,6 @@ import {
   type MChannel
 } from '../../types/models/video/index.js'
 import { AccountModel, ScopeNames as AccountModelScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account.js'
-import { ActorFollowModel } from '../actor/actor-follow.js'
 import { ActorImageModel } from '../actor/actor-image.js'
 import { ActorModel, actorSummaryAttributes } from '../actor/actor.js'
 import { ServerModel, serverSummaryAttributes } from '../server/server.js'
@@ -52,7 +52,7 @@ import { VideoChannelCollaboratorModel } from './video-channel-collaborator.js'
 import { VideoPlaylistModel } from './video-playlist.js'
 import { VideoModel } from './video.js'
 
-const channelSummaryAttributes = [ 'id', 'name', 'description', 'actorId' ] as const satisfies (keyof AttributesOnly<AccountModel>)[]
+const channelSummaryAttributes = [ 'id', 'name', 'description' ] as const satisfies (keyof AttributesOnly<AccountModel>)[]
 
 export enum ScopeNames {
   SUMMARY = 'SUMMARY',
@@ -155,9 +155,6 @@ export type SummaryOptions = {
 
     {
       fields: [ 'accountId' ]
-    },
-    {
-      fields: [ 'actorId' ]
     }
   ]
 })
@@ -185,15 +182,12 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
   @UpdatedAt
   declare updatedAt: Date
 
-  @ForeignKey(() => ActorModel)
-  @Column
-  declare actorId: number
-
-  @BelongsTo(() => ActorModel, {
+  @HasOne(() => ActorModel, {
     foreignKey: {
-      allowNull: false
+      allowNull: true
     },
-    onDelete: 'cascade'
+    onDelete: 'cascade',
+    hooks: true
   })
   declare Actor: Awaited<ActorModel>
 
@@ -254,25 +248,11 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
       instance.Actor = await instance.$get('Actor', { transaction: options.transaction })
     }
 
-    await ActorFollowModel.removeFollowsOf(instance.Actor.id, options.transaction)
-
     if (instance.Actor.isLocal()) {
       return sendDeleteActor(instance.Actor, options.transaction)
     }
 
     return undefined
-  }
-
-  @AfterDestroy
-  static async deleteActorIfRemote (instance: VideoChannelModel, options) {
-    if (!instance.Actor) {
-      instance.Actor = await instance.$get('Actor', { transaction: options.transaction })
-    }
-
-    // Remote actor, delete it
-    if (instance.Actor.serverId) {
-      await instance.Actor.destroy({ transaction: options.transaction })
-    }
   }
 
   // ---------------------------------------------------------------------------
@@ -323,7 +303,7 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
       FROM "videoChannel" AS "VideoChannelModel"
       ${videoJoin}
       INNER JOIN "account" AS "Account" ON "VideoChannelModel"."accountId" = "Account"."id"
-      INNER JOIN "actor" AS "Account->Actor" ON "Account"."actorId" = "Account->Actor"."id"
+      INNER JOIN "actor" AS "Account->Actor" ON "Account"."id" = "Account->Actor"."accountId"
         AND "Account->Actor"."serverId" IS NULL`
 
       return VideoChannelModel.sequelize.query<{ count: string }>(query, options)

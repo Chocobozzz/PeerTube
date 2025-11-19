@@ -41,7 +41,7 @@ export class UserListQueryBuilder extends AbstractListQuery {
     if (this.builtAccountJoin) return
 
     this.join += ' INNER JOIN "account" "Account" ON "Account"."userId" = "UserModel"."id" ' +
-      'INNER JOIN "actor" "Account->Actor" ON "Account->Actor"."id" = "Account"."actorId" ' +
+      'INNER JOIN "actor" "Account->Actor" ON "Account->Actor"."accountId" = "Account"."id" ' +
       'LEFT JOIN "server" "Account->Actor->Server" ON "Account->Actor"."serverId" = "Account->Actor->Server"."id" ' +
       'LEFT JOIN "actorImage" "Account->Actor->Avatars" ON "Account->Actor->Avatars"."actorId" = "Account->Actor"."id" ' +
       `  AND "Account->Actor->Avatars"."type" = ${ActorImageType.AVATAR} `
@@ -53,7 +53,8 @@ export class UserListQueryBuilder extends AbstractListQuery {
     if (this.builtChannelsJoin) return
 
     this.join += ' LEFT JOIN "videoChannel" "Account->VideoChannels" ON "Account"."id" = "Account->VideoChannels"."accountId" ' +
-      'LEFT JOIN "actor" "Account->VideoChannels->Actor" ON "Account->VideoChannels->Actor"."id" = "Account->VideoChannels"."actorId" ' +
+      'LEFT JOIN "actor" "Account->VideoChannels->Actor" ' +
+      '  ON "Account->VideoChannels->Actor"."videoChannelId" = "Account->VideoChannels"."id" ' +
       'LEFT JOIN "server" "Account->VideoChannels->Actor->Server" ' +
       '  ON "Account->VideoChannels->Actor->Server"."id" = "Account->VideoChannels->Actor"."serverId" ' +
       'LEFT JOIN "actorImage" "Account->VideoChannels->Actor->Avatars" ' +
@@ -74,7 +75,7 @@ export class UserListQueryBuilder extends AbstractListQuery {
       'LEFT JOIN (' +
       '  "videoChannel" "Account->Collabs->Channel" ' +
       '  INNER JOIN "actor" AS "Account->Collabs->Channel->Actor" ' +
-      '    ON "Account->Collabs->Channel"."actorId" = "Account->Collabs->Channel->Actor"."id"' +
+      '    ON "Account->Collabs->Channel"."id" = "Account->Collabs->Channel->Actor"."videoChannelId" ' +
       '  LEFT JOIN "server" AS "Account->Collabs->Channel->Actor->Server" ' +
       '    ON "Account->Collabs->Channel->Actor"."serverId" = "Account->Collabs->Channel->Actor->Server"."id"' +
       '  LEFT JOIN "actorImage" AS "Account->Collabs->Channel->Actor->Avatars" ' +

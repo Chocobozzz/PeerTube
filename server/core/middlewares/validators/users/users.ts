@@ -2,6 +2,7 @@ import { arrayify, forceNumber } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, ServerErrorCode, UserRole, UserUpdateMe } from '@peertube/peertube-models'
 import { isStringArray } from '@server/helpers/custom-validators/search.js'
 import { isNSFWFlagsValid } from '@server/helpers/custom-validators/videos.js'
+import { loadReservedActorName } from '@server/lib/local-actor.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { MUser } from '@server/types/models/user/user.js'
 import express from 'express'
@@ -33,7 +34,6 @@ import { isVideoChannelUsernameValid } from '../../../helpers/custom-validators/
 import { logger } from '../../../helpers/logger.js'
 import { isThemeRegistered } from '../../../lib/plugins/theme-utils.js'
 import { Redis } from '../../../lib/redis.js'
-import { ActorModel } from '../../../models/actor/actor.js'
 import {
   areValidationErrors,
   checkEmailDoesNotAlreadyExist,
@@ -89,7 +89,7 @@ export const usersAddValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res, { omitBodyLog: true })) return
-    if (!await checkUsernameOrEmailDoNotAlreadyExist(req.body.username, req.body.email, res)) return
+    if (!await checkUsernameOrEmailDoNotAlreadyExist({ username: req.body.username, email: req.body.email, req, res })) return
 
     const authUser = res.locals.oauth.token.User
     if (authUser.role !== UserRole.ADMINISTRATOR && req.body.role !== UserRole.USER) {
@@ -104,7 +104,7 @@ export const usersAddValidator = [
         return res.fail({ message: 'Channel name cannot be the same as user username.' })
       }
 
-      const existing = await ActorModel.loadLocalByName(req.body.channelName)
+      const existing = await loadReservedActorName(req.body.channelName)
       if (existing) {
         return res.fail({
           status: HttpStatusCode.CONFLICT_409,
@@ -209,7 +209,11 @@ export const usersUpdateValidator = [
 
     if (!checkCanModerate(user, res)) return
 
-    if (req.body.email && req.body.email !== user.email && !await checkEmailDoesNotAlreadyExist(req.body.email, res)) return
+    if (
+      req.body.email &&
+      req.body.email !== user.email &&
+      !await checkEmailDoesNotAlreadyExist({ email: req.body.email, req, res })
+    ) return
 
     return next()
   }
@@ -323,7 +327,11 @@ export const usersUpdateMeValidator = [
 
     if (areValidationErrors(req, res, { omitBodyLog: true })) return
 
-    if (body.email && body.email !== user.email && !await checkEmailDoesNotAlreadyExist(body.email, res)) return
+    if (
+      body.email &&
+      body.email !== user.email &&
+      !await checkEmailDoesNotAlreadyExist({ email: body.email, req, res })
+    ) return
 
     return next()
   }

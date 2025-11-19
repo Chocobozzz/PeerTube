@@ -215,24 +215,6 @@ export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
     return [ actorFollow, created ]
   }
 
-  static removeFollowsOf (actorId: number, t?: Transaction) {
-    const query = {
-      where: {
-        [Op.or]: [
-          {
-            actorId
-          },
-          {
-            targetActorId: actorId
-          }
-        ]
-      },
-      transaction: t
-    }
-
-    return ActorFollowModel.destroy(query)
-  }
-
   // Remove actor follows with a score of 0 (too many requests where they were unreachable)
   static async removeBadActorFollows () {
     const actorFollows = await ActorFollowModel.listBadActorFollows()
@@ -659,7 +641,7 @@ export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
       'WHERE id IN (' +
       'SELECT "actorFollow"."id" FROM "actorFollow" ' +
       'INNER JOIN "actor" ON "actor"."id" = "actorFollow"."targetActorId" ' +
-      `WHERE "actorFollow"."actorId" = ${me.Account.actorId} ` + // I'm the follower
+      `WHERE "actorFollow"."actorId" = ${me.Account.Actor.id} ` + // I'm the follower
       `AND "actor"."serverId" IN (${serverIdsString})` + // Criteria on followings
       ')'
 

@@ -173,7 +173,7 @@ export class UserNotificationListQueryBuilder extends AbstractListQuery {
       ON "Abuse->VideoCommentAbuse->VideoComment"."videoId" = "Abuse->VideoCommentAbuse->VideoComment->Video"."id"
     LEFT JOIN (
       "account" AS "Abuse->FlaggedAccount"
-      ${this.getActorJoin('Abuse->FlaggedAccount')}
+      ${this.getActorJoin('Abuse->FlaggedAccount', 'accountId')}
     ) ON "Abuse"."flaggedAccountId" = "Abuse->FlaggedAccount"."id"
 
     LEFT JOIN (
@@ -192,21 +192,21 @@ export class UserNotificationListQueryBuilder extends AbstractListQuery {
       "actorFollow" AS "ActorFollow"
       INNER JOIN "actor" AS "ActorFollow->ActorFollower" ON "ActorFollow"."actorId" = "ActorFollow->ActorFollower"."id"
       INNER JOIN "account" AS "ActorFollow->ActorFollower->Account"
-        ON "ActorFollow->ActorFollower"."id" = "ActorFollow->ActorFollower->Account"."actorId"
+        ON "ActorFollow->ActorFollower"."accountId" = "ActorFollow->ActorFollower->Account"."id"
       ${this.getActorImageJoin('ActorFollow->ActorFollower')}
       ${this.getActorServerJoin('ActorFollow->ActorFollower')}
 
       INNER JOIN "actor" AS "ActorFollow->ActorFollowing" ON "ActorFollow"."targetActorId" = "ActorFollow->ActorFollowing"."id"
       LEFT JOIN "videoChannel" AS "ActorFollow->ActorFollowing->VideoChannel"
-        ON "ActorFollow->ActorFollowing"."id" = "ActorFollow->ActorFollowing->VideoChannel"."actorId"
+        ON "ActorFollow->ActorFollowing"."videoChannelId" = "ActorFollow->ActorFollowing->VideoChannel"."id"
       LEFT JOIN "account" AS "ActorFollow->ActorFollowing->Account"
-        ON "ActorFollow->ActorFollowing"."id" = "ActorFollow->ActorFollowing->Account"."actorId"
+        ON "ActorFollow->ActorFollowing"."accountId" = "ActorFollow->ActorFollowing->Account"."id"
       ${this.getActorServerJoin('ActorFollow->ActorFollowing')}
     ) ON "UserNotificationModel"."actorFollowId" = "ActorFollow"."id"
 
     LEFT JOIN (
       "account" AS "Account"
-      ${this.getActorJoin('Account')}
+      ${this.getActorJoin('Account', 'accountId')}
     ) ON "UserNotificationModel"."accountId" = "Account"."id"
 
     LEFT JOIN "userRegistration" as "UserRegistration" ON "UserNotificationModel"."userRegistrationId" = "UserRegistration"."id"
@@ -243,17 +243,17 @@ export class UserNotificationListQueryBuilder extends AbstractListQuery {
 
   private getAccountJoin (tableName: string, columnJoin: string) {
     return `INNER JOIN "account" AS "${tableName}->Account" ON "${tableName}"."${columnJoin}" = "${tableName}->Account"."id" ` +
-      this.getActorJoin(`${tableName}->Account`)
+      this.getActorJoin(`${tableName}->Account`, 'accountId')
   }
 
   private getChannelJoin (tableName: string, columnJoin: string, aliasTableName = 'VideoChannel') {
     // eslint-disable-next-line max-len
     return `INNER JOIN "videoChannel" AS "${tableName}->${aliasTableName}" ON "${tableName}"."${columnJoin}" = "${tableName}->${aliasTableName}".id ` +
-      this.getActorJoin(`${tableName}->${aliasTableName}`)
+      this.getActorJoin(`${tableName}->${aliasTableName}`, 'videoChannelId')
   }
 
-  private getActorJoin (tableName: string) {
-    return `INNER JOIN "actor" AS "${tableName}->Actor" ON "${tableName}"."actorId" = "${tableName}->Actor"."id" ` +
+  private getActorJoin (tableName: string, column: string) {
+    return `INNER JOIN "actor" AS "${tableName}->Actor" ON "${tableName}"."id" = "${tableName}->Actor"."${column}" ` +
       this.getActorImageJoin(`${tableName}->Actor`) +
       this.getActorServerJoin(`${tableName}->Actor`)
   }

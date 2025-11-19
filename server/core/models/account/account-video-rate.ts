@@ -211,7 +211,7 @@ export class AccountVideoRateModel extends SequelizeModel<AccountVideoRateModel>
   static listRemoteRateUrlsOfLocalVideos () {
     const query = `SELECT "accountVideoRate".url FROM "accountVideoRate" ` +
       `INNER JOIN account ON account.id = "accountVideoRate"."accountId" ` +
-      `INNER JOIN actor ON actor.id = account."actorId" AND actor."serverId" IS NOT NULL ` +
+      `INNER JOIN actor ON "actor"."accountId" = account."id" AND actor."serverId" IS NOT NULL ` +
       `INNER JOIN video ON video.id = "accountVideoRate"."videoId" AND video.remote IS FALSE`
 
     return AccountVideoRateModel.sequelize.query<{ url: string }>(query, {
@@ -231,12 +231,12 @@ export class AccountVideoRateModel extends SequelizeModel<AccountVideoRateModel>
       transaction: t,
       include: [
         {
-          attributes: [ 'actorId' ],
+          attributes: [ 'id' ],
           model: AccountModel.unscoped(),
           required: true,
           include: [
             {
-              attributes: [ 'url' ],
+              attributes: [ 'url', 'accountId' ],
               model: ActorModel.unscoped(),
               required: true
             }

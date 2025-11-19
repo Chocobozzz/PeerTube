@@ -715,12 +715,12 @@ export class UserModel extends SequelizeModel<UserModel> {
           include: [
             {
               required: true,
-              attributes: [ 'id' ],
+              attributes: [],
               model: VideoChannelModel.unscoped(),
               include: [
                 {
                   required: true,
-                  attributes: [ 'id' ],
+                  attributes: [],
                   model: VideoModel.unscoped(),
                   where: {
                     id: videoId
@@ -754,7 +754,7 @@ export class UserModel extends SequelizeModel<UserModel> {
   }
 
   static loadByChannelActorId (videoChannelActorId: number): Promise<MUserDefault> {
-    const query = {
+    return UserModel.findOne({
       include: [
         {
           required: true,
@@ -763,18 +763,23 @@ export class UserModel extends SequelizeModel<UserModel> {
           include: [
             {
               required: true,
-              attributes: [ 'id' ],
+              attributes: [],
               model: VideoChannelModel.unscoped(),
-              where: {
-                actorId: videoChannelActorId
-              }
+              include: [
+                {
+                  model: ActorModel.unscoped(),
+                  required: true,
+                  attributes: [],
+                  where: {
+                    id: videoChannelActorId
+                  }
+                }
+              ]
             }
           ]
         }
       ]
-    }
-
-    return UserModel.findOne(query)
+    })
   }
 
   static loadByAccountId (accountId: number): Promise<MUserDefault> {
@@ -794,20 +799,25 @@ export class UserModel extends SequelizeModel<UserModel> {
   }
 
   static loadByAccountActorId (accountActorId: number): Promise<MUserDefault> {
-    const query = {
+    return UserModel.findOne({
       include: [
         {
           required: true,
           attributes: [ 'id' ],
           model: AccountModel.unscoped(),
-          where: {
-            actorId: accountActorId
-          }
+          include: [
+            {
+              model: ActorModel.unscoped(),
+              required: true,
+              attributes: [ 'id' ],
+              where: {
+                id: accountActorId
+              }
+            }
+          ]
         }
       ]
-    }
-
-    return UserModel.findOne(query)
+    })
   }
 
   static loadByLiveId (liveId: number): Promise<MUser> {
@@ -819,12 +829,12 @@ export class UserModel extends SequelizeModel<UserModel> {
           required: true,
           include: [
             {
-              attributes: [ 'id' ],
+              attributes: [],
               model: VideoChannelModel.unscoped(),
               required: true,
               include: [
                 {
-                  attributes: [ 'id' ],
+                  attributes: [],
                   model: VideoModel.unscoped(),
                   required: true,
                   include: [

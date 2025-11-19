@@ -220,7 +220,7 @@ export class AccountBlocklistModel extends SequelizeModel<AccountBlocklistModel>
     const rawQuery = `SELECT "accountBlocklist"."accountId", "actor"."preferredUsername" AS "name", "server"."host" ` +
       `FROM "accountBlocklist" ` +
       `INNER JOIN "account" ON "account"."id" = "accountBlocklist"."targetAccountId" ` +
-      `INNER JOIN "actor" ON "actor"."id" = "account"."actorId" ` +
+      `INNER JOIN "actor" ON "actor"."accountId" = "account"."id" ` +
       `LEFT JOIN "server" ON "server"."id" = "actor"."serverId" ` +
       `WHERE "accountBlocklist"."accountId" IN (${createSafeIn(AccountBlocklistModel.sequelize, byAccountIds)}) ` +
       `AND (${handlesWhere.join(' OR ')})`

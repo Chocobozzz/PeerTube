@@ -13,7 +13,7 @@ export class NewAbuseMessageForReporter extends AbstractNewAbuseMessage {
 
     await this.loadMessageAccount()
 
-    const reporter = await UserModel.loadByAccountActorId(this.abuse.ReporterAccount.actorId)
+    const reporter = await UserModel.loadByAccountActorId(this.abuse.ReporterAccount.Actor.id)
     // Don't notify my own message
     if (reporter.Account.id === this.message.accountId) return
 

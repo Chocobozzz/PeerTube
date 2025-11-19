@@ -57,7 +57,7 @@ export class ChannelsImporter extends AbstractUserImporter<ChannelExportJSON, Ch
 
       await this.importPlayerSettings(videoChannelCreated, channelImportData)
 
-      await JobQueue.Instance.createJob({ type: 'actor-keys', payload: { actorId: videoChannelCreated.actorId } })
+      await JobQueue.Instance.createJob({ type: 'actor-keys', payload: { actorId: videoChannelCreated.Actor.id } })
 
       for (const type of [ ActorImageType.AVATAR, ActorImageType.BANNER ]) {
         const relativePath = type === ActorImageType.AVATAR

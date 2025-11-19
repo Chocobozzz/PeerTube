@@ -7,6 +7,7 @@ import { ModelCache } from '@server/models/shared/model-cache.js'
 import { Op, QueryTypes, Transaction, col, fn, literal, where } from 'sequelize'
 import {
   AllowNull,
+  BeforeDestroy,
   BelongsTo,
   Column,
   CreatedAt,
@@ -14,7 +15,6 @@ import {
   DefaultScope,
   ForeignKey,
   HasMany,
-  HasOne,
   Is,
   Scopes,
   Table,
@@ -54,12 +54,15 @@ import { VideoChannelModel } from '../video/video-channel.js'
 import { VideoModel } from '../video/video.js'
 import { ActorFollowModel } from './actor-follow.js'
 import { ActorImageModel } from './actor-image.js'
+import { ActorReservedModel } from './actor-reserved.js'
 
 export const actorSummaryAttributes = [
   'id',
   'preferredUsername',
   'url',
-  'serverId'
+  'serverId',
+  'accountId',
+  'videoChannelId'
 ] as const satisfies (keyof AttributesOnly<ActorModel>)[]
 
 enum ScopeNames {
@@ -159,6 +162,14 @@ export const unusedActorAttributesForAPI: (keyof AttributesOnly<ActorModel>)[] =
     },
     {
       fields: [ 'followersUrl' ]
+    },
+    {
+      fields: [ 'accountId' ],
+      unique: true
+    },
+    {
+      fields: [ 'videoChannelId' ],
+      unique: true
     }
   ]
 })
@@ -300,23 +311,48 @@ export class ActorModel extends SequelizeModel<ActorModel> {
   })
   declare Server: Awaited<ServerModel>
 
-  @HasOne(() => AccountModel, {
+  @ForeignKey(() => VideoChannelModel)
+  @Column
+  declare videoChannelId: number
+
+  @BelongsTo(() => VideoChannelModel, {
     foreignKey: {
       allowNull: true
     },
-    onDelete: 'cascade',
-    hooks: true
+    onDelete: 'cascade'
+  })
+  declare VideoChannel: Awaited<VideoChannelModel>
+
+  @ForeignKey(() => AccountModel)
+  @Column
+  declare accountId: number
+
+  @BelongsTo(() => AccountModel, {
+    foreignKey: {
+      allowNull: true
+    },
+    onDelete: 'cascade'
   })
   declare Account: Awaited<AccountModel>
 
-  @HasOne(() => VideoChannelModel, {
-    foreignKey: {
-      allowNull: true
-    },
-    onDelete: 'cascade',
-    hooks: true
-  })
-  declare VideoChannel: Awaited<VideoChannelModel>
+  // ---------------------------------------------------------------------------
+
+  @BeforeDestroy
+  static async reserveActor (instance: ActorModel, options) {
+    if (instance.isLocal()) {
+      await ActorReservedModel.create({
+        preferredUsername: instance.preferredUsername,
+        url: instance.url,
+        publicKey: instance.publicKey,
+        privateKey: instance.privateKey,
+        actorId: instance.id,
+        accountId: instance.accountId,
+        videoChannelId: instance.videoChannelId
+      }, { transaction: options.transaction })
+    }
+
+    return undefined
+  }
 
   // ---------------------------------------------------------------------------
 
@@ -362,14 +398,14 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     return ActorModel.unscoped().findByPk(id, { transaction })
   }
 
-  static loadFull (id: number): Promise<MActorFull> {
-    return ActorModel.scope(ScopeNames.FULL).findByPk(id)
+  static loadFull (id: number, transaction?: Transaction): Promise<MActorFull> {
+    return ActorModel.scope(ScopeNames.FULL).findByPk(id, { transaction })
   }
 
   static loadAccountActorFollowerUrlByVideoId (videoId: number, transaction: Transaction) {
     const query = `SELECT "actor"."id" AS "id", "actor"."followersUrl" AS "followersUrl" ` +
       `FROM "actor" ` +
-      `INNER JOIN "account" ON "actor"."id" = "account"."actorId" ` +
+      `INNER JOIN "account" ON "actor"."accountId" = "account"."id" ` +
       `INNER JOIN "videoChannel" ON "videoChannel"."accountId" = "account"."id" ` +
       `INNER JOIN "video" ON "video"."channelId" = "videoChannel"."id" AND "video"."id" = :videoId`
 
@@ -505,6 +541,30 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     return ActorModel.scope(ScopeNames.FULL).findOne(query)
   }
 
+  static loadByUniqueKeys (options: {
+    preferredUsername: string
+    serverId: number
+    url: string
+    transaction: Transaction
+  }) {
+    const { preferredUsername, serverId, url, transaction } = options
+
+    return ActorModel.findOne({
+      where: {
+        [Op.or]: [
+          {
+            url
+          },
+          {
+            serverId,
+            preferredUsername
+          }
+        ]
+      },
+      transaction
+    })
+  }
+
   // ---------------------------------------------------------------------------
 
   static async recalculateFollowsCount (options: {
@@ -581,6 +641,14 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     return ActorModel.unscoped().findOne(query)
   }
 
+  // ---------------------------------------------------------------------------
+
+  static getPublicKeyUrl (url: string) {
+    return url + '#main-key'
+  }
+
+  // ---------------------------------------------------------------------------
+
   getSharedInbox (this: MActorWithInboxes) {
     return this.sharedInboxUrl || this.inboxUrl
   }
@@ -642,7 +710,7 @@ export class ActorModel extends SequelizeModel<ActorModel> {
         sharedInbox: this.sharedInboxUrl
       },
       publicKey: {
-        id: this.getPublicKeyUrl(),
+        id: ActorModel.getPublicKeyUrl(this.url),
         owner: this.url,
         publicKeyPem: this.publicKey
       },
@@ -688,10 +756,6 @@ export class ActorModel extends SequelizeModel<ActorModel> {
 
   getPlaylistsUrl () {
     return this.url + '/playlists'
-  }
-
-  getPublicKeyUrl () {
-    return this.url + '#main-key'
   }
 
   isLocal () {

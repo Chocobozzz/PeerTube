@@ -346,7 +346,9 @@ describe('Test <head> HTML tags', function () {
       const feedUrl = `${servers[0].url}/feeds/podcast/videos.xml?videoChannelId=${servers[0].store.channel.id}`
 
       expect(text).to.contain(
-        `<link rel="alternate" type="application/rss+xml" title="${servers[0].store.channel.displayName} podcast feed" href="${feedUrl}" />`
+        `<link rel="alternate" type="application/rss+xml" title="${
+          servers[0].store.channel.displayName
+        } - Podcast feed" href="${feedUrl}" />`
       )
     }
 

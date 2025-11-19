@@ -1,6 +1,6 @@
+import { forceNumber } from '@peertube/peertube-core-utils'
 import { literal, Op, QueryTypes, Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
-import { forceNumber } from '@peertube/peertube-core-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants.js'
 import { MActorDefault, MActorFollowersUrl, MActorId } from '../../types/models/index.js'
@@ -121,8 +121,11 @@ export class VideoShareModel extends SequelizeModel<VideoShareModel> {
     return VideoShareModel.sequelize.query<MActorId & MActorFollowersUrl>(query, options)
   }
 
-  static loadActorsWhoSharedVideosOf (actorOwnerId: number, t: Transaction): Promise<MActorDefault[]> {
-    const safeOwnerId = forceNumber(actorOwnerId)
+  static listActorsWhoSharedVideosOf (options: {
+    actorOwnerId: number
+    transaction: Transaction
+  }): Promise<MActorDefault[]> {
+    const safeOwnerId = forceNumber(options.actorOwnerId)
 
     // /!\ On actor model
     const query = {
@@ -134,20 +137,24 @@ export class VideoShareModel extends SequelizeModel<VideoShareModel> {
               `  INNER JOIN "video" ON "videoShare"."videoId" = "video"."id" ` +
               `  INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ` +
               `  INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ` +
-              `  WHERE "videoShare"."actorId" = "ActorModel"."id" AND "account"."actorId" = ${safeOwnerId} ` +
+              `  INNER JOIN "actor" ON "actor"."accountId" = "account"."id" ` +
+              `  WHERE "videoShare"."actorId" = "ActorModel"."id" AND "actor"."id" = ${safeOwnerId} ` +
               `  LIMIT 1` +
               `)`
           )
         ]
       },
-      transaction: t
+      transaction: options.transaction
     }
 
     return ActorModel.findAll(query)
   }
 
-  static loadActorsByVideoChannel (videoChannelId: number, t: Transaction): Promise<MActorDefault[]> {
-    const safeChannelId = forceNumber(videoChannelId)
+  static listActorsByVideoChannel (options: {
+    channelId: number
+    transaction: Transaction
+  }): Promise<MActorDefault[]> {
+    const safeChannelId = forceNumber(options.channelId)
 
     // /!\ On actor model
     const query = {
@@ -163,7 +170,7 @@ export class VideoShareModel extends SequelizeModel<VideoShareModel> {
           )
         ]
       },
-      transaction: t
+      transaction: options.transaction
     }
 
     return ActorModel.findAll(query)

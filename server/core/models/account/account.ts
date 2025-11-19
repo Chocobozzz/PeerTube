@@ -3,7 +3,6 @@ import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { ModelCache } from '@server/models/shared/model-cache.js'
 import { FindOptions, IncludeOptions, Includeable, Op, Transaction, WhereOptions, literal } from 'sequelize'
 import {
-  AfterDestroy,
   AllowNull,
   BeforeDestroy,
   BelongsTo,
@@ -14,6 +13,7 @@ import {
   DefaultScope,
   ForeignKey,
   HasMany,
+  HasOne,
   Is,
   Scopes,
   Table,
@@ -32,7 +32,6 @@ import {
   MAccountSummaryFormattable,
   MChannelIdHost
 } from '../../types/models/index.js'
-import { ActorFollowModel } from '../actor/actor-follow.js'
 import { ActorImageModel } from '../actor/actor-image.js'
 import { ActorModel, actorSummaryAttributes } from '../actor/actor.js'
 import { ApplicationModel } from '../application/application.js'
@@ -54,7 +53,7 @@ export enum ScopeNames {
   SUMMARY = 'SUMMARY'
 }
 
-const accountSummaryAttributes = [ 'id', 'name', 'actorId' ] as const satisfies (keyof AttributesOnly<AccountModel>)[]
+const accountSummaryAttributes = [ 'id', 'name' ] as const satisfies (keyof AttributesOnly<AccountModel>)[]
 
 export type SummaryOptions = {
   actorRequired?: boolean // Default: true
@@ -141,10 +140,6 @@ export type SummaryOptions = {
   tableName: 'account',
   indexes: [
     {
-      fields: [ 'actorId' ],
-      unique: true
-    },
-    {
       fields: [ 'applicationId' ]
     },
     {
@@ -168,18 +163,6 @@ export class AccountModel extends SequelizeModel<AccountModel> {
 
   @UpdatedAt
   declare updatedAt: Date
-
-  @ForeignKey(() => ActorModel)
-  @Column
-  declare actorId: number
-
-  @BelongsTo(() => ActorModel, {
-    foreignKey: {
-      allowNull: false
-    },
-    onDelete: 'cascade'
-  })
-  declare Actor: Awaited<ActorModel>
 
   @ForeignKey(() => UserModel)
   @Column
@@ -269,31 +252,26 @@ export class AccountModel extends SequelizeModel<AccountModel> {
   })
   declare VideoChannelCollaborators: Awaited<VideoChannelCollaboratorModel>[]
 
+  @HasOne(() => ActorModel, {
+    foreignKey: {
+      allowNull: true
+    },
+    hooks: true,
+    onDelete: 'cascade'
+  })
+  declare Actor: Awaited<ActorModel>
+
   @BeforeDestroy
   static async sendDeleteIfOwned (instance: AccountModel, options) {
     if (!instance.Actor) {
       instance.Actor = await instance.$get('Actor', { transaction: options.transaction })
     }
 
-    await ActorFollowModel.removeFollowsOf(instance.Actor.id, options.transaction)
-
     if (instance.isLocal()) {
       return sendDeleteActor(instance.Actor, options.transaction)
     }
 
     return undefined
-  }
-
-  @AfterDestroy
-  static async deleteActorIfRemote (instance: AccountModel, options) {
-    if (!instance.Actor) {
-      instance.Actor = await instance.$get('Actor', { transaction: options.transaction })
-    }
-
-    // Remote actor, delete it
-    if (instance.Actor.serverId) {
-      await instance.Actor.destroy({ transaction: options.transaction })
-    }
   }
 
   // ---------------------------------------------------------------------------
@@ -407,18 +385,7 @@ export class AccountModel extends SequelizeModel<AccountModel> {
     return AccountModel.findOne(query)
   }
 
-  static listForApi (start: number, count: number, sort: string) {
-    const query = {
-      offset: start,
-      limit: count,
-      order: getSort(sort)
-    }
-
-    return Promise.all([
-      AccountModel.count(),
-      AccountModel.findAll(query)
-    ]).then(([ total, data ]) => ({ total, data }))
-  }
+  // ---------------------------------------------------------------------------
 
   static loadAccountIdFromVideo (videoId: number): Promise<MAccount> {
     const query = {
@@ -441,6 +408,21 @@ export class AccountModel extends SequelizeModel<AccountModel> {
     }
 
     return AccountModel.findOne(query)
+  }
+
+  // ---------------------------------------------------------------------------
+
+  static listForApi (start: number, count: number, sort: string) {
+    const query = {
+      offset: start,
+      limit: count,
+      order: getSort(sort)
+    }
+
+    return Promise.all([
+      AccountModel.count(),
+      AccountModel.findAll(query)
+    ]).then(([ total, data ]) => ({ total, data }))
   }
 
   static listLocalsForSitemap (sort: string): Promise<MAccountHost[]> {
@@ -469,6 +451,8 @@ export class AccountModel extends SequelizeModel<AccountModel> {
       ]
     })
   }
+
+  // ---------------------------------------------------------------------------
 
   toFormattedJSON (this: MAccountFormattable): Account {
     return {

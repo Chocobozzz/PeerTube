@@ -831,7 +831,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     if (!instance.isLocal()) return undefined
 
     // Lazy load channels
-    if (!instance.VideoChannel) {
+    if (!instance.VideoChannel?.Account?.Actor) {
       instance.VideoChannel = await instance.$get('VideoChannel', {
         include: [
           ActorModel,
@@ -938,7 +938,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       const queryVideo = 'SELECT ' + select + ' FROM "video" AS "Video" ' +
         'INNER JOIN "videoChannel" AS "VideoChannel" ON "VideoChannel"."id" = "Video"."channelId" ' +
         'INNER JOIN "account" AS "Account" ON "Account"."id" = "VideoChannel"."accountId" ' +
-        'WHERE "Account"."actorId" = ' + actorId
+        'INNER JOIN "actor" AS "Actor" ON "Actor"."accountId" = "Account"."id" ' +
+        'WHERE "Actor"."id" = ' + actorId
       const queryVideoShare = 'SELECT ' + select + ' FROM "videoShare" AS "VideoShare" ' +
         'INNER JOIN "video" AS "Video" ON "Video"."id" = "VideoShare"."videoId" ' +
         'WHERE "VideoShare"."actorId" = ' + actorId
@@ -1529,22 +1530,24 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     })
   }
 
-  static checkVideoHasInstanceFollow (videoId: number, followerActorId: number) {
-    // Instances only share videos
-    const query = 'SELECT 1 FROM "videoShare" ' +
+  static async checkVideoHasInstanceFollow (videoId: number) {
+    const serverActor = await getServerActor()
+
+    const query = 'SELECT 1 FROM "videoShare" ' + // Instances/channels we follow that shared the video
       'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
-      'WHERE "actorFollow"."actorId" = $followerActorId AND "actorFollow"."state" = \'accepted\' AND "videoShare"."videoId" = $videoId ' +
+      'WHERE "actorFollow"."actorId" = $serverActorId AND "actorFollow"."state" = \'accepted\' AND "videoShare"."videoId" = $videoId ' +
       'UNION ' +
-      'SELECT 1 FROM "video" ' +
+      'SELECT 1 FROM "video" ' + // Accounts we follow that published the video
       'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
       'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
-      'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "account"."actorId" ' +
-      'WHERE "actorFollow"."actorId" = $followerActorId AND "actorFollow"."state" = \'accepted\' AND "video"."id" = $videoId ' +
+      'INNER JOIN "actor" ON "actor"."accountId" = "account"."id" ' +
+      'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "actor"."id" ' +
+      'WHERE "actorFollow"."actorId" = $serverActorId AND "actorFollow"."state" = \'accepted\' AND "video"."id" = $videoId ' +
       'LIMIT 1'
 
     const options = {
       type: QueryTypes.SELECT as QueryTypes.SELECT,
-      bind: { followerActorId, videoId },
+      bind: { serverActorId: serverActor.id, videoId },
       raw: true
     }
 

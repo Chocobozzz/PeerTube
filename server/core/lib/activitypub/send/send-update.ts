@@ -193,10 +193,10 @@ async function getToFollowersOfForActor (accountOrChannel: MChannelDefault | MAc
   let actorsInvolved: MActor[]
   if (accountOrChannel instanceof AccountModel) {
     // Actors that shared my videos are involved too
-    actorsInvolved = await VideoShareModel.loadActorsWhoSharedVideosOf(accountOrChannel.Actor.id, transaction)
+    actorsInvolved = await VideoShareModel.listActorsWhoSharedVideosOf({ actorOwnerId: accountOrChannel.Actor.id, transaction })
   } else {
     // Actors that shared videos of my channel are involved too
-    actorsInvolved = await VideoShareModel.loadActorsByVideoChannel(accountOrChannel.id, transaction)
+    actorsInvolved = await VideoShareModel.listActorsByVideoChannel({ channelId: accountOrChannel.id, transaction })
   }
 
   actorsInvolved.push(accountOrChannel.Actor)

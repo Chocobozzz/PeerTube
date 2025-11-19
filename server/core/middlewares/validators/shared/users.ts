@@ -1,7 +1,7 @@
 import { forceNumber } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, UserRightType } from '@peertube/peertube-models'
+import { loadReservedActorName } from '@server/lib/local-actor.js'
 import { getByEmailPermissive } from '@server/lib/user.js'
-import { ActorModel } from '@server/models/actor/actor.js'
 import { UserModel } from '@server/models/user/user.js'
 import { MAccountId, MUserAccountId, MUserDefault } from '@server/types/models/index.js'
 import express from 'express'
@@ -35,23 +35,30 @@ export function checkUserPendingEmailExistPermissive (email: string, res: expres
   )
 }
 
-export async function checkUsernameOrEmailDoNotAlreadyExist (username: string, email: string, res: express.Response) {
+export async function checkUsernameOrEmailDoNotAlreadyExist (options: {
+  username: string
+  email: string
+  req: express.Request
+  res: express.Response
+}) {
+  const { username, email, req, res } = options
+
   const existingUser = await UserModel.loadByUsernameOrEmailCaseInsensitive(username)
   const existingEmail = await UserModel.loadByUsernameOrEmailCaseInsensitive(email)
 
   if (existingUser.length > 0 || existingEmail.length > 0) {
     res.fail({
       status: HttpStatusCode.CONFLICT_409,
-      message: 'User with this username or email already exists.'
+      message: req.t('User with this username or email already exists.')
     })
     return false
   }
 
-  const actor = await ActorModel.loadLocalByName(username)
+  const actor = await loadReservedActorName(username)
   if (actor) {
     res.fail({
       status: HttpStatusCode.CONFLICT_409,
-      message: 'Another actor (account/channel) with this name on this instance already exists or has already existed.'
+      message: req.t('Another actor (account/channel) with this name on this instance already exists or has already existed.')
     })
     return false
   }
@@ -59,13 +66,18 @@ export async function checkUsernameOrEmailDoNotAlreadyExist (username: string, e
   return true
 }
 
-export async function checkEmailDoesNotAlreadyExist (email: string, res: express.Response) {
+export async function checkEmailDoesNotAlreadyExist (options: {
+  email: string
+  req: express.Request
+  res: express.Response
+}) {
+  const { email, req, res } = options
   const user = await UserModel.loadByEmailCaseInsensitive(email)
 
   if (user.length !== 0) {
     res.fail({
       status: HttpStatusCode.CONFLICT_409,
-      message: 'User with this email already exists.'
+      message: req.t('User with this email already exists.')
     })
     return false
   }
@@ -78,10 +90,7 @@ export async function checkUserExist (finder: () => Promise<MUserDefault>, res: 
 
   if (!user) {
     if (abortResponse === true) {
-      res.fail({
-        status: HttpStatusCode.NOT_FOUND_404,
-        message: 'User not found'
-      })
+      res.sendStatus(HttpStatusCode.NOT_FOUND_404)
     }
 
     return false
@@ -119,13 +128,19 @@ export function checkCanManageAccount (options: {
   return false
 }
 
-export async function doesUserFeedTokenCorrespond (id: number, token: string, res: express.Response) {
+export async function doesUserFeedTokenCorrespond (options: {
+  id: number
+  token: string
+  req: express.Request
+  res: express.Response
+}) {
+  const { id, token, req, res } = options
   const user = await UserModel.loadByIdWithChannels(forceNumber(id))
 
   if (token !== user.feedToken) {
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
-      message: 'User and token mismatch'
+      message: req.t('User and token mismatch')
     })
     return false
   }

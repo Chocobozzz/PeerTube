@@ -118,6 +118,8 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   private limit = ''
   private offset = ''
 
+  private builtChannelJoin = false
+
   constructor (protected readonly sequelize: Sequelize) {
     super(sequelize)
   }
@@ -154,7 +156,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     this.joins = this.joins.concat([
       'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId"',
       'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId"',
-      'INNER JOIN "actor" "accountActor" ON "account"."actorId" = "accountActor"."id"'
+      'INNER JOIN "actor" "accountActor" ON "account"."id" = "accountActor"."accountId"'
     ])
 
     if (!(options.include & VideoInclude.BLACKLISTED)) {
@@ -367,6 +369,13 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     )
   }
 
+  private joinChannel () {
+    if (this.builtChannelJoin) return
+    this.builtChannelJoin = true
+
+    this.joins.push('INNER JOIN "actor" "channelActor" ON "videoChannel"."id" = "channelActor"."videoChannelId"')
+  }
+
   private whereStateAvailable (options: {
     includeScheduledLive: boolean
   }) {
@@ -442,23 +451,26 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   }
 
   private whereChannelOneOf (channelOneOf: string[]) {
-    this.joins.push('INNER JOIN "actor" "channelActor" ON "videoChannel"."actorId" = "channelActor"."id"')
+    this.joinChannel()
+
     this.and.push('"channelActor"."preferredUsername" IN (:channelOneOf)')
     this.replacements.channelOneOf = channelOneOf
   }
 
   private whereFollowerActorId (options: { actorId: number, orLocalVideos: boolean }) {
+    this.joinChannel()
+
     let query = '(' +
-      '  EXISTS (' + // Videos shared by actors we follow
+      '  EXISTS (' + // Videos shared by actors (instances, channels) we follow
       '    SELECT 1 FROM "videoShare" ' +
       '    INNER JOIN "actorFollow" "actorFollowShare" ON "actorFollowShare"."targetActorId" = "videoShare"."actorId" ' +
       '    AND "actorFollowShare"."actorId" = :followerActorId AND "actorFollowShare"."state" = \'accepted\' ' +
       '    WHERE "videoShare"."videoId" = "video"."id"' +
       '  )' +
       '  OR' +
-      '  EXISTS (' + // Videos published by channels or accounts we follow
+      '  EXISTS (' + // Videos published by accounts we follow
       '    SELECT 1 from "actorFollow" ' +
-      '    WHERE ("actorFollow"."targetActorId" = "account"."actorId" OR "actorFollow"."targetActorId" = "videoChannel"."actorId") ' +
+      '    WHERE ("actorFollow"."targetActorId" = "accountActor"."id" OR "actorFollow"."targetActorId" = "channelActor"."id") ' +
       '    AND "actorFollow"."actorId" = :followerActorId ' +
       '    AND "actorFollow"."state" = \'accepted\'' +
       '  )'

@@ -6,7 +6,7 @@ import { VideoChannelModel } from '@server/models/video/video-channel.js'
 export class FollowersExporter extends AbstractUserExporter<FollowersExportJSON> {
   async export () {
     let followersJSON = this.formatFollowersJSON(
-      await ActorFollowModel.listAcceptedFollowersForExport(this.user.Account.actorId),
+      await ActorFollowModel.listAcceptedFollowersForExport(this.user.Account.Actor.id),
       this.user.Account.Actor.getFullIdentifier()
     )
 

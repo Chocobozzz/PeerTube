@@ -4,9 +4,10 @@ export function getActorJoin (options: {
   base?: string
   on: string
   required: boolean
+  type: 'account' | 'channel'
   includeAvatars?: boolean // default false
 }) {
-  const { base = '', on, includeAvatars = false, required } = options
+  const { base = '', on, includeAvatars = false, type, required } = options
 
   const avatarsJoin = includeAvatars
     ? getAvatarsJoin({ base: `${base}Actor`, on: `"${base}Actor"."id"` })
@@ -16,7 +17,11 @@ export function getActorJoin (options: {
     ? 'INNER JOIN'
     : 'LEFT JOIN'
 
-  return ` ${join} "actor" "${base}Actor" ON "${base}Actor"."id" = ${on} ` +
+  const column = type === 'account'
+    ? 'accountId'
+    : 'videoChannelId'
+
+  return ` ${join} "actor" "${base}Actor" ON "${base}Actor"."${column}" = ${on} ` +
     `LEFT JOIN "server" "${base}Actor->Server" ` +
     `  ON "${base}Actor->Server"."id" = "${base}Actor"."serverId" ` +
     avatarsJoin
@@ -43,7 +48,13 @@ export function getChannelJoin (options: {
     : ''
 
   const actorJoin = includeActors
-    ? getActorJoin({ base: `${base}VideoChannel->`, on: `"${base}VideoChannel"."actorId"`, includeAvatars, required })
+    ? getActorJoin({
+      base: `${base}VideoChannel->`,
+      on: `"${base}VideoChannel"."id"`,
+      type: 'channel',
+      includeAvatars,
+      required
+    })
     : ''
 
   const join = required
@@ -65,7 +76,13 @@ export function getAccountJoin (options: {
   const { base = '', on, includeAvatars, includeActor, required } = options
 
   const actorJoin = includeActor
-    ? getActorJoin({ base: `${base}Account->`, on: `"${base}Account"."actorId"`, includeAvatars, required })
+    ? getActorJoin({
+      base: `${base}Account->`,
+      on: `"${base}Account"."id"`,
+      type: 'account',
+      includeAvatars,
+      required
+    })
     : ''
 
   return ` LEFT JOIN "account" "${base}Account" ON "${base}Account"."id" = ${on} ` +

@@ -239,7 +239,8 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
 
     this.subQueryJoin += getActorJoin({
       base: 'Account->',
-      on: `"Account"."actorId"`,
+      on: `"Account"."id"`,
+      type: 'account',
       includeAvatars: false,
       required: false
     })
@@ -277,7 +278,8 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
 
     this.subQueryJoin += getActorJoin({
       base: 'Video->VideoChannel->',
-      on: '"Video->VideoChannel"."actorId"',
+      on: '"Video->VideoChannel"."id"',
+      type: 'channel',
       includeAvatars: false,
       required: true
     })
@@ -496,7 +498,7 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
     where.push(
       `NOT EXISTS (` +
         `SELECT 1 FROM "account" ` +
-        `INNER JOIN "actor" ON account."actorId" = actor.id ` +
+        `INNER JOIN "actor" ON account."id" = actor."accountId" ` +
         `INNER JOIN "serverBlocklist" ON "actor"."serverId" = "serverBlocklist"."targetServerId" ` +
         `WHERE "account"."id" = "${commentTableName}"."accountId" ` +
         `AND "serverBlocklist"."accountId" IN (${blockerIdsString})` +

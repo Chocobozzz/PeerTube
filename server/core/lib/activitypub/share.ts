@@ -1,3 +1,4 @@
+import { HttpStatusCode } from '@peertube/peertube-models'
 import { getServerActor } from '@server/models/application/application.js'
 import Bluebird from 'bluebird'
 import { Transaction } from 'sequelize'
@@ -9,7 +10,6 @@ import { fetchAP, getAPId } from './activity.js'
 import { getOrCreateAPActor } from './actors/index.js'
 import { sendUndoAnnounce, sendVideoAnnounce } from './send/index.js'
 import { checkUrlsSameHost, getLocalVideoAnnounceActivityPubUrl } from './url.js'
-import { HttpStatusCode } from '@peertube/peertube-models'
 
 const lTags = loggerTagsFactory('share')
 
@@ -19,7 +19,10 @@ export async function changeVideoChannelShare (
   t: Transaction
 ) {
   logger.info(
-    'Updating video channel of video %s: %s -> %s.', video.uuid, oldVideoChannel.name, video.VideoChannel.name,
+    'Updating video channel of video %s: %s -> %s.',
+    video.uuid,
+    oldVideoChannel.name,
+    video.VideoChannel.name,
     lTags(video.uuid)
   )
 
@@ -66,7 +69,7 @@ export async function shareByVideoChannel (video: MVideoAccountLight, t: Transac
   const videoChannelShareUrl = getLocalVideoAnnounceActivityPubUrl(video.VideoChannel.Actor, video)
   const [ videoChannelShare ] = await VideoShareModel.findOrCreate({
     defaults: {
-      actorId: video.VideoChannel.actorId,
+      actorId: video.VideoChannel.Actor.id,
       videoId: video.id,
       url: videoChannelShareUrl
     },
@@ -105,8 +108,8 @@ async function addVideoShare (shareUrl: string, video: MVideoId) {
 
 async function undoShareByVideoChannel (video: MVideo, oldVideoChannel: MChannelActorLight, t: Transaction) {
   // Load old share
-  const oldShare = await VideoShareModel.load(oldVideoChannel.actorId, video.id, t)
-  if (!oldShare) return new Error('Cannot find old video channel share ' + oldVideoChannel.actorId + ' for video ' + video.id)
+  const oldShare = await VideoShareModel.load(oldVideoChannel.Actor.id, video.id, t)
+  if (!oldShare) return new Error(`Cannot find old video channel share ${oldVideoChannel.Actor.id} for video ${video.id}`)
 
   await sendUndoAnnounce(oldVideoChannel.Actor, oldShare, video, t)
   await oldShare.destroy({ transaction: t })

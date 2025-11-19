@@ -33,7 +33,7 @@ async function sendDeleteActor (byActor: ActorModel, transaction: Transaction) {
   const url = getDeleteActivityPubUrl(byActor.url)
   const activity = buildDeleteActivity(url, byActor.url, byActor)
 
-  const actorsInvolved = await VideoShareModel.loadActorsWhoSharedVideosOf(byActor.id, transaction)
+  const actorsInvolved = await VideoShareModel.listActorsWhoSharedVideosOf({ actorOwnerId: byActor.id, transaction })
 
   // In case the actor did not have any videos
   const serverActor = await getServerActor()

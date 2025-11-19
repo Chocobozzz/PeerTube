@@ -6,7 +6,7 @@ import { Literal } from 'sequelize/types/utils'
 // FIXME: have to specify the result type to not break peertube typings generation
 export function buildLocalAccountIdsIn (): Literal {
   return literal(
-    '(SELECT "account"."id" FROM "account" INNER JOIN "actor" ON "actor"."id" = "account"."actorId" AND "actor"."serverId" IS NULL)'
+    '(SELECT "account"."id" FROM "account" INNER JOIN "actor" ON "actor"."accountId" = "account"."id" AND "actor"."serverId" IS NULL)'
   )
 }
 
@@ -22,7 +22,7 @@ export function buildBlockedAccountSQL (blockerIds: number[]) {
 
   return 'SELECT "targetAccountId" AS "id" FROM "accountBlocklist" WHERE "accountId" IN (' + blockerIdsString + ')' +
     ' UNION ' +
-    'SELECT "account"."id" AS "id" FROM account INNER JOIN "actor" ON account."actorId" = actor.id ' +
+    'SELECT "account"."id" AS "id" FROM account INNER JOIN "actor" ON account."id" = actor."accountId" ' +
     'INNER JOIN "serverBlocklist" ON "actor"."serverId" = "serverBlocklist"."targetServerId" ' +
     'WHERE "serverBlocklist"."accountId" IN (' + blockerIdsString + ')'
 }

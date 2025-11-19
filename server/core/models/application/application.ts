@@ -17,7 +17,7 @@ export const getServerActor = memoizee(async function () {
   actor.Avatars = avatars
   actor.Banners = banners
 
-  const uploadImages = await UploadImageModel.listByActor(actor)
+  const uploadImages = await UploadImageModel.listByActor(actor, undefined)
   actor.UploadImages = uploadImages
 
   return actor

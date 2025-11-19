@@ -12,7 +12,7 @@ export class NewVideoOrLiveForSubscribers extends AbstractNotification<MVideoAcc
 
   async prepare () {
     // List all followers that are users
-    this.users = await UserModel.listUserSubscribersOf(this.payload.VideoChannel.actorId)
+    this.users = await UserModel.listUserSubscribersOf(this.payload.VideoChannel.Actor.id)
   }
 
   log () {

@@ -140,7 +140,7 @@ export const videoSubscriptionFeedsValidator = [
     if (areValidationErrors(req, res)) return
 
     if (!await doesAccountIdExist({ id: req.query.accountId, req, res, checkIsLocal: true, checkCanManage: false })) return
-    if (!await doesUserFeedTokenCorrespond(res.locals.account.userId, req.query.token, res)) return
+    if (!await doesUserFeedTokenCorrespond({ id: res.locals.account.userId, token: req.query.token, req, res })) return
 
     return next()
   }
