@@ -1183,17 +1183,17 @@
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7565186330684477650" datatype="html">
+      <trans-unit id="7565186330684477650" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No subscribers} =1 {1 subscriber} other {<x id="INTERPOLATION"/> subscribers }}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No subscribers} =1 {1 subscriber} other {<x id="INTERPOLATION"/> subscribers }}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Nema pretplatnika} =1 {1 pretplatnik} other {<x id="INTERPOLATION"/> pretplatnika }}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8580229323143279034" datatype="html">
+      <trans-unit id="8580229323143279034" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos }}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos }}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Nema videa} =1 {1 video} other {<x id="INTERPOLATION"/> videa }}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">52</context>
@@ -1223,9 +1223,9 @@
           <context context-type="linenumber">98</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7592284673319729048" datatype="html">
+      <trans-unit id="7592284673319729048" datatype="html" xml:space="preserve">
         <source>Manage account</source>
-        <target state="new">Manage account</target>
+        <target state="translated">Upravljaj računima</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">78,79</context>
@@ -1655,7 +1655,13 @@
   color: red;
   <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
   <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Piši CSS kod izravno. Primjer:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Dodaj na početak <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> za prepisivanje stilova. Primjer:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
+        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Piši CSS kod izravno. Primjer:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>  #custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
+  color: red;
+  <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
+  <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Dodaj na početak <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> za prepisivanje stilova. Primjer:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>  #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
+  color: red;
+  <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
+  <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">198</context>
@@ -1821,9 +1827,9 @@
           <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="52101650994758228" datatype="html">
+      <trans-unit id="52101650994758228" datatype="html" xml:space="preserve">
         <source>Original theme</source>
-        <target state="new">Original theme</target>
+        <target state="translated">Izvorna tema</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">177</context>
@@ -1965,9 +1971,9 @@
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8239083179530818601" datatype="html">
+      <trans-unit id="8239083179530818601" datatype="html" xml:space="preserve">
         <source>Only used by the web player</source>
-        <target state="new">Only used by the web player</target>
+        <target state="translated">Koristi samo web player</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">33,35</context>
@@ -2381,25 +2387,25 @@
           <context context-type="linenumber">359</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5959922792614518034" datatype="html">
+      <trans-unit id="5959922792614518034" datatype="html" xml:space="preserve">
         <source>BROWSE VIDEOS</source>
-        <target state="new">BROWSE VIDEOS</target>
+        <target state="translated">PREGLEDAJ VIDEA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">375</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5668816720700287117" datatype="html">
+      <trans-unit id="5668816720700287117" datatype="html" xml:space="preserve">
         <source>Default sort</source>
-        <target state="new">Default sort</target>
+        <target state="translated">Standarno razvrstavanje</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">382</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8230654187625869910" datatype="html">
+      <trans-unit id="8230654187625869910" datatype="html" xml:space="preserve">
         <source>Default scope</source>
-        <target state="new">Default scope</target>
+        <target state="translated">Standardni opseg</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">392</context>
@@ -2517,25 +2523,25 @@
           <context context-type="linenumber">485</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5960828389062108087" datatype="html">
+      <trans-unit id="5960828389062108087" datatype="html" xml:space="preserve">
         <source>Default video privacy</source>
-        <target state="new">Default video privacy</target>
+        <target state="translated">Standardna privatnost videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">498</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3734974125618373942" datatype="html">
+      <trans-unit id="3734974125618373942" datatype="html" xml:space="preserve">
         <source>Default video licence</source>
-        <target state="new">Default video licence</target>
+        <target state="translated">Standardna licenca videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">508</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8251821314400241425" datatype="html">
+      <trans-unit id="8251821314400241425" datatype="html" xml:space="preserve">
         <source>Default comment policy</source>
-        <target state="new">Default comment policy</target>
+        <target state="translated">Standardna pravila za komentiranje</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">518</context>
@@ -2557,9 +2563,9 @@
           <context context-type="linenumber">742</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="481446928803565156" datatype="html">
+      <trans-unit id="481446928803565156" datatype="html" xml:space="preserve">
         <source>Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors that may not be federated with your platform</source>
-        <target state="new">Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors that may not be federated with your platform</target>
+        <target state="translated">Dozvoli <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>tvojim korisnicima<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> da pregledaju udaljena videa/aktere koji možda nisu federalizirani s tvojom platformom</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">745</context>
@@ -5141,9 +5147,9 @@
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6951424625724704708" datatype="html">
+      <trans-unit id="6951424625724704708" datatype="html" xml:space="preserve">
         <source><x id="START_BLOCK_IF" equiv-text="@if (isAccept()) {"/> Accept <x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> registration <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE_IF" equiv-text="@else if (isReject()) {"/> Reject <x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> registration <x id="CLOSE_BLOCK_ELSE_IF" equiv-text="}"/></source>
-        <target state="new"><x id="START_BLOCK_IF" equiv-text="@if (isAccept()) {"/> Accept <x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> registration <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE_IF" equiv-text="@else if (isReject()) {"/> Reject <x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> registration <x id="CLOSE_BLOCK_ELSE_IF" equiv-text="}"/></target>
+        <target state="translated"><x id="START_BLOCK_IF" equiv-text="@if (isAccept()) {"/> Prihvati <x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> registraciju <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE_IF" equiv-text="@else if (isReject()) {"/> Odbij <x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> registraciju <x id="CLOSE_BLOCK_ELSE_IF" equiv-text="}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">4,11</context>
@@ -7929,9 +7935,9 @@
           <context context-type="linenumber">38,39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6512825581399429064" datatype="html">
+      <trans-unit id="6512825581399429064" datatype="html" xml:space="preserve">
         <source>Enter the two-factor code generated by your phone app:</source>
-        <target state="translated">Upiši dvofaktorski kȏd koji je generirao tvoj telefonski program:</target>
+        <target state="translated">Upiši dvofaktorski kod koji je generirao tvoj telefonski program:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">73</context>
@@ -9398,9 +9404,9 @@
           <context context-type="linenumber">164</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4309045590850686400" datatype="html">
+      <trans-unit id="4309045590850686400" datatype="html" xml:space="preserve">
         <source>Two factor authentication adds an additional layer of security to your account by requiring a numeric code from another device (most commonly mobile phones) when you log in.</source>
-        <target state="translated">Dvofaktorska autentifikacija dodaje dodatnu sigurnost tvom računu zahtijevajući numerički kȏd od drugog uređaja (najčešće mobitela) tijekom prijave.</target>
+        <target state="translated">Dvofaktorska autentifikacija dodaje dodatnu sigurnost tvom računu zahtijevajući numerički kod od drugog uređaja (najčešće mobitela) tijekom prijave.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.html</context>
           <context context-type="linenumber">3,5</context>
@@ -13600,7 +13606,7 @@
       </trans-unit>
       <trans-unit id="2387076994218428275" datatype="html" xml:space="preserve">
         <source>A modal window will open for you to specify the local account to which you want to transfer your video</source>
-        <target state="translated">Otvorit će se prozor u kojem moraš odrediti lokalni račun na koji želiš prenijeti svoj video.</target>
+        <target state="translated">Otvorit će se prozor u kojem moraš odrediti lokalni račun na koji želiš prenijeti svoj video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">215</context>
@@ -17591,9 +17597,9 @@
           <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3381033584543723394" datatype="html">
+      <trans-unit id="3381033584543723394" datatype="html" xml:space="preserve">
         <source>Scan this QR code into a TOTP app on your phone. This app will generate tokens that you will have to enter when logging in.</source>
-        <target state="translated">Snimi ovaj QR kȏd u program za izradu vremenski ograničene jednokratna lozinka na svom telefonu. Ovaj program će generirati tokene koje ćeš morati unijeti tijekom prijave.</target>
+        <target state="translated">Snimi ovaj QR kod u program za izradu vremenski ograničene jednokratna lozinka na svom telefonu. Ovaj program će generirati tokene koje ćeš morati unijeti tijekom prijave.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">25</context>
@@ -17615,9 +17621,9 @@
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="336731433013115653" datatype="html">
+      <trans-unit id="336731433013115653" datatype="html" xml:space="preserve">
         <source>Enter the code generated by your authenticator app to confirm</source>
-        <target state="translated">Za potvrdu upiši kȏd koji je generirao tvoj program za autentifikaciju</target>
+        <target state="translated">Za potvrdu upiši kod koji je generirao tvoj program za autentifikaciju</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">36</context>
