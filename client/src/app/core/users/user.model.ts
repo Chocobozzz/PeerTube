@@ -78,6 +78,8 @@ export class User implements UserServerModel {
 
   language: string
 
+  newFeaturesInfoRead: number
+
   createdAt: Date
 
   constructor (hash: Partial<UserServerModel>) {

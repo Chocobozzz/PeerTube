@@ -61,6 +61,7 @@ class ServerConfigManager {
 
     return {
       client: {
+        newFeaturesInfo: CONFIG.CLIENT.NEW_FEATURES_INFO,
         header: {
           hideInstanceName: CONFIG.CLIENT.HEADER.HIDE_INSTANCE_NAME
         },

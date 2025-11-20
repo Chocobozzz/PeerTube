@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core'
 import { RouterOutlet } from '@angular/router'
 import { ServerService } from '@app/core'
+import { NewFeatureInfoService } from '@app/modal/new-feature-info.service'
 import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared-main/menu/horizontal-menu.component'
 import { HTMLServerConfig } from '@peertube/peertube-models'
 
@@ -10,6 +11,7 @@ import { HTMLServerConfig } from '@peertube/peertube-models'
 })
 export class MyVideoSpaceComponent implements OnInit {
   private serverService = inject(ServerService)
+  private newFeatureInfoService = inject(NewFeatureInfoService)
 
   menuEntries: HorizontalMenuEntry[] = []
 
@@ -19,6 +21,8 @@ export class MyVideoSpaceComponent implements OnInit {
     this.serverConfig = this.serverService.getHTMLConfig()
 
     this.buildMenu()
+
+    this.newFeatureInfoService.showChannelCollaboration()
   }
 
   private buildMenu () {

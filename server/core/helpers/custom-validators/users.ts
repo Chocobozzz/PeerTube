@@ -102,3 +102,7 @@ export function isUserRoleValid (value: any) {
     validator.default.isInt('' + value) &&
     [ UserRole.ADMINISTRATOR, UserRole.MODERATOR, UserRole.USER ].includes(value)
 }
+
+export function isUserFeatureInfo (value: string) {
+  return exists(value) && validator.default.isInt(value + '')
+}

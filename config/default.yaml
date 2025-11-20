@@ -1093,6 +1093,8 @@ search:
 
 # PeerTube client/interface configuration
 client:
+  # Display modals to inform users of new features after a PeerTube update
+  new_features_info: true
 
   header:
     # Hide the instance name in the header on desktop

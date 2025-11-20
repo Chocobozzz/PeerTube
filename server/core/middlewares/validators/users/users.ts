@@ -17,6 +17,7 @@ import {
   isUserDescriptionValid,
   isUserDisplayNameValid,
   isUserEmailPublicValid,
+  isUserFeatureInfo,
   isUserLanguage,
   isUserNoModal,
   isUserNSFWPolicyValid,
@@ -487,6 +488,17 @@ export const userAutocompleteValidator = [
   param('search')
     .isString()
     .not().isEmpty()
+]
+
+export const usersNewFeatureInfoReadValidator = [
+  body('feature')
+    .custom(isUserFeatureInfo),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
 ]
 
 // ---------------------------------------------------------------------------

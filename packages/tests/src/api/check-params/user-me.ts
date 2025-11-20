@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { HttpStatusCode, UserRole, VideoCreateResult } from '@peertube/peertube-models'
+import { HttpStatusCode, UserNewFeatureInfo, UserRole, VideoCreateResult } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
@@ -571,6 +571,27 @@ describe('Test my user API validators', function () {
   describe('When deleting our account', function () {
     it('Should fail with with the root account', async function () {
       await server.users.deleteMe({ expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+  })
+
+  describe('Whe updating new features info read', function () {
+    it('Should fail without token', async function () {
+      await server.users.readNewFeatureInfo({
+        token: null,
+        feature: UserNewFeatureInfo.CHANNEL_COLLABORATION,
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
+    })
+
+    it('Should fail with bad feature', async function () {
+      await server.users.readNewFeatureInfo({
+        feature: 'toto' as any,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should succeed with correct params', async function () {
+      await server.users.readNewFeatureInfo({ feature: UserNewFeatureInfo.CHANNEL_COLLABORATION })
     })
   })
 

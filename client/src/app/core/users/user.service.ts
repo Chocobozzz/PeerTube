@@ -2,7 +2,14 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { inject, Injectable, LOCALE_ID } from '@angular/core'
 import { AuthService } from '@app/core/auth'
 import { arrayify, getCompleteLocale } from '@peertube/peertube-core-utils'
-import { ActorImage, User as UserServerModel, UserUpdateMe, UserVideoQuota } from '@peertube/peertube-models'
+import {
+  ActorImage,
+  UserNewFeatureInfoRead,
+  UserNewFeatureInfoType,
+  User as UserServerModel,
+  UserUpdateMe,
+  UserVideoQuota
+} from '@peertube/peertube-models'
 import { from, Observable, of } from 'rxjs'
 import { catchError, concatMap, first, map, shareReplay, toArray } from 'rxjs/operators'
 import { environment } from '../../../environments/environment'
@@ -204,6 +211,16 @@ export class UserService {
   updateInterfaceLanguage (language: string) {
     const url = UserService.BASE_CLIENT_CONFIG_URL + 'update-interface-language'
     const body = { language }
+
+    return this.authHttp.post(url, body)
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
+  // ---------------------------------------------------------------------------
+
+  markNewFeatureInfoAsRead (feature: UserNewFeatureInfoType) {
+    const url = UserService.BASE_USERS_URL + 'me/new-feature-info/read'
+    const body: UserNewFeatureInfoRead = { feature }
 
     return this.authHttp.post(url, body)
       .pipe(catchError(err => this.restExtractor.handleError(err)))

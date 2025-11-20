@@ -7,6 +7,7 @@ import {
   User,
   UserAdminFlagType,
   UserCreateResult,
+  UserNewFeatureInfoType,
   UserRole,
   UserRoleType,
   UserUpdate,
@@ -452,6 +453,26 @@ export class UsersCommand extends AbstractCommand {
       path,
       fields: { language },
       implicitToken: false,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  readNewFeatureInfo (
+    options: OverrideCommandOptions & {
+      feature: UserNewFeatureInfoType
+    }
+  ) {
+    const { feature } = options
+    const path = '/api/v1/users/me/new-feature-info/read'
+
+    return this.postBodyRequest({
+      ...options,
+
+      path,
+      fields: { feature },
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }

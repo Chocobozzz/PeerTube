@@ -10,6 +10,7 @@ import {
   VideoPlaylistType,
   type NSFWPolicyType,
   type UserAdminFlagType,
+  type UserNewFeatureInfoType,
   type UserRoleType
 } from '@peertube/peertube-models'
 import { isNSFWFlagsValid } from '@server/helpers/custom-validators/videos.js'
@@ -409,6 +410,10 @@ export class UserModel extends SequelizeModel<UserModel> {
   )
   @Column
   declare noAccountSetupWarningModal: boolean
+
+  @AllowNull(false)
+  @Column
+  declare newFeaturesInfoRead: UserNewFeatureInfoType
 
   @AllowNull(true)
   @Default(null)
@@ -1087,7 +1092,9 @@ export class UserModel extends SequelizeModel<UserModel> {
 
       lastLoginDate: this.lastLoginDate,
 
-      twoFactorEnabled: !!this.otpSecret
+      twoFactorEnabled: !!this.otpSecret,
+
+      newFeaturesInfoRead: this.newFeaturesInfoRead
     }
 
     if (parameters.withAdminFlags) {

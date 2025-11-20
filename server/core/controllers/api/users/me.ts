@@ -3,6 +3,7 @@ import {
   ActorImageType,
   UserVideoRate as FormattedUserVideoRate,
   HttpStatusCode,
+  UserNewFeatureInfoRead,
   UserUpdateMe,
   UserVideoQuota,
   VideoInclude
@@ -42,7 +43,8 @@ import {
   listCommentsOnUserVideosValidator,
   listMyVideosValidator,
   videoImportsSortValidator,
-  videosSortValidator
+  videosSortValidator,
+  usersNewFeatureInfoReadValidator
 } from '../../../middlewares/validators/index.js'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate.js'
 import { AccountModel } from '../../../models/account/account.js'
@@ -122,6 +124,13 @@ meRouter.delete(
   '/me/avatar',
   authenticate,
   asyncRetryTransactionMiddleware(deleteMyAvatar)
+)
+
+meRouter.post(
+  '/me/new-feature-info/read',
+  authenticate,
+  usersNewFeatureInfoReadValidator,
+  asyncMiddleware(usersNewFeatureInfoRead)
 )
 
 // ---------------------------------------------------------------------------
@@ -361,4 +370,14 @@ async function deleteMyAvatar (req: express.Request, res: express.Response) {
   await deleteLocalActorImageFile(userAccount, ActorImageType.AVATAR)
 
   return res.json({ avatars: [] })
+}
+
+async function usersNewFeatureInfoRead (req: express.Request, res: express.Response) {
+  const user = res.locals.oauth.token.user
+  const body: UserNewFeatureInfoRead = req.body
+
+  user.newFeaturesInfoRead |= body.feature
+  await user.save()
+
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }

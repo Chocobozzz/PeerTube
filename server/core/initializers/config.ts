@@ -79,6 +79,9 @@ const CONFIG = {
   },
 
   CLIENT: {
+    get NEW_FEATURES_INFO () {
+      return config.get<boolean>('client.new_features_info')
+    },
     HEADER: {
       get HIDE_INSTANCE_NAME () {
         return config.get<boolean>('client.header.hide_instance_name')

@@ -1,0 +1,37 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+
+h2 {
+  color: pvar(--fg-350);
+  font-weight: $font-bold;
+
+  @include margin-bottom(2rem);
+  @include font-size(38px);
+}
+
+.modal-body {
+  text-align: center;
+}
+
+.content {
+  color: pvar(--fg-200);
+
+  @include margin-bottom(2.5rem);
+}
+
+.global-icon-container {
+  border-radius: 24px;
+  background: pvar(--bg);
+  padding: 2rem;
+  box-shadow: 12px 0 24px rgba(0, 0, 0, 0.12);
+  transform: rotate(-10deg);
+  display: inline-block;
+  position: relative;
+  top: -2.5rem;
+}
+
+my-global-icon {
+  color: pvar(--bg-secondary-450);
+
+  @include global-icon-size(80px);
+}

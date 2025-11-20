@@ -37,6 +37,8 @@ export interface ServerConfig {
   serverCommit?: string
 
   client: {
+    newFeaturesInfo: boolean
+
     header: {
       hideInstanceName: boolean
     }

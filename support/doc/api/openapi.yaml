@@ -2580,6 +2580,29 @@ paths:
         '204':
           description: successful operation
 
+  /api/v1/users/me/new-feature-info/read:
+    post:
+      tags:
+        - My User
+      summary: Mark feature info as read
+      description: "**PeerTube >= v8.0.0"
+      security:
+        - OAuth2:
+          - user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                feature:
+                  $ref: '#/components/schemas/NewFeatureInfoType'
+              required:
+                - feature
+      responses:
+        '204':
+          description: successful operation
+
   /api/v1/users/me/history/videos:
     get:
       summary: List watched videos history
@@ -11113,6 +11136,10 @@ components:
           type: boolean
           description: Whether the user has enabled two-factor authentication or not
 
+        newFeaturesInfoRead:
+          type: number
+          description: New features information the user has read
+
     UserWithStats:
       allOf:
         - $ref: '#/components/schemas/User'
@@ -11832,6 +11859,16 @@ components:
           - `21` NEW_LIVE_FROM_SUBSCRIPTION
 
           - `22` MY_VIDEO_TRANSCRIPTION_GENERATED
+
+    NewFeatureInfoType:
+      type: integer
+      enum:
+        - 1
+      description: >
+        Represent a new feature that can be displayed to inform users. One of the following values:
+
+          - `1` CHANNEL_COLLABORATION
+
     Notification:
       properties:
         id:

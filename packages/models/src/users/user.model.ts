@@ -77,6 +77,8 @@ export interface User {
   lastLoginDate: Date | null
 
   twoFactorEnabled: boolean
+
+  newFeaturesInfoRead: number
 }
 
 export interface MyUserSpecialPlaylist {

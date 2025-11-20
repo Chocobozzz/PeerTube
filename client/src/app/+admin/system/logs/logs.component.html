@@ -5,7 +5,9 @@
 
     <div class="peertube-select-container">
       <select id="log-type" [(ngModel)]="logType" (ngModelChange)="refresh()" class="form-control">
-        <option *ngFor="let logTypeChoice of logTypeChoices" [value]="logTypeChoice.id">{{ logTypeChoice.label }}</option>
+        @for (logTypeChoice of logTypeChoices; track logTypeChoice) {
+          <option [value]="logTypeChoice.id">{{ logTypeChoice.label }}</option>
+        }
       </select>
     </div>
   </div>

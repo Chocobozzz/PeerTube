@@ -2,6 +2,7 @@ import {
   ActivityPubActorType,
   UserAdminFlag,
   UserAdminFlagType,
+  UserNewFeatureInfo,
   UserNotificationSetting,
   UserNotificationSettingValue,
   UserRole,
@@ -74,7 +75,9 @@ export function buildUser (options: {
     videoQuota,
     videoQuotaDaily,
 
-    pluginAuth
+    pluginAuth,
+
+    newFeaturesInfoRead: Object.values(UserNewFeatureInfo).reduce((all, curr) => all | curr, 0)
   })
 }
 

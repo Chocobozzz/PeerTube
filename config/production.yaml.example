@@ -816,6 +816,9 @@ import:
     # Set a custom video import timeout to not block import queue
     timeout: '2 hours'
 
+    # Number of attempts a user or the channel sync process can do to import a video if an error occurs during the import process
+    max_attempts: 3
+
     # Classic HTTP or all sites supported by youtube-dl https://rg3.github.io/youtube-dl/supportedsites.html
     http:
       # We recommend to use a HTTP proxy if you enable HTTP import to prevent private URL access from this server
@@ -1100,6 +1103,8 @@ search:
 
 # PeerTube client/interface configuration
 client:
+  # Display modals to inform users of new features after a PeerTube update
+  new_features_info: true
 
   header:
     # Hide the instance name in the header on desktop
