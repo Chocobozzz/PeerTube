@@ -6,7 +6,7 @@ import { AccountModel } from '@server/models/account/account.js'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { ServerModel } from '@server/models/server/server.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
-import { MAccount, MActor, MActorFullActor, MActorImages, MChannel, MServer } from '@server/types/models/index.js'
+import { MAccount, MActor, MActorFull, MActorFullActor, MActorImages, MChannel, MServer } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 import { upsertAPPlayerSettings } from '../../player-settings.js'
 import { updateActorImages } from '../image.js'
@@ -23,17 +23,16 @@ export class APActorCreator {
     this.lTags = loggerTagsFactory('ap', 'actor', 'create', this.actorObject.id)
   }
 
-  async create (): Promise<MActorFullActor> {
+  async create (): Promise<MActorFull> {
     logger.debug('Creating remote actor from object', { actorObject: this.actorObject, ...this.lTags() })
 
     const { followersCount, followingCount } = await fetchActorFollowsCount(this.actorObject)
 
-    const actorInstance = new ActorModel(getActorAttributesFromObject(this.actorObject, followersCount, followingCount)) as MActorFullActor
-
     const actor = await sequelizeTypescript.transaction(async t => {
+      const actorInstance = new ActorModel(getActorAttributesFromObject(this.actorObject, followersCount, followingCount)) as MActorFull
+
       const server = await this.setServer(actorInstance, t)
 
-      // Remove
       const existingActor = await ActorModel.loadByUniqueKeys({
         preferredUsername: actorInstance.preferredUsername,
         url: actorInstance.url,
@@ -42,15 +41,16 @@ export class APActorCreator {
       })
 
       if (existingActor) {
-        logger.debug(`Actor ${existingActor.id} already exists, removing existing one before creating a new one`, this.lTags())
+        logger.debug(`Actor ${existingActor.id} already exists, updating existing one`, this.lTags())
 
-        if (existingActor.videoChannelId) {
-          const channel = await VideoChannelModel.loadAndPopulateAccount(existingActor.videoChannelId, t)
-          await channel.destroy({ transaction: t })
-        } else if (existingActor.accountId) {
-          const account = await AccountModel.findByPk(existingActor.accountId, { transaction: t })
-          if (account) await account.destroy({ transaction: t })
-        }
+        // Re-init unique keys
+        existingActor.preferredUsername = actorInstance.preferredUsername
+        existingActor.url = actorInstance.url
+        existingActor.serverId = actorInstance.serverId
+
+        await existingActor.save({ transaction: t })
+
+        return ActorModel.loadFull(existingActor.id, t)
       }
 
       if (isAccountActor(this.actorObject.type)) {
@@ -62,7 +62,7 @@ export class APActorCreator {
         const channel = await this.saveVideoChannel(actorInstance, t)
         await actorInstance.save({ transaction: t })
 
-        actorInstance.VideoChannel = Object.assign(channel, { Actor: actorInstance, Account: this.ownerActor.Account })
+        actorInstance.VideoChannel = Object.assign(channel, { Account: this.ownerActor.Account })
       }
 
       await this.setImageIfNeeded(actorInstance, ActorImageType.AVATAR, t)
@@ -74,10 +74,12 @@ export class APActorCreator {
     })
 
     if (isChannelActor(actor.type) && typeof this.actorObject.playerSettings === 'string') {
+      const channel = Object.assign(actor.VideoChannel, { Actor: actor })
+
       await upsertAPPlayerSettings({
         settingsObject: this.actorObject.playerSettings,
         video: undefined,
-        channel: actor.VideoChannel,
+        channel,
         contextUrl: actor.url
       })
     }
