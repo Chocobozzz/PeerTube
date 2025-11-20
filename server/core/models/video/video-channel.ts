@@ -182,15 +182,6 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
   @UpdatedAt
   declare updatedAt: Date
 
-  @HasOne(() => ActorModel, {
-    foreignKey: {
-      allowNull: true
-    },
-    onDelete: 'cascade',
-    hooks: true
-  })
-  declare Actor: Awaited<ActorModel>
-
   @ForeignKey(() => AccountModel)
   @Column
   declare accountId: number
@@ -226,6 +217,15 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
     onDelete: 'CASCADE'
   })
   declare VideoChannelCollaborators: Awaited<VideoChannelCollaboratorModel>[]
+
+  @HasOne(() => ActorModel, {
+    foreignKey: {
+      allowNull: true
+    },
+    onDelete: 'cascade',
+    hooks: true
+  })
+  declare Actor: Awaited<ActorModel>
 
   @AfterCreate
   static notifyCreate (channel: MChannel) {
