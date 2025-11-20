@@ -256,7 +256,7 @@ export class ThemeManager {
 
         if (paletteStyleContent) {
           // To override default variables
-          document.documentElement.className = 'color-palette'
+          document.documentElement.classList.add('color-palette')
 
           this.colorPaletteStyle.textContent = `:root.color-palette {\n${paletteStyleContent} }`
         }
