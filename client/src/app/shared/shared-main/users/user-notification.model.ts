@@ -148,14 +148,14 @@ export class UserNotification {
 
         case UserNotificationType.INVITED_TO_COLLABORATE_TO_CHANNEL:
           if (payload.videoChannelCollaborator.state.id === VideoChannelCollaboratorState.ACCEPTED) {
-            this.url = this.buildChannelEditorsUrl(payload.videoChannelCollaborator.channel)
+            this.url = this.buildChannelUrl(payload.videoChannelCollaborator.channel)
           } // Else, no URL: we have buttons instead to accept/decline the invitation
 
           break
 
         case UserNotificationType.ACCEPTED_TO_COLLABORATE_TO_CHANNEL:
         case UserNotificationType.REFUSED_TO_COLLABORATE_TO_CHANNEL:
-          this.url = this.buildChannelEditorsUrl(payload.videoChannelCollaborator.channel)
+          this.url = this.buildChannelUrl(payload.videoChannelCollaborator.channel)
           break
       }
     } catch (err) {
@@ -184,7 +184,7 @@ export class UserNotification {
     return [ this.buildVideoUrl(comment.video), { threadId: comment.threadId } ]
   }
 
-  buildChannelEditorsUrl (channel: { name: string }) {
-    return [ '/my-library', 'video-channels', 'manage', channel.name, 'editors' ]
+  buildChannelUrl (channel: { name: string }) {
+    return [ '/my-library', 'video-channels', 'manage', channel.name ]
   }
 }

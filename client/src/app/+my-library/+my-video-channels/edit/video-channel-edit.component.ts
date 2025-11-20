@@ -100,7 +100,7 @@ export class VideoChannelEditComponent implements OnInit, OnDestroy {
   private buildSwitchChannelActions () {
     const user = this.authService.getUser()
 
-    const builder = (c: VideoChannel, { editor }: { editor: boolean }) => ({
+    const builder = (c: VideoChannel, { editor, owner, collaborate }: { editor: boolean, owner: boolean, collaborate: boolean }) => ({
       label: c.displayName,
       linkBuilder: () => {
         const current = this.videoChannelEdit().channel.name
@@ -115,13 +115,17 @@ export class VideoChannelEditComponent implements OnInit, OnDestroy {
       },
 
       data: {
-        editor
+        collaborate,
+        editor,
+        owner
       }
     })
 
+    const collaborate = user.isCollaboratingToChannels()
+
     this.switchChannelActions = [
-      ...user.videoChannels.map(c => builder(c, { editor: false })),
-      ...user.videoChannelCollaborations.map(c => builder(c, { editor: true }))
+      ...user.videoChannels.map(c => builder(c, { editor: false, owner: true, collaborate })),
+      ...user.videoChannelCollaborations.map(c => builder(c, { editor: true, owner: false, collaborate }))
     ]
   }
 

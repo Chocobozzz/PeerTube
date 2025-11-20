@@ -70,8 +70,13 @@
           @if (playlist.videoChannel) {
             <a [routerLink]="[ '/c', playlist.videoChannel.name]" class="channel-sub-link-in-cell">
               <span>{{ playlist.videoChannel.displayName }}</span>
-              @if (user.isEditorOfChannel(playlist.videoChannel)) {
-                <my-collaborator-state class="ms-2" type="accepted" small="true"></my-collaborator-state>
+
+              @if (user.isCollaboratingToChannels()) {
+                @if (user.isOwnerOfChannel(playlist.videoChannel)) {
+                  <my-collaborator-state class="ms-2" type="owner" small="true"></my-collaborator-state>
+                } @else if (user.isEditorOfChannel(playlist.videoChannel)) {
+                  <my-collaborator-state class="ms-2" type="accepted" small="true"></my-collaborator-state>
+                }
               }
             </a>
           }

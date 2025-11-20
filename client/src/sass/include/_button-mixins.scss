@@ -15,6 +15,10 @@
     border: 1px solid $border-color !important;
   }
 
+  &:not(.icon-only) my-global-icon {
+    color: pvar(--secondary-icon-color);
+  }
+
   &:active,
   &.active,
   &:focus,
@@ -36,15 +40,15 @@
   &:hover {
     color: $fg;
     background-color: $hover-bg;
+
+    my-global-icon {
+      color: $fg !important;
+    }
   }
 
   &[disabled] {
     pointer-events: none;
     opacity: 0.6;
-  }
-
-  &:not(.icon-only) my-global-icon {
-    color: pvar(--secondary-icon-color);
   }
 }
 

@@ -19,8 +19,12 @@ import { CollaboratorStateComponent } from '@app/shared/shared-main/channel/coll
     [filter]="channels && channels.length > 5"
   >
     <ng-template #itemExtra let-item>
-      @if (item.editor) {
-        <my-collaborator-state class="lh-1 ms-2" type="accepted" disableTooltip="true"></my-collaborator-state>
+      @if (item.collaborate) {
+        @if (item.editor) {
+          <my-collaborator-state class="lh-1 ms-2" type="accepted" disableTooltip="true"></my-collaborator-state>
+        } @else if (item.owner) {
+          <my-collaborator-state class="lh-1 ms-2" type="owner" disableTooltip="true"></my-collaborator-state>
+        }
       }
     </ng-template>
   </my-select-options>

@@ -41,3 +41,17 @@ li {
     text-align: left;
   }
 }
+
+.notifications:not(.in-popup) {
+  .notification {
+    margin-bottom: 1rem;
+
+    &.unread {
+      background-color: pvar(--bg-secondary-350);
+    }
+
+    &:not(.unread) {
+      background-color: pvar(--bg-secondary-400);
+    }
+  }
+}

@@ -9,13 +9,14 @@ export function listUserChannelsForSelect (authService: AuthService, options: { 
       first(),
       map(() => {
         const user = authService.getUser()
+        const collaborate = user.isCollaboratingToChannels()
 
         const allChannels = options.includeCollaborations
           ? [
-            ...formatChannels(user.videoChannels, { editor: false }),
-            ...formatChannels(user.videoChannelCollaborations, { editor: true })
+            ...formatChannels(user.videoChannels, { editor: false, owner: true, collaborate }),
+            ...formatChannels(user.videoChannelCollaborations, { editor: true, owner: false, collaborate })
           ]
-          : formatChannels(user.videoChannels, { editor: false })
+          : formatChannels(user.videoChannels, { editor: false, owner: false, collaborate })
 
         return sortBy(allChannels, 'updatedAt').reverse()
       })
@@ -26,7 +27,13 @@ export function listUserChannelsForSelect (authService: AuthService, options: { 
 // Private
 // ---------------------------------------------------------------------------
 
-function formatChannels (channel: (VideoChannel & { ownerAccountId?: number })[], { editor }: { editor: boolean }) {
+function formatChannels (channel: (VideoChannel & { ownerAccountId?: number })[], options: {
+  editor: boolean
+  owner: boolean
+  collaborate: boolean
+}) {
+  const { editor, collaborate, owner } = options
+
   return channel
     .map(c => ({
       id: c.id,
@@ -34,6 +41,8 @@ function formatChannels (channel: (VideoChannel & { ownerAccountId?: number })[]
       label: c.displayName,
       support: c.support,
       editor,
+      collaborate,
+      owner,
       avatarFileUrl: getAvatarFileUrl(c),
       ownerAccountId: c.ownerAccountId,
       updatedAt: c.updatedAt

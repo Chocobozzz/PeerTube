@@ -116,6 +116,13 @@ a:hover {
   opacity: 0.8;
 }
 
+a.dropdown-item,
+a.action-button {
+  &:hover {
+    opacity: 1;
+  }
+}
+
 a.pt {
   text-decoration-color: pvar(--border-primary);
   text-underline-offset: 0.25em;

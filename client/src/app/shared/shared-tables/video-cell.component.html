@@ -21,8 +21,12 @@
         <a [routerLink]="getChannelUrl()" class="channel" [ngClass]="{ ellipsis: ellipsis }">
           <span>{{ video().channel?.displayName }}</span>
 
-          @if (displayEditorInfo() && user.isEditorOfChannel(video().channel)) {
-            <my-collaborator-state class="ms-2" type="accepted" small="true"></my-collaborator-state>
+          @if (displayEditorInfo() && user.isCollaboratingToChannels()) {
+            @if (user.isEditorOfChannel(video().channel)) {
+              <my-collaborator-state class="ms-2" type="accepted" small="true"></my-collaborator-state>
+            } @else if (user.isOwnerOfChannel(video().channel)) {
+              <my-collaborator-state class="ms-2" type="owner" small="true"></my-collaborator-state>
+            }
           }
         </a>
       }

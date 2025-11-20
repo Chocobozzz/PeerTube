@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject, input } from '@angular/core'
+import { Component, inject, input, output } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService, Notifier } from '@app/core'
 import { AbuseState, VideoChannelCollaboratorState, VideoState } from '@peertube/peertube-models'
@@ -10,6 +10,7 @@ import { ButtonComponent } from '../shared-main/buttons/button.component'
 import { VideoChannelService } from '../shared-main/channel/video-channel.service'
 import { FromNowPipe } from '../shared-main/date/from-now.pipe'
 import { UserNotification } from '../shared-main/users/user-notification.model'
+import { CollaboratorStateComponent } from '../shared-main/channel/collaborator-state.component'
 
 @Component({
   selector: 'my-user-notification-content',
@@ -21,7 +22,8 @@ import { UserNotification } from '../shared-main/users/user-notification.model'
     ActorAvatarComponent,
     AccountOnChannelAvatarComponent,
     FromNowPipe,
-    ButtonComponent
+    ButtonComponent,
+    CollaboratorStateComponent
   ]
 })
 export class UserNotificationContentComponent {
@@ -32,7 +34,9 @@ export class UserNotificationContentComponent {
 
   readonly notification = input.required<UserNotification>()
 
-  imageSize = 30
+  readonly buttonClicked = output()
+
+  imageSize = 24
 
   get n () {
     return this.notification()
@@ -69,13 +73,15 @@ export class UserNotificationContentComponent {
   acceptChannelCollab () {
     const collab = this.n.payload.videoChannelCollaborator
 
+    this.buttonClicked.emit()
+
     this.channelService.acceptCollaboratorInvitation(collab.channel.name, collab.id)
       .subscribe({
         next: () => {
           this.authService.refreshUserInformation()
 
           this.n.payload.videoChannelCollaborator.state.id = VideoChannelCollaboratorState.ACCEPTED
-          this.n.url = this.n.buildChannelEditorsUrl(collab.channel)
+          this.n.url = this.n.buildChannelUrl(collab.channel)
           this.router.navigate(this.n.url)
         },
 
@@ -85,6 +91,8 @@ export class UserNotificationContentComponent {
 
   rejectChannelCollab () {
     const collab = this.n.payload.videoChannelCollaborator
+
+    this.buttonClicked.emit()
 
     this.channelService.rejectCollaboratorInvitation(collab.channel.name, collab.id)
       .subscribe({

@@ -13,6 +13,8 @@
 
     @if (isEditorOfChannel()) {
       <my-collaborator-state class="ms-2" type="accepted" small="true"></my-collaborator-state>
+    } @else if (isOwnerOfChannel()) {
+      <my-collaborator-state class="ms-2" type="owner" small="true"></my-collaborator-state>
     }
   </div>
 </a>

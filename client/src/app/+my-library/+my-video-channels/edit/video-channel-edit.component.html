@@ -19,15 +19,22 @@
               [actions]="switchChannelActions"
             >
               <ng-template #labelExtra>
-                @if (user.isEditorOfChannel(videoChannelEdit().apiInfo)) {
-                  <my-collaborator-state class="d-inline-flex" type="accepted"></my-collaborator-state>
+                @if (user.isCollaboratingToChannels()) {
+                  @if (user.isOwnerOfChannel(videoChannelEdit().apiInfo)) {
+                    <my-collaborator-state class="d-inline-flex" type="owner"></my-collaborator-state>
+                  } @else if (user.isEditorOfChannel(videoChannelEdit().apiInfo)) {
+                    <my-collaborator-state class="d-inline-flex" type="accepted"></my-collaborator-state>
+                  }
                 }
-
               </ng-template>
 
               <ng-template #dropdownItemExtra let-action="action">
-                @if (action.data.editor) {
-                  <my-collaborator-state class="d-inline-flex ms-2" small="true" type="accepted"></my-collaborator-state>
+                @if (action.data.collaborate) {
+                  @if (action.data.editor) {
+                    <my-collaborator-state class="d-inline-flex ms-2" small="true" type="accepted"></my-collaborator-state>
+                  } @else if (action.data.owner) {
+                    <my-collaborator-state class="d-inline-flex ms-2" small="true" type="owner"></my-collaborator-state>
+                  }
                 }
               </ng-template>
             </my-action-dropdown>

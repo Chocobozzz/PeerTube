@@ -13,8 +13,3 @@
     @include peertube-select-container(auto);
   }
 }
-
-.user-notifications-container {
-  padding: 1rem;
-  background-color: pvar(--bg-secondary-400);
-}

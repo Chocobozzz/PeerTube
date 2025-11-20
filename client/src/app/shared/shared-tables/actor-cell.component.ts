@@ -36,10 +36,16 @@ export class ActorCellComponent implements OnInit {
   }
 
   isEditorOfChannel (): boolean {
-    const actor = this.actor()
-
     if (this.actorType() !== 'channel') return false
 
-    return this.authService.getUser().isEditorOfChannel(actor)
+    const user = this.authService.getUser()
+    return user.isCollaboratingToChannels() && user.isEditorOfChannel(this.actor())
+  }
+
+  isOwnerOfChannel (): boolean {
+    if (this.actorType() !== 'channel') return false
+
+    const user = this.authService.getUser()
+    return user.isCollaboratingToChannels() && user.isOwnerOfChannel(this.actor())
   }
 }

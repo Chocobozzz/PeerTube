@@ -123,6 +123,8 @@ my-search-typeahead {
   .display-name {
     font-weight: $font-bold;
     color: pvar(--fg);
+    line-height: 1;
+    padding-top: 3px;
   }
 
   .username {

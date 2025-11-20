@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject, input, OnInit, output } from '@angular/core'
+import { booleanAttribute, Component, inject, input, OnInit, output } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { ComponentPagination, hasMoreItems, Notifier } from '@app/core'
 import { Subject } from 'rxjs'
@@ -23,6 +23,7 @@ export class UserNotificationsComponent implements OnInit {
   private userNotificationService = inject(UserNotificationService)
   private notifier = inject(Notifier)
 
+  readonly inPopup = input.required({ transform: booleanAttribute })
   readonly ignoreLoadingBar = input(false)
   readonly infiniteScroll = input(true)
   readonly itemsPerPage = input(20)

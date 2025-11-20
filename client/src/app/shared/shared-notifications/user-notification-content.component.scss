@@ -71,6 +71,12 @@
   .from-date {
     color: pvar(--secondary-icon-color);
   }
+
+  > my-account-on-channel-avatar,
+  > my-global-icon,
+  > my-actor-avatar {
+    opacity: 0.6;
+  }
 }
 
 .action-button {

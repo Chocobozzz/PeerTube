@@ -22,14 +22,14 @@ export class CollaboratorStateComponent implements OnInit {
   ngOnInit () {
     this.editorTooltip = this.disableTooltip()
       ? null
-      : $localize`You are an editor of this channel`
+      : $localize`An editor can manage videos in this channel`
 
     this.ownerTooltip = this.disableTooltip()
       ? null
-      : $localize`You are the owner of this channel`
+      : $localize`Owner of the channel`
 
     this.invitationTooltip = this.disableTooltip()
       ? null
-      : $localize`You have been invited to be an editor of this channel`
+      : $localize`Invited to be an editor to manage videos in this channel`
   }
 }

@@ -56,7 +56,7 @@
 
   --support-btn-fg: var(--supportButtonColor, #{pvar(--fg-300)});
   --support-btn-bg: var(--supportButtonBackgroundColor, transparent);
-  --support-btn-heart-bg: var(--supportButtonHeartColor, #{$support-button-heart});
+  --support-btn-heart-bg: var(--supportButtonHeartColor, #{pvar(--support-btn-fg)});
 
   --x-margin-content: 2rem;
 

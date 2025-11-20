@@ -33,8 +33,12 @@
             <a [routerLink]="[ '/c', comment.video.channel.name]" class="channel-sub-link-in-cell">
               <span>{{ comment.video.channel.displayName }}</span>
 
-              @if (mode() === 'user' && user.isEditorOfChannel(comment.video.channel)) {
-                <my-collaborator-state class="ms-2" type="accepted" small="true"></my-collaborator-state>
+              @if (mode() === 'user' && user.isCollaboratingToChannels()) {
+                @if (user.isEditorOfChannel(comment.video.channel)) {
+                  <my-collaborator-state class="ms-2" type="accepted" small="true"></my-collaborator-state>
+                } @else if (user.isOwnerOfChannel(comment.video.channel)) {
+                  <my-collaborator-state class="ms-2" type="owner" small="true"></my-collaborator-state>
+                }
               }
             </a>
           }

@@ -35,8 +35,13 @@
           <div class="metadata">
             <div class="min-width-0 d-flex flex-wrap w-fit-content align-items-center">
               <a class="display-name" [routerLink]="[ '/c', videoChannel.nameWithHost ]" i18n-title title="Channel page">{{ videoChannel.displayName }}</a>
-              @if (user.isCollaboratingToChannels() && user.isEditorOfChannel(videoChannel)) {
-                <my-collaborator-state class="d-inline-block ms-2" type="accepted"></my-collaborator-state>
+
+              @if (user.isCollaboratingToChannels()) {
+                @if (user.isOwnerOfChannel(videoChannel)) {
+                  <my-collaborator-state class="d-inline-block ms-2" type="owner"></my-collaborator-state>
+                } @else if (user.isEditorOfChannel(videoChannel)) {
+                  <my-collaborator-state class="d-inline-block ms-2" type="accepted"></my-collaborator-state>
+                }
               }
             </div>
             <span class="handle">{{ videoChannel.nameWithHost }}</span>
