@@ -155,7 +155,7 @@
 .vjs-ended {
   .main-button {
     &::before {
-      content: "\f116";
+      content: "\f11b";
     }
   }
 }
@@ -177,6 +177,7 @@
 
   &.vjs-seeking,
   &.vjs-waiting,
+  &.vjs-mobile-sliding,
   &.vjs-fast-seeking {
     .main-button {
       display: none;
