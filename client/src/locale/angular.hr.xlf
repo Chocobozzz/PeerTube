@@ -148,9 +148,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="turn this._max;"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="turn this._max;"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="turn this._max;"/>
         </target>
@@ -256,9 +254,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="sible.    */   "/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="sible.    */   "/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="sible.    */   "/>
         </target>
@@ -1761,7 +1757,7 @@
       </trans-unit>
       <trans-unit id="5230468881050489759" datatype="html" xml:space="preserve">
         <source>Moderately rounded (default)</source>
-        <target state="translated">Umjereno zaobljeno (zadano)</target>
+        <target state="translated">Umjereno zaobljeno (standardno)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">147</context>
@@ -1805,7 +1801,7 @@
       </trans-unit>
       <trans-unit id="7646288536359666196" datatype="html" xml:space="preserve">
         <source>Slightly rounded (default)</source>
-        <target state="translated">Pomalo zaobljeno (zadano)</target>
+        <target state="translated">Pomalo zaobljeno (standardno)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">160</context>
@@ -2009,7 +2005,7 @@
       </trans-unit>
       <trans-unit id="6283491362360619064" datatype="html" xml:space="preserve">
         <source>UI customization only applies if the user is using the default platform theme.</source>
-        <target state="translated">Prilagodba korisničkog sučelja primjenjuje se samo ako korisnik koristi zadanu temu platforme.</target>
+        <target state="translated">Prilagodba korisničkog sučelja primjenjuje se samo ako korisnik koristi standardnu temu platforme.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">53</context>
@@ -2017,7 +2013,7 @@
       </trans-unit>
       <trans-unit id="3907392983067010584" datatype="html" xml:space="preserve">
         <source>You can't preview the changes because you aren't using your platform's default theme.</source>
-        <target state="translated">Ne možeš pregledati promjene jer ne koristiš zadanu temu tvoje platforme.</target>
+        <target state="translated">Ne možeš pregledati promjene jer ne koristiš standardnu temu tvoje platforme.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">60</context>
@@ -2181,7 +2177,7 @@
       </trans-unit>
       <trans-unit id="4328465163710612366" datatype="html" xml:space="preserve">
         <source>When the total number of users in your platform reaches this limit, registrations are disabled. -1 = unlimited</source>
-        <target state="translated">Kada ukupan broj korisnika na tvojoj platformi dosegne ovo ograničenje, registracije se onemogućuju. -1 = neograničeno</target>
+        <target state="translated">Kada ukupan broj korisnika na tvojoj platformi dosegne ovo ograničenje, registracije se deaktiviraju. -1 = neograničeno</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">176</context>
@@ -2221,7 +2217,7 @@
       </trans-unit>
       <trans-unit id="1980878931796709542" datatype="html" xml:space="preserve">
         <source>Default video quota for a new user</source>
-        <target state="translated">Zadana video kvota za novog korisnika</target>
+        <target state="translated">Standardna kvota videa za novog korisnika</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">225</context>
@@ -2261,7 +2257,7 @@
       </trans-unit>
       <trans-unit id="8819364692199793780" datatype="html" xml:space="preserve">
         <source>Default daily upload limit for a new user</source>
-        <target state="translated">Zadano dnevno ograničenje prijenosa za novog korisnika</target>
+        <target state="translated">Standardno dnevno ograničenje prijenosa za novog korisnika</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">246</context>
@@ -2835,9 +2831,9 @@
           <context context-type="linenumber">664</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2709958363414972972" datatype="html">
+      <trans-unit id="2709958363414972972" datatype="html" xml:space="preserve">
         <source>PLAYER</source>
-        <target state="new">PLAYER</target>
+        <target state="translated">PLAYER</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">689</context>
@@ -2891,9 +2887,9 @@
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1244629318108208810" datatype="html">
+      <trans-unit id="1244629318108208810" datatype="html" xml:space="preserve">
         <source>PLATFORM</source>
-        <target state="new">PLATFORM</target>
+        <target state="translated">PLATFORMA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">39</context>
@@ -2933,7 +2929,7 @@
       </trans-unit>
       <trans-unit id="8113899484555907381" datatype="html" xml:space="preserve">
         <source>This is just an extra information injected in PeerTube HTML that is required by Twitter/X. If you don't have a Twitter/X account, just leave the default value.</source>
-        <target state="translated">Ovo je samo dodatna u PeerTube HTML-u umetnuta informacija koju zahtijeva Twitter/X. Ako nemaš Twitter/X račun ostavi zadanu vrijednost.</target>
+        <target state="translated">Ovo je samo dodatna u PeerTube HTML-u umetnuta informacija koju zahtijeva Twitter/X. Ako nemaš Twitter/X račun ostavi standardnu vrijednost.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.html</context>
           <context context-type="linenumber">104</context>
@@ -3023,25 +3019,25 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5275641742274583738" datatype="html">
+      <trans-unit id="5275641742274583738" datatype="html" xml:space="preserve">
         <source>HOMEPAGE</source>
-        <target state="new">HOMEPAGE</target>
+        <target state="translated">POČETNA WEB STRANICA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-homepage.component.html</context>
           <context context-type="linenumber">5,6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="640634155992036798" datatype="html">
+      <trans-unit id="640634155992036798" datatype="html" xml:space="preserve">
         <source>Homepage content</source>
-        <target state="new">Homepage content</target>
+        <target state="translated">Sadržaj početne web stranice</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-homepage.component.html</context>
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5084959442263173366" datatype="html">
+      <trans-unit id="5084959442263173366" datatype="html" xml:space="preserve">
         <source>Homepage updated.</source>
-        <target state="new">Homepage updated.</target>
+        <target state="translated">Početna web stranica je aktualizirana.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-homepage.component.ts</context>
           <context context-type="linenumber">59</context>
@@ -3143,9 +3139,9 @@
           <context context-type="linenumber">214</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1305357231288135414" datatype="html">
+      <trans-unit id="1305357231288135414" datatype="html" xml:space="preserve">
         <source>Homepage</source>
-        <target state="translated">Početna web-stranica</target>
+        <target state="translated">Početna web stranica</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/admin-config.component.ts</context>
           <context context-type="linenumber">38</context>
@@ -3163,9 +3159,9 @@
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4550958265168690830" datatype="html">
+      <trans-unit id="4550958265168690830" datatype="html" xml:space="preserve">
         <source>Logo</source>
-        <target state="new">Logo</target>
+        <target state="translated">Logotip</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/admin-config.component.ts</context>
           <context context-type="linenumber">28</context>
@@ -3191,25 +3187,25 @@
           <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6201638315245239510" datatype="html">
+      <trans-unit id="6201638315245239510" datatype="html" xml:space="preserve">
         <source>Advanced</source>
-        <target state="translated">Napredne</target>
+        <target state="translated">Napredno</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/admin-config.component.ts</context>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="210131859223873198" datatype="html">
+      <trans-unit id="210131859223873198" datatype="html" xml:space="preserve">
         <source>Edit your platform homepage</source>
-        <target state="new">Edit your platform homepage</target>
+        <target state="translated">Uredi početnu web stranicu tvoje platforme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1577436512754482869" datatype="html">
+      <trans-unit id="1577436512754482869" datatype="html" xml:space="preserve">
         <source>Platform customization</source>
-        <target state="new">Platform customization</target>
+        <target state="translated">Prilagođavanje platforme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">110</context>
@@ -3219,9 +3215,9 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1717475601341178176" datatype="html">
+      <trans-unit id="1717475601341178176" datatype="html" xml:space="preserve">
         <source>Platform information</source>
-        <target state="new">Platform information</target>
+        <target state="translated">Informacije platforme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">124</context>
@@ -3231,17 +3227,17 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8169800528565475866" datatype="html">
+      <trans-unit id="8169800528565475866" datatype="html" xml:space="preserve">
         <source>Platform logos</source>
-        <target state="new">Platform logos</target>
+        <target state="translated">Logotipi platforme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">137</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6105834577396901822" datatype="html">
+      <trans-unit id="6105834577396901822" datatype="html" xml:space="preserve">
         <source>General configuration</source>
-        <target state="new">General configuration</target>
+        <target state="translated">Opća konfiguracija</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">152</context>
@@ -3251,9 +3247,9 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5637037987059793432" datatype="html">
+      <trans-unit id="5637037987059793432" datatype="html" xml:space="preserve">
         <source>VOD configuration</source>
-        <target state="new">VOD configuration</target>
+        <target state="translated">Konfiguracija videa na zahtjev (VOD)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">162</context>
@@ -3263,9 +3259,9 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7545205559638195390" datatype="html">
+      <trans-unit id="7545205559638195390" datatype="html" xml:space="preserve">
         <source>Live configuration</source>
-        <target state="new">Live configuration</target>
+        <target state="translated">Konfiguracija prijenosa uživo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">172</context>
@@ -3275,9 +3271,9 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7368823469700320150" datatype="html">
+      <trans-unit id="7368823469700320150" datatype="html" xml:space="preserve">
         <source>Advanced configuration</source>
-        <target state="new">Advanced configuration</target>
+        <target state="translated">Napredna konfiguracija</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">182</context>
@@ -3295,17 +3291,17 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2989122020331473189" datatype="html">
+      <trans-unit id="2989122020331473189" datatype="html" xml:space="preserve">
         <source>Square icon is used in the mobile application and can be used on your custom homepage.</source>
-        <target state="new">Square icon is used in the mobile application and can be used on your custom homepage.</target>
+        <target state="translated">Kvadratna ikona se koristi u mobilnoj aplikaciji i može se koristiti na tvojoj prilagođenoj početnoj web stranici.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3395873666314533052" datatype="html">
+      <trans-unit id="3395873666314533052" datatype="html" xml:space="preserve">
         <source>It's also used as a fallback for the favicon, header icon and social media logo.</source>
-        <target state="new">It's also used as a fallback for the favicon, header icon and social media logo.</target>
+        <target state="translated">Također se koristi kao zamjena za favicon, ikonu zaglavlja i logotip društvenih mreža.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">16,17</context>
@@ -3335,25 +3331,25 @@
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6889832108716754007" datatype="html">
+      <trans-unit id="6889832108716754007" datatype="html" xml:space="preserve">
         <source>Favicon</source>
-        <target state="new">Favicon</target>
+        <target state="translated">Favicon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8619617334320611526" datatype="html">
+      <trans-unit id="8619617334320611526" datatype="html" xml:space="preserve">
         <source>Favicon is the icon displayed in web browser tab.</source>
-        <target state="new">Favicon is the icon displayed in web browser tab. </target>
+        <target state="translated">Favicon je ikona koja se prikazuje u kartici web preglednika.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5274450200795156583" datatype="html">
+      <trans-unit id="5274450200795156583" datatype="html" xml:space="preserve">
         <source>If not set, the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Square icon<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> will be used.</source>
-        <target state="new">If not set, the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Square icon<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> will be used.</target>
+        <target state="translated">Ako nije postavljeno, koristit će se <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>kvadratna ikona<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">43</context>
@@ -3371,105 +3367,105 @@
           <context context-type="linenumber">122</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7437195070960902544" datatype="html">
+      <trans-unit id="7437195070960902544" datatype="html" xml:space="preserve">
         <source>It will be resized to 32x32 pixels and converted to .png format.</source>
-        <target state="new">It will be resized to 32x32 pixels and converted to .png format.</target>
+        <target state="translated">Veličina će se promijeniti na 32 × 32 piksela i pretvorit će se u .png format.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3348948062503298975" datatype="html">
+      <trans-unit id="3348948062503298975" datatype="html" xml:space="preserve">
         <source>Desktop header logo</source>
-        <target state="new">Desktop header logo</target>
+        <target state="translated">Logotip u zaglavlju za desktop računala</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9173809606492825579" datatype="html">
+      <trans-unit id="9173809606492825579" datatype="html" xml:space="preserve">
         <source>Logo displayed in the header on large screens such as desktop computers.</source>
-        <target state="new">Logo displayed in the header on large screens such as desktop computers.</target>
+        <target state="translated">Prikazani logotip u zaglavlju na velikim ekranima kao što su desktop računala.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2589534276502100138" datatype="html">
+      <trans-unit id="2589534276502100138" datatype="html" xml:space="preserve">
         <source>Its height will be reduced to 48 pixels and the width will be calculated based on the original file ratio.</source>
-        <target state="new">Its height will be reduced to 48 pixels and the width will be calculated based on the original file ratio.</target>
+        <target state="translated">Visina logotipa će se smanjiti na 48 piksela, a širina će se izračunati na temelju omjera izvorne datoteke.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3768411859162816126" datatype="html">
+      <trans-unit id="3768411859162816126" datatype="html" xml:space="preserve">
         <source>Hide the name of your platform in the header on desktop (wide screens)</source>
-        <target state="new">Hide the name of your platform in the header on desktop (wide screens)</target>
+        <target state="translated">Sakrij ime svoje platforme u zaglavlju na desktop računalu (široki ekrani)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3324015640819511842" datatype="html">
+      <trans-unit id="3324015640819511842" datatype="html" xml:space="preserve">
         <source>Useful for example if your "Desktop header logo" already includes your platform name</source>
-        <target state="new">Useful for example if your "Desktop header logo" already includes your platform name</target>
+        <target state="translated">Korisno na primjer ako tvoj „Logotip u zaglavlju za desktop računala” već uključuje ime tvoje platforme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5125203413999764563" datatype="html">
+      <trans-unit id="5125203413999764563" datatype="html" xml:space="preserve">
         <source>Mobile header logo</source>
-        <target state="new">Mobile header logo</target>
+        <target state="translated">Logotip u zaglavlju za mobilne uređaje</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="217599594829136695" datatype="html">
+      <trans-unit id="217599594829136695" datatype="html" xml:space="preserve">
         <source>Logo displayed in the header on small screens such as mobile devices.</source>
-        <target state="new">Logo displayed in the header on small screens such as mobile devices. </target>
+        <target state="translated">Prikazani logotip u zaglavlju na malim ekranima kao što su mobilni uređaji.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5056137165350591880" datatype="html">
+      <trans-unit id="5056137165350591880" datatype="html" xml:space="preserve">
         <source>It will be resized to 48x48 pixels.</source>
-        <target state="new">It will be resized to 48x48 pixels.</target>
+        <target state="translated">Veličina će se promijeniti na 48 × 48 piksela.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1557050723140613812" datatype="html">
+      <trans-unit id="1557050723140613812" datatype="html" xml:space="preserve">
         <source>Social media logo</source>
-        <target state="new">Social media logo</target>
+        <target state="translated">Logotip društvenih mreža</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">117</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="292602388224793614" datatype="html">
+      <trans-unit id="292602388224793614" datatype="html" xml:space="preserve">
         <source>Default logo displayed on social media.</source>
-        <target state="new">Default logo displayed on social media. </target>
+        <target state="translated">Standardni logotip prikazan na društvenim mrežama.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8756577993740241555" datatype="html">
+      <trans-unit id="8756577993740241555" datatype="html" xml:space="preserve">
         <source>It will be resized to 1200x650 pixels.</source>
-        <target state="new">It will be resized to 1200x650 pixels.</target>
+        <target state="translated">Veličina će se promijeniti na 1200 × 650 piksela.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2910903458139645161" datatype="html">
+      <trans-unit id="2910903458139645161" datatype="html" xml:space="preserve">
         <source>Logos updated</source>
-        <target state="new">Logos updated</target>
+        <target state="translated">Logotipi su aktualizirani</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.ts</context>
           <context context-type="linenumber">132</context>
@@ -3527,17 +3523,17 @@
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4014604069358445532" datatype="html">
+      <trans-unit id="4014604069358445532" datatype="html" xml:space="preserve">
         <source>Default language</source>
-        <target state="new">Default language</target>
+        <target state="translated">Standardni jezik</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="977381557718671058" datatype="html">
+      <trans-unit id="977381557718671058" datatype="html" xml:space="preserve">
         <source>Default language used for users, in emails for example.</source>
-        <target state="new">Default language used for users, in emails for example.</target>
+        <target state="translated">Standardni jezik koji se koristi za korisnike, na primjer u e-mailovima.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">85</context>
@@ -3917,7 +3913,7 @@
       </trans-unit>
       <trans-unit id="6422195560028891534" datatype="html" xml:space="preserve">
         <source>Small latency disables P2P and high latency can increase P2P ratio</source>
-        <target state="translated">Kratko kašnjene deativira P2P a dugo kašnjenje može povećati P2P omjer</target>
+        <target state="translated">Kratko kašnjene deativira P2P, a dugo kašnjenje može povećati P2P omjer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.html</context>
           <context context-type="linenumber">45</context>
@@ -4123,9 +4119,9 @@
           <context context-type="linenumber">107</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7266430450289997463" datatype="html">
+      <trans-unit id="7266430450289997463" datatype="html" xml:space="preserve">
         <source>LOGO</source>
-        <target state="new">LOGO</target>
+        <target state="translated">LOGOTIP</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">6,7</context>
@@ -4911,17 +4907,17 @@
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5320464639563693648" datatype="html">
+      <trans-unit id="5320464639563693648" datatype="html" xml:space="preserve">
         <source>subscriptions per page</source>
-        <target state="new">subscriptions per page</target>
+        <target state="translated">pretplate po stranici</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">6,7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9645096038052385" datatype="html">
+      <trans-unit id="9645096038052385" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No subscription} =1 {1 subscription} other {<x id="INTERPOLATION"/> subscriptions}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No subscription} =1 {1 subscription} other {<x id="INTERPOLATION"/> subscriptions}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Nema pretplate} =1 {1 pretplata} few {<x id="INTERPOLATION"/> pretplate} other {<x id="INTERPOLATION"/> pretplata}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">12</context>
@@ -5710,8 +5706,11 @@
       <trans-unit id="8098332505860203521" datatype="html" xml:space="preserve">
         <source>Only display comments with this tag</source>
         <target state="translated">Prikaži samo komentare s ovom oznakom</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.html</context><context context-type="linenumber">79</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.html</context>
+          <context context-type="linenumber">79</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7266085473379376028" datatype="html">
         <source>No comments found matching current filters.</source>
         <target state="translated">Nije pronađen nijedan komentar koji se poklapa s aktualnim filtrima.</target>
@@ -6089,7 +6088,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="3803133788917504574" datatype="html">
-        <source> Transcoding is enabled so real videos size can be at most ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </source>
+        <source>Transcoding is enabled so real videos size can be at most ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </source>
         <target state="new"> Transcoding is enabled so real videos size can be at most ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-real-quota-info.component.html</context>
@@ -6531,8 +6530,11 @@
       <trans-unit id="9053612499880707554" datatype="html" xml:space="preserve">
         <source>Example: ffmpeg, api</source>
         <target state="translated">Primjer: ffmpeg, api</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">42</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3894950702316166331" datatype="html">
         <source>Loading...</source>
         <target state="translated">Učitavanje …</target>
@@ -6544,13 +6546,19 @@
       <trans-unit id="2308490727635384266" datatype="html" xml:space="preserve">
         <source>Logs copied</source>
         <target state="translated">Zapisi su kopirani</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">60</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2064122482972455058" datatype="html" xml:space="preserve">
         <source>Copy logs</source>
         <target state="translated">Kopiraj zapise</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">60</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1570003374195931619" datatype="html">
         <source>No log.</source>
         <target state="translated">Nema zapisa.</target>
@@ -8093,8 +8101,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
-        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>.
-The link will expire within 1 hour.</source>
+        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
         <target state="translated">E-poruka s uputama za obnavljanje lozinke bit će poslana na <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Poveznica će isteći u roku od 1 sata.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
@@ -9381,9 +9388,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">143</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3284638679883263272" datatype="html">
+      <trans-unit id="3284638679883263272" datatype="html" xml:space="preserve">
         <source>ADVANCED</source>
-        <target state="new">ADVANCED</target>
+        <target state="translated">NAPREDNO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">162</context>
@@ -9437,9 +9444,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7121657131608757909" datatype="html">
+      <trans-unit id="7121657131608757909" datatype="html" xml:space="preserve">
         <source>Two factor authentication disabled</source>
-        <target state="translated">Dvofaktorska autentifikacija deaktivirana</target>
+        <target state="translated">Dvofaktorska autentifikacija je deaktivirana</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.ts</context>
           <context context-type="linenumber">38</context>
@@ -9516,8 +9523,11 @@ The link will expire within 1 hour.</source>
       <trans-unit id="1043265374828694539" datatype="html" xml:space="preserve">
         <source>Auto tag policies</source>
         <target state="translated">Pravila za automatsko označavanje</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-space.component.ts</context><context context-type="linenumber">48</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-space.component.ts</context>
+          <context context-type="linenumber">48</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4930506384627295710" datatype="html">
         <source>Settings</source>
         <target state="translated">Postavke</target>
@@ -10205,11 +10215,23 @@ The link will expire within 1 hour.</source>
       <trans-unit id="3897348120591552265" datatype="html" xml:space="preserve">
         <source>Manage</source>
         <target state="translated">Upravljaj</target>
-        
-        
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">64</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">130</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+video-list/video-user-subscriptions.component.ts</context><context context-type="linenumber">32</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">474</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context>
+          <context context-type="linenumber">130</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-list/video-user-subscriptions.component.ts</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
+          <context context-type="linenumber">474</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3004701943093671049" datatype="html">
         <source>All channels</source>
         <target state="new">All channels</target>
@@ -10245,8 +10267,11 @@ The link will expire within 1 hour.</source>
       <trans-unit id="7607713563510753803" datatype="html" xml:space="preserve">
         <source>Imports</source>
         <target state="translated">Uvozi</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-space.component.ts</context><context context-type="linenumber">61</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-space.component.ts</context>
+          <context context-type="linenumber">61</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8714145624854863455" datatype="html">
         <source>Accept ownership</source>
         <target state="translated">Prihvati vlasništvo</target>
@@ -10535,9 +10560,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4546188098867041457" datatype="html">
+      <trans-unit id="4546188098867041457" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {subscription} other {subscriptions}}</source>
-        <target state="new"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {subscription} other {subscriptions}}</target>
+        <target state="translated"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {pretplata} few {pretplate} other {pretplata}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.ts</context>
           <context context-type="linenumber">57</context>
@@ -11818,15 +11843,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">333</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7804724824750282316" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/>
-          <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/>
-        </source>
-        <target state="translated">
-          <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/>
-          <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {rezultat} other {rezultata}}"/>
-        </target>
+      <trans-unit id="7804724824750282316" datatype="html" xml:space="preserve">
+        <source><x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/> <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/> </source>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/> <x id="ICU" xid="2781455366919684095" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {pretplata} few {pretplate} other {pretplata}}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">6</context>
@@ -11840,9 +11859,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2781455366919684095" datatype="html">
+      <trans-unit id="2781455366919684095" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {subscription} other {subscriptions}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {subscription} other {subscriptions}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {pretplata} few {pretplate} other {pretplata}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">6</context>
@@ -15178,9 +15197,15 @@ The link will expire within 1 hour.</source>
       <trans-unit id="3470970355101730705" datatype="html" xml:space="preserve">
         <source>Pending review</source>
         <target state="translated">Čeka pregled</target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.html</context><context context-type="linenumber">31</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.html</context><context context-type="linenumber">66</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.html</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.html</context>
+          <context context-type="linenumber">66</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4502286564339177240" datatype="html">
         <source>Reply</source>
         <target state="translated">Odgovor</target>
@@ -16440,9 +16465,15 @@ The link will expire within 1 hour.</source>
       <trans-unit id="5937251202465808296" datatype="html" xml:space="preserve">
         <source>More</source>
         <target state="translated">Više</target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-space.component.ts</context><context context-type="linenumber">55</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.html</context><context context-type="linenumber">16</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-space.component.ts</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7855115715004732406" datatype="html" xml:space="preserve">
         <source>Browse "<x id="PH" equiv-text="value.category.label"/>" videos</source>
         <target state="translated">Pregledaj „<x id="PH" equiv-text="value.category.label"/>” videa</target>
@@ -16728,8 +16759,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
-        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>.
-Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
+        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
         <target state="translated">Nije moguće dohvatiti OAuth podatke prijave klijenta: <x id="PH" equiv-text="err.text"/>. Provjeri PeerTube konfiguraciju (config/directory), posebno odjeljak „webserver”.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
@@ -16812,9 +16842,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4116911651502837995" datatype="html">
+      <trans-unit id="4116911651502837995" datatype="html" xml:space="preserve">
         <source>Files</source>
-        <target state="new">Files</target>
+        <target state="translated">Datoteke</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">97</context>
@@ -16848,17 +16878,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2817281420230417453" datatype="html">
+      <trans-unit id="2817281420230417453" datatype="html" xml:space="preserve">
         <source>Started on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ session.startDate | ptDate:'medium' }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Started on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ session.startDate | ptDate:'medium' }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Započelo <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ session.startDate | ptDate:'medium' }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3301948621825061833" datatype="html">
+      <trans-unit id="3301948621825061833" datatype="html" xml:space="preserve">
         <source>Ended on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ session.endDate | ptDate:'medium' }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Ended on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ session.endDate | ptDate:'medium' }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Završilo <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ session.endDate | ptDate:'medium' }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.html</context>
           <context context-type="linenumber">14</context>
@@ -16920,9 +16950,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">161</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4750857371950301240" datatype="html">
+      <trans-unit id="4750857371950301240" datatype="html" xml:space="preserve">
         <source>Showing <x id="PH" equiv-text="start"/> to <x id="PH_1" equiv-text="end"/> of <x id="PH_2" equiv-text="this.totalRecords"/> elements</source>
-        <target state="new">Showing <x id="PH" equiv-text="start"/> to <x id="PH_1" equiv-text="end"/> of <x id="PH_2" equiv-text="this.totalRecords"/> elements</target>
+        <target state="translated">Prikazuje <x id="PH" equiv-text="start"/> do <x id="PH_1" equiv-text="end"/> od <x id="PH_2" equiv-text="this.totalRecords"/> elementa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-tables/table.component.ts</context>
           <context context-type="linenumber">428</context>
@@ -16944,17 +16974,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7751069057792041822" datatype="html">
+      <trans-unit id="7751069057792041822" datatype="html" xml:space="preserve">
         <source>Stay on page</source>
-        <target state="new">Stay on page</target>
+        <target state="translated">Ostani na stranici</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/routing/can-deactivate-guard.service.ts</context>
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="729881853265307704" datatype="html">
+      <trans-unit id="729881853265307704" datatype="html" xml:space="preserve">
         <source>Leave page</source>
-        <target state="new">Leave page</target>
+        <target state="translated">Napusti stranicu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/routing/can-deactivate-guard.service.ts</context>
           <context context-type="linenumber">34</context>
@@ -17024,9 +17054,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="839435106282863105" datatype="html">
+      <trans-unit id="839435106282863105" datatype="html" xml:space="preserve">
         <source>Open in the application?</source>
-        <target state="new">Open in the application?</target>
+        <target state="translated">Otvoriti u aplikaciji?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
           <context context-type="linenumber">3</context>
@@ -17040,9 +17070,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="27173108314474680" datatype="html">
+      <trans-unit id="27173108314474680" datatype="html" xml:space="preserve">
         <source>Go to the page where you can manage your account</source>
-        <target state="new">Go to the page where you can manage your account</target>
+        <target state="translated">Idi na stranicu na kojoj možeš upravljati svojim računom</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
           <context context-type="linenumber">44</context>
@@ -17156,17 +17186,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5646229632737908639" datatype="html">
+      <trans-unit id="5646229632737908639" datatype="html" xml:space="preserve">
         <source>Your <x id="PH" equiv-text="name"/> file format is not supported by your platform.</source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file format is not supported by your platform.</target>
+        <target state="translated">Tvoja platforma ne podržava tvoj <x id="PH" equiv-text="name"/> datotečni format.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4591025453509397472" datatype="html">
+      <trans-unit id="4591025453509397472" datatype="html" xml:space="preserve">
         <source>The server encountered an error.</source>
-        <target state="new">The server encountered an error.</target>
+        <target state="translated">Dogodila se greška na serveru.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">63</context>
@@ -17180,17 +17210,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5514835993053540551" datatype="html">
+      <trans-unit id="5514835993053540551" datatype="html" xml:space="preserve">
         <source>Your <x id="PH" equiv-text="name"/> file was too large.</source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file was too large.</target>
+        <target state="translated">Tvoja datoteka <x id="PH" equiv-text="name"/> je bila prevelika.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8456000313168556766" datatype="html">
+      <trans-unit id="8456000313168556766" datatype="html" xml:space="preserve">
         <source>Max size is <x id="PH" equiv-text="maxFileSize"/>.</source>
-        <target state="new"> Max size is <x id="PH" equiv-text="maxFileSize"/>.</target>
+        <target state="translated">Maks. veličina je <x id="PH" equiv-text="maxFileSize"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">74</context>
@@ -17224,17 +17254,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3980731018496292351" datatype="html">
+      <trans-unit id="3980731018496292351" datatype="html" xml:space="preserve">
         <source>Display the lateral menu</source>
-        <target state="new">Display the lateral menu</target>
+        <target state="translated">Prikaži bočni izbornik</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1618123054334930952" datatype="html">
+      <trans-unit id="1618123054334930952" datatype="html" xml:space="preserve">
         <source>Hide the lateral menu</source>
-        <target state="new">Hide the lateral menu</target>
+        <target state="translated">Sakrij bočni izbornik</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">34</context>
@@ -17479,8 +17509,11 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="8278995041812548563" datatype="html" xml:space="preserve">
         <source>Update your notification preferences</source>
         <target state="translated">Aktualiziraj tvoje postavke obavijesti</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/header/notification-dropdown.component.html</context><context context-type="linenumber">84</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/header/notification-dropdown.component.html</context>
+          <context context-type="linenumber">84</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2734780694152757859" datatype="html">
         <source>View all</source>
         <target state="new">View all</target>
@@ -21101,9 +21134,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3246080307662107611" datatype="html">
+      <trans-unit id="3246080307662107611" datatype="html" xml:space="preserve">
         <source>Disable global search</source>
-        <target state="new">Disable global search</target>
+        <target state="translated">Deaktiviraj globalnu pretragu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">100</context>
@@ -21804,8 +21837,11 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="8797603333570754589" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.actor.name"/> (instance page)</source>
         <target state="translated"><x id="PH" equiv-text="this.actor.name"/> (stranica instance)</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context><context context-type="linenumber">47</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context>
+          <context context-type="linenumber">47</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3171444589366264129" datatype="html" xml:space="preserve">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline&quot; href=&quot;https://en.wikipedia.org/wiki/Markdown#Example&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;"/>Markdown compatible<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> that also supports <x id="START_LINK_1" equiv-text="&lt;a class=&quot;text-decoration-underline&quot; href=&quot;https://docs.joinpeertube.org/api/custom-client-markup&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;"/>custom PeerTube HTML tags<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
         <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline&quot; href=&quot;https://en.wikipedia.org/wiki/Markdown#Example&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;"/>Markdown kompatibilnost<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> koja također podržava <x id="START_LINK_1" equiv-text="&lt;a class=&quot;text-decoration-underline&quot; href=&quot;https://docs.joinpeertube.org/api/custom-client-markup&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;"/>prilagođene PeerTube HTML oznake<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
@@ -23341,10 +23377,19 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="3755780063671912599" datatype="html" xml:space="preserve">
         <source>Watched words</source>
         <target state="translated">Praćene riječi</target>
-        
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin-moderation.component.ts</context><context context-type="linenumber">76</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context><context context-type="linenumber">127</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-space.component.ts</context><context context-type="linenumber">44</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/admin-moderation.component.ts</context>
+          <context context-type="linenumber">76</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context>
+          <context context-type="linenumber">127</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-space.component.ts</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6728985502447585050" datatype="html" xml:space="preserve">
         <source>No server found matching current filters.</source>
         <target state="translated">Nije pronađen nijedan server koji se poklapa s aktualnim filtrima.</target>
@@ -24137,9 +24182,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5752446567652282010" datatype="html">
+      <trans-unit id="5752446567652282010" datatype="html" xml:space="preserve">
         <source>Disable P2P streaming</source>
-        <target state="new">Disable P2P streaming</target>
+        <target state="translated">Deaktiviraj P2P streaming</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
           <context context-type="linenumber">55</context>
@@ -24153,9 +24198,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8032065084506853091" datatype="html">
+      <trans-unit id="8032065084506853091" datatype="html" xml:space="preserve">
         <source>Disable automatic transcription of videos</source>
-        <target state="new">Disable automatic transcription of videos</target>
+        <target state="translated">Deaktiviraj automatsku transkripciju videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
           <context context-type="linenumber">68</context>
@@ -24257,9 +24302,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3818007889408286818" datatype="html">
+      <trans-unit id="3818007889408286818" datatype="html" xml:space="preserve">
         <source>Disable video import and channel synchronization</source>
-        <target state="new">Disable video import and channel synchronization</target>
+        <target state="translated">Deaktiviraj uvoz videa i sinkronizaciju kanala</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/private-instance-config.component.ts</context>
           <context context-type="linenumber">53</context>
@@ -24283,9 +24328,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="7806027071187877900" datatype="html">
+      <trans-unit id="7806027071187877900" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Disable&lt;/strong&gt; user &lt;strong&gt;registration&lt;/strong&gt;</source>
-        <target state="new">&lt;strong&gt;Disable&lt;/strong&gt; user &lt;strong&gt;registration&lt;/strong&gt;</target>
+        <target state="translated">&lt;strong&gt;Deaktiviraj&lt;/strong&gt; &lt;strong&gt;registraciju&lt;/strong&gt; korisnika</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">183</context>
@@ -24400,9 +24445,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="168249800849144901" datatype="html">
+      <trans-unit id="168249800849144901" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Disable P2P streaming&lt;/strong&gt; by default for anonymous and new users</source>
-        <target state="new">&lt;strong&gt;Disable P2P streaming&lt;/strong&gt; by default for anonymous and new users</target>
+        <target state="translated">Standardno &lt;strong&gt;deaktiviraj P2P streaming&lt;/strong&gt; za anonimne i nove korisnike</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">346</context>
@@ -24523,17 +24568,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">350</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5898371297224932546" datatype="html">
+      <trans-unit id="5898371297224932546" datatype="html" xml:space="preserve">
         <source>More customization</source>
-        <target state="new">More customization</target>
+        <target state="translated">Više prilagođavanja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">364</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5395293285957838632" datatype="html">
+      <trans-unit id="5395293285957838632" datatype="html" xml:space="preserve">
         <source>Less customization</source>
-        <target state="new">Less customization</target>
+        <target state="translated">Manje prilagođavanja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">367</context>
@@ -24547,17 +24592,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8108544668313057377" datatype="html">
+      <trans-unit id="8108544668313057377" datatype="html" xml:space="preserve">
         <source>Go to the channel page of <x id="PH" equiv-text="this.actor().displayName"/></source>
-        <target state="new">Go to the channel page of <x id="PH" equiv-text="this.actor().displayName"/></target>
+        <target state="translated">Idi na stranicu kanala od <x id="PH" equiv-text="this.actor().displayName"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-tables/actor-cell.component.ts</context>
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8559482759792171399" datatype="html">
+      <trans-unit id="8559482759792171399" datatype="html" xml:space="preserve">
         <source>Go to the account page of <x id="PH" equiv-text="this.actor().displayName"/></source>
-        <target state="new">Go to the account page of <x id="PH" equiv-text="this.actor().displayName"/></target>
+        <target state="translated">Idi na stranicu računa od <x id="PH" equiv-text="this.actor().displayName"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-tables/actor-cell.component.ts</context>
           <context context-type="linenumber">34</context>
@@ -24595,17 +24640,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1795705931707209785" datatype="html">
+      <trans-unit id="1795705931707209785" datatype="html" xml:space="preserve">
         <source>Add to watch later</source>
-        <target state="translated">Dodaj u kasnije gledanje</target>
+        <target state="translated">Dodaj u „Gledaj kasnije”</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.ts</context>
           <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8498940878158860248" datatype="html">
+      <trans-unit id="8498940878158860248" datatype="html" xml:space="preserve">
         <source>Remove from watch later</source>
-        <target state="translated">Ukloni iz kasnijeg gledanja</target>
+        <target state="translated">Ukloni iz „Gledaj kasnije”</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.ts</context>
           <context context-type="linenumber">64</context>
@@ -24619,9 +24664,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8657461348142878243" datatype="html">
+      <trans-unit id="8657461348142878243" datatype="html" xml:space="preserve">
         <source>Preferred language for the web interface and for emails</source>
-        <target state="new">Preferred language for the web interface and for emails</target>
+        <target state="translated">Preferirani jezik za web sučelje i za e-poštu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context>
           <context context-type="linenumber">5,7</context>
@@ -25628,8 +25673,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="1604871298839217952" datatype="html">
-        <source>{VAR_PLURAL, plural, =1 {other platform} other {other
-              platforms}}</source>
+        <source>{VAR_PLURAL, plural, =1 {other platform} other {other platforms}}</source>
         <target state="new">{VAR_PLURAL, plural, =1 {other platform} other {other
               platforms}}</target>
         <context-group purpose="location">
@@ -25790,9 +25834,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="187187500641108332" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="{{ item.value.label }}"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="{{ item.value.label }}"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ item.value.label }}"/>
         </target>
@@ -26087,7 +26129,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6841230785530859987" datatype="html" xml:space="preserve">
         <source>Send a follow request to your subscriptions</source>
-        <target state="translated">Poslati zahtjev za praćenje na tvoje pretplate</target>
+        <target state="translated">Pošalji zahtjev za praćenje na tvoje pretplate</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">24</context>
@@ -27198,9 +27240,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
-        <source>
-          <x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/>
-        </source>
+        <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/> </source>
         <target state="translated">
           <x id="ICU" xid="1730926218636655979" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {Nema videa} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videa}}"/>
         </target>
