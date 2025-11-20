@@ -2579,9 +2579,9 @@
           <context context-type="linenumber">755</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7372107248244982956" datatype="html">
+      <trans-unit id="7372107248244982956" datatype="html" xml:space="preserve">
         <source>Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>anonymous users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors that may not be federated with your platform</source>
-        <target state="new">Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>anonymous users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors that may not be federated with your platform</target>
+        <target state="translated">Dozvoli <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>anonimnim korisnicima<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> da pregledaju udaljena videa/aktere koji možda nisu federalizirani s tvojom platformom</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">758</context>
@@ -2689,7 +2689,7 @@
       </trans-unit>
       <trans-unit id="74636758368624456" datatype="html" xml:space="preserve">
         <source>Users can export their PeerTube data in a .zip for backup or re-import. Only one export at a time is allowed per user</source>
-        <target state="translated">Korisnici mogu izvesti svoje PeerTube podatkeu .zip formatu kao sigurnosnu kopiju ili za ponovni uvoz podataka. Istodobno je moguć samo jedan izvoz po korisniku</target>
+        <target state="translated">Korisnici mogu izvesti svoje PeerTube podatke u .zip formatu kao sigurnosnu kopiju ili za ponovni uvoz podataka. Moguć je samo jedan izvoz po korisniku</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">847</context>
@@ -2759,9 +2759,9 @@
           <context context-type="linenumber">577</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="735929773748569631" datatype="html">
+      <trans-unit id="735929773748569631" datatype="html" xml:space="preserve">
         <source>Remote actors can follow channels of your platform</source>
-        <target state="new">Remote actors can follow channels of your platform</target>
+        <target state="translated">Udaljeni akteri mogu pratiti kanale tvoje platforme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">590</context>
@@ -2775,9 +2775,9 @@
           <context context-type="linenumber">593</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4707019046470605528" datatype="html">
+      <trans-unit id="4707019046470605528" datatype="html" xml:space="preserve">
         <source>Remote actors can follow your platform</source>
-        <target state="new">Remote actors can follow your platform</target>
+        <target state="translated">Udaljeni akteri mogu pratiti tvoju platformu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">605</context>
