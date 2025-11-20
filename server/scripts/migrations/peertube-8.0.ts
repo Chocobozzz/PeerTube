@@ -1,4 +1,5 @@
 import { initDatabaseModels, sequelizeTypescript } from '@server/initializers/database.js'
+import { ApplicationModel } from '@server/models/application/application.js'
 import { QueryTypes } from 'sequelize'
 
 run()
@@ -10,6 +11,12 @@ run()
 
 async function run () {
   await initDatabaseModels(true)
+
+  const application = await ApplicationModel.load()
+  if (application.migrationVersion < 960) {
+    console.error('This migration script must be run after v8.0 migration')
+    process.exit(-1)
+  }
 
   const chunkSize = 500
   let i = 1
