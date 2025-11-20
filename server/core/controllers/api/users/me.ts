@@ -49,6 +49,7 @@ import { AccountModel } from '../../../models/account/account.js'
 import { UserModel } from '../../../models/user/user.js'
 import { VideoImportModel } from '../../../models/video/video-import.js'
 import { VideoModel } from '../../../models/video/video.js'
+import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 
 const auditLogger = auditLoggerFactory('users')
 
@@ -262,7 +263,11 @@ async function deleteMe (req: express.Request, res: express.Response) {
 
   auditLogger.delete(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
 
-  await user.destroy()
+  await retryTransactionWrapper(() => {
+    return sequelizeTypescript.transaction(t => {
+      return user.destroy({ transaction: t })
+    })
+  })
 
   Hooks.runAction('action:api.user.deleted', { user, req, res })
 

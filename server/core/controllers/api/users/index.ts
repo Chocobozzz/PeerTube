@@ -48,6 +48,7 @@ import { registrationsRouter } from './registrations.js'
 import { twoFactorRouter } from './two-factor.js'
 import { userExportsRouter } from './user-exports.js'
 import { userImportRouter } from './user-imports.js'
+import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 
 const auditLogger = auditLoggerFactory('users')
 const lTags = loggerTagsFactory('api', 'users')
@@ -241,9 +242,11 @@ async function removeUser (req: express.Request, res: express.Response) {
 
   auditLogger.delete(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
 
-  await sequelizeTypescript.transaction(async t => {
-    // Use a transaction to avoid inconsistencies with hooks (account/channel deletion & federation)
-    await user.destroy({ transaction: t })
+  await retryTransactionWrapper(() => {
+    return sequelizeTypescript.transaction(t => {
+      // Use a transaction to avoid inconsistencies with hooks (account/channel deletion & federation)
+      return user.destroy({ transaction: t })
+    })
   })
 
   logger.info(`Removed user ${user.username} by moderator ${byUser.username}.`, lTags(user.username, byUser.username))
