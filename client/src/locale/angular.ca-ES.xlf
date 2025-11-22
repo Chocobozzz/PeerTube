@@ -3901,9 +3901,9 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7512666561651719221" datatype="html">
+      <trans-unit id="7512666561651719221" datatype="html" xml:space="preserve">
         <source>You can now &lt;strong&gt;invite other users&lt;/strong&gt; to collaborate on your channel</source>
-        <target state="new">You can now &lt;strong&gt;invite other users&lt;/strong&gt; to collaborate on your channel</target>
+        <target state="translated">Ara podeu &lt;strong&gt;convidar altres persones&lt;/strong&gt; a col·laborar al vostre canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context>
           <context context-type="linenumber">30</context>
@@ -14279,25 +14279,25 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">11,12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8627640588059476624" datatype="html">
+      <trans-unit id="8627640588059476624" datatype="html" xml:space="preserve">
         <source>An editor can manage videos in this channel</source>
-        <target state="new">An editor can manage videos in this channel</target>
+        <target state="translated">Un(a) editor(a) pot gestionar vídeos d'aquest canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.ts</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3775433842284877534" datatype="html">
+      <trans-unit id="3775433842284877534" datatype="html" xml:space="preserve">
         <source>Owner of the channel</source>
-        <target state="new">Owner of the channel</target>
+        <target state="translated">Propietari(a) del canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.ts</context>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2996672568437579118" datatype="html">
+      <trans-unit id="2996672568437579118" datatype="html" xml:space="preserve">
         <source>Invited to be an editor to manage videos in this channel</source>
-        <target state="new">Invited to be an editor to manage videos in this channel</target>
+        <target state="translated">Convidat a ser editor(a) per gestionar vídeos d'aquest canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -21266,9 +21266,9 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3803133788917504574" datatype="html">
+      <trans-unit id="3803133788917504574" datatype="html" xml:space="preserve">
         <source>Transcoding is enabled so real videos size can be at most ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </source>
-        <target state="new"> Transcoding is enabled so real videos size can be at most ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </target>
+        <target state="translated">La transcodificació està habilitada, de manera que la mida real dels vídeos pot ser com a màxim ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-real-quota-info.component.html</context>
           <context context-type="linenumber">11,12</context>
@@ -25554,7 +25554,8 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       <trans-unit id="1604871298839217952" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {other platform} other {other
               platforms}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {altra plataforma} other {altres plataformes}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {altra plataforma} other {altres
+              plataformes}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">25,27</context>
