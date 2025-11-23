@@ -9853,7 +9853,7 @@
       </trans-unit>
       <trans-unit id="3204334247986678419" datatype="html" xml:space="preserve">
         <source>Runners</source>
-        <target state="translated">Arbetstjänster</target>
+        <target state="translated">Fjärrarbetstjänster</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">109</context>
@@ -25685,7 +25685,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5024831045497027714" datatype="html" xml:space="preserve">
         <source>Associated runners</source>
-        <target state="translated">Kopplade arbetstjänster</target>
+        <target state="translated">Kopplade fjärrarbetstjänster</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">38</context>
@@ -25741,7 +25741,7 @@ color: red;
       </trans-unit>
       <trans-unit id="545462083274995239" datatype="html" xml:space="preserve">
         <source>Do you really want to remove this registration token? All associated runners will also be removed.</source>
-        <target state="translated">Vill du verkligen ta bort den här registreringsnyckeln? Alla kopplade arbetstjänster kommer också att tas bort.</target>
+        <target state="translated">Vill du verkligen ta bort den här registreringsnyckeln? Alla kopplade fjärrarbetstjänster kommer också att tas bort.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">72</context>
@@ -25765,7 +25765,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6713730474908011769" datatype="html" xml:space="preserve">
         <source>List runner jobs</source>
-        <target state="translated">Lista jobb för arbetstjänster</target>
+        <target state="translated">Lista jobb för fjärrarbetstjänster</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runners.routes.ts</context>
           <context context-type="linenumber">27</context>
@@ -25781,7 +25781,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4255553856349508493" datatype="html" xml:space="preserve">
         <source>List registration runner tokens</source>
-        <target state="translated">Lista registreringsnycklar för arbetstjänster</target>
+        <target state="translated">Lista registreringsnycklar för fjärrarbetstjänster</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runners.routes.ts</context>
           <context context-type="linenumber">47</context>
