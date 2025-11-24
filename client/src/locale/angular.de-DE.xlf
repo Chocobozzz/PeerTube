@@ -14284,25 +14284,25 @@
           <context context-type="linenumber">11,12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8627640588059476624" datatype="html">
+      <trans-unit id="8627640588059476624" datatype="html" xml:space="preserve">
         <source>An editor can manage videos in this channel</source>
-        <target state="new">An editor can manage videos in this channel</target>
+        <target state="translated">Ein Cutter kann Videos in diesem Kanal verwalten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.ts</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3775433842284877534" datatype="html">
+      <trans-unit id="3775433842284877534" datatype="html" xml:space="preserve">
         <source>Owner of the channel</source>
-        <target state="new">Owner of the channel</target>
+        <target state="translated">Eigentümer des Kanals</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.ts</context>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2996672568437579118" datatype="html">
+      <trans-unit id="2996672568437579118" datatype="html" xml:space="preserve">
         <source>Invited to be an editor to manage videos in this channel</source>
-        <target state="new">Invited to be an editor to manage videos in this channel</target>
+        <target state="translated">Eingeladen, ein Cutter zu werden, um Videos in diesem Kanal zu verwalten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -21280,9 +21280,9 @@ Stell sicher, dass PeerTube korrekt konfiguriert ist (Ordner config/), speziell 
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3803133788917504574" datatype="html">
+      <trans-unit id="3803133788917504574" datatype="html" xml:space="preserve">
         <source>Transcoding is enabled so real videos size can be at most ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </source>
-        <target state="new"> Transcoding is enabled so real videos size can be at most ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </target>
+        <target state="translated">Transkodierung ist aktiviert, damit die reale Videogröße maximal ca. <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/> sein kann. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-real-quota-info.component.html</context>
           <context context-type="linenumber">11,12</context>
