@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core'
 import { AuthService, Notifier, ServerService, UserService } from '@app/core'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { UserNewFeatureInfo } from '@peertube/peertube-models'
+import { first } from 'rxjs'
 import { NewFeatureInfoModalComponent } from './new-feature-info-modal.component'
 
 @Injectable({ providedIn: 'root' })
@@ -13,7 +14,7 @@ export class NewFeatureInfoService {
   private notifier = inject(Notifier)
 
   showChannelCollaboration () {
-    this.auth.userInformationLoaded.subscribe(() => {
+    this.auth.userInformationLoaded.pipe(first()).subscribe(() => {
       const config = this.serverService.getHTMLConfig()
       if (config.client.newFeaturesInfo !== true) return
 
@@ -25,16 +26,14 @@ export class NewFeatureInfoService {
       const modalRef = this.modalService.open(NewFeatureInfoModalComponent, { size: 'lg', centered: true })
       const component = modalRef.componentInstance as NewFeatureInfoModalComponent
 
-      component.title = $localize`Collaborations on channels are coming to ${instanceName}`
+      component.title = $localize`Collaboration on channels are coming to ${instanceName}`
       component.iconName = 'channel'
       component.html = $localize`You can now <strong>invite other users</strong> to collaborate on your channel`
 
       modalRef.result.finally(() => {
         this.userService.markNewFeatureInfoAsRead(UserNewFeatureInfo.CHANNEL_COLLABORATION)
           .subscribe({
-            next: () => {
-              // empty
-            },
+            next: () => this.auth.refreshUserInformation(),
 
             error: err => this.notifier.error(err.message)
           })
