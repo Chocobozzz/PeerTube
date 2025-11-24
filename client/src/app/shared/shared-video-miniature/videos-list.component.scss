@@ -62,8 +62,9 @@ my-date-group-label.date-displayed,
     @include margin-right(1rem);
   }
 
-  .date-title {
+  my-date-group-label.date-displayed {
     text-align: center;
+    display: block;
   }
 
   .videos-header {
