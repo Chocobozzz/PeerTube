@@ -3,7 +3,14 @@ import { Injectable, Injector, inject } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService } from '@app/core/auth/auth.service'
 import { getBackendUrl } from '@app/helpers'
-import { HttpStatusCode, OAuth2ErrorCode, PeerTubeProblemDocument, ServerErrorCode } from '@peertube/peertube-models'
+import {
+  HttpStatusCode,
+  OAuth2ErrorCode,
+  OAuth2ErrorCodeType,
+  PeerTubeProblemDocument,
+  ServerErrorCode,
+  ServerErrorCodeType
+} from '@peertube/peertube-models'
 import { isSameOrigin } from '@root-helpers/url'
 import { Observable, throwError as observableThrowError, of } from 'rxjs'
 import { catchError, switchMap } from 'rxjs/operators'
@@ -28,13 +35,18 @@ export class AuthInterceptor implements HttpInterceptor {
       .pipe(
         catchError((err: HttpErrorResponse) => {
           const error = err.error as PeerTubeProblemDocument
-          const isOTPMissingError = this.authService.isOTPMissingError(err)
 
-          if (error && error.code === ServerErrorCode.CURRENT_PASSWORD_IS_INVALID) {
+          const bypassCodes = new Set<ServerErrorCodeType | OAuth2ErrorCodeType>([
+            ServerErrorCode.VIDEO_REQUIRES_PASSWORD,
+            ServerErrorCode.INCORRECT_VIDEO_PASSWORD,
+            ServerErrorCode.CURRENT_PASSWORD_IS_INVALID
+          ])
+
+          if (error?.code && bypassCodes.has(error.code)) {
             return observableThrowError(() => err)
           }
 
-          if (!isOTPMissingError) {
+          if (!this.authService.isOTPMissingError(err)) {
             if (err.status === HttpStatusCode.UNAUTHORIZED_401 && error && error.code === OAuth2ErrorCode.INVALID_TOKEN) {
               return this.handleTokenExpired(req, next)
             }

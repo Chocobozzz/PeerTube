@@ -188,6 +188,7 @@ body {
   .modal-header {
     border-bottom: 0;
     margin-bottom: 5px;
+    padding: 1.5rem $modal-inner-padding;
 
     .modal-title {
       font-size: 20px;

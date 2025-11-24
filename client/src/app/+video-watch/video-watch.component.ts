@@ -404,6 +404,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         })
       },
       error: async err => {
+        console.log(err)
         if (err.body.code === ServerErrorCode.VIDEO_REQUIRES_PASSWORD || err.body.code === ServerErrorCode.INCORRECT_VIDEO_PASSWORD) {
           const { confirmed, password } = await this.handleVideoPasswordError(err)
 
