@@ -12207,17 +12207,17 @@
           <context context-type="linenumber">189</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4240037618955024499" datatype="html">
+      <trans-unit id="4240037618955024499" datatype="html" xml:space="preserve">
         <source>will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with VOD transcoding </source>
-        <target state="translated">kommer behöva upp till <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> med omkodning av video on demand </target>
+        <target state="translated">kommer behöva upp till <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> med omkodning av on demand-video </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.html</context>
           <context context-type="linenumber">194</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8489317904250057957" datatype="html">
+      <trans-unit id="8489317904250057957" datatype="html" xml:space="preserve">
         <source>will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with VOD transcoding </source>
-        <target state="translated">kommer behöva minst <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> med omkodning av video on demand </target>
+        <target state="translated">kommer behöva minst <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> med omkodning av on demand-video </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.html</context>
           <context context-type="linenumber">200</context>
@@ -12415,9 +12415,9 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8212237880239644112" datatype="html">
+      <trans-unit id="8212237880239644112" datatype="html" xml:space="preserve">
         <source>Same as VOD transcoding, transcoding live streams so that they are in a streamable form that any device can play. Requires a beefy CPU, and then some.</source>
-        <target state="translated">Likt video on demand, måste direktsändningar omkodas för att kunna strömmas till och visas på alla enheter. Detta kräver en väldigt kraftfull processor.</target>
+        <target state="translated">Likt on demand-video, måste direktsändningar omkodas för att kunna strömmas till och visas på alla enheter. Detta kräver en väldigt kraftfull processor.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.html</context>
           <context context-type="linenumber">100</context>
@@ -13439,9 +13439,9 @@ color: red;
           <context context-type="linenumber">81,83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1744425032255703211" datatype="html">
+      <trans-unit id="1744425032255703211" datatype="html" xml:space="preserve">
         <source>VOD &amp; Live videos</source>
-        <target state="translated">Video on demand &amp; direktsändningar</target>
+        <target state="translated">On demand-video &amp; direktsändningar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">141</context>
@@ -17753,9 +17753,9 @@ color: red;
           <context context-type="linenumber">3,4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3229595422546554334" datatype="html">
+      <trans-unit id="3229595422546554334" datatype="html" xml:space="preserve">
         <source>Jobs</source>
-        <target state="translated">Jobb</target>
+        <target state="translated">Fjärrjobb</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/system.routes.ts</context>
           <context context-type="linenumber">25</context>
@@ -17960,7 +17960,7 @@ color: red;
       </trans-unit>
       <trans-unit id="9215315749822099607" datatype="html" xml:space="preserve">
         <source>jobs per page</source>
-        <target state="translated">körningsjobb per sida</target>
+        <target state="translated">fjärrjobb per sida</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">7,8</context>
@@ -18232,7 +18232,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5182966734308933786" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No job} =1 {1 job} other {<x id="INTERPOLATION"/> jobs}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Inget körningsjobb} =1 {1 job} other {<x id="INTERPOLATION"/> körningsjobb}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Inget körningsjobb} =1 {1 job} other {<x id="INTERPOLATION"/> fjärrrjobb}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">14</context>
@@ -18274,65 +18274,65 @@ color: red;
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6133673901299224277" datatype="html">
+      <trans-unit id="6133673901299224277" datatype="html" xml:space="preserve">
         <source>No runner jobs found.</source>
-        <target state="translated">Inga jobb hittades.</target>
+        <target state="translated">Inga fjärrjobb hittades.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7146070362549250677" datatype="html">
+      <trans-unit id="7146070362549250677" datatype="html" xml:space="preserve">
         <source>Completed jobs</source>
-        <target state="translated">Avklarade jobb</target>
+        <target state="translated">Avslutade fjärrjobb</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2841995988789172579" datatype="html">
+      <trans-unit id="2841995988789172579" datatype="html" xml:space="preserve">
         <source>Pending jobs</source>
-        <target state="translated">Väntande jobb</target>
+        <target state="translated">Väntande fjärrjobb</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6587308737467829649" datatype="html">
+      <trans-unit id="6587308737467829649" datatype="html" xml:space="preserve">
         <source>Jobs that are being processed</source>
-        <target state="translated">Pågående jobb</target>
+        <target state="translated">Pågående fjärrjobb</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2902296494834684511" datatype="html">
+      <trans-unit id="2902296494834684511" datatype="html" xml:space="preserve">
         <source>Failed jobs</source>
-        <target state="translated">Misslyckade jobb</target>
+        <target state="translated">Misslyckade fjärrjobb</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2785060445730155276" datatype="html">
+      <trans-unit id="2785060445730155276" datatype="html" xml:space="preserve">
         <source>Cancel this job</source>
-        <target state="translated">Avbryt detta jobb</target>
+        <target state="translated">Avbryt detta fjärrjobb</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="410829478323542752" datatype="html">
+      <trans-unit id="410829478323542752" datatype="html" xml:space="preserve">
         <source>Delete this job</source>
-        <target state="translated">Radera detta jobb</target>
+        <target state="translated">Radera detta fjärrjobb</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="693664545987486839" datatype="html">
+      <trans-unit id="693664545987486839" datatype="html" xml:space="preserve">
         <source>Do you really want to cancel {count, plural, =1 {this job} other {<x id="count"/> jobs}}? Children jobs will also be cancelled.</source>
-        <target state="translated">Vill du verkligen avbryta {count, plural, =1 {detta} other {<x id="count"/>}} jobb? Deras underjobb kommer också avbrytas.</target>
+        <target state="translated">Vill du verkligen avbryta {count, plural, =1 {fjärrjobbet} other {<x id="count"/> fjärrjobben}}? Kopplade fjärrjobb kommer också att avbrytas.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">114</context>
@@ -18340,15 +18340,15 @@ color: red;
       </trans-unit>
       <trans-unit id="6494788464560085904" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Job cancelled} other {<x id="count"/> jobs cancelled}}</source>
-        <target state="translated">{count, plural, =1 {Jobb avbrutet} other {<x id="count"/> jobb avbrutna}}</target>
+        <target state="translated">{count, plural, =1 {fjärrjobbet avbrutet} other {<x id="count"/> fjärrjobben avbrutna}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">129</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2175266358082397536" datatype="html">
+      <trans-unit id="2175266358082397536" datatype="html" xml:space="preserve">
         <source>Do you really want to remove {count, plural, =1 {this job} other {<x id="count"/> jobs}}? Children jobs will also be removed.</source>
-        <target state="translated">Vill du verkligen ta bort {count, plural, =1 {detta} other {<x id="count"/>}} jobb? Underjobb kommer också tas bort.</target>
+        <target state="translated">Vill du verkligen ta bort {count, plural, =1 {fjärrjobbet} other {<x id="count"/> fjärrjobben}}? Alla kopplade fjärrjobb kommer också att tas bort.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">141</context>
@@ -18682,9 +18682,9 @@ color: red;
           <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1878553503929537171" datatype="html">
+      <trans-unit id="1878553503929537171" datatype="html" xml:space="preserve">
         <source>VOD</source>
-        <target state="translated">Video on demand</target>
+        <target state="translated">On demand-video (VOD)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/admin-config.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -21096,9 +21096,9 @@ color: red;
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2392481201920342009" datatype="html">
+      <trans-unit id="2392481201920342009" datatype="html" xml:space="preserve">
         <source>VOD videos</source>
-        <target state="translated">Video on demand</target>
+        <target state="translated">Video on demand (VOD)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">37</context>
@@ -25613,7 +25613,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7896600179187469316" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Job removed} other {<x id="count"/> jobs removed}}</source>
-        <target state="translated">{count, plural, =1 {Jobbet borttaget} other {<x id="count"/> jobben borttagna}}</target>
+        <target state="translated">{count, plural, =1 {fjärrjobbet borttaget} other {<x id="count"/> fjärrjobben borttagna}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">156</context>
@@ -25629,15 +25629,15 @@ color: red;
       </trans-unit>
       <trans-unit id="1870557085021370018" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No runner} =1 {1 runner} other {<x id="INTERPOLATION"/> runners}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Ingen hjälpreda} =1 {1 hjälpreda} other {<x id="INTERPOLATION"/> hjälpredor}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Ingen hjälpreda} =1 {1 fjärrarbetare} other {<x id="INTERPOLATION"/> fjärrarbetare}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8527948211896740910" datatype="html">
+      <trans-unit id="8527948211896740910" datatype="html" xml:space="preserve">
         <source>Do you really want to delete this runner? It won't be able to process jobs anymore.</source>
-        <target state="translated">Vill du verkligen radera denna arbetare? Den kommer inte kunna behandla jobb längre.</target>
+        <target state="translated">Vill du verkligen radera denna fjärrarbetare? Den kommer inte kunna hantera några fjärrjobb längre.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
           <context context-type="linenumber">58</context>
@@ -25765,7 +25765,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6713730474908011769" datatype="html" xml:space="preserve">
         <source>List runner jobs</source>
-        <target state="translated">Lista jobb för fjärrarbetstjänster</target>
+        <target state="translated">Lista jobb för fjärrarbetare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runners.routes.ts</context>
           <context context-type="linenumber">27</context>
