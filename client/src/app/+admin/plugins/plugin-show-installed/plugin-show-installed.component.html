@@ -17,6 +17,10 @@
   }
 
   @if (!hasRegisteredSettings()) {
-    <div i18n class="no-settings">This {{ pluginTypeLabel }} does not have settings.</div>
+    @if (isPlugin()) {
+      <div i18n class="no-settings">This plugin does not have settings.</div>
+    } @else if (isTheme()) {
+      <div i18n class="no-settings">This theme does not have settings.</div>
+    }
   }
 }

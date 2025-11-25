@@ -5,7 +5,7 @@ import { HooksService, Notifier, PluginService, ServerService } from '@app/core'
 import { BuildFormArgument } from '@app/shared/form-validators/form-validator.model'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
-import { PeerTubePlugin, RegisterServerSettingOptions } from '@peertube/peertube-models'
+import { PeerTubePlugin, PluginType, RegisterServerSettingOptions } from '@peertube/peertube-models'
 import { Subscription } from 'rxjs'
 import { map, switchMap } from 'rxjs/operators'
 import { PluginApiService } from '../../../shared/shared-admin/plugin-api.service'
@@ -76,6 +76,14 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
     if (!setting.name) return
 
     return setting.name + '-wrapper'
+  }
+
+  isTheme () {
+    return this.plugin.type === PluginType.THEME
+  }
+
+  isPlugin () {
+    return this.plugin.type === PluginType.PLUGIN
   }
 
   private loadPlugin (npmName: string) {
