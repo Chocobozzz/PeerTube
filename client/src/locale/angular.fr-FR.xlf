@@ -7345,17 +7345,17 @@
           <context context-type="linenumber">350</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5898371297224932546" datatype="html">
+      <trans-unit id="5898371297224932546" datatype="html" xml:space="preserve">
         <source>More customization</source>
-        <target state="new">More customization</target>
+        <target state="translated">Plus de personnalisation</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">364</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5395293285957838632" datatype="html">
+      <trans-unit id="5395293285957838632" datatype="html" xml:space="preserve">
         <source>Less customization</source>
-        <target state="new">Less customization</target>
+        <target state="translated">Moins de personnalisation</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">367</context>
@@ -7393,17 +7393,17 @@
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5256472549326274222" datatype="html">
+      <trans-unit id="5256472549326274222" datatype="html" xml:space="preserve">
         <source>Go to the channel page</source>
-        <target state="new">Go to the channel page</target>
+        <target state="translated">Accéder à la page de la chaîne</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7883181802464579797" datatype="html">
+      <trans-unit id="7883181802464579797" datatype="html" xml:space="preserve">
         <source>Go to the account page</source>
-        <target state="new">Go to the account page</target>
+        <target state="translated">Accédez à la page du compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">75</context>
@@ -8241,9 +8241,9 @@
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6525091553306665705" datatype="html">
+      <trans-unit id="6525091553306665705" datatype="html" xml:space="preserve">
         <source>Videos and playlists from collaborated channels, as well as your channel collaborators, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>will not<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> be included in the archive.</source>
-        <target state="new">Videos and playlists from collaborated channels, as well as your channel collaborators, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>will not<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> be included in the archive.</target>
+        <target state="translated">Les vidéos et les listes de lecture provenant des chaînes sur lesquelles vous collaborez, ainsi que vos collaborateurs de chaînes, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>ne seront pas<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> incluses dans l'archive.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">33,34</context>
@@ -9137,9 +9137,9 @@
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3279255412517973441" datatype="html">
+      <trans-unit id="3279255412517973441" datatype="html" xml:space="preserve">
         <source>No redundancy strategy is enabled on your instance.</source>
-        <target state="new">No redundancy strategy is enabled on your instance.</target>
+        <target state="translated">Aucune stratégie de redondance n'est activée sur votre instance.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">74,75</context>
@@ -10025,17 +10025,17 @@
           <context context-type="linenumber">108</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7366387646685791945" datatype="html">
+      <trans-unit id="7366387646685791945" datatype="html" xml:space="preserve">
         <source>Whether they're from channels you own or channels for which you're an editor</source>
-        <target state="new">Whether they're from channels you own or channels for which you're an editor</target>
+        <target state="translated">Qu'ils proviennent de chaînes que vous possédez ou de chaînes dont vous êtes un éditeur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1899610511598634736" datatype="html">
+      <trans-unit id="1899610511598634736" datatype="html" xml:space="preserve">
         <source>This will delete comments on all your videos</source>
-        <target state="new">This will delete comments on all your videos</target>
+        <target state="translated">Cela supprimera les commentaires sur toutes vos vidéos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">113</context>
