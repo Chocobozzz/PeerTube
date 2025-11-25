@@ -46,6 +46,7 @@ export class UserInterfaceSettingsComponent implements OnInit, OnDestroy {
   availableLanguages: SelectOptionsItem[]
 
   formValuesWatcher: Subscription
+  userInfoSub: Subscription
 
   private serverConfig: HTMLServerConfig
   private initialUserLanguage: string
@@ -71,7 +72,7 @@ export class UserInterfaceSettingsComponent implements OnInit, OnDestroy {
 
     this.buildForm()
 
-    this.userInformationLoaded()
+    this.userInfoSub = this.userInformationLoaded()
       .subscribe(() => {
         this.form.patchValue({
           theme: this.user().theme,
@@ -83,6 +84,12 @@ export class UserInterfaceSettingsComponent implements OnInit, OnDestroy {
         }
       })
   }
+
+  ngOnDestroy () {
+    this.formValuesWatcher?.unsubscribe()
+    this.userInfoSub?.unsubscribe()
+  }
+
   private buildForm () {
     const obj: BuildFormArgumentTyped<Form> = {
       theme: null,
@@ -98,10 +105,6 @@ export class UserInterfaceSettingsComponent implements OnInit, OnDestroy {
     this.form = form
     this.formErrors = formErrors
     this.validationMessages = validationMessages
-  }
-
-  ngOnDestroy () {
-    this.formValuesWatcher?.unsubscribe()
   }
 
   // ---------------------------------------------------------------------------
@@ -163,8 +166,6 @@ export class UserInterfaceSettingsComponent implements OnInit, OnDestroy {
 
   getSubmitValue () {
     return $localize`Save interface settings`
-
-    // return $localize`Save and reload the interface`
   }
 
   private getDefaultInstanceThemeLabel () {

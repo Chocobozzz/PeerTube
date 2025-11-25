@@ -1,4 +1,5 @@
-import { Component, OnInit, inject, viewChild } from '@angular/core'
+import { Component, DestroyRef, inject, OnInit, viewChild } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { FormsModule } from '@angular/forms'
 import {
   AuthService,
@@ -41,6 +42,7 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
   private notifier = inject(Notifier)
   private confirmService = inject(ConfirmService)
   private userHistoryService = inject(UserHistoryService)
+  private destroyRef = inject(DestroyRef)
 
   readonly videosSelection = viewChild<VideosSelectionComponent>('videosSelection')
 
@@ -77,6 +79,7 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
     this.user = this.authService.getUser()
 
     this.authService.userInformationLoaded
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.videosHistoryEnabled = this.user.videosHistoryEnabled)
   }
 

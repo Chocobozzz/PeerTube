@@ -7,7 +7,7 @@ import { VideoFilters } from '@app/shared/shared-video-miniature/video-filters.m
 import { VideosListComponent } from '@app/shared/shared-video-miniature/videos-list.component'
 import { VideoSortField } from '@peertube/peertube-models'
 import { firstValueFrom } from 'rxjs'
-import { switchMap, tap } from 'rxjs/operators'
+import { first, switchMap, tap } from 'rxjs/operators'
 
 @Component({
   selector: 'my-videos-user-subscriptions',
@@ -77,6 +77,7 @@ export class VideoUserSubscriptionsComponent implements DisableForReuseHook {
 
     const obs = this.authService.userInformationLoaded
       .pipe(
+        first(),
         switchMap(() => this.scopedTokensService.getScopedTokens()),
         tap(tokens => this.feedToken = tokens.feedToken)
       )
