@@ -1166,7 +1166,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context>
-          <context context-type="linenumber">31</context>
+          <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9031514421077169181" datatype="html">
@@ -5239,12 +5239,20 @@
         <target state="translated"><x id="PH" equiv-text="plugin.name"/> dipasang.</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context><context context-type="linenumber">156</context></context-group></trans-unit>
-      <trans-unit id="8946368517039712001" datatype="html">
-        <source>This <x id="INTERPOLATION" equiv-text="{{ pluginTypeLabel }}"/> does not have settings.</source>
-        <target state="new">This <x id="INTERPOLATION" equiv-text="{{ pluginTypeLabel }}"/> does not have settings.</target>
+      <trans-unit id="649873611133633238" datatype="html">
+        <source>This plugin does not have settings.</source>
+        <target state="new">This plugin does not have settings.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.html</context>
-          <context context-type="linenumber">20,23</context>
+          <context context-type="linenumber">21,22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5495621331909678720" datatype="html">
+        <source>This theme does not have settings.</source>
+        <target state="new">This theme does not have settings.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.html</context>
+          <context context-type="linenumber">23,24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1875025899004073421" datatype="html" xml:space="preserve">
@@ -8521,19 +8529,13 @@ The link will expire within 1 hour.</source>
       <trans-unit id="913810105049472842" datatype="html" xml:space="preserve">
         <source>Manage my channels</source>
         <target state="translated">Kelola kanal saya</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context>
-          <context context-type="linenumber">27</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context><context context-type="linenumber">31</context></context-group></trans-unit>
       <trans-unit id="7731752234233950482" datatype="html" xml:space="preserve">
         <source>Synchronizations</source>
         <target state="translated">Sinkronisasi</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context>
-          <context context-type="linenumber">35</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context><context context-type="linenumber">39</context></context-group></trans-unit>
       <trans-unit id="2521678336272309407" datatype="html">
         <source>No follower found.</source>
         <target state="new">No follower found.</target>
@@ -8662,49 +8664,34 @@ The link will expire within 1 hour.</source>
       <trans-unit id="111295045776045026" datatype="html" xml:space="preserve">
         <source>Video history is enabled</source>
         <target state="translated">Riwayat video diaktifkan</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
-          <context context-type="linenumber">119</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">122</context></context-group></trans-unit>
       <trans-unit id="1869266307786648674" datatype="html" xml:space="preserve">
         <source>Video history is disabled</source>
         <target state="translated">Riwayat video dimatikan</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
-          <context context-type="linenumber">120</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">123</context></context-group></trans-unit>
       <trans-unit id="7505147502630555700" datatype="html" xml:space="preserve">
         <source>Delete video history</source>
         <target state="translated">Hapus riwayat video</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
-          <context context-type="linenumber">144</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">147</context></context-group></trans-unit>
       <trans-unit id="8676027102068252963" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete all your video history?</source>
         <target state="translated">Apakah yakin ingin menghapus semua riwayat video?</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
-          <context context-type="linenumber">145</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">148</context></context-group></trans-unit>
       <trans-unit id="7708910304029766516" datatype="html" xml:space="preserve">
         <source>Video history deleted</source>
         <target state="translated">Riwayat video dihapus</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
-          <context context-type="linenumber">153</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">156</context></context-group></trans-unit>
       <trans-unit id="3343758569423394070" datatype="html">
         <source>No videos found for "<x id="PH" equiv-text="this.search"/>".</source>
         <target state="new">No videos found for "<x id="PH" equiv-text="this.search"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
-          <context context-type="linenumber">164</context>
+          <context context-type="linenumber">167</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3656932706364053858" datatype="html">
@@ -8736,17 +8723,14 @@ The link will expire within 1 hour.</source>
         <target/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
-          <context context-type="linenumber">167</context>
+          <context context-type="linenumber">170</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1486537403020619891" datatype="html" xml:space="preserve">
         <source>My watch history</source>
         <target state="translated">Riwayat tonton saya</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
-          <context context-type="linenumber">73</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">75</context></context-group></trans-unit>
       <trans-unit id="949618577357088829" datatype="html" xml:space="preserve">
         <source>Create a new playlist</source>
         <target state="translated">Buat daftar putar baru</target>
@@ -16590,12 +16574,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="786003471867762836" datatype="html">
-        <source>Collaborations on channels are coming to <x id="PH" equiv-text="instanceName"/></source>
-        <target state="new">Collaborations on channels are coming to <x id="PH" equiv-text="instanceName"/></target>
+      <trans-unit id="8309133070608650316" datatype="html">
+        <source>Collaboration on channels are coming to <x id="PH" equiv-text="instanceName"/></source>
+        <target state="new">Collaboration on channels are coming to <x id="PH" equiv-text="instanceName"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context>
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7512666561651719221" datatype="html">
@@ -16603,7 +16587,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">You can now &lt;strong&gt;invite other users&lt;/strong&gt; to collaborate on your channel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context>
-          <context context-type="linenumber">30</context>
+          <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1420294365005204590" datatype="html">
@@ -22213,13 +22197,13 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Save interface settings</source>
         <target state="translated">Simpan pengaturan antarmuka</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">165</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">168</context></context-group></trans-unit>
       <trans-unit id="7570883748440392027" datatype="html">
         <source><x id="PH" equiv-text="this.instanceName"/> theme</source>
         <target state="new"><x id="PH" equiv-text="this.instanceName"/> theme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4776289814033837037" datatype="html" xml:space="preserve">
@@ -22227,7 +22211,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Pengaturan antarmuka diperbarui.</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">138</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">160</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">141</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">163</context></context-group></trans-unit>
       <trans-unit id="6784127216978878229" datatype="html">
         <source>Override sensitive content policy for certain videos</source>
         <target state="new">Override sensitive content policy for certain videos</target>

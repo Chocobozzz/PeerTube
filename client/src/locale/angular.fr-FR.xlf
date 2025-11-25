@@ -148,7 +148,9 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="nd so on.    *"/> </source>
+        <source>
+          <x id="INTERPOLATION" equiv-text="nd so on.    *"/>
+        </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="nd so on.    *"/>
         </target>
@@ -254,7 +256,9 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
-        <source><x id="INTERPOLATION"/> </source>
+        <source>
+          <x id="INTERPOLATION"/>
+        </source>
         <target state="translated">
           <x id="INTERPOLATION"/>
         </target>
@@ -2554,7 +2558,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context>
-          <context context-type="linenumber">31</context>
+          <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6994936570572804302" datatype="html" xml:space="preserve">
@@ -2918,7 +2922,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
-        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
+        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>.
+The link will expire within 1 hour.</source>
         <target state="translated">Un courrier électronique contenant les instructions de réinitialisation du mot de passe sera envoyé à <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Le lien expirera dans 1 heure.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
@@ -3895,22 +3900,19 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="786003471867762836" datatype="html" xml:space="preserve">
-        <source>Collaborations on channels are coming to <x id="PH" equiv-text="instanceName"/></source>
-        <target state="translated">Les collaborations sur les chaînes sont arrivées sur <x id="PH" equiv-text="instanceName"/></target>
+      <trans-unit id="8309133070608650316" datatype="html">
+        <source>Collaboration on channels are coming to <x id="PH" equiv-text="instanceName"/></source>
+        <target state="new">Collaboration on channels are coming to <x id="PH" equiv-text="instanceName"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context>
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7512666561651719221" datatype="html" xml:space="preserve">
         <source>You can now &lt;strong&gt;invite other users&lt;/strong&gt; to collaborate on your channel</source>
         <target state="translated">Vous pouvez désormais &lt;strong&gt;inviter d'autres utilisateurs&lt;/strong&gt; à collaborer sur votre chaîne</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context>
-          <context context-type="linenumber">30</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context><context context-type="linenumber">31</context></context-group></trans-unit>
       <trans-unit id="5960096873104755868" datatype="html" xml:space="preserve">
         <source>More info</source>
         <target state="translated">Plus d'info</target>
@@ -8108,11 +8110,8 @@
       <trans-unit id="913810105049472842" datatype="html" xml:space="preserve">
         <source>Manage my channels</source>
         <target state="translated">Gérer mes chaînes</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context>
-          <context context-type="linenumber">27</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context><context context-type="linenumber">31</context></context-group></trans-unit>
       <trans-unit id="3140041890374956085" datatype="html" xml:space="preserve">
         <source>Comments on your videos</source>
         <target state="translated">Commentaires sur vos vidéos</target>
@@ -14162,7 +14161,7 @@
         <target state="translated">Vous n'avez pas encore de vidéo dans votre historique de visionnage.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
-          <context context-type="linenumber">167</context>
+          <context context-type="linenumber">170</context>
         </context-group>
       </trans-unit>
       <trans-unit id="989169929300254768" datatype="html">
@@ -14178,7 +14177,7 @@
         <target state="translated">L'historique vidéo est activé</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
-          <context context-type="linenumber">119</context>
+          <context context-type="linenumber">122</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1869266307786648674" datatype="html">
@@ -14186,7 +14185,7 @@
         <target state="translated">L'historique vidéo est désactivé</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
-          <context context-type="linenumber">120</context>
+          <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7505147502630555700" datatype="html">
@@ -14194,7 +14193,7 @@
         <target state="translated">Supprimer l'historique vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
-          <context context-type="linenumber">144</context>
+          <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8676027102068252963" datatype="html">
@@ -14202,7 +14201,7 @@
         <target state="translated">Êtes-vous certain·e de vouloir supprimer tout votre historique vidéo ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
-          <context context-type="linenumber">145</context>
+          <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7708910304029766516" datatype="html">
@@ -14210,7 +14209,7 @@
         <target state="translated">L'historique vidéo a été supprimé</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
-          <context context-type="linenumber">153</context>
+          <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3343758569423394070" datatype="html">
@@ -14218,7 +14217,7 @@
         <target state="translated">Aucune vidéo trouvée pour « <x id="PH" equiv-text="this.search"/> ».</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
-          <context context-type="linenumber">164</context>
+          <context context-type="linenumber">167</context>
         </context-group>
       </trans-unit>
       <trans-unit id="687236465759862933" datatype="html">
@@ -15014,7 +15013,9 @@
         </context-group>
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
-        <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/> </source>
+        <source>
+          <x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/>
+        </source>
         <target state="translated">
           <x id="ICU" xid="8553183884518584864" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 vidéo} other {{{ getTotalVideosOf(videoChannel) }} vidéos}}"/>
         </target>
@@ -17805,12 +17806,20 @@
           <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8946368517039712001" datatype="html" xml:space="preserve">
-        <source>This <x id="INTERPOLATION" equiv-text="{{ pluginTypeLabel }}"/> does not have settings.</source>
-        <target state="translated">Ce <x id="INTERPOLATION" equiv-text="{{ pluginTypeLabel }}"/> ne dispose pas de paramètres.</target>
+      <trans-unit id="649873611133633238" datatype="html">
+        <source>This plugin does not have settings.</source>
+        <target state="new">This plugin does not have settings.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.html</context>
-          <context context-type="linenumber">20,23</context>
+          <context context-type="linenumber">21,22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5495621331909678720" datatype="html">
+        <source>This theme does not have settings.</source>
+        <target state="new">This theme does not have settings.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.html</context>
+          <context context-type="linenumber">23,24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1875025899004073421">
@@ -19058,7 +19067,7 @@
         <target state="translated">Mon historique de visionnage</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
-          <context context-type="linenumber">73</context>
+          <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3656932706364053858" datatype="html">
@@ -19238,11 +19247,11 @@
         <target>Paramètres d'interface mis à jour.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
-          <context context-type="linenumber">138</context>
+          <context context-type="linenumber">141</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
-          <context context-type="linenumber">160</context>
+          <context context-type="linenumber">163</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6784127216978878229" datatype="html" xml:space="preserve">
@@ -20566,11 +20575,8 @@
       <trans-unit id="7731752234233950482" datatype="html" xml:space="preserve">
         <source>Synchronizations</source>
         <target state="translated">Synchronisations</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context>
-          <context context-type="linenumber">35</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context><context context-type="linenumber">39</context></context-group></trans-unit>
       <trans-unit id="7607713563510753803" datatype="html" xml:space="preserve">
         <source>Imports</source>
         <target state="translated">Imports</target>
@@ -20912,7 +20918,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
-        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
+        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>.
+Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
         <target state="translated">Impossible de récupérer les identifiants du Client OAuth : <x id="PH" equiv-text="error.text"/>. Assurez-vous d'avoir correctement configuré PeerTube (dossier config/), en particulier la section "serveur web".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
@@ -21288,7 +21295,10 @@
         </context-group>
       </trans-unit>
       <trans-unit id="7804724824750282316" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/> <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/> </source>
+        <source>
+          <x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/>
+          <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/>
+        </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/>
           <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {résultat} other {résultats}}"/>
@@ -25575,7 +25585,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1604871298839217952" datatype="html" xml:space="preserve">
-        <source>{VAR_PLURAL, plural, =1 {other platform} other {other platforms}}</source>
+        <source>{VAR_PLURAL, plural, =1 {other platform} other {other
+              platforms}}</source>
         <target state="translated">{VAR_PLURAL, plural, =1 {autre plateforme} other {autres plateformes}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
@@ -26335,7 +26346,9 @@
         </context-group>
       </trans-unit>
       <trans-unit id="187187500641108332" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/> </source>
+        <source>
+          <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
+        </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
         </target>
@@ -26431,19 +26444,13 @@
       <trans-unit id="5240556993302961443" datatype="html" xml:space="preserve">
         <source>Save interface settings</source>
         <target state="translated">Sauvegarder les paramètres de l'interface</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
-          <context context-type="linenumber">165</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">168</context></context-group></trans-unit>
       <trans-unit id="7570883748440392027" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.instanceName"/> theme</source>
         <target state="translated">Thème de <x id="PH" equiv-text="this.instanceName"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
-          <context context-type="linenumber">63</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">64</context></context-group></trans-unit>
       <trans-unit id="1219783168145776019" datatype="html">
         <source>LIVE ENDED</source>
         <target state="translated">DIRECT TERMINÉ</target>

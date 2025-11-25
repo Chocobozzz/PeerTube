@@ -2174,7 +2174,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context>
-          <context context-type="linenumber">31</context>
+          <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6994936570572804302" datatype="html">
@@ -3447,12 +3447,12 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="786003471867762836" datatype="html">
-        <source>Collaborations on channels are coming to <x id="PH" equiv-text="instanceName"/></source>
-        <target state="new">Collaborations on channels are coming to <x id="PH" equiv-text="instanceName"/></target>
+      <trans-unit id="8309133070608650316" datatype="html">
+        <source>Collaboration on channels are coming to <x id="PH" equiv-text="instanceName"/></source>
+        <target state="new">Collaboration on channels are coming to <x id="PH" equiv-text="instanceName"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context>
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7512666561651719221" datatype="html">
@@ -3460,7 +3460,7 @@ The link will expire within 1 hour.</source>
         <target state="new">You can now &lt;strong&gt;invite other users&lt;/strong&gt; to collaborate on your channel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context>
-          <context context-type="linenumber">30</context>
+          <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5960096873104755868" datatype="html" xml:space="preserve">
@@ -7199,11 +7199,8 @@ The link will expire within 1 hour.</source>
       <trans-unit id="913810105049472842" datatype="html" xml:space="preserve">
         <source>Manage my channels</source>
         <target state="translated">Gestionar mis canales</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context>
-          <context context-type="linenumber">27</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context><context context-type="linenumber">31</context></context-group></trans-unit>
       <trans-unit id="3140041890374956085" datatype="html" xml:space="preserve">
         <source>Comments on your videos</source>
         <target state="translated">Comentarios en tus vídeos</target>
@@ -12726,7 +12723,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Aún no tienes ningún video en tu historial de reproducciones.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
-          <context context-type="linenumber">167</context>
+          <context context-type="linenumber">170</context>
         </context-group>
       </trans-unit>
       <trans-unit id="989169929300254768" datatype="html">
@@ -12742,7 +12739,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">El historial de video está habilitado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
-          <context context-type="linenumber">119</context>
+          <context context-type="linenumber">122</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1869266307786648674" datatype="html">
@@ -12750,7 +12747,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">El historial de video está deshabilitado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
-          <context context-type="linenumber">120</context>
+          <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7505147502630555700" datatype="html">
@@ -12758,7 +12755,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Eliminar historial de video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
-          <context context-type="linenumber">144</context>
+          <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8676027102068252963" datatype="html">
@@ -12766,7 +12763,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">¿Seguro que quieres eliminar todo tu historial de vídeo?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
-          <context context-type="linenumber">145</context>
+          <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7708910304029766516" datatype="html">
@@ -12774,7 +12771,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Historial de video eliminado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
-          <context context-type="linenumber">153</context>
+          <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3343758569423394070" datatype="html">
@@ -12782,7 +12779,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">No se encontraron videos para "<x id="PH" equiv-text="this.search"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
-          <context context-type="linenumber">164</context>
+          <context context-type="linenumber">167</context>
         </context-group>
       </trans-unit>
       <trans-unit id="687236465759862933" datatype="html">
@@ -16163,12 +16160,20 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8946368517039712001" datatype="html">
-        <source>This <x id="INTERPOLATION" equiv-text="{{ pluginTypeLabel }}"/> does not have settings.</source>
-        <target state="new">This <x id="INTERPOLATION" equiv-text="{{ pluginTypeLabel }}"/> does not have settings.</target>
+      <trans-unit id="649873611133633238" datatype="html">
+        <source>This plugin does not have settings.</source>
+        <target state="new">This plugin does not have settings.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.html</context>
-          <context context-type="linenumber">20,23</context>
+          <context context-type="linenumber">21,22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5495621331909678720" datatype="html">
+        <source>This theme does not have settings.</source>
+        <target state="new">This theme does not have settings.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.html</context>
+          <context context-type="linenumber">23,24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1875025899004073421" datatype="html">
@@ -17401,7 +17406,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Mi historial de visionado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
-          <context context-type="linenumber">73</context>
+          <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3656932706364053858" datatype="html">
@@ -17578,11 +17583,11 @@ The link will expire within 1 hour.</source>
         <target state="translated">Configuración de la interfaz actualizada.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
-          <context context-type="linenumber">138</context>
+          <context context-type="linenumber">141</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
-          <context context-type="linenumber">160</context>
+          <context context-type="linenumber">163</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6784127216978878229" datatype="html">
@@ -18860,11 +18865,8 @@ The link will expire within 1 hour.</source>
       <trans-unit id="7731752234233950482" datatype="html" xml:space="preserve">
         <source>Synchronizations</source>
         <target state="translated">Sincronizaciones</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context>
-          <context context-type="linenumber">35</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context><context context-type="linenumber">39</context></context-group></trans-unit>
       <trans-unit id="7607713563510753803" datatype="html" xml:space="preserve">
         <source>Imports</source>
         <target state="translated">Importa</target>
@@ -24589,12 +24591,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Save interface settings</source>
         <target state="translated">Guardar los ajustes de la interfaz</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">165</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">168</context></context-group></trans-unit>
       <trans-unit id="7570883748440392027" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.instanceName"/> theme</source>
         <target state="translated"><x id="PH" equiv-text="this.instanceName"/> tema</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">63</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">64</context></context-group></trans-unit>
       <trans-unit id="1219783168145776019" datatype="html">
         <source>LIVE ENDED</source>
         <target state="translated">DIRECTO TERMINADO</target>
