@@ -76,8 +76,8 @@ export class MyAccountPage {
     await passwordInput.setValue(password)
 
     const submit = $('my-account-change-email input[type=submit]')
-    await submit.waitForClickable()
     await submit.scrollIntoView({ block: 'center' }) // Avoid issues with fixed header
+    await submit.waitForClickable()
     await submit.click()
   }
 

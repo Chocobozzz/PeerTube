@@ -1,7 +1,7 @@
 import { AdminPluginPage } from '../po/admin-plugin.po'
 import { LoginPage } from '../po/login.po'
 import { VideoPublishPage } from '../po/video-publish.po'
-import { getCheckbox, getScreenshotPath, isMobileDevice, prepareWebBrowser, waitServerUp } from '../utils'
+import { getCheckbox, isMobileDevice, prepareWebBrowser, waitServerUp } from '../utils'
 
 describe('Plugins', () => {
   let videoPublishPage: VideoPublishPage
@@ -82,9 +82,5 @@ describe('Plugins', () => {
     await videoPublishPage.setAsPrivate()
 
     await expectSubmitError(false)
-  })
-
-  after(async () => {
-    await browser.saveScreenshot(getScreenshotPath('after-test.png'))
   })
 })

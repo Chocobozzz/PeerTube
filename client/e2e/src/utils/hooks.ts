@@ -1,7 +1,7 @@
+import { setValue } from '@wdio/shared-store-service'
 import { ChildProcessWithoutNullStreams } from 'node:child_process'
 import { basename } from 'node:path'
-import { setValue } from '@wdio/shared-store-service'
-import { createScreenshotsDirectory } from './files'
+import { createScreenshotsDirectory, getScreenshotPath } from './files'
 import { runCommand, runServer } from './server'
 
 let appInstance: number
@@ -19,6 +19,12 @@ async function beforeLocalSuite (suite: any) {
 function afterLocalSuite () {
   app.kill()
   app = undefined
+}
+
+async function afterLocalTest (test: { file: string }) {
+  const filename = basename(test.file).replace(/\.ts$/, '')
+
+  await browser.saveScreenshot(getScreenshotPath(`${filename}-after-test.png`))
 }
 
 async function beforeLocalSession (config: { baseUrl: string }, capabilities: { browserName: string }) {
@@ -48,11 +54,12 @@ function onBrowserStackComplete () {
 }
 
 export {
-  beforeLocalSession,
   afterLocalSuite,
+  afterLocalTest,
+  beforeLocalSession,
   beforeLocalSuite,
-  onBrowserStackPrepare,
-  onBrowserStackComplete
+  onBrowserStackComplete,
+  onBrowserStackPrepare
 }
 
 // ---------------------------------------------------------------------------

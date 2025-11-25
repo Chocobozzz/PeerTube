@@ -14,6 +14,7 @@ export async function setCheckboxEnabled (name: string, enabled: boolean) {
 
   const checkbox = await getCheckbox(name)
 
+  await checkbox.scrollIntoView({ block: 'center' })
   await checkbox.waitForClickable()
   await checkbox.click()
 }

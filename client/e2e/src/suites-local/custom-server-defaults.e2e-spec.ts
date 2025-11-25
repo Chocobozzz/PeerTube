@@ -1,7 +1,7 @@
 import { LoginPage } from '../po/login.po'
 import { VideoPublishPage } from '../po/video-publish.po'
 import { VideoWatchPage } from '../po/video-watch.po'
-import { getScreenshotPath, go, isMobileDevice, isSafari, prepareWebBrowser, waitServerUp } from '../utils'
+import { go, isMobileDevice, isSafari, prepareWebBrowser, waitServerUp } from '../utils'
 
 describe('Custom server defaults', () => {
   let videoPublishPage: VideoPublishPage
@@ -15,7 +15,7 @@ describe('Custom server defaults', () => {
     videoPublishPage = new VideoPublishPage()
     videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
 
-    await prepareWebBrowser()
+    await prepareWebBrowser({ hidePrivacyConcerns: false })
   })
 
   describe('Publish default values', function () {
@@ -91,9 +91,5 @@ describe('Custom server defaults', () => {
 
       await checkP2P(false)
     })
-  })
-
-  after(async () => {
-    await browser.saveScreenshot(getScreenshotPath('after-test.png'))
   })
 })

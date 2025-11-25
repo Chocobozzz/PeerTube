@@ -73,7 +73,5 @@ describe('User settings', () => {
 
   after(async () => {
     MockSMTPServer.Instance.kill()
-
-    await browser.saveScreenshot(getScreenshotPath('after-test.png'))
   })
 })

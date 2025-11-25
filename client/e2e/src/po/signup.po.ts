@@ -15,6 +15,7 @@ export class SignupPage {
   async validateStep () {
     const next = $('button[type=submit]')
 
+    await next.scrollIntoView({ block: 'center' })
     await next.waitForClickable()
     await next.click()
   }

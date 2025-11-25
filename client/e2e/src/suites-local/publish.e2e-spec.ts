@@ -76,8 +76,4 @@ describe('Publish video', () => {
       await videoPublishPage.refresh('second video')
     })
   })
-
-  after(async () => {
-    await browser.saveScreenshot(getScreenshotPath('after-test.png'))
-  })
 })

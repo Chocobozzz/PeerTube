@@ -84,9 +84,9 @@ export class PlayerPage {
   }
 
   async hasPoster () {
-    const property = await $('.video-js .vjs-poster').getCSSProperty('background-image')
+    const img = $('.video-js .vjs-poster img')
 
-    return property.value.startsWith('url(')
+    return await img.isDisplayed() && (await img.getAttribute('src')).startsWith('http')
   }
 
   private async clickOnPlayButton () {

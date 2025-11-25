@@ -95,7 +95,7 @@ describe('NSFW', () => {
       await goOnPage()
 
       for (const video of videos) {
-        await browser.saveScreenshot(getScreenshotPath('before-test.png'))
+        await browser.saveScreenshot(getScreenshotPath('before-nsfw-test.png'))
         await checkVideo({ policy, videoName: video, nsfwTooltip })
       }
     }
@@ -103,7 +103,7 @@ describe('NSFW', () => {
     for (const video of videos) {
       await videoSearchPage.search(video)
 
-      await browser.saveScreenshot(getScreenshotPath('before-test.png'))
+      await browser.saveScreenshot(getScreenshotPath('before-nsfw-test.png'))
       await checkVideo({ policy, videoName: video, nsfwTooltip })
     }
   }

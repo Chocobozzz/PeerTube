@@ -37,15 +37,24 @@ export async function go (url: string) {
 
 // ---------------------------------------------------------------------------
 
-export async function prepareWebBrowser () {
-  if (isMobileDevice()) return
+export async function prepareWebBrowser (options: {
+  hidePrivacyConcerns?: boolean // default true
+} = {}) {
+  const { hidePrivacyConcerns = true } = options
 
-  // Window size on chromium doesn't seem to work in "new" headless mode
-  if (process.env.MOZ_HEADLESS_WIDTH) {
-    await browser.setWindowSize(+process.env.MOZ_HEADLESS_WIDTH, +process.env.MOZ_HEADLESS_HEIGHT)
+  if (hidePrivacyConcerns) {
+    try {
+      await browser.execute(() => {
+        localStorage.setItem('video-watch-privacy-concern', 'true')
+      })
+    } catch {
+      console.log('Cannot set local storage to hide privacy concerns')
+    }
   }
 
-  await browser.maximizeWindow()
+  if (!isMobileDevice() && process.env.MOZ_HEADLESS_WIDTH) {
+    await browser.setWindowSize(+process.env.MOZ_HEADLESS_WIDTH, +process.env.MOZ_HEADLESS_HEIGHT)
+  }
 }
 
 export async function waitServerUp () {
