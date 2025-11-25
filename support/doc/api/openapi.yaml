@@ -3206,8 +3206,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoDetails'
+        '401':
+          description: Requires authentication or the video requires a password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerError'
         '403':
-          description: provide a correct password to access this password protected video
+          description: Invalid authentication or the video requires a password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerError'
     delete:
       summary: Delete a video
       operationId: delVideo
@@ -9132,6 +9142,20 @@ components:
           properties:
             currentTime:
               type: integer
+    ServerError:
+      properties:
+        type:
+          type: string
+          example: 'https://docs.joinpeertube.org/api-rest-reference.html#section/Errors/video_requires_password'
+        detail:
+          type: string
+          example: 'Please provide a password to access this password protected video'
+        status:
+          type: integer
+          example: 403
+        code:
+          type: string
+          example: video_requires_password
     VideoDetails:
       allOf:
         - $ref: '#/components/schemas/Video'
