@@ -40,27 +40,27 @@
 
   <ng-template #tableCells let-job>
     @if (table.isColumnDisplayed('id')) {
-      <td class="job-i" [title]="job.id">{{ job.id }}</td>
+      <td class="job-id" [title]="job.id">{{ job.id }}</td>
     }
 
     @if (table.isColumnDisplayed('type')) {
-      <td class="job-typ" >
+      <td class="job-type" >
         <span class="pt-badge ellipsis" [ngClass]="getRandomJobTypeBadge(job.type)">{{ job.type }}</span>
       </td>
     }
 
     @if (table.isColumnDisplayed('priority')) {
-      <td class="job-priorit" >{{ job.priority }}</td>
+      <td class="job-priority" >{{ job.priority }}</td>
     }
 
     @if (table.isColumnDisplayed('state') && table.isColumnDisplayed('state')) {
-      <td class="job-stat" >
+      <td class="job-state" >
         <span class="ellipsis" [ngClass]="getJobStateClasses(job.state)">{{ job.state }}</span>
       </td>
     }
 
     @if (table.isColumnDisplayed('progress')) {
-      <td class="job-progres" >
+      <td class="job-progress" >
         @if (hasProgress(job)) {
           {{ getProgress(job) }}
         }
@@ -68,7 +68,7 @@
     }
 
     @if (table.isColumnDisplayed('createdAt')) {
-      <td class="job-dat" >{{ job.createdAt }}</td>
+      <td class="job-date" >{{ job.createdAt }}</td>
     }
 
     @if (table.isColumnDisplayed('processed')) {
