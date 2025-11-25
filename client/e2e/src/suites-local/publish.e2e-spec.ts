@@ -1,7 +1,7 @@
 import { LoginPage } from '../po/login.po'
 import { VideoPublishPage } from '../po/video-publish.po'
 import { VideoWatchPage } from '../po/video-watch.po'
-import { getScreenshotPath, isMobileDevice, isSafari, prepareWebBrowser, waitServerUp } from '../utils'
+import { isMobileDevice, isSafari, prepareWebBrowser, waitServerUp } from '../utils'
 
 describe('Publish video', () => {
   let videoPublishPage: VideoPublishPage

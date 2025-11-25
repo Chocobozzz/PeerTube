@@ -5,7 +5,6 @@ import {
   browserSleep,
   findEmailTo,
   getEmailPort,
-  getScreenshotPath,
   getVerificationLink,
   go,
   isMobileDevice,
@@ -71,7 +70,7 @@ describe('User settings', () => {
     })
   })
 
-  after(async () => {
+  after(() => {
     MockSMTPServer.Instance.kill()
   })
 })
