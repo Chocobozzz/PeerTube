@@ -1423,7 +1423,7 @@
       </trans-unit>
       <trans-unit id="5112667021094836629" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 transcription job created.} other {<x id="count"/> transcription jobs created.}}</source>
-        <target state="translated">{count, plural, =1 {1 transkriptionsjobbet skapat.} other {<x id="count"/> transkriptionsjobben skapade.}}</target>
+        <target state="translated">{count, plural, =1 {1 transkriptionsjobb skapat.} other {<x id="count"/> transkriptionsjobb skapade.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">403</context>
@@ -9987,9 +9987,9 @@
           <context context-type="linenumber">113</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7565129593705813435" datatype="html">
+      <trans-unit id="7565129593705813435" datatype="html" xml:space="preserve">
         <source>Runner jobs</source>
-        <target state="translated">Jobb</target>
+        <target state="translated">Fjärrjobb</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">118</context>
@@ -18232,7 +18232,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5182966734308933786" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No job} =1 {1 job} other {<x id="INTERPOLATION"/> jobs}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Inget körningsjobb} =1 {1 job} other {<x id="INTERPOLATION"/> fjärrrjobb}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Inget fjärrjobb} =1 {1 fjärrjobb} other {<x id="INTERPOLATION"/> fjärrjobb}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">14</context>
