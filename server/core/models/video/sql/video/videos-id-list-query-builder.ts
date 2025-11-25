@@ -466,13 +466,17 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       '    INNER JOIN "actorFollow" "actorFollowShare" ON "actorFollowShare"."targetActorId" = "videoShare"."actorId" ' +
       '    AND "actorFollowShare"."actorId" = :followerActorId AND "actorFollowShare"."state" = \'accepted\' ' +
       '    WHERE "videoShare"."videoId" = "video"."id"' +
-      '  )' +
-      '  OR' +
-      '  EXISTS (' + // Videos published by accounts we follow
-      '    SELECT 1 from "actorFollow" ' +
-      '    WHERE ("actorFollow"."targetActorId" = "accountActor"."id" OR "actorFollow"."targetActorId" = "channelActor"."id") ' +
+      '    UNION ALL ' +
+      '    SELECT 1 from "actorFollow" ' + // Videos published by accounts we follow
+      '    WHERE "actorFollow"."targetActorId" = "accountActor"."id" ' +
       '    AND "actorFollow"."actorId" = :followerActorId ' +
       '    AND "actorFollow"."state" = \'accepted\'' +
+      '    UNION ALL ' +
+      '    SELECT 1 from "actorFollow" ' + // Videos published by channels we follow
+      '    WHERE "actorFollow"."targetActorId" = "channelActor"."id" ' +
+      '    AND "actorFollow"."actorId" = :followerActorId ' +
+      '    AND "actorFollow"."state" = \'accepted\'' +
+      '    LIMIT 1' +
       '  )'
 
     if (options.orLocalVideos) {
