@@ -27,10 +27,12 @@ export class VideoFetcher {
       if (videoResponse?.status === HttpStatusCode.NOT_FOUND_404) {
         throw new Error('This video does not exist.')
       }
-      if (videoResponse?.status === HttpStatusCode.FORBIDDEN_403) {
+
+      if (videoResponse?.status === HttpStatusCode.UNAUTHORIZED_401) {
         const res = await videoResponse.json()
         throw new PeerTubeServerError(res.message || res.detail, res.code)
       }
+
       throw new Error('We cannot fetch the video. Please try again later.')
     }
 
