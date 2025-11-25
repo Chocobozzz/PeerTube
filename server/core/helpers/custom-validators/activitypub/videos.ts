@@ -135,10 +135,15 @@ export function isAPVideoTrackerUrlObject (url: any): url is ActivityTrackerUrlO
     isActivityPubUrlValid(url.href)
 }
 
-export function isAPCaptionUrlObject (url: any): url is ActivityCaptionUrlObject {
-  return url?.type === 'Link' &&
-    (url.mediaType === 'text/vtt' || url.mediaType === 'application/x-mpegURL') &&
-    isActivityPubUrlValid(url.href)
+export function setAPCaptionUrlObject (url: any): url is ActivityCaptionUrlObject {
+  if (url?.type !== 'Link') return false
+  if (!isActivityPubUrlValid(url.href)) return false
+
+  if (!url.mediaType && url.href.endsWith('.vtt')) {
+    url.mediaType = 'text/vtt'
+  }
+
+  return url.mediaType === 'text/vtt' || url.mediaType === 'application/x-mpegURL'
 }
 
 // ---------------------------------------------------------------------------
@@ -162,9 +167,23 @@ function setValidRemoteCaptions (video: VideoObject) {
   if (Array.isArray(video.subtitleLanguage) === false) return false
 
   video.subtitleLanguage = video.subtitleLanguage.filter(caption => {
-    caption.url = arrayify(caption.url).filter(u => isAPCaptionUrlObject(u))
+    if (typeof caption.url === 'string') {
+      if (isActivityPubUrlValid(caption.url)) {
+        caption.url = [
+          {
+            type: 'Link',
+            href: caption.url,
+            mediaType: 'text/vtt'
+          }
+        ]
+      } else {
+        caption.url = []
+      }
+    } else {
+      caption.url = arrayify(caption.url).filter(u => setAPCaptionUrlObject(u))
+    }
 
-    return isRemoteStringIdentifierValid(caption)
+    return caption.url.length > 0 && isRemoteStringIdentifierValid(caption)
   })
 
   return true
