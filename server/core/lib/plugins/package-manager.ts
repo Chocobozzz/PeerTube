@@ -1,6 +1,6 @@
 import { isStableOrUnstableVersionValid } from '@server/helpers/custom-validators/misc.js'
 import { outputJSON, pathExists, remove } from 'fs-extra/esm'
-import { writeFile } from 'fs/promises'
+import { readFile, writeFile } from 'fs/promises'
 import { join } from 'path'
 import { execShell } from '../../helpers/core-utils.js'
 import { isNpmPluginNameValid } from '../../helpers/custom-validators/plugins.js'
@@ -71,6 +71,14 @@ export async function initPNPM () {
     logger.info('Init package.json in plugin directory')
 
     await outputJSON(pluginPackageJSON, {})
+  } else {
+    let packageJSONContent = await readFile(pluginPackageJSON, 'utf-8')
+
+    if (packageJSONContent.includes('"packageManager"')) {
+      packageJSONContent = packageJSONContent.replace(/\s*"packageManager".*/g, '')
+
+      await writeFile(pluginPackageJSON, packageJSONContent, 'utf-8')
+    }
   }
 
   const pnpmWorkspace = join(pluginDirectory, 'pnpm-workspace.yaml')
