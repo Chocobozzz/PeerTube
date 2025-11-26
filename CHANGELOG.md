@@ -1,5 +1,96 @@
 # Changelog
 
+
+## v8.0.0-rc.1
+
+### IMPORTANT NOTES
+
+  * Database migrations of this version can take a long time (up to 30 minutes on an instance with many users/federation actors)
+  * You need to manually execute a migration script **after your upgrade** while PeerTube is running and the database migration is complete (`Migrations finished. New migration version schema: 965` in PeerTube startup logs):
+   * Classic installation: `cd /var/www/peertube/peertube-latest && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production node dist/scripts/migrations/peertube-8.0.js`
+   * Docker installation: `cd /var/www/peertube-docker && docker compose exec -u peertube peertube node dist/scripts/migrations/peertube-8.0.js`
+  * `yarn` NodeJS packages manager has been removed in favor of `pnpm`. Follow the [dependencies guide](https://docs.joinpeertube.org/support/doc/dependencies) to install `pnpm` on your system
+  * For Docker users, please read the Docker section below
+  * Supported NodeJS versions are `>= 20.19 and < 21` or `>= 22.12 and <23`
+
+### Configuration
+
+  * Remove `http_server` unused section from `.yaml` configuration files
+  * Introduce `views.videos.local.max_age` configuration to cleanup old views from local videos
+  * Add more STUN Servers to `webrtc.stun_servers` to improve P2P robustness
+  * Add ability to increase video transcription timeout in `video_transcription.timeout`
+  * Add `client.new_features_info` configuration to disable popups explaining new features to users
+  * Add `user.password_constraints.min_length` config to specify user password minimum length [#6945](https://github.com/Chocobozzz/PeerTube/pull/6945)
+
+### Docker
+
+  * PeerTube Dockerfile is now based on Debian Trixie. `chocobozzz/peertube:production` can be used instead of `chocobozzz/peertube:production-bookworm` (Debian suffix version is deprecated)
+  * PostgreSQL version has been upgraded in [Docker Compose](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/docker-compose.yml). Please follow [this guide](https://docs.joinpeertube.org/install/docker#upgrade-postgresql-container) if you want to upgrade PostgreSQL in your Docker Compose
+  * Redis version has been upgraded in [Docker Compose](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/docker-compose.yml). No maintenance task is required if you upgrade Redis in your Docker Compose
+
+### Plugins/Themes/Embed/REST APIs
+
+  * REST API:
+    * Remove deprecated `filename` field from `VideoSource` object
+    * Remove deprecated `commentsEnabled` field from `Video` object
+    * Remove deprecated `redundancies.files`field from `VideoRedundancy` object
+    * Deprecate `captionPath` field from `VideoCaption` object
+    * Deprecate `storyboardPath` from `Storyboard` object
+    * The HTTP response code for password-protected videos can be either 401 or 403, depending on the request headers
+  * Theme:
+    * Rename `--input-placeholder` CSS variables into `--input-placeholder-color`
+    * Introduce `--input-placeholder-font-size` CSS variable
+
+### Features
+
+  * :tada: Add channel collaboration :tada:
+    * Channel owners can invite users of their instance to become editors of their channel
+    * Editors can accept or reject the invitation
+    * Editors can manage videos, playlists & comments of the channel
+    * An *Activity* page has been added to list actions performed within a channel
+  * :tada: Video player redesign :tada:
+    * Introduce a new clean and modern theme named **Lucide**
+    * Original theme is still used by default, and has been renamed to **Galaxy**
+    * The player theme can be changed by the admin for the entire instance or by the channel for all its videos. It can also be changed for individual videos.
+    * Use vertical audio volume control for **Galaxy** player theme
+  * Improve video imports UX
+    * Introduce an *Import failed* state to clearly identify failed imports
+    * Display import state in video manage page and watch page
+    * Add ability to retry video imports
+    * Channel synchronization automatically retry failed imports
+  * Redesign notifications popup and page
+  * Replace `yarn` package manager by `pnpm` to provide faster PeerTube installation/upgrade and faster plugin installation/upgrade
+  * Add admin options to customize default *Browse videos* behaviour [#7193](https://github.com/Chocobozzz/PeerTube/pull/7193)
+  * Add ability to handle storyboard generation job by runners [#7191](https://github.com/Chocobozzz/PeerTube/pull/7191)
+  * Add *Resend verification email* button to admin users list [#7272](https://github.com/Chocobozzz/PeerTube/pull/7272)
+  * Improve video manage and admin config forms accessibility
+  * Add ability to insert a new playlist at first position in the channel
+  * Add ability to copy codecs, if possible, for HLS transcoding
+  * Also search by account name when searching for channels
+  * Faster start time seek on HLS videos
+
+### Bug fixes
+
+  * Fix avatar max size information
+  * Fix scroll issue when navigating from homepage
+  * Fix viewers stats date filter label after a reset
+  * Fix select languages component label
+  * Correctly load user video language settings in video filters
+  * Accept non-HTTPS URLs for the search index
+  * Fix admin abuse URL in emails
+  * Show videos to owners even if they are muted on the instance
+  * Correctly sort scheduled videos when listing my videos
+  * Fix account mention redirection
+  * Display all countries/regions labels in viewer stats graph
+  * Keep videos order after user import
+  * Fix HTML headings hierarchy to improve SEO
+  * Users logged-in by an external auth plugin can choose to display their email publicly (required by Apple for the podcast feed)
+  * Fix podcast feed video bitrate attribute that can be refused by some podcast applications
+  * Fix video quota information estimation
+  * Translate RSS feeds title
+  * Fix transcription CORS issue if the caption file is stored externally
+
+
 ## v7.3.0
 
 ### IMPORTANT NOTES
