@@ -8,9 +8,9 @@
  * Check migrations:
 ```
 npm run clean:server:test
-git checkout master && rm -r ./node_modules && npm run install-node-dependencies && npm run build:server
+git checkout master && rm -rf ./node_modules && npm run install-node-dependencies && npm run build:server
 NODE_APP_INSTANCE=6 NODE_ENV=test node dist/server --benchmark-startup
-git checkout develop && rm -r ./node_modules && npm run install-node-dependencies && npm run build:server
+git checkout develop && rm -rf ./node_modules && npm run install-node-dependencies && npm run build:server
 NODE_APP_INSTANCE=6 NODE_ENV=test node dist/server --benchmark-startup
 ```
  * Run `rm -rf node_modules && rm -rf client/node_modules && npm run install-node-dependencies && npm run build` to see if all the supported languages compile correctly
