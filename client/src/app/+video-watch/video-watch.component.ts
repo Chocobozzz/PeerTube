@@ -854,9 +854,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       isLive: video.isLive,
       liveOptions,
 
-      videoViewUrl: video.privacy.id !== VideoPrivacy.PRIVATE
-        ? this.videoService.getVideoViewUrl(video.uuid)
-        : null,
+      videoViewUrl: this.videoService.getVideoViewUrl(video.uuid),
 
       videoFileToken: () => videoFileToken,
       requiresUserAuth: videoRequiresUserAuth(video, videoPassword),
