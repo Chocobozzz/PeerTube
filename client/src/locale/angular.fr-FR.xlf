@@ -12,7 +12,7 @@
       </trans-unit>
       <trans-unit id="ngb.carousel.slide-number" datatype="html" xml:space="preserve">
         <source>Slide <x id="INTERPOLATION" equiv-text="get wrap("/> of <x id="INTERPOLATION_1" equiv-text=".value; }"/> </source>
-        <target state="translated">Diapositive <x id="INTERPOLATION" equiv-text="get wrap("/> sur <x id="INTERPOLATION_1" equiv-text=".value; }"/>. </target>
+        <target state="translated">Diapositive <x id="INTERPOLATION" equiv-text="get wrap("/> sur <x id="INTERPOLATION_1" equiv-text=".value; }"/> </target>
         <note priority="1" from="description">Currently selected slide number read by screen reader</note>
         <context-group purpose="location">
           <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/carousel/carousel.ts</context>
