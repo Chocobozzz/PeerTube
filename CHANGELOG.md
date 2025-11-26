@@ -10,8 +10,9 @@
     * Classic installation: `cd /var/www/peertube/peertube-latest && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production node dist/scripts/migrations/peertube-8.0.js`
     * Docker installation: `cd /var/www/peertube-docker && docker compose exec -u peertube peertube node dist/scripts/migrations/peertube-8.0.js`
   * `yarn` NodeJS packages manager has been removed in favor of `pnpm`. Follow the [dependencies guide](https://docs.joinpeertube.org/support/doc/dependencies) to install `pnpm` on your system **before the upgrade**
-  * For Docker users, please read the Docker section below
+  * Ensure `storage.uploads` directory is set in your [production.yaml](https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L139)
   * Supported NodeJS versions are `>= 20.19 and < 21` or `>= 22.12 and <23`
+  * For Docker users, please read the Docker section below
 
 ### Configuration
 
