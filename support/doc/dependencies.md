@@ -5,7 +5,7 @@
 Main dependencies supported by PeerTube:
 
  * `node` LTS (**>= 20.19 and < 21** or **>= 22.12 and <23**)
- * `yarn` 1.x for **PeerTube <= 7.3** or `pnpm` >= 10.x for **PeerTube next**
+ * `yarn` 1.x for **PeerTube <= 7.3** or `pnpm` >= 10.x for **PeerTube >= 8.0**
  * `postgres` >=10.x
  * `redis-server` >=6.x
  * `ffmpeg` >=4.3 (using a ffmpeg static build [is not recommended](https://github.com/Chocobozzz/PeerTube/issues/6308))
