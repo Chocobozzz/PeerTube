@@ -34,8 +34,9 @@
     * Remove deprecated `filename` field from `VideoSource` object
     * Remove deprecated `commentsEnabled` field from `Video` object
     * Remove deprecated `redundancies.files`field from `VideoRedundancy` object
-    * Deprecate `captionPath` field from `VideoCaption` object
-    * Deprecate `storyboardPath` from `Storyboard` object
+    * Deprecate `captionPath` field from `VideoCaption` object. Use `fileUrl` instead
+    * Deprecate `storyboardPath` from `Storyboard` object. Use `fileUrl` instead
+    * Deprecate `path` from `ActorImage` object (avatars, banners). Use `fileUrl` instead
     * The HTTP response code for password-protected videos can be either 401 or 403, depending on the request headers
   * Theme:
     * Rename `--input-placeholder` CSS variables into `--input-placeholder-color`

@@ -9600,10 +9600,11 @@ components:
     Storyboard:
       properties:
         storyboardPath:
-          description: Deprecated in PeerTube v8, use fileUrl instead
+          description: Deprecated in PeerTube v8.0, use fileUrl instead
           deprecated: true
           type: string
         fileUrl:
+          description: "**PeerTube >= 7.1**"
           type: string
         totalHeight:
           type: integer
@@ -9625,8 +9626,9 @@ components:
         captionPath:
           type: string
           deprecated: true
-          description: Deprecated in PeerTube v8, use fileUrl instead
+          description: Deprecated in PeerTube v8.0, use fileUrl instead
         fileUrl:
+          description: "**PeerTube >= 7.1**"
           type: string
         m3u8Url:
           type: string
@@ -9673,10 +9675,11 @@ components:
     ActorImage:
       properties:
         path:
-          description: Deprecated in PeerTube v8, use fileUrl instead
+          description: Deprecated in PeerTube v8.0, use fileUrl instead
           deprecated: true
           type: string
         fileUrl:
+          description: "**PeerTube >= 7.1**"
           type: string
         width:
           type: integer
