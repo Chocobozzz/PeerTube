@@ -45,6 +45,7 @@ export class InstanceConfigWarningModalComponent implements OnInit {
   }
 
   shouldAutoOpen (serverConfig: ServerConfig, about: About) {
+    if (this.modalService.hasOpenModals()) return false
     if (!serverConfig.signup.allowed) return false
 
     return serverConfig.instance.name.toLowerCase() === 'peertube' ||
