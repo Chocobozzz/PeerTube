@@ -30,14 +30,14 @@ _note_: only **LTS** versions of external dependencies are supported. If no LTS 
 1. Install NodeJS 20.x:
 [https://nodejs.org/en/download/package-manager/all#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/all#debian-and-ubuntu-based-linux-distributions)
 
-1. Install [PNPM](https://pnpm.io/fr/installation):
+1. **PeerTube <= v7.3 only** Install yarn, and be sure to have [a recent version](https://github.com/yarnpkg/yarn/releases/latest):
+[https://yarnpkg.com/en/docs/install#linux-tab](https://yarnpkg.com/en/docs/install#linux-tab)
+
+1. **PeerTube >= v8.0 only** Install [PNPM](https://pnpm.io/fr/installation):
 
     ```sh
     sudo npm install -g pnpm
-    ````
-
-1. Install yarn, and be sure to have [a recent version](https://github.com/yarnpkg/yarn/releases/latest):
-[https://yarnpkg.com/en/docs/install#linux-tab](https://yarnpkg.com/en/docs/install#linux-tab)
+    ```
 
 1. Install Python:
 
@@ -68,7 +68,9 @@ sudo systemctl start redis postgresql
 Run:
 
 ```sh
-sudo pacman -S nodejs-lts-iron yarn ffmpeg postgresql openssl redis git wget unzip python python-pip base-devel npm nginx pnpm
+sudo pacman -S nodejs-lts-iron yarn ffmpeg postgresql openssl redis git wget unzip python python-pip base-devel npm nginx
+sudo pacman -S yarn # PeerTube <= v7.3 only
+sudo pacman -S pnpm # PeerTube >= v8.0 only
 ```
 
 Now that dependencies are installed, before running PeerTube you should start PostgreSQL and Redis:
@@ -82,10 +84,9 @@ sudo systemctl start redis postgresql
 1. Install NodeJS 20.x:
 [https://nodejs.org/en/download/package-manager/all#centos-fedora-and-red-hat-enterprise-linux](https://nodejs.org/en/download/package-manager/all#centos-fedora-and-red-hat-enterprise-linux)
 
-1. Install yarn:
-[https://yarnpkg.com/en/docs/install](https://yarnpkg.com/en/docs/install)
+1. **PeerTube <= v7.3 only** Install [yarn](https://yarnpkg.com/en/docs/install):
 
-1. Install [PNPM](https://pnpm.io/fr/installation):
+1. **PeerTube >= v8.0 only** Install [PNPM](https://pnpm.io/fr/installation):
 
     ```sh
     sudo npm install -g pnpm
@@ -135,10 +136,10 @@ sudo systemctl enable --now postgresql
 1. Install NodeJS 20.x:
 [https://nodejs.org/en/download/package-manager/all#centos-fedora-and-red-hat-enterprise-linux](https://nodejs.org/en/download/package-manager/all#centos-fedora-and-red-hat-enterprise-linux)
 
-1. Install yarn:
+1. **PeerTube <= v7.3 only** Install yarn:
 [https://yarnpkg.com/en/docs/install](https://yarnpkg.com/en/docs/install)
 
-1. Install [PNPM](https://pnpm.io/fr/installation):
+1. **PeerTube >= v8.0 only** Install [PNPM](https://pnpm.io/fr/installation):
 
     ```sh
     sudo npm install -g pnpm
@@ -193,12 +194,12 @@ sudo systemctl enable --now postgresql
     sudo dnf module install -y nodejs:20
     ```
 
-1. Install yarn:
+1. **PeerTube <= v7.3 only** Install yarn:
     ```sh
     sudo npm install --global yarn
     ```
 
-1. Install PNPM:
+1. **PeerTube >= v8.0 only** Install PNPM:
     ```sh
     sudo npm install --global pnpm
     ```
@@ -241,10 +242,10 @@ sudo systemctl enable --now postgresql
 1. Install NodeJS 20.x:
 [https://nodejs.org/en/download/package-manager/all#centos-fedora-and-red-hat-enterprise-linux](https://nodejs.org/en/download/package-manager/all#centos-fedora-and-red-hat-enterprise-linux)
 
-1. Install yarn:
+1. **PeerTube <= v7.3 only** Install yarn:
 [https://yarnpkg.com/en/docs/install](https://yarnpkg.com/en/docs/install)
 
-1. Install PNPM:
+1. **PeerTube >= v8.0 only** Install PNPM:
     ```sh
     sudo npm install --global pnpm
     ```
@@ -330,9 +331,9 @@ sudo systemctl enable --now postgresql
 1. Register system as root user to Red Hat Subscription Management (create a free Red Hat account if you don't have one yet).
 
     ```sh
-    # subscription-manager register --username <username> --password <password> --auto-attach
-    # dnf upgrade
-    # reboot
+    subscription-manager register --username <username> --password <password> --auto-attach
+    dnf upgrade
+    reboot
     ```
 
 1. Install NodeJS
@@ -341,14 +342,14 @@ sudo systemctl enable --now postgresql
     sudo dnf module install nodejs:20
     ```
 
-1. Install Yarn
+1. **PeerTube <= v7.3 only** Install Yarn
 
     ```sh
     curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | sudo tee /etc/yum.repos.d/yarn.repo
     sudo dnf install yarn
     ```
 
-1. Install PNPM:
+1. **PeerTube >= v8.0 only** Install PNPM:
     ```sh
     sudo npm install --global pnpm
     ```
@@ -444,7 +445,12 @@ On a fresh install of [FreeBSD](https://www.freebsd.org), new system or new jail
     pkg install -y sudo bash wget git python nginx pkgconf postgresql13-server postgresql13-contrib redis openssl node npm yarn ffmpeg unzip
     ```
 
-1. Install PNPM:
+1. **PeerTube <= v7.3 only** Install Yarn:
+    ```sh
+    pkg install -y yarn
+    ```
+
+1. **PeerTube >= v8.0 only** Install PNPM:
     ```sh
     sudo npm install --global pnpm
     ```
@@ -483,7 +489,9 @@ On a fresh install of [FreeBSD](https://www.freebsd.org), new system or new jail
 1. Add the packages:
 
     ```sh
-    brew install bash ffmpeg nginx postgresql openssl gcc make redis git yarn pnpm
+    brew install bash ffmpeg nginx postgresql openssl gcc make redis git
+    brew install yarn # PeerTube <= v7.3 only
+    brew install pnpm # PeerTube >= v8.0 only
     ```
 
     You may need to update your default version of bash.
@@ -577,13 +585,13 @@ On a fresh install of [FreeBSD](https://www.freebsd.org), new system or new jail
     pkg_add sudo bash wget git python nginx pkgconf postgresql-server postgresql-contrib redis openssl
     ```
 
-1. Install yarn:
+1. **PeerTube <= v7.3 only** Install yarn:
 
     ```sh
     npm install --global yarn
     ```
 
-1. Install PNPM:
+1. **PeerTube >= v8.0 only** Install PNPM:
     ```sh
     sudo npm install --global pnpm
     ```
