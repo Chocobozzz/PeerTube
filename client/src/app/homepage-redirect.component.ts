@@ -22,7 +22,7 @@ export class HomepageRedirectComponent implements OnInit {
     const url = this.route.snapshot.url
 
     if (url.length === 0 || is18nPath('/' + url[0])) {
-      this.redirectService.redirectToHomepage(true)
+      this.redirectService.redirectToHomepage({ skipLocationChange: true })
     }
   }
 }

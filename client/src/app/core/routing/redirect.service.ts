@@ -89,20 +89,34 @@ export class RedirectService {
     }
   }
 
-  redirectToLatestSessionRoute () {
-    return this.doRedirect(this.latestSessionUrl)
+  redirectToLatestSessionRoute (options: {
+    reloadTab?: boolean
+  } = {}) {
+    return this.doRedirect(this.latestSessionUrl, options)
   }
 
-  redirectToPreviousRoute (fallbackRoute?: string) {
-    return this.doRedirect(this.previousUrl, fallbackRoute)
+  redirectToPreviousRoute (options: {
+    reloadTab?: boolean
+  } = {}) {
+    return this.doRedirect(this.previousUrl, options)
   }
 
   getPreviousUrl () {
     return this.previousUrl
   }
 
-  redirectToHomepage (skipLocationChange = false) {
+  redirectToHomepage (options: {
+    skipLocationChange?: boolean // default false
+    reloadTab?: boolean // default false
+  } = {}) {
+    const { skipLocationChange = false, reloadTab = false } = options
+
     if (this.redirectingToHomepage) return
+
+    if (reloadTab) {
+      window.location.href = this.defaultRoute
+      return
+    }
 
     this.redirectingToHomepage = true
 
@@ -131,20 +145,24 @@ export class RedirectService {
     this.router.navigate([ '/401' ], { state: { obj: err }, skipLocationChange: true })
   }
 
-  private doRedirect (redirectUrl: string, fallbackRoute?: string) {
+  private doRedirect (redirectUrl: string, options: {
+    reloadTab?: boolean
+  } = {}) {
+    const { reloadTab = false } = options
+
     debugLogger('Redirecting on %s', redirectUrl)
 
     if (this.isValidRedirection(redirectUrl)) {
+      if (reloadTab) {
+        window.location.href = redirectUrl
+        return
+      }
+
       return this.router.navigateByUrl(redirectUrl)
     }
 
-    debugLogger('%s is not a valid redirection, try fallback route %s', redirectUrl, fallbackRoute)
-    if (fallbackRoute) {
-      return this.router.navigateByUrl(fallbackRoute)
-    }
-
-    debugLogger('There was no fallback route, redirecting to homepage')
-    return this.redirectToHomepage()
+    debugLogger(`${redirectUrl} is not a valid redirection, redirecting to homepage`)
+    return this.redirectToHomepage(options)
   }
 
   private isValidRedirection (redirectUrl: string) {
