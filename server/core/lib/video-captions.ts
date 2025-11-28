@@ -12,7 +12,7 @@ import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MStreamingPlaylist, MVideo, MVideoCaption, MVideoFullLight, MVideoUUID, MVideoUrl } from '@server/types/models/index.js'
+import { MStreamingPlaylist, MVideo, MVideoCaption, MVideoFullLight, MVideoId, MVideoUUID, MVideoUrl } from '@server/types/models/index.js'
 import { MutexInterface } from 'async-mutex'
 import { ensureDir, remove } from 'fs-extra/esm'
 import { writeFile } from 'fs/promises'
@@ -111,8 +111,13 @@ export async function regenerateTranscriptionTaskIfNeeded (video: MVideo) {
   }
 }
 
-export async function createTranscriptionTaskIfNeeded (video: MVideoUUID & MVideoUrl) {
+export async function createTranscriptionTaskIfNeeded (video: MVideoId & MVideoUUID & MVideoUrl) {
   if (CONFIG.VIDEO_TRANSCRIPTION.ENABLED !== true) return
+
+  if (!await VideoModel.loadHasStream(video.id, VideoFileStream.AUDIO)) {
+    logger.info(`Do not create transcription job for ${video.url} that doesn't have an audio stream`, lTags(video.uuid))
+    return
+  }
 
   logger.info(`Creating transcription job for ${video.url}`, lTags(video.uuid))
 

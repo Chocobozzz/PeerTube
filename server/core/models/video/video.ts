@@ -1828,20 +1828,35 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
   // ---------------------------------------------------------------------------
 
-  getMaxFPS () {
+  getMaxFPS<T extends MVideoWithFile> (this: T) {
     return this.getMaxQualityFile(VideoFileStream.VIDEO)?.fps || 0
   }
 
-  getMaxResolution () {
+  getMaxResolution<T extends MVideoWithFile> (this: T) {
     return this.getMaxQualityFile(VideoFileStream.VIDEO)?.resolution || this.getMaxQualityFile(VideoFileStream.AUDIO)?.resolution
   }
 
-  hasAudio () {
+  hasAudio<T extends MVideoWithFile> (this: T) {
     return !!this.getMaxQualityFile(VideoFileStream.AUDIO)
   }
 
-  hasVideo () {
+  hasVideo<T extends MVideoWithFile> (this: T) {
     return !!this.getMaxQualityFile(VideoFileStream.VIDEO)
+  }
+
+  static loadHasStream (videoId: number, stream: VideoFileStreamType) {
+    const query = 'SELECT 1 FROM "videoFile" WHERE "videoId" = $videoId AND ("streams" & $stream) = $stream ' +
+      'UNION ALL ' +
+      'SELECT 1 FROM "videoStreamingPlaylist" ' +
+      'INNER JOIN "videoFile" ON "videoFile"."videoStreamingPlaylistId" = "videoStreamingPlaylist"."id" ' +
+      'WHERE "videoStreamingPlaylist"."videoId" = $videoId AND ("videoFile"."streams" & $stream) = $stream ' +
+      'LIMIT 1'
+
+    return doesExist({
+      sequelize: this.sequelize,
+      query,
+      bind: { videoId, stream }
+    })
   }
 
   // ---------------------------------------------------------------------------

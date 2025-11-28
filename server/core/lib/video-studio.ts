@@ -110,7 +110,7 @@ export async function onVideoStudioEnded (options: {
   await video.save()
 
   await JobQueue.Instance.createSequentialJobFlow(
-    buildLocalStoryboardJobIfNeeded({ video, federate: false }),
+    await buildLocalStoryboardJobIfNeeded({ video, federate: false }),
     {
       type: 'federate-video' as 'federate-video',
       payload: {

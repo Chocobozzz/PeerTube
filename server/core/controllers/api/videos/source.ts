@@ -188,7 +188,7 @@ async function addVideoJobsAfterUpload (video: MVideoFullLight, videoFile: MVide
       }
     },
 
-    buildLocalStoryboardJobIfNeeded({ video, federate: false }),
+    await buildLocalStoryboardJobIfNeeded({ video, federate: false }),
 
     {
       type: 'federate-video' as const,

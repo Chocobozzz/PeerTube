@@ -1,6 +1,14 @@
-import { ManageVideoTorrentPayload, VideoPrivacy, VideoPrivacyType, VideoState, VideoStateType } from '@peertube/peertube-models'
+import {
+  ManageVideoTorrentPayload,
+  VideoFileStream,
+  VideoPrivacy,
+  VideoPrivacyType,
+  VideoState,
+  VideoStateType
+} from '@peertube/peertube-models'
 import { CONFIG } from '@server/initializers/config.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
+import { VideoModel } from '@server/models/video/video.js'
 import { MVideo, MVideoFile, MVideoFullLight, MVideoUUID } from '@server/types/models/index.js'
 import { CreateJobArgument, CreateJobOptions, JobQueue } from './job-queue/job-queue.js'
 import { VideoStoryboardJobHandler } from './runners/index.js'
@@ -27,13 +35,19 @@ export async function buildMoveVideoJob (options: {
   }
 }
 
-export function buildLocalStoryboardJobIfNeeded (options: {
+// ---------------------------------------------------------------------------
+// Storyboard
+// ---------------------------------------------------------------------------
+
+export async function buildLocalStoryboardJobIfNeeded (options: {
   video: MVideo
   federate: boolean
 }) {
   const { video, federate } = options
 
-  if (CONFIG.STORYBOARDS.ENABLED && !CONFIG.STORYBOARDS.REMOTE_RUNNERS.ENABLED) {
+  const hasVideo = await VideoModel.loadHasStream(video.id, VideoFileStream.VIDEO)
+
+  if (hasVideo && CONFIG.STORYBOARDS.ENABLED && !CONFIG.STORYBOARDS.REMOTE_RUNNERS.ENABLED) {
     return {
       type: 'generate-video-storyboard' as 'generate-video-storyboard',
       payload: {
@@ -56,9 +70,10 @@ export function buildLocalStoryboardJobIfNeeded (options: {
   return undefined
 }
 
-export function addRemoteStoryboardJobIfNeeded (video: MVideo) {
+export async function addRemoteStoryboardJobIfNeeded (video: MVideo) {
   if (CONFIG.STORYBOARDS.ENABLED !== true) return
   if (CONFIG.STORYBOARDS.REMOTE_RUNNERS.ENABLED !== true) return
+  if (!await VideoModel.loadHasStream(video.id, VideoFileStream.VIDEO)) return
 
   return new VideoStoryboardJobHandler().create({ videoUUID: video.uuid })
 }
@@ -74,9 +89,13 @@ export async function addLocalOrRemoteStoryboardJobIfNeeded (options: {
   if (CONFIG.STORYBOARDS.REMOTE_RUNNERS.ENABLED === true) {
     await addRemoteStoryboardJobIfNeeded(video)
   } else {
-    await JobQueue.Instance.createJob(buildLocalStoryboardJobIfNeeded({ video, federate }))
+    await JobQueue.Instance.createJob(await buildLocalStoryboardJobIfNeeded({ video, federate }))
   }
 }
+
+// ---------------------------------------------------------------------------
+// Multiple jobs creation
+// ---------------------------------------------------------------------------
 
 export async function addVideoJobsAfterCreation (options: {
   video: MVideo
@@ -95,7 +114,7 @@ export async function addVideoJobsAfterCreation (options: {
       }
     },
 
-    buildLocalStoryboardJobIfNeeded({ video, federate: false }),
+    await buildLocalStoryboardJobIfNeeded({ video, federate: false }),
 
     {
       type: 'notify',
