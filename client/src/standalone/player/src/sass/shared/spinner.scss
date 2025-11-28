@@ -1,9 +1,12 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
 
 // Thanks: https://projects.lukehaas.me/css-loaders/
 .vjs-loading-spinner {
-  left: 50%;
+  --spinner-size: 6em;
+
+  top: calc(50% - var(--spinner-size) / 2);
+  left: calc(50% - var(--spinner-size) / 2);
   font-size: 10px;
   text-indent: -9999em;
   border: 0.7em solid rgba(255, 255, 255, 0.2);
@@ -18,10 +21,7 @@
   }
 
   &::after {
-    border-radius: 50%;
-    width: 6em;
-    height: 6em;
-    animation: none !important;
+    display: none !important;
   }
 
   @keyframes spinner {

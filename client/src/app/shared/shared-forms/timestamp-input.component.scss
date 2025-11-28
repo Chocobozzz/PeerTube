@@ -5,7 +5,7 @@
 p-inputmask {
   &.with-border {
     --input-border-color: #{pvar(--bg-secondary-500)};
-    --p-inputtext-hover-border-color: #{pvar(--bg-secondary-700)};
+    --p-inputtext-hover-border-color: #{pvar(--bg-secondary-500)};
   }
 
   ::ng-deep input {
