@@ -1,10 +1,11 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_form-mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
 
 p-inputmask {
   &.with-border {
     --input-border-color: #{pvar(--bg-secondary-500)};
+    --p-inputtext-hover-border-color: #{pvar(--bg-secondary-700)};
   }
 
   ::ng-deep input {
