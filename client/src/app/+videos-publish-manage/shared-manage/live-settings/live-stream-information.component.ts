@@ -1,4 +1,3 @@
-
 import { Component, inject, input, OnInit } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { Video } from '@app/shared/shared-main/video/video.model'
@@ -13,7 +12,7 @@ import { LiveVideoService } from '../../../shared/shared-video-live/live-video.s
   imports: [
     RouterLink,
     PTDatePipe
-],
+  ],
   providers: [ LiveVideoService ]
 })
 export class LiveStreamInformationComponent implements OnInit {
@@ -24,7 +23,7 @@ export class LiveStreamInformationComponent implements OnInit {
 
   ngOnInit () {
     this.liveVideoService.listSessions(this.video().id)
-      .subscribe(({ data }) => this.latestLiveSessions = data.reverse())
+      .subscribe(({ data }) => this.latestLiveSessions = data)
   }
 
   getVideoUrl (video: { shortUUID: string }) {

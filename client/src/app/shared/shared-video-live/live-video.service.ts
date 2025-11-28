@@ -1,5 +1,5 @@
 import { catchError } from 'rxjs/operators'
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
 import { RestExtractor } from '@app/core'
 import { LiveVideo, LiveVideoCreate, LiveVideoSession, LiveVideoUpdate, ResultList, VideoCreateResult } from '@peertube/peertube-models'
@@ -26,8 +26,10 @@ export class LiveVideoService {
   }
 
   listSessions (videoId: number | string) {
+    const params = new HttpParams().set('sort', '-startDate')
+
     return this.authHttp
-      .get<ResultList<LiveVideoSession>>(LiveVideoService.BASE_VIDEO_LIVE_URL + videoId + '/sessions')
+      .get<ResultList<LiveVideoSession>>(LiveVideoService.BASE_VIDEO_LIVE_URL + videoId + '/sessions', { params })
       .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 

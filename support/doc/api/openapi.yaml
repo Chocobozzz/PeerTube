@@ -3831,6 +3831,7 @@ paths:
         - Live Videos
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
+        - $ref: '#/components/parameters/sort'
       responses:
         '200':
           description: successful operation

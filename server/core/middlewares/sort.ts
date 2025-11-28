@@ -1,23 +1,17 @@
 import express from 'express'
 
-const setDefaultSort = setDefaultSortFactory('-createdAt')
-const setDefaultVideosSort = setDefaultSortFactory('-publishedAt')
+export const setDefaultSort = setDefaultSortFactory('-createdAt')
+export const setDefaultVideosSort = setDefaultSortFactory('-publishedAt')
 
-const setDefaultVideoRedundanciesSort = setDefaultSortFactory('name')
+export const setDefaultVideoRedundanciesSort = setDefaultSortFactory('name')
 
-const setDefaultSearchSort = setDefaultSortFactory('-match')
-const setBlacklistSort = setDefaultSortFactory('-createdAt')
+export const setDefaultSearchSort = setDefaultSortFactory('-match')
+export const setBlacklistSort = setDefaultSortFactory('-createdAt')
+
+export const setLiveSessionsSort = setDefaultSortFactory('startDate')
 
 // ---------------------------------------------------------------------------
-
-export {
-  setDefaultSort,
-  setDefaultSearchSort,
-  setDefaultVideosSort,
-  setDefaultVideoRedundanciesSort,
-  setBlacklistSort
-}
-
+// Private
 // ---------------------------------------------------------------------------
 
 function setDefaultSortFactory (sort: string) {

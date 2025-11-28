@@ -44,6 +44,8 @@ export const runnersSortValidator = checkSortFactory(SORTABLE_COLUMNS.RUNNERS)
 export const runnerRegistrationTokensSortValidator = checkSortFactory(SORTABLE_COLUMNS.RUNNER_REGISTRATION_TOKENS)
 export const runnerJobsSortValidator = checkSortFactory(SORTABLE_COLUMNS.RUNNER_JOBS)
 
+export const liveSessionsSortValidator = checkSortFactory(SORTABLE_COLUMNS.LIVE_SESSIONS)
+
 // ---------------------------------------------------------------------------
 
 function checkSortFactory (columns: string[], tags: string[] = []) {

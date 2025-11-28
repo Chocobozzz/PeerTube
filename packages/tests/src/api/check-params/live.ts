@@ -22,6 +22,7 @@ import {
   setAccessTokensToServers,
   stopFfmpeg
 } from '@peertube/peertube-server-commands'
+import { checkBadSortPagination } from '@tests/shared/checks.js'
 import { expect } from 'chai'
 
 describe('Test video lives API validator', function () {
@@ -447,6 +448,10 @@ describe('Test video lives API validator', function () {
   })
 
   describe('When getting live sessions', function () {
+    it('Should fail with an incorrect sort', async function () {
+      await checkBadSortPagination(server.url, path, server.accessToken)
+    })
+
     it('Should fail with a bad access token', async function () {
       await command.listSessions({ token: 'toto', videoId: video.id, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })

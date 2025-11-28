@@ -163,7 +163,9 @@ export const SORTABLE_COLUMNS = {
 
   VIDEO_REDUNDANCIES: [ 'name' ],
 
-  VIDEO_CHANNEL_ACTIVITIES: [ 'createdAt' ]
+  VIDEO_CHANNEL_ACTIVITIES: [ 'createdAt' ],
+
+  LIVE_SESSIONS: [ 'startDate' ]
 }
 
 export const ROUTE_CACHE_LIFETIME = {

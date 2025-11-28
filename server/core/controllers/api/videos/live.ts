@@ -26,6 +26,7 @@ import {
   videoLiveListSessionsValidator,
   videoLiveUpdateValidator
 } from '@server/middlewares/validators/videos/video-live.js'
+import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting.js'
 import { VideoLiveScheduleModel } from '@server/models/video/video-live-schedule.js'
 import { VideoLiveSessionModel } from '@server/models/video/video-live-session.js'
@@ -33,8 +34,14 @@ import { MVideoLive } from '@server/types/models/index.js'
 import express from 'express'
 import { Transaction } from 'sequelize'
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
-import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, optionalAuthenticate } from '../../../middlewares/index.js'
-import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
+import {
+  asyncMiddleware,
+  asyncRetryTransactionMiddleware,
+  authenticate,
+  liveSessionsSortValidator,
+  optionalAuthenticate,
+  setLiveSessionsSort
+} from '../../../middlewares/index.js'
 
 const lTags = loggerTagsFactory('api', 'live')
 
@@ -53,9 +60,11 @@ liveRouter.post(
 liveRouter.get(
   '/live/:videoId/sessions',
   authenticate,
+  liveSessionsSortValidator,
+  setLiveSessionsSort,
   asyncMiddleware(videoLiveGetValidator),
   asyncMiddleware(videoLiveListSessionsValidator),
-  asyncMiddleware(getLiveVideoSessions)
+  asyncMiddleware(listLiveVideoSessions)
 )
 
 liveRouter.get(
@@ -99,10 +108,14 @@ function getLiveReplaySession (req: express.Request, res: express.Response) {
   return res.json(session.toFormattedJSON())
 }
 
-async function getLiveVideoSessions (req: express.Request, res: express.Response) {
+async function listLiveVideoSessions (req: express.Request, res: express.Response) {
   const videoLive = res.locals.videoLive
 
-  const data = await VideoLiveSessionModel.listSessionsOfLiveForAPI({ videoId: videoLive.videoId, count: 100 })
+  const data = await VideoLiveSessionModel.listSessionsOfLiveForAPI({
+    videoId: videoLive.videoId,
+    count: 100,
+    sort: req.query.sort
+  })
 
   return res.json(getFormattedObjects(data, data.length))
 }

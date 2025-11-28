@@ -15,9 +15,9 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { getSort, SequelizeModel } from '../shared/index.js'
 import { VideoLiveReplaySettingModel } from './video-live-replay-setting.js'
 import { VideoModel } from './video.js'
-import { SequelizeModel } from '../shared/index.js'
 
 export enum ScopeNames {
   WITH_REPLAY = 'WITH_REPLAY'
@@ -177,15 +177,16 @@ export class VideoLiveSessionModel extends SequelizeModel<VideoLiveSessionModel>
   static listSessionsOfLiveForAPI (options: {
     videoId: number
     count: number
+    sort: string
   }) {
-    const { videoId, count } = options
+    const { videoId, count, sort } = options
 
     const query: FindOptions<AttributesOnly<VideoLiveSessionModel>> = {
       where: {
         liveVideoId: videoId
       },
       limit: count,
-      order: [ [ 'startDate', 'ASC' ] ]
+      order: getSort(sort)
     }
 
     return VideoLiveSessionModel.scope(ScopeNames.WITH_REPLAY).findAll(query)
