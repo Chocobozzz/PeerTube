@@ -71,6 +71,10 @@ if (PlayProgressBar.prototype.options_.children.includes('timeTooltip') !== true
   PlayProgressBar.prototype.options_.children.push('timeTooltip')
 }
 
+// FIXME: https://github.com/videojs/video.js/pull/8988#issuecomment-3402464579
+const seekBar = videojs.getComponent('SeekBar') as any
+seekBar.prototype.pendingSeekTime = seekBar.prototype.getCurrentTime_
+
 export { videojs }
 
 export class PeerTubePlayer {
