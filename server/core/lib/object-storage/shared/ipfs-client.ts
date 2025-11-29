@@ -18,6 +18,21 @@ let heliaInstance: Helia | null = null
 let unixfsInstance: UnixFS | null = null
 let initializationPromise: Promise<void> | null = null
 
+// Polyfill `Promise.withResolvers` for Node versions/environments
+// where it's not available (some libp2p/mortice versions call it).
+// This keeps the runtime compatible when Node is older than the API.
+if (typeof (Promise as any).withResolvers !== 'function') {
+  ;(Promise as any).withResolvers = function () {
+    let resolve: (value?: any) => void = () => {}
+    let reject: (reason?: any) => void = () => {}
+    const promise = new Promise((res, rej) => {
+      resolve = res
+      reject = rej
+    })
+    return { promise, resolve, reject }
+  }
+}
+
 /**
  * Initialize and return a singleton Helia IPFS node
  */
