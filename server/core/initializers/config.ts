@@ -253,6 +253,33 @@ const CONFIG = {
       BASE_URL: config.get<string>('object_storage.captions.base_url')
     }
   },
+  IPFS_STORAGE: {
+    ENABLED: config.get<boolean>('ipfs_storage.enabled'),
+    REPO_PATH: config.get<string>('ipfs_storage.repo_path'),
+    GATEWAY_URL: config.get<string>('ipfs_storage.gateway_url'),
+    LISTEN_ADDRESSES: config.get<string[]>('ipfs_storage.listen_addresses'),
+    BOOTSTRAP_PEERS: config.get<string[]>('ipfs_storage.bootstrap_peers'),
+    WEB_VIDEOS: {
+      BUCKET_NAME: config.get<string>('ipfs_storage.web_videos.bucket_name'),
+      PREFIX: config.get<string>('ipfs_storage.web_videos.prefix')
+    },
+    STREAMING_PLAYLISTS: {
+      BUCKET_NAME: config.get<string>('ipfs_storage.streaming_playlists.bucket_name'),
+      PREFIX: config.get<string>('ipfs_storage.streaming_playlists.prefix')
+    },
+    USER_EXPORTS: {
+      BUCKET_NAME: config.get<string>('ipfs_storage.user_exports.bucket_name'),
+      PREFIX: config.get<string>('ipfs_storage.user_exports.prefix')
+    },
+    ORIGINAL_VIDEO_FILES: {
+      BUCKET_NAME: config.get<string>('ipfs_storage.original_video_files.bucket_name'),
+      PREFIX: config.get<string>('ipfs_storage.original_video_files.prefix')
+    },
+    CAPTIONS: {
+      BUCKET_NAME: config.get<string>('ipfs_storage.captions.bucket_name'),
+      PREFIX: config.get<string>('ipfs_storage.captions.prefix')
+    }
+  },
   WEBSERVER: {
     SCHEME: config.get<boolean>('webserver.https') === true ? 'https' : 'http',
     WS: config.get<boolean>('webserver.https') === true ? 'wss' : 'ws',

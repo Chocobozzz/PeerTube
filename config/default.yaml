@@ -233,6 +233,54 @@ object_storage:
     prefix: ''
     base_url: ''
 
+# IPFS Storage Configuration
+# Alternative to traditional object storage (S3-compatible)
+# Uses Helia (IPFS implementation) for decentralized content storage
+ipfs_storage:
+  enabled: false
+
+  # IPFS node repository path (where blocks and datastore are stored)
+  repo_path: '' # Default: storage.tmp/ipfs-repo
+
+  # IPFS gateway URL for accessing content
+  # If not set, URLs will use ipfs:// protocol
+  gateway_url: '' # Example: 'https://ipfs.io' or 'http://localhost:8080'
+
+  # Multiaddresses for the IPFS node to listen on
+  listen_addresses:
+    - '/ip4/0.0.0.0/tcp/4001'
+    - '/ip4/0.0.0.0/tcp/4002/ws'
+
+  # Bootstrap peers for IPFS network discovery
+  # Leave empty for local-only node
+  bootstrap_peers:
+    # Public IPFS bootstrap nodes
+    - '/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN'
+    - '/dnsaddr/bootstrap.libp2p.io/p2p/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa'
+    - '/dnsaddr/bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb'
+    - '/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt'
+
+  # IPFS storage for different resource types
+  streaming_playlists:
+    bucket_name: 'streaming-playlists-ipfs'
+    prefix: 'hls/'
+
+  web_videos:
+    bucket_name: 'web-videos-ipfs'
+    prefix: 'videos/'
+
+  user_exports:
+    bucket_name: 'user-exports-ipfs'
+    prefix: 'exports/'
+
+  original_video_files:
+    bucket_name: 'original-video-files-ipfs'
+    prefix: 'originals/'
+
+  captions:
+    bucket_name: 'captions-ipfs'
+    prefix: 'captions/'
+
 log:
   level: 'info' # 'debug' | 'info' | 'warn' | 'error'
 
