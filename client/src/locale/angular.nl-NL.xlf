@@ -1651,7 +1651,7 @@
       </trans-unit>
       <trans-unit id="7855115715004732406" datatype="html" xml:space="preserve">
         <source>Browse "<x id="PH" equiv-text="value.category.label"/>" videos</source>
-        <target state="translated">Blader door "<x id="PH" equiv-text="value.category.label"/>" videos</target>
+        <target state="translated">Blader door "<x id="PH" equiv-text="value.category.label"/>"-video's</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
           <context context-type="linenumber">143</context>
@@ -1667,7 +1667,7 @@
       </trans-unit>
       <trans-unit id="8844207666221087270" datatype="html" xml:space="preserve">
         <source>Browse "#<x id="PH" equiv-text="value.tag"/>" videos</source>
-        <target state="translated">Blader door "#<x id="PH" equiv-text="value.tag"/>" videos</target>
+        <target state="translated">Blader door "#<x id="PH" equiv-text="value.tag"/>"-video's</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
           <context context-type="linenumber">154</context>
