@@ -120,35 +120,51 @@ async function migrateWebVideoFiles (options: {
     whereConditions.ipfsCid = null
   }
 
-  const videoFiles = await VideoFileModel.scope('WITH_VIDEO').findAll({
-    where: whereConditions,
-    limit: options.limit > 0 ? options.limit : undefined
-  })
+  // Count total first
+  const totalCount = await VideoFileModel.count({ where: whereConditions })
+  const limitToProcess = options.limit > 0 ? Math.min(options.limit, totalCount) : totalCount
+  logger.info(`Found ${totalCount} web video files to migrate (processing ${limitToProcess})`)
+  stats.total += limitToProcess
 
-  logger.info(`Found ${videoFiles.length} web video files to migrate`)
-  stats.total += videoFiles.length
+  // Process in batches to avoid memory overflow
+  const batchSize = 100
+  let processed = 0
 
-  await Bluebird.map(videoFiles, async (videoFile) => {
-    try {
-      if (options.dryRun) {
-        logger.info(`[DRY-RUN] Would migrate video file ${videoFile.id} (${videoFile.filename})`)
-        stats.skipped++
-        return
+  while (processed < limitToProcess) {
+    const batch = await VideoFileModel.scope('WITH_VIDEO').findAll({
+      where: whereConditions,
+      limit: Math.min(batchSize, limitToProcess - processed),
+      offset: processed,
+      order: [['id', 'ASC']]
+    })
+
+    if (batch.length === 0) break
+
+    await Bluebird.map(batch, async (videoFile) => {
+      try {
+        if (options.dryRun) {
+          logger.info(`[DRY-RUN] Would migrate video file ${videoFile.id} (${videoFile.filename})`)
+          stats.skipped++
+          return
+        }
+
+        await migrateVideoFile(videoFile, options.force)
+        stats.migrated++
+        logger.info(`Migrated video file ${videoFile.id} - Progress: ${stats.migrated}/${limitToProcess}`)
+      } catch (err) {
+        stats.failed++
+        stats.errors.push({
+          id: videoFile.id,
+          type: 'video-file',
+          error: err.message
+        })
+        logger.error(`Failed to migrate video file ${videoFile.id}`, { err })
       }
+    }, { concurrency: options.concurrency })
 
-      await migrateVideoFile(videoFile, options.force)
-      stats.migrated++
-      logger.info(`Migrated video file ${videoFile.id} - Progress: ${stats.migrated}/${videoFiles.length}`)
-    } catch (err) {
-      stats.failed++
-      stats.errors.push({
-        id: videoFile.id,
-        type: 'video-file',
-        error: err.message
-      })
-      logger.error(`Failed to migrate video file ${videoFile.id}`, { err })
-    }
-  }, { concurrency: options.concurrency })
+    processed += batch.length
+    logger.info(`Batch complete: ${processed}/${limitToProcess} files processed`)
+  }
 }
 
 async function migrateStreamingPlaylists (options: {
@@ -165,35 +181,51 @@ async function migrateStreamingPlaylists (options: {
     whereConditions.ipfsCid = null
   }
 
-  const playlists = await VideoStreamingPlaylistModel.scope('WITH_VIDEO').findAll({
-    where: whereConditions,
-    limit: options.limit > 0 ? options.limit : undefined
-  })
+  // Count total first
+  const totalCount = await VideoStreamingPlaylistModel.count({ where: whereConditions })
+  const limitToProcess = options.limit > 0 ? Math.min(options.limit, totalCount) : totalCount
+  logger.info(`Found ${totalCount} streaming playlists to migrate (processing ${limitToProcess})`)
+  stats.total += limitToProcess
 
-  logger.info(`Found ${playlists.length} streaming playlists to migrate`)
-  stats.total += playlists.length
+  // Process in batches to avoid memory overflow
+  const batchSize = 50
+  let processed = 0
 
-  await Bluebird.map(playlists, async (playlist) => {
-    try {
-      if (options.dryRun) {
-        logger.info(`[DRY-RUN] Would migrate streaming playlist ${playlist.id}`)
-        stats.skipped++
-        return
+  while (processed < limitToProcess) {
+    const batch = await VideoStreamingPlaylistModel.scope('WITH_VIDEO').findAll({
+      where: whereConditions,
+      limit: Math.min(batchSize, limitToProcess - processed),
+      offset: processed,
+      order: [['id', 'ASC']]
+    })
+
+    if (batch.length === 0) break
+
+    await Bluebird.map(batch, async (playlist) => {
+      try {
+        if (options.dryRun) {
+          logger.info(`[DRY-RUN] Would migrate streaming playlist ${playlist.id}`)
+          stats.skipped++
+          return
+        }
+
+        await migrateStreamingPlaylist(playlist, options.force)
+        stats.migrated++
+        logger.info(`Migrated streaming playlist ${playlist.id} - Progress: ${stats.migrated}/${limitToProcess}`)
+      } catch (err) {
+        stats.failed++
+        stats.errors.push({
+          id: playlist.id,
+          type: 'streaming-playlist',
+          error: err.message
+        })
+        logger.error(`Failed to migrate streaming playlist ${playlist.id}`, { err })
       }
+    }, { concurrency: options.concurrency })
 
-      await migrateStreamingPlaylist(playlist, options.force)
-      stats.migrated++
-      logger.info(`Migrated streaming playlist ${playlist.id} - Progress: ${stats.migrated}/${playlists.length}`)
-    } catch (err) {
-      stats.failed++
-      stats.errors.push({
-        id: playlist.id,
-        type: 'streaming-playlist',
-        error: err.message
-      })
-      logger.error(`Failed to migrate streaming playlist ${playlist.id}`, { err })
-    }
-  }, { concurrency: options.concurrency })
+    processed += batch.length
+    logger.info(`Batch complete: ${processed}/${limitToProcess} playlists processed`)
+  }
 }
 
 async function migrateCaptions (options: {
@@ -210,35 +242,51 @@ async function migrateCaptions (options: {
     whereConditions.ipfsCid = null
   }
 
-  const captions = await VideoCaptionModel.findAll({
-    where: whereConditions,
-    limit: options.limit > 0 ? options.limit : undefined
-  })
+  // Count total first
+  const totalCount = await VideoCaptionModel.count({ where: whereConditions })
+  const limitToProcess = options.limit > 0 ? Math.min(options.limit, totalCount) : totalCount
+  logger.info(`Found ${totalCount} captions to migrate (processing ${limitToProcess})`)
+  stats.total += limitToProcess
 
-  logger.info(`Found ${captions.length} captions to migrate`)
-  stats.total += captions.length
+  // Process in batches to avoid memory overflow
+  const batchSize = 100
+  let processed = 0
 
-  await Bluebird.map(captions, async (caption) => {
-    try {
-      if (options.dryRun) {
-        logger.info(`[DRY-RUN] Would migrate caption ${caption.id}`)
-        stats.skipped++
-        return
+  while (processed < limitToProcess) {
+    const batch = await VideoCaptionModel.findAll({
+      where: whereConditions,
+      limit: Math.min(batchSize, limitToProcess - processed),
+      offset: processed,
+      order: [['videoId', 'ASC'], ['language', 'ASC']]
+    })
+
+    if (batch.length === 0) break
+
+    await Bluebird.map(batch, async (caption) => {
+      try {
+        if (options.dryRun) {
+          logger.info(`[DRY-RUN] Would migrate caption ${caption.id}`)
+          stats.skipped++
+          return
+        }
+
+        await migrateCaption(caption, options.force)
+        stats.migrated++
+        logger.info(`Migrated caption ${caption.id} - Progress: ${stats.migrated}/${limitToProcess}`)
+      } catch (err) {
+        stats.failed++
+        stats.errors.push({
+          id: caption.id,
+          type: 'caption',
+          error: err.message
+        })
+        logger.error(`Failed to migrate caption ${caption.id}`, { err })
       }
+    }, { concurrency: options.concurrency })
 
-      await migrateCaption(caption, options.force)
-      stats.migrated++
-      logger.info(`Migrated caption ${caption.id} - Progress: ${stats.migrated}/${captions.length}`)
-    } catch (err) {
-      stats.failed++
-      stats.errors.push({
-        id: caption.id,
-        type: 'caption',
-        error: err.message
-      })
-      logger.error(`Failed to migrate caption ${caption.id}`, { err })
-    }
-  }, { concurrency: options.concurrency })
+    processed += batch.length
+    logger.info(`Batch complete: ${processed}/${limitToProcess} captions processed`)
+  }
 }
 
 async function migrateOriginalFiles (options: {
@@ -255,35 +303,51 @@ async function migrateOriginalFiles (options: {
     whereConditions.ipfsCid = null
   }
 
-  const sources = await VideoSourceModel.findAll({
-    where: whereConditions,
-    limit: options.limit > 0 ? options.limit : undefined
-  })
+  // Count total first
+  const totalCount = await VideoSourceModel.count({ where: whereConditions })
+  const limitToProcess = options.limit > 0 ? Math.min(options.limit, totalCount) : totalCount
+  logger.info(`Found ${totalCount} original files to migrate (processing ${limitToProcess})`)
+  stats.total += limitToProcess
 
-  logger.info(`Found ${sources.length} original files to migrate`)
-  stats.total += sources.length
+  // Process in batches to avoid memory overflow
+  const batchSize = 50
+  let processed = 0
 
-  await Bluebird.map(sources, async (source) => {
-    try {
-      if (options.dryRun) {
-        logger.info(`[DRY-RUN] Would migrate original file ${source.id}`)
-        stats.skipped++
-        return
+  while (processed < limitToProcess) {
+    const batch = await VideoSourceModel.findAll({
+      where: whereConditions,
+      limit: Math.min(batchSize, limitToProcess - processed),
+      offset: processed,
+      order: [['id', 'ASC']]
+    })
+
+    if (batch.length === 0) break
+
+    await Bluebird.map(batch, async (source) => {
+      try {
+        if (options.dryRun) {
+          logger.info(`[DRY-RUN] Would migrate original file ${source.id}`)
+          stats.skipped++
+          return
+        }
+
+        await migrateOriginalFile(source, options.force)
+        stats.migrated++
+        logger.info(`Migrated original file ${source.id} - Progress: ${stats.migrated}/${limitToProcess}`)
+      } catch (err) {
+        stats.failed++
+        stats.errors.push({
+          id: source.id,
+          type: 'original-file',
+          error: err.message
+        })
+        logger.error(`Failed to migrate original file ${source.id}`, { err })
       }
+    }, { concurrency: options.concurrency })
 
-      await migrateOriginalFile(source, options.force)
-      stats.migrated++
-      logger.info(`Migrated original file ${source.id} - Progress: ${stats.migrated}/${sources.length}`)
-    } catch (err) {
-      stats.failed++
-      stats.errors.push({
-        id: source.id,
-        type: 'original-file',
-        error: err.message
-      })
-      logger.error(`Failed to migrate original file ${source.id}`, { err })
-    }
-  }, { concurrency: options.concurrency })
+    processed += batch.length
+    logger.info(`Batch complete: ${processed}/${limitToProcess} original files processed`)
+  }
 }
 
 async function migrateVideoFile (videoFile: VideoFileModel, force: boolean) {
