@@ -605,6 +605,14 @@ $chapter-marker-size: 9px;
     }
   }
 
+  &.vjs-live {
+    // Take the available space for the control bar
+    .vjs-progress-control {
+      display: flex;
+      visibility: hidden;
+    }
+  }
+
   &.vjs-fullscreen .vjs-control-bar {
     --control-bar-height: 60px;
     --icon-size: 1.625rem; // 26px;
