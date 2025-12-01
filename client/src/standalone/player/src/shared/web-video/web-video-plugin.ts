@@ -91,7 +91,9 @@ class WebVideoPlugin extends Plugin {
       this.player.addClass('vjs-updating-resolution')
     }
 
-    this.player.src(httpUrl)
+    if (this.onPlayHandler) {
+      this.player.off('canplay', this.onPlayHandler)
+    }
 
     this.onPlayHandler = () => {
       this.player.playbackRate(playbackRate)
@@ -116,6 +118,12 @@ class WebVideoPlugin extends Plugin {
     }
 
     this.player.one('canplay', this.onPlayHandler)
+
+    this.player.src(httpUrl)
+
+    if (options.isUserResolutionChange) {
+      this.player.preload('auto')
+    }
   }
 
   getCurrentVideoFile () {
