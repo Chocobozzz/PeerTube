@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+import { expect } from 'chai'
 import { omit } from '@peertube/peertube-core-utils'
 import { ActorImageType, CustomConfig, HttpStatusCode, LogoType } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
@@ -232,13 +233,15 @@ describe('Test config API validators', function () {
           }
         })
 
-        await makePutBodyRequest({
+        const response = await makePutBodyRequest({
           url: server.url,
           path,
           fields: newUpdateParams,
           token: server.accessToken,
           expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
+
+        expect(response.body.detail).to.equal('Browse videos default sort should be -publishedAt or -originallyPublishedAt or name or -trending or -hot or -likes or -views, instead of hello')
       })
 
       it('Should fail with a trending default sort & disabled trending algorithm', async function () {
@@ -257,13 +260,15 @@ describe('Test config API validators', function () {
           }
         })
 
-        await makePutBodyRequest({
+        const response = await makePutBodyRequest({
           url: server.url,
           path,
           fields: newUpdateParams,
           token: server.accessToken,
           expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
+
+        expect(response.body.detail).to.equal('Trending videos algorithm most-viewed should be enabled if browse videos default sort is -trending')
       })
 
       it('Should fail with an invalid default scope', async function () {
