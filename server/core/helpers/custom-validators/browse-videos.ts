@@ -8,7 +8,7 @@ export function getBrowseVideosDefaultSortError (value: string, enabledTrendingA
 
     // Only use `t` if language is provided, because i18n might not be initialized yet and can return `undefined`
     if (language) {
-      return t(`Browse videos default sort should be '{options}', instead of '{value}'`, language, { options, value })
+      return t(`Browse videos default sort should be {options}, instead of {value}`, language, { options, value })
     }
 
     return `Browse videos default sort should be '${options}', instead of '${value}'`
