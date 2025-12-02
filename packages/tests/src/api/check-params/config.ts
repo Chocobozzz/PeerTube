@@ -241,7 +241,10 @@ describe('Test config API validators', function () {
           expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
 
-        expect(response.body.detail).to.equal('Browse videos default sort should be -publishedAt or -originallyPublishedAt or name or -trending or -hot or -likes or -views, instead of hello')
+        expect(response.body.detail).to.equal(
+          'Browse videos default sort should be -publishedAt or -originallyPublishedAt ' +
+          'or name or -trending or -hot or -likes or -views, instead of hello'
+        )
       })
 
       it('Should fail with a trending default sort & disabled trending algorithm', async function () {
@@ -268,7 +271,10 @@ describe('Test config API validators', function () {
           expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
 
-        expect(response.body.detail).to.equal('Trending videos algorithm most-viewed should be enabled if browse videos default sort is -trending')
+        expect(response.body.detail).to.equal(
+          'Trending videos algorithm most-viewed should be enabled ' +
+          'if browse videos default sort is -trending'
+        )
       })
 
       it('Should fail with an invalid default scope', async function () {
