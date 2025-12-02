@@ -107,7 +107,7 @@ async function run () {
       title: 'API - videos list without count*',
       path: '/api/v1/videos?skipCount=true',
       expecter: (body, status) => {
-        return status === 200 && body.startsWith('{"total":10')
+        return status === 200 && body.startsWith('{"data":[{"')
       }
     },
     {
