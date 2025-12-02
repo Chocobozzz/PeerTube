@@ -199,7 +199,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     }
 
     if (options.displayOnlyForFollower) {
-      this.whereFollowerActorId(options.displayOnlyForFollower)
+      this.whereFollowerActorId({ ...options.displayOnlyForFollower, isCount: options.isCount === true })
     }
 
     if (options.hasFiles === true) {
@@ -457,33 +457,56 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     this.replacements.channelOneOf = channelOneOf
   }
 
-  private whereFollowerActorId (options: { actorId: number, orLocalVideos: boolean }) {
+  private whereFollowerActorId (options: { actorId: number, orLocalVideos: boolean, isCount: boolean }) {
     this.joinChannel()
 
-    let query = '(' +
-      '  EXISTS (' + // Videos shared by actors (instances, channels) we follow
-      '    SELECT 1 FROM "videoShare" ' +
-      '    INNER JOIN "actorFollow" "actorFollowShare" ON "actorFollowShare"."targetActorId" = "videoShare"."actorId" ' +
-      '    AND "actorFollowShare"."actorId" = :followerActorId AND "actorFollowShare"."state" = \'accepted\' ' +
-      '    WHERE "videoShare"."videoId" = "video"."id"' +
-      '    UNION ALL ' +
-      '    SELECT 1 from "actorFollow" ' + // Videos published by accounts we follow
-      '    WHERE "actorFollow"."targetActorId" = "accountActor"."id" ' +
-      '    AND "actorFollow"."actorId" = :followerActorId ' +
-      '    AND "actorFollow"."state" = \'accepted\'' +
-      '    UNION ALL ' +
-      '    SELECT 1 from "actorFollow" ' + // Videos published by channels we follow
-      '    WHERE "actorFollow"."targetActorId" = "channelActor"."id" ' +
-      '    AND "actorFollow"."actorId" = :followerActorId ' +
-      '    AND "actorFollow"."state" = \'accepted\'' +
-      '    LIMIT 1' +
-      '  )'
+    let query = ''
 
-    if (options.orLocalVideos) {
-      query += '  OR "video"."remote" IS FALSE'
+    // IN is faster than EXISTS if with COUNT
+    if (options.isCount) {
+      // Don't use CTE on purpose, that seems to be slower in this case
+      const targetActorIdQuery =
+        `SELECT "targetActorId" FROM "actorFollow" WHERE "actorFollow"."actorId" = :followerActorId AND "actorFollow"."state" = 'accepted'`
+
+      query = '(' +
+        `"accountActor"."id" IN (${targetActorIdQuery})` +
+        `OR "channelActor"."id" IN (${targetActorIdQuery})` +
+        `OR "video"."id" IN (` +
+        `  SELECT "videoId" FROM "videoShare" INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ` +
+        `  WHERE "actorFollow"."actorId" = :followerActorId AND "actorFollow"."state" = 'accepted'` +
+        `) `
+
+      if (options.orLocalVideos) {
+        query += 'OR "video"."remote" IS FALSE'
+      }
+
+      query += ')'
+    } else {
+      query = '(' +
+        '  EXISTS (' + // Videos shared by actors (instances, channels) we follow
+        '    SELECT 1 FROM "videoShare" ' +
+        '    INNER JOIN "actorFollow" "actorFollowShare" ON "actorFollowShare"."targetActorId" = "videoShare"."actorId" ' +
+        '    AND "actorFollowShare"."actorId" = :followerActorId AND "actorFollowShare"."state" = \'accepted\' ' +
+        '    WHERE "videoShare"."videoId" = "video"."id"' +
+        '    UNION ALL ' +
+        '    SELECT 1 from "actorFollow" ' + // Videos published by accounts we follow
+        '    WHERE "actorFollow"."targetActorId" = "accountActor"."id" ' +
+        '    AND "actorFollow"."actorId" = :followerActorId ' +
+        '    AND "actorFollow"."state" = \'accepted\'' +
+        '    UNION ALL ' +
+        '    SELECT 1 from "actorFollow" ' + // Videos published by channels we follow
+        '    WHERE "actorFollow"."targetActorId" = "channelActor"."id" ' +
+        '    AND "actorFollow"."actorId" = :followerActorId ' +
+        '    AND "actorFollow"."state" = \'accepted\'' +
+        '    LIMIT 1' +
+        '  )'
+
+      if (options.orLocalVideos) {
+        query += '  OR "video"."remote" IS FALSE'
+      }
+
+      query += ')'
     }
-
-    query += ')'
 
     this.and.push(query)
     this.replacements.followerActorId = options.actorId

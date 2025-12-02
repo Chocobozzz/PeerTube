@@ -25,6 +25,7 @@ $context-menu-width: 350px;
     padding: 8px 16px;
     text-transform: none;
     justify-content: flex-start;
+    text-align: start;
 
     &:hover {
       background-color: var(--pt-player-overlay-bg-hover);
