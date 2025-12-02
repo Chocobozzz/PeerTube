@@ -286,13 +286,17 @@ describe('Test config API validators', function () {
           }
         })
 
-        await makePutBodyRequest({
+        const response = await makePutBodyRequest({
           url: server.url,
           path,
           fields: newUpdateParams,
           token: server.accessToken,
           expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
+
+        expect(response.body.detail).to.equal(
+          'Browse videos default scope should be local or federated, instead of hello'
+        )
       })
     })
   })
