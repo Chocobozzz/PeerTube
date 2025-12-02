@@ -110,7 +110,7 @@
     "The provided thumbnail file is invalid.": "El fitxer de miniatures proporcionat no és vàlid.",
     "Browse videos default sort should be {options}, instead of {value}": "L'ordenació per defecte per a la navegació de vídeos hauria de ser {options}, en comptes de {value}",
     "Trending videos algorithm {currentTrendingSortAlgorithm} should be enabled if browse videos default sort is {value}": "L'algoritme de vídeos de tendència {currentTrendingSortAlgorithm} hauria d'estar habilitat si l'ordenació per defecte per navegar per vídeos és {value}",
-    "Browse videos default scope should be '{options}', instead of '{value}'": "L'abast per defecte de la navegació per vídeos hauria de ser '{options}', en comptes de '{value}'",
+    "Browse videos default scope should be {options}, instead of {value}": "L'abast per defecte de la navegació per vídeos hauria de ser {options}, en comptes de {value}",
     "Reset your account password": "Restablir la contrasenya",
     "Create your account password": "Crear la contrasenya",
     "Verify your email on {instanceName}": "Verificar el correu electrònic a {instanceName}",

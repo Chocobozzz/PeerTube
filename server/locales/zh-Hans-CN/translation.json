@@ -110,7 +110,7 @@
     "The provided thumbnail file is invalid.": "提供的缩略图文件无效。",
     "Browse videos default sort should be {options}, instead of {value}": "Browse videos default sort should be {options}, instead of {value}",
     "Trending videos algorithm {currentTrendingSortAlgorithm} should be enabled if browse videos default sort is {value}": "Trending videos algorithm {currentTrendingSortAlgorithm} should be enabled if browse videos default sort is {value}",
-    "Browse videos default scope should be '{options}', instead of '{value}'": "Browse videos default scope should be '{options}', instead of '{value}'",
+    "Browse videos default scope should be {options}, instead of {value}": "Browse videos default scope should be {options}, instead of {value}",
     "Reset your account password": "重置你的账户密码",
     "Create your account password": "创建你账户的密码",
     "Verify your email on {instanceName}": "验证你在 {instanceName} 上的邮箱",

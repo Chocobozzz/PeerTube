@@ -110,7 +110,7 @@
     "The provided thumbnail file is invalid.": "Przesyłany plik miniatury nie jest prawidłowy.",
     "Browse videos default sort should be {options}, instead of {value}": "Browse videos default sort should be {options}, instead of {value}",
     "Trending videos algorithm {currentTrendingSortAlgorithm} should be enabled if browse videos default sort is {value}": "Trending videos algorithm {currentTrendingSortAlgorithm} should be enabled if browse videos default sort is {value}",
-    "Browse videos default scope should be '{options}', instead of '{value}'": "Browse videos default scope should be '{options}', instead of '{value}'",
+    "Browse videos default scope should be {options}, instead of {value}": "Browse videos default scope should be {options}, instead of {value}",
     "Reset your account password": "Zresetuj hasło do swojego konta",
     "Create your account password": "Stwórz hasło do swojego konta",
     "Verify your email on {instanceName}": "Zweryfikuj swój adres e-mail na {instanceName}",

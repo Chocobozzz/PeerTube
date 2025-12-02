@@ -110,7 +110,7 @@
     "The provided thumbnail file is invalid.": "提供的縮圖無效。",
     "Browse videos default sort should be {options}, instead of {value}": "瀏覽影片的預設排序應為{options}，而非{value}",
     "Trending videos algorithm {currentTrendingSortAlgorithm} should be enabled if browse videos default sort is {value}": "若瀏覽影片的預設排序為 {value}，則應啟用熱門影片演算法{currentTrendingSortAlgorithm}",
-    "Browse videos default scope should be '{options}', instead of '{value}'": "瀏覽影片的預設作用域應為「{options}」，而非「{value}」",
+    "Browse videos default scope should be {options}, instead of {value}": "瀏覽影片的預設作用域應為{options}，而非{value}",
     "Reset your account password": "重設您帳號的密碼",
     "Create your account password": "建立您帳號的密碼",
     "Verify your email on {instanceName}": "在 {instanceName} 上驗證您的電子郵件",

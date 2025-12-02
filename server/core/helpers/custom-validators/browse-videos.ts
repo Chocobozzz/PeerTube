@@ -40,13 +40,13 @@ export function getBrowseVideosDefaultScopeError (value: string, language?: stri
   const availableOptions = [ 'local', 'federated' ]
 
   if (availableOptions.includes(value) === false) {
-    const options = availableOptions.join('\' or \'')
+    const options = availableOptions.join(' or ')
 
     if (language) {
-      return t(`Browse videos default scope should be '{options}', instead of '{value}'`, language, { options, value })
+      return t('Browse videos default scope should be {options}, instead of {value}', language, { options, value })
     }
 
-    return `Browse videos default scope should be '${options}', instead of '${value}'`
+    return `Browse videos default scope should be ${options}, instead of ${value}`
   }
 
   return null

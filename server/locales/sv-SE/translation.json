@@ -110,7 +110,7 @@
     "The provided thumbnail file is invalid.": "Den angivna miniatyrbilden är ogiltig.",
     "Browse videos default sort should be {options}, instead of {value}": "Standardsorteringen för videor bör vara {options} istället för {value}",
     "Trending videos algorithm {currentTrendingSortAlgorithm} should be enabled if browse videos default sort is {value}": "Algoritmen för populära videor {currentTrendingSortAlgorithm} bör ändras om sorteringsordningen för videor är {value}",
-    "Browse videos default scope should be '{options}', instead of '{value}'": "Standardurvalet för videor bör vara \"{options}\" istället för \"{value}\"",
+    "Browse videos default scope should be {options}, instead of {value}": "Standardurvalet för videor bör vara {options} istället för {value}",
     "Reset your account password": "Återställ lösenordet för ditt konto",
     "Create your account password": "Skapa ett lösenord för ditt konto",
     "Verify your email on {instanceName}": "Verifiera din e-postadress på {instanceName}",

@@ -110,7 +110,7 @@
     "The provided thumbnail file is invalid.": "Die übergebene Thumbnail-Datei ist ungültig.",
     "Browse videos default sort should be {options}, instead of {value}": "Die Standardsortierung für die Videosuche sollte {options} statt {value} sein",
     "Trending videos algorithm {currentTrendingSortAlgorithm} should be enabled if browse videos default sort is {value}": "Der Algorithmus für Videos im Trend – {currentTrendingSortAlgorithm}– sollte aktiviert sein, wenn die Standardsortierung für die Videosuche {value} ist",
-    "Browse videos default scope should be '{options}', instead of '{value}'": "Der Standardeinzugsbereich für die Videosuche sollte „{options}“ statt „{value}“ sein",
+    "Browse videos default scope should be {options}, instead of {value}": "Der Standardeinzugsbereich für die Videosuche sollte {options} statt {value} sein",
     "Reset your account password": "Dein Kontopasswort zurücksetzen",
     "Create your account password": "Dein Kontopasswort erstellen",
     "Verify your email on {instanceName}": "Deine E-Mail-Adresse auf {instanceName} verifizieren",
