@@ -6,24 +6,21 @@
         <source>Close</source>
         <target state="translated">Fermer</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/alert/alert.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/alert/alert.ts</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.carousel.slide-number" datatype="html" xml:space="preserve">
         <source>Slide <x id="INTERPOLATION" equiv-text="get wrap("/> of <x id="INTERPOLATION_1" equiv-text=".value; }"/> </source>
-        <target state="translated">Diapositive <x id="INTERPOLATION" equiv-text="get wrap("/> sur <x id="INTERPOLATION_1" equiv-text=".value; }"/>. </target>
+        <target state="translated">Diapositive <x id="INTERPOLATION" equiv-text="get wrap("/> sur <x id="INTERPOLATION_1" equiv-text=".value; }"/> </target>
         <note priority="1" from="description">Currently selected slide number read by screen reader</note>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/carousel/carousel.ts</context>
-          <context context-type="linenumber">131</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/carousel/carousel.ts</context><context context-type="linenumber">131</context></context-group></trans-unit>
       <trans-unit id="ngb.carousel.previous" datatype="html">
         <source>Previous</source>
         <target state="translated">Précédent</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/carousel/carousel.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/carousel/carousel.ts</context>
           <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
@@ -31,7 +28,7 @@
         <source>Next</source>
         <target state="translated">Suivant</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/carousel/carousel.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/carousel/carousel.ts</context>
           <context context-type="linenumber">170</context>
         </context-group>
       </trans-unit>
@@ -39,11 +36,11 @@
         <source>Select month</source>
         <target state="translated">Sélectionner le mois</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
           <context context-type="linenumber">91</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
           <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
@@ -51,11 +48,11 @@
         <source>Select year</source>
         <target state="translated">Sélectionner l'année</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
           <context context-type="linenumber">91</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
           <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
@@ -63,11 +60,11 @@
         <source>Previous month</source>
         <target state="translated">Mois précédent</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/datepicker/datepicker-navigation.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/datepicker/datepicker-navigation.ts</context>
           <context context-type="linenumber">83</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/datepicker/datepicker-navigation.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/datepicker/datepicker-navigation.ts</context>
           <context context-type="linenumber">108</context>
         </context-group>
       </trans-unit>
@@ -75,11 +72,11 @@
         <source>Next month</source>
         <target state="translated">Mois suivant</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/datepicker/datepicker-navigation.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/datepicker/datepicker-navigation.ts</context>
           <context context-type="linenumber">112</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/datepicker/datepicker-navigation.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/datepicker/datepicker-navigation.ts</context>
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
@@ -87,7 +84,7 @@
         <source>««</source>
         <target state="translated">««</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">296</context>
         </context-group>
       </trans-unit>
@@ -95,7 +92,7 @@
         <source>«</source>
         <target state="translated">«</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">321</context>
         </context-group>
       </trans-unit>
@@ -103,7 +100,7 @@
         <source>»</source>
         <target state="translated">»</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">347</context>
         </context-group>
       </trans-unit>
@@ -111,7 +108,7 @@
         <source>»»</source>
         <target state="translated">»»</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">373</context>
         </context-group>
       </trans-unit>
@@ -119,7 +116,7 @@
         <source>First</source>
         <target state="translated">Premier</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">400</context>
         </context-group>
       </trans-unit>
@@ -127,7 +124,7 @@
         <source>Previous</source>
         <target state="translated">Précédent</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">416</context>
         </context-group>
       </trans-unit>
@@ -135,7 +132,7 @@
         <source>Next</source>
         <target state="translated">Suivant</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">441</context>
         </context-group>
       </trans-unit>
@@ -143,7 +140,7 @@
         <source>Last</source>
         <target state="translated">Dernier</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">468</context>
         </context-group>
       </trans-unit>
@@ -155,7 +152,7 @@
           <x id="INTERPOLATION" equiv-text="nd so on.    *"/>
         </target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/progressbar/progressbar.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/progressbar/progressbar.ts</context>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
@@ -163,7 +160,7 @@
         <source>HH</source>
         <target state="translated">HH</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">246</context>
         </context-group>
       </trans-unit>
@@ -171,7 +168,7 @@
         <source>Hours</source>
         <target state="translated">Heures</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">278</context>
         </context-group>
       </trans-unit>
@@ -179,7 +176,7 @@
         <source>MM</source>
         <target state="translated">MM</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">301</context>
         </context-group>
       </trans-unit>
@@ -187,7 +184,7 @@
         <source>Minutes</source>
         <target state="translated">Minutes</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">329</context>
         </context-group>
       </trans-unit>
@@ -195,7 +192,7 @@
         <source>Increment hours</source>
         <target state="translated">Incrémenter les heures</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">358</context>
         </context-group>
       </trans-unit>
@@ -203,7 +200,7 @@
         <source>Decrement hours</source>
         <target state="translated">Décrémenter les heures</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">392</context>
         </context-group>
       </trans-unit>
@@ -211,7 +208,7 @@
         <source>Increment minutes</source>
         <target state="translated">Incrémenter les minutes</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">427</context>
         </context-group>
       </trans-unit>
@@ -219,7 +216,7 @@
         <source>Decrement minutes</source>
         <target state="translated">Décrémenter les minutes</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
@@ -227,7 +224,7 @@
         <source>SS</source>
         <target state="translated">SS</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
@@ -235,7 +232,7 @@
         <source>Seconds</source>
         <target state="translated">Secondes</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
@@ -243,7 +240,7 @@
         <source>Increment seconds</source>
         <target state="translated">Incrémenter les secondes</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
@@ -251,7 +248,7 @@
         <source>Decrement seconds</source>
         <target state="translated">Décrémenter les secondes</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
@@ -263,7 +260,7 @@
           <x id="INTERPOLATION"/>
         </target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
@@ -271,7 +268,7 @@
         <source>Close</source>
         <target state="translated">Fermer</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/toast/toast.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/toast/toast.ts</context>
           <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit>
@@ -2927,7 +2924,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Un courrier électronique contenant les instructions de réinitialisation du mot de passe sera envoyé à <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Le lien expirera dans 1 heure.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">179</context>
+          <context context-type="linenumber">184</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4768749765465246664">
@@ -3813,7 +3810,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Serveur trop lent</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1599290313974118905" datatype="html">
@@ -3821,7 +3818,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Live en liste noire</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5274374742436838139" datatype="html">
@@ -3829,7 +3826,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Durée maximale dépassée</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1677142486230902467" datatype="html">
@@ -3837,7 +3834,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Erreur du serveur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="189546967059369850" datatype="html">
@@ -3845,31 +3842,25 @@ The link will expire within 1 hour.</source>
         <target state="translated">Quota dépassé</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1327409825122054374" datatype="html" xml:space="preserve">
         <source>Runner job cancelled</source>
         <target state="translated">Tâche déportée annulée</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
-          <context context-type="linenumber">43</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context><context context-type="linenumber">42</context></context-group></trans-unit>
       <trans-unit id="2874360404134250412" datatype="html" xml:space="preserve">
         <source>Error in runner job</source>
         <target state="translated">Erreur de la tâche déportée</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
-          <context context-type="linenumber">44</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context><context context-type="linenumber">43</context></context-group></trans-unit>
       <trans-unit id="2657043015926552641" datatype="html">
         <source>Unknown error</source>
         <target state="translated">Erreur inconnue</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
-          <context context-type="linenumber">45</context>
+          <context context-type="linenumber">44</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
@@ -3879,11 +3870,8 @@ The link will expire within 1 hour.</source>
       <trans-unit id="1439766333173070230" datatype="html" xml:space="preserve">
         <source>Invalid input video stream</source>
         <target state="translated">Flux vidéo d'entrée non valide</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
-          <context context-type="linenumber">46</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context><context context-type="linenumber">45</context></context-group></trans-unit>
       <trans-unit id="6013345175862135505" datatype="html">
         <source>Configure</source>
         <target state="translated">Configurer</target>
@@ -3900,19 +3888,16 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8309133070608650316" datatype="html">
+      <trans-unit id="8309133070608650316" datatype="html" xml:space="preserve">
         <source>Collaboration on channels are coming to <x id="PH" equiv-text="instanceName"/></source>
-        <target state="new">Collaboration on channels are coming to <x id="PH" equiv-text="instanceName"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context>
-          <context context-type="linenumber">29</context>
-        </context-group>
-      </trans-unit>
+        <target state="translated">La collaboration sur les chaînes est arrivée sur <x id="PH" equiv-text="instanceName"/></target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context><context context-type="linenumber">31</context></context-group></trans-unit>
       <trans-unit id="7512666561651719221" datatype="html" xml:space="preserve">
         <source>You can now &lt;strong&gt;invite other users&lt;/strong&gt; to collaborate on your channel</source>
         <target state="translated">Vous pouvez désormais &lt;strong&gt;inviter d'autres utilisateurs&lt;/strong&gt; à collaborer sur votre chaîne</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context><context context-type="linenumber">31</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context><context context-type="linenumber">33</context></context-group></trans-unit>
       <trans-unit id="5960096873104755868" datatype="html" xml:space="preserve">
         <source>More info</source>
         <target state="translated">Plus d'info</target>
@@ -5877,7 +5862,7 @@ The link will expire within 1 hour.</source>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">161</context>
+          <context context-type="linenumber">166</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
@@ -6040,9 +6025,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">160</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6760671759540007434" datatype="html">
+      <trans-unit id="6760671759540007434" datatype="html" xml:space="preserve">
         <source>You can import any URL <x id="START_LINK"/>supported by youtube-dl<x id="CLOSE_LINK"/> or URL that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </source>
-        <target state="translated">Vous pouvez importer n'importe quelle adresse URL <x id="START_LINK"/> supportée par YouTube <x id="CLOSE_LINK"/>ou pointant vers un fichier multimédia. Vous devez vous assurer que vous disposez des droits de diffusion sur le contenu vers lequel l'adresse pointe, sinon cela pourrait vous causer des problèmes juridiques ainsi qu'à votre instance. </target>
+        <target state="translated">Vous pouvez importer n'importe quelle adresse URL <x id="START_LINK"/> supportée par youtube-dl <x id="CLOSE_LINK"/>ou pointant vers un fichier multimédia. Vous devez vous assurer que vous disposez des droits de diffusion sur le contenu vers lequel l'adresse pointe, sinon cela pourrait vous causer des problèmes juridiques ainsi qu'à votre instance. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/import/video-import-url.component.html</context>
           <context context-type="linenumber">11</context>
@@ -8110,8 +8095,11 @@ The link will expire within 1 hour.</source>
       <trans-unit id="913810105049472842" datatype="html" xml:space="preserve">
         <source>Manage my channels</source>
         <target state="translated">Gérer mes chaînes</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context><context context-type="linenumber">31</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3140041890374956085" datatype="html" xml:space="preserve">
         <source>Comments on your videos</source>
         <target state="translated">Commentaires sur vos vidéos</target>
@@ -15826,7 +15814,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="9070783060207315765" datatype="html" xml:space="preserve">
         <source>I am at least <x id="INTERPOLATION" equiv-text="{{ minimumAge() }}"/> years old and agree to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_BLOCK_IF" equiv-text="@if (hasCodeOfConduct()) {"/> and to the <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Code of Conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_BLOCK_IF" equiv-text="}"/> of <x id="INTERPOLATION_1" equiv-text="{{ instanceName() }}"/> </source>
-        <target state="translated">J'ai au moins <x id="INTERPOLATION" equiv-text="{{ minimumAge() }}"/> ans et j'accepte <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>les conditions générales d'utilisation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_BLOCK_IF" equiv-text="@if (hasCodeOfConduct()) {"/>ainsi que<x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>le Code de Conduite<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_BLOCK_IF" equiv-text="}"/>de<x id="INTERPOLATION_1" equiv-text="{{ instanceName() }}"/> </target>
+        <target state="translated">J'ai au moins <x id="INTERPOLATION" equiv-text="{{ minimumAge() }}"/> ans et j'accepte <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>les conditions générales d'utilisation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_BLOCK_IF" equiv-text="@if (hasCodeOfConduct()) {"/> ainsi que<x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>le Code de Conduite<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_BLOCK_IF" equiv-text="}"/>de<x id="INTERPOLATION_1" equiv-text="{{ instanceName() }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-terms.component.html</context>
           <context context-type="linenumber">21,27</context>
@@ -16457,17 +16445,14 @@ The link will expire within 1 hour.</source>
         <target state="translated">{value, plural, =1 {thread} other {threads}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">197</context>
+          <context context-type="linenumber">202</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3072354262521481761" datatype="html" xml:space="preserve">
         <source>You cannot allow live replay if you don't enable transcoding.</source>
         <target state="translated">Vous ne pouvez pas autoriser la rediffusion en direct si vous n'activez pas le transcodage.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">214</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context><context context-type="linenumber">219</context></context-group></trans-unit>
       <trans-unit id="3957742085471141221">
         <source>Auto (via ffmpeg)</source>
         <target>Auto (avec ffmpeg)</target>
@@ -16529,7 +16514,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">x264, visant une compatibilité maximale des appareils</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">161</context>
+          <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1473738049081128420" datatype="html">
@@ -17806,17 +17791,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="649873611133633238" datatype="html">
+      <trans-unit id="649873611133633238" datatype="html" xml:space="preserve">
         <source>This plugin does not have settings.</source>
-        <target state="new">This plugin does not have settings.</target>
+        <target state="translated">Ce plugin ne dispose pas de paramètres.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.html</context>
           <context context-type="linenumber">21,22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5495621331909678720" datatype="html">
+      <trans-unit id="5495621331909678720" datatype="html" xml:space="preserve">
         <source>This theme does not have settings.</source>
-        <target state="new">This theme does not have settings.</target>
+        <target state="translated">Ce thème ne dispose pas de paramètres.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.html</context>
           <context context-type="linenumber">23,24</context>
@@ -19552,7 +19537,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="394587885009969736" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.channel().displayName"/> channel setting (<x id="PH_1" equiv-text="channelPlayerTheme"/>)</source>
-        <target state="translated">paramètre de la chaîne <x id="PH" equiv-text="this.channel().displayName"/> (<x id="PH_1" equiv-text="channelPlayerTheme"/>)</target>
+        <target state="translated">Paramètre de la chaîne <x id="PH" equiv-text="this.channel().displayName"/> (<x id="PH_1" equiv-text="channelPlayerTheme"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-player-theme.component.ts</context>
           <context context-type="linenumber">114</context>
@@ -20575,8 +20560,11 @@ The link will expire within 1 hour.</source>
       <trans-unit id="7731752234233950482" datatype="html" xml:space="preserve">
         <source>Synchronizations</source>
         <target state="translated">Synchronisations</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context><context context-type="linenumber">39</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7607713563510753803" datatype="html" xml:space="preserve">
         <source>Imports</source>
         <target state="translated">Imports</target>
@@ -20690,7 +20678,7 @@ The link will expire within 1 hour.</source>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1026</context>
+          <context context-type="linenumber">1024</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5470809226184152498" datatype="html">
@@ -21003,7 +20991,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Nom d'utilisateur·ice ou mot de passe incorrects.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">237</context>
+          <context context-type="linenumber">246</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6974874606619467663" datatype="html">
@@ -21011,7 +20999,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Votre compte est bloqué.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">242</context>
+          <context context-type="linenumber">251</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4713046508117369963" datatype="html">
@@ -21019,7 +21007,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Ce compte est en attente d'approbation par les modérateurs.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">247</context>
+          <context context-type="linenumber">256</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5751810538002251535" datatype="html">
@@ -21027,7 +21015,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">L'approbation de l'inscription a été rejetée pour ce compte.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">252</context>
+          <context context-type="linenumber">261</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4467323362722952678" datatype="html">
@@ -26444,13 +26432,19 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="5240556993302961443" datatype="html" xml:space="preserve">
         <source>Save interface settings</source>
         <target state="translated">Sauvegarder les paramètres de l'interface</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">168</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
+          <context context-type="linenumber">168</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7570883748440392027" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.instanceName"/> theme</source>
         <target state="translated">Thème de <x id="PH" equiv-text="this.instanceName"/></target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">64</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1219783168145776019" datatype="html">
         <source>LIVE ENDED</source>
         <target state="translated">DIRECT TERMINÉ</target>
@@ -27036,7 +27030,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Entrer/sortir du plein écran</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">988</context>
+          <context context-type="linenumber">986</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2971009377468404076" datatype="html">
@@ -27044,7 +27038,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Lecture/Pause de la vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">989</context>
+          <context context-type="linenumber">987</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4147087312411482964" datatype="html">
@@ -27052,7 +27046,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Sourdine/reprise du son de la vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">990</context>
+          <context context-type="linenumber">988</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4791956574676305640" datatype="html">
@@ -27060,7 +27054,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Passer à un pourcentage de la vidéo : 0 est 0% et 9 est 90%</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1005</context>
+          <context context-type="linenumber">1003</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3887762369650091344" datatype="html">
@@ -27068,7 +27062,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Augmenter le volume</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">992</context>
+          <context context-type="linenumber">990</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1363382131573461910" datatype="html">
@@ -27076,7 +27070,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Diminuer le volume</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">993</context>
+          <context context-type="linenumber">991</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2541031516422557760" datatype="html">
@@ -27084,7 +27078,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Faire avancer la vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1007</context>
+          <context context-type="linenumber">1005</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8813023402019364882" datatype="html">
@@ -27092,7 +27086,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Faire reculer la vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1008</context>
+          <context context-type="linenumber">1006</context>
         </context-group>
       </trans-unit>
       <trans-unit id="581757752202843950" datatype="html">
@@ -27100,7 +27094,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Augmenter la vitesse de lecture</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1010</context>
+          <context context-type="linenumber">1008</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5467642834854681120" datatype="html">
@@ -27108,7 +27102,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Diminuer la vitesse de lecture</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1011</context>
+          <context context-type="linenumber">1009</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3860402955823859506" datatype="html">
@@ -27116,7 +27110,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Naviguer dans la vidéo jusqu'à l'image précédente</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1013</context>
+          <context context-type="linenumber">1011</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8232494782895420700" datatype="html">
@@ -27124,7 +27118,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Naviguer dans la vidéo jusqu'à l'image suivante</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1014</context>
+          <context context-type="linenumber">1012</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8223917068580581095" datatype="html">
@@ -27132,7 +27126,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Basculer le mode théâtre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">998</context>
+          <context context-type="linenumber">996</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8025996572234182184">

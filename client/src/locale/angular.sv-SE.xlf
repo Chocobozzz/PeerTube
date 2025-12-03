@@ -6,7 +6,7 @@
         <source>Close</source>
         <target state="translated">Stäng</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/alert/alert.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/alert/alert.ts</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
@@ -14,16 +14,13 @@
         <source>Slide <x id="INTERPOLATION" equiv-text="get wrap("/> of <x id="INTERPOLATION_1" equiv-text=".value; }"/> </source>
         <target state="translated">Bild <x id="INTERPOLATION" equiv-text="get wrap("/> av <x id="INTERPOLATION_1" equiv-text=".value; }"/> </target>
         <note priority="1" from="description">Currently selected slide number read by screen reader</note>
-        <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/carousel/carousel.ts</context>
-          <context context-type="linenumber">131</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/carousel/carousel.ts</context><context context-type="linenumber">131</context></context-group></trans-unit>
       <trans-unit id="ngb.carousel.previous" datatype="html">
         <source>Previous</source>
         <target state="translated">Föregående</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/carousel/carousel.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/carousel/carousel.ts</context>
           <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
@@ -31,7 +28,7 @@
         <source>Next</source>
         <target state="translated">Nästa</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/carousel/carousel.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/carousel/carousel.ts</context>
           <context context-type="linenumber">170</context>
         </context-group>
       </trans-unit>
@@ -39,11 +36,11 @@
         <source>Select month</source>
         <target state="translated">Välj månad</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
           <context context-type="linenumber">91</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
           <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
@@ -51,11 +48,11 @@
         <source>Select year</source>
         <target state="translated">Välj år</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
           <context context-type="linenumber">91</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
           <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
@@ -63,11 +60,11 @@
         <source>Previous month</source>
         <target state="translated">Föregående månad</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/datepicker/datepicker-navigation.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/datepicker/datepicker-navigation.ts</context>
           <context context-type="linenumber">83</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/datepicker/datepicker-navigation.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/datepicker/datepicker-navigation.ts</context>
           <context context-type="linenumber">108</context>
         </context-group>
       </trans-unit>
@@ -75,11 +72,11 @@
         <source>Next month</source>
         <target state="translated">Nästa månad</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/datepicker/datepicker-navigation.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/datepicker/datepicker-navigation.ts</context>
           <context context-type="linenumber">112</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/datepicker/datepicker-navigation.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/datepicker/datepicker-navigation.ts</context>
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
@@ -87,7 +84,7 @@
         <source>««</source>
         <target state="translated">««</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">296</context>
         </context-group>
       </trans-unit>
@@ -95,7 +92,7 @@
         <source>«</source>
         <target state="translated">«</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">321</context>
         </context-group>
       </trans-unit>
@@ -103,7 +100,7 @@
         <source>»</source>
         <target state="translated">»</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">347</context>
         </context-group>
       </trans-unit>
@@ -111,7 +108,7 @@
         <source>»»</source>
         <target state="translated">»»</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">373</context>
         </context-group>
       </trans-unit>
@@ -119,7 +116,7 @@
         <source>First</source>
         <target state="translated">Första</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">400</context>
         </context-group>
       </trans-unit>
@@ -127,7 +124,7 @@
         <source>Previous</source>
         <target state="translated">Föregående</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">416</context>
         </context-group>
       </trans-unit>
@@ -135,7 +132,7 @@
         <source>Next</source>
         <target state="translated">Nästa</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">441</context>
         </context-group>
       </trans-unit>
@@ -143,7 +140,7 @@
         <source>Last</source>
         <target state="translated">Sista</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">468</context>
         </context-group>
       </trans-unit>
@@ -155,7 +152,7 @@
           <x id="INTERPOLATION" equiv-text="och så vidare.    *"/>
         </target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/progressbar/progressbar.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/progressbar/progressbar.ts</context>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
@@ -163,7 +160,7 @@
         <source>HH</source>
         <target state="translated">HH</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">246</context>
         </context-group>
       </trans-unit>
@@ -171,7 +168,7 @@
         <source>Hours</source>
         <target state="translated">Timmar</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">278</context>
         </context-group>
       </trans-unit>
@@ -179,7 +176,7 @@
         <source>MM</source>
         <target state="translated">MM</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">301</context>
         </context-group>
       </trans-unit>
@@ -187,7 +184,7 @@
         <source>Minutes</source>
         <target state="translated">Minuter</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">329</context>
         </context-group>
       </trans-unit>
@@ -195,7 +192,7 @@
         <source>Increment hours</source>
         <target state="translated">Öka timmar</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">358</context>
         </context-group>
       </trans-unit>
@@ -203,7 +200,7 @@
         <source>Decrement hours</source>
         <target state="translated">Minska timmar</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">392</context>
         </context-group>
       </trans-unit>
@@ -211,7 +208,7 @@
         <source>Increment minutes</source>
         <target state="translated">Öka minuter</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">427</context>
         </context-group>
       </trans-unit>
@@ -219,7 +216,7 @@
         <source>Decrement minutes</source>
         <target state="translated">Minska minuter</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
@@ -227,7 +224,7 @@
         <source>SS</source>
         <target state="translated">SS</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
@@ -235,7 +232,7 @@
         <source>Seconds</source>
         <target state="translated">Sekunder</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
@@ -243,7 +240,7 @@
         <source>Increment seconds</source>
         <target state="translated">Öka sekunder</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
@@ -251,7 +248,7 @@
         <source>Decrement seconds</source>
         <target state="translated">Minska sekunder</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
@@ -263,7 +260,7 @@
           <x id="INTERPOLATION"/>
         </target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
@@ -271,7 +268,7 @@
         <source>Close</source>
         <target state="translated">Stäng</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.11_@angular+core@20.3.11_@angula_dde172108f7602a01b61664dbf564d14/node_modules/src/toast/toast.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/toast/toast.ts</context>
           <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit>
@@ -2931,7 +2928,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Ett meddelande med instruktioner för att återställa lösenordet kommer skickas per e-post till <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Länken är giltig i 1 timme.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">179</context>
+          <context context-type="linenumber">184</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4768749765465246664">
@@ -3817,7 +3814,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Servern är för långsam</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1599290313974118905" datatype="html">
@@ -3825,7 +3822,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Direktsändning svartlistad</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5274374742436838139" datatype="html">
@@ -3833,7 +3830,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Maxlängden har överskridits</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1677142486230902467" datatype="html">
@@ -3841,7 +3838,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Server-fel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="189546967059369850" datatype="html">
@@ -3849,7 +3846,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Videokvoten har överskridits</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1327409825122054374" datatype="html">
@@ -3857,7 +3854,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Jobbkörningen har avbrutits</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2874360404134250412" datatype="html">
@@ -3865,7 +3862,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Fel i jobbkörning</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2657043015926552641" datatype="html">
@@ -3873,7 +3870,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Okänt fel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
-          <context context-type="linenumber">45</context>
+          <context context-type="linenumber">44</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
@@ -3885,7 +3882,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Ogiltig videoström inskickad</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6013345175862135505" datatype="html">
@@ -3904,19 +3901,16 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8309133070608650316" datatype="html">
+      <trans-unit id="8309133070608650316" datatype="html" xml:space="preserve">
         <source>Collaboration on channels are coming to <x id="PH" equiv-text="instanceName"/></source>
-        <target state="new">Collaboration on channels are coming to <x id="PH" equiv-text="instanceName"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context>
-          <context context-type="linenumber">29</context>
-        </context-group>
-      </trans-unit>
+        <target state="translated">Samarbeten med flera deltagare på samma kanal är på väg till <x id="PH" equiv-text="instanceName"/></target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context><context context-type="linenumber">31</context></context-group></trans-unit>
       <trans-unit id="7512666561651719221" datatype="html" xml:space="preserve">
         <source>You can now &lt;strong&gt;invite other users&lt;/strong&gt; to collaborate on your channel</source>
         <target state="translated">Du kan nu &lt;strong&gt;bjuda in andra användare&lt;/strong&gt; att samarbeta och delta i arbetet med din kanal</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context><context context-type="linenumber">31</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context><context context-type="linenumber">33</context></context-group></trans-unit>
       <trans-unit id="5960096873104755868" datatype="html" xml:space="preserve">
         <source>More info</source>
         <target state="translated">Mer information</target>
@@ -5877,7 +5871,7 @@ The link will expire within 1 hour.</source>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">161</context>
+          <context context-type="linenumber">166</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
@@ -8110,8 +8104,11 @@ The link will expire within 1 hour.</source>
       <trans-unit id="913810105049472842" datatype="html" xml:space="preserve">
         <source>Manage my channels</source>
         <target state="translated">Hantera mina kanaler</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context><context context-type="linenumber">31</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3140041890374956085" datatype="html" xml:space="preserve">
         <source>Comments on your videos</source>
         <target state="translated">Kommentarer på dina videor</target>
@@ -14273,7 +14270,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8627640588059476624" datatype="html" xml:space="preserve">
         <source>An editor can manage videos in this channel</source>
-        <target state="translated">En redaktör kan hantera videor i denna kanal</target>
+        <target state="translated">En redaktör kan hantera videor i kanalen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.ts</context>
           <context context-type="linenumber">25</context>
@@ -14289,7 +14286,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2996672568437579118" datatype="html" xml:space="preserve">
         <source>Invited to be an editor to manage videos in this channel</source>
-        <target state="translated">Inbjuden att bli redaktör för att hantera videor och delta i arbetet med denna kanal</target>
+        <target state="translated">Inbjuden att bli redaktör för att hantera videor och delta i arbetet med kanalen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -16456,17 +16453,14 @@ color: red;
         <target state="translated">{value, plural, =1 {tråd} other {trådar}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">197</context>
+          <context context-type="linenumber">202</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3072354262521481761" datatype="html" xml:space="preserve">
         <source>You cannot allow live replay if you don't enable transcoding.</source>
         <target state="translated">Du kan inte tillåta återuppspelning i direktsändningar utan att slå på omkodning.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">214</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context><context context-type="linenumber">219</context></context-group></trans-unit>
       <trans-unit id="3957742085471141221">
         <source>Auto (via ffmpeg)</source>
         <target>Automatiskt (via ffmpeg)</target>
@@ -16528,7 +16522,7 @@ color: red;
         <target state="translated">x264, för att stödja flest enheter</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">161</context>
+          <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1473738049081128420" datatype="html">
@@ -17805,17 +17799,17 @@ color: red;
           <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="649873611133633238" datatype="html">
+      <trans-unit id="649873611133633238" datatype="html" xml:space="preserve">
         <source>This plugin does not have settings.</source>
-        <target state="new">This plugin does not have settings.</target>
+        <target state="translated">Detta tillägg har inga inställningar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.html</context>
           <context context-type="linenumber">21,22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5495621331909678720" datatype="html">
+      <trans-unit id="5495621331909678720" datatype="html" xml:space="preserve">
         <source>This theme does not have settings.</source>
-        <target state="new">This theme does not have settings.</target>
+        <target state="translated">Detta tema har inga inställningar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.html</context>
           <context context-type="linenumber">23,24</context>
@@ -19244,9 +19238,15 @@ color: red;
       <trans-unit id="4776289814033837037" xml:space="preserve">
         <source>Interface settings updated.</source>
         <target state="translated">Gränssnittsinställningarna uppdaterade.</target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">141</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">163</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
+          <context context-type="linenumber">141</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
+          <context context-type="linenumber">163</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6784127216978878229" datatype="html" xml:space="preserve">
         <source>Override sensitive content policy for certain videos</source>
         <target state="translated">Åsidosätt policy för känsligt material för vissa videor</target>
@@ -19669,7 +19669,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3790361059881359024" datatype="html" xml:space="preserve">
         <source>Publish videos in this channel</source>
-        <target state="translated">Publicera videor i denna kanal</target>
+        <target state="translated">Publicera videor i kanalen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">44</context>
@@ -19677,7 +19677,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2328126264669408590" datatype="html" xml:space="preserve">
         <source>Manage, update or delete videos, comments, playlists of this channel</source>
-        <target state="translated">Hantera, uppdatera eller radera videor, kommentarer och spellistor för denna kanal</target>
+        <target state="translated">Hantera, uppdatera eller radera videor, kommentarer och spellistor för kanalen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">45</context>
@@ -19685,7 +19685,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6753681732976615521" datatype="html" xml:space="preserve">
         <source>Add or delete channel synchronization</source>
-        <target state="translated">Lägg till eller radera kanalsynkronisering</target>
+        <target state="translated">Lägga till eller radera kanalsynkroniseringar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">46</context>
@@ -19693,7 +19693,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8868828786989275402" datatype="html" xml:space="preserve">
         <source>Update information of this channel (title, description, banner...)</source>
-        <target state="translated">Uppdatera information om denna kanal (titel, beskrivning, omslagsbild ...)</target>
+        <target state="translated">Uppdatera information om kanalen (titel, beskrivning, omslagsbild ...)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">47</context>
@@ -20568,8 +20568,11 @@ color: red;
       <trans-unit id="7731752234233950482" datatype="html" xml:space="preserve">
         <source>Synchronizations</source>
         <target state="translated">Synkroniseringar</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context><context context-type="linenumber">39</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7607713563510753803" datatype="html" xml:space="preserve">
         <source>Imports</source>
         <target state="translated">Importer</target>
@@ -20683,7 +20686,7 @@ color: red;
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1026</context>
+          <context context-type="linenumber">1024</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5470809226184152498" datatype="html">
@@ -20996,7 +20999,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target>Felaktigt användarnamn eller lösenord.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">237</context>
+          <context context-type="linenumber">246</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6974874606619467663" datatype="html">
@@ -21004,25 +21007,19 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Ditt konto har blockerats.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">242</context>
+          <context context-type="linenumber">251</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4713046508117369963" datatype="html" xml:space="preserve">
         <source>This account is awaiting approval by moderators.</source>
         <target state="translated">Detta konto väntar på godkännande av en moderator.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">247</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">256</context></context-group></trans-unit>
       <trans-unit id="5751810538002251535" datatype="html" xml:space="preserve">
         <source>Registration approval has been rejected for this account.</source>
         <target state="translated">Registrering av kontot har avslagits.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">252</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">261</context></context-group></trans-unit>
       <trans-unit id="4467323362722952678" datatype="html">
         <source>Unknown</source>
         <target state="translated">Okänd</target>
@@ -26437,13 +26434,19 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="5240556993302961443" datatype="html" xml:space="preserve">
         <source>Save interface settings</source>
         <target state="translated">Spara inställningar för gränssnittet</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">168</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
+          <context context-type="linenumber">168</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7570883748440392027" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.instanceName"/> theme</source>
         <target state="translated"><x id="PH" equiv-text="this.instanceName"/> tema</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">64</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1219783168145776019" datatype="html">
         <source>LIVE ENDED</source>
         <target state="translated">SÄNDNINGEN ÄR AVSLUTAD</target>
@@ -27031,7 +27034,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Öppna/stäng fullskärm</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">988</context>
+          <context context-type="linenumber">986</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2971009377468404076" datatype="html">
@@ -27039,31 +27042,25 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Spela/Pausa videon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">989</context>
+          <context context-type="linenumber">987</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4147087312411482964" datatype="html" xml:space="preserve">
         <source>Mute/unmute the video</source>
         <target state="translated">Tysta/slå på ljudet på videon</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">990</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">988</context></context-group></trans-unit>
       <trans-unit id="4791956574676305640" datatype="html" xml:space="preserve">
         <source>Skip to a percentage of the video: 0 is 0% and 9 is 90%</source>
         <target state="translated">Hoppa till n:te tiondelen av videon: 0 är 0 % och 9 är 90 %</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1005</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">1003</context></context-group></trans-unit>
       <trans-unit id="3887762369650091344" datatype="html">
         <source>Increase the volume</source>
         <target state="translated">Höj volymen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">992</context>
+          <context context-type="linenumber">990</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1363382131573461910" datatype="html">
@@ -27071,7 +27068,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Sänk volymen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">993</context>
+          <context context-type="linenumber">991</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2541031516422557760" datatype="html">
@@ -27079,7 +27076,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Hoppa framåt i videon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1007</context>
+          <context context-type="linenumber">1005</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8813023402019364882" datatype="html">
@@ -27087,7 +27084,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Hoppa bakåt i videon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1008</context>
+          <context context-type="linenumber">1006</context>
         </context-group>
       </trans-unit>
       <trans-unit id="581757752202843950" datatype="html">
@@ -27095,7 +27092,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Öka uppspelningshastigheten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1010</context>
+          <context context-type="linenumber">1008</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5467642834854681120" datatype="html">
@@ -27103,7 +27100,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Minska uppspelningshastigheten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1011</context>
+          <context context-type="linenumber">1009</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3860402955823859506" datatype="html">
@@ -27111,7 +27108,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Gå till föregående bildruta i videon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1013</context>
+          <context context-type="linenumber">1011</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8232494782895420700" datatype="html">
@@ -27119,7 +27116,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Gå till nästa bildruta i videon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1014</context>
+          <context context-type="linenumber">1012</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8223917068580581095" datatype="html">
@@ -27127,7 +27124,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Växla teaterläge</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">998</context>
+          <context context-type="linenumber">996</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8025996572234182184">

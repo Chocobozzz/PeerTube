@@ -21,6 +21,8 @@ export class NewFeatureInfoService {
       const user = this.auth.getUser()
       if (user.newFeaturesInfoRead & UserNewFeatureInfo.CHANNEL_COLLABORATION) return
 
+      if (this.modalService.hasOpenModals()) return
+
       const instanceName = this.serverService.getHTMLConfig().instance.name
 
       const modalRef = this.modalService.open(NewFeatureInfoModalComponent, { size: 'lg', centered: true })
