@@ -24,7 +24,7 @@ export function getBrowseVideosDefaultSortError (value: string, enabledTrendingA
   if (currentTrendingSortAlgorithm && enabledTrendingAlgorithms.includes(currentTrendingSortAlgorithm) === false) {
     if (language) {
       return t(
-        `Trending videos algorithm '{currentTrendingSortAlgorithm}' should be enabled if browse videos default sort is '{value}'`,
+        `Trending videos algorithm {currentTrendingSortAlgorithm} should be enabled if browse videos default sort is {value}`,
         language,
         { currentTrendingSortAlgorithm, value }
       )
@@ -43,7 +43,7 @@ export function getBrowseVideosDefaultScopeError (value: string, language?: stri
     const options = availableOptions.join('\' or \'')
 
     if (language) {
-      return t(`Browse videos default scope should be '{options}', instead of '{value}'`, language, { options, value })
+      return t(`Browse videos default scope should be {options}, instead of {value}`, language, { options, value })
     }
 
     return `Browse videos default scope should be '${options}', instead of '${value}'`
