@@ -1,18 +1,18 @@
 import { Component, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { GlobalIconComponent, GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
+import { SafeHtml } from '@angular/platform-browser'
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap'
 
 @Component({
   selector: 'my-new-feature-info-modal',
   templateUrl: './new-feature-info-modal.component.html',
   styleUrls: [ './new-feature-info-modal.component.scss' ],
-  imports: [ GlobalIconComponent, FormsModule ]
+  imports: [ FormsModule ]
 })
 export class NewFeatureInfoModalComponent {
   activeModal = inject(NgbActiveModal)
 
   title: string
-  iconName: GlobalIconName
   html: string
+  svg: SafeHtml
 }
