@@ -14,8 +14,11 @@
         <source>Slide <x id="INTERPOLATION" equiv-text="get wrap("/> of <x id="INTERPOLATION_1" equiv-text=".value; }"/> </source>
         <target state="translated">Bild <x id="INTERPOLATION" equiv-text="get wrap("/> av <x id="INTERPOLATION_1" equiv-text=".value; }"/> </target>
         <note priority="1" from="description">Currently selected slide number read by screen reader</note>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/carousel/carousel.ts</context><context context-type="linenumber">131</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/carousel/carousel.ts</context>
+          <context context-type="linenumber">131</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.carousel.previous" datatype="html">
         <source>Previous</source>
         <target state="translated">Föregående</target>
@@ -145,9 +148,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="nd so on.    *"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="nd so on.    *"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="och så vidare.    *"/>
         </target>
@@ -253,9 +254,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
-        <source>
-          <x id="INTERPOLATION"/>
-        </source>
+        <source><x id="INTERPOLATION"/> </source>
         <target state="translated">
           <x id="INTERPOLATION"/>
         </target>
@@ -2923,8 +2922,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
-        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>.
-The link will expire within 1 hour.</source>
+        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
         <target state="translated">Ett meddelande med instruktioner för att återställa lösenordet kommer skickas per e-post till <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Länken är giltig i 1 timme.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
@@ -3141,9 +3139,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4421489306990745770" datatype="html">
+      <trans-unit id="4421489306990745770" datatype="html" xml:space="preserve">
         <source>This website is a GAFAM alternative</source>
-        <target state="new">This website is a GAFAM alternative</target>
+        <target state="translated">Denna webbplats är ett alternativ till de fem stora amerikanska övervakningskapitalistiska jättarna</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">47,49</context>
@@ -3904,18 +3902,27 @@ The link will expire within 1 hour.</source>
       <trans-unit id="5601530442010506564" datatype="html" xml:space="preserve">
         <source>Got it</source>
         <target state="translated">Jag förstår</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/new-feature-info-modal.component.html</context><context context-type="linenumber">13</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/new-feature-info-modal.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8309133070608650316" datatype="html" xml:space="preserve">
         <source>Collaboration on channels are coming to <x id="PH" equiv-text="instanceName"/></source>
         <target state="translated">Samarbeten med flera deltagare på samma kanal är på väg till <x id="PH" equiv-text="instanceName"/></target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context><context context-type="linenumber">35</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7512666561651719221" datatype="html" xml:space="preserve">
         <source>You can now &lt;strong&gt;invite other users&lt;/strong&gt; to collaborate on your channel</source>
         <target state="translated">Du kan nu &lt;strong&gt;bjuda in andra användare&lt;/strong&gt; att samarbeta och delta i arbetet med din kanal</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context><context context-type="linenumber">36</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5960096873104755868" datatype="html" xml:space="preserve">
         <source>More info</source>
         <target state="translated">Mer information</target>
@@ -16468,8 +16475,11 @@ color: red;
       <trans-unit id="3072354262521481761" datatype="html" xml:space="preserve">
         <source>You cannot allow live replay if you don't enable transcoding.</source>
         <target state="translated">Du kan inte tillåta återuppspelning i direktsändningar utan att slå på omkodning.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context><context context-type="linenumber">219</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
+          <context context-type="linenumber">219</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3957742085471141221">
         <source>Auto (via ffmpeg)</source>
         <target>Automatiskt (via ffmpeg)</target>
@@ -19652,9 +19662,9 @@ color: red;
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5317232365024013794" datatype="html">
+      <trans-unit id="5317232365024013794" datatype="html" xml:space="preserve">
         <source>Current owner</source>
-        <target state="new">Current owner</target>
+        <target state="translated">Nuvarande ägare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">14,16</context>
@@ -20931,8 +20941,7 @@ color: red;
         </context-group>
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
-        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>.
-Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
+        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
         <target state="translated">Kan inte hämta OAuth Client-uppgifter: <x id="PH" equiv-text="error.text"/>. Försäkra dig om att du har konfigurerat PeerTube korrekt (i config-katalogen), speciellt ”webserver”-sektionen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
@@ -21030,13 +21039,19 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="4713046508117369963" datatype="html" xml:space="preserve">
         <source>This account is awaiting approval by moderators.</source>
         <target state="translated">Detta konto väntar på godkännande av en moderator.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">256</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+login/login.component.ts</context>
+          <context context-type="linenumber">256</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5751810538002251535" datatype="html" xml:space="preserve">
         <source>Registration approval has been rejected for this account.</source>
         <target state="translated">Registrering av kontot har avslagits.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">261</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+login/login.component.ts</context>
+          <context context-type="linenumber">261</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4467323362722952678" datatype="html">
         <source>Unknown</source>
         <target state="translated">Okänd</target>
@@ -26353,9 +26368,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="187187500641108332" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
         </target>
@@ -27069,13 +27082,19 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="4147087312411482964" datatype="html" xml:space="preserve">
         <source>Mute/unmute the video</source>
         <target state="translated">Tysta/slå på ljudet på videon</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">988</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
+          <context context-type="linenumber">988</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4791956574676305640" datatype="html" xml:space="preserve">
         <source>Skip to a percentage of the video: 0 is 0% and 9 is 90%</source>
         <target state="translated">Hoppa till n:te tiondelen av videon: 0 är 0 % och 9 är 90 %</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">1003</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
+          <context context-type="linenumber">1003</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3887762369650091344" datatype="html">
         <source>Increase the volume</source>
         <target state="translated">Höj volymen</target>
