@@ -2856,6 +2856,14 @@ The link will expire within 1 hour.</source>
         <target state="translated">Du kan allerede følge <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> med ditt favorittverktøy.</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context><context context-type="linenumber">38</context></context-group></trans-unit>
+      <trans-unit id="4421489306990745770" datatype="html">
+        <source>This website is a GAFAM alternative</source>
+        <target state="new">This website is a GAFAM alternative</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
+          <context context-type="linenumber">47,49</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7772973173091400795" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> has been created using <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, a video creation platform developed by Framasoft. <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> is a french non-profit organization that offers alternatives to Big Tech's digital tools </source>
         <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> er laget med <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, en plattform for videoskaping utviklet av Framasoft. <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> er en fransk ideell organisasjon som tilbyr alternativer til Big Techs digitale verktøy </target>
@@ -3550,7 +3558,7 @@ The link will expire within 1 hour.</source>
         <target state="new">Got it</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/new-feature-info-modal.component.html</context>
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8309133070608650316" datatype="html">
@@ -3558,7 +3566,7 @@ The link will expire within 1 hour.</source>
         <target state="new">Collaboration on channels are coming to <x id="PH" equiv-text="instanceName"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context>
-          <context context-type="linenumber">31</context>
+          <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7512666561651719221" datatype="html">
@@ -3566,7 +3574,7 @@ The link will expire within 1 hour.</source>
         <target state="new">You can now &lt;strong&gt;invite other users&lt;/strong&gt; to collaborate on your channel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context>
-          <context context-type="linenumber">33</context>
+          <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5960096873104755868" datatype="html" xml:space="preserve">
@@ -8496,6 +8504,10 @@ The link will expire within 1 hour.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context>
           <context context-type="linenumber">55</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-tables/table.component.html</context>
+          <context context-type="linenumber">112</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-users/account-token-sessions.component.html</context>
@@ -18351,6 +18363,14 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="5317232365024013794" datatype="html">
+        <source>Current owner</source>
+        <target state="new">Current owner</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
+          <context context-type="linenumber">14,16</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3560799758233130163" datatype="html">
         <source>(you)</source>
         <target state="new">(you)</target>
@@ -24801,6 +24821,10 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.html</context>
           <context context-type="linenumber">6</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
+          <context context-type="linenumber">66</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.html</context>

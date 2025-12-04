@@ -5290,6 +5290,10 @@
           <context context-type="linenumber">55</context>
         </context-group>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-tables/table.component.html</context>
+          <context context-type="linenumber">112,113</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-users/account-token-sessions.component.html</context>
           <context context-type="linenumber">8,9</context>
         </context-group>
@@ -9238,6 +9242,10 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">6,7</context>
         </context-group>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
+          <context context-type="linenumber">66,68</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.html</context>
           <context context-type="linenumber">36,37</context>
         </context-group>
@@ -9999,6 +10007,13 @@ The link will expire within 1 hour.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">10,11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5317232365024013794" datatype="html">
+        <source>Current owner</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
+          <context context-type="linenumber">14,16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3560799758233130163" datatype="html">
@@ -12283,6 +12298,13 @@ The link will expire within 1 hour.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">38,41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4421489306990745770" datatype="html">
+        <source>This website is a GAFAM alternative</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
+          <context context-type="linenumber">47,49</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7772973173091400795" datatype="html">
@@ -17671,21 +17693,21 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Got it</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/new-feature-info-modal.component.html</context>
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8309133070608650316" datatype="html">
         <source>Collaboration on channels are coming to <x id="PH" equiv-text="instanceName"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context>
-          <context context-type="linenumber">31</context>
+          <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7512666561651719221" datatype="html">
         <source>You can now &lt;strong>invite other users&lt;/strong> to collaborate on your channel</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context>
-          <context context-type="linenumber">33</context>
+          <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1000468652492651683" datatype="html">
