@@ -11,7 +11,7 @@
     </div>
 
     <div class="content-col">
-      <h4 i18>Current owner</h4>
+      <h4 i18n>Current owner</h4>
 
       <div class="collaborator-block">
         <my-actor-avatar [actor]="getOwnerAccount()" actorType="account" size="60"></my-actor-avatar>
@@ -63,7 +63,7 @@
             <my-actor-avatar [actor]="collaborator.account" actorType="account" size="60"></my-actor-avatar>
 
             <div>
-              <div class="collaborator-display-name fw-bold" i18>{{ collaborator.account.displayName }}</div>
+              <div class="collaborator-display-name fw-bold" i18n>{{ collaborator.account.displayName }}</div>
 
               <div class="d-flex gap-1">
                 <my-collaborator-state [type]="getCollaboratorState(collaborator)"></my-collaborator-state>
