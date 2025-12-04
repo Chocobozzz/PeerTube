@@ -1,7 +1,9 @@
 <div class="modal-body">
-  <div class="global-icon-container">
-    <my-global-icon [iconName]="iconName"></my-global-icon>
-  </div>
+  @if (svg) {
+    <div class="svg-relative-container">
+      <div aria-hidden="true" class="svg-container" [innerHTML]="svg"></div>
+    </div>
+  }
 
   <h2>{{ title }}</h2>
 

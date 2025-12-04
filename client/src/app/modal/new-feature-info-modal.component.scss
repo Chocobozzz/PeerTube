@@ -19,19 +19,18 @@ h2 {
   @include margin-bottom(2.5rem);
 }
 
-.global-icon-container {
-  border-radius: 24px;
-  background: pvar(--bg);
-  padding: 2rem;
-  box-shadow: 12px 0 24px rgba(0, 0, 0, 0.12);
-  transform: rotate(-10deg);
-  display: inline-block;
+.svg-relative-container {
   position: relative;
-  top: -2.5rem;
 }
 
-my-global-icon {
-  color: pvar(--bg-secondary-450);
+.svg-container {
+  margin: 0 auto;
+  position: absolute;
+  top: -3.5rem;
+  right: 0;
+  left: 0;
+}
 
-  @include global-icon-size(80px);
+.svg-relative-container + h2 {
+  margin-top: 10rem;
 }

@@ -1,9 +1,12 @@
 import { Injectable, inject } from '@angular/core'
+import { DomSanitizer } from '@angular/platform-browser'
 import { AuthService, Notifier, ServerService, UserService } from '@app/core'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { UserNewFeatureInfo } from '@peertube/peertube-models'
 import { first } from 'rxjs'
 import { NewFeatureInfoModalComponent } from './new-feature-info-modal.component'
+
+const channelCollaborationImg = require('../../assets/images/feature-modal/channel-collaboration.svg')
 
 @Injectable({ providedIn: 'root' })
 export class NewFeatureInfoService {
@@ -12,6 +15,7 @@ export class NewFeatureInfoService {
   private serverService = inject(ServerService)
   private userService = inject(UserService)
   private notifier = inject(Notifier)
+  private domSanitizer = inject(DomSanitizer)
 
   showChannelCollaboration () {
     this.auth.userInformationLoaded.pipe(first()).subscribe(() => {
@@ -29,8 +33,8 @@ export class NewFeatureInfoService {
       const component = modalRef.componentInstance as NewFeatureInfoModalComponent
 
       component.title = $localize`Collaboration on channels are coming to ${instanceName}`
-      component.iconName = 'channel'
       component.html = $localize`You can now <strong>invite other users</strong> to collaborate on your channel`
+      component.svg = this.domSanitizer.bypassSecurityTrustHtml(channelCollaborationImg)
 
       modalRef.result.finally(() => {
         this.userService.markNewFeatureInfoAsRead(UserNewFeatureInfo.CHANNEL_COLLABORATION)
