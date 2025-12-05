@@ -6,6 +6,7 @@ import { CanComponentDeactivate, ServerService, ThemeService } from '@app/core'
 import { BuildFormArgumentTyped, FormDefaultTyped, FormReactiveMessagesTyped } from '@app/shared/form-validators/form-validator.model'
 import { FormReactiveErrorsTyped, FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
+import { PeertubeColorPickerComponent } from '@app/shared/shared-forms/peertube-color-picker.component'
 import { SelectCustomValueComponent } from '@app/shared/shared-forms/select/select-custom-value.component'
 import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-options.component'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
@@ -13,7 +14,6 @@ import { CustomConfig, PlayerTheme } from '@peertube/peertube-models'
 import { capitalizeFirstLetter } from '@root-helpers/string'
 import { ColorPaletteThemeConfig, ThemeCustomizationKey } from '@root-helpers/theme-manager'
 import debug from 'debug'
-import { ColorPickerModule } from 'primeng/colorpicker'
 import { debounceTime, Subscription } from 'rxjs'
 import { SelectOptionsItem } from 'src/types'
 import { AdminConfigService } from '../../../shared/shared-admin/admin-config.service'
@@ -86,7 +86,7 @@ type FieldType = 'color' | 'radius'
     RouterModule,
     ReactiveFormsModule,
     AdminSaveBarComponent,
-    ColorPickerModule,
+    PeertubeColorPickerComponent,
     AlertComponent,
     SelectOptionsComponent,
     HelpComponent,
