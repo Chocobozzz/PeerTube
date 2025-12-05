@@ -5,6 +5,7 @@ import { ColorPickerModule } from 'primeng/colorpicker'
 @Component({
   selector: 'my-peertube-color-picker',
   templateUrl: './peertube-color-picker.component.html',
+  styleUrls: [ './peertube-color-picker.component.scss' ],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

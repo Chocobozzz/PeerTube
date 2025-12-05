@@ -1,1 +1,14 @@
-<p-colorpicker class="d-block" [inputId]="inputId()" [(ngModel)]="value" (ngModelChange)="onModelChange()" />
+<div class="input-group">
+  <p-colorpicker 
+    class="d-block" 
+    [(ngModel)]="value" 
+    (ngModelChange)="onModelChange()" 
+    />
+  <input 
+    type="text" 
+    class="form-control" 
+    [inputId]="inputId()" 
+    [(ngModel)]="value" 
+    (ngModelChange)="onModelChange()" 
+    />
+</div>
