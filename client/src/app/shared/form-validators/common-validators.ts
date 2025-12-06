@@ -14,3 +14,10 @@ export const URL_VALIDATOR: BuildFormValidator = {
     pattern: $localize`This field must be a URL`
   }
 }
+
+export const HEX_COLOR_CODE_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [ Validators.pattern(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/) ],
+  MESSAGES: {
+    pattern: $localize`This field must be a valid hexadecimal color code`
+  }
+}
