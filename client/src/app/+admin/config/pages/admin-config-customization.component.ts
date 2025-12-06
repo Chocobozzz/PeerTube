@@ -202,6 +202,8 @@ export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, Can
     let currentAnimationFrame: number
 
     this.form.get('theme.customization').valueChanges.pipe(debounceTime(250)).subscribe(formValues => {
+      console.log(`Step 1`)
+
       if (currentAnimationFrame) {
         cancelAnimationFrame(currentAnimationFrame)
         currentAnimationFrame = null
@@ -219,6 +221,8 @@ export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, Can
     for (const [ key, control ] of Object.entries((this.form.get('theme.customization') as FormGroup).controls)) {
       control.events.subscribe(event => {
         if (event instanceof ValueChangeEvent) {
+          console.log(`Step 2`)
+
           debugLogger(`Deleting "${key}" from reset fields`)
 
           this.customizationResetFields.delete(key as ThemeCustomizationKey)

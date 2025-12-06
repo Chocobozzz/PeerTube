@@ -14,3 +14,7 @@
     (ngModelChange)="onModelChange()" 
     />
 </div>
+
+@if (formError()) {
+  <div class="form-error" role="alert">{{ formError() }}</div>
+}

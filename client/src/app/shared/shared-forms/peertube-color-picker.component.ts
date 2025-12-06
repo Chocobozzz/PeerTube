@@ -1,6 +1,7 @@
 import { Component, forwardRef, input, model } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { ColorPickerModule } from 'primeng/colorpicker'
+import { FormReactiveErrors } from './form-reactive.service'
 
 @Component({
   selector: 'my-peertube-color-picker',
@@ -17,6 +18,8 @@ import { ColorPickerModule } from 'primeng/colorpicker'
 })
 export class PeertubeColorPickerComponent implements ControlValueAccessor {
   readonly inputId = input.required<string>()
+
+  readonly formError = input<string | FormReactiveErrors | FormReactiveErrors[]>(undefined)
 
   readonly value = model('')
 
