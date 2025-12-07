@@ -6,12 +6,13 @@
     (ngModelChange)="onModelChange()" 
     />
   <input 
-    type="text" 
     [id]="textInputId" 
     [name]="textInputId" 
-    class="form-control" 
     [(ngModel)]="value" 
     (ngModelChange)="onModelChange()" 
+    type="text" 
+    class="form-control" 
+    [ngClass]="{ 'input-error': formError() }" 
     />
 </div>
 
