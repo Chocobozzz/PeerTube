@@ -17,7 +17,7 @@
 
       <div [ngClass]="videoEdit.isPublishedVOD() ? 'col-xl-6 col-md-12' : ''">
 
-        <div class="d-flex justify-content-between align-items-center mb-3 ms-2">
+        <div class="d-flex justify-content-between align-items-center mb-3 ms-2 flex-wrap gap-1">
           <my-peertube-checkbox
             inputName="raw-edition"
             [(ngModel)]="rawEdit" (ngModelChange)="onRawEditSwitch()"
@@ -53,7 +53,7 @@
             <div class="pt-1 pb-1 mb-3">
               @if (segmentToUpdate === segment) {
                 <div role="form">
-                  <div class="d-flex flex-wrap align-items-center">
+                  <div class="d-flex flex-wrap gap-1 align-items-center">
                     <div>
                       <label class="visually-hidden" i18n for="segmentStart">Segment start timestamp</label>
 
