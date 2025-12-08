@@ -14,8 +14,11 @@
         <source>Slide <x id="INTERPOLATION" equiv-text="get wrap("/> of <x id="INTERPOLATION_1" equiv-text=".value; }"/> </source>
         <target state="translated">Diapositive <x id="INTERPOLATION" equiv-text="get wrap("/> sur <x id="INTERPOLATION_1" equiv-text=".value; }"/> </target>
         <note priority="1" from="description">Currently selected slide number read by screen reader</note>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/carousel/carousel.ts</context><context context-type="linenumber">131</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/carousel/carousel.ts</context>
+          <context context-type="linenumber">131</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.carousel.previous" datatype="html">
         <source>Previous</source>
         <target state="translated">Précédent</target>
@@ -3137,9 +3140,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4421489306990745770" datatype="html">
+      <trans-unit id="4421489306990745770" datatype="html" xml:space="preserve">
         <source>This website is a GAFAM alternative</source>
-        <target state="new">This website is a GAFAM alternative</target>
+        <target state="translated">Ce site web est une alternative aux GAFAM</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">47,49</context>
@@ -3856,13 +3859,19 @@ The link will expire within 1 hour.</source>
       <trans-unit id="1327409825122054374" datatype="html" xml:space="preserve">
         <source>Runner job cancelled</source>
         <target state="translated">Tâche déportée annulée</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context><context context-type="linenumber">42</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2874360404134250412" datatype="html" xml:space="preserve">
         <source>Error in runner job</source>
         <target state="translated">Erreur de la tâche déportée</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context><context context-type="linenumber">43</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2657043015926552641" datatype="html">
         <source>Unknown error</source>
         <target state="translated">Erreur inconnue</target>
@@ -3878,8 +3887,11 @@ The link will expire within 1 hour.</source>
       <trans-unit id="1439766333173070230" datatype="html" xml:space="preserve">
         <source>Invalid input video stream</source>
         <target state="translated">Flux vidéo d'entrée non valide</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context><context context-type="linenumber">45</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6013345175862135505" datatype="html">
         <source>Configure</source>
         <target state="translated">Configurer</target>
@@ -3891,18 +3903,27 @@ The link will expire within 1 hour.</source>
       <trans-unit id="5601530442010506564" datatype="html" xml:space="preserve">
         <source>Got it</source>
         <target state="translated">J'ai compris</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/new-feature-info-modal.component.html</context><context context-type="linenumber">13</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/new-feature-info-modal.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8309133070608650316" datatype="html" xml:space="preserve">
         <source>Collaboration on channels are coming to <x id="PH" equiv-text="instanceName"/></source>
         <target state="translated">La collaboration sur les chaînes est arrivée sur <x id="PH" equiv-text="instanceName"/></target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context><context context-type="linenumber">35</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7512666561651719221" datatype="html" xml:space="preserve">
         <source>You can now &lt;strong&gt;invite other users&lt;/strong&gt; to collaborate on your channel</source>
         <target state="translated">Vous pouvez désormais &lt;strong&gt;inviter d'autres utilisateurs&lt;/strong&gt; à collaborer sur votre chaîne</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context><context context-type="linenumber">36</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5960096873104755868" datatype="html" xml:space="preserve">
         <source>More info</source>
         <target state="translated">Plus d'info</target>
@@ -10063,7 +10084,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2712688659924558571" datatype="html" xml:space="preserve">
         <source>Do you really want to delete all comments of <x id="PH" equiv-text="comment.by"/>? Comments are deleted after a few minutes.</source>
-        <target state="translated">Voulez-vous vraiment supprimer tous les commentaires de <x id="PH" equiv-text="comment.by"/>? Les commentaires sont supprimés après quelques minutes.</target>
+        <target state="translated">Voulez-vous vraiment supprimer tous les commentaires de <x id="PH" equiv-text="comment.by"/> ? Les commentaires sont supprimés après quelques minutes.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">282</context>
@@ -16460,8 +16481,11 @@ The link will expire within 1 hour.</source>
       <trans-unit id="3072354262521481761" datatype="html" xml:space="preserve">
         <source>You cannot allow live replay if you don't enable transcoding.</source>
         <target state="translated">Vous ne pouvez pas autoriser la rediffusion en direct si vous n'activez pas le transcodage.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context><context context-type="linenumber">219</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
+          <context context-type="linenumber">219</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3957742085471141221">
         <source>Auto (via ffmpeg)</source>
         <target>Auto (avec ffmpeg)</target>
@@ -19644,9 +19668,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5317232365024013794" datatype="html">
+      <trans-unit id="5317232365024013794" datatype="html" xml:space="preserve">
         <source>Current owner</source>
-        <target state="new">Current owner</target>
+        <target state="translated">Propriétaire actuel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">14,16</context>

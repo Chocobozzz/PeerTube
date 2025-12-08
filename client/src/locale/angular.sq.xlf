@@ -14,8 +14,11 @@
         <source>Slide <x id="INTERPOLATION"/> of <x id="INTERPOLATION_1"/> </source>
         <target state="translated">Diapozitivi <x id="INTERPOLATION"/> nga <x id="INTERPOLATION_1"/> </target>
         <note priority="1" from="description">Currently selected slide number read by screen reader</note>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/carousel/carousel.ts</context><context context-type="linenumber">131</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@19.0.1_@angular+common@20.3.15_@angular+core@20.3.15_@angula_911de1d99958e268e6ce9f176d85c4eb/node_modules/src/carousel/carousel.ts</context>
+          <context context-type="linenumber">131</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.carousel.previous" datatype="html">
         <source>Previous</source>
         <target>E mëparshmja</target>
@@ -2918,9 +2921,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5317232365024013794" datatype="html">
+      <trans-unit id="5317232365024013794" datatype="html" xml:space="preserve">
         <source>Current owner</source>
-        <target state="new">Current owner</target>
+        <target state="translated">I zoti i tanishëm</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">14,16</context>
@@ -6537,10 +6540,19 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="4914577418256256836" datatype="html" xml:space="preserve">
         <source>Followers</source>
         <target state="translated">Ndjekës</target>
-        
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context><context context-type="linenumber">46</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/follows.routes.ts</context><context context-type="linenumber">35</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context><context context-type="linenumber">35</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/follows/follows.routes.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="9031514421077169181" datatype="html">
         <source>Video redundancies</source>
         <target state="new">Video redundancies</target>
@@ -7515,23 +7527,35 @@ The link will expire within 1 hour.</target>
       <trans-unit id="1266887509445371246" datatype="html" xml:space="preserve">
         <source>Incorrect username or password.</source>
         <target state="translated">Emër përdoruesi ose fjalëkalim i pasaktë.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">246</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+login/login.component.ts</context>
+          <context context-type="linenumber">246</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6974874606619467663" datatype="html" xml:space="preserve">
         <source>Your account is blocked.</source>
         <target state="translated">Llogaria juaj u bllokua.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">251</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+login/login.component.ts</context>
+          <context context-type="linenumber">251</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4713046508117369963" datatype="html" xml:space="preserve">
         <source>This account is awaiting approval by moderators.</source>
         <target state="translated">Kjo llogari po pret miratimin nga moderatorët.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">256</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+login/login.component.ts</context>
+          <context context-type="linenumber">256</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5751810538002251535" datatype="html" xml:space="preserve">
         <source>Registration approval has been rejected for this account.</source>
         <target state="translated">Për këtë llogari është hedhur poshtë miratimi i regjistrimit.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">261</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+login/login.component.ts</context>
+          <context context-type="linenumber">261</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5302915360176176604" datatype="html" xml:space="preserve">
         <source>SUBSCRIPTION FEED</source>
         <target state="translated">PRURJE PAJTIMI</target>
@@ -14325,8 +14349,11 @@ The link will expire within 1 hour.</target>
       <trans-unit id="1254225561962113354" datatype="html" xml:space="preserve">
         <source>Server too slow</source>
         <target state="translated">Shërbyes shumë ngadalë</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context><context context-type="linenumber">37</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1599290313974118905" datatype="html">
         <source>Live blacklisted</source>
         <target state="new">Live blacklisted</target>
@@ -14346,13 +14373,19 @@ The link will expire within 1 hour.</target>
       <trans-unit id="1677142486230902467" datatype="html" xml:space="preserve">
         <source>Server error</source>
         <target state="translated">Gabim shërbyesi</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context><context context-type="linenumber">40</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="189546967059369850" datatype="html" xml:space="preserve">
         <source>Quota exceeded</source>
         <target state="translated">U tejkaluan kuota</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context><context context-type="linenumber">41</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
+          <context context-type="linenumber">41</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1327409825122054374" datatype="html">
         <source>Runner job cancelled</source>
         <target state="new">Runner job cancelled</target>
@@ -14372,9 +14405,15 @@ The link will expire within 1 hour.</target>
       <trans-unit id="2657043015926552641" datatype="html" xml:space="preserve">
         <source>Unknown error</source>
         <target state="translated">Gabim i panjohur</target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context><context context-type="linenumber">44</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">36</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1439766333173070230" datatype="html">
         <source>Invalid input video stream</source>
         <target state="new">Invalid input video stream</target>
@@ -16196,19 +16235,31 @@ The link will expire within 1 hour.</target>
       <trans-unit id="5240556993302961443" datatype="html" xml:space="preserve">
         <source>Save interface settings</source>
         <target state="translated">Ruaj rregullime ndërfaqeje</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">168</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
+          <context context-type="linenumber">168</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7570883748440392027" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.instanceName"/> theme</source>
         <target state="translated">Temë <x id="PH" equiv-text="this.instanceName"/></target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">64</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4776289814033837037" datatype="html" xml:space="preserve">
         <source>Interface settings updated.</source>
         <target state="translated">U përditësuan rregullime ndërfaqeje.</target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">141</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">163</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
+          <context context-type="linenumber">141</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
+          <context context-type="linenumber">163</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6784127216978878229" datatype="html">
         <source>Override sensitive content policy for certain videos</source>
         <target state="new">Override sensitive content policy for certain videos</target>
@@ -16472,33 +16523,51 @@ The link will expire within 1 hour.</target>
       <trans-unit id="5856931617181450881" datatype="html" xml:space="preserve">
         <source>Enter/exit fullscreen</source>
         <target state="translated">Hyni/dilni nga mënyra “Sa krejt ekrani”</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">986</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
+          <context context-type="linenumber">986</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2971009377468404076" datatype="html" xml:space="preserve">
         <source>Play/Pause the video</source>
         <target state="translated">Luajeni/Ndaleni videon</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">987</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
+          <context context-type="linenumber">987</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4147087312411482964" datatype="html" xml:space="preserve">
         <source>Mute/unmute the video</source>
         <target state="translated">Heshtojeni/Hiqini heshtimin videos</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">988</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
+          <context context-type="linenumber">988</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3887762369650091344" datatype="html" xml:space="preserve">
         <source>Increase the volume</source>
         <target state="translated">Ngrini volumin</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">990</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
+          <context context-type="linenumber">990</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1363382131573461910" datatype="html" xml:space="preserve">
         <source>Decrease the volume</source>
         <target state="translated">Ulni volumin</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">991</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
+          <context context-type="linenumber">991</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8223917068580581095" datatype="html" xml:space="preserve">
         <source>Toggle theater mode</source>
         <target state="translated">Aktivizo/çaktivizo mënyrën teatër</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">996</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
+          <context context-type="linenumber">996</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4791956574676305640" datatype="html">
         <source>Skip to a percentage of the video: 0 is 0% and 9 is 90%</source>
         <target state="new">Skip to a percentage of the video: 0 is 0% and 9 is 90%</target>
@@ -16526,8 +16595,11 @@ The link will expire within 1 hour.</target>
       <trans-unit id="581757752202843950" datatype="html" xml:space="preserve">
         <source>Increase playback rate</source>
         <target state="translated">Rritni shpejtësi luajtjeje</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">1008</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
+          <context context-type="linenumber">1008</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5467642834854681120" datatype="html">
         <source>Decrease playback rate</source>
         <target state="new">Decrease playback rate</target>
@@ -16539,13 +16611,19 @@ The link will expire within 1 hour.</target>
       <trans-unit id="3860402955823859506" datatype="html" xml:space="preserve">
         <source>Navigate in the video to the previous frame</source>
         <target state="translated">Kalo te kuadri u mëparshëm i videos</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">1011</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
+          <context context-type="linenumber">1011</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8232494782895420700" datatype="html" xml:space="preserve">
         <source>Navigate in the video to the next frame</source>
         <target state="translated">Kalo te kuadri pasues i videos</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">1012</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
+          <context context-type="linenumber">1012</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8306050839443016954" datatype="html" xml:space="preserve">
         <source>Video updated.</source>
         <target state="translated">Videoja u përditësua.</target>
@@ -23546,10 +23624,19 @@ The link will expire within 1 hour.</target>
       <trans-unit id="5607669932062416162" datatype="html" xml:space="preserve">
         <source>Default</source>
         <target state="translated">Parazgjedhje</target>
-        
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.ts</context><context context-type="linenumber">98</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context><context context-type="linenumber">166</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context><context context-type="linenumber">80</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.ts</context>
+          <context context-type="linenumber">98</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
+          <context context-type="linenumber">166</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
+          <context context-type="linenumber">80</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6659155428791414865" datatype="html">
         <source>x264, targeting maximum device compatibility</source>
         <target state="new">x264, targeting maximum device compatibility</target>
@@ -25081,8 +25168,11 @@ The link will expire within 1 hour.</target>
       <trans-unit id="1486537403020619891" datatype="html" xml:space="preserve">
         <source>My watch history</source>
         <target state="translated">Historiku i parjeve të mia</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">75</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
+          <context context-type="linenumber">75</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="111295045776045026" datatype="html">
         <source>Video history is enabled</source>
         <target state="new">Video history is enabled</target>
@@ -25102,8 +25192,11 @@ The link will expire within 1 hour.</target>
       <trans-unit id="7505147502630555700" datatype="html" xml:space="preserve">
         <source>Delete video history</source>
         <target state="translated">Fshije historikun e videos</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">147</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
+          <context context-type="linenumber">147</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8676027102068252963" datatype="html">
         <source>Are you sure you want to delete all your video history?</source>
         <target state="new">Are you sure you want to delete all your video history?</target>
@@ -25115,8 +25208,11 @@ The link will expire within 1 hour.</target>
       <trans-unit id="7708910304029766516" datatype="html" xml:space="preserve">
         <source>Video history deleted</source>
         <target state="translated">Historiku i videove u fshi</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">156</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
+          <context context-type="linenumber">156</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3343758569423394070" datatype="html">
         <source>No videos found for "<x id="PH" equiv-text="this.search"/>".</source>
         <target state="new">No videos found for "<x id="PH" equiv-text="this.search"/>".</target>
@@ -26068,9 +26164,15 @@ The link will expire within 1 hour.</target>
       <trans-unit id="1783173774503340906" datatype="html" xml:space="preserve">
         <source>Subscribe to the account</source>
         <target state="translated">Pajtohuni te llogaria</target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">125</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">1024</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context>
+          <context context-type="linenumber">125</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
+          <context context-type="linenumber">1024</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5066829276646988805" datatype="html">
         <source>PeerTube</source>
         <target>PeerTube</target>
@@ -26436,9 +26538,9 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4421489306990745770" datatype="html">
+      <trans-unit id="4421489306990745770" datatype="html" xml:space="preserve">
         <source>This website is a GAFAM alternative</source>
-        <target state="new">This website is a GAFAM alternative</target>
+        <target state="translated">Ky sajt është një alternativë ndaj GAFAM-it</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">47,49</context>
@@ -26943,13 +27045,19 @@ The link will expire within 1 hour.</target>
       <trans-unit id="913810105049472842" datatype="html" xml:space="preserve">
         <source>Manage my channels</source>
         <target state="translated">Administro kanalet e mi</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context><context context-type="linenumber">31</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7731752234233950482" datatype="html" xml:space="preserve">
         <source>Synchronizations</source>
         <target state="translated">Njëkohësime</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context><context context-type="linenumber">39</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2521678336272309407" datatype="html" xml:space="preserve">
         <source>No follower found.</source>
         <target state="translated">S’u gjet ndjekës.</target>

@@ -411,17 +411,17 @@
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4506409188003413837" datatype="html">
+      <trans-unit id="4506409188003413837" datatype="html" xml:space="preserve">
         <source>A new <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>abuse<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been created</source>
-        <target state="new">A new <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>abuse<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been created</target>
+        <target state="translated">新しい<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>報告<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>が作成されました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="726431118472191958" datatype="html">
+      <trans-unit id="726431118472191958" datatype="html" xml:space="preserve">
         <source>Your report of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the video <x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been accepted</source>
-        <target state="new">Your report of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the video <x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been accepted</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>動画<x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>に関する報告が承認されました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">48</context>
@@ -16441,8 +16441,11 @@ The link will expire within 1 hour.</source>
       <trans-unit id="3072354262521481761" datatype="html" xml:space="preserve">
         <source>You cannot allow live replay if you don't enable transcoding.</source>
         <target state="translated">動画のトランスコードを有効にしていない場合、ライブのリプレイは有効にできません。</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context><context context-type="linenumber">219</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
+          <context context-type="linenumber">219</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3957742085471141221">
         <source>Auto (via ffmpeg)</source>
         <target state="translated">自動 (ffmpeg経由)</target>

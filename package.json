@@ -162,7 +162,7 @@
     "jimp": "^0.22.12",
     "js-yaml": "^4.1.1",
     "jsonld": "~8.3.3",
-    "jsonwebtoken": "^9.0.2",
+    "jsonwebtoken": "^9.0.3",
     "linkify-it": "^5.0.0",
     "lodash-es": "^4.17.21",
     "lru-cache": "^11.2.2",
