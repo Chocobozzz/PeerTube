@@ -3137,7 +3137,7 @@
       </trans-unit>
       <trans-unit id="4421489306990745770" datatype="html" xml:space="preserve">
         <source>This website is a GAFAM alternative</source>
-        <target state="translated">Ce site web est une alternative aux GAFAM.</target>
+        <target state="translated">Ce site web est une alternative aux GAFAM</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">47,49</context>
@@ -10079,7 +10079,7 @@
       </trans-unit>
       <trans-unit id="2712688659924558571" datatype="html" xml:space="preserve">
         <source>Do you really want to delete all comments of <x id="PH" equiv-text="comment.by"/>? Comments are deleted after a few minutes.</source>
-        <target state="translated">Voulez-vous vraiment supprimer tous les commentaires de <x id="PH" equiv-text="comment.by"/>? Les commentaires sont supprimés après quelques minutes.</target>
+        <target state="translated">Voulez-vous vraiment supprimer tous les commentaires de <x id="PH" equiv-text="comment.by"/> ? Les commentaires sont supprimés après quelques minutes.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">282</context>
