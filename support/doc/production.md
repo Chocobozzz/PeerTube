@@ -16,11 +16,20 @@ Follow the steps of the [dependencies guide](/support/doc/dependencies.md).
 
 Create a `peertube` user with `/var/www/peertube` home:
 
-```bash
+::: code-group
+
+```bash [GNU/Linux]
 sudo useradd -m -d /var/www/peertube -s /usr/sbin/nologin -p peertube peertube
 ```
 
+```bash [FreeBSD]
+sudo pw useradd -n peertube -d /var/www/peertube -s /usr/sbin/nologin -m
+```
+
+:::
+
 Set its password:
+
 ```bash
 sudo passwd peertube
 ```
@@ -28,15 +37,8 @@ sudo passwd peertube
 Ensure the peertube root directory is traversable by nginx:
 
 ```bash
-ls -ld /var/www/peertube # Should be drwxr-xr-x
+sudo chmod 755 /var/www/peertube
 ```
-
-**On FreeBSD**
-
-```bash
-sudo pw useradd -n peertube -d /var/www/peertube -s /usr/sbin/nologin -m
-```
-or use `adduser` to create it interactively.
 
 ### :card_file_box: Database
 
