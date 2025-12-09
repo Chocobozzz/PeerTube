@@ -1,7 +1,7 @@
 # Changelog
 
 
-## v8.0.0-rc.1
+## v8.0.0
 
 ### IMPORTANT NOTES
 
@@ -91,6 +91,12 @@
   * Fix video quota information estimation
   * Translate RSS feeds title
   * Fix transcription CORS issue if the caption file is stored externally
+  * Do no uppercase video tags
+  * Fix resetting instance categories/languages
+  * Fix black screen when updating web video resolution in player
+  * Fix displaying more than 100 live sessions
+  * Reload page after login to respect user lang
+  * Do not run storyboard/transcription jobs without the appropriate stream
 
 
 ## v7.3.0
