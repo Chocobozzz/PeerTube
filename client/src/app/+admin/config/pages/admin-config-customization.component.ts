@@ -187,6 +187,7 @@ export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, Can
         this.customConfig = customConfig
 
         this.form.patchValue(this.getDefaultFormValues(), { emitEvent: false })
+        this.form.setErrors(this.form.errors)
       })
   }
 
