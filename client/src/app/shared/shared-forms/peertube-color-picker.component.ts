@@ -25,7 +25,7 @@ export class PeertubeColorPickerComponent implements ControlValueAccessor {
   readonly value = model('')
 
   get textInputId () {
-    return `${this.inputId()}-textInput`
+    return `${this.inputId()}TextInput`
   }
 
   propagateChange = (_: any) => {
