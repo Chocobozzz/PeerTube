@@ -28,7 +28,7 @@ jobs:
           git fetch --force --tags
 
           one="{ \"build-peertube\": true, \"file\": \"./support/docker/production/Dockerfile\", \"ref\": \"develop\", \"tags\": \"chocobozzz/peertube:develop-trixie,chocobozzz/peertube:develop\" }"
-          two="{ \"build-peertube\": true, \"file\": \"./support/docker/production/Dockerfile.bookworm\", \"ref\": \"master\", \"tags\": \"chocobozzz/peertube:production-bookworm,chocobozzz/peertube:$(git describe --abbrev=0)-bookworm\" }"
+          two="{ \"build-peertube\": true, \"file\": \"./support/docker/production/Dockerfile\", \"ref\": \"master\", \"tags\": \"chocobozzz/peertube:production-trixie,chocobozzz/peertube:$(git describe --abbrev=0)-trixie,chocobozzz/peertube:production,chocobozzz/peertube:$(git describe --abbrev=0)\" }"
           three="{ \"build-peertube\": false, \"file\": \"./support/docker/production/Dockerfile.nginx\", \"ref\": \"master\", \"tags\": \"chocobozzz/peertube-webserver:latest\" }"
 
           matrix="[$one,$two,$three]"
