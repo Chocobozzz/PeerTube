@@ -109,7 +109,9 @@ export class VideoDownload {
 
       const { input, isTmpDestination } = await this.buildMuxInput(
         videoFile,
-        err => {
+        errArg => {
+          const err = buildRequestError(errArg as any)
+
           logger.warn(`Cannot build mux input of video ${this.video.url}`, {
             err,
             inputs: this.inputsToLog(),
@@ -119,7 +121,7 @@ export class VideoDownload {
           this.cleanup()
             .catch(cleanupErr => logger.error('Cannot cleanup after mux error', { err: cleanupErr, ...lTags(this.video.uuid) }))
 
-          rej(buildRequestError(err as any))
+          rej(err)
         }
       )
 

@@ -221,6 +221,8 @@ export function isBinaryResponse (result: Response<any>) {
 }
 
 export function buildRequestError (error: RequestError) {
+  if (!error.response && !error.options) return error
+
   const newError: PeerTubeRequestError = new Error(error.message)
   newError.name = error.name
   newError.stack = error.stack
