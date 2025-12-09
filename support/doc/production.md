@@ -28,12 +28,6 @@ sudo pw useradd -n peertube -d /var/www/peertube -s /usr/sbin/nologin -m
 
 :::
 
-Set its password:
-
-```bash
-sudo passwd peertube
-```
-
 Ensure the peertube root directory is traversable by nginx:
 
 ```bash
