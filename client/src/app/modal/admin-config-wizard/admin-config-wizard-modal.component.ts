@@ -1,7 +1,8 @@
 import { CdkStepperModule } from '@angular/cdk/stepper'
 import { Component, ElementRef, OnInit, inject, output, viewChild } from '@angular/core'
-import { User } from '@app/core'
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { Notifier, User, UserService } from '@app/core'
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
+import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { AdminConfigWizardStepperComponent } from './admin-config-wizard-stepper.component'
 import { getNoWelcomeModalLocalStorageKey } from './shared/admin-config-wizard-modal-utils'
@@ -28,6 +29,8 @@ import { UsageType } from './steps/usage-type/usage-type.model'
 })
 export class AdminConfigWizardModalComponent implements OnInit {
   private modalService = inject(NgbModal)
+  private userService = inject(UserService)
+  private notifier = inject(Notifier)
 
   readonly modal = viewChild<ElementRef>('modal')
   readonly stepper = viewChild<AdminConfigWizardStepperComponent>('stepper')
@@ -39,6 +42,8 @@ export class AdminConfigWizardModalComponent implements OnInit {
 
   showWelcome: boolean
   dryRun: boolean
+
+  private modalRef: NgbModalRef
 
   ngOnInit () {
     this.created.emit()
@@ -58,7 +63,7 @@ export class AdminConfigWizardModalComponent implements OnInit {
     this.showWelcome = showWelcome
     this.dryRun = this.getFragment() === '#admin-welcome-wizard-test'
 
-    this.modalService.open(this.modal(), {
+    this.modalRef = this.modalService.open(this.modal(), {
       centered: true,
       backdrop: 'static',
       keyboard: false,
@@ -86,6 +91,25 @@ export class AdminConfigWizardModalComponent implements OnInit {
     if (this.showWelcome) return totalSteps - 1
 
     return totalSteps
+  }
+
+  hide (options: { doNotOpenAgain?: boolean } = {}) {
+    const { doNotOpenAgain = false } = options
+
+    if (doNotOpenAgain) this.doNotOpenAgain()
+
+    this.modalRef.close()
+  }
+
+  private doNotOpenAgain () {
+    peertubeLocalStorage.setItem(getNoWelcomeModalLocalStorageKey(), 'true')
+
+    this.userService.updateMyProfile({ noWelcomeModal: true })
+      .subscribe({
+        next: () => logger.info('We will not open the welcome modal again.'),
+
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   private getFragment () {
