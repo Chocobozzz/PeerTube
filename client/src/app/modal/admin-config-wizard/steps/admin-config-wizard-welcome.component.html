@@ -13,7 +13,7 @@
 
   <div class="buttons">
     <my-button i18n theme="primary" (click)="next.emit()">Let's go!</my-button>
-    <my-button i18n (click)="hide.emit()" theme="secondary">Remind me later</my-button>
-    <button i18n (click)="doNotOpenAgain(); hide.emit()" class="button-as-link">Do not display again</button>
+    <my-button i18n (click)="hide.emit({ doNotOpenAgain: false })" theme="secondary">Remind me later</my-button>
+    <button i18n (click)="hide.emit({ doNotOpenAgain: true })" class="button-as-link">Do not display again</button>
   </div>
 </div>
