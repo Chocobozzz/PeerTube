@@ -1,14 +1,13 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use 'form-mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "form-mixins" as *;
 
 .modal-body ::ng-deep {
-
   .nav-content {
     margin-top: 30px;
   }
 
-  my-global-icon[iconName=shield] {
+  my-global-icon[iconName="shield"] {
     position: relative;
     top: -1px;
 
@@ -26,12 +25,6 @@
   }
 }
 
-.peertube-select-container.title-select {
-  @include peertube-select-container(auto);
-}
-
 #dropdown-download-type {
   cursor: pointer;
 }
-
-

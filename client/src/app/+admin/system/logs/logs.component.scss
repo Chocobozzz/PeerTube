@@ -1,6 +1,6 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_form-mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
 
 .logs {
   font-family: monospace;
@@ -56,7 +56,7 @@
   margin-bottom: 10px;
 
   .peertube-select-container {
-    @include peertube-select-container(150px);
+    @include responsive-width(150px);
   }
 
   my-select-tags {
