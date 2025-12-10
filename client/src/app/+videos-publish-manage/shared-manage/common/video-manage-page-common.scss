@@ -8,10 +8,6 @@
   }
 }
 
-.peertube-select-container {
-  @include peertube-select-container(auto);
-}
-
 my-peertube-checkbox {
   display: block;
   margin-bottom: 1rem;
