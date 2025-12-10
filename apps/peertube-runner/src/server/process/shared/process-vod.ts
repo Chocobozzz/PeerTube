@@ -21,6 +21,7 @@ import {
 import {
   canDoQuickAudioTranscode,
   canDoQuickVideoTranscode,
+  FFmpegVOD,
   ffprobePromise,
   getVideoStreamDimensionsInfo,
   getVideoStreamFPS
@@ -34,6 +35,8 @@ export async function processWebVideoTranscoding (options: ProcessOptions<Runner
   let ffmpegProgress: number
   let videoInputPath: string
   let separatedAudioInputPath: string
+  let ffmpegVod: FFmpegVOD
+  let jobAborted = false
 
   const outputPath = join(ConfigManager.Instance.getTranscodingDirectory(), `output-${buildUUID()}.mp4`)
 
@@ -41,7 +44,10 @@ export async function processWebVideoTranscoding (options: ProcessOptions<Runner
     job,
     server,
     runnerToken,
-    progressGetter: () => ffmpegProgress
+    progressGetter: () => ffmpegProgress,
+    onAbort: () => {
+      jobAborted = true
+    }
   })
 
   try {
@@ -50,9 +56,14 @@ export async function processWebVideoTranscoding (options: ProcessOptions<Runner
     videoInputPath = await downloadInputFile({ url: payload.input.videoFileUrl, runnerToken, job })
     separatedAudioInputPath = await downloadSeparatedAudioFileIfNeeded({ urls: payload.input.separatedAudioFileUrl, runnerToken, job })
 
+    if (jobAborted) {
+      logger.info(`Job ${job.uuid} was aborted, stopping processing`)
+      return
+    }
+
     logger.info(`Downloaded input file ${payload.input.videoFileUrl} for job ${job.jobToken}. Running web video transcoding.`)
 
-    const ffmpegVod = buildFFmpegVOD({
+    ffmpegVod = buildFFmpegVOD({
       onJobProgress: progress => {
         ffmpegProgress = progress
       }
@@ -72,6 +83,11 @@ export async function processWebVideoTranscoding (options: ProcessOptions<Runner
       fps: payload.output.fps
     })
 
+    if (jobAborted) {
+      logger.info(`Job ${job.uuid} was aborted during transcoding, stopping processing`)
+      return
+    }
+
     const successBody: VODWebVideoTranscodingSuccess = {
       videoFile: outputPath
     }
@@ -83,6 +99,13 @@ export async function processWebVideoTranscoding (options: ProcessOptions<Runner
       payload: successBody,
       reqPayload: payload
     })
+  } catch (err) {
+    // If job was aborted, don't report the error
+    if (jobAborted) {
+      logger.info(`Job ${job.uuid} processing stopped after abort`)
+      return
+    }
+    throw err
   } finally {
     if (videoInputPath) await remove(videoInputPath)
     if (separatedAudioInputPath) await remove(separatedAudioInputPath)
@@ -98,6 +121,8 @@ export async function processHLSTranscoding (options: ProcessOptions<RunnerJobVO
   let ffmpegProgress: number
   let videoInputPath: string
   let separatedAudioInputPath: string
+  let ffmpegVod: FFmpegVOD
+  let jobAborted = false
 
   const uuid = buildUUID()
   const outputPath = join(ConfigManager.Instance.getTranscodingDirectory(), `${uuid}-${payload.output.resolution}.m3u8`)
@@ -108,7 +133,10 @@ export async function processHLSTranscoding (options: ProcessOptions<RunnerJobVO
     job,
     server,
     runnerToken,
-    progressGetter: () => ffmpegProgress
+    progressGetter: () => ffmpegProgress,
+    onAbort: () => {
+      jobAborted = true
+    }
   })
 
   try {
@@ -116,6 +144,11 @@ export async function processHLSTranscoding (options: ProcessOptions<RunnerJobVO
 
     videoInputPath = await downloadInputFile({ url: payload.input.videoFileUrl, runnerToken, job })
     separatedAudioInputPath = await downloadSeparatedAudioFileIfNeeded({ urls: payload.input.separatedAudioFileUrl, runnerToken, job })
+
+    if (jobAborted) {
+      logger.info(`Job ${job.uuid} was aborted, stopping processing`)
+      return
+    }
 
     const inputProbe = await ffprobePromise(videoInputPath)
     const { resolution } = await getVideoStreamDimensionsInfo(videoInputPath, inputProbe)
@@ -128,9 +161,14 @@ export async function processHLSTranscoding (options: ProcessOptions<RunnerJobVO
       resolution === payload.output.resolution &&
       (!resolution || fps === payload.output.fps)
 
+    if (jobAborted) {
+      logger.info(`Job ${job.uuid} was aborted, stopping processing`)
+      return
+    }
+
     logger.info(`Downloaded input file ${payload.input.videoFileUrl} for job ${job.jobToken}. Running HLS transcoding.`)
 
-    const ffmpegVod = buildFFmpegVOD({
+    ffmpegVod = buildFFmpegVOD({
       onJobProgress: progress => {
         ffmpegProgress = progress
       }
@@ -153,6 +191,11 @@ export async function processHLSTranscoding (options: ProcessOptions<RunnerJobVO
       separatedAudio: payload.output.separatedAudio
     })
 
+    if (jobAborted) {
+      logger.info(`Job ${job.uuid} was aborted during transcoding, stopping processing`)
+      return
+    }
+
     const successBody: VODHLSTranscodingSuccess = {
       resolutionPlaylistFile: outputPath,
       videoFile: videoPath
@@ -165,6 +208,13 @@ export async function processHLSTranscoding (options: ProcessOptions<RunnerJobVO
       payload: successBody,
       reqPayload: payload
     })
+  } catch (err) {
+    // If job was aborted, don't report the error
+    if (jobAborted) {
+      logger.info(`Job ${job.uuid} processing stopped after abort`)
+      return
+    }
+    throw err
   } finally {
     if (videoInputPath) await remove(videoInputPath)
     if (separatedAudioInputPath) await remove(separatedAudioInputPath)
@@ -181,6 +231,8 @@ export async function processAudioMergeTranscoding (options: ProcessOptions<Runn
   let ffmpegProgress: number
   let audioPath: string
   let previewPath: string
+  let ffmpegVod: FFmpegVOD
+  let jobAborted = false
 
   const outputPath = join(ConfigManager.Instance.getTranscodingDirectory(), `output-${buildUUID()}.mp4`)
 
@@ -188,7 +240,10 @@ export async function processAudioMergeTranscoding (options: ProcessOptions<Runn
     job,
     server,
     runnerToken,
-    progressGetter: () => ffmpegProgress
+    progressGetter: () => ffmpegProgress,
+    onAbort: () => {
+      jobAborted = true
+    }
   })
 
   try {
@@ -200,12 +255,17 @@ export async function processAudioMergeTranscoding (options: ProcessOptions<Runn
     audioPath = await downloadInputFile({ url: payload.input.audioFileUrl, runnerToken, job })
     previewPath = await downloadInputFile({ url: payload.input.previewFileUrl, runnerToken, job })
 
+    if (jobAborted) {
+      logger.info(`Job ${job.uuid} was aborted, stopping processing`)
+      return
+    }
+
     logger.info(
       `Downloaded input files ${payload.input.audioFileUrl} and ${payload.input.previewFileUrl} ` +
         `for job ${job.jobToken}. Running audio merge transcoding.`
     )
 
-    const ffmpegVod = buildFFmpegVOD({
+    ffmpegVod = buildFFmpegVOD({
       onJobProgress: progress => {
         ffmpegProgress = progress
       }
@@ -225,6 +285,11 @@ export async function processAudioMergeTranscoding (options: ProcessOptions<Runn
       fps: payload.output.fps
     })
 
+    if (jobAborted) {
+      logger.info(`Job ${job.uuid} was aborted during transcoding, stopping processing`)
+      return
+    }
+
     const successBody: VODAudioMergeTranscodingSuccess = {
       videoFile: outputPath
     }
@@ -236,6 +301,13 @@ export async function processAudioMergeTranscoding (options: ProcessOptions<Runn
       payload: successBody,
       reqPayload: payload
     })
+  } catch (err) {
+    // If job was aborted, don't report the error
+    if (jobAborted) {
+      logger.info(`Job ${job.uuid} processing stopped after abort`)
+      return
+    }
+    throw err
   } finally {
     if (audioPath) await remove(audioPath)
     if (previewPath) await remove(previewPath)

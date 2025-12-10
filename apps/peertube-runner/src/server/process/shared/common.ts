@@ -60,14 +60,19 @@ export function scheduleTranscodingProgress (options: {
   runnerToken: string
   job: JobWithToken
   progressGetter: () => number
+  onAbort?: () => void
 }) {
-  const { job, server, progressGetter, runnerToken } = options
+  const { job, server, progressGetter, runnerToken, onAbort } = options
 
   const updateInterval = ConfigManager.Instance.isTestInstance()
     ? 500
     : 60000
 
+  let aborted = false
+
   const update = () => {
+    if (aborted) return
+
     job.progress = progressGetter() || 0
 
     server.runnerJobs.update({
@@ -75,7 +80,18 @@ export function scheduleTranscodingProgress (options: {
       jobUUID: job.uuid,
       runnerToken,
       progress: job.progress
-    }).catch(err => logger.error({ err }, 'Cannot send job progress'))
+    }).catch(err => {
+      // Job was deleted on the server, gracefully abort processing
+      if (err.res?.status === 404) {
+        logger.info({ jobUUID: job.uuid }, 'Job was deleted on the server, aborting processing')
+        aborted = true
+        clearInterval(interval)
+        if (onAbort) onAbort()
+        return
+      }
+
+      logger.error({ err }, 'Cannot send job progress')
+    })
   }
 
   const interval = setInterval(() => {
