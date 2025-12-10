@@ -1,11 +1,11 @@
 @if (hasVideoScheduledPublication()) {
-  <my-alert rounded="false" type="primary" i18n>
+  <my-alert type="primary" i18n>
   This video will be published on {{ video().scheduledUpdate.updateAt | ptDate: 'full' }}.
 </my-alert>
 }
 
 @if (isWaitingForLive()) {
-  <my-alert rounded="false" type="primary">
+  <my-alert type="primary">
     <ng-container i18n>This live is not currently streaming.</ng-container>
     @if (scheduledLiveDate()) {
       <ng-container i18n>
@@ -16,13 +16,13 @@
 }
 
 @if (isLiveEnded()) {
-  <my-alert rounded="false" type="primary" i18n>
+  <my-alert type="primary" i18n>
   This live has ended.
 </my-alert>
 }
 
 @if (getAlertWarning()?.title) {
-  <my-alert rounded="false" type="warning">
+  <my-alert type="warning">
     <div class="alert-title">{{ getAlertWarning()?.title }}</div>
     @if (canSeeMoreInfo()) {
       {{ getAlertWarning().watchSecondary }}
@@ -32,20 +32,20 @@
 }
 
 @if (noPlaylistVideoFound()) {
-  <my-alert rounded="false" i18n type="warning">
+  <my-alert i18n type="warning">
   There are no videos available in this playlist.
 </my-alert>
 }
 
 @if (video()?.blacklisted) {
-  <my-alert rounded="false" type="danger">
+  <my-alert type="danger">
     <div class="blocked-label" i18n>This video is blocked.</div>
     {{ video().blacklistedReason }}
   </my-alert>
 }
 
 @if (video()?.canBypassPassword(user())) {
-  <my-alert rounded="false" i18n type="warning">
+  <my-alert i18n type="warning">
   This video is password protected.
 </my-alert>
 }
