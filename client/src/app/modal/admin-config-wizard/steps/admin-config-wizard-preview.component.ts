@@ -25,7 +25,7 @@ import { InstanceLogoService } from '@app/shared/shared-instance/instance-logo.s
     ColorPickerModule,
     CdkStepperModule,
     ButtonComponent
-],
+  ],
   providers: [ AdminConfigService, PluginApiService, InstanceLogoService ]
 })
 export class AdminConfigWizardPreviewComponent implements OnChanges {
@@ -85,13 +85,13 @@ export class AdminConfigWizardPreviewComponent implements OnChanges {
     this.updating = true
 
     this.adminConfig.updateCustomConfig(this.config)
-      .pipe(() => {
-        const avatar = this.instanceInfo().avatar
-        if (avatar) return this.instanceLogo.updateAvatar(avatar)
-
-        return this.instanceLogo.deleteAvatar()
-      })
       .pipe(
+        switchMap(() => {
+          const avatar = this.instanceInfo().avatar
+          if (avatar) return this.instanceLogo.updateAvatar(avatar)
+
+          return this.instanceLogo.deleteAvatar()
+        }),
         switchMap(() => this.server.resetConfig()),
         switchMap(() => {
           return from(this.plugins)
