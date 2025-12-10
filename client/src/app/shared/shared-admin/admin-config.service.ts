@@ -134,9 +134,10 @@ export class AdminConfigService {
     const { currentConfig, form, formConfig, success } = options
 
     this.updateCustomConfig(formConfig)
-      .pipe(switchMap(() => this.serverService.resetConfig()))
       .subscribe({
         next: newConfig => {
+          this.serverService.resetConfig()
+
           Object.assign(currentConfig, newConfig)
 
           form.markAsPristine()
