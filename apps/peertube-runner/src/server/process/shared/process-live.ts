@@ -71,7 +71,18 @@ export class ProcessLiveRTMPHLSTranscoding {
         const m3u8Watcher = watch(this.outputPath, { ignored: path => path !== this.outputPath && !path.endsWith('.m3u8') })
         this.fsWatchers.push(m3u8Watcher)
 
-        const tsWatcher = watch(this.outputPath, { ignored: path => path !== this.outputPath && !path.endsWith('.ts') })
+        // Fix: Wait for .ts files to be fully written before processing
+        // Without awaitWriteFinish, chokidar triggers immediately when FFmpeg creates the file,
+        // before FFmpeg finishes writing. This causes incomplete segments to be uploaded,
+        // leading to HTTP 416 errors when players request byte ranges beyond what was written.
+        // See: https://github.com/Chocobozzz/PeerTube/issues/7328
+        const tsWatcher = watch(this.outputPath, {
+          ignored: path => path !== this.outputPath && !path.endsWith('.ts'),
+          awaitWriteFinish: {
+            stabilityThreshold: 500,
+            pollInterval: 100
+          }
+        })
         this.fsWatchers.push(tsWatcher)
 
         m3u8Watcher.on('change', p => {
