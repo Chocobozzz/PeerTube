@@ -203,7 +203,7 @@ export class FFmpegVOD {
 
     const videoPath = this.getHLSVideoPath(options)
 
-    if (options.copyCodecs) {
+    if (options.copyCodecs && !this.commandWrapper.isAudioLoudnormEnabled()) {
       presetCopy(this.commandWrapper, {
         withAudio: !options.separatedAudio || !options.resolution,
         withVideo: !options.separatedAudio || !!options.resolution

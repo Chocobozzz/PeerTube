@@ -199,6 +199,10 @@ export interface CustomConfig {
       enabled: boolean
       splitAudioAndVideo: boolean
     }
+
+    audioLoudnorm?: {
+      enabled: boolean
+    }
   }
 
   live: {
@@ -227,6 +231,10 @@ export interface CustomConfig {
 
       fps: {
         max: number
+      }
+
+      audioLoudnorm?: {
+        enabled: boolean
       }
     }
   }

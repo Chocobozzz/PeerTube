@@ -584,6 +584,12 @@ const CONFIG = {
     get PROFILE () {
       return config.get<string>('transcoding.profile')
     },
+
+    AUDIO_LOUDNORM: {
+      get ENABLED () {
+        return config.get<boolean>('transcoding.audio_loudnorm.enabled')
+      }
+    },
     get ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION () {
       return config.get<boolean>('transcoding.always_transcode_original_resolution')
     },
@@ -710,6 +716,12 @@ const CONFIG = {
       },
       get PROFILE () {
         return config.get<string>('live.transcoding.profile')
+      },
+
+      AUDIO_LOUDNORM: {
+        get ENABLED () {
+          return config.get<boolean>('live.transcoding.audio_loudnorm.enabled')
+        }
       },
 
       get ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION () {

@@ -20,6 +20,9 @@ export type EncoderOptionsBuilderParams = {
 
   // For lives
   streamNum?: number
+
+  // Flag to enforce audio loudness normalization
+  audioLoudnorm?: boolean
 }
 
 export type EncoderOptionsBuilder = (params: EncoderOptionsBuilderParams) => Promise<EncoderOptions> | EncoderOptions

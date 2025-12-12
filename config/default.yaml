@@ -640,6 +640,10 @@ transcoding:
   web_videos:
     enabled: false
 
+  # Apply dynamic loudness normalization when transcoding audio
+  audio_loudnorm:
+    enabled: false
+
   # /!\ Requires ffmpeg >= 4.1
   # Generate HLS playlists and fragmented MP4 files. Better playback than with Web Videos:
   #     * Resolution change is smoother
@@ -730,6 +734,10 @@ live:
     # New profiles can be added by plugins
     # Available in core PeerTube: 'default'
     profile: 'default'
+
+    # Apply dynamic loudness normalization when transcoding audio in live
+    audio_loudnorm:
+      enabled: false
 
     resolutions:
       0p: false # Audio only

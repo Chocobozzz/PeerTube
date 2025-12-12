@@ -422,6 +422,9 @@ function customConfig (): CustomConfig {
       originalFile: {
         keep: CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP
       },
+      audioLoudnorm: {
+        enabled: CONFIG.TRANSCODING.AUDIO_LOUDNORM.ENABLED
+      },
       remoteRunners: {
         enabled: CONFIG.TRANSCODING.REMOTE_RUNNERS.ENABLED
       },
@@ -466,6 +469,9 @@ function customConfig (): CustomConfig {
         enabled: CONFIG.LIVE.TRANSCODING.ENABLED,
         remoteRunners: {
           enabled: CONFIG.LIVE.TRANSCODING.REMOTE_RUNNERS.ENABLED
+        },
+        audioLoudnorm: {
+          enabled: CONFIG.LIVE.TRANSCODING.AUDIO_LOUDNORM.ENABLED
         },
         threads: CONFIG.LIVE.TRANSCODING.THREADS,
         profile: CONFIG.LIVE.TRANSCODING.PROFILE,
