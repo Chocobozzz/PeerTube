@@ -4,9 +4,47 @@ set -eu
 
 defaultLanguage="en-US"
 
-# Supported languages - using parallel arrays for Bash 3.2 compatibility (macOS default)
-lang_keys=(ar sk is tr fa en vi hu th fi nl gd el es oc pt pt-PT sv pl ru zh-Hans zh-Hant fr ja eu ca gl cs hr eo de it uk sq tok nn nb kab)
-lang_values=(ar sk-SK is tr-TR fa-IR en-US vi-VN hu-HU th-TH fi-FI nl-NL gd el-GR es-ES oc pt-BR pt-PT sv-SE pl-PL ru-RU zh-Hans-CN zh-Hant-TW fr-FR ja-JP eu-ES ca-ES gl-ES cs-CZ hr eo de-DE it-IT uk-UA sq tok nn nb-NO kab)
+# Supported languages (key:locale pairs) - Bash 3.2 compatible for macOS
+languages=(
+    ar:ar
+    ca:ca-ES
+    cs:cs-CZ
+    de:de-DE
+    el:el-GR
+    en:en-US
+    eo:eo
+    es:es-ES
+    eu:eu-ES
+    fa:fa-IR
+    fi:fi-FI
+    fr:fr-FR
+    gd:gd
+    gl:gl-ES
+    hr:hr
+    hu:hu-HU
+    is:is
+    it:it-IT
+    ja:ja-JP
+    kab:kab
+    nb:nb-NO
+    nl:nl-NL
+    nn:nn
+    oc:oc
+    pl:pl-PL
+    pt:pt-BR
+    pt-PT:pt-PT
+    ru:ru-RU
+    sk:sk-SK
+    sq:sq
+    sv:sv-SE
+    th:th-TH
+    tok:tok
+    tr:tr-TR
+    uk:uk-UA
+    vi:vi-VN
+    zh-Hans:zh-Hans-CN
+    zh-Hant:zh-Hant-TW
+)
 
 
 rm -rf ./client/dist
@@ -24,9 +62,9 @@ if [ -z ${1+x} ] || ([ "$1" != "--light" ] && [ "$1" != "--analyze-bundle" ]); t
 
     NODE_OPTIONS=--max_old_space_size=8192 node_modules/.bin/ng build --configuration production --output-path "dist/build" $additionalParams
 
-    for i in "${!lang_keys[@]}"; do
-        key="${lang_keys[$i]}"
-        lang="${lang_values[$i]}"
+    for entry in "${languages[@]}"; do
+        key="${entry%%:*}"
+        lang="${entry#*:}"
 
         mv "dist/build/browser/$key" "dist/$lang"
 
