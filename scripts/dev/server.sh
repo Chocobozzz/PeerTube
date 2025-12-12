@@ -22,4 +22,4 @@ npm run resolve-tspaths:server
 cp -r "./server/core/static" "./server/core/assets" ./dist/core
 cp -r "./server/locales" ./dist
 
-./node_modules/.bin/tsc-watch --build --preserveWatchOutput --verbose --onSuccess 'sh -c "npm run resolve-tspaths:server && NODE_ENV=dev node dist/server"' server/tsconfig.json
+./node_modules/.bin/tsc-watch --build --preserveWatchOutput --verbose --onSuccess 'sh -c "npm run resolve-tspaths:server && NODE_ENV=dev node --inspect dist/server"' server/tsconfig.json
