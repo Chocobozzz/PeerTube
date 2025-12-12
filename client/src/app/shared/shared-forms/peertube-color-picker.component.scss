@@ -1,5 +1,5 @@
 @use "_form-mixins" as *;
 
 input[type=text] {
-  @include peertube-input-text(90px);
+  @include peertube-input-text(100px);
 }
