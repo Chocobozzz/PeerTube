@@ -27,6 +27,10 @@ export class VideoHtml {
       VideoModel.loadWithBlacklist(videoId)
     ])
 
+    if (video?.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
+      return html
+    }
+
     // Let Angular application handle errors
     if (!video || isVideoInPrivateDirectory(video.privacy) || video.VideoBlacklist) {
       res.status(HttpStatusCode.NOT_FOUND_404)
