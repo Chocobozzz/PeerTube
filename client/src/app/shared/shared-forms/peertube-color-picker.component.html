@@ -1,19 +1,22 @@
-<div class="d-flex align-items-center gap-2">
+<div class="d-flex align-items-center gap-4">
   <p-colorpicker 
     class="d-block" 
     [inputId]="inputId()" 
     [(ngModel)]="value" 
-    (ngModelChange)="onModelChange()" 
+    (ngModelChange)="onValueModelChange()" 
     />
-  <input 
-    [id]="textInputId" 
-    [name]="textInputId" 
-    [(ngModel)]="value" 
-    (ngModelChange)="onModelChange()" 
-    type="text" 
-    class="form-control" 
-    [ngClass]="{ 'input-error': formError() }" 
-    />
+  <div class="d-flex align-items-center gap-1">
+    {{ numberSign }}
+    <input 
+      [id]="sixCharactersInputId" 
+      [name]="sixCharactersInputId" 
+      [(ngModel)]="sixCharacters" 
+      (ngModelChange)="onSixCharactersModelChange()" 
+      type="text" 
+      class="form-control" 
+      [ngClass]="{ 'input-error': formError() }" 
+      />
+  </div>
 </div>
 
 @if (formError()) {

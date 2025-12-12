@@ -23,9 +23,11 @@ export class PeertubeColorPickerComponent implements ControlValueAccessor {
   readonly formError = input<string | FormReactiveErrors | FormReactiveErrors[]>(undefined)
 
   readonly value = model('')
+  readonly numberSign = '#'
+  sixCharacters: string
 
-  get textInputId () {
-    return `${this.inputId()}TextInput`
+  get sixCharactersInputId () {
+    return `${this.inputId()}SixCharacters`
   }
 
   propagateChange = (_: any) => {
@@ -34,6 +36,7 @@ export class PeertubeColorPickerComponent implements ControlValueAccessor {
 
   writeValue (value: string) {
     this.value.set(value)
+    this.updateSixCharactersOnValueChange()
   }
 
   registerOnChange (fn: (_: any) => void) {
@@ -44,7 +47,21 @@ export class PeertubeColorPickerComponent implements ControlValueAccessor {
     // Unused
   }
 
-  onModelChange () {
+  onValueModelChange () {
+    this.updateSixCharactersOnValueChange()
     this.propagateChange(this.value())
+  }
+
+  onSixCharactersModelChange(){
+    this.updateValueOnSixCharactersChange()
+    this.propagateChange(this.value())
+  }
+
+  updateSixCharactersOnValueChange(){
+    this.sixCharacters = this.value().substring(1)
+  }
+
+  updateValueOnSixCharactersChange(){
+    this.value.set(`${this.numberSign}${this.sixCharacters}`)
   }
 }
