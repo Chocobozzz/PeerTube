@@ -220,6 +220,11 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
   @Column
   declare storage: FileStorageType
 
+  // IPFS Content Identifier (CID) for decentralized storage
+  @AllowNull(true)
+  @Column
+  declare ipfsCid: string
+
   @BelongsTo(() => VideoModel, {
     foreignKey: {
       allowNull: true
