@@ -2,50 +2,11 @@
 
 set -eu
 
-declare -A languages
 defaultLanguage="en-US"
 
-# Supported languages
-languages=(
-    ["ar"]="ar"
-    ["sk"]="sk-SK"
-    ["is"]="is"
-    ["tr"]="tr-TR"
-    ["fa"]="fa-IR"
-    ["en"]="en-US"
-    ["vi"]="vi-VN"
-    ["hu"]="hu-HU"
-    ["th"]="th-TH"
-    ["fi"]="fi-FI"
-    ["nl"]="nl-NL"
-    ["gd"]="gd"
-    ["el"]="el-GR"
-    ["es"]="es-ES"
-    ["oc"]="oc"
-    ["pt"]="pt-BR"
-    ["pt-PT"]="pt-PT"
-    ["sv"]="sv-SE"
-    ["pl"]="pl-PL"
-    ["ru"]="ru-RU"
-    ["zh-Hans"]="zh-Hans-CN"
-    ["zh-Hant"]="zh-Hant-TW"
-    ["fr"]="fr-FR"
-    ["ja"]="ja-JP"
-    ["eu"]="eu-ES"
-    ["ca"]="ca-ES"
-    ["gl"]="gl-ES"
-    ["cs"]="cs-CZ"
-    ["hr"]="hr"
-    ["eo"]="eo"
-    ["de"]="de-DE"
-    ["it"]="it-IT"
-    ["uk"]="uk-UA"
-    ["sq"]="sq"
-    ["tok"]="tok"
-    ["nn"]="nn"
-    ["nb"]="nb-NO"
-    ["kab"]="kab"
-)
+# Supported languages - using parallel arrays for Bash 3.2 compatibility (macOS default)
+lang_keys=(ar sk is tr fa en vi hu th fi nl gd el es oc pt pt-PT sv pl ru zh-Hans zh-Hant fr ja eu ca gl cs hr eo de it uk sq tok nn nb kab)
+lang_values=(ar sk-SK is tr-TR fa-IR en-US vi-VN hu-HU th-TH fi-FI nl-NL gd el-GR es-ES oc pt-BR pt-PT sv-SE pl-PL ru-RU zh-Hans-CN zh-Hant-TW fr-FR ja-JP eu-ES ca-ES gl-ES cs-CZ hr eo de-DE it-IT uk-UA sq tok nn nb-NO kab)
 
 
 rm -rf ./client/dist
@@ -63,8 +24,9 @@ if [ -z ${1+x} ] || ([ "$1" != "--light" ] && [ "$1" != "--analyze-bundle" ]); t
 
     NODE_OPTIONS=--max_old_space_size=8192 node_modules/.bin/ng build --configuration production --output-path "dist/build" $additionalParams
 
-    for key in "${!languages[@]}"; do
-        lang=${languages[$key]}
+    for i in "${!lang_keys[@]}"; do
+        key="${lang_keys[$i]}"
+        lang="${lang_values[$i]}"
 
         mv "dist/build/browser/$key" "dist/$lang"
 
