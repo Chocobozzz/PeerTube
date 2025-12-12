@@ -485,24 +485,10 @@ On a fresh install of [FreeBSD](https://www.freebsd.org), new system or new jail
 1. Add the packages:
 
     ```sh
-    brew install bash ffmpeg nginx postgresql openssl gcc make redis git
+    brew install ffmpeg nginx postgresql openssl gcc make redis git
     brew install yarn # PeerTube <= v7.3 only
     brew install pnpm # PeerTube >= v8.0 only
     ```
-
-    You may need to update your default version of bash.
-
-    **How to change your default shell**
-
-    ```sh
-    which -a bash # Check where bash is installed
-    bash --version # You need a version at least as recent as 4.0
-    sudo vim /etc/shells # Add in this file : /usr/local/bin/bash
-    chsh -s /usr/local/bin/bash # To set the brew-installed bash as default bash
-    ```
-
-    In a new shell, type `bash --version` to assert your changes took effect and
-    correctly modified your default bash version.
 
 1. Run the services:
 
