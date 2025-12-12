@@ -200,6 +200,8 @@ server {
   }
 
   # Bypass PeerTube for performance reasons. Optional.
+  # SECURITY: Not vulnerable to path traversal, see https://github.com/Chocobozzz/PeerTube/issues/7326#issuecomment-3645582306
+  # nosec: nginx-alias-traversal
   location ~ ^/client/(.*\.(js|css|png|svg|woff2|otf|ttf|woff|eot))$ {
     add_header Cache-Control "public, max-age=31536000, immutable"; # Cache 1 year
 
