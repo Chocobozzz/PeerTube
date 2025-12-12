@@ -612,7 +612,8 @@ export const VIDEO_PRIVACIES: { [id in VideoPrivacyType]: string } = {
   [VideoPrivacy.UNLISTED]: 'Unlisted',
   [VideoPrivacy.PRIVATE]: 'Private',
   [VideoPrivacy.INTERNAL]: 'Internal',
-  [VideoPrivacy.PASSWORD_PROTECTED]: 'Password protected'
+  [VideoPrivacy.PASSWORD_PROTECTED]: 'Password protected',
+  [VideoPrivacy.PREMIERE]: 'Premiere'
 }
 
 export const VIDEO_STATES: { [id in VideoStateType]: string } = {

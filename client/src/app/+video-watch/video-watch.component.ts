@@ -77,6 +77,7 @@ import { VideoDescriptionComponent } from './shared/metadata/video-description.c
 import { VideoTranscriptionComponent } from './shared/player-widgets/video-transcription.component'
 import { VideoWatchPlaylistComponent } from './shared/player-widgets/video-watch-playlist.component'
 import { RecommendedVideosComponent } from './shared/recommendations/recommended-videos.component'
+import { VideoPremiereComponent } from './shared/premiere/video-premiere.component'
 
 const debugLogger = debug('peertube:watch:VideoWatchComponent')
 
@@ -122,10 +123,13 @@ type URLOptions = {
     PrivacyConcernsComponent,
     PlayerStylesComponent,
     VideoWatchPlaylistComponent,
-    VideoTranscriptionComponent
+    VideoTranscriptionComponent,
+    VideoPremiereComponent
   ]
 })
 export class VideoWatchComponent implements OnInit, OnDestroy {
+  VideoPrivacy = VideoPrivacy // Make VideoPrivacy accessible in template
+  
   private route = inject(ActivatedRoute)
   private router = inject(Router)
   private videoService = inject(VideoService)

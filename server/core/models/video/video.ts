@@ -2228,7 +2228,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       return false
     }
 
-    if (this.privacy === VideoPrivacy.PUBLIC || this.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
+    if (this.privacy === VideoPrivacy.PUBLIC || this.privacy === VideoPrivacy.PASSWORD_PROTECTED || this.privacy === VideoPrivacy.PREMIERE) {
       return false
     }
 

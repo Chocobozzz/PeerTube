@@ -32,7 +32,7 @@ import { AuthUser } from '@app/core'
 
 const debugLogger = debug('peertube:video-manage:video-edit')
 
-export type VideoEditPrivacyType = VideoPrivacyType | typeof VideoEdit.SPECIAL_SCHEDULED_PRIVACY
+export type VideoEditPrivacyType = VideoPrivacyType
 
 type CommonUpdateForm =
   & Omit<
@@ -142,8 +142,6 @@ type LiveUpdate = Omit<LiveVideoUpdate, 'schedules'> & {
 }
 
 export class VideoEdit {
-  static readonly SPECIAL_SCHEDULED_PRIVACY = -1
-
   private isNewVideo = false
   private common: CommonUpdate = {}
   private captions: VideoCaptionWithPathEdit[] = []
@@ -546,12 +544,11 @@ export class VideoEdit {
     }
 
     if (values.privacy !== undefined) {
-      // If schedule publication, the video is private and will be changed to public privacy
-      if (values.privacy === VideoEdit.SPECIAL_SCHEDULED_PRIVACY) {
+      if (values.privacy === VideoPrivacy.PREMIERE && values.schedulePublicationAt) {
         const updateAt = new Date(values.schedulePublicationAt)
         updateAt.setSeconds(0)
 
-        this.common.privacy = VideoPrivacy.PRIVATE
+        this.common.privacy = VideoPrivacy.PREMIERE
 
         this.common.scheduleUpdate = {
           updateAt: values.schedulePublicationAt
@@ -615,7 +612,7 @@ export class VideoEdit {
     // Special case if we scheduled an update
     if (this.common.scheduleUpdate) {
       Object.assign(json, {
-        privacy: VideoEdit.SPECIAL_SCHEDULED_PRIVACY,
+        privacy: this.common.scheduleUpdate.privacy,
         schedulePublicationAt: new Date(this.common.scheduleUpdate.updateAt.toString())
       })
     }

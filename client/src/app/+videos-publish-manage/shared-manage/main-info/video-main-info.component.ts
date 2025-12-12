@@ -262,16 +262,6 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
   private buildPrivacies () {
     const { privacies } = this.manageController.getStore()
     this.videoPrivacies = this.videoService.explainedPrivacyLabels(privacies).videoPrivacies
-
-    // Can't schedule publication if private privacy is not available (could be deleted by a plugin)
-    const hasPrivatePrivacy = this.videoPrivacies.some(p => p.id === VideoPrivacy.PRIVATE)
-    if (this.forbidScheduledPublication || !hasPrivatePrivacy) return
-
-    this.videoPrivacies.push({
-      id: VideoEdit.SPECIAL_SCHEDULED_PRIVACY,
-      label: $localize`Scheduled`,
-      description: $localize`Hide the video until a specific date`
-    })
   }
 
   private buildForm () {
@@ -409,7 +399,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
   }
 
   private updateScheduleRelatedControls (newPrivacyId: number, isInitialPatch = false) {
-    this.schedulePublicationSelected = newPrivacyId === VideoEdit.SPECIAL_SCHEDULED_PRIVACY
+    this.schedulePublicationSelected = newPrivacyId === VideoPrivacy.PREMIERE
 
     const scheduleControl = this.form.get('schedulePublicationAt')
     const waitTranscodingControl = this.form.get('waitTranscoding')

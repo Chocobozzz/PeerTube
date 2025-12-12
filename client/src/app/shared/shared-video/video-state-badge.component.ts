@@ -8,7 +8,7 @@ import { Video, VideoPrivacy, VideoState, VideoStateType } from '@peertube/peert
   imports: [ CommonModule ]
 })
 export class VideoStateBadgeComponent implements OnChanges {
-  readonly video = input.required<Pick<Video, 'privacy' | 'state' | 'waitTranscoding'>>()
+  readonly video = input.required<Pick<Video, 'privacy' | 'state' | 'waitTranscoding' | 'scheduledUpdate'>>()
 
   private states: { [id in VideoStateType]: string } = {
     [VideoState.PUBLISHED]: 'badge-green',
@@ -54,6 +54,12 @@ export class VideoStateBadgeComponent implements OnChanges {
         if (video.privacy.id === VideoPrivacy.INTERNAL) {
           this.label = $localize`Internal`
           this.badgeClass = 'badge-blue'
+          return
+        }
+
+        if (video.privacy.id === VideoPrivacy.PREMIERE && video.scheduledUpdate) {
+          this.label = $localize`Scheduled`
+          this.badgeClass = 'badge-yellow'
           return
         }
 

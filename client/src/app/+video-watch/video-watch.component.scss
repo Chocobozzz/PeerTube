@@ -35,8 +35,22 @@ $video-max-height: calc(100vh - #{pvar(--header-height)} - #{$theater-bottom-spa
     justify-content: center;
 
     #videojs-wrapper {
+      position: relative;
       width: 100%;
       height: $video-max-height;
+    }
+
+    #premiere-thumbnail-wrapper {
+      position: relative;
+      width: 100%;
+      height: $video-max-height;
+      
+      .premiere-thumbnail {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 3px;
+      }
     }
 
     ::ng-deep .video-js {
@@ -56,10 +70,26 @@ $video-max-height: calc(100vh - #{pvar(--header-height)} - #{$theater-bottom-spa
   border-radius: 5px;
 
   #videojs-wrapper {
+    position: relative;
     display: flex;
     justify-content: center;
     flex-grow: 1;
     height: $video-default-height;
+  }
+
+  #premiere-thumbnail-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+    height: $video-default-height;
+    
+    .premiere-thumbnail {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 3px;
+    }
   }
 
   ::ng-deep .video-js {
@@ -245,6 +275,7 @@ my-video-comments {
 
 @media screen and (max-width: 600px) {
   #videojs-wrapper {
+    position: relative;
     // Reset height
     height: initial !important;
 
@@ -254,6 +285,19 @@ my-video-comments {
       --co-player-height: calc(100vw / var(--co-player-ratio)) !important;
 
       max-height: calc(100vh - #{pvar(--header-height)} - #{$player-portrait-bottom-space});
+    }
+  }
+
+  #premiere-thumbnail-wrapper {
+    position: relative;
+    // Reset height
+    height: initial !important;
+    
+    .premiere-thumbnail {
+      width: 100vw;
+      height: calc(100vw / var(--co-player-ratio, #{math.div(16, 9)}));
+      max-height: calc(100vh - #{pvar(--header-height)} - #{$player-portrait-bottom-space});
+      object-fit: cover;
     }
   }
 
