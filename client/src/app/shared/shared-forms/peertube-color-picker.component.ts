@@ -24,10 +24,10 @@ export class PeertubeColorPickerComponent implements ControlValueAccessor {
 
   readonly value = model('')
   readonly numberSign = '#'
-  sixCharacters: string
+  hexCode: string
 
-  get sixCharactersInputId () {
-    return `${this.inputId()}SixCharacters`
+  get hexCodeInputId () {
+    return `${this.inputId()}HexCode`
   }
 
   propagateChange = (_: any) => {
@@ -36,7 +36,7 @@ export class PeertubeColorPickerComponent implements ControlValueAccessor {
 
   writeValue (value: string) {
     this.value.set(value)
-    this.updateSixCharactersOnValueChange()
+    this.updateHexCodeOnValueChange()
   }
 
   registerOnChange (fn: (_: any) => void) {
@@ -47,21 +47,21 @@ export class PeertubeColorPickerComponent implements ControlValueAccessor {
     // Unused
   }
 
-  onValueModelChange () {
-    this.updateSixCharactersOnValueChange()
+  onValueChange () {
+    this.updateHexCodeOnValueChange()
     this.propagateChange(this.value())
   }
 
-  onSixCharactersModelChange(){
-    this.updateValueOnSixCharactersChange()
+  onHexCodeChange(){
+    this.updateValueOnHexCodeChange()
     this.propagateChange(this.value())
   }
 
-  updateSixCharactersOnValueChange(){
-    this.sixCharacters = this.value().substring(1)
+  updateHexCodeOnValueChange(){
+    this.hexCode = this.value().substring(1)
   }
 
-  updateValueOnSixCharactersChange(){
-    this.value.set(`${this.numberSign}${this.sixCharacters}`)
+  updateValueOnHexCodeChange(){
+    this.value.set(`${this.numberSign}${this.hexCode}`)
   }
 }

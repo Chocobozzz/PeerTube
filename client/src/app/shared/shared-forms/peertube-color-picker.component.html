@@ -3,15 +3,15 @@
     class="d-block" 
     [inputId]="inputId()" 
     [(ngModel)]="value" 
-    (ngModelChange)="onValueModelChange()" 
+    (ngModelChange)="onValueChange()" 
     />
   <div class="d-flex align-items-center gap-1">
     {{ numberSign }}
     <input 
-      [id]="sixCharactersInputId" 
-      [name]="sixCharactersInputId" 
-      [(ngModel)]="sixCharacters" 
-      (ngModelChange)="onSixCharactersModelChange()" 
+      [id]="hexCodeInputId" 
+      [name]="hexCodeInputId" 
+      [(ngModel)]="hexCode" 
+      (ngModelChange)="onHexCodeChange()" 
       type="text" 
       class="form-control" 
       [ngClass]="{ 'input-error': formError() }" 
