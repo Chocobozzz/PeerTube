@@ -3,9 +3,11 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValueChangeEvent } from '@angular/forms'
 import { ActivatedRoute, RouterModule } from '@angular/router'
 import { CanComponentDeactivate, ServerService, ThemeService } from '@app/core'
+import { HEX_COLOR_CODE_VALIDATOR } from '@app/shared/form-validators/common-validators'
 import { BuildFormArgumentTyped, FormDefaultTyped, FormReactiveMessagesTyped } from '@app/shared/form-validators/form-validator.model'
 import { FormReactiveErrorsTyped, FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
+import { PeertubeColorPickerComponent } from '@app/shared/shared-forms/peertube-color-picker.component'
 import { SelectCustomValueComponent } from '@app/shared/shared-forms/select/select-custom-value.component'
 import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-options.component'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
@@ -13,7 +15,6 @@ import { CustomConfig, PlayerTheme } from '@peertube/peertube-models'
 import { capitalizeFirstLetter } from '@root-helpers/string'
 import { ColorPaletteThemeConfig, ThemeCustomizationKey } from '@root-helpers/theme-manager'
 import debug from 'debug'
-import { ColorPickerModule } from 'primeng/colorpicker'
 import { debounceTime, Subscription } from 'rxjs'
 import { SelectOptionsItem } from 'src/types'
 import { AdminConfigService } from '../../../shared/shared-admin/admin-config.service'
@@ -86,7 +87,7 @@ type FieldType = 'color' | 'radius'
     RouterModule,
     ReactiveFormsModule,
     AdminSaveBarComponent,
-    ColorPickerModule,
+    PeertubeColorPickerComponent,
     AlertComponent,
     SelectOptionsComponent,
     HelpComponent,
@@ -186,6 +187,7 @@ export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, Can
         this.customConfig = customConfig
 
         this.form.patchValue(this.getDefaultFormValues(), { emitEvent: false })
+        this.form.setErrors(this.form.errors)
       })
   }
 
@@ -268,15 +270,15 @@ export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, Can
       theme: {
         default: null,
         customization: {
-          primaryColor: null,
-          foregroundColor: null,
-          backgroundColor: null,
-          backgroundSecondaryColor: null,
-          menuForegroundColor: null,
-          menuBackgroundColor: null,
+          primaryColor: HEX_COLOR_CODE_VALIDATOR,
+          foregroundColor: HEX_COLOR_CODE_VALIDATOR,
+          backgroundColor: HEX_COLOR_CODE_VALIDATOR,
+          backgroundSecondaryColor: HEX_COLOR_CODE_VALIDATOR,
+          menuForegroundColor: HEX_COLOR_CODE_VALIDATOR,
+          menuBackgroundColor: HEX_COLOR_CODE_VALIDATOR,
           menuBorderRadius: null,
-          headerForegroundColor: null,
-          headerBackgroundColor: null,
+          headerForegroundColor: HEX_COLOR_CODE_VALIDATOR,
+          headerBackgroundColor: HEX_COLOR_CODE_VALIDATOR,
           inputBorderRadius: null
         }
       },
@@ -332,6 +334,7 @@ export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, Can
 
     control.patchValue(value, { emitEvent: false })
     control.markAsDirty()
+    control.setErrors(control.errors)
   }
 
   save () {

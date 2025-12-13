@@ -1,0 +1,24 @@
+<div class="d-flex align-items-center gap-4">
+  <p-colorpicker 
+    class="d-block" 
+    [inputId]="inputId()" 
+    [(ngModel)]="value" 
+    (ngModelChange)="onValueChange()" 
+    />
+  <div class="d-flex align-items-center gap-1">
+    {{ numberSign }}
+    <input 
+      [id]="hexCodeInputId" 
+      [name]="hexCodeInputId" 
+      [(ngModel)]="hexCode" 
+      (ngModelChange)="onHexCodeChange()" 
+      type="text" 
+      class="form-control" 
+      [ngClass]="{ 'input-error': formError() }" 
+      />
+  </div>
+</div>
+
+@if (formError()) {
+  <div class="form-error" role="alert">{{ formError() }}</div>
+}
