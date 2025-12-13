@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4.0
+
+ * Copy codecs for HLS transcoding if possible
+
 ## v0.3.0
 
  * Add generate storyboard support (PeerTube >= 8.0)

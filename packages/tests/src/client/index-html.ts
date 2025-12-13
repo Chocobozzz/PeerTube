@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
 import { HttpStatusCode, VideoPlaylistCreateResult } from '@peertube/peertube-models'
 import { cleanupTests, makeGetRequest, makeHTMLRequest, PeerTubeServer } from '@peertube/peertube-server-commands'
 import { checkIndexTags, getWatchPlaylistBasePaths, getWatchVideoBasePaths, prepareClientTests } from '@tests/shared/client.js'
+import { expect } from 'chai'
 
 describe('Test index HTML generation', function () {
   let servers: PeerTubeServer[]
@@ -27,7 +27,6 @@ describe('Test index HTML generation', function () {
 
   before(async function () {
     this.timeout(120000)
-
     ;({
       servers,
       playlistIds,
@@ -220,9 +219,9 @@ describe('Test index HTML generation', function () {
   })
 
   describe('Check no leaks for private objects', function () {
-    it('Should not display internal/private/password protected video', async function () {
+    it('Should not display internal/private video', async function () {
       for (const basePath of getWatchVideoBasePaths()) {
-        for (const id of [ privateVideoId, internalVideoId, passwordProtectedVideoId ]) {
+        for (const id of [ privateVideoId, internalVideoId ]) {
           const res = await makeGetRequest({
             url: servers[0].url,
             path: basePath + id,
@@ -232,8 +231,20 @@ describe('Test index HTML generation', function () {
 
           expect(res.text).to.not.contain('internal')
           expect(res.text).to.not.contain('private')
-          expect(res.text).to.not.contain('password protected')
         }
+      }
+    })
+
+    it('Should not display password protected video', async function () {
+      for (const basePath of getWatchVideoBasePaths()) {
+        const res = await makeGetRequest({
+          url: servers[0].url,
+          path: basePath + passwordProtectedVideoId,
+          accept: 'text/html',
+          expectedStatus: HttpStatusCode.OK_200
+        })
+
+        expect(res.text).to.not.contain('password protected')
       }
     })
 

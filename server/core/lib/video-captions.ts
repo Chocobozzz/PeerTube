@@ -200,7 +200,13 @@ export async function generateSubtitle (options: {
         format: 'vtt'
       })
 
-      await onTranscriptionEnded({ video, language: transcriptFile.language, vttPath: transcriptFile.path })
+      const refreshedVideo = await VideoModel.loadFull(video.uuid)
+      if (!refreshedVideo) {
+        logger.info(`Do not process transcription for video ${video.uuid}: it does not exist anymore.`, lTags(video.uuid))
+        return
+      }
+
+      await onTranscriptionEnded({ video: refreshedVideo, language: transcriptFile.language, vttPath: transcriptFile.path })
     })
   } finally {
     if (outputPath) await remove(outputPath)

@@ -6,6 +6,10 @@
   @include peertube-radio-container;
 }
 
+.peertube-select-container {
+  @include peertube-select-container(auto);
+}
+
 .pt-input-text {
   @include peertube-input-text(100%);
 }

@@ -6,7 +6,7 @@
 ### IMPORTANT NOTES
 
   * Database migrations of this version can take a long time (up to 30 minutes on an instance with many users/federation actors and a slow database disk)
-  * You need to manually execute a migration script **after your upgrade** while PeerTube is running and the database migration is complete (`Migrations finished. New migration version schema: 965` in PeerTube startup logs):
+  * You need to manually execute a migration script **after your upgrade** while PeerTube is running and the database migration is complete (`Migrations finished. New migration version schema: 970` in PeerTube startup logs):
     * Classic installation: `cd /var/www/peertube/peertube-latest && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production node dist/scripts/migrations/peertube-8.0.js`
     * Docker installation: `cd /var/www/peertube-docker && docker compose exec -u peertube peertube node dist/scripts/migrations/peertube-8.0.js`
   * `yarn` NodeJS packages manager has been removed in favor of `pnpm`. Follow the [dependencies guide](https://docs.joinpeertube.org/support/doc/dependencies) to install `pnpm` on your system **before the upgrade**

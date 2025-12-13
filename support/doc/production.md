@@ -28,12 +28,6 @@ sudo pw useradd -n peertube -d /var/www/peertube -s /usr/sbin/nologin -m
 
 :::
 
-Set its password:
-
-```bash
-sudo passwd peertube
-```
-
 Ensure the peertube root directory is traversable by nginx:
 
 ```bash
@@ -280,7 +274,7 @@ The administrator username is `root` and the password is automatically generated
 logs (path defined in `production.yaml`). You can also set another password with:
 
 ```bash
-cd /var/www/peertube/peertube-latest && NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run reset-password -- -u root
+cd /var/www/peertube/peertube-latest && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run reset-password -- -u root
 ```
 
 Alternatively you can set the environment variable `PT_INITIAL_ROOT_PASSWORD`,

@@ -33,7 +33,7 @@ export class MenuService {
 
     this.peertubeRouterService.getNavigationEndEvents()
       .subscribe(e => {
-        if (this.hasMenuCollapsedByUrl(e.url)) {
+        if (this.hasMenuCollapsedByUrl(e.url) || this.hasMenuCollapsedByUrl(e.urlAfterRedirects)) {
           this.collapseByUrl()
           return
         }

@@ -17,7 +17,7 @@ my-input-text {
 }
 
 .peertube-select-container {
-  @include peertube-select-container($form-base-input-width);
+  @include responsive-width($form-base-input-width);
 }
 
 my-select-custom-value {

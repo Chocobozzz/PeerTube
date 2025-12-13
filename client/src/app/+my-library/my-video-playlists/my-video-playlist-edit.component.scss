@@ -7,7 +7,7 @@ input[type="text"] {
 }
 
 .peertube-select-container {
-  @include peertube-select-container(340px);
+  @include responsive-width(340px);
 }
 
 my-select-channel,
