@@ -18,7 +18,7 @@ import {
   asyncRetryTransactionMiddleware,
   authenticate,
   checkVideoFollowConstraints,
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidatorFactory,
   optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
@@ -87,7 +87,7 @@ videosRouter.get(
   setDefaultVideosSort,
   setDefaultPagination,
   optionalAuthenticate,
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidatorFactory(),
   asyncMiddleware(listVideos)
 )
 

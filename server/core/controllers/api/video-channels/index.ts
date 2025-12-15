@@ -29,7 +29,7 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidatorFactory,
   optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
@@ -140,7 +140,7 @@ videoChannelRouter.get(
   setDefaultVideosSort,
   setDefaultPagination,
   optionalAuthenticate,
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidatorFactory(),
   asyncMiddleware(listVideoChannelVideos)
 )
 

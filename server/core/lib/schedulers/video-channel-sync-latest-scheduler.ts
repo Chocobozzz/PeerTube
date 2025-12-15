@@ -71,7 +71,7 @@ export class VideoChannelSyncLatestScheduler extends AbstractScheduler {
 
     return pathname.startsWith('/playlist/') || // Dailymotion playlist
       pathname.startsWith('/showcase/') || // Vimeo playlist
-      pathname.startsWith('/playlist?') || // YouTube playlist
+      pathname === '/playlist' || // YouTube playlist
       pathname.startsWith('/w/p/') // PeerTube playlist
   }
 }
