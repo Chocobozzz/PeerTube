@@ -19,7 +19,7 @@ import { ColorPickerModule } from 'primeng/colorpicker'
 export class PeertubeColorPickerComponent implements ControlValueAccessor {
   readonly inputId = input.required<string>()
 
-  readonly formError = input<string>(undefined)
+  readonly formError = input<string>()
 
   readonly value = model('')
   readonly numberSign = '#'
