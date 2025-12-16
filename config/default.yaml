@@ -827,8 +827,8 @@ import:
         # You can also use a youtube-dl standalone binary (requires python_path: null)
         # GNU/Linux binaries with support for impersonating browser requests (required by some platforms such as Vimeo) examples:
         #   * https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux (x64)
-        #   * https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux_armv7l (ARMv7)
-        #   * https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux_armv7l (ARMv8/AArch64/ARM64)
+        #   * https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux_armv7l.zip (ARMv7)
+        #   * https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux_aarch64 (ARMv8/AArch64/ARM64)
         url: 'https://api.github.com/repos/yt-dlp/yt-dlp/releases'
 
         # Release binary name: 'yt-dlp' or 'youtube-dl'
@@ -999,7 +999,7 @@ instance:
   # To discourage researchers from testing your instance and disable security.txt integration, set this to an empty string
   securitytxt: |
     Contact: https://github.com/Chocobozzz/PeerTube/blob/develop/SECURITY.md
-    Expires: 2025-12-31T11:00:00.000Z'
+    Expires: 2025-12-31T11:00:00.000Z
 
 services:
   # Cards configuration to format video in Twitter/X
