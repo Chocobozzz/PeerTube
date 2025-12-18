@@ -152,7 +152,7 @@ describe('Test generate download', function () {
           videoFileIds: [ file.id ],
           expectedStatus: server === servers[0]
             ? HttpStatusCode.OK_200
-            : HttpStatusCode.INTERNAL_SERVER_ERROR_500
+            : HttpStatusCode.SERVICE_UNAVAILABLE_503
         })
       }
     })

@@ -106,7 +106,7 @@ export class ProcessRegistrationModalComponent extends FormReactive implements O
         this.hide()
       },
 
-      error: err => this.notifier.error(err.message)
+      error: err => this.notifier.handleError(err)
     })
   }
 
@@ -123,7 +123,7 @@ export class ProcessRegistrationModalComponent extends FormReactive implements O
         this.hide()
       },
 
-      error: err => this.notifier.error(err.message)
+      error: err => this.notifier.handleError(err)
     })
   }
 }

@@ -51,7 +51,7 @@ export class VerifyNewAccountAskSendEmailComponent extends FormReactive implemen
         this.redirectService.redirectToHomepage()
       },
 
-      error: err => this.notifier.error(err.message)
+      error: err => this.notifier.handleError(err)
     })
   }
 }

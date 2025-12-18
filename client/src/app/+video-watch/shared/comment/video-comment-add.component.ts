@@ -151,7 +151,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
       error: err => {
         this.addingComment = false
 
-        this.notifier.error(err.message)
+        this.notifier.handleError(err)
       }
     })
   }

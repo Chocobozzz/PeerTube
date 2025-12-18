@@ -1,7 +1,7 @@
 import { Job } from 'bullmq'
 import { copy } from 'fs-extra/esm'
 import { VideoFileImportPayload } from '@peertube/peertube-models'
-import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent.js'
+import { createTorrentAndSetInfoHash } from '@server/lib/webtorrent.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'

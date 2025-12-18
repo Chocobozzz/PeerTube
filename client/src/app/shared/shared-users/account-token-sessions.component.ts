@@ -42,9 +42,7 @@ export class AccountTokenSessionsComponent implements OnInit {
         this.listSessions()
       },
 
-      error: err => {
-        this.notifier.error(err.message)
-      }
+      error: err => this.notifier.handleError(err)
     })
   }
 
@@ -65,7 +63,7 @@ export class AccountTokenSessionsComponent implements OnInit {
         })
       },
 
-      error: err => this.notifier.error(err.message)
+      error: err => this.notifier.handleError(err)
     })
   }
 }

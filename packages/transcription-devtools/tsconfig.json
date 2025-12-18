@@ -6,6 +6,7 @@
     "tsBuildInfoFile": "./dist/.tsbuildinfo",
   },
   "references": [
-    { "path": "../transcription" }
+    { "path": "../transcription" },
+    { "path": "../server-commands" }
   ]
 }

@@ -124,18 +124,17 @@ export class VideoGoLiveComponent implements OnInit, AfterViewInit, CanComponent
 
         error: err => {
           this.firstStepError.emit()
+          this.isGoingLive = false
 
-          let message = err.message
           const error = err.body as PeerTubeProblemDocument
 
           if (error?.code === ServerErrorCode.MAX_INSTANCE_LIVES_LIMIT_REACHED) {
-            message = $localize`Cannot create live because this platform has too many created lives`
+            this.notifier.error($localize`Cannot create live because this platform has too many created lives`)
           } else if (error?.code === ServerErrorCode.MAX_USER_LIVES_LIMIT_REACHED) {
-            message = $localize`Cannot create live because you created too many lives`
+            this.notifier.error($localize`Cannot create live because you created too many lives`)
+          } else {
+            this.notifier.handleError(err)
           }
-
-          this.notifier.error(message)
-          this.isGoingLive = false
         }
       })
   }

@@ -1,3 +1,4 @@
+import { InvalidGrantError } from '@node-oauth/oauth2-server'
 import { ResultList, ScopedToken, TokenSession } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { logger } from '@server/helpers/logger.js'
@@ -119,6 +120,8 @@ async function handleToken (req: express.Request, res: express.Response, next: e
     if (err instanceof MissingTwoFactorError) {
       res.set(OTP.HEADER_NAME, OTP.HEADER_REQUIRED_VALUE)
       logger.debug('Missing two factor error', { err })
+    } else if (err instanceof InvalidGrantError) {
+      logger.debug('Invalid grant', { err })
     } else {
       logger.warn('Login error', { err })
     }

@@ -141,7 +141,7 @@ export class UserInterfaceSettingsComponent implements OnInit, OnDestroy {
             if (this.notifyOnUpdate()) this.notifier.success($localize`Interface settings updated.`)
           },
 
-          error: err => this.notifier.error(err.message)
+          error: err => this.notifier.handleError(err)
         })
 
       return
@@ -154,7 +154,7 @@ export class UserInterfaceSettingsComponent implements OnInit, OnDestroy {
           window.location.reload()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
 
       return

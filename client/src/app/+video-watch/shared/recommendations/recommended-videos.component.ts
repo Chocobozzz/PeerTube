@@ -85,7 +85,7 @@ export class RecommendedVideosComponent implements OnInit, OnChanges, OnDestroy 
             this.authService.refreshUserInformation()
           },
 
-          error: err => this.notifier.error(err.message)
+          error: err => this.notifier.handleError(err)
         })
     } else {
       this.userService.updateMyAnonymousProfile(details)
@@ -101,7 +101,7 @@ export class RecommendedVideosComponent implements OnInit, OnChanges, OnDestroy 
           this.gotRecommendations.emit(this.videos)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 }

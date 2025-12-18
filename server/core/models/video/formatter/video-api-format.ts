@@ -9,7 +9,7 @@ import {
   VideoStreamingPlaylist
 } from '@peertube/peertube-models'
 import { uuidToShort } from '@peertube/peertube-node-utils'
-import { generateMagnetUri } from '@server/helpers/webtorrent.js'
+import { generateMagnetUri } from '@server/lib/webtorrent.js'
 import { tracer } from '@server/lib/opentelemetry/tracing.js'
 import { getHLSResolutionPlaylistFilename } from '@server/lib/paths.js'
 import { getLocalVideoFileMetadataUrl } from '@server/lib/video-urls.js'

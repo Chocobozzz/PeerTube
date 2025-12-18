@@ -1,5 +1,6 @@
 export * from './users'
 export * from './bytes'
+export * from './errors'
 export * from './images'
 export * from './local-storage-utils'
 export * from './logger'

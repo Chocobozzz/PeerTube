@@ -101,7 +101,7 @@ export class AboutFollowsComponent implements OnInit {
           this.followersPagination.totalItems = resultList.total
         },
 
-        error: err => this.notifier.error(err.message),
+        error: err => this.notifier.handleError(err),
 
         complete: () => this.loadingFollowers = false
       })
@@ -127,7 +127,7 @@ export class AboutFollowsComponent implements OnInit {
           this.subscriptionsPagination.totalItems = resultList.total
         },
 
-        error: err => this.notifier.error(err.message),
+        error: err => this.notifier.handleError(err),
 
         complete: () => this.loadingSubscriptions = false
       })

@@ -1,6 +1,6 @@
 import { FileStorage, isMoveCaptionPayload, isMoveVideoStoragePayload, MoveStoragePayload, VideoStateType } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
-import { updateTorrentMetadata } from '@server/helpers/webtorrent.js'
+import { updateTorrentMetadata } from '@server/lib/webtorrent.js'
 import { P2P_MEDIA_LOADER_PEER_VERSION } from '@server/initializers/constants.js'
 import {
   makeCaptionFileAvailable,

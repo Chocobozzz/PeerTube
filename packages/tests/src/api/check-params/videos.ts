@@ -22,7 +22,7 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '@peertube/peertube-server-commands'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { checkUploadVideoParam } from '@tests/shared/videos.js'
 import { expect } from 'chai'
 
@@ -90,7 +90,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, path)
+      await checkBadSort(server.url, path)
     })
 
     it('Should fail with a bad skipVideos query', async function () {
@@ -114,7 +114,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, path, undefined, { search: 'test' })
+      await checkBadSort(server.url, path, undefined, { search: 'test' })
     })
 
     it('Should succeed with the correct parameters', async function () {
@@ -134,7 +134,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, path, server.accessToken)
+      await checkBadSort(server.url, path, server.accessToken)
     })
 
     it('Should fail with an invalid channel', async function () {
@@ -207,7 +207,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, path, server.accessToken)
+      await checkBadSort(server.url, path, server.accessToken)
     })
 
     it('Should succeed with the correct parameters', async function () {
@@ -231,7 +231,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, path, server.accessToken)
+      await checkBadSort(server.url, path, server.accessToken)
     })
 
     it('Should succeed with the correct parameters', async function () {

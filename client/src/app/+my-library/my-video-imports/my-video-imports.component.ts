@@ -127,7 +127,7 @@ export class MyVideoImportsComponent implements OnInit {
       .subscribe({
         next: () => this.table().loadData(),
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -136,7 +136,7 @@ export class MyVideoImportsComponent implements OnInit {
       .subscribe({
         next: () => this.table().loadData(),
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -145,7 +145,7 @@ export class MyVideoImportsComponent implements OnInit {
       .subscribe({
         next: () => this.table().loadData(),
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

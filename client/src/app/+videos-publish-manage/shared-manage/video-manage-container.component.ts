@@ -48,7 +48,8 @@ export class VideoManageContainerComponent implements OnInit, OnDestroy {
 
   canRetryUpload = true
 
-  private isUpdating = false
+  isUpdating = false
+
   private videoEdit: VideoEdit
 
   ngOnInit (): void {

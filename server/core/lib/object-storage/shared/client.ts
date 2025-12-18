@@ -47,6 +47,8 @@ function getClient () {
         : undefined,
       requestHandler: await getProxyRequestHandler(),
       maxAttempts: CONFIG.OBJECT_STORAGE.MAX_REQUEST_ATTEMPTS,
+      forcePathStyle: CONFIG.OBJECT_STORAGE.FORCE_PATH_STYLE,
+
       // Default behaviour has incompatibilities with some S3 providers: https://github.com/aws/aws-sdk-js-v3/issues/6810
       requestChecksumCalculation: 'WHEN_REQUIRED',
       responseChecksumValidation: 'WHEN_REQUIRED'

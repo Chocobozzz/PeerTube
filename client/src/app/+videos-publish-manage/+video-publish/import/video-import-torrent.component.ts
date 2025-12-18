@@ -155,18 +155,20 @@ export class VideoImportTorrentComponent implements OnInit, AfterViewInit, CanCo
         },
 
         error: err => {
+          this.isImportingVideo = false
+
           this.loadingBar.useRef().complete()
           this.firstStepError.emit()
 
-          let message = err.message
           const error = err.body as PeerTubeProblemDocument
 
           if (error?.code === ServerErrorCode.INCORRECT_FILES_IN_TORRENT) {
-            message = $localize`Torrents with only 1 file are supported.`
+            this.notifier.error($localize`Torrents with only 1 file are supported.`)
+
+            return
           }
 
-          this.notifier.error(message)
-          this.isImportingVideo = false
+          this.notifier.handleError(err)
         }
       })
   }

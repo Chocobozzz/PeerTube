@@ -1,7 +1,7 @@
 {
   "name": "peertube",
   "description": "PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.",
-  "version": "8.0.0",
+  "version": "8.0.1",
   "private": true,
   "licence": "AGPL-3.0",
   "engines": {
@@ -95,6 +95,7 @@
     "@aws-sdk/s3-request-presigner": "^3.930.0",
     "@commander-js/extra-typings": "^14.0.0",
     "@jimp/plugin-color": "^1.6.0",
+    "@misskey-dev/node-http-message-signatures": "^0.0.10",
     "@node-oauth/oauth2-server": "^5.2.1",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/exporter-jaeger": "^2.2.0",
@@ -113,7 +114,6 @@
     "@opentelemetry/semantic-conventions": "^1.38.0",
     "@peertube/bittorrent-tracker-server": "^11.1.2",
     "@peertube/feed": "^5.4.1",
-    "@peertube/http-signature": "^1.7.0",
     "@peertube/peertube-core-utils": "workspace:*",
     "@peertube/peertube-ffmpeg": "workspace:*",
     "@peertube/peertube-models": "workspace:*",

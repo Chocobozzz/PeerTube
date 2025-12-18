@@ -21,7 +21,8 @@
 }
 
 <ng-template #content>
-  <my-loader size="sm" [ngClass]="{ displayed: loading() }" [loading]="loading()"></my-loader>
+  <my-loader size="md" [ngClass]="{ displayed: loading() }" [loading]="loading()"></my-loader>
+
   @if (icon() && !loading()) {
     <my-global-icon [iconName]="icon()"></my-global-icon>
   }

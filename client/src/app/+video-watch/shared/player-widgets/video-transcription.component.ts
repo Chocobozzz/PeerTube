@@ -165,7 +165,7 @@ export class VideoTranscriptionComponent implements OnInit, OnChanges {
           }
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

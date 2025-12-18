@@ -1,13 +1,14 @@
 import { getLocaleDirection, NgClass, PlatformLocation } from '@angular/common'
-import { AfterViewInit, Component, inject, LOCALE_ID, OnDestroy, OnInit, viewChild, DOCUMENT } from '@angular/core'
+import { AfterViewInit, Component, DOCUMENT, inject, LOCALE_ID, OnDestroy, OnInit, viewChild } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
-import { Event, GuardsCheckStart, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterOutlet } from '@angular/router'
+import { Event, GuardsCheckStart, NavigationStart, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterOutlet } from '@angular/router'
 import {
   AuthService,
   Hotkey,
   HotkeysService,
   MarkdownService,
   PeerTubeRouterService,
+  RouterStatusService,
   ScreenService,
   ScrollService,
   ServerService,
@@ -82,6 +83,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   private scrollService = inject(ScrollService)
   private userLocalStorage = inject(UserLocalStorageService)
   private peertubeModal = inject(PeertubeModalService)
+  private routerStatus = inject(RouterStatusService)
 
   menu = inject(MenuService)
 
@@ -229,6 +231,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     eventsObs.pipe(
       filter((e: Event): e is RouteConfigLoadEnd => e instanceof RouteConfigLoadEnd)
     ).subscribe(() => this.loadingBar.useRef().complete())
+
+    // We need this to prevent circular dependency between the router and the custom reuse strategy
+    eventsObs.pipe(
+      filter((e: Event): e is NavigationStart => e instanceof NavigationStart)
+    ).subscribe(() => {
+      const current = this.router.currentNavigation()
+
+      this.routerStatus.isNavigatingBack = current?.trigger === 'popstate' || current?.extras.state?.trigger === 'popstate'
+    })
   }
 
   private async injectBroadcastMessage () {

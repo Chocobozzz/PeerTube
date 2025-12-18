@@ -249,7 +249,7 @@ async function downloadGeneratedVideoFile (req: express.Request, res: express.Re
   if (VideoDownload.totalDownloads > CONFIG.DOWNLOAD_GENERATE_VIDEO.MAX_PARALLEL_DOWNLOADS) {
     return res.fail({
       status: HttpStatusCode.TOO_MANY_REQUESTS_429,
-      message: `Too many parallel downloads on this server. Please try again later.`
+      message: req.t(`Too many parallel downloads on this server. Please try again later.`)
     })
   }
 
@@ -269,7 +269,16 @@ async function downloadGeneratedVideoFile (req: express.Request, res: express.Re
 
   res.type(extname)
 
-  await new VideoDownload({ video, videoFiles }).muxToMergeVideoFiles(res)
+  try {
+    await new VideoDownload({ video, videoFiles }).muxToMergeVideoFiles(res)
+  } catch (err) {
+    // muxToMergeVideoFiles has already logged the error
+    res.fail({
+      status: HttpStatusCode.SERVICE_UNAVAILABLE_503,
+      message: req.t('Cannot process video download at the moment. Please try again later.'),
+      data: err.message
+    })
+  }
 }
 
 // ---------------------------------------------------------------------------

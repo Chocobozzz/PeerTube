@@ -30,7 +30,7 @@ export class MyAccountApplicationsComponent implements OnInit {
       .subscribe({
         next: tokens => this.regenApplications(tokens),
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -49,7 +49,7 @@ export class MyAccountApplicationsComponent implements OnInit {
           this.notifier.success($localize`Token renewed. Update your client configuration accordingly.`)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

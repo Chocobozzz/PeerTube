@@ -77,7 +77,7 @@ export class InstanceConfigWarningModalComponent implements OnInit {
       .subscribe({
         next: () => logger.info('We will not open the instance config warning modal again.'),
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 }

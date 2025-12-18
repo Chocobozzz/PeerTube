@@ -45,7 +45,10 @@ export class UserNotificationService {
 
   countUnreadNotifications () {
     return this.listMyNotifications({ pagination: { currentPage: 1, itemsPerPage: 0 }, ignoreLoadingBar: true, unread: true })
-      .pipe(map(n => n.total))
+      .pipe(
+        map(n => n.total),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   markAsRead (notification: UserNotification) {

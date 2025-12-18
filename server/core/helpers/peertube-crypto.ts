@@ -1,8 +1,8 @@
-import httpSignature from '@peertube/http-signature'
+import { ParsedDraftSignature, parseRequestSignature, verifyDraftSignature } from '@misskey-dev/node-http-message-signatures'
 import { sha256 } from '@peertube/peertube-node-utils'
 import { createCipheriv, createDecipheriv } from 'crypto'
 import { Request } from 'express'
-import { BCRYPT_SALT_SIZE, ENCRYPTION, HTTP_SIGNATURE, PRIVATE_RSA_KEY_SIZE } from '../initializers/constants.js'
+import { BCRYPT_SALT_SIZE, ENCRYPTION, PRIVATE_RSA_KEY_SIZE } from '../initializers/constants.js'
 import { MActor } from '../types/models/index.js'
 import { generateRSAKeyPairPromise, randomBytesPromise, scryptPromise } from './core-utils.js'
 import { logger } from './logger.js'
@@ -42,25 +42,46 @@ async function cryptPassword (password: string) {
 // ---------------------------------------------------------------------------
 
 function isHTTPSignatureDigestValid (rawBody: Buffer, req: Request): boolean {
-  if (req.headers[HTTP_SIGNATURE.HEADER_NAME] && req.headers['digest']) {
+  if (req.headers['signature'] && req.headers['digest']) {
     return buildDigest(rawBody.toString()) === req.headers['digest']
   }
 
   return true
 }
 
-function isHTTPSignatureVerified (httpSignatureParsed: any, actor: MActor): boolean {
-  return httpSignature.verifySignature(httpSignatureParsed, actor.publicKey) === true
+async function isHTTPSignatureVerified (httpSignatureParsed: ParsedDraftSignature, actor: MActor): Promise<boolean> {
+  const result = await verifyDraftSignature(
+    httpSignatureParsed.value,
+    actor.publicKey,
+    msg => logger.debug('Error in verify draft signature: ' + msg)
+  )
+
+  return result === true
 }
 
-function parseHTTPSignature (req: Request, clockSkew?: number) {
+function parseHTTPSignature (req: Request, clockSkewSeconds?: number): ParsedDraftSignature {
   const requiredHeaders = req.method === 'POST'
     ? [ '(request-target)', 'host', 'digest' ]
     : [ '(request-target)', 'host' ]
 
-  const parsed = httpSignature.parse(req, { clockSkew, headers: requiredHeaders })
+  const clockSkew = clockSkewSeconds
+    ? clockSkewSeconds * 1000
+    : undefined
 
-  const parsedHeaders = parsed.params.headers
+  const parsed = parseRequestSignature(req, {
+    requiredComponents: {
+      draft: requiredHeaders
+    },
+    clockSkew: {
+      delay: clockSkew
+    }
+  })
+
+  if (parsed.version !== 'draft') {
+    throw new Error(`Only draft version of HTTP signature is supported`)
+  }
+
+  const parsedHeaders = parsed.value.params.headers
   if (!parsedHeaders.includes('date') && !parsedHeaders.includes('(created)')) {
     throw new Error(`date or (created) must be included in signature`)
   }
@@ -107,13 +128,13 @@ async function decrypt (encryptedArg: string, secret: string) {
 // ---------------------------------------------------------------------------
 
 export {
-  isHTTPSignatureDigestValid,
-  parseHTTPSignature,
-  isHTTPSignatureVerified,
   buildDigest,
   comparePassword,
   createPrivateAndPublicKeys,
   cryptPassword,
+  decrypt,
   encrypt,
-  decrypt
+  isHTTPSignatureDigestValid,
+  isHTTPSignatureVerified,
+  parseHTTPSignature
 }

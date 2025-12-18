@@ -109,7 +109,7 @@ export class VideosSelectionComponent implements AfterContentInit {
         },
 
         error: err => {
-          const message = $localize`Cannot load more videos. Try again later.`
+          const message = $localize`Cannot load more videos. Please try again later.`
 
           logger.error(message, err)
           this.notifier.error(message)

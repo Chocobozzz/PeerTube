@@ -127,7 +127,7 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
           this.authService.refreshUserInformation()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -139,7 +139,7 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
           updatePaginationOnDelete(this.pagination)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -158,7 +158,7 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
           this.reloadData()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

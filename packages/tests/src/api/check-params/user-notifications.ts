@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { io } from 'socket.io-client'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { wait } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, UserNotificationSetting, UserNotificationSettingValue, UserNotificationType } from '@peertube/peertube-models'
 import {
@@ -39,7 +39,7 @@ describe('Test user notifications API validators', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, path, server.accessToken)
+      await checkBadSort(server.url, path, server.accessToken)
     })
 
     it('Should fail with an incorrect typeOneOf parameter', async function () {

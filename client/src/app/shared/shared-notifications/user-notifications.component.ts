@@ -83,7 +83,7 @@ export class UserNotificationsComponent implements OnInit {
           this.onDataSubject.next(result.data)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -106,7 +106,7 @@ export class UserNotificationsComponent implements OnInit {
           notification.payload.read = true
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -119,7 +119,7 @@ export class UserNotificationsComponent implements OnInit {
           }
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

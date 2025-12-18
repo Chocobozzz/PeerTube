@@ -96,7 +96,7 @@ export class VerifyAccountEmailComponent implements OnInit {
         error: err => {
           this.failed = true
 
-          this.notifier.error(err.message)
+          this.notifier.handleError(err)
         }
       })
   }
@@ -116,7 +116,7 @@ export class VerifyAccountEmailComponent implements OnInit {
         error: err => {
           this.failed = true
 
-          this.notifier.error(err.message)
+          this.notifier.handleError(err)
         }
       })
   }

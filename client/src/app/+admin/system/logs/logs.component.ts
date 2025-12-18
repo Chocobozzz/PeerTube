@@ -89,7 +89,7 @@ export class LogsComponent implements OnInit {
         })
       },
 
-      error: err => this.notifier.error(err.message),
+      error: err => this.notifier.handleError(err),
 
       complete: () => this.loading = false
     })

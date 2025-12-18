@@ -158,7 +158,7 @@ export class MyVideoChannelsComponent implements OnInit {
           updatePaginationOnDelete(this.pagination)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -217,7 +217,7 @@ export class MyVideoChannelsComponent implements OnInit {
           this.onChannelDataSubject.next(res.data)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

@@ -12,7 +12,7 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { expect } from 'chai'
 
 describe('Test video blacklist API validators', function () {
@@ -266,7 +266,7 @@ describe('Test video blacklist API validators', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(servers[0].url, basePath, servers[0].accessToken)
+      await checkBadSort(servers[0].url, basePath, servers[0].accessToken)
     })
 
     it('Should fail with an invalid type', async function () {

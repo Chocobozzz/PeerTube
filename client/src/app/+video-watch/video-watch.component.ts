@@ -468,14 +468,22 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       HttpStatusCode.BAD_REQUEST_400,
       HttpStatusCode.FORBIDDEN_403,
       HttpStatusCode.NOT_FOUND_404
-    ])
+    ]).subscribe({
+      next: () => {
+        // empty
+      },
+
+      error: err => this.notifier.handleError(err)
+    })
   }
 
-  private handleGlobalError (err: any) {
-    const errorMessage: string = typeof err === 'string' ? err : err.message
-    if (!errorMessage) return
+  private handleGlobalError (err: Error | string) {
+    if (typeof err === 'string') {
+      this.notifier.error(err)
+      return
+    }
 
-    this.notifier.error(errorMessage)
+    return this.notifier.handleError(err)
   }
 
   private handleVideoPasswordError (err: any) {

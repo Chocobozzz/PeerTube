@@ -152,7 +152,7 @@ async function checkBadCountPagination (url: string, path: string, token?: strin
   })
 }
 
-function checkBadSortPagination (url: string, path: string, token?: string, query = {}) {
+function checkBadSort (url: string, path: string, token?: string, query = {}) {
   return makeGetRequest({
     url,
     path,
@@ -180,7 +180,7 @@ async function checkVideoDuration (server: PeerTubeServer, videoUUID: string, du
 
 export {
   checkBadCountPagination,
-  checkBadSortPagination,
+  checkBadSort,
   checkBadStartPagination,
   checkVideoDuration,
   dateIsValid,

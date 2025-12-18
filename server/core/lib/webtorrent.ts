@@ -1,13 +1,12 @@
-import { promisify2 } from '@peertube/peertube-core-utils'
 import { sha1 } from '@peertube/peertube-node-utils'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { generateTorrentFileName } from '@server/lib/paths.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
+import { createTorrentFromWorker } from '@server/lib/worker/parent-process.js'
 import { MVideoFile } from '@server/types/models/video/video-file.js'
 import { MStreamingPlaylistVideo } from '@server/types/models/video/video-streaming-playlist.js'
 import { MVideo } from '@server/types/models/video/video.js'
 import bencode from 'bencode'
-import createTorrent from 'create-torrent'
 import { createWriteStream } from 'fs'
 import { ensureDir, pathExists, remove } from 'fs-extra/esm'
 import { readFile, writeFile } from 'fs/promises'
@@ -15,14 +14,11 @@ import { encode as magnetUriEncode } from 'magnet-uri'
 import parseTorrent from 'parse-torrent'
 import { dirname, join } from 'path'
 import { pipeline } from 'stream'
-import { CONFIG } from '../initializers/config.js'
-import { logger } from './logger.js'
-import { generateVideoImportTmpPath } from './utils.js'
-import { extractVideo } from './video.js'
-
 import type { Instance, TorrentFile } from 'webtorrent'
-
-const createTorrentPromise = promisify2<string, any, any>(createTorrent)
+import { logger } from '../helpers/logger.js'
+import { generateVideoImportTmpPath } from '../helpers/utils.js'
+import { extractVideo } from '../helpers/video.js'
+import { CONFIG } from '../initializers/config.js'
 
 export async function downloadWebTorrentVideo (target: { uri: string, torrentName?: string }, timeout: number) {
   const id = target.uri || target.torrentName
@@ -96,7 +92,6 @@ export async function downloadWebTorrentVideo (target: { uri: string, torrentNam
           logger.error('Cannot destroy webtorrent.', { err: destroyErr })
           rej(err)
         })
-
     }, timeout)
   })
 }
@@ -114,15 +109,15 @@ export async function createTorrentAndSetInfoHashFromPath (
 ) {
   const video = extractVideo(videoOrPlaylist)
 
-  const options = {
+  const torrentContent = await createTorrentFromWorker({
+    path: filePath,
+
     // Keep the extname, it's used by the client to stream the file inside a web browser
     name: buildInfoName(video, videoFile),
     createdBy: 'PeerTube',
     announceList: buildAnnounceList(),
     urlList: buildUrlList(video, videoFile)
-  }
-
-  const torrentContent = await createTorrentPromise(filePath, options)
+  })
 
   const torrentFilename = generateTorrentFileName(videoOrPlaylist, videoFile.resolution)
   const torrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, torrentFilename)

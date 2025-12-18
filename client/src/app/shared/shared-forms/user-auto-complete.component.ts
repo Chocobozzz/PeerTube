@@ -49,7 +49,7 @@ export class UserAutoCompleteComponent implements ControlValueAccessor {
       .subscribe({
         next: usernames => this.suggestions = usernames,
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 }

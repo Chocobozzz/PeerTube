@@ -246,7 +246,7 @@ export class VideoListComponent implements OnInit {
           this.table().loadData()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -262,7 +262,7 @@ export class VideoListComponent implements OnInit {
           this.table().loadData()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -329,7 +329,7 @@ export class VideoListComponent implements OnInit {
           this.table().loadData()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -347,7 +347,7 @@ export class VideoListComponent implements OnInit {
           this.table().loadData()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -376,7 +376,7 @@ export class VideoListComponent implements OnInit {
           this.table().loadData()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -389,7 +389,7 @@ export class VideoListComponent implements OnInit {
           this.table().loadData()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -426,7 +426,7 @@ export class VideoListComponent implements OnInit {
           }
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 }

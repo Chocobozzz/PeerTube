@@ -188,7 +188,7 @@ The link will expire within 1 hour.`
           this.hideForgotPasswordModal()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

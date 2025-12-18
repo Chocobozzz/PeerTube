@@ -6,7 +6,6 @@ import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { AbuseMessage, UserAbuse } from '@peertube/peertube-models'
-import { logger } from '@root-helpers/logger'
 import { ABUSE_MESSAGE_VALIDATOR } from '../form-validators/abuse-validators'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { PTDatePipe } from '../shared-main/common/date.pipe'
@@ -77,8 +76,7 @@ export class AbuseMessageModalComponent extends FormReactive implements OnInit {
 
         error: err => {
           this.sendingMessage = false
-          logger.error(err)
-          this.notifier.error('Sorry but you cannot send this message. Please retry later')
+          this.notifier.handleError(err)
         }
       })
   }
@@ -92,7 +90,7 @@ export class AbuseMessageModalComponent extends FormReactive implements OnInit {
           this.abuseMessages = this.abuseMessages.filter(m => m.id !== abuseMessage.id)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -129,7 +127,7 @@ export class AbuseMessageModalComponent extends FormReactive implements OnInit {
           })
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 }

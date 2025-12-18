@@ -1,6 +1,6 @@
 import { omit } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, HttpStatusCodeType, UserRole } from '@peertube/peertube-models'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import {
   cleanupTests,
   createSingleServer,
@@ -28,7 +28,6 @@ describe('Test registrations API validators', function () {
     await setDefaultChannelAvatar([ server ])
 
     await server.config.enableSignup(false)
-
     ;({ token: moderatorToken } = await server.users.generate('moderator', UserRole.MODERATOR))
     ;({ token: userToken } = await server.users.generate('user', UserRole.USER))
   })
@@ -319,7 +318,6 @@ describe('Test registrations API validators', function () {
       this.timeout(60000)
 
       await server.config.enableSignup(true)
-
       ;({ id: id1 } = await server.registrations.requestRegistration({ username: 'request_2', registrationReason: 'toto' }))
       ;({ id: id2 } = await server.registrations.requestRegistration({ username: 'request_3', registrationReason: 'toto' }))
     })
@@ -421,7 +419,7 @@ describe('Test registrations API validators', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, path, server.accessToken)
+      await checkBadSort(server.url, path, server.accessToken)
     })
 
     it('Should fail with a non authenticated user', async function () {

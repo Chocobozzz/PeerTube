@@ -96,7 +96,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           this.userChanged.emit()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -119,7 +119,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           this.userDeleted.emit()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -131,7 +131,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           this.userChanged.emit()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -142,7 +142,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           this.notifier.success($localize`Verification email sent to ${user.email}`)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -156,7 +156,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           this.userChanged.emit()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -170,7 +170,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           this.userChanged.emit()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -184,7 +184,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           this.userChanged.emit()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -198,7 +198,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           this.userChanged.emit()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -212,7 +212,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           this.userChanged.emit()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -226,7 +226,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           this.userChanged.emit()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -240,7 +240,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           this.userChanged.emit()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -254,7 +254,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           this.userChanged.emit()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -269,7 +269,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           this.notifier.success($localize`Will remove comments of this account (may take several minutes).`)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

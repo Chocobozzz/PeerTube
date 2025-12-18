@@ -59,7 +59,7 @@ export class AdminConfigHomepageComponent implements OnInit, CanComponentDeactiv
           this.notifier.success($localize`Homepage updated.`)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

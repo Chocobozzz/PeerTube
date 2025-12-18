@@ -56,7 +56,7 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
           this.notifier.success($localize`Settings updated.`)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -103,7 +103,7 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
           this.buildSettingsForm()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

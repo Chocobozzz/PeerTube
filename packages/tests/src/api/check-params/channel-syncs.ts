@@ -1,4 +1,4 @@
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 import { HttpStatusCode, VideoChannelSyncCreate } from '@peertube/peertube-models'
 import {
@@ -222,7 +222,7 @@ describe('Test video channel sync API validator', () => {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, myPath, server.accessToken)
+      await checkBadSort(server.url, myPath, server.accessToken)
     })
 
     it('Should succeed with the correct parameters', async function () {

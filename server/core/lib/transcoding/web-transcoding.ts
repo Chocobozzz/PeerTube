@@ -7,7 +7,7 @@ import {
 } from '@peertube/peertube-ffmpeg'
 import { VideoFileStream } from '@peertube/peertube-models'
 import { computeOutputFPS } from '@server/helpers/ffmpeg/index.js'
-import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent.js'
+import { createTorrentAndSetInfoHash } from '@server/lib/webtorrent.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
 import { Job } from 'bullmq'

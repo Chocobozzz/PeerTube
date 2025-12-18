@@ -225,7 +225,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
           this.cd.markForCheck()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -296,7 +296,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
           this.videoExistsInPlaylistChange.emit()
         },
 
-        error: err => this.notifier.error(err.message),
+        error: err => this.notifier.handleError(err),
 
         complete: () => this.cd.markForCheck()
       })
@@ -330,7 +330,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
           this.videoExistsInPlaylistChange.emit()
         },
 
-        error: err => this.notifier.error(err.message),
+        error: err => this.notifier.handleError(err),
 
         complete: () => this.cd.markForCheck()
       })
@@ -412,7 +412,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
           this.pendingAddId = undefined
           this.cd.markForCheck()
 
-          this.notifier.error(err.message)
+          this.notifier.handleError(err)
         },
 
         complete: () => {

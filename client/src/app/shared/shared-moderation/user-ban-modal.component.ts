@@ -83,7 +83,7 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
           this.hide()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

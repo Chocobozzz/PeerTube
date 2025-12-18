@@ -1,4 +1,3 @@
-
 import { Component, ElementRef, inject, input, OnChanges, OnDestroy, OnInit, output, SimpleChanges, viewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, ComponentPagination, ConfirmService, hasMoreItems, Notifier, PluginService, User } from '@app/core'
@@ -32,7 +31,7 @@ import { VideoCommentComponent } from './video-comment.component'
     InfiniteScrollerDirective,
     VideoCommentComponent,
     LoaderComponent
-]
+  ]
 })
 export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   private authService = inject(AuthService)
@@ -140,7 +139,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
         const errorBody = err.body as PeerTubeProblemDocument
         if (highlightThread && errorBody?.code === ServerErrorCode.COMMENT_NOT_ASSOCIATED_TO_VIDEO) return
 
-        this.notifier.error(err.message)
+        this.notifier.handleError(err)
       }
     })
   }
@@ -237,7 +236,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
           this.softDeleteComment(commentToDelete)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
 
     return true
@@ -273,7 +272,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
           this.notifier.success($localize`Comment approved`)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

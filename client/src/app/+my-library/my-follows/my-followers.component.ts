@@ -95,7 +95,7 @@ export class MyFollowersComponent implements OnInit {
         this.onDataSubject.next(res.data)
       },
 
-      error: err => this.notifier.error(err.message)
+      error: err => this.notifier.handleError(err)
     })
   }
 
