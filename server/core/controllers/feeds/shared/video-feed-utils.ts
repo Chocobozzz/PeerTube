@@ -3,6 +3,7 @@ import { VideoIncludeType } from '@peertube/peertube-models'
 import { mdToPlainText, toSafeHtml } from '@server/helpers/markdown.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
+import { Hooks } from '@server/lib/plugins/hooks.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { getCategoryLabel } from '@server/models/video/formatter/index.js'
 import { DisplayOnlyForFollowerOptions } from '@server/models/video/sql/video/index.js'
@@ -22,7 +23,9 @@ export async function getVideosForFeeds (options: {
 }) {
   const server = await getServerActor()
 
-  const { data } = await VideoModel.listForApi({
+  const { data } = await Hooks.wrapPromiseFun(
+    VideoModel.listForApi.bind(VideoModel),
+    {
     start: 0,
     count: CONFIG.FEEDS.VIDEOS.COUNT,
     displayOnlyForFollower: {
@@ -33,7 +36,9 @@ export async function getVideosForFeeds (options: {
     countVideos: false,
 
     ...options
-  })
+  },
+    'filter:feed.videos.list.result'
+  )
 
   return data
 }

@@ -190,6 +190,17 @@ describe('Test plugin filter hooks', function () {
       expect(total).to.equal(14)
     })
 
+    it('Should run filter:feed.videos.list.result', async function () {
+      const xmlFeed = await servers[0].feed.getXML({ feed: 'videos', ignoreCache: true })
+      expect(xmlFeed).to.contain('Custom name by hook')
+
+      const podcastFeed = await servers[0].feed.getPodcastXML({ channelId: servers[0].store.channel.id, ignoreCache: true })
+      expect(podcastFeed).to.contain('Custom name by hook')
+
+      const jsonFeed = await servers[0].feed.getJSON({ feed: 'videos', ignoreCache: true })
+      expect(jsonFeed).to.contain('Custom name by hook')
+    })
+
     it('Should run filter:api.video.get.result', async function () {
       const video = await servers[0].videos.get({ id: videoUUID })
       expect(video.name).to.contain('<3')
