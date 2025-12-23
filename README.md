@@ -67,7 +67,6 @@ Extend the API endpoints to handle new activities and objects, ensuring complian
 - **Payment Handling**: Payments are processed through listeners' digital wallets, interfaced with Hyperledger Fabric.
 - **Streaming Data**: Nodes collect streaming data and report it to the ledger for data integrity and transparency.
 
-ʼʼʼʼ
 flowchart TD
     %% Define Styles
     classDef blockchain fill:#f9f,stroke:#333,stroke-width:2px;
@@ -118,7 +117,6 @@ flowchart TD
     Node -->|14. Submit PayoutManifest| SC
     SC -->|15. Unlock Funds| Vault
     Vault -->|16. Direct Transfer| Artist
-ʼʼʼʼ
 
 ## Effective Dispute Resolution Mechanism
 
