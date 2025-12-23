@@ -14,7 +14,7 @@ async function processAnnounceActivity (options: APProcessorOptions<ActivityAnno
   // Only notify if it is not from a fetcher job
   const notify = options.fromFetch !== true
 
-  // Announces on accounts are not supported
+  // Announces by accounts are not supported
   if (actorAnnouncer.type !== 'Application' && actorAnnouncer.type !== 'Group') return
 
   return retryTransactionWrapper(processVideoShare, actorAnnouncer, activity, notify)
@@ -51,7 +51,7 @@ async function processVideoShare (actorAnnouncer: MActorSignature, activity: Act
       transaction: t
     })
 
-    if (video.isOwned() && created === true) {
+    if (video.isLocal() && created === true) {
       // Don't resend the activity to the sender
       const exceptions = [ actorAnnouncer ]
 

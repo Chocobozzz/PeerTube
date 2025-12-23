@@ -20,10 +20,10 @@ class StreamReplacer extends Transform {
       // readable side of the transform stream
       while ((index = this.pendingChunk.indexOf('\n')) !== -1) {
         // The `end` parameter is non-inclusive, so increase it to include the newline we found
-        const line = this.pendingChunk.slice(0, ++index)
+        const line = this.pendingChunk.subarray(0, ++index)
 
         // `start` is inclusive, but we are already one char ahead of the newline -> all good
-        this.pendingChunk = this.pendingChunk.slice(index)
+        this.pendingChunk = this.pendingChunk.subarray(index)
 
         // We have a single line here! Prepend the string we want
         this.push(this.doReplace(line))

@@ -1,41 +1,56 @@
-import { Subject, Subscription } from 'rxjs'
-import { Component, Input, OnDestroy, OnInit } from '@angular/core'
+import { booleanAttribute, Component, inject, input, OnDestroy, OnInit } from '@angular/core'
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AuthService, Notifier, ServerService, ThemeService, UserService } from '@app/core'
-import { FormReactive } from '@app/shared/shared-forms/form-reactive'
-import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import {
+  BuildFormArgumentTyped,
+  FormReactiveErrorsTyped,
+  FormReactiveMessagesTyped,
+  FormReactiveService
+} from '@app/shared/shared-forms/form-reactive.service'
+import { I18N_LOCALES } from '@peertube/peertube-core-utils'
 import { HTMLServerConfig, User, UserUpdateMe } from '@peertube/peertube-models'
+import { of, Subject, Subscription, switchMap } from 'rxjs'
 import { SelectOptionsItem } from 'src/types'
-import { NgFor, NgIf } from '@angular/common'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { SelectOptionsComponent } from '../shared-forms/select/select-options.component'
+
+type Form = {
+  theme: FormControl<string>
+  language: FormControl<string>
+}
 
 @Component({
   selector: 'my-user-interface-settings',
   templateUrl: './user-interface-settings.component.html',
   styleUrls: [ './user-interface-settings.component.scss' ],
-  standalone: true,
-  imports: [ FormsModule, ReactiveFormsModule, NgFor, NgIf ]
+  imports: [ FormsModule, ReactiveFormsModule, SelectOptionsComponent ]
 })
-export class UserInterfaceSettingsComponent extends FormReactive implements OnInit, OnDestroy {
-  @Input() user: User = null
-  @Input() reactiveUpdate = false
-  @Input() notifyOnUpdate = true
-  @Input() userInformationLoaded: Subject<any>
+export class UserInterfaceSettingsComponent implements OnInit, OnDestroy {
+  private formReactiveService = inject(FormReactiveService)
+
+  private authService = inject(AuthService)
+  private notifier = inject(Notifier)
+  private userService = inject(UserService)
+  private themeService = inject(ThemeService)
+  private serverService = inject(ServerService)
+
+  readonly user = input<Pick<User, 'theme' | 'language'>>(undefined)
+  readonly reactiveUpdate = input(false, { transform: booleanAttribute })
+  readonly notifyOnUpdate = input(true, { transform: booleanAttribute })
+  readonly userInformationLoaded = input<Subject<any>>(undefined)
+
+  form: FormGroup<Form>
+  formErrors: FormReactiveErrorsTyped<Form> = {}
+  validationMessages: FormReactiveMessagesTyped<Form> = {}
 
   availableThemes: SelectOptionsItem[]
+  availableLanguages: SelectOptionsItem[]
+
   formValuesWatcher: Subscription
+  userInfoSub: Subscription
 
   private serverConfig: HTMLServerConfig
-
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private authService: AuthService,
-    private notifier: Notifier,
-    private userService: UserService,
-    private themeService: ThemeService,
-    private serverService: ServerService
-  ) {
-    super()
-  }
+  private initialUserLanguage: string
+  private updating = false
 
   get instanceName () {
     return this.serverConfig.instance.name
@@ -43,20 +58,28 @@ export class UserInterfaceSettingsComponent extends FormReactive implements OnIn
 
   ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
+    this.initialUserLanguage = this.user().language
 
-    this.availableThemes = this.themeService.buildAvailableThemes()
+    this.availableThemes = [
+      { id: 'instance-default', label: $localize`${this.instanceName} theme`, description: this.getDefaultInstanceThemeLabel() },
 
-    this.buildForm({
-      theme: null
-    })
+      this.themeService.getDefaultThemeItem(),
 
-    this.userInformationLoaded
+      ...this.themeService.buildAvailableThemes()
+    ]
+
+    this.availableLanguages = Object.entries(I18N_LOCALES).map(([ id, label ]) => ({ label, id }))
+
+    this.buildForm()
+
+    this.userInfoSub = this.userInformationLoaded()
       .subscribe(() => {
         this.form.patchValue({
-          theme: this.user.theme
+          theme: this.user().theme,
+          language: this.user().language
         })
 
-        if (this.reactiveUpdate) {
+        if (this.reactiveUpdate()) {
           this.formValuesWatcher = this.form.valueChanges.subscribe(() => this.updateInterfaceSettings())
         }
       })
@@ -64,45 +87,94 @@ export class UserInterfaceSettingsComponent extends FormReactive implements OnIn
 
   ngOnDestroy () {
     this.formValuesWatcher?.unsubscribe()
+    this.userInfoSub?.unsubscribe()
   }
 
-  getDefaultThemeLabel () {
-    return this.themeService.getDefaultThemeLabel()
-  }
-
-  getDefaultInstanceThemeLabel () {
-    const theme = this.serverConfig.theme.default
-
-    if (theme === 'default') {
-      return this.getDefaultThemeLabel()
+  private buildForm () {
+    const obj: BuildFormArgumentTyped<Form> = {
+      theme: null,
+      language: null
     }
 
-    return theme
+    const {
+      form,
+      formErrors,
+      validationMessages
+    } = this.formReactiveService.buildForm<Form>(obj)
+
+    this.form = form
+    this.formErrors = formErrors
+    this.validationMessages = validationMessages
   }
+
+  // ---------------------------------------------------------------------------
 
   updateInterfaceSettings () {
-    const theme = this.form.value['theme']
+    if (this.updating) return
+    this.updating = true
+
+    const { theme, language } = this.form.value
 
     const details: UserUpdateMe = {
-      theme
+      theme,
+      language
     }
+    const changedLanguage = language !== this.initialUserLanguage
+
+    const changeLanguageObs = changedLanguage
+      ? this.userService.updateInterfaceLanguage(details.language)
+      : of(true)
 
     if (this.authService.isLoggedIn()) {
       this.userService.updateMyProfile(details)
+        .pipe(switchMap(() => changeLanguageObs))
         .subscribe({
           next: () => {
-            this.authService.refreshUserInformation()
+            if (changedLanguage) {
+              window.location.reload()
+              return
+            }
 
-            if (this.notifyOnUpdate) this.notifier.success($localize`Interface settings updated.`)
+            this.authService.refreshUserInformation()
+            this.updating = false
+
+            if (this.notifyOnUpdate()) this.notifier.success($localize`Interface settings updated.`)
           },
 
-          error: err => this.notifier.error(err.message)
+          error: err => this.notifier.handleError(err)
         })
 
       return
     }
 
     this.userService.updateMyAnonymousProfile(details)
-    if (this.notifyOnUpdate) this.notifier.success($localize`Interface settings updated.`)
+    if (changedLanguage) {
+      changeLanguageObs.subscribe({
+        next: () => {
+          window.location.reload()
+        },
+
+        error: err => this.notifier.handleError(err)
+      })
+
+      return
+    }
+
+    if (this.notifyOnUpdate()) this.notifier.success($localize`Interface settings updated.`)
+    this.updating = false
+  }
+
+  getSubmitValue () {
+    return $localize`Save interface settings`
+  }
+
+  private getDefaultInstanceThemeLabel () {
+    const theme = this.serverConfig.theme.default
+
+    if (theme === 'default') {
+      return this.themeService.getDefaultThemeItem().label
+    }
+
+    return theme
   }
 }

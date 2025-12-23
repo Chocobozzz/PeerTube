@@ -1,15 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { Video, VideoPrivacy } from '@peertube/peertube-models'
-import { cleanupTests, createMultipleServers, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@peertube/peertube-server-commands'
+import { Video, VideoCommentPolicy, VideoPrivacy } from '@peertube/peertube-models'
+import { PeerTubeServer, cleanupTests, createMultipleServers, setAccessTokensToServers, waitJobs } from '@peertube/peertube-server-commands'
 import { expectAccountFollows, expectChannelsFollows } from '@tests/shared/actors.js'
 import { testCaptionFile } from '@tests/shared/captions.js'
 import { dateIsValid } from '@tests/shared/checks.js'
 import { completeVideoCheck } from '@tests/shared/videos.js'
+import { expect } from 'chai'
 
 describe('Test follows', function () {
-
   describe('Complex follow', function () {
     let servers: PeerTubeServer[] = []
 
@@ -23,7 +22,6 @@ describe('Test follows', function () {
     })
 
     describe('Data propagation after follow', function () {
-
       it('Should not have followers/followings', async function () {
         for (const server of servers) {
           const bodies = await Promise.all([
@@ -430,12 +428,12 @@ describe('Test follows', function () {
         await expectChannelsFollows({ server: servers[0], handle: 'root_channel@' + servers[1].host, followers: 1, following: 0 })
         await expectAccountFollows({ server: servers[0], handle: 'peertube@' + servers[2].host, followers: 1, following: 0 })
 
-        await expectAccountFollows({ server: servers[1], handle: 'peertube@' + servers[0].host, followers: 0, following: 1 })
+        await expectAccountFollows({ server: servers[1], handle: 'peertube@' + servers[0].host, followers: 0, following: 0 })
         await expectAccountFollows({ server: servers[1], handle: 'peertube@' + servers[1].host, followers: 0, following: 0 })
         await expectAccountFollows({ server: servers[1], handle: 'root@' + servers[1].host, followers: 0, following: 0 })
         await expectChannelsFollows({ server: servers[1], handle: 'root_channel@' + servers[1].host, followers: 1, following: 0 })
 
-        await expectAccountFollows({ server: servers[2], handle: 'peertube@' + servers[0].host, followers: 0, following: 1 })
+        await expectAccountFollows({ server: servers[2], handle: 'peertube@' + servers[0].host, followers: 0, following: 2 })
         await expectAccountFollows({ server: servers[2], handle: 'peertube@' + servers[2].host, followers: 1, following: 0 })
       })
 
@@ -463,7 +461,7 @@ describe('Test follows', function () {
             name: 'root',
             host: servers[2].host
           },
-          commentsEnabled: true,
+          commentsPolicy: VideoCommentPolicy.ENABLED,
           downloadEnabled: true,
           duration: 5,
           tags: [ 'tag1', 'tag2', 'tag3' ],
@@ -574,8 +572,8 @@ describe('Test follows', function () {
         const caption1 = body.data[0]
         expect(caption1.language.id).to.equal('ar')
         expect(caption1.language.label).to.equal('Arabic')
-        expect(caption1.captionPath).to.match(new RegExp('^/lazy-static/video-captions/.+-ar.vtt$'))
-        await testCaptionFile(servers[0].url, caption1.captionPath, 'Subtitle good 2.')
+        expect(caption1.fileUrl).to.match(new RegExp('^' + servers[0].url + '/lazy-static/video-captions/.+-ar.vtt$'))
+        await testCaptionFile(caption1.fileUrl, 'Subtitle good 2.')
       })
 
       it('Should unfollow server 3 on server 1 and does not list server 3 videos', async function () {

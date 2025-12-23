@@ -7,15 +7,12 @@ import { asyncMiddleware, contactAdministratorValidator } from '../../../middlew
 
 const contactRouter = express.Router()
 
-contactRouter.post('/contact',
-  asyncMiddleware(contactAdministratorValidator),
-  asyncMiddleware(contactAdministrator)
-)
+contactRouter.post('/contact', asyncMiddleware(contactAdministratorValidator), asyncMiddleware(contactAdministrator))
 
 async function contactAdministrator (req: express.Request, res: express.Response) {
   const data = req.body as ContactForm
 
-  Emailer.Instance.addContactFormJob(data.fromEmail, data.fromName, data.subject, data.body)
+  Emailer.Instance.addContactFormJob({ fromEmail: data.fromEmail, fromName: data.fromName, subject: data.subject, body: data.body })
 
   try {
     await Redis.Instance.setContactFormIp(req.ip)

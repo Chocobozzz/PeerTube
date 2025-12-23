@@ -12,7 +12,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import { approximateIntroOutroAdditionalSize, getTaskFileFromReq } from '@server/lib/video-studio.js'
 import { isAudioFile } from '@peertube/peertube-ffmpeg'
 import { HttpStatusCode, UserRight, VideoStudioCreateEdition, VideoStudioTask } from '@peertube/peertube-models'
-import { areValidationErrors, checkUserCanManageVideo, checkUserQuota, doesVideoExist } from '../shared/index.js'
+import { areValidationErrors, checkCanManageVideo, checkUserQuota, doesVideoExist } from '../shared/index.js'
 import { checkVideoFileCanBeEdited } from './shared/index.js'
 
 const videoStudioAddEditionValidator = [
@@ -33,9 +33,13 @@ const videoStudioAddEditionValidator = [
     }
 
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
+    if (!await doesVideoExist(req.params.videoId, res)) return cleanUpReqFiles(req)
 
     const body: VideoStudioCreateEdition = req.body
     const files = req.files as Express.Multer.File[]
+
+    const video = res.locals.videoAll
+    const videoIsAudio = video.hasAudio() && !video.hasVideo()
 
     for (let i = 0; i < body.tasks.length; i++) {
       const task = body.tasks[i]
@@ -49,6 +53,17 @@ const videoStudioAddEditionValidator = [
         return cleanUpReqFiles(req)
       }
 
+      if (videoIsAudio) {
+        if (task.name === 'add-intro' || task.name === 'add-outro' || task.name === 'add-watermark') {
+          res.fail({
+            status: HttpStatusCode.BAD_REQUEST_400,
+            message: `Task ${task.name} is invalid: video does not contain a video stream`
+          })
+
+          return cleanUpReqFiles(req)
+        }
+      }
+
       if (task.name === 'add-intro' || task.name === 'add-outro') {
         const filePath = getTaskFileFromReq(files, i).path
 
@@ -56,7 +71,7 @@ const videoStudioAddEditionValidator = [
         if (await isAudioFile(filePath)) {
           res.fail({
             status: HttpStatusCode.BAD_REQUEST_400,
-            message: `Task ${task.name} is invalid: file does not contain a video stream`
+            message: `Task ${task.name} is invalid: input file does not contain a video stream`
           })
 
           return cleanUpReqFiles(req)
@@ -64,17 +79,16 @@ const videoStudioAddEditionValidator = [
       }
     }
 
-    if (!await doesVideoExist(req.params.videoId, res)) return cleanUpReqFiles(req)
-
-    const video = res.locals.videoAll
-    if (!checkVideoFileCanBeEdited(video, res)) return cleanUpReqFiles(req)
+    if (!checkVideoFileCanBeEdited(video, req, res)) return cleanUpReqFiles(req)
 
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, video, UserRight.UPDATE_ANY_VIDEO, res)) return cleanUpReqFiles(req)
+    if (!await checkCanManageVideo({ user, video, right: UserRight.UPDATE_ANY_VIDEO, req, res, checkIsLocal: true, checkIsOwner: false })) {
+      return cleanUpReqFiles(req)
+    }
 
     // Try to make an approximation of bytes added by the intro/outro
     const additionalBytes = await approximateIntroOutroAdditionalSize(video, body.tasks, i => getTaskFileFromReq(files, i).path)
-    if (await checkUserQuota(user, additionalBytes, res) === false) return cleanUpReqFiles(req)
+    if (await checkUserQuota({ user, videoFileSize: additionalBytes, req, res }) === false) return cleanUpReqFiles(req)
 
     return next()
   }

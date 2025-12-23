@@ -1,23 +1,29 @@
+import { RunnerJobType } from '@peertube/peertube-models'
+import { root } from '@peertube/peertube-node-utils'
+import { PeerTubeServer } from '@peertube/peertube-server-commands'
 import { ChildProcess, fork, ForkOptions } from 'child_process'
 import { execaNode } from 'execa'
 import { join } from 'path'
-import { root } from '@peertube/peertube-node-utils'
-import { PeerTubeServer } from '@peertube/peertube-server-commands'
 
 export class PeerTubeRunnerProcess {
   private app?: ChildProcess
 
   constructor (private readonly server: PeerTubeServer) {
-
   }
 
   runServer (options: {
+    jobType?: RunnerJobType
     hideLogs?: boolean // default true
   } = {}) {
-    const { hideLogs = true } = options
+    const { jobType, hideLogs = true } = options
 
     return new Promise<void>((res, rej) => {
       const args = [ 'server', '--verbose', ...this.buildIdArg() ]
+
+      if (jobType) {
+        args.push('--enable-job')
+        args.push(jobType)
+      }
 
       const forkOptions: ForkOptions = {
         detached: false,
@@ -26,6 +32,10 @@ export class PeerTubeRunnerProcess {
       }
 
       this.app = fork(this.getRunnerPath(), args, forkOptions)
+
+      this.app.stderr.on('data', data => {
+        console.error(data.toString())
+      })
 
       this.app.stdout.on('data', data => {
         const str = data.toString() as string
@@ -48,9 +58,12 @@ export class PeerTubeRunnerProcess {
 
     const args = [
       'register',
-      '--url', this.server.url,
-      '--registration-token', registrationToken,
-      '--runner-name', runnerName,
+      '--url',
+      this.server.url,
+      '--registration-token',
+      registrationToken,
+      '--runner-name',
+      runnerName,
       ...this.buildIdArg()
     ]
 
@@ -78,13 +91,34 @@ export class PeerTubeRunnerProcess {
     return stdout
   }
 
+  async listJobs () {
+    const args = [ 'list-jobs', ...this.buildIdArg() ]
+    const { stdout } = await this.runCommand(this.getRunnerPath(), args)
+
+    return stdout
+  }
+
+  // ---------------------------------------------------------------------------
+
+  gracefulShutdown () {
+    const args = [ 'graceful-shutdown', ...this.buildIdArg() ]
+
+    return this.runCommand(this.getRunnerPath(), args)
+  }
+
+  hasCorrectlyExited () {
+    return this.app.exitCode === 0
+  }
+
   kill () {
-    if (!this.app) return
+    if (this.app?.exitCode !== null) return
 
     process.kill(this.app.pid)
 
     this.app = null
   }
+
+  // ---------------------------------------------------------------------------
 
   getId () {
     return 'test-' + this.server.internalServerNumber

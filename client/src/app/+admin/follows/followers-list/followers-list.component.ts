@@ -1,59 +1,56 @@
-import { SortMeta, SharedModule } from 'primeng/api'
-import { Component, OnInit } from '@angular/core'
-import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
+import { Component, OnInit, inject, viewChild } from '@angular/core'
+import { ConfirmService, Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
-import { ActorFollow } from '@peertube/peertube-models'
-import { AutoColspanDirective } from '../../../shared/shared-main/angular/auto-colspan.directive'
-import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
-import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
-import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
-import { NgIf, DatePipe } from '@angular/common'
-import { TableModule } from 'primeng/table'
-import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { InstanceFollowService } from '@app/shared/shared-instance/instance-follow.service'
+import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
+import { DataLoaderOptions, TableColumnInfo, TableComponent } from '@app/shared/shared-tables/table.component'
+import { ActorFollow } from '@peertube/peertube-models'
+import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
+import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+import { DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
+import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
+import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
+import { NumberFormatterPipe } from '../../../shared/shared-main/common/number-formatter.pipe'
 
 @Component({
   selector: 'my-followers-list',
   templateUrl: './followers-list.component.html',
   styleUrls: [ './followers-list.component.scss' ],
-  standalone: true,
   imports: [
     GlobalIconComponent,
-    TableModule,
-    SharedModule,
-    NgIf,
-    ActionDropdownComponent,
     AdvancedInputFilterComponent,
-    NgbTooltip,
     ButtonComponent,
     DeleteButtonComponent,
-    AutoColspanDirective,
-    DatePipe
+    PTDatePipe,
+    NumberFormatterPipe,
+    TableComponent
   ]
 })
-export class FollowersListComponent extends RestTable <ActorFollow> implements OnInit {
-  followers: ActorFollow[] = []
-  totalRecords = 0
-  sort: SortMeta = { field: 'createdAt', order: -1 }
-  pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
+export class FollowersListComponent implements OnInit {
+  private confirmService = inject(ConfirmService)
+  private notifier = inject(Notifier)
+  private followService = inject(InstanceFollowService)
+
+  readonly table = viewChild<TableComponent<ActorFollow>>('table')
 
   searchFilters: AdvancedInputFilter[] = []
 
   bulkActions: DropdownAction<ActorFollow[]>[] = []
 
-  constructor (
-    private confirmService: ConfirmService,
-    private notifier: Notifier,
-    private followService: InstanceFollowService
-  ) {
-    super()
+  columns: TableColumnInfo<string>[] = [
+    { id: 'follower', label: $localize`Follower`, sortable: false },
+    { id: 'state', label: $localize`State`, sortable: true },
+    { id: 'score', label: $localize`Reliability`, sortable: true },
+    { id: 'createdAt', label: $localize`Created`, sortable: true }
+  ]
+
+  dataLoader: typeof this._dataLoader
+
+  constructor () {
+    this.dataLoader = this._dataLoader.bind(this)
   }
 
   ngOnInit () {
-    this.initialize()
-
     this.searchFilters = this.followService.buildFollowsListFilters()
 
     this.bulkActions = [
@@ -75,30 +72,24 @@ export class FollowersListComponent extends RestTable <ActorFollow> implements O
     ]
   }
 
-  getIdentifier () {
-    return 'FollowersListComponent'
-  }
-
   acceptFollower (follows: ActorFollow[]) {
     this.followService.acceptFollower(follows)
       .subscribe({
         next: () => {
-          // eslint-disable-next-line max-len
           const message = formatICU(
             $localize`Accepted {count, plural, =1 {{followerName} follow request} other {{count} follow requests}}`,
             { count: follows.length, followerName: this.buildFollowerName(follows[0]) }
           )
           this.notifier.success(message)
 
-          this.reloadData()
+          this.table().loadData()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
   async rejectFollower (follows: ActorFollow[]) {
-    // eslint-disable-next-line max-len
     const message = formatICU(
       $localize`Do you really want to reject {count, plural, =1 {{followerName} follow request?} other {{count} follow requests?}}`,
       { count: follows.length, followerName: this.buildFollowerName(follows[0]) }
@@ -108,20 +99,19 @@ export class FollowersListComponent extends RestTable <ActorFollow> implements O
     if (res === false) return
 
     this.followService.rejectFollower(follows)
-        .subscribe({
-          next: () => {
-            // eslint-disable-next-line max-len
-            const message = formatICU(
-              $localize`Rejected {count, plural, =1 {{followerName} follow request} other {{count} follow requests}}`,
-              { count: follows.length, followerName: this.buildFollowerName(follows[0]) }
-            )
-            this.notifier.success(message)
+      .subscribe({
+        next: () => {
+          const message = formatICU(
+            $localize`Rejected {count, plural, =1 {{followerName} follow request} other {{count} follow requests}}`,
+            { count: follows.length, followerName: this.buildFollowerName(follows[0]) }
+          )
+          this.notifier.success(message)
 
-            this.reloadData()
-          },
+          this.table().loadData()
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.handleError(err)
+      })
   }
 
   async deleteFollowers (follows: ActorFollow[]) {
@@ -130,7 +120,6 @@ export class FollowersListComponent extends RestTable <ActorFollow> implements O
     let message = $localize`Deleted followers will be able to send again a follow request.`
     message += '<br /><br />'
 
-    // eslint-disable-next-line max-len
     message += formatICU(
       $localize`Do you really want to delete {count, plural, =1 {{followerName} follow request?} other {{count} follow requests?}}`,
       icuParams
@@ -140,36 +129,29 @@ export class FollowersListComponent extends RestTable <ActorFollow> implements O
     if (res === false) return
 
     this.followService.removeFollower(follows)
-        .subscribe({
-          next: () => {
-            // eslint-disable-next-line max-len
-            const message = formatICU(
-              $localize`Removed {count, plural, =1 {{followerName} follow request} other {{count} follow requests}}`,
-              icuParams
-            )
+      .subscribe({
+        next: () => {
+          const message = formatICU(
+            $localize`Removed {count, plural, =1 {{followerName} follow request} other {{count} follow requests}}`,
+            icuParams
+          )
 
-            this.notifier.success(message)
+          this.notifier.success(message)
 
-            this.reloadData()
-          },
+          this.table().loadData()
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.handleError(err)
+      })
   }
 
   buildFollowerName (follow: ActorFollow) {
     return follow.follower.name + '@' + follow.follower.host
   }
 
-  protected reloadDataInternal () {
-    this.followService.getFollowers({ pagination: this.pagination, sort: this.sort, search: this.search })
-                      .subscribe({
-                        next: resultList => {
-                          this.followers = resultList.data
-                          this.totalRecords = resultList.total
-                        },
+  private _dataLoader (options: DataLoaderOptions) {
+    const { pagination, sort, search } = options
 
-                        error: err => this.notifier.error(err.message)
-                      })
+    return this.followService.getFollowers({ pagination, sort, search })
   }
 }

@@ -2,7 +2,7 @@
 @use '_mixins' as *;
 
 .pt-badge {
-  @include margin-right(10px);
-
   font-size: 12px;
+
+  @include margin-right(10px);
 }

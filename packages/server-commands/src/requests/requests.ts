@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
-import { decode } from 'querystring'
-import request from 'supertest'
-import { URL } from 'url'
 import { pick, queryParamsToObject } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, HttpStatusCodeType } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
+import { decode } from 'querystring'
+import request from 'supertest'
+import { URL } from 'url'
 
 export type CommonRequestParams = {
   url: string
@@ -17,10 +17,12 @@ export type CommonRequestParams = {
   accept?: string
   host?: string
   token?: string
-  headers?: { [ name: string ]: string }
+  headers?: { [name: string]: string }
   type?: string
   xForwardedFor?: string
   expectedStatus?: HttpStatusCodeType
+  query?: { [id: string]: any }
+  rawQuery?: string
 }
 
 export function makeRawRequest (options: {
@@ -29,17 +31,20 @@ export function makeRawRequest (options: {
   expectedStatus?: HttpStatusCodeType
   responseType?: string
   range?: string
-  query?: { [ id: string ]: string }
+  query?: { [id: string]: string }
+  fields?: { [fieldName: string]: any }
   method?: 'GET' | 'POST'
   accept?: string
-  headers?: { [ name: string ]: string }
+  headers?: { [name: string]: string }
   redirects?: number
+  requestType?: 'form'
 }) {
   const { host, protocol, pathname, searchParams } = new URL(options.url)
 
   const reqOptions = {
     url: `${protocol}//${host}`,
     path: pathname,
+    type: options.requestType,
 
     contentType: undefined,
 
@@ -49,7 +54,7 @@ export function makeRawRequest (options: {
       ...queryParamsToObject(searchParams)
     },
 
-    ...pick(options, [ 'expectedStatus', 'range', 'token', 'headers', 'responseType', 'accept', 'redirects' ])
+    ...pick(options, [ 'expectedStatus', 'range', 'token', 'headers', 'responseType', 'accept', 'redirects', 'fields' ])
   }
 
   if (options.method === 'POST') {
@@ -59,14 +64,17 @@ export function makeRawRequest (options: {
   return makeGetRequest(reqOptions)
 }
 
-export function makeGetRequest (options: CommonRequestParams & {
-  query?: any
-  rawQuery?: string
-}) {
-  const req = request(options.url).get(options.path)
+export const makeFileRequest = (url: string) => {
+  return makeRawRequest({
+    url,
+    responseType: 'arraybuffer',
+    redirects: 1,
+    expectedStatus: HttpStatusCode.OK_200
+  })
+}
 
-  if (options.query) req.query(options.query)
-  if (options.rawQuery) req.query(options.rawQuery)
+export function makeGetRequest (options: CommonRequestParams) {
+  const req = request(options.url).get(options.path)
 
   return buildRequest(req, { contentType: 'application/json', expectedStatus: HttpStatusCode.BAD_REQUEST_400, ...options })
 }
@@ -101,24 +109,25 @@ export function makeActivityPubRawRequest (url: string, expectedStatus: HttpStat
 
 // ---------------------------------------------------------------------------
 
-export function makeDeleteRequest (options: CommonRequestParams & {
-  query?: any
-  rawQuery?: string
-}) {
+export function makeDeleteRequest (
+  options: CommonRequestParams & {
+    query?: any
+    rawQuery?: string
+  }
+) {
   const req = request(options.url).delete(options.path)
-
-  if (options.query) req.query(options.query)
-  if (options.rawQuery) req.query(options.rawQuery)
 
   return buildRequest(req, { accept: 'application/json', expectedStatus: HttpStatusCode.BAD_REQUEST_400, ...options })
 }
 
-export function makeUploadRequest (options: CommonRequestParams & {
-  method?: 'POST' | 'PUT'
+export function makeUploadRequest (
+  options: CommonRequestParams & {
+    method?: 'POST' | 'PUT'
 
-  fields: { [ fieldName: string ]: any }
-  attaches?: { [ attachName: string ]: any | any[] }
-}) {
+    fields: { [fieldName: string]: any }
+    attaches?: { [attachName: string]: any }
+  }
+) {
   let req = options.method === 'PUT'
     ? request(options.url).put(options.path)
     : request(options.url).post(options.path)
@@ -132,43 +141,64 @@ export function makeUploadRequest (options: CommonRequestParams & {
     if (!value) return
 
     if (Array.isArray(value)) {
-      req.attach(attach, buildAbsoluteFixturePath(value[0]), value[1])
+      req.attach(
+        attach,
+        value[0] instanceof Buffer
+          ? value[0]
+          : buildAbsoluteFixturePath(value[0]),
+        value[1]
+      )
     } else {
-      req.attach(attach, buildAbsoluteFixturePath(value))
+      req.attach(
+        attach,
+        value instanceof Buffer
+          ? value
+          : buildAbsoluteFixturePath(value)
+      )
     }
   })
 
   return req
 }
 
-export function makePostBodyRequest (options: CommonRequestParams & {
-  fields?: { [ fieldName: string ]: any }
-}) {
+export function makePostBodyRequest (
+  options: CommonRequestParams & {
+    fields?: { [fieldName: string]: any }
+    requestType?: 'form'
+  }
+) {
   const req = request(options.url).post(options.path)
-                                  .send(options.fields)
+    .send(options.fields)
 
-  return buildRequest(req, { accept: 'application/json', expectedStatus: HttpStatusCode.BAD_REQUEST_400, ...options })
+  return buildRequest(req, {
+    accept: 'application/json',
+    type: options.requestType,
+    expectedStatus: HttpStatusCode.BAD_REQUEST_400,
+
+    ...options
+  })
 }
 
 export function makePutBodyRequest (options: {
   url: string
   path: string
   token?: string
-  fields: { [ fieldName: string ]: any }
+  fields: { [fieldName: string]: any }
   expectedStatus?: HttpStatusCodeType
   headers?: { [name: string]: string }
 }) {
   const req = request(options.url).put(options.path)
-                                  .send(options.fields)
+    .send(options.fields)
 
   return buildRequest(req, { accept: 'application/json', expectedStatus: HttpStatusCode.BAD_REQUEST_400, ...options })
 }
 
 // ---------------------------------------------------------------------------
 
-export async function getRedirectionUrl (url: string) {
+export async function getRedirectionUrl (url: string, token?: string) {
   const res = await makeRawRequest({
     url,
+    token,
     redirects: 0,
     expectedStatus: HttpStatusCode.FOUND_302
   })
@@ -184,7 +214,7 @@ export function decodeQueryString (path: string) {
 
 // ---------------------------------------------------------------------------
 
-export function unwrapBody <T> (test: request.Test): Promise<T> {
+export function unwrapBody<T> (test: request.Test): Promise<T> {
   return test.then(res => res.body)
 }
 
@@ -192,7 +222,7 @@ export function unwrapText (test: request.Test): Promise<string> {
   return test.then(res => res.text)
 }
 
-export function unwrapBodyOrDecodeToJSON <T> (test: request.Test): Promise<T> {
+export function unwrapBodyOrDecodeToJSON<T> (test: request.Test): Promise<T> {
   return test.then(res => {
     if (res.body instanceof Buffer) {
       try {
@@ -234,6 +264,8 @@ function buildRequest (req: request.Test, options: CommonRequestParams) {
   if (options.redirects) req.redirects(options.redirects)
   if (options.xForwardedFor) req.set('X-Forwarded-For', options.xForwardedFor)
   if (options.type) req.type(options.type)
+  if (options.query) req.query(options.query)
+  if (options.rawQuery) req.query(options.rawQuery)
 
   Object.keys(options.headers || {}).forEach(name => {
     req.set(name, options.headers[name])
@@ -241,12 +273,13 @@ function buildRequest (req: request.Test, options: CommonRequestParams) {
 
   return req.expect(res => {
     if (options.expectedStatus && res.status !== options.expectedStatus) {
-      const err = new Error(`Expected status ${options.expectedStatus}, got ${res.status}. ` +
-        `\nThe server responded: "${res.body?.error ?? res.text}".\n` +
-        'You may take a closer look at the logs. To see how to do so, check out this page: ' +
-        'https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/development/tests.md#debug-server-logs');
-
-      (err as any).res = res
+      const err = new Error(
+        `Expected status ${options.expectedStatus}, got ${res.status}. ` +
+          `\nThe server responded: "${res.body?.error ?? res.text}".\n` +
+          'You may take a closer look at the logs. To see how to do so, check out this page: ' +
+          'https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/development/tests.md#debug-server-logs'
+      )
+      ;(err as any).res = res
 
       throw err
     }
@@ -255,7 +288,7 @@ function buildRequest (req: request.Test, options: CommonRequestParams) {
   })
 }
 
-function buildFields (req: request.Test, fields: { [ fieldName: string ]: any }, namespace?: string) {
+function buildFields (req: request.Test, fields: { [fieldName: string]: any }, namespace?: string) {
   if (!fields) return
 
   let formKey: string

@@ -1,13 +1,85 @@
 <div>
-  <div class="sub-menu mb-0" [ngClass]="{ 'sub-menu-fixed': !isBroadcastMessageDisplayed }">
-    <a myPluginSelector pluginSelectorId="about-menu-instance" i18n routerLink="instance" routerLinkActive="active" class="sub-menu-entry">Instance</a>
+  <div class="margin-content">
+    <h1>
+      <my-global-icon iconName="help"></my-global-icon>
 
-    <a myPluginSelector pluginSelectorId="about-menu-peertube" i18n routerLink="peertube" routerLinkActive="active" class="sub-menu-entry">PeerTube</a>
+      <ng-container i18n>About</ng-container>
+    </h1>
 
-    <a myPluginSelector pluginSelectorId="about-menu-network" i18n routerLink="follows" routerLinkActive="active" class="sub-menu-entry">Network</a>
+    <div class="instance-info-container">
+      @if (bannerUrl) {
+        <div class="banner">
+          <img [src]="bannerUrl" alt="">
+        </div>
+      }
+
+      <div class="instance-info">
+        @if (avatarUrl) {
+          <div class="avatar">
+            <img [src]="avatarUrl" alt="">
+          </div>
+        }
+
+        <div>
+          <div class="instance-name">{{ config.instance.name }}</div>
+          <div class="instance-description">{{ config.instance.shortDescription }}</div>
+        </div>
+
+        <div class="ms-auto">
+          <div class="social-buttons d-flex flex-wrap justify-content-end">
+            @if (config.instance.social.mastodonLink) {
+              <a
+                class="media peertube-button-link rounded-icon-button mb-3" i18n-title title="Go to the Mastodon profile"
+                target="_blank" rel="noopener noreferrer" [href]="config.instance.social.mastodonLink"
+                >
+                <my-global-icon iconName="mastodon"></my-global-icon>
+              </a>
+            }
+
+            @if (config.instance.social.xLink) {
+              <a
+                class="media peertube-button-link rounded-icon-button mb-3" i18n-title title="Go to the X profile"
+                target="_blank" rel="noopener noreferrer" [href]="config.instance.social.xLink"
+                >
+                <my-global-icon iconName="x-twitter"></my-global-icon>
+              </a>
+            }
+
+            @if (config.instance.social.blueskyLink) {
+              <a
+                class="media peertube-button-link rounded-icon-button mb-3" i18n-title title="Go to the Bluesky profile"
+                target="_blank" rel="noopener noreferrer" [href]="config.instance.social.blueskyLink"
+                >
+                <my-global-icon iconName="bluesky"></my-global-icon>
+              </a>
+            }
+
+            @if (config.instance.social.externalLink) {
+              <a
+                class="external-link peertube-button-link rounded-icon-button mb-3" i18n-title title="Go to the external website"
+                target="_blank" rel="noopener noreferrer" [href]="config.instance.social.externalLink"
+                >
+                <my-global-icon iconName="link"></my-global-icon>
+              </a>
+            }
+          </div>
+
+          <div class="d-flex flex-wrap justify-content-end">
+            @if (isContactFormEnabled()) {
+              <my-button class="ms-3" theme="primary" ptRouterLink="/about/contact" i18n>Contact us</my-button>
+            }
+
+            @if (config.instance.support.text) {
+              <my-button class="ms-3" theme="secondary" ptRouterLink="/about/instance/support" i18n>Support</my-button>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <my-horizontal-menu [menuEntries]="menuEntries" withMarginBottom="false"></my-horizontal-menu>
   </div>
 
-  <div [ngClass]="{ 'sub-menu-offset-content': !isBroadcastMessageDisplayed }">
-    <router-outlet></router-outlet>
-  </div>
+  <router-outlet></router-outlet>
 </div>
+

@@ -1,40 +1,46 @@
 <div class="root flex-column">
-  <div class="d-flex">
+  <div class="d-flex align-items-center">
     <label>
       <input
         type="checkbox"
         [(ngModel)]="checked"
         (ngModelChange)="onModelChange()"
-        [id]="inputName"
+        [id]="inputName()"
         [disabled]="disabled"
-      />
-      <span role="checkbox" [attr.aria-checked]="checked" [attr.aria-label]="labelText || labelInnerHTML"></span>
-      <span *ngIf="labelText">{{ labelText }}</span>
-      <span
-        *ngIf="!labelText && labelInnerHTML"
-        [innerHTML]="labelInnerHTML"
-      ></span>
+        [attr.aria-describedby]="inputName() + '-description'"
+        />
+      <span></span>
+      @if (labelText()) {
+        <span>{{ labelText() }}</span>
+      } @else if (labelInnerHTML()) {
+        <span
+          [innerHTML]="labelInnerHTML()"
+        ></span>
+      }
 
-      <span *ngIf="labelTemplate">
-        <ng-container *ngTemplateOutlet="labelTemplate"></ng-container>
-      </span>
+      @if (labelTemplate) {
+        <span>
+          <ng-container *ngTemplateOutlet="labelTemplate"></ng-container>
+        </span>
+      }
     </label>
 
-    <my-help
-      *ngIf="helpTemplate"
-      [tooltipPlacement]="helpPlacement"
-      helpType="custom"
-    >
-      <ng-template ptTemplate="customHtml">
+    @if (helpTemplate) {
+      <my-help
+        [tooltipPlacement]="helpPlacement()"
+        helpType="custom"
+        >
         <ng-template *ngTemplateOutlet="helpTemplate"></ng-template>
-      </ng-template>
-    </my-help>
+      </my-help>
+    }
 
-    <div *ngIf="recommended" class="recommended" i18n>Recommended</div>
+    @if (recommended()) {
+      <div class="ms-2 pt-badge badge-secondary" i18n>Recommended</div>
+    }
   </div>
 
-  <div class="ms-4 d-flex flex-column">
-    <div class="wrapper form-group-description">
+  <div class="d-flex flex-column extra-container">
+    <div class="wrapper form-group-description" [id]="inputName() + '-description'">
       <ng-content select="description"></ng-content>
     </div>
 

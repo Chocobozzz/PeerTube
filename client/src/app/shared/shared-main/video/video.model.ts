@@ -1,24 +1,25 @@
 import { AuthUser } from '@app/core'
 import { User } from '@app/core/users/user.model'
-import { durationToString, formatICU, getAbsoluteAPIUrl, getAbsoluteEmbedUrl } from '@app/helpers'
+import { durationToString, getAPIUrl, getOriginUrl } from '@app/helpers'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
 import { buildVideoWatchPath, getAllFiles, peertubeTranslate } from '@peertube/peertube-core-utils'
 import {
   ActorImage,
   HTMLServerConfig,
   UserRight,
-  Video as VideoServerModel,
   VideoConstant,
   VideoFile,
   VideoPrivacy,
   VideoPrivacyType,
   VideoScheduleUpdate,
+  Video as VideoServerModel,
+  VideoSource,
   VideoState,
   VideoStateType,
   VideoStreamingPlaylist,
-  VideoStreamingPlaylistType,
-  VideoSource
+  VideoStreamingPlaylistType
 } from '@peertube/peertube-models'
+import { isVideoNSFWBlurForUser, isVideoNSFWHiddenForUser, isVideoNSFWWarnedForUser } from '@root-helpers/video'
 
 export class Video implements VideoServerModel {
   byVideoChannel: string
@@ -54,6 +55,7 @@ export class Video implements VideoServerModel {
   aspectRatio: number
 
   isLive: boolean
+  liveSchedules: { startAt: Date | string }[]
 
   previewPath: string
   previewUrl: string
@@ -68,7 +70,10 @@ export class Video implements VideoServerModel {
 
   likes: number
   dislikes: number
+
   nsfw: boolean
+  nsfwFlags: number
+  nsfwSummary: string
 
   originInstanceUrl: string
   originInstanceHost: string
@@ -114,17 +119,23 @@ export class Video implements VideoServerModel {
 
   videoSource?: VideoSource
 
+  automaticTags?: string[]
+
+  comments: number
+
   static buildWatchUrl (video: Partial<Pick<Video, 'uuid' | 'shortUUID'>>) {
     return buildVideoWatchPath({ shortUUID: video.shortUUID || video.uuid })
   }
 
   static buildUpdateUrl (video: Partial<Pick<Video, 'uuid' | 'shortUUID'>>) {
-    return '/videos/update/' + (video.shortUUID || video.uuid)
+    return '/videos/manage/' + (video.shortUUID || video.uuid)
   }
 
-  constructor (hash: VideoServerModel, translations: { [ id: string ]: string } = {}) {
-    const absoluteAPIUrl = getAbsoluteAPIUrl()
+  static buildDurationLabel (video: Partial<Pick<Video, 'duration'>>) {
+    return durationToString(video.duration)
+  }
 
+  constructor (hash: VideoServerModel, translations: { [id: string]: string } = {}) {
     this.createdAt = new Date(hash.createdAt.toString())
     this.publishedAt = new Date(hash.publishedAt.toString())
     this.category = hash.category
@@ -138,9 +149,12 @@ export class Video implements VideoServerModel {
     this.description = hash.description
 
     this.isLive = hash.isLive
+    this.liveSchedules = hash.liveSchedules
+      ? hash.liveSchedules.map(schedule => ({ startAt: new Date(schedule.startAt.toString()) }))
+      : null
 
     this.duration = hash.duration
-    this.durationLabel = durationToString(hash.duration)
+    this.durationLabel = Video.buildDurationLabel(this)
 
     this.id = hash.id
     this.uuid = hash.uuid
@@ -151,16 +165,16 @@ export class Video implements VideoServerModel {
 
     this.thumbnailPath = hash.thumbnailPath
     this.thumbnailUrl = this.thumbnailPath
-      ? hash.thumbnailUrl || (absoluteAPIUrl + hash.thumbnailPath)
+      ? hash.thumbnailUrl || (getAPIUrl() + hash.thumbnailPath)
       : null
 
     this.previewPath = hash.previewPath
     this.previewUrl = this.previewPath
-      ? hash.previewUrl || (absoluteAPIUrl + hash.previewPath)
+      ? hash.previewUrl || (getAPIUrl() + hash.previewPath)
       : null
 
     this.embedPath = hash.embedPath
-    this.embedUrl = hash.embedUrl || (getAbsoluteEmbedUrl() + hash.embedPath)
+    this.embedUrl = hash.embedUrl || (getOriginUrl() + hash.embedPath)
 
     this.url = hash.url
 
@@ -170,6 +184,8 @@ export class Video implements VideoServerModel {
     this.dislikes = hash.dislikes
 
     this.nsfw = hash.nsfw
+    this.nsfwFlags = hash.nsfwFlags
+    this.nsfwSummary = hash.nsfwSummary
 
     this.account = hash.account
     this.channel = hash.channel
@@ -183,7 +199,9 @@ export class Video implements VideoServerModel {
     this.privacy.label = peertubeTranslate(this.privacy.label, translations)
 
     this.scheduledUpdate = hash.scheduledUpdate
-    this.originallyPublishedAt = hash.originallyPublishedAt ? new Date(hash.originallyPublishedAt.toString()) : null
+    this.originallyPublishedAt = hash.originallyPublishedAt
+      ? new Date(hash.originallyPublishedAt.toString())
+      : null
 
     if (this.state) this.state.label = peertubeTranslate(this.state.label, translations)
 
@@ -205,18 +223,29 @@ export class Video implements VideoServerModel {
     this.pluginData = hash.pluginData
 
     this.aspectRatio = hash.aspectRatio
+
+    this.automaticTags = hash.automaticTags
+
+    this.comments = hash.comments
   }
 
-  isVideoNSFWForUser (user: User, serverConfig: HTMLServerConfig) {
-    // Video is not NSFW, skip
-    if (this.nsfw === false) return false
-
-    // Return user setting if logged in
-    if (user) return user.nsfwPolicy !== 'display'
-
-    // Return default instance config
-    return serverConfig.instance.defaultNSFWPolicy !== 'display'
+  isNSFWWarnedForUser (user: User, serverConfig: HTMLServerConfig) {
+    return isVideoNSFWWarnedForUser(this, serverConfig, user)
   }
+
+  isNSFWBlurForUser (user: User, serverConfig: HTMLServerConfig) {
+    return isVideoNSFWBlurForUser(this, serverConfig, user)
+  }
+
+  isNSFWHiddenForUser (user: User, serverConfig: HTMLServerConfig) {
+    return isVideoNSFWHiddenForUser(this, serverConfig, user)
+  }
+
+  isNSFWHiddenOrWarned (user: User, serverConfig: HTMLServerConfig) {
+    return this.isNSFWHiddenForUser(user, serverConfig) || this.isNSFWWarnedForUser(user, serverConfig)
+  }
+
+  // ---------------------------------------------------------------------------
 
   isRemovableBy (user: AuthUser) {
     return user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.REMOVE_ANY_VIDEO))
@@ -247,7 +276,7 @@ export class Video implements VideoServerModel {
   }
 
   hasSeeAllVideosRight (user: AuthUser) {
-    return user && user.hasRight(UserRight.SEE_ALL_VIDEOS)
+    return user?.hasRight(UserRight.SEE_ALL_VIDEOS)
   }
 
   isOwnerOrHasSeeAllVideosRight (user: AuthUser) {
@@ -261,7 +290,7 @@ export class Video implements VideoServerModel {
       getAllFiles(this).length > 1
   }
 
-  canRemoveFiles (user: AuthUser) {
+  canRemoveAllHLSOrWebFiles (user: AuthUser) {
     return this.isLocal &&
       user && user.hasRight(UserRight.MANAGE_VIDEO_FILES) &&
       this.state.id !== VideoState.TO_TRANSCODE &&
@@ -269,14 +298,36 @@ export class Video implements VideoServerModel {
       this.hasWebVideos()
   }
 
+  // ---------------------------------------------------------------------------
+
   canRunTranscoding (user: AuthUser) {
-    return this.canRunForcedTranscoding(user) && this.state.id !== VideoState.TO_TRANSCODE
+    return this.isLocal &&
+      !this.isLive &&
+      user?.hasRight(UserRight.RUN_VIDEO_TRANSCODING) &&
+      this.state?.id &&
+      !this.transcodingAndTranscriptionIncompatibleStates().has(this.state.id)
   }
 
-  canRunForcedTranscoding (user: AuthUser) {
-    return this.isLocal &&
-      user && user.hasRight(UserRight.RUN_VIDEO_TRANSCODING)
+  canGenerateTranscription (user: AuthUser, transcriptionEnabled: boolean) {
+    return transcriptionEnabled &&
+      this.isLocal &&
+      !this.isLive &&
+      user.hasRight(UserRight.UPDATE_ANY_VIDEO) &&
+      this.state?.id &&
+      !this.transcodingAndTranscriptionIncompatibleStates().has(this.state.id)
   }
+
+  private transcodingAndTranscriptionIncompatibleStates () {
+    return new Set<VideoStateType>([
+      VideoState.TO_IMPORT,
+      VideoState.TO_IMPORT_FAILED,
+      VideoState.TO_EDIT,
+      VideoState.TO_MOVE_TO_EXTERNAL_STORAGE,
+      VideoState.TO_MOVE_TO_FILE_SYSTEM
+    ])
+  }
+
+  // ---------------------------------------------------------------------------
 
   hasHLS () {
     return this.streamingPlaylists?.some(p => p.type === VideoStreamingPlaylistType.HLS)
@@ -295,18 +346,10 @@ export class Video implements VideoServerModel {
     return user && this.isLocal === false && user.hasRight(UserRight.MANAGE_VIDEOS_REDUNDANCIES)
   }
 
-  canAccessPasswordProtectedVideoWithoutPassword (user: AuthUser) {
+  canBypassPassword (user: AuthUser) {
     return this.privacy.id === VideoPrivacy.PASSWORD_PROTECTED &&
       user &&
       this.isLocal === true &&
       (this.account.name === user.username || user.hasRight(UserRight.SEE_ALL_VIDEOS))
-  }
-
-  getExactNumberOfViews () {
-    if (this.isLive) {
-      return formatICU($localize`{viewers, plural, =0 {No viewers} =1 {1 viewer} other {{viewers} viewers}}`, { viewers: this.viewers })
-    }
-
-    return formatICU($localize`{views, plural, =0 {No view} =1 {1 view} other {{views} views}}`, { views: this.views })
   }
 }

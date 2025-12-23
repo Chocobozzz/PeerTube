@@ -1,7 +1,8 @@
 <button
-  class="btn btn-outline-secondary btn-sm copy-button"
-  [cdkCopyToClipboard]="value" (click)="activateCopiedMessage()"
-  [title]="title" [ngClass]="{ 'is-input-group': isInputGroup }"
+  type="button"
+  class="btn copy-button"
+  (click)="copy()"
+  [attr.title]="title()" [ngClass]="{ 'is-input-group': isInputGroup(), 'with-border': withBorder() }"
 >
   <my-global-icon iconName="copy"></my-global-icon>
 

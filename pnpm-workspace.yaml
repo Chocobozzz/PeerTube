@@ -1,0 +1,27 @@
+packages:
+  - packages/*
+  - apps/*
+  - server
+  - client
+  - client/packages/*
+  - client/src/standalone/player
+
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - bcrypt
+  - bufferutil
+  - core-js
+  - edgedriver
+  - es5-ext
+  - esbuild
+  - geckodriver
+  - lmdb
+  - msgpackr-extract
+  - node-datachannel
+  - utf-8-validate
+  - utp-native
+
+patchedDependencies:
+  '@types/markdown-it': pnpm-patches/@types__markdown-it.patch
+  tinykeys: pnpm-patches/tinykeys.patch
+  video.js: pnpm-patches/video.js.patch

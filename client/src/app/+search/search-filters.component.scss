@@ -1,5 +1,6 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
 
 form {
   margin-top: 40px;
@@ -10,25 +11,17 @@ form {
 }
 
 .peertube-radio-container {
-  @include margin-right(30px);
-
   display: inline-block;
+
+  @include margin-right(30px);
 }
 
 .peertube-select-container {
-  @include peertube-select-container(auto);
-
   margin-bottom: 1rem;
 }
 
-input[type=text] {
+input[type="text"] {
   @include peertube-input-text(100%);
-  display: block;
-}
-
-input[type=submit] {
-  @include peertube-button-link;
-  @include orange-button;
 }
 
 .submit-button {

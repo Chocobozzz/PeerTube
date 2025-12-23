@@ -1,5 +1,4 @@
 import { CONFIG } from '@server/initializers/config.js'
-import { ACTOR_IMAGES_SIZE } from '@server/initializers/constants.js'
 import { ActorImageModel } from '@server/models/actor/actor-image.js'
 import { MActorImage } from '@server/types/models/index.js'
 import { AbstractPermanentFileCache } from './shared/index.js'
@@ -11,7 +10,7 @@ export class AvatarPermanentFileCache extends AbstractPermanentFileCache<MActorI
   }
 
   protected loadModel (filename: string) {
-    return ActorImageModel.loadByName(filename)
+    return ActorImageModel.loadByFilename(filename)
   }
 
   protected getImageSize (image: MActorImage): { width: number, height: number } {
@@ -22,6 +21,6 @@ export class AvatarPermanentFileCache extends AbstractPermanentFileCache<MActorI
       }
     }
 
-    return ACTOR_IMAGES_SIZE[image.type][0]
+    return undefined
   }
 }

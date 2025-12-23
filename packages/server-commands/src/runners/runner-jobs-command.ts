@@ -4,33 +4,41 @@ import {
   AcceptRunnerJobBody,
   AcceptRunnerJobResult,
   ErrorRunnerJobBody,
+  GenerateStoryboardSuccess,
   HttpStatusCode,
-  isHLSTranscodingPayloadSuccess,
-  isLiveRTMPHLSTranscodingUpdatePayload,
-  isWebVideoOrAudioMergeTranscodingPayloadSuccess,
   ListRunnerJobsQuery,
   RequestRunnerJobBody,
   RequestRunnerJobResult,
   ResultList,
   RunnerJobAdmin,
+  RunnerJobCustomUpload,
+  RunnerJobGenerateStoryboardPayload,
   RunnerJobLiveRTMPHLSTranscodingPayload,
   RunnerJobPayload,
   RunnerJobState,
   RunnerJobStateType,
   RunnerJobSuccessBody,
   RunnerJobSuccessPayload,
+  RunnerJobTranscriptionPayload,
   RunnerJobType,
   RunnerJobUpdateBody,
+  RunnerJobVODAudioMergeTranscodingPayload,
+  RunnerJobVODHLSTranscodingPayload,
   RunnerJobVODPayload,
+  TranscriptionSuccess,
   VODHLSTranscodingSuccess,
-  VODWebVideoTranscodingSuccess
+  VODWebVideoTranscodingSuccess,
+  isGenerateStoryboardSuccess,
+  isHLSTranscodingPayloadSuccess,
+  isLiveRTMPHLSTranscodingUpdatePayload,
+  isTranscriptionPayloadSuccess,
+  isWebVideoOrAudioMergeTranscodingPayloadSuccess
 } from '@peertube/peertube-models'
 import { unwrapBody } from '../requests/index.js'
 import { waitJobs } from '../server/jobs.js'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class RunnerJobsCommand extends AbstractCommand {
-
   list (options: OverrideCommandOptions & ListRunnerJobsQuery = {}) {
     const path = '/api/v1/runners/jobs'
 
@@ -77,35 +85,35 @@ export class RunnerJobsCommand extends AbstractCommand {
       ...options,
 
       path,
-      fields: pick(options, [ 'runnerToken' ]),
+      fields: pick(options, [ 'runnerToken', 'jobTypes', 'version' ]),
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     }))
   }
 
   async requestVOD (options: OverrideCommandOptions & RequestRunnerJobBody) {
-    const vodTypes = new Set<RunnerJobType>([ 'vod-audio-merge-transcoding', 'vod-hls-transcoding', 'vod-web-video-transcoding' ])
+    const { availableJobs } = await this.request({
+      ...options,
 
-    const { availableJobs } = await this.request(options)
+      jobTypes: [ 'vod-audio-merge-transcoding', 'vod-hls-transcoding', 'vod-web-video-transcoding' ]
+    })
 
-    return {
-      availableJobs: availableJobs.filter(j => vodTypes.has(j.type))
-    } as RequestRunnerJobResult<RunnerJobVODPayload>
+    return { availableJobs } as RequestRunnerJobResult<RunnerJobVODPayload>
   }
 
   async requestLive (options: OverrideCommandOptions & RequestRunnerJobBody) {
-    const vodTypes = new Set<RunnerJobType>([ 'live-rtmp-hls-transcoding' ])
+    const { availableJobs } = await this.request({
+      ...options,
 
-    const { availableJobs } = await this.request(options)
+      jobTypes: [ 'live-rtmp-hls-transcoding' ]
+    })
 
-    return {
-      availableJobs: availableJobs.filter(j => vodTypes.has(j.type))
-    } as RequestRunnerJobResult<RunnerJobLiveRTMPHLSTranscodingPayload>
+    return { availableJobs } as RequestRunnerJobResult<RunnerJobLiveRTMPHLSTranscodingPayload>
   }
 
   // ---------------------------------------------------------------------------
 
-  accept <T extends RunnerJobPayload = RunnerJobPayload> (options: OverrideCommandOptions & AcceptRunnerJobBody & { jobUUID: string }) {
+  accept<T extends RunnerJobPayload = RunnerJobPayload> (options: OverrideCommandOptions & AcceptRunnerJobBody & { jobUUID: string }) {
     const path = '/api/v1/runners/jobs/' + options.jobUUID + '/accept'
 
     return unwrapBody<AcceptRunnerJobResult<T>>(this.postBodyRequest({
@@ -131,39 +139,6 @@ export class RunnerJobsCommand extends AbstractCommand {
     })
   }
 
-  update (options: OverrideCommandOptions & RunnerJobUpdateBody & { jobUUID: string }) {
-    const path = '/api/v1/runners/jobs/' + options.jobUUID + '/update'
-
-    const { payload } = options
-    const attaches: { [id: string]: any } = {}
-    let payloadWithoutFiles = payload
-
-    if (isLiveRTMPHLSTranscodingUpdatePayload(payload)) {
-      if (payload.masterPlaylistFile) {
-        attaches[`payload[masterPlaylistFile]`] = payload.masterPlaylistFile
-      }
-
-      attaches[`payload[resolutionPlaylistFile]`] = payload.resolutionPlaylistFile
-      attaches[`payload[videoChunkFile]`] = payload.videoChunkFile
-
-      payloadWithoutFiles = omit(payloadWithoutFiles, [ 'masterPlaylistFile', 'resolutionPlaylistFile', 'videoChunkFile' ])
-    }
-
-    return this.postUploadRequest({
-      ...options,
-
-      path,
-      fields: {
-        ...pick(options, [ 'progress', 'jobToken', 'runnerToken' ]),
-
-        payload: payloadWithoutFiles
-      },
-      attaches,
-      implicitToken: false,
-      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
-    })
-  }
-
   error (options: OverrideCommandOptions & ErrorRunnerJobBody & { jobUUID: string }) {
     const path = '/api/v1/runners/jobs/' + options.jobUUID + '/error'
 
@@ -177,26 +152,139 @@ export class RunnerJobsCommand extends AbstractCommand {
     })
   }
 
-  success (options: OverrideCommandOptions & RunnerJobSuccessBody & { jobUUID: string }) {
+  // ---------------------------------------------------------------------------
+
+  update (options: OverrideCommandOptions & RunnerJobUpdateBody & { jobUUID: string, reqPayload?: RunnerJobPayload }) {
+    const path = '/api/v1/runners/jobs/' + options.jobUUID + '/update'
+
+    const { payload } = options
+    const attaches: { [id: string]: any } = {}
+    const customUploads: (RunnerJobCustomUpload & { file: Blob | string })[] = []
+
+    let payloadWithoutFiles = payload
+
+    if (isLiveRTMPHLSTranscodingUpdatePayload(payload)) {
+      const reqPayload = options.reqPayload as RunnerJobLiveRTMPHLSTranscodingPayload
+
+      if (payload.masterPlaylistFile) {
+        this.updateUploadPayloads({
+          attachesStore: attaches,
+          customUploadsStore: customUploads,
+
+          file: payload.masterPlaylistFile,
+          attachName: 'masterPlaylistFile',
+          customUpload: reqPayload?.output?.masterPlaylistFileCustomUpload
+        })
+
+        attaches[`payload[masterPlaylistFile]`] = payload.masterPlaylistFile
+      }
+
+      this.updateUploadPayloads({
+        attachesStore: attaches,
+        customUploadsStore: customUploads,
+
+        file: payload.resolutionPlaylistFile,
+        attachName: 'resolutionPlaylistFile',
+        customUpload: reqPayload?.output?.resolutionPlaylistFileCustomUpload
+      })
+
+      this.updateUploadPayloads({
+        attachesStore: attaches,
+        customUploadsStore: customUploads,
+
+        file: payload.videoChunkFile,
+        attachName: 'videoChunkFile',
+        customUpload: reqPayload?.output?.videoChunkFileCustomUpload
+      })
+
+      payloadWithoutFiles = omit(payloadWithoutFiles, [ 'masterPlaylistFile', 'resolutionPlaylistFile', 'videoChunkFile' ])
+    }
+
+    return this.uploadRunnerJobRequest({
+      ...options,
+
+      path,
+      fields: {
+        ...pick(options, [ 'progress', 'jobToken', 'runnerToken' ]),
+
+        payload: payloadWithoutFiles
+      },
+      attaches,
+      customUploads
+    })
+  }
+
+  success (options: OverrideCommandOptions & RunnerJobSuccessBody & { jobUUID: string, reqPayload?: RunnerJobPayload }) {
     const { payload } = options
 
     const path = '/api/v1/runners/jobs/' + options.jobUUID + '/success'
     const attaches: { [id: string]: any } = {}
+    const customUploads: (RunnerJobCustomUpload & { file: Blob | string })[] = []
+
     let payloadWithoutFiles = payload
 
     if ((isWebVideoOrAudioMergeTranscodingPayloadSuccess(payload) || isHLSTranscodingPayloadSuccess(payload)) && payload.videoFile) {
-      attaches[`payload[videoFile]`] = payload.videoFile
+      const reqPayload = options.reqPayload as RunnerJobVODAudioMergeTranscodingPayload | RunnerJobVODHLSTranscodingPayload
+
+      this.updateUploadPayloads({
+        attachesStore: attaches,
+        customUploadsStore: customUploads,
+
+        file: payload.videoFile,
+        attachName: 'videoFile',
+        customUpload: reqPayload?.output?.videoFileCustomUpload
+      })
 
       payloadWithoutFiles = omit(payloadWithoutFiles as VODWebVideoTranscodingSuccess, [ 'videoFile' ])
     }
 
     if (isHLSTranscodingPayloadSuccess(payload) && payload.resolutionPlaylistFile) {
-      attaches[`payload[resolutionPlaylistFile]`] = payload.resolutionPlaylistFile
+      const reqPayload = options.reqPayload as RunnerJobVODHLSTranscodingPayload
+
+      this.updateUploadPayloads({
+        attachesStore: attaches,
+        customUploadsStore: customUploads,
+
+        file: payload.resolutionPlaylistFile,
+        attachName: 'resolutionPlaylistFile',
+        customUpload: reqPayload?.output?.resolutionPlaylistFileCustomUpload
+      })
 
       payloadWithoutFiles = omit(payloadWithoutFiles as VODHLSTranscodingSuccess, [ 'resolutionPlaylistFile' ])
     }
 
-    return this.postUploadRequest({
+    if (isTranscriptionPayloadSuccess(payload) && payload.vttFile) {
+      const reqPayload = options.reqPayload as RunnerJobTranscriptionPayload
+
+      this.updateUploadPayloads({
+        attachesStore: attaches,
+        customUploadsStore: customUploads,
+
+        file: payload.vttFile,
+        attachName: 'vttFile',
+        customUpload: reqPayload?.output?.vttFileCustomUpload
+      })
+
+      payloadWithoutFiles = omit(payloadWithoutFiles as TranscriptionSuccess, [ 'vttFile' ])
+    }
+
+    // Generate storyboard success payload contains a storyboard image file
+    if (isGenerateStoryboardSuccess(payload) && payload.storyboardFile) {
+      const reqPayload = options.reqPayload as RunnerJobGenerateStoryboardPayload
+
+      this.updateUploadPayloads({
+        attachesStore: attaches,
+        customUploadsStore: customUploads,
+
+        file: payload.storyboardFile,
+        attachName: 'storyboardFile',
+        customUpload: reqPayload?.output?.storyboardFileCustomUpload
+      })
+
+      payloadWithoutFiles = omit(payloadWithoutFiles as GenerateStoryboardSuccess, [ 'storyboardFile' ])
+    }
+
+    return this.uploadRunnerJobRequest({
       ...options,
 
       path,
@@ -206,10 +294,67 @@ export class RunnerJobsCommand extends AbstractCommand {
 
         payload: payloadWithoutFiles
       },
+      customUploads
+    })
+  }
+
+  private updateUploadPayloads (options: {
+    file: Blob | string
+    customUpload?: RunnerJobCustomUpload
+    attachName: string
+
+    attachesStore: Record<string, string | Blob>
+    customUploadsStore: (RunnerJobCustomUpload & { file: Blob | string })[]
+  }) {
+    if (options.customUpload) {
+      options.customUploadsStore.push({ ...options.customUpload, file: options.file })
+    } else {
+      options.attachesStore[`payload[${options.attachName}]`] = options.file
+    }
+  }
+
+  private async uploadRunnerJobRequest (
+    options: OverrideCommandOptions & {
+      path: string
+
+      fields: { [fieldName: string]: any }
+      attaches: { [fieldName: string]: any }
+
+      customUploads?: (RunnerJobCustomUpload & { file: string | Blob })[]
+    }
+  ) {
+    for (const customUpload of (options.customUploads || [])) {
+      await this.customUpload(customUpload)
+    }
+
+    await this.postUploadRequest({
+      ...omit(options, [ 'customUploads' ]),
+
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
+
+  private customUpload (options: RunnerJobCustomUpload & { file: Blob | string }) {
+    const parsedUrl = new URL(options.url)
+
+    const reqOptions: Parameters<RunnerJobsCommand['postUploadRequest']>[0] = {
+      url: parsedUrl.origin,
+      path: parsedUrl.pathname,
+      rawQuery: parsedUrl.searchParams.toString(),
+      attaches: { file: options.file },
+      implicitToken: false,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    }
+
+    if (options.method === 'POST') {
+      return this.postUploadRequest(reqOptions)
+    }
+
+    return this.putUploadRequest(reqOptions)
+  }
+
+  // ---------------------------------------------------------------------------
 
   getJobFile (options: OverrideCommandOptions & { url: string, jobToken: string, runnerToken: string }) {
     const { host, protocol, pathname } = new URL(options.url)
@@ -241,14 +386,19 @@ export class RunnerJobsCommand extends AbstractCommand {
 
     if (!jobUUID) {
       const { availableJobs } = await this.request({ runnerToken })
-      jobUUID = availableJobs[0].uuid
+      // Find a web video transcoding job specifically
+      const webVideoJob = availableJobs.find(j => j.type === 'vod-web-video-transcoding')
+      if (!webVideoJob) throw new Error('No web video transcoding jobs available')
+
+      jobUUID = webVideoJob.uuid
     }
 
     const { job } = await this.accept({ runnerToken, jobUUID })
     const jobToken = job.jobToken
 
+    // Use a proper fixture file path for testing
     const payload: RunnerJobSuccessPayload = { videoFile: 'video_short.mp4' }
-    await this.success({ runnerToken, jobUUID, jobToken, payload })
+    await this.success({ runnerToken, jobUUID, jobToken, payload, reqPayload: undefined })
 
     await waitJobs([ this.server ])
 

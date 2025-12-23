@@ -1,0 +1,82 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
+
+.form-title {
+  @include on-small-main-col {
+    text-align: center;
+  }
+}
+
+my-peertube-checkbox {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+my-timestamp-input {
+  width: 100px;
+}
+
+input[type="text"] {
+  display: block;
+
+  @include peertube-input-text(100%);
+}
+
+p-calendar {
+  display: block;
+
+  ::ng-deep {
+    .p-calendar {
+      width: 100%;
+    }
+  }
+}
+
+.form-columns {
+  display: grid;
+  grid-template-columns: fit-content(66%) 1fr;
+
+  @include rfs(40px, grid-gap);
+
+  &.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  &.reverse {
+    > *:nth-child(1) {
+      order: 1;
+    }
+
+    > *:nth-child(2) {
+      order: -1;
+    }
+  }
+
+  @media screen and (max-width: $medium-view) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.dragover {
+  border: 3px dashed pvar(--primary);
+}
+
+.plugin-fields {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 2.5rem;
+
+  > *:nth-child(2n+1) {
+    width: 66%;
+  }
+}
+
+.danger-zone {
+  h3 {
+    color: pvar(--red);
+    font-weight: $font-bold;
+    font-size: 1rem;
+  }
+}

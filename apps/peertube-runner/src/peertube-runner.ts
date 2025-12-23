@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 
 import { Command, InvalidArgumentError } from '@commander-js/extra-typings'
-import { listRegistered, registerRunner, unregisterRunner } from './register/index.js'
+import { RunnerJobType } from '@peertube/peertube-models'
+import { listJobs, listRegistered, registerRunner, unregisterRunner } from './register/index.js'
+import { gracefulShutdown } from './register/shutdown.js'
 import { RunnerServer } from './server/index.js'
+import { getSupportedJobsList } from './server/shared/supported-job.js'
 import { ConfigManager, logger } from './shared/index.js'
 
 const program = new Command()
@@ -25,9 +28,29 @@ const program = new Command()
 
 program.command('server')
   .description('Run in server mode, to execute remote jobs of registered PeerTube instances')
-  .action(async () => {
+  .option(
+    '--enable-job <type>',
+    'Enable this job type (multiple --enable-job options can be specified). ' +
+    'By default all supported jobs are enabled). ' +
+    'Supported job types: ' + getSupportedJobsList().join(', '),
+    (value: RunnerJobType, previous: RunnerJobType[]) => [ ...previous, value ],
+    []
+  )
+  .action(async options => {
     try {
-      await RunnerServer.Instance.run()
+      let enabledJobs: Set<RunnerJobType>
+
+      if (options.enableJob) {
+        for (const jobType of options.enableJob) {
+          if (getSupportedJobsList().includes(jobType) !== true) {
+            throw new InvalidArgumentError(`${jobType} is not a supported job`)
+          }
+
+          enabledJobs = new Set(options.enableJob)
+        }
+      }
+
+      await new RunnerServer(enabledJobs).run()
     } catch (err) {
       logger.error(err, 'Cannot run PeerTube runner as server mode')
       process.exit(-1)
@@ -71,6 +94,31 @@ program.command('list-registered')
       await listRegistered()
     } catch (err) {
       console.error('Cannot list registered PeerTube instances.')
+      console.error(err)
+      process.exit(-1)
+    }
+  })
+
+program.command('list-jobs')
+  .description('List processing jobs')
+  .option('--include-payload', 'Include job payload in the output')
+  .action(async options => {
+    try {
+      await listJobs({ includePayload: options.includePayload })
+    } catch (err) {
+      console.error('Cannot list processing jobs.')
+      console.error(err)
+      process.exit(-1)
+    }
+  })
+
+program.command('graceful-shutdown')
+  .description('Exit runner when all processing tasks are finished')
+  .action(async () => {
+    try {
+      await gracefulShutdown()
+    } catch (err) {
+      console.error('Cannot graceful shutdown the runner.')
       console.error(err)
       process.exit(-1)
     }

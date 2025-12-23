@@ -1,36 +1,14 @@
 import { Component } from '@angular/core'
-import { NgIf, DatePipe } from '@angular/common'
-import { AutoColspanDirective } from '../../../shared/shared-main/angular/auto-colspan.directive'
-import { ActorAvatarComponent } from '../../../shared/shared-actor-image/actor-avatar.component'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
-import { SharedModule } from 'primeng/api'
-import { TableModule } from 'primeng/table'
-import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
-import { GenericAccountBlocklistComponent } from '@app/shared/shared-moderation/account-blocklist.component'
 import { BlocklistComponentType } from '@app/shared/shared-moderation/blocklist.service'
+import { GenericAccountBlocklistComponent } from '@app/shared/shared-moderation/generic-account-blocklist.component'
 
 @Component({
   selector: 'my-instance-account-blocklist',
-  styleUrls: [ '../../../shared/shared-moderation/moderation.scss' ],
-  templateUrl: '../../../shared/shared-moderation/account-blocklist.component.html',
-  standalone: true,
+  template: `<my-generic-account-blocklist [mode]="mode" key="InstanceAccountBlocklistComponent" />`,
   imports: [
-    GlobalIconComponent,
-    TableModule,
-    SharedModule,
-    AdvancedInputFilterComponent,
-    NgbTooltip,
-    ActorAvatarComponent,
-    AutoColspanDirective,
-    NgIf,
-    DatePipe
+    GenericAccountBlocklistComponent
   ]
 })
-export class InstanceAccountBlocklistComponent extends GenericAccountBlocklistComponent {
+export class InstanceAccountBlocklistComponent {
   mode = BlocklistComponentType.Instance
-
-  getIdentifier () {
-    return 'InstanceAccountBlocklistComponent'
-  }
 }

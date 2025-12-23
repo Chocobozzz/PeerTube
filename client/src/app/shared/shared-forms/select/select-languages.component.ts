@@ -1,14 +1,28 @@
-import { Component, forwardRef, Input, OnInit } from '@angular/core'
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms'
+import { Component, forwardRef, inject, input, OnInit } from '@angular/core'
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
-import { ItemSelectCheckboxValue } from './select-checkbox.component'
-import { SelectCheckboxAllComponent } from './select-checkbox-all.component'
+import { SelectCheckboxDefaultAllComponent } from './select-checkbox-default-all.component'
 
 @Component({
   selector: 'my-select-languages',
-  styleUrls: [ './select-shared.component.scss' ],
-  templateUrl: './select-languages.component.html',
+  template: `
+@if (availableLanguages) {
+  <my-select-checkbox-default-all
+    [availableItems]="availableLanguages"
+    [(ngModel)]="selectedLanguages"
+    (ngModelChange)="onModelChange()"
+    [inputId]="inputId()"
+    [maxIndividualItems]="maxLanguages()"
+    virtualScroll="true"
+    virtualScrollItemSize="37"
+    i18n-allSelectedLabel allSelectedLabel="All languages"
+    i18n-selectedLabel selectedLabel="{1} languages selected"
+    i18n-placeholder placeholder="Add a new language"
+    >
+  </my-select-checkbox-default-all>
+}
+`,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -16,60 +30,44 @@ import { SelectCheckboxAllComponent } from './select-checkbox-all.component'
       multi: true
     }
   ],
-  standalone: true,
-  imports: [ SelectCheckboxAllComponent, FormsModule ]
+  imports: [ SelectCheckboxDefaultAllComponent, FormsModule ]
 })
 export class SelectLanguagesComponent implements ControlValueAccessor, OnInit {
-  @Input() maxLanguages: number
+  private server = inject(ServerService)
 
-  selectedLanguages: ItemSelectCheckboxValue[]
-  availableLanguages: (SelectOptionsItem & { groupOrder: number })[] = []
+  readonly inputId = input.required<string>()
+  readonly maxLanguages = input<number>(undefined)
 
-  allLanguagesGroup = $localize`All languages`
-
-  // Fix a bug on ng-select when we update items after we selected items
-  private toWrite: any
-  private loaded = false
-
-  constructor (
-    private server: ServerService
-  ) {
-
-  }
+  selectedLanguages: string[]
+  availableLanguages: SelectOptionsItem[]
 
   ngOnInit () {
     this.server.getVideoLanguages()
       .subscribe(
         languages => {
-          this.availableLanguages = [ {
-            label: $localize`Unknown language`,
-            id: '_unknown',
-            group: this.allLanguagesGroup,
-            groupOrder: 1
-          } ]
+          const noLangSet = languages.find(l => l.id === 'zxx')
 
-          this.availableLanguages = this.availableLanguages
-            .concat(languages.map(l => {
-              if (l.id === 'zxx') return { label: l.label, id: l.id, group: $localize`Other`, groupOrder: 0 }
-              return { label: l.label, id: l.id, group: this.allLanguagesGroup, groupOrder: 1 }
-            }))
+          this.availableLanguages = [
+            {
+              label: $localize`Unknown language`,
+              id: '_unknown'
+            },
 
-          this.availableLanguages.sort((a, b) => a.groupOrder - b.groupOrder)
+            noLangSet,
 
-          this.loaded = true
-          this.writeValue(this.toWrite)
+            ...languages
+              .filter(l => l.id !== 'zxx')
+              .map(l => ({ label: l.label, id: l.id }))
+          ]
         }
       )
   }
 
-  propagateChange = (_: any) => { /* empty */ }
+  propagateChange = (_: any) => {
+    // empty
+  }
 
-  writeValue (languages: ItemSelectCheckboxValue[]) {
-    if (!this.loaded) {
-      this.toWrite = languages
-      return
-    }
-
+  writeValue (languages: string[]) {
     this.selectedLanguages = languages
   }
 

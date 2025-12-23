@@ -5,8 +5,9 @@ import { VideoBlockListComponent } from '@app/+admin/moderation/video-block-list
 import { UserRightGuard } from '@app/core'
 import { UserRight } from '@peertube/peertube-models'
 import { RegistrationListComponent } from './registration-list'
+import { WatchedWordsListAdminComponent } from './watched-words-list/watched-words-list-admin.component'
 
-export const ModerationRoutes: Routes = [
+export const moderationRoutes: Routes = [
   {
     path: 'moderation',
     children: [
@@ -89,7 +90,7 @@ export const ModerationRoutes: Routes = [
       },
       {
         path: 'video-comments/list',
-        redirectTo: '/admin/comments/list',
+        redirectTo: '/admin/overview/comments/list',
         pathMatch: 'full'
       },
 
@@ -111,7 +112,19 @@ export const ModerationRoutes: Routes = [
         data: {
           userRight: UserRight.MANAGE_SERVERS_BLOCKLIST,
           meta: {
-            title: $localize`Muted instances`
+            title: $localize`Muted platforms`
+          }
+        }
+      },
+
+      {
+        path: 'watched-words/list',
+        component: WatchedWordsListAdminComponent,
+        canActivate: [ UserRightGuard ],
+        data: {
+          userRight: UserRight.MANAGE_INSTANCE_WATCHED_WORDS,
+          meta: {
+            title: $localize`Watched words`
           }
         }
       }

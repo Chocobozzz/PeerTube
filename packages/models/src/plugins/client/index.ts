@@ -1,4 +1,5 @@
 export * from './client-hook.model.js'
+export * from './client-action.model.js'
 export * from './plugin-client-scope.type.js'
 export * from './plugin-element-placeholder.type.js'
 export * from './plugin-selector-id.type.js'

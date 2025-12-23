@@ -10,13 +10,16 @@ interface TranscodingWrapperEvents {
   'error': (options: { err: Error }) => void
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 declare interface AbstractTranscodingWrapper {
   on<U extends keyof TranscodingWrapperEvents>(
-    event: U, listener: TranscodingWrapperEvents[U]
+    event: U,
+    listener: TranscodingWrapperEvents[U]
   ): this
 
   emit<U extends keyof TranscodingWrapperEvents>(
-    event: U, ...args: Parameters<TranscodingWrapperEvents[U]>
+    event: U,
+    ...args: Parameters<TranscodingWrapperEvents[U]>
   ): boolean
 }
 
@@ -30,7 +33,6 @@ interface AbstractTranscodingWrapperOptions {
   inputLocalUrl: string
   inputPublicUrl: string
 
-  fps: number
   toTranscode: {
     resolution: number
     fps: number
@@ -38,7 +40,9 @@ interface AbstractTranscodingWrapperOptions {
 
   bitrate: number
   ratio: number
+
   hasAudio: boolean
+  hasVideo: boolean
   probe: FfprobeData
 
   segmentListSize: number
@@ -47,6 +51,7 @@ interface AbstractTranscodingWrapperOptions {
   outDirectory: string
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 abstract class AbstractTranscodingWrapper extends EventEmitter {
   protected readonly videoLive: MVideoLiveVideo
 
@@ -59,10 +64,10 @@ abstract class AbstractTranscodingWrapper extends EventEmitter {
   protected readonly inputLocalUrl: string
   protected readonly inputPublicUrl: string
 
-  protected readonly fps: number
   protected readonly bitrate: number
   protected readonly ratio: number
   protected readonly hasAudio: boolean
+  protected readonly hasVideo: boolean
   protected readonly probe: FfprobeData
 
   protected readonly segmentListSize: number
@@ -89,12 +94,12 @@ abstract class AbstractTranscodingWrapper extends EventEmitter {
     this.inputLocalUrl = options.inputLocalUrl
     this.inputPublicUrl = options.inputPublicUrl
 
-    this.fps = options.fps
     this.toTranscode = options.toTranscode
 
     this.bitrate = options.bitrate
     this.ratio = options.ratio
     this.hasAudio = options.hasAudio
+    this.hasVideo = options.hasVideo
     this.probe = options.probe
 
     this.segmentListSize = options.segmentListSize
@@ -110,6 +115,5 @@ abstract class AbstractTranscodingWrapper extends EventEmitter {
 
 export {
   type AbstractTranscodingWrapperOptions,
-
   AbstractTranscodingWrapper
 }

@@ -230,6 +230,13 @@ describe('Test plugin action hooks', function () {
 
       await checkHook('action:api.user.deleted')
     })
+
+    it('Should run action:api.user.deleted upon delete me', async function () {
+      const token = await servers[0].users.generateUserAndToken('delete_me_user')
+      await servers[0].users.deleteMe({ token })
+
+      await checkHook('action:api.user.deleted', true, 2)
+    })
   })
 
   describe('Playlist hooks', function () {

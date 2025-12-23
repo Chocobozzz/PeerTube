@@ -1,16 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { basename, join } from 'path'
 import { getAllFiles, wait } from '@peertube/peertube-core-utils'
-import { ffprobePromise, getVideoStream } from '@peertube/peertube-ffmpeg'
+import { ffprobePromise } from '@peertube/peertube-ffmpeg'
 import {
   HttpStatusCode,
   LiveVideo,
-  LiveVideoCreate,
   LiveVideoLatencyMode,
+  VideoCommentPolicy,
   VideoDetails,
   VideoPrivacy,
+  VideoResolution,
   VideoState,
   VideoStreamingPlaylistType
 } from '@peertube/peertube-models'
@@ -34,6 +33,8 @@ import {
 import { testImageGeneratedByFFmpeg } from '@tests/shared/checks.js'
 import { testLiveVideoResolutions } from '@tests/shared/live.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
+import { expect } from 'chai'
+import { basename, join } from 'path'
 
 describe('Test live', function () {
   let servers: PeerTubeServer[] = []
@@ -77,28 +78,28 @@ describe('Test live', function () {
     it('Should create a live with the appropriate parameters', async function () {
       this.timeout(20000)
 
-      const attributes: LiveVideoCreate = {
-        category: 1,
-        licence: 2,
-        language: 'fr',
-        description: 'super live description',
-        support: 'support field',
-        channelId: servers[0].store.channel.id,
-        nsfw: false,
-        waitTranscoding: false,
-        name: 'my super live',
-        tags: [ 'tag1', 'tag2' ],
-        commentsEnabled: false,
-        downloadEnabled: false,
-        saveReplay: true,
-        replaySettings: { privacy: VideoPrivacy.PUBLIC },
-        latencyMode: LiveVideoLatencyMode.SMALL_LATENCY,
-        privacy: VideoPrivacy.PUBLIC,
-        previewfile: 'video_short1-preview.webm.jpg',
-        thumbnailfile: 'video_short1.webm.jpg'
-      }
-
-      const live = await commands[0].create({ fields: attributes })
+      const live = await commands[0].create({
+        fields: {
+          category: 1,
+          licence: 2,
+          language: 'fr',
+          description: 'super live description',
+          support: 'support field',
+          channelId: servers[0].store.channel.id,
+          nsfw: false,
+          waitTranscoding: false,
+          name: 'my super live',
+          tags: [ 'tag1', 'tag2' ],
+          commentsPolicy: VideoCommentPolicy.DISABLED,
+          downloadEnabled: false,
+          saveReplay: true,
+          replaySettings: { privacy: VideoPrivacy.PUBLIC },
+          latencyMode: LiveVideoLatencyMode.SMALL_LATENCY,
+          privacy: VideoPrivacy.PUBLIC,
+          previewfile: 'video_short1-preview.webm.jpg',
+          thumbnailfile: 'video_short1.webm.jpg'
+        }
+      })
       liveVideoUUID = live.uuid
 
       await waitJobs(servers)
@@ -123,7 +124,6 @@ describe('Test live', function () {
         expect(video.waitTranscoding).to.be.false
         expect(video.name).to.equal('my super live')
         expect(video.tags).to.deep.equal([ 'tag1', 'tag2' ])
-        expect(video.commentsEnabled).to.be.false
         expect(video.downloadEnabled).to.be.false
         expect(video.privacy.id).to.equal(VideoPrivacy.PUBLIC)
 
@@ -151,14 +151,14 @@ describe('Test live', function () {
     it('Should have a default preview and thumbnail', async function () {
       this.timeout(20000)
 
-      const attributes: LiveVideoCreate = {
-        name: 'default live thumbnail',
-        channelId: servers[0].store.channel.id,
-        privacy: VideoPrivacy.UNLISTED,
-        nsfw: true
-      }
-
-      const live = await commands[0].create({ fields: attributes })
+      const live = await commands[0].create({
+        fields: {
+          name: 'default live thumbnail',
+          channelId: servers[0].store.channel.id,
+          privacy: VideoPrivacy.UNLISTED,
+          nsfw: true
+        }
+      })
       const videoId = live.uuid
 
       await waitJobs(servers)
@@ -219,6 +219,149 @@ describe('Test live', function () {
         await server.videos.get({ id: liveVideoUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
         await server.live.get({ videoId: liveVideoUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
       }
+    })
+  })
+
+  describe('Scheduled live', function () {
+    let liveVideoUUID: string
+    const scheduledForDate = (new Date(Date.now() + 3600000)).toISOString()
+
+    it('Should create a live with the appropriate parameters', async function () {
+      this.timeout(20000)
+
+      const { uuid } = await commands[0].create({
+        fields: {
+          name: 'live scheduled',
+          channelId: servers[0].store.channel.id,
+          privacy: VideoPrivacy.PUBLIC,
+          schedules: [ { startAt: scheduledForDate } ]
+        }
+      })
+      liveVideoUUID = uuid
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const video = await server.videos.get({ id: liveVideoUUID })
+
+        expect(video.liveSchedules).to.have.lengthOf(1)
+        expect(video.liveSchedules[0].startAt).to.equal(scheduledForDate)
+      }
+
+      const live = await servers[0].live.get({ videoId: liveVideoUUID })
+      expect(live.schedules[0].startAt).to.equal(scheduledForDate)
+    })
+
+    it('Should not have the live listed globally since nobody streams into', async function () {
+      for (const server of servers) {
+        const { total, data } = await server.videos.list()
+
+        expect(total).to.equal(0)
+        expect(data).to.have.lengthOf(0)
+      }
+    })
+
+    it('Should have the live listed on the channel since it is scheduled', async function () {
+      const handle = servers[0].store.channel.name + '@' + servers[0].store.channel.host
+
+      for (const server of servers) {
+        const { total, data } = await server.videos.listByChannel({ handle, includeScheduledLive: true })
+
+        expect(total).to.equal(1)
+        expect(data).to.have.lengthOf(1)
+        expect(data[0].liveSchedules[0].startAt).to.equal(scheduledForDate)
+      }
+    })
+
+    it('Should not list lives according to includeScheduledLive query param', async function () {
+      for (const server of servers) {
+        const { total, data } = await server.videos.list({ includeScheduledLive: false })
+
+        expect(total).to.equal(0)
+        expect(data).to.have.lengthOf(0)
+      }
+
+      for (const server of servers) {
+        const { total, data } = await server.videos.list({ includeScheduledLive: true })
+
+        expect(total).to.equal(1)
+        expect(data).to.have.lengthOf(1)
+      }
+
+      for (const server of servers) {
+        const { total, data } = await server.videos.list({ includeScheduledLive: true, isLive: false })
+
+        expect(total).to.equal(0)
+        expect(data).to.have.lengthOf(0)
+      }
+    })
+
+    it('Should update the live schedule', async function () {
+      const newSchedule = new Date(Date.now() + 7200000).toISOString()
+
+      await servers[0].live.update({
+        videoId: liveVideoUUID,
+        fields: {
+          schedules: [ { startAt: newSchedule } ]
+        }
+      })
+
+      await waitJobs(servers)
+
+      const handle = servers[0].store.channel.name + '@' + servers[0].store.channel.host
+      for (const server of servers) {
+        const { total, data } = await server.videos.listByChannel({ handle, includeScheduledLive: true })
+
+        expect(total).to.equal(1)
+        expect(data).to.have.lengthOf(1)
+        expect(data[0].liveSchedules[0].startAt).to.equal(newSchedule)
+      }
+    })
+
+    it('Should not list scheduled lives of the past', async function () {
+      const newSchedule = new Date(Date.now() - 1).toISOString()
+
+      await servers[0].live.update({
+        videoId: liveVideoUUID,
+        fields: {
+          schedules: [ { startAt: newSchedule } ]
+        }
+      })
+
+      await waitJobs(servers)
+
+      const handle = servers[0].store.channel.name + '@' + servers[0].store.channel.host
+      for (const server of servers) {
+        const { total, data } = await server.videos.listByChannel({ handle, includeScheduledLive: true })
+
+        expect(total).to.equal(0)
+        expect(data).to.have.lengthOf(0)
+      }
+    })
+
+    it('Should delete the live schedule', async function () {
+      await servers[0].live.update({
+        videoId: liveVideoUUID,
+        fields: {
+          schedules: null
+        }
+      })
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const video = await server.videos.get({ id: liveVideoUUID })
+
+        expect(video.liveSchedules).to.have.lengthOf(0)
+      }
+
+      const live = await servers[0].live.get({ videoId: liveVideoUUID })
+      expect(live.schedules).to.have.lengthOf(0)
+    })
+
+    it('Delete the live', async function () {
+      await servers[0].videos.remove({ id: liveVideoUUID })
+      await waitJobs(servers)
     })
   })
 
@@ -398,38 +541,22 @@ describe('Test live', function () {
     }
 
     function updateConf (resolutions: number[]) {
-      return servers[0].config.updateExistingConfig({
-        newConfig: {
-          live: {
-            enabled: true,
-            allowReplay: true,
-            maxDuration: -1,
-            transcoding: {
-              enabled: true,
-              resolutions: {
-                '144p': resolutions.includes(144),
-                '240p': resolutions.includes(240),
-                '360p': resolutions.includes(360),
-                '480p': resolutions.includes(480),
-                '720p': resolutions.includes(720),
-                '1080p': resolutions.includes(1080),
-                '2160p': resolutions.includes(2160)
-              }
-            }
-          }
-        }
+      return servers[0].config.enableLive({
+        allowReplay: true,
+        resolutions,
+        transcoding: true,
+        maxDuration: -1
       })
     }
 
     before(async function () {
-      await updateConf([])
-
       sqlCommandServer1 = new SQLCommand(servers[0])
     })
 
     it('Should enable transcoding without additional resolutions', async function () {
       this.timeout(120000)
 
+      await updateConf([])
       liveVideoId = await createLiveWrapper(false)
 
       const ffmpegCommand = await commands[0].sendRTMPStreamInVideo({ videoId: liveVideoId })
@@ -444,18 +571,6 @@ describe('Test live', function () {
         resolutions: [ 720 ],
         transcoded: true
       })
-
-      await stopFfmpeg(ffmpegCommand)
-    })
-
-    it('Should transcode audio only RTMP stream', async function () {
-      this.timeout(120000)
-
-      liveVideoId = await createLiveWrapper(false)
-
-      const ffmpegCommand = await commands[0].sendRTMPStreamInVideo({ videoId: liveVideoId, fixtureName: 'video_short_no_audio.mp4' })
-      await waitUntilLivePublishedOnAllServers(servers, liveVideoId)
-      await waitJobs(servers)
 
       await stopFfmpeg(ffmpegCommand)
     })
@@ -540,15 +655,17 @@ describe('Test live', function () {
       await waitUntilLivePublishedOnAllServers(servers, liveVideoId)
 
       const maxBitrateLimits = {
-        720: 6500 * 1000, // 60FPS
-        360: 1250 * 1000,
-        240: 700 * 1000
+        720: 6350 * 1000, // 60FPS
+        360: 1100 * 1000,
+        240: 600 * 1000,
+        0: 170 * 1000
       }
 
       const minBitrateLimits = {
-        720: 4800 * 1000,
-        360: 1000 * 1000,
-        240: 550 * 1000
+        720: 4650 * 1000,
+        360: 850 * 1000,
+        240: 400 * 1000,
+        0: 100 * 1000
       }
 
       for (const server of servers) {
@@ -567,9 +684,10 @@ describe('Test live', function () {
         expect(basename(hlsPlaylist.playlistUrl)).to.not.equal('master.m3u8')
         expect(basename(hlsPlaylist.segmentsSha256Url)).to.not.equal('segments-sha256.json')
 
-        expect(hlsPlaylist.files).to.have.lengthOf(resolutions.length)
+        const resolutionsAndAudio = [ VideoResolution.H_NOVIDEO, ...resolutions ]
+        expect(hlsPlaylist.files).to.have.lengthOf(resolutionsAndAudio.length)
 
-        for (const resolution of resolutions) {
+        for (const resolution of resolutionsAndAudio) {
           const file = hlsPlaylist.files.find(f => f.resolution.id === resolution)
 
           expect(file).to.exist
@@ -577,6 +695,8 @@ describe('Test live', function () {
 
           if (resolution >= 720) {
             expect(file.fps).to.be.approximately(60, 10)
+          } else if (resolution === VideoResolution.H_NOVIDEO) {
+            expect(file.fps).to.equal(0)
           } else {
             expect(file.fps).to.be.approximately(30, 3)
           }
@@ -587,10 +707,9 @@ describe('Test live', function () {
           const segmentPath = servers[0].servers.buildDirectory(join('streaming-playlists', 'hls', video.uuid, filename))
 
           const probe = await ffprobePromise(segmentPath)
-          const videoStream = await getVideoStream(segmentPath, probe)
 
-          expect(probe.format.bit_rate).to.be.below(maxBitrateLimits[videoStream.height])
-          expect(probe.format.bit_rate).to.be.at.least(minBitrateLimits[videoStream.height])
+          expect(probe.format.bit_rate).to.be.below(maxBitrateLimits[resolution])
+          expect(probe.format.bit_rate).to.be.at.least(minBitrateLimits[resolution])
 
           await makeRawRequest({ url: file.torrentUrl, expectedStatus: HttpStatusCode.OK_200 })
           await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
@@ -639,11 +758,12 @@ describe('Test live', function () {
       const video = await servers[0].videos.get({ id: liveVideoId })
       const hlsFiles = video.streamingPlaylists[0].files
 
-      expect(video.files).to.have.lengthOf(0)
-      expect(hlsFiles).to.have.lengthOf(resolutions.length)
+      const resolutionsWithAudio = [ VideoResolution.H_NOVIDEO, ...resolutions ]
 
-      // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
-      expect(getAllFiles(video).map(f => f.resolution.id).sort()).to.deep.equal(resolutions)
+      expect(video.files).to.have.lengthOf(0)
+      expect(hlsFiles).to.have.lengthOf(resolutionsWithAudio.length)
+
+      expect(getAllFiles(video).map(f => f.resolution.id)).to.have.members(resolutionsWithAudio)
     })
 
     it('Should only keep the original resolution if all resolutions are disabled', async function () {
@@ -676,9 +796,9 @@ describe('Test live', function () {
       const hlsFiles = video.streamingPlaylists[0].files
 
       expect(video.files).to.have.lengthOf(0)
-      expect(hlsFiles).to.have.lengthOf(1)
 
-      expect(hlsFiles[0].resolution.id).to.equal(720)
+      expect(hlsFiles).to.have.lengthOf(2)
+      expect(hlsFiles.map(f => f.resolution.id)).to.have.members([ VideoResolution.H_720P, VideoResolution.H_NOVIDEO ])
     })
 
     after(async function () {
@@ -696,15 +816,15 @@ describe('Test live', function () {
     let beforeServerRestart: Date
 
     async function createLiveWrapper (options: { saveReplay: boolean, permanent: boolean }) {
-      const liveAttributes: LiveVideoCreate = {
-        name: 'live video',
-        channelId: servers[0].store.channel.id,
-        privacy: VideoPrivacy.PUBLIC,
-        saveReplay: options.saveReplay,
-        permanentLive: options.permanent
-      }
-
-      const { uuid } = await commands[0].create({ fields: liveAttributes })
+      const { uuid } = await commands[0].create({
+        fields: {
+          name: 'live video',
+          channelId: servers[0].store.channel.id,
+          privacy: VideoPrivacy.PUBLIC,
+          saveReplay: options.saveReplay,
+          permanentLive: options.permanent
+        }
+      })
       return uuid
     }
 

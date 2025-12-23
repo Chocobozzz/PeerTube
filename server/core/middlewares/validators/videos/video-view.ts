@@ -1,5 +1,10 @@
 import { HttpStatusCode } from '@peertube/peertube-models'
-import { isVideoTimeValid } from '@server/helpers/custom-validators/video-view.js'
+import {
+  isVideoTimeValid,
+  isVideoViewEvent,
+  isVideoViewUAInfo,
+  toVideoViewUADeviceOrNull
+} from '@server/helpers/custom-validators/video-view.js'
 import { getCachedVideoDuration } from '@server/lib/video.js'
 import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer.js'
 import express from 'express'
@@ -7,18 +12,21 @@ import { body, param } from 'express-validator'
 import { isIdValid, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
 import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from '../shared/index.js'
 
+const tags = [ 'views' ]
+
 export const getVideoLocalViewerValidator = [
   param('localViewerId')
     .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (areValidationErrors(req, res)) return
+    if (areValidationErrors(req, res, { tags })) return
 
     const localViewer = await LocalVideoViewerModel.loadFullById(+req.params.localViewerId)
     if (!localViewer) {
       return res.fail({
         status: HttpStatusCode.NOT_FOUND_404,
-        message: 'Local viewer not found'
+        message: 'Local viewer not found',
+        tags
       })
     }
 
@@ -35,8 +43,26 @@ export const videoViewValidator = [
     .customSanitizer(toIntOrNull)
     .isInt(),
 
+  body('sessionId')
+    .optional()
+    .isAlphanumeric(undefined, { ignore: '-' }),
+
+  body('viewEvent')
+    .optional()
+    .custom(isVideoViewEvent),
+
+  body('client')
+    .optional()
+    .custom(isVideoViewUAInfo),
+  body('device')
+    .optional()
+    .customSanitizer(toVideoViewUADeviceOrNull),
+  body('operatingSystem')
+    .optional()
+    .custom(isVideoViewUAInfo),
+
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (areValidationErrors(req, res)) return
+    if (areValidationErrors(req, res, { tags })) return
     if (!await doesVideoExist(req.params.videoId, res, 'unsafe-only-immutable-attributes')) return
 
     const video = res.locals.onlyImmutableVideo
@@ -47,7 +73,8 @@ export const videoViewValidator = [
       return res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
         message: `Current time ${currentTime} is invalid (video ${video.uuid} duration: ${duration})`,
-        logLevel: 'warn'
+        logLevel: 'warn',
+        tags
       })
     }
 

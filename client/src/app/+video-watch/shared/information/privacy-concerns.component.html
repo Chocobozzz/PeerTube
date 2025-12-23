@@ -1,0 +1,16 @@
+@if (display) {
+  <div class="privacy-concerns">
+    <div class="privacy-concerns-text">
+      <span class="me-2">
+        <strong i18n>Friendly Reminder:</strong>&#32;
+        <ng-container i18n>
+        the sharing system used for this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.
+      </ng-container>
+      </span>
+      <a class="link-primary" i18n i18n-title title="Get more information" target="_blank" rel="noopener noreferrer" href="https://docs.joinpeertube.org/admin/privacy-guide#peertube-p2p-privacy">More information</a>
+    </div>
+    <button i18n class="ms-2 peertube-button primary-button" (click)="acceptedPrivacyConcern()">
+    OK
+  </button>
+  </div>
+}

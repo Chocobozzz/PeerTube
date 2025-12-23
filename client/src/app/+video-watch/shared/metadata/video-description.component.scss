@@ -1,0 +1,39 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.video-info-description {
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  @include margin-left($video-watch-info-margin-left);
+  @include margin-right(0);
+
+  .video-info-description-html {
+    @include peertube-word-wrap;
+
+    ::ng-deep {
+      p:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .description-loading {
+    @include margin-left(5px);
+  }
+
+  .video-info-description-more {
+    cursor: pointer;
+    font-weight: $font-semibold;
+    color: pvar(--fg-300);
+    margin-top: 1rem;
+
+    @include font-size(14px);
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .video-info-description {
+    font-size: 14px !important;
+  }
+}

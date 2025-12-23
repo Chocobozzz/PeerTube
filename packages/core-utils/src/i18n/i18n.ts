@@ -32,6 +32,7 @@ export const I18N_LOCALES = {
   'pt-BR': 'Português (Brasil)',
   'pt-PT': 'Português (Portugal)',
   'ru-RU': 'Pусский',
+  'sk-SK': 'Slovenčina',
   'sq': 'Shqip',
   'sv-SE': 'Svenska',
   'th-TH': 'ไทย',
@@ -65,6 +66,7 @@ const I18N_LOCALE_ALIAS = {
   'pl': 'pl-PL',
   'pt': 'pt-BR',
   'ru': 'ru-RU',
+  'sk': 'sk-SK',
   'sv': 'sv-SE',
   'th': 'th-TH',
   'tr': 'tr-TR',
@@ -77,7 +79,7 @@ const I18N_LOCALE_ALIAS = {
   'zh': 'zh-Hans-CN'
 }
 
-export const POSSIBLE_LOCALES = (Object.keys(I18N_LOCALES) as string[]).concat(Object.keys(I18N_LOCALE_ALIAS))
+export const AVAILABLE_LOCALES = Object.keys(I18N_LOCALES).concat(Object.keys(I18N_LOCALE_ALIAS))
 
 export function getDefaultLocale () {
   return 'en-US'
@@ -87,19 +89,19 @@ export function isDefaultLocale (locale: string) {
   return getCompleteLocale(locale) === getCompleteLocale(getDefaultLocale())
 }
 
-export function peertubeTranslate (str: string, translations?: { [ id: string ]: string }) {
+export function peertubeTranslate (str: string, translations?: { [id: string]: string }) {
   if (!translations?.[str]) return str
 
   return translations[str]
 }
 
-const possiblePaths = POSSIBLE_LOCALES.map(l => '/' + l)
+const possiblePaths = AVAILABLE_LOCALES.map(l => '/' + l)
 export function is18nPath (path: string) {
   return possiblePaths.includes(path)
 }
 
 export function is18nLocale (locale: string) {
-  return POSSIBLE_LOCALES.includes(locale)
+  return AVAILABLE_LOCALES.includes(locale)
 }
 
 export function getCompleteLocale (locale: string) {

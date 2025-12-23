@@ -1,0 +1,29 @@
+# Use another database and directories than dev.yaml
+# Useful if you work on 2 big features that update DB schema
+# To use this config: NODE_APP_INSTANCE=1 npm run dev
+
+database:
+  suffix: '_dev1'
+
+redis:
+  db: 1
+
+storage:
+  tmp: 'dev1/tmp/'
+  tmp_persistent: 'dev1/tmp-persistent/'
+  bin: 'dev1/bin/'
+  avatars: 'dev1/avatars/'
+  web_videos: 'dev1/web-videos/'
+  streaming_playlists: 'dev1/streaming-playlists/'
+  original_video_files: 'dev1/original-video-files/'
+  redundancy: 'dev1/redundancy/'
+  logs: 'dev1/logs/'
+  previews: 'dev1/previews/'
+  thumbnails: 'dev1/thumbnails/'
+  storyboards: 'dev1/storyboards/'
+  torrents: 'dev1/torrents/'
+  captions: 'dev1/captions/'
+  cache: 'dev1/cache/'
+  plugins: 'dev1/plugins/'
+  well_known: 'dev1/well-known/'
+  client_overrides: 'dev1/client-overrides/'

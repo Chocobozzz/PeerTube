@@ -1,10 +1,10 @@
-import { Component, Input, forwardRef } from '@angular/core'
-import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormsModule } from '@angular/forms'
-import { NgSelectModule } from '@ng-select/ng-select'
+import { Component, OnInit, forwardRef, input, model } from '@angular/core'
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
+import { isMobile } from '@root-helpers/web-browser'
+import { ChipsModule } from 'primeng/chips'
 
 @Component({
   selector: 'my-select-tags',
-  styleUrls: [ './select-shared.component.scss', './select-tags.component.scss' ],
   templateUrl: './select-tags.component.html',
   providers: [
     {
@@ -13,19 +13,30 @@ import { NgSelectModule } from '@ng-select/ng-select'
       multi: true
     }
   ],
-  standalone: true,
-  imports: [ NgSelectModule, FormsModule ]
+  imports: [ ChipsModule, FormsModule ]
 })
-export class SelectTagsComponent implements ControlValueAccessor {
-  @Input() availableItems: string[] = []
-  @Input() selectedItems: string[] = []
-  @Input() placeholder = $localize`Enter a new tag`
+export class SelectTagsComponent implements OnInit, ControlValueAccessor {
+  readonly inputId = input.required<string>()
+  readonly availableItems = input<string[]>([])
+  readonly selectedItems = model<string[]>([])
+  readonly placeholder = model($localize`Enter a new tag`)
 
-  propagateChange = (_: any) => { /* empty */ }
+  separator: string
+
+  ngOnInit () {
+    // FIXME: workaround for https://github.com/primefaces/primeng/issues/13981
+    if (isMobile()) {
+      this.separator = ','
+      this.placeholder.set($localize`Use a comma (,) to add a tag`)
+    }
+  }
+
+  propagateChange = (_: any) => {
+    // empty
+  }
 
   writeValue (items: string[]) {
-    this.selectedItems = items
-    this.propagateChange(this.selectedItems)
+    this.selectedItems.set(items)
   }
 
   registerOnChange (fn: (_: any) => void) {
@@ -37,6 +48,6 @@ export class SelectTagsComponent implements ControlValueAccessor {
   }
 
   onModelChange () {
-    this.propagateChange(this.selectedItems)
+    this.propagateChange(this.selectedItems())
   }
 }

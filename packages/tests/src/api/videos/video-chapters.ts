@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { VideoChapter, VideoCreateResult, VideoPrivacy } from '@peertube/peertube-models'
-import { areHttpImportTestsDisabled } from '@peertube/peertube-node-utils'
+import { areHttpImportTestsDisabled, areYoutubeImportTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
   createMultipleServers,
-  doubleFollow, PeerTubeServer, setAccessTokensToServers,
+  doubleFollow,
+  PeerTubeServer,
+  setAccessTokensToServers,
   setDefaultVideoChannel,
   waitJobs
 } from '@peertube/peertube-server-commands'
@@ -199,7 +201,6 @@ describe('Test video chapters', function () {
   })
 
   describe('With upload', function () {
-
     it('Should upload a mp4 containing chapters and automatically add them', async function () {
       const video = await servers[0].videos.quickUpload({ fixture: 'video_chapters.mp4', name: 'chapters' })
       await waitJobs(servers)
@@ -229,6 +230,8 @@ describe('Test video chapters', function () {
     if (areHttpImportTestsDisabled()) return
 
     it('Should detect chapters from youtube URL import', async function () {
+      if (areYoutubeImportTestsDisabled()) return
+
       this.timeout(120000)
 
       const attributes = {
@@ -266,6 +269,8 @@ describe('Test video chapters', function () {
     })
 
     it('Should have overriden description priority from youtube URL import', async function () {
+      if (areYoutubeImportTestsDisabled()) return
+
       this.timeout(120000)
 
       const attributes = {
@@ -307,7 +312,7 @@ describe('Test video chapters', function () {
       const attributes = {
         channelId: servers[0].store.channel.id,
         privacy: VideoPrivacy.PUBLIC,
-        targetUrl: FIXTURE_URLS.chatersVideo
+        targetUrl: FIXTURE_URLS.chaptersVideo
       }
       const { video } = await servers[0].videoImports.importVideo({ attributes })
 

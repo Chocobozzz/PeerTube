@@ -1,0 +1,48 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.advanced-filters-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  font-weight: 600;
+  cursor: pointer;
+
+  .nav-tabs {
+    margin-top: 10x;
+  }
+}
+
+.nav-metadata {
+  margin-top: 20px;
+}
+
+.file-metadata {
+  padding: 1rem;
+}
+
+.file-metadata .metadata-attribute {
+  font-size: 13px;
+  display: block;
+  margin-bottom: 12px;
+
+  > span:first-child {
+    min-width: 142px;
+    display: inline-block;
+    color: pvar(--fg-300);
+    font-weight: $font-bold;
+
+    @include padding-right(5px);
+  }
+}
+
+.download-type {
+  margin-top: 20px;
+
+  .peertube-radio-container {
+    display: inline-block;
+
+    @include margin-right(30px);
+  }
+}

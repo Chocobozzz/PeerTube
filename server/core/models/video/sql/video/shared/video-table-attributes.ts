@@ -1,12 +1,8 @@
 /**
- *
  * Class to build video attributes/join names we want to fetch from the database
- *
  */
 export class VideoTableAttributes {
-
   constructor (private readonly mode: 'get' | 'list') {
-
   }
 
   getChannelAttributesForUser () {
@@ -18,7 +14,7 @@ export class VideoTableAttributes {
       'id',
       'name',
       'description',
-      'actorId'
+      'accountId'
     ]
 
     if (this.mode === 'get') {
@@ -37,7 +33,7 @@ export class VideoTableAttributes {
   }
 
   getAccountAttributes () {
-    let attributeKeys = [ 'id', 'name', 'actorId' ]
+    let attributeKeys = [ 'id', 'name' ]
 
     if (this.mode === 'get') {
       attributeKeys = attributeKeys.concat([
@@ -90,6 +86,8 @@ export class VideoTableAttributes {
       'videoId',
       'width',
       'height',
+      'formatFlags',
+      'streams',
       'storage'
     ]
   }
@@ -168,6 +166,15 @@ export class VideoTableAttributes {
     ]
   }
 
+  getLiveScheduleAttributes () {
+    return [
+      'id',
+      'startAt',
+      'createdAt',
+      'updatedAt'
+    ]
+  }
+
   getVideoSourceAttributes () {
     return [
       'id',
@@ -196,6 +203,14 @@ export class VideoTableAttributes {
     ]
   }
 
+  getVideoAutoTagAttributes () {
+    return [ 'videoId', 'accountId', 'automaticTagId' ]
+  }
+
+  getAutoTagAttributes () {
+    return [ 'id', 'name' ]
+  }
+
   getRedundancyAttributes () {
     return [ 'id', 'fileUrl' ]
   }
@@ -205,7 +220,9 @@ export class VideoTableAttributes {
       'id',
       'preferredUsername',
       'url',
-      'serverId'
+      'serverId',
+      'accountId',
+      'videoChannelId'
     ]
 
     if (this.mode === 'get') {
@@ -264,6 +281,8 @@ export class VideoTableAttributes {
       'language',
       'privacy',
       'nsfw',
+      'nsfwSummary',
+      'nsfwFlags',
       'description',
       'support',
       'duration',
@@ -274,7 +293,7 @@ export class VideoTableAttributes {
       'isLive',
       'aspectRatio',
       'url',
-      'commentsEnabled',
+      'commentsPolicy',
       'downloadEnabled',
       'waitTranscoding',
       'state',
@@ -284,7 +303,8 @@ export class VideoTableAttributes {
       'channelId',
       'createdAt',
       'updatedAt',
-      'moveJobsRunning'
+      'moveJobsRunning',
+      'comments'
     ]
   }
 }

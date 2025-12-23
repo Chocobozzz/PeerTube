@@ -1,7 +1,3 @@
-import express from 'express'
-import { Emailer } from '@server/lib/emailer.js'
-import { Hooks } from '@server/lib/plugins/hooks.js'
-import { UserRegistrationModel } from '@server/models/user/user-registration.js'
 import { pick } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
@@ -11,11 +7,20 @@ import {
   UserRegistrationUpdateState,
   UserRight
 } from '@peertube/peertube-models'
+import { Emailer } from '@server/lib/emailer.js'
+import { Hooks } from '@server/lib/plugins/hooks.js'
+import { UserRegistrationModel } from '@server/models/user/user-registration.js'
+import express from 'express'
 import { auditLoggerFactory, UserAuditView } from '../../../helpers/audit-logger.js'
 import { logger } from '../../../helpers/logger.js'
 import { CONFIG } from '../../../initializers/config.js'
 import { Notifier } from '../../../lib/notifier/index.js'
-import { buildUser, createUserAccountAndChannelAndPlaylist, sendVerifyRegistrationEmail, sendVerifyUserEmail } from '../../../lib/user.js'
+import {
+  buildUser,
+  createUserAccountAndChannelAndPlaylist,
+  sendVerifyRegistrationEmail,
+  sendVerifyRegistrationRequestEmail
+} from '../../../lib/user.js'
 import {
   acceptOrRejectRegistrationValidator,
   asyncMiddleware,
@@ -45,7 +50,8 @@ const registrationRateLimiter = buildRateLimiter({
 
 const registrationsRouter = express.Router()
 
-registrationsRouter.post('/registrations/request',
+registrationsRouter.post(
+  '/registrations/request',
   registrationRateLimiter,
   asyncMiddleware(ensureUserRegistrationAllowedFactory('request-registration')),
   ensureUserRegistrationAllowedForIP,
@@ -53,27 +59,31 @@ registrationsRouter.post('/registrations/request',
   asyncRetryTransactionMiddleware(requestRegistration)
 )
 
-registrationsRouter.post('/registrations/:registrationId/accept',
+registrationsRouter.post(
+  '/registrations/:registrationId/accept',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_REGISTRATIONS),
   asyncMiddleware(acceptOrRejectRegistrationValidator),
   asyncRetryTransactionMiddleware(acceptRegistration)
 )
-registrationsRouter.post('/registrations/:registrationId/reject',
+registrationsRouter.post(
+  '/registrations/:registrationId/reject',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_REGISTRATIONS),
   asyncMiddleware(acceptOrRejectRegistrationValidator),
   asyncRetryTransactionMiddleware(rejectRegistration)
 )
 
-registrationsRouter.delete('/registrations/:registrationId',
+registrationsRouter.delete(
+  '/registrations/:registrationId',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_REGISTRATIONS),
   asyncMiddleware(getRegistrationValidator),
   asyncRetryTransactionMiddleware(deleteRegistration)
 )
 
-registrationsRouter.get('/registrations',
+registrationsRouter.get(
+  '/registrations',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_REGISTRATIONS),
   paginationValidator,
@@ -84,7 +94,8 @@ registrationsRouter.get('/registrations',
   asyncMiddleware(listRegistrations)
 )
 
-registrationsRouter.post('/register',
+registrationsRouter.post(
+  '/register',
   registrationRateLimiter,
   asyncMiddleware(ensureUserRegistrationAllowedFactory('direct-registration')),
   ensureUserRegistrationAllowedForIP,
@@ -118,7 +129,7 @@ async function requestRegistration (req: express.Request, res: express.Response)
   await registration.save()
 
   if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION) {
-    await sendVerifyRegistrationEmail(registration)
+    await sendVerifyRegistrationRequestEmail(registration)
   }
 
   Notifier.Instance.notifyOnNewRegistrationRequest(registration)
@@ -242,7 +253,7 @@ async function registerUser (req: express.Request, res: express.Response) {
   logger.info('User %s with its channel and account registered.', body.username)
 
   if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION) {
-    await sendVerifyUserEmail(user)
+    await sendVerifyRegistrationEmail(user)
   }
 
   Notifier.Instance.notifyOnNewDirectRegistration(user)

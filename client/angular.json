@@ -17,6 +17,10 @@
             "translation": "src/locale/angular.ar.xlf",
             "baseHref": "/client/ar/"
           },
+          "sk": {
+            "translation": "src/locale/angular.sk-SK.xlf",
+            "baseHref": "/client/sk-SK/"
+          },
           "fa": {
             "translation": "src/locale/angular.fa-IR.xlf",
             "baseHref": "/client/fa-IR/"
@@ -161,23 +165,31 @@
       },
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular/build:application",
           "options": {
+            "i18nMissingTranslation": "ignore",
             "localize": true,
-            "outputPath": "dist",
+            "outputPath": {
+              "base": "dist"
+            },
             "index": "src/index.html",
-            "main": "src/main.ts",
             "tsConfig": "tsconfig.json",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "src/polyfills.ts",
+              "@angular/localize/init"
+            ],
             "baseHref": "/",
             "stylePreprocessorOptions": {
               "includePaths": [
-                "src/sass/include"
-              ]
+                "src/sass/include",
+                "."
+              ],
+              "sass": {
+                "silenceDeprecations": [ "import", "color-functions", "global-builtin" ]
+              }
             },
             "assets": [
-              "src/assets/images",
-              "src/manifest.webmanifest"
+              "src/assets/images"
             ],
             "styles": [
               "src/sass/application.scss"
@@ -201,20 +213,20 @@
               "escape-string-regexp",
               "is-plain-object",
               "parse-srcset",
-              "deepmerge",
               "core-js/features/reflect",
-              "@formatjs/intl-locale/polyfill",
-              "@formatjs/intl-locale/should-polyfill",
-              "@formatjs/intl-pluralrules/polyfill-force",
-              "@formatjs/intl-pluralrules/should-polyfill"
+              "hammerjs",
+              "jschannel",
+              "color-bits"
             ],
             "scripts": [],
-            "vendorChunk": true,
             "extractLicenses": false,
-            "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "browser": "src/main.ts",
+            "loader": {
+              ".svg": "text"
+            }
           },
           "configurations": {
             "production": {
@@ -223,10 +235,7 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "serviceWorker": true,
-              "ngswConfigPath": "src/ngsw-config.json",
+              "serviceWorker": "src/ngsw-config.json",
               "budgets": [
                 {
                   "type": "initial",
@@ -236,7 +245,7 @@
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "6kb",
-                  "maximumError": "100kb"
+                  "maximumError": "140kb"
                 }
               ],
               "fileReplacements": [
@@ -281,15 +290,12 @@
           }
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular/build:dev-server",
           "options": {
             "proxyConfig": "proxy.config.json",
             "buildTarget": "PeerTube:build"
           },
           "configurations": {
-            "production": {
-              "buildTarget": "PeerTube:build:production"
-            },
             "hmr": {
               "buildTarget": "PeerTube:build:hmr"
             },
@@ -299,10 +305,7 @@
           }
         },
         "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "buildTarget": "PeerTube:build"
-          }
+          "builder": "@angular/build:extract-i18n"
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
@@ -322,16 +325,36 @@
       "prefix": "my",
       "style": "scss",
       "skipTests": true,
-      "flat": true
+      "flat": true,
+      "type": "component"
     },
     "@schematics/angular:directive": {
-      "prefix": "my"
+      "prefix": "my",
+      "type": "directive"
     },
     "@angular-eslint/schematics:application": {
       "setParserOptionsProject": true
     },
     "@angular-eslint/schematics:library": {
       "setParserOptionsProject": true
+    },
+    "@schematics/angular:service": {
+      "type": "service"
+    },
+    "@schematics/angular:guard": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:interceptor": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:module": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:pipe": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:resolver": {
+      "typeSeparator": "."
     }
   },
   "cli": {

@@ -1,6 +1,6 @@
 import { cleanupTests, CLICommand, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@peertube/peertube-server-commands'
 
-describe('Test reset password scripts', function () {
+describe('Test reset password CLI', function () {
   let server: PeerTubeServer
 
   before(async function () {

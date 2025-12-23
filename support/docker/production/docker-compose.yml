@@ -1,5 +1,3 @@
-version: "3.3"
-
 services:
 
   # You can comment this webserver section if you want to use another webserver/proxy or test PeerTube in local
@@ -8,7 +6,7 @@ services:
     # If you don't want to use the official image and build one from sources:
     # build:
     #   context: .
-    #   dockerfile: Dockerfile.nginx
+    #   dockerfile: ./support/docker/production/Dockerfile.nginx
     env_file:
       - .env
     ports:
@@ -24,6 +22,7 @@ services:
       - ./docker-volume/data:/var/www/peertube/storage
       - certbot-www:/var/www/certbot
       - ./docker-volume/certbot/conf:/etc/letsencrypt
+      - ./docker-volume/nginx-logs:/var/log/nginx
     depends_on:
       - peertube
     restart: "always"
@@ -44,13 +43,14 @@ services:
     # If you don't want to use the official image and build one from sources:
     # build:
     #   context: .
-    #   dockerfile: ./support/docker/production/Dockerfile.bookworm
+    #   dockerfile: ./support/docker/production/Dockerfile
     image: chocobozzz/peertube:production-bookworm
     # Use a static IP for this container because nginx does not handle proxy host change without reload
     # This container could be restarted on crash or until the postgresql database is ready for connection
     networks:
       default:
         ipv4_address: 172.18.0.42
+        ipv6_address: fdab:e4b3:21a2:ef1b::42
     env_file:
       - .env
 
@@ -69,7 +69,7 @@ services:
     restart: "always"
 
   postgres:
-    image: postgres:13-alpine
+    image: postgres:17-alpine
     env_file:
       - .env
     volumes:
@@ -77,7 +77,7 @@ services:
     restart: "always"
 
   redis:
-    image: redis:6-alpine
+    image: redis:8-alpine
     volumes:
       - ./docker-volume/redis:/data
     restart: "always"
@@ -92,10 +92,12 @@ services:
 
 networks:
   default:
+    enable_ipv6: true
     ipam:
       driver: default
       config:
       - subnet: 172.18.0.0/16
+      - subnet: fdab:e4b3:21a2:ef1b::/64
 
 volumes:
   assets:

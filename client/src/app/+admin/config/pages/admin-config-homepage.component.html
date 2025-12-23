@@ -1,0 +1,30 @@
+<my-admin-save-bar i18n-title title="Edit your homepage" (save)="save()" [form]="form" [formErrors]="formErrors"></my-admin-save-bar>
+
+<form class="homepage pt-two-cols" [formGroup]="form"  id="admin-config-form">
+  <div class="title-col">
+    <h2 i18n>HOMEPAGE</h2>
+  </div>
+
+  <div class="content-col">
+    <div class="form-group">
+      <label i18n for="homepageContent">Homepage content</label>
+      <div class="form-group-description">
+        <my-custom-markup-help></my-custom-markup-help>
+      </div>
+
+      <my-markdown-textarea
+        inputId="homepageContent"
+        formControlName="homepageContent"
+        [customMarkdownRenderer]="getCustomMarkdownRenderer()"
+        [debounceTime]="500"
+        [formError]="formErrors['homepageContent']"
+        dir="ltr"
+        monospace="true"
+      ></my-markdown-textarea>
+
+      @if (formErrors.homepageContent) {
+        <div class="form-error" role="alert">{{ formErrors.homepageContent }}</div>
+      }
+    </div>
+  </div>
+</form>

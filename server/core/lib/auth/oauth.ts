@@ -1,4 +1,3 @@
-import express from 'express'
 import OAuth2Server, {
   InvalidClientError,
   InvalidGrantError,
@@ -8,14 +7,17 @@ import OAuth2Server, {
   UnauthorizedClientError,
   UnsupportedGrantTypeError
 } from '@node-oauth/oauth2-server'
+import { pick } from '@peertube/peertube-core-utils'
+import { HttpStatusCode, ServerErrorCode, UserRegistrationState } from '@peertube/peertube-models'
+import { sha1 } from '@peertube/peertube-node-utils'
 import { randomBytesPromise } from '@server/helpers/core-utils.js'
 import { isOTPValid } from '@server/helpers/otp.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { UserRegistrationModel } from '@server/models/user/user-registration.js'
 import { MOAuthClient } from '@server/types/models/index.js'
-import { sha1 } from '@peertube/peertube-node-utils'
-import { HttpStatusCode, ServerErrorCode, UserRegistrationState } from '@peertube/peertube-models'
+import express from 'express'
 import { OTP } from '../../initializers/constants.js'
+import { Hooks } from '../plugins/hooks.js'
 import { BypassLogin, getAccessToken, getClient, getRefreshToken, getUser, revokeToken, saveToken } from './oauth-model.js'
 
 class MissingTwoFactorError extends Error {
@@ -39,9 +41,7 @@ class RegistrationApprovalRejected extends Error {
 }
 
 /**
- *
  * Reimplement some functions of OAuth2Server to inject external auth methods
- *
  */
 const oAuthServer = new OAuth2Server({
   // Wants seconds
@@ -98,18 +98,25 @@ async function handleOAuthToken (req: express.Request, options: { refreshTokenAu
     throw new UnauthorizedClientError('Unauthorized client: `grant_type` is invalid')
   }
 
+  const ip = req.ip
+  const userAgent = req.headers['user-agent']
+
   if (grantType === 'password') {
     return handlePasswordGrant({
       request,
       client,
-      bypassLogin
+      bypassLogin,
+      ip,
+      userAgent
     })
   }
 
   return handleRefreshGrant({
     request,
     client,
-    refreshTokenAuthName
+    refreshTokenAuthName,
+    ip,
+    userAgent
   })
 }
 
@@ -121,11 +128,10 @@ function handleOAuthAuthenticate (
 }
 
 export {
-  MissingTwoFactorError,
-  InvalidTwoFactorError,
-
+  handleOAuthAuthenticate,
   handleOAuthToken,
-  handleOAuthAuthenticate
+  InvalidTwoFactorError,
+  MissingTwoFactorError
 }
 
 // ---------------------------------------------------------------------------
@@ -134,41 +140,60 @@ async function handlePasswordGrant (options: {
   request: Request
   client: MOAuthClient
   bypassLogin?: BypassLogin
+  ip: string
+  userAgent: string
 }) {
-  const { request, client, bypassLogin } = options
+  const { client } = options
 
-  if (!request.body.username) {
+  const { bypassLogin, usernameOrEmail, password } = await Hooks.wrapObject({
+    bypassLogin: options.bypassLogin,
+    usernameOrEmail: options.request.body.username,
+    password: options.request.body.password
+  }, 'filter:oauth.password-grant.get-user.params')
+
+  if (!options.request.body.username) {
     throw new InvalidRequestError('Missing parameter: `username`')
   }
 
-  if (!bypassLogin && !request.body.password) {
+  if (!bypassLogin && !options.request.body.password) {
     throw new InvalidRequestError('Missing parameter: `password`')
   }
 
-  const user = await getUser(request.body.username, request.body.password, bypassLogin)
+  const user = await getUser(usernameOrEmail, password, bypassLogin)
   if (!user) {
-    const registration = await UserRegistrationModel.loadByEmailOrUsername(request.body.username)
+    const registrations = await UserRegistrationModel.listByEmailCaseInsensitiveOrUsername(usernameOrEmail)
 
-    if (registration?.state === UserRegistrationState.REJECTED) {
-      throw new RegistrationApprovalRejected('Registration approval for this account has been rejected')
-    } else if (registration?.state === UserRegistrationState.PENDING) {
-      throw new RegistrationWaitingForApproval('Registration for this account is awaiting approval')
+    if (registrations.length === 1) {
+      if (registrations[0].state === UserRegistrationState.REJECTED) {
+        throw new RegistrationApprovalRejected('Registration approval for this account has been rejected')
+      } else if (registrations[0].state === UserRegistrationState.PENDING) {
+        throw new RegistrationWaitingForApproval('Registration for this account is awaiting approval')
+      }
     }
 
     throw new InvalidGrantError('Invalid grant: user credentials are invalid')
   }
 
   if (user.otpSecret) {
-    if (!request.headers[OTP.HEADER_NAME]) {
+    if (!options.request.headers[OTP.HEADER_NAME]) {
       throw new MissingTwoFactorError('Missing two factor header')
     }
 
-    if (await isOTPValid({ encryptedSecret: user.otpSecret, token: request.headers[OTP.HEADER_NAME] }) !== true) {
+    if (await isOTPValid({ encryptedSecret: user.otpSecret, token: options.request.headers[OTP.HEADER_NAME] }) !== true) {
       throw new InvalidTwoFactorError('Invalid two factor header')
     }
   }
 
-  const token = await buildToken()
+  const now = new Date()
+
+  const token = await buildToken({
+    loginDevice: options.userAgent,
+    loginIP: options.ip,
+    loginDate: now,
+    lastActivityDevice: options.userAgent,
+    lastActivityIP: options.ip,
+    lastActivityDate: now
+  })
 
   return saveToken(token, client, user, { bypassLogin })
 }
@@ -177,6 +202,8 @@ async function handleRefreshGrant (options: {
   request: Request
   client: MOAuthClient
   refreshTokenAuthName: string
+  ip: string
+  userAgent: string
 }) {
   const { request, client, refreshTokenAuthName } = options
 
@@ -200,7 +227,15 @@ async function handleRefreshGrant (options: {
 
   await revokeToken({ refreshToken: refreshToken.refreshToken })
 
-  const token = await buildToken()
+  const token = await buildToken({
+    lastActivityDevice: options.userAgent,
+    lastActivityIP: options.ip,
+    lastActivityDate: new Date(),
+
+    loginIP: refreshToken.token.loginIP,
+    loginDate: refreshToken.token.loginDate,
+    loginDevice: refreshToken.token.loginDevice
+  })
 
   return saveToken(token, client, refreshToken.user, { refreshTokenAuthName })
 }
@@ -218,13 +253,29 @@ function getTokenExpiresAt (type: 'access' | 'refresh') {
   return new Date(Date.now() + lifetime)
 }
 
-async function buildToken () {
+async function buildToken (options: {
+  loginDevice: string
+  loginIP: string
+  loginDate: Date
+  lastActivityDevice: string
+  lastActivityIP: string
+  lastActivityDate: Date
+}) {
   const [ accessToken, refreshToken ] = await Promise.all([ generateRandomToken(), generateRandomToken() ])
 
   return {
     accessToken,
     refreshToken,
     accessTokenExpiresAt: getTokenExpiresAt('access'),
-    refreshTokenExpiresAt: getTokenExpiresAt('refresh')
+    refreshTokenExpiresAt: getTokenExpiresAt('refresh'),
+
+    ...pick(options, [
+      'loginDevice',
+      'loginIP',
+      'loginDate',
+      'lastActivityDevice',
+      'lastActivityIP',
+      'lastActivityDate'
+    ])
   }
 }

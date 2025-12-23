@@ -1,22 +1,26 @@
-import { Subject } from 'rxjs'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { AuthService, ComponentPagination, Notifier } from '@app/core'
-import { ActorFollow } from '@peertube/peertube-models'
-import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
-import { InfiniteScrollerDirective } from '../../shared/shared-main/angular/infinite-scroller.directive'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
-import { NgIf, NgFor } from '@angular/common'
-import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+import { AuthService, ComponentPagination, Notifier, resetCurrentPage } from '@app/core'
+import { formatICU } from '@app/helpers'
 import { UserSubscriptionService } from '@app/shared/shared-user-subscription/user-subscription.service'
+import { ActorFollow } from '@peertube/peertube-models'
+import { Subject } from 'rxjs'
+import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
+import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
+import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+import { InfiniteScrollerDirective } from '../../shared/shared-main/common/infinite-scroller.directive'
 
 @Component({
   templateUrl: './my-followers.component.html',
   styleUrls: [ './my-followers.component.scss' ],
-  standalone: true,
-  imports: [ GlobalIconComponent, NgIf, AdvancedInputFilterComponent, InfiniteScrollerDirective, NgFor, ActorAvatarComponent ]
+  imports: [ GlobalIconComponent, AdvancedInputFilterComponent, InfiniteScrollerDirective, ActorAvatarComponent ]
 })
 export class MyFollowersComponent implements OnInit {
+  private route = inject(ActivatedRoute)
+  private auth = inject(AuthService)
+  private userSubscriptionService = inject(UserSubscriptionService)
+  private notifier = inject(Notifier)
+
   follows: ActorFollow[] = []
 
   pagination: ComponentPagination = {
@@ -30,33 +34,24 @@ export class MyFollowersComponent implements OnInit {
 
   inputFilters: AdvancedInputFilter[]
 
-  constructor (
-    private route: ActivatedRoute,
-    private auth: AuthService,
-    private userSubscriptionService: UserSubscriptionService,
-    private notifier: Notifier
-  ) {}
-
   ngOnInit () {
     if (this.route.snapshot.queryParams['search']) {
       this.search = this.route.snapshot.queryParams['search']
     }
 
-    this.auth.userInformationLoaded.subscribe(() => {
-      const channelFilters = this.auth.getUser().videoChannels.map(c => {
-        return {
-          value: 'channel:' + c.name,
-          label: c.name
-        }
-      })
-
-      this.inputFilters = [
-        {
-          title: $localize`Channel filters`,
-          children: channelFilters
-        }
-      ]
+    const channelFilters = this.auth.getUser().videoChannels.map(c => {
+      return {
+        value: 'channel:' + c.name,
+        label: c.name
+      }
     })
+
+    this.inputFilters = [
+      {
+        title: $localize`Channel filters`,
+        children: channelFilters
+      }
+    ]
   }
 
   onNearOfBottom () {
@@ -69,11 +64,20 @@ export class MyFollowersComponent implements OnInit {
 
   onSearch (search: string) {
     this.search = search
+    resetCurrentPage(this.pagination)
+
     this.loadFollowers(false)
   }
 
   isFollowingAccount (follow: ActorFollow) {
     return follow.following.name === this.getUsername()
+  }
+
+  getTotalTitle () {
+    return formatICU(
+      $localize`${this.pagination.totalItems} {total, plural, =1 {follower} other {followers}}`,
+      { total: this.pagination.totalItems }
+    )
   }
 
   private loadFollowers (more = true) {
@@ -91,7 +95,7 @@ export class MyFollowersComponent implements OnInit {
         this.onDataSubject.next(res.data)
       },
 
-      error: err => this.notifier.error(err.message)
+      error: err => this.notifier.handleError(err)
     })
   }
 

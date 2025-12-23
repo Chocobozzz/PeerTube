@@ -1,0 +1,28 @@
+<form [formGroup]="form">
+    <div class="form-group">
+    <label i18n for="keepOriginalVideo">Save a copy of the uploaded video</label>
+
+    <my-select-options inputId="keepOriginalVideo" [items]="keepOriginalVideoOptions" formControlName="keepOriginalVideo"></my-select-options>
+  </div>
+
+  <div class="form-group">
+    <label i18n for="p2p">P2P</label>
+    <div class="form-group-description" i18n>
+      Helps your platform to distribute video content, but <a href="https://docs.joinpeertube.org/admin/privacy-guide#player-p2p" target="_blank">decreases privacy <my-global-icon iconName="external-link"></my-global-icon></a> of your users
+    </div>
+
+    <my-select-options inputId="p2p" [items]="p2pOptions" formControlName="p2p"></my-select-options>
+  </div>
+
+   <div class="form-group">
+    <label i18n for="transcription">Video transcription</label>
+
+    <my-select-options inputId="transcription" [items]="transcriptionOptions" formControlName="transcription"></my-select-options>
+  </div>
+
+  <div class="form-group">
+    <label i18n for="authType">Remote authentication</label>
+
+    <my-select-options inputId="authType" [items]="authenticationOptions" formControlName="authType"></my-select-options>
+  </div>
+</form>

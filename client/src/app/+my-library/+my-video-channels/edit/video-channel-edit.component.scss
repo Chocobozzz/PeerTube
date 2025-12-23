@@ -1,0 +1,69 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
+
+.header-block {
+  border-radius: 14px;
+  background-color: pvar(--bg-secondary-350);
+}
+
+h2 {
+  color: pvar(--fg-300);
+
+  @include font-size(22px);
+}
+
+.actions-container {
+  position: sticky;
+  top: pvar(--header-height);
+  background-color: pvar(--bg);
+  // On top of input group addons
+  z-index: 6;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.5rem;
+
+  h2 {
+    flex-shrink: 1;
+    color: pvar(--fg-350);
+    font-weight: $font-bold;
+    margin-bottom: 0;
+    line-height: normal;
+
+    @include font-size(1.5rem);
+    @include ellipsis;
+  }
+
+  .go-public-page-save {
+    display: flex;
+    gap: 1rem;
+  }
+
+  @media screen and (max-width: 1200px) {
+    flex-direction: column;
+    text-align: center;
+
+    .cancel-button {
+      display: none;
+    }
+
+    .go-public-page-save {
+      justify-content: center;
+    }
+  }
+
+  @include on-small-main-col {
+    .go-public-page {
+      display: none;
+    }
+  }
+
+  @include on-mobile-main-col {
+    padding: 0.5rem;
+    gap: 0.5rem;
+  }
+}

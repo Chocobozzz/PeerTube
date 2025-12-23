@@ -1,8 +1,19 @@
-import httpSignature from '@peertube/http-signature'
+import { signAsDraftToRequest } from '@misskey-dev/node-http-message-signatures'
+import { CONFIG } from '@server/initializers/config.js'
 import { createWriteStream } from 'fs'
 import { remove } from 'fs-extra/esm'
-import got, { CancelableRequest, OptionsInit, OptionsOfTextResponseBody, OptionsOfUnknownResponseBody, RequestError, Response } from 'got'
-import { HttpProxyAgent, HttpsProxyAgent } from 'hpagent'
+import got, {
+  CancelableRequest,
+  OptionsInit,
+  OptionsOfTextResponseBody,
+  OptionsOfUnknownResponseBodyWrapped,
+  RequestError,
+  Response
+} from 'got'
+import { gotSsrf } from 'got-ssrf'
+import http from 'http'
+import https from 'https'
+import { HttpProxyAgent, HttpsProxyAgent } from '../helpers/hpagent.js'
 import { ACTIVITY_PUB, BINARY_CONTENT_TYPES, PEERTUBE_VERSION, REQUEST_TIMEOUTS, WEBSERVER } from '../initializers/constants.js'
 import { pipelinePromise } from './core-utils.js'
 import { logger, loggerTagsFactory } from './logger.js'
@@ -12,19 +23,21 @@ const lTags = loggerTagsFactory('request')
 
 export interface PeerTubeRequestError extends Error {
   statusCode?: number
+
   responseBody?: any
   responseHeaders?: any
+
   requestHeaders?: any
+  requestUrl?: any
+  requestMethod?: any
 }
 
-type PeerTubeRequestOptions = {
+export type PeerTubeRequestOptions = {
   timeout?: number
   activityPub?: boolean
   bodyKBLimit?: number // 1MB
 
   httpSignature?: {
-    algorithm: string
-    authorizationHeaderName: string
     keyId: string
     key: string
     headers: string[]
@@ -35,8 +48,8 @@ type PeerTubeRequestOptions = {
   followRedirect?: boolean
 } & Pick<OptionsInit, 'headers' | 'json' | 'method' | 'searchParams'>
 
-const peertubeGot = got.extend({
-  ...getAgent(),
+export const unsafeSSRFGot = got.extend({
+  ...getProxyAgent(),
 
   headers: {
     'user-agent': getUserAgent()
@@ -50,8 +63,7 @@ const peertubeGot = got.extend({
 
       const bodyLimit = bodyKBLimit * 1000
 
-      /* eslint-disable @typescript-eslint/no-floating-promises */
-      promiseOrStream.on('downloadProgress', progress => {
+      void promiseOrStream.on('downloadProgress', progress => {
         if (progress.transferred > bodyLimit && progress.percent !== 1) {
           const message = `Exceeded the download limit of ${bodyLimit} B`
           logger.warn(message, lTags())
@@ -62,8 +74,7 @@ const peertubeGot = got.extend({
             return
           }
 
-          // Stream
-          (promiseOrStream as any).destroy()
+          ;(promiseOrStream as any).destroy()
         }
       })
 
@@ -78,8 +89,8 @@ const peertubeGot = got.extend({
         headers['host'] = buildUrl(options.url).host
       },
 
-      options => {
-        const httpSignatureOptions = options.context?.httpSignature
+      async options => {
+        const httpSignatureOptions = options.context?.httpSignature as PeerTubeRequestOptions['httpSignature']
 
         if (httpSignatureOptions) {
           const method = options.method ?? 'GET'
@@ -89,21 +100,20 @@ const peertubeGot = got.extend({
             throw new Error(`Cannot sign request without method (${method}) or path (${path}) ${options}`)
           }
 
-          httpSignature.signRequest({
-            getHeader: function (header: string) {
-              const value = options.headers[header.toLowerCase()]
-
-              if (!value) logger.warn('Unknown header requested by http-signature.', { headers: options.headers, header })
-              return value
-            },
-
-            setHeader: function (header: string, value: string) {
-              options.headers[header] = value
-            },
-
+          const request = {
+            headers: options.headers,
             method,
-            path
-          }, httpSignatureOptions)
+            url: path
+          }
+
+          await signAsDraftToRequest(
+            request,
+            {
+              keyId: httpSignatureOptions.keyId,
+              privateKeyPem: httpSignatureOptions.key
+            },
+            httpSignatureOptions.headers
+          )
         }
       }
     ],
@@ -116,25 +126,39 @@ const peertubeGot = got.extend({
   }
 })
 
-function doRequest (url: string, options: PeerTubeRequestOptions = {}) {
+export const peertubeGot = CONFIG.FEDERATION.PREVENT_SSRF
+  ? got.extend(gotSsrf, unsafeSSRFGot)
+  : unsafeSSRFGot
+
+// ---------------------------------------------------------------------------
+
+export function doRequest (url: string, options: PeerTubeRequestOptions & { preventSSRF?: false } = {}) {
   const gotOptions = buildGotOptions(options) as OptionsOfTextResponseBody
 
-  return peertubeGot(url, gotOptions)
-    .catch(err => { throw buildRequestError(err) })
+  const gotInstance = options.preventSSRF === false
+    ? unsafeSSRFGot
+    : peertubeGot
+
+  return gotInstance(url, gotOptions)
+    .catch(err => {
+      throw buildRequestError(err)
+    })
 }
 
-function doJSONRequest <T> (url: string, options: PeerTubeRequestOptions = {}) {
+export function doJSONRequest<T> (url: string, options: PeerTubeRequestOptions & { preventSSRF?: false } = {}) {
   const gotOptions = buildGotOptions(options)
 
-  return peertubeGot<T>(url, { ...gotOptions, responseType: 'json' })
-    .catch(err => { throw buildRequestError(err) })
+  const gotInstance = options.preventSSRF === false
+    ? unsafeSSRFGot
+    : peertubeGot
+
+  return gotInstance<T>(url, { ...gotOptions, responseType: 'json' })
+    .catch(err => {
+      throw buildRequestError(err)
+    })
 }
 
-async function doRequestAndSaveToFile (
-  url: string,
-  destPath: string,
-  options: PeerTubeRequestOptions = {}
-) {
+export async function doRequestAndSaveToFile (url: string, destPath: string, options: PeerTubeRequestOptions = {}) {
   const gotOptions = buildGotOptions({ ...options, timeout: options.timeout ?? REQUEST_TIMEOUTS.FILE })
 
   const outFile = createWriteStream(destPath)
@@ -152,8 +176,21 @@ async function doRequestAndSaveToFile (
   }
 }
 
-function getAgent () {
-  if (!isProxyEnabled()) return {}
+export function generateRequestStream (url: string, options: PeerTubeRequestOptions = {}) {
+  const gotOptions = buildGotOptions({ ...options, timeout: options.timeout ?? REQUEST_TIMEOUTS.DEFAULT })
+
+  return peertubeGot.stream(url, { ...gotOptions, isStream: true })
+}
+
+export function getProxyAgent () {
+  if (!isProxyEnabled()) {
+    return {
+      agent: { // Fix issue https://github.com/node-fetch/node-fetch/issues/1735 with Node 20
+        http: new http.Agent({ keepAlive: false }),
+        https: new https.Agent({ keepAlive: false })
+      }
+    }
+  }
 
   const proxy = getProxy()
 
@@ -176,31 +213,42 @@ function getAgent () {
   }
 }
 
+export function isBinaryResponse (result: Response<any>) {
+  return BINARY_CONTENT_TYPES.has(result.headers['content-type'])
+}
+
+export function buildRequestError (error: RequestError) {
+  if (!error.response && !error.options) return error
+
+  const newError: PeerTubeRequestError = new Error(error.message)
+  newError.name = error.name
+  newError.stack = error.stack
+
+  if (error.response) {
+    newError.responseBody = error.response.body
+    newError.responseHeaders = error.response.headers
+    newError.statusCode = error.response.statusCode
+  }
+
+  if (error.options) {
+    newError.requestHeaders = error.options.headers
+    newError.requestUrl = error.options.url
+    newError.requestMethod = error.options.method
+  }
+
+  return newError
+}
+
+// ---------------------------------------------------------------------------
+// Private
+// ---------------------------------------------------------------------------
+
 function getUserAgent () {
   return `PeerTube/${PEERTUBE_VERSION} (+${WEBSERVER.URL})`
 }
 
-function isBinaryResponse (result: Response<any>) {
-  return BINARY_CONTENT_TYPES.has(result.headers['content-type'])
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  type PeerTubeRequestOptions,
-
-  doRequest,
-  doJSONRequest,
-  doRequestAndSaveToFile,
-  isBinaryResponse,
-  getAgent,
-  peertubeGot
-}
-
-// ---------------------------------------------------------------------------
-
-function buildGotOptions (options: PeerTubeRequestOptions): OptionsOfUnknownResponseBody {
-  const { activityPub, bodyKBLimit = 1000 } = options
+function buildGotOptions (options: PeerTubeRequestOptions): OptionsOfUnknownResponseBodyWrapped {
+  const { activityPub, bodyKBLimit = 3000 } = options
 
   const context = { bodyKBLimit, httpSignature: options.httpSignature }
 
@@ -217,6 +265,7 @@ function buildGotOptions (options: PeerTubeRequestOptions): OptionsOfUnknownResp
   return {
     method: options.method,
     dnsCache: true,
+    resolveBodyOnly: false,
     timeout: {
       request: options.timeout ?? REQUEST_TIMEOUTS.DEFAULT
     },
@@ -229,24 +278,6 @@ function buildGotOptions (options: PeerTubeRequestOptions): OptionsOfUnknownResp
     headers,
     context
   }
-}
-
-function buildRequestError (error: RequestError) {
-  const newError: PeerTubeRequestError = new Error(error.message)
-  newError.name = error.name
-  newError.stack = error.stack
-
-  if (error.response) {
-    newError.responseBody = error.response.body
-    newError.responseHeaders = error.response.headers
-    newError.statusCode = error.response.statusCode
-  }
-
-  if (error.options) {
-    newError.requestHeaders = error.options.headers
-  }
-
-  return newError
 }
 
 function buildUrl (url: string | URL) {

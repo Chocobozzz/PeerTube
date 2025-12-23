@@ -26,6 +26,7 @@ storage:
   cache: 'test1/cache/'
   plugins: 'test1/plugins/'
   well_known: 'test1/well-known/'
+  uploads: 'test1/uploads/'
   client_overrides: 'test1/client-overrides/'
 
 admin:

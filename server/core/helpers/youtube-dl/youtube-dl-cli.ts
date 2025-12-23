@@ -1,20 +1,22 @@
-import { execa, NodeOptions as ExecaNodeOptions } from 'execa'
-import { ensureDir, pathExists } from 'fs-extra/esm'
-import { writeFile } from 'fs/promises'
-import { OptionsOfBufferResponseBody } from 'got'
-import { dirname, join } from 'path'
+import { randomInt } from '@peertube/peertube-core-utils'
 import { VideoResolution, VideoResolutionType } from '@peertube/peertube-models'
 import { CONFIG } from '@server/initializers/config.js'
+import { execa, Options as ExecaNodeOptions } from 'execa'
+import { ensureDir, pathExists } from 'fs-extra/esm'
+import { chmod, writeFile } from 'fs/promises'
+import { OptionsOfBufferResponseBody } from 'got'
+import { dirname, join } from 'path'
 import { logger, loggerTagsFactory } from '../logger.js'
 import { getProxy, isProxyEnabled } from '../proxy.js'
-import { isBinaryResponse, peertubeGot } from '../requests.js'
+import { isBinaryResponse, unsafeSSRFGot } from '../requests.js'
+
+type ProcessOptions = Pick<ExecaNodeOptions, 'cwd' | 'maxBuffer'>
 
 const lTags = loggerTagsFactory('youtube-dl')
 
 const youtubeDLBinaryPath = join(CONFIG.STORAGE.BIN_DIR, CONFIG.IMPORT.VIDEOS.HTTP.YOUTUBE_DL_RELEASE.NAME)
 
 export class YoutubeDLCLI {
-
   static async safeGet () {
     if (!await pathExists(youtubeDLBinaryPath)) {
       await ensureDir(dirname(youtubeDLBinaryPath))
@@ -31,7 +33,7 @@ export class YoutubeDLCLI {
     logger.info('Updating youtubeDL binary from %s.', url, lTags())
 
     const gotOptions: OptionsOfBufferResponseBody = {
-      context: { bodyKBLimit: 20_000 },
+      context: { bodyKBLimit: 100_000 },
       responseType: 'buffer' as 'buffer'
     }
 
@@ -42,7 +44,7 @@ export class YoutubeDLCLI {
     }
 
     try {
-      let gotResult = await peertubeGot(url, gotOptions)
+      let gotResult = await unsafeSSRFGot(url, gotOptions)
 
       if (!isBinaryResponse(gotResult)) {
         const json = JSON.parse(gotResult.body.toString())
@@ -53,7 +55,7 @@ export class YoutubeDLCLI {
         const releaseAsset = latest.assets.find(a => a.name === releaseName)
         if (!releaseAsset) throw new Error(`Cannot find appropriate release with name ${releaseName} in release assets`)
 
-        gotResult = await peertubeGot(releaseAsset.browser_download_url, gotOptions)
+        gotResult = await unsafeSSRFGot(releaseAsset.browser_download_url, gotOptions)
       }
 
       if (!isBinaryResponse(gotResult)) {
@@ -61,6 +63,10 @@ export class YoutubeDLCLI {
       }
 
       await writeFile(youtubeDLBinaryPath, gotResult.body)
+
+      if (!CONFIG.IMPORT.VIDEOS.HTTP.YOUTUBE_DL_RELEASE.PYTHON_PATH) {
+        await chmod(youtubeDLBinaryPath, '744')
+      }
 
       logger.info('youtube-dl updated %s.', youtubeDLBinaryPath, lTags())
     } catch (err) {
@@ -79,7 +85,7 @@ export class YoutubeDLCLI {
      * case #3 is the resolution-degraded equivalent of #1, and already a pretty safe fallback
      *
      * in any case we avoid AV1, see https://github.com/Chocobozzz/PeerTube/issues/3499
-     **/
+     */
 
     let result: string[] = []
 
@@ -104,14 +110,13 @@ export class YoutubeDLCLI {
   }
 
   private constructor () {
-
   }
 
   download (options: {
     url: string
     format: string
     output: string
-    processOptions: ExecaNodeOptions
+    processOptions: ProcessOptions
     timeout?: number
     additionalYoutubeDLArgs?: string[]
   }) {
@@ -129,7 +134,7 @@ export class YoutubeDLCLI {
   async getInfo (options: {
     url: string
     format: string
-    processOptions: ExecaNodeOptions
+    processOptions: ProcessOptions
     additionalYoutubeDLArgs?: string[]
   }) {
     const { url, format, additionalYoutubeDLArgs = [], processOptions } = options
@@ -149,7 +154,7 @@ export class YoutubeDLCLI {
   async getListInfo (options: {
     url: string
     latestVideosCount?: number
-    processOptions: ExecaNodeOptions
+    processOptions: ProcessOptions
   }): Promise<{ upload_date: string, webpage_url: string }[]> {
     const additionalYoutubeDLArgs = [ '--skip-download', '--playlist-reverse' ]
 
@@ -178,7 +183,7 @@ export class YoutubeDLCLI {
   async getSubs (options: {
     url: string
     format: 'vtt'
-    processOptions: ExecaNodeOptions
+    processOptions: ProcessOptions
   }) {
     const { url, format, processOptions } = options
 
@@ -192,7 +197,7 @@ export class YoutubeDLCLI {
     for (let i = 0, len = data.length; i < len; i++) {
       const line = data[i]
 
-      if (line.indexOf(skipString) === 0) {
+      if (line.startsWith(skipString)) {
         files.push(line.slice(skipString.length))
       }
     }
@@ -204,19 +209,23 @@ export class YoutubeDLCLI {
     url: string
     args: string[]
     timeout?: number
-    processOptions: ExecaNodeOptions
+    processOptions: ProcessOptions
   }) {
     const { url, args, timeout, processOptions } = options
 
-    let completeArgs = this.wrapWithProxyOptions(args)
+    let completeArgs = this.wrapWithJSRuntimeOptions(args)
+    completeArgs = this.wrapWithProxyOptions(completeArgs)
     completeArgs = this.wrapWithIPOptions(completeArgs)
     completeArgs = this.wrapWithFFmpegOptions(completeArgs)
 
-    const { PYTHON_PATH } = CONFIG.IMPORT.VIDEOS.HTTP.YOUTUBE_DL_RELEASE
-    const subProcess = execa(PYTHON_PATH, [ youtubeDLBinaryPath, ...completeArgs, url ], processOptions)
+    const subProcessBinary = CONFIG.IMPORT.VIDEOS.HTTP.YOUTUBE_DL_RELEASE.PYTHON_PATH || youtubeDLBinaryPath
+    const subProcessArgs = [ ...completeArgs, url ]
+    if (subProcessBinary !== youtubeDLBinaryPath) subProcessArgs.unshift(youtubeDLBinaryPath)
+
+    const subProcess = execa(subProcessBinary, subProcessArgs, processOptions)
 
     if (timeout) {
-      setTimeout(() => subProcess.cancel(), timeout)
+      setTimeout(() => subProcess.kill(), timeout)
     }
 
     const output = await subProcess
@@ -228,11 +237,26 @@ export class YoutubeDLCLI {
       : undefined
   }
 
-  private wrapWithProxyOptions (args: string[]) {
-    if (isProxyEnabled()) {
-      logger.debug('Using proxy %s for YoutubeDL', getProxy(), lTags())
+  private wrapWithJSRuntimeOptions (args: string[]) {
+    if (CONFIG.IMPORT.VIDEOS.HTTP.YOUTUBE_DL_RELEASE.NAME === 'yt-dlp') {
+      return [ '--js-runtimes', 'node' ].concat(args)
+    }
 
-      return [ '--proxy', getProxy() ].concat(args)
+    return args
+  }
+
+  private wrapWithProxyOptions (args: string[]) {
+    const config = CONFIG.IMPORT.VIDEOS.HTTP.PROXIES
+    const configProxyEnabled = Array.isArray(config) && config.length !== 0
+
+    if (configProxyEnabled || isProxyEnabled()) {
+      const proxy = configProxyEnabled
+        ? config[randomInt(0, config.length)]
+        : getProxy()
+
+      logger.debug('Using proxy %s for YoutubeDL', proxy, lTags())
+
+      return [ '--proxy', proxy ].concat(args)
     }
 
     return args

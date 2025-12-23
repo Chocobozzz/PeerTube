@@ -2,7 +2,7 @@ import { getAverageTheoreticalBitrate, getMaxTheoreticalBitrate, getMinTheoretic
 import {
   buildStreamSuffix,
   getAudioStream,
-  getMaxAudioBitrate,
+  getMaxAudioKBitrate,
   getVideoStream,
   getVideoStreamBitrate,
   getVideoStreamDimensionsInfo,
@@ -42,7 +42,7 @@ const defaultX264LiveOptionsBuilder: EncoderOptionsBuilder = (options: EncoderOp
 
 const defaultAACOptionsBuilder: EncoderOptionsBuilder = async ({ input, streamNum, canCopyAudio, inputProbe }) => {
   if (canCopyAudio && await canDoQuickAudioTranscode(input, inputProbe)) {
-    return { copy: true, outputOptions: [ ] }
+    return { copy: true, outputOptions: [] }
   }
 
   const parsedAudio = await getAudioStream(input, inputProbe)
@@ -52,7 +52,7 @@ const defaultAACOptionsBuilder: EncoderOptionsBuilder = async ({ input, streamNu
 
   const audioCodecName = parsedAudio.audioStream['codec_name']
 
-  const bitrate = getMaxAudioBitrate(audioCodecName, parsedAudio.bitrate)
+  const bitrate = getMaxAudioKBitrate(audioCodecName, parsedAudio.bitrate)
 
   // Force stereo as it causes some issues with HLS playback in Chrome
   const base = [ '-channel_layout', 'stereo' ]
@@ -116,7 +116,7 @@ export async function canDoQuickAudioTranscode (path: string, probe?: FfprobeDat
   const audioBitrate = parsedAudio.bitrate
   if (!audioBitrate) return false
 
-  const maxAudioBitrate = getMaxAudioBitrate('aac', audioBitrate)
+  const maxAudioBitrate = getMaxAudioKBitrate('aac', audioBitrate)
   if (maxAudioBitrate !== -1 && audioBitrate > maxAudioBitrate) return false
 
   const channelLayout = parsedAudio.audioStream['channel_layout']
@@ -126,8 +126,10 @@ export async function canDoQuickAudioTranscode (path: string, probe?: FfprobeDat
   return true
 }
 
-export async function canDoQuickVideoTranscode (path: string, probe?: FfprobeData): Promise<boolean> {
+export async function canDoQuickVideoTranscode (path: string, maxFPS: number, probe?: FfprobeData): Promise<boolean> {
   const videoStream = await getVideoStream(path, probe)
+  if (!videoStream) return true
+
   const fps = await getVideoStreamFPS(path, probe)
   const bitRate = await getVideoStreamBitrate(path, probe)
   const resolutionData = await getVideoStreamDimensionsInfo(path, probe)
@@ -139,7 +141,7 @@ export async function canDoQuickVideoTranscode (path: string, probe?: FfprobeDat
   if (!videoStream) return false
   if (videoStream['codec_name'] !== 'h264') return false
   if (videoStream['pix_fmt'] !== 'yuv420p') return false
-  if (fps < 2 || fps > 65) return false
+  if (fps < 2 || fps > maxFPS) return false
   if (bitRate > getMaxTheoreticalBitrate({ ...resolutionData, fps })) return false
 
   return true

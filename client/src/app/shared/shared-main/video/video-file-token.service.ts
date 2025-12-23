@@ -1,6 +1,6 @@
 import { catchError, map, of, tap } from 'rxjs'
 import { HttpClient } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { RestExtractor } from '@app/core'
 import { VideoToken } from '@peertube/peertube-models'
 import { VideoService } from './video.service'
@@ -8,13 +8,10 @@ import { VideoPasswordService } from './video-password.service'
 
 @Injectable()
 export class VideoFileTokenService {
+  private authHttp = inject(HttpClient)
+  private restExtractor = inject(RestExtractor)
 
   private readonly store = new Map<string, { token: string, expires: Date }>()
-
-  constructor (
-    private authHttp: HttpClient,
-    private restExtractor: RestExtractor
-  ) {}
 
   getVideoFileToken ({ videoUUID, videoPassword }: { videoUUID: string, videoPassword?: string }) {
     const existing = this.store.get(videoUUID)

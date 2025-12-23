@@ -1,32 +1,25 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, OnInit, inject, input } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { logger } from '@root-helpers/logger'
+import { isIOS } from '@root-helpers/web-browser'
 import { USER_HANDLE_VALIDATOR } from '../form-validators/user-validators'
-import { PeerTubeTemplateDirective } from '../shared-main/angular/peertube-template.directive'
-import { HelpComponent } from '../shared-main/misc/help.component'
-import { NgIf } from '@angular/common'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { HelpComponent } from '../shared-main/buttons/help.component'
 
 @Component({
   selector: 'my-remote-subscribe',
   templateUrl: './remote-subscribe.component.html',
-  styleUrls: [ './remote-subscribe.component.scss' ],
-  standalone: true,
-  imports: [ FormsModule, ReactiveFormsModule, NgIf, HelpComponent, PeerTubeTemplateDirective ]
+  imports: [ FormsModule, ReactiveFormsModule, HelpComponent ]
 })
 export class RemoteSubscribeComponent extends FormReactive implements OnInit {
-  @Input() uri: string
-  @Input() interact = false
-  @Input() showHelp = false
+  protected formReactiveService = inject(FormReactiveService)
+  private notifier = inject(Notifier)
 
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private notifier: Notifier
-  ) {
-    super()
-  }
+  readonly uri = input<string>(undefined)
+  readonly interact = input(false)
+  readonly showHelp = input(false)
 
   ngOnInit () {
     this.buildForm({
@@ -47,10 +40,8 @@ export class RemoteSubscribeComponent extends FormReactive implements OnInit {
 
     const [ username, hostname ] = address.split('@')
 
-    const protocol = window.location.protocol
-
     // Should not have CORS error because https://tools.ietf.org/html/rfc7033#section-5
-    fetch(`${protocol}//${hostname}/.well-known/webfinger?resource=acct:${username}@${hostname}`)
+    fetch(`https://${hostname}/.well-known/webfinger?resource=acct:${username}@${hostname}`)
       .then(response => response.json())
       .then(data => {
         if (!data || Array.isArray(data.links) === false) {
@@ -62,12 +53,16 @@ export class RemoteSubscribeComponent extends FormReactive implements OnInit {
         })
 
         if (link?.template.includes('{uri}')) {
-          return link.template.replace('{uri}', encodeURIComponent(this.uri))
+          return link.template.replace('{uri}', encodeURIComponent(this.uri()))
         }
 
         throw new Error('No subscribe template in webfinger response')
       })
-      .then(window.open)
+      .then(url => {
+        if (isIOS()) return window.location.href = url
+
+        return window.open(url)
+      })
       .catch(err => {
         logger.error(err)
 

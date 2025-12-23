@@ -1,6 +1,6 @@
+import { ExpressPromiseHandler } from '@server/types/express-handler.js'
 import { NextFunction, Request, RequestHandler, Response } from 'express'
 import { ValidationChain } from 'express-validator'
-import { ExpressPromiseHandler } from '@server/types/express-handler.js'
 import { retryTransactionWrapper } from '../helpers/database-utils.js'
 
 // Syntactic sugar to avoid try/catch in express controllers/middlewares
@@ -15,7 +15,7 @@ function asyncMiddleware (fun: RequestPromiseHandler | RequestPromiseHandler[]) 
     }
 
     try {
-      for (const f of (fun as RequestPromiseHandler[])) {
+      for (const f of fun) {
         await new Promise<void>((resolve, reject) => {
           return asyncMiddleware(f)(req, res, err => {
             if (err) return reject(err)

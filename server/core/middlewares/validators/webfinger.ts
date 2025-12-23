@@ -14,8 +14,8 @@ const webfingerValidator = [
     if (areValidationErrors(req, res)) return
 
     // Remove 'acct:' from the beginning of the string
-    const nameWithHost = getHostWithPort(req.query.resource.substr(5))
-    const [ name ] = nameWithHost.split('@')
+    const handle = getHostWithPort(req.query.resource.substr(5))
+    const [ name ] = handle.split('@')
 
     const actor = await ActorModel.loadLocalUrlByName(name)
     if (!actor) {

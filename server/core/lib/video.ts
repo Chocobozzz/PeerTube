@@ -1,9 +1,9 @@
-import memoizee from 'memoizee'
-import { Transaction } from 'sequelize'
 import { MEMOIZE_LENGTH, MEMOIZE_TTL } from '@server/initializers/constants.js'
 import { TagModel } from '@server/models/video/tag.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideoTag } from '@server/types/models/index.js'
+import memoizee from 'memoizee'
+import { Transaction } from 'sequelize'
 
 // ---------------------------------------------------------------------------
 
@@ -15,7 +15,7 @@ export async function setVideoTags (options: {
   const { video, tags, transaction } = options
 
   const internalTags = tags || []
-  const tagInstances = await TagModel.findOrCreateTags(internalTags, transaction)
+  const tagInstances = await TagModel.findOrCreateMultiple({ tags: internalTags, transaction })
 
   await video.$set('Tags', tagInstances, { transaction })
   video.Tags = tagInstances

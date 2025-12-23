@@ -1,0 +1,29 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+
+.caption-raw-textarea,
+.segments {
+  min-height: 50vh;
+  max-height: 50vh;
+
+  overflow: auto;
+}
+
+.segments textarea {
+  min-height: 100px;
+}
+
+.segment-text {
+  white-space: pre-wrap;
+
+  &.active,
+  &:hover {
+    background: pvar(--bg-secondary-400);
+  }
+}
+
+my-timestamp-input {
+  width: 130px;
+  display: inline-block;
+  vertical-align: bottom;
+}

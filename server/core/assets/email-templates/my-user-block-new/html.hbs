@@ -1,0 +1,15 @@
+{{#> base title=(t "Your account has been blocked")}}
+  <p>
+    {{#if reason}}
+      {{{t "Your account <strong>{username}</strong> has been blocked by {instanceName} moderators for the following reason:" username=username instanceName=instanceName}}}
+    {{else}}
+      {{{t "Your account <strong>{username}</strong> has been blocked by {instanceName} moderators." username=username instanceName=instanceName}}}
+    {{/if}}
+  </p>
+
+  {{#if reason}}
+    <blockquote>{{reason}}</blockquote>
+  {{/if}}
+
+  <br style="display: none;">
+{{/base}}

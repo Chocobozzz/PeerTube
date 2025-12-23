@@ -1,10 +1,10 @@
+import { VideoObject } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory, LoggerTagsFn } from '@server/helpers/logger.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideoFullLight, MVideoThumbnail } from '@server/types/models/index.js'
-import { VideoObject } from '@peertube/peertube-models'
 import { APVideoAbstractBuilder } from './abstract-builder.js'
 import { getVideoAttributesFromObject } from './object-to-model-attributes.js'
 
@@ -18,7 +18,7 @@ export class APVideoCreator extends APVideoAbstractBuilder {
   }
 
   async create () {
-    logger.debug('Adding remote video %s.', this.videoObject.id, this.lTags())
+    logger.debug('Adding remote video %s.', this.videoObject.id, { ...this.videoObject, ...this.lTags() })
 
     const channelActor = await this.getOrCreateVideoChannelFromVideoObject()
     const channel = channelActor.VideoChannel
@@ -41,6 +41,8 @@ export class APVideoCreator extends APVideoAbstractBuilder {
       await this.insertOrReplaceLive(videoCreated, t)
       await this.insertOrReplaceStoryboard(videoCreated, t)
 
+      await this.setAutomaticTags({ video: videoCreated, transaction: t })
+
       // We added a video in this channel, set it as updated
       await channel.setAsUpdated(t)
 
@@ -60,7 +62,8 @@ export class APVideoCreator extends APVideoAbstractBuilder {
       return { autoBlacklisted, videoCreated }
     })
 
-    await this.updateChaptersOutsideTransaction(videoCreated)
+    await this.updateChapters(videoCreated)
+    await this.upsertPlayerSettings(videoCreated)
 
     return { autoBlacklisted, videoCreated }
   }

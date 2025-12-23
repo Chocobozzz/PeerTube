@@ -85,7 +85,7 @@ describe('Test runner VOD transcoding', function () {
     before(async function () {
       this.timeout(60000)
 
-      await servers[0].config.enableTranscoding({ hls: true, webVideo: true })
+      await servers[0].config.enableTranscoding({ hls: true, webVideo: true, resolutions: 'max' })
     })
 
     it('Should error a transcoding job', async function () {
@@ -111,6 +111,8 @@ describe('Test runner VOD transcoding', function () {
 
     it('Should cancel a transcoding job', async function () {
       await servers[0].runnerJobs.cancelAllJobs()
+
+      await servers[0].config.enableTranscoding({ hls: true, webVideo: false })
       const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
       await waitJobs(servers)
 
@@ -397,16 +399,18 @@ describe('Test runner VOD transcoding', function () {
       await servers[0].runnerJobs.autoProcessWebVideoJob(runnerToken)
     })
 
-    it('Should have 9 jobs to process', async function () {
+    it('Should have 5 jobs to process', async function () {
       const { availableJobs } = await servers[0].runnerJobs.requestVOD({ runnerToken })
 
-      expect(availableJobs).to.have.lengthOf(9)
+      expect(availableJobs).to.have.lengthOf(5)
 
       const webVideoJobs = availableJobs.filter(j => j.type === 'vod-web-video-transcoding')
+
+      // Other HLS resolution jobs needs to web video transcoding to be processed first
       const hlsJobs = availableJobs.filter(j => j.type === 'vod-hls-transcoding')
 
       expect(webVideoJobs).to.have.lengthOf(4)
-      expect(hlsJobs).to.have.lengthOf(5)
+      expect(hlsJobs).to.have.lengthOf(1)
     })
 
     it('Should process all available jobs', async function () {
@@ -489,13 +493,13 @@ describe('Test runner VOD transcoding', function () {
       }
     })
 
-    it('Should have 7 lower resolutions to transcode', async function () {
+    it('Should have 4 lower resolutions to transcode', async function () {
       const { availableJobs } = await servers[0].runnerJobs.requestVOD({ runnerToken })
-      expect(availableJobs).to.have.lengthOf(7)
+      expect(availableJobs).to.have.lengthOf(4)
 
       for (const resolution of [ 360, 240, 144 ]) {
         const jobs = availableJobs.filter(j => j.payload.output.resolution === resolution)
-        expect(jobs).to.have.lengthOf(2)
+        expect(jobs).to.have.lengthOf(1)
       }
 
       jobUUID = availableJobs.find(j => j.payload.output.resolution === 480).uuid

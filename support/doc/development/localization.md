@@ -1,6 +1,6 @@
 # Application localization documentation
 
-Source files are in `client/src/locale` and translated files merged from [Weblate](https://weblate.framasoft.org/translate/peertube).
+Source files are in `client/src/locale` and translated files merged from [Weblate](https://weblate.framasoft.org/projects/peertube/).
 
 
 ## Generation

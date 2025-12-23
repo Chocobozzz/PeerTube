@@ -3,4 +3,5 @@ export interface RegisterRunnerBody {
 
   name: string
   description?: string
+  version?: string
 }

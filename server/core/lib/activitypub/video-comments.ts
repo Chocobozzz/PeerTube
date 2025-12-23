@@ -1,15 +1,26 @@
+import { HttpStatusCode, VideoCommentPolicy } from '@peertube/peertube-models'
 import Bluebird from 'bluebird'
 import { sanitizeAndCheckVideoCommentObject } from '../../helpers/custom-validators/activitypub/video-comments.js'
 import { logger } from '../../helpers/logger.js'
 import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants.js'
 import { VideoCommentModel } from '../../models/video/video-comment.js'
-import { MComment, MCommentOwner, MCommentOwnerVideo, MVideoAccountLightBlacklistAllFiles } from '../../types/models/video/index.js'
+import {
+  MComment,
+  MCommentOwner,
+  MCommentOwnerVideo,
+  MVideoAccountLight,
+  MVideoAccountLightBlacklistAllFiles
+} from '../../types/models/video/index.js'
+import { AutomaticTagger } from '../automatic-tags/automatic-tagger.js'
+import { setAndSaveCommentAutomaticTags } from '../automatic-tags/automatic-tags.js'
 import { isRemoteVideoCommentAccepted } from '../moderation.js'
 import { Hooks } from '../plugins/hooks.js'
+import { shouldCommentBeHeldForReview } from '../video-comment.js'
 import { fetchAP } from './activity.js'
 import { getOrCreateAPActor } from './actors/index.js'
 import { checkUrlsSameHost } from './url.js'
 import { canVideoBeFederated, getOrCreateAPVideo } from './videos/index.js'
+import { CONFIG } from '@server/initializers/config.js'
 
 type ResolveThreadParams = {
   url: string
@@ -19,17 +30,24 @@ type ResolveThreadParams = {
 }
 type ResolveThreadResult = Promise<{ video: MVideoAccountLightBlacklistAllFiles, comment: MCommentOwnerVideo, commentCreated: boolean }>
 
-async function addVideoComments (commentUrls: string[]) {
+export async function addVideoComments (commentUrls: string[]) {
+  if (CONFIG.VIDEO_COMMENTS.ACCEPT_REMOTE_COMMENTS !== true) return
+
   return Bluebird.map(commentUrls, async commentUrl => {
     try {
       await resolveThread({ url: commentUrl, isVideo: false })
     } catch (err) {
-      logger.warn('Cannot resolve thread %s.', commentUrl, { err })
+      if (err.statusCode === HttpStatusCode.NOT_FOUND_404 || err.statusCode === HttpStatusCode.GONE_410) {
+        logger.debug(`Cannot resolve thread ${commentUrl} that does not exist anymore`, { err })
+        return
+      }
+
+      logger.info(`Cannot resolve thread ${commentUrl}`, { err })
     }
   }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
 }
 
-async function resolveThread (params: ResolveThreadParams): ResolveThreadResult {
+export async function resolveThread (params: ResolveThreadParams): ResolveThreadResult {
   const { url, isVideo } = params
 
   if (params.commentCreated === undefined) params.commentCreated = false
@@ -54,24 +72,21 @@ async function resolveThread (params: ResolveThreadParams): ResolveThreadResult 
   return resolveRemoteParentComment(params)
 }
 
-export {
-  addVideoComments,
-  resolveThread
-}
-
+// ---------------------------------------------------------------------------
+// Private
 // ---------------------------------------------------------------------------
 
 async function resolveCommentFromDB (params: ResolveThreadParams) {
   const { url, comments, commentCreated } = params
 
-  const commentFromDatabase = await VideoCommentModel.loadByUrlAndPopulateReplyAndVideoUrlAndAccount(url)
+  const commentFromDatabase = await VideoCommentModel.loadByUrlAndPopulateReplyAndVideoImmutableAndAccount(url)
   if (!commentFromDatabase) return undefined
 
   let parentComments = comments.concat([ commentFromDatabase ])
 
   // Speed up things and resolve directly the thread
   if (commentFromDatabase.InReplyToVideoComment) {
-    const data = await VideoCommentModel.listThreadParentComments(commentFromDatabase, undefined, 'DESC')
+    const data = await VideoCommentModel.listThreadParentComments({ comment: commentFromDatabase, order: 'DESC' })
 
     parentComments = parentComments.concat(data)
   }
@@ -84,6 +99,8 @@ async function resolveCommentFromDB (params: ResolveThreadParams) {
   })
 }
 
+// ---------------------------------------------------------------------------
+
 async function tryToResolveThreadFromVideo (params: ResolveThreadParams) {
   const { url, comments, commentCreated } = params
 
@@ -92,8 +109,12 @@ async function tryToResolveThreadFromVideo (params: ResolveThreadParams) {
   const syncParam = { rates: true, shares: true, comments: false, refreshVideo: false }
   const { video } = await getOrCreateAPVideo({ videoObject: url, syncParam })
 
-  if (video.isOwned() && !canVideoBeFederated(video)) {
+  if (video.isLocal() && !canVideoBeFederated(video)) {
     throw new Error('Cannot resolve thread of video that is not compatible with federation')
+  }
+
+  if (video.commentsPolicy === VideoCommentPolicy.DISABLED) {
+    return undefined
   }
 
   let resultComment: MCommentOwnerVideo
@@ -109,7 +130,10 @@ async function tryToResolveThreadFromVideo (params: ResolveThreadParams) {
       return undefined
     }
 
+    const firstReplyAutomaticTags = await getAutomaticTagsAndAssignReview(firstReply, video)
     comments[comments.length - 1] = await firstReply.save()
+
+    await setAndSaveCommentAutomaticTags({ comment: firstReply, automaticTags: firstReplyAutomaticTags })
 
     for (let i = comments.length - 2; i >= 0; i--) {
       const comment = comments[i] as MCommentOwnerVideo
@@ -123,7 +147,11 @@ async function tryToResolveThreadFromVideo (params: ResolveThreadParams) {
         return undefined
       }
 
+      const automaticTags = await getAutomaticTagsAndAssignReview(comment, video)
+
       comments[i] = await comment.save()
+
+      await setAndSaveCommentAutomaticTags({ comment, automaticTags })
     }
 
     resultComment = comments[0] as MCommentOwnerVideo
@@ -131,6 +159,26 @@ async function tryToResolveThreadFromVideo (params: ResolveThreadParams) {
 
   return { video, comment: resultComment, commentCreated }
 }
+
+async function getAutomaticTagsAndAssignReview (comment: MComment, video: MVideoAccountLight) {
+  // Remote comment already exists in database or remote video -> we don't need to rebuild automatic tags
+  if (comment.id) return []
+
+  const ownerAccount = video.VideoChannel.Account
+
+  const automaticTags = await new AutomaticTagger().buildCommentsAutomaticTags({ ownerAccount, text: comment.text })
+
+  // Third parties rely on origin, so if origin has the comment it's not held for review
+  if (video.isLocal() || comment.isLocal()) {
+    comment.heldForReview = await shouldCommentBeHeldForReview({ user: null, video, automaticTags })
+  } else {
+    comment.heldForReview = false
+  }
+
+  return automaticTags
+}
+
+// ---------------------------------------------------------------------------
 
 async function resolveRemoteParentComment (params: ResolveThreadParams) {
   const { url, comments } = params
@@ -169,7 +217,11 @@ async function resolveRemoteParentComment (params: ResolveThreadParams) {
     originCommentId: null,
     createdAt: new Date(body.published),
     updatedAt: new Date(body.updated),
-    deletedAt: body.deleted ? new Date(body.deleted) : null
+    replyApproval: body.replyApproval,
+
+    deletedAt: body.deleted
+      ? new Date(body.deleted)
+      : null
   }) as MCommentOwner
   comment.Account = actor ? actor.Account : null
 
@@ -196,7 +248,7 @@ async function isRemoteCommentAccepted (comment: MComment) {
     'filter:activity-pub.remote-video-comment.create.accept.result'
   )
 
-  if (!acceptedResult || acceptedResult.accepted !== true) {
+  if (acceptedResult?.accepted !== true) {
     logger.info('Refused to create a remote comment.', { acceptedResult, acceptParameters })
 
     return false

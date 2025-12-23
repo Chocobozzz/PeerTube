@@ -1,21 +1,28 @@
-import { isArray } from '@server/helpers/custom-validators/misc.js'
-import { generateMagnetUri } from '@server/helpers/webtorrent.js'
-import { getActivityStreamDuration } from '@server/lib/activitypub/activity.js'
-import { getLocalVideoFileMetadataUrl } from '@server/lib/video-urls.js'
 import {
+  ActivityHashTagObject,
   ActivityIconObject,
   ActivityPlaylistUrlObject,
   ActivityPubStoryboard,
+  ActivitySensitiveTagObject,
   ActivityTagObject,
   ActivityTrackerUrlObject,
-  ActivityUrlObject, VideoObject
+  ActivityUrlObject,
+  nsfwFlagsToString,
+  VideoCommentPolicy,
+  VideoObject
 } from '@peertube/peertube-models'
+import { getAPPublicValue } from '@server/helpers/activity-pub-utils.js'
+import { isArray } from '@server/helpers/custom-validators/misc.js'
+import { generateMagnetUri } from '@server/lib/webtorrent.js'
+import { getActivityStreamDuration } from '@server/lib/activitypub/activity.js'
+import { getLocalVideoFileMetadataUrl } from '@server/lib/video-urls.js'
 import { WEBSERVER } from '../../../initializers/constants.js'
 import {
   getLocalVideoChaptersActivityPubUrl,
   getLocalVideoCommentsActivityPubUrl,
   getLocalVideoDislikesActivityPubUrl,
   getLocalVideoLikesActivityPubUrl,
+  getLocalVideoPlayerSettingsActivityPubUrl,
   getLocalVideoSharesActivityPubUrl
 } from '../../../lib/activitypub/url.js'
 import { MStreamingPlaylistFiles, MUserId, MVideo, MVideoAP, MVideoFile } from '../../../types/models/index.js'
@@ -40,7 +47,13 @@ export function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
     {
       type: 'Link',
       mediaType: 'text/html',
-      href: WEBSERVER.URL + '/videos/watch/' + video.uuid
+      href: WEBSERVER.URL + video.getWatchStaticPath()
+    } as ActivityUrlObject,
+
+    {
+      type: 'Link',
+      mediaType: 'text/html',
+      href: video.url
     } as ActivityUrlObject,
 
     ...buildVideoFileUrls({ video, files: video.VideoFiles }),
@@ -60,17 +73,30 @@ export function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
     licence,
     language,
     views: video.views,
+
     sensitive: video.nsfw,
+    summary: video.nsfwSummary,
+
     waitTranscoding: video.waitTranscoding,
 
     state: video.state,
-    commentsEnabled: video.commentsEnabled,
+
+    canReply: video.commentsPolicy === VideoCommentPolicy.ENABLED
+      ? null
+      : getAPPublicValue(), // Requires approval
+
+    commentsPolicy: video.commentsPolicy,
+
     downloadEnabled: video.downloadEnabled,
     published: video.publishedAt.toISOString(),
 
     originallyPublishedAt: video.originallyPublishedAt
       ? video.originallyPublishedAt.toISOString()
       : null,
+
+    schedules: (video.VideoLive?.LiveSchedules || []).map(s => ({
+      startDate: s.startAt
+    })),
 
     updated: video.updatedAt.toISOString(),
 
@@ -97,16 +123,11 @@ export function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
     shares: getLocalVideoSharesActivityPubUrl(video),
     comments: getLocalVideoCommentsActivityPubUrl(video),
     hasParts: getLocalVideoChaptersActivityPubUrl(video),
+    playerSettings: getLocalVideoPlayerSettingsActivityPubUrl(video),
 
     attributedTo: [
-      {
-        type: 'Person',
-        id: video.VideoChannel.Account.Actor.url
-      },
-      {
-        type: 'Group',
-        id: video.VideoChannel.Actor.url
-      }
+      video.VideoChannel.Account.Actor.url,
+      video.VideoChannel.Actor.url
     ],
 
     ...buildLiveAPAttributes(video)
@@ -265,17 +286,31 @@ function buildTrackerUrls (video: MVideoAP): ActivityTrackerUrlObject[] {
 
 // ---------------------------------------------------------------------------
 
-function buildTags (video: MVideoAP) {
-  if (!isArray(video.Tags)) return []
+function buildTags (video: MVideoAP): (ActivitySensitiveTagObject | ActivityHashTagObject)[] {
+  const tags = isArray(video.Tags)
+    ? video.Tags
+    : []
 
-  return video.Tags.map(t => ({
-    type: 'Hashtag' as 'Hashtag',
-    name: t.name
-  }))
+  return [
+    ...tags.map(t =>
+      ({
+        type: 'Hashtag' as 'Hashtag',
+        name: t.name
+      }) as ActivityHashTagObject
+    ),
+
+    ...nsfwFlagsToString(video.nsfwFlags).map(f =>
+      ({
+        type: 'SensitiveTag' as 'SensitiveTag',
+        name: f
+      }) as ActivitySensitiveTagObject
+    )
+  ]
 }
 
 function buildIcon (video: MVideoAP): ActivityIconObject[] {
   return [ video.getMiniature(), video.getPreview() ]
+    .filter(i => !!i)
     .map(i => i.toActivityPubObject(video))
 }
 

@@ -1,8 +1,8 @@
-import { copy, remove } from 'fs-extra/esm'
-import { readFile, rename } from 'fs/promises'
 import { ColorActionName } from '@jimp/plugin-color'
 import { buildUUID, getLowercaseExtension } from '@peertube/peertube-node-utils'
-import { convertWebPToJPG, processGIF } from './ffmpeg/index.js'
+import { copy, remove } from 'fs-extra/esm'
+import { readFile } from 'fs/promises'
+import { processImage as processImageByFFmpeg } from './ffmpeg/index.js'
 import { logger } from './logger.js'
 
 import type Jimp from 'jimp'
@@ -14,7 +14,7 @@ export function generateImageFilename (extension = '.jpg') {
 export async function processImage (options: {
   path: string
   destination: string
-  newSize: { width: number, height: number }
+  newSize?: { width: number, height: number }
   keepOriginal?: boolean // default false
 }) {
   const { path, destination, newSize, keepOriginal = false } = options
@@ -28,8 +28,8 @@ export async function processImage (options: {
   logger.debug('Processing image %s to %s.', path, destination)
 
   // Use FFmpeg to process GIF
-  if (extension === '.gif') {
-    await processGIF({ path, destination, newSize })
+  if (extension === '.gif' || extension === '.webp') {
+    await processImageByFFmpeg({ path, destination, newSize })
   } else {
     await jimpProcessor({ path, destination, newSize, inputExt: extension })
   }
@@ -52,6 +52,21 @@ export async function getImageSize (path: string) {
   }
 }
 
+// Build new size if height or width is missing, to keep the aspect ratio
+export async function buildImageSize (imagePath: string, sizeArg: { width?: number, height?: number }) {
+  if (sizeArg.width && sizeArg.height) {
+    return sizeArg as { width: number, height: number }
+  }
+
+  const size = await getImageSize(imagePath)
+  const ratio = size.width / size.height
+
+  return {
+    width: sizeArg.width ?? Math.round(sizeArg.height * ratio),
+    height: sizeArg.height ?? Math.round(sizeArg.width / ratio)
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------
@@ -59,43 +74,43 @@ export async function getImageSize (path: string) {
 async function jimpProcessor (options: {
   path: string
   destination: string
-  newSize: {
+  newSize?: {
     width: number
     height: number
   }
   inputExt: string
 }) {
-  const { path, destination, newSize, inputExt } = options
+  const { path, newSize, inputExt, destination } = options
 
-  let sourceImage: Jimp
   const inputBuffer = await readFile(path)
 
   const Jimp = await import('jimp')
-
-  try {
-    sourceImage = await Jimp.default.read(inputBuffer)
-  } catch (err) {
-    logger.debug('Cannot read %s with jimp. Try to convert the image using ffmpeg first.', path, { err })
-
-    const newName = path + '.jpg'
-    await convertWebPToJPG({ path, destination: newName })
-    await rename(newName, path)
-
-    sourceImage = await Jimp.default.read(path)
-  }
+  const sourceImage = await Jimp.default.read(inputBuffer)
 
   await remove(destination)
 
   // Optimization if the source file has the appropriate size
-  const outputExt = getLowercaseExtension(destination)
-  if (skipProcessing({ sourceImage, newSize, imageBytes: inputBuffer.byteLength, inputExt, outputExt })) {
+
+  if (
+    skipProcessing({
+      sourceImage,
+      newSize,
+      imageBytes: inputBuffer.byteLength,
+      inputExt,
+      outputExt: getLowercaseExtension(destination)
+    })
+  ) {
     return copy(path, destination)
   }
 
-  await autoResize({ sourceImage, newSize, destination })
+  if (newSize) {
+    await autoResize({ sourceImage, newSize, destination })
+  } else {
+    await write(sourceImage, destination)
+  }
 }
 
-async function autoResize (options: {
+function autoResize (options: {
   sourceImage: Jimp
   newSize: { width: number, height: number }
   destination: string
@@ -110,7 +125,7 @@ async function autoResize (options: {
 
   if (sourceIsPortrait && !destIsPortraitOrSquare) {
     const baseImage = sourceImage.cloneQuiet().cover(newSize.width, newSize.height)
-                                              .color([ { apply: ColorActionName.SHADE, params: [ 50 ] } ])
+      .color([ { apply: ColorActionName.SHADE, params: [ 50 ] } ])
 
     const topImage = sourceImage.cloneQuiet().contain(newSize.width, newSize.height)
 
@@ -126,22 +141,23 @@ function write (image: Jimp, destination: string) {
 
 function skipProcessing (options: {
   sourceImage: Jimp
-  newSize: { width: number, height: number }
+  newSize?: { width: number, height: number }
   imageBytes: number
   inputExt: string
   outputExt: string
 }) {
   const { sourceImage, newSize, imageBytes, inputExt, outputExt } = options
-  const { width, height } = newSize
 
   if (hasExif(sourceImage)) return false
-  if (sourceImage.getWidth() !== width || sourceImage.getHeight() !== height) return false
+  if (newSize && (sourceImage.getWidth() !== newSize.width || sourceImage.getHeight() !== newSize.height)) return false
   if (inputExt !== outputExt) return false
 
   const kB = 1000
 
-  if (height >= 1000) return imageBytes <= 200 * kB
-  if (height >= 500) return imageBytes <= 100 * kB
+  if (newSize) {
+    if (newSize.height >= 1000) return imageBytes <= 200 * kB
+    if (newSize.height >= 500) return imageBytes <= 100 * kB
+  }
 
   return imageBytes <= 15 * kB
 }
@@ -151,5 +167,5 @@ function hasExif (image: Jimp) {
 }
 
 function removeExif (image: Jimp) {
-  (image.bitmap as any).exifBuffer = null
+  ;(image.bitmap as any).exifBuffer = null
 }

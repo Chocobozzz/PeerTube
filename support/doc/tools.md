@@ -12,7 +12,7 @@ It can be launched from a remote server/computer to easily upload videos, manage
 Ensure you have `node` installed on your system:
 
 ```bash
-node --version # Should be >= 16.x
+node --version # Should be >= 20.x
 ```
 
 Then install the CLI:
@@ -119,16 +119,27 @@ peertube-cli redundancy remove --video 823
 
 ## PeerTube runner
 
-PeerTube >= 5.2 supports VOD or Live transcoding by a remote PeerTube runner.
+PeerTube supports VOD/Live transcoding and VOD transcription (PeerTube >= 6.2) by a remote PeerTube runner.
+
+The runner communicates with the PeerTube instance using HTTP and WebSocket and doesn't need to have a public IP.
+So you can run a runner on a classic server, a non-public server or even on your own computer!
+
+You can read the admin documentation on how to use PeerTube runners on https://docs.joinpeertube.org/admin/remote-runners
 
 ### Runner installation
 
 Ensure you have `node`, `ffmpeg` and `ffprobe` installed on your system:
 
 ```bash
-node --version # Should be >= 16.x
+node --version # Should be >= 20.x
 ffprobe -version # Should be >= 4.3
 ffmpeg -version # Should be >= 4.3
+```
+
+If you want to use video transcription:
+
+```bash
+pip install whisper-ctranslate2 # or pipx install whisper-ctranslate2 depending on your distribution
 ```
 
 Then install the CLI:
@@ -149,7 +160,41 @@ peertube-runner [commands] --id instance-2
 peertube-runner [commands] --id instance-3
 ```
 
-You can change the runner configuration (jobs concurrency, ffmpeg threads/nice etc) by editing `~/.config/peertube-runner-nodejs/[id]/config.toml`.
+You can change the runner configuration (jobs concurrency, ffmpeg threads/nice, whisper engines/models, etc.) by editing `~/.config/peertube-runner-nodejs/[id]/config.toml`.
+
+The runner TOML config template consists of:
+
+```toml
+[jobs]
+# How much concurrent jobs the runner can execute in parallel
+concurrency = 2
+
+[ffmpeg]
+# How much threads a ffmpeg process can use
+# 0 -> let ffmpeg automatically choose
+threads = 0
+nice = 20
+
+[transcription]
+# Choose between "openai-whisper" or "whisper-ctranslate2"
+# Engine binary has to be installed manually (unlike the PeerTube instance that can install whisper automatically)
+engine = "whisper-ctranslate2"
+# Optional whisper binary path if not available in global path
+enginePath = "/var/prunner/.local/pipx/venvs/whisper-ctranslate2/bin/whisper-ctranslate2"
+# Whisper model: "tiny", "base", "small", "medium", "large-v2" or "large-v3"
+model = "large-v2"
+
+# Registered instances are saved in the config file
+[[registeredInstances]]
+url = "..." # URL of the instance
+runnerToken = "..." # Shared runner token secret
+runnerName = "..." # Runner name declared to the PeerTube instance
+
+[[registeredInstances]]
+url = "..."
+runnerToken = "..."
+runnerName = "..."
+```
 
 ### Run the server
 
@@ -161,6 +206,20 @@ You need to run the runner in server mode first so it can run transcoding jobs o
 peertube-runner server
 ```
 
+You can also decide which kind of job the runner can execute with `--enable-job <type>` option.
+This way you can have one dedicated runner for transcription tasks (on a GPU machine for example) and another one for transcoding tasks.
+
+```bash
+# Only transcription tasks
+peertube-runner server --enable-job video-transcription
+# Only VOD transcoding tasks
+peertube-runner server --enable-job vod-web-video-transcoding --enable-job vod-hls-transcoding --enable-job vod-audio-merge-transcoding
+# Only "studio" transcoding
+peertube-runner server --enable-job video-studio-transcoding
+# Only "live" transcoding
+peertube-runner server --enable-job live-rtmp-hls-transcoding
+```
+
 #### As a Systemd service
 
 If your OS uses systemd, you can also configure a service so that the runner starts automatically.
@@ -169,7 +228,7 @@ To do so, first create a dedicated user. Here, we are calling it `prunner`, but 
 We are using `/srv/prunner` as his home dir, but you can choose any other path.
 
 ```bash
-useradd -m -d /srv/prunner -s /bin/bash -p prunner prunner
+useradd -m -d /srv/prunner -s /usr/sbin/nologin prunner
 ```
 
 ::: info Note
@@ -300,6 +359,42 @@ sudo -u prunner peertube-runner list-registered
 
 :::
 
+### List jobs
+
+**Runner >= 0.1.0**
+
+To list jobs that are processed by the runner:
+
+::: code-group
+
+```bash [Shell]
+peertube-runner list-jobs
+peertube-runner list-jobs --include-payload
+```
+
+```bash [Systemd]
+sudo -u prunner peertube-runner list-jobs
+sudo -u prunner peertube-runner list-jobs --include-payload
+```
+
+:::
+
+### Graceful shutdown
+
+Ask the runner to shutdown when it has finished all of its current tasks:
+
+::: code-group
+
+```bash [Shell]
+peertube-runner graceful-shutdown
+```
+
+```bash [Systemd]
+sudo -u prunner peertube-runner graceful-shutdown
+```
+
+:::
+
 ### Update the runner package
 
 You can check if there is a new runner version using:
@@ -349,7 +444,7 @@ docker compose exec -u peertube peertube npm run parse-log -- --level info
 
 `--level` is optional and could be `info`/`warn`/`error`
 
-You can also remove SQL or HTTP logs using `--not-tags` (PeerTube >= 3.2):
+You can also remove SQL or HTTP logs using `--not-tags`:
 
 ::: code-group
 
@@ -404,7 +499,7 @@ docker compose exec -u peertube peertube npm run create-import-video-file-job --
 
 ### Move video files from filesystem to object storage
 
-Use this script to move all video files or a specific video file to object storage.
+Use this script to move video related files (video files, original video file, captions, etc.) to object storage.
 
 ::: code-group
 
@@ -420,7 +515,7 @@ docker compose exec -u peertube peertube npm run create-move-video-storage-job -
 
 :::
 
-The script can also move all video files that are not already in object storage:
+The script can also move all video related files that are not already in object storage:
 
 ::: code-group
 
@@ -440,7 +535,7 @@ docker compose exec -u peertube peertube npm run create-move-video-storage-job -
 
 **PeerTube >= 6.0**
 
-Use this script to move all video files or a specific video file from object storage to the PeerTube instance filesystem.
+Use this script to move video related files (video files, original video file, captions, etc.) from object storage to the PeerTube instance filesystem.
 
 ::: code-group
 
@@ -456,7 +551,7 @@ docker compose exec -u peertube peertube npm run create-move-video-storage-job -
 
 :::
 
-The script can also move all video files that are not already on the filesystem:
+The script can also move all video related files that are not already on the filesystem:
 
 ::: code-group
 
@@ -471,6 +566,47 @@ docker compose exec -u peertube peertube npm run create-move-video-storage-job -
 ```
 
 :::
+
+### Update object storage URLs
+
+**PeerTube >= 6.2**
+
+Use this script after you migrated to another object storage provider so PeerTube updates its internal object URLs (a confirmation will be demanded first). Restart PeerTube after running the script.
+
+::: code-group
+
+```bash [Classic installation]
+cd /var/www/peertube/peertube-latest
+sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run update-object-storage-url -- --from 'https://region.old-s3-provider.example.com' --to 'https://region.new-s3-provider.example.com'
+```
+
+```bash [Docker]
+cd /var/www/peertube-docker
+docker compose exec -u peertube peertube npm run update-object-storage-url -- --from 'https://region.old-s3-provider.example.com' --to 'https://region.new-s3-provider.example.com'
+```
+
+:::
+
+### Cleanup remote files
+
+**PeerTube >= 6.2**
+
+Use this script to recover disk space by removing remote files (thumbnails, avatars...) that can be re-fetched later by your PeerTube instance on-demand:
+
+::: code-group
+
+```bash [Classic installation]
+cd /var/www/peertube/peertube-latest
+sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run house-keeping -- --delete-remote-files
+```
+
+```bash [Docker]
+cd /var/www/peertube-docker
+docker compose exec -u peertube peertube npm run house-keeping -- --delete-remote-files
+```
+
+:::
+
 
 ### Generate storyboard
 
@@ -508,15 +644,24 @@ docker compose exec -u peertube peertube npm run create-generate-storyboard-job 
 
 :::
 
-### Prune filesystem storage
+### Prune filesystem/object storage
 
 Some transcoded videos or shutdown at a bad time can leave some unused files on your storage.
-Stop PeerTube and delete these files (a confirmation will be demanded first):
+To delete these files (a confirmation will be demanded first):
 
-```bash
+::: code-group
+
+```bash [Classic installation]
 cd /var/www/peertube/peertube-latest
-sudo systemctl stop peertube && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run prune-storage
+sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run prune-storage
 ```
+
+```bash [Docker]
+cd /var/www/peertube-docker
+docker compose exec -u peertube peertube npm run prune-storage
+```
+
+:::
 
 ### Update PeerTube instance domain name
 

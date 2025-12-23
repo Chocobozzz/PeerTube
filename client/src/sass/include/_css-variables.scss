@@ -1,0 +1,187 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+
+@mixin define-css-variables() {
+  // ---------------------------------------------------------------------------
+  // New theme with fallback
+  // ---------------------------------------------------------------------------
+
+  --menu-bg: var(--menuBackgroundColor);
+  --menu-fg: var(--menuForegroundColor);
+  --menu-margin-left: #{$menu-margin-left};
+  --menu-width: #{$menu-width};
+  --menu-border-radius: #{$menu-border-radius};
+
+  --fg: var(--mainForegroundColor, #000);
+
+  --bg: var(--mainBackgroundColor, #fff);
+  --bg-secondary: var(--greyBackgroundColor, #E5E5E5);
+
+  --primary: var(--mainColor, hsl(24, 90%, 45%));
+  --on-primary: #{pvar(--fg)};
+
+  --red: #{$red};
+
+  --green: #{$green};
+
+  --input-fg: var(--inputForegroundColor, #{pvar(--fg)});
+
+  --input-bg: var(--inputBackgroundColor, #{pvar(--bg-secondary-400)});
+  --input-bg-in-modal: #{pvar(--input-bg-550)};
+  --input-bg-in-secondary: #{pvar(--input-bg-600)};
+
+  --input-danger-fg: #9C221C;
+  --input-danger-bg: #FEBBB2;
+
+  --input-placeholder-color: var(--inputPlaceholderColor, #{pvar(--fg-50)});
+  --input-placeholder-font-size: 0.875rem;
+
+  --input-border-color: var(--inputBorderColor, #{pvar(--input-bg)});
+  --input-border-width: 1px;
+
+  --input-check-active-fg: #{pvar(--on-primary)};
+  --input-check-active-bg: #{pvar(--primary)};
+
+  --input-y-padding: 5px;
+  --input-x-padding: 20px;
+
+  --input-border-radius: 4px;
+
+  --textarea-y-padding: 12px;
+  --textarea-x-padding: 15px;
+  --textarea-fg: var(--textareaForegroundColor, #{pvar(--input-fg)});
+  --textarea-bg: var(--textareaBackgroundColor, #{pvar(--input-bg)});
+  --textarea-bg-in-modal: #{pvar(--input-bg-in-modal)};
+  --textarea-bg-in-secondary: #{pvar(--input-bg-in-secondary)};
+
+  --support-btn-fg: var(--supportButtonColor, #{pvar(--fg-300)});
+  --support-btn-bg: var(--supportButtonBackgroundColor, transparent);
+  --support-btn-heart-bg: var(--supportButtonHeartColor, #{pvar(--support-btn-fg)});
+
+  --x-margin-content: 2rem;
+
+  --secondary-icon-color: #{pvar(--fg-50)};
+  --active-icon-color: #{pvar(--on-primary)};
+  --active-icon-bg: #{pvar(--primary)};
+
+  --border-primary: #{pvar(--primary)};
+  --border-secondary: #{pvar(--bg-secondary-450)};
+
+  --alert-primary-fg: #{pvar(--on-primary-200)};
+  --alert-primary-bg: #{pvar(--primary-200)};
+  --alert-primary-border-color: #{pvar(--primary-300)};
+
+  --pt-player-fg: #fff;
+  --pt-player-big-play-bg: rgba(0, 0, 0, 0.8);
+
+  --menu-fg: #{pvar(--fg-400)};
+  --menu-bg: #{pvar(--bg-secondary-400)};
+
+  --header-fg: #{pvar(--fg)};
+  --header-bg: #{pvar(--bg)};
+
+  --pt-player-overlay-secondary-fg: #{pvar(--fg-400)};
+  --pt-player-overlay-secondary-bg: #{pvar(--bg-secondary-400)};
+
+  // ---------------------------------------------------------------------------
+
+  --tmp-header-height: #{$header-height};
+
+  @media screen and (max-width: $small-view) {
+    --tmp-header-height: #{$header-height-small-view};
+  }
+
+  @media screen and (max-width: $mobile-view) {
+    --tmp-header-height: #{$header-height-mobile-view};
+
+    &.global-search-hidden {
+      --tmp-header-height: #{$header-height-mobile-view-without-search};
+    }
+  }
+
+  --header-height: #{pvar(--tmp-header-height)};
+
+  &.mobile-app-msg {
+    --header-height: calc(#{pvar(--tmp-header-height)} + #{$header-mobile-msg-height});
+  }
+
+  // ---------------------------------------------------------------------------
+
+  // Light theme
+  &[data-pt-theme="peertube-core-light-beige"],
+  &[data-pt-theme="default"] {
+    --is-dark: 0;
+
+    --primary: #FF8F37;
+    --border-primary: #F2690D;
+
+    --fg: hsl(0 14% 2%);
+    --fg-200: hsl(0 14% 29%);
+
+    --bg: hsl(250 5% 96%);
+    --bg-secondary: hsl(0 12% 72%);
+    --bg-secondary-500: hsl(0 12% 72%);
+    --bg-secondary-450: hsl(0 13% 81%);
+    --bg-secondary-400: hsl(0 19% 89%);
+    --bg-secondary-350: hsl(0 13% 92%);
+
+    --menu-bg-600: hsl(0 12% 72%);
+    --menu-bg-550: hsl(0 13% 81%);
+    --menu-bg: hsl(0 19% 89%);
+
+    --secondary-icon-color: hsl(0, 9%, 51%);
+    --input-placeholder-color: hsl(0, 9%, 51%);
+
+    --input-check-active-fg: #{pvar(--bg)};
+    --input-check-active-bg: #{pvar(--fg-250)};
+
+    --alert-primary-fg: #{pvar(--on-primary-200)};
+    --alert-primary-bg: #{pvar(--primary-200)};
+    --alert-primary-border-color: #{pvar(--primary-300)};
+  }
+
+  // Brown
+  &[data-pt-theme="peertube-core-dark-brown"] {
+    --is-dark: 1;
+
+    --primary: #FD9C50;
+    --on-primary: #111;
+    --border-primary: #F2690D;
+
+    --input-bg: #{pvar(--bg-secondary-450)};
+
+    --input-danger-fg: #FEBBB2;
+    --input-danger-bg: #9C221C;
+
+    --fg: hsl(0 10% 96%);
+
+    --bg: hsl(0 14% 7%);
+    --bg-secondary: hsl(0 14% 22%);
+
+    --alert-primary-fg: #{pvar(--on-primary)};
+    --alert-primary-bg: #cd9e7a;
+    --alert-primary-border-color: #{pvar(--primary-600)};
+
+    --active-icon-color: #{pvar(--fg-450)};
+    --active-icon-bg: #{pvar(--bg-secondary-600)};
+  }
+}
+
+@mixin define-input-css-variables-in-secondary() {
+  --textarea-bg: #{pvar(--textarea-bg-in-secondary)};
+
+  @include define-input-css-variables(pvar(--input-bg-in-secondary));
+}
+
+@mixin define-input-css-variables-in-modal() {
+  --textarea-bg: #{pvar(--textarea-bg-in-modal)};
+
+  @include define-input-css-variables(pvar(--input-bg-in-modal));
+}
+
+@mixin define-input-css-variables($value) {
+  --input-bg: #{$value};
+  --input-border-color: #{$value};
+  --p-multiselect-background: #{$value};
+  --p-select-background: #{$value};
+}

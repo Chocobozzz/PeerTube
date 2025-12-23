@@ -1,0 +1,19 @@
+<form [formGroup]="form">
+  <div class="form-group">
+    <label i18n for="remoteImport">Video import and synchronization</label>
+
+    <my-select-options inputId="remoteImport" [items]="importOptions" formControlName="remoteImport"></my-select-options>
+  </div>
+
+  <div class="form-group">
+    <label i18n for="live">Users can stream lives</label>
+
+    <my-select-options inputId="live" [items]="liveOptions" formControlName="live"></my-select-options>
+  </div>
+
+  <div class="form-group">
+    <label i18n for="keepOriginalVideo">Save a copy of the uploaded video</label>
+
+    <my-select-options inputId="keepOriginalVideo" [items]="keepOriginalVideoOptions" formControlName="keepOriginalVideo"></my-select-options>
+  </div>
+</form>

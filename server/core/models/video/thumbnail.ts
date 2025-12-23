@@ -2,7 +2,7 @@ import { ActivityIconObject, ThumbnailType, type ThumbnailType_Type } from '@pee
 import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 import { MThumbnail, MThumbnailVideo, MVideo, MVideoPlaylist } from '@server/types/models/index.js'
 import { remove } from 'fs-extra/esm'
-import { join } from 'path'
+import { extname, join } from 'path'
 import {
   AfterDestroy,
   AllowNull,
@@ -13,15 +13,17 @@ import {
   CreatedAt,
   DataType,
   Default,
-  ForeignKey, Table,
+  ForeignKey,
+  Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { logger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
-import { CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, WEBSERVER } from '../../initializers/constants.js'
+import { CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, MIMETYPES, WEBSERVER } from '../../initializers/constants.js'
+import { SequelizeModel } from '../shared/sequelize-type.js'
+import { buildSQLAttributes } from '../shared/table.js'
 import { VideoPlaylistModel } from './video-playlist.js'
 import { VideoModel } from './video.js'
-import { SequelizeModel } from '../shared/sequelize-type.js'
 
 @Table({
   tableName: 'thumbnail',
@@ -40,40 +42,39 @@ import { SequelizeModel } from '../shared/sequelize-type.js'
   ]
 })
 export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
-
   @AllowNull(false)
   @Column
-  filename: string
+  declare filename: string
 
   @AllowNull(true)
   @Default(null)
   @Column
-  height: number
+  declare height: number
 
   @AllowNull(true)
   @Default(null)
   @Column
-  width: number
+  declare width: number
 
   @AllowNull(false)
   @Column
-  type: ThumbnailType_Type
+  declare type: ThumbnailType_Type
 
   @AllowNull(true)
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.COMMONS.URL.max))
-  fileUrl: string
+  declare fileUrl: string
 
   @AllowNull(true)
   @Column
-  automaticallyGenerated: boolean
+  declare automaticallyGenerated: boolean
 
   @AllowNull(false)
   @Column
-  onDisk: boolean
+  declare onDisk: boolean
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -81,11 +82,11 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
     },
     onDelete: 'CASCADE'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   @ForeignKey(() => VideoPlaylistModel)
   @Column
-  videoPlaylistId: number
+  declare videoPlaylistId: number
 
   @BelongsTo(() => VideoPlaylistModel, {
     foreignKey: {
@@ -93,18 +94,18 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
     },
     onDelete: 'CASCADE'
   })
-  VideoPlaylist: Awaited<VideoPlaylistModel>
+  declare VideoPlaylist: Awaited<VideoPlaylistModel>
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   // If this thumbnail replaced existing one, track the old name
   previousThumbnailFilename: string
 
-  private static readonly types: { [ id in ThumbnailType_Type ]: { label: string, directory: string, staticPath: string } } = {
+  private static readonly types: { [id in ThumbnailType_Type]: { label: string, directory: string, staticPath: string } } = {
     [ThumbnailType.MINIATURE]: {
       label: 'miniature',
       directory: CONFIG.STORAGE.THUMBNAILS_DIR,
@@ -129,8 +130,20 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
 
     // Don't block the transaction
     instance.removeThumbnail()
-            .catch(err => logger.error('Cannot remove thumbnail file %s.', instance.filename, { err }))
+      .catch(err => logger.error('Cannot remove thumbnail file %s.', instance.filename, { err }))
   }
+
+  // ---------------------------------------------------------------------------
+
+  static getSQLAttributes (tableName: string, aliasPrefix = '') {
+    return buildSQLAttributes({
+      model: this,
+      tableName,
+      aliasPrefix
+    })
+  }
+
+  // ---------------------------------------------------------------------------
 
   static loadByFilename (filename: string, thumbnailType: ThumbnailType_Type): Promise<MThumbnail> {
     const query = {
@@ -160,16 +173,39 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
     return ThumbnailModel.findOne(query)
   }
 
+  static listRemoteOnDisk () {
+    return this.findAll<MThumbnail>({
+      where: {
+        onDisk: true
+      },
+      include: [
+        {
+          attributes: [ 'id' ],
+          model: VideoModel.unscoped(),
+          required: true,
+          where: {
+            remote: true
+          }
+        }
+      ]
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
   static buildPath (type: ThumbnailType_Type, filename: string) {
     const directory = ThumbnailModel.types[type].directory
 
     return join(directory, filename)
   }
 
+  // ---------------------------------------------------------------------------
+
   getOriginFileUrl (videoOrPlaylist: MVideo | MVideoPlaylist) {
     const staticPath = ThumbnailModel.types[this.type].staticPath + this.filename
 
-    if (videoOrPlaylist.isOwned()) return WEBSERVER.URL + staticPath
+    // FIXME: typings
+    if ((videoOrPlaylist as MVideo).isLocal()) return WEBSERVER.URL + staticPath
 
     return this.fileUrl
   }
@@ -200,7 +236,7 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
     this.previousThumbnailFilename = undefined
   }
 
-  isOwned () {
+  isLocal () {
     return !this.fileUrl
   }
 
@@ -210,7 +246,7 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
     return {
       type: 'Image',
       url: this.getOriginFileUrl(video),
-      mediaType: 'image/jpeg',
+      mediaType: MIMETYPES.IMAGE.EXT_MIMETYPE[extname(this.filename)],
       width: this.width,
       height: this.height
     }

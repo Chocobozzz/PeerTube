@@ -1,6 +1,6 @@
+import { root } from '@peertube/peertube-node-utils'
 import { readdir, stat } from 'fs/promises'
 import { join } from 'path'
-import { root } from '@peertube/peertube-node-utils'
 
 async function run () {
   const result = {
@@ -14,17 +14,21 @@ async function run () {
 run()
   .catch(err => console.error(err))
 
-async function buildResult (path: string) {
+async function buildResult (path: string, root = path) {
   const distFiles = await readdir(path)
 
-  const files: { name: string, size: number }[] = []
+  let files: { name: string, size: number }[] = []
 
   for (const file of distFiles) {
     const filePath = join(path, file)
 
     const statsResult = await stat(filePath)
+    if (statsResult.isDirectory()) {
+      files = files.concat(await buildResult(filePath, root))
+    }
+
     files.push({
-      name: file,
+      name: filePath.replace(new RegExp(`^${root}/`), ''),
       size: statsResult.size
     })
   }

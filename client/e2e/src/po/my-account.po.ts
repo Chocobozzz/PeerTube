@@ -1,7 +1,7 @@
+import { NSFWPolicyType } from '@peertube/peertube-models'
 import { getCheckbox, go, selectCustomSelect } from '../utils'
 
 export class MyAccountPage {
-
   navigateToMyVideos () {
     return $('a[href="/my-library/videos"]').click()
   }
@@ -14,20 +14,34 @@ export class MyAccountPage {
     return $('a[href="/my-library/history/videos"]').click()
   }
 
-  // Settings
+  // ---------------------------------------------------------------------------
+  // My account settings
+  // ---------------------------------------------------------------------------
 
   navigateToMySettings () {
     return $('a[href="/my-account"]').click()
   }
 
-  async updateNSFW (newValue: 'do_not_list' | 'blur' | 'display') {
-    const nsfw = $('#nsfwPolicy')
+  async updateNSFW (newValue: NSFWPolicyType) {
+    const nsfw = $(`#nsfwPolicy-${newValue} + label`)
 
     await nsfw.waitForDisplayed()
     await nsfw.scrollIntoView({ block: 'center' }) // Avoid issues with fixed header
     await nsfw.waitForClickable()
 
-    await nsfw.selectByAttribute('value', newValue)
+    await nsfw.click()
+
+    await this.submitVideoSettings()
+  }
+
+  async updateViolentFlag (newValue: NSFWPolicyType) {
+    const nsfw = $(`#nsfwFlagViolent-${newValue} + label`)
+
+    await nsfw.waitForDisplayed()
+    await nsfw.scrollIntoView({ block: 'center' }) // Avoid issues with fixed header
+    await nsfw.waitForClickable()
+
+    await nsfw.click()
 
     await this.submitVideoSettings()
   }
@@ -51,10 +65,28 @@ export class MyAccountPage {
     await submit.click()
   }
 
-  // My account Videos
+  async updateEmail (email: string, password: string) {
+    const emailInput = $('my-account-change-email #new-email')
+    await emailInput.waitForDisplayed()
+    await emailInput.scrollIntoView({ block: 'center' }) // Avoid issues with fixed header
+    await emailInput.setValue(email)
+
+    const passwordInput = $('my-account-change-email #password')
+    await passwordInput.waitForDisplayed()
+    await passwordInput.setValue(password)
+
+    const submit = $('my-account-change-email input[type=submit]')
+    await submit.scrollIntoView({ block: 'center' }) // Avoid issues with fixed header
+    await submit.waitForClickable()
+    await submit.click()
+  }
+
+  // ---------------------------------------------------------------------------
+  // My account videos
+  // ---------------------------------------------------------------------------
 
   async removeVideo (name: string) {
-    const container = await this.getVideoElement(name)
+    const container = await this.getVideoRow(name)
 
     await container.$('my-action-dropdown .dropdown-toggle').click()
 
@@ -76,8 +108,8 @@ export class MyAccountPage {
   }
 
   async countVideos (names: string[]) {
-    const elements = await $$('.video').filter(async e => {
-      const t = await e.$('.video-miniature-name').getText()
+    const elements = await $$('.video-cell-name .name').filter(async e => {
+      const t = await e.getText()
 
       return names.some(n => t.includes(n))
     })
@@ -85,7 +117,21 @@ export class MyAccountPage {
     return elements.length
   }
 
+  async getVideoRow (name: string) {
+    let el = $('.name*=' + name)
+
+    await el.waitForDisplayed()
+
+    while (await el.getTagName() !== 'tr') {
+      el = el.parentElement()
+    }
+
+    return el
+  }
+
+  // ---------------------------------------------------------------------------
   // My account playlists
+  // ---------------------------------------------------------------------------
 
   async getPlaylistVideosText (name: string) {
     const elem = await this.getPlaylist(name)
@@ -125,7 +171,7 @@ export class MyAccountPage {
     await selectCustomSelect('videoChannelId', 'Main root channel')
     await selectCustomSelect('privacy', privacy)
 
-    const submit = await $('form input[type=submit]')
+    const submit = $('form input[type=submit]')
     await submit.waitForClickable()
     await submit.scrollIntoView()
     await submit.click()
@@ -135,33 +181,11 @@ export class MyAccountPage {
     })
   }
 
-  // My account Videos
-
-  private async getVideoElement (name: string) {
-    const video = async () => {
-      const videos = await $$('.video').filter(async e => {
-        const t = await e.$('.video-miniature-name').getText()
-
-        return t.includes(name)
-      })
-
-      return videos[0]
-    }
-
-    await browser.waitUntil(async () => {
-      return (await video()).isDisplayed()
-    })
-
-    return video()
-  }
-
-  // My account playlists
-
   private async getPlaylist (name: string) {
     const playlist = () => {
       return $$('my-video-playlist-miniature')
         .filter(async e => {
-          const t = await e.$('.miniature-name').getText()
+          const t = await e.$('img').getAttribute('aria-label')
 
           return t.includes(name)
         })

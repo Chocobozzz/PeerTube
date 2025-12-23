@@ -29,6 +29,7 @@
         <button onclick="player.setVolume(1)">Unmute</button>
         <button onclick="player.playNextVideo()">Next video</button>
         <button onclick="player.playPreviousVideo()">Previous video</button>
+        <button onclick="getPlayerStatus()">Get status</button>
       </div>
       <br/>
 
@@ -56,6 +57,11 @@
         </fieldset>
 
         <fieldset>
+          <legend>Status</legend>
+          <div id="player-status"></div>
+        </fieldset>
+
+        <fieldset>
           <legend>Playlist position</legend>
           <div id="playlist-position"></div>
         </fieldset>
@@ -67,5 +73,7 @@
   <!-- iframes are used dynamically -->
   <iframe hidden></iframe>
   <a hidden></a>
+
+  <script type="module" src="./test-embed.ts"></script>
 </body>
 </html>

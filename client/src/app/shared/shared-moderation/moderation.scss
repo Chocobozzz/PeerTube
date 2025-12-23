@@ -1,7 +1,7 @@
-@use 'sass:math';
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_miniature' as *;
+@use "sass:math";
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_miniature" as *;
 
 .moderation-expanded {
   font-size: 90%;
@@ -10,13 +10,13 @@
   justify-content: space-between;
 
   .moderation-expanded-label {
-    @include margin-right(5px);
-
     font-weight: $font-semibold;
     display: inline-block;
     vertical-align: top;
     text-align: end;
     min-width: 100px;
+
+    @include margin-right(5px);
   }
 
   .moderation-expanded-text {
@@ -33,24 +33,19 @@
     max-width: 500px;
   }
 
-  @media screen and (max-width: $primeng-breakpoint) {
+  @media screen and (max-width: $medium-view) {
     .right {
       width: 100%;
     }
   }
 }
 
-my-action-dropdown.show {
-  ::ng-deep .dropdown-root {
-    display: block !important;
-  }
-}
-
 .table-comment-link,
 .table-account-link {
-  @include disable-outline;
+  text-decoration: none;
+  color: pvar(--fg);
 
-  color: var(--mainForegroundColor);
+  @include disable-outline;
 
   ::ng-deep p:last-child {
     margin: 0;
@@ -66,7 +61,7 @@ my-abuse-details {
   width: 100%;
 }
 
-@media screen and (max-width: $primeng-breakpoint) {
+@media screen and (max-width: $medium-view) {
   .abuse-messages {
     justify-content: flex-start !important;
   }

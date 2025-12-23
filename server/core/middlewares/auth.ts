@@ -1,16 +1,23 @@
-import express from 'express'
-import { Socket } from 'socket.io'
 import { HttpStatusCode, HttpStatusCodeType, ServerErrorCodeType } from '@peertube/peertube-models'
 import { getAccessToken } from '@server/lib/auth/oauth-model.js'
 import { RunnerModel } from '@server/models/runner/runner.js'
+import express from 'express'
+import { Socket } from 'socket.io'
 import { logger } from '../helpers/logger.js'
 import { handleOAuthAuthenticate } from '../lib/auth/oauth.js'
+import { UpdateTokenSessionScheduler } from '@server/lib/schedulers/update-token-session-scheduler.js'
 
-function authenticate (req: express.Request, res: express.Response, next: express.NextFunction) {
+export function authenticate (req: express.Request, res: express.Response, next: express.NextFunction) {
   handleOAuthAuthenticate(req, res)
     .then((token: any) => {
       res.locals.oauth = { token }
       res.locals.authenticated = true
+
+      UpdateTokenSessionScheduler.Instance.addToUpdate(token.id, {
+        lastActivityDate: new Date(),
+        lastActivityIP: req.ip,
+        lastActivityDevice: req.header('user-agent')
+      })
 
       return next()
     })
@@ -25,7 +32,7 @@ function authenticate (req: express.Request, res: express.Response, next: expres
     })
 }
 
-function authenticateSocket (socket: Socket, next: (err?: any) => void) {
+export function authenticateSocket (socket: Socket, next: (err?: any) => void) {
   const accessToken = socket.handshake.query['accessToken']
 
   logger.debug('Checking access token in runner.')
@@ -48,31 +55,7 @@ function authenticateSocket (socket: Socket, next: (err?: any) => void) {
     .catch(err => logger.error('Cannot get access token.', { err }))
 }
 
-function authenticatePromise (options: {
-  req: express.Request
-  res: express.Response
-  errorMessage?: string
-  errorStatus?: HttpStatusCodeType
-  errorType?: ServerErrorCodeType
-}) {
-  const { req, res, errorMessage = 'Not authenticated', errorStatus = HttpStatusCode.UNAUTHORIZED_401, errorType } = options
-  return new Promise<void>(resolve => {
-    // Already authenticated? (or tried to)
-    if (res.locals.oauth?.token.User) return resolve()
-
-    if (res.locals.authenticated === false) {
-      return res.fail({
-        status: errorStatus,
-        type: errorType,
-        message: errorMessage
-      })
-    }
-
-    authenticate(req, res, () => resolve())
-  })
-}
-
-function optionalAuthenticate (req: express.Request, res: express.Response, next: express.NextFunction) {
+export function optionalAuthenticate (req: express.Request, res: express.Response, next: express.NextFunction) {
   if (req.header('authorization')) return authenticate(req, res, next)
 
   res.locals.authenticated = false
@@ -80,9 +63,38 @@ function optionalAuthenticate (req: express.Request, res: express.Response, next
   return next()
 }
 
+export function authenticateOrFail (options: {
+  req: express.Request
+  res: express.Response
+  errorMessage?: string
+  errorStatus?: HttpStatusCodeType
+  errorType?: ServerErrorCodeType
+}) {
+  const { req, res, errorMessage = req.t('Authentication is required'), errorStatus = HttpStatusCode.UNAUTHORIZED_401, errorType } = options
+
+  return new Promise<boolean>(resolve => {
+    // Already authenticated? (or tried to)
+    if (res.locals.oauth?.token.User) return resolve(true)
+
+    if (res.locals.authenticated === false || !req.header('authorization')) {
+      res.fail({ status: errorStatus, type: errorType, message: errorMessage })
+
+      return resolve(false)
+    }
+
+    authenticate(req, res, () => {
+      if (res.locals.oauth?.token.User) return resolve(true)
+
+      res.fail({ status: errorStatus, type: errorType, message: errorMessage })
+
+      resolve(false)
+    })
+  })
+}
+
 // ---------------------------------------------------------------------------
 
-function authenticateRunnerSocket (socket: Socket, next: (err?: any) => void) {
+export function authenticateRunnerSocket (socket: Socket, next: (err?: any) => void) {
   const runnerToken = socket.handshake.auth['runnerToken']
 
   logger.debug('Checking runner token in socket.')
@@ -99,14 +111,4 @@ function authenticateRunnerSocket (socket: Socket, next: (err?: any) => void) {
       return next()
     })
     .catch(err => logger.error('Cannot get runner token.', { err }))
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  authenticate,
-  authenticateSocket,
-  authenticatePromise,
-  optionalAuthenticate,
-  authenticateRunnerSocket
 }

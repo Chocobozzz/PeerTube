@@ -1,0 +1,56 @@
+<ng-template #modal let-hide="close">
+  <div class="modal-header">
+    <div class="d-flex align-items-center me-auto">
+      <h4 class="modal-title" i18n>Download</h4>
+
+      <div class="peertube-select-container title-select ms-2">
+        <select id="type" name="type" [(ngModel)]="type" class="form-control">
+          <option value="video-generate" i18n>Video</option>
+          <option value="video-files" i18n>Video files</option>
+          @if (hasCaptions()) {
+            <option value="subtitle-files" i18n>Subtitle files</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <button class="border-0 p-0 align-self-start" title="Close this modal" i18n-title (click)="hide()">
+      <my-global-icon iconName="cross"></my-global-icon>
+    </button>
+  </div>
+
+  <div class="modal-body" [ngClass]="{ 'opacity-0': !loaded }">
+    <ng-template #cancelBlock>
+      <input
+        type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button"
+        (click)="hide()" (key.enter)="hide()"
+        >
+    </ng-template>
+
+    @switch (type) {
+      @case ('video-generate') {
+        <my-video-generate-download [video]="video" [originalVideoFile]="originalVideoFile" [videoFileToken]="videoFileToken" (downloaded)="onDownloaded()">
+          <ng-container ngProjectAs="cancel-button">
+            <ng-template [ngTemplateOutlet]="cancelBlock"></ng-template>
+          </ng-container>
+        </my-video-generate-download>
+      }
+
+      @case ('video-files') {
+        <my-video-files-download [video]="video" [originalVideoFile]="originalVideoFile" [videoFileToken]="videoFileToken" (downloaded)="onDownloaded()">
+          <ng-container ngProjectAs="cancel-button">
+            <ng-template [ngTemplateOutlet]="cancelBlock"></ng-template>
+          </ng-container>
+        </my-video-files-download>
+      }
+
+      @case ('subtitle-files') {
+        <my-subtitle-files-download [videoCaptions]="getCaptions()" (downloaded)="onDownloaded()">
+          <ng-container ngProjectAs="cancel-button">
+            <ng-template [ngTemplateOutlet]="cancelBlock"></ng-template>
+          </ng-container>
+        </my-subtitle-files-download>
+      }
+    }
+  </div>
+</ng-template>

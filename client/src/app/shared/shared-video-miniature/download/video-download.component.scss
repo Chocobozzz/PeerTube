@@ -1,0 +1,30 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "form-mixins" as *;
+
+.modal-body ::ng-deep {
+  .nav-content {
+    margin-top: 30px;
+  }
+
+  my-global-icon[iconName="shield"] {
+    position: relative;
+    top: -1px;
+
+    @include global-icon-size(16px);
+    @include margin-left(10px);
+  }
+
+  .modal-footer {
+    padding-inline-end: 0;
+    margin-top: 1rem;
+
+    > *:last-child {
+      margin-inline-end: 0;
+    }
+  }
+}
+
+#dropdown-download-type {
+  cursor: pointer;
+}

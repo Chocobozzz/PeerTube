@@ -59,7 +59,7 @@ export abstract class ActorExporter <T> extends AbstractUserExporter<T> {
 
       staticFiles.push({
         archivePath: archivePathBuilder(image.filename),
-        createrReadStream: () => Promise.resolve(createReadStream(image.getPath()))
+        readStreamFactory: () => Promise.resolve(createReadStream(image.getPath()))
       })
 
       const relativePath = join(this.relativeStaticDirPath, archivePathBuilder(image.filename))

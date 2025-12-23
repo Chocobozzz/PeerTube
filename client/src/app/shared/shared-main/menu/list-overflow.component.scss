@@ -1,0 +1,41 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+:host {
+  width: 100%;
+}
+
+li {
+  // Fix child outline on focus-visible
+  padding-top: 2px;
+}
+
+.root {
+  overflow: hidden;
+  max-width: calc(100vw - 30px);
+  padding-bottom: 3px;
+}
+
+.list-overflow-parent {
+  display: flex;
+  align-items: center;
+
+  // For the menu icon
+  position: relative;
+
+  &.has-border {
+    border-bottom: 1px solid pvar(--fg-200);
+  }
+}
+
+.list-overflow-menu {
+  position: absolute;
+  right: 0;
+}
+
+.overflow-button::after {
+  display: none;
+  margin-left: inherit;
+  vertical-align: inherit;
+  border: inherit;
+}

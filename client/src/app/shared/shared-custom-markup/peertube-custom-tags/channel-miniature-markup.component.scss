@@ -3,7 +3,7 @@
 
 .channel {
   padding: 20px;
-  background-color: pvar(--channelBackgroundColor);
+  background-color: pvar(--bg-secondary-350);
   margin-bottom: 30px;
   width: fit-content;
 }
@@ -20,9 +20,9 @@
   column-gap: 15px;
 
   a {
-    @include peertube-word-wrap;
+    color: pvar(--fg);
 
-    color: pvar(--mainForegroundColor);
+    @include peertube-word-wrap;
   }
 
   my-actor-avatar {
@@ -36,22 +36,26 @@
   }
 
   .actor-counters {
-    @include actor-counters(5px);
-
     font-size: 13px;
     grid-column: 2;
+
+    @include actor-counters(5px);
   }
 
   .description-html {
-    @include fade-text(30px, pvar(--channelBackgroundColor));
-
-    max-height: 60px;
+    max-height: 55px;
     grid-column: 2;
+    font-size: 14px;
+    margin-top: 5px;
+    color: var(--fg-300);
+    line-height: 1.2;
+
+    @include fade-text(30px, pvar(--bg-secondary-350));
   }
 }
 
 .video-label {
   font-size: 12px;
-  color: pvar(--greyForegroundColor);
+  color: pvar(--fg-300);
   margin: 15px 0 5px;
 }

@@ -1,0 +1,39 @@
+<div class="menu">
+  <h1>{{ config().title }}</h1>
+
+  <ul class="ul-unstyle">
+    @for (entry of config().entries; track entry) {
+      @if (entry.type === 'separator') {
+        <div class="separator">
+          <div></div>
+        </div>
+      } @else if (entry.type === 'link' && isDisplayed(entry)) {
+        <ng-template #icon>
+          @if (entry.icon) {
+            <div class="global-icon-wrapper">
+              <my-global-icon [iconName]="entry.icon"></my-global-icon>
+            </div>
+          }
+        </ng-template>
+
+        <ng-template #label>
+          <span>{{ entry.label }}</span>
+        </ng-template>
+
+        @if (isUnavailable(entry)) {
+          <my-unavailable-menu-entry [help]="entry.unavailableText()">
+            <span class="icon" *ngTemplateOutlet="icon"></span>
+            <span class="label" *ngTemplateOutlet="label"></span>
+          </my-unavailable-menu-entry>
+        } @else {
+          <a [routerLink]="entry.routerLink" [queryParams]="globalQueryParams()" queryParamsHandling="merge" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+            <ng-container *ngTemplateOutlet="icon"></ng-container>
+            <ng-container *ngTemplateOutlet="label"></ng-container>
+          </a>
+        }
+      }
+    }
+  </ul>
+</div>
+
+<div class="menu-placeholder"></div>

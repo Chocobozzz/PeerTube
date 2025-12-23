@@ -36,7 +36,7 @@ export class Hotkey {
 
   constructor (
     public combo: string | string[],
-    public callback: (event: KeyboardEvent, combo: string) => any | boolean,
+    public callback: (event: KeyboardEvent, combo: string) => any,
     public description?: string | Function
   ) {
     this.combo = arrayify(combo)

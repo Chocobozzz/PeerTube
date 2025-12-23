@@ -1,4 +1,5 @@
-import { join } from 'path'
+import { removeFragmentedMP4Ext } from '@peertube/peertube-core-utils'
+import { buildUUID } from '@peertube/peertube-node-utils'
 import { CONFIG } from '@server/initializers/config.js'
 import { DIRECTORIES, VIDEO_LIVE } from '@server/initializers/constants.js'
 import {
@@ -8,10 +9,10 @@ import {
   MUserImport,
   MVideo,
   MVideoFile,
+  MVideoPrivacy,
   MVideoUUID
 } from '@server/types/models/index.js'
-import { removeFragmentedMP4Ext } from '@peertube/peertube-core-utils'
-import { buildUUID } from '@peertube/peertube-node-utils'
+import { join } from 'path'
 import { isVideoInPrivateDirectory } from './video-privacy.js'
 
 // ################## Video file name ##################
@@ -34,7 +35,7 @@ export function getLiveReplayBaseDirectory (video: MVideo) {
   return join(getLiveDirectory(video), VIDEO_LIVE.REPLAY_DIRECTORY)
 }
 
-export function getHLSDirectory (video: MVideo) {
+export function getHLSDirectory (video: MVideoPrivacy) {
   if (isVideoInPrivateDirectory(video.privacy)) {
     return join(DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE, video.uuid)
   }
@@ -46,8 +47,7 @@ export function getHLSRedundancyDirectory (video: MVideoUUID) {
   return join(DIRECTORIES.HLS_REDUNDANCY, video.uuid)
 }
 
-export function getHlsResolutionPlaylistFilename (videoFilename: string) {
-  // Video file name already contain resolution
+export function getHLSResolutionPlaylistFilename (videoFilename: string) {
   return removeFragmentedMP4Ext(videoFilename) + '.m3u8'
 }
 

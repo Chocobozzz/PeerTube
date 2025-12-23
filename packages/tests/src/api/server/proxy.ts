@@ -84,13 +84,27 @@ describe('Test proxy', function () {
 
   describe('Videos import', async function () {
 
+    function getProxyConfig (url: string) {
+      return {
+        import: {
+          videos: {
+            http: {
+              proxies: url
+                ? [ url ]
+                : []
+            }
+          }
+        }
+      }
+    }
+
     function quickImport (expectedStatus: HttpStatusCodeType = HttpStatusCode.OK_200) {
       return servers[0].videoImports.importVideo({
         attributes: {
           name: 'video import',
           channelId: servers[0].store.channel.id,
           privacy: VideoPrivacy.PUBLIC,
-          targetUrl: FIXTURE_URLS.peertube_long
+          targetUrl: FIXTURE_URLS.peertubeLong
         },
         expectedStatus
       })
@@ -100,7 +114,7 @@ describe('Test proxy', function () {
       this.timeout(240000)
 
       await servers[0].kill()
-      await servers[0].run({}, { env: goodEnv })
+      await servers[0].run({}, { env: goodEnv, autoEnableImportProxy: false })
 
       await quickImport()
 
@@ -111,11 +125,20 @@ describe('Test proxy', function () {
       expect(data).to.have.lengthOf(3)
     })
 
-    it('Should fail import with a wrong proxy config', async function () {
+    it('Should fail import with a wrong proxy config in env', async function () {
       this.timeout(120000)
 
       await servers[0].kill()
-      await servers[0].run({}, { env: badEnv })
+      await servers[0].run({}, { env: badEnv, autoEnableImportProxy: false })
+
+      await quickImport(HttpStatusCode.BAD_REQUEST_400)
+    })
+
+    it('Should fail import with a wrong proxy config in config', async function () {
+      this.timeout(120000)
+
+      await servers[0].kill()
+      await servers[0].run(getProxyConfig('http://localhost:9000'), { autoEnableImportProxy: false })
 
       await quickImport(HttpStatusCode.BAD_REQUEST_400)
     })

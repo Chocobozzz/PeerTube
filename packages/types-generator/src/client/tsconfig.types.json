@@ -4,10 +4,10 @@
     "stripInternal": true,
     "removeComments": false,
     "emitDeclarationOnly": true,
-    "outDir": "../../dist/client/",
+    "outDir": "../../dist-tmp/client/",
     "rootDir": "./",
     "baseUrl": "./",
-    "tsBuildInfoFile": "../../dist/tsconfig.client.types.tsbuildinfo",
+    "tsBuildInfoFile": "../../dist-tmp/tsconfig.client.types.tsbuildinfo",
     "paths": {
       "@client/*": [ "../../../../client/src/*" ]
     }

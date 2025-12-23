@@ -3,13 +3,15 @@ import { ffprobePromise, getVideoStreamDuration } from '@peertube/peertube-ffmpe
 import { LiveVideoLatencyMode, ThumbnailType, VideoExportJSON, VideoPrivacy, VideoState } from '@peertube/peertube-models'
 import { buildUUID, getFileSize } from '@peertube/peertube-node-utils'
 import { isArray, isBooleanValid, isUUIDValid } from '@server/helpers/custom-validators/misc.js'
+import { isPlayerVideoThemeSettingValid } from '@server/helpers/custom-validators/player-settings.js'
 import { isVideoCaptionLanguageValid } from '@server/helpers/custom-validators/video-captions.js'
 import { isVideoChannelUsernameValid } from '@server/helpers/custom-validators/video-channels.js'
 import { isVideoChapterTimecodeValid, isVideoChapterTitleValid } from '@server/helpers/custom-validators/video-chapters.js'
-import { isLiveLatencyModeValid } from '@server/helpers/custom-validators/video-lives.js'
+import { isLiveLatencyModeValid, isLiveScheduleValid } from '@server/helpers/custom-validators/video-lives.js'
 import {
   isPasswordValid,
   isVideoCategoryValid,
+  isVideoCommentsPolicyValid,
   isVideoDescriptionValid,
   isVideoDurationValid,
   isVideoLanguageValid,
@@ -29,8 +31,9 @@ import { LocalVideoCreator, ThumbnailOptions } from '@server/lib/local-video-cre
 import { isLocalVideoFileAccepted } from '@server/lib/moderation.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { isUserQuotaValid } from '@server/lib/user.js'
-import { createLocalCaption } from '@server/lib/video-captions.js'
+import { createLocalCaption, updateHLSMasterOnCaptionChange } from '@server/lib/video-captions.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
+import { PlayerSettingModel } from '@server/models/video/player-setting.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MChannelId, MVideoFullLight } from '@server/types/models/index.js'
@@ -41,12 +44,34 @@ import { AbstractUserImporter } from './abstract-user-importer.js'
 const lTags = loggerTagsFactory('user-import')
 
 type ImportObject = VideoExportJSON['videos'][0]
-type SanitizedObject = Pick<ImportObject, 'name' | 'duration' | 'channel' | 'privacy' | 'archiveFiles' | 'captions' | 'category' |
-'licence' | 'language' | 'description' | 'support' | 'nsfw' | 'isLive' | 'commentsEnabled' | 'downloadEnabled' | 'waitTranscoding' |
-'originallyPublishedAt' | 'tags' | 'live' | 'passwords' | 'source' | 'chapters'>
+type SanitizedObject = Pick<
+  ImportObject,
+  | 'name'
+  | 'duration'
+  | 'channel'
+  | 'privacy'
+  | 'archiveFiles'
+  | 'captions'
+  | 'category'
+  | 'licence'
+  | 'language'
+  | 'description'
+  | 'support'
+  | 'nsfw'
+  | 'isLive'
+  | 'commentsPolicy'
+  | 'downloadEnabled'
+  | 'waitTranscoding'
+  | 'originallyPublishedAt'
+  | 'tags'
+  | 'live'
+  | 'passwords'
+  | 'source'
+  | 'chapters'
+  | 'playerSettings'
+>
 
-export class VideosImporter extends AbstractUserImporter <VideoExportJSON, ImportObject, SanitizedObject> {
-
+export class VideosImporter extends AbstractUserImporter<VideoExportJSON, ImportObject, SanitizedObject> {
   protected getImportObjects (json: VideoExportJSON) {
     return json.videos
   }
@@ -59,16 +84,19 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
     if (o.isLive !== true && !o.archiveFiles?.videoFile) return undefined
 
     if (!isVideoCategoryValid(o.category)) o.category = null
-    if (!isVideoLicenceValid(o.licence)) o.licence = CONFIG.DEFAULTS.PUBLISH.LICENCE
+    if (!o.licence || !isVideoLicenceValid(o.licence)) o.licence = CONFIG.DEFAULTS.PUBLISH.LICENCE
     if (!isVideoLanguageValid(o.language)) o.language = null
     if (!isVideoDescriptionValid(o.description)) o.description = null
     if (!isVideoSupportValid(o.support)) o.support = null
 
     if (!isBooleanValid(o.nsfw)) o.nsfw = false
     if (!isBooleanValid(o.isLive)) o.isLive = false
-    if (!isBooleanValid(o.commentsEnabled)) o.commentsEnabled = CONFIG.DEFAULTS.PUBLISH.COMMENTS_ENABLED
     if (!isBooleanValid(o.downloadEnabled)) o.downloadEnabled = CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED
     if (!isBooleanValid(o.waitTranscoding)) o.waitTranscoding = true
+
+    if (!o.commentsPolicy || !isVideoCommentsPolicyValid(o.commentsPolicy)) {
+      o.commentsPolicy = CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY
+    }
 
     if (!isVideoSourceFilenameValid(o.source?.inputFilename)) o.source = undefined
 
@@ -79,6 +107,7 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
     if (!isArray(o.chapters)) o.chapters = []
 
     o.tags = o.tags.filter(t => isVideoTagValid(t))
+
     o.captions = o.captions.filter(c => isVideoCaptionLanguageValid(c.language))
     o.chapters = o.chapters.filter(c => isVideoChapterTimecodeValid(c.timecode) && isVideoChapterTitleValid(c.title))
 
@@ -89,10 +118,18 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
       if (!isBooleanValid(o.live.saveReplay)) o.live.saveReplay = false
       if (o.live.saveReplay && !isVideoReplayPrivacyValid(o.live.replaySettings.privacy)) return undefined
 
-      if (!isLiveLatencyModeValid(o.live.latencyMode)) o.live.latencyMode = LiveVideoLatencyMode.DEFAULT
+      if (!o.live.latencyMode || !isLiveLatencyModeValid(o.live.latencyMode)) o.live.latencyMode = LiveVideoLatencyMode.DEFAULT
 
       if (!o.live.streamKey) o.live.streamKey = buildUUID()
       else if (!isUUIDValid(o.live.streamKey)) return undefined
+
+      if (!isArray(o.live.schedules)) o.live.schedules = []
+
+      o.live.schedules = o.live.schedules.filter(s => isLiveScheduleValid(s))
+    }
+
+    if (o.playerSettings) {
+      if (!isPlayerVideoThemeSettingValid(o.playerSettings.theme)) o.playerSettings.theme = undefined
     }
 
     if (o.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
@@ -114,7 +151,7 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
       'support',
       'nsfw',
       'isLive',
-      'commentsEnabled',
+      'commentsPolicy',
       'downloadEnabled',
       'waitTranscoding',
       'originallyPublishedAt',
@@ -123,7 +160,8 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
       'live',
       'passwords',
       'source',
-      'chapters'
+      'chapters',
+      'playerSettings'
     ])
   }
 
@@ -204,7 +242,7 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
           'isLive',
           'nsfw',
           'tags',
-          'commentsEnabled',
+          'commentsPolicy',
           'downloadEnabled',
           'waitTranscoding',
           'originallyPublishedAt'
@@ -230,6 +268,7 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
     const { video } = await localVideoCreator.create()
 
     await this.importCaptions(video, videoImportData)
+    await this.importPlayerSettings(video, videoImportData)
 
     logger.info('Video %s imported.', video.name, lTags(video.uuid))
 
@@ -238,6 +277,7 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
 
   private async importCaptions (video: MVideoFullLight, videoImportData: SanitizedObject) {
     const captionPaths: string[] = []
+    let updateHLS = false
 
     for (const captionImport of videoImportData.captions) {
       const relativeFilePath = videoImportData.archiveFiles?.captions?.[captionImport.language]
@@ -251,12 +291,33 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
 
       if (!await this.isFileValidOrLog(absoluteFilePath, CONSTRAINTS_FIELDS.VIDEO_CAPTIONS.CAPTION_FILE.FILE_SIZE.max)) continue
 
-      await createLocalCaption({ video, language: captionImport.language, path: absoluteFilePath })
+      const caption = await createLocalCaption({
+        video,
+        language: captionImport.language,
+        path: absoluteFilePath,
+        automaticallyGenerated: captionImport.automaticallyGenerated === true
+      })
 
       captionPaths.push(absoluteFilePath)
+
+      if (caption.m3u8Filename) updateHLS = true
+    }
+
+    if (updateHLS && video.getHLSPlaylist()) {
+      await updateHLSMasterOnCaptionChange(video, video.getHLSPlaylist())
     }
 
     return captionPaths
+  }
+
+  private async importPlayerSettings (video: MVideoFullLight, videoImportData: SanitizedObject) {
+    const playerSettings = videoImportData.playerSettings
+    if (!playerSettings?.theme) return
+
+    await PlayerSettingModel.create({
+      theme: playerSettings.theme,
+      videoId: video.id
+    })
   }
 
   private async checkVideoFileIsAcceptedOrThrow (options: {
@@ -284,7 +345,7 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
     }
     const acceptedResult = await Hooks.wrapFun(isLocalVideoFileAccepted, acceptParameters, 'filter:api.video.user-import.accept.result')
 
-    if (!acceptedResult || acceptedResult.accepted !== true) {
+    if (acceptedResult?.accepted !== true) {
       logger.info('Refused local video file to import.', { acceptedResult, acceptParameters, ...lTags() })
 
       throw new Error('Video file is not accepted: ' + acceptedResult.errorMessage || 'unknown reason')

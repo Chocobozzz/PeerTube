@@ -1,5 +1,3 @@
-import { remove } from 'fs-extra/esm'
-import { join } from 'path'
 import { pick } from '@peertube/peertube-core-utils'
 import {
   RunnerJobStudioTranscodingPayload,
@@ -12,17 +10,30 @@ import {
   VideoStudioTranscodingSuccess
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
+import { remove } from 'fs-extra/esm'
+import { join } from 'path'
 import { ConfigManager } from '../../../shared/config-manager.js'
 import { logger } from '../../../shared/index.js'
-import { buildFFmpegEdition, downloadInputFile, JobWithToken, ProcessOptions, scheduleTranscodingProgress } from './common.js'
+import {
+  buildFFmpegEdition,
+  downloadInputFile,
+  downloadSeparatedAudioFileIfNeeded,
+  JobWithToken,
+  ProcessOptions,
+  scheduleTranscodingProgress
+} from './common.js'
 
 export async function processStudioTranscoding (options: ProcessOptions<RunnerJobStudioTranscodingPayload>) {
   const { server, job, runnerToken } = options
   const payload = job.payload
 
-  let inputPath: string
+  let videoInputPath: string
+  let separatedAudioInputPath: string
+
+  let tmpVideoInputFilePath: string
+  let tmpSeparatedAudioInputFilePath: string
+
   let outputPath: string
-  let tmpInputFilePath: string
 
   let tasksProgress = 0
 
@@ -36,8 +47,11 @@ export async function processStudioTranscoding (options: ProcessOptions<RunnerJo
   try {
     logger.info(`Downloading input file ${payload.input.videoFileUrl} for job ${job.jobToken}`)
 
-    inputPath = await downloadInputFile({ url: payload.input.videoFileUrl, runnerToken, job })
-    tmpInputFilePath = inputPath
+    videoInputPath = await downloadInputFile({ url: payload.input.videoFileUrl, runnerToken, job })
+    separatedAudioInputPath = await downloadSeparatedAudioFileIfNeeded({ urls: payload.input.separatedAudioFileUrl, runnerToken, job })
+
+    tmpVideoInputFilePath = videoInputPath
+    tmpSeparatedAudioInputFilePath = separatedAudioInputPath
 
     logger.info(`Input file ${payload.input.videoFileUrl} downloaded for job ${job.jobToken}. Running studio transcoding tasks.`)
 
@@ -46,17 +60,20 @@ export async function processStudioTranscoding (options: ProcessOptions<RunnerJo
       outputPath = join(ConfigManager.Instance.getTranscodingDirectory(), outputFilename)
 
       await processTask({
-        inputPath: tmpInputFilePath,
+        videoInputPath: tmpVideoInputFilePath,
+        separatedAudioInputPath: tmpSeparatedAudioInputFilePath,
         outputPath,
         task,
         job,
         runnerToken
       })
 
-      if (tmpInputFilePath) await remove(tmpInputFilePath)
+      if (tmpVideoInputFilePath) await remove(tmpVideoInputFilePath)
+      if (tmpSeparatedAudioInputFilePath) await remove(tmpSeparatedAudioInputFilePath)
 
       // For the next iteration
-      tmpInputFilePath = outputPath
+      tmpVideoInputFilePath = outputPath
+      tmpSeparatedAudioInputFilePath = undefined
 
       tasksProgress += Math.floor(100 / payload.tasks.length)
     }
@@ -69,10 +86,12 @@ export async function processStudioTranscoding (options: ProcessOptions<RunnerJo
       jobToken: job.jobToken,
       jobUUID: job.uuid,
       runnerToken,
-      payload: successBody
+      payload: successBody,
+      reqPayload: payload
     })
   } finally {
-    if (tmpInputFilePath) await remove(tmpInputFilePath)
+    if (tmpVideoInputFilePath) await remove(tmpVideoInputFilePath)
+    if (tmpSeparatedAudioInputFilePath) await remove(tmpSeparatedAudioInputFilePath)
     if (outputPath) await remove(outputPath)
     if (updateProgressInterval) clearInterval(updateProgressInterval)
   }
@@ -83,8 +102,11 @@ export async function processStudioTranscoding (options: ProcessOptions<RunnerJo
 // ---------------------------------------------------------------------------
 
 type TaskProcessorOptions <T extends VideoStudioTaskPayload = VideoStudioTaskPayload> = {
-  inputPath: string
+  videoInputPath: string
+  separatedAudioInputPath: string
+
   outputPath: string
+
   task: T
   runnerToken: string
   job: JobWithToken
@@ -107,15 +129,15 @@ async function processTask (options: TaskProcessorOptions) {
 }
 
 async function processAddIntroOutro (options: TaskProcessorOptions<VideoStudioTaskIntroPayload | VideoStudioTaskOutroPayload>) {
-  const { inputPath, task, runnerToken, job } = options
+  const { videoInputPath, task, runnerToken, job } = options
 
-  logger.debug('Adding intro/outro to ' + inputPath)
+  logger.debug(`Adding intro/outro to ${videoInputPath}`)
 
   const introOutroPath = await downloadInputFile({ url: task.options.file, runnerToken, job })
 
   try {
     await buildFFmpegEdition().addIntroOutro({
-      ...pick(options, [ 'inputPath', 'outputPath' ]),
+      ...pick(options, [ 'videoInputPath', 'separatedAudioInputPath', 'outputPath' ]),
 
       introOutroPath,
       type: task.name === 'add-intro'
@@ -128,12 +150,12 @@ async function processAddIntroOutro (options: TaskProcessorOptions<VideoStudioTa
 }
 
 function processCut (options: TaskProcessorOptions<VideoStudioTaskCutPayload>) {
-  const { inputPath, task } = options
+  const { videoInputPath, task } = options
 
-  logger.debug(`Cutting ${inputPath}`)
+  logger.debug(`Cutting ${videoInputPath}`)
 
   return buildFFmpegEdition().cutVideo({
-    ...pick(options, [ 'inputPath', 'outputPath' ]),
+    ...pick(options, [ 'videoInputPath', 'separatedAudioInputPath', 'outputPath' ]),
 
     start: task.options.start,
     end: task.options.end
@@ -141,15 +163,15 @@ function processCut (options: TaskProcessorOptions<VideoStudioTaskCutPayload>) {
 }
 
 async function processAddWatermark (options: TaskProcessorOptions<VideoStudioTaskWatermarkPayload>) {
-  const { inputPath, task, runnerToken, job } = options
+  const { videoInputPath, task, runnerToken, job } = options
 
-  logger.debug('Adding watermark to ' + inputPath)
+  logger.debug(`Adding watermark to ${videoInputPath}`)
 
   const watermarkPath = await downloadInputFile({ url: task.options.file, runnerToken, job })
 
   try {
     await buildFFmpegEdition().addWatermark({
-      ...pick(options, [ 'inputPath', 'outputPath' ]),
+      ...pick(options, [ 'videoInputPath', 'separatedAudioInputPath', 'outputPath' ]),
 
       watermarkPath,
 

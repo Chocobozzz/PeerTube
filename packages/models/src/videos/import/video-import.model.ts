@@ -9,6 +9,8 @@ export interface VideoImport {
   magnetUri: string
   torrentName: string
 
+  attempts: number
+
   createdAt: string
   updatedAt: string
   originallyPublishedAt?: string

@@ -106,6 +106,7 @@ export const serverFilterHookObject = {
 
   // Filter result used to check if video/torrent download is allowed
   'filter:api.download.video.allowed.result': true,
+  'filter:api.download.generated-video.allowed.result': true,
   'filter:api.download.torrent.allowed.result': true,
 
   // Filter result to check if the embed is allowed for a particular request
@@ -139,7 +140,19 @@ export const serverFilterHookObject = {
   // Peertube >= 5.2
   'filter:feed.podcast.video.create-custom-tags.result': true,
   // Peertube >= 6.1
-  'filter:api.user.me.get.result': true
+  'filter:api.user.me.get.result': true,
+
+  // Peertube >= 7.1
+  'filter:oauth.password-grant.get-user.params': true,
+  'filter:api.email-verification.ask-send-verify-email.body': true,
+  'filter:api.users.ask-reset-password.body': true,
+
+  // Peertube >= 7.2
+  'filter:email.subject.result': true,
+  'filter:email.template-path.result': true,
+
+  // Peertube >= 8.1
+  'filter:feed.videos.list.result': true,
 }
 
 export type ServerFilterHookName = keyof typeof serverFilterHookObject

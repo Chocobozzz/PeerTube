@@ -15,3 +15,9 @@ export function randomString (length: number) {
 
   return result
 }
+
+export function splitAndGetNotEmpty (value: string) {
+  return value
+    .split('\n')
+    .filter(line => line && line.length !== 0) // Eject empty lines
+}

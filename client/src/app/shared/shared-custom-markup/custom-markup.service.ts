@@ -1,17 +1,16 @@
-import { ComponentRef, Injectable } from '@angular/core'
+import { ComponentRef, Injectable, inject } from '@angular/core'
 import { MarkdownService } from '@app/core'
-import { logger } from '@root-helpers/logger'
 import {
   ButtonMarkupData,
   ChannelMiniatureMarkupData,
   ContainerMarkupData,
   EmbedMarkupData,
   InstanceAvatarMarkupData,
-  InstanceBannerMarkupData,
   PlaylistMiniatureMarkupData,
   VideoMiniatureMarkupData,
   VideosListMarkupData
 } from '@peertube/peertube-models'
+import { logger } from '@root-helpers/logger'
 import { DynamicElementService } from './dynamic-element.service'
 import {
   ButtonMarkupComponent,
@@ -30,7 +29,10 @@ type HTMLBuilderFunction = (el: HTMLElement) => HTMLElement
 
 @Injectable()
 export class CustomMarkupService {
-  private angularBuilders: { [ selector: string ]: AngularBuilderFunction } = {
+  private dynamicElementService = inject(DynamicElementService)
+  private markdown = inject(MarkdownService)
+
+  private angularBuilders: { [selector: string]: AngularBuilderFunction } = {
     'peertube-instance-banner': el => this.instanceBannerBuilder(el),
     'peertube-instance-avatar': el => this.instanceAvatarBuilder(el),
     'peertube-button': el => this.buttonBuilder(el),
@@ -42,16 +44,13 @@ export class CustomMarkupService {
     'peertube-videos-list': el => this.videosListBuilder(el)
   }
 
-  private htmlBuilders: { [ selector: string ]: HTMLBuilderFunction } = {
+  private htmlBuilders: { [selector: string]: HTMLBuilderFunction } = {
     'peertube-container': el => this.containerBuilder(el)
   }
 
   private customMarkdownRenderer: (text: string) => Promise<HTMLElement>
 
-  constructor (
-    private dynamicElementService: DynamicElementService,
-    private markdown: MarkdownService
-  ) {
+  constructor () {
     this.customMarkdownRenderer = (text: string) => {
       return this.buildElement(text)
         .then(({ rootElement }) => rootElement)
@@ -117,7 +116,23 @@ export class CustomMarkupService {
     const data = el.dataset as EmbedMarkupData
     const { component, loadedPromise } = this.dynamicElementService.createElement(EmbedMarkupComponent)
 
-    this.dynamicElementService.setModel(component, { uuid: data.uuid, type })
+    this.dynamicElementService.setModel(component, {
+      uuid: data.uuid,
+      type,
+      responsive: this.buildBoolean(data.responsive),
+      startAt: data.startAt,
+      stopAt: data.stopAt,
+      subtitle: data.subtitle,
+      autoplay: this.buildBoolean(data.autoplay),
+      muted: this.buildBoolean(data.muted),
+      loop: this.buildBoolean(data.loop),
+      title: this.buildBoolean(data.title),
+      p2p: this.buildBoolean(data.p2p),
+      warningTitle: this.buildBoolean(data.warningTitle),
+      controlBar: this.buildBoolean(data.controlBar),
+      peertubeLink: this.buildBoolean(data.peertubeLink),
+      playlistPosition: this.buildNumber(data.playlistPosition)
+    })
 
     return { component, loadedPromise }
   }
@@ -162,14 +177,7 @@ export class CustomMarkupService {
   }
 
   private instanceBannerBuilder (el: HTMLElement) {
-    const data = el.dataset as InstanceBannerMarkupData
     const { component, loadedPromise } = this.dynamicElementService.createElement(InstanceBannerMarkupComponent)
-
-    const model = {
-      revertHomePaddingTop: this.buildBoolean(data.revertHomePaddingTop) ?? true
-    }
-
-    this.dynamicElementService.setModel(component, model)
 
     return { component, loadedPromise }
   }
@@ -217,6 +225,8 @@ export class CustomMarkupService {
 
       accountHandle: data.accountHandle || undefined,
       channelHandle: data.channelHandle || undefined,
+
+      host: data.host || undefined,
 
       isLive: this.buildBoolean(data.isLive),
 

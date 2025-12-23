@@ -75,7 +75,7 @@ describe('Object storage for video import', function () {
   describe('With transcoding', async function () {
 
     before(async function () {
-      await server.config.enableTranscoding()
+      await server.config.enableTranscoding({ webVideo: true, hls: true, resolutions: 'max' })
     })
 
     it('Should import a video and have sent it to object storage', async function () {

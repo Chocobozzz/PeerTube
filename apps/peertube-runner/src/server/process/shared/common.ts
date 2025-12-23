@@ -1,15 +1,23 @@
-import { remove } from 'fs-extra/esm'
-import { join } from 'path'
-import { FFmpegEdition, FFmpegLive, FFmpegVOD, getDefaultAvailableEncoders, getDefaultEncodersToTry } from '@peertube/peertube-ffmpeg'
+import { pick } from '@peertube/peertube-core-utils'
+import {
+  FFmpegEdition,
+  FFmpegImage,
+  FFmpegLive,
+  FFmpegVOD,
+  getDefaultAvailableEncoders,
+  getDefaultEncodersToTry
+} from '@peertube/peertube-ffmpeg'
 import { RunnerJob, RunnerJobPayload } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { PeerTubeServer } from '@peertube/peertube-server-commands'
+import { remove } from 'fs-extra/esm'
+import { join } from 'path'
 import { ConfigManager, downloadFile, logger } from '../../../shared/index.js'
-import { getTranscodingLogger } from './transcoding-logger.js'
+import { getWinstonLogger } from './winston-logger.js'
 
-export type JobWithToken <T extends RunnerJobPayload = RunnerJobPayload> = RunnerJob<T> & { jobToken: string }
+export type JobWithToken<T extends RunnerJobPayload = RunnerJobPayload> = RunnerJob<T> & { jobToken: string }
 
-export type ProcessOptions <T extends RunnerJobPayload = RunnerJobPayload> = {
+export type ProcessOptions<T extends RunnerJobPayload = RunnerJobPayload> = {
   server: PeerTubeServer
   job: JobWithToken<T>
   runnerToken: string
@@ -35,6 +43,18 @@ export async function downloadInputFile (options: {
   return destination
 }
 
+export async function downloadSeparatedAudioFileIfNeeded (options: {
+  urls: string[]
+  job: JobWithToken
+  runnerToken: string
+}) {
+  const { urls } = options
+
+  if (!urls || urls.length === 0) return undefined
+
+  return downloadInputFile({ url: urls[0], ...pick(options, [ 'job', 'runnerToken' ]) })
+}
+
 export function scheduleTranscodingProgress (options: {
   server: PeerTubeServer
   runnerToken: string
@@ -48,8 +68,14 @@ export function scheduleTranscodingProgress (options: {
     : 60000
 
   const update = () => {
-    server.runnerJobs.update({ jobToken: job.jobToken, jobUUID: job.uuid, runnerToken, progress: progressGetter() })
-      .catch(err => logger.error({ err }, 'Cannot send job progress'))
+    job.progress = progressGetter() || 0
+
+    server.runnerJobs.update({
+      jobToken: job.jobToken,
+      jobUUID: job.uuid,
+      runnerToken,
+      progress: job.progress
+    }).catch(err => logger.error({ err }, 'Cannot send job progress'))
   }
 
   const interval = setInterval(() => {
@@ -89,6 +115,10 @@ export function buildFFmpegEdition () {
   return new FFmpegEdition(getCommonFFmpegOptions())
 }
 
+export function buildFFmpegImage () {
+  return new FFmpegImage(getCommonFFmpegOptions())
+}
+
 function getCommonFFmpegOptions () {
   const config = ConfigManager.Instance.getConfig()
 
@@ -101,6 +131,6 @@ function getCommonFFmpegOptions () {
       available: getDefaultAvailableEncoders(),
       encodersToTry: getDefaultEncodersToTry()
     },
-    logger: getTranscodingLogger()
+    logger: getWinstonLogger()
   }
 }

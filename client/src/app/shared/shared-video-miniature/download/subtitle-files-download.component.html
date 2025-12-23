@@ -1,0 +1,29 @@
+<ul ngbNav #nav="ngbNav" class="nav-tabs" [(activeId)]="activeNavId">
+
+  @for (caption of getCaptions(); track caption) {
+    <li [ngbNavItem]="caption.language.id">
+      <button ngbNavLink>
+        {{ caption.language.label }}
+        @if (caption.automaticallyGenerated) {
+          <ng-container i18n>(auto-generated)</ng-container>
+        }
+      </button>
+      <ng-template ngbNavContent>
+        <div class="nav-content">
+          <my-input-text
+            inputId="subtitle-url" i18n-ariaLabel ariaLabel="Subtitle URL"
+            [show]="true" [readonly]="true" [withCopy]="true" [withToggle]="false" [value]="getCaptionLink()"
+          ></my-input-text>
+        </div>
+      </ng-template>
+    </li>
+  }
+</ul>
+
+<div [ngbNavOutlet]="nav" class="mt-2"></div>
+
+<div class="modal-footer inputs">
+  <ng-content select="cancel-button"></ng-content>
+
+  <input type="submit" i18n-value value="Download" class="peertube-button primary-button" (click)="download()" />
+</div>

@@ -1,4 +1,6 @@
 import {
+  ClientDoAction,
+  MyUser,
   RegisterClientFormFieldOptions,
   RegisterClientHookOptions,
   RegisterClientRouteOptions,
@@ -8,6 +10,8 @@ import {
 } from '@peertube/peertube-models'
 
 export type RegisterClientOptions = {
+  doAction: ClientDoAction
+
   registerHook: (options: RegisterClientHookOptions) => void
 
   registerVideoField: (commonOptions: RegisterClientFormFieldOptions, videoFormOptions: RegisterClientVideoFieldOptions) => void
@@ -34,6 +38,8 @@ export type RegisterClientHelpers = {
   getAuthHeader: () => { 'Authorization': string } | undefined
 
   getSettings: () => Promise<SettingEntries>
+
+  getUser: () => MyUser
 
   getServerConfig: () => Promise<ServerConfig>
 

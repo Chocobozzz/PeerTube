@@ -1,21 +1,27 @@
-import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
-import { logger } from '../../helpers/logger.js'
+import { isProdInstance, isTestOrDevInstance } from '@peertube/peertube-node-utils'
+import { logger, loggerTagsFactory } from '../../helpers/logger.js'
 import { ACTOR_FOLLOW_SCORE, SCHEDULER_INTERVALS_MS } from '../../initializers/constants.js'
 import { ActorFollowModel } from '../../models/actor/actor-follow.js'
 import { ActorFollowHealthCache } from '../actor-follow-health-cache.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
-export class ActorFollowScheduler extends AbstractScheduler {
+const lTags = loggerTagsFactory('schedulers')
 
+export class ActorFollowScheduler extends AbstractScheduler {
   private static instance: AbstractScheduler
 
   protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.ACTOR_FOLLOW_SCORES
 
   private constructor () {
-    super()
+    super({ randomRunOnEnable: false })
   }
 
   protected async internalExecute () {
+    // Run too often in test/dev instances
+    if (isProdInstance()) {
+      logger.info('Processing pending actor follow scores.', lTags())
+    }
+
     await this.processPendingScores()
 
     await this.removeBadActorFollows()
@@ -39,12 +45,12 @@ export class ActorFollowScheduler extends AbstractScheduler {
   }
 
   private async removeBadActorFollows () {
-    if (!isTestOrDevInstance()) logger.info('Removing bad actor follows (scheduler).')
+    if (!isTestOrDevInstance()) logger.info('Removing bad actor follows (scheduler).', lTags())
 
     try {
       await ActorFollowModel.removeBadActorFollows()
     } catch (err) {
-      logger.error('Error in bad actor follows scheduler.', { err })
+      logger.error('Error in bad actor follows scheduler.', { err, ...lTags() })
     }
   }
 

@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="noindex">
     <meta property="og:platform" content="PeerTube" />
 
     <!-- /!\ The following comment is used by the server to prerender some tags /!\ -->
 
+    <!-- favicon tag -->
     <!-- title tag -->
     <!-- description tag -->
     <!-- custom css tag -->
@@ -15,8 +15,6 @@
     <!-- server config -->
 
     <!-- /!\ Do not remove it /!\ -->
-
-    <link rel="icon" type="image/png" href="/client/assets/images/favicon.png" />
   </head>
 
   <body id="custom-css" class="standalone-video-embed">
@@ -26,6 +24,12 @@
       <h1 id="error-title"></h1>
 
       <div id="error-content"></div>
+
+      <details id="error-details">
+        <summary>Error details</summary>
+
+        <div id="error-details-content"></div>
+      </details>
     </div>
 
     <div id="video-password-block">
@@ -49,7 +53,7 @@
 
     <script type="text/javascript">
       // Can be called in embed.ts
-      window.displayIncompatibleBrowser = function () {
+      window.displayIncompatibleBrowser = function (err) {
         const text = 'The player is not compatible with your web browser. Please try latest Firefox version.'
 
         document.title = 'Sorry' + ' - ' + text
@@ -63,6 +67,19 @@
         const errorText = document.getElementById('error-content')
         errorText.innerHTML = text
 
+        const errorDetails = document.getElementById('error-details')
+        let msg = ''
+
+        if (typeof err === 'string') msg = err
+        else if (err instanceof Error) msg = err.name + ' ' + err.message + ' at:\n' + err.stack
+
+        if (msg) {
+          const errorDetailsContent = document.getElementById('error-details-content')
+          errorDetailsContent.innerText = msg
+        } else {
+          errorDetails.style.display = 'none'
+        }
+
         const videoWrapper = document.getElementById('video-wrapper')
         if (videoWrapper) videoWrapper.style.display = 'none'
 
@@ -70,19 +87,52 @@
         if (placeholderPreview) placeholderPreview.style.display = 'none'
       }
 
-      window.onerror = function (msg) {
+      window.onerror = function (msg, source, lineNumber, columnNumber, err) {
         if (typeof msg === 'string' && msg.toLowerCase().includes(' ice ')) {
           console.warn(msg)
           return
         }
 
-        window.displayIncompatibleBrowser()
+        // Google Bot doesn't support our codecs, but it should not prevent indexing
+        if (/googlebot/i.test(navigator.userAgent)) {
+          console.error(err)
+          return
+        }
+
+        // Video element is already created -> don't crash the player
+        // We also handle the case where a bugged extension throws an error (maybeUnrelatedError)
+        const maybeUnrelatedError = lineNumber === 0 && columnNumber === 0 && !source
+
+        if (document.querySelector('.vjs-can-play') || maybeUnrelatedError) {
+          if (window.logger && typeof window.logger.error === 'function') {
+            window.logger.error('Uncaught error in embed player ', err)
+          }
+
+          return
+        }
+
+        window.displayIncompatibleBrowser(err)
+
+        if (window.logger && typeof window.logger.error === 'function') {
+          window.logger.error('Embed player crashed', err)
+        }
       }
 
       if (/MSIE|Trident/.test(window.navigator.userAgent) ) {
         window.displayIncompatibleBrowser()
       }
+
+      // BigInt must be supported (for the player to work)
+      try {
+        BigInt(9007199254740991)
+      } catch (err) {
+        console.error('BigInt is not supported on this web browser')
+
+        window.displayIncompatibleBrowser()
+      }
     </script>
+
+    <script type="module" src="./embed.ts"></script>
 
   </body>
 </html>

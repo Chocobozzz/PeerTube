@@ -1,57 +1,50 @@
-import { SortMeta, SharedModule } from 'primeng/api'
-import { Component, OnInit, ViewChild } from '@angular/core'
-import { Notifier, RestPagination, RestTable } from '@app/core'
+import { CommonModule, NgClass } from '@angular/common'
+import { Component, inject, viewChild } from '@angular/core'
+import { Notifier } from '@app/core'
+import { Account } from '@app/shared/shared-main/account/account.model'
+import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
+import { VideoOwnershipService } from '@app/shared/shared-main/video/video-ownership.service'
+import { DataLoaderOptions, TableColumnInfo, TableComponent } from '@app/shared/shared-tables/table.component'
 import { VideoChangeOwnership, VideoChangeOwnershipStatus, VideoChangeOwnershipStatusType } from '@peertube/peertube-models'
-import { MyAcceptOwnershipComponent } from './my-accept-ownership/my-accept-ownership.component'
-import { AutoColspanDirective } from '../../shared/shared-main/angular/auto-colspan.directive'
+import { map } from 'rxjs'
 import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
 import { ButtonComponent } from '../../shared/shared-main/buttons/button.component'
-import { NgIf, NgClass, DatePipe } from '@angular/common'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { TableModule } from 'primeng/table'
-import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
-import { VideoOwnershipService } from '@app/shared/shared-main/video/video-ownership.service'
-import { Account } from '@app/shared/shared-main/account/account.model'
+import { NumberFormatterPipe } from '../../shared/shared-main/common/number-formatter.pipe'
+import { VideoCellComponent } from '../../shared/shared-tables/video-cell.component'
+import { MyAcceptOwnershipComponent } from './my-accept-ownership/my-accept-ownership.component'
 
 @Component({
   templateUrl: './my-ownership.component.html',
-  styleUrls: [ './my-ownership.component.scss' ],
-  standalone: true,
   imports: [
-    GlobalIconComponent,
-    TableModule,
-    SharedModule,
-    NgbTooltip,
-    NgIf,
+    CommonModule,
     ButtonComponent,
     ActorAvatarComponent,
     NgClass,
-    AutoColspanDirective,
     MyAcceptOwnershipComponent,
-    DatePipe
+    PTDatePipe,
+    VideoCellComponent,
+    NumberFormatterPipe,
+    TableComponent
   ]
 })
-export class MyOwnershipComponent extends RestTable implements OnInit {
-  videoChangeOwnerships: VideoChangeOwnership[] = []
-  totalRecords = 0
-  sort: SortMeta = { field: 'createdAt', order: -1 }
-  pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
+export class MyOwnershipComponent {
+  private notifier = inject(Notifier)
+  private videoOwnershipService = inject(VideoOwnershipService)
 
-  @ViewChild('myAcceptOwnershipComponent', { static: true }) myAccountAcceptOwnershipComponent: MyAcceptOwnershipComponent
+  readonly myAccountAcceptOwnershipComponent = viewChild<MyAcceptOwnershipComponent>('myAcceptOwnershipComponent')
+  readonly table = viewChild<TableComponent<VideoChangeOwnership>>('table')
 
-  constructor (
-    private notifier: Notifier,
-    private videoOwnershipService: VideoOwnershipService
-  ) {
-    super()
-  }
+  columns: TableColumnInfo<string>[] = [
+    { id: 'initiator', label: $localize`Initiator`, sortable: false },
+    { id: 'video', label: $localize`Video`, sortable: false },
+    { id: 'createdAt', label: $localize`Created`, sortable: true },
+    { id: 'status', label: $localize`Status`, sortable: false }
+  ]
 
-  ngOnInit () {
-    this.initialize()
-  }
+  dataLoader: typeof this._dataLoader
 
-  getIdentifier () {
-    return 'MyOwnershipComponent'
+  constructor () {
+    this.dataLoader = this._dataLoader.bind(this)
   }
 
   getStatusClass (status: VideoChangeOwnershipStatusType) {
@@ -66,34 +59,33 @@ export class MyOwnershipComponent extends RestTable implements OnInit {
   }
 
   openAcceptModal (videoChangeOwnership: VideoChangeOwnership) {
-    this.myAccountAcceptOwnershipComponent.show(videoChangeOwnership)
+    this.myAccountAcceptOwnershipComponent().show(videoChangeOwnership)
   }
 
   accepted () {
-    this.reloadData()
+    this.table().loadData()
   }
 
   refuse (videoChangeOwnership: VideoChangeOwnership) {
     this.videoOwnershipService.refuseOwnership(videoChangeOwnership.id)
       .subscribe({
-        next: () => this.reloadData(),
-        error: err => this.notifier.error(err.message)
+        next: () => this.table().loadData(),
+        error: err => this.notifier.handleError(err)
       })
   }
 
-  protected reloadDataInternal () {
-    return this.videoOwnershipService.getOwnershipChanges(this.pagination, this.sort)
-      .subscribe({
-        next: resultList => {
-          this.videoChangeOwnerships = resultList.data.map(change => ({
+  private _dataLoader (options: DataLoaderOptions) {
+    return this.videoOwnershipService.getOwnershipChanges(options.pagination, options.sort)
+      .pipe(
+        map(resultList => ({
+          data: resultList.data.map(change => ({
             ...change,
+
             initiatorAccount: new Account(change.initiatorAccount),
             nextOwnerAccount: new Account(change.nextOwnerAccount)
-          }))
-          this.totalRecords = resultList.total
-        },
-
-        error: err => this.notifier.error(err.message)
-      })
+          })),
+          total: resultList.total
+        }))
+      )
   }
 }

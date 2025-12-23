@@ -1,7 +1,7 @@
-import { ChangeDetectorRef, Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core'
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms'
-import { secondsToTime, timeToInt } from '@peertube/peertube-core-utils'
 import { NgClass } from '@angular/common'
+import { booleanAttribute, ChangeDetectorRef, Component, forwardRef, OnInit, inject, input, model, output } from '@angular/core'
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
+import { secondsToTime, timeToInt } from '@peertube/peertube-core-utils'
 import { InputMaskModule } from 'primeng/inputmask'
 
 @Component({
@@ -15,32 +15,38 @@ import { InputMaskModule } from 'primeng/inputmask'
       multi: true
     }
   ],
-  standalone: true,
   imports: [ InputMaskModule, FormsModule, NgClass ]
 })
 export class TimestampInputComponent implements ControlValueAccessor, OnInit {
-  @Input() maxTimestamp: number
-  @Input() timestamp: number
-  @Input() disabled = false
-  @Input() inputName: string
-  @Input() disableBorder = true
+  private changeDetector = inject(ChangeDetectorRef)
 
-  @Output() inputBlur = new EventEmitter()
+  readonly maxTimestamp = input<number>(undefined)
+  readonly timestamp = model<number>(undefined)
+
+  readonly disabled = input(false, { transform: booleanAttribute })
+  readonly enableBorder = input(false, { transform: booleanAttribute })
+
+  readonly inputName = input<string>(undefined)
+  readonly mask = input('99:99:99')
+
+  readonly formatter = input((timestamp: number) => secondsToTime({ seconds: timestamp, format: 'full', symbol: ':' }))
+  readonly parser = input((timestampString: string) => timeToInt(timestampString))
+
+  readonly inputBlur = output()
 
   timestampString: string
 
-  constructor (private changeDetector: ChangeDetectorRef) {}
-
   ngOnInit () {
-    this.writeValue(this.timestamp || 0)
+    this.writeValue(this.timestamp() || 0)
   }
 
-  propagateChange = (_: any) => { /* empty */ }
+  propagateChange = (_: any) => {
+    // empty
+  }
 
   writeValue (timestamp: number) {
-    this.timestamp = timestamp
-
-    this.timestampString = secondsToTime({ seconds: this.timestamp, format: 'full', symbol: ':' })
+    this.timestamp.set(timestamp)
+    this.timestampString = this.formatter()(this.timestamp())
   }
 
   registerOnChange (fn: (_: any) => void) {
@@ -52,18 +58,19 @@ export class TimestampInputComponent implements ControlValueAccessor, OnInit {
   }
 
   onModelChange () {
-    this.timestamp = timeToInt(this.timestampString)
+    this.timestamp.set(this.parser()(this.timestampString))
 
-    this.propagateChange(this.timestamp)
+    this.propagateChange(this.timestamp())
   }
 
   onBlur () {
-    if (this.maxTimestamp && this.timestamp > this.maxTimestamp) {
-      this.writeValue(this.maxTimestamp)
+    const maxTimestamp = this.maxTimestamp()
+    if (maxTimestamp && this.timestamp() > maxTimestamp) {
+      this.writeValue(maxTimestamp)
 
       this.changeDetector.detectChanges()
 
-      this.propagateChange(this.timestamp)
+      this.propagateChange(this.timestamp())
     }
 
     this.inputBlur.emit()

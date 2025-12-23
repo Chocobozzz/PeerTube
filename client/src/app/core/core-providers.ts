@@ -25,6 +25,7 @@ import { ThemeService } from './theme'
 import { UserLocalStorageService, UserService } from './users'
 import { LocalStorageService, ScreenService, SessionStorageService } from './wrappers'
 import { HotkeysService } from './hotkeys'
+import { HeaderService } from '@app/header/header.service'
 
 export function getCoreProviders () {
   return [
@@ -34,6 +35,7 @@ export function getCoreProviders () {
     ServerService,
     ThemeService,
     MenuService,
+    HeaderService,
     LoginGuard,
     UserRightGuard,
     UnloggedGuard,

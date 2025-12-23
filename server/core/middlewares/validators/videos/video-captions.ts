@@ -1,20 +1,25 @@
+import { HttpStatusCode, ServerErrorCode, UserRight, VideoCaptionGenerate } from '@peertube/peertube-models'
+import { isBooleanValid, toBooleanOrNull } from '@server/helpers/custom-validators/misc.js'
+import { CONFIG } from '@server/initializers/config.js'
+import { VideoCaptionModel } from '@server/models/video/video-caption.js'
+import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import express from 'express'
 import { body, param } from 'express-validator'
-import { UserRight } from '@peertube/peertube-models'
 import { isVideoCaptionFile, isVideoCaptionLanguageValid } from '../../../helpers/custom-validators/video-captions.js'
 import { cleanUpReqFiles } from '../../../helpers/express-utils.js'
 import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../../initializers/constants.js'
 import {
   areValidationErrors,
   checkCanSeeVideo,
-  checkUserCanManageVideo,
+  checkCanManageVideo,
   doesVideoCaptionExist,
   doesVideoExist,
   isValidVideoIdParam,
   isValidVideoPasswordHeader
 } from '../shared/index.js'
+import { checkVideoCanBeTranscribed } from './shared/video-validators.js'
 
-const addVideoCaptionValidator = [
+export const addVideoCaptionValidator = [
   isValidVideoIdParam('videoId'),
 
   param('captionLanguage')
@@ -24,9 +29,9 @@ const addVideoCaptionValidator = [
     .custom((_, { req }) => isVideoCaptionFile(req.files, 'captionfile'))
     .withMessage(
       'This caption file is not supported or too large. ' +
-      `Please, make sure it is under ${CONSTRAINTS_FIELDS.VIDEO_CAPTIONS.CAPTION_FILE.FILE_SIZE.max} bytes ` +
-      'and one of the following mimetypes: ' +
-      Object.keys(MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT).map(key => `${key} (${MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT[key]})`).join(', ')
+        `Please, make sure it is under ${CONSTRAINTS_FIELDS.VIDEO_CAPTIONS.CAPTION_FILE.FILE_SIZE.max} bytes ` +
+        'and one of the following mimetypes: ' +
+        Object.keys(MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT).map(key => `${key} (${MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT[key]})`).join(', ')
     ),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -35,13 +40,91 @@ const addVideoCaptionValidator = [
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.UPDATE_ANY_VIDEO, res)) return cleanUpReqFiles(req)
+    if (
+      !await checkCanManageVideo({
+        user,
+        video: res.locals.videoAll,
+        right: UserRight.UPDATE_ANY_VIDEO,
+        req,
+        res,
+        checkIsLocal: true,
+        checkIsOwner: false
+      })
+    ) {
+      return cleanUpReqFiles(req)
+    }
 
     return next()
   }
 ]
 
-const deleteVideoCaptionValidator = [
+export const generateVideoCaptionValidator = [
+  isValidVideoIdParam('videoId'),
+
+  body('forceTranscription')
+    .optional()
+    .customSanitizer(toBooleanOrNull)
+    .custom(isBooleanValid),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    if (CONFIG.VIDEO_TRANSCRIPTION.ENABLED !== true) {
+      return res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: 'Video transcription is disabled on this instance'
+      })
+    }
+
+    if (!await doesVideoExist(req.params.videoId, res)) return
+
+    const video = res.locals.videoAll
+
+    if (!checkVideoCanBeTranscribed(video, req, res)) return
+
+    // Check if the user who did the request is able to update the video
+    const user = res.locals.oauth.token.User
+    if (!await checkCanManageVideo({ user, video, right: UserRight.UPDATE_ANY_VIDEO, req, res, checkIsLocal: true, checkIsOwner: false })) {
+      return
+    }
+
+    // Check the video has not already a caption
+    const captions = await VideoCaptionModel.listVideoCaptions(video.id)
+    if (captions.length !== 0) {
+      return res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        type: ServerErrorCode.VIDEO_ALREADY_HAS_CAPTIONS,
+        message: 'This video already has captions'
+      })
+    }
+
+    // Bypass "video is already transcribed" check
+    const body = req.body as VideoCaptionGenerate
+    if (body.forceTranscription === true) {
+      if (user.hasRight(UserRight.UPDATE_ANY_VIDEO) !== true) {
+        return res.fail({
+          status: HttpStatusCode.FORBIDDEN_403,
+          message: 'Only admins can force transcription'
+        })
+      }
+
+      return next()
+    }
+
+    const info = await VideoJobInfoModel.load(video.id)
+    if (info && info.pendingTranscription > 0) {
+      return res.fail({
+        status: HttpStatusCode.CONFLICT_409,
+        type: ServerErrorCode.VIDEO_ALREADY_BEING_TRANSCRIBED,
+        message: 'This video is already being transcribed'
+      })
+    }
+
+    return next()
+  }
+]
+
+export const deleteVideoCaptionValidator = [
   isValidVideoIdParam('videoId'),
 
   param('captionLanguage')
@@ -54,13 +137,23 @@ const deleteVideoCaptionValidator = [
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.UPDATE_ANY_VIDEO, res)) return
+    if (
+      !await checkCanManageVideo({
+        user,
+        video: res.locals.videoAll,
+        right: UserRight.UPDATE_ANY_VIDEO,
+        req,
+        res,
+        checkIsLocal: true,
+        checkIsOwner: false
+      })
+    ) return
 
     return next()
   }
 ]
 
-const listVideoCaptionsValidator = [
+export const listVideoCaptionsValidator = [
   isValidVideoIdParam('videoId'),
 
   isValidVideoPasswordHeader(),
@@ -75,9 +168,3 @@ const listVideoCaptionsValidator = [
     return next()
   }
 ]
-
-export {
-  addVideoCaptionValidator,
-  listVideoCaptionsValidator,
-  deleteVideoCaptionValidator
-}

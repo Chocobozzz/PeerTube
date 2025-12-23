@@ -1,0 +1,209 @@
+@use "sass:math";
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "./_player-variables" as *;
+
+/* Special mobile style */
+
+.video-js.vjs-peertube-skin.vjs-is-mobile {
+  // No hover means we can't display the storyboard/time tooltip on mouse hover
+  // Use the time tooltip in progress control instead
+  .vjs-mouse-display {
+    display: none !important;
+  }
+
+  .vjs-storyboard-sprite-placeholder {
+    display: none;
+  }
+
+  .vjs-progress-control .vjs-sliding {
+    .vjs-time-tooltip,
+    .vjs-storyboard-sprite-placeholder {
+      display: block !important;
+
+      visibility: visible !important;
+    }
+
+    .vjs-time-tooltip {
+      color: #fff;
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+  }
+
+  .vjs-control-bar {
+    .vjs-progress-control .vjs-slider .vjs-play-progress {
+      // Always display the circle on mobile
+      &::before {
+        margin-top: -1px;
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.vjs-mobile-buttons-overlay {
+  display: none;
+
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 100%;
+  height: 100%;
+  top: 0;
+
+  .vjs-user-active:not(.vjs-force-inactive),
+  .vjs-paused {
+    display: block;
+  }
+
+  .main-button,
+  .rewind-button,
+  .forward-button {
+    width: fit-content;
+    height: fit-content;
+    position: relative;
+    top: calc(50% - 10px);
+    transform: translateY(-50%);
+    user-select: none;
+  }
+
+  .main-button,
+  .rewind-button .icon,
+  .forward-button .icon {
+    font-family: VideoJS;
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  .main-button {
+    font-size: 5em;
+    margin: auto;
+  }
+
+  .rewind-button,
+  .forward-button {
+    margin: 0 10px;
+    position: absolute;
+    text-align: center;
+
+    .icon {
+      opacity: 0;
+      animation: fadeInAndOut 750ms linear infinite;
+
+      &::before {
+        font-size: 20px;
+        content: "\f101";
+        display: inline-block;
+        width: 16px;
+      }
+    }
+  }
+
+  .forward-button {
+    right: 5px;
+
+    .icon {
+      &::before {
+        margin-left: -2px;
+      }
+
+      &:nth-child(2) {
+        animation-delay: 0.25s;
+      }
+
+      &:nth-child(3) {
+        animation-delay: 0.5s;
+      }
+    }
+  }
+
+  .rewind-button {
+    left: 5px;
+
+    .icon {
+      &::before {
+        margin-right: -2px;
+        transform: scaleX(-1);
+      }
+
+      &:nth-child(1) {
+        animation-delay: 0.5s;
+      }
+
+      &:nth-child(2) {
+        animation-delay: 0.25s;
+      }
+    }
+  }
+}
+
+.vjs-paused {
+  .main-button {
+    &::before {
+      content: "\f101";
+    }
+  }
+}
+
+.vjs-playing {
+  .main-button {
+    &::before {
+      content: "\f103";
+    }
+  }
+}
+
+.vjs-ended {
+  .main-button {
+    &::before {
+      content: "\f11b";
+    }
+  }
+}
+
+.vjs-can-play.vjs-has-started {
+  &.vjs-user-active:not(.vjs-force-inactive),
+  &.vjs-paused {
+    .vjs-mobile-buttons-overlay {
+      display: block;
+    }
+  }
+
+  &.vjs-scrubbing,
+  &.vjs-mobile-sliding {
+    .vjs-mobile-buttons-overlay {
+      display: none;
+    }
+  }
+
+  &.vjs-seeking,
+  &.vjs-waiting,
+  &.vjs-mobile-sliding,
+  &.vjs-fast-seeking {
+    .main-button {
+      display: none;
+    }
+  }
+}
+
+.vjs-force-inactive,
+.vjs-fast-seeking {
+  .vjs-control-bar {
+    display: none;
+  }
+}
+
+@keyframes fadeInAndOut {
+  0%,
+  20% {
+    opacity: 0;
+  }
+
+  60%,
+  70% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}

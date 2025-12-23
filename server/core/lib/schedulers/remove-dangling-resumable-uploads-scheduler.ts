@@ -3,23 +3,22 @@ import { SCHEDULER_INTERVALS_MS } from '@server/initializers/constants.js'
 import { uploadx } from '../uploadx.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
-const lTags = loggerTagsFactory('scheduler', 'resumable-upload', 'cleaner')
+const lTags = loggerTagsFactory('schedulers', 'resumable-upload', 'cleaner')
 
 export class RemoveDanglingResumableUploadsScheduler extends AbstractScheduler {
-
   private static instance: AbstractScheduler
   private lastExecutionTimeMs: number
 
   protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.REMOVE_DANGLING_RESUMABLE_UPLOADS
 
   private constructor () {
-    super()
+    super({ randomRunOnEnable: false })
 
     this.lastExecutionTimeMs = new Date().getTime()
   }
 
   protected async internalExecute () {
-    logger.debug('Removing dangling resumable uploads', lTags())
+    logger.info('Removing dangling resumable uploads', lTags())
 
     const now = new Date().getTime()
 

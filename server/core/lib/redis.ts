@@ -1,7 +1,7 @@
-import { Redis as IoRedis, RedisOptions } from 'ioredis'
-import { exists } from '@server/helpers/custom-validators/misc.js'
 import { sha256 } from '@peertube/peertube-node-utils'
-import { logger } from '../helpers/logger.js'
+import { exists } from '@server/helpers/custom-validators/misc.js'
+import { Redis as IoRedis, RedisOptions } from 'ioredis'
+import { logger, loggerTagsFactory } from '../helpers/logger.js'
 import { generateRandomString } from '../helpers/utils.js'
 import { CONFIG } from '../initializers/config.js'
 import {
@@ -15,6 +15,8 @@ import {
   VIEW_LIFETIME,
   WEBSERVER
 } from '../initializers/constants.js'
+
+const lTags = loggerTagsFactory('redis')
 
 class Redis {
 
@@ -33,35 +35,42 @@ class Redis {
     this.initialized = true
 
     const redisMode = CONFIG.REDIS.SENTINEL.ENABLED ? 'sentinel' : 'standalone'
-    logger.info('Connecting to redis ' + redisMode + '...')
+    logger.info(`Connecting to Redis in "${redisMode}" mode...`, lTags())
 
-    this.client = new IoRedis(Redis.getRedisClientOptions('', { enableAutoPipelining: true }))
-    this.client.on('error', err => logger.error('Redis failed to connect', { err }))
+    this.client = new IoRedis(Redis.getRedisClientOptions('', { enableAutoPipelining: true }, true))
+    this.client.on('error', err => logger.error('Redis failed to connect', { err, ...lTags() }))
     this.client.on('connect', () => {
-      logger.info('Connected to redis.')
+      logger.info('Connected to redis.', lTags())
 
       this.connected = true
     })
     this.client.on('reconnecting', (ms) => {
-      logger.error(`Reconnecting to redis in ${ms}.`)
+      logger.error(`Reconnecting to redis in ${ms}.`, lTags())
     })
     this.client.on('close', () => {
-      logger.error('Connection to redis has closed.')
+      logger.error('Connection to redis has closed.', lTags())
       this.connected = false
     })
 
     this.client.on('end', () => {
-      logger.error('Connection to redis has closed and no more reconnects will be done.')
+      logger.error('Connection to redis has closed and no more reconnects will be done.', lTags())
     })
 
     this.prefix = 'redis-' + WEBSERVER.HOST + '-'
   }
 
-  static getRedisClientOptions (name?: string, options: RedisOptions = {}): RedisOptions {
+  static getRedisClientOptions (name?: string, options: RedisOptions = {}, logOptions = false): RedisOptions {
     const connectionName = [ 'PeerTube', name ].join('')
     const connectTimeout = 20000 // Could be slow since node use sync call to compile PeerTube
 
     if (CONFIG.REDIS.SENTINEL.ENABLED) {
+      if (logOptions) {
+        logger.info(
+          `Using sentinel redis options`,
+          { sentinels: CONFIG.REDIS.SENTINEL.SENTINELS, name: CONFIG.REDIS.SENTINEL.MASTER_NAME, ...lTags() }
+        )
+      }
+
       return {
         connectionName,
         connectTimeout,
@@ -71,6 +80,13 @@ class Redis {
         name: CONFIG.REDIS.SENTINEL.MASTER_NAME,
         ...options
       }
+    }
+
+    if (logOptions) {
+      logger.info(
+        `Using standalone redis options`,
+        { db: CONFIG.REDIS.DB, host: CONFIG.REDIS.HOSTNAME, port: CONFIG.REDIS.PORT, path: CONFIG.REDIS.SOCKET, ...lTags() }
+      )
     }
 
     return {
@@ -202,7 +218,7 @@ class Redis {
     const valueInt = parseInt(valueString, 10)
 
     if (isNaN(valueInt)) {
-      logger.error('Cannot get videos views stats of video %d in hour %d: views number is NaN (%s).', videoId, hour, valueString)
+      logger.error(`Cannot get videos views stats of video ${videoId} in hour ${hour}: views number is NaN (${valueString}).`, lTags())
       return undefined
     }
 
@@ -243,7 +259,7 @@ class Redis {
     const valueInt = parseInt(valueString, 10)
 
     if (isNaN(valueInt)) {
-      logger.error('Cannot get videos views of video %d: views number is NaN (%s).', videoId, valueString)
+      logger.error(`Cannot get videos views of video ${videoId}: views number is NaN (${valueString}).`, lTags())
       return undefined
     }
 

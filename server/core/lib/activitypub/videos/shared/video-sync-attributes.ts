@@ -56,6 +56,8 @@ async function getRatesCount (type: 'like' | 'dislike', video: MVideo, fetchedVi
     ? fetchedVideo.likes
     : fetchedVideo.dislikes
 
+  if (!uri) return
+
   logger.info('Sync %s of video %s', type, video.url)
 
   const { body } = await fetchAP<ActivityPubOrderedCollection<any>>(uri)
@@ -70,6 +72,7 @@ async function getRatesCount (type: 'like' | 'dislike', video: MVideo, fetchedVi
 
 function syncShares (video: MVideo, fetchedVideo: VideoObject, isSync: boolean) {
   const uri = fetchedVideo.shares
+  if (!uri) return
 
   if (!isSync) {
     return createJob({ uri, videoId: video.id, type: 'video-shares' })
@@ -84,6 +87,7 @@ function syncShares (video: MVideo, fetchedVideo: VideoObject, isSync: boolean) 
 
 function syncComments (video: MVideo, fetchedVideo: VideoObject, isSync: boolean) {
   const uri = fetchedVideo.comments
+  if (!uri) return
 
   if (!isSync) {
     return createJob({ uri, videoId: video.id, type: 'video-comments' })

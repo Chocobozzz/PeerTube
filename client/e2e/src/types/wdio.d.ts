@@ -1,5 +1,9 @@
-declare namespace WebdriverIO {
-  interface Element {
-    chooseFile: (path: string) => Promise<void>
+declare global {
+  namespace WebdriverIO {
+    interface Element {
+      chooseFile: (path: string) => Promise<void>
+    }
   }
 }
+
+export {}

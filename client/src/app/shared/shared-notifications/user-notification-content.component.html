@@ -1,0 +1,281 @@
+<div class="root" [ngClass]="{ unread: !n.payload.read }">
+  @switch (n.payload.type) {
+    @case (1) { <!-- UserNotificationType.NEW_VIDEO_FROM_SUBSCRIPTION -->
+      @if (n.payload.video) {
+        <my-actor-avatar [size]="imageSize" [actor]="n.payload.video.channel" actorType="channel"></my-actor-avatar>
+
+        <div class="message" i18n>
+          <strong>{{ n.payload.video.channel.displayName }}</strong> published a new video: {{ n.payload.video.name }}
+        </div>
+      } @else {
+        <my-global-icon iconName="alert"></my-global-icon>
+
+        <div class="message" i18n>The notification concerns a video now unavailable</div>
+      }
+    }
+
+    @case (5) { <!-- UserNotificationType.UNBLACKLIST_ON_MY_VIDEO -->
+      <my-global-icon iconName="undo"></my-global-icon>
+
+      <div class="message" i18n>Your video <strong>{{ n.payload.video.name }}</strong> has been unblocked</div>
+    }
+
+    @case (4) { <!-- UserNotificationType.BLACKLIST_ON_MY_VIDEO -->
+      <my-global-icon iconName="no"></my-global-icon>
+
+      <div class="message" i18n>Your video <strong>{{ n.payload.videoBlacklist.video.name }}</strong> has been blocked</div>
+    }
+
+    @case (3) { <!-- UserNotificationType.NEW_ABUSE_FOR_MODERATORS -->
+      <my-global-icon iconName="flag"></my-global-icon>
+
+      @if (n.payload.abuse.video) {
+        <div class="message" i18n>A new <strong>video abuse</strong> has been created on video {{ n.payload.abuse.video.name }}</div>
+      } @else if (n.payload.abuse.comment) {
+        <div class="message" i18n>A new <strong>comment abuse</strong> has been created on video {{ n.payload.abuse.comment.video.name }}</div>
+      } @else if (n.payload.abuse.account) {
+        <div class="message" i18n>A new <strong>account abuse</strong> has been created on account {{ n.payload.abuse.account.displayName }}</div>
+      } @else { <!-- Deleted entity associated to the abuse -->
+        <div class="message" i18n>A new <strong>abuse</strong> has been created</div>
+      }
+    }
+
+    @case (15) { <!-- UserNotificationType.ABUSE_STATE_CHANGE -->
+      <my-global-icon iconName="flag"></my-global-icon>
+
+      @if (isAbuseAccepted(n)) {
+        @if (n.payload.abuse.video) {
+          <div class="message" i18n>Your report of <strong>the video {{ n.payload.abuse.video.name }}</strong> has been accepted</div>
+        } @else if (n.payload.abuse.comment) {
+          <div class="message" i18n>Your report of <strong>the comment</strong> in the video <strong>{{ n.payload.abuse.comment.video.name }}</strong> has been accepted</div>
+        } @else if (n.payload.abuse.account) {
+          <div class="message" i18n>Your report of <strong>the account {{ n.payload.abuse.account.displayName }}</strong> has been accepted</div>
+        } @else {
+          <div class="message" i18n>Your <strong>report {{ n.payload.abuse.id }}</strong> has been accepted</div>
+        }
+      } @else {
+        @if (n.payload.abuse.video) {
+          <div class="message" i18n>Your report of <strong>the video {{ n.payload.abuse.video.name }}</strong> has been rejected</div>
+        } @else if (n.payload.abuse.comment) {
+          <div class="message" i18n>Your report of <strong>the comment</strong> in the video <strong>{{ n.payload.abuse.comment.video.name }}</strong> has been rejected</div>
+        } @else if (n.payload.abuse.account) {
+          <div class="message" i18n>Your report of <strong>the account {{ n.payload.abuse.account.displayName }}</strong> has been rejected</div>
+        } @else {
+          <div class="message" i18n>Your <strong>report {{ n.payload.abuse.id }}</strong> has been rejected</div>
+        }
+      }
+    }
+
+    @case (16) { <!-- UserNotificationType.ABUSE_NEW_MESSAGE -->
+      <my-global-icon iconName="flag"></my-global-icon>
+
+      @if (n.payload.abuse.video) {
+        <div class="message" i18n>Report of <strong>the video {{ n.payload.abuse.video.name }}</strong> has a new message</div>
+      } @else if (n.payload.abuse.comment) {
+        <div class="message" i18n>Report of <strong>the comment</strong> in the video <strong>{{ n.payload.abuse.comment.video.name }}</strong> has a new message</div>
+      } @else if (n.payload.abuse.account) {
+        <div class="message" i18n>Report of <strong>the account {{ n.payload.abuse.account.displayName }}</strong> has a new message</div>
+      } @else {
+        <div class="message" i18n><strong>Report {{ n.payload.abuse.id }}</strong> has a new message</div>
+      }
+    }
+
+    @case (12) { <!-- UserNotificationType.VIDEO_AUTO_BLACKLIST_FOR_MODERATORS -->
+      <my-global-icon iconName="no"></my-global-icon>
+
+      <div class="message" i18n>The recently added video <strong>{{ n.payload.videoBlacklist.video.name }}</strong> has been automatically blocked</div>
+    }
+
+    @case (2) {
+      @if (n.payload.comment) {
+        <my-actor-avatar [size]="imageSize" [actor]="n.payload.comment.account" actorType="account"></my-actor-avatar>
+
+        <div class="message" i18n>
+          {{ n.payload.comment.account.displayName }} commented your video <strong>{{ n.payload.comment.video.name }}</strong>
+
+          @if (n.payload.comment.heldForReview) {
+            <div>This comment requires your approval</div>
+          }
+        </div>
+      } @else {
+        <my-global-icon iconName="alert"></my-global-icon>
+
+        <div class="message" i18n>The notification concerns a comment now unavailable</div>
+      }
+    }
+
+    @case (6) { <!-- UserNotificationType.MY_VIDEO_PUBLISHED -->
+      <my-global-icon iconName="film"></my-global-icon>
+
+      <div class="message" i18n>Your video <strong>{{ n.payload.video.name }}</strong> has been published</div>
+    }
+
+    @case (7) { <!-- UserNotificationType.MY_VIDEO_IMPORT_SUCCESS -->
+      <my-global-icon iconName="cloud-download"></my-global-icon>
+
+      <div class="message" i18n>Your video import <strong class="limit-characters">{{ n.videoImportIdentifier }}</strong> succeeded</div>
+    }
+
+    @case (8) { <!-- UserNotificationType.MY_VIDEO_IMPORT_ERROR -->
+      <my-global-icon iconName="cloud-error"></my-global-icon>
+
+      <div class="message" i18n>Your video import <strong class="limit-characters">{{ n.videoImportIdentifier }}</strong> failed</div>
+    }
+
+    @case (9) { <!-- UserNotificationType.NEW_USER_REGISTRATION -->
+      <my-global-icon iconName="user-add"></my-global-icon>
+
+      <div class="message" i18n>User <strong>{{ n.payload.account.name }}</strong> registered on your platform</div>
+    }
+
+    @case (10) { <!-- UserNotificationType.NEW_FOLLOW -->
+      <my-actor-avatar [size]="imageSize" [actor]="n.payload.actorFollow.follower" actorType="account"></my-actor-avatar>
+
+      @if (n.payload.actorFollow.following.type === 'channel') {
+        <div class="message" i18n>
+          <strong>{{ n.payload.actorFollow.follower.displayName }}</strong> is following your channel <strong>{{ n.payload.actorFollow.following.displayName }}</strong>
+        </div>
+      } @else if (n.payload.actorFollow.following.type === 'account') {
+        <div class="message" i18n>
+          <strong>{{ n.payload.actorFollow.follower.displayName }}</strong> is following <strong>your account</strong></div>
+      }
+    }
+
+    @case (11) {
+      @if (n.payload.comment) {
+        <my-actor-avatar [size]="imageSize" [actor]="n.payload.comment.account" actorType="account"></my-actor-avatar>
+
+        <div class="message" i18n>
+           <strong>{{ n.payload.comment.account.displayName }}</strong> mentioned you on video <strong>{{ n.payload.comment.video.name }}</strong>
+        </div>
+      } @else {
+        <my-global-icon iconName="alert"></my-global-icon>
+
+        <div class="message" i18n>The notification concerns a comment now unavailable</div>
+      }
+    }
+
+    @case (13) { <!-- UserNotificationType.NEW_INSTANCE_FOLLOWER -->
+      <my-global-icon iconName="users"></my-global-icon>
+
+      <div class="message">
+        <div i18n>Your platform has a new follower: <strong>{{ n.followerHandle }}</strong></div>
+
+        @if (n.payload.actorFollow?.state === 'pending') {
+          <div i18n>It is awaiting your approval</div>
+        }
+      </div>
+    }
+
+    @case (14) { <!-- UserNotificationType.AUTO_INSTANCE_FOLLOWING -->
+      <my-global-icon iconName="users"></my-global-icon>
+
+      <div class="message" i18n>Your platform automatically followed <strong>{{ n.followingHandle }}</strong></div>
+    }
+
+    @case (17) { <!-- UserNotificationType.NEW_PLUGIN_VERSION -->
+      <my-global-icon iconName="cog"></my-global-icon>
+
+      <div class="message" i18n>
+        A new version of the plugin/theme <strong>{{ n.payload.plugin.name }}</strong> is available: <strong>{{ n.payload.plugin.latestVersion }}</strong>
+      </div>
+    }
+
+    @case (18) { <!-- UserNotificationType.NEW_PEERTUBE_VERSION -->
+      <my-global-icon iconName="cog"></my-global-icon>
+
+      <div class="message" i18n>
+        A <strong>new version</strong> of PeerTube is available: <strong>{{ n.payload.peertube.latestVersion }}</strong>
+      </div>
+    }
+
+    @case (19) { <!-- UserNotificationType.MY_VIDEO_STUDIO_EDITION_FINISHED -->
+      <my-global-icon iconName="film"></my-global-icon>
+
+      <div class="message" i18n>The edits to your video <strong>{{ n.payload.video.name }}</strong> have been applied</div>
+    }
+
+    @case (20) { <!-- UserNotificationType.NEW_USER_REGISTRATION_REQUEST -->
+      <my-global-icon iconName="user-add"></my-global-icon>
+
+      <div class="message" i18n>User <strong>{{ n.payload.registration.username }}</strong> wants to register on your platform</div>
+    }
+
+    @case (21) { <!-- UserNotificationType.NEW_LIVE_FROM_SUBSCRIPTION -->
+      @if (n.payload.video) {
+        <my-actor-avatar [size]="imageSize" [actor]="n.payload.video.channel" actorType="channel"></my-actor-avatar>
+
+        @if (isVideoPublished(n)) {
+          <div class="message" i18n><strong>{{ n.payload.video.channel.displayName }}</strong> is live streaming: <strong>{{ n.payload.video.name }}</strong></div>
+        } @else {
+          <div class="message" i18n><strong>{{ n.payload.video.channel.displayName }}</strong> went live: <strong>{{ n.payload.video.name }}</strong></div>
+        }
+      } @else {
+        <my-global-icon iconName="alert"></my-global-icon>
+
+        <div class="message" i18n>The notification concerns a video now unavailable</div>
+      }
+    }
+
+    @case (22) { <!-- UserNotificationType.MY_VIDEO_TRANSCRIPTION_GENERATED -->
+      <my-global-icon iconName="video-lang"></my-global-icon>
+
+      <div class="message" i18n>
+        {{ n.payload.videoCaption.language.label }} transcription of your video <strong>{{ n.payload.videoCaption.video.name }}</strong> has been generated
+      </div>
+    }
+
+    @case (23) { <!-- UserNotificationType.INVITED_TO_COLLABORATE_TO_CHANNEL -->
+      <my-account-on-channel-avatar [size]="imageSize" [channel]="n.payload.videoChannelCollaborator.channel" [account]="n.payload.videoChannelCollaborator.channelOwner"></my-account-on-channel-avatar>
+
+      <div class="message">
+        <div i18n>
+          <strong>{{ n.payload.videoChannelCollaborator.channelOwner.displayName }}</strong> invited you to become an<my-collaborator-state class="mx-2" type="accepted"></my-collaborator-state> of their channel <strong>{{ n.payload.videoChannelCollaborator.channel.displayName }}</strong>
+        </div>
+      </div>
+
+      @if (isChannelCollabRejected(n)) {
+        <div class="action-button">
+          <my-global-icon iconName="cross"></my-global-icon>
+
+          <div i18n>Invitation declined</div>
+        </div>
+      } @else if (isChannelCollabInvitation(n)) {
+        <div class="action-button">
+          <my-button small="true" icon="tick" (click)="acceptChannelCollab()" i18n theme="primary">Accept</my-button>
+          <my-button small="true" icon="cross" (click)="rejectChannelCollab()" i18n theme="secondary">Decline</my-button>
+        </div>
+      } @else if (isChannelCollabAccepted(n)) {
+        <div class="action-button">
+          <my-global-icon iconName="tick"></my-global-icon>
+
+          <div i18n>Invitation accepted</div>
+        </div>
+      }
+    }
+
+    @case (24) { <!-- UserNotificationType.ACCEPTED_TO_COLLABORATE_TO_CHANNEL -->
+      <my-account-on-channel-avatar [size]="imageSize" [channel]="n.payload.videoChannelCollaborator.channel" [account]="n.payload.videoChannelCollaborator.account"></my-account-on-channel-avatar>
+
+      <div class="message" i18n>
+        <strong>{{ n.payload.videoChannelCollaborator.account.displayName }}</strong> accepted your invitation to become an editor for your channel <strong>{{ n.payload.videoChannelCollaborator.channel.displayName }}</strong>
+      </div>
+    }
+
+    @case (25) { <!-- UserNotificationType.REFUSED_TO_COLLABORATE_TO_CHANNEL -->
+      <my-global-icon iconName="cross"></my-global-icon>
+
+      <div class="message" i18n>
+        <strong>{{ n.payload.videoChannelCollaborator.account.displayName }}</strong> declined your invitation to become an editor for your channel <strong>{{ n.payload.videoChannelCollaborator.channel.displayName }}</strong>
+      </div>
+    }
+
+    @default {
+      <my-global-icon iconName="alert"></my-global-icon>
+
+      <div class="message" i18n>The notification points to content now unavailable</div>
+    }
+  }
+
+  <div [title]="n.payload.createdAt" class="from-date">{{ n.payload.createdAt | myFromNow }}</div>
+</div>

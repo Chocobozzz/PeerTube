@@ -36,7 +36,6 @@ describe('Test user videos', function () {
   })
 
   describe('List my videos', function () {
-
     it('Should list my videos', async function () {
       const { data, total } = await server.videos.listMyVideos()
 
@@ -46,7 +45,6 @@ describe('Test user videos', function () {
   })
 
   describe('Upload', function () {
-
     it('Should upload the video with the correct token', async function () {
       await server.videos.upload({ token })
       const { data } = await server.videos.list()
@@ -63,7 +61,6 @@ describe('Test user videos', function () {
   })
 
   describe('Ratings', function () {
-
     it('Should retrieve a video rating', async function () {
       await server.videos.rate({ id: videoId, token, rating: 'like' })
       const rating = await server.users.getMyRating({ token, videoId })
@@ -96,7 +93,6 @@ describe('Test user videos', function () {
   })
 
   describe('Remove video', function () {
-
     it('Should not be able to remove the video with an incorrect token', async function () {
       await server.videos.remove({ token: 'bad_token', id: videoId, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
@@ -112,7 +108,6 @@ describe('Test user videos', function () {
   })
 
   describe('My videos & quotas', function () {
-
     it('Should be able to upload a video with a user', async function () {
       this.timeout(30000)
 
@@ -147,7 +142,7 @@ describe('Test user videos', function () {
       expect(video.previewPath).to.not.be.null
     })
 
-    it('Should be able to filter by channel in my videos', async function () {
+    it('Should be able to filter by a specific channel in my videos', async function () {
       const myInfo = await server.users.getMyInfo({ token })
       const mainChannel = myInfo.videoChannels.find(c => c.name !== 'other_channel')
       const otherChannel = myInfo.videoChannels.find(c => c.name === 'other_channel')
@@ -167,6 +162,26 @@ describe('Test user videos', function () {
         const { total, data } = await server.videos.listMyVideos({ token, channelId: otherChannel.id })
         expect(total).to.equal(0)
         expect(data).to.have.lengthOf(0)
+      }
+    })
+
+    it('Should be able to filter by multiple channels in my videos', async function () {
+      {
+        const { total, data } = await server.videos.listMyVideos({ token, channelNameOneOf: [ 'user_channel' ] })
+        expect(total).to.equal(1)
+        expect(data).to.have.lengthOf(1)
+      }
+
+      {
+        const { total, data } = await server.videos.listMyVideos({ token, channelNameOneOf: [ 'other_channel' ] })
+        expect(total).to.equal(0)
+        expect(data).to.have.lengthOf(0)
+      }
+
+      {
+        const { total, data } = await server.videos.listMyVideos({ token, channelNameOneOf: [ 'user_channel', 'other_channel' ] })
+        expect(total).to.equal(1)
+        expect(data).to.have.lengthOf(1)
       }
     })
 

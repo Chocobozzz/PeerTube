@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { getAudioStream, getVideoStream, getVideoStreamFPS } from '@peertube/peertube-ffmpeg'
-import { VideoPrivacy } from '@peertube/peertube-models'
+import { getAudioStream, getVideoStream, getVideoStreamFPS, hasAudioStream, hasVideoStream } from '@peertube/peertube-ffmpeg'
+import { VideoPrivacy, VideoResolution } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createSingleServer,
@@ -13,6 +12,7 @@ import {
   testFfmpegStreamError,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { expect } from 'chai'
 
 async function createLiveWrapper (server: PeerTubeServer) {
   const liveAttributes = {
@@ -84,6 +84,11 @@ describe('Test transcoding plugins', function () {
       const files = video.files.concat(...video.streamingPlaylists.map(p => p.files))
 
       for (const file of files) {
+        if (file.resolution.id === VideoResolution.H_NOVIDEO) {
+          expect(file.fps).to.equal(0)
+          continue
+        }
+
         if (type === 'above') {
           expect(file.fps).to.be.above(fps)
         } else {
@@ -93,13 +98,22 @@ describe('Test transcoding plugins', function () {
     }
 
     async function checkLiveFPS (uuid: string, type: 'above' | 'below', fps: number) {
-      const playlistUrl = `${server.url}/static/streaming-playlists/hls/${uuid}/0.m3u8`
-      const videoFPS = await getVideoStreamFPS(playlistUrl)
+      let detectedAudio = false
 
-      if (type === 'above') {
-        expect(videoFPS).to.be.above(fps)
-      } else {
-        expect(videoFPS).to.be.below(fps)
+      for (const playlistName of [ '0.m3u8', '1.m3u8' ]) {
+        const playlistUrl = `${server.url}/static/streaming-playlists/hls/${uuid}/${playlistName}`
+        const videoFPS = await getVideoStreamFPS(playlistUrl)
+
+        if (!detectedAudio && videoFPS === 0) {
+          detectedAudio = true
+          continue
+        }
+
+        if (type === 'above') {
+          expect(videoFPS).to.be.above(fps)
+        } else {
+          expect(videoFPS).to.be.below(fps)
+        }
       }
     }
 
@@ -267,12 +281,17 @@ describe('Test transcoding plugins', function () {
       await server.live.waitUntilPublished({ videoId: liveVideoId })
       await waitJobs([ server ])
 
-      const playlistUrl = `${server.url}/static/streaming-playlists/hls/${liveVideoId}/0.m3u8`
-      const audioProbe = await getAudioStream(playlistUrl)
-      expect(audioProbe.audioStream.codec_name).to.equal('opus')
+      for (const playlistName of [ '0.m3u8', '1.m3u8' ]) {
+        const playlistUrl = `${server.url}/static/streaming-playlists/hls/${liveVideoId}/${playlistName}`
 
-      const videoProbe = await getVideoStream(playlistUrl)
-      expect(videoProbe.codec_name).to.equal('h264')
+        if (await hasAudioStream(playlistUrl)) {
+          const audioProbe = await getAudioStream(playlistUrl)
+          expect(audioProbe.audioStream.codec_name).to.equal('opus')
+        } else if (await hasVideoStream(playlistUrl)) {
+          const videoProbe = await getVideoStream(playlistUrl)
+          expect(videoProbe.codec_name).to.equal('h264')
+        }
+      }
     })
   })
 

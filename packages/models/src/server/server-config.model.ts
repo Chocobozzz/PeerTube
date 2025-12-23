@@ -1,4 +1,4 @@
-import { ActorImage } from '../index.js'
+import { ActorImage, LogoType, PlayerTheme, VideoCommentPolicyType } from '../index.js'
 import { ClientScriptJSON } from '../plugins/plugin-package-json.model.js'
 import { NSFWPolicyType } from '../videos/nsfw-policy.type.js'
 import { VideoPrivacyType } from '../videos/video-privacy.enum.js'
@@ -37,9 +37,14 @@ export interface ServerConfig {
   serverCommit?: string
 
   client: {
+    newFeaturesInfo: boolean
+
+    header: {
+      hideInstanceName: boolean
+    }
+
     videos: {
       miniature: {
-        displayAuthorAvatar: boolean
         preferAuthorDisplayName: boolean
       }
       resumableUpload: {
@@ -47,9 +52,32 @@ export interface ServerConfig {
       }
     }
 
+    browseVideos: {
+      defaultSort: string
+      defaultScope: string
+    }
+
     menu: {
       login: {
         redirectOnSingleExternalAuth: boolean
+      }
+    }
+
+    openInApp: {
+      android: {
+        intent: {
+          enabled: boolean
+          host: string
+          scheme: string
+          fallbackUrl: string
+        }
+      }
+
+      ios: {
+        enabled: boolean
+        host: string
+        scheme: string
+        fallbackUrl: string
       }
     }
   }
@@ -57,7 +85,9 @@ export interface ServerConfig {
   defaults: {
     publish: {
       downloadEnabled: boolean
-      commentsEnabled: boolean
+
+      commentsPolicy: VideoCommentPolicyType
+
       privacy: VideoPrivacyType
       licence: number
     }
@@ -70,6 +100,11 @@ export interface ServerConfig {
       embed: {
         enabled: boolean
       }
+    }
+
+    player: {
+      theme: PlayerTheme
+      autoPlay: boolean
     }
   }
 
@@ -86,6 +121,20 @@ export interface ServerConfig {
     shortDescription: string
     isNSFW: boolean
     defaultNSFWPolicy: NSFWPolicyType
+
+    serverCountry: string
+
+    support: {
+      text: string
+    }
+
+    social: {
+      externalLink: string
+      mastodonLink: string
+      blueskyLink: string
+      xLink: string
+    }
+
     defaultClientRoute: string
     customizations: {
       javascript: string
@@ -94,6 +143,16 @@ export interface ServerConfig {
 
     avatars: ActorImage[]
     banners: ActorImage[]
+
+    defaultLanguage: string
+
+    logo: {
+      type: LogoType
+      width: number
+      height: number
+      fileUrl: string
+      isFallback: boolean
+    }[]
   }
 
   search: {
@@ -120,7 +179,23 @@ export interface ServerConfig {
 
   theme: {
     registered: ServerConfigTheme[]
+
+    builtIn: { name: 'peertube-core-light-beige' | 'peertube-core-dark-brown' }[]
+
     default: string
+
+    customization: {
+      primaryColor: string
+      foregroundColor: string
+      backgroundColor: string
+      backgroundSecondaryColor: string
+      menuForegroundColor: string
+      menuBackgroundColor: string
+      menuBorderRadius: string
+      headerForegroundColor: string
+      headerBackgroundColor: string
+      inputBorderRadius: string
+    }
   }
 
   email: {
@@ -307,6 +382,10 @@ export interface ServerConfig {
     }
   }
 
+  federation: {
+    enabled: boolean
+  }
+
   broadcastMessage: {
     enabled: boolean
     message: string
@@ -329,6 +408,16 @@ export interface ServerConfig {
 
   views: {
     videos: {
+      remote: {
+        // milliseconds
+        maxAge: number
+      }
+
+      local: {
+        // milliseconds
+        maxAge: number
+      }
+
       watchingInterval: {
         // milliseconds
         anonymous: number
@@ -341,6 +430,34 @@ export interface ServerConfig {
 
   storyboards: {
     enabled: boolean
+    remoteRunners: {
+      enabled: boolean
+    }
+  }
+
+  videoTranscription: {
+    enabled: boolean
+
+    remoteRunners: {
+      enabled: boolean
+    }
+  }
+
+  webrtc: {
+    stunServers: string[]
+  }
+
+  nsfwFlagsSettings: {
+    enabled: boolean
+  }
+
+  fieldsConstraints: {
+    users: {
+      password: {
+        minLength: number
+        maxLength: number
+      }
+    }
   }
 }
 

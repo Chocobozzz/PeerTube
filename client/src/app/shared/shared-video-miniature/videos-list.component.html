@@ -1,62 +1,81 @@
 <div class="margin-content">
-  <div class="videos-header pt-4 mb-4">
-    <h1 *ngIf="displayTitle" class="title mb-1" placement="bottom" [ngbTooltip]="titleTooltip" container="body">
-      {{ title }}
-    </h1>
-
-    <div [ngClass]="{ 'no-title': !displayTitle, invisible: !syndicationItems || syndicationItems.length === 0 }" class="title-subscription">
-      <ng-container i18n>Subscribe to RSS feed "{{ title }}"</ng-container>
-
-      <my-feed [syndicationItems]="syndicationItems"></my-feed>
-    </div>
-
-    <div *ngIf="headerActions.length !== 0" class="action-block mt-3">
-      <ng-container *ngFor="let action of headerActions">
-        <a *ngIf="action.routerLink" class="ms-2" [routerLink]="action.routerLink" routerLinkActive="active">
-          <ng-container *ngTemplateOutlet="actionContent; context:{ $implicit: action }"></ng-container>
-        </a>
-
-        <button *ngIf="!action.routerLink && !action.href && action.click" class="ms-2 button-unstyle" (click)="action.click($event)" (key.enter)="action.click($event)">
-          <ng-container *ngTemplateOutlet="actionContent; context:{ $implicit: action }"></ng-container>
-        </button>
-
-        <a *ngIf="!action.routerLink && action.href && action.click" class="ms-2" (click)="action.click($event)" (key.enter)="action.click($event)" [href]="action.href">
-          <ng-container *ngTemplateOutlet="actionContent; context:{ $implicit: action }"></ng-container>
-        </a>
-
-        <ng-template #actionContent let-action>
-          <my-button *ngIf="!action.justIcon" [icon]="action.iconName" [label]="action.label"></my-button>
-          <my-button *ngIf="action.justIcon" [icon]="action.iconName" [ngbTooltip]="action.label"></my-button>
-        </ng-template>
-      </ng-container>
-    </div>
+  <div class="videos-header">
+    @if (headerActions().length !== 0) {
+      <div class="action-block mb-4">
+        @for (action of headerActions(); track action) {
+          @if (action.routerLink) {
+            <my-button theme="secondary" [ptRouterLink]="action.routerLink" [icon]="action.iconName">{{ action.label }}</my-button>
+          }
+        }
+      </div>
+    }
   </div>
 
-  <my-video-filters-header
-    *ngIf="displayFilters" [displayModerationBlock]="displayModerationBlock" [hideScope]="hideScopeFilter"
-    [filters]="filters"
-    (filtersChanged)="onFiltersChanged(true)"
-  ></my-video-filters-header>
+  @if (displayFilters()) {
+    <my-video-filters-header
+      class="d-block"
+      [displayModerationBlock]="displayModerationBlock"
+      [hideScope]="hideScopeFilter()"
+      [filters]="filters"
+    ></my-video-filters-header>
+  }
 
-  <div class="no-results" i18n *ngIf="hasDoneFirstQuery && videos.length === 0">No results.</div>
+  @if (hasDoneFirstQuery && videos.length === 0 && highlightedLives.length === 0) {
+    <div class="no-results" i18n>No results.</div>
+  }
+
   <div
-    myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()"
-    [setAngularState]="true" [parentDisabled]="disabled"
-    class="videos" [ngClass]="{ 'display-as-row': displayAsRow }"
+    myInfiniteScroller
+    (nearOfBottom)="onNearOfBottom()"
+    [dataObservable]="onVideosDataSubject.asObservable()"
+    class="videos"
+    [ngClass]="{ 'display-as-row': displayAsRow() }"
   >
-    <ng-container *ngFor="let video of videos; trackBy: videoById;">
-      <h2 class="date-title" *ngIf="getCurrentGroupedDateLabel(video)">
-        {{ getCurrentGroupedDateLabel(video) }}
+    @if (highlightedLives.length !== 0) {
+      <h2 class="videos-section-title">
+        <my-global-icon class="pt-icon me-1 top--1px" iconName="live"></my-global-icon>
+        <ng-container i18n>Lives</ng-container>
       </h2>
+
+      @for (live of highlightedLives; track videoById($index, live)) {
+        <div class="video-wrapper">
+          <my-video-miniature
+            [video]="live"
+            [user]="user"
+            [displayAsRow]="displayAsRow()"
+            [displayVideoActions]="displayVideoActions()"
+            [displayOptions]="displayOptions"
+            (videoBlocked)="removeVideoFromArray(live)"
+            (videoRemoved)="removeVideoFromArray(live)"
+          >
+          </my-video-miniature>
+        </div>
+      }
+
+      <h2 class="videos-section-title" [ngClass]="{ 'visually-hidden': groupByDate() }">
+        <my-global-icon class="pt-icon me-1" iconName="videos"></my-global-icon>
+        <ng-container i18n>Videos</ng-container>
+      </h2>
+    }
+
+    @for (video of videos; track videoById($index, video)) {
+
+      @if (groupByDate()) {
+        <my-date-group-label [date]="video.publishedAt" [store]="groupByDateStore" [groupedDateLabels]="groupedDateLabels"></my-date-group-label>
+      }
 
       <div class="video-wrapper">
         <my-video-miniature
-          [video]="video" [user]="userMiniature" [displayAsRow]="displayAsRow"
-          [displayVideoActions]="displayVideoActions" [displayOptions]="displayOptions"
-          (videoBlocked)="removeVideoFromArray(video)" (videoRemoved)="removeVideoFromArray(video)"
+          [video]="video"
+          [user]="user"
+          [displayAsRow]="displayAsRow()"
+          [displayVideoActions]="displayVideoActions()"
+          [displayOptions]="displayOptions"
+          (videoBlocked)="removeVideoFromArray(video)"
+          (videoRemoved)="removeVideoFromArray(video)"
         >
         </my-video-miniature>
       </div>
-    </ng-container>
+    }
   </div>
 </div>

@@ -1,4 +1,4 @@
-import { LiveVideoLatencyModeType, VideoStateType } from '../../videos/index.js'
+import { LiveVideoLatencyModeType, VideoCommentPolicyType, VideoStateType } from '../../videos/index.js'
 import {
   ActivityIconObject,
   ActivityIdentifierObject,
@@ -6,6 +6,7 @@ import {
   ActivityTagObject,
   ActivityUrlObject
 } from './common-objects.js'
+import { VideoCaptionObject } from './video-caption-object.js'
 import { VideoChapterObject } from './video-chapters-object.js'
 
 export interface VideoObject {
@@ -18,18 +19,21 @@ export interface VideoObject {
   category: ActivityIdentifierObject
   licence: ActivityIdentifierObject
   language: ActivityIdentifierObject
-  subtitleLanguage: ActivityIdentifierObject[]
+  subtitleLanguage: VideoCaptionObject[]
 
   views: number
 
   sensitive: boolean
+  summary: string
 
   isLiveBroadcast: boolean
   liveSaveReplay: boolean
   permanentLive: boolean
   latencyMode: LiveVideoLatencyModeType
 
-  commentsEnabled: boolean
+  commentsPolicy: VideoCommentPolicyType
+  canReply: 'as:Public' | 'https://www.w3.org/ns/activitystreams#Public'
+
   downloadEnabled: boolean
   waitTranscoding: boolean
   state: VideoStateType
@@ -38,6 +42,10 @@ export interface VideoObject {
   originallyPublishedAt: string
   updated: string
   uploadDate: string
+
+  schedules?: {
+    startDate: Date
+  }[]
 
   mediaType: 'text/markdown'
   content: string
@@ -55,6 +63,7 @@ export interface VideoObject {
   shares: string
   comments: string
   hasParts: string | VideoChapterObject[]
+  playerSettings: string
 
   attributedTo: ActivityPubAttributedTo[]
 
@@ -76,7 +85,7 @@ export interface VideoObject {
 
 export interface ActivityPubStoryboard {
   type: 'Image'
-  rel: [ 'storyboard' ]
+  rel: ['storyboard']
   url: {
     href: string
     mediaType: string

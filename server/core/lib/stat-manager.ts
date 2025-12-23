@@ -147,7 +147,9 @@ class StatsManager {
       Like: 0,
       Dislike: 0,
       Flag: 0,
-      View: 0
+      View: 0,
+      ApproveReply: 0,
+      RejectReply: 0
     }
   }
 
@@ -170,6 +172,8 @@ class StatsManager {
       totalActivityPubDislikeMessagesSuccesses: this.inboxMessages.successesPerType.Dislike,
       totalActivityPubFlagMessagesSuccesses: this.inboxMessages.successesPerType.Flag,
       totalActivityPubViewMessagesSuccesses: this.inboxMessages.successesPerType.View,
+      totalActivityPubApproveReplyMessagesSuccesses: this.inboxMessages.successesPerType.ApproveReply,
+      totalActivityPubRejectReplyMessagesSuccesses: this.inboxMessages.successesPerType.RejectReply,
 
       totalActivityPubCreateMessagesErrors: this.inboxMessages.errorsPerType.Create,
       totalActivityPubUpdateMessagesErrors: this.inboxMessages.errorsPerType.Update,
@@ -183,6 +187,8 @@ class StatsManager {
       totalActivityPubDislikeMessagesErrors: this.inboxMessages.errorsPerType.Dislike,
       totalActivityPubFlagMessagesErrors: this.inboxMessages.errorsPerType.Flag,
       totalActivityPubViewMessagesErrors: this.inboxMessages.errorsPerType.View,
+      totalActivityPubApproveReplyMessagesErrors: this.inboxMessages.errorsPerType.ApproveReply,
+      totalActivityPubRejectReplyMessagesErrors: this.inboxMessages.errorsPerType.RejectReply,
 
       totalActivityPubMessagesErrors: this.inboxMessages.errors,
 

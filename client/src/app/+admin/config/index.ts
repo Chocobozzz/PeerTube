@@ -1,2 +1,2 @@
-export * from './edit-custom-config'
+export * from './pages'
 export * from './config.routes'

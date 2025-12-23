@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { join } from 'path'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
@@ -15,12 +14,29 @@ import {
 import { DEFAULT_AUDIO_RESOLUTION } from '@peertube/peertube-server/core/initializers/constants.js'
 import { checkDirectoryIsEmpty, checkTmpIsEmpty } from '@tests/shared/directories.js'
 import { completeCheckHlsPlaylist } from '@tests/shared/streaming-playlists.js'
+import { join } from 'path'
 
 describe('Test HLS videos', function () {
   let servers: PeerTubeServer[] = []
 
-  function runTestSuite (hlsOnly: boolean, objectStorageBaseUrl?: string) {
+  function runTestSuite (options: {
+    hlsOnly: boolean
+    concurrency: number
+    objectStorageBaseUrl?: string
+  }) {
+    const { hlsOnly, objectStorageBaseUrl, concurrency } = options
+
     const videoUUIDs: string[] = []
+
+    before(async function () {
+      await servers[0].config.enableTranscoding({
+        resolutions: [ 720, 480, 360, 240 ],
+        hls: true,
+        webVideo: !hlsOnly
+      })
+
+      await servers[0].config.setTranscodingConcurrency(concurrency)
+    })
 
     it('Should upload a video and transcode it to HLS', async function () {
       this.timeout(120000)
@@ -31,6 +47,17 @@ describe('Test HLS videos', function () {
       await waitJobs(servers)
 
       await completeCheckHlsPlaylist({ servers, videoUUID: uuid, hlsOnly, objectStorageBaseUrl })
+    })
+
+    it('Should upload a video without audio', async function () {
+      this.timeout(120_000)
+
+      const { uuid } = await servers[0].videos.upload({ attributes: { name: 'no audio', fixture: 'video_short_no_audio.mp4' } })
+      videoUUIDs.push(uuid)
+
+      await waitJobs(servers)
+
+      await completeCheckHlsPlaylist({ servers, videoUUID: uuid, hlsOnly, hasAudio: false, objectStorageBaseUrl })
     })
 
     it('Should upload an audio file and transcode it to HLS', async function () {
@@ -112,41 +139,18 @@ describe('Test HLS videos', function () {
     await doubleFollow(servers[0], servers[1])
   })
 
-  describe('With Web Video & HLS enabled', function () {
-    runTestSuite(false)
-  })
+  for (const concurrency of [ 1, 2 ]) {
+    describe(`With concurrency ${concurrency}`, function () {
 
-  describe('With only HLS enabled', function () {
+      describe('With Web Video & HLS enabled', function () {
+        runTestSuite({ hlsOnly: false, concurrency })
+      })
 
-    before(async function () {
-      await servers[0].config.updateExistingConfig({
-        newConfig: {
-          transcoding: {
-            enabled: true,
-            allowAudioFiles: true,
-            resolutions: {
-              '144p': false,
-              '240p': true,
-              '360p': true,
-              '480p': true,
-              '720p': true,
-              '1080p': true,
-              '1440p': true,
-              '2160p': true
-            },
-            hls: {
-              enabled: true
-            },
-            webVideos: {
-              enabled: false
-            }
-          }
-        }
+      describe('With only HLS enabled', function () {
+        runTestSuite({ hlsOnly: true, concurrency })
       })
     })
-
-    runTestSuite(true)
-  })
+  }
 
   describe('With object storage enabled', function () {
     if (areMockObjectStorageTestsDisabled()) return
@@ -163,7 +167,11 @@ describe('Test HLS videos', function () {
       await servers[0].run(configOverride)
     })
 
-    runTestSuite(true, objectStorage.getMockPlaylistBaseUrl())
+    for (const concurrency of [ 1, 2 ]) {
+      describe(`With concurrency ${concurrency}`, function () {
+        runTestSuite({ hlsOnly: true, concurrency, objectStorageBaseUrl: objectStorage.getMockPlaylistBaseUrl() })
+      })
+    }
 
     after(async function () {
       await objectStorage.cleanupMock()

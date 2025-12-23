@@ -2,7 +2,7 @@ import { Transaction } from 'sequelize'
 import { ActivityAudience, ActivityFlag } from '@peertube/peertube-models'
 import { logger } from '../../../helpers/logger.js'
 import { MAbuseAP, MAccountLight, MActor } from '../../../types/models/index.js'
-import { audiencify, getAudience } from '../audience.js'
+import { audiencify, getPublicAudience } from '../audience.js'
 import { getLocalAbuseActivityPubUrl } from '../url.js'
 import { unicastTo } from './shared/send-utils.js'
 
@@ -28,7 +28,7 @@ function sendAbuse (byActor: MActor, abuse: MAbuseAP, flaggedAccount: MAccountLi
 }
 
 function buildFlagActivity (url: string, byActor: MActor, abuse: MAbuseAP, audience: ActivityAudience): ActivityFlag {
-  if (!audience) audience = getAudience(byActor)
+  if (!audience) audience = getPublicAudience(byActor)
 
   const activity = { id: url, actor: byActor.url, ...abuse.toActivityPubObject() }
 

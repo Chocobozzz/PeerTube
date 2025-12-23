@@ -1,0 +1,56 @@
+<my-table
+  #table
+  key="WatchedWordsListAdminOwnerComponent"
+  [defaultColumns]="columns"
+  defaultSort="updatedAt"
+  i18n-paginatorText
+  paginatorText="lists per page"
+  [dataLoader]="dataLoader"
+  columnConfig="false"
+>
+  <ng-template #totalTitle let-totalRecords>
+    <ng-container i18n>{ totalRecords, plural, =0 {No list} =1 {1 list} other {{{ totalRecords | myNumberFormatter }} lists}}</ng-container>
+  </ng-template>
+
+  <ng-template #captionRight>
+    <my-button i18n-label label="Refresh" icon="refresh" (click)="table.loadData()"></my-button>
+
+    <button type="button" class="peertube-create-button" (click)="openCreateOrUpdateList()">
+      <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
+      <ng-container i18n>Create a new list</ng-container>
+    </button>
+  </ng-template>
+
+  <ng-template #tableCells let-list>
+    <td>
+      {{ list.listName }}
+    </td>
+
+    <td i18n>
+      {{ list.words.length }} words
+    </td>
+
+    <td>{{ list.updatedAt | ptDate: 'short' }}</td>
+  </ng-template>
+
+  <ng-template #actionCell let-list>
+    <my-action-dropdown
+      placement="bottom-right" container="body"
+      i18n-label label="Actions" [actions]="actions" [entry]="list"
+    ></my-action-dropdown>
+  </ng-template>
+
+  <ng-template #expandedRow let-list>
+    <ul>
+      @for (word of list.words; track word) {
+        <li>{{ word }}</li>
+      }
+    </ul>
+  </ng-template>
+
+  <ng-template #noResults>
+    <ng-container i18n>No watched word lists found.</ng-container>
+  </ng-template>
+</my-table>
+
+<my-watched-words-list-save-modal #saveModal [accountName]="getAccountNameParam()" (listAddedOrUpdated)="onListAddedOrUpdated()"></my-watched-words-list-save-modal>

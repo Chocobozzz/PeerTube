@@ -1,7 +1,8 @@
-import { remove } from 'fs-extra/esm'
 import {
+  NSFWFlag,
   ThumbnailType,
   ThumbnailType_Type,
+  VideoChannelActivityAction,
   VideoImportCreate,
   VideoImportPayload,
   VideoImportState,
@@ -19,6 +20,7 @@ import { Hooks } from '@server/lib/plugins/hooks.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
 import { setVideoTags } from '@server/lib/video.js'
+import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoImportModel } from '@server/models/video/video-import.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { VideoModel } from '@server/models/video/video.js'
@@ -27,17 +29,19 @@ import {
   MChannelAccountDefault,
   MChannelSync,
   MThumbnail,
-  MUser,
+  MUserAccountId,
   MVideo,
-  MVideoAccountDefault, MVideoImportFormattable,
+  MVideoAccountDefault,
+  MVideoImportFormattable,
   MVideoTag,
   MVideoThumbnail,
   MVideoWithBlacklistLight
 } from '@server/types/models/index.js'
+import { remove } from 'fs-extra/esm'
 import { getLocalVideoActivityPubUrl } from './activitypub/url.js'
 import { updateLocalVideoMiniatureFromExisting, updateLocalVideoMiniatureFromUrl } from './thumbnail.js'
-import { replaceChapters, replaceChaptersFromDescriptionIfNeeded } from './video-chapters.js'
 import { createLocalCaption } from './video-captions.js'
+import { replaceChapters, replaceChaptersFromDescriptionIfNeeded } from './video-chapters.js'
 
 class YoutubeDlImportError extends Error {
   code: YoutubeDlImportError.CODE
@@ -71,7 +75,7 @@ async function insertFromImportIntoDB (parameters: {
   videoChannel: MChannelAccountDefault
   tags: string[]
   videoImportAttributes: FilteredModelAttributes<VideoImportModel>
-  user: MUser
+  user: MUserAccountId
   videoPasswords?: string[]
 }): Promise<MVideoImportFormattable> {
   const { video, thumbnailModel, previewModel, videoChannel, tags, videoImportAttributes, user, videoPasswords } = parameters
@@ -79,8 +83,9 @@ async function insertFromImportIntoDB (parameters: {
   const videoImport = await sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
 
-    // Save video object in database
-    const videoCreated = await video.save(sequelizeOptions) as (MVideoAccountDefault & MVideoWithBlacklistLight & MVideoTag)
+    const videoCreated = await video.save(
+      sequelizeOptions
+    ) as (MVideoAccountDefault & MVideoWithBlacklistLight & MVideoTag & MVideoThumbnail)
     videoCreated.VideoChannel = videoChannel
 
     if (thumbnailModel) await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
@@ -109,6 +114,15 @@ async function insertFromImportIntoDB (parameters: {
     ) as MVideoImportFormattable
     videoImport.Video = videoCreated
 
+    await VideoChannelActivityModel.addVideoImportActivity({
+      action: VideoChannelActivityAction.CREATE,
+      channel: videoChannel,
+      videoImport,
+      video: videoCreated,
+      user,
+      transaction: t
+    })
+
     return videoImport
   })
 
@@ -127,11 +141,13 @@ async function buildVideoFromImport ({ channelId, importData, importDataOverride
     category: importDataOverride?.category || importData.category,
     licence: importDataOverride?.licence ?? importData.licence ?? CONFIG.DEFAULTS.PUBLISH.LICENCE,
     language: importDataOverride?.language || importData.language,
-    commentsEnabled: importDataOverride?.commentsEnabled ?? CONFIG.DEFAULTS.PUBLISH.COMMENTS_ENABLED,
+    commentsPolicy: importDataOverride?.commentsPolicy ?? CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY,
     downloadEnabled: importDataOverride?.downloadEnabled ?? CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
     waitTranscoding: importDataOverride?.waitTranscoding ?? true,
     state: VideoState.TO_IMPORT,
     nsfw: importDataOverride?.nsfw || importData.nsfw || false,
+    nsfwFlags: importDataOverride?.nsfwFlags || NSFWFlag.NONE,
+    nsfwSummary: importDataOverride?.nsfwSummary || null,
     description: importDataOverride?.description || importData.description,
     support: importDataOverride?.support || null,
     privacy: importDataOverride?.privacy || VideoPrivacy.PRIVATE,
@@ -158,7 +174,7 @@ async function buildVideoFromImport ({ channelId, importData, importDataOverride
 async function buildYoutubeDLImport (options: {
   targetUrl: string
   channel: MChannelAccountDefault
-  user: MUser
+  user: MUserAccountId
   channelSync?: MChannelSync
   importDataOverride?: Partial<VideoImportCreate>
   thumbnailFilePath?: string
@@ -178,7 +194,9 @@ async function buildYoutubeDLImport (options: {
     youtubeDLInfo = await youtubeDL.getInfoForDownload()
   } catch (err) {
     throw YoutubeDlImportError.fromError(
-      err, YoutubeDlImportError.CODE.FETCH_ERROR, `Cannot fetch information from import for URL ${targetUrl}`
+      err,
+      YoutubeDlImportError.CODE.FETCH_ERROR,
+      `Cannot fetch information from import for URL ${targetUrl}`
     )
   }
 
@@ -259,9 +277,13 @@ async function buildYoutubeDLImport (options: {
     type: 'youtube-dl' as 'youtube-dl',
     videoImportId: videoImport.id,
     fileExt,
+    generateTranscription: importDataOverride.generateTranscription ?? true,
     // If part of a sync process, there is a parent job that will aggregate children results
     preventException: !!channelSync
   }
+
+  videoImport.payload = payload
+  await videoImport.save()
 
   return {
     videoImport,
@@ -271,12 +293,7 @@ async function buildYoutubeDLImport (options: {
 
 // ---------------------------------------------------------------------------
 
-export {
-  buildYoutubeDLImport,
-  YoutubeDlImportError,
-  insertFromImportIntoDB,
-  buildVideoFromImport
-}
+export { buildVideoFromImport, buildYoutubeDLImport, insertFromImportIntoDB, YoutubeDlImportError }
 
 // ---------------------------------------------------------------------------
 
@@ -319,7 +336,12 @@ async function processYoutubeSubtitles (youtubeDL: YoutubeDLWrapper, targetUrl: 
         continue
       }
 
-      await createLocalCaption({ language: subtitle.language, path: subtitle.path, video })
+      await createLocalCaption({
+        language: subtitle.language,
+        path: subtitle.path,
+        video,
+        automaticallyGenerated: false
+      })
 
       logger.info('Added %s youtube-dl subtitle', subtitle.path)
     }

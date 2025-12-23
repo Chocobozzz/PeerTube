@@ -1,0 +1,9 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.peertube-radio-container strong {
+  display: inline-block;
+  min-width: 80px;
+
+  @include margin-right(0.5rem);
+}

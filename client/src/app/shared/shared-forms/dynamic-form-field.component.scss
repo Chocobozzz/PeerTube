@@ -1,33 +1,24 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
 
-input:not([type=submit]) {
-  @include peertube-input-text(340px);
-
+input:not([type="submit"]) {
   max-width: 340px;
   width: 100%;
 
   display: block;
+
+  @include peertube-input-text(340px);
 }
 
 textarea {
-  @include peertube-textarea(340px, 200px);
-
   display: block;
+
+  @include peertube-textarea(340px, 200px);
 }
 
 .peertube-select-container {
-  @include peertube-select-container(340px);
-}
-
-.label-small-info {
-  font-style: italic;
-  margin-bottom: 10px;
-  font-size: 13px;
-}
-
-my-peertube-checkbox + .label-small-info {
-  margin-top: 5px;
+  @include responsive-width(340px);
 }
 
 my-markdown-textarea {

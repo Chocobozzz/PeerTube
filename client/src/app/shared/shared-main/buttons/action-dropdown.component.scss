@@ -1,53 +1,45 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_button-mixins" as *;
 
 .dropdown-divider:last-child {
   display: none;
 }
 
 .action-button {
-  @include peertube-button;
-
   display: inline-block;
-
-  &.button-styled {
-
-    &.grey {
-      @include grey-button;
-    }
-
-    &.orange {
-      @include orange-button;
-    }
-
-    &:hover,
-    &:active,
-    &:focus {
-      background-color: $grey-background-color;
-    }
-  }
 
   &::after {
     display: none;
   }
 
-  .more-icon {
-    width: 21px;
-
-    ::ng-deep {
-      @include apply-svg-color(pvar(--actionButtonColor));
-    }
-  }
-
-  &.small {
-    font-size: 14px;
-    padding: 0 10px;
+  &.icon-only {
+    @include button-with-icon(21px, 0, 0);
   }
 }
 
-.dropdown-toggle::after {
-  position: relative;
-  top: 1px;
+// So we can style the chevron color
+button {
+  color: inherit;
+}
+
+.chevron-down {
+  color: inherit;
+}
+
+.dropdown-toggle {
+  color: pvar(--fg-300);
+
+  &:hover,
+  &:active,
+  &:focus,
+  &:focus-visible {
+    color: pvar(--fg);
+  }
+
+  &::after {
+    display: none;
+  }
 }
 
 .dropdown-menu {
@@ -63,6 +55,10 @@
 
     &.with-icon {
       @include dropdown-with-icon-item;
+
+      .icon-video-lang {
+        top: 0;
+      }
     }
 
     a,
@@ -77,16 +73,16 @@
   display: flex;
   flex-direction: column;
   min-width: 1px;
+}
 
-  > * {
-    @include ellipsis;
-  }
+.action-description {
+  max-width: 300px;
+  white-space: normal;
 }
 
 .owner-moderator-privilege {
   margin: 0 !important;
-
-  @include margin-left(1rem !important);
-
   width: 13px !important;
+
+  @include margin-left(0.25rem !important);
 }

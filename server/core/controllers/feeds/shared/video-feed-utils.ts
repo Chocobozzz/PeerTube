@@ -1,12 +1,14 @@
+import { getChannelPodcastFeed } from '@peertube/peertube-core-utils'
 import { VideoIncludeType } from '@peertube/peertube-models'
-import { mdToOneLinePlainText, toSafeHtml } from '@server/helpers/markdown.js'
+import { mdToPlainText, toSafeHtml } from '@server/helpers/markdown.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
+import { Hooks } from '@server/lib/plugins/hooks.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { getCategoryLabel } from '@server/models/video/formatter/index.js'
 import { DisplayOnlyForFollowerOptions } from '@server/models/video/sql/video/index.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MThumbnail, MUserDefault } from '@server/types/models/index.js'
+import { MChannelHostOnly, MThumbnail, MUserDefault } from '@server/types/models/index.js'
 
 export async function getVideosForFeeds (options: {
   sort: string
@@ -21,7 +23,9 @@ export async function getVideosForFeeds (options: {
 }) {
   const server = await getServerActor()
 
-  const { data } = await VideoModel.listForApi({
+  const { data } = await Hooks.wrapPromiseFun(
+    VideoModel.listForApi.bind(VideoModel),
+    {
     start: 0,
     count: CONFIG.FEEDS.VIDEOS.COUNT,
     displayOnlyForFollower: {
@@ -32,7 +36,9 @@ export async function getVideosForFeeds (options: {
     countVideos: false,
 
     ...options
-  })
+  },
+    'filter:feed.videos.list.result'
+  )
 
   return data
 }
@@ -47,7 +53,7 @@ export function getCommonVideoFeedAttributes (video: VideoModel) {
   return {
     title: video.name,
     link: localLink,
-    description: mdToOneLinePlainText(video.getTruncatedDescription()),
+    description: mdToPlainText(video.getTruncatedDescription()),
     content: toSafeHtml(video.description),
 
     date: video.publishedAt,
@@ -62,5 +68,16 @@ export function getCommonVideoFeedAttributes (video: VideoModel) {
       width: t.width,
       height: t.height
     }))
+  }
+}
+
+export function getPodcastFeedUrlCustomTag (videoChannel: MChannelHostOnly) {
+  return {
+    name: 'podcast:txt',
+    attributes: {
+      purpose: 'p20url'
+    },
+    // TODO: use remote channel podcast feed URL
+    value: getChannelPodcastFeed(WEBSERVER.URL, videoChannel)
   }
 }

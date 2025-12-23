@@ -1,12 +1,9 @@
 {
   "name": "@peertube/peertube-cli",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "module",
   "main": "dist/peertube.js",
   "bin": "dist/peertube.js",
-  "engines": {
-    "node": ">=16.x"
-  },
   "scripts": {},
   "license": "AGPL-3.0",
   "private": false,

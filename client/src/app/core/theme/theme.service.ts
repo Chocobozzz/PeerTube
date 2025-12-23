@@ -1,39 +1,44 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
+import { HTMLServerConfig, ServerConfig, ServerConfigTheme } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { capitalizeFirstLetter } from '@root-helpers/string'
+import { ColorPaletteThemeConfig, ThemeCustomizationKey, ThemeManager } from '@root-helpers/theme-manager'
 import { UserLocalStorageKeys } from '@root-helpers/users'
-import { HTMLServerConfig, ServerConfigTheme } from '@peertube/peertube-models'
 import { environment } from '../../../environments/environment'
 import { AuthService } from '../auth'
 import { PluginService } from '../plugins/plugin.service'
 import { ServerService } from '../server'
 import { UserService } from '../users/user.service'
 import { LocalStorageService } from '../wrappers/storage.service'
+import { formatHEX, parse } from 'color-bits'
 
 @Injectable()
 export class ThemeService {
+  private auth = inject(AuthService)
+  private userService = inject(UserService)
+  private pluginService = inject(PluginService)
+  private server = inject(ServerService)
+  private localStorageService = inject(LocalStorageService)
 
   private oldThemeName: string
+
+  private internalThemes: string[] = []
   private themes: ServerConfigTheme[] = []
 
-  private themeFromLocalStorage: ServerConfigTheme
+  private themeFromLocalStorage: Pick<ServerConfigTheme, 'name' | 'version'>
   private themeDOMLinksFromLocalStorage: HTMLLinkElement[] = []
 
   private serverConfig: HTMLServerConfig
 
-  constructor (
-    private auth: AuthService,
-    private userService: UserService,
-    private pluginService: PluginService,
-    private server: ServerService,
-    private localStorageService: LocalStorageService
-  ) {}
+  private themeManager = new ThemeManager()
 
   initialize () {
+    this.serverConfig = this.server.getHTMLConfig()
+    this.internalThemes = this.serverConfig.theme.builtIn.map(t => t.name)
+
     // Try to load from local storage first, so we don't have to wait network requests
     this.loadAndSetFromLocalStorage()
 
-    this.serverConfig = this.server.getHTMLConfig()
     const themes = this.serverConfig.theme.registered
 
     this.removeThemeFromLocalStorageIfNeeded(themes)
@@ -42,17 +47,38 @@ export class ThemeService {
     this.listenUserTheme()
   }
 
-  getDefaultThemeLabel () {
-    if (this.hasDarkTheme()) {
-      return $localize`Light/Orange or Dark`
+  getDefaultThemeItem () {
+    return {
+      label: $localize`Light (Beige) or Dark (Brown)`,
+      id: 'default',
+      description: $localize`PeerTube selects the appropriate theme depending on web browser preferences`
     }
-
-    return $localize`Light/Orange`
   }
 
   buildAvailableThemes () {
-    return this.serverConfig.theme.registered
-               .map(t => ({ id: t.name, label: capitalizeFirstLetter(t.name) }))
+    return [
+      ...this.serverConfig.theme.builtIn.map(t => {
+        if (t.name === 'peertube-core-dark-brown') {
+          return { id: t.name, label: $localize`Dark (Brown)` }
+        }
+
+        if (t.name === 'peertube-core-light-beige') {
+          return { id: t.name, label: $localize`Light (Beige)` }
+        }
+
+        return { id: t.name, label: capitalizeFirstLetter(t.name) }
+      }),
+
+      ...this.serverConfig.theme.registered.map(t => ({ id: t.name, label: capitalizeFirstLetter(t.name) }))
+    ]
+  }
+
+  updateColorPalette (config: ColorPaletteThemeConfig = this.serverConfig.theme) {
+    this.themeManager.injectColorPalette({ currentTheme: this.getCurrentThemeName(), config })
+  }
+
+  getCSSConfigValue (configKey: ThemeCustomizationKey) {
+    return this.themeManager.getCSSConfigValue(configKey)
   }
 
   private injectThemes (themes: ServerConfigTheme[], fromLocalStorage = false) {
@@ -60,30 +86,19 @@ export class ThemeService {
 
     logger.info(`Injecting ${this.themes.length} themes.`)
 
-    const head = this.getHeadElement()
-
     for (const theme of this.themes) {
       // Already added this theme?
       if (fromLocalStorage === false && this.themeFromLocalStorage && this.themeFromLocalStorage.name === theme.name) continue
 
-      for (const css of theme.css) {
-        const link = document.createElement('link')
+      const links = this.themeManager.injectTheme(theme, environment.apiUrl)
 
-        const href = environment.apiUrl + `/themes/${theme.name}/${theme.version}/css/${css}`
-        link.setAttribute('href', href)
-        link.setAttribute('rel', 'alternate stylesheet')
-        link.setAttribute('type', 'text/css')
-        link.setAttribute('title', theme.name)
-        link.setAttribute('disabled', '')
-
-        if (fromLocalStorage === true) this.themeDOMLinksFromLocalStorage.push(link)
-
-        head.appendChild(link)
+      if (fromLocalStorage === true) {
+        this.themeDOMLinksFromLocalStorage = [ ...this.themeDOMLinksFromLocalStorage, ...links ]
       }
     }
   }
 
-  private getCurrentTheme () {
+  getCurrentThemeName () {
     if (this.themeFromLocalStorage) return this.themeFromLocalStorage.name
 
     const theme = this.auth.isLoggedIn()
@@ -96,35 +111,31 @@ export class ThemeService {
     if (instanceTheme !== 'default') return instanceTheme
 
     // Default to dark theme if available and wanted by the user
-    if (this.hasDarkTheme() && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      return 'dark'
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'peertube-core-dark-brown' satisfies ServerConfig['theme']['builtIn'][0]['name']
     }
 
     return instanceTheme
   }
 
-  private loadTheme (name: string) {
-    const links = document.getElementsByTagName('link')
-    for (let i = 0; i < links.length; i++) {
-      const link = links[i]
-      if (link.getAttribute('rel').includes('style') && link.getAttribute('title')) {
-        link.disabled = link.getAttribute('title') !== name
-      }
-    }
-  }
-
   private updateCurrentTheme () {
+    const currentThemeName = this.getCurrentThemeName()
+    if (this.oldThemeName === currentThemeName) return
+
     if (this.oldThemeName) this.removeThemePlugins(this.oldThemeName)
 
-    const currentTheme = this.getCurrentTheme()
+    logger.info(`Enabling ${currentThemeName} theme.`)
 
-    logger.info(`Enabling ${currentTheme} theme.`)
+    this.themeManager.loadThemeStyle(currentThemeName)
 
-    this.loadTheme(currentTheme)
+    const theme = this.getTheme(currentThemeName)
 
-    const theme = this.getTheme(currentTheme)
-    if (theme) {
-      logger.info(`Adding scripts of theme ${currentTheme}`)
+    if (this.internalThemes.includes(currentThemeName)) {
+      logger.info(`Enabling internal theme ${currentThemeName}`)
+
+      this.localStorageService.setItem(UserLocalStorageKeys.LAST_ACTIVE_THEME, JSON.stringify({ name: currentThemeName }), false)
+    } else if (theme) {
+      logger.info(`Adding scripts of theme ${currentThemeName}`)
 
       this.pluginService.addPlugin(theme, true)
 
@@ -135,7 +146,9 @@ export class ThemeService {
       this.localStorageService.removeItem(UserLocalStorageKeys.LAST_ACTIVE_THEME, false)
     }
 
-    this.oldThemeName = currentTheme
+    this.themeManager.injectColorPalette({ currentTheme: currentThemeName, config: this.serverConfig.theme })
+
+    this.oldThemeName = currentThemeName
   }
 
   private listenUserTheme () {
@@ -163,7 +176,10 @@ export class ThemeService {
       const lastActiveTheme = JSON.parse(lastActiveThemeString)
       this.themeFromLocalStorage = lastActiveTheme
 
-      this.injectThemes([ lastActiveTheme ], true)
+      if (!this.internalThemes.includes(this.themeFromLocalStorage.name)) {
+        this.injectThemes([ lastActiveTheme ], true)
+      }
+
       this.updateCurrentTheme()
     } catch (err) {
       logger.error('Cannot parse last active theme.', err)
@@ -181,6 +197,7 @@ export class ThemeService {
 
   private removeThemeFromLocalStorageIfNeeded (themes: ServerConfigTheme[]) {
     if (!this.themeFromLocalStorage) return
+    if (this.internalThemes.includes(this.themeFromLocalStorage.name)) return
 
     const loadedTheme = themes.find(t => t.name === this.themeFromLocalStorage.name)
     if (!loadedTheme || loadedTheme.version !== this.themeFromLocalStorage.version) {
@@ -188,9 +205,8 @@ export class ThemeService {
       this.removeThemePlugins(this.themeFromLocalStorage.name)
       this.oldThemeName = undefined
 
-      const head = this.getHeadElement()
       for (const htmlLinkElement of this.themeDOMLinksFromLocalStorage) {
-        head.removeChild(htmlLinkElement)
+        this.themeManager.removeThemeLink(htmlLinkElement)
       }
 
       this.themeFromLocalStorage = undefined
@@ -198,15 +214,34 @@ export class ThemeService {
     }
   }
 
-  private getHeadElement () {
-    return document.getElementsByTagName('head')[0]
-  }
-
   private getTheme (name: string) {
     return this.themes.find(t => t.name === name)
   }
 
-  private hasDarkTheme () {
-    return this.serverConfig.theme.registered.some(t => t.name === 'dark')
+  // ---------------------------------------------------------------------------
+  // Utils
+  // ---------------------------------------------------------------------------
+
+  formatColorForForm (value: string) {
+    if (!value) return null
+
+    try {
+      return formatHEX(parse(value))
+    } catch (err) {
+      logger.warn(`Error parsing color value "${value}"`, err)
+
+      return null
+    }
+  }
+
+  formatPixelsForForm (value: string) {
+    if (typeof value === 'number') return value + ''
+    if (typeof value !== 'string') return null
+
+    const result = parseInt(value.replace(/px$/, ''))
+
+    if (isNaN(result)) return null
+
+    return result + ''
   }
 }

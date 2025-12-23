@@ -1,7 +1,7 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
 
-@mixin actor-row ($avatar-margin-right: 10px, $min-height: 130px, $separator: true) {
+@mixin actor-row($avatar-margin-right: 10px, $min-height: 130px, $separator: true) {
   @include row-blocks($min-height: $min-height, $separator: $separator);
 
   > my-actor-avatar {
@@ -13,12 +13,12 @@
   }
 
   .actor-names {
-    @include disable-default-a-behaviour;
-
     width: fit-content;
     display: flex;
     align-items: baseline;
-    color: pvar(--mainForegroundColor);
+    color: pvar(--fg);
+
+    @include disable-default-a-behaviour;
   }
 
   .actor-display-name {
@@ -27,18 +27,18 @@
   }
 
   .actor-name {
-    @include margin-left(5px);
-
     font-size: 14px;
-    color: $grey-actor-name;
+    color: pvar(--fg-300);
+
+    @include margin-left(5px);
   }
 
   .actor-owner {
-    @include disable-default-a-behaviour;
-
-    color: pvar(--mainForegroundColor);
+    color: pvar(--fg);
     display: flex;
     align-items: center;
+
+    @include disable-default-a-behaviour;
 
     span:hover {
       opacity: 0.8;
@@ -61,4 +61,24 @@
       }
     }
   }
+}
+
+@mixin channel-filters {
+  display: flex;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid $separator-border-color;
+  margin-bottom: 1rem;
+  gap: 1rem;
+  overflow: hidden;
+
+  &:hover {
+    overflow: auto;
+  }
+}
+
+@mixin channel-label {
+  color: pvar(--fg-200);
+  font-weight: $font-bold;
+  white-space: nowrap;
 }

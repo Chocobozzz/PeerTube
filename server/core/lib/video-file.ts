@@ -1,5 +1,12 @@
-import { ffprobePromise, getVideoStreamDimensionsInfo, getVideoStreamFPS, isAudioFile } from '@peertube/peertube-ffmpeg'
-import { FileStorage, VideoFileMetadata, VideoResolution } from '@peertube/peertube-models'
+import {
+  ffprobePromise,
+  getVideoStreamDimensionsInfo,
+  getVideoStreamFPS,
+  hasAudioStream,
+  hasVideoStream,
+  isAudioFile
+} from '@peertube/peertube-ffmpeg'
+import { FileStorage, VideoFileFormatFlag, VideoFileMetadata, VideoFileStream, VideoResolution } from '@peertube/peertube-models'
 import { getFileSize, getLowercaseExtension } from '@peertube/peertube-node-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -8,8 +15,7 @@ import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { MVideo, MVideoFile, MVideoId, MVideoWithAllFiles } from '@server/types/models/index.js'
 import { FfprobeData } from 'fluent-ffmpeg'
-import { move, remove } from 'fs-extra'
-import { lTags } from './object-storage/shared/index.js'
+import { move, remove } from 'fs-extra/esm'
 import { storeOriginalVideoFile } from './object-storage/videos.js'
 import { generateHLSVideoFilename, generateWebVideoFilename } from './paths.js'
 import { VideoPathManager } from './video-path-manager.js'
@@ -18,7 +24,7 @@ export async function buildNewFile (options: {
   path: string
   mode: 'web-video' | 'hls'
   ffprobe?: FfprobeData
-}) {
+}): Promise<MVideoFile> {
   const { path, mode, ffprobe: probeArg } = options
 
   const probe = probeArg ?? await ffprobePromise(path)
@@ -27,8 +33,22 @@ export async function buildNewFile (options: {
   const videoFile = new VideoFileModel({
     extname: getLowercaseExtension(path),
     size,
-    metadata: await buildFileMetadata(path, probe)
+    metadata: await buildFileMetadata(path, probe),
+
+    streams: VideoFileStream.NONE,
+
+    formatFlags: mode === 'web-video'
+      ? VideoFileFormatFlag.WEB_VIDEO
+      : VideoFileFormatFlag.FRAGMENTED
   })
+
+  if (await hasAudioStream(path, probe)) {
+    videoFile.streams |= VideoFileStream.AUDIO
+  }
+
+  if (await hasVideoStream(path, probe)) {
+    videoFile.streams |= VideoFileStream.VIDEO
+  }
 
   if (await isAudioFile(path, probe)) {
     videoFile.fps = 0
@@ -59,7 +79,7 @@ export async function removeHLSPlaylist (video: MVideoWithAllFiles) {
   const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
   try {
-    await video.removeStreamingPlaylistFiles(hls)
+    await video.removeAllStreamingPlaylistFiles({ playlist: hls })
     await hls.destroy()
 
     video.VideoStreamingPlaylists = video.VideoStreamingPlaylists.filter(p => p.id !== hls.id)
@@ -69,8 +89,6 @@ export async function removeHLSPlaylist (video: MVideoWithAllFiles) {
 }
 
 export async function removeHLSFile (video: MVideoWithAllFiles, fileToDeleteId: number) {
-  logger.info('Deleting HLS file %d of %s.', fileToDeleteId, video.url, lTags(video.uuid))
-
   const hls = video.getHLSPlaylist()
   const files = hls.VideoFiles
 

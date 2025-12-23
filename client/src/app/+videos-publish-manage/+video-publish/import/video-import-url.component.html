@@ -1,0 +1,45 @@
+@if (firstStep) {
+  <div  class="upload-video-container">
+    <div class="first-step-block">
+      <my-global-icon class="upload-icon" iconName="upload" aria-hidden="true"></my-global-icon>
+
+      <div class="form-group">
+        <label i18n for="targetUrl">URL</label>
+
+        <my-help>
+          <ng-container i18n>
+            You can import any URL <a href='https://rg3.github.io/youtube-dl/supportedsites.html' target='_blank' rel='noopener noreferrer'>supported by youtube-dl</a>
+            or URL that points to a media file.
+            You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.
+          </ng-container>
+        </my-help>
+
+        <input type="text" id="targetUrl" [(ngModel)]="targetUrl" class="form-control" />
+
+        @if (isChannelSyncEnabled()) {
+          <div class="form-group-description" i18n>
+          You can also synchronize a remote channel in <a class="text-decoration-underline" routerLink="/my-library/video-channel-syncs">your library</a>
+        </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label i18n for="first-step-channel">Channel</label>
+        <my-select-channel inputId="first-step-channel" [items]="userChannels()" [(ngModel)]="firstStepChannelId"></my-select-channel>
+      </div>
+
+      <input
+        type="button" i18n-value value="Import" class="peertube-button primary-button"
+        [disabled]="!isTargetUrlValid() || isImportingVideo" (click)="importVideo()"
+        />
+    </div>
+  </div>
+} @else {
+  <my-video-manage-container canUpdate="true" canWatch="false" cancelLink="/my-library/videos" (videoUpdated)="onVideoUpdated()">
+    <my-alert type="primary" i18n>
+      Congratulations, the video behind {{ targetUrl }} is being imported! You can already add information about this video.
+    </my-alert>
+  </my-video-manage-container>
+}
+
+

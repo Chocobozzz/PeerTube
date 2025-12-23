@@ -1,0 +1,6 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+my-global-icon {
+  @include global-icon-size(24px);
+}

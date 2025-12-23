@@ -1,8 +1,3 @@
-<h1>
-  <my-global-icon iconName="codesandbox" aria-hidden="true"></my-global-icon>
-  <ng-container i18n>Applications</ng-container>
-</h1>
-
 <div class="pt-two-cols"> <!-- built-in token grid -->
 
   <div class="title-col">
@@ -17,17 +12,17 @@
 
     <div class="form-group">
       <label i18n for="feed-url">Feed URL</label>
-      <my-input-text [value]="feedUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-text>
+      <my-input-text inputId="feed-url" [value]="feedUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-text>
     </div>
 
     <div class="form-group">
       <label i18n for="feed-token">Feed Token</label>
-      <my-input-text [value]="feedToken" [withCopy]="true" [readonly]="true"></my-input-text>
+      <my-input-text inputId="feed-token" [value]="feedToken" [withCopy]="true" [readonly]="true"></my-input-text>
 
       <div class="form-group-description" i18n>⚠️ Never share your feed token with anyone.</div>
     </div>
 
-    <input (click)="renewToken()" class="peertube-button orange-button mt-4" type="submit" i18n-value value="Renew token">
+    <input (click)="renewToken()" class="peertube-button primary-button mt-4" type="submit" i18n-value value="Renew token">
 
   </div>
 </div>

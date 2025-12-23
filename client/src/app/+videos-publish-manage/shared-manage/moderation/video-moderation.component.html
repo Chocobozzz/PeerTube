@@ -1,0 +1,59 @@
+<h2 class="form-title">
+  <my-global-icon iconName="moderation"></my-global-icon>
+
+  <ng-container i18n>Moderation</ng-container>
+</h2>
+
+<form [formGroup]="form" id="video-manage-form">
+
+  <div class="form-columns">
+    <div>
+      <div class="form-group">
+        <my-select-radio
+          i18n-label label="Comments policy"
+          [items]="commentPolicies"
+          inputId="commentsPolicy"
+          formControlName="commentsPolicy"
+          >
+          <div class="form-group-description" i18n>
+            You can require comments to be approved depending on <a routerLink="/my-account/auto-tag-policies" target="_blank">your auto-tags policies</a>
+          </div>
+        </my-select-radio>
+      </div>
+
+      <my-peertube-checkbox inputName="nsfw" formControlName="nsfw">
+        <ng-template ptTemplate="label">
+          <ng-container i18n>Your video contains sensitive content</ng-container>
+        </ng-template>
+
+        <ng-container ngProjectAs="extra">
+          <div class="form-group">
+            <label i18n for="nsfwSummary">Describe what makes your content sensitive</label>
+            <input type="text" id="nsfwSummary" class="form-control" formControlName="nsfwSummary" [ngClass]="{ 'input-error': formErrors.nsfwSummary }" />
+
+            @if (formErrors.nsfwSummary) {
+              <div class="form-error" role="alert">{{ formErrors.nsfwSummary }}</div>
+            }
+          </div>
+
+          <div class="label" i18n>Help viewers identify your sensitive content</div>
+
+          <my-peertube-checkbox inputName="nsfwFlagViolent" formControlName="nsfwFlagViolent">
+            <ng-template ptTemplate="label">
+              <ng-container i18n>Potentially violent content</ng-container>
+            </ng-template>
+          </my-peertube-checkbox>
+
+          <my-peertube-checkbox inputName="nsfwFlagSex" formControlName="nsfwFlagSex">
+            <ng-template ptTemplate="label">
+              <ng-container i18n>Potentially sexually explicit content</ng-container>
+            </ng-template>
+          </my-peertube-checkbox>
+
+
+        </ng-container>
+
+      </my-peertube-checkbox>
+    </div>
+  </div>
+</form>

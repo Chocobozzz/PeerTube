@@ -7,7 +7,7 @@ import { extname } from 'path'
 import { authenticate } from '@server/middlewares/auth.js'
 import { resumableInitValidator } from '@server/middlewares/validators/resumable-upload.js'
 
-const logger = buildLogger('uploadx')
+const logger = buildLogger({ labelSuffix: 'uploadx' })
 
 export const uploadx = new Uploadx({
   directory: getResumableUploadPath(),
@@ -39,12 +39,14 @@ export function safeUploadXCleanup (file: FileQuery) {
     .catch(err => logger.error('Cannot delete the file %s', file.name, { err }))
 }
 
-export function buildUploadXFile <T extends UploadXMetadata> (reqBody: T) {
+export function buildUploadXFile<T extends UploadXMetadata> (reqBody: T) {
   return {
+    // eslint-disable-next-line @typescript-eslint/no-misused-spread
     ...reqBody,
 
     path: getResumableUploadPath(reqBody.name),
-    filename: reqBody.metadata.filename
+    filename: reqBody.metadata.filename,
+    originalname: reqBody.originalName
   }
 }
 
@@ -70,21 +72,26 @@ export function setupUploadResumableRoutes (options: {
     uploadDeleteMiddlewares = []
   } = options
 
-  router.post(routePath,
+  router.post(
+    routePath,
     authenticate,
     ...uploadInitBeforeMiddlewares,
     resumableInitValidator,
     ...uploadInitAfterMiddlewares,
-    (req, res) => uploadx.upload(req, res) // Prevent next() call, explicitly tell to uploadx it's the end
+    // Prevent next() call, explicitly tell to uploadx it's the end
+    (req, res) => uploadx.upload(req, res)
   )
 
-  router.delete(routePath,
+  router.delete(
+    routePath,
     authenticate,
     ...uploadDeleteMiddlewares,
-    (req, res) => uploadx.upload(req, res) // Prevent next() call, explicitly tell to uploadx it's the end
+    // Prevent next() call, explicitly tell to uploadx it's the end
+    (req, res) => uploadx.upload(req, res)
   )
 
-  router.put(routePath,
+  router.put(
+    routePath,
     authenticate,
     uploadx.upload, // uploadx doesn't next() before the file upload completes
     ...uploadedMiddlewares,

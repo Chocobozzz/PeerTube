@@ -15,6 +15,9 @@ rates_limit:
   signup:
     window: 5 minutes
     max: 200
+  download_generate_video:
+    window: 5 seconds
+    max: 500000
 
 database:
   hostname: '127.0.0.1'
@@ -106,11 +109,18 @@ import:
 instance:
   default_nsfw_policy: 'display'
 
+# Set by API when the field is not provided and put as default value in client
+defaults:
+  publish:
+    licence: 2
+
 plugins:
   index:
     check_latest_versions_interval: '10 minutes'
 
 federation:
+  # We use internal IP address in PeerTube tests
+  prevent_ssrf: false
   videos:
     cleanup_remote_interactions: false
 
@@ -118,6 +128,9 @@ views:
   videos:
     remote:
       max_age: -1
+
+    local:
+      max_age: '15 years'
 
     watching_interval:
       anonymous: '6 seconds'
@@ -131,3 +144,7 @@ video_studio:
 
 transcoding:
   keep_original_file: false
+
+user:
+  password_constraints:
+    min_length: 6

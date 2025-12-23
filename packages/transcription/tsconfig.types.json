@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../types-generator/dist-tmp/peertube-transcription",
+    "tsBuildInfoFile": "../types-generator/dist-tmp/peertube-transcription/.tsbuildinfo",
+    "stripInternal": true,
+    "removeComments": false,
+    "emitDeclarationOnly": true
+  }
+}

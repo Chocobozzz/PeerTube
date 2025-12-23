@@ -1,4 +1,5 @@
 import { ActivityDelete } from '@peertube/peertube-models'
+import { isAccountActor, isChannelActor } from '@server/helpers/actors.js'
 import { retryTransactionWrapper } from '../../../helpers/database-utils.js'
 import { logger } from '../../../helpers/logger.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
@@ -26,15 +27,16 @@ async function processDeleteActivity (options: APProcessorOptions<ActivityDelete
   if (activity.actor === objectUrl) {
     // We need more attributes (all the account and channel)
     const byActorFull = await ActorModel.loadByUrlAndPopulateAccountAndChannel(byActor.url)
+    if (!byActorFull) return
 
-    if (byActorFull.type === 'Person') {
-      if (!byActorFull.Account) throw new Error('Actor ' + byActorFull.url + ' is a person but we cannot find it in database.')
+    if (isAccountActor(byActorFull.type)) {
+      if (!byActorFull.Account) throw new Error(`Actor ${byActorFull.url} is a person but we cannot find the account in database.`)
 
       const accountToDelete = byActorFull.Account as MAccountActor
       accountToDelete.Actor = byActorFull
 
       return retryTransactionWrapper(processDeleteAccount, accountToDelete)
-    } else if (byActorFull.type === 'Group') {
+    } else if (isChannelActor(byActorFull.type)) {
       if (!byActorFull.VideoChannel) throw new Error('Actor ' + byActorFull.url + ' is a group but we cannot find it in database.')
 
       const channelToDelete = byActorFull.VideoChannel as MChannelAccountActor & { Actor: MActorFull }
@@ -44,7 +46,7 @@ async function processDeleteActivity (options: APProcessorOptions<ActivityDelete
   }
 
   {
-    const videoCommentInstance = await VideoCommentModel.loadByUrlAndPopulateAccountAndVideo(objectUrl)
+    const videoCommentInstance = await VideoCommentModel.loadByUrlAndPopulateAccountAndVideoAndReply(objectUrl)
     if (videoCommentInstance) {
       return retryTransactionWrapper(processDeleteVideoComment, byActor, videoCommentInstance, activity)
     }
@@ -53,7 +55,7 @@ async function processDeleteActivity (options: APProcessorOptions<ActivityDelete
   {
     const videoInstance = await VideoModel.loadByUrlAndPopulateAccountAndFiles(objectUrl)
     if (videoInstance) {
-      if (videoInstance.isOwned()) throw new Error(`Remote instance cannot delete owned video ${videoInstance.url}.`)
+      if (videoInstance.isLocal()) throw new Error(`Remote instance cannot delete owned video ${videoInstance.url}.`)
 
       return retryTransactionWrapper(processDeleteVideo, byActor, videoInstance)
     }
@@ -62,7 +64,7 @@ async function processDeleteActivity (options: APProcessorOptions<ActivityDelete
   {
     const videoPlaylist = await VideoPlaylistModel.loadByUrlAndPopulateAccount(objectUrl)
     if (videoPlaylist) {
-      if (videoPlaylist.isOwned()) throw new Error(`Remote instance cannot delete owned playlist ${videoPlaylist.url}.`)
+      if (videoPlaylist.isLocal()) throw new Error(`Remote instance cannot delete owned playlist ${videoPlaylist.url}.`)
 
       return retryTransactionWrapper(processDeleteVideoPlaylist, byActor, videoPlaylist)
     }
@@ -142,7 +144,7 @@ function processDeleteVideoComment (byActor: MActorSignature, videoComment: MCom
 
     await videoComment.save({ transaction: t })
 
-    if (videoComment.Video.isOwned()) {
+    if (videoComment.Video.isLocal()) {
       // Don't resend the activity to the sender
       const exceptions = [ byActor ]
       await forwardVideoRelatedActivity(activity, t, exceptions, videoComment.Video)

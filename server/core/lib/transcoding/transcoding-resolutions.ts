@@ -16,7 +16,10 @@ export function buildOriginalFileResolution (inputResolution: number) {
     hasAudio: true
   })
 
-  if (resolutions.length === 0) {
+  if (
+    resolutions.length === 0 ||
+    (resolutions.length === 1 && resolutions[0] === VideoResolution.H_NOVIDEO)
+  ) {
     return toEven(inputResolution)
   }
 
@@ -58,7 +61,7 @@ export function computeResolutionsToTranscode (options: {
     if (input < resolution) continue
     // We only want lower resolutions than input file
     if (strictLower && input === resolution) continue
-    // Audio resolutio but no audio in the video
+    // Audio resolution but no audio in the video
     if (resolution === VideoResolution.H_NOVIDEO && !hasAudio) continue
 
     resolutionsEnabled.add(resolution)

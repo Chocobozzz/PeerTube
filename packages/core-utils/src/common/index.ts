@@ -1,6 +1,7 @@
 export * from './array.js'
 export * from './random.js'
 export * from './date.js'
+export * from './image.js'
 export * from './number.js'
 export * from './object.js'
 export * from './regexp.js'

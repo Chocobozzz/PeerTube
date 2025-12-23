@@ -1,10 +1,11 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_miniature' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_miniature" as *;
 
 .miniature {
   display: inline-block;
   width: 100%;
+  vertical-align: middle;
 
   &.no-videos:not(.to-manage) {
     a {
@@ -24,99 +25,115 @@
   @include miniature-thumbnail;
 
   .miniature-playlist-info-overlay {
-    @include static-thumbnail-overlay;
-
     position: absolute;
     right: 0;
     bottom: 0;
     height: 100%;
     padding: 0 10px;
-    display: flex;
-    align-items: center;
     font-size: 14px;
     font-weight: $font-semibold;
+
+    @include static-thumbnail-overlay;
+
+    & {
+      display: flex;
+      align-items: center;
+    }
   }
 }
 
 .miniature-info {
+  display: flex;
+  flex-direction: column;
 
   .miniature-name {
+    display: inline-block;
+
     @include miniature-name;
   }
 
   .by {
-    @include disable-default-a-behaviour;
-
     display: block;
-    color: pvar(--greyForegroundColor);
+    color: pvar(--fg-300);
+
+    @include disable-default-a-behaviour;
   }
 
   .privacy-date {
-    margin-top: 5px;
-    font-size: 14px;
+    color: pvar(--fg-200);
+    font-size: $miniature-fs-small;
 
     .privacy {
       font-weight: $font-semibold;
 
       &::after {
-        content: '-';
+        content: "-";
         margin: 0 3px;
       }
     }
   }
 
   .description {
-    @include peertube-word-wrap;
-
     margin-top: 10px;
-    color: pvar(--greyForegroundColor);
+    color: pvar(--fg-300);
+
+    @include peertube-word-wrap;
   }
 }
 
 .miniature:not(.display-as-row) {
-
   .miniature-name {
-    margin-top: 10px;
-    margin-bottom: 5px;
+    margin-top: 0.5rem;
+    font-size: $miniature-fs-big;
   }
 
   .miniature-thumbnail {
-    @include block-ratio($selector: '::ng-deep a');
-
-    margin-top: 10px;
-    margin-bottom: 5px;
+    @include block-ratio($selector: "::ng-deep a");
   }
 }
 
 .miniature.display-as-row {
-  --rowThumbnailWidth: #{$video-thumbnail-width};
-  --rowThumbnailHeight: #{$video-thumbnail-height};
+  --co-row-thumbnail-width: #{$video-thumbnail-width};
+  --co-row-thumbnail-height: #{$video-thumbnail-height};
 
   display: flex;
 
   .miniature-name {
-    font-size: $video-miniature-row-name-font-size;
+    font-size: $miniature-fs-row-big;
+  }
+
+  .privacy-date {
+    font-size: $miniature-fs-row-small;
+    margin-top: 0.25rem;
   }
 
   .miniature-thumbnail {
-    @include margin-right(1rem);
+    min-width: var(--co-row-thumbnail-width);
+    max-width: var(--co-row-thumbnail-width);
+    height: var(--co-row-thumbnail-height);
 
-    min-width: var(--rowThumbnailWidth);
-    max-width: var(--rowThumbnailWidth);
-    height: var(--rowThumbnailHeight);
+    @include margin-right(1rem);
   }
 }
 
 @include on-small-main-col {
   .miniature.display-as-row {
-    --rowThumbnailWidth: #{$video-thumbnail-medium-width};
-    --rowThumbnailHeight: #{$video-thumbnail-medium-height};
+    --co-row-thumbnail-width: #{$video-thumbnail-medium-width};
+    --co-row-thumbnail-height: #{$video-thumbnail-medium-height};
   }
 }
 
 @include on-mobile-main-col {
   .miniature.display-as-row {
-    --rowThumbnailWidth: #{$video-thumbnail-small-width};
-    --rowThumbnailHeight: #{$video-thumbnail-small-height};
+    --co-row-thumbnail-width: #{$video-thumbnail-small-width};
+    --co-row-thumbnail-height: #{$video-thumbnail-small-height};
+
+    .miniature-name {
+      font-size: $miniature-fs-mobile-big;
+    }
+
+    .privacy-date {
+      font-size: $miniature-fs-mobile-small;
+    }
   }
 }

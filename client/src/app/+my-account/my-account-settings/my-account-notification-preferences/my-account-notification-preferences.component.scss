@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_bootstrap-variables' as *;
 
 .notification-row {
   display: flex;

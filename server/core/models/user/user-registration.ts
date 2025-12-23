@@ -1,3 +1,4 @@
+import { forceNumber } from '@peertube/peertube-core-utils'
 import { UserRegistration, UserRegistrationState, type UserRegistrationStateType } from '@peertube/peertube-models'
 import {
   isRegistrationModerationResponseValid,
@@ -8,7 +9,7 @@ import { isVideoChannelDisplayNameValid } from '@server/helpers/custom-validator
 import { cryptPassword } from '@server/helpers/peertube-crypto.js'
 import { USER_REGISTRATION_STATES } from '@server/initializers/constants.js'
 import { MRegistration, MRegistrationFormattable } from '@server/types/models/index.js'
-import { FindOptions, Op, QueryTypes, WhereOptions } from 'sequelize'
+import { col, FindOptions, fn, Op, QueryTypes, where, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BeforeCreate,
@@ -18,13 +19,13 @@ import {
   DataType,
   ForeignKey,
   Is,
-  IsEmail, Table,
+  IsEmail,
+  Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { isUserDisplayNameValid, isUserEmailVerifiedValid, isUserPasswordValid } from '../../helpers/custom-validators/users.js'
-import { SequelizeModel, getSort, parseAggregateResult, throwIfNotValid } from '../shared/index.js'
+import { isUserDisplayNameValid, isUserEmailVerifiedValid } from '../../helpers/custom-validators/users.js'
+import { getSort, parseAggregateResult, SequelizeModel, throwIfNotValid } from '../shared/index.js'
 import { UserModel } from './user.js'
-import { forceNumber } from '@peertube/peertube-core-utils'
 
 @Table({
   tableName: 'userRegistration',
@@ -48,69 +49,67 @@ import { forceNumber } from '@peertube/peertube-core-utils'
   ]
 })
 export class UserRegistrationModel extends SequelizeModel<UserRegistrationModel> {
-
   @AllowNull(false)
   @Is('RegistrationState', value => throwIfNotValid(value, isRegistrationStateValid, 'state'))
   @Column
-  state: UserRegistrationStateType
+  declare state: UserRegistrationStateType
 
   @AllowNull(false)
   @Is('RegistrationReason', value => throwIfNotValid(value, isRegistrationReasonValid, 'registration reason'))
   @Column(DataType.TEXT)
-  registrationReason: string
+  declare registrationReason: string
 
   @AllowNull(true)
   @Is('RegistrationModerationResponse', value => throwIfNotValid(value, isRegistrationModerationResponseValid, 'moderation response', true))
   @Column(DataType.TEXT)
-  moderationResponse: string
+  declare moderationResponse: string
 
   @AllowNull(true)
-  @Is('RegistrationPassword', value => throwIfNotValid(value, isUserPasswordValid, 'registration password', true))
   @Column
-  password: string
+  declare password: string
 
   @AllowNull(false)
   @Column
-  username: string
+  declare username: string
 
   @AllowNull(false)
   @IsEmail
   @Column(DataType.STRING(400))
-  email: string
+  declare email: string
 
   @AllowNull(true)
   @Is('RegistrationEmailVerified', value => throwIfNotValid(value, isUserEmailVerifiedValid, 'email verified boolean', true))
   @Column
-  emailVerified: boolean
+  declare emailVerified: boolean
 
   @AllowNull(true)
   @Is('RegistrationAccountDisplayName', value => throwIfNotValid(value, isUserDisplayNameValid, 'account display name', true))
   @Column
-  accountDisplayName: string
+  declare accountDisplayName: string
 
   @AllowNull(true)
   @Is('ChannelHandle', value => throwIfNotValid(value, isVideoChannelDisplayNameValid, 'channel handle', true))
   @Column
-  channelHandle: string
+  declare channelHandle: string
 
   @AllowNull(true)
   @Is('ChannelDisplayName', value => throwIfNotValid(value, isVideoChannelDisplayNameValid, 'channel display name', true))
   @Column
-  channelDisplayName: string
+  declare channelDisplayName: string
 
   @AllowNull(true)
   @Column
-  processedAt: Date
+  declare processedAt: Date
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @ForeignKey(() => UserModel)
   @Column
-  userId: number
+  declare userId: number
 
   @BelongsTo(() => UserModel, {
     foreignKey: {
@@ -118,7 +117,7 @@ export class UserRegistrationModel extends SequelizeModel<UserRegistrationModel>
     },
     onDelete: 'SET NULL'
   })
-  User: Awaited<UserModel>
+  declare User: Awaited<UserModel>
 
   @BeforeCreate
   static async cryptPasswordIfNeeded (instance: UserRegistrationModel) {
@@ -129,36 +128,49 @@ export class UserRegistrationModel extends SequelizeModel<UserRegistrationModel>
     return UserRegistrationModel.findByPk(id)
   }
 
-  static loadByEmail (email: string): Promise<MRegistration> {
+  static listByEmailCaseInsensitive (email: string): Promise<MRegistration[]> {
     const query = {
-      where: { email }
+      where: where(
+        fn('LOWER', col('email')),
+        '=',
+        email.toLowerCase()
+      )
     }
 
-    return UserRegistrationModel.findOne(query)
+    return UserRegistrationModel.findAll(query)
   }
 
-  static loadByEmailOrUsername (emailOrUsername: string): Promise<MRegistration> {
+  static listByEmailCaseInsensitiveOrUsername (emailOrUsername: string): Promise<MRegistration[]> {
     const query = {
       where: {
         [Op.or]: [
-          { email: emailOrUsername },
+          where(
+            fn('LOWER', col('email')),
+            '=',
+            emailOrUsername.toLowerCase()
+          ),
+
           { username: emailOrUsername }
         ]
       }
     }
 
-    return UserRegistrationModel.findOne(query)
+    return UserRegistrationModel.findAll(query)
   }
 
-  static loadByEmailOrHandle (options: {
+  static listByEmailCaseInsensitiveOrHandle (options: {
     email: string
     username: string
     channelHandle?: string
-  }): Promise<MRegistration> {
+  }): Promise<MRegistration[]> {
     const { email, username, channelHandle } = options
 
     let or: WhereOptions = [
-      { email },
+      where(
+        fn('LOWER', col('email')),
+        '=',
+        email.toLowerCase()
+      ),
       { channelHandle: username },
       { username }
     ]
@@ -176,7 +188,7 @@ export class UserRegistrationModel extends SequelizeModel<UserRegistrationModel>
       }
     }
 
-    return UserRegistrationModel.findOne(query)
+    return UserRegistrationModel.findAll(query)
   }
 
   // ---------------------------------------------------------------------------
@@ -232,8 +244,8 @@ export class UserRegistrationModel extends SequelizeModel<UserRegistrationModel>
   static getStats () {
     const query = `SELECT ` +
       `AVG(EXTRACT(EPOCH FROM ("processedAt" - "createdAt") * 1000)) ` +
-        `FILTER (WHERE "processedAt" IS NOT NULL AND "createdAt" > CURRENT_DATE - INTERVAL '3 months')` +
-        `AS "avgResponseTime", ` +
+      `FILTER (WHERE "processedAt" IS NOT NULL AND "createdAt" > CURRENT_DATE - INTERVAL '3 months')` +
+      `AS "avgResponseTime", ` +
       // "processedAt" has been introduced in PeerTube 6.1 so also check the abuse state to check processed abuses
       `COUNT(*) FILTER (WHERE "processedAt" IS NOT NULL OR "state" != ${UserRegistrationState.PENDING}) AS "processedRequests", ` +
       `COUNT(*) AS "totalRequests" ` +

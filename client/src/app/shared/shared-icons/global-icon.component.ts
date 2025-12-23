@@ -1,84 +1,106 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, ElementRef, OnInit, inject, input } from '@angular/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 
 const icons = {
   // misc icons
-  'npm': require('!!raw-loader?!../../../assets/images/misc/npm.svg').default,
-  'markdown': require('!!raw-loader?!../../../assets/images/misc/markdown.svg').default,
-  'language': require('!!raw-loader?!../../../assets/images/misc/language.svg').default,
-  'video-lang': require('!!raw-loader?!../../../assets/images/misc/video-lang.svg').default,
-  'support': require('!!raw-loader?!../../../assets/images/misc/support.svg').default,
-  'peertube-x': require('!!raw-loader?!../../../assets/images/misc/peertube-x.svg').default,
-  'robot': require('!!raw-loader?!../../../assets/images/misc/miscellaneous-services.svg').default, // material ui
-  'videos': require('!!raw-loader?!../../../assets/images/misc/video-library.svg').default, // material ui
-  'history': require('!!raw-loader?!../../../assets/images/misc/history.svg').default, // material ui
-  'subscriptions': require('!!raw-loader?!../../../assets/images/misc/subscriptions.svg').default, // material ui
-  'playlist-add': require('!!raw-loader?!../../../assets/images/misc/playlist-add.svg').default, // material ui
-  'follower': require('!!raw-loader?!../../../assets/images/misc/account-arrow-left.svg').default, // material ui
-  'following': require('!!raw-loader?!../../../assets/images/misc/account-arrow-right.svg').default, // material ui
-  'tip': require('!!raw-loader?!../../../assets/images/misc/tip.svg').default, // material ui
-  'flame': require('!!raw-loader?!../../../assets/images/misc/flame.svg').default,
-  'local': require('!!raw-loader?!../../../assets/images/misc/local.svg').default,
+  'markdown': require('../../../assets/images/misc/markdown.svg'),
+  'language': require('../../../assets/images/misc/language.svg'),
+  'video-lang': require('../../../assets/images/misc/video-lang.svg'),
+  'support': require('../../../assets/images/misc/support.svg'),
+  'peertube-x': require('../../../assets/images/misc/peertube-x.svg'),
+  'robot': require('../../../assets/images/misc/miscellaneous-services.svg'), // material ui
+  'playlist-add': require('../../../assets/images/misc/playlist-add.svg'), // material ui
+  'follower': require('../../../assets/images/misc/account-arrow-left.svg'), // material ui
+  'following': require('../../../assets/images/misc/account-arrow-right.svg'), // material ui
+  'tip': require('../../../assets/images/misc/tip.svg'), // material ui
+  'flame': require('../../../assets/images/misc/flame.svg'),
+  'fediverse': require('../../../assets/images/misc/fediverse.svg'),
+  'mastodon': require('../../../assets/images/misc/mastodon.svg'),
+  'x-twitter': require('../../../assets/images/misc/x-twitter.svg'),
+  'bluesky': require('../../../assets/images/misc/bluesky.svg'),
 
-  // feather icons
-  'copy': require('!!raw-loader?!../../../assets/images/feather/copy.svg').default,
-  'flag': require('!!raw-loader?!../../../assets/images/feather/flag.svg').default,
-  'playlists': require('!!raw-loader?!../../../assets/images/feather/list.svg').default,
-  'syndication': require('!!raw-loader?!../../../assets/images/feather/syndication.svg').default,
-  'help': require('!!raw-loader?!../../../assets/images/feather/help.svg').default,
-  'alert': require('!!raw-loader?!../../../assets/images/feather/alert.svg').default,
-  'globe': require('!!raw-loader?!../../../assets/images/feather/globe.svg').default,
-  'home': require('!!raw-loader?!../../../assets/images/feather/home.svg').default,
-  'trending': require('!!raw-loader?!../../../assets/images/feather/trending.svg').default,
-  'search': require('!!raw-loader?!../../../assets/images/feather/search.svg').default,
-  'upload': require('!!raw-loader?!../../../assets/images/feather/upload.svg').default,
-  'dislike': require('!!raw-loader?!../../../assets/images/feather/dislike.svg').default,
-  'like': require('!!raw-loader?!../../../assets/images/feather/like.svg').default,
-  'no': require('!!raw-loader?!../../../assets/images/feather/no.svg').default,
-  'cloud-download': require('!!raw-loader?!../../../assets/images/feather/cloud-download.svg').default,
-  'clock': require('!!raw-loader?!../../../assets/images/feather/clock.svg').default,
-  'cog': require('!!raw-loader?!../../../assets/images/feather/cog.svg').default,
-  'delete': require('!!raw-loader?!../../../assets/images/feather/delete.svg').default,
-  'bell': require('!!raw-loader?!../../../assets/images/feather/bell.svg').default,
-  'sign-out': require('!!raw-loader?!../../../assets/images/feather/log-out.svg').default,
-  'sign-in': require('!!raw-loader?!../../../assets/images/feather/log-in.svg').default,
-  'download': require('!!raw-loader?!../../../assets/images/feather/download.svg').default,
-  'ownership-change': require('!!raw-loader?!../../../assets/images/feather/share.svg').default,
-  'share': require('!!raw-loader?!../../../assets/images/feather/share-2.svg').default,
-  'channel': require('!!raw-loader?!../../../assets/images/feather/tv.svg').default,
-  'user': require('!!raw-loader?!../../../assets/images/feather/user.svg').default,
-  'user-x': require('!!raw-loader?!../../../assets/images/feather/user-x.svg').default,
-  'users': require('!!raw-loader?!../../../assets/images/feather/users.svg').default,
-  'user-add': require('!!raw-loader?!../../../assets/images/feather/user-plus.svg').default,
-  'add': require('!!raw-loader?!../../../assets/images/feather/plus-circle.svg').default,
-  'cloud-error': require('!!raw-loader?!../../../assets/images/feather/cloud-off.svg').default,
-  'undo': require('!!raw-loader?!../../../assets/images/feather/corner-up-left.svg').default,
-  'circle-tick': require('!!raw-loader?!../../../assets/images/feather/check-circle.svg').default,
-  'more-horizontal': require('!!raw-loader?!../../../assets/images/feather/more-horizontal.svg').default,
-  'more-vertical': require('!!raw-loader?!../../../assets/images/feather/more-vertical.svg').default,
-  'play': require('!!raw-loader?!../../../assets/images/feather/play.svg').default,
-  'p2p': require('!!raw-loader?!../../../assets/images/feather/airplay.svg').default,
-  'fullscreen': require('!!raw-loader?!../../../assets/images/feather/maximize.svg').default,
-  'exit-fullscreen': require('!!raw-loader?!../../../assets/images/feather/minimize.svg').default,
-  'film': require('!!raw-loader?!../../../assets/images/feather/film.svg').default,
-  'edit': require('!!raw-loader?!../../../assets/images/feather/edit-2.svg').default,
-  'external-link': require('!!raw-loader?!../../../assets/images/feather/external-link.svg').default,
-  'eye-open': require('!!raw-loader?!../../../assets/images/feather/eye.svg').default,
-  'eye-close': require('!!raw-loader?!../../../assets/images/feather/eye-off.svg').default,
-  'refresh': require('!!raw-loader?!../../../assets/images/feather/refresh-cw.svg').default,
-  'command': require('!!raw-loader?!../../../assets/images/feather/command.svg').default,
-  'go': require('!!raw-loader?!../../../assets/images/feather/arrow-up-right.svg').default,
-  'cross': require('!!raw-loader?!../../../assets/images/feather/x.svg').default,
-  'tick': require('!!raw-loader?!../../../assets/images/feather/check.svg').default,
-  'columns': require('!!raw-loader?!../../../assets/images/feather/columns.svg').default,
-  'live': require('!!raw-loader?!../../../assets/images/feather/live.svg').default,
-  'repeat': require('!!raw-loader?!../../../assets/images/feather/repeat.svg').default,
-  'chevrons-up': require('!!raw-loader?!../../../assets/images/feather/chevrons-up.svg').default,
-  'message-circle': require('!!raw-loader?!../../../assets/images/feather/message-circle.svg').default,
-  'codesandbox': require('!!raw-loader?!../../../assets/images/feather/codesandbox.svg').default,
-  'award': require('!!raw-loader?!../../../assets/images/feather/award.svg').default,
-  'stats': require('!!raw-loader?!../../../assets/images/feather/stats.svg').default,
-  'shield': require('!!raw-loader?!../../../assets/images/misc/shield.svg').default
+  // feather/lucide icons
+  'menu': require('../../../assets/images/feather/menu.svg'),
+  'link': require('../../../assets/images/feather/link.svg'),
+  'history': require('../../../assets/images/feather/history.svg'),
+  'registry': require('../../../assets/images/feather/registry.svg'),
+  'subscriptions': require('../../../assets/images/feather/subscriptions.svg'),
+  'videos': require('../../../assets/images/feather/videos.svg'),
+  'add': require('../../../assets/images/feather/plus.svg'),
+  'alert': require('../../../assets/images/feather/alert.svg'),
+  'chapters': require('../../../assets/images/feather/chapters.svg'),
+  'studio': require('../../../assets/images/feather/studio.svg'),
+  'overview': require('../../../assets/images/feather/overview.svg'),
+  'moderation': require('../../../assets/images/feather/moderation.svg'),
+  'captions': require('../../../assets/images/feather/captions.svg'),
+  'config': require('../../../assets/images/feather/config.svg'),
+  'award': require('../../../assets/images/feather/award.svg'),
+  'bell': require('../../../assets/images/feather/bell.svg'),
+  'opened-bell': require('../../../assets/images/feather/opened-bell.svg'),
+  'channel': require('../../../assets/images/feather/channel.svg'),
+  'chevrons-up': require('../../../assets/images/feather/chevrons-up.svg'),
+  'chevron-up': require('../../../assets/images/feather/chevron-up.svg'),
+  'chevron-down': require('../../../assets/images/feather/chevron-down.svg'),
+  'chevron-left': require('../../../assets/images/feather/chevron-left.svg'),
+  'arrow-left': require('../../../assets/images/feather/arrow-left.svg'),
+  'arrow-down': require('../../../assets/images/feather/arrow-down.svg'),
+  'circle-tick': require('../../../assets/images/feather/check-circle.svg'),
+  'clock-arrow-down': require('../../../assets/images/feather/clock-arrow-down.svg'),
+  'clock': require('../../../assets/images/feather/clock.svg'),
+  'cloud-download': require('../../../assets/images/feather/cloud-download.svg'),
+  'cloud-error': require('../../../assets/images/feather/cloud-off.svg'),
+  'codesandbox': require('../../../assets/images/feather/codesandbox.svg'),
+  'cog': require('../../../assets/images/feather/cog.svg'),
+  'columns': require('../../../assets/images/feather/columns.svg'),
+  'keyboard': require('../../../assets/images/feather/keyboard.svg'),
+  'copy': require('../../../assets/images/feather/copy.svg'),
+  'cross': require('../../../assets/images/feather/x.svg'),
+  'delete': require('../../../assets/images/feather/delete.svg'),
+  'dislike': require('../../../assets/images/feather/dislike.svg'),
+  'download': require('../../../assets/images/feather/download.svg'),
+  'edit': require('../../../assets/images/feather/edit-2.svg'),
+  'exit-fullscreen': require('../../../assets/images/feather/minimize.svg'),
+  'external-link': require('../../../assets/images/feather/external-link.svg'),
+  'eye-close': require('../../../assets/images/feather/eye-off.svg'),
+  'eye-open': require('../../../assets/images/feather/eye.svg'),
+  'film': require('../../../assets/images/feather/film.svg'),
+  'filter': require('../../../assets/images/feather/filter.svg'),
+  'flag': require('../../../assets/images/feather/flag.svg'),
+  'fullscreen': require('../../../assets/images/feather/maximize.svg'),
+  'globe': require('../../../assets/images/feather/globe.svg'),
+  'help': require('../../../assets/images/feather/help.svg'),
+  'home': require('../../../assets/images/feather/home.svg'),
+  'like': require('../../../assets/images/feather/like.svg'),
+  'live': require('../../../assets/images/feather/live.svg'),
+  'message-circle': require('../../../assets/images/feather/message-circle.svg'),
+  'more-horizontal': require('../../../assets/images/feather/more-horizontal.svg'),
+  'more-vertical': require('../../../assets/images/feather/more-vertical.svg'),
+  'move-right': require('../../../assets/images/feather/move-right.svg'),
+  'no': require('../../../assets/images/feather/no.svg'),
+  'ownership-change': require('../../../assets/images/feather/share.svg'),
+  'p2p': require('../../../assets/images/feather/airplay.svg'),
+  'play': require('../../../assets/images/feather/play.svg'),
+  'circle-alert': require('../../../assets/images/feather/circle-alert.svg'),
+  'playlists': require('../../../assets/images/feather/playlists.svg'),
+  'refresh': require('../../../assets/images/feather/refresh-cw.svg'),
+  'repeat': require('../../../assets/images/feather/repeat.svg'),
+  'search': require('../../../assets/images/feather/search.svg'),
+  'share': require('../../../assets/images/feather/share-2.svg'),
+  'shield': require('../../../assets/images/misc/shield.svg'),
+  'sign-in': require('../../../assets/images/feather/log-in.svg'),
+  'sign-out': require('../../../assets/images/feather/log-out.svg'),
+  'stats': require('../../../assets/images/feather/stats.svg'),
+  'syndication': require('../../../assets/images/feather/syndication.svg'),
+  'tick': require('../../../assets/images/feather/check.svg'),
+  'trending': require('../../../assets/images/feather/trending.svg'),
+  'undo': require('../../../assets/images/feather/undo.svg'),
+  'upload': require('../../../assets/images/feather/upload.svg'),
+  'user-add': require('../../../assets/images/feather/user-plus.svg'),
+  'user-x': require('../../../assets/images/feather/user-x.svg'),
+  'user': require('../../../assets/images/feather/user.svg'),
+  'grip-horizontal': require('../../../assets/images/feather/grip-horizontal.svg'),
+  'calendar': require('../../../assets/images/feather/calendar.svg'),
+  'users': require('../../../assets/images/feather/users.svg')
 }
 
 export type GlobalIconName = keyof typeof icons
@@ -86,24 +108,22 @@ export type GlobalIconName = keyof typeof icons
 @Component({
   selector: 'my-global-icon',
   template: '',
-  styleUrls: [ './global-icon.component.scss' ],
+  styleUrls: [ './common-icon.component.scss' ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true
 })
 export class GlobalIconComponent implements OnInit {
-  @Input() iconName: GlobalIconName
+  private el = inject(ElementRef)
+  private hooks = inject(HooksService)
 
-  constructor (
-    private el: ElementRef,
-    private hooks: HooksService
-  ) { }
+  readonly iconName = input.required<GlobalIconName>()
 
   async ngOnInit () {
     const nativeElement = this.el.nativeElement as HTMLElement
 
     nativeElement.innerHTML = await this.hooks.wrapFun(
       this.getSVGContent.bind(this),
-      { name: this.iconName },
+      { name: this.iconName() },
       'common',
       'filter:internal.common.svg-icons.get-content.params',
       'filter:internal.common.svg-icons.get-content.result'

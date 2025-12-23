@@ -1,0 +1,6 @@
+@if (video().nsfw) {
+  <span
+    class="button-unstyle pt-badge" [ngClass]="badgeClass"
+    [attr.aria-label]="tooltip" [ngbTooltip]="tooltip" i18n
+  >Sensitive</span>
+}

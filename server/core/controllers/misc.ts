@@ -16,36 +16,21 @@ const miscRouter = express.Router()
 
 miscRouter.use(cors())
 
-miscRouter.use('/nodeinfo/:version.json',
-  apiRateLimiter,
-  cacheRoute(ROUTE_CACHE_LIFETIME.NODEINFO),
-  asyncMiddleware(generateNodeinfo)
-)
+miscRouter.use('/nodeinfo/:version.json', apiRateLimiter, cacheRoute(ROUTE_CACHE_LIFETIME.NODEINFO), asyncMiddleware(generateNodeinfo))
 
 // robots.txt service
-miscRouter.get('/robots.txt',
-  apiRateLimiter,
-  cacheRoute(ROUTE_CACHE_LIFETIME.ROBOTS),
-  (_, res: express.Response) => {
-    res.type('text/plain')
+miscRouter.get('/robots.txt', apiRateLimiter, cacheRoute(ROUTE_CACHE_LIFETIME.ROBOTS), (_, res: express.Response) => {
+  res.type('text/plain')
 
-    return res.send(CONFIG.INSTANCE.ROBOTS)
-  }
-)
+  return res.send(CONFIG.INSTANCE.ROBOTS)
+})
 
-miscRouter.all('/teapot',
-  apiRateLimiter,
-  getCup,
-  asyncMiddleware(serveIndexHTML)
-)
+miscRouter.all('/teapot', apiRateLimiter, getCup, asyncMiddleware(serveIndexHTML))
 
 // security.txt service
-miscRouter.get('/security.txt',
-  apiRateLimiter,
-  (_, res: express.Response) => {
-    return res.redirect(HttpStatusCode.MOVED_PERMANENTLY_301, '/.well-known/security.txt')
-  }
-)
+miscRouter.get('/security.txt', apiRateLimiter, (_, res: express.Response) => {
+  return res.redirect(HttpStatusCode.MOVED_PERMANENTLY_301, '/.well-known/security.txt')
+})
 
 // ---------------------------------------------------------------------------
 
@@ -56,7 +41,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function generateNodeinfo (req: express.Request, res: express.Response) {
-  const { totalVideos } = await VideoModel.getStats()
+  const { totalLocalVideos } = await VideoModel.getStats()
   const { totalLocalVideoComments } = await VideoCommentModel.getStats()
   const { totalUsers, totalMonthlyActiveUsers, totalHalfYearActiveUsers } = await UserModel.getStats()
 
@@ -90,7 +75,7 @@ async function generateNodeinfo (req: express.Request, res: express.Response) {
         activeMonth: totalMonthlyActiveUsers,
         activeHalfyear: totalHalfYearActiveUsers
       },
-      localPosts: totalVideos,
+      localPosts: totalLocalVideos,
       localComments: totalLocalVideoComments
     },
     metadata: {
@@ -196,8 +181,8 @@ async function generateNodeinfo (req: express.Request, res: express.Response) {
   } as HttpNodeinfoDiasporaSoftwareNsSchema20
 
   res.contentType('application/json; profile="http://nodeinfo.diaspora.software/ns/schema/2.0#"')
-      .send(json)
-      .end()
+    .send(json)
+    .end()
 }
 
 function getCup (req: express.Request, res: express.Response, next: express.NextFunction) {

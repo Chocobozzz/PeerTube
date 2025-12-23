@@ -1,9 +1,10 @@
-import express from 'express'
+import { VideoPlaylistForAccountListQuery } from '@peertube/peertube-models'
 import { pickCommonVideoQuery } from '@server/helpers/query.js'
 import { ActorFollowModel } from '@server/models/actor/actor-follow.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync.js'
-import { buildNSFWFilter, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils.js'
+import express from 'express'
+import { buildNSFWFilters, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils.js'
 import { getFormattedObjects } from '../../helpers/utils.js'
 import { JobQueue } from '../../lib/job-queue/index.js'
 import { Hooks } from '../../lib/plugins/hooks.js'
@@ -11,7 +12,7 @@ import {
   apiRateLimiter,
   asyncMiddleware,
   authenticate,
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidatorFactory,
   optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
@@ -22,29 +23,33 @@ import {
   videoRatingValidator
 } from '../../middlewares/index.js'
 import {
-  accountNameWithHostGetValidator,
+  accountHandleGetValidatorFactory,
   accountsFollowersSortValidator,
   accountsSortValidator,
-  ensureAuthUserOwnsAccountValidator,
-  ensureCanManageChannelOrAccount,
+  listAccountChannelsSyncValidator,
+  listAccountChannelsValidator,
   videoChannelsSortValidator,
-  videoChannelStatsValidator,
   videoChannelSyncsSortValidator,
   videosSortValidator
 } from '../../middlewares/validators/index.js'
-import { commonVideoPlaylistFiltersValidator, videoPlaylistsSearchValidator } from '../../middlewares/validators/videos/video-playlists.js'
-import { AccountModel } from '../../models/account/account.js'
+import {
+  commonVideoPlaylistFiltersValidator,
+  videoPlaylistsAccountValidator,
+  videoPlaylistsSearchValidator
+} from '../../middlewares/validators/videos/video-playlists.js'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate.js'
+import { AccountModel } from '../../models/account/account.js'
 import { guessAdditionalAttributesFromQuery } from '../../models/video/formatter/index.js'
-import { VideoModel } from '../../models/video/video.js'
 import { VideoChannelModel } from '../../models/video/video-channel.js'
 import { VideoPlaylistModel } from '../../models/video/video-playlist.js'
+import { VideoModel } from '../../models/video/video.js'
 
 const accountsRouter = express.Router()
 
 accountsRouter.use(apiRateLimiter)
 
-accountsRouter.get('/',
+accountsRouter.get(
+  '/',
   paginationValidator,
   accountsSortValidator,
   setDefaultSort,
@@ -52,25 +57,28 @@ accountsRouter.get('/',
   asyncMiddleware(listAccounts)
 )
 
-accountsRouter.get('/:accountName',
-  asyncMiddleware(accountNameWithHostGetValidator),
+accountsRouter.get(
+  '/:handle',
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkCanManage: false })),
   getAccount
 )
 
-accountsRouter.get('/:accountName/videos',
-  asyncMiddleware(accountNameWithHostGetValidator),
+accountsRouter.get(
+  '/:handle/videos',
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkCanManage: false })),
   paginationValidator,
   videosSortValidator,
   setDefaultVideosSort,
   setDefaultPagination,
   optionalAuthenticate,
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidatorFactory(),
   asyncMiddleware(listAccountVideos)
 )
 
-accountsRouter.get('/:accountName/video-channels',
-  asyncMiddleware(accountNameWithHostGetValidator),
-  videoChannelStatsValidator,
+accountsRouter.get(
+  '/:handle/video-channels',
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkCanManage: false })),
+  listAccountChannelsValidator,
   paginationValidator,
   videoChannelsSortValidator,
   setDefaultSort,
@@ -78,33 +86,36 @@ accountsRouter.get('/:accountName/video-channels',
   asyncMiddleware(listAccountChannels)
 )
 
-accountsRouter.get('/:accountName/video-channel-syncs',
-  authenticate,
-  asyncMiddleware(accountNameWithHostGetValidator),
-  ensureCanManageChannelOrAccount,
-  paginationValidator,
-  videoChannelSyncsSortValidator,
-  setDefaultSort,
-  setDefaultPagination,
-  asyncMiddleware(listAccountChannelsSync)
-)
-
-accountsRouter.get('/:accountName/video-playlists',
+accountsRouter.get(
+  '/:handle/video-playlists',
   optionalAuthenticate,
-  asyncMiddleware(accountNameWithHostGetValidator),
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkCanManage: false })),
   paginationValidator,
   videoPlaylistsSortValidator,
   setDefaultSort,
   setDefaultPagination,
   commonVideoPlaylistFiltersValidator,
   videoPlaylistsSearchValidator,
+  videoPlaylistsAccountValidator,
   asyncMiddleware(listAccountPlaylists)
 )
 
-accountsRouter.get('/:accountName/ratings',
+accountsRouter.get(
+  '/:handle/video-channel-syncs',
   authenticate,
-  asyncMiddleware(accountNameWithHostGetValidator),
-  ensureAuthUserOwnsAccountValidator,
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkCanManage: true })),
+  paginationValidator,
+  videoChannelSyncsSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  listAccountChannelsSyncValidator,
+  asyncMiddleware(listAccountChannelsSync)
+)
+
+accountsRouter.get(
+  '/:handle/ratings',
+  authenticate,
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkCanManage: true })),
   paginationValidator,
   videoRatesSortValidator,
   setDefaultSort,
@@ -113,10 +124,10 @@ accountsRouter.get('/:accountName/ratings',
   asyncMiddleware(listAccountRatings)
 )
 
-accountsRouter.get('/:accountName/followers',
+accountsRouter.get(
+  '/:handle/followers',
   authenticate,
-  asyncMiddleware(accountNameWithHostGetValidator),
-  ensureAuthUserOwnsAccountValidator,
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkCanManage: true })),
   paginationValidator,
   accountsFollowersSortValidator,
   setDefaultSort,
@@ -149,16 +160,15 @@ async function listAccounts (req: express.Request, res: express.Response) {
 }
 
 async function listAccountChannels (req: express.Request, res: express.Response) {
-  const options = {
+  const resultList = await VideoChannelModel.listByAccountForAPI({
     accountId: res.locals.account.id,
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
     withStats: req.query.withStats,
+    includeCollaborations: req.query.includeCollaborations,
     search: req.query.search
-  }
-
-  const resultList = await VideoChannelModel.listByAccountForAPI(options)
+  })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
@@ -169,7 +179,8 @@ async function listAccountChannelsSync (req: express.Request, res: express.Respo
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
-    search: req.query.search
+    search: req.query.search,
+    includeCollaborations: req.query.includeCollaborations
   }
 
   const resultList = await VideoChannelSyncModel.listByAccountForAPI(options)
@@ -179,6 +190,7 @@ async function listAccountChannelsSync (req: express.Request, res: express.Respo
 
 async function listAccountPlaylists (req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
+  const query = req.query as VideoPlaylistForAccountListQuery
 
   // Allow users to see their private/unlisted video playlists
   let listMyPlaylists = false
@@ -187,18 +199,25 @@ async function listAccountPlaylists (req: express.Request, res: express.Response
   }
 
   const resultList = await VideoPlaylistModel.listForApi({
-    search: req.query.search,
-
     followerActorId: isUserAbleToSearchRemoteURI(res)
       ? null
       : serverActor.id,
 
-    start: req.query.start,
-    count: req.query.count,
-    sort: req.query.sort,
     accountId: res.locals.account.id,
     listMyPlaylists,
-    type: req.query.playlistType
+
+    start: query.start,
+    count: query.count,
+    sort: query.sort,
+    search: query.search,
+
+    type: query.playlistType,
+
+    channelNameOneOf: req.query.channelNameOneOf,
+
+    includeCollaborationsForAccount: listMyPlaylists && query.includeCollaborations
+      ? res.locals.oauth.token.User.Account.id
+      : undefined
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
@@ -221,9 +240,9 @@ async function listAccountVideos (req: express.Request, res: express.Response) {
 
   const apiOptions = await Hooks.wrapObject({
     ...query,
+    ...buildNSFWFilters({ req, res }),
 
     displayOnlyForFollower,
-    nsfw: buildNSFWFilter(res, query.nsfw),
     accountId: account.id,
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
     countVideos
@@ -254,8 +273,8 @@ async function listAccountRatings (req: express.Request, res: express.Response) 
 async function listAccountFollowers (req: express.Request, res: express.Response) {
   const account = res.locals.account
 
-  const channels = await VideoChannelModel.listAllByAccount(account.id)
-  const actorIds = [ account.actorId ].concat(channels.map(c => c.actorId))
+  const channels = await VideoChannelModel.listAllOwnedByAccount(account.id)
+  const actorIds = [ account.Actor.id ].concat(channels.map(c => c.Actor.id))
 
   const resultList = await ActorFollowModel.listFollowersForApi({
     actorIds,

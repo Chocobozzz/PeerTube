@@ -1,15 +1,13 @@
+import { ActorImageType } from '@peertube/peertube-models'
+import { MUserAccountId } from '@server/types/models/index.js'
 import { Sequelize } from 'sequelize'
 import validator from 'validator'
-import { MUserAccountId } from '@server/types/models/index.js'
-import { ActorImageType } from '@peertube/peertube-models'
 import { AbstractRunQuery } from '../../../../shared/abstract-run-query.js'
 import { createSafeIn } from '../../../../shared/index.js'
 import { VideoTableAttributes } from './video-table-attributes.js'
 
 /**
- *
  * Abstract builder to create SQL query and fetch video models
- *
  */
 
 export class AbstractVideoQueryBuilder extends AbstractRunQuery {
@@ -40,7 +38,7 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
 
   protected includeChannels () {
     this.addJoin('INNER JOIN "videoChannel" AS "VideoChannel" ON "video"."channelId" = "VideoChannel"."id"')
-    this.addJoin('INNER JOIN "actor" AS "VideoChannel->Actor" ON "VideoChannel"."actorId" = "VideoChannel->Actor"."id"')
+    this.addJoin('INNER JOIN "actor" AS "VideoChannel->Actor" ON "VideoChannel"."id" = "VideoChannel->Actor"."videoChannelId"')
 
     this.addJoin(
       'LEFT OUTER JOIN "server" AS "VideoChannel->Actor->Server" ON "VideoChannel->Actor"."serverId" = "VideoChannel->Actor->Server"."id"'
@@ -65,7 +63,7 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
   protected includeAccounts () {
     this.addJoin('INNER JOIN "account" AS "VideoChannel->Account" ON "VideoChannel"."accountId" = "VideoChannel->Account"."id"')
     this.addJoin(
-      'INNER JOIN "actor" AS "VideoChannel->Account->Actor" ON "VideoChannel->Account"."actorId" = "VideoChannel->Account->Actor"."id"'
+      'INNER JOIN "actor" AS "VideoChannel->Account->Actor" ON "VideoChannel->Account"."id" = "VideoChannel->Account->Actor"."accountId"'
     )
 
     this.addJoin(
@@ -75,7 +73,7 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
 
     this.addJoin(
       'LEFT OUTER JOIN "actorImage" AS "VideoChannel->Account->Actor->Avatars" ' +
-        'ON "VideoChannel->Account"."actorId"= "VideoChannel->Account->Actor->Avatars"."actorId" ' +
+        'ON "VideoChannel->Account->Actor"."id" = "VideoChannel->Account->Actor->Avatars"."actorId" ' +
         `AND "VideoChannel->Account->Actor->Avatars"."type" = ${ActorImageType.AVATAR}`
     )
 
@@ -173,8 +171,8 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
     this.addJoin(
       'LEFT OUTER JOIN (' +
         '"videoTag" AS "Tags->VideoTagModel" INNER JOIN "tag" AS "Tags" ON "Tags"."id" = "Tags->VideoTagModel"."tagId"' +
-      ') ' +
-      'ON "video"."id" = "Tags->VideoTagModel"."videoId"'
+        ') ' +
+        'ON "video"."id" = "Tags->VideoTagModel"."videoId"'
     )
 
     this.attributes = {
@@ -247,6 +245,19 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
     }
   }
 
+  protected includeLiveSchedules () {
+    this.addJoin(
+      'LEFT OUTER JOIN "videoLiveSchedule" AS "VideoLive->VideoLiveSchedules" ' +
+        'ON "VideoLive->VideoLiveSchedules"."liveVideoId" = "VideoLive"."id"'
+    )
+
+    this.attributes = {
+      ...this.attributes,
+
+      ...this.buildAttributesObject('VideoLive->VideoLiveSchedules', this.tables.getLiveScheduleAttributes())
+    }
+  }
+
   protected includeVideoSource () {
     this.addJoin(
       'LEFT OUTER JOIN "videoSource" AS "VideoSource" ON "video"."id" = "VideoSource"."videoId"'
@@ -259,12 +270,30 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
     }
   }
 
+  protected includeAutomaticTags (autoTagOfAccountId: number) {
+    this.addJoin(
+      'LEFT JOIN (' +
+        '"videoAutomaticTag" AS "VideoAutomaticTags" INNER JOIN "automaticTag" AS "VideoAutomaticTags->AutomaticTag" ' +
+        'ON "VideoAutomaticTags->AutomaticTag"."id" = "VideoAutomaticTags"."automaticTagId" ' +
+        ') ON "video"."id" = "VideoAutomaticTags"."videoId" AND "VideoAutomaticTags"."accountId" = :autoTagOfAccountId'
+    )
+
+    this.replacements.autoTagOfAccountId = autoTagOfAccountId
+
+    this.attributes = {
+      ...this.attributes,
+
+      ...this.buildAttributesObject('VideoAutomaticTags', this.tables.getVideoAutoTagAttributes()),
+      ...this.buildAttributesObject('VideoAutomaticTags->AutomaticTag', this.tables.getAutoTagAttributes())
+    }
+  }
+
   protected includeTrackers () {
     this.addJoin(
       'LEFT OUTER JOIN (' +
         '"videoTracker" AS "Trackers->VideoTrackerModel" ' +
-          'INNER JOIN "tracker" AS "Trackers" ON "Trackers"."id" = "Trackers->VideoTrackerModel"."trackerId"' +
-      ') ON "video"."id" = "Trackers->VideoTrackerModel"."videoId"'
+        'INNER JOIN "tracker" AS "Trackers" ON "Trackers"."id" = "Trackers->VideoTrackerModel"."trackerId"' +
+        ') ON "video"."id" = "Trackers->VideoTrackerModel"."videoId"'
     )
 
     this.attributes = {
@@ -272,19 +301,6 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
 
       ...this.buildAttributesObject('Trackers', this.tables.getTrackerAttributes()),
       ...this.buildAttributesObject('Trackers->VideoTrackerModel', this.tables.getVideoTrackerAttributes())
-    }
-  }
-
-  protected includeWebVideoRedundancies () {
-    this.addJoin(
-      'LEFT OUTER JOIN "videoRedundancy" AS "VideoFiles->RedundancyVideos" ON ' +
-        '"VideoFiles"."id" = "VideoFiles->RedundancyVideos"."videoFileId"'
-    )
-
-    this.attributes = {
-      ...this.attributes,
-
-      ...this.buildAttributesObject('VideoFiles->RedundancyVideos', this.tables.getRedundancyAttributes())
     }
   }
 

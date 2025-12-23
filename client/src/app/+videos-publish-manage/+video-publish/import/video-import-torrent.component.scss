@@ -1,0 +1,18 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.first-step-block {
+  .torrent-or-magnet {
+    @include divider($color: pvar(--secondary-icon-color), $background: pvar(--bg-secondary-400));
+
+    &[data-content] {
+      margin: 1.5rem 0;
+    }
+  }
+
+  .form-group-magnet-uri {
+    margin-bottom: 40px;
+  }
+}
+
+

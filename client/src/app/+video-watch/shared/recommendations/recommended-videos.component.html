@@ -1,0 +1,36 @@
+<div class="other-videos" [ngClass]="{ 'display-as-row': displayAsRow() }">
+  @if (videos.length !== 0) {
+    <div class="title-page-container">
+      <h2 i18n>Other videos</h2>
+
+      @if (!playlist()) {
+        <div
+          class="title-page-autoplay"
+          [ngbTooltip]="autoPlayNextVideoTooltip" placement="bottom-right auto"
+          >
+          <span i18n>AUTOPLAY</span>
+          <my-input-switch
+            i18n-label label="Toggle autoplay next video"
+            class="small" inputName="autoplay-next-video"
+            [(ngModel)]="autoPlayNextVideo" (ngModelChange)="switchAutoPlayNextVideo()"
+          ></my-input-switch>
+        </div>
+      }
+    </div>
+
+    @for (video of videos; track video; let i = $index; let length = $count) {
+      @if (!playlist() && i === 0 && length !== 0 && autoPlayNextVideo) {
+        <span i18n class="title-page-next-video-label">Next video to be played</span>
+      }
+      <my-video-miniature
+        [displayOptions]="displayOptions" [video]="video" [user]="user" [displayAsRow]="displayAsRow()"
+        (videoBlocked)="onVideoRemoved()" (videoRemoved)="onVideoRemoved()" (videoAccountMuted)="onVideoRemoved()"
+        actorImageSize="32"
+        >
+      </my-video-miniature>
+      @if (!playlist() && i === 0 && length > 1 && autoPlayNextVideo) {
+        <hr />
+      }
+    }
+  }
+</div>

@@ -26,6 +26,7 @@ storage:
   cache: 'test4/cache/'
   plugins: 'test4/plugins/'
   well_known: 'test4/well-known/'
+  uploads: 'test4/uploads/'
   client_overrides: 'test4/client-overrides/'
 
 admin:

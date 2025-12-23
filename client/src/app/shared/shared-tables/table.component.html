@@ -1,0 +1,230 @@
+<p-table
+  [value]="data"
+  [paginator]="totalRecords > 0"
+  [totalRecords]="totalRecords"
+  [rows]="pagination.count"
+  [first]="pagination.start"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  [sortField]="sort.field"
+  [sortOrder]="sort.order"
+  [dataKey]="dataKey()"
+  resizableColumns="false"
+  [(selection)]="selectedRows"
+  lazy="true"
+  (onLazyLoad)="onLoadLazy($event)"
+  [currentPageReportTemplate]="getPaginationTemplate()"
+  lazyLoadOnInit="false"
+  selectionPageOnly="true"
+  showCurrentPageReport="true"
+  [expandedRowKeys]="expandedRows"
+  (onRowExpand)="rowExpand.emit($event)"
+  [ngClass]="{ loading: loading, 'sticky-table': actionCell }"
+  (onRowReorder)="rowReorder.emit($event)"
+  >
+  <ng-template #caption>
+    <div class="caption">
+      <div class="left-buttons">
+        @if (isInSelectionMode()) {
+          <my-action-dropdown i18n-label label="Batch actions" theme="primary" [actions]="bulkActions()" [entry]="selectedRows"></my-action-dropdown>
+        } @else {
+          @if (totalTitle) {
+            <strong [ngClass]="{ 'opacity-0': loading }">
+              <ng-template *ngTemplateOutlet="totalTitle; context: { $implicit: totalRecords }"></ng-template>
+            </strong>
+          }
+
+          @if (captionLeft) {
+            <div class="ms-auto right-block">
+              <ng-template *ngTemplateOutlet="captionLeft"></ng-template>
+            </div>
+          }
+        }
+      </div>
+
+      @if (captionRight) {
+        <div class="ms-auto right-block">
+          <ng-template *ngTemplateOutlet="captionRight"></ng-template>
+        </div>
+      }
+    </div>
+  </ng-template>
+
+  <ng-template #sorticon let-sortOrder>
+    @if (sortOrder === 1) {
+      <my-button class="ms-2" small="true" active="true" rounded="true" theme="tertiary" icon="chevron-up"></my-button>
+    } @else if (sortOrder === -1) {
+      <my-button class="ms-2" small="true" active="true" rounded="true" theme="tertiary" icon="chevron-down"></my-button>
+    } @else if (sortOrder === 0) {
+      <my-button class="ms-2" small="true" rounded="true" theme="tertiary" icon="chevron-down"></my-button>
+    }
+  </ng-template>
+
+  <ng-template #paginatorright>
+    {{ paginatorText() }}
+  </ng-template>
+
+  <ng-template #header>
+    <tr>
+      @if (hasBulkActions()) {
+        <th scope="col" width="25px" class="checkbox-cell">
+          <p-tableHeaderCheckbox ariaLabel="Select all rows" i18n-ariaLabel></p-tableHeaderCheckbox>
+        </th>
+      }
+
+      @if (reorderableRows()) {
+        <th scope="col" width="25px"></th>
+      }
+
+      @if (expandedRow) {
+        <th>
+          <div class="visually-hidden">{{ expandedIconTooltip() }}</div>
+        </th>
+      }
+
+      @for (column of columns; track column.id) {
+        @if (isColumnDisplayed(column.id)) {
+          @if (column.sortable) {
+            <th scope="col" [ngbTooltip]="sortTooltip" container="body" [pSortableColumn]="column.sortKey" [ngClass]="column.class">
+              {{ column.label }}
+
+              @if (column.labelSmall) {
+                <small>{{ column.labelSmall }}</small>
+              }
+
+              <p-sortIcon [field]="column.sortKey"></p-sortIcon>
+            </th>
+          } @else {
+            <th scope="col" [ngClass]="column.class">
+              {{ column.label }}
+
+              @if (column.labelSmall) {
+                <small>{{ column.labelSmall }}</small>
+              }
+            </th>
+          }
+        }
+      }
+
+      @if (columnConfig() || actionCell) {
+        <th scope="col" class="action-head" [ngClass]="{ 'has-column-config': columnConfig(), 'has-action': actionCell }">
+          <div class="d-flex align-items-center justify-content-end gap-2">
+            @if (actionCell) {
+              <span i18n>Actions</span>
+            }
+
+            @if (columnConfig()) {
+              <span class="column-toggle">
+                <div ngbDropdown placement="bottom-left auto" container="body" autoClose="outside" #columnsDropdown="ngbDropdown">
+                  <my-button
+                    theme="tertiary"
+                    icon="columns"
+                    ngbDropdownToggle
+                    i18n-title
+                    title="Open table configuration"
+                    [show]="columnsDropdown.isOpen()"
+                  ></my-button>
+
+                  <div ngbDropdownMenu class="p-3">
+                    <div class="form-group">
+                      <div class="muted small mb-2" i18n>Column displayed:</div>
+
+                      @for (column of columns; track column.id) {
+                        <div class="ms-1 mb-1">
+                          <my-peertube-checkbox
+                            [inputName]="'column-' + column.id"
+                            [(ngModel)]="column.selected"
+                            i18n-labelText
+                            [labelText]="column.label"
+                            (ngModelChange)="saveSelectedColumns()"
+                          ></my-peertube-checkbox>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </span>
+            }
+          </div>
+        </th>
+      }
+    </tr>
+  </ng-template>
+
+  <ng-template #body let-item let-expanded="expanded" let-index="rowIndex">
+    <tr [pSelectableRow]="item" [pReorderableRow]="index" [pSelectableRowDisabled]="!reorderableRows()">
+      @if (reorderableRows()) {
+        <td>
+          @if (inInTouchScreen()) {
+            @let position = index + pagination.start;
+
+            @if (index !== 0) {
+              <my-button theme="tertiary" icon="arrow-down" class="rotate-180" i18n-title title="Move up" (click)="rowReorder.emit({ dragIndex: position, dropIndex: position - 1 })"></my-button>
+            }
+
+            @if (index !== totalRecords - 1) {
+              <my-button theme="tertiary" icon="arrow-down" i18n-title title="Move down" (click)="rowReorder.emit({ dragIndex: position, dropIndex: position + 1 })"></my-button>
+            }
+          } @else {
+            <button class="button-unstyle" [title]="dragHandleTitle()" pReorderableRowHandle>
+              <my-global-icon iconName="grip-horizontal"></my-global-icon>
+            </button>
+          }
+        </td>
+      }
+
+      @if (hasBulkActions()) {
+        <td class="checkbox-cell">
+          <p-tableCheckbox [value]="item" ariaLabel="Select this row" i18n-ariaLabel></p-tableCheckbox>
+        </td>
+      }
+
+      @if (expandedRow) {
+        <td class="expand-cell">
+          @if (hasExpandedRow()(item)) {
+            <my-table-expander-icon
+              [pRowToggler]="item"
+              [tooltip]="expandedIconTooltip()"
+              [expanded]="expanded"
+            ></my-table-expander-icon>
+          }
+        </td>
+      }
+
+      <ng-template *ngTemplateOutlet="tableCells; context: { $implicit: item }"></ng-template>
+
+      @if (columnConfig() || actionCell) {
+        <td class="action-cell" [ngClass]="{ 'has-column-config': columnConfig(), 'has-action': actionCell }">
+          <div class="d-flex justify-content-end gap-2">
+            <ng-template *ngTemplateOutlet="actionCell; context: { $implicit: item }"></ng-template>
+          </div>
+        </td>
+      }
+    </tr>
+  </ng-template>
+
+  <ng-template #emptymessage>
+    @if (loaded && !loading) {
+      <tr>
+        <td myAutoColspan>
+          <div class="no-results">
+            @if (noResults) {
+              <ng-template *ngTemplateOutlet="noResults; context: { $implicit: search }"></ng-template>
+            } @else {
+              <ng-container i18n>No results found.</ng-container>
+            }
+          </div>
+        </td>
+      </tr>
+    }
+  </ng-template>
+
+  @if (expandedRow) {
+    <ng-template #expandedrow let-item>
+      <tr>
+        <td class="expand-cell" myAutoColspan>
+          <ng-template *ngTemplateOutlet="expandedRow; context: { $implicit: item }"></ng-template>
+        </td>
+      </tr>
+    </ng-template>
+  }
+</p-table>

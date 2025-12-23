@@ -5,7 +5,7 @@ import ffmpeg, { FfmpegCommand } from 'fluent-ffmpeg'
 import truncate from 'lodash-es/truncate.js'
 import { PeerTubeServer } from '../server/server.js'
 
-function sendRTMPStream (options: {
+export function sendRTMPStream (options: {
   rtmpBaseUrl: string
   streamKey: string
   fixtureName?: string // default video_short.mp4
@@ -41,7 +41,6 @@ function sendRTMPStream (options: {
 
   if (process.env.DEBUG) {
     command.on('stderr', data => console.log(data))
-    command.on('stdout', data => console.log(data))
   }
 
   command.run()
@@ -49,7 +48,7 @@ function sendRTMPStream (options: {
   return command
 }
 
-function waitFfmpegUntilError (command: FfmpegCommand, successAfterMS = 10000) {
+export function waitFfmpegUntilError (command: FfmpegCommand, successAfterMS = 10000) {
   return new Promise<void>((res, rej) => {
     command.on('error', err => {
       return rej(err)
@@ -61,7 +60,7 @@ function waitFfmpegUntilError (command: FfmpegCommand, successAfterMS = 10000) {
   })
 }
 
-async function testFfmpegStreamError (command: FfmpegCommand, shouldHaveError: boolean) {
+export async function testFfmpegStreamError (command: FfmpegCommand, shouldHaveError: boolean) {
   let error: Error
 
   try {
@@ -76,31 +75,39 @@ async function testFfmpegStreamError (command: FfmpegCommand, shouldHaveError: b
   if (!shouldHaveError && error) throw error
 }
 
-async function stopFfmpeg (command: FfmpegCommand) {
+export async function stopFfmpeg (command: FfmpegCommand) {
   command.kill('SIGINT')
 
   await wait(500)
 }
 
-async function waitUntilLivePublishedOnAllServers (servers: PeerTubeServer[], videoId: string) {
+export async function waitUntilLivePublishedOnAllServers (servers: PeerTubeServer[], videoId: string) {
   for (const server of servers) {
     await server.live.waitUntilPublished({ videoId })
   }
 }
 
-async function waitUntilLiveWaitingOnAllServers (servers: PeerTubeServer[], videoId: string) {
+export async function waitUntilLiveWaitingOnAllServers (servers: PeerTubeServer[], videoId: string) {
   for (const server of servers) {
     await server.live.waitUntilWaiting({ videoId })
   }
 }
 
-async function waitUntilLiveReplacedByReplayOnAllServers (servers: PeerTubeServer[], videoId: string) {
+export async function waitUntilLiveReplacedByReplayOnAllServers (servers: PeerTubeServer[], videoId: string) {
   for (const server of servers) {
     await server.live.waitUntilReplacedByReplay({ videoId })
   }
 }
 
-async function findExternalSavedVideo (server: PeerTubeServer, liveDetails: VideoDetails) {
+export async function findExternalSavedVideo (server: PeerTubeServer, liveVideoUUID: string) {
+  let liveDetails: VideoDetails
+
+  try {
+    liveDetails = await server.videos.getWithToken({ id: liveVideoUUID })
+  } catch {
+    return undefined
+  }
+
   const include = VideoInclude.BLACKLISTED
   const privacyOneOf = [ VideoPrivacy.INTERNAL, VideoPrivacy.PRIVATE, VideoPrivacy.PUBLIC, VideoPrivacy.UNLISTED ]
 
@@ -113,17 +120,4 @@ async function findExternalSavedVideo (server: PeerTubeServer, liveDetails: Vide
   const toFind = truncatedVideoName + videoNameSuffix
 
   return data.find(v => v.name === toFind)
-}
-
-export {
-  sendRTMPStream,
-  waitFfmpegUntilError,
-  testFfmpegStreamError,
-  stopFfmpeg,
-
-  waitUntilLivePublishedOnAllServers,
-  waitUntilLiveReplacedByReplayOnAllServers,
-  waitUntilLiveWaitingOnAllServers,
-
-  findExternalSavedVideo
 }

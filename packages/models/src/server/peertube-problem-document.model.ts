@@ -22,8 +22,6 @@ export interface PeerTubeProblemDocument extends PeerTubeProblemDocumentData {
   title: string
 
   detail: string
-  // FIXME: Compat PeerTube <= 3.2
-  error: string
 
   status: HttpStatusCodeType
 

@@ -1,0 +1,17 @@
+<ng-template #content>
+  @if (icon()) {
+    <my-global-icon [iconName]="icon()"></my-global-icon>
+  }
+
+  <ng-content></ng-content>
+</ng-template>
+
+@if (href()) {
+  <a [href]="href()" [target]="target()" [attr.title]="title()" [ariaLabel]="ariaLabel()" [tabindex]="tabindex()" [ngClass]="builtClasses">
+    <ng-template *ngTemplateOutlet="content"></ng-template>
+  </a>
+} @else {
+  <a [routerLink]="internalLink()" [attr.title]="title()" [ariaLabel]="ariaLabel()" [tabindex]="tabindex()" [ngClass]="builtClasses">
+    <ng-template *ngTemplateOutlet="content"></ng-template>
+  </a>
+}

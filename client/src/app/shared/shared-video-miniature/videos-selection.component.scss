@@ -2,25 +2,16 @@
 @use '_mixins' as *;
 
 .action-selection-mode {
-  display: flex;
-  justify-content: flex-end;
-  flex-grow: 1;
-}
-
-.action-selection-mode-child {
   position: fixed;
-  display: flex;
+  bottom: 1rem;
+
+  @include right(#{pvar(--x-margin-content)});
 
   .action-button {
-    @include margin-left(55px);
-
     display: block;
-  }
-}
 
-.action-button-cancel-selection {
-  @include peertube-button;
-  @include grey-button;
+    @include margin-left(55px);
+  }
 }
 
 .video {
@@ -31,28 +22,29 @@
   }
 
   .checkbox-container {
-    @include margin-right(20px);
-    @include margin-left(12px);
-
     display: flex;
     align-items: center;
+
+    @include margin-right(20px);
+    @include margin-left(12px);
   }
 
   my-video-miniature {
     flex-grow: 1;
+    max-width: 100%;
   }
 }
 
-@include on-mobile-main-col {
+@include on-small-main-col {
   .video {
     flex-wrap: wrap;
   }
 
   .checkbox-container {
-    display: none;
+    display: none !important;
   }
 
   .action-selection-mode {
-    display: none; // disable for small screens
+    display: none !important; // disable for small screens
   }
 }

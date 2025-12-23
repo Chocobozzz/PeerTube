@@ -1,21 +1,22 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "form-mixins" as *;
 
 .select-job-state {
+  display: block;
   min-width: 120px;
-}
 
-.select-job-type {
-  min-width: 240px;
-
-  ::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items {
-    @media screen and (min-height: 500px) {
-      max-height: calc(90vh - 250px);
-    }
+  ::ng-deep .pt-badge {
+    font-size: 13px;
   }
 }
 
-@media screen and (min-width: $primeng-breakpoint) {
+.select-job-type {
+  display: block;
+  min-width: 240px;
+}
+
+@media screen and (min-width: $medium-view) {
   .job-id {
     max-width: 30vw !important;
   }
@@ -31,33 +32,10 @@
   }
 }
 
-.admin-sub-header {
-  flex-direction: row !important;
-  justify-content: flex-end;
-
-  .select-filter-block {
-    &:not(:last-child) {
-      @include margin-right(10px);
-    }
-
-    label {
-      margin-bottom: 2px;
-    }
-
-    .peertube-select-container {
-      @include peertube-select-container(auto);
-    }
-  }
-
-  .button-filter-block {
-    align-self: flex-end;
-  }
-}
-
 pre {
   font-size: 11px;
 }
 
 .job-error {
-  color: #ff0000;
+  color: pvar(--red);
 }

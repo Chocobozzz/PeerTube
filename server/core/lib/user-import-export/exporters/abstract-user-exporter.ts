@@ -8,7 +8,7 @@ export type ExportResult <T> = {
 
   staticFiles: {
     archivePath: string
-    createrReadStream: () => Promise<Readable>
+    readStreamFactory: () => Promise<Readable>
   }[]
 
   activityPub?: ActivityPubActor | ActivityPubOrderedCollection<string>

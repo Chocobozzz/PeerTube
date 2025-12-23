@@ -1,13 +1,7 @@
-@use 'sass:color';
-
-@use '_variables' as *;
-@use '_mixins' as *;
-
-@use 'bootstrap/scss/functions' as *;
-
-tr.banned > td {
-  background-color: color.adjust($color: $red, $lightness: 40%) !important;
-}
+@use "sass:color";
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "bootstrap/scss/functions" as *;
 
 .banned-info {
   font-style: italic;
@@ -21,28 +15,7 @@ tr.banned > td {
   @include margin-left(15px);
 }
 
-p-tableCheckbox {
-  position: relative;
-  top: -2.5px;
-}
-
-my-global-icon {
-  width: 18px;
-}
-
-.progress {
-  @include progressbar($small: true);
-
-  width: auto;
-  max-width: 100%;
-}
-
-@media screen and (max-width: $primeng-breakpoint) {
-  .progress {
-    width: 100%;
-  }
-
-  .empty-cell {
-    padding: 0;
-  }
+my-progress-bar {
+  display: block;
+  min-width: 120px;
 }

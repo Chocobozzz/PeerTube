@@ -1,12 +1,14 @@
+import { UserNotificationType, UserRight } from '@peertube/peertube-models'
+import { t } from '@server/helpers/i18n.js'
 import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { UserModel } from '@server/models/user/user.js'
+import { adminUsersListUrl } from '@server/lib/client-urls.js'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
+import { UserModel } from '@server/models/user/user.js'
 import { MUserDefault, MUserWithNotificationSetting, UserNotificationModelForApi } from '@server/types/models/index.js'
-import { UserNotificationType, UserRight } from '@peertube/peertube-models'
 import { AbstractNotification } from '../common/abstract-notification.js'
 
-export class DirectRegistrationForModerators extends AbstractNotification <MUserDefault> {
+export class DirectRegistrationForModerators extends AbstractNotification<MUserDefault> {
   private moderators: MUserDefault[]
 
   async prepare () {
@@ -36,13 +38,22 @@ export class DirectRegistrationForModerators extends AbstractNotification <MUser
     return notification
   }
 
-  createEmail (to: string) {
+  createEmail (user: MUserWithNotificationSetting) {
+    const to = { email: user.email, language: user.getLanguage() }
+
     return {
       template: 'user-registered',
       to,
-      subject: `A new user registered on ${CONFIG.INSTANCE.NAME}: ${this.payload.username}`,
+      subject: t('A new user registered on {instanceName}', to.language, { instanceName: CONFIG.INSTANCE.NAME }),
       locals: {
-        user: this.payload
+        userUsername: this.payload.username,
+        userEmail: this.payload.email,
+        userPendingEmail: this.payload.pendingEmail,
+        accountUrl: this.payload.Account.getClientUrl(),
+        action: {
+          type: t('View users', to.language),
+          url: adminUsersListUrl
+        }
       }
     }
   }

@@ -22,12 +22,12 @@ fi
 
 if [ -x "$(command -v awk)" ] && [ -x "$(command -v sed)" ]; then
     REMAINING=$(df -k $PEERTUBE_PATH | awk '{ print $4}' | sed -n 2p)
-    ONE_GB=$((1024 * 1024))
+    THREE_GB=$((3 * 1024 * 1024))
 
-    if [ "$REMAINING" -lt "$ONE_GB" ]; then
+    if [ "$REMAINING" -lt "$THREE_GB" ]; then
       echo "Error - not enough free space for upgrading"
       echo ""
-      echo "Make sure you have at least 1 GB of free space in $PEERTUBE_PATH"
+      echo "Make sure you have at least 3 GB of free space in $PEERTUBE_PATH"
       exit 1
     fi
 fi
@@ -78,8 +78,7 @@ RELEASE_PAGE_URL="https://github.com/Chocobozzz/PeerTube/releases/tag/${VERSION}
 LATEST_VERSION_DIRECTORY="$PEERTUBE_PATH/versions/peertube-${VERSION}"
 cd "$LATEST_VERSION_DIRECTORY"
 
-# Launch yarn to check if we have all required dependencies
-NOCLIENT=1 yarn install --production --pure-lockfile
+npm run install-node-dependencies -- --production
 
 OLD_VERSION_DIRECTORY=$(readlink "$PEERTUBE_PATH/peertube-latest")
 

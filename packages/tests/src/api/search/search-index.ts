@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
 import {
   BooleanBothQuery,
+  NSFWFlag,
   VideoChannelsSearchQuery,
   VideoPlaylistPrivacy,
   VideoPlaylistsSearchQuery,
@@ -16,6 +16,7 @@ import {
   SearchCommand,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
+import { expect } from 'chai'
 
 describe('Test index search', function () {
   const localVideoName = 'local video' + new Date().toISOString()
@@ -36,7 +37,6 @@ describe('Test index search', function () {
   })
 
   describe('Default search', async function () {
-
     it('Should make a local videos search by default', async function () {
       await server.config.updateExistingConfig({
         newConfig: {
@@ -88,7 +88,6 @@ describe('Test index search', function () {
   })
 
   describe('Videos search', async function () {
-
     async function check (search: VideosSearchQuery, exists = true) {
       const body = await command.advancedVideoSearch({ search })
 
@@ -149,6 +148,10 @@ describe('Test index search', function () {
       await check(baseSearch)
     })
 
+    it('Should sort results', async function () {
+      await check({ ...baseSearch, sort: '-hot' }, true)
+    })
+
     it('Should search by start date', async function () {
       const search = { ...baseSearch, startDate: '2018-10-01T10:54:46.396Z' }
       await check(search, false)
@@ -179,6 +182,29 @@ describe('Test index search', function () {
         const search = { ...baseSearch, nsfw: 'both' as BooleanBothQuery }
         await check(search, true)
       }
+    })
+
+    it('Should search by nsfw flag', async function () {
+      const checkNSFW = async (search: VideosSearchQuery, exists = true) => {
+        const body = await command.advancedVideoSearch({ search: { search: 'NSFW', host: 'peertube2.cpy.re', ...search } })
+        const video = body.data.find(v => v.name === 'NSFW test')
+
+        if (exists === false) {
+          expect(video).to.not.exist
+          return
+        }
+
+        expect(video).to.exist
+        expect(video.nsfw).to.be.true
+        expect(video.nsfwFlags).to.equal(NSFWFlag.VIOLENT)
+        expect(video.nsfwSummary).to.equal('This video can be violent')
+      }
+
+      await checkNSFW({ nsfw: 'false', nsfwFlagsIncluded: NSFWFlag.VIOLENT }, true)
+      await checkNSFW({ nsfw: 'false', nsfwFlagsIncluded: NSFWFlag.VIOLENT | NSFWFlag.EXPLICIT_SEX }, true)
+      await checkNSFW({ nsfw: 'true', nsfwFlagsExcluded: NSFWFlag.VIOLENT }, false)
+      await checkNSFW({ nsfw: 'both', nsfwFlagsExcluded: NSFWFlag.VIOLENT | NSFWFlag.EXPLICIT_SEX }, false)
+      await checkNSFW({ nsfw: 'false', nsfwFlagsIncluded: NSFWFlag.EXPLICIT_SEX }, false)
     })
 
     it('Should search by host', async function () {
@@ -279,7 +305,6 @@ describe('Test index search', function () {
   })
 
   describe('Channels search', async function () {
-
     async function check (search: VideoChannelsSearchQuery, exists = true) {
       const body = await command.advancedChannelSearch({ search })
 
@@ -335,7 +360,6 @@ describe('Test index search', function () {
   })
 
   describe('Playlists search', async function () {
-
     async function check (search: VideoPlaylistsSearchQuery, exists = true) {
       const body = await command.advancedPlaylistSearch({ search })
 
@@ -352,7 +376,7 @@ describe('Test index search', function () {
 
       expect(videoPlaylist.url).to.equal('https://peertube2.cpy.re/videos/watch/playlist/73804a40-da9a-40c2-b1eb-2c6d9eec8f0a')
       expect(videoPlaylist.thumbnailUrl).to.exist
-      expect(videoPlaylist.embedUrl).to.equal('https://peertube2.cpy.re/video-playlists/embed/73804a40-da9a-40c2-b1eb-2c6d9eec8f0a')
+      expect(videoPlaylist.embedUrl).to.equal('https://peertube2.cpy.re/video-playlists/embed/fgei1ws1oa6FCaJ2qZPG29')
 
       expect(videoPlaylist.type.id).to.equal(VideoPlaylistType.REGULAR)
       expect(videoPlaylist.privacy.id).to.equal(VideoPlaylistPrivacy.PUBLIC)

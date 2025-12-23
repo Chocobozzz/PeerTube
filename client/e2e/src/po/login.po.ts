@@ -1,9 +1,7 @@
 import { browserSleep, go, isAndroid } from '../utils'
 
 export class LoginPage {
-
   constructor (private isMobileDevice: boolean) {
-
   }
 
   async login (options: {
@@ -35,19 +33,7 @@ export class LoginPage {
       await submit.click()
     }
 
-    if (this.isMobileDevice) {
-      const menuToggle = $('.top-left-block button')
-
-      await $('h2=Our content selection').waitForDisplayed()
-
-      await menuToggle.click()
-
-      await this.ensureIsLoggedInAs(displayName)
-
-      await menuToggle.click()
-    } else {
-      await this.ensureIsLoggedInAs(displayName)
-    }
+    await this.ensureIsLoggedInAs(displayName)
   }
 
   async getLoginError (username: string, password: string) {
@@ -63,8 +49,12 @@ export class LoginPage {
     return $('.alert-danger').getText()
   }
 
-  async loginAsRootUser () {
-    return this.login({ username: 'root', password: 'test' + this.getSuffix() })
+  loginAsRootUser () {
+    return this.login({ username: 'root', password: this.getRootPassword() })
+  }
+
+  getRootPassword () {
+    return 'test' + this.getSuffix()
   }
 
   loginOnPeerTube2 () {
@@ -76,7 +66,7 @@ export class LoginPage {
   }
 
   async logout () {
-    const loggedInDropdown = $('.logged-in-more .logged-in-info')
+    const loggedInDropdown = $('.logged-in-container .dropdown-toggle')
 
     await loggedInDropdown.waitForClickable()
     await loggedInDropdown.click()
@@ -87,18 +77,16 @@ export class LoginPage {
     await logout.click()
 
     await browser.waitUntil(() => {
-      return $$('.login-buttons-block, my-error-page a[href="/login"]').some(e => e.isDisplayed())
+      return $$('my-login-link, my-error-page a[href="/login"]').some(e => e.isDisplayed())
     })
   }
 
   async ensureIsLoggedInAs (displayName: string) {
-    await this.getLoggedInInfoElem().waitForExist()
-
-    await expect(this.getLoggedInInfoElem()).toHaveText(displayName)
+    await this.getLoggedInInfoElem(displayName).waitForExist()
   }
 
-  private getLoggedInInfoElem () {
-    return $('.logged-in-display-name')
+  private getLoggedInInfoElem (displayName: string) {
+    return $('.logged-in-info').$('.display-name*=' + displayName)
   }
 
   private getSuffix () {

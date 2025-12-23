@@ -1,13 +1,10 @@
-import { Component, forwardRef, Input, OnInit } from '@angular/core'
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms'
+import { booleanAttribute, Component, forwardRef, input, model, numberAttribute, output } from '@angular/core'
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
+import { MultiSelectModule } from 'primeng/multiselect'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
-import { NgSelectModule } from '@ng-select/ng-select'
-
-export type ItemSelectCheckboxValue = { id?: string, group?: string } | string
 
 @Component({
   selector: 'my-select-checkbox',
-  styleUrls: [ './select-shared.component.scss', 'select-checkbox.component.scss' ],
   templateUrl: './select-checkbox.component.html',
   providers: [
     {
@@ -16,40 +13,36 @@ export type ItemSelectCheckboxValue = { id?: string, group?: string } | string
       multi: true
     }
   ],
-  standalone: true,
-  imports: [ NgSelectModule, FormsModule ]
+  imports: [ MultiSelectModule, FormsModule ]
 })
-export class SelectCheckboxComponent implements OnInit, ControlValueAccessor {
-  @Input() availableItems: SelectOptionsItem[] = []
-  @Input() selectedItems: ItemSelectCheckboxValue[] = []
-  @Input() selectableGroup: boolean
-  @Input() selectableGroupAsModel: boolean
-  @Input() placeholder: string
+export class SelectCheckboxComponent implements ControlValueAccessor {
+  readonly inputId = input.required<string>()
+
+  readonly availableItems = input<SelectOptionsItem[]>([])
+  readonly selectedItems = model<string[]>([])
+
+  readonly selectableGroup = input<boolean>(undefined)
+  readonly selectableGroupAsModel = input<boolean>(undefined)
+  readonly placeholder = input<string>(undefined)
+
+  readonly selectedItemsLabel = input<string>(undefined)
+
+  readonly virtualScroll = input(false, { transform: booleanAttribute })
+  readonly virtualScrollItemSize = input(33, { transform: numberAttribute })
+
+  readonly showClear = input<boolean, unknown>(undefined, { transform: booleanAttribute })
+  readonly showToggleAll = input<boolean, unknown>(undefined, { transform: booleanAttribute })
+
+  readonly panelHide = output()
 
   disabled = false
 
-  ngOnInit () {
-    if (!this.placeholder) this.placeholder = $localize`Add a new option`
+  propagateChange = (_: any) => {
+    // empty
   }
 
-  propagateChange = (_: any) => { /* empty */ }
-
-  writeValue (items: ItemSelectCheckboxValue[]) {
-    if (Array.isArray(items)) {
-      this.selectedItems = items.map(i => {
-        if (typeof i === 'string' || typeof i === 'number') {
-          return i + ''
-        }
-
-        if (i.group) {
-          return { group: i.group }
-        }
-
-        return { id: i.id + '' }
-      })
-    } else {
-      this.selectedItems = items
-    }
+  writeValue (items: string[]) {
+    this.selectedItems.set(items)
   }
 
   registerOnChange (fn: (_: any) => void) {
@@ -61,26 +54,10 @@ export class SelectCheckboxComponent implements OnInit, ControlValueAccessor {
   }
 
   onModelChange () {
-    this.propagateChange(this.selectedItems)
+    this.propagateChange(this.selectedItems())
   }
 
   setDisabledState (isDisabled: boolean) {
     this.disabled = isDisabled
-  }
-
-  compareFn (item: SelectOptionsItem, selected: ItemSelectCheckboxValue) {
-    if (typeof selected === 'string' || typeof selected === 'number') {
-      return item.id === selected
-    }
-
-    if (this.selectableGroup && item.group && selected.group) {
-      return item.group === selected.group
-    }
-
-    if (selected.id && item.id) {
-      return item.id === selected.id
-    }
-
-    return false
   }
 }

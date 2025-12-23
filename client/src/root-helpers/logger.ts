@@ -71,15 +71,11 @@ class Logger {
       console.error('Cannot set tokens to client log sender.', { err })
     }
 
-    try {
-      fetch(serverUrl + '/api/v1/server/logs/client', {
-        headers,
-        method: 'POST',
-        body: JSON.stringify(payload)
-      })
-    } catch (err) {
-      console.error('Cannot send client warn/error to server.', err)
-    }
+    fetch(serverUrl + '/api/v1/server/logs/client', {
+      headers,
+      method: 'POST',
+      body: JSON.stringify(payload)
+    }).catch(err => console.error('Cannot send client warn/error to server.', err))
   }
 
   private buildServerLogPayload (level: Extract<LoggerLevel, 'warn' | 'error'>, message: LoggerMessage, meta?: LoggerMeta) {

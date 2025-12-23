@@ -1,17 +1,17 @@
-function isToday (d: Date) {
+export function isToday (d: Date) {
   const today = new Date()
 
   return areDatesEqual(d, today)
 }
 
-function isYesterday (d: Date) {
+export function isYesterday (d: Date) {
   const yesterday = new Date()
   yesterday.setDate(yesterday.getDate() - 1)
 
   return areDatesEqual(d, yesterday)
 }
 
-function isThisWeek (d: Date) {
+export function isThisWeek (d: Date) {
   const minDateOfThisWeek = new Date()
   minDateOfThisWeek.setHours(0, 0, 0)
 
@@ -25,19 +25,19 @@ function isThisWeek (d: Date) {
   return d >= minDateOfThisWeek
 }
 
-function isThisMonth (d: Date) {
+export function isThisMonth (d: Date) {
   const thisMonth = new Date().getMonth()
 
   return d.getMonth() === thisMonth
 }
 
-function isLastMonth (d: Date) {
+export function isLastMonth (d: Date) {
   const now = new Date()
 
   return getDaysDifferences(now, d) <= 30
 }
 
-function isLastWeek (d: Date) {
+export function isLastWeek (d: Date) {
   const now = new Date()
 
   return getDaysDifferences(now, d) <= 7
@@ -47,7 +47,7 @@ function isLastWeek (d: Date) {
 
 export const timecodeRegexString = `(\\d+[h:])?(\\d+[m:])?\\d+s?`
 
-function timeToInt (time: number | string) {
+export function timeToInt (time: number | string) {
   if (!time) return 0
   if (typeof time === 'number') return Math.floor(time)
 
@@ -83,7 +83,7 @@ function timeToInt (time: number | string) {
   return result
 }
 
-function secondsToTime (options: {
+export function secondsToTime (options: {
   seconds: number
   format: 'short' | 'full' | 'locale-string' // default 'short'
   symbol?: string
@@ -125,7 +125,7 @@ function secondsToTime (options: {
   else if (minutes >= 1) time += formatNumber(minutes) + minuteSymbol
   else if (format === 'full') time += '00' + minuteSymbol
 
-  seconds %= 60
+  seconds = Math.round(seconds) % 60
   if (seconds >= 1 && seconds < 10 && format === 'full') time += '0' + seconds + secondsSymbol
   else if (seconds >= 1) time += formatNumber(seconds) + secondsSymbol
   else if (format === 'full') time += '00'
@@ -133,19 +133,27 @@ function secondsToTime (options: {
   return time
 }
 
-// ---------------------------------------------------------------------------
-
-export {
-  isYesterday,
-  isThisWeek,
-  isThisMonth,
-  isToday,
-  isLastMonth,
-  isLastWeek,
-  timeToInt,
-  secondsToTime
+export function millisecondsToTime (options: {
+  seconds: number
+  format: 'short' | 'full' | 'locale-string' // default 'short'
+  symbol?: string
+} | number) {
+  return secondsToTime(typeof options === 'number' ? options / 1000 : { ...options, seconds: options.seconds / 1000 })
 }
 
+export function millisecondsToVttTime (inputArg: number) {
+  const input = Math.round(inputArg || 0)
+
+  const hours = String(Math.floor(input / 3600_000)).padStart(2, '0')
+  const minutes = String(Math.floor((input % 3600_000) / 60_000)).padStart(2, '0')
+  const seconds = String(Math.floor(input % 60_000 / 1000)).padStart(2, '0')
+  const ms = String(input % 1000).padStart(3, '0')
+
+  return `${hours}:${minutes}:${seconds}.${ms}`
+}
+
+// ---------------------------------------------------------------------------
+// Private
 // ---------------------------------------------------------------------------
 
 function areDatesEqual (d1: Date, d2: Date) {

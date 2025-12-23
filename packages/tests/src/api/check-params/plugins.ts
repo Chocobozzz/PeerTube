@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { HttpStatusCode, PeerTubePlugin, PluginType } from '@peertube/peertube-models'
 import {
   cleanupTests,
@@ -96,14 +96,14 @@ describe('Test server plugins API validators', function () {
     it('Should fail with invalid paths', async function () {
       const paths = [
         '/plugins/' + pluginName + '/' + npmVersion + '/static/images/../chocobo.png',
-        '/plugins/' + pluginName + '/' + npmVersion + '/client-scripts/../client/common-client-plugin.js',
-        '/themes/' + themeName + '/' + themeVersion + '/static/../images/chocobo.png',
+        '/plugins/' + pluginName + '/' + npmVersion + '/client-scripts/h/o/../client/common-client-plugin.js',
+        '/themes/' + themeName + '/' + themeVersion + '/static/hola/a/../images/chocobo.png',
         '/themes/' + themeName + '/' + themeVersion + '/client-scripts/client/video-watch-client-plugin.js/..',
-        '/themes/' + themeName + '/' + themeVersion + '/css/../assets/style1.css'
+        '/themes/' + themeName + '/' + themeVersion + '/css/hiha//j../assets/style1.css'
       ]
 
       for (const p of paths) {
-        await makeGetRequest({ url: server.url, path: p, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+        await makeGetRequest({ url: server.url, path: p, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
       }
     })
 
@@ -189,7 +189,7 @@ describe('Test server plugins API validators', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, path, server.accessToken)
+      await checkBadSort(server.url, path, server.accessToken)
     })
 
     it('Should fail with an invalid plugin type', async function () {
@@ -214,7 +214,7 @@ describe('Test server plugins API validators', function () {
       })
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({
         url: server.url,
         path,
@@ -260,7 +260,7 @@ describe('Test server plugins API validators', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, path, server.accessToken)
+      await checkBadSort(server.url, path, server.accessToken)
     })
 
     it('Should fail with an invalid plugin type', async function () {
@@ -274,7 +274,7 @@ describe('Test server plugins API validators', function () {
       })
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({
         url: server.url,
         path,

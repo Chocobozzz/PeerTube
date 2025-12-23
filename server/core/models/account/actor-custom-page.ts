@@ -14,24 +14,23 @@ import { SequelizeModel } from '../shared/index.js'
   ]
 })
 export class ActorCustomPageModel extends SequelizeModel<ActorCustomPageModel> {
-
   @AllowNull(true)
   @Column(DataType.TEXT)
-  content: string
+  declare content: string
 
   @AllowNull(false)
   @Column
-  type: 'homepage'
+  declare type: 'homepage'
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @ForeignKey(() => ActorModel)
   @Column
-  actorId: number
+  declare actorId: number
 
   @BelongsTo(() => ActorModel, {
     foreignKey: {
@@ -40,7 +39,7 @@ export class ActorCustomPageModel extends SequelizeModel<ActorCustomPageModel> {
     },
     onDelete: 'cascade'
   })
-  Actor: Awaited<ActorModel>
+  declare Actor: Awaited<ActorModel>
 
   static async updateInstanceHomepage (content: string) {
     const serverActor = await getServerActor()

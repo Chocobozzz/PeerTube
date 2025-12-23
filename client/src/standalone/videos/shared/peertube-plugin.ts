@@ -4,25 +4,30 @@ import { PluginInfo, PluginsManager } from '../../../root-helpers'
 import { RegisterClientHelpers } from '../../../types'
 import { AuthHTTP } from './auth-http'
 import { Translations } from './translations'
+import { getBackendUrl } from './url'
 
 export class PeerTubePlugin {
-
   private pluginsManager: PluginsManager
 
   constructor (private readonly http: AuthHTTP) {
-
   }
 
-  loadPlugins (config: HTMLServerConfig, translations?: Translations) {
+  init (translations?: Translations) {
     this.pluginsManager = new PluginsManager({
-      peertubeHelpersFactory: pluginInfo => this.buildPeerTubeHelpers({
-        pluginInfo,
-        translations
-      })
+      peertubeHelpersFactory: pluginInfo =>
+        this.buildPeerTubeHelpers({
+          pluginInfo,
+          translations
+        }),
+      backendUrl: getBackendUrl()
     })
+  }
 
+  loadPlugins (config: HTMLServerConfig) {
     this.pluginsManager.loadPluginsList(config)
+  }
 
+  ensurePluginsAreLoaded () {
     return this.pluginsManager.ensurePluginsAreLoaded('embed')
   }
 
@@ -54,6 +59,8 @@ export class PeerTubePlugin {
           .then((obj: PublicServerSetting) => obj.publicSettings)
       },
 
+      getUser: unimplemented,
+
       isLoggedIn: () => this.http.isLoggedIn(),
       getAuthHeader: () => {
         if (!this.http.isLoggedIn()) return undefined
@@ -81,6 +88,6 @@ export class PeerTubePlugin {
   }
 
   private getPluginUrl () {
-    return window.location.origin + '/api/v1/plugins'
+    return getBackendUrl() + '/api/v1/plugins'
   }
 }

@@ -1,21 +1,18 @@
 {
   "name": "@peertube/peertube-runner",
-  "version": "0.0.16",
+  "version": "0.4.0",
   "type": "module",
   "main": "dist/peertube-runner.js",
   "bin": "dist/peertube-runner.js",
-  "engines": {
-    "node": ">=16.x"
-  },
   "license": "AGPL-3.0",
-  "dependencies": {},
   "devDependencies": {
     "@iarna/toml": "^2.2.5",
-    "@peertube/net-ipc": "^2.2.0",
     "@types/follow-redirects": "1.14.4",
+    "cli-table3": "^0.6.5",
     "env-paths": "^3.0.0",
     "follow-redirects": "^1.15.5",
-    "pino": "^8.11.0",
-    "pino-pretty": "^10.0.0"
+    "net-ipc": "^2.2.2",
+    "pino": "^9.6.0",
+    "pino-pretty": "^13.0.0"
   }
 }

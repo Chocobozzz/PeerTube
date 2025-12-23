@@ -1,0 +1,76 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_miniature" as *;
+
+.section-header,
+my-button {
+  // make the element span a full grid row within .videos grid
+  grid-column: 1 / -1;
+}
+
+.section-title,
+.section-header {
+  display: flex;
+  align-items: center;
+  min-width: 1px;
+}
+
+.section-title {
+  @include font-size(1.5rem);
+  @include margin-bottom(2rem);
+}
+
+.margin-content.videos-margin-content {
+  @include grid-videos-miniature-layout-with-margins($rows-limit: 2);
+}
+
+.quick-access {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  white-space: nowrap;
+}
+
+.quick-access-links {
+  a {
+    color: pvar(--fg-300);
+    text-decoration: underline;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  &:not(.see-all-quick-links) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.see-all-quick-links {
+  white-space: normal;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.section {
+  @include rfs(2.5rem, margin-top);
+
+  @media screen and (max-width: $mobile-view) {
+    max-height: initial;
+    overflow: initial;
+
+    .section-title {
+      @include margin-left(pvar(--x-margin-content));
+    }
+  }
+}
+
+my-actor-avatar {
+  min-width: 40px;
+  min-height: 40px;
+  max-width: 40px;
+  max-height: 40px;
+
+  @include margin-right(10px);
+}

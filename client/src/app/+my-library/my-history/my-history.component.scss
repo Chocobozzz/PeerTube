@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_form-mixins' as *;
 
 .no-history {
   display: flex;
@@ -23,25 +24,21 @@
   }
 
   .history-switch {
-    @include margin-left(auto);
-    @include margin-right(15px);
-
     grid-column: 3;
     display: flex;
     align-items: center;
 
+    @include margin-left(auto);
+    @include margin-right(15px);
+
     label {
       margin: 0 0 0 5px;
-      color: var(--greyForegroundColor);
+      color: pvar(--fg-400);
       font-weight: $font-semibold;
     }
   }
 
   .delete-history {
-    @include peertube-button;
-    @include grey-button;
-    @include button-with-icon;
-
     grid-column: 4;
   }
 }

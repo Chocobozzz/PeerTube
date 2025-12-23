@@ -1,0 +1,120 @@
+@use 'sass:math';
+@use '_variables' as *;
+@use '_mixins' as *;
+
+$index-block-height: 40px;
+
+header {
+  width: 100%;
+  background-color: pvar(--bg-secondary-400);
+  border-radius: 5px;
+
+  @include rfs(2rem, margin-bottom);
+  @include rfs(2rem, padding);
+}
+
+.header-steps {
+  max-width: 800px;
+  display: flex;
+  justify-content: space-between;
+  margin: auto;
+
+  // Useful on small screens
+  padding: 0 20px;
+}
+
+.step-index {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: $index-block-height;
+  height: $index-block-height;
+  border-radius: $index-block-height;
+  border: 1px solid pvar(--bg-secondary-500);
+  margin-bottom: 10px;
+  font-size: 24px;
+  position: relative;
+
+  .completed-icon {
+    $size: 14px;
+
+    width: $size;
+    height: $size;
+    border-radius: $size;
+    background-color: pvar(--bg);
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // Better than border color for aliasing
+    box-shadow: 0 0 0 1px pvar(--bg-secondary-500);
+    overflow: hidden;
+
+    my-global-icon {
+      display: flex;
+      width: 12px;
+      height: 12px;
+      color: pvar(--green);
+    }
+  }
+}
+
+.step-label {
+  width: max-content;
+  font-size: 18px;
+}
+
+.step-index,
+.step-label {
+  color: pvar(--fg-200);
+}
+
+.step-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: $index-block-height;
+
+  &.active,
+  &.completed {
+    .step-index {
+      border-color: pvar(--bg-secondary-550);
+      background-color: pvar(--bg-secondary-550);
+      color: pvar(--fg-400);
+    }
+
+    .step-label {
+      color: pvar(--fg-400);
+    }
+  }
+
+  &.active {
+    .step-label {
+      font-weight: $font-bold;
+    }
+  }
+}
+
+.connector {
+  flex: auto;
+  margin: math.div($index-block-height, 2) 10px 0 10px;
+  height: 2px;
+  background-color: pvar(--secondary-icon-color);
+  opacity: 0.3;
+}
+
+@media screen and (min-width: $small-view) {
+  .margin-content {
+    max-width: 1000px;
+    margin: auto;
+  }
+}
+
+@media screen and (max-width: $small-view) {
+  .step-label {
+    width: auto;
+    text-align: center;
+  }
+}

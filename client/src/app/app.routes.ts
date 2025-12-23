@@ -1,25 +1,21 @@
 import { Routes, UrlMatchResult, UrlSegment } from '@angular/router'
-import { MenuGuards } from '@app/core/routing/menu-guard.service'
-import { POSSIBLE_LOCALES } from '@peertube/peertube-core-utils'
+import { AVAILABLE_LOCALES } from '@peertube/peertube-core-utils'
 import { MetaGuard } from './core'
 import { EmptyComponent } from './empty.component'
 import { HomepageRedirectComponent } from './homepage-redirect.component'
 import { USER_USERNAME_REGEX_CHARACTERS } from './shared/form-validators/user-validators'
 import { ActorRedirectGuard } from './shared/shared-main/router/actor-redirect-guard.service'
+import { VideosParentComponent } from './videos-parent.component'
 
 const routes: Routes = [
   {
     path: 'admin',
-    canActivate: [ MenuGuards.close() ],
-    canDeactivate: [ MenuGuards.open() ],
     loadChildren: () => import('./+admin/routes'),
     canActivateChild: [ MetaGuard ]
   },
-  {
-    path: 'home',
-    loadChildren: () => import('./+home/routes'),
-    canActivateChild: [ MetaGuard ]
-  },
+
+  // ---------------------------------------------------------------------------
+
   {
     path: 'my-account',
     loadChildren: () => import('./+my-account/routes'),
@@ -46,6 +42,8 @@ const routes: Routes = [
     canActivateChild: [ MetaGuard ]
   },
 
+  // ---------------------------------------------------------------------------
+
   {
     path: 'video-channels',
     redirectTo: 'c'
@@ -55,11 +53,21 @@ const routes: Routes = [
     loadChildren: () => import('./+video-channels/routes'),
     canActivateChild: [ MetaGuard ]
   },
+
   {
-    path: 'manage',
-    loadChildren: () => import('./+manage/routes'),
-    canActivateChild: [ MetaGuard ]
+    path: 'manage/create',
+    redirectTo: '/my-library/video-channels/create',
+    pathMatch: 'full'
   },
+
+  {
+    path: 'manage/update/:channel',
+    pathMatch: 'full',
+    redirectTo: '/my-library/video-channels/update/:channel'
+  },
+
+  // ---------------------------------------------------------------------------
+
   {
     path: 'p',
     loadChildren: () => import('./shared/shared-plugin-pages/routes'),
@@ -95,25 +103,58 @@ const routes: Routes = [
     canActivateChild: [ MetaGuard ]
   },
 
+  // ---------------------------------------------------------------------------
+
+  {
+    path: 'studio/edit/:videoId',
+    redirectTo: '/videos/manage/:videoId/studio',
+    pathMatch: 'full'
+  },
+
+  {
+    path: 'stats/videos/:videoId',
+    redirectTo: '/videos/manage/:videoId/stats',
+    pathMatch: 'full'
+  },
+
   {
     path: 'videos/upload',
-    loadChildren: () => import('@app/+videos/+video-edit/add-routes'),
-    canActivateChild: [ MetaGuard ],
-    data: {
-      meta: {
-        title: $localize`Upload a video`
-      }
-    }
+    redirectTo: '/videos/publish',
+    pathMatch: 'full'
   },
   {
     path: 'videos/update/:uuid',
-    loadChildren: () => import('@app/+videos/+video-edit/update-routes'),
+    pathMatch: 'full',
+    redirectTo: '/videos/manage/:uuid'
+  },
+
+  {
+    path: 'videos/manage/:uuid',
+    loadChildren: () => import('./+videos-publish-manage/+video-manage/routes'),
     canActivateChild: [ MetaGuard ],
     data: {
       meta: {
-        title: $localize`Edit a video`
+        title: $localize`Manage your video`
       }
     }
+  },
+
+  {
+    path: 'videos/publish',
+    loadChildren: () => import('./+videos-publish-manage/+video-publish/routes'),
+    canActivateChild: [ MetaGuard ],
+    data: {
+      meta: {
+        title: $localize`Publish your video`
+      }
+    }
+  },
+
+  // ---------------------------------------------------------------------------
+
+  {
+    path: 'video-playlists/watch',
+    redirectTo: 'w/p'
   },
 
   {
@@ -126,20 +167,41 @@ const routes: Routes = [
   },
   {
     path: 'w',
-    loadChildren: () => import('@app/+videos/+video-watch/routes'),
+    loadChildren: () => import('./+video-watch/routes'),
     data: {
       preload: 5000
     }
   },
+
+  // ---------------------------------------------------------------------------
+  // /home and other /videos routes
+  // ---------------------------------------------------------------------------
   {
-    path: 'videos',
-    loadChildren: () => import('./+videos/routes'),
-    canActivateChild: [ MetaGuard ]
+    matcher: (url): UrlMatchResult => {
+      if (url.length < 1) return null
+
+      const matchResult = url[0].path === 'home' || url[0].path === 'videos'
+      if (!matchResult) return null
+
+      // So the children can detect the appropriate route
+      return { consumed: [] }
+    },
+    component: VideosParentComponent,
+    children: [
+      {
+        path: 'home',
+        loadChildren: () => import('./+home/routes'),
+        canActivateChild: [ MetaGuard ]
+      },
+      {
+        path: 'videos',
+        loadChildren: () => import('./+video-list/routes'),
+        canActivateChild: [ MetaGuard ]
+      }
+    ]
   },
-  {
-    path: 'video-playlists/watch',
-    redirectTo: 'videos/watch/playlist'
-  },
+
+  // ---------------------------------------------------------------------------
 
   {
     path: 'remote-interaction',
@@ -147,19 +209,9 @@ const routes: Routes = [
     canActivateChild: [ MetaGuard ]
   },
 
-  {
-    path: 'studio',
-    loadChildren: () => import('./+video-studio/routes'),
-    canActivateChild: [ MetaGuard ]
-  },
-
-  {
-    path: 'stats',
-    loadChildren: () => import('./+stats/routes'),
-    canActivateChild: [ MetaGuard ]
-  },
-
-  // Matches /@:actorName
+  // ---------------------------------------------------------------------------
+  // /@:actorName
+  // ---------------------------------------------------------------------------
   {
     matcher: (url): UrlMatchResult => {
       const regex = new RegExp(`^@(${USER_USERNAME_REGEX_CHARACTERS}+)$`)
@@ -180,6 +232,8 @@ const routes: Routes = [
     component: EmptyComponent
   },
 
+  // ---------------------------------------------------------------------------
+
   {
     path: '',
     component: HomepageRedirectComponent
@@ -187,7 +241,7 @@ const routes: Routes = [
 ]
 
 // Avoid 404 when changing language
-for (const locale of POSSIBLE_LOCALES) {
+for (const locale of AVAILABLE_LOCALES) {
   routes.push({
     path: locale,
     component: HomepageRedirectComponent

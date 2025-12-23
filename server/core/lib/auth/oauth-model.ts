@@ -14,7 +14,7 @@ import { OAuthClientModel } from '../../models/oauth/oauth-client.js'
 import { OAuthTokenModel } from '../../models/oauth/oauth-token.js'
 import { UserModel } from '../../models/user/user.js'
 import { findAvailableLocalActorName } from '../local-actor.js'
-import { buildUser, createUserAccountAndChannelAndPlaylist } from '../user.js'
+import { buildUser, createUserAccountAndChannelAndPlaylist, getByEmailPermissive } from '../user.js'
 import { ExternalUser } from './external-auth.js'
 import { TokensCache } from './tokens-cache.js'
 
@@ -23,6 +23,12 @@ type TokenInfo = {
   refreshToken: string
   accessTokenExpiresAt: Date
   refreshTokenExpiresAt: Date
+  loginDevice: string
+  loginIP: string
+  loginDate: Date
+  lastActivityDevice: string
+  lastActivityIP: string
+  lastActivityDate: Date
 }
 
 export type BypassLogin = {
@@ -84,10 +90,10 @@ async function getRefreshToken (refreshToken: string) {
 
 async function getUser (usernameOrEmail?: string, password?: string, bypassLogin?: BypassLogin) {
   // Special treatment coming from a plugin
-  if (bypassLogin && bypassLogin.bypass === true) {
+  if (bypassLogin?.bypass === true) {
     logger.info('Bypassing oauth login by plugin %s.', bypassLogin.pluginName)
 
-    let user = await UserModel.loadByEmail(bypassLogin.user.email)
+    let user = getByEmailPermissive(await UserModel.loadByEmailCaseInsensitive(bypassLogin.user.email), bypassLogin.user.email)
 
     if (!user) {
       user = await createUserFromExternal(bypassLogin.pluginName, bypassLogin.user)
@@ -105,7 +111,9 @@ async function getUser (usernameOrEmail?: string, password?: string, bypassLogin
       if (user.pluginAuth !== bypassLogin.pluginName) {
         logger.info(
           'Cannot bypass oauth login by plugin %s because %s has another plugin auth method (%s).',
-          bypassLogin.pluginName, bypassLogin.user.email, user.pluginAuth
+          bypassLogin.pluginName,
+          bypassLogin.user.email,
+          user.pluginAuth
         )
 
         return null
@@ -119,7 +127,14 @@ async function getUser (usernameOrEmail?: string, password?: string, bypassLogin
 
   logger.debug('Getting User (username/email: ' + usernameOrEmail + ', password: ******).')
 
-  const user = await UserModel.loadByUsernameOrEmail(usernameOrEmail)
+  const users = await UserModel.loadByUsernameOrEmailCaseInsensitive(usernameOrEmail)
+  let user: MUserDefault
+
+  if (usernameOrEmail.includes('@')) {
+    user = getByEmailPermissive(users, usernameOrEmail)
+  } else if (users.length === 1) {
+    user = users[0]
+  }
 
   // If we don't find the user, or if the user belongs to a plugin
   if (!user || user.pluginAuth !== null || !password) return null
@@ -130,6 +145,8 @@ async function getUser (usernameOrEmail?: string, password?: string, bypassLogin
   checkUserValidityOrThrow(user)
 
   if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION && user.emailVerified === false) {
+    // Keep this message sync with the client
+    // TODO: use custom server code
     throw new AccessDeniedError('User email is not verified.')
   }
 
@@ -157,7 +174,7 @@ async function revokeToken (
     TokensCache.Instance.clearCacheByToken(token.accessToken)
 
     token.destroy()
-         .catch(err => logger.error('Cannot destroy token when revoking token.', { err }))
+      .catch(err => logger.error('Cannot destroy token when revoking token.', { err }))
 
     return { success: true, redirectUrl }
   }
@@ -183,13 +200,21 @@ async function saveToken (
     authName = refreshTokenAuthName
   }
 
-  logger.debug('Saving token ' + token.accessToken + ' for client ' + client.id + ' and user ' + user.id + '.')
+  logger.debug(`Saving token ${token.accessToken} for client ${client.id} and user ${user.id}.`)
 
   const tokenToCreate = {
-    accessToken: token.accessToken,
-    accessTokenExpiresAt: token.accessTokenExpiresAt,
-    refreshToken: token.refreshToken,
-    refreshTokenExpiresAt: token.refreshTokenExpiresAt,
+    ...pick(token, [
+      'accessToken',
+      'refreshToken',
+      'accessTokenExpiresAt',
+      'refreshTokenExpiresAt',
+      'loginDevice',
+      'loginIP',
+      'loginDate',
+      'lastActivityDate',
+      'lastActivityDevice',
+      'lastActivityIP'
+    ]),
     authName,
     oAuthClientId: client.id,
     userId: user.id
@@ -252,7 +277,7 @@ async function updateUserFromExternal (
 
   {
     type UserAttributeKeys = keyof AttributesOnly<UserModel>
-    const mappingKeys: { [ id in UserAttributeKeys ]?: AuthenticatedResultUpdaterFieldName } = {
+    const mappingKeys: { [id in UserAttributeKeys]?: AuthenticatedResultUpdaterFieldName } = {
       role: 'role',
       adminFlags: 'adminFlags',
       videoQuota: 'videoQuota',
@@ -269,7 +294,7 @@ async function updateUserFromExternal (
 
   {
     type AccountAttributeKeys = keyof Partial<AttributesOnly<AccountModel>>
-    const mappingKeys: { [ id in AccountAttributeKeys ]?: AuthenticatedResultUpdaterFieldName } = {
+    const mappingKeys: { [id in AccountAttributeKeys]?: AuthenticatedResultUpdaterFieldName } = {
       name: 'displayName'
     }
 

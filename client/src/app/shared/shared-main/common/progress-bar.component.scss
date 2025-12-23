@@ -1,0 +1,72 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_button-mixins' as *;
+
+$height: 36px;
+
+.progress-container {
+  background-color: pvar(--bg-secondary-500);
+  display: flex;
+  overflow: hidden;
+  height: $height;
+  font-size: 0.85rem;
+  font-weight: $font-semibold;
+  border-radius: 0.25rem;
+  position: relative;
+
+  span {
+    position: absolute;
+    color: pvar(--fg-400);
+    line-height: $height;
+    margin: 0 12px;
+  }
+
+  .value {
+    left: 0;
+  }
+
+  .max {
+    right: 0;
+  }
+
+  .progress-bar {
+    font-weight: $font-semibold;
+    color: pvar(--bg);
+    background-color: pvar(--primary);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    white-space: nowrap;
+    transition: width 0.6s ease;
+  }
+
+  &.red,
+  &.green {
+    span {
+      color: $white;
+    }
+  }
+
+  &.red .progress-bar {
+    background-color: $red;
+  }
+
+  &.green .progress-bar {
+    background-color: $green;
+  }
+
+  &.small {
+    height: 1rem;
+    font-weight: normal;
+    font-size: 0.75rem;
+
+    span {
+      margin: 0 5px;
+      line-height: normal;
+    }
+  }
+
+  @include disable-outline;
+  @include button-focus(pvar(--primary-100));
+}

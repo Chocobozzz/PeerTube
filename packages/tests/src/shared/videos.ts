@@ -1,8 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
 
 import { uuidRegex } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, HttpStatusCodeType, VideoCaption, VideoDetails, VideoPrivacy, VideoResolution } from '@peertube/peertube-models'
-import { buildAbsoluteFixturePath, getFileSize, getFilenameFromUrl, getLowercaseExtension } from '@peertube/peertube-node-utils'
+import { ffprobePromise } from '@peertube/peertube-ffmpeg'
+import {
+  FileStorage,
+  HttpStatusCode,
+  HttpStatusCodeType,
+  VideoCaption,
+  VideoCommentPolicyType,
+  VideoDetails,
+  VideoPrivacy,
+  VideoResolution
+} from '@peertube/peertube-models'
+import { buildAbsoluteFixturePath, buildUUID, getFileSize, getFilenameFromUrl, getLowercaseExtension } from '@peertube/peertube-node-utils'
 import { PeerTubeServer, VideoEdit, getRedirectionUrl, makeRawRequest, waitJobs } from '@peertube/peertube-server-commands'
 import {
   VIDEO_CATEGORIES,
@@ -12,12 +22,13 @@ import {
   loadLanguages
 } from '@peertube/peertube-server/core/initializers/constants.js'
 import { expect } from 'chai'
-import { pathExists } from 'fs-extra/esm'
-import { readdir } from 'fs/promises'
+import { ensureDir, pathExists, remove } from 'fs-extra/esm'
+import { readdir, writeFile } from 'fs/promises'
+import { tmpdir } from 'os'
 import { basename, join } from 'path'
 import { dateIsValid, expectStartWith, testImageGeneratedByFFmpeg } from './checks.js'
+import { checkWebTorrentWorks } from './p2p.js'
 import { completeCheckHlsPlaylist } from './streaming-playlists.js'
-import { checkWebTorrentWorks } from './webtorrent.js'
 
 export async function completeWebVideoFilesCheck (options: {
   server: PeerTubeServer
@@ -52,6 +63,18 @@ export async function completeWebVideoFilesCheck (options: {
     expect(file.id).to.exist
     expect(file.magnetUri).to.have.lengthOf.above(2)
 
+    expect((file as any).playlistUrl).to.not.exist
+
+    if (server.internalServerNumber === originServer.internalServerNumber) {
+      if (objectStorageBaseUrl) {
+        expect(file.storage).to.equal(FileStorage.OBJECT_STORAGE)
+      } else {
+        expect(file.storage).to.equal(FileStorage.FILE_SYSTEM)
+      }
+    } else {
+      expect(file.storage).to.be.null
+    }
+
     {
       const privatePath = requiresAuth
         ? 'private/'
@@ -70,7 +93,7 @@ export async function completeWebVideoFilesCheck (options: {
         expect(file.fileUrl).to.match(new RegExp(`${originServer.url}/static/web-videos/${privatePath}${nameReg}${extension}`))
       }
 
-      expect(file.fileDownloadUrl).to.match(new RegExp(`${originServer.url}/download/videos/${nameReg}${extension}`))
+      expect(file.fileDownloadUrl).to.match(new RegExp(`${originServer.url}/download/web-videos/${nameReg}${extension}`))
     }
 
     {
@@ -96,9 +119,13 @@ export async function completeWebVideoFilesCheck (options: {
     expect(file.resolution.id).to.equal(attributeFile.resolution)
 
     if (file.resolution.id === VideoResolution.H_NOVIDEO) {
-      expect(file.resolution.label).to.equal('Audio')
+      expect(file.resolution.label).to.equal('Audio only')
+      expect(file.hasAudio).to.be.true
+      expect(file.hasVideo).to.be.false
     } else {
       expect(file.resolution.label).to.equal(attributeFile.resolution + 'p')
+      expect(file.hasAudio).to.be.true
+      expect(file.hasVideo).to.be.true
     }
 
     if (attributeFile.width !== undefined) expect(file.width).to.equal(attributeFile.width)
@@ -139,7 +166,7 @@ export async function completeVideoCheck (options: {
     licence: number
     language: string
     nsfw: boolean
-    commentsEnabled: boolean
+    commentsPolicy: VideoCommentPolicyType
     downloadEnabled: boolean
     description: string
     support: string
@@ -214,7 +241,7 @@ export async function completeVideoCheck (options: {
   expect(video.url).to.contain(originServer.host)
   expect(video.tags).to.deep.equal(attributes.tags)
 
-  expect(video.commentsEnabled).to.equal(attributes.commentsEnabled)
+  expect(video.commentsPolicy.id).to.equal(attributes.commentsPolicy)
   expect(video.downloadEnabled).to.equal(attributes.downloadEnabled)
 
   expect(dateIsValid(video.createdAt)).to.be.true
@@ -289,12 +316,12 @@ export async function checkVideoFilesWereRemoved (options: {
 
   const torrentNames = webVideoFiles.concat(hlsFiles).map(f => basename(f.torrentUrl))
 
-  const captionNames = captions.map(c => basename(c.captionPath))
+  const captionNames = captions.map(c => basename(c.fileUrl))
 
   const webVideoFilenames = webVideoFiles.map(f => basename(f.fileUrl))
   const hlsFilenames = hlsFiles.map(f => basename(f.fileUrl))
 
-  let directories: { [ directory: string ]: string[] } = {
+  let directories: { [directory: string]: string[] } = {
     videos: webVideoFilenames,
     redundancy: webVideoFilenames,
     [join('playlists', 'hls')]: hlsFilenames,
@@ -405,4 +432,17 @@ export async function checkSourceFile (options: {
   expect(body).to.have.lengthOf(fixtureFileSize)
 
   return source
+}
+
+export async function probeResBody (body: Buffer) {
+  const basePath = join(tmpdir(), 'peertube-test', 'ffprobe')
+  const videoPath = join(basePath, buildUUID())
+
+  await ensureDir(basePath)
+  await writeFile(videoPath, body)
+
+  const probe = await ffprobePromise(videoPath)
+  await remove(videoPath)
+
+  return probe
 }

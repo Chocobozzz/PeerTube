@@ -1,21 +1,19 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, OnInit, inject, input } from '@angular/core'
 import { ServerService } from '@app/core'
 import { HTMLServerConfig, VideoResolution } from '@peertube/peertube-models'
-import { BytesPipe } from '../../shared/shared-main/angular/bytes.pipe'
-import { NgIf } from '@angular/common'
+import { BytesPipe } from '../../shared/shared-main/common/bytes.pipe'
 
 @Component({
   selector: 'my-user-real-quota-info',
   templateUrl: './user-real-quota-info.component.html',
-  standalone: true,
-  imports: [ NgIf, BytesPipe ]
+  imports: [ BytesPipe ]
 })
 export class UserRealQuotaInfoComponent implements OnInit {
-  @Input() videoQuota: number | string
+  private server = inject(ServerService)
+
+  readonly videoQuota = input<number | string>(undefined)
 
   private serverConfig: HTMLServerConfig
-
-  constructor (private server: ServerService) { }
 
   ngOnInit () {
     this.serverConfig = this.server.getHTMLConfig()
@@ -30,7 +28,7 @@ export class UserRealQuotaInfoComponent implements OnInit {
 
     const resolutions = transcodingConfig.enabledResolutions
     const higherResolution = VideoResolution.H_4K
-    let multiplier = 0
+    let multiplier = 1
 
     for (const resolution of resolutions) {
       multiplier += resolution / higherResolution
@@ -38,10 +36,10 @@ export class UserRealQuotaInfoComponent implements OnInit {
 
     if (transcodingConfig.hls.enabled) multiplier *= 2
 
-    return multiplier * this.getQuotaAsNumber()
+    return Math.round(multiplier * this.getQuotaAsNumber())
   }
 
   getQuotaAsNumber () {
-    return parseInt(this.videoQuota + '', 10)
+    return parseInt(this.videoQuota() + '', 10)
   }
 }

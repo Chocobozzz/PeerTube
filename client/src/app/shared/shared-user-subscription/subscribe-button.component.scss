@@ -1,75 +1,37 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_form-mixins' as *;
 
-.btn-group-subscribe {
-  @include peertube-button;
-
+.btn-group {
   padding: 0;
 
-  button.dropdown-toggle {
-    font-size: $button-font-size;
-    line-height: 1.2;
+  .peertube-button {
+    // Prevent weird border radius blur on chrome
+    z-index: unset !important;
+    padding: pvar(--input-y-padding) 10px;
+  }
+
+  .dropdown-toggle::after {
+    position: relative;
+    top: 1px;
+  }
+
+  .dropdown-toggle:not(.dropdown-toggle-split)::after {
+    margin-left: 0.5rem;
+  }
+
+  .dropdown-toggle-split {
+    padding-left: 8px;
+    padding-right: 8px;
   }
 
   &:not(.big) {
     white-space: nowrap;
   }
 
-  &.big {
-    height: 35px;
-
-    > button:first-child {
-      width: max-content;
-      min-width: 175px;
-    }
-
-    button .extra-text {
-      span:first-child {
-        line-height: 80%;
-      }
-
-      span:not(:first-child) {
-        font-size: 75%;
-      }
-    }
-  }
-
-  // Unlogged
-  > .dropdown > .dropdown-toggle span {
-    @include padding-right(5px);
-  }
-
-  // Logged
-  > .btn {
-    @include padding-right(4px);
-
-    + .dropdown > button {
-      @include padding-left(2px);
-
-      &::after {
-        position: relative;
-        top: 1px;
-      }
-    }
-  }
-
-  &.subscribe-button {
-    .btn {
-      @include orange-button;
-      font-weight: 600;
-    }
-
-    span.followers-count {
-      @include padding-left(5px);
-    }
-  }
-
-  &.unsubscribe-button {
-    .btn {
-      @include grey-button;
-
-      font-weight: 600;
-    }
+  &.big > button:first-child {
+    width: max-content;
+    min-width: 175px;
   }
 
   .dropdown-menu {
@@ -101,19 +63,5 @@
 
   input {
     @include peertube-input-text(100%);
-  }
-}
-
-.extra-text {
-  display: flex;
-  flex-direction: column;
-
-  span:first-child {
-    line-height: 75%;
-  }
-
-  span:not(:first-child) {
-    font-size: 60%;
-    text-align: start;
   }
 }

@@ -10,23 +10,25 @@
   <div class="modal-body" [formGroup]="form">
     <div class="form-group">
       <label i18n for="channel">Select a channel to receive the video</label>
-      <my-select-channel labelForId="channel" formControlName="channel" [items]="videoChannels"></my-select-channel>
+      <my-select-channel class="d-block" inputId="channel" formControlName="channel" [items]="videoChannels"></my-select-channel>
 
-      <div *ngIf="formErrors.channel" class="form-error" role="alert">{{ formErrors.channel }}</div>
+      @if (formErrors.channel) {
+        <div class="form-error" role="alert">{{ formErrors.channel }}</div>
+      }
     </div>
   </div>
 
   <div class="modal-footer inputs">
     <div class="inputs">
       <input
-        type="button" role="button" i18n-value value="Cancel" class="peertube-button grey-button"
+        type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button"
         (click)="dismiss()" (key.enter)="dismiss()"
-      >
+        >
 
       <input
-        type="submit" i18n-value value="Accept" class="peertube-button orange-button"
+        type="submit" i18n-value value="Accept" class="peertube-button primary-button"
         (click)="close()"
-      >
+        >
     </div>
   </div>
 </ng-template>

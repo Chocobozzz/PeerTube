@@ -1,26 +1,39 @@
-import { pathExists, remove } from 'fs-extra/esm'
-import { readdir } from 'fs/promises'
-import { basename, join } from 'path'
-import { LiveVideoLatencyMode, LiveVideoLatencyModeType, FileStorage } from '@peertube/peertube-models'
+import { wait } from '@peertube/peertube-core-utils'
+import { FileStorage, LiveVideoLatencyMode, LiveVideoLatencyModeType, VideoState } from '@peertube/peertube-models'
 import { logger } from '@server/helpers/logger.js'
 import { VIDEO_LIVE } from '@server/initializers/constants.js'
 import { MStreamingPlaylist, MStreamingPlaylistVideo, MVideo } from '@server/types/models/index.js'
+import { pathExists, remove } from 'fs-extra/esm'
+import { readdir, rmdir } from 'fs/promises'
+import { basename, join } from 'path'
 import { listHLSFileKeysOf, removeHLSFileObjectStorageByFullKey, removeHLSObjectStorage } from '../object-storage/index.js'
-import { getLiveDirectory } from '../paths.js'
+import { getLiveDirectory, getLiveReplayBaseDirectory } from '../paths.js'
 
-function buildConcatenatedName (segmentOrPlaylistPath: string) {
+export function buildConcatenatedName (segmentOrPlaylistPath: string) {
   const num = basename(segmentOrPlaylistPath).match(/^(\d+)(-|\.)/)
 
   return 'concat-' + num[1] + '.ts'
 }
 
-async function cleanupAndDestroyPermanentLive (video: MVideo, streamingPlaylist: MStreamingPlaylist) {
+export async function cleanupAndDestroyPermanentLive (video: MVideo, streamingPlaylist: MStreamingPlaylist) {
   await cleanupTMPLiveFiles(video, streamingPlaylist)
+
+  if (video.state === VideoState.WAITING_FOR_LIVE) {
+    // Try to delete local filesystem empty paths
+    // Object storage doesn't have the concept of directories so we don't need to duplicate the logic here
+    try {
+      await rmdir(getLiveReplayBaseDirectory(video))
+      await wait(100)
+      await rmdir(getLiveDirectory(video))
+    } catch (err) {
+      logger.debug('Cannot cleanup permanent local live files', { err })
+    }
+  }
 
   await streamingPlaylist.destroy()
 }
 
-async function cleanupUnsavedNormalLive (video: MVideo, streamingPlaylist: MStreamingPlaylist) {
+export async function cleanupUnsavedNormalLive (video: MVideo, streamingPlaylist: MStreamingPlaylist) {
   const hlsDirectory = getLiveDirectory(video)
 
   // We uploaded files to object storage too, remove them
@@ -33,13 +46,13 @@ async function cleanupUnsavedNormalLive (video: MVideo, streamingPlaylist: MStre
   await streamingPlaylist.destroy()
 }
 
-async function cleanupTMPLiveFiles (video: MVideo, streamingPlaylist: MStreamingPlaylist) {
+export async function cleanupTMPLiveFiles (video: MVideo, streamingPlaylist: MStreamingPlaylist) {
   await cleanupTMPLiveFilesFromObjectStorage(streamingPlaylist.withVideo(video))
 
   await cleanupTMPLiveFilesFromFilesystem(video)
 }
 
-function getLiveSegmentTime (latencyMode: LiveVideoLatencyModeType) {
+export function getLiveSegmentTime (latencyMode: LiveVideoLatencyModeType) {
   if (latencyMode === LiveVideoLatencyMode.SMALL_LATENCY) {
     return VIDEO_LIVE.SEGMENT_TIME_SECONDS.SMALL_LATENCY
   }
@@ -47,14 +60,8 @@ function getLiveSegmentTime (latencyMode: LiveVideoLatencyModeType) {
   return VIDEO_LIVE.SEGMENT_TIME_SECONDS.DEFAULT_LATENCY
 }
 
-export {
-  cleanupAndDestroyPermanentLive,
-  cleanupUnsavedNormalLive,
-  cleanupTMPLiveFiles,
-  getLiveSegmentTime,
-  buildConcatenatedName
-}
-
+// ---------------------------------------------------------------------------
+// Private
 // ---------------------------------------------------------------------------
 
 function isTMPLiveFile (name: string) {

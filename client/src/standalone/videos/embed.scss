@@ -1,12 +1,14 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use 'video.js/dist/video-js';
-
-$assets-path: '../../assets/';
-@use '../../sass/player/index';
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_css-variables" as *;
+@use "../player/build/peertube-player";
 
 [hidden] {
   display: none !important;
+}
+
+:root {
+  @include define-css-variables();
 }
 
 body {
@@ -63,6 +65,14 @@ body {
   font-size: 24px;
 }
 
+#error-details {
+  margin-top: 30px;
+}
+
+#error-details-content {
+  margin-top: 10px;
+}
+
 #placeholder-preview {
   position: absolute;
   top: 0;
@@ -95,7 +105,7 @@ body {
   margin: 1rem 0.5rem;
   border: 0;
   font-weight: 600;
-  border-radius: 3px!important;
+  border-radius: 3px !important;
   font-size: 18px;
   display: inline-block;
 }
@@ -109,6 +119,7 @@ body {
 #video-password-submit:hover {
   background-color: #f47825;
 }
+
 #video-password-error {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -130,4 +141,3 @@ body {
     font-size: 14px;
   }
 }
-

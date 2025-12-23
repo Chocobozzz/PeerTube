@@ -1,32 +1,29 @@
-<h1 class="visually-hidden" i18n>Notifications</h1>
-
 <div class="header">
-  <a class="peertube-button-link grey-button" routerLink="/my-account/settings" fragment="notifications">
-    <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
-    <span i18n>Notification preferences</span>
-  </a>
-
-  <div class="peertube-select-container peertube-select-button ms-2 me-2">
-    <select [(ngModel)]="notificationSortType" (ngModelChange)="onChangeSortColumn()" class="form-control">
-      <option value="undefined" disabled i18n>Sort by</option>
+  <div class="peertube-select-container me-auto">
+    <select [(ngModel)]="notificationSortType" (ngModelChange)="onChangeSortColumn()" class="form-control" i18n-ariaLabel aria-label="Sort by">
       <option value="createdAt" i18n>Newest first</option>
       <option value="read" [disabled]="!hasUnreadNotifications()" i18n>Unread first</option>
     </select>
   </div>
 
-  <button class="ms-auto peertube-button grey-button" [disabled]="!hasUnreadNotifications()" (click)="markAllAsRead()">
-    <ng-container *ngIf="hasUnreadNotifications()">
+  <a class="peertube-button-link secondary-button" routerLink="/my-account/settings" fragment="notifications">
+    <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
+    <span i18n>Notification preferences</span>
+  </a>
+
+  <button class="peertube-button secondary-button" [disabled]="!hasUnreadNotifications()" (click)="markAllAsRead()">
+    @if (hasUnreadNotifications()) {
       <my-global-icon iconName="tick" aria-hidden="true"></my-global-icon>
-
       <span i18n>Mark all as read</span>
-    </ng-container>
+    }
 
-    <ng-container *ngIf="!hasUnreadNotifications()">
+    @if (!hasUnreadNotifications()) {
       <my-global-icon iconName="circle-tick" aria-hidden="true"></my-global-icon>
-
       <span i18n>All read</span>
-    </ng-container>
+    }
   </button>
 </div>
 
-<my-user-notifications #userNotification></my-user-notifications>
+<div>
+  <my-user-notifications #userNotification inPopup="false"></my-user-notifications>
+</div>

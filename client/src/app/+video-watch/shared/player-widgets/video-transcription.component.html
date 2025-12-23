@@ -1,0 +1,63 @@
+<div class="widget-root">
+
+  <div class="widget-header d-flex justify-content-between">
+    <div class="widget-title" i18n>Transcription</div>
+
+    <div>
+      <button
+        class="border-0 p-0 me-3 settings-button" title="Settings" i18n-title
+        (click)="isSettingsPanelCollapsed = !isSettingsPanelCollapsed" [attr.aria-expanded]="!isSettingsPanelCollapsed" aria-controls="video-transcription-settings-panel"
+        >
+        <my-global-icon iconName="filter"></my-global-icon>
+      </button>
+
+      <button class="border-0 p-0" title="Close transcription widget" i18n-title (click)="closeTranscription.emit()">
+        <my-global-icon iconName="cross"></my-global-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="widget-content">
+    <div class="widget-content-padded">
+
+      <div
+        id="video-transcription-settings-panel" class="settings-panel"
+        #settingsPanel #settingsPanelCollapse="ngbCollapse" [ngbCollapse]="isSettingsPanelCollapsed"
+        (shown)="settingsPanelShown = true" (hidden)="settingsPanelShown = false"
+        >
+        <div class="card">
+          <div class="card-body">
+            <label i18n for="transcription-language">Language</label>
+
+            <my-select-options
+              inputId="transcription-language" [items]="languagesOptions"
+              [(ngModel)]="currentLanguage" (ngModelChange)="updateCurrentCaption()"
+            ></my-select-options>
+          </div>
+        </div>
+      </div>
+
+      <input
+        type="text" class="mb-3" name="search-transcript" i18n-placeholder placeholder="Search transcript"
+        (input)="onSearchChange($event)"
+        >
+
+      @if (search && segments.length === 0) {
+        <div i18n>No results for your search</div>
+      }
+    </div>
+
+    @for (segment of segments; track segment) {
+      <div
+        role="button" tabindex="0" class="segment widget-content-padded pt-1 pb-1"
+        i18n-title title="Jump to this segment"
+        (keyup.enter)="onSegmentClick($event, segment)" (click)="onSegmentClick($event, segment)"
+        [ngClass]="getSegmentClasses(segment)"
+        >
+        <strong class="segment-start me-2">{{ segment.startFormatted }}</strong>
+        <span class="segment-text fs-7" [innerHTML]="segment.text | nl2br: true"></span>
+      </div>
+    }
+  </div>
+
+</div>

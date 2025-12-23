@@ -1,23 +1,24 @@
-import * as debug from 'debug'
+import debug from 'debug'
 import { Observable, Subject } from 'rxjs'
 import { filter, first, map } from 'rxjs/operators'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { buildBulkObservable } from '@app/helpers'
 import { AdvancedSearch } from './advanced-search.model'
 import { SearchService } from './search.service'
-import { VideoChannel } from '../shared-main/video-channel/video-channel.model'
+import { VideoChannel } from '../shared-main/channel/video-channel.model'
 import { Video } from '../shared-main/video/video.model'
 import { VideoPlaylist } from '../shared-video-playlist/video-playlist.model'
 
 const debugLogger = debug('peertube:search:FindInBulkService')
 
-type BulkObservables <P extends number | string, R> = {
+type BulkObservables<P extends number | string, R> = {
   notifier: Subject<P>
   result: Observable<{ params: P[], response: R }>
 }
 
 @Injectable()
 export class FindInBulkService {
+  private searchService = inject(SearchService)
 
   private advancedSearchForBulk: AdvancedSearch
 
@@ -25,9 +26,7 @@ export class FindInBulkService {
   private getChannelInBulk: BulkObservables<string, { data: VideoChannel[] }>
   private getPlaylistInBulk: BulkObservables<string, { data: VideoPlaylist[] }>
 
-  constructor (
-    private searchService: SearchService
-  ) {
+  constructor () {
     this.getVideoInBulk = this.buildBulkObservableObject(this.getVideosInBulk.bind(this))
     this.getChannelInBulk = this.buildBulkObservableObject(this.getChannelsInBulk.bind(this))
     this.getPlaylistInBulk = this.buildBulkObservableObject(this.getPlaylistsInBulk.bind(this))
@@ -60,12 +59,12 @@ export class FindInBulkService {
 
     return this.getData({
       observableObject: this.getPlaylistInBulk,
-      finder: p => p.uuid === uuid,
+      finder: p => p.uuid === uuid || p.shortUUID === uuid,
       param: uuid
     })
   }
 
-  private getData <P extends number | string, R> (options: {
+  private getData<P extends number | string, R> (options: {
     observableObject: BulkObservables<P, { data: R[] }>
     param: P
     finder: (d: R) => boolean
@@ -129,14 +128,14 @@ export class FindInBulkService {
     })
   }
 
-  private buildBulkObservableObject <P extends number | string, R> (bulkGet: (params: P[]) => Observable<R>) {
+  private buildBulkObservableObject<P extends number | string, R> (bulkGet: (params: P[]) => Observable<R>) {
     const notifier = new Subject<P>()
 
     return {
       notifier,
 
       result: buildBulkObservable({
-        time: 500,
+        time: 100,
         bulkGet,
         notifierObservable: notifier.asObservable()
       })

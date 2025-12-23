@@ -1,64 +1,76 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_miniature' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_miniature" as *;
 
-$more-button-width: 40px;
+$more-button-width: 30px;
 
 .video-miniature {
-  font-size: 14px;
+  --co-fs-small: #{$miniature-fs-small};
+  --co-fs-medium: #{$miniature-fs-medium};
+  --co-fs-big: #{$miniature-fs-big};
 }
 
-.video-miniature-name {
+.video-name-container {
+  display: flex;
+  align-items: center;
+  min-width: 1px;
+}
+
+.video-name {
+  font-size: var(--co-fs-big);
+
   @include miniature-name;
 }
 
-.video-miniature-information {
-  width: calc(100% - #{$more-button-width});
+.video-info {
+  display: grid;
 }
 
-my-actor-avatar {
-  @include margin(10px, 10px, 0, 0);
+.owner {
+  display: flex;
+  position: relative;
+  font-size: var(--co-fs-medium);
 }
 
-.video-miniature-created-at-views {
-  font-size: 13px;
+.date-and-views {
+  font-size: var(--co-fs-small);
+  color: pvar(--fg-200);
 }
 
-.video-miniature-account,
-.video-miniature-channel {
+.nsfw-warning {
+  my-global-icon {
+    @include global-icon-size(18px);
+  }
+}
+
+.owner-container {
+  display: flex;
+  min-width: 1px;
+  width: 100%;
+}
+
+my-actor-host {
+  flex-shrink: 1;
+  min-width: 1px;
+
+  @include margin-left(0.25rem);
+}
+
+.owner-label {
+  flex-shrink: 1;
+  color: pvar(--fg-300);
+
   @include disable-default-a-behaviour;
-  @include ellipsis;
-
-  display: block;
-  font-size: 13px;
-  color: pvar(--greyForegroundColor);
 
   &:hover {
-    color: $grey-foreground-hover-color;
+    color: pvar(--fg);
+    opacity: 1;
   }
-}
-
-.video-info-privacy,
-.video-info-blocked .blocked-label,
-.video-info-nsfw {
-  font-weight: $font-semibold;
-}
-
-.video-info-blocked {
-  color: #ff0000;
-
-  .blocked-reason::before {
-    content: ' - ';
-  }
-}
-
-.video-info-nsfw {
-  color: #ff0000;
 }
 
 .video-actions {
   width: $more-button-width;
-  height: 30px;
+  text-align: end;
 
   ::ng-deep .dropdown-root:not(.show) {
     opacity: 0;
@@ -68,17 +80,14 @@ my-actor-avatar {
     opacity: 1;
   }
 
-  ::ng-deep .more-icon {
-    opacity: .6;
-
-    &:hover {
-      opacity: 1;
-    }
+  ::ng-deep .dropdown-root > .dropdown-toggle {
+    --input-y-padding: 0;
   }
 }
 
-.video-miniature:hover {
-  ::ng-deep .video-thumbnail-actions-overlay,
+.video-miniature:hover,
+.video-miniature:focus-within {
+  my-video-thumbnail ::ng-deep .actions-overlay,
   .video-actions ::ng-deep .dropdown-root {
     opacity: 1 !important;
   }
@@ -89,29 +98,47 @@ my-actor-avatar {
 .video-miniature:not(.display-as-row) {
   display: flex;
   flex-direction: column;
-  padding-bottom: $video-miniature-margin-bottom;
+  padding-bottom: 1rem;
   width: 100%;
 
+  .video-name {
+    width: calc(100% - #{$more-button-width});
+  }
+
   my-video-thumbnail {
-    @include block-ratio($selector: '::ng-deep .video-thumbnail');
+    margin-bottom: 0.35rem;
+
+    @include block-ratio($selector: "::ng-deep .video-thumbnail");
   }
 
-  .video-bottom {
-    display: flex;
-    width: 100%;
-    min-width: 1px;
+  &.has-avatar .video-info {
+    @include padding-left(0.75rem);
   }
 
-  .video-miniature-name {
-    margin-top: 10px;
-    margin-bottom: 5px;
+  my-actor-avatar {
+    border: 2px solid pvar(--bg);
+    position: absolute;
+    top: -20px;
+    background: pvar(--bg);
+    z-index: z(miniature);
+
+    @include left(-2px);
+
+    &[actorType="account"] {
+      border-radius: $account-avatar-radius;
+    }
+
+    &[actorType="channel"] {
+      border-radius: $channel-avatar-radius;
+    }
+
+    & + .owner-container {
+      // Keep 34px in sync with the component
+      @include margin-left(calc(0.5rem + 34px));
+    }
   }
 
-  .video-miniature-created-at-views {
-    display: block;
-  }
-
-  .video-actions {
+  .date-and-views {
     margin-top: 3px;
   }
 
@@ -119,15 +146,12 @@ my-actor-avatar {
     width: 100%;
     margin-bottom: 25px;
 
-    .video-miniature-information {
-      margin: 0 10px;
-
+    .video-info {
       width: 100%;
       text-align: left;
     }
 
     .video-actions {
-      margin: 0;
       top: -3px;
       width: auto;
 
@@ -143,73 +167,67 @@ my-actor-avatar {
 }
 
 .video-miniature.display-as-row {
-  --rowThumbnailWidth: #{$video-thumbnail-width};
-  --rowThumbnailHeight: #{$video-thumbnail-height};
+  --co-fs-small: #{$miniature-fs-row-small};
+  --co-fs-medium: #{$miniature-fs-row-medium};
+  --co-fs-big: #{$miniature-fs-row-big};
+
+  --co-row-thumbnail-width: #{$video-thumbnail-width};
+  --co-row-thumbnail-height: #{$video-thumbnail-height};
 
   display: flex;
   flex-direction: row;
 
-  .video-bottom {
-    display: flex;
-    min-width: 1px;
-  }
-
-  // We don't display avatar in row mode
-  .channel-avatar {
-    display: none;
-  }
-
   my-video-thumbnail {
+    min-width: var(--co-row-thumbnail-width);
+    max-width: var(--co-row-thumbnail-width);
+    height: var(--co-row-thumbnail-height);
+
     @include margin-right(1rem);
-
-    min-width: var(--rowThumbnailWidth);
-    max-width: var(--rowThumbnailWidth);
-    height: var(--rowThumbnailHeight);
   }
 
-  .video-miniature-name {
-    font-size: $video-miniature-row-name-font-size;
+  .video-info {
+    grid-template-rows: auto;
+    height: min-content;
   }
 
-  .video-miniature-created-at-views,
-  .video-miniature-account,
-  .video-miniature-channel {
-    font-size: $video-miniature-row-info-font-size;
+  .video-name {
+    grid-row: 1;
   }
 
-  .video-actions {
-    margin-top: -3px;
+  .date-and-views {
+    grid-row: 2;
   }
-}
 
-.contained-in-playlists {
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: 5px;
-  row-gap: 5px;
-  font-size: 1rem;
+  .owner {
+    grid-row: 3;
+    align-items: center;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  my-actor-avatar {
+    @include margin-right(0.5rem);
+  }
 }
 
 @include on-small-main-col {
   .video-miniature.display-as-row {
-    --rowThumbnailWidth: #{$video-thumbnail-medium-width};
-    --rowThumbnailHeight: #{$video-thumbnail-medium-height};
+    --co-row-thumbnail-width: #{$video-thumbnail-medium-width};
+    --co-row-thumbnail-height: #{$video-thumbnail-medium-height};
   }
 }
 
 @include on-mobile-main-col {
   .video-miniature.display-as-row {
-    --rowThumbnailWidth: #{$video-thumbnail-small-width};
-    --rowThumbnailHeight: #{$video-thumbnail-small-height};
+    --co-row-thumbnail-width: #{$video-thumbnail-small-width};
+    --co-row-thumbnail-height: #{$video-thumbnail-small-height};
 
-    .video-miniature-name {
-      font-size: $video-miniature-row-info-font-size;
-    }
+    --co-fs-small: #{$miniature-fs-mobile-small};
+    --co-fs-medium: #{$miniature-fs-mobile-medium};
+    --co-fs-big: #{$miniature-fs-mobile-big};
 
-    .video-miniature-created-at-views,
-    .video-miniature-account,
-    .video-miniature-channel {
-      font-size: $video-miniature-row-mobile-info-font-size;
+    my-actor-avatar {
+      display: none;
     }
   }
 }

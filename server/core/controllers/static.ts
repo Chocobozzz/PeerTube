@@ -1,18 +1,20 @@
-import cors from 'cors'
-import express from 'express'
-import { readFile } from 'fs/promises'
-import { join } from 'path'
+import { HttpStatusCode } from '@peertube/peertube-models'
 import { injectQueryToPlaylistUrls } from '@server/lib/hls.js'
 import {
   asyncMiddleware,
   ensureCanAccessPrivateVideoHLSFiles,
   ensureCanAccessVideoPrivateWebVideoFiles,
   handleStaticError,
-  optionalAuthenticate
+  optionalAuthenticate,
+  privateHLSFileValidator,
+  privateM3U8PlaylistValidator
 } from '@server/middlewares/index.js'
-import { HttpStatusCode } from '@peertube/peertube-models'
+import cors from 'cors'
+import express from 'express'
+import { readFile } from 'fs/promises'
+import { join } from 'path'
 import { CONFIG } from '../initializers/config.js'
-import { DIRECTORIES, STATIC_MAX_AGE, STATIC_PATHS } from '../initializers/constants.js'
+import { DIRECTORIES, STATIC_PATHS } from '../initializers/constants.js'
 import { buildReinjectVideoFileTokenQuery, doReinjectVideoFileToken } from './shared/m3u8-playlist.js'
 
 const staticRouter = express.Router()
@@ -55,32 +57,35 @@ const privateHLSStaticMiddlewares = CONFIG.STATIC_FILES.PRIVATE_FILES_REQUIRE_AU
   : []
 
 staticRouter.use(
-  STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS + ':videoUUID/:playlistName.m3u8',
+  STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS + ':videoUUID/:playlistNameWithoutExtension([a-z0-9-]+).m3u8',
+  privateM3U8PlaylistValidator,
   ...privateHLSStaticMiddlewares,
   asyncMiddleware(servePrivateM3U8)
 )
 
 staticRouter.use(
-  STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS,
+  STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS + ':videoUUID/:filename',
+  privateHLSFileValidator,
   ...privateHLSStaticMiddlewares,
-  express.static(DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE, { fallthrough: false }),
-  handleStaticError
+  servePrivateHLSFile
 )
+// ---------------------------------------------------------------------------
+
 staticRouter.use(
   STATIC_PATHS.STREAMING_PLAYLISTS.HLS,
   express.static(DIRECTORIES.HLS_STREAMING_PLAYLIST.PUBLIC, { fallthrough: false }),
   handleStaticError
 )
 
-// FIXME: deprecated in v6, to remove
-const thumbnailsPhysicalPath = CONFIG.STORAGE.THUMBNAILS_DIR
+// ---------------------------------------------------------------------------
+// Uploads
+// ---------------------------------------------------------------------------
+
 staticRouter.use(
-  STATIC_PATHS.THUMBNAILS,
-  express.static(thumbnailsPhysicalPath, { maxAge: STATIC_MAX_AGE.SERVER, fallthrough: false }),
+  STATIC_PATHS.UPLOAD_IMAGES,
+  express.static(DIRECTORIES.UPLOAD_IMAGES, { fallthrough: false }),
   handleStaticError
 )
-
-// ---------------------------------------------------------------------------
 
 export {
   staticRouter
@@ -88,9 +93,15 @@ export {
 
 // ---------------------------------------------------------------------------
 
+function servePrivateHLSFile (req: express.Request, res: express.Response) {
+  const path = join(DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE, req.params.videoUUID, req.params.filename)
+
+  return res.sendFile(path)
+}
+
 async function servePrivateM3U8 (req: express.Request, res: express.Response) {
-  const path = join(DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE, req.params.videoUUID, req.params.playlistName + '.m3u8')
-  const filename = req.params.playlistName + '.m3u8'
+  const path = join(DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE, req.params.videoUUID, req.params.playlistNameWithoutExtension + '.m3u8')
+  const filename = req.params.playlistNameWithoutExtension + '.m3u8'
 
   let playlistContent: string
 
@@ -112,5 +123,5 @@ async function servePrivateM3U8 (req: express.Request, res: express.Response) {
     ? injectQueryToPlaylistUrls(playlistContent, buildReinjectVideoFileTokenQuery(req, filename.endsWith('master.m3u8')))
     : playlistContent
 
-  return res.set('content-type', 'application/vnd.apple.mpegurl').send(transformedContent).end()
+  return res.set('content-type', 'application/x-mpegurl; charset=utf-8').send(transformedContent).end()
 }

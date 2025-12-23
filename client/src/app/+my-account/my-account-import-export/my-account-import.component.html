@@ -35,34 +35,38 @@
         <li i18n>Followers (accounts will need to re-follow your channels)</li>
       </ul>
 
-      <p *ngIf="isEmailEnabled()" i18n>An email will be sent when the import process is complete.</p>
+      @if (isEmailEnabled()) {
+        <p i18n>An email will be sent when the import process is complete.</p>
+      }
 
-      <div class="mb-3" *ngIf="latestImport">
-        <div>
-          <strong>Latest import on:</strong> {{ latestImport.createdAt | date: 'medium' }}
+      @if (latestImport) {
+        <div class="mb-3">
+          <div>
+            <strong>Latest import on:</strong> {{ latestImport.createdAt | ptDate: 'medium' }}
+          </div>
+          <div>
+            <strong>Latest import state:</strong> {{ latestImport.state.label }}
+          </div>
         </div>
-
-        <div>
-          <strong>Latest import state:</strong> {{ latestImport.state.label }}
-        </div>
-      </div>
+      }
 
       @if (hasPendingImport()) {
-        <div i18n class="alert pt-alert-primary">
+        <my-alert i18n type="primary">
           You can't re-import an archive because you already have an import that is currently being processed by PeerTube.
-        </div>
+        </my-alert>
       } @else {
         <my-upload-progress
+          class="d-block mt-3 mb-3"
           [isUploading]="uploadingArchive" [uploadPercents]="uploadPercents" [error]="error" [uploaded]="archiveUploadFinished"
-          [enableRetryAfterError]="enableRetryAfterError" (cancel)="cancelUpload()" (retry)="retryUpload()"
-        >
+          [enableRetryAfterError]="enableRetryAfterError" (cancelUpload)="cancelUpload()" (retry)="retryUpload()"
+          >
         </my-upload-progress>
 
-        <div *ngIf="archiveUploadFinished && !error" class="alert pt-alert-primary" i18n>
-          Upload completed. Your archive import will be processed as soon as possible.
-        </div>
+        @if (archiveUploadFinished && !error) {
+          <my-alert type="primary" i18n>Upload completed. Your archive import will be processed as soon as possible.</my-alert>
+        }
 
-        <div [hidden]="uploadingArchive || archiveUploadFinished" class="button-file form-control" i18n-ngbTooltip ngbTooltip="(extension: .zip)">
+        <div [hidden]="uploadingArchive || archiveUploadFinished" class="button-file primary-button form-control" i18n-ngbTooltip ngbTooltip="(extension: .zip)">
           <span i18n>Select the archive file to import</span>
           <input
             aria-label="Select the file to import"
@@ -71,7 +75,7 @@
             (change)="onFileChange($event)"
             id="importfile"
             type="file"
-          />
+            />
         </div>
       }
     } @else {

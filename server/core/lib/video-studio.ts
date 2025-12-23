@@ -1,18 +1,19 @@
-import { move, remove } from 'fs-extra/esm'
-import { join } from 'path'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
-import { createTorrentAndSetInfoHashFromPath } from '@server/helpers/webtorrent.js'
-import { CONFIG } from '@server/initializers/config.js'
-import { MUser, MVideo, MVideoFile, MVideoFullLight, MVideoWithAllFiles } from '@server/types/models/index.js'
+import { buildAspectRatio } from '@peertube/peertube-core-utils'
 import { getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
 import { VideoStudioEditionPayload, VideoStudioTask, VideoStudioTaskPayload } from '@peertube/peertube-models'
+import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createTorrentAndSetInfoHashFromPath } from '@server/lib/webtorrent.js'
+import { CONFIG } from '@server/initializers/config.js'
+import { MUser, MVideoFile, MVideoFullLight, MVideoWithAllFiles, MVideoWithFile } from '@server/types/models/index.js'
+import { move, remove } from 'fs-extra/esm'
+import { join } from 'path'
 import { JobQueue } from './job-queue/index.js'
 import { VideoStudioTranscodingJobHandler } from './runners/index.js'
 import { getTranscodingJobPriority } from './transcoding/transcoding-priority.js'
+import { regenerateTranscriptionTaskIfNeeded } from './video-captions.js'
 import { buildNewFile, removeHLSPlaylist, removeWebVideoFile } from './video-file.js'
+import { addRemoteStoryboardJobIfNeeded, buildLocalStoryboardJobIfNeeded } from './video-jobs.js'
 import { VideoPathManager } from './video-path-manager.js'
-import { buildStoryboardJobIfNeeded } from './video-jobs.js'
-import { buildAspectRatio } from '@peertube/peertube-core-utils'
 
 const lTags = loggerTagsFactory('video-studio')
 
@@ -29,7 +30,7 @@ export function getStudioTaskFilePath (filename: string) {
 }
 
 export async function safeCleanupStudioTMPFiles (tasks: VideoStudioTaskPayload[]) {
-  logger.info('Removing studio task files', { tasks, ...lTags() })
+  logger.info('Removing TMP studio task files', { tasks, ...lTags() })
 
   for (const task of tasks) {
     try {
@@ -62,13 +63,13 @@ export async function approximateIntroOutroAdditionalSize (
     additionalDuration += await getVideoStreamDuration(filePath)
   }
 
-  return (video.getMaxQualityFile().size / video.duration) * additionalDuration
+  return (video.getMaxQualityBytes() / video.duration) * additionalDuration
 }
 
 // ---------------------------------------------------------------------------
 
 export async function createVideoStudioJob (options: {
-  video: MVideo
+  video: MVideoWithFile
   user: MUser
   payload: VideoStudioEditionPayload
 }) {
@@ -108,9 +109,8 @@ export async function onVideoStudioEnded (options: {
   video.aspectRatio = buildAspectRatio({ width: newFile.width, height: newFile.height })
   await video.save()
 
-  return JobQueue.Instance.createSequentialJobFlow(
-    buildStoryboardJobIfNeeded({ video, federate: false }),
-
+  await JobQueue.Instance.createSequentialJobFlow(
+    await buildLocalStoryboardJobIfNeeded({ video, federate: false }),
     {
       type: 'federate-video' as 'federate-video',
       payload: {
@@ -118,7 +118,6 @@ export async function onVideoStudioEnded (options: {
         isNewVideoForFederation: false
       }
     },
-
     {
       type: 'transcoding-job-builder' as 'transcoding-job-builder',
       payload: {
@@ -129,6 +128,9 @@ export async function onVideoStudioEnded (options: {
       }
     }
   )
+
+  await addRemoteStoryboardJobIfNeeded(video)
+  await regenerateTranscriptionTaskIfNeeded(video)
 }
 
 // ---------------------------------------------------------------------------

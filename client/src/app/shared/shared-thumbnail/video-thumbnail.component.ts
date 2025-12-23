@@ -1,77 +1,145 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core'
-import { ScreenService } from '@app/core'
-import { VideoState } from '@peertube/peertube-models'
-import { GlobalIconComponent } from '../shared-icons/global-icon.component'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { CommonModule } from '@angular/common'
+import { booleanAttribute, Component, inject, input, OnChanges, output, viewChild } from '@angular/core'
 import { RouterLink } from '@angular/router'
-import { NgIf, NgTemplateOutlet, NgClass, NgStyle } from '@angular/common'
+import { ScreenService } from '@app/core'
+import { getAPIUrl } from '@app/helpers'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { Video as VideoServerModel, VideoState } from '@peertube/peertube-models'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { Video } from '../shared-main/video/video.model'
+import { FromNowPipe } from '../shared-main/date/from-now.pipe'
+
+export type VideoThumbnailInput = Pick<
+  VideoServerModel,
+  | 'duration'
+  | 'id'
+  | 'uuid'
+  | 'shortUUID'
+  | 'isLive'
+  | 'state'
+  | 'previewPath'
+  | 'previewUrl'
+  | 'thumbnailPath'
+  | 'thumbnailUrl'
+  | 'userHistory'
+  | 'originallyPublishedAt'
+  | 'liveSchedules'
+>
 
 @Component({
   selector: 'my-video-thumbnail',
   styleUrls: [ './video-thumbnail.component.scss' ],
   templateUrl: './video-thumbnail.component.html',
-  standalone: true,
-  imports: [ NgIf, RouterLink, NgTemplateOutlet, NgClass, NgbTooltip, GlobalIconComponent, NgStyle ]
+  imports: [ CommonModule, RouterLink, NgbTooltip, GlobalIconComponent, FromNowPipe ]
 })
-export class VideoThumbnailComponent {
-  @Input() video: Video
-  @Input() nsfw = false
+export class VideoThumbnailComponent implements OnChanges {
+  private screenService = inject(ScreenService)
 
-  @Input() videoRouterLink: string | any[]
-  @Input() queryParams: { [ p: string ]: any }
-  @Input() videoHref: string
-  @Input() videoTarget: string
+  readonly video = input.required<VideoThumbnailInput>()
 
-  @Input() displayWatchLaterPlaylist: boolean
-  @Input() inWatchLaterPlaylist: boolean
+  readonly videoRouterLink = input<string | any[]>(undefined)
+  readonly queryParams = input<{
+    [p: string]: any
+  }>(undefined)
+  readonly videoHref = input<string>(undefined)
+  readonly videoTarget = input<string>(undefined)
 
-  @Input({ required: true }) ariaLabel: string
+  readonly displayWatchLaterPlaylist = input<boolean, boolean | string>(false, { transform: booleanAttribute })
+  readonly inWatchLaterPlaylist = input<boolean, boolean | string>(false, { transform: booleanAttribute })
+  readonly playOverlay = input<boolean, boolean | string>(true, { transform: booleanAttribute })
 
-  @Output() watchLaterClick = new EventEmitter<boolean>()
+  readonly ariaLabel = input.required<string>()
+  readonly blur = input.required({ transform: booleanAttribute })
+
+  readonly watchLaterTooltip = viewChild<NgbTooltip>('watchLaterTooltip')
+  readonly watchLaterClick = output<boolean>()
 
   addToWatchLaterText: string
-  addedToWatchLaterText: string
+  removeFromWatchLaterText: string
 
-  constructor (private screenService: ScreenService) {
+  durationLabel: string
+
+  constructor () {
     this.addToWatchLaterText = $localize`Add to watch later`
-    this.addedToWatchLaterText = $localize`Remove from watch later`
+    this.removeFromWatchLaterText = $localize`Remove from watch later`
   }
 
-  isLiveEnded () {
-    if (!this.video.state) return
+  ngOnChanges () {
+    this.durationLabel = this.video().duration
+      ? Video.buildDurationLabel(this.video())
+      : undefined
+  }
 
-    return this.video.state.id === VideoState.LIVE_ENDED
+  getWatchIconText () {
+    if (this.inWatchLaterPlaylist()) return this.removeFromWatchLaterText
+
+    return this.addToWatchLaterText
+  }
+
+  isLiveStreaming () {
+    // In non moderator mode we only display published live
+    // If in moderator mode, the server adds the state info to the object
+    const video = this.video()
+    if (!video.isLive) return false
+
+    return !video.state || video.state?.id === VideoState.PUBLISHED
+  }
+
+  isEndedLive () {
+    return this.video().state?.id === VideoState.LIVE_ENDED
+  }
+
+  isScheduledLive () {
+    return this.video().state?.id === VideoState.WAITING_FOR_LIVE &&
+      this.video().liveSchedules !== null &&
+      this.video().liveSchedules.length > 0
+  }
+
+  scheduledLiveDate () {
+    return new Date(this.video().liveSchedules[0].startAt)
   }
 
   getImageUrl () {
-    if (!this.video) return ''
+    const video = this.video()
+    if (!video) return ''
 
     if (this.screenService.isInMobileView()) {
-      return this.video.previewUrl
+      return video.previewUrl || getAPIUrl() + video.previewPath
     }
 
-    return this.video.thumbnailUrl
+    return video.thumbnailUrl || getAPIUrl() + video.thumbnailPath
   }
 
   getProgressPercent () {
-    if (!this.video.userHistory) return 0
+    const video = this.video()
+    if (!video.userHistory) return 0
 
-    const currentTime = this.video.userHistory.currentTime
+    const currentTime = video.userHistory.currentTime
 
-    return (currentTime / this.video.duration) * 100
+    return Math.round(currentTime / video.duration * 100)
+  }
+
+  getDurationOverlayLabel () {
+    return $localize`Video duration is ${this.getDurationLabel()}`
   }
 
   getVideoRouterLink () {
-    if (this.videoRouterLink) return this.videoRouterLink
+    const videoRouterLink = this.videoRouterLink()
+    if (videoRouterLink) return videoRouterLink
 
-    return Video.buildWatchUrl(this.video)
+    return Video.buildWatchUrl(this.video())
   }
 
   onWatchLaterClick (event: Event) {
-    this.watchLaterClick.emit(this.inWatchLaterPlaylist)
+    this.watchLaterClick.emit(this.inWatchLaterPlaylist())
 
     event.stopPropagation()
+    this.watchLaterTooltip().close()
+
     return false
+  }
+
+  getDurationLabel () {
+    return this.durationLabel
   }
 }

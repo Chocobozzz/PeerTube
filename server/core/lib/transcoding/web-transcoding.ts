@@ -1,7 +1,13 @@
 import { buildAspectRatio } from '@peertube/peertube-core-utils'
-import { TranscodeVODOptionsType, getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
+import {
+  MergeAudioTranscodeOptions,
+  TranscodeVODOptionsType,
+  VideoTranscodeOptions,
+  getVideoStreamDuration
+} from '@peertube/peertube-ffmpeg'
+import { VideoFileStream } from '@peertube/peertube-models'
 import { computeOutputFPS } from '@server/helpers/ffmpeg/index.js'
-import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent.js'
+import { createTorrentAndSetInfoHash } from '@server/lib/webtorrent.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
 import { Job } from 'bullmq'
@@ -10,10 +16,9 @@ import { copyFile } from 'fs/promises'
 import { basename, join } from 'path'
 import { CONFIG } from '../../initializers/config.js'
 import { VideoFileModel } from '../../models/video/video-file.js'
-import { JobQueue } from '../job-queue/index.js'
 import { generateWebVideoFilename } from '../paths.js'
 import { buildNewFile, saveNewOriginalFileIfNeeded } from '../video-file.js'
-import { buildStoryboardJobIfNeeded } from '../video-jobs.js'
+import { addLocalOrRemoteStoryboardJobIfNeeded } from '../video-jobs.js'
 import { VideoPathManager } from '../video-path-manager.js'
 import { buildFFmpegVOD } from './shared/index.js'
 import { buildOriginalFileResolution } from './transcoding-resolutions.js'
@@ -21,25 +26,22 @@ import { buildOriginalFileResolution } from './transcoding-resolutions.js'
 // Optimize the original video file and replace it. The resolution is not changed.
 export async function optimizeOriginalVideofile (options: {
   video: MVideoFullLight
-  inputVideoFile: MVideoFile
   quickTranscode: boolean
   job: Job
 }) {
-  const { video, inputVideoFile, quickTranscode, job } = options
+  const { quickTranscode, job } = options
 
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const newExtname = '.mp4'
 
   // Will be released by our transcodeVOD function once ffmpeg is ran
-  const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
+  const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(options.video.uuid)
 
   try {
-    await video.reload()
-    await inputVideoFile.reload()
+    const video = await VideoModel.loadFull(options.video.id)
+    const inputVideoFile = video.getMaxQualityFile(VideoFileStream.VIDEO)
 
-    const fileWithVideoOrPlaylist = inputVideoFile.withVideoOrPlaylist(video)
-
-    const result = await VideoPathManager.Instance.makeAvailableVideoFile(fileWithVideoOrPlaylist, async videoInputPath => {
+    const result = await VideoPathManager.Instance.makeAvailableVideoFile(inputVideoFile, async videoInputPath => {
       const videoOutputPath = join(transcodeDirectory, video.id + '-transcoded' + newExtname)
 
       const transcodeType: TranscodeVODOptionsType = quickTranscode
@@ -47,13 +49,13 @@ export async function optimizeOriginalVideofile (options: {
         : 'video'
 
       const resolution = buildOriginalFileResolution(inputVideoFile.resolution)
-      const fps = computeOutputFPS({ inputFPS: inputVideoFile.fps, resolution })
+      const fps = computeOutputFPS({ inputFPS: inputVideoFile.fps, resolution, isOriginResolution: true, type: 'vod' })
 
       // Could be very long!
       await buildFFmpegVOD(job).transcode({
         type: transcodeType,
 
-        inputPath: videoInputPath,
+        videoInputPath,
         outputPath: videoOutputPath,
 
         inputFileMutexReleaser,
@@ -89,16 +91,17 @@ export async function transcodeNewWebVideoResolution (options: {
 
   try {
     const video = await VideoModel.loadFull(videoArg.uuid)
-    const file = video.getMaxQualityFile().withVideoOrPlaylist(video)
 
-    const result = await VideoPathManager.Instance.makeAvailableVideoFile(file, async videoInputPath => {
+    const result = await VideoPathManager.Instance.makeAvailableMaxQualityFiles(video, async ({ videoPath, separatedAudioPath }) => {
       const filename = generateWebVideoFilename(resolution, newExtname)
       const videoOutputPath = join(transcodeDirectory, filename)
 
-      const transcodeOptions = {
-        type: 'video' as 'video',
+      const transcodeOptions: VideoTranscodeOptions = {
+        type: 'video',
 
-        inputPath: videoInputPath,
+        videoInputPath: videoPath,
+        separatedAudioInputPath: separatedAudioPath,
+
         outputPath: videoOutputPath,
 
         inputFileMutexReleaser,
@@ -134,11 +137,9 @@ export async function mergeAudioVideofile (options: {
 
   try {
     const video = await VideoModel.loadFull(videoArg.uuid)
-    const inputVideoFile = video.getMinQualityFile()
+    const inputVideoFile = video.getMaxQualityFile(VideoFileStream.AUDIO)
 
-    const fileWithVideoOrPlaylist = inputVideoFile.withVideoOrPlaylist(video)
-
-    const result = await VideoPathManager.Instance.makeAvailableVideoFile(fileWithVideoOrPlaylist, async audioInputPath => {
+    const result = await VideoPathManager.Instance.makeAvailableVideoFile(inputVideoFile, async audioInputPath => {
       const videoOutputPath = join(transcodeDirectory, video.id + '-transcoded' + newExtname)
 
       // If the user updates the video preview during transcoding
@@ -146,15 +147,16 @@ export async function mergeAudioVideofile (options: {
       const tmpPreviewPath = join(CONFIG.STORAGE.TMP_DIR, basename(previewPath))
       await copyFile(previewPath, tmpPreviewPath)
 
-      const transcodeOptions = {
-        type: 'merge-audio' as 'merge-audio',
+      const transcodeOptions: MergeAudioTranscodeOptions = {
+        type: 'merge-audio',
 
-        inputPath: tmpPreviewPath,
+        videoInputPath: tmpPreviewPath,
+        audioPath: audioInputPath,
+
         outputPath: videoOutputPath,
 
         inputFileMutexReleaser,
 
-        audioPath: audioInputPath,
         resolution,
         fps
       }
@@ -226,7 +228,7 @@ export async function onWebVideoFileTranscoding (options: {
     video.VideoFiles = await video.$get('VideoFiles')
 
     if (wasAudioFile) {
-      await JobQueue.Instance.createJob(buildStoryboardJobIfNeeded({ video, federate: false }))
+      await addLocalOrRemoteStoryboardJobIfNeeded({ video, federate: false })
     }
 
     return { video, videoFile }

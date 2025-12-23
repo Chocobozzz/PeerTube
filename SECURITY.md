@@ -39,9 +39,27 @@ The vulnerability is kept private until a majority of instances known on instanc
 
 ## Official Channels
 
-To help us receive vulnerability submissions we use the following official reporting channels:
-- chocobozzz@framasoft.org (GPG: [583A612D890159BE](https://keybase.io/chocobozzz/pgp_keys.asc?fingerprint=c44aad638367912ca93edd57583a612d890159be))
-- sendmemail@rigelk.eu (GPG: [EA12971B0E438F36](https://api.github.com/users/rigelk/gpg_keys))
+To help us receive vulnerability submissions we use the following official reporting channel:
+- peertube-security@framasoft.org
+
+The following PGP key can be used to encrypt your email:
+
+```
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+mDMEZjD41hYJKwYBBAHaRw8BAQdAfhTpNfIk8/doN8j+PnGzNazK6p6KXEatqz1L
+ARAmlU20M1BlZXJUdWJlIFNlY3VyaXR5IDxwZWVydHViZS1zZWN1cml0eUBmcmFt
+YXNvZnQub3JnPoiTBBMWCgA7FiEEr+3Jvd9JW64FG8cvQOaXHEo/b6cFAmYw+NYC
+GwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgkQQOaXHEo/b6fRbgD8DiAL
+7o3eeHuYnQe1I+SnSHU6RDVk/OY27+ZFSrWgsYMBAAA16aGGkbmme1mmig+iEMiL
+uhjVAfwuXb0VzrxqqmYMuDgEZjD41hIKKwYBBAGXVQEFAQEHQDCVpwHHyrS9rCQq
+0uXbPTWkWuf8yZJqpzZSoG3KY5JZAwEIB4h4BBgWCgAgFiEEr+3Jvd9JW64FG8cv
+QOaXHEo/b6cFAmYw+NYCGwwACgkQQOaXHEo/b6fwmAEAsiJDN2GG7sNA2ExjoNT8
+P0hnqJkaRh8WJ/pi3u+QlWABAJj5qRhA3Om7SYJjzYfe3fEnrS5cTW51qc96r7GU
+IdUI
+=y06w
+-----END PGP PUBLIC KEY BLOCK-----
+```
 
 If you think you have found a vulnerability, please include the following details with your report and be as descriptive as possible:
 - The location and nature of the vulnerability,

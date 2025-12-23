@@ -1,12 +1,13 @@
 import { forkJoin, Observable } from 'rxjs'
 import { map, switchMap } from 'rxjs/operators'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { ServerService } from '@app/core'
-import { About, ServerStats } from '@peertube/peertube-models'
+import { About, ServerConfig, ServerStats } from '@peertube/peertube-models'
 import { AboutHTML, InstanceService } from '@app/shared/shared-main/instance/instance.service'
 import { CustomMarkupService } from '@app/shared/shared-custom-markup/custom-markup.service'
 
 export type ResolverData = {
+  serverConfig: ServerConfig
   serverStats: ServerStats
   about: About
   languages: string[]
@@ -17,24 +18,24 @@ export type ResolverData = {
 
 @Injectable()
 export class AboutInstanceResolver {
-
-  constructor (
-    private instanceService: InstanceService,
-    private customMarkupService: CustomMarkupService,
-    private serverService: ServerService
-  ) {}
+  private instanceService = inject(InstanceService)
+  private customMarkupService = inject(CustomMarkupService)
+  private serverService = inject(ServerService)
 
   resolve (): Observable<ResolverData> {
     return forkJoin([
       this.buildInstanceAboutObservable(),
-      this.buildInstanceStatsObservable()
+      this.serverService.getServerStats(),
+      this.serverService.getConfig()
     ]).pipe(
       map(([
         [ about, languages, categories, aboutHTML, { rootElement } ],
-        serverStats
+        serverStats,
+        serverConfig
       ]) => {
         return {
           serverStats,
+          serverConfig,
           about,
           languages,
           categories,
@@ -58,9 +59,5 @@ export class AboutInstanceResolver {
           ])
         })
       )
-  }
-
-  private buildInstanceStatsObservable () {
-    return this.serverService.getServerStats()
   }
 }

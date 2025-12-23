@@ -1,12 +1,12 @@
-import 'multer'
-import express from 'express'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { handlesToNameAndHost } from '@server/helpers/actors.js'
 import { pickCommonVideoQuery } from '@server/helpers/query.js'
 import { sendUndoFollow } from '@server/lib/activitypub/send/index.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
-import { buildNSFWFilter, getCountVideos } from '../../../helpers/express-utils.js'
+import express from 'express'
+import 'multer'
+import { buildNSFWFilters, getCountVideos } from '../../../helpers/express-utils.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import { JobQueue } from '../../../lib/job-queue/index.js'
@@ -14,7 +14,7 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidatorFactory,
   paginationValidator,
   setDefaultPagination,
   setDefaultSort,
@@ -34,45 +34,36 @@ import { VideoModel } from '../../../models/video/video.js'
 
 const mySubscriptionsRouter = express.Router()
 
-mySubscriptionsRouter.get('/me/subscriptions/videos',
+mySubscriptionsRouter.get(
+  '/me/subscriptions/videos',
   authenticate,
   paginationValidator,
   videosSortValidator,
   setDefaultVideosSort,
   setDefaultPagination,
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidatorFactory(),
   asyncMiddleware(getUserSubscriptionVideos)
 )
 
-mySubscriptionsRouter.get('/me/subscriptions/exist',
-  authenticate,
-  areSubscriptionsExistValidator,
-  asyncMiddleware(areSubscriptionsExist)
-)
+mySubscriptionsRouter.get('/me/subscriptions/exist', authenticate, areSubscriptionsExistValidator, asyncMiddleware(areSubscriptionsExist))
 
-mySubscriptionsRouter.get('/me/subscriptions',
+mySubscriptionsRouter.get(
+  '/me/subscriptions',
   authenticate,
   paginationValidator,
   userSubscriptionsSortValidator,
   setDefaultSort,
   setDefaultPagination,
   userSubscriptionListValidator,
-  asyncMiddleware(getUserSubscriptions)
+  asyncMiddleware(listUserSubscriptions)
 )
 
-mySubscriptionsRouter.post('/me/subscriptions',
-  authenticate,
-  userSubscriptionAddValidator,
-  addUserSubscription
-)
+mySubscriptionsRouter.post('/me/subscriptions', authenticate, userSubscriptionAddValidator, addUserSubscription)
 
-mySubscriptionsRouter.get('/me/subscriptions/:uri',
-  authenticate,
-  userSubscriptionGetValidator,
-  asyncMiddleware(getUserSubscription)
-)
+mySubscriptionsRouter.get('/me/subscriptions/:uri', authenticate, userSubscriptionGetValidator, asyncMiddleware(getUserSubscription))
 
-mySubscriptionsRouter.delete('/me/subscriptions/:uri',
+mySubscriptionsRouter.delete(
+  '/me/subscriptions/:uri',
   authenticate,
   userSubscriptionGetValidator,
   asyncRetryTransactionMiddleware(deleteUserSubscription)
@@ -94,7 +85,7 @@ async function areSubscriptionsExist (req: express.Request, res: express.Respons
 
   const results = await ActorFollowModel.listSubscriptionsOf(user.Account.Actor.id, sanitizedHandles)
 
-  const existObject: { [id: string ]: boolean } = {}
+  const existObject: { [id: string]: boolean } = {}
   for (const sanitizedHandle of sanitizedHandles) {
     const obj = results.find(r => {
       const server = r.ActorFollowing.Server
@@ -147,11 +138,11 @@ async function deleteUserSubscription (req: express.Request, res: express.Respon
   })
 
   return res.type('json')
-            .status(HttpStatusCode.NO_CONTENT_204)
-            .end()
+    .status(HttpStatusCode.NO_CONTENT_204)
+    .end()
 }
 
-async function getUserSubscriptions (req: express.Request, res: express.Response) {
+async function listUserSubscriptions (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.User
   const actorId = user.Account.Actor.id
 
@@ -173,12 +164,12 @@ async function getUserSubscriptionVideos (req: express.Request, res: express.Res
 
   const apiOptions = await Hooks.wrapObject({
     ...query,
+    ...buildNSFWFilters({ req, res }),
 
     displayOnlyForFollower: {
       actorId: user.Account.Actor.id,
       orLocalVideos: false
     },
-    nsfw: buildNSFWFilter(res, query.nsfw),
     user,
     countVideos
   }, 'filter:api.user.me.subscription-videos.list.params')

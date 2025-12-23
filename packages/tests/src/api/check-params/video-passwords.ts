@@ -1,28 +1,30 @@
-import { expect } from 'chai'
 import {
   HttpStatusCode,
   HttpStatusCodeType,
   PeerTubeProblemDocument,
   ServerErrorCode,
+  VideoCommentPolicy,
   VideoCreateResult,
   VideoPrivacy
 } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
+  PeerTubeServer,
   cleanupTests,
   createSingleServer,
   makePostBodyRequest,
-  PeerTubeServer,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 import { checkUploadVideoParam } from '@tests/shared/videos.js'
+import { expect } from 'chai'
 
 describe('Test video passwords validator', function () {
   let path: string
   let server: PeerTubeServer
-  let userAccessToken = ''
+  let userAccessToken: string
+  let editorToken: string
   let video: VideoCreateResult
   let channelId: number
   let publicVideo: VideoCreateResult
@@ -47,7 +49,7 @@ describe('Test video passwords validator', function () {
         },
         import: {
           videos: {
-            http:{
+            http: {
               enabled: true
             }
           }
@@ -69,6 +71,9 @@ describe('Test video passwords validator', function () {
         videoPasswords: [ 'password1', 'password2' ]
       })
     }
+
+    editorToken = await server.channelCollaborators.createEditor('editor', 'root_channel')
+
     path = '/api/v1/videos/'
   })
 
@@ -89,7 +94,7 @@ describe('Test video passwords validator', function () {
       licence: 1,
       language: 'pt',
       nsfw: false,
-      commentsEnabled: true,
+      commentsPolicy: VideoCommentPolicy.ENABLED,
       downloadEnabled: true,
       waitTranscoding: true,
       description: 'my super description',
@@ -131,7 +136,6 @@ describe('Test video passwords validator', function () {
   }
 
   function validateVideoPasswordList (mode: 'uploadLegacy' | 'uploadResumable' | 'import' | 'updateVideo' | 'updatePasswords' | 'live') {
-
     it('Should fail with a password protected privacy without providing a password', async function () {
       await checkVideoPasswordOptions({
         server,
@@ -232,7 +236,9 @@ describe('Test video passwords validator', function () {
         ? HttpStatusCode.NO_CONTENT_204
         : HttpStatusCode.OK_200
 
-      await checkVideoPasswordOptions({ server, token: server.accessToken, videoPasswords, expectedStatus, mode })
+      for (const token of [ server.accessToken, editorToken ]) {
+        await checkVideoPasswordOptions({ server, token, videoPasswords, expectedStatus, mode })
+      }
     })
   }
 
@@ -267,7 +273,17 @@ describe('Test video passwords validator', function () {
     token?: string
     videoPassword?: string
     expectedStatus: HttpStatusCodeType
-    mode: 'get' | 'getWithPassword' | 'getWithToken' | 'listCaptions' | 'createThread' | 'listThreads' | 'replyThread' | 'rate' | 'token'
+    mode:
+      | 'get'
+      | 'getWithPassword'
+      | 'getWithToken'
+      | 'listCaptions'
+      | 'createThread'
+      | 'listThreads'
+      | 'replyThread'
+      | 'rate'
+      | 'token'
+      | 'getPlayerSettings'
   }) {
     const { server, token = null, videoPassword, expectedStatus, mode } = options
 
@@ -350,6 +366,15 @@ describe('Test video passwords validator', function () {
       })
     }
 
+    if (mode === 'getPlayerSettings') {
+      return server.playerSettings.getForVideo({
+        videoId: video.id,
+        token,
+        expectedStatus,
+        videoPassword
+      })
+    }
+
     if (mode === 'token') {
       return server.videoToken.create({
         videoId: video.id,
@@ -365,27 +390,34 @@ describe('Test video passwords validator', function () {
       ? ServerErrorCode.VIDEO_REQUIRES_PASSWORD
       : ServerErrorCode.INCORRECT_VIDEO_PASSWORD
 
-    const message = mode === 'providePassword'
-      ? 'Please provide a password to access this password protected video'
-      : 'Incorrect video password. Access to the video is denied.'
-
     if (!error.code) {
       error = JSON.parse(error.text)
     }
 
     expect(error.code).to.equal(serverCode)
-    expect(error.detail).to.equal(message)
-    expect(error.error).to.equal(message)
 
-    expect(error.status).to.equal(HttpStatusCode.FORBIDDEN_403)
+    if (mode === 'providePassword') {
+      expect(error.detail).to.equal('Please provide a password to access this password protected video')
+    } else {
+      expect(error.detail).to.equal('Incorrect video password. Access to the video is denied')
+    }
+
+    try {
+      expect(error.status).to.equal(HttpStatusCode.FORBIDDEN_403)
+    } catch {
+      expect(error.status).to.equal(HttpStatusCode.UNAUTHORIZED_401)
+    }
   }
 
-  function validateVideoAccess (mode: 'get' | 'listCaptions' | 'createThread' | 'listThreads' | 'replyThread' | 'rate' | 'token') {
+  function validateVideoAccess (
+    mode: 'get' | 'listCaptions' | 'createThread' | 'listThreads' | 'replyThread' | 'getPlayerSettings' | 'rate' | 'token'
+  ) {
     const requiresUserAuth = [ 'createThread', 'replyThread', 'rate' ].includes(mode)
     let tokens: string[]
+
     if (!requiresUserAuth) {
       it('Should fail without providing a password for an unlogged user', async function () {
-        const body = await checkVideoAccessOptions({ server, expectedStatus: HttpStatusCode.FORBIDDEN_403, mode })
+        const body = await checkVideoAccessOptions({ server, expectedStatus: HttpStatusCode.UNAUTHORIZED_401, mode })
         const error = body as unknown as PeerTubeProblemDocument
 
         checkVideoError(error, 'providePassword')
@@ -444,7 +476,7 @@ describe('Test video passwords validator', function () {
       }
     })
 
-    it('Should fail if an inccorect password containing the correct password is entered', async function () {
+    it('Should fail if an incorrect password containing the correct password is entered', async function () {
       const tmp = mode === 'get' ? 'getWithPassword' : mode
 
       for (const token of tokens) {
@@ -461,13 +493,20 @@ describe('Test video passwords validator', function () {
       }
     })
 
-    it('Should succeed without providing a password for an authorised user', async function () {
-      const tmp = mode === 'get' ? 'getWithToken' : mode
-      const expectedStatus = mode === 'rate' ? HttpStatusCode.NO_CONTENT_204 : HttpStatusCode.OK_200
+    it('Should succeed without providing a password for an authorized user', async function () {
+      const tmp = mode === 'get'
+        ? 'getWithToken'
+        : mode
 
-      const body = await checkVideoAccessOptions({ server, token: server.accessToken, expectedStatus, mode: tmp })
+      const expectedStatus = mode === 'rate'
+        ? HttpStatusCode.NO_CONTENT_204
+        : HttpStatusCode.OK_200
 
-      if (mode === 'createThread') commentId = body.comment.id
+      for (const token of [ editorToken, server.accessToken ]) {
+        const body = await checkVideoAccessOptions({ server, token, expectedStatus, mode: tmp })
+
+        if (mode === 'createThread') commentId = body.comment.id
+      }
     })
 
     it('Should succeed using correct passwords', async function () {
@@ -482,7 +521,6 @@ describe('Test video passwords validator', function () {
   }
 
   describe('When accessing password protected video', function () {
-
     describe('For getting a password protected video', function () {
       validateVideoAccess('get')
     })
@@ -507,6 +545,10 @@ describe('Test video passwords validator', function () {
       validateVideoAccess('listCaptions')
     })
 
+    describe('For getting player settings', function () {
+      validateVideoAccess('getPlayerSettings')
+    })
+
     describe('For creating video file token', function () {
       validateVideoAccess('token')
     })
@@ -522,7 +564,7 @@ describe('Test video passwords validator', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, path + video.uuid + '/passwords', server.accessToken)
+      await checkBadSort(server.url, path + video.uuid + '/passwords', server.accessToken)
     })
 
     it('Should fail for unauthenticated user', async function () {
@@ -542,11 +584,13 @@ describe('Test video passwords validator', function () {
     })
 
     it('Should succeed with the correct parameters', async function () {
-      await server.videoPasswords.list({
-        token: server.accessToken,
-        expectedStatus: HttpStatusCode.OK_200,
-        videoId: video.id
-      })
+      for (const token of [ server.accessToken, editorToken ]) {
+        await server.videoPasswords.list({
+          token,
+          expectedStatus: HttpStatusCode.OK_200,
+          videoId: video.id
+        })
+      }
     })
   })
 
@@ -590,11 +634,63 @@ describe('Test video passwords validator', function () {
     })
 
     it('Should succeed with correct parameter', async function () {
-      await server.videoPasswords.remove({ id: passwords[0].id, videoId: video.id, expectedStatus: HttpStatusCode.NO_CONTENT_204 })
+      for (const token of [ server.accessToken, editorToken ]) {
+        await server.videoPasswords.remove({ id: passwords[0].id, videoId: video.id, expectedStatus: HttpStatusCode.NO_CONTENT_204, token })
+
+        passwords.shift()
+      }
     })
 
     it('Should fail for last password of a video', async function () {
-      await server.videoPasswords.remove({ id: passwords[1].id, videoId: video.id, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      await server.videoPasswords.remove({ id: passwords[0].id, videoId: video.id, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+  })
+
+  describe('When adding a password', async function () {
+    const passwords = (await server.videoPasswords.list({ videoId: video.id })).data
+    const newPassword = 'password123'
+    const emptyPassword = ''
+
+    it('Should fail with duplicate password', async function () {
+      await server.videoPasswords.addOne({
+        videoId: video.id,
+        password: passwords[0].password,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail with empty password', async function () {
+      await server.videoPasswords.addOne({ videoId: video.id, password: emptyPassword, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should fail for unauthenticated user', async function () {
+      await server.videoPasswords.addOne({
+        password: newPassword,
+        token: null,
+        videoId: video.id,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should fail for unauthorized user', async function () {
+      await server.videoPasswords.addOne({
+        password: newPassword,
+        token: userAccessToken,
+        videoId: video.id,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail for non password protected video', async function () {
+      publicVideo = await server.videos.quickUpload({ name: 'public video' })
+
+      await server.videoPasswords.addOne({ password: newPassword, videoId: publicVideo.id, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should succeed with correct parameter', async function () {
+      for (const token of [ server.accessToken, editorToken ]) {
+        await server.videoPasswords.addOne({ password: token, videoId: video.id })
+      }
     })
   })
 

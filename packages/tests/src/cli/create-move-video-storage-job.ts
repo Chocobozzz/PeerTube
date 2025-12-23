@@ -1,23 +1,32 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { join } from 'path'
+import { getAllFiles } from '@peertube/peertube-core-utils'
+import { HttpStatusCode, VideoDetails, VideoResolution } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
-import { HttpStatusCode, VideoDetails } from '@peertube/peertube-models'
 import {
+  ObjectStorageCommand,
+  PeerTubeServer,
   cleanupTests,
   createMultipleServers,
   doubleFollow,
+  getRedirectionUrl,
   makeRawRequest,
-  ObjectStorageCommand,
-  PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { expectStartWith } from '../shared/checks.js'
 import { checkDirectoryIsEmpty } from '@tests/shared/directories.js'
-import { getAllFiles } from '@peertube/peertube-core-utils'
+import { completeCheckHlsPlaylist } from '@tests/shared/streaming-playlists.js'
+import { join } from 'path'
+import { expectStartWith } from '../shared/checks.js'
 
-async function checkFiles (origin: PeerTubeServer, video: VideoDetails, objectStorage?: ObjectStorageCommand) {
+async function checkFiles (options: {
+  origin: PeerTubeServer
+  video: VideoDetails
+  objectStorage?: ObjectStorageCommand
+}) {
+  const { origin, video, objectStorage } = options
+
+  // Web videos
   for (const file of video.files) {
     const start = objectStorage
       ? objectStorage.getMockWebVideosBaseUrl()
@@ -28,22 +37,66 @@ async function checkFiles (origin: PeerTubeServer, video: VideoDetails, objectSt
     await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
   }
 
-  const start = objectStorage
-    ? objectStorage.getMockPlaylistBaseUrl()
-    : origin.url
+  // Playlists
+  {
+    const start = objectStorage
+      ? objectStorage.getMockPlaylistBaseUrl()
+      : origin.url
 
-  const hls = video.streamingPlaylists[0]
-  expectStartWith(hls.playlistUrl, start)
-  expectStartWith(hls.segmentsSha256Url, start)
+    const hls = video.streamingPlaylists[0]
+    expectStartWith(hls.playlistUrl, start)
+    expectStartWith(hls.segmentsSha256Url, start)
 
-  for (const file of hls.files) {
-    expectStartWith(file.fileUrl, start)
+    for (const file of hls.files) {
+      expectStartWith(file.fileUrl, start)
 
-    await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+      await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+    }
+  }
+
+  // Original file
+  {
+    const source = await origin.videos.getSource({ id: video.uuid })
+
+    if (objectStorage) {
+      await makeRawRequest({ url: source.fileDownloadUrl, token: origin.accessToken, expectedStatus: HttpStatusCode.FOUND_302 })
+
+      const redirected = await getRedirectionUrl(source.fileDownloadUrl, origin.accessToken)
+      expectStartWith(redirected, objectStorage.getMockOriginalFileBaseUrl())
+    } else {
+      await makeRawRequest({ url: source.fileDownloadUrl, token: origin.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+      expectStartWith(source.fileDownloadUrl, origin.url)
+    }
+  }
+
+  // Captions
+  {
+    const start = objectStorage
+      ? objectStorage.getMockCaptionFileBaseUrl()
+      : origin.url
+
+    const { data: captions } = await origin.captions.list({ videoId: video.uuid })
+
+    for (const caption of captions) {
+      expectStartWith(caption.fileUrl, start)
+
+      await makeRawRequest({ url: caption.fileUrl, token: origin.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+    }
+
+    await completeCheckHlsPlaylist({
+      servers: [ origin ],
+      videoUUID: video.uuid,
+      hlsOnly: false,
+      hasAudio: true,
+      hasVideo: true,
+      captions,
+      objectStorageBaseUrl: objectStorage?.getMockPlaylistBaseUrl(),
+      resolutions: [ VideoResolution.H_720P, VideoResolution.H_240P ]
+    })
   }
 }
 
-describe('Test create move video storage job', function () {
+describe('Test create move video storage job CLI', function () {
   if (areMockObjectStorageTestsDisabled()) return
 
   let servers: PeerTubeServer[] = []
@@ -61,10 +114,14 @@ describe('Test create move video storage job', function () {
 
     await objectStorage.prepareDefaultMockBuckets()
 
-    await servers[0].config.enableTranscoding()
+    await servers[0].config.enableMinimumTranscoding({ keepOriginal: true })
 
     for (let i = 0; i < 3; i++) {
-      const { uuid } = await servers[0].videos.upload({ attributes: { name: 'video' + i } })
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'video' + i })
+
+      await servers[0].captions.add({ language: 'ar', videoId: uuid, fixture: 'subtitle-good1.vtt' })
+      await servers[0].captions.add({ language: 'zh', videoId: uuid, fixture: 'subtitle-good1.vtt' })
+
       uuids.push(uuid)
     }
 
@@ -75,7 +132,6 @@ describe('Test create move video storage job', function () {
   })
 
   describe('To object storage', function () {
-
     it('Should move only one file', async function () {
       this.timeout(120000)
 
@@ -86,12 +142,12 @@ describe('Test create move video storage job', function () {
       for (const server of servers) {
         const video = await server.videos.get({ id: uuids[1] })
 
-        await checkFiles(servers[0], video, objectStorage)
+        await checkFiles({ origin: servers[0], video, objectStorage })
 
         for (const id of [ uuids[0], uuids[2] ]) {
           const video = await server.videos.get({ id })
 
-          await checkFiles(servers[0], video)
+          await checkFiles({ origin: servers[0], video })
         }
       }
     })
@@ -107,12 +163,14 @@ describe('Test create move video storage job', function () {
         for (const id of [ uuids[0], uuids[2] ]) {
           const video = await server.videos.get({ id })
 
-          await checkFiles(servers[0], video, objectStorage)
+          await checkFiles({ origin: servers[0], video, objectStorage })
         }
       }
     })
 
     it('Should not have files on disk anymore', async function () {
+      await checkDirectoryIsEmpty(servers[0], 'captions', [ 'private' ])
+
       await checkDirectoryIsEmpty(servers[0], 'web-videos', [ 'private' ])
       await checkDirectoryIsEmpty(servers[0], join('web-videos', 'private'))
 
@@ -126,9 +184,14 @@ describe('Test create move video storage job', function () {
 
     before(async function () {
       const video = await servers[0].videos.get({ id: uuids[1] })
+      const { data: captions } = await servers[0].captions.list({ videoId: uuids[1] })
 
       oldFileUrls = [
         ...getAllFiles(video).map(f => f.fileUrl),
+
+        ...captions.map(c => c.fileUrl),
+        ...captions.map(c => c.m3u8Url),
+
         video.streamingPlaylists[0].playlistUrl
       ]
     })
@@ -143,12 +206,12 @@ describe('Test create move video storage job', function () {
       for (const server of servers) {
         const video = await server.videos.get({ id: uuids[1] })
 
-        await checkFiles(servers[0], video)
+        await checkFiles({ origin: servers[0], video })
 
         for (const id of [ uuids[0], uuids[2] ]) {
           const video = await server.videos.get({ id })
 
-          await checkFiles(servers[0], video, objectStorage)
+          await checkFiles({ origin: servers[0], video, objectStorage })
         }
       }
     })
@@ -164,7 +227,7 @@ describe('Test create move video storage job', function () {
         for (const id of [ uuids[0], uuids[2] ]) {
           const video = await server.videos.get({ id })
 
-          await checkFiles(servers[0], video)
+          await checkFiles({ origin: servers[0], video })
         }
       }
     })

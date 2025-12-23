@@ -1,80 +1,41 @@
-@use 'sass:math';
-@use 'sass:color';
+@use "sass:math";
+@use "sass:color";
+@use "_variables" as *;
+@use "_bootstrap-variables" as *;
+@use "_mixins" as *;
+@use "_icons" as *;
+@use "_fonts";
+@use "./custom-markup";
+@use "./bootstrap";
+@use "./z-index";
+@use "./class-helpers/index.scss";
+@use "_css-variables" as *;
+@use "./primeng";
 
-@use '_variables' as *;
-@use '_bootstrap-variables' as *;
-@use '_mixins' as *;
-@use '_icons' as *;
-
-@use '_fonts';
-
-@use './custom-markup';
-@use './ng-select';
-
-@use './bootstrap';
-@use './primeng-custom';
-
-@use './z-index';
-
-@use './class-helpers/index.scss';
+@mixin main-col-expanded {
+  --menu-width: #{$menu-collapsed-width};
+}
 
 /* clears the ‘X’ from Chrome */
 input[type="search"]::-webkit-search-decoration,
 input[type="search"]::-webkit-search-cancel-button,
 input[type="search"]::-webkit-search-results-button,
-input[type="search"]::-webkit-search-results-decoration { display: none; }
+input[type="search"]::-webkit-search-results-decoration {
+  display: none;
+}
+
+// ---------------------------------------------------------------------------
+
+:root {
+  @include define-css-variables();
+}
 
 body {
-  /*** theme ***/
-  // now beware sass requires interpolation
-  // for css custom properties #{$var}
-  --mainColor: #{$main-color};
-  --mainColorLighter: #{$main-color-lighter};
-  --mainColorLightest: #{$main-color-lightest};
-  --mainColorVeryLight: #{$main-color-very-light};
-
-  --mainHoverColor: #{$main-hover-color};
-  --mainBackgroundHoverColor: #{$main-background-hover-color};
-
-  --mainBackgroundColor: #{$bg-color};
-  --mainForegroundColor: #{$fg-color};
-
-  --greyForegroundColor: #{$grey-foreground-color};
-  --greyBackgroundColor: #{$grey-background-color};
-  --greySecondaryBackgroundColor: #{$grey-background-hover-color};
-
-  --menuBackgroundColor: #{$menu-background};
-  --menuForegroundColor: #{$menu-color};
-
-  --submenuBackgroundColor: #{$sub-menu-background-color};
-  --channelBackgroundColor: #{$channel-background-color};
-
-  --inputForegroundColor: #{$input-foreground-color};
-  --inputBackgroundColor: #{$input-background-color};
-  --inputPlaceholderColor: #{$input-placeholder-color};
-  --inputBorderColor: #{$input-border-color};
-
-  --textareaForegroundColor: #{$textarea-foreground-color};
-  --textareaBackgroundColor: #{$textarea-background-color};
-  --markdownTextareaBackgroundColor: #{$markdown-textarea-background-color};
-
-  --actionButtonColor: #{$grey-foreground-color};
-
-  --supportButtonBackgroundColor: #{transparent};
-  --supportButtonColor: #{pvar(--actionButtonColor)};
-  --supportButtonHeartColor: #{$support-button-heart};
-
-  --activatedActionButtonColor: #{$activated-action-button-color};
-
-  --horizontalMarginContent: #{$not-expanded-horizontal-margins};
-  --videosHorizontalMarginContent: 6vw;
-  --mainColWidth: calc(100vw - #{$menu-width});
-
   font-family: $main-fonts;
   font-weight: $font-regular;
-  color: pvar(--mainForegroundColor);
-  background-color: pvar(--mainBackgroundColor);
-  font-size: 1rem;
+  color: pvar(--fg);
+  background-color: pvar(--bg);
+
   // On desktop browsers, make sure vertical scroll bar is always visible
   // Allow to disable the scrollbar instead of hide it when the content fit the body
   // And not move the content and header horizontally sticked to right when the content is updating
@@ -85,8 +46,13 @@ body {
 }
 
 ::selection {
-  color: pvar(--mainBackgroundColor);
-  background-color: pvar(--mainHoverColor);
+  color: pvar(--on-primary-450);
+  background-color: pvar(--primary-450);
+}
+
+// Force to override bootstrap utilities
+body [hidden] {
+  display: none !important;
 }
 
 noscript,
@@ -97,210 +63,167 @@ noscript,
   margin: 1rem auto;
 }
 
-a {
-  text-decoration: none;
-}
-
 strong {
-  font-weight: $font-semibold;
+  font-weight: $font-bold;
 }
 
 input[readonly] {
-  /* Force blank on readonly inputs */
-  background-color: pvar(--inputBackgroundColor) !important;
+  // Force blank on readonly inputs
+  background-color: pvar(--input-bg);
 }
 
 input,
 textarea {
-  outline: none;
-  color: pvar(--inputForegroundColor);
+  color: pvar(--input-fg);
+
+  @include disable-outline;
 }
 
 button {
-  @include disable-outline;
-
   background: unset;
-  color: pvar(--mainForegroundColor);
+  color: pvar(--fg);
+
+  @include disable-outline;
 }
 
-label {
-  font-weight: $font-bold;
+.pt-label-container {
   margin-bottom: 0.5rem;
+
+  label {
+    display: inline;
+
+    @include margin-right(0.25rem);
+  }
 }
 
 code {
-  background-color: pvar(--greyBackgroundColor);
-  color: pvar(--greyForegroundColor);
+  background-color: pvar(--bg-secondary-500);
+  color: pvar(--fg-400);
   border-radius: 3px;
-  padding: .2em .4em;
-  margin: auto .4em;
+  padding: 0.2em 0.4em;
+  margin: auto 0.4em;
   font-size: 75%;
   display: inline-block;
   vertical-align: middle;
 }
 
+a {
+  color: inherit;
+}
+
+my-link:hover,
+a:hover {
+  opacity: 0.8;
+}
+
+a.dropdown-item,
+a.action-button {
+  &:hover {
+    opacity: 1;
+  }
+}
+
+a.pt {
+  text-decoration-color: pvar(--border-primary);
+  text-underline-offset: 0.25em;
+}
+
 .main-col {
   // Don't use rfs to get exact pixels
-  margin-inline-start: $menu-width;
-
-  width: calc(100% - #{$menu-width});
+  width: calc(100% - #{pvar(--menu-width)});
+  margin-inline-start: pvar(--menu-width);
   outline: none;
 
   .margin-content {
-    margin: 0 pvar(--horizontalMarginContent);
+    margin: 0 pvar(--x-margin-content);
     flex-grow: 1;
   }
 
-  .revert-margin-content {
-    margin: 0 calc(#{pvar(--horizontalMarginContent)} * -1);
-  }
-
-  .sub-menu {
-    background-color: pvar(--submenuBackgroundColor);
-    width: 100%;
-    display: flex;
-    align-items: center;
-    padding: 0 pvar(--horizontalMarginContent);
-    height: $sub-menu-height;
-    margin-bottom: $sub-menu-margin-bottom;
-    overflow-x: auto;
-
-    &.sub-menu-fixed {
-      position: fixed;
-      z-index: #{z('sub-menu') - 1};
-      max-width: pvar(--mainColWidth);
-    }
-  }
-
-  // Use an appropriate offset top when sub-menu fixed
-  .sub-menu-offset-content {
-    padding-top: $sub-menu-height + $sub-menu-margin-bottom;
-  }
-
-  .sub-menu.mb-0 + .sub-menu-offset-content {
-    padding-top: $sub-menu-height;
+  .skip-to-content-sub-menu {
+    display: block;
+    z-index: z(modal);
+    padding: 1rem;
+    background: pvar(--bg);
+    text-align: center;
+    text-decoration: underline;
   }
 
   // Override some properties if the main content is expanded (no menu on the left)
   &.expanded {
-    --horizontalMarginContent: #{$expanded-horizontal-margins};
-    --mainColWidth: 100vw;
-
-    @include margin-left(0);
-    width: 100%;
+    @include main-col-expanded();
   }
 
-  &.lock-scroll .main-row > router-outlet + * {  /* stylelint-disable-line selector-max-compound-selectors */
+  &.lock-scroll .main-row > router-outlet + * {
+    /* stylelint-disable-line selector-max-compound-selectors */
     // Lock and hide body scrollbars
     position: fixed;
-
-    // Lock and hide sub-menu scrollbars
-    .sub-menu { /* stylelint-disable-line */
-      overflow-x: hidden;
-    }
   }
 }
 
-// In tables, don't have a hover different background
-table {
-  my-edit-button,
-  my-delete-button {
-    .action-button {
-      &:hover,
-      &:active,
-      &:focus,
-      &[disabled],
-      &.disabled {
-        background-color: pvar(--greyBackgroundColor) !important;
-        opacity: 0.8;
-      }
-    }
-  }
+.modal-open {
+  overflow: hidden !important;
 }
 
-my-global-icon[iconName=external-link] {
+my-global-icon[iconName="external-link"] {
   margin: 0 0.3em;
   width: 0.9em;
   height: 0.9em;
+  line-height: 0.9em;
   display: inline-block;
-  color: pvar(--inputPlaceholderColor);
+  color: pvar(--secondary-icon-color);
   position: relative;
   top: -0.1em;
 }
 
-@media screen and (max-width: #{breakpoint(xxl)}) {
-  .main-col {
-    --horizontalMarginContent: #{math.div($not-expanded-horizontal-margins, 2)};
-    --videosHorizontalMarginContent: 30px;
-
-    &.expanded {
-      --horizontalMarginContent: #{math.div($expanded-horizontal-margins, 2)};
-    }
-  }
-}
-
-@media screen and (max-width: #{breakpoint(xl)}) {
-  .main-col {
-    --videosHorizontalMarginContent: #{pvar(--horizontalMarginContent)};
+@media screen and (max-width: $menu-overlay-view) {
+  .menu-open {
+    overflow: hidden !important;
   }
 
-  /* the following applies from 500px to 900px and is partially overridden from 500px to 800px by changes below to $small-view */
-  .main-col,
-  .main-col.expanded {
-    --horizontalMarginContent: #{math.div($expanded-horizontal-margins, 3)};
-
-    .sub-menu {
-      padding: 0 50px;
-
-      .title-page {
-        font-size: 17px;
-      }
-    }
-  }
-}
-
-@media screen and (min-width: $mobile-view) and (max-width: $small-view) {
   .main-col {
-    width: 100%;
+    @include main-col-expanded();
   }
 }
 
 @media screen and (max-width: $small-view) {
+  .main-col {
+    --x-margin-content: 1rem;
+  }
+
+  my-markdown-textarea {
+    .root {
+      max-width: 100% !important;
+    }
+  }
+
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  textarea,
+  .peertube-select-container {
+    flex-grow: 1;
+  }
+
+  .caption input[type="text"] {
+    width: unset !important;
+    flex-grow: 1;
+  }
+}
+
+@media screen and (max-width: $mobile-view) {
   .main-col,
   .main-col.expanded {
-    --horizontalMarginContent: 15px;
+    width: 100%;
 
     @include margin-left(0);
+  }
+}
 
-    .sub-menu {
-      width: 100vw;
-      padding: 0 15px;
-      margin-bottom: $sub-menu-margin-bottom-small-view;
-      overflow-x: auto;
-    }
-
-    // Use an appropriate offset top when sub-menu fixed
-    .sub-menu-offset-content {
-      padding-top: $sub-menu-height + $sub-menu-margin-bottom-small-view;
-    }
-
-    my-markdown-textarea {
-      .root {
-        max-width: 100% !important;
-      }
-    }
-
-    input[type=text],
-    input[type=password],
-    input[type=email],
-    textarea,
-    .peertube-select-container {
-      flex-grow: 1;
-    }
-
-    .caption input[type=text] {
-      width: unset !important;
-      flex-grow: 1;
-    }
+ngx-loading-bar {
+  .ngx-bar {
+    height: 3px !important;
+    border-radius: 0 !important;
+    border-start-end-radius: 6px !important;
+    border-end-end-radius: 6px !important;
   }
 }

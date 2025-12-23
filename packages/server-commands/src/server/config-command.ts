@@ -1,11 +1,12 @@
-import { About, ActorImageType, ActorImageType_Type, CustomConfig, HttpStatusCode, ServerConfig } from '@peertube/peertube-models'
+import { About, ActorImageType, ActorImageType_Type, CustomConfig, HttpStatusCode, LogoType, ServerConfig } from '@peertube/peertube-models'
 import { DeepPartial } from '@peertube/peertube-typescript-utils'
 import merge from 'lodash-es/merge.js'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/abstract-command.js'
 
 export class ConfigCommand extends AbstractCommand {
+  private savedConfig: CustomConfig
 
-  static getCustomConfigResolutions (enabled: boolean, with0p = false) {
+  static getConfigResolutions (enabled: boolean, with0p = false) {
     return {
       '0p': enabled && with0p,
       '144p': enabled,
@@ -16,6 +17,20 @@ export class ConfigCommand extends AbstractCommand {
       '1080p': enabled,
       '1440p': enabled,
       '2160p': enabled
+    }
+  }
+
+  static getCustomConfigResolutions (enabled: number[]) {
+    return {
+      '0p': enabled.includes(0),
+      '144p': enabled.includes(144),
+      '240p': enabled.includes(240),
+      '360p': enabled.includes(360),
+      '480p': enabled.includes(480),
+      '720p': enabled.includes(720),
+      '1080p': enabled.includes(1080),
+      '1440p': enabled.includes(1440),
+      '2160p': enabled.includes(2160)
     }
   }
 
@@ -211,19 +226,27 @@ export class ConfigCommand extends AbstractCommand {
 
   enableLive (options: {
     allowReplay?: boolean
+    resolutions?: 'min' | 'max' | number[] // default 'min'
     transcoding?: boolean
-    resolutions?: 'min' | 'max' // Default max
+    maxDuration?: number
+    alwaysTranscodeOriginalResolution?: boolean
   } = {}) {
-    const { allowReplay, transcoding, resolutions = 'max' } = options
+    const { allowReplay, transcoding, maxDuration, resolutions = 'min', alwaysTranscodeOriginalResolution } = options
 
     return this.updateExistingConfig({
       newConfig: {
         live: {
           enabled: true,
-          allowReplay: allowReplay ?? true,
+          allowReplay,
+          maxDuration,
           transcoding: {
-            enabled: transcoding ?? true,
-            resolutions: ConfigCommand.getCustomConfigResolutions(resolutions === 'max')
+            enabled: transcoding,
+
+            alwaysTranscodeOriginalResolution,
+
+            resolutions: Array.isArray(resolutions)
+              ? ConfigCommand.getCustomConfigResolutions(resolutions)
+              : ConfigCommand.getConfigResolutions(resolutions === 'max')
           }
         }
       }
@@ -243,13 +266,42 @@ export class ConfigCommand extends AbstractCommand {
     })
   }
 
-  enableTranscoding (options: {
-    webVideo?: boolean // default true
-    hls?: boolean // default true
-    with0p?: boolean // default false
-    keepOriginal?: boolean // default false
+  async enableTranscoding (options: {
+    webVideo?: boolean
+    hls?: boolean
+    keepOriginal?: boolean
+    splitAudioAndVideo?: boolean
+
+    resolutions?: 'min' | 'max' | number[]
+
+    with0p?: boolean
+
+    alwaysTranscodeOriginalResolution?: boolean
+
+    maxFPS?: number
   } = {}) {
-    const { webVideo = true, hls = true, with0p = false, keepOriginal = false } = options
+    const {
+      webVideo,
+      hls,
+      with0p,
+      keepOriginal,
+      splitAudioAndVideo,
+      alwaysTranscodeOriginalResolution,
+      maxFPS
+    } = options
+
+    let resolutions: ReturnType<typeof ConfigCommand.getCustomConfigResolutions>
+
+    if (Array.isArray(options.resolutions)) {
+      resolutions = ConfigCommand.getCustomConfigResolutions(options.resolutions)
+    } else if (typeof options.resolutions === 'string') {
+      resolutions = ConfigCommand.getConfigResolutions(options.resolutions === 'max', with0p)
+    } else if (with0p !== undefined) {
+      const existing = await this.getCustomConfig({ ...options, expectedStatus: HttpStatusCode.OK_200 })
+
+      resolutions = existing.transcoding.resolutions
+      resolutions['0p'] = with0p === true
+    }
 
     return this.updateExistingConfig({
       newConfig: {
@@ -262,14 +314,30 @@ export class ConfigCommand extends AbstractCommand {
           allowAudioFiles: true,
           allowAdditionalExtensions: true,
 
-          resolutions: ConfigCommand.getCustomConfigResolutions(true, with0p),
+          resolutions,
+
+          alwaysTranscodeOriginalResolution,
 
           webVideos: {
             enabled: webVideo
           },
           hls: {
-            enabled: hls
+            enabled: hls,
+            splitAudioAndVideo
+          },
+          fps: {
+            max: maxFPS
           }
+        }
+      }
+    })
+  }
+
+  setTranscodingConcurrency (concurrency: number) {
+    return this.updateExistingConfig({
+      newConfig: {
+        transcoding: {
+          concurrency
         }
       }
     })
@@ -278,9 +346,10 @@ export class ConfigCommand extends AbstractCommand {
   enableMinimumTranscoding (options: {
     webVideo?: boolean // default true
     hls?: boolean // default true
+    splitAudioAndVideo?: boolean // default false
     keepOriginal?: boolean // default false
   } = {}) {
-    const { webVideo = true, hls = true, keepOriginal = false } = options
+    const { webVideo = true, hls = true, keepOriginal = false, splitAudioAndVideo = false } = options
 
     return this.updateExistingConfig({
       newConfig: {
@@ -294,7 +363,7 @@ export class ConfigCommand extends AbstractCommand {
           allowAdditionalExtensions: true,
 
           resolutions: {
-            ...ConfigCommand.getCustomConfigResolutions(false),
+            ...ConfigCommand.getConfigResolutions(false),
 
             '240p': true
           },
@@ -303,7 +372,8 @@ export class ConfigCommand extends AbstractCommand {
             enabled: webVideo
           },
           hls: {
-            enabled: hls
+            enabled: hls,
+            splitAudioAndVideo
           }
         }
       }
@@ -355,6 +425,29 @@ export class ConfigCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
+  enableTranscription ({ remote = false }: { remote?: boolean } = {}) {
+    return this.setTranscriptionEnabled(true, remote)
+  }
+
+  disableTranscription () {
+    return this.setTranscriptionEnabled(false, false)
+  }
+
+  private setTranscriptionEnabled (enabled: boolean, remoteEnabled: boolean) {
+    return this.updateExistingConfig({
+      newConfig: {
+        videoTranscription: {
+          enabled,
+          remoteRunners: {
+            enabled: remoteEnabled
+          }
+        }
+      }
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
   getConfig (options: OverrideCommandOptions = {}) {
     const path = '/api/v1/config'
 
@@ -372,6 +465,7 @@ export class ConfigCommand extends AbstractCommand {
       ...options,
 
       path: '/',
+      accept: 'text/html',
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
@@ -396,10 +490,12 @@ export class ConfigCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  updateInstanceImage (options: OverrideCommandOptions & {
-    fixture: string
-    type: ActorImageType_Type
-  }) {
+  updateInstanceImage (
+    options: OverrideCommandOptions & {
+      fixture: string
+      type: ActorImageType_Type
+    }
+  ) {
     const { fixture, type } = options
 
     const path = type === ActorImageType.BANNER
@@ -420,9 +516,11 @@ export class ConfigCommand extends AbstractCommand {
     })
   }
 
-  deleteInstanceImage (options: OverrideCommandOptions & {
-    type: ActorImageType_Type
-  }) {
+  deleteInstanceImage (
+    options: OverrideCommandOptions & {
+      type: ActorImageType_Type
+    }
+  ) {
     const suffix = options.type === ActorImageType.BANNER
       ? 'instance-banner'
       : 'instance-avatar'
@@ -433,6 +531,45 @@ export class ConfigCommand extends AbstractCommand {
       ...options,
 
       path,
+
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  updateInstanceLogo (
+    options: OverrideCommandOptions & {
+      fixture: string
+      type: LogoType
+    }
+  ) {
+    const { fixture, type } = options
+
+    return this.updateImageRequest({
+      ...options,
+
+      path: '/api/v1/config/instance-logo/' + type + '/pick',
+      fixture,
+      fieldname: 'logofile',
+
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  deleteInstanceLogo (
+    options: OverrideCommandOptions & {
+      type: LogoType
+    }
+  ) {
+    const { type } = options
+
+    return this.deleteRequest({
+      ...options,
+
+      path: '/api/v1/config/instance-logo/' + type,
 
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
@@ -453,9 +590,11 @@ export class ConfigCommand extends AbstractCommand {
     })
   }
 
-  updateCustomConfig (options: OverrideCommandOptions & {
-    newCustomConfig: CustomConfig
-  }) {
+  updateCustomConfig (
+    options: OverrideCommandOptions & {
+      newCustomConfig: CustomConfig
+    }
+  ) {
     const path = '/api/v1/config/custom'
 
     return this.putBodyRequest({
@@ -480,11 +619,23 @@ export class ConfigCommand extends AbstractCommand {
     })
   }
 
-  async updateExistingConfig (options: OverrideCommandOptions & {
-    newConfig: DeepPartial<CustomConfig>
-  }) {
+  async updateExistingConfig (
+    options: OverrideCommandOptions & {
+      newConfig: DeepPartial<CustomConfig>
+    }
+  ) {
     const existing = await this.getCustomConfig({ ...options, expectedStatus: HttpStatusCode.OK_200 })
 
     return this.updateCustomConfig({ ...options, newCustomConfig: merge({}, existing, options.newConfig) })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  async save () {
+    this.savedConfig = await this.getCustomConfig()
+  }
+
+  rollback () {
+    return this.updateCustomConfig({ newCustomConfig: this.savedConfig })
   }
 }

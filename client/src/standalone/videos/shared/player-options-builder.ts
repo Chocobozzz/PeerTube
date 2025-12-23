@@ -2,6 +2,9 @@ import { peertubeTranslate } from '@peertube/peertube-core-utils'
 import {
   HTMLServerConfig,
   LiveVideo,
+  PlayerMode,
+  PlayerTheme,
+  PlayerVideoSettings,
   Storyboard,
   Video,
   VideoCaption,
@@ -11,21 +14,25 @@ import {
   VideoState,
   VideoStreamingPlaylistType
 } from '@peertube/peertube-models'
-import { HLSOptions, PeerTubePlayerContructorOptions, PeerTubePlayerLoadOptions, PlayerMode, VideoJSCaption } from '../../../assets/player'
 import {
   getBoolOrDefault,
   getParamString,
   getParamToggle,
   isP2PEnabled,
+  isVideoNSFWBlurForUser,
+  isVideoNSFWHiddenForUser,
+  isVideoNSFWWarnedForUser,
   logger,
   peertubeLocalStorage,
   UserLocalStorageKeys,
   videoRequiresUserAuth
 } from '../../../root-helpers'
+import { HLSOptions, PeerTubePlayerConstructorOptions, PeerTubePlayerLoadOptions, VideoJSCaption } from '../../player'
 import { PeerTubePlugin } from './peertube-plugin'
 import { PlayerHTML } from './player-html'
 import { PlaylistTracker } from './playlist-tracker'
 import { Translations } from './translations'
+import { getBackendUrl } from './url'
 import { VideoFetcher } from './video-fetcher'
 
 export class PlayerOptionsBuilder {
@@ -48,6 +55,7 @@ export class PlayerOptionsBuilder {
   private p2pEnabled: boolean
   private bigPlayBackgroundColor: string
   private foregroundColor: string
+  private playerTheme: PlayerTheme
 
   private waitPasswordFromEmbedAPI = false
 
@@ -137,6 +145,8 @@ export class PlayerOptionsBuilder {
 
       this.bigPlayBackgroundColor = getParamString(params, 'bigPlayBackgroundColor')
       this.foregroundColor = getParamString(params, 'foregroundColor')
+
+      this.playerTheme = getParamString(params, 'playerTheme') as PlayerTheme
     } catch (err) {
       logger.error('Cannot get params from URL.', err)
     }
@@ -160,6 +170,7 @@ export class PlayerOptionsBuilder {
         if (modeParam === 'p2p-media-loader') this.mode = 'p2p-media-loader'
         else this.mode = 'web-video'
       } else {
+        // eslint-disable-next-line no-lonely-if
         if (Array.isArray(video.streamingPlaylists) && video.streamingPlaylists.length !== 0) this.mode = 'p2p-media-loader'
         else this.mode = 'web-video'
       }
@@ -173,7 +184,7 @@ export class PlayerOptionsBuilder {
   getPlayerConstructorOptions (options: {
     serverConfig: HTMLServerConfig
     authorizationHeader: () => string
-  }): PeerTubePlayerContructorOptions {
+  }): PeerTubePlayerConstructorOptions {
     const { serverConfig, authorizationHeader } = options
 
     return {
@@ -190,13 +201,13 @@ export class PlayerOptionsBuilder {
       videoViewIntervalMs: serverConfig.views.videos.watchingInterval.anonymous,
 
       metricsUrl: serverConfig.openTelemetry.metrics.enabled
-        ? window.location.origin + '/api/v1/metrics/playback'
+        ? getBackendUrl() + '/api/v1/metrics/playback'
         : null,
       metricsInterval: serverConfig.openTelemetry.metrics.playbackStatsInterval,
 
       authorizationHeader,
 
-      playerElement: () => this.playerHTML.getPlayerElement(),
+      playerElement: () => this.playerHTML.getInitVideoEl(),
       enableHotkeys: true,
 
       peertubeLink: () => this.peertubeLink,
@@ -204,7 +215,8 @@ export class PlayerOptionsBuilder {
 
       theaterButton: false,
 
-      serverUrl: window.location.origin,
+      serverUrl: getBackendUrl(),
+      stunServers: serverConfig.webrtc.stunServers,
       language: navigator.language,
 
       pluginsManager: this.peertubePlugin.getPluginsManager(),
@@ -223,6 +235,8 @@ export class PlayerOptionsBuilder {
 
     chaptersResponse: Response
 
+    playerSettingsResponse: Response
+
     live?: LiveVideo
 
     alreadyPlayed: boolean
@@ -233,6 +247,7 @@ export class PlayerOptionsBuilder {
     videoPassword: () => string
     requiresPassword: boolean
 
+    config: HTMLServerConfig
     translations: Translations
 
     playlist?: {
@@ -254,19 +269,26 @@ export class PlayerOptionsBuilder {
       playlist,
       live,
       storyboardsResponse,
-      chaptersResponse
+      chaptersResponse,
+      config,
+      playerSettingsResponse
     } = options
 
-    const [ videoCaptions, storyboard, chapters ] = await Promise.all([
+    const [ videoCaptions, storyboard, chapters, playerSettings ] = await Promise.all([
       this.buildCaptions(captionsResponse, translations),
       this.buildStoryboard(storyboardsResponse),
-      this.buildChapters(chaptersResponse)
+      this.buildChapters(chaptersResponse),
+      playerSettingsResponse.json() as Promise<PlayerVideoSettings>
     ])
+
+    const nsfwWarn = isVideoNSFWWarnedForUser(video, config, null) || isVideoNSFWHiddenForUser(video, config, null)
+    const nsfwBlur = isVideoNSFWBlurForUser(video, config, null) || isVideoNSFWHiddenForUser(video, config, null)
 
     return {
       mode: this.mode,
+      theme: this.playerTheme || playerSettings.theme as PlayerTheme,
 
-      autoplay: forceAutoplay || alreadyPlayed || this.autoplay,
+      autoplay: !nsfwWarn && (forceAutoplay || alreadyPlayed || this.autoplay),
       forceAutoplay,
 
       p2pEnabled: this.p2pEnabled,
@@ -289,12 +311,21 @@ export class PlayerOptionsBuilder {
       videoShortUUID: video.shortUUID,
       videoUUID: video.uuid,
 
+      nsfwWarning: nsfwWarn
+        ? {
+          flags: video.nsfwFlags,
+          summary: video.nsfwSummary
+        }
+        : undefined,
+
+      poster: nsfwBlur
+        ? null
+        : getBackendUrl() + video.previewPath,
+
       duration: video.duration,
       videoRatio: video.aspectRatio,
 
-      poster: window.location.origin + video.previewPath,
-
-      embedUrl: window.location.origin + video.embedPath,
+      embedUrl: getBackendUrl() + video.embedPath,
       embedTitle: video.name,
 
       requiresUserAuth: videoRequiresUserAuth(video),
@@ -333,7 +364,7 @@ export class PlayerOptionsBuilder {
     if (!storyboards || storyboards.length === 0) return undefined
 
     return {
-      url: window.location.origin + storyboards[0].storyboardPath,
+      url: storyboards[0].fileUrl,
       height: storyboards[0].spriteHeight,
       width: storyboards[0].spriteWidth,
       interval: storyboards[0].spriteDuration
@@ -425,7 +456,8 @@ export class PlayerOptionsBuilder {
       return data.map((c: VideoCaption) => ({
         label: peertubeTranslate(c.language.label, translations),
         language: c.language.id,
-        src: window.location.origin + c.captionPath
+        automaticallyGenerated: c.automaticallyGenerated,
+        src: c.fileUrl
       }))
     }
 

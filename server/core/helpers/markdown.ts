@@ -1,12 +1,16 @@
+import {
+  getDefaultSanitizeOptions,
+  getMailHtmlSanitizeOptions,
+  getTextOnlySanitizeOptions,
+  TEXT_WITH_HTML_RULES
+} from '@peertube/peertube-core-utils'
 import MarkdownItClass from 'markdown-it'
-// FIXME: use direct import: import markdownItEmoji from 'markdown-it-emoji/lib/light.mjs' if it improves perf'
-// when https://github.com/privatenumber/tsx/issues/334 is fixed
-import { light as markdownItEmoji } from 'markdown-it-emoji'
+import markdownItEmoji from 'markdown-it-emoji/lib/light.mjs'
 import sanitizeHtml from 'sanitize-html'
-import { getDefaultSanitizeOptions, getTextOnlySanitizeOptions, TEXT_WITH_HTML_RULES } from '@peertube/peertube-core-utils'
 
 const defaultSanitizeOptions = getDefaultSanitizeOptions()
 const textOnlySanitizeOptions = getTextOnlySanitizeOptions()
+const hrefOnlySanitizeOptions = getMailHtmlSanitizeOptions()
 
 const markdownItForSafeHtml = new MarkdownItClass('default', { linkify: true, breaks: true, html: true })
   .enable(TEXT_WITH_HTML_RULES)
@@ -16,7 +20,7 @@ const markdownItForPlainText = new MarkdownItClass('default', { linkify: false, 
   .use(markdownItEmoji)
   .use(plainTextPlugin)
 
-const toSafeHtml = (text: string) => {
+export const toSafeHtml = (text: string) => {
   if (!text) return ''
 
   // Restore line feed
@@ -29,7 +33,7 @@ const toSafeHtml = (text: string) => {
   return sanitizeHtml(html, defaultSanitizeOptions)
 }
 
-const mdToOneLinePlainText = (text: string) => {
+export const mdToPlainText = (text: string) => {
   if (!text) return ''
 
   markdownItForPlainText.render(text)
@@ -38,13 +42,14 @@ const mdToOneLinePlainText = (text: string) => {
   return sanitizeHtml(markdownItForPlainText.plainText, textOnlySanitizeOptions)
 }
 
-// ---------------------------------------------------------------------------
+export const toSafeMailHtml = (text: string) => {
+  if (!text) return ''
 
-export {
-  toSafeHtml,
-  mdToOneLinePlainText
+  return sanitizeHtml(text, hrefOnlySanitizeOptions)
 }
 
+// ---------------------------------------------------------------------------
+// Private
 // ---------------------------------------------------------------------------
 
 // Thanks: https://github.com/wavesheep/markdown-it-plain-text

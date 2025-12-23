@@ -50,7 +50,7 @@ describe('Test users API validators', function () {
       await makePostBodyRequest({ url: server.url, path, fields })
     })
 
-    it('Should success with the correct params', async function () {
+    it('Should succeed with the correct params', async function () {
       const fields = { email: 'admin@example.com' }
 
       await makePostBodyRequest({

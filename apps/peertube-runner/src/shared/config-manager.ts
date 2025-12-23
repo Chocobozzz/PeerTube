@@ -1,4 +1,5 @@
 import { parse, stringify } from '@iarna/toml'
+import { TranscriptionEngineName, WhisperBuiltinModelName } from '@peertube/peertube-transcription'
 import envPaths from 'env-paths'
 import { ensureDir, pathExists, remove } from 'fs-extra/esm'
 import { readFile, writeFile } from 'fs/promises'
@@ -24,6 +25,13 @@ type Config = {
     runnerName: string
     runnerDescription?: string
   }[]
+
+  transcription: {
+    engine: TranscriptionEngineName
+    enginePath: string | null
+    model: WhisperBuiltinModelName
+    modelPath: string | null
+  }
 }
 
 export class ConfigManager {
@@ -36,6 +44,12 @@ export class ConfigManager {
     ffmpeg: {
       threads: 2,
       nice: 20
+    },
+    transcription: {
+      engine: 'whisper-ctranslate2',
+      enginePath: null,
+      model: 'small',
+      modelPath: null
     },
     registeredInstances: []
   }
@@ -94,8 +108,16 @@ export class ConfigManager {
 
   // ---------------------------------------------------------------------------
 
+  getStoryboardDirectory () {
+    return join(paths.cache, this.id, 'storyboard')
+  }
+
   getTranscodingDirectory () {
     return join(paths.cache, this.id, 'transcoding')
+  }
+
+  getTranscriptionDirectory () {
+    return join(paths.cache, this.id, 'transcription')
   }
 
   getSocketDirectory () {
@@ -119,7 +141,7 @@ export class ConfigManager {
   // ---------------------------------------------------------------------------
 
   // Thanks: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze
-  private deepFreeze <T extends object> (object: T) {
+  private deepFreeze<T extends object> (object: T) {
     const propNames = Reflect.ownKeys(object)
 
     // Freeze properties before freezing self

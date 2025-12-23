@@ -1,24 +1,21 @@
-import { escapeHTML } from '@peertube/peertube-core-utils'
+import { addQueryParams, escapeHTML } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
-import { toCompleteUUID } from '@server/helpers/custom-validators/misc.js'
 import { Memoize } from '@server/helpers/memoize.js'
+import { getVideoRSSFeeds } from '@server/lib/rss.js'
 import express from 'express'
 import validator from 'validator'
 import { CONFIG } from '../../../initializers/config.js'
 import { MEMOIZE_TTL, WEBSERVER } from '../../../initializers/constants.js'
 import { VideoModel } from '../../../models/video/video.js'
-import { MVideo, MVideoThumbnailBlacklist } from '../../../types/models/index.js'
+import { MVideo, MVideoThumbnail, MVideoThumbnailBlacklist } from '../../../types/models/index.js'
 import { getActivityStreamDuration } from '../../activitypub/activity.js'
 import { isVideoInPrivateDirectory } from '../../video-privacy.js'
-import { CommonEmbedHtml } from './common-embed-html.js'
+import { buildEmptyEmbedHTML } from './common.js'
 import { PageHtml } from './page-html.js'
 import { TagsHtml } from './tags-html.js'
 
 export class VideoHtml {
-
-  static async getWatchVideoHTML (videoIdArg: string, req: express.Request, res: express.Response) {
-    const videoId = toCompleteUUID(videoIdArg)
-
+  static async getWatchVideoHTML (videoId: string, req: express.Request, res: express.Response) {
     // Let Angular application handle errors
     if (!validator.default.isInt(videoId) && !validator.default.isUUID(videoId, 4)) {
       res.status(HttpStatusCode.NOT_FOUND_404)
@@ -30,6 +27,10 @@ export class VideoHtml {
       VideoModel.loadWithBlacklist(videoId)
     ])
 
+    if (video?.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
+      return html
+    }
+
     // Let Angular application handle errors
     if (!video || isVideoInPrivateDirectory(video.privacy) || video.VideoBlacklist) {
       res.status(HttpStatusCode.NOT_FOUND_404)
@@ -37,18 +38,20 @@ export class VideoHtml {
     }
 
     return this.buildVideoHTML({
+      req,
+
       html,
       video,
+      currentQuery: req.query,
       addEmbedInfo: true,
       addOG: true,
-      addTwitterCard: true
+      addTwitterCard: true,
+      isEmbed: false
     })
   }
 
   @Memoize({ maxAge: MEMOIZE_TTL.EMBED_HTML })
-  static async getEmbedVideoHTML (videoIdArg: string) {
-    const videoId = toCompleteUUID(videoIdArg)
-
+  static async getEmbedVideoHTML (videoId: string) {
     const videoPromise: Promise<MVideoThumbnailBlacklist> = validator.default.isInt(videoId) || validator.default.isUUID(videoId, 4)
       ? VideoModel.loadWithBlacklist(videoId)
       : Promise.resolve(undefined)
@@ -56,15 +59,21 @@ export class VideoHtml {
     const [ html, video ] = await Promise.all([ PageHtml.getEmbedHTML(), videoPromise ])
 
     if (!video || isVideoInPrivateDirectory(video.privacy) || video.VideoBlacklist) {
-      return CommonEmbedHtml.buildEmptyEmbedHTML({ html, video })
+      return buildEmptyEmbedHTML({ html, video })
     }
 
     return this.buildVideoHTML({
+      req: null,
+
       html,
       video,
       addEmbedInfo: true,
       addOG: false,
-      addTwitterCard: false
+      addTwitterCard: false,
+      isEmbed: true,
+
+      // TODO: Implement it so we can send query params to oembed service
+      currentQuery: {}
     })
   }
 
@@ -73,14 +82,20 @@ export class VideoHtml {
   // ---------------------------------------------------------------------------
 
   private static buildVideoHTML (options: {
+    req: express.Request
+
     html: string
-    video: MVideo
+    video: MVideoThumbnail
 
     addOG: boolean
     addTwitterCard: boolean
     addEmbedInfo: boolean
+
+    isEmbed: boolean
+
+    currentQuery: Record<string, string>
   }) {
-    const { html, video, addEmbedInfo, addOG, addTwitterCard } = options
+    const { req, html, video, addEmbedInfo, addOG, addTwitterCard, isEmbed, currentQuery = {} } = options
     const escapedTruncatedDescription = TagsHtml.buildEscapedTruncatedDescription(video.description)
 
     let customHTML = TagsHtml.addTitleTag(html, video.name)
@@ -90,7 +105,7 @@ export class VideoHtml {
       ? {
         url: WEBSERVER.URL + video.getEmbedStaticPath(),
         createdAt: video.createdAt.toISOString(),
-        duration: getActivityStreamDuration(video.duration),
+        duration: video.duration ? getActivityStreamDuration(video.duration) : undefined,
         views: video.views
       }
       : undefined
@@ -105,22 +120,48 @@ export class VideoHtml {
 
     const schemaType = 'VideoObject'
 
+    const preview = video.getPreview()
+
     return TagsHtml.addTags(customHTML, {
       url: WEBSERVER.URL + video.getWatchStaticPath(),
+
       escapedSiteName: escapeHTML(CONFIG.INSTANCE.NAME),
       escapedTitle: escapeHTML(video.name),
       escapedTruncatedDescription,
 
-      indexationPolicy: video.remote || video.privacy !== VideoPrivacy.PUBLIC
-        ? 'never'
-        : 'always',
+      forbidIndexation: isEmbed
+        ? video.privacy !== VideoPrivacy.PUBLIC && video.privacy !== VideoPrivacy.UNLISTED
+        : video.remote || video.privacy !== VideoPrivacy.PUBLIC,
 
-      image: { url: WEBSERVER.URL + video.getPreviewStaticPath() },
+      embedIndexation: isEmbed,
+
+      image: preview
+        ? { url: WEBSERVER.URL + video.getPreviewStaticPath(), width: preview.width, height: preview.height }
+        : undefined,
 
       embed,
+      oembedUrl: this.getOEmbedUrl(video, currentQuery),
+
       ogType,
       twitterCard,
-      schemaType
+      schemaType,
+
+      rssFeeds: req
+        ? getVideoRSSFeeds(video, req)
+        : []
     }, { video })
+  }
+
+  private static getOEmbedUrl (video: MVideo, currentQuery: Record<string, string>) {
+    const base = WEBSERVER.URL + video.getWatchStaticPath()
+
+    const additionalQuery: Record<string, string> = {}
+    const allowedParams = new Set([ 'start' ])
+
+    for (const [ key, value ] of Object.entries(currentQuery)) {
+      if (allowedParams.has(key)) additionalQuery[key] = value
+    }
+
+    return addQueryParams(base, additionalQuery)
   }
 }

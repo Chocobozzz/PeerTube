@@ -1,0 +1,45 @@
+@use 'sass:math';
+@use '_variables' as *;
+@use '_mixins' as *;
+
+@mixin stats-card {
+  position: relative;
+  border: 1px solid pvar(--border-secondary);
+  border-radius: 4px;
+  min-width: 170px;
+  padding: 1rem 1.5rem;
+  text-align: center;
+  overflow: hidden;
+
+  strong,
+  div,
+  a {
+    position: relative;
+    z-index: 2;
+    line-height: 1.2;
+  }
+
+  strong {
+    color: pvar(--fg-400);
+    font-weight: $font-bold;
+
+    @include font-size(2rem);
+  }
+
+  div,
+  a {
+    font-size: 18px;
+    color: pvar(--fg-200);
+    display: block;
+  }
+
+  my-global-icon {
+    position: absolute;
+    left: 10px;
+    top: -20px;
+    color: pvar(--bg-secondary-450);
+    z-index: 1;
+
+    @include global-icon-size(60px);
+  }
+}

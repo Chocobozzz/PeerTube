@@ -1,11 +1,11 @@
-import express from 'express'
-import { param } from 'express-validator'
+import { HttpStatusCode, VideoResolution } from '@peertube/peertube-models'
 import { isIdValid } from '@server/helpers/custom-validators/misc.js'
 import { MVideo } from '@server/types/models/index.js'
-import { HttpStatusCode } from '@peertube/peertube-models'
+import express from 'express'
+import { param } from 'express-validator'
 import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from '../shared/index.js'
 
-const videoFilesDeleteWebVideoValidator = [
+export const videoFilesDeleteWebVideoValidator = [
   isValidVideoIdParam('id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -34,7 +34,7 @@ const videoFilesDeleteWebVideoValidator = [
   }
 ]
 
-const videoFilesDeleteWebVideoFileValidator = [
+export const videoFilesDeleteWebVideoFileValidator = [
   isValidVideoIdParam('id'),
 
   param('videoFileId')
@@ -69,7 +69,7 @@ const videoFilesDeleteWebVideoFileValidator = [
 
 // ---------------------------------------------------------------------------
 
-const videoFilesDeleteHLSValidator = [
+export const videoFilesDeleteHLSValidator = [
   isValidVideoIdParam('id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -98,7 +98,7 @@ const videoFilesDeleteHLSValidator = [
   }
 ]
 
-const videoFilesDeleteHLSFileValidator = [
+export const videoFilesDeleteHLSFileValidator = [
   isValidVideoIdParam('id'),
 
   param('videoFileId')
@@ -112,15 +112,19 @@ const videoFilesDeleteHLSFileValidator = [
 
     if (!checkLocalVideo(video, res)) return
 
-    if (!video.getHLSPlaylist()) {
+    const hls = video.getHLSPlaylist()
+
+    if (!hls) {
       return res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
         message: 'This video does not have HLS files'
       })
     }
 
-    const hlsFiles = video.getHLSPlaylist().VideoFiles
-    if (!hlsFiles.find(f => f.id === +req.params.videoFileId)) {
+    const hlsFiles = hls.VideoFiles
+    const file = hlsFiles.find(f => f.id === +req.params.videoFileId)
+
+    if (!file) {
       return res.fail({
         status: HttpStatusCode.NOT_FOUND_404,
         message: 'This HLS playlist does not have this file id'
@@ -135,18 +139,19 @@ const videoFilesDeleteHLSFileValidator = [
       })
     }
 
+    if (hls.hasAudioAndVideoSplitted() && file.resolution === VideoResolution.H_NOVIDEO) {
+      return res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: 'Cannot delete audio file of HLS playlist with splitted audio/video. Delete all the videos first'
+      })
+    }
+
     return next()
   }
 ]
 
-export {
-  videoFilesDeleteWebVideoValidator,
-  videoFilesDeleteWebVideoFileValidator,
-
-  videoFilesDeleteHLSValidator,
-  videoFilesDeleteHLSFileValidator
-}
-
+// ---------------------------------------------------------------------------
+// Private
 // ---------------------------------------------------------------------------
 
 function checkLocalVideo (video: MVideo, res: express.Response) {

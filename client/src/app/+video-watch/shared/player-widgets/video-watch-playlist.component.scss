@@ -1,0 +1,54 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_bootstrap-variables";
+@use "_miniature" as *;
+
+.playlist {
+  .playlist-by-index {
+    color: pvar(--fg-300);
+    display: flex;
+
+    .playlist-by {
+      @include margin-right(5px);
+    }
+
+    .playlist-index span:first-child::after {
+      content: "/";
+      margin: 0 3px;
+    }
+  }
+
+  .playlist-controls {
+    display: flex;
+    margin: 10px 0;
+
+    button:not(.active) {
+      opacity: 0.5;
+    }
+  }
+
+  my-video-playlist-element-miniature {
+    ::ng-deep {
+      .video {
+        .position {
+          @include margin-right(0);
+        }
+
+        .video-info {
+          .video-info-name {
+            font-size: 15px;
+          }
+        }
+      }
+
+      my-video-thumbnail {
+        @include thumbnail-size-component(90px, 50px);
+      }
+
+      .fake-thumbnail {
+        width: 90px;
+        height: 50px;
+      }
+    }
+  }
+}

@@ -1,6 +1,16 @@
-import { Job } from 'bullmq'
-import { remove } from 'fs-extra/esm'
-import { join } from 'path'
+import { pick } from '@peertube/peertube-core-utils'
+import { FFmpegEdition } from '@peertube/peertube-ffmpeg'
+import {
+  VideoState,
+  VideoStudioEditionPayload,
+  VideoStudioTask,
+  VideoStudioTaskCutPayload,
+  VideoStudioTaskIntroPayload,
+  VideoStudioTaskOutroPayload,
+  VideoStudioTaskPayload,
+  VideoStudioTaskWatermarkPayload
+} from '@peertube/peertube-models'
+import { buildUUID } from '@peertube/peertube-node-utils'
 import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg/index.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { VideoTranscodingProfilesManager } from '@server/lib/transcoding/default-transcoding-profiles.js'
@@ -10,18 +20,10 @@ import { approximateIntroOutroAdditionalSize, onVideoStudioEnded, safeCleanupStu
 import { UserModel } from '@server/models/user/user.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideo, MVideoFullLight } from '@server/types/models/index.js'
-import { pick } from '@peertube/peertube-core-utils'
-import { buildUUID } from '@peertube/peertube-node-utils'
-import { FFmpegEdition } from '@peertube/peertube-ffmpeg'
-import {
-  VideoStudioEditionPayload,
-  VideoStudioTask,
-  VideoStudioTaskCutPayload,
-  VideoStudioTaskIntroPayload,
-  VideoStudioTaskOutroPayload,
-  VideoStudioTaskPayload,
-  VideoStudioTaskWatermarkPayload
-} from '@peertube/peertube-models'
+import { MutexInterface } from 'async-mutex'
+import { Job } from 'bullmq'
+import { remove } from 'fs-extra/esm'
+import { extname, join } from 'path'
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
 
 const lTagsBase = loggerTagsFactory('video-studio')
@@ -31,6 +33,8 @@ async function processVideoStudioEdition (job: Job) {
   const lTags = lTagsBase(payload.videoUUID)
 
   logger.info('Process video studio edition of %s in job %s.', payload.videoUUID, job.id, lTags)
+
+  let inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(payload.videoUUID)
 
   try {
     const video = await VideoModel.loadFull(payload.videoUUID)
@@ -45,18 +49,28 @@ async function processVideoStudioEdition (job: Job) {
 
     await checkUserQuotaOrThrow(video, payload)
 
-    const inputFile = video.getMaxQualityFile()
+    await video.reload()
 
-    const editionResultPath = await VideoPathManager.Instance.makeAvailableVideoFile(inputFile, async originalFilePath => {
+    const editionResultPath = await VideoPathManager.Instance.makeAvailableMaxQualityFiles(video, async ({
+      videoPath: originalVideoFilePath,
+      separatedAudioPath
+    }) => {
       let tmpInputFilePath: string
       let outputPath: string
 
       for (const task of payload.tasks) {
-        const outputFilename = buildUUID() + inputFile.extname
+        const outputFilename = buildUUID() + extname(originalVideoFilePath)
         outputPath = join(CONFIG.STORAGE.TMP_DIR, outputFilename)
 
         await processTask({
-          inputPath: tmpInputFilePath ?? originalFilePath,
+          videoInputPath: tmpInputFilePath ?? originalVideoFilePath,
+
+          separatedAudioInputPath: tmpInputFilePath
+            ? undefined
+            : separatedAudioPath,
+
+          inputFileMutexReleaser,
+
           video,
           outputPath,
           task,
@@ -67,6 +81,7 @@ async function processVideoStudioEdition (job: Job) {
 
         // For the next iteration
         tmpInputFilePath = outputPath
+        inputFileMutexReleaser = undefined
       }
 
       return outputPath
@@ -78,7 +93,16 @@ async function processVideoStudioEdition (job: Job) {
   } catch (err) {
     await safeCleanupStudioTMPFiles(payload.tasks)
 
+    try {
+      const video = await VideoModel.loadFull(payload.videoUUID)
+      await video.setNewState(VideoState.PUBLISHED, false, undefined)
+    } catch (err) {
+      logger.error('Cannot reset video state after studio error', { err, ...lTags })
+    }
+
     throw err
+  } finally {
+    if (inputFileMutexReleaser) inputFileMutexReleaser()
   }
 }
 
@@ -90,8 +114,12 @@ export {
 
 // ---------------------------------------------------------------------------
 
-type TaskProcessorOptions <T extends VideoStudioTaskPayload = VideoStudioTaskPayload> = {
-  inputPath: string
+type TaskProcessorOptions<T extends VideoStudioTaskPayload = VideoStudioTaskPayload> = {
+  videoInputPath: string
+  separatedAudioInputPath?: string
+
+  inputFileMutexReleaser: MutexInterface.Releaser
+
   outputPath: string
   video: MVideo
   task: T
@@ -122,7 +150,7 @@ function processAddIntroOutro (options: TaskProcessorOptions<VideoStudioTaskIntr
   logger.debug('Will add intro/outro to the video.', { options, ...lTags })
 
   return buildFFmpegEdition().addIntroOutro({
-    ...pick(options, [ 'inputPath', 'outputPath' ]),
+    ...pick(options, [ 'inputFileMutexReleaser', 'videoInputPath', 'separatedAudioInputPath', 'outputPath' ]),
 
     introOutroPath: task.options.file,
     type: task.name === 'add-intro'
@@ -137,7 +165,7 @@ function processCut (options: TaskProcessorOptions<VideoStudioTaskCutPayload>) {
   logger.debug('Will cut the video.', { options, ...lTags })
 
   return buildFFmpegEdition().cutVideo({
-    ...pick(options, [ 'inputPath', 'outputPath' ]),
+    ...pick(options, [ 'inputFileMutexReleaser', 'videoInputPath', 'separatedAudioInputPath', 'outputPath' ]),
 
     start: task.options.start,
     end: task.options.end
@@ -150,7 +178,7 @@ function processAddWatermark (options: TaskProcessorOptions<VideoStudioTaskWater
   logger.debug('Will add watermark to the video.', { options, ...lTags })
 
   return buildFFmpegEdition().addWatermark({
-    ...pick(options, [ 'inputPath', 'outputPath' ]),
+    ...pick(options, [ 'inputFileMutexReleaser', 'videoInputPath', 'separatedAudioInputPath', 'outputPath' ]),
 
     watermarkPath: task.options.file,
 

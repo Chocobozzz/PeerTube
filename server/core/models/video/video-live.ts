@@ -1,7 +1,11 @@
 import { LiveVideo, VideoState, type LiveVideoLatencyModeType } from '@peertube/peertube-models'
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
-import { MVideoLive, MVideoLiveVideoWithSetting, MVideoLiveWithSetting } from '@server/types/models/index.js'
+import {
+  MVideoLiveVideoWithSetting,
+  MVideoLiveVideoWithSettingSchedules,
+  MVideoLiveWithSettingSchedules
+} from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 import {
   AllowNull,
@@ -10,33 +14,17 @@ import {
   Column,
   CreatedAt,
   DataType,
-  DefaultScope,
-  ForeignKey, Table,
+  ForeignKey,
+  HasMany,
+  Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { SequelizeModel } from '../shared/index.js'
 import { VideoBlacklistModel } from './video-blacklist.js'
 import { VideoLiveReplaySettingModel } from './video-live-replay-setting.js'
+import { VideoLiveScheduleModel } from './video-live-schedule.js'
 import { VideoModel } from './video.js'
-import { SequelizeModel } from '../shared/index.js'
 
-@DefaultScope(() => ({
-  include: [
-    {
-      model: VideoModel,
-      required: true,
-      include: [
-        {
-          model: VideoBlacklistModel,
-          required: false
-        }
-      ]
-    },
-    {
-      model: VideoLiveReplaySettingModel,
-      required: false
-    }
-  ]
-}))
 @Table({
   tableName: 'videoLive',
   indexes: [
@@ -51,32 +39,31 @@ import { SequelizeModel } from '../shared/index.js'
   ]
 })
 export class VideoLiveModel extends SequelizeModel<VideoLiveModel> {
-
   @AllowNull(true)
   @Column(DataType.STRING)
-  streamKey: string
+  declare streamKey: string
 
   @AllowNull(false)
   @Column
-  saveReplay: boolean
+  declare saveReplay: boolean
 
   @AllowNull(false)
   @Column
-  permanentLive: boolean
+  declare permanentLive: boolean
 
   @AllowNull(false)
   @Column
-  latencyMode: LiveVideoLatencyModeType
+  declare latencyMode: LiveVideoLatencyModeType
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -84,11 +71,11 @@ export class VideoLiveModel extends SequelizeModel<VideoLiveModel> {
     },
     onDelete: 'cascade'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   @ForeignKey(() => VideoLiveReplaySettingModel)
   @Column
-  replaySettingId: number
+  declare replaySettingId: number
 
   @BelongsTo(() => VideoLiveReplaySettingModel, {
     foreignKey: {
@@ -96,7 +83,16 @@ export class VideoLiveModel extends SequelizeModel<VideoLiveModel> {
     },
     onDelete: 'set null'
   })
-  ReplaySetting: Awaited<VideoLiveReplaySettingModel>
+  declare ReplaySetting: Awaited<VideoLiveReplaySettingModel>
+
+  @HasMany(() => VideoLiveScheduleModel, {
+    foreignKey: {
+      allowNull: true
+    },
+    onDelete: 'cascade',
+    hooks: true
+  })
+  declare LiveSchedules: Awaited<VideoLiveScheduleModel>[]
 
   @BeforeDestroy
   static deleteReplaySetting (instance: VideoLiveModel, options: { transaction: Transaction }) {
@@ -144,10 +140,10 @@ export class VideoLiveModel extends SequelizeModel<VideoLiveModel> {
       }
     }
 
-    return VideoLiveModel.findOne<MVideoLive>(query)
+    return VideoLiveModel.findOne<MVideoLiveWithSettingSchedules>(query)
   }
 
-  static loadByVideoIdWithSettings (videoId: number) {
+  static loadByVideoIdFull (videoId: number) {
     const query = {
       where: {
         videoId
@@ -156,14 +152,18 @@ export class VideoLiveModel extends SequelizeModel<VideoLiveModel> {
         {
           model: VideoLiveReplaySettingModel.unscoped(),
           required: false
+        },
+        {
+          model: VideoLiveScheduleModel.unscoped(),
+          required: false
         }
       ]
     }
 
-    return VideoLiveModel.findOne<MVideoLiveWithSetting>(query)
+    return VideoLiveModel.findOne<MVideoLiveVideoWithSettingSchedules>(query)
   }
 
-  toFormattedJSON (canSeePrivateInformation: boolean): LiveVideo {
+  toFormattedJSON (this: MVideoLiveWithSettingSchedules, canSeePrivateInformation: boolean): LiveVideo {
     let privateInformation: Pick<LiveVideo, 'rtmpUrl' | 'rtmpsUrl' | 'streamKey'> | {} = {}
 
     // If we don't have a stream key, it means this is a remote live so we don't specify the rtmp URL
@@ -192,7 +192,8 @@ export class VideoLiveModel extends SequelizeModel<VideoLiveModel> {
       permanentLive: this.permanentLive,
       saveReplay: this.saveReplay,
       replaySettings,
-      latencyMode: this.latencyMode
+      latencyMode: this.latencyMode,
+      schedules: (this.LiveSchedules || []).map(schedule => schedule.toFormattedJSON())
     }
   }
 }

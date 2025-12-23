@@ -1,8 +1,8 @@
 import { Video, VideoPlaylist } from '@peertube/peertube-models'
 import { secondsToTime } from './date.js'
 
-function addQueryParams (url: string, params: { [ id: string ]: string }) {
-  const objUrl = new URL(url)
+function addQueryParams (url: string, params: { [ id: string ]: string }, baseUrl?: string) {
+  const objUrl = new URL(url, baseUrl)
 
   for (const key of Object.keys(params)) {
     objUrl.searchParams.append(key, params[key])
@@ -11,15 +11,15 @@ function addQueryParams (url: string, params: { [ id: string ]: string }) {
   return objUrl.toString()
 }
 
-function removeQueryParams (url: string) {
-  const objUrl = new URL(url)
+function removeQueryParams (url: string, baseUrl?: string) {
+  const objUrl = new URL(url, baseUrl)
 
   objUrl.searchParams.forEach((_v, k) => objUrl.searchParams.delete(k))
 
   return objUrl.toString()
 }
 
-function queryParamsToObject (entries: any) {
+function queryParamsToObject (entries: URLSearchParams) {
   const result: { [ id: string ]: string | number | boolean } = {}
 
   for (const [ key, value ] of entries) {
@@ -30,6 +30,23 @@ function queryParamsToObject (entries: any) {
 }
 
 // ---------------------------------------------------------------------------
+
+function buildDownloadFilesUrl (options: {
+  baseUrl: string
+  videoUUID: string
+  videoFiles: number[]
+  videoFileToken?: string
+  extension?: string
+}) {
+  const { baseUrl, videoFiles, videoUUID, videoFileToken, extension = '' } = options
+
+  let url = `${baseUrl}/download/videos/generate/${videoUUID}${extension}?`
+  url += videoFiles.map(f => 'videoFileIds=' + f).join('&')
+
+  if (videoFileToken) url += `&videoFileToken=${videoFileToken}`
+
+  return url
+}
 
 function buildPlaylistLink (playlist: Pick<VideoPlaylist, 'shortUUID'>, base?: string) {
   return (base ?? window.location.origin) + buildPlaylistWatchPath(playlist)
@@ -47,19 +64,19 @@ function buildVideoLink (video: Pick<Video, 'shortUUID'>, base?: string) {
   return (base ?? window.location.origin) + buildVideoWatchPath(video)
 }
 
-function buildPlaylistEmbedPath (playlist: Pick<VideoPlaylist, 'uuid'>) {
-  return '/video-playlists/embed/' + playlist.uuid
+function buildPlaylistEmbedPath (playlist: Partial<Pick<VideoPlaylist, 'shortUUID' | 'uuid'>>) {
+  return '/video-playlists/embed/' + (playlist.shortUUID || playlist.uuid)
 }
 
-function buildPlaylistEmbedLink (playlist: Pick<VideoPlaylist, 'uuid'>, base?: string) {
+function buildPlaylistEmbedLink (playlist: Partial<Pick<VideoPlaylist, 'shortUUID' | 'uuid'>>, base?: string) {
   return (base ?? window.location.origin) + buildPlaylistEmbedPath(playlist)
 }
 
-function buildVideoEmbedPath (video: Pick<Video, 'uuid'>) {
-  return '/videos/embed/' + video.uuid
+function buildVideoEmbedPath (video: Partial<Pick<Video, 'shortUUID' | 'uuid'>>) {
+  return '/videos/embed/' + (video.shortUUID || video.uuid)
 }
 
-function buildVideoEmbedLink (video: Pick<Video, 'uuid'>, base?: string) {
+function buildVideoEmbedLink (video: Partial<Pick<Video, 'shortUUID' | 'uuid'>>, base?: string) {
   return (base ?? window.location.origin) + buildVideoEmbedPath(video)
 }
 
@@ -84,6 +101,10 @@ function decorateVideoLink (options: {
 
   peertubeLink?: boolean
   p2p?: boolean
+
+  api?: boolean
+
+  version?: number
 }) {
   const { url } = options
 
@@ -113,6 +134,10 @@ function decorateVideoLink (options: {
   if (options.peertubeLink === false) params.set('peertubeLink', '0')
   if (options.p2p !== undefined) params.set('p2p', options.p2p ? '1' : '0')
 
+  if (options.api !== undefined) params.set('api', options.api ? '1' : '0')
+
+  if (options.version !== undefined) params.set('v', options.version + '')
+
   return buildUrl(url, params)
 }
 
@@ -136,6 +161,8 @@ export {
   addQueryParams,
   removeQueryParams,
   queryParamsToObject,
+
+  buildDownloadFilesUrl,
 
   buildPlaylistLink,
   buildVideoLink,

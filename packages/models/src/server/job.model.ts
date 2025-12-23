@@ -33,6 +33,7 @@ export type JobType =
   | 'generate-video-storyboard'
   | 'create-user-export'
   | 'import-user-archive'
+  | 'video-transcription'
 
 export interface Job {
   id: number | string
@@ -71,6 +72,7 @@ export type ActivitypubHttpFetcherPayload = {
   uri: string
   type: FetchType
   videoId?: number
+  accountId?: number
 }
 
 export type ActivitypubHttpUnicastPayload = {
@@ -97,21 +99,23 @@ export type VideoFileImportPayload = {
 export type VideoImportTorrentPayloadType = 'magnet-uri' | 'torrent-file'
 export type VideoImportYoutubeDLPayloadType = 'youtube-dl'
 
-export interface VideoImportYoutubeDLPayload {
-  type: VideoImportYoutubeDLPayloadType
+interface VideoImportAbstractPayload {
+  preventException: boolean
   videoImportId: number
+  generateTranscription: boolean
+}
+
+export interface VideoImportYoutubeDLPayload extends VideoImportAbstractPayload {
+  type: VideoImportYoutubeDLPayloadType
 
   fileExt?: string
 }
 
-export interface VideoImportTorrentPayload {
+export interface VideoImportTorrentPayload extends VideoImportAbstractPayload {
   type: VideoImportTorrentPayloadType
-  videoImportId: number
 }
 
-export type VideoImportPayload = (VideoImportYoutubeDLPayload | VideoImportTorrentPayload) & {
-  preventException: boolean
-}
+export type VideoImportPayload = VideoImportYoutubeDLPayload | VideoImportTorrentPayload
 
 export interface VideoImportPreventExceptionResult {
   resultType: 'success' | 'error'
@@ -123,24 +127,24 @@ export type VideoRedundancyPayload = {
   videoId: number
 }
 
-export type ManageVideoTorrentPayload =
-  {
-    action: 'create'
-    videoId: number
-    videoFileId: number
-  } | {
-    action: 'update-metadata'
+export type ManageVideoTorrentPayload = {
+  action: 'create'
+  videoId: number
+  videoFileId: number
+} | {
+  action: 'update-metadata'
 
-    videoId?: number
-    streamingPlaylistId?: number
+  videoId?: number
+  streamingPlaylistId?: number
 
-    videoFileId: number
-  }
+  videoFileId: number
+}
 
 // Video transcoding payloads
 
 interface BaseTranscodingPayload {
   videoUUID: string
+  hasChildren?: boolean
   isNewVideo?: boolean
 }
 
@@ -149,6 +153,8 @@ export interface HLSTranscodingPayload extends BaseTranscodingPayload {
   resolution: number
   fps: number
   copyCodecs: boolean
+
+  separatedAudio: boolean
 
   deleteWebVideoFiles: boolean
 }
@@ -164,20 +170,16 @@ export interface MergeAudioTranscodingPayload extends BaseTranscodingPayload {
 
   resolution: number
   fps: number
-
-  hasChildren: boolean
 }
 
 export interface OptimizeTranscodingPayload extends BaseTranscodingPayload {
   type: 'optimize-to-web-video'
 
   quickTranscode: boolean
-
-  hasChildren: boolean
 }
 
 export type VideoTranscodingPayload =
-  HLSTranscodingPayload
+  | HLSTranscodingPayload
   | NewWebVideoResolutionTranscodingPayload
   | OptimizeTranscodingPayload
   | MergeAudioTranscodingPayload
@@ -195,15 +197,29 @@ export interface ActorKeysPayload {
   actorId: number
 }
 
-export interface DeleteResumableUploadMetaFilePayload {
-  filepath: string
-}
+// ---------------------------------------------------------------------------
 
-export interface MoveStoragePayload {
+export type MoveStoragePayload = MoveVideoStoragePayload | MoveCaptionPayload
+
+export interface MoveVideoStoragePayload {
   videoUUID: string
   isNewVideo: boolean
   previousVideoState: VideoStateType
 }
+
+export interface MoveCaptionPayload {
+  captionId: number
+}
+
+export function isMoveVideoStoragePayload (payload: any): payload is MoveVideoStoragePayload {
+  return 'videoUUID' in payload
+}
+
+export function isMoveCaptionPayload (payload: any): payload is MoveCaptionPayload {
+  return 'captionId' in payload
+}
+
+// ---------------------------------------------------------------------------
 
 export type VideoStudioTaskCutPayload = VideoStudioTaskCut
 
@@ -236,10 +252,10 @@ export type VideoStudioTaskWatermarkPayload = {
 }
 
 export type VideoStudioTaskPayload =
-  VideoStudioTaskCutPayload |
-  VideoStudioTaskIntroPayload |
-  VideoStudioTaskOutroPayload |
-  VideoStudioTaskWatermarkPayload
+  | VideoStudioTaskCutPayload
+  | VideoStudioTaskIntroPayload
+  | VideoStudioTaskOutroPayload
+  | VideoStudioTaskWatermarkPayload
 
 export interface VideoStudioEditionPayload {
   videoUUID: string
@@ -261,11 +277,10 @@ export interface AfterVideoChannelImportPayload {
 
 // ---------------------------------------------------------------------------
 
-export type NotifyPayload =
-  {
-    action: 'new-video'
-    videoUUID: string
-  }
+export type NotifyPayload = {
+  action: 'new-video'
+  videoUUID: string
+}
 
 // ---------------------------------------------------------------------------
 
@@ -315,4 +330,10 @@ export interface CreateUserExportPayload {
 
 export interface ImportUserArchivePayload {
   userImportId: number
+}
+
+// ---------------------------------------------------------------------------
+
+export interface VideoTranscriptionPayload {
+  videoUUID: string
 }

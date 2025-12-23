@@ -1,20 +1,22 @@
 import { Routes } from '@angular/router'
+import { userResolver } from '@app/core/routing/user.resolver'
+import { AbuseService } from '@app/shared/shared-moderation/abuse.service'
+import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
+import { BulkService } from '@app/shared/shared-moderation/bulk.service'
+import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
+import { PluginPagesComponent } from '@app/shared/shared-plugin-pages/plugin-pages.component'
+import { TwoFactorService } from '@app/shared/shared-users/two-factor.service'
+import { VideoCommentService } from '@app/shared/shared-video-comment/video-comment.service'
 import { CanDeactivateGuard, LoginGuard } from '../core'
 import { MyAccountAbusesListComponent } from './my-account-abuses/my-account-abuses-list.component'
 import { MyAccountApplicationsComponent } from './my-account-applications/my-account-applications.component'
 import { MyAccountBlocklistComponent } from './my-account-blocklist/my-account-blocklist.component'
 import { MyAccountServerBlocklistComponent } from './my-account-blocklist/my-account-server-blocklist.component'
+import { MyAccountImportExportComponent, UserImportExportService } from './my-account-import-export'
 import { MyAccountNotificationsComponent } from './my-account-notifications/my-account-notifications.component'
 import { MyAccountSettingsComponent } from './my-account-settings/my-account-settings.component'
-import { MyAccountImportExportComponent, UserImportExportService } from './my-account-import-export'
-import { MyAccountComponent } from './my-account.component'
 import { MyAccountTwoFactorComponent } from './my-account-settings/my-account-two-factor/my-account-two-factor.component'
-import { AbuseService } from '@app/shared/shared-moderation/abuse.service'
-import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
-import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
-import { TwoFactorService } from '@app/shared/shared-users/two-factor.service'
-import { VideoCommentService } from '@app/shared/shared-video-comment/video-comment.service'
-import { PluginPagesComponent } from '@app/shared/shared-plugin-pages/plugin-pages.component'
+import { MyAccountComponent } from './my-account.component'
 
 export default [
   {
@@ -25,9 +27,13 @@ export default [
       TwoFactorService,
       BlocklistService,
       AbuseService,
-      VideoCommentService,
-      VideoBlockService
+      VideoBlockService,
+      BulkService,
+      VideoCommentService
     ],
+    resolve: {
+      user: userResolver
+    },
     canActivateChild: [ LoginGuard ],
     children: [
       {
@@ -153,6 +159,10 @@ export default [
         }
       },
       {
+        path: 'videos/comments',
+        redirectTo: '/my-library/videos/comments'
+      },
+      {
         path: 'import-export',
         component: MyAccountImportExportComponent,
         canDeactivate: [ CanDeactivateGuard ],
@@ -161,6 +171,16 @@ export default [
             title: $localize`Import/Export`
           }
         }
+      },
+      {
+        path: 'watched-words/list',
+        redirectTo: '/my-library/watched-words/list',
+        pathMatch: 'full'
+      },
+      {
+        path: 'auto-tag-policies',
+        redirectTo: '/my-library/auto-tag-policies',
+        pathMatch: 'full'
       },
       {
         path: 'p',

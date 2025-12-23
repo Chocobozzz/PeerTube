@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "typeRoots": [
+      "node_modules/@types",
+      "client/node_modules/@types"
+    ],
+    "baseUrl": "./dist-tmp",
+    "paths": {
+      "@server/*": [ "server/core/*" ],
+      "@client/*": [ "client/*" ],
+      "@peertube/peertube-models": [ "peertube-models" ],
+      "@peertube/peertube-typescript-utils": [ "peertube-typescript-utils" ]
+    }
+  }
+}
+

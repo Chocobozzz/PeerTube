@@ -1,0 +1,25 @@
+@if (latestLiveSessions.length !== 0) {
+  <div class="journal">
+    <div class="label" i18n>Latest live sessions</div>
+    @for (session of latestLiveSessions; track session) {
+      <div class="journal-session d-flex align-items-center flex-wrap mb-2">
+        @if (!getErrorLabel(session)) {
+          <span i18n class="pt-badge badge-success me-2">Success</span>
+        }
+        @if (getErrorLabel(session)) {
+          <span class="pt-badge badge-danger me-2">{{ getErrorLabel(session) }}</span>
+        }
+        <span i18n>Started on <strong>{{ session.startDate | ptDate:'medium' }}</strong></span>
+        @if (session.endDate) {
+          <span i18n>Ended on <strong>{{ session.endDate | ptDate:'medium' }}</strong></span>
+        }
+        @if (session.replayVideo) {
+          <a i18n [routerLink]="getVideoUrl(session.replayVideo)" target="_blank">Go to replay</a>
+        }
+        @if (isReplayBeingProcessed(session)) {
+          <span i18n>Replay is being processed...</span>
+        }
+      </div>
+    }
+  </div>
+}

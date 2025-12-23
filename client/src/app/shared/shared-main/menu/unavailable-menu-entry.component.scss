@@ -1,0 +1,26 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_form-mixins' as *;
+
+.unavailable {
+  display: flex;
+  align-items: center;
+
+  my-help {
+    color: pvar(--fg-200);
+  }
+}
+
+
+@media only screen and (max-width: $medium-view) {
+  .unavailable {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+
+  .badge-help {
+    display: flex;
+    margin-top: 0.25rem;
+  }
+}

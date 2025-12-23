@@ -1,0 +1,44 @@
+<div class="form-group">
+
+  @if (originalVideoFile()) {
+    <div class="peertube-radio-container">
+      <input type="radio" name="video-file" id="original-file" [(ngModel)]="videoFileChosen" value="file-original">
+      <label for="original-file">
+        <strong i18n>Original file</strong>
+        <span class="muted">{{ originalVideoFile().size | bytes: 1 }} | {{ originalVideoFile().width }}x{{ originalVideoFile().height }}</span>
+        <my-global-icon i18n-ngbTooltip ngbTooltip="Other users cannot download the original file" iconName="shield"></my-global-icon>
+      </label>
+    </div>
+  }
+
+  @for (file of videoFiles; track file.id) {
+    <div class="peertube-radio-container">
+      <input type="radio" name="video-file" [id]="'file-' + file.id" [(ngModel)]="videoFileChosen" [value]="'file-' + file.id">
+
+      <label [for]="'file-' + file.id">
+        <strong>{{ getLabel(file) }}</strong>
+
+        <span class="muted">
+          {{ getFileSize(file) | bytes: 1 }}
+
+          @if (file.width) { | {{ file.width }}x{{ file.height }} }
+
+            @if (file.fps && file.fps >= 50) { | <ng-container i18n>{{ file.fps }}fps</ng-container> }
+          </span>
+        </label>
+      </div>
+    }
+
+  </div>
+
+  @if (hasAudioSplitted()) {
+    <div class="form-group">
+      <my-peertube-checkbox inputName="includeAudio" [(ngModel)]="includeAudio" i18n-labelText labelText="Include audio"></my-peertube-checkbox>
+    </div>
+  }
+
+  <div class="modal-footer inputs">
+    <ng-content select="cancel-button"></ng-content>
+
+    <input type="submit" i18n-value value="Download" class="peertube-button primary-button" (click)="download()" />
+  </div>

@@ -12,10 +12,10 @@ import {
   setDefaultVideoChannel,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { parseTorrentVideo } from '@tests/shared/webtorrent.js'
+import { parseTorrentVideo } from '@tests/shared/p2p.js'
 import { VideoPlaylistPrivacy } from '@peertube/peertube-models'
 
-describe('Test update host scripts', function () {
+describe('Test update host CLI', function () {
   let server: PeerTubeServer
 
   before(async function () {

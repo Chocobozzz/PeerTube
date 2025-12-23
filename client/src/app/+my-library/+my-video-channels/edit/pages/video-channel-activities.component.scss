@@ -1,0 +1,53 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+
+.activity-container {
+  margin-bottom: 0.75rem;
+  border-radius: 24px;
+  padding: 1rem 1.5rem;
+  background-color: pvar(--bg-secondary-350);
+
+  &.even {
+    background-color: pvar(--bg-secondary-400);
+  }
+}
+
+my-date-group-label:not(.date-displayed) {
+  display: none;
+}
+
+my-date-group-label.date-displayed {
+  color: pvar(--fg-300);
+  font-weight: $font-bold;
+  display: block;
+
+  @include padding-bottom(1.5rem);
+  @include font-size(18px);
+
+  &:not(:first-child) {
+    border-top: 1px solid pvar(--bg-secondary-500);
+
+    @include padding-top(1.5rem);
+    @include margin-top(1.5rem);
+  }
+}
+
+my-date-group-label:not(.date-displayed) {
+  display: none;
+}
+
+my-date-group-label.date-displayed {
+  color: pvar(--fg-300);
+  font-weight: $font-bold;
+  display: block;
+
+  @include padding-bottom(1.5rem);
+  @include font-size(18px);
+
+  &:not(:first-child) {
+    border-top: 1px solid pvar(--bg-secondary-500);
+
+    @include padding-top(1.5rem);
+    @include margin-top(1.5rem);
+  }
+}

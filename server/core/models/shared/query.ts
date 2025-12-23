@@ -1,26 +1,33 @@
-import { BindOrReplacements, Op, QueryTypes, Sequelize } from 'sequelize'
+import { forceNumber } from '@peertube/peertube-core-utils'
+import { BindOrReplacements, Op, QueryOptionsWithType, QueryTypes, Sequelize, Transaction } from 'sequelize'
 import { Fn } from 'sequelize/types/utils'
 import validator from 'validator'
-import { forceNumber } from '@peertube/peertube-core-utils'
 
-function doesExist (sequelize: Sequelize, query: string, bind?: BindOrReplacements) {
-  const options = {
-    type: QueryTypes.SELECT as QueryTypes.SELECT,
+async function doesExist (options: {
+  sequelize: Sequelize
+  query: string
+  bind?: BindOrReplacements
+  transaction?: Transaction
+}) {
+  const { sequelize, query, bind, transaction } = options
+
+  const queryOptions: QueryOptionsWithType<QueryTypes.SELECT> = {
+    type: QueryTypes.SELECT,
     bind,
-    raw: true
+    raw: true,
+    transaction
   }
 
-  return sequelize.query(query, options)
-            .then(results => results.length === 1)
+  const results = await sequelize.query(query, queryOptions)
+
+  return results.length === 1
 }
 
 // FIXME: have to specify the result type to not break peertube typings generation
 function createSimilarityAttribute (col: string, value: string): Fn {
   return Sequelize.fn(
     'similarity',
-
     searchTrigramNormalizeCol(col),
-
     searchTrigramNormalizeValue(value)
   )
 }
@@ -38,7 +45,7 @@ function parseAggregateResult (result: any) {
   return total
 }
 
-function parseRowCountResult (result: any) {
+function parseRowCountResult (result: any): number {
   if (result.length !== 0) return result[0].total
 
   return 0
@@ -64,12 +71,12 @@ function searchAttribute (sourceField?: string, targetField?: string) {
 }
 
 export {
-  doesExist,
-  createSimilarityAttribute,
   buildWhereIdOrUUID,
+  createSafeIn,
+  createSimilarityAttribute,
+  doesExist,
   parseAggregateResult,
   parseRowCountResult,
-  createSafeIn,
   searchAttribute
 }
 

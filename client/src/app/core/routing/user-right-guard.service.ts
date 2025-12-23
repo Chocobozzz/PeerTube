@@ -1,15 +1,12 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router'
 import { AuthService } from '../auth/auth.service'
 import { RedirectService } from './redirect.service'
 
 @Injectable()
 export class UserRightGuard {
-
-  constructor (
-    private redirectService: RedirectService,
-    private auth: AuthService
-  ) {}
+  private redirectService = inject(RedirectService)
+  private auth = inject(AuthService)
 
   canActivate (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const user = this.auth.getUser()
@@ -19,7 +16,11 @@ export class UserRightGuard {
       if (user.hasRight(neededUserRight)) return true
     }
 
-    this.redirectService.redirectToLogin()
+    const err = new Error('') as any
+    err.status = 403
+
+    this.redirectService.replaceBy401(err)
+
     return false
   }
 

@@ -1,0 +1,11 @@
+{{#> base title=(t "A new user registered")}}
+  <p>
+    {{{t "User <a href=\"{accountUrl}\">{userUsername}</a> just registered." accountUrl=accountUrl userUsername=user.username}}}
+
+    {{#if userEmail}}
+      {{{t "You might want to contact them at <a href=\"mailto:{userEmail}\">{userEmail}</a>." userEmail=userEmail}}}
+    {{else}}
+      {{{t "You might want to contact them at <a href=\"mailto:{userEmail}\">{userEmail}</a> (the email has not been verified yet)." userEmail=userPendingEmail}}}
+    {{/if}}
+  </p>
+{{/base}}

@@ -1,10 +1,15 @@
-import { Transaction } from 'sequelize'
-import { MActorId, MVideoRedundancy, MVideoWithAllFiles } from '@server/types/models/index.js'
 import { CacheFileObject, VideoStreamingPlaylistType } from '@peertube/peertube-models'
+import { logger } from '@server/helpers/logger.js'
+import { MActorId, MVideoRedundancy, MVideoWithAllFiles } from '@server/types/models/index.js'
+import { Transaction } from 'sequelize'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy.js'
-import { exists } from '@server/helpers/custom-validators/misc.js'
 
-async function createOrUpdateCacheFile (cacheFileObject: CacheFileObject, video: MVideoWithAllFiles, byActor: MActorId, t: Transaction) {
+export async function createOrUpdateCacheFile (
+  cacheFileObject: CacheFileObject,
+  video: MVideoWithAllFiles,
+  byActor: MActorId,
+  t: Transaction
+) {
   const redundancyModel = await VideoRedundancyModel.loadByUrl(cacheFileObject.id, t)
 
   if (redundancyModel) {
@@ -15,15 +20,12 @@ async function createOrUpdateCacheFile (cacheFileObject: CacheFileObject, video:
 }
 
 // ---------------------------------------------------------------------------
-
-export {
-  createOrUpdateCacheFile
-}
-
+// Private
 // ---------------------------------------------------------------------------
 
 function createCacheFile (cacheFileObject: CacheFileObject, video: MVideoWithAllFiles, byActor: MActorId, t: Transaction) {
   const attributes = cacheFileActivityObjectToDBAttributes(cacheFileObject, video, byActor)
+  if (!attributes) return
 
   return VideoRedundancyModel.create(attributes, { transaction: t })
 }
@@ -40,6 +42,7 @@ function updateCacheFile (
   }
 
   const attributes = cacheFileActivityObjectToDBAttributes(cacheFileObject, video, byActor)
+  if (!attributes) return
 
   redundancyModel.expiresOn = attributes.expiresOn
   redundancyModel.fileUrl = attributes.fileUrl
@@ -48,40 +51,22 @@ function updateCacheFile (
 }
 
 function cacheFileActivityObjectToDBAttributes (cacheFileObject: CacheFileObject, video: MVideoWithAllFiles, byActor: MActorId) {
-
-  if (cacheFileObject.url.mediaType === 'application/x-mpegURL') {
-    const url = cacheFileObject.url
-
-    const playlist = video.VideoStreamingPlaylists.find(t => t.type === VideoStreamingPlaylistType.HLS)
-    if (!playlist) throw new Error('Cannot find HLS playlist of video ' + video.url)
-
-    return {
-      expiresOn: cacheFileObject.expires ? new Date(cacheFileObject.expires) : null,
-      url: cacheFileObject.id,
-      fileUrl: url.href,
-      strategy: null,
-      videoStreamingPlaylistId: playlist.id,
-      actorId: byActor.id
-    }
+  if (cacheFileObject.url.mediaType !== 'application/x-mpegURL') {
+    logger.debug('Do not create remote cache file of non application/x-mpegURL media type', { cacheFileObject })
+    return undefined
   }
 
   const url = cacheFileObject.url
-  const urlFPS = exists(url.fps) // TODO: compat with < 6.1, remove in 7.0
-    ? url.fps
-    : url['_:fps']
 
-  const videoFile = video.VideoFiles.find(f => {
-    return f.resolution === url.height && f.fps === urlFPS
-  })
-
-  if (!videoFile) throw new Error(`Cannot find video file ${url.height} ${urlFPS} of video ${video.url}`)
+  const playlist = video.VideoStreamingPlaylists.find(t => t.type === VideoStreamingPlaylistType.HLS)
+  if (!playlist) throw new Error('Cannot find HLS playlist of video ' + video.url)
 
   return {
     expiresOn: cacheFileObject.expires ? new Date(cacheFileObject.expires) : null,
     url: cacheFileObject.id,
     fileUrl: url.href,
     strategy: null,
-    videoFileId: videoFile.id,
+    videoStreamingPlaylistId: playlist.id,
     actorId: byActor.id
   }
 }

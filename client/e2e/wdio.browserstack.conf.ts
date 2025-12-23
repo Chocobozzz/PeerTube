@@ -71,13 +71,13 @@ module.exports = {
       },
       {
         browserName: 'Firefox',
-        browserVersion: '78', // Very old ESR
+        browserVersion: '79', // Oldest supported version
 
         ...buildBStackDesktopOptions({ sessionName: 'Firefox ESR Desktop', resolution: '1280x1024', os: 'Windows', osVersion: '8' })
       },
       {
         browserName: 'Safari',
-        browserVersion: '12.1',
+        browserVersion: '14',
 
         ...buildBStackDesktopOptions({ sessionName: 'Safari Desktop', resolution: '1280x1024' })
       },
@@ -95,17 +95,18 @@ module.exports = {
       {
         browserName: 'Chrome',
 
-        ...buildBStackMobileOptions({ sessionName: 'Latest Chrome Android', deviceName: 'Samsung Galaxy S8', osVersion: '7.0' })
+        ...buildBStackMobileOptions({ sessionName: 'Latest Chrome Android', deviceName: 'Samsung Galaxy S10', osVersion: '9.0' })
       },
       {
         browserName: 'Safari',
 
-        ...buildBStackMobileOptions({ sessionName: 'Safari iPhone', deviceName: 'iPhone 8', osVersion: '13' })
+        ...buildBStackMobileOptions({ sessionName: 'Safari iPhone', deviceName: 'iPhone 12', osVersion: '14' })
       },
+
       {
         browserName: 'Safari',
 
-        ...buildBStackMobileOptions({ sessionName: 'Safari iPad', deviceName: 'iPad 7th', osVersion: '13' })
+        ...buildBStackMobileOptions({ sessionName: 'Safari iPad', deviceName: 'iPad Pro 12.9 2021', osVersion: '14' })
       }
     ],
 
@@ -120,7 +121,8 @@ module.exports = {
 
     services: [
       [
-        'browserstack', { browserstackLocal: true }
+        'browserstack',
+        { browserstackLocal: true }
       ]
     ],
 
@@ -130,8 +132,48 @@ module.exports = {
       }
     },
 
+    before: function () {
+      require('./src/commands/upload')
+
+      // Force keep alive: https://www.browserstack.com/docs/automate/selenium/error-codes/keep-alive-not-used#Node_JS
+      const http = require('node:http')
+      const https = require('node:https')
+
+      const keepAliveTimeout = 30 * 1000
+
+      // eslint-disable-next-line no-prototype-builtins
+      if (http.globalAgent?.hasOwnProperty('keepAlive')) {
+        http.globalAgent.keepAlive = true
+        https.globalAgent.keepAlive = true
+        http.globalAgent.keepAliveMsecs = keepAliveTimeout
+        https.globalAgent.keepAliveMsecs = keepAliveTimeout
+      } else {
+        const agent = new http.Agent({
+          keepAlive: true,
+          keepAliveMsecs: keepAliveTimeout
+        })
+
+        const secureAgent = new https.Agent({
+          keepAlive: true,
+          keepAliveMsecs: keepAliveTimeout
+        })
+
+        const httpRequest = http.request
+        const httpsRequest = https.request
+
+        http.request = function (options, callback) {
+          if (options.protocol === 'https:') {
+            options['agent'] = secureAgent
+            return httpsRequest(options, callback)
+          } else {
+            options['agent'] = agent
+            return httpRequest(options, callback)
+          }
+        }
+      }
+    },
+
     onPrepare: onBrowserStackPrepare,
     onComplete: onBrowserStackComplete
-
   } as WebdriverIO.Config
 }

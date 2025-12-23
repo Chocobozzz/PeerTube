@@ -34,11 +34,14 @@ describe('Test stats (excluding redundancy)', function () {
     const { account } = await servers[0].users.create({ username: user.username, password: user.password })
     userAccountId = account.id
 
-    const { uuid } = await servers[0].videos.upload({ attributes: { fixture: 'video_short.webm' } })
+    {
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'video', fixture: 'video_short.webm' })
+      await servers[0].views.simulateView({ id: uuid })
 
-    await servers[0].comments.createThread({ videoId: uuid, text: 'comment' })
-
-    await servers[0].views.simulateView({ id: uuid })
+      await servers[0].comments.createThread({ videoId: uuid, text: 'comment' })
+      const toDelete = await servers[0].comments.createThread({ videoId: uuid, text: 'deleted' })
+      await servers[0].comments.delete({ videoId: uuid, commentId: toDelete.id })
+    }
 
     // Wait the video views repeatable job
     await wait(8000)

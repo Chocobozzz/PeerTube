@@ -12,55 +12,67 @@
 }
 
 @mixin chevron-right ($size, $border-width) {
+  left: 0;
+
   @include chevron($size, $border-width);
 
-  left: 0;
-  transform: rotate(45deg);
+  & {
+    transform: rotate(45deg);
+  }
 }
 
 @mixin chevron-right-default {
-  @include chevron-right(0.55rem, 0.15rem);
-
   margin: 0 8px;
+
+  @include chevron-right(0.55rem, 0.15rem);
 }
 
 @mixin chevron-down ($size, $border-width) {
+  bottom: 0.15em;
+
   @include chevron($size, $border-width);
 
-  bottom: 0.15em;
-  transform: rotate(135deg);
+  & {
+    transform: rotate(135deg);
+  }
 }
 
 @mixin chevron-down-default {
-  @include chevron-down(0.55rem, 0.15rem);
-
   margin: 0 8px;
+
+  @include chevron-down(0.55rem, 0.15rem);
 }
 
 @mixin chevron-up ($size, $border-width) {
+  top: 0.15em;
+
   @include chevron($size, $border-width);
 
-  top: 0.15em;
-  transform: rotate(-45deg);
+  & {
+    transform: rotate(-45deg);
+  }
 }
 
 @mixin chevron-up-default {
-  @include chevron-up(0.55rem, 0.15rem);
-
   margin: 0 8px;
+
+  @include chevron-up(0.55rem, 0.15rem);
 }
 
 @mixin chevron-left ($size, $border-width) {
+  left: 0.25em;
+
   @include chevron($size, $border-width);
 
-  left: 0.25em;
-  transform: rotate(-135deg);
+  & {
+    transform: rotate(-135deg);
+  }
 }
 
 @mixin chevron-left-default {
-  @include chevron-left(0.55rem, 0.15rem);
-
   margin: 0 8px;
+
+  @include chevron-left(0.55rem, 0.15rem);
 }
 
 // ---------------------------------------------------------------------------
@@ -70,7 +82,7 @@
   height: 0;
   border-left: $size solid transparent;
   border-right: $size solid transparent;
-  border-bottom: $size solid pvar(--mainForegroundColor);
+  border-bottom: $size solid pvar(--fg);
 }
 
 @mixin arrow-down ($size) {
@@ -78,5 +90,5 @@
   height: 0;
   border-left: $size solid transparent;
   border-right: $size solid transparent;
-  border-top: $size solid pvar(--mainForegroundColor);
+  border-top: $size solid pvar(--fg);
 }

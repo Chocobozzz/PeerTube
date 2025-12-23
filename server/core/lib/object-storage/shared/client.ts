@@ -1,14 +1,14 @@
 import type { S3Client } from '@aws-sdk/client-s3'
 import { logger } from '@server/helpers/logger.js'
 import { isProxyEnabled } from '@server/helpers/proxy.js'
-import { getAgent } from '@server/helpers/requests.js'
+import { getProxyAgent } from '@server/helpers/requests.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { lTags } from './logger.js'
 
 async function getProxyRequestHandler () {
   if (!isProxyEnabled()) return null
 
-  const { agent } = getAgent()
+  const { agent } = getProxyAgent()
 
   const { NodeHttpHandler } = await import('@smithy/node-http-handler')
 
@@ -29,7 +29,7 @@ function getEndpointParsed () {
 
 let s3ClientPromise: Promise<S3Client>
 function getClient () {
-  if (s3ClientPromise) return s3ClientPromise
+  if (s3ClientPromise !== undefined) return s3ClientPromise
 
   s3ClientPromise = (async () => {
     const OBJECT_STORAGE = CONFIG.OBJECT_STORAGE
@@ -45,7 +45,13 @@ function getClient () {
           secretAccessKey: OBJECT_STORAGE.CREDENTIALS.SECRET_ACCESS_KEY
         }
         : undefined,
-      requestHandler: await getProxyRequestHandler()
+      requestHandler: await getProxyRequestHandler(),
+      maxAttempts: CONFIG.OBJECT_STORAGE.MAX_REQUEST_ATTEMPTS,
+      forcePathStyle: CONFIG.OBJECT_STORAGE.FORCE_PATH_STYLE,
+
+      // Default behaviour has incompatibilities with some S3 providers: https://github.com/aws/aws-sdk-js-v3/issues/6810
+      requestChecksumCalculation: 'WHEN_REQUIRED',
+      responseChecksumValidation: 'WHEN_REQUIRED'
     })
 
     logger.info('Initialized S3 client %s with region %s.', getEndpoint(), OBJECT_STORAGE.REGION, lTags())

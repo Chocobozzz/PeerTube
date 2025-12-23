@@ -9,12 +9,6 @@ my-signup-step-title strong {
   padding-top: 30vh;
 }
 
-.title-page-v2 {
-  background-color: pvar(--mainColorVeryLight);
-  margin: 0;
-  padding-bottom: 10px;
-}
-
 my-instance-about-accordion {
   display: block;
   margin-bottom: 30px;
@@ -26,34 +20,14 @@ my-instance-about-accordion {
   align-items: center;
 
   .skip-step {
-    @include margin-right(30px);
-
     display: inline-block;
+
+    @include margin-right(30px);
   }
 
   .skip-step-description {
     margin-top: 5px;
     font-size: 14px;
-  }
-
-  .underline-orange {
-    color: pvar(--mainForegroundColor);
-
-    &:hover {
-      opacity: 0.8;
-    }
-  }
-
-  > button {
-    @include peertube-button-big;
-
-    &[cdkStepperNext] {
-      @include orange-button;
-    }
-
-    &[cdkStepperPrevious] {
-      @include grey-button;
-    }
   }
 
   > button,

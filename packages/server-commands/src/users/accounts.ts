@@ -1,15 +1,10 @@
+import { arrayify } from '@peertube/peertube-core-utils'
 import { PeerTubeServer } from '../server/server.js'
 
-async function setDefaultAccountAvatar (serversArg: PeerTubeServer | PeerTubeServer[], token?: string) {
-  const servers = Array.isArray(serversArg)
-    ? serversArg
-    : [ serversArg ]
+export async function setDefaultAccountAvatar (serversArg: PeerTubeServer | PeerTubeServer[], token?: string) {
+  const servers = arrayify(serversArg)
 
-  for (const server of servers) {
-    await server.users.updateMyAvatar({ fixture: 'avatar.png', token })
-  }
-}
-
-export {
-  setDefaultAccountAvatar
+  return Promise.all(
+    servers.map(s => s.users.updateMyAvatar({ fixture: 'avatar.png', token }))
+  )
 }

@@ -6,21 +6,24 @@
   </div>
 
   <div class="content-col">
-    <my-actor-avatar-edit
-      *ngIf="user?.account" class="d-block mb-3"
-      actorType="account" [avatars]="user.account.avatars"
-      [displayName]="user.account.displayName" [username]="user.username" [subscribers]="user.account.followersCount"
-      (avatarChange)="onAvatarChange($event)" (avatarDelete)="onAvatarDelete()"
-    ></my-actor-avatar-edit>
+    @if (user?.account) {
+      <my-actor-avatar-edit
+        class="d-block mb-3"
+        actorType="account" [avatars]="user.account.avatars"
+        [displayName]="user.account.displayName" [username]="user.username" [subscribers]="user.account.followersCount"
+        (avatarChange)="onAvatarChange($event)" (avatarDelete)="onAvatarDelete()"
+      ></my-actor-avatar-edit>
+    }
 
-    <my-user-quota [user]="user" [userInformationLoaded]="userInformationLoaded"></my-user-quota>
+    <my-user-quota></my-user-quota>
 
-    <my-account-profile [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-profile>
+    <my-account-profile [user]="user"></my-account-profile>
   </div>
 </div>
 
 <div class="pt-two-cols mt-5"> <!-- interface grid -->
   <div class="title-col">
+    <div class="anchor" id="interface-settings"></div> <!-- interface settings anchor -->
     <h2 i18n>INTERFACE</h2>
   </div>
 
@@ -47,39 +50,55 @@
   </div>
 
   <div class="content-col">
-    <my-account-notification-preferences [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-notification-preferences>
+    <my-account-notification-preferences [user]="user"></my-account-notification-preferences>
   </div>
 </div>
 
-<div class="pt-two-cols mt-5" *ngIf="user.pluginAuth === null"> <!-- password grid -->
+@if (user.pluginAuth === null) {
+  <div class="pt-two-cols mt-5"> <!-- password grid -->
+    <div class="title-col">
+      <h2 i18n>PASSWORD</h2>
+    </div>
+    <div class="content-col">
+      <my-account-change-password></my-account-change-password>
+    </div>
+  </div>
+}
+
+@if (user.pluginAuth === null) {
+  <div class="pt-two-cols mt-5"> <!-- two factor auth grid -->
+    <div class="title-col">
+      <h2 i18n>TWO-FACTOR AUTHENTICATION</h2>
+    </div>
+    <div class="content-col">
+      <my-account-two-factor-button [user]="user"></my-account-two-factor-button>
+    </div>
+  </div>
+}
+
+<div class="pt-two-cols mt-5">
   <div class="title-col">
-    <h2 i18n>PASSWORD</h2>
+    <h2 i18n>ACCOUNT SESSIONS</h2>
   </div>
 
   <div class="content-col">
-    <my-account-change-password></my-account-change-password>
+    <p i18n>These are the devices currently logged in to your account.</p>
+
+    <my-account-token-sessions [user]="user"></my-account-token-sessions>
   </div>
 </div>
 
-<div class="pt-two-cols mt-5" *ngIf="user.pluginAuth === null"> <!-- two factor auth grid -->
-  <div class="title-col">
-    <h2 i18n>Two-factor authentication</h2>
-  </div>
-
-  <div class="content-col">
-    <my-account-two-factor-button [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-two-factor-button>
-  </div>
-</div>
-
-<div class="pt-two-cols mt-5" *ngIf="user.pluginAuth === null"> <!-- email grid -->
+<div class="pt-two-cols mt-5"> <!-- email grid -->
   <div class="title-col">
     <h2 i18n>EMAIL</h2>
   </div>
 
   <div class="content-col">
-    <my-account-email-preferences class="d-block mb-5" [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-email-preferences>
+    <my-account-email-preferences class="d-block mb-5" [user]="user"></my-account-email-preferences>
 
-    <my-account-change-email></my-account-change-email>
+    @if (user.pluginAuth === null) {
+      <my-account-change-email></my-account-change-email>
+    }
   </div>
 </div>
 

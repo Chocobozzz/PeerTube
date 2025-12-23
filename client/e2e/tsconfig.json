@@ -5,8 +5,9 @@
     "noImplicitAny": false,
     "esModuleInterop": true,
     "module": "commonjs",
-    "target": "es5",
+    "target": "ES2018",
     "typeRoots": [
+      "../node_modules/@wdio",
       "../node_modules/@types",
       "../node_modules"
     ],
@@ -16,6 +17,9 @@
       "@wdio/mocha-framework",
       "expect-webdriverio"
     ]
+  },
+  "ts-node": {
+    "files": true
   },
   "include": [
     "src/**/*.ts",

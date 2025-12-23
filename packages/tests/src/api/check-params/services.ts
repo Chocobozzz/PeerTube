@@ -71,7 +71,6 @@ describe('Test services API validators', function () {
   })
 
   describe('Test oEmbed API validators', function () {
-
     it('Should fail with an invalid url', async function () {
       const embedUrl = 'hello.com'
       await checkParamEmbed(server, embedUrl)

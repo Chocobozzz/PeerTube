@@ -1,39 +1,50 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import { getVideoStreamDimensionsInfo, getVideoStreamFPS } from '@peertube/peertube-ffmpeg'
+import { LiveVideo, VideoResolution, VideoStreamingPlaylistType } from '@peertube/peertube-models'
+import { ObjectStorageCommand, PeerTubeServer } from '@peertube/peertube-server-commands'
 import { expect } from 'chai'
 import { pathExists } from 'fs-extra/esm'
 import { readdir } from 'fs/promises'
 import { join } from 'path'
-import { sha1 } from '@peertube/peertube-node-utils'
-import { LiveVideo, VideoStreamingPlaylistType } from '@peertube/peertube-models'
-import { ObjectStorageCommand, PeerTubeServer } from '@peertube/peertube-server-commands'
 import { SQLCommand } from './sql-command.js'
-import { checkLiveSegmentHash, checkResolutionsInMasterPlaylist } from './streaming-playlists.js'
+import { checkLiveSegmentHash, checkPlaylistInfohash, checkResolutionsInMasterPlaylist } from './streaming-playlists.js'
 
 async function checkLiveCleanup (options: {
   server: PeerTubeServer
   videoUUID: string
   permanent: boolean
   savedResolutions?: number[]
+  deleted?: boolean // default false
 }) {
-  const { server, videoUUID, permanent, savedResolutions = [] } = options
+  const { server, videoUUID, permanent, savedResolutions = [], deleted = false } = options
 
   const basePath = server.servers.buildDirectory('streaming-playlists')
   const hlsPath = join(basePath, 'hls', videoUUID)
+  const hlsPathExists = await pathExists(hlsPath)
 
-  if (permanent) {
-    if (!await pathExists(hlsPath)) return
-
-    const files = await readdir(hlsPath)
-    expect(files).to.have.lengthOf(0)
+  if (deleted) {
+    expect(hlsPathExists).to.be.false
     return
   }
 
-  if (savedResolutions.length === 0) {
-    return checkUnsavedLiveCleanup(server, videoUUID, hlsPath)
-  }
+  if (permanent) {
+    if (!hlsPathExists) return
 
-  return checkSavedLiveCleanup(hlsPath, savedResolutions)
+    const files = await readdir(hlsPath)
+    expect(files.filter(f => f !== 'replay')).to.have.lengthOf(0)
+
+    const replayDir = join(hlsPath, 'replay')
+    if (await pathExists(replayDir)) {
+      expect(await readdir(replayDir)).to.have.lengthOf(0)
+    }
+  } else {
+    if (savedResolutions.length === 0) {
+      return checkUnsavedLiveCleanup(server, videoUUID, hlsPath)
+    }
+
+    return checkSavedLiveCleanup(hlsPath, savedResolutions)
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -44,8 +55,14 @@ async function testLiveVideoResolutions (options: {
 
   servers: PeerTubeServer[]
   liveVideoId: string
+
   resolutions: number[]
+  framerates?: { [id: number]: number }
+
   transcoded: boolean
+
+  hasAudio?: boolean
+  hasVideo?: boolean
 
   objectStorage?: ObjectStorageCommand
   objectStorageBaseUrl?: string
@@ -55,11 +72,22 @@ async function testLiveVideoResolutions (options: {
     sqlCommand,
     servers,
     liveVideoId,
-    resolutions,
     transcoded,
+    framerates,
     objectStorage,
+    hasAudio = true,
+    hasVideo = true,
     objectStorageBaseUrl = objectStorage?.getMockPlaylistBaseUrl()
   } = options
+
+  // Live is always audio/video splitted
+  const splittedAudio = transcoded
+
+  const resolutions = splittedAudio && options.resolutions.length > 1 && !options.resolutions.includes(VideoResolution.H_NOVIDEO)
+    ? [ VideoResolution.H_NOVIDEO, ...options.resolutions ]
+    : [ ...options.resolutions ]
+
+  const isAudioOnly = resolutions.every(r => r === VideoResolution.H_NOVIDEO)
 
   for (const server of servers) {
     const { data } = await server.videos.list()
@@ -67,7 +95,12 @@ async function testLiveVideoResolutions (options: {
 
     const video = await server.videos.get({ id: liveVideoId })
 
-    expect(video.aspectRatio).to.equal(1.7778)
+    if (isAudioOnly) {
+      expect(video.aspectRatio).to.equal(0)
+    } else {
+      expect(video.aspectRatio).to.equal(1.7778)
+    }
+
     expect(video.streamingPlaylists).to.have.lengthOf(1)
 
     const hlsPlaylist = video.streamingPlaylists.find(s => s.type === VideoStreamingPlaylistType.HLS)
@@ -78,7 +111,11 @@ async function testLiveVideoResolutions (options: {
       server,
       playlistUrl: hlsPlaylist.playlistUrl,
       resolutions,
+      framerates,
       transcoded,
+      splittedAudio,
+      hasAudio,
+      hasVideo,
       withRetry: !!objectStorage
     })
 
@@ -97,6 +134,16 @@ async function testLiveVideoResolutions (options: {
         objectStorage,
         objectStorageBaseUrl
       })
+
+      if (framerates) {
+        const segmentPath = servers[0].servers.buildDirectory(join('streaming-playlists', 'hls', video.uuid, segmentName))
+        const { resolution } = await getVideoStreamDimensionsInfo(segmentPath)
+
+        if (resolution) {
+          const fps = await getVideoStreamFPS(segmentPath)
+          expect(fps).to.equal(framerates[resolution])
+        }
+      }
 
       const baseUrl = objectStorage
         ? join(objectStorageBaseUrl, 'hls')
@@ -121,13 +168,10 @@ async function testLiveVideoResolutions (options: {
         hlsPlaylist,
         withRetry: !!objectStorage // With object storage, the request may fail because of inconsistent data in S3
       })
+    }
 
-      if (originServer.internalServerNumber === server.internalServerNumber) {
-        const infohash = sha1(`${2 + hlsPlaylist.playlistUrl}+V${i}`)
-        const dbInfohashes = await sqlCommand.getPlaylistInfohash(hlsPlaylist.id)
-
-        expect(dbInfohashes).to.include(infohash)
-      }
+    if (originServer.internalServerNumber === server.internalServerNumber) {
+      await checkPlaylistInfohash({ video, sqlCommand, files: resolutions.map(r => ({ resolution: { id: r } })) })
     }
   }
 }

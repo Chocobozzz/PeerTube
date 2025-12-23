@@ -1,26 +1,33 @@
-import { tap } from 'rxjs/operators'
-import { Component, OnInit, ViewChild } from '@angular/core'
-import { AuthService, ComponentPagination, ConfirmService, DisableForReuseHook, Notifier, User, UserService } from '@app/core'
-import { immutableAssign } from '@app/helpers'
-import { DeleteButtonComponent } from '../../shared/shared-main/buttons/delete-button.component'
-import { PeerTubeTemplateDirective } from '../../shared/shared-main/angular/peertube-template.directive'
+import { Component, DestroyRef, inject, OnInit, viewChild } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { FormsModule } from '@angular/forms'
-import { InputSwitchComponent } from '../../shared/shared-forms/input-switch.component'
-import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
-import { NgIf } from '@angular/common'
-import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
-import { Video } from '@app/shared/shared-main/video/video.model'
+import {
+  AuthService,
+  ComponentPagination,
+  ConfirmService,
+  DisableForReuseHook,
+  Notifier,
+  updatePaginationOnDelete,
+  User,
+  UserService
+} from '@app/core'
+import { immutableAssign } from '@app/helpers'
+import { ButtonComponent } from '@app/shared/shared-main/buttons/button.component'
 import { UserHistoryService } from '@app/shared/shared-main/users/user-history.service'
+import { Video } from '@app/shared/shared-main/video/video.model'
 import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature/video-miniature.component'
 import { VideosSelectionComponent } from '@app/shared/shared-video-miniature/videos-selection.component'
+import { tap } from 'rxjs/operators'
+import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
+import { InputSwitchComponent } from '../../shared/shared-forms/input-switch.component'
+import { DeleteButtonComponent } from '../../shared/shared-main/buttons/delete-button.component'
+import { PeerTubeTemplateDirective } from '../../shared/shared-main/common/peertube-template.directive'
 
 @Component({
   templateUrl: './my-history.component.html',
   styleUrls: [ './my-history.component.scss' ],
-  standalone: true,
   imports: [
-    GlobalIconComponent,
-    NgIf,
+    ButtonComponent,
     AdvancedInputFilterComponent,
     InputSwitchComponent,
     FormsModule,
@@ -30,7 +37,14 @@ import { VideosSelectionComponent } from '@app/shared/shared-video-miniature/vid
   ]
 })
 export class MyHistoryComponent implements OnInit, DisableForReuseHook {
-  @ViewChild('videosSelection', { static: true }) videosSelection: VideosSelectionComponent
+  private authService = inject(AuthService)
+  private userService = inject(UserService)
+  private notifier = inject(Notifier)
+  private confirmService = inject(ConfirmService)
+  private userHistoryService = inject(UserHistoryService)
+  private destroyRef = inject(DestroyRef)
+
+  readonly videosSelection = viewChild<VideosSelectionComponent>('videosSelection')
 
   titlePage: string
   pagination: ComponentPagination = {
@@ -45,10 +59,7 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
     date: true,
     views: true,
     by: true,
-    privacyLabel: false,
-    privacyText: true,
-    state: true,
-    blacklistInfo: true
+    privacyLabel: false
   }
 
   getVideosObservableFunction = this.getVideosObservable.bind(this)
@@ -60,13 +71,7 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
 
   disabled = false
 
-  constructor (
-    private authService: AuthService,
-    private userService: UserService,
-    private notifier: Notifier,
-    private confirmService: ConfirmService,
-    private userHistoryService: UserHistoryService
-  ) {
+  constructor () {
     this.titlePage = $localize`My watch history`
   }
 
@@ -74,6 +79,7 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
     this.user = this.authService.getUser()
 
     this.authService.userInformationLoaded
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.videosHistoryEnabled = this.user.videosHistoryEnabled)
   }
 
@@ -86,7 +92,7 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
   }
 
   reloadData () {
-    this.videosSelection.reloadVideos()
+    this.videosSelection().reloadVideos()
   }
 
   onSearch (search: string) {
@@ -121,7 +127,7 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
           this.authService.refreshUserInformation()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -130,9 +136,10 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
       .subscribe({
         next: () => {
           this.videos = this.videos.filter(v => v.id !== video.id)
+          updatePaginationOnDelete(this.pagination)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -144,15 +151,15 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
     if (res !== true) return
 
     this.userHistoryService.clearAll()
-        .subscribe({
-          next: () => {
-            this.notifier.success($localize`Video history deleted`)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Video history deleted`)
 
-            this.reloadData()
-          },
+          this.reloadData()
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.handleError(err)
+      })
   }
 
   getNoResultMessage () {

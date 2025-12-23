@@ -1,0 +1,36 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+
+.video {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.video-name {
+  max-width: 300px;
+
+  @include ellipsis;
+}
+
+.comment-content-cell {
+  > .pt-badge {
+    position: relative;
+    top: 2px;
+  }
+}
+
+.comment-html > div {
+  max-width: 30vw;
+  overflow: hidden;
+
+  ::ng-deep {
+    * {
+      display: inline;
+    }
+
+    br {
+      display: none;
+    }
+  }
+}

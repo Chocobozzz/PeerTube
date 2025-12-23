@@ -1,15 +1,16 @@
+import { randomInt } from '@peertube/peertube-core-utils'
+import { User, Video, VideoChannelSync, VideoCreateResult, VideoDetails } from '@peertube/peertube-models'
+import { parallelTests, root } from '@peertube/peertube-node-utils'
 import { ChildProcess, fork } from 'child_process'
 import { copy } from 'fs-extra/esm'
+import merge from 'lodash-es/merge.js'
 import { join } from 'path'
-import { randomInt } from '@peertube/peertube-core-utils'
-import { Video, VideoChannel, VideoChannelSync, VideoCreateResult, VideoDetails } from '@peertube/peertube-models'
-import { parallelTests, root } from '@peertube/peertube-node-utils'
 import { BulkCommand } from '../bulk/index.js'
 import { CLICommand } from '../cli/index.js'
 import { CustomPagesCommand } from '../custom-pages/index.js'
 import { FeedCommand } from '../feeds/index.js'
 import { LogsCommand } from '../logs/index.js'
-import { AbusesCommand } from '../moderation/index.js'
+import { AbusesCommand, AutomaticTagsCommand, WatchedWordsCommand } from '../moderation/index.js'
 import { OverviewsCommand } from '../overviews/index.js'
 import { RunnerJobsCommand, RunnerRegistrationTokensCommand, RunnersCommand } from '../runners/index.js'
 import { SearchCommand } from '../search/index.js'
@@ -17,35 +18,37 @@ import { SocketIOCommand } from '../socket/index.js'
 import {
   AccountsCommand,
   BlocklistCommand,
-  UserExportsCommand,
   LoginCommand,
   NotificationsCommand,
   RegistrationsCommand,
   SubscriptionsCommand,
   TwoFactorCommand,
-  UsersCommand,
-  UserImportsCommand
+  UserExportsCommand,
+  UserImportsCommand,
+  UsersCommand
 } from '../users/index.js'
 import {
   BlacklistCommand,
   CaptionsCommand,
   ChangeOwnershipCommand,
-  ChannelsCommand,
+  ChannelCollaboratorsCommand,
   ChannelSyncsCommand,
+  ChannelsCommand,
   ChaptersCommand,
   CommentsCommand,
   HistoryCommand,
-  VideoImportsCommand,
   LiveCommand,
+  PlayerSettingsCommand,
   PlaylistsCommand,
   ServicesCommand,
   StoryboardCommand,
   StreamingPlaylistsCommand,
+  VideoImportsCommand,
   VideoPasswordsCommand,
-  VideosCommand,
   VideoStatsCommand,
   VideoStudioCommand,
   VideoTokenCommand,
+  VideosCommand,
   ViewsCommand
 } from '../videos/index.js'
 import { ConfigCommand } from './config-command.js'
@@ -60,10 +63,11 @@ import { ServersCommand } from './servers-command.js'
 import { StatsCommand } from './stats-command.js'
 
 export type RunServerOptions = {
+  autoEnableImportProxy?: boolean
   hideLogs?: boolean
   nodeArgs?: string[]
   peertubeArgs?: string[]
-  env?: { [ id: string ]: string }
+  env?: { [id: string]: string }
 }
 
 export class PeerTubeServer {
@@ -79,6 +83,7 @@ export class PeerTubeServer {
 
   parallel?: boolean
   internalServerNumber: number
+  adminEmail: string
 
   serverNumber?: number
   customConfigFile?: string
@@ -94,7 +99,7 @@ export class PeerTubeServer {
       password: string
     }
 
-    channel?: VideoChannel
+    channel?: User['videoChannels'][0]
     videoChannelSync?: Partial<VideoChannelSync>
 
     video?: Video
@@ -152,6 +157,7 @@ export class PeerTubeServer {
   videoToken?: VideoTokenCommand
   registrations?: RegistrationsCommand
   videoPasswords?: VideoPasswordsCommand
+  playerSettings?: PlayerSettingsCommand
 
   storyboard?: StoryboardCommand
   chapters?: ChaptersCommand
@@ -162,6 +168,11 @@ export class PeerTubeServer {
   runners?: RunnersCommand
   runnerRegistrationTokens?: RunnerRegistrationTokensCommand
   runnerJobs?: RunnerJobsCommand
+
+  watchedWordsLists?: WatchedWordsCommand
+  autoTags?: AutomaticTagsCommand
+
+  channelCollaborators?: ChannelCollaboratorsCommand
 
   constructor (options: { serverNumber: number } | { url: string }) {
     if ((options as any).url) {
@@ -181,6 +192,7 @@ export class PeerTubeServer {
       }
     }
 
+    this.adminEmail = this.buildEmail()
     this.assignCommands()
   }
 
@@ -237,10 +249,10 @@ export class PeerTubeServer {
 
     await this.assignCustomConfigFile()
 
-    const configOverride = this.buildConfigOverride()
+    let configOverride = this.buildConfigOverride(options)
 
     if (configOverrideArg !== undefined) {
-      Object.assign(configOverride, configOverrideArg)
+      configOverride = merge(configOverride, configOverrideArg)
     }
 
     // Share the environment
@@ -359,10 +371,16 @@ export class PeerTubeServer {
     this.customConfigFile = tmpConfigFile
   }
 
-  private buildConfigOverride () {
-    if (!this.parallel) return {}
+  private buildConfigOverride (options: RunServerOptions) {
+    const base = options.autoEnableImportProxy !== false && process.env.YOUTUBE_DL_PROXY
+      ? { import: { videos: { http: { proxies: [ process.env.YOUTUBE_DL_PROXY ] } } } }
+      : {}
+
+    if (!this.parallel) return base
 
     return {
+      ...base,
+
       listen: {
         port: this.port
       },
@@ -389,10 +407,11 @@ export class PeerTubeServer {
         captions: this.getDirectoryPath('captions') + '/',
         cache: this.getDirectoryPath('cache') + '/',
         plugins: this.getDirectoryPath('plugins') + '/',
+        uploads: this.getDirectoryPath('uploads') + '/',
         well_known: this.getDirectoryPath('well-known') + '/'
       },
       admin: {
-        email: `admin${this.internalServerNumber}@example.com`
+        email: this.buildEmail()
       },
       live: {
         rtmp: {
@@ -448,6 +467,8 @@ export class PeerTubeServer {
     this.videoToken = new VideoTokenCommand(this)
     this.registrations = new RegistrationsCommand(this)
 
+    this.playerSettings = new PlayerSettingsCommand(this)
+
     this.storyboard = new StoryboardCommand(this)
     this.chapters = new ChaptersCommand(this)
 
@@ -458,5 +479,14 @@ export class PeerTubeServer {
     this.runnerRegistrationTokens = new RunnerRegistrationTokensCommand(this)
     this.runnerJobs = new RunnerJobsCommand(this)
     this.videoPasswords = new VideoPasswordsCommand(this)
+
+    this.watchedWordsLists = new WatchedWordsCommand(this)
+    this.autoTags = new AutomaticTagsCommand(this)
+
+    this.channelCollaborators = new ChannelCollaboratorsCommand(this)
+  }
+
+  private buildEmail () {
+    return `admin${this.internalServerNumber}@example.com`
   }
 }

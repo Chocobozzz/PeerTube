@@ -1,25 +1,34 @@
 <my-instance-banner class="d-block mb-4" rounded="true"></my-instance-banner>
 
-<p class="alert pt-alert-primary text-center" *ngIf="requiresApproval">
-  <ng-container i18n>Moderators of {{ instanceName }} will have to approve your registration request once you have finished to fill the form.</ng-container>
+@if (requiresApproval()) {
+  <my-alert type="primary" class="text-center">
+    <p>
+      <ng-container i18n>Moderators of {{ instanceName }} will have to approve your registration request once you have completed and submitted the form.</ng-container>
 
-  <ng-container *ngIf="averageResponseTime" i18n>They usually respond within {{ averageResponseTime | myDaysDurationFormatter }}.</ng-container>
-</p>
+      @if (averageResponseTime) {
+        <ng-container i18n>They usually respond within {{ averageResponseTime | myDaysDurationFormatter }}.</ng-container>
+      }
+    </p>
+  </my-alert>
+}
 
 <div class="why">
-  <h3 i18n>Why creating an account?</h3>
+  <h3 i18n>Why create an account?</h3>
 
   <p i18n>
-    As you probably noticed: creating an account is not necessary to watch video on {{ instanceName }}.
+    As you probably noticed: creating an account is not necessary to watch videos on {{ instanceName }}.
     <br />
     However, creating an account on {{ instanceName }} will allow you to:
   </p>
 
   <ul>
-    <li i18n><strong>Comment</strong> videos</li>
-    <li i18n><strong>Subscribe</strong> to channels to be notified of new videos</li>
+    <li i18n><strong>Comment</strong> on videos</li>
+    <li i18n><strong>Subscribe</strong> to channels and receive notifications of new videos</li>
     <li i18n>Have access to your <strong>watch history</strong></li>
-    <li *ngIf="!videoUploadDisabled" i18n>Create your channel to <strong>publish videos</strong></li>
+
+    @if (!videoUploadDisabled()) {
+      <li i18n>Create a channel to <strong>publish videos</strong></li>
+    }
   </ul>
 </div>
 
@@ -29,17 +38,17 @@
   <p i18n>You can already follow {{ instanceName }} using your favorite tool.</p>
 </div>
 
-<div class="callout callout-orange callout-light">
+<div class="callout callout-primary callout-light">
   <div class="mascot-container" style="min-width: 140px">
     <img class="mascot" width="140px" height="160px" src="/client/assets/images/mascot/happy.svg" alt="mascot"/>
   </div>
 
   <div class="callout-content">
-    <h4 i18>This website is a GAFAM alternative</h4>
+    <h4 i18n>This website is a GAFAM alternative</h4>
 
     <p i18n>
-      {{ instanceName }} has been created using <a class="link-orange" target="_blank" rel="noopener noreferrer" href="https://joinpeertube.org">PeerTube</a>, a video creation platform developed by Framasoft.
-      <a class="link-orange" target="_blank" rel="noopener noreferrer" href="https://framasoft.org">Framasoft</a> is a french non-profit organization that offers alternatives to Big Tech's digital tools
+      {{ instanceName }} has been created using <a class="link-primary" target="_blank" rel="noopener noreferrer" href="https://joinpeertube.org">PeerTube</a>, a video creation platform developed by Framasoft.
+      <a class="link-primary" target="_blank" rel="noopener noreferrer" href="https://framasoft.org">Framasoft</a> is a french non-profit organization that offers alternatives to Big Tech's digital tools
     </p>
   </div>
 </div>

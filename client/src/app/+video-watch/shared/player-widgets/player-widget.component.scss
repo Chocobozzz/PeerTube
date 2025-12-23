@@ -1,0 +1,37 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.widget-root {
+  position: relative;
+  min-width: 200px;
+  width: 25vw;
+  max-width: 470px;
+  height: 66vh;
+  background-color: pvar(--bg);
+  overflow-y: auto;
+  border-bottom: 1px solid $separator-border-color;
+
+  .widget-header {
+    background-color: pvar(--bg-secondary-400);
+    padding: 1rem 2rem;
+  }
+
+  .widget-content-padded {
+    padding: 0 2rem;
+  }
+
+  .widget-title {
+    font-size: 18px;
+    font-weight: $font-semibold;
+
+    .pt-badge {
+      @include margin-left(5px);
+    }
+  }
+
+  .widget-content {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+}
+

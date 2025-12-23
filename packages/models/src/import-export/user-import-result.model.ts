@@ -18,5 +18,8 @@ export interface UserImportResultSummary {
     userSettings: Summary
 
     userVideoHistory: Summary
+
+    watchedWordsLists: Summary
+    commentAutoTagPolicies: Summary
   }
 }

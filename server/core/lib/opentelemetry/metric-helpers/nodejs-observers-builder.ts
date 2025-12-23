@@ -1,26 +1,30 @@
+import { Meter, ObservableResult } from '@opentelemetry/api'
+import { AggregationType, InstrumentType, ViewOptions } from '@opentelemetry/sdk-metrics'
+import { logger } from '@server/helpers/logger.js'
 import { readdir } from 'fs/promises'
 import { constants, NodeGCPerformanceDetail, PerformanceObserver } from 'perf_hooks'
 import * as process from 'process'
-import { Meter, ObservableResult } from '@opentelemetry/api'
-import { ExplicitBucketHistogramAggregation } from '@opentelemetry/sdk-metrics'
-import { View } from '@opentelemetry/sdk-metrics/build/src/view/View.js'
-import { logger } from '@server/helpers/logger.js'
 
 // Thanks to https://github.com/siimon/prom-client
 // We took their logic and adapter it for opentelemetry
 // Try to keep consistency with their metric name/description so it's easier to process (grafana dashboard template etc)
 
 export class NodeJSObserversBuilder {
-
   constructor (private readonly meter: Meter) {
   }
 
-  static getViews () {
+  static getViews (): ViewOptions[] {
     return [
-      new View({
-        aggregation: new ExplicitBucketHistogramAggregation([ 0.001, 0.01, 0.1, 1, 2, 5 ]),
-        instrumentName: 'nodejs_gc_duration_seconds'
-      })
+      {
+        instrumentType: InstrumentType.HISTOGRAM,
+        instrumentName: 'nodejs_gc_duration_seconds',
+        aggregation: {
+          type: AggregationType.EXPLICIT_BUCKET_HISTOGRAM,
+          options: {
+            boundaries: [ 0.001, 0.01, 0.1, 1, 2, 5 ]
+          }
+        }
+      }
     ]
   }
 
@@ -62,7 +66,6 @@ export class NodeJSObserversBuilder {
       observableResult.observe(cpuTotal, (userUsageMicros + systemUsageMicros) / 1e6)
       observableResult.observe(cpuUser, userUsageMicros / 1e6)
       observableResult.observe(cpuSystem, systemUsageMicros / 1e6)
-
     }, [ cpuTotal, cpuUser, cpuSystem ])
   }
 
@@ -119,7 +122,7 @@ export class NodeJSObserversBuilder {
   }
 
   private buildEventLoopLagObserver () {
-    const reportEventloopLag = (start: [ number, number ], observableResult: ObservableResult, res: () => void) => {
+    const reportEventLoopLag = (start: [number, number], observableResult: ObservableResult, res: () => void) => {
       const delta = process.hrtime(start)
       const nanosec = delta[0] * 1e9 + delta[1]
       const seconds = nanosec / 1e9
@@ -135,7 +138,7 @@ export class NodeJSObserversBuilder {
       return new Promise(res => {
         const start = process.hrtime()
 
-        setImmediate(reportEventloopLag, start, observableResult, res)
+        setImmediate(reportEventLoopLag, start, observableResult, res)
       })
     })
   }
@@ -168,18 +171,14 @@ export class NodeJSObserversBuilder {
   private buildActiveResourcesObserver () {
     if (typeof (process as any).getActiveResourcesInfo !== 'function') return
 
-    const grouped = this.meter.createObservableCounter('nodejs_active_resources', {
+    this.meter.createObservableGauge('nodejs_active_resources_total', {
       description: 'Number of active resources that are currently keeping the event loop alive, grouped by async resource type.'
-    })
-    const total = this.meter.createObservableCounter('nodejs_active_resources_total', {
-      description: 'Total number of active resources.'
-    })
-
-    this.meter.addBatchObservableCallback(observableResult => {
+    }).addCallback(observableResult => {
       const resources = (process as any).getActiveResourcesInfo()
 
       const data = {}
 
+      // eslint-disable-next-line @typescript-eslint/prefer-for-of
       for (let i = 0; i < resources.length; i++) {
         const resource = resources[i]
 
@@ -188,10 +187,8 @@ export class NodeJSObserversBuilder {
       }
 
       for (const type of Object.keys(data)) {
-        observableResult.observe(grouped, data[type], { type })
+        observableResult.observe(data[type], { type })
       }
-
-      observableResult.observe(total, resources.length)
-    }, [ grouped, total ])
+    })
   }
 }

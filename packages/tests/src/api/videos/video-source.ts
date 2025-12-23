@@ -7,7 +7,8 @@ import {
   PeerTubeServer,
   cleanupTests,
   createMultipleServers,
-  doubleFollow, makeGetRequest,
+  doubleFollow,
+  makeGetRequest,
   makeRawRequest,
   setAccessTokensToServers,
   setDefaultAccountAvatar,
@@ -61,7 +62,6 @@ describe('Test video source management', function () {
       await waitJobs(servers)
 
       const source = await servers[0].videos.getSource({ id: uuid })
-      expect(source.filename).to.equal(fixture1)
       expect(source.inputFilename).to.equal(fixture1)
       expect(source.fileDownloadUrl).to.be.null
 
@@ -89,7 +89,6 @@ describe('Test video source management', function () {
       await waitJobs(servers)
 
       const source = await servers[0].videos.getSource({ id: uuid })
-      expect(source.filename).to.equal(fixture2)
       expect(source.inputFilename).to.equal(fixture2)
       expect(source.fileDownloadUrl).to.exist
 
@@ -142,7 +141,7 @@ describe('Test video source management', function () {
       expect(source.height).to.equal(0)
       expect(source.width).to.equal(0)
       expect(source.resolution.id).to.equal(0)
-      expect(source.resolution.label).to.equal('Audio')
+      expect(source.resolution.label).to.equal('Audio only')
       expect(source.size).to.equal(105243)
 
       expect(source.metadata?.format).to.exist
@@ -207,9 +206,7 @@ describe('Test video source management', function () {
   })
 
   describe('Updating video source', function () {
-
     describe('Filesystem', function () {
-
       it('Should replace a video file with transcoding disabled', async function () {
         this.timeout(120000)
 
@@ -245,9 +242,9 @@ describe('Test video source management', function () {
       it('Should replace a video file with transcoding enabled', async function () {
         this.timeout(240000)
 
-        const previousPaths: string[] = []
+        const previousUrls: string[] = []
 
-        await servers[0].config.enableTranscoding({ hls: true, webVideo: true, with0p: true, keepOriginal: true })
+        await servers[0].config.enableTranscoding({ hls: true, webVideo: true, with0p: true, keepOriginal: true, resolutions: 'max' })
 
         const uploadFixture = 'video_short_720p.mp4'
         const { uuid: videoUUID } = await servers[0].videos.quickUpload({ name: 'fs with transcoding', fixture: uploadFixture })
@@ -266,21 +263,21 @@ describe('Test video source management', function () {
 
           // Grab old paths to ensure we'll regenerate
 
-          previousPaths.push(video.previewPath)
-          previousPaths.push(video.thumbnailPath)
+          previousUrls.push(video.previewPath)
+          previousUrls.push(video.thumbnailPath)
 
           for (const file of files) {
-            previousPaths.push(file.fileUrl)
-            previousPaths.push(file.torrentUrl)
-            previousPaths.push(file.metadataUrl)
+            previousUrls.push(file.fileUrl)
+            previousUrls.push(file.torrentUrl)
+            previousUrls.push(file.metadataUrl)
 
             const metadata = await server.videos.getFileMetadata({ url: file.metadataUrl })
-            previousPaths.push(JSON.stringify(metadata))
+            previousUrls.push(JSON.stringify(metadata))
           }
 
           const { storyboards } = await server.storyboard.list({ id: uuid })
           for (const s of storyboards) {
-            previousPaths.push(s.storyboardPath)
+            previousUrls.push(s.fileUrl)
           }
         }
 
@@ -312,29 +309,29 @@ describe('Test video source management', function () {
           const files = getAllFiles(video)
           expect(files).to.have.lengthOf(4 * 2)
 
-          expect(previousPaths).to.not.include(video.previewPath)
-          expect(previousPaths).to.not.include(video.thumbnailPath)
+          expect(previousUrls).to.not.include(server.url + video.previewPath)
+          expect(previousUrls).to.not.include(server.url + video.thumbnailPath)
 
           await makeGetRequest({ url: server.url, path: video.previewPath, expectedStatus: HttpStatusCode.OK_200 })
           await makeGetRequest({ url: server.url, path: video.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
 
           for (const file of files) {
-            expect(previousPaths).to.not.include(file.fileUrl)
-            expect(previousPaths).to.not.include(file.torrentUrl)
-            expect(previousPaths).to.not.include(file.metadataUrl)
+            expect(previousUrls).to.not.include(file.fileUrl)
+            expect(previousUrls).to.not.include(file.torrentUrl)
+            expect(previousUrls).to.not.include(file.metadataUrl)
 
             await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
             await makeRawRequest({ url: file.torrentUrl, expectedStatus: HttpStatusCode.OK_200 })
 
             const metadata = await server.videos.getFileMetadata({ url: file.metadataUrl })
-            expect(previousPaths).to.not.include(JSON.stringify(metadata))
+            expect(previousUrls).to.not.include(JSON.stringify(metadata))
           }
 
           const { storyboards } = await server.storyboard.list({ id: uuid })
           for (const s of storyboards) {
-            expect(previousPaths).to.not.include(s.storyboardPath)
+            expect(previousUrls).to.not.include(s.fileUrl)
 
-            await makeGetRequest({ url: server.url, path: s.storyboardPath, expectedStatus: HttpStatusCode.OK_200 })
+            await makeRawRequest({ url: s.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
           }
         }
 
@@ -366,7 +363,6 @@ describe('Test video source management', function () {
       it('Should have the correct source input filename', async function () {
         const source = await servers[0].videos.getSource({ id: uuid })
 
-        expect(source.filename).to.equal('video_short_360p.mp4')
         expect(source.inputFilename).to.equal('video_short_360p.mp4')
         expect(new Date(source.createdAt)).to.be.above(replaceDate)
       })
@@ -409,10 +405,35 @@ describe('Test video source management', function () {
           await makeGetRequest({ url: server.url, path: video.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
         }
       })
+
+      it('Should replace the video with an audio only file', async function () {
+        await servers[0].config.save()
+
+        await servers[0].config.enableTranscoding({ webVideo: true, hls: true, resolutions: [ 480, 360, 240, 144 ] })
+        const { uuid } = await servers[0].videos.quickUpload({ name: 'future audio', fixture: 'video_short_360p.mp4' })
+        await waitJobs(servers)
+
+        {
+          const video = await servers[0].videos.get({ id: uuid })
+          expect(getAllFiles(video)).to.have.lengthOf(6)
+        }
+
+        const fixture = 'sample.ogg'
+        await servers[0].videos.replaceSourceFile({ videoId: uuid, fixture })
+        await waitJobs(servers)
+
+        for (const server of servers) {
+          const video = await server.videos.get({ id: uuid })
+
+          const files = getAllFiles(video)
+          expect(files).to.have.lengthOf(8)
+        }
+
+        await servers[0].config.rollback()
+      })
     })
 
     describe('Autoblacklist', function () {
-
       async function expectBlacklist (uuid: string, value: boolean) {
         const video = await servers[0].videos.getWithToken({ id: uuid })
 
@@ -527,7 +548,7 @@ describe('Test video source management', function () {
 
         const previousPaths: string[] = []
 
-        await servers[0].config.enableTranscoding({ hls: true, webVideo: true, with0p: true, keepOriginal: true })
+        await servers[0].config.enableTranscoding({ hls: true, webVideo: true, with0p: true, keepOriginal: true, resolutions: 'max' })
 
         const fixture1 = 'video_short_360p.mp4'
         const { uuid: videoUUID } = await servers[0].videos.quickUpload({

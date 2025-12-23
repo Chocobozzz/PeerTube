@@ -3,6 +3,19 @@ type StringBoolean = 'true' | 'false'
 export type EmbedMarkupData = {
   // Video or playlist uuid
   uuid: string
+  responsive?: StringBoolean
+  startAt?: string
+  stopAt?: string
+  subtitle?: string
+  autoplay?: StringBoolean
+  muted?: StringBoolean
+  loop?: StringBoolean
+  title?: StringBoolean
+  p2p?: StringBoolean
+  warningTitle?: StringBoolean
+  controlBar?: StringBoolean
+  peertubeLink?: StringBoolean
+  playlistPosition?: string // number
 }
 
 export type VideoMiniatureMarkupData = {
@@ -38,6 +51,8 @@ export type VideosListMarkupData = {
   channelHandle?: string
   accountHandle?: string
 
+  host?: string
+
   isLive?: string // number
 
   onlyLocal?: StringBoolean
@@ -57,10 +72,6 @@ export type ContainerMarkupData = {
   layout?: 'row' | 'column'
 
   justifyContent?: 'space-between' | 'normal' // default to 'space-between'
-}
-
-export type InstanceBannerMarkupData = {
-  revertHomePaddingTop?: StringBoolean // default to 'true'
 }
 
 export type InstanceAvatarMarkupData = {

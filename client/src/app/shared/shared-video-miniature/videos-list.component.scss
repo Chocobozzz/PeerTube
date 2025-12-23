@@ -1,54 +1,32 @@
-@use '_bootstrap-variables';
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_miniature' as *;
+@use "_bootstrap-variables";
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_miniature" as *;
 
 // Cannot set margin top to videos-header because of the main header fixed position
 $margin-top: 2rem;
+
+.videos {
+  // Prevent scroll when reloading videos
+  min-height: 50vh;
+}
 
 .videos-header {
   display: grid;
   grid-template-columns: auto 1fr auto;
 
-  .title,
-  .title-subscription {
-    grid-column: 1;
-  }
-
-  .title {
-    font-size: 18px;
-    color: pvar(--mainForegroundColor);
-    display: inline-block;
-    font-weight: $font-semibold;
-  }
-
-  .title-subscription {
-    grid-row: 2;
-    font-size: 14px;
-    color: pvar(--greyForegroundColor);
-
-    &.no-title {
-      margin-top: 10px;
-    }
-  }
-
   .action-block {
     grid-column: 3;
     grid-row: 1/3;
   }
-
-  my-feed {
-    @include margin-left(5px);
-
-    display: inline-block;
-    width: 16px;
-    color: pvar(--mainColor);
-    position: relative;
-    top: -2px;
-  }
 }
 
-.date-title {
+my-date-group-label:not(.date-displayed) {
+  display: none;
+}
+
+my-date-group-label.date-displayed,
+.videos-section-title {
   font-weight: $font-semibold;
   margin-bottom: 20px;
   font-size: 1rem;
@@ -57,7 +35,7 @@ $margin-top: 2rem;
   grid-column: 1 / -1;
 
   &:not(:first-child) {
-    margin-top: .5rem;
+    margin-top: 0.5rem;
     padding-top: 20px;
     border-top: 1px solid $separator-border-color;
   }
@@ -68,8 +46,8 @@ $margin-top: 2rem;
 }
 
 .display-as-row.videos {
-  @include margin-left(pvar(--horizontalMarginContent));
-  @include margin-right(pvar(--horizontalMarginContent));
+  @include margin-left(pvar(--x-margin-content));
+  @include margin-right(pvar(--x-margin-content));
 
   .video-wrapper {
     margin-bottom: 1rem;
@@ -78,14 +56,15 @@ $margin-top: 2rem;
 
 @media screen and (max-width: $mobile-view) {
   my-video-filters-header {
+    display: inline-block;
+
     @include margin-left(1rem);
     @include margin-right(1rem);
-
-    display: inline-block;
   }
 
-  .date-title {
+  my-date-group-label.date-displayed {
     text-align: center;
+    display: block;
   }
 
   .videos-header {

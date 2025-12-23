@@ -1,0 +1,17 @@
+:host {
+  display: inline-block;
+  height: 24px;
+  width: 24px;
+
+  ::ng-deep {
+    svg {
+      vertical-align: bottom;
+      width: inherit;
+      height: inherit;
+    }
+
+    .feather-flag {
+      margin-left: -1px;
+    }
+  }
+}

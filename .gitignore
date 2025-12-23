@@ -1,8 +1,7 @@
 # NPM instalation
 node_modules
 *npm-debug.log
-yarn-error.log
-.yarn
+*-ci.log
 
 # Testing
 /test1/
@@ -11,11 +10,16 @@ yarn-error.log
 /test4/
 /test5/
 /test6/
+
+# Big fixtures generated/downloaded on-demand
 /packages/tests/fixtures/video_high_bitrate_1080p.mp4
 /packages/tests/fixtures/video_59fps.mp4
+/packages/tests/fixtures/video_50fps.mp4
+/packages/tests/fixtures/transcription/models-v1/
 
-# Production
+# PeerTube
 /storage
+/dev1
 /config/production.yaml
 /config/local*
 /ffmpeg/

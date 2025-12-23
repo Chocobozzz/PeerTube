@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
 import { omit } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, UserAdminFlag, UserRole } from '@peertube/peertube-models'
@@ -67,7 +67,7 @@ describe('Test users admin API validators', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, path, server.accessToken)
+      await checkBadSort(server.url, path, server.accessToken)
     })
 
     it('Should fail with a non authenticated user', async function () {
@@ -206,15 +206,22 @@ describe('Test users admin API validators', function () {
     })
 
     it('Should fail if we add a user with the same email', async function () {
-      const fields = { ...baseCorrectParams, email: 'user1@example.com' }
+      const emails = [
+        'user1@example.com',
+        'uSer1@example.com'
+      ]
 
-      await makePostBodyRequest({
-        url: server.url,
-        path,
-        token: server.accessToken,
-        fields,
-        expectedStatus: HttpStatusCode.CONFLICT_409
-      })
+      for (const email of emails) {
+        const fields = { ...baseCorrectParams, email }
+
+        await makePostBodyRequest({
+          url: server.url,
+          path,
+          token: server.accessToken,
+          fields,
+          expectedStatus: HttpStatusCode.CONFLICT_409
+        })
+      }
     })
 
     it('Should fail with an invalid videoQuota', async function () {
@@ -304,7 +311,6 @@ describe('Test users admin API validators', function () {
   })
 
   describe('When getting a user', function () {
-
     it('Should fail with an non authenticated user', async function () {
       await makeGetRequest({
         url: server.url,
@@ -324,13 +330,36 @@ describe('Test users admin API validators', function () {
   })
 
   describe('When updating a user', function () {
-
     it('Should fail with an invalid email attribute', async function () {
       const fields = {
         email: 'blabla'
       }
 
       await makePutBodyRequest({ url: server.url, path: path + userId, token: server.accessToken, fields })
+    })
+
+    it('Should fail with an existing email attribute', async function () {
+      const fields = { email: 'modeRator1@example.com' }
+
+      await makePutBodyRequest({
+        url: server.url,
+        path: path + userId,
+        token: server.accessToken,
+        fields,
+        expectedStatus: HttpStatusCode.CONFLICT_409
+      })
+    })
+
+    it('Should succeed with the same email', async function () {
+      const fields = { email: 'user1@example.com' }
+
+      await makePutBodyRequest({
+        url: server.url,
+        path: path + userId,
+        token: server.accessToken,
+        fields,
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
+      })
     })
 
     it('Should fail with an invalid emailVerified attribute', async function () {
@@ -450,7 +479,7 @@ describe('Test users admin API validators', function () {
   })
 
   after(async function () {
-    MockSmtpServer.Instance.kill()
+    await MockSmtpServer.Instance.kill()
 
     await cleanupTests([ server ])
   })

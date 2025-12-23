@@ -4,19 +4,25 @@ import {
   ActivityMagnetUrlObject,
   ActivityPlaylistSegmentHashesObject,
   ActivityPlaylistUrlObject,
+  ActivitySensitiveTagObject,
   ActivityTagObject,
   ActivityUrlObject,
   ActivityVideoUrlObject,
+  NSFWFlag,
+  stringToNSFWFlag,
+  VideoFileFormatFlag,
+  VideoFileStream,
   VideoObject,
   VideoPrivacy,
+  VideoResolution,
   VideoStreamingPlaylistType
 } from '@peertube/peertube-models'
+import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { hasAPPublic } from '@server/helpers/activity-pub-utils.js'
 import { isAPVideoFileUrlMetadataObject } from '@server/helpers/custom-validators/activitypub/videos.js'
-import { isArray } from '@server/helpers/custom-validators/misc.js'
+import { exists, isArray } from '@server/helpers/custom-validators/misc.js'
 import { isVideoFileInfoHashValid } from '@server/helpers/custom-validators/videos.js'
 import { generateImageFilename } from '@server/helpers/image-utils.js'
-import { logger } from '@server/helpers/logger.js'
 import { getExtFromMimetype } from '@server/helpers/video.js'
 import { MIMETYPES, P2P_MEDIA_LOADER_PEER_VERSION, PREVIEWS_SIZE, THUMBNAILS_SIZE } from '@server/initializers/constants.js'
 import { generateTorrentFileName } from '@server/lib/paths.js'
@@ -24,13 +30,21 @@ import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import { FilteredModelAttributes } from '@server/types/index.js'
-import { MChannelId, MStreamingPlaylistVideo, MVideo, MVideoId, isStreamingPlaylist } from '@server/types/models/index.js'
+import {
+  isStreamingPlaylist,
+  MChannelId,
+  MStreamingPlaylistVideo,
+  MVideo,
+  MVideoFile,
+  MVideoId,
+  MVideoLive
+} from '@server/types/models/index.js'
 import { decode as magnetUriDecode } from 'magnet-uri'
 import { basename, extname } from 'path'
 import { getDurationFromActivityStream } from '../../activity.js'
 
 export function getThumbnailFromIcons (videoObject: VideoObject) {
-  let validIcons = videoObject.icon.filter(i => i.width > THUMBNAILS_SIZE.minWidth)
+  let validIcons = videoObject.icon.filter(i => i.width > THUMBNAILS_SIZE.minRemoteWidth)
   // Fallback if there are not valid icons
   if (validIcons.length === 0) validIcons = videoObject.icon
 
@@ -38,7 +52,7 @@ export function getThumbnailFromIcons (videoObject: VideoObject) {
 }
 
 export function getPreviewFromIcons (videoObject: VideoObject) {
-  const validIcons = videoObject.icon.filter(i => i.width > PREVIEWS_SIZE.minWidth)
+  const validIcons = videoObject.icon.filter(i => i.width > PREVIEWS_SIZE.minRemoteWidth)
 
   return maxBy(validIcons, 'width')
 }
@@ -49,49 +63,43 @@ export function getTagsFromObject (videoObject: VideoObject) {
     .map(t => t.name)
 }
 
+// ---------------------------------------------------------------------------
+
 export function getFileAttributesFromUrl (
   videoOrPlaylist: MVideo | MStreamingPlaylistVideo,
   urls: (ActivityTagObject | ActivityUrlObject)[]
 ) {
-  const fileUrls = urls.filter(u => isAPVideoUrlObject(u)) as ActivityVideoUrlObject[]
+  const fileUrls = urls.filter(u => isAPVideoUrlObject(u))
   if (fileUrls.length === 0) return []
 
   const attributes: FilteredModelAttributes<VideoFileModel>[] = []
   for (const fileUrl of fileUrls) {
-    // Fetch associated magnet uri
-    const magnet = urls.filter(isAPMagnetUrlObject)
-                       .find(u => u.height === fileUrl.height)
-
-    if (!magnet) throw new Error('Cannot find associated magnet uri for file ' + fileUrl.href)
-
-    const parsed = magnetUriDecode(magnet.href)
-    if (!parsed || isVideoFileInfoHashValid(parsed.infoHash) === false) {
-      throw new Error('Cannot parse magnet URI ' + magnet.href)
-    }
-
-    const torrentUrl = Array.isArray(parsed.xs)
-      ? parsed.xs[0]
-      : parsed.xs
-
     // Fetch associated metadata url, if any
     const metadata = urls.filter(isAPVideoFileUrlMetadataObject)
-                         .find(u => {
-                           return u.height === fileUrl.height &&
-                             u.fps === fileUrl.fps &&
-                             u.rel.includes(fileUrl.mediaType)
-                         })
+      .find(u => {
+        return u.height === fileUrl.height &&
+          u.fps === fileUrl.fps &&
+          u.rel.includes(fileUrl.mediaType)
+      })
 
     const extname = getExtFromMimetype(MIMETYPES.VIDEO.MIMETYPE_EXT, fileUrl.mediaType)
     const resolution = fileUrl.height
-    const videoId = isStreamingPlaylist(videoOrPlaylist) ? null : videoOrPlaylist.id
-    const videoStreamingPlaylistId = isStreamingPlaylist(videoOrPlaylist) ? videoOrPlaylist.id : null
 
-    const attribute = {
+    const [ videoId, videoStreamingPlaylistId ] = isStreamingPlaylist(videoOrPlaylist)
+      ? [ null, videoOrPlaylist.id ]
+      : [ videoOrPlaylist.id, null ]
+
+    const { torrentFilename, infoHash, torrentUrl } = getTorrentRelatedInfo({ videoOrPlaylist, urls, fileUrl })
+
+    const attribute: Partial<AttributesOnly<MVideoFile>> = {
       extname,
-      infoHash: parsed.infoHash,
       resolution,
+
       size: fileUrl.size,
-      fps: fileUrl.fps || -1,
+      fps: exists(fileUrl.fps) && fileUrl.fps >= 0
+        ? fileUrl.fps
+        : -1,
+
       metadataUrl: metadata?.href,
 
       width: fileUrl.width,
@@ -101,9 +109,12 @@ export function getFileAttributesFromUrl (
       filename: basename(fileUrl.href),
       fileUrl: fileUrl.href,
 
+      infoHash,
+      torrentFilename,
       torrentUrl,
-      // Use our own torrent name since we proxify torrent requests
-      torrentFilename: generateTorrentFileName(videoOrPlaylist, resolution),
+
+      formatFlags: buildFileFormatFlags(fileUrl, isStreamingPlaylist(videoOrPlaylist)),
+      streams: buildFileStreams(fileUrl, resolution),
 
       // This is a video file owned by a video or by a streaming playlist
       videoId,
@@ -116,20 +127,58 @@ export function getFileAttributesFromUrl (
   return attributes
 }
 
+function buildFileFormatFlags (fileUrl: ActivityVideoUrlObject, isStreamingPlaylist: boolean) {
+  const attachment = fileUrl.attachment || []
+
+  const formatHints = attachment.filter(a => a.type === 'PropertyValue' && a.name === 'peertube_format_flag')
+  if (formatHints.length === 0) {
+    return isStreamingPlaylist
+      ? VideoFileFormatFlag.FRAGMENTED
+      : VideoFileFormatFlag.WEB_VIDEO
+  }
+
+  let formatFlags = VideoFileFormatFlag.NONE
+
+  for (const hint of formatHints) {
+    if (hint.value === 'fragmented') formatFlags |= VideoFileFormatFlag.FRAGMENTED
+    else if (hint.value === 'web-video') formatFlags |= VideoFileFormatFlag.WEB_VIDEO
+  }
+
+  return formatFlags
+}
+
+function buildFileStreams (fileUrl: ActivityVideoUrlObject, resolution: number) {
+  const attachment = fileUrl.attachment || []
+
+  const formatHints = attachment.filter(a => a.type === 'PropertyValue' && a.name === 'ffprobe_codec_type')
+
+  if (formatHints.length === 0) {
+    if (resolution === VideoResolution.H_NOVIDEO) return VideoFileStream.AUDIO
+
+    return VideoFileStream.VIDEO | VideoFileStream.AUDIO
+  }
+
+  let streams = VideoFileStream.NONE
+
+  for (const hint of formatHints) {
+    if (hint.value === 'audio') streams |= VideoFileStream.AUDIO
+    else if (hint.value === 'video') streams |= VideoFileStream.VIDEO
+  }
+
+  return streams
+}
+
+// ---------------------------------------------------------------------------
+
 export function getStreamingPlaylistAttributesFromObject (video: MVideoId, videoObject: VideoObject) {
-  const playlistUrls = videoObject.url.filter(u => isAPStreamingPlaylistUrlObject(u)) as ActivityPlaylistUrlObject[]
+  const playlistUrls = videoObject.url.filter(u => isAPStreamingPlaylistUrlObject(u))
   if (playlistUrls.length === 0) return []
 
   const attributes: (FilteredModelAttributes<VideoStreamingPlaylistModel> & { tagAPObject?: ActivityTagObject[] })[] = []
   for (const playlistUrlObject of playlistUrls) {
     const segmentsSha256UrlObject = playlistUrlObject.tag.find(isAPPlaylistSegmentHashesUrlObject)
 
-    const files: unknown[] = playlistUrlObject.tag.filter(u => isAPVideoUrlObject(u)) as ActivityVideoUrlObject[]
-
-    if (!segmentsSha256UrlObject) {
-      logger.warn('No segment sha256 URL found in AP playlist object.', { playlistUrl: playlistUrlObject })
-      continue
-    }
+    const files = playlistUrlObject.tag.filter(u => isAPVideoUrlObject(u))
 
     const attribute = {
       type: VideoStreamingPlaylistType.HLS,
@@ -137,8 +186,11 @@ export function getStreamingPlaylistAttributesFromObject (video: MVideoId, video
       playlistFilename: basename(playlistUrlObject.href),
       playlistUrl: playlistUrlObject.href,
 
-      segmentsSha256Filename: basename(segmentsSha256UrlObject.href),
-      segmentsSha256Url: segmentsSha256UrlObject.href,
+      segmentsSha256Filename: segmentsSha256UrlObject
+        ? basename(segmentsSha256UrlObject.href)
+        : null,
+
+      segmentsSha256Url: segmentsSha256UrlObject?.href ?? null,
 
       p2pMediaLoaderInfohashes: VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(playlistUrlObject.href, files),
       p2pMediaLoaderPeerVersion: P2P_MEDIA_LOADER_PEER_VERSION,
@@ -161,14 +213,32 @@ export function getLiveAttributesFromObject (video: MVideoId, videoObject: Video
     videoId: video.id
   }
 }
+export function getLiveSchedulesAttributesFromObject (live: MVideoLive, videoObject: VideoObject) {
+  const schedules = videoObject.schedules || []
+
+  return schedules.map(s => ({
+    liveVideoId: live.id,
+    startAt: s.startDate
+  }))
+}
 
 export function getCaptionAttributesFromObject (video: MVideoId, videoObject: VideoObject) {
-  return videoObject.subtitleLanguage.map(c => ({
-    videoId: video.id,
-    filename: VideoCaptionModel.generateCaptionName(c.identifier),
-    language: c.identifier,
-    fileUrl: c.url
-  }))
+  return videoObject.subtitleLanguage.map(c => {
+    // This field is sanitized in validators
+    const url = c.url
+
+    const filename = VideoCaptionModel.generateCaptionName(c.identifier)
+
+    return {
+      videoId: video.id,
+      filename,
+      language: c.identifier,
+      automaticallyGenerated: c.automaticallyGenerated === true,
+      fileUrl: url.find(u => u.mediaType === 'text/vtt')?.href,
+      m3u8Filename: VideoCaptionModel.generateM3U8Filename(filename),
+      m3u8Url: url.find(u => u.mediaType === 'application/x-mpegURL')?.href
+    } as Partial<AttributesOnly<VideoCaptionModel>>
+  })
 }
 
 export function getStoryboardAttributeFromObject (video: MVideoId, videoObject: VideoObject) {
@@ -218,8 +288,17 @@ export function getVideoAttributesFromObject (videoChannel: MChannelId, videoObj
     language,
     description,
     support,
+
     nsfw: videoObject.sensitive,
-    commentsEnabled: videoObject.commentsEnabled,
+    nsfwSummary: videoObject.sensitive
+      ? (videoObject.summary ?? null)
+      : null,
+    nsfwFlags: videoObject.sensitive
+      ? getNSFWFlags(videoObject.tag)
+      : NSFWFlag.NONE,
+
+    commentsPolicy: videoObject.commentsPolicy,
+
     downloadEnabled: videoObject.downloadEnabled,
     waitTranscoding: videoObject.waitTranscoding,
     isLive: videoObject.isLiveBroadcast,
@@ -254,17 +333,66 @@ function isAPVideoUrlObject (url: any): url is ActivityVideoUrlObject {
 }
 
 function isAPStreamingPlaylistUrlObject (url: any): url is ActivityPlaylistUrlObject {
-  return url && url.mediaType === 'application/x-mpegURL'
+  return url?.mediaType === 'application/x-mpegURL'
 }
 
 function isAPPlaylistSegmentHashesUrlObject (tag: any): tag is ActivityPlaylistSegmentHashesObject {
-  return tag && tag.name === 'sha256' && tag.type === 'Link' && tag.mediaType === 'application/json'
+  return tag?.name === 'sha256' && tag.type === 'Link' && tag.mediaType === 'application/json'
 }
 
 function isAPMagnetUrlObject (url: any): url is ActivityMagnetUrlObject {
-  return url && url.mediaType === 'application/x-bittorrent;x-scheme-handler/magnet'
+  return url?.mediaType === 'application/x-bittorrent;x-scheme-handler/magnet'
 }
 
-function isAPHashTagObject (url: any): url is ActivityHashTagObject {
-  return url && url.type === 'Hashtag'
+function isAPHashTagObject (tag: any): tag is ActivityHashTagObject {
+  return tag?.type === 'Hashtag'
+}
+
+function isAPSensitiveTagObject (tag: any): tag is ActivitySensitiveTagObject {
+  return tag?.type === 'SensitiveTag'
+}
+
+function getTorrentRelatedInfo (options: {
+  videoOrPlaylist: MVideo | MStreamingPlaylistVideo
+  urls: (ActivityTagObject | ActivityUrlObject)[]
+  fileUrl: ActivityVideoUrlObject
+}) {
+  const { urls, fileUrl, videoOrPlaylist } = options
+
+  // Fetch associated magnet uri
+  const magnet = urls.filter(isAPMagnetUrlObject)
+    .find(u => u.height === fileUrl.height)
+
+  if (!magnet) {
+    return {
+      torrentUrl: null,
+      torrentFilename: null,
+      infoHash: null
+    }
+  }
+
+  const magnetParsed = magnetUriDecode(magnet.href)
+  if (magnetParsed && isVideoFileInfoHashValid(magnetParsed.infoHash) === false) {
+    throw new Error('Info hash is not valid in magnet URI ' + magnet.href)
+  }
+
+  const torrentUrl = Array.isArray(magnetParsed.xs)
+    ? magnetParsed.xs[0]
+    : magnetParsed.xs
+
+  return {
+    torrentUrl,
+
+    // Use our own torrent name since we proxify torrent requests
+    torrentFilename: generateTorrentFileName(videoOrPlaylist, fileUrl.height),
+
+    infoHash: magnetParsed.infoHash
+  }
+}
+
+function getNSFWFlags (tags: ActivityTagObject[]) {
+  return tags.filter(t => isAPSensitiveTagObject(t))
+    .map(t => stringToNSFWFlag(t.name))
+    .filter(t => !!t)
+    .reduce((acc, t) => acc | t, 0)
 }

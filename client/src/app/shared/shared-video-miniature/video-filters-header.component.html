@@ -1,134 +1,171 @@
-<ng-template #updateSettings let-fragment>
-  <div class="label-description muted" i18n>
-    Update
-    <a routerLink="/my-account/settings" [fragment]="fragment">
-      <button class="button-unstyle" (click)="onAccountSettingsClick($event)">your settings</button>
-    </a
-  ></div>
-</ng-template>
-
-
 <div class="root" [formGroup]="form">
+  <div class="d-flex flex-wrap mb-3">
+    @for (quickFilter of quickFilters; track quickFilter) {
+      <my-button
+        theme="secondary"
+        [icon]="quickFilter.iconName"
+        class="me-2 mb-2"
+        ptRouterLink="."
+        [ptQueryParams]="quickFilter.filters"
+        [active]="quickFilter.isActive()"
+        ptQueryParamsHandling="merge"
+      >{{ quickFilter.label }}
+      </my-button>
+    }
+  </div>
 
-  <div class="first-row">
-    <div class="active-filters">
-      <button
-        class="pastille filters-toggle" (click)="areFiltersCollapsed = !areFiltersCollapsed"
-        [attr.aria-expanded]="!areFiltersCollapsed" aria-controls="collapseBasic"
-        [ngClass]="{ active: !areFiltersCollapsed }"
-      >
-        <ng-container i18n *ngIf="areFiltersCollapsed">More filters</ng-container>
-        <ng-container i18n *ngIf="!areFiltersCollapsed">Hide filters</ng-container>
+  <div class="d-flex flex-wrap-reverse align-items-start justify-content-between">
+    <div class="gap-3">
+      @if (!hideScope()) {
+        <div class="scope-info" [ngClass]="{ 'opacity-0': totalFollowing === undefined }">
+          @if (filters().scope === 'local' || totalFollowing === 0) {
+            <ng-container i18n>Videos on <strong>{{ instanceName }}</strong></ng-container>
+          } @else {
+            <ng-container i18n>
+              Videos on <strong>{{ instanceName }}</strong> and <strong>{{ totalFollowing }}</strong> {totalFollowing, plural, =1 {other platform} other {other
+              platforms}}
+            </ng-container>
+          }
+        </div>
+      }
 
-        <my-global-icon iconName="chevrons-up"></my-global-icon>
-      </button>
+      <div class="filters-summary">
+        <div class="d-inline-block active-filters">
+          @for (filter of filters().getActiveFilters(); track filter.key + (filter.value || '')) {
+            @if (filter.key !== 'scope') {
+              <div class="d-inline-block active-filter">
+                @if (filter.value) {
+                  <span>{{ filter.label }}: </span>
+                }
 
-      <button
-        *ngFor="let activeFilter of filters.getActiveFilters()" (click)="resetFilter(activeFilter.key, activeFilter.canRemove)"
-        class="active-filter pastille button-unstyle" [ngClass]="{ 'can-remove': activeFilter.canRemove }" [title]="getFilterTitle(activeFilter.canRemove)"
-      >
-        <span>
-          {{ activeFilter.label }}
+                <strong>{{ getFilterValue(filter) || filter.label }}</strong>
+              </div>
+            }
+          }
+        </div>
 
-          <ng-container *ngIf="activeFilter.value">: {{ activeFilter.value }}</ng-container>
-        </span>
+        <button
+          class="filters-toggle peertube-button-like-link"
+          (click)="areFiltersCollapsed = !areFiltersCollapsed"
+          [attr.aria-expanded]="!areFiltersCollapsed"
+          aria-controls="collapseBasic"
+          [ngClass]="{ active: !areFiltersCollapsed }"
+        >
+          @if (areFiltersCollapsed) {
+            <ng-container i18n>More filters</ng-container>
+          } @else {
+            <ng-container i18n>Hide filters</ng-container>
+          }
 
-        <my-global-icon *ngIf="activeFilter.canRemove" iconName="cross"></my-global-icon>
-      </button>
+          <my-global-icon iconName="chevrons-up"></my-global-icon>
+        </button>
+      </div>
     </div>
 
-    <ng-select
-      class="sort"
-      formControlName="sort"
-      [clearable]="false"
-      [searchable]="false"
-      [bindValue]="null"
-    >
-      <ng-option i18n value="-publishedAt">Sort by <strong>"Recently Added"</strong></ng-option>
-      <ng-option i18n value="-originallyPublishedAt">Sort by <strong>"Original Publication Date"</strong></ng-option>
+    <div class="d-flex flex-wrap align-items-center mb-2">
+      <label for="sort-videos" i18n class="select-label">Sort by:</label>
 
-      <ng-option i18n value="name">Sort by <strong>"Name"</strong></ng-option>
-      <ng-option i18n *ngIf="isTrendingSortEnabled('most-viewed')" value="-trending">Sort by <strong>"Recent Views"</strong></ng-option>
-      <ng-option i18n *ngIf="isTrendingSortEnabled('hot')" value="-hot">Sort by <strong>"Hot"</strong></ng-option>
-      <ng-option i18n *ngIf="isTrendingSortEnabled('most-liked')" value="-likes">Sort by <strong>"Likes"</strong></ng-option>
-      <ng-option i18n value="-views">Sort by <strong>"Global Views"</strong></ng-option>
-    </ng-select>
-
+      <my-select-videos-sort inputId="sort-videos" class="d-inline-block me-2" formControlName="sort"></my-select-videos-sort>
+    </div>
   </div>
 
   <div [ngbCollapse]="areFiltersCollapsed" [animation]="true">
     <div class="filters">
-      <div class="form-group">
-        <label class="with-description" for="languageOneOf" i18n>Languages:</label>
-        <ng-template *ngTemplateOutlet="updateSettings; context: { $implicit: 'video-languages-subtitles' }"></ng-template>
+      <div class="section">
+        <div class="section-title">
+          <ng-container i18n>Content preferences</ng-container>
 
-        <my-select-languages [maxLanguages]="20" formControlName="languageOneOf"></my-select-languages>
-      </div>
+          <div class="with-description">
+            <span i18n>You always use the same preferences?</span>
 
-      <div class="form-group" role="radiogroup">
-        <label class="with-description" for="nsfw" i18n>Sensitive content:</label>
-        <ng-template *ngTemplateOutlet="updateSettings; context: { $implicit: 'video-sensitive-content-policy' }"></ng-template>
-
-        <div class="peertube-radio-container">
-          <input formControlName="nsfw" type="radio" name="nsfw" id="nsfwBoth" value="both" />
-          <label for="nsfwBoth">{{ filters.getNSFWDisplayLabel() }}</label>
+            <span i18n>Update your <a routerLink="/my-account/settings" fragment="video-languages-subtitles" (click)="onAccountSettingsClick($event)"
+              >default settings</a></span>
+          </div>
         </div>
 
-        <div class="peertube-radio-container">
-          <input formControlName="nsfw" type="radio" name="nsfw" id="nsfwFalse" value="false" />
-          <label for="nsfwFalse" i18n>Hide</label>
-        </div>
-      </div>
+        <div class="form-group">
+          <label for="languageOneOf" i18n>Languages</label>
 
-      <div class="form-group" *ngIf="!hideScope" role="radiogroup">
-        <label for="scope" i18n>Scope:</label>
-
-        <div class="peertube-radio-container">
-          <input formControlName="scope" type="radio" name="scope" id="scopeLocal" value="local" />
-          <label for="scopeLocal" i18n>Local videos (this instance)</label>
+          <my-select-languages inputId="languageOneOf" [maxLanguages]="20" formControlName="languageOneOf"></my-select-languages>
         </div>
 
-        <div class="peertube-radio-container">
-          <input formControlName="scope" type="radio" name="scope" id="scopeFederated" value="federated" />
-          <label for="scopeFederated" i18n>Federated videos (this instance + followed instances)</label>
+        <div class="form-group" role="radiogroup">
+          <label for="nsfw" i18n>Sensitive content</label>
+
+          <div class="form-group-description">
+            <div>{{ filters().getNSFWSettingsLabel() }}</div>
+
+            <div i18n>
+              Update your policy in <a routerLink="/my-account/settings" fragment="video-sensitive-content-policy" (click)="onAccountSettingsClick($event)"
+              >your settings</a>.
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="form-group" role="radiogroup">
-        <label for="type" i18n>Type:</label>
+      @if (totalFollowing && !hideScope()) {
+        <div class="section">
+          <div class="section-title">
+            <ng-container i18n>Platforms order</ng-container>
 
-        <div class="peertube-radio-container">
-          <input formControlName="live" type="radio" name="live" id="liveBoth" value="both" />
-          <label for="liveBoth" i18n>VOD & Live videos</label>
+            <div class="with-description">
+              <div i18n>
+                {{ instanceName }} platform subscribes to content from <a routerLink="/about/follows" target="_blank">{{ totalFollowing }} {totalFollowing,
+                  plural, =1 {other platform} other {other platforms}}</a>.
+              </div>
+              <div i18n>Set your display preferences here.</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="scope" i18n>Displayed videos</label>
+            <my-select-videos-scope inputId="scope" class="scope-select" formControlName="scope"></my-select-videos-scope>
+          </div>
+        </div>
+      }
+
+      <div class="section">
+        <div class="section-title" i18n>Content type</div>
+
+        <div class="form-group">
+          <label for="categoryOneOf" i18n>Categories</label>
+
+          <my-select-categories inputId="categoryOneOf" formControlName="categoryOneOf"></my-select-categories>
         </div>
 
-        <div class="peertube-radio-container">
-          <input formControlName="live" type="radio" name="live" id="liveTrue" value="true" />
-          <label for="liveTrue" i18n>Live videos</label>
-        </div>
+        <div class="form-group" role="radiogroup">
+          <label for="type" i18n>Type</label>
 
-        <div class="peertube-radio-container">
-          <input formControlName="live" type="radio" name="live" id="liveFalse" value="false" />
-          <label for="liveFalse" i18n>VOD videos</label>
+          <div class="peertube-radio-container">
+            <input formControlName="live" type="radio" name="live" id="liveBoth" value="both" />
+            <label for="liveBoth" i18n>VOD & Live videos</label>
+          </div>
+
+          <div class="peertube-radio-container">
+            <input formControlName="live" type="radio" name="live" id="liveTrue" value="true" />
+            <label for="liveTrue" i18n>Live videos</label>
+          </div>
+
+          <div class="peertube-radio-container">
+            <input formControlName="live" type="radio" name="live" id="liveFalse" value="false" />
+            <label for="liveFalse" i18n>VOD videos</label>
+          </div>
         </div>
       </div>
 
-      <div class="form-group">
-        <label for="categoryOneOf" i18n>Categories:</label>
-
-        <my-select-categories formControlName="categoryOneOf"></my-select-categories>
-      </div>
-
-      <div class="form-group" *ngIf="canSeeAllVideos()">
-        <label for="allVideos" i18n>Moderation:</label>
-
-        <my-peertube-checkbox
-          formControlName="allVideos"
-          inputName="allVideos"
-          i18n-labelText labelText="Display all videos (private, unlisted, password protected or not yet published)"
-        ></my-peertube-checkbox>
-      </div>
+      @if (canSeeAllVideos()) {
+        <div class="section">
+          <div class="section-title" i18n>Moderation</div>
+          <div class="form-group">
+            <my-peertube-checkbox
+              formControlName="allVideos"
+              inputName="allVideos"
+              i18n-labelText
+              labelText="Display all videos (private, unlisted, password protected, not yet published or sensitive videos)"
+            ></my-peertube-checkbox>
+          </div>
+        </div>
+      }
     </div>
   </div>
-
 </div>

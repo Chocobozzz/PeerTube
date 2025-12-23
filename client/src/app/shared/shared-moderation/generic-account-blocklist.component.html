@@ -1,0 +1,46 @@
+<my-table
+  #table
+  [key]="key()"
+  [defaultColumns]="columns"
+  i18n-paginatorText
+  paginatorText="accounts per page"
+  [dataLoader]="dataLoader"
+  columnConfig="false"
+>
+  <ng-template #totalTitle let-totalRecords>
+    <ng-container i18n>{ totalRecords, plural, =0 {No account} =1 {1 account} other {{{ totalRecords | myNumberFormatter }} accounts}}</ng-container>
+  </ng-template>
+
+  <ng-template #captionRight>
+    <my-advanced-input-filter (search)="table.onSearch($event)"></my-advanced-input-filter>
+  </ng-template>
+
+  <ng-template #tableCells let-account>
+    <td>
+      <a [href]="account.blockedAccount.url" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
+        <div class="chip two-lines">
+          <my-actor-avatar [actor]="account.blockedAccount" actorType="account" size="32"></my-actor-avatar>
+
+          <div>
+            {{ account.blockedAccount.displayName }}
+            <span class="muted">{{ account.blockedAccount.nameWithHost }}</span>
+          </div>
+        </div>
+      </a>
+    </td>
+
+    <td>{{ account.createdAt | ptDate: 'short' }}</td>
+  </ng-template>
+
+  <ng-template #actionCell let-account>
+    <button class="peertube-button secondary-button" (click)="unblockAccount(account)" i18n>Unmute</button>
+  </ng-template>
+
+  <ng-template #noResults let-search>
+    @if (search) {
+      <ng-container i18n>No account found matching current filters.</ng-container>
+    } @else {
+      <ng-container i18n>No account found.</ng-container>
+    }
+  </ng-template>
+</my-table>

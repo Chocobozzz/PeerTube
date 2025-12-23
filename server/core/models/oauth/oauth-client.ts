@@ -16,31 +16,30 @@ import { SequelizeModel } from '../shared/index.js'
   ]
 })
 export class OAuthClientModel extends SequelizeModel<OAuthClientModel> {
+  @AllowNull(false)
+  @Column
+  declare clientId: string
 
   @AllowNull(false)
   @Column
-  clientId: string
-
-  @AllowNull(false)
-  @Column
-  clientSecret: string
+  declare clientSecret: string
 
   @Column(DataType.ARRAY(DataType.STRING))
-  grants: string[]
+  declare grants: string[]
 
   @Column(DataType.ARRAY(DataType.STRING))
-  redirectUris: string[]
+  declare redirectUris: string[]
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @HasMany(() => OAuthTokenModel, {
     onDelete: 'cascade'
   })
-  OAuthTokens: Awaited<OAuthTokenModel>[]
+  declare OAuthTokens: Awaited<OAuthTokenModel>[]
 
   static countTotal () {
     return OAuthClientModel.count()

@@ -1,47 +1,54 @@
+import { HttpClient, HttpParams } from '@angular/common/http'
+import { Injectable, inject } from '@angular/core'
+import { RestExtractor, RestPagination, RestService } from '@app/core'
+import { AdvancedInputFilter } from '@app/shared/shared-forms/advanced-input-filter.component'
+import { Video } from '@app/shared/shared-main/video/video.model'
+import { VideoListParams, VideoService } from '@app/shared/shared-main/video/video.service'
+import { getAllPrivacies, omit } from '@peertube/peertube-core-utils'
+import { ResultList, VideoInclude, VideoPrivacy } from '@peertube/peertube-models'
 import { Observable } from 'rxjs'
 import { catchError, switchMap } from 'rxjs/operators'
-import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable } from '@angular/core'
-import { RestExtractor, RestPagination, RestService } from '@app/core'
-import { ResultList, VideoInclude, VideoPrivacy } from '@peertube/peertube-models'
-import { getAllPrivacies } from '@peertube/peertube-core-utils'
-import { VideoService, CommonVideoParams } from '@app/shared/shared-main/video/video.service'
-import { Video } from '@app/shared/shared-main/video/video.model'
-import { AdvancedInputFilter } from '@app/shared/shared-forms/advanced-input-filter.component'
 
 @Injectable()
 export class VideoAdminService {
-
-  constructor (
-    private videoService: VideoService,
-    private authHttp: HttpClient,
-    private restExtractor: RestExtractor,
-    private restService: RestService
-  ) {}
+  private videoService = inject(VideoService)
+  private authHttp = inject(HttpClient)
+  private restExtractor = inject(RestExtractor)
+  private restService = inject(RestService)
 
   getAdminVideos (
-    options: CommonVideoParams & { pagination: RestPagination, search?: string }
+    options: VideoListParams & { pagination: RestPagination, search?: string }
   ): Observable<ResultList<Video>> {
     const { pagination, search } = options
 
     let params = new HttpParams()
-    params = this.videoService.buildCommonVideosParams({ params, ...options })
+    params = this.videoService.buildVideoListParams({ params, ...omit(options, [ 'search', 'pagination' ]) })
 
     params = params.set('start', pagination.start.toString())
-                   .set('count', pagination.count.toString())
+      .set('count', pagination.count.toString())
 
     params = this.buildAdminParamsFromSearch(search, params)
 
     return this.authHttp
-               .get<ResultList<Video>>(VideoService.BASE_VIDEO_URL, { params })
-               .pipe(
-                 switchMap(res => this.videoService.extractVideos(res)),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+      .get<ResultList<Video>>(VideoService.BASE_VIDEO_URL, { params })
+      .pipe(
+        switchMap(res => this.videoService.extractVideos(res)),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   buildAdminInputFilter (): AdvancedInputFilter[] {
     return [
+      {
+        title: $localize`Moderation`,
+        children: [
+          {
+            value: 'nsfw:true',
+            label: $localize`Sensitive videos`
+          }
+        ]
+      },
+
       {
         title: $localize`Video type`,
         children: [
@@ -113,7 +120,8 @@ export class VideoAdminService {
       VideoInclude.BLOCKED_OWNER |
       VideoInclude.NOT_PUBLISHED_STATE |
       VideoInclude.FILES |
-      VideoInclude.SOURCE
+      VideoInclude.SOURCE |
+      VideoInclude.AUTOMATIC_TAGS
 
     let privacyOneOf = getAllPrivacies()
 
@@ -143,6 +151,14 @@ export class VideoAdminService {
       excludePublic: {
         prefix: 'excludePublic',
         handler: () => true
+      },
+      autoTagOneOf: {
+        prefix: 'autoTag:',
+        multiple: true
+      },
+      nsfw: {
+        prefix: 'nsfw:',
+        isBoolean: true
       }
     })
 

@@ -1,67 +1,143 @@
-<h1>
-  <span class="text-nowrap me-2">
-    <my-global-icon iconName="videos" aria-hidden="true"></my-global-icon>
-    <ng-container i18n>My videos</ng-container>
-    <span *ngIf="pagination.totalItems" class="pt-badge badge-secondary"> {{ pagination.totalItems }}</span>
-  </span>
+<div class="channel-filters">
+  <div class="channel-label" i18n>Per channel:</div>
 
-  <div>
-    <a routerLink="/my-library/video-imports" class="button-link">
-      <my-global-icon iconName="cloud-download" aria-hidden="true"></my-global-icon>
-      <ng-container i18n>My imports</ng-container>
-    </a>
-
-    <a routerLink="/my-library/ownership" class="button-link">
-      <my-global-icon iconName="users" aria-hidden="true"></my-global-icon>
-      <ng-container i18n>Ownership changes</ng-container>
-    </a>
-  </div>
-</h1>
-
-<div class="videos-header d-flex justify-content-between gap-2">
-  <my-advanced-input-filter [emitOnInit]="false" [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
-
-  <div class="peertube-select-container peertube-select-button">
-    <select [(ngModel)]="sort" (ngModelChange)="onChangeSortColumn()" class="form-control">
-      <option value="undefined" disabled i18n>Sort by</option>
-      <option value="-publishedAt" i18n>Last published first</option>
-      <option value="-createdAt" i18n>Last created first</option>
-      <option value="-views" i18n>Most viewed first</option>
-      <option value="-likes" i18n>Most liked first</option>
-      <option value="-duration" i18n>Longest first</option>
-    </select>
-  </div>
+  @for (channel of channels; track channel.id) {
+    <my-channel-toggle [channel]="channel" [(ngModel)]="channel.selected" (ngModelChange)="table.onFilter()"></my-channel-toggle>
+  }
 </div>
 
-<my-videos-selection
-  [videosContainedInPlaylists]="videosContainedInPlaylists"
-  [pagination]="pagination"
-  [(selection)]="selection"
-  [(videosModel)]="videos"
-  [miniatureDisplayOptions]="miniatureDisplayOptions"
-  [titlePage]="titlePage"
-  [getVideosObservableFunction]="getVideosObservableFunction"
-  [user]="user"
-  [disabled]="disabled"
-  #videosSelection
+<my-table
+  #table
+  key="MyVideosComponent"
+  [defaultColumns]="columns"
+  defaultSort="publishedAt"
+  i18n-paginatorText
+  paginatorText="videos per page"
+  defaultRowsPerPage="5"
+  [bulkActions]="bulkActions"
+  [dataLoader]="dataLoader"
+  [customParseQueryParams]="customParseQueryParams"
+  [customUpdateUrl]="customUpdateUrl"
 >
-  <ng-template ptTemplate="globalButtons">
-    <button class="action-button action-button-delete-selection" (click)="deleteSelectedVideos()">
-      <my-global-icon iconName="delete" aria-hidden="true"></my-global-icon>
-      <ng-container i18n>Delete</ng-container>
-    </button>
+
+  <ng-template #totalTitle let-totalRecords>
+    <ng-container i18n>{ totalRecords, plural, =0 {No videos} =1 {1 video} other {{{ totalRecords | myNumberFormatter }} videos}}</ng-container>
   </ng-template>
 
-  <ng-template ptTemplate="rowButtons" let-video>
-    <div class="action-button">
-      <my-edit-button label [ptRouterLink]="[ '/videos', 'update', video.shortUUID ]"></my-edit-button>
+  <ng-template #captionRight>
+    <div class="d-flex align-items-center">
+      <label class="label-inline d-none d-inline-block-mw" for="table-search" i18n>Search</label>
 
-      <my-video-actions-dropdown
-        [video]="video" [displayOptions]="videoDropdownDisplayOptions" [moreActions]="moreVideoActions"
-        buttonStyled="true" buttonDirection="horizontal" (videoRemoved)="onVideoRemoved(video)"
-      ></my-video-actions-dropdown>
+      <my-advanced-input-filter
+        inputId="table-search" icon="true" emitOnInit="false" i18n-placeholder placeholder="Search your videos"
+        (search)="table.onSearch($event, true)"
+      ></my-advanced-input-filter>
+    </div>
+
+    <div class="d-flex align-items-center">
+      <label class="label-inline" for="table-filter" i18n>Filter</label>
+
+      <my-select-checkbox
+        inputId="table-filter"
+        showToggleAll="false"
+        showClear="true"
+
+        [availableItems]="filterItems"
+        [selectableGroup]="false"
+        [(ngModel)]="selectedFilterItems"
+        i18n-placeholder placeholder="All videos"
+        (ngModelChange)="table.onFilter()"
+        >
+      </my-select-checkbox>
     </div>
   </ng-template>
-</my-videos-selection>
 
-<my-video-change-ownership #videoChangeOwnershipModal></my-video-change-ownership>
+  <ng-template #tableCells let-video>
+
+    @if (table.isColumnDisplayed('duration')) {
+      <td>
+        <my-video-cell [video]="video" thumbnail="true" title="false"></my-video-cell>
+      </td>
+    }
+
+    @if (table.isColumnDisplayed('name')) {
+      <td>
+        <my-video-cell class="video-cell-name" [video]="video" thumbnail="false" title="true" displayEditorInfo="true"></my-video-cell>
+      </td>
+    }
+
+    @if (table.isColumnDisplayed('privacy')) {
+      <td>
+        <div class="pt-badges-container">
+          <my-privacy-badge [video]="video"></my-privacy-badge>
+          @if (video.blacklisted) {
+            <span class="pt-badge badge-red" i18n [ngbTooltip]="video.blacklistedReason">Blocked</span>
+          }
+        </div>
+      </td>
+    }
+
+    @if (table.isColumnDisplayed('sensitive')) {
+      <td>
+        <my-video-nsfw-badge [video]="video"></my-video-nsfw-badge>
+      </td>
+    }
+
+    @if (table.isColumnDisplayed('playlists')) {
+      <td>
+        <div class="badges playlists">
+          @for (playlist of (videosContainedInPlaylists[video.id] || []); track playlist) {
+            <a class="pt-badge badge-secondary pt-badge-keep-case" [routerLink]="['/w/p/', playlist.playlistShortUUID]">
+              {{ playlist.playlistDisplayName }}
+            </a>
+          }
+        </div>
+      </td>
+    }
+
+    @if (table.isColumnDisplayed('insights')) {
+      <td>
+        <a class="pt" [routerLink]="[ '/videos/manage', video.shortUUID, 'stats' ]" i18n-title title="Navigate to the video stats page">
+          <ng-container i18n>{video.views, plural, =0 {No views} =1 {1 view} other {{{ video.views | myNumberFormatter }} views}}</ng-container>
+          @if (video.isLive) {
+            <br />
+            <ng-container i18n>{video.viewers, plural, =0 {No viewers} =1 {1 viewer} other {{{ video.views | myNumberFormatter }} viewers}}</ng-container>
+          }
+        </a>
+      </td>
+    }
+
+    @if (table.isColumnDisplayed('comments')) {
+      <td>
+        <span i18n>{video.comments, plural, =0 {No comments} =1 {1 comment} other {{{ video.comments | myNumberFormatter }} comments}}</span>
+      </td>
+    }
+
+    @if (table.isColumnDisplayed('published')) {
+      <td>
+        {{ video.publishedAt | ptDate: 'short' }}
+      </td>
+    }
+
+    @if (table.isColumnDisplayed('state')) {
+      <td>
+        <my-video-state-badge [video]="video"></my-video-state-badge>
+      </td>
+    }
+  </ng-template>
+
+  <ng-template #actionCell let-video>
+    <my-button class="me-3" i18n-label label="Manage" [ptRouterLink]="[ '/videos', 'manage', video.shortUUID ]" theme="secondary" icon="film" responsiveLabel="true"></my-button>
+
+    <my-video-actions-dropdown
+      placement="bottom auto" buttonIcon="more-horizontal" buttonStyled="true" [video]="video" [displayOptions]="videoActionsOptions"
+      (videoRemoved)="table.loadData()" (videoFilesRemoved)="table.loadData()" (transcodingCreated)="table.loadData()" (videoExistsInPlaylistChange)="fetchVideosContainedInPlaylists([ video ])"
+    ></my-video-actions-dropdown>
+  </ng-template>
+
+  <ng-template #noResults let-search>
+    {{ getNoResults(search) }}
+  </ng-template>
+
+</my-table>
+

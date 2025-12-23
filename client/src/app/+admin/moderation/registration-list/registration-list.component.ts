@@ -1,49 +1,50 @@
-import { SortMeta, SharedModule } from 'primeng/api'
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
+import { ConfirmService, MarkdownService, Notifier, ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
-import { UserRegistration, UserRegistrationState } from '@peertube/peertube-models'
+import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { ResultList, UserRegistration as UserRegistrationServer, UserRegistrationState } from '@peertube/peertube-models'
+import { switchMap } from 'rxjs'
+import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
+import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
+import { NumberFormatterPipe } from '../../../shared/shared-main/common/number-formatter.pipe'
+import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../../../shared/shared-tables/table.component'
+import { UserEmailInfoComponent } from '../../shared/user-email-info.component'
 import { AdminRegistrationService } from './admin-registration.service'
 import { ProcessRegistrationModalComponent } from './process-registration-modal.component'
-import { AutoColspanDirective } from '../../../shared/shared-main/angular/auto-colspan.directive'
-import { UserEmailInfoComponent } from '../../shared/user-email-info.component'
-import { TableExpanderIconComponent } from '../../../shared/shared-tables/table-expander-icon.component'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
-import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
-import { NgIf, NgClass, DatePipe } from '@angular/common'
-import { TableModule } from 'primeng/table'
-import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+
+type UserRegistration = UserRegistrationServer & { registrationReasonHTML?: string, moderationResponseHTML?: string }
+type ColumnName = 'account' | 'email' | 'channel' | 'registrationReason' | 'state' | 'moderationResponse' | 'createdAt'
 
 @Component({
   selector: 'my-registration-list',
   templateUrl: './registration-list.component.html',
   styleUrls: [ '../../../shared/shared-moderation/moderation.scss', './registration-list.component.scss' ],
-  standalone: true,
   imports: [
     GlobalIconComponent,
-    TableModule,
-    SharedModule,
-    NgIf,
     ActionDropdownComponent,
     AdvancedInputFilterComponent,
     NgbTooltip,
-    TableExpanderIconComponent,
-    NgClass,
     UserEmailInfoComponent,
-    AutoColspanDirective,
     ProcessRegistrationModalComponent,
-    DatePipe
+    PTDatePipe,
+    NumberFormatterPipe,
+    TableComponent
   ]
 })
-export class RegistrationListComponent extends RestTable <UserRegistration> implements OnInit {
-  @ViewChild('processRegistrationModal', { static: true }) processRegistrationModal: ProcessRegistrationModalComponent
+export class RegistrationListComponent implements OnInit {
+  protected route = inject(ActivatedRoute)
+  protected router = inject(Router)
+  private server = inject(ServerService)
+  private notifier = inject(Notifier)
+  private markdownRenderer = inject(MarkdownService)
+  private confirmService = inject(ConfirmService)
+  private adminRegistrationService = inject(AdminRegistrationService)
 
-  registrations: (UserRegistration & { registrationReasonHTML?: string, moderationResponseHTML?: string })[] = []
-  totalRecords = 0
-  sort: SortMeta = { field: 'createdAt', order: -1 }
-  pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
+  readonly processRegistrationModal = viewChild<ProcessRegistrationModalComponent>('processRegistrationModal')
+  readonly table = viewChild<TableComponent<UserRegistration, ColumnName>>('table')
 
   registrationActions: DropdownAction<UserRegistration>[][] = []
   bulkActions: DropdownAction<UserRegistration[]>[] = []
@@ -52,16 +53,20 @@ export class RegistrationListComponent extends RestTable <UserRegistration> impl
 
   requiresEmailVerification: boolean
 
-  constructor (
-    protected route: ActivatedRoute,
-    protected router: Router,
-    private server: ServerService,
-    private notifier: Notifier,
-    private markdownRenderer: MarkdownService,
-    private confirmService: ConfirmService,
-    private adminRegistrationService: AdminRegistrationService
-  ) {
-    super()
+  columns: TableColumnInfo<ColumnName>[] = [
+    { id: 'account', label: $localize`Account`, sortable: false },
+    { id: 'email', label: $localize`Email`, sortable: false },
+    { id: 'channel', label: $localize`Channel`, sortable: false },
+    { id: 'registrationReason', label: $localize`Registration reason`, sortable: false },
+    { id: 'state', label: $localize`State`, sortable: true },
+    { id: 'moderationResponse', label: $localize`Moderation response`, sortable: false },
+    { id: 'createdAt', label: $localize`Requested on`, sortable: true }
+  ]
+
+  dataLoader: typeof this._dataLoader
+
+  constructor () {
+    this.dataLoader = this._dataLoader.bind(this)
 
     this.registrationActions = [
       [
@@ -92,16 +97,10 @@ export class RegistrationListComponent extends RestTable <UserRegistration> impl
   }
 
   ngOnInit () {
-    this.initialize()
-
     this.server.getConfig()
       .subscribe(config => {
         this.requiresEmailVerification = config.signup.requiresEmailVerification
       })
-  }
-
-  getIdentifier () {
-    return 'RegistrationListComponent'
   }
 
   isRegistrationAccepted (registration: UserRegistration) {
@@ -113,37 +112,30 @@ export class RegistrationListComponent extends RestTable <UserRegistration> impl
   }
 
   onRegistrationProcessed () {
-    this.reloadData()
+    this.table().reloadData({ field: 'createdAt', order: -1 })
   }
 
-  protected reloadDataInternal () {
-    this.adminRegistrationService.listRegistrations({
-      pagination: this.pagination,
-      sort: this.sort,
-      search: this.search
-    }).subscribe({
-      next: async resultList => {
-        this.totalRecords = resultList.total
-        this.registrations = resultList.data
+  private _dataLoader (options: DataLoaderOptions) {
+    return this.adminRegistrationService.listRegistrations(options)
+      .pipe(
+        switchMap(async (resultList: ResultList<UserRegistration>) => {
+          for (const registration of resultList.data) {
+            registration.registrationReasonHTML = await this.toHtml(registration.registrationReason)
+            registration.moderationResponseHTML = await this.toHtml(registration.moderationResponse)
+          }
 
-        for (const registration of this.registrations) {
-          registration.registrationReasonHTML = await this.toHtml(registration.registrationReason)
-          registration.moderationResponseHTML = await this.toHtml(registration.moderationResponse)
-        }
-      },
-
-      error: err => this.notifier.error(err.message)
-    })
+          return resultList
+        })
+      )
   }
 
   private openRegistrationRequestProcessModal (registration: UserRegistration, mode: 'accept' | 'reject') {
-    this.processRegistrationModal.openModal(registration, mode)
+    this.processRegistrationModal().openModal(registration, mode)
   }
 
   private async removeRegistrations (registrations: UserRegistration[]) {
     const icuParams = { count: registrations.length, username: registrations[0].username }
 
-    // eslint-disable-next-line max-len
     const message = formatICU(
       $localize`Do you really want to delete {count, plural, =1 {{username} registration request?} other {{count} registration requests?}}`,
       icuParams
@@ -155,17 +147,16 @@ export class RegistrationListComponent extends RestTable <UserRegistration> impl
     this.adminRegistrationService.removeRegistrations(registrations)
       .subscribe({
         next: () => {
-          // eslint-disable-next-line max-len
           const message = formatICU(
             $localize`Removed {count, plural, =1 {{username} registration request} other {{count} registration requests}}`,
             icuParams
           )
 
           this.notifier.success(message)
-          this.reloadData()
+          this.table().loadData()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

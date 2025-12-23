@@ -1,12 +1,14 @@
-import { Socket } from 'socket.io-client'
 import { LiveVideoEventPayload, VideoDetails, VideoState, VideoStateType } from '@peertube/peertube-models'
+import { Socket } from 'socket.io-client'
 import { PlayerHTML } from './player-html'
 import { Translations } from './translations'
+import { getBackendUrl } from './url'
 
 export class LiveManager {
   private liveSocket: Socket
 
-  private listeners = new Map<string, (payload: LiveVideoEventPayload) => void>()
+  private stateChangeListeners = new Map<string, (payload: LiveVideoEventPayload) => void>()
+  private forceEndListeners = new Map<string, () => void>()
 
   constructor (
     private readonly playerHTML: PlayerHTML
@@ -16,16 +18,19 @@ export class LiveManager {
 
   async listenForChanges (options: {
     video: VideoDetails
+
     onPublishedVideo: () => any
+
+    onForceEnd: () => any
   }) {
-    const { video, onPublishedVideo } = options
+    const { video, onPublishedVideo, onForceEnd } = options
 
     if (!this.liveSocket) {
       const io = (await import('socket.io-client')).io
-      this.liveSocket = io(window.location.origin + '/live-videos')
+      this.liveSocket = io(getBackendUrl() + '/live-videos')
     }
 
-    const listener = (payload: LiveVideoEventPayload) => {
+    const stateChangeListener = (payload: LiveVideoEventPayload) => {
       if (payload.state === VideoState.PUBLISHED) {
         this.playerHTML.removeInformation()
         onPublishedVideo()
@@ -33,16 +38,28 @@ export class LiveManager {
       }
     }
 
-    this.liveSocket.on('state-change', listener)
-    this.listeners.set(video.uuid, listener)
+    const forceEndListener = () => {
+      onForceEnd()
+    }
+
+    this.liveSocket.on('state-change', stateChangeListener)
+    this.liveSocket.on('force-end', forceEndListener)
+
+    this.stateChangeListeners.set(video.uuid, stateChangeListener)
+    this.forceEndListeners.set(video.uuid, forceEndListener)
 
     this.liveSocket.emit('subscribe', { videoId: video.id })
   }
 
   stopListeningForChanges (video: VideoDetails) {
-    const listener = this.listeners.get(video.uuid)
-    if (listener) {
-      this.liveSocket.off('state-change', listener)
+    {
+      const listener = this.stateChangeListeners.get(video.uuid)
+      if (listener) this.liveSocket.off('state-change', listener)
+    }
+
+    {
+      const listener = this.forceEndListeners.get(video.uuid)
+      if (listener) this.liveSocket.off('force-end', listener)
     }
 
     this.liveSocket.emit('unsubscribe', { videoId: video.id })
@@ -66,7 +83,7 @@ export class LiveManager {
   }
 
   private displayWaitingForLiveInfo (translations: Translations) {
-    this.playerHTML.displayInformation('This live has not started yet.', translations)
+    this.playerHTML.displayInformation('This live is not currently streaming.', translations)
   }
 
   private displayEndedLiveInfo (translations: Translations) {

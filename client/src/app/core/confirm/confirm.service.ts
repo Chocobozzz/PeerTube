@@ -1,35 +1,51 @@
-import { firstValueFrom, map, Observable, Subject } from 'rxjs'
 import { Injectable } from '@angular/core'
+import { firstValueFrom, map, Observable, Subject } from 'rxjs'
 
-type ConfirmOptions = {
-  title: string
-  message: string
-  errorMessage?: string
-} & (
-  {
-    type: 'confirm'
+type ConfirmOptions =
+  & {
+    title: string
+    message: string
+    errorMessage?: string
+    moreInfo?: {
+      title: string
+      content: string
+    }
     confirmButtonText?: string
-  } |
-  {
-    type: 'confirm-password'
-    confirmButtonText?: string
-    isIncorrectPassword?: boolean
-  } |
-  {
-    type: 'confirm-expected-input'
-    inputLabel?: string
-    expectedInputValue?: string
-    confirmButtonText?: string
+    cancelButtonText?: string
   }
-)
+  & (
+    | {
+      type: 'confirm'
+    }
+    | {
+      type: 'confirm-password'
+      isIncorrectPassword?: boolean
+    }
+    | {
+      type: 'confirm-expected-input'
+      inputLabel?: string
+      expectedInputValue?: string
+    }
+  )
 
 @Injectable()
 export class ConfirmService {
   showConfirm = new Subject<ConfirmOptions>()
   confirmResponse = new Subject<{ confirmed: boolean, value?: string }>()
 
-  confirm (message: string, title = '', confirmButtonText?: string) {
-    this.showConfirm.next({ type: 'confirm', title, message, confirmButtonText })
+  confirm (
+    message: string,
+    title = '',
+    options: Partial<Pick<ConfirmOptions, 'confirmButtonText' | 'cancelButtonText' | 'moreInfo'>> = {}
+  ) {
+    this.showConfirm.next({
+      type: 'confirm',
+      title,
+      message,
+      confirmButtonText: options.confirmButtonText,
+      moreInfo: options.moreInfo,
+      cancelButtonText: options.cancelButtonText
+    })
 
     return firstValueFrom(this.extractConfirmed(this.confirmResponse.asObservable()))
   }

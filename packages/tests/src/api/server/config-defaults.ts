@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { VideoDetails, VideoPrivacy } from '@peertube/peertube-models'
+import { VideoCommentPolicy, VideoDetails, VideoPrivacy } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createSingleServer,
@@ -26,12 +26,11 @@ describe('Test config defaults', function () {
   })
 
   describe('Default publish values', function () {
-
     before(async function () {
       const overrideConfig = {
         defaults: {
           publish: {
-            comments_enabled: false,
+            comments_policy: 2,
             download_enabled: false,
             privacy: VideoPrivacy.INTERNAL,
             licence: 4
@@ -46,14 +45,14 @@ describe('Test config defaults', function () {
     const attributes = {
       name: 'video',
       downloadEnabled: undefined,
-      commentsEnabled: undefined,
+      commentsPolicy: undefined,
       licence: undefined,
       privacy: VideoPrivacy.PUBLIC // Privacy is mandatory for server
     }
 
     function checkVideo (video: VideoDetails) {
       expect(video.downloadEnabled).to.be.false
-      expect(video.commentsEnabled).to.be.false
+      expect(video.commentsPolicy.id).to.equal(VideoCommentPolicy.DISABLED)
       expect(video.licence.id).to.equal(4)
     }
 
@@ -66,7 +65,7 @@ describe('Test config defaults', function () {
     it('Should have the correct server configuration', async function () {
       const config = await server.config.getConfig()
 
-      expect(config.defaults.publish.commentsEnabled).to.be.false
+      expect(config.defaults.publish.commentsPolicy).to.equal(VideoCommentPolicy.DISABLED)
       expect(config.defaults.publish.downloadEnabled).to.be.false
       expect(config.defaults.publish.licence).to.equal(4)
       expect(config.defaults.publish.privacy).to.equal(VideoPrivacy.INTERNAL)
@@ -121,9 +120,7 @@ describe('Test config defaults', function () {
   })
 
   describe('Default P2P values', function () {
-
     describe('Webapp default value', function () {
-
       before(async function () {
         const overrideConfig = {
           defaults: {
@@ -165,7 +162,6 @@ describe('Test config defaults', function () {
     })
 
     describe('Embed default value', function () {
-
       before(async function () {
         const overrideConfig = {
           defaults: {
@@ -210,6 +206,49 @@ describe('Test config defaults', function () {
     })
   })
 
+  describe('Default player value', function () {
+    before(async function () {
+      const overrideConfig = {
+        defaults: {
+          player: {
+            theme: 'lucide',
+            auto_play: false
+          }
+        },
+        signup: {
+          limit: 15
+        }
+      }
+
+      await server.kill()
+      await server.run(overrideConfig)
+    })
+
+    it('Should have appropriate player config', async function () {
+      const config = await server.config.getConfig()
+
+      expect(config.defaults.player.theme).to.equal('lucide')
+      expect(config.defaults.player.autoPlay).to.be.false
+    })
+
+    it('Should create a user with this default setting', async function () {
+      await server.users.create({ username: 'user_autoplay_1' })
+      const userToken = await server.login.getAccessToken('user_autoplay_1')
+
+      const { autoPlayVideo } = await server.users.getMyInfo({ token: userToken })
+      expect(autoPlayVideo).to.be.false
+    })
+
+    it('Should register a user with this default setting', async function () {
+      await server.registrations.register({ username: 'user_autoplay_2' })
+
+      const userToken = await server.login.getAccessToken('user_autoplay_2')
+
+      const { autoPlayVideo } = await server.users.getMyInfo({ token: userToken })
+      expect(autoPlayVideo).to.be.false
+    })
+  })
+
   describe('Default user attributes', function () {
     it('Should create a user and register a user with the default config', async function () {
       await server.config.updateExistingConfig({
@@ -220,7 +259,7 @@ describe('Test config defaults', function () {
                 enabled: true
               }
             },
-            videoQuota : -1,
+            videoQuota: -1,
             videoQuotaDaily: -1
           },
           signup: {
@@ -260,7 +299,7 @@ describe('Test config defaults', function () {
                 enabled: false
               }
             },
-            videoQuota : 5242881,
+            videoQuota: 5242881,
             videoQuotaDaily: 318742
           },
           signup: {
@@ -285,7 +324,6 @@ describe('Test config defaults', function () {
         expect(user.videoQuotaDaily).to.equal(318742)
       }
     })
-
   })
 
   after(async function () {

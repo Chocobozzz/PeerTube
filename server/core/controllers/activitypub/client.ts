@@ -1,20 +1,18 @@
-import cors from 'cors'
-import express from 'express'
-import {
-  VideoChaptersObject,
-  VideoCommentObject,
-  VideoPlaylistPrivacy,
-  VideoPrivacy,
-  VideoRateType
-} from '@peertube/peertube-models'
+import { HttpStatusCode, VideoChaptersObject, VideoCommentObject, VideoRateType } from '@peertube/peertube-models'
 import { activityPubCollectionPagination } from '@server/lib/activitypub/collection.js'
 import { getContextFilter } from '@server/lib/activitypub/context.js'
+import { buildChaptersAPHasPart } from '@server/lib/activitypub/video-chapters.js'
+import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 import { getServerActor } from '@server/models/application/application.js'
+import { PlayerSettingModel } from '@server/models/video/player-setting.js'
+import { VideoChapterModel } from '@server/models/video/video-chapter.js'
 import { MAccountId, MActorId, MChannelId, MVideoId } from '@server/types/models/index.js'
+import cors from 'cors'
+import express from 'express'
 import { activityPubContextify } from '../../helpers/activity-pub-utils.js'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers/constants.js'
-import { audiencify, getAudience } from '../../lib/activitypub/audience.js'
-import { buildAnnounceWithVideoAudience, buildLikeActivity } from '../../lib/activitypub/send/index.js'
+import { audiencify, getPlaylistAudience, getPublicAudience, getVideoAudience } from '../../lib/activitypub/audience.js'
+import { buildAnnounceWithVideoAudience, buildApprovalActivity, buildLikeActivity } from '../../lib/activitypub/send/index.js'
 import { buildCreateActivity } from '../../lib/activitypub/send/send-create.js'
 import { buildDislikeActivity } from '../../lib/activitypub/send/send-dislike.js'
 import {
@@ -33,19 +31,18 @@ import {
 import {
   activityPubRateLimiter,
   asyncMiddleware,
-  ensureIsLocalChannel,
   executeIfActivityPub,
-  localAccountValidator,
-  videoChannelsNameWithHostValidator,
+  videoChannelsHandleValidatorFactory,
   videosCustomGetValidator,
   videosShareValidator
 } from '../../middlewares/index.js'
 import {
+  accountHandleGetValidatorFactory,
   getAccountVideoRateValidatorFactory,
   getVideoLocalViewerValidator,
   videoCommentGetValidator
 } from '../../middlewares/validators/index.js'
-import { videoFileRedundancyGetValidator, videoPlaylistRedundancyGetValidator } from '../../middlewares/validators/redundancy.js'
+import { videoPlaylistRedundancyGetValidator } from '../../middlewares/validators/redundancy.js'
 import { videoPlaylistElementAPGetValidator, videoPlaylistsGetValidator } from '../../middlewares/validators/videos/video-playlists.js'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate.js'
 import { AccountModel } from '../../models/account/account.js'
@@ -54,9 +51,6 @@ import { VideoCommentModel } from '../../models/video/video-comment.js'
 import { VideoPlaylistModel } from '../../models/video/video-playlist.js'
 import { VideoShareModel } from '../../models/video/video-share.js'
 import { activityPubResponse } from './utils.js'
-import { VideoChapterModel } from '@server/models/video/video-chapter.js'
-import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
-import { buildChaptersAPHasPart } from '@server/lib/activitypub/video-chapters.js'
 
 const activityPubClientRouter = express.Router()
 activityPubClientRouter.use(cors())
@@ -64,44 +58,82 @@ activityPubClientRouter.use(cors())
 // Intercept ActivityPub client requests
 
 activityPubClientRouter.get(
-  [ '/accounts?/:name', '/accounts?/:name/video-channels', '/a/:name', '/a/:name/video-channels' ],
+  [ '/accounts?/:handle', '/accounts?/:handle/video-channels', '/a/:handle', '/a/:handle/video-channels' ],
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(localAccountValidator),
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkCanManage: false })),
   asyncMiddleware(accountController)
 )
-activityPubClientRouter.get('/accounts?/:name/followers',
+activityPubClientRouter.get(
+  '/accounts?/:handle/followers',
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(localAccountValidator),
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkCanManage: false })),
   asyncMiddleware(accountFollowersController)
 )
-activityPubClientRouter.get('/accounts?/:name/following',
+activityPubClientRouter.get(
+  '/accounts?/:handle/following',
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(localAccountValidator),
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkCanManage: false })),
   asyncMiddleware(accountFollowingController)
 )
-activityPubClientRouter.get('/accounts?/:name/playlists',
+activityPubClientRouter.get(
+  '/accounts?/:handle/playlists',
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(localAccountValidator),
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkCanManage: false })),
   asyncMiddleware(accountPlaylistsController)
 )
-activityPubClientRouter.get('/accounts?/:name/likes/:videoId',
+activityPubClientRouter.get(
+  '/accounts?/:accountName/likes/:videoId',
   executeIfActivityPub,
   activityPubRateLimiter,
   cacheRoute(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS),
   asyncMiddleware(getAccountVideoRateValidatorFactory('like')),
   asyncMiddleware(getAccountVideoRateFactory('like'))
 )
-activityPubClientRouter.get('/accounts?/:name/dislikes/:videoId',
+activityPubClientRouter.get(
+  '/accounts?/:accountName/dislikes/:videoId',
   executeIfActivityPub,
   activityPubRateLimiter,
   cacheRoute(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS),
   asyncMiddleware(getAccountVideoRateValidatorFactory('dislike')),
   asyncMiddleware(getAccountVideoRateFactory('dislike'))
 )
+
+// ---------------------------------------------------------------------------
+
+activityPubClientRouter.get(
+  '/videos/watch/:id/comments',
+  executeIfActivityPub,
+  activityPubRateLimiter,
+  asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
+  asyncMiddleware(videoCommentsController)
+)
+activityPubClientRouter.get(
+  '/videos/watch/:videoId/comments/:commentId/approve-reply',
+  executeIfActivityPub,
+  activityPubRateLimiter,
+  asyncMiddleware(videoCommentGetValidator),
+  asyncMiddleware(videoCommentApprovedController)
+)
+activityPubClientRouter.get(
+  '/videos/watch/:videoId/comments/:commentId/activity',
+  executeIfActivityPub,
+  activityPubRateLimiter,
+  asyncMiddleware(videoCommentGetValidator),
+  asyncMiddleware(videoCommentController)
+)
+activityPubClientRouter.get(
+  [ '/videos/watch/:videoId/comments/:commentId', '/w/:videoId([^;]+);threadId=:commentId([0-9]+)' ],
+  executeIfActivityPub,
+  activityPubRateLimiter,
+  asyncMiddleware(videoCommentGetValidator),
+  asyncMiddleware(videoCommentController)
+)
+
+// ---------------------------------------------------------------------------
 
 activityPubClientRouter.get(
   [ '/videos/watch/:id', '/w/:id' ],
@@ -111,53 +143,47 @@ activityPubClientRouter.get(
   asyncMiddleware(videosCustomGetValidator('all')),
   asyncMiddleware(videoController)
 )
-activityPubClientRouter.get('/videos/watch/:id/activity',
+activityPubClientRouter.get(
+  '/videos/watch/:id/activity',
   executeIfActivityPub,
   activityPubRateLimiter,
   asyncMiddleware(videosCustomGetValidator('all')),
   asyncMiddleware(videoController)
 )
-activityPubClientRouter.get('/videos/watch/:id/announces',
+activityPubClientRouter.get(
+  '/videos/watch/:id/announces',
   executeIfActivityPub,
   activityPubRateLimiter,
   asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
   asyncMiddleware(videoAnnouncesController)
 )
-activityPubClientRouter.get('/videos/watch/:id/announces/:actorId',
+activityPubClientRouter.get(
+  '/videos/watch/:id/announces/:actorId',
   executeIfActivityPub,
   activityPubRateLimiter,
   asyncMiddleware(videosShareValidator),
   asyncMiddleware(videoAnnounceController)
 )
-activityPubClientRouter.get('/videos/watch/:id/likes',
+activityPubClientRouter.get(
+  '/videos/watch/:id/likes',
   executeIfActivityPub,
   activityPubRateLimiter,
   asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
   asyncMiddleware(videoLikesController)
 )
-activityPubClientRouter.get('/videos/watch/:id/dislikes',
+activityPubClientRouter.get(
+  '/videos/watch/:id/dislikes',
   executeIfActivityPub,
   activityPubRateLimiter,
   asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
   asyncMiddleware(videoDislikesController)
 )
-activityPubClientRouter.get('/videos/watch/:id/comments',
+activityPubClientRouter.get(
+  '/videos/watch/:id/player-settings',
   executeIfActivityPub,
   activityPubRateLimiter,
   asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
-  asyncMiddleware(videoCommentsController)
-)
-activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId',
-  executeIfActivityPub,
-  activityPubRateLimiter,
-  asyncMiddleware(videoCommentGetValidator),
-  asyncMiddleware(videoCommentController)
-)
-activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId/activity',
-  executeIfActivityPub,
-  activityPubRateLimiter,
-  asyncMiddleware(videoCommentGetValidator),
-  asyncMiddleware(videoCommentController)
+  asyncMiddleware(videoPlayerSettingsController)
 )
 
 // ---------------------------------------------------------------------------
@@ -170,7 +196,8 @@ InternalEventEmitter.Instance.on('chapters-updated', ({ video }) => {
   chaptersApiCache.clearGroupSafe(buildAPVideoChaptersGroupsCache({ videoId: video.uuid }))
 })
 
-activityPubClientRouter.get('/videos/watch/:id/chapters',
+activityPubClientRouter.get(
+  '/videos/watch/:id/chapters',
   executeIfActivityPub,
   activityPubRateLimiter,
   apVideoChaptersSetCacheKey,
@@ -182,42 +209,43 @@ activityPubClientRouter.get('/videos/watch/:id/chapters',
 // ---------------------------------------------------------------------------
 
 activityPubClientRouter.get(
-  [ '/video-channels/:nameWithHost', '/video-channels/:nameWithHost/videos', '/c/:nameWithHost', '/c/:nameWithHost/videos' ],
+  [ '/video-channels/:handle', '/video-channels/:handle/videos', '/c/:handle', '/c/:handle/videos' ],
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(videoChannelsNameWithHostValidator),
-  ensureIsLocalChannel,
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: false, checkIsOwner: false })),
   asyncMiddleware(videoChannelController)
 )
-activityPubClientRouter.get('/video-channels/:nameWithHost/followers',
+activityPubClientRouter.get(
+  '/video-channels/:handle/followers',
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(videoChannelsNameWithHostValidator),
-  ensureIsLocalChannel,
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: false, checkIsOwner: false })),
   asyncMiddleware(videoChannelFollowersController)
 )
-activityPubClientRouter.get('/video-channels/:nameWithHost/following',
+activityPubClientRouter.get(
+  '/video-channels/:handle/following',
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(videoChannelsNameWithHostValidator),
-  ensureIsLocalChannel,
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: false, checkIsOwner: false })),
   asyncMiddleware(videoChannelFollowingController)
 )
-activityPubClientRouter.get('/video-channels/:nameWithHost/playlists',
+activityPubClientRouter.get(
+  '/video-channels/:handle/playlists',
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(videoChannelsNameWithHostValidator),
-  ensureIsLocalChannel,
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: false, checkIsOwner: false })),
   asyncMiddleware(videoChannelPlaylistsController)
 )
-
-activityPubClientRouter.get('/redundancy/videos/:videoId/:resolution([0-9]+)(-:fps([0-9]+))?',
+activityPubClientRouter.get(
+  '/video-channels/:handle/player-settings',
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(videoFileRedundancyGetValidator),
-  asyncMiddleware(videoRedundancyController)
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: false, checkIsOwner: false })),
+  asyncMiddleware(channelPlayerSettingsController)
 )
-activityPubClientRouter.get('/redundancy/streaming-playlists/:streamingPlaylistType/:videoId',
+
+activityPubClientRouter.get(
+  '/redundancy/streaming-playlists/:streamingPlaylistType/:videoId',
   executeIfActivityPub,
   activityPubRateLimiter,
   asyncMiddleware(videoPlaylistRedundancyGetValidator),
@@ -231,14 +259,16 @@ activityPubClientRouter.get(
   asyncMiddleware(videoPlaylistsGetValidator('all')),
   asyncMiddleware(videoPlaylistController)
 )
-activityPubClientRouter.get('/video-playlists/:playlistId/videos/:playlistElementId',
+activityPubClientRouter.get(
+  '/video-playlists/:playlistId/videos/:playlistElementId',
   executeIfActivityPub,
   activityPubRateLimiter,
   asyncMiddleware(videoPlaylistElementAPGetValidator),
   asyncMiddleware(videoPlaylistElementController)
 )
 
-activityPubClientRouter.get('/videos/local-viewer/:localViewerId',
+activityPubClientRouter.get(
+  '/videos/local-viewer/:localViewerId',
   executeIfActivityPub,
   activityPubRateLimiter,
   asyncMiddleware(getVideoLocalViewerValidator),
@@ -308,7 +338,7 @@ async function videoController (req: express.Request, res: express.Response) {
   // We need captions to render AP object
   const videoAP = await video.lightAPToFullAP(undefined)
 
-  const audience = getAudience(videoAP.VideoChannel.Account.Actor, videoAP.privacy === VideoPrivacy.PUBLIC)
+  const audience = getVideoAudience(videoAP.VideoChannel.Account.Actor, videoAP.privacy)
   const videoObject = audiencify(await videoAP.toActivityPubObject(), audience)
 
   if (req.path.endsWith('/activity')) {
@@ -384,6 +414,30 @@ async function videoCommentsController (req: express.Request, res: express.Respo
   return activityPubResponse(activityPubContextify(json, 'Collection', getContextFilter()), res)
 }
 
+// ---------------------------------------------------------------------------
+
+async function videoPlayerSettingsController (req: express.Request, res: express.Response) {
+  const video = res.locals.onlyVideo
+
+  if (redirectIfNotOwned(video.url, res)) return
+
+  const settings = await PlayerSettingModel.loadByVideoId(video.id)
+  const json = PlayerSettingModel.formatAPPlayerSetting({ channel: undefined, video, settings })
+
+  return activityPubResponse(activityPubContextify(json, 'PlayerSettings', getContextFilter()), res)
+}
+
+async function channelPlayerSettingsController (req: express.Request, res: express.Response) {
+  const channel = res.locals.videoChannel
+
+  const settings = await PlayerSettingModel.loadByChannelId(channel.id)
+  const json = PlayerSettingModel.formatAPPlayerSetting({ channel, video: undefined, settings })
+
+  return activityPubResponse(activityPubContextify(json, 'PlayerSettings', getContextFilter()), res)
+}
+
+// ---------------------------------------------------------------------------
+
 async function videoChannelController (req: express.Request, res: express.Response) {
   const videoChannel = res.locals.videoChannel
 
@@ -408,13 +462,14 @@ async function videoCommentController (req: express.Request, res: express.Respon
   const videoComment = res.locals.videoCommentFull
 
   if (redirectIfNotOwned(videoComment.url, res)) return
+  if (videoComment.Video.isLocal() && videoComment.heldForReview === true) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
-  const threadParentComments = await VideoCommentModel.listThreadParentComments(videoComment, undefined)
-  const isPublic = true // Comments are always public
+  const threadParentComments = await VideoCommentModel.listThreadParentComments({ comment: videoComment })
+
   let videoCommentObject = videoComment.toActivityPubObject(threadParentComments)
 
   if (videoComment.Account) {
-    const audience = getAudience(videoComment.Account.Actor, isPublic)
+    const audience = getPublicAudience(videoComment.Account.Actor)
     videoCommentObject = audiencify(videoCommentObject, audience)
 
     if (req.path.endsWith('/activity')) {
@@ -424,6 +479,16 @@ async function videoCommentController (req: express.Request, res: express.Respon
   }
 
   return activityPubResponse(activityPubContextify(videoCommentObject, 'Comment', getContextFilter()), res)
+}
+
+async function videoCommentApprovedController (req: express.Request, res: express.Response) {
+  const comment = res.locals.videoCommentFull
+
+  if (!comment.Video.isLocal() || comment.heldForReview === true) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+
+  const activity = buildApprovalActivity({ comment, type: 'ApproveReply' })
+
+  return activityPubResponse(activityPubContextify(activity, 'ApproveReply', getContextFilter()), res)
 }
 
 async function videoChaptersController (req: express.Request, res: express.Response) {
@@ -448,7 +513,7 @@ async function videoRedundancyController (req: express.Request, res: express.Res
 
   const serverActor = await getServerActor()
 
-  const audience = getAudience(serverActor)
+  const audience = getPublicAudience(serverActor)
   const object = audiencify(videoRedundancy.toActivityPubObject(), audience)
 
   if (req.path.endsWith('/activity')) {
@@ -468,7 +533,7 @@ async function videoPlaylistController (req: express.Request, res: express.Respo
   playlist.OwnerAccount = await AccountModel.load(playlist.ownerAccountId)
 
   const json = await playlist.toActivityPubObject(req.query.page, null)
-  const audience = getAudience(playlist.OwnerAccount.Actor, playlist.privacy === VideoPlaylistPrivacy.PUBLIC)
+  const audience = getPlaylistAudience(playlist.OwnerAccount.Actor, playlist.privacy)
   const object = audiencify(json, audience)
 
   return activityPubResponse(activityPubContextify(object, 'Playlist', getContextFilter()), res)

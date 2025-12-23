@@ -5,7 +5,6 @@ import { ActorFollowModel } from '../../actor-follow.js'
 import { ActorImageModel } from '../../actor-image.js'
 
 export class ActorFollowTableAttributes {
-
   @Memoize()
   getFollowAttributes () {
     return ActorFollowModel.getSQLAttributes('ActorFollowModel').join(', ')
@@ -13,7 +12,7 @@ export class ActorFollowTableAttributes {
 
   @Memoize()
   getActorAttributes (actorTableName: string) {
-    return ActorModel.getSQLAttributes(actorTableName, `${actorTableName}.`).join(', ')
+    return ActorModel.getSQLAPIAttributes(actorTableName, `${actorTableName}.`).join(', ')
   }
 
   @Memoize()

@@ -15,19 +15,19 @@ import { LocalVideoViewerModel } from './local-video-viewer.js'
 })
 export class LocalVideoViewerWatchSectionModel extends SequelizeModel<LocalVideoViewerWatchSectionModel> {
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @AllowNull(false)
   @Column
-  watchStart: number
+  declare watchStart: number
 
   @AllowNull(false)
   @Column
-  watchEnd: number
+  declare watchEnd: number
 
   @ForeignKey(() => LocalVideoViewerModel)
   @Column
-  localVideoViewerId: number
+  declare localVideoViewerId: number
 
   @BelongsTo(() => LocalVideoViewerModel, {
     foreignKey: {
@@ -35,7 +35,7 @@ export class LocalVideoViewerWatchSectionModel extends SequelizeModel<LocalVideo
     },
     onDelete: 'CASCADE'
   })
-  LocalVideoViewer: Awaited<LocalVideoViewerModel>
+  declare LocalVideoViewer: Awaited<LocalVideoViewerModel>
 
   static async bulkCreateSections (options: {
     localVideoViewerId: number

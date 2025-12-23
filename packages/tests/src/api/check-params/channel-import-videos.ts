@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
-import { areHttpImportTestsDisabled } from '@peertube/peertube-node-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
+import { areHttpImportTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   ChannelsCommand,
   cleanupTests,
@@ -11,6 +10,7 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '@peertube/peertube-server-commands'
+import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 
 describe('Test videos import in a channel API validator', function () {
   let server: PeerTubeServer
@@ -23,6 +23,8 @@ describe('Test videos import in a channel API validator', function () {
     videoQuotaDaily: -1,
     channelSyncId: -1
   }
+  let editorToken: string
+
   let command: ChannelsCommand
 
   // ---------------------------------------------------------------
@@ -62,6 +64,8 @@ describe('Test videos import in a channel API validator', function () {
       })
       userInfo.channelSyncId = videoChannelSync.id
     }
+
+    editorToken = await server.channelCollaborators.createEditor('user_editor', userCreds.username + '_channel')
 
     command = server.channels
   })
@@ -194,13 +198,16 @@ describe('Test videos import in a channel API validator', function () {
     })
   })
 
-  it('Should succeed when sync is run with root and for another user\'s channel', async function () {
+  it('Should succeed when sync is run with root or an editor', async function () {
     if (!areHttpImportTestsDisabled()) return
 
-    await command.importVideos({
-      channelName: 'fake_channel',
-      externalChannelUrl: FIXTURE_URLS.youtubeChannel
-    })
+    for (const token of [ server.accessToken, editorToken ]) {
+      await command.importVideos({
+        channelName: 'fake_channel',
+        externalChannelUrl: FIXTURE_URLS.youtubeChannel,
+        token
+      })
+    }
   })
 
   after(async function () {

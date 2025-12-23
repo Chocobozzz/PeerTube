@@ -25,19 +25,19 @@ import { getSort } from '../shared/sort.js'
 })
 export class UserVideoHistoryModel extends SequelizeModel<UserVideoHistoryModel> {
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @AllowNull(false)
   @IsInt
   @Column
-  currentTime: number
+  declare currentTime: number
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -45,11 +45,11 @@ export class UserVideoHistoryModel extends SequelizeModel<UserVideoHistoryModel>
     },
     onDelete: 'CASCADE'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   @ForeignKey(() => UserModel)
   @Column
-  userId: number
+  declare userId: number
 
   @BelongsTo(() => UserModel, {
     foreignKey: {
@@ -57,7 +57,7 @@ export class UserVideoHistoryModel extends SequelizeModel<UserVideoHistoryModel>
     },
     onDelete: 'CASCADE'
   })
-  User: Awaited<UserModel>
+  declare User: Awaited<UserModel>
 
   // FIXME: have to specify the result type to not break peertube typings generation
   static listForApi (user: MUserAccountId, start: number, count: number, search?: string): Promise<ResultList<VideoModel>> {

@@ -1,35 +1,43 @@
-<div *ngIf="webNotifications">
-  <ng-container *ngFor="let group of notificationSettingGroups">
-    <ng-container *ngIf="hasNotificationsInGroup(group)">
-      <div class="header notification-row">
-        <div i18n>{{ group.label }}</div>
-        <div i18n>Web</div>
-        <div i18n *ngIf="emailEnabled">Email</div>
-      </div>
+@if (webNotifications) {
+  <div>
+    @for (group of notificationSettingGroups; track group) {
+      @if (hasNotificationsInGroup(group)) {
+        <div class="header notification-row">
+          <div i18n>{{ group.label }}</div>
+          <div i18n>Web</div>
 
-      <ng-container *ngFor="let notificationType of group.keys">
-        <div class="small notification-row" *ngIf="hasUserRight(notificationType)">
-          <div>{{ labelNotifications[notificationType] }}</div>
-
-          <div>
-            <my-input-switch
-              [label]="getWebLabel(notificationType)"
-              [inputName]="'web-notification-' + notificationType"
-              [(ngModel)]="webNotifications[notificationType]"
-              (ngModelChange)="updateWebSetting(notificationType, webNotifications[notificationType])"
-            ></my-input-switch>
-          </div>
-
-          <div *ngIf="emailEnabled">
-            <my-input-switch
-              [label]="getEmailLabel(notificationType)"
-              [inputName]="'email-notification-' + notificationType"
-              [(ngModel)]="emailNotifications[notificationType]"
-              (ngModelChange)="updateEmailSetting(notificationType, emailNotifications[notificationType])"
-            ></my-input-switch>
-          </div>
+          @if (emailEnabled) {
+            <div i18n>Email</div>
+          }
         </div>
-      </ng-container>
-    </ng-container>
-  </ng-container>
-</div>
+
+        @for (notificationType of group.keys; track notificationType) {
+          @if (hasUserRight(notificationType)) {
+            <div class="small notification-row">
+              <div>{{ labelNotifications[notificationType] }}</div>
+              <div>
+                <my-input-switch
+                  [label]="getWebLabel(notificationType)"
+                  [inputName]="'web-notification-' + notificationType"
+                  [(ngModel)]="webNotifications[notificationType]"
+                  (ngModelChange)="updateWebSetting(notificationType, webNotifications[notificationType])"
+                ></my-input-switch>
+              </div>
+
+              @if (emailEnabled) {
+                <div>
+                  <my-input-switch
+                    [label]="getEmailLabel(notificationType)"
+                    [inputName]="'email-notification-' + notificationType"
+                    [(ngModel)]="emailNotifications[notificationType]"
+                    (ngModelChange)="updateEmailSetting(notificationType, emailNotifications[notificationType])"
+                  ></my-input-switch>
+                </div>
+              }
+            </div>
+          }
+        }
+      }
+    }
+  </div>
+}

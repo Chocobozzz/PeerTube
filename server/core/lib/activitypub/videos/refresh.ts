@@ -43,8 +43,10 @@ async function refreshVideoIfNeeded (options: {
 
     return video
   } catch (err) {
-    if ((err as PeerTubeRequestError).statusCode === HttpStatusCode.NOT_FOUND_404) {
-      logger.info('Cannot refresh remote video %s: video does not exist anymore. Deleting it.', video.url, lTags())
+    const statusCode = (err as PeerTubeRequestError).statusCode
+
+    if (statusCode === HttpStatusCode.NOT_FOUND_404 || statusCode === HttpStatusCode.GONE_410) {
+      logger.info('Cannot refresh remote video %s: video does not exist anymore (404/410 error code). Deleting it.', video.url, lTags())
 
       // Video does not exist anymore
       await video.destroy()

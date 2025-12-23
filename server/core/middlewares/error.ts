@@ -11,10 +11,7 @@ function apiFailMiddleware (req: express.Request, res: express.Response, next: e
       ...data,
 
       docs: res.locals.docUrl,
-      code: type,
-
-      // For <= 3.2 compatibility
-      error: message
+      code: type
     })
 
     const json = new ProblemDocument({

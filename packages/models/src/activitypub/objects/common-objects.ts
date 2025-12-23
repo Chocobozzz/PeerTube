@@ -1,9 +1,9 @@
 import { AbusePredefinedReasonsString } from '../../moderation/abuse/abuse-reason.model.js'
+import { NSFWFlagString } from '../../videos/nsfw-flag.enum.js'
 
 export interface ActivityIdentifierObject {
   identifier: string
   name: string
-  url?: string
 }
 
 export interface ActivityIconObject {
@@ -14,6 +14,18 @@ export interface ActivityIconObject {
   height: number | null
 }
 
+// ---------------------------------------------------------------------------
+
+export type ActivityVideoUrlObjectAttachment = {
+  type: 'PropertyValue'
+  name: 'ffprobe_codec_type'
+  value: 'video' | 'audio'
+} | {
+  type: 'PropertyValue'
+  name: 'peertube_format_flag'
+  value: 'web-video' | 'fragmented'
+}
+
 export type ActivityVideoUrlObject = {
   type: 'Link'
   mediaType: 'video/mp4' | 'video/webm' | 'video/ogg' | 'audio/mp4'
@@ -22,7 +34,11 @@ export type ActivityVideoUrlObject = {
   width: number | null
   size: number
   fps: number
+
+  attachment: ActivityVideoUrlObjectAttachment[]
 }
+
+// ---------------------------------------------------------------------------
 
 export type ActivityPlaylistSegmentHashesObject = {
   type: 'Link'
@@ -33,7 +49,7 @@ export type ActivityPlaylistSegmentHashesObject = {
 
 export type ActivityVideoFileMetadataUrlObject = {
   type: 'Link'
-  rel: [ 'metadata', any ]
+  rel: ['metadata', any]
   mediaType: 'application/json'
   height: number
   width: number | null
@@ -41,9 +57,15 @@ export type ActivityVideoFileMetadataUrlObject = {
   fps: number
 }
 
+export type ActivityCaptionUrlObject = {
+  type: 'Link'
+  mediaType: 'text/vtt'
+  href: string
+}
+
 export type ActivityTrackerUrlObject = {
   type: 'Link'
-  rel: [ 'tracker', 'websocket' | 'http' ]
+  rel: ['tracker', 'websocket' | 'http']
   name: string
   href: string
 }
@@ -101,24 +123,31 @@ export interface ActivityFlagReasonObject {
   name: AbusePredefinedReasonsString
 }
 
+export interface ActivitySensitiveTagObject {
+  type: 'SensitiveTag'
+  name: NSFWFlagString
+}
+
 export type ActivityTagObject =
-  ActivityPlaylistSegmentHashesObject
+  | ActivityPlaylistSegmentHashesObject
   | ActivityStreamingPlaylistInfohashesObject
   | ActivityVideoUrlObject
   | ActivityHashTagObject
+  | ActivitySensitiveTagObject
   | ActivityMentionObject
   | ActivityBitTorrentUrlObject
   | ActivityMagnetUrlObject
   | ActivityVideoFileMetadataUrlObject
 
 export type ActivityUrlObject =
-  ActivityVideoUrlObject
+  | ActivityVideoUrlObject
   | ActivityPlaylistUrlObject
   | ActivityBitTorrentUrlObject
   | ActivityMagnetUrlObject
   | ActivityHtmlUrlObject
   | ActivityVideoFileMetadataUrlObject
   | ActivityTrackerUrlObject
+  | ActivityCaptionUrlObject
 
 export type ActivityPubAttributedTo = { type: 'Group' | 'Person', id: string } | string
 

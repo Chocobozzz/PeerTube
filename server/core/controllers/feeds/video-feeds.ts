@@ -1,23 +1,31 @@
-import express from 'express'
-import { extname } from 'path'
 import { Feed } from '@peertube/feed'
+import { buildDownloadFilesUrl } from '@peertube/peertube-core-utils'
+import { VideoInclude, VideoResolution } from '@peertube/peertube-models'
+import { getVideoFileMimeType } from '@server/lib/video-file.js'
 import { cacheRouteFactory } from '@server/middlewares/index.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { VideoInclude, VideoResolution } from '@peertube/peertube-models'
-import { buildNSFWFilter } from '../../helpers/express-utils.js'
+import express from 'express'
+import { extname } from 'path'
+import { buildNSFWFilters } from '../../helpers/express-utils.js'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers/constants.js'
 import {
   asyncMiddleware,
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidatorFactory,
+  feedsAccountOrChannelFiltersValidator,
   feedsFormatValidator,
   setDefaultVideosSort,
   setFeedFormatContentType,
-  feedsAccountOrChannelFiltersValidator,
   videosSortValidator,
   videoSubscriptionFeedsValidator
 } from '../../middlewares/index.js'
-import { buildFeedMetadata, getCommonVideoFeedAttributes, getVideosForFeeds, initFeed, sendFeed } from './shared/index.js'
-import { getVideoFileMimeType } from '@server/lib/video-file.js'
+import {
+  buildFeedMetadata,
+  getCommonVideoFeedAttributes,
+  getPodcastFeedUrlCustomTag,
+  getVideosForFeeds,
+  initFeed,
+  sendFeed
+} from './shared/index.js'
 
 const videoFeedsRouter = express.Router()
 
@@ -27,24 +35,26 @@ const { middleware: cacheRouteMiddleware } = cacheRouteFactory({
 
 // ---------------------------------------------------------------------------
 
-videoFeedsRouter.get('/videos.:format',
+videoFeedsRouter.get(
+  '/videos.:format',
   videosSortValidator,
   setDefaultVideosSort,
   feedsFormatValidator,
   setFeedFormatContentType,
   cacheRouteMiddleware(ROUTE_CACHE_LIFETIME.FEEDS),
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidatorFactory(),
   asyncMiddleware(feedsAccountOrChannelFiltersValidator),
   asyncMiddleware(generateVideoFeed)
 )
 
-videoFeedsRouter.get('/subscriptions.:format',
+videoFeedsRouter.get(
+  '/subscriptions.:format',
   videosSortValidator,
   setDefaultVideosSort,
   feedsFormatValidator,
   setFeedFormatContentType,
   cacheRouteMiddleware(ROUTE_CACHE_LIFETIME.FEEDS),
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidatorFactory(),
   asyncMiddleware(videoSubscriptionFeedsValidator),
   asyncMiddleware(generateVideoFeedForSubscriptions)
 )
@@ -61,22 +71,33 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
   const account = res.locals.account
   const videoChannel = res.locals.videoChannel
 
-  const { name, description, imageUrl, accountImageUrl, link, accountLink } = await buildFeedMetadata({ videoChannel, account })
+  const { name, description, imageUrl, ownerImageUrl, link, ownerLink } = await buildFeedMetadata({ videoChannel, account })
 
-  const feed = initFeed({
+  const feed = await initFeed({
     name,
     description,
     link,
     isPodcast: false,
-    imageUrl,
-    author: { name, link: accountLink, imageUrl: accountImageUrl },
+    imageUrl: ownerImageUrl || imageUrl,
+    author: { name, link: ownerLink },
     resourceType: 'videos',
-    queryString: new URL(WEBSERVER.URL + req.url).search
+    queryString: new URL(WEBSERVER.URL + req.url).search,
+
+    customXMLNS: [
+      {
+        name: 'podcast',
+        value: 'https://podcastindex.org/namespace/1.0'
+      }
+    ],
+    customTags: videoChannel
+      ? [ getPodcastFeedUrlCustomTag(videoChannel) ]
+      : []
   })
 
   const data = await getVideosForFeeds({
+    ...buildNSFWFilters({ req, res }),
+
     sort: req.query.sort,
-    nsfw: buildNSFWFilter(res, req.query.nsfw),
     isLocal: req.query.isLocal,
     include: req.query.include | VideoInclude.FILES,
     accountId: account?.id,
@@ -93,7 +114,7 @@ async function generateVideoFeedForSubscriptions (req: express.Request, res: exp
   const account = res.locals.account
   const { name, description, imageUrl, link } = await buildFeedMetadata({ account })
 
-  const feed = initFeed({
+  const feed = await initFeed({
     name,
     description,
     link,
@@ -104,8 +125,9 @@ async function generateVideoFeedForSubscriptions (req: express.Request, res: exp
   })
 
   const data = await getVideosForFeeds({
+    ...buildNSFWFilters({ req, res }),
+
     sort: req.query.sort,
-    nsfw: buildNSFWFilter(res, req.query.nsfw),
     isLocal: req.query.isLocal,
     include: req.query.include | VideoInclude.FILES,
     displayOnlyForFollower: {
@@ -149,6 +171,9 @@ function addVideosToFeed (feed: Feed, videos: VideoModel[]) {
       }
     })
 
+    const { videoFile: bestFile, separatedAudioFile: bestAudioFile } = video.getMaxQualityAudioAndVideoFiles()
+    const bestFiles = [ bestFile, bestAudioFile ].filter(f => !!f)
+
     feed.addItem({
       ...getCommonVideoFeedAttributes(video),
 
@@ -162,11 +187,11 @@ function addVideosToFeed (feed: Feed, videos: VideoModel[]) {
       torrents,
 
       // Enclosure
-      video: videoFiles.length !== 0
+      video: bestFiles.length !== 0
         ? {
-          url: videoFiles[0].url,
-          length: videoFiles[0].fileSize,
-          type: videoFiles[0].type
+          url: buildDownloadFilesUrl({ baseUrl: WEBSERVER.URL, videoFiles: bestFiles.map(f => f.id), videoUUID: video.uuid }),
+          length: bestFiles.reduce((p, f) => p + f.size, 0),
+          type: getVideoFileMimeType('.mp4', bestFile.resolution === VideoResolution.H_NOVIDEO)
         }
         : undefined,
 

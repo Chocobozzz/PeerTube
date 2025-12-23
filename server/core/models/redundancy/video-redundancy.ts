@@ -1,3 +1,15 @@
+import {
+  CacheFileObject,
+  RedundancyInformation,
+  VideoPrivacy,
+  VideoRedundanciesTarget,
+  VideoRedundancy,
+  VideoRedundancyStrategy,
+  VideoRedundancyStrategyWithManual
+} from '@peertube/peertube-models'
+import { isTestInstance } from '@peertube/peertube-node-utils'
+import { getServerActor } from '@server/models/application/application.js'
+import { MActor, MVideoForRedundancyAPI, MVideoRedundancy, MVideoRedundancyAP, MVideoRedundancyVideo } from '@server/types/models/index.js'
 import sample from 'lodash-es/sample.js'
 import { literal, Op, QueryTypes, Transaction, WhereOptions } from 'sequelize'
 import {
@@ -8,25 +20,12 @@ import {
   CreatedAt,
   DataType,
   ForeignKey,
-  Is, Scopes,
+  Is,
+  Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import {
-  ActivityVideoUrlObject,
-  CacheFileObject,
-  FileRedundancyInformation,
-  StreamingPlaylistRedundancyInformation,
-  VideoPrivacy,
-  VideoRedundanciesTarget,
-  VideoRedundancy,
-  VideoRedundancyStrategy,
-  VideoRedundancyStrategyWithManual
-} from '@peertube/peertube-models'
-import { isTestInstance } from '@peertube/peertube-node-utils'
-import { getServerActor } from '@server/models/application/application.js'
-import { MActor, MVideoForRedundancyAPI, MVideoRedundancy, MVideoRedundancyAP, MVideoRedundancyVideo } from '@server/types/models/index.js'
-import { isActivityPubUrlValid, isUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
+import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
 import { logger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants.js'
@@ -38,7 +37,6 @@ import { VideoChannelModel } from '../video/video-channel.js'
 import { VideoFileModel } from '../video/video-file.js'
 import { VideoStreamingPlaylistModel } from '../video/video-streaming-playlist.js'
 import { VideoModel } from '../video/video.js'
-import { getVideoFileMimeType } from '@server/lib/video-file.js'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO'
@@ -47,16 +45,6 @@ export enum ScopeNames {
 @Scopes(() => ({
   [ScopeNames.WITH_VIDEO]: {
     include: [
-      {
-        model: VideoFileModel,
-        required: false,
-        include: [
-          {
-            model: VideoModel,
-            required: true
-          }
-        ]
-      },
       {
         model: VideoStreamingPlaylistModel,
         required: false,
@@ -70,12 +58,11 @@ export enum ScopeNames {
     ]
   }
 }))
-
 @Table({
   tableName: 'videoRedundancy',
   indexes: [
     {
-      fields: [ 'videoFileId' ]
+      fields: [ 'videoStreamingPlaylistId' ]
     },
     {
       fields: [ 'actorId' ]
@@ -90,58 +77,44 @@ export enum ScopeNames {
   ]
 })
 export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
-
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @AllowNull(true)
   @Column
-  expiresOn: Date
+  declare expiresOn: Date
 
   @AllowNull(false)
-  @Is('VideoRedundancyFileUrl', value => throwIfNotValid(value, isUrlValid, 'fileUrl'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS_REDUNDANCY.URL.max))
-  fileUrl: string
+  declare fileUrl: string
 
   @AllowNull(false)
   @Is('VideoRedundancyUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS_REDUNDANCY.URL.max))
-  url: string
+  declare url: string
 
   @AllowNull(true)
   @Column
-  strategy: string // Only used by us
-
-  @ForeignKey(() => VideoFileModel)
-  @Column
-  videoFileId: number
-
-  @BelongsTo(() => VideoFileModel, {
-    foreignKey: {
-      allowNull: true
-    },
-    onDelete: 'cascade'
-  })
-  VideoFile: Awaited<VideoFileModel>
+  declare strategy: string // Only used by us
 
   @ForeignKey(() => VideoStreamingPlaylistModel)
   @Column
-  videoStreamingPlaylistId: number
+  declare videoStreamingPlaylistId: number
 
   @BelongsTo(() => VideoStreamingPlaylistModel, {
     foreignKey: {
-      allowNull: true
+      allowNull: false
     },
     onDelete: 'cascade'
   })
-  VideoStreamingPlaylist: Awaited<VideoStreamingPlaylistModel>
+  declare VideoStreamingPlaylist: Awaited<VideoStreamingPlaylistModel>
 
   @ForeignKey(() => ActorModel)
   @Column
-  actorId: number
+  declare actorId: number
 
   @BelongsTo(() => ActorModel, {
     foreignKey: {
@@ -149,97 +122,34 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
     },
     onDelete: 'cascade'
   })
-  Actor: Awaited<ActorModel>
+  declare Actor: Awaited<ActorModel>
 
   @BeforeDestroy
   static async removeFile (instance: VideoRedundancyModel) {
-    if (!instance.isOwned()) return
+    if (!instance.isLocal()) return
 
-    if (instance.videoFileId) {
-      const videoFile = await VideoFileModel.loadWithVideo(instance.videoFileId)
+    const videoStreamingPlaylist = await VideoStreamingPlaylistModel.loadWithVideo(instance.videoStreamingPlaylistId)
 
-      const logIdentifier = `${videoFile.Video.uuid}-${videoFile.resolution}`
-      logger.info('Removing duplicated video file %s.', logIdentifier)
+    const videoUUID = videoStreamingPlaylist.Video.uuid
+    logger.info('Removing duplicated video streaming playlist %s.', videoUUID)
 
-      videoFile.Video.removeWebVideoFile(videoFile, true)
-        .catch(err => logger.error('Cannot delete %s files.', logIdentifier, { err }))
-    }
-
-    if (instance.videoStreamingPlaylistId) {
-      const videoStreamingPlaylist = await VideoStreamingPlaylistModel.loadWithVideo(instance.videoStreamingPlaylistId)
-
-      const videoUUID = videoStreamingPlaylist.Video.uuid
-      logger.info('Removing duplicated video streaming playlist %s.', videoUUID)
-
-      videoStreamingPlaylist.Video.removeStreamingPlaylistFiles(videoStreamingPlaylist, true)
-                            .catch(err => logger.error('Cannot delete video streaming playlist files of %s.', videoUUID, { err }))
-    }
+    videoStreamingPlaylist.Video.removeAllStreamingPlaylistFiles({ playlist: videoStreamingPlaylist, isRedundancy: true })
+      .catch(err => logger.error('Cannot delete video streaming playlist files of %s.', videoUUID, { err }))
 
     return undefined
   }
 
-  static async loadLocalByFileId (videoFileId: number): Promise<MVideoRedundancyVideo> {
+  static async listLocalByStreamingPlaylistId (videoStreamingPlaylistId: number): Promise<MVideoRedundancyVideo[]> {
     const actor = await getServerActor()
 
     const query = {
       where: {
         actorId: actor.id,
-        videoFileId
+        videoStreamingPlaylistId
       }
     }
 
-    return VideoRedundancyModel.scope(ScopeNames.WITH_VIDEO).findOne(query)
-  }
-
-  static async listLocalByVideoId (videoId: number): Promise<MVideoRedundancyVideo[]> {
-    const actor = await getServerActor()
-
-    const queryStreamingPlaylist = {
-      where: {
-        actorId: actor.id
-      },
-      include: [
-        {
-          model: VideoStreamingPlaylistModel.unscoped(),
-          required: true,
-          include: [
-            {
-              model: VideoModel.unscoped(),
-              required: true,
-              where: {
-                id: videoId
-              }
-            }
-          ]
-        }
-      ]
-    }
-
-    const queryFiles = {
-      where: {
-        actorId: actor.id
-      },
-      include: [
-        {
-          model: VideoFileModel,
-          required: true,
-          include: [
-            {
-              model: VideoModel,
-              required: true,
-              where: {
-                id: videoId
-              }
-            }
-          ]
-        }
-      ]
-    }
-
-    return Promise.all([
-      VideoRedundancyModel.findAll(queryStreamingPlaylist),
-      VideoRedundancyModel.findAll(queryFiles)
-    ]).then(([ r1, r2 ]) => r1.concat(r2))
+    return VideoRedundancyModel.scope(ScopeNames.WITH_VIDEO).findAll(query)
   }
 
   static async loadLocalByStreamingPlaylistId (videoStreamingPlaylistId: number): Promise<MVideoRedundancyVideo> {
@@ -275,47 +185,9 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
     return VideoRedundancyModel.findOne(query)
   }
 
-  static async isLocalByVideoUUIDExists (uuid: string) {
-    const actor = await getServerActor()
-
-    const query = {
-      raw: true,
-      attributes: [ 'id' ],
-      where: {
-        actorId: actor.id
-      },
-      include: [
-        {
-          attributes: [],
-          model: VideoFileModel,
-          required: true,
-          include: [
-            {
-              attributes: [],
-              model: VideoModel,
-              required: true,
-              where: {
-                uuid
-              }
-            }
-          ]
-        }
-      ]
-    }
-
-    return VideoRedundancyModel.findOne(query)
-                               .then(r => !!r)
-  }
-
-  static async getVideoSample (p: Promise<VideoModel[]>) {
-    const rows = await p
-    if (rows.length === 0) return undefined
-
-    const ids = rows.map(r => r.id)
-    const id = sample(ids)
-
-    return VideoModel.loadWithFiles(id, undefined, !isTestInstance())
-  }
+  // ---------------------------------------------------------------------------
+  // Select redundancy candidates
+  // ---------------------------------------------------------------------------
 
   static async findMostViewToDuplicate (randomizedFactor: number) {
     const peertubeActor = await getServerActor()
@@ -326,12 +198,12 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
       limit: randomizedFactor,
       order: getVideoSort('-views'),
       where: {
-        privacy: VideoPrivacy.PUBLIC,
-        isLive: false,
+        ...this.buildVideoCandidateWhere(),
         ...this.buildVideoIdsForDuplication(peertubeActor)
       },
       include: [
-        VideoRedundancyModel.buildServerRedundancyInclude()
+        VideoRedundancyModel.buildRedundancyAllowedInclude(),
+        VideoRedundancyModel.buildStreamingPlaylistRequiredInclude()
       ]
     }
 
@@ -349,12 +221,12 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
       limit: randomizedFactor,
       order: getVideoSort('-trending'),
       where: {
-        privacy: VideoPrivacy.PUBLIC,
-        isLive: false,
+        ...this.buildVideoCandidateWhere(),
         ...this.buildVideoIdsForDuplication(peertubeActor)
       },
       include: [
-        VideoRedundancyModel.buildServerRedundancyInclude(),
+        VideoRedundancyModel.buildRedundancyAllowedInclude(),
+        VideoRedundancyModel.buildStreamingPlaylistRequiredInclude(),
 
         VideoModel.buildTrendingQuery(CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS)
       ]
@@ -372,15 +244,16 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
       limit: randomizedFactor,
       order: getVideoSort('-publishedAt'),
       where: {
-        privacy: VideoPrivacy.PUBLIC,
-        isLive: false,
+        ...this.buildVideoCandidateWhere(),
+        ...this.buildVideoIdsForDuplication(peertubeActor),
+
         views: {
           [Op.gte]: minViews
-        },
-        ...this.buildVideoIdsForDuplication(peertubeActor)
+        }
       },
       include: [
-        VideoRedundancyModel.buildServerRedundancyInclude(),
+        VideoRedundancyModel.buildRedundancyAllowedInclude(),
+        VideoRedundancyModel.buildStreamingPlaylistRequiredInclude(),
 
         // Required by publishedAt sort
         {
@@ -392,6 +265,90 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
 
     return VideoRedundancyModel.getVideoSample(VideoModel.unscoped().findAll(query))
   }
+
+  static async isLocalByVideoUUIDExists (uuid: string) {
+    const actor = await getServerActor()
+
+    const query = {
+      raw: true,
+      attributes: [ 'id' ],
+      where: {
+        actorId: actor.id
+      },
+      include: [
+        {
+          model: VideoStreamingPlaylistModel.unscoped(),
+          required: true,
+          include: [
+            {
+              attributes: [],
+              model: VideoModel.unscoped(),
+              required: true,
+              where: {
+                uuid
+              }
+            }
+          ]
+        }
+      ]
+    }
+
+    return VideoRedundancyModel.findOne(query)
+      .then(r => !!r)
+  }
+
+  static async getVideoSample (p: Promise<VideoModel[]>) {
+    const rows = await p
+    if (rows.length === 0) return undefined
+
+    const ids = rows.map(r => r.id)
+    const id = sample(ids)
+
+    return VideoModel.loadWithFiles(id, undefined, !isTestInstance())
+  }
+
+  private static buildVideoCandidateWhere () {
+    return {
+      privacy: VideoPrivacy.PUBLIC,
+      remote: true,
+      isLive: false
+    }
+  }
+
+  private static buildRedundancyAllowedInclude () {
+    return {
+      attributes: [],
+      model: VideoChannelModel.unscoped(),
+      required: true,
+      include: [
+        {
+          attributes: [],
+          model: ActorModel.unscoped(),
+          required: true,
+          include: [
+            {
+              attributes: [],
+              model: ServerModel.unscoped(),
+              required: true,
+              where: {
+                redundancyAllowed: true
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+
+  private static buildStreamingPlaylistRequiredInclude () {
+    return {
+      attributes: [],
+      required: true,
+      model: VideoStreamingPlaylistModel.unscoped()
+    }
+  }
+
+  // ---------------------------------------------------------------------------
 
   static async loadOldestLocalExpired (strategy: VideoRedundancyStrategy, expiresAfterMs: number): Promise<MVideoRedundancyVideo> {
     const expiredDate = new Date()
@@ -447,60 +404,38 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
 
   static async listLocalOfServer (serverId: number) {
     const actor = await getServerActor()
-    const buildVideoInclude = () => ({
-      model: VideoModel,
-      required: true,
-      include: [
-        {
-          attributes: [],
-          model: VideoChannelModel.unscoped(),
-          required: true,
-          include: [
-            {
-              attributes: [],
-              model: ActorModel.unscoped(),
-              required: true,
-              where: {
-                serverId
-              }
-            }
-          ]
-        }
-      ]
-    })
 
     const query = {
       where: {
-        [Op.and]: [
-          {
-            actorId: actor.id
-          },
-          {
-            [Op.or]: [
-              {
-                '$VideoStreamingPlaylist.id$': {
-                  [Op.ne]: null
-                }
-              },
-              {
-                '$VideoFile.id$': {
-                  [Op.ne]: null
-                }
-              }
-            ]
-          }
-        ]
+        actorId: actor.id
       },
       include: [
         {
-          model: VideoFileModel.unscoped(),
-          required: false,
-          include: [ buildVideoInclude() ]
-        },
-        {
           model: VideoStreamingPlaylistModel.unscoped(),
-          required: false,
-          include: [ buildVideoInclude() ]
+          required: true,
+          include: [
+            {
+              model: VideoModel,
+              required: true,
+              include: [
+                {
+                  attributes: [],
+                  model: VideoChannelModel.unscoped(),
+                  required: true,
+                  include: [
+                    {
+                      attributes: [],
+                      model: ActorModel.unscoped(),
+                      required: true,
+                      where: {
+                        serverId
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ]
     }
@@ -518,51 +453,16 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
     const { start, count, sort, target, strategy } = options
     const redundancyWhere: WhereOptions = {}
     const videosWhere: WhereOptions = {}
-    let redundancySqlSuffix = ''
 
     if (target === 'my-videos') {
       Object.assign(videosWhere, { remote: false })
     } else if (target === 'remote-videos') {
       Object.assign(videosWhere, { remote: true })
       Object.assign(redundancyWhere, { strategy: { [Op.ne]: null } })
-      redundancySqlSuffix = ' AND "videoRedundancy"."strategy" IS NOT NULL'
     }
 
     if (strategy) {
       Object.assign(redundancyWhere, { strategy })
-    }
-
-    const videoFilterWhere = {
-      [Op.and]: [
-        {
-          [Op.or]: [
-            {
-              id: {
-                [Op.in]: literal(
-                  '(' +
-                  'SELECT "videoId" FROM "videoFile" ' +
-                  'INNER JOIN "videoRedundancy" ON "videoRedundancy"."videoFileId" = "videoFile".id' +
-                  redundancySqlSuffix +
-                  ')'
-                )
-              }
-            },
-            {
-              id: {
-                [Op.in]: literal(
-                  '(' +
-                  'select "videoId" FROM "videoStreamingPlaylist" ' +
-                  'INNER JOIN "videoRedundancy" ON "videoRedundancy"."videoStreamingPlaylistId" = "videoStreamingPlaylist".id' +
-                  redundancySqlSuffix +
-                  ')'
-                )
-              }
-            }
-          ]
-        },
-
-        videosWhere
-      ]
     }
 
     // /!\ On video model /!\
@@ -570,46 +470,43 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
       offset: start,
       limit: count,
       order: getSort(sort),
+      where: videosWhere,
       include: [
         {
-          required: false,
-          model: VideoFileModel,
-          include: [
-            {
-              model: VideoRedundancyModel.unscoped(),
-              required: false,
-              where: redundancyWhere
-            }
-          ]
-        },
-        {
-          required: false,
+          required: true,
           model: VideoStreamingPlaylistModel.unscoped(),
           include: [
             {
               model: VideoRedundancyModel.unscoped(),
-              required: false,
+              required: true,
               where: redundancyWhere
             },
             {
               model: VideoFileModel,
-              required: false
+              required: true
             }
           ]
         }
-      ],
-      where: videoFilterWhere
-    }
-
-    // /!\ On video model /!\
-    const countOptions = {
-      where: videoFilterWhere
+      ]
     }
 
     return Promise.all([
       VideoModel.findAll(findOptions),
 
-      VideoModel.count(countOptions)
+      VideoModel.count({
+        where: {
+          ...videosWhere,
+
+          id: {
+            [Op.in]: literal(
+              '(' +
+                'SELECT "videoId" FROM "videoStreamingPlaylist" ' +
+                'INNER JOIN "videoRedundancy" ON "videoRedundancy"."videoStreamingPlaylistId" = "videoStreamingPlaylist".id' +
+                ')'
+            )
+          }
+        }
+      })
     ]).then(([ data, total ]) => ({ total, data }))
   }
 
@@ -618,22 +515,16 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
 
     const sql = `WITH "tmp" AS ` +
       `(` +
-        `SELECT "videoFile"."size" AS "videoFileSize", "videoStreamingFile"."size" AS "videoStreamingFileSize", ` +
-          `"videoFile"."videoId" AS "videoFileVideoId", "videoStreamingPlaylist"."videoId" AS "videoStreamingVideoId"` +
-        `FROM "videoRedundancy" AS "videoRedundancy" ` +
-        `LEFT JOIN "videoFile" AS "videoFile" ON "videoRedundancy"."videoFileId" = "videoFile"."id" ` +
-        `LEFT JOIN "videoStreamingPlaylist" ON "videoRedundancy"."videoStreamingPlaylistId" = "videoStreamingPlaylist"."id" ` +
-        `LEFT JOIN "videoFile" AS "videoStreamingFile" ` +
-          `ON "videoStreamingPlaylist"."id" = "videoStreamingFile"."videoStreamingPlaylistId" ` +
-        `WHERE "videoRedundancy"."strategy" = :strategy AND "videoRedundancy"."actorId" = :actorId` +
-      `), ` +
-      `"videoIds" AS (` +
-        `SELECT "videoFileVideoId" AS "videoId" FROM "tmp" ` +
-        `UNION SELECT "videoStreamingVideoId" AS "videoId" FROM "tmp" ` +
+      `SELECT "videoStreamingFile"."size" AS "videoStreamingFileSize", "videoStreamingPlaylist"."videoId" AS "videoStreamingVideoId"` +
+      `FROM "videoRedundancy" AS "videoRedundancy" ` +
+      `LEFT JOIN "videoStreamingPlaylist" ON "videoRedundancy"."videoStreamingPlaylistId" = "videoStreamingPlaylist"."id" ` +
+      `LEFT JOIN "videoFile" AS "videoStreamingFile" ` +
+      `ON "videoStreamingPlaylist"."id" = "videoStreamingFile"."videoStreamingPlaylistId" ` +
+      `WHERE "videoRedundancy"."strategy" = :strategy AND "videoRedundancy"."actorId" = :actorId` +
       `) ` +
       `SELECT ` +
-      `COALESCE(SUM("videoFileSize"), '0') + COALESCE(SUM("videoStreamingFileSize"), '0') AS "totalUsed", ` +
-      `(SELECT COUNT("videoIds"."videoId") FROM "videoIds") AS "totalVideos", ` +
+      `COALESCE(SUM("videoStreamingFileSize"), '0') AS "totalUsed", ` +
+      `COUNT(DISTINCT "videoStreamingVideoId") AS "totalVideos", ` +
       `COUNT(*) AS "totalVideoFiles" ` +
       `FROM "tmp"`
 
@@ -648,22 +539,7 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
   }
 
   static toFormattedJSONStatic (video: MVideoForRedundancyAPI): VideoRedundancy {
-    const filesRedundancies: FileRedundancyInformation[] = []
-    const streamingPlaylistsRedundancies: StreamingPlaylistRedundancyInformation[] = []
-
-    for (const file of video.VideoFiles) {
-      for (const redundancy of file.RedundancyVideos) {
-        filesRedundancies.push({
-          id: redundancy.id,
-          fileUrl: redundancy.fileUrl,
-          strategy: redundancy.strategy,
-          createdAt: redundancy.createdAt,
-          updatedAt: redundancy.updatedAt,
-          expiresOn: redundancy.expiresOn,
-          size: file.size
-        })
-      }
-    }
+    const streamingPlaylistsRedundancies: RedundancyInformation[] = []
 
     for (const playlist of video.VideoStreamingPlaylists) {
       const size = playlist.VideoFiles.reduce((a, b) => a + b.size, 0)
@@ -688,63 +564,34 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
       uuid: video.uuid,
 
       redundancies: {
-        files: filesRedundancies,
         streamingPlaylists: streamingPlaylistsRedundancies
       }
     }
   }
 
   getVideo () {
-    if (this.VideoFile?.Video) return this.VideoFile.Video
-
-    if (this.VideoStreamingPlaylist?.Video) return this.VideoStreamingPlaylist.Video
-
-    return undefined
+    return this.VideoStreamingPlaylist.Video
   }
 
   getVideoUUID () {
-    const video = this.getVideo()
-    if (!video) return undefined
-
-    return video.uuid
+    return this.getVideo()?.uuid
   }
 
-  isOwned () {
+  isLocal () {
     return !!this.strategy
   }
 
   toActivityPubObject (this: MVideoRedundancyAP): CacheFileObject {
-    if (this.VideoStreamingPlaylist) {
-      return {
-        id: this.url,
-        type: 'CacheFile' as 'CacheFile',
-        object: this.VideoStreamingPlaylist.Video.url,
-        expires: this.expiresOn ? this.expiresOn.toISOString() : null,
-        url: {
-          type: 'Link',
-          mediaType: 'application/x-mpegURL',
-          href: this.fileUrl
-        }
-      }
-    }
-
     return {
       id: this.url,
       type: 'CacheFile' as 'CacheFile',
-      object: this.VideoFile.Video.url,
-
-      expires: this.expiresOn
-        ? this.expiresOn.toISOString()
-        : null,
-
+      object: this.VideoStreamingPlaylist.Video.url,
+      expires: this.expiresOn ? this.expiresOn.toISOString() : null,
       url: {
         type: 'Link',
-        mediaType: getVideoFileMimeType(this.VideoFile.extname, this.VideoFile.isAudio()),
-        href: this.fileUrl,
-        height: this.VideoFile.resolution,
-        size: this.VideoFile.size,
-        fps: this.VideoFile.fps
-      } as ActivityVideoUrlObject
+        mediaType: 'application/x-mpegURL',
+        href: this.fileUrl
+      }
     }
   }
 
@@ -752,45 +599,16 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
   private static buildVideoIdsForDuplication (peertubeActor: MActor) {
     const notIn = literal(
       '(' +
-        `SELECT "videoFile"."videoId" AS "videoId" FROM "videoRedundancy" ` +
-        `INNER JOIN "videoFile" ON "videoFile"."id" = "videoRedundancy"."videoFileId" ` +
-        `WHERE "videoRedundancy"."actorId" = ${peertubeActor.id} ` +
-        `UNION ` +
         `SELECT "videoStreamingPlaylist"."videoId" AS "videoId" FROM "videoRedundancy" ` +
         `INNER JOIN "videoStreamingPlaylist" ON "videoStreamingPlaylist"."id" = "videoRedundancy"."videoStreamingPlaylistId" ` +
         `WHERE "videoRedundancy"."actorId" = ${peertubeActor.id} ` +
-      ')'
+        ')'
     )
 
     return {
       id: {
         [Op.notIn]: notIn
       }
-    }
-  }
-
-  private static buildServerRedundancyInclude () {
-    return {
-      attributes: [],
-      model: VideoChannelModel.unscoped(),
-      required: true,
-      include: [
-        {
-          attributes: [],
-          model: ActorModel.unscoped(),
-          required: true,
-          include: [
-            {
-              attributes: [],
-              model: ServerModel.unscoped(),
-              required: true,
-              where: {
-                redundancyAllowed: true
-              }
-            }
-          ]
-        }
-      ]
     }
   }
 }

@@ -1,8 +1,8 @@
-import express from 'express'
 import { HttpStatusCode, VideoView } from '@peertube/peertube-models'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { VideoViewsManager } from '@server/lib/views/video-views-manager.js'
 import { MVideoId } from '@server/types/models/index.js'
+import express from 'express'
 import {
   asyncMiddleware,
   methodsValidator,
@@ -35,14 +35,17 @@ async function viewVideo (req: express.Request, res: express.Response) {
   const video = res.locals.onlyImmutableVideo
 
   const body = req.body as VideoView
-
   const ip = req.ip
+
   const { successView } = await VideoViewsManager.Instance.processLocalView({
     video,
     ip,
     currentTime: body.currentTime,
     viewEvent: body.viewEvent,
-    sessionId: body.sessionId
+    sessionId: body.sessionId,
+    client: body.client,
+    operatingSystem: body.operatingSystem,
+    device: body.device
   })
 
   if (successView) {

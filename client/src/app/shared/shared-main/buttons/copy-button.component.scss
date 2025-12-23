@@ -1,15 +1,19 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-button:not(.is-input-group) {
+button:not(.with-border, .is-input-group) {
   border: 0;
 }
 
 .is-input-group {
+  --bs-btn-border-color: #{pvar(--input-border-color)};
+  --bs-btn-hover-border-color: #{pvar(--input-border-color)};
+
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
 
 my-global-icon {
-  width: 15px;
+  @include global-icon-size(15px);
+  @include margin-right(5px);
 }

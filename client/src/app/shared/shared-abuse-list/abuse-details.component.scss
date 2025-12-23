@@ -1,21 +1,21 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_miniature' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_miniature" as *;
 
 .comment-html {
-  background-color: #ececec;
+  background-color: pvar(--bg-secondary-400);
   padding: 10px;
 }
 
 .abuse-details-date-updated {
   font-size: 90%;
-  margin-top: .1rem;
+  margin-top: 0.1rem;
 }
 
 .abuse-details-links {
   @include disable-default-a-behaviour;
 }
 
-my-global-icon[iconName=flag] {
-  width: 15px;
+my-global-icon[iconName="flag"] {
+  @include global-icon-size(15px);
 }

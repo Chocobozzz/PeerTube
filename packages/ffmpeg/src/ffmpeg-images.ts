@@ -1,3 +1,4 @@
+import { MutexInterface } from 'async-mutex'
 import { FfprobeData } from 'fluent-ffmpeg'
 import { FFmpegCommandWrapper, FFmpegCommandWrapperOptions } from './ffmpeg-command-wrapper.js'
 import { getVideoStreamDuration } from './ffprobe.js'
@@ -9,31 +10,20 @@ export class FFmpegImage {
     this.commandWrapper = new FFmpegCommandWrapper(options)
   }
 
-  convertWebPToJPG (options: {
+  processImage (options: {
     path: string
     destination: string
-  }): Promise<void> {
-    const { path, destination } = options
-
-    this.commandWrapper.buildCommand(path)
-      .output(destination)
-
-    return this.commandWrapper.runCommand({ silent: true })
-  }
-
-  processGIF (options: {
-    path: string
-    destination: string
-    newSize: { width: number, height: number }
+    newSize?: { width: number, height: number }
   }): Promise<void> {
     const { path, destination, newSize } = options
 
-    this.commandWrapper.buildCommand(path)
-      .fps(20)
-      .size(`${newSize.width}x${newSize.height}`)
-      .output(destination)
+    const command = this.commandWrapper.buildCommand(path)
 
-    return this.commandWrapper.runCommand()
+    if (newSize) command.size(`${newSize.width ?? '?'}x${newSize.height ?? '?'}`)
+
+    command.output(destination)
+
+    return this.commandWrapper.runCommand({ silent: true })
   }
 
   // ---------------------------------------------------------------------------
@@ -100,6 +90,9 @@ export class FFmpegImage {
     path: string
     destination: string
 
+    // Will be released after the ffmpeg started
+    inputFileMutexReleaser: MutexInterface.Releaser
+
     sprites: {
       size: {
         width: number
@@ -114,13 +107,13 @@ export class FFmpegImage {
       duration: number
     }
   }) {
-    const { path, destination, sprites } = options
+    const { path, destination, inputFileMutexReleaser, sprites } = options
 
-    const command = this.commandWrapper.buildCommand(path)
+    const command = this.commandWrapper.buildCommand(path, inputFileMutexReleaser)
 
     const filter = [
       // Fix "t" variable with some videos
-      `setpts=N/round(FRAME_RATE)/TB`,
+      `setpts='N/FRAME_RATE/TB'`,
       // First frame or the time difference between the last and the current frame is enough for our sprite interval
       `select='isnan(prev_selected_t)+gte(t-prev_selected_t,${options.sprites.duration})'`,
       `scale=${sprites.size.width}:${sprites.size.height}`,

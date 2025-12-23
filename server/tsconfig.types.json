@@ -1,8 +1,8 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../packages/types-generator/dist/server",
-    "tsBuildInfoFile": "../packages/types-generator/dist/server/.tsbuildinfo",
+    "outDir": "../packages/types-generator/dist-tmp/server",
+    "tsBuildInfoFile": "../packages/types-generator/dist-tmp/server/.tsbuildinfo",
     "stripInternal": true,
     "removeComments": false,
     "emitDeclarationOnly": true
@@ -13,9 +13,7 @@
     { "path": "../packages/models" },
     { "path": "../packages/node-utils" },
     { "path": "../packages/server-commands" },
-    { "path": "../packages/typescript-utils" }
-  ],
-  "exclude": [
-    "tests/"
+    { "path": "../packages/typescript-utils" },
+    { "path": "../packages/transcription" }
   ]
 }

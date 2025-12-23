@@ -183,7 +183,7 @@ function commentOptionsFactory () {
     bodyValidator: (body: any) => sanitizeAndCheckVideoCommentObject(body),
 
     updater: async (url: string, newUrl: string) => {
-      const comment = await VideoCommentModel.loadByUrlAndPopulateAccountAndVideo(url)
+      const comment = await VideoCommentModel.loadByUrlAndPopulateAccountAndVideoAndReply(url)
       comment.url = newUrl
 
       await comment.save()
@@ -192,7 +192,7 @@ function commentOptionsFactory () {
     },
 
     deleter: async (url) => {
-      const comment = await VideoCommentModel.loadByUrlAndPopulateAccountAndVideo(url)
+      const comment = await VideoCommentModel.loadByUrlAndPopulateAccountAndVideoAndReply(url)
 
       await comment.destroy()
 

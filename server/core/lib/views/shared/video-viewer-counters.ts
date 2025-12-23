@@ -1,4 +1,4 @@
-import { isTestOrDevInstance, isUsingViewersFederationV2 } from '@peertube/peertube-node-utils'
+import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { exists } from '@server/helpers/custom-validators/misc.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { VIEW_LIFETIME } from '@server/initializers/constants.js'
@@ -31,7 +31,7 @@ export class VideoViewerCounters {
   private processingViewerCounters = false
 
   constructor () {
-    setInterval(() => this.cleanViewerCounters(), VIEW_LIFETIME.VIEWER_COUNTER)
+    setInterval(() => this.updateVideoViewersCount(), VIEW_LIFETIME.VIEWER_COUNTER)
   }
 
   // ---------------------------------------------------------------------------
@@ -68,6 +68,13 @@ export class VideoViewerCounters {
     const { video, viewerExpires, viewerId } = options
 
     logger.debug('Adding remote viewer to local video %s.', video.uuid, { viewerId, viewerExpires, ...lTags(video.uuid) })
+
+    const viewer = this.idToViewer.get(viewerId)
+    if (viewer) {
+      viewer.expires = viewerExpires.getTime()
+
+      return false
+    }
 
     this.addViewerToVideo({ video, viewerExpires, viewerId, viewerScope: 'remote', viewerCount: 1 })
 
@@ -163,11 +170,13 @@ export class VideoViewerCounters {
     return viewer
   }
 
-  private async cleanViewerCounters () {
+  private async updateVideoViewersCount () {
     if (this.processingViewerCounters) return
     this.processingViewerCounters = true
 
-    if (!isTestOrDevInstance()) logger.info('Cleaning video viewers.', lTags())
+    if (!isTestOrDevInstance()) {
+      logger.debug('Updating video viewer counters.', lTags())
+    }
 
     try {
       for (const videoId of this.viewersPerVideo.keys()) {
@@ -221,7 +230,7 @@ export class VideoViewerCounters {
     const federationLimit = now - (VIEW_LIFETIME.VIEWER_COUNTER * 0.75)
 
     if (viewer.lastFederation && viewer.lastFederation > federationLimit) return
-    if (video.remote === false && isUsingViewersFederationV2()) return
+    if (video.remote === false) return
 
     await sendView({
       byActor: await getServerActor(),
@@ -234,8 +243,6 @@ export class VideoViewerCounters {
   }
 
   private async federateTotalViewers (video: MVideoImmutable) {
-    if (!isUsingViewersFederationV2()) return
-
     await sendView({
       byActor: await getServerActor(),
       video,

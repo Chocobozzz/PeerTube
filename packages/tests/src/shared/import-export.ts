@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
+import { ffprobePromise } from '@peertube/peertube-ffmpeg'
 import {
   ActivityCreate,
   ActivityPubOrderedCollection,
@@ -7,27 +8,32 @@ import {
   UserExport,
   UserNotificationSettingValue,
   VideoCommentObject,
+  VideoCommentPolicy,
   VideoObject,
   VideoPlaylistPrivacy,
   VideoPrivacy
 } from '@peertube/peertube-models'
+import { getFilenameFromUrl } from '@peertube/peertube-node-utils'
 import {
   ConfigCommand,
   ObjectStorageCommand,
   PeerTubeServer,
   createSingleServer,
-  doubleFollow, makeRawRequest,
+  doubleFollow,
+  makeRawRequest,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   waitJobs
 } from '@peertube/peertube-server-commands'
 import { expect } from 'chai'
+import { ensureDir, remove } from 'fs-extra'
+import { writeFile } from 'fs/promises'
 import JSZip from 'jszip'
-import { resolve } from 'path'
-import { MockSmtpServer } from './mock-servers/mock-email.js'
-import { getAllNotificationsSettings } from './notifications.js'
-import { getFilenameFromUrl } from '@peertube/peertube-node-utils'
+import { tmpdir } from 'os'
+import { basename, join, resolve } from 'path'
 import { testFileExistsOnFSOrNot } from './checks.js'
+import { MockSmtpServer } from './mock-servers/mock-email.js'
+import { getAllNotificationsSettings } from './notifications/notifications-common.js'
 
 type ExportOutbox = ActivityPubOrderedCollection<ActivityCreate<VideoObject | VideoCommentObject>>
 
@@ -44,7 +50,7 @@ export async function downloadZIP (server: PeerTubeServer, userId: number) {
   return JSZip.loadAsync(res.body)
 }
 
-export async function parseZIPJSONFile <T> (zip: JSZip, path: string) {
+export async function parseZIPJSONFile<T> (zip: JSZip, path: string) {
   return JSON.parse(await zip.file(path).async('string')) as T
 }
 
@@ -55,6 +61,24 @@ export async function checkFileExistsInZIP (zip: JSZip, path: string, base = '/'
 
   const buf = await zip.file(innerPath).async('arraybuffer')
   expect(buf.byteLength, `${innerPath} is empty`).to.be.greaterThan(0)
+}
+
+export async function probeZIPFile (zip: JSZip, path: string, base = '/') {
+  const innerPath = resolve(base, path).substring(1) // Remove '/' at the beginning of the string
+
+  expect(zip.files[innerPath], `${innerPath} does not exist`).to.exist
+
+  const buf = await zip.file(innerPath).async('arraybuffer')
+
+  const basePath = join(tmpdir(), 'peertube-test')
+  const videoPath = join(basePath, basename(innerPath))
+  await ensureDir(basePath)
+  await writeFile(videoPath, Buffer.from(buf))
+
+  const probe = await ffprobePromise(videoPath)
+  await remove(videoPath)
+
+  return probe
 }
 
 // ---------------------------------------------------------------------------
@@ -187,22 +211,26 @@ export async function prepareImportExportTests (options: {
     fixture: 'avatar.png',
     type: 'avatar'
   })
+  await server.playerSettings.updateForChannel({ channelHandle: 'noah_second_channel', theme: 'galaxy' })
 
   // Videos
   const externalVideo = await remoteServer.videos.quickUpload({ name: 'external video', privacy: VideoPrivacy.PUBLIC })
 
   // eslint-disable-next-line max-len
   const noahPrivateVideo = await server.videos.quickUpload({ name: 'noah private video', token: noahToken, privacy: VideoPrivacy.PRIVATE })
+
   const noahVideo = await server.videos.quickUpload({ name: 'noah public video', token: noahToken, privacy: VideoPrivacy.PUBLIC })
+  await server.playerSettings.updateForVideo({ videoId: noahVideo.uuid, theme: 'lucide' })
+
   // eslint-disable-next-line max-len
-  await server.videos.upload({
+  const noahVideo2 = await server.videos.upload({
     token: noahToken,
     attributes: {
       fixture: 'video_short.webm',
       name: 'noah public video second channel',
       category: 12,
       tags: [ 'tag1', 'tag2' ],
-      commentsEnabled: false,
+      commentsPolicy: VideoCommentPolicy.DISABLED,
       description: 'video description',
       downloadEnabled: false,
       language: 'fr',
@@ -225,6 +253,9 @@ export async function prepareImportExportTests (options: {
   await server.captions.add({ language: 'ar', videoId: noahVideo.uuid, fixture: 'subtitle-good1.vtt' })
   await server.captions.add({ language: 'fr', videoId: noahVideo.uuid, fixture: 'subtitle-good1.vtt' })
 
+  await server.captions.add({ language: 'zh', videoId: noahVideo2.uuid, fixture: 'subtitle-good1.vtt' })
+  await server.captions.add({ language: 'es', videoId: noahVideo2.uuid, fixture: 'subtitle-good1.vtt' })
+
   // Chapters
   await server.chapters.update({
     videoId: noahVideo.uuid,
@@ -235,7 +266,7 @@ export async function prepareImportExportTests (options: {
   })
 
   // My settings
-  await server.users.updateMe({ token: noahToken, description: 'super noah description', p2pEnabled: false })
+  await server.users.updateMe({ token: noahToken, description: 'super noah description', p2pEnabled: false, language: 'fr' })
 
   // My notification settings
   await server.notifications.updateMySettings({
@@ -272,7 +303,11 @@ export async function prepareImportExportTests (options: {
   await server.playlists.quickCreate({ displayName: 'noah playlist 2', token: noahToken, privacy: VideoPlaylistPrivacy.PRIVATE })
 
   // eslint-disable-next-line max-len
-  await server.playlists.addElement({ playlistId: noahPlaylist.uuid, token: noahToken, attributes: { videoId: mouskaVideo.uuid, startTimestamp: 2, stopTimestamp: 3 } })
+  await server.playlists.addElement({
+    playlistId: noahPlaylist.uuid,
+    token: noahToken,
+    attributes: { videoId: mouskaVideo.uuid, startTimestamp: 2, stopTimestamp: 3 }
+  })
   await server.playlists.addElement({ playlistId: noahPlaylist.uuid, token: noahToken, attributes: { videoId: noahVideo.uuid } })
   await server.playlists.addElement({ playlistId: noahPlaylist.uuid, token: noahToken, attributes: { videoId: noahPrivateVideo.uuid } })
 
@@ -306,7 +341,10 @@ export async function prepareImportExportTests (options: {
       videoPasswords: [ 'password1' ],
       channelId: noahSecondChannelId,
       name: 'noah live video',
-      privacy: VideoPrivacy.PASSWORD_PROTECTED
+      privacy: VideoPrivacy.PASSWORD_PROTECTED,
+      schedules: [
+        { startAt: new Date(Date.now() + 1000 * 60 * 60).toISOString() }
+      ]
     },
     token: noahToken
   })
@@ -314,6 +352,32 @@ export async function prepareImportExportTests (options: {
   // Views
   await server.views.view({ id: noahVideo.uuid, token: noahToken, currentTime: 4 })
   await server.views.view({ id: externalVideo.uuid, token: noahToken, currentTime: 2 })
+
+  // Watched words and auto tag policies
+  await servers[0].watchedWordsLists.createList({
+    token: noahToken,
+    listName: 'forbidden-list',
+    words: [ 'forbidden' ],
+    accountName: 'noah'
+  })
+
+  await servers[0].watchedWordsLists.createList({
+    token: noahToken,
+    listName: 'allowed-list',
+    words: [ 'allowed', 'allowed2' ],
+    accountName: 'noah'
+  })
+
+  await servers[0].autoTags.updateCommentPolicies({
+    accountName: 'noah',
+    review: [ 'external-link', 'forbidden-list' ],
+    token: noahToken
+  })
+
+  await waitJobs([ server, remoteServer ])
+
+  const { data: noahVideos } = await server.videos.listMyVideos({ token: noahToken, sort: '-publishedAt' })
+  const noahVODNames = noahVideos.filter(v => !v.isLive).map(v => v.name)
 
   return {
     rootId,
@@ -336,6 +400,8 @@ export async function prepareImportExportTests (options: {
 
     server,
     remoteServer,
-    blockedServer
+    blockedServer,
+
+    noahVODNames
   }
 }

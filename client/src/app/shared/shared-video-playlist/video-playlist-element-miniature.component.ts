@@ -1,62 +1,62 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
-import { AuthService, Notifier, ServerService } from '@app/core'
-import { NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, NgbDropdownButtonItem, NgbDropdownItem } from '@ng-bootstrap/ng-bootstrap'
+import { CommonModule } from '@angular/common'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject, input, output, viewChild } from '@angular/core'
+import { FormsModule } from '@angular/forms'
+import { RouterLink } from '@angular/router'
+import { Notifier, ServerService, User, UserService } from '@app/core'
+import { NgbDropdown, NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { secondsToTime } from '@peertube/peertube-core-utils'
 import { HTMLServerConfig, VideoPlaylistElementType, VideoPlaylistElementUpdate, VideoPrivacy } from '@peertube/peertube-models'
+import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
+import { TimestampInputComponent } from '../shared-forms/timestamp-input.component'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
+import { DateToggleComponent } from '../shared-main/date/date-toggle.component'
+import { Video } from '../shared-main/video/video.model'
+import { VideoService } from '../shared-main/video/video.service'
+import { VideoThumbnailComponent } from '../shared-thumbnail/video-thumbnail.component'
+import { VideoViewsCounterComponent } from '../shared-video/video-views-counter.component'
 import { VideoPlaylistElement } from './video-playlist-element.model'
 import { VideoPlaylist } from './video-playlist.model'
 import { VideoPlaylistService } from './video-playlist.service'
-import { TimestampInputComponent } from '../shared-forms/timestamp-input.component'
-import { FormsModule } from '@angular/forms'
-import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
-import { EditButtonComponent } from '../shared-main/buttons/edit-button.component'
-import { VideoViewsCounterComponent } from '../shared-video/video-views-counter.component'
-import { DateToggleComponent } from '../shared-main/date/date-toggle.component'
-import { VideoThumbnailComponent } from '../shared-thumbnail/video-thumbnail.component'
-import { GlobalIconComponent } from '../shared-icons/global-icon.component'
-import { RouterLink } from '@angular/router'
-import { NgClass, NgIf } from '@angular/common'
-import { Video } from '../shared-main/video/video.model'
-import { VideoService } from '../shared-main/video/video.service'
 
 @Component({
   selector: 'my-video-playlist-element-miniature',
   styleUrls: [ './video-playlist-element-miniature.component.scss' ],
   templateUrl: './video-playlist-element-miniature.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
-    NgClass,
+    CommonModule,
     RouterLink,
-    NgIf,
     GlobalIconComponent,
     VideoThumbnailComponent,
     DateToggleComponent,
     VideoViewsCounterComponent,
-    EditButtonComponent,
-    NgbDropdown,
-    NgbDropdownToggle,
-    NgbDropdownMenu,
-    NgbDropdownButtonItem,
-    NgbDropdownItem,
+    NgbDropdownModule,
     PeertubeCheckboxComponent,
     FormsModule,
-    TimestampInputComponent
+    TimestampInputComponent,
+    NgbTooltipModule
   ]
 })
 export class VideoPlaylistElementMiniatureComponent implements OnInit {
-  @ViewChild('moreDropdown') moreDropdown: NgbDropdown
+  private userService = inject(UserService)
+  private serverService = inject(ServerService)
+  private notifier = inject(Notifier)
+  private videoPlaylistService = inject(VideoPlaylistService)
+  private videoService = inject(VideoService)
+  private cdr = inject(ChangeDetectorRef)
 
-  @Input() playlist: VideoPlaylist
-  @Input() playlistElement: VideoPlaylistElement
-  @Input() owned = false
-  @Input() playing = false
-  @Input() rowLink = false
-  @Input() accountLink = true
-  @Input() position: number // Keep this property because we're in the OnPush change detection strategy
-  @Input() touchScreenEditButton = false
+  readonly moreDropdown = viewChild<NgbDropdown>('moreDropdown')
 
-  @Output() elementRemoved = new EventEmitter<VideoPlaylistElement>()
+  readonly playlist = input<VideoPlaylist>(undefined)
+  readonly playlistElement = input<VideoPlaylistElement>(undefined)
+  readonly owned = input(false)
+  readonly playing = input(false)
+  readonly rowLink = input(false)
+  readonly accountLink = input(true)
+  readonly position = input<number // Keep this property because we're in the OnPush change detection strategy
+  >(undefined) // Keep this property because we're in the OnPush change detection strategy
+
+  readonly elementRemoved = output<VideoPlaylistElement>()
 
   displayTimestampOptions = false
 
@@ -68,22 +68,18 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
   } = {} as any
 
   private serverConfig: HTMLServerConfig
-
-  constructor (
-    private authService: AuthService,
-    private serverService: ServerService,
-    private notifier: Notifier,
-    private videoPlaylistService: VideoPlaylistService,
-    private videoService: VideoService,
-    private cdr: ChangeDetectorRef
-  ) {}
+  private user: User
 
   ngOnInit (): void {
     this.serverConfig = this.serverService.getHTMLConfig()
+
+    this.userService.getAnonymousOrLoggedUser().subscribe(user => {
+      this.user = user
+    })
   }
 
   getVideoAriaLabel () {
-    return $localize`Watch video ${this.playlistElement.video.name}`
+    return $localize`Watch video ${this.playlistElement().video.name}`
   }
 
   getVideoOwnerDisplayType (element: VideoPlaylistElement) {
@@ -91,11 +87,11 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
   }
 
   isVideoPrivate () {
-    return this.playlistElement.video.privacy.id === VideoPrivacy.PRIVATE
+    return this.playlistElement().video.privacy.id === VideoPrivacy.PRIVATE
   }
 
   isVideoPasswordProtected () {
-    return this.playlistElement.video.privacy.id === VideoPrivacy.PASSWORD_PROTECTED
+    return this.playlistElement().video.privacy.id === VideoPrivacy.PASSWORD_PROTECTED
   }
 
   isUnavailable (e: VideoPlaylistElement) {
@@ -111,40 +107,51 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
   }
 
   buildRouterLink () {
-    if (!this.playlist) return null
+    const playlist = this.playlist()
+    if (!playlist) return null
 
-    return VideoPlaylist.buildWatchUrl(this.playlist)
+    return VideoPlaylist.buildWatchUrl(playlist)
   }
 
   buildRouterQuery () {
-    if (!this.playlistElement?.video) return {}
+    const playlistElement = this.playlistElement()
+    if (!playlistElement?.video) return {}
 
     return {
-      playlistPosition: this.playlistElement.position,
-      start: this.playlistElement.startTimestamp,
-      stop: this.playlistElement.stopTimestamp,
+      playlistPosition: playlistElement.position,
+      start: playlistElement.startTimestamp,
+      stop: playlistElement.stopTimestamp,
       resume: true
     }
   }
 
-  isVideoBlur (video: Video) {
-    return video.isVideoNSFWForUser(this.authService.getUser(), this.serverConfig)
+  hasNSFWBlur (video: Video) {
+    return video.isNSFWBlurForUser(this.user, this.serverConfig)
+  }
+
+  hasNSFWWarning (video: Video) {
+    return video.isNSFWWarnedForUser(this.user, this.serverConfig)
+  }
+
+  getNSFWTooltip (video: Video) {
+    return this.videoService.buildNSFWTooltip(video)
   }
 
   removeFromPlaylist (playlistElement: VideoPlaylistElement) {
-    const videoId = this.playlistElement.video ? this.playlistElement.video.id : undefined
+    const playlistElementValue = this.playlistElement()
+    const videoId = playlistElementValue.video ? playlistElementValue.video.id : undefined
 
-    this.videoPlaylistService.removeVideoFromPlaylist(this.playlist.id, playlistElement.id, videoId)
-        .subscribe({
-          next: () => {
-            this.notifier.success($localize`Video removed from ${this.playlist.displayName}`)
-            this.elementRemoved.emit(playlistElement)
-          },
+    this.videoPlaylistService.removeVideoFromPlaylist(this.playlist().id, playlistElement.id, videoId)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Video removed from ${this.playlist().displayName}`)
+          this.elementRemoved.emit(playlistElement)
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.handleError(err)
+      })
 
-    this.moreDropdown.close()
+    this.moreDropdown().close()
   }
 
   updateTimestamps (playlistElement: VideoPlaylistElement) {
@@ -153,21 +160,21 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
     body.startTimestamp = this.timestampOptions.startTimestampEnabled ? this.timestampOptions.startTimestamp : null
     body.stopTimestamp = this.timestampOptions.stopTimestampEnabled ? this.timestampOptions.stopTimestamp : null
 
-    this.videoPlaylistService.updateVideoOfPlaylist(this.playlist.id, playlistElement.id, body, this.playlistElement.video.id)
-        .subscribe({
-          next: () => {
-            this.notifier.success($localize`Timestamps updated`)
+    this.videoPlaylistService.updateVideoOfPlaylist(this.playlist().id, playlistElement.id, body, this.playlistElement().video.id)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Timestamps updated`)
 
-            playlistElement.startTimestamp = body.startTimestamp
-            playlistElement.stopTimestamp = body.stopTimestamp
+          playlistElement.startTimestamp = body.startTimestamp
+          playlistElement.stopTimestamp = body.stopTimestamp
 
-            this.cdr.detectChanges()
-          },
+          this.cdr.detectChanges()
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.handleError(err)
+      })
 
-    this.moreDropdown.close()
+    this.moreDropdown().close()
   }
 
   formatTimestamp (playlistElement: VideoPlaylistElement) {

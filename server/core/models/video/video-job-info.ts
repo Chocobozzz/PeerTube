@@ -1,10 +1,10 @@
+import { forceNumber } from '@peertube/peertube-core-utils'
 import { Op, QueryTypes, Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, IsInt, Table, Unique, UpdatedAt } from 'sequelize-typescript'
-import { forceNumber } from '@peertube/peertube-core-utils'
-import { VideoModel } from './video.js'
 import { SequelizeModel } from '../shared/sequelize-type.js'
+import { VideoModel } from './video.js'
 
-export type VideoJobInfoColumnType = 'pendingMove' | 'pendingTranscode'
+export type VideoJobInfoColumnType = 'pendingMove' | 'pendingTranscode' | 'pendingTranscription'
 
 @Table({
   tableName: 'videoJobInfo',
@@ -19,30 +19,35 @@ export type VideoJobInfoColumnType = 'pendingMove' | 'pendingTranscode'
     }
   ]
 })
-
 export class VideoJobInfoModel extends SequelizeModel<VideoJobInfoModel> {
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @AllowNull(false)
   @Default(0)
   @IsInt
   @Column
-  pendingMove: number
+  declare pendingMove: number
 
   @AllowNull(false)
   @Default(0)
   @IsInt
   @Column
-  pendingTranscode: number
+  declare pendingTranscode: number
+
+  @AllowNull(false)
+  @Default(0)
+  @IsInt
+  @Column
+  declare pendingTranscription: number
 
   @ForeignKey(() => VideoModel)
   @Unique
   @Column
-  videoId: number
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -50,7 +55,7 @@ export class VideoJobInfoModel extends SequelizeModel<VideoJobInfoModel> {
     },
     onDelete: 'cascade'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   static load (videoId: number, transaction?: Transaction) {
     const where = {
@@ -64,7 +69,8 @@ export class VideoJobInfoModel extends SequelizeModel<VideoJobInfoModel> {
     const options = { type: QueryTypes.SELECT as QueryTypes.SELECT, bind: { videoUUID } }
     const amount = forceNumber(amountArg)
 
-    const [ result ] = await VideoJobInfoModel.sequelize.query<{ pendingMove: number }>(`
+    const [ result ] = await VideoJobInfoModel.sequelize.query(
+      `
     INSERT INTO "videoJobInfo" ("videoId", "${column}", "createdAt", "updatedAt")
     SELECT
       "video"."id" AS "videoId", ${amount}, NOW(), NOW()
@@ -78,7 +84,9 @@ export class VideoJobInfoModel extends SequelizeModel<VideoJobInfoModel> {
       "updatedAt" = NOW()
     RETURNING
       "${column}"
-    `, options)
+    `,
+      options
+    )
 
     return result[column]
   }
@@ -86,18 +94,21 @@ export class VideoJobInfoModel extends SequelizeModel<VideoJobInfoModel> {
   static async decrease (videoUUID: string, column: VideoJobInfoColumnType): Promise<number> {
     const options = { type: QueryTypes.SELECT as QueryTypes.SELECT, bind: { videoUUID } }
 
-    const result = await VideoJobInfoModel.sequelize.query(`
+    const result = await VideoJobInfoModel.sequelize.query(
+      `
     UPDATE
       "videoJobInfo"
     SET
-      "${column}" = "videoJobInfo"."${column}" - 1,
+      "${column}" = GREATEST("videoJobInfo"."${column}" - 1, 0),
       "updatedAt" = NOW()
     FROM "video"
     WHERE
       "video"."id" = "videoJobInfo"."videoId" AND "video"."uuid" = $videoUUID
     RETURNING
       "${column}";
-    `, options)
+    `,
+      options
+    )
 
     if (result.length === 0) return undefined
 
@@ -107,7 +118,8 @@ export class VideoJobInfoModel extends SequelizeModel<VideoJobInfoModel> {
   static async abortAllTasks (videoUUID: string, column: VideoJobInfoColumnType): Promise<void> {
     const options = { type: QueryTypes.UPDATE as QueryTypes.UPDATE, bind: { videoUUID } }
 
-    await VideoJobInfoModel.sequelize.query(`
+    await VideoJobInfoModel.sequelize.query(
+      `
     UPDATE
       "videoJobInfo"
     SET
@@ -116,6 +128,8 @@ export class VideoJobInfoModel extends SequelizeModel<VideoJobInfoModel> {
     FROM "video"
     WHERE
       "video"."id" = "videoJobInfo"."videoId" AND "video"."uuid" = $videoUUID
-    `, options)
+    `,
+      options
+    )
   }
 }

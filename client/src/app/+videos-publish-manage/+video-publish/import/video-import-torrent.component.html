@@ -1,0 +1,45 @@
+@if (firstStep) {
+  <div class="upload-video-container" myDragDrop (fileDropped)="setTorrentFile($event)">
+    <div class="first-step-block">
+      <my-global-icon class="upload-icon" iconName="upload" aria-hidden="true"></my-global-icon>
+
+      <div class="button-file primary-button form-control" [ngbTooltip]="'(extensions: .torrent)'">
+        <span i18n>Select the torrent to import</span>
+        <input
+          aria-label="Select the torrent to import" i18n-aria-label
+          #torrentfileInput type="file" name="torrentfile" id="torrentfile" accept=".torrent" (change)="fileChange()"
+        />
+      </div>
+
+      <div class="torrent-or-magnet" i18n-data-content data-content="OR"></div>
+
+      <div class="form-group form-group-magnet-uri">
+        <label i18n for="magnetUri">Paste magnet URI</label>
+        <my-help>
+          <ng-container i18n>
+            You can import any torrent file that points to a media file.
+            You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.
+          </ng-container>
+        </my-help>
+
+        <input type="text" id="magnetUri" [(ngModel)]="firstStepMagnetUri" class="form-control" />
+      </div>
+
+      <div class="form-group">
+        <label i18n for="first-step-channel">Channel</label>
+        <my-select-channel inputId="first-step-channel" [items]="userChannels()" [(ngModel)]="firstStepChannelId"></my-select-channel>
+      </div>
+
+      <input
+        type="button" i18n-value value="Import" class="peertube-button primary-button"
+        [disabled]="!isMagnetUrlValid() || isImportingVideo" (click)="importVideo()"
+      />
+    </div>
+  </div>
+} @else {
+  <my-video-manage-container canUpdate="true" canWatch="false" cancelLink="/my-library/videos" (videoUpdated)="onVideoUpdated()">
+    <my-alert type="primary" i18n>
+      Congratulations, the video will be imported with BitTorrent! You can already add information about this video.
+    </my-alert>
+  </my-video-manage-container>
+}

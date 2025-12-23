@@ -1,7 +1,7 @@
 import { VideoPrivacy, VideoPrivacyType, VideoState } from '@peertube/peertube-models'
 import { VideoModel } from '@server/models/video/video.js'
 import { MScheduleVideoUpdate } from '@server/types/models/index.js'
-import { logger } from '../../helpers/logger.js'
+import { logger, loggerTagsFactory } from '../../helpers/logger.js'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants.js'
 import { sequelizeTypescript } from '../../initializers/database.js'
 import { ScheduleVideoUpdateModel } from '../../models/video/schedule-video-update.js'
@@ -12,14 +12,15 @@ import { VideoPathManager } from '../video-path-manager.js'
 import { setVideoPrivacy } from '../video-privacy.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
-export class UpdateVideosScheduler extends AbstractScheduler {
+const lTags = loggerTagsFactory('schedulers', 'update-videos')
 
+export class UpdateVideosScheduler extends AbstractScheduler {
   private static instance: AbstractScheduler
 
   protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.UPDATE_VIDEOS
 
   private constructor () {
-    super()
+    super({ randomRunOnEnable: false })
   }
 
   protected async internalExecute () {
@@ -27,12 +28,16 @@ export class UpdateVideosScheduler extends AbstractScheduler {
   }
 
   private async updateVideos () {
+    logger.debug('Running update videos scheduler', lTags())
+
     if (!await ScheduleVideoUpdateModel.areVideosToUpdate()) return undefined
 
     const schedules = await ScheduleVideoUpdateModel.listVideosToUpdate()
 
     for (const schedule of schedules) {
       const videoOnly = await VideoModel.load(schedule.videoId)
+      if (!videoOnly) continue
+
       const mutexReleaser = await VideoPathManager.Instance.lockFiles(videoOnly.uuid)
 
       try {
@@ -40,7 +45,7 @@ export class UpdateVideosScheduler extends AbstractScheduler {
 
         if (published) Notifier.Instance.notifyOnVideoPublishedAfterScheduledUpdate(video)
       } catch (err) {
-        logger.error('Cannot update video', { err })
+        logger.error('Cannot update video ' + videoOnly.uuid, { err, ...lTags(videoOnly.uuid) })
       }
 
       mutexReleaser()
@@ -56,7 +61,7 @@ export class UpdateVideosScheduler extends AbstractScheduler {
       const video = await VideoModel.loadFull(schedule.videoId, t)
       if (video.state === VideoState.TO_TRANSCODE) return null
 
-      logger.info('Executing scheduled video update on %s.', video.uuid)
+      logger.info('Executing scheduled video update on ' + video.uuid, lTags(video.uuid))
 
       if (schedule.privacy) {
         isNewVideoForFederation = isNewVideoPrivacyForFederation(video.privacy, schedule.privacy)

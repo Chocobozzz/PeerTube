@@ -75,6 +75,25 @@ describe('Test replace file using peertube-runner program', function () {
     await checkSourceFile({ server, fsCount: 2, fixture, uuid })
   })
 
+  it('Should replace the video by an audio file', async function () {
+    {
+      await server.videos.removeAllWebVideoFiles({ videoId: uuid })
+      const video = await server.videos.get({ id: uuid })
+      expect(getAllFiles(video)).to.have.lengthOf(2)
+    }
+
+    const fixture = 'sample.ogg'
+    await server.videos.replaceSourceFile({ videoId: uuid, fixture })
+    await waitJobs(server, { runnerJobs: true })
+
+    const video = await server.videos.get({ id: uuid })
+
+    const files = getAllFiles(video)
+    expect(files).to.have.lengthOf(4)
+
+    await checkSourceFile({ server, fsCount: 2, fixture, uuid })
+  })
+
   after(async function () {
     if (peertubeRunner) {
       await peertubeRunner.unregisterPeerTubeInstance({ runnerName: 'runner' })

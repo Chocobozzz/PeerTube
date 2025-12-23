@@ -1,107 +1,89 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
 
 #search-video {
-  @include peertube-input-text($search-input-width, 14px);
+  text-overflow: ellipsis;
 
-  @include padding-left(10px);
-  @include padding-right(40px); // For the search icon
+  @include peertube-input-text(100%);
+
+  & {
+    padding-inline-start: 42px; // For the search icon
+    padding-inline-end: 20px; // For the search icon
+  }
 
   &::placeholder {
-    color: pvar(--inputPlaceholderColor);
+    color: pvar(--input-placeholder-color);
   }
 }
 
 .search-button {
-  display: inline-flex;
-  align-self: center;
   position: absolute;
-  right: 5px;
+  top: 0;
+  bottom: 0;
+
+  @include left(18px);
 
   &:hover {
     opacity: 0.8;
   }
 
   my-global-icon {
-    @include icon(18px);
+    height: 18px;
+    width: 18px;
 
-    display: inline-flex;
+    position: relative;
+    top: -2px;
   }
 }
 
 .jump-to-suggestions {
   top: 100%;
   left: 0;
-  z-index: z('search-typeahead');
+  z-index: z("search-typeahead");
   width: 100%;
 }
 
-#typeahead-help,
-#typeahead-instructions,
-li.suggestion {
-  border: 1px solid pvar(--mainBackgroundColor);
-  background: pvar(--mainBackgroundColor);
-  transition: .3s ease;
+#typeahead-suggestion-help,
+#typeahead-input-help,
+.suggestion {
+  border: 1px solid pvar(--bg);
+  background: pvar(--bg-secondary-400);
+  transition: 0.3s ease;
   transition-property: box-shadow;
   cursor: pointer;
-
-  // soft border-radius for the last suggestion and the link inside
-  &:last-of-type {
-    &,
-    ::ng-deep a {
-      border-bottom-right-radius: 3px;
-      border-bottom-left-radius: 3px;
-    }
-  }
 }
 
-#typeahead-help,
-#typeahead-instructions {
+#typeahead-suggestion-help,
+#typeahead-input-help,
+.suggestion:last-of-type {
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+#typeahead-suggestion-help,
+#typeahead-input-help {
   margin-top: 9px;
   width: 100%;
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
   white-space: normal;
 
   ul {
     list-style: none;
     padding: 0;
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
 
     em {
-      @include margin-right(0.2rem);
-
       font-weight: 600;
       font-style: normal;
+
+      @include margin-right(0.2rem);
     }
   }
 }
 
 #typeahead-container {
   font-size: 14px;
-  margin: 0 10px;
-
-  input {
-    border: 1px solid pvar(--mainBackgroundColor) !important;
-    box-shadow: rgba(0, 0, 0, 0.1) 0 1px 20px 0;
-    flex-grow: 1;
-    transition: box-shadow .3s ease, width .2s ease;
-  }
-
-  @media screen and (max-width: $small-view) {
-    input {
-      width: 200px;
-    }
-  }
-
-  @media screen and (max-width: $mobile-view) {
-    input {
-      width: 150px;
-    }
-  }
-
-  span {
-    right: 10px;
-  }
 
   > div:last-child {
     // we have to switch the display and not the opacity,
@@ -109,47 +91,31 @@ li.suggestion {
     display: none;
   }
 
-  &:focus,
-  ::ng-deep &:focus-within {
+  &:focus-within {
     > div:last-child {
       @media screen and (min-width: $mobile-view) {
         display: initial !important;
       }
 
-      #typeahead-help,
-      #typeahead-instructions,
-      li.suggestion {
+      #typeahead-suggestion-help,
+      #typeahead-input-help,
+      .suggestion {
         box-shadow: rgba(0, 0, 0, 0.2) 0 10px 20px -5px;
       }
     }
 
-    ::ng-deep input {
+    input {
       box-shadow: rgba(0, 0, 0, 0.2) 0 1px 20px 0;
       border-end-start-radius: 0;
       border-end-end-radius: 0;
 
-      @media screen and (min-width: 1000px) {
+      @media screen and (min-width: $medium-view) {
         width: 500px;
       }
     }
   }
 }
 
-.advanced-search-status {
-  height: max-content;
-  cursor: default;
-
-  &.c-help {
-    cursor: help;
-  }
-}
-
-.small-title {
-  @include in-content-small-title;
-
-  margin-bottom: .5rem;
-}
-
-::ng-deep my-suggestion {
+my-suggestion {
   width: 100%;
 }

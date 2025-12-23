@@ -1,12 +1,3 @@
-import express from 'express'
-import { body } from 'express-validator'
-import { isLiveLatencyModeValid } from '@server/helpers/custom-validators/video-lives.js'
-import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
-import { isLocalLiveVideoAccepted } from '@server/lib/moderation.js'
-import { Hooks } from '@server/lib/plugins/hooks.js'
-import { VideoModel } from '@server/models/video/video.js'
-import { VideoLiveModel } from '@server/models/video/video-live.js'
-import { VideoLiveSessionModel } from '@server/models/video/video-live-session.js'
 import {
   HttpStatusCode,
   LiveVideoCreate,
@@ -16,28 +7,31 @@ import {
   UserRight,
   VideoState
 } from '@peertube/peertube-models'
+import { areLiveSchedulesValid, isLiveLatencyModeValid } from '@server/helpers/custom-validators/video-lives.js'
+import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
+import { isLocalLiveVideoAccepted } from '@server/lib/moderation.js'
+import { Hooks } from '@server/lib/plugins/hooks.js'
+import { VideoLiveSessionModel } from '@server/models/video/video-live-session.js'
+import { VideoLiveModel } from '@server/models/video/video-live.js'
+import { VideoModel } from '@server/models/video/video.js'
+import express from 'express'
+import { body } from 'express-validator'
 import { exists, isBooleanValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
 import { isValidPasswordProtectedPrivacy, isVideoNameValid, isVideoReplayPrivacyValid } from '../../../helpers/custom-validators/videos.js'
 import { cleanUpReqFiles } from '../../../helpers/express-utils.js'
 import { logger } from '../../../helpers/logger.js'
 import { CONFIG } from '../../../initializers/config.js'
-import {
-  areValidationErrors,
-  checkUserCanManageVideo,
-  doesVideoChannelOfAccountExist,
-  doesVideoExist,
-  isValidVideoIdParam
-} from '../shared/index.js'
-import { getCommonVideoEditAttributes } from './videos.js'
+import { areValidationErrors, checkCanManageVideo, doesChannelIdExist, doesVideoExist, isValidVideoIdParam } from '../shared/index.js'
+import { areErrorsInNSFW, getCommonVideoEditAttributes } from './videos.js'
 
-const videoLiveGetValidator = [
+export const videoLiveGetValidator = [
   isValidVideoIdParam('videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res, 'all')) return
 
-    const videoLive = await VideoLiveModel.loadByVideoId(res.locals.videoAll.id)
+    const videoLive = await VideoLiveModel.loadByVideoIdFull(res.locals.videoAll.id)
     if (!videoLive) {
       return res.fail({
         status: HttpStatusCode.NOT_FOUND_404,
@@ -51,7 +45,7 @@ const videoLiveGetValidator = [
   }
 ]
 
-const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
+export const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
     .customSanitizer(toIntOrNull)
     .custom(isIdValid),
@@ -86,8 +80,13 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
     .isArray()
     .withMessage('Video passwords should be an array.'),
 
+  body('schedules')
+    .optional()
+    .custom(areLiveSchedulesValid).withMessage('Should have a valid schedules array'),
+
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
+    if (areErrorsInNSFW(req, res)) return cleanUpReqFiles(req)
 
     if (!isValidPasswordProtectedPrivacy(req, res)) return cleanUpReqFiles(req)
 
@@ -122,8 +121,9 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
       })
     }
 
-    const user = res.locals.oauth.token.User
-    if (!await doesVideoChannelOfAccountExist(body.channelId, user, res)) return cleanUpReqFiles(req)
+    if (!await doesChannelIdExist({ id: body.channelId, req, res, checkCanManage: true, checkIsLocal: true, checkIsOwner: false })) {
+      return cleanUpReqFiles(req)
+    }
 
     if (CONFIG.LIVE.MAX_INSTANCE_LIVES !== -1) {
       const totalInstanceLives = await VideoModel.countLives({ remote: false, mode: 'not-ended' })
@@ -140,6 +140,8 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
     }
 
     if (CONFIG.LIVE.MAX_USER_LIVES !== -1) {
+      const user = res.locals.oauth.token.User
+
       const totalUserLives = await VideoModel.countLivesOfAccount(user.Account.id)
 
       if (totalUserLives >= CONFIG.LIVE.MAX_USER_LIVES) {
@@ -159,7 +161,7 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
   }
 ])
 
-const videoLiveUpdateValidator = [
+export const videoLiveUpdateValidator = [
   body('saveReplay')
     .optional()
     .customSanitizer(toBooleanOrNull)
@@ -175,7 +177,11 @@ const videoLiveUpdateValidator = [
     .customSanitizer(toIntOrNull)
     .custom(isLiveLatencyModeValid),
 
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  body('schedules')
+    .optional()
+    .custom(areLiveSchedulesValid).withMessage('Should have a valid schedules array'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
     const body: LiveVideoUpdate = req.body
@@ -202,23 +208,43 @@ const videoLiveUpdateValidator = [
 
     // Check the user can manage the live
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.GET_ANY_LIVE, res)) return
+    if (
+      !await checkCanManageVideo({
+        user,
+        video: res.locals.videoAll,
+        right: UserRight.GET_ANY_LIVE,
+        req,
+        res,
+        checkIsLocal: true,
+        checkIsOwner: false
+      })
+    ) return
 
     return next()
   }
 ]
 
-const videoLiveListSessionsValidator = [
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+export const videoLiveListSessionsValidator = [
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     // Check the user can manage the live
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.GET_ANY_LIVE, res)) return
+    if (
+      !await checkCanManageVideo({
+        user,
+        video: res.locals.videoAll,
+        right: UserRight.GET_ANY_LIVE,
+        req,
+        res,
+        checkIsLocal: true,
+        checkIsOwner: false
+      })
+    ) return
 
     return next()
   }
 ]
 
-const videoLiveFindReplaySessionValidator = [
+export const videoLiveFindReplaySessionValidator = [
   isValidVideoIdParam('videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -240,15 +266,7 @@ const videoLiveFindReplaySessionValidator = [
 ]
 
 // ---------------------------------------------------------------------------
-
-export {
-  videoLiveAddValidator,
-  videoLiveUpdateValidator,
-  videoLiveListSessionsValidator,
-  videoLiveFindReplaySessionValidator,
-  videoLiveGetValidator
-}
-
+// Private
 // ---------------------------------------------------------------------------
 
 async function isLiveVideoAccepted (req: express.Request, res: express.Response) {
@@ -263,7 +281,7 @@ async function isLiveVideoAccepted (req: express.Request, res: express.Response)
     'filter:api.live-video.create.accept.result'
   )
 
-  if (!acceptedResult || acceptedResult.accepted !== true) {
+  if (acceptedResult?.accepted !== true) {
     logger.info('Refused local live video.', { acceptedResult, acceptParameters })
 
     res.fail({
@@ -300,7 +318,6 @@ function checkLiveSettingsReplayConsistency (options: {
 
   // We now save replays of this live, so replay settings are mandatory
   if (res.locals.videoLive.saveReplay !== true && body.saveReplay === true) {
-
     if (!exists(body.replaySettings)) {
       res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,

@@ -1,8 +1,8 @@
-import { logger } from '@server/helpers/logger.js'
-import { getAbuseTargetUrl } from '@server/lib/activitypub/url.js'
-import { UserModel } from '@server/models/user/user.js'
-import { MUserDefault } from '@server/types/models/index.js'
 import { UserRight } from '@peertube/peertube-models'
+import { logger } from '@server/helpers/logger.js'
+import { getAbuseIdentifier } from '@server/lib/activitypub/url.js'
+import { UserModel } from '@server/models/user/user.js'
+import { MUserDefault, MUserWithNotificationSetting } from '@server/types/models/index.js'
 import { AbstractNewAbuseMessage } from './abstract-new-abuse-message.js'
 
 export class NewAbuseMessageForModerators extends AbstractNewAbuseMessage {
@@ -19,14 +19,16 @@ export class NewAbuseMessageForModerators extends AbstractNewAbuseMessage {
   }
 
   log () {
-    logger.info('Notifying moderators of new abuse message on %s.', getAbuseTargetUrl(this.abuse))
+    logger.info('Notifying moderators of new abuse message on %s.', getAbuseIdentifier(this.abuse))
   }
 
   getTargetUsers () {
     return this.moderators
   }
 
-  createEmail (to: string) {
+  createEmail (user: MUserWithNotificationSetting) {
+    const to = { email: user.email, language: user.getLanguage() }
+
     return this.createEmailFor(to, 'moderator')
   }
 }

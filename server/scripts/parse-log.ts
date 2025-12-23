@@ -14,7 +14,7 @@ program
   .option('-l, --level [level]', 'Level log (debug/info/warn/error)')
   .option('-f, --files [file...]', 'Files to parse. If not provided, the script will parse the latest log file from config)')
   .option('-t, --tags [tags...]', 'Display only lines with these tags')
-  .option('-nt, --not-tags [tags...]', 'Do not display lines containing these tags')
+  .option('-n, --not-tags [tags...]', 'Do not display lines containing these tags')
   .parse(process.argv)
 
 const options = program.opts()
@@ -39,7 +39,7 @@ const loggerFormat = winston.format.printf((info) => {
 
   if (info.sql) {
     if (CONFIG.LOG.PRETTIFY_SQL) {
-      additionalInfos += '\n' + sqlFormat(info.sql, {
+      additionalInfos += '\n' + sqlFormat(info.sql as string, {
         language: 'sql',
         tabWidth: 2
       })
@@ -48,7 +48,7 @@ const loggerFormat = winston.format.printf((info) => {
     }
   }
 
-  return `[${info.label}] ${toTimeFormat(info.timestamp)} ${info.level}: ${info.message}${additionalInfos}`
+  return `[${info.label}] ${toTimeFormat(info.timestamp as string)} ${info.level}: ${info.message}${additionalInfos}`
 })
 
 const logger = winston.createLogger({

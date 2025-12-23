@@ -1,6 +1,23 @@
+import { FileStorage, UserExportState } from '@peertube/peertube-models'
+import { getFileSize } from '@peertube/peertube-node-utils'
+import { activityPubContextify } from '@server/helpers/activity-pub-utils.js'
+import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
+import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { UserModel } from '@server/models/user/user.js'
+import { MUserDefault, MUserExport } from '@server/types/models/index.js'
+import archiver, { Archiver } from 'archiver'
+import { createWriteStream } from 'fs'
+import { remove } from 'fs-extra/esm'
 import { join, parse } from 'path'
+import { PassThrough, Readable, Writable } from 'stream'
+import { activityPubCollection } from '../activitypub/collection.js'
+import { getContextFilter } from '../activitypub/context.js'
+import { getUserExportFileObjectStorageSize, removeUserExportObjectStorage, storeUserExportFile } from '../object-storage/user-export.js'
+import { getFSUserExportFilePath } from '../paths.js'
 import {
+  AbstractUserExporter,
   AccountExporter,
+  AutoTagPoliciesExporter,
   BlocklistExporter,
   ChannelsExporter,
   CommentsExporter,
@@ -8,27 +25,13 @@ import {
   ExportResult,
   FollowersExporter,
   FollowingExporter,
-  LikesExporter, AbstractUserExporter,
+  LikesExporter,
   UserSettingsExporter,
+  UserVideoHistoryExporter,
   VideoPlaylistsExporter,
   VideosExporter,
-  UserVideoHistoryExporter
+  WatchedWordsListsExporter
 } from './exporters/index.js'
-import { MUserDefault, MUserExport } from '@server/types/models/index.js'
-import archiver, { Archiver } from 'archiver'
-import { createWriteStream } from 'fs'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
-import { PassThrough, Readable, Writable } from 'stream'
-import { activityPubContextify } from '@server/helpers/activity-pub-utils.js'
-import { getContextFilter } from '../activitypub/context.js'
-import { activityPubCollection } from '../activitypub/collection.js'
-import { FileStorage, UserExportState } from '@peertube/peertube-models'
-import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
-import { UserModel } from '@server/models/user/user.js'
-import { getFSUserExportFilePath } from '../paths.js'
-import { getUserExportFileObjectStorageSize, removeUserExportObjectStorage, storeUserExportFile } from '../object-storage/user-export.js'
-import { getFileSize } from '@peertube/peertube-node-utils'
-import { remove } from 'fs-extra/esm'
 
 const lTags = loggerTagsFactory('user-export')
 
@@ -111,7 +114,7 @@ export class UserExporter {
 
     return new Promise<void>(async (res, rej) => {
       this.archive.on('warning', err => {
-        logger.warn('Warning to archive a file in ' + exportModel.filename, { err })
+        logger.warn('Warning to archive a file in ' + exportModel.filename, { ...lTags(), err })
       })
 
       this.archive.on('error', err => {
@@ -124,7 +127,7 @@ export class UserExporter {
         for (const { exporter, jsonFilename } of this.buildExporters(exportModel, user)) {
           const { json, staticFiles, activityPub, activityPubOutbox } = await exporter.export()
 
-          logger.debug('Adding JSON file ' + jsonFilename + ' in archive ' + exportModel.filename)
+          logger.debug(`Adding JSON file ${jsonFilename} in archive ${exportModel.filename}`, lTags())
           this.appendJSON(json, join('peertube', jsonFilename))
 
           if (activityPub) {
@@ -141,12 +144,12 @@ export class UserExporter {
           for (const file of staticFiles) {
             const archivePath = join('files', parse(jsonFilename).name, file.archivePath)
 
-            logger.debug(`Adding static file ${archivePath} in archive`)
+            logger.debug(`Adding static file ${archivePath} in archive`, lTags())
 
             try {
-              await this.addToArchiveAndWait(await file.createrReadStream(), archivePath)
+              await this.addToArchiveAndWait(await file.readStreamFactory(), archivePath)
             } catch (err) {
-              logger.error(`Cannot add ${archivePath} in archive`, { err })
+              logger.error(`Cannot add ${archivePath} in archive`, { err, ...lTags() })
             }
           }
         }
@@ -245,6 +248,14 @@ export class UserExporter {
       {
         jsonFilename: 'video-history.json',
         exporter: new UserVideoHistoryExporter(options)
+      },
+      {
+        jsonFilename: 'watched-words-lists.json',
+        exporter: new WatchedWordsListsExporter(options)
+      },
+      {
+        jsonFilename: 'automatic-tag-policies.json',
+        exporter: new AutoTagPoliciesExporter(options)
       }
     ] as { jsonFilename: string, exporter: AbstractUserExporter<any> }[]
   }

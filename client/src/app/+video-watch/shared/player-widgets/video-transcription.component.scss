@@ -1,0 +1,26 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_form-mixins' as *;
+
+.segment {
+  &.active,
+  &:hover {
+    background: pvar(--bg-secondary-300);
+  }
+}
+
+input[type=text] {
+  @include peertube-input-text(100%);
+}
+
+.settings-button my-global-icon {
+  @include global-icon-size(18px);
+}
+
+.settings-panel {
+  position: absolute;
+  width: 100%;
+  padding: 0 1.5rem;
+  left: 0;
+  right: 0;
+}

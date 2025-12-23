@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { wait } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, VideoCommentThreadTree, VideoPrivacy } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoCommentPolicy, VideoCommentThreadTree, VideoPrivacy } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
   PeerTubeServer,
   cleanupTests,
   createMultipleServers,
-  doubleFollow,
-  makeGetRequest,
+  followAll,
+  makeRawRequest,
   setAccessTokensToServers,
   setDefaultAccountAvatar,
   setDefaultChannelAvatar,
@@ -17,7 +17,8 @@ import {
 import { dateIsValid, testImageGeneratedByFFmpeg } from '@tests/shared/checks.js'
 import { checkTmpIsEmpty } from '@tests/shared/directories.js'
 import { checkVideoFilesWereRemoved, completeVideoCheck, saveVideoInServers } from '@tests/shared/videos.js'
-import { checkWebTorrentWorks } from '@tests/shared/webtorrent.js'
+import { checkWebTorrentWorks } from '@tests/shared/p2p.js'
+import Bluebird from 'bluebird'
 import { expect } from 'chai'
 import request from 'supertest'
 
@@ -49,12 +50,7 @@ describe('Test multiple servers', function () {
       videoChannelId = data[0].id
     }
 
-    // Server 1 and server 2 follow each other
-    await doubleFollow(servers[0], servers[1])
-    // Server 1 and server 3 follow each other
-    await doubleFollow(servers[0], servers[2])
-    // Server 2 and server 3 follow each other
-    await doubleFollow(servers[1], servers[2])
+    await followAll(servers)
   })
 
   it('Should not have videos for all servers', async function () {
@@ -66,7 +62,6 @@ describe('Test multiple servers', function () {
   })
 
   describe('Should upload the video and propagate on each server', function () {
-
     it('Should upload the video on server 1 and propagate on each server', async function () {
       this.timeout(60000)
 
@@ -89,7 +84,8 @@ describe('Test multiple servers', function () {
 
       // All servers should have this video
       let publishedAt: string = null
-      for (const server of servers) {
+
+      await Bluebird.map(servers, async server => {
         const checkAttributes = {
           name: 'my super name for server 1',
           category: 5,
@@ -107,7 +103,7 @@ describe('Test multiple servers', function () {
           duration: 10,
           tags: [ 'tag1p1', 'tag2p1' ],
           privacy: VideoPrivacy.PUBLIC,
-          commentsEnabled: true,
+          commentsPolicy: VideoCommentPolicy.ENABLED,
           downloadEnabled: true,
           channel: {
             displayName: 'my channel',
@@ -140,15 +136,11 @@ describe('Test multiple servers', function () {
           expect(image.createdAt).to.exist
           expect(image.updatedAt).to.exist
           expect(image.width).to.be.above(20).and.below(2000)
-          expect(image.path).to.exist
+          expect(image.fileUrl).to.exist
 
-          await makeGetRequest({
-            url: server.url,
-            path: image.path,
-            expectedStatus: HttpStatusCode.OK_200
-          })
+          await makeRawRequest({ url: image.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
         }
-      }
+      })
     })
 
     it('Should upload the video on server 2 and propagate on each server', async function () {
@@ -180,7 +172,7 @@ describe('Test multiple servers', function () {
       await waitJobs(servers)
 
       // All servers should have this video
-      for (const server of servers) {
+      await Bluebird.map(servers, async server => {
         const checkAttributes = {
           name: 'my super name for server 2',
           category: 4,
@@ -193,7 +185,7 @@ describe('Test multiple servers', function () {
             name: 'user1',
             host: servers[1].host
           },
-          commentsEnabled: true,
+          commentsPolicy: VideoCommentPolicy.ENABLED,
           downloadEnabled: true,
           duration: 5,
           tags: [ 'tag1p2', 'tag2p2', 'tag3p2' ],
@@ -240,7 +232,7 @@ describe('Test multiple servers', function () {
         const video = data[1]
 
         await completeVideoCheck({ server, originServer: servers[1], videoUUID: video.uuid, attributes: checkAttributes })
-      }
+      })
     })
 
     it('Should upload two videos on server 3 and propagate on each server', async function () {
@@ -279,7 +271,7 @@ describe('Test multiple servers', function () {
       await waitJobs(servers)
 
       // All servers should have this video
-      for (const server of servers) {
+      await Bluebird.map(servers, async server => {
         const { data } = await server.videos.list()
 
         expect(data).to.be.an('array')
@@ -309,7 +301,7 @@ describe('Test multiple servers', function () {
             host: servers[2].host
           },
           duration: 5,
-          commentsEnabled: true,
+          commentsPolicy: VideoCommentPolicy.ENABLED,
           downloadEnabled: true,
           tags: [ 'tag1p3' ],
           privacy: VideoPrivacy.PUBLIC,
@@ -342,7 +334,7 @@ describe('Test multiple servers', function () {
             name: 'root',
             host: servers[2].host
           },
-          commentsEnabled: true,
+          commentsPolicy: VideoCommentPolicy.ENABLED,
           downloadEnabled: true,
           duration: 5,
           tags: [ 'tag2p3', 'tag3p3', 'tag4p3' ],
@@ -363,12 +355,11 @@ describe('Test multiple servers', function () {
           ]
         }
         await completeVideoCheck({ server, originServer: servers[2], videoUUID: video2.uuid, attributes: checkAttributesVideo2 })
-      }
+      })
     })
   })
 
   describe('Local videos listing', function () {
-
     it('Should list only local videos on server 1', async function () {
       const { data, total } = await servers[0].videos.list({ isLocal: true })
 
@@ -399,7 +390,6 @@ describe('Test multiple servers', function () {
   })
 
   describe('All videos listing', function () {
-
     it('Should list and sort by "localVideoFilesSize"', async function () {
       const { data, total } = await servers[2].videos.list({ sort: '-localVideoFilesSize' })
 
@@ -414,7 +404,6 @@ describe('Test multiple servers', function () {
   })
 
   describe('Should seed the uploaded video', function () {
-
     it('Should add the file 1 by asking server 3', async function () {
       this.retries(2)
       this.timeout(30000)
@@ -649,7 +638,7 @@ describe('Test multiple servers', function () {
     it('Should have the video 3 updated on each server', async function () {
       this.timeout(30000)
 
-      for (const server of servers) {
+      await Bluebird.map(servers, async server => {
         const { data } = await server.videos.list()
 
         const videoUpdated = data.find(video => video.name === 'my super video updated')
@@ -671,7 +660,7 @@ describe('Test multiple servers', function () {
             host: servers[2].host
           },
           duration: 5,
-          commentsEnabled: true,
+          commentsPolicy: VideoCommentPolicy.ENABLED,
           downloadEnabled: true,
           tags: [ 'tag_up_1', 'tag_up_2' ],
           privacy: VideoPrivacy.PUBLIC,
@@ -693,7 +682,7 @@ describe('Test multiple servers', function () {
           previewfile: 'custom-preview'
         }
         await completeVideoCheck({ server, originServer: servers[2], videoUUID: videoUpdated.uuid, attributes: checkAttributes })
-      }
+      })
     })
 
     it('Should be able to remove originallyPublishedAt attribute', async function () {
@@ -1022,7 +1011,7 @@ describe('Test multiple servers', function () {
       this.timeout(20000)
 
       const attributes = {
-        commentsEnabled: false,
+        commentsPolicy: VideoCommentPolicy.DISABLED,
         downloadEnabled: false
       }
 
@@ -1032,7 +1021,8 @@ describe('Test multiple servers', function () {
 
       for (const server of servers) {
         const video = await server.videos.get({ id: videoUUID })
-        expect(video.commentsEnabled).to.be.false
+        expect(video.commentsPolicy.id).to.equal(VideoCommentPolicy.DISABLED)
+        expect(video.commentsPolicy.label).to.equal('Disabled')
         expect(video.downloadEnabled).to.be.false
 
         const text = 'my super forbidden comment'
@@ -1056,11 +1046,11 @@ describe('Test multiple servers', function () {
         .field('channelId', '1')
 
       await req.attach('videofile', buildAbsoluteFixturePath('video_short.webm'))
-               .expect(HttpStatusCode.OK_200)
+        .expect(HttpStatusCode.OK_200)
 
       await waitJobs(servers)
 
-      for (const server of servers) {
+      await Bluebird.map(servers, async server => {
         const { data } = await server.videos.list()
         const video = data.find(v => v.name === 'minimum parameters')
 
@@ -1079,7 +1069,7 @@ describe('Test multiple servers', function () {
           },
           isLocal,
           duration: 5,
-          commentsEnabled: true,
+          commentsPolicy: VideoCommentPolicy.ENABLED,
           downloadEnabled: true,
           tags: [],
           privacy: VideoPrivacy.PUBLIC,
@@ -1118,7 +1108,7 @@ describe('Test multiple servers', function () {
           ]
         }
         await completeVideoCheck({ server, originServer: servers[1], videoUUID: video.uuid, attributes: checkAttributes })
-      }
+      })
     })
   })
 

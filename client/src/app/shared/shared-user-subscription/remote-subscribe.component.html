@@ -1,30 +1,36 @@
 <form novalidate [formGroup]="form" (ngSubmit)="formValidated()">
   <div class="form-group">
-    <input type="email"
+    <input
+      type="email"
       formControlName="text"
       class="form-control"
-      (keyup.control.enter)="onValidKey()" (keyup.meta.enter)="onValidKey()"
-      placeholder="jane_doe@example.com">
+      (keyup.control.enter)="onValidKey()"
+      (keyup.meta.enter)="onValidKey()"
+      placeholder="jane_doe@example.com"
+    >
   </div>
 
-  <button type="submit" [disabled]="!form.valid" class="btn btn-sm btn-remote-follow" i18n>
-    <span *ngIf="!interact">Remote subscribe</span>
-    <span *ngIf="interact">Remote interact</span>
+  <button type="submit" [disabled]="!form.valid" class="peertube-button primary-button">
+    @if (interact()) {
+      <span i18n>Remote interact</span>
+    } @else {
+      <span i18n>Remote subscribe</span>
+    }
   </button>
 
-  <my-help *ngIf="!interact && showHelp">
-    <ng-template ptTemplate="customHtml">
-      <ng-container i18n>
-        You can subscribe to the channel via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).
-      </ng-container>
-    </ng-template>
-  </my-help>
-
-  <my-help *ngIf="showHelp && interact">
-    <ng-template ptTemplate="customHtml">
-      <ng-container i18n>
-        You can interact with this via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).
-      </ng-container>
-    </ng-template>
-  </my-help>
+  @if (showHelp()) {
+    @if (!interact()) {
+      <my-help>
+        <ng-container i18n>
+          You can subscribe to the channel via any ActivityPub-capable fediverse instance (PeerTube or Mastodon for example).
+        </ng-container>
+      </my-help>
+    } @else {
+      <my-help>
+        <ng-container i18n>
+          You can interact with this via any ActivityPub-capable fediverse instance (PeerTube or Mastodon for example).
+        </ng-container>
+      </my-help>
+    }
+  }
 </form>

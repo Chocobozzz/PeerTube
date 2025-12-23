@@ -1,72 +1,69 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
 
-h1 {
-  display: flex;
-  justify-content: space-between;
-
-  my-global-icon {
-    position: relative;
-    top: -2px;
-  }
-
-  .button-link {
-    @include peertube-button-link;
-    @include grey-button;
-    @include button-with-icon(18px, 3px, -1px);
-  }
+.results-container {
+  min-height: 40vh;
 }
 
-input[type=text] {
+input[type="text"] {
   @include peertube-input-text(300px);
 }
 
-my-edit-button {
-  @include margin-right(10px);
+.channel {
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid pvar(--input-border-color);
+  min-height: 130px;
 }
 
-.video-channel {
-  @include row-blocks;
-
-  padding-bottom: 0;
-
-  my-actor-avatar {
-    @include margin-right(10px);
-  }
+.channel-info {
+  display: flex;
+  gap: 1rem;
 }
 
-.video-channel-info {
-  flex-grow: 1;
+.metadata {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  min-width: 1px;
 }
 
 .video-channel-names {
-  @include disable-default-a-behaviour;
-
   width: fit-content;
   display: flex;
   align-items: baseline;
-  color: pvar(--mainForegroundColor);
+  color: pvar(--fg);
+
+  @include disable-default-a-behaviour;
 }
 
-.video-channel-display-name {
+.display-name {
   font-weight: $font-semibold;
-  font-size: 18px;
+
+  @include font-size(18px);
 }
 
-.video-channel-name {
-  @include margin-left(5px);
-
-  font-size: 14px;
-  color: $grey-actor-name;
+.handle,
+.followers,
+.videos-info {
+  @include font-size(14px);
 }
 
-.video-channel-followers {
-  color: pvar(--mainForegroundColor);
+.handle {
+  color: pvar(--fg-300);
+  margin-bottom: 0.5rem;
 }
 
-.video-channel-buttons {
-  margin-top: 10px;
-  min-width: 190px;
+.followers {
+  color: pvar(--fg);
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  @include margin-left(auto);
 }
 
 .chart-container {
@@ -75,66 +72,23 @@ my-edit-button {
   height: 100px;
 }
 
-.video-channels-header {
-  margin-bottom: 30px;
-}
-
 @media screen and (max-width: $small-view) {
-  .video-channels-header {
-    text-align: center;
-  }
-
-  .video-channel {
-    padding-bottom: 10px;
-
-    img {
-      @include margin-right(0);
-    }
-
-    .video-channel-buttons {
-      align-self: center;
-    }
-  }
-
-  .video-channel-info {
-    padding-bottom: 10px;
-    text-align: center;
-  }
-
-  .video-channel-names {
+  .channel-info {
     flex-direction: column;
-    align-items: center !important;
-    margin: auto;
+    align-items: center;
+    text-align: center;
+    padding-bottom: 1rem;
+    align-items: center;
   }
 
-  .video-channel-name {
-    @include margin-left(0 !important);
+  .metadata {
+    align-self: normal;
+    align-items: center;
   }
-}
 
-@media screen and (max-width: $mobile-view) {
-  .video-channels-header {
-    flex-direction: column;
+  .buttons {
+    text-align: center;
 
-    input[type=text] {
-      width: 100% !important;
-      margin-bottom: 12px;
-    }
-  }
-}
-
-@media screen and (min-width: breakpoint(lg)) {
-  :host-context(.main-col:not(.expanded)) {
-    .video-channel-buttons {
-      float: right;
-    }
-  }
-}
-
-@media screen and (min-width: $small-view) {
-  :host-context(.expanded) {
-    .video-channel-buttons {
-      float: right;
-    }
+    @include margin-left(0);
   }
 }

@@ -77,7 +77,7 @@ describe('Test external auth plugins', function () {
     const config = await server.config.getConfig()
 
     const auths = config.plugin.registeredExternalAuths
-    expect(auths).to.have.lengthOf(9)
+    expect(auths).to.have.lengthOf(10)
 
     const auth2 = auths.find((a) => a.authName === 'external-auth-2')
     expect(auth2).to.exist
@@ -122,7 +122,7 @@ describe('Test external auth plugins', function () {
   })
 
   it('Should reject auto external login with an expired token', async function () {
-    this.timeout(15000)
+    this.timeout(30000)
 
     await wait(5000)
 
@@ -132,7 +132,7 @@ describe('Test external auth plugins', function () {
       expectedStatus: HttpStatusCode.BAD_REQUEST_400
     })
 
-    await server.servers.waitUntilLog('expired external auth token', 4)
+    await server.servers.waitUntilLog('expired external auth token', 3)
   })
 
   it('Should auto login Cyan, create the user and use the token', async function () {
@@ -319,7 +319,7 @@ describe('Test external auth plugins', function () {
     const config = await server.config.getConfig()
 
     const auths = config.plugin.registeredExternalAuths
-    expect(auths).to.have.lengthOf(8)
+    expect(auths).to.have.lengthOf(9)
 
     const auth1 = auths.find(a => a.authName === 'external-auth-2')
     expect(auth1).to.not.exist
@@ -400,7 +400,7 @@ describe('Test external auth plugins', function () {
     const config = await server.config.getConfig()
 
     const auths = config.plugin.registeredExternalAuths
-    expect(auths).to.have.lengthOf(7)
+    expect(auths).to.have.lengthOf(8)
 
     const auth2 = auths.find((a) => a.authName === 'external-auth-2')
     expect(auth2).to.not.exist
@@ -432,5 +432,30 @@ describe('Test external auth plugins', function () {
 
     const { redirectUrl } = await server.login.logout({ token: resLogin.access_token })
     expect(redirectUrl).to.equal('https://example.com/redirectUrl?access_token=' + resLogin.access_token)
+  })
+
+  it('Should redirect to an external site after login if externalRedirectUri is set', async function () {
+
+    const res = await server.plugins.getExternalAuth({
+      npmName: 'test-external-auth-three',
+      npmVersion: '0.0.1',
+      authName: 'external-auth-9',
+      query: {
+        username: 'cid'
+      },
+      expectedStatus: HttpStatusCode.FOUND_302
+    })
+
+    const location = res.header.location
+    expect(location.startsWith('https://external.com/some/redirect/path?')).to.be.true
+    
+    const searchParams = decodeQueryString(location)
+  
+    expect(searchParams.externalAuthToken).to.exist
+    expect(searchParams.username).to.equal('cid')
+
+    externalAuthToken = searchParams.externalAuthToken as string
+
+    await server.login.loginUsingExternalToken({ username: 'cid', externalAuthToken, expectedStatus: HttpStatusCode.OK_200 })
   })
 })

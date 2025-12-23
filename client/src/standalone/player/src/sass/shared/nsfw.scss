@@ -1,0 +1,122 @@
+@use "sass:math";
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_icons" as *;
+@use "./_player-variables" as *;
+
+.video-js.vjs-peertube-skin {
+  --nsfw-info-margin-x: 20px;
+  --nsfw-info-margin-y: 20px;
+  --nsfw-font-size: 13px;
+
+  &.vjs-size-570 {
+    --nsfw-info-margin-x: 10px;
+    --nsfw-info-margin-y: 10px;
+  }
+
+  button:not(.vjs-disabled) {
+    cursor: pointer;
+  }
+
+  .nsfw-info,
+  .nsfw-details {
+    width: 100%;
+    width: fit-content;
+    background-color: pvar(--pt-player-overlay-secondary-bg);
+    color: pvar(--pt-player-overlay-secondary-fg);
+    max-width: calc(40% - 2 * var(--nsfw-info-margin-x));
+    padding: 1rem;
+  }
+
+  // ---------------------------------------------------------------------------
+  // NSFW info
+  // ---------------------------------------------------------------------------
+
+  .nsfw-info {
+    position: absolute;
+    top: var(--nsfw-info-margin-y);
+    right: var(--nsfw-info-margin-x);
+    max-height: calc(100% - 2 * var(--nsfw-info-margin-y));
+
+    font-size: var(--nsfw-font-size);
+    border-radius: 4px;
+    overflow: auto;
+
+    strong {
+      display: block;
+    }
+
+    button {
+      margin-top: 0.75rem;
+      padding: 0;
+      text-decoration: underline;
+
+      &:hover {
+        opacity: 0.8;
+      }
+
+      &::after {
+        @include chevron-down(8px, 2px);
+        @include margin-left(5px);
+      }
+    }
+  }
+
+  &.peertube-dock {
+    .nsfw-info {
+      top: unset;
+      bottom: var(--nsfw-info-margin-y);
+      max-width: 90%;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // NSFW details
+  // ---------------------------------------------------------------------------
+
+  .nsfw-details-container {
+    background-color: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+    width: 100%;
+    height: 100%;
+  }
+
+  .nsfw-details {
+    margin-left: auto;
+    height: 100%;
+
+    .nsfw-details-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      line-height: 1.5;
+      height: 100%;
+    }
+
+    .nsfw-details-flags + .nsfw-details-summary {
+      margin-top: 1rem;
+    }
+
+    .nsfw-details-close {
+      mask-image: url("../svg/x.svg");
+      -webkit-mask-image: url("../svg/x.svg");
+      mask-size: cover;
+      -webkit-mask-size: cover;
+      width: 20px;
+      height: 20px;
+      background-color: pvar(--pt-player-overlay-secondary-fg);
+      display: block;
+
+      @include margin-left(auto);
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+}

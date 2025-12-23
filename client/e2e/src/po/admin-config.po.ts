@@ -1,65 +1,73 @@
-import { browserSleep, getCheckbox, go, isCheckboxSelected } from '../utils'
+import { NSFWPolicyType } from '@peertube/peertube-models'
+import { browserSleep, go, setCheckboxEnabled } from '../utils'
 
 export class AdminConfigPage {
+  async navigateTo (page: 'information' | 'live' | 'general' | 'homepage') {
+    const url = '/admin/settings/config/' + page
 
-  async navigateTo (tab: 'instance-homepage' | 'basic-configuration' | 'instance-information') {
-    const waitTitles = {
-      'instance-homepage': 'INSTANCE HOMEPAGE',
-      'basic-configuration': 'APPEARANCE',
-      'instance-information': 'INSTANCE'
+    const currentUrl = await browser.getUrl()
+    if (!currentUrl.endsWith(url)) {
+      await go(url)
     }
-    await go('/admin/config/edit-custom#' + tab)
 
-    await $('h2=' + waitTitles[tab]).waitForDisplayed()
+    await $('a.active[href="' + url + '"]').waitForDisplayed()
   }
 
-  async updateNSFWSetting (newValue: 'do_not_list' | 'blur' | 'display') {
-    const elem = $('#instanceDefaultNSFWPolicy')
+  async updateNSFWSetting (newValue: NSFWPolicyType) {
+    await this.navigateTo('information')
+
+    const elem = $(`#instanceDefaultNSFWPolicy-${newValue} + label`)
 
     await elem.waitForDisplayed()
     await elem.scrollIntoView({ block: 'center' }) // Avoid issues with fixed header
     await elem.waitForClickable()
 
-    return elem.selectByAttribute('value', newValue)
+    return elem.click()
   }
 
-  updateHomepage (newValue: string) {
-    return $('#instanceCustomHomepageContent').setValue(newValue)
+  async updateHomepage (newValue: string) {
+    await this.navigateTo('homepage')
+
+    return $('#homepageContent').setValue(newValue)
   }
 
   async toggleSignup (enabled: boolean) {
-    if (await isCheckboxSelected('signupEnabled') === enabled) return
+    await this.navigateTo('general')
 
-    const checkbox = await getCheckbox('signupEnabled')
-
-    await checkbox.waitForClickable()
-    await checkbox.click()
+    return setCheckboxEnabled('signupEnabled', enabled)
   }
 
   async toggleSignupApproval (required: boolean) {
-    if (await isCheckboxSelected('signupRequiresApproval') === required) return
+    await this.navigateTo('general')
 
-    const checkbox = await getCheckbox('signupRequiresApproval')
-
-    await checkbox.waitForClickable()
-    await checkbox.click()
+    return setCheckboxEnabled('signupRequiresApproval', required)
   }
 
   async toggleSignupEmailVerification (required: boolean) {
-    if (await isCheckboxSelected('signupRequiresEmailVerification') === required) return
+    await this.navigateTo('general')
 
-    const checkbox = await getCheckbox('signupRequiresEmailVerification')
+    return setCheckboxEnabled('signupRequiresEmailVerification', required)
+  }
 
-    await checkbox.waitForClickable()
-    await checkbox.click()
+  async toggleLive (enabled: boolean) {
+    await this.navigateTo('live')
+
+    return setCheckboxEnabled('liveEnabled', enabled)
   }
 
   async save () {
-    const button = $('input[type=submit]')
+    const button = $('my-admin-save-bar .save-button')
 
-    await button.waitForClickable()
+    try {
+      await button.waitForClickable()
+    } catch {
+      // The config may have not been changed
+      return
+    } finally {
+      await browserSleep(1000) // Wait for the button to be clickable
+    }
+
     await button.click()
-
-    await browserSleep(1000)
+    await button.waitForClickable({ reverse: true })
   }
 }

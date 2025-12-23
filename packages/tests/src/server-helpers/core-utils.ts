@@ -14,7 +14,6 @@ import { VideoResolution } from '@peertube/peertube-models'
 import { objectConverter, parseBytes, parseDurationToMs, parseSemVersion } from '@peertube/peertube-server/core/helpers/core-utils.js'
 
 describe('Parse Bytes', function () {
-
   it('Should pass on valid value', function () {
     // just return it
     expect(parseBytes(-1024)).to.equal(-1024)
@@ -55,7 +54,6 @@ describe('Parse Bytes', function () {
 })
 
 describe('Parse duration', function () {
-
   it('Should pass when given valid value', function () {
     expect(parseDurationToMs(35)).to.equal(35)
     expect(parseDurationToMs(-35)).to.equal(-35)
@@ -63,6 +61,7 @@ describe('Parse duration', function () {
     expect(parseDurationToMs('1 minute')).to.equal(60 * 1000)
     expect(parseDurationToMs('1 hour')).to.equal(3600 * 1000)
     expect(parseDurationToMs('35 hours')).to.equal(3600 * 35 * 1000)
+    expect(parseDurationToMs('15 years')).to.equal(15 * 3600 * 24 * 365 * 1000)
   })
 
   it('Should be invalid when given invalid value', function () {
@@ -71,7 +70,6 @@ describe('Parse duration', function () {
 })
 
 describe('Time to int', function () {
-
   it('Should correctly parse time to int', function () {
     expect(timeToInt(undefined)).to.equal(0)
     expect(timeToInt('')).to.equal(0)
@@ -93,7 +91,6 @@ describe('Time to int', function () {
 })
 
 describe('Object', function () {
-
   it('Should convert an object', function () {
     function keyConverter (k: string) {
       return snakeCase(k)
@@ -143,7 +140,6 @@ describe('Object', function () {
 })
 
 describe('Bitrate', function () {
-
   it('Should get appropriate max bitrate', function () {
     const tests = [
       { resolution: VideoResolution.H_144P, ratio: 16 / 9, fps: 24, min: 200, max: 400 },
@@ -177,7 +173,6 @@ describe('Bitrate', function () {
   })
 
   describe('Ratio', function () {
-
     it('Should have the correct aspect ratio in landscape', function () {
       expect(buildAspectRatio({ width: 1920, height: 1080 })).to.equal(1.7778)
       expect(buildAspectRatio({ width: 1000, height: 1000 })).to.equal(1)
@@ -190,7 +185,6 @@ describe('Bitrate', function () {
 })
 
 describe('Parse semantic version string', function () {
-
   it('Should parse Node.js version string', function () {
     const actual = parseSemVersion('v18.16.0')
 
@@ -241,7 +235,6 @@ describe('Parse semantic version string', function () {
 })
 
 describe('Extract chapters', function () {
-
   it('Should not extract chapters', function () {
     expect(parseChapters('my super description\nno?', 100)).to.deep.equal([])
     expect(parseChapters('m00:00 super description\nno?', 100)).to.deep.equal([])
@@ -267,7 +260,13 @@ describe('Extract chapters', function () {
     ])
     expect(parseChapters('hi\n\n00:01:30 chapter 1\n00:01:35 chapter 2\nhi\n00:01:40 chapter 3', 100)).to.deep.equal([
       { timecode: 90, title: 'chapter 1' },
-      { timecode: 95, title: 'chapter 2' }
+      { timecode: 95, title: 'chapter 2' },
+      { timecode: 100, title: 'chapter 3' }
+    ])
+    expect(parseChapters('hi\n\n00:01:30 chapter 1\n00:01:35 chapter 2\nhi\n00:01:32 chapter 3\n00:01:40 chapter 4', 100)).to.deep.equal([
+      { timecode: 90, title: 'chapter 1' },
+      { timecode: 95, title: 'chapter 2' },
+      { timecode: 100, title: 'chapter 4' }
     ])
   })
 

@@ -1,27 +1,33 @@
-import { Component, Input } from '@angular/core'
+import { Clipboard } from '@angular/cdk/clipboard'
+import { NgClass } from '@angular/common'
+import { booleanAttribute, Component, inject, input } from '@angular/core'
 import { Notifier } from '@app/core'
 import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
-import { NgClass } from '@angular/common'
-import { CdkCopyToClipboard } from '@angular/cdk/clipboard'
 
 @Component({
   selector: 'my-copy-button',
   styleUrls: [ './copy-button.component.scss' ],
   templateUrl: './copy-button.component.html',
-  standalone: true,
-  imports: [ CdkCopyToClipboard, NgClass, GlobalIconComponent ]
+  providers: [ Clipboard ],
+  imports: [ NgClass, GlobalIconComponent ]
 })
 export class CopyButtonComponent {
-  @Input() value: string
-  @Input() title: string
-  @Input() notification: string
-  @Input() isInputGroup = false
+  private notifier = inject(Notifier)
+  private clipboard = inject(Clipboard)
 
-  constructor (private notifier: Notifier) {
+  readonly value = input<string>(undefined)
+  readonly elementContent = input<HTMLElement>(undefined)
 
-  }
+  readonly title = input<string>(undefined)
+  readonly notification = input<string>(undefined)
 
-  activateCopiedMessage () {
-    if (this.notification) this.notifier.success(this.notification)
+  readonly withBorder = input(false, { transform: booleanAttribute })
+  readonly isInputGroup = input(false, { transform: booleanAttribute })
+
+  copy () {
+    this.clipboard.copy(this.value() || this.elementContent()?.innerText)
+
+    const notification = this.notification()
+    if (notification) this.notifier.success(notification)
   }
 }

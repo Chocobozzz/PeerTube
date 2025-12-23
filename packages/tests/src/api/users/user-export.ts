@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { wait } from '@peertube/peertube-core-utils'
+import { hasAudioStream, hasVideoStream } from '@peertube/peertube-ffmpeg'
 import {
-  AccountExportJSON, ActivityPubActor,
+  AccountExportJSON,
+  ActivityPubActor,
   ActivityPubOrderedCollection,
+  AutoTagPoliciesJSON,
   BlocklistExportJSON,
   ChannelExportJSON,
   CommentsExportJSON,
@@ -20,15 +23,19 @@ import {
   VideoChapterObject,
   VideoCommentObject,
   VideoCreateResult,
-  VideoExportJSON, VideoPlaylistCreateResult,
+  VideoExportJSON,
+  VideoPlaylistCreateResult,
   VideoPlaylistPrivacy,
   VideoPlaylistsExportJSON,
   VideoPlaylistType,
-  VideoPrivacy
+  VideoPrivacy,
+  WatchedWordsListsJSON
 } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
-  cleanupTests, getRedirectionUrl, makeActivityPubRawRequest,
+  cleanupTests,
+  getRedirectionUrl,
+  makeActivityPubRawRequest,
   makeRawRequest,
   ObjectStorageCommand,
   PeerTubeServer,
@@ -43,6 +50,7 @@ import {
   parseAPOutbox,
   parseZIPJSONFile,
   prepareImportExportTests,
+  probeZIPFile,
   regenerateExport
 } from '@tests/shared/import-export.js'
 import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
@@ -77,9 +85,8 @@ function runTest (withObjectStorage: boolean) {
 
     objectStorage = withObjectStorage
       ? new ObjectStorageCommand()
-      : undefined;
-
-    ({
+      : undefined
+    ;({
       rootId,
       noahId,
       remoteRootId,
@@ -93,6 +100,16 @@ function runTest (withObjectStorage: boolean) {
       server,
       remoteServer
     } = await prepareImportExportTests({ emails, objectStorage, withBlockedServer: false }))
+
+    // Create collaboration to ensure we don't export them
+    const userToken = await server.users.generateUserAndToken('user')
+    const { id } = await server.channelCollaborators.invite({ target: 'noah', channel: 'user_channel', token: userToken })
+    await server.channelCollaborators.accept({ id, channel: 'user_channel', token: noahToken })
+    await server.videos.quickUpload({
+      name: 'collab video',
+      token: userToken,
+      channelId: await server.channels.getIdOf({ channelName: 'user_channel' })
+    })
   })
 
   it('Should export root account', async function () {
@@ -138,6 +155,9 @@ function runTest (withObjectStorage: boolean) {
     await waitJobs([ server ])
   })
 
+  it('Should not export collaborations', async function () {
+  })
+
   it('Should have received an email on archive creation', async function () {
     const email = emails.find(e => {
       return e['to'][0]['address'] === 'admin' + server.internalServerNumber + '@example.com' &&
@@ -172,7 +192,9 @@ function runTest (withObjectStorage: boolean) {
       'peertube/likes.json',
       'peertube/user-settings.json',
       'peertube/video-playlists.json',
-      'peertube/videos.json'
+      'peertube/videos.json',
+      'peertube/watched-words-lists.json',
+      'peertube/automatic-tag-policies.json'
     ]
 
     for (const file of files) {
@@ -260,7 +282,7 @@ function runTest (withObjectStorage: boolean) {
       expect(outbox.id).to.equal('outbox.json')
       expect(outbox.type).to.equal('OrderedCollection')
 
-      // 3 videos and 2 comments
+      // 4 videos and 2 comments
       expect(outbox.totalItems).to.equal(6)
       expect(outbox.orderedItems).to.have.lengthOf(6)
 
@@ -279,7 +301,11 @@ function runTest (withObjectStorage: boolean) {
         // Subtitles
         expect(video.subtitleLanguage).to.have.lengthOf(2)
         for (const subtitle of video.subtitleLanguage) {
-          await checkFileExistsInZIP(zip, subtitle.url, '/activity-pub')
+          const subtitleUrl = typeof subtitle.url === 'string'
+            ? subtitle.url
+            : subtitle.url.find(u => u.mediaType === 'text/vtt').href
+
+          await checkFileExistsInZIP(zip, subtitleUrl, '/activity-pub')
         }
 
         // Chapters
@@ -442,6 +468,7 @@ function runTest (withObjectStorage: boolean) {
         expect(secondaryChannel.displayName).to.equal('noah display name')
         expect(secondaryChannel.description).to.equal('noah description')
         expect(secondaryChannel.support).to.equal('noah support')
+        expect(secondaryChannel.playerSettings.theme).to.equal('galaxy')
 
         expect(secondaryChannel.avatars).to.have.lengthOf(4)
         expect(secondaryChannel.banners).to.have.lengthOf(2)
@@ -541,6 +568,8 @@ function runTest (withObjectStorage: boolean) {
         expect(publicVideo.source.metadata?.streams).to.exist
         expect(publicVideo.source.resolution).to.equal(720)
         expect(publicVideo.source.size).to.equal(218910)
+
+        expect(publicVideo.playerSettings.theme).to.equal('lucide')
       }
 
       {
@@ -553,6 +582,8 @@ function runTest (withObjectStorage: boolean) {
         expect(liveVideo.live.permanentLive).to.be.true
         expect(liveVideo.live.streamKey).to.exist
         expect(liveVideo.live.replaySettings.privacy).to.equal(VideoPrivacy.PUBLIC)
+        expect(liveVideo.live.schedules).to.have.lengthOf(1)
+        expect(liveVideo.live.schedules[0].startAt).to.exist
 
         expect(liveVideo.channel.name).to.equal('noah_second_channel')
         expect(liveVideo.privacy).to.equal(VideoPrivacy.PASSWORD_PROTECTED)
@@ -573,6 +604,28 @@ function runTest (withObjectStorage: boolean) {
         const secondaryChannelVideo = json.videos.find(v => v.name === 'noah public video second channel')
         expect(secondaryChannelVideo.channel.name).to.equal('noah_second_channel')
       }
+    }
+
+    {
+      const json = await parseZIPJSONFile<WatchedWordsListsJSON>(zip, 'peertube/watched-words-lists.json')
+
+      expect(json.watchedWordLists).to.have.lengthOf(2)
+
+      expect(json.watchedWordLists[0].createdAt).to.exist
+      expect(json.watchedWordLists[0].updatedAt).to.exist
+      expect(json.watchedWordLists[0].listName).to.equal('forbidden-list')
+      expect(json.watchedWordLists[0].words).to.have.members([ 'forbidden' ])
+
+      expect(json.watchedWordLists[1].createdAt).to.exist
+      expect(json.watchedWordLists[1].updatedAt).to.exist
+      expect(json.watchedWordLists[1].listName).to.equal('allowed-list')
+      expect(json.watchedWordLists[1].words).to.have.members([ 'allowed', 'allowed2' ])
+    }
+
+    {
+      const json = await parseZIPJSONFile<AutoTagPoliciesJSON>(zip, 'peertube/automatic-tag-policies.json')
+      expect(json.reviewComments).to.have.lengthOf(2)
+      expect(json.reviewComments.map(r => r.name)).to.have.members([ 'external-link', 'forbidden-list' ])
     }
   })
 
@@ -725,6 +778,53 @@ function runTest (withObjectStorage: boolean) {
       expect(video.attachment).to.have.lengthOf(1)
       expect(video.attachment[0].url).to.equal('../files/videos/video-files/' + externalVideo.uuid + '.mp4')
       await checkFileExistsInZIP(zip, video.attachment[0].url, '/activity-pub')
+
+      const probe = await probeZIPFile(zip, video.attachment[0].url, '/activity-pub')
+
+      expect(await hasAudioStream('', probe)).to.be.true
+      expect(await hasVideoStream('', probe)).to.be.true
+    }
+  })
+
+  it('Should export videos on instance with HLS only and audio separated', async function () {
+    this.timeout(120000)
+
+    await remoteServer.config.enableMinimumTranscoding({ hls: true, webVideo: false, splitAudioAndVideo: true, keepOriginal: false })
+
+    const videoName = 'hls and audio separated'
+    await remoteServer.videos.quickUpload({ name: videoName })
+    await waitJobs([ remoteServer ])
+
+    await regenerateExport({ server: remoteServer, userId: remoteRootId, withVideoFiles: true })
+
+    const zip = await downloadZIP(remoteServer, remoteRootId)
+    let videoUUID: string
+
+    {
+      const json = await parseZIPJSONFile<VideoExportJSON>(zip, 'peertube/videos.json')
+
+      expect(json.videos).to.have.lengthOf(2)
+      const video = json.videos.find(v => v.name === videoName)
+
+      expect(video.files).to.have.lengthOf(0)
+      expect(video.streamingPlaylists).to.have.lengthOf(1)
+      expect(video.streamingPlaylists[0].files).to.have.lengthOf(3)
+
+      videoUUID = video.uuid
+    }
+
+    {
+      const outbox = await parseAPOutbox(zip)
+      const { object: video } = findVideoObjectInOutbox(outbox, videoName)
+
+      expect(video.attachment).to.have.lengthOf(1)
+      expect(video.attachment[0].url).to.equal('../files/videos/video-files/' + videoUUID + '.mp4')
+      await checkFileExistsInZIP(zip, video.attachment[0].url, '/activity-pub')
+
+      const probe = await probeZIPFile(zip, video.attachment[0].url, '/activity-pub')
+
+      expect(await hasAudioStream('', probe)).to.be.true
+      expect(await hasVideoStream('', probe)).to.be.true
     }
   })
 
@@ -777,6 +877,7 @@ function runTest (withObjectStorage: boolean) {
 
     await server.userExports.request({ userId: noahId, withVideoFiles: true })
     await server.userExports.waitForCreation({ userId: noahId })
+    await wait(1500)
 
     const tomorrow = new Date()
     tomorrow.setDate(tomorrow.getDate() + 1)
@@ -791,6 +892,13 @@ function runTest (withObjectStorage: boolean) {
 
     await checkExportFileExists({ exists: true, server, userExport, withObjectStorage, redirectedUrl })
 
+    // Should not delete the file
+    await server.debug.sendCommand({ body: { command: 'remove-expired-user-exports' } })
+    // File deletion
+    await wait(500)
+
+    await checkExportFileExists({ exists: true, server, userExport, withObjectStorage, redirectedUrl })
+
     await server.config.updateExistingConfig({
       newConfig: {
         export: {
@@ -801,11 +909,7 @@ function runTest (withObjectStorage: boolean) {
       }
     })
 
-    await server.debug.sendCommand({
-      body: {
-        command: 'remove-expired-user-exports'
-      }
-    })
+    await server.debug.sendCommand({ body: { command: 'remove-expired-user-exports' } })
 
     // File deletion
     await wait(500)
@@ -819,14 +923,13 @@ function runTest (withObjectStorage: boolean) {
   })
 
   after(async function () {
-    MockSmtpServer.Instance.kill()
+    await MockSmtpServer.Instance.kill()
 
     await cleanupTests([ server, remoteServer ])
   })
 }
 
 describe('Test user export', function () {
-
   describe('From filesystem', function () {
     runTest(false)
   })

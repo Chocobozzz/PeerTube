@@ -1,0 +1,30 @@
+@use "sass:math";
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
+
+.banner-preview {
+  max-width: 500px;
+  aspect-ratio: math.div(1, $banner-inverted-ratio);
+  width: 100%;
+  height: auto;
+}
+
+.avatar-preview,
+.header-square-preview {
+  width: 128px;
+  height: 128px;
+}
+
+.header-wide-preview {
+  width: auto;
+  height: 128px;
+  max-width: 500px;
+}
+
+.opengraph-preview {
+  max-width: 500px;
+  aspect-ratio: math.div(1200, 630);
+  width: 100%;
+  height: auto;
+}

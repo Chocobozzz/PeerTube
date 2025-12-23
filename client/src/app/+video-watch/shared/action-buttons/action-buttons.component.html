@@ -1,0 +1,79 @@
+<div class="video-actions-rates">
+  <div class="video-actions justify-content-end">
+    <my-video-rate
+      [video]="video()" [videoPassword]="videoPassword()" [isUserLoggedIn]="isUserLoggedIn()"
+      (rateUpdated)="onRateUpdated($event)" (userRatingLoaded)="onRateUpdated($event)"
+    ></my-video-rate>
+
+    @if (video().support) {
+      <button
+        (click)="showSupportModal()" (keyup.enter)="showSupportModal()" class="action-button support-button"
+        [attr.aria-label]="tooltipSupport" [ngbTooltip]="tooltipSupport" placement="bottom auto"
+        >
+        <my-global-icon iconName="support" aria-hidden="true"></my-global-icon>
+        <span class="icon-text" i18n>SUPPORT</span>
+      </button>
+    }
+
+    <button (click)="showShareModal()" (keyup.enter)="showShareModal()" class="action-button" aria-label="Open the modal to share this video" i18n-ariaLabel>
+      <my-global-icon iconName="share" aria-hidden="true"></my-global-icon>
+      <span class="icon-text" i18n>SHARE</span>
+    </button>
+
+    @if (isVideoAddableToPlaylist()) {
+      <div
+        class="action-dropdown" ngbDropdown placement="top" role="button" autoClose="outside"
+        [ngbTooltip]="tooltipSaveToPlaylist" placement="bottom auto"
+        >
+        <button class="action-button action-button-save" ngbDropdownToggle>
+          <my-global-icon iconName="playlist-add" aria-hidden="true"></my-global-icon>
+          <span class="icon-text" i18n>SAVE</span>
+        </button>
+        <div ngbDropdownMenu>
+          <my-video-add-to-playlist [video]="video()"></my-video-add-to-playlist>
+        </div>
+      </div>
+    }
+
+    @if (!isUserLoggedIn() && !video().isLive) {
+      @if (isVideoDownloadable()) {
+        <button
+          class="action-button action-button-download"
+          (click)="showDownloadModal()" (keydown.enter)="showDownloadModal()"
+          aria-label="Open the modal to download this video" i18n-ariaLabel
+          >
+          <my-global-icon iconName="download" aria-hidden="true"></my-global-icon>
+          <span class="icon-text d-none d-sm-inline" i18n>DOWNLOAD</span>
+        </button>
+      }
+
+      <my-video-download #videoDownloadModal [videoPassword]="videoPassword()"></my-video-download>
+    }
+
+    <my-video-actions-dropdown
+      [video]="video()" [videoCaptions]="videoCaptions()" [transcriptionWidgetOpened]="transcriptionWidgetOpened()"
+      [displayOptions]="videoActionsOptions" (videoRemoved)="onVideoRemoved()"
+      (showTranscriptionWidget)="showTranscriptionWidget.emit()" (hideTranscriptionWidget)="hideTranscriptionWidget.emit()"
+      placement="bottom auto" buttonIcon="more-horizontal" buttonStyled="true"
+      actionAvailabilityHint="true"
+    ></my-video-actions-dropdown>
+  </div>
+
+  <div class="likes-dislikes-bar-outer-container">
+    @if (video().likes !== 0 || video().dislikes !== 0) {
+      <div
+        class="likes-dislikes-bar-inner-container"
+        [ngbTooltip]="likesBarTooltipText" placement="bottom" tabindex="0"
+        >
+        <div class="likes-dislikes-bar">
+          <div class="likes-bar" [ngClass]="{ 'liked': userRating !== 'none' }" [ngStyle]="{ 'width.%': video().likesPercent }"></div>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
+@if (video()) {
+  <my-support-modal #supportModal [name]="video().channel.displayName" [content]="video().support"></my-support-modal>
+  <my-video-share #videoShareModal [video]="video()" [videoCaptions]="videoCaptions()" [playlist]="playlist()"></my-video-share>
+}

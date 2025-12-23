@@ -1,25 +1,26 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
-import chaiJSONSChema from 'chai-json-schema'
-import chaiXML from 'chai-xml'
-import { XMLParser, XMLValidator } from 'fast-xml-parser'
-import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoCommentPolicy, VideoPrivacy } from '@peertube/peertube-models'
 import {
+  PeerTubeServer,
+  PluginsCommand,
   cleanupTests,
   createMultipleServers,
   createSingleServer,
   doubleFollow,
   makeGetRequest,
   makeRawRequest,
-  PeerTubeServer,
-  PluginsCommand,
   setAccessTokensToServers,
   setDefaultChannelAvatar,
   setDefaultVideoChannel,
   stopFfmpeg,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { expectStartWith } from '@tests/shared/checks.js'
+import * as chai from 'chai'
+import chaiJSONSChema from 'chai-json-schema'
+import chaiXML from 'chai-xml'
+import { XMLParser, XMLValidator } from 'fast-xml-parser'
 
 chai.use(chaiXML)
 chai.use(chaiJSONSChema)
@@ -33,12 +34,14 @@ describe('Test syndication feeds', () => {
 
   let userAccessToken: string
   let rootAccountId: number
-  let rootChannelId: number
+  let rootChannelIdServer1: number
 
   let userAccountId: number
   let userChannelId: number
   let userFeedToken: string
 
+  let videoIdWithComments: string
+  let videoIdWithoutComments: string
   let liveId: string
 
   before(async function () {
@@ -49,17 +52,17 @@ describe('Test syndication feeds', () => {
     serverHLSOnly = await createSingleServer(3)
 
     await setAccessTokensToServers([ ...servers, serverHLSOnly ])
-    await setDefaultChannelAvatar(servers[0])
-    await setDefaultVideoChannel(servers)
+    await setDefaultChannelAvatar([ servers[0], serverHLSOnly ])
+    await setDefaultVideoChannel([ ...servers, serverHLSOnly ])
     await doubleFollow(servers[0], servers[1])
 
     await servers[0].config.enableLive({ allowReplay: false, transcoding: false })
-    await serverHLSOnly.config.enableTranscoding({ webVideo: false, hls: true, with0p: true })
+    await serverHLSOnly.config.enableTranscoding({ webVideo: false, hls: true, with0p: true, resolutions: 'max' })
 
     {
       const user = await servers[0].users.getMyInfo()
       rootAccountId = user.account.id
-      rootChannelId = user.videoChannels[0].id
+      rootChannelIdServer1 = user.videoChannels[0].id
     }
 
     {
@@ -74,7 +77,8 @@ describe('Test syndication feeds', () => {
     }
 
     {
-      await servers[0].videos.upload({ token: userAccessToken, attributes: { name: 'user video' } })
+      const { uuid } = await servers[0].videos.upload({ token: userAccessToken, attributes: { name: 'user video' } })
+      videoIdWithoutComments = uuid
     }
 
     {
@@ -83,10 +87,11 @@ describe('Test syndication feeds', () => {
         description: 'my super description for server 1',
         fixture: 'video_short.webm'
       }
-      const { id } = await servers[0].videos.upload({ attributes })
+      const { uuid } = await servers[0].videos.upload({ attributes })
+      videoIdWithComments = uuid
 
-      await servers[0].comments.createThread({ videoId: id, text: 'super comment 1' })
-      await servers[0].comments.createThread({ videoId: id, text: 'super comment 2' })
+      await servers[0].comments.createThread({ videoId: uuid, text: 'super comment 1' })
+      await servers[0].comments.createThread({ videoId: uuid, text: 'super comment 2' })
     }
 
     {
@@ -103,7 +108,7 @@ describe('Test syndication feeds', () => {
       await servers[0].comments.createThread({ videoId: id, text: 'comment on password protected video' })
     }
 
-    await serverHLSOnly.videos.upload({ attributes: { name: 'hls only video' } })
+    await serverHLSOnly.videos.upload({ attributes: { name: 'hls only video', nsfw: true } })
 
     await waitJobs([ ...servers, serverHLSOnly ])
 
@@ -111,7 +116,6 @@ describe('Test syndication feeds', () => {
   })
 
   describe('All feed', function () {
-
     it('Should be well formed XML (covers RSS 2.0 and ATOM 1.0 endpoints)', async function () {
       for (const feed of [ 'video-comments' as 'video-comments', 'videos' as 'videos' ]) {
         const rss = await servers[0].feed.getXML({ feed, ignoreCache: true })
@@ -123,7 +127,7 @@ describe('Test syndication feeds', () => {
     })
 
     it('Should be well formed XML (covers Podcast endpoint)', async function () {
-      const podcast = await servers[0].feed.getPodcastXML({ ignoreCache: true, channelId: rootChannelId })
+      const podcast = await servers[0].feed.getPodcastXML({ ignoreCache: true, channelId: rootChannelIdServer1 })
       expect(podcast).xml.to.be.valid()
     })
 
@@ -149,13 +153,11 @@ describe('Test syndication feeds', () => {
   })
 
   describe('Videos feed', function () {
-
     describe('Podcast feed', function () {
-
-      it('Should contain a valid podcast:alternateEnclosure', async function () {
+      it('Should contain a valid podcast enclosures', async function () {
         // Since podcast feeds should only work on the server they originate on,
         // only test the first server where the videos reside
-        const rss = await servers[0].feed.getPodcastXML({ ignoreCache: false, channelId: rootChannelId })
+        const rss = await servers[0].feed.getPodcastXML({ ignoreCache: false, channelId: servers[0].store.channel.id })
         expect(XMLValidator.validate(rss)).to.be.true
 
         const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
@@ -167,6 +169,9 @@ describe('Test syndication feeds', () => {
 
         const enclosure = xmlDoc.rss.channel.item.enclosure
         expect(enclosure).to.exist
+        expect(enclosure['@_url']).to.contain(`${servers[0].url}/static/web-videos/`)
+        expect(enclosure['@_type']).to.equal('video/webm')
+
         const alternateEnclosure = xmlDoc.rss.channel.item['podcast:alternateEnclosure']
         expect(alternateEnclosure).to.exist
 
@@ -183,8 +188,8 @@ describe('Test syndication feeds', () => {
         expect(alternateEnclosure['podcast:source'][2]['@_uri']).to.contain('magnet:?')
       })
 
-      it('Should contain a valid podcast:alternateEnclosure with HLS only', async function () {
-        const rss = await serverHLSOnly.feed.getPodcastXML({ ignoreCache: false, channelId: rootChannelId })
+      it('Should contain a valid podcast enclosures with HLS only', async function () {
+        const rss = await serverHLSOnly.feed.getPodcastXML({ ignoreCache: false, channelId: serverHLSOnly.store.channel.id })
         expect(XMLValidator.validate(rss)).to.be.true
 
         const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
@@ -195,20 +200,34 @@ describe('Test syndication feeds', () => {
         expect(itemGuid['@_isPermaLink']).to.equal(true)
 
         const enclosure = xmlDoc.rss.channel.item.enclosure
-        const alternateEnclosure = xmlDoc.rss.channel.item['podcast:alternateEnclosure']
-        expect(alternateEnclosure).to.exist
+        expect(enclosure).to.exist
+        expectStartWith(enclosure['@_url'], `${serverHLSOnly.url}/download/videos/generate/`)
+        expect(enclosure['@_url']).to.contain('.m4a')
+        expect(enclosure['@_type']).to.equal('audio/x-m4a')
 
-        expect(alternateEnclosure['@_type']).to.equal('application/x-mpegURL')
-        expect(alternateEnclosure['@_lang']).to.equal('zh')
-        expect(alternateEnclosure['@_title']).to.equal('HLS')
-        expect(alternateEnclosure['@_default']).to.equal(true)
+        const res = await makeRawRequest({ url: enclosure['@_url'], expectedStatus: HttpStatusCode.OK_200 })
+        expect(res.headers['content-type']).to.equal('audio/mp4')
+        expect(res.headers['content-disposition']).to.not.exist
 
-        expect(alternateEnclosure['podcast:source']['@_uri']).to.contain('-master.m3u8')
-        expect(alternateEnclosure['podcast:source']['@_uri']).to.equal(enclosure['@_url'])
+        const alternateEnclosures = xmlDoc.rss.channel.item['podcast:alternateEnclosure']
+        expect(alternateEnclosures).to.be.an('array')
+
+        const audioEnclosure = alternateEnclosures.find(e => e['@_type'] === 'audio/x-m4a')
+        expect(audioEnclosure).to.exist
+        expect(audioEnclosure['@_default']).to.equal(true)
+        expect(audioEnclosure['podcast:source']['@_uri']).to.equal(enclosure['@_url'])
+
+        const hlsEnclosure = alternateEnclosures.find(e => e['@_type'] === 'application/x-mpegURL')
+        expect(hlsEnclosure).to.exist
+        expect(hlsEnclosure['@_lang']).to.equal('zh')
+        expect(hlsEnclosure['@_title']).to.equal('HLS')
+        expect(hlsEnclosure['@_default']).to.equal(false)
+
+        expect(hlsEnclosure['podcast:source']['@_uri']).to.contain('-master.m3u8')
       })
 
       it('Should contain a valid podcast:socialInteract', async function () {
-        const rss = await servers[0].feed.getPodcastXML({ ignoreCache: false, channelId: rootChannelId })
+        const rss = await servers[0].feed.getPodcastXML({ ignoreCache: false, channelId: servers[0].store.channel.id })
         expect(XMLValidator.validate(rss)).to.be.true
 
         const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
@@ -262,7 +281,7 @@ describe('Test syndication feeds', () => {
           fields: {
             name: 'live-0',
             privacy: VideoPrivacy.PUBLIC,
-            channelId: rootChannelId,
+            channelId: rootChannelIdServer1,
             permanentLive: false
           }
         })
@@ -271,15 +290,14 @@ describe('Test syndication feeds', () => {
         const ffmpeg = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveId, copyCodecs: true, fixtureName: 'video_short.mp4' })
         await servers[0].live.waitUntilPublished({ videoId: liveId })
 
-        const rss = await servers[0].feed.getPodcastXML({ ignoreCache: false, channelId: rootChannelId })
+        const rss = await servers[0].feed.getPodcastXML({ ignoreCache: false, channelId: servers[0].store.channel.id })
         expect(XMLValidator.validate(rss)).to.be.true
 
         const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
         const xmlDoc = parser.parse(rss)
         const liveItem = xmlDoc.rss.channel['podcast:liveItem']
         expect(liveItem.title).to.equal('live-0')
-        expect(liveItem.guid['@_isPermaLink']).to.equal(false)
-        expect(liveItem.guid['#text']).to.contain(`${uuid}_`)
+        expect(liveItem.guid['@_isPermaLink']).to.equal(true)
         expect(liveItem['@_status']).to.equal('live')
 
         const enclosure = liveItem.enclosure
@@ -298,10 +316,75 @@ describe('Test syndication feeds', () => {
 
         await waitJobs(servers)
       })
+
+      it('Should have valid itunes metadata', async function () {
+        const rss = await serverHLSOnly.feed.getPodcastXML({ ignoreCache: false, channelId: serverHLSOnly.store.channel.id })
+        expect(XMLValidator.validate(rss)).to.be.true
+
+        const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
+        const xmlDoc = parser.parse(rss)
+
+        const channel = xmlDoc.rss.channel
+
+        expect(channel['language']).to.equal('zh')
+
+        expect(channel['category']).to.equal('Sports')
+        expect(channel['itunes:category']['@_text']).to.equal('Sports')
+
+        expect(channel['itunes:explicit']).to.equal(true)
+
+        expect(channel['itunes:author']).to.equal('PeerTube')
+
+        expect(channel['itunes:image']['@_href']).to.exist
+        await makeRawRequest({ url: channel['itunes:image']['@_href'], expectedStatus: HttpStatusCode.OK_200 })
+
+        const item = xmlDoc.rss.channel.item
+
+        expect(item['itunes:duration']).to.equal(5)
+      })
+
+      it('Should have p20url podcast txt attribute with local podcast feed', async function () {
+        const rss = await servers[0].feed.getPodcastXML({ ignoreCache: false, channelId: servers[0].store.channel.id })
+        const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
+        const xmlDoc = parser.parse(rss)
+
+        const podcastUrlEl = xmlDoc.rss.channel['podcast:txt']
+        expect(podcastUrlEl).to.exist
+        expect(podcastUrlEl['@_purpose']).to.equal('p20url')
+        expect(podcastUrlEl['#text']).to.equal(
+          servers[0].url + '/feeds/podcast/videos.xml?videoChannelId=' + servers[0].store.channel.id
+        )
+      })
+
+      it('Should have p20url podcast txt attribute with remote classic RSS feed with channel', async function () {
+        const videoChannelId = await servers[1].channels.getIdOf({ channelName: 'root_channel@' + servers[0].host })
+
+        const rss = await servers[1].feed.getXML({
+          feed: 'videos',
+          ignoreCache: true,
+          query: { videoChannelId }
+        })
+
+        const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
+        const xmlDoc = parser.parse(rss)
+
+        const podcastUrlEl = xmlDoc.rss.channel['podcast:txt']
+        expect(podcastUrlEl).to.exist
+        expect(podcastUrlEl['@_purpose']).to.equal('p20url')
+        expect(podcastUrlEl['#text']).to.equal(servers[1].url + '/feeds/podcast/videos.xml?videoChannelId=' + videoChannelId)
+      })
+
+      it('Should not have p20url podcast txt attribute with classic RSS feed without channel', async function () {
+        const rss = await serverHLSOnly.feed.getXML({ feed: 'videos', ignoreCache: true })
+        const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
+        const xmlDoc = parser.parse(rss)
+
+        const podcastUrlEl = xmlDoc.rss.channel['podcast:txt']
+        expect(podcastUrlEl).to.not.exist
+      })
     })
 
     describe('JSON feed', function () {
-
       it('Should contain a valid \'attachments\' object', async function () {
         for (const server of servers) {
           const json = await server.feed.getJSON({ feed: 'videos', ignoreCache: true })
@@ -351,7 +434,7 @@ describe('Test syndication feeds', () => {
 
       it('Should filter by video channel', async function () {
         {
-          const json = await servers[0].feed.getJSON({ feed: 'videos', query: { videoChannelId: rootChannelId }, ignoreCache: true })
+          const json = await servers[0].feed.getJSON({ feed: 'videos', query: { videoChannelId: rootChannelIdServer1 }, ignoreCache: true })
           const jsonObj = JSON.parse(json)
           expect(jsonObj.items.length).to.be.equal(1)
           expect(jsonObj.items[0].title).to.equal('my super name for server 1')
@@ -406,7 +489,7 @@ describe('Test syndication feeds', () => {
           fields: {
             name: 'live',
             privacy: VideoPrivacy.PUBLIC,
-            channelId: rootChannelId
+            channelId: rootChannelIdServer1
           }
         })
         liveId = uuid
@@ -437,7 +520,7 @@ describe('Test syndication feeds', () => {
       })
 
       it('Should have the channel avatar as feed icon', async function () {
-        const json = await servers[0].feed.getJSON({ feed: 'videos', query: { videoChannelId: rootChannelId }, ignoreCache: true })
+        const json = await servers[0].feed.getJSON({ feed: 'videos', query: { videoChannelId: rootChannelIdServer1 }, ignoreCache: true })
 
         const jsonObj = JSON.parse(json)
         const imageUrl = jsonObj.icon
@@ -447,7 +530,6 @@ describe('Test syndication feeds', () => {
     })
 
     describe('XML feed', function () {
-
       it('Should correctly have video mime types feed with HLS only', async function () {
         this.timeout(120000)
 
@@ -467,7 +549,6 @@ describe('Test syndication feeds', () => {
   })
 
   describe('Video comments feed', function () {
-
     it('Should contain valid comments (covers JSON feed 1.0 endpoint) and not from unlisted/password protected videos', async function () {
       for (const server of servers) {
         const json = await server.feed.getJSON({ feed: 'video-comments', ignoreCache: true })
@@ -476,6 +557,93 @@ describe('Test syndication feeds', () => {
         expect(jsonObj.items.length).to.be.equal(2)
         expect(jsonObj.items[0].content_html).to.contain('<p>super comment 2</p>')
         expect(jsonObj.items[1].content_html).to.contain('<p>super comment 1</p>')
+      }
+    })
+
+    it('Should filter by videoId', async function () {
+      {
+        const json = await servers[0].feed.getJSON({ feed: 'video-comments', query: { videoId: videoIdWithComments }, ignoreCache: true })
+        expect(JSON.parse(json).items.length).to.be.equal(2)
+      }
+
+      {
+        const json = await servers[0].feed.getJSON({
+          feed: 'video-comments',
+          query: { videoId: videoIdWithoutComments },
+          ignoreCache: true
+        })
+        expect(JSON.parse(json).items.length).to.be.equal(0)
+      }
+    })
+
+    it('Should filter by videoChannelId/videoChannelName', async function () {
+      {
+        const json = await servers[0].feed.getJSON({
+          feed: 'video-comments',
+          query: { videoChannelId: rootChannelIdServer1 },
+          ignoreCache: true
+        })
+        expect(JSON.parse(json).items.length).to.be.equal(2)
+      }
+
+      {
+        const json = await servers[0].feed.getJSON({
+          feed: 'video-comments',
+          query: { videoChannelName: 'root_channel' },
+          ignoreCache: true
+        })
+        expect(JSON.parse(json).items.length).to.be.equal(2)
+      }
+
+      {
+        const json = await servers[0].feed.getJSON({ feed: 'video-comments', query: { videoChannelId: userChannelId }, ignoreCache: true })
+        expect(JSON.parse(json).items.length).to.be.equal(0)
+      }
+
+      {
+        const json = await servers[0].feed.getJSON({
+          feed: 'video-comments',
+          query: { videoChannelName: 'john_channel' },
+          ignoreCache: true
+        })
+        expect(JSON.parse(json).items.length).to.be.equal(0)
+      }
+    })
+
+    it('Should filter by accountId/accountName', async function () {
+      {
+        const json = await servers[0].feed.getJSON({ feed: 'video-comments', query: { accountId: rootAccountId }, ignoreCache: true })
+        expect(JSON.parse(json).items.length).to.be.equal(2)
+      }
+
+      {
+        const json = await servers[0].feed.getJSON({ feed: 'video-comments', query: { accountName: 'root' }, ignoreCache: true })
+        expect(JSON.parse(json).items.length).to.be.equal(2)
+      }
+
+      {
+        const json = await servers[0].feed.getJSON({ feed: 'video-comments', query: { accountId: userAccountId }, ignoreCache: true })
+        expect(JSON.parse(json).items.length).to.be.equal(0)
+      }
+
+      {
+        const json = await servers[0].feed.getJSON({ feed: 'video-comments', query: { accountName: 'john' }, ignoreCache: true })
+        expect(JSON.parse(json).items.length).to.be.equal(0)
+      }
+    })
+
+    it('Should not list non approved comments', async function () {
+      await servers[0].videos.update({ id: videoIdWithComments, attributes: { commentsPolicy: VideoCommentPolicy.REQUIRES_APPROVAL } })
+      await servers[0].comments.createThread({ videoId: videoIdWithComments, text: 'approval comment', token: userAccessToken })
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const json = await server.feed.getJSON({ feed: 'video-comments', ignoreCache: true })
+
+        const jsonObj = JSON.parse(json)
+        expect(jsonObj.items.length).to.be.equal(2)
+        expect(jsonObj.items.some(i => i.content_html.includes('approval'))).to.be.false
       }
     })
 
@@ -614,7 +782,6 @@ describe('Test syndication feeds', () => {
       const query = { accountId: userAccountId, token: userFeedToken }
       await servers[0].feed.getJSON({ feed: 'subscriptions', query, ignoreCache: true })
     })
-
   })
 
   describe('Cache', function () {
@@ -700,7 +867,6 @@ describe('Test syndication feeds', () => {
       const res = await doPodcastRequest()
       expect(res.headers['x-api-cache-cached']).to.not.exist
     })
-
   })
 
   after(async function () {

@@ -10,6 +10,7 @@ export interface VideoSource {
   width?: number
   height?: number
 
+  fileUrl: string
   fileDownloadUrl: string
 
   fps?: number
@@ -17,7 +18,4 @@ export interface VideoSource {
   metadata?: VideoFileMetadata
 
   createdAt: string | Date
-
-  // TODO: remove, deprecated in 6.1
-  filename: string
 }

@@ -1,0 +1,38 @@
+<div role="radiogroup">
+  @if (label()) {
+    <label [for]="inputId()" [ngClass]="{ 'label-secondary': labelSecondary() }">{{ label() }}</label>
+  }
+
+  <ng-content></ng-content>
+
+  @if (isGroup()) {
+    <div [ngClass]="{ 'btn-group': !isInMobileView(), 'btn-group-vertical': isInMobileView() }" role="group">
+      @for (item of items(); track item.id) {
+        <input
+          type="radio" [name]="inputId()" [id]="getRadioId(item)" [value]="item.id"
+          class="btn-check"
+          autocomplete="off" [(ngModel)]="value" (ngModelChange)="update()"
+          />
+
+        <label class="btn btn-outline-primary" [for]="getRadioId(item)" [attr.data-label]="item.label" i18n>{{ item.label }}</label>
+      }
+    </div>
+  } @else {
+    @for (item of items(); track item.id) {
+      <div class="peertube-radio-container">
+        <input
+          type="radio" [name]="inputId()" [id]="getRadioId(item)" [value]="item.id"
+          autocomplete="off" [(ngModel)]="value" (ngModelChange)="update()"
+          />
+
+        <label [for]="getRadioId(item)" i18n>{{ item.label }}</label>
+
+        @if (item.description) {
+          <div class="form-group-description">
+            {{ item.description}}
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

@@ -4,7 +4,7 @@ export interface UserVideoHistoryExportJSON {
     lastTimecode: number
     createdAt: string
     updatedAt: string
-  }[]
 
-  archiveFiles?: never
+    archiveFiles?: never
+  }[]
 }

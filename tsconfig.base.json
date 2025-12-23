@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "module": "NodeNext",
-    "target": "ES2017",
+    "target": "ES2022",
     "noImplicitAny": false,
     "sourceMap": true,
     "experimentalDecorators": true,
@@ -17,7 +17,10 @@
       "es2016",
       "es2017",
       "es2018",
-      "es2019"
+      "es2019",
+      "es2020",
+      "es2021",
+      "es2022"
     ],
     "resolveJsonModule": true,
     "strict": false,

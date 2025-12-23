@@ -1,25 +1,31 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core'
-import { AuthService, ServerService, CanComponentDeactivate, Notifier } from '@app/core'
-import { Subscription, first, switchMap } from 'rxjs'
-import { UserImportExportService } from './user-import-export.service'
 import { HttpErrorResponse } from '@angular/common/http'
+import { Component, OnDestroy, OnInit, inject, input } from '@angular/core'
+import { AuthService, CanComponentDeactivate, Notifier, ServerService } from '@app/core'
 import { buildHTTPErrorResponse, genericUploadErrorHandler, getUploadXRetryConfig } from '@app/helpers'
-import { HttpStatusCode, UserImport, UserImportState } from '@peertube/peertube-models'
-import { UploadxService, UploadState, UploaderX } from 'ngx-uploadx'
+import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
+import { BytesPipe } from '@app/shared/shared-main/common/bytes.pipe'
+import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { UploadProgressComponent } from '../../shared/standalone-upload/upload-progress.component'
-import { NgIf, DatePipe } from '@angular/common'
-import { BytesPipe } from '@app/shared/shared-main/angular/bytes.pipe'
+import { HttpStatusCode, UserImport, UserImportState } from '@peertube/peertube-models'
+import { UploadState, UploaderX, UploadxService } from 'ngx-uploadx'
+import { Subscription } from 'rxjs'
+import { UploadProgressComponent } from '../../shared/shared-upload/upload-progress.component'
+import { UserImportExportService } from './user-import-export.service'
 
 @Component({
   selector: 'my-account-import',
   templateUrl: './my-account-import.component.html',
   styleUrls: [ './my-account-import.component.scss' ],
-  standalone: true,
-  imports: [ NgIf, UploadProgressComponent, NgbTooltip, DatePipe ]
+  imports: [ UploadProgressComponent, NgbTooltip, PTDatePipe, AlertComponent ]
 })
 export class MyAccountImportComponent implements OnInit, OnDestroy, CanComponentDeactivate {
-  @Input() videoQuotaUsed: number
+  private authService = inject(AuthService)
+  private server = inject(ServerService)
+  private userImportExportService = inject(UserImportExportService)
+  private resumableUploadService = inject(UploadxService)
+  private notifier = inject(Notifier)
+
+  readonly videoQuotaUsed = input<number>(undefined)
 
   uploadingArchive = false
   archiveUploadFinished = false
@@ -34,20 +40,8 @@ export class MyAccountImportComponent implements OnInit, OnDestroy, CanComponent
   private uploadServiceSubscription: Subscription
   private alreadyRefreshedToken = false
 
-  constructor (
-    private authService: AuthService,
-    private server: ServerService,
-    private userImportExportService: UserImportExportService,
-    private resumableUploadService: UploadxService,
-    private notifier: Notifier
-  ) {}
-
   ngOnInit () {
-    this.authService.userInformationLoaded
-      .pipe(
-        first(),
-        switchMap(() => this.userImportExportService.getLatestImport({ userId: this.authService.getUser().id }))
-      )
+    this.userImportExportService.getLatestImport({ userId: this.authService.getUser().id })
       .subscribe(res => this.latestImport = res)
 
     this.uploadServiceSubscription = this.resumableUploadService.events
@@ -116,10 +110,10 @@ export class MyAccountImportComponent implements OnInit, OnDestroy, CanComponent
 
     const user = this.authService.getUser()
 
-    if (user.videoQuota !== -1 && this.videoQuotaUsed + file.size > user.videoQuota) {
+    if (user.videoQuota !== -1 && this.videoQuotaUsed() + file.size > user.videoQuota) {
       const bytePipes = new BytesPipe()
       const fileSizeBytes = bytePipes.transform(file.size, 0)
-      const videoQuotaUsedBytes = bytePipes.transform(this.videoQuotaUsed, 0)
+      const videoQuotaUsedBytes = bytePipes.transform(this.videoQuotaUsed(), 0)
       const videoQuotaBytes = bytePipes.transform(user.videoQuota, 0)
 
       this.notifier.error(

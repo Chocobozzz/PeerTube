@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { dateIsValid } from '@tests/shared/checks.js'
 import { wait } from '@peertube/peertube-core-utils'
 import {
   cleanupTests,
@@ -11,6 +9,8 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { dateIsValid } from '@tests/shared/checks.js'
+import { expect } from 'chai'
 
 describe('Test jobs', function () {
   let servers: PeerTubeServer[]
@@ -101,12 +101,13 @@ describe('Test jobs', function () {
 
     {
       const body = await servers[1].jobs.list({ state: 'waiting', jobType: 'video-transcoding' })
-      // waiting includes waiting-children
-      expect(body.data).to.have.lengthOf(4)
+      // root transcoding
+      expect(body.data).to.have.lengthOf(1)
     }
 
     {
-      const body = await servers[1].jobs.list({ state: 'waiting-children', jobType: 'video-transcoding' })
+      const body = await servers[1].jobs.list({ state: 'waiting-children', jobType: 'transcoding-job-builder' })
+      // next transcoding jobs
       expect(body.data).to.have.lengthOf(1)
     }
   })

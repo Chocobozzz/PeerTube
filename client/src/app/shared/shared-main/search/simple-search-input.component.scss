@@ -1,0 +1,34 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_form-mixins' as *;
+
+.root {
+  display: flex;
+}
+
+.search-button,
+.close-search-button {
+  @include margin-left(10px);
+
+  my-global-icon {
+    height: 28px;
+    width: 28px;
+    color: pvar(--fg-400);
+
+    &:hover {
+      color: pvar(--fg-300);
+    }
+  }
+}
+
+input {
+  @include peertube-input-text(200px);
+
+  &:focus {
+    box-shadow: 0 0 5px 0 #a5a5a5;
+  }
+}
+
+.form-control-clear my-global-icon {
+  @include global-icon-size(20px);
+}

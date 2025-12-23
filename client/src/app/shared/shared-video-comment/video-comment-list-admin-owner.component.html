@@ -1,0 +1,108 @@
+<my-table
+  #table
+  [key]="key()"
+  [defaultColumns]="columns"
+  defaultSort="createdAt"
+  i18n-paginatorText
+  paginatorText="comments per page"
+  [bulkActions]="bulkActions"
+  [dataLoader]="dataLoader"
+  >
+
+  <ng-template #totalTitle let-totalRecords>
+    <ng-container i18n>{ totalRecords, plural, =0 {No comments} =1 {1 comment} other {{{ totalRecords | myNumberFormatter }} comments}}</ng-container>
+  </ng-template>
+
+  <ng-template #captionRight>
+    <my-advanced-input-filter [filters]="inputFilters" (search)="table.onSearch($event)"></my-advanced-input-filter>
+
+    <my-button i18n-label label="Refresh" icon="refresh" (click)="table.loadData()"></my-button>
+  </ng-template>
+
+  <ng-template #tableCells let-comment>
+
+    @if (table.isColumnDisplayed('video')) {
+      <td>
+        <div class="video">
+          <a [href]="comment.localUrl" target="_blank" rel="noopener noreferrer" class="text-decoration-none d-inline-flex align-items-baseline">
+            <span class="video-name">{{ comment.video.name }}</span>
+            <my-global-icon iconName="external-link"></my-global-icon>
+          </a>
+
+          @if (comment.video.channel) {
+            <a [routerLink]="[ '/c', comment.video.channel.name]" class="channel-sub-link-in-cell">
+              <span>{{ comment.video.channel.displayName }}</span>
+
+              @if (mode() === 'user' && user.isCollaboratingToChannels()) {
+                @if (user.isEditorOfChannel(comment.video.channel)) {
+                  <my-collaborator-state class="ms-2" type="accepted" small="true"></my-collaborator-state>
+                } @else if (user.isOwnerOfChannel(comment.video.channel)) {
+                  <my-collaborator-state class="ms-2" type="owner" small="true"></my-collaborator-state>
+                }
+              }
+            </a>
+          }
+        </div>
+      </td>
+    }
+
+    @if (table.isColumnDisplayed('account')) {
+      <td>
+        <a [href]="comment.account.localUrl" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
+          <div class="chip two-lines">
+            <my-actor-avatar [actor]="comment.account" actorType="account" size="32"></my-actor-avatar>
+            <div>
+              {{ comment.account.displayName }}
+              <span>{{ comment.by }}</span>
+            </div>
+          </div>
+        </a>
+      </td>
+    }
+
+    @if (table.isColumnDisplayed('comment')) {
+      <td class="comment-content-cell">
+        @if (comment.heldForReview) {
+          <span class="pt-badge badge-red float-start me-2" i18n>Pending review</span>
+        }
+
+        <div class="comment-html">
+          <div class="ellipsis" [innerHTML]="comment.textHtml"></div>
+        </div>
+      </td>
+    }
+
+    @if (table.isColumnDisplayed('autoTags')) {
+      <td>
+        @for (tag of comment.automaticTags; track tag) {
+          <a
+            i18n-title title="Only display comments with this tag"
+            class="pt-badge badge-secondary me-1"
+            [routerLink]="[ '.' ]" [queryParams]="{ 'search': buildSearchAutoTag(tag) }"
+          >{{ tag }}</a>
+        }
+      </td>
+    }
+
+    @if (table.isColumnDisplayed('createdAt')) {
+      <td>{{ comment.createdAt | ptDate: 'short' }}</td>
+    }
+  </ng-template>
+
+  <ng-template #actionCell let-comment>
+    <my-action-dropdown placement="bottom-right" container="body" [actions]="videoCommentActions" [entry]="comment"></my-action-dropdown>
+  </ng-template>
+
+  <ng-template #expandedRow let-comment>
+    <div [innerHTML]="comment.textHtml"></div>
+  </ng-template>
+
+  <ng-template #noResults let-search>
+    @if (search) {
+      <ng-container i18n>No comments found matching current filters.</ng-container>
+    } @else {
+      <ng-container i18n>No comments found.</ng-container>
+    }
+  </ng-template>
+
+</my-table>

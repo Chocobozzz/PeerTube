@@ -6,10 +6,10 @@ import { logger } from '../../helpers/logger.js'
 import { ACTIVITY_PUB, WEBSERVER } from '../../initializers/constants.js'
 import { fetchAP } from './activity.js'
 
-type HandlerFunction<T> = (items: T[]) => (Promise<any> | Bluebird<any>)
+type HandlerFunction<T> = (items: T[]) => Promise<any> | Bluebird<any>
 type CleanerFunction = (startedDate: Date) => Promise<any>
 
-async function crawlCollectionPage <T> (argUrl: string, handler: HandlerFunction<T>, cleaner?: CleanerFunction) {
+export async function crawlCollectionPage<T> (argUrl: string, handler: HandlerFunction<T>, cleaner?: CleanerFunction) {
   let url = argUrl
 
   logger.info('Crawling ActivityPub data on %s.', url)
@@ -23,6 +23,8 @@ async function crawlCollectionPage <T> (argUrl: string, handler: HandlerFunction
   let i = 0
   let nextLink = firstBody.first
   while (nextLink && i < limit) {
+    i++
+
     let body: any
 
     if (typeof nextLink === 'string') {
@@ -40,7 +42,6 @@ async function crawlCollectionPage <T> (argUrl: string, handler: HandlerFunction
     }
 
     nextLink = body.next
-    i++
 
     if (Array.isArray(body.orderedItems)) {
       const items = body.orderedItems
@@ -51,8 +52,4 @@ async function crawlCollectionPage <T> (argUrl: string, handler: HandlerFunction
   }
 
   if (cleaner) await retryTransactionWrapper(cleaner, startDate)
-}
-
-export {
-  crawlCollectionPage
 }

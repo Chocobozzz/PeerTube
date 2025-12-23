@@ -23,7 +23,7 @@ describe('Test runner socket', function () {
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 
-    await server.config.enableTranscoding({ hls: true, webVideo: true })
+    await server.config.enableTranscoding({ hls: false, webVideo: true })
     await server.config.enableRemoteTranscoding()
     runnerToken = await server.runners.autoRegisterRunner()
   })

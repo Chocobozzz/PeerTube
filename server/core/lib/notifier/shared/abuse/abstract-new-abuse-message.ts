@@ -1,5 +1,6 @@
-import { UserNotificationType } from '@peertube/peertube-models'
-import { WEBSERVER } from '@server/initializers/constants.js'
+import { To, UserNotificationType } from '@peertube/peertube-models'
+import { t } from '@server/helpers/i18n.js'
+import { getAdminAbuseUrl, getUserAbuseUrl } from '@server/lib/client-urls.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
 import {
@@ -16,7 +17,7 @@ type NewAbuseMessagePayload = {
   message: MAbuseMessage
 }
 
-export abstract class AbstractNewAbuseMessage extends AbstractNotification <NewAbuseMessagePayload> {
+export abstract class AbstractNewAbuseMessage extends AbstractNotification<NewAbuseMessagePayload> {
   protected messageAccount: MAccountDefault
 
   async loadMessageAccount () {
@@ -38,14 +39,14 @@ export abstract class AbstractNewAbuseMessage extends AbstractNotification <NewA
     return notification
   }
 
-  protected createEmailFor (to: string, target: 'moderator' | 'reporter') {
-    const text = 'New message on report #' + this.abuse.id
+  protected createEmailFor (to: To, target: 'moderator' | 'reporter') {
+    const text = t('New message on report #{id}', to.language, { id: this.abuse.id })
     const abuseUrl = target === 'moderator'
-      ? WEBSERVER.URL + '/admin/moderation/abuses/list?search=%23' + this.abuse.id
-      : WEBSERVER.URL + '/my-account/abuses?search=%23' + this.abuse.id
+      ? getAdminAbuseUrl(this.abuse)
+      : getUserAbuseUrl(this.abuse)
 
     const action = {
-      text: 'View report #' + this.abuse.id,
+      text: t('View report #{id}', to.language, { id: this.abuse.id }),
       url: abuseUrl
     }
 
@@ -55,7 +56,7 @@ export abstract class AbstractNewAbuseMessage extends AbstractNotification <NewA
       subject: text,
       locals: {
         abuseId: this.abuse.id,
-        abuseUrl: action.url,
+        abuseUrl,
         messageAccountName: this.messageAccount.getDisplayName(),
         messageText: this.message.message,
         action

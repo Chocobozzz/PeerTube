@@ -1,0 +1,14 @@
+{{! New plugin version available }}
+{{#> base title=(t "New plugin version available")}}
+  <p>
+    {{#if isPlugin}}
+      {{t "A new version of the plugin {pluginName} is available: {latestVersion}." pluginName=pluginName latestVersion=latestVersion}}
+    {{else}}
+      {{t "A new version of the theme {pluginName} is available: {latestVersion}." pluginName=pluginName latestVersion=latestVersion}}
+    {{/if}}
+  </p>
+
+  <p>
+    {{{t "You might want to upgrade it on <a href=\"{pluginUrl}\">your admin interface</a>." pluginUrl=pluginUrl}}}
+  </p>
+{{/base}}

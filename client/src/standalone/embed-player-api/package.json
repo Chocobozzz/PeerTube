@@ -1,10 +1,10 @@
 {
   "name": "@peertube/embed-api",
   "private": false,
-  "version": "0.0.7",
+  "version": "0.2.0",
   "description": "API to communicate with the PeerTube player embed",
   "scripts": {
-    "build": "../../../node_modules/.bin/tsc && ../../../node_modules/.bin/webpack --mode production --config ./webpack.config.js"
+    "build": "rm -rf ./build ./dist && ../../../node_modules/.bin/tsc && ../../../node_modules/.bin/vite build --mode production --config ./vite.config.mjs"
   },
   "repository": {
     "type": "git",
@@ -22,7 +22,5 @@
     "url": "https://github.com/Chocobozzz/PeerTube/issues"
   },
   "homepage": "https://github.com/Chocobozzz/PeerTube#readme",
-  "dependencies": {
-    "jschannel": "^1.0.2"
-  }
+  "dependencies": {}
 }

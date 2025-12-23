@@ -1,13 +1,14 @@
-import { pick, promisify0 } from '@peertube/peertube-core-utils'
-import { AvailableEncoders, EncoderOptionsBuilder, EncoderOptionsBuilderParams, EncoderProfile } from '@peertube/peertube-models'
+import { arrayify, pick, promisify0 } from '@peertube/peertube-core-utils'
+import {
+  AvailableEncoders,
+  EncoderOptionsBuilder,
+  EncoderOptionsBuilderParams,
+  EncoderProfile,
+  SimpleLogger
+} from '@peertube/peertube-models'
+import { MutexInterface } from 'async-mutex'
 import ffmpeg, { FfmpegCommand } from 'fluent-ffmpeg'
-
-type FFmpegLogger = {
-  info: (msg: string, obj?: object) => void
-  debug: (msg: string, obj?: object) => void
-  warn: (msg: string, obj?: object) => void
-  error: (msg: string, obj?: object) => void
-}
+import { Readable } from 'node:stream'
 
 export interface FFmpegCommandWrapperOptions {
   availableEncoders?: AvailableEncoders
@@ -17,7 +18,7 @@ export interface FFmpegCommandWrapperOptions {
   tmpDirectory: string
   threads: number
 
-  logger: FFmpegLogger
+  logger: SimpleLogger
   lTags?: { tags: string[] }
 
   updateJobProgress?: (progress?: number) => void
@@ -35,7 +36,7 @@ export class FFmpegCommandWrapper {
   private readonly tmpDirectory: string
   private readonly threads: number
 
-  private readonly logger: FFmpegLogger
+  private readonly logger: SimpleLogger
   private readonly lTags: { tags: string[] }
 
   private readonly updateJobProgress: (progress?: number) => void
@@ -83,18 +84,28 @@ export class FFmpegCommandWrapper {
     this.command = undefined
   }
 
-  buildCommand (input: string) {
+  buildCommand (inputs: (string | Readable)[] | string | Readable, inputFileMutexReleaser?: MutexInterface.Releaser) {
     if (this.command) throw new Error('Command is already built')
 
     // We set cwd explicitly because ffmpeg appears to create temporary files when trancoding which fails in read-only file systems
-    this.command = ffmpeg(input, {
+    this.command = ffmpeg({
       niceness: this.niceness,
       cwd: this.tmpDirectory
     })
 
+    for (const input of arrayify(inputs)) {
+      this.command.input(input)
+    }
+
     if (this.threads > 0) {
       // If we don't set any threads ffmpeg will chose automatically
       this.command.outputOption('-threads ' + this.threads)
+    }
+
+    if (inputFileMutexReleaser) {
+      this.command.on('start', () => {
+        setTimeout(() => inputFileMutexReleaser(), 1000)
+      })
     }
 
     return this.command
@@ -108,10 +119,15 @@ export class FFmpegCommandWrapper {
     return new Promise<void>((res, rej) => {
       let shellCommand: string
 
-      this.command.on('start', cmdline => { shellCommand = cmdline })
+      this.command.on('start', cmdline => {
+        shellCommand = cmdline
+      })
 
-      this.command.on('error', (err, stdout, stderr) => {
-        if (silent !== true) this.logger.error('Error in ffmpeg.', { stdout, stderr, shellCommand, ...this.lTags })
+      this.command.on('error', (err: Error & { stdout?: string, stderr?: string }, stdout, stderr) => {
+        if (silent !== true) this.logger.error('Error in ffmpeg.', { err, stdout, stderr, shellCommand, ...this.lTags })
+
+        err.stdout = stdout
+        err.stderr = stderr
 
         if (this.onError) this.onError(err)
 
@@ -152,12 +168,14 @@ export class FFmpegCommandWrapper {
   // Run encoder builder depending on available encoders
   // Try encoders by priority: if the encoder is available, run the chosen profile or fallback to the default one
   // If the default one does not exist, check the next encoder
-  async getEncoderBuilderResult (options: EncoderOptionsBuilderParams & {
-    streamType: 'video' | 'audio'
-    input: string
+  async getEncoderBuilderResult (
+    options: EncoderOptionsBuilderParams & {
+      streamType: 'video' | 'audio'
+      input: string
 
-    videoType: 'vod' | 'live'
-  }) {
+      videoType: 'vod' | 'live'
+    }
+  ) {
     if (!this.availableEncoders) {
       throw new Error('There is no available encoders')
     }

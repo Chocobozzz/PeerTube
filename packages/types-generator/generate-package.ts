@@ -1,9 +1,9 @@
+import { currentDir, root } from '@peertube/peertube-node-utils'
 import { execSync } from 'child_process'
 import depcheck, { PackageDependencies } from 'depcheck'
 import { readJson, remove, writeJSON } from 'fs-extra/esm'
 import { copyFile, writeFile } from 'fs/promises'
 import { join, resolve } from 'path'
-import { currentDir, root } from '@peertube/peertube-node-utils'
 
 if (!process.argv[2]) {
   console.error('Need version as argument')
@@ -22,25 +22,30 @@ run()
 
 async function run () {
   const typesPath = currentDir(import.meta.url)
-  const typesDistPath = join(typesPath, 'dist')
+  const typesDistTMPPath = join(typesPath, 'dist-tmp')
 
-  await remove(typesDistPath)
-
-  const typesDistPackageJsonPath = join(typesDistPath, 'package.json')
-  const typesDistGitIgnorePath = join(typesDistPath, '.gitignore')
+  await remove(typesDistTMPPath)
 
   const mainPackageJson = await readJson(join(root(), 'package.json'))
 
   const typesTsConfigPath = join(typesPath, 'tsconfig.types.json')
 
-  const distTsConfigPath = join(typesPath, 'tsconfig.dist.json')
-  const distTsConfig = await readJson(distTsConfigPath)
+  const distTmpTsConfigPath = join(typesPath, 'tsconfig.dist-tmp.json')
+  const distTmpTsConfig = await readJson(distTmpTsConfigPath)
 
   const clientPackageJson = await readJson(join(root(), 'client', 'package.json'))
 
-  await remove(typesDistPath)
+  const typesDistPath = join(typesPath, 'dist')
+  const rollupConfig = join(typesPath, 'rollup.config.js')
+
+  await remove(typesDistTMPPath)
+
   execSync(`npm run tsc -- -b ${typesTsConfigPath} --verbose`, { stdio: 'inherit' })
-  execSync(`npm run resolve-tspaths -- --project ${distTsConfigPath} --src ${typesDistPath} --out ${typesDistPath}`, { stdio: 'inherit' })
+  // eslint-disable-next-line max-len
+  execSync(`npm run resolve-tspaths -- --project ${distTmpTsConfigPath} --src ${typesDistTMPPath} --out ${typesDistTMPPath}`, { stdio: 'inherit' })
+
+  execSync(`./node_modules/.bin/rollup -c ${rollupConfig}`, { stdio: 'inherit' })
+  await remove(typesDistTMPPath)
 
   const allDependencies = Object.assign(
     mainPackageJson.dependencies,
@@ -49,7 +54,7 @@ async function run () {
     clientPackageJson.devDependencies
   ) as PackageDependencies
 
-  const toIgnore = Object.keys(distTsConfig?.compilerOptions?.paths || [])
+  const toIgnore = Object.keys(distTmpTsConfig?.compilerOptions?.paths || [])
 
   // https://github.com/depcheck/depcheck#api
   const depcheckOptions = {
@@ -98,6 +103,10 @@ async function run () {
     repository,
     dependencies
   }
+
+  const typesDistPackageJsonPath = join(typesDistPath, 'package.json')
+  const typesDistGitIgnorePath = join(typesDistPath, '.gitignore')
+
   console.log(`Writing package.json to ${typesDistPackageJsonPath}`)
   await writeJSON(typesDistPackageJsonPath, typesPackageJson, { spaces: 2 })
 

@@ -16,6 +16,7 @@ import { checkUrlsSameHost } from '../url.js'
 import { refreshActorIfNeeded } from './refresh.js'
 import { APActorCreator, fetchRemoteActor } from './shared/index.js'
 
+// FIXME: use an object for params
 function getOrCreateAPActor (
   activityActor: string | ActivityPubActor,
   fetchType: 'all',
@@ -37,7 +38,7 @@ async function getOrCreateAPActor (
   updateCollections = false
 ): Promise<MActorFullActor | MActorAccountChannelId> {
   const actorUrl = getAPId(activityActor)
-  let actor = await loadActorFromDB(actorUrl, fetchType)
+  let actor = await loadActorByUrl(actorUrl, fetchType)
 
   let created = false
   let accountPlaylistsUrl: string
@@ -45,7 +46,7 @@ async function getOrCreateAPActor (
   // We don't have this actor in our database, fetch it on remote
   if (!actor) {
     const { actorObject } = await fetchRemoteActor(actorUrl)
-    if (actorObject === undefined) throw new Error('Cannot fetch remote actor ' + actorUrl)
+    if (actorObject === undefined) throw new Error(`Cannot fetch remote actor ${actorUrl}`)
 
     // actorUrl is just an alias/redirection, so process object id instead
     if (actorObject.id !== actorUrl) return getOrCreateAPActor(actorObject, 'all', recurseIfNeeded, updateCollections)
@@ -67,7 +68,7 @@ async function getOrCreateAPActor (
   if (actor.VideoChannel) (actor as MActorAccountChannelIdActor).VideoChannel.Actor = actor
 
   const { actor: actorRefreshed, refreshed } = await refreshActorIfNeeded({ actor, fetchedType: fetchType })
-  if (!actorRefreshed) throw new Error('Actor ' + actor.url + ' does not exist anymore.')
+  if (!actorRefreshed) throw new Error(`Actor ${actor.url} does not exist anymore.`)
 
   await scheduleOutboxFetchIfNeeded(actor, created, refreshed, updateCollections)
   await schedulePlaylistFetchIfNeeded(actor, created, accountPlaylistsUrl)
@@ -75,10 +76,10 @@ async function getOrCreateAPActor (
   return actorRefreshed
 }
 
-async function getOrCreateAPOwner (actorObject: ActivityPubActor, actorUrl: string) {
-  const accountAttributedTo = await findOwner(actorUrl, actorObject.attributedTo, 'Person')
+async function getOrCreateAPOwner (actorObject: ActivityPubActor, actorId: string) {
+  const accountAttributedTo = await findOwner(actorId, actorObject.attributedTo, 'Person')
   if (!accountAttributedTo) {
-    throw new Error(`Cannot find account attributed to video channel  ${actorUrl}`)
+    throw new Error(`Cannot find account attributed to video channel ${actorId}`)
   }
 
   try {
@@ -86,7 +87,9 @@ async function getOrCreateAPOwner (actorObject: ActivityPubActor, actorUrl: stri
     const recurseIfNeeded = false
     return getOrCreateAPActor(accountAttributedTo, 'all', recurseIfNeeded)
   } catch (err) {
-    logger.error('Cannot get or create account attributed to video channel ' + actorUrl)
+    logger.error(`Cannot get or create account attributed to video channel ${actorId}`)
+
+    // eslint-disable-next-line preserve-caught-error
     throw new Error(err)
   }
 }
@@ -96,7 +99,7 @@ async function findOwner (rootUrl: string, attributedTo: APObjectId[] | APObject
     const actorObject = await fetchAPObjectIfNeeded<ActivityPubActor>(getAPId(actorToCheck))
 
     if (!actorObject) {
-      logger.warn('Unknown attributed to actor %s for owner %s', actorToCheck, rootUrl)
+      logger.warn(`Unknown attributed to actor ${actorToCheck} for owner ${rootUrl}`)
       continue
     }
 
@@ -114,24 +117,12 @@ async function findOwner (rootUrl: string, attributedTo: APObjectId[] | APObject
 // ---------------------------------------------------------------------------
 
 export {
-  getOrCreateAPOwner,
+  findOwner,
   getOrCreateAPActor,
-  findOwner
+  getOrCreateAPOwner
 }
 
 // ---------------------------------------------------------------------------
-
-async function loadActorFromDB (actorUrl: string, fetchType: ActorLoadByUrlType) {
-  let actor = await loadActorByUrl(actorUrl, fetchType)
-
-  // Orphan actor (not associated to an account of channel) so recreate it
-  if (actor && (!actor.Account && !actor.VideoChannel)) {
-    await actor.destroy()
-    actor = null
-  }
-
-  return actor
-}
 
 async function scheduleOutboxFetchIfNeeded (actor: MActor, created: boolean, refreshed: boolean, updateCollections: boolean) {
   if ((created === true || refreshed === true) && updateCollections === true) {
@@ -143,7 +134,7 @@ async function scheduleOutboxFetchIfNeeded (actor: MActor, created: boolean, ref
 async function schedulePlaylistFetchIfNeeded (actor: MActorAccountId, created: boolean, accountPlaylistsUrl: string) {
   // We created a new account: fetch the playlists
   if (created === true && actor.Account && accountPlaylistsUrl) {
-    const payload = { uri: accountPlaylistsUrl, type: 'account-playlists' as 'account-playlists' }
+    const payload = { uri: accountPlaylistsUrl, type: 'account-playlists' as 'account-playlists', accountId: actor.Account.id }
     await JobQueue.Instance.createJob({ type: 'activitypub-http-fetcher', payload })
   }
 }

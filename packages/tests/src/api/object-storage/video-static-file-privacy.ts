@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { basename } from 'path'
 import { getAllFiles, getHLS } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, LiveVideo, VideoDetails, VideoPrivacy } from '@peertube/peertube-models'
+import { HttpStatusCode, LiveVideo, VideoDetails, VideoPrivacy, VideoResolution } from '@peertube/peertube-models'
 import { areScalewayObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
@@ -20,7 +18,9 @@ import {
 } from '@peertube/peertube-server-commands'
 import { expectStartWith } from '@tests/shared/checks.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
-import { checkVideoFileTokenReinjection } from '@tests/shared/streaming-playlists.js'
+import { checkPlaylistInfohash, checkVideoFileTokenReinjection } from '@tests/shared/streaming-playlists.js'
+import { expect } from 'chai'
+import { basename } from 'path'
 
 function extractFilenameFromUrl (url: string) {
   const parts = basename(url).split(':')
@@ -34,7 +34,9 @@ describe('Object storage for video static file privacy', function () {
 
   let server: PeerTubeServer
   let sqlCommand: SQLCommand
+
   let userToken: string
+  let editorToken: string
 
   // ---------------------------------------------------------------------------
 
@@ -44,7 +46,9 @@ describe('Object storage for video static file privacy', function () {
     for (const file of video.files) {
       expectStartWith(file.fileUrl, server.url + '/object-storage-proxy/web-videos/private/')
 
-      await makeRawRequest({ url: file.fileUrl, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+      for (const token of [ server.accessToken, editorToken ]) {
+        await makeRawRequest({ url: file.fileUrl, token, expectedStatus: HttpStatusCode.OK_200 })
+      }
     }
 
     for (const file of getAllFiles(video)) {
@@ -54,9 +58,9 @@ describe('Object storage for video static file privacy', function () {
       const { text } = await makeRawRequest({
         url: internalFileUrl,
         token: server.accessToken,
-        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
-      expect(text).to.contain('Unsupported Authorization Type')
+      expect(text).to.contain('AccessDenied')
     }
 
     const hls = getHLS(video)
@@ -66,14 +70,18 @@ describe('Object storage for video static file privacy', function () {
         expectStartWith(url, server.url + '/object-storage-proxy/streaming-playlists/hls/private/')
       }
 
-      await makeRawRequest({ url: hls.playlistUrl, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
-      await makeRawRequest({ url: hls.segmentsSha256Url, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+      for (const token of [ server.accessToken, editorToken ]) {
+        await makeRawRequest({ url: hls.playlistUrl, token, expectedStatus: HttpStatusCode.OK_200 })
+        await makeRawRequest({ url: hls.segmentsSha256Url, token, expectedStatus: HttpStatusCode.OK_200 })
 
-      for (const file of hls.files) {
-        expectStartWith(file.fileUrl, server.url + '/object-storage-proxy/streaming-playlists/hls/private/')
+        for (const file of hls.files) {
+          expectStartWith(file.fileUrl, server.url + '/object-storage-proxy/streaming-playlists/hls/private/')
 
-        await makeRawRequest({ url: file.fileUrl, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+          await makeRawRequest({ url: file.fileUrl, token, expectedStatus: HttpStatusCode.OK_200 })
+        }
       }
+
+      await checkPlaylistInfohash({ video, files: hls.files, sqlCommand })
     }
   }
 
@@ -108,7 +116,8 @@ describe('Object storage for video static file privacy', function () {
 
     await server.config.enableMinimumTranscoding()
 
-    userToken = await server.users.generateUserAndToken('user1')
+    userToken = await server.users.generateUserAndToken('user')
+    editorToken = await server.channelCollaborators.createEditor('editor', 'root_channel')
 
     sqlCommand = new SQLCommand(server)
   })
@@ -181,7 +190,7 @@ describe('Object storage for video static file privacy', function () {
       await checkPublicVODFiles(publicVideoUUID)
     })
 
-    it('Should not get files without appropriate OAuth token', async function () {
+    it('Should not get files without appropriate user token', async function () {
       this.timeout(60000)
 
       const { webVideoFile, hlsFile } = await getSampleFileUrls(privateVideoUUID)
@@ -193,7 +202,7 @@ describe('Object storage for video static file privacy', function () {
       await makeRawRequest({ url: hlsFile, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
     })
 
-    it('Should not get files without appropriate password or appropriate OAuth token', async function () {
+    it('Should not get files without appropriate password or appropriate user token', async function () {
       this.timeout(60000)
 
       const { webVideoFile, hlsFile } = await getSampleFileUrls(passwordProtectedVideoUUID)
@@ -242,30 +251,35 @@ describe('Object storage for video static file privacy', function () {
       await makeRawRequest({ url: goodUrl, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
     })
 
-    it('Should correctly check OAuth, video file token of private video', async function () {
+    it('Should correctly check user token, video file token of private video', async function () {
       this.timeout(60000)
 
-      const badVideoFileToken = await server.videoToken.getVideoFileToken({ token: userToken, videoId: userPrivateVideoUUID })
-      const goodVideoFileToken = await server.videoToken.getVideoFileToken({ videoId: privateVideoUUID })
+      const userFileToken = await server.videoToken.getVideoFileToken({ token: userToken, videoId: userPrivateVideoUUID })
+      const editorFileToken = await server.videoToken.getVideoFileToken({ token: editorToken, videoId: privateVideoUUID })
+      const adminFileToken = await server.videoToken.getVideoFileToken({ videoId: privateVideoUUID })
 
       const { webVideoFile, hlsFile } = await getSampleFileUrls(privateVideoUUID)
 
       for (const url of [ webVideoFile, hlsFile ]) {
-        await makeRawRequest({ url, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+        await makeRawRequest({ url, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+
         await makeRawRequest({ url, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+        await makeRawRequest({ url, query: { videoFileToken: userFileToken }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+
         await makeRawRequest({ url, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+        await makeRawRequest({ url, query: { videoFileToken: adminFileToken }, expectedStatus: HttpStatusCode.OK_200 })
 
-        await makeRawRequest({ url, query: { videoFileToken: badVideoFileToken }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
-        await makeRawRequest({ url, query: { videoFileToken: goodVideoFileToken }, expectedStatus: HttpStatusCode.OK_200 })
-
+        await makeRawRequest({ url, token: editorToken, expectedStatus: HttpStatusCode.OK_200 })
+        await makeRawRequest({ url, query: { videoFileToken: editorFileToken }, expectedStatus: HttpStatusCode.OK_200 })
       }
     })
 
-    it('Should correctly check OAuth, video file token or video password of password protected video', async function () {
+    it('Should correctly check user token, video file token or video password of password protected video', async function () {
       this.timeout(60000)
 
-      const badVideoFileToken = await server.videoToken.getVideoFileToken({ token: userToken, videoId: userPrivateVideoUUID })
-      const goodVideoFileToken = await server.videoToken.getVideoFileToken({
+      const userFileToken = await server.videoToken.getVideoFileToken({ token: userToken, videoId: userPrivateVideoUUID })
+      const adminFileToken = await server.videoToken.getVideoFileToken({
+        token: undefined,
         videoId: passwordProtectedVideoUUID,
         videoPassword: correctPassword
       })
@@ -273,18 +287,20 @@ describe('Object storage for video static file privacy', function () {
       const { webVideoFile, hlsFile } = await getSampleFileUrls(passwordProtectedVideoUUID)
 
       for (const url of [ hlsFile, webVideoFile ]) {
-        await makeRawRequest({ url, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
-        await makeRawRequest({ url, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
-        await makeRawRequest({ url, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+        await makeRawRequest({ url, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
 
-        await makeRawRequest({ url, query: { videoFileToken: badVideoFileToken }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
-        await makeRawRequest({ url, query: { videoFileToken: goodVideoFileToken }, expectedStatus: HttpStatusCode.OK_200 })
+        await makeRawRequest({ url, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+        await makeRawRequest({ url, query: { videoFileToken: userFileToken }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+
+        await makeRawRequest({ url, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+        await makeRawRequest({ url, query: { videoFileToken: adminFileToken }, expectedStatus: HttpStatusCode.OK_200 })
 
         await makeRawRequest({
           url,
           headers: incorrectPasswordHeader,
           expectedStatus: HttpStatusCode.FORBIDDEN_403
         })
+
         await makeRawRequest({ url, headers: correctPasswordHeader, expectedStatus: HttpStatusCode.OK_200 })
       }
     })
@@ -298,7 +314,7 @@ describe('Object storage for video static file privacy', function () {
         server,
         videoUUID: privateVideoUUID,
         videoFileToken,
-        resolutions: [ 240, 720 ],
+        resolutions: [ VideoResolution.H_720P, VideoResolution.H_240P ],
         isLive: false
       })
     })
@@ -348,6 +364,8 @@ describe('Object storage for video static file privacy', function () {
         ? await server.videoToken.getVideoFileToken({ token: null, videoId: video.uuid, videoPassword })
         : await server.videoToken.getVideoFileToken({ videoId: video.uuid })
 
+      const editorFileToken = await server.videoToken.getVideoFileToken({ videoId: video.uuid, token: editorToken })
+
       const hls = video.streamingPlaylists[0]
 
       for (const url of [ hls.playlistUrl, hls.segmentsSha256Url ]) {
@@ -357,10 +375,12 @@ describe('Object storage for video static file privacy', function () {
         await makeRawRequest({ url: hls.segmentsSha256Url, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
 
         await makeRawRequest({ url, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+        await makeRawRequest({ url, token: editorToken, expectedStatus: HttpStatusCode.OK_200 })
         await makeRawRequest({ url, query: { videoFileToken: fileToken }, expectedStatus: HttpStatusCode.OK_200 })
+        await makeRawRequest({ url, query: { videoFileToken: editorFileToken }, expectedStatus: HttpStatusCode.OK_200 })
 
         await makeRawRequest({ url, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
-        await makeRawRequest({ url, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+        await makeRawRequest({ url, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
         await makeRawRequest({ url, query: { videoFileToken: unrelatedFileToken }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
 
         if (videoPassword) {
@@ -383,16 +403,20 @@ describe('Object storage for video static file privacy', function () {
 
     async function checkReplay (replay: VideoDetails) {
       const fileToken = await server.videoToken.getVideoFileToken({ videoId: replay.uuid })
+      const editorFileToken = await server.videoToken.getVideoFileToken({ videoId: replay.uuid, token: editorToken })
 
       const hls = replay.streamingPlaylists[0]
       expect(hls.files).to.not.have.lengthOf(0)
 
       for (const file of hls.files) {
         await makeRawRequest({ url: file.fileUrl, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+        await makeRawRequest({ url: file.fileUrl, token: editorToken, expectedStatus: HttpStatusCode.OK_200 })
+
         await makeRawRequest({ url: file.fileUrl, query: { videoFileToken: fileToken }, expectedStatus: HttpStatusCode.OK_200 })
+        await makeRawRequest({ url: file.fileUrl, query: { videoFileToken: editorFileToken }, expectedStatus: HttpStatusCode.OK_200 })
 
         await makeRawRequest({ url: file.fileUrl, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
-        await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+        await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
         await makeRawRequest({
           url: file.fileUrl,
           query: { videoFileToken: unrelatedFileToken },
@@ -404,10 +428,13 @@ describe('Object storage for video static file privacy', function () {
         expectStartWith(url, server.url + '/object-storage-proxy/streaming-playlists/hls/private/')
 
         await makeRawRequest({ url, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+        await makeRawRequest({ url, token: editorToken, expectedStatus: HttpStatusCode.OK_200 })
+
         await makeRawRequest({ url, query: { videoFileToken: fileToken }, expectedStatus: HttpStatusCode.OK_200 })
+        await makeRawRequest({ url, query: { videoFileToken: editorFileToken }, expectedStatus: HttpStatusCode.OK_200 })
 
         await makeRawRequest({ url, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
-        await makeRawRequest({ url, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+        await makeRawRequest({ url, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
         await makeRawRequest({ url, query: { videoFileToken: unrelatedFileToken }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
       }
     }
@@ -489,7 +516,7 @@ describe('Object storage for video static file privacy', function () {
         server,
         videoUUID: permanentLiveId,
         videoFileToken,
-        resolutions: [ 720 ],
+        resolutions: [ VideoResolution.H_720P, VideoResolution.H_240P ],
         isLive: true
       })
 
@@ -511,8 +538,7 @@ describe('Object storage for video static file privacy', function () {
       await server.live.waitUntilWaiting({ videoId: permanentLiveId })
       await waitJobs([ server ])
 
-      const live = await server.videos.getWithToken({ id: permanentLiveId })
-      const replayFromList = await findExternalSavedVideo(server, live)
+      const replayFromList = await findExternalSavedVideo(server, permanentLiveId)
       const replay = await server.videos.getWithToken({ id: replayFromList.id })
 
       await checkReplay(replay)

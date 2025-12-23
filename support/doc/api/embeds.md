@@ -11,10 +11,10 @@ For instance, the playground URL for the above embed URL is `https://my-instance
 ## Quick Start
 
 Given an existing PeerTube embed `<iframe>` **with API enabled** (`https://my-instance.example.com/videos/embed/52a10666-3a18-4e73-93da-e8d3c12c305a?api=1`),
-one can use the PeerTube Embed API to control it by first including the library. You can include it via Yarn with:
+one can use the PeerTube Embed API to control it by first including the library. You can include it via NPM with:
 
 ```
-yarn add @peertube/embed-api
+npm install @peertube/embed-api
 ```
 
 Now just use the `PeerTubePlayer` class exported by the module:
@@ -168,6 +168,15 @@ See behaviour description [here](https://docs.joinpeertube.org/admin/configurati
 
 Default: `p2p-media-loader` and fallback to `web-video` mode.
 
+
+### playlistPosition
+
+If you are embedding a playlist, select the video to play by specifying its position.
+
+Value must be a number.
+
+Default: `1`
+
 ### api
 
 Enable/Disable embed JavaScript API (see methods below).
@@ -193,20 +202,32 @@ Default: `0`
 
 ### `ready: Promise<void>`
 
-This promise is resolved when the video is loaded an the player is ready.
+This promise is resolved when the video is loaded and the player is ready.
 
 
 ## Embed methods
 
-### `play() : Promise<void>`
+### `isPlaying(): Promise<boolean>`
+
+**PeerTube >= 7.0**
+
+Check if the player is playing the media.
+
+### `play(): Promise<void>`
 
 Starts playback, or resumes playback if it is paused.
 
-### `pause() : Promise<void>`
+### `pause(): Promise<void>`
 
 Pauses playback.
 
-### `seek(positionInSeconds : number)`
+### `getCurrentTime(): Promise<number>`
+
+**PeerTube >= 7.0**
+
+Get player current time in seconds.
+
+### `seek(positionInSeconds : number): Promise<void>`
 
 Seek to the given position, as specified in seconds into the video.
 
@@ -242,7 +263,7 @@ Otherwise, `resolutionId` should be the ID of an object returned by `getResoluti
 
 Get the available playback rates, where `1` represents normal speed, `0.5` is half speed, `2` is double speed, etc.
 
-### `getPlaybackRates() : Promise<number>`
+### `getPlaybackRate() : Promise<number>`
 
 Get the current playback rate. See `getPlaybackRates()` for more information.
 
@@ -285,6 +306,13 @@ Get current position in playlist (starts from 1).
 
 Set the video password so the user doesn't have to manually fill it.
 `waitPasswordFromEmbedAPI=1` is required in embed URL.
+
+
+### `getImageDataUrl(): Promise<string>`
+
+**PeerTube >= 6.2**
+
+Get the current frame as JPEG image data URL.
 
 
 ## Embed events

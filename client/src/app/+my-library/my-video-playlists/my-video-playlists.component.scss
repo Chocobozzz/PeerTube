@@ -1,65 +1,26 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
+@use "_actor" as *;
 
-h1 {
+.channel-filters {
+  @include channel-filters;
+}
+
+.name {
+  color: var(--fg);
+  line-height: 1rem;
+  font-weight: $font-bold;
+  text-decoration: none;
+}
+
+.name-container {
   display: flex;
-}
-
-input[type=text] {
-  @include peertube-input-text(300px);
-}
-
-.video-playlist {
-  @include row-blocks($column-responsive: false);
-}
-
-.video-playlist-buttons {
-  @include margin-left(10px);
-
-  display: flex;
-  align-self: flex-end;
-}
-
-.video-playlists-header {
-  margin-bottom: 30px;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 my-video-playlist-miniature {
   display: block;
-  flex-grow: 1;
-}
-
-my-delete-button {
-  @include margin-right(10px);
-}
-
-@include on-small-main-col {
-  .video-playlists-header {
-    text-align: center;
-  }
-
-  .video-playlist {
-    flex-wrap: wrap;
-  }
-
-  .video-playlist-buttons {
-    @include margin-left(auto);
-
-    margin-top: 10px;
-  }
-}
-
-@include on-mobile-main-col {
-  .video-playlists-header {
-    flex-direction: column;
-
-    input[type=text] {
-      width: 100% !important;
-      margin-bottom: 12px;
-    }
-  }
-
-  .action-button {
-    @include margin-left(0);
-  }
+  width: 130px;
 }

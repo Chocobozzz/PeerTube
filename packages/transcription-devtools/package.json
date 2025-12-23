@@ -1,0 +1,20 @@
+{
+  "name": "@peertube/peertube-transcription-devtools",
+  "private": true,
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "files": [ "dist" ],
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "peertube:tsx": "./src/index.ts",
+    "default": "./dist/index.js"
+  },
+  "type": "module",
+  "devDependencies": {},
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "benchmark": "tsx --conditions=peertube:tsx --tsconfig ./tsconfig.json ./src/benchmark.ts"
+  },
+  "dependencies": {}
+}

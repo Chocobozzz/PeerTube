@@ -1,19 +1,36 @@
-<a [href]="getVideoUrl()" class="table-video-link" [title]="video.name" target="_blank" rel="noopener noreferrer">
-  <div class="table-video">
-    <div class="table-video-image">
-      <img [src]="video.thumbnailPath" alt="">
+<div class="root" [ngClass]="{ 'small': size() === 'small' }">
 
-      <ng-content select="[image]"></ng-content>
-    </div>
+  @if (thumbnail()) {
+    <my-video-thumbnail
+      blur="false"
+      [video]="video()" [videoRouterLink]="getVideoUrl()" [ariaLabel]="video().name" playOverlay="false"
+    ></my-video-thumbnail>
+  }
 
-    <div class="table-video-text">
-      <div>
-        <ng-content select="[name]"></ng-content>
+  @if (title()) {
+    <div class="min-width-0" [ngClass]="{ ellipsis: ellipsis }">
+      <div class="d-flex flex-wrap gap-2 align-items-center">
+        <a class="name" [ngClass]="{ ellipsis: ellipsis }" [routerLink]="getVideoUrl()" [title]="video().name">
+          {{ video().name }}
+        </a>
 
-        {{ video.name }}
+        <ng-content></ng-content>
       </div>
 
-      <div class="muted">by {{ video.channel?.displayName }} on {{ video.channel?.host }} </div>
+      @if (video().channel) {
+        <a [routerLink]="getChannelUrl()" class="channel" [ngClass]="{ ellipsis: ellipsis }">
+          <span>{{ video().channel?.displayName }}</span>
+
+          @if (displayEditorInfo() && user.isCollaboratingToChannels()) {
+            @if (user.isEditorOfChannel(video().channel)) {
+              <my-collaborator-state class="ms-2" type="accepted" small="true"></my-collaborator-state>
+            } @else if (user.isOwnerOfChannel(video().channel)) {
+              <my-collaborator-state class="ms-2" type="owner" small="true"></my-collaborator-state>
+            }
+          }
+        </a>
+      }
     </div>
-  </div>
-</a>
+  }
+
+</div>

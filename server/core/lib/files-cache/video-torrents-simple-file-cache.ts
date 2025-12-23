@@ -8,8 +8,7 @@ import { FILES_CACHE } from '../../initializers/constants.js'
 import { VideoModel } from '../../models/video/video.js'
 import { AbstractSimpleFileCache } from './shared/abstract-simple-file-cache.js'
 
-class VideoTorrentsSimpleFileCache extends AbstractSimpleFileCache <string> {
-
+class VideoTorrentsSimpleFileCache extends AbstractSimpleFileCache<string> {
   private static instance: VideoTorrentsSimpleFileCache
 
   private constructor () {
@@ -24,10 +23,10 @@ class VideoTorrentsSimpleFileCache extends AbstractSimpleFileCache <string> {
     const file = await VideoFileModel.loadWithVideoOrPlaylistByTorrentFilename(filename)
     if (!file) return undefined
 
-    if (file.getVideo().isOwned()) {
+    if (file.getVideo().isLocal()) {
       const downloadName = this.buildDownloadName(file.getVideo(), file)
 
-      return { isOwned: true, path: join(CONFIG.STORAGE.TORRENTS_DIR, file.torrentFilename), downloadName }
+      return { isLocal: true, path: join(CONFIG.STORAGE.TORRENTS_DIR, file.torrentFilename), downloadName }
     }
 
     return this.loadRemoteFile(filename)
@@ -38,7 +37,7 @@ class VideoTorrentsSimpleFileCache extends AbstractSimpleFileCache <string> {
     const file = await VideoFileModel.loadWithVideoOrPlaylistByTorrentFilename(key)
     if (!file) return undefined
 
-    if (file.getVideo().isOwned()) throw new Error('Cannot load remote file of owned video.')
+    if (file.getVideo().isLocal()) throw new Error('Cannot load remote file of owned video.')
 
     // Used to fetch the path
     const video = await VideoModel.loadFull(file.getVideo().id)
@@ -52,7 +51,7 @@ class VideoTorrentsSimpleFileCache extends AbstractSimpleFileCache <string> {
 
       const downloadName = this.buildDownloadName(video, file)
 
-      return { isOwned: false, path: destPath, downloadName }
+      return { isLocal: false, path: destPath, downloadName }
     } catch (err) {
       logger.info('Cannot fetch remote torrent file %s.', remoteUrl, { err })
 

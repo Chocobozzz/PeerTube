@@ -1,0 +1,47 @@
+<my-table
+  #table
+  [key]="key()"
+  [defaultColumns]="columns"
+  i18n-paginatorText
+  paginatorText="servers per page"
+  [dataLoader]="dataLoader"
+  columnConfig="false"
+>
+  <ng-template #totalTitle let-totalRecords>
+    <ng-container i18n>{ totalRecords, plural, =0 {No server} =1 {1 server} other {{{ totalRecords | myNumberFormatter }} servers}}</ng-container>
+  </ng-template>
+
+  <ng-template #captionRight>
+    <my-advanced-input-filter (search)="table.onSearch($event)"></my-advanced-input-filter>
+
+    <button class="peertube-create-button" (click)="addServersToBlock()" (key.enter)="addServersToBlock()">
+      <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
+      <ng-container i18n>Mute domains</ng-container>
+    </button>
+  </ng-template>
+
+  <ng-template #tableCells let-serverBlock>
+    <td>
+      <a [href]="'https://' + serverBlock.blockedServer.host" i18n-title title="Open instance in a new tab" target="_blank" rel="noopener noreferrer">
+        {{ serverBlock.blockedServer.host }}
+        <my-global-icon iconName="external-link"></my-global-icon>
+      </a>
+    </td>
+
+    <td>{{ serverBlock.createdAt | ptDate: 'short' }}</td>
+  </ng-template>
+
+  <ng-template #actionCell let-serverBlock>
+    <button class="peertube-button secondary-button" (click)="unblockServer(serverBlock)" i18n>Unmute</button>
+  </ng-template>
+
+  <ng-template #noResults let-search>
+    @if (search) {
+      <ng-container i18n>No server found matching current filters.</ng-container>
+    } @else {
+      <ng-container i18n>No server found.</ng-container>
+    }
+  </ng-template>
+</my-table>
+
+<my-batch-domains-modal #batchDomainsModal i18n-action action="Mute domains" (domains)="onDomainsToBlock($event)"></my-batch-domains-modal>

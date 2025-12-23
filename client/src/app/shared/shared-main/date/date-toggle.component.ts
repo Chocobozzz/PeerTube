@@ -1,31 +1,32 @@
-import { Component, Input, OnChanges } from '@angular/core'
-import { FromNowPipe } from '../angular/from-now.pipe'
+import { ChangeDetectionStrategy, Component, OnChanges, inject, input, model } from '@angular/core'
+import { FromNowPipe } from './from-now.pipe'
 
 @Component({
   selector: 'my-date-toggle',
   templateUrl: './date-toggle.component.html',
   styleUrls: [ './date-toggle.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true
 })
 export class DateToggleComponent implements OnChanges {
-  @Input() date: Date
-  @Input() toggled = false
+  private fromNowPipe = inject(FromNowPipe)
+
+  readonly date = input<Date>(undefined)
+  readonly toggled = model(false)
 
   dateRelative: string
   dateAbsolute: string
-
-  constructor (private fromNowPipe: FromNowPipe) { }
 
   ngOnChanges () {
     this.updateDates()
   }
 
   toggle () {
-    this.toggled = !this.toggled
+    this.toggled.update(toggled => !toggled)
   }
 
   getTitle () {
-    const target = this.toggled
+    const target = this.toggled()
       ? this.dateRelative
       : this.dateAbsolute
 
@@ -33,13 +34,13 @@ export class DateToggleComponent implements OnChanges {
   }
 
   getContent () {
-    return this.toggled
+    return this.toggled()
       ? this.dateAbsolute
       : this.dateRelative
   }
 
   private updateDates () {
-    this.dateRelative = this.fromNowPipe.transform(this.date)
-    this.dateAbsolute = this.date.toLocaleDateString()
+    this.dateRelative = this.fromNowPipe.transform(this.date())
+    this.dateAbsolute = this.date().toLocaleString()
   }
 }

@@ -1,0 +1,63 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "./_player-variables" as *;
+
+$context-menu-width: 350px;
+
+.video-js .vjs-contextmenu-ui-menu {
+  position: absolute;
+  background-color: var(--pt-player-overlay-bg);
+  padding: 8px 0;
+  border-radius: 4px;
+  width: $context-menu-width;
+  z-index: 105; // On top of the progress bar
+
+  .vjs-menu-content {
+    opacity: $fg-opacity;
+    color: pvar(--pt-player-fg);
+    font-size: $font-size !important;
+    font-weight: $font-semibold;
+  }
+
+  .vjs-menu-item {
+    cursor: pointer;
+    font-size: 1em;
+    padding: 8px 16px;
+    text-transform: none;
+    justify-content: flex-start;
+    text-align: start;
+
+    &:hover {
+      background-color: var(--pt-player-overlay-bg-hover);
+    }
+
+    [class^="vjs-icon-"] {
+      display: inline-flex;
+      position: relative;
+      top: 2px;
+      cursor: pointer;
+      width: 14px;
+      height: 14px;
+      background-color: #fff;
+
+      -webkit-mask-size: cover;
+      mask-size: cover;
+
+      @include margin-right(0.8rem !important);
+
+      $icons: "link-2", "repeat", "code", "tick-white", "info";
+
+      @each $icon in $icons {
+        &[class$="-#{$icon}"] {
+          mask-image: url("../svg/#{$icon}.svg");
+          -webkit-mask-image: url("../svg/#{$icon}.svg");
+        }
+      }
+
+      &[class$="-tick-white"] {
+        float: right;
+        margin: 0 !important;
+      }
+    }
+  }
+}

@@ -1,0 +1,88 @@
+<h2 class="form-title">
+  <my-global-icon iconName="studio"></my-global-icon>
+
+  <ng-container i18n>Studio</ng-container>
+</h2>
+
+@if (getUnavailability()) {
+  <my-alert type="primary">{{ getUnavailability() }}</my-alert>
+} @else {
+  <div class="grid-container">
+    <form [formGroup]="form" id="video-manage-form">
+
+      <div class="section cut" formGroupName="cut">
+        <h3 class="section-label" i18n>CUT VIDEO</h3>
+
+        <div i18n class="description">Set a new start/end.</div>
+
+        <div class="form-group">
+          <label i18n for="cutStart">New start</label>
+          <my-timestamp-input inputName="cutStart" enableBorder="true" [maxTimestamp]="videoEdit.getVideoAttributes().duration" formControlName="start"></my-timestamp-input>
+        </div>
+
+        <div class="form-group">
+          <label i18n for="cutEnd">New end</label>
+          <my-timestamp-input inputName="cutEnd" enableBorder="true" [maxTimestamp]="videoEdit.getVideoAttributes().duration" formControlName="end"></my-timestamp-input>
+        </div>
+      </div>
+
+      <div class="section" formGroupName="add-intro">
+        <h3 class="section-label" i18n>ADD INTRO</h3>
+
+        <div i18n class="description">Concatenate a file at the beginning of the video.</div>
+
+        <div class="form-group">
+          <my-reactive-file
+            formControlName="file" inputName="addIntroFile" i18n-inputLabel inputLabel="Select the intro video file"
+            [extensions]="videoExtensions" [displayFilename]="true" [displayReset]="true"
+            [buttonTooltip]="getIntroOutroTooltip()"
+          ></my-reactive-file>
+        </div>
+      </div>
+
+      <div class="section" formGroupName="add-outro">
+        <h3 class="section-label" i18n>ADD OUTRO</h3>
+
+        <div i18n class="description">Concatenate a file at the end of the video.</div>
+
+        <div class="form-group">
+          <my-reactive-file
+            formControlName="file" inputName="addOutroFile" i18n-inputLabel inputLabel="Select the outro video file"
+            [extensions]="videoExtensions" [displayFilename]="true" [displayReset]="true"
+            [buttonTooltip]="getIntroOutroTooltip()"
+          ></my-reactive-file>
+        </div>
+      </div>
+
+      <div class="section" formGroupName="add-watermark">
+        <h3 class="section-label" i18n>ADD WATERMARK</h3>
+
+        <div i18n class="description">Add a watermark image to the video.</div>
+
+        <div class="form-group">
+          <my-reactive-file
+            formControlName="file" inputName="addWatermarkFile" i18n-inputLabel inputLabel="Select watermark image file"
+            [extensions]="imageExtensions" [displayFilename]="true" [displayReset]="true"
+            [buttonTooltip]="getWatermarkTooltip()"
+          ></my-reactive-file>
+        </div>
+      </div>
+    </form>
+
+    <div class="embed-container">
+      <div class="mb-1 fw-bold" i18n>Original video</div>
+      <my-embed [video]="videoEdit.getVideoAttributes()"></my-embed>
+    </div>
+
+    @if (!noEdit()) {
+      <div class="tasks-container">
+        <div class="mb-1 fw-bold" i18n>Edits to apply:</div>
+        <ol>
+          @for (task of videoEdit.getStudioTasksSummary(); track task) {
+            <li>{{ task }}</li>
+          }
+        </ol>
+      </div>
+    }
+  </div>
+}

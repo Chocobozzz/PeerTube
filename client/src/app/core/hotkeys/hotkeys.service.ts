@@ -1,19 +1,22 @@
 // Thanks to https://github.com/brtnshrdr/angular2-hotkeys
 
-import { Injectable } from '@angular/core'
-import { Hotkey } from './hotkey.model'
+import { Injectable, NgZone, inject } from '@angular/core'
+import debug from 'debug'
 import { Subject } from 'rxjs'
 import { tinykeys } from 'tinykeys'
-import debug from 'debug'
+import { Hotkey } from './hotkey.model'
 
 const debugLogger = debug('peertube:hotkeys')
 
 @Injectable()
 export class HotkeysService {
+  private zone = inject(NgZone)
+
   cheatSheetToggle = new Subject<boolean>()
 
   private hotkeys: Hotkey[] = []
-  private preventIn = [ 'INPUT', 'SELECT', 'TEXTAREA' ]
+  private readonly preventInNode = new Set([ 'INPUT', 'SELECT', 'TEXTAREA' ])
+  private readonly preventInRole = new Set([ 'combobox' ])
 
   private disabled = false
 
@@ -54,31 +57,35 @@ export class HotkeysService {
     for (const combo of hotkey.combo) {
       debugLogger('Adding hotkey ' + hotkey.formatted)
 
-      const removeTinyKey = tinykeys(window, {
-        [combo]: event => {
-          if (this.disabled) return
+      this.zone.runOutsideAngular(() => {
+        const removeTinyKey = tinykeys(window, {
+          [combo]: event => {
+            if (this.disabled) return
 
-          const target = event.target as Element
-          const nodeName: string = target.nodeName.toUpperCase()
+            const target = event.target as HTMLElement
+            const nodeName: string = target.nodeName.toUpperCase()
 
-          if (this.preventIn.includes(nodeName)) {
-            return
+            if (target.isContentEditable || this.preventInNode.has(nodeName) || this.preventInRole.has(target.getAttribute('role'))) {
+              return
+            }
+
+            this.zone.run(() => {
+              const result = hotkey.callback.apply(this, [ event, combo ])
+
+              if (result === false) {
+                event.preventDefault()
+                event.stopPropagation()
+              }
+            })
           }
+        })
 
-          const result = hotkey.callback.apply(this, [ event, combo ])
-
-          if (result === false) {
-            event.preventDefault()
-            event.stopPropagation()
-          }
+        if (!this.removeTinyKeysStore.has(hotkey)) {
+          this.removeTinyKeysStore.set(hotkey, [])
         }
+
+        this.removeTinyKeysStore.get(hotkey).push(removeTinyKey)
       })
-
-      if (!this.removeTinyKeysStore.has(hotkey)) {
-        this.removeTinyKeysStore.set(hotkey, [])
-      }
-
-      this.removeTinyKeysStore.get(hotkey).push(removeTinyKey)
     }
 
     return hotkey

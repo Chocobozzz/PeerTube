@@ -1,13 +1,13 @@
 import { LoginPage } from '../po/login.po'
-import { SignupPage } from '../po/signup.po'
-import { PlayerPage } from '../po/player.po'
-import { VideoUploadPage } from '../po/video-upload.po'
-import { VideoWatchPage } from '../po/video-watch.po'
-import { getScreenshotPath, go, isMobileDevice, isSafari, waitServerUp } from '../utils'
 import { MyAccountPage } from '../po/my-account.po'
+import { PlayerPage } from '../po/player.po'
+import { SignupPage } from '../po/signup.po'
+import { VideoPublishPage } from '../po/video-publish.po'
+import { VideoWatchPage } from '../po/video-watch.po'
+import { go, isMobileDevice, isSafari, prepareWebBrowser, waitServerUp } from '../utils'
 
 describe('Password protected videos', () => {
-  let videoUploadPage: VideoUploadPage
+  let videoPublishPage: VideoPublishPage
   let loginPage: LoginPage
   let videoWatchPage: VideoWatchPage
   let signupPage: SignupPage
@@ -44,13 +44,13 @@ describe('Password protected videos', () => {
     await waitServerUp()
 
     loginPage = new LoginPage(isMobileDevice())
-    videoUploadPage = new VideoUploadPage()
+    videoPublishPage = new VideoPublishPage()
     videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
     signupPage = new SignupPage()
     playerPage = new PlayerPage()
     myAccountPage = new MyAccountPage()
 
-    await browser.maximizeWindow()
+    await prepareWebBrowser()
   })
 
   describe('Owner', function () {
@@ -59,9 +59,12 @@ describe('Password protected videos', () => {
     })
 
     it('Should login, upload a public video and save it to a playlist', async () => {
-      await videoUploadPage.navigateTo()
-      await videoUploadPage.uploadVideo('video.mp4')
-      await videoUploadPage.validSecondUploadStep(publicVideoName1)
+      await videoPublishPage.navigateTo()
+      await videoPublishPage.uploadVideo('video.mp4')
+      await videoPublishPage.validSecondStep(publicVideoName1)
+
+      await videoPublishPage.clickOnWatch()
+      await videoWatchPage.waitWatchVideoName(publicVideoName1)
 
       await videoWatchPage.clickOnSave()
 
@@ -69,15 +72,15 @@ describe('Password protected videos', () => {
 
       await videoWatchPage.saveToPlaylist(playlistName)
       await browser.pause(5000)
-
     })
 
     it('Should upload a password protected video', async () => {
-      await videoUploadPage.navigateTo()
-      await videoUploadPage.uploadVideo('video2.mp4')
-      await videoUploadPage.setAsPasswordProtected(videoPassword)
-      await videoUploadPage.validSecondUploadStep(passwordProtectedVideoName)
+      await videoPublishPage.navigateTo()
+      await videoPublishPage.uploadVideo('video2.mp4')
+      await videoPublishPage.setAsPasswordProtected(videoPassword)
+      await videoPublishPage.validSecondStep(passwordProtectedVideoName)
 
+      await videoPublishPage.clickOnWatch()
       await videoWatchPage.waitWatchVideoName(passwordProtectedVideoName)
 
       passwordProtectedVideoUrl = await browser.getUrl()
@@ -89,19 +92,19 @@ describe('Password protected videos', () => {
     })
 
     it('Should upload a second public video and save it to playlist', async () => {
-      await videoUploadPage.navigateTo()
+      await videoPublishPage.navigateTo()
 
-      await videoUploadPage.uploadVideo('video3.mp4')
-      await videoUploadPage.validSecondUploadStep(publicVideoName2)
+      await videoPublishPage.uploadVideo('video3.mp4')
+      await videoPublishPage.validSecondStep(publicVideoName2)
+      await videoPublishPage.clickOnWatch()
 
+      await videoWatchPage.waitWatchVideoName(publicVideoName2)
       await videoWatchPage.clickOnSave()
       await videoWatchPage.saveToPlaylist(playlistName)
     })
 
     it('Should play video without password', async function () {
       await go(passwordProtectedVideoUrl)
-
-      expect(!await videoWatchPage.isPasswordProtected())
 
       await videoWatchPage.waitWatchVideoName(passwordProtectedVideoName)
 
@@ -142,11 +145,12 @@ describe('Password protected videos', () => {
     it('Should watch the playlist', async () => {
       await myAccountPage.clickOnPlaylist(playlistName)
       await myAccountPage.playPlaylist()
+
+      await videoWatchPage.waitWatchVideoName(publicVideoName1, 40 * 1000)
       playlistUrl = await browser.getUrl()
 
-      await videoWatchPage.waitUntilVideoName(publicVideoName1, 40 * 1000)
-      await videoWatchPage.waitUntilVideoName(passwordProtectedVideoName, 40 * 1000)
-      await videoWatchPage.waitUntilVideoName(publicVideoName2, 40 * 1000)
+      await videoWatchPage.waitWatchVideoName(passwordProtectedVideoName, 40 * 1000)
+      await videoWatchPage.waitWatchVideoName(publicVideoName2, 40 * 1000)
     })
 
     after(async () => {
@@ -155,7 +159,6 @@ describe('Password protected videos', () => {
   })
 
   describe('Regular users', function () {
-
     before(async () => {
       await signupPage.fullSignup({
         accountInfo: {
@@ -170,8 +173,6 @@ describe('Password protected videos', () => {
 
     it('Should requires password to play video', async function () {
       await go(passwordProtectedVideoUrl)
-
-      expect(await videoWatchPage.isPasswordProtected())
 
       await videoWatchPage.fillVideoPassword(videoPassword)
       await videoWatchPage.waitWatchVideoName(passwordProtectedVideoName)
@@ -191,7 +192,7 @@ describe('Password protected videos', () => {
     it('Should watch the playlist without password protected video', async () => {
       await go(playlistUrl)
       await playerPage.playVideo()
-      await videoWatchPage.waitUntilVideoName(publicVideoName2, 40 * 1000)
+      await videoWatchPage.waitWatchVideoName(publicVideoName2, 40 * 1000)
     })
 
     after(async () => {
@@ -202,8 +203,6 @@ describe('Password protected videos', () => {
   describe('Anonymous users', function () {
     it('Should requires password to play video', async function () {
       await go(passwordProtectedVideoUrl)
-
-      expect(await videoWatchPage.isPasswordProtected())
 
       await videoWatchPage.fillVideoPassword(videoPassword)
       await videoWatchPage.waitWatchVideoName(passwordProtectedVideoName)
@@ -221,11 +220,7 @@ describe('Password protected videos', () => {
     it('Should watch the playlist without password protected video', async () => {
       await go(playlistUrl)
       await playerPage.playVideo()
-      await videoWatchPage.waitUntilVideoName(publicVideoName2, 40 * 1000)
+      await videoWatchPage.waitWatchVideoName(publicVideoName2, 40 * 1000)
     })
-  })
-
-  after(async () => {
-    await browser.saveScreenshot(getScreenshotPath('after-test.png'))
   })
 })

@@ -1,0 +1,24 @@
+<div class="margin-content">
+  <h1 i18n class="title-page">Request email for account verification</h1>
+
+  @if (requiresEmailVerification) {
+    <form (ngSubmit)="askSendVerifyEmail()" [formGroup]="form">
+      <div class="form-group">
+        <label i18n for="verify-email-email">Email</label>
+
+        <input
+          type="email" id="verify-email-email" i18n-placeholder placeholder="Email address" required
+          formControlName="verify-email-email" class="form-control" [ngClass]="{ 'input-error': formErrors['verify-email-email'] }"
+          >
+
+        @if (formErrors['verify-email-email']) {
+          <div class="form-error" role="alert">{{ formErrors['verify-email-email'] }}</div>
+        }
+      </div>
+
+      <input class="peertube-button primary-button" type="submit" i18n-value value="Send verification email" [disabled]="!form.valid">
+    </form>
+  } @else {
+    <div i18n>{{ instanceName }} does not require email verification.</div>
+  }
+</div>

@@ -1,16 +1,18 @@
-import { omit } from '@peertube/peertube-core-utils'
+import { omit, pick } from '@peertube/peertube-core-utils'
 import {
-  VideoPrivacy,
-  VideoPlaylistPrivacy,
-  VideoPlaylistCreateResult,
   Account,
+  ActorImageType,
   HTMLServerConfig,
-  ServerConfig
+  LogoType,
+  ServerConfig,
+  VideoPlaylistCreateResult,
+  VideoPlaylistPrivacy,
+  VideoPrivacy
 } from '@peertube/peertube-models'
 import {
   createMultipleServers,
-  setAccessTokensToServers,
   doubleFollow,
+  setAccessTokensToServers,
   setDefaultVideoChannel,
   waitJobs
 } from '@peertube/peertube-server-commands'
@@ -43,10 +45,26 @@ export async function prepareClientTests () {
   const servers = await createMultipleServers(2)
 
   await setAccessTokensToServers(servers)
-
   await doubleFollow(servers[0], servers[1])
-
   await setDefaultVideoChannel(servers)
+
+  const instanceConfig = {
+    name: 'super instance title',
+    shortDescription: 'super instance description',
+    avatar: 'avatar.png'
+  }
+
+  await servers[0].config.updateExistingConfig({
+    newConfig: {
+      instance: { ...pick(instanceConfig, [ 'name', 'shortDescription' ]) }
+    }
+  })
+  await servers[0].config.updateInstanceImage({ type: ActorImageType.AVATAR, fixture: instanceConfig.avatar })
+
+  const types: LogoType[] = [ 'favicon', 'header-square', 'header-wide', 'opengraph' ]
+  for (const type of types) {
+    await servers[0].config.updateInstanceLogo({ type, fixture: 'avatar.png' })
+  }
 
   let account: Account
 
@@ -59,8 +77,6 @@ export async function prepareClientTests () {
   let playlistIds: (string | number)[] = []
   let privatePlaylistId: string
   let unlistedPlaylistId: string
-
-  const instanceDescription = 'PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.'
 
   const videoName = 'my super name for server 1'
   const videoDescription = 'my<br> super __description__ for *server* 1<p></p>'
@@ -77,6 +93,8 @@ export async function prepareClientTests () {
     attributes: { description: channelDescription }
   })
 
+  await servers[0].channels.updateImage({ channelName: servers[0].store.channel.name, fixture: 'avatar.png', type: 'avatar' })
+
   // Public video
 
   {
@@ -92,10 +110,10 @@ export async function prepareClientTests () {
   }
 
   {
-    ({ uuid: privateVideoId } = await servers[0].videos.quickUpload({ name: 'private', privacy: VideoPrivacy.PRIVATE }));
-    ({ uuid: unlistedVideoId } = await servers[0].videos.quickUpload({ name: 'unlisted', privacy: VideoPrivacy.UNLISTED }));
-    ({ uuid: internalVideoId } = await servers[0].videos.quickUpload({ name: 'internal', privacy: VideoPrivacy.INTERNAL }));
-    ({ uuid: passwordProtectedVideoId } = await servers[0].videos.quickUpload({
+    ;({ uuid: privateVideoId } = await servers[0].videos.quickUpload({ name: 'private', privacy: VideoPrivacy.PRIVATE }))
+    ;({ uuid: unlistedVideoId } = await servers[0].videos.quickUpload({ name: 'unlisted', privacy: VideoPrivacy.UNLISTED }))
+    ;({ uuid: internalVideoId } = await servers[0].videos.quickUpload({ name: 'internal', privacy: VideoPrivacy.INTERNAL }))
+    ;({ uuid: passwordProtectedVideoId } = await servers[0].videos.quickUpload({
       name: 'password protected',
       privacy: VideoPrivacy.PASSWORD_PROTECTED,
       videoPasswords: [ 'password' ]
@@ -154,7 +172,7 @@ export async function prepareClientTests () {
   return {
     servers,
 
-    instanceDescription,
+    instanceConfig,
 
     account,
 

@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
 import { HttpStatusCode, PeerTubeProblemDocument, ServerErrorCode } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
+  makeActivityPubGetRequest,
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { expect } from 'chai'
 
 describe('Test follow constraints', function () {
   let servers: PeerTubeServer[] = []
@@ -45,9 +46,7 @@ describe('Test follow constraints', function () {
   })
 
   describe('With a followed instance', function () {
-
     describe('With an unlogged user', function () {
-
       it('Should get the local video', async function () {
         await servers[0].videos.get({ id: video1UUID })
       })
@@ -129,7 +128,6 @@ describe('Test follow constraints', function () {
   })
 
   describe('With a non followed instance', function () {
-
     before(async function () {
       this.timeout(30000)
 
@@ -137,7 +135,6 @@ describe('Test follow constraints', function () {
     })
 
     describe('With an unlogged user', function () {
-
       it('Should get the local video', async function () {
         await servers[0].videos.get({ id: video1UUID })
       })
@@ -151,7 +148,6 @@ describe('Test follow constraints', function () {
         expect(error.code).to.equal(ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS)
 
         expect(error.detail).to.equal('Cannot get this video regarding follow constraints')
-        expect(error.error).to.equal(error.detail)
 
         expect(error.status).to.equal(HttpStatusCode.FORBIDDEN_403)
 
@@ -196,7 +192,6 @@ describe('Test follow constraints', function () {
     })
 
     describe('With a logged user', function () {
-
       it('Should get the local video', async function () {
         await servers[0].videos.getWithToken({ token: userToken, id: video1UUID })
       })
@@ -238,7 +233,6 @@ describe('Test follow constraints', function () {
   })
 
   describe('When following a remote account', function () {
-
     before(async function () {
       this.timeout(60000)
 
@@ -256,7 +250,6 @@ describe('Test follow constraints', function () {
   })
 
   describe('When unfollowing a remote account', function () {
-
     before(async function () {
       this.timeout(60000)
 
@@ -277,7 +270,6 @@ describe('Test follow constraints', function () {
   })
 
   describe('When following a remote channel', function () {
-
     before(async function () {
       this.timeout(60000)
 
@@ -295,7 +287,6 @@ describe('Test follow constraints', function () {
   })
 
   describe('When unfollowing a remote channel', function () {
-
     before(async function () {
       this.timeout(60000)
 
@@ -312,6 +303,25 @@ describe('Test follow constraints', function () {
 
     it('Should get the remote video with a logged in user', async function () {
       await servers[0].videos.getWithToken({ token: userToken, id: video2UUID })
+    })
+  })
+
+  describe('When disabling federation', function () {
+    before(async function () {
+      this.timeout(60_000)
+
+      await servers[0].kill()
+      await servers[0].run({ federation: { enabled: false } })
+    })
+
+    it('Should not federate anymore', async function () {
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'non federated video' })
+      await waitJobs(servers)
+
+      await servers[1].videos.get({ id: uuid, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+
+      await makeActivityPubGetRequest(servers[0].url, '/inbox', HttpStatusCode.NOT_ACCEPTABLE_406)
+      await makeActivityPubGetRequest(servers[0].url, '/outbox', HttpStatusCode.NOT_ACCEPTABLE_406)
     })
   })
 

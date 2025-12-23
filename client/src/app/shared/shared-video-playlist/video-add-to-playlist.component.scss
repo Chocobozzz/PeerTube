@@ -1,9 +1,15 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
+
+my-timestamp-input {
+  width: 100px;
+}
 
 .header,
 .dropdown-item,
-.input-container {
+.input-container,
+.new-playlist-block {
   padding: 8px 24px;
 }
 
@@ -28,7 +34,7 @@
 }
 
 .playlists {
-  max-height: 180px;
+  max-height: 200px;
   overflow-y: auto;
 }
 
@@ -53,9 +59,9 @@
   width: 100%;
 
   my-peertube-checkbox {
-    @include margin-right(10px);
-
     align-self: center;
+
+    @include margin-right(10px);
   }
 
   .display-name {
@@ -65,24 +71,25 @@
     margin: 0;
     font-weight: $font-regular;
     cursor: pointer;
+    font-size: 1rem;
   }
 
   .optional-row-icon {
-    @include margin-left(0.5rem);
-
     display: flex;
     align-items: center;
     font-size: 14px;
     cursor: pointer;
 
-    my-global-icon {
-      @include apply-svg-color(#333);
-      @include margin-right(0);
+    @include margin-left(0.5rem);
 
+    my-global-icon {
       position: relative;
       top: 1px;
       width: 19px;
       height: 19px;
+      color: pvar(--fg-400);
+
+      @include margin-right(0);
     }
 
     &:hover {
@@ -93,7 +100,7 @@
 
 .optional-rows {
   display: grid;
-  grid-template-columns: 35px 80px 80px;
+  grid-template-columns: 35px 105px 105px;
   row-gap: 3px;
   column-gap: 10px;
   align-items: center;
@@ -104,7 +111,7 @@
 
   .header-label {
     font-size: 13px;
-    color: pvar(--greyForegroundColor);
+    color: pvar(--fg-300);
     padding-left: 2px;
 
     &:nth-child(1) {
@@ -127,24 +134,19 @@
   cursor: pointer;
 
   my-global-icon {
-    @include apply-svg-color(#333);
-    @include margin-right(4px);
-
     position: relative;
     left: -1px;
     top: -1px;
     width: 21px;
     height: 21px;
+    line-height: 21px;
+    display: inline-block;
+    color: pvar(--fg-400);
+
+    @include margin-right(13px);
   }
 }
 
-input[type=text] {
+input[type="text"] {
   @include peertube-input-text(200px);
-
-  display: block;
-}
-
-input[type=submit] {
-  @include peertube-button;
-  @include orange-button;
 }

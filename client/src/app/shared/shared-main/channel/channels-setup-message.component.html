@@ -1,0 +1,9 @@
+@if (hasChannelNotConfigured()) {
+  <my-alert type="primary" class="text-center">
+    <my-global-icon iconName="tip"></my-global-icon>
+    <div i18n>Some of your channels are not fully set up. Make them welcoming and explicit about what you publish by adding a <strong>banner</strong>, an <strong>avatar</strong> and a <strong>description</strong>.</div>
+    @if (!hideLink()) {
+      <a class="peertube-button-link secondary-button mt-2" routerLink="/my-library/video-channels" i18n>Set up my channels</a>
+    }
+  </my-alert>
+}

@@ -2,23 +2,42 @@
 
 import { HttpStatusCode, LiveVideoCreate, VideoPrivacy } from '@peertube/peertube-models'
 import {
-  cleanupTests, createSingleServer, makeRawRequest,
+  cleanupTests,
+  createSingleServer,
+  findExternalSavedVideo,
+  makeRawRequest,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   stopFfmpeg,
   waitJobs,
   waitUntilLivePublishedOnAllServers,
-  waitUntilLiveReplacedByReplayOnAllServers
+  waitUntilLiveReplacedByReplayOnAllServers,
+  waitUntilLiveWaitingOnAllServers
 } from '@peertube/peertube-server-commands'
+import { expect } from 'chai'
 
-async function testVideoFiles (server: PeerTubeServer, uuid: string) {
+async function testVideoFiles (options: {
+  server: PeerTubeServer
+  uuid: string
+  isPrivate: boolean
+}) {
+  const { server, uuid, isPrivate } = options
+
   const video = await server.videos.getWithToken({ id: uuid })
+  const playlist = video.streamingPlaylists[0]
 
-  const expectedStatus = HttpStatusCode.OK_200
+  const urls = [ playlist.playlistUrl, playlist.segmentsSha256Url ]
 
-  await makeRawRequest({ url: video.streamingPlaylists[0].playlistUrl, token: server.accessToken, expectedStatus })
-  await makeRawRequest({ url: video.streamingPlaylists[0].segmentsSha256Url, token: server.accessToken, expectedStatus })
+  for (const url of urls) {
+    await makeRawRequest({ url, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+
+    if (isPrivate) {
+      expect(url).to.not.include('/private/')
+    } else {
+      expect(url).to.include('/private/')
+    }
+  }
 }
 
 describe('Live privacy update', function () {
@@ -43,7 +62,7 @@ describe('Live privacy update', function () {
       this.timeout(120000)
 
       const fields: LiveVideoCreate = {
-        name: 'live',
+        name: 'normal live',
         privacy: VideoPrivacy.PUBLIC,
         permanentLive: false,
         replaySettings: { privacy: VideoPrivacy.PRIVATE },
@@ -61,7 +80,7 @@ describe('Live privacy update', function () {
       await waitUntilLiveReplacedByReplayOnAllServers([ server ], uuid)
       await waitJobs([ server ])
 
-      await testVideoFiles(server, uuid)
+      await testVideoFiles({ server, uuid, isPrivate: false })
     })
 
     it('Should update the replay to public and re-update it to private', async function () {
@@ -69,11 +88,44 @@ describe('Live privacy update', function () {
 
       await server.videos.update({ id: uuid, attributes: { privacy: VideoPrivacy.PUBLIC } })
       await waitJobs([ server ])
-      await testVideoFiles(server, uuid)
+      await testVideoFiles({ server, uuid, isPrivate: true })
 
       await server.videos.update({ id: uuid, attributes: { privacy: VideoPrivacy.PRIVATE } })
       await waitJobs([ server ])
-      await testVideoFiles(server, uuid)
+      await testVideoFiles({ server, uuid, isPrivate: false })
+    })
+  })
+
+  describe('Permanent live', function () {
+    let liveUUID: string
+
+    it('Should update the permanent live privacy but still process the replay', async function () {
+      this.timeout(120000)
+
+      const fields: LiveVideoCreate = {
+        name: 'permanent live',
+        privacy: VideoPrivacy.PUBLIC,
+        permanentLive: true,
+        replaySettings: { privacy: VideoPrivacy.PUBLIC },
+        saveReplay: true,
+        channelId: server.store.channel.id
+      }
+
+      const video = await server.live.create({ fields })
+      liveUUID = video.uuid
+
+      const ffmpegCommand = await server.live.sendRTMPStreamInVideo({ videoId: liveUUID })
+      await waitUntilLivePublishedOnAllServers([ server ], liveUUID)
+      await stopFfmpeg(ffmpegCommand)
+      await waitUntilLiveWaitingOnAllServers([ server ], liveUUID)
+
+      await server.videos.update({ id: liveUUID, attributes: { privacy: VideoPrivacy.PRIVATE } })
+      await waitJobs([ server ])
+
+      const replay = await findExternalSavedVideo(server, liveUUID)
+      expect(replay).to.exist
+
+      await testVideoFiles({ server, uuid: replay.uuid, isPrivate: true })
     })
   })
 

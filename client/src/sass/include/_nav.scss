@@ -14,14 +14,15 @@
     display: none !important;
   }
 
-  a.nav-link {
-    @include disable-default-a-behaviour;
-
+  a.nav-link,
+  .unavailable-nav-link {
     margin-bottom: -$border-width;
-    height: $nav-link-height !important;
+    min-height: $nav-link-height !important;
     padding: 0 30px !important;
 
     border: $border-width $border-type transparent;
+
+    @include disable-default-a-behaviour;
 
     span {
       border-bottom: 2px solid transparent;
@@ -32,7 +33,7 @@
       border-bottom-color: transparent;
 
       span {
-        border-bottom-color: pvar(--mainColor);
+        border-bottom-color: pvar(--border-primary);
       }
     }
 

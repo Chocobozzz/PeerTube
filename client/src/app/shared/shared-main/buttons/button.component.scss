@@ -1,17 +1,14 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_button-mixins" as *;
 
-@mixin responsive-label {
-  .action-button {
-    padding: 0 13px;
-  }
+@mixin reduced-padding {
+  padding: pvar(--input-y-padding) calc(#{pvar(--input-x-padding)} / 2) !important;
+}
 
+@mixin hide-label {
   .button-label {
     display: none;
-  }
-
-  my-global-icon {
-    margin: 0 !important;
   }
 }
 
@@ -19,46 +16,34 @@
   display: inline-block;
 }
 
-a[class$=-button],
-span[class$=-button] {
-  > span {
-    @include margin-left(5px);
-  }
-}
-
 .action-button {
   width: 100%; // useful for ellipsis, allow to define a max-width on host component
+  vertical-align: top; // prevent additional height to the parent because of ellipsis
 
   my-loader.displayed {
-    @include margin-right(3px);
-
     display: inline-flex;
     vertical-align: middle;
     margin-top: -1px;
+
+    @include margin-right(0.5rem);
   }
 
-  &.has-icon {
-    @include button-with-icon(21px);
+  &:not(.rounded-icon-button) {
+    &.has-icon {
+      @include button-with-icon(24px, 0, 0);
+    }
   }
 
-  &.icon-only my-global-icon {
-    margin: 0 !important;
-  }
-}
+  &.label-xl {
+    font-size: 90%;
 
-.button-label {
-  @include ellipsis;
-}
-
-// In a table, try to minimize the space taken by this button
-@media screen and (max-width: 1400px) {
-  :host-context(td) {
-    @include responsive-label;
+    @include reduced-padding();
   }
 }
 
 @media screen and (max-width: $small-view) {
   .responsive-label {
-    @include responsive-label;
+    @include hide-label();
+    @include reduced-padding();
   }
 }

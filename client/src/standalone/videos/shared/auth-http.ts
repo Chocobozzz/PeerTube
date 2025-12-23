@@ -1,9 +1,9 @@
 import { HttpStatusCode, OAuth2ErrorCode, OAuth2ErrorCodeType, UserRefreshToken } from '@peertube/peertube-models'
-import { OAuthUserTokens, objectToUrlEncoded } from '../../../root-helpers'
+import { isSameOrigin, OAuthUserTokens, objectToUrlEncoded } from '../../../root-helpers'
 import { peertubeLocalStorage } from '../../../root-helpers/peertube-web-storage'
 
 export class AuthHTTP {
-  private readonly LOCAL_STORAGE_OAUTH_CLIENT_KEYS = {
+  private readonly LS_OAUTH_CLIENT_KEYS = {
     CLIENT_ID: 'client_id',
     CLIENT_SECRET: 'client_secret'
   }
@@ -12,7 +12,7 @@ export class AuthHTTP {
 
   private headers = new Headers()
 
-  constructor () {
+  constructor (private readonly serverUrl: string, private readonly language: string) {
     this.userOAuthTokens = OAuthUserTokens.getUserTokens(peertubeLocalStorage)
 
     if (this.userOAuthTokens) this.setHeadersFromTokens()
@@ -21,9 +21,13 @@ export class AuthHTTP {
   fetch (url: string, { optionalAuth, method }: { optionalAuth: boolean, method?: string }, videoPassword?: string) {
     let refreshFetchOptions: { headers?: Headers } = {}
 
-    if (videoPassword) this.headers.set('x-peertube-video-password', videoPassword)
+    if (isSameOrigin(this.serverUrl, url)) {
+      if (this.language) this.headers.set('x-peertube-language', this.language)
 
-    if (videoPassword || optionalAuth) refreshFetchOptions = { headers: this.headers }
+      if (videoPassword) this.headers.set('x-peertube-video-password', videoPassword)
+
+      if (videoPassword || optionalAuth) refreshFetchOptions = { headers: this.headers }
+    }
 
     return this.refreshFetch(url.toString(), { ...refreshFetchOptions, method })
   }
@@ -44,8 +48,8 @@ export class AuthHTTP {
         if (res.status !== HttpStatusCode.UNAUTHORIZED_401) return res
 
         const refreshingTokenPromise = new Promise<void>((resolve, reject) => {
-          const clientId: string = peertubeLocalStorage.getItem(this.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_ID)
-          const clientSecret: string = peertubeLocalStorage.getItem(this.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_SECRET)
+          const clientId: string = peertubeLocalStorage.getItem(this.LS_OAUTH_CLIENT_KEYS.CLIENT_ID)
+          const clientSecret: string = peertubeLocalStorage.getItem(this.LS_OAUTH_CLIENT_KEYS.CLIENT_SECRET)
 
           const headers = new Headers()
           headers.set('Content-Type', 'application/x-www-form-urlencoded')
@@ -91,11 +95,13 @@ export class AuthHTTP {
             OAuthUserTokens.flushLocalStorage(peertubeLocalStorage)
 
             this.removeTokensFromHeaders()
-          }).then(() => fetch(url, {
-            ...options,
+          }).then(() =>
+            fetch(url, {
+              ...options,
 
-            headers: this.headers
-          }))
+              headers: this.headers
+            })
+          )
       })
   }
 

@@ -5,6 +5,10 @@
 $thumbnail-width: 130px;
 $thumbnail-height: 72px;
 
+my-timestamp-input {
+  width: 100px;
+}
+
 my-video-thumbnail {
   @include thumbnail-size-component($thumbnail-width, $thumbnail-height);
 }
@@ -17,15 +21,22 @@ my-video-thumbnail {
 
 my-video-thumbnail,
 .fake-thumbnail {
-  @include margin-right(10px);
-
   display: flex; // Avoids an issue with line-height that adds space below the element
+
+  @include margin-right(10px);
+}
+
+.nsfw-warning {
+  my-global-icon {
+    @include global-icon-size(18px);
+  }
 }
 
 .video {
   display: grid;
   grid-template-columns: 1fr auto;
-  background-color: pvar(--mainBackgroundColor);
+  align-items: center;
+  background-color: pvar(--bg);
   padding: 10px;
   border-bottom: 1px solid $separator-border-color;
 
@@ -34,9 +45,9 @@ my-video-thumbnail,
   }
 
   a {
-    @include disable-default-a-behaviour;
+    color: pvar(--fg);
 
-    color: pvar(--mainForegroundColor);
+    @include disable-default-a-behaviour;
   }
 
   > a {
@@ -46,34 +57,25 @@ my-video-thumbnail,
     cursor: pointer;
 
     .position {
-      @include margin-right(10px);
-
       font-weight: $font-semibold;
-      color: pvar(--greyForegroundColor);
+      color: pvar(--fg-300);
       min-width: 25px;
 
       my-global-icon {
-        @include apply-svg-color(pvar(--greyForegroundColor));
-
-        width: 17px;
         position: relative;
         left: -2px;
+        color: pvar(--fg-300);
+
+        @include global-icon-size(17px);
       }
     }
   }
 
-  .more,
-  my-edit-button {
-    @include margin-left(auto);
-
-    justify-self: flex-end;
+  .more {
     cursor: pointer;
     min-width: 24px;
-  }
 
-  .more {
-    display: flex;
-    align-items: center;
+    @include margin-left(auto);
   }
 
   .more-button {
@@ -84,7 +86,7 @@ my-video-thumbnail,
     }
 
     my-global-icon {
-      @include apply-svg-color(pvar(--greyForegroundColor));
+      color: pvar(--fg-300);
     }
   }
 
@@ -109,11 +111,11 @@ my-video-thumbnail,
 }
 
 .video-info-name {
-  @include ellipsis;
-
   font-size: 18px;
   font-weight: $font-semibold;
   display: inline-block;
+
+  @include ellipsis;
 }
 
 .video-info {
@@ -138,30 +140,30 @@ my-video-thumbnail,
 
   .video-info-owner,
   .video-info-timestamp {
-    color: pvar(--greyForegroundColor);
+    color: pvar(--fg-300);
   }
 }
 
 .video-info-owner,
 .video-info-timestamp,
-.video-miniature-created-at-views {
+.date-and-views {
   font-size: 14px;
 }
 
 .dropdown-menu {
 
   .dropdown-item {
-    @include dropdown-with-icon-item;
-
     cursor: pointer;
+
+    @include dropdown-with-icon-item;
   }
 
   .timestamp-options {
-    @include padding-left(35px);
-
     padding-top: 0;
     margin-top: 5px;
     margin-bottom: 15px;
+
+    @include padding-left(35px);
 
     > div {
       display: flex;
@@ -171,13 +173,6 @@ my-video-thumbnail,
 
     my-peertube-checkbox {
       @include margin-right(5px);
-    }
-
-    input {
-      @include peertube-button;
-      @include orange-button;
-
-      margin-top: 10px;
     }
   }
 }
@@ -229,37 +224,10 @@ my-video-thumbnail,
 }
 
 @media screen and (min-width: $small-view) {
-  :host-context(.expanded) {
-    @include more-dropdown-control();
-  }
-}
-
-@media screen and (max-width: $small-view) {
-  :host-context(.expanded) {
-    @include edit-button-control();
-  }
+  @include more-dropdown-control();
+  @include edit-button-control();
 }
 
 @media screen and (max-width: $mobile-view) {
-  :host-context(.expanded) {
-    @include edit-button-in-mobile-view();
-  }
-}
-
-@media screen and (min-width: #{$small-view + $menu-width}) {
-  :host-context(.main-col:not(.expanded)) {
-    @include more-dropdown-control();
-  }
-}
-
-@media screen and (max-width: #{$small-view + $menu-width}) {
-  :host-context(.main-col:not(.expanded)) {
-    @include edit-button-control();
-  }
-}
-
-@media screen and (max-width: #{$mobile-view + $menu-width}) {
-  :host-context(.main-col:not(.expanded)) {
-    @include edit-button-in-mobile-view();
-  }
+  @include edit-button-in-mobile-view();
 }

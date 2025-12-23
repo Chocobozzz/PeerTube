@@ -1,17 +1,29 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
+
+.peertube-radio-container {
+  @include peertube-radio-container;
+}
+
+.peertube-select-container {
+  @include peertube-select-container(auto);
+}
+
+.pt-input-text {
+  @include peertube-input-text(100%);
+}
 
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .input-error:not(:focus) {
-
   &,
-  +.nav-preview,
+  + .nav-preview,
   // Markdown textarea
-  +*+.tab-content {
-    border-color: $red !important;
+  + * + .tab-content {
+    border-color: pvar(--red) !important;
   }
 }
 
@@ -27,26 +39,25 @@
 }
 
 .form-error {
-  color: $red;
+  color: pvar(--red);
 }
 
 // Disable red error on input focus
 .input-error:focus,
 .input-group:focus-within {
-
-  +.form-error,
-  +*+.form-error,
+  + .form-error,
+  + * + .form-error,
   // Markdown textarea
-  +*+*+.form-error {
-    color: pvar(--mainForegroundColor);
+  + * + * + .form-error {
+    color: pvar(--fg);
   }
 }
 
 .form-group-description {
-  @include muted;
-
   font-size: 14px;
   margin-top: 10px;
+
+  @include muted-2;
 }
 
 // Useful with a "reset" button
@@ -56,25 +67,48 @@
   align-items: baseline;
 }
 
+label,
+.label {
+  font-weight: $font-bold;
+  margin-bottom: 0.5rem;
+  font-size: 18px;
+  color: pvar(--fg-300);
+}
+
+.label-inline {
+  display: inline;
+  font-size: 1rem;
+  color: pvar(--fg-200);
+  font-weight: normal;
+  margin-bottom: 0;
+
+  @include margin-right(0.75rem);
+}
+
 label + .form-group-description,
+label + my-help + .form-group-description,
+.label + .form-group-description,
 .label-container + .form-group-description {
   margin-bottom: 10px;
-  margin-top: 0;
+  margin-top: -0.4rem;
 }
 
-.reset-button {
-  @include peertube-button;
-  @include grey-button;
+.number-with-unit {
+  position: relative;
+  width: fit-content;
 
-  height: auto;
+  input[type="number"] + span {
+    position: absolute;
+    top: 0.4em;
+    right: 3em;
 
-  &.reset-button-small {
-    font-size: 80%;
-    padding: 2px 5px;
-    margin: 0 0.25rem;
-    height: fit-content;
-    line-height: initial;
+    @media screen and (max-width: $mobile-view) {
+      display: none;
+    }
+  }
+
+  input[disabled] {
+    opacity: 0.8;
+    pointer-events: none;
   }
 }
-
-

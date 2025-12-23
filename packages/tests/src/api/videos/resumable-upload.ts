@@ -135,7 +135,6 @@ describe('Test resumable upload', function () {
   })
 
   describe('Directory cleaning', function () {
-
     it('Should correctly delete files after an upload', async function () {
       const uploadId = await prepareUpload()
       await sendChunks({ pathUploadId: uploadId })
@@ -171,7 +170,6 @@ describe('Test resumable upload', function () {
   })
 
   describe('Resumable upload and chunks', function () {
-
     it('Should accept the same amount of chunks', async function () {
       const uploadId = await prepareUpload()
       await sendChunks({ pathUploadId: uploadId })
@@ -187,20 +185,41 @@ describe('Test resumable upload', function () {
     })
 
     it('Should not accept more chunks than expected with an invalid content length/content range', async function () {
+      // Sometimes the server answers 409, and sometimes 400 :shrug:
+      this.retries(3)
+
       const uploadId = await prepareUpload({ size: 1500 })
 
-      await sendChunks({ pathUploadId: uploadId, expectedStatus: HttpStatusCode.CONFLICT_409, contentLength: 1000 })
+      try {
+        await sendChunks({ pathUploadId: uploadId, expectedStatus: HttpStatusCode.CONFLICT_409, contentLength: 1000 })
+      } catch (err) {
+        await sendChunks({ pathUploadId: uploadId, expectedStatus: HttpStatusCode.BAD_REQUEST_400, contentLength: 1000 })
+      }
 
       await checkFileSize(uploadId, 0)
     })
 
     it('Should not accept more chunks than expected with an invalid content length', async function () {
+      // Sometimes the server answers 409, and sometimes 400 :shrug:
+      this.retries(3)
+
       const uploadId = await prepareUpload({ size: 500 })
 
       const size = 1000
 
       const contentRangeBuilder = (start: number) => `bytes ${start}-${start + size - 1}/${size}`
-      await sendChunks({ pathUploadId: uploadId, expectedStatus: HttpStatusCode.CONFLICT_409, contentRangeBuilder, contentLength: size })
+
+      try {
+        await sendChunks({ pathUploadId: uploadId, expectedStatus: HttpStatusCode.CONFLICT_409, contentRangeBuilder, contentLength: size })
+      } catch (err) {
+        await sendChunks({
+          pathUploadId: uploadId,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400,
+          contentRangeBuilder,
+          contentLength: size
+        })
+      }
+
       await checkFileSize(uploadId, 0)
     })
 

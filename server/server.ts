@@ -10,6 +10,7 @@ import { checkMissedConfig, checkFFmpeg, checkNodeVersion } from './core/initial
 import { CONFIG } from './core/initializers/config.js'
 import { API_VERSION, WEBSERVER, loadLanguages } from './core/initializers/constants.js'
 import { logger } from './core/helpers/logger.js'
+import { initI18n, useI18n } from '@server/helpers/i18n.js'
 
 const missed = checkMissedConfig()
 if (missed.length !== 0) {
@@ -55,8 +56,10 @@ migrate()
   })
 
 // ----------- Initialize -----------
-loadLanguages()
-  .catch(err => logger.error('Cannot load languages', { err }))
+Promise.all([
+  initI18n(),
+  loadLanguages()
+]).catch(err => logger.error('Cannot load i18n/languages', { err }))
 
 // Express configuration
 import express from 'express'
@@ -64,7 +67,6 @@ import morgan, { token } from 'morgan'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import { frameguard } from 'helmet'
-import { parse } from 'useragent'
 import anonymize from 'ip-anonymize'
 import { program as cli } from 'commander'
 
@@ -83,6 +85,8 @@ app.use((_req, res, next) => {
 
   return next()
 })
+
+app.use(useI18n)
 
 // Security middleware
 import { baseCSP } from './core/middlewares/csp.js'
@@ -148,6 +152,7 @@ import { OpenTelemetryMetrics } from '@server/lib/opentelemetry/metrics.js'
 import { ApplicationModel } from '@server/models/application/application.js'
 import { VideoChannelSyncLatestScheduler } from '@server/lib/schedulers/video-channel-sync-latest-scheduler.js'
 import { RemoveExpiredUserExportsScheduler } from '@server/lib/schedulers/remove-expired-user-exports-scheduler.js'
+import { UpdateTokenSessionScheduler } from '@server/lib/schedulers/update-token-session-scheduler.js'
 
 // ----------- Command line -----------
 
@@ -176,14 +181,6 @@ if (CONFIG.LOG.LOG_HTTP_REQUESTS) {
     }
 
     return req.ip
-  })
-
-  token('user-agent', (req: express.Request) => {
-    if (req.get('DNT') === '1') {
-      return parse(req.get('user-agent')).family
-    }
-
-    return req.get('user-agent')
   })
 
   app.use(morgan('combined', {
@@ -232,7 +229,10 @@ app.use('/api/' + API_VERSION, apiRouter)
 // Services (oembed...)
 app.use('/services', servicesRouter)
 
-app.use('/', activityPubRouter)
+if (CONFIG.FEDERATION.ENABLED) {
+  app.use('/', activityPubRouter)
+}
+
 app.use('/', feedsRouter)
 app.use('/', trackerRouter)
 app.use('/', sitemapRouter)
@@ -263,13 +263,7 @@ app.use((_req, res: express.Response) => {
 })
 
 // Catch thrown errors
-app.use((err, _req, res: express.Response, _next) => {
-  // Format error to be logged
-  let error = 'Unknown error.'
-  if (err) {
-    error = err.stack || err.message || err
-  }
-
+app.use((err, req, res: express.Response, _next) => {
   // Handling Sequelize error traces
   const sql = err?.parent ? err.parent.sql : undefined
 
@@ -278,7 +272,7 @@ app.use((err, _req, res: express.Response, _next) => {
     ? (process as any)._getActiveRequests()
     : undefined
 
-  logger.error('Error in controller.', { err: error, sql, activeRequests })
+  logger.error('Error in controller.', { err, sql, activeRequests, url: req.originalUrl })
 
   return res.fail({
     status: err.status || HttpStatusCode.INTERNAL_SERVER_ERROR_500,
@@ -288,6 +282,8 @@ app.use((err, _req, res: express.Response, _next) => {
 })
 
 const { server, trackerServer } = createWebsocketTrackerServer(app)
+
+server.requestTimeout = CONFIG.HTTP_TIMEOUTS.REQUEST
 
 // ----------- Run -----------
 
@@ -309,10 +305,10 @@ async function startApplication () {
 
   Redis.Instance.init()
   Emailer.Instance.init()
+  JobQueue.Instance.init()
 
   await Promise.all([
     Emailer.Instance.checkConnection(),
-    JobQueue.Instance.init(),
     ServerConfigManager.Instance.init()
   ])
 
@@ -332,6 +328,7 @@ async function startApplication () {
   GeoIPUpdateScheduler.Instance.enable()
   RunnerJobWatchDogScheduler.Instance.enable()
   RemoveExpiredUserExportsScheduler.Instance.enable()
+  UpdateTokenSessionScheduler.Instance.enable()
 
   OpenTelemetryMetrics.Instance.registerMetrics({ trackerServer })
 

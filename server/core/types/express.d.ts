@@ -1,4 +1,11 @@
-import { HttpMethodType, PeerTubeProblemDocumentData, ServerLogLevel, VideoCreate } from '@peertube/peertube-models'
+import {
+  HttpMethodType,
+  HttpStatusCodeType,
+  PeerTubeProblemDocumentData,
+  ServerErrorCodeType,
+  ServerLogLevel,
+  VideoCreate
+} from '@peertube/peertube-models'
 import { RegisterServerAuthExternalOptions } from '@server/types/index.js'
 import {
   MAbuseMessage,
@@ -7,7 +14,9 @@ import {
   MActorFollowActorsDefault,
   MActorUrl,
   MChannelBannerAccountDefault,
+  MChannelCollaboratorAccount,
   MChannelSyncChannel,
+  MLocalVideoViewerWithWatchSections,
   MRegistration,
   MStreamingPlaylist,
   MUserAccountUrl,
@@ -17,13 +26,15 @@ import {
   MVideoFormattableDetails,
   MVideoId,
   MVideoImmutable,
-  MVideoLiveFormattable,
+  MVideoLiveSessionReplay,
+  MVideoLiveWithSettingSchedules,
   MVideoPassword,
   MVideoPlaylistFull,
   MVideoPlaylistFullSummary,
-  MVideoThumbnailBlacklist
+  MVideoThumbnailBlacklist,
+  MWatchedWordsList
 } from '@server/types/models/index.js'
-import { MOAuthTokenUser } from '@server/types/models/oauth/oauth-token.js'
+import { MOAuthToken, MOAuthTokenUser } from '@server/types/models/oauth/oauth-token.js'
 import { MPlugin, MServer, MServerBlocklist } from '@server/types/models/server.js'
 import { MVideoImportDefault } from '@server/types/models/video/video-import.js'
 import { MVideoPlaylistElement, MVideoPlaylistElementVideoUrlPlaylistPrivacy } from '@server/types/models/video/video-playlist-element.js'
@@ -55,6 +66,8 @@ declare module 'express' {
     query: any
     method: HttpMethodType
     rawBody: Buffer // Allow plugin routes to access the raw body
+
+    t: (key: string, context?: Record<string, string | number>) => string
   }
 
   // ---------------------------------------------------------------------------
@@ -76,12 +89,12 @@ declare module 'express' {
   // ---------------------------------------------------------------------------
 
   // Upload file with a duration added by our middleware
-  export type VideoLegacyUploadFile = Pick<Express.Multer.File, 'path' | 'filename' | 'size', 'originalname'> & {
-    duration: number
+  export type VideoLegacyUploadFile = Pick<Express.Multer.File, 'path' | 'filename' | 'size' | 'originalname'> & {
+    duration?: number
   }
 
   // Our custom UploadXFile object using our custom metadata
-  export type CustomUploadXFile <T extends Metadata> = UploadXFile & { metadata: T }
+  export type CustomUploadXFile<T extends Metadata> = UploadXFile & { metadata: T }
 
   export type EnhancedUploadXFile = CustomUploadXFile<Metadata> & {
     duration?: number // If video file
@@ -104,8 +117,8 @@ declare module 'express' {
       message: string
 
       title?: string
-      status?: number
-      type?: ServerErrorCode | string
+      status?: HttpStatusCodeType
+      type?: ServerErrorCodeType
       instance?: string
 
       data?: PeerTubeProblemDocumentData
@@ -138,8 +151,8 @@ declare module 'express' {
       onlyVideo?: MVideoThumbnailBlacklist
       videoId?: MVideoId
 
-      videoLive?: MVideoLiveFormattable
-      videoLiveSession?: MVideoLiveSession
+      videoLive?: MVideoLiveWithSettingSchedules
+      videoLiveSession?: MVideoLiveSessionReplay
 
       videoShare?: MVideoShareActor
 
@@ -196,6 +209,9 @@ declare module 'express' {
 
       user?: MUserDefault
       userRegistration?: MRegistration
+      // For verification links
+      userEmail?: MUserDefault
+      userPendingEmail?: MUserDefault
 
       server?: MServer
 
@@ -231,6 +247,12 @@ declare module 'express' {
       runnerJob?: MRunnerJobRunner
 
       userExport?: MUserExport
+
+      watchedWordsList?: MWatchedWordsList
+
+      tokenSession?: MOAuthToken
+
+      channelCollaborator?: MChannelCollaboratorAccount
     }
   }
 }

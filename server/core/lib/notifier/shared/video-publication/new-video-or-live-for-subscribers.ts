@@ -1,17 +1,18 @@
+import { To, UserNotificationType, VideoPrivacy, VideoState } from '@peertube/peertube-models'
 import { logger } from '@server/helpers/logger.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
-import { UserModel } from '@server/models/user/user.js'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
+import { UserModel } from '@server/models/user/user.js'
 import { MUserWithNotificationSetting, MVideoAccountLight, UserNotificationModelForApi } from '@server/types/models/index.js'
-import { UserNotificationType, VideoPrivacy, VideoState } from '@peertube/peertube-models'
 import { AbstractNotification } from '../common/abstract-notification.js'
+import { t } from '@server/helpers/i18n.js'
 
-export class NewVideoOrLiveForSubscribers extends AbstractNotification <MVideoAccountLight> {
+export class NewVideoOrLiveForSubscribers extends AbstractNotification<MVideoAccountLight> {
   private users: MUserWithNotificationSetting[]
 
   async prepare () {
     // List all followers that are users
-    this.users = await UserModel.listUserSubscribersOf(this.payload.VideoChannel.actorId)
+    this.users = await UserModel.listUserSubscribersOf(this.payload.VideoChannel.Actor.id)
   }
 
   log () {
@@ -19,7 +20,11 @@ export class NewVideoOrLiveForSubscribers extends AbstractNotification <MVideoAc
   }
 
   isDisabled () {
-    return this.payload.privacy !== VideoPrivacy.PUBLIC || this.payload.state !== VideoState.PUBLISHED || this.payload.isBlacklisted()
+    if (this.payload.privacy !== VideoPrivacy.PUBLIC && this.payload.privacy !== VideoPrivacy.INTERNAL) return true
+    if (this.payload.state !== VideoState.PUBLISHED) return true
+    if (this.payload.isBlacklisted()) return true
+
+    return false
   }
 
   getSetting (user: MUserWithNotificationSetting) {
@@ -46,7 +51,9 @@ export class NewVideoOrLiveForSubscribers extends AbstractNotification <MVideoAc
 
   // ---------------------------------------------------------------------------
 
-  createEmail (to: string) {
+  createEmail (user: MUserWithNotificationSetting) {
+    const to = { email: user.email, language: user.getLanguage() }
+
     const channelName = this.payload.VideoChannel.getDisplayName()
     const videoUrl = WEBSERVER.URL + this.payload.getWatchStaticPath()
 
@@ -55,30 +62,32 @@ export class NewVideoOrLiveForSubscribers extends AbstractNotification <MVideoAc
     return this.createVideoEmail(to, channelName, videoUrl)
   }
 
-  private createVideoEmail (to: string, channelName: string, videoUrl: string) {
+  private createVideoEmail (to: To, channelName: string, videoUrl: string) {
     return {
       to,
-      subject: channelName + ' just published a new video',
-      text: `Your subscription ${channelName} just published a new video: "${this.payload.name}".`,
+      subject: t('{channelName} just published a new video', to.language, { channelName }),
+      text: t('Your subscription {channelName} just published a new video: {videoName}.', to.language, {
+        channelName,
+        videoName: this.payload.name
+      }),
       locals: {
-        title: 'New content ',
+        title: t('{channelName} just published a new video', to.language, { channelName }),
         action: {
-          text: 'View video',
+          text: t('View video', to.language),
           url: videoUrl
         }
       }
     }
   }
 
-  private createLiveEmail (to: string, channelName: string, videoUrl: string) {
+  private createLiveEmail (to: To, channelName: string, videoUrl: string) {
     return {
       to,
-      subject: channelName + ' is live streaming',
-      text: `Your subscription ${channelName} is live streaming in "${this.payload.name}".`,
+      subject: t('{channelName} is live streaming', to.language, { channelName }),
+      text: t('Your subscription {channelName} is live streaming {videoName}', to.language, { channelName, videoName: this.payload.name }),
       locals: {
-        title: 'New content ',
         action: {
-          text: 'View video',
+          text: t('View video', to.language),
           url: videoUrl
         }
       }

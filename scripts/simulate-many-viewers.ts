@@ -7,10 +7,10 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { isMainThread } from 'worker_threads'
-import Piscina from 'piscina'
-import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
+import { Piscina } from 'piscina'
+import { fileURLToPath } from 'url'
+import { isMainThread } from 'worker_threads'
 
 const THOUSAND_VIEWERS = 2
 const TOTAL_THREADS = 20

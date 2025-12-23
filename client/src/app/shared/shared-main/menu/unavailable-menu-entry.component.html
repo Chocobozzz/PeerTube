@@ -1,0 +1,17 @@
+<div class="unavailable">
+  <ng-content select=".icon"></ng-content>
+
+  <div>
+    <div>
+      <ng-content select=".label"></ng-content>
+    </div>
+
+    <div class="badge-help">
+      <div class="pt-badge badge-secondary-on-secondary" i18n>UNAVAILABLE</div>
+
+      <my-help i18n-helpTitle helpTitle="Feature unavailable" container="body">
+        {{ help() }}
+      </my-help>
+    </div>
+  </div>
+</div>

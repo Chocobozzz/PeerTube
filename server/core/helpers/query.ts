@@ -12,10 +12,14 @@ function pickCommonVideoQuery (query: VideosCommonQueryAfterSanitize) {
     'count',
     'sort',
     'nsfw',
+    'nsfwFlagsIncluded',
+    'nsfwFlagsExcluded',
     'isLive',
+    'includeScheduledLive',
     'categoryOneOf',
     'licenceOneOf',
     'languageOneOf',
+    'host',
     'privacyOneOf',
     'tagsOneOf',
     'tagsAllOf',
@@ -23,10 +27,10 @@ function pickCommonVideoQuery (query: VideosCommonQueryAfterSanitize) {
     'include',
     'skipCount',
     'hasHLSFiles',
-    'hasWebtorrentFiles', // TODO: Remove in v7
     'hasWebVideoFiles',
     'search',
-    'excludeAlreadyWatched'
+    'excludeAlreadyWatched',
+    'autoTagOneOf'
   ])
 }
 
@@ -43,8 +47,7 @@ function pickSearchVideoQuery (query: VideosSearchQueryAfterSanitize) {
       'originallyPublishedEndDate',
       'durationMin',
       'durationMax',
-      'uuids',
-      'excludeAlreadyWatched'
+      'uuids'
     ])
   }
 }

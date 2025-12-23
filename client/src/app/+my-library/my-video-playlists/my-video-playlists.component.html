@@ -1,31 +1,115 @@
-<h1>
-  <my-global-icon iconName="playlists" aria-hidden="true"></my-global-icon>
-  <ng-container i18n>My playlists</ng-container>
-  <span *ngIf="pagination.totalItems" class="pt-badge badge-secondary">{{ pagination.totalItems }}</span>
-</h1>
+<div class="form-group">
+  <div class="label" i18n>Filter by a channel</div>
+  <div class="form-group-description" i18n>This allows you to reorder playlists assigned to it</div>
 
-<my-channels-setup-message></my-channels-setup-message>
-
-<div class="video-playlists-header d-flex justify-content-between gap-2">
-  <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
-
-  <a class="peertube-create-button" routerLink="create">
-    <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
-    <ng-container i18n>Create playlist</ng-container>
-  </a>
-</div>
-
-<div class="video-playlists" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
-  <div *ngFor="let playlist of videoPlaylists" class="video-playlist">
-    <my-video-playlist-miniature
-      [playlist]="playlist" [toManage]="true" [displayChannel]="true"
-      [displayDescription]="true" [displayPrivacy]="true" [displayAsRow]="true"
-    ></my-video-playlist-miniature>
-
-    <div *ngIf="isRegularPlaylist(playlist)" class="video-playlist-buttons">
-      <my-delete-button label (click)="deleteVideoPlaylist(playlist)"></my-delete-button>
-
-      <my-edit-button label [ptRouterLink]="[ 'update', playlist.shortUUID ]"></my-edit-button>
-    </div>
+  <div class="channel-filters">
+    @for (channel of channels; track channel.id) {
+      <my-channel-toggle [channel]="channel" [(ngModel)]="channel.selected" (ngModelChange)="onChannelFilter(channel)"></my-channel-toggle>
+    }
   </div>
 </div>
+
+<my-table
+  #table
+  key="MyVideoPlaylistsComponent"
+  [defaultColumns]="columns"
+  defaultSort="updatedAt"
+  i18n-paginatorText
+  paginatorText="playlists per page"
+  defaultRowsPerPage="10"
+  [dataLoader]="dataLoader"
+  [customParseQueryParams]="customParseQueryParams"
+  [customUpdateUrl]="customUpdateUrl"
+  [hasExpandedRow]="hasExpandedRow"
+  columnConfig="false"
+  [reorderableRows]="hasReorderableRows()"
+  (rowReorder)="onRowReorder($event)"
+  dragHandleTitle="Drag and drop this row to reorder playlists in your channel"
+  i18n-dragHandleTitle
+  >
+  <ng-template #totalTitle let-totalRecords>
+    @if (getFilteredChannel()) {
+      <ng-container i18n>{ totalRecords, plural, =0 {No playlist} =1 {1 playlist} other {{{ totalRecords | myNumberFormatter }} playlists}} in {{ getFilteredChannel().displayName }} channel</ng-container>
+    } @else {
+      <ng-container i18n>{ totalRecords, plural, =0 {No playlist} =1 {1 playlist} other {{{ totalRecords | myNumberFormatter }} playlists}}</ng-container>
+    }
+  </ng-template>
+
+  <ng-template #captionRight>
+    <my-advanced-input-filter
+      inputId="table-search" icon="true" emitOnInit="false" i18n-placeholder placeholder="Search your playlists"
+      (search)="table.onSearch($event)"
+    ></my-advanced-input-filter>
+
+    <a class="peertube-create-button" routerLink="create">
+      <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
+      <ng-container i18n>Create playlist</ng-container>
+    </a>
+  </ng-template>
+
+  <ng-template #tableCells let-playlist>
+
+    @if (table.isColumnDisplayed('videoChannelPosition')) {
+      <td style="width: 10px;">
+        {{ playlist.videoChannelPosition }}
+      </td>
+    }
+
+    @if (table.isColumnDisplayed('videos')) {
+      <td>
+        <my-video-playlist-miniature [playlist]="playlist" thumbnailOnly="true" toManage="true"></my-video-playlist-miniature>
+      </td>
+    }
+
+    @if (table.isColumnDisplayed('name')) {
+      <td>
+        <div class="name-container">
+          <a [routerLink]="[ '/my-library/video-playlists', playlist.shortUUID ]" class="name">
+            {{ playlist.displayName }}
+          </a>
+          @if (playlist.videoChannel) {
+            <a [routerLink]="[ '/c', playlist.videoChannel.name]" class="channel-sub-link-in-cell">
+              <span>{{ playlist.videoChannel.displayName }}</span>
+
+              @if (user.isCollaboratingToChannels()) {
+                @if (user.isOwnerOfChannel(playlist.videoChannel)) {
+                  <my-collaborator-state class="ms-2" type="owner" small="true"></my-collaborator-state>
+                } @else if (user.isEditorOfChannel(playlist.videoChannel)) {
+                  <my-collaborator-state class="ms-2" type="accepted" small="true"></my-collaborator-state>
+                }
+              }
+            </a>
+          }
+        </div>
+      </td>
+    }
+
+    @if (table.isColumnDisplayed('privacy')) {
+      <td>
+        <my-privacy-badge [playlist]="playlist"></my-privacy-badge>
+      </td>
+    }
+
+    @if (table.isColumnDisplayed('updatedAt')) {
+      <td>
+        {{ playlist.updatedAt | ptDate: 'short' }}
+      </td>
+    }
+  </ng-template>
+
+  <ng-template #actionCell let-playlist>
+    @if(isRegularPlaylist(playlist)) {
+      <my-edit-button label [ptRouterLink]="[ 'update', playlist.shortUUID ]"></my-edit-button>
+
+      <my-delete-button label (click)="deleteVideoPlaylist(playlist)"></my-delete-button>
+    }
+  </ng-template>
+
+  <ng-template #expandedRow let-playlist>
+    {{ playlist.description }}
+  </ng-template>
+
+  <ng-template #noResults let-search>
+    {{ getNoResults(search) }}
+  </ng-template>
+</my-table>

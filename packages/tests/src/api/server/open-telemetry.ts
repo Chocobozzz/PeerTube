@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { HttpStatusCode, PlaybackMetricCreate, VideoPrivacy, VideoResolution } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoPrivacy, VideoResolution } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createSingleServer,
@@ -9,8 +8,9 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
-import { expectLogDoesNotContain, expectLogContain } from '@tests/shared/checks.js'
+import { expectLogContain, expectLogDoesNotContain } from '@tests/shared/checks.js'
 import { MockHTTP } from '@tests/shared/mock-servers/mock-http.js'
+import { expect } from 'chai'
 
 describe('Open Telemetry', function () {
   let server: PeerTubeServer
@@ -73,6 +73,7 @@ describe('Open Telemetry', function () {
           downloadedBytesHTTP: 0,
           uploadedBytesP2P: 5,
           p2pPeers: 1,
+          bufferStalled: 2,
           p2pEnabled: false,
           videoId: video.uuid
         }
@@ -91,7 +92,7 @@ describe('Open Telemetry', function () {
       const video = await server.videos.quickUpload({ name: 'video' })
 
       const metrics = {
-        playerMode: 'p2p-media-loader',
+        playerMode: 'p2p-media-loader' as 'p2p-media-loader',
         resolution: VideoResolution.H_1080P,
         fps: 30,
         resolutionChanges: 1,
@@ -100,9 +101,10 @@ describe('Open Telemetry', function () {
         downloadedBytesHTTP: 0,
         uploadedBytesP2P: 5,
         p2pPeers: 7,
+        bufferStalled: 8,
         p2pEnabled: false,
         videoId: video.uuid
-      } as PlaybackMetricCreate
+      }
 
       await server.metrics.addPlaybackMetric({ metrics })
 

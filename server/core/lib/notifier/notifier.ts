@@ -1,5 +1,5 @@
 import { UserNotificationSettingValue, UserNotificationSettingValueType } from '@peertube/peertube-models'
-import { MRegistration, MUser, MUserDefault } from '@server/types/models/user/index.js'
+import { MRegistration, MUser, MUserDefault, MUserWithNotificationSetting } from '@server/types/models/user/index.js'
 import { MVideoBlacklistLightVideo, MVideoBlacklistVideo } from '@server/types/models/video/video-blacklist.js'
 import { logger, loggerTagsFactory } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
@@ -8,14 +8,21 @@ import {
   MAbuseMessage,
   MActorFollowFull,
   MApplication,
+  MChannelAccountDefault,
+  MChannelCollaboratorAccount,
+  MChannelDefault,
   MCommentOwnerVideo,
   MPlugin,
   MVideoAccountLight,
+  MVideoCaptionVideo,
   MVideoFullLight
 } from '../../types/models/index.js'
 import { JobQueue } from '../job-queue/index.js'
 import { PeerTubeSocket } from '../peertube-socket.js'
 import { Hooks } from '../plugins/hooks.js'
+import { AcceptedToCollaborateToChannel } from './shared/channel/accepted-to-collaborate-to-channel.js'
+import { InvitedToCollaborateToChannel } from './shared/channel/invited-to-collaborate-to-channel.js'
+import { RefusedToCollaborateToChannel } from './shared/channel/refused-to-collaborate-to-channel.js'
 import {
   AbstractNotification,
   AbuseStateChangeForReporter,
@@ -41,19 +48,20 @@ import {
   OwnedPublicationAfterTranscoding,
   RegistrationRequestForModerators,
   StudioEditionFinishedForOwner,
-  UnblacklistForOwner
+  UnblacklistForOwner,
+  VideoTranscriptionGeneratedForOwner
 } from './shared/index.js'
 
 const lTags = loggerTagsFactory('notifier')
 
 class Notifier {
-
   private readonly notificationModels = {
     newVideoOrLive: [ NewVideoOrLiveForSubscribers ],
     publicationAfterTranscoding: [ OwnedPublicationAfterTranscoding ],
     publicationAfterScheduleUpdate: [ OwnedPublicationAfterScheduleUpdate ],
     publicationAfterAutoUnblacklist: [ OwnedPublicationAfterAutoUnblacklist ],
     newComment: [ CommentMention, NewCommentForVideoOwner ],
+    commentApproval: [ CommentMention ],
     newAbuse: [ NewAbuseForModerators ],
     newBlacklist: [ NewBlacklistForOwner ],
     unblacklist: [ UnblacklistForOwner ],
@@ -68,7 +76,11 @@ class Notifier {
     newAbuseMessage: [ NewAbuseMessageForReporter, NewAbuseMessageForModerators ],
     newPeertubeVersion: [ NewPeerTubeVersionForAdmins ],
     newPluginVersion: [ NewPluginVersionForAdmins ],
-    videoStudioEditionFinished: [ StudioEditionFinishedForOwner ]
+    videoStudioEditionFinished: [ StudioEditionFinishedForOwner ],
+    videoTranscriptionGenerated: [ VideoTranscriptionGeneratedForOwner ],
+    channelCollaboratorInvitation: [ InvitedToCollaborateToChannel ],
+    channelCollaborationAccepted: [ AcceptedToCollaborateToChannel ],
+    channelCollaborationRefused: [ RefusedToCollaborateToChannel ]
   }
 
   private static instance: Notifier
@@ -123,6 +135,15 @@ class Notifier {
       .catch(err => logger.error('Cannot notify of new comment %s.', comment.url, { err }))
   }
 
+  notifyOnNewCommentApproval (comment: MCommentOwnerVideo): void {
+    const models = this.notificationModels.commentApproval
+
+    logger.debug('Notify on comment approval', { comment: comment.url, ...lTags() })
+
+    this.sendNotifications(models, comment)
+      .catch(err => logger.error('Cannot notify on comment approval %s.', comment.url, { err }))
+  }
+
   notifyOnNewAbuse (payload: NewAbusePayload): void {
     const models = this.notificationModels.newAbuse
 
@@ -156,7 +177,7 @@ class Notifier {
     logger.debug('Notify on video unblacklist', { video: video.url, ...lTags() })
 
     this.sendNotifications(models, video)
-        .catch(err => logger.error('Cannot notify video owner of unblacklist of %s.', video.url, { err }))
+      .catch(err => logger.error('Cannot notify video owner of unblacklist of %s.', video.url, { err }))
   }
 
   notifyOnFinishedVideoImport (payload: ImportFinishedForOwnerPayload): void {
@@ -165,9 +186,9 @@ class Notifier {
     logger.debug('Notify on finished video import', { import: payload.videoImport.getTargetIdentifier(), ...lTags() })
 
     this.sendNotifications(models, payload)
-        .catch(err => {
-          logger.error('Cannot notify owner that its video import %s is finished.', payload.videoImport.getTargetIdentifier(), { err })
-        })
+      .catch(err => {
+        logger.error('Cannot notify owner that its video import %s is finished.', payload.videoImport.getTargetIdentifier(), { err })
+      })
   }
 
   notifyOnNewDirectRegistration (user: MUserDefault): void {
@@ -265,7 +286,55 @@ class Notifier {
       .catch(err => logger.error('Cannot notify on finished studio edition %s.', video.url, { err }))
   }
 
-  private async notify <T> (object: AbstractNotification<T>) {
+  notifyOfGeneratedVideoTranscription (caption: MVideoCaptionVideo) {
+    const models = this.notificationModels.videoTranscriptionGenerated
+    const video = caption.Video
+
+    logger.debug('Notify on generated video transcription', { language: caption.language, video: video.url, ...lTags() })
+
+    this.sendNotifications(models, caption)
+      .catch(err => logger.error('Cannot notify on generated video transcription %s of video %s.', caption.language, video.url, { err }))
+  }
+
+  notifyOfChannelCollaboratorInvitation (collaborator: MChannelCollaboratorAccount, channel: MChannelAccountDefault) {
+    const models = this.notificationModels.channelCollaboratorInvitation
+
+    const channelName = channel.Actor.preferredUsername
+    const collaboratorName = collaborator.Account.Actor.preferredUsername
+
+    logger.debug('Notify on channel collaborator invitation', { channelName, collaboratorName, ...lTags() })
+
+    this.sendNotifications(models, { channel, collaborator })
+      .catch(err => logger.error(`Cannot notify ${collaboratorName} of invitation to collaborate to channel ${channelName}`, { err }))
+  }
+
+  notifyOfAcceptedChannelCollaborator (collaborator: MChannelCollaboratorAccount, channel: MChannelDefault) {
+    const models = this.notificationModels.channelCollaborationAccepted
+
+    const channelName = channel.Actor.preferredUsername
+    const channelOwner = collaborator.Account.Actor.preferredUsername
+
+    logger.debug('Notify of accepted channel collaboration invitation', { channelName, channelOwner, ...lTags() })
+
+    this.sendNotifications(models, { channel, collaborator })
+      .catch(err => logger.error(`Cannot notify ${channelOwner} of accepted invitation to collaborate to channel ${channelName}`, { err }))
+  }
+
+  notifyOfRefusedChannelCollaborator (collaborator: MChannelCollaboratorAccount, channel: MChannelDefault) {
+    const models = this.notificationModels.channelCollaborationRefused
+
+    const channelName = channel.Actor.preferredUsername
+    const channelOwner = collaborator.Account.Actor.preferredUsername
+
+    logger.debug('Notify of refused channel collaboration invitation', { channelName, channelOwner, ...lTags() })
+
+    this.sendNotifications(models, { channel, collaborator })
+      .catch(err => logger.error(`Cannot notify ${channelOwner} of refused invitation to collaborate to channel ${channelName}`, { err }))
+  }
+
+  // ---------------------------------------------------------------------------
+
+  private async notify<T> (object: AbstractNotification<T>) {
     await object.prepare()
 
     const users = object.getTargetUsers()
@@ -275,7 +344,7 @@ class Notifier {
 
     object.log()
 
-    const toEmails: string[] = []
+    const toUsers: MUserWithNotificationSetting[] = []
 
     for (const user of users) {
       const setting = object.getSetting(user)
@@ -291,13 +360,13 @@ class Notifier {
       }
 
       if (emailNotificationEnabled) {
-        toEmails.push(user.email)
+        toUsers.push(user)
       }
 
       Hooks.runAction('action:notifier.notification.created', { webNotificationEnabled, emailNotificationEnabled, user, notification })
     }
 
-    for (const to of toEmails) {
+    for (const to of toUsers) {
       const payload = await object.createEmail(to)
       JobQueue.Instance.createJobAsync({ type: 'email', payload })
     }
@@ -306,14 +375,14 @@ class Notifier {
   private isEmailEnabled (user: MUser, value: UserNotificationSettingValueType) {
     if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION === true && user.emailVerified === false) return false
 
-    return value & UserNotificationSettingValue.EMAIL
+    return (value & UserNotificationSettingValue.EMAIL) === UserNotificationSettingValue.EMAIL
   }
 
   private isWebNotificationEnabled (value: UserNotificationSettingValueType) {
-    return value & UserNotificationSettingValue.WEB
+    return (value & UserNotificationSettingValue.WEB) === UserNotificationSettingValue.WEB
   }
 
-  private async sendNotifications <T> (models: (new (payload: T) => AbstractNotification<T>)[], payload: T) {
+  private async sendNotifications<T> (models: (new(payload: T) => AbstractNotification<T>)[], payload: T) {
     for (const model of models) {
       // eslint-disable-next-line new-cap
       await this.notify(new model(payload))

@@ -1,0 +1,18 @@
+{{! An account is pending moderation }}
+{{#> base title=(t "An account is pending moderation")}}
+  <p>
+    {{#if isLocal}}
+      {{{t "{instanceName} received an abuse report for the account: <a href=\"{accountUrl}\">{accountDisplayName}</a>" accountUrl=accountUrl accountDisplayName=accountDisplayName instanceName=instanceName}}}
+    {{else}}
+      {{{t "{instanceName} received an abuse report for the remote account: <a href=\"{accountUrl}\">{accountDisplayName}</a>" accountUrl=accountUrl accountDisplayName=accountDisplayName instanceName=instanceName}}}
+    {{/if}}
+  </p>
+
+  <p>
+    {{t "The reporter, {reporter}, cited the following reason(s):" reporter=reporter}}
+  </p>
+
+  <blockquote>{{reason}}</blockquote>
+
+  <br style="display: none;">
+{{/base}}

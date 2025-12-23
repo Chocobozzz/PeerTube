@@ -1,0 +1,64 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+
+.root {
+  position: relative;
+  display: flex;
+  align-items: center;
+  text-align: start;
+
+  line-height: 1.2;
+
+  // Don't use mixin, we need the exact value
+  padding-inline-start: 17px;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.info {
+  border-radius: 4px;
+  background-color: pvar(--bg-secondary-400);
+  max-width: 150px;
+
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  padding-inline-start: 25px; // Don't use a mixin that would use rfs, we need the exact value here
+
+  @include padding-right(1rem);
+
+  .name {
+    color: pvar(--fg-400);
+
+    @include ellipsis;
+    @include font-size(14px);
+  }
+
+  &.has-collaborator-state {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+}
+
+my-actor-avatar {
+  position: absolute;
+  left: 0;
+  border: 2px solid pvar(--bg-secondary-400);
+  border-radius: $channel-avatar-radius;
+}
+
+.root.active {
+  .info {
+    background-color: pvar(--bg-secondary-450);
+  }
+
+  .name {
+    font-weight: $font-bold;
+  }
+
+  my-actor-avatar {
+    border-color: pvar(--bg-secondary-450);
+    background-color: pvar(--bg-secondary-450);
+  }
+}

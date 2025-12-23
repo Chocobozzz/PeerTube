@@ -1,18 +1,55 @@
 {
   "extends": "stylelint-config-sass-guidelines",
+  "plugins": [
+    "stylelint-order"
+  ],
   "rules": {
+    "declaration-empty-line-before": [
+      "always",
+      {
+        "except": [
+          "first-nested"
+        ],
+        "ignore": [ "after-declaration", "after-comment" ]
+      }
+    ],
+    "at-rule-empty-line-before": [
+      "always",
+      {
+        "except": [
+          "first-nested",
+          "blockless-after-blockless"
+        ],
+        "ignore": [ "after-comment" ],
+        "ignoreAtRules": [ "else" ]
+      }
+    ],
+    "order/order": [
+      "custom-properties",
+      "declarations",
+      {
+        "type": "at-rule",
+        "name": "include"
+      }
+    ],
+    "scss/selector-no-redundant-nesting-selector": null,
     "scss/at-import-no-partial-leading-underscore": null,
     "color-hex-length": null,
     "selector-pseudo-element-no-unknown": [
       true,
       {
-        "ignorePseudoElements": [ "ng-deep" ]
+        "ignorePseudoElements": [
+          "ng-deep"
+        ]
       }
     ],
     "max-nesting-depth": [
       8,
       {
-        "ignore": [ "blockless-at-rules", "pseudo-classes" ]
+        "ignore": [
+          "blockless-at-rules",
+          "pseudo-classes"
+        ]
       }
     ],
     "selector-max-compound-selectors": 9,
@@ -22,10 +59,16 @@
     "selector-max-id": null,
     "scss/at-function-pattern": null,
     "scss/load-no-partial-leading-underscore": null,
+    "@stylistic/string-quotes": null,
+    "@stylistic/color-hex-case": null,
+    "@stylistic/function-parentheses-space-inside": null,
     "property-no-vendor-prefix": [
       true,
       {
-        "ignoreProperties": [ "mask-image", "mask-size" ]
+        "ignoreProperties": [
+          "mask-image",
+          "mask-size"
+        ]
       }
     ]
   }

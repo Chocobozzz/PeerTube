@@ -1,0 +1,26 @@
+@use 'sass:math';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_form-mixins' as *;
+
+.current-filename {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.root {
+  min-height: 260px;
+  text-align: center;
+  padding: 2rem 1.5rem;
+  border-radius: 4px;
+  border: 1px dashed pvar(--secondary-icon-color);
+
+  @include on-mobile-main-col {
+    border: 0;
+  }
+}
+
+.dragover {
+  background-color: pvar(--bg-secondary-400);
+  border-color: pvar(--primary);
+}

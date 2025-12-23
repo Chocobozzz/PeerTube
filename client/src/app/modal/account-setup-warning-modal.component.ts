@@ -1,6 +1,6 @@
-import { CommonModule } from '@angular/common'
-import { Component, ElementRef, ViewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, inject, output, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
+import { RouterLink } from '@angular/router'
 import { Notifier, ServerService, User, UserService } from '@app/core'
 import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
@@ -12,27 +12,30 @@ import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
   selector: 'my-account-setup-warning-modal',
   templateUrl: './account-setup-warning-modal.component.html',
   styleUrls: [ './account-setup-warning-modal.component.scss' ],
-  standalone: true,
-  imports: [ CommonModule, GlobalIconComponent, PeertubeCheckboxComponent, FormsModule ]
+  imports: [ GlobalIconComponent, PeertubeCheckboxComponent, FormsModule, RouterLink ]
 })
-export class AccountSetupWarningModalComponent {
-  @ViewChild('modal', { static: true }) modal: ElementRef
+export class AccountSetupWarningModalComponent implements OnInit {
+  private userService = inject(UserService)
+  private modalService = inject(NgbModal)
+  private notifier = inject(Notifier)
+  private serverService = inject(ServerService)
+
+  readonly modal = viewChild<ElementRef>('modal')
+
+  readonly created = output()
 
   stopDisplayModal = false
   ref: NgbModalRef
 
   user: User
 
-  private LOCAL_STORAGE_KEYS = {
+  private LS_KEYS = {
     NO_ACCOUNT_SETUP_WARNING_MODAL: 'no_account_setup_warning_modal'
   }
 
-  constructor (
-    private userService: UserService,
-    private modalService: NgbModal,
-    private notifier: Notifier,
-    private serverService: ServerService
-  ) { }
+  ngOnInit (): void {
+    this.created.emit()
+  }
 
   get instanceName () {
     return this.serverService.getHTMLConfig().instance.name
@@ -46,9 +49,10 @@ export class AccountSetupWarningModalComponent {
     return !!user.account.description
   }
 
-  shouldOpen (user: User) {
+  shouldAutoOpen (user: User) {
+    if (this.modalService.hasOpenModals()) return false
     if (user.noAccountSetupWarningModal === true) return false
-    if (peertubeLocalStorage.getItem(this.LOCAL_STORAGE_KEYS.NO_ACCOUNT_SETUP_WARNING_MODAL) === 'true') return false
+    if (peertubeLocalStorage.getItem(this.LS_KEYS.NO_ACCOUNT_SETUP_WARNING_MODAL) === 'true') return false
 
     if (this.hasAccountAvatar(user) && this.hasAccountDescription(user)) return false
     if (this.userService.hasSignupInThisSession()) return false
@@ -61,7 +65,7 @@ export class AccountSetupWarningModalComponent {
 
     if (this.ref) return
 
-    this.ref = this.modalService.open(this.modal, {
+    this.ref = this.modalService.open(this.modal(), {
       centered: true,
       backdrop: 'static',
       keyboard: false,
@@ -74,13 +78,13 @@ export class AccountSetupWarningModalComponent {
   }
 
   private doNotOpenAgain () {
-    peertubeLocalStorage.setItem(this.LOCAL_STORAGE_KEYS.NO_ACCOUNT_SETUP_WARNING_MODAL, 'true')
+    peertubeLocalStorage.setItem(this.LS_KEYS.NO_ACCOUNT_SETUP_WARNING_MODAL, 'true')
 
     this.userService.updateMyProfile({ noAccountSetupWarningModal: true })
-        .subscribe({
-          next: () => logger.info('We will not open the account setup modal again.'),
+      .subscribe({
+        next: () => logger.info('We will not open the account setup modal again.'),
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.handleError(err)
+      })
   }
 }

@@ -1,19 +1,14 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-
-input[type=submit] {
-  @include peertube-button;
-  @include orange-button;
-
-  margin-top: 15px;
-}
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
 
 .peertube-select-container {
-  @include peertube-select-container(340px);
+  @include responsive-width(340px);
 }
 
 my-select-languages {
-  @include responsive-width(340px);
-
   display: block;
+
+  width: 340px;
+  max-width: 100%;
 }

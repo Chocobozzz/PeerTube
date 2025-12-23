@@ -1,37 +1,21 @@
 @use '_variables' as *;
 @use '_mixins' as *;
-
-@mixin section-label-responsive {
-  color: pvar(--mainColor);
-  font-size: 12px;
-  margin-bottom: 15px;
-  font-weight: $font-bold;
-  letter-spacing: 2.5px;
-
-  @media screen and (max-width: $mobile-view) {
-    font-size: 10px;
-    letter-spacing: 2.1px;
-    margin-bottom: 5px;
-  }
-}
+@use '_button-mixins' as *;
 
 @mixin show-more-description {
   @include margin(10px, auto, 45px);
-
-  color: pvar(--mainColor);
-  cursor: pointer;
 }
 
-@mixin avatar-row-responsive ($img-margin, $grey-font-size) {
-  @include margin-bottom(2rem);
-
+@mixin avatar-row-responsive ($img-margin, $actor-handle-font-size) {
   display: flex;
   grid-column: 1;
 
-  > div {
-    @include margin-left($img-margin);
+  @include margin-bottom(2rem);
 
+  > div {
     min-width: 1px;
+
+    @include margin-left($img-margin);
   }
 
   .actor-info {
@@ -44,17 +28,17 @@
   }
 
   .actor-display-name {
-    @include peertube-word-wrap;
-
     display: flex;
     flex-wrap: wrap;
+
+    @include peertube-word-wrap;
   }
 
   h1 {
-    @include font-size(2rem);
-
     font-weight: $font-bold;
     margin: 0;
+
+    @include font-size(2rem);
   }
 
   .actor-handle {
@@ -63,14 +47,14 @@
 
   .actor-handle,
   .actor-counters {
-    @include font-size($grey-font-size);
+    color: pvar(--fg-300);
 
-    color: pvar(--greyForegroundColor);
+    @include font-size($actor-handle-font-size);
   }
 
   .actor-counters > *:not(:last-child)::after {
     content: '•';
     margin: 0 10px;
-    color: pvar(--mainColor);
+    color: pvar(--primary);
   }
 }

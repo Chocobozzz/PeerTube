@@ -1,13 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
+import { HttpStatusCode, UserRole } from '@peertube/peertube-models'
 import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@peertube/peertube-server-commands'
-import { HttpStatusCode } from '@peertube/peertube-models'
+import { expect } from 'chai'
 
 describe('Official plugin auth-ldap', function () {
   let server: PeerTubeServer
   let accessToken: string
   let userId: number
+
+  const pluginSettings = {
+    'bind-credentials': 'GoodNewsEveryone',
+    'bind-dn': 'cn=admin,dc=planetexpress,dc=com',
+    'insecure-tls': false,
+    'mail-property': 'mail',
+    'search-base': 'ou=people,dc=planetexpress,dc=com',
+    'search-filter': '(|(mail={{username}})(uid={{username}}))',
+    'url': 'ldap://127.0.0.1:10389',
+    'username-property': 'uid'
+  }
 
   before(async function () {
     this.timeout(30000)
@@ -26,14 +37,9 @@ describe('Official plugin auth-ldap', function () {
     await server.plugins.updateSettings({
       npmName: 'peertube-plugin-auth-ldap',
       settings: {
-        'bind-credentials': 'GoodNewsEveryone',
-        'bind-dn': 'cn=admin,dc=planetexpress,dc=com',
-        'insecure-tls': false,
-        'mail-property': 'mail',
-        'search-base': 'ou=people,dc=planetexpress,dc=com',
-        'search-filter': '(|(mail={{username}})(uid={{username}}))',
-        'url': 'ldap://127.0.0.1:390',
-        'username-property': 'uid'
+        ...pluginSettings,
+
+        url: 'ldap://127.0.0.1:390'
       }
     })
 
@@ -43,16 +49,7 @@ describe('Official plugin auth-ldap', function () {
   it('Should not login with good LDAP settings but wrong username/password', async function () {
     await server.plugins.updateSettings({
       npmName: 'peertube-plugin-auth-ldap',
-      settings: {
-        'bind-credentials': 'GoodNewsEveryone',
-        'bind-dn': 'cn=admin,dc=planetexpress,dc=com',
-        'insecure-tls': false,
-        'mail-property': 'mail',
-        'search-base': 'ou=people,dc=planetexpress,dc=com',
-        'search-filter': '(|(mail={{username}})(uid={{username}}))',
-        'url': 'ldap://127.0.0.1:10389',
-        'username-property': 'uid'
-      }
+      settings: pluginSettings
     })
 
     await server.login.login({ user: { username: 'fry', password: 'bad password' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
@@ -100,6 +97,35 @@ describe('Official plugin auth-ldap', function () {
 
   it('Should not be able to ask email verification', async function () {
     await server.users.askSendVerifyEmail({ email: 'fry@planetexpress.com', expectedStatus: HttpStatusCode.CONFLICT_409 })
+  })
+
+  it('Should set the correct roles', async function () {
+    await server.plugins.updateSettings({
+      npmName: 'peertube-plugin-auth-ldap',
+      settings: {
+        ...pluginSettings,
+
+        'group-base': 'ou=people,dc=planetexpress,dc=com',
+        'group-filter': '(member={{dn}})',
+        'group-admin': 'cn=admin_staff,ou=people,dc=planetexpress,dc=com',
+        'group-mod': 'cn=unknown,ou=people,dc=planetexpress,dc=com',
+        'group-user': 'cn=ship_crew,ou=people,dc=planetexpress,dc=com'
+      }
+    })
+
+    {
+      const accessToken = await server.login.getAccessToken({ username: 'professor', password: 'professor' })
+
+      const { role } = await server.users.getMyInfo({ token: accessToken })
+      expect(role.id).to.equal(UserRole.ADMINISTRATOR)
+    }
+
+    {
+      const accessToken = await server.login.getAccessToken({ username: 'leela', password: 'leela' })
+
+      const { role } = await server.users.getMyInfo({ token: accessToken })
+      expect(role.id).to.equal(UserRole.USER)
+    }
   })
 
   it('Should not login if the plugin is uninstalled', async function () {

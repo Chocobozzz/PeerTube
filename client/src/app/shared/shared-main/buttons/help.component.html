@@ -1,0 +1,27 @@
+<ng-template #tooltipTemplate>
+  @if (helpTitle()) {
+    <strong class="help-title">{{ helpTitle() }}</strong>
+  }
+
+  @if (markdownHTML) {
+    <p [innerHTML]="markdownHTML"></p>
+  }
+
+  <ng-content></ng-content>
+</ng-template>
+
+<button
+  class="help-tooltip-button p-0 border-0 mx-1"
+  [title]="title()"
+  popoverClass="help-popover"
+  [attr.aria-pressed]="isPopoverOpened"
+  [ngbPopover]="tooltipTemplate"
+  [placement]="tooltipPlacement()"
+  [autoClose]="autoClose()"
+  (onHidden)="onPopoverHidden()"
+  (onShown)="onPopoverShown()"
+  [container]="container()"
+  type="button"
+  >
+  <my-global-icon [iconName]="iconName()"></my-global-icon>
+</button>

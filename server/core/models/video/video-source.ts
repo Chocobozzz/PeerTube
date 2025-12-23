@@ -1,12 +1,13 @@
-import type { FileStorageType, VideoSource } from '@peertube/peertube-models'
-import { STATIC_DOWNLOAD_PATHS, WEBSERVER } from '@server/initializers/constants.js'
-import { join } from 'path'
+import { getResolutionLabel } from '@peertube/peertube-core-utils'
+import { ActivityVideoUrlObject, type FileStorageType, type VideoSource } from '@peertube/peertube-models'
+import { DOWNLOAD_PATHS, WEBSERVER } from '@server/initializers/constants.js'
+import { getVideoFileMimeType } from '@server/lib/video-file.js'
+import { MVideoSource } from '@server/types/models/video/video-source.js'
+import { extname, join } from 'path'
 import { Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
-import { SequelizeModel, getSort } from '../shared/index.js'
-import { getResolutionLabel } from './formatter/video-api-format.js'
+import { SequelizeModel, doesExist, getSort } from '../shared/index.js'
 import { VideoModel } from './video.js'
-import { MVideoSource } from '@server/types/models/video/video-source.js'
 
 @Table({
   tableName: 'videoSource',
@@ -25,54 +26,57 @@ import { MVideoSource } from '@server/types/models/video/video-source.js'
 })
 export class VideoSourceModel extends SequelizeModel<VideoSourceModel> {
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
+  // The name of the uploaded file
   @AllowNull(false)
   @Column
-  inputFilename: string
+  declare inputFilename: string
+
+  // The name of the file stored on disk
+  // null means we don't have the file
+  @AllowNull(true)
+  @Column
+  declare keptOriginalFilename: string
 
   @AllowNull(true)
   @Column
-  keptOriginalFilename: string
+  declare resolution: number
 
   @AllowNull(true)
   @Column
-  resolution: number
+  declare width: number
 
   @AllowNull(true)
   @Column
-  width: number
+  declare height: number
 
   @AllowNull(true)
   @Column
-  height: number
-
-  @AllowNull(true)
-  @Column
-  fps: number
+  declare fps: number
 
   @AllowNull(true)
   @Column(DataType.BIGINT)
-  size: number
+  declare size: number
 
   @AllowNull(true)
   @Column(DataType.JSONB)
-  metadata: any
+  declare metadata: any
 
   @AllowNull(true)
   @Column
-  storage: FileStorageType
+  declare storage: FileStorageType
 
   @AllowNull(true)
   @Column
-  fileUrl: string
+  declare fileUrl: string
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -80,7 +84,7 @@ export class VideoSourceModel extends SequelizeModel<VideoSourceModel> {
     },
     onDelete: 'cascade'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   static loadLatest (videoId: number, transaction?: Transaction) {
     return VideoSourceModel.findOne<MVideoSource>({
@@ -103,22 +107,50 @@ export class VideoSourceModel extends SequelizeModel<VideoSourceModel> {
     })
   }
 
+  // ---------------------------------------------------------------------------
+
+  static async doesOwnedFileExist (filename: string, storage: FileStorageType) {
+    const query = 'SELECT 1 FROM "videoSource" ' +
+      'INNER JOIN "video" ON "video"."id" = "videoSource"."videoId" AND "video"."remote" IS FALSE ' +
+      `WHERE "keptOriginalFilename" = $filename AND "storage" = $storage LIMIT 1`
+
+    return doesExist({ sequelize: this.sequelize, query, bind: { filename, storage } })
+  }
+
+  // ---------------------------------------------------------------------------
+
   getFileDownloadUrl () {
     if (!this.keptOriginalFilename) return null
 
-    return WEBSERVER.URL + join(STATIC_DOWNLOAD_PATHS.ORIGINAL_VIDEO_FILE, this.keptOriginalFilename)
+    return WEBSERVER.URL + join(DOWNLOAD_PATHS.ORIGINAL_VIDEO_FILE, this.keptOriginalFilename)
   }
 
-  toFormattedJSON (): VideoSource {
+  toActivityPubObject (this: MVideoSource): ActivityVideoUrlObject {
+    const mimeType = getVideoFileMimeType(extname(this.inputFilename), false)
+
     return {
-      filename: this.inputFilename,
+      type: 'Link',
+      mediaType: mimeType as ActivityVideoUrlObject['mediaType'],
+      href: null,
+      height: this.height || this.resolution,
+      width: this.width,
+      size: this.size,
+      fps: this.fps,
+      attachment: []
+    }
+  }
+
+  toFormattedJSON (this: MVideoSource): VideoSource {
+    return {
       inputFilename: this.inputFilename,
+
+      fileUrl: this.fileUrl,
       fileDownloadUrl: this.getFileDownloadUrl(),
 
       resolution: {
         id: this.resolution,
         label: this.resolution !== null
-          ? getResolutionLabel(this.resolution)
+          ? getResolutionLabel({ resolution: this.resolution, height: this.height, width: this.width })
           : null
       },
       size: this.size,

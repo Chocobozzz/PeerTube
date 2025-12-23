@@ -1,32 +1,112 @@
-@use 'sass:color';
+@use "sass:color";
+@use "_badges" as *;
+@use "_icons" as *;
+@use "_variables" as *;
+@use "_mixins" as *;
 
-@use '_badges' as *;
-@use '_icons' as *;
-@use '_variables' as *;
-@use '_mixins' as *;
-
-.link-orange {
-  color: pvar(--mainForegroundColor);
-  font-weight: $font-semibold;
-  border-bottom: 0.18em solid pvar(--mainColor);
-  display: inline-block;
-  line-height: 1.1;
-
-  &:hover {
-    color: pvar(--mainForegroundColor);
-    opacity: 0.8;
-  }
+.red {
+  color: pvar(--red);
 }
 
-.underline-orange {
-  display: inline-block;
-  border-bottom: 0.19em solid pvar(--mainColor);
+.green {
+  color: pvar(--green);
+}
+
+.text-fg {
+  color: pvar(--fg);
+}
+
+.fg-100 {
+  color: pvar(--fg-100);
 }
 
 // ---------------------------------------------------------------------------
 
-.muted {
-  @include muted;
+.fg-100 {
+  color: pvar(--fg-100);
+}
+
+.fg-150 {
+  color: pvar(--fg-150);
+}
+
+.fg-200 {
+  color: pvar(--fg-200);
+}
+
+.fg-250 {
+  color: pvar(--fg-250);
+}
+
+.fg-300 {
+  color: pvar(--fg-300);
+}
+
+.fg-350 {
+  color: pvar(--fg-350);
+}
+
+.fg-400 {
+  color: pvar(--fg-400);
+}
+
+.fg-450 {
+  color: pvar(--fg-450);
+}
+
+.fg-500 {
+  color: pvar(--fg-500);
+}
+
+// ---------------------------------------------------------------------------
+
+.total-items {
+  color: pvar(--fg-300);
+  font-weight: $font-bold;
+
+  @include font-size(22px);
+}
+
+.link-primary {
+  color: pvar(--fg);
+  font-weight: $font-semibold;
+  line-height: 1.1;
+
+  @include underline-primary;
+
+  &:hover {
+    color: pvar(--fg);
+    opacity: 0.8;
+
+    @include underline-primary;
+  }
+}
+
+.border-highlight {
+  &::after {
+    content: "";
+    display: block;
+    height: 4px;
+    background-color: pvar(--border-primary);
+    border-radius: 2px;
+    position: absolute;
+    width: 20px;
+  }
+}
+
+.section-label {
+  @include section-label;
+}
+
+// ---------------------------------------------------------------------------
+
+.muted,
+.muted-1 {
+  @include muted-1;
+}
+
+.muted-2 {
+  @include muted-2;
 }
 
 // ---------------------------------------------------------------------------

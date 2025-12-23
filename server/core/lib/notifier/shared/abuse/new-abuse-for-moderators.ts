@@ -1,15 +1,17 @@
+import { To, UserAbuse, UserNotificationType, UserRight } from '@peertube/peertube-models'
+import { t } from '@server/helpers/i18n.js'
 import { logger } from '@server/helpers/logger.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
-import { getAbuseTargetUrl } from '@server/lib/activitypub/url.js'
-import { UserModel } from '@server/models/user/user.js'
+import { getAbuseIdentifier } from '@server/lib/activitypub/url.js'
+import { getAdminAbuseUrl } from '@server/lib/client-urls.js'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
+import { UserModel } from '@server/models/user/user.js'
 import { MAbuseFull, MUserDefault, MUserWithNotificationSetting, UserNotificationModelForApi } from '@server/types/models/index.js'
-import { UserAbuse, UserNotificationType, UserRight } from '@peertube/peertube-models'
 import { AbstractNotification } from '../common/abstract-notification.js'
 
-export type NewAbusePayload = { abuse: UserAbuse, abuseInstance: MAbuseFull, reporter: string }
+export type NewAbusePayload = { abuse: Pick<UserAbuse, 'reason' | 'video'>, abuseInstance: MAbuseFull, reporter: string }
 
-export class NewAbuseForModerators extends AbstractNotification <NewAbusePayload> {
+export class NewAbuseForModerators extends AbstractNotification<NewAbusePayload> {
   private moderators: MUserDefault[]
 
   async prepare () {
@@ -17,7 +19,7 @@ export class NewAbuseForModerators extends AbstractNotification <NewAbusePayload
   }
 
   log () {
-    logger.info('Notifying %s user/moderators of new abuse %s.', this.moderators.length, getAbuseTargetUrl(this.payload.abuseInstance))
+    logger.info('Notifying %s user/moderators of new abuse %s.', this.moderators.length, getAbuseIdentifier(this.payload.abuseInstance))
   }
 
   getSetting (user: MUserWithNotificationSetting) {
@@ -39,7 +41,9 @@ export class NewAbuseForModerators extends AbstractNotification <NewAbusePayload
     return notification
   }
 
-  createEmail (to: string) {
+  createEmail (user: MUserWithNotificationSetting) {
+    const to = { email: user.email, language: user.getLanguage() }
+
     const abuseInstance = this.payload.abuseInstance
 
     if (abuseInstance.VideoAbuse) return this.createVideoAbuseEmail(to)
@@ -48,72 +52,72 @@ export class NewAbuseForModerators extends AbstractNotification <NewAbusePayload
     return this.createAccountAbuseEmail(to)
   }
 
-  private createVideoAbuseEmail (to: string) {
+  private createVideoAbuseEmail (to: To) {
     const video = this.payload.abuseInstance.VideoAbuse.Video
-    const videoUrl = WEBSERVER.URL + video.getWatchStaticPath()
+    const channel = video.VideoChannel
 
     return {
       template: 'video-abuse-new',
       to,
-      subject: `New video abuse report from ${this.payload.reporter}`,
+      subject: t('New video abuse report from {reporter}', to.language, { reporter: this.payload.reporter }),
       locals: {
-        videoUrl,
+        videoUrl: WEBSERVER.URL + video.getWatchStaticPath(),
         isLocal: video.remote === false,
         videoCreatedAt: new Date(video.createdAt).toLocaleString(),
         videoPublishedAt: new Date(video.publishedAt).toLocaleString(),
         videoName: video.name,
         reason: this.payload.abuse.reason,
-        videoChannel: this.payload.abuse.video.channel,
+        channelDisplayName: channel.getDisplayName(),
+        channelUrl: channel.getClientUrl(),
         reporter: this.payload.reporter,
-        action: this.buildEmailAction()
+        action: this.buildEmailAction(to)
       }
     }
   }
 
-  private createCommentAbuseEmail (to: string) {
+  private createCommentAbuseEmail (to: To) {
     const comment = this.payload.abuseInstance.VideoCommentAbuse.VideoComment
-    const commentUrl = WEBSERVER.URL + comment.Video.getWatchStaticPath() + ';threadId=' + comment.getThreadId()
 
     return {
       template: 'video-comment-abuse-new',
       to,
-      subject: `New comment abuse report from ${this.payload.reporter}`,
+      subject: t('New comment abuse report from {reporter}', to.language, { reporter: this.payload.reporter }),
       locals: {
-        commentUrl,
+        commentUrl: WEBSERVER.URL + comment.getCommentStaticPath(),
         videoName: comment.Video.name,
-        isLocal: comment.isOwned(),
+        isLocal: comment.isLocal(),
         commentCreatedAt: new Date(comment.createdAt).toLocaleString(),
         reason: this.payload.abuse.reason,
         flaggedAccount: this.payload.abuseInstance.FlaggedAccount.getDisplayName(),
         reporter: this.payload.reporter,
-        action: this.buildEmailAction()
+        action: this.buildEmailAction(to)
       }
     }
   }
 
-  private createAccountAbuseEmail (to: string) {
+  private createAccountAbuseEmail (to: To) {
     const account = this.payload.abuseInstance.FlaggedAccount
     const accountUrl = account.getClientUrl()
 
     return {
       template: 'account-abuse-new',
       to,
-      subject: `New account abuse report from ${this.payload.reporter}`,
+      subject: t('New account abuse report from {reporter}', to.language, { reporter: this.payload.reporter }),
       locals: {
         accountUrl,
         accountDisplayName: account.getDisplayName(),
-        isLocal: account.isOwned(),
+        isLocal: account.isLocal(),
         reason: this.payload.abuse.reason,
         reporter: this.payload.reporter,
-        action: this.buildEmailAction()
+        action: this.buildEmailAction(to)
       }
     }
   }
 
-  private buildEmailAction () {
+  private buildEmailAction (to: To) {
     return {
-      text: 'View report #' + this.payload.abuseInstance.id,
-      url: WEBSERVER.URL + '/admin/moderation/abuses/list?search=%23' + this.payload.abuseInstance.id
+      text: t('View report #' + this.payload.abuseInstance.id, to.language),
+      url: getAdminAbuseUrl(this.payload.abuseInstance)
     }
   }
 }

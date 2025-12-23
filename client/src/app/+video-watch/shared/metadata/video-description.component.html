@@ -1,0 +1,25 @@
+<div class="video-info-description">
+  <div
+    #descriptionHTML
+    class="video-info-description-html"
+    [ngClass]="{ 'ellipsis-multiline-3': !completeDescriptionShown }"
+    [innerHTML]="videoHTMLDescription"
+    (timestampClicked)="onTimestampClicked($event)"
+    myTimestampRouteTransformer
+  ></div>
+
+  @if ((hasEllipsis() && !completeDescriptionShown) || completeDescriptionShown) {
+    <button
+      (click)="completeDescriptionShown = !completeDescriptionShown"
+      class="video-info-description-more button-unstyle"
+      >
+      @if (completeDescriptionShown) {
+        <ng-container i18n>Show less</ng-container>
+        <span class="chevron-up"></span>
+      } @else {
+        <ng-container i18n>Show more</ng-container>
+        <span class="chevron-down"></span>
+      }
+    </button>
+  }
+</div>

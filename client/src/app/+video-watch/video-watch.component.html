@@ -1,0 +1,116 @@
+<div class="root" [ngClass]="{ 'theater-enabled': theaterEnabled }" [hidden]="!playlist && !video">
+  <div class="margin-content player-margin-content">
+    <!-- We need the video container for videojs so we just hide it -->
+    <div id="video-wrapper">
+      @if (remoteServerDown) {
+        <div class="remote-server-down">
+          <ng-container i18n>Sorry, but this video did not load because the remote instance did not respond.</ng-container>
+          <br />
+          <ng-container i18n>Please try refreshing the page, or try again later.</ng-container>
+        </div>
+      }
+
+      <div id="videojs-wrapper">
+        <video #playerElement class="video-js vjs-peertube-skin" playsinline="true"></video>
+      </div>
+
+      <div class="player-widget-component">
+        <my-video-watch-playlist
+          #videoWatchPlaylist [playlist]="playlist"
+          [hidden]="transcriptionWidgetOpened"
+          (noVideoFound)="onPlaylistNoVideoFound()" (videoFound)="onPlaylistVideoFound($event)"
+        ></my-video-watch-playlist>
+
+        @if (transcriptionWidgetOpened) {
+          <my-video-transcription
+            [video]="video" [captions]="videoCaptions" [currentTime]="getCurrentTime()"
+            (segmentClicked)="handleTimestampClicked($event)" (closeTranscription)="transcriptionWidgetOpened = false"
+          ></my-video-transcription>
+        }
+      </div>
+
+      <my-plugin-placeholder pluginId="player-next"></my-plugin-placeholder>
+    </div>
+
+    <my-video-alert class="d-block mt-2" [video]="video" [user]="authUser" [noPlaylistVideoFound]="noPlaylistVideoFound"></my-video-alert>
+  </div>
+
+  <!-- Video information -->
+  @if (video) {
+    <div class="margin-content video-bottom">
+      <div class="video-info">
+        <div class="video-info-first-row">
+          <div>
+            <div class="d-flex justify-content-between flex-direction-column">
+              <h1 class="video-info-name">{{ video.name }}</h1>
+
+              <div class="video-info-first-row-bottom">
+                <div class="video-info-date-views">
+                  <ng-container i18n>Published <my-date-toggle [date]="video.publishedAt"></my-date-toggle></ng-container>
+                  •
+                  <my-video-views-counter [isLive]="video.isLive" [viewers]="video.viewers" [views]="video.views"></my-video-views-counter>
+                </div>
+                <my-action-buttons
+                  [video]="video" [videoPassword]="videoPassword" [videoCaptions]="videoCaptions"
+                  [isUserLoggedIn]="isUserLoggedIn()" [isUserOwner]="isUserOwner()"
+                  [transcriptionWidgetOpened]="transcriptionWidgetOpened"
+                  [playlist]="playlist" [currentTime]="getCurrentTime()" [currentPlaylistPosition]="getCurrentPlaylistPosition()"
+                  (showTranscriptionWidget)="transcriptionWidgetOpened = true" (hideTranscriptionWidget)="transcriptionWidgetOpened = false"
+                ></my-action-buttons>
+              </div>
+            </div>
+
+            <div class="pt-3 border-top video-info-channel d-flex">
+              <div class="video-info-channel-left d-flex">
+                <my-account-on-channel-avatar
+                  [account]="video.account"
+                  [channel]="video.channel"
+                  [internalHref]="getAccountOrChannelRouterLink()"
+                  [showChannel]="!isChannelDisplayNameGeneric()"
+                ></my-account-on-channel-avatar>
+
+                <div class="video-info-channel-left-links ms-1">
+                  @if (!isChannelDisplayNameGeneric()) {
+                    <a [routerLink]="[ '/c', video.byVideoChannel ]" i18n-title title="Go to the channel page">{{ video.channel.displayName }}</a>
+                    <a [routerLink]="[ '/a', video.byAccount ]" i18n-title title="Go to the account page"><span i18n>By {{ video.byAccount }}</span></a>
+                  } @else {
+                    <a [routerLink]="[ '/a', video.byAccount ]" class="single-link" i18n-title title="Account page">
+                      <span i18n>{{ video.byAccount }}</span>
+                    </a>
+                  }
+                </div>
+              </div>
+
+              <my-subscribe-button #subscribeButton [videoChannels]="[video.channel]" size="small"></my-subscribe-button>
+            </div>
+          </div>
+        </div>
+
+        <my-video-description [video]="video" (timestampClicked)="handleTimestampClicked($event)"></my-video-description>
+
+        <my-video-attributes [video]="video"></my-video-attributes>
+
+        <my-video-comments
+          class="border-top pt-3"
+          [video]="video"
+          [videoPassword]="videoPassword"
+          [user]="authUser"
+          (timestampClicked)="handleTimestampClicked($event)"
+        ></my-video-comments>
+      </div>
+
+      <my-recommended-videos
+        [displayAsRow]="displayOtherVideosAsRow()"
+        [currentVideo]="video"
+        [playlist]="playlist"
+        (gotRecommendations)="onRecommendations($event)"
+      ></my-recommended-videos>
+    </div>
+  }
+
+  @if (video) {
+    <my-privacy-concerns [video]="video"></my-privacy-concerns>
+  }
+</div>
+
+<my-player-styles></my-player-styles>

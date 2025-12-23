@@ -1,0 +1,104 @@
+<div>
+  <h2 class="form-title">
+    <my-global-icon iconName="users"></my-global-icon>
+
+    <ng-container i18n>Editors</ng-container>
+  </h2>
+
+  <div class="pt-two-cols">
+    <div class="title-col">
+      <h3 i18n>OWNER</h3>
+    </div>
+
+    <div class="content-col">
+      <h4 i18n>Current owner</h4>
+
+      <div class="collaborator-block">
+        <my-actor-avatar [actor]="getOwnerAccount()" actorType="account" size="60"></my-actor-avatar>
+
+        <div>
+          <div class="collaborator-display-name">
+            <span class="fw-bold">{{ getOwnerDisplayName() }}</span>
+
+            @if (isOwner()) {
+              <span class="d-inline-block ms-1" i18n>(you)</span>
+            }
+          </div>
+
+          <my-collaborator-state type="owner"></my-collaborator-state>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pt-two-cols mt-4">
+    <div class="title-col">
+      <h3 i18n>EDITORS</h3>
+    </div>
+
+    <div class="content-col">
+      <div class="editor-explanation">
+        <p i18n>Editors <strong>can:</strong></p>
+
+        <ul>
+          <li i18n>Publish videos in this channel</li>
+          <li i18n>Manage, update or delete videos, comments, playlists of this channel</li>
+          <li i18n>Add or delete channel synchronization</li>
+          <li i18n>Update information of this channel (title, description, banner...)</li>
+        </ul>
+
+        <p i18n>But editors <strong>cannot:</strong></p>
+
+        <ul>
+          <li i18n>Delete the channel</li>
+          <li i18n>Add or remove other editors</li>
+        </ul>
+      </div>
+
+      <h4 i18n>Current editors</h4>
+
+      <div class="collaborators">
+        @for (collaborator of videoChannelEdit.collaborators; track collaborator.id) {
+          <div class="collaborator-block">
+            <my-actor-avatar [actor]="collaborator.account" actorType="account" size="60"></my-actor-avatar>
+
+            <div>
+              <div class="collaborator-display-name fw-bold" i18n>{{ collaborator.account.displayName }}</div>
+
+              <div class="d-flex gap-1">
+                <my-collaborator-state [type]="getCollaboratorState(collaborator)"></my-collaborator-state>
+
+                @if (isOwner() || isCollaborator(collaborator)) {
+                  <my-action-dropdown
+                    container="body"
+                    buttonStyled="false"
+                    buttonIcon="chevron-down"
+                    buttonSize="small"
+                    [actions]="collaboratorActions"
+                    [entry]="collaborator"
+                  ></my-action-dropdown>
+                }
+              </div>
+            </div>
+          </div>
+        } @empty {
+          <div i18n>No editors at the moment</div>
+        }
+      </div>
+
+      @if (isOwner()) {
+        <div class="mt-4">
+          <h4 i18n>New editor</h4>
+
+          <label for="addEditor" i18n>Editor handle</label>
+
+          <div class="d-flex flex-wrap gap-3">
+            <my-user-auto-complete inputName="addEditor" [(ngModel)]="newEditorUsername"></my-user-auto-complete>
+
+            <my-button theme="secondary" (click)="addEditor()" i18n [disabled]="!newEditorUsername">Invite</my-button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

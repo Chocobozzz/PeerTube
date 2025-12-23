@@ -1,0 +1,132 @@
+<my-admin-save-bar i18n-title title="Upload logos" (save)="save()" [form]="form" [formErrors]="formErrors"></my-admin-save-bar>
+
+<form [formGroup]="form" id="admin-config-form">
+  <div class="pt-two-cols mt-4">
+    <div class="title-col">
+      <h2 i18n>LOGO</h2>
+    </div>
+
+    <div class="content-col">
+      <div class="form-group">
+        <label i18n for="avatarfile">Square icon</label>
+
+        <div class="form-group-description">
+          <div class="mb-0">
+            <div i18n>Square icon is used in the mobile application and can be used on your custom homepage.</div>
+            <div i18n>It's also used as a fallback for the favicon, header icon and social media logo.</div>
+          </div>
+        </div>
+
+        <my-preview-upload class="avatar-preview" formControlName="avatar" inputName="avatar" displayDelete="true"></my-preview-upload>
+      </div>
+
+      <div class="form-group">
+        <label i18n for="bannerfile">Banner</label>
+
+        <div class="form-group-description">
+          <p i18n class="mb-0">Banner is displayed in the about, login and registration pages and be used on your custom homepage.</p>
+          <p i18n>
+            It can also be displayed on external websites to promote your instance, such as <a target="_blank" href="https://joinpeertube.org/instances"
+            >JoinPeerTube.org</a>.
+          </p>
+        </div>
+
+        <my-preview-upload class="banner-preview" formControlName="banner" inputName="banner" displayDelete="true"></my-preview-upload>
+      </div>
+
+      <div class="form-group">
+        <label i18n for="favicon">Favicon</label>
+
+        <div class="form-group-description">
+          <p class="mb-0">
+            <ng-container i18n>Favicon is the icon displayed in web browser tab. </ng-container>
+            <ng-container i18n>If not set, the <strong>Square icon</strong> will be used.</ng-container>
+          </p>
+
+          <p i18n>It will be resized to 32x32 pixels and converted to .png format.</p>
+        </div>
+
+        <my-preview-upload
+          class="favicon-preview"
+          formControlName="favicon"
+          inputName="favicon"
+          displayDelete="true"
+          buttonsAside="true"
+          [previewSize]="{ height: '32px', width: '32px' }"
+        ></my-preview-upload>
+      </div>
+
+      <div class="form-group">
+        <label i18n for="header-wide">Desktop header logo</label>
+
+        <div class="form-group-description">
+          <p class="mb-0">
+            <ng-container i18n>Logo displayed in the header on large screens such as desktop computers.</ng-container>
+            <ng-container i18n>If not set, the <strong>Square icon</strong> will be used.</ng-container>
+          </p>
+
+          <p i18n>Its height will be reduced to 48 pixels and the width will be calculated based on the original file ratio.</p>
+        </div>
+
+        <my-preview-upload
+          class="header-wide-preview"
+          formControlName="header-wide"
+          inputName="header-wide"
+          displayDelete="true"
+          buttonsAside="true"
+          [previewSize]="{ height: '48px', width: 'auto' }"
+        ></my-preview-upload>
+      </div>
+
+      <div class="form-group">
+        <my-peertube-checkbox
+          inputName="hideInstanceName"
+          formControlName="hideInstanceName"
+          i18n-labelText
+          labelText="Hide the name of your platform in the header on desktop (wide screens)"
+        >
+          <ng-container ngProjectAs="description">
+            <div i18n>Useful for example if your "Desktop header logo" already includes your platform name</div>
+          </ng-container>
+        </my-peertube-checkbox>
+      </div>
+
+      <div class="form-group">
+        <label i18n for="header-square">Mobile header logo</label>
+
+        <div class="form-group-description">
+          <p class="mb-0">
+            <ng-container i18n>Logo displayed in the header on small screens such as mobile devices. </ng-container>
+            <ng-container i18n>If not set, the <strong>Square icon</strong> will be used.</ng-container>
+          </p>
+
+          <p i18n>It will be resized to 48x48 pixels.</p>
+        </div>
+
+        <my-preview-upload
+          class="header-square-preview"
+          formControlName="header-square"
+          inputName="header-square"
+          displayDelete="true"
+          buttonsAside="true"
+          [previewSize]="{ height: '48px', width: '48px' }"
+        ></my-preview-upload>
+      </div>
+
+      <div class="form-group">
+        <label i18n for="opengraph">Social media logo</label>
+
+        <div class="form-group-description">
+          <p class="mb-0">
+            <ng-container i18n>Default logo displayed on social media. </ng-container>
+            <ng-container i18n>If not set, the <strong>Square icon</strong> will be used.</ng-container>
+          </p>
+
+          <p i18n>It will be resized to 1200x650 pixels.</p>
+        </div>
+
+        <my-preview-upload class="opengraph-preview" formControlName="opengraph" inputName="opengraph" displayDelete="true"></my-preview-upload>
+      </div>
+    </div>
+  </div>
+</form>

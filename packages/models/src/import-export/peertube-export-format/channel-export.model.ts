@@ -1,3 +1,4 @@
+import { PlayerThemeChannelSetting } from '../../player/player-theme.type.js'
 import { UserActorImageJSON } from './actor-export.model.js'
 
 export interface ChannelExportJSON {
@@ -14,6 +15,10 @@ export interface ChannelExportJSON {
 
     avatars: UserActorImageJSON[]
     banners: UserActorImageJSON[]
+
+    playerSettings?: {
+      theme: PlayerThemeChannelSetting
+    }
 
     archiveFiles: {
       avatar: string | null

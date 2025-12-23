@@ -1,0 +1,16 @@
+<div class="modal-body">
+  @if (svg) {
+    <div class="svg-relative-container">
+      <div aria-hidden="true" class="svg-container" [innerHTML]="svg"></div>
+    </div>
+  }
+
+  <h2>{{ title }}</h2>
+
+  <div class="content" [innerHtml]="html"></div>
+
+  <input
+    type="button" role="button" i18n-value value="Got it" class="peertube-button primary-button"
+    (click)="activeModal.close()" (key.enter)="activeModal.close()"
+  >
+</div>

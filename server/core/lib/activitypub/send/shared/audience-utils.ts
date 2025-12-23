@@ -45,7 +45,7 @@ export function getVideoCommentAudience (
 
 export function getAudienceFromFollowersOf (actorsInvolvedInObject: MActorFollowersUrl[]): ActivityAudience {
   return {
-    to: [ getAPPublicValue() ].concat(actorsInvolvedInObject.map(a => a.followersUrl)),
+    to: [ getAPPublicValue() as string ].concat(actorsInvolvedInObject.map(a => a.followersUrl)),
     cc: []
   }
 }
@@ -59,7 +59,7 @@ export async function getActorsInvolvedInVideo (video: MVideoId, t: Transaction)
     ? alreadyLoadedActor
     : await ActorModel.loadAccountActorFollowerUrlByVideoId(video.id, t)
 
-  actors.push(videoActor)
+  if (videoActor) actors.push(videoActor)
 
   return actors
 }

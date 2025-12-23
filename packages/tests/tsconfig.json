@@ -6,16 +6,20 @@
     "tsBuildInfoFile": "./dist/.tsbuildinfo",
     "paths": {
       "@tests/*": [ "./src/*" ],
-      "@server/*": [ "../../server/core/*" ]
+      "@server/*": [ "../../server/core/*" ],
+      "@peertube/peertube-transcription": [ "../transcription" ],
+      "@peertube/peertube-transcription-devtools": [ "../transcription-devtools" ],
     }
   },
   "references": [
     { "path": "../core-utils" },
     { "path": "../ffmpeg" },
+    { "path": "../transcription-devtools" },
     { "path": "../models" },
     { "path": "../node-utils" },
     { "path": "../typescript-utils" },
     { "path": "../server-commands" },
+    { "path": "../transcription" },
     { "path": "../../server/tsconfig.lib.json" }
   ],
   "include": [

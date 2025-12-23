@@ -1,11 +1,9 @@
-import { NgIf } from '@angular/common'
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { AfterViewInit, Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
 import { ComponentPaginationLight, DisableForReuseHook, HooksService, ScreenService } from '@app/core'
-import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
-import { VideoChannelService } from '@app/shared/shared-main/video-channel/video-channel.service'
+import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
+import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { VideoFilters } from '@app/shared/shared-video-miniature/video-filters.model'
-import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature/video-miniature.component'
 import { Video, VideoSortField } from '@peertube/peertube-models'
 import { Subscription } from 'rxjs'
 import { VideosListComponent } from '../../shared/shared-video-miniature/videos-list.component'
@@ -13,28 +11,20 @@ import { VideosListComponent } from '../../shared/shared-video-miniature/videos-
 @Component({
   selector: 'my-video-channel-videos',
   templateUrl: './video-channel-videos.component.html',
-  standalone: true,
-  imports: [ NgIf, VideosListComponent ]
+  imports: [ VideosListComponent ]
 })
 export class VideoChannelVideosComponent implements OnInit, AfterViewInit, OnDestroy, DisableForReuseHook {
-  @ViewChild('videosList') videosList: VideosListComponent
+  private screenService = inject(ScreenService)
+  private videoChannelService = inject(VideoChannelService)
+  private videoService = inject(VideoService)
+  private hooks = inject(HooksService)
+
+  readonly videosList = viewChild<VideosListComponent>('videosList')
 
   getVideosObservableFunction = this.getVideosObservable.bind(this)
   getSyndicationItemsFunction = this.getSyndicationItems.bind(this)
 
-  title = $localize`Videos`
   defaultSort = '-publishedAt' as VideoSortField
-
-  displayOptions: MiniatureDisplayOptions = {
-    date: true,
-    views: true,
-    by: false,
-    avatar: false,
-    privacyLabel: true,
-    privacyText: false,
-    state: false,
-    blacklistInfo: false
-  }
 
   videoChannel: VideoChannel
   disabled = false
@@ -42,20 +32,14 @@ export class VideoChannelVideosComponent implements OnInit, AfterViewInit, OnDes
   private videoChannelSub: Subscription
   private alreadyLoaded = false
 
-  constructor (
-    private screenService: ScreenService,
-    private videoChannelService: VideoChannelService,
-    private videoService: VideoService,
-    private hooks: HooksService
-  ) {
-  }
-
   ngOnInit () {
     // Parent get the video channel for us
     this.videoChannelSub = this.videoChannelService.videoChannelLoaded
       .subscribe(videoChannel => {
+        if (this.videoChannel?.id === videoChannel.id) return
+
         this.videoChannel = videoChannel
-        if (this.alreadyLoaded) this.videosList.reloadVideos()
+        if (this.alreadyLoaded) this.videosList().reloadVideos()
 
         this.hooks.runAction('action:video-channel-videos.video-channel.loaded', 'video-channel', { videoChannel })
 
@@ -72,15 +56,14 @@ export class VideoChannelVideosComponent implements OnInit, AfterViewInit, OnDes
   }
 
   getVideosObservable (pagination: ComponentPaginationLight, filters: VideoFilters) {
-    const params = {
+    return this.videoService.listChannelVideos({
       ...filters.toVideosAPIObject(),
 
       videoPagination: pagination,
       videoChannel: this.videoChannel,
+      includeScheduledLive: true,
       skipCount: true
-    }
-
-    return this.videoService.getVideoChannelVideos(params)
+    })
   }
 
   getSyndicationItems () {

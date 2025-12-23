@@ -1,0 +1,27 @@
+@if (aboutHTML.administrator) {
+  <div class="block administrator">
+    <h4 i18n>Who we are</h4>
+    <div class="text-content" [innerHTML]="aboutHTML.administrator"></div>
+  </div>
+}
+
+@if (aboutHTML.creationReason) {
+  <div class="block creation-reason">
+    <h4 i18n>Why we created {{ instanceName }}</h4>
+    <div class="text-content" [innerHTML]="aboutHTML.creationReason"></div>
+  </div>
+}
+
+@if (aboutHTML.maintenanceLifetime) {
+  <div class="block maintenance-lifetime">
+    <h4 i18n>How long we plan to maintain {{ instanceName }}</h4>
+    <div [innerHTML]="aboutHTML.maintenanceLifetime"></div>
+  </div>
+}
+
+@if (aboutHTML.businessModel) {
+  <div class="block business-model">
+    <h4 i18n>How we will pay for keeping {{ instanceName }} running</h4>
+    <div class="text-content" [innerHTML]="aboutHTML.businessModel"></div>
+  </div>
+}

@@ -3,9 +3,9 @@ import { DatePipe } from '@angular/common'
 let datePipe: DatePipe
 let intl: Intl.DateTimeFormat
 
-type DateFormat = 'medium' | 'precise'
+export type DateFormat = 'medium' | 'precise'
 
-function dateToHuman (localeId: string, date: Date, format: 'medium' | 'precise' = 'medium') {
+export function dateToHuman (localeId: string, date: Date, format: 'medium' | 'precise' = 'medium') {
   if (!datePipe) {
     datePipe = new DatePipe(localeId)
   }
@@ -26,7 +26,7 @@ function dateToHuman (localeId: string, date: Date, format: 'medium' | 'precise'
   if (format === 'precise') return intl.format(date)
 }
 
-function durationToString (duration: number) {
+export function durationToString (duration: number) {
   const hours = Math.floor(duration / 3600)
   const minutes = Math.floor((duration % 3600) / 60)
   const seconds = duration % 60
@@ -38,11 +38,4 @@ function durationToString (duration: number) {
   return (
     displayedHours + minutesPadding + minutes.toString() + ':' + secondsPadding + seconds.toString()
   ).replace(/^0/, '')
-}
-
-export {
-  DateFormat,
-
-  durationToString,
-  dateToHuman
 }

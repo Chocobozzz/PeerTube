@@ -1,22 +1,26 @@
 import { forceNumber, maxBy } from '@peertube/peertube-core-utils'
-import { UserNotification, type UserNotificationType_Type } from '@peertube/peertube-models'
+import type { UserNotification, UserNotificationData, UserNotificationType_Type } from '@peertube/peertube-models'
 import { uuidToShort } from '@peertube/peertube-node-utils'
 import { UserNotificationIncludes, UserNotificationModelForApi } from '@server/types/models/user/index.js'
 import { ModelIndexesOptions, Op, WhereOptions } from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Is, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, Is, Table, UpdatedAt } from 'sequelize-typescript'
 import { isBooleanValid } from '../../helpers/custom-validators/misc.js'
 import { isUserNotificationTypeValid } from '../../helpers/custom-validators/user-notifications.js'
 import { AbuseModel } from '../abuse/abuse.js'
 import { AccountModel } from '../account/account.js'
 import { ActorFollowModel } from '../actor/actor-follow.js'
+import { ActorImageModel } from '../actor/actor-image.js'
 import { ApplicationModel } from '../application/application.js'
 import { PluginModel } from '../server/plugin.js'
 import { SequelizeModel, throwIfNotValid } from '../shared/index.js'
+import { getStateLabel } from '../video/formatter/video-api-format.js'
 import { VideoBlacklistModel } from '../video/video-blacklist.js'
+import { VideoCaptionModel } from '../video/video-caption.js'
+import { VideoChannelCollaboratorModel } from '../video/video-channel-collaborator.js'
 import { VideoCommentModel } from '../video/video-comment.js'
 import { VideoImportModel } from '../video/video-import.js'
 import { VideoModel } from '../video/video.js'
-import { UserNotificationListQueryBuilder } from './sql/user-notitication-list-query-builder.js'
+import { UserNotificationListQueryBuilder } from './sql/user-notification/user-notification-list-query-builder.js'
 import { UserRegistrationModel } from './user-registration.js'
 import { UserModel } from './user.js'
 
@@ -105,32 +109,43 @@ import { UserModel } from './user.js'
           [Op.ne]: null
         }
       }
+    },
+    {
+      fields: [ 'channelCollaboratorId' ],
+      where: {
+        channelCollaboratorId: {
+          [Op.ne]: null
+        }
+      }
     }
   ] as (ModelIndexesOptions & { where?: WhereOptions })[]
 })
 export class UserNotificationModel extends SequelizeModel<UserNotificationModel> {
-
   @AllowNull(false)
   @Default(null)
   @Is('UserNotificationType', value => throwIfNotValid(value, isUserNotificationTypeValid, 'type'))
   @Column
-  type: UserNotificationType_Type
+  declare type: UserNotificationType_Type
 
   @AllowNull(false)
   @Default(false)
   @Is('UserNotificationRead', value => throwIfNotValid(value, isBooleanValid, 'read'))
   @Column
-  read: boolean
+  declare read: boolean
+
+  @AllowNull(true)
+  @Column(DataType.JSONB)
+  declare data: UserNotificationData
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @ForeignKey(() => UserModel)
   @Column
-  userId: number
+  declare userId: number
 
   @BelongsTo(() => UserModel, {
     foreignKey: {
@@ -138,11 +153,11 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     },
     onDelete: 'cascade'
   })
-  User: Awaited<UserModel>
+  declare User: Awaited<UserModel>
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -150,11 +165,11 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     },
     onDelete: 'cascade'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   @ForeignKey(() => VideoCommentModel)
   @Column
-  commentId: number
+  declare commentId: number
 
   @BelongsTo(() => VideoCommentModel, {
     foreignKey: {
@@ -162,11 +177,11 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     },
     onDelete: 'cascade'
   })
-  VideoComment: Awaited<VideoCommentModel>
+  declare VideoComment: Awaited<VideoCommentModel>
 
   @ForeignKey(() => AbuseModel)
   @Column
-  abuseId: number
+  declare abuseId: number
 
   @BelongsTo(() => AbuseModel, {
     foreignKey: {
@@ -174,11 +189,11 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     },
     onDelete: 'cascade'
   })
-  Abuse: Awaited<AbuseModel>
+  declare Abuse: Awaited<AbuseModel>
 
   @ForeignKey(() => VideoBlacklistModel)
   @Column
-  videoBlacklistId: number
+  declare videoBlacklistId: number
 
   @BelongsTo(() => VideoBlacklistModel, {
     foreignKey: {
@@ -186,11 +201,11 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     },
     onDelete: 'cascade'
   })
-  VideoBlacklist: Awaited<VideoBlacklistModel>
+  declare VideoBlacklist: Awaited<VideoBlacklistModel>
 
   @ForeignKey(() => VideoImportModel)
   @Column
-  videoImportId: number
+  declare videoImportId: number
 
   @BelongsTo(() => VideoImportModel, {
     foreignKey: {
@@ -198,11 +213,11 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     },
     onDelete: 'cascade'
   })
-  VideoImport: Awaited<VideoImportModel>
+  declare VideoImport: Awaited<VideoImportModel>
 
   @ForeignKey(() => AccountModel)
   @Column
-  accountId: number
+  declare accountId: number
 
   @BelongsTo(() => AccountModel, {
     foreignKey: {
@@ -210,11 +225,11 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     },
     onDelete: 'cascade'
   })
-  Account: Awaited<AccountModel>
+  declare Account: Awaited<AccountModel>
 
   @ForeignKey(() => ActorFollowModel)
   @Column
-  actorFollowId: number
+  declare actorFollowId: number
 
   @BelongsTo(() => ActorFollowModel, {
     foreignKey: {
@@ -222,11 +237,11 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     },
     onDelete: 'cascade'
   })
-  ActorFollow: Awaited<ActorFollowModel>
+  declare ActorFollow: Awaited<ActorFollowModel>
 
   @ForeignKey(() => PluginModel)
   @Column
-  pluginId: number
+  declare pluginId: number
 
   @BelongsTo(() => PluginModel, {
     foreignKey: {
@@ -234,11 +249,11 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     },
     onDelete: 'cascade'
   })
-  Plugin: Awaited<PluginModel>
+  declare Plugin: Awaited<PluginModel>
 
   @ForeignKey(() => ApplicationModel)
   @Column
-  applicationId: number
+  declare applicationId: number
 
   @BelongsTo(() => ApplicationModel, {
     foreignKey: {
@@ -246,11 +261,11 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     },
     onDelete: 'cascade'
   })
-  Application: Awaited<ApplicationModel>
+  declare Application: Awaited<ApplicationModel>
 
   @ForeignKey(() => UserRegistrationModel)
   @Column
-  userRegistrationId: number
+  declare userRegistrationId: number
 
   @BelongsTo(() => UserRegistrationModel, {
     foreignKey: {
@@ -258,29 +273,64 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     },
     onDelete: 'cascade'
   })
-  UserRegistration: Awaited<UserRegistrationModel>
+  declare UserRegistration: Awaited<UserRegistrationModel>
 
-  static listForApi (userId: number, start: number, count: number, sort: string, unread?: boolean) {
-    const where = { userId }
+  @ForeignKey(() => VideoCaptionModel)
+  @Column
+  declare videoCaptionId: number
+
+  @BelongsTo(() => VideoCaptionModel, {
+    foreignKey: {
+      allowNull: true
+    },
+    onDelete: 'cascade'
+  })
+  declare VideoCaption: Awaited<VideoCaptionModel>
+
+  @ForeignKey(() => VideoChannelCollaboratorModel)
+  @Column
+  declare channelCollaboratorId: number
+
+  @BelongsTo(() => VideoChannelCollaboratorModel, {
+    foreignKey: {
+      allowNull: true
+    },
+    onDelete: 'cascade'
+  })
+  declare VideoChannelCollaborator: Awaited<VideoChannelCollaboratorModel>
+
+  static listForApi (options: {
+    userId: number
+    start: number
+    count: number
+    sort: string
+    unread?: boolean
+    typeOneOf?: UserNotificationType_Type[]
+  }) {
+    const { userId, start, count, sort, unread, typeOneOf } = options
+
+    const countWhere = { userId }
 
     const query = {
+      start,
+      count,
+      sort,
+
       userId,
       unread,
-      offset: start,
-      limit: count,
-      sort,
-      where
+      typeOneOf
     }
 
-    if (unread !== undefined) query.where['read'] = !unread
+    if (unread !== undefined) countWhere['read'] = !unread
+    if (typeOneOf !== undefined) countWhere['type'] = { [Op.in]: typeOneOf }
 
     return Promise.all([
-      UserNotificationModel.count({ where })
+      UserNotificationModel.count({ where: countWhere })
         .then(count => count || 0),
 
       count === 0
         ? [] as UserNotificationModelForApi[]
-        : new UserNotificationListQueryBuilder(this.sequelize, query).listNotifications()
+        : new UserNotificationListQueryBuilder(this.sequelize, query).list<UserNotificationModelForApi>()
     ]).then(([ total, data ]) => ({ total, data }))
   }
 
@@ -290,7 +340,8 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
         userId,
         id: {
           [Op.in]: notificationIds
-        }
+        },
+        read: false
       }
     }
 
@@ -298,12 +349,16 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
   }
 
   static markAllAsRead (userId: number) {
-    const query = { where: { userId } }
+    const query = { where: { userId, read: false } }
 
     return UserNotificationModel.update({ read: true }, query)
   }
 
-  static removeNotificationsOf (options: { id: number, type: 'account' | 'server', forUserId?: number }) {
+  static removeNotificationsOf (options: {
+    id: number
+    type: 'account' | 'server'
+    forUserId?: number
+  }) {
     const id = forceNumber(options.id)
 
     function buildAccountWhereQuery (base: string) {
@@ -321,33 +376,44 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     }
 
     const queries = [
+      // Remove notifications from muted accounts
       buildAccountWhereQuery(
         `SELECT "userNotification"."id" FROM "userNotification" ` +
-        `INNER JOIN "account" ON "userNotification"."accountId" = "account"."id" ` +
-        `INNER JOIN actor ON "actor"."id" = "account"."actorId" `
+          `INNER JOIN "account" ON "userNotification"."accountId" = "account"."id" ` +
+          `INNER JOIN actor ON "actor"."accountId" = "account"."id" `
       ),
 
       // Remove notifications from muted accounts that followed ours
       buildAccountWhereQuery(
         `SELECT "userNotification"."id" FROM "userNotification" ` +
-        `INNER JOIN "actorFollow" ON "actorFollow".id = "userNotification"."actorFollowId" ` +
-        `INNER JOIN actor ON actor.id = "actorFollow"."actorId" ` +
-        `INNER JOIN account ON account."actorId" = actor.id `
+          `INNER JOIN "actorFollow" ON "actorFollow".id = "userNotification"."actorFollowId" ` +
+          `INNER JOIN actor ON actor.id = "actorFollow"."actorId" ` +
+          `INNER JOIN account ON account."id" = actor."accountId" `
       ),
 
       // Remove notifications from muted accounts that commented something
       buildAccountWhereQuery(
         `SELECT "userNotification"."id" FROM "userNotification" ` +
-        `INNER JOIN "actorFollow" ON "actorFollow".id = "userNotification"."actorFollowId" ` +
-        `INNER JOIN actor ON actor.id = "actorFollow"."actorId" ` +
-        `INNER JOIN account ON account."actorId" = actor.id `
+          `INNER JOIN "actorFollow" ON "actorFollow".id = "userNotification"."actorFollowId" ` +
+          `INNER JOIN actor ON actor.id = "actorFollow"."actorId" ` +
+          `INNER JOIN account ON account."id" = actor."accountId" `
       ),
 
+      // Remove notifications of comments from muted accounts
       buildAccountWhereQuery(
         `SELECT "userNotification"."id" FROM "userNotification" ` +
-        `INNER JOIN "videoComment" ON "videoComment".id = "userNotification"."commentId" ` +
-        `INNER JOIN account ON account.id = "videoComment"."accountId" ` +
-        `INNER JOIN actor ON "actor"."id" = "account"."actorId" `
+          `INNER JOIN "videoComment" ON "videoComment".id = "userNotification"."commentId" ` +
+          `INNER JOIN account ON account.id = "videoComment"."accountId" ` +
+          `INNER JOIN actor ON "actor"."accountId" = "account"."id" `
+      ),
+
+      // Remove notifications from muted accounts that invited us to collaborate to a channel
+      buildAccountWhereQuery(
+        `SELECT "userNotification"."id" FROM "userNotification" ` +
+          `INNER JOIN "videoChannelCollaborator" ON "videoChannelCollaborator".id = "userNotification"."channelCollaboratorId" ` +
+          `INNER JOIN "videoChannel" ON "videoChannel".id = "videoChannelCollaborator"."channelId" ` +
+          `INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ` +
+          `INNER JOIN actor ON "actor"."accountId" = "account"."id" `
       )
     ]
 
@@ -382,7 +448,8 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
         id: this.VideoComment.id,
         threadId: this.VideoComment.getThreadId(),
         account: this.formatActor(this.VideoComment.Account),
-        video: this.formatVideo(this.VideoComment.Video)
+        video: this.formatVideo(this.VideoComment.Video),
+        heldForReview: this.VideoComment.heldForReview
       }
       : undefined
 
@@ -439,10 +506,35 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
       ? { id: this.UserRegistration.id, username: this.UserRegistration.username }
       : undefined
 
+    const videoCaption = this.VideoCaption
+      ? {
+        id: this.VideoCaption.id,
+        language: {
+          id: this.VideoCaption.language,
+          label: VideoCaptionModel.getLanguageLabel(this.VideoCaption.language)
+        },
+        video: this.formatVideo(this.VideoCaption.Video)
+      }
+      : undefined
+
+    const videoChannelCollaborator = this.VideoChannelCollaborator
+      ? {
+        id: this.VideoChannelCollaborator.id,
+        channelOwner: this.formatActor(this.VideoChannelCollaborator.Channel.Account),
+        channel: this.formatActor(this.VideoChannelCollaborator.Channel),
+        account: this.formatActor(this.VideoChannelCollaborator.Account),
+        state: {
+          id: this.VideoChannelCollaborator.state,
+          label: VideoChannelCollaboratorModel.getStateLabel(this.VideoChannelCollaborator.state)
+        }
+      }
+      : undefined
+
     return {
       id: this.id,
       type: this.type,
       read: this.read,
+      data: this.data,
       video,
       videoImport,
       comment,
@@ -453,6 +545,8 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
       plugin,
       peertube,
       registration,
+      videoCaption,
+      videoChannelCollaborator,
       createdAt: this.createdAt.toISOString(),
       updatedAt: this.updatedAt.toISOString()
     }
@@ -463,7 +557,11 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
       id: video.id,
       uuid: video.uuid,
       shortUUID: uuidToShort(video.uuid),
-      name: video.name
+      name: video.name,
+      state: {
+        id: video.state,
+        label: getStateLabel(video.state)
+      }
     }
   }
 
@@ -473,12 +571,7 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
         threadId: abuse.VideoCommentAbuse.VideoComment.getThreadId(),
 
         video: abuse.VideoCommentAbuse.VideoComment.Video
-          ? {
-            id: abuse.VideoCommentAbuse.VideoComment.Video.id,
-            name: abuse.VideoCommentAbuse.VideoComment.Video.name,
-            shortUUID: uuidToShort(abuse.VideoCommentAbuse.VideoComment.Video.uuid),
-            uuid: abuse.VideoCommentAbuse.VideoComment.Video.uuid
-          }
+          ? this.formatVideo(abuse.VideoCommentAbuse.VideoComment.Video)
           : undefined
       }
       : undefined
@@ -525,6 +618,7 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
 
   formatAvatar (a: UserNotificationIncludes.ActorImageInclude) {
     return {
+      fileUrl: ActorImageModel.getImageUrl(a),
       path: a.getStaticPath(),
       width: a.width
     }

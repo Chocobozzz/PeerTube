@@ -1,7 +1,10 @@
+import { PlayerTheme } from '../player/player-theme.type.js'
+import { VideoCommentPolicyType, VideoPrivacyType } from '../videos/index.js'
 import { NSFWPolicyType } from '../videos/nsfw-policy.type.js'
 import { BroadcastMessageLevel } from './broadcast-message-level.type.js'
 
 export type ConfigResolutions = {
+  '0p': boolean
   '144p': boolean
   '240p': boolean
   '360p': boolean
@@ -27,11 +30,26 @@ export interface CustomConfig {
     businessModel: string
     hardwareInformation: string
 
+    defaultLanguage: string
+
     languages: string[]
     categories: number[]
 
     isNSFW: boolean
     defaultNSFWPolicy: NSFWPolicyType
+
+    serverCountry: string
+
+    support: {
+      text: string
+    }
+
+    social: {
+      externalLink: string
+      mastodonLink: string
+      blueskyLink: string
+      xLink: string
+    }
 
     defaultClientRoute: string
 
@@ -43,6 +61,19 @@ export interface CustomConfig {
 
   theme: {
     default: string
+
+    customization: {
+      primaryColor: string
+      foregroundColor: string
+      backgroundColor: string
+      backgroundSecondaryColor: string
+      menuForegroundColor: string
+      menuBackgroundColor: string
+      menuBorderRadius: string
+      headerForegroundColor: string
+      headerBackgroundColor: string
+      inputBorderRadius: string
+    }
   }
 
   services: {
@@ -52,10 +83,19 @@ export interface CustomConfig {
   }
 
   client: {
+    header: {
+      hideInstanceName: boolean
+    }
+
     videos: {
       miniature: {
         preferAuthorDisplayName: boolean
       }
+    }
+
+    browseVideos: {
+      defaultSort: string
+      defaultScope: string
     }
 
     menu: {
@@ -93,6 +133,16 @@ export interface CustomConfig {
 
   admin: {
     email: string
+  }
+
+  email: {
+    body: {
+      signature: string
+    }
+
+    subject: {
+      prefix: string
+    }
   }
 
   contactForm: {
@@ -133,9 +183,13 @@ export interface CustomConfig {
 
     profile: string
 
-    resolutions: ConfigResolutions & { '0p': boolean }
+    resolutions: ConfigResolutions
 
     alwaysTranscodeOriginalResolution: boolean
+
+    fps: {
+      max: number
+    }
 
     webVideos: {
       enabled: boolean
@@ -143,6 +197,7 @@ export interface CustomConfig {
 
     hls: {
       enabled: boolean
+      splitAudioAndVideo: boolean
     }
   }
 
@@ -166,12 +221,25 @@ export interface CustomConfig {
       }
       threads: number
       profile: string
+
       resolutions: ConfigResolutions
       alwaysTranscodeOriginalResolution: boolean
+
+      fps: {
+        max: number
+      }
     }
   }
 
   videoStudio: {
+    enabled: boolean
+
+    remoteRunners: {
+      enabled: boolean
+    }
+  }
+
+  videoTranscription: {
     enabled: boolean
 
     remoteRunners: {
@@ -237,6 +305,10 @@ export interface CustomConfig {
       enabled: boolean
       manualApproval: boolean
     }
+
+    channels: {
+      enabled: boolean
+    }
   }
 
   followings: {
@@ -275,5 +347,36 @@ export interface CustomConfig {
 
   storyboards: {
     enabled: boolean
+    remoteRunners: {
+      enabled: boolean
+    }
+  }
+
+  defaults: {
+    publish: {
+      downloadEnabled: boolean
+      commentsPolicy: VideoCommentPolicyType
+      privacy: VideoPrivacyType
+      licence: number
+    }
+
+    p2p: {
+      webapp: {
+        enabled: boolean
+      }
+
+      embed: {
+        enabled: boolean
+      }
+    }
+
+    player: {
+      theme: PlayerTheme
+      autoPlay: boolean
+    }
+  }
+
+  videoComments: {
+    acceptRemoteComments: boolean
   }
 }

@@ -285,7 +285,7 @@ describe('Test plugin helpers', function () {
     before(async function () {
       this.timeout(240000)
 
-      await servers[0].config.enableTranscoding()
+      await servers[0].config.enableTranscoding({ webVideo: true, hls: true, resolutions: 'max' })
 
       const res = await servers[0].videos.quickUpload({ name: 'video1' })
       videoUUID = res.uuid

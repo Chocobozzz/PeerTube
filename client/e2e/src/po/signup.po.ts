@@ -1,12 +1,11 @@
 import { getCheckbox } from '../utils'
 
 export class SignupPage {
-
   getRegisterMenuButton () {
     return $('.create-account-button')
   }
 
-  async clickOnRegisterInMenu () {
+  async clickOnRegisterButton () {
     const button = this.getRegisterMenuButton()
 
     await button.waitForClickable()
@@ -16,6 +15,7 @@ export class SignupPage {
   async validateStep () {
     const next = $('button[type=submit]')
 
+    await next.scrollIntoView({ block: 'center' })
     await next.waitForClickable()
     await next.click()
   }
@@ -47,7 +47,7 @@ export class SignupPage {
     await $('#displayName').setValue(options.displayName || `${options.username} display name`)
 
     await $('#username').setValue(options.username)
-    await $('#password').setValue(options.password || 'password')
+    await $('#password').setValue(options.password || 'superpassword')
 
     // Fix weird bug on firefox that "cannot scroll into view" when using just `setValue`
     await $('#email').scrollIntoView({ block: 'center' })
@@ -74,7 +74,7 @@ export class SignupPage {
       name: string
     }
   }) {
-    await this.clickOnRegisterInMenu()
+    await this.clickOnRegisterButton()
     await this.validateStep()
     await this.checkTerms()
     await this.validateStep()

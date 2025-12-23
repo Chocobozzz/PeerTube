@@ -1,7 +1,7 @@
 import { Job } from 'bullmq'
 import { copy } from 'fs-extra/esm'
 import { VideoFileImportPayload } from '@peertube/peertube-models'
-import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent.js'
+import { createTorrentAndSetInfoHash } from '@server/lib/webtorrent.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
@@ -10,7 +10,7 @@ import { MVideoFullLight } from '@server/types/models/index.js'
 import { getVideoStreamDimensionsInfo } from '@peertube/peertube-ffmpeg'
 import { logger } from '../../../helpers/logger.js'
 import { JobQueue } from '../job-queue.js'
-import { buildMoveJob } from '@server/lib/video-jobs.js'
+import { buildMoveVideoJob } from '@server/lib/video-jobs.js'
 import { buildNewFile } from '@server/lib/video-file.js'
 
 async function processVideoFileImport (job: Job) {
@@ -20,14 +20,14 @@ async function processVideoFileImport (job: Job) {
   const video = await VideoModel.loadFull(payload.videoUUID)
   // No video, maybe deleted?
   if (!video) {
-    logger.info('Do not process job %d, video does not exist.', job.id)
+    logger.info(`Do not process job ${job.id}, video does not exist.`)
     return undefined
   }
 
   await updateVideoFile(video, payload.filePath)
 
   if (CONFIG.OBJECT_STORAGE.ENABLED) {
-    await JobQueue.Instance.createJob(await buildMoveJob({ video, previousVideoState: video.state, type: 'move-to-object-storage' }))
+    await JobQueue.Instance.createJob(await buildMoveVideoJob({ video, previousVideoState: video.state, type: 'move-to-object-storage' }))
   } else {
     await federateVideoIfNeeded(video, false)
   }

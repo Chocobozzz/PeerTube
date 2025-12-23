@@ -1,8 +1,3 @@
-import './embed.scss'
-import '../../assets/player/shared/dock/peertube-dock-component'
-import '../../assets/player/shared/dock/peertube-dock-plugin'
-import { PeerTubeServerError } from 'src/types'
-import videojs from 'video.js'
 import {
   HTMLServerConfig,
   ResultList,
@@ -12,35 +7,42 @@ import {
   VideoPlaylistElement,
   VideoState
 } from '@peertube/peertube-models'
-import { PeerTubePlayer } from '../../assets/player/peertube-player'
-import { TranslationsManager } from '../../assets/player/translations-manager'
+import type { PeerTubePlayer, VideojsPlayer } from '@peertube/player'
+import { TranslationsManager } from '@root-helpers/translations-manager'
+import { PeerTubeServerError } from 'src/types'
+import type videojs from 'video.js'
 import { getParamString, logger, videoRequiresFileToken } from '../../root-helpers'
 import { PeerTubeEmbedApi } from './embed-api'
+import './embed.scss'
 import {
   AuthHTTP,
   LiveManager,
   PeerTubePlugin,
+  PeerTubeTheme,
   PlayerOptionsBuilder,
   PlaylistFetcher,
   PlaylistTracker,
   Translations,
-  VideoFetcher
+  VideoFetcher,
+  getBackendUrl
 } from './shared'
 import { PlayerHTML } from './shared/player-html'
 
 export class PeerTubeEmbed {
-  player: videojs.Player
+  player: VideojsPlayer
   api: PeerTubeEmbedApi = null
 
   config: HTMLServerConfig
 
   private translationsPromise: Promise<{ [id: string]: string }>
   private PeerTubePlayerManagerModulePromise: Promise<any>
+  private videojs: typeof videojs
 
   private readonly http: AuthHTTP
   private readonly videoFetcher: VideoFetcher
   private readonly playlistFetcher: PlaylistFetcher
   private readonly peertubePlugin: PeerTubePlugin
+  private readonly peertubeTheme: PeerTubeTheme
   private readonly playerHTML: PlayerHTML
   private readonly playerOptionsBuilder: PlayerOptionsBuilder
   private readonly liveManager: LiveManager
@@ -58,13 +60,14 @@ export class PeerTubeEmbed {
   private requiresPassword: boolean
 
   constructor (videoWrapperId: string) {
-    logger.registerServerSending(window.location.origin)
+    logger.registerServerSending(getBackendUrl())
 
-    this.http = new AuthHTTP()
+    this.http = new AuthHTTP(getBackendUrl(), navigator.language)
 
     this.videoFetcher = new VideoFetcher(this.http)
     this.playlistFetcher = new PlaylistFetcher(this.http)
     this.peertubePlugin = new PeerTubePlugin(this.http)
+    this.peertubeTheme = new PeerTubeTheme(this.peertubePlugin)
     this.playerHTML = new PlayerHTML(videoWrapperId)
     this.playerOptionsBuilder = new PlayerOptionsBuilder(this.playerHTML, this.videoFetcher, this.peertubePlugin)
     this.liveManager = new LiveManager(this.playerHTML)
@@ -73,7 +76,9 @@ export class PeerTubeEmbed {
     try {
       this.config = JSON.parse((window as any)['PeerTubeServerConfig'])
     } catch (err) {
-      logger.error('Cannot parse HTML config.', err)
+      if (!(import.meta as any).env.DEV) {
+        logger.error('Cannot parse HTML config.', err)
+      }
     }
   }
 
@@ -83,10 +88,6 @@ export class PeerTubeEmbed {
     await embed.init()
   }
 
-  getPlayerElement () {
-    return this.playerHTML.getPlayerElement()
-  }
-
   getScope () {
     return this.playerOptionsBuilder.getScope()
   }
@@ -94,14 +95,16 @@ export class PeerTubeEmbed {
   // ---------------------------------------------------------------------------
 
   async init () {
-    this.translationsPromise = TranslationsManager.getServerTranslations(window.location.origin, navigator.language)
-    this.PeerTubePlayerManagerModulePromise = import('../../assets/player/peertube-player')
+    this.translationsPromise = TranslationsManager.getServerTranslations(getBackendUrl(), navigator.language)
+    this.PeerTubePlayerManagerModulePromise = import('@peertube/player')
 
     // Issue when we parsed config from HTML, fallback to API
     if (!this.config) {
-      this.config = await this.http.fetch('/api/v1/config', { optionalAuth: false })
+      this.config = await this.http.fetch(getBackendUrl() + '/api/v1/config', { optionalAuth: false })
         .then(res => res.json())
     }
+
+    this.peertubeTheme.loadThemeStyle(this.config)
 
     const videoId = this.isPlaylistEmbed()
       ? await this.initPlaylist()
@@ -131,7 +134,7 @@ export class PeerTubeEmbed {
       const playlistPositionParam = getParamString(params, 'playlistPosition')
 
       const position = playlistPositionParam
-        ? parseInt(playlistPositionParam + '', 10)
+        ? parseInt(playlistPositionParam, 10)
         : 1
 
       this.playlistTracker.setPosition(position)
@@ -217,12 +220,19 @@ export class PeerTubeEmbed {
         videoResponse,
         captionsPromise,
         chaptersPromise,
-        storyboardsPromise
+        storyboardsPromise,
+        playerSettingsPromise
       } = await this.videoFetcher.loadVideo({ videoId: uuid, videoPassword: this.videoPassword })
 
-      return this.buildVideoPlayer({ videoResponse, captionsPromise, chaptersPromise, storyboardsPromise, forceAutoplay })
+      return this.buildVideoPlayer({
+        videoResponse,
+        captionsPromise,
+        chaptersPromise,
+        storyboardsPromise,
+        playerSettingsPromise,
+        forceAutoplay
+      })
     } catch (err) {
-
       if (await this.handlePasswordError(err)) this.loadVideoAndBuildPlayer({ ...options })
       else this.playerHTML.displayError(err.message, await this.translationsPromise)
     }
@@ -233,9 +243,10 @@ export class PeerTubeEmbed {
     storyboardsPromise: Promise<Response>
     captionsPromise: Promise<Response>
     chaptersPromise: Promise<Response>
+    playerSettingsPromise: Promise<Response>
     forceAutoplay: boolean
   }) {
-    const { videoResponse, captionsPromise, chaptersPromise, storyboardsPromise, forceAutoplay } = options
+    const { videoResponse, captionsPromise, chaptersPromise, storyboardsPromise, playerSettingsPromise, forceAutoplay } = options
 
     const videoInfoPromise = videoResponse.json()
       .then(async (videoInfo: VideoDetails) => {
@@ -257,20 +268,17 @@ export class PeerTubeEmbed {
       translations,
       captionsResponse,
       chaptersResponse,
-      storyboardsResponse
+      storyboardsResponse,
+      playerSettingsResponse
     ] = await Promise.all([
       videoInfoPromise,
       this.translationsPromise,
       captionsPromise,
       chaptersPromise,
       storyboardsPromise,
+      playerSettingsPromise,
       this.buildPlayerIfNeeded()
     ])
-
-    // If already played, we are in a playlist so we don't want to display the poster between videos
-    if (!this.alreadyPlayed) {
-      this.peertubePlayer.setPoster(window.location.origin + video.previewPath)
-    }
 
     const playlist = this.playlistTracker
       ? {
@@ -286,6 +294,9 @@ export class PeerTubeEmbed {
       video,
       captionsResponse,
       chaptersResponse,
+      playerSettingsResponse,
+
+      config: this.config,
       translations,
 
       storyboardsResponse,
@@ -303,9 +314,8 @@ export class PeerTubeEmbed {
     await this.peertubePlayer.load(loadOptions)
 
     if (!this.alreadyInitialized) {
-      this.player = this.peertubePlayer.getPlayer();
-
-      (window as any)['videojsPlayer'] = this.player
+      this.player = this.peertubePlayer.getPlayer()
+      ;(window as any)['videojsPlayer'] = this.player
 
       this.buildCSS()
 
@@ -323,38 +333,55 @@ export class PeerTubeEmbed {
     if (video.isLive) {
       this.liveManager.listenForChanges({
         video,
+
         onPublishedVideo: () => {
           this.liveManager.stopListeningForChanges(video)
           this.loadVideoAndBuildPlayer({ uuid: video.uuid, forceAutoplay: true })
-        }
+        },
+
+        onForceEnd: () => this.endLive(video, translations)
       })
 
       if (video.state.id === VideoState.WAITING_FOR_LIVE || video.state.id === VideoState.LIVE_ENDED) {
         this.liveManager.displayInfo({ state: video.state.id, translations })
         this.peertubePlayer.disable()
       } else {
-        this.correctlyHandleLiveEnding(translations)
+        this.player.one('ended', () => this.endLive(video, translations))
       }
     }
 
-    this.peertubePlugin.getPluginsManager().runHook('action:embed.player.loaded', undefined, { player: this.player, videojs, video })
+    this.peertubePlugin.getPluginsManager().runHook(
+      'action:embed.player.loaded',
+      undefined,
+      { player: this.player, videojs: this.videojs, video }
+    )
   }
 
   private buildCSS () {
     const body = document.getElementById('custom-css')
 
     if (this.playerOptionsBuilder.hasBigPlayBackgroundColor()) {
-      body.style.setProperty('--embedBigPlayBackgroundColor', this.playerOptionsBuilder.getBigPlayBackgroundColor())
+      body.style.setProperty('--pt-player-big-play-background-color', this.playerOptionsBuilder.getBigPlayBackgroundColor())
     }
 
     if (this.playerOptionsBuilder.hasForegroundColor()) {
-      body.style.setProperty('--embedForegroundColor', this.playerOptionsBuilder.getForegroundColor())
+      body.style.setProperty('--pt-player-fg', this.playerOptionsBuilder.getForegroundColor())
     }
   }
 
   // ---------------------------------------------------------------------------
 
   private getResourceId () {
+    const search = window.location.search
+
+    if (search.startsWith('?videoId=')) {
+      return search.replace(/^\?videoId=/, '')
+    }
+
+    if (search.startsWith('?videoPlaylistId=')) {
+      return search.replace(/^\?videoPlaylistId=/, '')
+    }
+
     const urlParts = window.location.pathname.split('/')
     return urlParts[urlParts.length - 1]
   }
@@ -365,13 +392,14 @@ export class PeerTubeEmbed {
 
   // ---------------------------------------------------------------------------
 
-  private correctlyHandleLiveEnding (translations: Translations) {
-    this.player.one('ended', () => {
-      // Display the live ended information
-      this.liveManager.displayInfo({ state: VideoState.LIVE_ENDED, translations })
+  private endLive (video: VideoDetails, translations: Translations) {
+    // Display the live ended information
+    this.liveManager.displayInfo({ state: VideoState.LIVE_ENDED, translations })
 
-      this.peertubePlayer.disable()
-    })
+    this.peertubePlayer.unload()
+    this.peertubePlayer.disable()
+
+    this.peertubePlayer.setPoster(video.previewPath)
   }
 
   private async handlePasswordError (err: PeerTubeServerError) {
@@ -420,13 +448,22 @@ export class PeerTubeEmbed {
     playerElement.className = 'video-js vjs-peertube-skin'
     playerElement.setAttribute('playsinline', 'true')
 
-    this.playerHTML.setPlayerElement(playerElement)
-    this.playerHTML.addPlayerElementToDOM()
+    this.playerHTML.setInitVideoEl(playerElement)
+    this.playerHTML.addInitVideoElToDOM()
 
-    const [ { PeerTubePlayer } ] = await Promise.all([
+    const [ { PeerTubePlayer, videojs } ] = await Promise.all([
       this.PeerTubePlayerManagerModulePromise,
-      this.peertubePlugin.loadPlugins(this.config, await this.translationsPromise)
+
+      this.translationsPromise.then(translations => {
+        this.peertubePlugin.init(translations)
+        this.peertubePlugin.loadPlugins(this.config)
+        this.peertubeTheme.loadThemePlugins(this.config)
+
+        return this.peertubePlugin.ensurePluginsAreLoaded()
+      })
     ])
+
+    this.videojs = videojs
 
     const constructorOptions = this.playerOptionsBuilder.getPlayerConstructorOptions({
       serverConfig: this.config,
@@ -436,11 +473,24 @@ export class PeerTubeEmbed {
 
     this.player = this.peertubePlayer.getPlayer()
   }
+
+  getImageDataUrl (): string {
+    const canvas = document.createElement('canvas')
+
+    canvas.width = this.player.videoWidth()
+    canvas.height = this.player.videoHeight()
+
+    const videoEl = this.player.tech(true).el() as HTMLVideoElement
+
+    canvas.getContext('2d').drawImage(videoEl, 0, 0, canvas.width, canvas.height)
+
+    return canvas.toDataURL('image/jpeg')
+  }
 }
 
 PeerTubeEmbed.main()
   .catch(err => {
-    (window as any).displayIncompatibleBrowser()
+    ;(window as any).displayIncompatibleBrowser()
 
     logger.error('Cannot init embed.', err)
   })

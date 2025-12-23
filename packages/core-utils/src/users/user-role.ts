@@ -17,14 +17,16 @@ const userRoleRights: { [ id in UserRoleType ]: UserRightType[] } = {
     UserRight.MANAGE_ANY_VIDEO_CHANNEL,
     UserRight.REMOVE_ANY_VIDEO,
     UserRight.REMOVE_ANY_VIDEO_PLAYLIST,
-    UserRight.REMOVE_ANY_VIDEO_COMMENT,
+    UserRight.MANAGE_ANY_VIDEO_COMMENT,
     UserRight.UPDATE_ANY_VIDEO,
     UserRight.SEE_ALL_VIDEOS,
     UserRight.MANAGE_ACCOUNTS_BLOCKLIST,
     UserRight.MANAGE_SERVERS_BLOCKLIST,
     UserRight.MANAGE_USERS,
     UserRight.SEE_ALL_COMMENTS,
-    UserRight.MANAGE_REGISTRATIONS
+    UserRight.MANAGE_REGISTRATIONS,
+    UserRight.MANAGE_INSTANCE_WATCHED_WORDS,
+    UserRight.MANAGE_INSTANCE_AUTO_TAGS
   ],
 
   [UserRole.USER]: []

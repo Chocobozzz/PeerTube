@@ -1,13 +1,12 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
+import { NgClass } from '@angular/common'
+import { Component, OnInit, inject, output, viewChild } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { AdminAbuse } from '@peertube/peertube-models'
 import { ABUSE_MODERATION_COMMENT_VALIDATOR } from '../form-validators/abuse-validators'
-import { NgClass, NgIf } from '@angular/common'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { AbuseService } from '../shared-moderation/abuse.service'
 
@@ -15,24 +14,19 @@ import { AbuseService } from '../shared-moderation/abuse.service'
   selector: 'my-moderation-comment-modal',
   templateUrl: './moderation-comment-modal.component.html',
   styleUrls: [ './moderation-comment-modal.component.scss' ],
-  standalone: true,
-  imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, NgIf ]
+  imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass ]
 })
 export class ModerationCommentModalComponent extends FormReactive implements OnInit {
-  @ViewChild('modal', { static: true }) modal: NgbModal
-  @Output() commentUpdated = new EventEmitter<string>()
+  protected formReactiveService = inject(FormReactiveService)
+  private modalService = inject(NgbModal)
+  private notifier = inject(Notifier)
+  private abuseService = inject(AbuseService)
+
+  readonly modal = viewChild<NgbModal>('modal')
+  readonly commentUpdated = output<string>()
 
   private abuseToComment: AdminAbuse
   private openedModal: NgbModalRef
-
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private modalService: NgbModal,
-    private notifier: Notifier,
-    private abuseService: AbuseService
-  ) {
-    super()
-  }
 
   ngOnInit () {
     this.buildForm({
@@ -42,7 +36,7 @@ export class ModerationCommentModalComponent extends FormReactive implements OnI
 
   openModal (abuseToComment: AdminAbuse) {
     this.abuseToComment = abuseToComment
-    this.openedModal = this.modalService.open(this.modal, { centered: true })
+    this.openedModal = this.modalService.open(this.modal(), { centered: true })
 
     this.form.patchValue({
       moderationComment: this.abuseToComment.moderationComment
@@ -59,16 +53,15 @@ export class ModerationCommentModalComponent extends FormReactive implements OnI
     const moderationComment: string = this.form.value['moderationComment']
 
     this.abuseService.updateAbuse(this.abuseToComment, { moderationComment })
-        .subscribe({
-          next: () => {
-            this.notifier.success($localize`Comment updated.`)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Comment updated.`)
 
-            this.commentUpdated.emit(moderationComment)
-            this.hide()
-          },
+          this.commentUpdated.emit(moderationComment)
+          this.hide()
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.handleError(err)
+      })
   }
-
 }

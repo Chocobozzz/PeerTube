@@ -1,34 +1,25 @@
-import { Subject } from 'rxjs'
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, OnInit, inject, input } from '@angular/core'
 import { AuthService, ConfirmService, Notifier, User } from '@app/core'
-import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
-import { NgIf } from '@angular/common'
 import { TwoFactorService } from '@app/shared/shared-users/two-factor.service'
+import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 
 @Component({
   selector: 'my-account-two-factor-button',
   templateUrl: './my-account-two-factor-button.component.html',
-  standalone: true,
-  imports: [ NgIf, ButtonComponent ]
+  imports: [ ButtonComponent ]
 })
 export class MyAccountTwoFactorButtonComponent implements OnInit {
-  @Input() user: User = null
-  @Input() userInformationLoaded: Subject<any>
+  private notifier = inject(Notifier)
+  private twoFactorService = inject(TwoFactorService)
+  private confirmService = inject(ConfirmService)
+  private auth = inject(AuthService)
+
+  readonly user = input<User>(undefined)
 
   twoFactorEnabled = false
 
-  constructor (
-    private notifier: Notifier,
-    private twoFactorService: TwoFactorService,
-    private confirmService: ConfirmService,
-    private auth: AuthService
-  ) {
-  }
-
   ngOnInit () {
-    this.userInformationLoaded.subscribe(() => {
-      this.twoFactorEnabled = this.user.twoFactorEnabled
-    })
+    this.twoFactorEnabled = this.user().twoFactorEnabled
   }
 
   async disableTwoFactor () {
@@ -37,7 +28,7 @@ export class MyAccountTwoFactorButtonComponent implements OnInit {
     const { confirmed, password } = await this.confirmService.confirmWithPassword({ message, title: $localize`Disable two factor` })
     if (confirmed === false) return
 
-    this.twoFactorService.disableTwoFactor({ userId: this.user.id, currentPassword: password })
+    this.twoFactorService.disableTwoFactor({ userId: this.user().id, currentPassword: password })
       .subscribe({
         next: () => {
           this.twoFactorEnabled = false
@@ -47,7 +38,7 @@ export class MyAccountTwoFactorButtonComponent implements OnInit {
           this.notifier.success($localize`Two factor authentication disabled`)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 }

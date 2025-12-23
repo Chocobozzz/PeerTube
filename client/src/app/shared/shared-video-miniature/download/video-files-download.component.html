@@ -1,0 +1,134 @@
+@if (isConfidentialVideo()) {
+  <my-alert type="warning" i18n>
+  The following link contains a private token and should not be shared with anyone.
+</my-alert>
+}
+
+<div ngbNav #resolutionNav="ngbNav" class="nav-tabs" [activeId]="activeResolutionId" (activeIdChange)="onResolutionIdChange($event)">
+
+  <ng-template #rootNavContent>
+    <div class="nav-content">
+      <my-input-text
+        inputId="video-file-link"
+        i18n-ariaLabel ariaLabel="Video file link"
+        [show]="true" [readonly]="true" [withCopy]="true" [withToggle]="false" [value]="getVideoFileLink()"
+      ></my-input-text>
+    </div>
+  </ng-template>
+
+  @if (originalVideoFile()) {
+    <ng-container ngbNavItem="original">
+      <a ngbNavLink>
+        <ng-container i18n>Original file</ng-container>
+        <my-global-icon i18n-ngbTooltip ngbTooltip="Other users cannot download the original file" iconName="shield"></my-global-icon>
+      </a>
+      <ng-template ngbNavContent>
+        <ng-template [ngTemplateOutlet]="rootNavContent"></ng-template>
+      </ng-template>
+    </ng-container>
+  }
+
+  @for (file of getVideoFiles(); track file) {
+    <ng-container [ngbNavItem]="file.resolution.id">
+      <a ngbNavLink>{{ file.resolution.label }}</a>
+      <ng-template ngbNavContent>
+        <ng-template [ngTemplateOutlet]="rootNavContent"></ng-template>
+      </ng-template>
+    </ng-container>
+  }
+</div>
+
+<div [ngbNavOutlet]="resolutionNav"></div>
+
+<div class="advanced-filters" [ngbCollapse]="isAdvancedCustomizationCollapsed" [animation]="true">
+  <div ngbNav #navMetadata="ngbNav" class="nav-tabs nav-metadata">
+
+    <ng-template #metadataInfo let-item>
+      <div class="metadata-attribute">
+        <span>{{ item.value.label }}</span>
+
+        @if (item.value.value) {
+          <span>{{ item.value.value }}</span>
+        } @else {
+          <span i18n>Unknown</span>
+        }
+      </div>
+    </ng-template>
+
+    <ng-container ngbNavItem>
+      <a ngbNavLink i18n>Format</a>
+
+      <ng-template ngbNavContent>
+        <div class="file-metadata">
+          @for (item of videoFileMetadataFormat | keyvalue; track item.key) {
+            <ng-template [ngTemplateOutlet]="metadataInfo" [ngTemplateOutletContext]="{ $implicit: item }"></ng-template>
+          }
+        </div>
+      </ng-template>
+    </ng-container>
+
+    @if (videoFileMetadataVideoStream !== undefined) {
+      <ng-container ngbNavItem>
+        <a ngbNavLink i18n>Video stream</a>
+        <ng-template ngbNavContent>
+          <div class="file-metadata">
+            @for (item of videoFileMetadataVideoStream | keyvalue; track item.key) {
+              <ng-template [ngTemplateOutlet]="metadataInfo" [ngTemplateOutletContext]="{ $implicit: item }"></ng-template>
+            }
+          </div>
+        </ng-template>
+      </ng-container>
+    }
+
+    @if (videoFileMetadataAudioStream !== undefined) {
+      <ng-container ngbNavItem>
+        <a ngbNavLink i18n>Audio stream</a>
+        <ng-template ngbNavContent>
+          <div class="file-metadata">
+            @for (item of videoFileMetadataAudioStream | keyvalue; track item.key) {
+              <ng-template [ngTemplateOutlet]="metadataInfo" [ngTemplateOutletContext]="{ $implicit: item }"></ng-template>
+            }
+          </div>
+        </ng-template>
+      </ng-container>
+    }
+  </div>
+
+  @if (hasMetadata()) {
+    <div [ngbNavOutlet]="navMetadata"></div>
+  }
+
+  <div [hidden]="originalVideoFile() || !getVideoFile()?.torrentDownloadUrl" class="download-type">
+    <div class="peertube-radio-container">
+      <input type="radio" name="download" id="download-direct" [(ngModel)]="downloadType" value="direct">
+      <label i18n for="download-direct">Direct download</label>
+    </div>
+
+    <div class="peertube-radio-container">
+      <input type="radio" name="download" id="download-torrent" [(ngModel)]="downloadType" value="torrent">
+      <label i18n for="download-torrent">Torrent (.torrent file)</label>
+    </div>
+  </div>
+</div>
+
+<button
+  (click)="isAdvancedCustomizationCollapsed = !isAdvancedCustomizationCollapsed"
+  class="advanced-filters-button button-unstyle"
+  [attr.aria-expanded]="!isAdvancedCustomizationCollapsed" aria-controls="collapseBasic"
+  >
+  @if (isAdvancedCustomizationCollapsed) {
+    <span class="chevron-down"></span>
+
+    <ng-container i18n>More information/options</ng-container>
+  } @else {
+    <span class="chevron-up"></span>
+
+    <ng-container i18n>Less information/options</ng-container>
+  }
+</button>
+
+<div class="modal-footer inputs">
+  <ng-content select="cancel-button"></ng-content>
+
+  <input type="submit" i18n-value value="Download" class="peertube-button primary-button" (click)="download()" />
+</div>

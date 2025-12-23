@@ -1,32 +1,30 @@
 import { catchError } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { ScopedToken } from '@peertube/peertube-models'
 import { environment } from '../../../environments/environment'
 import { RestExtractor } from '../rest'
 
 @Injectable()
 export class ScopedTokensService {
-  private static BASE_SCOPED_TOKENS_URL = environment.apiUrl + '/api/v1/users/scoped-tokens'
+  private authHttp = inject(HttpClient)
+  private restExtractor = inject(RestExtractor)
 
-  constructor (
-    private authHttp: HttpClient,
-    private restExtractor: RestExtractor
-  ) {}
+  private static BASE_SCOPED_TOKENS_URL = environment.apiUrl + '/api/v1/users/scoped-tokens'
 
   getScopedTokens () {
     return this.authHttp
-            .get<ScopedToken>(ScopedTokensService.BASE_SCOPED_TOKENS_URL)
-            .pipe(
-              catchError(res => this.restExtractor.handleError(res))
-            )
+      .get<ScopedToken>(ScopedTokensService.BASE_SCOPED_TOKENS_URL)
+      .pipe(
+        catchError(res => this.restExtractor.handleError(res))
+      )
   }
 
   renewScopedTokens () {
     return this.authHttp
-            .post<ScopedToken>(ScopedTokensService.BASE_SCOPED_TOKENS_URL, {})
-            .pipe(
-              catchError(res => this.restExtractor.handleError(res))
-            )
+      .post<ScopedToken>(ScopedTokensService.BASE_SCOPED_TOKENS_URL, {})
+      .pipe(
+        catchError(res => this.restExtractor.handleError(res))
+      )
   }
 }

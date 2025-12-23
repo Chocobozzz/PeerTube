@@ -5,22 +5,23 @@
 .account-flagged-handle,
 .video-owner {
   font-size: 11px;
-  color: var(--greyForegroundColor);
+  color: pvar(--fg-300);
 }
 
 .abuse-messages {
   my-global-icon {
-    @include margin-left(3px);
-
-    width: 22px;
     position: relative;
-    top: -2px;
+    top: -1px;
+
+    @include global-icon-size(22px);
+    @include margin-left(3px);
   }
 }
 
 .table-video-text my-global-icon,
 my-video-cell my-global-icon {
-  width: 15px;
   position: relative;
   top: -2px;
+
+  @include global-icon-size(15px);
 }

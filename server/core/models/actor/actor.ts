@@ -1,4 +1,4 @@
-import { forceNumber, maxBy } from '@peertube/peertube-core-utils'
+import { findAppropriateImage, forceNumber, maxBy } from '@peertube/peertube-core-utils'
 import { ActivityIconObject, ActorImageType, ActorImageType_Type, type ActivityPubActorType } from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { activityPubContextify } from '@server/helpers/activity-pub-utils.js'
@@ -7,6 +7,7 @@ import { ModelCache } from '@server/models/shared/model-cache.js'
 import { Op, QueryTypes, Transaction, col, fn, literal, where } from 'sequelize'
 import {
   AllowNull,
+  BeforeDestroy,
   BelongsTo,
   Column,
   CreatedAt,
@@ -14,8 +15,8 @@ import {
   DefaultScope,
   ForeignKey,
   HasMany,
-  HasOne,
-  Is, Scopes,
+  Is,
+  Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -28,12 +29,7 @@ import {
   isActorPublicKeyValid
 } from '../../helpers/custom-validators/activitypub/actor.js'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
-import {
-  ACTIVITY_PUB,
-  ACTIVITY_PUB_ACTOR_TYPES,
-  CONSTRAINTS_FIELDS, SERVER_ACTOR_NAME,
-  WEBSERVER
-} from '../../initializers/constants.js'
+import { ACTIVITY_PUB, ACTIVITY_PUB_ACTOR_TYPES, CONSTRAINTS_FIELDS, SERVER_ACTOR_NAME, WEBSERVER } from '../../initializers/constants.js'
 import {
   MActor,
   MActorAPAccount,
@@ -51,12 +47,23 @@ import {
 } from '../../types/models/index.js'
 import { AccountModel } from '../account/account.js'
 import { getServerActor } from '../application/application.js'
+import { UploadImageModel } from '../application/upload-image.js'
 import { ServerModel } from '../server/server.js'
 import { SequelizeModel, buildSQLAttributes, isOutdated, throwIfNotValid } from '../shared/index.js'
 import { VideoChannelModel } from '../video/video-channel.js'
 import { VideoModel } from '../video/video.js'
 import { ActorFollowModel } from './actor-follow.js'
 import { ActorImageModel } from './actor-image.js'
+import { ActorReservedModel } from './actor-reserved.js'
+
+export const actorSummaryAttributes = [
+  'id',
+  'preferredUsername',
+  'url',
+  'serverId',
+  'accountId',
+  'videoChannelId'
+] as const satisfies (keyof AttributesOnly<ActorModel>)[]
 
 enum ScopeNames {
   FULL = 'FULL'
@@ -155,79 +162,86 @@ export const unusedActorAttributesForAPI: (keyof AttributesOnly<ActorModel>)[] =
     },
     {
       fields: [ 'followersUrl' ]
+    },
+    {
+      fields: [ 'accountId' ],
+      unique: true
+    },
+    {
+      fields: [ 'videoChannelId' ],
+      unique: true
     }
   ]
 })
 export class ActorModel extends SequelizeModel<ActorModel> {
-
   @AllowNull(false)
   @Column(DataType.ENUM(...Object.values(ACTIVITY_PUB_ACTOR_TYPES)))
-  type: ActivityPubActorType
+  declare type: ActivityPubActorType
 
   @AllowNull(false)
   @Is('ActorPreferredUsername', value => throwIfNotValid(value, isActorPreferredUsernameValid, 'actor preferred username'))
   @Column
-  preferredUsername: string
+  declare preferredUsername: string
 
   @AllowNull(false)
   @Is('ActorUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
-  url: string
+  declare url: string
 
   @AllowNull(true)
   @Is('ActorPublicKey', value => throwIfNotValid(value, isActorPublicKeyValid, 'public key', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.PUBLIC_KEY.max))
-  publicKey: string
+  declare publicKey: string
 
   @AllowNull(true)
   @Is('ActorPublicKey', value => throwIfNotValid(value, isActorPrivateKeyValid, 'private key', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.PRIVATE_KEY.max))
-  privateKey: string
+  declare privateKey: string
 
   @AllowNull(false)
   @Is('ActorFollowersCount', value => throwIfNotValid(value, isActorFollowersCountValid, 'followers count'))
   @Column
-  followersCount: number
+  declare followersCount: number
 
   @AllowNull(false)
   @Is('ActorFollowersCount', value => throwIfNotValid(value, isActorFollowingCountValid, 'following count'))
   @Column
-  followingCount: number
+  declare followingCount: number
 
   @AllowNull(false)
   @Is('ActorInboxUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'inbox url'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
-  inboxUrl: string
+  declare inboxUrl: string
 
   @AllowNull(true)
   @Is('ActorOutboxUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'outbox url', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
-  outboxUrl: string
+  declare outboxUrl: string
 
   @AllowNull(true)
   @Is('ActorSharedInboxUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'shared inbox url', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
-  sharedInboxUrl: string
+  declare sharedInboxUrl: string
 
   @AllowNull(true)
   @Is('ActorFollowersUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'followers url', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
-  followersUrl: string
+  declare followersUrl: string
 
   @AllowNull(true)
   @Is('ActorFollowingUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'following url', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
-  followingUrl: string
+  declare followingUrl: string
 
   @AllowNull(true)
   @Column
-  remoteCreatedAt: Date
+  declare remoteCreatedAt: Date
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @HasMany(() => ActorImageModel, {
     as: 'Avatars',
@@ -240,7 +254,7 @@ export class ActorModel extends SequelizeModel<ActorModel> {
       type: ActorImageType.AVATAR
     }
   })
-  Avatars: Awaited<ActorImageModel>[]
+  declare Avatars: Awaited<ActorImageModel>[]
 
   @HasMany(() => ActorImageModel, {
     as: 'Banners',
@@ -253,7 +267,17 @@ export class ActorModel extends SequelizeModel<ActorModel> {
       type: ActorImageType.BANNER
     }
   })
-  Banners: Awaited<ActorImageModel>[]
+  declare Banners: Awaited<ActorImageModel>[]
+
+  @HasMany(() => UploadImageModel, {
+    as: 'UploadImages',
+    onDelete: 'cascade',
+    hooks: true,
+    foreignKey: {
+      allowNull: false
+    }
+  })
+  declare UploadImages: Awaited<UploadImageModel>[]
 
   @HasMany(() => ActorFollowModel, {
     foreignKey: {
@@ -263,7 +287,7 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     as: 'ActorFollowings',
     onDelete: 'cascade'
   })
-  ActorFollowing: Awaited<ActorFollowModel>[]
+  declare ActorFollowing: Awaited<ActorFollowModel>[]
 
   @HasMany(() => ActorFollowModel, {
     foreignKey: {
@@ -273,11 +297,11 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     as: 'ActorFollowers',
     onDelete: 'cascade'
   })
-  ActorFollowers: Awaited<ActorFollowModel>[]
+  declare ActorFollowers: Awaited<ActorFollowModel>[]
 
   @ForeignKey(() => ServerModel)
   @Column
-  serverId: number
+  declare serverId: number
 
   @BelongsTo(() => ServerModel, {
     foreignKey: {
@@ -285,25 +309,50 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     },
     onDelete: 'cascade'
   })
-  Server: Awaited<ServerModel>
+  declare Server: Awaited<ServerModel>
 
-  @HasOne(() => AccountModel, {
+  @ForeignKey(() => VideoChannelModel)
+  @Column
+  declare videoChannelId: number
+
+  @BelongsTo(() => VideoChannelModel, {
     foreignKey: {
       allowNull: true
     },
-    onDelete: 'cascade',
-    hooks: true
+    onDelete: 'cascade'
   })
-  Account: Awaited<AccountModel>
+  declare VideoChannel: Awaited<VideoChannelModel>
 
-  @HasOne(() => VideoChannelModel, {
+  @ForeignKey(() => AccountModel)
+  @Column
+  declare accountId: number
+
+  @BelongsTo(() => AccountModel, {
     foreignKey: {
       allowNull: true
     },
-    onDelete: 'cascade',
-    hooks: true
+    onDelete: 'cascade'
   })
-  VideoChannel: Awaited<VideoChannelModel>
+  declare Account: Awaited<AccountModel>
+
+  // ---------------------------------------------------------------------------
+
+  @BeforeDestroy
+  static async reserveActor (instance: ActorModel, options) {
+    if (instance.isLocal()) {
+      await ActorReservedModel.create({
+        preferredUsername: instance.preferredUsername,
+        url: instance.url,
+        publicKey: instance.publicKey,
+        privateKey: instance.privateKey,
+        actorId: instance.id,
+        accountId: instance.accountId,
+        videoChannelId: instance.videoChannelId
+      }, { transaction: options.transaction })
+    }
+
+    return undefined
+  }
 
   // ---------------------------------------------------------------------------
 
@@ -324,6 +373,15 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     })
   }
 
+  static getSQLSummaryAttributes (tableName: string, aliasPrefix = '') {
+    return buildSQLAttributes({
+      model: ActorModel,
+      tableName,
+      aliasPrefix,
+      includeAttributes: actorSummaryAttributes
+    })
+  }
+
   // ---------------------------------------------------------------------------
 
   // FIXME: have to specify the result type to not break peertube typings generation
@@ -333,32 +391,37 @@ export class ActorModel extends SequelizeModel<ActorModel> {
 
   // ---------------------------------------------------------------------------
 
-  static async load (id: number): Promise<MActor> {
+  static async load (id: number, transaction?: Transaction): Promise<MActor> {
     const actorServer = await getServerActor()
     if (id === actorServer.id) return actorServer
 
-    return ActorModel.unscoped().findByPk(id)
+    return ActorModel.unscoped().findByPk(id, { transaction })
   }
 
-  static loadFull (id: number): Promise<MActorFull> {
-    return ActorModel.scope(ScopeNames.FULL).findByPk(id)
+  static loadFull (id: number, transaction?: Transaction): Promise<MActorFull> {
+    return ActorModel.scope(ScopeNames.FULL).findByPk(id, { transaction })
   }
 
   static loadAccountActorFollowerUrlByVideoId (videoId: number, transaction: Transaction) {
     const query = `SELECT "actor"."id" AS "id", "actor"."followersUrl" AS "followersUrl" ` +
-                  `FROM "actor" ` +
-                  `INNER JOIN "account" ON "actor"."id" = "account"."actorId" ` +
-                  `INNER JOIN "videoChannel" ON "videoChannel"."accountId" = "account"."id" ` +
-                  `INNER JOIN "video" ON "video"."channelId" = "videoChannel"."id" AND "video"."id" = :videoId`
+      `FROM "actor" ` +
+      `INNER JOIN "account" ON "actor"."accountId" = "account"."id" ` +
+      `INNER JOIN "videoChannel" ON "videoChannel"."accountId" = "account"."id" ` +
+      `INNER JOIN "video" ON "video"."channelId" = "videoChannel"."id" AND "video"."id" = :videoId`
 
     const options = {
       type: QueryTypes.SELECT as QueryTypes.SELECT,
       replacements: { videoId },
-      plain: true as true,
+      plain: true,
       transaction
     }
 
     return ActorModel.sequelize.query<MActorId & MActorFollowersUrl>(query, options)
+      .then(res => {
+        if (res && res.length !== 0) return res[0]
+
+        return undefined
+      })
   }
 
   static listByFollowersUrls (followersUrls: string[], transaction?: Transaction): Promise<MActorFull[]> {
@@ -478,11 +541,44 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     return ActorModel.scope(ScopeNames.FULL).findOne(query)
   }
 
-  static rebuildFollowsCount (ofId: number, type: 'followers' | 'following', transaction?: Transaction) {
+  static loadByUniqueKeys (options: {
+    preferredUsername: string
+    serverId: number
+    url: string
+    transaction: Transaction
+  }) {
+    const { preferredUsername, serverId, url, transaction } = options
+
+    return ActorModel.findOne({
+      where: {
+        [Op.or]: [
+          {
+            url
+          },
+          {
+            serverId,
+            preferredUsername
+          }
+        ]
+      },
+      transaction
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  static async recalculateFollowsCount (options: {
+    ofId: number
+    type: 'followers' | 'following'
+    by: number
+    transaction?: Transaction
+  }) {
+    const { transaction, ofId, type, by } = options
+
     const sanitizedOfId = forceNumber(ofId)
     const where = { id: sanitizedOfId }
 
-    let columnToUpdate: string
+    let columnToUpdate: 'followersCount' | 'followingCount'
     let columnOfCount: string
 
     if (type === 'followers') {
@@ -493,10 +589,26 @@ export class ActorModel extends SequelizeModel<ActorModel> {
       columnOfCount = 'actorId'
     }
 
+    const actor = await this.load(ofId, transaction)
+
+    // Remote actor where we don't store all the actor follows
+    // So we just increment the counter
+    if (actor.serverId) {
+      if (!by) return
+
+      return ActorModel.increment(columnToUpdate, {
+        by,
+        where,
+        transaction
+      })
+    }
+
     return ActorModel.update({
       [columnToUpdate]: literal(`(SELECT COUNT(*) FROM "actorFollow" WHERE "${columnOfCount}" = ${sanitizedOfId} AND "state" = 'accepted')`)
     }, { where, transaction })
   }
+
+  // ---------------------------------------------------------------------------
 
   static loadAccountActorByVideoId (videoId: number, transaction: Transaction): Promise<MActor> {
     const query = {
@@ -529,6 +641,14 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     return ActorModel.unscoped().findOne(query)
   }
 
+  // ---------------------------------------------------------------------------
+
+  static getPublicKeyUrl (url: string) {
+    return url + '#main-key'
+  }
+
+  // ---------------------------------------------------------------------------
+
   getSharedInbox (this: MActorWithInboxes) {
     return this.sharedInboxUrl || this.inboxUrl
   }
@@ -542,7 +662,7 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     }
   }
 
-  toFormattedJSON (this: MActorFormattable) {
+  toFormattedJSON (this: MActorFormattable, includeBanner = true) {
     return {
       ...this.toFormattedSummaryJSON(),
 
@@ -552,7 +672,9 @@ export class ActorModel extends SequelizeModel<ActorModel> {
       followersCount: this.followersCount,
       createdAt: this.getCreatedAt(),
 
-      banners: (this.Banners || []).map(b => b.toFormattedJSON())
+      banners: includeBanner
+        ? (this.Banners || []).map(b => b.toFormattedJSON())
+        : undefined
     }
   }
 
@@ -561,7 +683,13 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     let image: ActivityIconObject[] // Banners
 
     if (this.hasImage(ActorImageType.AVATAR)) {
-      icon = this.Avatars.map(a => a.toActivityPubObject())
+      let avatars = this.Avatars
+
+      // Use 120px avatar as first position if possible, so that remote servers use it in priority (instead of using 48x48px)
+      const avatar120Px = avatars.find(a => a.width === 120)
+      if (avatar120Px) avatars = [ avatar120Px, ...avatars.filter(a => a.width !== 120) ]
+
+      icon = avatars.map(a => a.toActivityPubObject())
     }
 
     if (this.hasImage(ActorImageType.BANNER)) {
@@ -577,13 +705,12 @@ export class ActorModel extends SequelizeModel<ActorModel> {
       inbox: this.inboxUrl,
       outbox: this.outboxUrl,
       preferredUsername: this.preferredUsername,
-      url: this.url,
       name,
       endpoints: {
         sharedInbox: this.sharedInboxUrl
       },
       publicKey: {
-        id: this.getPublicKeyUrl(),
+        id: ActorModel.getPublicKeyUrl(this.url),
         owner: this.url,
         publicKeyPem: this.publicKey
       },
@@ -631,11 +758,7 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     return this.url + '/playlists'
   }
 
-  getPublicKeyUrl () {
-    return this.url + '#main-key'
-  }
-
-  isOwned () {
+  isLocal () {
     return this.serverId === null
   }
 
@@ -652,6 +775,8 @@ export class ActorModel extends SequelizeModel<ActorModel> {
   }
 
   getHost (this: MActorHostOnly) {
+    if (this.serverId && !this.Server) throw new Error('Server is not loaded in the object')
+
     return this.Server ? this.Server.host : WEBSERVER.HOST
   }
 
@@ -677,8 +802,18 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     return maxBy(images, 'height')
   }
 
+  getAppropriateQualityImage (type: ActorImageType_Type, width: number) {
+    if (!this.hasImage(type)) return undefined
+
+    const images = type === ActorImageType.AVATAR
+      ? this.Avatars
+      : this.Banners
+
+    return findAppropriateImage(images, width)
+  }
+
   isOutdated () {
-    if (this.isOwned()) return false
+    if (this.isLocal()) return false
 
     return isOutdated(this, ACTIVITY_PUB.ACTOR_REFRESH_INTERVAL)
   }

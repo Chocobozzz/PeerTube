@@ -1,6 +1,6 @@
-import { Transaction } from 'sequelize'
 import { LiveVideoError, UserAdminFlag, UserRight, VideoBlacklistCreate, VideoBlacklistType } from '@peertube/peertube-models'
 import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
+import { englishLanguage, t } from '@server/helpers/i18n.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import {
   MUser,
@@ -10,6 +10,7 @@ import {
   MVideoFullLight,
   MVideoWithBlacklistLight
 } from '@server/types/models/index.js'
+import { Transaction } from 'sequelize'
 import { logger, loggerTagsFactory } from '../helpers/logger.js'
 import { CONFIG } from '../initializers/config.js'
 import { VideoBlacklistModel } from '../models/video/video-blacklist.js'
@@ -21,7 +22,7 @@ import { Hooks } from './plugins/hooks.js'
 
 const lTags = loggerTagsFactory('blacklist')
 
-async function autoBlacklistVideoIfNeeded (parameters: {
+export async function autoBlacklistVideoIfNeeded (parameters: {
   video: MVideoWithBlacklistLight
   user?: MUser
   isRemote: boolean
@@ -42,7 +43,7 @@ async function autoBlacklistVideoIfNeeded (parameters: {
   const videoBlacklistToCreate = {
     videoId: video.id,
     unfederated: true,
-    reason: 'Auto-blacklisted. Moderator review required.',
+    reason: t('Automatically blocked. Moderator review is required.', user?.getLanguage() ?? englishLanguage),
     type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED
   }
   const [ videoBlacklist ] = await VideoBlacklistModel.findOrCreate<MVideoBlacklistVideo>({
@@ -67,7 +68,7 @@ async function autoBlacklistVideoIfNeeded (parameters: {
   return true
 }
 
-async function blacklistVideo (videoInstance: MVideoAccountLight, options: VideoBlacklistCreate) {
+export async function blacklistVideo (videoInstance: MVideoAccountLight, options: VideoBlacklistCreate) {
   const blacklist: MVideoBlacklistVideo = await VideoBlacklistModel.create({
     videoId: videoInstance.id,
     unfederated: options.unfederate === true,
@@ -87,7 +88,7 @@ async function blacklistVideo (videoInstance: MVideoAccountLight, options: Video
   Notifier.Instance.notifyOnVideoBlacklist(blacklist)
 }
 
-async function unblacklistVideo (videoBlacklist: MVideoBlacklist, video: MVideoFullLight) {
+export async function unblacklistVideo (videoBlacklist: MVideoBlacklist, video: MVideoFullLight) {
   const videoBlacklistType = await sequelizeTypescript.transaction(async t => {
     const unfederated = videoBlacklist.unfederated
     const videoBlacklistType = videoBlacklist.type
@@ -115,13 +116,7 @@ async function unblacklistVideo (videoBlacklist: MVideoBlacklist, video: MVideoF
 }
 
 // ---------------------------------------------------------------------------
-
-export {
-  autoBlacklistVideoIfNeeded,
-  blacklistVideo,
-  unblacklistVideo
-}
-
+// Private
 // ---------------------------------------------------------------------------
 
 function autoBlacklistNeeded (parameters: {
