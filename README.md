@@ -67,6 +67,59 @@ Extend the API endpoints to handle new activities and objects, ensuring complian
 - **Payment Handling**: Payments are processed through listeners' digital wallets, interfaced with Hyperledger Fabric.
 - **Streaming Data**: Nodes collect streaming data and report it to the ledger for data integrity and transparency.
 
+ʼʼʼʼ
+flowchart TD
+    %% Define Styles
+    classDef blockchain fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef p2p fill:#ade,stroke:#333,stroke-width:2px;
+    classDef actor fill:#ffd,stroke:#333,stroke-width:2px;
+    classDef storage fill:#eee,stroke:#333,stroke-width:2px;
+
+    %% Actors
+    Listener((Listener)):::actor
+    Artist((Artist)):::actor
+    Operator((Node Operator)):::actor
+
+    subgraph User_Space [User Environment]
+        Wallet[User Crypto Wallet]
+        Client[9ten Client App]
+    end
+
+    subgraph Public_Chain [Public Blockchain (Polygon/Eth)]
+        SC[Split-Payment Smart Contract]:::blockchain
+        Vault[Artist Payout Vault]:::blockchain
+    end
+
+    subgraph 9ten_Network [9ten Decentralized Network]
+        Node[Local 9ten Node / Oracle]:::p2p
+        Witness[Witness Node]:::p2p
+        HL[(Hyperledger Fabric Ledger)]:::storage
+    end
+
+    %% --- FLOW 1: SUBSCRIPTION ---
+    Listener -->|1. Pay $10 USDP| Wallet
+    Wallet -->|2. Transfer USDP| SC
+    SC -->|3a. Instant $1 Op Fee| Operator
+    SC -->|3b. Lock $9 Pool| Vault
+    SC -.->|4. Emit Event: SubVerified| Node
+    Node -->|5. Grant Premium Access| HL
+
+    %% --- FLOW 2: STREAMING & VERIFICATION (Three Eyes) ---
+    Listener -->|6. Press Play| Client
+    Client -->|7. Request Audio| Node
+    Node -->|8. Stream Audio Data| Client
+    Client -->|9. Report ListenActivity| Node
+    Node -->|10. Verify Bandwidth & Sign| Witness
+    Witness -->|11. Verify Signature| HL
+    Node -->|12. Commit Verified Stream| HL
+
+    %% --- FLOW 3: MONTHLY PAYOUT ---
+    HL -->|13. Calculate Top 9 (Equal Split)| Node
+    Node -->|14. Submit PayoutManifest| SC
+    SC -->|15. Unlock Funds| Vault
+    Vault -->|16. Direct Transfer| Artist
+ʼʼʼʼ
+
 ## Effective Dispute Resolution Mechanism
 
 ### Dispute Detection
