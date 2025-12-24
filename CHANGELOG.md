@@ -51,7 +51,7 @@
 
 ### Docker
 
-  * PeerTube Dockerfile is now based on Debian Trixie. `chocobozzz/peertube:production` can be used instead of `chocobozzz/peertube:production-trixie` (Debian suffix version is deprecated)
+  * PeerTube Dockerfile is now based on Debian Trixie. `chocobozzz/peertube:production` must now be used instead of `chocobozzz/peertube:production-trixie` (Debian suffix version is deprecated)
   * PostgreSQL version has been upgraded in [Docker Compose](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/docker-compose.yml). Please follow [this guide](https://docs.joinpeertube.org/install/docker#upgrade-postgresql-container) if you want to upgrade PostgreSQL in your Docker Compose
   * Redis version has been upgraded in [Docker Compose](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/docker-compose.yml). No maintenance task is required if you upgrade Redis in your Docker Compose
 
