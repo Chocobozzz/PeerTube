@@ -7953,9 +7953,9 @@
           <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7484733722080653014" datatype="html">
+      <trans-unit id="7484733722080653014" datatype="html" xml:space="preserve">
         <source>You can comment using an account on any ActivityPub-compatible instance (PeerTube/Mastodon account for example).</source>
-        <target state="new"> You can comment using an account on any ActivityPub-compatible instance (PeerTube/Mastodon account for example). </target>
+        <target state="translated">Du kan kommentera med ett konto på vilken ActivityPub-kompatibel instans som helst (till exempel ett PeerTube- eller Mastodon-konto).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">72,73</context>
@@ -19618,17 +19618,17 @@ color: red;
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4734036261865085437" datatype="html">
+      <trans-unit id="4734036261865085437" datatype="html" xml:space="preserve">
         <source>You can subscribe to the channel via any ActivityPub-capable fediverse instance (PeerTube or Mastodon for example).</source>
-        <target state="new"> You can subscribe to the channel via any ActivityPub-capable fediverse instance (PeerTube or Mastodon for example). </target>
+        <target state="translated">Du kan prenumerera på kanalen från vilken ActivityPub-kompatibel fediversuminstans som helst (till exempel PeerTube eller Mastodon).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">25,26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7954187697200187265" datatype="html">
+      <trans-unit id="7954187697200187265" datatype="html" xml:space="preserve">
         <source>You can interact with this via any ActivityPub-capable fediverse instance (PeerTube or Mastodon for example).</source>
-        <target state="new"> You can interact with this via any ActivityPub-capable fediverse instance (PeerTube or Mastodon for example). </target>
+        <target state="translated">Du kan interagera med detta från vilken ActivityPub-kompatibel fediversuminstans som helst (till exempel PeerTube eller Mastodon).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">31,32</context>
@@ -21068,9 +21068,9 @@ color: red;
           <context context-type="linenumber">267</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5768110395382587657" datatype="html">
+      <trans-unit id="5768110395382587657" datatype="html" xml:space="preserve">
         <source>Your current password is too long. Please reset it.</source>
-        <target state="new">Your current password is too long. Please reset it.</target>
+        <target state="translated">Ditt nuvarande lösenord är för långt. Du behöver återställa det.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
           <context context-type="linenumber">272</context>
@@ -22443,9 +22443,9 @@ color: red;
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3824663103894000237" datatype="html">
+      <trans-unit id="3824663103894000237" datatype="html" xml:space="preserve">
         <source>This field must be a valid 6-digit hexadecimal color code.</source>
-        <target state="new">This field must be a valid 6-digit hexadecimal color code.</target>
+        <target state="translated">Detta fält måste innehålla en giltig färgkod (RRGGBB där de tre värdena är ett hexadecimalt tal mellan 00-FF).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/common-validators.ts</context>
           <context context-type="linenumber">22</context>
@@ -24181,9 +24181,9 @@ color: red;
           <context context-type="linenumber">422</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="712087646607951600" datatype="html">
+      <trans-unit id="712087646607951600" datatype="html" xml:space="preserve">
         <source>Platform server moderation</source>
-        <target state="new">Platform server moderation</target>
+        <target state="translated">Moderering av plattformsserver</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">435</context>
@@ -24197,9 +24197,9 @@ color: red;
           <context context-type="linenumber">381</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8709893433757106476" datatype="html">
+      <trans-unit id="8709893433757106476" datatype="html" xml:space="preserve">
         <source>Platform account moderation</source>
-        <target state="new">Platform account moderation</target>
+        <target state="translated">Moderering av plattformskonton</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">392</context>
@@ -24245,9 +24245,9 @@ color: red;
           <context context-type="linenumber">445</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9183388719442195675" datatype="html">
+      <trans-unit id="9183388719442195675" datatype="html" xml:space="preserve">
         <source>Platform danger zone</source>
-        <target state="new">Platform danger zone</target>
+        <target state="translated">Plattformens farozon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">454</context>
@@ -24361,9 +24361,9 @@ color: red;
           <context context-type="linenumber">339</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4975588549700433407" datatype="html">
+      <trans-unit id="4975588549700433407" datatype="html" xml:space="preserve">
         <source>Manage user</source>
-        <target state="new">Manage user</target>
+        <target state="translated">Hantera användare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">367</context>
@@ -26415,9 +26415,9 @@ color: red;
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4103450444995968891" datatype="html">
+      <trans-unit id="4103450444995968891" datatype="html" xml:space="preserve">
         <source>Cannot load more videos. Please try again later.</source>
-        <target state="new">Cannot load more videos. Please try again later.</target>
+        <target state="translated">Det går inte att ladda fler videor. Försök igen senare.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.ts</context>
           <context context-type="linenumber">349</context>
