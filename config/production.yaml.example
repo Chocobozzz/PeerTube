@@ -98,7 +98,7 @@ redis:
     enable_tls: false
     master_name: ''
     sentinels:
-      - hostname: ''
+      - host: ''
         port: 26379
 
 # SMTP server to send emails
