@@ -75,7 +75,7 @@ class Redis {
         connectionName,
         connectTimeout,
         enableTLSForSentinelMode: CONFIG.REDIS.SENTINEL.ENABLE_TLS,
-        sentinelPassword: CONFIG.REDIS.AUTH,
+        sentinelPassword: CONFIG.REDIS.SENTINEL.PASSWORD,
         password: CONFIG.REDIS.AUTH,
         sentinels: CONFIG.REDIS.SENTINEL.SENTINELS,
         name: CONFIG.REDIS.SENTINEL.MASTER_NAME,

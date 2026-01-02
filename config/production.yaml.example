@@ -91,12 +91,13 @@ database:
 redis:
   hostname: '127.0.0.1'
   port: 6379
-  auth: null # Used by both standalone and sentinel
+  auth: null
   db: 0
   sentinel:
     enabled: false
     enable_tls: false
     master_name: ''
+    password: ''
     sentinels:
       - host: ''
         port: 26379
