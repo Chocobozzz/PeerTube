@@ -33,6 +33,7 @@ import { LocalVideoViewerWatchSectionModel } from '@server/models/view/local-vid
 import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer.js'
 import { WatchedWordsListModel } from '@server/models/watched-words/watched-words-list.js'
 import pg from 'pg'
+import { readFileSync } from 'fs'
 import { QueryTypes, Transaction } from 'sequelize'
 import { Sequelize as SequelizeTypescript } from 'sequelize-typescript'
 import { logger } from '../helpers/logger.js'
@@ -85,10 +86,17 @@ const poolMax = CONFIG.DATABASE.POOL.MAX
 
 let dialectOptions: any = {}
 
-if (CONFIG.DATABASE.SSL) {
+// Backward compatibility
+if (CONFIG.DATABASE.SSL === true) {
+  dialectOptions = { ssl: { rejectUnauthorized: false } }
+} else if (CONFIG.DATABASE.SSL) {
   dialectOptions = {
+    // For reference: https://node-postgres.com/features/ssl
     ssl: {
-      rejectUnauthorized: false
+      ...(CONFIG.DATABASE.SSL.REJECT_UNAUTHORIZED != null && { rejectUnauthorized: CONFIG.DATABASE.SSL.REJECT_UNAUTHORIZED }),
+      ...(CONFIG.DATABASE.SSL.CA && { ca: readFileSync(CONFIG.DATABASE.SSL.CA, { encoding: 'utf8' }) }),
+      ...(CONFIG.DATABASE.SSL.CERT && { cert: readFileSync(CONFIG.DATABASE.SSL.CERT, { encoding: 'utf8' }) }),
+      ...(CONFIG.DATABASE.SSL.KEY && { key: readFileSync(CONFIG.DATABASE.SSL.KEY, { encoding: 'utf8' }) }),
     }
   }
 }

@@ -80,7 +80,13 @@ trust_proxy:
 database:
   hostname: '127.0.0.1'
   port: 5432
-  ssl: false
+  # Use `ssl: false` in case you don't need it
+  ssl:
+    reject_unauthorized: false
+    # You should use absolute paths. 
+    # ca: '/path/to/server-certificates/root.crt'
+    # cert: '/path/to/client-key/postgresql.key'
+    # key: '/path/to/client-certificates/postgresql.crt'
   suffix: '_dev'
   username: 'peertube'
   password: 'peertube'
