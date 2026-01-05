@@ -1585,17 +1585,17 @@
           <context context-type="linenumber">109</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7300340273184779103" datatype="html">
+      <trans-unit id="7300340273184779103" datatype="html" xml:space="preserve">
         <source>Email is now public</source>
-        <target state="translated">Электронная почта теперь общедоступна</target>
+        <target state="translated">Email теперь общедоступен</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.ts</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7474057965374731586" datatype="html">
+      <trans-unit id="7474057965374731586" datatype="html" xml:space="preserve">
         <source>Email is now private</source>
-        <target state="translated">Электронная почта теперь скрыта</target>
+        <target state="translated">Email теперь скрыт</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -2731,9 +2731,9 @@
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3997350348765083892">
+      <trans-unit id="3997350348765083892" xml:space="preserve">
         <source>Username or email address</source>
-        <target>Имя пользователя или электронный адрес</target>
+        <target state="translated">Имя пользователя или адрес email</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">57</context>
@@ -3403,7 +3403,7 @@
       </trans-unit>
       <trans-unit id="3848077896245199337" datatype="html" xml:space="preserve">
         <source>Setup your account, managing video playlists, discover third-party applications...</source>
-        <target state="translated">Настройте свою учетную запись, управляйте списками воспроизведения видео, используйте сторонние приложения...</target>
+        <target state="translated">Настройте свою учетную запись, управляйте плейлистами видео, используйте сторонние приложения...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">54</context>
@@ -3903,7 +3903,7 @@
       </trans-unit>
       <trans-unit id="8309133070608650316" datatype="html" xml:space="preserve">
         <source>Collaboration on channels are coming to <x id="PH" equiv-text="instanceName"/></source>
-        <target state="translated">Коллаборации на каналах прибыли на <x id="PH" equiv-text="instanceName"/></target>
+        <target state="translated">Соавторство на каналах прибыло на <x id="PH" equiv-text="instanceName"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context>
           <context context-type="linenumber">35</context>
@@ -3911,7 +3911,7 @@
       </trans-unit>
       <trans-unit id="7512666561651719221" datatype="html" xml:space="preserve">
         <source>You can now &lt;strong&gt;invite other users&lt;/strong&gt; to collaborate on your channel</source>
-        <target state="translated">Теперь вы можете &lt;strong&gt;приглашать других пользователей&lt;/strong&gt; для коллабораций на вашем канале</target>
+        <target state="translated">Теперь вы можете &lt;strong&gt;приглашать других пользователей&lt;/strong&gt; для соавторства на вашем канале</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context>
           <context context-type="linenumber">36</context>
@@ -6683,9 +6683,9 @@
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="937533808893845780" datatype="html">
+      <trans-unit id="937533808893845780" datatype="html" xml:space="preserve">
         <source>This playlist is private so you won't be able to share it with external users</source>
-        <target state="translated">Этот плейлист является частным, поэтому вы не сможете поделиться им с другими пользователями</target>
+        <target state="translated">Этот плейлист является приватным, поэтому вы не сможете поделиться им с другими пользователями</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">19</context>
@@ -6701,7 +6701,7 @@
       </trans-unit>
       <trans-unit id="3522196594292220614" datatype="html" xml:space="preserve">
         <source>Playlist URL</source>
-        <target state="translated">Плейлист URL</target>
+        <target state="translated">URL плейлиста</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">40</context>
@@ -8207,7 +8207,7 @@
       </trans-unit>
       <trans-unit id="8728252018840518768" datatype="html" xml:space="preserve">
         <source>Your video playlists with thumbnail files</source>
-        <target state="translated">Ваши плейлисты видео с файлами миниатюр</target>
+        <target state="translated">Ваши плейлисты с файлами миниатюр</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">20</context>
@@ -8279,7 +8279,7 @@
       </trans-unit>
       <trans-unit id="6448402358500159809" datatype="html" xml:space="preserve">
         <source>An email will be sent when the export archive is available.</source>
-        <target state="translated">Когда архив экспорта будет доступен, будет отправлено электронное письмо.</target>
+        <target state="translated">Когда архив экспорта будет доступен, будет отправлено письмо email.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">37</context>
@@ -8653,9 +8653,9 @@
           <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8371296837649897723" datatype="html">
+      <trans-unit id="8371296837649897723" datatype="html" xml:space="preserve">
         <source>If you leave the password empty, an email will be sent to the user.</source>
-        <target state="translated">Если вы оставите пароль пустым, пользователю будет отправлено электронное письмо.</target>
+        <target state="translated">Если вы оставите пароль пустым, пользователю будет отправлено письмо email.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">144</context>
@@ -8761,9 +8761,9 @@
           <context context-type="linenumber">249</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6667250632809964191">
+      <trans-unit id="6667250632809964191" xml:space="preserve">
         <source>Send a link to reset the password by email to the user</source>
-        <target>Отправить ссылку для сброса пароля на электронную почту пользователя</target>
+        <target state="translated">Отправить ссылку для сброса пароля на email пользователя</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">267</context>
@@ -10609,7 +10609,7 @@
       </trans-unit>
       <trans-unit id="977381557718671058" datatype="html" xml:space="preserve">
         <source>Default language used for users, in emails for example.</source>
-        <target state="translated">Язык, используемый пользователями по умолчанию, например в электронных письмах.</target>
+        <target state="translated">Язык, используемый пользователями по умолчанию, например в email.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">85</context>
@@ -11163,9 +11163,9 @@
           <context context-type="linenumber">138</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4497115134891299867">
+      <trans-unit id="4497115134891299867" xml:space="preserve">
         <source>Signup requires email verification</source>
-        <target>Для регистрации требуется подтверждение электронной почты</target>
+        <target state="translated">Для регистрации требуется подтверждение адреса email</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">170</context>
@@ -12007,9 +12007,9 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3171683206914962995">
+      <trans-unit id="3171683206914962995" xml:space="preserve">
         <source>Admin email</source>
-        <target>Электронная почта администратора</target>
+        <target state="translated">Email администратора</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">13</context>
@@ -12527,9 +12527,9 @@
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2093595615152706886" datatype="html">
+      <trans-unit id="2093595615152706886" datatype="html" xml:space="preserve">
         <source>Web Videos enabled</source>
-        <target state="translated">Включено веб-видео</target>
+        <target state="translated">Web-видео включено</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">82</context>
@@ -12575,9 +12575,9 @@
           <context context-type="linenumber">97</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4354548488369167450" datatype="html">
+      <trans-unit id="4354548488369167450" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with Web Videos:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled Web Videos support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Требуется ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Генерируйте списки воспроизведения HLS и фрагментированные файлы MP4, что приводит к лучшему воспроизведению, чем при использовании веб-видео:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Изменение разрешения происходит более плавно<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Более быстрое воспроизведение, особенно с длинными видео<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Более стабильное воспроизведение (меньше ошибок/бесконечная загрузка)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Если вы также включили поддержку веб-видео, это увеличит объем хранилища видео в 2 раза<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Требуется ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Генерируйте плейлисты HLS и фрагментированные файлы MP4, что приводит к лучшему воспроизведению, чем при использовании web-видео:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Изменение разрешения происходит более плавно<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Более быстрое воспроизведение, особенно с длинными видео<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Более стабильное воспроизведение (меньше ошибок/бесконечная загрузка)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Если вы также включили поддержку web-видео, это увеличит объем хранилища видео в 2 раза<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">102</context>
@@ -12785,7 +12785,7 @@
       </trans-unit>
       <trans-unit id="2487046557845958040" datatype="html" xml:space="preserve">
         <source>Automatically enable Web Videos transcoding because at least 1 output format must be enabled when transcoding is enabled</source>
-        <target state="translated">Автоматическое включение транскодирования веб-видео, поскольку при включении транскодирования должен быть включен по крайней мере 1 выходной формат</target>
+        <target state="translated">Автоматическое включение транскодирования web-видео, поскольку при включении транскодирования должен быть включен по крайней мере 1 выходной формат</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.ts</context>
           <context context-type="linenumber">271</context>
@@ -13189,9 +13189,9 @@
           <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9012586956848595996" datatype="html">
+      <trans-unit id="9012586956848595996" datatype="html" xml:space="preserve">
         <source>EMAIL</source>
-        <target state="translated">ЭЛЕКТРОННАЯ ПОЧТА</target>
+        <target state="translated">EMAIL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">127</context>
@@ -13697,17 +13697,17 @@
           <context context-type="linenumber">220</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="264068562357780835" datatype="html">
+      <trans-unit id="264068562357780835" datatype="html" xml:space="preserve">
         <source>New email</source>
-        <target state="translated">Новая электронная почта</target>
+        <target state="translated">Новое письмо email</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3000005804987112527" datatype="html">
+      <trans-unit id="3000005804987112527" datatype="html" xml:space="preserve">
         <source>Change email</source>
-        <target state="translated">Изменить адрес электронной почты</target>
+        <target state="translated">Изменить адрес email</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">48</context>
@@ -14750,9 +14750,9 @@
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3458449147454605646" datatype="html">
+      <trans-unit id="3458449147454605646" datatype="html" xml:space="preserve">
         <source>Request a new verification email</source>
-        <target state="translated">Запросить новое электронное письмо с подтверждением</target>
+        <target state="translated">Запросить новое письмо email с подтверждением</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
           <context context-type="linenumber">14</context>
@@ -14774,9 +14774,9 @@
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4027779086550572813">
+      <trans-unit id="4027779086550572813" xml:space="preserve">
         <source>Send verification email</source>
-        <target>Отправить подтверждение по электронной почте</target>
+        <target state="translated">Отправить подтверждение по email</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-new-account-ask-send-email/verify-new-account-ask-send-email.component.html</context>
           <context context-type="linenumber">19</context>
@@ -14792,23 +14792,23 @@
       </trans-unit>
       <trans-unit id="248731258067914565" datatype="html" xml:space="preserve">
         <source>Verify account via email</source>
-        <target state="translated">Подтвердить учетную запись по электронной почте</target>
+        <target state="translated">Подтвердить учетную запись по email</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/routes.ts</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6040639330855198542" datatype="html">
+      <trans-unit id="6040639330855198542" datatype="html" xml:space="preserve">
         <source>Ask to send an email to verify your account</source>
-        <target state="translated">Попросить отправить электронное письмо для подтверждения вашей учетной записи</target>
+        <target state="translated">Попросить отправить письмо email для подтверждения вашей учетной записи</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/routes.ts</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5634180635200972996" datatype="html">
+      <trans-unit id="5634180635200972996" datatype="html" xml:space="preserve">
         <source>Email verified!</source>
-        <target state="translated">Электронная почта подтверждена!</target>
+        <target state="translated">Email подтвержден!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">2</context>
@@ -14816,7 +14816,7 @@
       </trans-unit>
       <trans-unit id="2584956257063845668" datatype="html" xml:space="preserve">
         <source>Your email has been verified and your account request has been sent!</source>
-        <target state="translated">Ваша электронная почта подтверждена, и запрос на создание учетной записи отправлен!</target>
+        <target state="translated">Ваш email подтвержден, и запрос на создание учетной записи отправлен!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">7</context>
@@ -14834,9 +14834,9 @@
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="381800444567495906" datatype="html">
+      <trans-unit id="381800444567495906" datatype="html" xml:space="preserve">
         <source>Your email has been verified and your account has been created!</source>
-        <target state="translated">Ваша электронная почта подтверждена, и ваша учетная запись создана!</target>
+        <target state="translated">Ваш email подтвержден, и ваша учетная запись создана!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">13</context>
@@ -14878,17 +14878,17 @@
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7273859988396814188" datatype="html">
+      <trans-unit id="7273859988396814188" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Check your email<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to validate your account and complete your registration request. </source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Проверьте свою электронную почту<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, чтобы подтвердить свою учетную запись и заполнить заявку на регистрацию. </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Проверьте свой email<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, чтобы подтвердить свою учетную запись и заполнить заявку на регистрацию. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7056036938435794110" datatype="html">
+      <trans-unit id="7056036938435794110" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Check your email<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to validate your account and complete your registration. </source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Проверьте свою электронную почту<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, чтобы подтвердить свою учетную запись и завершить регистрацию. </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Проверьте свой email<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, чтобы подтвердить свою учетную запись и завершить регистрацию. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">26</context>
@@ -15268,9 +15268,9 @@
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1769661379068269645">
+      <trans-unit id="1769661379068269645" xml:space="preserve">
         <source>Your email</source>
-        <target>Ваша электронная почта</target>
+        <target state="translated">Ваш email</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-contact/about-contact.component.html</context>
           <context context-type="linenumber">21</context>
@@ -15918,7 +15918,7 @@
       </trans-unit>
       <trans-unit id="1789116494691736014" datatype="html" xml:space="preserve">
         <source>Request email for account verification</source>
-        <target state="translated">Запрос электронной почты для подтверждения учетной записи</target>
+        <target state="translated">Запрос email для подтверждения учетной записи</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-new-account-ask-send-email/verify-new-account-ask-send-email.component.html</context>
           <context context-type="linenumber">2</context>
@@ -18458,9 +18458,9 @@
           <context context-type="linenumber">4,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2237982448344718491" datatype="html">
+      <trans-unit id="2237982448344718491" datatype="html" xml:space="preserve">
         <source>Registration email has not been verified. Email delivery has been disabled by default.</source>
-        <target state="translated">Электронная почта для регистрации не подтверждена. Доставка электронной почты отключена по умолчанию.</target>
+        <target state="translated">Адрес email для регистрации не подтвержден. Доставка email отключена по умолчанию.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">27</context>
@@ -18474,17 +18474,17 @@
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4287036840463640002" datatype="html">
+      <trans-unit id="4287036840463640002" datatype="html" xml:space="preserve">
         <source>An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its account has been created with the moderation response you'll write below. </source>
-        <target state="translated">Электронное письмо будет отправлено на <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> с объяснением того, что его учетная запись была создана с помощью ответа модератора, который вы напишете ниже. </target>
+        <target state="translated">Письмо email будет отправлено на <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> с объяснением того, что его учетная запись была создана с помощью ответа модератора, который вы напишете ниже. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6252848909934071768" datatype="html">
+      <trans-unit id="6252848909934071768" datatype="html" xml:space="preserve">
         <source>Emails are not enabled on this instance so PeerTube won't be able to send an email to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its account has been created. </source>
-        <target state="translated">Электронная почта в этом экземпляре не включена, поэтому PeerTube не сможет отправить электронное письмо на адрес <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> с уведомлением о создании учетной записи. </target>
+        <target state="translated">Доставка email в этом экземпляре не включена, поэтому PeerTube не сможет отправить письмо email на адрес <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> с уведомлением о создании учетной записи. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">37</context>
@@ -18514,9 +18514,9 @@
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="608706297814044931" datatype="html">
+      <trans-unit id="608706297814044931" datatype="html" xml:space="preserve">
         <source>Prevent email from being sent to the user</source>
-        <target state="translated">Запретить отправку электронной почты пользователю</target>
+        <target state="translated">Запретить отправку email пользователю</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">80</context>
@@ -18626,9 +18626,9 @@
           <context context-type="linenumber">142</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8819563010322372715">
+      <trans-unit id="8819563010322372715" xml:space="preserve">
         <source>An email asking for password reset has been sent to <x id="PH"/>.</source>
-        <target>Электронное письмо для сброса пароля было отправлено пользователю <x id="PH"/>.</target>
+        <target state="translated">Письмо email для сброса пароля было отправлено пользователю <x id="PH"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-update.component.ts</context>
           <context context-type="linenumber">149</context>
@@ -18746,17 +18746,17 @@
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1882931826815906053" datatype="html">
+      <trans-unit id="1882931826815906053" datatype="html" xml:space="preserve">
         <source>With Web Videos</source>
-        <target state="translated">С Веб-Видео</target>
+        <target state="translated">С web-видео</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1590370632695044398" datatype="html">
+      <trans-unit id="1590370632695044398" datatype="html" xml:space="preserve">
         <source>Without Web Videos</source>
-        <target state="translated">Без Веб-Видео</target>
+        <target state="translated">Без web-видео</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">75</context>
@@ -19002,9 +19002,9 @@
           <context context-type="linenumber">246</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3104427236147521673" datatype="html">
+      <trans-unit id="3104427236147521673" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 user email set as verified.} other {<x id="count"/> user emails set as verified.}}</source>
-        <target state="translated">{count, plural, one {<x id="count"/> адрес электронной почты пользователя установлен как подтвержденный.} few {<x id="count"/> адреса электронной почты пользователя установлены как подтвержденные.} other {<x id="count"/> адресов электронной почты пользователей установлены как подтвержденные.}}</target>
+        <target state="translated">{count, plural, =1 {1 email адрес пользователя подтвержден.} other {<x id="count"/> email адресов подтверждено.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">264</context>
@@ -19118,17 +19118,17 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6012072687166259654" datatype="html">
+      <trans-unit id="6012072687166259654" datatype="html" xml:space="preserve">
         <source>Please check your emails to verify your new email.</source>
-        <target state="translated">Пожалуйста, проверьте свою электронную почту, чтобы проверить ваш новый электронный адрес.</target>
+        <target state="translated">Пожалуйста, проверьте свой email, чтобы подтвердить ваш новый адрес email.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.ts</context>
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6585766371605707311" datatype="html">
+      <trans-unit id="6585766371605707311" datatype="html" xml:space="preserve">
         <source>Email updated.</source>
-        <target state="translated">Адрес электронной почты обновлен.</target>
+        <target state="translated">Адрес email обновлен.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.ts</context>
           <context context-type="linenumber">59</context>
@@ -19236,7 +19236,7 @@
       </trans-unit>
       <trans-unit id="5468340957320375738" datatype="html" xml:space="preserve">
         <source>⚠️ Your email cannot be used in podcast RSS feeds because it has not yet been verified.</source>
-        <target state="translated">⚠️ Ваш адрес электронной почты не может быть использован в RSS-лентах подкастов, поскольку он еще не был подтвержден.</target>
+        <target state="translated">⚠️ Ваш адрес email не может быть использован в RSS-лентах подкастов, поскольку он еще не был подтвержден.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.html</context>
           <context context-type="linenumber">14</context>
@@ -19244,7 +19244,7 @@
       </trans-unit>
       <trans-unit id="4422757693184001803" datatype="html" xml:space="preserve">
         <source>Save email settings</source>
-        <target state="translated">Сохранить настройки электронной почты</target>
+        <target state="translated">Сохранить настройки email</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.html</context>
           <context context-type="linenumber">21</context>
@@ -19804,7 +19804,7 @@
       </trans-unit>
       <trans-unit id="8065180360788653509" datatype="html" xml:space="preserve">
         <source>Are you sure you want to remove invitation of &lt;strong&gt;<x id="PH" equiv-text="collaborator.account.displayName"/>&lt;/strong&gt; to collaborate on your channel?</source>
-        <target state="translated">Вы уверены, что хотите удалить приглашение &lt;strong&gt;<x id="PH" equiv-text="collaborator.account.displayName"/>&lt;/strong&gt; для коллаборации на вашем канале?</target>
+        <target state="translated">Вы уверены, что хотите удалить приглашение &lt;strong&gt;<x id="PH" equiv-text="collaborator.account.displayName"/>&lt;/strong&gt; для соавторства на вашем канале?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.ts</context>
           <context context-type="linenumber">71</context>
@@ -19812,7 +19812,7 @@
       </trans-unit>
       <trans-unit id="1861878820024137953" datatype="html" xml:space="preserve">
         <source>Are you sure you want to remove &lt;strong&gt;<x id="PH" equiv-text="collaborator.account.displayName"/>&lt;/strong&gt; as a collaborator?</source>
-        <target state="translated">Вы уверены, что хотите удалить &lt;strong&gt;<x id="PH" equiv-text="collaborator.account.displayName"/>&lt;/strong&gt; как коллаборатора?</target>
+        <target state="translated">Вы уверены, что хотите удалить &lt;strong&gt;<x id="PH" equiv-text="collaborator.account.displayName"/>&lt;/strong&gt; как соавтора?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.ts</context>
           <context context-type="linenumber">72</context>
@@ -19820,7 +19820,7 @@
       </trans-unit>
       <trans-unit id="751060137543557029" datatype="html" xml:space="preserve">
         <source>Remove collaborator</source>
-        <target state="translated">Удалить коллаборатора</target>
+        <target state="translated">Удалить соавтора</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.ts</context>
           <context context-type="linenumber">76</context>
@@ -19828,7 +19828,7 @@
       </trans-unit>
       <trans-unit id="405732769723561556" datatype="html" xml:space="preserve">
         <source>You have been removed as a collaborator from <x id="PH" equiv-text="this.videoChannelEdit.channel.name"/> channel</source>
-        <target state="translated">Вы удалили коллаборатора c канала <x id="PH" equiv-text="this.videoChannelEdit.channel.name"/></target>
+        <target state="translated">Вы удалили соавтора c канала <x id="PH" equiv-text="this.videoChannelEdit.channel.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.ts</context>
           <context context-type="linenumber">87</context>
@@ -19836,7 +19836,7 @@
       </trans-unit>
       <trans-unit id="5832118307296065997" datatype="html" xml:space="preserve">
         <source>Do you want to send an invitation to &lt;strong&gt;<x id="PH" equiv-text="this.newEditorUsername"/>&lt;/strong&gt; to collaborate on &lt;strong&gt;<x id="PH_1" equiv-text="this.videoChannelEdit.channel.name"/>&lt;/strong&gt;?</source>
-        <target state="translated">Вы хотите отправить приглашение &lt;strong&gt;<x id="PH" equiv-text="this.newEditorUsername"/>&lt;/strong&gt; для коллаборации на &lt;strong&gt;<x id="PH_1" equiv-text="this.videoChannelEdit.channel.name"/>&lt;/strong&gt;?</target>
+        <target state="translated">Вы хотите отправить приглашение &lt;strong&gt;<x id="PH" equiv-text="this.newEditorUsername"/>&lt;/strong&gt; для соавторства на &lt;strong&gt;<x id="PH_1" equiv-text="this.videoChannelEdit.channel.name"/>&lt;/strong&gt;?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.ts</context>
           <context context-type="linenumber">133</context>
@@ -20692,9 +20692,9 @@
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2687679787442328897">
+      <trans-unit id="2687679787442328897" xml:space="preserve">
         <source>An email with verification link will be sent to <x id="PH"/>.</source>
-        <target>Электронное письмо со ссылкой на подтверждение было отправлено на <x id="PH"/>.</target>
+        <target state="translated">Письмо email со ссылкой на подтверждение было отправлено на <x id="PH"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-new-account-ask-send-email/verify-new-account-ask-send-email.component.ts</context>
           <context context-type="linenumber">50</context>
@@ -21292,17 +21292,17 @@
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5378618511917875694" datatype="html">
+      <trans-unit id="5378618511917875694" datatype="html" xml:space="preserve">
         <source>User email has been verified</source>
-        <target state="translated">Электронная почта пользователя подтверждена</target>
+        <target state="translated">Адрес email пользователя подтвержден</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-email-info.component.ts</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2754481302921121772" datatype="html">
+      <trans-unit id="2754481302921121772" datatype="html" xml:space="preserve">
         <source>User email hasn't been verified</source>
-        <target state="translated">Электронная почта пользователя не подтверждена</target>
+        <target state="translated">Адрес email пользователя не подтвержден</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-email-info.component.ts</context>
           <context context-type="linenumber">19</context>
@@ -21716,17 +21716,17 @@
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="240096858386658337">
+      <trans-unit id="240096858386658337" xml:space="preserve">
         <source>Admin email is required.</source>
-        <target>Требуется электронная почта администратора.</target>
+        <target state="translated">Требуется email администратора.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4392533896009432078">
+      <trans-unit id="4392533896009432078" xml:space="preserve">
         <source>Admin email must be valid.</source>
-        <target>Электронная почта администратора должна быть действительной.</target>
+        <target state="translated">Email администратора должен быть действительным.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">56</context>
@@ -21908,9 +21908,9 @@
           <context context-type="linenumber">137</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8602814243662345124">
+      <trans-unit id="8602814243662345124" xml:space="preserve">
         <source>Email is required.</source>
-        <target>Требуется электронная почта.</target>
+        <target state="translated">Требуется адрес email.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -21920,9 +21920,9 @@
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4591482207344282590">
+      <trans-unit id="4591482207344282590" xml:space="preserve">
         <source>Email must be valid.</source>
-        <target>Электронная почта должна быть действительной.</target>
+        <target state="translated">Адрес email должен быть действительным.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">8</context>
@@ -24425,9 +24425,9 @@
           <context context-type="linenumber">139</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8363008638081993167" datatype="html">
+      <trans-unit id="8363008638081993167" datatype="html" xml:space="preserve">
         <source>Contains personal information that could be used to track, identify, contact or impersonate someone (e.g. name, address, phone number, email, or credit card details).</source>
-        <target state="translated">Содержит личную информацию, которая может быть использована для отслеживания, идентификации, связи или выдачи себя за другое лицо (например, имя, адрес, номер телефона, адрес электронной почты или данные кредитной карты).</target>
+        <target state="translated">Содержит личную информацию, которая может быть использована для отслеживания, идентификации, связи или выдачи себя за другое лицо (например, имя, адрес, номер телефона, адрес email или данные кредитной карты).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">142</context>
@@ -25025,7 +25025,7 @@
       </trans-unit>
       <trans-unit id="2996238463588374734" datatype="html" xml:space="preserve">
         <source>Update your user settings (autoplay or P2P policy, notification settings...). It does not update your user email, username or password.</source>
-        <target state="translated">Обновите свои пользовательские настройки (политика автозапуска или P2P, настройки уведомлений ...). При этом не обновляется адрес электронной почты, имя пользователя или пароль.</target>
+        <target state="translated">Обновите свои пользовательские настройки (политика автозапуска или P2P, настройки уведомлений ...). При этом не обновляется адрес email, имя пользователя или пароль.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">21</context>
@@ -25065,7 +25065,7 @@
       </trans-unit>
       <trans-unit id="3590744729573065939" datatype="html" xml:space="preserve">
         <source>Create playlists if they do not already exist</source>
-        <target state="translated">Создавайте списки воспроизведения, если они еще не существуют</target>
+        <target state="translated">Создавайте плейлисты, если они еще не существуют</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">26</context>
@@ -25105,7 +25105,7 @@
       </trans-unit>
       <trans-unit id="558490183395886693" datatype="html" xml:space="preserve">
         <source>An email will be sent when the import process is complete.</source>
-        <target state="translated">По завершении процесса импорта будет отправлено электронное письмо.</target>
+        <target state="translated">По завершении процесса импорта будет отправлено письмо email.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">39</context>
@@ -25421,7 +25421,7 @@
       </trans-unit>
       <trans-unit id="3371925892115176358" datatype="html" xml:space="preserve">
         <source>playlists per page</source>
-        <target state="translated">списков воспроизведения на страницу</target>
+        <target state="translated">плейлистов на страницу</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
           <context context-type="linenumber">18</context>
@@ -25429,7 +25429,7 @@
       </trans-unit>
       <trans-unit id="3108012194945806606" datatype="html" xml:space="preserve">
         <source>Drag and drop this row to reorder playlists in your channel</source>
-        <target state="translated">Перетащите эту строку, чтобы изменить порядок воспроизведения в вашем канале</target>
+        <target state="translated">Перетащите эту строку, чтобы изменить порядок в плейлисте на вашем канале</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
           <context context-type="linenumber">27</context>
@@ -25457,7 +25457,7 @@
       </trans-unit>
       <trans-unit id="4311110442674793732" datatype="html" xml:space="preserve">
         <source>Search your playlists</source>
-        <target state="translated">Искать среди Ваших плейлистов</target>
+        <target state="translated">Искать среди ваших плейлистов</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
           <context context-type="linenumber">40</context>
@@ -25517,7 +25517,7 @@
       </trans-unit>
       <trans-unit id="72391380513979568" datatype="html" xml:space="preserve">
         <source>Delete Web Video files</source>
-        <target state="translated">Удаление файлов веб-видео</target>
+        <target state="translated">Удаление файлов web-видео</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">161</context>
@@ -26500,7 +26500,7 @@
       </trans-unit>
       <trans-unit id="8657461348142878243" datatype="html" xml:space="preserve">
         <source>Preferred language for the web interface and for emails</source>
-        <target state="translated">Предпочтительный язык для веб-интерфейса и электронной почты</target>
+        <target state="translated">Предпочтительный язык для веб-интерфейса и email</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context>
           <context context-type="linenumber">5,7</context>
@@ -26918,9 +26918,9 @@
           <context context-type="linenumber">281</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1599585307037758139" datatype="html">
+      <trans-unit id="1599585307037758139" datatype="html" xml:space="preserve">
         <source>Loop playlist videos</source>
-        <target state="translated">Цикличное воспроизведение видео</target>
+        <target state="translated">Повторять плейлист</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/player-widgets/video-watch-playlist.component.ts</context>
           <context context-type="linenumber">282</context>
