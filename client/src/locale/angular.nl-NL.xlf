@@ -2802,9 +2802,9 @@ Een verbannen gebruiker kan niet langer inloggen.</target>
           <context context-type="linenumber">38,39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3257605143052145807" datatype="html">
+      <trans-unit id="3257605143052145807" datatype="html" xml:space="preserve">
         <source>Reset your password</source>
-        <target state="new"> Reset your password </target>
+        <target state="translated">Wachtwoord opnieuw instellen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">44</context>
@@ -19621,9 +19621,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">25,26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7954187697200187265" datatype="html">
+      <trans-unit id="7954187697200187265" datatype="html" xml:space="preserve">
         <source>You can interact with this via any ActivityPub-capable fediverse instance (PeerTube or Mastodon for example).</source>
-        <target state="new"> You can interact with this via any ActivityPub-capable fediverse instance (PeerTube or Mastodon for example). </target>
+        <target state="needs-translation">Interacties zijn mogelijk met een account op een ActivityPub-platform zoals PeerTube of Mastodon.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">31,32</context>
@@ -21061,9 +21061,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">267</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5768110395382587657" datatype="html">
+      <trans-unit id="5768110395382587657" datatype="html" xml:space="preserve">
         <source>Your current password is too long. Please reset it.</source>
-        <target state="new">Your current password is too long. Please reset it.</target>
+        <target state="needs-translation">Je huidige wachtwoord is te lang. Stel alstublieft een nieuwe in.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
           <context context-type="linenumber">272</context>
@@ -22263,7 +22263,7 @@ Geen ondertiteling voor nu.</target>
       </trans-unit>
       <trans-unit id="4362414027529971937" datatype="html" xml:space="preserve">
         <source>As you probably noticed: creating an account is not necessary to watch videos on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> However, creating an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will allow you to: </source>
-        <target state="translated">Zoals je waarschijnlijk hebt gemerkt: om video's te bekijken is een account aanmaken op <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> niet nodig. Je kunt echter als je een account op <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> aanmaakt: </target>
+        <target state="translated">Zoals je waarschijnlijk hebt gemerkt: om video's te bekijken is een account aanmaken op <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> niet nodig. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Je kunt echter als je een account op <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> aanmaakt: </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">19</context>
@@ -22271,7 +22271,7 @@ Geen ondertiteling voor nu.</target>
       </trans-unit>
       <trans-unit id="7876769433154649513" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Comment<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on videos</source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Reageer<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> op video's</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Reageren<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> op video's</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">25</context>
@@ -22437,9 +22437,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3824663103894000237" datatype="html">
+      <trans-unit id="3824663103894000237" datatype="html" xml:space="preserve">
         <source>This field must be a valid 6-digit hexadecimal color code.</source>
-        <target state="new">This field must be a valid 6-digit hexadecimal color code.</target>
+        <target state="needs-translation">In dit veld moet een geldige 6-cijferige hexadecimale kleurcode.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/common-validators.ts</context>
           <context context-type="linenumber">22</context>
@@ -24353,9 +24353,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">339</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4975588549700433407" datatype="html">
+      <trans-unit id="4975588549700433407" datatype="html" xml:space="preserve">
         <source>Manage user</source>
-        <target state="new">Manage user</target>
+        <target state="needs-translation">Gebruiker beheren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">367</context>
