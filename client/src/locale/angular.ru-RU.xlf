@@ -10409,7 +10409,7 @@
       </trans-unit>
       <trans-unit id="6889832108716754007" datatype="html" xml:space="preserve">
         <source>Favicon</source>
-        <target state="translated">Favicon</target>
+        <target state="translated">Иконка сайта</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">38</context>
@@ -10617,7 +10617,7 @@
       </trans-unit>
       <trans-unit id="7971232255104545985" datatype="html" xml:space="preserve">
         <source>The web interface still uses the web browser preferred language if not overridden by user preference</source>
-        <target state="translated">Веб-интерфейс по-прежнему использует предпочитаемый язык веб-браузера, если он не переопределен настройками пользователя.</target>
+        <target state="translated">Веб-интерфейс по-прежнему использует предпочитаемый язык веб-браузера, если он не переопределен настройками пользователя</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">86</context>
@@ -13395,7 +13395,7 @@
       </trans-unit>
       <trans-unit id="246143686312852623" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ file.fps }}"/>fps</source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ file.fps }}"/>fps</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ file.fps }}"/> кадров в секунду</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/video-generate-download.component.html</context>
           <context context-type="linenumber">26</context>
@@ -13611,7 +13611,7 @@
       </trans-unit>
       <trans-unit id="8534731544752464794" datatype="html" xml:space="preserve">
         <source>PeerTube uses this setting to explain to your users which law they must follow in the "About" pages</source>
-        <target state="translated">PeerTube использует этот параметр, чтобы объяснить пользователям, какие законы они должны соблюдать на странице "О нас".</target>
+        <target state="translated">PeerTube использует этот параметр, чтобы объяснить пользователям, какие законы они должны соблюдать на странице "О нас"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">124</context>
@@ -26286,7 +26286,7 @@
       </trans-unit>
       <trans-unit id="8780054161177843365" datatype="html" xml:space="preserve">
         <source>The video is being moved to the file system.</source>
-        <target state="translated">Видео перемещается в файловую систему</target>
+        <target state="translated">Видео перемещается в файловую систему.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">91</context>
@@ -26322,7 +26322,7 @@
       </trans-unit>
       <trans-unit id="542526490067261846" datatype="html" xml:space="preserve">
         <source>Failed to move video files to an external storage.</source>
-        <target state="translated">Не удалось переместить файлы во внешнее хранилище</target>
+        <target state="translated">Не удалось переместить файлы во внешнее хранилище.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">116</context>
