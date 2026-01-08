@@ -11,7 +11,7 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '@peertube/peertube-server-commands'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { expect } from 'chai'
 
 describe('Test video comments API validator', function () {
@@ -85,7 +85,7 @@ describe('Test video comments API validator', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, pathThread, server.accessToken)
+      await checkBadSort(server.url, pathThread, server.accessToken)
     })
 
     it('Should fail with an incorrect video', async function () {
@@ -457,7 +457,7 @@ describe('Test video comments API validator', function () {
       for (const path of paths) {
         await checkBadStartPagination(server.url, path, server.accessToken)
         await checkBadCountPagination(server.url, path, server.accessToken)
-        await checkBadSortPagination(server.url, path, server.accessToken)
+        await checkBadSort(server.url, path, server.accessToken)
       }
     })
 

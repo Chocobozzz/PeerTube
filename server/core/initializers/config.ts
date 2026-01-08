@@ -215,6 +215,7 @@ const CONFIG = {
     MAX_REQUEST_ATTEMPTS: config.get<number>('object_storage.max_request_attempts'),
     ENDPOINT: config.get<string>('object_storage.endpoint'),
     REGION: config.get<string>('object_storage.region'),
+    FORCE_PATH_STYLE: config.get<boolean>('object_storage.force_path_style'),
     UPLOAD_ACL: {
       PUBLIC: config.get<string>('object_storage.upload_acl.public'),
       PRIVATE: config.get<string>('object_storage.upload_acl.private')

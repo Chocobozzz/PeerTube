@@ -2,7 +2,7 @@ import { ActivityIconObject, ThumbnailType, type ThumbnailType_Type } from '@pee
 import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 import { MThumbnail, MThumbnailVideo, MVideo, MVideoPlaylist } from '@server/types/models/index.js'
 import { remove } from 'fs-extra/esm'
-import { join } from 'path'
+import { extname, join } from 'path'
 import {
   AfterDestroy,
   AllowNull,
@@ -19,7 +19,7 @@ import {
 } from 'sequelize-typescript'
 import { logger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
-import { CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, WEBSERVER } from '../../initializers/constants.js'
+import { CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, MIMETYPES, WEBSERVER } from '../../initializers/constants.js'
 import { SequelizeModel } from '../shared/sequelize-type.js'
 import { buildSQLAttributes } from '../shared/table.js'
 import { VideoPlaylistModel } from './video-playlist.js'
@@ -246,7 +246,7 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
     return {
       type: 'Image',
       url: this.getOriginFileUrl(video),
-      mediaType: 'image/jpeg',
+      mediaType: MIMETYPES.IMAGE.EXT_MIMETYPE[extname(this.filename)],
       width: this.width,
       height: this.height
     }

@@ -165,7 +165,7 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
           this.notifier.success($localize`Preferences saved`, undefined, 2000)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

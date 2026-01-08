@@ -73,7 +73,7 @@ export class FollowModalComponent extends FormReactive implements OnInit {
           this.newFollow.emit()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 }

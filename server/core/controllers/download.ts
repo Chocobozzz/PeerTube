@@ -23,6 +23,7 @@ import {
   MVideoFullLight
 } from '@server/types/models/index.js'
 import { MVideoSource } from '@server/types/models/video/video-source.js'
+import contentDisposition from 'content-disposition'
 import cors from 'cors'
 import express from 'express'
 import { DOWNLOAD_PATHS, WEBSERVER } from '../initializers/constants.js'
@@ -249,7 +250,7 @@ async function downloadGeneratedVideoFile (req: express.Request, res: express.Re
   if (VideoDownload.totalDownloads > CONFIG.DOWNLOAD_GENERATE_VIDEO.MAX_PARALLEL_DOWNLOADS) {
     return res.fail({
       status: HttpStatusCode.TOO_MANY_REQUESTS_429,
-      message: `Too many parallel downloads on this server. Please try again later.`
+      message: req.t(`Too many parallel downloads on this server. Please try again later.`)
     })
   }
 
@@ -264,12 +265,21 @@ async function downloadGeneratedVideoFile (req: express.Request, res: express.Re
   const urlPath = new URL(req.originalUrl, WEBSERVER.URL).pathname
   if (!urlPath.endsWith('.mp4') && !urlPath.endsWith('.m4a')) {
     const downloadFilename = buildDownloadFilename({ video, extname })
-    res.setHeader('Content-disposition', `attachment; filename="${encodeURI(downloadFilename)}`)
+    res.setHeader('Content-disposition', contentDisposition(encodeURI(downloadFilename)))
   }
 
   res.type(extname)
 
-  await new VideoDownload({ video, videoFiles }).muxToMergeVideoFiles(res)
+  try {
+    await new VideoDownload({ video, videoFiles }).muxToMergeVideoFiles(res)
+  } catch (err) {
+    // muxToMergeVideoFiles has already logged the error
+    res.fail({
+      status: HttpStatusCode.SERVICE_UNAVAILABLE_503,
+      message: req.t('Cannot process video download at the moment. Please try again later.'),
+      data: err.message
+    })
+  }
 }
 
 // ---------------------------------------------------------------------------

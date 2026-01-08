@@ -5,6 +5,7 @@ import { AuthService, HooksService } from '@app/core'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCaption, VideoSource } from '@peertube/peertube-models'
+import { logger } from '@root-helpers/logger'
 import { videoRequiresFileToken } from '@root-helpers/video'
 import { of } from 'rxjs'
 import { catchError } from 'rxjs/operators'
@@ -101,7 +102,7 @@ export class VideoDownloadComponent {
 
     return this.videoService.getSource(this.video.id)
       .pipe(catchError(err => {
-        console.error('Cannot get source file', err)
+        logger.error('Cannot get source file', err)
 
         return of(undefined)
       }))

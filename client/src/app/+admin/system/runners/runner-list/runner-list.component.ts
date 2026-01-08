@@ -1,4 +1,3 @@
-
 import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { ConfirmService, Notifier } from '@app/core'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
@@ -16,7 +15,7 @@ import { RunnerService } from '../runner.service'
     PTDatePipe,
     TableComponent,
     NumberFormatterPipe
-]
+  ]
 })
 export class RunnerListComponent implements OnInit {
   private runnerService = inject(RunnerService)
@@ -68,7 +67,7 @@ export class RunnerListComponent implements OnInit {
           this.notifier.success($localize`Runner removed.`)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

@@ -14,7 +14,7 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidatorFactory,
   paginationValidator,
   setDefaultPagination,
   setDefaultSort,
@@ -41,7 +41,7 @@ mySubscriptionsRouter.get(
   videosSortValidator,
   setDefaultVideosSort,
   setDefaultPagination,
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidatorFactory(),
   asyncMiddleware(getUserSubscriptionVideos)
 )
 

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import {
   cleanupTests,
@@ -127,7 +127,7 @@ describe('Test server follows API validators', function () {
       })
 
       it('Should fail with an incorrect sort', async function () {
-        await checkBadSortPagination(server.url, path)
+        await checkBadSort(server.url, path)
       })
 
       it('Should fail with an incorrect state', async function () {
@@ -175,7 +175,7 @@ describe('Test server follows API validators', function () {
       })
 
       it('Should fail with an incorrect sort', async function () {
-        await checkBadSortPagination(server.url, path)
+        await checkBadSort(server.url, path)
       })
 
       it('Should fail with an incorrect actor type', async function () {

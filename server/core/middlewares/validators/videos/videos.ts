@@ -485,126 +485,130 @@ export function getCommonVideoEditAttributes () {
   ] as (ValidationChain | ExpressPromiseHandler)[]
 }
 
-export const commonVideosFiltersValidator = [
-  query('categoryOneOf')
-    .optional()
-    .customSanitizer(arrayify)
-    .custom(isNumberArray).withMessage('Should have a valid categoryOneOf array'),
-  query('licenceOneOf')
-    .optional()
-    .customSanitizer(arrayify)
-    .custom(isNumberArray).withMessage('Should have a valid licenceOneOf array'),
-  query('languageOneOf')
-    .optional()
-    .customSanitizer(arrayify)
-    .custom(isStringArray).withMessage('Should have a valid languageOneOf array'),
-  query('privacyOneOf')
-    .optional()
-    .customSanitizer(arrayify)
-    .custom(isNumberArray).withMessage('Should have a valid privacyOneOf array'),
-  query('tagsOneOf')
-    .optional()
-    .customSanitizer(arrayify)
-    .custom(isStringArray).withMessage('Should have a valid tagsOneOf array'),
-  query('tagsAllOf')
-    .optional()
-    .customSanitizer(arrayify)
-    .custom(isStringArray).withMessage('Should have a valid tagsAllOf array'),
-  query('nsfw')
-    .optional()
-    .custom(isBooleanBothQueryValid),
-  query('nsfwFlagsIncluded')
-    .optional()
-    .customSanitizer(toIntOrNull)
-    .custom(isNSFWFlagsValid),
-  query('nsfwFlagsExcluded')
-    .optional()
-    .customSanitizer(toIntOrNull)
-    .custom(isNSFWFlagsValid),
-  query('isLive')
-    .optional()
-    .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid isLive boolean'),
-  query('includeScheduledLive')
-    .optional()
-    .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid includeScheduledLive boolean'),
-  query('include')
-    .optional()
-    .custom(isVideoIncludeValid),
-  query('isLocal')
-    .optional()
-    .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid isLocal boolean'),
-  query('hasHLSFiles')
-    .optional()
-    .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid hasHLSFiles boolean'),
-  query('hasWebVideoFiles')
-    .optional()
-    .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid hasWebVideoFiles boolean'),
-  query('skipCount')
-    .optional()
-    .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid skipCount boolean'),
-  query('search')
-    .optional()
-    .custom(exists),
-  query('excludeAlreadyWatched')
-    .optional()
-    .customSanitizer(toBooleanOrNull)
-    .isBoolean().withMessage('Should be a valid excludeAlreadyWatched boolean'),
-  query('autoTagOneOf')
-    .optional()
-    .customSanitizer(arrayify)
-    .custom(isStringArray).withMessage('Should have a valid autoTagOneOf array'),
-  query('host')
-    .optional()
-    .custom(isHostValid),
+export const commonVideosFiltersValidatorFactory = (options: {
+  allowPrivacyFilterForAllUsers?: boolean
+} = {}) => {
+  return [
+    query('categoryOneOf')
+      .optional()
+      .customSanitizer(arrayify)
+      .custom(isNumberArray).withMessage('Should have a valid categoryOneOf array'),
+    query('licenceOneOf')
+      .optional()
+      .customSanitizer(arrayify)
+      .custom(isNumberArray).withMessage('Should have a valid licenceOneOf array'),
+    query('languageOneOf')
+      .optional()
+      .customSanitizer(arrayify)
+      .custom(isStringArray).withMessage('Should have a valid languageOneOf array'),
+    query('privacyOneOf')
+      .optional()
+      .customSanitizer(arrayify)
+      .custom(isNumberArray).withMessage('Should have a valid privacyOneOf array'),
+    query('tagsOneOf')
+      .optional()
+      .customSanitizer(arrayify)
+      .custom(isStringArray).withMessage('Should have a valid tagsOneOf array'),
+    query('tagsAllOf')
+      .optional()
+      .customSanitizer(arrayify)
+      .custom(isStringArray).withMessage('Should have a valid tagsAllOf array'),
+    query('nsfw')
+      .optional()
+      .custom(isBooleanBothQueryValid),
+    query('nsfwFlagsIncluded')
+      .optional()
+      .customSanitizer(toIntOrNull)
+      .custom(isNSFWFlagsValid),
+    query('nsfwFlagsExcluded')
+      .optional()
+      .customSanitizer(toIntOrNull)
+      .custom(isNSFWFlagsValid),
+    query('isLive')
+      .optional()
+      .customSanitizer(toBooleanOrNull)
+      .custom(isBooleanValid).withMessage('Should have a valid isLive boolean'),
+    query('includeScheduledLive')
+      .optional()
+      .customSanitizer(toBooleanOrNull)
+      .custom(isBooleanValid).withMessage('Should have a valid includeScheduledLive boolean'),
+    query('include')
+      .optional()
+      .custom(isVideoIncludeValid),
+    query('isLocal')
+      .optional()
+      .customSanitizer(toBooleanOrNull)
+      .custom(isBooleanValid).withMessage('Should have a valid isLocal boolean'),
+    query('hasHLSFiles')
+      .optional()
+      .customSanitizer(toBooleanOrNull)
+      .custom(isBooleanValid).withMessage('Should have a valid hasHLSFiles boolean'),
+    query('hasWebVideoFiles')
+      .optional()
+      .customSanitizer(toBooleanOrNull)
+      .custom(isBooleanValid).withMessage('Should have a valid hasWebVideoFiles boolean'),
+    query('skipCount')
+      .optional()
+      .customSanitizer(toBooleanOrNull)
+      .custom(isBooleanValid).withMessage('Should have a valid skipCount boolean'),
+    query('search')
+      .optional()
+      .custom(exists),
+    query('excludeAlreadyWatched')
+      .optional()
+      .customSanitizer(toBooleanOrNull)
+      .isBoolean().withMessage('Should be a valid excludeAlreadyWatched boolean'),
+    query('autoTagOneOf')
+      .optional()
+      .customSanitizer(arrayify)
+      .custom(isStringArray).withMessage('Should have a valid autoTagOneOf array'),
+    query('host')
+      .optional()
+      .custom(isHostValid),
 
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (areValidationErrors(req, res)) return
+    (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      if (areValidationErrors(req, res)) return
 
-    const query = req.query as VideosCommonQuery
+      const query = req.query as VideosCommonQuery
 
-    if (((query.nsfwFlagsExcluded || 0) & (query.nsfwFlagsIncluded || 0)) !== 0) {
-      return res.fail({
-        status: HttpStatusCode.BAD_REQUEST_400,
-        message: req.t('Cannot use same flags in nsfwFlagsIncluded and nsfwFlagsExcluded at the same time')
-      })
-    }
-
-    const user = res.locals.oauth?.token.User
-
-    if ((!user || user.hasRight(UserRight.SEE_ALL_VIDEOS) !== true)) {
-      if (query.include || query.privacyOneOf || query.autoTagOneOf) {
+      if (((query.nsfwFlagsExcluded || 0) & (query.nsfwFlagsIncluded || 0)) !== 0) {
         return res.fail({
-          status: HttpStatusCode.UNAUTHORIZED_401,
-          message: req.t('You are not allowed to see all videos, specify a custom include or auto tags filter')
+          status: HttpStatusCode.BAD_REQUEST_400,
+          message: req.t('Cannot use same flags in nsfwFlagsIncluded and nsfwFlagsExcluded at the same time')
         })
       }
-    }
 
-    if (!user && exists(query.excludeAlreadyWatched)) {
-      res.fail({
-        status: HttpStatusCode.BAD_REQUEST_400,
-        message: req.t('Cannot use excludeAlreadyWatched parameter when auth token is not provided')
-      })
-      return false
-    }
+      const user = res.locals.oauth?.token.User
 
-    if (req.query.filter) {
-      res.fail({
-        status: HttpStatusCode.BAD_REQUEST_400,
-        message: req.t('"filter" query parameter is not supported anymore by PeerTube. Please use "isLocal" and "include" instead')
-      })
-      return false
-    }
+      if ((!user || user.hasRight(UserRight.SEE_ALL_VIDEOS) !== true)) {
+        if (query.include || (options.allowPrivacyFilterForAllUsers !== true && query.privacyOneOf) || query.autoTagOneOf) {
+          return res.fail({
+            status: HttpStatusCode.UNAUTHORIZED_401,
+            message: req.t('You are not allowed to see all videos, specify a custom include or auto tags filter')
+          })
+        }
+      }
 
-    return next()
-  }
-]
+      if (!user && exists(query.excludeAlreadyWatched)) {
+        res.fail({
+          status: HttpStatusCode.BAD_REQUEST_400,
+          message: req.t('Cannot use excludeAlreadyWatched parameter when auth token is not provided')
+        })
+        return false
+      }
+
+      if (req.query.filter) {
+        res.fail({
+          status: HttpStatusCode.BAD_REQUEST_400,
+          message: req.t('"filter" query parameter is not supported anymore by PeerTube. Please use "isLocal" and "include" instead')
+        })
+        return false
+      }
+
+      return next()
+    }
+  ]
+}
 
 export function areErrorsInNSFW (req: express.Request, res: express.Response) {
   const body = req.body as VideoCreateUpdateCommon

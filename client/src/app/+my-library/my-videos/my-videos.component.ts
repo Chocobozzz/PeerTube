@@ -318,7 +318,7 @@ export class MyVideosComponent implements OnInit, OnDestroy {
           this.table().loadData()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

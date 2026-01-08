@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: PeerTube
-  version: 7..0
+  version: 8.0.0
   contact:
     name: PeerTube Community
     url: https://joinpeertube.org
@@ -8522,7 +8522,7 @@ components:
       type: string
       format: password
       minLength: 6
-      maxLength: 255
+      maxLength: 50
 
     VideoCategorySet:
       type: integer

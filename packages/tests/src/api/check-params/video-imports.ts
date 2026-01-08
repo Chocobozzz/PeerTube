@@ -14,7 +14,7 @@ import {
   setDefaultVideoChannel,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
 
@@ -60,7 +60,7 @@ describe('Test video imports API validator', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, myPath, server.accessToken)
+      await checkBadSort(server.url, myPath, server.accessToken)
     })
 
     it('Should fail with a bad id param', async function () {

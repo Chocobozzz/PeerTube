@@ -135,7 +135,7 @@ export class AdminConfigLogoComponent implements OnInit, OnDestroy, CanComponent
         this.form.markAsPristine()
       },
 
-      error: err => this.notifier.error(err.message)
+      error: err => this.notifier.handleError(err)
     })
   }
 

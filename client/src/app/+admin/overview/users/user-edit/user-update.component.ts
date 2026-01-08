@@ -149,7 +149,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
           this.notifier.success($localize`An email asking for password reset has been sent to ${this.user.username}.`)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -162,7 +162,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
           this.notifier.success($localize`Two factor authentication of ${this.user.username} disabled.`)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

@@ -41,8 +41,12 @@ export const ServerErrorCode = {
 
   COMMENT_NOT_ASSOCIATED_TO_VIDEO: 'comment_not_associated_to_video',
 
+  INVALID_GRANT: 'invalid_grant',
   MISSING_TWO_FACTOR: 'missing_two_factor',
+  TOO_LONG_PASSWORD: 'too_long_password',
   INVALID_TWO_FACTOR: 'invalid_two_factor',
+  ACCOUNT_BLOCKED: 'account_blocked',
+  EMAIL_NOT_VERIFIED: 'email_not_verified',
 
   ACCOUNT_WAITING_FOR_APPROVAL: 'account_waiting_for_approval',
   ACCOUNT_APPROVAL_REJECTED: 'account_approval_rejected',

@@ -497,7 +497,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
           this.router.navigate([ '/my-library/videos' ])
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

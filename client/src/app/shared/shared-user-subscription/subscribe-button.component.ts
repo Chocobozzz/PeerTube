@@ -147,7 +147,7 @@ export class SubscribeButtonComponent implements OnChanges {
           )
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -184,7 +184,7 @@ export class SubscribeButtonComponent implements OnChanges {
           )
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -236,7 +236,7 @@ export class SubscribeButtonComponent implements OnChanges {
           this.buildClasses()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
     }
   }

@@ -307,6 +307,65 @@ describe('Object storage for lives', function () {
     })
   })
 
+  describe('With path style request', function () {
+    let objectStorageBaseUrl: string
+
+    before(async function () {
+      this.timeout(120000)
+
+      const bucketName = objectStorage.getMockStreamingPlaylistsBucketName()
+      objectStorageBaseUrl = `http://${ObjectStorageCommand.getMockEndpointHost()}/${bucketName}`
+
+      await objectStorage.prepareDefaultMockBuckets()
+
+      const config = {
+        object_storage: {
+          enabled: true,
+          endpoint: 'http://' + ObjectStorageCommand.getMockEndpointHost(),
+          region: ObjectStorageCommand.getMockRegion(),
+
+          credentials: ObjectStorageCommand.getMockCredentialsConfig(),
+          force_path_style: true,
+
+          streaming_playlists: {
+            bucket_name: bucketName,
+            prefix: '',
+            store_live_streams: true
+          }
+        }
+      }
+
+      await servers[0].kill()
+      await servers[0].run(config)
+
+      await servers[0].config.enableLive({ transcoding: true, resolutions: 'min' })
+    })
+
+    it('Should publish a live with path style request', async function () {
+      this.timeout(240000)
+
+      const videoUUIDPermanent = await createLive(servers[0], true)
+
+      const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: videoUUIDPermanent })
+      await waitUntilLivePublishedOnAllServers(servers, videoUUIDPermanent)
+
+      await testLiveVideoResolutions({
+        originServer: servers[0],
+        sqlCommand: sqlCommandServer1,
+        servers,
+        liveVideoId: videoUUIDPermanent,
+        resolutions: [ 720 ],
+        transcoded: true,
+        objectStorage,
+        objectStorageBaseUrl
+      })
+
+      await stopFfmpeg(ffmpegCommand)
+
+      await servers[0].videos.remove({ id: videoUUIDPermanent })
+    })
+  })
+
   describe('With live stream to object storage disabled', function () {
     let videoUUID: string
 

@@ -10,7 +10,7 @@ import { buildNSFWFilters } from '../../helpers/express-utils.js'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers/constants.js'
 import {
   asyncMiddleware,
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidatorFactory,
   feedsAccountOrChannelFiltersValidator,
   feedsFormatValidator,
   setDefaultVideosSort,
@@ -42,7 +42,7 @@ videoFeedsRouter.get(
   feedsFormatValidator,
   setFeedFormatContentType,
   cacheRouteMiddleware(ROUTE_CACHE_LIFETIME.FEEDS),
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidatorFactory(),
   asyncMiddleware(feedsAccountOrChannelFiltersValidator),
   asyncMiddleware(generateVideoFeed)
 )
@@ -54,7 +54,7 @@ videoFeedsRouter.get(
   feedsFormatValidator,
   setFeedFormatContentType,
   cacheRouteMiddleware(ROUTE_CACHE_LIFETIME.FEEDS),
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidatorFactory(),
   asyncMiddleware(videoSubscriptionFeedsValidator),
   asyncMiddleware(generateVideoFeedForSubscriptions)
 )

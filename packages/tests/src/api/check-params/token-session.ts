@@ -8,7 +8,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 
 describe('Test token session API validators', function () {
   let server: PeerTubeServer
@@ -45,7 +45,7 @@ describe('Test token session API validators', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, path, userToken1)
+      await checkBadSort(server.url, path, userToken1)
     })
 
     it('Should fail with an unknown user', async function () {

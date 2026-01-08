@@ -1,6 +1,6 @@
 import { Job } from 'bullmq'
 import { extractVideo } from '@server/helpers/video.js'
-import { createTorrentAndSetInfoHash, updateTorrentMetadata } from '@server/helpers/webtorrent.js'
+import { createTorrentAndSetInfoHash, updateTorrentMetadata } from '@server/lib/webtorrent.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'

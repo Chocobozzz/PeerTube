@@ -47,13 +47,14 @@ export class PlayerHTML {
     const errorText = document.getElementById('error-content')
     errorText.innerHTML = translatedText
 
+    document.getElementById('error-details').style.display = 'none'
+
     this.wrapperElement.style.display = 'none'
   }
 
   async askVideoPassword (options: { incorrectPassword: boolean, translations: Translations }): Promise<string> {
     const { incorrectPassword, translations } = options
-    return new Promise((resolve) => {
-
+    return new Promise(resolve => {
       this.wrapperElement.style.display = 'none'
 
       const translatedTitle = peertubeTranslate('This video is password protected', translations)
@@ -87,7 +88,7 @@ export class PlayerHTML {
       videoPasswordInput.placeholder = peertubeTranslate('Password', translations)
 
       const videoPasswordForm = document.getElementById('video-password-form')
-      videoPasswordForm.addEventListener('submit', (event) => {
+      videoPasswordForm.addEventListener('submit', event => {
         event.preventDefault()
         const videoPassword = videoPasswordInput.value
         resolve(videoPassword)

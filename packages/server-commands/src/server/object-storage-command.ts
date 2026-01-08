@@ -72,25 +72,60 @@ export class ObjectStorageCommand {
     }
   }
 
-  getMockWebVideosBaseUrl () {
-    return `http://${this.getMockWebVideosBucketName()}.${ObjectStorageCommand.getMockEndpointHost()}/`
+  getMockWebVideosBaseUrl (options: {
+    pathStyle?: boolean // default false
+  } = {}) {
+    const { pathStyle = false } = options
+
+    return this.getMockFileBaseUrl({ bucketName: this.getMockWebVideosBucketName(), pathStyle })
   }
 
-  getMockPlaylistBaseUrl () {
-    return `http://${this.getMockStreamingPlaylistsBucketName()}.${ObjectStorageCommand.getMockEndpointHost()}/`
+  getMockPlaylistBaseUrl (options: {
+    pathStyle?: boolean // default false
+  } = {}) {
+    const { pathStyle = false } = options
+
+    return this.getMockFileBaseUrl({ bucketName: this.getMockStreamingPlaylistsBucketName(), pathStyle })
   }
 
-  getMockUserExportBaseUrl () {
-    return `http://${this.getMockUserExportBucketName()}.${ObjectStorageCommand.getMockEndpointHost()}/`
+  getMockUserExportBaseUrl (options: {
+    pathStyle?: boolean // default false
+  } = {}) {
+    const { pathStyle = false } = options
+
+    return this.getMockFileBaseUrl({ bucketName: this.getMockUserExportBucketName(), pathStyle })
   }
 
-  getMockOriginalFileBaseUrl () {
-    return `http://${this.getMockOriginalFileBucketName()}.${ObjectStorageCommand.getMockEndpointHost()}/`
+  getMockOriginalFileBaseUrl (options: {
+    pathStyle?: boolean // default false
+  } = {}) {
+    const { pathStyle = false } = options
+
+    return this.getMockFileBaseUrl({ bucketName: this.getMockOriginalFileBucketName(), pathStyle })
   }
 
-  getMockCaptionFileBaseUrl () {
-    return `http://${this.getMockCaptionsBucketName()}.${ObjectStorageCommand.getMockEndpointHost()}/`
+  getMockCaptionFileBaseUrl (options: {
+    pathStyle?: boolean // default false
+  } = {}) {
+    const { pathStyle = false } = options
+
+    return this.getMockFileBaseUrl({ bucketName: this.getMockCaptionsBucketName(), pathStyle })
   }
+
+  private getMockFileBaseUrl (options: {
+    bucketName: string
+    pathStyle: boolean
+  }) {
+    const { bucketName, pathStyle } = options
+
+    if (pathStyle) {
+      return `http://${ObjectStorageCommand.getMockEndpointHost()}/${bucketName}/`
+    }
+
+    return `http://${bucketName}.${ObjectStorageCommand.getMockEndpointHost()}/`
+  }
+
+  // ---------------------------------------------------------------------------
 
   async prepareDefaultMockBuckets () {
     await this.createMockBucket(this.getMockStreamingPlaylistsBucketName())

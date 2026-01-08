@@ -59,7 +59,8 @@ describe('Test video filters validators', function () {
       & {
         token?: string
         expectedStatus: HttpStatusCodeType
-        unauthenticatedUser?: boolean
+        unauthenticatedUser?: boolean // default false
+        skipMyVideos?: boolean // default  false
         filter?: string
       }
   ) {
@@ -70,7 +71,7 @@ describe('Test video filters validators', function () {
       '/api/v1/search/videos'
     ]
 
-    if (options.unauthenticatedUser !== true) {
+    if (options.unauthenticatedUser !== true && options.skipMyVideos !== true) {
       paths.push('/api/v1/users/me/videos')
     }
 
@@ -129,7 +130,20 @@ describe('Test video filters validators', function () {
       await testEndpoints({
         privacyOneOf: [ VideoPrivacy.INTERNAL ],
         token: userAccessToken,
+        skipMyVideos: true,
         expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
+    })
+
+    it('Should succeed to use privacyOneOf to our own videos', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path: '/api/v1/users/me/videos',
+        token: userAccessToken,
+        query: {
+          privacyOneOf: [ VideoPrivacy.INTERNAL ]
+        },
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
   })

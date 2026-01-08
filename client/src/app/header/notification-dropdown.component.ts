@@ -53,7 +53,7 @@ export class NotificationDropdownComponent implements OnInit, OnDestroy {
           this.subscribeToNotifications()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
 
     this.routeSub = this.router.events

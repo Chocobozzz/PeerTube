@@ -34,12 +34,6 @@
       ],
       "@root-helpers/*": [
         "src/root-helpers/*"
-      ],
-      "fs": [
-        "src/shims/noop.ts"
-      ],
-      "crypto": [
-        "src/shims/noop.ts"
       ]
     }
   },

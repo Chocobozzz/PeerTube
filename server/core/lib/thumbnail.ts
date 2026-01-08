@@ -180,20 +180,16 @@ export function updateLocalVideoMiniatureFromUrl (options: {
   size?: ImageSize
 }) {
   const { downloadUrl, video, type, size } = options
+  const extension = getImageExtension(downloadUrl)
 
   const { filename: updatedFilename, basePath, height, width, existingThumbnail } = buildMetadataFromVideo({
     video,
     type,
     size,
-    extension: getImageExtension(downloadUrl)
+    extension
   })
 
-  // Only save the file URL if it is a remote video
-  const fileUrl = video.isLocal()
-    ? null
-    : downloadUrl
-
-  const thumbnailUrlChanged = hasThumbnailUrlChanged(existingThumbnail, downloadUrl, video)
+  const thumbnailUrlChanged = hasThumbnailUrlChanged({ existingThumbnail, fileUrl: downloadUrl, video, extension })
 
   // Do not change the thumbnail filename if the file did not change
   const filename = thumbnailUrlChanged
@@ -208,6 +204,11 @@ export function updateLocalVideoMiniatureFromUrl (options: {
     return Promise.resolve()
   }
 
+  // Only save the file URL if it is a remote video
+  const fileUrl = video.isLocal()
+    ? null
+    : downloadUrl
+
   return updateThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl, onDisk: true })
 }
 
@@ -219,17 +220,19 @@ export function updateRemoteVideoThumbnail (options: {
   onDisk: boolean
 }) {
   const { fileUrl, video, type, size, onDisk } = options
+  const extension = getImageExtension(fileUrl)
+
   const { filename: generatedFilename, height, width, existingThumbnail } = buildMetadataFromVideo({
     video,
     type,
     size,
-    extension: getImageExtension(fileUrl)
+    extension
   })
 
   const thumbnail = existingThumbnail || new ThumbnailModel()
 
   // Do not change the thumbnail filename if the file did not change
-  if (hasThumbnailUrlChanged(existingThumbnail, fileUrl, video)) {
+  if (hasThumbnailUrlChanged({ existingThumbnail, fileUrl, video, extension })) {
     thumbnail.previousThumbnailFilename = thumbnail.filename
     thumbnail.filename = generatedFilename
   }
@@ -272,13 +275,27 @@ export async function regenerateMiniaturesIfNeeded (video: MVideoWithAllFiles, f
 // Private
 // ---------------------------------------------------------------------------
 
-function hasThumbnailUrlChanged (existingThumbnail: MThumbnail, downloadUrl: string, video: MVideoUUID) {
-  const existingUrl = existingThumbnail
-    ? existingThumbnail.fileUrl
-    : null
+function hasThumbnailUrlChanged (options: {
+  existingThumbnail: MThumbnail
+  fileUrl: string
+  video: MVideoUUID
+  extension: string
+}) {
+  const { existingThumbnail, fileUrl, video, extension } = options
 
-  // If the thumbnail URL did not change and has a unique filename (introduced in 3.1), avoid thumbnail processing
-  return !existingUrl || existingUrl !== downloadUrl || downloadUrl.endsWith(`${video.uuid}.jpg`)
+  if (!existingThumbnail) return true
+
+  // If the thumbnail URL did not change
+  const existingUrl = existingThumbnail.fileUrl
+  if (!existingUrl || existingUrl !== fileUrl) return true
+
+  // Or has a unique filename (introduced in 3.1)
+  if (fileUrl.endsWith(`${video.uuid}.jpg`)) return true
+
+  // Or the extension changed
+  if (extname(existingThumbnail.filename).toLowerCase() !== extension) return true
+
+  return false
 }
 
 function buildMetadataFromPlaylist (playlist: MVideoPlaylistThumbnail, size: ImageSize) {

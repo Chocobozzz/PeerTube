@@ -23,7 +23,7 @@ import {
   VideoStudioCommand,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { basename } from 'path'
 
 const badUUID = '910ec12a-d9e6-458b-a274-0abb655f9464'
@@ -132,7 +132,7 @@ describe('Test managing runners', function () {
       })
 
       it('Should fail to list with an incorrect sort', async function () {
-        await checkBadSortPagination(server.url, path, server.accessToken)
+        await checkBadSort(server.url, path, server.accessToken)
       })
 
       it('Should succeed to list with the correct params', async function () {
@@ -237,7 +237,7 @@ describe('Test managing runners', function () {
       })
 
       it('Should fail to list with an incorrect sort', async function () {
-        await checkBadSortPagination(server.url, path, server.accessToken)
+        await checkBadSort(server.url, path, server.accessToken)
       })
 
       it('Should fail with an invalid state', async function () {
@@ -310,7 +310,7 @@ describe('Test managing runners', function () {
       })
 
       it('Should fail to list with an incorrect sort', async function () {
-        await checkBadSortPagination(server.url, path, server.accessToken)
+        await checkBadSort(server.url, path, server.accessToken)
       })
 
       it('Should fail with an invalid state', async function () {

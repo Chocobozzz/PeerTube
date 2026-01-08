@@ -58,7 +58,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 970
+export const LAST_MIGRATION_VERSION = 980
 
 // ---------------------------------------------------------------------------
 
@@ -378,7 +378,7 @@ export const CONSTRAINTS_FIELDS = {
     NAME: { min: 1, max: 120 }, // Length
     DESCRIPTION: { min: 3, max: 1000 }, // Length
     USERNAME: { min: 1, max: 50 }, // Length
-    PASSWORD: { min: CONFIG.USER.PASSWORD_CONSTRAINTS.MIN_LENGTH, max: 50 }, // Length
+    PASSWORD: { min: CONFIG.USER.PASSWORD_CONSTRAINTS.MIN_LENGTH, max: 50, maxBytes: 72 }, // Limited by bcrypt algorithm
     VIDEO_QUOTA: { min: -1 },
     VIDEO_QUOTA_DAILY: { min: -1 },
     VIDEO_LANGUAGES: { max: 500 }, // Array length
@@ -858,8 +858,6 @@ export const ACTIVITY_PUB_ACTOR_TYPES: { [id: string]: ActivityPubActorType } = 
 }
 
 export const HTTP_SIGNATURE = {
-  HEADER_NAME: 'signature',
-  ALGORITHM: 'rsa-sha256',
   HEADERS_TO_SIGN_WITH_PAYLOAD: [ '(request-target)', 'host', 'date', 'digest' ],
   HEADERS_TO_SIGN_WITHOUT_PAYLOAD: [ '(request-target)', 'host', 'date' ],
   CLOCK_SKEW_SECONDS: 1800
@@ -1156,6 +1154,10 @@ export const WORKER_THREADS = {
     MAX_THREADS: 1 // FIXME: we would want 2 threads but there is an issue with JSONLD in worker thread where CPU jumps and stays at 100%
   },
   BUILD_DIGEST: {
+    CONCURRENCY: 1,
+    MAX_THREADS: 1
+  },
+  CREATE_TORRENT: {
     CONCURRENCY: 1,
     MAX_THREADS: 1
   }

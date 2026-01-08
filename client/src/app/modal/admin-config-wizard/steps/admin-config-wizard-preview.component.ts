@@ -108,7 +108,7 @@ export class AdminConfigWizardPreviewComponent implements OnChanges {
         },
 
         error: err => {
-          this.notifier.error(err.message)
+          this.notifier.handleError(err)
           this.updating = false
         }
       })

@@ -22,9 +22,6 @@ export class VideoManageComponent implements OnInit, OnDestroy, CanComponentDeac
 
   private manageController = inject(VideoManageController)
 
-  isUpdatingVideo = false
-  loaded = false
-
   ngOnInit () {
     const data = this.route.snapshot.data.resolverData as VideoManageResolverData
     const { userChannels, userQuota, privacies, videoEdit } = data

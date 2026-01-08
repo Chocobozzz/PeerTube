@@ -8,7 +8,6 @@
   "references": [
     { "path": "../models" },
     { "path": "../core-utils" },
-    { "path": "../node-utils" },
-    { "path": "../server-commands" }
+    { "path": "../node-utils" }
   ]
 }

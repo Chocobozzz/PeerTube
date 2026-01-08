@@ -30,7 +30,7 @@ export class DebugComponent implements OnInit {
       .subscribe({
         next: debug => this.debug = debug,
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -43,7 +43,7 @@ export class DebugComponent implements OnInit {
           this.notifier.success($localize`Emails will be sent!`)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 }

@@ -7,6 +7,10 @@
   myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()"
 >
   @for (notification of notifications; track notification.payload.id) {
+    @if (!inPopup()) {
+      <my-date-group-label [date]="notification.payload.createdAt" [store]="groupByDateStore" [groupedDateLabels]="groupedDateLabels"></my-date-group-label>
+    }
+
     <li>
       @if (notification.externalUrl) {
         <a

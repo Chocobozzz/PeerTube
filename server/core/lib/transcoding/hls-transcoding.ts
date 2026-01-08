@@ -1,7 +1,7 @@
 import { pick } from '@peertube/peertube-core-utils'
 import { getVideoStreamDuration, HLSFromTSTranscodeOptions, HLSTranscodeOptions } from '@peertube/peertube-ffmpeg'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
-import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent.js'
+import { createTorrentAndSetInfoHash } from '@server/lib/webtorrent.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { MVideo } from '@server/types/models/index.js'
 import { MutexInterface } from 'async-mutex'

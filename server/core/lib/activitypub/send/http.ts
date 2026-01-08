@@ -51,8 +51,6 @@ export async function buildSignedRequestOptions (options: {
     : await getServerActor() // We need to sign the request, so use the server
 
   return {
-    algorithm: HTTP_SIGNATURE.ALGORITHM,
-    authorizationHeaderName: HTTP_SIGNATURE.HEADER_NAME,
     keyId: ActorModel.getPublicKeyUrl(actor.url),
     key: actor.privateKey,
     headers: options.hasPayload

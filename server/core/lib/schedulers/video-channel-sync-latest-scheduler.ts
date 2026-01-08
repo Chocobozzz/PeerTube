@@ -1,21 +1,21 @@
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync.js'
+import { VideoChannelModel } from '@server/models/video/video-channel.js'
+import { VideoImportModel } from '@server/models/video/video-import.js'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants.js'
 import { synchronizeChannel } from '../sync-channel.js'
-import { AbstractScheduler } from './abstract-scheduler.js'
-import { VideoImportModel } from '@server/models/video/video-import.js'
 import { retryImport } from '../video-post-import.js'
+import { AbstractScheduler } from './abstract-scheduler.js'
 
-const lTags = loggerTagsFactory('channel-synchronization')
+const lTags = loggerTagsFactory('schedulers', 'channel-synchronization')
 
 export class VideoChannelSyncLatestScheduler extends AbstractScheduler {
   private static instance: AbstractScheduler
   protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.CHANNEL_SYNC_CHECK_INTERVAL
 
   private constructor () {
-    super()
+    super({ randomRunOnEnable: true })
   }
 
   protected async internalExecute () {
@@ -71,7 +71,7 @@ export class VideoChannelSyncLatestScheduler extends AbstractScheduler {
 
     return pathname.startsWith('/playlist/') || // Dailymotion playlist
       pathname.startsWith('/showcase/') || // Vimeo playlist
-      pathname.startsWith('/playlist?') || // YouTube playlist
+      pathname === '/playlist' || // YouTube playlist
       pathname.startsWith('/w/p/') // PeerTube playlist
   }
 }

@@ -21,7 +21,8 @@
           <my-button
             theme="primary" class="save-button"
             icon="circle-tick"
-            [disabled]="!canUpdate() || !hasPendingChanges()"  (click)="onWantToUpdate()"
+            [disabled]="!canUpdate() || !hasPendingChanges()" (click)="onWantToUpdate()"
+            [loading]="isUpdating"
             form="video-manage-form"
             >
             @if (hasStudioTasks()) {

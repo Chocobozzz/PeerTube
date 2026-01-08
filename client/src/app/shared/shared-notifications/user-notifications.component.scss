@@ -55,3 +55,19 @@ li {
     }
   }
 }
+
+my-date-group-label.date-displayed {
+  font-weight: $font-bold;
+  color: pvar(--fg-300);
+  padding-bottom: 1.5rem;
+  display: block;
+  line-height: normal;
+
+  @include font-size(18px);
+
+  &:not(:first-child) {
+    padding-top: 1.5rem;
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--bg-secondary);
+  }
+}

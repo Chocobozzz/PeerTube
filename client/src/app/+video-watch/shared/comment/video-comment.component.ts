@@ -187,7 +187,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
         .subscribe({
           next: user => this.commentUser = user,
 
-          error: err => this.notifier.error(err.message)
+          error: err => this.notifier.handleError(err)
         })
     }
   }

@@ -108,7 +108,7 @@ export class AdminConfigWizardModalComponent implements OnInit {
       .subscribe({
         next: () => logger.info('We will not open the welcome modal again.'),
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

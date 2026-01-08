@@ -1,10 +1,11 @@
+import { ParsedDraftSignature } from '@misskey-dev/node-http-message-signatures'
 import { ActivityDelete, ActivityPubSignature, HttpStatusCode } from '@peertube/peertube-models'
 import { isActorDeleteActivityValid } from '@server/helpers/custom-validators/activitypub/actor.js'
+import { isHTTPSignatureVerified, parseHTTPSignature } from '@server/helpers/peertube-crypto.js'
 import { getAPId } from '@server/lib/activitypub/activity.js'
 import { wrapWithSpanAndContext } from '@server/lib/opentelemetry/tracing.js'
 import { NextFunction, Request, Response } from 'express'
 import { logger } from '../helpers/logger.js'
-import { isHTTPSignatureVerified, parseHTTPSignature } from '../helpers/peertube-crypto.js'
 import { ACCEPT_HEADERS, ACTIVITY_PUB, HTTP_SIGNATURE } from '../initializers/constants.js'
 import { getOrCreateAPActor, loadActorUrlOrGetFromWebfinger } from '../lib/activitypub/actors/index.js'
 
@@ -58,10 +59,10 @@ export function executeIfActivityPub (req: Request, res: Response, next: NextFun
 async function checkHttpSignature (req: Request, res: Response) {
   return wrapWithSpanAndContext('peertube.activitypub.checkHTTPSignature', async () => {
     // Compatibility with http-signature < v1.3
-    const sig = req.headers[HTTP_SIGNATURE.HEADER_NAME] as string
-    if (sig && sig.startsWith('Signature ') === true) req.headers[HTTP_SIGNATURE.HEADER_NAME] = sig.replace(/^Signature /, '')
+    const sig = req.headers['signature'] as string
+    if (sig && sig.startsWith('Signature ') === true) req.headers['signature'] = sig.replace(/^Signature /, '')
 
-    let parsed: any
+    let parsed: ParsedDraftSignature
 
     try {
       parsed = parseHTTPSignature(req, HTTP_SIGNATURE.CLOCK_SKEW_SECONDS)
@@ -70,16 +71,17 @@ async function checkHttpSignature (req: Request, res: Response) {
 
       res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
-        message: err.message
+        message: req.t('Cannot parse HTTP signature')
       })
       return false
     }
 
-    const keyId = parsed.keyId
+    const keyId = parsed.value?.keyId
+
     if (!keyId) {
       res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Invalid key ID',
+        message: req.t('Invalid key ID'),
         data: {
           keyId
         }
@@ -96,13 +98,14 @@ async function checkHttpSignature (req: Request, res: Response) {
 
     const actor = await getOrCreateAPActor(actorUrl)
 
-    const verified = isHTTPSignatureVerified(parsed, actor)
+    const verified = await isHTTPSignatureVerified(parsed, actor)
+
     if (verified !== true) {
       logger.warn('Signature from %s is invalid', actorUrl, { parsed })
 
       res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Invalid signature',
+        message: req.t('Invalid signature'),
         data: {
           actorUrl
         }

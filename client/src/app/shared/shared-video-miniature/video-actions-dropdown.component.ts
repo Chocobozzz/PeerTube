@@ -291,7 +291,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
           this.videoUnblocked.emit()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -314,7 +314,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
           this.videoRemoved.emit()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -326,7 +326,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
           this.notifier.success(message)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -341,7 +341,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
           this.videoAccountMuted.emit()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -355,7 +355,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
           this.notifier.success($localize`Account ${params.nameWithHost} unmuted.`)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -372,7 +372,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
           this.videoFilesRemoved.emit()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -384,7 +384,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
           this.transcodingCreated.emit()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -397,7 +397,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
           else if (result.alreadyHasCaptions) this.notifier.info($localize`This video already has captions.`)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

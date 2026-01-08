@@ -9,7 +9,7 @@ import { readJsonSync } from 'fs-extra/esm'
 import cloneDeep from 'lodash-es/cloneDeep.js'
 
 function buildRequestStub (): any {
-  return { }
+  return {}
 }
 
 function signJsonLDObjectWithoutAssertion (options: Parameters<typeof signJsonLDObject>[0]) {
@@ -29,9 +29,7 @@ function fakeExpressReq (body: any) {
 }
 
 describe('Test activity pub helpers', function () {
-
   describe('When checking the Linked Signature', function () {
-
     it('Should fail with an invalid Mastodon signature', async function () {
       const body = readJsonSync(buildAbsoluteFixturePath('./ap-json/mastodon/create-bad-signature.json'))
       const publicKey = readJsonSync(buildAbsoluteFixturePath('./ap-json/mastodon/public-key.json')).publicKey
@@ -115,7 +113,7 @@ describe('Test activity pub helpers', function () {
       const publicKey = readJsonSync(buildAbsoluteFixturePath('./ap-json/mastodon/public-key.json')).publicKey
 
       const actor = { publicKey }
-      const verified = isHTTPSignatureVerified(parsed, actor as any)
+      const verified = await isHTTPSignatureVerified(parsed, actor as any)
 
       expect(verified).to.be.false
     })
@@ -133,7 +131,7 @@ describe('Test activity pub helpers', function () {
       const publicKey = readJsonSync(buildAbsoluteFixturePath('./ap-json/mastodon/bad-public-key.json')).publicKey
 
       const actor = { publicKey }
-      const verified = isHTTPSignatureVerified(parsed, actor as any)
+      const verified = await isHTTPSignatureVerified(parsed, actor as any)
 
       expect(verified).to.be.false
     })
@@ -190,11 +188,9 @@ describe('Test activity pub helpers', function () {
       const publicKey = readJsonSync(buildAbsoluteFixturePath('./ap-json/mastodon/public-key.json')).publicKey
 
       const actor = { publicKey }
-      const verified = isHTTPSignatureVerified(parsed, actor as any)
+      const verified = await isHTTPSignatureVerified(parsed, actor as any)
 
       expect(verified).to.be.true
     })
-
   })
-
 })

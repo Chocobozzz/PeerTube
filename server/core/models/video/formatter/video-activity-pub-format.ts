@@ -13,7 +13,7 @@ import {
 } from '@peertube/peertube-models'
 import { getAPPublicValue } from '@server/helpers/activity-pub-utils.js'
 import { isArray } from '@server/helpers/custom-validators/misc.js'
-import { generateMagnetUri } from '@server/helpers/webtorrent.js'
+import { generateMagnetUri } from '@server/lib/webtorrent.js'
 import { getActivityStreamDuration } from '@server/lib/activitypub/activity.js'
 import { getLocalVideoFileMetadataUrl } from '@server/lib/video-urls.js'
 import { WEBSERVER } from '../../../initializers/constants.js'

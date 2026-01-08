@@ -346,7 +346,7 @@ export class VideosListComponent implements OnInit, OnDestroy {
         },
 
         error: err => {
-          const message = $localize`Cannot load more videos. Try again later.`
+          const message = $localize`Cannot load more videos. Please try again later.`
 
           logger.error(message, err)
           this.notifier.error(message)

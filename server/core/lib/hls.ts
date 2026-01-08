@@ -2,6 +2,7 @@ import { sortBy, uniqify, uuidRegex } from '@peertube/peertube-core-utils'
 import { ffprobePromise, getVideoStreamDimensionsInfo } from '@peertube/peertube-ffmpeg'
 import { FileStorage, VideoResolution } from '@peertube/peertube-models'
 import { sha256 } from '@peertube/peertube-node-utils'
+import { ApplicationModel } from '@server/models/application/application.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { MStreamingPlaylist, MStreamingPlaylistFilesVideo, MVideo, MVideoCaption } from '@server/types/models/index.js'
 import { ensureDir, move, outputJSON, remove } from 'fs-extra/esm'
@@ -25,7 +26,21 @@ import { VideoPathManager } from './video-path-manager.js'
 const lTags = loggerTagsFactory('hls')
 
 export async function updateStreamingPlaylistsInfohashesIfNeeded () {
-  const playlistsToUpdateIds = await VideoStreamingPlaylistModel.listByIncorrectPeerVersion()
+  let playlistsToUpdateIds = new Set(await VideoStreamingPlaylistModel.listIdsByIncorrectPeerVersion())
+
+  if (playlistsToUpdateIds.size !== 0) {
+    logger.info(`Will update ${playlistsToUpdateIds.size} streaming playlists infohash because of protocol version change.`, lTags())
+  }
+
+  if (await ApplicationModel.streamingPlaylistBaseUrlChanged()) {
+    const localIds = await VideoStreamingPlaylistModel.listIdsLocals()
+
+    if (localIds.length !== 0) {
+      logger.info(`Will update ${localIds.length} local streaming playlists infohash because of object storage base URL change.`, lTags())
+
+      playlistsToUpdateIds = new Set([ ...playlistsToUpdateIds, ...localIds ])
+    }
+  }
 
   // Use separate SQL queries, because we could have many videos to update
   for (const playlistId of playlistsToUpdateIds) {

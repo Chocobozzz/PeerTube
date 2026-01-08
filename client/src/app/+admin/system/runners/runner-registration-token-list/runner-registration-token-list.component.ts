@@ -1,4 +1,3 @@
-
 import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { ConfirmService, Notifier } from '@app/core'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
@@ -21,7 +20,7 @@ import { RunnerService } from '../runner.service'
     PTDatePipe,
     NumberFormatterPipe,
     TableComponent
-]
+  ]
 })
 export class RunnerRegistrationTokenListComponent implements OnInit {
   private runnerService = inject(RunnerService)
@@ -63,7 +62,7 @@ export class RunnerRegistrationTokenListComponent implements OnInit {
           this.notifier.success($localize`Registration token generated.`)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -82,7 +81,7 @@ export class RunnerRegistrationTokenListComponent implements OnInit {
           this.notifier.success($localize`Registration token removed.`)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

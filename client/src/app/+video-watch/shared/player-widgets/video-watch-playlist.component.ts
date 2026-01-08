@@ -253,7 +253,7 @@ export class VideoWatchPlaylistComponent {
             this.auth.refreshUserInformation()
           },
 
-          error: err => this.notifier.error(err.message)
+          error: err => this.notifier.handleError(err)
         })
     } else {
       this.userService.updateMyAnonymousProfile(details)

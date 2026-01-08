@@ -1,4 +1,4 @@
-import httpSignature from '@peertube/http-signature'
+import { signAsDraftToRequest } from '@misskey-dev/node-http-message-signatures'
 import { CONFIG } from '@server/initializers/config.js'
 import { createWriteStream } from 'fs'
 import { remove } from 'fs-extra/esm'
@@ -38,8 +38,6 @@ export type PeerTubeRequestOptions = {
   bodyKBLimit?: number // 1MB
 
   httpSignature?: {
-    algorithm: string
-    authorizationHeaderName: string
     keyId: string
     key: string
     headers: string[]
@@ -91,8 +89,8 @@ export const unsafeSSRFGot = got.extend({
         headers['host'] = buildUrl(options.url).host
       },
 
-      options => {
-        const httpSignatureOptions = options.context?.httpSignature
+      async options => {
+        const httpSignatureOptions = options.context?.httpSignature as PeerTubeRequestOptions['httpSignature']
 
         if (httpSignatureOptions) {
           const method = options.method ?? 'GET'
@@ -102,21 +100,20 @@ export const unsafeSSRFGot = got.extend({
             throw new Error(`Cannot sign request without method (${method}) or path (${path}) ${options}`)
           }
 
-          httpSignature.signRequest({
-            getHeader: function (header: string) {
-              const value = options.headers[header.toLowerCase()]
-
-              if (!value) logger.warn('Unknown header requested by http-signature.', { headers: options.headers, header })
-              return value
-            },
-
-            setHeader: function (header: string, value: string) {
-              options.headers[header] = value
-            },
-
+          const request = {
+            headers: options.headers,
             method,
-            path
-          }, httpSignatureOptions)
+            url: path
+          }
+
+          await signAsDraftToRequest(
+            request,
+            {
+              keyId: httpSignatureOptions.keyId,
+              privateKeyPem: httpSignatureOptions.key
+            },
+            httpSignatureOptions.headers
+          )
         }
       }
     ],

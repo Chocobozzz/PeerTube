@@ -93,7 +93,7 @@ export class VideoBlockListComponent implements OnInit {
                 this.table().loadData()
               },
 
-              error: err => this.notifier.error(err.message)
+              error: err => this.notifier.handleError(err)
             })
           },
           isDisplayed: videoBlock => videoBlock.type === VideoBlacklistType.AUTO_BEFORE_PUBLISHED
@@ -125,7 +125,7 @@ export class VideoBlockListComponent implements OnInit {
                   this.table().loadData()
                 },
 
-                error: err => this.notifier.error(err.message)
+                error: err => this.notifier.handleError(err)
               })
           }
         }
@@ -159,7 +159,7 @@ export class VideoBlockListComponent implements OnInit {
           this.table().loadData()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

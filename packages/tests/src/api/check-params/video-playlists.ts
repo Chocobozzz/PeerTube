@@ -20,7 +20,7 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '@peertube/peertube-server-commands'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { expect } from 'chai'
 
 describe('Test video playlists API validator', function () {
@@ -146,9 +146,9 @@ describe('Test video playlists API validator', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, globalPath, server.accessToken)
-      await checkBadSortPagination(server.url, accountPath, server.accessToken)
-      await checkBadSortPagination(server.url, videoChannelPath, server.accessToken)
+      await checkBadSort(server.url, globalPath, server.accessToken)
+      await checkBadSort(server.url, accountPath, server.accessToken)
+      await checkBadSort(server.url, videoChannelPath, server.accessToken)
     })
 
     it('Should fail with a bad playlist type', async function () {

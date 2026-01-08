@@ -102,7 +102,7 @@ export class VideoRateComponent implements OnInit, OnChanges, OnDestroy {
           this.userRatingLoaded.emit(this.userRating)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -122,7 +122,7 @@ export class VideoRateComponent implements OnInit, OnChanges, OnDestroy {
           this.rateUpdated.emit(this.userRating)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

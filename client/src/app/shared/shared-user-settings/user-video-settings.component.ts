@@ -224,7 +224,7 @@ export class UserVideoSettingsComponent implements OnInit, OnDestroy {
           if (this.notifyOnUpdate()) this.notifier.success($localize`Video settings updated.`)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

@@ -1,6 +1,6 @@
 import { ensureDir } from 'fs-extra/esm'
 import { Op } from 'sequelize'
-import { updateTorrentMetadata } from '@server/helpers/webtorrent.js'
+import { updateTorrentMetadata } from '@server/lib/webtorrent.js'
 import { DIRECTORIES } from '@server/initializers/constants.js'
 import { moveFilesIfPrivacyChanged } from '@server/lib/video-privacy.js'
 import { VideoModel } from '@server/models/video/video.js'

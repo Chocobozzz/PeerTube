@@ -148,7 +148,7 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
           this.elementRemoved.emit(playlistElement)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
 
     this.moreDropdown().close()
@@ -171,7 +171,7 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
           this.cdr.detectChanges()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
 
     this.moreDropdown().close()

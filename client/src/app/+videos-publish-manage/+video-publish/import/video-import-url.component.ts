@@ -1,4 +1,3 @@
-
 import { AfterViewInit, Component, OnInit, inject, input, output } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, RouterLink } from '@angular/router'
@@ -37,7 +36,7 @@ const debugLogger = debug('peertube:video-publish')
     ReactiveFormsModule,
     AlertComponent,
     VideoManageContainerComponent
-]
+  ]
 })
 export class VideoImportUrlComponent implements OnInit, AfterViewInit, CanComponentDeactivate {
   private authService = inject(AuthService)
@@ -151,7 +150,7 @@ export class VideoImportUrlComponent implements OnInit, AfterViewInit, CanCompon
           this.loadingBar.useRef().complete()
           this.isImportingVideo = false
           this.firstStepError.emit()
-          this.notifier.error(err.message)
+          this.notifier.handleError(err)
         }
       })
   }

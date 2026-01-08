@@ -3,13 +3,14 @@ import { JobQueue } from '@server/lib/job-queue/index.js'
 import { ActorFollowModel } from '@server/models/actor/actor-follow.js'
 import { getServerActor } from '@server/models/application/application.js'
 import chunk from 'lodash-es/chunk.js'
-import { logger } from '../../helpers/logger.js'
+import { logger, loggerTagsFactory } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { SCHEDULER_INTERVALS_MS, SERVER_ACTOR_NAME } from '../../initializers/constants.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
-export class AutoFollowIndexInstances extends AbstractScheduler {
+const lTags = loggerTagsFactory('schedulers')
 
+export class AutoFollowIndexInstances extends AbstractScheduler {
   private static instance: AbstractScheduler
 
   protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.AUTO_FOLLOW_INDEX_INSTANCES
@@ -17,7 +18,7 @@ export class AutoFollowIndexInstances extends AbstractScheduler {
   private lastCheck: Date
 
   private constructor () {
-    super()
+    super({ randomRunOnEnable: true })
   }
 
   protected async internalExecute () {
@@ -29,7 +30,7 @@ export class AutoFollowIndexInstances extends AbstractScheduler {
 
     const indexUrl = CONFIG.FOLLOWINGS.INSTANCE.AUTO_FOLLOW_INDEX.INDEX_URL
 
-    logger.info('Auto follow instances of index %s.', indexUrl)
+    logger.info(`Auto follow instances of index ${indexUrl}`, lTags())
 
     try {
       const serverActor = await getServerActor()
@@ -41,7 +42,7 @@ export class AutoFollowIndexInstances extends AbstractScheduler {
 
       const { body } = await doJSONRequest<any>(indexUrl, { searchParams, preventSSRF: false })
       if (!body.data || Array.isArray(body.data) === false) {
-        logger.error('Cannot auto follow instances of index %s. Please check the auto follow URL.', indexUrl, { body })
+        logger.error(`Cannot auto follow instances of index ${indexUrl}. Please check the auto follow URL.`, { body, ...lTags() })
         return
       }
 
@@ -62,11 +63,9 @@ export class AutoFollowIndexInstances extends AbstractScheduler {
           JobQueue.Instance.createJobAsync({ type: 'activitypub-follow', payload })
         }
       }
-
     } catch (err) {
-      logger.error('Cannot auto follow hosts of index %s.', indexUrl, { err })
+      logger.error(`Cannot auto follow hosts of index ${indexUrl}.`, { err, ...lTags() })
     }
-
   }
 
   static get Instance () {

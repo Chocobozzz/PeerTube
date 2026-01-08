@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router'
 import { ComponentPagination, hasMoreItems, Notifier } from '@app/core'
 import { Subject } from 'rxjs'
 import { InfiniteScrollerDirective } from '../shared-main/common/infinite-scroller.directive'
+import { DateGroupLabelComponent, GroupDate, GroupDateLabels } from '../shared-main/date/date-group-label.component'
 import { UserNotification } from '../shared-main/users/user-notification.model'
 import { UserNotificationService } from '../shared-main/users/user-notification.service'
 import { UserNotificationContentComponent } from './user-notification-content.component'
@@ -16,7 +17,8 @@ import { UserNotificationContentComponent } from './user-notification-content.co
     CommonModule,
     RouterLink,
     InfiniteScrollerDirective,
-    UserNotificationContentComponent
+    UserNotificationContentComponent,
+    DateGroupLabelComponent
   ]
 })
 export class UserNotificationsComponent implements OnInit {
@@ -31,6 +33,16 @@ export class UserNotificationsComponent implements OnInit {
   readonly userNotificationReload = input<Subject<boolean>>(undefined)
 
   readonly notificationsLoaded = output()
+
+  groupByDateStore = new Set<number>()
+  groupedDateLabels: GroupDateLabels = {
+    [GroupDate.TODAY]: $localize`Today`,
+    [GroupDate.YESTERDAY]: $localize`Yesterday`,
+    [GroupDate.THIS_WEEK]: $localize`This week`,
+    [GroupDate.THIS_MONTH]: $localize`This month`,
+    [GroupDate.LAST_MONTH]: $localize`Last month`,
+    [GroupDate.OLDER]: $localize`Older`
+  }
 
   notifications: UserNotification[] = []
   sortField = 'createdAt'
@@ -83,7 +95,7 @@ export class UserNotificationsComponent implements OnInit {
           this.onDataSubject.next(result.data)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -106,7 +118,7 @@ export class UserNotificationsComponent implements OnInit {
           notification.payload.read = true
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -119,7 +131,7 @@ export class UserNotificationsComponent implements OnInit {
           }
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

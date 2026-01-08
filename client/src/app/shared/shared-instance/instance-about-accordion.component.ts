@@ -76,7 +76,7 @@ export class InstanceAboutAccordionComponent implements OnInit {
           this.init.emit(this)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
 
     this.pluginPanels = await this.hookService.wrapObject([], this.pluginScope(), this.pluginHook())

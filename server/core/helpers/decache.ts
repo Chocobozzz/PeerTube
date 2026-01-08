@@ -1,22 +1,26 @@
 // Thanks: https://github.com/dwyl/decache
 // We reuse this file to also uncache plugin base path
 
+import { CONFIG } from '@server/initializers/config.js'
 import { Module } from 'module'
-import { extname } from 'path'
+import { extname, join } from 'path'
 
-function decachePlugin (require: NodeJS.Require, libraryPath: string) {
+export function decachePlugin (require: NodeJS.Require, libraryPath: string) {
   const moduleName = find(require, libraryPath)
 
   if (!moduleName) return
 
   searchCache(require, moduleName, function (mod) {
+    console.log(mod)
+
     delete require.cache[mod.id]
 
     removeCachedPath(mod.path)
+    removeCachedPath(join(CONFIG.STORAGE.PLUGINS_DIR, 'node_modules'))
   })
 }
 
-function decacheModule (require: NodeJS.Require, name: string) {
+export function decacheModule (require: NodeJS.Require, name: string) {
   const moduleName = find(require, name)
 
   if (!moduleName) return
@@ -29,12 +33,7 @@ function decacheModule (require: NodeJS.Require, name: string) {
 }
 
 // ---------------------------------------------------------------------------
-
-export {
-  decacheModule,
-  decachePlugin
-}
-
+// Private
 // ---------------------------------------------------------------------------
 
 function find (require: NodeJS.Require, moduleName: string) {

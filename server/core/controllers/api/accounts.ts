@@ -12,7 +12,7 @@ import {
   apiRateLimiter,
   asyncMiddleware,
   authenticate,
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidatorFactory,
   optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
@@ -71,7 +71,7 @@ accountsRouter.get(
   setDefaultVideosSort,
   setDefaultPagination,
   optionalAuthenticate,
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidatorFactory(),
   asyncMiddleware(listAccountVideos)
 )
 

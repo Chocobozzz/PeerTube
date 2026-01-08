@@ -72,12 +72,16 @@ export async function initPNPM () {
 
     await outputJSON(pluginPackageJSON, {})
   } else {
-    let packageJSONContent = await readFile(pluginPackageJSON, 'utf-8')
+    try {
+      let packageJSONContent = await readFile(pluginPackageJSON, 'utf-8')
 
-    if (packageJSONContent.includes('"packageManager"')) {
-      packageJSONContent = packageJSONContent.replace(/\s*"packageManager".*/g, '')
+      if (packageJSONContent.includes('"packageManager"')) {
+        packageJSONContent = packageJSONContent.replace(/\s*"packageManager".*/g, '')
 
-      await writeFile(pluginPackageJSON, packageJSONContent, 'utf-8')
+        await writeFile(pluginPackageJSON, packageJSONContent, 'utf-8')
+      }
+    } catch (err) {
+      logger.error('Cannot sanitize package.json in plugin directory', { err })
     }
   }
 
@@ -91,7 +95,14 @@ export async function initPNPM () {
   if (await pathExists(join(pluginDirectory, 'yarn.lock'))) {
     logger.info('Migrate from yarn.lock in plugin directory')
 
-    await execPNPM('import yarn.lock')
-    await remove(join(pluginDirectory, 'yarn.lock'))
+    try {
+      await execPNPM('import')
+      await remove(join(pluginDirectory, 'yarn.lock'))
+    } catch (err) {
+      logger.error(
+        'Cannot migrate from yarn.lock in plugin directory. Please fix this error to not break PeerTube plugins/themes.',
+        { err }
+      )
+    }
   }
 }

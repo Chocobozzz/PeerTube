@@ -53,7 +53,7 @@ export class VideoChangeOwnershipComponent extends FormReactive implements OnIni
           this.requestSent.emit(username)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 }

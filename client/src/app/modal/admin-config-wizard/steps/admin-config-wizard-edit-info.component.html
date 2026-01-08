@@ -47,7 +47,7 @@
         <div class="form-group">
           <label i18n for="primaryColor">Primary color</label>
 
-          <p-colorpicker class="d-block" inputId="primaryColor" formControlName="primaryColor" />
+          <my-peertube-color-picker inputId="primaryColor" formControlName="primaryColor" [formError]="formErrors.primaryColor" />
         </div>
 
         <div class="buttons">

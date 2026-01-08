@@ -245,7 +245,7 @@ export class VideoCommentListAdminOwnerComponent implements OnInit, OnDestroy {
           this.table().loadData()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -265,7 +265,7 @@ export class VideoCommentListAdminOwnerComponent implements OnInit, OnDestroy {
           this.table().loadData()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -274,7 +274,7 @@ export class VideoCommentListAdminOwnerComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => this.table().loadData(),
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -296,7 +296,7 @@ export class VideoCommentListAdminOwnerComponent implements OnInit, OnDestroy {
           this.notifier.success($localize`Comments of ${options.accountName} will be deleted in a few minutes`)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 }

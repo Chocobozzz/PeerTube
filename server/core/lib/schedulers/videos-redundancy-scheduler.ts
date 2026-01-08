@@ -22,7 +22,7 @@ import { removeVideoRedundancy } from '../redundancy.js'
 import { generateHLSRedundancyUrl } from '../video-urls.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
-const lTags = loggerTagsFactory('redundancy')
+const lTags = loggerTagsFactory('schedulers', 'redundancy')
 
 type CandidateToDuplicate = {
   redundancy: VideosRedundancyStrategy
@@ -31,13 +31,12 @@ type CandidateToDuplicate = {
 }
 
 export class VideosRedundancyScheduler extends AbstractScheduler {
-
   private static instance: VideosRedundancyScheduler
 
   protected schedulerIntervalMs = CONFIG.REDUNDANCY.VIDEOS.CHECK_INTERVAL
 
   private constructor () {
-    super()
+    super({ randomRunOnEnable: true })
   }
 
   async createManualRedundancy (videoId: number) {
@@ -79,7 +78,9 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
 
         logger.info(
           'Will duplicate video %s in redundancy scheduler "%s".',
-          videoToDuplicate.url, redundancyConfig.strategy, lTags(videoToDuplicate.uuid)
+          videoToDuplicate.url,
+          redundancyConfig.strategy,
+          lTags(videoToDuplicate.uuid)
         )
 
         await this.createVideoRedundancies(candidateToDuplicate)
@@ -108,7 +109,8 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
         if (!redundancyConfig) {
           logger.info(
             'Destroying redundancy %s because the redundancy %s does not exist anymore.',
-            redundancyModel.url, redundancyModel.strategy
+            redundancyModel.url,
+            redundancyModel.strategy
           )
 
           await removeVideoRedundancy(redundancyModel)
@@ -129,7 +131,8 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
       } catch (err) {
         logger.error(
           'Cannot extend or remove expiration of %s video from our redundancy system.',
-          this.buildEntryLogId(redundancyModel), { err, ...lTags(redundancyModel.getVideoUUID()) }
+          this.buildEntryLogId(redundancyModel),
+          { err, ...lTags(redundancyModel.getVideoUUID()) }
         )
       }
     }
@@ -155,7 +158,8 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
       } catch (err) {
         logger.error(
           'Cannot remove redundancy %s from our redundancy system.',
-          this.buildEntryLogId(redundancyModel), lTags(redundancyModel.getVideoUUID())
+          this.buildEntryLogId(redundancyModel),
+          lTags(redundancyModel.getVideoUUID())
         )
       }
     }

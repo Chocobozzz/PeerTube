@@ -157,7 +157,7 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     return hashes
   }
 
-  static async listByIncorrectPeerVersion () {
+  static async listIdsByIncorrectPeerVersion () {
     const rows = await VideoStreamingPlaylistModel.unscoped().findAll({
       raw: true,
       attributes: [ 'id' ],
@@ -170,6 +170,26 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
 
     return rows.map(r => r.id)
   }
+
+  static async listIdsLocals () {
+    const rows = await VideoStreamingPlaylistModel.unscoped().findAll({
+      raw: true,
+      attributes: [ 'id' ],
+      include: [
+        {
+          model: VideoModel.unscoped(),
+          required: true,
+          where: {
+            remote: false
+          }
+        }
+      ]
+    })
+
+    return rows.map(r => r.id)
+  }
+
+  // ---------------------------------------------------------------------------
 
   static loadWithVideoAndFiles (id: number) {
     const options = {

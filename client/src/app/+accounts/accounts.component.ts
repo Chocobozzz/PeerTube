@@ -108,7 +108,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
           this.videoChannels = videoChannels.data
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
 
     this.links = [
@@ -213,7 +213,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
             this.accountUser = accountUser
           },
 
-          error: err => this.notifier.error(err.message)
+          error: err => this.notifier.handleError(err)
         })
     }
   }

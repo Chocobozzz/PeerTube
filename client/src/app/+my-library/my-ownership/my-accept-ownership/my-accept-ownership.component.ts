@@ -74,7 +74,7 @@ export class MyAcceptOwnershipComponent extends FormReactive implements OnInit {
           this.videoChangeOwnership = undefined
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 }

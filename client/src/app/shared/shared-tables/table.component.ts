@@ -487,7 +487,7 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
           },
 
           error: err => {
-            this.notifier.error(err.message)
+            this.notifier.handleError(err)
             rej(err)
           }
         })

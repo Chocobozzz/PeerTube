@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common'
 import { booleanAttribute, Component, inject, input, numberAttribute, OnInit, output } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ServerService, ThemeService } from '@app/core'
+import { HEX_COLOR_CODE_VALIDATOR } from '@app/shared/form-validators/common-validators'
 import { INSTANCE_NAME_VALIDATOR, INSTANCE_SHORT_DESCRIPTION_VALIDATOR } from '@app/shared/form-validators/custom-config-validators'
 import {
   BuildFormArgumentTyped,
@@ -11,8 +12,8 @@ import {
   FormReactiveMessagesTyped
 } from '@app/shared/form-validators/form-validator.model'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import { PeertubeColorPickerComponent } from '@app/shared/shared-forms/peertube-color-picker.component'
 import { PreviewUploadComponent } from '@app/shared/shared-forms/preview-upload.component'
-import { ColorPickerModule } from 'primeng/colorpicker'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 import { findAppropriateImage } from '@peertube/peertube-core-utils'
 import { logger } from '@root-helpers/logger'
@@ -30,7 +31,15 @@ export type FormEditInfo = FormDefaultTyped<Form>
   selector: 'my-admin-config-wizard-edit-info',
   templateUrl: './admin-config-wizard-edit-info.component.html',
   styleUrls: [ './admin-config-wizard-edit-info.component.scss', '../shared/admin-config-wizard-modal-common.scss' ],
-  imports: [ CommonModule, FormsModule, ReactiveFormsModule, ColorPickerModule, CdkStepperModule, ButtonComponent, PreviewUploadComponent ]
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    PeertubeColorPickerComponent,
+    CdkStepperModule,
+    ButtonComponent,
+    PreviewUploadComponent
+  ]
 })
 export class AdminConfigWizardEditInfoComponent implements OnInit {
   private server = inject(ServerService)
@@ -68,7 +77,7 @@ export class AdminConfigWizardEditInfoComponent implements OnInit {
       platformName: INSTANCE_NAME_VALIDATOR,
       shortDescription: INSTANCE_SHORT_DESCRIPTION_VALIDATOR,
       avatar: null,
-      primaryColor: null
+      primaryColor: HEX_COLOR_CODE_VALIDATOR
     }
 
     const {
