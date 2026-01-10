@@ -24237,9 +24237,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">445</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9183388719442195675" datatype="html">
+      <trans-unit id="9183388719442195675" datatype="html" xml:space="preserve">
         <source>Platform danger zone</source>
-        <target state="new">Platform danger zone</target>
+        <target state="translated">Platform-gevarenzone</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">454</context>
