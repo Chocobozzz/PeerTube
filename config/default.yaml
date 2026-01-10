@@ -140,6 +140,7 @@ storage:
   # Various admin/user uploads that are not suitable for the folders above
   uploads: 'storage/uploads/'
   # Overridable client files in client/dist/assets/images:
+  # - logo.svg
   # - default-avatar-account-48x48.png
   # - default-avatar-account.png
   # - default-avatar-video-channel-48x48.png
