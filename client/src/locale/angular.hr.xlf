@@ -9600,9 +9600,9 @@
           <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6726731995452198855" datatype="html">
+      <trans-unit id="6726731995452198855" datatype="html" xml:space="preserve">
         <source>Channel name "<x id="PH" equiv-text="this.videoChannelEdit.channel.name"/>" already exists on this platform.</source>
-        <target state="new">Channel name "<x id="PH" equiv-text="this.videoChannelEdit.channel.name"/>" already exists on this platform.</target>
+        <target state="translated">Ime kanala „<x id="PH" equiv-text="this.videoChannelEdit.channel.name"/>” već postoji na ovoj platformi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/video-channel-create.component.ts</context>
           <context context-type="linenumber">86</context>
@@ -9616,9 +9616,9 @@
           <context context-type="linenumber">139</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5389185875019765464" datatype="html">
+      <trans-unit id="5389185875019765464" datatype="html" xml:space="preserve">
         <source>Editors</source>
-        <target state="new">Editors</target>
+        <target state="translated">Urednici</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">5</context>
@@ -9636,153 +9636,153 @@
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5317232365024013794" datatype="html">
+      <trans-unit id="5317232365024013794" datatype="html" xml:space="preserve">
         <source>Current owner</source>
-        <target state="new">Current owner</target>
+        <target state="translated">Trenutačni vlasnik</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">14,16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3560799758233130163" datatype="html">
+      <trans-unit id="3560799758233130163" datatype="html" xml:space="preserve">
         <source>(you)</source>
-        <target state="new">(you)</target>
+        <target state="translated">(ti)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">24,25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8692176668095407729" datatype="html">
+      <trans-unit id="8692176668095407729" datatype="html" xml:space="preserve">
         <source>EDITORS</source>
-        <target state="new">EDITORS</target>
+        <target state="translated">UREDNICI</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">36,37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2648594810167531503" datatype="html">
+      <trans-unit id="2648594810167531503" datatype="html" xml:space="preserve">
         <source>Editors <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>can:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Editors <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>can:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Urednici <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>mogu:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3790361059881359024" datatype="html">
+      <trans-unit id="3790361059881359024" datatype="html" xml:space="preserve">
         <source>Publish videos in this channel</source>
-        <target state="new">Publish videos in this channel</target>
+        <target state="translated">Objaviti videa na ovom kanalu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2328126264669408590" datatype="html">
+      <trans-unit id="2328126264669408590" datatype="html" xml:space="preserve">
         <source>Manage, update or delete videos, comments, playlists of this channel</source>
-        <target state="new">Manage, update or delete videos, comments, playlists of this channel</target>
+        <target state="translated">Upravljati, aktualizirati ili brisati videa, komentare i playliste ovog kanala</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6753681732976615521" datatype="html">
+      <trans-unit id="6753681732976615521" datatype="html" xml:space="preserve">
         <source>Add or delete channel synchronization</source>
-        <target state="new">Add or delete channel synchronization</target>
+        <target state="translated">Dodati ili izbrisati sinkronizaciju kanala</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8868828786989275402" datatype="html">
+      <trans-unit id="8868828786989275402" datatype="html" xml:space="preserve">
         <source>Update information of this channel (title, description, banner...)</source>
-        <target state="new">Update information of this channel (title, description, banner...)</target>
+        <target state="translated">Aktualizirati informacije o ovom kanalu (naslov, opis, natpis …)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="566992019450450500" datatype="html">
+      <trans-unit id="566992019450450500" datatype="html" xml:space="preserve">
         <source>But editors <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>cannot:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">But editors <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>cannot:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Ali urednici <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>ne mogu:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="217345434594735009" datatype="html">
+      <trans-unit id="217345434594735009" datatype="html" xml:space="preserve">
         <source>Delete the channel</source>
-        <target state="new">Delete the channel</target>
+        <target state="translated">Izbrisati kanal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5864968016757262571" datatype="html">
+      <trans-unit id="5864968016757262571" datatype="html" xml:space="preserve">
         <source>Add or remove other editors</source>
-        <target state="new">Add or remove other editors</target>
+        <target state="translated">Dodati ili ukloniti druge urednike</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3684779884984833882" datatype="html">
+      <trans-unit id="3684779884984833882" datatype="html" xml:space="preserve">
         <source>Current editors</source>
-        <target state="new">Current editors</target>
+        <target state="translated">Aktualni urednici</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5874570330774661733" datatype="html">
+      <trans-unit id="5874570330774661733" datatype="html" xml:space="preserve">
         <source>No editors at the moment</source>
-        <target state="new">No editors at the moment</target>
+        <target state="translated">Trenutačno nema urednika</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7704259175174094901" datatype="html">
+      <trans-unit id="7704259175174094901" datatype="html" xml:space="preserve">
         <source>New editor</source>
-        <target state="new">New editor</target>
+        <target state="translated">Novi urednik</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8488228014293021599" datatype="html">
+      <trans-unit id="8488228014293021599" datatype="html" xml:space="preserve">
         <source>Editor handle</source>
-        <target state="new">Editor handle</target>
+        <target state="translated">Identifikacija urednika</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3463797202358605584" datatype="html">
+      <trans-unit id="3463797202358605584" datatype="html" xml:space="preserve">
         <source>Invite</source>
-        <target state="new">Invite</target>
+        <target state="translated">Pozovi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">98</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8065180360788653509" datatype="html">
+      <trans-unit id="8065180360788653509" datatype="html" xml:space="preserve">
         <source>Are you sure you want to remove invitation of &lt;strong&gt;<x id="PH" equiv-text="collaborator.account.displayName"/>&lt;/strong&gt; to collaborate on your channel?</source>
-        <target state="new">Are you sure you want to remove invitation of &lt;strong&gt;<x id="PH" equiv-text="collaborator.account.displayName"/>&lt;/strong&gt; to collaborate on your channel?</target>
+        <target state="translated">Stvarno želiš ukloniti pozivnicu za suradnju korisnika <x id="PH" equiv-text="collaborator.account.displayName"/> na tvom kanalu?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.ts</context>
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1861878820024137953" datatype="html">
+      <trans-unit id="1861878820024137953" datatype="html" xml:space="preserve">
         <source>Are you sure you want to remove &lt;strong&gt;<x id="PH" equiv-text="collaborator.account.displayName"/>&lt;/strong&gt; as a collaborator?</source>
-        <target state="new">Are you sure you want to remove &lt;strong&gt;<x id="PH" equiv-text="collaborator.account.displayName"/>&lt;/strong&gt; as a collaborator?</target>
+        <target state="translated">Stvarno želiš ukloniti <x id="PH" equiv-text="collaborator.account.displayName"/> kao suradnika?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.ts</context>
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="751060137543557029" datatype="html">
+      <trans-unit id="751060137543557029" datatype="html" xml:space="preserve">
         <source>Remove collaborator</source>
-        <target state="new">Remove collaborator</target>
+        <target state="translated">Ukloni suradnika</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.ts</context>
           <context context-type="linenumber">76</context>
@@ -22166,17 +22166,17 @@
           <context context-type="linenumber">3,4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8958007499282871351" datatype="html">
+      <trans-unit id="8958007499282871351" datatype="html" xml:space="preserve">
         <source>Editor</source>
-        <target state="new"> Editor </target>
+        <target state="translated">Urednik</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.html</context>
           <context context-type="linenumber">7,8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8310012947639468553" datatype="html">
+      <trans-unit id="8310012947639468553" datatype="html" xml:space="preserve">
         <source>Invitation sent</source>
-        <target state="new"> Invitation sent </target>
+        <target state="translated">Pozivnica je poslana</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.html</context>
           <context context-type="linenumber">11,12</context>
