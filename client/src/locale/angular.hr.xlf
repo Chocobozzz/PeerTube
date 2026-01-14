@@ -18222,9 +18222,9 @@
           <context context-type="linenumber">46,48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1561366846864007609" datatype="html">
+      <trans-unit id="1561366846864007609" datatype="html" xml:space="preserve">
         <source>Managing users, following other platforms, dealing with spammers, configure object storage or remote transcoding...</source>
-        <target state="new">Managing users, following other platforms, dealing with spammers, configure object storage or remote transcoding...</target>
+        <target state="translated">Upravljanje korisnicima, praćenje drugih platformi, rješavanje neželjene pošte, konfiguriranje spremišta objekata ili udaljeno transkodiranje …</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">48,49</context>
@@ -18238,17 +18238,17 @@
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="795989016417948119" datatype="html">
+      <trans-unit id="795989016417948119" datatype="html" xml:space="preserve">
         <source>Do not display again</source>
-        <target state="new">Do not display again</target>
+        <target state="translated">Nemoj više prikazivati</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-welcome.component.html</context>
           <context context-type="linenumber">17,18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9079166010714549602" datatype="html">
+      <trans-unit id="9079166010714549602" datatype="html" xml:space="preserve">
         <source>Registration policy</source>
-        <target state="new">Registration policy</target>
+        <target state="translated">Politika registracije</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.html</context>
           <context context-type="linenumber">3,5</context>
