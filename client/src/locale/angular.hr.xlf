@@ -15342,9 +15342,9 @@
           <context context-type="linenumber">6,7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1870557085021370018" datatype="html">
+      <trans-unit id="1870557085021370018" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No runner} =1 {1 runner} other {<x id="INTERPOLATION"/> runners}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No runner} =1 {1 runner} other {<x id="INTERPOLATION"/> runners}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Nema izvršitelja} =1 {1 izvršitelj} few {<x id="INTERPOLATION"/> izvršitelja other {<x id="INTERPOLATION"/> izvršitelja}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context>
           <context context-type="linenumber">11</context>
@@ -15374,17 +15374,17 @@
           <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6730106167108982068" datatype="html">
+      <trans-unit id="6730106167108982068" datatype="html" xml:space="preserve">
         <source>tokens per page</source>
-        <target state="new">tokens per page</target>
+        <target state="translated">tokena po stranici</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">6,7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6150953528522677928" datatype="html">
+      <trans-unit id="6150953528522677928" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No token} =1 {1 token} other {<x id="INTERPOLATION"/> tokens}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No token} =1 {1 token} other {<x id="INTERPOLATION"/> tokens}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Nema tokena} =1 {1 token} few {<x id="INTERPOLATION"/> tokena} other {<x id="INTERPOLATION"/> tokena}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">11</context>
