@@ -2665,7 +2665,7 @@
       </trans-unit>
       <trans-unit id="4091781230315618850" datatype="html" xml:space="preserve">
         <source>Video quota is checked on import so the user doesn't upload a too big archive file</source>
-        <target state="translated">Kvota za videa se provjerava prilikom uvoza kako korisnik ne bi prenio preveliku arhivsku datoteku</target>
+        <target state="translated">Kvota videa se provjerava prilikom uvoza kako korisnik ne bi prenio preveliku arhivsku datoteku</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">834</context>
@@ -2673,7 +2673,7 @@
       </trans-unit>
       <trans-unit id="3112747752460656486" datatype="html" xml:space="preserve">
         <source>Video quota (daily quota is not taken into account) is also checked for each video when PeerTube is processing the import</source>
-        <target state="translated">Kvota za videa (dnevna kvota se ne uzima u obzir) se također provjerava za svaki video kada PeerTube obrađuje uvoz</target>
+        <target state="translated">Kvota videa (dnevna kvota se ne uzima u obzir) se također provjerava za svaki video kada PeerTube obrađuje uvoz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">835</context>
@@ -2697,7 +2697,7 @@
       </trans-unit>
       <trans-unit id="7396688046674522189" datatype="html" xml:space="preserve">
         <source>Max user video quota allowed to generate the export</source>
-        <target state="translated">Maksimalno dozvoljena korisnička kvota za videa za generiranje izvoza</target>
+        <target state="translated">Maksimalno dozvoljena korisnička kvota videa za generiranje izvoza</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">852</context>
@@ -6093,7 +6093,7 @@
       </trans-unit>
       <trans-unit id="6180920471345723927" datatype="html" xml:space="preserve">
         <source>The video quota only takes into account the size of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>uploaded<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videos, not transcoded files or user export archives (which may contain video files). </source>
-        <target state="translated">Kvota za videa uzima u obzir samo veličinu <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>prenesenih<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videa, a ne transkodirane datoteke ili arhive korisničkih izvoza (koje mogu sadržavati video datoteke). </target>
+        <target state="translated">Kvota videa uzima u obzir samo veličinu <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>prenesenih<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videa, a ne transkodirane datoteke ili arhive korisničkih izvoza (koje mogu sadržavati video datoteke). </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-real-quota-info.component.html</context>
           <context context-type="linenumber">4</context>
@@ -7185,7 +7185,7 @@
       </trans-unit>
       <trans-unit id="2602586221576511475" datatype="html" xml:space="preserve">
         <source>Video quota</source>
-        <target state="translated">Kvota za videa</target>
+        <target state="translated">Kvota videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">171</context>
@@ -7205,7 +7205,7 @@
       </trans-unit>
       <trans-unit id="2743014784334706527" datatype="html" xml:space="preserve">
         <source>Daily video quota</source>
-        <target state="translated">Dnevna kvota za videa</target>
+        <target state="translated">Dnevna kvota videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">192</context>
@@ -7449,7 +7449,7 @@
       </trans-unit>
       <trans-unit id="2127094963121208963" datatype="html" xml:space="preserve">
         <source>Total video quota</source>
-        <target state="translated">Ukupna kvota za videa</target>
+        <target state="translated">Ukupna kvota videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">67</context>
@@ -7461,7 +7461,7 @@
       </trans-unit>
       <trans-unit id="242888077027281874" datatype="html" xml:space="preserve">
         <source>Total daily video quota</source>
-        <target state="translated">Ukupna dnevna kvota za videa</target>
+        <target state="translated">Ukupna dnevna kvota videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">77</context>
@@ -11425,7 +11425,7 @@
       </trans-unit>
       <trans-unit id="6995024616159044376" datatype="html" xml:space="preserve">
         <source>Your video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</source>
-        <target state="translated">Ovim videom premašuješ tvoju kvotu za videa (veličina videa: <x id="PH" equiv-text="videoSizeBytes"/>, korišteno: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, kvota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
+        <target state="translated">Ovim videom premašuješ tvoju kvotu videa (veličina videa: <x id="PH" equiv-text="videoSizeBytes"/>, korišteno: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, kvota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-upload.service.ts</context>
           <context context-type="linenumber">30</context>
@@ -13927,7 +13927,7 @@
       </trans-unit>
       <trans-unit id="1212376766715456139" datatype="html" xml:space="preserve">
         <source>⚠️ If you enable this option, your live will be terminated if you exceed your video quota</source>
-        <target state="translated">⚠️ Ako aktiviraš ovu opciju, tvoj će se prijenos uživo prekinuti ako premašiš tvoju kvotu za videa</target>
+        <target state="translated">⚠️ Ako aktiviraš ovu opciju, tvoj će se prijenos uživo prekinuti ako premašiš tvoju kvotu videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">96</context>
@@ -14900,7 +14900,7 @@
       </trans-unit>
       <trans-unit id="438743381693904838" datatype="html" xml:space="preserve">
         <source>Your daily video quota is insufficient. If you want to add more videos, you must wait for 24 hours or an admin must increase your daily quota.</source>
-        <target state="translated">Tvoja dnevna kvota za videa nije dovoljna. Ako želiš dodati više videa, moraš pričekati 24 sata ili jedan od administratora mora povećati tvoj dnevnu kvotu.</target>
+        <target state="translated">Tvoja dnevna kvota videa nije dovoljna. Ako želiš dodati više videa, moraš pričekati 24 sata ili jedan od administratora mora povećati tvoj dnevnu kvotu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/video-publish.component.ts</context>
           <context context-type="linenumber">187</context>
@@ -14908,7 +14908,7 @@
       </trans-unit>
       <trans-unit id="6796692581512042469" datatype="html" xml:space="preserve">
         <source>Your video quota is insufficient. If you want to add more videos, an admin must increase your quota.</source>
-        <target state="translated">Tvoja kvota za videa nije dovoljna. Ako želiš dodati više videa, moraš pričekati 24 sata ili jedan od administratora mora povećati tvoj kvotu.</target>
+        <target state="translated">Tvoja kvota videa nije dovoljna. Ako želiš dodati više videa, moraš pričekati 24 sata ili jedan od administratora mora povećati tvoj kvotu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/video-publish.component.ts</context>
           <context context-type="linenumber">188</context>
@@ -18254,9 +18254,9 @@
           <context context-type="linenumber">3,5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4252012934127630804" datatype="html">
+      <trans-unit id="4252012934127630804" datatype="html" xml:space="preserve">
         <source>Video quota for new users</source>
-        <target state="new">Video quota for new users</target>
+        <target state="translated">Kvota videa za nove korisnike</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.html</context>
           <context context-type="linenumber">9,11</context>
@@ -18780,7 +18780,7 @@
       </trans-unit>
       <trans-unit id="7568988728218416870" datatype="html" xml:space="preserve">
         <source>Max user video quota is required.</source>
-        <target state="translated">Maks. korisnička kvota za videa se mora navesti.</target>
+        <target state="translated">Maks. korisnička kvota videa se mora navesti.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">136</context>
@@ -18788,7 +18788,7 @@
       </trans-unit>
       <trans-unit id="6536118679588615245" datatype="html" xml:space="preserve">
         <source>Max user video video quota must be greater or equal to 1.</source>
-        <target state="translated">Maks. korisnička kvota za videa mora biti veća od 1.</target>
+        <target state="translated">Maks. korisnička kvota videa mora biti veća od 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">137</context>
@@ -19032,7 +19032,7 @@
       </trans-unit>
       <trans-unit id="2027337371129904473" datatype="html" xml:space="preserve">
         <source>Video quota is required.</source>
-        <target state="translated">Kvota za videa se mora navesti.</target>
+        <target state="translated">Kvota videa se mora navesti.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">113</context>
@@ -20930,9 +20930,9 @@
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1684051774032618280" datatype="html">
+      <trans-unit id="1684051774032618280" datatype="html" xml:space="preserve">
         <source>(<x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/> per day)</source>
-        <target state="new">(<x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/> per day)</target>
+        <target state="translated">(<x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/> na dan)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">63,64</context>
@@ -26125,7 +26125,7 @@
       </trans-unit>
       <trans-unit id="6258670465000264011" datatype="html" xml:space="preserve">
         <source>Video files cannot be included in the export because you have exceeded the maximum video quota allowed by your administrator to export this archive.</source>
-        <target state="translated">Video datoteke se ne mogu uključiti u izvoz jer je premašena maksimalna kvota za videa koju je tvoj administrator dozvolio za izvoz ove arhive.</target>
+        <target state="translated">Video datoteke se ne mogu uključiti u izvoz jer je premašena maksimalna kvota videa koju je tvoj administrator dozvolio za izvoz ove arhive.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.ts</context>
           <context context-type="linenumber">107</context>
@@ -26329,7 +26329,7 @@
       </trans-unit>
       <trans-unit id="1335600007725669502" datatype="html" xml:space="preserve">
         <source>Cannot import this file as your video quota would be exceeded (import size: <x id="PH" equiv-text="fileSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</source>
-        <target state="translated">Nije moguće uvesti ovu datoteku jer bi se premašila tvoja kvota za videa (veličina uvoza: <x id="PH" equiv-text="fileSizeBytes"/>, korišteno: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/> , kvota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
+        <target state="translated">Nije moguće uvesti ovu datoteku jer bi se premašila tvoja kvota videa (veličina uvoza: <x id="PH" equiv-text="fileSizeBytes"/>, korišteno: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/> , kvota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.ts</context>
           <context context-type="linenumber">121</context>
