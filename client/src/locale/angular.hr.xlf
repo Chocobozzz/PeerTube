@@ -1519,9 +1519,9 @@
           <context context-type="linenumber">132</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2279400024471134535" datatype="html">
+      <trans-unit id="2279400024471134535" datatype="html" xml:space="preserve">
         <source>Remote runners</source>
-        <target state="translated">Eksterni pokretači</target>
+        <target state="translated">Udaljeni pokretači</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">113</context>
@@ -2509,7 +2509,7 @@
       </trans-unit>
       <trans-unit id="776440228653665977" datatype="html" xml:space="preserve">
         <source>Enable remote runners for transcription</source>
-        <target state="translated">Aktiviraj eksterne pokretače za transkripciju</target>
+        <target state="translated">Aktiviraj udaljene pokretače za transkripciju</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">482</context>
@@ -4023,17 +4023,17 @@
           <context context-type="linenumber">167</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3283660108004661843" datatype="html">
+      <trans-unit id="3283660108004661843" datatype="html" xml:space="preserve">
         <source>Enable remote runners for lives</source>
-        <target state="translated">Aktiviraj eksterne pokretače za prijenose uživo</target>
+        <target state="translated">Aktiviraj udaljene pokretače za prijenose uživo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.html</context>
           <context context-type="linenumber">179</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2752892225115021926" datatype="html">
+      <trans-unit id="2752892225115021926" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process live transcoding.</source>
-        <target state="new">Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process live transcoding.</target>
+        <target state="translated">Koristi <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>udaljene pokretače<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> za obradu transkodiranje uživo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.html</context>
           <context context-type="linenumber">182</context>
@@ -4359,17 +4359,17 @@
           <context context-type="linenumber">179</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8056487097039524924" datatype="html">
+      <trans-unit id="8056487097039524924" datatype="html" xml:space="preserve">
         <source>Enable remote runners for VOD</source>
-        <target state="translated">Aktiviraj eksterne pokretače za video na zahtjev</target>
+        <target state="translated">Aktiviraj udaljene pokretače za video na zahtjev</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">192</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4869944184588194039" datatype="html">
+      <trans-unit id="4869944184588194039" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process VOD transcoding.</source>
-        <target state="new">Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process VOD transcoding.</target>
+        <target state="translated">Koristi <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>udaljene pokretače<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> za obradu transkodiranja videa na zahtjev.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">195</context>
@@ -4463,17 +4463,17 @@
           <context context-type="linenumber">279</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7185229240632050966" datatype="html">
+      <trans-unit id="7185229240632050966" datatype="html" xml:space="preserve">
         <source>Enable remote runners for studio</source>
-        <target state="translated">Aktiviraj eksterne pokretače za studio</target>
+        <target state="translated">Aktiviraj udaljene pokretače za studio</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">287</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5159526565235763891" datatype="html">
+      <trans-unit id="5159526565235763891" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process studio transcoding tasks.</source>
-        <target state="new">Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process studio transcoding tasks.</target>
+        <target state="translated">Koristi <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>udaljene pokretače<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> za obradu zadataka studijskog transkodiranja.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">290</context>
@@ -4709,7 +4709,7 @@
       </trans-unit>
       <trans-unit id="6738889286784295744" datatype="html" xml:space="preserve">
         <source>Toggle</source>
-        <target state="translated">Uklj./Isklj.</target>
+        <target state="translated">Uključi/Isključi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/input-switch.component.ts</context>
           <context context-type="linenumber">21</context>
@@ -5741,7 +5741,7 @@
       </trans-unit>
       <trans-unit id="2721988499779041837" datatype="html" xml:space="preserve">
         <source>Remote comments</source>
-        <target state="translated">Eksterni komentari</target>
+        <target state="translated">Udaljeni komentari</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">171</context>
@@ -5935,9 +5935,9 @@
           <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6341046485611073562" datatype="html">
+      <trans-unit id="6341046485611073562" datatype="html" xml:space="preserve">
         <source>To load your new installed plugins or themes, refresh the page.</source>
-        <target state="new"> To load your new installed plugins or themes, refresh the page. </target>
+        <target state="translated">Za učitavanje novoinstaliranih dodataka ili tema osvježi stranicu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">3,4</context>
@@ -5995,9 +5995,9 @@
           <context context-type="linenumber">113</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3013441103054072216" datatype="html">
+      <trans-unit id="3013441103054072216" datatype="html" xml:space="preserve">
         <source>Please only install plugins or themes you trust, since they can execute any code on your platform.</source>
-        <target state="new">Please only install plugins or themes you trust, since they can execute any code on your platform.</target>
+        <target state="translated">Instaliraj samo dodatke ili teme kojima vjeruješ, budući da oni mogu izvršavati bilo koji kod na tvojoj platformi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context>
           <context context-type="linenumber">143</context>
@@ -6823,9 +6823,9 @@
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6329354273972175246" datatype="html">
+      <trans-unit id="6329354273972175246" datatype="html" xml:space="preserve">
         <source>No remote runners found.</source>
-        <target state="translated">Nije pronađen nijedan daljinski pokretač.</target>
+        <target state="translated">Nije pronađen nijedan udaljeni pokretač.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context>
           <context context-type="linenumber">36</context>
@@ -9628,9 +9628,9 @@
           <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7988117381662962564" datatype="html">
+      <trans-unit id="7988117381662962564" datatype="html" xml:space="preserve">
         <source>OWNER</source>
-        <target state="new">OWNER</target>
+        <target state="translated">VLASNIK</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">10,11</context>
@@ -15336,7 +15336,7 @@
       </trans-unit>
       <trans-unit id="4798270796894950278" datatype="html" xml:space="preserve">
         <source>runners per page</source>
-        <target state="translated">izvršitelja po stranici</target>
+        <target state="translated">pokretača po stranici</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context>
           <context context-type="linenumber">6,7</context>
@@ -15344,7 +15344,7 @@
       </trans-unit>
       <trans-unit id="1870557085021370018" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No runner} =1 {1 runner} other {<x id="INTERPOLATION"/> runners}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Nema izvršitelja} =1 {1 izvršitelj} few {<x id="INTERPOLATION"/> izvršitelja other {<x id="INTERPOLATION"/> izvršitelja}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Nema pokretača} =1 {1 pokretač} few {<x id="INTERPOLATION"/> pokretača other {<x id="INTERPOLATION"/> pokretača}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context>
           <context context-type="linenumber">11</context>
@@ -15430,9 +15430,9 @@
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1952170121636976975" datatype="html">
+      <trans-unit id="1952170121636976975" datatype="html" xml:space="preserve">
         <source>No registration token found for remote runners.</source>
-        <target state="translated">Nije pronađen nijedan registracijski token za eksterne pokretače.</target>
+        <target state="translated">Nije pronađen nijedan registracijski token za udaljene pokretače.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">42</context>
@@ -15480,7 +15480,7 @@
       </trans-unit>
       <trans-unit id="6713730474908011769" datatype="html" xml:space="preserve">
         <source>List runner jobs</source>
-        <target state="translated">Prikaži listu poslova pokretača</target>
+        <target state="translated">Prikaži popis poslova pokretača</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runners.routes.ts</context>
           <context context-type="linenumber">27</context>
@@ -15488,7 +15488,7 @@
       </trans-unit>
       <trans-unit id="890886250761175417" datatype="html" xml:space="preserve">
         <source>List remote runners</source>
-        <target state="translated">Prikaži listu eksternih pokretača</target>
+        <target state="translated">Prikaži popis udaljenih pokretača</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runners.routes.ts</context>
           <context context-type="linenumber">37</context>
@@ -15496,7 +15496,7 @@
       </trans-unit>
       <trans-unit id="4255553856349508493" datatype="html" xml:space="preserve">
         <source>List registration runner tokens</source>
-        <target state="translated">Prikaži listu registracije tokena pokretača</target>
+        <target state="translated">Prikaži popis tokena registracija pokretača</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runners.routes.ts</context>
           <context context-type="linenumber">47</context>
@@ -15676,7 +15676,7 @@
       </trans-unit>
       <trans-unit id="1274250938669222125" datatype="html" xml:space="preserve">
         <source>Toggle autoplay next video</source>
-        <target state="translated">Uklj./Isklj. automatsku reprodukciju sljedećeg videa</target>
+        <target state="translated">Uključi/Isključi automatsku reprodukciju sljedećeg videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/recommendations/recommended-videos.component.html</context>
           <context context-type="linenumber">13</context>
@@ -16722,9 +16722,9 @@
           <context context-type="linenumber">365</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4049262826107502276" datatype="html">
+      <trans-unit id="4049262826107502276" datatype="html" xml:space="preserve">
         <source>Toggle the left menu</source>
-        <target state="translated">Uključi/isključi lijevi izbornik</target>
+        <target state="translated">Uključi/Isključi lijevi izbornik</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">370</context>
@@ -21070,17 +21070,17 @@
           <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1652024247924208981" datatype="html">
+      <trans-unit id="1652024247924208981" datatype="html" xml:space="preserve">
         <source>Warn users</source>
-        <target state="new">Warn users</target>
+        <target state="translated">Upozori korisnike</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3624586880997617732" datatype="html">
+      <trans-unit id="3624586880997617732" datatype="html" xml:space="preserve">
         <source>Warn users and blur thumbnail</source>
-        <target state="new">Warn users and blur thumbnail</target>
+        <target state="translated">Upozori korisnike i zamuti minijaturu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">69</context>
@@ -21122,17 +21122,17 @@
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7401094473118142911" datatype="html">
+      <trans-unit id="7401094473118142911" datatype="html" xml:space="preserve">
         <source>Your community cannot import or synchronize content from remote platforms</source>
-        <target state="new">Your community cannot import or synchronize content from remote platforms</target>
+        <target state="translated">Tvoja zajednica ne može uvoziti ili sinkronizirati sadržaj s udaljenih platformi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2807800733729323332" datatype="html">
+      <trans-unit id="2807800733729323332" datatype="html" xml:space="preserve">
         <source>Yes</source>
-        <target state="new">Yes</target>
+        <target state="translated">Da</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">82</context>
@@ -21158,9 +21158,9 @@
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3542042671420335679" datatype="html">
+      <trans-unit id="3542042671420335679" datatype="html" xml:space="preserve">
         <source>No</source>
-        <target state="new">No</target>
+        <target state="translated">Ne</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">87</context>
@@ -21186,9 +21186,9 @@
           <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3203530711190558690" datatype="html">
+      <trans-unit id="3203530711190558690" datatype="html" xml:space="preserve">
         <source>Use https://sepiasearch.org as default search engine to search for content across all known PeerTube platforms</source>
-        <target state="new">Use https://sepiasearch.org as default search engine to search for content across all known PeerTube platforms</target>
+        <target state="translated">Koristi https://sepiasearch.org kao standardnu tražilicu za pretraživanje sadržaja na svim poznatim PeerTube platformama</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">96</context>
@@ -21314,9 +21314,9 @@
           <context context-type="linenumber">151</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2906587845957718064" datatype="html">
+      <trans-unit id="2906587845957718064" datatype="html" xml:space="preserve">
         <source>Local</source>
-        <target state="translated">Lokalno</target>
+        <target state="translated">Lokalna</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">33</context>
@@ -21324,7 +21324,7 @@
       </trans-unit>
       <trans-unit id="5559612210462560518" datatype="html" xml:space="preserve">
         <source>Remote</source>
-        <target state="translated">Eksterno</target>
+        <target state="translated">Udaljena</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">35</context>
@@ -21878,17 +21878,17 @@
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4289602458574418807" datatype="html">
+      <trans-unit id="4289602458574418807" datatype="html" xml:space="preserve">
         <source>Go to <x id="PH" equiv-text="this.channel().name"/> channel page</source>
-        <target state="new">Go to <x id="PH" equiv-text="this.channel().name"/> channel page</target>
+        <target state="translated">Idi na stranicu kanala <x id="PH" equiv-text="this.channel().name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image/account-on-channel-avatar.component.ts</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6044929163432559756" datatype="html">
+      <trans-unit id="6044929163432559756" datatype="html" xml:space="preserve">
         <source>Go to <x id="PH" equiv-text="this.account().name"/> account page</source>
-        <target state="new">Go to <x id="PH" equiv-text="this.account().name"/> account page</target>
+        <target state="translated">Idi na stranicu računa <x id="PH" equiv-text="this.account().name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image/account-on-channel-avatar.component.ts</context>
           <context context-type="linenumber">27</context>
@@ -22094,9 +22094,9 @@
           <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2644027207588859009" datatype="html">
+      <trans-unit id="2644027207588859009" datatype="html" xml:space="preserve">
         <source>in <x id="PH" equiv-text="-interval"/> min</source>
-        <target state="new">in <x id="PH" equiv-text="-interval"/> min</target>
+        <target state="translated">za <x id="PH" equiv-text="-interval"/> min</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/from-now.pipe.ts</context>
           <context context-type="linenumber">85</context>
@@ -22120,7 +22120,7 @@
       </trans-unit>
       <trans-unit id="2587910160708766081" datatype="html" xml:space="preserve">
         <source>Toggle this date format to "<x id="PH" equiv-text="target"/>"</source>
-        <target state="translated">Prebaci ovaj format datuma u "<x id="PH" equiv-text="target"/>"</target>
+        <target state="translated">Promijeni ovaj format datuma u "<x id="PH" equiv-text="target"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/date-toggle.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -22158,9 +22158,9 @@
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9193001935256028830" datatype="html">
+      <trans-unit id="9193001935256028830" datatype="html" xml:space="preserve">
         <source>Owner</source>
-        <target state="new"> Owner </target>
+        <target state="translated">Vlasnik</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.html</context>
           <context context-type="linenumber">3,4</context>
@@ -22342,25 +22342,25 @@
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7631247820708444092" datatype="html">
+      <trans-unit id="7631247820708444092" datatype="html" xml:space="preserve">
         <source>Links: [title](https://example.com)</source>
-        <target state="new">Links: [title](https://example.com)</target>
+        <target state="translated">Poveznice: [naslov](https://example.com)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/text/markdown-hint.component.ts</context>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8652568377002148697" datatype="html">
+      <trans-unit id="8652568377002148697" datatype="html" xml:space="preserve">
         <source>Images: ![description](https://example.com/image.png)</source>
-        <target state="new">Images: ![description](https://example.com/image.png)</target>
+        <target state="translated">Slike: ![opis](https://example.com/image.png)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/text/markdown-hint.component.ts</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2762554571133839421" datatype="html">
+      <trans-unit id="2762554571133839421" datatype="html" xml:space="preserve">
         <source>Go to the login page</source>
-        <target state="new">Go to the login page</target>
+        <target state="translated">Idi na stranicu prijave</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/login-link.component.html</context>
           <context context-type="linenumber">2,3</context>
@@ -22466,9 +22466,9 @@
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2856890491475613560" datatype="html">
+      <trans-unit id="2856890491475613560" datatype="html" xml:space="preserve">
         <source>Toggle this channel</source>
-        <target state="new">Toggle this channel</target>
+        <target state="translated">Uključi/Isključi ovaj kanal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-channels/channel-toggle.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -24758,7 +24758,7 @@
       </trans-unit>
       <trans-unit id="8736159932649611942" datatype="html" xml:space="preserve">
         <source>You can help us to translate the platform by consulting <x id="START_LINK" ctype="x-a" equiv-text="&lt;a           class=&quot;link-primary&quot;           target=&quot;_blank&quot;           rel=&quot;noreferrer noopener&quot;           href=&quot;https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/translation.md#how-to&quot;         &gt;"/>this guide<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="translated">Pomogni nam prevesti platformu konzultirajući &lt;x id="START_LINK" ctype="xa" equiv-text="&lt;a class="link-primary" target="_blank" rel="noreferrer noopener" href="https://github.com/Chocobozz/PeerTube/blob/develop/support/doc/translation.md#how-to" &gt;"/&gt;ovaj vodič&lt;x id="CLOSE_LINK" ctype="xa" equiv-text="&lt;/a&gt;"/&gt;</target>
+        <target state="translated">Pomogni nam prevesti platformu konzultirajući <x id="START_LINK" ctype="x-a" equiv-text="&lt;a           class=&quot;link-primary&quot;           target=&quot;_blank&quot;           rel=&quot;noreferrer noopener&quot;           href=&quot;https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/translation.md#how-to&quot;         &gt;"/>ovaj vodič<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context>
           <context context-type="linenumber">8,15</context>
