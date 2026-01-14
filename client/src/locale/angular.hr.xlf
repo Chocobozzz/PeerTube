@@ -17878,9 +17878,9 @@
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8900807565018046089" datatype="html">
+      <trans-unit id="8900807565018046089" datatype="html" xml:space="preserve">
         <source>It's time to add information about your platform! <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Setting up a description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, specifying <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, why <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>you created your platform<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>how long<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> you plan to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>maintain it<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is very important for visitors to understand on what type of website they are. </source>
-        <target state="new"> It's time to add information about your platform! <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Setting up a description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, specifying <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, why <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>you created your platform<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>how long<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> you plan to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>maintain it<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is very important for visitors to understand on what type of website they are. </target>
+        <target state="translated">Dodaj informacije o svojoj platformi! <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Postavljanje opisa<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, navođenjem informacija o tome <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>tko si<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>zašto <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>si stvorio/la svoju platformu<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> i <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>koliko dugo<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/> planiraš <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>održavati platformu<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> su vrlo važne informacije kako bi posjetitelji shvatili na kojoj se vrsti web stranice nalaze. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">16,21</context>
@@ -17912,7 +17912,7 @@
       </trans-unit>
       <trans-unit id="7512666561651719221" datatype="html" xml:space="preserve">
         <source>You can now &lt;strong&gt;invite other users&lt;/strong&gt; to collaborate on your channel</source>
-        <target state="translated">Sada možeš <strong>pozvati druge korisnike</strong> da surađuju na tvom kanalu</target>
+        <target state="translated">Sada možeš &lt;strong&gt;pozvati druge korisnike&lt;/strong&gt; da surađuju na tvom kanalu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context>
           <context context-type="linenumber">36</context>
@@ -17934,17 +17934,17 @@
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="304750832760838492" datatype="html">
+      <trans-unit id="304750832760838492" datatype="html" xml:space="preserve">
         <source>Fill platform information</source>
-        <target state="new">Fill platform information</target>
+        <target state="translated">Ispuni informacije o platformi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4779080266057522972" datatype="html">
+      <trans-unit id="4779080266057522972" datatype="html" xml:space="preserve">
         <source>STEP <x id="INTERPOLATION" equiv-text="{{ currentStep() }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ totalSteps() }}"/></source>
-        <target state="new">STEP <x id="INTERPOLATION" equiv-text="{{ currentStep() }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ totalSteps() }}"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ currentStep() }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ totalSteps() }}"/>. KORAK</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-edit-info.component.html</context>
           <context context-type="linenumber">9,10</context>
@@ -17958,49 +17958,49 @@
           <context context-type="linenumber">9,10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="123842545276072825" datatype="html">
+      <trans-unit id="123842545276072825" datatype="html" xml:space="preserve">
         <source>General information</source>
-        <target state="new">General information</target>
+        <target state="translated">Opće informacije</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-edit-info.component.html</context>
           <context context-type="linenumber">12,14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2810794032670562031" datatype="html">
+      <trans-unit id="2810794032670562031" datatype="html" xml:space="preserve">
         <source>You can edit this information later</source>
-        <target state="new">You can edit this information later</target>
+        <target state="translated">Ovu informaciju možeš kasnije urediti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-edit-info.component.html</context>
           <context context-type="linenumber">14,16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="149227559940853875" datatype="html">
+      <trans-unit id="149227559940853875" datatype="html" xml:space="preserve">
         <source>Platform name</source>
-        <target state="new">Platform name</target>
+        <target state="translated">Ime platforme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-edit-info.component.html</context>
           <context context-type="linenumber">18,20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8513759773687345464" datatype="html">
+      <trans-unit id="8513759773687345464" datatype="html" xml:space="preserve">
         <source>Platform icon</source>
-        <target state="new">Platform icon</target>
+        <target state="translated">Ikona platforme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-edit-info.component.html</context>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7511449611399836691" datatype="html">
+      <trans-unit id="7511449611399836691" datatype="html" xml:space="preserve">
         <source>Used in various places such as on the website, mobile application and social media</source>
-        <target state="new">Used in various places such as on the website, mobile application and social media</target>
+        <target state="translated">Koristi se na raznim mjestima kao što su web-stranica, mobilna aplikacija i društvene mreže</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-edit-info.component.html</context>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8890553633144307762" datatype="html">
+      <trans-unit id="8890553633144307762" datatype="html" xml:space="preserve">
         <source>Back</source>
-        <target state="new">Back</target>
+        <target state="translated">Natrag</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-edit-info.component.html</context>
           <context context-type="linenumber">55</context>
@@ -18014,17 +18014,17 @@
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="168761137939271501" datatype="html">
+      <trans-unit id="168761137939271501" datatype="html" xml:space="preserve">
         <source>Next step</source>
-        <target state="new">Next step</target>
+        <target state="translated">Sljedeći korak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-edit-info.component.html</context>
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="178210321115752683" datatype="html">
+      <trans-unit id="178210321115752683" datatype="html" xml:space="preserve">
         <source>Ignore for now</source>
-        <target state="new">Ignore for now</target>
+        <target state="translated">Za sada zanemari</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-edit-info.component.html</context>
           <context context-type="linenumber">59</context>
@@ -18038,113 +18038,113 @@
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1452446159629727078" datatype="html">
+      <trans-unit id="1452446159629727078" datatype="html" xml:space="preserve">
         <source>My platform is more like...</source>
-        <target state="new">My platform is more like...</target>
+        <target state="translated">Moja je platforma više kao …</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-form.component.html</context>
           <context context-type="linenumber">18,20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5155290888522084933" datatype="html">
+      <trans-unit id="5155290888522084933" datatype="html" xml:space="preserve">
         <source>Community-based</source>
-        <target state="new">Community-based</target>
+        <target state="translated">Platforma koju pokreće zajednica</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-form.component.html</context>
           <context context-type="linenumber">32,34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7688216686590994502" datatype="html">
+      <trans-unit id="7688216686590994502" datatype="html" xml:space="preserve">
         <source>Enable a community to publish content and interact together.</source>
-        <target state="new">Enable a community to publish content and interact together.</target>
+        <target state="translated">Omogući zajednici objavljivanje sadržaja i međusobnu interakciju.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-form.component.html</context>
           <context context-type="linenumber">34,35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9053431081731437649" datatype="html">
+      <trans-unit id="9053431081731437649" datatype="html" xml:space="preserve">
         <source>Institutional</source>
-        <target state="new">Institutional</target>
+        <target state="translated">Institucionalna platforma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-form.component.html</context>
           <context context-type="linenumber">48,50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3627851297496094146" datatype="html">
+      <trans-unit id="3627851297496094146" datatype="html" xml:space="preserve">
         <source>To broadcast your videos. Recommended for public institutions, association and companies.</source>
-        <target state="new">To broadcast your videos. Recommended for public institutions, association and companies.</target>
+        <target state="translated">Za emitiranje tvojih videa. Preporučuje se za javne ustanove, udruge i tvrtke.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-form.component.html</context>
           <context context-type="linenumber">50,51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3867965101763494594" datatype="html">
+      <trans-unit id="3867965101763494594" datatype="html" xml:space="preserve">
         <source>Only certain people can access content. Recommended for families and closed communities.</source>
-        <target state="new">Only certain people can access content. Recommended for families and closed communities.</target>
+        <target state="translated">Samo određene osobe mogu pristupiti sadržaju. Preporučuje se za obitelji i zatvorene zajednice.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-form.component.html</context>
           <context context-type="linenumber">66,67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6894497431455747153" datatype="html">
+      <trans-unit id="6894497431455747153" datatype="html" xml:space="preserve">
         <source>Preview configuration</source>
-        <target state="new">Preview configuration</target>
+        <target state="translated">Pregledaj konfiguraciju</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-form.component.html</context>
           <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1843196826036466911" datatype="html">
+      <trans-unit id="1843196826036466911" datatype="html" xml:space="preserve">
         <source>If you confirm, PeerTube will:</source>
-        <target state="new">If you confirm, PeerTube will:</target>
+        <target state="translated">Ako potvrdiš, PeerTube će:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-preview.component.html</context>
           <context context-type="linenumber">15,17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4915702577741089907" datatype="html">
+      <trans-unit id="4915702577741089907" datatype="html" xml:space="preserve">
         <source>If you want finer settings control, your platform configuration can be easily changed after the pre-configuration wizard!</source>
-        <target state="new"> If you want finer settings control, your platform configuration can be easily changed after the pre-configuration wizard! </target>
+        <target state="translated">Ako želiš precizniju kontrolu postavki, konfiguraciju platforme možeš jednostavno promijeniti nakon čarobnjaka prije konfiguracije!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-preview.component.html</context>
           <context context-type="linenumber">24,25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7106510114370231860" datatype="html">
+      <trans-unit id="7106510114370231860" datatype="html" xml:space="preserve">
         <source>Confirm this configuration</source>
-        <target state="new">Confirm this configuration</target>
+        <target state="translated">Potvrdi ovu konfiguraciju</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-preview.component.html</context>
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5397011431963692760" datatype="html">
+      <trans-unit id="5397011431963692760" datatype="html" xml:space="preserve">
         <source>Welcome to PeerTube</source>
-        <target state="new">Welcome to PeerTube</target>
+        <target state="translated">Dobro došao, dobro došla na PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-welcome.component.html</context>
           <context context-type="linenumber">7,9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6505095755481996135" datatype="html">
+      <trans-unit id="6505095755481996135" datatype="html" xml:space="preserve">
         <source>dear administrator!</source>
-        <target state="new">dear administrator!</target>
+        <target state="translated">dragi administratore!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-welcome.component.html</context>
           <context context-type="linenumber">9,10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4023399618862728868" datatype="html">
+      <trans-unit id="4023399618862728868" datatype="html" xml:space="preserve">
         <source>Sepia, the cuttlefish, has a few questions to help you <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>quickly pre-configure your platform<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</source>
-        <target state="new">Sepia, the cuttlefish, has a few questions to help you <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>quickly pre-configure your platform<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
+        <target state="translated">Sepia, sipa, ima nekoliko pitanja koja će ti pomoći da <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>brzo unaprijed konfiguriraš svoju platformu<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-welcome.component.html</context>
           <context context-type="linenumber">12,14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1443195823760151170" datatype="html">
+      <trans-unit id="1443195823760151170" datatype="html" xml:space="preserve">
         <source>Let's go!</source>
-        <target state="new">Let's go!</target>
+        <target state="translated">Krenimo!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-welcome.component.html</context>
           <context context-type="linenumber">15</context>
@@ -18158,9 +18158,9 @@
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1202582215608581565" datatype="html">
+      <trans-unit id="1202582215608581565" datatype="html" xml:space="preserve">
         <source>CLI:</source>
-        <target state="new">CLI:</target>
+        <target state="translated">CLI:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">59,60</context>
@@ -18174,49 +18174,49 @@
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3736279079808209047" datatype="html">
+      <trans-unit id="3736279079808209047" datatype="html" xml:space="preserve">
         <source>Official PeerTube website:</source>
-        <target state="new">Official PeerTube website:</target>
+        <target state="translated">Službene PeerTube web-stranice:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">28,30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8833059586949417355" datatype="html">
+      <trans-unit id="8833059586949417355" datatype="html" xml:space="preserve">
         <source>Blog post, get help or discover PeerTube</source>
-        <target state="new">Blog post, get help or discover PeerTube</target>
+        <target state="translated">Objava na blogu, dobij pomoć ili otkrij PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">30,31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="931415109224027105" datatype="html">
+      <trans-unit id="931415109224027105" datatype="html" xml:space="preserve">
         <source>Public PeerTube index:</source>
-        <target state="new">Public PeerTube index:</target>
+        <target state="translated">Javni PeerTube indeks:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">34,36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1498251075459491982" datatype="html">
+      <trans-unit id="1498251075459491982" datatype="html" xml:space="preserve">
         <source>Put your platform on the official PeerTube public index</source>
-        <target state="new">Put your platform on the official PeerTube public index</target>
+        <target state="translated">Postavi svoju platformu na službeni javni indeks PeerTubea</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">36,37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4895326106573044490" datatype="html">
+      <trans-unit id="4895326106573044490" datatype="html" xml:space="preserve">
         <source>Documentation</source>
-        <target state="new">Documentation</target>
+        <target state="translated">Dokumentacija</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">42,44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1498236237234691799" datatype="html">
+      <trans-unit id="1498236237234691799" datatype="html" xml:space="preserve">
         <source>Admin:</source>
-        <target state="new">Admin:</target>
+        <target state="translated">Administrator:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">46,48</context>
