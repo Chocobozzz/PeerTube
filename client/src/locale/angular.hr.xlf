@@ -6787,9 +6787,9 @@
           <context context-type="linenumber">129</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2175266358082397536" datatype="html">
+      <trans-unit id="2175266358082397536" datatype="html" xml:space="preserve">
         <source>Do you really want to remove {count, plural, =1 {this job} other {<x id="count"/> jobs}}? Children jobs will also be removed.</source>
-        <target state="translated">Stvarno žeiliš ukloniti {count, plural, =1 {ovaj posao} few {<x id="count"/> posla} other {<x id="count"/> poslova}}? Dječji poslovi će se također ukloniti.</target>
+        <target state="translated">Stvarno žeiliš ukloniti {count, plural, =1 {ovaj posao} few {<x id="count"/> posla} other {<x id="count"/> poslova}}? Podređeni poslovi će se također ukloniti.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">141</context>
@@ -7655,9 +7655,9 @@
           <context context-type="linenumber">204</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="738031253894929036" datatype="html">
+      <trans-unit id="738031253894929036" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 user unbanned.} other {<x id="count"/> users unbanned.}}</source>
-        <target state="translated">{count, plural, =1 {1 korisnik ponovo uključen.} few {<x id="count"/> korisnika ponovo uključena.} other {<x id="count"/> korisnika ponovo uključeni.}}</target>
+        <target state="translated">{count, plural, =1 {1 korisnik je ponovo uključen.} few {<x id="count"/> korisnika su ponovo uključena.} other {<x id="count"/> korisnika su ponovo uključeni.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">217</context>
@@ -7691,17 +7691,17 @@
           <context context-type="linenumber">235</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1301767781765127363" datatype="html">
+      <trans-unit id="1301767781765127363" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 user deleted.} other {<x id="count"/> users deleted.}}</source>
-        <target state="translated">{count, plural, =1 {1 korisnik izbrisan.} few {<x id="count"/> korisnika izbrisana.} other {<x id="count"/> korisnik izbrisano.}}</target>
+        <target state="translated">{count, plural, =1 {1 korisnik je izbrisan.} few {<x id="count"/> korisnika su izbrisana.} other {<x id="count"/> korisnika su izbrisani.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">246</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3104427236147521673" datatype="html">
+      <trans-unit id="3104427236147521673" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 user email set as verified.} other {<x id="count"/> user emails set as verified.}}</source>
-        <target state="translated">{count, plural, =1 {Jedna e-mail poruka korisnika označena kao potvrđena.} few {<x id="count"/> e-mail poruke korisnika označene kao potvrđene.} other {<x id="count"/> e-mail poruka korisnika označeno kao potvrđena.}}</target>
+        <target state="translated">{count, plural, =1 {Jedna e-mail poruka korisnika je označena kao potvrđena.} few {<x id="count"/> e-mail poruke korisnika su označene kao potvrđene.} other {<x id="count"/> e-mail poruka korisnika su označene kao potvrđene.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">264</context>
@@ -14934,9 +14934,9 @@
           <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3550561851301742246" datatype="html">
+      <trans-unit id="3550561851301742246" datatype="html" xml:space="preserve">
         <source>Views made before <x id="INTERPOLATION" equiv-text="{{ getMaxViewsAgeDate() | date }}"/> are not taken into account</source>
-        <target state="new">Views made before <x id="INTERPOLATION" equiv-text="{{ getMaxViewsAgeDate() | date }}"/> are not taken into account</target>
+        <target state="translated">Gledanja prije <x id="INTERPOLATION" equiv-text="{{ getMaxViewsAgeDate() | date }}"/> se ne uzimaju u obzir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.html</context>
           <context context-type="linenumber">37</context>
@@ -18306,9 +18306,9 @@
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8305610685019836481" datatype="html">
+      <trans-unit id="8305610685019836481" datatype="html" xml:space="preserve">
         <source>Anyone can register, but a moderator must approve their account before they can use the platform</source>
-        <target state="new">Anyone can register, but a moderator must approve their account before they can use the platform</target>
+        <target state="translated">Svatko se može registrirati, ali moderator mora odobriti njegov račun prije nego što može koristiti platformu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">56</context>
@@ -20756,7 +20756,7 @@
       </trans-unit>
       <trans-unit id="8280589137189201687" datatype="html" xml:space="preserve">
         <source>You can't select more than {maxItems, plural, =1 {1 item} other {<x id="maxItems"/> items}}</source>
-        <target state="translated">Ne možeš odabrati više od {maxItems, plural, =1 {1 element} few {<x id="maxItems"/> elementa} other {<x id="maxItems"/> elementa}}</target>
+        <target state="translated">Ne možeš odabrati više od {maxItems, plural, =1 {1 elementa} few {<x id="maxItems"/> elementa} other {<x id="maxItems"/> elementa}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox-default-all.component.ts</context>
           <context context-type="linenumber">113</context>
@@ -21982,15 +21982,15 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7814200089682321851" datatype="html">
+      <trans-unit id="7814200089682321851" datatype="html" xml:space="preserve">
         <source>{interval, plural, =1 {in 1 year} other {in <x id="interval"/> years}}</source>
-        <target state="new">{interval, plural, =1 {in 1 year} other {in <x id="interval"/> years}}</target>
+        <target state="needs-translation">{interval, plural, =1 {za 1 godinu} few {za <x id="interval"/> godine} other {za <x id="interval"/> godina}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/from-now.pipe.ts</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="599762045687999334" datatype="html">
+      <trans-unit id="599762045687999334" datatype="html" xml:space="preserve">
         <source>{interval, plural, =1 {1 month ago} other {<x id="interval"/> months ago}}</source>
         <target state="translated">{interval, plural, =1 {prije 1 mjesec} few {prije <x id="interval"/> mjeseca} other {prije <x id="interval"/> mjeseci}}</target>
         <context-group purpose="location">
@@ -22006,7 +22006,7 @@
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4951459525104027759" datatype="html">
+      <trans-unit id="4951459525104027759" datatype="html" xml:space="preserve">
         <source>{interval, plural, =1 {1 week ago} other {<x id="interval"/> weeks ago}}</source>
         <target state="translated">{interval, plural, =1 {prije 1 tjedan} few {prije <x id="interval"/> tjedna} other {prije <x id="interval"/> tjedana}}</target>
         <context-group purpose="location">
@@ -22022,7 +22022,7 @@
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2471141982657856893" datatype="html">
+      <trans-unit id="2471141982657856893" datatype="html" xml:space="preserve">
         <source>{interval, plural, =1 {1 day ago} other {<x id="interval"/> days ago}}</source>
         <target state="translated">{interval, plural, =1 {prije 1 dan} few {prije <x id="interval"/> dana} other {prije <x id="interval"/> dana}}</target>
         <context-group purpose="location">
@@ -22038,7 +22038,7 @@
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8562677309401914974" datatype="html">
+      <trans-unit id="8562677309401914974" datatype="html" xml:space="preserve">
         <source>{interval, plural, =1 {1 hour ago} other {<x id="interval"/> hours ago}}</source>
         <target state="translated">{interval, plural, =1 {prije 1 sat} few {prije <x id="interval"/> sata} other {prije <x id="interval"/> sati}}</target>
         <context-group purpose="location">
@@ -22070,17 +22070,17 @@
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6874778750344205852" datatype="html">
+      <trans-unit id="6874778750344205852" datatype="html" xml:space="preserve">
         <source>1 month ago</source>
-        <target state="translated">prije 1 mjesec</target>
+        <target state="translated">prije mjesec dana</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/from-now.pipe.ts</context>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5270698693661649973" datatype="html">
+      <trans-unit id="5270698693661649973" datatype="html" xml:space="preserve">
         <source>1 month from now</source>
-        <target state="new">1 month from now</target>
+        <target state="translated">1 mjesec od sada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/from-now.pipe.ts</context>
           <context context-type="linenumber">49</context>
@@ -22182,65 +22182,65 @@
           <context context-type="linenumber">11,12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8627640588059476624" datatype="html">
+      <trans-unit id="8627640588059476624" datatype="html" xml:space="preserve">
         <source>An editor can manage videos in this channel</source>
-        <target state="new">An editor can manage videos in this channel</target>
+        <target state="translated">Jedan urednik može upravljati videima na ovom kanalu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.ts</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3775433842284877534" datatype="html">
+      <trans-unit id="3775433842284877534" datatype="html" xml:space="preserve">
         <source>Owner of the channel</source>
-        <target state="new">Owner of the channel</target>
+        <target state="translated">Vlasnik kanala</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.ts</context>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2996672568437579118" datatype="html">
+      <trans-unit id="2996672568437579118" datatype="html" xml:space="preserve">
         <source>Invited to be an editor to manage videos in this channel</source>
-        <target state="new">Invited to be an editor to manage videos in this channel</target>
+        <target state="translated">Pozvan da bude urednik/ca za upravljanje videima na ovom kanalu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.ts</context>
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4498682414491138092" datatype="html">
+      <trans-unit id="4498682414491138092" datatype="html" xml:space="preserve">
         <source>Yesterday</source>
-        <target state="new">Yesterday</target>
+        <target state="translated">Jučer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/date-group-label.component.ts</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5073473933031004097" datatype="html">
+      <trans-unit id="5073473933031004097" datatype="html" xml:space="preserve">
         <source>This week</source>
-        <target state="new">This week</target>
+        <target state="translated">Ovaj tjedan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/date-group-label.component.ts</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="842657237693374355" datatype="html">
+      <trans-unit id="842657237693374355" datatype="html" xml:space="preserve">
         <source>This month</source>
-        <target state="new">This month</target>
+        <target state="translated">Ovaj mjesec</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/date-group-label.component.ts</context>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4463380307954693363" datatype="html">
+      <trans-unit id="4463380307954693363" datatype="html" xml:space="preserve">
         <source>Last month</source>
-        <target state="new">Last month</target>
+        <target state="translated">Prošli mjesec</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/date-group-label.component.ts</context>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7473676707373218484" datatype="html">
+      <trans-unit id="7473676707373218484" datatype="html" xml:space="preserve">
         <source>Older</source>
-        <target state="new">Older</target>
+        <target state="translated">Starije</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/date-group-label.component.ts</context>
           <context context-type="linenumber">30</context>
@@ -22334,9 +22334,9 @@
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1250852024988288728" datatype="html">
+      <trans-unit id="1250852024988288728" datatype="html" xml:space="preserve">
         <source>Emphasis: *text*</source>
-        <target state="new">Emphasis: *text*</target>
+        <target state="translated">Isticanje: *tekst*</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/text/markdown-hint.component.ts</context>
           <context context-type="linenumber">40</context>
@@ -22382,17 +22382,17 @@
           <context context-type="linenumber">5,6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7919708461177482031" datatype="html">
+      <trans-unit id="7919708461177482031" datatype="html" xml:space="preserve">
         <source>PeerTube considers video "<x id="PH" equiv-text="video.name"/>" is already being transcripted.</source>
-        <target state="new">PeerTube considers video "<x id="PH" equiv-text="video.name"/>" is already being transcripted.</target>
+        <target state="translated">PeerTube smatra da se video "<x id="PH" equiv-text="video.name"/>" već transkribira.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video-caption/video-caption.service.ts</context>
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1574297288544496710" datatype="html">
+      <trans-unit id="1574297288544496710" datatype="html" xml:space="preserve">
         <source>If you think PeerTube is wrong (video in broken state after a crash etc.), you can force transcription on this video.</source>
-        <target state="new"> If you think PeerTube is wrong (video in broken state after a crash etc.), you can force transcription on this video.</target>
+        <target state="translated">Ako misliš da PeerTube nije u pravu (video je oštećen nakon prekida rada sustava itd.), možeš prisilno pokrenuti transkripciju ovog videa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video-caption/video-caption.service.ts</context>
           <context context-type="linenumber">117</context>
@@ -22414,9 +22414,9 @@
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7833439309018904726" datatype="html">
+      <trans-unit id="7833439309018904726" datatype="html" xml:space="preserve">
         <source>New message</source>
-        <target state="new">New message</target>
+        <target state="translated">Nova poruka</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notifications.component.html</context>
           <context context-type="linenumber">17</context>
@@ -22426,17 +22426,17 @@
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="906167214730624194" datatype="html">
+      <trans-unit id="906167214730624194" datatype="html" xml:space="preserve">
         <source>{views, plural, =0 {No view} =1 {1 view} other {<x id="views"/> views}}</source>
-        <target state="translated">{views, plural, =0 {Bez gledanja} =1 {1 gledanje} other {<x id="views"/> gledanja}}</target>
+        <target state="needs-translation">{views, plural, =0 {Bez gledanja} =1 {1 gledanje} few {<x id="views"/> gledanja} other {<x id="views"/> gledanja}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.ts</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7128109358021057367" datatype="html">
+      <trans-unit id="7128109358021057367" datatype="html" xml:space="preserve">
         <source>What is it?</source>
-        <target state="new">What is it?</target>
+        <target state="translated">Što je to?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor/actor-host.component.html</context>
           <context context-type="linenumber">18</context>
@@ -23550,9 +23550,9 @@
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1080230904501320275" datatype="html">
+      <trans-unit id="1080230904501320275" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 user banned.} other {<x id="count"/> users banned.}}</source>
-        <target state="translated">{count, plural, =1 {1 korisnik isključen.} few {<x id="count"/> korisnika isključena.} other {<x id="count"/> korisnika isključeno.}}</target>
+        <target state="translated">{count, plural, =1 {1 korisnik je isključen.} few {<x id="count"/> korisnika su isključena.} other {<x id="count"/> korisnika je isključeno.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">72</context>
@@ -24010,9 +24010,9 @@
           <context context-type="linenumber">53,54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="901879091817013957" datatype="html">
+      <trans-unit id="901879091817013957" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Blocked <x id="videoName"/>.} other {Blocked <x id="count"/> videos.}}</source>
-        <target state="translated">{count, plural, =1 {Blokiran video <x id="videoName"/>.} few {Blokirana <x id="count"/> videa.} other {Blokirano <x id="count"/> videa.}}</target>
+        <target state="translated">{count, plural, =1 {Blokiran je video <x id="videoName"/>.} few {Blokirana su <x id="count"/> videa.} other {Blokirano je <x id="count"/> videa.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.ts</context>
           <context context-type="linenumber">86</context>
@@ -25644,17 +25644,17 @@
           <context context-type="linenumber">313</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9164541937317586242" datatype="html">
+      <trans-unit id="9164541937317586242" datatype="html" xml:space="preserve">
         <source>Unblocked {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</source>
-        <target state="translated">{count, plural, =1 {1 video deblokiran} few {<x id="count"/> videa deblokirana} other {<x id="count"/> videa deblokirano}}.</target>
+        <target state="translated">{count, plural, =1 {1 video je deblokiran} few {<x id="count"/> videa su deblokirana} other {<x id="count"/> videa je deblokirano}}.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">342</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6228449077605046873" datatype="html">
+      <trans-unit id="6228449077605046873" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete {count, plural, =1 {1 HLS streaming playlist} other {<x id="count"/> HLS streaming playlists}}?</source>
-        <target state="translated">Stvarno želiš izbrisati {count, plural, =1 {jedanu playlistu HLS prijenosa} few {<x id="count"/> playliste HLS prijenosa} other {<x id="count"/> playlista HLS prijenosa}}?</target>
+        <target state="translated">Stvarno želiš izbrisati {count, plural, =1 {jednu playlistu HLS prijenosa} few {<x id="count"/> playliste HLS prijenosa} other {<x id="count"/> playlista HLS prijenosa}}?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">359</context>
@@ -25686,7 +25686,7 @@
       </trans-unit>
       <trans-unit id="5112667021094836629" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 transcription job created.} other {<x id="count"/> transcription jobs created.}}</source>
-        <target state="translated">{count, plural, =1 {1 posao transkripcije stvoren.} few {<x id="count"/> posla transkripcije stvorena.} other {<x id="count"/> poslova transkripcije stvoreno.}}</target>
+        <target state="translated">{count, plural, =1 {1 posao transkripcije je stvoren.} few {<x id="count"/> posla transkripcije su stvorena.} other {<x id="count"/> poslova transkripcije je stvoreno.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">403</context>
@@ -26421,7 +26421,7 @@
       </trans-unit>
       <trans-unit id="246143686312852623" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ file.fps }}"/>fps</source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ file.fps }}"/>fps</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ file.fps }}"/> fps</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/video-generate-download.component.html</context>
           <context context-type="linenumber">26</context>
