@@ -9788,17 +9788,17 @@
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="405732769723561556" datatype="html">
+      <trans-unit id="405732769723561556" datatype="html" xml:space="preserve">
         <source>You have been removed as a collaborator from <x id="PH" equiv-text="this.videoChannelEdit.channel.name"/> channel</source>
-        <target state="new">You have been removed as a collaborator from <x id="PH" equiv-text="this.videoChannelEdit.channel.name"/> channel</target>
+        <target state="translated">Uklonjen/a si kao suradnik/ca s kanala <x id="PH" equiv-text="this.videoChannelEdit.channel.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.ts</context>
           <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5832118307296065997" datatype="html">
+      <trans-unit id="5832118307296065997" datatype="html" xml:space="preserve">
         <source>Do you want to send an invitation to &lt;strong&gt;<x id="PH" equiv-text="this.newEditorUsername"/>&lt;/strong&gt; to collaborate on &lt;strong&gt;<x id="PH_1" equiv-text="this.videoChannelEdit.channel.name"/>&lt;/strong&gt;?</source>
-        <target state="new">Do you want to send an invitation to &lt;strong&gt;<x id="PH" equiv-text="this.newEditorUsername"/>&lt;/strong&gt; to collaborate on &lt;strong&gt;<x id="PH_1" equiv-text="this.videoChannelEdit.channel.name"/>&lt;/strong&gt;?</target>
+        <target state="translated">Želiš li poslati pozivnicu korisniku <x id="PH" equiv-text="this.newEditorUsername"/> za suradnju na <x id="PH_1" equiv-text="this.videoChannelEdit.channel.name"/>?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.ts</context>
           <context context-type="linenumber">133</context>
