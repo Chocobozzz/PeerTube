@@ -15,6 +15,7 @@ import './shared/control-bar/next-previous-video-button'
 import './shared/control-bar/p2p-info-button'
 import './shared/control-bar/peertube-link-button'
 import './shared/control-bar/peertube-live-display'
+import './shared/control-bar/popout-button'
 import './shared/control-bar/storyboard-plugin'
 import './shared/control-bar/theater-button'
 import './shared/control-bar/time-tooltip'
@@ -431,6 +432,7 @@ export class PeerTubePlayer {
 
       videoShortUUID: () => this.currentLoadOptions.videoShortUUID,
       p2pEnabled: () => this.currentLoadOptions.p2pEnabled,
+      embedUrl: () => this.currentLoadOptions.embedUrl,
 
       nextVideo: () => this.currentLoadOptions.nextVideo,
       previousVideo: () => this.currentLoadOptions.previousVideo

@@ -24,6 +24,7 @@ export type PeerTubePlayerConstructorOptions = {
   instanceName: string
 
   theaterButton: boolean
+  popoutButton: boolean
 
   authorizationHeader: () => string
 
