@@ -22,7 +22,7 @@ async function waitJobs (
   const states: JobState[] = [ 'waiting', 'active' ]
   if (!skipDelayed) states.push('delayed')
 
-  const repeatableJobs: JobType[] = [ 'videos-views-stats', 'activitypub-cleaner' ]
+  const repeatableJobs: JobType[] = [ 'videos-downloads-stats', 'videos-views-stats', 'activitypub-cleaner' ]
   let pendingRequests: boolean
 
   function tasksBuilder () {

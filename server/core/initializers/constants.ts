@@ -217,6 +217,7 @@ export const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'video-import': 1,
   'email': 5,
   'actor-keys': 3,
+  'videos-downloads-stats': 1,
   'videos-views-stats': 1,
   'activitypub-refresher': 1,
   'video-redundancy': 1,
@@ -246,6 +247,7 @@ export const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'v
   'video-file-import': 1,
   'email': 5,
   'actor-keys': 1,
+  'videos-downloads-stats': 1,
   'videos-views-stats': 1,
   'activitypub-refresher': 1,
   'video-redundancy': 1,
@@ -277,6 +279,7 @@ export const JOB_TTL: { [id in JobType]: number } = {
   'video-import': CONFIG.IMPORT.VIDEOS.TIMEOUT,
   'email': 60000 * 10, // 10 minutes
   'actor-keys': 60000 * 20, // 20 minutes
+  'videos-downloads-stats': undefined, // Unlimited
   'videos-views-stats': undefined, // Unlimited
   'activitypub-refresher': 60000 * 10, // 10 minutes
   'video-redundancy': 1000 * 3600 * 3, // 3 hours
@@ -295,6 +298,9 @@ export const JOB_TTL: { [id in JobType]: number } = {
   'video-transcription': CONFIG.VIDEO_TRANSCRIPTION.TIMEOUT
 }
 export const REPEAT_JOBS: { [id in JobType]?: RepeatOptions } = {
+  'videos-downloads-stats': {
+    pattern: randomInt(1, 20) + ' * * * *' // Between 1-20 minutes past the hour
+  },
   'videos-views-stats': {
     pattern: randomInt(1, 20) + ' * * * *' // Between 1-20 minutes past the hour
   },
@@ -317,6 +323,7 @@ export const JOB_REMOVAL_OPTIONS = {
 
     'activitypub-http-broadcast-parallel': parseDurationToMs('10 minutes'),
     'activitypub-http-unicast': parseDurationToMs('1 hour'),
+    'videos-downloads-stats': parseDurationToMs('3 hours'),
     'videos-views-stats': parseDurationToMs('3 hours'),
     'activitypub-refresher': parseDurationToMs('10 hours')
   },
@@ -1266,6 +1273,7 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
     SCHEDULER_INTERVALS_MS.CHECK_PEERTUBE_VERSION = 2000
     SCHEDULER_INTERVALS_MS.UPDATE_TOKEN_SESSION = 2000
 
+    REPEAT_JOBS['videos-downloads-stats'] = { every: 5000 }
     REPEAT_JOBS['videos-views-stats'] = { every: 5000 }
 
     REPEAT_JOBS['activitypub-cleaner'] = { every: 5000 }
@@ -1285,6 +1293,7 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
 
     PLUGIN_EXTERNAL_AUTH_TOKEN_LIFETIME = 5000
 
+    JOB_REMOVAL_OPTIONS.SUCCESS['videos-downloads-stats'] = 10000
     JOB_REMOVAL_OPTIONS.SUCCESS['videos-views-stats'] = 10000
 
     VIEWER_SYNC_REDIS = 1000

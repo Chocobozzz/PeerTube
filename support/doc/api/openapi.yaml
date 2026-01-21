@@ -8272,6 +8272,7 @@ components:
           - video-transcoding
           - video-file-import
           - video-import
+          - videos-downloads-stats
           - videos-views-stats
           - activitypub-refresher
           - video-redundancy
@@ -10683,6 +10684,7 @@ components:
             - video-transcoding
             - email
             - video-import
+            - videos-downloads-stats
             - videos-views-stats
             - activitypub-refresher
             - video-redundancy
