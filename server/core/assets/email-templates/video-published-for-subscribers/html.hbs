@@ -1,0 +1,9 @@
+{{#> base title=(t "{channelName} just published a new video" channelName=channelName)}}
+  <p>
+    {{#if isLive}}
+      {{{t "Your subscription <a href=\"{channelUrl}\">{channelName}</a> is live streaming <strong>{videoName}</strong>" channelUrl=channelUrl channelName=channelName videoName=videoName}}}
+    {{else}}
+      {{{t "Your subscription <a href=\"{channelUrl}\">{channelName}</a> just published a new video: <strong>{videoName}</strong>" channelUrl=channelUrl channelName=channelName videoName=videoName}}}
+    {{/if}}
+  </p>
+{{/base}}
