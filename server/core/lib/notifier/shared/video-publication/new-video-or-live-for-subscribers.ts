@@ -62,7 +62,7 @@ export class NewVideoOrLiveForSubscribers extends AbstractNotification<MVideoAcc
 
     const subject = isLive
       ? t('{channelName} is live streaming', to.language, { channelName })
-      : t('{channelName} just published a new video: { videoName } ', to.language, { channelName })
+      : t('{channelName} just published a new video: { videoName }', to.language, { channelName, videoName })
 
     return {
       template: 'video-published-for-subscribers',
