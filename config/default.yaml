@@ -843,7 +843,7 @@ import:
         python_path: '/usr/bin/python3'
 
       # IPv6 is very strongly rate-limited on most sites supported by youtube-dl
-      force_ipv4: false
+      force_ipv4: true
 
       # By default PeerTube uses HTTP_PROXY and HTTPS_PROXY environment variables
       # But you can specify custom proxies for youtube-dl because remote websites (like YouTube) may block your server IP address
