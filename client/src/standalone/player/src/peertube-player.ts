@@ -263,7 +263,15 @@ export class PeerTubePlayer {
         saveAverageBandwidth(Math.floor(data.bandwidthEstimate))
       })
 
-      this.player.contextMenu(this.getContextMenuOptions())
+      if (this.isInIframe()) {
+        // Disable custom and native context menus in embeds.
+        this.player.on('contextmenu', (event: Event) => {
+          event.preventDefault()
+          event.stopPropagation()
+        })
+      } else {
+        this.player.contextMenu(this.getContextMenuOptions())
+      }
 
       this.displayNotificationWhenOffline()
     })
@@ -639,5 +647,13 @@ export class PeerTubePlayer {
     }
 
     return { content }
+  }
+
+  private isInIframe () {
+    try {
+      return window.self !== window.top
+    } catch {
+      return true
+    }
   }
 }
