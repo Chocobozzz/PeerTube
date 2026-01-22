@@ -39,6 +39,21 @@ services:
     depends_on:
       - webserver
 
+  # You can comment this webserver-reloader section if you want to use another webserver/proxy or test PeerTube in local
+  webserver-reloader:
+    image: alpine:latest
+    command: >
+      sh -c "trap exit TERM;
+        while :; do
+          sleep 21600 & wait $$!;
+          echo 'Sending reload signal to webserver...';
+          kill -HUP 1;
+        done"
+    pid: "service:webserver"
+    depends_on:
+      - webserver
+    restart: "always"
+
   peertube:
     # If you don't want to use the official image and build one from sources:
     # build:
