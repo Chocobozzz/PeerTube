@@ -139,7 +139,7 @@ export class ControlBarOptionsBuilder {
 
   private getPopoutButton () {
     const options: PopoutButtonOptions = {
-      isDisplayed: () => this.options.popoutButton && !!this.options.embedUrl(),
+      isDisplayed: () => this.options.popoutButton,
       embedUrl: this.options.embedUrl
     }
 

@@ -185,7 +185,7 @@ export type PeerTubeLinkButtonOptions = {
 
 export type PopoutButtonOptions = {
   isDisplayed: () => boolean
-  embedUrl: () => string
+  embedUrl?: () => string
 }
 
 export type TheaterButtonOptions = {

@@ -5,47 +5,44 @@ const Button = videojs.getComponent('Button') as typeof VideojsButton
 
 class PopoutButton extends Button {
   declare private popoutButtonOptions: PopoutButtonOptions
+  private currentVideoElement: HTMLVideoElement | null = null
+  private onEnterPiP = () => this.updateControlText()
+  private onLeavePiP = () => this.updateControlText()
 
   constructor (player: VideojsPlayer, options: PopoutButtonOptions & VideojsButtonOptions) {
     super(player, options)
 
     this.popoutButtonOptions = options
 
-    this.controlText('Pop out player')
+    this.updateControlText()
 
     this.updateShowing()
     this.player().on('video-change', () => this.updateShowing())
+    this.player().on('loadedmetadata', () => this.updateShowing())
   }
 
   buildCSSClass () {
     return `vjs-popout-control ${super.buildCSSClass()}`
   }
 
-  handleClick () {
-    const embedUrl = this.popoutButtonOptions.embedUrl?.()
-    if (!embedUrl) return
+  async handleClick () {
+    const video = this.getVideoElement()
+    if (!video) return
 
-    const popupUrl = this.buildPopoutUrl(embedUrl)
-    const placement = this.getPopupPlacement()
-    const features = [
-      'popup=yes',
-      'toolbar=no',
-      'location=no',
-      'status=no',
-      'menubar=no',
-      'scrollbars=no',
-      'resizable=yes',
-      `width=${placement.width}`,
-      `height=${placement.height}`,
-      `left=${placement.left}`,
-      `top=${placement.top}`
-    ].join(',')
-
-    const popup = window.open(popupUrl, '_blank', features)
-    if (popup) {
-      popup.focus()
-      if (!this.player_.paused()) this.player_.pause()
+    if (this.isInPictureInPicture(video)) {
+      await this.exitPictureInPicture(video)
+      return
     }
+
+    if (this.isPictureInPictureSupported(video)) {
+      await this.enterPictureInPicture(video)
+    }
+  }
+
+  private updateControlText () {
+    const video = this.getVideoElement()
+    const isActive = video ? this.isInPictureInPicture(video) : false
+    this.controlText(isActive ? 'Exit picture-in-picture' : 'Picture-in-picture')
   }
 
   private buildPopoutUrl (embedUrl: string) {
@@ -81,9 +78,84 @@ class PopoutButton extends Button {
     return { width, height, left, top }
   }
 
+  private getVideoElement () {
+    const video = this.player_.el()?.querySelector('video')
+    return (video instanceof HTMLVideoElement) ? video : null
+  }
+
+  private isPictureInPictureSupported (video: HTMLVideoElement) {
+    const doc = document as Document & { pictureInPictureEnabled?: boolean }
+    const standardSupported = !!(doc.pictureInPictureEnabled && typeof video.requestPictureInPicture === 'function')
+    const webkitSupported = typeof (video as HTMLVideoElement & { webkitSetPresentationMode?: (mode: string) => void }).webkitSetPresentationMode === 'function'
+    return standardSupported || webkitSupported
+  }
+
+  private isInPictureInPicture (video: HTMLVideoElement) {
+    const doc = document as Document & { pictureInPictureElement?: Element | null }
+    if (doc.pictureInPictureElement === video) return true
+
+    const webkitVideo = video as HTMLVideoElement & { webkitPresentationMode?: string }
+    return webkitVideo.webkitPresentationMode === 'picture-in-picture'
+  }
+
+  private async enterPictureInPicture (video: HTMLVideoElement) {
+    try {
+      if (typeof video.requestPictureInPicture === 'function') {
+        await video.requestPictureInPicture()
+        this.updateControlText()
+        return
+      }
+
+      const webkitVideo = video as HTMLVideoElement & { webkitSetPresentationMode?: (mode: string) => void }
+      webkitVideo.webkitSetPresentationMode?.('picture-in-picture')
+      this.updateControlText()
+    } catch {
+      // Ignore errors from user gesture or unsupported browser.
+    }
+  }
+
+  private async exitPictureInPicture (video: HTMLVideoElement) {
+    try {
+      const doc = document as Document & { exitPictureInPicture?: () => Promise<void> }
+      if (doc.exitPictureInPicture) {
+        await doc.exitPictureInPicture()
+        this.updateControlText()
+        return
+      }
+
+      const webkitVideo = video as HTMLVideoElement & { webkitSetPresentationMode?: (mode: string) => void }
+      webkitVideo.webkitSetPresentationMode?.('inline')
+      this.updateControlText()
+    } catch {
+      // Ignore errors from user gesture or unsupported browser.
+    }
+  }
+
   private updateShowing () {
-    if (this.popoutButtonOptions.isDisplayed()) this.show()
+    const video = this.getVideoElement()
+
+    if (video !== this.currentVideoElement) {
+      if (this.currentVideoElement) {
+        this.currentVideoElement.removeEventListener('enterpictureinpicture', this.onEnterPiP)
+        this.currentVideoElement.removeEventListener('leavepictureinpicture', this.onLeavePiP)
+      }
+
+      this.currentVideoElement = video
+
+      if (this.currentVideoElement) {
+        this.currentVideoElement.addEventListener('enterpictureinpicture', this.onEnterPiP)
+        this.currentVideoElement.addEventListener('leavepictureinpicture', this.onLeavePiP)
+      }
+    }
+
+    const canShow = this.popoutButtonOptions.isDisplayed()
+      && !!video
+      && this.isPictureInPictureSupported(video)
+
+    if (canShow) this.show()
     else this.hide()
+
+    this.updateControlText()
   }
 }
 
