@@ -262,6 +262,9 @@ $chapter-marker-size: 9px;
   .vjs-popout-control {
     width: var(--button-width);
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     @include disable-outline;
     @include inject-icon("./svg/popout.svg", var(--icon-size));
