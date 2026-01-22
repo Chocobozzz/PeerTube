@@ -134,6 +134,8 @@ export class PeerTubePlayer {
       this.setPoster(loadOptions.poster)
     }
 
+    this.updateLiveDvrClass()
+
     this.player.trigger('video-change')
   }
 
@@ -298,7 +300,10 @@ export class PeerTubePlayer {
     })
 
     if (this.options.enableHotkeys === true) {
-      this.player.peerTubeHotkeysPlugin({ isLive: this.currentLoadOptions.isLive })
+      this.player.peerTubeHotkeysPlugin({
+        isLive: this.currentLoadOptions.isLive,
+        isLiveDvr: this.currentLoadOptions.isLiveDvr
+      })
     }
 
     if (this.currentLoadOptions.playlist) {
@@ -409,6 +414,7 @@ export class PeerTubePlayer {
 
         videoCaptions: () => this.currentLoadOptions.videoCaptions,
         isLive: () => this.currentLoadOptions.isLive,
+        isLiveDvr: () => this.currentLoadOptions.isLiveDvr,
         videoUUID: () => this.currentLoadOptions.videoUUID,
         subtitle: () => this.currentLoadOptions.subtitle,
 
@@ -472,6 +478,16 @@ export class PeerTubePlayer {
     } satisfies VideojsPlayerOptions
 
     return videojsOptions
+  }
+
+  private updateLiveDvrClass () {
+    if (!this.player) return
+
+    this.player.removeClass('vjs-live-dvr')
+
+    if (this.currentLoadOptions.isLive && this.currentLoadOptions.isLiveDvr) {
+      this.player.addClass('vjs-live-dvr')
+    }
   }
 
   private getAutoPlayValue (autoplay: boolean): VideojsAutoplay {

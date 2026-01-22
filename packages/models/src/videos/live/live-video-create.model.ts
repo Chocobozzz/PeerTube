@@ -6,6 +6,7 @@ import { LiveVideoScheduleEdit } from './live-video-schedule.model.js'
 export interface LiveVideoCreate extends VideoCreate {
   permanentLive?: boolean
   latencyMode?: LiveVideoLatencyModeType
+  dvrEnabled?: boolean
 
   saveReplay?: boolean
   replaySettings?: { privacy: VideoPrivacyType }

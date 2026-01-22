@@ -33,7 +33,7 @@ import {
 import { isUserQuotaValid } from '../../user.js'
 import { LiveQuotaStore } from '../live-quota-store.js'
 import { LiveSegmentShaStore } from '../live-segment-sha-store.js'
-import { buildConcatenatedName, getLiveSegmentTime } from '../live-utils.js'
+import { buildConcatenatedName, getLiveSegmentListSize, getLiveSegmentTime } from '../live-utils.js'
 import { AbstractTranscodingWrapper, FFmpegTranscodingWrapper, RemoteTranscodingWrapper } from './transcoding-wrapper/index.js'
 
 interface MuxingSessionEvents {
@@ -544,7 +544,7 @@ class MuxingSession extends EventEmitter implements MuxingSession {
       hasVideo: this.hasVideo,
       probe: this.probe,
 
-      segmentListSize: VIDEO_LIVE.SEGMENTS_LIST_SIZE,
+      segmentListSize: getLiveSegmentListSize(this.videoLive.latencyMode, this.videoLive.dvrEnabled),
       segmentDuration: getLiveSegmentTime(this.videoLive.latencyMode),
 
       outDirectory: this.outDirectory
