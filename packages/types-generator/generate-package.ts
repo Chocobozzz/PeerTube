@@ -85,6 +85,8 @@ async function run () {
   const dependencies = Object
     .keys(allDependencies)
     .filter(dependencyName => !unusedDependencies.includes(dependencyName) && !toIgnore.includes(dependencyName))
+    // Filter out workspace protocol dependencies (internal packages not published to npm)
+    .filter(dependencyName => !allDependencies[dependencyName].startsWith('workspace:'))
     .reduce((dependencies, dependencyName) => {
       dependencies[dependencyName] = allDependencies[dependencyName]
       return dependencies
