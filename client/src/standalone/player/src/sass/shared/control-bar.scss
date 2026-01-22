@@ -265,6 +265,13 @@ $chapter-marker-size: 9px;
 
     @include disable-outline;
     @include inject-icon("./svg/popout.svg", var(--icon-size));
+
+    .vjs-icon-placeholder {
+      mask-position: center;
+      -webkit-mask-position: center;
+      mask-repeat: no-repeat;
+      -webkit-mask-repeat: no-repeat;
+    }
   }
 
   .vjs-progress-control:hover .vjs-slider,
