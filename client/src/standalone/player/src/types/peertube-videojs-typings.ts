@@ -108,6 +108,7 @@ export type PeerTubePluginOptions = {
 
   videoCaptions: () => VideoJSCaption[]
   isLive: () => boolean
+  isLiveDvr: () => boolean
   videoUUID: () => string
   subtitle: () => string
 

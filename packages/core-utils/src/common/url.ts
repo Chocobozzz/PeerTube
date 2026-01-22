@@ -101,6 +101,7 @@ function decorateVideoLink (options: {
 
   peertubeLink?: boolean
   p2p?: boolean
+  pip?: boolean
 
   api?: boolean
 
@@ -133,6 +134,7 @@ function decorateVideoLink (options: {
 
   if (options.peertubeLink === false) params.set('peertubeLink', '0')
   if (options.p2p !== undefined) params.set('p2p', options.p2p ? '1' : '0')
+  if (options.pip !== undefined) params.set('pip', options.pip ? '1' : '0')
 
   if (options.api !== undefined) params.set('api', options.api ? '1' : '0')
 

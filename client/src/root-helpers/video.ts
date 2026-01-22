@@ -15,7 +15,7 @@ export function buildVideoOrPlaylistEmbed (options: {
   iframe.height = responsive ? '100%' : '315'
   iframe.src = embedUrl
   iframe.style.border = '0'
-  iframe.allow = 'fullscreen'
+  iframe.allow = 'fullscreen; picture-in-picture'
   iframe.sandbox.add('allow-same-origin', 'allow-scripts', 'allow-popups', 'allow-forms')
 
   if (responsive) {
