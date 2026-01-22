@@ -86,6 +86,7 @@ export class PeerTubePlayer {
   private player: VideojsPlayer
 
   private currentLoadOptions: PeerTubePlayerLoadOptions
+  private liveDvrControlObserver: MutationObserver
 
   constructor (private options: PeerTubePlayerConstructorOptions) {
     this.pluginsManager = options.pluginsManager
@@ -95,6 +96,7 @@ export class PeerTubePlayer {
     if (!this.player) return
 
     this.disposeDynamicPluginsIfNeeded()
+    this.disposeLiveDvrObserver()
 
     this.player.reset()
   }
@@ -135,6 +137,7 @@ export class PeerTubePlayer {
     }
 
     this.updateLiveDvrClass()
+    this.ensureLiveDvrControls()
 
     this.player.trigger('video-change')
   }
@@ -487,6 +490,53 @@ export class PeerTubePlayer {
 
     if (this.currentLoadOptions.isLive && this.currentLoadOptions.isLiveDvr) {
       this.player.addClass('vjs-live-dvr')
+    }
+  }
+
+  private ensureLiveDvrControls () {
+    if (!this.player) return
+    if (!(this.currentLoadOptions.isLive && this.currentLoadOptions.isLiveDvr)) return
+
+    const controlBarEl = this.player.controlBar?.el()
+    if (!controlBarEl) return
+
+    const selectors = [
+      '.vjs-progress-control',
+      '.vjs-current-time',
+      '.vjs-time-divider',
+      '.vjs-duration'
+    ]
+
+    for (const selector of selectors) {
+      const el = controlBarEl.querySelector(selector)
+      el?.classList?.remove('vjs-hidden')
+    }
+
+    if (!this.liveDvrControlObserver) {
+      this.liveDvrControlObserver = new MutationObserver(mutations => {
+        for (const mutation of mutations) {
+          if (mutation.type !== 'attributes') continue
+
+          const target = mutation.target as HTMLElement
+          if (!target?.classList?.contains('vjs-hidden')) continue
+          if (!selectors.some(selector => target.matches?.(selector))) continue
+
+          target.classList.remove('vjs-hidden')
+        }
+      })
+
+      this.liveDvrControlObserver.observe(controlBarEl, {
+        attributes: true,
+        subtree: true,
+        attributeFilter: [ 'class' ]
+      })
+    }
+  }
+
+  private disposeLiveDvrObserver () {
+    if (this.liveDvrControlObserver) {
+      this.liveDvrControlObserver.disconnect()
+      this.liveDvrControlObserver = undefined
     }
   }
 

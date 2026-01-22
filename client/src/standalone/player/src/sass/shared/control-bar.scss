@@ -630,6 +630,26 @@ $chapter-marker-size: 9px;
   }
 }
 
+// Force seekbar visibility for Live DVR
+.video-js.vjs-live.vjs-live-dvr {
+  .vjs-progress-control {
+    display: flex !important;
+    visibility: visible !important;
+  }
+
+  .vjs-progress-control.vjs-hidden {
+    display: flex !important;
+    visibility: visible !important;
+  }
+
+  .vjs-current-time.vjs-hidden,
+  .vjs-duration.vjs-hidden,
+  .vjs-time-divider.vjs-hidden {
+    display: flex !important;
+    visibility: visible !important;
+  }
+}
+
 .video-js.vjs-peertube-theme-lucide.vjs-fullscreen .vjs-control-bar {
   .vjs-fullscreen-control {
     @include update-icon("./svg/theme-lucide/close-fullscreen-lucide.svg", var(--icon-size));

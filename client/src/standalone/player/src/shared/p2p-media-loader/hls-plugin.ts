@@ -123,6 +123,7 @@ export class Html5Hlsjs {
   private _duration: number = null
   private metadata: ManifestParsedData = null
   private isLive: boolean = null
+  private isLiveDvr: boolean = false
   private dvrDuration: number = null
   private edgeMargin: number = null
 
@@ -180,6 +181,7 @@ export class Html5Hlsjs {
   }
 
   duration () {
+    if (this.isLive && this.isLiveDvr && !isNaN(this.dvrDuration)) return this.dvrDuration
     if (this._duration === Infinity) return Infinity
     if (!isNaN(this.videoElement.duration)) return this.videoElement.duration
 
@@ -190,6 +192,11 @@ export class Html5Hlsjs {
     if (this.hls.media) {
       if (!this.isLive) {
         return this.vjs.createTimeRanges(0, this.hls.media.duration)
+      }
+
+      if (this.isLiveDvr && !isNaN(this.dvrDuration)) {
+        const endTime = Math.max(0, Math.round(this.dvrDuration - this.edgeMargin))
+        return this.vjs.createTimeRanges(0, endTime)
       }
 
       // Video.js doesn't seem to like floating point timeranges
@@ -397,6 +404,8 @@ export class Html5Hlsjs {
 
     this.buildBaseConfig()
 
+    this.isLiveDvr = this.hlsjsConfig?.peertubeLiveDvr === true || this.player?.hasClass('vjs-live-dvr')
+
     if ([ '', 'auto' ].includes(this.videoElement.preload) && !this.videoElement.autoplay && this.hlsjsConfig.autoStartLoad === undefined) {
       this.hlsjsConfig.autoStartLoad = false
     }
@@ -436,7 +445,9 @@ export class Html5Hlsjs {
       this.isLive = data.details.live
       this.dvrDuration = data.details.totalduration
 
-      this._duration = this.isLive ? Infinity : data.details.totalduration
+      this._duration = this.isLive
+        ? (this.isLiveDvr ? this.dvrDuration : Infinity)
+        : data.details.totalduration
 
       // Increase network error recovery for lives since they can be broken (server restart, stream interruption etc)
       if (this.isLive) this.maxNetworkErrorRecovery = 30
