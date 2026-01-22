@@ -47,6 +47,7 @@ type Customizations = {
   title: boolean
   warningTitle: boolean
   controlBar: boolean
+  contextMenu: boolean
   peertubeLink: boolean
   responsive: boolean
 
@@ -137,6 +138,7 @@ export class VideoShareComponent {
       title: true,
       warningTitle: true,
       controlBar: true,
+      contextMenu: true,
       peertubeLink: true,
       responsive: false,
 
@@ -307,6 +309,7 @@ export class VideoShareComponent {
         controlBar: this.customizations.controlBar,
         peertubeLink: this.customizations.peertubeLink,
         pip: this.customizations.embedPiP ? undefined : false,
+        contextMenu: this.customizations.contextMenu ? undefined : false,
 
         // If using default value, we don't need to specify it
         p2p: this.customizations.embedP2P === this.server.getHTMLConfig().defaults.p2p.embed.enabled
