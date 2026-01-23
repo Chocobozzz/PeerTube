@@ -66,49 +66,70 @@ describe('Page crash', () => {
 
   for (const language of languages) {
     describe('For language: ' + language, () => {
-      it('Should change the language', async function () {
-        await go('/')
+      describe('Logged in user', () => {
+        it('Should change the language', async function () {
+          await go('/')
 
-        await $('.settings-button').waitForClickable()
-        await $('.settings-button').click()
+          await $('.settings-button').waitForClickable()
+          await $('.settings-button').click()
 
-        await selectCustomSelect('language', language)
+          await selectCustomSelect('language', language)
 
-        await $('my-user-interface-settings .primary-button').waitForClickable()
-        await $('my-user-interface-settings .primary-button').click()
+          await $('my-user-interface-settings .primary-button').waitForClickable()
+          await $('my-user-interface-settings .primary-button').click()
+        })
+
+        it('Should upload and watch a video', async function () {
+          await videoPublishPage.navigateTo()
+          await videoPublishPage.uploadVideo('video3.mp4')
+          await videoPublishPage.validSecondStep('video')
+
+          await videoPublishPage.clickOnWatch()
+          await videoWatchPage.waitWatchVideoName('video')
+        })
+
+        it('Should set a homepage', async function () {
+          await adminConfigPage.updateHomepage('My custom homepage content')
+          await adminConfigPage.save()
+
+          // All tests
+          await go('/home')
+
+          await $('*=My custom homepage content').waitForDisplayed()
+        })
+
+        it('Should go on overview page and not crash', async function () {
+          await $('a[href="/videos/overview"]').waitForClickable()
+          await $('a[href="/videos/overview"]').click()
+
+          await $('my-video-overview').waitForExist()
+        })
+
+        it('Should go on videos from subscriptions page', async function () {
+          await $('a[href="/videos/subscriptions"]').waitForClickable()
+          await $('a[href="/videos/subscriptions"]').click()
+
+          await $('my-videos-user-subscriptions').waitForExist()
+        })
       })
 
-      it('Should upload and watch a video', async function () {
-        await videoPublishPage.navigateTo()
-        await videoPublishPage.uploadVideo('video3.mp4')
-        await videoPublishPage.validSecondStep('video')
+      describe('Anonymous user', () => {
+        before(async () => {
+          await adminConfigPage.toggleSignup(true)
 
-        await videoPublishPage.clickOnWatch()
-        await videoWatchPage.waitWatchVideoName('video')
-      })
+          await adminConfigPage.save()
 
-      it('Should set a homepage', async function () {
-        await adminConfigPage.updateHomepage('My custom homepage content')
-        await adminConfigPage.save()
+          await loginPage.logout()
+          await browser.refresh()
+        })
 
-        // All tests
-        await go('/home')
+        it('Should go on signup page', async function () {
+          await loginPage.loginAsRootUser()
 
-        await $('*=My custom homepage content').waitForDisplayed()
-      })
+          await go('/auth/signup')
 
-      it('Should go on client pages and not crash', async function () {
-        await $('a[href="/videos/overview"]').waitForClickable()
-        await $('a[href="/videos/overview"]').click()
-
-        await $('my-video-overview').waitForExist()
-      })
-
-      it('Should go on videos from subscriptions pages', async function () {
-        await $('a[href="/videos/subscriptions"]').waitForClickable()
-        await $('a[href="/videos/subscriptions"]').click()
-
-        await $('my-videos-user-subscriptions').waitForExist()
+          await $('my-signup-page').waitForExist()
+        })
       })
 
       after(async () => {

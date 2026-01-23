@@ -252,7 +252,9 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
-        <source><x id="INTERPOLATION"/> </source>
+        <source>
+          <x id="INTERPOLATION"/>
+        </source>
         <target state="translated">
           <x id="INTERPOLATION"/>
         </target>
@@ -288,15 +290,9 @@
       <trans-unit id="7833439309018904726" datatype="html" xml:space="preserve">
         <source>New message</source>
         <target state="translated">Nou missatge</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-notifications/user-notifications.component.html</context>
-          <context context-type="linenumber">17</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-notifications/user-notifications.component.html</context>
-          <context context-type="linenumber">30</context>
-        </context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-notifications/user-notifications.component.html</context><context context-type="linenumber">21</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-notifications/user-notifications.component.html</context><context context-type="linenumber">34</context></context-group></trans-unit>
       <trans-unit id="906167214730624194" datatype="html" xml:space="preserve">
         <source>{views, plural, =0 {No view} =1 {1 view} other {<x id="views"/> views}}</source>
         <target state="translated">{views, plural, =0 {Cap visualització} =1 {1 visualització} other {<x id="views"/> visualitzacions}}</target>
@@ -6036,12 +6032,12 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">160</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6760671759540007434" datatype="html" xml:space="preserve">
-        <source>You can import any URL <x id="START_LINK"/>supported by youtube-dl<x id="CLOSE_LINK"/> or URL that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </source>
-        <target state="translated">Podeu importar qualsevol URL <x id="START_LINK"/>compatible amb youtube-dl<x id="CLOSE_LINK"/> o que apunti a un fitxer multimèdia. Heu d'assegurar-vos que teniu drets de distribució del contingut al qual apunta l'adreça, ja que, en cas contrari, us podria causar problemes legals a vosaltres i a la vostra instància. </target>
+      <trans-unit id="3967174847083461627" datatype="html">
+        <source> You can import any URL <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href='https://rg3.github.io/youtube-dl/supportedsites.html' target='_blank' rel='noopener noreferrer'&gt;"/>supported by youtube-dl/yt-dlp<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> or URL that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </source>
+        <target state="new"> You can import any URL <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href='https://rg3.github.io/youtube-dl/supportedsites.html' target='_blank' rel='noopener noreferrer'&gt;"/>supported by youtube-dl/yt-dlp<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> or URL that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/import/video-import-url.component.html</context>
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">11,13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="25952900092483482" datatype="html" xml:space="preserve">
@@ -14314,43 +14310,28 @@ L'enllaç caducarà al cap d'una hora.</target>
       <trans-unit id="4498682414491138092" datatype="html" xml:space="preserve">
         <source>Yesterday</source>
         <target state="translated">Ahir</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-main/date/date-group-label.component.ts</context>
-          <context context-type="linenumber">26</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/date/date-group-label.component.ts</context><context context-type="linenumber">26</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-notifications/user-notifications.component.ts</context><context context-type="linenumber">40</context></context-group></trans-unit>
       <trans-unit id="5073473933031004097" datatype="html" xml:space="preserve">
         <source>This week</source>
         <target state="translated">Aquesta setmana</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-main/date/date-group-label.component.ts</context>
-          <context context-type="linenumber">27</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/date/date-group-label.component.ts</context><context context-type="linenumber">27</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-notifications/user-notifications.component.ts</context><context context-type="linenumber">41</context></context-group></trans-unit>
       <trans-unit id="842657237693374355" datatype="html" xml:space="preserve">
         <source>This month</source>
         <target state="translated">Aquest mes</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-main/date/date-group-label.component.ts</context>
-          <context context-type="linenumber">28</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/date/date-group-label.component.ts</context><context context-type="linenumber">28</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-notifications/user-notifications.component.ts</context><context context-type="linenumber">42</context></context-group></trans-unit>
       <trans-unit id="4463380307954693363" datatype="html" xml:space="preserve">
         <source>Last month</source>
         <target state="translated">El mes passat</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-main/date/date-group-label.component.ts</context>
-          <context context-type="linenumber">29</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/date/date-group-label.component.ts</context><context context-type="linenumber">29</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-notifications/user-notifications.component.ts</context><context context-type="linenumber">43</context></context-group></trans-unit>
       <trans-unit id="7473676707373218484" datatype="html" xml:space="preserve">
         <source>Older</source>
         <target state="translated">Més antic</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-main/date/date-group-label.component.ts</context>
-          <context context-type="linenumber">30</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/date/date-group-label.component.ts</context><context context-type="linenumber">30</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-notifications/user-notifications.component.ts</context><context context-type="linenumber">44</context></context-group></trans-unit>
       <trans-unit id="2317673285989169654" datatype="html" xml:space="preserve">
         <source>Newest first</source>
         <target state="translated">Els més recents primer</target>
@@ -21097,6 +21078,10 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
           <context context-type="sourcefile">src/app/shared/shared-main/date/date-group-label.component.ts</context>
           <context context-type="linenumber">25</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-notifications/user-notifications.component.ts</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="4873149362496451858" datatype="html" xml:space="preserve">
         <source>Last 7 days</source>
@@ -24542,19 +24527,13 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       <trans-unit id="3779435129809850171" datatype="html" xml:space="preserve">
         <source>Sort by this column</source>
         <target state="translated">Ordenar per aquesta columna</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-tables/table.component.ts</context>
-          <context context-type="linenumber">161</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-tables/table.component.ts</context><context context-type="linenumber">164</context></context-group></trans-unit>
       <trans-unit id="4750857371950301240" datatype="html" xml:space="preserve">
         <source>Showing <x id="PH" equiv-text="start"/> to <x id="PH_1" equiv-text="end"/> of <x id="PH_2" equiv-text="this.totalRecords"/> elements</source>
         <target state="translated">Mostrant <x id="PH" equiv-text="start"/> a <x id="PH_1" equiv-text="end"/> de <x id="PH_2" equiv-text="this.totalRecords"/> elements</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-tables/table.component.ts</context>
-          <context context-type="linenumber">428</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-tables/table.component.ts</context><context context-type="linenumber">448</context></context-group></trans-unit>
       <trans-unit id="5927402622550505067" datatype="html" xml:space="preserve">
         <source>Subscribed to all current channels of <x id="PH"/>. You will be notified of all their new videos.</source>
         <target state="translated">Esteu subscrits a tots els canals actuals de <x id="PH"/>. Rebreu notificacions de tots llurs vídeos nous.</target>
@@ -26341,6 +26320,14 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="33149636091572968" datatype="html">
+        <source>Load more</source>
+        <target state="new">Load more</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.html</context>
+          <context context-type="linenumber">82</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4730491486461828294" datatype="html" xml:space="preserve">
         <source>Today's videos</source>
         <target state="translated">Vídeos d'avui</target>
@@ -26394,7 +26381,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
         <target state="new">Cannot load more videos. Please try again later.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.ts</context>
-          <context context-type="linenumber">349</context>
+          <context context-type="linenumber">364</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-selection.component.ts</context>
