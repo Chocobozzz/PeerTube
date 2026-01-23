@@ -1,4 +1,5 @@
-import { MEMOIZE_LENGTH, MEMOIZE_TTL } from '@server/initializers/constants.js'
+import { VideoPrivacy } from '@peertube/peertube-models'
+import { MEMOIZE_LENGTH, MEMOIZE_TTL, VIDEO_PRIVACIES } from '@server/initializers/constants.js'
 import { TagModel } from '@server/models/video/tag.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideoTag } from '@server/types/models/index.js'
@@ -38,3 +39,20 @@ export const getCachedVideoDuration = memoizee(getVideoDuration, {
   max: MEMOIZE_LENGTH.VIDEO_DURATION,
   maxAge: MEMOIZE_TTL.VIDEO_DURATION
 })
+
+// ---------------------------------------------------------------------------
+
+export function getLeastPrivatePrivacy () {
+  const order = [
+    VideoPrivacy.PUBLIC,
+    VideoPrivacy.UNLISTED,
+    VideoPrivacy.INTERNAL,
+    VideoPrivacy.PRIVATE
+  ]
+
+  for (const privacy of order) {
+    if (VIDEO_PRIVACIES[privacy]) return privacy
+  }
+
+  throw new Error('No valid privacy found')
+}

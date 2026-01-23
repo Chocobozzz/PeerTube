@@ -1,4 +1,4 @@
-import { VideoChannelSyncState, VideoPrivacy } from '@peertube/peertube-models'
+import { VideoChannelSyncState } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { YoutubeDLWrapper } from '@server/helpers/youtube-dl/index.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -8,6 +8,7 @@ import { VideoImportModel } from '@server/models/video/video-import.js'
 import { MChannelAccountDefault, MChannelSync } from '@server/types/models/index.js'
 import { CreateJobArgument, JobQueue } from './job-queue/index.js'
 import { ServerConfigManager } from './server-config-manager.js'
+import { getLeastPrivatePrivacy } from './video.js'
 
 const lTags = loggerTagsFactory('channel-synchronization')
 
@@ -66,7 +67,7 @@ export async function synchronizeChannel (options: {
           targetUrl,
           channelSync,
           importDataOverride: {
-            privacy: VideoPrivacy.PUBLIC,
+            privacy: getLeastPrivatePrivacy(),
             support: channel.support
           }
         })
