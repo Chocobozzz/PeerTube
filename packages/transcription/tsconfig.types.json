@@ -5,6 +5,11 @@
     "tsBuildInfoFile": "../types-generator/dist-tmp/peertube-transcription/.tsbuildinfo",
     "stripInternal": true,
     "removeComments": false,
-    "emitDeclarationOnly": true
-  }
+    "emitDeclarationOnly": true,
+  },
+    "references": [
+    { "path": "../models" },
+    { "path": "../core-utils" },
+    { "path": "../node-utils" }
+  ]
 }
