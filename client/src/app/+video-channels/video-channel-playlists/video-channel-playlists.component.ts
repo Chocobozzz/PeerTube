@@ -1,5 +1,4 @@
-import { NgFor, NgIf } from '@angular/common'
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core'
+import { AfterViewInit, Component, inject, OnDestroy, OnInit } from '@angular/core'
 import { ComponentPagination, hasMoreItems, HooksService, resetCurrentPage, ScreenService } from '@app/core'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
@@ -13,10 +12,14 @@ import { VideoPlaylistMiniatureComponent } from '../../shared/shared-video-playl
   selector: 'my-video-channel-playlists',
   templateUrl: './video-channel-playlists.component.html',
   styleUrls: [ './video-channel-playlists.component.scss' ],
-  standalone: true,
-  imports: [ NgIf, InfiniteScrollerDirective, NgFor, VideoPlaylistMiniatureComponent ]
+  imports: [ InfiniteScrollerDirective, VideoPlaylistMiniatureComponent ]
 })
 export class VideoChannelPlaylistsComponent implements OnInit, AfterViewInit, OnDestroy {
+  private videoPlaylistService = inject(VideoPlaylistService)
+  private videoChannelService = inject(VideoChannelService)
+  private screenService = inject(ScreenService)
+  private hooks = inject(HooksService)
+
   videoPlaylists: VideoPlaylist[] = []
 
   pagination: ComponentPagination = {
@@ -29,13 +32,6 @@ export class VideoChannelPlaylistsComponent implements OnInit, AfterViewInit, On
 
   private videoChannelSub: Subscription
   private videoChannel: VideoChannel
-
-  constructor (
-    private videoPlaylistService: VideoPlaylistService,
-    private videoChannelService: VideoChannelService,
-    private screenService: ScreenService,
-    private hooks: HooksService
-  ) {}
 
   ngOnInit () {
     // Parent get the video channel for us
@@ -71,14 +67,17 @@ export class VideoChannelPlaylistsComponent implements OnInit, AfterViewInit, On
   }
 
   private loadVideoPlaylists () {
-    this.videoPlaylistService.listChannelPlaylists(this.videoChannel, this.pagination)
-      .subscribe(res => {
-        this.videoPlaylists = this.videoPlaylists.concat(res.data)
-        this.pagination.totalItems = res.total
+    this.videoPlaylistService.listChannelPlaylists({
+      videoChannel: this.videoChannel,
+      componentPagination: this.pagination,
+      sort: 'videoChannelPosition'
+    }).subscribe(res => {
+      this.videoPlaylists = this.videoPlaylists.concat(res.data)
+      this.pagination.totalItems = res.total
 
-        this.hooks.runAction('action:video-channel-playlists.playlists.loaded', 'video-channel', { playlists: this.videoPlaylists })
+      this.hooks.runAction('action:video-channel-playlists.playlists.loaded', 'video-channel', { playlists: this.videoPlaylists })
 
-        this.onDataSubject.next(res.data)
-      })
+      this.onDataSubject.next(res.data)
+    })
   }
 }

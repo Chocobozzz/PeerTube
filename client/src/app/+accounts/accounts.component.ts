@@ -1,13 +1,22 @@
-import { NgClass, NgIf } from '@angular/common'
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router'
-import { AuthService, MarkdownService, MetaService, Notifier, RedirectService, RestExtractor, ScreenService, UserService } from '@app/core'
+import { CommonModule } from '@angular/common'
+import { Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
+import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router'
+import {
+  AuthService,
+  MarkdownService,
+  MetaService,
+  Notifier,
+  PeerTubeRouterService,
+  RedirectService,
+  RestExtractor,
+  ScreenService,
+  UserService
+} from '@app/core'
 import { Account } from '@app/shared/shared-main/account/account.model'
 import { AccountService } from '@app/shared/shared-main/account/account.service'
 import { DropdownAction } from '@app/shared/shared-main/buttons/action-dropdown.component'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
-import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared-main/menu/horizontal-menu.component'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
@@ -26,15 +35,13 @@ import { SubscribeButtonComponent } from '../shared/shared-user-subscription/sub
 @Component({
   templateUrl: './accounts.component.html',
   styleUrls: [ './accounts.component.scss' ],
-  standalone: true,
   imports: [
-    NgIf,
+    CommonModule,
     ActorAvatarComponent,
     UserModerationDropdownComponent,
     NgbTooltip,
     AccountBlockBadgesComponent,
     CopyButtonComponent,
-    NgClass,
     RouterLink,
     SubscribeButtonComponent,
     RouterLinkActive,
@@ -42,15 +49,31 @@ import { SubscribeButtonComponent } from '../shared/shared-user-subscription/sub
     SimpleSearchInputComponent,
     RouterOutlet,
     AccountReportComponent,
-    PTDatePipe,
     HorizontalMenuComponent
   ]
 })
 export class AccountsComponent implements OnInit, OnDestroy {
-  @ViewChild('accountReportModal') accountReportModal: AccountReportComponent
+  private route = inject(ActivatedRoute)
+  private userService = inject(UserService)
+  private accountService = inject(AccountService)
+  private videoChannelService = inject(VideoChannelService)
+  private notifier = inject(Notifier)
+  private restExtractor = inject(RestExtractor)
+  private redirectService = inject(RedirectService)
+  private authService = inject(AuthService)
+  private videoService = inject(VideoService)
+  private markdown = inject(MarkdownService)
+  private blocklist = inject(BlocklistService)
+  private screenService = inject(ScreenService)
+  private metaService = inject(MetaService)
+  private peertubeRouter = inject(PeerTubeRouterService)
+
+  readonly accountReportModal = viewChild<AccountReportComponent>('accountReportModal')
 
   account: Account
   accountUser: User
+
+  search = ''
 
   videoChannels: VideoChannel[] = []
 
@@ -65,24 +88,6 @@ export class AccountsComponent implements OnInit, OnDestroy {
 
   private routeSub: Subscription
 
-  constructor (
-    private route: ActivatedRoute,
-    private router: Router,
-    private userService: UserService,
-    private accountService: AccountService,
-    private videoChannelService: VideoChannelService,
-    private notifier: Notifier,
-    private restExtractor: RestExtractor,
-    private redirectService: RedirectService,
-    private authService: AuthService,
-    private videoService: VideoService,
-    private markdown: MarkdownService,
-    private blocklist: BlocklistService,
-    private screenService: ScreenService,
-    private metaService: MetaService
-  ) {
-  }
-
   ngOnInit () {
     this.routeSub = this.route.params
       .pipe(
@@ -90,24 +95,28 @@ export class AccountsComponent implements OnInit, OnDestroy {
         distinctUntilChanged(),
         switchMap(accountId => this.accountService.getAccount(accountId)),
         tap(account => this.onAccount(account)),
-        switchMap(account => this.videoChannelService.listAccountVideoChannels({ account })),
-        catchError(err => this.restExtractor.redirectTo404IfNotFound(err, 'other', [
-          HttpStatusCode.BAD_REQUEST_400,
-          HttpStatusCode.NOT_FOUND_404
-        ]))
+        switchMap(account => this.videoChannelService.listAccountChannels({ account })),
+        catchError(err =>
+          this.restExtractor.redirectTo404IfNotFound(err, 'other', [
+            HttpStatusCode.BAD_REQUEST_400,
+            HttpStatusCode.NOT_FOUND_404
+          ])
+        )
       )
       .subscribe({
         next: videoChannels => {
           this.videoChannels = videoChannels.data
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
 
     this.links = [
       { label: $localize`Channels`, routerLink: 'video-channels' },
       { label: $localize`Videos`, routerLink: 'videos' }
     ]
+
+    this.search = this.route.snapshot.queryParams['search'] || ''
   }
 
   ngOnDestroy () {
@@ -152,7 +161,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
   searchChanged (search: string) {
     const queryParams = { search }
 
-    this.router.navigate([ './videos' ], { queryParams, relativeTo: this.route, queryParamsHandling: 'merge' })
+    this.peertubeRouter.silentNavigate([ './videos' ], queryParams, this.route)
   }
 
   onSearchInputDisplayChanged (displayed: boolean) {
@@ -190,7 +199,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
   }
 
   private showReportModal () {
-    this.accountReportModal.show(this.account)
+    this.accountReportModal().show(this.account)
   }
 
   private loadUserIfNeeded (account: Account) {
@@ -204,7 +213,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
             this.accountUser = accountUser
           },
 
-          error: err => this.notifier.error(err.message)
+          error: err => this.notifier.handleError(err)
         })
     }
   }
@@ -229,7 +238,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
   }
 
   private loadAccountVideosCount () {
-    this.videoService.getAccountVideos({
+    this.videoService.listAccountVideos({
       account: this.account,
       videoPagination: {
         currentPage: 1,

@@ -2,8 +2,11 @@ import { buildAspectRatio } from '@peertube/peertube-core-utils'
 import {
   LiveVideoCreate,
   LiveVideoLatencyMode,
+  NSFWFlag,
+  PeerTubeError,
   ThumbnailType,
   ThumbnailType_Type,
+  VideoChannelActivityAction,
   VideoCreate,
   VideoPrivacy,
   VideoStateType
@@ -14,11 +17,13 @@ import { LoggerTagsFn, logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { ScheduleVideoUpdateModel } from '@server/models/video/schedule-video-update.js'
+import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting.js'
+import { VideoLiveScheduleModel } from '@server/models/video/video-live-schedule.js'
 import { VideoLiveModel } from '@server/models/video/video-live.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MChannel, MChannelAccountLight, MThumbnail, MUser, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
+import { MChannel, MChannelAccountLight, MThumbnail, MUserAccountId, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
 import { FilteredModelAttributes } from '@server/types/sequelize.js'
 import { FfprobeData } from 'fluent-ffmpeg'
 import { move } from 'fs-extra/esm'
@@ -33,7 +38,7 @@ import { replaceChapters, replaceChaptersFromDescriptionIfNeeded } from './video
 import { buildNewFile, createVideoSource } from './video-file.js'
 import { addVideoJobsAfterCreation } from './video-jobs.js'
 import { VideoPathManager } from './video-path-manager.js'
-import { buildCommentsPolicy, setVideoTags } from './video.js'
+import { setVideoTags } from './video.js'
 
 type VideoAttributes = Omit<VideoCreate, 'channelId'> & {
   duration: number
@@ -42,7 +47,7 @@ type VideoAttributes = Omit<VideoCreate, 'channelId'> & {
   inputFilename: string
 }
 
-type LiveAttributes = Pick<LiveVideoCreate, 'permanentLive' | 'latencyMode' | 'saveReplay' | 'replaySettings'> & {
+type LiveAttributes = Pick<LiveVideoCreate, 'permanentLive' | 'latencyMode' | 'saveReplay' | 'replaySettings' | 'schedules'> & {
   streamKey?: string
 }
 
@@ -56,9 +61,9 @@ export type ThumbnailOptions = {
 type ChaptersOption = { timecode: number, title: string }[]
 
 type VideoAttributeHookFilter =
-  'filter:api.video.user-import.video-attribute.result' |
-  'filter:api.video.upload.video-attribute.result' |
-  'filter:api.video.live.video-attribute.result'
+  | 'filter:api.video.user-import.video-attribute.result'
+  | 'filter:api.video.upload.video-attribute.result'
+  | 'filter:api.video.live.video-attribute.result'
 
 export class LocalVideoCreator {
   private readonly lTags: LoggerTagsFn
@@ -76,28 +81,30 @@ export class LocalVideoCreator {
   private videoFile: MVideoFile
   private videoPath: string
 
-  constructor (private readonly options: {
-    lTags: LoggerTagsFn
+  constructor (
+    private readonly options: {
+      lTags: LoggerTagsFn
 
-    videoFile: {
-      path: string
-      probe: FfprobeData
+      videoFile: {
+        path: string
+        probe: FfprobeData
+      }
+
+      videoAttributes: VideoAttributes
+      liveAttributes: LiveAttributes
+
+      channel: MChannelAccountLight
+      user: MUserAccountId
+      videoAttributeResultHook: VideoAttributeHookFilter
+      thumbnails: ThumbnailOptions
+
+      chapters: ChaptersOption | undefined
+      fallbackChapters: {
+        fromDescription: boolean
+        finalFallback: ChaptersOption | undefined
+      }
     }
-
-    videoAttributes: VideoAttributes
-    liveAttributes: LiveAttributes
-
-    channel: MChannelAccountLight
-    user: MUser
-    videoAttributeResultHook: VideoAttributeHookFilter
-    thumbnails: ThumbnailOptions
-
-    chapters: ChaptersOption | undefined
-    fallbackChapters: {
-      fromDescription: boolean
-      finalFallback: ChaptersOption | undefined
-    }
-  }) {
+  ) {
     this.videoFilePath = options.videoFile?.path
     this.videoFileProbe = options.videoFile?.probe
 
@@ -133,6 +140,14 @@ export class LocalVideoCreator {
     await retryTransactionWrapper(() => {
       return sequelizeTypescript.transaction(async transaction => {
         await this.video.save({ transaction })
+
+        await VideoChannelActivityModel.addVideoActivity({
+          action: VideoChannelActivityAction.CREATE,
+          user: this.options.user,
+          channel: this.channel,
+          video: this.video,
+          transaction
+        })
 
         for (const thumbnail of thumbnails) {
           await this.video.addAndSaveThumbnail(thumbnail, transaction)
@@ -199,6 +214,14 @@ export class LocalVideoCreator {
 
           videoLive.videoId = this.video.id
           this.video.VideoLive = await videoLive.save({ transaction })
+
+          if (this.liveAttributes.schedules) {
+            this.video.VideoLive.LiveSchedules = await VideoLiveScheduleModel.addToLiveId(
+              this.video.VideoLive.id,
+              this.liveAttributes.schedules.map(s => s.startAt),
+              transaction
+            )
+          }
         }
 
         if (this.videoFile) {
@@ -255,6 +278,9 @@ export class LocalVideoCreator {
           type,
           automaticallyGenerated: thumbnail.automaticallyGenerated || false,
           keepOriginal: thumbnail.keepOriginal
+        }).catch(err => {
+          // eslint-disable-next-line @typescript-eslint/only-throw-error
+          throw PeerTubeError.fromError(err, 'INVALID_IMAGE_FILE')
         })
       )
 
@@ -281,10 +307,14 @@ export class LocalVideoCreator {
       category: videoInfo.category,
       licence: videoInfo.licence ?? CONFIG.DEFAULTS.PUBLISH.LICENCE,
       language: videoInfo.language,
-      commentsPolicy: buildCommentsPolicy(videoInfo),
+      commentsPolicy: videoInfo.commentsPolicy ?? CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY,
       downloadEnabled: videoInfo.downloadEnabled ?? CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
       waitTranscoding: videoInfo.waitTranscoding || false,
+
       nsfw: videoInfo.nsfw || false,
+      nsfwSummary: videoInfo.nsfwSummary,
+      nsfwFlags: videoInfo.nsfwFlags || NSFWFlag.NONE,
+
       description: videoInfo.description,
       support: videoInfo.support,
       privacy: videoInfo.privacy || VideoPrivacy.PRIVATE,
@@ -293,6 +323,10 @@ export class LocalVideoCreator {
       originallyPublishedAt: videoInfo.originallyPublishedAt
         ? new Date(videoInfo.originallyPublishedAt)
         : null,
+
+      publishedAt: this.videoAttributes.scheduleUpdate?.updateAt
+        ? new Date(this.videoAttributes.scheduleUpdate?.updateAt)
+        : undefined,
 
       uuid: buildUUID(),
       duration: videoInfo.duration

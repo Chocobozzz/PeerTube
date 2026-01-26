@@ -1,23 +1,20 @@
+import { VideoFileStream, VideoInclude } from '@peertube/peertube-models'
+import { logger } from '@server/helpers/logger.js'
+import { ServerConfigManager } from '@server/lib/server-config-manager.js'
+import { getServerActor } from '@server/models/application/application.js'
 import express from 'express'
 import truncate from 'lodash-es/truncate.js'
 import { ErrorLevel, SitemapStream, streamToPromise } from 'sitemap'
-import { logger } from '@server/helpers/logger.js'
-import { getServerActor } from '@server/models/application/application.js'
-import { buildNSFWFilter } from '../helpers/express-utils.js'
+import { buildNSFWFilters } from '../helpers/express-utils.js'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants.js'
 import { apiRateLimiter, asyncMiddleware, cacheRoute } from '../middlewares/index.js'
 import { AccountModel } from '../models/account/account.js'
-import { VideoModel } from '../models/video/video.js'
 import { VideoChannelModel } from '../models/video/video-channel.js'
-import { VideoFileStream, VideoInclude } from '@peertube/peertube-models'
+import { VideoModel } from '../models/video/video.js'
 
 const sitemapRouter = express.Router()
 
-sitemapRouter.use('/sitemap.xml',
-  apiRateLimiter,
-  cacheRoute(ROUTE_CACHE_LIFETIME.SITEMAP),
-  asyncMiddleware(getSitemap)
-)
+sitemapRouter.use('/sitemap.xml', apiRateLimiter, cacheRoute(ROUTE_CACHE_LIFETIME.SITEMAP), asyncMiddleware(getSitemap))
 
 // ---------------------------------------------------------------------------
 
@@ -37,9 +34,9 @@ async function getSitemap (req: express.Request, res: express.Response) {
   const sitemapStream = new SitemapStream({
     hostname: WEBSERVER.URL,
     errorHandler: (err: Error, level: ErrorLevel) => {
-      if (level === 'warn') {
+      if (level === ErrorLevel.WARN) {
         logger.warn('Warning in sitemap generation.', { err })
-      } else if (level === 'throw') {
+      } else if (level === ErrorLevel.THROW) {
         logger.error('Error in sitemap generation.', { err })
 
         throw err
@@ -81,6 +78,8 @@ async function getSitemapLocalVideoUrls () {
 
   while (hasData && i < 1000) {
     const { data } = await VideoModel.listForApi({
+      ...buildNSFWFilters(),
+
       start: chunkSize * i,
       count: chunkSize,
       sort: 'createdAt',
@@ -89,7 +88,6 @@ async function getSitemapLocalVideoUrls () {
         orLocalVideos: true
       },
       isLocal: true,
-      nsfw: buildNSFWFilter(),
       countVideos: false,
       include: VideoInclude.FILES | VideoInclude.TAGS
     })
@@ -104,7 +102,9 @@ async function getSitemapLocalVideoUrls () {
           v.getMaxQualityFile(VideoFileStream.AUDIO)?.getFileUrl(v)
 
         return {
-          url: WEBSERVER.URL + v.getWatchStaticPath(),
+          url: process.env.EXPERIMENTAL_SITEMAP_VIDEO_URL === 'true'
+            ? WEBSERVER.URL + '/videos/watch/' + v.uuid
+            : WEBSERVER.URL + v.getWatchStaticPath(),
           video: [
             {
               // Sitemap title should be < 100 characters
@@ -135,9 +135,13 @@ async function getSitemapLocalVideoUrls () {
 
 function getSitemapBasicUrls () {
   const paths = [
-    '/about/instance',
-    '/videos/local'
+    '/about/instance/home',
+    '/videos/browse?scope=local'
   ]
+
+  if (ServerConfigManager.Instance.isHomepageEnabled()) {
+    paths.push('/home')
+  }
 
   return paths.map(p => ({ url: WEBSERVER.URL + p }))
 }

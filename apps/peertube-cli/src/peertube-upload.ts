@@ -72,7 +72,12 @@ export function defineUploadProgram () {
 
         await run({ ...options, url, username, password })
       } catch (err) {
-        console.error('Cannot upload video: ' + err.message)
+        if (err.code === 'ECONNREFUSED') {
+          console.error(`Server is not responding`)
+        } else {
+          console.error('Cannot upload video: ' + err.message)
+        }
+
         process.exit(-1)
       }
     })
@@ -127,7 +132,7 @@ async function buildVideoAttributesFromCommander (server: PeerTubeServer, option
     waitTranscoding: true
   }
 
-  const booleanAttributes: { [id in keyof typeof defaultBooleanAttributes]: boolean } | {} = {}
+  const booleanAttributes: { [id in keyof typeof defaultBooleanAttributes]: boolean } = {} as any
 
   for (const key of Object.keys(defaultBooleanAttributes)) {
     if (options[key] !== undefined) {

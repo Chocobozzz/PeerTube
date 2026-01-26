@@ -1,0 +1,13 @@
+@if (type() === 'owner') {
+  <span class="collaborator-role collaborator-role-owner" [ngClass]="{ small: small() }" [ngbTooltip]="ownerTooltip" container="body" i18n>
+    Owner
+  </span>
+} @else if (type() === 'accepted') {
+  <span class="collaborator-role collaborator-role-editor" [ngClass]="{ small: small() }" [ngbTooltip]="editorTooltip" container="body" i18n>
+    Editor
+  </span>
+} @else if (type() === 'invited') {
+  <span class="collaborator-role collaborator-role-invited" [ngClass]="{ small: small() }" [ngbTooltip]="invitationTooltip" container="body" i18n>
+    Invitation sent
+  </span>
+}

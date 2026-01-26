@@ -2,16 +2,17 @@ import { Route, Routes, UrlSegment } from '@angular/router'
 import { userResolver } from '@app/core/routing/user.resolver'
 import { AbuseService } from '@app/shared/shared-moderation/abuse.service'
 import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
+import { BulkService } from '@app/shared/shared-moderation/bulk.service'
 import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
 import { UserSubscriptionService } from '@app/shared/shared-user-subscription/user-subscription.service'
 import { VideoCommentService } from '@app/shared/shared-video-comment/video-comment.service'
 import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
-import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
-import { WatchedWordsListService } from '@app/shared/standalone-watched-words/watched-words-list.service'
+import { WatchedWordsListService } from '@app/shared/shared-watched-words/watched-words-list.service'
 import { LoginGuard } from '../core'
 import { CommentsOnMyVideosComponent } from './comments-on-my-videos/comments-on-my-videos.component'
 import { AutomaticTagService } from './my-auto-tag-policies/automatic-tag.service'
 import { MyAutoTagPoliciesComponent } from './my-auto-tag-policies/my-auto-tag-policies.component'
+import { MyChannelSpaceComponent } from './my-channel-space.component'
 import { MyFollowersComponent } from './my-follows/my-followers.component'
 import { MySubscriptionsComponent } from './my-follows/my-subscriptions.component'
 import { MyHistoryComponent } from './my-history/my-history.component'
@@ -27,12 +28,10 @@ import { MyVideoPlaylistsComponent } from './my-video-playlists/my-video-playlis
 import { MyVideoSpaceComponent } from './my-video-space.component'
 import { MyVideosComponent } from './my-videos/my-videos.component'
 import { MyWatchedWordsListComponent } from './my-watched-words-list/my-watched-words-list.component'
-import { BulkService } from '@app/shared/shared-moderation/bulk.service'
 
 const commonConfig = {
   path: '',
   providers: [
-    VideoPlaylistService,
     BlocklistService,
     VideoBlockService,
     AbuseService,
@@ -50,55 +49,6 @@ const commonConfig = {
 }
 
 const videoSpaceRoutes = [
-  // ---------------------------------------------------------------------------
-  // Channels
-  // ---------------------------------------------------------------------------
-
-  {
-    path: '',
-    redirectTo: 'video-channels',
-    pathMatch: 'full'
-  },
-
-  {
-    path: 'video-channels',
-    loadChildren: () => import('./+my-video-channels/routes')
-  },
-
-  {
-    path: 'followers',
-    component: MyFollowersComponent,
-    data: {
-      meta: {
-        title: $localize`My followers`
-      }
-    }
-  },
-
-  {
-    path: 'video-channel-syncs',
-    component: MyVideoChannelSyncsComponent,
-    data: {
-      meta: {
-        title: $localize`My synchronizations`
-      }
-    }
-  },
-
-  {
-    path: 'video-channel-syncs/create',
-    component: VideoChannelSyncEditComponent,
-    data: {
-      meta: {
-        title: $localize`Create new synchronization`
-      }
-    }
-  },
-
-  // ---------------------------------------------------------------------------
-  // Videos
-  // ---------------------------------------------------------------------------
-
   {
     path: 'videos/comments',
     redirectTo: 'comments-on-my-videos',
@@ -141,10 +91,6 @@ const videoSpaceRoutes = [
     data: {
       meta: {
         title: $localize`My videos`
-      },
-      reuse: {
-        enabled: true,
-        key: 'my-videos-list'
       }
     }
   },
@@ -168,8 +114,50 @@ const videoSpaceRoutes = [
   }
 ] satisfies Routes
 
-const libraryRoutes = [
+const channelSpaceRoutes = [
+  {
+    path: '',
+    redirectTo: 'video-channels',
+    pathMatch: 'full'
+  },
 
+  {
+    path: 'video-channels',
+    loadChildren: () => import('./+my-video-channels/routes')
+  },
+
+  {
+    path: 'followers',
+    component: MyFollowersComponent,
+    data: {
+      meta: {
+        title: $localize`My followers`
+      }
+    }
+  },
+
+  {
+    path: 'video-channel-syncs',
+    component: MyVideoChannelSyncsComponent,
+    data: {
+      meta: {
+        title: $localize`My synchronizations`
+      }
+    }
+  },
+
+  {
+    path: 'video-channel-syncs/create',
+    component: VideoChannelSyncEditComponent,
+    data: {
+      meta: {
+        title: $localize`Create new synchronization`
+      }
+    }
+  }
+] satisfies Routes
+
+const libraryRoutes = [
   // ---------------------------------------------------------------------------
   // Playlists
   // ---------------------------------------------------------------------------
@@ -248,6 +236,14 @@ function isVideoSpaceRoute (segments: UrlSegment[]) {
   return videoSpaceRoutes.some(r => r.path === rootPath || r.path.startsWith(`${rootPath}/`))
 }
 
+function isChannelSpaceRoute (segments: UrlSegment[]) {
+  if (segments.length === 0) return false
+
+  const rootPath = segments[0].path
+
+  return channelSpaceRoutes.some(r => r.path === rootPath || r.path.startsWith(`${rootPath}/`))
+}
+
 export default [
   {
     ...commonConfig,
@@ -264,10 +260,22 @@ export default [
   {
     ...commonConfig,
 
+    component: MyChannelSpaceComponent,
+    canMatch: [
+      (_route: Route, segments: UrlSegment[]) => {
+        return isChannelSpaceRoute(segments)
+      }
+    ],
+
+    children: channelSpaceRoutes
+  },
+  {
+    ...commonConfig,
+
     component: MyLibraryComponent,
     canMatch: [
       (_route: Route, segments: UrlSegment[]) => {
-        return !isVideoSpaceRoute(segments)
+        return !isVideoSpaceRoute(segments) && !isChannelSpaceRoute(segments)
       }
     ],
     children: libraryRoutes

@@ -1,0 +1,54 @@
+@if (componentPagination.totalItems === 0) {
+  <div class="no-notification" i18n>You don't have notifications.</div>
+}
+
+<ul
+  class="notifications" [ngClass]="{ 'in-popup': inPopup() }"
+  myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()"
+>
+  @for (notification of notifications; track notification.payload.id) {
+    @if (!inPopup()) {
+      <my-date-group-label [date]="notification.payload.createdAt" [store]="groupByDateStore" [groupedDateLabels]="groupedDateLabels"></my-date-group-label>
+    }
+
+    <li>
+      @if (notification.externalUrl) {
+        <a
+          class="notification"
+          [ngClass]="{ unread: !notification.payload.read }"
+          (click)="markAsRead(notification)"
+          i18n-title
+          title="New message"
+          [href]="notification.externalUrl"
+          target="_blank"
+          rel="noopener nofollow"
+          >
+          <my-user-notification-content [notification]="notification"></my-user-notification-content>
+        </a>
+      } @else if (notification.url) {
+        <a
+          class="notification"
+          [ngClass]="{ unread: !notification.payload.read }"
+          (click)="markAsRead(notification)"
+          i18n-title
+          title="New message"
+          [routerLink]="notification.url"
+          [queryParams]="notification.queryParams"
+          >
+          <my-user-notification-content [notification]="notification"></my-user-notification-content>
+        </a>
+      } @else if (notification.payload.read === false) {
+        <div
+          class="notification button-unstyle"
+          [ngClass]="{ unread: !notification.payload.read }"
+        >
+          <my-user-notification-content [notification]="notification" (buttonClicked)="markAsRead(notification)"></my-user-notification-content>
+        </div>
+        }@else {
+        <div class="notification">
+          <my-user-notification-content [notification]="notification"></my-user-notification-content>
+        </div>
+      }
+    </li>
+  }
+</ul>

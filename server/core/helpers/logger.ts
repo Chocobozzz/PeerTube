@@ -1,10 +1,13 @@
 import { context, trace } from '@opentelemetry/api'
 import { omit } from '@peertube/peertube-core-utils'
+import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { stat } from 'fs/promises'
 import { join } from 'path'
 import { format as sqlFormat } from 'sql-formatter'
-import { createLogger, format, transports } from 'winston'
-import { FileTransportOptions } from 'winston/lib/winston/transports'
+import { isatty } from 'tty'
+import { createLogger, format, transport, transports } from 'winston'
+import { FileTransportOptions } from 'winston/lib/winston/transports/index.js'
+import { isMainThread } from 'worker_threads'
 import { CONFIG } from '../initializers/config.js'
 import { LOG_FILENAME } from '../initializers/constants.js'
 
@@ -30,63 +33,99 @@ const consoleLoggerFormat = format.printf(info => {
   return `[${info.label}] ${info.timestamp} ${info.level}: ${info.message}${additionalInfos}`
 })
 
-const jsonLoggerFormat = format.printf(info => {
+export const jsonLoggerFormat: ReturnType<typeof format.printf> = format.printf(info => {
   return JSON.stringify(info, removeCyclicValues())
 })
 
-const timestampFormatter = format.timestamp({
-  format: 'YYYY-MM-DD HH:mm:ss.SSS'
-})
-const labelFormatter = (suffix?: string) => {
+export const labelFormatter: (suffix?: string) => ReturnType<typeof format.printf> = (suffix?: string) => {
   return format.label({
     label: suffix ? `${label} ${suffix}` : label
   })
 }
 
-const fileLoggerOptions: FileTransportOptions = {
-  filename: join(CONFIG.STORAGE.LOG_DIR, LOG_FILENAME),
-  handleExceptions: true,
-  format: format.combine(
-    format.timestamp(),
-    jsonLoggerFormat
-  )
-}
+export function buildLogger (options: {
+  labelSuffix?: string
+  handleExceptions?: boolean // default false
+}) {
+  const { labelSuffix, handleExceptions = false } = options
 
-if (CONFIG.LOG.ROTATION.ENABLED) {
-  fileLoggerOptions.maxsize = CONFIG.LOG.ROTATION.MAX_FILE_SIZE
-  fileLoggerOptions.maxFiles = CONFIG.LOG.ROTATION.MAX_FILES
-}
+  const formatters = [
+    format.timestamp({
+      format: 'YYYY-MM-DD HH:mm:ss.SSS'
+    })
+  ]
 
-function buildLogger (labelSuffix?: string) {
+  if (doesConsoleSupportColor()) formatters.push(format.colorize())
+
+  formatters.push(consoleLoggerFormat)
+
+  const consoleTransport = new transports.Console({
+    handleExceptions,
+    format: format.combine(...formatters)
+  })
+
+  const fileLoggerOptions: FileTransportOptions = {
+    filename: join(CONFIG.STORAGE.LOG_DIR, LOG_FILENAME),
+    handleExceptions,
+    format: format.combine(
+      format.timestamp(),
+      jsonLoggerFormat
+    )
+  }
+
+  if (CONFIG.LOG.ROTATION.ENABLED) {
+    fileLoggerOptions.maxsize = CONFIG.LOG.ROTATION.MAX_FILE_SIZE
+    fileLoggerOptions.maxFiles = CONFIG.LOG.ROTATION.MAX_FILES
+  }
+
+  const loggerTransports: transport[] = []
+
+  // Don't add file logger transport in worker threads in production
+  // See https://github.com/winstonjs/winston/issues/2393
+  if (isMainThread || isTestOrDevInstance()) {
+    loggerTransports.push(new transports.File(fileLoggerOptions))
+  }
+
+  loggerTransports.push(consoleTransport)
+
   return createLogger({
     level: process.env.LOGGER_LEVEL ?? CONFIG.LOG.LEVEL,
     defaultMeta: {
-      get traceId () { return trace.getSpanContext(context.active())?.traceId },
-      get spanId () { return trace.getSpanContext(context.active())?.spanId },
-      get traceFlags () { return trace.getSpanContext(context.active())?.traceFlags }
+      get traceId () {
+        return trace.getSpanContext(context.active())?.traceId
+      },
+      get spanId () {
+        return trace.getSpanContext(context.active())?.spanId
+      },
+      get traceFlags () {
+        return trace.getSpanContext(context.active())?.traceFlags
+      }
     },
     format: format.combine(
       labelFormatter(labelSuffix),
       format.splat()
     ),
-    transports: [
-      new transports.File(fileLoggerOptions),
-      new transports.Console({
-        handleExceptions: true,
-        format: format.combine(
-          timestampFormatter,
-          format.colorize(),
-          consoleLoggerFormat
-        )
-      })
-    ],
+    transports: loggerTransports,
     exitOnError: true
   })
 }
 
-const logger = buildLogger()
+export const logger = buildLogger({ handleExceptions: true })
 
 // ---------------------------------------------------------------------------
+// Bunyan logger adapter for Winston
+// ---------------------------------------------------------------------------
+
+export const bunyanLogger = {
+  level: () => {},
+  trace: bunyanLogFactory('debug'),
+  debug: bunyanLogFactory('debug'),
+  verbose: bunyanLogFactory('debug'),
+  info: bunyanLogFactory('info'),
+  warn: bunyanLogFactory('warn'),
+  error: bunyanLogFactory('error'),
+  fatal: bunyanLogFactory('error')
+}
 
 function bunyanLogFactory (level: string) {
   return function (...params: any[]) {
@@ -107,22 +146,13 @@ function bunyanLogFactory (level: string) {
   }
 }
 
-const bunyanLogger = {
-  level: () => { },
-  trace: bunyanLogFactory('debug'),
-  debug: bunyanLogFactory('debug'),
-  verbose: bunyanLogFactory('debug'),
-  info: bunyanLogFactory('info'),
-  warn: bunyanLogFactory('warn'),
-  error: bunyanLogFactory('error'),
-  fatal: bunyanLogFactory('error')
-}
-
+// ---------------------------------------------------------------------------
+// Logger tags helpers
 // ---------------------------------------------------------------------------
 
-type LoggerTags = { tags: (string | number)[] }
-type LoggerTagsFn = (...tags: (string | number)[]) => LoggerTags
-function loggerTagsFactory (...defaultTags: (string | number)[]): LoggerTagsFn {
+export type LoggerTags = { tags: (string | number)[] }
+export type LoggerTagsFn = (...tags: (string | number)[]) => LoggerTags
+export function loggerTagsFactory (...defaultTags: (string | number)[]): LoggerTagsFn {
   return (...tags: (string | number)[]) => {
     return { tags: defaultTags.concat(tags) }
   }
@@ -130,7 +160,7 @@ function loggerTagsFactory (...defaultTags: (string | number)[]): LoggerTagsFn {
 
 // ---------------------------------------------------------------------------
 
-async function mtimeSortFilesDesc (files: string[], basePath: string) {
+export async function mtimeSortFilesDesc (files: string[], basePath: string) {
   const promises = []
   const out: { file: string, mtime: number }[] = []
 
@@ -151,14 +181,7 @@ async function mtimeSortFilesDesc (files: string[], basePath: string) {
 }
 
 // ---------------------------------------------------------------------------
-
-export {
-
-  buildLogger, bunyanLogger, consoleLoggerFormat,
-  jsonLoggerFormat, labelFormatter, logger,
-  loggerTagsFactory, mtimeSortFilesDesc, timestampFormatter, type LoggerTags, type LoggerTagsFn
-}
-
+// Private
 // ---------------------------------------------------------------------------
 
 function removeCyclicValues () {
@@ -185,7 +208,9 @@ function removeCyclicValues () {
     if (value instanceof Error) {
       const error = {}
 
-      Object.getOwnPropertyNames(value).forEach(key => { error[key] = value[key] })
+      Object.getOwnPropertyNames(value).forEach(key => {
+        error[key] = value[key]
+      })
 
       return error
     }
@@ -198,4 +223,10 @@ function getAdditionalInfo (info: any) {
   const toOmit = [ 'label', 'timestamp', 'level', 'message', 'sql', 'tags' ]
 
   return omit(info, toOmit)
+}
+
+function doesConsoleSupportColor () {
+  if (isTestOrDevInstance()) return true
+
+  return isatty(1) && process.env.TERM && process.env.TERM !== 'dumb'
 }

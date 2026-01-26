@@ -1,17 +1,18 @@
 import { omit, pick } from '@peertube/peertube-core-utils'
 import {
-  VideoPrivacy,
-  VideoPlaylistPrivacy,
-  VideoPlaylistCreateResult,
   Account,
+  ActorImageType,
   HTMLServerConfig,
+  LogoType,
   ServerConfig,
-  ActorImageType
+  VideoPlaylistCreateResult,
+  VideoPlaylistPrivacy,
+  VideoPrivacy
 } from '@peertube/peertube-models'
 import {
   createMultipleServers,
-  setAccessTokensToServers,
   doubleFollow,
+  setAccessTokensToServers,
   setDefaultVideoChannel,
   waitJobs
 } from '@peertube/peertube-server-commands'
@@ -60,6 +61,11 @@ export async function prepareClientTests () {
   })
   await servers[0].config.updateInstanceImage({ type: ActorImageType.AVATAR, fixture: instanceConfig.avatar })
 
+  const types: LogoType[] = [ 'favicon', 'header-square', 'header-wide', 'opengraph' ]
+  for (const type of types) {
+    await servers[0].config.updateInstanceLogo({ type, fixture: 'avatar.png' })
+  }
+
   let account: Account
 
   let videoIds: (string | number)[] = []
@@ -104,10 +110,10 @@ export async function prepareClientTests () {
   }
 
   {
-    ({ uuid: privateVideoId } = await servers[0].videos.quickUpload({ name: 'private', privacy: VideoPrivacy.PRIVATE }));
-    ({ uuid: unlistedVideoId } = await servers[0].videos.quickUpload({ name: 'unlisted', privacy: VideoPrivacy.UNLISTED }));
-    ({ uuid: internalVideoId } = await servers[0].videos.quickUpload({ name: 'internal', privacy: VideoPrivacy.INTERNAL }));
-    ({ uuid: passwordProtectedVideoId } = await servers[0].videos.quickUpload({
+    ;({ uuid: privateVideoId } = await servers[0].videos.quickUpload({ name: 'private', privacy: VideoPrivacy.PRIVATE }))
+    ;({ uuid: unlistedVideoId } = await servers[0].videos.quickUpload({ name: 'unlisted', privacy: VideoPrivacy.UNLISTED }))
+    ;({ uuid: internalVideoId } = await servers[0].videos.quickUpload({ name: 'internal', privacy: VideoPrivacy.INTERNAL }))
+    ;({ uuid: passwordProtectedVideoId } = await servers[0].videos.quickUpload({
       name: 'password protected',
       privacy: VideoPrivacy.PASSWORD_PROTECTED,
       videoPasswords: [ 'password' ]

@@ -10,10 +10,6 @@ const videosSearchValidator = [
     .optional()
     .not().isEmpty(),
 
-  query('host')
-    .optional()
-    .custom(isHostValid),
-
   query('startDate')
     .optional()
     .custom(isDateValid).withMessage('Should have a start date that conforms to ISO 8601'),

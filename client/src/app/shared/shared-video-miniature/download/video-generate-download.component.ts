@@ -1,5 +1,5 @@
-import { NgIf } from '@angular/common'
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+
+import { Component, OnInit, inject, input, output } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
@@ -15,29 +15,26 @@ import { VideoDetails } from '../../shared-main/video/video-details.model'
   selector: 'my-video-generate-download',
   templateUrl: './video-generate-download.component.html',
   styleUrls: [ './video-generate-download.component.scss' ],
-  standalone: true,
   imports: [
-    NgIf,
     FormsModule,
     GlobalIconComponent,
     PeertubeCheckboxComponent,
     NgbTooltip,
     BytesPipe
-  ]
+]
 })
 export class VideoGenerateDownloadComponent implements OnInit {
-  @Input({ required: true }) video: VideoDetails
-  @Input() originalVideoFile: VideoSource
-  @Input() videoFileToken: string
+  private videoService = inject(VideoService)
 
-  @Output() downloaded = new EventEmitter<void>()
+  readonly video = input.required<VideoDetails>()
+  readonly originalVideoFile = input<VideoSource>(undefined)
+  readonly videoFileToken = input<string>(undefined)
+
+  readonly downloaded = output()
 
   includeAudio = true
   videoFileChosen = ''
   videoFiles: VideoFile[]
-
-  constructor (private videoService: VideoService) {
-  }
 
   ngOnInit () {
     this.videoFiles = this.buildVideoFiles()
@@ -82,11 +79,11 @@ export class VideoGenerateDownloadComponent implements OnInit {
 
   getVideoFileLink () {
     const suffix = this.videoFileChosen === 'file-original' || this.isConfidentialVideo()
-      ? '?videoFileToken=' + this.videoFileToken
+      ? '?videoFileToken=' + this.videoFileToken()
       : ''
 
     if (this.videoFileChosen === 'file-original') {
-      return this.originalVideoFile.fileDownloadUrl + suffix
+      return this.originalVideoFile().fileDownloadUrl + suffix
     }
 
     const file = this.findCurrentFile()
@@ -98,24 +95,25 @@ export class VideoGenerateDownloadComponent implements OnInit {
       files.push(this.findAudioFileOnly())
     }
 
-    return this.videoService.generateDownloadUrl({ video: this.video, videoFileToken: this.videoFileToken, files })
+    return this.videoService.generateDownloadUrl({ video: this.video(), videoFileToken: this.videoFileToken(), files })
   }
 
   // ---------------------------------------------------------------------------
 
   isConfidentialVideo () {
-    return this.videoFileChosen === 'file-original' || videoRequiresFileToken(this.video)
+    return this.videoFileChosen === 'file-original' || videoRequiresFileToken(this.video())
   }
 
   // ---------------------------------------------------------------------------
 
   private buildVideoFiles () {
-    if (!this.video) return []
+    const video = this.video()
+    if (!video) return []
 
-    const hls = this.video.getHlsPlaylist()
+    const hls = video.getHlsPlaylist()
     if (hls) return hls.files
 
-    return this.video.files
+    return video.files
   }
 
   private findCurrentFile () {

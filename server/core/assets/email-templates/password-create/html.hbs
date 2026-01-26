@@ -1,0 +1,11 @@
+{{#> base title=(t "Password creation for your account")}}
+  <p>
+    {{{t "Welcome to <a href=\"{webserverUrl}\">{instanceName}</a>!" webserverUrl=WEBSERVER.URL instanceName=instanceName}}}
+  </p>
+
+  <p>{{t "Your username is: {username}." username=username}}</p>
+
+  <p>{{t "Please click on the link below to set your password (this link will expire within seven days):"}}</p>
+
+  {{> button actionUrl=createPasswordUrl actionText=(t "Create my password")}}
+{{/base}}

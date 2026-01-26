@@ -1,10 +1,11 @@
-import validator from 'validator'
 import { Activity, ActivityType } from '@peertube/peertube-models'
+import validator from 'validator'
 import { isAbuseReasonValid } from '../abuses.js'
 import { exists } from '../misc.js'
 import { sanitizeAndCheckActorObject } from './actor.js'
 import { isCacheFileObjectValid } from './cache-file.js'
 import { isActivityPubUrlValid, isBaseActivityValid, isObjectValid } from './misc.js'
+import { sanitizeAndCheckPlayerSettingsObject } from './player-settings.js'
 import { isPlaylistObjectValid } from './playlist.js'
 import { sanitizeAndCheckVideoCommentObject } from './video-comments.js'
 import { sanitizeAndCheckVideoTorrentObject } from './videos.js'
@@ -28,7 +29,7 @@ function isActivity (activity: any) {
 
 // ---------------------------------------------------------------------------
 
-const activityCheckers: { [ P in ActivityType ]: (activity: Activity) => boolean } = {
+const activityCheckers: { [P in ActivityType]: (activity: Activity) => boolean } = {
   Create: isCreateActivityValid,
   Update: isUpdateActivityValid,
   Delete: isDeleteActivityValid,
@@ -88,7 +89,6 @@ export function isCreateActivityValid (activity: any) {
       isFlagActivityValid(activity.object) ||
       isPlaylistObjectValid(activity.object) ||
       isWatchActionObjectValid(activity.object) ||
-
       isCacheFileObjectValid(activity.object) ||
       sanitizeAndCheckVideoCommentObject(activity.object) ||
       sanitizeAndCheckVideoTorrentObject(activity.object)
@@ -101,7 +101,9 @@ export function isUpdateActivityValid (activity: any) {
       isCacheFileObjectValid(activity.object) ||
       isPlaylistObjectValid(activity.object) ||
       sanitizeAndCheckVideoTorrentObject(activity.object) ||
-      sanitizeAndCheckActorObject(activity.object)
+      sanitizeAndCheckActorObject(activity.object) ||
+      sanitizeAndCheckPlayerSettingsObject(activity.object, 'video') ||
+      sanitizeAndCheckPlayerSettingsObject(activity.object, 'channel')
     )
 }
 

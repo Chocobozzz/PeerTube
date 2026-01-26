@@ -1,7 +1,7 @@
 import { forceNumber } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, UserRightType } from '@peertube/peertube-models'
-import { getUserByEmailPermissive } from '@server/lib/user.js'
-import { ActorModel } from '@server/models/actor/actor.js'
+import { loadReservedActorName } from '@server/lib/local-actor.js'
+import { getByEmailPermissive } from '@server/lib/user.js'
 import { UserModel } from '@server/models/user/user.js'
 import { MAccountId, MUserAccountId, MUserDefault } from '@server/types/models/index.js'
 import express from 'express'
@@ -12,30 +12,53 @@ export function checkUserIdExist (idArg: number | string, res: express.Response,
 }
 
 export function checkUserEmailExistPermissive (email: string, res: express.Response, abortResponse = true) {
-  return checkUserExist(async () => {
-    const users = await UserModel.loadByEmailCaseInsensitive(email)
+  return checkUserExist(
+    async () => {
+      const users = await UserModel.loadByEmailCaseInsensitive(email)
 
-    return getUserByEmailPermissive(users, email)
-  }, res, abortResponse)
+      return getByEmailPermissive(users, email)
+    },
+    res,
+    abortResponse
+  )
 }
 
-export async function checkUsernameOrEmailDoNotAlreadyExist (username: string, email: string, res: express.Response) {
+export function checkUserPendingEmailExistPermissive (email: string, res: express.Response, abortResponse = true) {
+  return checkUserExist(
+    async () => {
+      const users = await UserModel.loadByPendingEmailCaseInsensitive(email)
+
+      return getByEmailPermissive(users, email)
+    },
+    res,
+    abortResponse
+  )
+}
+
+export async function checkUsernameOrEmailDoNotAlreadyExist (options: {
+  username: string
+  email: string
+  req: express.Request
+  res: express.Response
+}) {
+  const { username, email, req, res } = options
+
   const existingUser = await UserModel.loadByUsernameOrEmailCaseInsensitive(username)
   const existingEmail = await UserModel.loadByUsernameOrEmailCaseInsensitive(email)
 
   if (existingUser.length > 0 || existingEmail.length > 0) {
     res.fail({
       status: HttpStatusCode.CONFLICT_409,
-      message: 'User with this username or email already exists.'
+      message: req.t('User with this username or email already exists.')
     })
     return false
   }
 
-  const actor = await ActorModel.loadLocalByName(username)
+  const actor = await loadReservedActorName(username)
   if (actor) {
     res.fail({
       status: HttpStatusCode.CONFLICT_409,
-      message: 'Another actor (account/channel) with this name on this instance already exists or has already existed.'
+      message: req.t('Another actor (account/channel) with this name on this instance already exists or has already existed.')
     })
     return false
   }
@@ -43,13 +66,18 @@ export async function checkUsernameOrEmailDoNotAlreadyExist (username: string, e
   return true
 }
 
-export async function checkEmailDoesNotAlreadyExist (email: string, res: express.Response) {
+export async function checkEmailDoesNotAlreadyExist (options: {
+  email: string
+  req: express.Request
+  res: express.Response
+}) {
+  const { email, req, res } = options
   const user = await UserModel.loadByEmailCaseInsensitive(email)
 
   if (user.length !== 0) {
     res.fail({
       status: HttpStatusCode.CONFLICT_409,
-      message: 'User with this email already exists.'
+      message: req.t('User with this email already exists.')
     })
     return false
   }
@@ -62,10 +90,7 @@ export async function checkUserExist (finder: () => Promise<MUserDefault>, res: 
 
   if (!user) {
     if (abortResponse === true) {
-      res.fail({
-        status: HttpStatusCode.NOT_FOUND_404,
-        message: 'User not found'
-      })
+      res.sendStatus(HttpStatusCode.NOT_FOUND_404)
     }
 
     return false
@@ -75,30 +100,51 @@ export async function checkUserExist (finder: () => Promise<MUserDefault>, res: 
   return true
 }
 
-export function checkUserCanManageAccount (options: {
+export function checkCanManageAccount (options: {
   user: MUserAccountId
   account: MAccountId
   specialRight: UserRightType
-  res: express.Response
+  req: express.Request
+  res: express.Response | null
 }) {
-  const { user, account, specialRight, res } = options
+  const { user, account, specialRight, res, req } = options
+
+  if (!user) {
+    res?.fail({
+      status: HttpStatusCode.UNAUTHORIZED_401,
+      message: req.t('Authentication is required')
+    })
+    return false
+  }
 
   if (account.id === user.Account.id) return true
   if (specialRight && user.hasRight(specialRight) === true) return true
 
-  if (!specialRight) {
-    res.fail({
-      status: HttpStatusCode.FORBIDDEN_403,
-      message: 'Only the owner of this account can manage this account resource.'
-    })
-
-    return false
-  }
-
-  res.fail({
+  res?.fail({
     status: HttpStatusCode.FORBIDDEN_403,
-    message: 'Only a user with sufficient right can access this account resource.'
+    message: req.t('Only a user with sufficient right can manage this account resource.')
   })
 
   return false
+}
+
+export async function doesUserFeedTokenCorrespond (options: {
+  id: number
+  token: string
+  req: express.Request
+  res: express.Response
+}) {
+  const { id, token, req, res } = options
+  const user = await UserModel.loadByIdWithChannels(forceNumber(id))
+
+  if (token !== user.feedToken) {
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: req.t('User and token mismatch')
+    })
+    return false
+  }
+
+  res.locals.user = user
+  return true
 }

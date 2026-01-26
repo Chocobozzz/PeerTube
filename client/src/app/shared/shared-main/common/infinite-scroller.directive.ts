@@ -1,5 +1,4 @@
-import { AfterViewChecked, booleanAttribute, Directive, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
-import { PeerTubeRouterService, RouterSetting } from '@app/core'
+import { AfterViewChecked, booleanAttribute, Directive, ElementRef, inject, input, OnDestroy, OnInit, output } from '@angular/core'
 import { fromEvent, Observable, Subscription } from 'rxjs'
 import { distinctUntilChanged, filter, map, share, startWith, throttleTime } from 'rxjs/operators'
 
@@ -8,28 +7,23 @@ import { distinctUntilChanged, filter, map, share, startWith, throttleTime } fro
   standalone: true
 })
 export class InfiniteScrollerDirective implements OnInit, OnDestroy, AfterViewChecked {
-  @Input() percentLimit = 70
-  @Input({ transform: booleanAttribute }) onItself = false
-  @Input() dataObservable: Observable<any[]>
+  private el = inject(ElementRef)
 
-  // Add angular state in query params to reuse the routed component
-  @Input({ transform: booleanAttribute }) setAngularState: boolean
-  @Input() parentDisabled = false
+  readonly percentLimit = input(70)
+  readonly onItself = input(false, { transform: booleanAttribute })
+  readonly dataObservable = input<Observable<any[]>>(undefined)
 
-  @Output() nearOfBottom = new EventEmitter<void>()
+  readonly nearOfBottom = output()
 
   private decimalLimit = 0
-  private lastCurrentBottom = -1
+  private lastCurrentBottom: number
   private scrollDownSub: Subscription
   private container: HTMLElement
 
   private checkScroll = false
 
-  constructor (
-    private peertubeRouter: PeerTubeRouterService,
-    private el: ElementRef
-  ) {
-    this.decimalLimit = this.percentLimit / 100
+  constructor () {
+    this.decimalLimit = this.percentLimit() / 100
   }
 
   ngAfterViewChecked () {
@@ -52,14 +46,14 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy, AfterViewCh
   }
 
   initialize () {
-    this.container = this.onItself
+    this.container = this.onItself()
       ? this.el.nativeElement
       : document.documentElement
 
     // Emit the last value
     const throttleOptions = { leading: true, trailing: true }
 
-    const scrollableElement = this.onItself ? this.container : window
+    const scrollableElement = this.onItself() ? this.container : window
     const scrollObservable = fromEvent(scrollableElement, 'scroll')
       .pipe(
         startWith(true),
@@ -76,15 +70,14 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy, AfterViewCh
         filter(({ current, maximumScroll }) => (current / maximumScroll) > this.decimalLimit)
       )
       .subscribe(() => {
-        if (this.setAngularState && !this.parentDisabled) this.setScrollRouteParams()
-
         this.nearOfBottom.emit()
       })
 
-    if (this.dataObservable) {
-      this.dataObservable
-          .pipe(filter(d => d.length !== 0))
-          .subscribe(() => this.checkScroll = true)
+    const dataObservable = this.dataObservable()
+    if (dataObservable) {
+      dataObservable
+        .pipe(filter(d => d.length !== 0))
+        .subscribe(() => this.checkScroll = true)
     }
   }
 
@@ -93,7 +86,7 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy, AfterViewCh
   }
 
   private getMaximumScroll () {
-    const elementHeight = this.onItself ? this.container.clientHeight : window.innerHeight
+    const elementHeight = this.onItself() ? this.container.clientHeight : window.innerHeight
 
     return this.container.scrollHeight - elementHeight
   }
@@ -103,13 +96,14 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy, AfterViewCh
   }
 
   private isScrollingDown (current: number) {
+    if (this.lastCurrentBottom === undefined) {
+      this.lastCurrentBottom = current
+      return false
+    }
+
     const result = this.lastCurrentBottom < current
 
     this.lastCurrentBottom = current
     return result
-  }
-
-  private setScrollRouteParams () {
-    this.peertubeRouter.addRouteSetting(RouterSetting.REUSE_COMPONENT)
   }
 }

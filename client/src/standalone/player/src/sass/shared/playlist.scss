@@ -1,0 +1,192 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "./_player-variables" as *;
+
+$playlist-menu-width: 350px;
+
+.vjs-playlist-menu {
+  position: absolute;
+  right: 0;
+  height: 100%;
+  width: $playlist-menu-width;
+  // !important to prevent none background set on focus
+  background: rgba(0, 0, 0, 0.8) !important;
+  z-index: 101;
+  transition: right 0.2s;
+  overflow-y: scroll;
+  line-height: normal;
+
+  // Hidden
+  right: -$playlist-menu-width;
+
+  ol {
+    padding: 0;
+    margin: 0;
+  }
+
+  .header {
+    border-bottom: 1px solid #e9eff6;
+    padding: 20px 10px;
+    display: flex;
+    justify-content: space-between;
+
+    .title {
+      font-size: 14px;
+      margin-bottom: 5px;
+
+      @include ellipsis;
+    }
+
+    .channel {
+      font-size: 11px;
+      color: #bfbfbf;
+
+      @include ellipsis;
+    }
+
+    .cross {
+      mask-image: url("../svg/x.svg");
+      -webkit-mask-image: url("../svg/x.svg");
+      mask-size: cover;
+      -webkit-mask-size: cover;
+
+      cursor: pointer;
+      width: 20px;
+      height: 20px;
+      background-color: #fff;
+    }
+  }
+}
+
+.playlist-menu-displayed {
+  .vjs-playlist-menu {
+    right: 0;
+    display: block;
+  }
+
+  .vjs-playlist-button {
+    display: none;
+  }
+}
+
+@media screen and (max-width: $playlist-menu-width) {
+  .vjs-playlist-menu {
+    width: 100%;
+    min-width: unset;
+    display: none;
+  }
+
+  .playlist-menu-displayed .vjs-playlist-menu {
+    display: block;
+  }
+}
+
+.vjs-playlist-button {
+  font-size: 16px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 100;
+  padding: $dock-padding;
+  cursor: pointer;
+}
+
+.vjs-playlist-icon {
+  mask-image: url("../svg/playlists.svg");
+  -webkit-mask-image: url("../svg/playlists.svg");
+  mask-size: cover;
+  -webkit-mask-size: cover;
+
+  width: 22px;
+  height: 22px;
+  background-color: #fff;
+  margin-bottom: 3px;
+}
+
+.vjs-playing.vjs-user-inactive .vjs-playlist-button {
+  opacity: 0;
+
+  transition: opacity 1s;
+}
+
+.vjs-playing.vjs-no-flex.vjs-user-inactive .vjs-playlist-button {
+  display: none;
+}
+
+.vjs-playlist-menu-item {
+  display: flex;
+  padding: 10px 0;
+  height: 60px;
+
+  &:not(.vjs-disabled) {
+    cursor: pointer;
+  }
+
+  .item-position-block {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    flex-shrink: 0;
+  }
+
+  .item-unavailable {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .item-player {
+    display: none;
+
+    @include play-icon(20px, 16px);
+  }
+
+  &.vjs-selected {
+    background-color: rgba(150, 150, 150, 0.3);
+
+    .item-position {
+      display: none;
+    }
+
+    .item-player {
+      display: block;
+    }
+  }
+
+  &:hover:not(.vjs-disabled) {
+    background-color: rgba(150, 150, 150, 0.2);
+  }
+
+  img {
+    width: 80px;
+    height: 40px;
+  }
+
+  .info-block {
+    margin: 0 10px;
+    min-width: 1px;
+
+    .title {
+      font-size: 13px;
+      margin-bottom: 3px;
+
+      @include ellipsis;
+    }
+
+    .channel,
+    .timestamps {
+      font-size: 11px;
+      color: #bfbfbf;
+
+      @include ellipsis;
+    }
+
+    .timestamps {
+      font-size: 10px;
+      margin-top: 3px;
+    }
+  }
+}

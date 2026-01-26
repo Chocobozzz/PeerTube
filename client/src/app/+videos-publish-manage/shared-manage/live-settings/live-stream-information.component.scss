@@ -1,0 +1,9 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.journal-session {
+  span:not(.pt-badge, :last-child)::after {
+    margin: 3px;
+    content: '•';
+  }
+}

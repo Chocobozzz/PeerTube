@@ -1,50 +1,38 @@
-<p-table
-  [value]="runners" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
-  [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order"
-  [lazy]="true" (onLazyLoad)="loadLazy($event)"
-  [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()"
+<my-table
+  #table
+  key="RunnerListComponent"
+  [defaultColumns]="columns"
+  i18n-paginatorText
+  paginatorText="runners per page"
+  [dataLoader]="dataLoader"
+  columnConfig="false"
 >
-  <ng-template pTemplate="header">
-    <tr>
-      <th scope="col" style="width: 120px;">
-        <span i18n class="visually-hidden">Actions</span>
-      </th>
-      <th scope="col" i18n>Name</th>
-      <th scope="col" i18n>Description</th>
-      <th scope="col" i18n>IP</th>
-      <th scope="col" i18n>Last contact</th>
-      <th scope="col" style="width: 150px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
-    </tr>
+  <ng-template #totalTitle let-totalRecords>
+    <ng-container i18n>{ totalRecords, plural, =0 {No runner} =1 {1 runner} other {{{ totalRecords | myNumberFormatter }} runners}}</ng-container>
   </ng-template>
 
-  <ng-template pTemplate="body" let-runner>
-    <tr>
-      <td class="action-cell">
-        <my-action-dropdown
-          placement="bottom-right top-right left auto" container="body"
-          i18n-label label="Actions" [actions]="actions" [entry]="runner" buttonSize="small"
-        ></my-action-dropdown>
-      </td>
+  <ng-template #tableCells let-runner>
+    <td>{{ runner.name }}</td>
 
-      <td>{{ runner.name }}</td>
+    <td class="max-width-300px ellipsis">{{ runner.description }}</td>
 
-      <td>{{ runner.description }}</td>
+    <td>{{ runner.ip }}</td>
 
-      <td>{{ runner.ip }}</td>
+    <td>{{ runner.version }}</td>
 
-      <td>{{ runner.lastContact | ptDate: 'short' }}</td>
+    <td>{{ runner.lastContact | ptDate: 'short' }}</td>
 
-      <td>{{ runner.createdAt | ptDate: 'short' }}</td>
-    </tr>
+    <td>{{ runner.createdAt | ptDate: 'short' }}</td>
   </ng-template>
 
-  <ng-template pTemplate="emptymessage">
-    <tr>
-      <td myAutoColspan>
-        <div class="no-results">
-          <ng-container i18n>No remote runners found.</ng-container>
-        </div>
-      </td>
-    </tr>
+  <ng-template #actionCell let-runner>
+    <my-action-dropdown
+      placement="bottom-right top-right left auto" container="body"
+      i18n-label label="Actions" [actions]="actions" [entry]="runner"
+    ></my-action-dropdown>
   </ng-template>
-</p-table>
+
+  <ng-template #noResults>
+    <ng-container i18n>No remote runners found.</ng-container>
+  </ng-template>
+</my-table>

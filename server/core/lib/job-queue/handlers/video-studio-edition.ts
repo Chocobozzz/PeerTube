@@ -1,6 +1,7 @@
 import { pick } from '@peertube/peertube-core-utils'
 import { FFmpegEdition } from '@peertube/peertube-ffmpeg'
 import {
+  VideoState,
   VideoStudioEditionPayload,
   VideoStudioTask,
   VideoStudioTaskCutPayload,
@@ -92,6 +93,13 @@ async function processVideoStudioEdition (job: Job) {
   } catch (err) {
     await safeCleanupStudioTMPFiles(payload.tasks)
 
+    try {
+      const video = await VideoModel.loadFull(payload.videoUUID)
+      await video.setNewState(VideoState.PUBLISHED, false, undefined)
+    } catch (err) {
+      logger.error('Cannot reset video state after studio error', { err, ...lTags })
+    }
+
     throw err
   } finally {
     if (inputFileMutexReleaser) inputFileMutexReleaser()
@@ -106,7 +114,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-type TaskProcessorOptions <T extends VideoStudioTaskPayload = VideoStudioTaskPayload> = {
+type TaskProcessorOptions<T extends VideoStudioTaskPayload = VideoStudioTaskPayload> = {
   videoInputPath: string
   separatedAudioInputPath?: string
 

@@ -11,6 +11,7 @@ import {
   VideoPrivacy
 } from '@peertube/peertube-models'
 import {
+  ConfigCommand,
   PeerTubeServer,
   PluginsCommand,
   cleanupTests,
@@ -26,6 +27,7 @@ import {
 import { expectEndWith } from '@tests/shared/checks.js'
 import { expect } from 'chai'
 import { FIXTURE_URLS } from '../shared/fixture-urls.js'
+import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
 
 describe('Test plugin filter hooks', function () {
   let servers: PeerTubeServer[]
@@ -33,11 +35,13 @@ describe('Test plugin filter hooks', function () {
   let threadId: number
   let videoPlaylistUUID: string
   let importUserToken: string
+  const emails: object[] = []
 
   before(async function () {
     this.timeout(120000)
 
-    servers = await createMultipleServers(2)
+    const emailPort = await MockSmtpServer.Instance.collectEmails(emails)
+    servers = await createMultipleServers(2, ConfigCommand.getEmailOverrideConfig(emailPort))
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
     await doubleFollow(servers[0], servers[1])
@@ -45,7 +49,7 @@ describe('Test plugin filter hooks', function () {
     await servers[0].plugins.install({ path: PluginsCommand.getPluginTestPath() })
     await servers[0].plugins.install({ path: PluginsCommand.getPluginTestPath('-filter-translations') })
     {
-      ({ uuid: videoPlaylistUUID } = await servers[0].playlists.create({
+      ;({ uuid: videoPlaylistUUID } = await servers[0].playlists.create({
         attributes: {
           displayName: 'my super playlist',
           privacy: VideoPlaylistPrivacy.PUBLIC,
@@ -96,7 +100,6 @@ describe('Test plugin filter hooks', function () {
   })
 
   describe('Videos', function () {
-
     it('Should run filter:api.videos.list.params', async function () {
       const { data } = await servers[0].videos.list({ start: 0, count: 2 })
 
@@ -187,6 +190,17 @@ describe('Test plugin filter hooks', function () {
       expect(total).to.equal(14)
     })
 
+    it('Should run filter:feed.videos.list.result', async function () {
+      const xmlFeed = await servers[0].feed.getXML({ feed: 'videos', ignoreCache: true })
+      expect(xmlFeed).to.contain('Custom name by hook')
+
+      const podcastFeed = await servers[0].feed.getPodcastXML({ channelId: servers[0].store.channel.id, ignoreCache: true })
+      expect(podcastFeed).to.contain('Custom name by hook')
+
+      const jsonFeed = await servers[0].feed.getJSON({ feed: 'videos', ignoreCache: true })
+      expect(jsonFeed).to.contain('Custom name by hook')
+    })
+
     it('Should run filter:api.video.get.result', async function () {
       const video = await servers[0].videos.get({ id: videoUUID })
       expect(video.name).to.contain('<3')
@@ -194,7 +208,6 @@ describe('Test plugin filter hooks', function () {
   })
 
   describe('Video/live/import accept', function () {
-
     it('Should run filter:api.video.upload.accept.result', async function () {
       const options = { attributes: { name: 'video with bad word' }, expectedStatus: HttpStatusCode.FORBIDDEN_403 }
       await servers[0].videos.upload({ mode: 'legacy', ...options })
@@ -260,7 +273,7 @@ describe('Test plugin filter hooks', function () {
       await waitJobs(servers)
 
       {
-        const body = await servers[0].videoImports.getMyVideoImports()
+        const body = await servers[0].videoImports.listMyVideoImports()
         const videoImports = body.data
 
         const videoImport = videoImports.find(i => i.id === videoImportId)
@@ -289,7 +302,7 @@ describe('Test plugin filter hooks', function () {
       await waitJobs(servers)
 
       {
-        const { data: videoImports } = await servers[0].videoImports.getMyVideoImports()
+        const { data: videoImports } = await servers[0].videoImports.listMyVideoImports()
 
         const videoImport = videoImports.find(i => i.id === videoImportId)
 
@@ -308,7 +321,6 @@ describe('Test plugin filter hooks', function () {
   })
 
   describe('Video comments accept', function () {
-
     it('Should run filter:api.video-thread.create.accept.result', async function () {
       await servers[0].comments.createThread({
         videoId: videoUUID,
@@ -382,7 +394,6 @@ describe('Test plugin filter hooks', function () {
   })
 
   describe('Video comments', function () {
-
     it('Should run filter:api.video-threads.list.params', async function () {
       const { data } = await servers[0].comments.listThreads({ videoId: videoUUID, start: 0, count: 0 })
 
@@ -415,7 +426,6 @@ describe('Test plugin filter hooks', function () {
   })
 
   describe('filter:video.auto-blacklist.result', function () {
-
     async function checkIsBlacklisted (id: number | string, value: boolean) {
       const video = await servers[0].videos.getWithToken({ id })
       expect(video.blacklisted).to.equal(value)
@@ -500,7 +510,6 @@ describe('Test plugin filter hooks', function () {
   })
 
   describe('Should run filter:api.user.signup.allowed.result', function () {
-
     before(async function () {
       await servers[0].config.updateExistingConfig({ newConfig: { signup: { requiresApproval: false } } })
     })
@@ -525,7 +534,6 @@ describe('Test plugin filter hooks', function () {
   })
 
   describe('Should run filter:api.user.request-signup.allowed.result', function () {
-
     before(async function () {
       await servers[0].config.updateExistingConfig({ newConfig: { signup: { requiresApproval: true } } })
     })
@@ -652,12 +660,12 @@ describe('Test plugin filter hooks', function () {
 
     it('Should run filter:html.embed.video.allowed.result', async function () {
       const res = await makeGetRequest({ url: servers[0].url, path: embedVideos[0].embedPath, expectedStatus: HttpStatusCode.OK_200 })
-      expect(res.text).to.equal('Lu Bu')
+      expect(res.text).to.equal('Lu Bu ' + embedVideos[0].uuid)
     })
 
     it('Should run filter:html.embed.video-playlist.allowed.result', async function () {
       const res = await makeGetRequest({ url: servers[0].url, path: embedPlaylists[0].embedPath, expectedStatus: HttpStatusCode.OK_200 })
-      expect(res.text).to.equal('Diao Chan')
+      expect(res.text).to.equal('Diao Chan ' + embedPlaylists[0].uuid)
     })
   })
 
@@ -683,7 +691,6 @@ describe('Test plugin filter hooks', function () {
   })
 
   describe('Search filters', function () {
-
     before(async function () {
       await servers[0].config.updateExistingConfig({
         newConfig: {
@@ -775,7 +782,6 @@ describe('Test plugin filter hooks', function () {
   })
 
   describe('Upload/import/live attributes filters', function () {
-
     before(async function () {
       await servers[0].config.enableLive({ transcoding: false, allowReplay: false })
       await servers[0].config.enableVideoImports()
@@ -844,13 +850,11 @@ describe('Test plugin filter hooks', function () {
   })
 
   describe('Stats filters', function () {
-
     it('Should run filter:api.server.stats.get.result', async function () {
       const data = await servers[0].stats.get()
 
       expect((data as any).customStats).to.equal(14)
     })
-
   })
 
   describe('Job queue filters', function () {
@@ -900,7 +904,6 @@ describe('Test plugin filter hooks', function () {
   })
 
   describe('Transcoding filters', async function () {
-
     it('Should run filter:transcoding.auto.resolutions-to-transcode.result', async function () {
       const { uuid } = await servers[0].videos.quickUpload({ name: 'transcode-filter' })
 
@@ -913,7 +916,6 @@ describe('Test plugin filter hooks', function () {
   })
 
   describe('Video channel filters', async function () {
-
     it('Should run filter:api.video-channels.list.params', async function () {
       const { data } = await servers[0].channels.list({ start: 0, count: 0 })
 
@@ -935,7 +937,6 @@ describe('Test plugin filter hooks', function () {
   })
 
   describe('Activity Pub', function () {
-
     it('Should run filter:activity-pub.activity.context.build.result', async function () {
       const { body } = await makeActivityPubGetRequest(servers[0].url, '/w/' + videoUUID)
       expect(body.type).to.equal('Video')
@@ -952,7 +953,43 @@ describe('Test plugin filter hooks', function () {
     })
   })
 
+  describe('Emails', function () {
+    let server: PeerTubeServer
+    const emailAddress = 'plugin-admin@example.com'
+
+    before(async function () {
+      server = servers[0]
+      await server.users.create({ username: 'plugin-admin', email: emailAddress })
+    })
+
+    it('Should run filter:email.template-path.result', async function () {
+      const preEmailCount = emails.length
+      await server.users.askResetPassword({ email: emailAddress })
+
+      await waitJobs(server)
+      expect(emails).to.have.lengthOf(preEmailCount + 1)
+
+      const email = emails[preEmailCount]
+
+      expect(email['html']).to.contain('Custom password reset email')
+    })
+
+    it('Should run filter:email.subject.result', async function () {
+      const preEmailCount = emails.length
+      await server.users.askResetPassword({ email: emailAddress })
+
+      await waitJobs(server)
+      expect(emails).to.have.lengthOf(preEmailCount + 1)
+
+      const email = emails[preEmailCount]
+
+      expect(email['subject']).to.contain('Custom subject')
+    })
+  })
+
   after(async function () {
+    await MockSmtpServer.Instance.kill()
+
     await cleanupTests(servers)
   })
 })

@@ -1,14 +1,11 @@
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { MVideoPlaylistFullSummary } from '@server/types/models/index.js'
-import { APObjectId } from '@peertube/peertube-models'
 import { getAPId } from '../activity.js'
 import { createOrUpdateVideoPlaylist } from './create-update.js'
 import { scheduleRefreshIfNeeded } from './refresh.js'
 import { fetchRemoteVideoPlaylist } from './shared/index.js'
 
-async function getOrCreateAPVideoPlaylist (playlistObjectArg: APObjectId): Promise<MVideoPlaylistFullSummary> {
-  const playlistUrl = getAPId(playlistObjectArg)
-
+export async function getOrCreateAPVideoPlaylist (playlistUrl: string): Promise<MVideoPlaylistFullSummary> {
   const playlistFromDatabase = await VideoPlaylistModel.loadByUrlWithAccountAndChannelSummary(playlistUrl)
 
   if (playlistFromDatabase) {
@@ -21,15 +18,9 @@ async function getOrCreateAPVideoPlaylist (playlistObjectArg: APObjectId): Promi
   if (!playlistObject) throw new Error('Cannot fetch remote playlist with url: ' + playlistUrl)
 
   // playlistUrl is just an alias/redirection, so process object id instead
-  if (playlistObject.id !== playlistUrl) return getOrCreateAPVideoPlaylist(playlistObject)
+  if (playlistObject.id !== playlistUrl) return getOrCreateAPVideoPlaylist(getAPId(playlistObject))
 
-  const playlistCreated = await createOrUpdateVideoPlaylist(playlistObject)
+  const playlistCreated = await createOrUpdateVideoPlaylist({ playlistObject, contextUrl: playlistUrl })
 
   return playlistCreated
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  getOrCreateAPVideoPlaylist
 }

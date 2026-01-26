@@ -20,13 +20,11 @@ import { VideoScope, VideoViewerCounters, VideoViewerStats, VideoViews, ViewerSc
  * A viewer is a someone that watched one or multiple sections of a video
  * A viewer that watched only a few seconds of a video may not increment the video views counter
  * Viewers statistics are sent to origin instance using the `WatchAction` ActivityPub object
- *
  */
 
 const lTags = loggerTagsFactory('views')
 
 export class VideoViewsManager {
-
   private static instance: VideoViewsManager
 
   private videoViewerStats: VideoViewerStats
@@ -48,8 +46,11 @@ export class VideoViewsManager {
     ip: string | null
     sessionId?: string
     viewEvent?: VideoViewEvent
+    client: string
+    operatingSystem: string
+    device: string
   }) {
-    const { video, ip, viewEvent, currentTime } = options
+    const { video, ip, viewEvent, currentTime, client, operatingSystem, device } = options
 
     let sessionId = options.sessionId
     if (!sessionId || CONFIG.VIEWS.VIDEOS.TRUST_VIEWER_SESSION_ID !== true) {
@@ -58,7 +59,7 @@ export class VideoViewsManager {
 
     logger.debug(`Processing local view for ${video.url}, ip ${ip} and session id ${sessionId}.`, lTags())
 
-    await this.videoViewerStats.addLocalViewer({ video, ip, sessionId, viewEvent, currentTime })
+    await this.videoViewerStats.addLocalViewer({ video, ip, sessionId, viewEvent, currentTime, client, operatingSystem, device })
 
     const successViewer = await this.videoViewerCounters.addLocalViewer({ video, sessionId })
 

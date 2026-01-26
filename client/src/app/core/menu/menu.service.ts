@@ -1,21 +1,28 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
+import debug from 'debug'
 import { fromEvent } from 'rxjs'
 import { debounceTime } from 'rxjs/operators'
+import { PeerTubeRouterService } from '../routing'
 import { LocalStorageService, ScreenService } from '../wrappers'
+
+const debugLogger = debug('peertube:menu')
 
 @Injectable()
 export class MenuService {
+  private screenService = inject(ScreenService)
+  private localStorageService = inject(LocalStorageService)
+  private peertubeRouterService = inject(PeerTubeRouterService)
+
   private static LS_MENU_COLLAPSED = 'menu-collapsed'
 
   private menuCollapsed = false
   private menuChangedByUser = false
 
-  constructor (
-    private screenService: ScreenService,
-    private localStorageService: LocalStorageService
-  ) {
-    // Do not display menu on small or touch screens
-    if (this.screenService.isInSmallView() || this.screenService.isInTouchScreen()) {
+  private collapsedBeforeUrl: boolean
+
+  constructor () {
+    // Do not display menu on small screens
+    if (this.screenService.isInMenuOverlayView() || this.hasMenuCollapsedByUrl(window.location.pathname)) {
       this.setMenuCollapsed(true)
     } else {
       this.setMenuCollapsed(this.localStorageService.getItem(MenuService.LS_MENU_COLLAPSED) === 'true')
@@ -23,6 +30,46 @@ export class MenuService {
     }
 
     this.handleWindowResize()
+
+    this.peertubeRouterService.getNavigationEndEvents()
+      .subscribe(e => {
+        if (this.hasMenuCollapsedByUrl(e.url) || this.hasMenuCollapsedByUrl(e.urlAfterRedirects)) {
+          this.collapseByUrl()
+          return
+        }
+
+        if (this.collapsedBeforeUrl !== undefined) {
+          this.setMenuCollapsed(this.collapsedBeforeUrl)
+          this.collapsedBeforeUrl = undefined
+        }
+      })
+  }
+
+  private hasMenuCollapsedByUrl (url: string) {
+    const collapsedBaseUrls = [
+      '/videos/publish',
+      '/videos/manage/',
+      '/admin/settings/config',
+      '/my-library/video-channels/manage',
+      '/my-library/video-channels/create'
+    ]
+
+    for (const collapsedBaseUrl of collapsedBaseUrls) {
+      if (url.startsWith(collapsedBaseUrl)) {
+        debugLogger('Menu should be collapsed by URL ' + url)
+
+        return true
+      }
+    }
+
+    return false
+  }
+
+  private collapseByUrl () {
+    if (this.menuCollapsed) return
+
+    this.collapsedBeforeUrl = this.menuCollapsed
+    this.setMenuCollapsed(true)
   }
 
   toggleMenu () {

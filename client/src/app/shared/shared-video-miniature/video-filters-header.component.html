@@ -1,31 +1,43 @@
 <div class="root" [formGroup]="form">
-
   <div class="d-flex flex-wrap mb-3">
     @for (quickFilter of quickFilters; track quickFilter) {
       <my-button
-        theme="secondary" [icon]="quickFilter.iconName" class="me-2 mb-2"
-        ptRouterLink="." [ptQueryParams]="quickFilter.filters" [active]="quickFilter.isActive()" ptQueryParamsHandling="merge"
-        (click)="onQuickFilter($event, quickFilter)"
-        >{{ quickFilter.label }} </my-button>
+        theme="secondary"
+        [icon]="quickFilter.iconName"
+        class="me-2 mb-2"
+        ptRouterLink="."
+        [ptQueryParams]="quickFilter.filters"
+        [active]="quickFilter.isActive()"
+        ptQueryParamsHandling="merge"
+      >{{ quickFilter.label }}
+      </my-button>
     }
   </div>
 
   <div class="d-flex flex-wrap-reverse align-items-start justify-content-between">
     <div class="gap-3">
-      <div class="scope-info" *ngIf="!hideScope" [ngClass]="{ 'opacity-0': totalFollowing === undefined }">
-        @if (filters.scope === 'local' || totalFollowing === 0) {
-          <ng-container i18n>Videos on <strong>{{ instanceName }}</strong></ng-container>
-        } @else {
-          <ng-container i18n>Videos on <strong>{{ instanceName }}</strong> and <strong>{{ totalFollowing }}</strong> other platforms</ng-container>
-        }
-      </div>
+      @if (!hideScope()) {
+        <div class="scope-info" [ngClass]="{ 'opacity-0': totalFollowing === undefined }">
+          @if (filters().scope === 'local' || totalFollowing === 0) {
+            <ng-container i18n>Videos on <strong>{{ instanceName }}</strong></ng-container>
+          } @else {
+            <ng-container i18n>
+              Videos on <strong>{{ instanceName }}</strong> and <strong>{{ totalFollowing }}</strong> {totalFollowing, plural, =1 {other platform} other {other
+              platforms}}
+            </ng-container>
+          }
+        </div>
+      }
 
       <div class="filters-summary">
         <div class="d-inline-block active-filters">
-          @for (filter of filters.getActiveFilters(); track filter.key + (filter.value || '')) {
+          @for (filter of filters().getActiveFilters(); track filter.key + (filter.value || '')) {
             @if (filter.key !== 'scope') {
               <div class="d-inline-block active-filter">
-                <span i18n *ngIf="filter.value">{{ filter.label }}: </span>
+                @if (filter.value) {
+                  <span>{{ filter.label }}: </span>
+                }
+
                 <strong>{{ getFilterValue(filter) || filter.label }}</strong>
               </div>
             }
@@ -33,8 +45,10 @@
         </div>
 
         <button
-          class="filters-toggle peertube-button-like-link" (click)="areFiltersCollapsed = !areFiltersCollapsed"
-          [attr.aria-expanded]="!areFiltersCollapsed" aria-controls="collapseBasic"
+          class="filters-toggle peertube-button-like-link"
+          (click)="areFiltersCollapsed = !areFiltersCollapsed"
+          [attr.aria-expanded]="!areFiltersCollapsed"
+          aria-controls="collapseBasic"
           [ngClass]="{ active: !areFiltersCollapsed }"
         >
           @if (areFiltersCollapsed) {
@@ -51,7 +65,7 @@
     <div class="d-flex flex-wrap align-items-center mb-2">
       <label for="sort-videos" i18n class="select-label">Sort by:</label>
 
-      <my-select-options inputId="sort-videos" class="d-inline-block me-2" formControlName="sort" [items]="sortItems"></my-select-options>
+      <my-select-videos-sort inputId="sort-videos" class="d-inline-block me-2" formControlName="sort"></my-select-videos-sort>
     </div>
   </div>
 
@@ -62,11 +76,10 @@
           <ng-container i18n>Content preferences</ng-container>
 
           <div class="with-description">
-            <ng-container i18n>You always use the same preferences?</ng-container>
+            <span class="me-1" i18n>You always use the same preferences?</span>
 
-            <ng-container i18n>
-              Update your <a routerLink="/my-account/settings" fragment="video-languages-subtitles" (click)="onAccountSettingsClick($event)">default settings</a>
-            </ng-container>
+            <span i18n>Update your <a routerLink="/my-account/settings" fragment="video-languages-subtitles" (click)="onAccountSettingsClick($event)"
+              >default settings</a></span>
           </div>
         </div>
 
@@ -79,35 +92,37 @@
         <div class="form-group" role="radiogroup">
           <label for="nsfw" i18n>Sensitive content</label>
 
-          <div class="peertube-radio-container">
-            <input formControlName="nsfw" type="radio" name="nsfw" id="nsfwBoth" value="both" />
-            <label for="nsfwBoth">{{ filters.getNSFWDisplayLabel() }}</label>
-          </div>
+          <div class="form-group-description">
+            <div>{{ filters().getNSFWSettingsLabel() }}</div>
 
-          <div class="peertube-radio-container">
-            <input formControlName="nsfw" type="radio" name="nsfw" id="nsfwFalse" value="false" />
-            <label for="nsfwFalse" i18n>Hide</label>
+            <div i18n>
+              Update your policy in <a routerLink="/my-account/settings" fragment="video-sensitive-content-policy" (click)="onAccountSettingsClick($event)"
+              >your settings</a>.
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="section" *ngIf="totalFollowing && !hideScope">
-        <div class="section-title">
-         <ng-container i18n>Platforms order</ng-container>
+      @if (totalFollowing && !hideScope()) {
+        <div class="section">
+          <div class="section-title">
+            <ng-container i18n>Platforms order</ng-container>
 
-          <div class="with-description">
-            <div i18n>{{ instanceName }} platform subscribes to content from  <a routerLink="/about/follows" target="_blank">{{ totalFollowing }} other platforms</a>.</div>
+            <div class="with-description">
+              <div i18n>
+                {{ instanceName }} platform subscribes to content from <a routerLink="/about/follows" target="_blank">{{ totalFollowing }} {totalFollowing,
+                  plural, =1 {other platform} other {other platforms}}</a>.
+              </div>
+              <div i18n>Set your display preferences here.</div>
+            </div>
+          </div>
 
-            <div i18n>Set your display preferences here.</div>
+          <div class="form-group">
+            <label for="scope" i18n>Displayed videos</label>
+            <my-select-videos-scope inputId="scope" class="scope-select" formControlName="scope"></my-select-videos-scope>
           </div>
         </div>
-
-        <div class="form-group" >
-          <label for="scope" i18n>Displayed videos</label>
-
-          <my-select-options inputId="scope" class="scope-select" formControlName="scope" [items]="availableScopes"></my-select-options>
-        </div>
-      </div>
+      }
 
       <div class="section">
         <div class="section-title" i18n>Content type</div>
@@ -138,18 +153,19 @@
         </div>
       </div>
 
-      <div class="section" *ngIf="canSeeAllVideos()">
-        <div class="section-title" i18n>Moderation</div>
-
-        <div class="form-group">
-          <my-peertube-checkbox
-            formControlName="allVideos"
-            inputName="allVideos"
-            i18n-labelText labelText="Display all videos (private, unlisted, password protected or not yet published)"
-          ></my-peertube-checkbox>
+      @if (canSeeAllVideos()) {
+        <div class="section">
+          <div class="section-title" i18n>Moderation</div>
+          <div class="form-group">
+            <my-peertube-checkbox
+              formControlName="allVideos"
+              inputName="allVideos"
+              i18n-labelText
+              labelText="Display all videos (private, unlisted, password protected, not yet published or sensitive videos)"
+            ></my-peertube-checkbox>
+          </div>
         </div>
-      </div>
+      }
     </div>
   </div>
-
 </div>

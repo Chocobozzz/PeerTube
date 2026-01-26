@@ -8,10 +8,3 @@ export WEBSERVER_HOST="$PEERTUBE_WEBSERVER_HOSTNAME"
 export PEERTUBE_HOST="peertube:9000"
 
 envsubst '${WEBSERVER_HOST} ${PEERTUBE_HOST}' < $SOURCE_FILE > $TARGET_FILE
-
-while :; do
-  sleep 12h & wait $!;
-  nginx -s reload;
-done &
-
-nginx -g 'daemon off;'

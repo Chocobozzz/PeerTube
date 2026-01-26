@@ -1,4 +1,6 @@
+import { arrayify } from '@peertube/peertube-core-utils'
 import {
+  ActivityCaptionUrlObject,
   ActivityPubStoryboard,
   ActivityTrackerUrlObject,
   ActivityVideoFileMetadataUrlObject,
@@ -31,7 +33,7 @@ export function sanitizeAndCheckVideoTorrentUpdateActivity (activity: any) {
 }
 
 export function sanitizeAndCheckVideoTorrentObject (video: VideoObject) {
-  if (!video || video.type !== 'Video') return false
+  if (video?.type !== 'Video') return false
 
   const fail = (field: string) => {
     logger.debug(`Video field is not valid to PeerTube: ${field}`, { video })
@@ -47,9 +49,6 @@ export function sanitizeAndCheckVideoTorrentObject (video: VideoObject) {
   if (!setValidStoryboard(video)) return fail('preview (storyboard)')
   if (!setValidLicence(video)) return fail('licence')
 
-  // TODO: compat with < 6.1, remove in 8.0
-  if (!video.uuid && video['identifier']) video.uuid = video['identifier']
-
   // Default attributes
   if (!isVideoStateValid(video.state)) video.state = VideoState.PUBLISHED
   if (!isBooleanValid(video.waitTranscoding)) video.waitTranscoding = false
@@ -64,8 +63,6 @@ export function sanitizeAndCheckVideoTorrentObject (video: VideoObject) {
     if (!isVideoCommentsPolicyValid(video.commentsPolicy)) {
       video.commentsPolicy = VideoCommentPolicy.DISABLED
     }
-  } else if (video.commentsEnabled === true) { // Fallback to deprecated attribute
-    video.commentsPolicy = VideoCommentPolicy.ENABLED
   } else {
     video.commentsPolicy = VideoCommentPolicy.DISABLED
   }
@@ -96,14 +93,14 @@ export function sanitizeAndCheckVideoTorrentObject (video: VideoObject) {
 
 export function isRemoteVideoUrlValid (url: any) {
   return url.type === 'Link' &&
-    // Video file link
-    (
-      MIMETYPES.AP_VIDEO.MIMETYPE_EXT[url.mediaType] &&
-      isActivityPubUrlValid(url.href) &&
-      validator.default.isInt(url.height + '', { min: 0 }) &&
-      validator.default.isInt(url.size + '', { min: 0 }) &&
-      (!url.fps || validator.default.isInt(url.fps + '', { min: -1 }))
-    ) ||
+      // Video file link
+      (
+        MIMETYPES.AP_VIDEO.MIMETYPE_EXT[url.mediaType] &&
+        isActivityPubUrlValid(url.href) &&
+        validator.default.isInt(url.height + '', { min: 0 }) &&
+        validator.default.isInt(url.size + '', { min: 0 }) &&
+        (!url.fps || validator.default.isInt(url.fps + '', { min: -1 }))
+      ) ||
     // Torrent link
     (
       MIMETYPES.AP_TORRENT.MIMETYPE_EXT[url.mediaType] &&
@@ -127,8 +124,7 @@ export function isRemoteVideoUrlValid (url: any) {
 }
 
 export function isAPVideoFileUrlMetadataObject (url: any): url is ActivityVideoFileMetadataUrlObject {
-  return url &&
-    url.type === 'Link' &&
+  return url?.type === 'Link' &&
     url.mediaType === 'application/json' &&
     isArray(url.rel) && url.rel.includes('metadata')
 }
@@ -139,6 +135,17 @@ export function isAPVideoTrackerUrlObject (url: any): url is ActivityTrackerUrlO
     isActivityPubUrlValid(url.href)
 }
 
+export function setAPCaptionUrlObject (url: any): url is ActivityCaptionUrlObject {
+  if (url?.type !== 'Link') return false
+  if (!isActivityPubUrlValid(url.href)) return false
+
+  if (!url.mediaType && url.href.endsWith('.vtt')) {
+    url.mediaType = 'text/vtt'
+  }
+
+  return url.mediaType === 'text/vtt' || url.mediaType === 'application/x-mpegURL'
+}
+
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------
@@ -146,7 +153,10 @@ export function isAPVideoTrackerUrlObject (url: any): url is ActivityTrackerUrlO
 function setValidRemoteTags (video: VideoObject) {
   if (Array.isArray(video.tag) === false) video.tag = []
 
-  video.tag = video.tag.filter(t => t.type === 'Hashtag' && isVideoTagValid(t.name))
+  video.tag = video.tag.filter(t => {
+    return (t.type === 'Hashtag' && isVideoTagValid(t.name)) ||
+      (t.type === 'SensitiveTag' && !!t.name)
+  })
 
   return true
 }
@@ -157,9 +167,23 @@ function setValidRemoteCaptions (video: VideoObject) {
   if (Array.isArray(video.subtitleLanguage) === false) return false
 
   video.subtitleLanguage = video.subtitleLanguage.filter(caption => {
-    if (!isActivityPubUrlValid(caption.url)) caption.url = null
+    if (typeof caption.url === 'string') {
+      if (isActivityPubUrlValid(caption.url)) {
+        caption.url = [
+          {
+            type: 'Link',
+            href: caption.url,
+            mediaType: 'text/vtt'
+          }
+        ]
+      } else {
+        caption.url = []
+      }
+    } else {
+      caption.url = arrayify(caption.url).filter(u => setAPCaptionUrlObject(u))
+    }
 
-    return isRemoteStringIdentifierValid(caption)
+    return caption.url.length > 0 && isRemoteStringIdentifierValid(caption)
   })
 
   return true

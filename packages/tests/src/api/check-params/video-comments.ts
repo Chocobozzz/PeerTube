@@ -11,7 +11,7 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '@peertube/peertube-server-commands'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { expect } from 'chai'
 
 describe('Test video comments API validator', function () {
@@ -24,6 +24,7 @@ describe('Test video comments API validator', function () {
 
   let userAccessToken: string
   let userAccessToken2: string
+  let editorToken: string
 
   let commentId: number
   let privateCommentId: number
@@ -70,6 +71,8 @@ describe('Test video comments API validator', function () {
       await server.users.create({ username: user.username, password: user.password })
       userAccessToken2 = await server.login.getAccessToken(user)
     }
+
+    editorToken = await server.channelCollaborators.createEditor('editor', 'root_channel')
   })
 
   describe('When listing video comment threads', function () {
@@ -82,7 +85,7 @@ describe('Test video comments API validator', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, pathThread, server.accessToken)
+      await checkBadSort(server.url, pathThread, server.accessToken)
     })
 
     it('Should fail with an incorrect video', async function () {
@@ -111,12 +114,14 @@ describe('Test video comments API validator', function () {
     })
 
     it('Should succeed with the correct params', async function () {
-      await makeGetRequest({
-        url: server.url,
-        token: server.accessToken,
-        path: '/api/v1/videos/' + privateVideo.shortUUID + '/comment-threads',
-        expectedStatus: HttpStatusCode.OK_200
-      })
+      for (const token of [ server.accessToken, editorToken ]) {
+        await makeGetRequest({
+          url: server.url,
+          token,
+          path: '/api/v1/videos/' + privateVideo.shortUUID + '/comment-threads',
+          expectedStatus: HttpStatusCode.OK_200
+        })
+      }
     })
   })
 
@@ -154,13 +159,15 @@ describe('Test video comments API validator', function () {
       })
     })
 
-    it('Should success with the correct params', async function () {
-      await makeGetRequest({
-        url: server.url,
-        token: server.accessToken,
-        path: '/api/v1/videos/' + privateVideo.shortUUID + '/comment-threads/' + privateCommentId,
-        expectedStatus: HttpStatusCode.OK_200
-      })
+    it('Should succeed with the correct params', async function () {
+      for (const token of [ server.accessToken, editorToken ]) {
+        await makeGetRequest({
+          url: server.url,
+          token,
+          path: '/api/v1/videos/' + privateVideo.shortUUID + '/comment-threads/' + privateCommentId,
+          expectedStatus: HttpStatusCode.OK_200
+        })
+      }
 
       await makeGetRequest({
         url: server.url,
@@ -171,7 +178,6 @@ describe('Test video comments API validator', function () {
   })
 
   describe('When adding a video thread', function () {
-
     it('Should fail with a non authenticated user', async function () {
       const fields = {
         text: 'text'
@@ -232,6 +238,16 @@ describe('Test video comments API validator', function () {
     it('Should succeed with the correct parameters', async function () {
       const fields = { text: 'super comment' }
 
+      for (const token of [ server.accessToken, editorToken ]) {
+        await makePostBodyRequest({
+          url: server.url,
+          path: '/api/v1/videos/' + privateVideo.shortUUID + '/comment-threads',
+          token,
+          fields,
+          expectedStatus: HttpStatusCode.OK_200
+        })
+      }
+
       await makePostBodyRequest({
         url: server.url,
         path: pathThread,
@@ -243,7 +259,6 @@ describe('Test video comments API validator', function () {
   })
 
   describe('When adding a comment to a thread', function () {
-
     it('Should fail with a non authenticated user', async function () {
       const fields = {
         text: 'text'
@@ -317,9 +332,18 @@ describe('Test video comments API validator', function () {
     })
 
     it('Should succeed with the correct parameters', async function () {
-      const fields = {
-        text: 'super comment'
+      const fields = { text: 'super comment' }
+
+      for (const token of [ server.accessToken, editorToken ]) {
+        await makePostBodyRequest({
+          url: server.url,
+          path: '/api/v1/videos/' + privateVideo.uuid + '/comments/' + privateCommentId,
+          token,
+          fields,
+          expectedStatus: HttpStatusCode.OK_200
+        })
       }
+
       await makePostBodyRequest({
         url: server.url,
         path: pathComment,
@@ -355,21 +379,14 @@ describe('Test video comments API validator', function () {
     })
 
     it('Should succeed with the same user', async function () {
-      let commentToDelete: number
-
-      {
-        const created = await server.comments.createThread({ videoId: video.uuid, token: userAccessToken, text: 'hello' })
-        commentToDelete = created.id
-      }
-
-      const path = '/api/v1/videos/' + video.uuid + '/comments/' + commentToDelete
+      const created = await server.comments.createThread({ videoId: video.uuid, token: userAccessToken, text: 'hello' })
+      const path = '/api/v1/videos/' + video.uuid + '/comments/' + created.id
 
       await makeDeleteRequest({ url: server.url, path, token: userAccessToken2, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
       await makeDeleteRequest({ url: server.url, path, token: userAccessToken, expectedStatus: HttpStatusCode.NO_CONTENT_204 })
     })
 
     it('Should succeed with the owner of the video', async function () {
-      let commentToDelete: number
       let anotherVideoUUID: string
 
       {
@@ -377,15 +394,16 @@ describe('Test video comments API validator', function () {
         anotherVideoUUID = uuid
       }
 
-      {
-        const created = await server.comments.createThread({ videoId: anotherVideoUUID, text: 'hello' })
-        commentToDelete = created.id
-      }
-
-      const path = '/api/v1/videos/' + anotherVideoUUID + '/comments/' + commentToDelete
+      const created = await server.comments.createThread({ videoId: anotherVideoUUID, text: 'hello' })
+      const path = '/api/v1/videos/' + anotherVideoUUID + '/comments/' + created.id
 
       await makeDeleteRequest({ url: server.url, path, token: userAccessToken2, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
       await makeDeleteRequest({ url: server.url, path, token: userAccessToken, expectedStatus: HttpStatusCode.NO_CONTENT_204 })
+    })
+
+    it('Should succeed with the editor of the video', async function () {
+      const created = await server.comments.createThread({ videoId: video.uuid, text: 'hello' })
+      await server.comments.delete({ commentId: created.id, videoId: video.uuid, token: editorToken })
     })
 
     it('Should succeed with the correct parameters', async function () {
@@ -399,7 +417,6 @@ describe('Test video comments API validator', function () {
   })
 
   describe('When a video has comments disabled', function () {
-
     before(async function () {
       video = await server.videos.upload({ attributes: { commentsPolicy: VideoCommentPolicy.DISABLED } })
       pathThread = `/api/v1/videos/${video.uuid}/comment-threads`
@@ -440,7 +457,7 @@ describe('Test video comments API validator', function () {
       for (const path of paths) {
         await checkBadStartPagination(server.url, path, server.accessToken)
         await checkBadCountPagination(server.url, path, server.accessToken)
-        await checkBadSortPagination(server.url, path, server.accessToken)
+        await checkBadSort(server.url, path, server.accessToken)
       }
     })
 
@@ -495,6 +512,7 @@ describe('Test video comments API validator', function () {
 
       await server.comments.listForAdmin({ ...base, isLocal: false })
       await server.comments.listCommentsOnMyVideos(base)
+      await server.comments.listCommentsOnMyVideos({ ...base, token: editorToken })
     })
   })
 
@@ -563,6 +581,13 @@ describe('Test video comments API validator', function () {
 
     it('Should succeed with the correct params', async function () {
       await server.comments.approve({ token: userAccessToken, commentId, videoId })
+    })
+
+    it('Should succeed with the editor token', async function () {
+      const created = await server.comments.createThread({ text: 'thread for editor', videoId, token: userAccessToken2 })
+
+      const editor2Token = await server.channelCollaborators.createEditor('editor2', 'user1_channel')
+      await server.comments.approve({ token: editor2Token, commentId: created.id, videoId })
     })
 
     it('Should fail with an already held for review comment', async function () {

@@ -11,4 +11,5 @@ export abstract class MyVideoPlaylistEdit extends FormReactive {
 
   abstract isCreation (): boolean
   abstract getFormButtonTitle (): string
+  abstract isEditor (): boolean
 }

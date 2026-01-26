@@ -32,7 +32,10 @@ export async function checkDirectoryIsEmpty (server: PeerTubeServer, directory: 
   expect(filtered).to.have.lengthOf(0)
 }
 
-export async function checkPeerTubeRunnerCacheIsEmpty (runner: PeerTubeRunnerProcess, subDir: 'transcoding' | 'transcription') {
+export async function checkPeerTubeRunnerCacheIsEmpty (
+  runner: PeerTubeRunnerProcess,
+  subDir: 'transcoding' | 'transcription' | 'storyboard'
+) {
   const directoryPath = join(homedir(), '.cache', 'peertube-runner-nodejs', runner.getId(), subDir)
 
   const directoryExists = await pathExists(directoryPath)

@@ -1,53 +1,50 @@
 import { HttpClient } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { ConfirmService, RestExtractor, ServerService } from '@app/core'
 import { objectToFormData } from '@app/helpers'
 import { peertubeTranslate, sortBy } from '@peertube/peertube-core-utils'
 import { PeerTubeProblemDocument, ResultList, ServerErrorCode, Video, VideoCaption, VideoCaptionGenerate } from '@peertube/peertube-models'
 import { Observable, from, of, throwError } from 'rxjs'
 import { catchError, concatMap, map, switchMap, toArray } from 'rxjs/operators'
-import { environment } from '../../../../environments/environment'
 import { VideoPasswordService } from '../video/video-password.service'
 import { VideoService } from '../video/video.service'
-import { VideoCaptionEdit } from './video-caption-edit.model'
+import { VideoCaptionEdit } from '../../../+videos-publish-manage/shared-manage/common/video-caption-edit.model'
 
 @Injectable()
 export class VideoCaptionService {
-  constructor (
-    private authHttp: HttpClient,
-    private serverService: ServerService,
-    private restExtractor: RestExtractor,
-    private confirmService: ConfirmService
-  ) {}
+  private authHttp = inject(HttpClient)
+  private serverService = inject(ServerService)
+  private restExtractor = inject(RestExtractor)
+  private confirmService = inject(ConfirmService)
 
   listCaptions (videoId: string, videoPassword?: string): Observable<ResultList<VideoCaption>> {
     const headers = VideoPasswordService.buildVideoPasswordHeader(videoPassword)
 
     return this.authHttp.get<ResultList<VideoCaption>>(`${VideoService.BASE_VIDEO_URL}/${videoId}/captions`, { headers })
-               .pipe(
-                 switchMap(captionsResult => {
-                   return this.serverService.getServerLocale()
-                     .pipe(map(translations => ({ captionsResult, translations })))
-                 }),
-                 map(({ captionsResult, translations }) => {
-                   for (const c of captionsResult.data) {
-                     c.language.label = peertubeTranslate(c.language.label, translations)
-                   }
+      .pipe(
+        switchMap(captionsResult => {
+          return this.serverService.getServerLocale()
+            .pipe(map(translations => ({ captionsResult, translations })))
+        }),
+        map(({ captionsResult, translations }) => {
+          for (const c of captionsResult.data) {
+            c.language.label = peertubeTranslate(c.language.label, translations)
+          }
 
-                   return captionsResult
-                 }),
-                 map(captionsResult => {
-                   sortBy(captionsResult.data, 'language', 'label')
+          return captionsResult
+        }),
+        map(captionsResult => {
+          sortBy(captionsResult.data, 'language', 'label')
 
-                   return captionsResult
-                 })
-               )
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
+          return captionsResult
+        })
+      )
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   removeCaption (videoId: number | string, language: string) {
     return this.authHttp.delete(`${VideoService.BASE_VIDEO_URL}/${videoId}/captions/${language}`)
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   addCaption (videoId: number | string, language: string, captionfile: File) {
@@ -55,7 +52,7 @@ export class VideoCaptionService {
     const data = objectToFormData(body)
 
     return this.authHttp.put(`${VideoService.BASE_VIDEO_URL}/${videoId}/captions/${language}`, data)
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   updateCaptions (videoId: number | string, videoCaptions: VideoCaptionEdit[]) {
@@ -72,8 +69,8 @@ export class VideoCaptionService {
     return obs
   }
 
-  getCaptionContent ({ captionPath }: Pick<VideoCaption, 'captionPath'>) {
-    return this.authHttp.get(environment.originServerUrl + captionPath, { responseType: 'text' })
+  getCaptionContent ({ fileUrl }: Pick<VideoCaption, 'fileUrl'>) {
+    return this.authHttp.get(fileUrl, { responseType: 'text' })
   }
 
   // ---------------------------------------------------------------------------

@@ -9,7 +9,7 @@
 
   .button-file {
     &.with-icon {
-      @include button-with-icon;
+      @include button-with-icon(24px);
     }
   }
 

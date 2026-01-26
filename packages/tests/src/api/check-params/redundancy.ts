@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { HttpStatusCode, VideoCreateResult } from '@peertube/peertube-models'
 import {
   cleanupTests,
@@ -76,7 +76,7 @@ describe('Test server redundancy API validators', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(url, path, servers[0].accessToken)
+      await checkBadSort(url, path, servers[0].accessToken)
     })
 
     it('Should fail with a bad target', async function () {

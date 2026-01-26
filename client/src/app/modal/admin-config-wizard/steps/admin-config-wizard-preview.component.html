@@ -1,0 +1,36 @@
+<div class="root">
+  <div class="two-columns">
+    <div>
+      <img class="mascot" src="/client/assets/images/mascot/default.svg" alt="mascot">
+    </div>
+
+    <div>
+      <div class="steps">
+        <div class="header-steps" i18n>STEP {{ currentStep() }}/{{ totalSteps() }}</div>
+      </div>
+
+      <h4 i18n class="title">Configuration preview</h4>
+
+      <div class="text-content mt-3">
+        <p i18n>If you confirm, PeerTube will:</p>
+
+        <ul>
+          @for (explanation of safeExplanations; track explanation) {
+            <li [innerHTML]="explanation"></li>
+          }
+        </ul>
+
+        <p i18n>
+          If you want finer settings control, your platform configuration can be easily changed after the pre-configuration wizard!
+        </p>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="buttons">
+    <my-button i18n icon="arrow-left" (click)="back.emit()" theme="secondary">Back</my-button>
+    <my-button i18n theme="primary" [disabled]="updating" [loading]="updating" (click)="confirm()">Confirm this configuration</my-button>
+    <button i18n (click)="hide.emit()" class="button-as-link">Ignore for now</button>
+  </div>
+</div>

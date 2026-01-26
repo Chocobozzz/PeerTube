@@ -41,7 +41,7 @@ export default [
         component: AboutFollowsComponent,
         data: {
           meta: {
-            title: $localize`About this instance's network`
+            title: $localize`About this platform's network`
           }
         }
       },

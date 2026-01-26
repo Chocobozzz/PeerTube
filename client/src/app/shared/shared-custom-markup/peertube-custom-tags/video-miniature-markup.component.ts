@@ -1,68 +1,63 @@
-import { finalize } from 'rxjs/operators'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
-import { AuthService, Notifier } from '@app/core'
-import { objectKeysTyped } from '@peertube/peertube-core-utils'
-import { CustomMarkupComponent } from './shared'
-import { MiniatureDisplayOptions, VideoMiniatureComponent } from '../../shared-video-miniature/video-miniature.component'
-import { NgIf } from '@angular/common'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject, input, model, output } from '@angular/core'
+import { AuthService, Notifier, User, UserService } from '@app/core'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { FindInBulkService } from '@app/shared/shared-search/find-in-bulk.service'
+import { objectKeysTyped } from '@peertube/peertube-core-utils'
+import { finalize } from 'rxjs/operators'
+import { MiniatureDisplayOptions, VideoMiniatureComponent } from '../../shared-video-miniature/video-miniature.component'
+import { CustomMarkupComponent } from './shared'
 
 /*
  * Markup component that creates a video miniature only
-*/
+ */
 
 @Component({
   selector: 'my-video-miniature-markup',
   templateUrl: 'video-miniature-markup.component.html',
   styleUrls: [ 'video-miniature-markup.component.scss' ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [ NgIf, VideoMiniatureComponent ]
+  imports: [ VideoMiniatureComponent ]
 })
 export class VideoMiniatureMarkupComponent implements CustomMarkupComponent, OnInit {
-  @Input() uuid: string
-  @Input() onlyDisplayTitle: boolean
-  @Input() video: Video
+  private auth = inject(AuthService)
+  private findInBulk = inject(FindInBulkService)
+  private notifier = inject(Notifier)
+  private userService = inject(UserService)
+  private cd = inject(ChangeDetectorRef)
 
-  @Output() loaded = new EventEmitter<boolean>()
+  readonly uuid = input<string>(undefined)
+  readonly onlyDisplayTitle = input<boolean>(undefined)
+  readonly video = model<Video>(undefined)
+
+  readonly loaded = output<boolean>()
 
   displayOptions: MiniatureDisplayOptions = {
     date: true,
     views: true,
     by: true,
     avatar: true,
-    privacyLabel: false,
-    privacyText: false,
-    state: false,
-    blacklistInfo: false
+    privacyLabel: false
   }
 
-  constructor (
-    private auth: AuthService,
-    private findInBulk: FindInBulkService,
-    private notifier: Notifier,
-    private cd: ChangeDetectorRef
-  ) { }
-
-  getUser () {
-    return this.auth.getUser()
-  }
+  user: User
 
   ngOnInit () {
-    if (this.onlyDisplayTitle) {
+    if (this.onlyDisplayTitle()) {
       for (const key of objectKeysTyped(this.displayOptions)) {
         this.displayOptions[key] = false
       }
     }
 
-    if (this.video) return
+    this.userService.getAnonymousOrLoggedUser()
+      .subscribe(user => this.user = user)
 
-    this.findInBulk.getVideo(this.uuid)
+    if (this.video()) return
+
+    this.findInBulk.getVideo(this.uuid())
       .pipe(finalize(() => this.loaded.emit(true)))
       .subscribe({
         next: video => {
-          this.video = video
+          this.video.set(video)
           this.cd.markForCheck()
         },
 

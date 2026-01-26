@@ -1,14 +1,14 @@
-import express from 'express'
-import { body, param, query, ValidationChain } from 'express-validator'
+import { HttpStatusCode, UserRegister, UserRegistrationRequest, UserRegistrationState } from '@peertube/peertube-models'
 import { exists, isBooleanValid, isIdValid, toBooleanOrNull } from '@server/helpers/custom-validators/misc.js'
 import { isRegistrationModerationResponseValid, isRegistrationReasonValid } from '@server/helpers/custom-validators/user-registration.js'
 import { CONFIG } from '@server/initializers/config.js'
+import { loadReservedActorName } from '@server/lib/local-actor.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
-import { HttpStatusCode, UserRegister, UserRegistrationRequest, UserRegistrationState } from '@peertube/peertube-models'
+import express from 'express'
+import { body, param, query, ValidationChain } from 'express-validator'
 import { isUserDisplayNameValid, isUserPasswordValid, isUserUsernameValid } from '../../../helpers/custom-validators/users.js'
 import { isVideoChannelDisplayNameValid, isVideoChannelUsernameValid } from '../../../helpers/custom-validators/video-channels.js'
 import { isSignupAllowed, isSignupAllowedForCurrentIP, SignupMode } from '../../../lib/signup.js'
-import { ActorModel } from '../../../models/actor/actor.js'
 import { areValidationErrors, checkUsernameOrEmailDoNotAlreadyExist } from '../shared/index.js'
 import { checkRegistrationHandlesDoNotAlreadyExist, checkRegistrationIdExist } from './shared/user-registrations.js'
 import { pick } from '@peertube/peertube-core-utils'
@@ -36,7 +36,7 @@ const usersRequestRegistrationValidator = [
     if (requiresApproval !== true) {
       return res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
-        message: 'Signup approval is not enabled on this instance'
+        message: req.t('Signup approval is not enabled on this instance')
       })
     }
 
@@ -82,7 +82,6 @@ function ensureUserRegistrationAllowedFactory (sm?: SignupMode) {
     const allowedResult = await Hooks.wrapPromiseFun(
       isSignupAllowed,
       allowedParams,
-
       signupMode === 'direct-registration'
         ? 'filter:api.user.signup.allowed.result'
         : 'filter:api.user.request-signup.allowed.result'
@@ -91,7 +90,7 @@ function ensureUserRegistrationAllowedFactory (sm?: SignupMode) {
     if (allowedResult.allowed === false) {
       return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
-        message: allowedResult.errorMessage || 'User registration is not allowed'
+        message: allowedResult.errorMessage || req.t('User registration is not allowed')
       })
     }
 
@@ -106,7 +105,7 @@ const ensureUserRegistrationAllowedForIP = [
     if (allowed === false) {
       return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
-        message: 'You are not on a network authorized for registration.'
+        message: req.t('You are not on a network authorized for registration.')
       })
     }
 
@@ -135,7 +134,7 @@ const acceptOrRejectRegistrationValidator = [
     if (res.locals.userRegistration.state !== UserRegistrationState.PENDING) {
       return res.fail({
         status: HttpStatusCode.CONFLICT_409,
-        message: 'This registration is already accepted or rejected.'
+        message: req.t('This registration is already accepted or rejected.')
       })
     }
 
@@ -177,15 +176,13 @@ export {
   determineSignupMode,
 
   usersRegistrationValidator,
-  usersRequestRegistrationValidator,
 
+  acceptOrRejectRegistrationValidator,
   ensureUserRegistrationAllowedFactory,
   ensureUserRegistrationAllowedForIP,
-
   getRegistrationValidator,
   listRegistrationsValidator,
-
-  acceptOrRejectRegistrationValidator
+  usersRequestRegistrationValidator
 }
 
 // ---------------------------------------------------------------------------
@@ -216,22 +213,24 @@ function usersCommonRegistrationValidatorFactory (additionalValidationChain: Val
 
       const body: UserRegister | UserRegistrationRequest = req.body
 
-      if (!await checkUsernameOrEmailDoNotAlreadyExist(body.username, body.email, res)) return
+      if (!await checkUsernameOrEmailDoNotAlreadyExist({ username: body.username, email: body.email, req, res })) return
 
       if (body.channel) {
         if (!body.channel.name || !body.channel.displayName) {
-          return res.fail({ message: 'Channel is optional but if you specify it, channel.name and channel.displayName are required.' })
+          return res.fail({
+            message: req.t('Channel is optional but if you specify it, channel.name and channel.displayName are required.')
+          })
         }
 
         if (body.channel.name === body.username) {
-          return res.fail({ message: 'Channel name cannot be the same as user username.' })
+          return res.fail({ message: req.t('Channel name cannot be the same as user username.') })
         }
 
-        const existing = await ActorModel.loadLocalByName(body.channel.name)
+        const existing = await loadReservedActorName(body.channel.name)
         if (existing) {
           return res.fail({
             status: HttpStatusCode.CONFLICT_409,
-            message: `Channel with name ${body.channel.name} already exists.`
+            message: req.t(`Channel with name {name} already exists.`, { name: body.channel.name })
           })
         }
       }

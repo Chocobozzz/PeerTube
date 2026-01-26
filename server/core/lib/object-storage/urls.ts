@@ -1,3 +1,4 @@
+import { CONFIG } from '@server/initializers/config.js'
 import { OBJECT_STORAGE_PROXY_PATHS, WEBSERVER } from '@server/initializers/constants.js'
 import { MVideoUUID } from '@server/types/models/index.js'
 import { BucketInfo, buildKey, getEndpointParsed } from './shared/index.js'
@@ -24,10 +25,17 @@ export function getHLSPrivateFileUrl (video: MVideoUUID, filename: string) {
 export function getWebVideoPrivateFileUrl (filename: string) {
   return WEBSERVER.URL + OBJECT_STORAGE_PROXY_PATHS.PRIVATE_WEB_VIDEOS + filename
 }
+
+// ---------------------------------------------------------------------------
+// Private
 // ---------------------------------------------------------------------------
 
 function getBaseUrl (bucketInfo: BucketInfo, baseUrl?: string) {
   if (baseUrl) return baseUrl
+
+  if (CONFIG.OBJECT_STORAGE.FORCE_PATH_STYLE) {
+    return `${getEndpointParsed().protocol}//${getEndpointParsed().host}/${bucketInfo.BUCKET_NAME}/`
+  }
 
   return `${getEndpointParsed().protocol}//${bucketInfo.BUCKET_NAME}.${getEndpointParsed().host}/`
 }

@@ -1,3 +1,4 @@
+import { PlayerThemeVideoSetting } from '../../player/player-theme.type.js'
 import {
   LiveVideoLatencyModeType,
   VideoCommentPolicyType,
@@ -40,6 +41,10 @@ export interface VideoExportJSON {
       replaySettings?: {
         privacy: VideoPrivacyType
       }
+
+      schedules?: {
+        startAt: string
+      }[]
     }
 
     url: string
@@ -54,8 +59,6 @@ export interface VideoExportJSON {
 
     nsfw: boolean
 
-    // TODO: remove, deprecated in 6.2
-    commentsEnabled?: boolean
     commentsPolicy: VideoCommentPolicyType
 
     downloadEnabled: boolean
@@ -102,6 +105,10 @@ export interface VideoExportJSON {
       fps: number
 
       metadata: VideoFileMetadata
+    }
+
+    playerSettings?: {
+      theme: PlayerThemeVideoSetting
     }
 
     archiveFiles: {

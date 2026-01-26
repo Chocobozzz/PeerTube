@@ -1,12 +1,13 @@
+import { PluginType, UserNotificationType, UserRight } from '@peertube/peertube-models'
+import { t } from '@server/helpers/i18n.js'
 import { logger } from '@server/helpers/logger.js'
-import { WEBSERVER } from '@server/initializers/constants.js'
-import { UserModel } from '@server/models/user/user.js'
+import { getPluginUrl } from '@server/lib/client-urls.js'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
+import { UserModel } from '@server/models/user/user.js'
 import { MPlugin, MUserDefault, MUserWithNotificationSetting, UserNotificationModelForApi } from '@server/types/models/index.js'
-import { UserNotificationType, UserRight } from '@peertube/peertube-models'
 import { AbstractNotification } from '../common/abstract-notification.js'
 
-export class NewPluginVersionForAdmins extends AbstractNotification <MPlugin> {
+export class NewPluginVersionForAdmins extends AbstractNotification<MPlugin> {
   private admins: MUserDefault[]
 
   async prepare () {
@@ -37,16 +38,25 @@ export class NewPluginVersionForAdmins extends AbstractNotification <MPlugin> {
     return notification
   }
 
-  createEmail (to: string) {
-    const pluginUrl = WEBSERVER.URL + '/admin/settings/plugins/list-installed?pluginType=' + this.plugin.type
+  createEmail (user: MUserWithNotificationSetting) {
+    const to = { email: user.email, language: user.getLanguage() }
+    const language = user.getLanguage()
+
+    const pluginUrl = getPluginUrl(this.plugin.type)
+    const context = { pluginName: this.plugin.name, latestVersion: this.plugin.latestVersion }
 
     return {
       to,
       template: 'plugin-version-new',
-      subject: `A new plugin/theme version is available: ${this.plugin.name}@${this.plugin.latestVersion}`,
+
+      subject: this.plugin.type === PluginType.PLUGIN
+        ? t('A new version of the plugin {pluginName} is available: {latestVersion}', language, context)
+        : t('A new version of the theme {pluginName} is available: {latestVersion}', language, context),
+
       locals: {
         pluginName: this.plugin.name,
         latestVersion: this.plugin.latestVersion,
+        isPlugin: this.plugin.type === PluginType.PLUGIN,
         pluginUrl
       }
     }

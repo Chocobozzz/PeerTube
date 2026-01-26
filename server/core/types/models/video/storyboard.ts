@@ -11,5 +11,5 @@ export type MStoryboard = Omit<StoryboardModel, 'Video'>
 // ############################################################################
 
 export type MStoryboardVideo =
-  MStoryboard &
-  Use<'Video', MVideo>
+  & MStoryboard
+  & Use<'Video', MVideo>

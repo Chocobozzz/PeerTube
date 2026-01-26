@@ -7,7 +7,7 @@ import {
 } from '@peertube/peertube-ffmpeg'
 import { VideoFileStream } from '@peertube/peertube-models'
 import { computeOutputFPS } from '@server/helpers/ffmpeg/index.js'
-import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent.js'
+import { createTorrentAndSetInfoHash } from '@server/lib/webtorrent.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
 import { Job } from 'bullmq'
@@ -16,10 +16,9 @@ import { copyFile } from 'fs/promises'
 import { basename, join } from 'path'
 import { CONFIG } from '../../initializers/config.js'
 import { VideoFileModel } from '../../models/video/video-file.js'
-import { JobQueue } from '../job-queue/index.js'
 import { generateWebVideoFilename } from '../paths.js'
 import { buildNewFile, saveNewOriginalFileIfNeeded } from '../video-file.js'
-import { buildStoryboardJobIfNeeded } from '../video-jobs.js'
+import { addLocalOrRemoteStoryboardJobIfNeeded } from '../video-jobs.js'
 import { VideoPathManager } from '../video-path-manager.js'
 import { buildFFmpegVOD } from './shared/index.js'
 import { buildOriginalFileResolution } from './transcoding-resolutions.js'
@@ -229,7 +228,7 @@ export async function onWebVideoFileTranscoding (options: {
     video.VideoFiles = await video.$get('VideoFiles')
 
     if (wasAudioFile) {
-      await JobQueue.Instance.createJob(buildStoryboardJobIfNeeded({ video, federate: false }))
+      await addLocalOrRemoteStoryboardJobIfNeeded({ video, federate: false })
     }
 
     return { video, videoFile }

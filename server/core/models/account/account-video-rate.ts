@@ -42,25 +42,24 @@ import { AccountModel } from './account.js'
   ]
 })
 export class AccountVideoRateModel extends SequelizeModel<AccountVideoRateModel> {
-
   @AllowNull(false)
   @Column(DataType.ENUM(...Object.values(VIDEO_RATE_TYPES)))
-  type: VideoRateType
+  declare type: VideoRateType
 
   @AllowNull(false)
   @Is('AccountVideoRateUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_RATES.URL.max))
-  url: string
+  declare url: string
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -68,11 +67,11 @@ export class AccountVideoRateModel extends SequelizeModel<AccountVideoRateModel>
     },
     onDelete: 'CASCADE'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   @ForeignKey(() => AccountModel)
   @Column
-  accountId: number
+  declare accountId: number
 
   @BelongsTo(() => AccountModel, {
     foreignKey: {
@@ -80,7 +79,7 @@ export class AccountVideoRateModel extends SequelizeModel<AccountVideoRateModel>
     },
     onDelete: 'CASCADE'
   })
-  Account: Awaited<AccountModel>
+  declare Account: Awaited<AccountModel>
 
   static load (accountId: number, videoId: number, transaction?: Transaction): Promise<MAccountVideoRate> {
     const options: FindOptions = {
@@ -212,7 +211,7 @@ export class AccountVideoRateModel extends SequelizeModel<AccountVideoRateModel>
   static listRemoteRateUrlsOfLocalVideos () {
     const query = `SELECT "accountVideoRate".url FROM "accountVideoRate" ` +
       `INNER JOIN account ON account.id = "accountVideoRate"."accountId" ` +
-      `INNER JOIN actor ON actor.id = account."actorId" AND actor."serverId" IS NOT NULL ` +
+      `INNER JOIN actor ON "actor"."accountId" = account."id" AND actor."serverId" IS NOT NULL ` +
       `INNER JOIN video ON video.id = "accountVideoRate"."videoId" AND video.remote IS FALSE`
 
     return AccountVideoRateModel.sequelize.query<{ url: string }>(query, {
@@ -232,12 +231,12 @@ export class AccountVideoRateModel extends SequelizeModel<AccountVideoRateModel>
       transaction: t,
       include: [
         {
-          attributes: [ 'actorId' ],
+          attributes: [ 'id' ],
           model: AccountModel.unscoped(),
           required: true,
           include: [
             {
-              attributes: [ 'url' ],
+              attributes: [ 'url', 'accountId' ],
               model: ActorModel.unscoped(),
               required: true
             }

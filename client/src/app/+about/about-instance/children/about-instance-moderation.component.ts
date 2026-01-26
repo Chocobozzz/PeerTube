@@ -1,24 +1,20 @@
-import { CommonModule } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { ServerService } from '@app/core'
 import { AboutHTML } from '@app/shared/shared-main/instance/instance.service'
-import { ResolverData } from '../about-instance.resolver'
 import { PluginSelectorDirective } from '@app/shared/shared-main/plugins/plugin-selector.directive'
+import { ResolverData } from '../about-instance.resolver'
 
 @Component({
   templateUrl: './about-instance-moderation.component.html',
   styleUrls: [ './about-instance-common.component.scss' ],
-  standalone: true,
-  imports: [ CommonModule, PluginSelectorDirective ]
+  imports: [ PluginSelectorDirective ]
 })
 export class AboutInstanceModerationComponent implements OnInit {
-  aboutHTML: AboutHTML
+  private route = inject(ActivatedRoute)
+  private serverService = inject(ServerService)
 
-  constructor (
-    private route: ActivatedRoute,
-    private serverService: ServerService
-  ) {}
+  aboutHTML: AboutHTML
 
   get instanceName () {
     return this.serverService.getHTMLConfig().instance.name

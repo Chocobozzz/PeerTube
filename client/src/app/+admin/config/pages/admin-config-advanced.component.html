@@ -1,0 +1,122 @@
+<my-admin-save-bar i18n-title title="Advanced configuration" (save)="save()" [form]="form" [formErrors]="formErrors"></my-admin-save-bar>
+
+<form [formGroup]="form" id="admin-config-form">
+
+  <div class="pt-two-cols">
+
+    <div class="title-col">
+      <h2 i18n>CACHE</h2>
+      <div i18n class="inner-form-description">
+        Some files are not federated, and fetched when necessary. Define their caching policies.
+      </div>
+    </div>
+
+    <div class="content-col">
+      <ng-container formGroupName="cache">
+        <div class="form-group" formGroupName="previews">
+          <label i18n for="cachePreviewsSize">Number of previews to keep in cache</label>
+
+          <div class="number-with-unit">
+            <input
+              type="number" min="0" id="cachePreviewsSize" class="form-control"
+              formControlName="size" [ngClass]="{ 'input-error': formErrors.cache.previews.size }"
+              >
+            <span i18n>{getCacheSize('previews'), plural, =1 {cached image} other {cached images}}</span>
+          </div>
+
+          @if (formErrors.cache.previews.size) {
+            <div class="form-error" role="alert">{{ formErrors.cache.previews.size }}</div>
+          }
+        </div>
+
+        <div class="form-group" formGroupName="captions">
+          <label i18n for="cacheCaptionsSize">Number of video captions to keep in cache</label>
+
+          <div class="number-with-unit">
+            <input
+              type="number" min="0" id="cacheCaptionsSize" class="form-control"
+              formControlName="size" [ngClass]="{ 'input-error': formErrors.cache.captions.size }"
+              >
+            <span i18n>{getCacheSize('captions'), plural, =1 {cached caption} other {cached captions}}</span>
+          </div>
+
+          @if (formErrors.cache.captions.size) {
+            <div class="form-error" role="alert">{{ formErrors.cache.captions.size }}</div>
+          }
+        </div>
+
+        <div class="form-group" formGroupName="torrents">
+          <label i18n for="cacheTorrentsSize">Number of video torrents to keep in cache</label>
+
+          <div class="number-with-unit">
+            <input
+              type="number" min="0" id="cacheTorrentsSize" class="form-control"
+              formControlName="size" [ngClass]="{ 'input-error': formErrors.cache.torrents.size }"
+              >
+            <span i18n>{getCacheSize('torrents'), plural, =1 {cached torrent} other {cached torrents}}</span>
+          </div>
+
+          @if (formErrors.cache.torrents.size) {
+            <div class="form-error" role="alert">{{ formErrors.cache.torrents.size }}</div>
+          }
+        </div>
+
+        <div class="form-group" formGroupName="storyboards">
+          <label i18n for="cacheTorrentsSize">Number of video storyboard images to keep in cache</label>
+
+          <div class="number-with-unit">
+            <input
+              type="number" min="0" id="cacheStoryboardsSize" class="form-control"
+              formControlName="size" [ngClass]="{ 'input-error': formErrors.cache.storyboards.size }"
+              >
+            <span i18n>{getCacheSize('storyboards'), plural, =1 {cached storyboard} other {cached storyboards}}</span>
+          </div>
+
+          @if (formErrors.cache.storyboards.size) {
+            <div class="form-error" role="alert">{{ formErrors.cache.storyboards.size }}</div>
+          }
+        </div>
+      </ng-container>
+
+    </div>
+  </div>
+
+  <div class="pt-two-cols mt-4">
+    <div class="title-col">
+      <h2 i18n>TWITTER/X</h2>
+
+      <div i18n class="inner-form-description">
+        Extra configuration required by Twitter/X. All other social media (Facebook, Mastodon, etc.) are supported out of the box.
+      </div>
+    </div>
+
+    <div class="content-col">
+
+      <ng-container formGroupName="services">
+        <ng-container formGroupName="twitter">
+
+          <div class="form-group">
+            <label for="servicesTwitterUsername" i18n>Your Twitter/X username</label>
+
+            <div class="form-group-description">
+              <p i18n class="mb-0">Indicates the Twitter/X account for the website or platform where the content was published.</p>
+
+              <p i18n>This is just an extra information injected in PeerTube HTML that is required by Twitter/X. If you don't have a Twitter/X account, just leave the default value.</p>
+            </div>
+
+            <input
+              type="text" id="servicesTwitterUsername" class="form-control"
+              formControlName="username" [ngClass]="{ 'input-error': formErrors.services.twitter.username }"
+              >
+
+            @if (formErrors.services.twitter.username) {
+              <div class="form-error" role="alert">{{ formErrors.services.twitter.username }}</div>
+            }
+          </div>
+
+        </ng-container>
+      </ng-container>
+
+    </div>
+  </div>
+</form>

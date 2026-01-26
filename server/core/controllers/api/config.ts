@@ -1,8 +1,9 @@
-import { About, ActorImageType, ActorImageType_Type, CustomConfig, HttpStatusCode, UserRight } from '@peertube/peertube-models'
+import { About, ActorImageType, ActorImageType_Type, CustomConfig, HttpStatusCode, LogoType, UserRight } from '@peertube/peertube-models'
 import { createReqFiles } from '@server/helpers/express-utils.js'
 import { MIMETYPES } from '@server/initializers/constants.js'
 import { deleteLocalActorImageFile, updateLocalActorImageFiles } from '@server/lib/local-actor.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
+import { deleteUploadImages, logoTypeToUploadImageEnum, replaceUploadImage } from '@server/lib/upload-image.js'
 import { ActorImageModel } from '@server/models/actor/actor-image.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { ModelCache } from '@server/models/shared/model-cache.js'
@@ -23,7 +24,12 @@ import {
   updateAvatarValidator,
   updateBannerValidator
 } from '../../middlewares/index.js'
-import { customConfigUpdateValidator, ensureConfigIsEditable } from '../../middlewares/validators/config.js'
+import {
+  customConfigUpdateValidator,
+  ensureConfigIsEditable,
+  updateInstanceLogoValidator,
+  updateOrDeleteLogoValidator
+} from '../../middlewares/validators/config.js'
 
 const configRouter = express.Router()
 
@@ -31,24 +37,20 @@ configRouter.use(apiRateLimiter)
 
 const auditLogger = auditLoggerFactory('config')
 
-configRouter.get('/',
-  openapiOperationDoc({ operationId: 'getConfig' }),
-  asyncMiddleware(getConfig)
-)
+configRouter.get('/', openapiOperationDoc({ operationId: 'getConfig' }), asyncMiddleware(getConfig))
 
-configRouter.get('/about',
-  openapiOperationDoc({ operationId: 'getAbout' }),
-  asyncMiddleware(getAbout)
-)
+configRouter.get('/about', openapiOperationDoc({ operationId: 'getAbout' }), asyncMiddleware(getAbout))
 
-configRouter.get('/custom',
+configRouter.get(
+  '/custom',
   openapiOperationDoc({ operationId: 'getCustomConfig' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   getCustomConfig
 )
 
-configRouter.put('/custom',
+configRouter.put(
+  '/custom',
   openapiOperationDoc({ operationId: 'putCustomConfig' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
@@ -57,7 +59,8 @@ configRouter.put('/custom',
   asyncMiddleware(updateCustomConfig)
 )
 
-configRouter.delete('/custom',
+configRouter.delete(
+  '/custom',
   openapiOperationDoc({ operationId: 'delCustomConfig' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
@@ -67,7 +70,8 @@ configRouter.delete('/custom',
 
 // ---------------------------------------------------------------------------
 
-configRouter.post('/instance-banner/pick',
+configRouter.post(
+  '/instance-banner/pick',
   authenticate,
   createReqFiles([ 'bannerfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT),
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
@@ -75,7 +79,8 @@ configRouter.post('/instance-banner/pick',
   asyncMiddleware(updateInstanceImageFactory(ActorImageType.BANNER))
 )
 
-configRouter.delete('/instance-banner',
+configRouter.delete(
+  '/instance-banner',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   asyncMiddleware(deleteInstanceImageFactory(ActorImageType.BANNER))
@@ -83,7 +88,8 @@ configRouter.delete('/instance-banner',
 
 // ---------------------------------------------------------------------------
 
-configRouter.post('/instance-avatar/pick',
+configRouter.post(
+  '/instance-avatar/pick',
   authenticate,
   createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT),
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
@@ -91,10 +97,31 @@ configRouter.post('/instance-avatar/pick',
   asyncMiddleware(updateInstanceImageFactory(ActorImageType.AVATAR))
 )
 
-configRouter.delete('/instance-avatar',
+configRouter.delete(
+  '/instance-avatar',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   asyncMiddleware(deleteInstanceImageFactory(ActorImageType.AVATAR))
+)
+
+// ---------------------------------------------------------------------------
+
+configRouter.post(
+  '/instance-logo/:logoType/pick',
+  authenticate,
+  createReqFiles([ 'logofile' ], MIMETYPES.IMAGE.MIMETYPE_EXT),
+  ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
+  updateOrDeleteLogoValidator,
+  updateInstanceLogoValidator,
+  asyncMiddleware(updateInstanceLogo)
+)
+
+configRouter.delete(
+  '/instance-logo/:logoType',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
+  updateOrDeleteLogoValidator,
+  asyncMiddleware(deleteInstanceLogo)
 )
 
 // ---------------------------------------------------------------------------
@@ -186,12 +213,16 @@ function updateInstanceImageFactory (imageType: ActorImageType_Type) {
 
     const imagePhysicalFile = req.files[field][0]
 
+    const serverActor = await getServerActor()
+
     await updateLocalActorImageFiles({
-      accountOrChannel: (await getServerActorWithUpdatedImages(imageType)).Account,
+      accountOrChannel: serverActor.Account,
       imagePhysicalFile,
       type: imageType,
       sendActorUpdate: false
     })
+
+    await updateServerActorImages(imageType)
 
     ClientHtml.invalidateCache()
     ModelCache.Instance.clearCache('server-account')
@@ -202,7 +233,11 @@ function updateInstanceImageFactory (imageType: ActorImageType_Type) {
 
 function deleteInstanceImageFactory (imageType: ActorImageType_Type) {
   return async (req: express.Request, res: express.Response) => {
-    await deleteLocalActorImageFile((await getServerActorWithUpdatedImages(imageType)).Account, imageType)
+    const serverActor = await getServerActor()
+
+    await deleteLocalActorImageFile(serverActor.Account, imageType)
+
+    await updateServerActorImages(imageType)
 
     ClientHtml.invalidateCache()
     ModelCache.Instance.clearCache('server-account')
@@ -211,7 +246,7 @@ function deleteInstanceImageFactory (imageType: ActorImageType_Type) {
   }
 }
 
-async function getServerActorWithUpdatedImages (imageType: ActorImageType_Type) {
+async function updateServerActorImages (imageType: ActorImageType_Type) {
   const serverActor = await getServerActor()
   const updatedImages = await ActorImageModel.listByActor(serverActor, imageType) // Reload images from DB
 
@@ -219,6 +254,35 @@ async function getServerActorWithUpdatedImages (imageType: ActorImageType_Type) 
   else serverActor.Avatars = updatedImages
 
   return serverActor
+}
+
+// ---------------------------------------------------------------------------
+
+async function updateInstanceLogo (req: express.Request, res: express.Response) {
+  const imagePhysicalFile = req.files['logofile'][0]
+
+  await replaceUploadImage({
+    actor: await getServerActor(),
+    imagePhysicalFile,
+    type: logoTypeToUploadImageEnum(req.params.logoType as LogoType)
+  })
+
+  ClientHtml.invalidateCache()
+  ModelCache.Instance.clearCache('server-account')
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+}
+
+async function deleteInstanceLogo (req: express.Request, res: express.Response) {
+  await deleteUploadImages({
+    actor: await getServerActor(),
+    type: logoTypeToUploadImageEnum(req.params.logoType as LogoType)
+  })
+
+  ClientHtml.invalidateCache()
+  ModelCache.Instance.clearCache('server-account')
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
 // ---------------------------------------------------------------------------
@@ -245,6 +309,8 @@ function customConfig (): CustomConfig {
       businessModel: CONFIG.INSTANCE.BUSINESS_MODEL,
       hardwareInformation: CONFIG.INSTANCE.HARDWARE_INFORMATION,
 
+      defaultLanguage: CONFIG.INSTANCE.DEFAULT_LANGUAGE,
+
       languages: CONFIG.INSTANCE.LANGUAGES,
       categories: CONFIG.INSTANCE.CATEGORIES,
 
@@ -260,6 +326,7 @@ function customConfig (): CustomConfig {
       social: {
         blueskyLink: CONFIG.INSTANCE.SOCIAL.BLUESKY,
         mastodonLink: CONFIG.INSTANCE.SOCIAL.MASTODON_LINK,
+        xLink: CONFIG.INSTANCE.SOCIAL.X_LINK,
         externalLink: CONFIG.INSTANCE.SOCIAL.EXTERNAL_LINK
       },
 
@@ -271,7 +338,20 @@ function customConfig (): CustomConfig {
       }
     },
     theme: {
-      default: CONFIG.THEME.DEFAULT
+      default: CONFIG.THEME.DEFAULT,
+
+      customization: {
+        primaryColor: CONFIG.THEME.CUSTOMIZATION.PRIMARY_COLOR,
+        foregroundColor: CONFIG.THEME.CUSTOMIZATION.FOREGROUND_COLOR,
+        backgroundColor: CONFIG.THEME.CUSTOMIZATION.BACKGROUND_COLOR,
+        backgroundSecondaryColor: CONFIG.THEME.CUSTOMIZATION.BACKGROUND_SECONDARY_COLOR,
+        menuForegroundColor: CONFIG.THEME.CUSTOMIZATION.MENU_FOREGROUND_COLOR,
+        menuBackgroundColor: CONFIG.THEME.CUSTOMIZATION.MENU_BACKGROUND_COLOR,
+        menuBorderRadius: CONFIG.THEME.CUSTOMIZATION.MENU_BORDER_RADIUS,
+        headerForegroundColor: CONFIG.THEME.CUSTOMIZATION.HEADER_FOREGROUND_COLOR,
+        headerBackgroundColor: CONFIG.THEME.CUSTOMIZATION.HEADER_BACKGROUND_COLOR,
+        inputBorderRadius: CONFIG.THEME.CUSTOMIZATION.INPUT_BORDER_RADIUS
+      }
     },
     services: {
       twitter: {
@@ -279,10 +359,17 @@ function customConfig (): CustomConfig {
       }
     },
     client: {
+      header: {
+        hideInstanceName: CONFIG.CLIENT.HEADER.HIDE_INSTANCE_NAME
+      },
       videos: {
         miniature: {
           preferAuthorDisplayName: CONFIG.CLIENT.VIDEOS.MINIATURE.PREFER_AUTHOR_DISPLAY_NAME
         }
+      },
+      browseVideos: {
+        defaultSort: CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SORT,
+        defaultScope: CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SCOPE
       },
       menu: {
         login: {
@@ -460,6 +547,9 @@ function customConfig (): CustomConfig {
       instance: {
         enabled: CONFIG.FOLLOWERS.INSTANCE.ENABLED,
         manualApproval: CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL
+      },
+      channels: {
+        enabled: CONFIG.FOLLOWERS.CHANNELS.ENABLED
       }
     },
     followings: {
@@ -493,7 +583,44 @@ function customConfig (): CustomConfig {
       }
     },
     storyboards: {
-      enabled: CONFIG.STORYBOARDS.ENABLED
+      enabled: CONFIG.STORYBOARDS.ENABLED,
+      remoteRunners: {
+        enabled: CONFIG.STORYBOARDS.REMOTE_RUNNERS.ENABLED
+      }
+    },
+    defaults: {
+      publish: {
+        downloadEnabled: CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
+        commentsPolicy: CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY,
+        privacy: CONFIG.DEFAULTS.PUBLISH.PRIVACY,
+        licence: CONFIG.DEFAULTS.PUBLISH.LICENCE
+      },
+      p2p: {
+        webapp: {
+          enabled: CONFIG.DEFAULTS.P2P.WEBAPP.ENABLED
+        },
+
+        embed: {
+          enabled: CONFIG.DEFAULTS.P2P.EMBED.ENABLED
+        }
+      },
+      player: {
+        theme: CONFIG.DEFAULTS.PLAYER.THEME,
+        autoPlay: CONFIG.DEFAULTS.PLAYER.AUTO_PLAY
+      }
+    },
+
+    email: {
+      body: {
+        signature: CONFIG.EMAIL.BODY.SIGNATURE
+      },
+      subject: {
+        prefix: CONFIG.EMAIL.SUBJECT.PREFIX
+      }
+    },
+
+    videoComments: {
+      acceptRemoteComments: CONFIG.VIDEO_COMMENTS.ACCEPT_REMOTE_COMMENTS
     }
   }
 }
@@ -503,12 +630,13 @@ function convertCustomConfigBody (body: CustomConfig) {
     // Transcoding resolutions exception
     if (/^\d{3,4}p$/.exec(k)) return k
     if (k === '0p') return k
+    if (k === 'p2p') return k
 
     return snakeCase(k)
   }
 
   function valueConverter (v: any) {
-    if (validator.default.isNumeric(v + '')) return parseInt('' + v, 10)
+    if (validator.isNumeric(v + '')) return parseInt('' + v, 10)
 
     return v
   }

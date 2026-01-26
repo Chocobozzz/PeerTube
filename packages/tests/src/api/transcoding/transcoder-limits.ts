@@ -41,8 +41,14 @@ describe('Test video transcoding limits', function () {
   })
 
   describe('Framerate limits', function () {
+    async function testFPS (options: {
+      uuid: string
+      originFPS: number
+      averageFPS: number
+      highFPS?: number
+    }) {
+      const { uuid, originFPS, averageFPS, highFPS = averageFPS } = options
 
-    async function testFPS (uuid: string, originFPS: number, averageFPS: number) {
       for (const server of servers) {
         const video = await server.videos.get({ id: uuid })
 
@@ -56,10 +62,14 @@ describe('Test video transcoding limits', function () {
         files.shift()
 
         for (const file of files) {
-          expect(file.fps).to.be.closeTo(averageFPS, 2)
+          const expectedFPS = file.resolution.id >= VideoResolution.H_720P
+            ? highFPS
+            : averageFPS
+
+          expect(file.fps).to.be.closeTo(expectedFPS, 2)
 
           const path = servers[1].servers.buildWebVideoFilePath(file.fileUrl)
-          expect(await getVideoStreamFPS(path)).to.be.closeTo(averageFPS, 2)
+          expect(await getVideoStreamFPS(path)).to.be.closeTo(expectedFPS, 2)
         }
       }
     }
@@ -81,7 +91,7 @@ describe('Test video transcoding limits', function () {
       const { uuid } = await servers[1].videos.upload({ attributes })
       await waitJobs(servers)
 
-      await testFPS(uuid, 60, 30)
+      await testFPS({ uuid, originFPS: 60, averageFPS: 30 })
     })
 
     it('Should transcode origin resolution to max FPS', async function () {
@@ -101,7 +111,7 @@ describe('Test video transcoding limits', function () {
         const { uuid } = await servers[1].videos.upload({ attributes })
 
         await waitJobs(servers)
-        await testFPS(uuid, 50, 25)
+        await testFPS({ uuid, originFPS: 50, averageFPS: 25 })
       }
     })
 
@@ -121,7 +131,7 @@ describe('Test video transcoding limits', function () {
       const { uuid } = await servers[1].videos.upload({ attributes })
 
       await waitJobs(servers)
-      await testFPS(uuid, 59, 25)
+      await testFPS({ uuid, originFPS: 59, averageFPS: 25 })
     })
 
     it('Should configure max FPS', async function () {
@@ -133,7 +143,7 @@ describe('Test video transcoding limits', function () {
       const { uuid } = await servers[1].videos.upload({ attributes })
 
       await waitJobs(servers)
-      await testFPS(uuid, 15, 15)
+      await testFPS({ uuid, originFPS: 60, averageFPS: 15 })
     })
 
     it('Should not duplicate resolution on re-transcoding', async function () {
@@ -141,19 +151,19 @@ describe('Test video transcoding limits', function () {
 
       await updateMaxFPS(50)
 
-      const attributes = { name: 'capped 50fps', fixture: '60fps_720p_small.mp4' }
+      const attributes = { name: 'capped 50fps', fixture: '1080p_60fps.mp4' }
       const { uuid } = await servers[1].videos.upload({ attributes })
 
       await waitJobs(servers)
-      await testFPS(uuid, 50, 25)
+      await testFPS({ uuid, originFPS: 60, averageFPS: 30, highFPS: 50 })
 
       await servers[1].videos.runTranscoding({ transcodingType: 'web-video', videoId: uuid })
       await waitJobs(servers)
 
       const video = await servers[1].videos.get({ id: uuid })
-      expect(video.files.map(f => f.resolution.id)).to.deep.equal([ 720, 480, 360, 240, 144 ])
+      expect(video.files.map(f => f.resolution.id)).to.deep.equal([ 1080, 720, 480, 360, 240, 144 ])
 
-      await testFPS(uuid, 50, 25)
+      await testFPS({ uuid, originFPS: 60, averageFPS: 30, highFPS: 50 })
     })
 
     after(async function () {
@@ -162,7 +172,6 @@ describe('Test video transcoding limits', function () {
   })
 
   describe('Bitrate control', function () {
-
     it('Should respect maximum bitrate values', async function () {
       this.timeout(160_000)
 
@@ -251,7 +260,6 @@ describe('Test video transcoding limits', function () {
   })
 
   describe('Resolution capping', function () {
-
     it('Should not generate an upper resolution than original file', async function () {
       this.timeout(120_000)
 

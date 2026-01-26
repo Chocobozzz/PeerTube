@@ -9,16 +9,16 @@ import { fetchRemoteActor } from './shared/index.js'
 import { APActorUpdater } from './updater.js'
 import { getUrlFromWebfinger } from './webfinger.js'
 
-type RefreshResult <T> = Promise<{ actor: T | MActorFull, refreshed: boolean }>
+type RefreshResult<T> = Promise<{ actor: T | MActorFull, refreshed: boolean }>
 
-type RefreshOptions <T> = {
+type RefreshOptions<T> = {
   actor: T
   fetchedType: ActorLoadByUrlType
 }
 
 const promiseCache = new CachePromiseFactory(doRefresh, (options: RefreshOptions<MActorFull | MActorAccountChannelId>) => options.actor.url)
 
-function refreshActorIfNeeded <T extends MActorFull | MActorAccountChannelId> (options: RefreshOptions<T>): RefreshResult <T> {
+function refreshActorIfNeeded<T extends MActorFull | MActorAccountChannelId> (options: RefreshOptions<T>): RefreshResult<T> {
   const actorArg = options.actor
   if (!actorArg.isOutdated()) return Promise.resolve({ actor: actorArg, refreshed: false })
 
@@ -31,7 +31,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function doRefresh <T extends MActorFull | MActorAccountChannelId> (options: RefreshOptions<T>): RefreshResult <MActorFull> {
+async function doRefresh<T extends MActorFull | MActorAccountChannelId> (options: RefreshOptions<T>): RefreshResult<MActorFull> {
   const { actor: actorArg, fetchedType } = options
 
   // We need more attributes
@@ -77,7 +77,7 @@ async function doRefresh <T extends MActorFull | MActorAccountChannelId> (option
 function getActorUrl (actor: MActorFull) {
   return getUrlFromWebfinger(actor.preferredUsername + '@' + actor.getHost())
     .catch(err => {
-      logger.warn('Cannot get actor URL from webfinger, keeping the old one.', { err })
+      logger.info('Cannot get actor URL from webfinger, keeping the old one.', { err })
       return actor.url
     })
 }

@@ -1,10 +1,10 @@
-import { program } from 'commander'
 import { toCompleteUUID } from '@server/helpers/custom-validators/misc.js'
 import { initDatabaseModels } from '@server/initializers/database.js'
 import { JobQueue } from '@server/lib/job-queue/index.js'
+import { addLocalOrRemoteStoryboardJobIfNeeded } from '@server/lib/video-jobs.js'
 import { StoryboardModel } from '@server/models/video/storyboard.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { buildStoryboardJobIfNeeded } from '@server/lib/video-jobs.js'
+import { program } from 'commander'
 
 program
   .description('Generate videos storyboard')
@@ -61,7 +61,7 @@ async function run () {
 
     if (videoFull.isLive) continue
 
-    await JobQueue.Instance.createJob(buildStoryboardJobIfNeeded({ video: videoFull, federate: true }))
+    await addLocalOrRemoteStoryboardJobIfNeeded({ video: videoFull, federate: true })
 
     console.log(`Created generate-storyboard job for ${videoFull.name}.`)
   }

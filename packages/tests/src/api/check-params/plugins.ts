@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { HttpStatusCode, PeerTubePlugin, PluginType } from '@peertube/peertube-models'
 import {
   cleanupTests,
@@ -189,7 +189,7 @@ describe('Test server plugins API validators', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, path, server.accessToken)
+      await checkBadSort(server.url, path, server.accessToken)
     })
 
     it('Should fail with an invalid plugin type', async function () {
@@ -214,7 +214,7 @@ describe('Test server plugins API validators', function () {
       })
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({
         url: server.url,
         path,
@@ -260,7 +260,7 @@ describe('Test server plugins API validators', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, path, server.accessToken)
+      await checkBadSort(server.url, path, server.accessToken)
     })
 
     it('Should fail with an invalid plugin type', async function () {
@@ -274,7 +274,7 @@ describe('Test server plugins API validators', function () {
       })
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({
         url: server.url,
         path,

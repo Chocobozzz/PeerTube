@@ -5,6 +5,9 @@ import { isHostValid } from '../../helpers/custom-validators/servers.js'
 import { ActorModel } from '../actor/actor.js'
 import { SequelizeModel, buildSQLAttributes, throwIfNotValid } from '../shared/index.js'
 import { ServerBlocklistModel } from './server-blocklist.js'
+import { AttributesOnly } from '@peertube/peertube-typescript-utils'
+
+export const serverSummaryAttributes = [ 'id', 'host' ] as const satisfies (keyof AttributesOnly<ServerModel>)[]
 
 @Table({
   tableName: 'server',
@@ -16,22 +19,21 @@ import { ServerBlocklistModel } from './server-blocklist.js'
   ]
 })
 export class ServerModel extends SequelizeModel<ServerModel> {
-
   @AllowNull(false)
   @Is('Host', value => throwIfNotValid(value, isHostValid, 'valid host'))
   @Column
-  host: string
+  declare host: string
 
   @AllowNull(false)
   @Default(false)
   @Column
-  redundancyAllowed: boolean
+  declare redundancyAllowed: boolean
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @HasMany(() => ActorModel, {
     foreignKey: {
@@ -41,7 +43,7 @@ export class ServerModel extends SequelizeModel<ServerModel> {
     onDelete: 'CASCADE',
     hooks: true
   })
-  Actors: Awaited<ActorModel>[]
+  declare Actors: Awaited<ActorModel>[]
 
   @HasMany(() => ServerBlocklistModel, {
     foreignKey: {
@@ -49,7 +51,7 @@ export class ServerModel extends SequelizeModel<ServerModel> {
     },
     onDelete: 'CASCADE'
   })
-  BlockedBy: Awaited<ServerBlocklistModel>[]
+  declare BlockedBy: Awaited<ServerBlocklistModel>[]
 
   // ---------------------------------------------------------------------------
 
@@ -58,6 +60,15 @@ export class ServerModel extends SequelizeModel<ServerModel> {
       model: this,
       tableName,
       aliasPrefix
+    })
+  }
+
+  static getSQLSummaryAttributes (tableName: string, aliasPrefix = '') {
+    return buildSQLAttributes({
+      model: this,
+      tableName,
+      aliasPrefix,
+      includeAttributes: serverSummaryAttributes
     })
   }
 

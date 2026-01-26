@@ -1,10 +1,11 @@
-import { HttpStatusCode } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoChannelActivityAction } from '@peertube/peertube-models'
 import { pickCommonVideoQuery } from '@server/helpers/query.js'
 import { openapiOperationDoc } from '@server/middlewares/doc.js'
 import { getServerActor } from '@server/models/application/application.js'
+import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import express from 'express'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger.js'
-import { buildNSFWFilter, getCountVideos } from '../../../helpers/express-utils.js'
+import { buildNSFWFilters, getCountVideos } from '../../../helpers/express-utils.js'
 import { logger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../initializers/constants.js'
@@ -17,7 +18,7 @@ import {
   asyncRetryTransactionMiddleware,
   authenticate,
   checkVideoFollowConstraints,
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidatorFactory,
   optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
@@ -73,35 +74,25 @@ videosRouter.use('/', storyboardRouter)
 videosRouter.use('/', videoSourceRouter)
 videosRouter.use('/', videoChaptersRouter)
 
-videosRouter.get('/categories',
-  openapiOperationDoc({ operationId: 'getCategories' }),
-  listVideoCategories
-)
-videosRouter.get('/licences',
-  openapiOperationDoc({ operationId: 'getLicences' }),
-  listVideoLicences
-)
-videosRouter.get('/languages',
-  openapiOperationDoc({ operationId: 'getLanguages' }),
-  listVideoLanguages
-)
-videosRouter.get('/privacies',
-  openapiOperationDoc({ operationId: 'getPrivacies' }),
-  listVideoPrivacies
-)
+videosRouter.get('/categories', openapiOperationDoc({ operationId: 'getCategories' }), listVideoCategories)
+videosRouter.get('/licences', openapiOperationDoc({ operationId: 'getLicences' }), listVideoLicences)
+videosRouter.get('/languages', openapiOperationDoc({ operationId: 'getLanguages' }), listVideoLanguages)
+videosRouter.get('/privacies', openapiOperationDoc({ operationId: 'getPrivacies' }), listVideoPrivacies)
 
-videosRouter.get('/',
+videosRouter.get(
+  '/',
   openapiOperationDoc({ operationId: 'getVideos' }),
   paginationValidator,
   videosSortValidator,
   setDefaultVideosSort,
   setDefaultPagination,
   optionalAuthenticate,
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidatorFactory(),
   asyncMiddleware(listVideos)
 )
 
-videosRouter.get('/:id',
+videosRouter.get(
+  '/:id',
   openapiOperationDoc({ operationId: 'getVideo' }),
   optionalAuthenticate,
   asyncMiddleware(videosCustomGetValidator('for-api')),
@@ -109,7 +100,8 @@ videosRouter.get('/:id',
   asyncMiddleware(getVideo)
 )
 
-videosRouter.delete('/:id',
+videosRouter.delete(
+  '/:id',
   openapiOperationDoc({ operationId: 'delVideo' }),
   authenticate,
   asyncMiddleware(videosRemoveValidator),
@@ -163,12 +155,12 @@ async function listVideos (req: express.Request, res: express.Response) {
 
   const apiOptions = await Hooks.wrapObject({
     ...query,
+    ...buildNSFWFilters({ req, res }),
 
     displayOnlyForFollower: {
       actorId: serverActor.id,
       orLocalVideos: true
     },
-    nsfw: buildNSFWFilter(res, query.nsfw),
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
     countVideos
   }, 'filter:api.videos.list.params')
@@ -187,6 +179,14 @@ async function removeVideo (req: express.Request, res: express.Response) {
 
   await sequelizeTypescript.transaction(async t => {
     await videoInstance.destroy({ transaction: t })
+
+    await VideoChannelActivityModel.addVideoActivity({
+      action: VideoChannelActivityAction.DELETE,
+      user: res.locals.oauth.token.User,
+      channel: videoInstance.VideoChannel,
+      video: videoInstance,
+      transaction: t
+    })
   })
 
   auditLogger.delete(getAuditIdFromRes(res), new VideoAuditView(videoInstance.toFormattedDetailsJSON()))
@@ -195,6 +195,6 @@ async function removeVideo (req: express.Request, res: express.Response) {
   Hooks.runAction('action:api.video.deleted', { video: videoInstance, req, res })
 
   return res.type('json')
-            .status(HttpStatusCode.NO_CONTENT_204)
-            .end()
+    .status(HttpStatusCode.NO_CONTENT_204)
+    .end()
 }

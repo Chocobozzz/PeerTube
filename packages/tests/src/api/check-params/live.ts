@@ -5,6 +5,7 @@ import {
   HttpStatusCode,
   LiveVideoCreate,
   LiveVideoLatencyMode,
+  NSFWFlag,
   VideoCommentPolicy,
   VideoCreateResult,
   VideoPrivacy
@@ -21,12 +22,16 @@ import {
   setAccessTokensToServers,
   stopFfmpeg
 } from '@peertube/peertube-server-commands'
+import { checkBadSort } from '@tests/shared/checks.js'
 import { expect } from 'chai'
 
 describe('Test video lives API validator', function () {
   const path = '/api/v1/videos/live'
   let server: PeerTubeServer
-  let userAccessToken = ''
+
+  let userAccessToken: string
+  let editorToken: string
+
   let channelId: number
   let video: VideoCreateResult
   let videoIdNotLive: number
@@ -56,10 +61,8 @@ describe('Test video lives API validator', function () {
       }
     })
 
-    const username = 'user1'
-    const password = 'my super password'
-    await server.users.create({ username, password })
-    userAccessToken = await server.login.getAccessToken({ username, password })
+    userAccessToken = await server.users.generateUserAndToken('user1')
+    editorToken = await server.channelCollaborators.createEditor('editor', 'root_channel')
 
     {
       const { videoChannels } = await server.users.getMyInfo()
@@ -94,7 +97,12 @@ describe('Test video lives API validator', function () {
         saveReplay: false,
         replaySettings: undefined,
         permanentLive: true,
-        latencyMode: LiveVideoLatencyMode.DEFAULT
+        latencyMode: LiveVideoLatencyMode.DEFAULT,
+        schedules: [
+          {
+            startAt: new Date(Date.now() + 1000 * 60 * 60) // 1 hour later
+          }
+        ]
       }
     })
 
@@ -107,6 +115,32 @@ describe('Test video lives API validator', function () {
       const fields = { ...baseCorrectParams, name: 'super'.repeat(65) }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should fail with a bad NSFW', async function () {
+      {
+        const fields = { ...baseCorrectParams, nsfw: false, nsfwFlags: NSFWFlag.EXPLICIT_SEX }
+
+        await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      }
+
+      {
+        const fields = { ...baseCorrectParams, nsfw: false, nsfwSummary: 'toto' }
+
+        await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      }
+
+      {
+        const fields = { ...baseCorrectParams, nsfw: true, nsfwFlags: 'toto' as any }
+
+        await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      }
+
+      {
+        const fields = { ...baseCorrectParams, nsfw: true, nsfwSummary: 't' }
+
+        await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      }
     })
 
     it('Should fail with a bad category', async function () {
@@ -154,7 +188,7 @@ describe('Test video lives API validator', function () {
     it('Should fail with a bad channel', async function () {
       const fields = { ...baseCorrectParams, channelId: 545454 }
 
-      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should fail with a bad privacy for replay settings', async function () {
@@ -176,7 +210,7 @@ describe('Test video lives API validator', function () {
 
       const fields = { ...baseCorrectParams, channelId: customChannelId }
 
-      await makePostBodyRequest({ url: server.url, path, token: userAccessToken, fields })
+      await makePostBodyRequest({ url: server.url, path, token: userAccessToken, fields, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should fail with too many tags', async function () {
@@ -245,18 +279,36 @@ describe('Test video lives API validator', function () {
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
+    it('Should fail with an invalid schedules', async function () {
+      const toTests = [ 'toto', 42, [ 'toto' ], { toto: 'toto' }, { startAt: 'toto' } ]
+
+      for (const schedules of toTests) {
+        const fields = { ...baseCorrectParams, schedules }
+
+        await makePostBodyRequest({
+          url: server.url,
+          path,
+          token: server.accessToken,
+          fields,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      }
+    })
+
     it('Should succeed with the correct parameters', async function () {
       this.timeout(30000)
 
-      const res = await makePostBodyRequest({
-        url: server.url,
-        path,
-        token: server.accessToken,
-        fields: baseCorrectParams,
-        expectedStatus: HttpStatusCode.OK_200
-      })
+      for (const token of [ server.accessToken, editorToken ]) {
+        const res = await makePostBodyRequest({
+          url: server.url,
+          path,
+          token,
+          fields: baseCorrectParams,
+          expectedStatus: HttpStatusCode.OK_200
+        })
 
-      video = res.body.video
+        video = res.body.video
+      }
     })
 
     it('Should forbid if live is disabled', async function () {
@@ -346,7 +398,6 @@ describe('Test video lives API validator', function () {
   })
 
   describe('When getting live information', function () {
-
     it('Should fail with a bad access token', async function () {
       await command.get({ token: 'toto', videoId: video.id, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
@@ -368,11 +419,13 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should display private information with appropriate token', async function () {
-      const live = await command.get({ videoId: video.id })
+      for (const token of [ server.accessToken, editorToken ]) {
+        const live = await command.get({ videoId: video.id, token })
 
-      expect(live.rtmpUrl).to.exist
-      expect(live.streamKey).to.exist
-      expect(live.latencyMode).to.exist
+        expect(live.rtmpUrl).to.exist
+        expect(live.streamKey).to.exist
+        expect(live.latencyMode).to.exist
+      }
     })
 
     it('Should fail with a bad video id', async function () {
@@ -395,6 +448,9 @@ describe('Test video lives API validator', function () {
   })
 
   describe('When getting live sessions', function () {
+    it('Should fail with an incorrect sort', async function () {
+      await checkBadSort(server.url, path, server.accessToken)
+    })
 
     it('Should fail with a bad access token', async function () {
       await command.listSessions({ token: 'toto', videoId: video.id, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
@@ -421,12 +477,13 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should succeed with the correct params', async function () {
-      await command.listSessions({ videoId: video.id })
+      for (const token of [ server.accessToken, editorToken ]) {
+        await command.listSessions({ videoId: video.id, token })
+      }
     })
   })
 
   describe('When getting live session of a replay', function () {
-
     it('Should fail with a bad video id', async function () {
       await command.getReplaySession({ videoId: 'toto', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
@@ -441,7 +498,6 @@ describe('Test video lives API validator', function () {
   })
 
   describe('When updating live information', async function () {
-
     it('Should fail without access token', async function () {
       await command.update({ token: '', videoId: video.id, fields: {}, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
@@ -504,13 +560,30 @@ describe('Test video lives API validator', function () {
       await command.update({ videoId: video.id, fields, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
+    it('Should fail with an invalid schedules', async function () {
+      const toTests = [ 'toto', 42, [ 'toto' ], { toto: 'toto' }, { startAt: 'toto' } ]
+
+      for (const schedules of toTests) {
+        const fields = { schedules } as any
+
+        await command.update({
+          videoId: video.id,
+          fields,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      }
+    })
+
     it('Should succeed with the correct params', async function () {
       await command.update({ videoId: video.id, fields: { saveReplay: false } })
       await command.update({ videoId: video.uuid, fields: { saveReplay: false } })
       await command.update({ videoId: video.shortUUID, fields: { saveReplay: false } })
 
-      await command.update({ videoId: video.id, fields: { saveReplay: true, replaySettings: { privacy: VideoPrivacy.PUBLIC } } })
-
+      await command.update({
+        videoId: video.id,
+        token: editorToken,
+        fields: { saveReplay: true, replaySettings: { privacy: VideoPrivacy.PUBLIC } }
+      })
     })
 
     it('Should fail to update replay status if replay is not allowed on the instance', async function () {

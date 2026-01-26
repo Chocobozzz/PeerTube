@@ -5,29 +5,25 @@ import {
   type FileStorageType,
   type VideoStreamingPlaylistType_Type
 } from '@peertube/peertube-models'
-import { sha1 } from '@peertube/peertube-node-utils'
+import { generateP2PMediaLoaderHash } from '@peertube/peertube-node-utils'
 import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { getHLSPrivateFileUrl, getObjectStoragePublicFileUrl } from '@server/lib/object-storage/index.js'
 import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename } from '@server/lib/paths.js'
 import { isVideoInPrivateDirectory } from '@server/lib/video-privacy.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
-import { MStreamingPlaylist, MStreamingPlaylistFiles, MStreamingPlaylistFilesVideo, MVideo } from '@server/types/models/index.js'
+import {
+  MStreamingPlaylist,
+  MStreamingPlaylistFiles,
+  MStreamingPlaylistFilesVideo,
+  MStreamingPlaylistVideo,
+  MVideo,
+  MVideoPrivacy
+} from '@server/types/models/index.js'
 import memoizee from 'memoizee'
 import { join } from 'path'
 import { Op, Transaction } from 'sequelize'
-import {
-  AllowNull,
-  BelongsTo,
-  Column,
-  CreatedAt,
-  DataType,
-  Default,
-  ForeignKey,
-  HasMany,
-  Is, Table,
-  UpdatedAt
-} from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, HasMany, Is, Table, UpdatedAt } from 'sequelize-typescript'
 import { isArrayOf } from '../../helpers/custom-validators/misc.js'
 import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos.js'
 import {
@@ -60,48 +56,48 @@ import { VideoModel } from './video.js'
 })
 export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPlaylistModel> {
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @AllowNull(false)
   @Column
-  type: VideoStreamingPlaylistType_Type
+  declare type: VideoStreamingPlaylistType_Type
 
   @AllowNull(false)
   @Column
-  playlistFilename: string
+  declare playlistFilename: string
 
   @AllowNull(true)
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.URL.max))
-  playlistUrl: string
+  declare playlistUrl: string
 
   @AllowNull(false)
   @Is('VideoStreamingPlaylistInfoHashes', value => throwIfNotValid(value, v => isArrayOf(v, isVideoFileInfoHashValid), 'info hashes'))
   @Column(DataType.ARRAY(DataType.STRING))
-  p2pMediaLoaderInfohashes: string[]
+  declare p2pMediaLoaderInfohashes: string[]
 
   @AllowNull(false)
   @Column
-  p2pMediaLoaderPeerVersion: number
+  declare p2pMediaLoaderPeerVersion: number
 
   @AllowNull(true)
   @Column
-  segmentsSha256Filename: string
+  declare segmentsSha256Filename: string
 
   @AllowNull(true)
   @Column
-  segmentsSha256Url: string
+  declare segmentsSha256Url: string
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @AllowNull(false)
   @Default(FileStorage.FILE_SYSTEM)
   @Column
-  storage: FileStorageType
+  declare storage: FileStorageType
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -109,7 +105,7 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     },
     onDelete: 'CASCADE'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   @HasMany(() => VideoFileModel, {
     foreignKey: {
@@ -117,7 +113,7 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     },
     onDelete: 'CASCADE'
   })
-  VideoFiles: Awaited<VideoFileModel>[]
+  declare VideoFiles: Awaited<VideoFileModel>[]
 
   @HasMany(() => VideoRedundancyModel, {
     foreignKey: {
@@ -126,7 +122,7 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     onDelete: 'CASCADE',
     hooks: true
   })
-  RedundancyVideos: Awaited<VideoRedundancyModel>[]
+  declare RedundancyVideos: Awaited<VideoRedundancyModel>[]
 
   static doesInfohashExistCached = memoizee(VideoStreamingPlaylistModel.doesInfohashExist.bind(VideoStreamingPlaylistModel), {
     promise: true,
@@ -141,12 +137,19 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     return doesExist({ sequelize: this.sequelize, query, bind: { infoHash: `{${infoHash}}` } }) // Transform infoHash in a PG array
   }
 
-  static buildP2PMediaLoaderInfoHashes (playlistUrl: string, files: unknown[]) {
+  static buildP2PMediaLoaderInfoHashes (playlistUrl: string, files: { height: number }[]) {
     const hashes: string[] = []
+
+    const version = Math.abs(P2P_MEDIA_LOADER_PEER_VERSION)
 
     // https://github.com/Novage/p2p-media-loader/blob/master/p2p-media-loader-core/lib/p2p-media-manager.ts#L115
     for (let i = 0; i < files.length; i++) {
-      hashes.push(sha1(`${P2P_MEDIA_LOADER_PEER_VERSION}${playlistUrl}+V${i}`))
+      hashes.push(generateP2PMediaLoaderHash(`v${version}-${playlistUrl}-main-${i}`))
+    }
+
+    // Audio only stream
+    if (files.some(f => f.height === 0)) {
+      hashes.push(generateP2PMediaLoaderHash(`v${version}-${playlistUrl}-secondary-0`))
     }
 
     logger.debug('Assigned P2P Media Loader info hashes', { playlistUrl, hashes })
@@ -154,23 +157,39 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     return hashes
   }
 
-  static listByIncorrectPeerVersion () {
-    const query = {
+  static async listIdsByIncorrectPeerVersion () {
+    const rows = await VideoStreamingPlaylistModel.unscoped().findAll({
+      raw: true,
+      attributes: [ 'id' ],
       where: {
         p2pMediaLoaderPeerVersion: {
           [Op.ne]: P2P_MEDIA_LOADER_PEER_VERSION
         }
-      },
+      }
+    })
+
+    return rows.map(r => r.id)
+  }
+
+  static async listIdsLocals () {
+    const rows = await VideoStreamingPlaylistModel.unscoped().findAll({
+      raw: true,
+      attributes: [ 'id' ],
       include: [
         {
           model: VideoModel.unscoped(),
-          required: true
+          required: true,
+          where: {
+            remote: false
+          }
         }
       ]
-    }
+    })
 
-    return VideoStreamingPlaylistModel.findAll(query)
+    return rows.map(r => r.id)
   }
+
+  // ---------------------------------------------------------------------------
 
   static loadWithVideoAndFiles (id: number) {
     const options = {
@@ -188,20 +207,21 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     return VideoStreamingPlaylistModel.findByPk<MStreamingPlaylistFilesVideo>(id, options)
   }
 
-  static loadWithVideo (id: number) {
+  static loadWithVideo (id: number, transaction?: Transaction) {
     const options = {
       include: [
         {
           model: VideoModel.unscoped(),
           required: true
         }
-      ]
+      ],
+      transaction
     }
 
     return VideoStreamingPlaylistModel.findByPk(id, options)
   }
 
-  static loadHLSPlaylistByVideo (videoId: number, transaction?: Transaction): Promise<MStreamingPlaylist> {
+  static loadHLSByVideo (videoId: number, transaction?: Transaction): Promise<MStreamingPlaylist> {
     const options = {
       where: {
         type: VideoStreamingPlaylistType.HLS,
@@ -213,10 +233,31 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     return VideoStreamingPlaylistModel.findOne(options)
   }
 
+  static loadHLSByVideoWithVideo (videoId: number, transaction?: Transaction): Promise<MStreamingPlaylistVideo> {
+    const options = {
+      where: {
+        type: VideoStreamingPlaylistType.HLS,
+        videoId
+      },
+      include: [
+        {
+          model: VideoModel.unscoped(),
+          required: true
+        }
+      ],
+      transaction
+    }
+
+    return VideoStreamingPlaylistModel.findOne(options)
+  }
+
   static async loadOrGenerate (video: MVideo, transaction?: Transaction) {
-    let playlist = await VideoStreamingPlaylistModel.loadHLSPlaylistByVideo(video.id, transaction)
+    let playlist = await VideoStreamingPlaylistModel.loadHLSByVideo(video.id, transaction)
+    let generated = false
 
     if (!playlist) {
+      generated = true
+
       playlist = new VideoStreamingPlaylistModel({
         p2pMediaLoaderPeerVersion: P2P_MEDIA_LOADER_PEER_VERSION,
         type: VideoStreamingPlaylistType.HLS,
@@ -230,7 +271,7 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
       await playlist.save({ transaction })
     }
 
-    return Object.assign(playlist, { Video: video })
+    return { generated, playlist: Object.assign(playlist, { Video: video }) }
   }
 
   static doesOwnedVideoUUIDExist (videoUUID: string, storage: FileStorageType) {
@@ -242,7 +283,7 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     return doesExist({ sequelize: this.sequelize, query, bind: { videoUUID, storage } })
   }
 
-  assignP2PMediaLoaderInfoHashes (video: MVideo, files: unknown[]) {
+  assignP2PMediaLoaderInfoHashes (video: MVideo, files: { height: number }[]) {
     const masterPlaylistUrl = this.getMasterPlaylistUrl(video)
 
     this.p2pMediaLoaderInfohashes = VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(masterPlaylistUrl, files)
@@ -251,7 +292,7 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
   // ---------------------------------------------------------------------------
 
   getMasterPlaylistUrl (video: MVideo) {
-    if (video.isOwned()) {
+    if (video.isLocal()) {
       if (this.storage === FileStorage.OBJECT_STORAGE) {
         return this.getMasterPlaylistObjectStorageUrl(video)
       }
@@ -273,7 +314,7 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
   // ---------------------------------------------------------------------------
 
   getSha256SegmentsUrl (video: MVideo) {
-    if (video.isOwned()) {
+    if (video.isLocal()) {
       if (!this.segmentsSha256Filename) return null
 
       if (this.storage === FileStorage.OBJECT_STORAGE) {
@@ -335,19 +376,21 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     return Object.assign(this, { Video: video })
   }
 
-  private getMasterPlaylistStaticPath (video: MVideo) {
+  // ---------------------------------------------------------------------------
+
+  static getPlaylistFileStaticPath (video: MVideoPrivacy, filename: string) {
     if (isVideoInPrivateDirectory(video.privacy)) {
-      return join(STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS, video.uuid, this.playlistFilename)
+      return join(STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS, video.uuid, filename)
     }
 
-    return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, video.uuid, this.playlistFilename)
+    return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, video.uuid, filename)
   }
 
-  private getSha256SegmentsStaticPath (video: MVideo) {
-    if (isVideoInPrivateDirectory(video.privacy)) {
-      return join(STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS, video.uuid, this.segmentsSha256Filename)
-    }
+  private getMasterPlaylistStaticPath (video: MVideoPrivacy) {
+    return VideoStreamingPlaylistModel.getPlaylistFileStaticPath(video, this.playlistFilename)
+  }
 
-    return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, video.uuid, this.segmentsSha256Filename)
+  private getSha256SegmentsStaticPath (video: MVideoPrivacy) {
+    return VideoStreamingPlaylistModel.getPlaylistFileStaticPath(video, this.segmentsSha256Filename)
   }
 }

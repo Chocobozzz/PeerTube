@@ -1,0 +1,78 @@
+<h2 class="form-title">
+  <my-global-icon iconName="captions"></my-global-icon>
+
+  <ng-container i18n>Captions</ng-container>
+</h2>
+
+@if (isLive()) {
+  <my-alert type="primary" i18n>Captions are not available on a live.</my-alert>
+} @else {
+  <form class="captions" id="video-manage-form">
+    @if (displayTranscriptionInfo && isTranscriptionEnabled() && !hasCaptions()) {
+      <my-alert type="primary" i18n>
+      Subtitles will be automatically generated from your video.
+    </my-alert>
+    }
+
+    @for (videoCaption of videoEdit.getCaptionsEdit(); track videoCaption) {
+      <div class="form-group">
+        <div class="caption-entry">
+          @if (videoCaption.action) {
+            <span class="caption-entry-label">{{ getCaptionLabel(videoCaption) }}</span>
+            @switch (videoCaption.action) {
+              @case ('CREATE') {
+                <div i18n class="caption-entry-state green">Will be created on update</div>
+                } @case ('UPDATE') {
+                <div i18n class="caption-entry-state green">Will be edited on update</div>
+                } @case ('REMOVE') {
+                <div i18n class="caption-entry-state red">Will be deleted on update</div>
+              }
+            }
+            @if (videoCaption.action === 'CREATE' || videoCaption.action === 'UPDATE') {
+              <my-edit-button class="me-2" i18n-label label="Edit" (click)="openEditCaptionModal(videoCaption)"></my-edit-button>
+            }
+            <my-button i18n (click)="deleteCaption(videoCaption)" icon="undo">
+            @switch (videoCaption.action) {
+              @case ('CREATE') {
+                Cancel creation
+              } @case ('UPDATE') {
+                Cancel editing
+              } @case ('REMOVE') {
+                Cancel deletion
+              }
+            }
+          </my-button>
+          } @else {
+            <a
+              i18n-title title="See the subtitle file" class="caption-entry-label" target="_blank" rel="noopener noreferrer"
+              [href]="videoCaption.fileUrl"
+            >{{ getCaptionLabel(videoCaption) }}</a>
+            <div i18n class="caption-entry-state">Uploaded on {{ videoCaption.updatedAt | ptDate }}	&#10004;</div>
+            <my-edit-button i18n-label label="Edit" class="me-2" (click)="openEditCaptionModal(videoCaption)"></my-edit-button>
+            <my-delete-button label (click)="deleteCaption(videoCaption)"></my-delete-button>
+          }
+        </div>
+      </div>
+    }
+
+    @if (videoEdit.getCaptionsEdit()?.length === 0) {
+      <div i18n class="no-caption">
+      No captions for now.
+    </div>
+    }
+
+    <div class="mt-3 mb-3">
+      <button (click)="openAddCaptionModal()" class="peertube-create-button">
+        <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
+        <ng-container i18n>Add a caption</ng-container>
+      </button>
+    </div>
+
+  </form>
+}
+
+<my-video-caption-add-modal
+  #videoCaptionAddModal [existingCaptions]="getExistingCaptions()" [serverConfig]="serverConfig" (captionAdded)="onCaptionEdited($event)"
+></my-video-caption-add-modal>
+
+<my-video-caption-edit-modal #videoCaptionEditModal></my-video-caption-edit-modal>

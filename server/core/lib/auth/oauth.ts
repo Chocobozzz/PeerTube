@@ -1,4 +1,3 @@
-import express from 'express'
 import OAuth2Server, {
   InvalidClientError,
   InvalidGrantError,
@@ -8,20 +7,37 @@ import OAuth2Server, {
   UnauthorizedClientError,
   UnsupportedGrantTypeError
 } from '@node-oauth/oauth2-server'
+import { pick } from '@peertube/peertube-core-utils'
+import { HttpStatusCode, ServerErrorCode, UserRegistrationState } from '@peertube/peertube-models'
+import { sha1 } from '@peertube/peertube-node-utils'
 import { randomBytesPromise } from '@server/helpers/core-utils.js'
 import { isOTPValid } from '@server/helpers/otp.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { UserRegistrationModel } from '@server/models/user/user-registration.js'
 import { MOAuthClient } from '@server/types/models/index.js'
-import { sha1 } from '@peertube/peertube-node-utils'
-import { HttpStatusCode, ServerErrorCode, UserRegistrationState } from '@peertube/peertube-models'
+import express from 'express'
 import { OTP } from '../../initializers/constants.js'
-import { BypassLogin, getAccessToken, getClient, getRefreshToken, getUser, revokeToken, saveToken } from './oauth-model.js'
 import { Hooks } from '../plugins/hooks.js'
+import { BypassLogin, getAccessToken, getClient, getRefreshToken, getUser, revokeToken, saveToken } from './oauth-model.js'
 
 class MissingTwoFactorError extends Error {
   code = HttpStatusCode.UNAUTHORIZED_401
   name = ServerErrorCode.MISSING_TWO_FACTOR
+}
+
+class TooLongPasswordError extends Error {
+  code = HttpStatusCode.BAD_REQUEST_400
+  name = ServerErrorCode.TOO_LONG_PASSWORD
+}
+
+class AccountBlockedError extends Error {
+  code = HttpStatusCode.BAD_REQUEST_400
+  name = ServerErrorCode.ACCOUNT_BLOCKED
+}
+
+class EmailNotVerifiedError extends Error {
+  code = HttpStatusCode.BAD_REQUEST_400
+  name = ServerErrorCode.EMAIL_NOT_VERIFIED
 }
 
 class InvalidTwoFactorError extends Error {
@@ -40,9 +56,7 @@ class RegistrationApprovalRejected extends Error {
 }
 
 /**
- *
  * Reimplement some functions of OAuth2Server to inject external auth methods
- *
  */
 const oAuthServer = new OAuth2Server({
   // Wants seconds
@@ -63,19 +77,19 @@ const oAuthServer = new OAuth2Server({
 // ---------------------------------------------------------------------------
 
 async function handleOAuthToken (req: express.Request, options: { refreshTokenAuthName?: string, bypassLogin?: BypassLogin }) {
-  const request = new Request(req)
+  const oauthRequest = new Request(req)
   const { refreshTokenAuthName, bypassLogin } = options
 
-  if (request.method !== 'POST') {
+  if (oauthRequest.method !== 'POST') {
     throw new InvalidRequestError('Invalid request: method must be POST')
   }
 
-  if (!request.is([ 'application/x-www-form-urlencoded' ])) {
+  if (!oauthRequest.is([ 'application/x-www-form-urlencoded' ])) {
     throw new InvalidRequestError('Invalid request: content must be application/x-www-form-urlencoded')
   }
 
-  const clientId = request.body.client_id
-  const clientSecret = request.body.client_secret
+  const clientId = oauthRequest.body.client_id
+  const clientSecret = oauthRequest.body.client_secret
 
   if (!clientId || !clientSecret) {
     throw new InvalidClientError('Invalid client: cannot retrieve client credentials')
@@ -86,7 +100,7 @@ async function handleOAuthToken (req: express.Request, options: { refreshTokenAu
     throw new InvalidClientError('Invalid client: client is invalid')
   }
 
-  const grantType = request.body.grant_type
+  const grantType = oauthRequest.body.grant_type
   if (!grantType) {
     throw new InvalidRequestError('Missing parameter: `grant_type`')
   }
@@ -99,18 +113,27 @@ async function handleOAuthToken (req: express.Request, options: { refreshTokenAu
     throw new UnauthorizedClientError('Unauthorized client: `grant_type` is invalid')
   }
 
+  const ip = req.ip
+  const userAgent = req.headers['user-agent']
+
   if (grantType === 'password') {
     return handlePasswordGrant({
-      request,
+      req,
+      oauthRequest,
       client,
-      bypassLogin
+      bypassLogin,
+      ip,
+      userAgent
     })
   }
 
   return handleRefreshGrant({
-    request,
+    req,
+    oauthRequest,
     client,
-    refreshTokenAuthName
+    refreshTokenAuthName,
+    ip,
+    userAgent
   })
 }
 
@@ -122,94 +145,119 @@ function handleOAuthAuthenticate (
 }
 
 export {
-  MissingTwoFactorError,
-  InvalidTwoFactorError,
-
+  handleOAuthAuthenticate,
   handleOAuthToken,
-  handleOAuthAuthenticate
+  InvalidTwoFactorError,
+  MissingTwoFactorError,
+  TooLongPasswordError,
+  AccountBlockedError,
+  EmailNotVerifiedError
 }
 
 // ---------------------------------------------------------------------------
 
 async function handlePasswordGrant (options: {
-  request: Request
+  req: express.Request
+  oauthRequest: Request
   client: MOAuthClient
   bypassLogin?: BypassLogin
+  ip: string
+  userAgent: string
 }) {
-  const { client } = options
+  const { req, oauthRequest, client } = options
 
   const { bypassLogin, usernameOrEmail, password } = await Hooks.wrapObject({
     bypassLogin: options.bypassLogin,
-    usernameOrEmail: options.request.body.username,
-    password: options.request.body.password
+    usernameOrEmail: oauthRequest.body.username,
+    password: oauthRequest.body.password
   }, 'filter:oauth.password-grant.get-user.params')
 
-  if (!options.request.body.username) {
-    throw new InvalidRequestError('Missing parameter: `username`')
+  if (!options.oauthRequest.body.username) {
+    throw new InvalidRequestError(req.t('Missing parameter: `username`'))
   }
 
-  if (!bypassLogin && !options.request.body.password) {
-    throw new InvalidRequestError('Missing parameter: `password`')
+  if (!bypassLogin && !options.oauthRequest.body.password) {
+    throw new InvalidRequestError(req.t('Missing parameter: `password`'))
   }
 
-  const user = await getUser(usernameOrEmail, password, bypassLogin)
+  const user = await getUser(usernameOrEmail, password, { bypassLogin, req })
   if (!user) {
     const registrations = await UserRegistrationModel.listByEmailCaseInsensitiveOrUsername(usernameOrEmail)
 
     if (registrations.length === 1) {
       if (registrations[0].state === UserRegistrationState.REJECTED) {
-        throw new RegistrationApprovalRejected('Registration approval for this account has been rejected')
+        throw new RegistrationApprovalRejected(req.t('Registration approval for this account has been rejected'))
       } else if (registrations[0].state === UserRegistrationState.PENDING) {
-        throw new RegistrationWaitingForApproval('Registration for this account is awaiting approval')
+        throw new RegistrationWaitingForApproval(req.t('Registration for this account is awaiting approval'))
       }
     }
 
-    throw new InvalidGrantError('Invalid grant: user credentials are invalid')
+    throw new InvalidGrantError(req.t('Invalid grant: user credentials are invalid'))
   }
 
   if (user.otpSecret) {
-    if (!options.request.headers[OTP.HEADER_NAME]) {
-      throw new MissingTwoFactorError('Missing two factor header')
+    if (!options.oauthRequest.headers[OTP.HEADER_NAME]) {
+      throw new MissingTwoFactorError(req.t('Missing two factor header'))
     }
 
-    if (await isOTPValid({ encryptedSecret: user.otpSecret, token: options.request.headers[OTP.HEADER_NAME] }) !== true) {
-      throw new InvalidTwoFactorError('Invalid two factor header')
+    if (await isOTPValid({ encryptedSecret: user.otpSecret, token: options.oauthRequest.headers[OTP.HEADER_NAME] }) !== true) {
+      throw new InvalidTwoFactorError(req.t('Invalid two factor header'))
     }
   }
 
-  const token = await buildToken()
+  const now = new Date()
+
+  const token = await buildToken({
+    loginDevice: options.userAgent,
+    loginIP: options.ip,
+    loginDate: now,
+    lastActivityDevice: options.userAgent,
+    lastActivityIP: options.ip,
+    lastActivityDate: now
+  })
 
   return saveToken(token, client, user, { bypassLogin })
 }
 
 async function handleRefreshGrant (options: {
-  request: Request
+  req: express.Request
+  oauthRequest: Request
   client: MOAuthClient
   refreshTokenAuthName: string
+  ip: string
+  userAgent: string
 }) {
-  const { request, client, refreshTokenAuthName } = options
+  const { req, oauthRequest, client, refreshTokenAuthName } = options
 
-  if (!request.body.refresh_token) {
-    throw new InvalidRequestError('Missing parameter: `refresh_token`')
+  if (!oauthRequest.body.refresh_token) {
+    throw new InvalidRequestError(req.t('Missing parameter: `refresh_token`'))
   }
 
-  const refreshToken = await getRefreshToken(request.body.refresh_token)
+  const refreshToken = await getRefreshToken(oauthRequest.body.refresh_token)
 
   if (!refreshToken) {
-    throw new InvalidGrantError('Invalid grant: refresh token is invalid')
+    throw new InvalidGrantError(req.t('Invalid grant: refresh token is invalid'))
   }
 
   if (refreshToken.client.id !== client.id) {
-    throw new InvalidGrantError('Invalid grant: refresh token is invalid')
+    throw new InvalidGrantError(req.t('Invalid grant: refresh token is invalid'))
   }
 
   if (refreshToken.refreshTokenExpiresAt && refreshToken.refreshTokenExpiresAt < new Date()) {
-    throw new InvalidGrantError('Invalid grant: refresh token has expired')
+    throw new InvalidGrantError(req.t('Invalid grant: refresh token has expired'))
   }
 
   await revokeToken({ refreshToken: refreshToken.refreshToken })
 
-  const token = await buildToken()
+  const token = await buildToken({
+    lastActivityDevice: options.userAgent,
+    lastActivityIP: options.ip,
+    lastActivityDate: new Date(),
+
+    loginIP: refreshToken.token.loginIP,
+    loginDate: refreshToken.token.loginDate,
+    loginDevice: refreshToken.token.loginDevice
+  })
 
   return saveToken(token, client, refreshToken.user, { refreshTokenAuthName })
 }
@@ -227,13 +275,29 @@ function getTokenExpiresAt (type: 'access' | 'refresh') {
   return new Date(Date.now() + lifetime)
 }
 
-async function buildToken () {
+async function buildToken (options: {
+  loginDevice: string
+  loginIP: string
+  loginDate: Date
+  lastActivityDevice: string
+  lastActivityIP: string
+  lastActivityDate: Date
+}) {
   const [ accessToken, refreshToken ] = await Promise.all([ generateRandomToken(), generateRandomToken() ])
 
   return {
     accessToken,
     refreshToken,
     accessTokenExpiresAt: getTokenExpiresAt('access'),
-    refreshTokenExpiresAt: getTokenExpiresAt('refresh')
+    refreshTokenExpiresAt: getTokenExpiresAt('refresh'),
+
+    ...pick(options, [
+      'loginDevice',
+      'loginIP',
+      'loginDate',
+      'lastActivityDevice',
+      'lastActivityIP',
+      'lastActivityDate'
+    ])
   }
 }

@@ -1,20 +1,7 @@
-@use '_badges' as *;
-@use '_icons' as *;
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_button-mixins' as *;
-
-// ---------------------------------------------------------------------------
-
-.pt-badge {
-  @include peertube-badge;
-
-  &:is(a) {
-    @include disable-default-a-behaviour;
-  }
-}
-
-// ---------------------------------------------------------------------------
+@use "_icons" as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_button-mixins" as *;
 
 .no-results {
   height: 40vh;
@@ -81,7 +68,7 @@
 
 .anchor {
   position: relative;
-  top: -calc(#{pvar(--header-height)} + 20px);
+  top: calc((#{pvar(--header-height)} + 20px) * -1);
 }
 
 // ---------------------------------------------------------------------------
@@ -109,6 +96,13 @@
       );
     }
   }
+}
+
+.alert-title {
+  color: pvar(--fg-300);
+  font-weight: $font-bold;
+
+  @include font-size(18px);
 }
 
 // ---------------------------------------------------------------------------

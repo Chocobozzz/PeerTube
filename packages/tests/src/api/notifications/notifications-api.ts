@@ -1,15 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { UserNotification, UserNotificationSettingValue } from '@peertube/peertube-models'
+import { UserNotification, UserNotificationSettingValue, UserNotificationType } from '@peertube/peertube-models'
 import { cleanupTests, PeerTubeServer, waitJobs } from '@peertube/peertube-server-commands'
 import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
-import {
-  prepareNotificationsTest,
-  CheckerBaseParams,
-  getAllNotificationsSettings,
-  checkNewVideoFromSubscription
-} from '@tests/shared/notifications.js'
+import { checkNewVideoFromSubscription } from '@tests/shared/notifications/check-video-notifications.js'
+import { getAllNotificationsSettings, prepareNotificationsTest } from '@tests/shared/notifications/notifications-common.js'
+import { CheckerBaseParams } from '@tests/shared/notifications/shared/notification-checker.js'
+import { expect } from 'chai'
 
 describe('Test notifications API', function () {
   let server: PeerTubeServer
@@ -36,17 +33,43 @@ describe('Test notifications API', function () {
   })
 
   describe('Notification list & count', function () {
-
     it('Should correctly list notifications', async function () {
       const { data, total } = await server.notifications.list({ token: userToken, start: 0, count: 2 })
 
       expect(data).to.have.lengthOf(2)
       expect(total).to.equal(10)
     })
+
+    it('Should correctly filter notifications on its type', async function () {
+      {
+        const { data, total } = await server.notifications.list({
+          token: userToken,
+          start: 0,
+          count: 2,
+          typeOneOf: [ UserNotificationType.ABUSE_NEW_MESSAGE ]
+        })
+
+        expect(data).to.have.lengthOf(0)
+        expect(total).to.equal(0)
+      }
+
+      {
+        const { data, total } = await server.notifications.list({
+          token: userToken,
+          start: 0,
+          count: 2,
+          typeOneOf: [ UserNotificationType.ABUSE_NEW_MESSAGE, UserNotificationType.NEW_VIDEO_FROM_SUBSCRIPTION ]
+        })
+
+        console.log(data)
+
+        expect(data).to.have.lengthOf(2)
+        expect(total).to.equal(10)
+      }
+    })
   })
 
   describe('Mark as read', function () {
-
     it('Should mark as read some notifications', async function () {
       const { data } = await server.notifications.list({ token: userToken, start: 2, count: 3 })
       const ids = data.map(n => n.id)
@@ -199,7 +222,7 @@ describe('Test notifications API', function () {
   })
 
   after(async function () {
-    MockSmtpServer.Instance.kill()
+    await MockSmtpServer.Instance.kill()
 
     await cleanupTests([ server ])
   })

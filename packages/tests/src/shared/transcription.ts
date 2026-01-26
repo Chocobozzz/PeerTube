@@ -2,12 +2,13 @@
 
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
-import { makeGetRequest, PeerTubeServer, VideoEdit } from '@peertube/peertube-server-commands'
+import { makeRawRequest, PeerTubeServer, VideoEdit } from '@peertube/peertube-server-commands'
 import { downloadFile, unzip } from '@peertube/peertube-transcription-devtools'
 import { expect } from 'chai'
 import { ensureDir, pathExists } from 'fs-extra/esm'
 import { join } from 'path'
 import { testCaptionFile } from './captions.js'
+import { expectStartWith } from './checks.js'
 import { FIXTURE_URLS } from './fixture-urls.js'
 
 type CustomModelName = 'tiny.pt' | 'faster-whisper-tiny'
@@ -29,11 +30,23 @@ export function getCustomModelPath (modelName: CustomModelName) {
 
 // ---------------------------------------------------------------------------
 
-export async function checkAutoCaption (
-  servers: PeerTubeServer[],
-  uuid: string,
-  captionContains = new RegExp('^WEBVTT\\n\\n00:00.\\d{3} --> 00:')
-) {
+export async function checkAutoCaption (options: {
+  servers: PeerTubeServer[]
+  uuid: string
+
+  captionContains?: RegExp
+
+  rootServer?: PeerTubeServer
+  objectStorageBaseUrl?: string
+}) {
+  const {
+    servers,
+    rootServer = servers[0],
+    uuid,
+    captionContains = new RegExp('^WEBVTT\\n\\n00:00.\\d{3} --> 00:'),
+    objectStorageBaseUrl
+  } = options
+
   for (const server of servers) {
     const body = await server.captions.list({ videoId: uuid })
     expect(body.total).to.equal(1)
@@ -44,9 +57,11 @@ export async function checkAutoCaption (
     expect(caption.language.label).to.equal('English')
     expect(caption.automaticallyGenerated).to.be.true
 
-    {
-      await testCaptionFile(server.url, caption.captionPath, captionContains)
+    if (objectStorageBaseUrl && server === rootServer) {
+      expectStartWith(caption.fileUrl, objectStorageBaseUrl)
     }
+
+    await testCaptionFile(caption.fileUrl, captionContains)
   }
 }
 
@@ -63,7 +78,7 @@ export async function getCaptionContent (server: PeerTubeServer, videoId: string
 
   const caption = data.find(c => c.language.id === language)
 
-  const { text } = await makeGetRequest({ url: server.url, path: caption.captionPath, expectedStatus: HttpStatusCode.OK_200 })
+  const { text } = await makeRawRequest({ url: caption.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
 
   return text
 }

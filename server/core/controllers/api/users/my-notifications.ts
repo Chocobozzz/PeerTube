@@ -1,8 +1,8 @@
-import 'multer'
-import express from 'express'
-import { HttpStatusCode, UserNotificationSetting } from '@peertube/peertube-models'
+import { HttpStatusCode, UserNotificationListQuery, UserNotificationSetting } from '@peertube/peertube-models'
 import { getFormattedObjects } from '@server/helpers/utils.js'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
+import express from 'express'
+import 'multer'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -22,13 +22,15 @@ import { meRouter } from './me.js'
 
 const myNotificationsRouter = express.Router()
 
-meRouter.put('/me/notification-settings',
+meRouter.put(
+  '/me/notification-settings',
   authenticate,
   updateNotificationSettingsValidator,
   asyncRetryTransactionMiddleware(updateNotificationSettings)
 )
 
-myNotificationsRouter.get('/me/notifications',
+myNotificationsRouter.get(
+  '/me/notifications',
   authenticate,
   paginationValidator,
   userNotificationsSortValidator,
@@ -38,16 +40,14 @@ myNotificationsRouter.get('/me/notifications',
   asyncMiddleware(listUserNotifications)
 )
 
-myNotificationsRouter.post('/me/notifications/read',
+myNotificationsRouter.post(
+  '/me/notifications/read',
   authenticate,
   markAsReadUserNotificationsValidator,
   asyncMiddleware(markAsReadUserNotifications)
 )
 
-myNotificationsRouter.post('/me/notifications/read-all',
-  authenticate,
-  asyncMiddleware(markAsReadAllUserNotifications)
-)
+myNotificationsRouter.post('/me/notifications/read-all', authenticate, asyncMiddleware(markAsReadAllUserNotifications))
 
 export {
   myNotificationsRouter
@@ -88,7 +88,16 @@ async function updateNotificationSettings (req: express.Request, res: express.Re
 async function listUserNotifications (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.User
 
-  const resultList = await UserNotificationModel.listForApi(user.id, req.query.start, req.query.count, req.query.sort, req.query.unread)
+  const query = req.query as UserNotificationListQuery
+
+  const resultList = await UserNotificationModel.listForApi({
+    userId: user.id,
+    start: query.start,
+    count: query.count,
+    sort: query.sort,
+    unread: query.unread,
+    typeOneOf: query.typeOneOf
+  })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }

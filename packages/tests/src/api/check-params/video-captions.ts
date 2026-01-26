@@ -17,6 +17,7 @@ describe('Test video captions API validator', function () {
 
   let server: PeerTubeServer
   let userAccessToken: string
+  let editorToken: string
   let video: VideoCreateResult
   let privateVideo: VideoCreateResult
 
@@ -32,10 +33,11 @@ describe('Test video captions API validator', function () {
     video = await server.videos.upload()
     privateVideo = await server.videos.upload({ attributes: { privacy: VideoPrivacy.PRIVATE } })
     userAccessToken = await server.users.generateUserAndToken('user1')
+    editorToken = await server.channelCollaborators.createEditor('editor', 'root_channel')
   })
 
   describe('When adding video caption', function () {
-    const fields = { }
+    const fields = {}
     const attaches = {
       captionfile: buildAbsoluteFixturePath('subtitle-good1.vtt')
     }
@@ -125,24 +127,6 @@ describe('Test video captions API validator', function () {
       })
     })
 
-    // We accept any file now
-    // it('Should fail with an invalid captionfile extension', async function () {
-    //   const attaches = {
-    //     'captionfile': buildAbsoluteFixturePath('subtitle-bad.txt')
-    //   }
-    //
-    //   const captionPath = path + video.uuid + '/captions/fr'
-    //   await makeUploadRequest({
-    //     method: 'PUT',
-    //     url: server.url,
-    //     path: captionPath,
-    //     token: server.accessToken,
-    //     fields,
-    //     attaches,
-    //     expectedStatus: HttpStatusCode.BAD_REQUEST_400
-    //   })
-    // })
-
     // We don't check the extension yet
     // it('Should fail with an invalid captionfile extension and octet-stream mime type', async function () {
     //   await createVideoCaption({
@@ -183,17 +167,20 @@ describe('Test video captions API validator', function () {
     //   })
     // })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should succeed with the correct parameters', async function () {
       const captionPath = path + video.uuid + '/captions/fr'
-      await makeUploadRequest({
-        method: 'PUT',
-        url: server.url,
-        path: captionPath,
-        token: server.accessToken,
-        fields,
-        attaches,
-        expectedStatus: HttpStatusCode.NO_CONTENT_204
-      })
+
+      for (const token of [ server.accessToken, editorToken ]) {
+        await makeUploadRequest({
+          method: 'PUT',
+          url: server.url,
+          path: captionPath,
+          token,
+          fields,
+          attaches,
+          expectedStatus: HttpStatusCode.NO_CONTENT_204
+        })
+      }
     })
   })
 
@@ -227,15 +214,21 @@ describe('Test video captions API validator', function () {
       })
     })
 
-    it('Should success with the correct parameters', async function () {
-      await makeGetRequest({ url: server.url, path: path + video.shortUUID + '/captions', expectedStatus: HttpStatusCode.OK_200 })
-
+    it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({
         url: server.url,
-        path: path + privateVideo.shortUUID + '/captions',
-        token: server.accessToken,
+        path: path + video.shortUUID + '/captions',
         expectedStatus: HttpStatusCode.OK_200
       })
+
+      for (const token of [ server.accessToken, editorToken ]) {
+        await makeGetRequest({
+          url: server.url,
+          path: path + privateVideo.shortUUID + '/captions',
+          token,
+          expectedStatus: HttpStatusCode.OK_200
+        })
+      }
     })
   })
 
@@ -295,14 +288,19 @@ describe('Test video captions API validator', function () {
       })
     })
 
-    it('Should success with the correct parameters', async function () {
-      const captionPath = path + video.shortUUID + '/captions/fr'
-      await makeDeleteRequest({
-        url: server.url,
-        path: captionPath,
-        token: server.accessToken,
-        expectedStatus: HttpStatusCode.NO_CONTENT_204
-      })
+    it('Should succeed with the correct parameters', async function () {
+      for (const token of [ server.accessToken, editorToken ]) {
+        const captionPath = path + video.shortUUID + '/captions/fr'
+
+        await makeDeleteRequest({
+          url: server.url,
+          path: captionPath,
+          token,
+          expectedStatus: HttpStatusCode.NO_CONTENT_204
+        })
+
+        await server.captions.add({ language: 'fr', videoId: video.uuid, fixture: 'subtitle-good1.vtt' })
+      }
     })
   })
 

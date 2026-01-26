@@ -1,23 +1,27 @@
-import { NgFor, NgIf } from '@angular/common'
-import { Component } from '@angular/core'
-import { RouterLink } from '@angular/router'
+import { Component, OnInit, inject } from '@angular/core'
+import { FormsModule } from '@angular/forms'
+import { ActivatedRoute, RouterLink } from '@angular/router'
 import {
   AuthService,
   ComponentPagination,
   ConfirmService,
   Notifier,
+  PeerTubeRouterService,
   ScreenService,
   hasMoreItems,
   resetCurrentPage,
   updatePaginationOnDelete
 } from '@app/core'
 import { formatICU } from '@app/helpers'
+import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-options.component'
+import { CollaboratorStateComponent } from '@app/shared/shared-main/channel/collaborator-state.component'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
 import { maxBy, minBy } from '@peertube/peertube-core-utils'
 import { ChartData, ChartOptions, TooltipItem, TooltipModel } from 'chart.js'
 import { ChartModule } from 'primeng/chart'
-import { Subject, first, map, switchMap } from 'rxjs'
+import { Subject, first, switchMap } from 'rxjs'
+import { SelectOptionsItem } from 'src/types'
 import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
 import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
@@ -28,29 +32,38 @@ import { DeferLoadingDirective } from '../../shared/shared-main/common/defer-loa
 import { InfiniteScrollerDirective } from '../../shared/shared-main/common/infinite-scroller.directive'
 import { NumberFormatterPipe } from '../../shared/shared-main/common/number-formatter.pipe'
 
-type CustomChartData = (ChartData & { startDate: string, total: number })
+type CustomChartData = ChartData & { startDate: string, total: number }
+type DisplayFilter = 'all' | 'owned'
 
 @Component({
   templateUrl: './my-video-channels.component.html',
   styleUrls: [ './my-video-channels.component.scss' ],
-  standalone: true,
   imports: [
     GlobalIconComponent,
-    NgIf,
+    FormsModule,
     RouterLink,
     ChannelsSetupMessageComponent,
     AdvancedInputFilterComponent,
     InfiniteScrollerDirective,
-    NgFor,
     ActorAvatarComponent,
     EditButtonComponent,
     DeleteButtonComponent,
     DeferLoadingDirective,
     ChartModule,
-    NumberFormatterPipe
+    NumberFormatterPipe,
+    SelectOptionsComponent,
+    CollaboratorStateComponent
   ]
 })
-export class MyVideoChannelsComponent {
+export class MyVideoChannelsComponent implements OnInit {
+  private authService = inject(AuthService)
+  private notifier = inject(Notifier)
+  private confirmService = inject(ConfirmService)
+  private videoChannelService = inject(VideoChannelService)
+  private screenService = inject(ScreenService)
+  private route = inject(ActivatedRoute)
+  private peertubeRouter = inject(PeerTubeRouterService)
+
   videoChannels: VideoChannel[] = []
 
   videoChannelsChartData: CustomChartData[]
@@ -67,23 +80,53 @@ export class MyVideoChannelsComponent {
     totalItems: null
   }
 
-  private pagesDone = new Set<number>()
+  displayFilter: DisplayFilter = 'all'
+  displayFilterItems: SelectOptionsItem[] = [
+    { id: 'all', label: $localize`All channels` },
+    { id: 'owned', label: $localize`Only channels owned by me` }
+  ]
 
-  constructor (
-    private authService: AuthService,
-    private notifier: Notifier,
-    private confirmService: ConfirmService,
-    private videoChannelService: VideoChannelService,
-    private screenService: ScreenService
-  ) {}
+  private pagesDone = new Set<number>()
 
   get isInSmallView () {
     return this.screenService.isInSmallView()
   }
 
+  get user () {
+    return this.authService.getUser()
+  }
+
+  ngOnInit () {
+    if (this.route.snapshot.queryParamMap.get('displayFilter') === 'owned') {
+      this.displayFilter = 'owned'
+    }
+  }
+
+  isOwned (channel: VideoChannel) {
+    return channel.ownerAccount.id === this.authService.getUser().account.id
+  }
+
+  onDisplayFilterChanged () {
+    this.peertubeRouter.silentNavigate([], {
+      ...this.route.snapshot.queryParams,
+
+      displayFilter: this.displayFilter === 'all'
+        ? null
+        : this.displayFilter
+    })
+
+    this.resetDataAndReload()
+  }
+
   onSearch (search: string) {
     this.search = search
 
+    this.resetDataAndReload()
+  }
+
+  // ---------------------------------------------------------------------------
+
+  private resetDataAndReload () {
     resetCurrentPage(this.pagination)
     this.videoChannels = []
     this.pagesDone.clear()
@@ -94,22 +137,19 @@ export class MyVideoChannelsComponent {
   async deleteVideoChannel (videoChannel: VideoChannel) {
     const res = await this.confirmService.confirmWithExpectedInput(
       $localize`Do you really want to delete ${videoChannel.displayName}?` +
-      `<br />` +
-      formatICU(
-        // eslint-disable-next-line max-len
-        $localize`It will delete {count, plural, =1 {1 video} other {{count} videos}} uploaded in this channel, and you will not be able to create another channel or account with the same name (${videoChannel.name})!`,
-        { count: videoChannel.videosCount }
-      ),
-
+        `<br />` +
+        formatICU(
+          // eslint-disable-next-line max-len
+          $localize`It will delete {count, plural, =1 {1 video} other {{count} videos}} uploaded in this channel, and you will not be able to create another channel or account with the same name (${videoChannel.name})!`,
+          { count: videoChannel.videosCount }
+        ),
       $localize`Please type the name of the video channel (${videoChannel.name}) to confirm`,
-
       videoChannel.name,
-
       $localize`Delete`
     )
     if (res === false) return
 
-    this.videoChannelService.removeVideoChannel(videoChannel)
+    this.videoChannelService.remove(videoChannel)
       .subscribe({
         next: () => {
           this.videoChannels = this.videoChannels.filter(c => c.id !== videoChannel.id)
@@ -118,7 +158,7 @@ export class MyVideoChannelsComponent {
           updatePaginationOnDelete(this.pagination)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -137,44 +177,51 @@ export class MyVideoChannelsComponent {
     return this.authService.userInformationLoaded
       .pipe(
         first(),
-        map(() => ({
-          account: this.authService.getUser().account,
-          withStats: true,
-          search: this.search,
-          componentPagination: this.pagination,
-          sort: '-updatedAt'
-        })),
-        switchMap(options => this.videoChannelService.listAccountVideoChannels(options))
-      )
-      .subscribe(res => {
-        this.videoChannels = this.videoChannels.concat(res.data)
-        this.pagination.totalItems = res.total
+        switchMap(() => {
+          return this.videoChannelService.listAccountChannels({
+            account: this.authService.getUser().account,
+            withStats: true,
+            search: this.search,
+            componentPagination: this.pagination,
+            includeCollaborations: this.displayFilter === 'all',
+            sort: '-updatedAt'
+          })
+        })
+      ).subscribe({
+        next: res => {
+          this.videoChannels = this.videoChannels.concat(res.data)
+          this.pagination.totalItems = res.total
 
-        // chart data
-        this.videoChannelsChartData = this.videoChannels.map(v => ({
-          labels: v.viewsPerDay.map(day => day.date.toLocaleDateString()),
-          datasets: [
-            {
-              label: $localize`Views for the day`,
-              data: v.viewsPerDay.map(day => day.views),
-              fill: false,
-              borderColor: '#c6c6c6'
-            }
-          ],
+          // chart data
+          this.videoChannelsChartData = this.videoChannels.map(v => ({
+            labels: v.viewsPerDay.map(day => day.date.toLocaleDateString()),
+            datasets: [
+              {
+                label: $localize`Views for the day`,
+                data: v.viewsPerDay.map(day => day.views),
+                fill: false,
+                borderColor: '#c6c6c6'
+              }
+            ],
 
-          total: v.viewsPerDay.map(day => day.views)
-            .reduce((p, c) => p + c, 0),
+            total: v.viewsPerDay.map(day => day.views)
+              .reduce((p, c) => p + c, 0),
 
-          startDate: v.viewsPerDay.length !== 0
-            ? v.viewsPerDay[0].date.toLocaleDateString()
-            : ''
-        }))
+            startDate: v.viewsPerDay.length !== 0
+              ? v.viewsPerDay[0].date.toLocaleDateString()
+              : ''
+          }))
 
-        this.buildChartOptions()
+          this.buildChartOptions()
 
-        this.onChannelDataSubject.next(res.data)
+          this.onChannelDataSubject.next(res.data)
+        },
+
+        error: err => this.notifier.handleError(err)
       })
   }
+
+  // ---------------------------------------------------------------------------
 
   private buildChartOptions () {
     const channelsMinimumDailyViews = Math.min(...this.videoChannels.map(v => minBy(v.viewsPerDay, 'views').views))
@@ -234,6 +281,8 @@ export class MyVideoChannelsComponent {
 
     return formatICU($localize`${data.total} {value, plural, =1 {view} other {views}} since ${data.startDate}`, { value: data.total })
   }
+
+  // ---------------------------------------------------------------------------
 
   getTotalTitle () {
     return formatICU(

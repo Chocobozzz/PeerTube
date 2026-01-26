@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
 import { UserRegistrationState, UserRole } from '@peertube/peertube-models'
 import {
   cleanupTests,
@@ -11,6 +9,8 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
+import { expect } from 'chai'
 
 describe('Test registrations', function () {
   let server: PeerTubeServer
@@ -27,6 +27,13 @@ describe('Test registrations', function () {
 
     await setAccessTokensToServers([ server ])
     await server.config.enableSignup(false)
+    await server.config.updateExistingConfig({
+      newConfig: {
+        instance: {
+          defaultLanguage: 'fr'
+        }
+      }
+    })
   })
 
   describe('Direct registrations of a new user', function () {
@@ -263,8 +270,8 @@ describe('Test registrations', function () {
       const email = emails.find(e => e['to'][0]['address'] === 'user4@example.com')
       expect(email).to.exist
 
-      expect(email['subject']).to.contain('been rejected')
-      expect(email['text']).to.contain('been rejected')
+      expect(email['subject']).to.contain('été rejetée')
+      expect(email['text']).to.contain('été rejetée')
       expect(email['text']).to.contain('I do not want id 4 on this instance')
     })
 
@@ -282,8 +289,8 @@ describe('Test registrations', function () {
         const email = emails.find(e => e['to'][0]['address'] === 'user2@example.com')
         expect(email).to.exist
 
-        expect(email['subject']).to.contain('been accepted')
-        expect(email['text']).to.contain('been accepted')
+        expect(email['subject']).to.contain('été acceptée')
+        expect(email['text']).to.contain('été acceptée')
         expect(email['text']).to.contain('Welcome id 2')
       }
 
@@ -291,8 +298,8 @@ describe('Test registrations', function () {
         const email = emails.find(e => e['to'][0]['address'] === 'user3@example.com')
         expect(email).to.exist
 
-        expect(email['subject']).to.contain('been accepted')
-        expect(email['text']).to.contain('been accepted')
+        expect(email['subject']).to.contain('été acceptée')
+        expect(email['text']).to.contain('été acceptée')
         expect(email['text']).to.contain('Welcome id 3')
       }
     })
@@ -312,6 +319,7 @@ describe('Test registrations', function () {
       expect(me.videoChannels[0].displayName).to.equal('Main user2 channel')
       expect(me.role.id).to.equal(UserRole.USER)
       expect(me.email).to.equal('user2@example.com')
+      expect(me.language).to.equal('fr')
     })
 
     it('Should have created the appropriate attributes for user 3', async function () {
@@ -324,6 +332,7 @@ describe('Test registrations', function () {
       expect(me.videoChannels[0].displayName).to.equal('my user 3 channel')
       expect(me.role.id).to.equal(UserRole.USER)
       expect(me.email).to.equal('user3@example.com')
+      expect(me.language).to.equal('fr')
     })
 
     it('Should list these accepted/rejected registration requests', async function () {
@@ -465,7 +474,7 @@ describe('Test registrations', function () {
   })
 
   after(async function () {
-    MockSmtpServer.Instance.kill()
+    await MockSmtpServer.Instance.kill()
 
     await cleanupTests([ server ])
   })

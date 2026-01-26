@@ -1,18 +1,16 @@
-import { Injectable } from '@angular/core'
-import {
-  getDefaultSanitizedHrefAttributes,
-  getDefaultSanitizedSchemes,
-  getDefaultSanitizedTags
-} from '@peertube/peertube-core-utils'
+import { Injectable, inject } from '@angular/core'
+import { getDefaultSanitizedHrefAttributes, getDefaultSanitizedSchemes, getDefaultSanitizedTags } from '@peertube/peertube-core-utils'
 import DOMPurify, { DOMPurify as DOMPurifyI } from 'dompurify'
 import { LinkifierService } from './linkifier.service'
 
 @Injectable()
 export class HtmlRendererService {
+  private linkifier = inject(LinkifierService)
+
   private simpleDomPurify: DOMPurifyI
   private enhancedDomPurify: DOMPurifyI
 
-  constructor (private linkifier: LinkifierService) {
+  constructor () {
     this.simpleDomPurify = DOMPurify()
     this.enhancedDomPurify = DOMPurify()
 
@@ -20,7 +18,7 @@ export class HtmlRendererService {
     this.addHrefHook(this.enhancedDomPurify)
 
     this.addCheckSchemesHook(this.simpleDomPurify, getDefaultSanitizedSchemes())
-    this.addCheckSchemesHook(this.simpleDomPurify, [ ...getDefaultSanitizedSchemes(), 'mailto' ])
+    this.addCheckSchemesHook(this.enhancedDomPurify, [ ...getDefaultSanitizedSchemes(), 'mailto' ])
   }
 
   private addHrefHook (dompurifyInstance: DOMPurifyI) {
@@ -29,10 +27,15 @@ export class HtmlRendererService {
         node.setAttribute('target', '_blank')
 
         const rel = node.hasAttribute('rel')
-          ? node.getAttribute('rel') + ' '
+          ? node.getAttribute('rel')
           : ''
 
-        node.setAttribute('rel', rel + 'noopener noreferrer')
+        const relValues = new Set(rel.split(' '))
+        relValues.add('noopener')
+        relValues.add('noreferrer')
+        relValues.add('ugc')
+
+        node.setAttribute('rel', [ ...relValues ].join(' '))
       }
     })
   }
@@ -53,18 +56,55 @@ export class HtmlRendererService {
     })
   }
 
-  convertToBr (text: string) {
+  convertToBr (text: string, allowFormatting = false) {
     const html = text.replace(/\r?\n/g, '<br />')
 
+    const additionalAllowed = allowFormatting
+      ? [ 'b', 'i', 'u', 'strong', 'em' ]
+      : []
+
     return DOMPurify.sanitize(html, {
-      ALLOWED_TAGS: [ 'br' ]
+      ALLOWED_TAGS: [ ...additionalAllowed, 'br' ]
     })
   }
 
-  async toSimpleSafeHtml (text: string) {
-    const html = await this.linkifier.linkify(text)
+  removeClassAttributes (html: string, options: {
+    additionalTags?: string[]
+    additionalAttributes?: string[]
+  } = {}) {
+    const { additionalTags = [], additionalAttributes = [] } = options
 
-    return this.sanitize(this.simpleDomPurify, html)
+    return DOMPurify().sanitize(html, {
+      ALLOWED_TAGS: [ ...getDefaultSanitizedTags(), ...additionalTags ],
+      ALLOWED_ATTR: [ ...getDefaultSanitizedHrefAttributes(), ...additionalAttributes ].filter(a => a !== 'class'),
+      ALLOW_DATA_ATTR: true
+    })
+  }
+
+  toSimpleSafeHtml (text: string) {
+    return this.sanitize(this.simpleDomPurify, this.removeClassAttributes(text))
+  }
+
+  async toSimpleSafeHtmlWithLinks (text: string, options: {
+    allowImages?: boolean
+  } = {}) {
+    const { allowImages = false } = options
+
+    const additionalTags = allowImages
+      ? [ 'img' ]
+      : []
+
+    const additionalAttributes = allowImages
+      ? [ 'src', 'alt' ]
+      : []
+
+    let html = this.removeClassAttributes(text, { additionalTags, additionalAttributes })
+    html = await this.linkifier.linkify(html)
+
+    return this.sanitize(this.simpleDomPurify, html, {
+      additionalTags,
+      additionalAttributes
+    })
   }
 
   async toCustomPageSafeHtml (text: string, additionalAllowedTags: string[] = []) {

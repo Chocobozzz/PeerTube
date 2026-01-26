@@ -61,7 +61,7 @@ export {
 // ---------------------------------------------------------------------------
 
 function buildPluginLogger (npmName: string) {
-  return buildLogger(npmName)
+  return buildLogger({ labelSuffix: npmName })
 }
 
 function buildDatabaseHelpers () {
@@ -177,7 +177,7 @@ function buildModerationHelpers () {
     },
 
     blockAccount: async (options: { byAccountId: number, handleToBlock: string }) => {
-      const accountToBlock = await AccountModel.loadByNameWithHost(options.handleToBlock)
+      const accountToBlock = await AccountModel.loadByHandle(options.handleToBlock)
       if (!accountToBlock) return
 
       const user = await UserModel.loadByAccountId(options.byAccountId)
@@ -190,7 +190,7 @@ function buildModerationHelpers () {
     },
 
     unblockAccount: async (options: { byAccountId: number, handleToUnblock: string }) => {
-      const targetAccount = await AccountModel.loadByNameWithHost(options.handleToUnblock)
+      const targetAccount = await AccountModel.loadByHandle(options.handleToUnblock)
       if (!targetAccount) return
 
       const accountBlock = await AccountBlocklistModel.loadByAccountAndTarget(options.byAccountId, targetAccount.id)

@@ -19,25 +19,24 @@ import { AbuseModel } from './abuse.js'
   ]
 })
 export class AbuseMessageModel extends SequelizeModel<AbuseMessageModel> {
-
   @AllowNull(false)
   @Is('AbuseMessage', value => throwIfNotValid(value, isAbuseMessageValid, 'message'))
   @Column(DataType.TEXT)
-  message: string
+  declare message: string
 
   @AllowNull(false)
   @Column
-  byModerator: boolean
+  declare byModerator: boolean
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @ForeignKey(() => AccountModel)
   @Column
-  accountId: number
+  declare accountId: number
 
   @BelongsTo(() => AccountModel, {
     foreignKey: {
@@ -46,11 +45,11 @@ export class AbuseMessageModel extends SequelizeModel<AbuseMessageModel> {
     },
     onDelete: 'set null'
   })
-  Account: Awaited<AccountModel>
+  declare Account: Awaited<AccountModel>
 
   @ForeignKey(() => AbuseModel)
   @Column
-  abuseId: number
+  declare abuseId: number
 
   @BelongsTo(() => AbuseModel, {
     foreignKey: {
@@ -59,7 +58,7 @@ export class AbuseMessageModel extends SequelizeModel<AbuseMessageModel> {
     },
     onDelete: 'cascade'
   })
-  Abuse: Awaited<AbuseModel>
+  declare Abuse: Awaited<AbuseModel>
 
   static listForApi (abuseId: number) {
     const getQuery = (forCount: boolean) => {

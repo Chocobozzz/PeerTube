@@ -1,5 +1,5 @@
-import { getAbsoluteAPIUrl, getAPIHost } from '@app/helpers'
-import { Actor as ServerActor, ActorImage } from '@peertube/peertube-models'
+import { getBackendHost } from '@app/helpers'
+import { ActorImage, Actor as ServerActor } from '@peertube/peertube-models'
 
 export abstract class Actor implements ServerActor {
   id: number
@@ -17,23 +17,20 @@ export abstract class Actor implements ServerActor {
 
   isLocal: boolean
 
-  static GET_ACTOR_AVATAR_URL (actor: { avatars: { width: number, url?: string, path: string }[] }, size?: number) {
+  static GET_ACTOR_AVATAR_URL (actor: { avatars: Pick<ActorImage, 'width' | 'fileUrl'>[] }, size?: number) {
     const avatarsAscWidth = actor.avatars.sort((a, b) => a.width - b.width)
 
     const avatar = size && avatarsAscWidth.length > 1
       ? avatarsAscWidth.find(a => a.width >= size)
-      : avatarsAscWidth[avatarsAscWidth.length - 1] // Bigger one
+      : avatarsAscWidth[avatarsAscWidth.length - 1] // Biggest one
 
     if (!avatar) return ''
-    if (avatar.url) return avatar.url
 
-    const absoluteAPIUrl = getAbsoluteAPIUrl()
-
-    return absoluteAPIUrl + avatar.path
+    return avatar.fileUrl
   }
 
   static CREATE_BY_STRING (accountName: string, host: string, forceHostname = false) {
-    const thisHost = getAPIHost()
+    const thisHost = getBackendHost()
 
     if (host.trim() === thisHost && !forceHostname) return accountName
 
@@ -41,7 +38,7 @@ export abstract class Actor implements ServerActor {
   }
 
   static IS_LOCAL (host: string) {
-    const thisHost = getAPIHost()
+    const thisHost = getBackendHost()
 
     return host.trim() === thisHost
   }

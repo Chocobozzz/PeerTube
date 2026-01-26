@@ -1,0 +1,53 @@
+<ng-template #modal>
+  <ng-container [formGroup]="form">
+
+    <div class="modal-header">
+      <h4 i18n class="modal-title">Add caption</h4>
+
+      <button class="border-0 p-0" title="Close this modal" i18n-title (click)="hide()">
+        <my-global-icon iconName="cross"></my-global-icon>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <label i18n for="language">Language</label>
+
+      <my-select-options
+        inputId="language" [items]="videoCaptionLanguages" formControlName="language"
+        clearable="true" filter="true" virtualScroll="true"
+      ></my-select-options>
+
+      @if (formErrors.language) {
+        <div class="form-error" role="alert">
+          {{ formErrors.language }}
+        </div>
+      }
+
+      <div class="caption-file">
+        <my-reactive-file
+          formControlName="captionfile" inputName="captionfile" i18n-inputLabel inputLabel="Select the caption file"
+          [extensions]="videoCaptionExtensions" [maxFileSize]="videoCaptionMaxSize" [displayFilename]="true"
+          [buttonTooltip]="getReactiveFileButtonTooltip()"
+        ></my-reactive-file>
+      </div>
+
+      @if (isReplacingExistingCaption()) {
+        <div class="warning-replace-caption" i18n>
+        This will replace an existing caption!
+      </div>
+      }
+    </div>
+
+    <div class="modal-footer inputs">
+      <input
+        type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button"
+        (click)="hide()" (key.enter)="hide()"
+        >
+
+      <input
+        type="submit" i18n-value value="Add this caption" class="peertube-button primary-button"
+        [disabled]="!form.valid" (click)="addCaption()"
+        >
+    </div>
+  </ng-container>
+</ng-template>

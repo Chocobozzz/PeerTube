@@ -1,6 +1,6 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_form-mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
 
 my-timestamp-input {
   width: 100px;
@@ -8,7 +8,8 @@ my-timestamp-input {
 
 .header,
 .dropdown-item,
-.input-container {
+.input-container,
+.new-playlist-block {
   padding: 8px 24px;
 }
 
@@ -146,6 +147,6 @@ my-timestamp-input {
   }
 }
 
-input[type=text] {
+input[type="text"] {
   @include peertube-input-text(200px);
 }

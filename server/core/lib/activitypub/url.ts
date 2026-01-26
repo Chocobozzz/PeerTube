@@ -6,14 +6,14 @@ import {
   MActorFollow,
   MActorId,
   MActorUrl,
-  MCommentId, MLocalVideoViewer,
+  MCommentId,
+  MLocalVideoViewer,
   MVideoId,
   MVideoPlaylistElement,
   MVideoUUID,
   MVideoUrl,
   MVideoWithHost
 } from '../../types/models/index.js'
-import { MVideoFileVideoUUID } from '../../types/models/video/video-file.js'
 import { MVideoPlaylist, MVideoPlaylistUUID } from '../../types/models/video/video-playlist.js'
 import { MStreamingPlaylist } from '../../types/models/video/video-streaming-playlist.js'
 
@@ -29,12 +29,6 @@ export function getLocalVideoPlaylistElementActivityPubUrl (playlist: MVideoPlay
   return WEBSERVER.URL + '/video-playlists/' + playlist.uuid + '/videos/' + element.id
 }
 
-export function getLocalVideoCacheFileActivityPubUrl (videoFile: MVideoFileVideoUUID) {
-  const suffixFPS = videoFile.fps && videoFile.fps !== -1 ? '-' + videoFile.fps : ''
-
-  return `${WEBSERVER.URL}/redundancy/videos/${videoFile.Video.uuid}/${videoFile.resolution}${suffixFPS}`
-}
-
 export function getLocalVideoCacheStreamingPlaylistActivityPubUrl (video: MVideoUUID, playlist: MStreamingPlaylist) {
   return `${WEBSERVER.URL}/redundancy/streaming-playlists/${playlist.getStringType()}/${video.uuid}`
 }
@@ -45,6 +39,10 @@ export function getLocalVideoCommentActivityPubUrl (video: MVideoUUID, videoComm
 
 export function getLocalVideoChannelActivityPubUrl (videoChannelName: string) {
   return WEBSERVER.URL + '/video-channels/' + videoChannelName
+}
+
+export function getLocalChannelPlayerSettingsActivityPubUrl (videoChannelName: string) {
+  return WEBSERVER.URL + '/video-channels/' + videoChannelName + '/player-settings'
 }
 
 export function getLocalAccountActivityPubUrl (accountName: string) {
@@ -83,6 +81,10 @@ export function getLocalVideoChaptersActivityPubUrl (video: MVideoUrl) {
   return video.url + '/chapters'
 }
 
+export function getLocalVideoPlayerSettingsActivityPubUrl (video: MVideoUrl) {
+  return video.url + '/player-settings'
+}
+
 export function getLocalVideoLikesActivityPubUrl (video: MVideoUrl) {
   return video.url + '/likes'
 }
@@ -117,6 +119,10 @@ export function getUpdateActivityPubUrl (originalUrl: string, updatedAt: string)
 
 export function getUndoActivityPubUrl (originalUrl: string) {
   return originalUrl + '/undo'
+}
+
+export function getLocalActorPlayerSettingsActivityPubUrl (actor: MActorUrl) {
+  return actor.url + '/player-settings'
 }
 
 export function getLocalApproveReplyActivityPubUrl (video: MVideoUUID, comment: MCommentId) {

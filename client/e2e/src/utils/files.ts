@@ -1,17 +1,13 @@
-import { mkdirSync } from 'fs'
-import { join } from 'path'
+import { mkdir, rm } from 'node:fs/promises'
+import { join } from 'node:path'
 
 const SCREENSHOTS_DIRECTORY = 'screenshots'
 
-function createScreenshotsDirectory () {
-  mkdirSync(SCREENSHOTS_DIRECTORY, { recursive: true })
+export async function createScreenshotsDirectory () {
+  await rm(SCREENSHOTS_DIRECTORY, { recursive: true, force: true })
+  await mkdir(SCREENSHOTS_DIRECTORY, { recursive: true })
 }
 
-function getScreenshotPath (filename: string) {
+export function getScreenshotPath (filename: string) {
   return join(SCREENSHOTS_DIRECTORY, filename)
-}
-
-export {
-  createScreenshotsDirectory,
-  getScreenshotPath
 }

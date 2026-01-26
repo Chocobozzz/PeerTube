@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { io } from 'socket.io-client'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { wait } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, UserNotificationSetting, UserNotificationSettingValue } from '@peertube/peertube-models'
+import { HttpStatusCode, UserNotificationSetting, UserNotificationSettingValue, UserNotificationType } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createSingleServer,
@@ -39,18 +39,18 @@ describe('Test user notifications API validators', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, path, server.accessToken)
+      await checkBadSort(server.url, path, server.accessToken)
     })
 
-    it('Should fail with an incorrect unread parameter', async function () {
+    it('Should fail with an incorrect typeOneOf parameter', async function () {
       await makeGetRequest({
         url: server.url,
         path,
         query: {
-          unread: 'toto'
+          typeOneOf: 'toto'
         },
         token: server.accessToken,
-        expectedStatus: HttpStatusCode.OK_200
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -66,6 +66,9 @@ describe('Test user notifications API validators', function () {
       await makeGetRequest({
         url: server.url,
         path,
+        query: {
+          typeOneOf: [ UserNotificationType.ABUSE_NEW_MESSAGE ]
+        },
         token: server.accessToken,
         expectedStatus: HttpStatusCode.OK_200
       })
@@ -90,7 +93,7 @@ describe('Test user notifications API validators', function () {
         url: server.url,
         path,
         fields: {
-          ids: [ ]
+          ids: []
         },
         token: server.accessToken,
         expectedStatus: HttpStatusCode.BAD_REQUEST_400
@@ -232,7 +235,6 @@ describe('Test user notifications API validators', function () {
   })
 
   describe('When connecting to my notification socket', function () {
-
     it('Should fail with no token', function (next) {
       const socket = io(`${server.url}/user-notifications`, { reconnection: false })
 
@@ -264,7 +266,7 @@ describe('Test user notifications API validators', function () {
       })
     })
 
-    it('Should success with the correct token', function (next) {
+    it('Should succeed with the correct token', function (next) {
       const socket = io(`${server.url}/user-notifications`, {
         query: { accessToken: server.accessToken },
         reconnection: false

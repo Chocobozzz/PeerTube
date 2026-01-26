@@ -3,7 +3,9 @@
 import { UserNotification, UserNotificationType, VideoCommentPolicy } from '@peertube/peertube-models'
 import { PeerTubeServer, cleanupTests, setDefaultAccountAvatar, waitJobs } from '@peertube/peertube-server-commands'
 import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
-import { CheckerBaseParams, checkCommentMention, checkNewCommentOnMyVideo, prepareNotificationsTest } from '@tests/shared/notifications.js'
+import { checkCommentMention, checkNewCommentOnMyVideo } from '@tests/shared/notifications/check-comment-notifications.js'
+import { prepareNotificationsTest } from '@tests/shared/notifications/notifications-common.js'
+import { CheckerBaseParams } from '@tests/shared/notifications/shared/notification-checker.js'
 import { expect } from 'chai'
 
 describe('Test comments notifications', function () {
@@ -15,7 +17,7 @@ describe('Test comments notifications', function () {
 
   const commentText = '**hello** <a href="https://joinpeertube.org">world</a>, <h1>what do you think about peertube?</h1>'
   const expectedHtml = '<strong>hello</strong> <a href="https://joinpeertube.org" target="_blank" rel="noopener noreferrer">world</a>' +
-                       ', </p>what do you think about peertube?'
+    ', </p>what do you think about peertube?'
 
   before(async function () {
     this.timeout(120000)
@@ -161,10 +163,17 @@ describe('Test comments notifications', function () {
       let localCommentId: number
       {
         const created = await servers[0].comments.createThread({ videoId: uuid, text: 'local approval', token: userToken2 })
-        const commentId = localCommentId = created.id
+        localCommentId = created.id
 
         await waitJobs(servers)
-        await checkNewCommentOnMyVideo({ ...baseParams, shortUUID, threadId: commentId, commentId, checkType: 'presence', approval: true })
+        await checkNewCommentOnMyVideo({
+          ...baseParams,
+          shortUUID,
+          threadId: localCommentId,
+          commentId: localCommentId,
+          checkType: 'presence',
+          approval: true
+        })
       }
 
       {
@@ -392,7 +401,7 @@ describe('Test comments notifications', function () {
   })
 
   after(async function () {
-    MockSmtpServer.Instance.kill()
+    await MockSmtpServer.Instance.kill()
 
     await cleanupTests(servers)
   })

@@ -3,12 +3,10 @@ import { VideoResolution } from '@peertube/peertube-models'
 import ffmpeg, { FfprobeData } from 'fluent-ffmpeg'
 
 /**
- *
  * Helpers to run ffprobe and extract data from the JSON output
- *
  */
 
-function ffprobePromise (path: string) {
+export function ffprobePromise (path: string) {
   return new Promise<FfprobeData>((res, rej) => {
     ffmpeg.ffprobe(path, [ '-show_chapters' ], (err, data) => {
       if (err) return rej(err)
@@ -23,12 +21,48 @@ function ffprobePromise (path: string) {
 // ---------------------------------------------------------------------------
 
 const imageCodecs = new Set([
-  'ansi', 'apng', 'bintext', 'bmp', 'brender_pix', 'dpx', 'exr', 'fits', 'gem', 'gif', 'jpeg2000', 'jpgls', 'mjpeg', 'mjpegb', 'msp2',
-  'pam', 'pbm', 'pcx', 'pfm', 'pgm', 'pgmyuv', 'pgx', 'photocd', 'pictor', 'png', 'ppm', 'psd', 'sgi', 'sunrast', 'svg', 'targa', 'tiff',
-  'txd', 'webp', 'xbin', 'xbm', 'xface', 'xpm', 'xwd'
+  'ansi',
+  'apng',
+  'bintext',
+  'bmp',
+  'brender_pix',
+  'dpx',
+  'exr',
+  'fits',
+  'gem',
+  'gif',
+  'jpeg2000',
+  'jpgls',
+  'mjpeg',
+  'mjpegb',
+  'msp2',
+  'pam',
+  'pbm',
+  'pcx',
+  'pfm',
+  'pgm',
+  'pgmyuv',
+  'pgx',
+  'photocd',
+  'pictor',
+  'png',
+  'ppm',
+  'psd',
+  'sgi',
+  'sunrast',
+  'svg',
+  'targa',
+  'tiff',
+  'txd',
+  'webp',
+  'xbin',
+  'xbm',
+  'xface',
+  'xpm',
+  'xwd'
 ])
 
-async function isAudioFile (path: string, existingProbe?: FfprobeData) {
+export async function isAudioFile (path: string, existingProbe?: FfprobeData) {
   const videoStream = await getVideoStream(path, existingProbe)
   if (!videoStream) return true
 
@@ -37,13 +71,13 @@ async function isAudioFile (path: string, existingProbe?: FfprobeData) {
   return false
 }
 
-async function hasAudioStream (path: string, existingProbe?: FfprobeData) {
+export async function hasAudioStream (path: string, existingProbe?: FfprobeData) {
   const { audioStream } = await getAudioStream(path, existingProbe)
 
   return !!audioStream
 }
 
-async function getAudioStream (videoPath: string, existingProbe?: FfprobeData) {
+export async function getAudioStream (videoPath: string, existingProbe?: FfprobeData) {
   const data = existingProbe || await ffprobePromise(videoPath)
 
   if (Array.isArray(data.streams)) {
@@ -61,45 +95,34 @@ async function getAudioStream (videoPath: string, existingProbe?: FfprobeData) {
   return { absolutePath: data.format.filename }
 }
 
-function getMaxAudioBitrate (type: 'aac' | 'mp3' | string, bitrate: number) {
+export function getMaxAudioKBitrate (type: string, bitrate: number) {
   const maxKBitrate = 384
-  const kToBits = (kbits: number) => kbits * 1000
 
   // If we did not manage to get the bitrate, use an average value
-  if (!bitrate) return 256
+  if (!bitrate) {
+    // We expect uploader wants a high quality audio if the input is in FLAC format
+    if (type === 'flac') return maxKBitrate
+
+    return 256
+  }
+
+  const kBitrate = Math.round(bitrate / 1000)
 
   if (type === 'aac') {
-    switch (true) {
-      case bitrate > kToBits(maxKBitrate):
-        return maxKBitrate
+    if (kBitrate > maxKBitrate) return maxKBitrate
 
-      default:
-        return -1 // we interpret it as a signal to copy the audio stream as is
-    }
+    // We interpret it as a signal to copy the audio stream as is
+    return -1
   }
 
-  /*
-    a 192kbit/sec mp3 doesn't hold as much information as a 192kbit/sec aac.
-    That's why, when using aac, we can go to lower kbit/sec. The equivalences
-    made here are not made to be accurate, especially with good mp3 encoders.
-    */
-  switch (true) {
-    case bitrate <= kToBits(192):
-      return 128
-
-    case bitrate <= kToBits(384):
-      return 256
-
-    default:
-      return maxKBitrate
-  }
+  return Math.min(maxKBitrate, kBitrate)
 }
 
 // ---------------------------------------------------------------------------
 // Video
 // ---------------------------------------------------------------------------
 
-async function getVideoStreamDimensionsInfo (path: string, existingProbe?: FfprobeData) {
+export async function getVideoStreamDimensionsInfo (path: string, existingProbe?: FfprobeData) {
   const videoStream = await getVideoStream(path, existingProbe)
   if (!videoStream) {
     return {
@@ -130,7 +153,7 @@ async function getVideoStreamDimensionsInfo (path: string, existingProbe?: Ffpro
   }
 }
 
-async function getVideoStreamFPS (path: string, existingProbe?: FfprobeData) {
+export async function getVideoStreamFPS (path: string, existingProbe?: FfprobeData) {
   const videoStream = await getVideoStream(path, existingProbe)
   if (!videoStream) return 0
 
@@ -148,7 +171,7 @@ async function getVideoStreamFPS (path: string, existingProbe?: FfprobeData) {
   return 0
 }
 
-async function getVideoStreamBitrate (path: string, existingProbe?: FfprobeData): Promise<number> {
+export async function getVideoStreamBitrate (path: string, existingProbe?: FfprobeData): Promise<number> {
   const metadata = existingProbe || await ffprobePromise(path)
 
   let bitrate = metadata.format.bit_rate
@@ -163,19 +186,19 @@ async function getVideoStreamBitrate (path: string, existingProbe?: FfprobeData)
   return undefined
 }
 
-async function getVideoStreamDuration (path: string, existingProbe?: FfprobeData) {
+export async function getVideoStreamDuration (path: string, existingProbe?: FfprobeData) {
   const metadata = existingProbe || await ffprobePromise(path)
 
   return Math.round(metadata.format.duration)
 }
 
-async function getVideoStream (path: string, existingProbe?: FfprobeData) {
+export async function getVideoStream (path: string, existingProbe?: FfprobeData) {
   const metadata = existingProbe || await ffprobePromise(path)
 
   return metadata.streams.find(s => s.codec_type === 'video')
 }
 
-async function hasVideoStream (path: string, existingProbe?: FfprobeData) {
+export async function hasVideoStream (path: string, existingProbe?: FfprobeData) {
   const videoStream = await getVideoStream(path, existingProbe)
 
   return !!videoStream
@@ -185,7 +208,7 @@ async function hasVideoStream (path: string, existingProbe?: FfprobeData) {
 // Chapters
 // ---------------------------------------------------------------------------
 
-async function getChaptersFromContainer (options: {
+export async function getChaptersFromContainer (options: {
   path: string
   maxTitleLength: number
   ffprobe?: FfprobeData
@@ -201,24 +224,4 @@ async function getChaptersFromContainer (options: {
       timecode: Math.round(c.start_time),
       title: (c['TAG:title'] || '').slice(0, maxTitleLength)
     }))
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  ffprobePromise,
-  getAudioStream,
-  getChaptersFromContainer,
-
-  getMaxAudioBitrate,
-
-  getVideoStream,
-  getVideoStreamBitrate,
-  getVideoStreamDimensionsInfo,
-  getVideoStreamDuration,
-  getVideoStreamFPS,
-  hasAudioStream,
-
-  hasVideoStream,
-  isAudioFile
 }

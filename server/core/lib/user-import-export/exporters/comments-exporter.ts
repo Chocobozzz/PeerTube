@@ -1,13 +1,12 @@
-import { AbstractUserExporter } from './abstract-user-exporter.js'
-import { MCommentExport } from '@server/types/models/index.js'
 import { CommentsExportJSON, VideoCommentObject } from '@peertube/peertube-models'
-import { VideoCommentModel } from '@server/models/video/video-comment.js'
-import Bluebird from 'bluebird'
-import { audiencify, getAudience } from '@server/lib/activitypub/audience.js'
+import { audiencify, getPublicAudience } from '@server/lib/activitypub/audience.js'
 import { buildCreateActivity } from '@server/lib/activitypub/send/send-create.js'
+import { VideoCommentModel } from '@server/models/video/video-comment.js'
+import { MCommentExport } from '@server/types/models/index.js'
+import Bluebird from 'bluebird'
+import { AbstractUserExporter } from './abstract-user-exporter.js'
 
-export class CommentsExporter extends AbstractUserExporter <CommentsExportJSON> {
-
+export class CommentsExporter extends AbstractUserExporter<CommentsExportJSON> {
   async export () {
     const comments = await VideoCommentModel.listForExport(this.user.Account.id)
 
@@ -39,8 +38,7 @@ export class CommentsExporter extends AbstractUserExporter <CommentsExportJSON> 
       const threadParentComments = await VideoCommentModel.listThreadParentComments({ comment })
       let commentObject = comment.toActivityPubObject(threadParentComments) as VideoCommentObject
 
-      const isPublic = true // Comments are always public
-      const audience = getAudience(comment.Account.Actor, isPublic)
+      const audience = getPublicAudience(comment.Account.Actor)
 
       commentObject = audiencify(commentObject, audience)
 

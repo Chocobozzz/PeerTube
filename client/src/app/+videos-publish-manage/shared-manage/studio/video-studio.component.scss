@@ -1,0 +1,100 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+my-timestamp-input {
+  display: block;
+  width: 100px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
+
+  @include rfs(3rem, column-gap);
+  @include rfs(2rem, row-gap);
+
+  form {
+    grid-column: 1;
+    grid-row: 1 / 3;
+  }
+
+  .embed-container {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .tasks-container {
+    grid-column: 2;
+    grid-row: 2;
+  }
+}
+
+@include on-small-main-col {
+  .grid-container {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto 1fr;
+
+    form {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .embed-container {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .tasks-container {
+      grid-column: 1;
+      grid-row: 3;
+    }
+  }
+}
+
+h3 {
+  font-weight: $font-bold;
+  font-size: 16px;
+  padding: 0 5px;
+  width: fit-content;
+  margin-top: 0.5rem;
+}
+
+.section {
+  $min-width: 600px;
+
+  min-width: $min-width;
+  margin-bottom: 50px;
+  border: 1px solid transparent;
+  background: pvar(--bg-secondary-400);
+  border-radius: 5px;
+  width: fit-content;
+
+  @include padding-left(10px);
+
+  .form-group,
+  .description {
+    @include margin-left(5px);
+  }
+
+  .description {
+    color: pvar(--fg-300);
+    margin-top: 5px;
+    margin-bottom: 15px;
+  }
+
+  @media screen and (max-width: $min-width) {
+    min-width: 100%;
+  }
+}
+
+my-embed {
+  display: block;
+  max-width: 500px;
+  width: 100%;
+}
+
+my-reactive-file {
+  display: block;
+  width: fit-content;
+}

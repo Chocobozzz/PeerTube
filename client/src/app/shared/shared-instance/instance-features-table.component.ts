@@ -1,12 +1,10 @@
-import { NgFor, NgIf } from '@angular/common'
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, OnInit, inject, model } from '@angular/core'
 import { ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { ServerConfig, ServerStats } from '@peertube/peertube-models'
 import { of } from 'rxjs'
 import { HelpComponent } from '../shared-main/buttons/help.component'
 import { BytesPipe } from '../shared-main/common/bytes.pipe'
-import { PeerTubeTemplateDirective } from '../shared-main/common/peertube-template.directive'
 import { DaysDurationFormatterPipe } from '../shared-main/date/days-duration-formatter.pipe'
 import { FeatureBooleanComponent } from './feature-boolean.component'
 
@@ -14,72 +12,71 @@ import { FeatureBooleanComponent } from './feature-boolean.component'
   selector: 'my-instance-features-table',
   templateUrl: './instance-features-table.component.html',
   styleUrls: [ './instance-features-table.component.scss' ],
-  standalone: true,
-  imports: [ NgIf, FeatureBooleanComponent, HelpComponent, PeerTubeTemplateDirective, NgFor, BytesPipe ]
+  imports: [ FeatureBooleanComponent, HelpComponent, BytesPipe ]
 })
 export class InstanceFeaturesTableComponent implements OnInit {
-  @Input() serverConfig: ServerConfig
-  @Input() serverStats: ServerStats
+  private serverService = inject(ServerService)
+
+  readonly serverConfig = model<ServerConfig>(undefined)
+  readonly serverStats = model<ServerStats>(undefined)
 
   quotaHelpIndication = ''
 
-  constructor (
-    private serverService: ServerService
-  ) { }
-
   get initialUserVideoQuota () {
-    return this.serverConfig.user.videoQuota
+    return this.serverConfig().user.videoQuota
   }
 
   get dailyUserVideoQuota () {
-    return Math.min(this.initialUserVideoQuota, this.serverConfig.user.videoQuotaDaily)
+    return Math.min(this.initialUserVideoQuota, this.serverConfig().user.videoQuotaDaily)
   }
 
   get maxInstanceLives () {
-    const value = this.serverConfig.live.maxInstanceLives
+    const value = this.serverConfig().live.maxInstanceLives
     if (value === -1) return $localize`Unlimited`
 
     return value
   }
 
   get maxUserLives () {
-    const value = this.serverConfig.live.maxUserLives
+    const value = this.serverConfig().live.maxUserLives
     if (value === -1) return $localize`Unlimited`
 
     return value
   }
 
   ngOnInit () {
-    const serverConfigObs = this.serverConfig
-      ? of(this.serverConfig)
+    const serverConfig = this.serverConfig()
+    const serverConfigObs = serverConfig
+      ? of(serverConfig)
       : this.serverService.getConfig()
 
     serverConfigObs.subscribe(config => {
-      this.serverConfig = config
+      this.serverConfig.set(config)
 
       this.buildQuotaHelpIndication()
     })
 
-    if (!this.serverStats) {
-      this.serverService.getServerStats().subscribe(stats => this.serverStats = stats)
+    if (!this.serverStats()) {
+      this.serverService.getServerStats().subscribe(stats => this.serverStats.set(stats))
     }
   }
 
   buildNSFWLabel () {
-    const policy = this.serverConfig.instance.defaultNSFWPolicy
+    const policy = this.serverConfig().instance.defaultNSFWPolicy
 
     if (policy === 'do_not_list') return $localize`Hidden`
-    if (policy === 'blur') return $localize`Blurred with confirmation request`
+    if (policy === 'warn') return $localize`Warn users`
+    if (policy === 'blur') return $localize`Warn users and blur thumbnail`
     if (policy === 'display') return $localize`Displayed`
   }
 
   buildRegistrationLabel () {
-    const config = this.serverConfig.signup
+    const config = this.serverConfig().signup
 
     if (config.allowed !== true) return $localize`Disabled`
 
     if (config.requiresApproval === true) {
-      const responseTimeMS = this.serverStats?.averageRegistrationRequestResponseTimeMs
+      const responseTimeMS = this.serverStats()?.averageRegistrationRequestResponseTimeMs
 
       if (!responseTimeMS) {
         return $localize`Requires approval by moderators`

@@ -3,7 +3,7 @@ import { SortMeta } from 'primeng/api'
 import { Observable } from 'rxjs'
 import { catchError } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
 import {
   AbuseCreate,
@@ -20,14 +20,12 @@ import { environment } from '../../../environments/environment'
 
 @Injectable()
 export class AbuseService {
+  private authHttp = inject(HttpClient)
+  private restService = inject(RestService)
+  private restExtractor = inject(RestExtractor)
+
   private static BASE_ABUSE_URL = environment.apiUrl + '/api/v1/abuses'
   private static BASE_MY_ABUSE_URL = environment.apiUrl + '/api/v1/users/me/abuses'
-
-  constructor (
-    private authHttp: HttpClient,
-    private restService: RestService,
-    private restExtractor: RestExtractor
-  ) { }
 
   getAdminAbuses (options: {
     pagination: RestPagination
@@ -98,23 +96,23 @@ export class AbuseService {
     const url = AbuseService.BASE_ABUSE_URL + '/' + abuse.id + '/messages'
 
     return this.authHttp.post(url, { message })
-    .pipe(catchError(res => this.restExtractor.handleError(res)))
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   listAbuseMessages (abuse: UserAbuse) {
     const url = AbuseService.BASE_ABUSE_URL + '/' + abuse.id + '/messages'
 
     return this.authHttp.get<ResultList<AbuseMessage>>(url)
-    .pipe(
-      catchError(res => this.restExtractor.handleError(res))
-    )
+      .pipe(
+        catchError(res => this.restExtractor.handleError(res))
+      )
   }
 
   deleteAbuseMessage (abuse: UserAbuse, abuseMessage: AbuseMessage) {
     const url = AbuseService.BASE_ABUSE_URL + '/' + abuse.id + '/messages/' + abuseMessage.id
 
     return this.authHttp.delete(url)
-    .pipe(catchError(res => this.restExtractor.handleError(res)))
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   getPrefefinedReasons (type: AbuseFilter) {
@@ -132,14 +130,16 @@ export class AbuseService {
       {
         id: 'spamOrMisleading',
         label: $localize`Spam, ad or false news`,
-        // eslint-disable-next-line max-len
-        help: $localize`Contains marketing, spam, purposefully deceitful news, or otherwise misleading thumbnail/text/tags. Please provide reputable sources to report hoaxes.`
+        help:
+          // eslint-disable-next-line max-len
+          $localize`Contains marketing, spam, purposefully deceitful news, or otherwise misleading thumbnail/text/tags. Please provide reputable sources to report hoaxes.`
       },
       {
         id: 'privacy',
         label: $localize`Privacy breach or doxxing`,
-        // eslint-disable-next-line max-len
-        help: $localize`Contains personal information that could be used to track, identify, contact or impersonate someone (e.g. name, address, phone number, email, or credit card details).`
+        help:
+          // eslint-disable-next-line max-len
+          $localize`Contains personal information that could be used to track, identify, contact or impersonate someone (e.g. name, address, phone number, email, or credit card details).`
       },
       {
         id: 'rights',
@@ -149,8 +149,9 @@ export class AbuseService {
       {
         id: 'serverRules',
         label: $localize`Breaks server rules`,
-        // eslint-disable-next-line max-len
-        help: $localize`Anything not included in the above that breaks the terms of service, code of conduct, or general rules in place on the server.`
+        help:
+          // eslint-disable-next-line max-len
+          $localize`Anything not included in the above that breaks the terms of service, code of conduct, or general rules in place on the server.`
       }
     ]
 

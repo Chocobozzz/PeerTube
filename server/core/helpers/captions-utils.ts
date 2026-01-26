@@ -4,8 +4,8 @@ import { Transform } from 'stream'
 import { MVideoCaption } from '@server/types/models/index.js'
 import { pipelinePromise } from './core-utils.js'
 
-async function moveAndProcessCaptionFile (physicalFile: { filename?: string, path: string }, videoCaption: MVideoCaption) {
-  const destination = videoCaption.getFSPath()
+export async function moveAndProcessCaptionFile (physicalFile: { filename?: string, path: string }, videoCaption: MVideoCaption) {
+  const destination = videoCaption.getFSFilePath()
 
   // Convert this srt file to vtt
   if (physicalFile.path.endsWith('.srt')) {
@@ -22,20 +22,14 @@ async function moveAndProcessCaptionFile (physicalFile: { filename?: string, pat
 
 // ---------------------------------------------------------------------------
 
-export {
-  moveAndProcessCaptionFile
-}
-
-// ---------------------------------------------------------------------------
-
 async function convertSrtToVtt (source: string, destination: string) {
   const fixVTT = new Transform({
     transform: (chunk, _encoding, cb) => {
       let block: string = chunk.toString()
 
       block = block.replace(/(\d\d:\d\d:\d\d)(\s)/g, '$1.000$2')
-                   .replace(/(\d\d:\d\d:\d\d),(\d)(\s)/g, '$1.00$2$3')
-                   .replace(/(\d\d:\d\d:\d\d),(\d\d)(\s)/g, '$1.0$2$3')
+        .replace(/(\d\d:\d\d:\d\d),(\d)(\s)/g, '$1.00$2$3')
+        .replace(/(\d\d:\d\d:\d\d),(\d\d)(\s)/g, '$1.0$2$3')
 
       return cb(undefined, block)
     }

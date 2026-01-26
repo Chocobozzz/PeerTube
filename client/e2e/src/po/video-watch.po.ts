@@ -1,24 +1,16 @@
 import { browserSleep, FIXTURE_URLS, go } from '../utils'
 
 export class VideoWatchPage {
-
   constructor (private isMobileDevice: boolean, private isSafari: boolean) {
-
   }
 
-  waitWatchVideoName (videoName: string) {
+  waitWatchVideoName (videoName: string, maxTime?: number) {
     if (this.isSafari) return browserSleep(5000)
 
     // On mobile we display the first node, on desktop the second one
-    const index = this.isMobileDevice ? 0 : 1
-
     return browser.waitUntil(async () => {
-      if (!await $('.video-info .video-info-name').isExisting()) return false
-
-      const elem = await $$('.video-info .video-info-name')[index]
-
-      return (await elem.getText()).includes(videoName) && elem.isDisplayed()
-    })
+      return (await this.getVideoName()) === videoName
+    }, { timeout: maxTime })
   }
 
   getVideoName () {
@@ -48,7 +40,7 @@ export class VideoWatchPage {
   }
 
   isPrivacyWarningDisplayed () {
-    return $('my-privacy-concerns').isDisplayed()
+    return $('.privacy-concerns-text').isDisplayed()
   }
 
   async goOnAssociatedEmbed (passwordProtected = false) {
@@ -82,23 +74,95 @@ export class VideoWatchPage {
     return go(FIXTURE_URLS.HLS_PLAYLIST_EMBED)
   }
 
-  async clickOnUpdate () {
-    await this.clickOnMoreDropdownIcon()
+  getModalTitleEl () {
+    return $('.modal-content .modal-title')
+  }
 
-    const items = await $$('.dropdown-menu.show .dropdown-item')
+  confirmModal () {
+    return $('.modal-content .modal-footer .primary-button').click()
+  }
 
-    for (const item of items) {
-      const href = await item.getAttribute('href')
+  private getVideoNameElement () {
+    return $('.video-info-first-row .video-info-name')
+  }
 
-      if (href?.includes('/update/')) {
-        await item.click()
-        return
+  // ---------------------------------------------------------------------------
+  // Video password
+  // ---------------------------------------------------------------------------
+
+  async fillVideoPassword (videoPassword: string) {
+    const videoPasswordInput = $('input#confirmInput')
+    await videoPasswordInput.waitForClickable()
+    await videoPasswordInput.clearValue()
+    await videoPasswordInput.setValue(videoPassword)
+
+    const confirmButton = $('input[value="Confirm"]')
+    await confirmButton.waitForClickable()
+    return confirmButton.click()
+  }
+
+  // ---------------------------------------------------------------------------
+  // Video actions
+  // ---------------------------------------------------------------------------
+
+  async like () {
+    const likeButton = $('.action-button-like')
+    const isActivated = (await likeButton.getAttribute('class')).includes('activated')
+
+    let count: number
+    try {
+      count = parseInt(await $('.action-button-like > .count').getText())
+    } catch (error) {
+      count = 0
+    }
+
+    await likeButton.waitForClickable()
+    await likeButton.click()
+
+    if (isActivated) {
+      if (count === 1) {
+        return expect(!await $('.action-button-like > .count').isExisting())
+      } else {
+        return expect(parseInt(await $('.action-button-like > .count').getText())).toBe(count - 1)
       }
+    } else {
+      return expect(parseInt(await $('.action-button-like > .count').getText())).toBe(count + 1)
     }
   }
 
-  clickOnSave () {
-    return $('.action-button-save').click()
+  async clickOnManage () {
+    await this.clickOnMoreDropdownIcon()
+
+    // We need the await expression
+    return $$('.dropdown-menu.show .dropdown-item').forEach(async item => {
+      const content = await item.getText()
+
+      if (content.includes('Manage')) {
+        await item.click()
+        await $('#name').waitForClickable()
+        return
+      }
+    })
+  }
+
+  async clickOnMoreDropdownIcon () {
+    const dropdown = $('my-video-actions-dropdown .action-button')
+    await dropdown.scrollIntoView({ block: 'center' })
+    await dropdown.click()
+
+    await $('.dropdown-menu.show .dropdown-item').waitForDisplayed()
+  }
+
+  // ---------------------------------------------------------------------------
+  // Playlists
+  // ---------------------------------------------------------------------------
+
+  async clickOnSave () {
+    const button = $('.action-button-save')
+
+    await button.scrollIntoView({ block: 'center' })
+
+    return button.click()
   }
 
   async createPlaylist (name: string) {
@@ -123,107 +187,41 @@ export class VideoWatchPage {
     return playlist().click()
   }
 
-  waitUntilVideoName (name: string, maxTime: number) {
-    return browser.waitUntil(async () => {
-      return (await this.getVideoName()) === name
-    }, { timeout: maxTime })
-  }
-
-  async clickOnMoreDropdownIcon () {
-    const dropdown = $('my-video-actions-dropdown .action-button')
-    await dropdown.click()
-
-    await $('.dropdown-menu.show .dropdown-item').waitForDisplayed()
-  }
-
-  private async getVideoNameElement () {
-    // We have 2 video info name block, pick the first that is not empty
-    const elem = async () => {
-      const elems = await $$('.video-info-first-row .video-info-name').filter(e => e.isDisplayed())
-
-      return elems[0]
-    }
-
-    await browser.waitUntil(async () => {
-      const e = await elem()
-
-      return e?.isDisplayed()
-    })
-
-    return elem()
-  }
-
-  isPasswordProtected () {
-    return $('#confirmInput').isExisting()
-  }
-
-  async fillVideoPassword (videoPassword: string) {
-    const videoPasswordInput = await $('input#confirmInput')
-    await videoPasswordInput.waitForClickable()
-    await videoPasswordInput.clearValue()
-    await videoPasswordInput.setValue(videoPassword)
-
-    const confirmButton = await $('input[value="Confirm"]')
-    await confirmButton.waitForClickable()
-    return confirmButton.click()
-  }
-
-  async like () {
-    const likeButton = await $('.action-button-like')
-    const isActivated = (await likeButton.getAttribute('class')).includes('activated')
-
-    let count: number
-    try {
-      count = parseInt(await $('.action-button-like > .count').getText())
-    } catch (error) {
-      count = 0
-    }
-
-    await likeButton.waitForClickable()
-    await likeButton.click()
-
-    if (isActivated) {
-      if (count === 1) {
-        return expect(!await $('.action-button-like > .count').isExisting())
-      } else {
-        return expect(parseInt(await $('.action-button-like > .count').getText())).toBe(count - 1)
-      }
-    } else {
-      return expect(parseInt(await $('.action-button-like > .count').getText())).toBe(count + 1)
-    }
-  }
+  // ---------------------------------------------------------------------------
+  // Comments
+  // ---------------------------------------------------------------------------
 
   async createThread (comment: string) {
-    const textarea = await $('my-video-comment-add textarea')
+    const textarea = $('my-video-comment-add textarea')
     await textarea.waitForClickable()
 
     await textarea.setValue(comment)
 
-    const confirmButton = await $('.comment-buttons .primary-button')
+    const confirmButton = $('.comment-buttons .primary-button')
     await confirmButton.waitForClickable()
     await confirmButton.click()
 
-    const createdComment = await (await $('.comment-html p')).getText()
+    const createdComment = await $('.comment-html p').getText()
 
     return expect(createdComment).toBe(comment)
   }
 
   async createReply (comment: string) {
-    const replyButton = await $('button.comment-action-reply')
+    const replyButton = $('button.comment-action-reply')
     await replyButton.waitForClickable()
     await replyButton.scrollIntoView({ block: 'center' })
     await replyButton.click()
 
-    const textarea = await $('my-video-comment my-video-comment-add textarea')
+    const textarea = $('my-video-comment my-video-comment-add textarea')
     await textarea.waitForClickable()
     await textarea.setValue(comment)
 
-    const confirmButton = await $('my-video-comment .comment-buttons .primary-button')
+    const confirmButton = $('my-video-comment .comment-buttons .primary-button')
     await confirmButton.waitForClickable()
     await replyButton.scrollIntoView({ block: 'center' })
     await confirmButton.click()
 
-    const createdComment = await $('.is-child .comment-html p')
+    const createdComment = $('.is-child .comment-html p')
     await createdComment.waitForDisplayed()
 
     return expect(await createdComment.getText()).toBe(comment)

@@ -8,7 +8,7 @@ import {
   cleanupTests,
   createMultipleServers,
   followAll,
-  makeGetRequest,
+  makeRawRequest,
   setAccessTokensToServers,
   setDefaultAccountAvatar,
   setDefaultChannelAvatar,
@@ -17,7 +17,7 @@ import {
 import { dateIsValid, testImageGeneratedByFFmpeg } from '@tests/shared/checks.js'
 import { checkTmpIsEmpty } from '@tests/shared/directories.js'
 import { checkVideoFilesWereRemoved, completeVideoCheck, saveVideoInServers } from '@tests/shared/videos.js'
-import { checkWebTorrentWorks } from '@tests/shared/webtorrent.js'
+import { checkWebTorrentWorks } from '@tests/shared/p2p.js'
 import Bluebird from 'bluebird'
 import { expect } from 'chai'
 import request from 'supertest'
@@ -62,7 +62,6 @@ describe('Test multiple servers', function () {
   })
 
   describe('Should upload the video and propagate on each server', function () {
-
     it('Should upload the video on server 1 and propagate on each server', async function () {
       this.timeout(60000)
 
@@ -137,13 +136,9 @@ describe('Test multiple servers', function () {
           expect(image.createdAt).to.exist
           expect(image.updatedAt).to.exist
           expect(image.width).to.be.above(20).and.below(2000)
-          expect(image.path).to.exist
+          expect(image.fileUrl).to.exist
 
-          await makeGetRequest({
-            url: server.url,
-            path: image.path,
-            expectedStatus: HttpStatusCode.OK_200
-          })
+          await makeRawRequest({ url: image.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
         }
       })
     })
@@ -365,7 +360,6 @@ describe('Test multiple servers', function () {
   })
 
   describe('Local videos listing', function () {
-
     it('Should list only local videos on server 1', async function () {
       const { data, total } = await servers[0].videos.list({ isLocal: true })
 
@@ -396,7 +390,6 @@ describe('Test multiple servers', function () {
   })
 
   describe('All videos listing', function () {
-
     it('Should list and sort by "localVideoFilesSize"', async function () {
       const { data, total } = await servers[2].videos.list({ sort: '-localVideoFilesSize' })
 
@@ -411,7 +404,6 @@ describe('Test multiple servers', function () {
   })
 
   describe('Should seed the uploaded video', function () {
-
     it('Should add the file 1 by asking server 3', async function () {
       this.retries(2)
       this.timeout(30000)
@@ -1029,7 +1021,6 @@ describe('Test multiple servers', function () {
 
       for (const server of servers) {
         const video = await server.videos.get({ id: videoUUID })
-        expect(video.commentsEnabled).to.be.false
         expect(video.commentsPolicy.id).to.equal(VideoCommentPolicy.DISABLED)
         expect(video.commentsPolicy.label).to.equal('Disabled')
         expect(video.downloadEnabled).to.be.false
@@ -1041,7 +1032,6 @@ describe('Test multiple servers', function () {
   })
 
   describe('With minimum parameters', function () {
-
     it('Should upload and propagate the video', async function () {
       this.timeout(240000)
 
@@ -1056,7 +1046,7 @@ describe('Test multiple servers', function () {
         .field('channelId', '1')
 
       await req.attach('videofile', buildAbsoluteFixturePath('video_short.webm'))
-               .expect(HttpStatusCode.OK_200)
+        .expect(HttpStatusCode.OK_200)
 
       await waitJobs(servers)
 
@@ -1123,13 +1113,11 @@ describe('Test multiple servers', function () {
   })
 
   describe('TMP directory', function () {
-
     it('Should have an empty tmp directory', async function () {
       for (const server of servers) {
         await checkTmpIsEmpty(server)
       }
     })
-
   })
 
   after(async function () {

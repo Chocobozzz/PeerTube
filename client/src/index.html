@@ -9,17 +9,6 @@
     <!-- Web Manifest file -->
     <link rel="manifest" href="/manifest.webmanifest?[manifestContentHash]">
 
-    <link rel="icon" type="image/png" href="/client/assets/images/favicon.png?[faviconContentHash]" />
-    <link rel="apple-touch-icon" href="/client/assets/images/icons/icon-144x144.png" sizes="144x144" />
-    <link rel="apple-touch-icon" href="/client/assets/images/icons/icon-192x192.png" sizes="192x192" />
-
-    <!-- logo background-image -->
-    <style type="text/css">
-      .icon-logo {
-        background-image: url(/client/assets/images/logo.svg?[logoContentHash]);
-      }
-    </style>
-
     <!-- base url -->
     <base href="/">
 
@@ -38,7 +27,6 @@
   <body id="custom-css">
 
     <noscript class="alert alert-light">
-      <h1 class="alert-heading">PeerTube</h1>
       <h2 class="mb-3">JavaScript required</h2>
 
       <p>It seems JavaScript is either blocked or disabled in your web browser. We totally get that. However, this page will not work without it.</p>
@@ -56,7 +44,6 @@
     </noscript>
 
     <div id="incompatible-browser" class="alert alert-light" role="alert" style="display: none">
-      <h1 class="alert-heading">PeerTube</h1>
       <h2 class="mb-3">Incompatible browser</h2>
 
       <p>We are sorry but it seems that PeerTube is not compatible with your web browser.</p>
@@ -79,6 +66,15 @@
       }
 
       if (/MSIE|Trident/.test(window.navigator.userAgent) ) {
+        displayIncompatibleBrowser()
+      }
+
+      // BigInt must be supported (for the player to work)
+      try {
+        BigInt(9007199254740991)
+      } catch (err) {
+        console.error('BigInt is not supported on this web browser')
+
         displayIncompatibleBrowser()
       }
     </script>

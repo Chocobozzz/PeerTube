@@ -1,10 +1,10 @@
 import { LoginPage } from '../po/login.po'
-import { VideoUploadPage } from '../po/video-upload.po'
+import { VideoPublishPage } from '../po/video-publish.po'
 import { VideoWatchPage } from '../po/video-watch.po'
-import { getScreenshotPath, go, isMobileDevice, isSafari, waitServerUp } from '../utils'
+import { go, isMobileDevice, isSafari, prepareWebBrowser, waitServerUp } from '../utils'
 
 describe('Custom server defaults', () => {
-  let videoUploadPage: VideoUploadPage
+  let videoPublishPage: VideoPublishPage
   let loginPage: LoginPage
   let videoWatchPage: VideoWatchPage
 
@@ -12,10 +12,10 @@ describe('Custom server defaults', () => {
     await waitServerUp()
 
     loginPage = new LoginPage(isMobileDevice())
-    videoUploadPage = new VideoUploadPage()
+    videoPublishPage = new VideoPublishPage()
     videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
 
-    await browser.maximizeWindow()
+    await prepareWebBrowser({ hidePrivacyConcerns: false })
   })
 
   describe('Publish default values', function () {
@@ -24,10 +24,11 @@ describe('Custom server defaults', () => {
     })
 
     it('Should upload a video with custom default values', async function () {
-      await videoUploadPage.navigateTo()
-      await videoUploadPage.uploadVideo('video.mp4')
-      await videoUploadPage.validSecondUploadStep('video')
+      await videoPublishPage.navigateTo()
+      await videoPublishPage.uploadVideo('video.mp4')
+      await videoPublishPage.validSecondStep('video')
 
+      await videoPublishPage.clickOnWatch()
       await videoWatchPage.waitWatchVideoName('video')
 
       const videoUrl = await browser.getUrl()
@@ -66,11 +67,12 @@ describe('Custom server defaults', () => {
 
     before(async () => {
       await loginPage.loginAsRootUser()
-      await videoUploadPage.navigateTo()
-      await videoUploadPage.uploadVideo('video2.mp4')
-      await videoUploadPage.setAsPublic()
-      await videoUploadPage.validSecondUploadStep('video')
+      await videoPublishPage.navigateTo()
+      await videoPublishPage.uploadVideo('video2.mp4')
+      await videoPublishPage.setAsPublic()
+      await videoPublishPage.validSecondStep('video')
 
+      await videoPublishPage.clickOnWatch()
       await videoWatchPage.waitWatchVideoName('video')
 
       videoUrl = await browser.getUrl()
@@ -89,9 +91,5 @@ describe('Custom server defaults', () => {
 
       await checkP2P(false)
     })
-  })
-
-  after(async () => {
-    await browser.saveScreenshot(getScreenshotPath('after-test.png'))
   })
 })

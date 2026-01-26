@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { ActorImageType, CustomConfig, HttpStatusCode } from '@peertube/peertube-models'
+import { ActorImageType, CustomConfig, HttpStatusCode, LogoType, VideoCommentPolicy, VideoPrivacy } from '@peertube/peertube-models'
 import {
   PeerTubeServer,
   cleanupTests,
@@ -32,9 +32,11 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.instance.hardwareInformation).to.be.empty
   expect(data.instance.serverCountry).to.be.empty
   expect(data.instance.support.text).to.be.empty
+  expect(data.instance.defaultLanguage).to.equal('en')
   expect(data.instance.social.externalLink).to.be.empty
   expect(data.instance.social.blueskyLink).to.be.empty
   expect(data.instance.social.mastodonLink).to.be.empty
+  expect(data.instance.social.xLink).to.be.empty
 
   expect(data.instance.languages).to.have.lengthOf(0)
   expect(data.instance.categories).to.have.lengthOf(0)
@@ -47,7 +49,10 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
 
   expect(data.services.twitter.username).to.equal('@Chocobozzz')
 
+  expect(data.client.header.hideInstanceName).to.be.false
   expect(data.client.videos.miniature.preferAuthorDisplayName).to.be.false
+  expect(data.client.browseVideos.defaultSort).to.equal('-publishedAt')
+  expect(data.client.browseVideos.defaultScope).to.equal('federated')
   expect(data.client.menu.login.redirectOnSingleExternalAuth).to.be.false
 
   expect(data.cache.previews.size).to.equal(1)
@@ -131,6 +136,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
 
   expect(data.followers.instance.enabled).to.be.true
   expect(data.followers.instance.manualApproval).to.be.false
+  expect(data.followers.channels.enabled).to.be.true
 
   expect(data.followings.instance.autoFollowBack.enabled).to.be.false
   expect(data.followings.instance.autoFollowIndex.enabled).to.be.false
@@ -146,6 +152,20 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.export.users.enabled).to.be.true
   expect(data.export.users.exportExpiration).to.equal(1000 * 3600 * 48)
   expect(data.export.users.maxUserVideoQuota).to.equal(10737418240)
+
+  expect(data.defaults.publish.commentsPolicy).to.equal(VideoCommentPolicy.ENABLED)
+  expect(data.defaults.publish.downloadEnabled).to.be.true
+  expect(data.defaults.publish.licence).to.be.null
+  expect(data.defaults.publish.privacy).to.equal(VideoPrivacy.PUBLIC)
+  expect(data.defaults.p2p.embed.enabled).to.be.true
+  expect(data.defaults.p2p.webapp.enabled).to.be.true
+  expect(data.defaults.player.theme).to.equal('galaxy')
+  expect(data.defaults.player.autoPlay).to.be.true
+
+  expect(data.email.body.signature).to.equal('')
+  expect(data.email.subject.prefix).to.equal('[{{instanceName}}] ')
+
+  expect(data.videoComments.acceptRemoteComments).to.be.true
 }
 
 function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
@@ -168,16 +188,18 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       categories: [ 1, 2 ],
 
       isNSFW: true,
-      defaultNSFWPolicy: 'blur' as 'blur',
+      defaultNSFWPolicy: 'warn' as 'warn',
 
       serverCountry: 'France',
       support: {
         text: 'My support text'
       },
+      defaultLanguage: 'fr',
       social: {
         externalLink: 'https://joinpeertube.org/',
         mastodonLink: 'https://framapiaf.org/@peertube',
-        blueskyLink: 'https://bsky.app/profile/joinpeertube.org'
+        blueskyLink: 'https://bsky.app/profile/joinpeertube.org',
+        xLink: 'https://x.org/@joinpeertube'
       },
 
       defaultClientRoute: '/videos/recently-added',
@@ -188,7 +210,19 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       }
     },
     theme: {
-      default: 'default'
+      default: 'default',
+      customization: {
+        primaryColor: '#001',
+        foregroundColor: '#002',
+        backgroundColor: '#003',
+        backgroundSecondaryColor: '#004',
+        menuForegroundColor: '#005',
+        menuBackgroundColor: '#006',
+        menuBorderRadius: '1px',
+        headerForegroundColor: '#008',
+        headerBackgroundColor: '#009',
+        inputBorderRadius: '2px'
+      }
     },
     services: {
       twitter: {
@@ -196,10 +230,17 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       }
     },
     client: {
+      header: {
+        hideInstanceName: true
+      },
       videos: {
         miniature: {
           preferAuthorDisplayName: true
         }
+      },
+      browseVideos: {
+        defaultSort: '-trending',
+        defaultScope: 'local'
       },
       menu: {
         login: {
@@ -370,6 +411,9 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       instance: {
         enabled: false,
         manualApproval: true
+      },
+      channels: {
+        enabled: false
       }
     },
     followings: {
@@ -402,7 +446,10 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       }
     },
     storyboards: {
-      enabled: false
+      enabled: false,
+      remoteRunners: {
+        enabled: true
+      }
     },
     export: {
       users: {
@@ -410,6 +457,37 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
         exportExpiration: 43,
         maxUserVideoQuota: 42
       }
+    },
+    defaults: {
+      publish: {
+        commentsPolicy: VideoCommentPolicy.REQUIRES_APPROVAL,
+        downloadEnabled: false,
+        licence: 2,
+        privacy: VideoPrivacy.INTERNAL
+      },
+      p2p: {
+        embed: {
+          enabled: false
+        },
+        webapp: {
+          enabled: true
+        }
+      },
+      player: {
+        autoPlay: false,
+        theme: 'lucide'
+      }
+    },
+    email: {
+      body: {
+        signature: 'my signature'
+      },
+      subject: {
+        prefix: 'my prefix'
+      }
+    },
+    videoComments: {
+      acceptRemoteComments: false
     }
   }
 }
@@ -450,7 +528,6 @@ describe('Test config', function () {
   })
 
   describe('Config keys', function () {
-
     it('Should have the correct default config', async function () {
       const data = await server.config.getConfig()
 
@@ -460,10 +537,7 @@ describe('Test config', function () {
       expect(data.views.videos.watchingInterval.anonymous).to.equal(5000)
       expect(data.views.videos.watchingInterval.users).to.equal(5000)
 
-      expect(data.webrtc.stunServers).to.have.members([
-        'stun:stunserver2024.stunprotocol.org',
-        'stun:stun.framasoft.org'
-      ])
+      expect(data.webrtc.stunServers).to.include('stun:stun.framasoft.org')
     })
 
     it('Should have a correct config on a server with registration enabled', async function () {
@@ -612,7 +686,6 @@ describe('Test config', function () {
   })
 
   describe('Image files', function () {
-
     async function checkAndGetServerImages () {
       const { instance } = await server.config.getAbout()
       const htmlConfig = await server.config.getConfig()
@@ -624,7 +697,7 @@ describe('Test config', function () {
     }
 
     describe('Banner', function () {
-      const bannerPaths: string[] = []
+      const bannerUrls: string[] = []
 
       it('Should update instance banner', async function () {
         await server.config.updateInstanceImage({ type: ActorImageType.BANNER, fixture: 'banner.jpg' })
@@ -634,10 +707,10 @@ describe('Test config', function () {
         expect(banners).to.have.lengthOf(2)
 
         for (const banner of banners) {
-          await testImage(server.url, `banner-resized-${banner.width}`, banner.path)
-          await testFileExistsOnFSOrNot(server, 'avatars', basename(banner.path), true)
+          await testImage({ url: banner.fileUrl, name: `banner-resized-${banner.width}.jpg` })
+          await testFileExistsOnFSOrNot(server, 'avatars', basename(banner.fileUrl), true)
 
-          bannerPaths.push(banner.path)
+          bannerUrls.push(banner.fileUrl)
         }
       })
 
@@ -651,14 +724,14 @@ describe('Test config', function () {
         const { banners } = await checkAndGetServerImages()
         expect(banners).to.have.lengthOf(0)
 
-        for (const bannerPath of bannerPaths) {
-          await testFileExistsOnFSOrNot(server, 'avatars', basename(bannerPath), false)
+        for (const bannerUrl of bannerUrls) {
+          await testFileExistsOnFSOrNot(server, 'avatars', basename(bannerUrl), false)
         }
       })
     })
 
     describe('Avatar', function () {
-      const avatarPaths: string[] = []
+      const avatarUrls: string[] = []
 
       it('Should update instance avatar', async function () {
         for (const extension of [ '.png', '.gif' ]) {
@@ -670,9 +743,9 @@ describe('Test config', function () {
 
           for (const avatar of avatars) {
             await testAvatarSize({ url: server.url, avatar, imageName: `avatar-resized-${avatar.width}x${avatar.width}` })
-            await testFileExistsOnFSOrNot(server, 'avatars', basename(avatar.path), true)
+            await testFileExistsOnFSOrNot(server, 'avatars', basename(avatar.fileUrl), true)
 
-            avatarPaths.push(avatar.path)
+            avatarUrls.push(avatar.fileUrl)
           }
         }
       })
@@ -694,8 +767,8 @@ describe('Test config', function () {
         const { avatars } = await checkAndGetServerImages()
         expect(avatars).to.have.lengthOf(0)
 
-        for (const avatarPath of avatarPaths) {
-          await testFileExistsOnFSOrNot(server, 'avatars', basename(avatarPath), false)
+        for (const avatarUrl of avatarUrls) {
+          await testFileExistsOnFSOrNot(server, 'avatars', basename(avatarUrl), false)
         }
       })
 
@@ -706,6 +779,305 @@ describe('Test config', function () {
         expect(object.icon).to.not.exist
       })
     })
+
+    describe('Logos', function () {
+      describe('Favicon', function () {
+        const logoPaths: string[] = []
+
+        it('Should update instance favicon', async function () {
+          for (const extension of [ '.png', '.gif' ]) {
+            const fixture = 'avatar' + extension
+
+            await server.config.updateInstanceLogo({ type: 'favicon', fixture })
+
+            const htmlConfig = await server.config.getConfig()
+
+            const favicons = htmlConfig.instance.logo.filter(l => l.type === 'favicon')
+            expect(favicons).to.have.lengthOf(1)
+            expect(favicons[0].width).to.equal(32)
+            expect(favicons[0].height).to.equal(32)
+            expect(favicons[0].isFallback).to.be.false
+            expect(favicons[0].type).to.equal('favicon')
+
+            logoPaths.push(favicons[0].fileUrl)
+
+            await makeRawRequest({ url: favicons[0].fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+            await testFileExistsOnFSOrNot(server, 'uploads/images', basename(favicons[0].fileUrl), true)
+          }
+        })
+
+        it('Should remove instance favicon', async function () {
+          await server.config.deleteInstanceLogo({ type: 'favicon' })
+
+          const htmlConfig = await server.config.getConfig()
+
+          const favicons = htmlConfig.instance.logo.filter(l => l.type === 'favicon')
+          expect(favicons).to.have.lengthOf(1)
+          expect(favicons[0].width).to.equal(32)
+          expect(favicons[0].height).to.equal(32)
+          expect(favicons[0].isFallback).to.be.true
+          expect(favicons[0].type).to.equal('favicon')
+
+          await makeRawRequest({ url: favicons[0].fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+
+          for (const logoPath of logoPaths) {
+            await testFileExistsOnFSOrNot(server, 'uploads/images', basename(logoPath), false)
+          }
+        })
+      })
+
+      describe('Header square icons', function () {
+        const logoPaths: string[] = []
+
+        it('Should update instance header square icon', async function () {
+          for (const extension of [ '.png', '.gif' ]) {
+            const fixture = 'avatar' + extension
+
+            await server.config.updateInstanceLogo({ type: 'header-square', fixture })
+
+            const htmlConfig = await server.config.getConfig()
+
+            const logos = htmlConfig.instance.logo.filter(l => l.type === 'header-square')
+            expect(logos).to.have.lengthOf(1)
+            expect(logos[0].width).to.equal(48)
+            expect(logos[0].height).to.equal(48)
+            expect(logos[0].isFallback).to.be.false
+            expect(logos[0].type).to.equal('header-square')
+
+            logoPaths.push(logos[0].fileUrl)
+
+            await makeRawRequest({ url: logos[0].fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+            await testFileExistsOnFSOrNot(server, 'uploads/images', basename(logos[0].fileUrl), true)
+          }
+        })
+
+        it('Should remove instance header square icon', async function () {
+          await server.config.deleteInstanceLogo({ type: 'header-square' })
+
+          const htmlConfig = await server.config.getConfig()
+
+          const logos = htmlConfig.instance.logo.filter(l => l.type === 'header-square')
+          expect(logos).to.have.lengthOf(1)
+          expect(logos[0].width).to.equal(34)
+          expect(logos[0].height).to.equal(34)
+          expect(logos[0].isFallback).to.be.true
+          expect(logos[0].type).to.equal('header-square')
+
+          await makeRawRequest({ url: logos[0].fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+
+          for (const logoPath of logoPaths) {
+            await testFileExistsOnFSOrNot(server, 'uploads/images', basename(logoPath), false)
+          }
+        })
+      })
+
+      describe('Header wide icons', function () {
+        const logoPaths: string[] = []
+
+        it('Should update instance header wide icon', async function () {
+          const fixture = 'banner.jpg'
+
+          await server.config.updateInstanceLogo({ type: 'header-wide', fixture })
+
+          const htmlConfig = await server.config.getConfig()
+
+          const logos = htmlConfig.instance.logo.filter(l => l.type === 'header-wide')
+          expect(logos).to.have.lengthOf(1)
+          expect(logos[0].width).to.equal(258)
+          expect(logos[0].height).to.equal(48)
+          expect(logos[0].isFallback).to.be.false
+          expect(logos[0].type).to.equal('header-wide')
+
+          logoPaths.push(logos[0].fileUrl)
+
+          await makeRawRequest({ url: logos[0].fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+          await testFileExistsOnFSOrNot(server, 'uploads/images', basename(logos[0].fileUrl), true)
+        })
+
+        it('Should remove instance header wide icon', async function () {
+          await server.config.deleteInstanceLogo({ type: 'header-wide' })
+
+          const htmlConfig = await server.config.getConfig()
+
+          const logos = htmlConfig.instance.logo.filter(l => l.type === 'header-wide')
+          expect(logos).to.have.lengthOf(1)
+          expect(logos[0].width).to.equal(34)
+          expect(logos[0].height).to.equal(34)
+          expect(logos[0].isFallback).to.be.true
+          expect(logos[0].type).to.equal('header-wide')
+
+          await makeRawRequest({ url: logos[0].fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+
+          for (const logoPath of logoPaths) {
+            await testFileExistsOnFSOrNot(server, 'uploads/images', basename(logoPath), false)
+          }
+        })
+      })
+
+      describe('Opengraph icons', function () {
+        it('Should update instance opengraph icon', async function () {
+          const fixture = 'banner.jpg'
+
+          await server.config.updateInstanceLogo({ type: 'opengraph', fixture })
+
+          const htmlConfig = await server.config.getConfig()
+
+          const logos = htmlConfig.instance.logo.filter(l => l.type === 'opengraph')
+          expect(logos).to.have.lengthOf(1)
+          expect(logos[0].width).to.equal(1200)
+          expect(logos[0].height).to.equal(650)
+          expect(logos[0].isFallback).to.be.false
+          expect(logos[0].type).to.equal('opengraph')
+
+          await makeRawRequest({ url: logos[0].fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+          await testFileExistsOnFSOrNot(server, 'uploads/images', basename(logos[0].fileUrl), true)
+        })
+
+        it('Should remove instance opengraph icon', async function () {
+          await server.config.deleteInstanceLogo({ type: 'opengraph' })
+
+          const htmlConfig = await server.config.getConfig()
+
+          const logos = htmlConfig.instance.logo.filter(l => l.type === 'opengraph')
+          expect(logos).to.have.lengthOf(0)
+        })
+      })
+
+      describe('Default logo', function () {
+        before(async function () {
+          await server.config.updateInstanceImage({ type: ActorImageType.AVATAR, fixture: 'avatar.png' })
+        })
+
+        it('Should default to the avatar logo for the favicon, header icons and opengraph', async function () {
+          const htmlConfig = await server.config.getConfig()
+
+          const types: LogoType[] = [ 'favicon', 'header-square', 'header-wide', 'opengraph' ]
+
+          for (const type of types) {
+            const logos = htmlConfig.instance.logo.filter(l => l.type === type)
+
+            expect(logos).to.have.lengthOf(4)
+            expect(logos[0].width).to.equal(48)
+            expect(logos[0].height).to.equal(48)
+            expect(logos[0].isFallback).to.be.true
+            expect(logos[0].type).to.equal(type)
+
+            await testImage({ url: logos[0].fileUrl, name: `avatar-resized-48x48.png` })
+          }
+        })
+
+        after(async function () {
+          await server.config.deleteInstanceImage({ type: ActorImageType.AVATAR })
+        })
+      })
+    })
+  })
+
+  describe('Manifest', function () {
+    before(async function () {
+      await server.config.updateExistingConfig({
+        newConfig: {
+          instance: {
+            name: 'PeerTube manifest',
+            shortDescription: 'description manifest'
+          }
+        }
+      })
+    })
+
+    it('Should generate the manifest file without avatar', async function () {
+      const { body } = await makeGetRequest({
+        url: server.url,
+        path: '/manifest.webmanifest',
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      expect(body.name).to.equal('PeerTube manifest')
+      expect(body.short_name).to.equal(body.name)
+      expect(body.description).to.equal('description manifest')
+
+      const icon = body.icons.find(f => f.sizes === '192x192')
+      expect(icon).to.exist
+      expect(icon.src).to.equal('/client/assets/images/icons/icon-192x192.png')
+    })
+
+    it('Should generate the manifest with avatar', async function () {
+      await server.config.updateInstanceImage({ type: ActorImageType.AVATAR, fixture: 'avatar.png' })
+
+      const { body } = await makeGetRequest({
+        url: server.url,
+        path: '/manifest.webmanifest',
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      const icon = body.icons.find(f => f.sizes === '48x48')
+      expect(icon).to.exist
+
+      await testImage({ url: server.url + icon.src, name: `avatar-resized-48x48.png` })
+    })
+  })
+
+  after(async function () {
+    await cleanupTests([ server ])
+  })
+})
+
+describe('YAML config', function () {
+  let server: PeerTubeServer
+  let userToken: string
+
+  before(async function () {
+    this.timeout(30000)
+
+    server = await createSingleServer(1, {
+      user: {
+        password_constraints: {
+          min_length: 10
+        }
+      }
+    })
+    await setAccessTokensToServers([ server ])
+  })
+
+  it('Should update the minimum length of a password', async function () {
+    await server.users.create({ username: 'user10', password: 'short', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+
+    await server.users.create({ username: 'user10', password: 's'.repeat(10) })
+  })
+
+  it('Should still be able to login with an old password', async function () {
+  })
+
+  it('Should update the minimum length of a password but still allow to login', async function () {
+    await server.kill()
+
+    await server.run({
+      user: {
+        password_constraints: {
+          min_length: 12
+        }
+      }
+    })
+
+    const res = await server.login.login({ user: { username: 'user10', password: 's'.repeat(10) } })
+    userToken = res.access_token
+  })
+
+  it('Should be able to change the password', async function () {
+    await server.users.updateMe({
+      token: userToken,
+      currentPassword: 's'.repeat(10),
+      password: 'password',
+      expectedStatus: HttpStatusCode.BAD_REQUEST_400
+    })
+
+    await server.users.updateMe({
+      token: userToken,
+      currentPassword: 's'.repeat(10),
+      password: 's'.repeat(12)
+    })
+
+    await server.login.login({ user: { username: 'user10', password: 's'.repeat(12) } })
   })
 
   after(async function () {

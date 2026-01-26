@@ -9,11 +9,7 @@ const bulkRouter = express.Router()
 
 bulkRouter.use(apiRateLimiter)
 
-bulkRouter.post('/remove-comments-of',
-  authenticate,
-  asyncMiddleware(bulkRemoveCommentsOfValidator),
-  asyncMiddleware(bulkRemoveCommentsOf)
-)
+bulkRouter.post('/remove-comments-of', authenticate, asyncMiddleware(bulkRemoveCommentsOfValidator), asyncMiddleware(bulkRemoveCommentsOf))
 
 // ---------------------------------------------------------------------------
 
@@ -28,8 +24,8 @@ async function bulkRemoveCommentsOf (req: express.Request, res: express.Response
   const body = req.body as BulkRemoveCommentsOfBody
   const user = res.locals.oauth.token.User
 
-  const filter = body.scope === 'my-videos'
-    ? { onVideosOfAccount: user.Account }
+  const filter = body.scope === 'my-videos' || body.scope === 'my-videos-and-collaborations'
+    ? { onVideosOfAccount: user.Account, includeCollaborations: body.scope === 'my-videos-and-collaborations' }
     : {}
 
   const comments = await VideoCommentModel.listForBulkDelete(account, filter)

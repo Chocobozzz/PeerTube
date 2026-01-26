@@ -1,0 +1,133 @@
+<h2 class="form-title">
+  <my-global-icon iconName="cog"></my-global-icon>
+
+  <ng-container i18n>General</ng-container>
+</h2>
+
+<form id="channel-manage-form" [formGroup]="form">
+  <div class="pt-two-cols">
+    <div class="title-col">
+      <h3 i18n>IMAGES</h3>
+    </div>
+
+    <div class="content-col">
+      <my-actor-banner-edit
+        previewImage="true"
+        class="d-block mb-4"
+        [bannerUrl]="videoChannelEdit.apiInfo.bannerUrl"
+        (bannerChange)="onBannerChange($event)"
+        (bannerDelete)="onBannerDelete()"
+      ></my-actor-banner-edit>
+
+      <my-actor-avatar-edit
+        class="d-block mb-4"
+        actorType="channel"
+        previewImage="true"
+        [avatars]="videoChannelEdit.apiInfo.avatars"
+        [username]="mode === 'update' && videoChannelEdit.channel.name"
+        [subscribers]="mode === 'update' && videoChannelEdit.apiInfo.followersCount"
+        (avatarChange)="onAvatarChange($event)"
+        (avatarDelete)="onAvatarDelete()"
+      ></my-actor-avatar-edit>
+    </div>
+  </div>
+
+  <div class="pt-two-cols">
+    <div class="title-col">
+      <h3 i18n>INFORMATION</h3>
+    </div>
+
+    <div class="content-col">
+      <div class="form-group" [hidden]="mode !== 'create'">
+        <label i18n for="name">Name</label>
+
+        <div class="input-group">
+          <input
+            type="text"
+            id="name"
+            i18n-placeholder
+            placeholder="Example: my_channel"
+            formControlName="name"
+            [ngClass]="{ 'input-error': formErrors.name }"
+            class="form-control w-auto flex-grow-1 d-block"
+            >
+          <div class="input-group-text">&#64;{{ instanceHost }}</div>
+        </div>
+
+        @if (formErrors.name) {
+          <div class="form-error" role="alert">{{ formErrors.name }}</div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label i18n for="displayName">Display name</label>
+        <input type="text" id="displayName" class="form-control" formControlName="displayName" [ngClass]="{ 'input-error': formErrors.displayName }">
+        @if (formErrors.displayName) {
+          <div class="form-error" role="alert">
+            {{ formErrors.displayName }}
+          </div>
+        }
+      </div>
+
+      <div class="form-group markdown-block">
+        <label i18n for="description">Description</label>
+
+        <my-help helpType="markdownText" supportRelMe="true"></my-help>
+
+        <my-markdown-textarea
+          inputId="description"
+          formControlName="description"
+          markdownType="enhanced"
+          [formError]="formErrors.description"
+          withEmoji="true"
+          withHtml="true"
+        ></my-markdown-textarea>
+      </div>
+
+      <div class="form-group markdown-block">
+        <label i18n for="support">Support</label>
+
+        <div class="form-group-description" i18n>
+          This is text that helps people visiting your channel page <strong>understand how to support you</strong>. You can use <my-markdown-hint
+            helpType="markdownText"
+          >Markdown Language</my-markdown-hint>, including <strong>links to your fundraising tools</strong>.
+        </div>
+
+        <my-markdown-textarea
+          inputId="support"
+          formControlName="support"
+          markdownType="enhanced"
+          [formError]="formErrors.support"
+          withEmoji="true"
+          withHtml="true"
+        ></my-markdown-textarea>
+      </div>
+
+      @if (isBulkUpdateVideosDisplayed()) {
+        <div class="form-group">
+          <my-peertube-checkbox
+            inputName="bulkVideosSupportUpdate"
+            formControlName="bulkVideosSupportUpdate"
+            i18n-labelText
+            labelText="Overwrite support field of all videos of this channel"
+          ></my-peertube-checkbox>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="pt-two-cols">
+    <div class="title-col">
+      <h3 i18n>VIDEOS</h3>
+    </div>
+
+    <div class="content-col">
+      <div class="form-group">
+        <label i18n for="playerTheme">Player Theme</label>
+        <div class="form-group-description" i18n>Only used by the web player</div>
+
+        <my-select-player-theme formControlName="playerTheme" inputId="playerTheme" mode="channel"> </my-select-player-theme>
+      </div>
+    </div>
+  </div>
+</form>

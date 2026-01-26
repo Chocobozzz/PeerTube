@@ -1,8 +1,9 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
 
-.label {
+strong {
   display: inline-block;
   min-width: 100px;
   font-weight: $font-semibold;
+  color: pvar(--fg-300);
 }

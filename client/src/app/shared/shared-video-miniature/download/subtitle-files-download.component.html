@@ -1,21 +1,23 @@
 <ul ngbNav #nav="ngbNav" class="nav-tabs" [(activeId)]="activeNavId">
 
-  <li *ngFor="let caption of getCaptions()" [ngbNavItem]="caption.language.id">
-    <button ngbNavLink>
-      {{ caption.language.label }}
-
-      <ng-container *ngIf="caption.automaticallyGenerated" i18n>(auto-generated)</ng-container>
-    </button>
-
-    <ng-template ngbNavContent>
-      <div class="nav-content">
-        <my-input-text
-          inputId="subtitle-url" i18n-ariaLabel ariaLabel="Subtitle URL"
-          [show]="true" [readonly]="true" [withCopy]="true" [withToggle]="false" [value]="getCaptionLink()"
-        ></my-input-text>
-      </div>
-    </ng-template>
-  </li>
+  @for (caption of getCaptions(); track caption) {
+    <li [ngbNavItem]="caption.language.id">
+      <button ngbNavLink>
+        {{ caption.language.label }}
+        @if (caption.automaticallyGenerated) {
+          <ng-container i18n>(auto-generated)</ng-container>
+        }
+      </button>
+      <ng-template ngbNavContent>
+        <div class="nav-content">
+          <my-input-text
+            inputId="subtitle-url" i18n-ariaLabel ariaLabel="Subtitle URL"
+            [show]="true" [readonly]="true" [withCopy]="true" [withToggle]="false" [value]="getCaptionLink()"
+          ></my-input-text>
+        </div>
+      </ng-template>
+    </li>
+  }
 </ul>
 
 <div [ngbNavOutlet]="nav" class="mt-2"></div>

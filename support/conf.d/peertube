@@ -1,0 +1,6 @@
+BASE_DIR="/var/www/peertube"
+
+directory="${BASE_DIR}/peertube-latest"
+
+export NODE_ENV="production"
+export NODE_CONFIG_DIR="${BASE_DIR}/config"

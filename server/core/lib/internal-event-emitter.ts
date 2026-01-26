@@ -13,18 +13,21 @@ export interface PeerTubeInternalEvents {
   'chapters-updated': (options: { video: MVideoImmutable }) => void
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 declare interface InternalEventEmitter {
   on<U extends keyof PeerTubeInternalEvents>(
-    event: U, listener: PeerTubeInternalEvents[U]
+    event: U,
+    listener: PeerTubeInternalEvents[U]
   ): this
 
   emit<U extends keyof PeerTubeInternalEvents>(
-    event: U, ...args: Parameters<PeerTubeInternalEvents[U]>
+    event: U,
+    ...args: Parameters<PeerTubeInternalEvents[U]>
   ): boolean
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 class InternalEventEmitter extends EventEmitter {
-
   private static instance: InternalEventEmitter
 
   static get Instance () {

@@ -1,7 +1,6 @@
 import { arrayify } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
-  RunnerJobLiveRTMPHLSTranscodingPrivatePayload,
   RunnerJobState,
   RunnerJobStateType,
   RunnerJobSuccessBody,
@@ -20,7 +19,6 @@ import {
 } from '@server/helpers/custom-validators/runners/jobs.js'
 import { isRunnerTokenValid } from '@server/helpers/custom-validators/runners/runners.js'
 import { cleanUpReqFiles } from '@server/helpers/express-utils.js'
-import { LiveManager } from '@server/lib/live/index.js'
 import { runnerJobCanBeCancelled } from '@server/lib/runners/index.js'
 import { RunnerJobModel } from '@server/models/runner/runner-job.js'
 import express from 'express'
@@ -70,21 +68,6 @@ export const updateRunnerJobValidator = [
         message: 'Payload is invalid',
         tags
       })
-    }
-
-    if (res.locals.runnerJob.type === 'live-rtmp-hls-transcoding') {
-      const privatePayload = job.privatePayload as RunnerJobLiveRTMPHLSTranscodingPrivatePayload
-
-      if (!LiveManager.Instance.hasSession(privatePayload.sessionId)) {
-        cleanUpReqFiles(req)
-
-        return res.fail({
-          status: HttpStatusCode.BAD_REQUEST_400,
-          type: ServerErrorCode.RUNNER_JOB_NOT_IN_PROCESSING_STATE,
-          message: 'Session of this live ended',
-          tags
-        })
-      }
     }
 
     return next()

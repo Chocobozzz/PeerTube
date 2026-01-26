@@ -1,0 +1,185 @@
+<div class="root">
+  <div class="message">
+    @switch (a.action.id) {
+      @case (1) { <!-- VideoChannelActivityAction.CREATE) -->
+
+        @switch (a.targetType.id) {
+          @case (1) { <!-- VideoChannelActivityTargetType.VIDEO) -->
+            <ng-container i18n>
+              <strong>{{ account }}</strong> created video <a [routerLink]="[ '/w', a.video.shortUUID ]">{{ a.video.name }}</a>
+            </ng-container>
+          }
+
+          @case (2) { <!-- VideoChannelActivityTargetType.PLAYLIST) -->
+            <ng-container i18n>
+              <strong>{{ account }}</strong> created playlist <a [routerLink]="[ '/my-library/video-playlists/', a.playlist.shortUUID ]">{{ a.playlist.name }}</a>
+            </ng-container>
+          }
+
+          <!-- VideoChannelActivityTargetType.CHANNEL) - Case cannot exist -->
+
+          @case (4) { <!-- VideoChannelActivityTargetType.CHANNEL_SYNC) -->
+            <ng-container i18n>
+              <strong>{{ account }}</strong> created <a routerLink="/my-library/video-channel-syncs">a channel synchronization</a>: {{ a.channelSync.externalChannelUrl }}
+            </ng-container>
+          }
+
+          @case (5) { <!-- VideoChannelActivityTargetType.VIDEO_IMPORT) -->
+            <ng-container i18n>
+              <strong>{{ account }}</strong> imported video <a [routerLink]="[ '/w', a.videoImport.uuid ]">{{ a.videoImport.name }}</a>: {{ a.videoImport.targetUrl }}
+            </ng-container>
+          }
+        }
+      }
+
+      @case (2) { <!-- VideoChannelActivityAction.UPDATE) -->
+        @switch (a.targetType.id) {
+          @case (1) { <!-- VideoChannelActivityTargetType.VIDEO) -->
+            <ng-container i18n>
+              <strong>{{ account }}</strong> updated video <a [routerLink]="[ '/w', a.video.shortUUID ]">{{ a.video.name }}</a>
+            </ng-container>
+          }
+
+          @case (2) { <!-- VideoChannelActivityTargetType.PLAYLIST) -->
+            <ng-container i18n>
+              <strong>{{ account }}</strong> updated playlist <a [routerLink]="[ '/my-library/video-playlists/', a.playlist.shortUUID ]">{{ a.playlist.name }}</a>
+            </ng-container>
+          }
+
+          @case (3) { <!-- VideoChannelActivityTargetType.CHANNEL) -->
+            <ng-container i18n>
+              <strong>{{ account }}</strong> updated the channel
+            </ng-container>
+          }
+
+
+          <!-- VideoChannelActivityTargetType.CHANNEL_SYNC) - Case cannot exist -->
+
+          <!-- VideoChannelActivityTargetType.CHANNEL_SYNC) - Case cannot exist -->
+        }
+      }
+
+      @case (3) { <!-- VideoChannelActivityAction.DELETE) -->
+        @switch (a.targetType.id) {
+          @case (1) { <!-- VideoChannelActivityTargetType.VIDEO) -->
+            <ng-container i18n>
+              <strong>{{ account }}</strong> deleted video <a [routerLink]="[ '/w', a.video.shortUUID ]">{{ a.video.name }}</a>
+            </ng-container>
+          }
+
+          @case (2) { <!-- VideoChannelActivityTargetType.PLAYLIST) -->
+            <ng-container i18n>
+              <strong>{{ account }}</strong> deleted playlist <a [routerLink]="[ '/my-library/video-playlists/', a.playlist.shortUUID ]">{{ a.playlist.name }}</a>
+            </ng-container>
+          }
+
+          <!-- VideoChannelActivityTargetType.CHANNEL) - Case cannot exist -->
+
+          @case (4) { <!-- VideoChannelActivityTargetType.CHANNEL_SYNC) -->
+            <ng-container i18n>
+              <strong>{{ account }}</strong> delete channel synchronization {{ a.channelSync.externalChannelUrl }}
+            </ng-container>
+          }
+
+          <!-- VideoChannelActivityTargetType.VIDEO_IMPORT) - Case cannot exist -->
+        }
+      }
+
+      @case (4) { <!-- VideoChannelActivityAction.UPDATE_CAPTIONS) -->
+        @switch (a.targetType.id) {
+          @case (1) { <!-- VideoChannelActivityTargetType.VIDEO) -->
+            <ng-container i18n>
+              <strong>{{ account }}</strong> updated captions of video <a [routerLink]="[ '/w', a.video.shortUUID ]">{{ a.video.name }}</a>
+            </ng-container>
+          }
+        }
+      }
+
+      @case (5) { <!-- VideoChannelActivityAction.UPDATE_CHAPTERS) -->
+        @switch (a.targetType.id) {
+          @case (1) { <!-- VideoChannelActivityTargetType.VIDEO) -->
+            <ng-container i18n>
+              <strong>{{ account }}</strong> updated chapters of video <a [routerLink]="[ '/w', a.video.shortUUID ]">{{ a.video.name }}</a>
+            </ng-container>
+          }
+        }
+      }
+
+      @case (6) { <!-- VideoChannelActivityAction.UPDATE_PASSWORDS) -->
+        @switch (a.targetType.id) {
+          @case (1) { <!-- VideoChannelActivityTargetType.VIDEO) -->
+            <ng-container i18n>
+              <strong>{{ account }}</strong> updated passwords of video <a [routerLink]="[ '/w', a.video.shortUUID ]">{{ a.video.name }}</a>
+            </ng-container>
+          }
+        }
+      }
+
+      @case (7) { <!-- VideoChannelActivityAction.CREATE_STUDIO_TASKS) -->
+        @switch (a.targetType.id) {
+          @case (1) { <!-- VideoChannelActivityTargetType.VIDEO) -->
+            <ng-container i18n>
+              <strong>{{ account }}</strong> created studio tasks of video <a [routerLink]="[ '/w', a.video.shortUUID ]">{{ a.video.name }}</a>
+            </ng-container>
+          }
+        }
+      }
+
+      @case (8) { <!-- VideoChannelActivityAction.UPDATE_SOURCE_FILE) -->
+        @switch (a.targetType.id) {
+          @case (1) { <!-- VideoChannelActivityTargetType.VIDEO) -->
+            <ng-container i18n>
+              <strong>{{ account }}</strong> updated source file of video <a [routerLink]="[ '/w', a.video.shortUUID ]">{{ a.video.name }}</a>
+            </ng-container>
+          }
+        }
+      }
+
+      @case (9) { <!-- VideoChannelActivityAction.UPDATE_ELEMENTS) -->
+        @switch (a.targetType.id) {
+          @case (2) { <!-- VideoChannelActivityTargetType.PLAYLIST) -->
+            <ng-container i18n>
+              <strong>{{ account }}</strong> updated elements of playlist <a [routerLink]="[ '/my-library/video-playlists/', a.playlist.shortUUID ]">{{ a.playlist.name }}</a>
+            </ng-container>
+          }
+        }
+      }
+
+      @case (10) { <!-- VideoChannelActivityAction.REMOVE_CHANNEL_OWNERSHIP) -->
+        @switch (a.targetType.id) {
+          @case (1) { <!-- VideoChannelActivityTargetType.VIDEO) -->
+            <ng-container i18n>
+              <strong>{{ account }}</strong> removed video <a [routerLink]="[ '/w', a.video.shortUUID ]">{{ a.video.name }}</a> by updating its channel
+            </ng-container>
+          }
+
+          @case (2) { <!-- VideoChannelActivityTargetType.PLAYLIST) -->
+            <ng-container i18n>
+              <strong>{{ account }}</strong> removed playlist <a [routerLink]="[ '/my-library/video-playlists/', a.playlist.shortUUID ]">{{ a.playlist.name }}</a> by updating its channel
+            </ng-container>
+          }
+        }
+      }
+
+      @case (11) { <!-- VideoChannelActivityAction.CREATE_CHANNEL_OWNERSHIP) -->
+        @switch (a.targetType.id) {
+          @case (1) { <!-- VideoChannelActivityTargetType.VIDEO) -->
+            <ng-container i18n>
+              <strong>{{ account }}</strong> created video <a [routerLink]="[ '/w', a.video.shortUUID ]">{{ a.video.name }}</a> by updating its channel
+            </ng-container>
+          }
+
+          @case (2) { <!-- VideoChannelActivityTargetType.PLAYLIST) -->
+            <ng-container i18n>
+              <strong>{{ account }}</strong> created playlist <a [routerLink]="[ '/my-library/video-playlists/', a.playlist.shortUUID ]">{{ a.playlist.name }}</a> by updating its channel
+            </ng-container>
+          }
+        }
+      }
+    }
+  </div>
+
+  <div class="date">
+    {{ a.createdAt | myFromNow }}
+  </div>
+</div>

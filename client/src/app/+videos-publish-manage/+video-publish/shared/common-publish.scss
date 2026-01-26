@@ -1,0 +1,58 @@
+@use "_variables" as *;
+@use "_css-variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
+
+$width-size: 275px;
+
+.alert.alert-danger {
+  text-align: center;
+
+  > div {
+    font-weight: $font-semibold;
+  }
+}
+
+.first-step-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @include define-input-css-variables-in-modal;
+
+  .upload-icon {
+    width: 90px;
+    margin-bottom: 25px;
+    color: pvar(--fg-300);
+  }
+
+  .peertube-select-container {
+    @include responsive-width($width-size);
+  }
+
+  my-select-channel,
+  my-select-options,
+  .peertube-radio-container,
+  .form-group-description {
+    display: block;
+    width: $width-size;
+
+    @media screen and (max-width: $width-size) {
+      width: 100%;
+    }
+  }
+
+  .form-group-description {
+    white-space: nowrap;
+  }
+
+  input[type="text"] {
+    display: block;
+
+    @include peertube-input-text($width-size);
+  }
+
+  .button-file {
+    width: max-content;
+  }
+}

@@ -21,23 +21,28 @@ describe('Test generate download API validator', function () {
   })
 
   describe('Download rights', function () {
-    let videoFileToken: string
+    let userFileToken: string
+    let editorFileToken: string
+
     let videoId: string
     let videoFileIds: number[]
 
-    let user3: string
-    let user4: string
+    let userToken: string
+    let anotherUserToken: string
+    let editorToken: string
 
     before(async function () {
       this.timeout(60000)
 
-      user3 = await server.users.generateUserAndToken('user3')
-      user4 = await server.users.generateUserAndToken('user4')
+      userToken = await server.users.generateUserAndToken('user')
+      anotherUserToken = await server.users.generateUserAndToken('another_user')
+      editorToken = await server.channelCollaborators.createEditor('editor', 'user_channel')
 
-      const { uuid } = await server.videos.quickUpload({ name: 'video', token: user3, privacy: VideoPrivacy.PRIVATE })
+      const { uuid } = await server.videos.quickUpload({ name: 'video', token: userToken, privacy: VideoPrivacy.PRIVATE })
       videoId = uuid
 
-      videoFileToken = await server.videoToken.getVideoFileToken({ videoId: uuid, token: user3 })
+      userFileToken = await server.videoToken.getVideoFileToken({ videoId: uuid, token: userToken })
+      editorFileToken = await server.videoToken.getVideoFileToken({ videoId: uuid, token: editorToken })
 
       const video = await server.videos.getWithToken({ id: uuid })
       videoFileIds = [ video.files[0].id ]
@@ -45,11 +50,11 @@ describe('Test generate download API validator', function () {
       await waitJobs([ server ])
     })
 
-    it('Should fail without header token or video file token', async function () {
-      await server.videos.generateDownload({ videoId, videoFileIds, token: null, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    it('Should fail without user token or video file token', async function () {
+      await server.videos.generateDownload({ videoId, videoFileIds, token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
-    it('Should fail with an invalid header token', async function () {
+    it('Should fail with an invalid user token', async function () {
       await server.videos.generateDownload({ videoId, videoFileIds, token: 'toto', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
@@ -59,24 +64,27 @@ describe('Test generate download API validator', function () {
       await server.videos.generateDownload({ videoId, videoFileIds, token: null, query, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
-    it('Should fail with header token of another user', async function () {
-      await server.videos.generateDownload({ videoId, videoFileIds, token: user4, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    it('Should fail with user token of another user', async function () {
+      await server.videos.generateDownload({ videoId, videoFileIds, token: anotherUserToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
-    it('Should fail with video file token of another user', async function () {
-      const { uuid: otherVideo } = await server.videos.quickUpload({ name: 'other video' })
-      const videoFileToken = await server.videoToken.getVideoFileToken({ videoId: otherVideo, token: user4 })
+    it('Should fail with video file token of another video', async function () {
+      const { uuid: otherVideo } = await server.videos.quickUpload({ name: 'other video', token: userToken })
+      const videoFileToken = await server.videoToken.getVideoFileToken({ videoId: otherVideo, token: userToken })
       const query = { videoFileToken }
 
       await server.videos.generateDownload({ videoId, videoFileIds, token: null, query, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
-    it('Should succeed with a valid header token', async function () {
-      await server.videos.generateDownload({ videoId, videoFileIds, token: user3 })
+    it('Should succeed with a valid user token', async function () {
+      for (const token of [ server.accessToken, userToken, editorToken ]) {
+        await server.videos.generateDownload({ videoId, videoFileIds, token })
+      }
     })
 
     it('Should succeed with a valid query token', async function () {
-      await server.videos.generateDownload({ videoId, videoFileIds, token: null, query: { videoFileToken } })
+      await server.videos.generateDownload({ videoId, videoFileIds, token: null, query: { videoFileToken: userFileToken } })
+      await server.videos.generateDownload({ videoId, videoFileIds, token: null, query: { videoFileToken: editorFileToken } })
     })
   })
 
@@ -123,10 +131,61 @@ describe('Test generate download API validator', function () {
       await server.videos.generateDownload({ videoId, videoFileIds, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
-    it('Should suceed with the correct params', async function () {
+    it('Should succeed with the correct params', async function () {
       const videoFileIds = [ audioStreamId, videoStreamIds[0] ]
 
       await server.videos.generateDownload({ videoId, videoFileIds })
+    })
+  })
+
+  describe('Download rate limit', function () {
+    let videoId: string
+    let fileId: number
+
+    before(async function () {
+      this.timeout(60000)
+
+      await server.kill()
+
+      await server.run({
+        download_generate_video: {
+          max_parallel_downloads: 2
+        }
+      })
+
+      const { uuid } = await server.videos.quickUpload({ name: 'video' })
+      videoId = uuid
+      await waitJobs([ server ])
+
+      const video = await server.videos.get({ id: uuid })
+      fileId = video.files[0].id
+    })
+
+    it('Should succeed with a single download', async function () {
+      const videoFileIds = [ fileId ]
+
+      for (let i = 0; i < 3; i++) {
+        await server.videos.generateDownload({ videoId, videoFileIds })
+      }
+    })
+
+    it('Should fail with too many parallel downloads', async function () {
+      const videoFileIds = [ fileId ]
+
+      const promises: Promise<any>[] = []
+
+      for (let i = 0; i < 10; i++) {
+        promises.push(
+          server.videos.generateDownload({ videoId, videoFileIds })
+            .catch(err => {
+              if (err.message.includes('429')) return
+
+              throw err
+            })
+        )
+      }
+
+      await Promise.all(promises)
     })
   })
 

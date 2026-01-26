@@ -1,8 +1,12 @@
-@use 'sass:map';
-@use '_variables' as *;
+@use "sass:map";
+@use "_variables" as *;
 
 $modal-footer-border-width: 0;
 $modal-md: 600px;
+$modal-lg: 900px;
+$modal-content-border-radius: 14px;
+$modal-content-bg: pvar(--bg-secondary-350);
+$modal-inner-padding: 2rem;
 
 $grid-breakpoints: (
   // CLASSIC BREAKPOINTS GROUP
@@ -17,7 +21,6 @@ $grid-breakpoints: (
   // Extra large screens / wide desktops
   xl: 1200px,
   xxl: 1600px,
-
   // SCREEN GROUP
   fhd: 1800px,
   qhd: 2560px,
@@ -43,13 +46,16 @@ $input-btn-focus-width: 0;
 $input-btn-focus-color: inherit;
 $input-focus-border-color: pvar(--input-border-color);
 $input-focus-box-shadow: #{$focus-box-shadow-form};
+$input-padding-y: pvar(--input-y-padding);
+$input-padding-x: pvar(--input-x-padding);
+$input-border-radius: pvar(--input-border-radius);
+$input-border-width: pvar(--input-border-width);
+$input-border-color: pvar(--input-border-color);
 
 $input-group-addon-color: pvar(--fg);
 $input-group-addon-bg: pvar(--bg-secondary-500);
 $input-group-addon-border-color: pvar(--input-border-color);
 
-$nav-pills-link-active-bg: pvar(--bg-secondary-500);
-$nav-pills-link-active-color: pvar(--fg);
 $nav-link-transition: none;
 
 $dropdown-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);

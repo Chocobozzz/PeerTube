@@ -1,5 +1,5 @@
 import { ffprobePromise, getChaptersFromContainer } from '@peertube/peertube-ffmpeg'
-import { ThumbnailType, VideoCreate } from '@peertube/peertube-models'
+import { isPeerTubeError, ThumbnailType, VideoCreate } from '@peertube/peertube-models'
 import { uuidToShort } from '@peertube/peertube-node-utils'
 import { getResumableUploadPath } from '@server/helpers/upload.js'
 import { LocalVideoCreator } from '@server/lib/local-video-creator.js'
@@ -8,7 +8,7 @@ import { setupUploadResumableRoutes, uploadx } from '@server/lib/uploadx.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
 import { openapiOperationDoc } from '@server/middlewares/doc.js'
 import express from 'express'
-import { VideoAuditView, auditLoggerFactory, getAuditIdFromRes } from '../../../helpers/audit-logger.js'
+import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger.js'
 import { createReqFiles } from '../../../helpers/express-utils.js'
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
 import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../../initializers/constants.js'
@@ -17,7 +17,6 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
-  setReqTimeout,
   videosAddLegacyValidator,
   videosAddResumableInitValidator,
   videosAddResumableValidator
@@ -38,10 +37,10 @@ const reqVideoFileAddResumable = createReqFiles(
   getResumableUploadPath()
 )
 
-uploadRouter.post('/upload',
+uploadRouter.post(
+  '/upload',
   openapiOperationDoc({ operationId: 'uploadLegacy' }),
   authenticate,
-  setReqTimeout(1000 * 60 * 10), // Uploading the video could be long
   reqVideoFileAdd,
   asyncMiddleware(videosAddLegacyValidator),
   asyncRetryTransactionMiddleware(addVideoLegacy)
@@ -90,11 +89,14 @@ async function addVideoResumable (req: express.Request, res: express.Response) {
   const videoInfo = videoPhysicalFile.metadata
   const files = { previewfile: videoInfo.previewfile, thumbnailfile: videoInfo.thumbnailfile }
 
-  const response = await addVideo({ req, res, videoPhysicalFile, videoInfo, files })
-  await Redis.Instance.deleteUploadSession(req.query.upload_id)
-  await uploadx.storage.delete(res.locals.uploadVideoFileResumable)
+  try {
+    const response = await addVideo({ req, res, videoPhysicalFile, videoInfo, files })
 
-  return res.json(response)
+    return res.json(response)
+  } finally {
+    await Redis.Instance.deleteUploadSession(req.query.upload_id)
+    await uploadx.storage.delete(res.locals.uploadVideoFileResumable)
+  }
 }
 
 async function addVideo (options: {
@@ -157,19 +159,31 @@ async function addVideo (options: {
     thumbnails
   })
 
-  const { video } = await localVideoCreator.create()
+  try {
+    const { video } = await localVideoCreator.create()
 
-  auditLogger.create(getAuditIdFromRes(res), new VideoAuditView(video.toFormattedDetailsJSON()))
-  logger.info('Video with name %s and uuid %s created.', videoInfo.name, video.uuid, lTags(video.uuid))
+    auditLogger.create(getAuditIdFromRes(res), new VideoAuditView(video.toFormattedDetailsJSON()))
+    logger.info('Video with name %s and uuid %s created.', videoInfo.name, video.uuid, lTags(video.uuid))
 
-  Hooks.runAction('action:api.video.uploaded', { video, req, res })
+    Hooks.runAction('action:api.video.uploaded', { video, req, res })
 
-  return {
-    video: {
-      id: video.id,
-      shortUUID: uuidToShort(video.uuid),
-      uuid: video.uuid
+    return {
+      video: {
+        id: video.id,
+        shortUUID: uuidToShort(video.uuid),
+        uuid: video.uuid
+      }
     }
+  } catch (err) {
+    if (isPeerTubeError(err) && err.code === 'INVALID_IMAGE_FILE') {
+      logger.warn('Invalid thumbnail file provided for video upload.', { err, ...lTags() })
+
+      return res.fail({
+        message: req.t('The provided thumbnail file is invalid.')
+      })
+    }
+
+    throw err
   }
 }
 

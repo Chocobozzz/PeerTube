@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { omit } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, VideoCommentPolicy, VideoImportCreate, VideoPrivacy } from '@peertube/peertube-models'
+import { HttpStatusCode, NSFWFlag, VideoCommentPolicy, VideoImportCreate, VideoPrivacy } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
   PeerTubeServer,
@@ -14,13 +14,15 @@ import {
   setDefaultVideoChannel,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
+import { SQLCommand } from '@tests/shared/sql-command.js'
 
 describe('Test video imports API validator', function () {
   const path = '/api/v1/videos/imports'
   let server: PeerTubeServer
-  let userAccessToken = ''
+  let userAccessToken: string
+  let editorToken: string
   let channelId: number
 
   // ---------------------------------------------------------------
@@ -37,6 +39,8 @@ describe('Test video imports API validator', function () {
     const password = 'my super password'
     await server.users.create({ username, password })
     userAccessToken = await server.login.getAccessToken({ username, password })
+
+    editorToken = await server.channelCollaborators.createEditor('editor', 'root_channel')
 
     {
       const { videoChannels } = await server.users.getMyInfo()
@@ -56,7 +60,15 @@ describe('Test video imports API validator', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, myPath, server.accessToken)
+      await checkBadSort(server.url, myPath, server.accessToken)
+    })
+
+    it('Should fail with a bad id param', async function () {
+      await makeGetRequest({ url: server.url, path: myPath, query: { id: 'toto' }, token: server.accessToken })
+    })
+
+    it('Should fail with a bad video id param', async function () {
+      await makeGetRequest({ url: server.url, path: myPath, query: { videoId: 'toto' }, token: server.accessToken })
     })
 
     it('Should fail with a bad videoChannelSyncId param', async function () {
@@ -68,7 +80,7 @@ describe('Test video imports API validator', function () {
       })
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({ url: server.url, path: myPath, expectedStatus: HttpStatusCode.OK_200, token: server.accessToken })
     })
   })
@@ -158,6 +170,32 @@ describe('Test video imports API validator', function () {
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
+    it('Should fail with a bad NSFW', async function () {
+      {
+        const fields = { ...baseCorrectParams, nsfw: false, nsfwFlags: NSFWFlag.EXPLICIT_SEX }
+
+        await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      }
+
+      {
+        const fields = { ...baseCorrectParams, nsfw: false, nsfwSummary: 'toto' }
+
+        await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      }
+
+      {
+        const fields = { ...baseCorrectParams, nsfw: true, nsfwFlags: 'toto' as any }
+
+        await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      }
+
+      {
+        const fields = { ...baseCorrectParams, nsfw: true, nsfwSummary: 't' }
+
+        await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      }
+    })
+
     it('Should fail with a bad category', async function () {
       const fields = { ...baseCorrectParams, category: 125 }
 
@@ -203,7 +241,7 @@ describe('Test video imports API validator', function () {
     it('Should fail with a bad channel', async function () {
       const fields = { ...baseCorrectParams, channelId: 545454 }
 
-      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should fail with another user channel', async function () {
@@ -219,7 +257,7 @@ describe('Test video imports API validator', function () {
 
       const fields = { ...baseCorrectParams, channelId: customChannelId }
 
-      await makePostBodyRequest({ url: server.url, path, token: userAccessToken, fields })
+      await makePostBodyRequest({ url: server.url, path, token: userAccessToken, fields, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should fail with too many tags', async function () {
@@ -295,11 +333,27 @@ describe('Test video imports API validator', function () {
     it('Should succeed with the correct parameters', async function () {
       this.timeout(120000)
 
+      for (const token of [ editorToken, server.accessToken ]) {
+        await makePostBodyRequest({
+          url: server.url,
+          path,
+          token,
+          fields: baseCorrectParams,
+          expectedStatus: HttpStatusCode.OK_200
+        })
+      }
+
       await makePostBodyRequest({
         url: server.url,
         path,
         token: server.accessToken,
-        fields: baseCorrectParams,
+        fields: {
+          ...baseCorrectParams,
+
+          nsfw: true,
+          nsfwFlags: NSFWFlag.EXPLICIT_SEX,
+          nsfwSummary: 'toto'
+        },
         expectedStatus: HttpStatusCode.OK_200
       })
     })
@@ -414,10 +468,6 @@ describe('Test video imports API validator', function () {
       await server.videoImports.cancel({ importId, expectedStatus: HttpStatusCode.CONFLICT_409 })
     })
 
-    it('Should succeed to delete an import', async function () {
-      await server.videoImports.delete({ importId })
-    })
-
     it('Should fail to delete a pending import', async function () {
       await server.jobs.pauseJobQueue()
 
@@ -426,10 +476,94 @@ describe('Test video imports API validator', function () {
       await server.videoImports.delete({ importId, expectedStatus: HttpStatusCode.CONFLICT_409 })
     })
 
-    it('Should succeed to cancel an import', async function () {
-      importId = await importVideo()
+    it('Should succeed to cancel and delete an import', async function () {
+      for (const token of [ editorToken, server.accessToken ]) {
+        importId = await importVideo()
 
-      await server.videoImports.cancel({ importId })
+        await server.videoImports.cancel({ importId, token })
+        await server.videoImports.delete({ importId, token })
+      }
+    })
+
+    it('Should not allow a editor to delete an import without a video', async function () {
+      await server.videoImports.cancelAll()
+      await server.jobs.resumeJobQueue()
+
+      importId = await importVideo()
+      await waitJobs([ server ], { skipFailed: true })
+
+      const videoId = await server.videoImports.getVideoId({ importId })
+      await server.videos.remove({ id: videoId })
+
+      await server.videoImports.delete({ importId, token: editorToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await server.videoImports.delete({ importId, token: server.accessToken })
+    })
+  })
+
+  describe('Retrying a video import', function () {
+    let sqlCommand: SQLCommand
+    let importId: number
+    let successId: number
+
+    before(async function () {
+      this.timeout(60000)
+
+      sqlCommand = new SQLCommand(server)
+
+      await server.jobs.pauseJobQueue()
+
+      {
+        const res = await server.videoImports.quickImport({ name: 'To retry', targetUrl: FIXTURE_URLS.goodVideo })
+        importId = res.id
+      }
+
+      await sqlCommand.setImportUrl(importId, FIXTURE_URLS.badVideo)
+      await server.jobs.resumeJobQueue()
+
+      {
+        const res = await server.videoImports.quickImport({ name: 'Success', targetUrl: FIXTURE_URLS.goodVideo })
+        successId = res.id
+      }
+
+      await waitJobs([ server ])
+    })
+
+    it('Should fail with an invalid import id', async function () {
+      await server.videoImports.retry({ importId: 'artyom' as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should fail with an unknown import id', async function () {
+      await server.videoImports.retry({ importId: 42, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+    })
+
+    it('Should fail without token', async function () {
+      await server.videoImports.retry({ importId, token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+    })
+
+    it('Should fail with another user token', async function () {
+      await server.videoImports.retry({ importId, token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should fail with non failed import', async function () {
+      this.timeout(60000)
+
+      await server.videoImports.retry({ importId: successId, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should succeed to retry', async function () {
+      await server.videoImports.retry({ importId, token: editorToken })
+    })
+
+    it('Should fail to retry too many times an import', async function () {
+      await waitJobs([ server ])
+
+      await server.videoImports.retry({ importId, token: editorToken })
+
+      await server.videoImports.retry({ importId, token: editorToken, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    after(async function () {
+      await sqlCommand?.cleanup()
     })
   })
 

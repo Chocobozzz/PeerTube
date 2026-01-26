@@ -59,6 +59,9 @@
     "selector-max-id": null,
     "scss/at-function-pattern": null,
     "scss/load-no-partial-leading-underscore": null,
+    "@stylistic/string-quotes": null,
+    "@stylistic/color-hex-case": null,
+    "@stylistic/function-parentheses-space-inside": null,
     "property-no-vendor-prefix": [
       true,
       {

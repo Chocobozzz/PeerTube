@@ -1,0 +1,68 @@
+<h2 class="form-title">
+  <my-global-icon iconName="cog"></my-global-icon>
+
+  <ng-container i18n>Customization</ng-container>
+</h2>
+
+<div [formGroup]="form" id="video-manage-form">
+  <div class="form-columns">
+    <div>
+      @if (videoEdit.getVideoSource()) {
+        <div class="form-group">
+          <label i18n for="filename">Filename</label>
+          <div class="form-group-description" i18n>
+          Name of the uploaded file.
+        </div>
+          <input type="text" [disabled]="true" id="filename" class="form-control" [value]="videoEdit.getVideoSource().inputFilename" />
+        </div>
+      }
+
+      <div class="form-group originally-published-at">
+        <div class="label-container">
+          <label i18n for="originallyPublishedAt">Original publication date</label>
+
+          @if (hasPublicationDate()) {
+            <button i18n class="reset-button reset-button-small" (click)="resetField('originallyPublishedAt')">
+            Reset
+          </button>
+          }
+        </div>
+
+        <div class="form-group-description" i18n>
+          This is the date when the content was originally published (e.g. the release date for a film)
+        </div>
+
+        <p-datepicker
+          inputId="originallyPublishedAt"
+          formControlName="originallyPublishedAt"
+          [dateFormat]="calendarDateFormat"
+          [firstDayOfWeek]="0"
+          [showTime]="true"
+          [hideOnDateTimeSelect]="true"
+          [monthNavigator]="true"
+          [yearNavigator]="true"
+          [yearRange]="myYearRange"
+          baseZIndex="20000"
+          >
+        </p-datepicker>
+
+        @if (formErrors.originallyPublishedAt) {
+          <div class="form-error" role="alert">
+            {{ formErrors.originallyPublishedAt }}
+          </div>
+        }
+      </div>
+
+      <my-peertube-checkbox inputName="downloadEnabled" formControlName="downloadEnabled" i18n-labelText labelText="Enable download"></my-peertube-checkbox>
+
+      <div class="form-group" formGroupName="playerSettings">
+        <label i18n for="playerSettingsTheme">Player Theme</label>
+        <div class="form-group-description" i18n>Only used by the web player</div>
+
+        <my-select-player-theme formControlName="theme" inputId="playerSettingsTheme" mode="video" [channel]="videoChannel">
+        </my-select-player-theme>
+      </div>
+    </div>
+
+  </div>
+</div>

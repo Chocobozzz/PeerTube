@@ -1,9 +1,11 @@
+import { To, UserNotificationType } from '@peertube/peertube-models'
+import { t } from '@server/helpers/i18n.js'
 import { logger } from '@server/helpers/logger.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
-import { UserModel } from '@server/models/user/user.js'
+import { myVideoImportsUrl } from '@server/lib/client-urls.js'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
+import { UserModel } from '@server/models/user/user.js'
 import { MUserDefault, MUserWithNotificationSetting, MVideoImportVideo, UserNotificationModelForApi } from '@server/types/models/index.js'
-import { UserNotificationType } from '@peertube/peertube-models'
 import { AbstractNotification } from '../common/abstract-notification.js'
 
 export type ImportFinishedForOwnerPayload = {
@@ -11,7 +13,7 @@ export type ImportFinishedForOwnerPayload = {
   success: boolean
 }
 
-export class ImportFinishedForOwner extends AbstractNotification <ImportFinishedForOwnerPayload> {
+export class ImportFinishedForOwner extends AbstractNotification<ImportFinishedForOwnerPayload> {
   private user: MUserDefault
 
   async prepare () {
@@ -46,46 +48,47 @@ export class ImportFinishedForOwner extends AbstractNotification <ImportFinished
     return notification
   }
 
-  createEmail (to: string) {
+  createEmail (user: MUserWithNotificationSetting) {
+    const to = { email: user.email, language: user.getLanguage() }
+
     if (this.payload.success) return this.createSuccessEmail(to)
 
     return this.createFailEmail(to)
   }
 
-  private createSuccessEmail (to: string) {
+  private createSuccessEmail (to: To) {
     const videoUrl = WEBSERVER.URL + this.videoImport.Video.getWatchStaticPath()
+    const language = to.language
+    const targetId = this.videoImport.getTargetIdentifier()
 
     return {
       to,
-      subject: `Your video import ${this.videoImport.getTargetIdentifier()} is complete`,
-      text: `Your video "${this.videoImport.getTargetIdentifier()}" just finished importing.`,
+      subject: t('Your video import is complete', language),
+      text: t('Your video {targetId} has just finished importing.', language, { targetId }),
       locals: {
-        title: 'Import complete',
         action: {
-          text: 'View video',
+          text: t('View video', language),
           url: videoUrl
         }
       }
     }
   }
 
-  private createFailEmail (to: string) {
-    const importUrl = WEBSERVER.URL + '/my-library/video-imports'
+  private createFailEmail (to: To) {
+    const language = to.language
+    const targetId = this.videoImport.getTargetIdentifier()
 
-    const text =
-      `Your video import "${this.videoImport.getTargetIdentifier()}" encountered an error.` +
-      '\n\n' +
-      `See your videos import dashboard for more information: <a href="${importUrl}">${importUrl}</a>.`
+    const text = t('Your video import {targetId} encountered an error.', language, { targetId })
 
     return {
       to,
-      subject: `Your video import "${this.videoImport.getTargetIdentifier()}" encountered an error`,
+      subject: t('Your video import encountered an error', language),
       text,
       locals: {
-        title: 'Import failed',
+        title: t('Import failed', language),
         action: {
-          text: 'Review imports',
-          url: importUrl
+          text: t('Review imports', language),
+          url: myVideoImportsUrl
         }
       }
     }

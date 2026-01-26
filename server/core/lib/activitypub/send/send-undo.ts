@@ -12,7 +12,7 @@ import {
   MVideoRedundancyVideo,
   MVideoShare
 } from '../../../types/models/index.js'
-import { audiencify, getAudience } from '../audience.js'
+import { audiencify, getPublicAudience } from '../audience.js'
 import { getUndoActivityPubUrl, getVideoDislikeActivityPubUrlByLocalActor, getVideoLikeActivityPubUrlByLocalActor } from '../url.js'
 import { buildAnnounceWithVideoAudience } from './send-announce.js'
 import { buildCreateActivity } from './send-create.js'
@@ -119,13 +119,13 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function undoActivityData <T extends ActivityUndoObject> (
+function undoActivityData<T extends ActivityUndoObject> (
   url: string,
   byActor: MActorAudience,
   object: T,
   audience?: ActivityAudience
 ): ActivityUndo<T> {
-  if (!audience) audience = getAudience(byActor)
+  if (!audience) audience = getPublicAudience(byActor)
 
   return audiencify(
     {

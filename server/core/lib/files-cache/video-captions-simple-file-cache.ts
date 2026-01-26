@@ -6,8 +6,7 @@ import { VideoModel } from '../../models/video/video.js'
 import { VideoCaptionModel } from '../../models/video/video-caption.js'
 import { AbstractSimpleFileCache } from './shared/abstract-simple-file-cache.js'
 
-class VideoCaptionsSimpleFileCache extends AbstractSimpleFileCache <string> {
-
+class VideoCaptionsSimpleFileCache extends AbstractSimpleFileCache<string> {
   private static instance: VideoCaptionsSimpleFileCache
 
   private constructor () {
@@ -22,8 +21,8 @@ class VideoCaptionsSimpleFileCache extends AbstractSimpleFileCache <string> {
     const videoCaption = await VideoCaptionModel.loadWithVideoByFilename(filename)
     if (!videoCaption) return undefined
 
-    if (videoCaption.isOwned()) {
-      return { isOwned: true, path: videoCaption.getFSPath() }
+    if (videoCaption.isLocal()) {
+      return { isLocal: true, path: videoCaption.getFSFilePath() }
     }
 
     return this.loadRemoteFile(filename)
@@ -34,19 +33,19 @@ class VideoCaptionsSimpleFileCache extends AbstractSimpleFileCache <string> {
     const videoCaption = await VideoCaptionModel.loadWithVideoByFilename(key)
     if (!videoCaption) return undefined
 
-    if (videoCaption.isOwned()) throw new Error('Cannot load remote caption of owned video.')
+    if (videoCaption.isLocal()) throw new Error('Cannot load remote caption of owned video.')
 
     // Used to fetch the path
     const video = await VideoModel.loadFull(videoCaption.videoId)
     if (!video) return undefined
 
-    const remoteUrl = videoCaption.getFileUrl(video)
+    const remoteUrl = videoCaption.getOriginFileUrl(video)
     const destPath = join(FILES_CACHE.VIDEO_CAPTIONS.DIRECTORY, videoCaption.filename)
 
     try {
       await doRequestAndSaveToFile(remoteUrl, destPath)
 
-      return { isOwned: false, path: destPath }
+      return { isLocal: false, path: destPath }
     } catch (err) {
       logger.info('Cannot fetch remote caption file %s.', remoteUrl, { err })
 

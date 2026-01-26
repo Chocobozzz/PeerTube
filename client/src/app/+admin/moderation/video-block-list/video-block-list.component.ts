@@ -1,52 +1,48 @@
-import { NgClass, NgIf } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
-import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
+import { Component, OnInit, inject, viewChild } from '@angular/core'
+import { ConfirmService, MarkdownService, Notifier, ServerService } from '@app/core'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { buildVideoEmbedLink, decorateVideoLink } from '@peertube/peertube-core-utils'
-import { VideoBlacklist, VideoBlacklistType, VideoBlacklistType_Type } from '@peertube/peertube-models'
+import { ResultList, VideoBlacklist as VideoBlacklistServer, VideoBlacklistType, VideoBlacklistType_Type } from '@peertube/peertube-models'
 import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
-import { SharedModule, SortMeta } from 'primeng/api'
-import { TableModule } from 'primeng/table'
 import { switchMap } from 'rxjs/operators'
 import { environment } from 'src/environments/environment'
 import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
-import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
-import { AutoColspanDirective } from '../../../shared/shared-main/common/auto-colspan.directive'
+import { NumberFormatterPipe } from '../../../shared/shared-main/common/number-formatter.pipe'
 import { EmbedComponent } from '../../../shared/shared-main/video/embed.component'
-import { TableExpanderIconComponent } from '../../../shared/shared-tables/table-expander-icon.component'
+import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../../../shared/shared-tables/table.component'
 import { VideoCellComponent } from '../../../shared/shared-tables/video-cell.component'
+import { VideoNSFWBadgeComponent } from '../../../shared/shared-video/video-nsfw-badge.component'
+
+type VideoBlacklist = VideoBlacklistServer & { reasonHtml?: string }
 
 @Component({
   selector: 'my-video-block-list',
   templateUrl: './video-block-list.component.html',
   styleUrls: [ '../../../shared/shared-moderation/moderation.scss' ],
-  standalone: true,
   imports: [
-    GlobalIconComponent,
-    TableModule,
-    SharedModule,
     AdvancedInputFilterComponent,
-    NgbTooltip,
-    NgIf,
-    TableExpanderIconComponent,
     ActionDropdownComponent,
-    NgClass,
     VideoCellComponent,
-    AutoColspanDirective,
     EmbedComponent,
-    PTDatePipe
+    PTDatePipe,
+    VideoNSFWBadgeComponent,
+    TableComponent,
+    NumberFormatterPipe
   ]
 })
-export class VideoBlockListComponent extends RestTable implements OnInit {
-  blocklist: (VideoBlacklist & { reasonHtml?: string })[] = []
-  totalRecords = 0
-  sort: SortMeta = { field: 'createdAt', order: -1 }
-  pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
+export class VideoBlockListComponent implements OnInit {
+  private notifier = inject(Notifier)
+  private serverService = inject(ServerService)
+  private confirmService = inject(ConfirmService)
+  private videoBlocklistService = inject(VideoBlockService)
+  private markdownRenderer = inject(MarkdownService)
+  private videoService = inject(VideoService)
+
+  readonly table = viewChild<TableComponent<VideoBlacklist>>('table')
+
   blocklistTypeFilter: VideoBlacklistType_Type
 
   videoBlocklistActions: DropdownAction<VideoBlacklist>[][] = []
@@ -67,17 +63,17 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
     }
   ]
 
-  constructor (
-    protected route: ActivatedRoute,
-    protected router: Router,
-    private notifier: Notifier,
-    private serverService: ServerService,
-    private confirmService: ConfirmService,
-    private videoBlocklistService: VideoBlockService,
-    private markdownRenderer: MarkdownService,
-    private videoService: VideoService
-  ) {
-    super()
+  columns: TableColumnInfo<string>[] = [
+    { id: 'name', label: $localize`Video`, sortable: true },
+    { id: 'sensitive', label: $localize`Sensitive`, sortable: false },
+    { id: 'unfederated', label: $localize`Unfederated`, sortable: false },
+    { id: 'createdAt', label: $localize`Date`, sortable: true }
+  ]
+
+  dataLoader: typeof this._dataLoader
+
+  constructor () {
+    this.dataLoader = this._dataLoader.bind(this)
 
     this.videoBlocklistActions = [
       [
@@ -94,10 +90,10 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
             ).subscribe({
               next: () => {
                 this.notifier.success($localize`Video ${videoBlock.video.name} switched to manual block.`)
-                this.reloadData()
+                this.table().loadData()
               },
 
-              error: err => this.notifier.error(err.message)
+              error: err => this.notifier.handleError(err)
             })
           },
           isDisplayed: videoBlock => videoBlock.type === VideoBlacklistType.AUTO_BEFORE_PUBLISHED
@@ -126,10 +122,10 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
               .subscribe({
                 next: () => {
                   this.notifier.success($localize`Video deleted.`)
-                  this.reloadData()
+                  this.table().loadData()
                 },
 
-                error: err => this.notifier.error(err.message)
+                error: err => this.notifier.handleError(err)
               })
           }
         }
@@ -144,12 +140,6 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
     if (serverConfig.autoBlacklist.videos.ofUsers.enabled) {
       this.blocklistTypeFilter = VideoBlacklistType.MANUAL
     }
-
-    this.initialize()
-  }
-
-  getIdentifier () {
-    return 'VideoBlockListComponent'
   }
 
   toHtml (text: string) {
@@ -166,10 +156,10 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
       .subscribe({
         next: () => {
           this.notifier.success($localize`Video ${entry.video.name} unblocked.`)
-          this.reloadData()
+          this.table().loadData()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -186,25 +176,16 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
     })
   }
 
-  protected reloadDataInternal () {
-    this.videoBlocklistService.listBlocks({
-      pagination: this.pagination,
-      sort: this.sort,
-      search: this.search
-    }).subscribe({
-      next: async resultList => {
-        this.totalRecords = resultList.total
+  private _dataLoader (options: DataLoaderOptions) {
+    return this.videoBlocklistService.listBlocks(options)
+      .pipe(
+        switchMap(async (resultList: ResultList<VideoBlacklist>) => {
+          for (const element of resultList.data) {
+            element.reasonHtml = await this.toHtml(element.reason)
+          }
 
-        this.blocklist = resultList.data
-
-        for (const element of this.blocklist) {
-          Object.assign(element, {
-            reasonHtml: await this.toHtml(element.reason)
-          })
-        }
-      },
-
-      error: err => this.notifier.error(err.message)
-    })
+          return resultList
+        })
+      )
   }
 }

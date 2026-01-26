@@ -1,49 +1,69 @@
-import { FileStorage, MoveStoragePayload, VideoStateType } from '@peertube/peertube-models'
+import { FileStorage, isMoveCaptionPayload, isMoveVideoStoragePayload, MoveStoragePayload, VideoStateType } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
-import { updateTorrentMetadata } from '@server/helpers/webtorrent.js'
+import { updateTorrentMetadata } from '@server/lib/webtorrent.js'
 import { P2P_MEDIA_LOADER_PEER_VERSION } from '@server/initializers/constants.js'
 import {
+  makeCaptionFileAvailable,
   makeHLSFileAvailable,
   makeOriginalFileAvailable,
   makeWebVideoFileAvailable,
+  removeCaptionObjectStorage,
   removeHLSFileObjectStorageByFilename,
   removeHLSObjectStorage,
   removeOriginalFileObjectStorage,
   removeWebVideoObjectStorage
 } from '@server/lib/object-storage/index.js'
-import { getHLSDirectory, getHlsResolutionPlaylistFilename } from '@server/lib/paths.js'
+import { getHLSDirectory, getHLSResolutionPlaylistFilename } from '@server/lib/paths.js'
+import { updateHLSMasterOnCaptionChange, upsertCaptionPlaylistOnFS } from '@server/lib/video-captions.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { moveToFailedMoveToFileSystemState, moveToNextState } from '@server/lib/video-state.js'
-import { MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoWithAllFiles } from '@server/types/models/index.js'
+import { MStreamingPlaylistVideo, MVideo, MVideoCaption, MVideoFile, MVideoWithAllFiles } from '@server/types/models/index.js'
 import { MVideoSource } from '@server/types/models/video/video-source.js'
 import { Job } from 'bullmq'
 import { join } from 'path'
-import { moveToJob, onMoveToStorageFailure } from './shared/move-video.js'
+import { moveCaptionToStorageJob } from './shared/move-caption.js'
+import { moveVideoToStorageJob, onMoveVideoToStorageFailure } from './shared/move-video.js'
 
 const lTagsBase = loggerTagsFactory('move-file-system')
 
 export async function processMoveToFileSystem (job: Job) {
   const payload = job.data as MoveStoragePayload
-  logger.info('Moving video %s to file system in job %s.', payload.videoUUID, job.id)
 
-  await moveToJob({
-    jobId: job.id,
-    videoUUID: payload.videoUUID,
-    loggerTags: lTagsBase().tags,
+  if (isMoveVideoStoragePayload(payload)) { // Move all video related files
+    logger.info('Moving video %s to file system in job %s.', payload.videoUUID, job.id)
 
-    moveWebVideoFiles,
-    moveHLSFiles,
-    moveVideoSourceFile,
+    await moveVideoToStorageJob({
+      jobId: job.id,
+      videoUUID: payload.videoUUID,
+      loggerTags: lTagsBase().tags,
 
-    doAfterLastMove: video => doAfterLastMove({ video, previousVideoState: payload.previousVideoState, isNewVideo: payload.isNewVideo }),
-    moveToFailedState: moveToFailedMoveToFileSystemState
-  })
+      moveWebVideoFiles,
+      moveHLSFiles,
+      moveVideoSourceFile,
+      moveCaptionFiles,
+
+      doAfterLastMove: video => doAfterLastMove({ video, previousVideoState: payload.previousVideoState, isNewVideo: payload.isNewVideo })
+    })
+  } else if (isMoveCaptionPayload(payload)) { // Only caption file
+    logger.info(`Moving video caption ${payload.captionId} to file system in job ${job.id}.`)
+
+    await moveCaptionToStorageJob({
+      jobId: job.id,
+      captionId: payload.captionId,
+      loggerTags: lTagsBase().tags,
+      moveCaptionFiles
+    })
+  } else {
+    throw new Error('Unknown payload type')
+  }
 }
 
 export async function onMoveToFileSystemFailure (job: Job, err: any) {
   const payload = job.data as MoveStoragePayload
 
-  await onMoveToStorageFailure({
+  if (!isMoveVideoStoragePayload(payload)) return
+
+  await onMoveVideoToStorageFailure({
     videoUUID: payload.videoUUID,
     err,
     lTags: lTagsBase(),
@@ -95,7 +115,7 @@ async function moveHLSFiles (video: MVideoWithAllFiles) {
       if (file.storage === FileStorage.FILE_SYSTEM) continue
 
       // Resolution playlist
-      const playlistFilename = getHlsResolutionPlaylistFilename(file.filename)
+      const playlistFilename = getHLSResolutionPlaylistFilename(file.filename)
       await makeHLSFileAvailable(playlistWithVideo, playlistFilename, join(getHLSDirectory(video), playlistFilename))
       await makeHLSFileAvailable(playlistWithVideo, file.filename, join(getHLSDirectory(video), file.filename))
 
@@ -129,6 +149,54 @@ async function onVideoFileMoved (options: {
   logger.debug('Removing web video file %s because it\'s now on file system', oldFileUrl, lTagsBase())
   await objetStorageRemover()
 }
+
+// ---------------------------------------------------------------------------
+
+async function moveCaptionFiles (captions: MVideoCaption[], hls: MStreamingPlaylistVideo) {
+  let hlsUpdated = false
+
+  for (const caption of captions) {
+    if (caption.storage === FileStorage.OBJECT_STORAGE) {
+      const oldFileUrl = caption.fileUrl
+
+      await makeCaptionFileAvailable(caption.filename, caption.getFSFilePath())
+
+      // Assign new values before building the m3u8 file
+      caption.fileUrl = null
+      caption.storage = FileStorage.FILE_SYSTEM
+
+      await caption.save()
+
+      logger.debug('Removing caption file %s because it\'s now on file system', oldFileUrl, lTagsBase())
+      await removeCaptionObjectStorage(caption)
+    }
+
+    if (hls && (!caption.m3u8Filename || caption.m3u8Url)) {
+      hlsUpdated = true
+
+      const oldM3U8Url = caption.m3u8Url
+      const oldM3U8Filename = caption.m3u8Filename
+
+      // Caption link has been updated, so we must also update the HLS caption playlist
+      caption.m3u8Filename = await upsertCaptionPlaylistOnFS(caption, hls.Video)
+      caption.m3u8Url = null
+
+      await caption.save()
+
+      if (oldM3U8Url) {
+        logger.debug(`Removing video caption playlist file ${oldM3U8Url} because it's now on file system`, lTagsBase())
+
+        await removeHLSFileObjectStorageByFilename(hls, oldM3U8Filename)
+      }
+    }
+  }
+
+  if (hlsUpdated) {
+    await updateHLSMasterOnCaptionChange(hls.Video, hls)
+  }
+}
+
+// ---------------------------------------------------------------------------
 
 async function doAfterLastMove (options: {
   video: MVideoWithAllFiles

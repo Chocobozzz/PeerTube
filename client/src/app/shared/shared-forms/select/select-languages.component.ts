@@ -1,5 +1,4 @@
-import { NgIf } from '@angular/common'
-import { Component, forwardRef, Input, OnInit } from '@angular/core'
+import { Component, forwardRef, inject, input, OnInit } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
@@ -8,26 +7,22 @@ import { SelectCheckboxDefaultAllComponent } from './select-checkbox-default-all
 @Component({
   selector: 'my-select-languages',
   template: `
-<my-select-checkbox-default-all
-  *ngIf="availableLanguages"
-
-  [availableItems]="availableLanguages"
-  [(ngModel)]="selectedLanguages"
-  (ngModelChange)="onModelChange()"
-
-  [inputId]="inputId"
-
-  [maxIndividualItems]="maxLanguages"
-
-  virtualScroll="true"
-  virtualScrollItemSize="37"
-
-  i18n-allSelectedLabel allSelectedLabel="All languages"
-  i18n-selectedLabel selectedLabel="{1} languages selected"
-  i18n-placeholder placeholder="Add a new language"
->
-</my-select-checkbox-default-all>
-  `,
+@if (availableLanguages) {
+  <my-select-checkbox-default-all
+    [availableItems]="availableLanguages"
+    [(ngModel)]="selectedLanguages"
+    (ngModelChange)="onModelChange()"
+    [inputId]="inputId()"
+    [maxIndividualItems]="maxLanguages()"
+    virtualScroll="true"
+    virtualScrollItemSize="37"
+    i18n-allSelectedLabel allSelectedLabel="All languages"
+    i18n-selectedLabel selectedLabel="{1} languages selected"
+    i18n-placeholder placeholder="Add a new language"
+    >
+  </my-select-checkbox-default-all>
+}
+`,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -35,21 +30,16 @@ import { SelectCheckboxDefaultAllComponent } from './select-checkbox-default-all
       multi: true
     }
   ],
-  standalone: true,
-  imports: [ SelectCheckboxDefaultAllComponent, FormsModule, NgIf ]
+  imports: [ SelectCheckboxDefaultAllComponent, FormsModule ]
 })
 export class SelectLanguagesComponent implements ControlValueAccessor, OnInit {
-  @Input({ required: true }) inputId: string
-  @Input() maxLanguages: number
+  private server = inject(ServerService)
+
+  readonly inputId = input.required<string>()
+  readonly maxLanguages = input<number>(undefined)
 
   selectedLanguages: string[]
   availableLanguages: SelectOptionsItem[]
-
-  constructor (
-    private server: ServerService
-  ) {
-
-  }
 
   ngOnInit () {
     this.server.getVideoLanguages()
@@ -73,7 +63,9 @@ export class SelectLanguagesComponent implements ControlValueAccessor, OnInit {
       )
   }
 
-  propagateChange = (_: any) => { /* empty */ }
+  propagateChange = (_: any) => {
+    // empty
+  }
 
   writeValue (languages: string[]) {
     this.selectedLanguages = languages

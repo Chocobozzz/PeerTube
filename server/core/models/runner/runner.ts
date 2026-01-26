@@ -1,10 +1,10 @@
+import { Runner } from '@peertube/peertube-models'
+import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
+import { MRunner } from '@server/types/models/runners/index.js'
 import { FindOptions } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
-import { MRunner } from '@server/types/models/runners/index.js'
-import { Runner } from '@peertube/peertube-models'
 import { SequelizeModel, getSort } from '../shared/index.js'
 import { RunnerRegistrationTokenModel } from './runner-registration-token.js'
-import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 
 @Table({
   tableName: 'runner',
@@ -23,37 +23,40 @@ import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
   ]
 })
 export class RunnerModel extends SequelizeModel<RunnerModel> {
-
   // Used to identify the appropriate runner when it uses the runner REST API
   @AllowNull(false)
   @Column
-  runnerToken: string
+  declare runnerToken: string
 
   @AllowNull(false)
   @Column
-  name: string
+  declare name: string
 
   @AllowNull(true)
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.RUNNERS.DESCRIPTION.max))
-  description: string
+  declare description: string
 
   @AllowNull(false)
   @Column
-  lastContact: Date
+  declare lastContact: Date
 
   @AllowNull(false)
   @Column
-  ip: string
+  declare ip: string
+
+  @AllowNull(true)
+  @Column
+  declare version: string
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @ForeignKey(() => RunnerRegistrationTokenModel)
   @Column
-  runnerRegistrationTokenId: number
+  declare runnerRegistrationTokenId: number
 
   @BelongsTo(() => RunnerRegistrationTokenModel, {
     foreignKey: {
@@ -61,7 +64,7 @@ export class RunnerModel extends SequelizeModel<RunnerModel> {
     },
     onDelete: 'cascade'
   })
-  RunnerRegistrationToken: Awaited<RunnerRegistrationTokenModel>
+  declare RunnerRegistrationToken: Awaited<RunnerRegistrationTokenModel>
 
   // ---------------------------------------------------------------------------
 
@@ -115,6 +118,7 @@ export class RunnerModel extends SequelizeModel<RunnerModel> {
 
       ip: this.ip,
       lastContact: this.lastContact,
+      version: this.version,
 
       createdAt: this.createdAt,
       updatedAt: this.updatedAt

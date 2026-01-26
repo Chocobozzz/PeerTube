@@ -17,6 +17,7 @@ import { setVideoTags } from '@server/lib/video.js'
 import { StoryboardModel } from '@server/models/video/storyboard.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
+import { VideoLiveScheduleModel } from '@server/models/video/video-live-schedule.js'
 import { VideoLiveModel } from '@server/models/video/video-live.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import {
@@ -31,10 +32,12 @@ import {
 import { CreationAttributes, Transaction } from 'sequelize'
 import { fetchAP } from '../../activity.js'
 import { findOwner, getOrCreateAPActor } from '../../actors/index.js'
+import { upsertAPPlayerSettings } from '../../player-settings.js'
 import {
   getCaptionAttributesFromObject,
   getFileAttributesFromUrl,
   getLiveAttributesFromObject,
+  getLiveSchedulesAttributesFromObject,
   getPreviewFromIcons,
   getStoryboardAttributeFromObject,
   getStreamingPlaylistAttributesFromObject,
@@ -101,7 +104,7 @@ export abstract class APVideoAbstractBuilder {
     const existingCaptions = await VideoCaptionModel.listVideoCaptions(video.id, t)
 
     let captionsToCreate = getCaptionAttributesFromObject(video, this.videoObject)
-                            .map(a => new VideoCaptionModel(a) as MVideoCaption)
+      .map(a => new VideoCaptionModel(a) as MVideoCaption)
 
     for (const existingCaption of existingCaptions) {
       // Only keep captions that do not already exist
@@ -136,7 +139,14 @@ export abstract class APVideoAbstractBuilder {
     const attributes = getLiveAttributesFromObject(video, this.videoObject)
     const [ videoLive ] = await VideoLiveModel.upsert(attributes, { transaction, returning: true })
 
-    video.VideoLive = videoLive
+    await VideoLiveScheduleModel.deleteAllOfLiveId(videoLive.id, transaction)
+    videoLive.LiveSchedules = []
+
+    for (const scheduleAttributes of getLiveSchedulesAttributesFromObject(videoLive, this.videoObject)) {
+      const scheduleModel = new VideoLiveScheduleModel(scheduleAttributes)
+
+      videoLive.LiveSchedules.push(await scheduleModel.save({ transaction }))
+    }
   }
 
   protected async setWebVideoFiles (video: MVideoFullLight, t: Transaction) {
@@ -151,7 +161,7 @@ export abstract class APVideoAbstractBuilder {
     video.VideoFiles = await Promise.all(upsertTasks)
   }
 
-  protected async updateChaptersOutsideTransaction (video: MVideoFullLight) {
+  protected async updateChapters (video: MVideoFullLight) {
     if (!this.videoObject.hasParts || typeof this.videoObject.hasParts !== 'string') return
 
     const { body } = await fetchAP<VideoChaptersObject>(this.videoObject.hasParts)
@@ -168,6 +178,17 @@ export abstract class APVideoAbstractBuilder {
 
         await replaceChapters({ chapters, transaction: t, video })
       })
+    })
+  }
+
+  protected async upsertPlayerSettings (video: MVideoFullLight) {
+    if (typeof this.videoObject.playerSettings !== 'string') return
+
+    await upsertAPPlayerSettings({
+      settingsObject: this.videoObject.playerSettings,
+      video,
+      channel: undefined,
+      contextUrl: video.url
     })
   }
 

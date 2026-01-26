@@ -7,7 +7,9 @@
         <select id="type" name="type" [(ngModel)]="type" class="form-control">
           <option value="video-generate" i18n>Video</option>
           <option value="video-files" i18n>Video files</option>
-          <option *ngIf="hasCaptions()" value="subtitle-files" i18n>Subtitle files</option>
+          @if (hasCaptions()) {
+            <option value="subtitle-files" i18n>Subtitle files</option>
+          }
         </select>
       </div>
     </div>
@@ -22,7 +24,7 @@
       <input
         type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button"
         (click)="hide()" (key.enter)="hide()"
-      >
+        >
     </ng-template>
 
     @switch (type) {

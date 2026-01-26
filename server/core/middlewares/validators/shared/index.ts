@@ -1,5 +1,6 @@
 export * from './abuses.js'
 export * from './accounts.js'
+export * from './images.js'
 export * from './users.js'
 export * from './utils.js'
 export * from './video-blacklists.js'

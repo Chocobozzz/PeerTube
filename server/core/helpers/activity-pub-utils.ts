@@ -1,11 +1,13 @@
+import { arrayify } from '@peertube/peertube-core-utils'
 import { ContextType } from '@peertube/peertube-models'
 import { ACTIVITY_PUB, REMOTE_SCHEME } from '@server/initializers/constants.js'
 import { isArray } from './custom-validators/misc.js'
+import { logger } from './logger.js'
 import { buildDigest } from './peertube-crypto.js'
 import type { signJsonLDObject } from './peertube-jsonld.js'
 import { doJSONRequest } from './requests.js'
 
-export type ContextFilter = <T> (arg: T) => Promise<T>
+export type ContextFilter = <T>(arg: T) => Promise<T>
 
 export function buildGlobalHTTPHeaders (
   body: any,
@@ -18,11 +20,11 @@ export function buildGlobalHTTPHeaders (
   }
 }
 
-export async function activityPubContextify <T> (data: T, type: ContextType, contextFilter: ContextFilter) {
+export async function activityPubContextify<T> (data: T, type: ContextType, contextFilter: ContextFilter) {
   return { ...await getContextData(type, contextFilter), ...data }
 }
 
-export async function signAndContextify <T> (options: {
+export async function signAndContextify<T> (options: {
   byActor: { url: string, privateKey: string }
   data: T
   contextType: ContextType | null
@@ -35,7 +37,13 @@ export async function signAndContextify <T> (options: {
     ? await activityPubContextify(data, contextType, contextFilter)
     : data
 
-  return signerFunction({ byActor, data: activity })
+  try {
+    return await signerFunction({ byActor, data: activity })
+  } catch (err) {
+    logger.debug('Cannot sign activity', { activity, err })
+
+    throw err
+  }
 }
 
 export async function getApplicationActorOfHost (host: string) {
@@ -53,21 +61,19 @@ export function getAPPublicValue (): 'https://www.w3.org/ns/activitystreams#Publ
   return 'https://www.w3.org/ns/activitystreams#Public'
 }
 
-export function hasAPPublic (toOrCC: string[]) {
-  if (!isArray(toOrCC)) return false
-
+export function hasAPPublic (collection: string[] | string) {
   const publicValue = getAPPublicValue()
 
-  return toOrCC.some(f => f === 'as:Public' || publicValue)
+  return arrayify(collection).some(f => f === 'as:Public' || publicValue)
 }
 
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------
 
-type ContextValue = { [ id: string ]: (string | { '@type': string, '@id': string }) }
+type ContextValue = { [id: string]: string | { '@type': string, '@id': string } }
 
-const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string })[] } = {
+const contextStore: { [id in ContextType]: (string | { [id: string]: string })[] } = {
   Video: buildContext({
     Hashtag: 'as:Hashtag',
     category: 'sc:category',
@@ -94,6 +100,8 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
 
     Infohash: 'pt:Infohash',
 
+    SensitiveTag: 'pt:SensitiveTag',
+
     tileWidth: {
       '@type': 'sc:Number',
       '@id': 'pt:tileWidth'
@@ -117,10 +125,14 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
     },
 
     originallyPublishedAt: 'sc:datePublished',
+    schedules: 'sc:eventSchedule',
+    startDate: 'sc:startDate',
 
     uploadDate: 'sc:uploadDate',
 
     hasParts: 'sc:hasParts',
+
+    playerSettings: 'pt:playerSettings',
 
     views: {
       '@type': 'sc:Number',
@@ -137,12 +149,6 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
     fps: {
       '@type': 'sc:Number',
       '@id': 'pt:fps'
-    },
-
-    // Keep for federation compatibility
-    commentsEnabled: {
-      '@type': 'sc:Boolean',
-      '@id': 'pt:commentsEnabled'
     },
 
     canReply: 'pt:canReply',
@@ -191,6 +197,10 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
       '@type': 'sc:Number',
       '@id': 'pt:position'
     },
+    videoChannelPosition: {
+      '@type': 'sc:Number',
+      '@id': 'pt:position'
+    },
     startTimestamp: {
       '@type': 'sc:Number',
       '@id': 'pt:startTimestamp'
@@ -223,6 +233,8 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
   }),
 
   Actor: buildContext({
+    playerSettings: 'pt:playerSettings',
+
     playlists: {
       '@id': 'pt:playlists',
       '@type': '@id'
@@ -290,6 +302,15 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
     hasPart: 'sc:hasPart',
     endOffset: 'sc:endOffset',
     startOffset: 'sc:startOffset'
+  }),
+
+  PlayerSettings: buildContext({
+    PlayerSettings: {
+      '@type': '@id',
+      '@id': 'pt:PlayerSettings'
+    },
+
+    theme: 'pt:theme'
   })
 }
 

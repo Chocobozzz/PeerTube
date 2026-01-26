@@ -108,6 +108,10 @@ export class ConfigManager {
 
   // ---------------------------------------------------------------------------
 
+  getStoryboardDirectory () {
+    return join(paths.cache, this.id, 'storyboard')
+  }
+
   getTranscodingDirectory () {
     return join(paths.cache, this.id, 'transcoding')
   }
@@ -137,7 +141,7 @@ export class ConfigManager {
   // ---------------------------------------------------------------------------
 
   // Thanks: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze
-  private deepFreeze <T extends object> (object: T) {
+  private deepFreeze<T extends object> (object: T) {
     const propNames = Reflect.ownKeys(object)
 
     // Freeze properties before freezing self

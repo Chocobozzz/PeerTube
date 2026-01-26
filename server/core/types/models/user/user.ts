@@ -1,11 +1,11 @@
+import { PickWith, PickWithOpt } from '@peertube/peertube-typescript-utils'
 import { AccountModel } from '@server/models/account/account.js'
 import { UserModel } from '@server/models/user/user.js'
-import { MVideoPlaylist } from '@server/types/models/index.js'
-import { PickWith, PickWithOpt } from '@peertube/peertube-typescript-utils'
+import { MChannelCollaboratorChannel, MVideoPlaylist } from '@server/types/models/index.js'
 import {
   MAccount,
   MAccountDefault,
-  MAccountDefaultChannelDefault,
+  MAccountDefaultAllChannelDefault,
   MAccountFormattable,
   MAccountId,
   MAccountIdActorId,
@@ -30,60 +30,63 @@ export type MUserId = Pick<UserModel, 'id'>
 // With account
 
 export type MUserAccountId =
-  MUser &
-  Use<'Account', MAccountId>
+  & MUser
+  & Use<'Account', MAccountId>
 
 export type MUserAccountUrl =
-  MUser &
-  Use<'Account', MAccountUrl & MAccountIdActorId>
+  & MUser
+  & Use<'Account', MAccountUrl & MAccountIdActorId>
 
 export type MUserAccount =
-  MUser &
-  Use<'Account', MAccount>
+  & MUser
+  & Use<'Account', MAccount>
 
 export type MUserAccountDefault =
-  MUser &
-  Use<'Account', MAccountDefault>
+  & MUser
+  & Use<'Account', MAccountDefault>
 
 // With channel
 
 export type MUserNotifSettingChannelDefault =
-  MUser &
-  Use<'NotificationSetting', MNotificationSetting> &
-  Use<'Account', MAccountDefaultChannelDefault>
+  & MUser
+  & Use<'NotificationSetting', MNotificationSetting>
+  & Use<'Account', MAccountDefaultAllChannelDefault>
 
 // With notification settings
 
 export type MUserWithNotificationSetting =
-  MUser &
-  Use<'NotificationSetting', MNotificationSetting>
+  & MUser
+  & Use<'NotificationSetting', MNotificationSetting>
 
 export type MUserNotifSettingAccount =
-  MUser &
-  Use<'NotificationSetting', MNotificationSetting> &
-  Use<'Account', MAccount>
+  & MUser
+  & Use<'NotificationSetting', MNotificationSetting>
+  & Use<'Account', MAccount>
 
 // Default scope
 
 export type MUserDefault =
-  MUser &
-  Use<'NotificationSetting', MNotificationSetting> &
-  Use<'Account', MAccountDefault>
+  & MUser
+  & Use<'NotificationSetting', MNotificationSetting>
+  & Use<'Account', MAccountDefault>
 
 // ############################################################################
 
 // Format for API or AP object
 
 type MAccountWithChannels = MAccountFormattable & PickWithOpt<AccountModel, 'VideoChannels', MChannelFormattable[]>
-type MAccountWithChannelsAndSpecialPlaylists =
-  MAccountWithChannels &
-  PickWithOpt<AccountModel, 'VideoPlaylists', MVideoPlaylist[]>
+
+type MAccountWithAllChannels = MAccountWithChannels & PickWithOpt<AccountModel, 'VideoChannelCollaborators', MChannelCollaboratorChannel[]>
+
+type MAccountWithAllChannelsAndSpecialPlaylists =
+  & MAccountWithAllChannels
+  & PickWithOpt<AccountModel, 'VideoPlaylists', MVideoPlaylist[]>
 
 export type MUserFormattable =
-  MUserQuotaUsed &
-  Use<'Account', MAccountWithChannels> &
-  PickWithOpt<UserModel, 'NotificationSetting', MNotificationSettingFormattable>
+  & MUserQuotaUsed
+  & Use<'Account', MAccountWithChannels>
+  & PickWithOpt<UserModel, 'NotificationSetting', MNotificationSettingFormattable>
 
 export type MMyUserFormattable =
-  MUserFormattable &
-  Use<'Account', MAccountWithChannelsAndSpecialPlaylists>
+  & MUserFormattable
+  & Use<'Account', MAccountWithAllChannelsAndSpecialPlaylists>

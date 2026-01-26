@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { Component, DestroyRef, inject, OnInit, viewChild } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { FormsModule } from '@angular/forms'
 import {
   AuthService,
@@ -25,7 +26,6 @@ import { PeerTubeTemplateDirective } from '../../shared/shared-main/common/peert
 @Component({
   templateUrl: './my-history.component.html',
   styleUrls: [ './my-history.component.scss' ],
-  standalone: true,
   imports: [
     ButtonComponent,
     AdvancedInputFilterComponent,
@@ -37,7 +37,14 @@ import { PeerTubeTemplateDirective } from '../../shared/shared-main/common/peert
   ]
 })
 export class MyHistoryComponent implements OnInit, DisableForReuseHook {
-  @ViewChild('videosSelection', { static: true }) videosSelection: VideosSelectionComponent
+  private authService = inject(AuthService)
+  private userService = inject(UserService)
+  private notifier = inject(Notifier)
+  private confirmService = inject(ConfirmService)
+  private userHistoryService = inject(UserHistoryService)
+  private destroyRef = inject(DestroyRef)
+
+  readonly videosSelection = viewChild<VideosSelectionComponent>('videosSelection')
 
   titlePage: string
   pagination: ComponentPagination = {
@@ -52,10 +59,7 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
     date: true,
     views: true,
     by: true,
-    privacyLabel: false,
-    privacyText: true,
-    state: true,
-    blacklistInfo: true
+    privacyLabel: false
   }
 
   getVideosObservableFunction = this.getVideosObservable.bind(this)
@@ -67,13 +71,7 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
 
   disabled = false
 
-  constructor (
-    private authService: AuthService,
-    private userService: UserService,
-    private notifier: Notifier,
-    private confirmService: ConfirmService,
-    private userHistoryService: UserHistoryService
-  ) {
+  constructor () {
     this.titlePage = $localize`My watch history`
   }
 
@@ -81,6 +79,7 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
     this.user = this.authService.getUser()
 
     this.authService.userInformationLoaded
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.videosHistoryEnabled = this.user.videosHistoryEnabled)
   }
 
@@ -93,7 +92,7 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
   }
 
   reloadData () {
-    this.videosSelection.reloadVideos()
+    this.videosSelection().reloadVideos()
   }
 
   onSearch (search: string) {
@@ -128,7 +127,7 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
           this.authService.refreshUserInformation()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -140,7 +139,7 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
           updatePaginationOnDelete(this.pagination)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -152,15 +151,15 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
     if (res !== true) return
 
     this.userHistoryService.clearAll()
-        .subscribe({
-          next: () => {
-            this.notifier.success($localize`Video history deleted`)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Video history deleted`)
 
-            this.reloadData()
-          },
+          this.reloadData()
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.handleError(err)
+      })
   }
 
   getNoResultMessage () {

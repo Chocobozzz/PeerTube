@@ -1,32 +1,31 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_form-mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
 
-.sub-title my-global-icon {
-  position: relative;
-  top: -3px;
+.results-container {
+  min-height: 40vh;
 }
 
-input[type=text] {
+input[type="text"] {
   @include peertube-input-text(300px);
 }
 
-my-edit-button {
-  @include margin-right(10px);
+.channel {
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid pvar(--input-border-color);
+  min-height: 130px;
 }
 
-.video-channel {
-  padding-bottom: 0;
-
-  @include row-blocks;
-
-  my-actor-avatar {
-    @include margin-right(10px);
-  }
+.channel-info {
+  display: flex;
+  gap: 1rem;
 }
 
-.video-channel-info {
-  flex-grow: 1;
+.metadata {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  min-width: 1px;
 }
 
 .video-channel-names {
@@ -38,26 +37,33 @@ my-edit-button {
   @include disable-default-a-behaviour;
 }
 
-.video-channel-display-name {
+.display-name {
   font-weight: $font-semibold;
-  font-size: 18px;
+
+  @include font-size(18px);
 }
 
-.video-channel-name {
-  font-size: 14px;
+.handle,
+.followers,
+.videos-info {
+  @include font-size(14px);
+}
+
+.handle {
   color: pvar(--fg-300);
-
-  @include margin-left(5px);
+  margin-bottom: 0.5rem;
 }
 
-.video-channel-followers {
+.followers {
   color: pvar(--fg);
-  text-decoration: none;
 }
 
-.video-channel-buttons {
-  margin-top: 10px;
-  min-width: 190px;
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  @include margin-left(auto);
 }
 
 .chart-container {
@@ -66,41 +72,23 @@ my-edit-button {
   height: 100px;
 }
 
-.video-channels-header {
-  margin-bottom: 30px;
-}
-
 @media screen and (max-width: $small-view) {
-  .video-channel {
-    padding-bottom: 10px;
-
-    img {
-      @include margin-right(0);
-    }
-
-    .video-channel-buttons {
-      align-self: center;
-    }
-  }
-
-  .video-channel-info {
-    padding-bottom: 10px;
-    text-align: center;
-  }
-
-  .video-channel-names {
+  .channel-info {
     flex-direction: column;
-    align-items: center !important;
-    margin: auto;
+    align-items: center;
+    text-align: center;
+    padding-bottom: 1rem;
+    align-items: center;
   }
 
-  .video-channel-name {
-    @include margin-left(0 !important);
+  .metadata {
+    align-self: normal;
+    align-items: center;
   }
-}
 
-@media screen and (min-width: $small-view) {
-  .video-channel-buttons {
-    float: right;
+  .buttons {
+    text-align: center;
+
+    @include margin-left(0);
   }
 }

@@ -1,13 +1,14 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_form-mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
 
 .peertube-select-container {
-  @include peertube-select-container(340px);
+  @include responsive-width(340px);
 }
 
 my-select-languages {
   display: block;
 
-  @include responsive-width(340px);
+  width: 340px;
+  max-width: 100%;
 }

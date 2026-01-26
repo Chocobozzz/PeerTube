@@ -41,6 +41,9 @@ describe('Update object storage URL CLI', function () {
     const video = await server.videos.quickUpload({ name: 'video' })
     uuid = video.uuid
 
+    await server.captions.add({ language: 'ar', videoId: uuid, fixture: 'subtitle-good1.vtt' })
+    await server.captions.add({ language: 'zh', videoId: uuid, fixture: 'subtitle-good1.vtt' })
+
     await waitJobs([ server ])
   })
 
@@ -97,6 +100,16 @@ describe('Update object storage URL CLI', function () {
         const source = await server.videos.getSource({ id: video.uuid })
 
         return [ source.fileUrl ]
+      }
+    })
+
+    await check({
+      baseUrl: objectStorage.getMockCaptionFileBaseUrl(),
+      newBaseUrl: 'https://captions.example.com/',
+      urlGetter: async video => {
+        const { data } = await server.captions.list({ videoId: video.uuid })
+
+        return data.map(c => c.fileUrl)
       }
     })
   })

@@ -1,8 +1,8 @@
 <p-chips
   [(ngModel)]="selectedItems"
   (ngModelChange)="onModelChange()"
-  [placeholder]="placeholder"
-  [inputId]="inputId"
+  [placeholder]="placeholder()"
+  [inputId]="inputId()"
   [allowDuplicate]="false"
   [caseSensitiveDuplication]="false"
   [separator]="separator"

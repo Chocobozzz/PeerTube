@@ -30,7 +30,8 @@ export class TranscriptFile {
     const guessableFormats = [ 'txt', 'vtt', 'srt' ]
     assert(
       guessableFormats.includes(format),
-      `Couldn't guess transcript format from extension "${format}". Valid formats are: ${guessableFormats.join(', ')}."`)
+      `Couldn't guess transcript format from extension "${format}". Valid formats are: ${guessableFormats.join(', ')}."`
+    )
 
     return new TranscriptFile({ path, language, format: format as TranscriptFormat })
   }
@@ -49,7 +50,7 @@ export class TranscriptFile {
     return new TranscriptFile({ path, language, format })
   }
 
-  async equals (transcript: TranscriptFile, caseSensitive: boolean = true) {
+  async equals (transcript: TranscriptFile, caseSensitive = true) {
     if (this.language !== transcript.language) {
       return false
     }

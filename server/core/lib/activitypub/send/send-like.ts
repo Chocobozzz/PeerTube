@@ -2,7 +2,7 @@ import { Transaction } from 'sequelize'
 import { ActivityAudience, ActivityLike } from '@peertube/peertube-models'
 import { logger } from '../../../helpers/logger.js'
 import { MActor, MActorAudience, MVideoAccountLight, MVideoUrl } from '../../../types/models/index.js'
-import { audiencify, getAudience } from '../audience.js'
+import { audiencify, getPublicAudience } from '../audience.js'
 import { getVideoLikeActivityPubUrlByLocalActor } from '../url.js'
 import { sendVideoActivityToOrigin } from './shared/send-utils.js'
 
@@ -19,7 +19,7 @@ function sendLike (byActor: MActor, video: MVideoAccountLight, transaction: Tran
 }
 
 function buildLikeActivity (url: string, byActor: MActorAudience, video: MVideoUrl, audience?: ActivityAudience): ActivityLike {
-  if (!audience) audience = getAudience(byActor)
+  if (!audience) audience = getPublicAudience(byActor)
 
   return audiencify(
     {

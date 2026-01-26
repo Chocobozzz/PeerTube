@@ -1,0 +1,17 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+
+.form-title {
+  font-weight: $font-bold;
+  color: pvar(--fg-350);
+  line-height: 1;
+
+  @include font-size(2rem);
+  @include rfs(2rem, margin-top);
+  @include rfs(2rem, margin-bottom);
+
+  my-global-icon {
+    @include global-icon-size(28px);
+    @include margin-right(0.5rem);
+  }
+}

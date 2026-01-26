@@ -1,42 +1,44 @@
-import { Component, OnInit } from '@angular/core'
-import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
+import { Component, OnInit, inject, viewChild } from '@angular/core'
+import { ConfirmService, Notifier } from '@app/core'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { Runner } from '@peertube/peertube-models'
-import { SharedModule, SortMeta } from 'primeng/api'
-import { TableModule } from 'primeng/table'
 import { ActionDropdownComponent, DropdownAction } from '../../../../shared/shared-main/buttons/action-dropdown.component'
-import { AutoColspanDirective } from '../../../../shared/shared-main/common/auto-colspan.directive'
+import { NumberFormatterPipe } from '../../../../shared/shared-main/common/number-formatter.pipe'
+import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../../../../shared/shared-tables/table.component'
 import { RunnerService } from '../runner.service'
 
 @Component({
   selector: 'my-runner-list',
   templateUrl: './runner-list.component.html',
-  standalone: true,
   imports: [
-    TableModule,
-    SharedModule,
-    NgbTooltip,
     ActionDropdownComponent,
-    AutoColspanDirective,
-    PTDatePipe
+    PTDatePipe,
+    TableComponent,
+    NumberFormatterPipe
   ]
 })
-export class RunnerListComponent extends RestTable <Runner> implements OnInit {
-  runners: Runner[] = []
-  totalRecords = 0
+export class RunnerListComponent implements OnInit {
+  private runnerService = inject(RunnerService)
+  private notifier = inject(Notifier)
+  private confirmService = inject(ConfirmService)
 
-  sort: SortMeta = { field: 'createdAt', order: -1 }
-  pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
+  readonly table = viewChild<TableComponent<Runner>>('table')
 
   actions: DropdownAction<Runner>[][] = []
 
-  constructor (
-    private runnerService: RunnerService,
-    private notifier: Notifier,
-    private confirmService: ConfirmService
-  ) {
-    super()
+  columns: TableColumnInfo<string>[] = [
+    { id: 'name', label: $localize`Name`, sortable: false },
+    { id: 'description', label: $localize`Description`, sortable: false },
+    { id: 'ip', label: $localize`IP`, sortable: false },
+    { id: 'version', label: $localize`Version`, sortable: false },
+    { id: 'lastContact', label: $localize`Last contact`, sortable: false },
+    { id: 'createdAt', label: $localize`Created`, sortable: true }
+  ]
+
+  dataLoader: typeof this._dataLoader
+
+  constructor () {
+    this.dataLoader = this._dataLoader.bind(this)
   }
 
   ngOnInit () {
@@ -44,16 +46,10 @@ export class RunnerListComponent extends RestTable <Runner> implements OnInit {
       [
         {
           label: $localize`Remove`,
-          handler: runer => this.deleteRunner(runer)
+          handler: runner => this.deleteRunner(runner)
         }
       ]
     ]
-
-    this.initialize()
-  }
-
-  getIdentifier () {
-    return 'RunnerListComponent'
   }
 
   async deleteRunner (runner: Runner) {
@@ -65,25 +61,17 @@ export class RunnerListComponent extends RestTable <Runner> implements OnInit {
     if (res === false) return
 
     this.runnerService.deleteRunner(runner)
-        .subscribe({
-          next: () => {
-            this.reloadData()
-            this.notifier.success($localize`Runner removed.`)
-          },
-
-          error: err => this.notifier.error(err.message)
-        })
-  }
-
-  protected reloadDataInternal () {
-    this.runnerService.listRunners({ pagination: this.pagination, sort: this.sort })
       .subscribe({
-        next: resultList => {
-          this.runners = resultList.data
-          this.totalRecords = resultList.total
+        next: () => {
+          this.table().loadData()
+          this.notifier.success($localize`Runner removed.`)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
+  }
+
+  private _dataLoader (options: DataLoaderOptions) {
+    return this.runnerService.listRunners(options)
   }
 }

@@ -1,7 +1,7 @@
 import { SortMeta } from 'primeng/api'
 import { catchError, map, tap } from 'rxjs/operators'
 import { HttpClient, HttpContext, HttpParams } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { AuthService, ComponentPaginationLight, PeerTubeSocket, RestExtractor, RestService } from '@app/core'
 import { NGX_LOADING_BAR_IGNORED } from '@ngx-loading-bar/http-client'
 import { ResultList, UserNotification as UserNotificationServer, UserNotificationSetting } from '@peertube/peertube-models'
@@ -10,16 +10,14 @@ import { UserNotification } from './user-notification.model'
 
 @Injectable()
 export class UserNotificationService {
+  private authHttp = inject(HttpClient)
+  private auth = inject(AuthService)
+  private restExtractor = inject(RestExtractor)
+  private restService = inject(RestService)
+  private peertubeSocket = inject(PeerTubeSocket)
+
   static BASE_NOTIFICATIONS_URL = environment.apiUrl + '/api/v1/users/me/notifications'
   static BASE_NOTIFICATION_SETTINGS = environment.apiUrl + '/api/v1/users/me/notification-settings'
-
-  constructor (
-    private authHttp: HttpClient,
-    private auth: AuthService,
-    private restExtractor: RestExtractor,
-    private restService: RestService,
-    private peertubeSocket: PeerTubeSocket
-  ) {}
 
   listMyNotifications (parameters: {
     pagination: ComponentPaginationLight
@@ -38,29 +36,32 @@ export class UserNotificationService {
       ? new HttpContext().set(NGX_LOADING_BAR_IGNORED, true)
       : undefined
 
-    return this.authHttp.get<ResultList<UserNotification>>(UserNotificationService.BASE_NOTIFICATIONS_URL, { params, context })
-               .pipe(
-                 map(res => this.restExtractor.applyToResultListData(res, this.formatNotification.bind(this))),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+    return this.authHttp.get<ResultList<UserNotificationServer>>(UserNotificationService.BASE_NOTIFICATIONS_URL, { params, context })
+      .pipe(
+        map(res => this.restExtractor.applyToResultListData(res, this.formatNotification.bind(this))),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   countUnreadNotifications () {
     return this.listMyNotifications({ pagination: { currentPage: 1, itemsPerPage: 0 }, ignoreLoadingBar: true, unread: true })
-      .pipe(map(n => n.total))
+      .pipe(
+        map(n => n.total),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   markAsRead (notification: UserNotification) {
     const url = UserNotificationService.BASE_NOTIFICATIONS_URL + '/read'
 
-    const body = { ids: [ notification.id ] }
+    const body = { ids: [ notification.payload.id ] }
     const context = new HttpContext().set(NGX_LOADING_BAR_IGNORED, true)
 
     return this.authHttp.post(url, body, { context })
-               .pipe(
-                 tap(() => this.peertubeSocket.dispatchNotificationEvent('read')),
-                 catchError(res => this.restExtractor.handleError(res))
-               )
+      .pipe(
+        tap(() => this.peertubeSocket.dispatchNotificationEvent('read')),
+        catchError(res => this.restExtractor.handleError(res))
+      )
   }
 
   markAllAsRead () {
@@ -68,17 +69,17 @@ export class UserNotificationService {
     const context = new HttpContext().set(NGX_LOADING_BAR_IGNORED, true)
 
     return this.authHttp.post(url, {}, { context })
-               .pipe(
-                 tap(() => this.peertubeSocket.dispatchNotificationEvent('read-all')),
-                 catchError(res => this.restExtractor.handleError(res))
-               )
+      .pipe(
+        tap(() => this.peertubeSocket.dispatchNotificationEvent('read-all')),
+        catchError(res => this.restExtractor.handleError(res))
+      )
   }
 
   updateNotificationSettings (settings: UserNotificationSetting) {
     const url = UserNotificationService.BASE_NOTIFICATION_SETTINGS
 
     return this.authHttp.put(url, settings)
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   private formatNotification (notification: UserNotificationServer) {

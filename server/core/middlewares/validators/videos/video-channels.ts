@@ -1,9 +1,10 @@
-import express from 'express'
-import { body, param, query } from 'express-validator'
 import { HttpStatusCode, VideosImportInChannelCreate } from '@peertube/peertube-models'
 import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 import { CONFIG } from '@server/initializers/config.js'
+import { loadReservedActorName } from '@server/lib/local-actor.js'
 import { MChannelAccountDefault } from '@server/types/models/index.js'
+import express from 'express'
+import { body, param, query } from 'express-validator'
 import { isBooleanValid, isIdValid, toBooleanOrNull } from '../../../helpers/custom-validators/misc.js'
 import {
   isVideoChannelDescriptionValid,
@@ -11,9 +12,8 @@ import {
   isVideoChannelSupportValid,
   isVideoChannelUsernameValid
 } from '../../../helpers/custom-validators/video-channels.js'
-import { ActorModel } from '../../../models/actor/actor.js'
 import { VideoChannelModel } from '../../../models/video/video-channel.js'
-import { areValidationErrors, checkUserQuota, doesVideoChannelNameWithHostExist } from '../shared/index.js'
+import { areValidationErrors, checkUserQuota, doesChannelHandleExist } from '../shared/index.js'
 import { doesVideoChannelSyncIdExist } from '../shared/video-channel-syncs.js'
 
 export const videoChannelsAddValidator = [
@@ -31,18 +31,21 @@ export const videoChannelsAddValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    const actor = await ActorModel.loadLocalByName(req.body.name)
+    const actor = await loadReservedActorName(req.body.name)
     if (actor) {
       res.fail({
         status: HttpStatusCode.CONFLICT_409,
-        message: 'Another actor (account/channel) with this name on this instance already exists or has already existed.'
+        message: req.t(
+          'Another actor (account/channel) with name {name} on this instance already exists or has already existed.',
+          { name: req.body.name }
+        )
       })
       return false
     }
 
     const count = await VideoChannelModel.countByAccount(res.locals.oauth.token.User.Account.id)
     if (count >= CONFIG.VIDEO_CHANNELS.MAX_PER_USER) {
-      res.fail({ message: `You cannot create more than ${CONFIG.VIDEO_CHANNELS.MAX_PER_USER} channels` })
+      res.fail({ message: req.t('You cannot create more than {count} channels', { count: CONFIG.VIDEO_CHANNELS.MAX_PER_USER }) })
       return false
     }
 
@@ -51,9 +54,6 @@ export const videoChannelsAddValidator = [
 ]
 
 export const videoChannelsUpdateValidator = [
-  param('nameWithHost')
-    .exists(),
-
   body('displayName')
     .optional()
     .custom(isVideoChannelDisplayNameValid),
@@ -76,57 +76,45 @@ export const videoChannelsUpdateValidator = [
 
 export const videoChannelsRemoveValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (!await checkVideoChannelIsNotTheLastOne(res.locals.videoChannel, res)) return
+    if (!await checkVideoChannelIsNotTheLastOne(res.locals.videoChannel, req, res)) return
 
     return next()
   }
 ]
 
-export const videoChannelsNameWithHostValidator = [
-  param('nameWithHost')
-    .exists(),
+export const videoChannelsHandleValidatorFactory = (options: {
+  checkIsLocal: boolean
+  checkCanManage: boolean
+  checkIsOwner: boolean
+}) => {
+  const { checkIsLocal, checkCanManage, checkIsOwner } = options
 
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (areValidationErrors(req, res)) return
+  return [
+    param('handle')
+      .exists(),
 
-    if (!await doesVideoChannelNameWithHostExist(req.params.nameWithHost, res)) return
+    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      if (areValidationErrors(req, res)) return
 
-    return next()
-  }
-]
+      if (!await doesChannelHandleExist({ handle: req.params.handle, checkCanManage, checkIsLocal, checkIsOwner, req, res })) return
 
-export const ensureIsLocalChannel = [
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (res.locals.videoChannel.Actor.isOwned() === false) {
-      return res.fail({
-        status: HttpStatusCode.FORBIDDEN_403,
-        message: 'This channel is not owned.'
-      })
+      return next()
     }
+  ]
+}
 
-    return next()
-  }
-]
-
-export const ensureChannelOwnerCanUpload = [
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const channel = res.locals.videoChannel
-    const user = { id: channel.Account.userId }
-
-    if (!await checkUserQuota(user, 1, res)) return
-
-    next()
-  }
-]
-
-export const videoChannelStatsValidator = [
+export const listAccountChannelsValidator = [
   query('withStats')
     .optional()
-    .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid stats flag boolean'),
+    .customSanitizer(toBooleanOrNull),
+
+  query('includeCollaborations')
+    .optional()
+    .customSanitizer(toBooleanOrNull),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
+
     return next()
   }
 ]
@@ -159,7 +147,7 @@ export const videoChannelImportVideosValidator = [
     if (!CONFIG.IMPORT.VIDEOS.HTTP.ENABLED) {
       return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Channel import is impossible as video upload via HTTP is not enabled on the server'
+        message: req.t('Channel import is impossible as video upload via HTTP is not enabled on the server')
       })
     }
 
@@ -168,9 +156,12 @@ export const videoChannelImportVideosValidator = [
     if (res.locals.videoChannelSync && res.locals.videoChannelSync.videoChannelId !== res.locals.videoChannel.id) {
       return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
-        message: 'This channel sync is not owned by this channel'
+        message: req.t('This channel sync is not owned by this channel')
       })
     }
+
+    const user = { id: res.locals.videoChannel.Account.userId }
+    if (!await checkUserQuota({ user, videoFileSize: 1, req, res })) return
 
     return next()
   }
@@ -178,13 +169,13 @@ export const videoChannelImportVideosValidator = [
 
 // ---------------------------------------------------------------------------
 
-async function checkVideoChannelIsNotTheLastOne (videoChannel: MChannelAccountDefault, res: express.Response) {
+async function checkVideoChannelIsNotTheLastOne (videoChannel: MChannelAccountDefault, req: express.Request, res: express.Response) {
   const count = await VideoChannelModel.countByAccount(videoChannel.Account.id)
 
   if (count <= 1) {
     res.fail({
       status: HttpStatusCode.CONFLICT_409,
-      message: 'Cannot remove the last channel of this user'
+      message: req.t('Cannot remove the last channel of this user')
     })
     return false
   }

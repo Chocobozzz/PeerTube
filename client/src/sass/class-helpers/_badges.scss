@@ -1,0 +1,161 @@
+@use "_icons" as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_button-mixins" as *;
+
+// Badge color variables
+$badge-red-light: #ffcdd2;
+$badge-red-dark: #c63737;
+
+$badge-yellow-light: #FEEDAF;
+$badge-yellow-dark: #7E432E;
+
+$badge-brown-light: #FBC98D;
+$badge-brown-dark: #7B2F1A;
+
+$badge-green-light: #8FEBA4;
+$badge-green-dark: #213B2D;
+
+$badge-blue-light: #B3E4E6;
+$badge-blue-dark: #273236;
+
+$badge-purple-light: #DCBCFA;
+$badge-purple-dark: #50386E;
+
+$badge-grey-light: #CBD7E0;
+$badge-grey-dark: #2D3448;
+
+.pt-badge {
+  display: inline-block;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-weight: $font-semibold;
+  line-height: normal;
+  max-width: 100%;
+  white-space: normal;
+  word-break: normal;
+
+  &.badge-fs-normal {
+    font-size: 100%;
+  }
+
+  &.badge-small {
+    font-size: 10px;
+    padding: 1px 3px;
+  }
+
+  &.badge-primary {
+    color: pvar(--on-primary);
+    background-color: pvar(--primary);
+  }
+
+  &.badge-secondary {
+    color: pvar(--fg-450);
+    background-color: pvar(--bg-secondary-400);
+  }
+
+  &.badge-secondary-on-secondary {
+    color: pvar(--fg-300);
+    background-color: pvar(--bg-secondary-450);
+  }
+
+  &.badge-banned,
+  &.badge-danger,
+  &.badge-red {
+    background-color: $badge-red-light;
+    color: $badge-red-dark;
+  }
+
+  &.badge-banned {
+    text-decoration: line-through;
+  }
+
+  &.badge-yellow,
+  &.badge-warning {
+    background-color: $badge-yellow-light;
+    color: $badge-yellow-dark;
+  }
+
+  &.badge-brown {
+    background-color: $badge-brown-light;
+    color: $badge-brown-dark;
+  }
+
+  &.badge-green,
+  &.badge-success {
+    background-color: $badge-green-light;
+    color: $badge-green-dark;
+  }
+
+  &.badge-blue,
+  &.badge-info {
+    background-color: $badge-blue-light;
+    color: $badge-blue-dark;
+  }
+
+  &.badge-purple {
+    background-color: $badge-purple-light;
+    color: $badge-purple-dark;
+  }
+
+  &.badge-grey {
+    color: $badge-grey-dark;
+    background-color: $badge-grey-light;
+  }
+
+  &:is(a) {
+    @include disable-default-a-behaviour;
+  }
+}
+
+[data-bs-theme="dark"] {
+  .pt-badge {
+    &.badge-banned,
+    &.badge-danger,
+    &.badge-red {
+      color: $badge-red-light;
+      background-color: $badge-red-dark;
+    }
+
+    &.badge-yellow,
+    &.badge-warning {
+      color: $badge-yellow-light;
+      background-color: $badge-yellow-dark;
+    }
+
+    &.badge-brown {
+      color: $badge-brown-light;
+      background-color: $badge-brown-dark;
+    }
+
+    &.badge-green,
+    &.badge-success {
+      color: $badge-green-light;
+      background-color: $badge-green-dark;
+    }
+
+    &.badge-blue,
+    &.badge-info {
+      color: $badge-blue-light;
+      background-color: $badge-blue-dark;
+    }
+
+    &.badge-purple {
+      color: $badge-purple-light;
+      background-color: $badge-purple-dark;
+    }
+
+    &.badge-grey {
+      color: $badge-grey-light;
+      background-color: $badge-grey-dark;
+    }
+  }
+}
+
+.pt-badges-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.25rem;
+}

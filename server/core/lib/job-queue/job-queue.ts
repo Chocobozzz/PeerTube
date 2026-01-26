@@ -7,7 +7,6 @@ import {
   ActorKeysPayload,
   AfterVideoChannelImportPayload,
   CreateUserExportPayload,
-  DeleteResumableUploadMetaFilePayload,
   EmailPayload,
   FederateVideoPayload,
   GenerateStoryboardPayload,
@@ -78,35 +77,34 @@ import { processVideoTranscription } from './handlers/video-transcription.js'
 import { processVideosViewsStats } from './handlers/video-views-stats.js'
 
 export type CreateJobArgument =
-  { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
-  { type: 'activitypub-http-broadcast-parallel', payload: ActivitypubHttpBroadcastPayload } |
-  { type: 'activitypub-http-unicast', payload: ActivitypubHttpUnicastPayload } |
-  { type: 'activitypub-http-fetcher', payload: ActivitypubHttpFetcherPayload } |
-  { type: 'activitypub-cleaner', payload: {} } |
-  { type: 'activitypub-follow', payload: ActivitypubFollowPayload } |
-  { type: 'video-file-import', payload: VideoFileImportPayload } |
-  { type: 'video-transcoding', payload: VideoTranscodingPayload } |
-  { type: 'email', payload: EmailPayload } |
-  { type: 'transcoding-job-builder', payload: TranscodingJobBuilderPayload } |
-  { type: 'video-import', payload: VideoImportPayload } |
-  { type: 'activitypub-refresher', payload: RefreshPayload } |
-  { type: 'videos-views-stats', payload: {} } |
-  { type: 'video-live-ending', payload: VideoLiveEndingPayload } |
-  { type: 'actor-keys', payload: ActorKeysPayload } |
-  { type: 'video-redundancy', payload: VideoRedundancyPayload } |
-  { type: 'delete-resumable-upload-meta-file', payload: DeleteResumableUploadMetaFilePayload } |
-  { type: 'video-studio-edition', payload: VideoStudioEditionPayload } |
-  { type: 'manage-video-torrent', payload: ManageVideoTorrentPayload } |
-  { type: 'move-to-object-storage', payload: MoveStoragePayload } |
-  { type: 'move-to-file-system', payload: MoveStoragePayload } |
-  { type: 'video-channel-import', payload: VideoChannelImportPayload } |
-  { type: 'after-video-channel-import', payload: AfterVideoChannelImportPayload } |
-  { type: 'notify', payload: NotifyPayload } |
-  { type: 'federate-video', payload: FederateVideoPayload } |
-  { type: 'create-user-export', payload: CreateUserExportPayload } |
-  { type: 'generate-video-storyboard', payload: GenerateStoryboardPayload } |
-  { type: 'import-user-archive', payload: ImportUserArchivePayload } |
-  { type: 'video-transcription', payload: VideoTranscriptionPayload }
+  | { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload }
+  | { type: 'activitypub-http-broadcast-parallel', payload: ActivitypubHttpBroadcastPayload }
+  | { type: 'activitypub-http-unicast', payload: ActivitypubHttpUnicastPayload }
+  | { type: 'activitypub-http-fetcher', payload: ActivitypubHttpFetcherPayload }
+  | { type: 'activitypub-cleaner', payload: {} }
+  | { type: 'activitypub-follow', payload: ActivitypubFollowPayload }
+  | { type: 'video-file-import', payload: VideoFileImportPayload }
+  | { type: 'video-transcoding', payload: VideoTranscodingPayload }
+  | { type: 'email', payload: EmailPayload }
+  | { type: 'transcoding-job-builder', payload: TranscodingJobBuilderPayload }
+  | { type: 'video-import', payload: VideoImportPayload }
+  | { type: 'activitypub-refresher', payload: RefreshPayload }
+  | { type: 'videos-views-stats', payload: {} }
+  | { type: 'video-live-ending', payload: VideoLiveEndingPayload }
+  | { type: 'actor-keys', payload: ActorKeysPayload }
+  | { type: 'video-redundancy', payload: VideoRedundancyPayload }
+  | { type: 'video-studio-edition', payload: VideoStudioEditionPayload }
+  | { type: 'manage-video-torrent', payload: ManageVideoTorrentPayload }
+  | { type: 'move-to-object-storage', payload: MoveStoragePayload }
+  | { type: 'move-to-file-system', payload: MoveStoragePayload }
+  | { type: 'video-channel-import', payload: VideoChannelImportPayload }
+  | { type: 'after-video-channel-import', payload: AfterVideoChannelImportPayload }
+  | { type: 'notify', payload: NotifyPayload }
+  | { type: 'federate-video', payload: FederateVideoPayload }
+  | { type: 'create-user-export', payload: CreateUserExportPayload }
+  | { type: 'generate-video-storyboard', payload: GenerateStoryboardPayload }
+  | { type: 'import-user-archive', payload: ImportUserArchivePayload }
+  | { type: 'video-transcription', payload: VideoTranscriptionPayload }
 
 export type CreateJobOptions = {
   delay?: number
@@ -184,7 +182,6 @@ const jobTypes: JobType[] = [
 const silentFailure = new Set<JobType>([ 'activitypub-http-unicast' ])
 
 class JobQueue {
-
   private static instance: JobQueue
 
   private workers: { [id in JobType]?: Worker } = {}
@@ -216,7 +213,9 @@ class JobQueue {
       connection: Redis.getRedisClientOptions('FlowProducer'),
       prefix: this.jobRedisPrefix
     })
-    this.flowProducer.on('error', err => { logger.error('Error in flow producer', { err }) })
+    this.flowProducer.on('error', err => {
+      logger.error('Error in flow producer', { err })
+    })
 
     this.addRepeatableJobs()
   }
@@ -239,7 +238,7 @@ class JobQueue {
       return timeoutPromise(p, timeout)
     }
 
-    const processor = async (jobArg: Job<any>) => {
+    const processor = async (jobArg: Job) => {
       const job = await Hooks.wrapObject(jobArg, 'filter:job-queue.process.params', { type: handlerName })
 
       return Hooks.wrapPromiseFun(handler, job, 'filter:job-queue.process.result')
@@ -254,13 +253,15 @@ class JobQueue {
 
       logger.log(logLevel, 'Cannot execute job %s in queue %s.', job.id, handlerName, { payload: job.data, err })
 
-      if (errorHandlers[job.name]) {
-        errorHandlers[job.name](job, err)
+      if (errorHandlers[handlerName]) {
+        errorHandlers[handlerName](job, err)
           .catch(err => logger.error('Cannot run error handler for job failure %d in queue %s.', job.id, handlerName, { err }))
       }
     })
 
-    worker.on('error', err => { logger.error('Error in job worker %s.', handlerName, { err }) })
+    worker.on('error', err => {
+      logger.error('Error in job worker %s.', handlerName, { err })
+    })
 
     this.workers[handlerName] = worker
   }
@@ -272,7 +273,9 @@ class JobQueue {
     }
 
     const queue = new Queue(handlerName, queueOptions)
-    queue.on('error', err => { logger.error('Error in job queue %s.', handlerName, { err }) })
+    queue.on('error', err => {
+      logger.error('Error in job queue %s.', handlerName, { err })
+    })
 
     this.queues[handlerName] = queue
 
@@ -288,7 +291,9 @@ class JobQueue {
     }
 
     const queueEvents = new QueueEvents(handlerName, queueEventsOptions)
-    queueEvents.on('error', err => { logger.error('Error in job queue events %s.', handlerName, { err }) })
+    queueEvents.on('error', err => {
+      logger.error('Error in job queue events %s.', handlerName, { err })
+    })
 
     this.queueEvents[handlerName] = queueEvents
   }
@@ -347,7 +352,7 @@ class JobQueue {
 
   createJobAsync (options: CreateJobArgument & CreateJobOptions): void {
     this.createJob(options)
-        .catch(err => logger.error('Cannot create job.', { err, options }))
+      .catch(err => logger.error('Cannot create job.', { err, options }))
   }
 
   createJob (options: CreateJobArgument & CreateJobOptions | undefined) {
@@ -440,10 +445,7 @@ class JobQueue {
         continue
       }
 
-      let jobs = await queue.getJobs(states, 0, start + count, asc)
-
-      // FIXME: we have sometimes undefined values https://github.com/taskforcesh/bullmq/issues/248
-      jobs = jobs.filter(j => !!j)
+      const jobs = await queue.getJobs(states, 0, start + count, asc)
 
       results = results.concat(jobs)
     }
@@ -559,5 +561,6 @@ class JobQueue {
 // ---------------------------------------------------------------------------
 
 export {
-  JobQueue, jobTypes
+  JobQueue,
+  jobTypes
 }

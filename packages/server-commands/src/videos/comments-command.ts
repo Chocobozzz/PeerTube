@@ -23,7 +23,6 @@ type ListForAdminOrAccountCommonOptions = {
 }
 
 export class CommentsCommand extends AbstractCommand {
-
   private lastVideoId: number | string
   private lastThreadId: number
   private lastReplyId: number
@@ -51,6 +50,7 @@ export class CommentsCommand extends AbstractCommand {
 
   listCommentsOnMyVideos (options: OverrideCommandOptions & ListForAdminOrAccountCommonOptions & {
     isHeldForReview?: boolean
+    includeCollaborations?: boolean
   } = {}) {
     const path = '/api/v1/users/me/videos/comments'
 
@@ -61,7 +61,7 @@ export class CommentsCommand extends AbstractCommand {
       query: {
         ...this.buildListForAdminOrAccountQuery(options),
 
-        isHeldForReview: options.isHeldForReview
+        ...pick(options, [ 'isHeldForReview', 'includeCollaborations' ])
       },
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
@@ -78,13 +78,15 @@ export class CommentsCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  listThreads (options: OverrideCommandOptions & {
-    videoId: number | string
-    videoPassword?: string
-    start?: number
-    count?: number
-    sort?: string
-  }) {
+  listThreads (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+      videoPassword?: string
+      start?: number
+      count?: number
+      sort?: string
+    }
+  ) {
     const { start, count, sort, videoId, videoPassword } = options
     const path = '/api/v1/videos/' + videoId + '/comment-threads'
 
@@ -99,10 +101,12 @@ export class CommentsCommand extends AbstractCommand {
     })
   }
 
-  getThread (options: OverrideCommandOptions & {
-    videoId: number | string
-    threadId: number
-  }) {
+  getThread (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+      threadId: number
+    }
+  ) {
     const { videoId, threadId } = options
     const path = '/api/v1/videos/' + videoId + '/comment-threads/' + threadId
 
@@ -115,21 +119,25 @@ export class CommentsCommand extends AbstractCommand {
     })
   }
 
-  async getThreadOf (options: OverrideCommandOptions & {
-    videoId: number | string
-    text: string
-  }) {
+  async getThreadOf (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+      text: string
+    }
+  ) {
     const { videoId, text } = options
     const threadId = await this.findCommentId({ videoId, text })
 
     return this.getThread({ ...options, videoId, threadId })
   }
 
-  async createThread (options: OverrideCommandOptions & {
-    videoId: number | string
-    text: string
-    videoPassword?: string
-  }) {
+  async createThread (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+      text: string
+      videoPassword?: string
+    }
+  ) {
     const { videoId, text, videoPassword } = options
     const path = '/api/v1/videos/' + videoId + '/comment-threads'
 
@@ -149,12 +157,14 @@ export class CommentsCommand extends AbstractCommand {
     return body.comment
   }
 
-  async addReply (options: OverrideCommandOptions & {
-    videoId: number | string
-    toCommentId: number
-    text: string
-    videoPassword?: string
-  }) {
+  async addReply (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+      toCommentId: number
+      text: string
+      videoPassword?: string
+    }
+  ) {
     const { videoId, toCommentId, text, videoPassword } = options
     const path = '/api/v1/videos/' + videoId + '/comments/' + toCommentId
 
@@ -173,22 +183,28 @@ export class CommentsCommand extends AbstractCommand {
     return body.comment
   }
 
-  async addReplyToLastReply (options: OverrideCommandOptions & {
-    text: string
-  }) {
+  async addReplyToLastReply (
+    options: OverrideCommandOptions & {
+      text: string
+    }
+  ) {
     return this.addReply({ ...options, videoId: this.lastVideoId, toCommentId: this.lastReplyId })
   }
 
-  async addReplyToLastThread (options: OverrideCommandOptions & {
-    text: string
-  }) {
+  async addReplyToLastThread (
+    options: OverrideCommandOptions & {
+      text: string
+    }
+  ) {
     return this.addReply({ ...options, videoId: this.lastVideoId, toCommentId: this.lastThreadId })
   }
 
-  async findCommentId (options: OverrideCommandOptions & {
-    videoId: number | string
-    text: string
-  }) {
+  async findCommentId (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+      text: string
+    }
+  ) {
     const { videoId, text } = options
     const { data } = await this.listForAdmin({ videoId, count: 25, sort: '-createdAt' })
 
@@ -197,10 +213,12 @@ export class CommentsCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  delete (options: OverrideCommandOptions & {
-    videoId: number | string
-    commentId: number
-  }) {
+  delete (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+      commentId: number
+    }
+  ) {
     const { videoId, commentId } = options
     const path = '/api/v1/videos/' + videoId + '/comments/' + commentId
 
@@ -213,9 +231,11 @@ export class CommentsCommand extends AbstractCommand {
     })
   }
 
-  async deleteAllComments (options: OverrideCommandOptions & {
-    videoUUID: string
-  }) {
+  async deleteAllComments (
+    options: OverrideCommandOptions & {
+      videoUUID: string
+    }
+  ) {
     const { data } = await this.listForAdmin({ ...options, start: 0, count: 20 })
 
     for (const comment of data) {
@@ -227,10 +247,12 @@ export class CommentsCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  approve (options: OverrideCommandOptions & {
-    videoId: number | string
-    commentId: number
-  }) {
+  approve (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+      commentId: number
+    }
+  ) {
     const { videoId, commentId } = options
     const path = '/api/v1/videos/' + videoId + '/comments/' + commentId + '/approve'
 

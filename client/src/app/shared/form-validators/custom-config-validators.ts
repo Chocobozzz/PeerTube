@@ -4,7 +4,7 @@ import { BuildFormValidator } from './form-validator.model'
 export const INSTANCE_NAME_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.required ],
   MESSAGES: {
-    required: $localize`Instance name is required.`
+    required: $localize`Platform name is required.`
   }
 }
 
@@ -84,8 +84,8 @@ export const MAX_LIVE_DURATION_VALIDATOR: BuildFormValidator = {
 export const MAX_INSTANCE_LIVES_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.required, Validators.min(-1) ],
   MESSAGES: {
-    required: $localize`Max instance lives is required.`,
-    min: $localize`Max instance lives must be greater or equal to -1.`
+    required: $localize`Max lives is required.`,
+    min: $localize`Max lives must be greater or equal to -1.`
   }
 }
 

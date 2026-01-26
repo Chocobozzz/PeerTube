@@ -1,8 +1,9 @@
-import { NgClass, NgIf } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { CommonModule, NgClass } from '@angular/common'
+import { Component, OnInit, inject } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AuthService, ServerService, UserService } from '@app/core'
-import { USER_EMAIL_VALIDATOR, USER_PASSWORD_VALIDATOR } from '@app/shared/form-validators/user-validators'
+import { LOGIN_PASSWORD_VALIDATOR } from '@app/shared/form-validators/login-validators'
+import { USER_EMAIL_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
@@ -15,27 +16,23 @@ import { InputTextComponent } from '../../../shared/shared-forms/input-text.comp
   selector: 'my-account-change-email',
   templateUrl: './my-account-change-email.component.html',
   styleUrls: [ './my-account-change-email.component.scss' ],
-  standalone: true,
-  imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, InputTextComponent, AlertComponent ]
+  imports: [ CommonModule, FormsModule, ReactiveFormsModule, NgClass, InputTextComponent, AlertComponent ]
 })
 export class MyAccountChangeEmailComponent extends FormReactive implements OnInit {
+  protected formReactiveService = inject(FormReactiveService)
+  private authService = inject(AuthService)
+  private userService = inject(UserService)
+  private serverService = inject(ServerService)
+
+  verificationEmailSent = false
   error: string
   success: string
   user: User
 
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private authService: AuthService,
-    private userService: UserService,
-    private serverService: ServerService
-  ) {
-    super()
-  }
-
   ngOnInit () {
     this.buildForm({
       'new-email': USER_EMAIL_VALIDATOR,
-      'password': USER_PASSWORD_VALIDATOR
+      'password': LOGIN_PASSWORD_VALIDATOR
     })
 
     this.user = this.authService.getUser()
@@ -72,5 +69,17 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
           this.error = err.message
         }
       })
+  }
+
+  resendVerificationEmail () {
+    this.userService.askSendVerifyEmail(this.user.pendingEmail).subscribe({
+      next: () => {
+        this.verificationEmailSent = true
+      },
+
+      error: err => {
+        this.error = err.message
+      }
+    })
   }
 }

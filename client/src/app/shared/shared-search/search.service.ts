@@ -1,7 +1,7 @@
 import { Observable, of } from 'rxjs'
 import { catchError, map, switchMap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { ComponentPaginationLight, RestExtractor, RestPagination, RestService } from '@app/core'
 import {
   ResultList,
@@ -20,15 +20,13 @@ import { VideoPlaylistService } from '../shared-video-playlist/video-playlist.se
 
 @Injectable()
 export class SearchService {
-  static BASE_SEARCH_URL = environment.apiUrl + '/api/v1/search/'
+  private authHttp = inject(HttpClient)
+  private restExtractor = inject(RestExtractor)
+  private restService = inject(RestService)
+  private videoService = inject(VideoService)
+  private playlistService = inject(VideoPlaylistService)
 
-  constructor (
-    private authHttp: HttpClient,
-    private restExtractor: RestExtractor,
-    private restService: RestService,
-    private videoService: VideoService,
-    private playlistService: VideoPlaylistService
-  ) { }
+  static BASE_SEARCH_URL = environment.apiUrl + '/api/v1/search/'
 
   searchVideos (parameters: {
     search?: string
@@ -59,15 +57,18 @@ export class SearchService {
 
     if (advancedSearch) {
       const advancedSearchObject = advancedSearch.toVideosAPIObject()
+
       params = this.restService.addObjectParams(params, advancedSearchObject)
     }
 
+    params = this.videoService.buildNSFWParams(params, {})
+
     return this.authHttp
-               .get<ResultList<VideoServerModel>>(url, { params })
-               .pipe(
-                 switchMap(res => this.videoService.extractVideos(res)),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+      .get<ResultList<VideoServerModel>>(url, { params })
+      .pipe(
+        switchMap(res => this.videoService.extractVideos(res)),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   searchVideoChannels (parameters: {
@@ -101,11 +102,11 @@ export class SearchService {
     }
 
     return this.authHttp
-               .get<ResultList<VideoChannelServerModel>>(url, { params })
-               .pipe(
-                 map(res => VideoChannelService.extractVideoChannels(res)),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+      .get<ResultList<VideoChannelServerModel>>(url, { params })
+      .pipe(
+        map(res => VideoChannelService.extractVideoChannels(res)),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   searchVideoPlaylists (parameters: {
@@ -139,10 +140,10 @@ export class SearchService {
     }
 
     return this.authHttp
-               .get<ResultList<VideoPlaylistServerModel>>(url, { params })
-               .pipe(
-                 switchMap(res => this.playlistService.extractPlaylists(res)),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+      .get<ResultList<VideoPlaylistServerModel>>(url, { params })
+      .pipe(
+        switchMap(res => this.playlistService.extractPlaylists(res)),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 }

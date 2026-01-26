@@ -1,49 +1,57 @@
-<ng-template #uppercaseWarning>
-  <div i18n class="form-warning">
-    ⚠️ Most email addresses do not include capital letters.
-  </div>
-</ng-template>
-
 <div class="margin-content">
   <h1 class="title-page" i18n>Login on {{ instanceName }}</h1>
 
-  <ng-container *ngIf="!externalAuthError && !isAuthenticatedWithExternalAuth">
+  @if (externalAuthError) {
+    <my-alert type="danger" i18n>
+    Sorry but there was an issue with the external login process. Please <a class="link-primary" routerLink="/about">contact an administrator</a>.
+  </my-alert>
+  }
 
+  @if (!externalAuthError && !isAuthenticatedWithExternalAuth) {
     <my-alert type="primary">
-      <h5 class="alert-heading" i18n>
-        Logging into an account lets you publish content
+      <h5 class="alert-heading">
+        @if (canUploadByDefault()) {
+          <ng-container i18n>Logging into an account lets you publish content</ng-container>
+        } @else {
+          <ng-container i18n>Logging into an account lets you subscribe to your favorite content</ng-container>
+        }
       </h5>
 
       @if (signupAllowed) {
         <p i18n>
-          This instance allows registration. However, be careful to check the <a class="link-primary terms-anchor d-inline" (click)="onTermsClick($event, instanceInformation)" href="/about/instance#terms">Terms</a><a class="terms-link" target="_blank" routerLink="/about/instance">Terms</a> before creating an account.
-          You may also search for another instance to match your exact needs at: <a class="link-primary" href="https://joinpeertube.org/instances" target="_blank" rel="noopener noreferrer">https://joinpeertube.org/instances</a>.
+          {{ instanceName }} allows registration. However, be careful to check the <a class="link-primary terms-anchor d-inline" (click)="onTermsClick($event, instanceInformation)" href="/about/instance#terms">Terms</a><a class="terms-link" target="_blank" routerLink="/about/instance">Terms</a> before creating an account.
+          You may also search for another PeerTube platform to match your exact needs at: <a class="link-primary" href="https://joinpeertube.org/instances" target="_blank" rel="noopener noreferrer">https://joinpeertube.org/instances</a>.
         </p>
       } @else {
         <p i18n>
-          Currently this instance doesn't allow for user registration, you may check the <a class="link-primary terms-anchor d-inline" (click)="onTermsClick($event, instanceInformation)" href="/about/instance#terms">Terms</a><a class="terms-link" target="_blank" routerLink="/about/instance">Terms</a> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there.
-          Find yours among multiple instances at: <a class="link-primary" href="https://joinpeertube.org/instances" target="_blank" rel="noopener noreferrer">https://joinpeertube.org/instances</a>.
+          {{ instanceName }} doesn't allow for user registration. You may check the <a class="link-primary terms-anchor d-inline" (click)="onTermsClick($event, instanceInformation)" href="/about/instance#terms">Terms</a><a class="terms-link" target="_blank" routerLink="/about/instance">Terms</a> for more details or find a PeerTube platform that gives you the possibility to sign up for an account and upload your videos there.
+          Find yours among multiple platforms at: <a class="link-primary" href="https://joinpeertube.org/instances" target="_blank" rel="noopener noreferrer">https://joinpeertube.org/instances</a>.
         </p>
       }
     </my-alert>
 
-    <my-alert type="danger" i18n *ngIf="externalAuthError">
-      Sorry but there was an issue with the external login process. Please <a class="link-primary" routerLink="/about">contact an administrator</a>.
-    </my-alert>
+    @if (error) {
+      <my-alert type="danger">
+        {{ error }}
 
-    <my-alert *ngIf="error" type="danger">
-      {{ error }}
+        @if (emailNotVerifiedError) {
+          <a class="ms-1 link-primary" i18n routerLink="/verify-account/ask-send-email">Request new verification email</a>
+        }
 
-      <a *ngIf="error === 'User email is not verified.'" class="ms-1 link-primary" i18n routerLink="/verify-account/ask-send-email">
-        Request new verification email
-      </a>
-    </my-alert>
+        @if (passwordTooLongError) {
+          <div>
+            <button type="button" i18n class="button-unstyle link-primary" (click)="openForgotPasswordModal()">
+              Reset your password
+            </button>
+          </div>
+        }
+      </my-alert>
+    }
 
     <div class="wrapper">
       <div class="login-form-and-externals">
-
         <form class="w-100 m-0" myPluginSelector pluginSelectorId="login-form" (ngSubmit)="login()" [formGroup]="form">
-          <ng-container *ngIf="!otpStep">
+          @if (!otpStep) {
             <div class="form-group">
               <div>
                 <label i18n for="username">Username or email address</label>
@@ -51,64 +59,69 @@
                   type="text" id="username" i18n-placeholder placeholder="Example: john@example.com" required
                   formControlName="username" class="form-control" [ngClass]="{ 'input-error': formErrors['username'] }" myAutofocus
                   autocomplete="username"
-                >
+                  >
               </div>
 
-              <div *ngIf="formErrors.username" class="form-error" role="alert">{{ formErrors.username }}</div>
-
-              <ng-template *ngIf="hasUsernameUppercase()" [ngTemplateOutlet]="uppercaseWarning"></ng-template>
+              @if (formErrors.username) {
+                <div class="form-error" role="alert">{{ formErrors.username }}</div>
+              }
             </div>
 
             <div class="form-group">
               <label i18n for="password">Password</label>
-
               <my-input-text
                 formControlName="password" inputId="password" i18n-placeholder placeholder="Password"
                 [formError]="formErrors['password']" autocomplete="current-password"
               ></my-input-text>
             </div>
-          </ng-container>
+          }
 
-          <div *ngIf="otpStep" class="form-group">
-            <p i18n>Enter the two-factor code generated by your phone app:</p>
+          @if (otpStep) {
+            <div class="form-group">
+              <p i18n>Enter the two-factor code generated by your phone app:</p>
+              <label i18n for="otp-token">Two factor authentication token</label>
 
-            <label i18n for="otp-token">Two factor authentication token</label>
-
-            <my-input-text
-              #otpTokenInput
-              [show]="true" formControlName="otp-token" inputId="otp-token"
-              [formError]="formErrors['otp-token']" autocomplete="otp-token"
-            ></my-input-text>
-          </div>
+              <my-input-text
+                #otpTokenInput
+                [show]="true" formControlName="otp-token" inputId="otp-token"
+                [formError]="formErrors['otp-token']" autocomplete="otp-token"
+              ></my-input-text>
+            </div>
+          }
 
           <input type="submit" class="peertube-button primary-button w-100" i18n-value value="Login" [disabled]="!form.valid">
 
-          <div *ngIf="!otpStep" class="additional-links d-flex justify-content-center mt-4 mb-5 text-center">
-            <button type="button" i18n class="button-unstyle link-primary mx-3" (click)="openForgotPasswordModal()" i18n-title title="Click here to reset your password">
-              I forgot my password
-            </button>
+          @if (!otpStep) {
+            <div class="additional-links d-flex justify-content-center mt-4 mb-5 text-center">
+              <button type="button" i18n class="button-unstyle link-primary mx-3" (click)="openForgotPasswordModal()" i18n-title title="Click here to reset your password">
+                I forgot my password
+              </button>
 
-            <ng-container *ngIf="signupAllowed">
-              <span class="lh-1">·</span>
-              <a i18n routerLink="/signup" class="link-primary mx-3">Create an account</a>
-            </ng-container>
-          </div>
+              @if (signupAllowed) {
+                <span class="lh-1">·</span>
+                <a i18n routerLink="/signup" class="link-primary mx-3">Create an account</a>
+              }
+            </div>
+          }
         </form>
 
-        <div class="external-login-blocks" *ngIf="hasExternalLogins()">
-          <div class="fw-semibold" i18n>Or sign in with</div>
+        @if (hasExternalLogins()) {
+          <div class="external-login-blocks">
+            <div class="fw-semibold" i18n>Or sign in with</div>
 
-          <div>
-            <a class="external-login-block" *ngFor="let auth of getExternalLogins()" [href]="getAuthHref(auth)" role="button">
-              {{ auth.authDisplayName }}
-            </a>
+            <div>
+              @for (auth of getExternalLogins(); track auth) {
+                <a class="external-login-block" [href]="getAuthHref(auth)" role="button">
+                  {{ auth.authDisplayName }}
+                </a>
+              }
+            </div>
           </div>
-        </div>
+        }
       </div>
 
       <div #instanceInformation class="instance-information">
         <my-instance-banner rounded="true"></my-instance-banner>
-
         <my-instance-about-accordion
           #instanceAboutAccordion
           [displayInstanceName]="false"
@@ -117,7 +130,7 @@
         ></my-instance-about-accordion>
       </div>
     </div>
-  </ng-container>
+  }
 </div>
 
 <ng-template #forgotPasswordModal>
@@ -131,22 +144,24 @@
 
   <div class="modal-body text-start">
 
-    <my-alert *ngIf="isEmailDisabled()" type="danger" i18n>
-      We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.
-    </my-alert>
+    @if (isEmailDisabled()) {
+      <my-alert type="danger" i18n>
+        We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.
+      </my-alert>
+    }
 
-    <div *ngIf="!isEmailDisabled()" class="mb-4" i18n>
-      Enter your email address and we will send you a link to reset your password.
-    </div>
+    @if (!isEmailDisabled()) {
+      <div class="mb-4" i18n>
+        Enter your email address and we will send you a link to reset your password.
+      </div>
+    }
 
     <div class="form-group" [hidden]="isEmailDisabled()">
       <label i18n for="forgot-password-email">Email</label>
       <input
         type="email" id="forgot-password-email" i18n-placeholder placeholder="Email address" required
         [(ngModel)]="forgotPasswordEmail" #forgotPasswordEmailInput
-      >
-
-      <ng-template *ngIf="hasForgotPasswordEmailUppercase()" [ngTemplateOutlet]="uppercaseWarning"></ng-template>
+        >
     </div>
   </div>
 
@@ -154,11 +169,11 @@
     <input
       type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button d-none d-sm-block"
       (click)="hideForgotPasswordModal()" (key.enter)="hideForgotPasswordModal()"
-    >
+      >
 
     <input
       type="submit" i18n-value="Password reset button" value="Reset" class="peertube-button primary-button"
       (click)="askResetPassword()" [disabled]="!forgotPasswordEmailInput.validity.valid"
-    >
+      >
   </div>
 </ng-template>

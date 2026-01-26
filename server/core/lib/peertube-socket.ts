@@ -11,10 +11,9 @@ import { authenticateRunnerSocket, authenticateSocket } from '../middlewares/ind
 import { isDevInstance } from '@peertube/peertube-node-utils'
 
 class PeerTubeSocket {
-
   private static instance: PeerTubeSocket
 
-  private userNotificationSockets: { [ userId: number ]: Socket[] } = {}
+  private userNotificationSockets: { [userId: number]: Socket[] } = {}
   private liveVideosNamespace: Namespace
   private readonly runnerSockets = new Set<Socket>()
 
@@ -51,16 +50,14 @@ class PeerTubeSocket {
           const videoId = params.videoId + ''
           if (!isIdValid(videoId)) return
 
-          /* eslint-disable @typescript-eslint/no-floating-promises */
-          socket.join(videoId)
+          void socket.join(videoId)
         })
 
         socket.on('unsubscribe', params => {
           const videoId = params.videoId + ''
           if (!isIdValid(videoId)) return
 
-          /* eslint-disable @typescript-eslint/no-floating-promises */
-          socket.leave(videoId)
+          void socket.leave(videoId)
         })
       })
 

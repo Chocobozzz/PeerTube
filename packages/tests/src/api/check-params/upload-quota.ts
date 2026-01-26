@@ -37,7 +37,6 @@ describe('Test upload quota', function () {
   })
 
   describe('When having a video quota', function () {
-
     it('Should fail with a registered user having too many videos with legacy upload', async function () {
       this.timeout(120000)
 
@@ -81,7 +80,7 @@ describe('Test upload quota', function () {
 
       await waitJobs([ server ])
 
-      const { total, data: videoImports } = await server.videoImports.getMyVideoImports()
+      const { total, data: videoImports } = await server.videoImports.listMyVideoImports()
       expect(total).to.equal(3)
 
       expect(videoImports).to.have.lengthOf(3)
@@ -95,7 +94,6 @@ describe('Test upload quota', function () {
   })
 
   describe('When having a daily video quota', function () {
-
     it('Should fail with a user having too many videos daily', async function () {
       await server.users.update({ userId: rootId, videoQuotaDaily: 42 })
 

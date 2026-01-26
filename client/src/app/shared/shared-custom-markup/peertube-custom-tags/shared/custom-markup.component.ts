@@ -1,5 +1,5 @@
-import { EventEmitter } from '@angular/core'
+import { OutputEmitterRef } from '@angular/core'
 
 export interface CustomMarkupComponent {
-  loaded: EventEmitter<boolean> | undefined
+  loaded: OutputEmitterRef<boolean> | undefined
 }

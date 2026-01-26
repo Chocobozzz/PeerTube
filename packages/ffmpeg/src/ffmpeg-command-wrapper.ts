@@ -119,7 +119,9 @@ export class FFmpegCommandWrapper {
     return new Promise<void>((res, rej) => {
       let shellCommand: string
 
-      this.command.on('start', cmdline => { shellCommand = cmdline })
+      this.command.on('start', cmdline => {
+        shellCommand = cmdline
+      })
 
       this.command.on('error', (err: Error & { stdout?: string, stderr?: string }, stdout, stderr) => {
         if (silent !== true) this.logger.error('Error in ffmpeg.', { err, stdout, stderr, shellCommand, ...this.lTags })
@@ -166,12 +168,14 @@ export class FFmpegCommandWrapper {
   // Run encoder builder depending on available encoders
   // Try encoders by priority: if the encoder is available, run the chosen profile or fallback to the default one
   // If the default one does not exist, check the next encoder
-  async getEncoderBuilderResult (options: EncoderOptionsBuilderParams & {
-    streamType: 'video' | 'audio'
-    input: string
+  async getEncoderBuilderResult (
+    options: EncoderOptionsBuilderParams & {
+      streamType: 'video' | 'audio'
+      input: string
 
-    videoType: 'vod' | 'live'
-  }) {
+      videoType: 'vod' | 'live'
+    }
+  ) {
     if (!this.availableEncoders) {
       throw new Error('There is no available encoders')
     }

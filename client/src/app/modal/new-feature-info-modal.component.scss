@@ -1,0 +1,36 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+
+h2 {
+  color: pvar(--fg-350);
+  font-weight: $font-bold;
+
+  @include margin-bottom(2rem);
+  @include font-size(38px);
+}
+
+.modal-body {
+  text-align: center;
+}
+
+.content {
+  color: pvar(--fg-200);
+
+  @include margin-bottom(2.5rem);
+}
+
+.svg-relative-container {
+  position: relative;
+}
+
+.svg-container {
+  margin: 0 auto;
+  position: absolute;
+  top: -3.5rem;
+  right: 0;
+  left: 0;
+}
+
+.svg-relative-container + h2 {
+  margin-top: 10rem;
+}

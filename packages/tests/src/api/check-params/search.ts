@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { HttpStatusCode } from '@peertube/peertube-models'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import {
   cleanupTests,
   createSingleServer,
@@ -51,7 +51,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, path, null, query)
+      await checkBadSort(server.url, path, null, query)
     })
 
     it('Should succeed with the correct parameters', async function () {
@@ -172,7 +172,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, path, null, query)
+      await checkBadSort(server.url, path, null, query)
     })
 
     it('Should fail with an invalid host', async function () {
@@ -206,7 +206,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, path, null, query)
+      await checkBadSort(server.url, path, null, query)
     })
 
     it('Should fail with an invalid host', async function () {
@@ -223,7 +223,6 @@ describe('Test videos API validator', function () {
   })
 
   describe('Search target', function () {
-
     it('Should fail/succeed depending on the search target', async function () {
       const query = { search: 'coucou' }
       const paths = [

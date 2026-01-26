@@ -1,6 +1,6 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use 'form-mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "form-mixins" as *;
 
 .root {
   display: flex;
@@ -34,4 +34,8 @@
 
 .pt-badge {
   height: fit-content;
+}
+
+.extra-container {
+  @include margin-left(28px);
 }

@@ -1,0 +1,241 @@
+<h2 class="form-title">
+  <my-global-icon iconName="film"></my-global-icon>
+
+  <ng-container i18n>Main information</ng-container>
+</h2>
+
+<form [formGroup]="form" id="video-manage-form">
+
+  <ng-template #pluginSettingTemplate let-pluginSetting>
+    <div [hidden]="isPluginFieldHidden(pluginSetting)">
+      <my-dynamic-form-field [form]="pluginDataFormGroup" [formErrors]="formErrors['pluginData']" [setting]="pluginSetting.commonOptions"></my-dynamic-form-field>
+    </div>
+  </ng-template>
+
+  <div class="form-columns">
+    <div>
+      <div class="form-group">
+        <label i18n for="name">Video title</label>
+        <input type="text" id="name" class="form-control" formControlName="name" />
+        @if (formErrors.name) {
+          <div class="form-error" role="alert">{{ formErrors.name }}</div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label i18n for="description">Description</label>
+
+        <div class="form-group-description">
+          <div i18n>
+            You can format your description using the <my-markdown-hint helpType="markdownText">Markdown Language</my-markdown-hint>:
+          </div>
+
+          <ul>
+            <li i18n>For example, to put <strong>text in bold</strong> (**text in bold**) or <em>text in italic</em> (*text in italic*)</li>
+            <li i18n>You can also create a link to a specific timecode of the video (e.g. <span class="fake-link">00:05</span> by simply writing 00:05) or <span class="fake-link">a classic link</span> ([title of my link](https://example.com))</li>
+          </ul>
+        </div>
+
+        <my-markdown-textarea
+          inputId="description"
+          formControlName="description" [markdownVideo]="videoEdit.getVideoAttributes()"
+          [formError]="formErrors.description" withEmoji="true" withShowMoreButton="true"
+        ></my-markdown-textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="label-tags" i18n class="label-tags">Tags</label>
+        <div class="form-group-description">
+          <ng-container i18n>Maximum of 5 tags to suggest relevant recommendations.</ng-container>
+        </div>
+
+        <my-select-tags inputId="label-tags" formControlName="tags" class="d-block w-100"></my-select-tags>
+        @if (formErrors.tags) {
+          <div class="form-error" role="alert">{{ formErrors.tags }}</div>
+        }
+      </div>
+
+      <div class="form-group mb-5">
+        <label i18n for="support">Support button</label>
+
+        <div class="form-group-description" i18n>
+          This is text that helps people watching your video <strong>understand how to support you</strong>. You can use <my-markdown-hint helpType="markdownText">Markdown Language</my-markdown-hint>, including <strong>links to your fundraising tools</strong>.
+        </div>
+
+        <my-markdown-textarea
+          inputId="support" formControlName="support" markdownType="enhanced"
+          [formError]="formErrors['support']" withEmoji="true" withHtml="true"
+        ></my-markdown-textarea>
+
+        <div class="form-group-description mt-3" i18n>
+          Do you want to use the same text for all your videos? You can define <strong>a default text and support button</strong> in your <a [routerLink]="getChannelUpdateUrl()" target="_blank" rel="noopener noreferrer">channel settings</a>.
+        </div>
+      </div>
+
+      @for (pluginSetting of getPluginsFields('main'); track pluginSetting) {
+        <ng-container
+          [ngTemplateOutlet]="pluginSettingTemplate" [ngTemplateOutletContext]="{ $implicit: pluginSetting }"
+        ></ng-container>
+      }
+
+      @for (pluginSetting of getPluginsFields('plugin-settings'); track pluginSetting) {
+        <ng-container
+          [ngTemplateOutlet]="pluginSettingTemplate" [ngTemplateOutletContext]="{ $implicit: pluginSetting }"
+        ></ng-container>
+      }
+    </div>
+
+    <div>
+      <div class="form-group">
+        <label i18n for="channel">Channel</label>
+
+        @if (manageType === 'update') {
+          @if (isEditor()) {
+            <div class="form-group-description">
+              <div i18n>
+                Only {{ videoEdit.getVideoAttributes().ownerAccountDisplayName }}'s channels are listed
+              </div>
+
+              <div i18n>
+                You do not have the right to <a href="https://docs.joinpeertube.org/use/library#change-ownership-of-a-video" target="_blank">transfer ownership <my-global-icon iconName="external-link"></my-global-icon></a> of this video but {{ videoEdit.getVideoAttributes().ownerAccountDisplayName }} can do it
+              </div>
+            </div>
+          } @else {
+            <div class="form-group-description" i18n>
+              You can also <a href="https://docs.joinpeertube.org/use/library#change-ownership-of-a-video" target="_blank">transfer this video <my-global-icon iconName="external-link"></my-global-icon></a> to another account
+            </div>
+          }
+        }
+
+        <my-select-channel class="d-block" inputId="channel" [items]="userChannels" formControlName="channelId"></my-select-channel>
+      </div>
+
+      <div class="form-group">
+        <label i18n for="previewfile">Thumbnail</label>
+
+        <my-thumbnail-manager id="previewfile" formControlName="previewfile" [videoEdit]="videoEdit"></my-thumbnail-manager>
+      </div>
+
+      <div class="form-group">
+        <label i18n for="privacy">Privacy</label>
+        <my-select-options inputId="privacy" [items]="videoPrivacies" formControlName="privacy"></my-select-options>
+
+        @if (formErrors.privacy) {
+          <div class="form-error" role="alert">
+            {{ formErrors.privacy }}
+          </div>
+        }
+      </div>
+
+      @if (passwordProtectionSelected) {
+        <div class="form-group">
+          <label i18n for="videoPassword">Password</label>
+          <my-input-text formControlName="videoPassword" inputId="videoPassword" [withCopy]="true" [formError]="formErrors['videoPassword']"></my-input-text>
+        </div>
+      }
+
+      @if (schedulePublicationSelected) {
+        <div class="form-group">
+          <label i18n for="schedulePublicationAt">Schedule publication ({{ calendarTimezone }})</label>
+          <p-datepicker
+            id="schedulePublicationAt" formControlName="schedulePublicationAt" [dateFormat]="calendarDateFormat"
+            [firstDayOfWeek]="0" [minDate]="minScheduledDate" [showTime]="true" [hideOnDateTimeSelect]="true"
+            baseZIndex="20000" fluid="true"
+            >
+          </p-datepicker>
+          @if (formErrors.schedulePublicationAt) {
+            <div class="form-error" role="alert">
+              {{ formErrors.schedulePublicationAt }}
+            </div>
+          }
+        </div>
+      }
+
+      <div class="form-group">
+        <label i18n for="licence">Licence</label>
+
+        <div class="form-group-description" i18n>
+        <a href="https://chooser-beta.creativecommons.org/" target="_blank" rel="noopener noreferrer">Choose</a> the appropriate licence for your work.
+      </div>
+
+        <my-select-options inputId="licence" [items]="videoLicences" formControlName="licence" clearable="true"></my-select-options>
+
+        @if (formErrors.licence) {
+          <div class="form-error" role="alert">
+            {{ formErrors.licence }}
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label i18n for="category">Category</label>
+        <my-select-options inputId="category" [items]="videoCategories" formControlName="category" clearable="true"></my-select-options>
+
+        @if (formErrors.category) {
+          <div class="form-error" role="alert">
+            {{ formErrors.category }}
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label i18n for="language">Language</label>
+        <my-select-options
+          inputId="language" [items]="videoLanguages" formControlName="language"
+          clearable="true" filter="true" virtualScroll="true"
+        ></my-select-options>
+
+        @if (formErrors.language) {
+          <div class="form-error" role="alert">
+            {{ formErrors.language }}
+          </div>
+        }
+      </div>
+
+      @if (!hideWaitTranscoding) {
+        <my-peertube-checkbox inputName="waitTranscoding" formControlName="waitTranscoding" helpPlacement="bottom-right">
+          <ng-template ptTemplate="label">
+            <ng-container i18n>Publish video after transcoding</ng-container>
+          </ng-template>
+          <ng-template ptTemplate="help">
+            <ng-container i18n>The video may be unplayable during the transcoding process. It's the reason why we prefer to publish publicly the video after transcoding.</ng-container>
+          </ng-template>
+        </my-peertube-checkbox>
+      }
+    </div>
+  </div>
+
+  @if (canBeDeletedOrTransferred()) {
+    <div class="danger-zone mt-5">
+      <h3 class="mb-3" i18n>DANGER ZONE</h3>
+
+      @if (!isEditor()) {
+        <div class="form-group">
+          <label i18n for="deleteVideo">Change ownership of your video</label>
+          <div class="form-group-description" i18n>A modal window will open for you to specify the local account to which you want to transfer your video</div>
+
+          <button class="peertube-button danger-button" (click)="showChangeOwnershipModal()" [disabled]="ownershipRequestSent" i18n>Transfer ownership</button>
+
+          @if (ownershipRequestSent) {
+            <my-alert class="d-block mt-3" type="success">
+              <ng-container i18n>
+              <a routerLink="/my-library/ownership">Ownership change request</a> sent to {{ ownershipRequestSent }}</ng-container>
+              </my-alert>
+            }
+          </div>
+
+          <my-video-change-ownership
+            #videoChangeOwnershipModal
+            [videoId]="videoEdit.getVideoAttributes().id" (requestSent)="onChangeOwnershipRequest($event)"
+          ></my-video-change-ownership>
+        }
+
+        <div class="form-group">
+          <label i18n for="deleteVideo">Delete your video</label>
+          <div class="form-group-description" i18n>Warning: this is a definitive action!</div>
+
+          <button class="peertube-button danger-button" (click)="deleteVideo()" i18n>Delete</button>
+        </div>
+      </div>
+    }
+

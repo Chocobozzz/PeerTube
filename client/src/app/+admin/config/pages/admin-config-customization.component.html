@@ -1,0 +1,232 @@
+<my-admin-save-bar i18n-title title="Platform customization" (save)="save()" [form]="form" [formErrors]="formErrors"></my-admin-save-bar>
+
+<form [formGroup]="form" id="admin-config-form">
+  <div class="pt-two-cols">
+    <div class="title-col">
+      <h2 i18n>APPEARANCE</h2>
+    </div>
+
+    <div class="content-col">
+      <div class="form-group" formGroupName="theme">
+        <label i18n for="themeDefault">Theme</label>
+
+        <my-select-options formControlName="default" inputId="themeDefault" [items]="availableThemes"></my-select-options>
+      </div>
+
+      <ng-container formGroupName="client">
+        <ng-container formGroupName="videos">
+          <div class="form-group" formGroupName="miniature">
+            <my-peertube-checkbox
+              inputName="clientVideosMiniaturePreferAuthorDisplayName"
+              formControlName="preferAuthorDisplayName"
+              i18n-labelText
+              labelText="Prefer author display name in video miniature"
+            ></my-peertube-checkbox>
+          </div>
+        </ng-container>
+      </ng-container>
+
+      <ng-container formGroupName="defaults">
+        <ng-container formGroupName="player">
+          <div class="form-group">
+            <label i18n for="defaultsPlayerTheme">Player Theme</label>
+            <div class="form-group-description" i18n>Only used by the web player</div>
+
+            <my-select-player-theme mode="instance" formControlName="theme" inputId="defaultsPlayerTheme"></my-select-player-theme>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="pt-two-cols mt-4">
+    <div class="title-col">
+      <h2 i18n>CUSTOMIZATION</h2>
+
+      <div i18n class="inner-form-description">
+        Use <a class="link-primary" routerLink="/admin/settings/plugins">plugins & themes</a> for more involved changes
+      </div>
+    </div>
+
+    <div class="content-col">
+      <ng-template #alertIntro>
+        <div i18n>UI customization only applies if the user is using the default platform theme.</div>
+      </ng-template>
+
+      @if (getCurrentThemeName() !== getDefaultThemeName()) {
+        <my-alert type="warning">
+          <ng-template *ngTemplateOutlet="alertIntro"></ng-template>
+
+          <div i18n>You can't preview the changes because you aren't using your platform's default theme.</div>
+          <div i18n>Current theme: <strong>{{ getCurrentThemeLabel() }}</strong></div>
+          <div i18n>Platform theme: <strong>{{ getDefaultThemeLabel() }}</strong>.</div>
+        </my-alert>
+      } @else {
+        <my-alert type="info">
+          <ng-template *ngTemplateOutlet="alertIntro"></ng-template>
+
+          <div i18n>You can preview your UI customization but <strong>don't forget to save your changes</strong> once you are happy with the results.</div>
+        </my-alert>
+      }
+
+      <div class="form-group" formGroupName="theme">
+        <ng-container formGroupName="customization">
+          @for (field of customizationFormFields; track field.name) {
+            <div class="form-group">
+              <label [for]="field.inputId">{{ field.label }}</label>
+
+              @if (!hasDefaultCustomizationValue(field.name)) {
+                <button
+                  type="button"
+                  i18n
+                  class="reset-button reset-button-small"
+                  (click)="resetCustomizationField(field.name)"
+                  >
+                Reset
+              </button>
+              }
+
+              @if (field.description) {
+                <div class="form-group-description">{{ field.description }}</div>
+              }
+
+              @if (field.type === 'color') {
+                <my-peertube-color-picker 
+                  [inputId]="field.inputId" 
+                  [formControlName]="field.name" 
+                  [formError]="formErrors.theme.customization[field.name]" 
+                  />
+              } @else if (field.type === 'radius') {
+                <my-select-custom-value
+                  [labelId]="field.inputId"
+                  [inputId]="field.inputId"
+                  [items]="field.items"
+                  [formControlName]="field.name"
+                  inputType="text"
+                  [clearable]="false"
+                ></my-select-custom-value>
+              } @else {
+                <input
+                  type="text"
+                  [id]="field.inputId"
+                  [name]="field.inputId"
+                  class="form-control"
+                  [formControlName]="field.name"
+                  [ngClass]="{ 'input-error': formErrors.theme.customization[field.name]}"
+                  >
+              }
+            </div>
+          }
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <div class="pt-two-cols">
+    <div class="title-col">
+      <h2 i18n>EMAIL</h2>
+    </div>
+
+    <ng-container formGroupName="email">
+      <div class="content-col">
+        <div class="form-group" formGroupName="subject">
+          <label i18n for="emailSubjectPrefix">Subject prefix</label>
+          <div class="form-group-description" i18n>Support <pre class="d-inline">{{ '{{instanceName}}' }}</pre> template variable</div>
+
+          <input
+            type="text" id="emailSubjectPrefix" class="form-control"
+            formControlName="prefix" [ngClass]="{ 'input-error': formErrors.email.subject.prefix }"
+            >
+
+          @if (formErrors.email.subject.prefix) {
+            <div class="form-error" role="alert">{{ formErrors.email.subject.prefix }}</div>
+          }
+        </div>
+
+        <div class="form-group" formGroupName="body">
+          <label i18n for="emailBodySignature">Body signature</label>
+          <div class="form-group-description" i18n>Support <pre class="d-inline">{{ '{{instanceName}}' }}</pre> template variable</div>
+
+          <input
+            type="text" id="emailBodySignature" class="form-control"
+            formControlName="signature" [ngClass]="{ 'input-error': formErrors.email.body.signature }"
+            >
+
+          @if (formErrors.email.body.signature) {
+            <div class="form-error" role="alert">{{ formErrors.email.body.signature }}</div>
+          }
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="pt-two-cols mt-4">
+    <div class="title-col">
+      <div class="anchor" id="customizations"></div>
+      <h2 i18n>ADVANCED</h2>
+      <div i18n class="inner-form-description">
+        Advanced modifications to your PeerTube platform if creating a plugin or a theme is overkill.
+      </div>
+    </div>
+
+    <div class="content-col">
+      <ng-container formGroupName="instance">
+        <ng-container formGroupName="customizations">
+          <div class="form-group">
+            <label i18n for="customizationJavascript">JavaScript</label>
+            <my-help>
+              <ng-container i18n>
+                <p class="mb-2">Write JavaScript code directly. Example:</p>
+                <pre>console.log('my instance is amazing');</pre>
+              </ng-container>
+            </my-help>
+
+            <textarea
+              id="customizationJavascript"
+              formControlName="javascript"
+              class="form-control"
+              dir="ltr"
+              [ngClass]="{ 'input-error': formErrors.instance.customizations.javascript }"
+            ></textarea>
+
+            @if (formErrors.instance.customizations.javascript) {
+              <div class="form-error" role="alert">{{ formErrors.instance.customizations.javascript }}</div>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="customizationCSS">CSS</label>
+
+            <my-help>
+              <ng-container i18n>
+                <p class="mb-2">Write CSS code directly. Example:</p>
+                <pre>
+  #custom-css {{ '{' }}
+  color: red;
+  {{ '}' }}
+  </pre>
+                <p class="mb-2">Prepend with <em>#custom-css</em> to override styles. Example:</p>
+                <pre>
+  #custom-css .logged-in-email {{ '{' }}
+  color: red;
+  {{ '}' }}
+  </pre>
+              </ng-container>
+            </my-help>
+
+            <textarea
+              id="customizationCSS"
+              formControlName="css"
+              class="form-control"
+              dir="ltr"
+              [ngClass]="{ 'input-error': formErrors.instance.customizations.css }"
+            ></textarea>
+            @if (formErrors.instance.customizations.css) {
+              <div class="form-error" role="alert">{{ formErrors.instance.customizations.css }}</div>
+            }
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+</form>

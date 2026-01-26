@@ -1,36 +1,40 @@
-import { CommonModule } from '@angular/common'
-import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, AuthStatus, LocalStorageService, User, UserService } from '@app/core'
+import { Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
+import { ActivatedRoute } from '@angular/router'
+import { AuthService, AuthStatus, LocalStorageService, PeerTubeRouterService, User, UserService } from '@app/core'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
-import { ButtonComponent } from '@app/shared/shared-main/buttons/button.component'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { UserInterfaceSettingsComponent } from '@app/shared/shared-user-settings/user-interface-settings.component'
 import { UserVideoSettingsComponent } from '@app/shared/shared-user-settings/user-video-settings.component'
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { ReplaySubject, Subscription } from 'rxjs'
 import { filter } from 'rxjs/operators'
 
 @Component({
   selector: 'my-quick-settings',
   templateUrl: './quick-settings-modal.component.html',
-  standalone: true,
+  styles: [
+    `h5 {
+      font-size: 1rem;
+    }`
+  ],
   imports: [
-    CommonModule,
     GlobalIconComponent,
     UserVideoSettingsComponent,
     UserInterfaceSettingsComponent,
-    AlertComponent,
-    ButtonComponent
+    AlertComponent
   ]
 })
 export class QuickSettingsModalComponent implements OnInit, OnDestroy {
+  private modalService = inject(NgbModal)
+  private userService = inject(UserService)
+  private authService = inject(AuthService)
+  private localStorageService = inject(LocalStorageService)
+  private route = inject(ActivatedRoute)
+  private peertubeRouter = inject(PeerTubeRouterService)
+
   private static readonly QUERY_MODAL_NAME = 'quick-settings'
 
-  @ViewChild('modal', { static: true }) modal: NgbModal
-
-  @Output() openLanguageModal = new EventEmitter<void>()
+  readonly modal = viewChild<NgbModal>('modal')
 
   user: User
   userInformationLoaded = new ReplaySubject<boolean>(1)
@@ -40,16 +44,6 @@ export class QuickSettingsModalComponent implements OnInit, OnDestroy {
   private routeSub: Subscription
   private loginSub: Subscription
   private localStorageSub: Subscription
-
-  constructor (
-    private modalService: NgbModal,
-    private userService: UserService,
-    private authService: AuthService,
-    private localStorageService: LocalStorageService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {
-  }
 
   ngOnInit () {
     this.user = this.userService.getAnonymousUser()
@@ -72,7 +66,7 @@ export class QuickSettingsModalComponent implements OnInit, OnDestroy {
 
     this.routeSub = this.route.queryParams.subscribe(params => {
       if (params['modal'] === QuickSettingsModalComponent.QUERY_MODAL_NAME) {
-        this.openedModal = this.modalService.open(this.modal, { centered: true })
+        this.openedModal = this.modalService.open(this.modal(), { centered: true })
 
         this.openedModal.hidden.subscribe(() => this.setModalQuery('remove'))
       }
@@ -93,16 +87,11 @@ export class QuickSettingsModalComponent implements OnInit, OnDestroy {
     this.setModalQuery('add')
   }
 
-  changeLanguage () {
-    this.openedModal.close()
-    this.openLanguageModal.emit()
-  }
-
   private setModalQuery (type: 'add' | 'remove') {
     const modal = type === 'add'
       ? QuickSettingsModalComponent.QUERY_MODAL_NAME
       : null
 
-    this.router.navigate([], { queryParams: { modal }, queryParamsHandling: 'merge' })
+    this.peertubeRouter.silentNavigate([], { modal }, this.route)
   }
 }

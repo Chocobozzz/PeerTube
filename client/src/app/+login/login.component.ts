@@ -1,5 +1,5 @@
-import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core'
+import { NgClass } from '@angular/common'
+import { AfterViewInit, Component, ElementRef, LOCALE_ID, OnInit, inject, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, Notifier, RedirectService, SessionStorageService, UserService } from '@app/core'
@@ -12,8 +12,9 @@ import { InputTextComponent } from '@app/shared/shared-forms/input-text.componen
 import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance/instance-about-accordion.component'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { NgbAccordionDirective, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
-import { getExternalAuthHref } from '@peertube/peertube-core-utils'
+import { getCompleteLocale, getExternalAuthHref } from '@peertube/peertube-core-utils'
 import { RegisteredExternalAuthConfig, ServerConfig, ServerErrorCode } from '@peertube/peertube-models'
+import { of, switchMap } from 'rxjs'
 import { environment } from 'src/environments/environment'
 import { GlobalIconComponent } from '../shared/shared-icons/global-icon.component'
 import { InstanceBannerComponent } from '../shared/shared-instance/instance-banner.component'
@@ -24,34 +25,45 @@ import { PluginSelectorDirective } from '../shared/shared-main/plugins/plugin-se
   selector: 'my-login',
   templateUrl: './login.component.html',
   styleUrls: [ './login.component.scss' ],
-  standalone: true,
   imports: [
-    NgIf,
     RouterLink,
     FormsModule,
     PluginSelectorDirective,
     ReactiveFormsModule,
     AutofocusDirective,
     NgClass,
-    NgTemplateOutlet,
     InputTextComponent,
-    NgFor,
     InstanceBannerComponent,
     InstanceAboutAccordionComponent,
     GlobalIconComponent,
     AlertComponent
   ]
 })
-
 export class LoginComponent extends FormReactive implements OnInit, AfterViewInit {
+  protected formReactiveService = inject(FormReactiveService)
+  private route = inject(ActivatedRoute)
+  private modalService = inject(NgbModal)
+  private authService = inject(AuthService)
+  private userService = inject(UserService)
+  private redirectService = inject(RedirectService)
+  private notifier = inject(Notifier)
+  private hooks = inject(HooksService)
+  private storage = inject(SessionStorageService)
+  private router = inject(Router)
+  private localeId = inject(LOCALE_ID)
+
   private static SESSION_STORAGE_REDIRECT_URL_KEY = 'login-previous-url'
 
-  @ViewChild('forgotPasswordModal', { static: true }) forgotPasswordModal: ElementRef
-  @ViewChild('otpTokenInput') otpTokenInput: InputTextComponent
-  @ViewChild('instanceAboutAccordion') instanceAboutAccordion: InstanceAboutAccordionComponent
+  readonly forgotPasswordModal = viewChild<ElementRef>('forgotPasswordModal')
+  readonly otpTokenInput = viewChild<InputTextComponent>('otpTokenInput')
+  readonly instanceAboutAccordion = viewChild<InstanceAboutAccordionComponent>('instanceAboutAccordion')
 
   accordion: NgbAccordionDirective
+
   error: string = null
+  emailNotVerifiedError = false
+  passwordTooLongError = false
+
   forgotPasswordEmail = ''
 
   isAuthenticatedWithExternalAuth = false
@@ -73,21 +85,6 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
   private openedForgotPasswordModal: NgbModalRef
   private serverConfig: ServerConfig
 
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private route: ActivatedRoute,
-    private modalService: NgbModal,
-    private authService: AuthService,
-    private userService: UserService,
-    private redirectService: RedirectService,
-    private notifier: Notifier,
-    private hooks: HooksService,
-    private storage: SessionStorageService,
-    private router: Router
-  ) {
-    super()
-  }
-
   get signupAllowed () {
     return this.serverConfig.signup.allowed === true
   }
@@ -99,14 +96,19 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
   onTermsClick (event: Event, instanceInformation: HTMLElement) {
     event.preventDefault()
 
-    if (this.instanceAboutAccordion) {
-      this.instanceAboutAccordion.expandTerms()
+    const instanceAboutAccordion = this.instanceAboutAccordion()
+    if (instanceAboutAccordion) {
+      instanceAboutAccordion.expandTerms()
       instanceInformation.scrollIntoView({ behavior: 'smooth' })
     }
   }
 
   isEmailDisabled () {
     return this.serverConfig.email.enabled === false
+  }
+
+  canUploadByDefault () {
+    return this.serverConfig.user.videoQuota !== 0 && this.serverConfig.user.videoQuotaDaily !== 0
   }
 
   ngOnInit () {
@@ -158,6 +160,8 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
 
   login () {
     this.error = null
+    this.emailNotVerifiedError = false
+    this.passwordTooLongError = false
 
     const options = {
       username: this.form.value['username'],
@@ -166,9 +170,12 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
     }
 
     this.authService.login(options)
-      .pipe()
+      .pipe(
+        switchMap(() => this.authService.userInformationLoaded),
+        switchMap(() => this.updateUserLanguageIfNeeded())
+      )
       .subscribe({
-        next: () => this.redirectService.redirectToPreviousRoute(),
+        next: () => this.redirectService.redirectToPreviousRoute({ reloadTab: this.shouldReloadTabOnLogin() }),
 
         error: err => {
           this.handleError(err)
@@ -187,12 +194,12 @@ The link will expire within 1 hour.`
           this.hideForgotPasswordModal()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
   openForgotPasswordModal () {
-    this.openedForgotPasswordModal = this.modalService.open(this.forgotPasswordModal)
+    this.openedForgotPasswordModal = this.modalService.open(this.forgotPasswordModal())
   }
 
   hideForgotPasswordModal () {
@@ -200,26 +207,17 @@ The link will expire within 1 hour.`
   }
 
   onInstanceAboutAccordionInit (instanceAboutAccordion: InstanceAboutAccordionComponent) {
-    this.accordion = instanceAboutAccordion.accordion
-  }
-
-  hasUsernameUppercase () {
-    const username = this.form.value['username']
-    if (!username) return false
-
-    return username.match(/[A-Z]/)
-  }
-
-  hasForgotPasswordEmailUppercase () {
-    if (!this.forgotPasswordEmail) return false
-
-    return this.forgotPasswordEmail.match(/[A-Z]/)
+    this.accordion = instanceAboutAccordion.accordion()
   }
 
   private loadExternalAuthToken (username: string, token: string) {
     this.isAuthenticatedWithExternalAuth = true
 
     this.authService.login({ username, password: null, token })
+      .pipe(
+        switchMap(() => this.authService.userInformationLoaded),
+        switchMap(() => this.updateUserLanguageIfNeeded())
+      )
       .subscribe({
         next: () => {
           const redirectUrl = this.storage.getItem(LoginComponent.SESSION_STORAGE_REDIRECT_URL_KEY)
@@ -228,7 +226,7 @@ The link will expire within 1 hour.`
             return this.router.navigateByUrl(redirectUrl)
           }
 
-          this.redirectService.redirectToLatestSessionRoute()
+          this.redirectService.redirectToLatestSessionRoute({ reloadTab: this.shouldReloadTabOnLogin() })
         },
 
         error: err => {
@@ -244,18 +242,18 @@ The link will expire within 1 hour.`
 
       setTimeout(() => {
         this.form.get('otp-token').setValidators(USER_OTP_TOKEN_VALIDATOR.VALIDATORS)
-        this.otpTokenInput.focus()
+        this.otpTokenInput().focus()
       })
 
       return
     }
 
-    if (err.message.includes('credentials are invalid')) {
+    if (err.body?.code === ServerErrorCode.INVALID_GRANT) {
       this.error = $localize`Incorrect username or password.`
       return
     }
 
-    if (err.message.includes('blocked')) {
+    if (err.body?.code === ServerErrorCode.ACCOUNT_BLOCKED) {
       this.error = $localize`Your account is blocked.`
       return
     }
@@ -270,6 +268,30 @@ The link will expire within 1 hour.`
       return
     }
 
+    if (err.body?.code === ServerErrorCode.TOO_LONG_PASSWORD) {
+      this.error = $localize`Your current password is too long. Please reset it.`
+      this.passwordTooLongError = true
+      return
+    }
+
+    if (err.body?.code === ServerErrorCode.EMAIL_NOT_VERIFIED) {
+      this.emailNotVerifiedError = true
+    }
+
     this.error = err.message
+  }
+
+  private shouldReloadTabOnLogin () {
+    const user = this.authService.getUser()
+
+    return user.language && getCompleteLocale(user.language) !== getCompleteLocale(this.localeId)
+  }
+
+  private updateUserLanguageIfNeeded () {
+    if (this.authService.getUser().language) {
+      return this.userService.updateInterfaceLanguage(this.authService.getUser().language)
+    }
+
+    return of(true)
   }
 }

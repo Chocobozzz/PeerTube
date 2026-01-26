@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { RestExtractor, RestService } from '@app/core'
 import { ServerLogLevel } from '@peertube/peertube-models'
 import { catchError, map } from 'rxjs/operators'
@@ -8,14 +8,12 @@ import { LogRow } from './log-row.model'
 
 @Injectable()
 export class LogsService {
+  private authHttp = inject(HttpClient)
+  private restService = inject(RestService)
+  private restExtractor = inject(RestExtractor)
+
   private static BASE_LOG_URL = environment.apiUrl + '/api/v1/server/logs'
   private static BASE_AUDIT_LOG_URL = environment.apiUrl + '/api/v1/server/audit-logs'
-
-  constructor (
-    private authHttp: HttpClient,
-    private restService: RestService,
-    private restExtractor: RestExtractor
-  ) {}
 
   getLogs (options: {
     isAuditLog: boolean
@@ -38,9 +36,9 @@ export class LogsService {
       : LogsService.BASE_LOG_URL
 
     return this.authHttp.get<LogRow[]>(path, { params })
-               .pipe(
-                 map(rows => rows.map(r => new LogRow(r))),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+      .pipe(
+        map(rows => rows.map(r => new LogRow(r))),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 }

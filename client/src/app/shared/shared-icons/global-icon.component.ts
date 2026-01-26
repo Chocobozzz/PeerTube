@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, ElementRef, OnInit, inject, input } from '@angular/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 
 const icons = {
@@ -16,6 +16,7 @@ const icons = {
   'flame': require('../../../assets/images/misc/flame.svg'),
   'fediverse': require('../../../assets/images/misc/fediverse.svg'),
   'mastodon': require('../../../assets/images/misc/mastodon.svg'),
+  'x-twitter': require('../../../assets/images/misc/x-twitter.svg'),
   'bluesky': require('../../../assets/images/misc/bluesky.svg'),
 
   // feather/lucide icons
@@ -27,15 +28,22 @@ const icons = {
   'videos': require('../../../assets/images/feather/videos.svg'),
   'add': require('../../../assets/images/feather/plus.svg'),
   'alert': require('../../../assets/images/feather/alert.svg'),
+  'chapters': require('../../../assets/images/feather/chapters.svg'),
+  'studio': require('../../../assets/images/feather/studio.svg'),
   'overview': require('../../../assets/images/feather/overview.svg'),
   'moderation': require('../../../assets/images/feather/moderation.svg'),
+  'captions': require('../../../assets/images/feather/captions.svg'),
   'config': require('../../../assets/images/feather/config.svg'),
   'award': require('../../../assets/images/feather/award.svg'),
   'bell': require('../../../assets/images/feather/bell.svg'),
   'opened-bell': require('../../../assets/images/feather/opened-bell.svg'),
   'channel': require('../../../assets/images/feather/channel.svg'),
   'chevrons-up': require('../../../assets/images/feather/chevrons-up.svg'),
+  'chevron-up': require('../../../assets/images/feather/chevron-up.svg'),
+  'chevron-down': require('../../../assets/images/feather/chevron-down.svg'),
   'chevron-left': require('../../../assets/images/feather/chevron-left.svg'),
+  'arrow-left': require('../../../assets/images/feather/arrow-left.svg'),
+  'arrow-down': require('../../../assets/images/feather/arrow-down.svg'),
   'circle-tick': require('../../../assets/images/feather/check-circle.svg'),
   'clock-arrow-down': require('../../../assets/images/feather/clock-arrow-down.svg'),
   'clock': require('../../../assets/images/feather/clock.svg'),
@@ -72,6 +80,7 @@ const icons = {
   'ownership-change': require('../../../assets/images/feather/share.svg'),
   'p2p': require('../../../assets/images/feather/airplay.svg'),
   'play': require('../../../assets/images/feather/play.svg'),
+  'circle-alert': require('../../../assets/images/feather/circle-alert.svg'),
   'playlists': require('../../../assets/images/feather/playlists.svg'),
   'refresh': require('../../../assets/images/feather/refresh-cw.svg'),
   'repeat': require('../../../assets/images/feather/repeat.svg'),
@@ -89,6 +98,8 @@ const icons = {
   'user-add': require('../../../assets/images/feather/user-plus.svg'),
   'user-x': require('../../../assets/images/feather/user-x.svg'),
   'user': require('../../../assets/images/feather/user.svg'),
+  'grip-horizontal': require('../../../assets/images/feather/grip-horizontal.svg'),
+  'calendar': require('../../../assets/images/feather/calendar.svg'),
   'users': require('../../../assets/images/feather/users.svg')
 }
 
@@ -97,24 +108,22 @@ export type GlobalIconName = keyof typeof icons
 @Component({
   selector: 'my-global-icon',
   template: '',
-  styleUrls: [ './global-icon.component.scss' ],
+  styleUrls: [ './common-icon.component.scss' ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true
 })
 export class GlobalIconComponent implements OnInit {
-  @Input({ required: true }) iconName: GlobalIconName
+  private el = inject(ElementRef)
+  private hooks = inject(HooksService)
 
-  constructor (
-    private el: ElementRef,
-    private hooks: HooksService
-  ) { }
+  readonly iconName = input.required<GlobalIconName>()
 
   async ngOnInit () {
     const nativeElement = this.el.nativeElement as HTMLElement
 
     nativeElement.innerHTML = await this.hooks.wrapFun(
       this.getSVGContent.bind(this),
-      { name: this.iconName },
+      { name: this.iconName() },
       'common',
       'filter:internal.common.svg-icons.get-content.params',
       'filter:internal.common.svg-icons.get-content.result'

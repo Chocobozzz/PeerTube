@@ -1,0 +1,226 @@
+@use "sass:math";
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "./_player-variables" as *;
+@use "./_player-mixins" as *;
+
+body {
+  --pt-player-overlay-bg: rgba(0, 0, 0, 0.6);
+  --pt-player-overlay-bg-hover: rgba(255, 255, 255, 0.15);
+
+  --pt-player-big-play-background-color: rgba(0, 0, 0, 0.8);
+
+  // Prevent z-index bug with Firefox PiP button
+  // See:
+  // * https://bugzilla.mozilla.org/show_bug.cgi?id=1742585
+  // * https://bugzilla.mozilla.org/show_bug.cgi?id=1742585
+  // * https://bugzilla.mozilla.org/show_bug.cgi?id=1754604
+  @supports (-moz-orient: block) {
+    --pt-player-overlay-bg: #000;
+  }
+}
+
+@mixin big-play-button-triangle-size($triangle-size) {
+  width: $triangle-size;
+  height: $triangle-size;
+}
+
+.video-js.vjs-peertube-skin {
+  font-size: $font-size;
+  color: pvar(--pt-player-fg);
+
+  &.disabled {
+    cursor: default;
+    pointer-events: none;
+
+    .vjs-big-play-button {
+      display: none !important;
+    }
+  }
+
+  .vjs-audio-button {
+    display: none;
+  }
+
+  .vjs-big-play-button {
+    --big-play-button-size: 90px;
+    --big-play-button-icon-size: 45px;
+
+    font-size: unset;
+    outline: 0;
+    border: 0;
+    width: calc(var(--big-play-button-size));
+    height: calc(var(--big-play-button-size));
+    margin-top: calc(var(--big-play-button-size) / 2 * -1);
+    line-height: 1;
+    background-color: pvar(--pt-player-big-play-bg);
+    border-radius: 100%;
+    transition: 0.2s background-color;
+
+    @include margin-left(calc(var(--big-play-button-size) / 2 * -1));
+
+    &::-moz-focus-inner {
+      border: 0;
+      padding: 0;
+    }
+
+    &:focus-visible,
+    &:hover {
+      background-color: pvar(--primary);
+    }
+
+    .vjs-icon-placeholder {
+      position: relative;
+      left: 2px;
+    }
+
+    @include inject-icon("./svg/big-play-button.svg", var(--big-play-button-icon-size));
+  }
+
+  // Show poster and controls when playing audio-only content
+  &.vjs-playing-audio-only-content {
+    .vjs-poster {
+      display: block;
+      visibility: visible;
+    }
+
+    .vjs-control-bar {
+      opacity: $fg-opacity-hover;
+    }
+  }
+
+  // Do not display poster when video is starting
+  // Or if we change resolution manually
+  &.vjs-has-autoplay:not(.vjs-has-started),
+  &.vjs-updating-resolution {
+    .vjs-poster {
+      display: none !important;
+    }
+  }
+
+  // Hide the big play button on autoplay or resolution change
+  &.vjs-has-autoplay,
+  &.vjs-updating-resolution {
+    .vjs-big-play-button {
+      display: none !important;
+    }
+  }
+
+  .vjs-poster {
+    outline: 0;
+    background-size: cover;
+  }
+
+  // Theater mode is enabled
+  &.vjs-theater-enabled {
+    .vjs-theater-control {
+      width: 30px;
+
+      .vjs-icon-placeholder {
+        transform: scale(0.8);
+      }
+    }
+  }
+
+  // On fullscreen, hide theater control
+  &.vjs-fullscreen {
+    .vjs-theater-control {
+      display: none;
+    }
+  }
+}
+
+.vjs-error-display {
+  display: none;
+}
+
+.vjs-custom-error-display {
+  font-family: $main-fonts;
+
+  .error-details {
+    margin-top: 40px;
+    font-size: 80%;
+  }
+}
+
+.vjs-modal-dialog-content {
+  padding-top: 40px !important;
+}
+
+// Error display disabled
+.vjs-error:not(.vjs-error-display-enabled) {
+  .vjs-custom-error-display {
+    display: none;
+  }
+
+  .vjs-loading-spinner {
+    display: block;
+  }
+}
+
+// Error display enabled
+.vjs-error.vjs-error-display-enabled {
+  .vjs-custom-error-display {
+    display: block;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Galaxy (original) theme
+// ---------------------------------------------------------------------------
+
+.video-js.vjs-peertube-theme-galaxy {
+  .vjs-big-play-button {
+    border: 2px solid #fff;
+  }
+}
+
+.video-js.vjs-peertube-theme-galaxy.vjs-size-570 {
+  .vjs-big-play-button {
+    --big-play-button-size: 78px;
+    --big-play-button-icon-size: 32px;
+
+    border-width: 3px;
+  }
+}
+
+.video-js.vjs-peertube-theme-galaxy.vjs-size-350 {
+  .vjs-big-play-button {
+    --big-play-button-size: 46px;
+    --big-play-button-icon-size: 20px;
+
+    border-width: 2px;
+
+    .vjs-icon-placeholder {
+      left: 1px;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Lucide theme
+// ---------------------------------------------------------------------------
+
+.video-js.vjs-peertube-theme-lucide {
+  font-family: Roboto, "helvetica neue", "segoe ui", arial, sans-serif;
+
+  .vjs-big-play-button {
+    --big-play-button-icon-size: 50px;
+
+    color: rgba(255, 255, 255, 0.9);
+  }
+}
+
+.video-js.vjs-peertube-theme-lucide.vjs-size-570 {
+  .vjs-big-play-button {
+    --big-play-button-size: 78px;
+    --big-play-button-icon-size: 32px;
+  }
+}
+
+.video-js.vjs-peertube-theme-lucide.vjs-size-350 {
+  .vjs-big-play-button {
+    --big-play-button-size: 46px;
+    --big-play-button-icon-size: 20px;
+  }
+}

@@ -1,6 +1,5 @@
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop'
-import { NgFor, NgIf } from '@angular/common'
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ComponentPagination, ConfirmService, HooksService, Notifier, ScreenService, updatePaginationOnDelete } from '@app/core'
 import { ButtonComponent } from '@app/shared/shared-main/buttons/button.component'
@@ -10,7 +9,6 @@ import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 import { VideoPlaylistType } from '@peertube/peertube-models'
 import { Subject, Subscription } from 'rxjs'
-import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
 import { ActionDropdownComponent, DropdownAction } from '../../shared/shared-main/buttons/action-dropdown.component'
 import { InfiniteScrollerDirective } from '../../shared/shared-main/common/infinite-scroller.directive'
 import { VideoPlaylistElementMiniatureComponent } from '../../shared/shared-video-playlist/video-playlist-element-miniature.component'
@@ -19,23 +17,27 @@ import { VideoPlaylistMiniatureComponent } from '../../shared/shared-video-playl
 @Component({
   templateUrl: './my-video-playlist-elements.component.html',
   styleUrls: [ './my-video-playlist-elements.component.scss' ],
-  standalone: true,
   imports: [
-    NgIf,
     ButtonComponent,
     VideoPlaylistMiniatureComponent,
-    GlobalIconComponent,
     ActionDropdownComponent,
     InfiniteScrollerDirective,
     CdkDropList,
-    NgFor,
     CdkDrag,
     VideoPlaylistElementMiniatureComponent,
     VideoShareComponent
   ]
 })
 export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
-  @ViewChild('videoShareModal') videoShareModal: VideoShareComponent
+  private hooks = inject(HooksService)
+  private notifier = inject(Notifier)
+  private router = inject(Router)
+  private confirmService = inject(ConfirmService)
+  private route = inject(ActivatedRoute)
+  private screenService = inject(ScreenService)
+  private videoPlaylistService = inject(VideoPlaylistService)
+
+  readonly videoShareModal = viewChild<VideoShareComponent>('videoShareModal')
 
   playlistElements: VideoPlaylistElement[] = []
   playlist: VideoPlaylist
@@ -52,16 +54,6 @@ export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
 
   private videoPlaylistId: string | number
   private paramsSub: Subscription
-
-  constructor (
-    private hooks: HooksService,
-    private notifier: Notifier,
-    private router: Router,
-    private confirmService: ConfirmService,
-    private route: ActivatedRoute,
-    private screenService: ScreenService,
-    private videoPlaylistService: VideoPlaylistService
-  ) {}
 
   ngOnInit () {
     this.playlistActions = [
@@ -107,13 +99,13 @@ export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
     this.playlistElements.splice(previousIndex, 1)
     this.playlistElements.splice(newIndex, 0, element)
 
-    this.videoPlaylistService.reorderPlaylist(this.playlist.id, oldPosition, insertAfter)
+    this.videoPlaylistService.reorderVideosOfPlaylist(this.playlist.id, oldPosition, insertAfter)
       .subscribe({
         next: () => {
           this.reorderClientPositions()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -142,7 +134,7 @@ export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
   }
 
   showShareModal () {
-    this.videoShareModal.show()
+    this.videoShareModal().show()
   }
 
   async deleteVideoPlaylist (videoPlaylist: VideoPlaylist) {
@@ -159,7 +151,7 @@ export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
           this.notifier.success($localize`Playlist ${videoPlaylist.displayName} deleted.`)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

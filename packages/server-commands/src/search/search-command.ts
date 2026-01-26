@@ -11,10 +11,11 @@ import {
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class SearchCommand extends AbstractCommand {
-
-  searchChannels (options: OverrideCommandOptions & {
-    search: string
-  }) {
+  searchChannels (
+    options: OverrideCommandOptions & {
+      search: string
+    }
+  ) {
     return this.advancedChannelSearch({
       ...options,
 
@@ -22,9 +23,11 @@ export class SearchCommand extends AbstractCommand {
     })
   }
 
-  advancedChannelSearch (options: OverrideCommandOptions & {
-    search: VideoChannelsSearchQuery
-  }) {
+  advancedChannelSearch (
+    options: OverrideCommandOptions & {
+      search: VideoChannelsSearchQuery
+    }
+  ) {
     const { search } = options
     const path = '/api/v1/search/video-channels'
 
@@ -38,9 +41,11 @@ export class SearchCommand extends AbstractCommand {
     })
   }
 
-  searchPlaylists (options: OverrideCommandOptions & {
-    search: string
-  }) {
+  searchPlaylists (
+    options: OverrideCommandOptions & {
+      search: string
+    }
+  ) {
     return this.advancedPlaylistSearch({
       ...options,
 
@@ -48,9 +53,11 @@ export class SearchCommand extends AbstractCommand {
     })
   }
 
-  advancedPlaylistSearch (options: OverrideCommandOptions & {
-    search: VideoPlaylistsSearchQuery
-  }) {
+  advancedPlaylistSearch (
+    options: OverrideCommandOptions & {
+      search: VideoPlaylistsSearchQuery
+    }
+  ) {
     const { search } = options
     const path = '/api/v1/search/video-playlists'
 
@@ -64,10 +71,12 @@ export class SearchCommand extends AbstractCommand {
     })
   }
 
-  searchVideos (options: OverrideCommandOptions & {
-    search: string
-    sort?: string
-  }) {
+  searchVideos (
+    options: OverrideCommandOptions & {
+      search?: string
+      sort?: string
+    }
+  ) {
     const { search, sort } = options
 
     return this.advancedVideoSearch({
@@ -80,9 +89,11 @@ export class SearchCommand extends AbstractCommand {
     })
   }
 
-  advancedVideoSearch (options: OverrideCommandOptions & {
-    search: VideosSearchQuery
-  }) {
+  advancedVideoSearch (
+    options: OverrideCommandOptions & {
+      search?: VideosSearchQuery
+    }
+  ) {
     const { search } = options
     const path = '/api/v1/search/videos'
 

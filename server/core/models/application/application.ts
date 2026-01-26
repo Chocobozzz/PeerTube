@@ -1,9 +1,12 @@
 import { getNodeABIVersion } from '@server/helpers/version.js'
+import { CONFIG } from '@server/initializers/config.js'
 import memoizee from 'memoizee'
-import { AllowNull, Column, Default, DefaultScope, HasOne, IsInt, Table } from 'sequelize-typescript'
+import { AllowNull, Column, DataType, Default, DefaultScope, HasOne, IsInt, Table } from 'sequelize-typescript'
+import type { PickDeep } from 'type-fest'
 import { AccountModel } from '../account/account.js'
 import { ActorImageModel } from '../actor/actor-image.js'
 import { SequelizeModel } from '../shared/index.js'
+import { UploadImageModel } from './upload-image.js'
 
 export const getServerActor = memoizee(async function () {
   const application = await ApplicationModel.load()
@@ -16,8 +19,13 @@ export const getServerActor = memoizee(async function () {
   actor.Avatars = avatars
   actor.Banners = banners
 
+  const uploadImages = await UploadImageModel.listByActor(actor, undefined)
+  actor.UploadImages = uploadImages
+
   return actor
 }, { promise: true })
+
+type ConfigPart = PickDeep<typeof CONFIG, 'OBJECT_STORAGE.STREAMING_PLAYLISTS'>
 
 @DefaultScope(() => ({
   include: [
@@ -32,24 +40,27 @@ export const getServerActor = memoizee(async function () {
   timestamps: false
 })
 export class ApplicationModel extends SequelizeModel<ApplicationModel> {
-
   @AllowNull(false)
   @Default(0)
   @IsInt
   @Column
-  migrationVersion: number
+  declare migrationVersion: number
 
   @AllowNull(true)
   @Column
-  latestPeerTubeVersion: string
+  declare latestPeerTubeVersion: string
 
   @AllowNull(false)
   @Column
-  nodeVersion: string
+  declare nodeVersion: string
 
   @AllowNull(false)
   @Column
-  nodeABIVersion: number
+  declare nodeABIVersion: string
+
+  @AllowNull(true)
+  @Column(DataType.JSONB)
+  declare configPart: ConfigPart
 
   @HasOne(() => AccountModel, {
     foreignKey: {
@@ -57,7 +68,10 @@ export class ApplicationModel extends SequelizeModel<ApplicationModel> {
     },
     onDelete: 'cascade'
   })
-  Account: Awaited<AccountModel>
+  declare Account: Awaited<AccountModel>
+
+  private static lastRunConfigPart: ConfigPart
+  private static lastRunNodeABIVersion: string
 
   static countTotal () {
     return ApplicationModel.count()
@@ -70,14 +84,32 @@ export class ApplicationModel extends SequelizeModel<ApplicationModel> {
   static async nodeABIChanged () {
     const application = await this.load()
 
-    return application.nodeABIVersion !== getNodeABIVersion()
+    const nodeABIVersion = this.lastRunNodeABIVersion || application.nodeABIVersion
+
+    return nodeABIVersion !== getNodeABIVersion()
   }
 
-  static async updateNodeVersions () {
+  static async streamingPlaylistBaseUrlChanged () {
     const application = await this.load()
+    const configPart = this.lastRunConfigPart || application.configPart
+
+    return configPart?.OBJECT_STORAGE.STREAMING_PLAYLISTS.BASE_URL !== CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BASE_URL
+  }
+
+  static async updateNodeVersionsOrConfig () {
+    const application = await this.load()
+
+    this.lastRunNodeABIVersion = application.nodeABIVersion
+    this.lastRunConfigPart = application.configPart
 
     application.nodeABIVersion = getNodeABIVersion()
     application.nodeVersion = process.version
+
+    application.configPart = {
+      OBJECT_STORAGE: {
+        STREAMING_PLAYLISTS: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS
+      }
+    }
 
     await application.save()
   }

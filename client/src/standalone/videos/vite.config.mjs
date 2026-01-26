@@ -5,8 +5,15 @@ import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 import checker from 'vite-plugin-checker'
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
+import { getCSSConfig, getAliasConfig } from '../build-tools/vite-utils.js'
 
+const nodeConfig = process.env.NODE_CONFIG
+  ? JSON.parse(process.env.NODE_CONFIG)
+  : undefined
+
+const hostname = nodeConfig?.webserver?.hostname || 'localhost'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 const root = resolve(__dirname, '../../../')
 
 export default defineConfig(({ mode }) => {
@@ -18,9 +25,11 @@ export default defineConfig(({ mode }) => {
     root: resolve(root, 'src', 'standalone', 'videos'),
 
     server: {
+      host: hostname,
+
       proxy: {
         '^/(videos|video-playlists)/(test-)?embed/[^\/\.]+$': {
-          target: 'http://localhost:5173',
+          target: 'http://' + hostname + ':5173',
           rewrite: (path) => {
             return path.replace('/videos/embed/', 'embed.html?videoId=')
               .replace('/videos/test-embed/', 'test-embed.html?')
@@ -29,38 +38,29 @@ export default defineConfig(({ mode }) => {
           }
         },
         '^/(videos|video-playlists)/(test-)?embed/.*': {
-          target: 'http://localhost:5173',
+          target: 'http://' + hostname + ':5173',
           rewrite: (path) => {
             return path.replace(/\/(videos|video-playlists)\/(test-)?embed\//, '')
           }
         },
         '^/lazy-static': {
-          target: 'http://localhost:9000'
+          target: 'http://' + hostname + ':9000'
         }
       }
     },
 
     resolve: {
-      alias: [
-        { find: /^video.js$/, replacement: resolve(root, './node_modules/video.js/core.js') },
-        { find: '@root-helpers', replacement: resolve(root, './src/root-helpers') }
-      ],
+      alias: getAliasConfig(root),
     },
 
-    css: {
-      preprocessorOptions: {
-        scss: {
-          includePaths: [resolve(root, './src/sass/include')]
-        }
-      }
-    },
+    css: getCSSConfig(root),
 
     build: {
       outDir: resolve(root, 'dist', 'standalone', 'videos'),
       emptyOutDir: true,
       sourcemap: mode === 'development',
 
-      target: [ 'firefox78', 'ios12' ],
+      target: [ 'firefox78', 'ios14' ],
 
       rollupOptions: {
         input: {

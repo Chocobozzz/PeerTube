@@ -126,8 +126,6 @@ export class VideoViewerCounters {
   getTotalViewersOf (video: MVideoImmutable) {
     const viewers = this.viewersPerVideo.get(video.id)
 
-    logger.error('toto', { viewers })
-
     return viewers?.reduce((p, c) => p + c.viewerCount, 0) || 0
   }
 

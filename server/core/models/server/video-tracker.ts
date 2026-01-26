@@ -16,16 +16,16 @@ import { SequelizeModel } from '../shared/index.js'
 })
 export class VideoTrackerModel extends SequelizeModel<VideoTrackerModel> {
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @ForeignKey(() => TrackerModel)
   @Column
-  trackerId: number
+  declare trackerId: number
 }

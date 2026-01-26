@@ -2,7 +2,7 @@ import { SortMeta } from 'primeng/api'
 import { from, Observable } from 'rxjs'
 import { catchError, concatMap, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
 import { arrayify } from '@peertube/peertube-core-utils'
 import { ActivityPubActorType, ActorFollow, FollowState, ResultList, ServerFollowCreate } from '@peertube/peertube-models'
@@ -11,14 +11,11 @@ import { AdvancedInputFilter } from '../shared-forms/advanced-input-filter.compo
 
 @Injectable()
 export class InstanceFollowService {
-  private static BASE_APPLICATION_URL = environment.apiUrl + '/api/v1/server'
+  private authHttp = inject(HttpClient)
+  private restService = inject(RestService)
+  private restExtractor = inject(RestExtractor)
 
-  constructor (
-    private authHttp: HttpClient,
-    private restService: RestService,
-    private restExtractor: RestExtractor
-  ) {
-  }
+  private static BASE_APPLICATION_URL = environment.apiUrl + '/api/v1/server'
 
   getFollowing (options: {
     pagination: RestPagination
@@ -40,7 +37,7 @@ export class InstanceFollowService {
     if (actorType) params = params.append('actorType', actorType)
 
     return this.authHttp.get<ResultList<ActorFollow>>(InstanceFollowService.BASE_APPLICATION_URL + '/following', { params })
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   getFollowers (options: {
@@ -63,7 +60,7 @@ export class InstanceFollowService {
     if (actorType) params = params.append('actorType', actorType)
 
     return this.authHttp.get<ResultList<ActorFollow>>(InstanceFollowService.BASE_APPLICATION_URL + '/followers', { params })
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   follow (hostsOrHandles: string[]) {
@@ -73,7 +70,7 @@ export class InstanceFollowService {
     }
 
     return this.authHttp.post(InstanceFollowService.BASE_APPLICATION_URL + '/following', body)
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   unfollow (followsArg: ActorFollow[] | ActorFollow) {

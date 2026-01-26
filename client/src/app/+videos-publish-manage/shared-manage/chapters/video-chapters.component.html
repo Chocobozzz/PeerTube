@@ -1,0 +1,60 @@
+<h2 class="form-title">
+  <my-global-icon iconName="chapters"></my-global-icon>
+
+  <ng-container i18n>Chapters</ng-container>
+</h2>
+
+@if (isLive()) {
+  <my-alert type="primary" i18n>Chapters are not available on a live.</my-alert>
+} @else {
+  <form [formGroup]="form" id="video-manage-form">
+    <div class="row mb-5">
+      <div class="chapters col-md-12 col-xl-6" formArrayName="chapters">
+        <my-alert type="primary" i18n>
+          Chapters can also be set in the video description.
+
+          Check the format <a href="https://docs.joinpeertube.org/use/create-upload-video#chapters" target="_blank" class="alert-link">in the PeerTube documentation</a>
+        </my-alert>
+
+        @for (chapterControl of getChaptersFormArray().controls; track chapterControl; let i = $index) {
+          <div class="chapter" [formGroupName]="i">
+            <!-- Row 1 -->
+            <div></div>
+            <label i18n [ngClass]="{ 'hide-chapter-label': i !== 0 }" [for]="'timecode[' + i + ']'">Timecode</label>
+            <label i18n [ngClass]="{ 'hide-chapter-label': i !== 0 }" [for]="'title[' + i + ']'">Chapter name</label>
+            <div></div>
+            <!-- Row 2 -->
+            <div class="position">{{ i + 1 }}</div>
+            <my-timestamp-input
+              class="d-block" enableBorder="true" [inputName]="'timecode[' + i + ']'"
+              [maxTimestamp]="videoEdit.getVideoAttributes().duration || null" formControlName="timecode"
+            ></my-timestamp-input>
+            <div>
+              <input
+                [ngClass]="{ 'input-error': formErrors.chapters[i].title }"
+                type="text" [id]="'title[' + i + ']'" [name]="'title[' + i + ']'" formControlName="title"
+                />
+              <div [ngClass]="{ 'opacity-0': !formErrors.chapters[i].title }" class="form-error" role="alert">
+                <span class="opacity-0">t</span> <!-- Ensure we have reserve a correct height -->
+                {{ formErrors.chapters[i].title }}
+              </div>
+            </div>
+            @if (!isLastChapterControl(i)) {
+              <my-delete-button (click)="deleteChapterControl(i)"></my-delete-button>
+            }
+          </div>
+        }
+
+        @if (getChapterArrayErrors()) {
+          <div class="form-error" role="alert">
+            {{ getChapterArrayErrors() }}
+          </div>
+        }
+      </div>
+
+      @if (videoEdit.isPublishedVOD()) {
+        <my-embed class="col-md-12 col-xl-6" [video]="videoEdit.getVideoAttributes()" [version]="getEmbedVersion()"></my-embed>
+      }
+    </div>
+  </form>
+}

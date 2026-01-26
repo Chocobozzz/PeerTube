@@ -1,0 +1,15 @@
+<button class="root button-unstyle" [ngClass]="{ active: checked() }" [title]="label()" (click)="toggle()">
+  <my-actor-avatar [actor]="channel()" actorType="channel" size="34"></my-actor-avatar>
+
+  <div class="info" [ngClass]="{ 'has-collaborator-state': user.isCollaboratingToChannels()  }">
+    <div class="name">{{ channel().displayName }}</div>
+
+    @if (user.isCollaboratingToChannels()) {
+      @if (user.isEditorOfChannel(channel())) {
+        <my-collaborator-state small="true" type="accepted"></my-collaborator-state>
+      } @else {
+        <my-collaborator-state small="true" type="owner"></my-collaborator-state>
+      }
+    }
+  </div>
+</button>

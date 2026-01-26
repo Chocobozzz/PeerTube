@@ -9,11 +9,6 @@ Npm:
 npm install --save-dev @peertube/peertube-types
 ```
 
-Yarn:
-```
-yarn add --dev @peertube/peertube-types
-```
-
 ## Usage
 
 > See [contribute-plugins](https://docs.joinpeertube.org/contribute/plugins#typescript) **Typescript** section of the doc.

@@ -1,9 +1,9 @@
 import { VideoPrivacy, VideoState } from '@peertube/peertube-models'
 import { MTag } from '@server/types/models/video/tag.js'
-import { QueryTypes, Transaction, col, fn } from 'sequelize'
+import { col, fn, QueryTypes, Transaction } from 'sequelize'
 import { AllowNull, BelongsToMany, Column, Is, Table } from 'sequelize-typescript'
 import { isVideoTagValid } from '../../helpers/custom-validators/videos.js'
-import { SequelizeModel, throwIfNotValid } from '../shared/index.js'
+import { buildSQLAttributes, SequelizeModel, throwIfNotValid } from '../shared/index.js'
 import { VideoTagModel } from './video-tag.js'
 import { VideoModel } from './video.js'
 
@@ -22,18 +22,29 @@ import { VideoModel } from './video.js'
   ]
 })
 export class TagModel extends SequelizeModel<TagModel> {
-
   @AllowNull(false)
   @Is('VideoTag', value => throwIfNotValid(value, isVideoTagValid, 'tag'))
   @Column
-  name: string
+  declare name: string
 
   @BelongsToMany(() => VideoModel, {
     foreignKey: 'tagId',
     through: () => VideoTagModel,
     onDelete: 'CASCADE'
   })
-  Videos: Awaited<VideoModel>[]
+  declare Videos: Awaited<VideoModel>[]
+
+  // ---------------------------------------------------------------------------
+
+  static getSQLAttributes (tableName: string, aliasPrefix = '') {
+    return buildSQLAttributes({
+      model: this,
+      tableName,
+      aliasPrefix
+    })
+  }
+
+  // ---------------------------------------------------------------------------
 
   // threshold corresponds to how many video the field should have to be returned
   static getRandomSamples (threshold: number, count: number): Promise<string[]> {
@@ -51,7 +62,7 @@ export class TagModel extends SequelizeModel<TagModel> {
     }
 
     return TagModel.sequelize.query<{ name: string }>(query, options)
-                    .then(data => data.map(d => d.name))
+      .then(data => data.map(d => d.name))
   }
 
   static findOrCreateMultiple (options: {

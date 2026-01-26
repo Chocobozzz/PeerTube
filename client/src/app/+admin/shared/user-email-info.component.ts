@@ -1,20 +1,18 @@
-import { Component, Input, booleanAttribute } from '@angular/core'
+import { Component, booleanAttribute, input } from '@angular/core'
 import { User, UserRegistration } from '@peertube/peertube-models'
-import { NgIf } from '@angular/common'
 
 @Component({
   selector: 'my-user-email-info',
   templateUrl: './user-email-info.component.html',
   styleUrls: [ './user-email-info.component.scss' ],
-  standalone: true,
-  imports: [ NgIf ]
+  imports: []
 })
 export class UserEmailInfoComponent {
-  @Input() entry: User | UserRegistration
-  @Input({ transform: booleanAttribute }) showEmailVerifyInformation: boolean
+  readonly entry = input<User | UserRegistration>(undefined)
+  readonly showEmailVerifyInformation = input<boolean, unknown>(undefined, { transform: booleanAttribute })
 
   getTitle () {
-    if (this.entry.emailVerified) {
+    if (this.entry().emailVerified) {
       return $localize`User email has been verified`
     }
 

@@ -15,6 +15,7 @@ export interface UserSettingsExportJSON {
 
   videosHistoryEnabled: boolean
   videoLanguages: string[]
+  language: string
 
   theme: string
 

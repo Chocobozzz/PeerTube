@@ -1,0 +1,73 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style: none;
+}
+
+.no-notification {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.notification {
+  display: block;
+  margin-bottom: 0.5rem;
+  text-decoration: none;
+
+  &.unread {
+    border-top: 2px solid pvar(--primary);
+    background-color: pvar(--bg);
+  }
+
+  &:not(.unread) {
+    background-color: pvar(--bg-secondary-350);
+  }
+
+  &:hover {
+    opacity: 1;
+    background-color: pvar(--bg-secondary-300);
+  }
+
+  &.button-unstyle {
+    width: 100%;
+    text-align: left;
+  }
+}
+
+.notifications:not(.in-popup) {
+  .notification {
+    margin-bottom: 1rem;
+
+    &.unread {
+      background-color: pvar(--bg-secondary-350);
+    }
+
+    &:not(.unread) {
+      background-color: pvar(--bg-secondary-400);
+    }
+  }
+}
+
+my-date-group-label.date-displayed {
+  font-weight: $font-bold;
+  color: pvar(--fg-300);
+  padding-bottom: 1.5rem;
+  display: block;
+  line-height: normal;
+
+  @include font-size(18px);
+
+  &:not(:first-child) {
+    padding-top: 1.5rem;
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--bg-secondary);
+  }
+}

@@ -1,7 +1,7 @@
 import { LoginPage } from '../po/login.po'
 import { PlayerPage } from '../po/player.po'
 import { VideoWatchPage } from '../po/video-watch.po'
-import { FIXTURE_URLS, go, isMobileDevice, isSafari } from '../utils'
+import { FIXTURE_URLS, go, isMobileDevice, isSafari, prepareWebBrowser } from '../utils'
 
 async function checkCorrectlyPlay (playerPage: PlayerPage) {
   await playerPage.playAndPauseVideo(false, 2)
@@ -22,9 +22,7 @@ describe('Private videos all workflow', () => {
     loginPage = new LoginPage(isMobileDevice())
     playerPage = new PlayerPage()
 
-    if (!isMobileDevice()) {
-      await browser.maximizeWindow()
-    }
+    await prepareWebBrowser()
   })
 
   it('Should log in', async () => {

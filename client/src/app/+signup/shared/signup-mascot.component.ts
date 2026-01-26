@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core'
 import { DomSanitizer } from '@angular/platform-browser'
 
 const images = {
@@ -19,13 +19,11 @@ export type MascotImageName = keyof typeof images
   standalone: true
 })
 export class SignupMascotComponent {
-  @Input() imageName: MascotImageName
+  private sanitize = inject(DomSanitizer)
 
-  constructor (private sanitize: DomSanitizer) {
-
-  }
+  readonly imageName = input<MascotImageName>(undefined)
 
   get html () {
-    return this.sanitize.bypassSecurityTrustHtml(images[this.imageName])
+    return this.sanitize.bypassSecurityTrustHtml(images[this.imageName()])
   }
 }

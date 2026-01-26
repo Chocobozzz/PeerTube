@@ -1,4 +1,5 @@
 import { logger } from '@server/helpers/logger.js'
+import { t } from '@server/helpers/i18n.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { UserModel } from '@server/models/user/user.js'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
@@ -6,7 +7,7 @@ import { MUserDefault, MUserWithNotificationSetting, MVideoFullLight, UserNotifi
 import { UserNotificationType } from '@peertube/peertube-models'
 import { AbstractNotification } from '../common/abstract-notification.js'
 
-export abstract class AbstractOwnedVideoPublication extends AbstractNotification <MVideoFullLight> {
+export abstract class AbstractOwnedVideoPublication extends AbstractNotification<MVideoFullLight> {
   protected user: MUserDefault
 
   async prepare () {
@@ -38,17 +39,20 @@ export abstract class AbstractOwnedVideoPublication extends AbstractNotification
     return notification
   }
 
-  createEmail (to: string) {
+  createEmail (user: MUserWithNotificationSetting) {
+    const to = { email: user.email, language: user.getLanguage() }
+    const language = user.getLanguage()
+
     const videoUrl = WEBSERVER.URL + this.payload.getWatchStaticPath()
 
     return {
       to,
-      subject: `Your video ${this.payload.name} has been published`,
-      text: `Your video "${this.payload.name}" has been published.`,
+      subject: t('Your video has been published', language),
+      text: t('Your video {videoName} has been published.', language, { videoName: this.payload.name }),
       locals: {
-        title: 'Your video is live',
+        title: t('Your video is live', language),
         action: {
-          text: 'View video',
+          text: t('View video', language),
           url: videoUrl
         }
       }

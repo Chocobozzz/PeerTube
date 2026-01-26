@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { NavigationCancel, NavigationEnd, Router } from '@angular/router'
 import { VideoSortField } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
@@ -12,6 +12,10 @@ const debugLogger = debug('peertube:router:RedirectService')
 
 @Injectable()
 export class RedirectService {
+  private router = inject(Router)
+  private serverService = inject(ServerService)
+  private storage = inject(SessionStorageService)
+
   private static SESSION_STORAGE_LATEST_SESSION_URL_KEY = 'redirect-latest-session-url'
 
   // Default route could change according to the instance configuration
@@ -26,14 +30,6 @@ export class RedirectService {
   private redirectingToHomepage = false
   private defaultTrendingAlgorithm = RedirectService.INIT_DEFAULT_TRENDING_ALGORITHM
   private defaultRoute = RedirectService.INIT_DEFAULT_ROUTE
-
-  constructor (
-    private router: Router,
-    private serverService: ServerService,
-    private storage: SessionStorageService
-  ) {
-
-  }
 
   init () {
     const config = this.serverService.getHTMLConfig()
@@ -93,36 +89,51 @@ export class RedirectService {
     }
   }
 
-  redirectToLatestSessionRoute () {
-    return this.doRedirect(this.latestSessionUrl)
+  redirectToLatestSessionRoute (options: {
+    reloadTab?: boolean
+  } = {}) {
+    return this.doRedirect(this.latestSessionUrl, options)
   }
 
-  redirectToPreviousRoute (fallbackRoute?: string) {
-    return this.doRedirect(this.previousUrl, fallbackRoute)
+  redirectToPreviousRoute (options: {
+    reloadTab?: boolean
+  } = {}) {
+    return this.doRedirect(this.previousUrl, options)
   }
 
   getPreviousUrl () {
     return this.previousUrl
   }
 
-  redirectToHomepage (skipLocationChange = false) {
+  redirectToHomepage (options: {
+    skipLocationChange?: boolean // default false
+    reloadTab?: boolean // default false
+  } = {}) {
+    const { skipLocationChange = false, reloadTab = false } = options
+
     if (this.redirectingToHomepage) return
+
+    if (reloadTab) {
+      window.location.href = this.defaultRoute
+      return
+    }
 
     this.redirectingToHomepage = true
 
-    logger.info(`Redirecting to ${this.defaultRoute}...`)
+    logger.info(`Redirecting to default route ${this.defaultRoute}...`, { skipLocationChange })
 
-    this.router.navigateByUrl(this.defaultRoute, { skipLocationChange })
-        .then(() => this.redirectingToHomepage = false)
-        .catch(err => {
-          this.redirectingToHomepage = false
+    this.router.navigateByUrl(this.defaultRoute, {
+      skipLocationChange,
+      state: { trigger: this.router.currentNavigation()?.trigger }
+    }).then(() => this.redirectingToHomepage = false)
+      .catch(err => {
+        this.redirectingToHomepage = false
 
-          logger.error(`Cannot navigate to ${this.defaultRoute}, resetting default route to ${RedirectService.INIT_DEFAULT_ROUTE}`, err)
+        logger.error(`Cannot navigate to ${this.defaultRoute}, resetting default route to ${RedirectService.INIT_DEFAULT_ROUTE}`, err)
 
-          this.defaultRoute = RedirectService.INIT_DEFAULT_ROUTE
-          return this.router.navigateByUrl(this.defaultRoute, { skipLocationChange })
-        })
-
+        this.defaultRoute = RedirectService.INIT_DEFAULT_ROUTE
+        return this.router.navigateByUrl(this.defaultRoute, { skipLocationChange })
+      })
   }
 
   redirectToLogin () {
@@ -136,20 +147,24 @@ export class RedirectService {
     this.router.navigate([ '/401' ], { state: { obj: err }, skipLocationChange: true })
   }
 
-  private doRedirect (redirectUrl: string, fallbackRoute?: string) {
+  private doRedirect (redirectUrl: string, options: {
+    reloadTab?: boolean
+  } = {}) {
+    const { reloadTab = false } = options
+
     debugLogger('Redirecting on %s', redirectUrl)
 
     if (this.isValidRedirection(redirectUrl)) {
+      if (reloadTab) {
+        window.location.href = redirectUrl
+        return
+      }
+
       return this.router.navigateByUrl(redirectUrl)
     }
 
-    debugLogger('%s is not a valid redirection, try fallback route %s', redirectUrl, fallbackRoute)
-    if (fallbackRoute) {
-      return this.router.navigateByUrl(fallbackRoute)
-    }
-
-    debugLogger('There was no fallback route, redirecting to homepage')
-    return this.redirectToHomepage()
+    debugLogger(`${redirectUrl} is not a valid redirection, redirecting to homepage`)
+    return this.redirectToHomepage(options)
   }
 
   private isValidRedirection (redirectUrl: string) {

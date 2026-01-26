@@ -1,0 +1,66 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+@use 'nav' as *;
+
+$border-width: 0;
+$border-type: solid;
+$border-color: #fff;
+$nav-link-height: 40px;
+
+.upload-message {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 0;
+
+  &:last-child {
+    margin-bottom: 1rem;
+  }
+}
+
+.upload-image {
+  width: 100%;
+  text-align: center;
+
+  img {
+    margin-top: 2rem;
+    margin-bottom: 75px;
+    width: 220px;
+    height: auto;
+  }
+}
+
+:host ::ng-deep .video-add-nav {
+  @include peertube-nav-tabs($border-width, $border-type, $border-color, $nav-link-height);
+
+  & {
+    overflow-x: auto;
+    flex-wrap: unset;
+    white-space: nowrap;
+  }
+
+  a.nav-link {
+    &.active {
+      background-color: pvar(--bg-secondary-400) !important;
+    }
+  }
+}
+
+:host ::ng-deep .upload-video-container {
+  border: $border-width $border-type $border-color;
+  border-top: transparent;
+
+  background-color: pvar(--bg-secondary-400);
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  width: 100%;
+  min-height: 440px;
+  padding-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+
+  &.dragover {
+    border: 3px dashed pvar(--primary);
+  }
+}

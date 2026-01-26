@@ -1,0 +1,13 @@
+{{#> base title=(t "Email verification")}}
+  <p>{{t "You requested to change your email."}}</p>
+
+  <p>
+    {{t "Please click on the link below to verify this email belongs to you (the link will expire within 1 hour):"}}
+  </p>
+
+  {{> button actionUrl=verifyEmailUrl actionText=(t "Verify my email")}}
+
+  <p>
+    {{t "If you are not the person who initiated this request, please let us know by replying to this email."}}
+  </p>
+{{/base}}

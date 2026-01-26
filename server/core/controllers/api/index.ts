@@ -7,19 +7,21 @@ import { accountsRouter } from './accounts.js'
 import { automaticTagRouter } from './automatic-tags.js'
 import { blocklistRouter } from './blocklist.js'
 import { bulkRouter } from './bulk.js'
+import { clientConfigRouter } from './client-config.js'
 import { configRouter } from './config.js'
 import { customPageRouter } from './custom-page.js'
 import { jobsRouter } from './jobs.js'
 import { metricsRouter } from './metrics.js'
 import { oauthClientsRouter } from './oauth-clients.js'
 import { overviewsRouter } from './overviews.js'
+import { playerSettingsRouter } from './player-settings.js'
 import { pluginRouter } from './plugins.js'
 import { runnersRouter } from './runners/index.js'
 import { searchRouter } from './search/index.js'
 import { serverRouter } from './server/index.js'
 import { usersRouter } from './users/index.js'
 import { videoChannelSyncRouter } from './video-channel-sync.js'
-import { videoChannelRouter } from './video-channel.js'
+import { videoChannelRouter } from './video-channels/index.js'
 import { videoPlaylistRouter } from './video-playlist.js'
 import { videosRouter } from './videos/index.js'
 import { watchedWordsRouter } from './watched-words.js'
@@ -47,12 +49,14 @@ apiRouter.use('/jobs', jobsRouter)
 apiRouter.use('/metrics', metricsRouter)
 apiRouter.use('/search', searchRouter)
 apiRouter.use('/overviews', overviewsRouter)
+apiRouter.use('/player-settings', playerSettingsRouter)
 apiRouter.use('/plugins', pluginRouter)
 apiRouter.use('/custom-pages', customPageRouter)
 apiRouter.use('/blocklist', blocklistRouter)
 apiRouter.use('/runners', runnersRouter)
 apiRouter.use('/watched-words', watchedWordsRouter)
 apiRouter.use('/automatic-tags', automaticTagRouter)
+apiRouter.use('/client-config', clientConfigRouter)
 
 apiRouter.use('/ping', pong)
 apiRouter.use('/*', badRequest)

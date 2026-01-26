@@ -17,6 +17,7 @@ import {
 } from '../../../../types/models/index.js'
 import { JobQueue } from '../../../job-queue/index.js'
 import { getActorsInvolvedInVideo, getAudienceFromFollowersOf, getOriginVideoAudience } from './audience-utils.js'
+import { arrayify } from '@peertube/peertube-core-utils'
 
 async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAudience) => Activity, options: {
   byActor: MActorLight
@@ -28,7 +29,7 @@ async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAud
   const { byActor, video, transaction, contextType, parallelizable } = options
 
   // Send to origin
-  if (video.isOwned() === false) {
+  if (video.isLocal() === false) {
     return sendVideoActivityToOrigin(activityBuilder, options)
   }
 
@@ -61,7 +62,7 @@ async function sendVideoActivityToOrigin (activityBuilder: (audience: ActivityAu
 }) {
   const { byActor, video, actorsInvolvedInVideo, transaction, contextType } = options
 
-  if (video.isOwned()) throw new Error('Cannot send activity to owned video origin ' + video.url)
+  if (video.isLocal()) throw new Error('Cannot send activity to owned video origin ' + video.url)
 
   let accountActor: MActorLight = (video as MVideoAccountLight).VideoChannel?.Account?.Actor
   if (!accountActor) accountActor = await ActorModel.loadAccountActorByVideoId(video.id, transaction)
@@ -102,8 +103,8 @@ async function forwardActivity (
 ) {
   logger.info('Forwarding activity %s.', activity.id)
 
-  const to = activity.to || []
-  const cc = activity.cc || []
+  const to = arrayify(activity.to)
+  const cc = arrayify(activity.cc)
 
   const followersUrls = additionalFollowerUrls
   for (const dest of to.concat(cc)) {
@@ -285,7 +286,7 @@ async function computeUris (toActors: MActor[], actorsException: MActorWithInbox
 
   const sharedInboxesException = await buildSharedInboxesException(actorsException)
   return Array.from(toActorSharedInboxesSet)
-              .filter(sharedInbox => sharedInboxesException.includes(sharedInbox) === false)
+    .filter(sharedInbox => sharedInboxesException.includes(sharedInbox) === false)
 }
 
 async function buildSharedInboxesException (actorsException: MActorWithInboxes[]) {

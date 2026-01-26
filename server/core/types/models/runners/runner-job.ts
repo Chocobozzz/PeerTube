@@ -11,10 +11,10 @@ export type MRunnerJob = Omit<RunnerJobModel, 'Runner' | 'DependsOnRunnerJob'>
 // ############################################################################
 
 export type MRunnerJobRunner =
-  MRunnerJob &
-  Use<'Runner', MRunner>
+  & MRunnerJob
+  & Use<'Runner', MRunner>
 
 export type MRunnerJobRunnerParent =
-  MRunnerJob &
-  Use<'Runner', MRunner> &
-  Use<'DependsOnRunnerJob', MRunnerJob>
+  & MRunnerJob
+  & Use<'Runner', MRunner>
+  & Use<'DependsOnRunnerJob', MRunnerJob>

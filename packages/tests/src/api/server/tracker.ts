@@ -7,7 +7,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
-import { magnetUriDecode, magnetUriEncode } from '@tests/shared/webtorrent.js'
+import { magnetUriDecode, magnetUriEncode } from '@tests/shared/p2p.js'
 import WebTorrent from 'webtorrent'
 
 describe('Test tracker', function () {

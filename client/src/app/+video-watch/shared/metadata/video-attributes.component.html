@@ -1,0 +1,101 @@
+<div class="attribute attribute-privacy">
+  <span i18n class="attribute-label">Privacy</span>
+  <span class="attribute-value">{{ video().privacy.label }}</span>
+</div>
+
+@if (video().isLocal === false) {
+  <div class="attribute attribute-origin">
+    <span i18n class="attribute-label">Origin</span>
+    <a
+      class="attribute-value" target="_blank" rel="noopener noreferrer"
+      routerLink="/search" [queryParams]="{ host: getVideoHost() }"
+    >{{ video().originInstanceHost }}</a>
+    <a
+      i18n-title title="Open the video on the origin instance"
+      target="_blank" rel="noopener noreferrer" [href]="video().url"
+      >
+      <my-global-icon iconName="external-link"></my-global-icon>
+    </a>
+  </div>
+}
+
+@if (!!video().inputFileUpdatedAt) {
+  <div class="attribute attribute-re-uploaded-on">
+    <span i18n class="attribute-label">Video re-upload</span>
+    <span class="attribute-value">{{ video().inputFileUpdatedAt | ptDate: 'short' }}</span>
+  </div>
+}
+
+@if (!!video().originallyPublishedAt) {
+  <div class="attribute attribute-originally-published-at">
+    <span i18n class="attribute-label">Originally published</span>
+    <span class="attribute-value">{{ video().originallyPublishedAt | ptDate: 'shortDate' }}</span>
+  </div>
+}
+
+<div class="attribute attribute-category">
+  <span i18n class="attribute-label">Category</span>
+  @if (!video().category.id) {
+    <span class="attribute-value">{{ video().category.label }}</span>
+  }
+  @if (video().category.id) {
+    <a
+      class="attribute-value"
+      [routerLink]="[ '/search' ]" [queryParams]="{ categoryOneOf: [ video().category.id ] }"
+    >{{ video().category.label }}</a>
+  }
+</div>
+
+<div class="attribute attribute-licence">
+  <span i18n class="attribute-label">Licence</span>
+  @if (!video().licence.id) {
+    <span class="attribute-value">{{ video().licence.label }}</span>
+  }
+  @if (video().licence.id) {
+    <a
+      class="attribute-value"
+      [routerLink]="[ '/search' ]" [queryParams]="{ licenceOneOf: [ video().licence.id ] }"
+    >{{ video().licence.label }}</a>
+  }
+</div>
+
+<div class="attribute attribute-language">
+  <span i18n class="attribute-label">Language</span>
+  @if (!video().language.id) {
+    <span class="attribute-value">{{ video().language.label }}</span>
+  }
+  @if (video().language.id) {
+    <a
+      class="attribute-value"
+      [routerLink]="[ '/search' ]" [queryParams]="{ languageOneOf: [ video().language.id ] }"
+    >{{ video().language.label }}</a>
+  }
+</div>
+
+<div class="attribute attribute-tags">
+  <span i18n class="attribute-label">Tags</span>
+  @for (tag of getVideoTags(); track tag) {
+    <a
+      class="attribute-value pt-badge badge-secondary me-1" [routerLink]="[ '/search' ]" [queryParams]="{ tagsOneOf: [ tag ] }"
+    >{{ tag }}</a>
+  }
+</div>
+
+@if (!video().isLive) {
+  <div class="attribute attribute-duration">
+    <span i18n class="attribute-label">Duration</span>
+    <span class="attribute-value">{{ video().duration | myTimeDurationFormatter }}</span>
+  </div>
+}
+
+@for (metadata of pluginMetadata; track metadata) {
+  <div class="attribute attribute-plugin">
+    <span class="attribute-label">{{ metadata.label }}</span>
+    @if (metadata.value) {
+      <span class="attribute-value">{{ metadata.value }}</span>
+    }
+    @if (metadata.safeHTML) {
+      <span class="attribute-value" [innerHTML]="metadata.safeHTML"></span>
+    }
+  </div>
+}

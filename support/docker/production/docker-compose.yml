@@ -22,6 +22,7 @@ services:
       - ./docker-volume/data:/var/www/peertube/storage
       - certbot-www:/var/www/certbot
       - ./docker-volume/certbot/conf:/etc/letsencrypt
+      - ./docker-volume/nginx-logs:/var/log/nginx
     depends_on:
       - peertube
     restart: "always"
@@ -38,12 +39,27 @@ services:
     depends_on:
       - webserver
 
+  # You can comment this webserver-reloader section if you want to use another webserver/proxy or test PeerTube in local
+  webserver-reloader:
+    image: alpine:latest
+    command: >
+      sh -c "trap exit TERM;
+        while :; do
+          sleep 21600 & wait $$!;
+          echo 'Sending reload signal to webserver...';
+          kill -HUP 1;
+        done"
+    pid: "service:webserver"
+    depends_on:
+      - webserver
+    restart: "always"
+
   peertube:
     # If you don't want to use the official image and build one from sources:
     # build:
     #   context: .
-    #   dockerfile: ./support/docker/production/Dockerfile.bookworm
-    image: chocobozzz/peertube:production-bookworm
+    #   dockerfile: ./support/docker/production/Dockerfile
+    image: chocobozzz/peertube:production
     # Use a static IP for this container because nginx does not handle proxy host change without reload
     # This container could be restarted on crash or until the postgresql database is ready for connection
     networks:
@@ -68,7 +84,7 @@ services:
     restart: "always"
 
   postgres:
-    image: postgres:13-alpine
+    image: postgres:17-alpine
     env_file:
       - .env
     volumes:
@@ -76,7 +92,7 @@ services:
     restart: "always"
 
   redis:
-    image: redis:6-alpine
+    image: redis:8-alpine
     volumes:
       - ./docker-volume/redis:/data
     restart: "always"

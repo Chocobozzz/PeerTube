@@ -1,0 +1,292 @@
+@use "sass:math";
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_bootstrap-variables";
+@use "_miniature" as *;
+
+$video-default-height: 66vh;
+$video-max-height: calc(100vh - #{pvar(--header-height)} - #{$theater-bottom-space});
+
+@mixin player-widget-below-player {
+  width: 100% !important;
+  height: auto !important;
+  max-height: 300px !important;
+  max-width: initial;
+  border-bottom: 1px solid $separator-border-color !important;
+}
+
+.blocked-label {
+  font-weight: $font-semibold;
+}
+
+.placeholder-image {
+  height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.flex-direction-column {
+  flex-direction: column;
+}
+
+.root {
+  &.theater-enabled #video-wrapper {
+    flex-direction: column;
+    justify-content: center;
+
+    #videojs-wrapper {
+      width: 100%;
+      height: $video-max-height;
+    }
+
+    ::ng-deep .video-js {
+      --co-player-height: #{$video-max-height};
+    }
+
+    .player-widget-component ::ng-deep .widget-root {
+      @include player-widget-below-player;
+    }
+  }
+}
+
+#video-wrapper {
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  border-radius: 5px;
+
+  #videojs-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+    height: $video-default-height;
+  }
+
+  ::ng-deep .video-js {
+    --co-player-height: #{$video-default-height};
+    --co-player-portrait-mode: 0;
+    // Default player ratio, redefined by the player to automatically adapt player size
+    --co-player-ratio: #{math.div(16, 9)};
+
+    width: 100%;
+    height: var(--co-player-height);
+
+    // Can be recalculated by the player depending on video ratio
+    max-width: calc(var(--co-player-height) * var(--co-player-ratio));
+
+    // VideoJS create an inner video player
+    video {
+      outline: 0;
+      position: relative !important;
+    }
+  }
+}
+
+.remote-server-down {
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  background-color: #141313;
+  width: 100%;
+  font-size: 24px;
+  height: 500px;
+
+  @media screen and (max-width: $medium-view) {
+    font-size: 20px;
+  }
+
+  @media screen and (max-width: 600px) {
+    font-size: 16px;
+  }
+}
+
+#video-not-found {
+  height: 300px;
+  line-height: 300px;
+  margin-top: 50px;
+  text-align: center;
+  font-weight: $font-semibold;
+}
+
+.video-bottom {
+  display: flex;
+  margin-top: 1.5rem;
+}
+
+.video-info {
+  flex-grow: 1;
+  // Set min width for flex item
+  min-width: 1px;
+  max-width: 100%;
+}
+
+.video-info-first-row {
+  display: flex;
+
+  > div:first-child {
+    flex-grow: 1;
+  }
+}
+
+.video-info-name {
+  min-height: 40px; // Align with the action buttons
+  font-size: 27px;
+  font-weight: $font-semibold;
+  flex-grow: 1;
+
+  @include peertube-word-wrap;
+  @include margin-right(30px);
+}
+
+.video-info-first-row-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-direction: column;
+}
+
+.video-info-date-views {
+  font-size: 14px;
+
+  @include margin-right(10px);
+}
+
+.video-info-channel {
+  font-weight: $font-semibold;
+
+  a {
+    color: pvar(--fg);
+
+    @include disable-default-a-behaviour;
+    @include peertube-word-wrap;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+.video-info-channel-left {
+  flex-grow: 1;
+
+  .video-info-channel-left-links {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    line-height: 1.37;
+
+    a:nth-of-type(2) {
+      font-weight: $font-regular;
+      font-size: 90%;
+    }
+
+    a.single-link {
+      margin-top: 7px;
+    }
+  }
+}
+
+my-subscribe-button {
+  @include margin-left(5px);
+}
+
+my-video-attributes {
+  display: block;
+  margin-bottom: 15px;
+
+  @include margin-left($video-watch-info-margin-left);
+}
+
+my-action-buttons {
+  display: block;
+  width: max-content;
+
+  @include margin-left(auto);
+  @include margin-right(0);
+}
+
+my-recommended-videos {
+  display: block;
+  min-width: 250px;
+
+  @include padding-left(15px);
+}
+
+my-video-comments {
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+// Use the same breakpoint than in the typescript component to display the other video miniatures as row
+@media screen and (max-width: 1100px) {
+  #video-wrapper {
+    flex-direction: column;
+    justify-content: center;
+
+    .player-widget-component ::ng-deep .widget-root {
+      @include player-widget-below-player;
+    }
+  }
+
+  .video-bottom {
+    flex-direction: column;
+  }
+
+  my-recommended-videos {
+    @include padding-left(0);
+  }
+}
+
+@media screen and (max-width: 600px) {
+  #videojs-wrapper {
+    // Reset height
+    height: initial !important;
+
+    .remote-server-down,
+    ::ng-deep .video-js {
+      --co-player-portrait-mode: 1;
+      --co-player-height: calc(100vw / var(--co-player-ratio)) !important;
+
+      max-height: calc(100vh - #{pvar(--header-height)} - #{$player-portrait-bottom-space});
+    }
+  }
+
+  .video-bottom {
+    margin-top: 20px !important;
+    padding-bottom: 20px !important;
+  }
+
+  .video-info {
+    padding: 0;
+  }
+
+  .video-info-name {
+    font-size: 20px;
+    height: auto;
+  }
+}
+
+@media screen and (max-width: $mobile-view) {
+  .margin-content.player-margin-content {
+    margin: 0 !important;
+  }
+
+  .video-info-name {
+    font-size: 18px;
+  }
+
+  .video-info-date-views {
+    font-size: 14px;
+  }
+}
+
+// Special case for iOS, that takes into account the width for fullscreens
+#video-wrapper ::ng-deep .video-js.vjs-fullscreen {
+  max-width: unset;
+}

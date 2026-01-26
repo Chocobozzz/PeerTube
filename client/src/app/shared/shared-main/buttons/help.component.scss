@@ -3,25 +3,28 @@
 
 .help-tooltip-button {
   my-global-icon {
-    width: 17px;
-    height: 17px;
-    line-height: 17px;
-    display: inline-block;
-    position: relative;
-    top: -1px;
     color: pvar(--fg-400);
+
+    @include global-icon-size(18px);
   }
 }
 
-:host ::ng-deep {
+::ng-deep {
   .help-popover {
+    border: 0;
     min-width: 200px;
     max-width: 300px;
 
     .popover-body {
-      padding: 10px;
-      font-size: 13px;
-      border-radius: 3px;
+      padding: 1rem;
+      border-radius: 14px;
+
+      .help-title {
+        display: block;
+        margin-bottom: 0.5rem;
+
+        @include font-size(20px);
+      }
 
       p {
         margin-bottom: 0;

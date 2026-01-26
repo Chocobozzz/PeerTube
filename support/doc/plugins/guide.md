@@ -196,7 +196,7 @@ function register ({
 }
 ```
 
-You can also store files in the plugin data directory (`/{plugins-directory}/data/{npm-plugin-name}`) **in PeerTube >= 3.2**.
+You can also store files in the plugin data directory (`/{plugins-directory}/data/{npm-plugin-name}`).
 This directory and its content won't be deleted when your plugin is uninstalled/upgraded.
 
 ```js
@@ -378,7 +378,7 @@ function register (...) {
     // Will be displayed in a button next to the login form
     authDisplayName: () => 'Auth method'
 
-    // If the user click on the auth button, PeerTube will forward the request in this function
+    // If the user click on the auth button, PeerTube will forward the request to this function
     onAuthRequest: (req, res) => {
       res.redirect('https://external-auth.example.com/auth')
     },
@@ -418,7 +418,12 @@ function register (...) {
         if (fieldName === 'videoQuotaDaily') return currentValue
 
         return newValue
-      }
+      },
+
+      // Ask PeerTube to redirect on this URL instead of classic `/login` page
+      // The URL will contain an `externalAuthToken` param that can be reused to authenticate to the PeerTube REST API
+      // Introduced in PeerTube >= 7.3
+      externalRedirectUri: 'https://mywebsite.example.com/peertube-login-cb'
     })
   })
 
@@ -873,8 +878,14 @@ PeerTube creates gradients of some CSS variables so you don't have to specify al
 
 You can take inspiration from core PeerTube themes in [client/src/sass/application.scss](https://github.com/Chocobozzz/PeerTube/blob/develop/client/src/sass/application.scss) file:
 
+::: info
+`--is-dark` CSS variable must be provided when you define a new theme
+:::
+
 ```css
-body {
+:root {
+  --is-dark: 0; /* Or --is-dark: 1 if it's a dark theme */
+
   --primary: #FD9C50;
   --on-primary: #111;
   --border-primary: #F2690D;
@@ -923,6 +934,8 @@ function register ({ registerClientRoute }) {
 You can then access the page on `/p/my-super/route` (please note the additional `/p/` in the path).
 
 #### Run actions
+
+**PeerTube >= 7.1**
 
 Plugin can trigger actions in the client by calling `doAction` with a specific action.
 This can be used in combination with a hook to add custom admin actions, for instance:

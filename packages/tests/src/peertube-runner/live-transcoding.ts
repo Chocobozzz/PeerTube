@@ -53,6 +53,13 @@ describe('Test Live transcoding in peertube-runner program', function () {
         transcoded: true
       })
 
+      // Check jobs output
+      {
+        const jobsList = await peertubeRunner.listJobs()
+        expect(jobsList).to.contain(servers[0].url)
+        expect(jobsList).to.contain('live-rtmp-hls-transcoding')
+      }
+
       await stopFfmpeg(ffmpegCommand)
       await waitUntilLiveWaitingOnAllServers(servers, video.uuid)
 
@@ -101,7 +108,7 @@ describe('Test Live transcoding in peertube-runner program', function () {
         liveVideoId: video.uuid,
         resolutions: [ 720, 480, 360, 240, 144 ],
         framerates: {
-          720: 48,
+          720: 60,
           480: 30,
           360: 30,
           240: 30,
@@ -217,7 +224,6 @@ describe('Test Live transcoding in peertube-runner program', function () {
   })
 
   describe('With lives on local filesystem storage', function () {
-
     before(async function () {
       await servers[0].config.enableTranscoding({ webVideo: true, hls: false, with0p: true })
     })
@@ -249,7 +255,6 @@ describe('Test Live transcoding in peertube-runner program', function () {
   })
 
   describe('Check cleanup', function () {
-
     it('Should have an empty cache directory', async function () {
       await checkPeerTubeRunnerCacheIsEmpty(peertubeRunner, 'transcoding')
     })

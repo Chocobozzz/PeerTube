@@ -1,3 +1,5 @@
 <div class="root">
-  <my-alert type="danger" *ngIf="error">{{ error }}</my-alert>
+  @if (error) {
+    <my-alert type="danger">{{ error }}</my-alert>
+  }
 </div>

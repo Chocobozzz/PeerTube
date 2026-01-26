@@ -1,11 +1,10 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { ActivatedRouteSnapshot } from '@angular/router'
 import { MetaService } from './meta.service'
 
 @Injectable()
 export class MetaGuard {
-
-  constructor (private meta: MetaService) { }
+  private meta = inject(MetaService)
 
   canActivate (route: ActivatedRouteSnapshot): boolean {
     const metaSettings = route.data?.meta

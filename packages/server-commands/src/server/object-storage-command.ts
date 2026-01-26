@@ -31,8 +31,9 @@ export class ObjectStorageCommand {
 
   getDefaultMockConfig (options: {
     storeLiveStreams?: boolean // default true
+    proxifyPrivateFiles?: boolean // default true
   } = {}) {
-    const { storeLiveStreams = true } = options
+    const { storeLiveStreams = true, proxifyPrivateFiles = true } = options
 
     return {
       object_storage: {
@@ -58,30 +59,80 @@ export class ObjectStorageCommand {
 
         original_video_files: {
           bucket_name: this.getMockOriginalFileBucketName()
+        },
+
+        captions: {
+          bucket_name: this.getMockCaptionsBucketName()
+        },
+
+        proxy: {
+          proxify_private_files: proxifyPrivateFiles
         }
       }
     }
   }
 
-  getMockWebVideosBaseUrl () {
-    return `http://${this.getMockWebVideosBucketName()}.${ObjectStorageCommand.getMockEndpointHost()}/`
+  getMockWebVideosBaseUrl (options: {
+    pathStyle?: boolean // default false
+  } = {}) {
+    const { pathStyle = false } = options
+
+    return this.getMockFileBaseUrl({ bucketName: this.getMockWebVideosBucketName(), pathStyle })
   }
 
-  getMockPlaylistBaseUrl () {
-    return `http://${this.getMockStreamingPlaylistsBucketName()}.${ObjectStorageCommand.getMockEndpointHost()}/`
+  getMockPlaylistBaseUrl (options: {
+    pathStyle?: boolean // default false
+  } = {}) {
+    const { pathStyle = false } = options
+
+    return this.getMockFileBaseUrl({ bucketName: this.getMockStreamingPlaylistsBucketName(), pathStyle })
   }
 
-  getMockUserExportBaseUrl () {
-    return `http://${this.getMockUserExportBucketName()}.${ObjectStorageCommand.getMockEndpointHost()}/`
+  getMockUserExportBaseUrl (options: {
+    pathStyle?: boolean // default false
+  } = {}) {
+    const { pathStyle = false } = options
+
+    return this.getMockFileBaseUrl({ bucketName: this.getMockUserExportBucketName(), pathStyle })
   }
 
-  getMockOriginalFileBaseUrl () {
-    return `http://${this.getMockOriginalFileBucketName()}.${ObjectStorageCommand.getMockEndpointHost()}/`
+  getMockOriginalFileBaseUrl (options: {
+    pathStyle?: boolean // default false
+  } = {}) {
+    const { pathStyle = false } = options
+
+    return this.getMockFileBaseUrl({ bucketName: this.getMockOriginalFileBucketName(), pathStyle })
   }
+
+  getMockCaptionFileBaseUrl (options: {
+    pathStyle?: boolean // default false
+  } = {}) {
+    const { pathStyle = false } = options
+
+    return this.getMockFileBaseUrl({ bucketName: this.getMockCaptionsBucketName(), pathStyle })
+  }
+
+  private getMockFileBaseUrl (options: {
+    bucketName: string
+    pathStyle: boolean
+  }) {
+    const { bucketName, pathStyle } = options
+
+    if (pathStyle) {
+      return `http://${ObjectStorageCommand.getMockEndpointHost()}/${bucketName}/`
+    }
+
+    return `http://${bucketName}.${ObjectStorageCommand.getMockEndpointHost()}/`
+  }
+
+  // ---------------------------------------------------------------------------
 
   async prepareDefaultMockBuckets () {
     await this.createMockBucket(this.getMockStreamingPlaylistsBucketName())
     await this.createMockBucket(this.getMockWebVideosBucketName())
+    await this.createMockBucket(this.getMockOriginalFileBucketName())
+    await this.createMockBucket(this.getMockUserExportBucketName())
+    await this.createMockBucket(this.getMockCaptionsBucketName())
   }
 
   async createMockBucket (name: string) {
@@ -124,6 +175,10 @@ export class ObjectStorageCommand {
     return this.getMockBucketName(name)
   }
 
+  getMockCaptionsBucketName (name = 'captions') {
+    return this.getMockBucketName(name)
+  }
+
   getMockBucketName (name: string) {
     return `${this.seed}-${name}`
   }
@@ -163,7 +218,8 @@ export class ObjectStorageCommand {
 
         streaming_playlists: {
           bucket_name: this.DEFAULT_SCALEWAY_BUCKET,
-          prefix: `test:server-${serverNumber}-streaming-playlists:`
+          prefix: `test:server-${serverNumber}-streaming-playlists:`,
+          store_live_streams: true
         },
 
         web_videos: {

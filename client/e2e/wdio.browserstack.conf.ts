@@ -71,13 +71,13 @@ module.exports = {
       },
       {
         browserName: 'Firefox',
-        browserVersion: '78', // Very old ESR
+        browserVersion: '79', // Oldest supported version
 
         ...buildBStackDesktopOptions({ sessionName: 'Firefox ESR Desktop', resolution: '1280x1024', os: 'Windows', osVersion: '8' })
       },
       {
         browserName: 'Safari',
-        browserVersion: '13',
+        browserVersion: '14',
 
         ...buildBStackDesktopOptions({ sessionName: 'Safari Desktop', resolution: '1280x1024' })
       },
@@ -95,18 +95,18 @@ module.exports = {
       {
         browserName: 'Chrome',
 
-        ...buildBStackMobileOptions({ sessionName: 'Latest Chrome Android', deviceName: 'Samsung Galaxy S8', osVersion: '7.0' })
+        ...buildBStackMobileOptions({ sessionName: 'Latest Chrome Android', deviceName: 'Samsung Galaxy S10', osVersion: '9.0' })
       },
       {
         browserName: 'Safari',
 
-        ...buildBStackMobileOptions({ sessionName: 'Safari iPhone', deviceName: 'iPhone 11', osVersion: '13' })
+        ...buildBStackMobileOptions({ sessionName: 'Safari iPhone', deviceName: 'iPhone 12', osVersion: '14' })
       },
 
       {
         browserName: 'Safari',
 
-        ...buildBStackMobileOptions({ sessionName: 'Safari iPad', deviceName: 'iPad Pro 11 2020', osVersion: '13' })
+        ...buildBStackMobileOptions({ sessionName: 'Safari iPad', deviceName: 'iPad Pro 12.9 2021', osVersion: '14' })
       }
     ],
 
@@ -121,7 +121,8 @@ module.exports = {
 
     services: [
       [
-        'browserstack', { browserstackLocal: true }
+        'browserstack',
+        { browserstackLocal: true }
       ]
     ],
 
@@ -135,8 +136,8 @@ module.exports = {
       require('./src/commands/upload')
 
       // Force keep alive: https://www.browserstack.com/docs/automate/selenium/error-codes/keep-alive-not-used#Node_JS
-      const http = require('http')
-      const https = require('https')
+      const http = require('node:http')
+      const https = require('node:https')
 
       const keepAliveTimeout = 30 * 1000
 
@@ -174,6 +175,5 @@ module.exports = {
 
     onPrepare: onBrowserStackPrepare,
     onComplete: onBrowserStackComplete
-
   } as WebdriverIO.Config
 }

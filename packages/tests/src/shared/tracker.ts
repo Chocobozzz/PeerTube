@@ -1,13 +1,11 @@
-import { expect } from 'chai'
-import { sha1 } from '@peertube/peertube-node-utils'
 import { makeGetRequest } from '@peertube/peertube-server-commands'
+import { expect } from 'chai'
 
-async function hlsInfohashExist (serverUrl: string, masterPlaylistUrl: string, fileNumber: number) {
+export async function checkTrackerInfohash (serverUrl: string, infohash: string) {
   const path = '/tracker/announce'
 
-  const infohash = sha1(`2${masterPlaylistUrl}+V${fileNumber}`)
-
   // From bittorrent-tracker
+  // eslint-disable-next-line @typescript-eslint/no-deprecated
   const infohashBinary = escape(Buffer.from(infohash, 'hex').toString('binary')).replace(/[@*/+]/g, function (char) {
     return '%' + char.charCodeAt(0).toString(16).toUpperCase()
   })
@@ -20,8 +18,4 @@ async function hlsInfohashExist (serverUrl: string, masterPlaylistUrl: string, f
   })
 
   expect(res.text).to.not.contain('failure')
-}
-
-export {
-  hlsInfohashExist
 }

@@ -1,18 +1,17 @@
-import express from 'express'
-import { Activity, VideoPrivacy } from '@peertube/peertube-models'
+import { Activity } from '@peertube/peertube-models'
 import { activityPubContextify } from '@server/helpers/activity-pub-utils.js'
 import { activityPubCollectionPagination } from '@server/lib/activitypub/collection.js'
 import { getContextFilter } from '@server/lib/activitypub/context.js'
 import { MActorLight } from '@server/types/models/index.js'
+import express from 'express'
 import { logger } from '../../helpers/logger.js'
-import { buildAudience } from '../../lib/activitypub/audience.js'
+import { getVideoAudience } from '../../lib/activitypub/audience.js'
 import { buildAnnounceActivity, buildCreateActivity } from '../../lib/activitypub/send/index.js'
 import {
+  accountHandleGetValidatorFactory,
   activityPubRateLimiter,
   asyncMiddleware,
-  ensureIsLocalChannel,
-  localAccountValidator,
-  videoChannelsNameWithHostValidator
+  videoChannelsHandleValidatorFactory
 } from '../../middlewares/index.js'
 import { apPaginationValidator } from '../../middlewares/validators/activitypub/index.js'
 import { VideoModel } from '../../models/video/video.js'
@@ -20,18 +19,19 @@ import { activityPubResponse } from './utils.js'
 
 const outboxRouter = express.Router()
 
-outboxRouter.get('/accounts/:name/outbox',
+outboxRouter.get(
+  '/accounts/:handle/outbox',
   activityPubRateLimiter,
   apPaginationValidator,
-  localAccountValidator,
+  accountHandleGetValidatorFactory({ checkIsLocal: true, checkCanManage: false }),
   asyncMiddleware(outboxController)
 )
 
-outboxRouter.get('/video-channels/:nameWithHost/outbox',
+outboxRouter.get(
+  '/video-channels/:handle/outbox',
   activityPubRateLimiter,
   apPaginationValidator,
-  asyncMiddleware(videoChannelsNameWithHostValidator),
-  ensureIsLocalChannel,
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: false, checkIsOwner: false })),
   asyncMiddleware(outboxController)
 )
 
@@ -62,7 +62,7 @@ async function buildActivities (actor: MActorLight, start: number, count: number
 
   for (const video of data.data) {
     const byActor = video.VideoChannel.Account.Actor
-    const createActivityAudience = buildAudience([ byActor.followersUrl ], video.privacy === VideoPrivacy.PUBLIC)
+    const createActivityAudience = getVideoAudience(byActor, video.privacy)
 
     // This is a shared video
     if (video.VideoShares !== undefined && video.VideoShares.length !== 0) {
@@ -71,9 +71,7 @@ async function buildActivities (actor: MActorLight, start: number, count: number
 
       activities.push(announceActivity)
     } else {
-      // FIXME: only use the video URL to reduce load. Breaks compat with PeerTube < 6.0.0
-      const videoObject = await video.toActivityPubObject()
-      const createActivity = buildCreateActivity(video.url, byActor, videoObject, createActivityAudience)
+      const createActivity = buildCreateActivity(video.url, byActor, video.url, createActivityAudience)
 
       activities.push(createActivity)
     }

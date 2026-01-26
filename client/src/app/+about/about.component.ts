@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common'
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { RouterOutlet } from '@angular/router'
 import { ServerService } from '@app/core'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
@@ -14,12 +13,12 @@ import { HTMLServerConfig } from '@peertube/peertube-models'
   selector: 'my-about',
   templateUrl: './about.component.html',
   styleUrls: [ './about.component.scss' ],
-  standalone: true,
-  imports: [ CommonModule, RouterOutlet, HorizontalMenuComponent, GlobalIconComponent, ButtonComponent, SupportModalComponent ]
+  imports: [ RouterOutlet, HorizontalMenuComponent, GlobalIconComponent, ButtonComponent ]
 })
-
 export class AboutComponent implements OnInit {
-  @ViewChild('supportModal') supportModal: SupportModalComponent
+  private server = inject(ServerService)
+
+  readonly supportModal = viewChild<SupportModalComponent>('supportModal')
 
   bannerUrl: string
   avatarUrl: string
@@ -28,17 +27,11 @@ export class AboutComponent implements OnInit {
 
   config: HTMLServerConfig
 
-  constructor (
-    private server: ServerService
-  ) {
-
-  }
-
   ngOnInit () {
     this.config = this.server.getHTMLConfig()
 
     this.bannerUrl = this.config.instance.banners.length !== 0
-      ? maxBy(this.config.instance.banners, 'width').path
+      ? maxBy(this.config.instance.banners, 'width').fileUrl
       : undefined
 
     this.avatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.config.instance, 110)
@@ -46,7 +39,7 @@ export class AboutComponent implements OnInit {
     this.menuEntries = [
       {
         label: $localize`Platform`,
-        routerLink: '/about/instance/home',
+        routerLink: '/about/instance',
         pluginSelectorId: 'about-menu-instance'
       },
       {

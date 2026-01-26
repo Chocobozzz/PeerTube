@@ -1,0 +1,20 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+
+.root {
+  position: relative;
+  margin-bottom: 5px;
+
+  @include margin-right(5px);
+
+  .second-avatar {
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    background-color: rgba(0, 0, 0, 0);
+    border: 2px solid pvar(--bg-secondary-350);
+    background: pvar(--bg-secondary-350);
+    border-radius: 100%;
+    line-height: 1;
+  }
+}

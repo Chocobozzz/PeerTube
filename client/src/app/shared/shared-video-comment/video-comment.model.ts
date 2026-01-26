@@ -1,8 +1,9 @@
-import { getAbsoluteAPIUrl } from '@app/helpers'
+import { getBackendHost } from '@app/helpers'
 import {
   Account as AccountInterface,
-  VideoComment as VideoCommentServerModel,
-  VideoCommentForAdminOrUser as VideoCommentForAdminOrUserServerModel
+  VideoChannelSummary,
+  VideoCommentForAdminOrUser as VideoCommentForAdminOrUserServerModel,
+  VideoComment as VideoCommentServerModel
 } from '@peertube/peertube-models'
 import { Actor } from '../shared-main/account/actor.model'
 import { Video } from '../shared-main/video/video.model'
@@ -45,9 +46,7 @@ export class VideoComment implements VideoCommentServerModel {
     if (this.account) {
       this.by = Actor.CREATE_BY_STRING(this.account.name, this.account.host)
 
-      const absoluteAPIUrl = getAbsoluteAPIUrl()
-      const thisHost = new URL(absoluteAPIUrl).host
-      this.isLocal = this.account.host.trim() === thisHost
+      this.isLocal = this.account.host.trim() === getBackendHost()
     }
   }
 }
@@ -72,6 +71,8 @@ export class VideoCommentForAdminOrUser implements VideoCommentForAdminOrUserSer
     uuid: string
     name: string
     localUrl: string
+
+    channel: VideoChannelSummary
   }
 
   heldForReview: boolean
@@ -100,7 +101,9 @@ export class VideoCommentForAdminOrUser implements VideoCommentForAdminOrUserSer
       id: hash.video.id,
       uuid: hash.video.uuid,
       name: hash.video.name,
-      localUrl: Video.buildWatchUrl(hash.video)
+      localUrl: Video.buildWatchUrl(hash.video),
+
+      channel: hash.video.channel
     }
 
     this.localUrl = this.video.localUrl + ';threadId=' + this.threadId

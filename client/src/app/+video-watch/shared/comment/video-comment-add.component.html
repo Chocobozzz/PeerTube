@@ -1,0 +1,106 @@
+<form novalidate [formGroup]="form" (ngSubmit)="formValidated()">
+  <div class="avatar-and-textarea">
+    <my-actor-avatar [actor]="user()?.account" [actorType]="getAvatarActorType()" size="25"></my-actor-avatar>
+
+    <div class="textarea-wrapper">
+      <textarea
+        i18n-placeholder placeholder="Add comment..." myAutoResize
+        [readonly]="(user() === null) ? true : false"
+        (click)="openVisitorModal($event)"
+        formControlName="text" [ngClass]="{ 'input-error': formErrors['text'] }"
+        (keyup.control.enter)="onValidKey()" (keyup.meta.enter)="onValidKey()" #textarea
+        >
+      </textarea>
+
+      <my-help
+        [ngClass]="{ 'is-rtl': isRTL() }" class="markdown-guide" helpType="custom" iconName="markdown"
+        tooltipPlacement="left auto" autoClose="true" i18n-title title="Markdown compatible"
+        >
+        <span i18n>Markdown compatible that supports:</span>
+
+        <ul>
+          <li><span i18n>Auto generated links</span></li>
+          <li><span i18n>Break lines</span></li>
+          <li><span i18n>Lists</span></li>
+          <li>
+            <span i18n>Emphasis</span>
+            <code>**<strong i18n>bold</strong>** _<i i18n>italic</i>_</code>
+          </li>
+          <li>
+            <span i18n>Emoji shortcuts</span>
+            <code>:) &lt;3</code>
+          </li>
+          <li>
+            <span i18n>Emoji markup</span>
+            <code>:smile:</code>
+            <div><a href="" (click)="openEmojiModal($event)" i18n>See complete list</a></div>
+          </li>
+        </ul>
+      </my-help>
+      @if (formErrors.text) {
+        <div class="form-error" role="alert">
+          {{ formErrors.text }}
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="comment-buttons">
+    @if (isAddButtonDisplayed()) {
+      <button class="peertube-button tertiary-button cancel-button me-2" (click)="cancelCommentReply()" type="button" i18n>
+        Cancel
+      </button>
+
+      <button class="peertube-button primary-button" [disabled]="!form.valid || addingComment">
+        {{ addingCommentButtonValue }}
+      </button>
+    }
+  </div>
+</form>
+
+<ng-template #visitorModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title" i18n>You are one step away from commenting</h4>
+
+    <button class="border-0 p-0" title="Close this modal" i18n-title (click)="hideModals()">
+      <my-global-icon iconName="cross"></my-global-icon>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <span i18n>
+      You can comment using an account on any ActivityPub-compatible instance (PeerTube/Mastodon account for example).
+    </span>
+
+    <my-remote-subscribe [interact]="true" [uri]="getUri()"></my-remote-subscribe>
+  </div>
+
+  <div class="modal-footer inputs">
+    <input
+      type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button"
+      (click)="hideModals()" (key.enter)="hideModals()"
+      >
+
+    <my-login-link i18n-label label="Login to comment" className="peertube-button-link primary-button"></my-login-link>
+  </div>
+</ng-template>
+
+<ng-template #emojiModal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title" i18n>Markdown Emoji List</h4>
+
+    <button class="border-0 p-0" title="Close this modal" i18n-title (click)="hideModals()">
+      <my-global-icon iconName="cross"></my-global-icon>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="emoji-flex">
+      @for (emojiMarkup of getEmojiMarkupList(); track emojiMarkup) {
+        <div class="emoji-flex-item">
+          {{ emojiMarkup.emoji }} <code>:{{ emojiMarkup.name }}:</code>
+        </div>
+      }
+    </div>
+  </div>
+</ng-template>

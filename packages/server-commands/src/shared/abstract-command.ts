@@ -15,6 +15,7 @@ import {
   unwrapText
 } from '../requests/requests.js'
 
+import { pick } from '@peertube/peertube-core-utils'
 import { createReadStream } from 'fs'
 import type { PeerTubeServer } from '../server/server.js'
 
@@ -38,38 +39,30 @@ interface InternalCommonCommandOptions extends OverrideCommandOptions {
   redirects?: number
   range?: string
   host?: string
-  headers?: { [ name: string ]: string }
+  headers?: { [name: string]: string }
   requestType?: string
   responseType?: string
   xForwardedFor?: string
-}
 
-interface InternalGetCommandOptions extends InternalCommonCommandOptions {
-  query?: { [ id: string ]: any }
-}
-
-interface InternalDeleteCommandOptions extends InternalCommonCommandOptions {
-  query?: { [ id: string ]: any }
+  query?: { [id: string]: any }
   rawQuery?: string
 }
 
 export abstract class AbstractCommand {
-
   constructor (
     protected server: PeerTubeServer
   ) {
-
   }
 
-  protected getRequestBody <T> (options: InternalGetCommandOptions) {
+  protected getRequestBody<T> (options: InternalCommonCommandOptions) {
     return unwrapBody<T>(this.getRequest(options))
   }
 
-  protected getRequestText (options: InternalGetCommandOptions) {
+  protected getRequestText (options: InternalCommonCommandOptions) {
     return unwrapText(this.getRequest(options))
   }
 
-  protected getRawRequest (options: Omit<InternalGetCommandOptions, 'path'>) {
+  protected getRawRequest (options: Omit<InternalCommonCommandOptions, 'path'>) {
     const { url, range } = options
     const { host, protocol, pathname } = new URL(url)
 
@@ -85,31 +78,20 @@ export abstract class AbstractCommand {
     })
   }
 
-  protected getRequest (options: InternalGetCommandOptions) {
-    const { query } = options
-
-    return makeGetRequest({
-      ...this.buildCommonRequestOptions(options),
-
-      query
-    })
+  protected getRequest (options: InternalCommonCommandOptions) {
+    return makeGetRequest(this.buildCommonRequestOptions(options))
   }
 
-  protected deleteRequest (options: InternalDeleteCommandOptions) {
-    const { query, rawQuery } = options
-
-    return makeDeleteRequest({
-      ...this.buildCommonRequestOptions(options),
-
-      query,
-      rawQuery
-    })
+  protected deleteRequest (options: InternalCommonCommandOptions) {
+    return makeDeleteRequest(this.buildCommonRequestOptions(options))
   }
 
-  protected putBodyRequest (options: InternalCommonCommandOptions & {
-    fields?: { [ fieldName: string ]: any }
-    headers?: { [name: string]: string }
-  }) {
+  protected putBodyRequest (
+    options: InternalCommonCommandOptions & {
+      fields?: { [fieldName: string]: any }
+      headers?: { [name: string]: string }
+    }
+  ) {
     const { fields, headers } = options
 
     return makePutBodyRequest({
@@ -120,10 +102,12 @@ export abstract class AbstractCommand {
     })
   }
 
-  protected postBodyRequest (options: InternalCommonCommandOptions & {
-    fields?: { [ fieldName: string ]: any }
-    headers?: { [name: string]: string }
-  }) {
+  protected postBodyRequest (
+    options: InternalCommonCommandOptions & {
+      fields?: { [fieldName: string]: any }
+      headers?: { [name: string]: string }
+    }
+  ) {
     const { fields, headers } = options
 
     return makePostBodyRequest({
@@ -134,10 +118,12 @@ export abstract class AbstractCommand {
     })
   }
 
-  protected postUploadRequest (options: InternalCommonCommandOptions & {
-    fields?: { [ fieldName: string ]: any }
-    attaches?: { [ fieldName: string ]: any }
-  }) {
+  protected postUploadRequest (
+    options: InternalCommonCommandOptions & {
+      fields?: { [fieldName: string]: any }
+      attaches?: { [fieldName: string]: any }
+    }
+  ) {
     const { fields, attaches } = options
 
     return makeUploadRequest({
@@ -149,10 +135,12 @@ export abstract class AbstractCommand {
     })
   }
 
-  protected putUploadRequest (options: InternalCommonCommandOptions & {
-    fields?: { [ fieldName: string ]: any }
-    attaches?: { [ fieldName: string ]: any }
-  }) {
+  protected putUploadRequest (
+    options: InternalCommonCommandOptions & {
+      fields?: { [fieldName: string]: any }
+      attaches?: { [fieldName: string]: any }
+    }
+  ) {
     const { fields, attaches } = options
 
     return makeUploadRequest({
@@ -164,10 +152,12 @@ export abstract class AbstractCommand {
     })
   }
 
-  protected updateImageRequest (options: InternalCommonCommandOptions & {
-    fixture: string
-    fieldname: string
-  }) {
+  protected updateImageRequest (
+    options: InternalCommonCommandOptions & {
+      fixture: string
+      fieldname: string
+    }
+  ) {
     const filePath = isAbsolute(options.fixture)
       ? options.fixture
       : buildAbsoluteFixturePath(options.fixture)
@@ -181,24 +171,28 @@ export abstract class AbstractCommand {
   }
 
   protected buildCommonRequestOptions (options: InternalCommonCommandOptions) {
-    const { url, path, redirects, contentType, accept, range, host, headers, requestType, xForwardedFor, responseType } = options
+    const { url, path, requestType } = options
 
     return {
       url: url ?? this.server.url,
       path,
+      type: requestType,
 
       token: this.buildCommonRequestToken(options),
       expectedStatus: this.buildExpectedStatus(options),
 
-      redirects,
-      contentType,
-      range,
-      host,
-      accept,
-      headers,
-      type: requestType,
-      responseType,
-      xForwardedFor
+      ...pick(options, [
+        'redirects',
+        'contentType',
+        'range',
+        'host',
+        'accept',
+        'headers',
+        'responseType',
+        'xForwardedFor',
+        'query',
+        'rawQuery'
+      ])
     }
   }
 
@@ -226,15 +220,17 @@ export abstract class AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  protected async buildResumeUpload <T> (options: OverrideCommandOptions & {
-    path: string
+  protected async buildResumeUpload<T> (
+    options: OverrideCommandOptions & {
+      path: string
 
-    fixture: string
-    attaches?: Record<string, string>
-    fields?: Record<string, any>
+      fixture: string
+      attaches?: Record<string, string>
+      fields?: Record<string, any>
 
-    completedExpectedStatus?: HttpStatusCodeType // When the upload is finished
-  }): Promise<T> {
+      completedExpectedStatus?: HttpStatusCodeType // When the upload is finished
+    }
+  ): Promise<T> {
     const { path, fixture, expectedStatus = HttpStatusCode.OK_200, completedExpectedStatus } = options
 
     let size = 0
@@ -304,19 +300,21 @@ export abstract class AbstractCommand {
     return initializeSessionRes.body.video || initializeSessionRes.body
   }
 
-  protected async prepareResumableUpload (options: OverrideCommandOptions & {
-    path: string
+  protected async prepareResumableUpload (
+    options: OverrideCommandOptions & {
+      path: string
 
-    fixture: string
-    size: number
-    mimetype: string
+      fixture: string
+      size: number
+      mimetype: string
 
-    attaches?: Record<string, string>
-    fields?: Record<string, any>
+      attaches?: Record<string, string>
+      fields?: Record<string, any>
 
-    originalName?: string
-    lastModified?: number
-  }) {
+      originalName?: string
+      lastModified?: number
+    }
+  ) {
     const { path, attaches = {}, fields = {}, originalName, lastModified, fixture, size, mimetype } = options
 
     const uploadOptions = {
@@ -347,15 +345,17 @@ export abstract class AbstractCommand {
     return this.postUploadRequest(uploadOptions)
   }
 
-  protected async sendResumableChunks <T> (options: OverrideCommandOptions & {
-    pathUploadId: string
-    path: string
-    videoFilePath: string
-    size: number
-    contentLength?: number
-    contentRangeBuilder?: (start: number, chunk: any) => string
-    digestBuilder?: (chunk: any) => string
-  }) {
+  protected async sendResumableChunks<T> (
+    options: OverrideCommandOptions & {
+      pathUploadId: string
+      path: string
+      videoFilePath: string
+      size: number
+      contentLength?: number
+      contentRangeBuilder?: (start: number, chunk: any) => string
+      digestBuilder?: (chunk: any) => string
+    }
+  ) {
     const {
       path,
       pathUploadId,
@@ -414,7 +414,8 @@ export abstract class AbstractCommand {
               readable.off('data', onData)
 
               // eslint-disable-next-line max-len
-              const message = `Incorrect transient behaviour sending intermediary chunks. Status code is ${res.statusCode} instead of ${expectedStatus}`
+              const message =
+                `Incorrect transient behaviour sending intermediary chunks. Status code is ${res.statusCode} instead of ${expectedStatus}`
               return reject(new Error(message))
             }
           }
@@ -427,10 +428,12 @@ export abstract class AbstractCommand {
     })
   }
 
-  protected endResumableUpload (options: OverrideCommandOptions & {
-    path: string
-    pathUploadId: string
-  }) {
+  protected endResumableUpload (
+    options: OverrideCommandOptions & {
+      path: string
+      pathUploadId: string
+    }
+  ) {
     return this.deleteRequest({
       ...options,
 

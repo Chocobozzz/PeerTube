@@ -3,7 +3,7 @@ import { BuildFormValidator } from './form-validator.model'
 import { USER_USERNAME_VALIDATOR } from './user-validators'
 
 export const VIDEO_CHANNEL_NAME_VALIDATOR: BuildFormValidator = {
-  // Use the same constraints than user usernmae
+  // Use the same constraints than user username
   VALIDATORS: USER_USERNAME_VALIDATOR.VALIDATORS,
 
   MESSAGES: {

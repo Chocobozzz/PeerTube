@@ -1,67 +1,46 @@
-import validator from 'validator'
 import { PluginPackageJSON, PluginType, PluginType_Type } from '@peertube/peertube-models'
+import validator from 'validator'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants.js'
 import { isUrlValid } from './activitypub/misc.js'
 import { exists, isArray, isSafePath } from './misc.js'
 
 const PLUGINS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.PLUGINS
 
-function isPluginTypeValid (value: any) {
+export function isPluginTypeValid (value: any) {
   return exists(value) &&
     (value === PluginType.PLUGIN || value === PluginType.THEME)
 }
 
-function isPluginNameValid (value: string) {
+export function isPluginNameValid (value: string) {
   return exists(value) &&
     validator.default.isLength(value, PLUGINS_CONSTRAINTS_FIELDS.NAME) &&
     validator.default.matches(value, /^[a-z-0-9]+$/)
 }
 
-function isNpmPluginNameValid (value: string) {
+export function isNpmPluginNameValid (value: string) {
   return exists(value) &&
     validator.default.isLength(value, PLUGINS_CONSTRAINTS_FIELDS.NAME) &&
     validator.default.matches(value, /^[a-z\-._0-9]+$/) &&
     (value.startsWith('peertube-plugin-') || value.startsWith('peertube-theme-'))
 }
 
-function isPluginDescriptionValid (value: string) {
+export function isPluginDescriptionValid (value: string) {
   return exists(value) && validator.default.isLength(value, PLUGINS_CONSTRAINTS_FIELDS.DESCRIPTION)
 }
 
-function isPluginStableVersionValid (value: string) {
-  if (!exists(value)) return false
-
-  const parts = (value + '').split('.')
-
-  return parts.length === 3 && parts.every(p => validator.default.isInt(p))
-}
-
-function isPluginStableOrUnstableVersionValid (value: string) {
-  if (!exists(value)) return false
-
-  // suffix is beta.x or alpha.x
-  const [ stable, suffix ] = value.split('-')
-  if (!isPluginStableVersionValid(stable)) return false
-
-  const suffixRegex = /^(rc|alpha|beta)\.\d+$/
-  if (suffix && !suffixRegex.test(suffix)) return false
-
-  return true
-}
-
-function isPluginEngineValid (engine: any) {
+export function isPluginEngineValid (engine: any) {
   return exists(engine) && exists(engine.peertube)
 }
 
-function isPluginHomepage (value: string) {
+export function isPluginHomepage (value: string) {
   return exists(value) && (!value || isUrlValid(value))
 }
 
-function isPluginBugs (value: string) {
+export function isPluginBugs (value: string) {
   return exists(value) && (!value || isUrlValid(value))
 }
 
-function areStaticDirectoriesValid (staticDirs: any) {
+export function areStaticDirectoriesValid (staticDirs: any) {
   if (!exists(staticDirs) || typeof staticDirs !== 'object') return false
 
   for (const key of Object.keys(staticDirs)) {
@@ -71,14 +50,14 @@ function areStaticDirectoriesValid (staticDirs: any) {
   return true
 }
 
-function areClientScriptsValid (clientScripts: any[]) {
+export function areClientScriptsValid (clientScripts: any[]) {
   return isArray(clientScripts) &&
     clientScripts.every(c => {
       return isSafePath(c.script) && isArray(c.scopes)
     })
 }
 
-function areTranslationPathsValid (translations: any) {
+export function areTranslationPathsValid (translations: any) {
   if (!exists(translations) || typeof translations !== 'object') return false
 
   for (const key of Object.keys(translations)) {
@@ -88,16 +67,16 @@ function areTranslationPathsValid (translations: any) {
   return true
 }
 
-function areCSSPathsValid (css: any[]) {
+export function areCSSPathsValid (css: any[]) {
   return isArray(css) && css.every(c => isSafePath(c))
 }
 
-function isThemeNameValid (name: string) {
+export function isThemeNameValid (name: string) {
   return name && typeof name === 'string' &&
     (isPluginNameValid(name) || name.startsWith('peertube-core-'))
 }
 
-function isPackageJSONValid (packageJSON: PluginPackageJSON, pluginType: PluginType_Type) {
+export function isPackageJSONValid (packageJSON: PluginPackageJSON, pluginType: PluginType_Type) {
   let result = true
   const badFields: string[] = []
 
@@ -159,20 +138,7 @@ function isPackageJSONValid (packageJSON: PluginPackageJSON, pluginType: PluginT
   return { result, badFields }
 }
 
-function isLibraryCodeValid (library: any) {
+export function isLibraryCodeValid (library: any) {
   return typeof library.register === 'function' &&
     typeof library.unregister === 'function'
-}
-
-export {
-  isPluginTypeValid,
-  isPackageJSONValid,
-  isThemeNameValid,
-  isPluginHomepage,
-  isPluginStableVersionValid,
-  isPluginStableOrUnstableVersionValid,
-  isPluginNameValid,
-  isPluginDescriptionValid,
-  isLibraryCodeValid,
-  isNpmPluginNameValid
 }

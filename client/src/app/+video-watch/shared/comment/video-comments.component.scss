@@ -1,0 +1,47 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+
+#highlighted-comment {
+  margin-bottom: 25px;
+}
+
+.view-replies {
+  font-weight: $font-semibold;
+  cursor: pointer;
+  position: relative;
+
+  .chevron-down {
+    @include margin-left(0);
+  }
+}
+
+.title-block {
+  > h2 {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+
+    @include font-size(1.25rem);
+  }
+
+  my-feed {
+    display: inline-block;
+    transition: ease-in 0.2s opacity;
+    width: 12px;
+    height: 12px;
+    line-height: 12px;
+
+    @include margin-left(5px);
+  }
+}
+
+#dropdown-sort-comments {
+  font-weight: $font-semibold;
+  text-transform: uppercase;
+  border: 0;
+}
+
+@media screen and (max-width: 450px) {
+  .view-replies {
+    font-size: 14px;
+  }
+}

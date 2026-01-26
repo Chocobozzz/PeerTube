@@ -1,0 +1,17 @@
+@use "sass:color";
+@use "_badges" as *;
+@use "_icons" as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+
+.scale-x--1 {
+  transform: scaleX(-1);
+}
+
+.scale-y--1 {
+  transform: scaleY(-1);
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
+}

@@ -1,13 +1,12 @@
+import { MAX_SQL_DELETE_ITEMS } from '@server/initializers/constants.js'
 import { literal, Op } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Table } from 'sequelize-typescript'
+import { safeBulkDestroy, SequelizeModel } from '../shared/index.js'
 import { VideoModel } from '../video/video.js'
-import { SequelizeModel } from '../shared/index.js'
 
 /**
- *
  * Aggregate views of all videos federated with our instance
  * Mainly used by the trending/hot algorithms
- *
  */
 
 @Table({
@@ -24,23 +23,23 @@ import { SequelizeModel } from '../shared/index.js'
 })
 export class VideoViewModel extends SequelizeModel<VideoViewModel> {
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @AllowNull(false)
   @Column(DataType.DATE)
-  startDate: Date
+  declare startDate: Date
 
   @AllowNull(false)
   @Column(DataType.DATE)
-  endDate: Date
+  declare endDate: Date
 
   @AllowNull(false)
   @Column
-  views: number
+  declare views: number
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -48,20 +47,37 @@ export class VideoViewModel extends SequelizeModel<VideoViewModel> {
     },
     onDelete: 'CASCADE'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
-  static removeOldRemoteViewsHistory (beforeDate: string) {
-    const query = {
-      where: {
-        startDate: {
-          [Op.lt]: beforeDate
+  static removeOldRemoteViews (beforeDate: string) {
+    return safeBulkDestroy(() => {
+      return VideoViewModel.destroy({
+        where: {
+          startDate: {
+            [Op.lt]: beforeDate
+          },
+          videoId: {
+            [Op.in]: literal('(SELECT "id" FROM "video" WHERE "remote" IS TRUE)')
+          }
         },
-        videoId: {
-          [Op.in]: literal('(SELECT "id" FROM "video" WHERE "remote" IS TRUE)')
-        }
-      }
-    }
+        limit: MAX_SQL_DELETE_ITEMS
+      })
+    })
+  }
 
-    return VideoViewModel.destroy(query)
+  static removeOldLocalViews (beforeDate: string) {
+    return safeBulkDestroy(() => {
+      return VideoViewModel.destroy({
+        where: {
+          startDate: {
+            [Op.lt]: beforeDate
+          },
+          videoId: {
+            [Op.in]: literal('(SELECT "id" FROM "video" WHERE "remote" IS FALSE)')
+          }
+        },
+        limit: MAX_SQL_DELETE_ITEMS
+      })
+    })
   }
 }

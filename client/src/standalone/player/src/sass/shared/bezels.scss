@@ -1,0 +1,37 @@
+@use "_mixins" as *;
+
+@keyframes bezels-fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
+
+.vjs-bezel {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 52px;
+  height: 52px;
+  z-index: 19;
+  margin-top: -26px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 26px;
+  animation: bezels-fadeout 0.5s linear 1 normal forwards;
+  pointer-events: none;
+
+  @include margin-left(-26px);
+}
+
+.vjs-bezel-icon {
+  width: 36px;
+  height: 36px;
+  margin: 8px;
+
+  svg .vjs-svg-fill {
+    fill: #fff;
+  }
+}

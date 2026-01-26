@@ -1,22 +1,21 @@
-import { filter, throttleTime } from 'rxjs'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { AuthService, AuthStatus } from '@app/core/auth'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
 import { NSFWPolicyType, UserRoleType, UserUpdateMe } from '@peertube/peertube-models'
-import { getBoolOrDefault } from '@root-helpers/local-storage-utils'
+import { getBoolOrDefault, getNumberOrDefault } from '@root-helpers/local-storage-utils'
 import { logger } from '@root-helpers/logger'
 import { OAuthUserTokens, UserLocalStorageKeys } from '@root-helpers/users'
+import { filter, throttleTime } from 'rxjs'
 import { ServerService } from '../server'
 import { LocalStorageService } from '../wrappers/storage.service'
 
 @Injectable()
 export class UserLocalStorageService {
+  private authService = inject(AuthService)
+  private server = inject(ServerService)
+  private localStorageService = inject(LocalStorageService)
 
-  constructor (
-    private authService: AuthService,
-    private server: ServerService,
-    private localStorageService: LocalStorageService
-  ) {
+  constructor () {
     this.authService.userInformationLoaded.subscribe({
       next: () => {
         const user = this.authService.getUser()
@@ -111,6 +110,11 @@ export class UserLocalStorageService {
 
     return {
       nsfwPolicy: this.localStorageService.getItem<NSFWPolicyType>(UserLocalStorageKeys.NSFW_POLICY) || defaultNSFWPolicy,
+      nsfwFlagsDisplayed: getNumberOrDefault(this.localStorageService.getItem(UserLocalStorageKeys.NSFW_FLAGS_DISPLAYED), undefined),
+      nsfwFlagsWarned: getNumberOrDefault(this.localStorageService.getItem(UserLocalStorageKeys.NSFW_FLAGS_WARNED), undefined),
+      nsfwFlagsBlurred: getNumberOrDefault(this.localStorageService.getItem(UserLocalStorageKeys.NSFW_FLAGS_BLURRED), undefined),
+      nsfwFlagsHidden: getNumberOrDefault(this.localStorageService.getItem(UserLocalStorageKeys.NSFW_FLAGS_HIDDEN), undefined),
+
       p2pEnabled: getBoolOrDefault(this.localStorageService.getItem(UserLocalStorageKeys.P2P_ENABLED), defaultP2PEnabled),
       theme: this.localStorageService.getItem(UserLocalStorageKeys.THEME) || 'instance-default',
       videoLanguages,
@@ -124,6 +128,10 @@ export class UserLocalStorageService {
   setUserInfo (profile: UserUpdateMe) {
     const localStorageKeys = {
       nsfwPolicy: UserLocalStorageKeys.NSFW_POLICY,
+      nsfwFlagsDisplayed: UserLocalStorageKeys.NSFW_FLAGS_DISPLAYED,
+      nsfwFlagsHidden: UserLocalStorageKeys.NSFW_FLAGS_HIDDEN,
+      nsfwFlagsWarned: UserLocalStorageKeys.NSFW_FLAGS_WARNED,
+      nsfwFlagsBlurred: UserLocalStorageKeys.NSFW_FLAGS_BLURRED,
       p2pEnabled: UserLocalStorageKeys.P2P_ENABLED,
       autoPlayVideo: UserLocalStorageKeys.AUTO_PLAY_VIDEO,
       autoPlayNextVideo: UserLocalStorageKeys.AUTO_PLAY_NEXT_VIDEO,
@@ -132,9 +140,9 @@ export class UserLocalStorageService {
       videoLanguages: UserLocalStorageKeys.VIDEO_LANGUAGES
     }
 
-    const obj: [ string, string | boolean | string[] ][] = objectKeysTyped(localStorageKeys)
+    const obj: [string, string | boolean | number | string[]][] = objectKeysTyped(localStorageKeys)
       .filter(key => key in profile)
-      .map(key => ([ localStorageKeys[key], profile[key] ]))
+      .map(key => [ localStorageKeys[key], profile[key] ])
 
     for (const [ key, value ] of obj) {
       try {
@@ -156,6 +164,10 @@ export class UserLocalStorageService {
 
   flushUserInfo () {
     this.localStorageService.removeItem(UserLocalStorageKeys.NSFW_POLICY)
+    this.localStorageService.removeItem(UserLocalStorageKeys.NSFW_FLAGS_DISPLAYED)
+    this.localStorageService.removeItem(UserLocalStorageKeys.NSFW_FLAGS_WARNED)
+    this.localStorageService.removeItem(UserLocalStorageKeys.NSFW_FLAGS_BLURRED)
+    this.localStorageService.removeItem(UserLocalStorageKeys.NSFW_FLAGS_HIDDEN)
     this.localStorageService.removeItem(UserLocalStorageKeys.P2P_ENABLED)
     this.localStorageService.removeItem(UserLocalStorageKeys.AUTO_PLAY_VIDEO)
     this.localStorageService.removeItem(UserLocalStorageKeys.AUTO_PLAY_VIDEO_PLAYLIST)
@@ -166,6 +178,10 @@ export class UserLocalStorageService {
   listenUserInfoChange () {
     return this.localStorageService.watch([
       UserLocalStorageKeys.NSFW_POLICY,
+      UserLocalStorageKeys.NSFW_FLAGS_DISPLAYED,
+      UserLocalStorageKeys.NSFW_FLAGS_WARNED,
+      UserLocalStorageKeys.NSFW_FLAGS_BLURRED,
+      UserLocalStorageKeys.NSFW_FLAGS_HIDDEN,
       UserLocalStorageKeys.P2P_ENABLED,
       UserLocalStorageKeys.AUTO_PLAY_VIDEO,
       UserLocalStorageKeys.AUTO_PLAY_NEXT_VIDEO,

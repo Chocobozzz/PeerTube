@@ -1,0 +1,20 @@
+<a [routerLink]="routerLink" [title]="linkTitle">
+  <div class="chip two-lines">
+    @if (displayAvatar()) {
+      <my-actor-avatar [actor]="actor()" [actorType]="actorType()" size="32"></my-actor-avatar>
+    }
+
+    <div class="information">
+      <span class="fw-semibold">{{ actor().displayName }}</span>
+      @if (displayUsername()) {
+        <span class="muted">{{ actor().name }}</span>
+      }
+    </div>
+
+    @if (isEditorOfChannel()) {
+      <my-collaborator-state class="ms-2" type="accepted" small="true"></my-collaborator-state>
+    } @else if (isOwnerOfChannel()) {
+      <my-collaborator-state class="ms-2" type="owner" small="true"></my-collaborator-state>
+    }
+  </div>
+</a>

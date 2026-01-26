@@ -1,0 +1,27 @@
+@if (error()) {
+  @if (enableRetryAfterError()) {
+    <div class="d-flex">
+      <my-progress-bar
+        [label]="error()" value="100" [valueFormatted]="error()"
+        theme="red"
+      >
+      </my-progress-bar>
+
+      <input type="button" class="peertube-button secondary-button ms-1" i18n-value="Retry failed upload" value="Retry" (click)="retry.emit()" />
+    </div>
+  } @else {
+    <my-alert type="danger">
+      <div i18n>Sorry, but something went wrong.</div>
+
+      {{ error() }}
+    </my-alert>
+  }
+} @else if (isUploading() || uploaded()){
+  <div>
+    <my-progress-bar
+      i18n-label label="Total uploaded" theme="green"
+      [value]="uploadPercents()" [valueFormatted]="getUploadingLabel()"
+    >
+    </my-progress-bar>
+  </div>
+}

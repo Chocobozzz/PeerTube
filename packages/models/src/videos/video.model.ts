@@ -2,6 +2,7 @@ import { Account, AccountSummary } from '../actors/index.js'
 import { VideoChannel, VideoChannelSummary } from './channel/video-channel.model.js'
 import { VideoFile } from './file/index.js'
 import { VideoCommentPolicyType } from './index.js'
+import { LiveVideoScheduleEdit } from './live/live-video-schedule.model.js'
 import { VideoConstant } from './video-constant.model.js'
 import { VideoPrivacyType } from './video-privacy.enum.js'
 import { VideoScheduleUpdate } from './video-schedule-update.model.js'
@@ -34,6 +35,7 @@ export interface Video extends Partial<VideoAdditionalAttributes> {
   aspectRatio: number | null
 
   isLive: boolean
+  liveSchedules?: LiveVideoScheduleEdit[]
 
   thumbnailPath: string
   thumbnailUrl?: string
@@ -51,7 +53,11 @@ export interface Video extends Partial<VideoAdditionalAttributes> {
 
   likes: number
   dislikes: number
+  comments: number
+
   nsfw: boolean
+  nsfwFlags: number
+  nsfwSummary: string
 
   account: AccountSummary
   channel: VideoChannelSummary
@@ -81,6 +87,8 @@ export interface VideoAdditionalAttributes {
   videoSource: VideoSource
 
   automaticTags: string[]
+
+  liveSchedules: LiveVideoScheduleEdit[]
 }
 
 export interface VideoDetails extends Video {
@@ -89,8 +97,6 @@ export interface VideoDetails extends Video {
   account: Account
   tags: string[]
 
-  // TODO: remove, deprecated in 6.2
-  commentsEnabled: boolean
   commentsPolicy: {
     id: VideoCommentPolicyType
     label: string

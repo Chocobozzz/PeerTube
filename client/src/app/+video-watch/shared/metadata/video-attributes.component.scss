@@ -1,0 +1,23 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.attribute {
+  font-size: 13px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.attribute-label {
+  min-width: 142px;
+  display: inline-block;
+  color: pvar(--fg-300);
+  font-weight: $font-bold;
+
+  @include padding-right(5px);
+}
+
+@media screen and (max-width: 1600px) {
+  .attributes .attribute {
+    margin-bottom: 5px;
+  }
+}

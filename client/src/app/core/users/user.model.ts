@@ -4,14 +4,13 @@ import {
   ActorImage,
   HTMLServerConfig,
   NSFWPolicyType,
-  User as UserServerModel,
   UserAdminFlag,
   UserAdminFlagType,
   UserNotificationSetting,
   UserRightType,
   UserRole,
   UserRoleType,
-  VideoChannel
+  User as UserServerModel
 } from '@peertube/peertube-models'
 
 export class User implements UserServerModel {
@@ -22,7 +21,12 @@ export class User implements UserServerModel {
 
   emailVerified: boolean
   emailPublic: boolean
+
   nsfwPolicy: NSFWPolicyType
+  nsfwFlagsDisplayed: number
+  nsfwFlagsHidden: number
+  nsfwFlagsWarned: number
+  nsfwFlagsBlurred: number
 
   adminFlags?: UserAdminFlagType
 
@@ -56,7 +60,8 @@ export class User implements UserServerModel {
 
   account: Account
   notificationSettings?: UserNotificationSetting
-  videoChannels?: VideoChannel[]
+
+  videoChannels?: UserServerModel['videoChannels']
 
   blocked: boolean
   blockedReason?: string
@@ -70,6 +75,10 @@ export class User implements UserServerModel {
   lastLoginDate: Date | null
 
   twoFactorEnabled: boolean
+
+  language: string
+
+  newFeaturesInfoRead: number
 
   createdAt: Date
 
@@ -89,7 +98,7 @@ export class User implements UserServerModel {
 
   patch (obj: UserServerModel) {
     for (const key of objectKeysTyped(obj)) {
-      (this as any)[key] = obj[key]
+      ;(this as any)[key] = obj[key]
     }
 
     if (obj.account !== undefined) {

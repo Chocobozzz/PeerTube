@@ -31,5 +31,7 @@ export interface VideoPlaylist {
   updatedAt: Date | string
 
   ownerAccount: AccountSummary
+
+  videoChannelPosition: number
   videoChannel?: VideoChannelSummary
 }

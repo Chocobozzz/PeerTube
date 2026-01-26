@@ -1,23 +1,25 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, inject, viewChild } from '@angular/core'
+import { FormsModule } from '@angular/forms'
 import { HtmlRendererService } from '@app/core'
 import { ConfirmService } from '@app/core/confirm/confirm.service'
 import { POP_STATE_MODAL_DISMISS } from '@app/helpers'
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { InputTextComponent } from '../shared/shared-forms/input-text.component'
-import { FormsModule } from '@angular/forms'
-import { NgIf } from '@angular/common'
+
 import { GlobalIconComponent } from '../shared/shared-icons/global-icon.component'
 
 @Component({
   selector: 'my-confirm',
   templateUrl: './confirm.component.html',
   styleUrls: [ './confirm.component.scss' ],
-  standalone: true,
-  imports: [ GlobalIconComponent, NgIf, FormsModule, InputTextComponent ]
+  imports: [ GlobalIconComponent, FormsModule, InputTextComponent ]
 })
 export class ConfirmComponent implements OnInit {
-  @ViewChild('confirmModal', { static: true }) confirmModal: ElementRef
+  private modalService = inject(NgbModal)
+  private html = inject(HtmlRendererService)
+  private confirmService = inject(ConfirmService)
+
+  readonly confirmModal = viewChild<ElementRef>('confirmModal')
 
   title = ''
   message = ''
@@ -25,6 +27,10 @@ export class ConfirmComponent implements OnInit {
   inputLabel = ''
 
   inputValue = ''
+
+  moreInfo: { title: string, content: string }
+
+  cancelButtonText = ''
   confirmButtonText = ''
 
   errorMessage = ''
@@ -32,12 +38,6 @@ export class ConfirmComponent implements OnInit {
   isPasswordInput = false
 
   private openedModal: NgbModalRef
-
-  constructor (
-    private modalService: NgbModal,
-    private html: HtmlRendererService,
-    private confirmService: ConfirmService
-  ) { }
 
   ngOnInit () {
     this.confirmService.showConfirm.subscribe(
@@ -48,13 +48,15 @@ export class ConfirmComponent implements OnInit {
         this.expectedInputValue = ''
         this.inputLabel = ''
         this.inputValue = ''
+        this.moreInfo = undefined
         this.confirmButtonText = ''
         this.isPasswordInput = false
         this.errorMessage = ''
 
-        const { type, title, message, confirmButtonText, errorMessage } = payload
+        const { type, title, message, confirmButtonText, cancelButtonText, errorMessage, moreInfo } = payload
 
         this.title = title
+        this.moreInfo = moreInfo
 
         if (type === 'confirm-expected-input') {
           this.inputLabel = payload.inputLabel
@@ -66,8 +68,9 @@ export class ConfirmComponent implements OnInit {
         }
 
         this.confirmButtonText = confirmButtonText || $localize`Confirm`
+        this.cancelButtonText = cancelButtonText || $localize`Cancel`
 
-        this.html.toSimpleSafeHtml(message)
+        this.html.toSimpleSafeHtmlWithLinks(message)
           .then(html => {
             this.message = html
 
@@ -94,17 +97,17 @@ export class ConfirmComponent implements OnInit {
   showModal () {
     this.inputValue = ''
 
-    this.openedModal = this.modalService.open(this.confirmModal, { centered: true })
+    this.openedModal = this.modalService.open(this.confirmModal(), { centered: true })
 
     this.openedModal.result
-        .then(() => {
-          this.confirmService.confirmResponse.next({ confirmed: true, value: this.inputValue })
-        })
-        .catch((reason: string) => {
-          // If the reason was that the user used the back button, we don't care about the confirm dialog result
-          if (!reason || reason !== POP_STATE_MODAL_DISMISS) {
-            this.confirmService.confirmResponse.next({ confirmed: false, value: this.inputValue })
-          }
-        })
+      .then(() => {
+        this.confirmService.confirmResponse.next({ confirmed: true, value: this.inputValue })
+      })
+      .catch((reason: string) => {
+        // If the reason was that the user used the back button, we don't care about the confirm dialog result
+        if (!reason || reason !== POP_STATE_MODAL_DISMISS) {
+          this.confirmService.confirmResponse.next({ confirmed: false, value: this.inputValue })
+        }
+      })
   }
 }

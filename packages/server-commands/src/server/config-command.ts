@@ -1,10 +1,9 @@
-import { About, ActorImageType, ActorImageType_Type, CustomConfig, HttpStatusCode, ServerConfig } from '@peertube/peertube-models'
+import { About, ActorImageType, ActorImageType_Type, CustomConfig, HttpStatusCode, LogoType, ServerConfig } from '@peertube/peertube-models'
 import { DeepPartial } from '@peertube/peertube-typescript-utils'
 import merge from 'lodash-es/merge.js'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/abstract-command.js'
 
 export class ConfigCommand extends AbstractCommand {
-
   private savedConfig: CustomConfig
 
   static getConfigResolutions (enabled: boolean, with0p = false) {
@@ -466,6 +465,7 @@ export class ConfigCommand extends AbstractCommand {
       ...options,
 
       path: '/',
+      accept: 'text/html',
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
@@ -490,10 +490,12 @@ export class ConfigCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  updateInstanceImage (options: OverrideCommandOptions & {
-    fixture: string
-    type: ActorImageType_Type
-  }) {
+  updateInstanceImage (
+    options: OverrideCommandOptions & {
+      fixture: string
+      type: ActorImageType_Type
+    }
+  ) {
     const { fixture, type } = options
 
     const path = type === ActorImageType.BANNER
@@ -514,9 +516,11 @@ export class ConfigCommand extends AbstractCommand {
     })
   }
 
-  deleteInstanceImage (options: OverrideCommandOptions & {
-    type: ActorImageType_Type
-  }) {
+  deleteInstanceImage (
+    options: OverrideCommandOptions & {
+      type: ActorImageType_Type
+    }
+  ) {
     const suffix = options.type === ActorImageType.BANNER
       ? 'instance-banner'
       : 'instance-avatar'
@@ -527,6 +531,45 @@ export class ConfigCommand extends AbstractCommand {
       ...options,
 
       path,
+
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  updateInstanceLogo (
+    options: OverrideCommandOptions & {
+      fixture: string
+      type: LogoType
+    }
+  ) {
+    const { fixture, type } = options
+
+    return this.updateImageRequest({
+      ...options,
+
+      path: '/api/v1/config/instance-logo/' + type + '/pick',
+      fixture,
+      fieldname: 'logofile',
+
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  deleteInstanceLogo (
+    options: OverrideCommandOptions & {
+      type: LogoType
+    }
+  ) {
+    const { type } = options
+
+    return this.deleteRequest({
+      ...options,
+
+      path: '/api/v1/config/instance-logo/' + type,
 
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
@@ -547,9 +590,11 @@ export class ConfigCommand extends AbstractCommand {
     })
   }
 
-  updateCustomConfig (options: OverrideCommandOptions & {
-    newCustomConfig: CustomConfig
-  }) {
+  updateCustomConfig (
+    options: OverrideCommandOptions & {
+      newCustomConfig: CustomConfig
+    }
+  ) {
     const path = '/api/v1/config/custom'
 
     return this.putBodyRequest({
@@ -574,9 +619,11 @@ export class ConfigCommand extends AbstractCommand {
     })
   }
 
-  async updateExistingConfig (options: OverrideCommandOptions & {
-    newConfig: DeepPartial<CustomConfig>
-  }) {
+  async updateExistingConfig (
+    options: OverrideCommandOptions & {
+      newConfig: DeepPartial<CustomConfig>
+    }
+  ) {
     const existing = await this.getCustomConfig({ ...options, expectedStatus: HttpStatusCode.OK_200 })
 
     return this.updateCustomConfig({ ...options, newCustomConfig: merge({}, existing, options.newConfig) })

@@ -11,5 +11,5 @@ export type MVideoAutomaticTag = Omit<VideoAutomaticTagModel, 'Account' | 'Video
 // ############################################################################
 
 export type MVideoAutomaticTagWithTag =
-  MVideoAutomaticTag &
-  Use<'AutomaticTag', MAutomaticTag>
+  & MVideoAutomaticTag
+  & Use<'AutomaticTag', MAutomaticTag>

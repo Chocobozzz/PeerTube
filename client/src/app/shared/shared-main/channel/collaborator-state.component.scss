@@ -1,0 +1,31 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+
+.collaborator-role {
+  border-radius: 4px;
+  padding: 1px 6px;
+  width: fit-content;
+  line-height: normal;
+  border: 1px solid;
+  white-space: nowrap;
+
+  @include font-size(12px);
+
+  &.small {
+    padding: 1px 6px;
+
+    @include font-size(10px);
+  }
+}
+
+.collaborator-role-owner {
+  color: pvar(--bg-secondary-400);
+  background-color: pvar(--fg-200);
+  border-color: pvar(--fg-200);
+}
+
+.collaborator-role-editor,
+.collaborator-role-invited {
+  color: pvar(--fg-300);
+  border-color: pvar(--secondary-icon-color);
+}

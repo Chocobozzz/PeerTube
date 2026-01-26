@@ -1,0 +1,102 @@
+@if (isCommentDisplayed()) {
+  <div class="root-comment" [ngClass]="{ 'is-child': isChild() }">
+    <div class="left">
+      @if (!comment().isDeleted) {
+        <my-actor-avatar
+          [href]="comment().account.url"
+          [actor]="comment().account" actorType="account" [size]="isChild() ? '25' : '36'"
+        ></my-actor-avatar>
+      }
+      <div class="vertical-border"></div>
+    </div>
+    <div class="right" [ngClass]="{ 'mb-3': firstInThread() }">
+      <div class="comment">
+        @if (!comment().isDeleted) {
+          @if (highlightedComment() === true) {
+            <div class="highlighted-comment" i18n>Highlighted comment</div>
+          }
+          <div class="comment-account-date">
+            <div class="comment-account">
+              <a [routerLink]="[ '/a', comment().by ]">
+                <span class="comment-account-name" [ngClass]="{ 'video-author': video().account.id === comment().account.id }">
+                  {{ comment().account.displayName }}
+                </span>
+                <span class="comment-account-fid ms-1">{{ comment().by }}</span>
+              </a>
+            </div>
+            <a [routerLink]="['/w', video().shortUUID, { 'threadId': comment().threadId }]" class="comment-date" [title]="comment().createdAt">
+              {{ comment().createdAt | myFromNow }}
+            </a>
+            @if (comment().heldForReview) {
+              <span class="pt-badge badge-red ms-2" i18n>Pending review</span>
+            }
+          </div>
+          <div
+            class="comment-html"
+            [innerHTML]="sanitizedCommentHTML"
+            (timestampClicked)="handleTimestampClicked($event)"
+            myTimestampRouteTransformer
+          ></div>
+          <div class="comment-actions">
+            <button (click)="onWantToReply()" class="comment-action-reply border-0 p-0" i18n>Reply</button>
+            <my-user-moderation-dropdown
+              [prependActions]="prependModerationActions" [buttonStyled]="false"
+              buttonSize="small" [account]="commentAccount" [user]="commentUser" i18n-label label="Options" placement="bottom-left auto"
+            ></my-user-moderation-dropdown>
+          </div>
+        }
+        @if (comment().isDeleted) {
+          <div class="comment-account-date">
+            <span class="comment-account" i18n>Deleted</span>
+            <a [routerLink]="['/w', video().shortUUID, { 'threadId': comment().threadId }]"
+            class="comment-date">{{ comment().createdAt | myFromNow }}</a>
+          </div>
+          <div class="comment-html comment-html-deleted">
+            <i i18n>This comment has been deleted</i>
+          </div>
+        }
+        @if (!comment().isDeleted && inReplyToCommentId() === comment().id) {
+          <my-video-comment-add
+            [user]="user"
+            [video]="video()"
+            [videoPassword]="videoPassword()"
+            [parentComment]="comment()"
+            [parentComments]="newParentComments"
+            [focusOnInit]="true"
+            (commentCreated)="onCommentReplyCreated($event)"
+            (cancelEdit)="onResetReply()"
+            [textValue]="redraftValue()"
+          ></my-video-comment-add>
+        }
+        @if (commentTree()) {
+          <div>
+            @for (commentChild of commentTree().children; track commentChild) {
+              <div>
+                <my-video-comment
+                  [comment]="commentChild.comment"
+                  [video]="video()"
+                  [videoPassword]="videoPassword()"
+                  [inReplyToCommentId]="inReplyToCommentId()"
+                  [commentTree]="commentChild"
+                  [parentComments]="newParentComments"
+                  (wantedToReply)="onWantToReply($event)"
+                  (wantedToDelete)="onWantToDelete($event)"
+                  (wantedToRedraft)="onWantToRedraft($event)"
+                  (wantedToApprove)="onWantToApprove($event)"
+                  (resetReply)="onResetReply()"
+                  (timestampClicked)="handleTimestampClicked($event)"
+                  [redraftValue]="redraftValue()"
+                ></my-video-comment>
+              </div>
+            }
+          </div>
+        }
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
+}
+
+@if (prependModerationActions) {
+  <my-comment-report #commentReportModal [comment]="comment()"></my-comment-report>
+}

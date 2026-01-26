@@ -1,13 +1,13 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_form-mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
 
-input[type=text] {
+input[type="text"] {
   @include peertube-input-text(340px);
 }
 
 .peertube-select-container {
-  @include peertube-select-container(340px);
+  @include responsive-width(340px);
 }
 
 my-select-channel,
@@ -17,5 +17,10 @@ my-select-options {
 }
 
 .content-col {
-  max-width: 500px;;
+  max-width: 500px;
+}
+
+my-preview-upload {
+  width: 223px;
+  height: 122px;
 }

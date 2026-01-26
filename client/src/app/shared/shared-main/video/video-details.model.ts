@@ -19,7 +19,6 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   tags: string[]
   downloadEnabled: boolean
 
-  commentsEnabled: never
   commentsPolicy: VideoConstant<VideoCommentPolicyType>
 
   likesPercent: number

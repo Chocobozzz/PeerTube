@@ -1,5 +1,5 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
 
 my-embed {
   display: block;
@@ -7,11 +7,13 @@ my-embed {
   width: 50%;
 }
 
-.pt-badge {
+.pt-badge,
+my-privacy-badge,
+my-video-nsfw-badge {
   @include margin-right(5px);
 }
 
-.video-info > div {
+.video-expanded-info {
   display: flex;
 
   my-global-icon {
@@ -20,19 +22,5 @@ my-embed {
 
     @include global-icon-size(16px);
     @include margin-left(3px);
-  }
-}
-
-.loading {
-  opacity: 0.5;
-}
-
-.right-form {
-  display: flex;
-  flex-wrap: wrap;
-  row-gap: 0.5rem;
-
-  > *:not(:last-child) {
-    @include margin-right(10px);
   }
 }

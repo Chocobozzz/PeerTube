@@ -1,5 +1,5 @@
-import { exec, spawn } from 'child_process'
-import { join, resolve } from 'path'
+import { exec, spawn } from 'node:child_process'
+import { join, resolve } from 'node:path'
 
 function runServer (appInstance: number, config: any = {}) {
   const env = Object.create(process.env)

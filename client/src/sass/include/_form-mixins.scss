@@ -1,8 +1,8 @@
-@use 'sass:math';
-@use 'sass:color';
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_button-mixins' as *;
+@use "sass:math";
+@use "sass:color";
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_button-mixins" as *;
 
 @mixin peertube-input-text($width, $font-size: $form-input-font-size) {
   font-size: $font-size;
@@ -12,14 +12,14 @@
   max-width: $width;
   color: pvar(--input-fg);
   background-color: pvar(--input-bg);
-  border: 1px solid pvar(--input-border-color);
+  border: pvar(--input-border-width) solid pvar(--input-border-color);
   border-radius: pvar(--input-border-radius);
 
   @include rounded-line-height-1-5($font-size);
 
   &::placeholder {
-    color: pvar(--input-placeholder);
-    font-size: 14px;
+    color: pvar(--input-placeholder-color);
+    font-size: pvar(--input-placeholder-font-size);
   }
 
   &[readonly] {
@@ -33,7 +33,8 @@
   }
 
   &[disabled] {
-    opacity: 0.4;
+    color: pvar(--fg-300);
+    opacity: 0.8;
   }
 
   @media screen and (max-width: calc(#{$width} + 40px)) {
@@ -41,32 +42,29 @@
   }
 }
 
-@mixin peertube-textarea ($width, $height) {
+@mixin peertube-textarea($width, $height) {
   @include peertube-input-text($width);
 
   & {
     color: pvar(--textarea-fg) !important;
     background-color: pvar(--textarea-bg) !important;
     height: $height;
-    padding: pvar(--input-y-padding) calc(#{pvar(--input-x-padding)} / 2);
+    padding: pvar(--textarea-y-padding) pvar(--textarea-x-padding);
   }
 }
 
-@mixin peertube-select-container ($width) {
+@mixin peertube-select-container($width) {
   padding: 0;
   margin: 0;
-  width: $width;
   position: relative;
   height: min-content;
 
-  @media screen and (max-width: $width) {
-    width: 100%;
-  }
+  @include responsive-width($width);
 
   &::after {
     top: 50%;
     right: calc(0% + 15px);
-    content: ' ';
+    content: " ";
     height: 0;
     width: 0;
     position: absolute;
@@ -86,7 +84,7 @@
 
       padding: pvar(--input-y-padding) calc(#{pvar(--input-x-padding)} + 23px) pvar(--input-y-padding) pvar(--input-x-padding);
       position: relative;
-      border: 1px solid var(--input-border-color) !important;
+      border: pvar(--input-border-width) solid var(--input-border-color) !important;
       appearance: none;
       text-overflow: ellipsis;
 
@@ -102,7 +100,7 @@
     }
 
     &[disabled] {
-      opacity: 0.4;
+      opacity: 0.5;
     }
   }
 }
@@ -110,21 +108,23 @@
 // Thanks: https://codepen.io/manabox/pen/raQmpL
 @mixin peertube-radio-container {
   &[disabled] {
-    opacity: 0.4;
+    opacity: 0.5;
   }
 
   label {
     font-size: $form-input-font-size;
+    color: pvar(--fg-350);
   }
 
-  [type=radio]:focus-visible,[type=radio]:focus {
+  [type="radio"]:focus-visible,
+  [type="radio"]:focus {
     & + label::before {
       box-shadow: $focus-box-shadow-form;
     }
   }
 
-  [type=radio]:checked,
-  [type=radio]:not(:checked) {
+  [type="radio"]:checked,
+  [type="radio"]:not(:checked) {
     position: absolute;
     opacity: 0;
     cursor: pointer;
@@ -132,20 +132,19 @@
     width: 0;
   }
 
-  [type=radio]:checked + label,
-  [type=radio]:not(:checked) + label {
+  [type="radio"]:checked + label,
+  [type="radio"]:not(:checked) + label {
     position: relative;
     padding-left: 28px;
     cursor: pointer;
     line-height: 20px;
     display: inline-block;
     font-weight: $font-regular;
-    color: pvar(--fg);
   }
 
-  [type=radio]:checked + label::before,
-  [type=radio]:not(:checked) + label::before {
-    content: '';
+  [type="radio"]:checked + label::before,
+  [type="radio"]:not(:checked) + label::before {
+    content: "";
     position: absolute;
     left: 0;
     top: -1px;
@@ -155,9 +154,9 @@
     border-radius: 100%;
   }
 
-  [type=radio]:checked + label::after,
-  [type=radio]:not(:checked) + label::after {
-    content: '';
+  [type="radio"]:checked + label::after,
+  [type="radio"]:not(:checked) + label::after {
+    content: "";
     width: 10px;
     height: 10px;
     background: pvar(--input-check-active-bg);
@@ -167,16 +166,16 @@
     border-radius: 100%;
     transition: all 0.2s ease;
   }
-  [type=radio]:not(:checked) + label::after {
+  [type="radio"]:not(:checked) + label::after {
     opacity: 0;
     transform: scale(0);
   }
 
-  [type=radio]:checked + label::before {
+  [type="radio"]:checked + label::before {
     border: 2px solid pvar(--fg);
   }
 
-  [type=radio]:checked + label::after {
+  [type="radio"]:checked + label::after {
     opacity: 1;
     transform: scale(1);
   }
@@ -199,6 +198,7 @@
     box-shadow: $focus-box-shadow-form;
   }
 
+  // Checkbox
   + span {
     position: relative;
     width: 20px;
@@ -210,7 +210,7 @@
     cursor: pointer;
 
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       top: 4px;
       left: 6px;
@@ -223,12 +223,13 @@
     }
   }
 
+  // Checkbox checked
   &:checked + span {
     background: pvar(--input-check-active-bg);
     animation: jelly 0.6s ease;
 
     &::before {
-      content: '';
+      content: "";
       width: 100%;
       height: 100%;
       background: pvar(--input-check-active-bg);
@@ -245,17 +246,19 @@
     }
   }
 
+  // Label
   + span + span {
     font-weight: $font-regular;
     cursor: pointer;
     display: inline;
+    color: pvar(--fg-350);
 
     @include margin-left(8px);
   }
 
   &[disabled] + span,
   &[disabled] + span + span {
-    opacity: 0.4;
+    opacity: 0.5;
     cursor: default;
   }
 }

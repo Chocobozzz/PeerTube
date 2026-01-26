@@ -1,13 +1,19 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_form-mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
 
 .button {
   padding: 0 13px;
 }
 
-input[type=text] {
+input[type="text"] {
   display: block;
 
   @include peertube-input-text(100%);
+}
+
+.modal-body {
+  padding-top: 0;
+  padding-bottom: 0;
+  color: pvar(--fg-300);
 }

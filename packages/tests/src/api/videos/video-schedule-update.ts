@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
 import { wait } from '@peertube/peertube-core-utils'
 import { VideoPrivacy } from '@peertube/peertube-models'
 import {
@@ -11,6 +10,7 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { expect } from 'chai'
 
 function in15Seconds () {
   const now = new Date()
@@ -35,16 +35,21 @@ describe('Test video update scheduler', function () {
   })
 
   it('Should upload a video and schedule an update in 10 seconds', async function () {
+    const updateAt = in15Seconds().toISOString()
+
     const attributes = {
       name: 'video 1',
       privacy: VideoPrivacy.PRIVATE,
       scheduleUpdate: {
-        updateAt: in15Seconds().toISOString(),
+        updateAt,
         privacy: VideoPrivacy.PUBLIC
       }
     }
 
-    await servers[0].videos.upload({ attributes })
+    const { uuid } = await servers[0].videos.upload({ attributes })
+
+    const video = await servers[0].videos.getWithToken({ id: uuid })
+    expect(video.publishedAt).to.equal(updateAt)
 
     await waitJobs(servers)
   })
@@ -75,14 +80,20 @@ describe('Test video update scheduler', function () {
   it('Should wait some seconds and have the video in public privacy', async function () {
     this.timeout(50000)
 
-    await wait(15000)
-    await waitJobs(servers)
-
-    for (const server of servers) {
+    const check = async (server: PeerTubeServer) => {
       const { total, data } = await server.videos.list()
 
-      expect(total).to.equal(1)
-      expect(data[0].name).to.equal('video 1')
+      return total === 1 && data[0].name === 'video 1'
+    }
+
+    while (true) {
+      const allGood = await Promise.all(servers.map(s => check(s)))
+
+      if (allGood.every(g => g)) {
+        break
+      }
+
+      await wait(500)
     }
   })
 
@@ -99,15 +110,21 @@ describe('Test video update scheduler', function () {
   })
 
   it('Should update a video by scheduling an update', async function () {
+    const updateAt = in15Seconds().toISOString()
+
     const attributes = {
       name: 'video 2 updated',
       scheduleUpdate: {
-        updateAt: in15Seconds().toISOString(),
+        updateAt,
         privacy: VideoPrivacy.PUBLIC
       }
     }
 
     await servers[0].videos.update({ id: video2UUID, attributes })
+
+    const video = await servers[0].videos.getWithToken({ id: video2UUID })
+    expect(video.publishedAt).to.equal(updateAt)
+
     await waitJobs(servers)
   })
 
@@ -153,6 +170,33 @@ describe('Test video update scheduler', function () {
       const video = data.find(v => v.uuid === video2UUID)
       expect(video).not.to.be.undefined
       expect(video.name).to.equal('video 2 updated')
+    }
+  })
+
+  it('Should abort a scheduled update', async function () {
+    const updateAt = in15Seconds().toISOString()
+
+    const attributes = {
+      name: 'video 1',
+      privacy: VideoPrivacy.PRIVATE,
+      scheduleUpdate: {
+        updateAt,
+        privacy: VideoPrivacy.PUBLIC
+      }
+    }
+
+    const { uuid } = await servers[0].videos.upload({ attributes })
+
+    {
+      const video = await servers[0].videos.getWithToken({ id: uuid })
+      expect(video.publishedAt).to.equal(updateAt)
+    }
+
+    await servers[0].videos.update({ id: uuid, attributes: { scheduleUpdate: null } })
+
+    {
+      const video = await servers[0].videos.getWithToken({ id: uuid })
+      expect(video.publishedAt).to.not.equal(updateAt)
     }
   })
 

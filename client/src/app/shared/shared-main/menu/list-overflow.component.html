@@ -1,11 +1,11 @@
 <div class="root">
-  <div #itemsParent class="list-overflow-parent" [ngClass]="{ 'opacity-0': !initialized, 'has-border': hasBorder }">
+  <div #itemsParent class="list-overflow-parent" [ngClass]="{ 'opacity-0': !initialized, 'has-border': hasBorder() }">
 
     <ul class="ul-unstyle d-flex">
-      @for (item of items; track item.label; let id = $index) {
+      @for (item of items(); track item.label; let id = $index) {
         @if (!item.isDisplayed || item.isDisplayed()) {
           <li class="d-inline-block" [id]="getId(id)" #itemsRendered [style]="{ visibility: showItemsUntilIndexExcluded && id >= showItemsUntilIndexExcluded ? 'hidden' : 'inherit' }">
-            <ng-container *ngTemplateOutlet="itemTemplate; context: {item: item}"></ng-container>
+            <ng-container *ngTemplateOutlet="itemTemplate(); context: {item: item}"></ng-container>
           </li>
         }
       }
@@ -24,10 +24,10 @@
         </button>
 
         <ul class="ul-unstyle" ngbDropdownMenu>
-          @for (item of items | slice:showItemsUntilIndexExcluded:items.length; track item.label) {
+          @for (item of items() | slice:showItemsUntilIndexExcluded:items().length; track item.label) {
             @if (!item.isDisplayed || item.isDisplayed()) {
               <li>
-                <ng-container *ngTemplateOutlet="itemTemplate; context: {item: item, dropdown: true}"></ng-container>
+                <ng-container *ngTemplateOutlet="itemTemplate(); context: {item: item, dropdown: true}"></ng-container>
               </li>
             }
           }
@@ -39,10 +39,10 @@
   <ng-template #modal let-close="close" let-dismiss="dismiss">
     <div class="modal-body">
       <ul class="ul-unstyle">
-        @for (item of items | slice:showItemsUntilIndexExcluded:items.length; track item.label) {
+        @for (item of items() | slice:showItemsUntilIndexExcluded:items().length; track item.label) {
           @if (!item.isDisplayed || item.isDisplayed()) {
             <li>
-              <ng-container *ngTemplateOutlet="itemTemplate; context: {item: item, modal: true}"></ng-container>
+              <ng-container *ngTemplateOutlet="itemTemplate(); context: {item: item, modal: true}"></ng-container>
             </li>
           }
         }

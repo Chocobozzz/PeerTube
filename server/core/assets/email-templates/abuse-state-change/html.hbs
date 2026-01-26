@@ -1,0 +1,10 @@
+{{! Abuse report state changed }}
+{{#> base title=(t "Abuse report state changed")}}
+  <p>
+    {{#if isAccepted}}
+      {{{t "<a href=\"{abuseUrl}\">Your abuse report #{abuseId}</a> on {instanceName} has been accepted." abuseUrl=abuseUrl abuseId=abuseId instanceName=instanceName}}}
+    {{else}}
+      {{{t "<a href=\"{abuseUrl}\">Your abuse report #{abuseId}</a> on {instanceName} has been rejected." abuseUrl=abuseUrl abuseId=abuseId instanceName=instanceName}}}
+    {{/if}}
+  </p>
+{{/base}}

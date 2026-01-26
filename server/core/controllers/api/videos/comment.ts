@@ -42,7 +42,8 @@ import { VideoCommentModel } from '../../../models/video/video-comment.js'
 const auditLogger = auditLoggerFactory('comments')
 const videoCommentRouter = express.Router()
 
-videoCommentRouter.get('/:videoId/comment-threads',
+videoCommentRouter.get(
+  '/:videoId/comment-threads',
   paginationValidator,
   videoCommentThreadsSortValidator,
   setDefaultSort,
@@ -51,35 +52,41 @@ videoCommentRouter.get('/:videoId/comment-threads',
   optionalAuthenticate,
   asyncMiddleware(listVideoThreads)
 )
-videoCommentRouter.get('/:videoId/comment-threads/:threadId',
+videoCommentRouter.get(
+  '/:videoId/comment-threads/:threadId',
   asyncMiddleware(listVideoThreadCommentsValidator),
   optionalAuthenticate,
   asyncMiddleware(listVideoThreadComments)
 )
 
-videoCommentRouter.post('/:videoId/comment-threads',
+videoCommentRouter.post(
+  '/:videoId/comment-threads',
   authenticate,
   asyncMiddleware(addVideoCommentThreadValidator),
   asyncRetryTransactionMiddleware(addVideoCommentThread)
 )
-videoCommentRouter.post('/:videoId/comments/:commentId',
+videoCommentRouter.post(
+  '/:videoId/comments/:commentId',
   authenticate,
   asyncMiddleware(addVideoCommentReplyValidator),
   asyncRetryTransactionMiddleware(addVideoCommentReply)
 )
-videoCommentRouter.delete('/:videoId/comments/:commentId',
+videoCommentRouter.delete(
+  '/:videoId/comments/:commentId',
   authenticate,
   asyncMiddleware(removeVideoCommentValidator),
   asyncRetryTransactionMiddleware(removeVideoComment)
 )
 
-videoCommentRouter.post('/:videoId/comments/:commentId/approve',
+videoCommentRouter.post(
+  '/:videoId/comments/:commentId/approve',
   authenticate,
   asyncMiddleware(approveVideoCommentValidator),
   asyncMiddleware(approveVideoComment)
 )
 
-videoCommentRouter.get('/comments',
+videoCommentRouter.get(
+  '/comments',
   authenticate,
   ensureUserHasRight(UserRight.SEE_ALL_COMMENTS),
   paginationValidator,
@@ -118,7 +125,7 @@ async function listComments (req: express.Request, res: express.Response) {
     heldForReview: undefined
   }
 
-  const resultList = await VideoCommentModel.listCommentsForApi(options)
+  const resultList = await VideoCommentModel.listForApi(options)
 
   return res.json({
     total: resultList.total,

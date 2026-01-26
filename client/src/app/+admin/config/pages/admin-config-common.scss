@@ -1,0 +1,83 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
+
+$form-base-input-width: 340px;
+$form-max-width: 500px;
+
+form {
+  padding-bottom: 1.5rem;
+}
+
+my-markdown-textarea {
+  display: block;
+  max-width: $form-max-width;
+}
+
+.homepage my-markdown-textarea {
+  display: block;
+  max-width: 100%;
+
+  ::ng-deep textarea {
+    height: 300px !important;
+  }
+}
+
+input[type="text"],
+input[type="number"] {
+  @include peertube-input-text($form-base-input-width);
+}
+
+input[type="checkbox"] {
+  @include peertube-checkbox;
+}
+
+.peertube-select-container {
+  @include responsive-width($form-base-input-width);
+}
+
+my-select-videos-sort,
+my-select-videos-scope,
+my-select-checkbox,
+my-select-options,
+my-select-player-theme,
+my-select-custom-value {
+  display: block;
+
+  @include responsive-width($form-base-input-width);
+}
+
+.inner-form-description {
+  font-size: 14px;
+  margin-bottom: 1rem;
+  color: pvar(--fg-300);
+}
+
+textarea {
+  max-width: 100%;
+  display: block;
+
+  @include peertube-textarea(500px, 150px);
+
+  &.small {
+    height: 75px;
+  }
+}
+
+.disabled-checkbox-extra {
+  &,
+  ::ng-deep label {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+my-actor-banner-edit {
+  max-width: $form-max-width;
+}
+
+h4 {
+  font-weight: $font-bold;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}

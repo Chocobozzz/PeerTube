@@ -1,4 +1,4 @@
-import { buildPlaylistEmbedPath, buildPlaylistWatchPath, pick } from '@peertube/peertube-core-utils'
+import { buildPlaylistEmbedPath, buildPlaylistWatchPath } from '@peertube/peertube-core-utils'
 import {
   ActivityIconObject,
   PlaylistObject,
@@ -12,7 +12,7 @@ import { buildUUID, uuidToShort } from '@peertube/peertube-node-utils'
 import { activityPubCollectionPagination } from '@server/lib/activitypub/collection.js'
 import { MAccountId, MChannelId, MVideoPlaylistElement } from '@server/types/models/index.js'
 import { join } from 'path'
-import { FindOptions, Includeable, Op, ScopeOptions, Sequelize, Transaction, WhereOptions, literal } from 'sequelize'
+import { FindOptions, Op, Transaction, literal } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -24,7 +24,8 @@ import {
   HasMany,
   HasOne,
   Is,
-  IsUUID, Scopes,
+  IsUUID,
+  Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -54,43 +55,29 @@ import {
   MVideoPlaylistFullSummary,
   MVideoPlaylistSummaryWithElements
 } from '../../types/models/video/video-playlist.js'
-import { AccountModel, ScopeNames as AccountScopeNames, SummaryOptions } from '../account/account.js'
+import { AccountModel, ScopeNames as AccountScopeNames } from '../account/account.js'
 import { ActorModel } from '../actor/actor.js'
 import {
   SequelizeModel,
-  buildServerIdsFollowedBy,
+  buildSQLAttributes,
   buildTrigramSearchIndex,
   buildWhereIdOrUUID,
-  createSimilarityAttribute,
-  getPlaylistSort,
   isOutdated,
   setAsUpdated,
   throwIfNotValid
 } from '../shared/index.js'
+import { getNextPositionOf, increasePositionOf, reassignPositionOf } from '../shared/position.js'
+import { ListVideoPlaylistsOptions, VideoPlaylistListQueryBuilder } from './sql/playlist/video-playlist-list-query-builder.js'
 import { ThumbnailModel } from './thumbnail.js'
 import { VideoChannelModel, ScopeNames as VideoChannelScopeNames } from './video-channel.js'
 import { VideoPlaylistElementModel } from './video-playlist-element.js'
 
 enum ScopeNames {
-  AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
   WITH_VIDEOS_LENGTH = 'WITH_VIDEOS_LENGTH',
   WITH_ACCOUNT_AND_CHANNEL_SUMMARY = 'WITH_ACCOUNT_AND_CHANNEL_SUMMARY',
   WITH_ACCOUNT = 'WITH_ACCOUNT',
   WITH_THUMBNAIL = 'WITH_THUMBNAIL',
   WITH_ACCOUNT_AND_CHANNEL = 'WITH_ACCOUNT_AND_CHANNEL'
-}
-
-type AvailableForListOptions = {
-  followerActorId?: number
-  type?: VideoPlaylistType_Type
-  accountId?: number
-  videoChannelId?: number
-  listMyPlaylists?: boolean
-  search?: string
-  host?: string
-  uuids?: string[]
-  withVideos?: boolean
-  forCount?: boolean
 }
 
 function getVideoLengthSelect () {
@@ -147,129 +134,8 @@ function getVideoLengthSelect () {
         required: false
       }
     ]
-  },
-  [ScopeNames.AVAILABLE_FOR_LIST]: (options: AvailableForListOptions) => {
-    const whereAnd: WhereOptions[] = []
-
-    const whereServer = options.host && options.host !== WEBSERVER.HOST
-      ? { host: options.host }
-      : undefined
-
-    let whereActor: WhereOptions = {}
-
-    if (options.host === WEBSERVER.HOST) {
-      whereActor = {
-        [Op.and]: [ { serverId: null } ]
-      }
-    }
-
-    if (options.listMyPlaylists !== true) {
-      whereAnd.push({
-        privacy: VideoPlaylistPrivacy.PUBLIC
-      })
-
-      // … OR playlists that are on an instance followed by actorId
-      if (options.followerActorId) {
-        // Only list local playlists
-        const whereActorOr: WhereOptions[] = [
-          {
-            serverId: null
-          }
-        ]
-
-        const inQueryInstanceFollow = buildServerIdsFollowedBy(options.followerActorId)
-
-        whereActorOr.push({
-          serverId: {
-            [Op.in]: literal(inQueryInstanceFollow)
-          }
-        })
-
-        Object.assign(whereActor, { [Op.or]: whereActorOr })
-      }
-    }
-
-    if (options.accountId) {
-      whereAnd.push({
-        ownerAccountId: options.accountId
-      })
-    }
-
-    if (options.videoChannelId) {
-      whereAnd.push({
-        videoChannelId: options.videoChannelId
-      })
-    }
-
-    if (options.type) {
-      whereAnd.push({
-        type: options.type
-      })
-    }
-
-    if (options.uuids) {
-      whereAnd.push({
-        uuid: {
-          [Op.in]: options.uuids
-        }
-      })
-    }
-
-    if (options.withVideos === true) {
-      whereAnd.push(
-        literal(`(${getVideoLengthSelect()}) != 0`)
-      )
-    }
-
-    let attributesInclude: any[] = [ literal('0 as similarity') ]
-
-    if (options.search) {
-      const escapedSearch = VideoPlaylistModel.sequelize.escape(options.search)
-      const escapedLikeSearch = VideoPlaylistModel.sequelize.escape('%' + options.search + '%')
-      attributesInclude = [ createSimilarityAttribute('VideoPlaylistModel.name', options.search) ]
-
-      whereAnd.push({
-        [Op.or]: [
-          Sequelize.literal(
-            'lower(immutable_unaccent("VideoPlaylistModel"."name")) % lower(immutable_unaccent(' + escapedSearch + '))'
-          ),
-          Sequelize.literal(
-            'lower(immutable_unaccent("VideoPlaylistModel"."name")) LIKE lower(immutable_unaccent(' + escapedLikeSearch + '))'
-          )
-        ]
-      })
-    }
-
-    const where = {
-      [Op.and]: whereAnd
-    }
-
-    const include: Includeable[] = [
-      {
-        model: AccountModel.scope({
-          method: [ AccountScopeNames.SUMMARY, { whereActor, whereServer, forCount: options.forCount } as SummaryOptions ]
-        }),
-        required: true
-      }
-    ]
-
-    if (options.forCount !== true) {
-      include.push({
-        model: VideoChannelModel.scope(VideoChannelScopeNames.SUMMARY),
-        required: false
-      })
-    }
-
-    return {
-      attributes: {
-        include: attributesInclude
-      },
-      where,
-      include
-    } as FindOptions
   }
 }))
-
 @Table({
   tableName: 'videoPlaylist',
   indexes: [
@@ -289,45 +155,49 @@ function getVideoLengthSelect () {
 })
 export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @AllowNull(false)
   @Is('VideoPlaylistName', value => throwIfNotValid(value, isVideoPlaylistNameValid, 'name'))
   @Column
-  name: string
+  declare name: string
 
   @AllowNull(true)
   @Is('VideoPlaylistDescription', value => throwIfNotValid(value, isVideoPlaylistDescriptionValid, 'description', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_PLAYLISTS.DESCRIPTION.max))
-  description: string
+  declare description: string
 
   @AllowNull(false)
   @Is('VideoPlaylistPrivacy', value => throwIfNotValid(value, isVideoPlaylistPrivacyValid, 'privacy'))
   @Column
-  privacy: VideoPlaylistPrivacyType
+  declare privacy: VideoPlaylistPrivacyType
 
   @AllowNull(false)
   @Is('VideoPlaylistUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_PLAYLISTS.URL.max))
-  url: string
+  declare url: string
 
   @AllowNull(false)
   @Default(DataType.UUIDV4)
   @IsUUID(4)
   @Column(DataType.UUID)
-  uuid: string
+  declare uuid: string
 
   @AllowNull(false)
   @Default(VideoPlaylistType.REGULAR)
   @Column
-  type: VideoPlaylistType_Type
+  declare type: VideoPlaylistType_Type
+
+  @AllowNull(true)
+  @Column
+  declare videoChannelPosition: number
 
   @ForeignKey(() => AccountModel)
   @Column
-  ownerAccountId: number
+  declare ownerAccountId: number
 
   @BelongsTo(() => AccountModel, {
     foreignKey: {
@@ -335,11 +205,11 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
     },
     onDelete: 'CASCADE'
   })
-  OwnerAccount: Awaited<AccountModel>
+  declare OwnerAccount: Awaited<AccountModel>
 
   @ForeignKey(() => VideoChannelModel)
   @Column
-  videoChannelId: number
+  declare videoChannelId: number
 
   @BelongsTo(() => VideoChannelModel, {
     foreignKey: {
@@ -347,7 +217,7 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
     },
     onDelete: 'CASCADE'
   })
-  VideoChannel: Awaited<VideoChannelModel>
+  declare VideoChannel: Awaited<VideoChannelModel>
 
   @HasMany(() => VideoPlaylistElementModel, {
     foreignKey: {
@@ -356,7 +226,7 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
     },
     onDelete: 'CASCADE'
   })
-  VideoPlaylistElements: Awaited<VideoPlaylistElementModel>[]
+  declare VideoPlaylistElements: Awaited<VideoPlaylistElementModel>[]
 
   @HasOne(() => ThumbnailModel, {
     foreignKey: {
@@ -366,72 +236,41 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
     onDelete: 'CASCADE',
     hooks: true
   })
-  Thumbnail: Awaited<ThumbnailModel>
+  declare Thumbnail: Awaited<ThumbnailModel>
 
-  static listForApi (options: AvailableForListOptions & {
-    start: number
-    count: number
-    sort: string
-  }) {
-    const query = {
-      offset: options.start,
-      limit: options.count,
-      order: getPlaylistSort(options.sort)
-    }
+  // ---------------------------------------------------------------------------
 
-    const commonAvailableForListOptions = pick(options, [
-      'type',
-      'followerActorId',
-      'accountId',
-      'videoChannelId',
-      'listMyPlaylists',
-      'search',
-      'host',
-      'uuids'
-    ])
-
-    const scopesFind: (string | ScopeOptions)[] = [
-      {
-        method: [
-          ScopeNames.AVAILABLE_FOR_LIST,
-          {
-            ...commonAvailableForListOptions,
-
-            withVideos: options.withVideos || false
-          } as AvailableForListOptions
-        ]
-      },
-      ScopeNames.WITH_VIDEOS_LENGTH,
-      ScopeNames.WITH_THUMBNAIL
-    ]
-
-    const scopesCount: (string | ScopeOptions)[] = [
-      {
-        method: [
-          ScopeNames.AVAILABLE_FOR_LIST,
-
-          {
-            ...commonAvailableForListOptions,
-
-            withVideos: options.withVideos || false,
-            forCount: true
-          } as AvailableForListOptions
-        ]
-      },
-      ScopeNames.WITH_VIDEOS_LENGTH
-    ]
-
-    return Promise.all([
-      VideoPlaylistModel.scope(scopesCount).count(),
-      VideoPlaylistModel.scope(scopesFind).findAll(query)
-    ]).then(([ count, rows ]) => ({ total: count, data: rows }))
+  static getSQLAttributes (tableName: string, aliasPrefix = '') {
+    return buildSQLAttributes({
+      model: this,
+      tableName,
+      aliasPrefix
+    })
   }
 
-  static searchForApi (options: Pick<AvailableForListOptions, 'followerActorId' | 'search' | 'host' | 'uuids'> & {
-    start: number
-    count: number
-    sort: string
-  }) {
+  static getSQLSummaryAttributes (tableName: string, aliasPrefix = '') {
+    return buildSQLAttributes({
+      model: this,
+      tableName,
+      aliasPrefix,
+      includeAttributes: [ 'id', 'name', 'type' ]
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  static listForApi (options: ListVideoPlaylistsOptions) {
+    return Promise.all([
+      new VideoPlaylistListQueryBuilder(VideoPlaylistModel.sequelize, options).list<MVideoPlaylistFormattable>(),
+      new VideoPlaylistListQueryBuilder(VideoPlaylistModel.sequelize, options).count()
+    ]).then(([ rows, count ]) => {
+      return { total: count, data: rows }
+    })
+  }
+
+  static searchForApi (
+    options: Pick<ListVideoPlaylistsOptions, 'followerActorId' | 'search' | 'host' | 'uuids' | 'start' | 'count' | 'sort'>
+  ) {
     return VideoPlaylistModel.listForApi({
       ...options,
 
@@ -505,6 +344,18 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
           ownerAccountId: accountId
         },
         limit: USER_EXPORT_MAX_ITEMS
+      })
+  }
+
+  static listPlaylistOfChannel (channelId: number, transaction: Transaction): Promise<MVideoPlaylistFull[]> {
+    return VideoPlaylistModel
+      .scope([ ScopeNames.WITH_ACCOUNT_AND_CHANNEL, ScopeNames.WITH_VIDEOS_LENGTH, ScopeNames.WITH_THUMBNAIL ])
+      .findAll({
+        where: {
+          videoChannelId: channelId
+        },
+        limit: 150,
+        transaction
       })
   }
 
@@ -597,6 +448,64 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
       .findOne(query)
   }
 
+  // ---------------------------------------------------------------------------
+
+  static getNextPositionOf (options: {
+    videoChannelId: number
+    transaction?: Transaction
+  }) {
+    const { videoChannelId, transaction } = options
+
+    return getNextPositionOf({
+      model: VideoPlaylistModel,
+      columnName: 'videoChannelPosition',
+      where: { videoChannelId },
+      transaction
+    })
+  }
+
+  static reassignPositionOf (options: {
+    videoChannelId: number
+    firstPosition: number
+    endPosition: number
+    newPosition: number
+    transaction?: Transaction
+  }) {
+    const { videoChannelId, firstPosition, endPosition, newPosition, transaction } = options
+
+    return reassignPositionOf({
+      model: VideoPlaylistModel,
+      columnName: 'videoChannelPosition',
+      where: { videoChannelId },
+      transaction,
+
+      firstPosition,
+      endPosition,
+      newPosition
+    })
+  }
+
+  static increasePositionOf (options: {
+    videoChannelId: number
+    fromPosition: number
+    by: number
+    transaction?: Transaction
+  }) {
+    const { videoChannelId, fromPosition, by, transaction } = options
+
+    return increasePositionOf({
+      model: VideoPlaylistModel,
+      columnName: 'videoChannelPosition',
+      where: { videoChannelId },
+      transaction,
+
+      fromPosition,
+      by
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
   static getPrivacyLabel (privacy: VideoPlaylistPrivacyType) {
     return VIDEO_PLAYLIST_PRIVACIES[privacy] || 'Unknown'
   }
@@ -613,7 +522,11 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
       transaction
     }
 
-    return VideoPlaylistModel.update({ privacy: VideoPlaylistPrivacy.PRIVATE, videoChannelId: null }, query)
+    return VideoPlaylistModel.update({
+      privacy: VideoPlaylistPrivacy.PRIVATE,
+      videoChannelId: null,
+      videoChannelPosition: null
+    }, query)
   }
 
   async setAndSaveThumbnail (thumbnail: MThumbnail, t: Transaction) {
@@ -660,7 +573,7 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
   }
 
   getEmbedStaticPath () {
-    return buildPlaylistEmbedPath(this)
+    return buildPlaylistEmbedPath({ shortUUID: uuidToShort(this.uuid) })
   }
 
   static async getStats () {
@@ -698,12 +611,12 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
     this.set('videosLength' as any, videosLength, { raw: true })
   }
 
-  isOwned () {
-    return this.OwnerAccount.isOwned()
+  isLocal () {
+    return this.OwnerAccount.isLocal()
   }
 
   isOutdated () {
-    if (this.isOwned()) return false
+    if (this.isLocal()) return false
 
     return isOutdated(this, ACTIVITY_PUB.VIDEO_PLAYLIST_REFRESH_INTERVAL)
   }
@@ -714,7 +627,7 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
       uuid: this.uuid,
       shortUUID: uuidToShort(this.uuid),
 
-      isLocal: this.isOwned(),
+      isLocal: this.isLocal(),
 
       url: this.url,
 
@@ -739,6 +652,8 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
       updatedAt: this.updatedAt,
 
       ownerAccount: this.OwnerAccount.toFormattedSummaryJSON(),
+
+      videoChannelPosition: this.videoChannelPosition,
       videoChannel: this.VideoChannel
         ? this.VideoChannel.toFormattedSummaryJSON()
         : null
@@ -769,6 +684,7 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
           content: this.description,
           mediaType: 'text/markdown' as 'text/markdown',
           uuid: this.uuid,
+          videoChannelPosition: this.videoChannelPosition,
           published: this.createdAt.toISOString(),
           updated: this.updatedAt.toISOString(),
           attributedTo: this.VideoChannel ? [ this.VideoChannel.Actor.url ] : [],

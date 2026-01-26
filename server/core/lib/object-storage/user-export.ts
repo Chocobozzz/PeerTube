@@ -9,7 +9,8 @@ export function storeUserExportFile (stream: Readable, userExport: MUserExport) 
     stream,
     objectStorageKey: generateUserExportObjectStorageKey(userExport.filename),
     bucketInfo: CONFIG.OBJECT_STORAGE.USER_EXPORTS,
-    isPrivate: true
+    isPrivate: true,
+    contentType: 'application/zip'
   })
 }
 

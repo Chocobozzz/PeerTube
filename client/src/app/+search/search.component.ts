@@ -1,5 +1,5 @@
-import { NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { NgTemplateOutlet } from '@angular/common'
+import { Component, inject, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, HooksService, MetaService, Notifier, ServerService, User, UserService } from '@app/core'
 import { immutableAssign, SimpleMemoize } from '@app/helpers'
@@ -27,13 +27,10 @@ import { SearchFiltersComponent } from './search-filters.component'
   selector: 'my-search',
   styleUrls: [ './search.component.scss' ],
   templateUrl: './search.component.html',
-  standalone: true,
   imports: [
     InfiniteScrollerDirective,
-    NgIf,
     NgbCollapse,
     SearchFiltersComponent,
-    NgFor,
     ActorAvatarComponent,
     RouterLink,
     NgTemplateOutlet,
@@ -46,6 +43,16 @@ import { SearchFiltersComponent } from './search-filters.component'
   ]
 })
 export class SearchComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute)
+  private router = inject(Router)
+  private metaService = inject(MetaService)
+  private notifier = inject(Notifier)
+  private searchService = inject(SearchService)
+  private authService = inject(AuthService)
+  private userService = inject(UserService)
+  private hooks = inject(HooksService)
+  private serverService = inject(ServerService)
+
   error: string
 
   results: (Video | VideoChannel | VideoPlaylist)[] = []
@@ -65,10 +72,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     views: true,
     by: true,
     avatar: true,
-    privacyLabel: false,
-    privacyText: false,
-    state: false,
-    blacklistInfo: false
+    privacyLabel: false
   }
 
   errorMessage: string
@@ -86,18 +90,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   private lastSearchTarget: SearchTargetType
 
   private serverConfig: HTMLServerConfig
-
-  constructor (
-    private route: ActivatedRoute,
-    private router: Router,
-    private metaService: MetaService,
-    private notifier: Notifier,
-    private searchService: SearchService,
-    private authService: AuthService,
-    private userService: UserService,
-    private hooks: HooksService,
-    private serverService: ServerService
-  ) { }
 
   ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
@@ -131,7 +123,7 @@ export class SearchComponent implements OnInit, OnDestroy {
           this.search()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
 
     this.userService.getAnonymousOrLoggedUser()
@@ -191,7 +183,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         }
 
         this.notifier.error(
-          $localize`Search index is unavailable. Retrying with instance results instead.`,
+          $localize`Search index is unavailable. Retrying with local platform results instead.`,
           $localize`Search error`
         )
         this.advancedSearch.searchTarget = 'local'
@@ -368,7 +360,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   private checkFieldsAndGetError () {
     if (this.advancedSearch.host && !validateHost(this.advancedSearch.host)) {
-      return $localize`PeerTube instance host filter is invalid`
+      return $localize`Host filter is invalid`
     }
 
     return undefined

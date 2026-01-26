@@ -11,13 +11,13 @@ import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../../initializers/constants.j
 import {
   areValidationErrors,
   checkCanSeeVideo,
-  checkUserCanManageVideo,
+  checkCanManageVideo,
   doesVideoCaptionExist,
   doesVideoExist,
   isValidVideoIdParam,
   isValidVideoPasswordHeader
 } from '../shared/index.js'
-import { checkVideoCanBeTranscribedOrTranscripted } from './shared/video-validators.js'
+import { checkVideoCanBeTranscribed } from './shared/video-validators.js'
 
 export const addVideoCaptionValidator = [
   isValidVideoIdParam('videoId'),
@@ -29,9 +29,9 @@ export const addVideoCaptionValidator = [
     .custom((_, { req }) => isVideoCaptionFile(req.files, 'captionfile'))
     .withMessage(
       'This caption file is not supported or too large. ' +
-      `Please, make sure it is under ${CONSTRAINTS_FIELDS.VIDEO_CAPTIONS.CAPTION_FILE.FILE_SIZE.max} bytes ` +
-      'and one of the following mimetypes: ' +
-      Object.keys(MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT).map(key => `${key} (${MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT[key]})`).join(', ')
+        `Please, make sure it is under ${CONSTRAINTS_FIELDS.VIDEO_CAPTIONS.CAPTION_FILE.FILE_SIZE.max} bytes ` +
+        'and one of the following mimetypes: ' +
+        Object.keys(MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT).map(key => `${key} (${MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT[key]})`).join(', ')
     ),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -40,7 +40,19 @@ export const addVideoCaptionValidator = [
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.UPDATE_ANY_VIDEO, res)) return cleanUpReqFiles(req)
+    if (
+      !await checkCanManageVideo({
+        user,
+        video: res.locals.videoAll,
+        right: UserRight.UPDATE_ANY_VIDEO,
+        req,
+        res,
+        checkIsLocal: true,
+        checkIsOwner: false
+      })
+    ) {
+      return cleanUpReqFiles(req)
+    }
 
     return next()
   }
@@ -68,11 +80,13 @@ export const generateVideoCaptionValidator = [
 
     const video = res.locals.videoAll
 
-    if (!checkVideoCanBeTranscribedOrTranscripted(video, res)) return
+    if (!checkVideoCanBeTranscribed(video, req, res)) return
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, video, UserRight.UPDATE_ANY_VIDEO, res)) return
+    if (!await checkCanManageVideo({ user, video, right: UserRight.UPDATE_ANY_VIDEO, req, res, checkIsLocal: true, checkIsOwner: false })) {
+      return
+    }
 
     // Check the video has not already a caption
     const captions = await VideoCaptionModel.listVideoCaptions(video.id)
@@ -123,7 +137,17 @@ export const deleteVideoCaptionValidator = [
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.UPDATE_ANY_VIDEO, res)) return
+    if (
+      !await checkCanManageVideo({
+        user,
+        video: res.locals.videoAll,
+        right: UserRight.UPDATE_ANY_VIDEO,
+        req,
+        res,
+        checkIsLocal: true,
+        checkIsOwner: false
+      })
+    ) return
 
     return next()
   }

@@ -1,6 +1,6 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_form-mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
 
 my-timestamp-input {
   width: 100px;
@@ -15,7 +15,7 @@ my-input-text {
 }
 
 .peertube-select-container {
-  @include peertube-select-container(200px);
+  @include responsive-width(200px);
 }
 
 .qr-code-group {

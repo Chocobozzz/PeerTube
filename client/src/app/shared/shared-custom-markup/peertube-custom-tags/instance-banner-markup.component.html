@@ -1,3 +1,5 @@
-<div class="banner" *ngIf="instanceBannerUrl">
-  <img [src]="instanceBannerUrl" alt="Instance banner">
-</div>
+@if (instanceBannerUrl) {
+  <div class="banner">
+    <img [src]="instanceBannerUrl" alt="Instance banner">
+  </div>
+}

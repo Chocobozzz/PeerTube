@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 import { getAllFiles, wait } from '@peertube/peertube-core-utils'
-import { VideoPrivacy } from '@peertube/peertube-models'
+import { VideoPrivacy, VideoResolution } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
@@ -304,7 +304,6 @@ describe('Test VOD transcoding in peertube-runner program', function () {
     const resolutions = 'max'
 
     describe('Web video only enabled', function () {
-
       before(async function () {
         await servers[0].config.enableTranscoding({ resolutions, webVideo: true, hls: false, with0p: true })
       })
@@ -313,7 +312,6 @@ describe('Test VOD transcoding in peertube-runner program', function () {
     })
 
     describe('HLS videos only enabled', function () {
-
       before(async function () {
         await servers[0].config.enableTranscoding({ resolutions, webVideo: false, hls: true, with0p: true })
       })
@@ -322,7 +320,6 @@ describe('Test VOD transcoding in peertube-runner program', function () {
     })
 
     describe('HLS only with separated audio only enabled', function () {
-
       before(async function () {
         await servers[0].config.enableTranscoding({ resolutions, webVideo: false, hls: true, splitAudioAndVideo: true, with0p: true })
       })
@@ -331,7 +328,6 @@ describe('Test VOD transcoding in peertube-runner program', function () {
     })
 
     describe('Web video & HLS with separated audio only enabled', function () {
-
       before(async function () {
         await servers[0].config.enableTranscoding({ resolutions, hls: true, webVideo: true, splitAudioAndVideo: true, with0p: true })
       })
@@ -340,7 +336,6 @@ describe('Test VOD transcoding in peertube-runner program', function () {
     })
 
     describe('Web video & HLS enabled', function () {
-
       before(async function () {
         await servers[0].config.enableTranscoding({ resolutions, hls: true, webVideo: true, with0p: true, splitAudioAndVideo: false })
       })
@@ -350,12 +345,10 @@ describe('Test VOD transcoding in peertube-runner program', function () {
   }
 
   describe('With videos on local filesystem storage', function () {
-
     runSuites()
 
     describe('Common', function () {
-
-      it('Should cap max FPS', async function () {
+      it('Should cap max FPS with HLS and Web Videos enabled', async function () {
         this.timeout(120_000)
 
         await servers[0].config.enableTranscoding({ maxFPS: 15, resolutions: [ 240, 480, 720 ], hls: true, webVideo: true })
@@ -368,11 +361,14 @@ describe('Test VOD transcoding in peertube-runner program', function () {
         expect(video.files).to.have.lengthOf(3)
         expect(hlsFiles).to.have.lengthOf(3)
 
-        const fpsArray = getAllFiles(video).map(f => f.fps)
+        const files = getAllFiles(video)
+        const file720p = files.find(f => f.resolution.id === VideoResolution.H_720P)
+        const file480p = files.find(f => f.resolution.id === VideoResolution.H_480P)
+        const file240p = files.find(f => f.resolution.id === VideoResolution.H_240P)
 
-        for (const fps of fpsArray) {
-          expect(fps).to.be.at.most(15)
-        }
+        expect(file720p.fps).to.at.least(22)
+        expect(file480p.fps).to.be.at.most(15)
+        expect(file240p.fps).to.be.at.most(15)
       })
 
       it('Should not generate an upper resolution than original file', async function () {
@@ -423,7 +419,6 @@ describe('Test VOD transcoding in peertube-runner program', function () {
   })
 
   describe('Check cleanup', function () {
-
     it('Should have an empty cache directory', async function () {
       await checkPeerTubeRunnerCacheIsEmpty(peertubeRunner, 'transcoding')
     })

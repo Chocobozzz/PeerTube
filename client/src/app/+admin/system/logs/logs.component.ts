@@ -1,10 +1,9 @@
-import { NgClass, NgFor, NgIf } from '@angular/common'
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
+import { NgClass } from '@angular/common'
+import { Component, ElementRef, OnInit, inject, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { LocalStorageService, Notifier } from '@app/core'
 import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-options.component'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
-import { PeerTubeTemplateDirective } from '@app/shared/shared-main/common/peertube-template.directive'
 import { ServerLogLevel } from '@peertube/peertube-models'
 import { SelectTagsComponent } from '../../../shared/shared-forms/select/select-tags.component'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
@@ -15,25 +14,25 @@ import { LogsService } from './logs.service'
 @Component({
   templateUrl: './logs.component.html',
   styleUrls: [ './logs.component.scss' ],
-  standalone: true,
   imports: [
     FormsModule,
-    NgFor,
-    NgIf,
     NgClass,
     SelectTagsComponent,
     ButtonComponent,
     PTDatePipe,
     CopyButtonComponent,
-    SelectOptionsComponent,
-    PeerTubeTemplateDirective
+    SelectOptionsComponent
   ]
 })
 export class LogsComponent implements OnInit {
+  private logsService = inject(LogsService)
+  private notifier = inject(Notifier)
+  private localStorage = inject(LocalStorageService)
+
   private static LS_LOG_TYPE_CHOICE_KEY = 'admin-logs-log-type-choice'
 
-  @ViewChild('logsElement', { static: true }) logsElement: ElementRef<HTMLElement>
-  @ViewChild('logsContent', { static: true }) logsContent: ElementRef<HTMLElement>
+  readonly logsElement = viewChild<ElementRef<HTMLElement>>('logsElement')
+  readonly logsContent = viewChild<ElementRef<HTMLElement>>('logsContent')
 
   loading = false
 
@@ -48,12 +47,6 @@ export class LogsComponent implements OnInit {
   level: ServerLogLevel
   logType: 'audit' | 'standard'
   tagsOneOf: string[] = []
-
-  constructor (
-    private logsService: LogsService,
-    private notifier: Notifier,
-    private localStorage: LocalStorageService
-  ) { }
 
   ngOnInit (): void {
     this.buildTimeChoices()
@@ -92,11 +85,11 @@ export class LogsComponent implements OnInit {
         this.rawLogs = this.logs.map(l => `${l.level} ${l.localeDate} ${l.message} ${l.meta}`).join('\n')
 
         setTimeout(() => {
-          this.logsElement.nativeElement.scrollIntoView({ block: 'end', inline: 'nearest' })
+          this.logsElement().nativeElement.scrollIntoView({ block: 'end', inline: 'nearest' })
         })
       },
 
-      error: err => this.notifier.error(err.message),
+      error: err => this.notifier.handleError(err),
 
       complete: () => this.loading = false
     })

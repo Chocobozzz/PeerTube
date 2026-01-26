@@ -1,6 +1,7 @@
 <ng-template #modal let-hide="close">
   <div class="modal-header">
     <h4 i18n class="modal-title">Welcome to {{ instanceName }}, dear user!</h4>
+
     <button class="border-0 p-0" title="Close this modal" i18n-title (click)="hide()">
       <my-global-icon iconName="cross"></my-global-icon>
     </button>
@@ -14,8 +15,13 @@
     <p i18n>Help moderators and other users to know <strong>who you are</strong> by:</p>
 
     <ul>
-      <li *ngIf="!hasAccountAvatar(user)" i18n>Uploading an <strong>avatar</strong></li>
-      <li *ngIf="!hasAccountDescription(user)" i18n>Writing a <strong>description</strong></li>
+      @if (!hasAccountAvatar(user)) {
+        <li i18n>Uploading an <strong>avatar</strong></li>
+      }
+
+      @if (!hasAccountDescription(user)) {
+        <li i18n>Writing a <strong>description</strong></li>
+      }
     </ul>
   </div>
 
@@ -23,19 +29,17 @@
     <my-peertube-checkbox
       inputName="stopDisplayModal" [(ngModel)]="stopDisplayModal"
       i18n-labelText labelText="Don't show me this anymore"
-    >
+      >
     </my-peertube-checkbox>
 
     <input
       type="button" role="button" i18n-value value="Close" class="peertube-button secondary-button"
       (click)="hide()" (key.enter)="hide()"
-    >
+      >
 
     <a i18n (click)="hide()" (key.enter)="hide()"
-       class="peertube-button-link primary-button" routerLink="/my-account"
-       rel="noopener noreferrer" ngbAutofocus>
-      Set up
-    </a>
+      class="peertube-button-link primary-button" routerLink="/my-account"
+      rel="noopener noreferrer" ngbAutofocus>Set up</a>
   </div>
 
 </ng-template>

@@ -1,0 +1,31 @@
+<div class="root">
+  <div class="root-bar">
+    <h2>{{ title() }}</h2>
+
+    <div class="buttons">
+      <my-button theme="secondary" class="pre-config" (click)="openConfigWizard()" i18n>Open config wizard</my-button>
+
+      <my-button form="admin-config-form" theme="primary" class="save-button" icon="circle-tick" [disabled]="!canUpdate()" (click)="onSave($event)" i18n>Save</my-button>
+    </div>
+  </div>
+
+  @if (!isUpdateAllowed()) {
+    <my-alert type="primary" i18n class="d-block mt-3">
+      Updating platform configuration from the web interface is disabled by the system administrator.
+    </my-alert>
+  } @else if (displayFormErrors && !form().valid) {
+    <my-alert type="danger" class="d-block mt-3">
+      <ng-container i18n>There are errors in the configuration:</ng-container>
+
+      <ul class="mb-0">
+        @for (error of grabAllErrors(); track error) {
+          <li>{{ error }}</li>
+        }
+      </ul>
+    </my-alert>
+  }
+
+  @if (inconsistentOptions()) {
+    <my-alert type="danger" class="d-block mt-3">{{ inconsistentOptions() }}</my-alert>
+  }
+</div>

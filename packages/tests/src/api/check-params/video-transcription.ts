@@ -14,10 +14,12 @@ describe('Test video transcription API validator', function () {
   let servers: PeerTubeServer[]
 
   let userToken: string
+  let editorToken: string
   let anotherUserToken: string
 
   let remoteId: string
   let validId: string
+  let validId2: string
 
   // ---------------------------------------------------------------
 
@@ -31,6 +33,7 @@ describe('Test video transcription API validator', function () {
 
     userToken = await servers[0].users.generateUserAndToken('user', UserRole.USER)
     anotherUserToken = await servers[0].users.generateUserAndToken('user2', UserRole.USER)
+    editorToken = await servers[0].channelCollaborators.createEditor('editor', 'user_channel')
 
     {
       const { uuid } = await servers[1].videos.quickUpload({ name: 'remote video' })
@@ -40,6 +43,11 @@ describe('Test video transcription API validator', function () {
     {
       const { uuid } = await servers[0].videos.quickUpload({ name: 'both 1', token: userToken })
       validId = uuid
+    }
+
+    {
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'both 2', token: userToken })
+      validId2 = uuid
     }
 
     await waitJobs(servers)
@@ -55,7 +63,7 @@ describe('Test video transcription API validator', function () {
     await servers[0].captions.runGenerate({ videoId: remoteId, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
   })
 
-  it('Should not run transcription by a owner/moderator user', async function () {
+  it('Should not run transcription by a non owner/moderator user', async function () {
     await servers[0].captions.runGenerate({ videoId: validId, token: anotherUserToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
   })
 
@@ -81,6 +89,7 @@ describe('Test video transcription API validator', function () {
 
   it('Should succeed to run transcription', async function () {
     await servers[0].captions.runGenerate({ videoId: validId, token: userToken })
+    await servers[0].captions.runGenerate({ videoId: validId2, token: editorToken })
   })
 
   it('Should fail to run transcription twice', async function () {

@@ -25,21 +25,20 @@ import { pick } from '@peertube/peertube-core-utils'
   ]
 })
 export class VideoPasswordModel extends SequelizeModel<VideoPasswordModel> {
-
   @AllowNull(false)
   @Is('VideoPassword', value => throwIfNotValid(value, isPasswordValid, 'videoPassword'))
   @Column
-  password: string
+  declare password: string
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -47,7 +46,7 @@ export class VideoPasswordModel extends SequelizeModel<VideoPasswordModel> {
     },
     onDelete: 'cascade'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   static async countByVideoId (videoId: number, t?: Transaction) {
     const query = {
@@ -93,11 +92,15 @@ export class VideoPasswordModel extends SequelizeModel<VideoPasswordModel> {
 
   static async addPasswords (passwords: string[], videoId: number, transaction?: Transaction): Promise<void> {
     for (const password of passwords) {
-      await VideoPasswordModel.create({
-        password,
-        videoId
-      }, { transaction })
+      await VideoPasswordModel.addPassword(password, videoId, transaction)
     }
+  }
+
+  static async addPassword (password: string, videoId: number, transaction?: Transaction): Promise<VideoPasswordModel> {
+    return await VideoPasswordModel.create({
+      password,
+      videoId
+    }, { transaction })
   }
 
   static async deleteAllPasswords (videoId: number, transaction?: Transaction) {

@@ -1,8 +1,7 @@
-import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { CommonModule, NgTemplateOutlet } from '@angular/common'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
-import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { AuthService, Notifier, ScreenService, ServerService, User, UserService } from '@app/core'
 import {
   USER_EMAIL_VALIDATOR,
@@ -10,6 +9,7 @@ import {
   USER_VIDEO_QUOTA_DAILY_VALIDATOR,
   USER_VIDEO_QUOTA_VALIDATOR
 } from '@app/shared/form-validators/user-validators'
+import { AdminConfigService } from '@app/shared/shared-admin/admin-config.service'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { TwoFactorService } from '@app/shared/shared-users/two-factor.service'
@@ -20,56 +20,51 @@ import { ActorAvatarEditComponent } from '../../../../shared/shared-actor-image-
 import { InputTextComponent } from '../../../../shared/shared-forms/input-text.component'
 import { PeertubeCheckboxComponent } from '../../../../shared/shared-forms/peertube-checkbox.component'
 import { SelectCustomValueComponent } from '../../../../shared/shared-forms/select/select-custom-value.component'
-import { HelpComponent } from '../../../../shared/shared-main/buttons/help.component'
 import { BytesPipe } from '../../../../shared/shared-main/common/bytes.pipe'
-import { PeerTubeTemplateDirective } from '../../../../shared/shared-main/common/peertube-template.directive'
 import { UserRealQuotaInfoComponent } from '../../../shared/user-real-quota-info.component'
 import { UserEdit } from './user-edit'
 import { UserPasswordComponent } from './user-password.component'
+import { AccountTokenSessionsComponent } from '@app/shared/shared-users/account-token-sessions.component'
 
 @Component({
   selector: 'my-user-update',
   templateUrl: './user-edit.component.html',
   styleUrls: [ './user-edit.component.scss' ],
-  standalone: true,
   imports: [
     RouterLink,
-    NgIf,
     NgTemplateOutlet,
     ActorAvatarEditComponent,
     FormsModule,
     ReactiveFormsModule,
-    NgClass,
-    HelpComponent,
-    PeerTubeTemplateDirective,
+    CommonModule,
     InputTextComponent,
-    NgFor,
     SelectCustomValueComponent,
     UserRealQuotaInfoComponent,
     PeertubeCheckboxComponent,
     UserPasswordComponent,
+    AccountTokenSessionsComponent,
     BytesPipe,
     AlertComponent
   ]
 })
 export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
+  protected formReactiveService = inject(FormReactiveService)
+  protected serverService = inject(ServerService)
+  protected configService = inject(AdminConfigService)
+  protected screenService = inject(ScreenService)
+  protected auth = inject(AuthService)
+  private route = inject(ActivatedRoute)
+  private router = inject(Router)
+  private notifier = inject(Notifier)
+  private userService = inject(UserService)
+  private twoFactorService = inject(TwoFactorService)
+  private userAdminService = inject(UserAdminService)
+
   error: string
 
   private paramsSub: Subscription
 
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    protected serverService: ServerService,
-    protected configService: ConfigService,
-    protected screenService: ScreenService,
-    protected auth: AuthService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private notifier: Notifier,
-    private userService: UserService,
-    private twoFactorService: TwoFactorService,
-    private userAdminService: UserAdminService
-  ) {
+  constructor () {
     super()
 
     this.buildQuotaOptions()
@@ -154,7 +149,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
           this.notifier.success($localize`An email asking for password reset has been sent to ${this.user.username}.`)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -167,9 +162,8 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
           this.notifier.success($localize`Two factor authentication of ${this.user.username} disabled.`)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
-
   }
 
   private onUserFetched (userJson: UserType) {

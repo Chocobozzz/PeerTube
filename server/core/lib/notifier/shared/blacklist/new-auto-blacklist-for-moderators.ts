@@ -1,6 +1,8 @@
 import { UserNotificationType, UserRight } from '@peertube/peertube-models'
+import { tu } from '@server/helpers/i18n.js'
 import { logger } from '@server/helpers/logger.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
+import { videoAutoBlacklistUrl } from '@server/lib/client-urls.js'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
 import { UserModel } from '@server/models/user/user.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
@@ -12,7 +14,7 @@ import {
 } from '@server/types/models/index.js'
 import { AbstractNotification } from '../common/abstract-notification.js'
 
-export class NewAutoBlacklistForModerators extends AbstractNotification <MVideoBlacklistLightVideo> {
+export class NewAutoBlacklistForModerators extends AbstractNotification<MVideoBlacklistLightVideo> {
   private moderators: MUserDefault[]
 
   async prepare () {
@@ -42,21 +44,21 @@ export class NewAutoBlacklistForModerators extends AbstractNotification <MVideoB
     return notification
   }
 
-  async createEmail (to: string) {
-    const videoAutoBlacklistUrl = WEBSERVER.URL + '/admin/moderation/video-blocks/list'
-    const videoUrl = WEBSERVER.URL + this.payload.Video.getWatchStaticPath()
-    const channel = await VideoChannelModel.loadAndPopulateAccount(this.payload.Video.channelId)
+  async createEmail (user: MUserWithNotificationSetting) {
+    const video = this.payload.Video
+    const channel = await VideoChannelModel.loadAndPopulateAccount(video.channelId)
 
     return {
       template: 'video-auto-blacklist-new',
-      to,
-      subject: 'A new video is pending moderation',
+      to: { email: user.email, language: user.getLanguage() },
+      subject: tu('A new video is pending moderation', user),
       locals: {
-        channel: channel.toFormattedSummaryJSON(),
-        videoUrl,
-        videoName: this.payload.Video.name,
+        channelDisplayName: channel.getDisplayName(),
+        channelUrl: channel.getClientUrl(),
+        videoUrl: WEBSERVER.URL + video.getWatchStaticPath(),
+        videoName: video.name,
         action: {
-          text: 'Review autoblacklist',
+          text: tu('Review video', user),
           url: videoAutoBlacklistUrl
         }
       }

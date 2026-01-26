@@ -60,7 +60,7 @@ export interface MergeAudioTranscodeOptions extends BaseTranscodeVODOptions {
 }
 
 export type TranscodeVODOptions =
-  HLSTranscodeOptions
+  | HLSTranscodeOptions
   | HLSFromTSTranscodeOptions
   | VideoTranscodeOptions
   | MergeAudioTranscodeOptions
@@ -79,7 +79,7 @@ export class FFmpegVOD {
 
   async transcode (options: TranscodeVODOptions) {
     const builders: {
-      [ type in TranscodeVODOptionsType ]: (options: TranscodeVODOptions) => Promise<void> | void
+      [type in TranscodeVODOptionsType]: (options: TranscodeVODOptions) => Promise<void> | void
     } = {
       'quick-transcode': this.buildQuickTranscodeCommand.bind(this),
       'hls': this.buildHLSVODCommand.bind(this),
@@ -108,11 +108,13 @@ export class FFmpegVOD {
     return this.ended
   }
 
-  private async buildVODCommand (options: TranscodeVODOptions & {
-    videoStreamOnly?: boolean
-    canCopyAudio?: boolean
-    canCopyVideo?: boolean
-  }) {
+  private async buildVODCommand (
+    options: TranscodeVODOptions & {
+      videoStreamOnly?: boolean
+      canCopyAudio?: boolean
+      canCopyVideo?: boolean
+    }
+  ) {
     const {
       resolution,
       fps,
@@ -227,6 +229,7 @@ export class FFmpegVOD {
     const videoPath = this.getHLSVideoPath(options)
 
     command.outputOption('-c copy')
+    command.outputOption('-copyts')
 
     if (options.isAAC) {
       // Required for example when copying an AAC stream from an MPEG-TS
@@ -239,12 +242,12 @@ export class FFmpegVOD {
 
   private addCommonHLSVODCommandOptions (command: FfmpegCommand, outputPath: string) {
     return command.outputOption('-hls_time 4')
-                  .outputOption('-hls_list_size 0')
-                  .outputOption('-hls_playlist_type vod')
-                  .outputOption('-hls_segment_filename ' + outputPath)
-                  .outputOption('-hls_segment_type fmp4')
-                  .outputOption('-f hls')
-                  .outputOption('-hls_flags single_file')
+      .outputOption('-hls_list_size 0')
+      .outputOption('-hls_playlist_type vod')
+      .outputOption('-hls_segment_filename ' + outputPath)
+      .outputOption('-hls_segment_type fmp4')
+      .outputOption('-f hls')
+      .outputOption('-hls_flags single_file')
   }
 
   private async fixHLSPlaylistIfNeeded (options: TranscodeVODOptions) {
@@ -257,7 +260,7 @@ export class FFmpegVOD {
 
     // Fix wrong mapping with some ffmpeg versions
     const newContent = fileContent.toString()
-                                  .replace(`#EXT-X-MAP:URI="${videoFilePath}",`, `#EXT-X-MAP:URI="${videoFileName}",`)
+      .replace(`#EXT-X-MAP:URI="${videoFilePath}",`, `#EXT-X-MAP:URI="${videoFileName}",`)
 
     await writeFile(options.outputPath, newContent)
   }

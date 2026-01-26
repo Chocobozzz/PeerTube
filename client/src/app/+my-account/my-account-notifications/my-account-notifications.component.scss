@@ -1,15 +1,11 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_button-mixins' as *;
-@use '_form-mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_button-mixins" as *;
+@use "_form-mixins" as *;
 
 .header {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-bottom: 1.25rem;
-
-  .peertube-select-container {
-    @include peertube-select-container(auto);
-  }
+  margin-bottom: 1.5rem;
 }

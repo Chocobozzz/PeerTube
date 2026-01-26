@@ -21,22 +21,21 @@ import { VideoAutomaticTagModel } from './video-automatic-tag.js'
   ]
 })
 export class AutomaticTagModel extends SequelizeModel<AutomaticTagModel> {
-
   @AllowNull(false)
   @Column
-  name: string
+  declare name: string
 
   @HasMany(() => CommentAutomaticTagModel, {
     foreignKey: 'automaticTagId',
     onDelete: 'CASCADE'
   })
-  CommentAutomaticTags: Awaited<CommentAutomaticTagModel>[]
+  declare CommentAutomaticTags: Awaited<CommentAutomaticTagModel>[]
 
   @HasMany(() => VideoAutomaticTagModel, {
     foreignKey: 'automaticTagId',
     onDelete: 'CASCADE'
   })
-  VideoAutomaticTags: Awaited<VideoAutomaticTagModel>[]
+  declare VideoAutomaticTags: Awaited<VideoAutomaticTagModel>[]
 
   @HasMany(() => AccountAutomaticTagPolicyModel, {
     foreignKey: {
@@ -45,7 +44,7 @@ export class AutomaticTagModel extends SequelizeModel<AutomaticTagModel> {
     },
     onDelete: 'cascade'
   })
-  AccountAutomaticTagPolicies: Awaited<AccountAutomaticTagPolicyModel>[]
+  declare AccountAutomaticTagPolicies: Awaited<AccountAutomaticTagPolicyModel>[]
 
   static findOrCreateAutomaticTag (options: {
     tag: string

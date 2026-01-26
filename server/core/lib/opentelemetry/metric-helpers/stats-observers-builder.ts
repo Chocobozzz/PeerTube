@@ -5,13 +5,11 @@ import { buildAvailableActivities } from '@server/lib/activitypub/activity.js'
 import { StatsManager } from '@server/lib/stat-manager.js'
 
 export class StatsObserversBuilder {
-
   private readonly getInstanceStats = memoizee(() => {
     return StatsManager.Instance.getStats()
   }, { maxAge: MEMOIZE_TTL.GET_STATS_FOR_OPEN_TELEMETRY_METRICS })
 
   constructor (private readonly meter: Meter) {
-
   }
 
   buildObservers () {
@@ -147,6 +145,8 @@ export class StatsObserversBuilder {
       const stats = await this.getInstanceStats()
 
       for (const r of stats.videosRedundancy) {
+        if (r.totalSize === 0) continue
+
         observableResult.observe(r.totalSize, { strategy: r.strategy })
       }
     })

@@ -3,79 +3,24 @@
 @use '_mixins' as *;
 @use '_form-mixins' as *;
 
-$nav-preview-tab-height: 30px;
-$base-padding: 15px;
-$input-border-radius: 3px;
-
 .root {
   display: flex;
   flex-direction: column;
 
   textarea {
-    @include peertube-textarea(100%, 150px);
-
-    & {
-      color: pvar(--textarea-fg);
-      background-color: pvar(--textarea-bg);
-
-      font-family: monospace;
-      font-size: 14px;
-      border-bottom: 0;
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-    }
+    @include peertube-textarea(100%, 170px);
   }
 
-  .nav-preview {
-    padding: 10px 0;
-
-    border: 1px solid pvar(--input-border-color);
-    border-top: 1px dashed pvar(--input-border-color);
-
-    border-bottom-right-radius: $input-border-radius;
-    border-bottom-left-radius: $input-border-radius;
-
-    display: flex;
-    flex-grow: 1;
-    border-bottom-left-radius: unset;
-    border-bottom-right-radius: unset;
-    border-bottom: 2px solid pvar(--primary);
-
-    .maximize-button {
-      opacity: 0.6;
-
-      &:not([disabled]) {
-        &:hover,
-        &:active {
-          opacity: 1;
-        }
-      }
-    }
+  .preview,
+  .preview-maximized {
+    @include peertube-word-wrap;
   }
 
-  .nav-pills {
+  .buttons {
+    gap: 1rem;
     display: flex;
-    align-items: center;
+    flex-wrap: wrap;
     justify-content: flex-end;
-
-    > * {
-      font-size: 0.9em !important;
-    }
-  }
-
-  .tab-content {
-    min-height: 75px;
-    max-height: 210px;
-    padding: $base-padding;
-
-    overflow-y: auto;
-    word-wrap: break-word;
-
-    border: 1px solid pvar(--input-border-color);
-    border-top: 0;
-
-    border-bottom-left-radius: $input-border-radius;
-    border-bottom-right-radius: $input-border-radius;
   }
 
   &.maximized {
@@ -83,9 +28,7 @@ $input-border-radius: 3px;
     position: fixed;
     top: pvar(--header-height);
 
-    max-height: none !important;
-    max-width: none !important;
-    width: calc(100% - #{$menu-width});
+    width: calc(100% - #{pvar(--menu-width)} - (#{pvar(--x-margin-content)} * 2));
     height: calc(100vh - #{pvar(--header-height)});
 
     display: grid;
@@ -94,35 +37,42 @@ $input-border-radius: 3px;
 
     background-color: pvar(--bg);
 
-    @include left($menu-width);
+    @include left(calc(#{pvar(--menu-width)} + #{pvar(--x-margin-content)}));
 
-    .nav-preview {
+    .buttons {
       grid-row: 1;
       grid-column: 1 / 3;
 
-      border: 0;
       border-bottom: 2px solid pvar(--primary);
 
       padding: 20px 0;
       width: 100% !important;
     }
 
+    textarea,
+    .preview-maximized {
+      height: 100% !important;
+      max-height: none !important;
+      border-radius: 0;
+
+      padding: 1rem;
+    }
+
     textarea {
       grid-column: 1;
+      grid-row: 2;
 
       border: 0;
       border-right: 1px dashed pvar(--input-border-color);
-
       resize: none;
 
       // Prevent "outline" overflow with left menu
       box-shadow: none !important;
     }
 
-    ::ng-deep .tab-content {
+    .preview-maximized {
       grid-column: 2;
-
-      border: 0;
+      grid-row: 2;
 
       display: block;
       overflow-y: auto;
@@ -130,45 +80,24 @@ $input-border-radius: 3px;
 
       scrollbar-color: pvar(--fg-300) pvar(--bg);
     }
-
-    textarea,
-    ::ng-deep .tab-content {
-      grid-row: 2;
-
-      height: 100% !important;
-      max-height: none !important;
-      border-radius: 0;
-
-      padding: 15px;
-    }
-
-    @media screen and (max-width: $mobile-view) {
-      grid-template-rows: auto 45% 1fr;
-      grid-template-columns: 1fr;
-
-      .nav-preview {
-        grid-column: 1;
-      }
-
-      textarea {
-        grid-row: 2;
-        grid-column: 1;
-        border: 0;
-        border-bottom: 1px dashed pvar(--input-border-color);;
-      }
-
-      ::ng-deep .tab-content {
-        grid-column: 1;
-        grid-row: 3;
-      }
-    }
   }
 }
 
-:host-context(.main-col.expanded) {
-  .root.maximized {
-    width: calc(100% - #{$menu-collapsed-width});
+.show-more-toggle {
+  font-weight: $font-bold;
+  color: pvar(--fg-300);
+  margin-top: 1rem;
 
-    @include left($menu-collapsed-width);
+  @include font-size(14px);
+}
+
+@include on-small-main-col () {
+  .maximize-button {
+    display: none;
   }
+}
+
+.monospace textarea {
+  font-family: monospace;
+  font-size: 14px;
 }

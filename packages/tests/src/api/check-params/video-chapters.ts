@@ -15,6 +15,7 @@ describe('Test videos chapters API validator', function () {
   let live: Video
   let privateVideo: VideoCreateResult
   let userAccessToken: string
+  let editorToken: string
 
   // ---------------------------------------------------------------
 
@@ -29,6 +30,7 @@ describe('Test videos chapters API validator', function () {
     video = await server.videos.upload()
     privateVideo = await server.videos.upload({ attributes: { privacy: VideoPrivacy.PRIVATE } })
     userAccessToken = await server.users.generateUserAndToken('user1')
+    editorToken = await server.channelCollaborators.createEditor('editor', 'root_channel')
 
     await server.config.enableLive({ allowReplay: false })
 
@@ -37,7 +39,6 @@ describe('Test videos chapters API validator', function () {
   })
 
   describe('When updating chapters', function () {
-
     it('Should fail without a valid uuid', async function () {
       await server.chapters.update({ videoId: '4da6fd', chapters: [], expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
@@ -135,15 +136,17 @@ describe('Test videos chapters API validator', function () {
         chapters: []
       })
 
-      await server.chapters.update({
-        videoId: video.id,
-        chapters: [ { title: 'hello', timecode: 21 }, { title: 'hello 2', timecode: 35 } ]
-      })
+      for (const token of [ server.accessToken, editorToken ]) {
+        await server.chapters.update({
+          videoId: video.id,
+          token,
+          chapters: [ { title: 'hello', timecode: 21 }, { title: 'hello 2', timecode: 35 } ]
+        })
+      }
     })
   })
 
   describe('When listing chapters', function () {
-
     it('Should fail without a valid uuid', async function () {
       await server.chapters.list({ videoId: '4da6fd', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
@@ -161,8 +164,10 @@ describe('Test videos chapters API validator', function () {
     })
 
     it('Should list chapters', async function () {
-      await server.chapters.list({ videoId: privateVideo.uuid })
-      await server.chapters.list({ videoId: video.uuid })
+      for (const token of [ server.accessToken, editorToken ]) {
+        await server.chapters.list({ videoId: privateVideo.uuid, token })
+        await server.chapters.list({ videoId: video.uuid, token })
+      }
     })
   })
 

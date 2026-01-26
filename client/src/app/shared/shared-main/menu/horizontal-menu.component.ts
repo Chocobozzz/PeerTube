@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { booleanAttribute, Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core'
+import { booleanAttribute, Component, OnChanges, OnDestroy, OnInit, inject, input } from '@angular/core'
 import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router'
 import { GlobalIconComponent, GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
 import { logger } from '@root-helpers/logger'
@@ -7,6 +7,7 @@ import { filter, Subscription } from 'rxjs'
 import { PluginSelectorDirective } from '../plugins/plugin-selector.directive'
 import { ListOverflowComponent } from './list-overflow.component'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { HorizontalMenuService } from './horizontal-menu.service'
 
 export type HorizontalMenuEntry = {
   label: string
@@ -32,7 +33,6 @@ export type HorizontalMenuEntry = {
   selector: 'my-horizontal-menu',
   templateUrl: './horizontal-menu.component.html',
   styleUrls: [ './horizontal-menu.component.scss' ],
-  standalone: true,
   imports: [
     CommonModule,
     RouterModule,
@@ -42,26 +42,23 @@ export type HorizontalMenuEntry = {
   ]
 })
 export class HorizontalMenuComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() menuEntries: HorizontalMenuEntry[] = []
+  private horizontalMenuService = inject(HorizontalMenuService)
+  private router = inject(Router)
+  private route = inject(ActivatedRoute)
+  private modal = inject(NgbModal)
 
-  @Input() h1: string
-  @Input() h1Icon: GlobalIconName
+  readonly menuEntries = input<HorizontalMenuEntry[]>([])
 
-  @Input({ transform: booleanAttribute }) areChildren = false
-  @Input({ transform: booleanAttribute }) withMarginBottom = true
+  readonly h1 = input<string>(undefined)
+  readonly h1Icon = input<GlobalIconName>(undefined)
+
+  readonly areChildren = input(false, { transform: booleanAttribute })
+  readonly withMarginBottom = input(true, { transform: booleanAttribute })
 
   activeParent: HorizontalMenuEntry
   children: HorizontalMenuEntry[] = []
 
   private routerSub: Subscription
-
-  constructor (
-    private router: Router,
-    private route: ActivatedRoute,
-    private modal: NgbModal
-  ) {
-
-  }
 
   ngOnInit () {
     this.routerSub = this.router.events.pipe(
@@ -83,6 +80,10 @@ export class HorizontalMenuComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  isHidden () {
+    return this.horizontalMenuService.isMenuHidden()
+  }
+
   private buildChildren () {
     this.children = []
     this.activeParent = undefined
@@ -94,7 +95,7 @@ export class HorizontalMenuComponent implements OnInit, OnChanges, OnDestroy {
       return a + '/' + c.url[0].path
     }, '')
 
-    const entry = this.menuEntries.find(parent => {
+    const entry = this.menuEntries().find(parent => {
       if (currentUrl.startsWith(parent.routerLink)) return true
       if (!parent.routerLink.startsWith('/') && `${currentComponentPath}/${parent.routerLink}` === currentUrl) return true
 
@@ -104,8 +105,9 @@ export class HorizontalMenuComponent implements OnInit, OnChanges, OnDestroy {
     })
 
     if (!entry) {
-      if (this.menuEntries.length !== 0 && currentUrl !== '/') {
-        logger.info(`Unable to find entry for ${currentUrl} or ${currentComponentPath}`, { menuEntries: this.menuEntries })
+      const menuEntries = this.menuEntries()
+      if (menuEntries.length !== 0 && currentUrl !== '/') {
+        logger.info(`Unable to find entry for ${currentUrl} or ${currentComponentPath}`, { menuEntries })
       }
 
       return

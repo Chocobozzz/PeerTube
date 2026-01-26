@@ -11,5 +11,5 @@ export type MRegistration = Omit<UserRegistrationModel, 'User'>
 // ############################################################################
 
 export type MRegistrationFormattable =
-  MRegistration &
-  Use<'User', MUserId>
+  & MRegistration
+  & Use<'User', MUserId>

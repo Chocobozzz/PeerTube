@@ -1,5 +1,5 @@
 import { ensureDir } from 'fs-extra/esm'
-import { Server as NetIPC } from '@peertube/net-ipc'
+import { Server as NetIPC } from 'net-ipc'
 import { pick } from '@peertube/peertube-core-utils'
 import { RunnerServer } from '../../server/index.js'
 import { ConfigManager } from '../config-manager.js'
@@ -33,6 +33,10 @@ export class IPCServer {
     })
   }
 
+  stop () {
+    return this.netIPC?.close()
+  }
+
   private async process (req: IPCRequest) {
     switch (req.type) {
       case 'register':
@@ -46,6 +50,9 @@ export class IPCServer {
       case 'list-registered':
         return Promise.resolve(this.runnerServer.listRegistered())
 
+      case 'list-jobs':
+        return Promise.resolve(this.runnerServer.listJobs())
+
       case 'graceful-shutdown':
         this.runnerServer.requestGracefulShutdown()
         return undefined
@@ -55,11 +62,11 @@ export class IPCServer {
     }
   }
 
-  private sendResponse <T extends IPCResponseData> (
+  private sendResponse<T extends IPCResponseData> (
     response: (data: any) => Promise<void>,
     body: IPCResponse<T>
   ) {
     response(body)
-      .catch(err => logger.error('Cannot send response after IPC request', err))
+      .catch(err => logger.error(err, 'Cannot send response after IPC request'))
   }
 }

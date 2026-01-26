@@ -1,0 +1,19 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.action-button-like,
+.action-button-dislike {
+  .count {
+    margin: 0 5px;
+  }
+}
+
+.activated {
+  color: pvar(--fg) !important;
+
+  my-global-icon {
+    color: pvar(--active-icon-color) !important;
+
+    @include fill-path-svg-color(pvar(--active-icon-bg));
+  }
+}

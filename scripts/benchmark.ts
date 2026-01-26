@@ -104,6 +104,13 @@ async function run () {
       }
     },
     {
+      title: 'API - videos list without count*',
+      path: '/api/v1/videos?skipCount=true',
+      expecter: (body, status) => {
+        return status === 200 && body.startsWith('{"data":[{"')
+      }
+    },
+    {
       title: 'API - video get',
       path: '/api/v1/videos/' + video.uuid,
       expecter: (body, status) => {
@@ -207,7 +214,7 @@ function runBenchmark (options: {
   path: string
   method?: string
   body?: string
-  headers?: { [ id: string ]: string }
+  headers?: { [id: string]: string }
   expecter: Function
 }) {
   const { method = 'GET', path, body, expecter, headers } = options

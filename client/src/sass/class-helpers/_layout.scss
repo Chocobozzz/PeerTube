@@ -1,6 +1,6 @@
-@use 'sass:color';
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "sass:color";
+@use "_variables" as *;
+@use "_mixins" as *;
 
 .pt-two-cols {
   @include make-row();
@@ -17,7 +17,8 @@
       @include make-col(3);
     }
 
-    h2 {
+    h2,
+    h3 {
       font-size: 1rem;
       margin-bottom: 10px;
 
@@ -48,6 +49,16 @@
   min-width: 0;
 }
 
+.max-width-300px {
+  max-width: 300px;
+}
+
+.w-fit-content {
+  width: fit-content;
+}
+
+// ---------------------------------------------------------------------------
+
 .d-none-mw {
   @include on-mobile-main-col {
     display: none !important;
@@ -55,6 +66,18 @@
 }
 
 .d-none-sw {
+  @include on-small-main-col {
+    display: none !important;
+  }
+}
+
+.d-inline-block-mw {
+  @include on-mobile-main-col {
+    display: inline-block !important;
+  }
+}
+
+.d-inline-block-sw {
   @include on-small-main-col {
     display: none !important;
   }

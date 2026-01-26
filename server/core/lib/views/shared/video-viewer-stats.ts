@@ -26,6 +26,10 @@ type LocalViewerStats = {
 
   watchTime: number
 
+  client: string
+  device: string
+  operatingSystem: string
+
   country: string
   subdivisionName: string
 
@@ -52,12 +56,16 @@ export class VideoViewerStats {
     ip: string
     sessionId: string
     viewEvent?: VideoViewEvent
+    client: string
+    operatingSystem: string
+    device: string
   }) {
-    const { video, ip, viewEvent, currentTime, sessionId } = options
+    const { video, ip, viewEvent, currentTime, sessionId, client, operatingSystem, device } = options
 
     logger.debug(
-      'Adding local viewer to video stats %s.', video.uuid,
-      { currentTime, viewEvent, sessionId, ...lTags(video.uuid) }
+      'Adding local viewer to video stats %s.',
+      video.uuid,
+      { currentTime, viewEvent, sessionId, client, operatingSystem, device, ...lTags(video.uuid) }
     )
 
     const nowMs = new Date().getTime()
@@ -67,7 +75,7 @@ export class VideoViewerStats {
     if (stats && stats.watchSections.length >= MAX_LOCAL_VIEWER_WATCH_SECTIONS) {
       logger.warn(
         'Too much watch section to store for a viewer, skipping this one',
-        { sessionId, currentTime, viewEvent, ...lTags(video.uuid) }
+        { currentTime, viewEvent, sessionId, client, operatingSystem, device, ...lTags(video.uuid) }
       )
       return
     }
@@ -82,6 +90,10 @@ export class VideoViewerStats {
         watchSections: [],
 
         watchTime: 0,
+
+        client,
+        device,
+        operatingSystem,
 
         country,
         subdivisionName,
@@ -181,6 +193,9 @@ export class VideoViewerStats {
       startDate: new Date(stats.firstUpdated),
       endDate: new Date(stats.lastUpdated),
       watchTime: stats.watchTime,
+      client: stats.client,
+      device: stats.device,
+      operatingSystem: stats.operatingSystem,
       country: stats.country,
       subdivisionName: stats.subdivisionName,
       videoId: video.id
@@ -205,9 +220,7 @@ export class VideoViewerStats {
   }
 
   /**
-   *
    *  Redis calls can be expensive so try to cache things in front of it
-   *
    */
 
   private getLocalVideoViewer (options: {

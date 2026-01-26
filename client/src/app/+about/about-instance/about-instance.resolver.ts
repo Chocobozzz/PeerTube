@@ -1,6 +1,6 @@
 import { forkJoin, Observable } from 'rxjs'
 import { map, switchMap } from 'rxjs/operators'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { ServerService } from '@app/core'
 import { About, ServerConfig, ServerStats } from '@peertube/peertube-models'
 import { AboutHTML, InstanceService } from '@app/shared/shared-main/instance/instance.service'
@@ -18,12 +18,9 @@ export type ResolverData = {
 
 @Injectable()
 export class AboutInstanceResolver {
-
-  constructor (
-    private instanceService: InstanceService,
-    private customMarkupService: CustomMarkupService,
-    private serverService: ServerService
-  ) {}
+  private instanceService = inject(InstanceService)
+  private customMarkupService = inject(CustomMarkupService)
+  private serverService = inject(ServerService)
 
   resolve (): Observable<ResolverData> {
     return forkJoin([

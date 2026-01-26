@@ -7,6 +7,7 @@ import { MIMETYPES, VIDEO_FILTERS } from '@server/initializers/constants.js'
 import { buildTaskFileFieldname, createVideoStudioJob, getStudioTaskFilePath, getTaskFileFromReq } from '@server/lib/video-studio.js'
 import {
   HttpStatusCode,
+  VideoChannelActivityAction,
   VideoState,
   VideoStudioCreateEdition,
   VideoStudioTask,
@@ -17,6 +18,7 @@ import {
   VideoStudioTaskWatermark
 } from '@peertube/peertube-models'
 import { asyncMiddleware, authenticate, videoStudioAddEditionValidator } from '../../../middlewares/index.js'
+import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 
 const studioRouter = express.Router()
 
@@ -45,7 +47,8 @@ const tasksFiles = createAnyReqFiles(
   }
 )
 
-studioRouter.post('/:videoId/studio/edit',
+studioRouter.post(
+  '/:videoId/studio/edit',
   authenticate,
   tasksFiles,
   asyncMiddleware(videoStudioAddEditionValidator),
@@ -73,10 +76,20 @@ async function createEditionTasks (req: express.Request, res: express.Response) 
     tasks: await Bluebird.mapSeries(body.tasks, (t, i) => buildTaskPayload(t, i, files))
   }
 
+  const user = res.locals.oauth.token.User
+
   await createVideoStudioJob({
-    user: res.locals.oauth.token.User,
+    user,
     payload,
     video
+  })
+
+  await VideoChannelActivityModel.addVideoActivity({
+    action: VideoChannelActivityAction.CREATE_STUDIO_TASKS,
+    user,
+    channel: video.VideoChannel,
+    video,
+    transaction: null
   })
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)

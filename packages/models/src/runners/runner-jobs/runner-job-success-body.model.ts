@@ -13,7 +13,8 @@ export type RunnerJobSuccessPayload =
   VODAudioMergeTranscodingSuccess |
   LiveRTMPHLSTranscodingSuccess |
   VideoStudioTranscodingSuccess |
-  TranscriptionSuccess
+  TranscriptionSuccess |
+  GenerateStoryboardSuccess
 
 export interface VODWebVideoTranscodingSuccess {
   videoFile: Blob | string
@@ -42,6 +43,10 @@ export interface TranscriptionSuccess {
   vttFile: Blob | string
 }
 
+export interface GenerateStoryboardSuccess {
+  storyboardFile: Blob | string
+}
+
 export function isWebVideoOrAudioMergeTranscodingPayloadSuccess (
   payload: RunnerJobSuccessPayload
 ): payload is VODHLSTranscodingSuccess | VODAudioMergeTranscodingSuccess {
@@ -54,4 +59,8 @@ export function isHLSTranscodingPayloadSuccess (payload: RunnerJobSuccessPayload
 
 export function isTranscriptionPayloadSuccess (payload: RunnerJobSuccessPayload): payload is TranscriptionSuccess {
   return !!(payload as TranscriptionSuccess)?.vttFile
+}
+
+export function isGenerateStoryboardSuccess (payload: RunnerJobSuccessPayload): payload is GenerateStoryboardSuccess {
+  return !!(payload as GenerateStoryboardSuccess)?.storyboardFile
 }

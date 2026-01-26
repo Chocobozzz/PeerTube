@@ -11,7 +11,7 @@ import {
   waitJobs
 } from '@peertube/peertube-server-commands'
 import { HttpStatusCode } from '@peertube/peertube-models'
-import { checkBadStartPagination, checkBadCountPagination, checkBadSortPagination } from '@tests/shared/checks.js'
+import { checkBadStartPagination, checkBadCountPagination, checkBadSort } from '@tests/shared/checks.js'
 
 describe('Test user subscriptions API validators', function () {
   const path = '/api/v1/users/me/subscriptions'
@@ -45,7 +45,7 @@ describe('Test user subscriptions API validators', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, path, server.accessToken)
+      await checkBadSort(server.url, path, server.accessToken)
     })
 
     it('Should fail with a non authenticated user', async function () {
@@ -78,7 +78,7 @@ describe('Test user subscriptions API validators', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, path, server.accessToken)
+      await checkBadSort(server.url, path, server.accessToken)
     })
 
     it('Should fail with a non authenticated user', async function () {

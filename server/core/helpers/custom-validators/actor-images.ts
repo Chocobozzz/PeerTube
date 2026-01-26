@@ -7,17 +7,11 @@ const imageMimeTypes = CONSTRAINTS_FIELDS.ACTORS.IMAGE.EXTNAME
   .join('|')
 const imageMimeTypesRegex = `image/(${imageMimeTypes})`
 
-function isActorImageFile (files: UploadFilesForCheck, fieldname: string) {
+export function isActorImageFile (files: UploadFilesForCheck, fieldname: string) {
   return isFileValid({
     files,
     mimeTypeRegex: imageMimeTypesRegex,
     field: fieldname,
     maxSize: CONSTRAINTS_FIELDS.ACTORS.IMAGE.FILE_SIZE.max
   })
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  isActorImageFile
 }

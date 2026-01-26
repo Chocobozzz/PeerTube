@@ -1,22 +1,18 @@
-import { Sequelize } from 'sequelize'
 import { pick } from '@peertube/peertube-core-utils'
 import { VideoInclude } from '@peertube/peertube-models'
+import { getServerActor } from '@server/models/application/application.js'
+import { MActorAccount } from '@server/types/models/index.js'
+import { Sequelize } from 'sequelize'
 import { AbstractVideoQueryBuilder } from './shared/abstract-video-query-builder.js'
 import { VideoFileQueryBuilder } from './shared/video-file-query-builder.js'
 import { VideoModelBuilder } from './shared/video-model-builder.js'
 import { BuildVideosListQueryOptions, VideosIdListQueryBuilder } from './videos-id-list-query-builder.js'
-import { getServerActor } from '@server/models/application/application.js'
-import { MActorAccount } from '@server/types/models/index.js'
 
 /**
- *
  * Build videos list SQL query and create video models
- *
  */
 
 export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
-  protected attributes: { [key: string]: string }
-
   private innerQuery: string
   private innerSort: string
 
@@ -57,11 +53,17 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
           this.streamingPlaylistFilesQueryBuilder.queryStreamingPlaylistVideos(fileQueryOptions)
         ])
 
-        return this.videoModelBuilder.buildVideosFromRows({ rows, include: options.include, rowsStreamingPlaylist, rowsWebVideoFiles })
+        return this.videoModelBuilder.buildVideosFromRows({
+          rows,
+          include: options.include,
+          addCaptions: false,
+          rowsStreamingPlaylist,
+          rowsWebVideoFiles
+        })
       }
     }
 
-    return this.videoModelBuilder.buildVideosFromRows({ rows, include: options.include })
+    return this.videoModelBuilder.buildVideosFromRows({ rows, include: options.include, addCaptions: false })
   }
 
   private buildInnerQuery (options: BuildVideosListQueryOptions) {
@@ -93,6 +95,14 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
       this.includePlaylist(options.videoPlaylistId)
     }
 
+    if (options.isLive || options.includeScheduledLive) {
+      this.includeLive()
+    }
+
+    if (options.includeScheduledLive) {
+      this.includeLiveSchedules()
+    }
+
     if (options.include & VideoInclude.BLACKLISTED) {
       this.includeBlacklisted()
     }
@@ -111,6 +121,10 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
 
     if (options.include & VideoInclude.TAGS) {
       this.includeTags()
+    }
+
+    if (options.include & VideoInclude.NOT_PUBLISHED_STATE) {
+      this.includeScheduleUpdate()
     }
 
     const select = this.buildSelect()

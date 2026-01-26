@@ -1,0 +1,25 @@
+diff --git a/dist/types/menu/menu-button.d.ts b/dist/types/menu/menu-button.d.ts
+index 58572dee9b32202c1656269c749efbce623ea363..323101a846fe2064dc74ea9b8faa250fded70744 100644
+--- a/dist/types/menu/menu-button.d.ts
++++ b/dist/types/menu/menu-button.d.ts
+@@ -67,8 +67,11 @@ declare class MenuButton extends Component {
+      *
+      * @param {string} name
+      *         The icon name to be added.
++     *
++     * @return {Element}
++     *         The element that gets created.
+      */
+-    setIcon(name: string): void;
++    setIcon(name: string): Element;
+     /**
+      * Allow sub components to stack CSS class names for the wrapper element
+      *
+diff --git a/dist/types/menu/menu-button.d.ts.map b/dist/types/menu/menu-button.d.ts.map
+index 4768d14c2d8c0a977b93b63eaa9ca5f48d7a2d1a..5bc21645324ccc7c790df13d6f34beedcbf0d7f4 100644
+--- a/dist/types/menu/menu-button.d.ts.map
++++ b/dist/types/menu/menu-button.d.ts.map
+@@ -1 +1 @@
+-{"version":3,"file":"menu-button.d.ts","sourceRoot":"","sources":["../../../src/js/menu/menu-button.js"],"names":[],"mappings":";AAYA,sCAAsC;AAEtC;;;;GAIG;AACH;IAEE;;;;;;;;OAQG;IACH,oBANW,MAAM,iBAwChB;IA/BC,oBAA8C;IAe9C,kBAAoB;IAIpB,mCAAsD;IAcxD;;OAEG;IACH,eA4BC;IApBC,WAAgB;IAGhB;;;;;OAKG;IACH,uBAA2B;IAa7B;;;;;OAKG;IACH,cAHY,IAAI,CAuCf;IAjCC;;;;;;;OAOG;IACH,iCAAuB;IAevB,YAA+B;IAYjC;;;;OAIG;IACH,oBAAgB;IAEhB;;;;;OAKG;IACH,YAHY,OAAO,CAQlB;IAED;;;;;;OAMG;IACH,cAHW,MAAM,QAKhB;IAED;;;;;OAKG;IACH,wBAHY,MAAM,CAiBjB;IAqBD;;;;;;;;;;;;;OAaG;IACH,mBATW,MAAM,OAGN,OAAO,GAGN,MAAM,CAKjB;IAED;;OAEG;IACH,gBAGC;IAED;;;;;;;;;;OAUG;IACH,mBAPW,KAAK,QAaf;IAED;;;;;;;OAOG;IACH,wBALW,KAAK,QAQf;IAgBD;;;;;;;;OAQG;IACH,qBALW,KAAK,QA0Bf;IAED;;;;;;;;OAQG;IACH,uBALW,KAAK,QAUf;IAED;;;;;;;OAOG;IACH,6BAHW,KAAK,QAKf;IAED;;;;;;;;OAQG;IACH,4BALW,KAAK,QAuBf;IAED;;OAEG;IACH,oBAgBC;IAED;;OAEG;IACH,sBAOC;IAED;;OAEG;IACH,gBAOC;IAED;;OAEG;IACH,eAKC;CACF;sBA1aqB,iBAAiB;mBADpB,cAAc;iBAEhB,WAAW;wBAOJ,WAAW"}
+\ No newline at end of file
++{"version":3,"file":"menu-button.d.ts","sourceRoot":"","sources":["../../../src/js/menu/menu-button.js"],"names":[],"mappings":";AAYA,sCAAsC;AAEtC;;;;GAIG;AACH;IAEE;;;;;;;;OAQG;IACH,oBANW,MAAM,iBAwChB;IA/BC,oBAA8C;IAe9C,kBAAoB;IAIpB,mCAAsD;IAcxD;;OAEG;IACH,eA4BC;IApBC,WAAgB;IAGhB;;;;;OAKG;IACH,uBAA2B;IAa7B;;;;;OAKG;IACH,cAHY,IAAI,CAuCf;IAjCC;;;;;;;OAOG;IACH,iCAAuB;IAevB,YAA+B;IAYjC;;;;OAIG;IACH,oBAAgB;IAEhB;;;;;OAKG;IACH,YAHY,OAAO,CAQlB;IAED;;;;;;;;;OASG;IACH,cANW,MAAM,GAGL,OAAO,CAKlB;IAED;;;;;OAKG;IACH,wBAHY,MAAM,CAiBjB;IAqBD;;;;;;;;;;;;;OAaG;IACH,mBATW,MAAM,OAGN,OAAO,GAGN,MAAM,CAKjB;IAED;;OAEG;IACH,gBAGC;IAED;;;;;;;;;;OAUG;IACH,mBAPW,KAAK,QAaf;IAED;;;;;;;OAOG;IACH,wBALW,KAAK,QAQf;IAgBD;;;;;;;;OAQG;IACH,qBALW,KAAK,QA0Bf;IAED;;;;;;;;OAQG;IACH,uBALW,KAAK,QAUf;IAED;;;;;;;OAOG;IACH,6BAHW,KAAK,QAKf;IAED;;;;;;;;OAQG;IACH,4BALW,KAAK,QAuBf;IAED;;OAEG;IACH,oBAgBC;IAED;;OAEG;IACH,sBAOC;IAED;;OAEG;IACH,gBAOC;IAED;;OAEG;IACH,eAKC;CACF;sBA7aqB,iBAAiB;mBADpB,cAAc;iBAEhB,WAAW;wBAOJ,WAAW"}

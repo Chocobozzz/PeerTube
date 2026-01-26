@@ -41,6 +41,14 @@ export function downloadFile (options: {
       }
 
       const file = createWriteStream(destination)
+
+      file.on('error', err => {
+        remove(destination)
+          .catch(err => logger.error(err))
+
+        return rej(err)
+      })
+
       file.on('finish', () => res())
 
       response.pipe(file)
@@ -55,6 +63,10 @@ export function downloadFile (options: {
 
     request.write(body)
     request.end()
+
+    setTimeout(() => {
+      request.destroy(new Error('Global request timeout'))
+    }, 2 * 3600 * 1000) // 2 hours
   })
 }
 

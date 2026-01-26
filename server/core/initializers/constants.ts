@@ -8,20 +8,32 @@ import {
   FollowState,
   JobType,
   NSFWPolicyType,
+  PlayerThemeChannelSetting,
+  PlayerThemeVideoSetting,
   RunnerJobState,
   RunnerJobStateType,
+  UploadImageType,
+  UploadImageType_Type,
   UserExportState,
   UserExportStateType,
   UserImportState,
   UserImportStateType,
   UserRegistrationState,
   UserRegistrationStateType,
+  VideoChannelActivityAction,
+  VideoChannelActivityActionType,
+  VideoChannelActivityTarget,
+  VideoChannelActivityTargetType,
+  VideoChannelCollaboratorState,
+  VideoChannelCollaboratorStateType,
   VideoChannelSyncState,
   VideoChannelSyncStateType,
   VideoCommentPolicy,
   VideoCommentPolicyType,
   VideoImportState,
   VideoImportStateType,
+  VideoLicence,
+  VideoLicenceType,
   VideoPlaylistPrivacy,
   VideoPlaylistPrivacyType,
   VideoPlaylistType,
@@ -46,7 +58,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 865
+export const LAST_MIGRATION_VERSION = 980
 
 // ---------------------------------------------------------------------------
 
@@ -85,7 +97,7 @@ export const WEBSERVER = {
 // Sortable columns per schema
 export const SORTABLE_COLUMNS = {
   ADMIN_USERS: [ 'id', 'username', 'videoQuotaUsed', 'createdAt', 'lastLoginDate', 'role' ],
-  USER_SUBSCRIPTIONS: [ 'id', 'createdAt' ],
+  USER_SUBSCRIPTIONS: [ 'id', 'createdAt', 'channelUpdatedAt' ],
   ACCOUNTS: [ 'createdAt' ],
   JOBS: [ 'createdAt' ],
   VIDEO_CHANNELS: [ 'id', 'name', 'updatedAt', 'createdAt' ],
@@ -107,6 +119,8 @@ export const SORTABLE_COLUMNS = {
 
   USER_REGISTRATIONS: [ 'createdAt', 'state' ],
 
+  TOKEN_SESSIONS: [ 'createdAt' ],
+
   RUNNERS: [ 'createdAt' ],
   RUNNER_REGISTRATION_TOKENS: [ 'createdAt' ],
   RUNNER_JOBS: [ 'updatedAt', 'createdAt', 'priority', 'state', 'progress' ],
@@ -119,14 +133,16 @@ export const SORTABLE_COLUMNS = {
     'originallyPublishedAt',
     'views',
     'likes',
+    'comments',
     'trending',
     'hot',
     'best',
-    'localVideoFilesSize'
+    'localVideoFilesSize',
+    'match'
   ],
 
   // Don't forget to update peertube-search-index with the same values
-  VIDEOS_SEARCH: [ 'name', 'duration', 'createdAt', 'publishedAt', 'originallyPublishedAt', 'views', 'likes', 'match' ],
+  VIDEOS_SEARCH: [ 'name', 'duration', 'createdAt', 'publishedAt', 'originallyPublishedAt', 'views', 'likes', 'match', 'hot' ],
   VIDEO_CHANNELS_SEARCH: [ 'match', 'displayName', 'createdAt' ],
   VIDEO_PLAYLISTS_SEARCH: [ 'match', 'displayName', 'createdAt' ],
 
@@ -139,13 +155,17 @@ export const SORTABLE_COLUMNS = {
 
   USER_NOTIFICATIONS: [ 'createdAt', 'read' ],
 
-  VIDEO_PLAYLISTS: [ 'name', 'displayName', 'createdAt', 'updatedAt' ],
+  VIDEO_PLAYLISTS: [ 'name', 'displayName', 'createdAt', 'updatedAt', 'videoChannelPosition' ],
 
   PLUGINS: [ 'name', 'createdAt', 'updatedAt' ],
 
   AVAILABLE_PLUGINS: [ 'npmName', 'popularity', 'trending' ],
 
-  VIDEO_REDUNDANCIES: [ 'name' ]
+  VIDEO_REDUNDANCIES: [ 'name' ],
+
+  VIDEO_CHANNEL_ACTIVITIES: [ 'createdAt' ],
+
+  LIVE_SESSIONS: [ 'startDate' ]
 }
 
 export const ROUTE_CACHE_LIFETIME = {
@@ -172,7 +192,7 @@ export const ACTOR_FOLLOW_SCORE = {
   MAX: 10000
 }
 
-export const FOLLOW_STATES: { [ id: string ]: FollowState } = {
+export const FOLLOW_STATES: { [id: string]: FollowState } = {
   PENDING: 'pending',
   ACCEPTED: 'accepted',
   REJECTED: 'rejected'
@@ -272,9 +292,9 @@ export const JOB_TTL: { [id in JobType]: number } = {
   'federate-video': 60000 * 5, // 5 minutes,
   'create-user-export': 60000 * 60 * 24, // 24 hours
   'import-user-archive': 60000 * 60 * 24, // 24 hours
-  'video-transcription': 1000 * 3600 * 6 // 6 hours
+  'video-transcription': CONFIG.VIDEO_TRANSCRIPTION.TIMEOUT
 }
-export const REPEAT_JOBS: { [ id in JobType ]?: RepeatOptions } = {
+export const REPEAT_JOBS: { [id in JobType]?: RepeatOptions } = {
   'videos-views-stats': {
     pattern: randomInt(1, 20) + ' * * * *' // Between 1-20 minutes past the hour
   },
@@ -283,6 +303,7 @@ export const REPEAT_JOBS: { [ id in JobType ]?: RepeatOptions } = {
   }
 }
 export const JOB_PRIORITY = {
+  STORYBOARD: 95,
   TRANSCODING: 100,
   VIDEO_STUDIO: 150,
   TRANSCRIPTION: 200
@@ -335,6 +356,7 @@ export const SCHEDULER_INTERVALS_MS = {
   ACTOR_FOLLOW_SCORES: 60000 * 60, // 1 hour
   REMOVE_OLD_JOBS: 60000 * 60, // 1 hour
   UPDATE_VIDEOS: 60000, // 1 minute
+  UPDATE_TOKEN_SESSION: 60000, // 1 minute
   YOUTUBE_DL_UPDATE: 60000 * 60 * 24, // 1 day
   GEO_IP_UPDATE: 60000 * 60 * 24, // 1 day
   VIDEO_VIEWS_BUFFER_UPDATE: CONFIG.VIEWS.VIDEOS.LOCAL_BUFFER_UPDATE_INTERVAL,
@@ -356,7 +378,7 @@ export const CONSTRAINTS_FIELDS = {
     NAME: { min: 1, max: 120 }, // Length
     DESCRIPTION: { min: 3, max: 1000 }, // Length
     USERNAME: { min: 1, max: 50 }, // Length
-    PASSWORD: { min: 6, max: 255 }, // Length
+    PASSWORD: { min: CONFIG.USER.PASSWORD_CONSTRAINTS.MIN_LENGTH, max: 50, maxBytes: 72 }, // Limited by bcrypt algorithm
     VIDEO_QUOTA: { min: -1 },
     VIDEO_QUOTA_DAILY: { min: -1 },
     VIDEO_LANGUAGES: { max: 500 }, // Array length
@@ -415,15 +437,16 @@ export const CONSTRAINTS_FIELDS = {
     LANGUAGE: { min: 1, max: 10 }, // Length
     TRUNCATED_DESCRIPTION: { min: 3, max: 250 }, // Length
     DESCRIPTION: { min: 3, max: 10000 }, // Length
+    NSFW_SUMMARY: { min: 3, max: 250 }, // Length
     SUPPORT: { min: 3, max: 1000 }, // Length
     IMAGE: {
       EXTNAME: [ '.png', '.jpg', '.jpeg', '.webp' ],
       FILE_SIZE: {
-        max: 4 * 1024 * 1024 // 4MB
+        max: 8 * 1024 * 1024 // 8MB
       }
     },
     EXTNAME: [] as string[],
-    INFO_HASH: { min: 40, max: 40 }, // Length, info hash is 20 bytes length but we represent it in hexadecimal so 20 * 2
+    INFO_HASH: { min: 10, max: 100 },
     DURATION: { min: 0 }, // Number
     TAGS: { min: 0, max: 5 }, // Number of total tags
     TAG: { min: 2, max: 30 }, // Length
@@ -444,7 +467,7 @@ export const CONSTRAINTS_FIELDS = {
     IMAGE: {
       EXTNAME: [ '.jpg', '.jpeg' ],
       FILE_SIZE: {
-        max: 4 * 1024 * 1024 // 4MB
+        max: 8 * 1024 * 1024 // 8MB
       }
     }
   },
@@ -455,7 +478,7 @@ export const CONSTRAINTS_FIELDS = {
     IMAGE: {
       EXTNAME: [ '.png', '.jpeg', '.jpg', '.gif', '.webp' ],
       FILE_SIZE: {
-        max: 4 * 1024 * 1024 // 4MB
+        max: 8 * 1024 * 1024 // 8MB
       }
     }
   },
@@ -511,6 +534,9 @@ export const CONSTRAINTS_FIELDS = {
     LIST_NAME: { min: 1, max: 100 }, // Length
     WORDS: { min: 1, max: 500 }, // Number of total words
     WORD: { min: 1, max: 100 } // Length
+  },
+  VIDEO_VIEW: {
+    UA_INFO: { min: 1, max: 200 } // Length
   }
 }
 
@@ -528,7 +554,7 @@ export let CONTACT_FORM_LIFETIME = 60000 * 60 // 1 hour
 export const DEFAULT_AUDIO_RESOLUTION = VideoResolution.H_480P
 export const DEFAULT_AUDIO_MERGE_RESOLUTION = 25
 
-export const VIDEO_RATE_TYPES: { [ id: string ]: VideoRateType } = {
+export const VIDEO_RATE_TYPES: { [id: string]: VideoRateType } = {
   LIKE: 'like',
   DISLIKE: 'dislike'
 }
@@ -567,19 +593,21 @@ export const VIDEO_CATEGORIES = {
 }
 
 // See https://creativecommons.org/licenses/?lang=en
-export const VIDEO_LICENCES = {
-  1: 'Attribution',
-  2: 'Attribution - Share Alike',
-  3: 'Attribution - No Derivatives',
-  4: 'Attribution - Non Commercial',
-  5: 'Attribution - Non Commercial - Share Alike',
-  6: 'Attribution - Non Commercial - No Derivatives',
-  7: 'Public Domain Dedication'
+export const VIDEO_LICENCES: { [id in VideoLicenceType]: string } = {
+  [VideoLicence['CC-BY']]: 'Attribution',
+  [VideoLicence['CC-BY-SA']]: 'Attribution - Share Alike',
+  [VideoLicence['CC-BY-ND']]: 'Attribution - No Derivatives',
+  [VideoLicence['CC-BY-NC']]: 'Attribution - Non Commercial',
+  [VideoLicence['CC-BY-NC-SA']]: 'Attribution - Non Commercial - Share Alike',
+  [VideoLicence['CC-BY-NC-ND']]: 'Attribution - Non Commercial - No Derivatives',
+  [VideoLicence['CC0']]: 'Public Domain Dedication',
+  [VideoLicence['PDM']]: 'Free of known copyright restrictions',
+  [VideoLicence['COPYRIGHT']]: 'Copyrighted - All Rights Reserved'
 }
 
 export const VIDEO_LANGUAGES: { [id: string]: string } = {}
 
-export const VIDEO_PRIVACIES: { [ id in VideoPrivacyType ]: string } = {
+export const VIDEO_PRIVACIES: { [id in VideoPrivacyType]: string } = {
   [VideoPrivacy.PUBLIC]: 'Public',
   [VideoPrivacy.UNLISTED]: 'Unlisted',
   [VideoPrivacy.PRIVATE]: 'Private',
@@ -587,7 +615,7 @@ export const VIDEO_PRIVACIES: { [ id in VideoPrivacyType ]: string } = {
   [VideoPrivacy.PASSWORD_PROTECTED]: 'Password protected'
 }
 
-export const VIDEO_STATES: { [ id in VideoStateType ]: string } = {
+export const VIDEO_STATES: { [id in VideoStateType]: string } = {
   [VideoState.PUBLISHED]: 'Published',
   [VideoState.TO_TRANSCODE]: 'To transcode',
   [VideoState.TO_IMPORT]: 'To import',
@@ -598,10 +626,11 @@ export const VIDEO_STATES: { [ id in VideoStateType ]: string } = {
   [VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED]: 'External storage move failed',
   [VideoState.TO_EDIT]: 'To edit',
   [VideoState.TO_MOVE_TO_FILE_SYSTEM]: 'To move to file system',
-  [VideoState.TO_MOVE_TO_FILE_SYSTEM_FAILED]: 'Move to file system failed'
+  [VideoState.TO_MOVE_TO_FILE_SYSTEM_FAILED]: 'Move to file system failed',
+  [VideoState.TO_IMPORT_FAILED]: 'Import failed'
 }
 
-export const VIDEO_IMPORT_STATES: { [ id in VideoImportStateType ]: string } = {
+export const VIDEO_IMPORT_STATES: { [id in VideoImportStateType]: string } = {
   [VideoImportState.FAILED]: 'Failed',
   [VideoImportState.PENDING]: 'Pending',
   [VideoImportState.SUCCESS]: 'Success',
@@ -610,37 +639,37 @@ export const VIDEO_IMPORT_STATES: { [ id in VideoImportStateType ]: string } = {
   [VideoImportState.PROCESSING]: 'Processing'
 }
 
-export const VIDEO_CHANNEL_SYNC_STATE: { [ id in VideoChannelSyncStateType ]: string } = {
+export const VIDEO_CHANNEL_SYNC_STATE: { [id in VideoChannelSyncStateType]: string } = {
   [VideoChannelSyncState.FAILED]: 'Failed',
   [VideoChannelSyncState.SYNCED]: 'Synchronized',
   [VideoChannelSyncState.PROCESSING]: 'Processing',
   [VideoChannelSyncState.WAITING_FIRST_RUN]: 'Waiting first run'
 }
 
-export const ABUSE_STATES: { [ id in AbuseStateType ]: string } = {
+export const ABUSE_STATES: { [id in AbuseStateType]: string } = {
   [AbuseState.PENDING]: 'Pending',
   [AbuseState.REJECTED]: 'Rejected',
   [AbuseState.ACCEPTED]: 'Accepted'
 }
 
-export const USER_REGISTRATION_STATES: { [ id in UserRegistrationStateType ]: string } = {
+export const USER_REGISTRATION_STATES: { [id in UserRegistrationStateType]: string } = {
   [UserRegistrationState.PENDING]: 'Pending',
   [UserRegistrationState.REJECTED]: 'Rejected',
   [UserRegistrationState.ACCEPTED]: 'Accepted'
 }
 
-export const VIDEO_PLAYLIST_PRIVACIES: { [ id in VideoPlaylistPrivacyType ]: string } = {
+export const VIDEO_PLAYLIST_PRIVACIES: { [id in VideoPlaylistPrivacyType]: string } = {
   [VideoPlaylistPrivacy.PUBLIC]: 'Public',
   [VideoPlaylistPrivacy.UNLISTED]: 'Unlisted',
   [VideoPlaylistPrivacy.PRIVATE]: 'Private'
 }
 
-export const VIDEO_PLAYLIST_TYPES: { [ id in VideoPlaylistType_Type ]: string } = {
+export const VIDEO_PLAYLIST_TYPES: { [id in VideoPlaylistType_Type]: string } = {
   [VideoPlaylistType.REGULAR]: 'Regular',
   [VideoPlaylistType.WATCH_LATER]: 'Watch later'
 }
 
-export const RUNNER_JOB_STATES: { [ id in RunnerJobStateType ]: string } = {
+export const RUNNER_JOB_STATES: { [id in RunnerJobStateType]: string } = {
   [RunnerJobState.PROCESSING]: 'Processing',
   [RunnerJobState.COMPLETED]: 'Completed',
   [RunnerJobState.COMPLETING]: 'Completing',
@@ -652,24 +681,52 @@ export const RUNNER_JOB_STATES: { [ id in RunnerJobStateType ]: string } = {
   [RunnerJobState.PARENT_CANCELLED]: 'Parent job cancelled'
 }
 
-export const USER_EXPORT_STATES: { [ id in UserExportStateType ]: string } = {
+export const USER_EXPORT_STATES: { [id in UserExportStateType]: string } = {
   [UserExportState.PENDING]: 'Pending',
   [UserExportState.PROCESSING]: 'Processing',
   [UserExportState.COMPLETED]: 'Completed',
   [UserExportState.ERRORED]: 'Failed'
 }
 
-export const USER_IMPORT_STATES: { [ id in UserImportStateType ]: string } = {
+export const USER_IMPORT_STATES: { [id in UserImportStateType]: string } = {
   [UserImportState.PENDING]: 'Pending',
   [UserImportState.PROCESSING]: 'Processing',
   [UserImportState.COMPLETED]: 'Completed',
   [UserImportState.ERRORED]: 'Failed'
 }
 
-export const VIDEO_COMMENTS_POLICY: { [ id in VideoCommentPolicyType ]: string } = {
+export const VIDEO_COMMENTS_POLICY: { [id in VideoCommentPolicyType]: string } = {
   [VideoCommentPolicy.DISABLED]: 'Disabled',
   [VideoCommentPolicy.ENABLED]: 'Enabled',
   [VideoCommentPolicy.REQUIRES_APPROVAL]: 'Requires approval'
+}
+
+export const CHANNEL_COLLABORATOR_STATE: { [id in VideoChannelCollaboratorStateType]: string } = {
+  [VideoChannelCollaboratorState.ACCEPTED]: 'Accepted',
+  [VideoChannelCollaboratorState.PENDING]: 'Pending',
+  [VideoChannelCollaboratorState.REJECTED]: 'Rejected'
+}
+
+export const VIDEO_CHANNEL_ACTIVITY_ACTIONS: { [id in VideoChannelActivityActionType]: string } = {
+  [VideoChannelActivityAction.CREATE]: 'Create',
+  [VideoChannelActivityAction.UPDATE]: 'Update',
+  [VideoChannelActivityAction.DELETE]: 'Delete',
+  [VideoChannelActivityAction.UPDATE_CAPTIONS]: 'Update captions',
+  [VideoChannelActivityAction.UPDATE_CHAPTERS]: 'Update chapters',
+  [VideoChannelActivityAction.UPDATE_PASSWORDS]: 'Update passwords',
+  [VideoChannelActivityAction.CREATE_STUDIO_TASKS]: 'Create studio tasks',
+  [VideoChannelActivityAction.UPDATE_SOURCE_FILE]: 'Update source file',
+  [VideoChannelActivityAction.UPDATE_ELEMENTS]: 'Update elements',
+  [VideoChannelActivityAction.REMOVE_CHANNEL_OWNERSHIP]: 'Remove channel ownership',
+  [VideoChannelActivityAction.CREATE_CHANNEL_OWNERSHIP]: 'Create channel ownership'
+}
+
+export const VIDEO_CHANNEL_ACTIVITY_TARGETS: { [id in VideoChannelActivityTargetType]: string } = {
+  [VideoChannelActivityTarget.CHANNEL]: 'Channel',
+  [VideoChannelActivityTarget.CHANNEL_SYNC]: 'Channel synchronization',
+  [VideoChannelActivityTarget.PLAYLIST]: 'Playlist',
+  [VideoChannelActivityTarget.VIDEO]: 'Video',
+  [VideoChannelActivityTarget.VIDEO_IMPORT]: 'Video import'
 }
 
 export const MIMETYPES = {
@@ -699,12 +756,12 @@ export const MIMETYPES = {
       'audio/vnd.dolby.dd-raw': '.ac3',
       'audio/ac3': '.ac3'
     },
-    EXT_MIMETYPE: null as { [ id: string ]: string }
+    EXT_MIMETYPE: null as { [id: string]: string }
   },
   VIDEO: {
-    MIMETYPE_EXT: null as { [ id: string ]: string | string[] },
+    MIMETYPE_EXT: null as { [id: string]: string | string[] },
     MIMETYPES_REGEX: null as string,
-    EXT_MIMETYPE: null as { [ id: string ]: string }
+    EXT_MIMETYPE: null as { [id: string]: string }
   },
   IMAGE: {
     MIMETYPE_EXT: {
@@ -714,7 +771,7 @@ export const MIMETYPES = {
       'image/jpg': '.jpg',
       'image/jpeg': '.jpg'
     },
-    EXT_MIMETYPE: null as { [ id: string ]: string }
+    EXT_MIMETYPE: null as { [id: string]: string }
   },
   VIDEO_CAPTIONS: {
     MIMETYPE_EXT: {
@@ -722,7 +779,7 @@ export const MIMETYPES = {
       'application/x-subrip': '.srt',
       'text/plain': '.srt'
     },
-    EXT_MIMETYPE: null as { [ id: string ]: string }
+    EXT_MIMETYPE: null as { [id: string]: string }
   },
   TORRENT: {
     MIMETYPE_EXT: {
@@ -792,7 +849,7 @@ export const ACTIVITY_PUB = {
   VIDEO_PLAYLIST_REFRESH_INTERVAL: 3600 * 24 * 1000 * 2 // 2 days
 }
 
-export const ACTIVITY_PUB_ACTOR_TYPES: { [ id: string ]: ActivityPubActorType } = {
+export const ACTIVITY_PUB_ACTOR_TYPES: { [id: string]: ActivityPubActorType } = {
   GROUP: 'Group',
   PERSON: 'Person',
   APPLICATION: 'Application',
@@ -801,8 +858,6 @@ export const ACTIVITY_PUB_ACTOR_TYPES: { [ id: string ]: ActivityPubActorType } 
 }
 
 export const HTTP_SIGNATURE = {
-  HEADER_NAME: 'signature',
-  ALGORITHM: 'rsa-sha256',
   HEADERS_TO_SIGN_WITH_PAYLOAD: [ '(request-target)', 'host', 'date', 'digest' ],
   HEADERS_TO_SIGN_WITHOUT_PAYLOAD: [ '(request-target)', 'host', 'date' ],
   CLOCK_SKEW_SECONDS: 1800
@@ -826,12 +881,13 @@ export const USER_PASSWORD_RESET_LIFETIME = 60000 * 60 // 60 minutes
 export const USER_PASSWORD_CREATE_LIFETIME = 60000 * 60 * 24 * 7 // 7 days
 
 export const TWO_FACTOR_AUTH_REQUEST_TOKEN_LIFETIME = 60000 * 10 // 10 minutes
-export let JWT_TOKEN_USER_EXPORT_FILE_LIFETIME = '15 minutes'
+export let JWT_TOKEN_USER_EXPORT_FILE_LIFETIME: `${number} minutes` | `${number} seconds` = '15 minutes'
 
 export const EMAIL_VERIFY_LIFETIME = 60000 * 60 // 60 minutes
 
-export const NSFW_POLICY_TYPES: { [ id: string ]: NSFWPolicyType } = {
+export const NSFW_POLICY_TYPES: { [id: string]: NSFWPolicyType } = {
   DO_NOT_LIST: 'do_not_list',
+  WARN: 'warn',
   BLUR: 'blur',
   DISPLAY: 'display'
 }
@@ -858,7 +914,9 @@ export const STATIC_PATHS = {
   STREAMING_PLAYLISTS: {
     HLS: '/static/streaming-playlists/hls',
     PRIVATE_HLS: '/static/streaming-playlists/hls/private/'
-  }
+  },
+
+  UPLOAD_IMAGES: '/static/uploads/images/'
 }
 export const DOWNLOAD_PATHS = {
   TORRENTS: '/download/torrents/',
@@ -935,6 +993,32 @@ export const ACTOR_IMAGES_SIZE: { [key in ActorImageType_Type]: { width: number,
     }
   ]
 }
+export const UPLOAD_IMAGES_SIZE: { [key in UploadImageType_Type]: { width: number, height: number }[] } = {
+  [UploadImageType.INSTANCE_FAVICON]: [
+    {
+      width: 32,
+      height: 32
+    }
+  ],
+  [UploadImageType.INSTANCE_HEADER_SQUARE]: [
+    {
+      width: 48,
+      height: 48
+    }
+  ],
+  [UploadImageType.INSTANCE_HEADER_WIDE]: [
+    {
+      width: null, // Auto
+      height: 48
+    }
+  ],
+  [UploadImageType.INSTANCE_OPENGRAPH]: [
+    {
+      width: 1200,
+      height: 650
+    }
+  ]
+}
 
 export const STORYBOARD = {
   SPRITE_MAX_SIZE: 192,
@@ -1007,7 +1091,9 @@ export const DIRECTORIES = {
 
   HLS_REDUNDANCY: join(CONFIG.STORAGE.REDUNDANCY_DIR, 'hls'),
 
-  LOCAL_PIP_DIRECTORY: join(CONFIG.STORAGE.BIN_DIR, 'pip')
+  LOCAL_PIP_DIRECTORY: join(CONFIG.STORAGE.BIN_DIR, 'pip'),
+
+  UPLOAD_IMAGES: join(CONFIG.STORAGE.UPLOADS_DIR, 'images')
 }
 
 export const RESUMABLE_UPLOAD_SESSION_LIFETIME = SCHEDULER_INTERVALS_MS.REMOVE_DANGLING_RESUMABLE_UPLOADS
@@ -1050,6 +1136,7 @@ export const MEMOIZE_LENGTH = {
 export const totalCPUs = Math.max(cpus().length, 1)
 
 export const WORKER_THREADS = {
+  IDLE_TIMEOUT: 1000 * 10, // 10 seconds
   DOWNLOAD_IMAGE: {
     CONCURRENCY: 3,
     MAX_THREADS: 1
@@ -1069,6 +1156,10 @@ export const WORKER_THREADS = {
   BUILD_DIGEST: {
     CONCURRENCY: 1,
     MAX_THREADS: 1
+  },
+  CREATE_TORRENT: {
+    CONCURRENCY: 1,
+    MAX_THREADS: 1
   }
 }
 
@@ -1079,6 +1170,9 @@ export const REDUNDANCY = {
 }
 
 export const ACCEPT_HEADERS = [ 'html', 'application/json' ].concat(ACTIVITY_PUB.POTENTIAL_ACCEPT_HEADERS)
+export const LANGUAGE_COOKIE_NAME = 'clientLanguage'
+export const LANGUAGE_HEADER = 'x-peertube-language'
+
 export const OTP = {
   HEADER_NAME: 'x-peertube-otp',
   HEADER_REQUIRED_VALUE: 'required; app'
@@ -1088,6 +1182,8 @@ export const ASSETS_PATH = {
   DEFAULT_AUDIO_BACKGROUND: join(root(), 'dist', 'core', 'assets', 'default-audio-background.jpg'),
   DEFAULT_LIVE_BACKGROUND: join(root(), 'dist', 'core', 'assets', 'default-live-background.jpg')
 }
+
+export const SERVER_INTERNAL_LOCALES_BASE_PATH = join(root(), 'dist', 'locales')
 
 // ---------------------------------------------------------------------------
 
@@ -1112,7 +1208,9 @@ export const TRACKER_RATE_LIMITS = {
   BLOCK_IP_LIFETIME: parseDurationToMs('3 minutes')
 }
 
-export const P2P_MEDIA_LOADER_PEER_VERSION = 2
+// We use -2 instead of 2 because of historical reason
+// When p2p-media-loader bumps to v3, we'll be able to switch to 3 directly
+export const P2P_MEDIA_LOADER_PEER_VERSION = -2
 
 // ---------------------------------------------------------------------------
 
@@ -1122,7 +1220,9 @@ export const PLUGIN_GLOBAL_CSS_PATH = join(CONFIG.STORAGE.TMP_DIR, PLUGIN_GLOBAL
 export let PLUGIN_EXTERNAL_AUTH_TOKEN_LIFETIME = 1000 * 60 * 5 // 5 minutes
 
 export const DEFAULT_THEME_NAME = 'default'
-export const DEFAULT_USER_THEME_NAME = 'instance-default'
+export const DEFAULT_INSTANCE_THEME_NAME = 'instance-default'
+export const DEFAULT_CHANNEL_PLAYER_SETTING_VALUE: PlayerThemeVideoSetting = 'channel-default'
+export const DEFAULT_INSTANCE_PLAYER_SETTING_VALUE: PlayerThemeVideoSetting | PlayerThemeChannelSetting = 'instance-default'
 
 // ---------------------------------------------------------------------------
 
@@ -1141,6 +1241,10 @@ export const STATS_TIMESERIE = {
 
 // ---------------------------------------------------------------------------
 
+export const MAX_SQL_DELETE_ITEMS = 10000
+
+// ---------------------------------------------------------------------------
+
 // Special constants for a test instance
 if (process.env.PRODUCTION_CONSTANTS !== 'true') {
   if (isTestOrDevInstance()) {
@@ -1156,11 +1260,11 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
     SCHEDULER_INTERVALS_MS.ACTOR_FOLLOW_SCORES = 1000
     SCHEDULER_INTERVALS_MS.REMOVE_OLD_JOBS = 10000
     SCHEDULER_INTERVALS_MS.REMOVE_OLD_HISTORY = 5000
-    SCHEDULER_INTERVALS_MS.REMOVE_OLD_VIEWS = 5000
     SCHEDULER_INTERVALS_MS.UPDATE_VIDEOS = 5000
     SCHEDULER_INTERVALS_MS.AUTO_FOLLOW_INDEX_INSTANCES = 5000
     SCHEDULER_INTERVALS_MS.UPDATE_INBOX_STATS = 5000
     SCHEDULER_INTERVALS_MS.CHECK_PEERTUBE_VERSION = 2000
+    SCHEDULER_INTERVALS_MS.UPDATE_TOKEN_SESSION = 2000
 
     REPEAT_JOBS['videos-views-stats'] = { every: 5000 }
 
@@ -1226,9 +1330,7 @@ export async function loadLanguages () {
 // ---------------------------------------------------------------------------
 
 export const FILES_CONTENT_HASH = {
-  MANIFEST: generateContentHash(),
-  FAVICON: generateContentHash(),
-  LOGO: generateContentHash()
+  MANIFEST: generateContentHash()
 }
 
 // ---------------------------------------------------------------------------
@@ -1275,7 +1377,9 @@ export async function buildLanguages () {
     jbo: true, // Lojban
     avk: true, // Kotava
 
-    zxx: true // No linguistic content (ISO-639-2)
+    zxx: true, // No linguistic content (ISO-639-2),
+
+    gsw: true // Swiss German (ISO-639-3)
   }
 
   // Only add ISO639-1 languages and some sign languages (ISO639-3)
@@ -1284,7 +1388,9 @@ export async function buildLanguages () {
       return (l.iso6391 !== undefined && l.type === 'living') ||
         additionalLanguages[l.iso6393] === true
     })
-    .forEach(l => { languages[l.iso6391 || l.iso6393] = l.name })
+    .forEach(l => {
+      languages[l.iso6391 || l.iso6393] = l.name
+    })
 
   // Override Occitan label
   languages['oc'] = 'Occitan'
@@ -1305,6 +1411,10 @@ export async function buildLanguages () {
 
   // Catalan languages
   languages['ca-valencia'] = 'Valencian'
+
+  // Creole French languages
+  languages['rcf'] = 'Réunion Creole French'
+  languages['gcr'] = 'Guianese Creole French'
 
   return languages
 }
@@ -1356,7 +1466,7 @@ function buildVideoMimetypeExt () {
 
         // The standard video format used by many Sony and Panasonic HD camcorders.
         // It is also used for storing high definition video on Blu-ray discs.
-        'video/mp2t': '.mts',
+        'video/mp2t': [ '.mts', 'ts' ],
         'video/vnd.dlna.mpeg-tts': '.mts',
 
         'video/m2ts': '.m2ts',
@@ -1409,7 +1519,7 @@ function updateWebserverConfig () {
   CONSTRAINTS_FIELDS.VIDEOS.EXTNAME = Object.keys(MIMETYPES.VIDEO.EXT_MIMETYPE)
 }
 
-function buildVideoExtMimetype (obj: { [ id: string ]: string | string[] }) {
+function buildVideoExtMimetype (obj: { [id: string]: string | string[] }) {
   const result: { [id: string]: string } = {}
 
   for (const mimetype of Object.keys(obj)) {

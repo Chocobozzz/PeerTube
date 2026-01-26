@@ -1,8 +1,6 @@
 /**
- *
  * Simple memoize only support methods that accept 0 or 1 argument
  * You can easily use it adding @SimpleMemoize just above the method name
- *
  */
 
 export function SimpleMemoize () {
@@ -35,13 +33,11 @@ function getNewFunction (originalMethod: () => void, store: Map<any, any>) {
         returnedValue = originalMethod.apply(this, args)
         store.set(hashKey, returnedValue)
       }
+    } else if (store.has(this)) {
+      returnedValue = store.get(this)
     } else {
-      if (store.has(this)) {
-        returnedValue = store.get(this)
-      } else {
-        returnedValue = originalMethod.apply(this, args)
-        store.set(this, returnedValue)
-      }
+      returnedValue = originalMethod.apply(this, args)
+      store.set(this, returnedValue)
     }
 
     return returnedValue

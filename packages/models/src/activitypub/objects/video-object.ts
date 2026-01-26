@@ -24,13 +24,13 @@ export interface VideoObject {
   views: number
 
   sensitive: boolean
+  summary: string
 
   isLiveBroadcast: boolean
   liveSaveReplay: boolean
   permanentLive: boolean
   latencyMode: LiveVideoLatencyModeType
 
-  commentsEnabled?: boolean
   commentsPolicy: VideoCommentPolicyType
   canReply: 'as:Public' | 'https://www.w3.org/ns/activitystreams#Public'
 
@@ -42,6 +42,10 @@ export interface VideoObject {
   originallyPublishedAt: string
   updated: string
   uploadDate: string
+
+  schedules?: {
+    startDate: Date
+  }[]
 
   mediaType: 'text/markdown'
   content: string
@@ -59,6 +63,7 @@ export interface VideoObject {
   shares: string
   comments: string
   hasParts: string | VideoChapterObject[]
+  playerSettings: string
 
   attributedTo: ActivityPubAttributedTo[]
 
@@ -80,7 +85,7 @@ export interface VideoObject {
 
 export interface ActivityPubStoryboard {
   type: 'Image'
-  rel: [ 'storyboard' ]
+  rel: ['storyboard']
   url: {
     href: string
     mediaType: string

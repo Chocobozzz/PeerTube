@@ -26,6 +26,12 @@ my-video-thumbnail,
   @include margin-right(10px);
 }
 
+.nsfw-warning {
+  my-global-icon {
+    @include global-icon-size(18px);
+  }
+}
+
 .video {
   display: grid;
   grid-template-columns: 1fr auto;

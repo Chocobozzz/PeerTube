@@ -20,6 +20,7 @@ import { fetchAP } from './activity.js'
 import { getOrCreateAPActor } from './actors/index.js'
 import { checkUrlsSameHost } from './url.js'
 import { canVideoBeFederated, getOrCreateAPVideo } from './videos/index.js'
+import { CONFIG } from '@server/initializers/config.js'
 
 type ResolveThreadParams = {
   url: string
@@ -30,6 +31,8 @@ type ResolveThreadParams = {
 type ResolveThreadResult = Promise<{ video: MVideoAccountLightBlacklistAllFiles, comment: MCommentOwnerVideo, commentCreated: boolean }>
 
 export async function addVideoComments (commentUrls: string[]) {
+  if (CONFIG.VIDEO_COMMENTS.ACCEPT_REMOTE_COMMENTS !== true) return
+
   return Bluebird.map(commentUrls, async commentUrl => {
     try {
       await resolveThread({ url: commentUrl, isVideo: false })
@@ -106,7 +109,7 @@ async function tryToResolveThreadFromVideo (params: ResolveThreadParams) {
   const syncParam = { rates: true, shares: true, comments: false, refreshVideo: false }
   const { video } = await getOrCreateAPVideo({ videoObject: url, syncParam })
 
-  if (video.isOwned() && !canVideoBeFederated(video)) {
+  if (video.isLocal() && !canVideoBeFederated(video)) {
     throw new Error('Cannot resolve thread of video that is not compatible with federation')
   }
 
@@ -166,7 +169,7 @@ async function getAutomaticTagsAndAssignReview (comment: MComment, video: MVideo
   const automaticTags = await new AutomaticTagger().buildCommentsAutomaticTags({ ownerAccount, text: comment.text })
 
   // Third parties rely on origin, so if origin has the comment it's not held for review
-  if (video.isOwned() || comment.isOwned()) {
+  if (video.isLocal() || comment.isLocal()) {
     comment.heldForReview = await shouldCommentBeHeldForReview({ user: null, video, automaticTags })
   } else {
     comment.heldForReview = false
@@ -245,7 +248,7 @@ async function isRemoteCommentAccepted (comment: MComment) {
     'filter:activity-pub.remote-video-comment.create.accept.result'
   )
 
-  if (!acceptedResult || acceptedResult.accepted !== true) {
+  if (acceptedResult?.accepted !== true) {
     logger.info('Refused to create a remote comment.', { acceptedResult, acceptParameters })
 
     return false

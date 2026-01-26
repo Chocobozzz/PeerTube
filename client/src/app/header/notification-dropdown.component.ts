@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common'
-import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router'
 import { Notifier, PeerTubeSocket, ScreenService } from '@app/core'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
+import { ButtonComponent } from '@app/shared/shared-main/buttons/button.component'
 import { LoaderComponent } from '@app/shared/shared-main/common/loader.component'
 import { UserNotificationService } from '@app/shared/shared-main/users/user-notification.service'
-import { UserNotificationsComponent } from '@app/shared/standalone-notifications/user-notifications.component'
+import { UserNotificationsComponent } from '@app/shared/shared-notifications/user-notifications.component'
 import { NgbDropdown, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap'
 import { Subject, Subscription } from 'rxjs'
 import { filter } from 'rxjs/operators'
@@ -14,7 +15,6 @@ import { filter } from 'rxjs/operators'
   selector: 'my-notification-dropdown',
   templateUrl: './notification-dropdown.component.html',
   styleUrls: [ './notification-dropdown.component.scss' ],
-  standalone: true,
   imports: [
     CommonModule,
     UserNotificationsComponent,
@@ -22,13 +22,18 @@ import { filter } from 'rxjs/operators'
     LoaderComponent,
     RouterLink,
     RouterLinkActive,
-    NgbDropdownModule
+    NgbDropdownModule,
+    ButtonComponent
   ]
 })
 export class NotificationDropdownComponent implements OnInit, OnDestroy {
-  @ViewChild('dropdown', { static: false }) dropdown: NgbDropdown
+  private userNotificationService = inject(UserNotificationService)
+  private screenService = inject(ScreenService)
+  private peertubeSocket = inject(PeerTubeSocket)
+  private notifier = inject(Notifier)
+  private router = inject(Router)
 
-  @Output() navigate = new EventEmitter<HTMLAnchorElement>()
+  readonly dropdown = viewChild<NgbDropdown>('dropdown')
 
   unreadNotifications = 0
   loaded = false
@@ -40,29 +45,20 @@ export class NotificationDropdownComponent implements OnInit, OnDestroy {
   private notificationSub: Subscription
   private routeSub: Subscription
 
-  constructor (
-    private userNotificationService: UserNotificationService,
-    private screenService: ScreenService,
-    private peertubeSocket: PeerTubeSocket,
-    private notifier: Notifier,
-    private router: Router
-  ) {
-  }
-
   ngOnInit () {
     this.userNotificationService.countUnreadNotifications()
-        .subscribe({
-          next: result => {
-            this.unreadNotifications = result
-            this.subscribeToNotifications()
-          },
+      .subscribe({
+        next: result => {
+          this.unreadNotifications = result
+          this.subscribeToNotifications()
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.handleError(err)
+      })
 
     this.routeSub = this.router.events
-                        .pipe(filter(event => event instanceof NavigationEnd))
-                        .subscribe(() => this.closeDropdown())
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => this.closeDropdown())
   }
 
   ngOnDestroy () {
@@ -75,7 +71,8 @@ export class NotificationDropdownComponent implements OnInit, OnDestroy {
   }
 
   closeDropdown () {
-    if (this.dropdown) this.dropdown.close()
+    const dropdown = this.dropdown()
+    if (dropdown) dropdown.close()
   }
 
   onDropdownShown () {
@@ -94,7 +91,6 @@ export class NotificationDropdownComponent implements OnInit, OnDestroy {
 
   onNavigate (link: HTMLAnchorElement) {
     this.closeDropdown()
-    this.navigate.emit(link)
   }
 
   markAllAsRead () {

@@ -1,15 +1,14 @@
-import { forkJoin } from 'rxjs'
-import { filter, first, map } from 'rxjs/operators'
-import { DOCUMENT, getLocaleDirection, NgClass, NgIf, PlatformLocation } from '@angular/common'
-import { AfterViewInit, Component, Inject, LOCALE_ID, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { getLocaleDirection, NgClass, PlatformLocation } from '@angular/common'
+import { AfterViewInit, Component, DOCUMENT, inject, LOCALE_ID, OnDestroy, OnInit, viewChild } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
-import { Event, GuardsCheckStart, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterLink, RouterOutlet } from '@angular/router'
+import { Event, GuardsCheckStart, NavigationStart, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterOutlet } from '@angular/router'
 import {
   AuthService,
   Hotkey,
   HotkeysService,
   MarkdownService,
   PeerTubeRouterService,
+  RouterStatusService,
   ScreenService,
   ScrollService,
   ServerService,
@@ -19,7 +18,7 @@ import {
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { AccountSetupWarningModalComponent } from '@app/modal/account-setup-warning-modal.component'
-import { AdminWelcomeModalComponent } from '@app/modal/admin-welcome-modal.component'
+import { AdminConfigWizardModalComponent } from '@app/modal/admin-config-wizard/admin-config-wizard-modal.component'
 import { CustomModalComponent } from '@app/modal/custom-modal.component'
 import { InstanceConfigWarningModalComponent } from '@app/modal/instance-config-warning-modal.component'
 import { NgbConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap'
@@ -30,6 +29,8 @@ import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { SharedModule } from 'primeng/api'
 import { ToastModule } from 'primeng/toast'
+import { forkJoin } from 'rxjs'
+import { filter, first, map } from 'rxjs/operators'
 import { MenuService } from './core/menu/menu.service'
 import { HeaderComponent } from './header/header.component'
 import { POP_STATE_MODAL_DISMISS } from './helpers'
@@ -37,19 +38,16 @@ import { HotkeysCheatSheetComponent } from './hotkeys/hotkeys-cheat-sheet.compon
 import { MenuComponent } from './menu/menu.component'
 import { ConfirmComponent } from './modal/confirm.component'
 import { GlobalIconComponent, GlobalIconName } from './shared/shared-icons/global-icon.component'
-import { ButtonComponent } from './shared/shared-main/buttons/button.component'
 import { InstanceService } from './shared/shared-main/instance/instance.service'
+import { PeertubeModalService } from './shared/shared-main/peertube-modal/peertube-modal.service'
 
 @Component({
   selector: 'my-app',
   templateUrl: './app.component.html',
   styleUrls: [ './app.component.scss' ],
-  standalone: true,
   imports: [
-    NgIf,
     HotkeysCheatSheetComponent,
     NgClass,
-    RouterLink,
     HeaderComponent,
     MenuComponent,
     GlobalIconComponent,
@@ -59,19 +57,42 @@ import { InstanceService } from './shared/shared-main/instance/instance.service'
     ToastModule,
     SharedModule,
     AccountSetupWarningModalComponent,
-    AdminWelcomeModalComponent,
     InstanceConfigWarningModalComponent,
     CustomModalComponent,
-    ButtonComponent
+    AdminConfigWizardModalComponent
   ]
 })
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
+  private document = inject<Document>(DOCUMENT)
+  private localeId = inject(LOCALE_ID)
+  private router = inject(Router)
+  private authService = inject(AuthService)
+  private serverService = inject(ServerService)
+  private peertubeRouter = inject(PeerTubeRouterService)
+  private pluginService = inject(PluginService)
+  private instanceService = inject(InstanceService)
+  private domSanitizer = inject(DomSanitizer)
+  private screenService = inject(ScreenService)
+  private hotkeysService = inject(HotkeysService)
+  private hooks = inject(HooksService)
+  private location = inject(PlatformLocation)
+  private modalService = inject(NgbModal)
+  private markdownService = inject(MarkdownService)
+  private ngbConfig = inject(NgbConfig)
+  private loadingBar = inject(LoadingBarService)
+  private scrollService = inject(ScrollService)
+  private userLocalStorage = inject(UserLocalStorageService)
+  private peertubeModal = inject(PeertubeModalService)
+  private routerStatus = inject(RouterStatusService)
+
+  menu = inject(MenuService)
+
   private static LS_BROADCAST_MESSAGE = 'app-broadcast-message-dismissed'
 
-  @ViewChild('accountSetupWarningModal') accountSetupWarningModal: AccountSetupWarningModalComponent
-  @ViewChild('adminWelcomeModal') adminWelcomeModal: AdminWelcomeModalComponent
-  @ViewChild('instanceConfigWarningModal') instanceConfigWarningModal: InstanceConfigWarningModalComponent
-  @ViewChild('customModal') customModal: CustomModalComponent
+  readonly accountSetupWarningModal = viewChild<AccountSetupWarningModalComponent>('accountSetupWarningModal')
+  readonly adminConfigWizardModal = viewChild<AdminConfigWizardModalComponent>('adminConfigWizardModal')
+  readonly instanceConfigWarningModal = viewChild<InstanceConfigWarningModalComponent>('instanceConfigWarningModal')
+  readonly customModal = viewChild<CustomModalComponent>('customModal')
 
   customCSS: SafeHtml
   broadcastMessage: { message: string, dismissable: boolean, class: string } | null = null
@@ -80,28 +101,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   private serverConfig: HTMLServerConfig
   private userLoaded = false
 
-  constructor (
-    @Inject(DOCUMENT) private document: Document,
-    @Inject(LOCALE_ID) private localeId: string,
-    private router: Router,
-    private authService: AuthService,
-    private serverService: ServerService,
-    private peertubeRouter: PeerTubeRouterService,
-    private pluginService: PluginService,
-    private instanceService: InstanceService,
-    private domSanitizer: DomSanitizer,
-    private screenService: ScreenService,
-    private hotkeysService: HotkeysService,
-    private hooks: HooksService,
-    private location: PlatformLocation,
-    private modalService: NgbModal,
-    private markdownService: MarkdownService,
-    private ngbConfig: NgbConfig,
-    private loadingBar: LoadingBarService,
-    private scrollService: ScrollService,
-    private userLocalStorage: UserLocalStorageService,
-    public menu: MenuService
-  ) {
+  constructor () {
     this.ngbConfig.animation = false
   }
 
@@ -157,10 +157,17 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
       return Promise.resolve()
     })
+
+    this.peertubeModal.openAdminConfigWizardSubject.subscribe(({ showWelcome }) => {
+      const adminWelcomeModal = this.adminConfigWizardModal()
+      if (!adminWelcomeModal) return
+
+      adminWelcomeModal.show({ showWelcome })
+    })
   }
 
   ngAfterViewInit () {
-    this.pluginService.initializeCustomModal(this.customModal)
+    this.pluginService.initializeCustomModal(this.customModal())
   }
 
   ngOnDestroy () {
@@ -172,6 +179,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isUserLoggedIn () {
     return this.authService.isLoggedIn()
+  }
+
+  isUserAdmin () {
+    return this.isUserLoggedIn() && this.authService.getUser().role.id === UserRole.ADMINISTRATOR
   }
 
   hideBroadcastMessage () {
@@ -220,6 +231,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     eventsObs.pipe(
       filter((e: Event): e is RouteConfigLoadEnd => e instanceof RouteConfigLoadEnd)
     ).subscribe(() => this.loadingBar.useRef().complete())
+
+    // We need this to prevent circular dependency between the router and the custom reuse strategy
+    eventsObs.pipe(
+      filter((e: Event): e is NavigationStart => e instanceof NavigationStart)
+    ).subscribe(() => {
+      const current = this.router.currentNavigation()
+
+      this.routerStatus.isNavigatingBack = current?.trigger === 'popstate' || current?.extras.state?.trigger === 'popstate'
+    })
   }
 
   private async injectBroadcastMessage () {
@@ -259,7 +279,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     // Inject JS
     if (this.serverConfig.instance.customizations.javascript) {
       try {
-        /* eslint-disable no-eval */
         window.eval(this.serverConfig.instance.customizations.javascript)
       } catch (err) {
         logger.error('Cannot eval custom JavaScript.', err)
@@ -280,11 +299,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private listenUserChangeForModals () {
     this.authService.userInformationLoaded
-        .pipe(map(() => this.authService.getUser()))
-        .subscribe(user => {
-          this.userLoaded = true
-          this.openModalsIfNeeded(user)
-        })
+      .pipe(map(() => this.authService.getUser()))
+      .subscribe(user => {
+        this.userLoaded = true
+        this.openModalsIfNeeded(user)
+      })
   }
 
   onModalCreated () {
@@ -305,30 +324,34 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private openAdminModalsIfNeeded (user: User) {
-    if (!this.adminWelcomeModal) return
+    const adminWelcomeModal = this.adminConfigWizardModal()
+    if (!adminWelcomeModal) return
 
-    if (this.adminWelcomeModal.shouldOpen(user)) {
-      return this.adminWelcomeModal.show()
+    if (adminWelcomeModal.shouldAutoOpen(user)) {
+      return adminWelcomeModal.show({ showWelcome: true })
     }
 
-    if (!this.instanceConfigWarningModal) return
-    if (!this.instanceConfigWarningModal.shouldOpenByUser(user)) return
+    const instanceConfigWarningModal = this.instanceConfigWarningModal()
+    if (!instanceConfigWarningModal) return
+    if (!instanceConfigWarningModal.canBeOpenByUser(user)) return
 
     forkJoin([
       this.serverService.getConfig().pipe(first()),
       this.instanceService.getAbout().pipe(first())
     ]).subscribe(([ config, about ]) => {
-      if (this.instanceConfigWarningModal.shouldOpen(config, about)) {
-        this.instanceConfigWarningModal.show(about)
+      const instanceConfigWarningModalValue = this.instanceConfigWarningModal()
+      if (instanceConfigWarningModalValue.shouldAutoOpen(config, about)) {
+        instanceConfigWarningModalValue.show(about)
       }
     })
   }
 
   private openAccountModalsIfNeeded (user: User) {
-    if (!this.accountSetupWarningModal) return
+    const accountSetupWarningModal = this.accountSetupWarningModal()
+    if (!accountSetupWarningModal) return
 
-    if (this.accountSetupWarningModal.shouldOpen(user)) {
-      this.accountSetupWarningModal.show(user)
+    if (accountSetupWarningModal.shouldAutoOpen(user)) {
+      accountSetupWarningModal.show(user)
     }
   }
 

@@ -1,29 +1,54 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
 
-.root {
-  height: auto;
-  display: flex;
-  flex-direction: column;
+:host {
+  display: block;
+}
 
-  .preview-container {
-    position: relative;
+.preview-container,
+.preview {
+  height: 100%;
+  width: 100%;
+}
 
-    my-reactive-file {
-      position: absolute;
-      bottom: 10px;
-      left: 10px;
-    }
+.preview-container {
+  position: relative;
 
-    .preview {
-      object-fit: cover;
-      border-radius: 4px;
-      max-width: 100%;
+  .buttons {
+    display: flex;
+    gap: 10px;
+  }
 
-      &.no-image {
-        border: 2px solid #808080;
-        background-color: pvar(--bg);
-      }
-    }
+  .preview {
+    object-fit: cover;
+    border-radius: 4px;
+    max-width: 100%;
+  }
+}
+
+.preview-container:not(.buttons-aside) {
+  .buttons {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    flex-wrap: wrap;
+  }
+
+  .preview.no-image {
+    border: 2px solid pvar(--secondary-icon-color);
+    background-color: pvar(--bg);
+  }
+}
+
+.preview-container.buttons-aside {
+  text-align: center;
+  border: 1px solid pvar(--secondary-icon-color);
+  border-radius: 4px;
+  width: min-content;
+
+  @include padding(1rem, 1.5rem);
+
+  .buttons {
+    margin-top: 1rem;
   }
 }

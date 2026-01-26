@@ -1,14 +1,13 @@
-import { AbstractUserExporter } from './abstract-user-exporter.js'
 import { ActivityPubOrderedCollection, FollowingExportJSON } from '@peertube/peertube-models'
-import { ActorFollowModel } from '@server/models/actor/actor-follow.js'
-import { activityPubCollection } from '@server/lib/activitypub/collection.js'
 import { activityPubContextify } from '@server/helpers/activity-pub-utils.js'
+import { activityPubCollection } from '@server/lib/activitypub/collection.js'
 import { getContextFilter } from '@server/lib/activitypub/context.js'
+import { ActorFollowModel } from '@server/models/actor/actor-follow.js'
+import { AbstractUserExporter } from './abstract-user-exporter.js'
 
-export class FollowingExporter extends AbstractUserExporter <FollowingExportJSON> {
-
+export class FollowingExporter extends AbstractUserExporter<FollowingExportJSON> {
   async export () {
-    const following = await ActorFollowModel.listAcceptedFollowingForExport(this.user.Account.actorId)
+    const following = await ActorFollowModel.listAcceptedFollowingForExport(this.user.Account.Actor.id)
     const followingJSON = this.formatFollowingJSON(following, this.user.Account.Actor.getFullIdentifier())
 
     return {
@@ -45,5 +44,4 @@ export class FollowingExporter extends AbstractUserExporter <FollowingExportJSON
       getContextFilter()
     )
   }
-
 }

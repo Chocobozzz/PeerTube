@@ -7,11 +7,11 @@ type Use<K extends keyof VideoChannelSyncModel, M> = PickWith<VideoChannelSyncMo
 export type MChannelSync = Omit<VideoChannelSyncModel, 'VideoChannel'>
 
 export type MChannelSyncChannel =
-  MChannelSync &
-  Use<'VideoChannel', MChannelAccountDefault> &
-  FunctionProperties<VideoChannelSyncModel>
+  & MChannelSync
+  & Use<'VideoChannel', MChannelAccountDefault>
+  & FunctionProperties<VideoChannelSyncModel>
 
 export type MChannelSyncFormattable =
-  FunctionProperties<MChannelSyncChannel> &
-  Use<'VideoChannel', MChannelFormattable> &
-  MChannelSync
+  & FunctionProperties<MChannelSyncChannel>
+  & Use<'VideoChannel', MChannelFormattable>
+  & MChannelSync

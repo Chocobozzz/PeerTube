@@ -1,21 +1,23 @@
-import express from 'express'
 import { AccessDeniedError } from '@node-oauth/oauth2-server'
+import { pick } from '@peertube/peertube-core-utils'
+import { AttributesOnly } from '@peertube/peertube-typescript-utils'
+import { isUserPasswordTooLong } from '@server/helpers/custom-validators/users.js'
 import { PluginManager } from '@server/lib/plugins/plugin-manager.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { AuthenticatedResultUpdaterFieldName, RegisterServerAuthenticatedResult } from '@server/types/index.js'
 import { MOAuthClient } from '@server/types/models/index.js'
 import { MOAuthTokenUser } from '@server/types/models/oauth/oauth-token.js'
 import { MUser, MUserDefault } from '@server/types/models/user/user.js'
-import { pick } from '@peertube/peertube-core-utils'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
+import express from 'express'
 import { logger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { OAuthClientModel } from '../../models/oauth/oauth-client.js'
 import { OAuthTokenModel } from '../../models/oauth/oauth-token.js'
 import { UserModel } from '../../models/user/user.js'
 import { findAvailableLocalActorName } from '../local-actor.js'
-import { buildUser, createUserAccountAndChannelAndPlaylist, getUserByEmailPermissive } from '../user.js'
+import { buildUser, createUserAccountAndChannelAndPlaylist, getByEmailPermissive } from '../user.js'
 import { ExternalUser } from './external-auth.js'
+import { AccountBlockedError, EmailNotVerifiedError, TooLongPasswordError } from './oauth.js'
 import { TokensCache } from './tokens-cache.js'
 
 type TokenInfo = {
@@ -23,6 +25,12 @@ type TokenInfo = {
   refreshToken: string
   accessTokenExpiresAt: Date
   refreshTokenExpiresAt: Date
+  loginDevice: string
+  loginIP: string
+  loginDate: Date
+  lastActivityDevice: string
+  lastActivityIP: string
+  lastActivityDate: Date
 }
 
 export type BypassLogin = {
@@ -82,12 +90,18 @@ async function getRefreshToken (refreshToken: string) {
   return tokenInfo
 }
 
-async function getUser (usernameOrEmail?: string, password?: string, bypassLogin?: BypassLogin) {
+// Keep this function signature, required by oauth2-server
+async function getUser (usernameOrEmail?: string, password?: string, options?: {
+  bypassLogin?: BypassLogin
+  req: express.Request
+}) {
+  const { bypassLogin, req } = options
+
   // Special treatment coming from a plugin
-  if (bypassLogin && bypassLogin.bypass === true) {
+  if (bypassLogin?.bypass === true) {
     logger.info('Bypassing oauth login by plugin %s.', bypassLogin.pluginName)
 
-    let user = getUserByEmailPermissive(await UserModel.loadByEmailCaseInsensitive(bypassLogin.user.email), bypassLogin.user.email)
+    let user = getByEmailPermissive(await UserModel.loadByEmailCaseInsensitive(bypassLogin.user.email), bypassLogin.user.email)
 
     if (!user) {
       user = await createUserFromExternal(bypassLogin.pluginName, bypassLogin.user)
@@ -96,7 +110,7 @@ async function getUser (usernameOrEmail?: string, password?: string, bypassLogin
     }
 
     // Cannot create a user
-    if (!user) throw new AccessDeniedError('Cannot create such user: an actor with that name already exists.')
+    if (!user) throw new AccessDeniedError(req.t('Cannot create such user: an actor with that name already exists.'))
 
     // If the user does not belongs to a plugin, it was created before its installation
     // Then we just go through a regular login process
@@ -105,13 +119,15 @@ async function getUser (usernameOrEmail?: string, password?: string, bypassLogin
       if (user.pluginAuth !== bypassLogin.pluginName) {
         logger.info(
           'Cannot bypass oauth login by plugin %s because %s has another plugin auth method (%s).',
-          bypassLogin.pluginName, bypassLogin.user.email, user.pluginAuth
+          bypassLogin.pluginName,
+          bypassLogin.user.email,
+          user.pluginAuth
         )
 
         return null
       }
 
-      checkUserValidityOrThrow(user)
+      checkUserValidityOrThrow(user, req)
 
       return user
     }
@@ -123,7 +139,7 @@ async function getUser (usernameOrEmail?: string, password?: string, bypassLogin
   let user: MUserDefault
 
   if (usernameOrEmail.includes('@')) {
-    user = getUserByEmailPermissive(users, usernameOrEmail)
+    user = getByEmailPermissive(users, usernameOrEmail)
   } else if (users.length === 1) {
     user = users[0]
   }
@@ -134,12 +150,16 @@ async function getUser (usernameOrEmail?: string, password?: string, bypassLogin
   const passwordMatch = await user.isPasswordMatch(password)
   if (passwordMatch !== true) return null
 
-  checkUserValidityOrThrow(user)
+  if (isUserPasswordTooLong(password)) {
+    throw new TooLongPasswordError(req.t('Password is too long. Please reset it using the password reset procedure.'))
+  }
+
+  checkUserValidityOrThrow(user, req)
 
   if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION && user.emailVerified === false) {
     // Keep this message sync with the client
     // TODO: use custom server code
-    throw new AccessDeniedError('User email is not verified.')
+    throw new EmailNotVerifiedError(req.t('User email is not verified.'))
   }
 
   return user
@@ -166,7 +186,7 @@ async function revokeToken (
     TokensCache.Instance.clearCacheByToken(token.accessToken)
 
     token.destroy()
-         .catch(err => logger.error('Cannot destroy token when revoking token.', { err }))
+      .catch(err => logger.error('Cannot destroy token when revoking token.', { err }))
 
     return { success: true, redirectUrl }
   }
@@ -192,13 +212,21 @@ async function saveToken (
     authName = refreshTokenAuthName
   }
 
-  logger.debug('Saving token ' + token.accessToken + ' for client ' + client.id + ' and user ' + user.id + '.')
+  logger.debug(`Saving token ${token.accessToken} for client ${client.id} and user ${user.id}.`)
 
   const tokenToCreate = {
-    accessToken: token.accessToken,
-    accessTokenExpiresAt: token.accessTokenExpiresAt,
-    refreshToken: token.refreshToken,
-    refreshTokenExpiresAt: token.refreshTokenExpiresAt,
+    ...pick(token, [
+      'accessToken',
+      'refreshToken',
+      'accessTokenExpiresAt',
+      'refreshTokenExpiresAt',
+      'loginDevice',
+      'loginIP',
+      'loginDate',
+      'lastActivityDate',
+      'lastActivityDevice',
+      'lastActivityIP'
+    ]),
     authName,
     oAuthClientId: client.id,
     userId: user.id
@@ -261,7 +289,7 @@ async function updateUserFromExternal (
 
   {
     type UserAttributeKeys = keyof AttributesOnly<UserModel>
-    const mappingKeys: { [ id in UserAttributeKeys ]?: AuthenticatedResultUpdaterFieldName } = {
+    const mappingKeys: { [id in UserAttributeKeys]?: AuthenticatedResultUpdaterFieldName } = {
       role: 'role',
       adminFlags: 'adminFlags',
       videoQuota: 'videoQuota',
@@ -278,7 +306,7 @@ async function updateUserFromExternal (
 
   {
     type AccountAttributeKeys = keyof Partial<AttributesOnly<AccountModel>>
-    const mappingKeys: { [ id in AccountAttributeKeys ]?: AuthenticatedResultUpdaterFieldName } = {
+    const mappingKeys: { [id in AccountAttributeKeys]?: AuthenticatedResultUpdaterFieldName } = {
       name: 'displayName'
     }
 
@@ -297,8 +325,8 @@ async function updateUserFromExternal (
   return user.save()
 }
 
-function checkUserValidityOrThrow (user: MUser) {
-  if (user.blocked) throw new AccessDeniedError('User is blocked.')
+function checkUserValidityOrThrow (user: MUser, req: express.Request) {
+  if (user.blocked) throw new AccountBlockedError(req.t('User is blocked.'))
 }
 
 function buildExpiresIn (expiresAt: Date) {

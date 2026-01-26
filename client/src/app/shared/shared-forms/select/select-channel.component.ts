@@ -1,16 +1,15 @@
-import { CommonModule } from '@angular/common'
-import { Component, forwardRef, Input, OnChanges } from '@angular/core'
+import { Component, forwardRef, input, OnChanges } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
-import { DropdownModule } from 'primeng/dropdown'
 import { SelectChannelItem, SelectOptionsItem } from '../../../../types/select-options-item.model'
 import { SelectOptionsComponent } from './select-options.component'
+import { CollaboratorStateComponent } from '@app/shared/shared-main/channel/collaborator-state.component'
 
 @Component({
   selector: 'my-select-channel',
   template: `
   <my-select-options
-    [inputId]="inputId"
+    [inputId]="inputId()"
 
     [items]="channels"
 
@@ -18,7 +17,17 @@ import { SelectOptionsComponent } from './select-options.component'
     (ngModelChange)="onModelChange()"
 
     [filter]="channels && channels.length > 5"
-  ></my-select-options>
+  >
+    <ng-template #itemExtra let-item>
+      @if (item.collaborate) {
+        @if (item.editor) {
+          <my-collaborator-state class="lh-1 ms-2" type="accepted" disableTooltip="true"></my-collaborator-state>
+        } @else if (item.owner) {
+          <my-collaborator-state class="lh-1 ms-2" type="owner" disableTooltip="true"></my-collaborator-state>
+        }
+      }
+    </ng-template>
+  </my-select-options>
   `,
   providers: [
     {
@@ -27,27 +36,28 @@ import { SelectOptionsComponent } from './select-options.component'
       multi: true
     }
   ],
-  standalone: true,
-  imports: [ DropdownModule, FormsModule, CommonModule, SelectOptionsComponent ]
+  imports: [ FormsModule, SelectOptionsComponent, CollaboratorStateComponent ]
 })
 export class SelectChannelComponent implements ControlValueAccessor, OnChanges {
-  @Input({ required: true }) inputId: string
-  @Input() items: SelectChannelItem[] = []
+  readonly inputId = input.required<string>()
+  readonly items = input<SelectChannelItem[]>([])
 
   channels: SelectOptionsItem[]
   selectedId: number
 
   ngOnChanges () {
-    this.channels = this.items.map(c => {
-      const avatarPath = c.avatarPath
-        ? c.avatarPath
+    this.channels = this.items().map(c => {
+      const avatarFileUrl = c.avatarFileUrl
+        ? c.avatarFileUrl
         : VideoChannel.GET_DEFAULT_AVATAR_URL(21)
 
-      return Object.assign({}, c, { imageUrl: avatarPath })
+      return Object.assign({}, c, { imageUrl: avatarFileUrl })
     })
   }
 
-  propagateChange = (_: any) => { /* empty */ }
+  propagateChange = (_: any) => {
+    // empty
+  }
 
   writeValue (id: number | string) {
     this.selectedId = typeof id === 'string'

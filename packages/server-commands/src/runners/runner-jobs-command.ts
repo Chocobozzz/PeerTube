@@ -4,6 +4,7 @@ import {
   AcceptRunnerJobBody,
   AcceptRunnerJobResult,
   ErrorRunnerJobBody,
+  GenerateStoryboardSuccess,
   HttpStatusCode,
   ListRunnerJobsQuery,
   RequestRunnerJobBody,
@@ -11,6 +12,7 @@ import {
   ResultList,
   RunnerJobAdmin,
   RunnerJobCustomUpload,
+  RunnerJobGenerateStoryboardPayload,
   RunnerJobLiveRTMPHLSTranscodingPayload,
   RunnerJobPayload,
   RunnerJobState,
@@ -26,6 +28,7 @@ import {
   TranscriptionSuccess,
   VODHLSTranscodingSuccess,
   VODWebVideoTranscodingSuccess,
+  isGenerateStoryboardSuccess,
   isHLSTranscodingPayloadSuccess,
   isLiveRTMPHLSTranscodingUpdatePayload,
   isTranscriptionPayloadSuccess,
@@ -36,7 +39,6 @@ import { waitJobs } from '../server/jobs.js'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class RunnerJobsCommand extends AbstractCommand {
-
   list (options: OverrideCommandOptions & ListRunnerJobsQuery = {}) {
     const path = '/api/v1/runners/jobs'
 
@@ -83,7 +85,7 @@ export class RunnerJobsCommand extends AbstractCommand {
       ...options,
 
       path,
-      fields: pick(options, [ 'runnerToken', 'jobTypes' ]),
+      fields: pick(options, [ 'runnerToken', 'jobTypes', 'version' ]),
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     }))
@@ -111,7 +113,7 @@ export class RunnerJobsCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  accept <T extends RunnerJobPayload = RunnerJobPayload> (options: OverrideCommandOptions & AcceptRunnerJobBody & { jobUUID: string }) {
+  accept<T extends RunnerJobPayload = RunnerJobPayload> (options: OverrideCommandOptions & AcceptRunnerJobBody & { jobUUID: string }) {
     const path = '/api/v1/runners/jobs/' + options.jobUUID + '/accept'
 
     return unwrapBody<AcceptRunnerJobResult<T>>(this.postBodyRequest({
@@ -266,6 +268,22 @@ export class RunnerJobsCommand extends AbstractCommand {
       payloadWithoutFiles = omit(payloadWithoutFiles as TranscriptionSuccess, [ 'vttFile' ])
     }
 
+    // Generate storyboard success payload contains a storyboard image file
+    if (isGenerateStoryboardSuccess(payload) && payload.storyboardFile) {
+      const reqPayload = options.reqPayload as RunnerJobGenerateStoryboardPayload
+
+      this.updateUploadPayloads({
+        attachesStore: attaches,
+        customUploadsStore: customUploads,
+
+        file: payload.storyboardFile,
+        attachName: 'storyboardFile',
+        customUpload: reqPayload?.output?.storyboardFileCustomUpload
+      })
+
+      payloadWithoutFiles = omit(payloadWithoutFiles as GenerateStoryboardSuccess, [ 'storyboardFile' ])
+    }
+
     return this.uploadRunnerJobRequest({
       ...options,
 
@@ -295,14 +313,16 @@ export class RunnerJobsCommand extends AbstractCommand {
     }
   }
 
-  private async uploadRunnerJobRequest (options: OverrideCommandOptions & {
-    path: string
+  private async uploadRunnerJobRequest (
+    options: OverrideCommandOptions & {
+      path: string
 
-    fields: { [ fieldName: string ]: any }
-    attaches: { [ fieldName: string ]: any }
+      fields: { [fieldName: string]: any }
+      attaches: { [fieldName: string]: any }
 
-    customUploads?: (RunnerJobCustomUpload & { file: string | Blob })[]
-  }) {
+      customUploads?: (RunnerJobCustomUpload & { file: string | Blob })[]
+    }
+  ) {
     for (const customUpload of (options.customUploads || [])) {
       await this.customUpload(customUpload)
     }
@@ -318,15 +338,18 @@ export class RunnerJobsCommand extends AbstractCommand {
   private customUpload (options: RunnerJobCustomUpload & { file: Blob | string }) {
     const parsedUrl = new URL(options.url)
 
-    const reqOptions = {
+    const reqOptions: Parameters<RunnerJobsCommand['postUploadRequest']>[0] = {
       url: parsedUrl.origin,
       path: parsedUrl.pathname,
+      rawQuery: parsedUrl.searchParams.toString(),
       attaches: { file: options.file },
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     }
 
-    if (options.method === 'POST') return this.postUploadRequest(reqOptions)
+    if (options.method === 'POST') {
+      return this.postUploadRequest(reqOptions)
+    }
 
     return this.putUploadRequest(reqOptions)
   }
@@ -363,12 +386,17 @@ export class RunnerJobsCommand extends AbstractCommand {
 
     if (!jobUUID) {
       const { availableJobs } = await this.request({ runnerToken })
-      jobUUID = availableJobs[0].uuid
+      // Find a web video transcoding job specifically
+      const webVideoJob = availableJobs.find(j => j.type === 'vod-web-video-transcoding')
+      if (!webVideoJob) throw new Error('No web video transcoding jobs available')
+
+      jobUUID = webVideoJob.uuid
     }
 
     const { job } = await this.accept({ runnerToken, jobUUID })
     const jobToken = job.jobToken
 
+    // Use a proper fixture file path for testing
     const payload: RunnerJobSuccessPayload = { videoFile: 'video_short.mp4' }
     await this.success({ runnerToken, jobUUID, jobToken, payload, reqPayload: undefined })
 

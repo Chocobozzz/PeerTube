@@ -15,16 +15,15 @@ import { SequelizeModel } from '../shared/index.js'
   ]
 })
 export class VideoCommentAbuseModel extends SequelizeModel<VideoCommentAbuseModel> {
-
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @ForeignKey(() => AbuseModel)
   @Column
-  abuseId: number
+  declare abuseId: number
 
   @BelongsTo(() => AbuseModel, {
     foreignKey: {
@@ -32,11 +31,11 @@ export class VideoCommentAbuseModel extends SequelizeModel<VideoCommentAbuseMode
     },
     onDelete: 'cascade'
   })
-  Abuse: Awaited<AbuseModel>
+  declare Abuse: Awaited<AbuseModel>
 
   @ForeignKey(() => VideoCommentModel)
   @Column
-  videoCommentId: number
+  declare videoCommentId: number
 
   @BelongsTo(() => VideoCommentModel, {
     foreignKey: {
@@ -44,5 +43,5 @@ export class VideoCommentAbuseModel extends SequelizeModel<VideoCommentAbuseMode
     },
     onDelete: 'set null'
   })
-  VideoComment: Awaited<VideoCommentModel>
+  declare VideoComment: Awaited<VideoCommentModel>
 }

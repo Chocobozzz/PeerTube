@@ -1,0 +1,192 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_icons" as *;
+@use "./_player-variables" as *;
+
+$setting-transition-duration: 0.15s;
+$setting-transition-easing: ease-out;
+
+/* Sass for videojs-settings-menu */
+
+.video-js {
+  .vjs-settings-sub-menu-title {
+    text-transform: initial;
+  }
+
+  .vjs-settings-dialog {
+    position: absolute;
+    right: 0.5em;
+    bottom: 4em;
+    color: pvar(--pt-player-fg);
+    margin: 0 auto;
+    font-size: $font-size !important;
+    z-index: 100;
+    border-radius: 10px;
+    background-color: var(--pt-player-overlay-bg);
+
+    width: auto;
+    overflow: hidden;
+
+    transition:
+      width $setting-transition-duration $setting-transition-easing,
+      height $setting-transition-duration $setting-transition-easing;
+
+    .vjs-settings-sub-menu-value,
+    .vjs-settings-sub-menu-title {
+      display: table-cell;
+      padding: 0 5px;
+      text-transform: capitalize;
+    }
+
+    .vjs-settings-sub-menu-title {
+      font-weight: $font-semibold;
+    }
+
+    .vjs-settings-sub-menu-value {
+      width: 100%;
+      text-align: end;
+
+      small {
+        font-size: 0.85em;
+        opacity: 0.8;
+      }
+    }
+
+    .vjs-settings-panel {
+      position: absolute;
+
+      overflow-y: auto;
+      overflow-x: hidden;
+
+      @include right(0);
+    }
+
+    .vjs-settings-panel-child {
+      display: flex;
+
+      align-items: flex-end;
+      white-space: nowrap;
+
+      &:focus,
+      &:active {
+        outline: none;
+      }
+
+      > .vjs-menu {
+        flex: 1;
+        min-width: 200px;
+        padding: 5px 0;
+      }
+
+      > .vjs-menu,
+      > .vjs-settings-sub-menu {
+        transition: all $setting-transition-duration $setting-transition-easing;
+
+        .vjs-menu-item {
+          font-size: 1em;
+          text-transform: initial;
+
+          &:hover {
+            cursor: pointer;
+            background-color: var(--pt-player-overlay-bg-hover);
+          }
+
+          &.disabled {
+            opacity: 0.5;
+            cursor: default !important;
+            background-color: inherit !important;
+          }
+        }
+      }
+
+      > .vjs-menu {
+        .vjs-menu-item {
+          padding: 8px 16px;
+        }
+
+        .vjs-settings-sub-menu-value::after {
+          @include chevron-right(9px, 2px);
+          @include margin-left(5px);
+        }
+      }
+
+      > .vjs-settings-sub-menu {
+        min-width: 80px;
+
+        .vjs-menu-item {
+          outline: 0;
+          font-weight: $font-semibold;
+          justify-content: flex-end;
+          padding: 8px 15px;
+
+          &.vjs-back-button {
+            padding: 12px 15px;
+            margin-bottom: 5px;
+            border-bottom: 1px solid #808080;
+            justify-content: flex-start;
+            align-items: center;
+
+            &::before {
+              top: -1px;
+
+              @include chevron-left(9px, 2px);
+              @include margin-right(10px);
+            }
+          }
+
+          &.vjs-selected {
+            background-color: inherit;
+            color: inherit;
+            position: relative;
+
+            &:focus {
+              background-color: rgba(115, 133, 159, 0.5);
+            }
+
+            &::before {
+              position: absolute;
+              content: " ";
+              margin-top: 1px;
+              background-image: url("../svg/tick-white.svg");
+
+              @include icon(15px);
+              @include left(15px);
+            }
+          }
+        }
+
+        // Special captions case
+        // Bigger caption button
+        &.vjs-captions-button {
+          min-width: 200px;
+
+          .vjs-menu-item {
+            text-align: start;
+
+            .vjs-menu-item-text {
+              text-transform: capitalize;
+
+              @include margin-left(25px);
+            }
+          }
+        }
+
+        &.vjs-resolution-button {
+          .vjs-menu-item-text {
+            @include margin-left(25px);
+          }
+        }
+
+        .vjs-menu {
+          width: inherit;
+        }
+      }
+    }
+  }
+}
+
+:root[dir="rtl"] {
+  .vjs-back-button::before {
+    transform: rotate(45deg) !important;
+  }
+}

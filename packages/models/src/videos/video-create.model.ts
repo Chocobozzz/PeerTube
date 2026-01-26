@@ -1,32 +1,10 @@
-import { VideoCommentPolicyType } from './comment/video-comment-policy.enum.js'
+import { VideoCreateUpdateCommon } from './video-create-update-common.model.js'
 import { VideoPrivacyType } from './video-privacy.enum.js'
-import { VideoScheduleUpdate } from './video-schedule-update.model.js'
 
-export interface VideoCreate {
+export interface VideoCreate extends VideoCreateUpdateCommon {
   name: string
   channelId: number
-
-  category?: number
-  licence?: number
-  language?: string
-  description?: string
-  support?: string
-  nsfw?: boolean
-  waitTranscoding?: boolean
-  tags?: string[]
-
-  // TODO: remove, deprecated in 6.2
-  commentsEnabled?: boolean
-  commentsPolicy?: VideoCommentPolicyType
-
-  downloadEnabled?: boolean
   privacy: VideoPrivacyType
-  scheduleUpdate?: VideoScheduleUpdate
-  originallyPublishedAt?: Date | string
-  videoPasswords?: string[]
-
-  thumbnailfile?: Blob | string
-  previewfile?: Blob | string
 
   // Default is true if the feature is enabled by the instance admin
   generateTranscription?: boolean

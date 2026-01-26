@@ -49,18 +49,21 @@ interface MuxingSessionEvents {
   'after-cleanup': (options: { videoUUID: string }) => void
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 declare interface MuxingSession {
   on<U extends keyof MuxingSessionEvents>(
-    event: U, listener: MuxingSessionEvents[U]
+    event: U,
+    listener: MuxingSessionEvents[U]
   ): this
 
   emit<U extends keyof MuxingSessionEvents>(
-    event: U, ...args: Parameters<MuxingSessionEvents[U]>
+    event: U,
+    ...args: Parameters<MuxingSessionEvents[U]>
   ): boolean
 }
 
-class MuxingSession extends EventEmitter {
-
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
+class MuxingSession extends EventEmitter implements MuxingSession {
   private transcodingWrapper: AbstractTranscodingWrapper
 
   private readonly context: any
@@ -222,12 +225,18 @@ class MuxingSession extends EventEmitter {
 
           logger.debug('Uploading live master playlist on object storage for %s', this.videoUUID, { masterContent, ...this.lTags() })
 
-          const url = await storeHLSFileFromContent(this.streamingPlaylist, this.streamingPlaylist.playlistFilename, masterContent)
+          const url = await storeHLSFileFromContent(
+            {
+              playlist: this.streamingPlaylist,
+              pathOrFilename: this.streamingPlaylist.playlistFilename,
+              content: masterContent
+            }
+          )
 
           this.streamingPlaylist.playlistUrl = url
         }
 
-        this.streamingPlaylist.assignP2PMediaLoaderInfoHashes(this.videoLive.Video, this.allResolutions)
+        this.streamingPlaylist.assignP2PMediaLoaderInfoHashes(this.videoLive.Video, this.allResolutions.map(r => ({ height: r })))
 
         await this.streamingPlaylist.save()
       } catch (err) {
@@ -405,25 +414,34 @@ class MuxingSession extends EventEmitter {
       }
 
       const queue = this.objectStorageSendQueues.get(m3u8Path)
-      await queue.add(() => storeHLSFileFromContent(this.streamingPlaylist, m3u8Path, filteredPlaylistContent))
+      await queue.add(() =>
+        storeHLSFileFromContent({
+          playlist: this.streamingPlaylist,
+          pathOrFilename: m3u8Path,
+          content: filteredPlaylistContent
+        })
+      )
     } catch (err) {
       logger.error('Cannot store in object storage m3u8 file %s', m3u8Path, { err, ...this.lTags() })
     }
   }
 
   private onTranscodingError () {
-    this.emit('transcoding-error', ({ videoUUID: this.videoUUID }))
+    this.emit('transcoding-error', { videoUUID: this.videoUUID })
   }
 
   private onTranscodedEnded () {
-    this.emit('transcoding-end', ({ videoUUID: this.videoUUID }))
+    this.emit('transcoding-end', { videoUUID: this.videoUUID })
 
     logger.info('RTMP transmuxing for video %s ended. Scheduling cleanup', this.inputLocalUrl, this.lTags())
 
     setTimeout(() => {
       // Wait latest segments generation, and close watchers
 
-      const promise = this.filesWatcher?.close() || Promise.resolve()
+      const promise = this.filesWatcher
+        ? this.filesWatcher.close()
+        : Promise.resolve()
+
       promise
         .then(() => {
           // Process remaining segments hash
@@ -433,7 +451,8 @@ class MuxingSession extends EventEmitter {
         })
         .catch(err => {
           logger.error(
-            'Cannot close watchers of %s or process remaining hash segments.', this.outDirectory,
+            'Cannot close watchers of %s or process remaining hash segments.',
+            this.outDirectory,
             { err, ...this.lTags() }
           )
         })
@@ -470,6 +489,8 @@ class MuxingSession extends EventEmitter {
     const segmentName = basename(segmentPath)
     const dest = join(this.replayDirectory, buildConcatenatedName(segmentName))
 
+    logger.debug(`Add segment ${segmentPath} to replay ${dest}`, this.lTags())
+
     try {
       const data = await readFile(segmentPath)
 
@@ -480,7 +501,7 @@ class MuxingSession extends EventEmitter {
   }
 
   private async createLivePlaylist (): Promise<MStreamingPlaylistVideo> {
-    const playlist = await VideoStreamingPlaylistModel.loadOrGenerate(this.videoLive.Video)
+    const { playlist } = await VideoStreamingPlaylistModel.loadOrGenerate(this.videoLive.Video)
 
     playlist.playlistFilename = generateHLSMasterPlaylistFilename(true)
     playlist.segmentsSha256Filename = generateHlsSha256SegmentsFilename(true)

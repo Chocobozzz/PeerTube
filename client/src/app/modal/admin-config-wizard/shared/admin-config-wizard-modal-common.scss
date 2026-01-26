@@ -1,0 +1,83 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+
+.steps {
+  color: pvar(--fg-200);
+  font-size: 14px;
+  font-weight: $font-bold;
+}
+
+.title {
+  color: pvar(--fg-350);
+  font-weight: $font-bold;
+
+  @include font-size(38px);
+}
+
+.sub-title {
+  color: pvar(--fg-300);
+  font-weight: normal;
+
+  @include font-size(20px);
+}
+
+h4 {
+  margin-bottom: 0;
+}
+
+.text-content {
+  color: pvar(--fg-200);
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  @include rfs(2.5rem, margin-top);
+  @include rfs(1.5rem, gap);
+}
+
+form {
+  max-width: 512px;
+  width: 100%;
+}
+
+.two-columns {
+  display: flex;
+  gap: 1rem;
+
+  &.width-50 {
+    > div {
+      width: 50%;
+    }
+  }
+}
+
+.one-column {
+  text-align: center;
+
+  .mascot-container {
+    position: relative;
+    height: 110px;
+    margin: 0 auto;
+  }
+
+  .mascot-container,
+  .mascot {
+    width: 170px;
+  }
+
+  .mascot {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    height: 190px;
+  }
+}
+
+h5 {
+  font-size: 1rem;
+  font-weight: $font-bold;
+  color: var(--fg-300);
+}

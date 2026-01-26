@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs'
 import { ManagerOptions, Socket, SocketOptions } from 'socket.io-client'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { LiveVideoEventPayload, LiveVideoEventType, UserNotification as UserNotificationServer } from '@peertube/peertube-models'
 import { environment } from '../../../environments/environment'
 import { AuthService } from '../auth'
@@ -9,6 +9,8 @@ export type NotificationEvent = 'new' | 'read' | 'read-all'
 
 @Injectable()
 export class PeerTubeSocket {
+  private auth = inject(AuthService)
+
   private io: (uri: string, opts?: Partial<ManagerOptions & SocketOptions>) => Socket
 
   private notificationSubject = new Subject<{ type: NotificationEvent, notification?: UserNotificationServer }>()
@@ -16,10 +18,6 @@ export class PeerTubeSocket {
 
   private notificationSocket: Socket
   private liveVideosSocket: Socket
-
-  constructor (
-    private auth: AuthService
-  ) {}
 
   async getMyNotificationsSocket () {
     await this.initNotificationSocket()

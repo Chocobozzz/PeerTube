@@ -1,24 +1,25 @@
-import express from 'express'
-import { body, param } from 'express-validator'
-import { isIdValid } from '@server/helpers/custom-validators/misc.js'
+import { forceNumber } from '@peertube/peertube-core-utils'
+import { HttpStatusCode, RegisterRunnerBody, ServerErrorCode } from '@peertube/peertube-models'
+import { isIdValid, isStableOrUnstableVersionValid } from '@server/helpers/custom-validators/misc.js'
 import {
   isRunnerDescriptionValid,
   isRunnerNameValid,
   isRunnerRegistrationTokenValid,
   isRunnerTokenValid
 } from '@server/helpers/custom-validators/runners/runners.js'
-import { RunnerModel } from '@server/models/runner/runner.js'
 import { RunnerRegistrationTokenModel } from '@server/models/runner/runner-registration-token.js'
-import { forceNumber } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, RegisterRunnerBody, ServerErrorCode } from '@peertube/peertube-models'
+import { RunnerModel } from '@server/models/runner/runner.js'
+import express from 'express'
+import { body, param } from 'express-validator'
 import { areValidationErrors } from '../shared/utils.js'
 
 const tags = [ 'runner' ]
 
-const registerRunnerValidator = [
+export const registerRunnerValidator = [
   body('registrationToken').custom(isRunnerRegistrationTokenValid),
   body('name').custom(isRunnerNameValid),
   body('description').optional().custom(isRunnerDescriptionValid),
+  body('version').optional().custom(isStableOrUnstableVersionValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res, { tags })) return
@@ -50,7 +51,7 @@ const registerRunnerValidator = [
   }
 ]
 
-const deleteRunnerValidator = [
+export const deleteRunnerValidator = [
   param('runnerId').custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -72,9 +73,8 @@ const deleteRunnerValidator = [
   }
 ]
 
-const getRunnerFromTokenValidator = [
+export const getRunnerFromTokenValidator = [
   body('runnerToken').custom(isRunnerTokenValid),
-  body('jobTypes').optional().isArray(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res, { tags })) return
@@ -96,10 +96,13 @@ const getRunnerFromTokenValidator = [
   }
 ]
 
-// ---------------------------------------------------------------------------
+export const requestRunnerJobValidator = [
+  body('version').optional().custom(isStableOrUnstableVersionValid),
+  body('jobTypes').optional().isArray(),
 
-export {
-  registerRunnerValidator,
-  deleteRunnerValidator,
-  getRunnerFromTokenValidator
-}
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res, { tags })) return
+
+    return next()
+  }
+]

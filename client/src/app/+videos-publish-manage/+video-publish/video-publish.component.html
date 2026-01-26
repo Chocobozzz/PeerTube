@@ -1,0 +1,155 @@
+<ng-template #helpButtons>
+  @if (isContactFormEnabled) {
+    <a i18n routerLink="/about/contact" class="peertube-button-link primary-button mt-3 me-3">Contact us</a>
+  }
+
+  <a i18n routerLink="/about/instance" class="peertube-button-link primary-button mt-3">Read instance rules for help</a>
+</ng-template>
+
+<ng-template #infoMessages>
+  @if (user.isAutoBlocked(serverConfig)) {
+    <my-alert class="upload-message auto-blocked" type="primary">
+      <div>{{ uploadMessages?.autoBlock }}</div>
+
+      <ng-template [ngTemplateOutlet]="helpButtons"></ng-template>
+    </my-alert>
+  }
+
+  @if (isRootUser()) {
+    <my-alert class="upload-message root-user root-user root-user" type="warning">
+      <div i18n>We recommend you to not use the <strong>root</strong> user to publish your videos, since it's the super-admin account of your instance.</div>
+
+      <div i18n>Instead, <a class="text-decoration-underline alert-link" routerLink="/admin/overview/users">create a dedicated account</a> to upload your videos.</div>
+    </my-alert>
+  } @else {
+    <my-channels-setup-message></my-channels-setup-message>
+  }
+
+  <my-user-quota></my-user-quota>
+
+  @if (hasNoQuotaLeft || hasNoQuotaLeftDaily) {
+    <my-alert class="upload-message quota-left" type="warning">
+      @if (hasNoQuotaLeft) {
+        <div>{{ uploadMessages?.quotaLeft }}</div>
+      }
+
+      @if (hasNoQuotaLeftDaily) {
+        <div>{{ uploadMessages?.quotaLeftDaily }}</div>
+      }
+
+      <ng-template [ngTemplateOutlet]="helpButtons"></ng-template>
+    </my-alert>
+  }
+</ng-template>
+
+@if (user.hasUploadDisabled()) {
+  <div class="margin-content">
+    <my-alert class="upload-message upload-disabled" type="warning">
+      <div>{{ uploadMessages?.noQuota }}</div>
+
+      <ng-template [ngTemplateOutlet]="helpButtons"></ng-template>
+    </my-alert>
+
+    <div class="upload-image">
+      <img src="/client/assets/images/mascot/defeated.svg" alt="defeated mascot">
+    </div>
+  </div>
+} @else {
+  <div class="margin-content">
+    @if (!isInSecondStep()) {
+      <ng-template [ngTemplateOutlet]="infoMessages"></ng-template>
+    }
+
+    <div ngbNav #nav="ngbNav" class="nav-tabs video-add-nav" [activeId]="activeNav" (activeIdChange)="onNavChange($event)" [ngClass]="{ 'hide-nav': isInSecondStep() }">
+      <ng-container ngbNavItem="upload">
+        <a ngbNavLink>
+          <span i18n>Upload a file</span>
+        </a>
+
+        <ng-template ngbNavContent>
+          <my-video-upload
+            #videoUpload (firstStepDone)="onFirstStepDone('upload', $event)" (firstStepError)="onError()"
+            [userChannels]="userChannels" [userQuota]="userQuota" [highestPrivacy]="highestPrivacy"
+          ></my-video-upload>
+        </ng-template>
+      </ng-container>
+
+      <ng-container ngbNavItem="import-url">
+        @if (isVideoImportHttpEnabled()) {
+          <a ngbNavLink>
+            <span i18n>Import with URL</span>
+          </a>
+        } @else {
+          <div class="unavailable-nav-link">
+            <span i18n>Import with URL</span>
+
+            <div class="pt-badge badge-secondary ms-2 me-1" i18n>UNAVAILABLE</div>
+
+            <my-help i18n-helpTitle helpTitle="Feature unavailable" container="body">
+              Import with URL is not available on {{ instanceName }}.
+            </my-help>
+          </div>
+        }
+
+        <ng-template ngbNavContent>
+          <my-video-import-url
+            #videoImportUrl (firstStepDone)="onFirstStepDone('import-url', $event)" (firstStepError)="onError()"
+            [userChannels]="userChannels" [userQuota]="userQuota" [highestPrivacy]="highestPrivacy"
+          ></my-video-import-url>
+        </ng-template>
+      </ng-container>
+
+      <ng-container ngbNavItem="import-torrent">
+        @if (isVideoImportTorrentEnabled()) {
+          <a ngbNavLink>
+            <span i18n>Import with torrent</span>
+          </a>
+        } @else {
+          <div class="unavailable-nav-link">
+            <span i18n>Import with torrent</span>
+
+            <div class="pt-badge badge-secondary ms-2 me-1" i18n>UNAVAILABLE</div>
+
+            <my-help i18n-helpTitle helpTitle="Feature unavailable" container="body">
+              Import with torrent is not available on {{ instanceName }}.
+            </my-help>
+          </div>
+        }
+
+        <ng-template ngbNavContent>
+          <my-video-import-torrent
+            #videoImportTorrent (firstStepDone)="onFirstStepDone('import-torrent', $event)" (firstStepError)="onError()"
+            [userChannels]="userChannels" [userQuota]="userQuota" [highestPrivacy]="highestPrivacy"
+          ></my-video-import-torrent>
+        </ng-template>
+      </ng-container>
+
+      <ng-container ngbNavItem="go-live">
+        @if (isVideoLiveEnabled()) {
+          <a ngbNavLink>
+            <span i18n>Go live</span>
+          </a>
+        } @else {
+          <div class="unavailable-nav-link">
+            <span i18n>Go live</span>
+
+            <div class="pt-badge badge-secondary ms-2 me-1" i18n>UNAVAILABLE</div>
+
+            <my-help i18n-helpTitle helpTitle="Feature unavailable" container="body">
+              Live streaming is not available on {{ instanceName }}.
+            </my-help>
+          </div>
+        }
+
+        <ng-template ngbNavContent>
+          <my-video-go-live
+            #videoGoLive (firstStepDone)="onFirstStepDone('go-live', $event)" (firstStepError)="onError()"
+            [userChannels]="userChannels" [userQuota]="userQuota" [highestPrivacy]="highestPrivacy"
+          ></my-video-go-live>
+        </ng-template>
+      </ng-container>
+    </div>
+
+    <div class="nav-content" [ngbNavOutlet]="nav"></div>
+  </div>
+}

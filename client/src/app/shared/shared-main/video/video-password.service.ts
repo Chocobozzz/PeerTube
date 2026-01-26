@@ -1,17 +1,14 @@
-import { ResultList, VideoPassword } from '@peertube/peertube-models'
-import { Injectable } from '@angular/core'
-import { catchError, switchMap } from 'rxjs'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { Injectable, inject } from '@angular/core'
 import { RestExtractor } from '@app/core'
+import { ResultList, VideoPassword } from '@peertube/peertube-models'
+import { catchError, map } from 'rxjs'
 import { VideoService } from './video.service'
 
 @Injectable()
 export class VideoPasswordService {
-
-  constructor (
-    private authHttp: HttpClient,
-    private restExtractor: RestExtractor
-  ) {}
+  private authHttp = inject(HttpClient)
+  private restExtractor = inject(RestExtractor)
 
   static buildVideoPasswordHeader (videoPassword: string) {
     return videoPassword
@@ -22,7 +19,7 @@ export class VideoPasswordService {
   getVideoPasswords (options: { videoUUID: string }) {
     return this.authHttp.get<ResultList<VideoPassword>>(`${VideoService.BASE_VIDEO_URL}/${options.videoUUID}/passwords`)
       .pipe(
-        switchMap(res => res.data),
+        map(res => res.data),
         catchError(err => this.restExtractor.handleError(err))
       )
   }

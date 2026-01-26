@@ -14,6 +14,22 @@ input {
   @include peertube-input-text(250px);
 }
 
+.has-icon input {
+  padding-inline-start: 46px;
+}
+
+.search-button {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 20px;
+  color: pvar(--fg-200);
+
+  my-global-icon {
+    @include global-icon-size(19px);
+  }
+}
+
 .input-group-text {
   background-color: transparent;
   transition: 0.3s ease-out;
@@ -24,21 +40,16 @@ input {
 }
 
 .form-control-clear my-global-icon {
-  display: block;
-
-  ::ng-deep svg {
-    vertical-align: inherit;
-  }
+  @include global-icon-size(19px);
 }
 
-my-global-icon {
+div[role=menu] my-global-icon {
   $size: 19px;
   $margin: 2px;
 
   opacity: 1;
-  width: $size;
-  height: $size;
 
+  @include global-icon-size($size);
   @include margin-right($margin);
 
   &.no-visible {
@@ -48,6 +59,8 @@ my-global-icon {
     @include margin-right($size + $margin);
   }
 }
+
+
 
 div[role=menu] {
   max-height: 50vh;

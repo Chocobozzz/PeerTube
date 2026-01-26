@@ -1,0 +1,75 @@
+<div class="root">
+  <div>
+    <my-video-manage-menu [canWatch]="canWatch()"></my-video-manage-menu>
+  </div>
+
+  <div class="w-100 min-width-0">
+
+    <div class="video-actions-container">
+      <div class="video-actions video-header-block">
+        <my-button class="cancel-button" icon="arrow-left" theme="secondary" i18n [ptRouterLink]="cancelLink()">Cancel</my-button>
+
+        <h2>{{ getVideo().name }}</h2>
+
+        <div class="watch-save">
+          @if (canWatch()) {
+            <my-button class="watch-button" icon="external-link" theme="secondary" class="me-3" [href]="getWatchUrl()">
+              <span i18n class="watch-button-label">Watch the video</span>
+            </my-button>
+          }
+
+          <my-button
+            theme="primary" class="save-button"
+            icon="circle-tick"
+            [disabled]="!canUpdate() || !hasPendingChanges()" (click)="onWantToUpdate()"
+            [loading]="isUpdating"
+            form="video-manage-form"
+            >
+            @if (hasStudioTasks()) {
+              <ng-container i18n>Save and run studio tasks</ng-container>
+            } @else if (hasReplaceFile()) {
+              <ng-container i18n>Save and replace file</ng-container>
+            } @else {
+              <ng-container i18n>Save</ng-container>
+            }
+          </my-button>
+        </div>
+      </div>
+    </div>
+
+    @if (getStateWarning()?.title) {
+      <div class="video-state video-header-block mt-2">
+        <div class="alert-title">{{ getStateWarning().title }}</div>
+        <strong class="me-1">{{ getStateWarning().manageMain }}</strong>
+        <span>{{ getStateWarning().manageSecondary }}</span>
+
+        @if (getStateWarning().routerLink) {
+          <span class="ms-1">
+            <a [routerLink]="getStateWarning().routerLink.link" [queryParams]="getStateWarning().routerLink.queryParams">{{ getStateWarning().routerLink.text }}</a>
+          </span>
+        }
+      </div>
+    }
+
+    @if (displayFormErrorsMsg && hasFormErrors()) {
+      <my-manage-errors class="d-block mt-2"></my-manage-errors>
+    }
+
+    <my-upload-progress
+      class="d-block mt-2"
+      [isUploading]="isUploadingFile()"
+      [uploadPercents]="getUploadPercents()" [error]="getUploadError()" [uploaded]="hasUploadedFile()"
+      [enableRetryAfterError]="canRetryUpload" (retry)="retryUpload()"
+      [uploadedLabel]="uploadedLabel()"
+      >
+    </my-upload-progress>
+
+    <div class="mt-2">
+      <ng-content></ng-content>
+    </div>
+
+    <div class="mt-3">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

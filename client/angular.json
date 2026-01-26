@@ -165,7 +165,7 @@
       },
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular/build:application",
           "options": {
             "i18nMissingTranslation": "ignore",
             "localize": true,
@@ -183,11 +183,13 @@
               "includePaths": [
                 "src/sass/include",
                 "."
-              ]
+              ],
+              "sass": {
+                "silenceDeprecations": [ "import", "color-functions", "global-builtin" ]
+              }
             },
             "assets": [
-              "src/assets/images",
-              "src/manifest.webmanifest"
+              "src/assets/images"
             ],
             "styles": [
               "src/sass/application.scss"
@@ -211,8 +213,10 @@
               "escape-string-regexp",
               "is-plain-object",
               "parse-srcset",
-              "deepmerge",
-              "core-js/features/reflect"
+              "core-js/features/reflect",
+              "hammerjs",
+              "jschannel",
+              "color-bits"
             ],
             "scripts": [],
             "extractLicenses": false,
@@ -241,7 +245,7 @@
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "6kb",
-                  "maximumError": "100kb"
+                  "maximumError": "140kb"
                 }
               ],
               "fileReplacements": [
@@ -286,7 +290,7 @@
           }
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular/build:dev-server",
           "options": {
             "proxyConfig": "proxy.config.json",
             "buildTarget": "PeerTube:build"
@@ -301,7 +305,7 @@
           }
         },
         "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n"
+          "builder": "@angular/build:extract-i18n"
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
@@ -321,16 +325,36 @@
       "prefix": "my",
       "style": "scss",
       "skipTests": true,
-      "flat": true
+      "flat": true,
+      "type": "component"
     },
     "@schematics/angular:directive": {
-      "prefix": "my"
+      "prefix": "my",
+      "type": "directive"
     },
     "@angular-eslint/schematics:application": {
       "setParserOptionsProject": true
     },
     "@angular-eslint/schematics:library": {
       "setParserOptionsProject": true
+    },
+    "@schematics/angular:service": {
+      "type": "service"
+    },
+    "@schematics/angular:guard": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:interceptor": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:module": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:pipe": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:resolver": {
+      "typeSeparator": "."
     }
   },
   "cli": {

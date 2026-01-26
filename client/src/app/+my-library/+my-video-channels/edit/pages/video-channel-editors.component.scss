@@ -1,0 +1,45 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+
+h4 {
+  margin-bottom: 1rem;
+  font-weight: $font-bold;
+  color: pvar(--fg-300);
+
+  @include font-size(20px);
+}
+
+.collaborators {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.collaborator-block {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: pvar(--bg-secondary-400);
+  gap: 10px;
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  border-radius: 16px;
+
+  my-actor-avatar {
+    display: block;
+  }
+}
+
+my-user-auto-complete {
+  display: block;
+
+  @include responsive-width(450px);
+}
+
+my-action-dropdown {
+  color: pvar(--fg-200);
+}
+
+.editor-explanation {
+  color: pvar(--fg-200);
+}

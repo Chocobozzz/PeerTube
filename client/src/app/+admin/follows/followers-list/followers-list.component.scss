@@ -1,11 +1,5 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-
-.action-cell {
-  my-button:first-child {
-    @include margin-right(10px);
-  }
-}
+@use "_variables" as *;
+@use "_mixins" as *;
 
 my-delete-button {
   max-width: 130px;

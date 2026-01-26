@@ -9,8 +9,11 @@ export interface VideosCommonQuery {
   sort?: string
 
   nsfw?: BooleanBothQuery
+  nsfwFlagsIncluded?: number
+  nsfwFlagsExcluded?: number
 
   isLive?: boolean
+  includeScheduledLive?: boolean
 
   isLocal?: boolean
   include?: VideoIncludeType
@@ -33,6 +36,8 @@ export interface VideosCommonQuery {
   search?: string
 
   excludeAlreadyWatched?: boolean
+
+  host?: string
 
   // Only available with special user right
   autoTagOneOf?: string[]

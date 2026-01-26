@@ -1,8 +1,10 @@
 import { FollowState } from '../actors/index.js'
 import { AbuseStateType } from '../moderation/index.js'
 import { PluginType_Type } from '../plugins/index.js'
+import { VideoChannelCollaboratorStateType } from '../videos/index.js'
 import { VideoConstant } from '../videos/video-constant.model.js'
 import { VideoStateType } from '../videos/video-state.enum.js'
+import { UserNotificationData } from './user-notification-data.model.js'
 
 export const UserNotificationType = {
   NEW_VIDEO_FROM_SUBSCRIPTION: 1,
@@ -40,7 +42,11 @@ export const UserNotificationType = {
 
   NEW_LIVE_FROM_SUBSCRIPTION: 21,
 
-  MY_VIDEO_TRANSCRIPTION_GENERATED: 22
+  MY_VIDEO_TRANSCRIPTION_GENERATED: 22,
+
+  INVITED_TO_COLLABORATE_TO_CHANNEL: 23,
+  ACCEPTED_TO_COLLABORATE_TO_CHANNEL: 24,
+  REFUSED_TO_COLLABORATE_TO_CHANNEL: 25
 } as const
 
 export type UserNotificationType_Type = typeof UserNotificationType[keyof typeof UserNotificationType]
@@ -58,7 +64,8 @@ export interface VideoInfo {
 
 export interface AvatarInfo {
   width: number
-  path: string
+
+  fileUrl: string
 }
 
 export interface ActorInfo {
@@ -75,6 +82,7 @@ export interface UserNotification {
   id: number
   type: UserNotificationType_Type
   read: boolean
+  data: UserNotificationData
 
   video?: VideoInfo & {
     channel: ActorInfo
@@ -150,6 +158,16 @@ export interface UserNotification {
     id: number
     language: VideoConstant<string>
     video: VideoInfo
+  }
+
+  videoChannelCollaborator?: {
+    id: number
+
+    state: VideoConstant<VideoChannelCollaboratorStateType>
+
+    channel: ActorInfo
+    channelOwner: ActorInfo
+    account: ActorInfo
   }
 
   createdAt: string

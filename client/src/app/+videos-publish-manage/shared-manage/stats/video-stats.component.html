@@ -1,0 +1,92 @@
+<h2 class="form-title">
+  <my-global-icon iconName="stats"></my-global-icon>
+
+  <ng-container i18n>Statistics</ng-container>
+</h2>
+
+<div class="stats-embed">
+  <div class="global-stats">
+    @for (card of globalStatsCards; track card) {
+      <div class="card stats-card">
+        <div class="label">
+          {{ card.label }}
+          @if (card.help) {
+            <my-help>
+              {{ card.help }}
+            </my-help>
+          }
+        </div>
+        <div class="value">{{ card.value }}</div>
+        @if (card.moreInfo) {
+          <div class="more-info">{{ card.moreInfo }}</div>
+        }
+      </div>
+    }
+  </div>
+
+  <my-embed [video]="videoEdit.getVideoAttributes()"></my-embed>
+</div>
+
+<div class="stats-with-date">
+
+  <div class="overall-stats">
+    <div class="title-container mb-4">
+      <h3 class="mb-0">{{ getViewersStatsTitle() }}</h3>
+
+      @if (hasMaxViewsAge()) {
+        <div class="muted-2 small" i18n>Views made before {{ getMaxViewsAgeDate() | date }} are not taken into account</div>
+      }
+    </div>
+
+    <div class="date-filter-wrapper">
+      <label class="visually-hidden" for="date-filter">Filter viewers stats by date</label>
+      <my-select-options inputId="date-filter" [(ngModel)]="currentDateFilter" (ngModelChange)="onDateFilterChange()" [items]="dateFilters"></my-select-options>
+    </div>
+
+    <div class="cards">
+      @for (card of overallStatCards; track card) {
+        <div class="card stats-card">
+          <div class="label">{{ card.label }}</div>
+          <div class="value">{{ card.value }}</div>
+          @if (card.moreInfo) {
+            <div class="more-info">{{ card.moreInfo }}</div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="timeseries">
+    <div ngbNav #nav="ngbNav" [activeId]="activeGraphId" (activeIdChange)="onChartChange($event)" class="nav-tabs">
+
+      @for (availableChart of availableCharts; track availableChart) {
+        <ng-container [ngbNavItem]="availableChart.id">
+          <a ngbNavLink>
+            <span>{{ availableChart.label }}</span>
+          </a>
+          <ng-template ngbNavContent>
+            <div class="chart-container">
+              @if (chartOptions[availableChart.id]) {
+                <p-chart
+                  [height]="chartHeight" [width]="chartWidth"
+                  [type]="chartOptions[availableChart.id].type" [options]="chartOptions[availableChart.id].options" [data]="chartOptions[availableChart.id].data"
+                  [plugins]="chartPlugins"
+                ></p-chart>
+              }
+            </div>
+            <div class="zoom-container">
+              @if (!hasZoom() && availableChart.zoomEnabled) {
+                <span i18n class="description">You can select a part of the graph to zoom in</span>
+              }
+              @if (hasZoom()) {
+                <my-button i18n (click)="resetZoom()">Reset zoom</my-button>
+              }
+            </div>
+          </ng-template>
+        </ng-container>
+      }
+    </div>
+
+    <div [ngbNavOutlet]="nav"></div>
+  </div>
+</div>

@@ -1,15 +1,18 @@
 import { ObserversModule } from '@angular/cdk/observers'
-import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common'
+import { NgClass, NgTemplateOutlet } from '@angular/common'
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
-  Input,
+  HostBinding,
+  HostListener,
   OnChanges,
-  ViewChild,
-  booleanAttribute
+  booleanAttribute,
+  inject,
+  input,
+  viewChild
 } from '@angular/core'
 import { Params, QueryParamsHandling, RouterLink, RouterLinkActive } from '@angular/router'
 import { GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
@@ -20,14 +23,14 @@ import { LoaderComponent } from '../common/loader.component'
 
 const debugLogger = debug('peertube:button')
 
+export type ButtonTheme = 'primary' | 'secondary' | 'tertiary' | 'danger'
+
 @Component({
   selector: 'my-button',
   styleUrls: [ './button.component.scss' ],
   templateUrl: './button.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
-    NgIf,
     NgClass,
     NgbTooltip,
     NgTemplateOutlet,
@@ -38,32 +41,35 @@ const debugLogger = debug('peertube:button')
     RouterLinkActive
   ]
 })
-
 export class ButtonComponent implements OnChanges, AfterViewInit {
-  @Input() label = ''
-  @Input() theme: 'primary' | 'secondary' | 'tertiary' = 'secondary'
-  @Input() icon: GlobalIconName
+  private cd = inject(ChangeDetectorRef)
 
-  @Input() href: string
-  @Input() ptRouterLink: string[] | string
-  @Input() ptQueryParams: Params
-  @Input() ptQueryParamsHandling: QueryParamsHandling
-  @Input() ptRouterLinkActive = ''
+  readonly label = input('')
+  readonly theme = input<ButtonTheme>('secondary')
+  readonly icon = input<GlobalIconName>(undefined)
 
-  @Input() title: string
-  @Input() tooltip: string
-  @Input({ transform: booleanAttribute }) active = false
+  readonly href = input<string>(undefined)
+  readonly ptRouterLink = input<string[] | string>(undefined)
+  readonly ptQueryParams = input<Params>(undefined)
+  readonly ptQueryParamsHandling = input<QueryParamsHandling>(undefined)
+  readonly ptRouterLinkActive = input('')
 
-  @Input({ transform: booleanAttribute }) loading = false
-  @Input({ transform: booleanAttribute }) disabled = false
-  @Input({ transform: booleanAttribute }) responsiveLabel = false
-  @Input({ transform: booleanAttribute }) rounded = false
+  readonly title = input<string>(undefined)
+  readonly tooltip = input<string>(undefined)
+  readonly active = input(false, { transform: booleanAttribute })
 
-  @ViewChild('labelContent') labelContent: ElementRef
+  readonly loading = input(false, { transform: booleanAttribute })
+  readonly disabled = input(false, { transform: booleanAttribute })
+  readonly responsiveLabel = input(false, { transform: booleanAttribute })
+  readonly autoFontSize = input(false, { transform: booleanAttribute })
+  readonly rounded = input(false, { transform: booleanAttribute })
+  readonly small = input(false, { transform: booleanAttribute })
+  readonly show = input(false, { transform: booleanAttribute })
+  readonly form = input<string>()
+
+  readonly labelContent = viewChild<ElementRef>('labelContent')
 
   classes: { [id: string]: boolean } = {}
-
-  constructor (private cd: ChangeDetectorRef) {}
 
   ngOnChanges () {
     this.buildClasses()
@@ -73,24 +79,46 @@ export class ButtonComponent implements OnChanges, AfterViewInit {
     this.buildClasses()
   }
 
+  @HostListener('touchend', [ '$event' ])
+  onTouchEnd (event: TouchEvent): void {
+    if (this.disabled()) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+  }
+
+  @HostBinding('style.pointer-events')
+  get pointerEvents (): string {
+    return this.disabled() ? 'none' : 'auto'
+  }
+
   private buildClasses () {
-    const isButtonLink = !!this.ptRouterLink || !!this.href
+    const isButtonLink = !!this.ptRouterLink() || !!this.href()
+    const label = this.getLabel() || ''
 
     this.classes = {
-      'active': this.active,
+      'active': this.active(),
       'peertube-button': !isButtonLink,
       'peertube-button-link': isButtonLink,
-      'primary-button': this.theme === 'primary',
-      'secondary-button': this.theme === 'secondary',
-      'tertiary-button': this.theme === 'tertiary',
-      'has-icon': !!this.icon,
-      'rounded-icon-button': !!this.rounded,
-      'icon-only': !this.label && !(this.labelContent?.nativeElement as HTMLElement)?.innerText,
-      'responsive-label': this.responsiveLabel
+      'primary-button': this.theme() === 'primary',
+      'secondary-button': this.theme() === 'secondary',
+      'tertiary-button': this.theme() === 'tertiary',
+      'danger-button': this.theme() === 'danger',
+      'has-icon': !!this.icon(),
+      'rounded-icon-button': !!this.rounded(),
+      'icon-only': !label,
+      'label-xl': this.autoFontSize() && label.length > 10,
+      'responsive-label': this.responsiveLabel(),
+      'small-button': this.small(),
+      'show': this.show()
     }
 
-    debugLogger('Built button classes', { classes: this.classes, labelContent: this.labelContent })
+    debugLogger('Built button classes', { classes: this.classes, label, labelContent: this.labelContent() })
 
     this.cd.markForCheck()
+  }
+
+  private getLabel () {
+    return this.label() || (this.labelContent()?.nativeElement as HTMLElement)?.innerText
   }
 }

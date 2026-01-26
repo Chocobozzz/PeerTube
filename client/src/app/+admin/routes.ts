@@ -1,5 +1,5 @@
 import { Route, Routes, UrlSegment } from '@angular/router'
-import { configRoutes, EditConfigurationService } from '@app/+admin/config'
+import { configRoutes } from '@app/+admin/config'
 import { moderationRoutes } from '@app/+admin/moderation/moderation.routes'
 import { pluginsRoutes } from '@app/+admin/plugins/plugins.routes'
 import { DebugService, JobService, LogsService, RunnerService, systemRoutes } from '@app/+admin/system'
@@ -16,16 +16,15 @@ import { SearchService } from '@app/shared/shared-search/search.service'
 import { TwoFactorService } from '@app/shared/shared-users/two-factor.service'
 import { UserAdminService } from '@app/shared/shared-users/user-admin.service'
 import { VideoCommentService } from '@app/shared/shared-video-comment/video-comment.service'
-import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
-import { WatchedWordsListService } from '@app/shared/standalone-watched-words/watched-words-list.service'
+import { WatchedWordsListService } from '@app/shared/shared-watched-words/watched-words-list.service'
 import { AdminModerationComponent } from './admin-moderation.component'
 import { AdminOverviewComponent } from './admin-overview.component'
 import { AdminSettingsComponent } from './admin-settings.component'
-import { ConfigService } from './config/shared/config.service'
+import { AdminConfigService } from '../shared/shared-admin/admin-config.service'
 import { followsRoutes } from './follows'
 import { AdminRegistrationService } from './moderation/registration-list'
 import { overviewRoutes, VideoAdminService } from './overview'
-import { PluginApiService } from './plugins/shared/plugin-api.service'
+import { PluginApiService } from '../shared/shared-admin/plugin-api.service'
 
 const commonConfig = {
   path: '',
@@ -37,7 +36,6 @@ const commonConfig = {
     CustomMarkupService,
     CustomPageService,
     DebugService,
-    EditConfigurationService,
     InstanceFollowService,
     JobService,
     LogsService,
@@ -48,12 +46,11 @@ const commonConfig = {
     VideoAdminService,
     VideoBlockService,
     VideoCommentService,
-    ConfigService,
+    AdminConfigService,
     AbuseService,
     DynamicElementService,
     FindInBulkService,
     SearchService,
-    VideoPlaylistService,
     WatchedWordsListService
   ]
 }

@@ -12,7 +12,7 @@ It can be launched from a remote server/computer to easily upload videos, manage
 Ensure you have `node` installed on your system:
 
 ```bash
-node --version # Should be >= 16.x
+node --version # Should be >= 20.x
 ```
 
 Then install the CLI:
@@ -45,7 +45,15 @@ The wrapper can keep track of instances you have an account on. We limit to one 
 
 ```bash
 peertube-cli auth add -u 'PEERTUBE_URL' -U 'PEERTUBE_USER' --password 'PEERTUBE_PASSWORD'
+```
+
+Now list the account(s) you've created
+
+```bash
 peertube-cli auth list
+```
+
+```
 ┌──────────────────────────────┬──────────────────────────────┐
 │ instance                     │ login                        │
 ├──────────────────────────────┼──────────────────────────────┤
@@ -57,8 +65,12 @@ You can now use that account to execute sub-commands without feeding the `--url`
 
 ```bash
 peertube-cli upload <videoFile>
+```
+
+```bash
 peertube-cli plugins list
 ...
+
 ```
 
 #### peertube-cli upload
@@ -131,7 +143,7 @@ You can read the admin documentation on how to use PeerTube runners on https://d
 Ensure you have `node`, `ffmpeg` and `ffprobe` installed on your system:
 
 ```bash
-node --version # Should be >= 16.x
+node --version # Should be >= 20.x
 ffprobe -version # Should be >= 4.3
 ffmpeg -version # Should be >= 4.3
 ```
@@ -209,14 +221,27 @@ peertube-runner server
 You can also decide which kind of job the runner can execute with `--enable-job <type>` option.
 This way you can have one dedicated runner for transcription tasks (on a GPU machine for example) and another one for transcoding tasks.
 
+Only transcription tasks
+
 ```bash
-# Only transcription tasks
 peertube-runner server --enable-job video-transcription
-# Only VOD transcoding tasks
+```
+
+Only VOD transcoding tasks
+
+```bash
 peertube-runner server --enable-job vod-web-video-transcoding --enable-job vod-hls-transcoding --enable-job vod-audio-merge-transcoding
-# Only "studio" transcoding
+```
+
+Only "studio" transcoding
+
+```bash
 peertube-runner server --enable-job video-studio-transcoding
-# Only "live" transcoding
+```
+
+Only "live" transcoding
+
+```bash
 peertube-runner server --enable-job live-rtmp-hls-transcoding
 ```
 
@@ -228,7 +253,7 @@ To do so, first create a dedicated user. Here, we are calling it `prunner`, but 
 We are using `/srv/prunner` as his home dir, but you can choose any other path.
 
 ```bash
-useradd -m -d /srv/prunner -s /bin/bash -p prunner prunner
+useradd -m -d /srv/prunner -s /usr/sbin/nologin prunner
 ```
 
 ::: info Note
@@ -359,6 +384,26 @@ sudo -u prunner peertube-runner list-registered
 
 :::
 
+### List jobs
+
+**Runner >= 0.1.0**
+
+To list jobs that are processed by the runner:
+
+::: code-group
+
+```bash [Shell]
+peertube-runner list-jobs
+peertube-runner list-jobs --include-payload
+```
+
+```bash [Systemd]
+sudo -u prunner peertube-runner list-jobs
+sudo -u prunner peertube-runner list-jobs --include-payload
+```
+
+:::
+
 ### Graceful shutdown
 
 Ask the runner to shutdown when it has finished all of its current tasks:
@@ -390,12 +435,18 @@ Package                    Current  Wanted  Latest  Location                    
 
 To update the runner:
 
+Update the package
 ```bash
-# Update the package
 sudo npm update -g @peertube/peertube-runner
-# Check that the version changed (optional)
+```
+
+Check that the version changed (optional)
+```bash
 sudo npm list -g @peertube/peertube-runner
-# Restart the service (if you are using systemd)
+```
+
+Restart the service (if you are using systemd)
+```bash
 sudo systemctl restart prunner.service
 ```
 
@@ -411,31 +462,31 @@ To parse PeerTube last log file:
 ::: code-group
 
 ```bash [Classic installation]
-cd /var/www/peertube/peertube-latest
-sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run parse-log -- --level info
+cd /var/www/peertube/peertube-latest; \
+    sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run parse-log -- --level info
 ```
 
 ```bash [Docker]
-cd /var/www/peertube-docker
-docker compose exec -u peertube peertube npm run parse-log -- --level info
+cd /var/www/peertube-docker; \
+    docker compose exec -u peertube peertube npm run parse-log -- --level info
 ```
 
 :::
 
 `--level` is optional and could be `info`/`warn`/`error`
 
-You can also remove SQL or HTTP logs using `--not-tags` (PeerTube >= 3.2):
+You can also remove SQL or HTTP logs using `--not-tags`:
 
 ::: code-group
 
 ```bash [Classic installation]
-cd /var/www/peertube/peertube-latest
-sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run parse-log -- --level debug --not-tags http sql
+cd /var/www/peertube/peertube-latest; \
+    sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run parse-log -- --level debug --not-tags http sql
 ```
 
 ```bash [Docker]
-cd /var/www/peertube-docker
-docker compose exec -u peertube peertube npm run parse-log -- --level debug --not-tags http sql
+cd /var/www/peertube-docker; \
+    docker compose exec -u peertube peertube npm run parse-log -- --level debug --not-tags http sql
 ```
 
 :::
@@ -447,13 +498,13 @@ Regenerating local video thumbnails could be useful because new PeerTube release
 ::: code-group
 
 ```bash [Classic installation]
-cd /var/www/peertube/peertube-latest
-sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run regenerate-thumbnails
+cd /var/www/peertube/peertube-latest; \
+    sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run regenerate-thumbnails
 ```
 
 ```bash [Docker]
-cd /var/www/peertube-docker
-docker compose exec -u peertube peertube npm run regenerate-thumbnails
+cd /var/www/peertube-docker; \
+    docker compose exec -u peertube peertube npm run regenerate-thumbnails
 ```
 
 :::
@@ -466,47 +517,47 @@ You can then create a transcoding job using the web interface if you need to opt
 ::: code-group
 
 ```bash [Classic installation]
-cd /var/www/peertube/peertube-latest
-sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-import-video-file-job -- -v [videoUUID] -i [videoFile]
+cd /var/www/peertube/peertube-latest; \
+    sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-import-video-file-job -- -v [videoUUID] -i [videoFile]
 ```
 
 ```bash [Docker]
-cd /var/www/peertube-docker
-docker compose exec -u peertube peertube npm run create-import-video-file-job -- -v [videoUUID] -i [videoFile]
+cd /var/www/peertube-docker; \
+    docker compose exec -u peertube peertube npm run create-import-video-file-job -- -v [videoUUID] -i [videoFile]
 ```
 
 :::
 
 ### Move video files from filesystem to object storage
 
-Use this script to move all video files or a specific video file to object storage.
+Use this script to move video related files (video files, original video file, captions, etc.) to object storage.
 
 ::: code-group
 
 ```bash [Classic installation]
-cd /var/www/peertube/peertube-latest
-sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-move-video-storage-job -- --to-object-storage -v [videoUUID]
+cd /var/www/peertube/peertube-latest; \
+    sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-move-video-storage-job -- --to-object-storage -v [videoUUID]
 ```
 
 ```bash [Docker]
-cd /var/www/peertube-docker
-docker compose exec -u peertube peertube npm run create-move-video-storage-job -- --to-object-storage -v [videoUUID]
+cd /var/www/peertube-docker; \
+    docker compose exec -u peertube peertube npm run create-move-video-storage-job -- --to-object-storage -v [videoUUID]
 ```
 
 :::
 
-The script can also move all video files that are not already in object storage:
+The script can also move all video related files that are not already in object storage:
 
 ::: code-group
 
 ```bash [Classic installation]
-cd /var/www/peertube/peertube-latest
-sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-move-video-storage-job -- --to-object-storage --all-videos
+cd /var/www/peertube/peertube-latest; \
+    sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-move-video-storage-job -- --to-object-storage --all-videos
 ```
 
 ```bash [Docker]
-cd /var/www/peertube-docker
-docker compose exec -u peertube peertube npm run create-move-video-storage-job -- --to-object-storage --all-videos
+cd /var/www/peertube-docker; \
+    docker compose exec -u peertube peertube npm run create-move-video-storage-job -- --to-object-storage --all-videos
 ```
 
 :::
@@ -515,34 +566,34 @@ docker compose exec -u peertube peertube npm run create-move-video-storage-job -
 
 **PeerTube >= 6.0**
 
-Use this script to move all video files or a specific video file from object storage to the PeerTube instance filesystem.
+Use this script to move video related files (video files, original video file, captions, etc.) from object storage to the PeerTube instance filesystem.
 
 ::: code-group
 
 ```bash [Classic installation]
-cd /var/www/peertube/peertube-latest
-sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-move-video-storage-job -- --to-file-system -v [videoUUID]
+cd /var/www/peertube/peertube-latest; \
+    sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-move-video-storage-job -- --to-file-system -v [videoUUID]
 ```
 
 ```bash [Docker]
-cd /var/www/peertube-docker
-docker compose exec -u peertube peertube npm run create-move-video-storage-job -- --to-file-system -v [videoUUID]
+cd /var/www/peertube-docker; \
+    docker compose exec -u peertube peertube npm run create-move-video-storage-job -- --to-file-system -v [videoUUID]
 ```
 
 :::
 
-The script can also move all video files that are not already on the filesystem:
+The script can also move all video related files that are not already on the filesystem:
 
 ::: code-group
 
 ```bash [Classic installation]
-cd /var/www/peertube/peertube-latest
-sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-move-video-storage-job -- --to-file-system --all-videos
+cd /var/www/peertube/peertube-latest; \
+    sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-move-video-storage-job -- --to-file-system --all-videos
 ```
 
 ```bash [Docker]
-cd /var/www/peertube-docker
-docker compose exec -u peertube peertube npm run create-move-video-storage-job -- --to-file-system --all-videos
+cd /var/www/peertube-docker; \
+    docker compose exec -u peertube peertube npm run create-move-video-storage-job -- --to-file-system --all-videos
 ```
 
 :::
@@ -556,13 +607,13 @@ Use this script after you migrated to another object storage provider so PeerTub
 ::: code-group
 
 ```bash [Classic installation]
-cd /var/www/peertube/peertube-latest
-sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run update-object-storage-url -- --from 'https://region.old-s3-provider.example.com' --to 'https://region.new-s3-provider.example.com'
+cd /var/www/peertube/peertube-latest; \
+    sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run update-object-storage-url -- --from 'https://region.old-s3-provider.example.com' --to 'https://region.new-s3-provider.example.com'
 ```
 
 ```bash [Docker]
-cd /var/www/peertube-docker
-docker compose exec -u peertube peertube npm run update-object-storage-url -- --from 'https://region.old-s3-provider.example.com' --to 'https://region.new-s3-provider.example.com'
+cd /var/www/peertube-docker; \
+    docker compose exec -u peertube peertube npm run update-object-storage-url -- --from 'https://region.old-s3-provider.example.com' --to 'https://region.new-s3-provider.example.com'
 ```
 
 :::
@@ -573,14 +624,16 @@ docker compose exec -u peertube peertube npm run update-object-storage-url -- --
 
 Use this script to recover disk space by removing remote files (thumbnails, avatars...) that can be re-fetched later by your PeerTube instance on-demand:
 
+::: code-group
+
 ```bash [Classic installation]
-cd /var/www/peertube/peertube-latest
-sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run house-keeping -- --delete-remote-files
+cd /var/www/peertube/peertube-latest; \
+    sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run house-keeping -- --delete-remote-files
 ```
 
 ```bash [Docker]
-cd /var/www/peertube-docker
-docker compose exec -u peertube peertube npm run house-keeping -- --delete-remote-files
+cd /var/www/peertube-docker; \
+    docker compose exec -u peertube peertube npm run house-keeping -- --delete-remote-files
 ```
 
 :::
@@ -595,13 +648,13 @@ Use this script to generate storyboard of a specific video:
 ::: code-group
 
 ```bash [Classic installation]
-cd /var/www/peertube/peertube-latest
-sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-generate-storyboard-job -- -v [videoUUID]
+cd /var/www/peertube/peertube-latest; \
+    sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-generate-storyboard-job -- -v [videoUUID]
 ```
 
 ```bash [Docker]
-cd /var/www/peertube-docker
-docker compose exec -u peertube peertube npm run create-generate-storyboard-job -- -v [videoUUID]
+cd /var/www/peertube-docker; \
+    docker compose exec -u peertube peertube npm run create-generate-storyboard-job -- -v [videoUUID]
 ```
 
 :::
@@ -611,13 +664,13 @@ The script can also generate all missing storyboards of local videos:
 ::: code-group
 
 ```bash [Classic installation]
-cd /var/www/peertube/peertube-latest
-sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-generate-storyboard-job -- --all-videos
+cd /var/www/peertube/peertube-latest; \
+    sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-generate-storyboard-job -- --all-videos
 ```
 
 ```bash [Docker]
-cd /var/www/peertube-docker
-docker compose exec -u peertube peertube npm run create-generate-storyboard-job -- --all-videos
+cd /var/www/peertube-docker; \
+    docker compose exec -u peertube peertube npm run create-generate-storyboard-job -- --all-videos
 ```
 
 :::
@@ -630,13 +683,13 @@ To delete these files (a confirmation will be demanded first):
 ::: code-group
 
 ```bash [Classic installation]
-cd /var/www/peertube/peertube-latest
-sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run prune-storage
+cd /var/www/peertube/peertube-latest; \
+    sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run prune-storage
 ```
 
 ```bash [Docker]
-cd /var/www/peertube-docker
-docker compose exec -u peertube peertube npm run prune-storage
+cd /var/www/peertube-docker; \
+    docker compose exec -u peertube peertube npm run prune-storage
 ```
 
 :::
@@ -651,13 +704,13 @@ to run the command below (keep in mind your follower instances will NOT update t
 ::: code-group
 
 ```bash [Classic installation]
-cd /var/www/peertube/peertube-latest
-sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run update-host
+cd /var/www/peertube/peertube-latest; \
+    sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run update-host
 ```
 
 ```bash [Docker]
-cd /var/www/peertube-docker
-docker compose exec -u peertube peertube npm run update-host
+cd /var/www/peertube-docker; \
+    docker compose exec -u peertube peertube npm run update-host
 ```
 
 :::
@@ -669,13 +722,13 @@ To reset a user password from CLI, run:
 ::: code-group
 
 ```bash [Classic installation]
-cd /var/www/peertube/peertube-latest
-sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run reset-password -- -u target_username
+cd /var/www/peertube/peertube-latest; \
+    sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run reset-password -- -u target_username
 ```
 
 ```bash [Docker]
-cd /var/www/peertube-docker
-docker compose exec -u peertube peertube npm run reset-password -- -u target_username
+cd /var/www/peertube-docker; \
+    docker compose exec -u peertube peertube npm run reset-password -- -u target_username
 ```
 
 :::
@@ -691,13 +744,13 @@ To install/update a plugin or a theme from the disk:
 ::: code-group
 
 ```bash [Classic installation]
-cd /var/www/peertube/peertube-latest
-sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run plugin:install -- --plugin-path /local/plugin/path
+cd /var/www/peertube/peertube-latest; \
+    sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run plugin:install -- --plugin-path /local/plugin/path
 ```
 
 ```bash [Docker]
-cd /var/www/peertube-docker
-docker compose exec -u peertube peertube npm run plugin:install -- --plugin-path /local/plugin/path
+cd /var/www/peertube-docker; \
+    docker compose exec -u peertube peertube npm run plugin:install -- --plugin-path /local/plugin/path
 ```
 
 :::
@@ -707,13 +760,13 @@ From NPM:
 ::: code-group
 
 ```bash
-cd /var/www/peertube/peertube-latest
-sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run plugin:install -- --npm-name peertube-plugin-myplugin
+cd /var/www/peertube/peertube-latest; \
+    sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run plugin:install -- --npm-name peertube-plugin-myplugin
 ```
 
 ```bash [Docker]
-cd /var/www/peertube-docker
-docker compose exec -u peertube peertube npm run plugin:install -- --npm-name peertube-plugin-myplugin
+cd /var/www/peertube-docker; \
+    docker compose exec -u peertube peertube npm run plugin:install -- --npm-name peertube-plugin-myplugin
 ```
 
 :::
@@ -723,13 +776,13 @@ To uninstall a plugin or a theme:
 ::: code-group
 
 ```bash [Classic installation]
-cd /var/www/peertube/peertube-latest
-sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run plugin:uninstall -- --npm-name peertube-plugin-myplugin
+cd /var/www/peertube/peertube-latest; \
+    sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run plugin:uninstall -- --npm-name peertube-plugin-myplugin
 ```
 
 ```bash [Docker]
-cd /var/www/peertube-docker
-docker compose exec -u peertube peertube npm run plugin:uninstall -- --npm-name peertube-plugin-myplugin
+cd /var/www/peertube-docker; \
+    docker compose exec -u peertube peertube npm run plugin:uninstall -- --npm-name peertube-plugin-myplugin
 ```
 
 :::

@@ -1,0 +1,42 @@
+<div class="root">
+  <table class="pt-table">
+    <thead>
+      <tr>
+        <th i18n>Device</th>
+        <th i18n>IP</th>
+        <th i18n>Last Active</th>
+        <th i18n>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @if (sessions.length === 0) {
+        <tr>
+          <td colspan="4" class="text-center" i18n>No active sessions</td>
+        </tr>
+      } @else {
+        @for (session of sessions; track session) {
+          <tr>
+            <td>{{ session.browserName }} {{ session.browserVersion }} on {{ session.osName }} {{ session.osVersion }}</td>
+
+            <td class="font-monospace">{{ session.lastActivityIP }}</td>
+
+            <td>
+              @if (session.currentSession) {
+                <span class="current-session" i18n>Current Session</span>
+              } @else {
+                <span class="last-active">{{ session.lastActivityDate | date: 'short' }}</span>
+              }
+            </td>
+
+            <td>
+              @if (!session.currentSession) {
+                <button class="peertube-button secondary-button" (click)="revokeSession(session)" i18n>Revoke</button>
+              }
+            </td>
+          </tr>
+        }
+      }
+    </tbody>
+  </table>
+</div>

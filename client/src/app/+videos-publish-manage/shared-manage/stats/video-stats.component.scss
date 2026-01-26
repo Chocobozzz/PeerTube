@@ -1,0 +1,110 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "nav" as *;
+
+.stats-embed {
+  display: flex;
+  justify-content: space-between;
+}
+
+.overall-stats,
+.global-stats {
+  display: flex;
+  flex-wrap: wrap;
+
+  .title-container {
+    h3 {
+      font-size: 16px;
+      font-weight: $font-bold;
+    }
+
+    width: 100%;
+  }
+}
+
+.overall-stats {
+  justify-content: space-between;
+
+  .cards {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .date-filter-wrapper {
+    margin-bottom: 10px;
+    min-width: 300px;
+  }
+}
+
+.stats-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: fit-content;
+  min-height: 100px;
+  min-width: 200px;
+  background-color: pvar(--bg-secondary-400);
+  margin-bottom: 15px;
+
+  @include margin-right(15px);
+
+  .label,
+  .more-info {
+    font-size: 1rem;
+    font-weight: $font-semibold;
+  }
+
+  .value {
+    font-size: 24px;
+    font-weight: $font-semibold;
+  }
+
+  @media screen and (max-width: $mobile-view) {
+    min-height: fit-content;
+    min-width: fit-content;
+    padding: 15px;
+  }
+}
+
+my-embed {
+  display: block;
+  max-width: 500px;
+  width: 100%;
+}
+
+.stats-with-date {
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 1px solid $separator-border-color;
+}
+
+@include on-small-main-col {
+  my-embed {
+    display: none;
+  }
+}
+
+.tab-content {
+  margin-top: 5px;
+}
+
+.nav-tabs {
+  @include peertube-nav-tabs($border-width: 2px);
+
+  a.nav-link {
+    padding: 0 10px !important;
+  }
+}
+
+.timeseries {
+  min-height: 500px;
+}
+
+.zoom-container {
+  display: flex;
+  justify-content: center;
+
+  .description {
+    font-style: italic;
+  }
+}

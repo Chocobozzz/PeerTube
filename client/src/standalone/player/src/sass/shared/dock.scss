@@ -1,0 +1,103 @@
+@use "sass:math";
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "./_player-variables" as *;
+
+.video-js.vjs-peertube-skin {
+  .peertube-dock {
+    --dock-avatar-size: 48px;
+
+    transition: opacity 0.1s;
+
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    padding: $dock-padding;
+    background: linear-gradient(to bottom, rgba(20, 20, 20, 0.7) 0, rgba(20, 20, 20, 0));
+
+    @include padding-right(60px);
+  }
+
+  .peertube-dock-avatar {
+    border-radius: 50%;
+    margin-right: 10px;
+    min-width: var(--dock-avatar-size);
+    min-height: var(--dock-avatar-size);
+    max-height: var(--dock-avatar-size);
+    max-height: var(--dock-avatar-size);
+  }
+
+  .peertube-dock-title-description {
+    // For ellipsis
+    min-width: 0;
+  }
+
+  .peertube-dock-title {
+    font-weight: $font-semibold;
+    letter-spacing: 1px;
+    line-height: normal;
+    min-width: 0;
+    margin: 0;
+    font-size: 23px;
+  }
+
+  .peertube-dock-title,
+  .peertube-dock-description {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+
+    @include ellipsis;
+  }
+
+  .peertube-dock-title + .peertube-dock-description {
+    margin-top: 3px;
+  }
+
+  .peertube-dock-description {
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+  &.vjs-playing.vjs-user-inactive .peertube-dock {
+    opacity: 0;
+    transition: opacity 1s;
+  }
+}
+
+.video-js.vjs-peertube-skin.vjs-size-750 {
+  .peertube-dock-avatar {
+    --dock-avatar-size: 40px;
+  }
+
+  .peertube-dock-title {
+    font-size: 16px;
+  }
+
+  .peertube-dock-description {
+    font-size: 9px;
+  }
+}
+
+.video-js.vjs-peertube-skin.vjs-size-570 {
+  .peertube-dock-avatar {
+    --dock-avatar-size: 35px;
+  }
+
+  .peertube-dock-title {
+    font-size: 14px;
+  }
+}
+
+.video-js.vjs-peertube-skin.vjs-size-350 {
+  .peertube-dock-avatar {
+    --dock-avatar-size: 30px;
+  }
+
+  .peertube-dock-title {
+    font-size: 13px;
+  }
+}

@@ -1,5 +1,5 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
 
 .actor {
   display: flex;
@@ -28,7 +28,7 @@
 }
 
 .actor-info-followers {
-  padding-bottom: .5rem;
+  padding-bottom: 0.5rem;
 }
 
 .actor-img-edit-button {

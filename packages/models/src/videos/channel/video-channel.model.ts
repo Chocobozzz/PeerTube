@@ -32,3 +32,7 @@ export interface VideoChannelSummary {
 
   avatars: ActorImage[]
 }
+
+export function isVideoChannel (obj: Account | VideoChannel): obj is VideoChannel {
+  return obj && typeof obj === 'object' && 'support' in obj
+}

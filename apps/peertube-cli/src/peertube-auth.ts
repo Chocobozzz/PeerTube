@@ -16,7 +16,6 @@ export function defineAuthProgram () {
     .option('-p, --password <token>', 'Password')
     .option('--default', 'add the entry as the new default')
     .action(options => {
-      /* eslint-disable no-import-assign */
       prompt.override = options
       prompt.start()
       prompt.get({
@@ -39,7 +38,6 @@ export function defineAuthProgram () {
           }
         }
       }, async (_, result) => {
-
         // Check credentials
         try {
           // Strip out everything after the domain:port.
@@ -111,11 +109,13 @@ export function defineAuthProgram () {
       }
     })
 
-  program.addHelpText('after', '\n\n  Examples:\n\n' +
-    '    $ peertube auth add -u https://peertube.cpy.re -U "PEERTUBE_USER" --password "PEERTUBE_PASSWORD"\n' +
-    '    $ peertube auth add -u https://peertube.cpy.re -U root\n' +
-    '    $ peertube auth list\n' +
-    '    $ peertube auth del https://peertube.cpy.re\n'
+  program.addHelpText(
+    'after',
+    '\n\n  Examples:\n\n' +
+      '    $ peertube auth add -u https://peertube.cpy.re -U "PEERTUBE_USER" --password "PEERTUBE_PASSWORD"\n' +
+      '    $ peertube auth add -u https://peertube.cpy.re -U root\n' +
+      '    $ peertube auth list\n' +
+      '    $ peertube auth del https://peertube.cpy.re\n'
   )
 
   return program

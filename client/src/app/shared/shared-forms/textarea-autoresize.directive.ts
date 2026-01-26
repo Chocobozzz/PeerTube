@@ -1,15 +1,17 @@
 // Thanks: https://github.com/evseevdev/ngx-textarea-autosize
-import { AfterViewInit, Directive, ElementRef, HostBinding, HostListener } from '@angular/core'
+import { AfterViewInit, Directive, ElementRef, HostBinding, HostListener, inject } from '@angular/core'
 
 @Directive({
   selector: 'textarea[myAutoResize]',
   standalone: true
 })
 export class TextareaAutoResizeDirective implements AfterViewInit {
-  @HostBinding('attr.rows') rows = '1'
-  @HostBinding('style.overflow') overflow = 'hidden'
+  private elem = inject(ElementRef)
 
-  constructor (private elem: ElementRef) { }
+  @HostBinding('attr.rows')
+  rows = '1'
+  @HostBinding('style.overflow')
+  overflow = 'hidden'
 
   public ngAfterViewInit () {
     this.resize()

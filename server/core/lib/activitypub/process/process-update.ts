@@ -1,9 +1,11 @@
+import { arrayify } from '@peertube/peertube-core-utils'
 import {
   ActivityPubActor,
   ActivityPubActorType,
   ActivityUpdate,
   ActivityUpdateObject,
   CacheFileObject,
+  PlayerSettingsObject,
   PlaylistObject,
   VideoObject
 } from '@peertube/peertube-models'
@@ -18,11 +20,13 @@ import { ActorModel } from '../../../models/actor/actor.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MActorFull, MActorSignature } from '../../../types/models/index.js'
 import { fetchAPObjectIfNeeded } from '../activity.js'
+import { getOrCreateAPActor } from '../actors/get.js'
 import { APActorUpdater } from '../actors/updater.js'
 import { createOrUpdateCacheFile } from '../cache-file.js'
+import { upsertAPPlayerSettings } from '../player-settings.js'
 import { createOrUpdateVideoPlaylist } from '../playlists/index.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
-import { APVideoUpdater, canVideoBeFederated, getOrCreateAPVideo } from '../videos/index.js'
+import { APVideoUpdater, canVideoBeFederated, getOrCreateAPVideo, maybeGetOrCreateAPVideo } from '../videos/index.js'
 
 async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate<ActivityUpdateObject>>) {
   const { activity, byActor } = options
@@ -48,6 +52,10 @@ async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate
 
   if (objectType === 'Playlist') {
     return retryTransactionWrapper(processUpdatePlaylist, byActor, activity, object)
+  }
+
+  if (objectType === 'PlayerSettings') {
+    return retryTransactionWrapper(processUpdatePlayerSettings, byActor, object)
   }
 
   return undefined
@@ -78,7 +86,7 @@ async function processUpdateVideo (activity: ActivityUpdate<VideoObject | string
   if (created) return
 
   const updater = new APVideoUpdater(videoObject, video)
-  return updater.update(activity.to)
+  return updater.update(arrayify(activity.to))
 }
 
 async function processUpdateCacheFile (
@@ -95,7 +103,7 @@ async function processUpdateCacheFile (
 
   const { video } = await getOrCreateAPVideo({ videoObject: cacheFileObject.object })
 
-  if (video.isOwned() && !canVideoBeFederated(video)) {
+  if (video.isLocal() && !canVideoBeFederated(video)) {
     logger.warn(`Do not process update cache file on video ${activity.object} that cannot be federated`)
     return
   }
@@ -104,7 +112,7 @@ async function processUpdateCacheFile (
     await createOrUpdateCacheFile(cacheFileObject, video, byActor, t)
   })
 
-  if (video.isOwned()) {
+  if (video.isLocal()) {
     // Don't resend the activity to the sender
     const exceptions = [ byActor ]
 
@@ -113,7 +121,7 @@ async function processUpdateCacheFile (
 }
 
 async function processUpdateActor (actor: MActorFull, actorObject: ActivityPubActor) {
-  logger.debug('Updating remote account "%s".', actorObject.url)
+  logger.debug(`Updating remote account "${actorObject.id}".`)
 
   const updater = new APActorUpdater(actorObject, actor)
   return updater.update()
@@ -127,5 +135,36 @@ async function processUpdatePlaylist (
   const byAccount = byActor.Account
   if (!byAccount) throw new Error('Cannot update video playlist with the non account actor ' + byActor.url)
 
-  await createOrUpdateVideoPlaylist(playlistObject, activity.to)
+  await createOrUpdateVideoPlaylist({ playlistObject, contextUrl: byActor.url, to: arrayify(activity.to) })
+}
+
+async function processUpdatePlayerSettings (
+  byActor: MActorSignature,
+  settingsObject: PlayerSettingsObject
+) {
+  let actor: MActorFull
+
+  const { video } = await maybeGetOrCreateAPVideo({ videoObject: settingsObject.object })
+
+  if (!video) {
+    try {
+      actor = await getOrCreateAPActor(settingsObject.object, 'all')
+    } catch {
+      actor = undefined
+    }
+  }
+
+  if (!video && !actor?.VideoChannel) {
+    logger.warn(`Do not process update player settings on unknown video/channel`)
+    return
+  }
+
+  await upsertAPPlayerSettings({
+    settingsObject,
+    contextUrl: byActor.url,
+    video,
+    channel: actor
+      ? Object.assign(actor.VideoChannel, { Actor: actor })
+      : undefined
+  })
 }

@@ -78,7 +78,7 @@ export class YoutubeDLInfoBuilder {
 
   private buildVideoInfo (obj: any): YoutubeDLInfo {
     return {
-      name: this.titleTruncation(obj.title),
+      name: this.titleTruncation(obj.title || obj.fulltitle),
       description: this.descriptionTruncation(obj.description),
       category: this.getCategory(obj.categories),
       licence: this.getLicence(obj.license),

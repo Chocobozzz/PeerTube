@@ -1,7 +1,12 @@
+export type To = { email: string, language: string }
 type From = string | { name?: string, address: string }
 
-interface Base extends Partial<SendEmailDefaultMessageOptions> {
-  to: string[] | string
+interface Base {
+  to: To[] | To
+
+  from?: From
+  subject?: string
+  replyTo?: string
 }
 
 interface MailTemplate extends Base {
@@ -10,15 +15,17 @@ interface MailTemplate extends Base {
   text?: undefined
 }
 
+export interface MailAction {
+  url: string
+  text: string
+}
+
 interface MailText extends Base {
   text: string
 
   locals?: Partial<SendEmailDefaultLocalsOptions> & {
     title?: string
-    action?: {
-      url: string
-      text: string
-    }
+    action?: MailAction
   }
 }
 
@@ -26,6 +33,12 @@ interface SendEmailDefaultLocalsOptions {
   instanceName: string
   text: string
   subject: string
+
+  fg: string
+  bg: string
+  primary: string
+  language: string
+  logoUrl: string
 }
 
 interface SendEmailDefaultMessageOptions {
@@ -42,7 +55,7 @@ export type SendEmailDefaultOptions = {
 
   locals: SendEmailDefaultLocalsOptions & {
     WEBSERVER: any
-    EMAIL: any
+    signature: string
   }
 }
 

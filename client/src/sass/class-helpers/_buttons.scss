@@ -1,6 +1,6 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_button-mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_button-mixins" as *;
 
 .peertube-button {
   @include peertube-button;
@@ -38,6 +38,10 @@
   @include tertiary-button;
 }
 
+.button-as-link {
+  @include button-as-link;
+}
+
 .danger-button {
   @include danger-button;
 }
@@ -53,6 +57,7 @@
 }
 
 .button-unstyle {
+  font-weight: inherit;
   padding: 0;
   border: 0;
 }

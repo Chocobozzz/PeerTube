@@ -1,3 +1,5 @@
+const path = require('path')
+
 async function register ({ registerHook, registerSetting, settingsManager, storageManager, peertubeHelpers }) {
   {
     registerSetting({
@@ -100,6 +102,15 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
   registerHook({
     target: 'filter:api.video-playlist.videos.list.result',
     handler: obj => addToTotal(obj)
+  })
+
+  registerHook({
+    target: 'filter:feed.videos.list.result',
+    handler: (result) => {
+      result.data[0].name = 'Custom name by hook'
+
+      return result
+    }
   })
 
   registerHook({
@@ -390,7 +401,7 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     handler: (result, params) => {
       return {
         allowed: false,
-        html: 'Lu Bu'
+        html: 'Lu Bu ' + params.req.params.id
       }
     }
   })
@@ -400,7 +411,7 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     handler: (result, params) => {
       return {
         allowed: false,
-        html: 'Diao Chan'
+        html: 'Diao Chan ' + params.req.params.id
       }
     }
   })
@@ -452,6 +463,28 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
       }
 
       return object
+    }
+  })
+
+  registerHook({
+    target: 'filter:email.template-path.result',
+    handler: (templatePath, { view }) => {
+      if (view === 'password-reset/html') {
+        return path.join(__dirname, 'emails', 'password-reset.pug')
+      }
+
+      return templatePath
+    }
+  })
+
+  registerHook({
+    target: 'filter:email.subject.result',
+    handler: (subject, { template }) => {
+      if (template === 'password-reset') {
+        return 'Custom subject'
+      }
+
+      return subject
     }
   })
 

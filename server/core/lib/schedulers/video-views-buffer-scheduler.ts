@@ -5,19 +5,20 @@ import { federateVideoIfNeeded } from '../activitypub/videos/index.js'
 import { Redis } from '../redis.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
-const lTags = loggerTagsFactory('views')
+const lTags = loggerTagsFactory('schedulers', 'views')
 
 export class VideoViewsBufferScheduler extends AbstractScheduler {
-
   private static instance: AbstractScheduler
 
   protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.VIDEO_VIEWS_BUFFER_UPDATE
 
   private constructor () {
-    super()
+    super({ randomRunOnEnable: false })
   }
 
   protected async internalExecute () {
+    logger.debug('Running video views buffer scheduler', lTags())
+
     const videoIds = await Redis.Instance.listLocalVideosViewed()
     if (videoIds.length === 0) return
 
