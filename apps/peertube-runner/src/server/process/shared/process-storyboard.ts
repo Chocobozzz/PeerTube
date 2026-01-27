@@ -13,6 +13,7 @@ export async function processGenerateStoryboard (options: ProcessOptions<RunnerJ
 
   let ffmpegProgress: number
   let videoInputPath: string
+  let jobAborted = false
 
   const outputPath = join(ConfigManager.Instance.getStoryboardDirectory(), `storyboard-${buildUUID()}.jpg`)
 
@@ -20,13 +21,21 @@ export async function processGenerateStoryboard (options: ProcessOptions<RunnerJ
     job,
     server,
     runnerToken,
-    progressGetter: () => ffmpegProgress
+    progressGetter: () => ffmpegProgress,
+    onAbort: () => {
+      jobAborted = true
+    }
   })
 
   try {
     logger.info(`Downloading input file ${payload.input.videoFileUrl} for storyboard job ${job.jobToken}`)
 
     videoInputPath = await downloadInputFile({ url: payload.input.videoFileUrl, runnerToken, job })
+
+    if (jobAborted) {
+      logger.info(`Job ${job.uuid} was aborted, stopping processing`)
+      return
+    }
 
     logger.info(`Downloaded input file ${payload.input.videoFileUrl} for job ${job.jobToken}. Generating storyboard.`)
 
@@ -39,6 +48,11 @@ export async function processGenerateStoryboard (options: ProcessOptions<RunnerJ
       sprites: payload.sprites
     })
 
+    if (jobAborted) {
+      logger.info(`Job ${job.uuid} was aborted during storyboard generation, stopping processing`)
+      return
+    }
+
     const successBody: GenerateStoryboardSuccess = {
       storyboardFile: outputPath
     }
@@ -50,6 +64,13 @@ export async function processGenerateStoryboard (options: ProcessOptions<RunnerJ
       payload: successBody,
       reqPayload: payload
     })
+  } catch (err) {
+    // If job was aborted, don't report the error
+    if (jobAborted) {
+      logger.info(`Job ${job.uuid} processing stopped after abort`)
+      return
+    }
+    throw err
   } finally {
     if (videoInputPath) await remove(videoInputPath)
     if (outputPath) await remove(outputPath)

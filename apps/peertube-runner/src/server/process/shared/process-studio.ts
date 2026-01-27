@@ -36,12 +36,16 @@ export async function processStudioTranscoding (options: ProcessOptions<RunnerJo
   let outputPath: string
 
   let tasksProgress = 0
+  let jobAborted = false
 
   const updateProgressInterval = scheduleTranscodingProgress({
     job,
     server,
     runnerToken,
-    progressGetter: () => tasksProgress
+    progressGetter: () => tasksProgress,
+    onAbort: () => {
+      jobAborted = true
+    }
   })
 
   try {
@@ -50,12 +54,22 @@ export async function processStudioTranscoding (options: ProcessOptions<RunnerJo
     videoInputPath = await downloadInputFile({ url: payload.input.videoFileUrl, runnerToken, job })
     separatedAudioInputPath = await downloadSeparatedAudioFileIfNeeded({ urls: payload.input.separatedAudioFileUrl, runnerToken, job })
 
+    if (jobAborted) {
+      logger.info(`Job ${job.uuid} was aborted, stopping processing`)
+      return
+    }
+
     tmpVideoInputFilePath = videoInputPath
     tmpSeparatedAudioInputFilePath = separatedAudioInputPath
 
     logger.info(`Input file ${payload.input.videoFileUrl} downloaded for job ${job.jobToken}. Running studio transcoding tasks.`)
 
     for (const task of payload.tasks) {
+      if (jobAborted) {
+        logger.info(`Job ${job.uuid} was aborted during processing, stopping`)
+        return
+      }
+
       const outputFilename = 'output-edition-' + buildUUID() + '.mp4'
       outputPath = join(ConfigManager.Instance.getTranscodingDirectory(), outputFilename)
 
@@ -78,6 +92,11 @@ export async function processStudioTranscoding (options: ProcessOptions<RunnerJo
       tasksProgress += Math.floor(100 / payload.tasks.length)
     }
 
+    if (jobAborted) {
+      logger.info(`Job ${job.uuid} was aborted, stopping processing`)
+      return
+    }
+
     const successBody: VideoStudioTranscodingSuccess = {
       videoFile: outputPath
     }
@@ -89,6 +108,13 @@ export async function processStudioTranscoding (options: ProcessOptions<RunnerJo
       payload: successBody,
       reqPayload: payload
     })
+  } catch (err) {
+    // If job was aborted, don't report the error
+    if (jobAborted) {
+      logger.info(`Job ${job.uuid} processing stopped after abort`)
+      return
+    }
+    throw err
   } finally {
     if (tmpVideoInputFilePath) await remove(tmpVideoInputFilePath)
     if (tmpSeparatedAudioInputFilePath) await remove(tmpSeparatedAudioInputFilePath)
