@@ -39,7 +39,7 @@ export async function loadRunnerVideo (runnerJob: MRunnerJob, lTags: LoggerTagsF
   return video
 }
 
-export async function isVideoMissHLSAudio (options: {
+export async function isHLSAudioMissing (options: {
   resolution: number
   separatedAudio: boolean
   videoId: string | number

@@ -5,7 +5,7 @@ import {
   OptimizeTranscodingPayload,
   VideoTranscodingPayload
 } from '@peertube/peertube-models'
-import { isVideoMissHLSAudio } from '@server/lib/runners/job-handlers/shared/utils.js'
+import { isHLSAudioMissing } from '@server/lib/runners/job-handlers/shared/utils.js'
 import { onTranscodingEnded } from '@server/lib/transcoding/ended-transcoding.js'
 import { generateHlsPlaylistResolution } from '@server/lib/transcoding/hls-transcoding.js'
 import { mergeAudioVideofile, optimizeOriginalVideofile, transcodeNewWebVideoResolution } from '@server/lib/transcoding/web-transcoding.js'
@@ -145,18 +145,22 @@ async function handleHLSJob (job: Job, payload: HLSTranscodingPayload, videoArg:
 
   logger.info('HLS transcoding job for %s ended.', video.uuid, lTags(video.uuid), { payload })
 
-  if (payload.deleteWebVideoFiles === true) {
+  const missingAudio = await isHLSAudioMissing({
+    resolution: payload.resolution,
+    separatedAudio: payload.separatedAudio,
+    videoId: videoArg.uuid
+  })
+
+  if (!missingAudio && payload.deleteWebVideoFiles === true) {
     logger.info('Removing Web Video files of %s now we have a HLS version of it.', video.uuid, lTags(video.uuid))
 
     await removeAllWebVideoFiles(video)
   }
 
-  let moveVideoToNextState = !payload.hasChildren
-
   // Splitted audio, wait audio generation before moving the video in its next state
-  if (await isVideoMissHLSAudio({ resolution: payload.resolution, separatedAudio: payload.separatedAudio, videoId: videoArg.uuid })) {
-    moveVideoToNextState = false
-  }
+  const moveVideoToNextState = missingAudio
+    ? false
+    : !payload.hasChildren
 
   await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState, video })
 }
