@@ -213,6 +213,7 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       default: 'default',
       customization: {
         primaryColor: '#001',
+        onPrimaryColor: '#042',
         foregroundColor: '#002',
         backgroundColor: '#003',
         backgroundSecondaryColor: '#004',

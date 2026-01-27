@@ -1059,6 +1059,9 @@ const CONFIG = {
       get PRIMARY_COLOR () {
         return config.get<string>('theme.customization.primary_color')
       },
+      get ON_PRIMARY_COLOR () {
+        return config.get<string>('theme.customization.on_primary_color')
+      },
       get FOREGROUND_COLOR () {
         return config.get<string>('theme.customization.foreground_color')
       },

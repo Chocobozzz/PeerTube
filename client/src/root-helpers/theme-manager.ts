@@ -18,6 +18,7 @@ export class ThemeManager {
 
   private readonly configCSSVariableMap: ConfigCSSVariableMap = {
     primaryColor: '--primary',
+    onPrimaryColor: '--on-primary',
     foregroundColor: '--fg',
     backgroundColor: '--bg',
     backgroundSecondaryColor: '--bg-secondary',

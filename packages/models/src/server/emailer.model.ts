@@ -36,6 +36,7 @@ interface SendEmailDefaultLocalsOptions {
 
   fg: string
   bg: string
+  onPrimary: string
   primary: string
   language: string
   logoUrl: string

@@ -400,6 +400,7 @@ export class Emailer {
           fg: CONFIG.THEME.CUSTOMIZATION.FOREGROUND_COLOR || '#000',
           bg: CONFIG.THEME.CUSTOMIZATION.BACKGROUND_COLOR || '#fff',
           primary: CONFIG.THEME.CUSTOMIZATION.PRIMARY_COLOR || '#FF8F37',
+          onPrimary: CONFIG.THEME.CUSTOMIZATION.ON_PRIMARY_COLOR || '#000',
           language: to.language,
           logoUrl: ServerConfigManager.Instance.getLogoUrl(await getServerActor(), 192)
         }
