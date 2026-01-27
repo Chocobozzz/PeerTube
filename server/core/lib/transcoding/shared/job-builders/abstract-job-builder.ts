@@ -93,7 +93,7 @@ export abstract class AbstractJobBuilder<P> {
           if (hasSplitAudioTranscoding) {
             hlsAudioAlreadyGenerated = true
 
-            hlsPayloads.push(
+            hlsPayloads.unshift(
               {
                 higherPriority: true,
 
