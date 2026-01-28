@@ -80,21 +80,12 @@ trust_proxy:
 database:
   hostname: '127.0.0.1'
   port: 5432
-  # ssl options:
-  #   false  - no ssl
-  #   true   - ssl without cert validation
-  #   object - full control over tls
-  #
-  # Note:
-  #   Each file path (ca, cert, key) MUST be absolute path
-  #
-  # Example:
-  # ssl: 
-  #   reject_unauthorized: false
-  #   ca: '/abs/path/to/server-certificates/root.crt'
-  #   cert: '/abs/path/to/client-certificates/postgresql.crt'
-  #   key: '/abs/path/to/client-key/postgresql.key'
-  ssl: false
+  ssl_settings: 
+    enabled: false
+    reject_unauthorized: false
+    ca: '/absolute/path/to/server-certificates/root.crt'
+    cert: '/absolute/path/to/client-certificates/postgresql.crt'
+    key: '/absolute/path/to/client-key/postgresql.key'
   suffix: '_dev'
   username: 'peertube'
   password: 'peertube'

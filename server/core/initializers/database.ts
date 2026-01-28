@@ -87,17 +87,18 @@ const poolMax = CONFIG.DATABASE.POOL.MAX
 let dialectOptions: any = {}
 
 // Backward compatibility
-if (CONFIG.DATABASE.SSL === true) {
-  dialectOptions = { ssl: { rejectUnauthorized: false } }
-} else if (CONFIG.DATABASE.SSL) {
-  dialectOptions = {
-    // For reference: https://node-postgres.com/features/ssl
-    ssl: {
-      ...(CONFIG.DATABASE.SSL.REJECT_UNAUTHORIZED != null && { rejectUnauthorized: CONFIG.DATABASE.SSL.REJECT_UNAUTHORIZED }),
-      ...(CONFIG.DATABASE.SSL.CA && { ca: readFileSync(CONFIG.DATABASE.SSL.CA, { encoding: 'utf8' }) }),
-      ...(CONFIG.DATABASE.SSL.CERT && { cert: readFileSync(CONFIG.DATABASE.SSL.CERT, { encoding: 'utf8' }) }),
-      ...(CONFIG.DATABASE.SSL.KEY && { key: readFileSync(CONFIG.DATABASE.SSL.KEY, { encoding: 'utf8' }) }),
-    }
+if (CONFIG.DATABASE.SSL_SETTINGS.ENABLED) {
+  // For reference: https://node-postgres.com/features/ssl
+  dialectOptions = { ssl: { rejectUnauthorized: CONFIG.DATABASE.SSL_SETTINGS.REJECT_UNAUTHORIZED } }
+  
+  if (CONFIG.DATABASE.SSL_SETTINGS.CA) {
+    dialectOptions.ssl.ca = readFileSync(CONFIG.DATABASE.SSL_SETTINGS.CA, { encoding: 'utf8' })
+  }
+  if (CONFIG.DATABASE.SSL_SETTINGS.CERT) {
+    dialectOptions.ssl.cert = readFileSync(CONFIG.DATABASE.SSL_SETTINGS.CERT, { encoding: 'utf8' })
+  }
+  if (CONFIG.DATABASE.SSL_SETTINGS.KEY) {
+    dialectOptions.ssl.key = readFileSync(CONFIG.DATABASE.SSL_SETTINGS.KEY, { encoding: 'utf8' }) 
   }
 }
 

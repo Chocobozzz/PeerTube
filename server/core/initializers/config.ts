@@ -37,19 +37,25 @@ const CONFIG = {
     DBNAME: config.has('database.name') ? config.get<string>('database.name') : 'peertube' + config.get<string>('database.suffix'),
     HOSTNAME: config.get<string>('database.hostname'),
     PORT: config.get<number>('database.port'),
-    SSL: (() => {
-      if (!config.has('database.ssl')) return false
-
-      const ssl = config.get<boolean | { reject_unauthorized?: boolean, ca?: string, cert?: string, key?:string }>('database.ssl')
-      if (typeof ssl === 'boolean') return ssl
-
-      return {
-        REJECT_UNAUTHORIZED: ssl.reject_unauthorized ?? null,
-        CA: ssl.ca ?? null,
-        CERT: ssl.cert ?? null,
-        KEY: ssl.key ?? null,
+    SSL_SETTINGS: {
+      get ENABLED () {
+        return config.has('database.ssl_settings.enabled') ? config.get<boolean>('database.ssl_settings.enabled') : false
+      },
+      get REJECT_UNAUTHORIZED () {
+        return config.has('database.ssl_settings.reject_unauthorized') 
+          ? config.get<boolean>('database.ssl_settings.reject_unauthorized') 
+          : false
+      },
+      get CA() {
+        return config.has('database.ssl_settings.ca') ? config.get<string>('database.ssl_settings.ca') : null
+      },
+      get CERT() {
+        return config.has('database.ssl_settings.cert') ? config.get<string>('database.ssl_settings.cert') : null
+      },
+      get KEY() {
+        return config.has('database.ssl_settings.key') ? config.get<string>('database.ssl_settings.key') : null
       }
-    })(),
+    },
     USERNAME: config.get<string>('database.username'),
     PASSWORD: config.get<string>('database.password'),
     POOL: {
