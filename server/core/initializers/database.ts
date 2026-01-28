@@ -86,7 +86,6 @@ const poolMax = CONFIG.DATABASE.POOL.MAX
 
 let dialectOptions: any = {}
 
-// Backward compatibility
 if (CONFIG.DATABASE.SSL_SETTINGS.ENABLED) {
   // For reference: https://node-postgres.com/features/ssl
   dialectOptions = { ssl: { rejectUnauthorized: CONFIG.DATABASE.SSL_SETTINGS.REJECT_UNAUTHORIZED } }
