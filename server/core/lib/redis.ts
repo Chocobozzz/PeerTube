@@ -15,6 +15,8 @@ import {
   VIEW_LIFETIME,
   WEBSERVER
 } from '../initializers/constants.js'
+import { ConnectionOptions } from 'node:tls'
+import { readFileSync } from 'node:fs'
 
 const lTags = loggerTagsFactory('redis')
 
@@ -71,13 +73,31 @@ class Redis {
         )
       }
 
+      let enableTLSForSentinelMode = false
+      let sentinelTLS: ConnectionOptions = undefined
+      if (CONFIG.REDIS.SENTINEL.TLS_SETTINGS.ENABLED) {
+        enableTLSForSentinelMode = true
+        sentinelTLS = { rejectUnauthorized: CONFIG.REDIS.SENTINEL.TLS_SETTINGS.REJECT_UNAUTHORIZED }
+
+        if (CONFIG.REDIS.SENTINEL.TLS_SETTINGS.CA) {
+          sentinelTLS.ca = readFileSync(CONFIG.REDIS.SENTINEL.TLS_SETTINGS.CA, { encoding: 'utf8' })
+        }
+        if (CONFIG.REDIS.SENTINEL.TLS_SETTINGS.CERT) {
+          sentinelTLS.cert = readFileSync(CONFIG.REDIS.SENTINEL.TLS_SETTINGS.CERT, { encoding: 'utf8' })
+        }
+        if (CONFIG.REDIS.SENTINEL.TLS_SETTINGS.KEY) {
+          sentinelTLS.key = readFileSync(CONFIG.REDIS.SENTINEL.TLS_SETTINGS.KEY, { encoding: 'utf8' })
+        }
+      }
+
       return {
         connectionName,
         connectTimeout,
-        enableTLSForSentinelMode: CONFIG.REDIS.SENTINEL.ENABLE_TLS,
+        enableTLSForSentinelMode,
         sentinelPassword: CONFIG.REDIS.AUTH,
         sentinels: CONFIG.REDIS.SENTINEL.SENTINELS,
         name: CONFIG.REDIS.SENTINEL.MASTER_NAME,
+        sentinelTLS,
         ...options
       }
     }
@@ -89,6 +109,21 @@ class Redis {
       )
     }
 
+    let tls: ConnectionOptions = undefined
+    if (CONFIG.REDIS.SENTINEL.TLS_SETTINGS.ENABLED) {
+      tls = { rejectUnauthorized: CONFIG.REDIS.TLS_SETTINGS.REJECT_UNAUTHORIZED }
+
+      if (CONFIG.REDIS.TLS_SETTINGS.CA) {
+        tls.ca = readFileSync(CONFIG.REDIS.TLS_SETTINGS.CA, { encoding: 'utf8' })
+      }
+      if (CONFIG.REDIS.TLS_SETTINGS.CERT) {
+        tls.cert = readFileSync(CONFIG.REDIS.TLS_SETTINGS.CERT, { encoding: 'utf8' })
+      }
+      if (CONFIG.REDIS.TLS_SETTINGS.KEY) {
+        tls.key = readFileSync(CONFIG.REDIS.TLS_SETTINGS.KEY, { encoding: 'utf8' })
+      }
+    }
+
     return {
       connectionName,
       connectTimeout,
@@ -98,6 +133,7 @@ class Redis {
       port: CONFIG.REDIS.PORT,
       path: CONFIG.REDIS.SOCKET,
       showFriendlyErrorStack: true,
+      tls,
       ...options
     }
   }
