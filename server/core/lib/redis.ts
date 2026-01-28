@@ -1,6 +1,8 @@
 import { sha256 } from '@peertube/peertube-node-utils'
 import { exists } from '@server/helpers/custom-validators/misc.js'
 import { Redis as IoRedis, RedisOptions } from 'ioredis'
+import { readFileSync } from 'node:fs'
+import { ConnectionOptions } from 'node:tls'
 import { logger, loggerTagsFactory } from '../helpers/logger.js'
 import { generateRandomString } from '../helpers/utils.js'
 import { CONFIG } from '../initializers/config.js'
@@ -15,8 +17,6 @@ import {
   VIEW_LIFETIME,
   WEBSERVER
 } from '../initializers/constants.js'
-import { ConnectionOptions } from 'node:tls'
-import { readFileSync } from 'node:fs'
 
 const lTags = loggerTagsFactory('redis')
 
