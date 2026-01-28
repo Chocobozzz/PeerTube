@@ -15,7 +15,7 @@ import { MVideoWithFile } from '@server/types/models/index.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
 import { generateRunnerTranscodingAudioInputFileUrl, generateRunnerTranscodingVideoInputFileUrl } from '../runner-urls.js'
 import { AbstractVODTranscodingJobHandler } from './abstract-vod-transcoding-job-handler.js'
-import { isVideoMissHLSAudio, loadRunnerVideo } from './shared/utils.js'
+import { isHLSAudioMissing, loadRunnerVideo } from './shared/utils.js'
 
 type CreateOptions = {
   video: MVideoWithFile
@@ -29,8 +29,9 @@ type CreateOptions = {
 }
 
 // eslint-disable-next-line max-len
-export class VODHLSTranscodingJobHandler extends AbstractVODTranscodingJobHandler<CreateOptions, RunnerJobUpdatePayload, VODHLSTranscodingSuccess> {
-
+export class VODHLSTranscodingJobHandler
+  extends AbstractVODTranscodingJobHandler<CreateOptions, RunnerJobUpdatePayload, VODHLSTranscodingSuccess>
+{
   async create (options: CreateOptions) {
     const { video, resolution, fps, dependsOnRunnerJob, separatedAudio, priority } = options
 
@@ -96,15 +97,15 @@ export class VODHLSTranscodingJobHandler extends AbstractVODTranscodingJobHandle
     })
 
     // Splitted audio? Wait audio generation before moving the video in its next state
-    const moveVideoToNextState = !await isVideoMissHLSAudio({
+    const missingAudio = await isHLSAudioMissing({
       resolution: payload.output.resolution,
       separatedAudio: payload.output.separatedAudio,
       videoId: video.uuid
     })
 
-    await onTranscodingEnded({ isNewVideo: privatePayload.isNewVideo, moveVideoToNextState, video })
+    await onTranscodingEnded({ isNewVideo: privatePayload.isNewVideo, moveVideoToNextState: !missingAudio, video })
 
-    if (privatePayload.deleteWebVideoFiles === true) {
+    if (!missingAudio && privatePayload.deleteWebVideoFiles === true) {
       logger.info('Removing web video files of %s now we have a HLS version of it.', video.uuid, this.lTags(video.uuid))
 
       await removeAllWebVideoFiles(video)

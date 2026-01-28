@@ -178,7 +178,7 @@
     "Your video {targetId} has just finished importing.": "Your video {targetId} has just finished importing.",
     "Your video import {targetId} encountered an error.": "Your video import {targetId} encountered an error.",
     "Your video import encountered an error": "Your video import encountered an error",
-    "Import failed": "Import failed",
+    "Import failed": "Falha ao importar",
     "Review imports": "Review imports",
     "{channelName} just published a new video": "{channelName} just published a new video",
     "Your subscription {channelName} just published a new video: {videoName}.": "Your subscription {channelName} just published a new video: {videoName}.",

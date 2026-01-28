@@ -103,6 +103,7 @@ import {
   MVideoId,
   MVideoImmutable,
   MVideoOwned,
+  MVideoSeo,
   MVideoThumbnail,
   MVideoThumbnailBlacklist,
   MVideoWithAllFiles,
@@ -1343,6 +1344,12 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
 
     return queryBuilder.queryVideo({ id, transaction, type: 'thumbnails-blacklist' })
+  }
+
+  static loadForSEO (id: number | string, transaction?: Transaction): Promise<MVideoSeo> {
+    const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
+
+    return queryBuilder.queryVideo({ id, transaction, type: 'seo' })
   }
 
   static loadAndPopulateAccountAndFiles (id: number | string, transaction?: Transaction): Promise<MVideoAccountLightBlacklistAllFiles> {

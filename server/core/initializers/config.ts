@@ -90,8 +90,9 @@ const CONFIG = {
           return config.has('redis.sentinel.tls_settings.key') ? config.get<string>('redis.sentinel.tls_settings.key') : null
         }
       },
-      SENTINELS: config.has('redis.sentinel.sentinels') ? config.get<{ hostname: string, port: number }[]>('redis.sentinel.sentinels') : [],
-      MASTER_NAME: config.has('redis.sentinel.master_name') ? config.get<string>('redis.sentinel.master_name') : null
+      SENTINELS: config.has('redis.sentinel.sentinels') ? config.get<{ host: string, port: number }[]>('redis.sentinel.sentinels') : [],
+      MASTER_NAME: config.has('redis.sentinel.master_name') ? config.get<string>('redis.sentinel.master_name') : null,
+      PASSWORD: config.has('redis.sentinel.password') ? config.get<string>('redis.sentinel.password') : null
     }
   },
   SMTP: {
@@ -1094,6 +1095,9 @@ const CONFIG = {
     CUSTOMIZATION: {
       get PRIMARY_COLOR () {
         return config.get<string>('theme.customization.primary_color')
+      },
+      get ON_PRIMARY_COLOR () {
+        return config.get<string>('theme.customization.on_primary_color')
       },
       get FOREGROUND_COLOR () {
         return config.get<string>('theme.customization.foreground_color')

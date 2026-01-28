@@ -35,7 +35,6 @@ export class PlaylistHtml {
       req,
       html,
       playlist: videoPlaylist,
-      addEmbedInfo: true,
       addOG: true,
       addTwitterCard: true,
       isEmbed: false,
@@ -61,7 +60,6 @@ export class PlaylistHtml {
 
       html,
       playlist,
-      addEmbedInfo: true,
       addOG: false,
       addTwitterCard: false,
       isEmbed: true,
@@ -83,32 +81,16 @@ export class PlaylistHtml {
 
     addOG: boolean
     addTwitterCard: boolean
-    addEmbedInfo: boolean
 
     isEmbed: boolean
 
     currentQuery: Record<string, string>
   }) {
-    const { req, html, playlist, addEmbedInfo, addOG, addTwitterCard, isEmbed, currentQuery = {} } = options
+    const { req, html, playlist, addOG, addTwitterCard, isEmbed, currentQuery = {} } = options
     const escapedTruncatedDescription = TagsHtml.buildEscapedTruncatedDescription(playlist.description)
 
     let htmlResult = TagsHtml.addTitleTag(html, playlist.name)
     htmlResult = TagsHtml.addDescriptionTag(htmlResult, escapedTruncatedDescription)
-
-    const list = { numberOfItems: playlist.get('videosLength') as number }
-    const schemaType = 'ItemList'
-
-    const twitterCard = addTwitterCard
-      ? 'player'
-      : undefined
-
-    const ogType = addOG
-      ? 'video' as 'video'
-      : undefined
-
-    const embed = addEmbedInfo
-      ? { url: WEBSERVER.URL + playlist.getEmbedStaticPath(), createdAt: playlist.createdAt.toISOString() }
-      : undefined
 
     return TagsHtml.addTags(htmlResult, {
       url: WEBSERVER.URL + playlist.getWatchStaticPath(),
@@ -127,14 +109,31 @@ export class PlaylistHtml {
         ? { url: playlist.getThumbnailUrl(), width: playlist.Thumbnail.width, height: playlist.Thumbnail.height }
         : undefined,
 
-      list,
+      list: { numberOfItems: playlist.get('videosLength') as number },
 
-      schemaType,
-      ogType,
-      twitterCard,
+      schemaType: 'ItemList',
 
-      embed,
-      oembedUrl: this.getOEmbedUrl(playlist, currentQuery),
+      ogType: addOG
+        ? 'video' as 'video'
+        : undefined,
+
+      twitterCard: addTwitterCard
+        ? 'player'
+        : undefined,
+
+      videoOrPlaylist: {
+        embedUrl: WEBSERVER.URL + playlist.getEmbedStaticPath(),
+        oembedUrl: this.getOEmbedUrl(playlist, currentQuery),
+        createdAt: playlist.createdAt.toISOString(),
+        updatedAt: playlist.updatedAt.toISOString(),
+
+        channel: playlist.VideoChannel
+          ? {
+            displayName: playlist.VideoChannel.name,
+            url: playlist.VideoChannel.getClientUrl(false)
+          }
+          : undefined
+      },
 
       rssFeeds: req
         ? getDefaultRSSFeeds(req)

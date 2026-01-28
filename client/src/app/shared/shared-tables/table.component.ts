@@ -150,7 +150,10 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
 
   totalRecords = 0
   rowsPerPageOptions = [ 5, 10, 20, 50, 100 ]
+
   sort: SortMeta = { field: undefined, order: -1 }
+  saveSort: SortMeta
+
   pagination: RestPagination
 
   search: string
@@ -169,12 +172,7 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
   private routeSubscription: Subscription
 
   ngOnInit (): void {
-    this.sort = {
-      field: this.defaultSort(),
-      order: this.defaultSortOrder() === 'desc'
-        ? -1
-        : 1
-    }
+    this.setDefaultSort()
 
     this.pagination = {
       count: this.defaultRowsPerPage(),
@@ -226,15 +224,25 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
 
   // ---------------------------------------------------------------------------
 
-  onSearch (search: string, useMatchSort = false) {
-    debugLogger('On search', { search, useMatchSort })
+  onSearch (search: string, canUseMatchSort = false) {
+    debugLogger('On search', { search, canUseMatchSort })
 
     this.search = search
 
-    if (useMatchSort) {
-      this.sort = {
-        field: 'match' as any,
-        order: -1
+    if (this.search) {
+      if (canUseMatchSort && this.sort.field !== 'match') {
+        debugLogger('Saving previous sort on search', { saveSort: this.sort })
+
+        this.saveSort = { ...this.sort }
+
+        this.sort = { field: 'match', order: -1 }
+      }
+    } else if (this.sort.field === 'match') {
+      if (this.saveSort) {
+        this.sort = { ...this.saveSort }
+        this.saveSort = undefined
+      } else {
+        this.setDefaultSort()
       }
     }
 
@@ -263,6 +271,15 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
 
     this.selectedRows = []
     this.expandedRows = {}
+  }
+
+  private setDefaultSort () {
+    this.sort = {
+      field: this.defaultSort(),
+      order: this.defaultSortOrder() === 'desc'
+        ? -1
+        : 1
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -308,7 +325,10 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
   }
 
   private saveTableSettings () {
-    peertubeLocalStorage.setItem(this.getSortLocalStorageKey(), JSON.stringify(this.sort))
+    if (this.sort.field !== 'match') {
+      peertubeLocalStorage.setItem(this.getSortLocalStorageKey(), JSON.stringify(this.sort))
+    }
+
     peertubeLocalStorage.setItem(this.getCountLocalStorageKey(), JSON.stringify(this.pagination.count))
   }
 

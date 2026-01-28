@@ -77,7 +77,7 @@ export abstract class AbstractJobBuilder<P> {
 
           hlsPayloads.push(
             this.buildHLSJobPayload({
-              deleteWebVideoFiles: !CONFIG.TRANSCODING.WEB_VIDEOS.ENABLED && !hasSplitAudioTranscoding,
+              deleteWebVideoFiles: !CONFIG.TRANSCODING.WEB_VIDEOS.ENABLED,
 
               separatedAudio: hasSplitAudioTranscoding,
 
@@ -93,12 +93,12 @@ export abstract class AbstractJobBuilder<P> {
           if (hasSplitAudioTranscoding) {
             hlsAudioAlreadyGenerated = true
 
-            hlsPayloads.push(
+            hlsPayloads.unshift(
               {
                 higherPriority: true,
 
                 ...this.buildHLSJobPayload({
-                  deleteWebVideoFiles: !CONFIG.TRANSCODING.WEB_VIDEOS.ENABLED,
+                  deleteWebVideoFiles: false,
                   separatedAudio: hasSplitAudioTranscoding,
 
                   copyCodecs: true,

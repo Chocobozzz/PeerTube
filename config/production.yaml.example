@@ -91,7 +91,7 @@ database:
 redis:
   hostname: '127.0.0.1'
   port: 6379
-  auth: null # Used by both standalone and sentinel
+  auth: null
   db: 0
   tls_settings: 
     enabled: false
@@ -108,8 +108,9 @@ redis:
       cert: '/absolute/path/to/client-certificates/postgresql.crt'
       key: '/absolute/path/to/client-key/postgresql.key'
     master_name: ''
+    password: ''
     sentinels:
-      - hostname: ''
+      - host: ''
         port: 26379
 
 # SMTP server to send emails
@@ -863,7 +864,7 @@ import:
         python_path: '/usr/bin/python3'
 
       # IPv6 is very strongly rate-limited on most sites supported by youtube-dl
-      force_ipv4: false
+      force_ipv4: true
 
       # By default PeerTube uses HTTP_PROXY and HTTPS_PROXY environment variables
       # But you can specify custom proxies for youtube-dl because remote websites (like YouTube) may block your server IP address
@@ -1069,6 +1070,7 @@ theme:
   # If you need more advanced customizations, install or develop a dedicated theme: https://docs.joinpeertube.org/contribute/plugins
   customization:
     primary_color: null # Hex color. Example: '#FF8F37'
+    on_primary_color: null # Hex color
 
     foreground_color: null # Hex color
     background_color: null # Hex color

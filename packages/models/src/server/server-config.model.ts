@@ -186,6 +186,7 @@ export interface ServerConfig {
 
     customization: {
       primaryColor: string
+      onPrimaryColor: string
       foregroundColor: string
       backgroundColor: string
       backgroundSecondaryColor: string

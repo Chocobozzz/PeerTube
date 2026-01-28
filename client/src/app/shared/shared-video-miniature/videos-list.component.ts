@@ -179,8 +179,9 @@ export class VideosListComponent implements OnInit, OnDestroy {
       this.filtersChanged.emit(this.filters)
     })
 
+    this.handlePagination()
     this.reloadSyndicationItems()
-    this.reloadVideos()
+    this.loadMoreVideos(true)
   }
 
   ngOnDestroy () {
@@ -201,11 +202,17 @@ export class VideosListComponent implements OnInit, OnDestroy {
     }
 
     // No more results
-    if (this.lastQueryLength !== undefined && this.lastQueryLength < this.pagination.itemsPerPage) return
+    if (!this.hasMoreResults()) return
 
     this.pagination.currentPage += 1
 
     this.loadMoreVideos()
+  }
+
+  hasMoreResults () {
+    if (this.lastQueryLength !== undefined && this.lastQueryLength < this.pagination.itemsPerPage) return false
+
+    return true
   }
 
   loadMoreVideos (reset = false) {
@@ -250,6 +257,14 @@ export class VideosListComponent implements OnInit, OnDestroy {
     }
 
     this.highlightedLives = this.highlightedLives.filter(v => v.id !== video.id)
+  }
+
+  getNextPageQueryParams () {
+    return {
+      ...this.route.snapshot.queryParams,
+
+      page: (this.pagination.currentPage + 1) + ''
+    }
   }
 
   private calcPageSizes () {
@@ -352,5 +367,24 @@ export class VideosListComponent implements OnInit, OnDestroy {
           this.notifier.error(message)
         }
       })
+  }
+
+  // Handle "Load more" button for SEO
+  private handlePagination () {
+    const initPage = this.route.snapshot.queryParams['page']
+
+    this.pagination.currentPage = initPage
+      ? +initPage
+      : 1
+
+    this.route.queryParams.subscribe(queryParams => {
+      const page = queryParams['page']
+      if (!page || +page === this.pagination.currentPage) return
+
+      resetCurrentPage(this.pagination)
+      this.pagination.currentPage = +page
+
+      this.loadMoreVideos(true)
+    })
   }
 }

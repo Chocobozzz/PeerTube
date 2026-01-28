@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { writeJson } from 'fs-extra/esm'
-import { join } from 'path'
 import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
+import { uuidToShort } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
   createSingleServer,
@@ -11,6 +9,9 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
+import { expect } from 'chai'
+import { writeJson } from 'fs-extra/esm'
+import { join } from 'path'
 import { expectLogDoesNotContain } from './shared/checks.js'
 
 describe('Test misc endpoints', function () {
@@ -165,6 +166,8 @@ describe('Test misc endpoints', function () {
   })
 
   describe('Test bots endpoints', function () {
+    let uuid1: string
+
     it('Should get the empty sitemap', async function () {
       const res = await makeGetRequest({
         url: server.url,
@@ -207,12 +210,13 @@ describe('Test misc endpoints', function () {
         token: user3Token
       })
 
-      const { id: video1Id } = await server.videos.upload({ attributes: { name: 'video 1', nsfw: false }, videoChannelId: channel1Id })
+      const video1 = await server.videos.upload({ attributes: { name: 'video 1', nsfw: false }, videoChannelId: channel1Id })
+      uuid1 = video1.uuid
       await server.videos.upload({ attributes: { name: 'video 2', nsfw: false }, videoChannelId: channel2Id })
       await server.videos.upload({ attributes: { name: 'video 3', privacy: VideoPrivacy.PRIVATE }, videoChannelId: channel3Id })
 
       await server.videos.update({
-        id: video1Id,
+        id: uuid1,
         attributes: {
           tags: [ 'fish', 'chips' ]
         }
@@ -267,6 +271,35 @@ describe('Test misc endpoints', function () {
       await expectLogDoesNotContain(server, 'Error in sitemap generation')
 
       expect(res.text).to.contain(`<video:title>${'v'.repeat(97)}...</video:title>`)
+    })
+
+    it('Should use an experimental env variable to update video URLs', async function () {
+      const video = await server.videos.get({ id: uuid1 })
+
+      {
+        const res = await makeGetRequest({
+          url: server.url,
+          path: '/sitemap.xml?t=3', // avoid using cache
+          expectedStatus: HttpStatusCode.OK_200
+        })
+
+        const url = server.url + '/w/' + uuidToShort(video.uuid)
+        expect(res.text).to.contain(`<url><loc>${url}</loc><video:video>`)
+      }
+
+      await server.kill()
+      await server.run({}, { env: { EXPERIMENTAL_SITEMAP_VIDEO_URL: 'true' } })
+
+      {
+        const res = await makeGetRequest({
+          url: server.url,
+          path: '/sitemap.xml?t=4', // avoid using cache
+          expectedStatus: HttpStatusCode.OK_200
+        })
+
+        const url = server.url + '/videos/watch/' + video.uuid
+        expect(res.text).to.contain(`<url><loc>${url}</loc><video:video>`)
+      }
     })
   })
 

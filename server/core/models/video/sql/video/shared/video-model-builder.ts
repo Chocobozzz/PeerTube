@@ -10,6 +10,7 @@ import { ServerBlocklistModel } from '@server/models/server/server-blocklist.js'
 import { ServerModel } from '@server/models/server/server.js'
 import { TrackerModel } from '@server/models/server/tracker.js'
 import { UserVideoHistoryModel } from '@server/models/user/user-video-history.js'
+import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoLiveScheduleModel } from '@server/models/video/video-live-schedule.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { ScheduleVideoUpdateModel } from '../../../schedule-video-update.js'
@@ -49,6 +50,7 @@ export class VideoModelBuilder {
   private trackersDone: Set<string>
   private tagsDone: Set<string>
   private autoTagsDone: Set<string>
+  private captionsDone: Set<any>
 
   private videos: VideoModel[]
 
@@ -62,16 +64,17 @@ export class VideoModelBuilder {
 
   buildVideosFromRows (options: {
     rows: SQLRow[]
+    addCaptions: boolean
     include?: VideoIncludeType
     rowsWebVideoFiles?: SQLRow[]
     rowsStreamingPlaylist?: SQLRow[]
   }) {
-    const { rows, rowsWebVideoFiles, rowsStreamingPlaylist, include } = options
+    const { rows, rowsWebVideoFiles, rowsStreamingPlaylist, include, addCaptions } = options
 
     this.reinit()
 
     for (const row of rows) {
-      this.buildVideoAndAccount(row)
+      this.buildVideoAndAccount(row, { addCaptions })
 
       const videoModel = this.videosMemo[row.id as number]
 
@@ -102,6 +105,7 @@ export class VideoModelBuilder {
       if (this.mode === 'get') {
         this.addTag(row, videoModel)
         this.addTracker(row, videoModel)
+        this.addCaption(row, videoModel)
         this.setBlacklisted(row, videoModel)
         this.setScheduleVideoUpdate(row, videoModel)
       } else {
@@ -159,6 +163,7 @@ export class VideoModelBuilder {
     this.trackersDone = new Set()
     this.tagsDone = new Set()
     this.autoTagsDone = new Set()
+    this.captionsDone = new Set()
 
     this.videos = []
   }
@@ -190,7 +195,9 @@ export class VideoModelBuilder {
     }
   }
 
-  private buildVideoAndAccount (row: SQLRow) {
+  private buildVideoAndAccount (row: SQLRow, options: {
+    addCaptions: boolean
+  }) {
     if (this.videosMemo[row.id]) return
 
     const videoModel = new VideoModel(this.grab(row, this.tables.getVideoAttributes(), ''), this.buildOpts)
@@ -202,6 +209,10 @@ export class VideoModelBuilder {
     videoModel.Tags = []
     videoModel.VideoAutomaticTags = []
     videoModel.Trackers = []
+
+    if (options.addCaptions === true) {
+      videoModel.VideoCaptions = []
+    }
 
     this.buildAccount(row, videoModel)
 
@@ -374,6 +385,19 @@ export class VideoModelBuilder {
     videoModel.Trackers.push(trackerModel)
 
     this.trackersDone.add(key)
+  }
+
+  private addCaption (row: SQLRow, videoModel: VideoModel) {
+    const id = row['VideoCaptions.id']
+
+    if (!id || this.captionsDone.has(id)) return
+
+    const attributes = this.grab(row, this.tables.getCaptionAttributes(), 'VideoCaptions')
+    const captionModel = new VideoCaptionModel(attributes, this.buildOpts)
+
+    videoModel.VideoCaptions.push(captionModel)
+
+    this.captionsDone.add(id)
   }
 
   private setBlacklisted (row: SQLRow, videoModel: VideoModel) {

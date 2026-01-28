@@ -79,12 +79,12 @@ export function makeGetRequest (options: CommonRequestParams) {
   return buildRequest(req, { contentType: 'application/json', expectedStatus: HttpStatusCode.BAD_REQUEST_400, ...options })
 }
 
-export function makeHTMLRequest (url: string, path: string) {
+export function makeHTMLRequest (url: string, path: string, expectedStatus: HttpStatusCodeType = HttpStatusCode.OK_200) {
   return makeGetRequest({
     url,
     path,
     accept: 'text/html',
-    expectedStatus: HttpStatusCode.OK_200
+    expectedStatus
   })
 }
 

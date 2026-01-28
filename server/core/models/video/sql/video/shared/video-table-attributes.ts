@@ -215,6 +215,10 @@ export class VideoTableAttributes {
     return [ 'id', 'fileUrl' ]
   }
 
+  getCaptionAttributes () {
+    return [ 'id', 'language', 'fileUrl', 'storage', 'filename', 'automaticallyGenerated', 'm3u8Filename', 'm3u8Url' ]
+  }
+
   getActorAttributes () {
     let attributeKeys = [
       'id',

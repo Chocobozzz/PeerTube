@@ -269,7 +269,7 @@ export function checkMissedConfig () {
     [ // set
       [ 'redis.hostname', 'redis.port' ], // alternative
       [ 'redis.socket' ],
-      [ 'redis.sentinel.master_name', 'redis.sentinel.sentinels[0].hostname', 'redis.sentinel.sentinels[0].port' ]
+      [ 'redis.sentinel.master_name', 'redis.sentinel.sentinels[0].host', 'redis.sentinel.sentinels[0].port' ]
     ]
   ]
   const miss: string[] = []

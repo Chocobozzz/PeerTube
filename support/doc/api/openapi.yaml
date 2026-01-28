@@ -5396,7 +5396,7 @@ paths:
                       type: object
                       properties:
                         id:
-                          description: object id for the video
+                          description: Playlist element id
                           allOf:
                             - $ref: '#/components/schemas/id'
                         position:
@@ -5410,7 +5410,7 @@ paths:
                         stopTimestamp:
                           type: integer
                           nullable: true
-                          example: 42
+                          example: 41
                           format: seconds
                         video:
                           $ref: '#/components/schemas/Video'

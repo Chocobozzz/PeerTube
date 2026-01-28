@@ -56,6 +56,7 @@ type Form = {
 
     customization: FormGroup<{
       primaryColor: FormControl<string>
+      onPrimaryColor: FormControl<string>
       foregroundColor: FormControl<string>
       backgroundColor: FormControl<string>
       backgroundSecondaryColor: FormControl<string>
@@ -129,6 +130,7 @@ export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, Can
     { label: string, description?: string, type: FieldType, items?: SelectOptionsItem[] }
   > = {
     primaryColor: { label: $localize`Primary color`, type: 'color' },
+    onPrimaryColor: { label: $localize`On primary color`, type: 'color' },
     foregroundColor: { label: $localize`Foreground color`, type: 'color' },
     backgroundColor: { label: $localize`Background color`, type: 'color' },
     backgroundSecondaryColor: {
@@ -193,6 +195,8 @@ export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, Can
 
   ngOnDestroy () {
     if (this.customConfigSub) this.customConfigSub.unsubscribe()
+
+    this.themeService.updateColorPalette(this.customConfig.theme)
   }
 
   canDeactivate () {
@@ -271,6 +275,7 @@ export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, Can
         default: null,
         customization: {
           primaryColor: HEX_COLOR_CODE_VALIDATOR,
+          onPrimaryColor: HEX_COLOR_CODE_VALIDATOR,
           foregroundColor: HEX_COLOR_CODE_VALIDATOR,
           backgroundColor: HEX_COLOR_CODE_VALIDATOR,
           backgroundSecondaryColor: HEX_COLOR_CODE_VALIDATOR,
