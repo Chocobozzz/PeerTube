@@ -680,6 +680,11 @@ live:
   # /!\ transcoding.enabled (and not live.transcoding.enabled) has to be true to create a replay
   allow_replay: true
 
+  # Default value for "automatically publish a replay when your live ends" checkbox
+  # when creating a new live video
+  # If allow_replay is false, this setting has no effect
+  save_replay_by_default: false
+
   # Allow your users to change latency settings (small latency/default/high latency)
   # Small latency live streams cannot use P2P
   # High latency live streams can increase P2P ratio

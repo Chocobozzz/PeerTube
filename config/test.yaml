@@ -106,6 +106,7 @@ live:
   enabled: false
 
   allow_replay: false
+  save_replay_by_default: false
 
   rtmp:
     port: 1935

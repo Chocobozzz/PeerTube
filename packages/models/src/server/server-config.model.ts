@@ -238,6 +238,7 @@ export interface ServerConfig {
     enabled: boolean
 
     allowReplay: boolean
+    saveReplayByDefault: boolean
     latencySetting: {
       enabled: boolean
     }

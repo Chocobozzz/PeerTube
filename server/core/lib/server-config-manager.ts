@@ -225,6 +225,7 @@ class ServerConfigManager {
         enabled: CONFIG.LIVE.ENABLED,
 
         allowReplay: CONFIG.LIVE.ALLOW_REPLAY,
+        saveReplayByDefault: CONFIG.LIVE.SAVE_REPLAY_BY_DEFAULT,
         latencySetting: {
           enabled: CONFIG.LIVE.LATENCY_SETTING.ENABLED
         },

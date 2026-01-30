@@ -31,6 +31,7 @@ type Form = {
   live: FormGroup<{
     enabled: FormControl<boolean>
     allowReplay: FormControl<boolean>
+    saveReplayByDefault: FormControl<boolean>
     latencySetting: FormGroup<{
       enabled: FormControl<boolean>
     }>
@@ -131,6 +132,7 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
       live: {
         enabled: null,
         allowReplay: null,
+        saveReplayByDefault: null,
 
         maxDuration: MAX_LIVE_DURATION_VALIDATOR,
         maxInstanceLives: MAX_INSTANCE_LIVES_VALIDATOR,

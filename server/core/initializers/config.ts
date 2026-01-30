@@ -661,6 +661,10 @@ const CONFIG = {
       return config.get<boolean>('live.allow_replay')
     },
 
+    get SAVE_REPLAY_BY_DEFAULT () {
+      return config.get<boolean>('live.save_replay_by_default')
+    },
+
     LATENCY_SETTING: {
       get ENABLED () {
         return config.get<boolean>('live.latency_setting.enabled')

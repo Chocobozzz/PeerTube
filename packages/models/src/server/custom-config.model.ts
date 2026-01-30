@@ -206,6 +206,7 @@ export interface CustomConfig {
     enabled: boolean
 
     allowReplay: boolean
+    saveReplayByDefault: boolean
 
     latencySetting: {
       enabled: boolean
