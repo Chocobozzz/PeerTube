@@ -37,10 +37,8 @@ const CONFIG = {
     DBNAME: config.has('database.name') ? config.get<string>('database.name') : 'peertube' + config.get<string>('database.suffix'),
     HOSTNAME: config.get<string>('database.hostname'),
     PORT: config.get<number>('database.port'),
+    SSL: config.get<boolean>('database.ssl'),
     SSL_SETTINGS: {
-      get ENABLED () {
-        return config.has('database.ssl_settings.enabled') ? config.get<boolean>('database.ssl_settings.enabled') : false
-      },
       get REJECT_UNAUTHORIZED () {
         return config.has('database.ssl_settings.reject_unauthorized') 
           ? config.get<boolean>('database.ssl_settings.reject_unauthorized') 

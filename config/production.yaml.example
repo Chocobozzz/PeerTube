@@ -78,8 +78,8 @@ trust_proxy:
 database:
   hostname: '127.0.0.1'
   port: 5432
+  ssl: false
   ssl_settings: 
-    enabled: false
     reject_unauthorized: false
     ca: '/absolute/path/to/server-certificates/root.crt'
     cert: '/absolute/path/to/client-certificates/postgresql.crt'

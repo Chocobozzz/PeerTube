@@ -86,10 +86,13 @@ const poolMax = CONFIG.DATABASE.POOL.MAX
 
 let dialectOptions: any = {}
 
-if (CONFIG.DATABASE.SSL_SETTINGS.ENABLED) {
+if (CONFIG.DATABASE.SSL) {
   // For reference: https://node-postgres.com/features/ssl
-  dialectOptions = { ssl: { rejectUnauthorized: CONFIG.DATABASE.SSL_SETTINGS.REJECT_UNAUTHORIZED } }
-  
+  dialectOptions = { 
+    ssl: { 
+      rejectUnauthorized: CONFIG.DATABASE.SSL_SETTINGS.REJECT_UNAUTHORIZED
+    }
+  }
   if (CONFIG.DATABASE.SSL_SETTINGS.CA) {
     dialectOptions.ssl.ca = readFileSync(CONFIG.DATABASE.SSL_SETTINGS.CA, { encoding: 'utf8' })
   }
