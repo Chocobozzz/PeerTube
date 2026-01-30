@@ -36,6 +36,17 @@
                 </my-peertube-checkbox>
               </div>
 
+              <div class="form-group" [ngClass]="getDisabledLiveClass()">
+                <my-peertube-checkbox
+                  inputName="liveSaveReplayByDefault" formControlName="saveReplayByDefault"
+                  i18n-labelText labelText="Automatically publish a replay by default"
+                  >
+                  <ng-container ngProjectAs="description" i18n>
+                    Default value for the "automatically publish a replay when your live ends" checkbox when creating a new live
+                  </ng-container>
+                </my-peertube-checkbox>
+              </div>
+
               <div class="form-group" formGroupName="latencySetting" [ngClass]="getDisabledLiveClass()">
                 <my-peertube-checkbox
                   inputName="liveLatencySettingEnabled" formControlName="enabled"

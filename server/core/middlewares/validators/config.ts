@@ -119,6 +119,7 @@ export const customConfigUpdateValidator = [
 
   body('live.enabled').isBoolean(),
   body('live.allowReplay').isBoolean(),
+  body('live.saveReplayByDefault').isBoolean(),
   body('live.maxDuration').isInt(),
   body('live.maxInstanceLives').custom(isIntOrNull),
   body('live.maxUserLives').custom(isIntOrNull),

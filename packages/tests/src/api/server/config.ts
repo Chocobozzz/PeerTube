@@ -99,6 +99,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
 
   expect(data.live.enabled).to.be.false
   expect(data.live.allowReplay).to.be.false
+  expect(data.live.saveReplayByDefault).to.be.false
   expect(data.live.latencySetting.enabled).to.be.true
   expect(data.live.maxDuration).to.equal(-1)
   expect(data.live.maxInstanceLives).to.equal(20)
@@ -328,6 +329,7 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
     live: {
       enabled: true,
       allowReplay: true,
+      saveReplayByDefault: false,
       latencySetting: {
         enabled: false
       },
