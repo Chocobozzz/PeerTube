@@ -109,7 +109,7 @@ configRouter.delete(
 configRouter.post(
   '/instance-logo/:logoType/pick',
   authenticate,
-  createReqFiles([ 'logofile' ], MIMETYPES.IMAGE.MIMETYPE_EXT),
+  createReqFiles([ 'logofile' ], MIMETYPES.LOGO_IMAGE.MIMETYPE_EXT),
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   updateOrDeleteLogoValidator,
   updateInstanceLogoValidator,

@@ -310,6 +310,14 @@ class ServerConfigManager {
           extensions: CONSTRAINTS_FIELDS.ACTORS.IMAGE.EXTNAME
         }
       },
+      logo: {
+        file: {
+          size: {
+            max: CONSTRAINTS_FIELDS.LOGO.IMAGE.FILE_SIZE.max
+          },
+          extensions: CONSTRAINTS_FIELDS.LOGO.IMAGE.EXTNAME
+        }
+      },
       video: {
         image: {
           extensions: CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME,

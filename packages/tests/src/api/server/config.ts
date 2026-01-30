@@ -971,6 +971,26 @@ describe('Test config', function () {
           await server.config.deleteInstanceImage({ type: ActorImageType.AVATAR })
         })
       })
+
+      describe('SVG logos', async function () {
+        it('Should upload SVG on compatible endpoints', async function () {
+          for (const type of [ 'favicon', 'header-wide', 'header-square', 'opengraph' ] as LogoType[]) {
+            await server.config.updateInstanceLogo({ type, fixture: 'peertube.svg' })
+
+            const htmlConfig = await server.config.getConfig()
+
+            const logos = htmlConfig.instance.logo.filter(l => l.type === type)
+            expect(logos).to.have.lengthOf(1)
+            expect(logos[0].width).to.be.null
+            expect(logos[0].height).to.be.null
+            expect(logos[0].isFallback).to.be.false
+            expect(logos[0].type).to.equal(type)
+
+            await makeRawRequest({ url: logos[0].fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+            await testFileExistsOnFSOrNot(server, 'uploads/images', basename(logos[0].fileUrl), true)
+          }
+        })
+      })
     })
   })
 

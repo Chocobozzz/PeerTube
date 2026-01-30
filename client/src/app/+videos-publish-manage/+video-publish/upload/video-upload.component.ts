@@ -1,4 +1,3 @@
-
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, inject, input, output, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
@@ -12,7 +11,7 @@ import debug from 'debug'
 import { truncate } from 'lodash-es'
 import { Subscription } from 'rxjs'
 import { SelectChannelItem } from 'src/types'
-import { PreviewUploadComponent } from '../../../shared/shared-forms/preview-upload.component'
+import { ImageInputComponent } from '../../../shared/shared-forms/image-input.component'
 import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
@@ -34,11 +33,11 @@ const debugLogger = debug('peertube:video-publish')
     NgbTooltip,
     SelectChannelComponent,
     FormsModule,
-    PreviewUploadComponent,
+    ImageInputComponent,
     ButtonComponent,
     ReactiveFormsModule,
     VideoManageContainerComponent
-]
+  ]
 })
 export class VideoUploadComponent implements OnInit, OnDestroy, AfterViewInit, CanComponentDeactivate {
   private notifier = inject(Notifier)

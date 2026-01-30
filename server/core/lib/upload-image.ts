@@ -2,7 +2,7 @@ import { LogoType, UploadImageType, UploadImageType_Type } from '@peertube/peert
 import { buildUUID, getLowercaseExtension } from '@peertube/peertube-node-utils'
 import { buildImageSize } from '@server/helpers/image-utils.js'
 import { UploadImageModel } from '@server/models/application/upload-image.js'
-import { remove } from 'fs-extra/esm'
+import { copy, remove } from 'fs-extra/esm'
 import { retryTransactionWrapper } from '../helpers/database-utils.js'
 import { UPLOAD_IMAGES_SIZE } from '../initializers/constants.js'
 import { sequelizeTypescript } from '../initializers/database.js'
@@ -16,19 +16,7 @@ export async function replaceUploadImage (options: {
 }) {
   const { actor, imagePhysicalFile, type } = options
 
-  const processImageSize = async (imageSizeArg: { width: number, height: number }) => {
-    const imageSize = await buildImageSize(imagePhysicalFile.path, imageSizeArg)
-
-    const extension = getLowercaseExtension(imagePhysicalFile.path)
-    const imageName = buildUUID() + extension
-    const destination = UploadImageModel.getPathOf(imageName)
-
-    await processImageFromWorker({ path: imagePhysicalFile.path, destination, newSize: imageSize, keepOriginal: true })
-
-    return { imageName, imageSize }
-  }
-
-  const processedImages = await Promise.all(UPLOAD_IMAGES_SIZE[type].map(processImageSize))
+  const processedImages = await generateImageSizes(imagePhysicalFile.path, type)
   await remove(imagePhysicalFile.path)
 
   return retryTransactionWrapper(() =>
@@ -56,6 +44,40 @@ export async function replaceUploadImage (options: {
     })
   )
 }
+
+async function generateImageSizes (imagePath: string, type: UploadImageType_Type) {
+  if (imagePath.endsWith('.svg')) {
+    const extension = getLowercaseExtension(imagePath)
+    const imageName = buildUUID() + extension
+    const destination = UploadImageModel.getPathOf(imageName)
+
+    await copy(imagePath, destination)
+
+    return [ { imageName, imageSize: { width: null, height: null } } ]
+  }
+
+  return Promise.all(UPLOAD_IMAGES_SIZE[type].map(size => generateImageSize({ ...size, imagePath })))
+}
+
+async function generateImageSize (options: {
+  imagePath: string
+  width: number
+  height: number
+}) {
+  const { imagePath, width, height } = options
+
+  const imageSize = await buildImageSize(imagePath, { width, height })
+
+  const extension = getLowercaseExtension(imagePath)
+  const imageName = buildUUID() + extension
+  const destination = UploadImageModel.getPathOf(imageName)
+
+  await processImageFromWorker({ path: imagePath, destination, newSize: imageSize, keepOriginal: true })
+
+  return { imageName, imageSize }
+}
+
+// ---------------------------------------------------------------------------
 
 export async function deleteUploadImages (options: {
   actor: MActorUploadImages

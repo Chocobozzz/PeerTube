@@ -243,7 +243,7 @@ describe('Test config API validators', function () {
 
         expect(response.body.detail).to.equal(
           'Browse videos default sort should be -publishedAt or -originallyPublishedAt ' +
-          'or name or -trending or -hot or -likes or -views, instead of hello'
+            'or name or -trending or -hot or -likes or -views, instead of hello'
         )
       })
 
@@ -273,7 +273,7 @@ describe('Test config API validators', function () {
 
         expect(response.body.detail).to.equal(
           'Trending videos algorithm most-viewed should be enabled ' +
-          'if browse videos default sort is -trending'
+            'if browse videos default sort is -trending'
         )
       })
 
@@ -322,12 +322,12 @@ describe('Test config API validators', function () {
 
   describe('Updating instance image/logo', function () {
     const toTest = [
-      { path: '/api/v1/config/instance-banner/pick', attachName: 'bannerfile' },
-      { path: '/api/v1/config/instance-avatar/pick', attachName: 'avatarfile' },
-      { path: '/api/v1/config/instance-logo/favicon/pick', attachName: 'logofile' },
-      { path: '/api/v1/config/instance-logo/header-square/pick', attachName: 'logofile' },
-      { path: '/api/v1/config/instance-logo/header-wide/pick', attachName: 'logofile' },
-      { path: '/api/v1/config/instance-logo/opengraph/pick', attachName: 'logofile' }
+      { path: '/api/v1/config/instance-banner/pick', attachName: 'bannerfile', supportSVG: false },
+      { path: '/api/v1/config/instance-avatar/pick', attachName: 'avatarfile', supportSVG: false },
+      { path: '/api/v1/config/instance-logo/favicon/pick', attachName: 'logofile', supportSVG: true },
+      { path: '/api/v1/config/instance-logo/header-square/pick', attachName: 'logofile', supportSVG: true },
+      { path: '/api/v1/config/instance-logo/header-wide/pick', attachName: 'logofile', supportSVG: true },
+      { path: '/api/v1/config/instance-logo/opengraph/pick', attachName: 'logofile', supportSVG: true }
     ]
 
     it('Should fail with an incorrect input file', async function () {
@@ -393,6 +393,23 @@ describe('Test config API validators', function () {
           fields: {},
           attaches,
           expectedStatus: HttpStatusCode.NO_CONTENT_204
+        })
+      }
+    })
+
+    it('Should succeed with SVG logo on some endpoints', async function () {
+      for (const { attachName, path, supportSVG } of toTest) {
+        const attaches = { [attachName]: buildAbsoluteFixturePath('peertube.svg') }
+
+        await makeUploadRequest({
+          url: server.url,
+          path,
+          token: server.accessToken,
+          fields: {},
+          attaches,
+          expectedStatus: supportSVG
+            ? HttpStatusCode.NO_CONTENT_204
+            : HttpStatusCode.BAD_REQUEST_400
         })
       }
     })

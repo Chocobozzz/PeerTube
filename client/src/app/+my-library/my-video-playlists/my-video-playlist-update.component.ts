@@ -19,7 +19,7 @@ import { VideoPlaylistUpdate } from '@peertube/peertube-models'
 import { forkJoin, Subscription } from 'rxjs'
 import { map, switchMap } from 'rxjs/operators'
 import { MarkdownTextareaComponent } from '../../shared/shared-forms/markdown-textarea.component'
-import { PreviewUploadComponent } from '../../shared/shared-forms/preview-upload.component'
+import { ImageInputComponent } from '../../shared/shared-forms/image-input.component'
 import { SelectChannelComponent } from '../../shared/shared-forms/select/select-channel.component'
 import { SelectOptionsComponent } from '../../shared/shared-forms/select/select-options.component'
 import { HelpComponent } from '../../shared/shared-main/buttons/help.component'
@@ -33,7 +33,7 @@ import { MyVideoPlaylistEdit } from './my-video-playlist-edit'
     RouterLink,
     FormsModule,
     ReactiveFormsModule,
-    PreviewUploadComponent,
+    ImageInputComponent,
     NgClass,
     HelpComponent,
     MarkdownTextareaComponent,

@@ -1,18 +1,20 @@
 import { CustomConfig, HttpStatusCode } from '@peertube/peertube-models'
-import { isConfigLogoTypeValid } from '@server/helpers/custom-validators/config.js'
+import { isConfigLogoTypeValid, isLogoImageFile } from '@server/helpers/custom-validators/config.js'
 import { isIntOrNull } from '@server/helpers/custom-validators/misc.js'
 import { isPlayerThemeValid } from '@server/helpers/custom-validators/player-settings.js'
 import { isNumberArray, isStringArray } from '@server/helpers/custom-validators/search.js'
 import { isVideoCommentsPolicyValid, isVideoLicenceValid, isVideoPrivacyValid } from '@server/helpers/custom-validators/videos.js'
+import { cleanUpReqFiles } from '@server/helpers/express-utils.js'
 import { guessLanguageFromReq } from '@server/helpers/i18n.js'
 import { CONFIG, isEmailEnabled } from '@server/initializers/config.js'
+import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import express from 'express'
 import { body, param } from 'express-validator'
 import { getBrowseVideosDefaultScopeError, getBrowseVideosDefaultSortError } from '../../helpers/custom-validators/browse-videos.js'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins.js'
 import { isUserNSFWPolicyValid, isUserVideoQuotaDailyValid, isUserVideoQuotaValid } from '../../helpers/custom-validators/users.js'
 import { isThemeRegistered } from '../../lib/plugins/theme-utils.js'
-import { areValidationErrors, updateActorImageValidatorFactory } from './shared/index.js'
+import { areValidationErrors } from './shared/index.js'
 
 export const customConfigUpdateValidator = [
   body('instance.name').exists(),
@@ -192,7 +194,18 @@ export const updateOrDeleteLogoValidator = [
   }
 ]
 
-export const updateInstanceLogoValidator = updateActorImageValidatorFactory('logofile')
+export const updateInstanceLogoValidator = [
+  body('logofile').custom((value, { req }) => isLogoImageFile(req.files, 'logofile')).withMessage(
+    'This file is not supported or too large. Please, make sure it is of the following type : ' +
+      CONSTRAINTS_FIELDS.LOGO.IMAGE.EXTNAME.join(', ')
+  ),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
+
+    return next()
+  }
+]
 
 // ---------------------------------------------------------------------------
 // Private
