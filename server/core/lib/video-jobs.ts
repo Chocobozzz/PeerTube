@@ -17,11 +17,14 @@ import { moveFilesIfPrivacyChanged } from './video-privacy.js'
 
 export async function buildMoveVideoJob (options: {
   video: MVideoUUID
-  previousVideoState: VideoStateType
   type: 'move-to-object-storage' | 'move-to-file-system'
-  isNewVideo?: boolean // Default true
+
+  moveVideoState?: {
+    isNewVideo: boolean
+    previousVideoState: VideoStateType
+  }
 }) {
-  const { video, previousVideoState, isNewVideo = true, type } = options
+  const { video, moveVideoState, type } = options
 
   await VideoJobInfoModel.increaseOrCreate(video.uuid, 'pendingMove')
 
@@ -29,8 +32,7 @@ export async function buildMoveVideoJob (options: {
     type,
     payload: {
       videoUUID: video.uuid,
-      isNewVideo,
-      previousVideoState
+      moveVideoState
     }
   }
 }
@@ -133,8 +135,18 @@ export async function addVideoJobsAfterCreation (options: {
     }
   ]
 
+  // No transcoding, move the file directly on object storage
   if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
-    jobs.push(await buildMoveVideoJob({ video, previousVideoState: undefined, type: 'move-to-object-storage' }))
+    jobs.push(
+      await buildMoveVideoJob({
+        type: 'move-to-object-storage',
+        video,
+        moveVideoState: {
+          isNewVideo: true,
+          previousVideoState: undefined
+        }
+      })
+    )
   }
 
   if (video.state === VideoState.TO_TRANSCODE) {

@@ -1,3 +1,4 @@
+import { canCopyForHLS } from '@peertube/peertube-ffmpeg'
 import {
   RunnerJobVODAudioMergeTranscodingPayload,
   RunnerJobVODHLSTranscodingPayload,
@@ -18,13 +19,6 @@ import {
   ProcessOptions,
   scheduleTranscodingProgress
 } from './common.js'
-import {
-  canDoQuickAudioTranscode,
-  canDoQuickVideoTranscode,
-  ffprobePromise,
-  getVideoStreamDimensionsInfo,
-  getVideoStreamFPS
-} from '@peertube/peertube-ffmpeg'
 
 export async function processWebVideoTranscoding (options: ProcessOptions<RunnerJobVODWebVideoTranscodingPayload>) {
   const { server, job, runnerToken } = options
@@ -117,16 +111,11 @@ export async function processHLSTranscoding (options: ProcessOptions<RunnerJobVO
     videoInputPath = await downloadInputFile({ url: payload.input.videoFileUrl, runnerToken, job })
     separatedAudioInputPath = await downloadSeparatedAudioFileIfNeeded({ urls: payload.input.separatedAudioFileUrl, runnerToken, job })
 
-    const inputProbe = await ffprobePromise(videoInputPath)
-    const { resolution } = await getVideoStreamDimensionsInfo(videoInputPath, inputProbe)
-    const fps = await getVideoStreamFPS(videoInputPath, inputProbe)
-
-    // Copy codecs if the input file can be quick transcoded (appropriate bitrate, codecs, etc.)
-    // And if the input resolution/fps are the same as the output resolution/fps
-    const copyCodecs = await canDoQuickAudioTranscode(videoInputPath, inputProbe) &&
-      await canDoQuickVideoTranscode(videoInputPath, fps) &&
-      resolution === payload.output.resolution &&
-      (!resolution || fps === payload.output.fps)
+    const copyCodecs = await canCopyForHLS({
+      fps: payload.output.fps,
+      resolution: payload.output.resolution,
+      path: videoInputPath
+    })
 
     logger.info(`Downloaded input file ${payload.input.videoFileUrl} for job ${job.jobToken}. Running HLS transcoding.`)
 

@@ -75,7 +75,7 @@ export async function createVideoStudioJob (options: {
 }) {
   const { video, user, payload } = options
 
-  const priority = await getTranscodingJobPriority({ user, type: 'studio', fallback: 0 })
+  const priority = await getTranscodingJobPriority({ user, type: 'studio' })
 
   if (CONFIG.VIDEO_STUDIO.REMOTE_RUNNERS.ENABLED) {
     await new VideoStudioTranscodingJobHandler().create({ video, tasks: payload.tasks, priority })

@@ -148,6 +148,8 @@ function updateMasterHLSPlaylist (video: MVideo, playlistArg: MStreamingPlaylist
 
     const masterPlaylists = [ '#EXTM3U', '#EXT-X-VERSION:3', '', ...extMediaSubtitle, '', ...extMediaAudio, '', ...extStreamInfo ]
 
+    await playlist.reload()
+
     if (playlist.playlistFilename) {
       await video.removeStreamingPlaylistFile(playlist, playlist.playlistFilename)
     }

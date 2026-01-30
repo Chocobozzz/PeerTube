@@ -253,8 +253,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
         video,
         videoFile,
         user: videoImport.User,
-        generateTranscription: options.generateTranscription,
-        videoFileAlreadyLocked: true
+        generateTranscription: options.generateTranscription
       })
     } finally {
       videoFileLockReleaser()
@@ -305,11 +304,9 @@ async function afterImportSuccess (options: {
   videoFile: MVideoFile
   user: MUserId
 
-  videoFileAlreadyLocked: boolean
-
   generateTranscription: boolean
 }) {
-  const { video, videoFile, videoImport, user, generateTranscription, videoFileAlreadyLocked } = options
+  const { video, videoFile, videoImport, user, generateTranscription } = options
 
   Notifier.Instance.notifyOnFinishedVideoImport({ videoImport: Object.assign(videoImport, { Video: video }), success: true })
 
@@ -330,13 +327,20 @@ async function afterImportSuccess (options: {
 
   if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
     await JobQueue.Instance.createJob(
-      await buildMoveVideoJob({ video, previousVideoState: VideoState.TO_IMPORT, type: 'move-to-object-storage' })
+      await buildMoveVideoJob({
+        type: 'move-to-object-storage',
+        video,
+        moveVideoState: {
+          isNewVideo: true,
+          previousVideoState: VideoState.TO_IMPORT
+        }
+      })
     )
     return
   }
 
   if (video.state === VideoState.TO_TRANSCODE) { // Create transcoding jobs?
-    await createOptimizeOrMergeAudioJobs({ video, videoFile, isNewVideo: true, user, videoFileAlreadyLocked })
+    await createOptimizeOrMergeAudioJobs({ video, videoFile, isNewVideo: true, user })
   }
 }
 

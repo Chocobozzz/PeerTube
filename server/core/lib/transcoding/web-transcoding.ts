@@ -22,14 +22,14 @@ import { addLocalOrRemoteStoryboardJobIfNeeded } from '../video-jobs.js'
 import { VideoPathManager } from '../video-path-manager.js'
 import { buildFFmpegVOD } from './shared/index.js'
 import { buildOriginalFileResolution } from './transcoding-resolutions.js'
+import { canDoQuickTranscode } from './transcoding-quick-transcode.js'
 
 // Optimize the original video file and replace it. The resolution is not changed.
 export async function optimizeOriginalVideofile (options: {
   video: MVideoFullLight
-  quickTranscode: boolean
   job: Job
 }) {
-  const { quickTranscode, job } = options
+  const { job } = options
 
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const newExtname = '.mp4'
@@ -44,7 +44,7 @@ export async function optimizeOriginalVideofile (options: {
     const result = await VideoPathManager.Instance.makeAvailableVideoFile(inputVideoFile, async videoInputPath => {
       const videoOutputPath = join(transcodeDirectory, video.id + '-transcoded' + newExtname)
 
-      const transcodeType: TranscodeVODOptionsType = quickTranscode
+      const transcodeType: TranscodeVODOptionsType = await canDoQuickTranscode(videoInputPath, CONFIG.TRANSCODING.FPS.MAX)
         ? 'quick-transcode'
         : 'video'
 

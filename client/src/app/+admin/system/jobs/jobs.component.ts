@@ -108,21 +108,32 @@ export class JobsComponent implements OnInit {
     this.loadJobStateAndType()
   }
 
-  getJobStateClasses (state: JobStateClient) {
+  getJobStateClasses (state: JobStateClient): string[] {
     switch (state) {
+      case 'all':
+        return []
+
       case 'active':
         return [ 'pt-badge', 'badge-blue' ]
+
       case 'completed':
         return [ 'pt-badge', 'badge-green' ]
+
       case 'delayed':
+      case 'prioritized':
+      case 'paused':
         return [ 'pt-badge', 'badge-brown' ]
+
       case 'failed':
         return [ 'pt-badge', 'badge-red' ]
+
       case 'waiting':
+      case 'waiting-children':
         return [ 'pt-badge', 'badge-yellow' ]
     }
 
-    return []
+    // Do not remove, to ensure all cases are handled by the switch
+    return state
   }
 
   onJobStateOrTypeChanged () {

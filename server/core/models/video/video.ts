@@ -1,4 +1,4 @@
-import { buildVideoEmbedPath, buildVideoWatchPath, maxBy, pick, sortBy, wait } from '@peertube/peertube-core-utils'
+import { buildVideoEmbedPath, buildVideoWatchPath, maxBy, pick, wait } from '@peertube/peertube-core-utils'
 import {
   FileStorage,
   ResultList,
@@ -1851,6 +1851,15 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return !!this.getMaxQualityFile(VideoFileStream.VIDEO)
   }
 
+  getStreamTypes<T extends MVideoWithFile> (this: T) {
+    const streamTypes: VideoFileStreamType[] = []
+
+    if (this.hasAudio()) streamTypes.push(VideoFileStream.AUDIO)
+    if (this.hasVideo()) streamTypes.push(VideoFileStream.VIDEO)
+
+    return streamTypes
+  }
+
   static loadHasStream (videoId: number, stream: VideoFileStreamType) {
     const query = 'SELECT 1 FROM "videoFile" WHERE "videoId" = $videoId AND ("streams" & $stream) = $stream ' +
       'UNION ALL ' +
@@ -1868,16 +1877,13 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
   // ---------------------------------------------------------------------------
 
-  getWebVideoFileMinResolution<T extends MVideoWithFile> (this: T, resolution: number): MVideoFileVideo {
+  getWebVideoFileResolution<T extends MVideoWithFile> (this: T, resolution: number): MVideoFileVideo {
     if (Array.isArray(this.VideoFiles) === false) return undefined
 
-    for (const file of sortBy(this.VideoFiles, 'resolution')) {
-      if (file.resolution < resolution) continue
+    const file = this.VideoFiles.find(f => f.resolution === resolution)
+    if (!file) return undefined
 
-      return Object.assign(file, { Video: this })
-    }
-
-    return undefined
+    return Object.assign(file, { Video: this })
   }
 
   hasWebVideoFiles () {

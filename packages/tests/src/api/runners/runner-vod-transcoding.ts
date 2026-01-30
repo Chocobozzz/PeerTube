@@ -64,7 +64,6 @@ describe('Test runner VOD transcoding', function () {
   })
 
   describe('Without transcoding', function () {
-
     before(async function () {
       this.timeout(60000)
 
@@ -81,7 +80,6 @@ describe('Test runner VOD transcoding', function () {
   })
 
   describe('With classic transcoding enabled', function () {
-
     before(async function () {
       this.timeout(60000)
 
@@ -176,15 +174,15 @@ describe('Test runner VOD transcoding', function () {
       await waitJobs(servers)
     })
 
-    it('Should have the video updated', async function () {
-      for (const server of servers) {
-        const video = await server.videos.get({ id: videoUUID })
-        expect(video.files).to.have.lengthOf(1)
-        expect(video.streamingPlaylists).to.have.lengthOf(0)
+    it('Should have the video updated but not federated', async function () {
+      const video = await servers[0].videos.get({ id: videoUUID })
+      expect(video.files).to.have.lengthOf(1)
+      expect(video.streamingPlaylists).to.have.lengthOf(0)
 
-        const { body } = await makeRawRequest({ url: video.files[0].fileUrl, expectedStatus: HttpStatusCode.OK_200 })
-        expect(body).to.deep.equal(await readFile(buildAbsoluteFixturePath('video_short.mp4')))
-      }
+      const { body } = await makeRawRequest({ url: video.files[0].fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+      expect(body).to.deep.equal(await readFile(buildAbsoluteFixturePath('video_short.mp4')))
+
+      await servers[1].videos.get({ id: videoUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should have 4 lower resolution to transcode', async function () {
@@ -211,6 +209,16 @@ describe('Test runner VOD transcoding', function () {
 
       const payload: VODWebVideoTranscodingSuccess = { videoFile: `video_short_${job.payload.output.resolution}p.mp4` }
       await servers[0].runnerJobs.success({ runnerToken, jobUUID, jobToken, payload })
+    })
+
+    it('Should have federated the video', async function () {
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const video = await server.videos.get({ id: videoUUID })
+        expect(video.files).to.have.lengthOf(2)
+        expect(video.streamingPlaylists).to.have.lengthOf(0)
+      }
     })
 
     it('Should process all other jobs', async function () {
@@ -382,7 +390,6 @@ describe('Test runner VOD transcoding', function () {
   })
 
   describe('Web video and HLS transcoding', function () {
-
     before(async function () {
       this.timeout(60000)
 
@@ -482,15 +489,14 @@ describe('Test runner VOD transcoding', function () {
       await waitJobs(servers)
     })
 
-    it('Should have the video updated', async function () {
-      for (const server of servers) {
-        const video = await server.videos.get({ id: videoUUID })
-        expect(video.files).to.have.lengthOf(1)
-        expect(video.streamingPlaylists).to.have.lengthOf(0)
+    it('Should have the video updated but not federated', async function () {
+      const video = await servers[0].videos.get({ id: videoUUID })
+      expect(video.files).to.have.lengthOf(1)
+      expect(video.streamingPlaylists).to.have.lengthOf(0)
+      const { body } = await makeRawRequest({ url: video.files[0].fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+      expect(body).to.deep.equal(await readFile(buildAbsoluteFixturePath('video_short_480p.mp4')))
 
-        const { body } = await makeRawRequest({ url: video.files[0].fileUrl, expectedStatus: HttpStatusCode.OK_200 })
-        expect(body).to.deep.equal(await readFile(buildAbsoluteFixturePath('video_short_480p.mp4')))
-      }
+      await servers[1].videos.get({ id: videoUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should have 4 lower resolutions to transcode', async function () {
@@ -524,7 +530,7 @@ describe('Test runner VOD transcoding', function () {
       await waitJobs(servers)
     })
 
-    it('Should have the video updated', async function () {
+    it('Should have the video updated and federated', async function () {
       for (const server of servers) {
         const video = await server.videos.get({ id: videoUUID })
 
