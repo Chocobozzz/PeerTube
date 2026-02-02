@@ -4,9 +4,7 @@ ARG ALREADY_BUILT=0
 
 # Install dependencies
 RUN apt update \
- && apt install -y --no-install-recommends openssl ffmpeg python3 python3-pip ca-certificates gnupg gosu build-essential curl git \
-  # We must install recommended packages
- && apt install -y va-driver-all \
+ && apt install -y --no-install-recommends openssl ffmpeg python3 python3-pip ca-certificates gnupg gosu build-essential curl git va-driver-all \
  && gosu nobody true \
  && rm /var/lib/apt/lists/* -fR
 
