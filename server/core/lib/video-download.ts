@@ -15,6 +15,7 @@ import {
   makeWebVideoFileAvailable
 } from './object-storage/videos.js'
 import { VideoPathManager } from './video-path-manager.js'
+import { VideoDownloadStats } from './stats/video-download.js'
 
 export class VideoDownload {
   static totalDownloads = 0
@@ -66,6 +67,8 @@ export class VideoDownload {
           })
 
           logger.info(`Mux ended for video ${this.video.url}`, { inputs: this.inputsToLog(), ...lTags(this.video.uuid) })
+
+          VideoDownloadStats.add({video: this.video});
 
           res()
         } catch (err) {

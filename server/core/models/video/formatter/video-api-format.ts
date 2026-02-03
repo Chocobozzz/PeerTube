@@ -112,6 +112,8 @@ export function videoModelToFormattedJSON (video: MVideoFormattable, options: Vi
     views: video.views,
     viewers: VideoViewsManager.Instance.getTotalViewersOf(video),
 
+    downloads: video.downloads,
+
     likes: video.likes,
     dislikes: video.dislikes,
     thumbnailPath: video.getMiniatureStaticPath(),

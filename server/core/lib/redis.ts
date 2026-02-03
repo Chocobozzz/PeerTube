@@ -321,6 +321,46 @@ class Redis {
     ])
   }
 
+  /* ************ Generic stats ************ */
+
+  getStats (options: {
+    key?: string
+    // Or
+    scope?: string,
+    ip?: string
+    videoId?: number
+  }) {
+    if (options.key) return this.getObject(options.key)
+
+    const { key } = this.generateKeysForStats(options.scope, options.ip, options.videoId)
+
+    return this.getObject(key)
+  }
+
+  setStats (scope: string, sessionId: string, videoId: number, object: any) {
+    const { setKey, key } = this.generateKeysForStats(scope, sessionId, videoId)
+
+    return Promise.all([
+      this.addToSet(setKey, key),
+      this.setObject(key, object)
+    ])
+  }
+
+  getStatsKeys (scope: string) {
+    const { setKey } = this.generateKeysForStats(scope)
+
+    return this.getSet(setKey)
+  }
+
+  deleteStatsKey (scope: string, key: string) {
+    const { setKey } = this.generateKeysForStats(scope)
+
+    return Promise.all([
+      this.deleteFromSet(setKey, key),
+      this.deleteKey(key)
+    ])
+  }
+
   /* ************ Resumable uploads final responses ************ */
 
   setUploadSession (uploadId: string) {
@@ -372,6 +412,18 @@ class Redis {
       : new Date().getHours()
 
     return { setKey: `videos-view-h${hour}`, videoKey: `video-view-${options.videoId}-h${hour}` }
+  }
+
+  generateKeysForStats (scope: string, sessionId: string, videoId: number): { setKey: string, key: string }
+  generateKeysForStats (scole: string): { setKey: string }
+  generateKeysForStats (scope: string, sessionId?: string, videoId?: number) {
+    return {
+      setKey: `${scope}-stats-keys`,
+
+      key: sessionId && videoId
+        ? `${scope}-stats-${sessionId}-${videoId}`
+        : undefined
+    }
   }
 
   private generateResetPasswordKey (userId: number) {

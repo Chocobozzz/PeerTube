@@ -554,6 +554,10 @@ export const VIEW_LIFETIME = {
 }
 export let VIEWER_SYNC_REDIS = 30000 // Sync viewer into redis
 
+export const STATS_LIFETIME = {
+  DOWNLOADS: 60000 * 60,  // 1 hour
+}
+
 export const MAX_LOCAL_VIEWER_WATCH_SECTIONS = 100
 
 export let CONTACT_FORM_LIFETIME = 60000 * 60 // 1 hour

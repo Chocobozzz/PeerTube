@@ -72,6 +72,7 @@ import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-pla
 import { VideoTagModel } from '../models/video/video-tag.js'
 import { VideoModel } from '../models/video/video.js'
 import { VideoViewModel } from '../models/view/video-view.js'
+import { VideoDownloadModel } from '@server/models/download/video-download.js'
 import { CONFIG } from './config.js'
 
 pg.defaults.parseInt8 = true // Avoid BIGINT to be converted to string
@@ -159,6 +160,7 @@ export async function initDatabaseModels (silent: boolean) {
     ScheduleVideoUpdateModel,
     VideoImportModel,
     VideoViewModel,
+    VideoDownloadModel,
     VideoRedundancyModel,
     UserVideoHistoryModel,
     VideoLiveModel,

@@ -51,6 +51,8 @@ export interface Video extends Partial<VideoAdditionalAttributes> {
   views: number
   viewers: number
 
+  downloads: number
+
   likes: number
   dislikes: number
   comments: number

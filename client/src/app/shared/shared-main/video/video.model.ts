@@ -68,6 +68,8 @@ export class Video implements VideoServerModel {
   views: number
   viewers: number
 
+  downloads: number
+
   likes: number
   dislikes: number
 
@@ -182,6 +184,7 @@ export class Video implements VideoServerModel {
     this.viewers = hash.viewers
     this.likes = hash.likes
     this.dislikes = hash.dislikes
+    this.downloads = hash.downloads
 
     this.nsfw = hash.nsfw
     this.nsfwFlags = hash.nsfwFlags
