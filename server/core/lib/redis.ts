@@ -73,10 +73,8 @@ class Redis {
         )
       }
 
-      let enableTLSForSentinelMode = false
       let sentinelTLS: ConnectionOptions = undefined
-      if (CONFIG.REDIS.SENTINEL.TLS_SETTINGS.ENABLED) {
-        enableTLSForSentinelMode = true
+      if (CONFIG.REDIS.SENTINEL.ENABLE_TLS) {
         sentinelTLS = { rejectUnauthorized: CONFIG.REDIS.SENTINEL.TLS_SETTINGS.REJECT_UNAUTHORIZED }
 
         if (CONFIG.REDIS.SENTINEL.TLS_SETTINGS.CA) {
@@ -93,7 +91,7 @@ class Redis {
       return {
         connectionName,
         connectTimeout,
-        enableTLSForSentinelMode,
+        enableTLSForSentinelMode: CONFIG.REDIS.SENTINEL.ENABLE_TLS,
         sentinelPassword: CONFIG.REDIS.SENTINEL.PASSWORD,
         password: CONFIG.REDIS.AUTH,
         sentinels: CONFIG.REDIS.SENTINEL.SENTINELS,
@@ -111,7 +109,7 @@ class Redis {
     }
 
     let tls: ConnectionOptions = undefined
-    if (CONFIG.REDIS.SENTINEL.TLS_SETTINGS.ENABLED) {
+    if (CONFIG.REDIS.TLS) {
       tls = { rejectUnauthorized: CONFIG.REDIS.TLS_SETTINGS.REJECT_UNAUTHORIZED }
 
       if (CONFIG.REDIS.TLS_SETTINGS.CA) {

@@ -50,10 +50,8 @@ const CONFIG = {
     SOCKET: config.has('redis.socket') ? config.get<string>('redis.socket') : null,
     AUTH: config.has('redis.auth') ? config.get<string>('redis.auth') : null,
     DB: config.has('redis.db') ? config.get<number>('redis.db') : null,
+    TLS: config.has('redis.tls') ? config.get<boolean>('redis.tls') : false,
     TLS_SETTINGS: {
-      get ENABLED () {
-        return config.has('redis.tls_settings.enabled') ? config.get<boolean>('redis.tls_settings.enabled') : false
-      },
       get REJECT_UNAUTHORIZED () {
         return config.has('redis.tls_settings.reject_unauthorized') 
           ? config.get<boolean>('redis.tls_settings.reject_unauthorized') 
@@ -71,10 +69,8 @@ const CONFIG = {
     },
     SENTINEL: {
       ENABLED: config.has('redis.sentinel.enabled') ? config.get<boolean>('redis.sentinel.enabled') : false,
+      ENABLE_TLS: config.has('redis.sentinel.enable_tls') ? config.get<boolean>('redis.sentinel.enable_tls') : false,
       TLS_SETTINGS: {
-        get ENABLED () {
-          return config.has('redis.sentinel.tls_settings.enabled') ? config.get<boolean>('redis.sentinel.tls_settings.enabled') : false
-        },
         get REJECT_UNAUTHORIZED () {
           return config.has('redis.sentinel.tls_settings.reject_unauthorized') 
             ? config.get<boolean>('redis.sentinel.tls_settings.reject_unauthorized') 
