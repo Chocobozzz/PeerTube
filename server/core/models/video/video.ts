@@ -22,6 +22,7 @@ import {
 } from '@peertube/peertube-models'
 import { uuidToShort } from '@peertube/peertube-node-utils'
 import { getPrivaciesForFederation } from '@server/helpers/video.js'
+import { isPrivacyForFederation } from '@server/lib/activitypub/videos/federate.js'
 import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 import { LiveManager } from '@server/lib/live/live-manager.js'
 import {
@@ -830,6 +831,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   @BeforeDestroy
   static async sendDelete (instance: MVideoAccountLight, options: { transaction: Transaction }) {
     if (!instance.isLocal()) return undefined
+    if (!isPrivacyForFederation(instance.privacy)) return undefined
 
     // Lazy load channels
     if (!instance.VideoChannel?.Account?.Actor) {
@@ -842,7 +844,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       }) as MChannelAccountDefault
     }
 
-    return sendDeleteVideo(instance, options.transaction)
+    return sendDeleteVideo({ video: instance, transaction: options.transaction })
   }
 
   @BeforeDestroy

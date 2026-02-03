@@ -11,7 +11,6 @@ import { MActorUrl } from '../../../types/models/index.js'
 import { MCommentOwnerVideo, MVideoAccountLight, MVideoPlaylistFullSummary } from '../../../types/models/video/index.js'
 import { audiencify, getCommentAudience } from '../audience.js'
 import { getDeleteActivityPubUrl } from '../url.js'
-import { isPrivacyForFederation } from '../videos/federate.js'
 import {
   broadcastToActors,
   broadcastToFollowers,
@@ -20,8 +19,12 @@ import {
   unicastTo
 } from './shared/send-utils.js'
 
-async function sendDeleteVideo (video: MVideoAccountLight, transaction: Transaction) {
-  if (isPrivacyForFederation(video.privacy) === false) return
+async function sendDeleteVideo (options: {
+  video: MVideoAccountLight
+  transaction: Transaction
+  deleteForPrivacyChange?: boolean // default false
+}) {
+  const { video, transaction, deleteForPrivacyChange = false } = options
 
   logger.info('Creating job to broadcast delete of video %s.', video.url)
 
@@ -33,7 +36,13 @@ async function sendDeleteVideo (video: MVideoAccountLight, transaction: Transact
     return buildDeleteActivity(url, video.url, byActor, audience)
   }
 
-  return sendVideoRelatedActivity(activityBuilder, { byActor, video, contextType: 'Delete', transaction })
+  return sendVideoRelatedActivity(activityBuilder, {
+    byActor,
+    video,
+    contextType: 'Delete',
+    transaction,
+    skipPrivacyCheck: deleteForPrivacyChange
+  })
 }
 
 async function sendDeleteActor (byActor: ActorModel, transaction: Transaction) {

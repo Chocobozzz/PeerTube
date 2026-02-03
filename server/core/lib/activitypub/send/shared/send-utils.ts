@@ -26,8 +26,9 @@ async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAud
   contextType: ContextType
   parallelizable?: boolean
   transaction?: Transaction
+  skipPrivacyCheck?: boolean
 }) {
-  const { byActor, transaction, contextType, parallelizable } = options
+  const { byActor, transaction, contextType, parallelizable, skipPrivacyCheck } = options
 
   // Send to origin
   if (options.video.isLocal() === false) {
@@ -37,8 +38,12 @@ async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAud
   const video = await VideoModel.loadByUrlAndPopulateAccount(options.video.url, transaction)
   const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, transaction)
 
-  // Send to followers
-  const audience = getVideoAudience({ account: video.VideoChannel.Account, channel: video.VideoChannel, privacy: video.privacy })
+  const audience = getVideoAudience({
+    account: video.VideoChannel.Account,
+    channel: video.VideoChannel,
+    privacy: video.privacy,
+    skipPrivacyCheck
+  })
   const activity = activityBuilder(audience)
 
   const actorsException = [ byActor ]
