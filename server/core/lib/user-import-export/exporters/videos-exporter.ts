@@ -292,7 +292,13 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
   ): Promise<ActivityCreate<VideoObject>> {
     const icon = video.getPreview()
 
-    const audience = getVideoAudience(video.VideoChannel.Account.Actor, video.privacy, { skipPrivacyCheck: true })
+    const audience = getVideoAudience({
+      account: video.VideoChannel.Account,
+      channel: video.VideoChannel,
+      privacy: video.privacy,
+      skipPrivacyCheck: true
+    })
+
     const videoObject: VideoObject = {
       ...audiencify(await video.toActivityPubObject(), audience),
 
