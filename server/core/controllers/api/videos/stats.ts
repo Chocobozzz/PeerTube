@@ -1,5 +1,7 @@
 import {
+  VideoDownloadStatsTimeserieMetric,
   VideoStatsOverallQuery,
+  VideoStatsTimeserie,
   VideoStatsTimeserieMetric,
   VideoStatsTimeserieQuery,
   VideoStatsUserAgentQuery
@@ -13,6 +15,8 @@ import {
   videoRetentionStatsValidator,
   videoTimeseriesStatsValidator
 } from '../../../middlewares/index.js'
+import { MVideo } from '@server/types/models/index.js'
+import { VideoDownloadModel } from '@server/models/download/video-download.js'
 
 const statsRouter = express.Router()
 
@@ -87,17 +91,32 @@ async function getRetentionStats (req: express.Request, res: express.Response) {
 }
 
 async function getTimeseriesStats (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
-  const metric = req.params.metric as VideoStatsTimeserieMetric
+	const video = res.locals.videoAll
+	const metric = req.params.metric as VideoStatsTimeserieMetric|VideoDownloadStatsTimeserieMetric
 
-  const query = req.query as VideoStatsTimeserieQuery
+	let handler: (options: {
+		video: MVideo
+		metric: VideoStatsTimeserieMetric|VideoDownloadStatsTimeserieMetric
+		startDate: string
+		endDate: string
+	}) => Promise < VideoStatsTimeserie >
 
-  const stats = await LocalVideoViewerModel.getTimeserieStats({
-    video,
-    metric,
-    startDate: query.startDate ?? video.createdAt.toISOString(),
-    endDate: query.endDate ?? new Date().toISOString()
-  })
+	switch (metric) {
+		case "downloads":
+			handler = VideoDownloadModel.getTimeserieStats;
+			break;
+		default:
+			handler = LocalVideoViewerModel.getTimeserieStats;
+	}
+
+	const query = req.query as VideoStatsTimeserieQuery;
+
+	const stats = await handler({
+		video,
+		metric,
+		startDate: query.startDate ?? video.createdAt.toISOString(),
+		endDate: query.endDate ?? new Date().toISOString(),
+	});
 
   return res.json(stats)
 }

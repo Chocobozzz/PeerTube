@@ -11,6 +11,7 @@ import { secondsToTime } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
   LiveVideoSession,
+  VideoDownloadStatsTimeserieMetric,
   VideoStatsOverall,
   VideoStatsRetention,
   VideoStatsTimeserie,
@@ -32,7 +33,7 @@ import { VideoStatsService } from './video-stats.service'
 
 const BAR_GRAPHS = [ 'countries', 'regions', 'clients', 'devices', 'operatingSystems' ] as const
 type BarGraphs = typeof BAR_GRAPHS[number]
-type ActiveGraphId = VideoStatsTimeserieMetric | 'retention' | BarGraphs
+type ActiveGraphId = VideoStatsTimeserieMetric | VideoDownloadStatsTimeserieMetric | 'retention' | BarGraphs
 
 type GeoData = { name: string, viewers: number }[]
 
@@ -129,6 +130,11 @@ export class VideoStatsComponent implements OnInit {
       {
         id: 'aggregateWatchTime',
         label: $localize`Watch time`,
+        zoomEnabled: true
+      },
+      {
+        id: 'downloads',
+        label: $localize`Downloads`,
         zoomEnabled: true
       },
       {
@@ -242,7 +248,7 @@ export class VideoStatsComponent implements OnInit {
   }
 
   private isTimeserieGraph (graphId: ActiveGraphId) {
-    return graphId === 'aggregateWatchTime' || graphId === 'viewers'
+    return graphId === 'aggregateWatchTime' || graphId === 'viewers' || graphId === 'downloads'
   }
 
   private loadOverallStats () {
@@ -403,6 +409,12 @@ export class VideoStatsComponent implements OnInit {
         endDate: this.statsEndDate,
         metric: 'viewers'
       }),
+      downloads: this.statsService.getTimeserieStats({
+        videoId,
+        startDate: this.statsStartDate,
+        endDate: this.statsEndDate,
+        metric: 'downloads'
+      }),
 
       countries: of(this.countries),
 
@@ -430,6 +442,7 @@ export class VideoStatsComponent implements OnInit {
       retention: (rawData: VideoStatsRetention) => this.buildRetentionChartOptions(rawData),
       aggregateWatchTime: (rawData: VideoStatsTimeserie) => this.buildTimeserieChartOptions(rawData),
       viewers: (rawData: VideoStatsTimeserie) => this.buildTimeserieChartOptions(rawData),
+      downloads: (rawData: VideoStatsTimeserie) => this.buildTimeserieChartOptions(rawData),
       countries: (rawData: GeoData) => this.buildGeoChartOptions(rawData),
       regions: (rawData: GeoData) => this.buildGeoChartOptions(rawData)
     }
