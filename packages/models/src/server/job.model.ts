@@ -281,6 +281,7 @@ export interface VideoChannelImportPayload {
 
 export interface AfterVideoChannelImportPayload {
   channelSyncId: number
+  buildJobErrors: number
 }
 
 // ---------------------------------------------------------------------------

@@ -7,8 +7,9 @@ import {
   VideoImportPayload,
   VideoImportState
 } from '@peertube/peertube-models'
-import { retryImport } from '@server/lib/video-post-import.js'
-import { buildVideoFromImport, buildYoutubeDLImport, insertFromImportIntoDB, YoutubeDlImportError } from '@server/lib/video-pre-import.js'
+import { YoutubeDlImportError, YoutubeDlImportErrorCode } from '@server/helpers/youtube-dl/youtube-dl-wrapper.js'
+import { buildRetryImportJob } from '@server/lib/video-post-import.js'
+import { buildVideoFromImport, buildYoutubeDLImport, insertFromImportIntoDB } from '@server/lib/video-pre-import.js'
 import { MThumbnail, MVideoThumbnail } from '@server/types/models/index.js'
 import express from 'express'
 import { move } from 'fs-extra/esm'
@@ -100,7 +101,7 @@ async function cancelVideoImport (req: express.Request, res: express.Response) {
 async function retryVideoImport (req: express.Request, res: express.Response) {
   const videoImport = res.locals.videoImport
 
-  await retryImport(videoImport)
+  await JobQueue.Instance.createJob(await buildRetryImportJob(videoImport))
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
@@ -179,10 +180,11 @@ async function handleTorrentImport (req: express.Request, res: express.Response,
 
 function statusFromYtDlImportError (err: YoutubeDlImportError): HttpStatusCodeType {
   switch (err.code) {
-    case YoutubeDlImportError.CODE.NOT_ONLY_UNICAST_URL:
+    case YoutubeDlImportErrorCode.NOT_ONLY_UNICAST_URL:
       return HttpStatusCode.FORBIDDEN_403
 
-    case YoutubeDlImportError.CODE.FETCH_ERROR:
+    case YoutubeDlImportErrorCode.FETCH_ERROR:
+    case YoutubeDlImportErrorCode.IS_LIVE:
       return HttpStatusCode.BAD_REQUEST_400
 
     default:

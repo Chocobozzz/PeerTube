@@ -12,8 +12,9 @@ import {
 import { isVTTFileValid } from '@server/helpers/custom-validators/video-captions.js'
 import { isVideoFileExtnameValid } from '@server/helpers/custom-validators/videos.js'
 import { isResolvingToUnicastOnly } from '@server/helpers/dns.js'
+import { guessLanguageFromReq, t } from '@server/helpers/i18n.js'
 import { logger } from '@server/helpers/logger.js'
-import { YoutubeDLInfo, YoutubeDLWrapper } from '@server/helpers/youtube-dl/index.js'
+import { YoutubeDlImportError, YoutubeDlImportErrorCode, YoutubeDLInfo, YoutubeDLWrapper } from '@server/helpers/youtube-dl/index.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
@@ -37,38 +38,16 @@ import {
   MVideoThumbnail,
   MVideoWithBlacklistLight
 } from '@server/types/models/index.js'
+import express from 'express'
 import { remove } from 'fs-extra/esm'
 import { getLocalVideoActivityPubUrl } from './activitypub/url.js'
 import { updateLocalVideoMiniatureFromExisting, updateLocalVideoMiniatureFromUrl } from './thumbnail.js'
 import { createLocalCaption } from './video-captions.js'
 import { replaceChapters, replaceChaptersFromDescriptionIfNeeded } from './video-chapters.js'
 
-class YoutubeDlImportError extends Error {
-  code: YoutubeDlImportError.CODE
-  cause?: Error // Property to remove once ES2022 is used
-  constructor ({ message, code }) {
-    super(message)
-    this.code = code
-  }
-
-  static fromError (err: Error, code: YoutubeDlImportError.CODE, message?: string) {
-    const ytDlErr = new this({ message: message ?? err.message, code })
-    ytDlErr.cause = err
-    ytDlErr.stack = err.stack // Useless once ES2022 is used
-    return ytDlErr
-  }
-}
-
-namespace YoutubeDlImportError {
-  export enum CODE {
-    FETCH_ERROR,
-    NOT_ONLY_UNICAST_URL
-  }
-}
-
 // ---------------------------------------------------------------------------
 
-async function insertFromImportIntoDB (parameters: {
+export async function insertFromImportIntoDB (parameters: {
   video: MVideoThumbnail
   thumbnailModel: MThumbnail
   previewModel: MThumbnail
@@ -129,7 +108,7 @@ async function insertFromImportIntoDB (parameters: {
   return videoImport
 }
 
-async function buildVideoFromImport ({ channelId, importData, importDataOverride, importType }: {
+export async function buildVideoFromImport ({ channelId, importData, importDataOverride, importType }: {
   channelId: number
   importData: YoutubeDLInfo
   importDataOverride?: Partial<VideoImportCreate>
@@ -171,16 +150,37 @@ async function buildVideoFromImport ({ channelId, importData, importDataOverride
   return video
 }
 
-async function buildYoutubeDLImport (options: {
+export async function buildYoutubeDLImport (options: {
   targetUrl: string
   channel: MChannelAccountDefault
   user: MUserAccountId
+
   channelSync?: MChannelSync
   importDataOverride?: Partial<VideoImportCreate>
   thumbnailFilePath?: string
   previewFilePath?: string
+
+  skipPublishedBeforeOrEq?: Date
+
+  req?: express.Request
+  res?: express.Response
 }) {
-  const { targetUrl, channel, channelSync, importDataOverride, thumbnailFilePath, previewFilePath, user } = options
+  const {
+    targetUrl,
+    channel,
+    channelSync,
+    importDataOverride,
+    thumbnailFilePath,
+    previewFilePath,
+    user,
+    skipPublishedBeforeOrEq,
+    req,
+    res
+  } = options
+
+  const userLanguage = req && res
+    ? guessLanguageFromReq(req, res)
+    : user.getLanguage()
 
   const youtubeDL = new YoutubeDLWrapper(
     targetUrl,
@@ -189,21 +189,27 @@ async function buildYoutubeDLImport (options: {
   )
 
   // Get video infos
-  let youtubeDLInfo: YoutubeDLInfo
-  try {
-    youtubeDLInfo = await youtubeDL.getInfoForDownload()
-  } catch (err) {
-    throw YoutubeDlImportError.fromError(
-      err,
-      YoutubeDlImportError.CODE.FETCH_ERROR,
-      `Cannot fetch information from import for URL ${targetUrl}`
-    )
+  const youtubeDLInfo = await youtubeDL.getInfoForDownload({ userLanguage })
+
+  if (skipPublishedBeforeOrEq) {
+    const onlyAfterWithoutTime = new Date(skipPublishedBeforeOrEq)
+    onlyAfterWithoutTime.setHours(0, 0, 0, 0)
+
+    if (youtubeDLInfo.originallyPublishedAtWithoutTime.getTime() < onlyAfterWithoutTime.getTime()) {
+      throw new YoutubeDlImportError({
+        message: t(`Video originally published at {publishedAt} is before the limit of {limit}`, userLanguage, {
+          publishedAt: youtubeDLInfo.originallyPublishedAtWithoutTime.toLocaleString(userLanguage),
+          limit: onlyAfterWithoutTime.toLocaleString(userLanguage)
+        }),
+        code: YoutubeDlImportErrorCode.SKIP_PUBLICATION_DATE
+      })
+    }
   }
 
   if (!await hasUnicastURLsOnly(youtubeDLInfo)) {
     throw new YoutubeDlImportError({
-      message: 'Cannot use non unicast IP as targetUrl.',
-      code: YoutubeDlImportError.CODE.NOT_ONLY_UNICAST_URL
+      message: t('Cannot use non unicast IP as targetUrl.', userLanguage),
+      code: YoutubeDlImportErrorCode.NOT_ONLY_UNICAST_URL
     })
   }
 
@@ -292,9 +298,7 @@ async function buildYoutubeDLImport (options: {
 }
 
 // ---------------------------------------------------------------------------
-
-export { buildVideoFromImport, buildYoutubeDLImport, insertFromImportIntoDB, YoutubeDlImportError }
-
+// Private
 // ---------------------------------------------------------------------------
 
 async function forgeThumbnail ({ inputPath, video, downloadUrl, type }: {

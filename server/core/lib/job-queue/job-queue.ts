@@ -409,7 +409,7 @@ class JobQueue {
       data: job.payload,
       queueName: job.type,
       opts: {
-        failParentOnFailure: true,
+        failParentOnFailure: false,
 
         ...this.buildJobOptions(job.type as JobType, pick(job, [ 'priority', 'delay', 'failParentOnFailure' ]))
       }

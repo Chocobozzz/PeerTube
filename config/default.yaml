@@ -811,7 +811,7 @@ import:
     timeout: '2 hours'
 
     # Number of attempts a user or the channel sync process can do to import a video if an error occurs during the import process
-    max_attempts: 3
+    max_attempts: 5
 
     # Classic HTTP or all sites supported by youtube-dl https://rg3.github.io/youtube-dl/supportedsites.html
     http:

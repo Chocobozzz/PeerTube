@@ -5,7 +5,6 @@ import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { VideoImportModel } from '@server/models/video/video-import.js'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants.js'
 import { synchronizeChannel } from '../sync-channel.js'
-import { retryImport } from '../video-post-import.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
 const lTags = loggerTagsFactory('schedulers', 'channel-synchronization')
@@ -31,33 +30,27 @@ export class VideoChannelSyncLatestScheduler extends AbstractScheduler {
     for (const sync of channelSyncs) {
       const channel = await VideoChannelModel.loadAndPopulateAccount(sync.videoChannelId)
 
-      logger.info(
-        `Creating video import jobs for "${channel.Actor.preferredUsername}" sync with external channel "${sync.externalChannelUrl}"`,
-        lTags()
-      )
-
       // We can't rely on publication date for playlist elements
       // For example, an old video may have been added to a playlist since the last sync
-      const skipPublishedBefore = this.isPlaylistUrl(sync.externalChannelUrl)
-        ? undefined
-        : sync.lastSyncAt || sync.createdAt
+      let skipPublishedBeforeOrEq: Date
+
+      if (!this.isPlaylistUrl(sync.externalChannelUrl)) {
+        const lastImport = await VideoImportModel.loadLastImportBySyncId({ channelSyncId: sync.id })
+
+        if (lastImport && lastImport.Video?.originallyPublishedAt) {
+          skipPublishedBeforeOrEq = lastImport.Video.originallyPublishedAt
+        } else {
+          skipPublishedBeforeOrEq = sync.lastSyncAt || sync.createdAt
+        }
+      }
 
       await synchronizeChannel({
         channel,
         externalChannelUrl: sync.externalChannelUrl,
         videosCountLimit: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.VIDEOS_LIMIT_PER_SYNCHRONIZATION,
         channelSync: sync,
-        skipPublishedBefore
+        skipPublishedBeforeOrEq
       })
-
-      const failed = await VideoImportModel.listFailedBySyncId({ channelSyncId: sync.id })
-      for (const videoImport of failed) {
-        logger.info(
-          `Retrying failed video import (id: ${videoImport.id}) for channel "${channel.Actor.preferredUsername}"`,
-          lTags()
-        )
-        await retryImport(videoImport)
-      }
     }
   }
 

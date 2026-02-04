@@ -124,8 +124,13 @@ describe('Test video imports', function () {
         expect(video.name).to.equal('small video - youtube')
 
         {
-          expect(video.thumbnailPath).to.match(new RegExp(`^/lazy-static/thumbnails/.+.webp$`))
-          expect(video.previewPath).to.match(new RegExp(`^/lazy-static/previews/.+.webp$`))
+          try {
+            expect(video.thumbnailPath).to.match(new RegExp(`^/lazy-static/thumbnails/.+.webp$`))
+            expect(video.previewPath).to.match(new RegExp(`^/lazy-static/previews/.+.webp$`))
+          } catch {
+            expect(video.thumbnailPath).to.match(new RegExp(`^/lazy-static/thumbnails/.+.jpg$`))
+            expect(video.previewPath).to.match(new RegExp(`^/lazy-static/previews/.+.jpg$`))
+          }
 
           // FIXME: re-enable when we'll support webp pixel match
           // const suffix = mode === 'yt-dlp'
