@@ -78,7 +78,7 @@ export async function blacklistVideo (videoInstance: MVideoAccountLight, options
   blacklist.Video = videoInstance
 
   if (options.unfederate === true) {
-    await sendDeleteVideo(videoInstance, undefined)
+    await sendDeleteVideo({ video: videoInstance, transaction: undefined })
   }
 
   if (videoInstance.isLive) {
