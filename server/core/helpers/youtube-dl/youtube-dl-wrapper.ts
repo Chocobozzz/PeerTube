@@ -24,7 +24,13 @@ export const YoutubeDlImportErrorCode = {
 export type YoutubeDlImportErrorCodeType = typeof YoutubeDlImportErrorCode[keyof typeof YoutubeDlImportErrorCode]
 
 export class YoutubeDlImportError extends Error {
-  static fromError (err: Error, code: YoutubeDlImportErrorCodeType, message?: string) {
+  static fromError (options: {
+    err: Error
+    code: YoutubeDlImportErrorCodeType
+    message?: string
+  }) {
+    const { err, code, message } = options
+
     const ytDlErr = new this({ message: message ?? err.message, code })
     ytDlErr.cause = err
 
@@ -94,30 +100,38 @@ export class YoutubeDLWrapper {
 
     const youtubeDL = await YoutubeDLCLI.safeGet()
 
-    const info = await youtubeDL.getInfo({
-      url: this.url,
-      format: YoutubeDLCLI.getYoutubeDLVideoFormat(this.enabledResolutions, this.useBestFormat),
-      additionalYoutubeDLArgs: youtubeDLArgs,
-      processOptions
-    })
+    try {
+      const info = await youtubeDL.getInfo({
+        url: this.url,
+        format: YoutubeDLCLI.getYoutubeDLVideoFormat(this.enabledResolutions, this.useBestFormat),
+        additionalYoutubeDLArgs: youtubeDLArgs,
+        processOptions
+      })
 
-    if (!info) {
-      throw new YoutubeDlImportError({
-        message: t(`Cannot fetch information from import for URL {targetUrl}`, userLanguage, { targetUrl: this.url }),
+      if (!info) {
+        throw new YoutubeDlImportError({
+          message: t(`Cannot fetch information from import for URL {targetUrl}`, userLanguage, { targetUrl: this.url }),
+          code: YoutubeDlImportErrorCode.FETCH_ERROR
+        })
+      }
+
+      if (info.is_live === true || [ 'is_live', 'post_live', 'is_upcoming' ].includes(info.live_status)) {
+        throw new YoutubeDlImportError({
+          message: t('Cannot download a live streaming for URL {targetUrl}', userLanguage, { targetUrl: this.url }),
+          code: YoutubeDlImportErrorCode.IS_LIVE
+        })
+      }
+
+      const infoBuilder = new YoutubeDLInfoBuilder(info)
+
+      return infoBuilder.getInfo()
+    } catch (err) {
+      throw YoutubeDlImportError.fromError({
+        err,
+        message: t(`Cannot get info from {targetUrl}`, userLanguage, { targetUrl: this.url }),
         code: YoutubeDlImportErrorCode.FETCH_ERROR
       })
     }
-
-    if (info.is_live === true || [ 'is_live', 'post_live', 'is_upcoming' ].includes(info.live_status)) {
-      throw new YoutubeDlImportError({
-        message: t('Cannot download a live streaming for URL {targetUrl}', userLanguage, { targetUrl: this.url }),
-        code: YoutubeDlImportErrorCode.IS_LIVE
-      })
-    }
-
-    const infoBuilder = new YoutubeDLInfoBuilder(info)
-
-    return infoBuilder.getInfo()
   }
 
   async getInfoForListImport (options: {
