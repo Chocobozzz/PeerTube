@@ -9,6 +9,7 @@ import {
   VideoUpdate
 } from '@peertube/peertube-models'
 import { exists } from '@server/helpers/custom-validators/misc.js'
+import { sendDeleteVideo } from '@server/lib/activitypub/send/send-delete.js'
 import { changeVideoChannelShare } from '@server/lib/activitypub/share.js'
 import { isNewVideoPrivacyForFederation, isPrivacyForFederation } from '@server/lib/activitypub/videos/federate.js'
 import { AutomaticTagger } from '@server/lib/automatic-tags/automatic-tagger.js'
@@ -265,7 +266,7 @@ async function updateVideoPrivacy (options: {
 
   // Unfederate the video if the new privacy is not compatible with federation
   if (hadPrivacyForFederation && !isPrivacyForFederation(videoInstance.privacy)) {
-    await VideoModel.sendDelete(videoInstance, { transaction })
+    await sendDeleteVideo({ video: videoInstance, deleteForPrivacyChange: true, transaction })
   }
 
   return isNewVideoForFederation
