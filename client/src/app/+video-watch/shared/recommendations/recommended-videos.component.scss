@@ -49,8 +49,10 @@ my-video-miniature {
 }
 
 .other-videos:not(.display-as-row) my-video-miniature {
-  min-width: $video-thumbnail-medium-width;
-  max-width: $video-thumbnail-medium-width;
+  --co-miniature-max-width: #{$video-thumbnail-medium-width};
+
+  min-width: var(--co-miniature-min-width);
+  max-width: var(--co-miniature-max-width);
 }
 
 .display-as-row {

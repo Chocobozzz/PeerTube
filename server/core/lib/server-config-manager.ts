@@ -13,9 +13,7 @@ import { CONFIG, isEmailEnabled } from '@server/initializers/config.js'
 import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME, PEERTUBE_VERSION, WEBSERVER } from '@server/initializers/constants.js'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '@server/lib/signup.js'
 import { ActorCustomPageModel } from '@server/models/account/actor-custom-page.js'
-import { ActorImageModel } from '@server/models/actor/actor-image.js'
 import { getServerActor } from '@server/models/application/application.js'
-import { UploadImageModel } from '@server/models/application/upload-image.js'
 import { PluginModel } from '@server/models/server/plugin.js'
 import { MActorImage, MActorUploadImages, MUploadImage } from '@server/types/models/index.js'
 import { Hooks } from './plugins/hooks.js'
@@ -653,7 +651,7 @@ class ServerConfigManager {
       height: logo.height,
       width: logo.width,
       type,
-      fileUrl: UploadImageModel.getImageUrl(logo),
+      fileUrl: logo.getLocalFileUrl(),
       isFallback
     }
   }
@@ -663,7 +661,7 @@ class ServerConfigManager {
       height: logo.height,
       width: logo.width,
       type,
-      fileUrl: ActorImageModel.getImageUrl(logo),
+      fileUrl: logo.getLocalFileUrl(),
       isFallback
     }
   }

@@ -456,6 +456,8 @@ describe('Test video comments', function () {
       video1 = await server.videos.quickUpload({ name: 'video on server 1' })
       video2 = await server2.videos.quickUpload({ name: 'video on server 2' })
 
+      await waitJobs([ server, server2 ])
+
       await server2.comments.createThread({ videoId: video1.uuid, text: 'comment on server 2' })
       await server2.comments.createThread({ videoId: video2.uuid, text: 'comment on server 2' })
 

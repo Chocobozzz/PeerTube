@@ -55,11 +55,6 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.client.browseVideos.defaultScope).to.equal('federated')
   expect(data.client.menu.login.redirectOnSingleExternalAuth).to.be.false
 
-  expect(data.cache.previews.size).to.equal(1)
-  expect(data.cache.captions.size).to.equal(1)
-  expect(data.cache.torrents.size).to.equal(1)
-  expect(data.cache.storyboards.size).to.equal(1)
-
   expect(data.signup.enabled).to.be.true
   expect(data.signup.limit).to.equal(4)
   expect(data.signup.minimumAge).to.equal(16)
@@ -247,20 +242,6 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
         login: {
           redirectOnSingleExternalAuth: true
         }
-      }
-    },
-    cache: {
-      previews: {
-        size: 2
-      },
-      captions: {
-        size: 3
-      },
-      torrents: {
-        size: 4
-      },
-      storyboards: {
-        size: 5
       }
     },
     signup: {

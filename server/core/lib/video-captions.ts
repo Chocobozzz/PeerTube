@@ -39,7 +39,8 @@ export async function createLocalCaption (options: {
     filename: VideoCaptionModel.generateCaptionName(language),
     storage: FileStorage.FILE_SYSTEM,
     language,
-    automaticallyGenerated
+    automaticallyGenerated,
+    cached: false
   }) as MVideoCaption
 
   await moveAndProcessCaptionFile({ path }, videoCaption)

@@ -1,9 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { readFile } from 'fs/promises'
-import { completeCheckHlsPlaylist } from '@tests/shared/streaming-playlists.js'
-import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
+import { maxBy } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
   RunnerJobSuccessPayload,
@@ -16,17 +13,20 @@ import {
   VODHLSTranscodingSuccess,
   VODWebVideoTranscodingSuccess
 } from '@peertube/peertube-models'
+import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
-  makeGetRequest,
   makeRawRequest,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { completeCheckHlsPlaylist } from '@tests/shared/streaming-playlists.js'
+import { expect } from 'chai'
+import { readFile } from 'fs/promises'
 
 async function processAllJobs (server: PeerTubeServer, runnerToken: string) {
   do {
@@ -435,7 +435,7 @@ describe('Test runner VOD transcoding', function () {
 
       await servers[0].config.enableTranscoding({ hls: true, webVideo: true })
 
-      const attributes = { name: 'audio_with_preview', previewfile: 'custom-preview.jpg', fixture: 'sample.ogg' }
+      const attributes = { name: 'audio_with_preview', thumbnailfile: 'custom-thumbnail-big.jpg', fixture: 'sample.ogg' }
       const { uuid } = await servers[0].videos.upload({ attributes, mode: 'legacy' })
       videoUUID = uuid
 
@@ -470,9 +470,9 @@ describe('Test runner VOD transcoding', function () {
         const { body } = await servers[0].runnerJobs.getJobFile({ url: job.payload.input.previewFileUrl, jobToken, runnerToken })
 
         const video = await servers[0].videos.get({ id: videoUUID })
-        const { body: inputFile } = await makeGetRequest({
-          url: servers[0].url,
-          path: video.previewPath,
+
+        const { body: inputFile } = await makeRawRequest({
+          url: maxBy(video.thumbnails, 'width').fileUrl,
           expectedStatus: HttpStatusCode.OK_200
         })
 

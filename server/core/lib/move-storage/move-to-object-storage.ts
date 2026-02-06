@@ -93,10 +93,9 @@ async function moveVideoSourceFile (source: MVideoSource) {
   if (source.storage !== FileStorage.FILE_SYSTEM) return
 
   const sourcePath = VideoPathManager.Instance.getFSOriginalVideoFilePath(source.keptOriginalFilename)
-  const fileUrl = await storeOriginalVideoFile(sourcePath, source.keptOriginalFilename)
+  await storeOriginalVideoFile(sourcePath, source.keptOriginalFilename)
 
   source.storage = FileStorage.OBJECT_STORAGE
-  source.fileUrl = fileUrl
   await source.save()
 
   logger.debug('Removing original video file ' + sourcePath + ' because it\'s now on object storage', lTagsBase())
@@ -113,8 +112,8 @@ async function moveCaptionFiles (captions: MVideoCaption[], hls: MStreamingPlayl
     if (caption.storage === FileStorage.FILE_SYSTEM) {
       const captionPath = caption.getFSFilePath()
 
+      await storeVideoCaption(captionPath, caption.filename)
       // Assign new values before building the m3u8 file
-      caption.fileUrl = await storeVideoCaption(captionPath, caption.filename)
       caption.storage = FileStorage.OBJECT_STORAGE
 
       await caption.save()
@@ -123,7 +122,7 @@ async function moveCaptionFiles (captions: MVideoCaption[], hls: MStreamingPlayl
       await remove(captionPath)
     }
 
-    if (hls && (!caption.m3u8Filename || !caption.m3u8Url)) {
+    if (hls) {
       hlsUpdated = true
 
       const m3u8PathToRemove = caption.getFSM3U8Path(hls.Video)
@@ -132,8 +131,9 @@ async function moveCaptionFiles (captions: MVideoCaption[], hls: MStreamingPlayl
       const content = buildCaptionM3U8Content({ video: hls.Video, caption })
 
       caption.m3u8Filename = VideoCaptionModel.generateM3U8Filename(caption.filename)
-      caption.m3u8Url = await storeHLSFileFromContent({
-        playlist: hls,
+
+      await storeHLSFileFromContent({
+        video: hls.Video,
         pathOrFilename: caption.m3u8Filename,
         content
       })
@@ -158,17 +158,15 @@ async function moveWebVideoFiles (video: MVideoWithAllFiles) {
   for (const file of video.VideoFiles) {
     if (file.storage !== FileStorage.FILE_SYSTEM) continue
 
-    const fileUrl = await storeWebVideoFile(video, file)
+    await storeWebVideoFile(video, file)
 
     const oldPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, file)
-    await onVideoFileMoved({ videoOrPlaylist: video, file, fileUrl, oldPath })
+    await onVideoFileMoved({ videoOrPlaylist: video, file, oldPath })
   }
 }
 
 async function moveHLSFiles (video: MVideoWithAllFiles) {
   for (const playlist of video.VideoStreamingPlaylists) {
-    const playlistWithVideo = playlist.withVideo(video)
-
     let updatedFile = false
 
     for (const file of playlist.VideoFiles) {
@@ -178,21 +176,21 @@ async function moveHLSFiles (video: MVideoWithAllFiles) {
 
       // Resolution playlist
       const playlistFilename = getHLSResolutionPlaylistFilename(file.filename)
-      await storeHLSFileFromFilename(playlistWithVideo, playlistFilename)
+      await storeHLSFileFromFilename(video, playlistFilename)
 
       // Resolution fragmented file
-      const fileUrl = await storeHLSFileFromFilename(playlistWithVideo, file.filename)
+      await storeHLSFileFromFilename(video, file.filename)
 
       const oldPath = join(getHLSDirectory(video), file.filename)
 
-      await onVideoFileMoved({ videoOrPlaylist: Object.assign(playlist, { Video: video }), file, fileUrl, oldPath })
+      await onVideoFileMoved({ videoOrPlaylist: Object.assign(playlist, { Video: video }), file, oldPath })
 
       await remove(join(getHLSDirectory(video), playlistFilename))
     }
 
-    if (playlistWithVideo.storage === FileStorage.FILE_SYSTEM) {
-      playlist.playlistUrl = await storeHLSFileFromFilename(playlistWithVideo, playlist.playlistFilename)
-      playlist.segmentsSha256Url = await storeHLSFileFromFilename(playlistWithVideo, playlist.segmentsSha256Filename)
+    if (playlist.storage === FileStorage.FILE_SYSTEM) {
+      await storeHLSFileFromFilename(video, playlist.playlistFilename)
+      await storeHLSFileFromFilename(video, playlist.segmentsSha256Filename)
       playlist.storage = FileStorage.OBJECT_STORAGE
 
       await playlist.save()
@@ -219,12 +217,10 @@ async function moveHLSFiles (video: MVideoWithAllFiles) {
 async function onVideoFileMoved (options: {
   videoOrPlaylist: MVideo | MStreamingPlaylistVideo
   file: MVideoFile
-  fileUrl: string
   oldPath: string
 }) {
-  const { videoOrPlaylist, file, fileUrl, oldPath } = options
+  const { videoOrPlaylist, file, oldPath } = options
 
-  file.fileUrl = fileUrl
   file.storage = FileStorage.OBJECT_STORAGE
 
   await updateTorrentMetadata(videoOrPlaylist, file)

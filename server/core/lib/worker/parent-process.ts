@@ -8,7 +8,6 @@ import type getImageSize from './workers/get-image-size.js'
 import type httpBroadcast from './workers/http-broadcast.js'
 import type httpUnicast from './workers/http-unicast.js'
 import type downloadImage from './workers/image-downloader.js'
-import type processImage from './workers/image-processor.js'
 import type signJsonLDObject from './workers/sign-json-ld-object.js'
 
 let downloadImageWorker: Piscina
@@ -27,26 +26,6 @@ export function downloadImageFromWorker (options: Parameters<typeof downloadImag
   }
 
   return downloadImageWorker.run(options)
-}
-
-// ---------------------------------------------------------------------------
-
-let processImageWorker: Piscina
-
-export function processImageFromWorker (options: Parameters<typeof processImage>[0]): Promise<ReturnType<typeof processImage>> {
-  if (!processImageWorker) {
-    processImageWorker = new Piscina({
-      filename: new URL(join('workers', 'image-processor.js'), import.meta.url).href,
-      concurrentTasksPerWorker: WORKER_THREADS.PROCESS_IMAGE.CONCURRENCY,
-      maxThreads: WORKER_THREADS.PROCESS_IMAGE.MAX_THREADS,
-      minThreads: 1,
-      idleTimeout: WORKER_THREADS.IDLE_TIMEOUT
-    })
-
-    processImageWorker.on('error', err => logger.error('Error in process image worker', { err }))
-  }
-
-  return processImageWorker.run(options)
 }
 
 // ---------------------------------------------------------------------------
@@ -209,11 +188,6 @@ export function getWorkersStats () {
       label: 'downloadImage',
       queueSize: downloadImageWorker?.queueSize || 0,
       completed: downloadImageWorker?.completed || 0
-    },
-    {
-      label: 'processImageWorker',
-      queueSize: processImageWorker?.queueSize || 0,
-      completed: processImageWorker?.completed || 0
     },
     {
       label: 'getImageSizeWorker',

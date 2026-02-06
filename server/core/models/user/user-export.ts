@@ -2,8 +2,8 @@ import { FileStorage, UserExportState, type FileStorageType, type UserExport, ty
 import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import {
-  JWT_TOKEN_USER_EXPORT_FILE_LIFETIME,
   DOWNLOAD_PATHS,
+  JWT_TOKEN_USER_EXPORT_FILE_LIFETIME,
   USER_EXPORT_FILE_PREFIX,
   USER_EXPORT_STATES,
   WEBSERVER
@@ -63,10 +63,6 @@ export class UserExportModel extends SequelizeModel<UserExportModel> {
   @AllowNull(false)
   @Column
   declare storage: FileStorageType
-
-  @AllowNull(true)
-  @Column
-  declare fileUrl: string
 
   @ForeignKey(() => UserModel)
   @Column
@@ -200,7 +196,7 @@ export class UserExportModel extends SequelizeModel<UserExportModel> {
     }
   }
 
-  getFileDownloadUrl () {
+  getLocalDownloadFileUrl () {
     if (this.state !== UserExportState.COMPLETED) return null
 
     return WEBSERVER.URL + join(DOWNLOAD_PATHS.USER_EXPORTS, this.filename) + '?jwt=' + this.generateJWT()
@@ -219,8 +215,7 @@ export class UserExportModel extends SequelizeModel<UserExportModel> {
 
       size: this.size,
 
-      fileUrl: this.fileUrl,
-      privateDownloadUrl: this.getFileDownloadUrl(),
+      privateDownloadUrl: this.getLocalDownloadFileUrl(),
       createdAt: this.createdAt.toISOString(),
       expiresOn: new Date(this.createdAt.getTime() + CONFIG.EXPORT.USERS.EXPORT_EXPIRATION).toISOString()
     }

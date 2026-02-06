@@ -1,5 +1,6 @@
 import { ActivityPubActorType, ActorImageType, ActorImageType_Type } from '@peertube/peertube-models'
 import { buildUUID, getLowercaseExtension } from '@peertube/peertube-node-utils'
+import { processImage } from '@server/helpers/image-utils.js'
 import { ActorReservedModel } from '@server/models/actor/actor-reserved.js'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { remove } from 'fs-extra/esm'
@@ -12,7 +13,6 @@ import { sequelizeTypescript } from '../initializers/database.js'
 import { MAccountDefault, MActor, MChannelDefault } from '../types/models/index.js'
 import { deleteActorImages, updateActorImages } from './activitypub/actors/index.js'
 import { sendUpdateActor } from './activitypub/send/index.js'
-import { processImageFromWorker } from './worker/parent-process.js'
 
 export function buildActorInstance (type: ActivityPubActorType, url: string, preferredUsername: string) {
   return new ActorModel({
@@ -44,7 +44,7 @@ export async function updateLocalActorImageFiles (options: {
 
     const imageName = buildUUID() + extension
     const destination = join(CONFIG.STORAGE.ACTOR_IMAGES_DIR, imageName)
-    await processImageFromWorker({ path: imagePhysicalFile.path, destination, newSize: imageSize, keepOriginal: true })
+    await processImage({ path: imagePhysicalFile.path, destination, newSize: imageSize, keepOriginal: true })
 
     return {
       imageName,
@@ -62,7 +62,7 @@ export async function updateLocalActorImageFiles (options: {
         fileUrl: null,
         height: imageSize.height,
         width: imageSize.width,
-        onDisk: true
+        cached: false
       }))
 
       const updatedActor = await updateActorImages(accountOrChannel.Actor, type, actorImagesInfo, t)

@@ -93,6 +93,7 @@
 }
 
 .miniature.display-as-row {
+  // Keep it sync with image size requested by the component
   --co-row-thumbnail-width: #{$video-thumbnail-width};
   --co-row-thumbnail-height: #{$video-thumbnail-height};
 

@@ -47,11 +47,6 @@ export const customConfigUpdateValidator = [
 
   body('services.twitter.username').exists(),
 
-  body('cache.previews.size').isInt(),
-  body('cache.captions.size').isInt(),
-  body('cache.torrents.size').isInt(),
-  body('cache.storyboards.size').isInt(),
-
   body('signup.enabled').isBoolean(),
   body('signup.limit').isInt(),
   body('signup.requiresEmailVerification').isBoolean(),

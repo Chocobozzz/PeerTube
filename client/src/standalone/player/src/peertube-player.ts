@@ -1,4 +1,5 @@
-import { buildVideoLink, decorateVideoLink, isDefaultLocale, pick } from '@peertube/peertube-core-utils'
+import { buildVideoLink, decorateVideoLink, findAppropriateImage, isDefaultLocale, pick } from '@peertube/peertube-core-utils'
+import { Thumbnail } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { PluginsManager } from '@root-helpers/plugins-manager'
 import { TranslationsManager } from '@root-helpers/translations-manager'
@@ -101,7 +102,7 @@ export class PeerTubePlayer {
   async load (loadOptions: PeerTubePlayerLoadOptions) {
     this.currentLoadOptions = loadOptions
 
-    this.setPoster('')
+    this.setPoster([])
 
     this.disposeDynamicPluginsIfNeeded()
 
@@ -130,7 +131,7 @@ export class PeerTubePlayer {
     this.player.autoplay(this.getAutoPlayValue(this.currentLoadOptions.autoplay))
 
     if (!this.player.autoplay()) {
-      this.setPoster(loadOptions.poster)
+      this.setPoster(loadOptions.thumbnails)
     }
 
     this.player.trigger('video-change')
@@ -144,15 +145,20 @@ export class PeerTubePlayer {
     if (this.player) this.player.dispose()
   }
 
-  setPoster (url: string) {
+  setPoster (thumbnails: Thumbnail[]) {
     // Use HTML video element to display poster
     if (!this.player) {
-      this.options.playerElement().poster = url
+      const playerEl = this.options.playerElement()
+
+      this.options.playerElement().poster = findAppropriateImage(thumbnails, playerEl.clientWidth || window.innerWidth)?.fileUrl || ''
       return
     }
 
     // Prefer using player poster API
-    this.player?.poster(url)
+    if (this.player) {
+      this.player.poster(findAppropriateImage(thumbnails, this.player.currentWidth())?.fileUrl || '')
+    }
+
     this.options.playerElement().poster = ''
   }
 
@@ -384,7 +390,10 @@ export class PeerTubePlayer {
     })
   }
 
-  getVideojsOptions (): VideojsPlayerOptions {
+  private getVideojsOptions (): VideojsPlayerOptions {
+    const poster =
+      findAppropriateImage(this.currentLoadOptions.thumbnails, this.options.playerElement().clientWidth || window.innerWidth)?.fileUrl || ''
+
     const html5 = {
       preloadTextTracks: false,
       // Prevent a bug on iOS where the text tracks added by peertube plugin are removed on play
@@ -413,7 +422,7 @@ export class PeerTubePlayer {
 
         videoRatio: () => this.currentLoadOptions.videoRatio,
 
-        poster: () => this.currentLoadOptions.poster,
+        poster: () => poster,
 
         autoPlayerRatio: this.options.autoPlayerRatio
       },
@@ -450,7 +459,7 @@ export class PeerTubePlayer {
 
       autoplay: this.getAutoPlayValue(this.currentLoadOptions.autoplay),
 
-      poster: this.currentLoadOptions.poster,
+      poster,
       preload: 'none' as 'none',
 
       inactivityTimeout: this.options.inactivityTimeout,

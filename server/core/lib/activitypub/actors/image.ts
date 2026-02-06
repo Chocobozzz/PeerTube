@@ -9,7 +9,7 @@ type ImageInfo = {
   fileUrl: string
   height: number
   width: number
-  onDisk?: boolean
+  cached?: boolean
 }
 
 async function updateActorImages (actor: MActorImages, type: ActorImageType_Type, imagesInfo: ImageInfo[], t: Transaction) {
@@ -46,7 +46,7 @@ async function updateActorImages (actor: MActorImages, type: ActorImageType_Type
 
     const imageModel = await ActorImageModel.create({
       filename: imageInfo.name,
-      onDisk: imageInfo.onDisk ?? false,
+      cached: imageInfo.cached ?? false,
       fileUrl: imageInfo.fileUrl,
       height: imageInfo.height,
       width: imageInfo.width,
@@ -91,7 +91,6 @@ async function safeDeleteActorImage (actor: MActorImages, toDelete: MActorImage,
 
 export {
   type ImageInfo,
-
   updateActorImages,
   deleteActorImages
 }

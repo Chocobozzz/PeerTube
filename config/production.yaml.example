@@ -479,9 +479,6 @@ thumbnails:
     # Minimum value is 2
     frames_to_analyze: 50
 
-  # Only two sizes are currently supported for now (not less, not more)
-  # 1 size for the thumbnail (displayed in video miniatures)
-  # 1 size for the preview (displayed in the video player)
   sizes:
     -
       width: 280
@@ -537,16 +534,6 @@ download_generate_video:
 # the following keys will have no effect /!\
 #
 ###############################################################################
-
-cache:
-  previews:
-    size: 500 # Max number of previews you want to cache
-  captions:
-    size: 500 # Max number of video captions/subtitles you want to cache
-  torrents:
-    size: 500 # Max number of video torrents you want to cache
-  storyboards:
-    size: 500 # Max number of video storyboards you want to cache
 
 admin:
   # Used to generate the root user at first startup

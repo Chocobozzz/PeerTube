@@ -387,7 +387,7 @@ describe('Test managing runners', function () {
       const { jobUUID, expectedStatus, videoUUID, runnerToken, jobToken } = options
 
       const basePath = '/api/v1/runners/jobs/' + jobUUID + '/files/videos/' + videoUUID
-      const paths = [ `${basePath}/max-quality`, `${basePath}/previews/max-quality` ]
+      const paths = [ `${basePath}/max-quality`, `${basePath}/thumbnails/max-quality` ]
 
       for (const path of paths) {
         await makePostBodyRequest({ url: server.url, path, fields: { runnerToken, jobToken }, expectedStatus })
@@ -810,7 +810,7 @@ describe('Test managing runners', function () {
         })
 
         it('Should fail with an invalid vod audio merge payload', async function () {
-          const attributes = { name: 'audio_with_preview', previewfile: 'custom-preview.jpg', fixture: 'sample.ogg' }
+          const attributes = { name: 'audio_with_preview', thumbnailfile: 'custom-thumbnail-big.jpg', fixture: 'sample.ogg' }
           await server.videos.upload({ attributes, mode: 'legacy' })
 
           await waitJobs([ server ])

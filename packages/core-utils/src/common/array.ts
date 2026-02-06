@@ -37,7 +37,6 @@ export function shuffle<T> (elements: T[]) {
 
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1))
-
     ;[ shuffled[i], shuffled[j] ] = [ shuffled[j], shuffled[i] ]
   }
 
@@ -45,7 +44,7 @@ export function shuffle<T> (elements: T[]) {
 }
 
 export function sortBy<T> (obj: T[], key1: string, key2?: string): T[] {
-  return obj.sort((a, b) => {
+  return [ ...obj ].sort((a, b) => {
     const elem1 = key2 ? a[key1][key2] : a[key1]
     const elem2 = key2 ? b[key1][key2] : b[key1]
 

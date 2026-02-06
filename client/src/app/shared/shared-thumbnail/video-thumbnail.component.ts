@@ -1,13 +1,12 @@
 import { CommonModule } from '@angular/common'
-import { booleanAttribute, Component, inject, input, OnChanges, output, viewChild } from '@angular/core'
+import { booleanAttribute, Component, ElementRef, inject, input, OnChanges, output, viewChild } from '@angular/core'
 import { RouterLink } from '@angular/router'
-import { ScreenService } from '@app/core'
-import { getAPIUrl } from '@app/helpers'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { Video as VideoServerModel, VideoState } from '@peertube/peertube-models'
+import { findAppropriateImageFileUrl } from '@root-helpers/images'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
-import { Video } from '../shared-main/video/video.model'
 import { FromNowPipe } from '../shared-main/date/from-now.pipe'
+import { Video } from '../shared-main/video/video.model'
 
 export type VideoThumbnailInput = Pick<
   VideoServerModel,
@@ -17,10 +16,7 @@ export type VideoThumbnailInput = Pick<
   | 'shortUUID'
   | 'isLive'
   | 'state'
-  | 'previewPath'
-  | 'previewUrl'
-  | 'thumbnailPath'
-  | 'thumbnailUrl'
+  | 'thumbnails'
   | 'userHistory'
   | 'originallyPublishedAt'
   | 'liveSchedules'
@@ -33,7 +29,7 @@ export type VideoThumbnailInput = Pick<
   imports: [ CommonModule, RouterLink, NgbTooltip, GlobalIconComponent, FromNowPipe ]
 })
 export class VideoThumbnailComponent implements OnChanges {
-  private screenService = inject(ScreenService)
+  private el = inject(ElementRef)
 
   readonly video = input.required<VideoThumbnailInput>()
 
@@ -103,11 +99,15 @@ export class VideoThumbnailComponent implements OnChanges {
     const video = this.video()
     if (!video) return ''
 
-    if (this.screenService.isInMobileView()) {
-      return video.previewUrl || getAPIUrl() + video.previewPath
-    }
+    const computedStyle = window.getComputedStyle(this.el.nativeElement)
 
-    return video.thumbnailUrl || getAPIUrl() + video.thumbnailPath
+    const cssVariable = computedStyle.getPropertyValue('--co-miniature-max-width') ||
+      computedStyle.getPropertyValue('--co-row-thumbnail-width') ||
+      computedStyle.getPropertyValue('--co-image-width')
+
+    const widthStr = cssVariable.replace('px', '').trim()
+
+    return findAppropriateImageFileUrl(video.thumbnails, +widthStr)
   }
 
   getProgressPercent () {

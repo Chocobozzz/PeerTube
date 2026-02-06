@@ -1,8 +1,7 @@
-import { buildVideoEmbedPath, buildVideoWatchPath, maxBy, pick, wait } from '@peertube/peertube-core-utils'
+import { buildVideoEmbedPath, buildVideoWatchPath, maxBy, minBy, pick, wait } from '@peertube/peertube-core-utils'
 import {
   FileStorage,
   ResultList,
-  ThumbnailType,
   UserRight,
   Video,
   VideoDetails,
@@ -211,7 +210,7 @@ export type ForAPIOptions = {
         required: true
       },
       {
-        attributes: [ 'type', 'filename' ],
+        attributes: [ 'width', 'height', 'fileUrl', 'filename' ],
         model: ThumbnailModel,
         required: false
       }
@@ -1894,37 +1893,57 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
   // ---------------------------------------------------------------------------
 
-  async addAndSaveThumbnail (thumbnail: MThumbnail, transaction?: Transaction) {
-    thumbnail.videoId = this.id
-
-    const savedThumbnail = await thumbnail.save({ transaction })
+  async replaceAndSaveThumbnails (thumbnails: MThumbnail[], transaction?: Transaction) {
+    if (thumbnails.length === 0) {
+      throw new Error('Cannot replace thumbnails with an empty array, at least one thumbnail is required')
+    }
 
     if (Array.isArray(this.Thumbnails) === false) this.Thumbnails = []
 
-    this.Thumbnails = this.Thumbnails.filter(t => t.id !== savedThumbnail.id)
-    this.Thumbnails.push(savedThumbnail)
+    let oldThumbnails = [ ...this.Thumbnails ]
+
+    for (const thumbnail of thumbnails) {
+      thumbnail.videoId = this.id
+
+      const savedThumbnail = await thumbnail.save({ transaction })
+
+      this.Thumbnails = this.Thumbnails.filter(t => t.id !== savedThumbnail.id)
+      oldThumbnails = oldThumbnails.filter(t => t.id !== savedThumbnail.id)
+
+      this.Thumbnails.push(savedThumbnail)
+    }
+
+    for (const oldThumbnail of oldThumbnails) {
+      await oldThumbnail.destroy({ transaction })
+    }
   }
 
   // ---------------------------------------------------------------------------
 
-  hasMiniature (this: Pick<MVideoThumbnail, 'getMiniature' | 'Thumbnails'>) {
-    return !!this.getMiniature()
+  getBestThumbnail (this: Pick<MVideoThumbnail, 'Thumbnails'>) {
+    if (!this.Thumbnails || this.Thumbnails.length === 0) return undefined
+
+    return maxBy(this.Thumbnails, 'width')
   }
 
-  getMiniature (this: Pick<MVideoThumbnail, 'Thumbnails'>) {
-    if (Array.isArray(this.Thumbnails) === false) return undefined
+  getBestThumbnailStaticPath (this: Pick<MVideoThumbnail, 'Thumbnails' | 'getBestThumbnail'>) {
+    const thumbnail = this.getBestThumbnail()
+    if (!thumbnail) return null
 
-    return this.Thumbnails.find(t => t.type === ThumbnailType.MINIATURE)
+    return thumbnail.getFileStaticPath()
   }
 
-  hasPreview (this: Pick<MVideoThumbnail, 'getPreview' | 'Thumbnails'>) {
-    return !!this.getPreview()
+  getSmallestThumbnail (this: Pick<MVideoThumbnail, 'Thumbnails'>) {
+    if (!this.Thumbnails || this.Thumbnails.length === 0) return undefined
+
+    return minBy(this.Thumbnails, 'width')
   }
 
-  getPreview (this: Pick<MVideoThumbnail, 'Thumbnails'>) {
-    if (Array.isArray(this.Thumbnails) === false) return undefined
+  getSmallestThumbnailStaticPath (this: Pick<MVideoThumbnail, 'Thumbnails' | 'getSmallestThumbnail'>) {
+    const thumbnail = this.getSmallestThumbnail()
+    if (!thumbnail) return null
 
-    return this.Thumbnails.find(t => t.type === ThumbnailType.PREVIEW)
+    return thumbnail.getFileStaticPath()
   }
 
   // ---------------------------------------------------------------------------
@@ -1939,20 +1958,6 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
   getEmbedStaticPath () {
     return buildVideoEmbedPath({ shortUUID: uuidToShort(this.uuid) })
-  }
-
-  getMiniatureStaticPath (this: Pick<MVideoThumbnail, 'getMiniature' | 'Thumbnails'>) {
-    const thumbnail = this.getMiniature()
-    if (!thumbnail) return null
-
-    return thumbnail.getLocalStaticPath()
-  }
-
-  getPreviewStaticPath (this: Pick<MVideoThumbnail, 'getPreview' | 'Thumbnails'>) {
-    const preview = this.getPreview()
-    if (!preview) return null
-
-    return preview.getLocalStaticPath()
   }
 
   toFormattedJSON (this: MVideoFormattable, options?: VideoFormattingJSONOptions): Video {
@@ -2158,7 +2163,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       )
 
       if (playlist.storage === FileStorage.OBJECT_STORAGE) {
-        await removeHLSObjectStorage(playlist.withVideo(this))
+        await removeHLSObjectStorage(this)
       }
     }
 
@@ -2177,8 +2182,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     await remove(VideoPathManager.Instance.getFSHLSOutputPath(this, resolutionFilename))
 
     if (videoFile.storage === FileStorage.OBJECT_STORAGE) {
-      await removeHLSFileObjectStorageByFilename(streamingPlaylist.withVideo(this), videoFile.filename)
-      await removeHLSFileObjectStorageByFilename(streamingPlaylist.withVideo(this), resolutionFilename)
+      await removeHLSFileObjectStorageByFilename(this, videoFile.filename)
+      await removeHLSFileObjectStorageByFilename(this, resolutionFilename)
     }
 
     logger.debug(
@@ -2192,7 +2197,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     await remove(filePath)
 
     if (streamingPlaylist.storage === FileStorage.OBJECT_STORAGE) {
-      await removeHLSFileObjectStorageByFilename(streamingPlaylist.withVideo(this), filename)
+      await removeHLSFileObjectStorageByFilename(this, filename)
     }
 
     logger.debug(`Removing streaming playlist file ${filename}`, lTags(this.uuid))

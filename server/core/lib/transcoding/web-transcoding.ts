@@ -21,8 +21,8 @@ import { buildNewFile, saveNewOriginalFileIfNeeded } from '../video-file.js'
 import { addLocalOrRemoteStoryboardJobIfNeeded } from '../video-jobs.js'
 import { VideoPathManager } from '../video-path-manager.js'
 import { buildFFmpegVOD } from './shared/index.js'
-import { buildOriginalFileResolution } from './transcoding-resolutions.js'
 import { canDoQuickTranscode } from './transcoding-quick-transcode.js'
+import { buildOriginalFileResolution } from './transcoding-resolutions.js'
 
 // Optimize the original video file and replace it. The resolution is not changed.
 export async function optimizeOriginalVideofile (options: {
@@ -142,15 +142,15 @@ export async function mergeAudioVideofile (options: {
     const result = await VideoPathManager.Instance.makeAvailableVideoFile(inputVideoFile, async audioInputPath => {
       const videoOutputPath = join(transcodeDirectory, video.id + '-transcoded' + newExtname)
 
-      // If the user updates the video preview during transcoding
-      const previewPath = video.getPreview().getPath()
-      const tmpPreviewPath = join(CONFIG.STORAGE.TMP_DIR, basename(previewPath))
-      await copyFile(previewPath, tmpPreviewPath)
+      // If the user updates the video thumbnails during transcoding
+      const thumbnailPath = video.getBestThumbnail().getFSPath()
+      const tmpThumbnailPath = join(CONFIG.STORAGE.TMP_DIR, basename(thumbnailPath))
+      await copyFile(thumbnailPath, tmpThumbnailPath)
 
       const transcodeOptions: MergeAudioTranscodeOptions = {
         type: 'merge-audio',
 
-        videoInputPath: tmpPreviewPath,
+        videoInputPath: tmpThumbnailPath,
         audioPath: audioInputPath,
 
         outputPath: videoOutputPath,
@@ -164,9 +164,9 @@ export async function mergeAudioVideofile (options: {
       try {
         await buildFFmpegVOD(job).transcode(transcodeOptions)
 
-        await remove(tmpPreviewPath)
+        await remove(tmpThumbnailPath)
       } catch (err) {
-        await remove(tmpPreviewPath)
+        await remove(tmpThumbnailPath)
         throw err
       }
 

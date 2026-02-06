@@ -1,4 +1,4 @@
-import { maxBy, minBy, randomInt } from '@peertube/peertube-core-utils'
+import { randomInt } from '@peertube/peertube-core-utils'
 import {
   AbuseState,
   AbuseStateType,
@@ -58,7 +58,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 980
+export const LAST_MIGRATION_VERSION = 990
 
 // ---------------------------------------------------------------------------
 
@@ -950,7 +950,6 @@ export const LAZY_STATIC_PATHS = {
   THUMBNAILS: '/lazy-static/thumbnails/',
   BANNERS: '/lazy-static/banners/',
   AVATARS: '/lazy-static/avatars/',
-  PREVIEWS: '/lazy-static/previews/',
   VIDEO_CAPTIONS: '/lazy-static/video-captions/',
   TORRENTS: '/lazy-static/torrents/',
   STORYBOARDS: '/lazy-static/storyboards/'
@@ -972,17 +971,6 @@ export const STATIC_MAX_AGE = {
   CLIENT: '30d'
 }
 
-// Videos thumbnail size
-export const THUMBNAILS_SIZE = {
-  width: minBy(CONFIG.THUMBNAILS.SIZES, 'width').width,
-  height: minBy(CONFIG.THUMBNAILS.SIZES, 'width').height,
-  minRemoteWidth: 150
-}
-export const PREVIEWS_SIZE = {
-  width: maxBy(CONFIG.THUMBNAILS.SIZES, 'width').width,
-  height: maxBy(CONFIG.THUMBNAILS.SIZES, 'width').height,
-  minRemoteWidth: 400
-}
 export const ACTOR_IMAGES_SIZE: { [key in ActorImageType_Type]: { width: number, height: number }[] } = {
   [ActorImageType.AVATAR]: [ // 1/1 ratio
     {
@@ -1052,8 +1040,12 @@ export const EMBED_SIZE = {
 
 // Sub folders of cache directory
 export const FILES_CACHE = {
-  PREVIEWS: {
-    DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'previews'),
+  AVATARS: {
+    DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'avatars'),
+    MAX_AGE: 1000 * 3600 * 24 * 7 // 7 days
+  },
+  THUMBNAILS: {
+    DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'thumbnails'),
     MAX_AGE: 1000 * 3600 * 3 // 3 hours
   },
   STORYBOARDS: {
@@ -1063,10 +1055,6 @@ export const FILES_CACHE = {
   VIDEO_CAPTIONS: {
     DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'video-captions'),
     MAX_AGE: 1000 * 3600 * 3 // 3 hours
-  },
-  TORRENTS: {
-    DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'torrents'),
-    MAX_AGE: 1000 * 3600 * 3 // 3 hours
   }
 }
 
@@ -1075,7 +1063,7 @@ export const LRU_CACHE = {
     MAX_SIZE: 1000
   },
   FILENAME_TO_PATH_PERMANENT_FILE_CACHE: {
-    MAX_SIZE: 1000
+    MAX_SIZE: 5000
   },
   STATIC_VIDEO_FILES_RIGHTS_CHECK: {
     MAX_SIZE: 5000,

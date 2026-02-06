@@ -187,7 +187,7 @@ export class VideoDownload {
       const destination = VideoPathManager.Instance.buildTMPDestination(videoFile.filename)
 
       if (videoFile.isHLS()) {
-        await makeHLSFileAvailable(this.video.getHLSPlaylist(), videoFile.filename, destination)
+        await makeHLSFileAvailable(this.video, videoFile.filename, destination)
       } else {
         await makeWebVideoFileAvailable(videoFile.filename, destination)
       }
@@ -197,7 +197,7 @@ export class VideoDownload {
 
     if (videoFile.isHLS()) {
       const { stream } = await getHLSFileReadStream({
-        playlist: this.video.getHLSPlaylist().withVideo(this.video),
+        video: this.video,
         filename: videoFile.filename,
         rangeHeader: undefined
       })
@@ -217,14 +217,14 @@ export class VideoDownload {
   // ---------------------------------------------------------------------------
 
   private async buildCoverInput () {
-    const preview = this.video.getPreview()
+    const thumbnail = this.video.getBestThumbnail()
 
-    if (this.video.isLocal()) return { coverPath: preview?.getPath() }
+    if (this.video.isLocal()) return { coverPath: thumbnail?.getFSPath() }
 
-    if (preview.fileUrl) {
-      const destination = VideoPathManager.Instance.buildTMPDestination(preview.filename)
+    if (thumbnail.fileUrl) {
+      const destination = VideoPathManager.Instance.buildTMPDestination(thumbnail.filename)
 
-      await doRequestAndSaveToFile(preview.fileUrl, destination)
+      await doRequestAndSaveToFile(thumbnail.fileUrl, destination)
 
       return { coverPath: destination, isTmpDestination: true }
     }

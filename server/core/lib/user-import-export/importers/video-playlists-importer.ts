@@ -8,7 +8,7 @@ import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { AbstractUserImporter } from './abstract-user-importer.js'
 import { sendCreateVideoPlaylist } from '@server/lib/activitypub/send/send-create.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
-import { updateLocalPlaylistMiniatureFromExisting } from '@server/lib/thumbnail.js'
+import { createLocalPlaylistThumbnailFromImage } from '@server/lib/thumbnail.js'
 import { CONSTRAINTS_FIELDS, USER_IMPORT } from '@server/initializers/constants.js'
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
 import { loadOrCreateVideoIfAllowedForUser } from '@server/lib/model-loaders/video.js'
@@ -122,7 +122,7 @@ export class VideoPlaylistsImporter extends AbstractUserImporter<VideoPlaylistsE
 
     if (!await this.isFileValidOrLog(thumbnailPath, CONSTRAINTS_FIELDS.VIDEO_PLAYLISTS.IMAGE.FILE_SIZE.max)) return undefined
 
-    const thumbnail = await updateLocalPlaylistMiniatureFromExisting({
+    const thumbnail = await createLocalPlaylistThumbnailFromImage({
       inputPath: thumbnailPath,
       playlist,
       automaticallyGenerated: false

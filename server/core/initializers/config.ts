@@ -15,6 +15,7 @@ import { IConfig } from 'config'
 import { createRequire } from 'module'
 import { dirname, join } from 'path'
 import { parseBytes, parseDurationToMs } from '../helpers/core-utils.js'
+import { sortBy } from '@peertube/peertube-core-utils'
 
 const require = createRequire(import.meta.url)
 let config: IConfig = require('config')
@@ -474,7 +475,7 @@ const CONFIG = {
     GENERATION_FROM_VIDEO: {
       FRAMES_TO_ANALYZE: config.get<number>('thumbnails.generation_from_video.frames_to_analyze')
     },
-    SIZES: config.get<{ width: number, height: number }[]>('thumbnails.sizes')
+    SIZES: sortBy(config.get<{ width: number, height: number }[]>('thumbnails.sizes'), 'width')
   },
   STATS: {
     REGISTRATION_REQUESTS: {
@@ -888,28 +889,6 @@ const CONFIG = {
         get ENABLED () {
           return config.get<boolean>('auto_blacklist.videos.of_users.enabled')
         }
-      }
-    }
-  },
-  CACHE: {
-    PREVIEWS: {
-      get SIZE () {
-        return config.get<number>('cache.previews.size')
-      }
-    },
-    VIDEO_CAPTIONS: {
-      get SIZE () {
-        return config.get<number>('cache.captions.size')
-      }
-    },
-    TORRENTS: {
-      get SIZE () {
-        return config.get<number>('cache.torrents.size')
-      }
-    },
-    STORYBOARDS: {
-      get SIZE () {
-        return config.get<number>('cache.storyboards.size')
       }
     }
   },

@@ -1,7 +1,5 @@
 import {
   NSFWFlag,
-  ThumbnailType,
-  ThumbnailType_Type,
   VideoChannelActivityAction,
   VideoImportCreate,
   VideoImportPayload,
@@ -41,7 +39,7 @@ import {
 import express from 'express'
 import { remove } from 'fs-extra/esm'
 import { getLocalVideoActivityPubUrl } from './activitypub/url.js'
-import { updateLocalVideoMiniatureFromExisting, updateLocalVideoMiniatureFromUrl } from './thumbnail.js'
+import { createLocalVideoThumbnailsFromUrl, createLocalVideoThumbnailsFromImage } from './thumbnail.js'
 import { createLocalCaption } from './video-captions.js'
 import { replaceChapters, replaceChaptersFromDescriptionIfNeeded } from './video-chapters.js'
 
@@ -49,15 +47,14 @@ import { replaceChapters, replaceChaptersFromDescriptionIfNeeded } from './video
 
 export async function insertFromImportIntoDB (parameters: {
   video: MVideoThumbnail
-  thumbnailModel: MThumbnail
-  previewModel: MThumbnail
+  thumbnails: MThumbnail[]
   videoChannel: MChannelAccountDefault
   tags: string[]
   videoImportAttributes: FilteredModelAttributes<VideoImportModel>
   user: MUserAccountId
   videoPasswords?: string[]
 }): Promise<MVideoImportFormattable> {
-  const { video, thumbnailModel, previewModel, videoChannel, tags, videoImportAttributes, user, videoPasswords } = parameters
+  const { video, thumbnails, videoChannel, tags, videoImportAttributes, user, videoPasswords } = parameters
 
   const videoImport = await sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
@@ -67,8 +64,9 @@ export async function insertFromImportIntoDB (parameters: {
     ) as (MVideoAccountDefault & MVideoWithBlacklistLight & MVideoTag & MVideoThumbnail)
     videoCreated.VideoChannel = videoChannel
 
-    if (thumbnailModel) await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
-    if (previewModel) await videoCreated.addAndSaveThumbnail(previewModel, t)
+    if (thumbnails.length !== 0) {
+      await videoCreated.replaceAndSaveThumbnails(thumbnails, t)
+    }
 
     if (videoCreated.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
       await VideoPasswordModel.addPasswords(videoPasswords, video.id, t)
@@ -158,7 +156,6 @@ export async function buildYoutubeDLImport (options: {
   channelSync?: MChannelSync
   importDataOverride?: Partial<VideoImportCreate>
   thumbnailFilePath?: string
-  previewFilePath?: string
 
   skipPublishedBeforeOrEq?: Date
 
@@ -171,7 +168,6 @@ export async function buildYoutubeDLImport (options: {
     channelSync,
     importDataOverride,
     thumbnailFilePath,
-    previewFilePath,
     user,
     skipPublishedBeforeOrEq,
     req,
@@ -220,24 +216,15 @@ export async function buildYoutubeDLImport (options: {
     importType: 'url'
   })
 
-  const thumbnailModel = await forgeThumbnail({
+  const thumbnails = await processThumbnails({
     inputPath: thumbnailFilePath,
     downloadUrl: youtubeDLInfo.thumbnailUrl,
-    video,
-    type: ThumbnailType.MINIATURE
-  })
-
-  const previewModel = await forgeThumbnail({
-    inputPath: previewFilePath,
-    downloadUrl: youtubeDLInfo.thumbnailUrl,
-    video,
-    type: ThumbnailType.PREVIEW
+    video
   })
 
   const videoImport = await insertFromImportIntoDB({
     video,
-    thumbnailModel,
-    previewModel,
+    thumbnails,
     videoChannel: channel,
     tags: importDataOverride?.tags || youtubeDLInfo.tags,
     user,
@@ -301,30 +288,30 @@ export async function buildYoutubeDLImport (options: {
 // Private
 // ---------------------------------------------------------------------------
 
-async function forgeThumbnail ({ inputPath, video, downloadUrl, type }: {
+async function processThumbnails (options: {
   inputPath?: string
   downloadUrl?: string
   video: MVideoThumbnail
-  type: ThumbnailType_Type
-}): Promise<MThumbnail> {
+}): Promise<MThumbnail[]> {
+  const { inputPath, downloadUrl, video } = options
+
   if (inputPath) {
-    return updateLocalVideoMiniatureFromExisting({
+    return createLocalVideoThumbnailsFromImage({
       inputPath,
       video,
-      type,
       automaticallyGenerated: false
     })
   }
 
   if (downloadUrl) {
     try {
-      return await updateLocalVideoMiniatureFromUrl({ downloadUrl, video, type })
+      return await createLocalVideoThumbnailsFromUrl({ downloadUrl, video })
     } catch (err) {
       logger.warn('Cannot process thumbnail %s from youtube-dl.', downloadUrl, { err })
     }
   }
 
-  return null
+  return []
 }
 
 async function processYoutubeSubtitles (youtubeDL: YoutubeDLWrapper, targetUrl: string, video: MVideo) {

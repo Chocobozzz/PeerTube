@@ -10,22 +10,6 @@ export class FFmpegImage {
     this.commandWrapper = new FFmpegCommandWrapper(options)
   }
 
-  processImage (options: {
-    path: string
-    destination: string
-    newSize?: { width: number, height: number }
-  }): Promise<void> {
-    const { path, destination, newSize } = options
-
-    const command = this.commandWrapper.buildCommand(path)
-
-    if (newSize) command.size(`${newSize.width ?? '?'}x${newSize.height ?? '?'}`)
-
-    command.output(destination)
-
-    return this.commandWrapper.runCommand({ silent: true })
-  }
-
   // ---------------------------------------------------------------------------
 
   async generateThumbnailFromVideo (options: {

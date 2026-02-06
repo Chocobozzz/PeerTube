@@ -106,24 +106,6 @@ export interface CustomConfig {
     }
   }
 
-  cache: {
-    previews: {
-      size: number
-    }
-
-    captions: {
-      size: number
-    }
-
-    torrents: {
-      size: number
-    }
-
-    storyboards: {
-      size: number
-    }
-  }
-
   signup: {
     enabled: boolean
     limit: number

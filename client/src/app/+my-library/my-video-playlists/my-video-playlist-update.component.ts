@@ -150,7 +150,8 @@ export class MyVideoPlaylistUpdateComponent extends MyVideoPlaylistEdit implemen
       videoChannelId: this.videoPlaylistToUpdate.videoChannel ? this.videoPlaylistToUpdate.videoChannel.id : null
     })
 
-    fetch(this.videoPlaylistToUpdate.thumbnailUrl)
+    // Keep it sync with image size set in the SASS file
+    fetch(this.videoPlaylistToUpdate.getThumbnailUrl(223))
       .then(response => response.blob())
       .then(data => {
         this.form.patchValue({

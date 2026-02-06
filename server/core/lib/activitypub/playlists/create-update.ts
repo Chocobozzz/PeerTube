@@ -5,7 +5,7 @@ import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { PeerTubeRequestError } from '@server/helpers/requests.js'
 import { CRAWL_REQUEST_CONCURRENCY } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
-import { updateRemotePlaylistMiniatureFromUrl } from '@server/lib/thumbnail.js'
+import { updateRemotePlaylistThumbnailFromUrl } from '@server/lib/thumbnail.js'
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { FilteredModelAttributes } from '@server/types/index.js'
@@ -130,12 +130,12 @@ async function updatePlaylistThumbnail (playlistObject: PlaylistObject, playlist
     let thumbnailModel: MThumbnail
 
     try {
-      thumbnailModel = await updateRemotePlaylistMiniatureFromUrl({ downloadUrl: playlistObject.icon.url, playlist })
+      thumbnailModel = updateRemotePlaylistThumbnailFromUrl({ fileUrl: playlistObject.icon.url, playlist })
       await playlist.setAndSaveThumbnail(thumbnailModel, undefined)
     } catch (err) {
       logger.warn('Cannot set thumbnail of %s.', playlistObject.id, { err, ...lTags(playlistObject.id, playlist.uuid, playlist.url) })
 
-      if (thumbnailModel) await thumbnailModel.removeThumbnail()
+      if (thumbnailModel) await thumbnailModel.removeFile()
     }
 
     return

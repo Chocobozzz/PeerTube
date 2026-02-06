@@ -58,7 +58,7 @@ export class VideoUploadComponent implements OnInit, OnDestroy, AfterViewInit, C
   readonly videoFileInput = viewChild<ElementRef<HTMLInputElement>>('videoFileInput')
 
   uploadingAudioFile = false
-  audioPreviewFile: File
+  audioThumbnailFile: File
 
   firstStep = true
   firstStepChannelId: number
@@ -164,11 +164,11 @@ export class VideoUploadComponent implements OnInit, OnDestroy, AfterViewInit, C
     this.firstStep = true
     this.videoEdit = undefined
     this.uploadingAudioFile = false
-    this.audioPreviewFile = undefined
+    this.audioThumbnailFile = undefined
   }
 
   uploadAudio () {
-    this.uploadFile(this.getInputVideoFile(), this.audioPreviewFile)
+    this.uploadFile(this.getInputVideoFile(), this.audioThumbnailFile)
   }
 
   getAudioUploadLabel () {
@@ -206,7 +206,7 @@ export class VideoUploadComponent implements OnInit, OnDestroy, AfterViewInit, C
     return this.videoFileInput().nativeElement.files[0]
   }
 
-  private uploadFile (file: File, previewfile?: File) {
+  private uploadFile (file: File, thumbnailfile?: File) {
     const serverConfig = this.serverService.getHTMLConfig()
 
     this.videoEdit = VideoEdit.createFromUpload(serverConfig, {
@@ -218,7 +218,7 @@ export class VideoUploadComponent implements OnInit, OnDestroy, AfterViewInit, C
 
     this.manageController.setConfig({ manageType: 'upload', serverConfig: this.serverService.getHTMLConfig() })
     this.manageController.setVideoEdit(this.videoEdit)
-    this.manageController.uploadNewVideo({ privacy: this.highestPrivacy(), file, previewfile })
+    this.manageController.uploadNewVideo({ privacy: this.highestPrivacy(), file, thumbnailfile })
     this.manageController.silentRedirectOnUploading(this.route)
 
     this.firstStep = false

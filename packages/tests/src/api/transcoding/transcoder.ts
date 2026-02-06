@@ -8,7 +8,7 @@ import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
-  makeGetRequest,
+  makeRawRequest,
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
@@ -306,7 +306,7 @@ describe('Test video transcoding', function () {
       it('Should merge an audio file with the preview file', async function () {
         this.timeout(60_000)
 
-        const attributes = { name: 'audio_with_preview', previewfile: 'custom-preview.jpg', fixture: 'sample.ogg' }
+        const attributes = { name: 'audio_with_preview', thumbnailfile: 'custom-thumbnail-big.jpg', fixture: 'sample.ogg' }
         await servers[1].videos.upload({ attributes, mode })
 
         await waitJobs(servers)
@@ -319,8 +319,9 @@ describe('Test video transcoding', function () {
 
           expect(videoDetails.files).to.have.lengthOf(1)
 
-          await makeGetRequest({ url: server.url, path: videoDetails.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
-          await makeGetRequest({ url: server.url, path: videoDetails.previewPath, expectedStatus: HttpStatusCode.OK_200 })
+          for (const t of video.thumbnails) {
+            await makeRawRequest({ url: t.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+          }
 
           const magnetUri = videoDetails.files[0].magnetUri
           expect(magnetUri).to.contain('.mp4')
@@ -343,8 +344,9 @@ describe('Test video transcoding', function () {
 
           expect(videoDetails.files).to.have.lengthOf(1)
 
-          await makeGetRequest({ url: server.url, path: videoDetails.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
-          await makeGetRequest({ url: server.url, path: videoDetails.previewPath, expectedStatus: HttpStatusCode.OK_200 })
+          for (const t of videoDetails.thumbnails) {
+            await makeRawRequest({ url: t.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+          }
 
           const magnetUri = videoDetails.files[0].magnetUri
           expect(magnetUri).to.contain('.mp4')
@@ -369,7 +371,7 @@ describe('Test video transcoding', function () {
           }
         })
 
-        const attributes = { name: 'audio_with_preview', previewfile: 'custom-preview.jpg', fixture: 'sample.ogg' }
+        const attributes = { name: 'audio_with_preview', thumbnailfile: 'custom-thumbnail-big.jpg', fixture: 'sample.ogg' }
         const { id } = await servers[1].videos.upload({ attributes, mode })
 
         await waitJobs(servers)

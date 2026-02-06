@@ -1,8 +1,6 @@
 import { buildAspectRatio } from '@peertube/peertube-core-utils'
 import { ffprobePromise, getChaptersFromContainer, getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
 import {
-  ThumbnailType,
-  ThumbnailType_Type,
   VideoImportPayload,
   VideoImportPreventExceptionResult,
   VideoImportState,
@@ -45,7 +43,7 @@ import { VideoImportModel } from '../../../models/video/video-import.js'
 import { VideoModel } from '../../../models/video/video.js'
 import { federateVideoIfNeeded } from '../../activitypub/videos/index.js'
 import { Notifier } from '../../notifier/index.js'
-import { generateLocalVideoMiniature } from '../../thumbnail.js'
+import { createLocalVideoThumbnailsFromVideo } from '../../thumbnail.js'
 import { JobQueue } from '../job-queue.js'
 
 async function processVideoImport (job: Job): Promise<VideoImportPreventExceptionResult> {
@@ -206,7 +204,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
 
       tmpVideoPath = null // This path is not used anymore
 
-      const thumbnails = await generateMiniature({ videoImportWithFiles, videoFile, ffprobe })
+      const thumbnails = await generateThumbnails({ videoImportWithFiles, videoFile, ffprobe })
 
       // Create torrent
       await createTorrentAndSetInfoHash(videoImportWithFiles.Video, videoFile)
@@ -225,8 +223,8 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
           video.aspectRatio = buildAspectRatio({ width: videoFile.width, height: videoFile.height })
           await video.save({ transaction: t })
 
-          for (const thumbnail of thumbnails) {
-            await video.addAndSaveThumbnail(thumbnail, t)
+          if (thumbnails.length !== 0) {
+            await video.replaceAndSaveThumbnails(thumbnails, t)
           }
 
           await replaceChaptersIfNotExist({ video, chapters: containerChapters, transaction: t })
@@ -273,29 +271,16 @@ async function refreshVideoImportFromDB (videoImport: MVideoImportDefault, video
   return Object.assign(videoImport, { Video: videoWithFiles })
 }
 
-async function generateMiniature (options: {
+async function generateThumbnails (options: {
   videoImportWithFiles: MVideoImportDefaultFiles
   videoFile: MVideoFile
   ffprobe: FfprobeData
 }) {
   const { ffprobe, videoFile, videoImportWithFiles } = options
 
-  const thumbnailsToGenerate: ThumbnailType_Type[] = []
+  if (videoImportWithFiles.Video.Thumbnails.length !== 0) return []
 
-  if (!videoImportWithFiles.Video.getMiniature()) {
-    thumbnailsToGenerate.push(ThumbnailType.MINIATURE)
-  }
-
-  if (!videoImportWithFiles.Video.getPreview()) {
-    thumbnailsToGenerate.push(ThumbnailType.PREVIEW)
-  }
-
-  return generateLocalVideoMiniature({
-    video: videoImportWithFiles.Video,
-    videoFile,
-    types: thumbnailsToGenerate,
-    ffprobe
-  })
+  return createLocalVideoThumbnailsFromVideo({ video: videoImportWithFiles.Video, videoFile, ffprobe })
 }
 
 async function afterImportSuccess (options: {

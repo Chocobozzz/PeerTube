@@ -3,12 +3,14 @@ import { buildPlaylistWatchPath, peertubeTranslate } from '@peertube/peertube-co
 import {
   AccountSummary,
   VideoPlaylist as ServerVideoPlaylist,
+  Thumbnail,
   VideoChannelSummary,
   VideoConstant,
   VideoPlaylistPrivacyType,
   VideoPlaylistType,
   VideoPlaylistType_Type
 } from '@peertube/peertube-models'
+import { findAppropriateImageFileUrl } from '@root-helpers/images'
 import { Actor } from '../shared-main/account/actor.model'
 
 export class VideoPlaylist implements ServerVideoPlaylist {
@@ -35,6 +37,8 @@ export class VideoPlaylist implements ServerVideoPlaylist {
 
   videoChannelPosition: number
   videoChannel?: VideoChannelSummary
+
+  thumbnails: Thumbnail[]
 
   thumbnailPath: string
   thumbnailUrl: string
@@ -63,12 +67,6 @@ export class VideoPlaylist implements ServerVideoPlaylist {
     this.description = hash.description
     this.privacy = hash.privacy
 
-    this.thumbnailPath = hash.thumbnailPath
-
-    this.thumbnailUrl = this.thumbnailPath
-      ? hash.thumbnailUrl || (getAPIUrl() + hash.thumbnailPath)
-      : getAPIUrl() + '/client/assets/images/default-playlist.jpg'
-
     this.embedPath = hash.embedPath
     this.embedUrl = hash.embedUrl || (getOriginUrl() + hash.embedPath)
 
@@ -94,5 +92,11 @@ export class VideoPlaylist implements ServerVideoPlaylist {
     if (this.type.id === VideoPlaylistType.WATCH_LATER) {
       this.displayName = peertubeTranslate(this.displayName, translations)
     }
+  }
+
+  getThumbnailUrl (width: number) {
+    const defaultUrl = getAPIUrl() + '/client/assets/images/default-playlist.jpg'
+
+    return findAppropriateImageFileUrl(this.thumbnails, width) || defaultUrl
   }
 }

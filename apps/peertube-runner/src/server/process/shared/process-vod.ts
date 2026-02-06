@@ -169,7 +169,7 @@ export async function processAudioMergeTranscoding (options: ProcessOptions<Runn
 
   let ffmpegProgress: number
   let audioPath: string
-  let previewPath: string
+  let thumbnailPath: string
 
   const outputPath = join(ConfigManager.Instance.getTranscodingDirectory(), `output-${buildUUID()}.mp4`)
 
@@ -187,7 +187,7 @@ export async function processAudioMergeTranscoding (options: ProcessOptions<Runn
     )
 
     audioPath = await downloadInputFile({ url: payload.input.audioFileUrl, runnerToken, job })
-    previewPath = await downloadInputFile({ url: payload.input.previewFileUrl, runnerToken, job })
+    thumbnailPath = await downloadInputFile({ url: payload.input.previewFileUrl, runnerToken, job })
 
     logger.info(
       `Downloaded input files ${payload.input.audioFileUrl} and ${payload.input.previewFileUrl} ` +
@@ -204,7 +204,7 @@ export async function processAudioMergeTranscoding (options: ProcessOptions<Runn
       type: 'merge-audio',
 
       audioPath,
-      videoInputPath: previewPath,
+      videoInputPath: thumbnailPath,
 
       outputPath,
 
@@ -227,7 +227,7 @@ export async function processAudioMergeTranscoding (options: ProcessOptions<Runn
     })
   } finally {
     if (audioPath) await remove(audioPath)
-    if (previewPath) await remove(previewPath)
+    if (thumbnailPath) await remove(thumbnailPath)
     if (outputPath) await remove(outputPath)
     if (updateProgressInterval) clearInterval(updateProgressInterval)
   }

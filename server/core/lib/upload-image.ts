@@ -1,13 +1,12 @@
 import { LogoType, UploadImageType, UploadImageType_Type } from '@peertube/peertube-models'
 import { buildUUID, getLowercaseExtension } from '@peertube/peertube-node-utils'
-import { buildImageSize } from '@server/helpers/image-utils.js'
+import { buildImageSize, processImage } from '@server/helpers/image-utils.js'
 import { UploadImageModel } from '@server/models/application/upload-image.js'
 import { copy, remove } from 'fs-extra/esm'
 import { retryTransactionWrapper } from '../helpers/database-utils.js'
 import { UPLOAD_IMAGES_SIZE } from '../initializers/constants.js'
 import { sequelizeTypescript } from '../initializers/database.js'
 import { MActorUploadImages } from '../types/models/index.js'
-import { processImageFromWorker } from './worker/parent-process.js'
 
 export async function replaceUploadImage (options: {
   actor: MActorUploadImages
@@ -49,7 +48,7 @@ async function generateImageSizes (imagePath: string, type: UploadImageType_Type
   if (imagePath.endsWith('.svg')) {
     const extension = getLowercaseExtension(imagePath)
     const imageName = buildUUID() + extension
-    const destination = UploadImageModel.getPathOf(imageName)
+    const destination = UploadImageModel.getFSPathOf(imageName)
 
     await copy(imagePath, destination)
 
@@ -70,9 +69,9 @@ async function generateImageSize (options: {
 
   const extension = getLowercaseExtension(imagePath)
   const imageName = buildUUID() + extension
-  const destination = UploadImageModel.getPathOf(imageName)
+  const destination = UploadImageModel.getFSPathOf(imageName)
 
-  await processImageFromWorker({ path: imagePath, destination, newSize: imageSize, keepOriginal: true })
+  await processImage({ path: imagePath, destination, newSize: imageSize, keepOriginal: true })
 
   return { imageName, imageSize }
 }

@@ -3,7 +3,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { CanComponentDeactivate } from '@app/core'
-import { CACHE_SIZE_VALIDATOR, SERVICES_TWITTER_USERNAME_VALIDATOR } from '@app/shared/form-validators/custom-config-validators'
+import { SERVICES_TWITTER_USERNAME_VALIDATOR } from '@app/shared/form-validators/custom-config-validators'
 import {
   BuildFormArgumentTyped,
   FormDefaultTyped,
@@ -20,21 +20,6 @@ type Form = {
   services: FormGroup<{
     twitter: FormGroup<{
       username: FormControl<string>
-    }>
-  }>
-
-  cache: FormGroup<{
-    previews: FormGroup<{
-      size: FormControl<number>
-    }>
-    captions: FormGroup<{
-      size: FormControl<number>
-    }>
-    torrents: FormGroup<{
-      size: FormControl<number>
-    }>
-    storyboards: FormGroup<{
-      size: FormControl<number>
     }>
   }>
 }
@@ -84,20 +69,6 @@ export class AdminConfigAdvancedComponent implements OnInit, OnDestroy, CanCompo
         twitter: {
           username: SERVICES_TWITTER_USERNAME_VALIDATOR
         }
-      },
-      cache: {
-        previews: {
-          size: CACHE_SIZE_VALIDATOR
-        },
-        captions: {
-          size: CACHE_SIZE_VALIDATOR
-        },
-        torrents: {
-          size: CACHE_SIZE_VALIDATOR
-        },
-        storyboards: {
-          size: CACHE_SIZE_VALIDATOR
-        }
       }
     }
 
@@ -112,10 +83,6 @@ export class AdminConfigAdvancedComponent implements OnInit, OnDestroy, CanCompo
     this.form = form
     this.formErrors = formErrors
     this.validationMessages = validationMessages
-  }
-
-  getCacheSize (type: 'captions' | 'previews' | 'torrents' | 'storyboards') {
-    return this.form.value.cache[type].size
   }
 
   save () {

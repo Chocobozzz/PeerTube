@@ -378,20 +378,6 @@ function customConfig (): CustomConfig {
         }
       }
     },
-    cache: {
-      previews: {
-        size: CONFIG.CACHE.PREVIEWS.SIZE
-      },
-      captions: {
-        size: CONFIG.CACHE.VIDEO_CAPTIONS.SIZE
-      },
-      torrents: {
-        size: CONFIG.CACHE.TORRENTS.SIZE
-      },
-      storyboards: {
-        size: CONFIG.CACHE.STORYBOARDS.SIZE
-      }
-    },
     signup: {
       enabled: CONFIG.SIGNUP.ENABLED,
       limit: CONFIG.SIGNUP.LIMIT,

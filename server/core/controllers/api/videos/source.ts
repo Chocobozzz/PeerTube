@@ -3,7 +3,7 @@ import { HttpStatusCode, VideoChannelActivityAction, VideoState } from '@peertub
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { CreateJobArgument, CreateJobOptions, JobQueue } from '@server/lib/job-queue/index.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
-import { regenerateMiniaturesIfNeeded } from '@server/lib/thumbnail.js'
+import { regenerateLocalVideoThumbnailsFromVideoIfNeeded } from '@server/lib/thumbnail.js'
 import { setupUploadResumableRoutes } from '@server/lib/uploadx.js'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
 import { regenerateTranscriptionTaskIfNeeded } from '@server/lib/video-captions.js'
@@ -162,7 +162,7 @@ async function replaceVideoSourceResumable (req: express.Request, res: express.R
       createdAt: inputFileUpdatedAt
     })
 
-    await regenerateMiniaturesIfNeeded(video, res.locals.ffprobe)
+    await regenerateLocalVideoThumbnailsFromVideoIfNeeded(video, res.locals.ffprobe)
     await video.VideoChannel.setAsUpdated()
 
     await addVideoJobsAfterUpload(video, videoFile.withVideoOrPlaylist(video))

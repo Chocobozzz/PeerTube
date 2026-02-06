@@ -10,7 +10,7 @@ import { logger } from '@server/helpers/logger.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { MVideo } from '@server/types/models/index.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
-import { generateRunnerTranscodingVideoInputFileUrl, generateRunnerTranscodingVideoPreviewFileUrl } from '../runner-urls.js'
+import { generateRunnerTranscodingVideoInputFileUrl, generateRunnerTranscodingVideoThumbnailFileUrl } from '../runner-urls.js'
 import { AbstractVODTranscodingJobHandler } from './abstract-vod-transcoding-job-handler.js'
 import { loadRunnerVideo, onVODWebVideoOrAudioMergeTranscodingJob } from './shared/utils.js'
 
@@ -36,7 +36,7 @@ export class VODAudioMergeTranscodingJobHandler
     const payload: RunnerJobVODAudioMergeTranscodingPayload = {
       input: {
         audioFileUrl: generateRunnerTranscodingVideoInputFileUrl(jobUUID, video.uuid),
-        previewFileUrl: generateRunnerTranscodingVideoPreviewFileUrl(jobUUID, video.uuid)
+        previewFileUrl: generateRunnerTranscodingVideoThumbnailFileUrl(jobUUID, video.uuid)
       },
       output: {
         resolution,

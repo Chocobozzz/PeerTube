@@ -1,7 +1,13 @@
 import { FileStorage, VideoStateType } from '@peertube/peertube-models'
 import { logger, LoggerTags, loggerTagsFactory } from '@server/helpers/logger.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { P2P_MEDIA_LOADER_PEER_VERSION } from '@server/initializers/constants.js'
 import {
+  buildObjectStoragePublicFileUrl,
+  generateCaptionObjectStorageKey,
+  generateHLSObjectStorageKey,
+  generateOriginalVideoObjectStorageKey,
+  generateWebVideoObjectStorageKey,
   makeCaptionFileAvailable,
   makeHLSFileAvailable,
   makeOriginalFileAvailable,
@@ -96,9 +102,11 @@ async function moveVideoSourceFile (source: MVideoSource) {
     VideoPathManager.Instance.getFSOriginalVideoFilePath(source.keptOriginalFilename)
   )
 
-  const oldFileUrl = source.fileUrl
+  const oldFileUrl = buildObjectStoragePublicFileUrl({
+    bucket: CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES,
+    key: generateOriginalVideoObjectStorageKey(source.keptOriginalFilename)
+  })
 
-  source.fileUrl = null
   source.storage = FileStorage.FILE_SYSTEM
   await source.save()
 
@@ -122,8 +130,6 @@ async function moveWebVideoFiles (video: MVideoWithAllFiles) {
 
 async function moveHLSFiles (video: MVideoWithAllFiles) {
   for (const playlist of video.VideoStreamingPlaylists) {
-    const playlistWithVideo = playlist.withVideo(video)
-
     let updatedFile = false
 
     for (const file of playlist.VideoFiles) {
@@ -133,36 +139,34 @@ async function moveHLSFiles (video: MVideoWithAllFiles) {
 
       // Resolution playlist
       const playlistFilename = getHLSResolutionPlaylistFilename(file.filename)
-      await makeHLSFileAvailable(playlistWithVideo, playlistFilename, join(getHLSDirectory(video), playlistFilename))
-      await makeHLSFileAvailable(playlistWithVideo, file.filename, join(getHLSDirectory(video), file.filename))
+      await makeHLSFileAvailable(video, playlistFilename, join(getHLSDirectory(video), playlistFilename))
+      await makeHLSFileAvailable(video, file.filename, join(getHLSDirectory(video), file.filename))
 
       await onVideoFileMoved({
-        videoOrPlaylist: playlistWithVideo,
+        videoOrPlaylist: playlist.withVideo(video),
         file,
         objetStorageRemover: async () => {
-          await removeHLSFileObjectStorageByFilename(playlistWithVideo, playlistFilename)
-          await removeHLSFileObjectStorageByFilename(playlistWithVideo, file.filename)
+          await removeHLSFileObjectStorageByFilename(video, playlistFilename)
+          await removeHLSFileObjectStorageByFilename(video, file.filename)
         }
       })
     }
 
-    if (playlistWithVideo.storage !== FileStorage.FILE_SYSTEM) {
-      await makeHLSFileAvailable(playlistWithVideo, playlist.playlistFilename, join(getHLSDirectory(video), playlist.playlistFilename))
+    if (playlist.storage !== FileStorage.FILE_SYSTEM) {
+      await makeHLSFileAvailable(video, playlist.playlistFilename, join(getHLSDirectory(video), playlist.playlistFilename))
 
       await makeHLSFileAvailable(
-        playlistWithVideo,
+        video,
         playlist.segmentsSha256Filename,
         join(getHLSDirectory(video), playlist.segmentsSha256Filename)
       )
 
-      playlist.playlistUrl = null
-      playlist.segmentsSha256Url = null
       playlist.storage = FileStorage.FILE_SYSTEM
 
       await playlist.save()
 
-      await removeHLSFileObjectStorageByFilename(playlistWithVideo, playlist.playlistFilename)
-      await removeHLSFileObjectStorageByFilename(playlistWithVideo, playlist.segmentsSha256Filename)
+      await removeHLSFileObjectStorageByFilename(video, playlist.playlistFilename)
+      await removeHLSFileObjectStorageByFilename(video, playlist.segmentsSha256Filename)
     }
 
     if (updatedFile === true) {
@@ -181,9 +185,11 @@ async function onVideoFileMoved (options: {
 }) {
   const { videoOrPlaylist, file, objetStorageRemover } = options
 
-  const oldFileUrl = file.fileUrl
+  const oldFileUrl = buildObjectStoragePublicFileUrl({
+    bucket: CONFIG.OBJECT_STORAGE.WEB_VIDEOS,
+    key: generateWebVideoObjectStorageKey(file.filename)
+  })
 
-  file.fileUrl = null
   file.storage = FileStorage.FILE_SYSTEM
 
   await updateTorrentMetadata(videoOrPlaylist, file)
@@ -200,12 +206,14 @@ async function moveCaptionFiles (captions: MVideoCaption[], hls: MStreamingPlayl
 
   for (const caption of captions) {
     if (caption.storage === FileStorage.OBJECT_STORAGE) {
-      const oldFileUrl = caption.fileUrl
+      const oldFileUrl = buildObjectStoragePublicFileUrl({
+        bucket: CONFIG.OBJECT_STORAGE.CAPTIONS,
+        key: generateCaptionObjectStorageKey(caption.filename)
+      })
 
       await makeCaptionFileAvailable(caption.filename, caption.getFSFilePath())
 
       // Assign new values before building the m3u8 file
-      caption.fileUrl = null
       caption.storage = FileStorage.FILE_SYSTEM
 
       await caption.save()
@@ -214,22 +222,25 @@ async function moveCaptionFiles (captions: MVideoCaption[], hls: MStreamingPlayl
       await removeCaptionObjectStorage(caption)
     }
 
-    if (hls && (!caption.m3u8Filename || caption.m3u8Url)) {
+    if (hls) {
       hlsUpdated = true
 
-      const oldM3U8Url = caption.m3u8Url
+      const oldM3U8Url = buildObjectStoragePublicFileUrl({
+        bucket: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS,
+        key: generateHLSObjectStorageKey(hls.Video, caption.m3u8Filename)
+      })
+
       const oldM3U8Filename = caption.m3u8Filename
 
       // Caption link has been updated, so we must also update the HLS caption playlist
       caption.m3u8Filename = await upsertCaptionPlaylistOnFS(caption, hls.Video)
-      caption.m3u8Url = null
 
       await caption.save()
 
-      if (oldM3U8Url) {
+      if (oldM3U8Filename) {
         logger.debug(`Removing video caption playlist file ${oldM3U8Url} because it's now on file system`, lTagsBase())
 
-        await removeHLSFileObjectStorageByFilename(hls, oldM3U8Filename)
+        await removeHLSFileObjectStorageByFilename(hls.Video, oldM3U8Filename)
       }
     }
   }

@@ -107,6 +107,7 @@ describe('Test index search', function () {
       expect(video.licence.label).to.equal('Attribution - Share Alike')
       expect(video.privacy.label).to.equal('Public')
       expect(video.duration).to.equal(113)
+      // eslint-disable-next-line @typescript-eslint/no-deprecated
       expect(video.thumbnailUrl.startsWith('https://framatube.org/lazy-static/thumbnails')).to.be.true
 
       expect(video.account.host).to.equal('framatube.org')
@@ -375,6 +376,7 @@ describe('Test index search', function () {
       const videoPlaylist = body.data[0]
 
       expect(videoPlaylist.url).to.equal('https://peertube2.cpy.re/videos/watch/playlist/73804a40-da9a-40c2-b1eb-2c6d9eec8f0a')
+      // eslint-disable-next-line @typescript-eslint/no-deprecated
       expect(videoPlaylist.thumbnailUrl).to.exist
       expect(videoPlaylist.embedUrl).to.equal('https://peertube2.cpy.re/video-playlists/embed/fgei1ws1oa6FCaJ2qZPG29')
 

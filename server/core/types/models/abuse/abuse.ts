@@ -43,7 +43,15 @@ export type MVideoAbuseFormattable =
     'Video',
     Pick<
       MVideoAccountLightBlacklistAllFiles,
-      'id' | 'uuid' | 'name' | 'nsfw' | 'getMiniature' | 'getMiniatureStaticPath' | 'isBlacklisted' | 'VideoChannel' | 'Thumbnails'
+      | 'id'
+      | 'uuid'
+      | 'name'
+      | 'nsfw'
+      | 'isBlacklisted'
+      | 'VideoChannel'
+      | 'Thumbnails'
+      | 'getSmallestThumbnail'
+      | 'getSmallestThumbnailStaticPath'
     >
   >
 

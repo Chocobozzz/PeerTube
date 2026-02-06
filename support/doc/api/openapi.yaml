@@ -3130,7 +3130,8 @@ paths:
                   type: string
                   format: binary
                 previewfile:
-                  description: Video preview file
+                  description: Deprecated in PeerTube v8.1, use thumbnailfile instead
+                  deprecated: true
                   type: string
                   format: binary
                 category:
@@ -3724,7 +3725,8 @@ paths:
                   type: string
                   format: binary
                 previewfile:
-                  description: Live video/replay preview file
+                  description: Deprecated in PeerTube v8.1, use thumbnailfile instead
+                  deprecated: true
                   type: string
                   format: binary
                 privacy:
@@ -8898,6 +8900,14 @@ components:
           nullable: true
           allOf:
             - $ref: '#/components/schemas/Video'
+    Thumbnail:
+      properties:
+        fileUrl:
+          type: string
+        width:
+          type: integer
+        height:
+          type: integer
     VideoFile:
       properties:
         id:
@@ -9088,11 +9098,17 @@ components:
           minLength: 3
           maxLength: 120
         thumbnailPath:
+          description: Deprecated in PeerTube v8.1, use thumbnails instead
+          deprecated: true
           type: string
-          example: /lazy-static/thumbnails/a65bc12f-9383-462e-81ae-8207e8b434ee.jpg
         previewPath:
+          description: Deprecated in PeerTube v8.1, use thumbnails instead
+          deprecated: true
           type: string
-          example: /lazy-static/previews/a65bc12f-9383-462e-81ae-8207e8b434ee.jpg
+        thumbnails:
+          type: array
+          items:
+            $ref: '#/components/schemas/Thumbnail'
         embedPath:
           type: string
           example: /videos/embed/a65bc12f-9383-462e-81ae-8207e8b434ee
@@ -9423,7 +9439,13 @@ components:
             blacklisted:
               type: boolean
             thumbnailPath:
+              description: Deprecated in PeerTube v8.1, use thumbnails instead
+              deprecated: true
               type: string
+            thumbnails:
+              type: array
+              items:
+                $ref: '#/components/schemas/Thumbnail'
             channel:
               $ref: '#/components/schemas/VideoChannel'
         createdAt:
@@ -9505,7 +9527,13 @@ components:
           type: integer
           minimum: 0
         thumbnailPath:
+          description: Deprecated in PeerTube v8.1, use thumbnails instead
+          deprecated: true
           type: string
+        thumbnails:
+          type: array
+          items:
+            $ref: '#/components/schemas/Thumbnail'
         privacy:
           $ref: '#/components/schemas/VideoPlaylistPrivacyConstant'
         type:
@@ -10787,7 +10815,8 @@ components:
           type: string
           format: binary
         previewfile:
-          description: Video preview file
+          description: Deprecated in PeerTube v8.1, use thumbnailfile instead
+          deprecated: true
           type: string
           format: binary
         videoPasswords:
@@ -10823,7 +10852,8 @@ components:
               type: string
               format: binary
             previewfile:
-              description: Video preview file
+              description: Deprecated in PeerTube v8.1, use thumbnailfile instead
+              deprecated: true
               type: string
               format: binary
     VideoUploadResponse:
