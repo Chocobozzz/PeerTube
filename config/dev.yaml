@@ -126,6 +126,7 @@ federation:
 
 views:
   videos:
+    local_buffer_update_interval: '5 seconds'
     remote:
       max_age: -1
 

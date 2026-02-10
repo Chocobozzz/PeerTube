@@ -1,6 +1,7 @@
 import { pick } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
+  VideoDownloadStatsTimeserieMetric,
   VideoStatsOverall,
   VideoStatsRetention,
   VideoStatsTimeserie,
@@ -53,7 +54,7 @@ export class VideoStatsCommand extends AbstractCommand {
   getTimeserieStats (
     options: OverrideCommandOptions & {
       videoId: number | string
-      metric: VideoStatsTimeserieMetric
+      metric: VideoStatsTimeserieMetric | VideoDownloadStatsTimeserieMetric
       startDate?: Date
       endDate?: Date
     }
