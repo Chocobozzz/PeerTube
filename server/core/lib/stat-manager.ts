@@ -47,7 +47,7 @@ class StatsManager {
   }
 
   async getStats () {
-    const { totalLocalVideos, totalLocalVideoViews, totalVideos } = await VideoModel.getStats()
+    const { totalLocalVideos, totalLocalVideoViews, totalLocalVideoDownloads, totalVideos } = await VideoModel.getStats()
     const { totalLocalVideoComments, totalVideoComments } = await VideoCommentModel.getStats()
     const {
       totalUsers,
@@ -85,6 +85,7 @@ class StatsManager {
 
       totalLocalVideos,
       totalLocalVideoViews,
+      totalLocalVideoDownloads,
       totalLocalVideoComments,
       totalLocalVideoFilesSize,
 

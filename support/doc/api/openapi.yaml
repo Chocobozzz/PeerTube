@@ -10237,6 +10237,9 @@ components:
         totalLocalVideoViews:
           type: number
           description: Total video views made on the instance
+        totalLocalVideoDownloads:
+          type: number
+          description: Total video downloads made on the instance
         totalLocalVideoComments:
           type: number
           description: Total comments made by local users
