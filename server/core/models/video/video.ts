@@ -1478,7 +1478,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     // Sequelize could return null...
     if (!totalLocalVideoViews) totalLocalVideoViews = 0
 
-    let totalLocalVideoDownloads = await VideoModel.sum('downloads', {
+    const totalLocalVideoDownloads = await VideoModel.sum('downloads', {
       where: {
         remote: false
       }

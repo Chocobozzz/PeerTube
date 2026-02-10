@@ -104,7 +104,7 @@ async function getTimeseriesStats (req: express.Request, res: express.Response) 
   switch (metric) {
     case "downloads":
       handler = VideoDownloadModel.getTimeserieStats
-      break;
+      break
     default:
       handler = LocalVideoViewerModel.getTimeserieStats
   }

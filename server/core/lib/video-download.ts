@@ -68,7 +68,7 @@ export class VideoDownload {
 
           logger.info(`Mux ended for video ${this.video.url}`, { inputs: this.inputsToLog(), ...lTags(this.video.uuid) })
 
-          VideoDownloadStats.add({video: this.video});
+          await VideoDownloadStats.add({video: this.video})
 
           res()
         } catch (err) {

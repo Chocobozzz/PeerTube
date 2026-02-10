@@ -21,49 +21,49 @@ describe("Test video downloads counters", function() {
 
 	async function upload(): Promise < string > {
 		return new Promise(async (resolve) => {
-			const { uuid } = await server.videos.quickUpload({ name: "video" });
-			await waitJobs(server);
-			resolve(uuid);
-		});
+			const { uuid } = await server.videos.quickUpload({ name: "video" })
+			await waitJobs(server)
+			resolve(uuid)
+		})
 	}
 
 	it("Should count downloads", async function() {
-		const videoId = await upload();
-		const video = await server.videos.getWithToken({ id: videoId });
-		const videoFileIds = [video.files[0].id];
+		const videoId = await upload()
+		const video = await server.videos.getWithToken({ id: videoId })
+		const videoFileIds = [ video.files[0].id ]
 
 		await server.videos.generateDownload({
 			videoId,
 			videoFileIds,
-		});
-		await processDownloadsStats([server]);
+		})
+		await processDownloadsStats([ server ])
 
-		expect((await server.videos.get({ id: videoId })).downloads).to.equal(1);
-	});
+		expect((await server.videos.get({ id: videoId })).downloads).to.equal(1)
+	})
 
 	it("Should return time-series for downloads stats", async function() {
-		const videoId = await upload();
-		const video = await server.videos.getWithToken({ id: videoId });
-		const videoFileIds = [video.files[0].id];
+		const videoId = await upload()
+		const video = await server.videos.getWithToken({ id: videoId })
+		const videoFileIds = [ video.files[0].id ]
 
 		await server.videos.generateDownload({
 			videoId,
 			videoFileIds,
-		});
-		await processDownloadsStats([server]);
+		})
+		await processDownloadsStats([ server ])
 
-		const startDate = new Date();
-		startDate.setSeconds(0);
-		startDate.setMilliseconds(0);
+		const startDate = new Date()
+		startDate.setSeconds(0)
+		startDate.setMilliseconds(0)
 
 		const res = await server.videoStats.getTimeserieStats({
 			videoId,
 			metric: "downloads",
-		});
+		})
 		const count = res.data.find(
 			(e) => e.date === startDate.toISOString(),
-		).value;
+		).value
 
-		expect(count).to.equal(1);
-	});
-});
+		expect(count).to.equal(1)
+	})
+})

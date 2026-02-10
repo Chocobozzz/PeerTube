@@ -1,31 +1,31 @@
-import { AllowNull, BelongsTo, Column, DataType, ForeignKey, Table, } from "sequelize-typescript";
-import { VideoModel } from "../video/video.js";
-import { SequelizeModel } from "../shared/sequelize-type.js";
-import { MVideo } from "@server/types/models/index.js";
-import { VideoDownloadStatsTimeserieMetric, VideoStatsTimeserie } from "@peertube/peertube-models";
-import { buildGroupByAndBoundaries } from "@server/lib/timeserie.js";
-import { QueryTypes } from "sequelize";
+import { AllowNull, BelongsTo, Column, DataType, ForeignKey, Table, } from "sequelize-typescript"
+import { VideoModel } from "../video/video.js"
+import { SequelizeModel } from "../shared/sequelize-type.js"
+import { MVideo } from "@server/types/models/index.js"
+import { VideoDownloadStatsTimeserieMetric, VideoStatsTimeserie } from "@peertube/peertube-models"
+import { buildGroupByAndBoundaries } from "@server/lib/timeserie.js"
+import { QueryTypes } from "sequelize"
 
 @Table({
   tableName: "videoDownload",
   createdAt: false,
   updatedAt: false,
-  indexes: [{
-      fields: ["videoId"],
+  indexes: [ {
+      fields: [ "videoId" ],
     },
     {
-      fields: ["startDate"],
+      fields: [ "startDate" ],
     },
   ],
 })
 export class VideoDownloadModel extends SequelizeModel < VideoDownloadModel > {
   @AllowNull(false)
   @Column(DataType.DATE)
-  declare startDate: Date;
+  declare startDate: Date
 
   @AllowNull(false)
   @Column(DataType.DATE)
-  declare endDate: Date;
+  declare endDate: Date
 
   @AllowNull(false)
   @Column
@@ -33,7 +33,7 @@ export class VideoDownloadModel extends SequelizeModel < VideoDownloadModel > {
 
   @ForeignKey(() => VideoModel)
   @Column
-  declare videoId: number;
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -41,7 +41,7 @@ export class VideoDownloadModel extends SequelizeModel < VideoDownloadModel > {
     },
     onDelete: "CASCADE",
   })
-  declare Video: Awaited < VideoModel > ;
+  declare Video: Awaited < VideoModel > 
 
   static async getTimeserieStats (options: {
     video: MVideo
