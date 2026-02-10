@@ -1,23 +1,23 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { PeerTubeServer, waitJobs } from "@peertube/peertube-server-commands";
+import { PeerTubeServer, waitJobs } from "@peertube/peertube-server-commands"
 import {
 	prepareDownloadsServer,
 	processDownloadsStats,
-} from "@tests/shared/downloads.js";
-import { Promise } from "bluebird";
-import { expect } from "chai";
+} from "@tests/shared/downloads.js"
+import { Promise } from "bluebird"
+import { expect } from "chai"
 
 describe("Test video downloads counters", function() {
-	let server: PeerTubeServer;
+	let server: PeerTubeServer
 
 	before(async function() {
-		this.timeout(120000);
+		this.timeout(120000)
 
-		server = await prepareDownloadsServer();
+		server = await prepareDownloadsServer()
 
-		this.timeout(120000);
-	});
+		this.timeout(120000)
+	})
 
 	async function upload(): Promise < string > {
 		return new Promise(async (resolve) => {
