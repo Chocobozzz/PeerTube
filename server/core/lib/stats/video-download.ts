@@ -10,106 +10,105 @@ const lTags = loggerTagsFactory("downloads");
 const redis_scope = "download";
 
 type DownloadStats = {
-	videoId: number;
-	downloadedAt: number; // Date.getTime()
+  videoId: number;
+  downloadedAt: number; // Date.getTime()
 };
 
 export class VideoDownloadStats {
+  /**
+   * Record a video download into Redis
+   */
+  static async add({ video }: { video: MVideoThumbnail }) {
+    const sessionId = await generateRandomString(32);
+    const videoId = video.id;
+
+    const stats: DownloadStats = {
+      videoId,
+      downloadedAt: new Date().getTime(),
+    };
+
+    try {
+      await Redis.Instance.setStats(redis_scope, sessionId, videoId, stats);
+    } catch (err) {
+      logger.error("Cannot write download into redis", {
+        sessionId,
+        videoId,
+        stats,
+        err,
+      });
+    }
+  }
 
   /**
-  * Record a video download into Redis
-  */
-	static async add({ video }: { video: MVideoThumbnail }) {
-		const sessionId = await generateRandomString(32);
-		const videoId = video.id;
+   * Aggregate video downloads from Redis into SQL database
+   */
+  static async save() {
+    logger.debug("Saving download stats to DB", lTags());
 
-		const stats: DownloadStats = {
-			videoId,
-			downloadedAt: new Date().getTime(),
-		};
+    const keys = await Redis.Instance.getStatsKeys(redis_scope);
+    if (keys.length === 0) return;
 
-		try {
-			await Redis.Instance.setStats(redis_scope, sessionId, videoId, stats);
-		} catch (err) {
-			logger.error("Cannot write download into redis", {
-				sessionId,
-				videoId,
-				stats,
-				err,
-			});
-		}
-	}
+    logger.debug("Processing %d video download(s)", keys.length);
 
-  /**
-  * Aggregate video downloads from Redis into SQL database
-  */
-	static async save() {
-		logger.debug("Saving download stats to DB", lTags());
+    for (const key of keys) {
+      const stats: DownloadStats = await Redis.Instance.getStats({ key });
 
-		const keys = await Redis.Instance.getStatsKeys(redis_scope);
-		if (keys.length === 0) return;
+      const videoId = stats.videoId;
+      const video = await VideoModel.load(videoId);
+      if (!video) {
+        logger.debug(
+          "Video %d does not exist anymore, skipping videos view stats.",
+          videoId,
+        );
+        try {
+          await Redis.Instance.deleteStatsKey(redis_scope, key);
+        } catch (err) {
+          logger.error("Cannot remove key %s from Redis", key);
+        }
+        continue;
+      }
 
-		logger.debug("Processing %d video download(s)", keys.length);
+      const downloadedAt = new Date(stats.downloadedAt);
+      const startDate = new Date(downloadedAt.setMinutes(0, 0, 0));
+      const endDate = new Date(downloadedAt.setMinutes(59, 59, 999));
 
-		for (const key of keys) {
-			const stats: DownloadStats = await Redis.Instance.getStats({ key });
+      logger.info(
+        "date range: %s -> %s",
+        startDate.toISOString(),
+        endDate.toISOString(),
+      );
 
-			const videoId = stats.videoId;
-			const video = await VideoModel.load(videoId);
-			if (!video) {
-				logger.debug(
-					"Video %d does not exist anymore, skipping videos view stats.",
-					videoId,
-				);
-				try {
-					await Redis.Instance.deleteStatsKey(redis_scope, key);
-				} catch (err) {
-					logger.error("Cannot remove key %s from Redis", key);
-				}
-				continue;
-			}
-
-			const downloadedAt = new Date(stats.downloadedAt);
-			const startDate = new Date(downloadedAt.setMinutes(0, 0, 0));
-			const endDate = new Date(downloadedAt.setMinutes(59, 59, 999));
-
-			logger.info(
-				"date range: %s -> %s",
-				startDate.toISOString(),
-				endDate.toISOString(),
-			);
-
-			try {
-				const record = await VideoDownloadModel.findOne({
-					where: { videoId, startDate },
-				});
-				if (record) {
+      try {
+        const record = await VideoDownloadModel.findOne({
+          where: { videoId, startDate },
+        });
+        if (record) {
           // Increment download count for current time slice
-					record.downloads++;
-					record.save();
-				} else {
+          record.downloads++;
+          record.save();
+        } else {
           // Create a new time slice for this video downloads
-					await VideoDownloadModel.create({
-						startDate: new Date(startDate),
-						endDate: new Date(endDate),
-						downloads: 1,
-						videoId,
-					});
-				}
+          await VideoDownloadModel.create({
+            startDate: new Date(startDate),
+            endDate: new Date(endDate),
+            downloads: 1,
+            videoId,
+          });
+        }
 
         // Increment video total download count
         video.downloads++;
         video.save();
 
-				await Redis.Instance.deleteStatsKey(redis_scope, key);
-			} catch (err) {
-				logger.error(
-					"Cannot update video views stats of video %d on range %s -> %s",
-					videoId,
-					startDate.toISOString(),
-					endDate.toISOString(), { err },
-				);
-			}
-		}
-	}
+        await Redis.Instance.deleteStatsKey(redis_scope, key);
+      } catch (err) {
+        logger.error(
+          "Cannot update video views stats of video %d on range %s -> %s",
+          videoId,
+          startDate.toISOString(),
+          endDate.toISOString(), { err },
+        );
+      }
+    }
+  }
 }

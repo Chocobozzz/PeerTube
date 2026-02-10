@@ -4,7 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
 import { RestExtractor } from '@app/core'
 import {
-    VideoDownloadStatsTimeserieMetric,
+  VideoDownloadStatsTimeserieMetric,
   VideoStatsOverall,
   VideoStatsRetention,
   VideoStatsTimeserie,

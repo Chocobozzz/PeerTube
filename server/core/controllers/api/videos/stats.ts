@@ -91,32 +91,32 @@ async function getRetentionStats (req: express.Request, res: express.Response) {
 }
 
 async function getTimeseriesStats (req: express.Request, res: express.Response) {
-	const video = res.locals.videoAll
-	const metric = req.params.metric as VideoStatsTimeserieMetric|VideoDownloadStatsTimeserieMetric
+  const video = res.locals.videoAll
+  const metric = req.params.metric as VideoStatsTimeserieMetric|VideoDownloadStatsTimeserieMetric
 
-	let handler: (options: {
-		video: MVideo
-		metric: VideoStatsTimeserieMetric|VideoDownloadStatsTimeserieMetric
-		startDate: string
-		endDate: string
-	}) => Promise < VideoStatsTimeserie >
+  let handler: (options: {
+    video: MVideo
+    metric: VideoStatsTimeserieMetric|VideoDownloadStatsTimeserieMetric
+    startDate: string
+    endDate: string
+  }) => Promise < VideoStatsTimeserie >
 
-	switch (metric) {
-		case "downloads":
-			handler = VideoDownloadModel.getTimeserieStats;
-			break;
-		default:
-			handler = LocalVideoViewerModel.getTimeserieStats;
-	}
+  switch (metric) {
+    case "downloads":
+      handler = VideoDownloadModel.getTimeserieStats
+      break;
+    default:
+      handler = LocalVideoViewerModel.getTimeserieStats
+  }
 
-	const query = req.query as VideoStatsTimeserieQuery;
+  const query = req.query as VideoStatsTimeserieQuery
 
-	const stats = await handler({
-		video,
-		metric,
-		startDate: query.startDate ?? video.createdAt.toISOString(),
-		endDate: query.endDate ?? new Date().toISOString(),
-	});
+  const stats = await handler({
+    video,
+    metric,
+    startDate: query.startDate ?? video.createdAt.toISOString(),
+    endDate: query.endDate ?? new Date().toISOString()
+  })
 
   return res.json(stats)
 }
