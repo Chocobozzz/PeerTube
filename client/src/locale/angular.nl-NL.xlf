@@ -10434,9 +10434,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6968024281421956913" datatype="html">
+      <trans-unit id="6968024281421956913" datatype="html" xml:space="preserve">
         <source>If the image is not in .svg format, it will be resized to 32x32 pixels and converted to .png format.</source>
-        <target state="new">If the image is not in .svg format, it will be resized to 32x32 pixels and converted to .png format.</target>
+        <target state="needs-translation">Als de afbeelding niet van het .svg-formaat is, zal deze worden verkleind naar 32 bij 32 pixels en omgezet naar een .png-afbeelding.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">46,47</context>
@@ -10458,9 +10458,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2548546342283535220" datatype="html">
+      <trans-unit id="2548546342283535220" datatype="html" xml:space="preserve">
         <source>If the image is not in .svg format, its height will be reduced to 48 pixels and the width will be calculated based on the original file ratio.</source>
-        <target state="new">If the image is not in .svg format, its height will be reduced to 48 pixels and the width will be calculated based on the original file ratio.</target>
+        <target state="translated">Als de afbeelding niet van het .svg-formaat is, zal de hoogte worden beperkt tot 48 pixels en zal de breedte bepaald worden aan de hand van de originele beeldverhouding.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">69,70</context>
@@ -10498,9 +10498,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="990188276054805848" datatype="html">
+      <trans-unit id="990188276054805848" datatype="html" xml:space="preserve">
         <source>If the image is not in .svg format, it will be resized to 48x48 pixels.</source>
-        <target state="new">If the image is not in .svg format, it will be resized to 48x48 pixels.</target>
+        <target state="needs-translation">Als de afbeelding niet van het .svg-formaat is, zal deze worden verkleind naar 48 bij 48 pixels.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">105,106</context>
@@ -10522,9 +10522,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="642474058485369474" datatype="html">
+      <trans-unit id="642474058485369474" datatype="html" xml:space="preserve">
         <source>If the image is not in .svg format, it will be resized to 1200x650 pixels.</source>
-        <target state="new">If the image is not in .svg format, it will be resized to 1200x650 pixels.</target>
+        <target state="translated">Als de afbeelding niet van het .svg-formaat is, zal de resolutie naar 1200 bij 650 pixels veranderd worden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">128,129</context>
@@ -26386,9 +26386,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="33149636091572968" datatype="html">
+      <trans-unit id="33149636091572968" datatype="html" xml:space="preserve">
         <source>Load more</source>
-        <target state="new">Load more</target>
+        <target state="translated">Meer laden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.html</context>
           <context context-type="linenumber">82</context>
@@ -26442,9 +26442,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4103450444995968891" datatype="html">
+      <trans-unit id="4103450444995968891" datatype="html" xml:space="preserve">
         <source>Cannot load more videos. Please try again later.</source>
-        <target state="new">Cannot load more videos. Please try again later.</target>
+        <target state="translated">Meer video's laden is niet mogelijk. Probeer het later nog eens.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.ts</context>
           <context context-type="linenumber">364</context>
