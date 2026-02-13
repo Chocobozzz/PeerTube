@@ -733,15 +733,15 @@
       </trans-unit>
       <trans-unit id="7235777177623270068" datatype="html" xml:space="preserve">
         <source>PeerTube considers video "<x id="PH" equiv-text="video.name"/>" is already being transcoded.</source>
-        <target state="translated">PeerTube indikerar att videon "<x id="PH" equiv-text="video.name"/>" redan är transkodad.</target>
+        <target state="translated">PeerTube indikerar att videon "<x id="PH" equiv-text="video.name"/>" redan är omkodad.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">415</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5630101530611188113" datatype="html">
+      <trans-unit id="5630101530611188113" datatype="html" xml:space="preserve">
         <source>If you think PeerTube is wrong (video in broken state after a crash etc.), you can force transcoding on this video.</source>
-        <target state="translated">Om du tror PeerTube har fel (exempelvis om videon förstördes av en krasch), kan du tvinga omkodning av videon.</target>
+        <target state="translated">Om du ändå tycker att PeerTube ska omkoda videon (exempelvis om den förstördes av en krasch), kan du tvinga omkodning av videon.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">417</context>
@@ -23975,7 +23975,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7919708461177482031" datatype="html" xml:space="preserve">
         <source>PeerTube considers video "<x id="PH" equiv-text="video.name"/>" is already being transcripted.</source>
-        <target state="translated">PeerTube anser att videon "<x id="PH" equiv-text="video.name"/>" redan har transkriberats.</target>
+        <target state="translated">PeerTube indikerar att videon "<x id="PH" equiv-text="video.name"/>" redan har transkriberats.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video-caption/video-caption.service.ts</context>
           <context context-type="linenumber">115</context>
@@ -23983,7 +23983,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1574297288544496710" datatype="html" xml:space="preserve">
         <source>If you think PeerTube is wrong (video in broken state after a crash etc.), you can force transcription on this video.</source>
-        <target state="translated">Om du tycker att PeerTube är fel ute (video i trasigt tillstånd efter en krasch etcetera) kan du tvinga transkription av den här videon.</target>
+        <target state="translated">Om du tycker att PeerTube är fel ute (video i trasigt tillstånd efter en krasch etcetera) kan du tvinga omtranskribering av den här videon.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video-caption/video-caption.service.ts</context>
           <context context-type="linenumber">117</context>
