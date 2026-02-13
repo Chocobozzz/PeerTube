@@ -96,6 +96,7 @@
   // Keep it sync with image size requested by the component
   --co-row-thumbnail-width: #{$video-thumbnail-width};
   --co-row-thumbnail-height: #{$video-thumbnail-height};
+  --thumbnail-width: var(--co-row-thumbnail-width); // Required by video-thumbnail component
 
   display: flex;
 

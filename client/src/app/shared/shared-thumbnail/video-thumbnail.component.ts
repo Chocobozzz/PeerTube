@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { Video as VideoServerModel, VideoState } from '@peertube/peertube-models'
 import { findAppropriateImageFileUrl } from '@root-helpers/images'
+import { logger } from '@root-helpers/logger'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { FromNowPipe } from '../shared-main/date/from-now.pipe'
 import { Video } from '../shared-main/video/video.model'
@@ -101,11 +102,14 @@ export class VideoThumbnailComponent implements OnChanges {
 
     const computedStyle = window.getComputedStyle(this.el.nativeElement)
 
-    const cssVariable = computedStyle.getPropertyValue('--co-miniature-max-width') ||
-      computedStyle.getPropertyValue('--co-row-thumbnail-width') ||
-      computedStyle.getPropertyValue('--co-image-width')
+    const cssVariable = computedStyle.getPropertyValue('--thumbnail-width')
 
-    const widthStr = cssVariable.replace('px', '').trim()
+    let widthStr = cssVariable.replace('px', '').trim()
+
+    if (!widthStr) {
+      logger.error('Cannot find thumbnail width in CSS variables. Fallback to 280px')
+      widthStr = '280'
+    }
 
     return findAppropriateImageFileUrl(video.thumbnails, +widthStr)
   }

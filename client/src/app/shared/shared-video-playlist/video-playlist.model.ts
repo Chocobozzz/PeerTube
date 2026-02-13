@@ -74,6 +74,8 @@ export class VideoPlaylist implements ServerVideoPlaylist {
 
     this.type = hash.type
 
+    this.thumbnails = hash.thumbnails
+
     this.createdAt = new Date(hash.createdAt)
     this.updatedAt = new Date(hash.updatedAt)
 

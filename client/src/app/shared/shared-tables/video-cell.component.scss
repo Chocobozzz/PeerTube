@@ -10,6 +10,7 @@
 .root {
   --co-image-height: 78px;
   --co-image-width: #{getWidth(78px)};
+  --thumbnail-width: var(--co-image-width); // Required by video-thumbnail component
 
   display: flex;
   align-items: center;

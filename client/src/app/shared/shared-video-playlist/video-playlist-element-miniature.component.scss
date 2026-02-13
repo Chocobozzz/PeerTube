@@ -8,6 +8,7 @@ $thumbnail-height: 72px;
 .video {
   --co-miniature-width: #{$thumbnail-width};
   --co-miniature-height: #{$thumbnail-height};
+  --thumbnail-width: var(--co-miniature-width); // Required by video-thumbnail component
 }
 
 my-timestamp-input {
