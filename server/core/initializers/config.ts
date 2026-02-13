@@ -1,3 +1,4 @@
+import { sortBy } from '@peertube/peertube-core-utils'
 import {
   BroadcastMessageLevel,
   NSFWPolicyType,
@@ -15,7 +16,6 @@ import { IConfig } from 'config'
 import { createRequire } from 'module'
 import { dirname, join } from 'path'
 import { parseBytes, parseDurationToMs } from '../helpers/core-utils.js'
-import { sortBy } from '@peertube/peertube-core-utils'
 
 const require = createRequire(import.meta.url)
 let config: IConfig = require('config')
@@ -41,17 +41,17 @@ const CONFIG = {
     SSL: config.get<boolean>('database.ssl'),
     SSL_SETTINGS: {
       get REJECT_UNAUTHORIZED () {
-        return config.has('database.ssl_settings.reject_unauthorized') 
-          ? config.get<boolean>('database.ssl_settings.reject_unauthorized') 
+        return config.has('database.ssl_settings.reject_unauthorized')
+          ? config.get<boolean>('database.ssl_settings.reject_unauthorized')
           : false
       },
-      get CA() {
+      get CA () {
         return config.has('database.ssl_settings.ca') ? config.get<string>('database.ssl_settings.ca') : null
       },
-      get CERT() {
+      get CERT () {
         return config.has('database.ssl_settings.cert') ? config.get<string>('database.ssl_settings.cert') : null
       },
-      get KEY() {
+      get KEY () {
         return config.has('database.ssl_settings.key') ? config.get<string>('database.ssl_settings.key') : null
       }
     },
@@ -70,18 +70,16 @@ const CONFIG = {
     ENABLE_TLS: config.has('redis.enable_tls') ? config.get<boolean>('redis.enable_tls') : false,
     TLS_SETTINGS: {
       get REJECT_UNAUTHORIZED () {
-        return config.has('redis.tls_settings.reject_unauthorized')
-          ? config.get<boolean>('redis.tls_settings.reject_unauthorized')
-          : false
+        return config.get<boolean>('redis.tls_settings.reject_unauthorized')
       },
       get CA () {
-        return config.has('redis.tls_settings.ca') ? config.get<string>('redis.tls_settings.ca') : null
+        return config.get<string>('redis.tls_settings.ca')
       },
       get CERT () {
-        return config.has('redis.tls_settings.cert') ? config.get<string>('redis.tls_settings.cert') : null
+        return config.get<string>('redis.tls_settings.cert')
       },
       get KEY () {
-        return config.has('redis.tls_settings.key') ? config.get<string>('redis.tls_settings.key') : null
+        return config.get<string>('redis.tls_settings.key')
       }
     },
     SENTINEL: {

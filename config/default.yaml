@@ -81,7 +81,7 @@ database:
   hostname: '127.0.0.1'
   port: 5432
   ssl: false
-  ssl_settings: 
+  ssl_settings:
     reject_unauthorized: false
     ca: '/absolute/path/to/server-certificates/root.crt'
     cert: '/absolute/path/to/client-certificates/postgresql.crt'
