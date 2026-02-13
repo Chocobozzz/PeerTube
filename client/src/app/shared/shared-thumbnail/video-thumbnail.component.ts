@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { booleanAttribute, Component, ElementRef, inject, input, OnChanges, output, viewChild } from '@angular/core'
+import { booleanAttribute, Component, ElementRef, inject, input, numberAttribute, OnChanges, output, viewChild } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { Video as VideoServerModel, VideoState } from '@peertube/peertube-models'
@@ -50,6 +50,8 @@ export class VideoThumbnailComponent implements OnChanges {
 
   readonly watchLaterTooltip = viewChild<NgbTooltip>('watchLaterTooltip')
   readonly watchLaterClick = output<boolean>()
+
+  readonly widthPx = input(undefined, { transform: numberAttribute })
 
   addToWatchLaterText: string
   removeFromWatchLaterText: string
@@ -102,16 +104,22 @@ export class VideoThumbnailComponent implements OnChanges {
 
     const computedStyle = window.getComputedStyle(this.el.nativeElement)
 
-    const cssVariable = computedStyle.getPropertyValue('--thumbnail-width')
+    let width = this.widthPx()
 
-    let widthStr = cssVariable.replace('px', '').trim()
+    if (!width) {
+      const cssVariable = computedStyle.getPropertyValue('--thumbnail-width')
 
-    if (!widthStr) {
-      logger.error('Cannot find thumbnail width in CSS variables. Fallback to 280px')
-      widthStr = '280'
+      const widthStr = cssVariable.replace('px', '').trim()
+
+      if (!widthStr) {
+        logger.error('Cannot find thumbnail width in CSS variables. Fallback to 280px')
+        return ''
+      }
+
+      width = +widthStr
     }
 
-    return findAppropriateImageFileUrl(video.thumbnails, +widthStr)
+    return findAppropriateImageFileUrl(video.thumbnails, width)
   }
 
   getProgressPercent () {

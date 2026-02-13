@@ -126,7 +126,6 @@
     .playlists {
       --co-miniature-min-width: #{$video-thumbnail-width - 25px};
       --co-miniature-max-width: #{$video-thumbnail-width};
-      --thumbnail-width: var(--co-miniature-max-width); // Required by video-thumbnail component
 
       display: grid;
       column-gap: 30px;
