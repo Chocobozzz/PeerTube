@@ -95,9 +95,20 @@ redis:
   port: 6379
   auth: null
   db: 0
+  tls: false
+  tls_settings: 
+    reject_unauthorized: false
+    ca: '/absolute/path/to/server-certificates/root.crt'
+    cert: '/absolute/path/to/client-certificates/postgresql.crt'
+    key: '/absolute/path/to/client-key/postgresql.key'
   sentinel:
     enabled: false
     enable_tls: false
+    tls_settings: 
+      reject_unauthorized: false
+      ca: '/absolute/path/to/server-certificates/root.crt'
+      cert: '/absolute/path/to/client-certificates/postgresql.crt'
+      key: '/absolute/path/to/client-key/postgresql.key'
     master_name: ''
     password: ''
     sentinels:
