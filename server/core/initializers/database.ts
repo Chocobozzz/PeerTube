@@ -33,6 +33,7 @@ import { LocalVideoViewerWatchSectionModel } from '@server/models/view/local-vid
 import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer.js'
 import { WatchedWordsListModel } from '@server/models/watched-words/watched-words-list.js'
 import pg from 'pg'
+import { readFileSync } from 'fs'
 import { QueryTypes, Transaction } from 'sequelize'
 import { Sequelize as SequelizeTypescript } from 'sequelize-typescript'
 import { logger } from '../helpers/logger.js'
@@ -86,10 +87,20 @@ const poolMax = CONFIG.DATABASE.POOL.MAX
 let dialectOptions: any = {}
 
 if (CONFIG.DATABASE.SSL) {
-  dialectOptions = {
-    ssl: {
-      rejectUnauthorized: false
+  // For reference: https://node-postgres.com/features/ssl
+  dialectOptions = { 
+    ssl: { 
+      rejectUnauthorized: CONFIG.DATABASE.SSL_SETTINGS.REJECT_UNAUTHORIZED
     }
+  }
+  if (CONFIG.DATABASE.SSL_SETTINGS.CA) {
+    dialectOptions.ssl.ca = readFileSync(CONFIG.DATABASE.SSL_SETTINGS.CA, { encoding: 'utf8' })
+  }
+  if (CONFIG.DATABASE.SSL_SETTINGS.CERT) {
+    dialectOptions.ssl.cert = readFileSync(CONFIG.DATABASE.SSL_SETTINGS.CERT, { encoding: 'utf8' })
+  }
+  if (CONFIG.DATABASE.SSL_SETTINGS.KEY) {
+    dialectOptions.ssl.key = readFileSync(CONFIG.DATABASE.SSL_SETTINGS.KEY, { encoding: 'utf8' }) 
   }
 }
 
