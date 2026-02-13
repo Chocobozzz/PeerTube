@@ -1127,7 +1127,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context>
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3686284950598311784">
@@ -1143,7 +1143,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context>
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">19</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.html</context>
@@ -5129,7 +5129,7 @@ The link will expire within 1 hour.</target>
         <target state="new">Error in video miniature component: <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/video-miniature-markup.component.ts</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1247256698916587400" datatype="html">
@@ -5137,7 +5137,7 @@ The link will expire within 1 hour.</target>
         <target state="new">Error in videos list component: <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/videos-list-markup.component.ts</context>
-          <context context-type="linenumber">84</context>
+          <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7596115240533332749" datatype="html">
@@ -5871,7 +5871,7 @@ The link will expire within 1 hour.</target>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">167</context>
+          <context context-type="linenumber">169</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
@@ -12027,7 +12027,7 @@ The link will expire within 1 hour.</target>
         <target state="new">TWITTER/X</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.html</context>
-          <context context-type="linenumber">86</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2502039689036410119" datatype="html">
@@ -12035,7 +12035,7 @@ The link will expire within 1 hour.</target>
         <target state="new"> Extra configuration required by Twitter/X. All other social media (Facebook, Mastodon, etc.) are supported out of the box. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.html</context>
-          <context context-type="linenumber">89</context>
+          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6966836698348768805" datatype="html">
@@ -12043,7 +12043,7 @@ The link will expire within 1 hour.</target>
         <target state="new">Your Twitter/X username</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.html</context>
-          <context context-type="linenumber">99</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5402438532456058874" datatype="html">
@@ -12051,7 +12051,7 @@ The link will expire within 1 hour.</target>
         <target state="new">Indicates the Twitter/X account for the website or platform where the content was published.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.html</context>
-          <context context-type="linenumber">102</context>
+          <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8113899484555907381" datatype="html">
@@ -12059,7 +12059,7 @@ The link will expire within 1 hour.</target>
         <target state="new">This is just an extra information injected in PeerTube HTML that is required by Twitter/X. If you don't have a Twitter/X account, just leave the default value.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.html</context>
-          <context context-type="linenumber">104</context>
+          <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1226896451128473265" datatype="html">
@@ -12067,7 +12067,7 @@ The link will expire within 1 hour.</target>
         <target state="new">Advanced configuration updated.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.ts</context>
-          <context context-type="linenumber">126</context>
+          <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4776429682428363094" datatype="html">
@@ -12812,70 +12812,6 @@ The link will expire within 1 hour.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.html</context>
           <context context-type="linenumber">10</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4382565260112874406" datatype="html">
-        <source>Number of previews to keep in cache</source>
-        <target state="new">Number of previews to keep in cache</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.html</context>
-          <context context-type="linenumber">17</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3710881484246327863" datatype="html">
-        <source>{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.html</context>
-          <context context-type="linenumber">24</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2279905277031617076" datatype="html">
-        <source>Number of video captions to keep in cache</source>
-        <target state="new">Number of video captions to keep in cache</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.html</context>
-          <context context-type="linenumber">33</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6193666854590647323" datatype="html">
-        <source>{VAR_PLURAL, plural, =1 {cached caption} other {cached captions}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {cached caption} other {cached captions}}</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.html</context>
-          <context context-type="linenumber">40</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="330647913034301472" datatype="html">
-        <source>Number of video torrents to keep in cache</source>
-        <target state="new">Number of video torrents to keep in cache</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.html</context>
-          <context context-type="linenumber">49</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4613961764793311850" datatype="html">
-        <source>{VAR_PLURAL, plural, =1 {cached torrent} other {cached torrents}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {cached torrent} other {cached torrents}}</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.html</context>
-          <context context-type="linenumber">56</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="9180372875725189823" datatype="html">
-        <source>Number of video storyboard images to keep in cache</source>
-        <target state="new">Number of video storyboard images to keep in cache</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.html</context>
-          <context context-type="linenumber">65</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="224402797620080356" datatype="html">
-        <source>{VAR_PLURAL, plural, =1 {cached storyboard} other {cached storyboards}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {cached storyboard} other {cached storyboards}}</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.html</context>
-          <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6180346896314915203" datatype="html">
@@ -16342,7 +16278,7 @@ The link will expire within 1 hour.</target>
         <target state="new">Password protected</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context>
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">22</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.html</context>
@@ -16510,7 +16446,7 @@ The link will expire within 1 hour.</target>
         <target state="new">{value, plural, =1 {thread} other {threads}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">203</context>
+          <context context-type="linenumber">205</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3072354262521481761" datatype="html">
@@ -16518,7 +16454,7 @@ The link will expire within 1 hour.</target>
         <target state="new">You cannot allow live replay if you don't enable transcoding.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">220</context>
+          <context context-type="linenumber">222</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3957742085471141221" datatype="html">
@@ -16582,7 +16518,7 @@ The link will expire within 1 hour.</target>
         <target state="new">x264, targeting maximum device compatibility</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
-          <context context-type="linenumber">167</context>
+          <context context-type="linenumber">169</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1473738049081128420" datatype="html">
@@ -21750,36 +21686,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="518461007481947848" datatype="html">
-        <source>Cache size is required.</source>
-        <target state="new">Cache size is required.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">28</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5481098690555703943" datatype="html">
-        <source>Cache size must be greater than 1.</source>
-        <target state="new">Cache size must be greater than 1.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">29</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4704896848161515188" datatype="html">
-        <source>Cache size must be a number.</source>
-        <target state="new">Cache size must be a number.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">30</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="818392297325723982" datatype="html">
         <source>Signup limit is required.</source>
         <target state="new">Signup limit is required.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">37</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5630311719329022718" datatype="html">
@@ -21787,7 +21699,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Signup limit must be greater than 1. Use -1 to disable it.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2555843408410000965" datatype="html">
@@ -21795,7 +21707,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Signup limit must be a number.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="346485141381099383" datatype="html">
@@ -21803,7 +21715,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Signup minimum age is required.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4230672031132838318" datatype="html">
@@ -21811,7 +21723,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Signup minimum age must be greater than 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5929230001329133993" datatype="html">
@@ -21819,7 +21731,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Signup minimum age must be a number.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">48</context>
+          <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="240096858386658337" datatype="html">
@@ -21827,7 +21739,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Admin email is required.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4392533896009432078" datatype="html">
@@ -21835,7 +21747,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Admin email must be valid.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6172217783476989430" datatype="html">
@@ -21843,7 +21755,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Transcoding threads is required.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5320424292625586941" datatype="html">
@@ -21851,7 +21763,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Transcoding threads must be greater or equal to 0.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3683210116632914190" datatype="html">
@@ -21859,7 +21771,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Transcoding max FPS is required.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">71</context>
+          <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4345398192434581438" datatype="html">
@@ -21867,7 +21779,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Transcoding max FPS must be greater or equal to 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">72</context>
+          <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8185661254949728718" datatype="html">
@@ -21875,7 +21787,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Max live duration is required.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">79</context>
+          <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
       <trans-unit id="977908106285712483" datatype="html">
@@ -21883,7 +21795,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Max live duration must be greater or equal to -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">80</context>
+          <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6722592581141834318" datatype="html">
@@ -21891,7 +21803,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Max lives is required.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">87</context>
+          <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4718923616998868965" datatype="html">
@@ -21899,7 +21811,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Max lives must be greater or equal to -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">88</context>
+          <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5614457087254770778" datatype="html">
@@ -21907,7 +21819,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Max user lives is required.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">95</context>
+          <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6094685877052448543" datatype="html">
@@ -21915,7 +21827,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Max user lives must be greater or equal to -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">96</context>
+          <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
       <trans-unit id="351272950792130803" datatype="html">
@@ -21923,7 +21835,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Max video channels per user is required.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">103</context>
+          <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5253683089104713724" datatype="html">
@@ -21931,7 +21843,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Max video channels per user must be greater or equal to 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">104</context>
+          <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8354695459880751923" datatype="html">
@@ -21939,7 +21851,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Max video channels per user must be a number.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">105</context>
+          <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6274027958678461128" datatype="html">
@@ -21947,7 +21859,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Max synchronizations per user is required.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">112</context>
+          <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8998234411272282626" datatype="html">
@@ -21955,7 +21867,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Max synchronizations per user must be greater or equal to 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">113</context>
+          <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6409680643108400586" datatype="html">
@@ -21963,7 +21875,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Max synchronizations per user must be a number.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">114</context>
+          <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5832601947705094130" datatype="html">
@@ -21971,7 +21883,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Concurrency is required.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">121</context>
+          <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5727962096948024837" datatype="html">
@@ -21979,7 +21891,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Concurrency must be greater or equal to 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">122</context>
+          <context context-type="linenumber">113</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4327605300509435150" datatype="html">
@@ -21987,7 +21899,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Export expiration is required.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">129</context>
+          <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8101376384086436513" datatype="html">
@@ -21995,7 +21907,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Export expiration must be greater or equal to 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">130</context>
+          <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7568988728218416870" datatype="html">
@@ -22003,7 +21915,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Max user video quota is required.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">136</context>
+          <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6536118679588615245" datatype="html">
@@ -22011,7 +21923,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Max user video video quota must be greater or equal to 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
-          <context context-type="linenumber">137</context>
+          <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8602814243662345124" datatype="html">
@@ -23921,7 +23833,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
-          <context context-type="linenumber">153</context>
+          <context context-type="linenumber">155</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1209500590333005801" datatype="html">
@@ -26490,7 +26402,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Watch video <x id="PH" equiv-text="this.video.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
-          <context context-type="linenumber">224</context>
+          <context context-type="linenumber">226</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context>
@@ -26630,7 +26542,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Add to watch later</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.ts</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8498940878158860248" datatype="html">
@@ -26638,7 +26550,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Remove from watch later</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.ts</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3386106491172606235" datatype="html">
@@ -26646,7 +26558,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Video duration is <x id="PH" equiv-text="this.video.durationLabel"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.ts</context>
-          <context context-type="linenumber">123</context>
+          <context context-type="linenumber">135</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8657461348142878243" datatype="html">
