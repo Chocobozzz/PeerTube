@@ -611,7 +611,7 @@ export const VIDEO_LICENCES: { [id in VideoLicenceType]: string } = {
   [VideoLicence['CC-BY-NC-ND']]: 'Attribution - Non Commercial - No Derivatives',
   [VideoLicence['CC0']]: 'Public Domain Dedication',
   [VideoLicence['PDM']]: 'Free of known copyright restrictions',
-  [VideoLicence['COPYRIGHT']]: 'Copyrighted - All Rights Reserved'
+  [VideoLicence['ALL_RIGHTS_RESERVED']]: 'All Rights Reserved'
 }
 
 export const VIDEO_LANGUAGES: { [id: string]: string } = {}
