@@ -67,7 +67,7 @@ const CONFIG = {
     SOCKET: config.has('redis.socket') ? config.get<string>('redis.socket') : null,
     AUTH: config.has('redis.auth') ? config.get<string>('redis.auth') : null,
     DB: config.has('redis.db') ? config.get<number>('redis.db') : null,
-    TLS: config.has('redis.enable_tls') ? config.get<boolean>('redis.enable_tls') : false,
+    ENABLE_TLS: config.has('redis.enable_tls') ? config.get<boolean>('redis.enable_tls') : false,
     TLS_SETTINGS: {
       get REJECT_UNAUTHORIZED () {
         return config.has('redis.tls_settings.reject_unauthorized')

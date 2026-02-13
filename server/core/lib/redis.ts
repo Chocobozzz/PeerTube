@@ -21,7 +21,6 @@ import {
 const lTags = loggerTagsFactory('redis')
 
 class Redis {
-
   private static instance: Redis
   private initialized = false
   private connected = false
@@ -46,7 +45,7 @@ class Redis {
 
       this.connected = true
     })
-    this.client.on('reconnecting', (ms) => {
+    this.client.on('reconnecting', ms => {
       logger.error(`Reconnecting to redis in ${ms}.`, lTags())
     })
     this.client.on('close', () => {
@@ -109,7 +108,7 @@ class Redis {
     }
 
     let tls: ConnectionOptions = undefined
-    if (CONFIG.REDIS.TLS) {
+    if (CONFIG.REDIS.ENABLE_TLS) {
       tls = { rejectUnauthorized: CONFIG.REDIS.TLS_SETTINGS.REJECT_UNAUTHORIZED }
 
       if (CONFIG.REDIS.TLS_SETTINGS.CA) {
@@ -466,7 +465,7 @@ class Redis {
     return JSON.parse(value)
   }
 
-  private setObject (key: string, value: { [ id: string ]: number | string }, expirationMilliseconds?: number) {
+  private setObject (key: string, value: { [id: string]: number | string }, expirationMilliseconds?: number) {
     return this.setValue(key, JSON.stringify(value), expirationMilliseconds)
   }
 
