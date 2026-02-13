@@ -66,7 +66,7 @@ async function movePreviewsToThumbnails () {
     }
   }, { concurrency: 10 })
 
-  console.log('Done!')
+  console.log('File moving completed.\n')
 }
 
 async function removeInvalidRemoteCaptions () {
@@ -74,12 +74,12 @@ async function removeInvalidRemoteCaptions () {
 
   await sequelizeTypescript.query(
     `DELETE FROM "videoCaption" WHERE id IN (` +
-      `SELECT id FROM "videoCaption" INNER JOIN video ON video.id = "videoCaption"."videoId" ` +
+      `SELECT "videoCaption".id FROM "videoCaption" INNER JOIN video ON video.id = "videoCaption"."videoId" ` +
       `WHERE "videoCaption"."fileUrl" IS NULL AND video.remote IS TRUE` +
       `)`
   )
 
-  console.log('Invalid remote captions removed.')
+  console.log('Invalid remote captions removed.\n')
 }
 
 async function deleteInvalidRemoteAvatars () {
@@ -93,7 +93,7 @@ async function deleteInvalidRemoteAvatars () {
       `)`
   )
 
-  console.log('Invalid remote avatars removed.')
+  console.log('Invalid remote avatars removed.\n')
 }
 
 async function updateLocalVideoFileUrls () {
@@ -101,7 +101,7 @@ async function updateLocalVideoFileUrls () {
 
   await sequelizeTypescript.query(
     `UPDATE "videoFile" SET "fileUrl" = NULL WHERE "id" IN (` +
-      `SELECT id FROM "videoFile" ` +
+      `SELECT "videoFile".id FROM "videoFile" ` +
       `INNER JOIN "videoStreamingPlaylist" ON "videoStreamingPlaylist".id = "videoFile"."videoStreamingPlaylistId" ` +
       `INNER JOIN video ON video.id = "videoStreamingPlaylist"."videoId" ` +
       `WHERE "videoFile"."fileUrl" IS NOT NULL AND video.remote IS FALSE` +
@@ -110,13 +110,13 @@ async function updateLocalVideoFileUrls () {
 
   await sequelizeTypescript.query(
     `UPDATE "videoFile" SET "fileUrl" = NULL WHERE "id" IN (` +
-      `SELECT id FROM "videoFile" ` +
+      `SELECT "videoFile".id FROM "videoFile" ` +
       `INNER JOIN video ON video.id = "videoFile"."videoId" ` +
       `WHERE "videoFile"."fileUrl" IS NOT NULL AND video.remote IS FALSE` +
       `)`
   )
 
-  console.log('Local video file URLs updated.')
+  console.log('Local video file URLs updated.\n')
 }
 
 async function updateLocalVideoCaptionUrls () {
@@ -124,7 +124,7 @@ async function updateLocalVideoCaptionUrls () {
 
   await sequelizeTypescript.query(
     `UPDATE "videoCaption" SET "fileUrl" = NULL WHERE "id" IN (` +
-      `SELECT id FROM "videoCaption" ` +
+      `SELECT "videoCaption".id FROM "videoCaption" ` +
       `INNER JOIN video ON video.id = "videoCaption"."videoId" ` +
       `WHERE "videoCaption"."fileUrl" IS NOT NULL AND video.remote IS FALSE` +
       `)`
@@ -132,13 +132,13 @@ async function updateLocalVideoCaptionUrls () {
 
   await sequelizeTypescript.query(
     `UPDATE "videoCaption" SET "m3u8Url" = NULL WHERE "id" IN (` +
-      `SELECT id FROM "videoCaption" ` +
+      `SELECT "videoCaption".id FROM "videoCaption" ` +
       `INNER JOIN video ON video.id = "videoCaption"."videoId" ` +
       `WHERE "videoCaption"."m3u8Url" IS NOT NULL AND video.remote IS FALSE` +
       `)`
   )
 
-  console.log('Local video caption URLs updated.')
+  console.log('Local video caption URLs updated.\n')
 }
 
 async function updateLocalVideoStreamingPlaylistUrls () {
@@ -146,7 +146,7 @@ async function updateLocalVideoStreamingPlaylistUrls () {
 
   await sequelizeTypescript.query(
     `UPDATE "videoStreamingPlaylist" SET "playlistUrl" = NULL WHERE "id" IN (` +
-      `SELECT id FROM "videoStreamingPlaylist" ` +
+      `SELECT "videoStreamingPlaylist".id FROM "videoStreamingPlaylist" ` +
       `INNER JOIN video ON video.id = "videoStreamingPlaylist"."videoId" ` +
       `WHERE "videoStreamingPlaylist"."playlistUrl" IS NOT NULL AND video.remote IS FALSE` +
       `)`
@@ -154,11 +154,11 @@ async function updateLocalVideoStreamingPlaylistUrls () {
 
   await sequelizeTypescript.query(
     `UPDATE "videoStreamingPlaylist" SET "segmentsSha256Url" = NULL WHERE "id" IN (` +
-      `SELECT id FROM "videoStreamingPlaylist" ` +
+      `SELECT "videoStreamingPlaylist".id FROM "videoStreamingPlaylist" ` +
       `INNER JOIN video ON video.id = "videoStreamingPlaylist"."videoId" ` +
       `WHERE "videoStreamingPlaylist"."segmentsSha256Url" IS NOT NULL AND video.remote IS FALSE` +
       `)`
   )
 
-  console.log('Local video streaming playlist URLs updated.')
+  console.log('Local video streaming playlist URLs updated.\n')
 }
