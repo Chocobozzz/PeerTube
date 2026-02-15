@@ -75,11 +75,6 @@ export const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
     .customSanitizer(toIntOrNull)
     .custom(isLiveLatencyModeValid),
 
-  body('dvrEnabled')
-    .optional()
-    .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid dvrEnabled boolean'),
-
   body('videoPasswords')
     .optional()
     .isArray()
@@ -181,11 +176,6 @@ export const videoLiveUpdateValidator = [
     .optional()
     .customSanitizer(toIntOrNull)
     .custom(isLiveLatencyModeValid),
-
-  body('dvrEnabled')
-    .optional()
-    .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid dvrEnabled boolean'),
 
   body('schedules')
     .optional()

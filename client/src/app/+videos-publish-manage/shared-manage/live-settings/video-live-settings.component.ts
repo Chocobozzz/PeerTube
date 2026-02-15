@@ -37,7 +37,6 @@ type Form = {
   liveStreamKey: FormControl<string>
   permanentLive: FormControl<boolean>
   latencyMode: FormControl<LiveVideoLatencyModeType>
-  dvrEnabled: FormControl<boolean>
   saveReplay: FormControl<boolean>
   replayPrivacy: FormControl<VideoPrivacyType>
 
@@ -142,7 +141,6 @@ export class VideoLiveSettingsComponent implements OnInit, OnDestroy {
       liveStreamKey: null,
       permanentLive: null,
       latencyMode: null,
-      dvrEnabled: null,
       saveReplay: null,
       replayPrivacy: null
     }

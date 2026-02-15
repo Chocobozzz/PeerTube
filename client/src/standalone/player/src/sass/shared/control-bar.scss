@@ -624,7 +624,7 @@ $chapter-marker-size: 9px;
     }
   }
 
-  &.vjs-live:not(.vjs-live-dvr) {
+  &.vjs-live {
     // Take the available space for the control bar
     .vjs-progress-control {
       display: flex;
@@ -683,7 +683,7 @@ $chapter-marker-size: 9px;
     max-width: 100px;
   }
 
-  &.vjs-live:not(.vjs-live-dvr) {
+  &.vjs-live {
     .vjs-duration {
       display: none !important;
     }
@@ -716,7 +716,7 @@ $chapter-marker-size: 9px;
     @include margin-left(0);
   }
 
-  &.vjs-live:not(.vjs-live-dvr) {
+  &.vjs-live {
     .vjs-current-time {
       display: none !important;
     }

@@ -60,13 +60,6 @@ export function getLiveSegmentTime (latencyMode: LiveVideoLatencyModeType) {
   return VIDEO_LIVE.SEGMENT_TIME_SECONDS.DEFAULT_LATENCY
 }
 
-export function getLiveSegmentListSize (latencyMode: LiveVideoLatencyModeType, dvrEnabled: boolean) {
-  if (dvrEnabled !== true) return VIDEO_LIVE.SEGMENTS_LIST_SIZE
-
-  const segmentDuration = getLiveSegmentTime(latencyMode)
-  return Math.ceil(VIDEO_LIVE.DVR_MAX_WINDOW_SECONDS / segmentDuration)
-}
-
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------

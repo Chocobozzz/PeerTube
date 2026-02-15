@@ -2,6 +2,7 @@ import { FFmpegLive } from '@peertube/peertube-ffmpeg'
 import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg/index.js'
 import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
+import { VIDEO_LIVE } from '@server/initializers/constants.js'
 import { VideoTranscodingProfilesManager } from '@server/lib/transcoding/default-transcoding-profiles.js'
 import { FfmpegCommand } from 'fluent-ffmpeg'
 import { getLiveSegmentTime } from '../../live-utils.js'
@@ -42,7 +43,7 @@ export class FFmpegTranscodingWrapper extends AbstractTranscodingWrapper {
 
         masterPlaylistName: this.streamingPlaylist.playlistFilename,
 
-        segmentListSize: this.segmentListSize,
+        segmentListSize: VIDEO_LIVE.SEGMENTS_LIST_SIZE,
         segmentDuration: getLiveSegmentTime(this.videoLive.latencyMode)
       })
 

@@ -147,7 +147,6 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
 
       if (exists(body.permanentLive)) videoLive.permanentLive = body.permanentLive
       if (exists(body.latencyMode)) videoLive.latencyMode = body.latencyMode
-      if (exists(body.dvrEnabled)) videoLive.dvrEnabled = body.dvrEnabled
 
       if (body.schedules !== undefined) {
         await VideoLiveScheduleModel.deleteAllOfLiveId(videoLive.id, t)
@@ -225,7 +224,7 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
       fromDescription: false,
       finalFallback: undefined
     },
-    liveAttributes: pick(videoInfo, [ 'saveReplay', 'permanentLive', 'latencyMode', 'dvrEnabled', 'replaySettings', 'schedules' ]),
+    liveAttributes: pick(videoInfo, [ 'saveReplay', 'permanentLive', 'latencyMode', 'replaySettings', 'schedules' ]),
     videoAttributeResultHook: 'filter:api.video.live.video-attribute.result',
     lTags,
     videoAttributes: {

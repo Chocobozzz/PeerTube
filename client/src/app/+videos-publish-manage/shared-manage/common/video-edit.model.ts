@@ -82,7 +82,7 @@ type CreateFromImportOptions = LoadFromPublishOptions & Pick<VideoImportCreate, 
 
 type CreateFromLiveOptions =
   & CreateFromUploadOptions
-  & Required<Pick<LiveVideoCreate, 'permanentLive' | 'latencyMode' | 'dvrEnabled' | 'saveReplay' | 'replaySettings' | 'schedules'>>
+  & Required<Pick<LiveVideoCreate, 'permanentLive' | 'latencyMode' | 'saveReplay' | 'replaySettings' | 'schedules'>>
 
 type UpdateFromAPIOptions = {
   video?: Pick<
@@ -259,7 +259,6 @@ export class VideoEdit {
     this.live = {
       latencyMode: options.latencyMode,
       permanentLive: options.permanentLive,
-      dvrEnabled: options.dvrEnabled === true,
 
       saveReplay: options.saveReplay,
 
@@ -454,7 +453,6 @@ export class VideoEdit {
       return {
         permanentLive: live.permanentLive,
         latencyMode: live.latencyMode,
-        dvrEnabled: live.dvrEnabled === true,
         saveReplay: live.saveReplay,
 
         replaySettings: live.replaySettings
@@ -675,7 +673,6 @@ export class VideoEdit {
   loadFromLiveForm (values: LiveUpdateForm) {
     if (values.permanentLive !== undefined) this.live.permanentLive = values.permanentLive
     if (values.latencyMode !== undefined) this.live.latencyMode = values.latencyMode
-    if (values.dvrEnabled !== undefined) this.live.dvrEnabled = values.dvrEnabled
     if (values.saveReplay !== undefined) this.live.saveReplay = values.saveReplay
 
     if (values.replayPrivacy !== undefined) {
@@ -702,7 +699,6 @@ export class VideoEdit {
       liveStreamKey: this.metadata.live.streamKey,
       permanentLive: this.live.permanentLive,
       latencyMode: this.live.latencyMode,
-      dvrEnabled: this.live.dvrEnabled === true,
       saveReplay: this.live.saveReplay,
 
       replayPrivacy: this.live.replaySettings
@@ -723,7 +719,6 @@ export class VideoEdit {
         ? this.live.replaySettings
         : undefined,
       latencyMode: this.live.latencyMode,
-      dvrEnabled: this.live.dvrEnabled,
 
       schedules: this.live.schedules
     }
@@ -735,7 +730,6 @@ export class VideoEdit {
 
       permanentLive: this.live.permanentLive,
       latencyMode: this.live.latencyMode,
-      dvrEnabled: this.live.dvrEnabled,
       saveReplay: this.live.saveReplay,
       replaySettings: this.live.replaySettings,
       schedules: this.live.schedules

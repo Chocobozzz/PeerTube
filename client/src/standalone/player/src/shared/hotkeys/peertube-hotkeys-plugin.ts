@@ -157,9 +157,10 @@ class PeerTubeHotkeysPlugin extends Plugin {
       }
     ]
 
-    if (this.isLive && this.isLiveDvr !== true) return handlers
-
-    return handlers.concat(this.buildVODHandlers())
+    if (this.isLive) return handlers
+    return this.isLiveDvr
+      ? handlers.concat(this.buildVODHandlers())
+      : handlers
   }
 
   private buildVODHandlers () {
