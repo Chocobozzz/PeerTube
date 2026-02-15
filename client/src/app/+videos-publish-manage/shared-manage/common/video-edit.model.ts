@@ -51,6 +51,7 @@ type CommonUpdateForm =
 
 type LiveUpdateForm = Omit<LiveVideoUpdate, 'replaySettings' | 'schedules'> & {
   replayPrivacy?: VideoPrivacyType
+  dvrWindowHours?: number
   liveStreamKey?: string
   schedules?: {
     startAt?: Date
@@ -82,7 +83,7 @@ type CreateFromImportOptions = LoadFromPublishOptions & Pick<VideoImportCreate, 
 
 type CreateFromLiveOptions =
   & CreateFromUploadOptions
-  & Required<Pick<LiveVideoCreate, 'permanentLive' | 'latencyMode' | 'dvrEnabled' | 'saveReplay' | 'replaySettings' | 'schedules'>>
+  & Required<Pick<LiveVideoCreate, 'permanentLive' | 'latencyMode' | 'dvrEnabled' | 'dvrWindowSeconds' | 'saveReplay' | 'replaySettings' | 'schedules'>>
 
 type UpdateFromAPIOptions = {
   video?: Pick<
@@ -260,6 +261,7 @@ export class VideoEdit {
       latencyMode: options.latencyMode,
       permanentLive: options.permanentLive,
       dvrEnabled: options.dvrEnabled === true,
+      dvrWindowSeconds: this.sanitizeDvrWindowSeconds(options.dvrWindowSeconds),
 
       saveReplay: options.saveReplay,
 
@@ -455,6 +457,7 @@ export class VideoEdit {
         permanentLive: live.permanentLive,
         latencyMode: live.latencyMode,
         dvrEnabled: live.dvrEnabled === true,
+        dvrWindowSeconds: this.sanitizeDvrWindowSeconds(live.dvrWindowSeconds),
         saveReplay: live.saveReplay,
 
         replaySettings: live.replaySettings
@@ -676,6 +679,7 @@ export class VideoEdit {
     if (values.permanentLive !== undefined) this.live.permanentLive = values.permanentLive
     if (values.latencyMode !== undefined) this.live.latencyMode = values.latencyMode
     if (values.dvrEnabled !== undefined) this.live.dvrEnabled = values.dvrEnabled
+    if (values.dvrWindowHours !== undefined) this.live.dvrWindowSeconds = this.dvrWindowHoursToSeconds(values.dvrWindowHours)
     if (values.saveReplay !== undefined) this.live.saveReplay = values.saveReplay
 
     if (values.replayPrivacy !== undefined) {
@@ -703,6 +707,7 @@ export class VideoEdit {
       permanentLive: this.live.permanentLive,
       latencyMode: this.live.latencyMode,
       dvrEnabled: this.live.dvrEnabled === true,
+      dvrWindowHours: this.dvrWindowSecondsToHours(this.live.dvrWindowSeconds),
       saveReplay: this.live.saveReplay,
 
       replayPrivacy: this.live.replaySettings
@@ -724,6 +729,7 @@ export class VideoEdit {
         : undefined,
       latencyMode: this.live.latencyMode,
       dvrEnabled: this.live.dvrEnabled,
+      dvrWindowSeconds: this.live.dvrWindowSeconds,
 
       schedules: this.live.schedules
     }
@@ -736,6 +742,7 @@ export class VideoEdit {
       permanentLive: this.live.permanentLive,
       latencyMode: this.live.latencyMode,
       dvrEnabled: this.live.dvrEnabled,
+      dvrWindowSeconds: this.live.dvrWindowSeconds,
       saveReplay: this.live.saveReplay,
       replaySettings: this.live.replaySettings,
       schedules: this.live.schedules
@@ -1059,6 +1066,24 @@ export class VideoEdit {
 
       live: this.metadata.live
     }
+  }
+
+  private sanitizeDvrWindowSeconds (value: number) {
+    if (!Number.isFinite(value) || value <= 0) return this.serverConfig.live.dvrMaxWindowSeconds
+
+    return Math.min(Math.round(value), this.serverConfig.live.dvrMaxWindowSeconds)
+  }
+
+  private dvrWindowSecondsToHours (seconds: number) {
+    const sanitizedSeconds = this.sanitizeDvrWindowSeconds(seconds)
+    return Math.round((sanitizedSeconds / 3600) * 100) / 100
+  }
+
+  private dvrWindowHoursToSeconds (hours: number) {
+    if (!Number.isFinite(hours) || hours <= 0) return this.serverConfig.live.dvrMaxWindowSeconds
+
+    const secondsFromHours = Math.round(hours * 3600)
+    return this.sanitizeDvrWindowSeconds(secondsFromHours)
   }
 
   // ---------------------------------------------------------------------------

@@ -208,6 +208,7 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
       permanentLive: live.permanentLive,
       latencyMode: live.latencyMode,
       dvrEnabled: live.dvrEnabled,
+      dvrWindowSeconds: live.dvrWindowSeconds,
       streamKey: live.streamKey,
 
       replaySettings: live.ReplaySetting

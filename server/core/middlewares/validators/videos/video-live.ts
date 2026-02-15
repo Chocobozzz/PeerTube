@@ -7,7 +7,7 @@ import {
   UserRight,
   VideoState
 } from '@peertube/peertube-models'
-import { areLiveSchedulesValid, isLiveLatencyModeValid } from '@server/helpers/custom-validators/video-lives.js'
+import { areLiveSchedulesValid, isLiveDvrWindowSecondsValid, isLiveLatencyModeValid } from '@server/helpers/custom-validators/video-lives.js'
 import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import { isLocalLiveVideoAccepted } from '@server/lib/moderation.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
@@ -79,6 +79,12 @@ export const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
     .optional()
     .customSanitizer(toBooleanOrNull)
     .custom(isBooleanValid).withMessage('Should have a valid dvrEnabled boolean'),
+
+  body('dvrWindowSeconds')
+    .optional()
+    .customSanitizer(toIntOrNull)
+    .custom(v => isLiveDvrWindowSecondsValid(v, CONFIG.LIVE.DVR_MAX_WINDOW_SECONDS))
+    .withMessage('Should have a valid dvrWindowSeconds integer'),
 
   body('videoPasswords')
     .optional()
@@ -186,6 +192,12 @@ export const videoLiveUpdateValidator = [
     .optional()
     .customSanitizer(toBooleanOrNull)
     .custom(isBooleanValid).withMessage('Should have a valid dvrEnabled boolean'),
+
+  body('dvrWindowSeconds')
+    .optional()
+    .customSanitizer(toIntOrNull)
+    .custom(v => isLiveDvrWindowSecondsValid(v, CONFIG.LIVE.DVR_MAX_WINDOW_SECONDS))
+    .withMessage('Should have a valid dvrWindowSeconds integer'),
 
   body('schedules')
     .optional()

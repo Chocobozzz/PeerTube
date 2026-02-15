@@ -47,7 +47,7 @@ type VideoAttributes = Omit<VideoCreate, 'channelId'> & {
   inputFilename: string
 }
 
-type LiveAttributes = Pick<LiveVideoCreate, 'permanentLive' | 'latencyMode' | 'dvrEnabled' | 'saveReplay' | 'replaySettings' | 'schedules'> & {
+type LiveAttributes = Pick<LiveVideoCreate, 'permanentLive' | 'latencyMode' | 'dvrEnabled' | 'dvrWindowSeconds' | 'saveReplay' | 'replaySettings' | 'schedules'> & {
   streamKey?: string
 }
 
@@ -201,6 +201,7 @@ export class LocalVideoCreator {
             permanentLive: this.liveAttributes.permanentLive || false,
             latencyMode: this.liveAttributes.latencyMode || LiveVideoLatencyMode.DEFAULT,
             dvrEnabled: this.liveAttributes.dvrEnabled || false,
+            dvrWindowSeconds: Math.min(this.liveAttributes.dvrWindowSeconds || CONFIG.LIVE.DVR_MAX_WINDOW_SECONDS, CONFIG.LIVE.DVR_MAX_WINDOW_SECONDS),
             streamKey: this.liveAttributes.streamKey || buildUUID()
           })
 

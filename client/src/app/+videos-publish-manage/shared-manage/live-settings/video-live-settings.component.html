@@ -102,13 +102,39 @@
         <div class="form-group">
           <my-peertube-checkbox inputName="liveVideoDvrEnabled" formControlName="dvrEnabled">
             <ng-template ptTemplate="label">
-              <ng-container i18n>Enable Live DVR (pause/rewind up to 2 hours)</ng-container>
+              <ng-container i18n>Enable Live DVR (pause/rewind up to {{ getMaxDvrWindowHours() }} hours)</ng-container>
             </ng-template>
             <ng-container ngProjectAs="description">
               <span i18n>Allows viewers to pause, rewind, and jump back to live during the stream</span>
             </ng-container>
           </my-peertube-checkbox>
         </div>
+
+        @if (form.value.dvrEnabled === true) {
+          <div class="form-group ms-4">
+            <label i18n for="liveDvrWindowHours">Live Stream DVR window</label>
+
+            <div class="number-with-unit">
+              <input
+                type="number"
+                id="liveDvrWindowHours"
+                formControlName="dvrWindowHours"
+                [step]="getDvrWindowStepHours()"
+                [max]="getMaxDvrWindowHours()"
+                [min]="getDvrWindowStepHours()"
+              />
+              <span i18n>hours</span>
+            </div>
+
+            <div class="form-group-description" i18n>
+              Max {{ getMaxDvrWindowHours() }} hours (configured by instance admin)
+            </div>
+
+            @if (formErrors.dvrWindowHours) {
+              <div class="form-error" role="alert">{{ formErrors.dvrWindowHours }}</div>
+            }
+          </div>
+        }
 
         @if (isSaveReplayEnabled()) {
           <div class="form-group ms-4">

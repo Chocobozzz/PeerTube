@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { Component, OnDestroy, OnInit, inject } from '@angular/core'
-import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { BuildFormArgument } from '@app/shared/form-validators/form-validator.model'
 import { FormReactiveErrors, FormReactiveService, FormReactiveMessages } from '@app/shared/shared-forms/form-reactive.service'
@@ -38,6 +38,7 @@ type Form = {
   permanentLive: FormControl<boolean>
   latencyMode: FormControl<LiveVideoLatencyModeType>
   dvrEnabled: FormControl<boolean>
+  dvrWindowHours: FormControl<number>
   saveReplay: FormControl<boolean>
   replayPrivacy: FormControl<VideoPrivacyType>
 
@@ -143,6 +144,14 @@ export class VideoLiveSettingsComponent implements OnInit, OnDestroy {
       permanentLive: null,
       latencyMode: null,
       dvrEnabled: null,
+      dvrWindowHours: {
+        VALIDATORS: [ Validators.required, Validators.min(this.getDvrWindowStepHours()), Validators.max(this.getMaxDvrWindowHours()) ],
+        MESSAGES: {
+          required: $localize`DVR window is required.`,
+          min: $localize`DVR window must be at least 1 minute.`,
+          max: $localize`DVR window exceeds the instance maximum.`
+        }
+      },
       saveReplay: null,
       replayPrivacy: null
     }
@@ -220,6 +229,14 @@ export class VideoLiveSettingsComponent implements OnInit, OnDestroy {
 
   getMaxLiveDuration () {
     return this.serverConfig.live.maxDuration / 1000
+  }
+
+  getMaxDvrWindowHours () {
+    return Math.round((this.serverConfig.live.dvrMaxWindowSeconds / 3600) * 100) / 100
+  }
+
+  getDvrWindowStepHours () {
+    return 1 / 60
   }
 
   getInstanceName () {
