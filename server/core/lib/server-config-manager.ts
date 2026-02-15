@@ -109,6 +109,9 @@ class ServerConfigManager {
           privacy: CONFIG.DEFAULTS.PUBLISH.PRIVACY,
           licence: CONFIG.DEFAULTS.PUBLISH.LICENCE
         },
+        live: {
+          saveReplay: CONFIG.DEFAULTS.LIVE.SAVE_REPLAY
+        },
         p2p: {
           webapp: {
             enabled: CONFIG.DEFAULTS.P2P.WEBAPP.ENABLED
@@ -225,7 +228,6 @@ class ServerConfigManager {
         enabled: CONFIG.LIVE.ENABLED,
 
         allowReplay: CONFIG.LIVE.ALLOW_REPLAY,
-        saveReplayByDefault: CONFIG.LIVE.SAVE_REPLAY_BY_DEFAULT,
         latencySetting: {
           enabled: CONFIG.LIVE.LATENCY_SETTING.ENABLED
         },

@@ -31,7 +31,6 @@ type Form = {
   live: FormGroup<{
     enabled: FormControl<boolean>
     allowReplay: FormControl<boolean>
-    saveReplayByDefault: FormControl<boolean>
     latencySetting: FormGroup<{
       enabled: FormControl<boolean>
     }>
@@ -55,6 +54,12 @@ type Form = {
 
       threads: FormControl<number>
       profile: FormControl<string>
+    }>
+  }>
+
+  defaults: FormGroup<{
+    live: FormGroup<{
+      saveReplay: FormControl<boolean>
     }>
   }>
 }
@@ -132,7 +137,6 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
       live: {
         enabled: null,
         allowReplay: null,
-        saveReplayByDefault: null,
 
         maxDuration: MAX_LIVE_DURATION_VALIDATOR,
         maxInstanceLives: MAX_INSTANCE_LIVES_VALIDATOR,
@@ -153,6 +157,12 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
           fps: {
             max: TRANSCODING_MAX_FPS_VALIDATOR
           }
+        }
+      },
+
+      defaults: {
+        live: {
+          saveReplay: null
         }
       }
     }

@@ -457,7 +457,6 @@ function customConfig (): CustomConfig {
     live: {
       enabled: CONFIG.LIVE.ENABLED,
       allowReplay: CONFIG.LIVE.ALLOW_REPLAY,
-      saveReplayByDefault: CONFIG.LIVE.SAVE_REPLAY_BY_DEFAULT,
       latencySetting: {
         enabled: CONFIG.LIVE.LATENCY_SETTING.ENABLED
       },
@@ -596,6 +595,9 @@ function customConfig (): CustomConfig {
         commentsPolicy: CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY,
         privacy: CONFIG.DEFAULTS.PUBLISH.PRIVACY,
         licence: CONFIG.DEFAULTS.PUBLISH.LICENCE
+      },
+      live: {
+        saveReplay: CONFIG.DEFAULTS.LIVE.SAVE_REPLAY
       },
       p2p: {
         webapp: {

@@ -206,7 +206,6 @@ export interface CustomConfig {
     enabled: boolean
 
     allowReplay: boolean
-    saveReplayByDefault: boolean
 
     latencySetting: {
       enabled: boolean
@@ -355,14 +354,18 @@ export interface CustomConfig {
   }
 
   defaults: {
-    publish: {
-      downloadEnabled: boolean
-      commentsPolicy: VideoCommentPolicyType
-      privacy: VideoPrivacyType
-      licence: number
-    }
+      publish: {
+        downloadEnabled: boolean
+        commentsPolicy: VideoCommentPolicyType
+        privacy: VideoPrivacyType
+        licence: number
+      }
 
-    p2p: {
+      live: {
+        saveReplay: boolean
+      }
+
+      p2p: {
       webapp: {
         enabled: boolean
       }

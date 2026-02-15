@@ -164,6 +164,11 @@ const CONFIG = {
         return config.get<number>('defaults.publish.licence')
       }
     },
+    LIVE: {
+      get SAVE_REPLAY () {
+        return config.get<boolean>('defaults.live.save_replay')
+      }
+    },
     P2P: {
       WEBAPP: {
         get ENABLED () {
@@ -659,10 +664,6 @@ const CONFIG = {
 
     get ALLOW_REPLAY () {
       return config.get<boolean>('live.allow_replay')
-    },
-
-    get SAVE_REPLAY_BY_DEFAULT () {
-      return config.get<boolean>('live.save_replay_by_default')
     },
 
     LATENCY_SETTING: {
