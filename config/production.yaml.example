@@ -161,9 +161,6 @@ object_storage:
 
   region: 'us-east-1'
 
-  # Use path style requests if the S3 provider does not support virtual hosting of buckets
-  force_path_style: false
-
   upload_acl:
     # Set this ACL on each uploaded object of public/unlisted videos
     # Use null if your S3 provider does not support object ACL
