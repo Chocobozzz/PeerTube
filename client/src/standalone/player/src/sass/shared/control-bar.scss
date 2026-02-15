@@ -264,7 +264,7 @@ $chapter-marker-size: 9px;
     cursor: pointer;
 
     @include disable-outline;
-    @include inject-icon("./svg/popout.svg", var(--icon-size));
+    @include inject-icon("./svg/popout.svg", calc(var(--icon-size) - 4px));
   }
 
   .vjs-progress-control:hover .vjs-slider,
