@@ -132,17 +132,6 @@ body {
   margin-right: auto;
 }
 
-// Always show PiP button in embed, even for small fixed-size iframes.
-.standalone-video-embed .video-js.vjs-peertube-skin .vjs-control-bar .vjs-popout-control {
-  display: flex !important;
-  visibility: visible !important;
-}
-
-.standalone-video-embed .video-js.vjs-peertube-skin .vjs-control-bar .vjs-popout-control.vjs-hidden {
-  display: flex !important;
-  visibility: visible !important;
-}
-
 @media screen and (max-width: 300px) {
   #error-block {
     font-size: 36px;
