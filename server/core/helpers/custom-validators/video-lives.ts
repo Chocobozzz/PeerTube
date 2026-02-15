@@ -18,5 +18,5 @@ export function areLiveSchedulesValid (schedules: any[]) {
 }
 
 export function isLiveDvrWindowSecondsValid (value: unknown, maxDvrWindowSeconds: number) {
-  return Number.isInteger(value) && value > 0 && value <= maxDvrWindowSeconds
+  return typeof value === 'number' && Number.isInteger(value) && value > 0 && value <= maxDvrWindowSeconds
 }
