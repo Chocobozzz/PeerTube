@@ -839,7 +839,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       : undefined
 
     const liveOptions = video.isLive
-      ? { latencyMode: liveVideo.latencyMode, dvrEnabled: liveVideo.dvrEnabled === true }
+      ? { latencyMode: liveVideo.latencyMode }
       : undefined
 
     return {
@@ -861,7 +861,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       embedTitle: video.name,
 
       isLive: video.isLive,
-      isLiveDvr: video.isLive && liveVideo?.dvrEnabled === true,
       liveOptions,
 
       videoViewUrl: this.videoService.getVideoViewUrl(video.uuid),
