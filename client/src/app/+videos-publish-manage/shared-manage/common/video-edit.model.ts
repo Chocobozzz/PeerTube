@@ -707,6 +707,7 @@ export class VideoEdit {
       permanentLive: this.live.permanentLive,
       latencyMode: this.live.latencyMode,
       dvrEnabled: this.live.dvrEnabled === true,
+      dvrWindowSeconds: this.live.dvrWindowSeconds,
       dvrWindowHours: this.dvrWindowSecondsToHours(this.live.dvrWindowSeconds),
       saveReplay: this.live.saveReplay,
 
