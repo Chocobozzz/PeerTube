@@ -220,7 +220,6 @@ export class HLSOptionsBuilder {
       startPosition: timeToInt(this.options.startTime),
 
       p2pMediaLoaderOptions: p2pMediaLoaderConfig.loader,
-      peertubeLiveDvr: this.options.liveOptions?.dvrEnabled === true,
 
       // p2p-media-loader uses hls.js loader to fetch m3u8 playlists
       xhrSetup: (xhr, url) => {
