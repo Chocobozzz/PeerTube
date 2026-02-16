@@ -252,9 +252,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
-        <source>
-          <x id="INTERPOLATION"/>
-        </source>
+        <source><x id="INTERPOLATION"/> </source>
         <target state="translated">
           <x id="INTERPOLATION"/>
         </target>
@@ -5130,13 +5128,19 @@ The link will expire within 1 hour.</source>
       <trans-unit id="863691161959989717" datatype="html" xml:space="preserve">
         <source>Error in video miniature component: <x id="PH" equiv-text="err.message"/></source>
         <target state="translated">Wystąpił błąd przy komponencie miniaturki filmu: <x id="PH" equiv-text="err.message"/></target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/video-miniature-markup.component.ts</context><context context-type="linenumber">63</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/video-miniature-markup.component.ts</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1247256698916587400" datatype="html" xml:space="preserve">
         <source>Error in videos list component: <x id="PH" equiv-text="err.message"/></source>
         <target state="translated">Wystąpił błąd przy komponencie miniaturki listy filmów: <x id="PH" equiv-text="err.message"/></target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/videos-list-markup.component.ts</context><context context-type="linenumber">83</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/videos-list-markup.component.ts</context>
+          <context context-type="linenumber">83</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7596115240533332749" datatype="html" xml:space="preserve">
         <source>Open quick filters</source>
         <target state="translated">Otwórz szybkie filtry</target>
@@ -11983,33 +11987,51 @@ The link will expire within 1 hour.</source>
       <trans-unit id="3448020426354063371" datatype="html" xml:space="preserve">
         <source>TWITTER/X</source>
         <target state="translated">TWITTER/X</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.html</context><context context-type="linenumber">17</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2502039689036410119" datatype="html" xml:space="preserve">
         <source>Extra configuration required by Twitter/X. All other social media (Facebook, Mastodon, etc.) are supported out of the box.</source>
         <target state="translated">Dodatkowa konfiguracja wymagana przez Twittera/platformę X. Wszystkie inne media społecznościowe (Facebook, Mastodon, itd.) są wspierane bez dodatkowej konfiguracji.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.html</context><context context-type="linenumber">20</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6966836698348768805" datatype="html" xml:space="preserve">
         <source>Your Twitter/X username</source>
         <target state="translated">Twój pseudonim na Twitterze/platformie X</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.html</context><context context-type="linenumber">30</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.html</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5402438532456058874" datatype="html" xml:space="preserve">
         <source>Indicates the Twitter/X account for the website or platform where the content was published.</source>
         <target state="translated">Wskazuje na konto na Twitterze/platformie X należące do administracji tego serwisu, skąd pochodzi jego zawartość.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.html</context><context context-type="linenumber">33</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.html</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8113899484555907381" datatype="html" xml:space="preserve">
         <source>This is just an extra information injected in PeerTube HTML that is required by Twitter/X. If you don't have a Twitter/X account, just leave the default value.</source>
         <target state="translated">To jest tylko dodatkowa informacja wprowadzona do kodu HTML PeerTube'a, która jest wymagana przez Twittera/platformę X. Jeżeli nie posiadasz konta na Twitterze/platformie X, pozostaw domyślną wartość.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.html</context><context context-type="linenumber">35</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.html</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1226896451128473265" datatype="html" xml:space="preserve">
         <source>Advanced configuration updated.</source>
         <target state="translated">Zaawansowana konfiguracja została zaktualizowana.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.ts</context><context context-type="linenumber">93</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.ts</context>
+          <context context-type="linenumber">93</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4776429682428363094" datatype="html" xml:space="preserve">
         <source>1 day</source>
         <target state="translated">1 dzień</target>
@@ -14914,9 +14936,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
-        <source>
-          <x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/>
-        </source>
+        <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/> </source>
         <target state="translated">
           <x id="ICU" equiv-text="{video.views, plural, =1 {1 wyświetlenie} few {{{ video.views | myNumberFormatter }} wyświetlenia}} many {{{ video.views | myNumberFormatter }} wyświetleń}} other {{{ video.views | myNumberFormatter }} wyświetleń}}"/>
         </target>
@@ -16188,9 +16208,15 @@ The link will expire within 1 hour.</source>
       <trans-unit id="166448092104563965" datatype="html" xml:space="preserve">
         <source>Password protected</source>
         <target state="translated">Zabezpieczone hasłem</target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context><context context-type="linenumber">22</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.html</context><context context-type="linenumber">31</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.html</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6250999352462648289" datatype="html">
         <source>Report this account</source>
         <target state="translated">Zgłoś to konto</target>
@@ -16350,13 +16376,19 @@ The link will expire within 1 hour.</source>
       <trans-unit id="5921284055608402352" datatype="html" xml:space="preserve">
         <source>{value, plural, =1 {thread} other {threads}}</source>
         <target state="translated">{value, plural, =1 {wątek} few {wątki} other {wątków}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context><context context-type="linenumber">205</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
+          <context context-type="linenumber">205</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3072354262521481761" datatype="html" xml:space="preserve">
         <source>You cannot allow live replay if you don't enable transcoding.</source>
         <target state="translated">Nie możesz zezwolić na udostępnienie zapisów z transmisji na żywo, jeżeli nie włączysz transkodowania.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context><context context-type="linenumber">222</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
+          <context context-type="linenumber">222</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3957742085471141221" datatype="html">
         <source>Auto (via ffmpeg)</source>
         <target state="translated">Automatycznie (poprzez ffmpeg)</target>
@@ -20849,8 +20881,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
-        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>.
-Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
+        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
         <target state="translated">Nie można uzyskać danych uwierzytelniających klienta OAuth: <x id="PH" equiv-text="error.text"/>. Upewnij się, że PeerTube jest prawidłowo skonfigurowane (katalog config/), szczególnie w sekcji „webserver”.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
@@ -21065,9 +21096,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3642535017283477339">
+      <trans-unit id="3642535017283477339" xml:space="preserve">
         <source>Medium (4-10 min)</source>
-        <target>Średni (4-10 min)</target>
+        <target state="translated">Średnie (4-10 min)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.ts</context>
           <context context-type="linenumber">65</context>
@@ -21226,10 +21257,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="7804724824750282316" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/>
-          <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/> <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/>
           <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {wynik} few {wyniki} many {wyników} other {wyniki}}"/>
@@ -21630,13 +21658,19 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="3683210116632914190" datatype="html" xml:space="preserve">
         <source>Transcoding max FPS is required.</source>
         <target state="translated">Maksymalna liczba klatek na sekundę w transkodowanych materiałach jest wymagana.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">62</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4345398192434581438" datatype="html" xml:space="preserve">
         <source>Transcoding max FPS must be greater or equal to 1.</source>
         <target state="translated">Maksymalna liczba klatek na sekundę w transkodowanych materiałach musi być większa od lub równa 1.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">63</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8185661254949728718" datatype="html">
         <source>Max live duration is required.</source>
         <target state="translated">Maksymalna długość live jest wymagana.</target>
@@ -21648,58 +21682,91 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="977908106285712483" datatype="html" xml:space="preserve">
         <source>Max live duration must be greater or equal to -1.</source>
         <target state="translated">Maksymalny czas trwania transmisji na żywo musi być większa od lub równa -1.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">71</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
+          <context context-type="linenumber">71</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6722592581141834318" datatype="html" xml:space="preserve">
         <source>Max lives is required.</source>
         <target state="translated">Maksymalna liczba transmisji na żywo jest wymagana.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">78</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
+          <context context-type="linenumber">78</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4718923616998868965" datatype="html" xml:space="preserve">
         <source>Max lives must be greater or equal to -1.</source>
         <target state="translated">Maksymalna liczba transmisji na żywo musi być większa od lub równa -1.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">79</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
+          <context context-type="linenumber">79</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5614457087254770778" datatype="html" xml:space="preserve">
         <source>Max user lives is required.</source>
         <target state="translated">Maksymalna liczba transmisji na żywo na użytkownika jest wymagana.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">86</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
+          <context context-type="linenumber">86</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6094685877052448543" datatype="html" xml:space="preserve">
         <source>Max user lives must be greater or equal to -1.</source>
         <target state="translated">Maksymalna liczba transmisji na żywo na użytkownika musi być większa od lub równa -1.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">87</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
+          <context context-type="linenumber">87</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="351272950792130803" datatype="html" xml:space="preserve">
         <source>Max video channels per user is required.</source>
         <target state="translated">Maksymalna liczba kanałów wideo na użytkownika jest wymagana.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">94</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
+          <context context-type="linenumber">94</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5253683089104713724" datatype="html" xml:space="preserve">
         <source>Max video channels per user must be greater or equal to 1.</source>
         <target state="translated">Maksymalna liczba kanałów wideo na użytkownika musi być większa od lub równa 1.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">95</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
+          <context context-type="linenumber">95</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8354695459880751923" datatype="html" xml:space="preserve">
         <source>Max video channels per user must be a number.</source>
         <target state="translated">Maksymalna liczba kanałów wideo na użytkownika musi być liczbą.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">96</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
+          <context context-type="linenumber">96</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6274027958678461128" datatype="html" xml:space="preserve">
         <source>Max synchronizations per user is required.</source>
         <target state="translated">Maksymalna liczba synchronizacji na użytkownika jest wymagana.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">103</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
+          <context context-type="linenumber">103</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8998234411272282626" datatype="html" xml:space="preserve">
         <source>Max synchronizations per user must be greater or equal to 1.</source>
         <target state="translated">Maksymalna liczba synchronizacji na użytkownika musi być większa od lub równa 1.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">104</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
+          <context context-type="linenumber">104</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6409680643108400586" datatype="html" xml:space="preserve">
         <source>Max synchronizations per user must be a number.</source>
         <target state="translated">Maksymalna liczba synchronizacji na użytkownika musi być liczbą.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">105</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
+          <context context-type="linenumber">105</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5832601947705094130" datatype="html">
         <source>Concurrency is required.</source>
         <target state="translated">Współbieżność jest wymagana.</target>
@@ -21711,28 +21778,43 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="5727962096948024837" datatype="html" xml:space="preserve">
         <source>Concurrency must be greater or equal to 1.</source>
         <target state="translated">Współbieżność musi być większa od lub równa 1.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">113</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
+          <context context-type="linenumber">113</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4327605300509435150" datatype="html" xml:space="preserve">
         <source>Export expiration is required.</source>
         <target state="translated">Termin wygaśnięcia eksportu jest wymagany.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">120</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
+          <context context-type="linenumber">120</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8101376384086436513" datatype="html" xml:space="preserve">
         <source>Export expiration must be greater or equal to 1.</source>
         <target state="translated">Termin wygaśnięcia eksportu musi być większy od lub równy 1.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">121</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
+          <context context-type="linenumber">121</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7568988728218416870" datatype="html" xml:space="preserve">
         <source>Max user video quota is required.</source>
         <target state="translated">Maksymalny limit przesyłanych filmów na użytkownika jest wymagany.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">127</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
+          <context context-type="linenumber">127</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6536118679588615245" datatype="html" xml:space="preserve">
         <source>Max user video video quota must be greater or equal to 1.</source>
         <target state="translated">Maksymalny limit przesyłanych filmów na użytkownika musi być większy od lub równy 1.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">128</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
+          <context context-type="linenumber">128</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8602814243662345124">
         <source>Email is required.</source>
         <target>Adres e-mail jest wymagany.</target>
@@ -25259,7 +25341,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3108012194945806606" datatype="html" xml:space="preserve">
         <source>Drag and drop this row to reorder playlists in your channel</source>
-        <target state="translated">Przeciągnij i upuść ten rząd, żeby reorganizować playlisty na swoim kanale</target>
+        <target state="translated">Przeciągnij i upuść tę pozycję, żeby przeorganizować playlisty na swoim kanale</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
           <context context-type="linenumber">27</context>
@@ -26177,9 +26259,15 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="76275487642696165" datatype="html" xml:space="preserve">
         <source>Watch video <x id="PH" equiv-text="this.video.name"/></source>
         <target state="translated">Obejrzyj <x id="PH" equiv-text="this.video.name"/></target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">226</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context><context context-type="linenumber">82</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
+          <context context-type="linenumber">226</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context>
+          <context context-type="linenumber">82</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="33149636091572968" datatype="html" xml:space="preserve">
         <source>Load more</source>
         <target state="translated">Załaduj więcej</target>
@@ -26249,9 +26337,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="187187500641108332" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
         </target>
@@ -26327,8 +26413,11 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="3386106491172606235" datatype="html" xml:space="preserve">
         <source>Video duration is <x id="PH" equiv-text="this.video.durationLabel"/></source>
         <target state="translated">Długość filmu: <x id="PH" equiv-text="this.video.durationLabel"/></target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.ts</context><context context-type="linenumber">135</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.ts</context>
+          <context context-type="linenumber">135</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8657461348142878243" datatype="html" xml:space="preserve">
         <source>Preferred language for the web interface and for emails</source>
         <target state="translated">Preferowany język interfejsu oraz e-maili</target>
