@@ -13,20 +13,18 @@ import { resolveUrl, UploaderX } from 'ngx-uploadx'
  *   };
  */
 export class UploaderXFormData extends UploaderX {
-
   async getFileUrl (): Promise<string> {
     const headers = {
       'X-Upload-Content-Length': this.size.toString(),
       'X-Upload-Content-Type': this.file.type || 'application/octet-stream'
     }
 
-    const previewfile = this.metadata.previewfile as any as File
-    delete this.metadata.previewfile
+    const thumbnailfile = this.metadata.thumbnailfile as any as File
+    delete this.metadata.thumbnailfile
 
     const data = objectToFormData(this.metadata)
-    if (previewfile !== undefined) {
-      data.append('previewfile', previewfile, previewfile.name)
-      data.append('thumbnailfile', previewfile, previewfile.name)
+    if (thumbnailfile !== undefined) {
+      data.append('thumbnailfile', thumbnailfile, thumbnailfile.name)
     }
 
     await this.request({

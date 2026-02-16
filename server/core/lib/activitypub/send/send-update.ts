@@ -20,8 +20,7 @@ import {
 import { audiencify, getPlaylistAudience, getPublicAudience, getVideoAudience } from '../audience.js'
 import { getLocalChannelPlayerSettingsActivityPubUrl, getLocalVideoPlayerSettingsActivityPubUrl, getUpdateActivityPubUrl } from '../url.js'
 import { canVideoBeFederated } from '../videos/federate.js'
-import { getActorsInvolvedInVideo } from './shared/index.js'
-import { broadcastToFollowers, sendVideoRelatedActivity } from './shared/send-utils.js'
+import { broadcastToFollowers, getActorsInvolvedInVideo, sendVideoRelatedActivity } from './shared/send-utils.js'
 
 export async function sendUpdateVideo (videoArg: MVideoAPLight, transaction: Transaction, overriddenByActor?: MActor) {
   if (!canVideoBeFederated(videoArg)) return undefined
@@ -35,7 +34,7 @@ export async function sendUpdateVideo (videoArg: MVideoAPLight, transaction: Tra
   const url = getUpdateActivityPubUrl(video.url, video.updatedAt.toISOString())
 
   const videoObject = await video.toActivityPubObject()
-  const audience = getVideoAudience(byActor, video.privacy)
+  const audience = getVideoAudience({ account: video.VideoChannel.Account, channel: video.VideoChannel, privacy: video.privacy })
 
   const updateActivity = buildUpdateActivity(url, byActor, videoObject, audience)
 
@@ -130,7 +129,7 @@ export async function sendUpdateVideoPlayerSettings (video: MVideoFullLight, set
   const updateUrl = getUpdateActivityPubUrl(settingsUrl, settings.updatedAt.toISOString())
 
   const object = PlayerSettingModel.formatAPPlayerSetting({ settings, video, channel: undefined })
-  const audience = getVideoAudience(byActor, video.privacy)
+  const audience = getVideoAudience({ account: video.VideoChannel.Account, channel: video.VideoChannel, privacy: video.privacy })
 
   const updateActivity = buildUpdateActivity(updateUrl, byActor, object, audience)
 

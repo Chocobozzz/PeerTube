@@ -3,26 +3,22 @@ import { OBJECT_STORAGE_PROXY_PATHS, WEBSERVER } from '@server/initializers/cons
 import { MVideoUUID } from '@server/types/models/index.js'
 import { BucketInfo, buildKey, getEndpointParsed } from './shared/index.js'
 
-export function getInternalUrl (config: BucketInfo, keyWithoutPrefix: string) {
-  return getBaseUrl(config) + buildKey(keyWithoutPrefix, config)
+// ---------------------------------------------------------------------------
+
+export function buildObjectStoragePublicFileUrl (options: {
+  bucket: BucketInfo
+  key: string
+}) {
+  return buildBaseUrl(options.bucket) + buildKey(options.key, options.bucket)
 }
 
 // ---------------------------------------------------------------------------
 
-export function getObjectStoragePublicFileUrl (fileUrl: string, objectStorageConfig: { BASE_URL: string }) {
-  const baseUrl = objectStorageConfig.BASE_URL
-  if (!baseUrl) return fileUrl
-
-  return replaceByBaseUrl(fileUrl, baseUrl)
-}
-
-// ---------------------------------------------------------------------------
-
-export function getHLSPrivateFileUrl (video: MVideoUUID, filename: string) {
+export function buildObjectStorageHLSPrivateFileUrl (video: MVideoUUID, filename: string) {
   return WEBSERVER.URL + OBJECT_STORAGE_PROXY_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS + video.uuid + `/${filename}`
 }
 
-export function getWebVideoPrivateFileUrl (filename: string) {
+export function buildObjectStorageWebVideoPrivateFileUrl (filename: string) {
   return WEBSERVER.URL + OBJECT_STORAGE_PROXY_PATHS.PRIVATE_WEB_VIDEOS + filename
 }
 
@@ -30,19 +26,17 @@ export function getWebVideoPrivateFileUrl (filename: string) {
 // Private
 // ---------------------------------------------------------------------------
 
-function getBaseUrl (bucketInfo: BucketInfo, baseUrl?: string) {
-  if (baseUrl) return baseUrl
+function buildBaseUrl (bucketInfo: BucketInfo) {
+  let baseUrlConfig = bucketInfo.BASE_URL
+  if (baseUrlConfig && !baseUrlConfig.endsWith('/')) baseUrlConfig += '/'
 
   if (CONFIG.OBJECT_STORAGE.FORCE_PATH_STYLE) {
-    return `${getEndpointParsed().protocol}//${getEndpointParsed().host}/${bucketInfo.BUCKET_NAME}/`
+    const baseUrl = baseUrlConfig || `${getEndpointParsed().protocol}//${getEndpointParsed().host}/`
+
+    return baseUrl + `${bucketInfo.BUCKET_NAME}/`
   }
 
+  if (baseUrlConfig) return baseUrlConfig
+
   return `${getEndpointParsed().protocol}//${bucketInfo.BUCKET_NAME}.${getEndpointParsed().host}/`
-}
-
-const regex = new RegExp('https?://[^/]+')
-function replaceByBaseUrl (fileUrl: string, baseUrl: string) {
-  if (!fileUrl) return fileUrl
-
-  return fileUrl.replace(regex, baseUrl)
 }

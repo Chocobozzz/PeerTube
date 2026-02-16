@@ -479,8 +479,7 @@ function runTest (withObjectStorage: boolean) {
                   size: 23000
                 }
               ],
-              thumbnailfile: 'custom-thumbnail-from-preview',
-              previewfile: 'custom-preview'
+              thumbnails: [ 'custom-thumbnail-280x157.jpg', 'custom-thumbnail-850x480.jpg' ]
             }
           })
         }

@@ -8,7 +8,6 @@ import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
-  makeGetRequest,
   makeRawRequest,
   setAccessTokensToServers,
   setDefaultAccountAvatar,
@@ -263,8 +262,9 @@ describe('Test video source management', function () {
 
           // Grab old paths to ensure we'll regenerate
 
-          previousUrls.push(video.previewPath)
-          previousUrls.push(video.thumbnailPath)
+          for (const thumbnail of video.thumbnails) {
+            previousUrls.push(thumbnail.fileUrl)
+          }
 
           for (const file of files) {
             previousUrls.push(file.fileUrl)
@@ -309,11 +309,11 @@ describe('Test video source management', function () {
           const files = getAllFiles(video)
           expect(files).to.have.lengthOf(4 * 2)
 
-          expect(previousUrls).to.not.include(server.url + video.previewPath)
-          expect(previousUrls).to.not.include(server.url + video.thumbnailPath)
+          for (const thumbnail of video.thumbnails) {
+            expect(previousUrls).to.not.include(thumbnail.fileUrl)
 
-          await makeGetRequest({ url: server.url, path: video.previewPath, expectedStatus: HttpStatusCode.OK_200 })
-          await makeGetRequest({ url: server.url, path: video.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
+            await makeRawRequest({ url: thumbnail.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+          }
 
           for (const file of files) {
             expect(previousUrls).to.not.include(file.fileUrl)
@@ -373,23 +373,22 @@ describe('Test video source management', function () {
         const { uuid } = await servers[0].videos.upload({
           attributes: {
             name: 'custom miniatures',
-            thumbnailfile: 'custom-thumbnail.jpg',
-            previewfile: 'custom-preview.jpg'
+            thumbnailfile: 'custom-thumbnail-850x480.jpg'
           }
         })
 
         await waitJobs(servers)
 
-        const previousPaths: string[] = []
+        const previousUrls: string[] = []
 
         for (const server of servers) {
           const video = await server.videos.get({ id: uuid })
 
-          previousPaths.push(video.previewPath)
-          previousPaths.push(video.thumbnailPath)
+          for (const thumbnail of video.thumbnails) {
+            previousUrls.push(thumbnail.fileUrl)
 
-          await makeGetRequest({ url: server.url, path: video.previewPath, expectedStatus: HttpStatusCode.OK_200 })
-          await makeGetRequest({ url: server.url, path: video.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
+            await makeRawRequest({ url: thumbnail.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+          }
         }
 
         await servers[0].videos.replaceSourceFile({ videoId: uuid, fixture: 'video_short_360p.mp4' })
@@ -398,11 +397,11 @@ describe('Test video source management', function () {
         for (const server of servers) {
           const video = await server.videos.get({ id: uuid })
 
-          expect(previousPaths).to.include(video.previewPath)
-          expect(previousPaths).to.include(video.thumbnailPath)
+          for (const thumbnail of video.thumbnails) {
+            expect(previousUrls).to.include(thumbnail.fileUrl)
 
-          await makeGetRequest({ url: server.url, path: video.previewPath, expectedStatus: HttpStatusCode.OK_200 })
-          await makeGetRequest({ url: server.url, path: video.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
+            await makeRawRequest({ url: thumbnail.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+          }
         }
       })
 

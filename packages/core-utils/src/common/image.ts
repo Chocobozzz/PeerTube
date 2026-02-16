@@ -1,13 +1,16 @@
-export function findAppropriateImage<T extends { width: number, height: number }> (images: T[], wantedWidth: number) {
+import { maxBy } from './array.js'
+
+export function findAppropriateImage<T extends { width: number }> (images: T[], wantedWidth: number) {
+  if (!wantedWidth) throw new Error('Invalid width to find appropriate image')
   if (!images || images.length === 0) return undefined
 
-  const imagesSorted = images.sort((a, b) => a.width - b.width)
+  let candidate: T
 
-  for (const image of imagesSorted) {
-    if (image.width >= wantedWidth) {
-      return image
+  for (const img of images) {
+    if (img.width >= wantedWidth && (!candidate || img.width < candidate.width)) {
+      candidate = img
     }
   }
 
-  return images[images.length - 1] // Biggest one
+  return candidate || maxBy(images, 'width')
 }

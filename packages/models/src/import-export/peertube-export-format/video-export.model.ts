@@ -7,6 +7,7 @@ import {
   VideoStateType,
   VideoStreamingPlaylistType_Type
 } from '../../videos/index.js'
+import { ImageExportJSON } from './image-export.model.js'
 
 export interface VideoExportJSON {
   videos: {
@@ -51,6 +52,7 @@ export interface VideoExportJSON {
 
     thumbnailUrl: string
     previewUrl: string
+    thumbnails: ImageExportJSON[]
 
     views: number
 

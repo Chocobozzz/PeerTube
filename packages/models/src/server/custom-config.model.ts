@@ -64,6 +64,7 @@ export interface CustomConfig {
 
     customization: {
       primaryColor: string
+      onPrimaryColor: string
       foregroundColor: string
       backgroundColor: string
       backgroundSecondaryColor: string
@@ -102,24 +103,6 @@ export interface CustomConfig {
       login: {
         redirectOnSingleExternalAuth: boolean
       }
-    }
-  }
-
-  cache: {
-    previews: {
-      size: number
-    }
-
-    captions: {
-      size: number
-    }
-
-    torrents: {
-      size: number
-    }
-
-    storyboards: {
-      size: number
     }
   }
 

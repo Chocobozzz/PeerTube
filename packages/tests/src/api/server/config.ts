@@ -55,11 +55,6 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.client.browseVideos.defaultScope).to.equal('federated')
   expect(data.client.menu.login.redirectOnSingleExternalAuth).to.be.false
 
-  expect(data.cache.previews.size).to.equal(1)
-  expect(data.cache.captions.size).to.equal(1)
-  expect(data.cache.torrents.size).to.equal(1)
-  expect(data.cache.storyboards.size).to.equal(1)
-
   expect(data.signup.enabled).to.be.true
   expect(data.signup.limit).to.equal(4)
   expect(data.signup.minimumAge).to.equal(16)
@@ -213,6 +208,7 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       default: 'default',
       customization: {
         primaryColor: '#001',
+        onPrimaryColor: '#042',
         foregroundColor: '#002',
         backgroundColor: '#003',
         backgroundSecondaryColor: '#004',
@@ -246,20 +242,6 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
         login: {
           redirectOnSingleExternalAuth: true
         }
-      }
-    },
-    cache: {
-      previews: {
-        size: 2
-      },
-      captions: {
-        size: 3
-      },
-      torrents: {
-        size: 4
-      },
-      storyboards: {
-        size: 5
       }
     },
     signup: {
@@ -968,6 +950,26 @@ describe('Test config', function () {
 
         after(async function () {
           await server.config.deleteInstanceImage({ type: ActorImageType.AVATAR })
+        })
+      })
+
+      describe('SVG logos', async function () {
+        it('Should upload SVG on compatible endpoints', async function () {
+          for (const type of [ 'favicon', 'header-wide', 'header-square', 'opengraph' ] as LogoType[]) {
+            await server.config.updateInstanceLogo({ type, fixture: 'peertube.svg' })
+
+            const htmlConfig = await server.config.getConfig()
+
+            const logos = htmlConfig.instance.logo.filter(l => l.type === type)
+            expect(logos).to.have.lengthOf(1)
+            expect(logos[0].width).to.be.null
+            expect(logos[0].height).to.be.null
+            expect(logos[0].isFallback).to.be.false
+            expect(logos[0].type).to.equal(type)
+
+            await makeRawRequest({ url: logos[0].fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+            await testFileExistsOnFSOrNot(server, 'uploads/images', basename(logos[0].fileUrl), true)
+          }
         })
       })
     })

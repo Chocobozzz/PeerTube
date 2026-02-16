@@ -94,6 +94,8 @@ export class VideoMiniatureComponent implements OnInit {
 
   readonly videoLinkType = input<LinkType>('internal')
 
+  readonly thumbnailWidthPx = input(undefined, { transform: numberAttribute })
+
   readonly videoBlocked = output()
   readonly videoUnblocked = output()
   readonly videoRemoved = output()

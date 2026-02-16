@@ -73,7 +73,7 @@ type Form = {
   language: FormControl<string>
   description: FormControl<string>
   tags: FormArray<FormControl<string>>
-  previewfile: FormControl<Blob>
+  thumbnailfile: FormControl<Blob>
   support: FormControl<string>
   schedulePublicationAt: FormControl<Date>
   pluginData: FormGroup
@@ -287,7 +287,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
       language: VIDEO_LANGUAGE_VALIDATOR,
       description: VIDEO_DESCRIPTION_VALIDATOR,
       tags: VIDEO_TAGS_ARRAY_VALIDATOR,
-      previewfile: null,
+      thumbnailfile: null,
       support: VIDEO_SUPPORT_VALIDATOR,
       schedulePublicationAt: VIDEO_SCHEDULE_PUBLICATION_AT_VALIDATOR
     }

@@ -1,4 +1,5 @@
 import { VideoStudioTaskPayload } from '../../server/index.js'
+import { VideoFileStreamType } from '../../videos/file/video-file-stream.enum.js'
 
 export type RunnerJobVODPrivatePayload =
   | RunnerJobVODWebVideoTranscodingPrivatePayload
@@ -18,18 +19,26 @@ export interface RunnerJobVODWebVideoTranscodingPrivatePayload {
   videoUUID: string
   isNewVideo: boolean
   deleteInputFileId: number | null
+
+  canMoveVideoState: boolean
 }
 
 export interface RunnerJobVODAudioMergeTranscodingPrivatePayload {
   videoUUID: string
   isNewVideo: boolean
   deleteInputFileId: number | null
+
+  canMoveVideoState: boolean
 }
 
 export interface RunnerJobVODHLSTranscodingPrivatePayload {
   videoUUID: string
   isNewVideo: boolean
   deleteWebVideoFiles: boolean
+
+  canMoveVideoState: boolean
+  inputStreams: VideoFileStreamType[]
+  transcodingRequestAt: string
 }
 
 // ---------------------------------------------------------------------------

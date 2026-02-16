@@ -19,7 +19,7 @@ Create a `peertube` user with `/var/www/peertube` home:
 ::: code-group
 
 ```bash [GNU/Linux]
-sudo useradd -m -d /var/www/peertube -s /usr/sbin/nologin -p peertube peertube
+sudo useradd -m -d /var/www/peertube -s /usr/sbin/nologin peertube
 ```
 
 ```bash [FreeBSD]

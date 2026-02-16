@@ -3,8 +3,14 @@
 @use "_mixins" as *;
 @use "_miniature" as *;
 
+@function getWidth($height) {
+  @return math.div(16, 9) * $height;
+}
+
 .root {
   --co-image-height: 78px;
+  --co-image-width: #{getWidth(78px)};
+  --thumbnail-width: var(--co-image-width); // Required by video-thumbnail component
 
   display: flex;
   align-items: center;
@@ -12,17 +18,19 @@
 
   @media screen and (max-width: $mobile-view) {
     --co-image-height: 64px;
+    --co-image-width: #{getWidth(64px)};
   }
 
   &.small {
     --co-image-height: 45px;
+    --co-image-width: #{getWidth(45px)};
   }
 }
 
 my-video-thumbnail {
   display: block;
   height: var(--co-image-height);
-  width: calc(#{math.div(16, 9)} * var(--co-image-height));
+  width: var(--co-image-width);
 
   & + .name {
     @include margin-left(0.5rem);

@@ -8,6 +8,12 @@ import { Job } from 'bullmq'
 import { logger } from '../../../helpers/logger.js'
 import { JobQueue } from '../job-queue.js'
 
+/**
+ * Create transcoding jobs.
+ * They are not created directly so we can keep parent/children relationships using bullmq features
+ * while having the ability to use remote runner jobs that are not part of bullmq
+ */
+
 async function processTranscodingJobBuilder (job: Job) {
   const payload = job.data as TranscodingJobBuilderPayload
 
@@ -23,8 +29,7 @@ async function processTranscodingJobBuilder (job: Job) {
 
       video,
       videoFile,
-      user,
-      videoFileAlreadyLocked: false
+      user
     })
   }
 

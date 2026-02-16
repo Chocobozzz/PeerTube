@@ -13,7 +13,6 @@ import {
   RegisterServerHookOptions,
   RegisterServerSettingOptions,
   ServerConfig,
-  ThumbnailType_Type,
   VideoBlacklistCreate
 } from '@peertube/peertube-models'
 import { ActorModel } from '@server/models/actor/actor.js'
@@ -63,7 +62,11 @@ export type PeerTubeHelpers = {
       }
 
       thumbnails: {
-        type: ThumbnailType_Type
+        // 1 = Thumbnail, 2 = Preview (deprecated, use width/height instead)
+        type: 1 | 2
+
+        height: number
+        width: number
         path: string
       }[]
     }>

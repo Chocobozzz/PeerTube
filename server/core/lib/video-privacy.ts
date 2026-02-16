@@ -84,7 +84,7 @@ async function moveFiles (options: {
       await moveHLSFilesOnFS(type, video)
     } else {
       try {
-        await updateHLSFilesACL(hls)
+        await updateHLSFilesACL(video)
       } catch (err) {
         logger.error(objectStorageErrorMsg, { err, ...lTags('object-storage', video.uuid) })
       }

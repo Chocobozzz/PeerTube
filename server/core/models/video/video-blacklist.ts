@@ -84,7 +84,7 @@ export class VideoBlacklistModel extends SequelizeModel<VideoBlacklistModel> {
           },
           {
             model: ThumbnailModel,
-            attributes: [ 'type', 'filename' ],
+            attributes: [ 'width', 'height', 'filename' ],
             required: false
           }
         ]

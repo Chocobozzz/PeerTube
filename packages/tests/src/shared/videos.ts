@@ -1,14 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
 
-import { uuidRegex } from '@peertube/peertube-core-utils'
+import { maxBy, minBy, uuidRegex } from '@peertube/peertube-core-utils'
 import { ffprobePromise } from '@peertube/peertube-ffmpeg'
 import {
   FileStorage,
   HttpStatusCode,
   HttpStatusCodeType,
+  Video,
   VideoCaption,
   VideoCommentPolicyType,
   VideoDetails,
+  VideoPlaylist,
   VideoPrivacy,
   VideoResolution
 } from '@peertube/peertube-models'
@@ -192,9 +194,6 @@ export async function completeVideoCheck (options: {
     }
     fixture: string
 
-    thumbnailfile?: string
-    previewfile?: string
-
     files?: {
       resolution: number
       size: number
@@ -206,6 +205,8 @@ export async function completeVideoCheck (options: {
       hlsOnly: boolean
       resolutions: number[]
     }
+
+    thumbnails?: string[]
   }
 }) {
   const { attributes, originServer, server, videoUUID, objectStorageBaseUrl } = options
@@ -269,12 +270,10 @@ export async function completeVideoCheck (options: {
   expect(video.channel.createdAt).to.exist
   expect(dateIsValid(video.channel.updatedAt.toString())).to.be.true
 
-  expect(video.thumbnailPath).to.exist
-  await testImageGeneratedByFFmpeg(server.url, attributes.thumbnailfile || attributes.fixture, video.thumbnailPath)
-
-  if (attributes.previewfile) {
-    expect(video.previewPath).to.exist
-    await testImageGeneratedByFFmpeg(server.url, attributes.previewfile, video.previewPath)
+  if (attributes.thumbnails) {
+    await checkThumbnails({ video, thumbnails: attributes.thumbnails, server })
+  } else {
+    await checkThumbnails({ video, thumbnails: [ attributes.fixture + '.jpg' ], strict: false, server })
   }
 
   if (attributes.files) {
@@ -311,8 +310,7 @@ export async function checkVideoFilesWereRemoved (options: {
   const webVideoFiles = video.files || []
   const hlsFiles = video.streamingPlaylists[0]?.files || []
 
-  const thumbnailName = basename(video.thumbnailPath)
-  const previewName = basename(video.previewPath)
+  const thumbnailNames = video.thumbnails.map(t => basename(t.fileUrl))
 
   const torrentNames = webVideoFiles.concat(hlsFiles).map(f => basename(f.torrentUrl))
 
@@ -332,8 +330,7 @@ export async function checkVideoFilesWereRemoved (options: {
     directories = {
       ...directories,
 
-      thumbnails: [ thumbnailName ],
-      previews: [ previewName ],
+      thumbnails: thumbnailNames,
       torrents: torrentNames,
       captions: captionNames
     }
@@ -445,4 +442,51 @@ export async function probeResBody (body: Buffer) {
   await remove(videoPath)
 
   return probe
+}
+
+export async function checkThumbnails (options: {
+  server: PeerTubeServer
+  video?: Video
+  playlist?: VideoPlaylist
+  thumbnails: string[]
+  strict?: boolean // default true
+}) {
+  const { server, video, playlist, strict = true } = options
+
+  const thumbnails = options.thumbnails.map(t => {
+    const matched = t.match(/-(\d+)x(\d+)/)
+
+    const width = matched
+      ? +matched[1]
+      : 280
+
+    const height = matched
+      ? +matched[2]
+      : 157
+
+    return { filename: t, width, height }
+  })
+
+  const entity = video || playlist
+
+  if (strict) {
+    expect(entity.thumbnails).to.have.lengthOf(thumbnails.length)
+  }
+
+  for (const thumbnail of thumbnails) {
+    const videoThumbnail = entity.thumbnails.find(t => t.width === thumbnail.width && t.height === thumbnail.height)
+    expect(videoThumbnail).to.exist
+
+    expectStartWith(videoThumbnail.fileUrl, server.url)
+
+    await testImageGeneratedByFFmpeg({ name: thumbnail.filename, url: videoThumbnail.fileUrl })
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-deprecated
+  await testImageGeneratedByFFmpeg({ name: minBy(thumbnails, 'width').filename, url: server.url + entity.thumbnailPath })
+
+  if (video && thumbnails.length > 1) {
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
+    await testImageGeneratedByFFmpeg({ name: maxBy(thumbnails, 'width').filename, url: server.url + video.previewPath })
+  }
 }

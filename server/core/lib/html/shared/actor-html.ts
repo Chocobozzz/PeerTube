@@ -2,7 +2,6 @@ import { escapeHTML, maxBy } from '@peertube/peertube-core-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { getChannelRSSFeeds, getDefaultRSSFeeds } from '@server/lib/rss.js'
 import { AccountModel } from '@server/models/account/account.js'
-import { ActorImageModel } from '@server/models/actor/actor-image.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { MAccountDefault, MChannelDefault } from '@server/types/models/index.js'
 import express from 'express'
@@ -83,12 +82,13 @@ export class ActorHtml {
     const title = entity.getDisplayName()
 
     const avatar = maxBy(entity.Actor.Avatars, 'width')
-    const image = {
-      url: ActorImageModel.getImageUrl(avatar),
-      width: avatar?.width,
-      height: avatar?.height
-    }
-
+    const image = avatar
+      ? {
+        url: avatar.getLocalFileUrl(),
+        width: avatar.width,
+        height: avatar.height
+      }
+      : undefined
     const ogType = 'website'
     const twitterCard = 'summary'
     const schemaType = 'ProfilePage'

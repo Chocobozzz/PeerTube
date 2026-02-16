@@ -1,4 +1,4 @@
-import { maxBy, minBy, randomInt } from '@peertube/peertube-core-utils'
+import { randomInt } from '@peertube/peertube-core-utils'
 import {
   AbuseState,
   AbuseStateType,
@@ -58,7 +58,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 980
+export const LAST_MIGRATION_VERSION = 990
 
 // ---------------------------------------------------------------------------
 
@@ -304,7 +304,8 @@ export const REPEAT_JOBS: { [id in JobType]?: RepeatOptions } = {
 }
 export const JOB_PRIORITY = {
   STORYBOARD: 95,
-  TRANSCODING: 100,
+  REQUIRED_TRANSCODING: 100,
+  OPTIONAL_TRANSCODING: 10000,
   VIDEO_STUDIO: 150,
   TRANSCRIPTION: 200
 }
@@ -482,6 +483,14 @@ export const CONSTRAINTS_FIELDS = {
       }
     }
   },
+  LOGO: {
+    IMAGE: {
+      EXTNAME: [ '.svg', '.png', '.jpeg', '.jpg', '.gif', '.webp' ],
+      FILE_SIZE: {
+        max: 8 * 1024 * 1024 // 8MB
+      }
+    }
+  },
   VIDEO_EVENTS: {
     COUNT: { min: 0 }
   },
@@ -602,7 +611,7 @@ export const VIDEO_LICENCES: { [id in VideoLicenceType]: string } = {
   [VideoLicence['CC-BY-NC-ND']]: 'Attribution - Non Commercial - No Derivatives',
   [VideoLicence['CC0']]: 'Public Domain Dedication',
   [VideoLicence['PDM']]: 'Free of known copyright restrictions',
-  [VideoLicence['COPYRIGHT']]: 'Copyrighted - All Rights Reserved'
+  [VideoLicence['ALL_RIGHTS_RESERVED']]: 'All Rights Reserved'
 }
 
 export const VIDEO_LANGUAGES: { [id: string]: string } = {}
@@ -773,6 +782,10 @@ export const MIMETYPES = {
     },
     EXT_MIMETYPE: null as { [id: string]: string }
   },
+  LOGO_IMAGE: {
+    MIMETYPE_EXT: null as { [id: string]: string },
+    EXT_MIMETYPE: null as { [id: string]: string }
+  },
   VIDEO_CAPTIONS: {
     MIMETYPE_EXT: {
       'text/vtt': '.vtt',
@@ -811,8 +824,15 @@ export const MIMETYPES = {
   }
 }
 
+MIMETYPES.LOGO_IMAGE.MIMETYPE_EXT = {
+  ...MIMETYPES.IMAGE.MIMETYPE_EXT,
+
+  'image/svg+xml': '.svg'
+}
+
 MIMETYPES.AUDIO.EXT_MIMETYPE = invert(MIMETYPES.AUDIO.MIMETYPE_EXT)
 MIMETYPES.IMAGE.EXT_MIMETYPE = invert(MIMETYPES.IMAGE.MIMETYPE_EXT)
+MIMETYPES.LOGO_IMAGE.EXT_MIMETYPE = invert(MIMETYPES.LOGO_IMAGE.MIMETYPE_EXT)
 MIMETYPES.VIDEO_CAPTIONS.EXT_MIMETYPE = invert(MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT)
 
 export const BINARY_CONTENT_TYPES = new Set([
@@ -930,7 +950,6 @@ export const LAZY_STATIC_PATHS = {
   THUMBNAILS: '/lazy-static/thumbnails/',
   BANNERS: '/lazy-static/banners/',
   AVATARS: '/lazy-static/avatars/',
-  PREVIEWS: '/lazy-static/previews/',
   VIDEO_CAPTIONS: '/lazy-static/video-captions/',
   TORRENTS: '/lazy-static/torrents/',
   STORYBOARDS: '/lazy-static/storyboards/'
@@ -952,17 +971,6 @@ export const STATIC_MAX_AGE = {
   CLIENT: '30d'
 }
 
-// Videos thumbnail size
-export const THUMBNAILS_SIZE = {
-  width: minBy(CONFIG.THUMBNAILS.SIZES, 'width').width,
-  height: minBy(CONFIG.THUMBNAILS.SIZES, 'width').height,
-  minRemoteWidth: 150
-}
-export const PREVIEWS_SIZE = {
-  width: maxBy(CONFIG.THUMBNAILS.SIZES, 'width').width,
-  height: maxBy(CONFIG.THUMBNAILS.SIZES, 'width').height,
-  minRemoteWidth: 400
-}
 export const ACTOR_IMAGES_SIZE: { [key in ActorImageType_Type]: { width: number, height: number }[] } = {
   [ActorImageType.AVATAR]: [ // 1/1 ratio
     {
@@ -1032,8 +1040,12 @@ export const EMBED_SIZE = {
 
 // Sub folders of cache directory
 export const FILES_CACHE = {
-  PREVIEWS: {
-    DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'previews'),
+  AVATARS: {
+    DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'avatars'),
+    MAX_AGE: 1000 * 3600 * 24 * 7 // 7 days
+  },
+  THUMBNAILS: {
+    DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'thumbnails'),
     MAX_AGE: 1000 * 3600 * 3 // 3 hours
   },
   STORYBOARDS: {
@@ -1043,10 +1055,6 @@ export const FILES_CACHE = {
   VIDEO_CAPTIONS: {
     DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'video-captions'),
     MAX_AGE: 1000 * 3600 * 3 // 3 hours
-  },
-  TORRENTS: {
-    DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'torrents'),
-    MAX_AGE: 1000 * 3600 * 3 // 3 hours
   }
 }
 
@@ -1055,7 +1063,7 @@ export const LRU_CACHE = {
     MAX_SIZE: 1000
   },
   FILENAME_TO_PATH_PERMANENT_FILE_CACHE: {
-    MAX_SIZE: 1000
+    MAX_SIZE: 5000
   },
   STATIC_VIDEO_FILES_RIGHTS_CHECK: {
     MAX_SIZE: 5000,
@@ -1297,6 +1305,7 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
     ACTIVITY_PUB.VIDEO_PLAYLIST_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
 
     CONSTRAINTS_FIELDS.ACTORS.IMAGE.FILE_SIZE.max = 100 * 1024 // 100KB
+    CONSTRAINTS_FIELDS.LOGO.IMAGE.FILE_SIZE.max = 100 * 1024 // 100KB
     CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max = 400 * 1024 // 400KB
 
     VIEW_LIFETIME.VIEWER_COUNTER = 1000 * 5 // 5 second

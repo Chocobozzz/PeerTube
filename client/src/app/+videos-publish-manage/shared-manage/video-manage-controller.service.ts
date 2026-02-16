@@ -446,7 +446,7 @@ export class VideoManageController implements OnDestroy {
   uploadNewVideo (options: {
     file: File
     privacy: VideoPrivacyType
-    previewfile?: File
+    thumbnailfile?: File
   }) {
     this.resetUploadState()
 
@@ -457,7 +457,7 @@ export class VideoManageController implements OnDestroy {
       ...this.videoEdit.toVideoCreate(options.privacy),
 
       filename: options.file.name,
-      previewfile: options.previewfile
+      thumbnailfile: options.thumbnailfile
     }
 
     this.resumableUploadService.handleFiles(options.file, {

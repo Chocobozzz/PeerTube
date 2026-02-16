@@ -108,7 +108,6 @@ export class LiveCommand extends AbstractCommand {
     options: OverrideCommandOptions & {
       fields: Omit<LiveVideoCreate, 'channelId' | 'thumbnailfile' | 'previewfile'> & {
         thumbnailfile?: string | Blob
-        previewfile?: string | Blob
         channelId?: number
       }
     }
@@ -125,7 +124,6 @@ export class LiveCommand extends AbstractCommand {
 
     const attaches: any = {}
     if (fields.thumbnailfile) attaches.thumbnailfile = fields.thumbnailfile
-    if (fields.previewfile) attaches.previewfile = fields.previewfile
 
     const body = await unwrapBody<{ video: VideoCreateResult }>(this.postUploadRequest({
       ...options,
@@ -135,7 +133,7 @@ export class LiveCommand extends AbstractCommand {
       fields: {
         channelId: defaultChannelId,
 
-        ...omit(fields, [ 'thumbnailfile', 'previewfile' ])
+        ...omit(fields, [ 'thumbnailfile' ])
       },
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200

@@ -1,18 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { getAllFiles, omit } from '@peertube/peertube-core-utils'
-import {
-  ffprobePromise,
-  getAudioStream,
-  hasAudioStream
-} from '@peertube/peertube-ffmpeg'
+import { ffprobePromise, getAudioStream, hasAudioStream } from '@peertube/peertube-ffmpeg'
 import { HttpStatusCode, VideoFileMetadata, VideoState } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
-  makeGetRequest,
+  makeRawRequest,
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
@@ -45,7 +41,6 @@ describe('Test video transcoding', function () {
   })
 
   describe('Common transcoding', function () {
-
     it('Should not transcode video on server 1', async function () {
       this.timeout(60_000)
 
@@ -209,7 +204,6 @@ describe('Test video transcoding', function () {
   })
 
   describe('Audio transcoding', function () {
-
     it('Should transcode high bit rate mp3 to proper bit rate', async function () {
       this.timeout(120_000)
 
@@ -304,9 +298,7 @@ describe('Test video transcoding', function () {
   })
 
   describe('Audio upload', function () {
-
     function runSuite (mode: 'legacy' | 'resumable') {
-
       before(async function () {
         await servers[1].config.enableTranscoding({ hls: true, webVideo: true, resolutions: [] })
       })
@@ -314,7 +306,7 @@ describe('Test video transcoding', function () {
       it('Should merge an audio file with the preview file', async function () {
         this.timeout(60_000)
 
-        const attributes = { name: 'audio_with_preview', previewfile: 'custom-preview.jpg', fixture: 'sample.ogg' }
+        const attributes = { name: 'audio_with_preview', thumbnailfile: 'custom-thumbnail-big.jpg', fixture: 'sample.ogg' }
         await servers[1].videos.upload({ attributes, mode })
 
         await waitJobs(servers)
@@ -327,8 +319,9 @@ describe('Test video transcoding', function () {
 
           expect(videoDetails.files).to.have.lengthOf(1)
 
-          await makeGetRequest({ url: server.url, path: videoDetails.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
-          await makeGetRequest({ url: server.url, path: videoDetails.previewPath, expectedStatus: HttpStatusCode.OK_200 })
+          for (const t of video.thumbnails) {
+            await makeRawRequest({ url: t.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+          }
 
           const magnetUri = videoDetails.files[0].magnetUri
           expect(magnetUri).to.contain('.mp4')
@@ -351,8 +344,9 @@ describe('Test video transcoding', function () {
 
           expect(videoDetails.files).to.have.lengthOf(1)
 
-          await makeGetRequest({ url: server.url, path: videoDetails.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
-          await makeGetRequest({ url: server.url, path: videoDetails.previewPath, expectedStatus: HttpStatusCode.OK_200 })
+          for (const t of videoDetails.thumbnails) {
+            await makeRawRequest({ url: t.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+          }
 
           const magnetUri = videoDetails.files[0].magnetUri
           expect(magnetUri).to.contain('.mp4')
@@ -377,7 +371,7 @@ describe('Test video transcoding', function () {
           }
         })
 
-        const attributes = { name: 'audio_with_preview', previewfile: 'custom-preview.jpg', fixture: 'sample.ogg' }
+        const attributes = { name: 'audio_with_preview', thumbnailfile: 'custom-thumbnail-big.jpg', fixture: 'sample.ogg' }
         const { id } = await servers[1].videos.upload({ attributes, mode })
 
         await waitJobs(servers)
@@ -405,7 +399,6 @@ describe('Test video transcoding', function () {
   })
 
   describe('FFprobe', function () {
-
     it('Should provide valid ffprobe data', async function () {
       this.timeout(160_000)
 
@@ -423,25 +416,29 @@ describe('Test video transcoding', function () {
         const metadata = new VideoFileMetadata(probe)
 
         // expected format properties
-        for (const p of [
-          'tags.encoder',
-          'format_long_name',
-          'size',
-          'bit_rate'
-        ]) {
+        for (
+          const p of [
+            'tags.encoder',
+            'format_long_name',
+            'size',
+            'bit_rate'
+          ]
+        ) {
           expect(metadata.format).to.have.nested.property(p)
         }
 
         // expected stream properties
-        for (const p of [
-          'codec_long_name',
-          'profile',
-          'width',
-          'height',
-          'display_aspect_ratio',
-          'avg_frame_rate',
-          'pix_fmt'
-        ]) {
+        for (
+          const p of [
+            'codec_long_name',
+            'profile',
+            'width',
+            'height',
+            'display_aspect_ratio',
+            'avg_frame_rate',
+            'pix_fmt'
+          ]
+        ) {
           expect(metadata.streams[0]).to.have.nested.property(p)
         }
 
@@ -475,7 +472,6 @@ describe('Test video transcoding', function () {
   })
 
   describe('Transcoding job queue', function () {
-
     it('Should have the appropriate priorities for transcoding jobs', async function () {
       const body = await servers[1].jobs.list({
         start: 0,
@@ -497,9 +493,14 @@ describe('Test video transcoding', function () {
       expect(webVideoJobs).to.have.lengthOf(7)
       expect(optimizeJobs).to.have.lengthOf(1)
 
-      for (const j of optimizeJobs.concat(hlsJobs.concat(webVideoJobs))) {
-        expect(j.priority).to.be.greaterThan(100)
-        expect(j.priority).to.be.lessThan(150)
+      expect(optimizeJobs[0].priority).to.be.greaterThan(100).and.lessThan(150)
+
+      for (const job of [ ...webVideoJobs, ...hlsJobs ]) {
+        if (job.data.resolution === 2160) {
+          expect(job.priority).to.be.greaterThan(100).and.lessThan(150)
+        } else {
+          expect(job.priority).to.be.greaterThan(10000).and.lessThan(10050)
+        }
       }
     })
   })

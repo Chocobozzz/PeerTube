@@ -27,7 +27,16 @@ async function processVideoFileImport (job: Job) {
   await updateVideoFile(video, payload.filePath)
 
   if (CONFIG.OBJECT_STORAGE.ENABLED) {
-    await JobQueue.Instance.createJob(await buildMoveVideoJob({ video, previousVideoState: video.state, type: 'move-to-object-storage' }))
+    await JobQueue.Instance.createJob(
+      await buildMoveVideoJob({
+        type: 'move-to-object-storage',
+        video,
+        moveVideoState: {
+          isNewVideo: false,
+          previousVideoState: video.state
+        }
+      })
+    )
   } else {
     await federateVideoIfNeeded(video, false)
   }

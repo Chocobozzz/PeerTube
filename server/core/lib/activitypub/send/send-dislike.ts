@@ -4,7 +4,7 @@ import { logger } from '../../../helpers/logger.js'
 import { MActor, MActorAudience, MVideoAccountLight, MVideoUrl } from '../../../types/models/index.js'
 import { audiencify, getPublicAudience } from '../audience.js'
 import { getVideoDislikeActivityPubUrlByLocalActor } from '../url.js'
-import { sendVideoActivityToOrigin } from './shared/send-utils.js'
+import { sendVideoRelatedActivityToOrigin } from './shared/send-utils.js'
 
 function sendDislike (byActor: MActor, video: MVideoAccountLight, transaction: Transaction) {
   logger.info('Creating job to dislike %s.', video.url)
@@ -15,7 +15,7 @@ function sendDislike (byActor: MActor, video: MVideoAccountLight, transaction: T
     return buildDislikeActivity(url, byActor, video, audience)
   }
 
-  return sendVideoActivityToOrigin(activityBuilder, { byActor, video, transaction, contextType: 'Rate' })
+  return sendVideoRelatedActivityToOrigin(activityBuilder, { byActor, video, transaction, contextType: 'Rate' })
 }
 
 function buildDislikeActivity (url: string, byActor: MActorAudience, video: MVideoUrl, audience?: ActivityAudience): ActivityDislike {

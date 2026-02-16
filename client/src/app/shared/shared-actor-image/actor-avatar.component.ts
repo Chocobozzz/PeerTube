@@ -3,8 +3,8 @@ import { Component, ElementRef, OnChanges, OnInit, booleanAttribute, inject, inp
 import { RouterLink } from '@angular/router'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
 import { ActorImage } from '@peertube/peertube-models'
+import { findAppropriateImageFileUrl } from '@root-helpers/images'
 import { Account } from '../shared-main/account/account.model'
-import { Actor } from '../shared-main/account/actor.model'
 import { VideoChannel } from '../shared-main/channel/video-channel.model'
 
 export type ActorAvatarInput = {
@@ -119,7 +119,7 @@ export class ActorAvatarComponent implements OnInit, OnChanges {
     }
 
     if (this.isAccount() || this.isChannel() || this.isInstance()) {
-      this.avatarUrl = Actor.GET_ACTOR_AVATAR_URL(actor, this.getSizeNumber())
+      this.avatarUrl = findAppropriateImageFileUrl(actor.avatars, this.getSizeNumber())
       return
     }
 

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import { maxBy } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, Video, VideoPlaylistPrivacy } from '@peertube/peertube-models'
 import {
   cleanupTests,
@@ -85,14 +86,14 @@ describe('Test services', function () {
             `title="${video.name}" src="http://${servers[0].host}/videos/embed/${video.shortUUID}${suffix.output}" ` +
             'style="border: none" allow="fullscreen"></iframe>'
 
-          const expectedThumbnailUrl = 'http://' + servers[0].host + video.previewPath
+          const thumbnail = maxBy(video.thumbnails, 'width')
 
           expect(res.body.html).to.equal(expectedHtml)
           expect(res.body.title).to.equal(video.name)
           expect(res.body.author_name).to.equal(servers[0].store.channel.displayName)
           expect(res.body.width).to.equal(560)
           expect(res.body.height).to.equal(315)
-          expect(res.body.thumbnail_url).to.equal(expectedThumbnailUrl)
+          expect(res.body.thumbnail_url).to.equal(thumbnail.fileUrl)
           expect(res.body.thumbnail_width).to.equal(850)
           expect(res.body.thumbnail_height).to.equal(480)
         }

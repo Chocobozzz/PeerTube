@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { wait } from '@peertube/peertube-core-utils'
+import { maxBy, wait } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoCommentPolicy, VideoCommentThreadTree, VideoPrivacy } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
@@ -86,47 +86,51 @@ describe('Test multiple servers', function () {
       let publishedAt: string = null
 
       await Bluebird.map(servers, async server => {
-        const checkAttributes = {
-          name: 'my super name for server 1',
-          category: 5,
-          licence: 4,
-          language: 'ja',
-          nsfw: true,
-          description: 'my super description for server 1',
-          support: 'my super support text for server 1',
-          originallyPublishedAt: '2019-02-10T13:38:14.449Z',
-          account: {
-            name: 'root',
-            host: servers[0].host
-          },
-          publishedAt,
-          duration: 10,
-          tags: [ 'tag1p1', 'tag2p1' ],
-          privacy: VideoPrivacy.PUBLIC,
-          commentsPolicy: VideoCommentPolicy.ENABLED,
-          downloadEnabled: true,
-          channel: {
-            displayName: 'my channel',
-            name: 'super_channel_name',
-            description: 'super channel'
-          },
-          fixture: 'video_short1.webm',
-          files: [
-            {
-              resolution: 720,
-              height: 720,
-              width: 1280,
-              size: 572456
-            }
-          ]
-        }
-
         const { data } = await server.videos.list()
         expect(data).to.be.an('array')
         expect(data.length).to.equal(1)
         const video = data[0]
 
-        await completeVideoCheck({ server, originServer: servers[0], videoUUID: video.uuid, attributes: checkAttributes })
+        await completeVideoCheck({
+          server,
+          originServer: servers[0],
+          videoUUID: video.uuid,
+          attributes: {
+            name: 'my super name for server 1',
+            category: 5,
+            licence: 4,
+            language: 'ja',
+            nsfw: true,
+            description: 'my super description for server 1',
+            support: 'my super support text for server 1',
+            originallyPublishedAt: '2019-02-10T13:38:14.449Z',
+            account: {
+              name: 'root',
+              host: servers[0].host
+            },
+            publishedAt,
+            duration: 10,
+            tags: [ 'tag1p1', 'tag2p1' ],
+            privacy: VideoPrivacy.PUBLIC,
+            commentsPolicy: VideoCommentPolicy.ENABLED,
+            downloadEnabled: true,
+            channel: {
+              displayName: 'my channel',
+              name: 'super_channel_name',
+              description: 'super channel'
+            },
+            fixture: 'video_short1.webm',
+            files: [
+              {
+                resolution: 720,
+                height: 720,
+                width: 1280,
+                size: 572456
+              }
+            ]
+          }
+        })
+
         publishedAt = video.publishedAt as string
 
         expect(video.channel.avatars).to.have.lengthOf(4)
@@ -163,8 +167,7 @@ describe('Test multiple servers', function () {
         support: 'my super support text for server 2',
         tags: [ 'tag1p2', 'tag2p2', 'tag3p2' ],
         fixture: 'video_short2.webm',
-        thumbnailfile: 'custom-thumbnail.jpg',
-        previewfile: 'custom-preview.jpg'
+        thumbnailfile: 'custom-thumbnail-850x480.jpg'
       }
       await servers[1].videos.upload({ token: userAccessToken, attributes, mode: 'resumable' })
 
@@ -222,8 +225,7 @@ describe('Test multiple servers', function () {
               size: 750000
             }
           ],
-          thumbnailfile: 'custom-thumbnail',
-          previewfile: 'custom-preview'
+          thumbnails: [ 'custom-thumbnail-280x157.jpg', 'custom-thumbnail-850x480.jpg' ]
         }
 
         const { data } = await server.videos.list()
@@ -624,9 +626,8 @@ describe('Test multiple servers', function () {
         description: 'my super description updated',
         support: 'my super support text updated',
         tags: [ 'tag_up_1', 'tag_up_2' ],
-        thumbnailfile: 'custom-thumbnail.jpg',
-        originallyPublishedAt: '2019-02-11T13:38:14.449Z',
-        previewfile: 'custom-preview.jpg'
+        thumbnailfile: 'custom-thumbnail-850x480.jpg',
+        originallyPublishedAt: '2019-02-11T13:38:14.449Z'
       }
 
       updatedAtMin = new Date()
@@ -646,42 +647,45 @@ describe('Test multiple servers', function () {
 
         expect(new Date(videoUpdated.updatedAt)).to.be.greaterThan(updatedAtMin)
 
-        const checkAttributes = {
-          name: 'my super video updated',
-          category: 10,
-          licence: 7,
-          language: 'fr',
-          nsfw: true,
-          description: 'my super description updated',
-          support: 'my super support text updated',
-          originallyPublishedAt: '2019-02-11T13:38:14.449Z',
-          account: {
-            name: 'root',
-            host: servers[2].host
-          },
-          duration: 5,
-          commentsPolicy: VideoCommentPolicy.ENABLED,
-          downloadEnabled: true,
-          tags: [ 'tag_up_1', 'tag_up_2' ],
-          privacy: VideoPrivacy.PUBLIC,
-          channel: {
-            displayName: 'Main root channel',
-            name: 'root_channel',
-            description: ''
-          },
-          fixture: 'video_short3.webm',
-          files: [
-            {
-              resolution: 720,
-              height: 720,
-              width: 1280,
-              size: 292677
-            }
-          ],
-          thumbnailfile: 'custom-thumbnail',
-          previewfile: 'custom-preview'
-        }
-        await completeVideoCheck({ server, originServer: servers[2], videoUUID: videoUpdated.uuid, attributes: checkAttributes })
+        await completeVideoCheck({
+          server,
+          originServer: servers[2],
+          videoUUID: videoUpdated.uuid,
+          attributes: {
+            name: 'my super video updated',
+            category: 10,
+            licence: 7,
+            language: 'fr',
+            nsfw: true,
+            description: 'my super description updated',
+            support: 'my super support text updated',
+            originallyPublishedAt: '2019-02-11T13:38:14.449Z',
+            account: {
+              name: 'root',
+              host: servers[2].host
+            },
+            duration: 5,
+            commentsPolicy: VideoCommentPolicy.ENABLED,
+            downloadEnabled: true,
+            tags: [ 'tag_up_1', 'tag_up_2' ],
+            privacy: VideoPrivacy.PUBLIC,
+            channel: {
+              displayName: 'Main root channel',
+              name: 'root_channel',
+              description: ''
+            },
+            fixture: 'video_short3.webm',
+            files: [
+              {
+                resolution: 720,
+                height: 720,
+                width: 1280,
+                size: 292677
+              }
+            ],
+            thumbnails: [ 'custom-thumbnail-280x157.jpg', 'custom-thumbnail-850x480.jpg' ]
+          }
+        })
       })
     })
 
@@ -704,7 +708,7 @@ describe('Test multiple servers', function () {
       this.timeout(30000)
 
       const attributes = {
-        thumbnailfile: 'custom-thumbnail.jpg'
+        thumbnailfile: 'custom-thumbnail-280x157.jpg'
       }
 
       updatedAtMin = new Date()
@@ -776,11 +780,11 @@ describe('Test multiple servers', function () {
       }
     })
 
-    it('Should get the preview from each server', async function () {
+    it('Should get the best thumbnail from each server', async function () {
       for (const server of servers) {
         const video = await server.videos.get({ id: videoUUID })
 
-        await testImageGeneratedByFFmpeg(server.url, 'video_short1-preview.webm', video.previewPath)
+        await testImageGeneratedByFFmpeg({ name: 'video_short1.webm-thumbnail-850x480.jpg', url: maxBy(video.thumbnails, 'width').fileUrl })
       }
     })
   })
@@ -1054,60 +1058,61 @@ describe('Test multiple servers', function () {
         const { data } = await server.videos.list()
         const video = data.find(v => v.name === 'minimum parameters')
 
-        const isLocal = server.url === servers[1].url
-        const checkAttributes = {
-          name: 'minimum parameters',
-          category: null,
-          licence: null,
-          language: null,
-          nsfw: false,
-          description: null,
-          support: null,
-          account: {
-            name: 'root',
-            host: servers[1].host
-          },
-          isLocal,
-          duration: 5,
-          commentsPolicy: VideoCommentPolicy.ENABLED,
-          downloadEnabled: true,
-          tags: [],
-          privacy: VideoPrivacy.PUBLIC,
-          channel: {
-            displayName: 'Main root channel',
-            name: 'root_channel',
-            description: '',
-            isLocal
-          },
-          fixture: 'video_short.webm',
-          files: [
-            {
-              resolution: 720,
-              height: 720,
-              width: 1280,
-              size: 61000
+        await completeVideoCheck({
+          server,
+          originServer: servers[1],
+          videoUUID: video.uuid,
+          attributes: {
+            name: 'minimum parameters',
+            category: null,
+            licence: null,
+            language: null,
+            nsfw: false,
+            description: null,
+            support: null,
+            account: {
+              name: 'root',
+              host: servers[1].host
             },
-            {
-              resolution: 480,
-              height: 480,
-              width: 854,
-              size: 40000
+            duration: 5,
+            commentsPolicy: VideoCommentPolicy.ENABLED,
+            downloadEnabled: true,
+            tags: [],
+            privacy: VideoPrivacy.PUBLIC,
+            channel: {
+              displayName: 'Main root channel',
+              name: 'root_channel',
+              description: ''
             },
-            {
-              resolution: 360,
-              height: 360,
-              width: 640,
-              size: 32000
-            },
-            {
-              resolution: 240,
-              height: 240,
-              width: 426,
-              size: 23000
-            }
-          ]
-        }
-        await completeVideoCheck({ server, originServer: servers[1], videoUUID: video.uuid, attributes: checkAttributes })
+            fixture: 'video_short.webm',
+            files: [
+              {
+                resolution: 720,
+                height: 720,
+                width: 1280,
+                size: 61000
+              },
+              {
+                resolution: 480,
+                height: 480,
+                width: 854,
+                size: 40000
+              },
+              {
+                resolution: 360,
+                height: 360,
+                width: 640,
+                size: 32000
+              },
+              {
+                resolution: 240,
+                height: 240,
+                width: 426,
+                size: 23000
+              }
+            ]
+          }
+        })
       })
     })
   })

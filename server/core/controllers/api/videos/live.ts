@@ -3,7 +3,6 @@ import {
   HttpStatusCode,
   LiveVideoCreate,
   LiveVideoUpdate,
-  ThumbnailType,
   UserRight,
   VideoChannelActivityAction,
   VideoState
@@ -13,6 +12,7 @@ import { exists, isArray } from '@server/helpers/custom-validators/misc.js'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { createReqFiles } from '@server/helpers/express-utils.js'
 import { getFormattedObjects } from '@server/helpers/utils.js'
+import { getVideoThumbnailFile } from '@server/helpers/video.js'
 import { ASSETS_PATH, MIMETYPES } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
@@ -198,24 +198,7 @@ async function updateReplaySettings (videoLive: MVideoLive, body: LiveVideoUpdat
 async function addLiveVideo (req: express.Request, res: express.Response) {
   const videoInfo: LiveVideoCreate = req.body
 
-  const thumbnails = [ { type: ThumbnailType.MINIATURE, field: 'thumbnailfile' }, { type: ThumbnailType.PREVIEW, field: 'previewfile' } ]
-    .map(({ type, field }) => {
-      if (req.files?.[field]?.[0]) {
-        return {
-          path: req.files[field][0].path,
-          type,
-          automaticallyGenerated: false,
-          keepOriginal: false
-        }
-      }
-
-      return {
-        path: ASSETS_PATH.DEFAULT_LIVE_BACKGROUND,
-        type,
-        automaticallyGenerated: true,
-        keepOriginal: true
-      }
-    })
+  const thumbnailfile = getVideoThumbnailFile(req.files)
 
   const localVideoCreator = new LocalVideoCreator({
     channel: res.locals.videoChannel,
@@ -237,7 +220,18 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
     },
     videoFile: undefined,
     user: res.locals.oauth.token.User,
-    thumbnails
+
+    thumbnail: thumbnailfile
+      ? {
+        path: thumbnailfile.path,
+        automaticallyGenerated: false,
+        keepOriginal: false
+      }
+      : {
+        path: ASSETS_PATH.DEFAULT_LIVE_BACKGROUND,
+        automaticallyGenerated: true,
+        keepOriginal: true
+      }
   })
 
   const { video } = await localVideoCreator.create()

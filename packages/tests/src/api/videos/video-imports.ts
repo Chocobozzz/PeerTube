@@ -15,9 +15,9 @@ import {
 } from '@peertube/peertube-server-commands'
 import { DeepPartial } from '@peertube/peertube-typescript-utils'
 import { testCaptionFile } from '@tests/shared/captions.js'
-import { testImageGeneratedByFFmpeg } from '@tests/shared/checks.js'
 import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
+import { checkThumbnails } from '@tests/shared/videos.js'
 import { expect } from 'chai'
 import { pathExists, remove } from 'fs-extra/esm'
 import { readdir } from 'fs/promises'
@@ -73,7 +73,7 @@ async function checkVideoServer2 (server: PeerTubeServer, id: number | string) {
   expect(video.description).to.equal('my super description')
   expect(video.tags).to.deep.equal([ 'supertag1', 'supertag2' ])
 
-  await testImageGeneratedByFFmpeg(server.url, 'custom-thumbnail', video.thumbnailPath)
+  await checkThumbnails({ server, video, thumbnails: [ 'custom-thumbnail-280x157.jpg', 'custom-thumbnail-850x480.jpg' ] })
 
   expect(video.files).to.have.lengthOf(1)
 
@@ -123,17 +123,20 @@ describe('Test video imports', function () {
 
         expect(video.name).to.equal('small video - youtube')
 
-        {
-          expect(video.thumbnailPath).to.match(new RegExp(`^/lazy-static/thumbnails/.+.webp$`))
-          expect(video.previewPath).to.match(new RegExp(`^/lazy-static/previews/.+.webp$`))
+        const extension = video.thumbnails[0].fileUrl.endsWith('.webp')
+          ? '.webp'
+          : '.jpg'
 
-          // FIXME: re-enable when we'll support webp pixel match
-          // const suffix = mode === 'yt-dlp'
-          //   ? '_yt_dlp'
-          //   : ''
+        const pathRegexp = new RegExp(`^/lazy-static/thumbnails/.+.${extension}$`)
+        const urlRegexp = new RegExp(`^${servers[0].url}/lazy-static/thumbnails/.+.${extension}$`)
 
-          // await testImageGeneratedByFFmpeg(servers[0].url, 'video_import_thumbnail' + suffix, video.thumbnailPath)
-          // await testImageGeneratedByFFmpeg(servers[0].url, 'video_import_preview' + suffix, video.previewPath)
+        // eslint-disable-next-line @typescript-eslint/no-deprecated
+        expect(video.thumbnailPath).to.match(pathRegexp)
+        // eslint-disable-next-line @typescript-eslint/no-deprecated
+        expect(video.previewPath).to.match(pathRegexp)
+
+        for (const thumbnail of video.thumbnails) {
+          expect(thumbnail.fileUrl).to.match(urlRegexp)
         }
 
         const bodyCaptions = await servers[0].captions.list({ videoId: video.id })
@@ -336,7 +339,7 @@ describe('Test video imports', function () {
             name: 'my super name',
             description: 'my super description',
             tags: [ 'supertag1', 'supertag2' ],
-            thumbnailfile: 'custom-thumbnail.jpg'
+            thumbnailfile: 'custom-thumbnail-850x480.jpg'
           }
         })
         expect(video.name).to.equal('my super name')

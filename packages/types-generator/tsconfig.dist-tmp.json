@@ -10,7 +10,8 @@
       "@server/*": [ "server/core/*" ],
       "@client/*": [ "client/*" ],
       "@peertube/peertube-models": [ "peertube-models" ],
-      "@peertube/peertube-typescript-utils": [ "peertube-typescript-utils" ]
+      "@peertube/peertube-typescript-utils": [ "peertube-typescript-utils" ],
+      "@peertube/peertube-transcription": [ "peertube-transcription" ]
     }
   }
 }

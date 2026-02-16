@@ -1,11 +1,12 @@
 import { AuthUser } from '@app/core'
 import { User } from '@app/core/users/user.model'
-import { durationToString, getAPIUrl, getOriginUrl } from '@app/helpers'
+import { durationToString, getOriginUrl } from '@app/helpers'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
 import { buildVideoWatchPath, getAllFiles, peertubeTranslate } from '@peertube/peertube-core-utils'
 import {
   ActorImage,
   HTMLServerConfig,
+  Thumbnail,
   UserRight,
   VideoConstant,
   VideoFile,
@@ -49,16 +50,17 @@ export class Video implements VideoServerModel {
 
   name: string
   serverHost: string
+
   thumbnailPath: string
   thumbnailUrl: string
+  previewPath: string
+  previewUrl: string
+  thumbnails: Thumbnail[]
 
   aspectRatio: number
 
   isLive: boolean
   liveSchedules: { startAt: Date | string }[]
-
-  previewPath: string
-  previewUrl: string
 
   embedPath: string
   embedUrl: string
@@ -153,6 +155,8 @@ export class Video implements VideoServerModel {
       ? hash.liveSchedules.map(schedule => ({ startAt: new Date(schedule.startAt.toString()) }))
       : null
 
+    this.thumbnails = hash.thumbnails
+
     this.duration = hash.duration
     this.durationLabel = Video.buildDurationLabel(this)
 
@@ -162,16 +166,6 @@ export class Video implements VideoServerModel {
 
     this.isLocal = hash.isLocal
     this.name = hash.name
-
-    this.thumbnailPath = hash.thumbnailPath
-    this.thumbnailUrl = this.thumbnailPath
-      ? hash.thumbnailUrl || (getAPIUrl() + hash.thumbnailPath)
-      : null
-
-    this.previewPath = hash.previewPath
-    this.previewUrl = this.previewPath
-      ? hash.previewUrl || (getAPIUrl() + hash.previewPath)
-      : null
 
     this.embedPath = hash.embedPath
     this.embedUrl = hash.embedUrl || (getOriginUrl() + hash.embedPath)

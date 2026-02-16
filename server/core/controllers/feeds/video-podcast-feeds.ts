@@ -223,7 +223,7 @@ async function addVODPodcastItem (options: {
   // So web videos are default if enabled
   const media = [ ...webVideos, ...streamingPlaylistFiles ]
 
-  const videoCaptions = buildVODCaptions(video, captionsGroup[video.id])
+  const videoCaptions = buildVODCaptions(captionsGroup[video.id])
   const item = await generatePodcastItem({ video, liveItem: false, media })
 
   feed.addPodcastItem({ ...item, subTitle: videoCaptions })
@@ -335,13 +335,13 @@ function buildLiveStreamingPlaylists (video: MVideoFullLight) {
   ]
 }
 
-function buildVODCaptions (video: MVideo, videoCaptions: MVideoCaptionVideo[]) {
+function buildVODCaptions (videoCaptions: MVideoCaptionVideo[]) {
   return videoCaptions.map(caption => {
     const type = MIMETYPES.VIDEO_CAPTIONS.EXT_MIMETYPE[extname(caption.filename)]
     if (!type) return null
 
     return {
-      url: caption.getFileUrl(video),
+      url: caption.getLocalFileUrl(),
       language: caption.language,
       type,
       rel: 'captions'

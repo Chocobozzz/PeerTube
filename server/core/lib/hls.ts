@@ -148,6 +148,8 @@ function updateMasterHLSPlaylist (video: MVideo, playlistArg: MStreamingPlaylist
 
     const masterPlaylists = [ '#EXTM3U', '#EXT-X-VERSION:3', '', ...extMediaSubtitle, '', ...extMediaAudio, '', ...extStreamInfo ]
 
+    await playlist.reload()
+
     if (playlist.playlistFilename) {
       await video.removeStreamingPlaylistFile(playlist, playlist.playlistFilename)
     }
@@ -156,8 +158,8 @@ function updateMasterHLSPlaylist (video: MVideo, playlistArg: MStreamingPlaylist
     const masterPlaylistContent = masterPlaylists.join('\n') + '\n'
 
     if (playlist.storage === FileStorage.OBJECT_STORAGE) {
-      playlist.playlistUrl = await storeHLSFileFromContent({
-        playlist,
+      await storeHLSFileFromContent({
+        video,
         pathOrFilename: playlist.playlistFilename,
         content: masterPlaylistContent
       })
@@ -213,8 +215,8 @@ function updateSha256VODSegments (video: MVideo, playlistArg: MStreamingPlaylist
     playlist.segmentsSha256Filename = generateHlsSha256SegmentsFilename(video.isLive)
 
     if (playlist.storage === FileStorage.OBJECT_STORAGE) {
-      playlist.segmentsSha256Url = await storeHLSFileFromContent({
-        playlist,
+      await storeHLSFileFromContent({
+        video,
         pathOrFilename: playlist.segmentsSha256Filename,
         content: JSON.stringify(json)
       })
@@ -330,7 +332,7 @@ export function buildCaptionM3U8Content (options: {
   const { video, caption } = options
 
   return `#EXTM3U\n#EXT-X-VERSION:3\n#EXT-X-TARGETDURATION:${video.duration}\n#EXT-X-MEDIA-SEQUENCE:0\n` +
-    `#EXTINF:${video.duration},\n${caption.getFileUrl(video)}\n#EXT-X-ENDLIST\n`
+    `#EXTINF:${video.duration},\n${caption.getLocalFileUrl()}\n#EXT-X-ENDLIST\n`
 }
 
 // ---------------------------------------------------------------------------

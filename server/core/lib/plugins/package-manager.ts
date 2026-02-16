@@ -80,6 +80,12 @@ export async function initPNPM () {
 
         await writeFile(pluginPackageJSON, packageJSONContent, 'utf-8')
       }
+
+      if (packageJSONContent.match(/},\s*}/)) {
+        packageJSONContent = packageJSONContent.replace(/},(\s*)}/, '}$1}')
+
+        await writeFile(pluginPackageJSON, packageJSONContent, 'utf-8')
+      }
     } catch (err) {
       logger.error('Cannot sanitize package.json in plugin directory', { err })
     }

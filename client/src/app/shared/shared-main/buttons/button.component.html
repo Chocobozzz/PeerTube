@@ -1,7 +1,7 @@
 @if (ptRouterLink() || ptQueryParams()) {
   <a
     class="action-button ellipsis"
-    [ngClass]="classes" [ngbTooltip]="tooltip()" [attr.title]="title()"
+    [class]="classes" [ngbTooltip]="tooltip()" [attr.title]="title()"
     [routerLink]="ptRouterLink()" [queryParams]="ptQueryParams()" [queryParamsHandling]="ptQueryParamsHandling()" [routerLinkActive]="ptRouterLinkActive()"
     >
     <ng-container *ngTemplateOutlet="content"></ng-container>
@@ -9,13 +9,13 @@
 } @else if (href()) {
   <a
     class="action-button ellipsis"
-    [ngClass]="classes" [ngbTooltip]="tooltip()" [attr.title]="title()"
+    [class]="classes" [ngbTooltip]="tooltip()" [attr.title]="title()"
     [href]="href()" target="_blank"
     >
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </a>
 } @else {
-  <button type="button" class="action-button ellipsis" [ngClass]="classes" [disabled]="disabled()" [ngbTooltip]="tooltip()" [attr.title]="title()" [attr.form]="form()">
+  <button type="button" class="action-button ellipsis" [class]="classes" [disabled]="disabled()" [ngbTooltip]="tooltip()" [attr.title]="title()" [attr.form]="form()">
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </button>
 }

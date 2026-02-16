@@ -2,6 +2,28 @@
 @use "_mixins" as *;
 @use "_form-mixins" as *;
 
+menu,
+.menu-placeholder,
+h1,
+ul {
+  position: relative;
+  z-index: 1;
+}
+
+.svg-container {
+  position: absolute;
+  top: 0;
+  opacity: 0.4;
+  z-index: 0;
+
+  ::ng-deep svg {
+    color: pvar(--bg-secondary-450);
+
+    -webkit-mask-image: linear-gradient(to bottom, #000 25%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 25%, transparent 100%);
+  }
+}
+
 h1 {
   color: pvar(--fg-200);
   font-weight: $font-bold;

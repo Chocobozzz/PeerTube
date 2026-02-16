@@ -1,4 +1,4 @@
-import { LiveVideoLatencyModeType, PlayerMode, PlayerTheme, VideoChapter, VideoFile } from '@peertube/peertube-models'
+import { LiveVideoLatencyModeType, PlayerMode, PlayerTheme, Thumbnail, VideoChapter, VideoFile } from '@peertube/peertube-models'
 import { PluginsManager } from '@root-helpers/plugins-manager'
 import { PeerTubeDockPluginOptions } from '../shared/dock/peertube-dock-plugin'
 import { PlaylistPluginOptions, VideoJSCaption, VideojsPlayer, VideoJSStoryboard } from './peertube-videojs-typings'
@@ -59,7 +59,8 @@ export type PeerTubePlayerLoadOptions = {
   autoplay: boolean
   forceAutoplay: boolean
 
-  poster: string
+  thumbnails: Thumbnail[]
+
   subtitle?: string
   videoViewUrl: string
 
