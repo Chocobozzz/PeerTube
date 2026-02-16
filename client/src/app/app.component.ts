@@ -8,6 +8,7 @@ import {
   HotkeysService,
   MarkdownService,
   PeerTubeRouterService,
+  RedirectService,
   RouterStatusService,
   ScreenService,
   ScrollService,
@@ -84,6 +85,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   private userLocalStorage = inject(UserLocalStorageService)
   private peertubeModal = inject(PeertubeModalService)
   private routerStatus = inject(RouterStatusService)
+  private redirectService = inject(RedirectService)
 
   menu = inject(MenuService)
 
@@ -382,7 +384,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       new Hotkey('g u', () => {
         this.router.navigate([ '/videos/upload' ])
         return false
-      }, $localize`Go to the "Publish video" page`)
+      }, $localize`Go to the "Publish video" page`),
+
+      new Hotkey('g l', () => {
+        this.redirectService.redirectToLogin()
+        return false
+      }, $localize`Go to the login page`)
     ])
   }
 
