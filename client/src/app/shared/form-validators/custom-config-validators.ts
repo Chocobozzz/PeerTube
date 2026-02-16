@@ -22,15 +22,6 @@ export const SERVICES_TWITTER_USERNAME_VALIDATOR: BuildFormValidator = {
   }
 }
 
-export const CACHE_SIZE_VALIDATOR: BuildFormValidator = {
-  VALIDATORS: [ Validators.required, Validators.min(1), Validators.pattern('[0-9]+') ],
-  MESSAGES: {
-    required: $localize`Cache size is required.`,
-    min: $localize`Cache size must be greater than 1.`,
-    pattern: $localize`Cache size must be a number.`
-  }
-}
-
 export const SIGNUP_LIMIT_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.required, Validators.min(-1), Validators.pattern('-?[0-9]+') ],
   MESSAGES: {

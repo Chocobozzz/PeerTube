@@ -22,6 +22,14 @@
 
           <label [for]="getPrimaryInputName(playlist)" class="display-name">{{ playlist.displayName }}</label>
 
+          @if (user.isCollaboratingToChannels()) {
+            @if (user.isOwnerOfChannel(playlist.videoChannel)) {
+              <my-collaborator-state class="ms-2" type="owner" small="true"></my-collaborator-state>
+            } @else if (user.isEditorOfChannel(playlist.videoChannel)) {
+              <my-collaborator-state class="ms-2" type="accepted" small="true"></my-collaborator-state>
+            }
+          }
+
           <button
             class="optional-row-icon button-unstyle" [ngClass]="{ 'invisible': !isPrimaryCheckboxChecked(playlist) }"
             (click)="$event.stopPropagation(); toggleOptionalRow(playlist)"

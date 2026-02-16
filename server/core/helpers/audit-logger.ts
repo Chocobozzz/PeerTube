@@ -66,12 +66,15 @@ function auditLoggerWrapper (domain: string, user: string, action: AUDIT_TYPE, e
     entityInfos = { ...entity.toLogKeys() }
   }
 
-  auditLogger.log('audit', JSON.stringify({
-    user,
-    domain,
-    action,
-    ...entityInfos
-  }))
+  auditLogger.log(
+    'audit',
+    JSON.stringify({
+      user,
+      domain,
+      action,
+      ...entityInfos
+    })
+  )
 }
 
 function auditLoggerFactory (domain: string) {
@@ -89,7 +92,7 @@ function auditLoggerFactory (domain: string) {
 }
 
 abstract class EntityAuditView {
-  constructor (private readonly keysToKeep: Set<string>, private readonly prefix: string, private readonly entityInfos: object) { }
+  constructor (private readonly keysToKeep: Set<string>, private readonly prefix: string, private readonly entityInfos: object) {}
 
   toLogKeys (): object {
     const obj = flatten<object, any>(this.entityInfos, { delimiter: '-', safe: true })
@@ -116,8 +119,6 @@ const videoKeysToKeep = new Set([
   'duration',
   'isLocal',
   'name',
-  'thumbnailPath',
-  'previewPath',
   'nsfw',
   'waitTranscoding',
   'account-id',
@@ -243,7 +244,6 @@ const customConfigKeysToKeep = new Set([
   'instance-customizations-javascript',
   'instance-customizations-css',
   'services-twitter-username',
-  'cache-previews-size',
   'cache-captions-size',
   'signup-enabled',
   'signup-limit',
@@ -261,9 +261,9 @@ class CustomConfigAuditView extends EntityAuditView {
     const resolutionsArray = []
 
     Object.entries(resolutionsDict)
-          .forEach(([ resolution, isEnabled ]) => {
-            if (isEnabled) resolutionsArray.push(resolution)
-          })
+      .forEach(([ resolution, isEnabled ]) => {
+        if (isEnabled) resolutionsArray.push(resolution)
+      })
 
     Object.assign({}, infos, { transcoding: { resolutions: resolutionsArray } })
     super(customConfigKeysToKeep, 'config', infos)
@@ -284,7 +284,6 @@ class VideoChannelSyncAuditView extends EntityAuditView {
 
 export {
   getAuditIdFromRes,
-
   auditLoggerFactory,
   VideoImportAuditView,
   VideoChannelAuditView,

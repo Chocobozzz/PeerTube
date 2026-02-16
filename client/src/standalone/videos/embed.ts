@@ -399,7 +399,7 @@ export class PeerTubeEmbed {
     this.peertubePlayer.unload()
     this.peertubePlayer.disable()
 
-    this.peertubePlayer.setPoster(video.previewPath)
+    this.peertubePlayer.setPoster(video.thumbnails)
   }
 
   private async handlePasswordError (err: PeerTubeServerError) {

@@ -2,8 +2,8 @@ import { forceNumber, maxBy } from '@peertube/peertube-core-utils'
 import { FileStorage, HttpStatusCode, VideoResolution, VideoStreamingPlaylistType } from '@peertube/peertube-models'
 import { exists } from '@server/helpers/custom-validators/misc.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { generateRequestStream } from '@server/helpers/requests.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { VideoTorrentsSimpleFileCache } from '@server/lib/files-cache/index.js'
 import {
   generateHLSFilePresignedUrl,
   generateOriginalFilePresignedUrl,
@@ -14,6 +14,7 @@ import { getFSUserExportFilePath } from '@server/lib/paths.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { VideoDownload } from '@server/lib/video-download.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
+import { VideoFileModel } from '@server/models/video/video-file.js'
 import {
   MStreamingPlaylist,
   MStreamingPlaylistVideo,
@@ -26,6 +27,8 @@ import { MVideoSource } from '@server/types/models/video/video-source.js'
 import contentDisposition from 'content-disposition'
 import cors from 'cors'
 import express from 'express'
+import { join } from 'path'
+import { pipeline } from 'stream/promises'
 import { DOWNLOAD_PATHS, WEBSERVER } from '../initializers/constants.js'
 import {
   asyncMiddleware,
@@ -103,19 +106,23 @@ export {
 // ---------------------------------------------------------------------------
 
 async function downloadTorrent (req: express.Request, res: express.Response) {
-  const result = await VideoTorrentsSimpleFileCache.Instance.getFilePath(req.params.filename)
-  if (!result) {
-    return res.fail({
-      status: HttpStatusCode.NOT_FOUND_404,
-      message: 'Torrent file not found'
-    })
-  }
+  const file = await VideoFileModel.loadWithVideoOrPlaylistByTorrentFilename(req.params.filename)
+  if (!file) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+
+  const video = file.getVideo()
+
+  const path = video.isLocal()
+    ? join(CONFIG.STORAGE.TORRENTS_DIR, file.torrentFilename)
+    : undefined
+
+  const downloadFilename = `${video.name}-${file.resolution}p.torrent`
 
   const allowParameters = {
     req,
     res,
-    torrentPath: result.path,
-    downloadName: result.downloadName
+    torrentFilename: req.params.filename,
+    torrentPath: path,
+    downloadName: downloadFilename
   }
 
   const allowedResult = await Hooks.wrapFun(
@@ -126,7 +133,17 @@ async function downloadTorrent (req: express.Request, res: express.Response) {
 
   if (!checkAllowResult(res, allowParameters, allowedResult)) return
 
-  return res.download(result.path, result.downloadName)
+  if (video.isLocal()) {
+    return res.download(path, downloadFilename)
+  }
+
+  // Proxify remote request without cache
+  res.type('application/x-bittorrent')
+  res.setHeader('Content-disposition', contentDisposition(encodeURI(downloadFilename)))
+
+  const remoteUrl = file.getRemoteTorrentUrl(video)
+
+  await pipeline(generateRequestStream(remoteUrl), res)
 }
 
 // ---------------------------------------------------------------------------

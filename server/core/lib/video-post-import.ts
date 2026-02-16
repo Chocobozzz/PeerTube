@@ -1,9 +1,8 @@
 import { VideoImportPayload, VideoImportState, VideoImportYoutubeDLPayload } from '@peertube/peertube-models'
 import { CONFIG } from '@server/initializers/config.js'
 import { MVideoImport } from '@server/types/models/video/video-import.js'
-import { JobQueue } from './job-queue/job-queue.js'
 
-export async function retryImport (videoImport: MVideoImport) {
+export async function buildRetryImportJob (videoImport: MVideoImport) {
   let type: VideoImportPayload['type']
 
   if (videoImport.magnetUri) type = 'magnet-uri'
@@ -21,8 +20,8 @@ export async function retryImport (videoImport: MVideoImport) {
     fileExt: (videoImport.payload as VideoImportYoutubeDLPayload)?.fileExt
   }
 
-  await JobQueue.Instance.createJob({ type: 'video-import', payload })
-
   videoImport.state = VideoImportState.PENDING
   await videoImport.save()
+
+  return { type: 'video-import' as const, payload }
 }

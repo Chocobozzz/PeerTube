@@ -98,28 +98,29 @@ export class UploadImageModel extends SequelizeModel<UploadImageModel> {
     return UploadImageModel.findAll(query)
   }
 
-  static getImageUrl (image: MUploadImage) {
-    if (!image) return undefined
+  // ---------------------------------------------------------------------------
 
-    return WEBSERVER.URL + image.getStaticPath()
-  }
-
-  static getPathOf (filename: string) {
+  static getFSPathOf (filename: string) {
     return join(DIRECTORIES.UPLOAD_IMAGES, filename)
   }
 
   // ---------------------------------------------------------------------------
 
+  getLocalFileUrl (this: MUploadImage) {
+    // Remote files are cached by our instance
+    return WEBSERVER.URL + this.getStaticPath()
+  }
+
   getStaticPath (this: MUploadImage) {
     return join(STATIC_PATHS.UPLOAD_IMAGES, this.filename)
   }
 
-  getPath () {
-    return UploadImageModel.getPathOf(this.filename)
+  getFSPath () {
+    return UploadImageModel.getFSPathOf(this.filename)
   }
 
   removeImage () {
-    return remove(this.getPath())
+    return remove(this.getFSPath())
   }
 
   isLocal () {

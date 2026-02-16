@@ -1,4 +1,4 @@
-import { arrayify, maxBy, minBy } from '@peertube/peertube-core-utils'
+import { arrayify } from '@peertube/peertube-core-utils'
 import {
   ActivityHashTagObject,
   ActivityMagnetUrlObject,
@@ -25,7 +25,7 @@ import { isVideoFileInfoHashValid } from '@server/helpers/custom-validators/vide
 import { generateImageFilename } from '@server/helpers/image-utils.js'
 import { getExtFromMimetype } from '@server/helpers/video.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { MIMETYPES, P2P_MEDIA_LOADER_PEER_VERSION, PREVIEWS_SIZE, THUMBNAILS_SIZE } from '@server/initializers/constants.js'
+import { MIMETYPES, P2P_MEDIA_LOADER_PEER_VERSION } from '@server/initializers/constants.js'
 import { generateTorrentFileName } from '@server/lib/paths.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
@@ -43,20 +43,6 @@ import {
 import { decode as magnetUriDecode } from 'magnet-uri'
 import { basename, extname } from 'path'
 import { getDurationFromActivityStream } from '../../activity.js'
-
-export function getThumbnailFromIcons (videoObject: VideoObject) {
-  let validIcons = videoObject.icon.filter(i => i.width > THUMBNAILS_SIZE.minRemoteWidth)
-  // Fallback if there are not valid icons
-  if (validIcons.length === 0) validIcons = videoObject.icon
-
-  return minBy(validIcons, 'width')
-}
-
-export function getPreviewFromIcons (videoObject: VideoObject) {
-  const validIcons = videoObject.icon.filter(i => i.width > PREVIEWS_SIZE.minRemoteWidth)
-
-  return maxBy(validIcons, 'width')
-}
 
 export function getTagsFromObject (videoObject: VideoObject) {
   return videoObject.tag
@@ -187,7 +173,7 @@ export function getStreamingPlaylistAttributesFromObject (video: MVideoId, video
       playlistFilename: basename(playlistUrlObject.href),
       playlistUrl: playlistUrlObject.href,
 
-      segmentsSha256Filename: segmentsSha256UrlObject
+      segmentsSha256Filename: segmentsSha256UrlObject?.href
         ? basename(segmentsSha256UrlObject.href)
         : null,
 
@@ -237,9 +223,10 @@ export function getCaptionAttributesFromObject (video: MVideoId, videoObject: Vi
       filename,
       language: c.identifier,
       automaticallyGenerated: c.automaticallyGenerated === true,
-      fileUrl: url.find(u => u.mediaType === 'text/vtt')?.href,
+      fileUrl: url.find(u => u.mediaType === 'text/vtt').href,
       m3u8Filename: VideoCaptionModel.generateM3U8Filename(filename),
-      m3u8Url: url.find(u => u.mediaType === 'application/x-mpegURL')?.href
+      m3u8Url: url.find(u => u.mediaType === 'application/x-mpegURL')?.href,
+      cached: false
     } as Partial<AttributesOnly<VideoCaptionModel>>
   })
 }
@@ -260,7 +247,8 @@ export function getStoryboardAttributeFromObject (video: MVideoId, videoObject: 
     spriteWidth: url.tileWidth,
     spriteDuration: getDurationFromActivityStream(url.tileDuration),
     fileUrl: url.href,
-    videoId: video.id
+    videoId: video.id,
+    cached: false
   }
 }
 

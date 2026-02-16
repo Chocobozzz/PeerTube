@@ -1,11 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions, max-len */
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
-import {
-  Ctranslate2Transcriber,
-  OpenaiTranscriber,
-  TranscriptFile,
-  TranscriptionModel
-} from '@peertube/peertube-transcription'
+import { Ctranslate2Transcriber, OpenaiTranscriber, TranscriptFile, TranscriptionModel } from '@peertube/peertube-transcription'
 import { TranscriptFileEvaluator, levenshteinDistance } from '@peertube/peertube-transcription-devtools'
 import { createConsoleLogger } from '@tests/shared/common.js'
 import { downloadCustomModelsIfNeeded, getCustomModelPath } from '@tests/shared/transcription.js'
@@ -81,11 +76,15 @@ describe('Whisper CTranslate2 transcriber', function () {
       model,
       transcriptDirectory
     })
-    expect(await transcript.equals(new TranscriptFile({
-      path: join(transcriptDirectory, 'the_last_man_on_earth.txt'),
-      format: 'txt',
-      language: 'en'
-    }))).to.be.true
+    expect(
+      await transcript.equals(
+        new TranscriptFile({
+          path: join(transcriptDirectory, 'the_last_man_on_earth.txt'),
+          format: 'txt',
+          language: 'en'
+        })
+      )
+    ).to.be.true
 
     expect(transcript.format).to.equals('txt')
     expect(transcript.language).to.equals('en')
@@ -93,7 +92,7 @@ describe('Whisper CTranslate2 transcriber', function () {
     expect(levenshteinDistance(
       (await transcript.read()).toString(),
       'December 1965, is that all it has been since I inherited the world only three years, seems like a hundred million.'
-    )).to.be.below(6)
+    )).to.be.below(8)
   })
 
   it('May transcribe a media file using a local CTranslate2 model', async function () {

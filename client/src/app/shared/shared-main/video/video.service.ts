@@ -567,7 +567,7 @@ export class VideoService {
       [VideoLicence['CC-BY-NC-ND']]: $localize`CC-BY-NC-ND`,
       [VideoLicence['CC0']]: '',
       [VideoLicence.PDM]: $localize`Public domain mark`,
-      [VideoLicence['COPYRIGHT']]: $localize`You are the owner of the content or you have the rights of the copyright holders`
+      [VideoLicence['ALL_RIGHTS_RESERVED']]: $localize`You are the owner of the content or you have the rights of the copyright holders`
     }
 
     return serverLicences.map(p => {
@@ -599,7 +599,7 @@ export class VideoService {
     return $localize`This video contains sensitive content: ${flags.join(' - ')}`
   }
 
-  getHighestAvailablePrivacy (serverPrivacies: VideoConstant<VideoPrivacyType>[]) {
+  getMostPrivatePrivacy (serverPrivacies: VideoConstant<VideoPrivacyType>[]) {
     // We do not add a password as this requires additional configuration.
     const order = [
       VideoPrivacy.PRIVATE,
@@ -608,13 +608,17 @@ export class VideoService {
       VideoPrivacy.PUBLIC
     ]
 
+    return this.getPrivacyFromOrder(serverPrivacies, order)
+  }
+
+  private getPrivacyFromOrder (serverPrivacies: VideoConstant<VideoPrivacyType>[], order: VideoPrivacyType[]) {
     for (const privacy of order) {
       if (serverPrivacies.find(p => p.id === privacy)) {
         return privacy
       }
     }
 
-    throw new Error('No highest privacy available')
+    throw new Error('No privacy available')
   }
 
   nsfwPolicyToParam (nsfwPolicy: NSFWPolicyType): BooleanBothQuery {

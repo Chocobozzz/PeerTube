@@ -38,7 +38,7 @@ export async function cleanupUnsavedNormalLive (video: MVideo, streamingPlaylist
 
   // We uploaded files to object storage too, remove them
   if (streamingPlaylist.storage === FileStorage.OBJECT_STORAGE) {
-    await removeHLSObjectStorage(streamingPlaylist.withVideo(video))
+    await removeHLSObjectStorage(video)
   }
 
   await remove(hlsDirectory)
@@ -110,7 +110,7 @@ async function cleanupTMPLiveFilesFromObjectStorage (streamingPlaylist: MStreami
 
   logger.info('Cleanup TMP live files from object storage for %s.', streamingPlaylist.Video.uuid)
 
-  const keys = await listHLSFileKeysOf(streamingPlaylist)
+  const keys = await listHLSFileKeysOf(streamingPlaylist.Video)
 
   for (const key of keys) {
     if (isTMPLiveFile(key)) {

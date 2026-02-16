@@ -109,7 +109,7 @@ configRouter.delete(
 configRouter.post(
   '/instance-logo/:logoType/pick',
   authenticate,
-  createReqFiles([ 'logofile' ], MIMETYPES.IMAGE.MIMETYPE_EXT),
+  createReqFiles([ 'logofile' ], MIMETYPES.LOGO_IMAGE.MIMETYPE_EXT),
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   updateOrDeleteLogoValidator,
   updateInstanceLogoValidator,
@@ -342,6 +342,7 @@ function customConfig (): CustomConfig {
 
       customization: {
         primaryColor: CONFIG.THEME.CUSTOMIZATION.PRIMARY_COLOR,
+        onPrimaryColor: CONFIG.THEME.CUSTOMIZATION.ON_PRIMARY_COLOR,
         foregroundColor: CONFIG.THEME.CUSTOMIZATION.FOREGROUND_COLOR,
         backgroundColor: CONFIG.THEME.CUSTOMIZATION.BACKGROUND_COLOR,
         backgroundSecondaryColor: CONFIG.THEME.CUSTOMIZATION.BACKGROUND_SECONDARY_COLOR,
@@ -375,20 +376,6 @@ function customConfig (): CustomConfig {
         login: {
           redirectOnSingleExternalAuth: CONFIG.CLIENT.MENU.LOGIN.REDIRECT_ON_SINGLE_EXTERNAL_AUTH
         }
-      }
-    },
-    cache: {
-      previews: {
-        size: CONFIG.CACHE.PREVIEWS.SIZE
-      },
-      captions: {
-        size: CONFIG.CACHE.VIDEO_CAPTIONS.SIZE
-      },
-      torrents: {
-        size: CONFIG.CACHE.TORRENTS.SIZE
-      },
-      storyboards: {
-        size: CONFIG.CACHE.STORYBOARDS.SIZE
       }
     },
     signup: {

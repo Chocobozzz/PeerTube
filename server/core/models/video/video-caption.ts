@@ -1,7 +1,8 @@
 import { removeVTTExt } from '@peertube/peertube-core-utils'
 import { FileStorage, type FileStorageType, VideoCaption, VideoCaptionObject } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
-import { getObjectStoragePublicFileUrl } from '@server/lib/object-storage/urls.js'
+import { generateCaptionObjectStorageKey, generateHLSObjectStorageKey } from '@server/lib/object-storage/keys.js'
+import { buildObjectStoragePublicFileUrl } from '@server/lib/object-storage/urls.js'
 import { removeCaptionObjectStorage, removeHLSFileObjectStorageByFilename } from '@server/lib/object-storage/videos.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import {
@@ -35,7 +36,7 @@ import {
 import { isVideoCaptionLanguageValid } from '../../helpers/custom-validators/video-captions.js'
 import { logger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
-import { CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, VIDEO_LANGUAGES, WEBSERVER } from '../../initializers/constants.js'
+import { CONSTRAINTS_FIELDS, FILES_CACHE, LAZY_STATIC_PATHS, VIDEO_LANGUAGES, WEBSERVER } from '../../initializers/constants.js'
 import { SequelizeModel, buildWhereIdOrUUID, doesExist, throwIfNotValid } from '../shared/index.js'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist.js'
 import { VideoModel } from './video.js'
@@ -110,6 +111,10 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
   @Column
   declare automaticallyGenerated: boolean
 
+  @AllowNull(false)
+  @Column
+  declare cached: boolean
+
   @ForeignKey(() => VideoModel)
   @Column
   declare videoId: number
@@ -128,12 +133,8 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
       instance.Video = await instance.$get('Video', { transaction: options.transaction })
     }
 
-    if (instance.isLocal()) {
-      logger.info('Removing caption %s.', instance.filename)
-
-      instance.removeAllCaptionFiles()
-        .catch(err => logger.error('Cannot remove caption file ' + instance.filename, { err }))
-    }
+    instance.removeAllCaptionFiles()
+      .catch(err => logger.error('Cannot remove caption file ' + instance.filename, { err }))
 
     return undefined
   }
@@ -187,17 +188,11 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
     return VideoCaptionModel.findOne(query)
   }
 
-  static loadWithVideoByFilename (filename: string): Promise<MVideoCaptionVideo> {
+  static loadByFilename (filename: string): Promise<MVideoCaption> {
     const query = {
       where: {
         filename
-      },
-      include: [
-        {
-          model: VideoModel.unscoped(),
-          attributes: videoAttributes
-        }
-      ]
+      }
     }
 
     return VideoCaptionModel.findOne(query)
@@ -254,6 +249,17 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
     return result
   }
 
+  static listRemoteCached () {
+    return this.findAll<MVideoCaption>({
+      where: {
+        cached: true,
+        fileUrl: {
+          [Op.ne]: null
+        }
+      }
+    })
+  }
+
   // ---------------------------------------------------------------------------
 
   static getLanguageLabel (language: string) {
@@ -279,11 +285,11 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
       automaticallyGenerated: this.automaticallyGenerated,
 
       // TODO: remove, deprecated in 8.0
-      captionPath: this.Video.isLocal() && this.fileUrl
+      captionPath: this.isLocal() && this.fileUrl
         ? null // On object storage
         : this.getFileStaticPath(),
 
-      fileUrl: this.getFileUrl(this.Video),
+      fileUrl: this.getLocalFileUrl(),
       m3u8Url: this.getM3U8Url(this.Video),
 
       updatedAt: this.updatedAt.toISOString()
@@ -300,12 +306,12 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
         {
           type: 'Link',
           mediaType: 'text/vtt',
-          href: this.getOriginFileUrl(video)
+          href: this.getLocalFileUrl()
         },
         {
           type: 'Link',
           mediaType: 'application/x-mpegURL',
-          href: this.getOriginFileUrl(video)
+          href: this.getM3U8Url(video)
         }
       ]
     }
@@ -314,7 +320,7 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
   // ---------------------------------------------------------------------------
 
   isLocal () {
-    return this.Video.remote === false
+    return !this.fileUrl
   }
 
   // ---------------------------------------------------------------------------
@@ -335,6 +341,10 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
     return join(CONFIG.STORAGE.CAPTIONS_DIR, this.filename)
   }
 
+  getFSFileCachedPath () {
+    return join(FILES_CACHE.VIDEO_CAPTIONS.DIRECTORY, this.filename)
+  }
+
   getFSM3U8Path (video: MVideoPrivacy) {
     if (!this.m3u8Filename) return null
 
@@ -342,21 +352,20 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
   }
 
   async removeAllCaptionFiles (this: MVideoCaptionVideo) {
+    logger.info('Removing caption files of video ' + this.Video.uuid)
+
     await this.removeCaptionFile()
     await this.removeCaptionPlaylist()
   }
 
-  async removeCaptionFile (this: MVideoCaptionVideo) {
-    if (this.storage === FileStorage.OBJECT_STORAGE) {
-      if (this.fileUrl) {
-        await removeCaptionObjectStorage(this)
-      }
+  async removeCaptionFile (this: MVideoCaption) {
+    if (this.cached) {
+      await remove(this.getFSFileCachedPath())
+    } else if (this.storage === FileStorage.OBJECT_STORAGE) {
+      await removeCaptionObjectStorage(this)
     } else {
       await remove(this.getFSFilePath())
     }
-
-    this.filename = null
-    this.fileUrl = null
   }
 
   async removeCaptionPlaylist (this: MVideoCaptionVideo) {
@@ -365,48 +374,45 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
     const hls = await VideoStreamingPlaylistModel.loadHLSByVideoWithVideo(this.videoId)
     if (!hls) return
 
+    // M3U8 is proxified by our our instance, not cached
+
     if (this.storage === FileStorage.OBJECT_STORAGE) {
-      if (this.m3u8Url) {
-        await removeHLSFileObjectStorageByFilename(hls, this.m3u8Filename)
-      }
+      await removeHLSFileObjectStorageByFilename(hls.Video, this.m3u8Filename)
     } else {
       await remove(this.getFSM3U8Path(this.Video))
     }
 
     this.m3u8Filename = null
-    this.m3u8Url = null
   }
 
   // ---------------------------------------------------------------------------
 
-  getFileUrl (this: MVideoCaptionUrl, video: MVideoOwned) {
-    if (video.isLocal() && this.storage === FileStorage.OBJECT_STORAGE) {
-      return getObjectStoragePublicFileUrl(this.fileUrl, CONFIG.OBJECT_STORAGE.CAPTIONS)
+  getLocalFileUrl (this: MVideoCaptionUrl) {
+    if (this.isLocal() && this.storage === FileStorage.OBJECT_STORAGE) {
+      return buildObjectStoragePublicFileUrl({
+        bucket: CONFIG.OBJECT_STORAGE.CAPTIONS,
+        key: generateCaptionObjectStorageKey(this.filename)
+      })
     }
 
+    // Captions are cached by our instance
     return WEBSERVER.URL + this.getFileStaticPath()
-  }
-
-  getOriginFileUrl (this: MVideoCaptionUrl, video: MVideoOwned) {
-    if (video.isLocal()) return this.getFileUrl(video)
-
-    return this.fileUrl
   }
 
   // ---------------------------------------------------------------------------
 
   getM3U8Url (this: MVideoCaptionUrl, video: MVideoOwned & MVideoPrivacy) {
     if (!this.m3u8Filename) return null
+    if (!this.isLocal()) return this.m3u8Url
 
-    if (video.isLocal()) {
-      if (this.storage === FileStorage.OBJECT_STORAGE) {
-        return getObjectStoragePublicFileUrl(this.m3u8Url, CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
-      }
-
-      return WEBSERVER.URL + this.getM3U8StaticPath(video)
+    if (this.storage === FileStorage.OBJECT_STORAGE) {
+      return buildObjectStoragePublicFileUrl({
+        bucket: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS, // M3U8 caption file is in the streaming playlists bucket
+        key: generateHLSObjectStorageKey(video, this.m3u8Filename)
+      })
     }
 
-    return this.m3u8Url
+    return WEBSERVER.URL + this.getM3U8StaticPath(video)
   }
 
   // ---------------------------------------------------------------------------

@@ -103,7 +103,7 @@ export class VideoPublishComponent implements OnInit, CanComponentDeactivate {
     this.user = this.auth.getUser()
 
     this.serverConfig = this.serverService.getHTMLConfig()
-    this.highestPrivacy = this.videoService.getHighestAvailablePrivacy(privacies)
+    this.highestPrivacy = this.videoService.getMostPrivatePrivacy(privacies)
 
     if (this.route.snapshot.fragment) {
       this.onNavChange(this.route.snapshot.fragment as VideoManageType)

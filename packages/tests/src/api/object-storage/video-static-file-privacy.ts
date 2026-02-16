@@ -51,12 +51,21 @@ describe('Object storage for video static file privacy', function () {
       }
     }
 
-    for (const file of getAllFiles(video)) {
-      const internalFileUrl = await sqlCommand.getInternalFileUrl(file.id)
-      expectStartWith(internalFileUrl, ObjectStorageCommand.getScalewayBaseUrl())
+    const internalUrls = [
+      ...video.files.map(file => {
+        return ObjectStorageCommand.getScalewayBaseUrl() +
+          `test:server-1-web-videos:private/${video.uuid}/${extractFilenameFromUrl(file.fileUrl)}`
+      }),
 
+      ...video.streamingPlaylists[0].files.map(file => {
+        return ObjectStorageCommand.getScalewayBaseUrl() +
+          `test:server-1-streaming-playlists:hls/private/${video.uuid}/${extractFilenameFromUrl(file.fileUrl)}`
+      })
+    ]
+
+    for (const internalUrl of internalUrls) {
       const { text } = await makeRawRequest({
-        url: internalFileUrl,
+        url: internalUrl,
         token: server.accessToken,
         expectedStatus: HttpStatusCode.FORBIDDEN_403
       })

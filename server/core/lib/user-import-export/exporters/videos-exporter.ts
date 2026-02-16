@@ -164,8 +164,15 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
 
       url: video.url,
 
-      thumbnailUrl: video.getMiniature()?.getOriginFileUrl(video) || null,
-      previewUrl: video.getPreview()?.getOriginFileUrl(video) || null,
+      thumbnailUrl: video.getBestThumbnail()?.getLocalFileUrl() || null,
+      previewUrl: video.getBestThumbnail()?.getLocalFileUrl() || null,
+      thumbnails: video.Thumbnails.map(t => ({
+        width: t.width,
+        height: t.height,
+        url: t.getLocalFileUrl(),
+        createdAt: t.createdAt.toISOString(),
+        updatedAt: t.updatedAt.toISOString()
+      })),
 
       views: video.views,
 
@@ -228,7 +235,7 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
       language: c.language,
       filename: c.filename,
       automaticallyGenerated: c.automaticallyGenerated,
-      fileUrl: c.getFileUrl(video)
+      fileUrl: c.getLocalFileUrl()
     }))
   }
 
@@ -292,19 +299,27 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
     chapters: MVideoChapter[],
     exportedVideoFileOrSource: MVideoFile | MVideoSource
   ): Promise<ActivityCreate<VideoObject>> {
-    const icon = video.getPreview()
+    const icon = video.getBestThumbnail()
 
-    const audience = getVideoAudience(video.VideoChannel.Account.Actor, video.privacy, { skipPrivacyCheck: true })
+    const audience = getVideoAudience({
+      account: video.VideoChannel.Account,
+      channel: video.VideoChannel,
+      privacy: video.privacy,
+      skipPrivacyCheck: true
+    })
+
     const videoObject: VideoObject = {
       ...audiencify(await video.toActivityPubObject(), audience),
 
-      icon: [
-        {
-          ...icon.toActivityPubObject(video),
+      icon: icon
+        ? [
+          {
+            ...icon.toActivityPubObject(),
 
-          url: join(this.options.relativeStaticDirPath, this.getArchiveThumbnailFilePath(video, icon))
-        }
-      ],
+            url: join(this.options.relativeStaticDirPath, this.getArchiveThumbnailFilePath(video, icon))
+          }
+        ]
+        : [],
 
       subtitleLanguage: video.VideoCaptions.map(c => ({
         ...c.toActivityPubObject(video),
@@ -392,11 +407,11 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
       relativePathsFromJSON.captions[caption.language] = join(this.relativeStaticDirPath, this.getArchiveCaptionFilePath(video, caption))
     }
 
-    const thumbnail = video.getPreview() || video.getMiniature()
+    const thumbnail = video.getBestThumbnail()
     if (thumbnail) {
       staticFiles.push({
         archivePath: this.getArchiveThumbnailFilePath(video, thumbnail),
-        readStreamFactory: () => Promise.resolve(createReadStream(thumbnail.getPath()))
+        readStreamFactory: () => Promise.resolve(createReadStream(thumbnail.getFSPath()))
       })
 
       relativePathsFromJSON.thumbnail = join(this.relativeStaticDirPath, this.getArchiveThumbnailFilePath(video, thumbnail))
@@ -437,7 +452,7 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
     }
 
     const { stream } = videoFile.isHLS()
-      ? await getHLSFileReadStream({ playlist: video.getHLSPlaylist(), filename: videoFile.filename, rangeHeader: undefined })
+      ? await getHLSFileReadStream({ video, filename: videoFile.filename, rangeHeader: undefined })
       : await getWebVideoFileReadStream({ filename: videoFile.filename, rangeHeader: undefined })
 
     return stream

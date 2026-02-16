@@ -18,7 +18,7 @@ export * from './nsfw-flag.enum.js'
 export * from './nsfw-policy.type.js'
 
 export * from './storyboard.model.js'
-export * from './thumbnail.type.js'
+export * from './thumbnail/index.js'
 
 export * from './video-constant.model.js'
 export * from './video-create.model.js'

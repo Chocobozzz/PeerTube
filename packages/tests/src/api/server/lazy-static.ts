@@ -5,16 +5,66 @@ import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
-  makeGetRequest,
+  makeRawRequest,
   PeerTubeServer,
   setAccessTokensToServers,
+  setDefaultAccountAvatar,
+  setDefaultChannelAvatar,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { checkDirectoryIsEmpty } from '@tests/shared/directories.js'
+import { expect } from 'chai'
+import { join } from 'path'
 
-describe('Test lazy static endpoinds', function () {
+describe('Test lazy static endpoints', function () {
   let servers: PeerTubeServer[]
   let videoId: string
+
+  async function fetchRemoteData () {
+    {
+      const video = await servers[1].videos.get({ id: videoId })
+
+      for (const thumbnail of video.thumbnails) {
+        await makeRawRequest({ url: thumbnail.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+      }
+
+      const { storyboards } = await servers[1].storyboard.list({ id: video.uuid })
+
+      for (const storyboard of storyboards) {
+        await makeRawRequest({ url: storyboard.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+      }
+
+      const { data: captions } = await servers[1].captions.list({ videoId: video.uuid })
+
+      for (const caption of captions) {
+        await makeRawRequest({ url: caption.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+      }
+    }
+
+    {
+      const { data: accounts } = await servers[1].accounts.list()
+      const { data: channels } = await servers[1].channels.list()
+
+      for (const { avatars } of [ ...accounts, ...channels ]) {
+        for (const avatar of avatars) {
+          await makeRawRequest({ url: avatar.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+        }
+      }
+    }
+  }
+
+  async function checkCachedFiles (options: { populated: boolean }) {
+    if (options.populated) {
+      expect(await servers[1].servers.countFiles(join('cache', 'thumbnails'))).to.equal(2)
+      expect(await servers[1].servers.countFiles(join('cache', 'avatars'))).to.equal(2 * 4)
+      expect(await servers[1].servers.countFiles(join('cache', 'storyboards'))).to.equal(1)
+      expect(await servers[1].servers.countFiles(join('cache', 'video-captions'))).to.equal(1)
+    } else {
+      expect(await servers[1].servers.countFiles(join('cache', 'thumbnails'))).to.equal(0)
+      expect(await servers[1].servers.countFiles(join('cache', 'avatars'))).to.equal(0)
+      expect(await servers[1].servers.countFiles(join('cache', 'storyboards'))).to.equal(0)
+      expect(await servers[1].servers.countFiles(join('cache', 'video-captions'))).to.equal(0)
+    }
+  }
 
   before(async function () {
     this.timeout(240000)
@@ -22,40 +72,72 @@ describe('Test lazy static endpoinds', function () {
     servers = await createMultipleServers(2)
 
     await setAccessTokensToServers(servers)
+    await setDefaultAccountAvatar(servers)
+    await setDefaultChannelAvatar(servers)
+
+    await servers[0].config.enableFileUpdate()
+
     await doubleFollow(servers[0], servers[1])
 
-    const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
+    const { uuid } = await servers[0].videos.upload({
+      attributes: {
+        name: 'video',
+        thumbnailfile: 'custom-thumbnail-big.jpg'
+      }
+    })
     videoId = uuid
+
+    await servers[0].captions.add({
+      language: 'ar',
+      videoId: uuid,
+      fixture: 'subtitle-good1.vtt'
+    })
 
     await waitJobs(servers)
   })
 
-  it('Should remove previous thumbnails/previews after an update', async function () {
+  it('Should remove previous data after an update', async function () {
     this.timeout(60000)
 
-    const fetchRemoteImages = async () => {
-      const video = await servers[1].videos.get({ id: videoId })
-      await makeGetRequest({ url: servers[1].url, path: video.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
-      await makeGetRequest({ url: servers[1].url, path: video.previewPath, expectedStatus: HttpStatusCode.OK_200 })
-    }
+    await checkCachedFiles({ populated: false })
 
-    await fetchRemoteImages()
+    await fetchRemoteData()
 
-    // Update video
-    await servers[0].videos.update({
-      id: videoId,
-      attributes: { thumbnailfile: 'custom-thumbnail.jpg', previewfile: 'custom-preview.jpg' }
+    await checkCachedFiles({ populated: true })
+
+    // Will re-generate thumbnails and storyboard
+    await servers[0].videos.replaceSourceFile({ videoId, fixture: 'video_short_360p.mp4' })
+
+    await servers[0].captions.add({
+      language: 'ar',
+      videoId,
+      fixture: 'subtitle-good2.vtt'
     })
     await waitJobs(servers)
 
-    await fetchRemoteImages()
+    await fetchRemoteData()
+    await checkCachedFiles({ populated: true })
+  })
 
-    // Remove video
+  it('Should still have files after a server restart', async function () {
+    this.timeout(60000)
+
+    await servers[0].kill()
+    await servers[0].run()
+
+    await checkCachedFiles({ populated: true })
+  })
+
+  it('Should remove the video and remove cached files', async function () {
+    this.timeout(60000)
+
     await servers[0].videos.remove({ id: videoId })
     await waitJobs(servers)
 
-    await checkDirectoryIsEmpty(servers[1], 'thumbnails')
-    await checkDirectoryIsEmpty(servers[1], 'previews')
+    expect(await servers[1].servers.countFiles(join('cache', 'thumbnails'))).to.equal(0)
+    expect(await servers[1].servers.countFiles(join('cache', 'avatars'))).to.equal(2 * 4)
+    expect(await servers[1].servers.countFiles(join('cache', 'storyboards'))).to.equal(0)
+    expect(await servers[1].servers.countFiles(join('cache', 'video-captions'))).to.equal(0)
   })
 
   after(async function () {

@@ -1,6 +1,6 @@
 import { pick } from '@peertube/peertube-core-utils'
 import { ffprobePromise, getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
-import { LiveVideoLatencyMode, ThumbnailType, VideoExportJSON, VideoPrivacy, VideoState } from '@peertube/peertube-models'
+import { LiveVideoLatencyMode, VideoExportJSON, VideoPrivacy, VideoState } from '@peertube/peertube-models'
 import { buildUUID, getFileSize } from '@peertube/peertube-node-utils'
 import { isArray, isBooleanValid, isUUIDValid } from '@server/helpers/custom-validators/misc.js'
 import { isPlayerVideoThemeSettingValid } from '@server/helpers/custom-validators/player-settings.js'
@@ -27,7 +27,7 @@ import {
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
-import { LocalVideoCreator, ThumbnailOptions } from '@server/lib/local-video-creator.js'
+import { LocalVideoCreator } from '@server/lib/local-video-creator.js'
 import { isLocalVideoFileAccepted } from '@server/lib/moderation.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { isUserQuotaValid } from '@server/lib/user.js'
@@ -208,18 +208,6 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
 
     const thumbnailPath = this.getSafeArchivePathOrThrow(videoImportData.archiveFiles.thumbnail)
 
-    const thumbnails: ThumbnailOptions = []
-    for (const type of [ ThumbnailType.MINIATURE, ThumbnailType.PREVIEW ]) {
-      if (!await this.isFileValidOrLog(thumbnailPath, CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max)) continue
-
-      thumbnails.push({
-        path: thumbnailPath,
-        automaticallyGenerated: false,
-        keepOriginal: true,
-        type
-      })
-    }
-
     const localVideoCreator = new LocalVideoCreator({
       lTags,
 
@@ -268,7 +256,13 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
 
       videoAttributeResultHook: 'filter:api.video.user-import.video-attribute.result',
 
-      thumbnails
+      thumbnail: await this.isFileValidOrLog(thumbnailPath, CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max)
+        ? {
+          path: thumbnailPath,
+          automaticallyGenerated: false,
+          keepOriginal: true
+        }
+        : undefined
     })
 
     const { video } = await localVideoCreator.create()

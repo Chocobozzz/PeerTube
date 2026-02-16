@@ -116,7 +116,7 @@ async function processUpdateCacheFile (
     // Don't resend the activity to the sender
     const exceptions = [ byActor ]
 
-    await forwardVideoRelatedActivity(activity, undefined, exceptions, video)
+    await forwardVideoRelatedActivity({ activity, transaction: undefined, followersException: exceptions, video })
   }
 }
 

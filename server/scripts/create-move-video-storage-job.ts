@@ -1,15 +1,13 @@
 import { createCommand } from '@commander-js/extra-typings'
-import { FileStorage, VideoState } from '@peertube/peertube-models'
+import { FileStorage, FileStorageType, VideoState } from '@peertube/peertube-models'
 import { toCompleteUUID } from '@server/helpers/custom-validators/misc.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { initDatabaseModels } from '@server/initializers/database.js'
 import { JobQueue } from '@server/lib/job-queue/index.js'
+import { hasVideoResourcesToBeMoved } from '@server/lib/move-storage/shared/move-video.js'
 import { moveToExternalStorageState, moveToFileSystemState } from '@server/lib/video-state.js'
-import { VideoCaptionModel } from '@server/models/video/video-caption.js'
-import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MStreamingPlaylist, MVideoCaption, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
-import { MVideoSource } from '@server/types/models/video/video-source.js'
+import { MVideoFullLight } from '@server/types/models/index.js'
 
 const program = createCommand()
   .description('Move videos to another storage.')
@@ -89,15 +87,7 @@ async function run () {
     if (options.toObjectStorage) {
       await createMoveJobIfNeeded({
         video: videoFull,
-        type: 'to object storage',
-        canProcessVideo: options => {
-          const { files, hls, source, captions } = options
-
-          return files.some(f => f.storage === FileStorage.FILE_SYSTEM) ||
-            hls?.storage === FileStorage.FILE_SYSTEM ||
-            source?.storage === FileStorage.FILE_SYSTEM ||
-            captions.some(c => c.storage === FileStorage.FILE_SYSTEM)
-        },
+        targetStorage: FileStorage.OBJECT_STORAGE,
         handler: () => moveToExternalStorageState({ video: videoFull, isNewVideo: false, transaction: undefined })
       })
 
@@ -107,16 +97,7 @@ async function run () {
     if (options.toFileSystem) {
       await createMoveJobIfNeeded({
         video: videoFull,
-        type: 'to file system',
-
-        canProcessVideo: options => {
-          const { files, hls, source, captions } = options
-
-          return files.some(f => f.storage === FileStorage.OBJECT_STORAGE) ||
-            hls?.storage === FileStorage.OBJECT_STORAGE ||
-            source?.storage === FileStorage.OBJECT_STORAGE ||
-            captions.some(c => c.storage === FileStorage.OBJECT_STORAGE)
-        },
+        targetStorage: FileStorage.FILE_SYSTEM,
 
         handler: () => moveToFileSystemState({ video: videoFull, isNewVideo: false, transaction: undefined })
       })
@@ -126,26 +107,17 @@ async function run () {
 
 async function createMoveJobIfNeeded (options: {
   video: MVideoFullLight
-  type: 'to object storage' | 'to file system'
-
-  canProcessVideo: (options: {
-    files: MVideoFile[]
-    hls: MStreamingPlaylist
-    source: MVideoSource
-    captions: MVideoCaption[]
-  }) => boolean
+  targetStorage: FileStorageType
 
   handler: () => Promise<any>
 }) {
-  const { video, type, canProcessVideo, handler } = options
+  const { video, targetStorage, handler } = options
 
-  const files = video.VideoFiles || []
-  const hls = video.getHLSPlaylist()
+  if (await hasVideoResourcesToBeMoved(video, targetStorage)) {
+    const type = targetStorage === FileStorage.OBJECT_STORAGE
+      ? 'to object storage'
+      : 'to file system'
 
-  const source = await VideoSourceModel.loadLatest(video.id)
-  const captions = await VideoCaptionModel.listVideoCaptions(video.id)
-
-  if (canProcessVideo({ files, hls, source, captions })) {
     console.log(`Moving ${type} video ${video.name}`)
 
     const success = await handler()

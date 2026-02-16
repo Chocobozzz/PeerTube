@@ -1,6 +1,6 @@
-import { VideoChannelSyncState, VideoPrivacy } from '@peertube/peertube-models'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
-import { YoutubeDLWrapper } from '@server/helpers/youtube-dl/index.js'
+import { VideoChannelSyncState } from '@peertube/peertube-models'
+import { logger, loggerTagsFactory, LoggerTagsFn } from '@server/helpers/logger.js'
+import { YoutubeDlImportError, YoutubeDlImportErrorCode, YoutubeDLWrapper } from '@server/helpers/youtube-dl/index.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { buildYoutubeDLImport } from '@server/lib/video-pre-import.js'
 import { UserModel } from '@server/models/user/user.js'
@@ -8,17 +8,20 @@ import { VideoImportModel } from '@server/models/video/video-import.js'
 import { MChannelAccountDefault, MChannelSync } from '@server/types/models/index.js'
 import { CreateJobArgument, JobQueue } from './job-queue/index.js'
 import { ServerConfigManager } from './server-config-manager.js'
+import { buildRetryImportJob } from './video-post-import.js'
+import { getLeastPrivatePrivacy } from './video.js'
 
-const lTags = loggerTagsFactory('channel-synchronization')
+const rootLTags = loggerTagsFactory('channel-synchronization')
 
 export async function synchronizeChannel (options: {
   channel: MChannelAccountDefault
   externalChannelUrl: string
   videosCountLimit: number
   channelSync?: MChannelSync
-  skipPublishedBefore?: Date
+  skipPublishedBeforeOrEq?: Date
 }) {
-  const { channel, externalChannelUrl, videosCountLimit, skipPublishedBefore, channelSync } = options
+  const { channel, externalChannelUrl, videosCountLimit, skipPublishedBeforeOrEq, channelSync } = options
+  const channelUsername = channel.Actor.preferredUsername
 
   if (channelSync) {
     channelSync.state = VideoChannelSyncState.PROCESSING
@@ -34,60 +37,85 @@ export async function synchronizeChannel (options: {
       CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
     )
 
-    const targetUrls = await youtubeDL.getInfoForListImport({ latestVideosCount: videosCountLimit })
+    const lTags = loggerTagsFactory(...rootLTags().tags, channelSync.externalChannelUrl, channelUsername)
+
+    const targetUrls = await youtubeDL.getInfoForListImport({
+      userLanguage: user.getLanguage(),
+      latestVideosCount: videosCountLimit
+    })
 
     logger.info(
-      'Fetched %d candidate URLs for sync channel %s.',
-      targetUrls.length,
-      channel.Actor.preferredUsername,
+      `Fetched ${targetUrls.length} candidate URLs for sync channel ${channelSync.externalChannelUrl}.`,
       { targetUrls, ...lTags() }
     )
 
-    if (targetUrls.length === 0) {
-      if (channelSync) {
-        channelSync.state = VideoChannelSyncState.SYNCED
-        await channelSync.save()
-      }
-
-      return
-    }
-
     const children: CreateJobArgument[] = []
+
+    let buildJobErrors = 0
 
     for (const targetUrl of targetUrls) {
       logger.debug(`Import candidate: ${targetUrl}`, lTags())
 
       try {
-        if (await skipImport({ channel, channelSync, targetUrl, skipPublishedBefore })) continue
+        if (await skipImport({ channel, channelSync, targetUrl, lTags })) continue
 
         const { job } = await buildYoutubeDLImport({
           user,
           channel,
           targetUrl,
           channelSync,
+          skipPublishedBeforeOrEq,
           importDataOverride: {
-            privacy: VideoPrivacy.PUBLIC,
+            privacy: getLeastPrivatePrivacy(),
             support: channel.support
           }
         })
 
         children.push(job)
       } catch (err) {
-        logger.error(`Cannot build import for ${targetUrl} in channel ${channel.name}`, { err, ...lTags() })
+        if (err instanceof YoutubeDlImportError) {
+          if (
+            err.code === YoutubeDlImportErrorCode.SKIP_PUBLICATION_DATE ||
+            err.code === YoutubeDlImportErrorCode.IS_LIVE ||
+            err.isUnavailableVideoError()
+          ) {
+            continue
+          }
+
+          if (err.isRateLimitError()) {
+            logger.info(`Stopping synchronization due to rate limit error in channel ${channelUsername}.`, { err, ...lTags() })
+            break
+          }
+        }
+
+        buildJobErrors++
+
+        logger.error(`Cannot build import for ${targetUrl} in channel ${channelUsername}`, { err, ...lTags() })
       }
+    }
+
+    const failed = await VideoImportModel.listFailedBySyncId({ channelSyncId: channelSync.id })
+    for (const videoImport of failed) {
+      logger.info(
+        `Retrying failed video import (id: ${videoImport.id}) for channel "${channel.Actor.preferredUsername}"`,
+        rootLTags()
+      )
+
+      children.push(await buildRetryImportJob(videoImport))
     }
 
     // Will update the channel sync status
     const parent: CreateJobArgument = {
       type: 'after-video-channel-import',
       payload: {
-        channelSyncId: channelSync?.id
+        channelSyncId: channelSync?.id,
+        buildJobErrors
       }
     }
 
     await JobQueue.Instance.createJobWithChildren(parent, children)
   } catch (err) {
-    logger.error(`Failed to import ${externalChannelUrl} in channel ${channel.name}`, { err, ...lTags() })
+    logger.error(`Failed to import ${externalChannelUrl} in channel ${channelUsername}`, { err, ...rootLTags() })
     channelSync.state = VideoChannelSyncState.FAILED
     await channelSync.save()
   }
@@ -99,33 +127,17 @@ async function skipImport (options: {
   channel: MChannelAccountDefault
   channelSync: MChannelSync
   targetUrl: string
-  skipPublishedBefore?: Date
+  lTags: LoggerTagsFn
 }) {
-  const { channel, channelSync, targetUrl, skipPublishedBefore } = options
+  const { channel, channelSync, targetUrl, lTags } = options
 
   if (await VideoImportModel.urlAlreadyImported({ channelId: channel.id, channelSyncId: channelSync?.id, targetUrl })) {
     logger.debug(
       `${targetUrl} is already imported for channel ${channel.name}, skipping video channel synchronization.`,
       { channelSync, ...lTags() }
     )
+
     return true
-  }
-
-  if (skipPublishedBefore) {
-    const youtubeDL = new YoutubeDLWrapper(
-      targetUrl,
-      ServerConfigManager.Instance.getEnabledResolutions('vod'),
-      CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
-    )
-
-    const videoInfo = await youtubeDL.getInfoForDownload()
-
-    const onlyAfterWithoutTime = new Date(skipPublishedBefore)
-    onlyAfterWithoutTime.setHours(0, 0, 0, 0)
-
-    if (videoInfo.originallyPublishedAtWithoutTime.getTime() < onlyAfterWithoutTime.getTime()) {
-      return true
-    }
   }
 
   return false

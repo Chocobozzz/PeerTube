@@ -10,7 +10,6 @@ export interface VideoSource {
   width?: number
   height?: number
 
-  fileUrl: string
   fileDownloadUrl: string
 
   fps?: number

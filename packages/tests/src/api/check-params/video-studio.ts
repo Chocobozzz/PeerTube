@@ -293,7 +293,7 @@ describe('Test video studio API validator', function () {
       it('Should succeed with the correct params', async function () {
         this.timeout(360000)
 
-        await addWatermark('custom-thumbnail.jpg', HttpStatusCode.NO_CONTENT_204)
+        await addWatermark('custom-thumbnail-280x157.jpg', HttpStatusCode.NO_CONTENT_204)
 
         await waitJobs([ server ])
       })
@@ -325,8 +325,8 @@ describe('Test video studio API validator', function () {
       })
 
       it('Should fail with an invalid file', async function () {
-        await addIntroOutro('add-intro', 'custom-thumbnail.jpg')
-        await addIntroOutro('add-outro', 'custom-thumbnail.jpg')
+        await addIntroOutro('add-intro', 'custom-thumbnail-280x157.jpg')
+        await addIntroOutro('add-outro', 'custom-thumbnail-280x157.jpg')
       })
 
       it('Should fail with a file that does not contain video stream', async function () {

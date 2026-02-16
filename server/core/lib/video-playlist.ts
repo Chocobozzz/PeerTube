@@ -1,15 +1,19 @@
 import { VideoPlaylistPrivacy, VideoPlaylistType } from '@peertube/peertube-models'
+import { generateImageFilename } from '@server/helpers/image-utils.js'
 import { logger } from '@server/helpers/logger.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { SequelizeModel } from '@server/models/shared/sequelize-type.js'
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
+import { copy } from 'fs-extra/esm'
+import { extname, join } from 'path'
 import { Transaction } from 'sequelize'
 import { VideoPlaylistModel } from '../models/video/video-playlist.js'
 import { MAccount, MVideoThumbnail } from '../types/models/index.js'
 import { MVideoPlaylistOwner, MVideoPlaylistThumbnail } from '../types/models/video/video-playlist.js'
 import { sendUpdateVideoPlaylist } from './activitypub/send/send-update.js'
 import { getLocalVideoPlaylistActivityPubUrl } from './activitypub/url.js'
-import { VideoMiniaturePermanentFileCache } from './files-cache/video-miniature-permanent-file-cache.js'
-import { updateLocalPlaylistMiniatureFromExisting } from './thumbnail.js'
+import { createLocalPlaylistThumbnailFromImage } from './thumbnail.js'
+import { downloadImageFromWorker } from './worker/parent-process.js'
 
 export async function createWatchLaterPlaylist (account: MAccount, t: Transaction) {
   const videoPlaylist: MVideoPlaylistOwner = new VideoPlaylistModel({
@@ -31,23 +35,33 @@ export async function createWatchLaterPlaylist (account: MAccount, t: Transactio
 export async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylistThumbnail, video: MVideoThumbnail) {
   logger.info('Generating default thumbnail to playlist %s.', videoPlaylist.url)
 
-  const videoMiniature = video.getMiniature()
-  if (!videoMiniature) {
+  const videoThumbnail = video.getBestThumbnail()
+  if (!videoThumbnail) {
     logger.info('Cannot generate thumbnail for playlist %s because video %s does not have any.', videoPlaylist.url, video.url)
     return
   }
 
-  // Ensure the file is on disk
-  const videoMiniaturePermanentFileCache = new VideoMiniaturePermanentFileCache()
-  const inputPath = videoMiniature.isLocal()
-    ? videoMiniature.getPath()
-    : await videoMiniaturePermanentFileCache.downloadRemoteFile(videoMiniature)
+  const tmpImageName = generateImageFilename(extname(videoThumbnail.filename))
 
-  const thumbnailModel = await updateLocalPlaylistMiniatureFromExisting({
-    inputPath,
+  if (video.isLocal() === true) {
+    await copy(videoThumbnail.getFSPath(), join(CONFIG.STORAGE.TMP_DIR, tmpImageName))
+  } else {
+    await downloadImageFromWorker({
+      url: videoThumbnail.fileUrl,
+      destDir: CONFIG.STORAGE.TMP_DIR,
+      destName: tmpImageName,
+      size: {
+        height: videoThumbnail.height || 280,
+        width: videoThumbnail.width || 157
+      }
+    })
+  }
+
+  const thumbnailModel = await createLocalPlaylistThumbnailFromImage({
+    inputPath: join(CONFIG.STORAGE.TMP_DIR, tmpImageName),
     playlist: videoPlaylist,
     automaticallyGenerated: true,
-    keepOriginal: true
+    keepOriginal: false
   })
 
   thumbnailModel.videoPlaylistId = videoPlaylist.id

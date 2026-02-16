@@ -2,13 +2,18 @@ import {
   FileStorage,
   VideoResolution,
   VideoStreamingPlaylistType,
+  VideoStreamingPlaylistTypeString,
   type FileStorageType,
   type VideoStreamingPlaylistType_Type
 } from '@peertube/peertube-models'
 import { generateP2PMediaLoaderHash } from '@peertube/peertube-node-utils'
 import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { getHLSPrivateFileUrl, getObjectStoragePublicFileUrl } from '@server/lib/object-storage/index.js'
+import {
+  buildObjectStorageHLSPrivateFileUrl,
+  buildObjectStoragePublicFileUrl,
+  generateHLSObjectStorageKey
+} from '@server/lib/object-storage/index.js'
 import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename } from '@server/lib/paths.js'
 import { isVideoInPrivateDirectory } from '@server/lib/video-privacy.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
@@ -305,10 +310,13 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
 
   private getMasterPlaylistObjectStorageUrl (video: MVideo) {
     if (video.hasPrivateStaticPath() && CONFIG.OBJECT_STORAGE.PROXY.PROXIFY_PRIVATE_FILES === true) {
-      return getHLSPrivateFileUrl(video, this.playlistFilename)
+      return buildObjectStorageHLSPrivateFileUrl(video, this.playlistFilename)
     }
 
-    return getObjectStoragePublicFileUrl(this.playlistUrl, CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
+    return buildObjectStoragePublicFileUrl({
+      bucket: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS,
+      key: generateHLSObjectStorageKey(video, this.playlistFilename)
+    })
   }
 
   // ---------------------------------------------------------------------------
@@ -329,10 +337,13 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
 
   private getSha256SegmentsObjectStorageUrl (video: MVideo) {
     if (video.hasPrivateStaticPath() && CONFIG.OBJECT_STORAGE.PROXY.PROXIFY_PRIVATE_FILES === true) {
-      return getHLSPrivateFileUrl(video, this.segmentsSha256Filename)
+      return buildObjectStorageHLSPrivateFileUrl(video, this.segmentsSha256Filename)
     }
 
-    return getObjectStoragePublicFileUrl(this.segmentsSha256Url, CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
+    return buildObjectStoragePublicFileUrl({
+      bucket: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS,
+      key: generateHLSObjectStorageKey(video, this.segmentsSha256Filename)
+    })
   }
 
   // ---------------------------------------------------------------------------
@@ -357,7 +368,7 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     return false
   }
 
-  getStringType () {
+  getStringType (): VideoStreamingPlaylistTypeString {
     if (this.type === VideoStreamingPlaylistType.HLS) return 'hls'
 
     return 'unknown'

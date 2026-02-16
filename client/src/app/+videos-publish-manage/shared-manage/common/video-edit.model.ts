@@ -1,5 +1,5 @@
-import { getOriginUrl } from '@app/helpers'
-import { exists, omit, pick, secondsToTime } from '@peertube/peertube-core-utils'
+import { AuthUser } from '@app/core'
+import { exists, maxBy, omit, pick, secondsToTime } from '@peertube/peertube-core-utils'
 import {
   HTMLServerConfig,
   LiveVideo,
@@ -28,7 +28,6 @@ import debug from 'debug'
 import { Jsonify, SharedUnionFieldsDeep } from 'type-fest'
 import { VideoCaptionWithPathEdit } from './video-caption-edit.model'
 import { VideoChaptersEdit } from './video-chapters-edit.model'
-import { AuthUser } from '@app/core'
 
 const debugLogger = debug('peertube:video-manage:video-edit')
 
@@ -37,7 +36,7 @@ export type VideoEditPrivacyType = VideoPrivacyType | typeof VideoEdit.SPECIAL_S
 type CommonUpdateForm =
   & Omit<
     VideoUpdate,
-    'privacy' | 'videoPasswords' | 'thumbnailfile' | 'scheduleUpdate' | 'originallyPublishedAt' | 'nsfwFlags'
+    'privacy' | 'videoPasswords' | 'previewfile' | 'scheduleUpdate' | 'originallyPublishedAt' | 'nsfwFlags'
   >
   & {
     schedulePublicationAt?: Date
@@ -114,7 +113,7 @@ type UpdateFromAPIOptions = {
     | 'aspectRatio'
     | 'views'
     | 'blacklisted'
-    | 'previewPath'
+    | 'thumbnails'
     | 'state'
     | 'isLive'
   >
@@ -128,7 +127,7 @@ type UpdateFromAPIOptions = {
 
 // ---------------------------------------------------------------------------
 
-type CommonUpdate = Omit<VideoUpdate, 'thumbnailfile' | 'originallyPublishedAt' | 'scheduleUpdate'> & {
+type CommonUpdate = Omit<VideoUpdate, 'previewfile' | 'originallyPublishedAt' | 'scheduleUpdate'> & {
   originallyPublishedAt?: string
   scheduleUpdate?: {
     updateAt: string
@@ -197,8 +196,8 @@ export class VideoEdit {
   }
 
   private saveStore: {
-    common?: Omit<CommonUpdate, 'pluginData' | 'previewfile'>
-    previewfile?: { size: number }
+    common?: Omit<CommonUpdate, 'pluginData' | 'thumbnailfile'>
+    thumbnailfile?: { size: number }
 
     live?: LiveUpdate
     playerSettings?: PlayerVideoSettings
@@ -337,7 +336,7 @@ export class VideoEdit {
       this.metadata.videoSource = videoSource
     }
 
-    await this.loadPreview(video)
+    await this.loadThumbnail(video)
 
     this.updateAfterChange()
   }
@@ -399,7 +398,7 @@ export class VideoEdit {
 
     if (saveInStore) {
       const obj = buildObj({ loadPrivacy: true })
-      this.saveStore.common = omit(obj, [ 'pluginData', 'previewfile' ])
+      this.saveStore.common = omit(obj, [ 'pluginData', 'thumbnailfile' ])
 
       // Apply plugin defaults so we correctly detect changes
       const pluginDefaults = this.saveStore.pluginDefaults || {}
@@ -433,16 +432,18 @@ export class VideoEdit {
     }
   }
 
-  private async loadPreview (video: UpdateFromAPIOptions['video']) {
-    if (!video?.previewPath) return
+  private async loadThumbnail (video: UpdateFromAPIOptions['video']) {
+    if (!video?.thumbnails || video.thumbnails.length === 0) return
+
+    const bestThumbnail = maxBy(video.thumbnails, 'width')
 
     try {
-      const response = await fetch(getOriginUrl() + video.previewPath)
+      const response = await fetch(bestThumbnail.fileUrl)
 
-      this.common.previewfile = await response.blob()
-      this.saveStore.previewfile = { size: this.common.previewfile.size }
+      this.common.thumbnailfile = await response.blob()
+      this.saveStore.thumbnailfile = { size: this.common.thumbnailfile.size }
     } catch (err) {
-      logger.error('Failed to fetch video preview', err)
+      logger.error('Failed to fetch video thumbnail', err)
     }
   }
 
@@ -512,7 +513,7 @@ export class VideoEdit {
     if (values.support !== undefined) this.common.support = values.support
     if (values.commentsPolicy !== undefined) this.common.commentsPolicy = values.commentsPolicy
     if (values.downloadEnabled !== undefined) this.common.downloadEnabled = values.downloadEnabled
-    if (values.previewfile !== undefined) this.common.previewfile = values.previewfile
+    if (values.thumbnailfile !== undefined) this.common.thumbnailfile = values.thumbnailfile
     if (values.pluginData !== undefined) this.common.pluginData = values.pluginData
 
     // ---------------------------------------------------------------------------
@@ -602,7 +603,7 @@ export class VideoEdit {
 
       pluginData: this.common.pluginData,
 
-      previewfile: this.common.previewfile,
+      thumbnailfile: this.common.thumbnailfile,
 
       videoPassword: this.common.videoPasswords && this.common.videoPasswords.length !== 0
         ? this.common.videoPasswords[0]
@@ -628,7 +629,7 @@ export class VideoEdit {
     return json
   }
 
-  toVideoUpdate (): Required<VideoUpdate> {
+  toVideoUpdate (): Required<Omit<VideoUpdate, 'previewfile'>> {
     return {
       ...this.toVideoCreateOrUpdate(),
 
@@ -636,7 +637,7 @@ export class VideoEdit {
     }
   }
 
-  toVideoCreate (overriddenPrivacy: VideoPrivacyType): Required<Omit<VideoCreate, 'generateTranscription'>> {
+  toVideoCreate (overriddenPrivacy: VideoPrivacyType): Required<Omit<VideoCreate, 'generateTranscription' | 'previewfile'>> {
     return {
       ...this.toVideoCreateOrUpdate(),
 
@@ -644,7 +645,7 @@ export class VideoEdit {
     }
   }
 
-  private toVideoCreateOrUpdate (): Required<SharedUnionFieldsDeep<VideoCreate | VideoUpdate>> {
+  private toVideoCreateOrUpdate (): Required<SharedUnionFieldsDeep<Omit<VideoCreate | VideoUpdate, 'previewfile'>>> {
     return {
       name: this.common.name,
       category: this.common.category || null,
@@ -666,8 +667,7 @@ export class VideoEdit {
       waitTranscoding: this.common.waitTranscoding,
       commentsPolicy: this.common.commentsPolicy,
       downloadEnabled: this.common.downloadEnabled,
-      thumbnailfile: this.common.previewfile,
-      previewfile: this.common.previewfile,
+      thumbnailfile: this.common.thumbnailfile,
       scheduleUpdate: this.common.scheduleUpdate || null,
       originallyPublishedAt: this.common.originallyPublishedAt || null
     }
@@ -937,18 +937,18 @@ export class VideoEdit {
     if (this.isNewVideo) return true
     if (!this.saveStore.common) return true
 
-    let changes = !this.areSameObjects(omit(this.common, [ 'previewfile', 'pluginData' ]), this.saveStore.common)
+    let changes = !this.areSameObjects(omit(this.common, [ 'thumbnailfile', 'pluginData' ]), this.saveStore.common)
 
-    // Compare preview file
-    if (changes !== true && (this.common.previewfile || this.saveStore.previewfile)) {
-      changes = this.common.previewfile?.size !== this.saveStore.previewfile?.size
+    // Compare thumbnails
+    if (changes !== true && (this.common.thumbnailfile || this.saveStore.thumbnailfile)) {
+      changes = this.common.thumbnailfile?.size !== this.saveStore.thumbnailfile?.size
     }
 
     debugLogger('Check if has common changes', {
       changes,
       common: this.common,
       saveCommon: this.saveStore.common,
-      savePreview: this.saveStore.previewfile
+      saveThumbnail: this.saveStore.thumbnailfile
     })
 
     return changes

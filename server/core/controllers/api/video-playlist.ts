@@ -32,7 +32,7 @@ import { MIMETYPES, VIDEO_PLAYLIST_PRIVACIES } from '../../initializers/constant
 import { sequelizeTypescript } from '../../initializers/database.js'
 import { sendCreateVideoPlaylist, sendDeleteVideoPlaylist, sendUpdateVideoPlaylist } from '../../lib/activitypub/send/index.js'
 import { getLocalVideoPlaylistActivityPubUrl, getLocalVideoPlaylistElementActivityPubUrl } from '../../lib/activitypub/url.js'
-import { updateLocalPlaylistMiniatureFromExisting } from '../../lib/thumbnail.js'
+import { createLocalPlaylistThumbnailFromImage } from '../../lib/thumbnail.js'
 import {
   apiRateLimiter,
   asyncMiddleware,
@@ -197,7 +197,7 @@ async function createVideoPlaylist (req: express.Request, res: express.Response)
 
   const thumbnailField = req.files?.['thumbnailfile']
   const thumbnailModel = thumbnailField
-    ? await updateLocalPlaylistMiniatureFromExisting({
+    ? await createLocalPlaylistThumbnailFromImage({
       inputPath: thumbnailField[0].path,
       playlist: videoPlaylist,
       automaticallyGenerated: false
@@ -259,7 +259,7 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
 
   const thumbnailField = req.files?.['thumbnailfile']
   const thumbnailModel = thumbnailField
-    ? await updateLocalPlaylistMiniatureFromExisting({
+    ? await createLocalPlaylistThumbnailFromImage({
       inputPath: thumbnailField[0].path,
       playlist,
       automaticallyGenerated: false
@@ -567,14 +567,14 @@ async function reorderVideosOfPlaylist (req: express.Request, res: express.Respo
 
     videoPlaylist.changed('updatedAt', true)
     await videoPlaylist.save({ transaction: t })
-
-    await sendUpdateVideoPlaylist(videoPlaylist, t)
   })
 
   // The first element changed
   if ((start === 1 || insertAfter === 0) && videoPlaylist.hasGeneratedThumbnail()) {
     await regeneratePlaylistThumbnail(videoPlaylist)
   }
+
+  await sendUpdateVideoPlaylist(videoPlaylist, undefined)
 
   logger.info(
     'Reordered playlist %s (inserted after position %d elements %d - %d).',

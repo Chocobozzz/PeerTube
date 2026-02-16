@@ -458,30 +458,38 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   }
 
   private whereFollowerActorId (options: { actorId: number, orLocalVideos: boolean, isCount: boolean }) {
-    this.joinChannel()
-
-    let query = ''
-
-    // IN is faster than EXISTS if with COUNT
+    // EXISTS doesn't work very well with COUNT queries, so we use a CTE instead
     if (options.isCount) {
       // Don't use CTE on purpose, that seems to be slower in this case
       const targetActorIdQuery =
         `SELECT "targetActorId" FROM "actorFollow" WHERE "actorFollow"."actorId" = :followerActorId AND "actorFollow"."state" = 'accepted'`
 
-      query = '(' +
-        `"accountActor"."id" IN (${targetActorIdQuery})` +
-        `OR "channelActor"."id" IN (${targetActorIdQuery})` +
-        `OR "video"."id" IN (` +
-        `  SELECT "videoId" FROM "videoShare" INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ` +
-        `  WHERE "actorFollow"."actorId" = :followerActorId AND "actorFollow"."state" = 'accepted'` +
-        `) `
+      let cteQuery = '"videoCandidates" AS (' +
+        `SELECT "videoShare"."videoId" FROM "videoShare" WHERE "videoShare"."actorId" IN (${targetActorIdQuery}) ` +
+        `UNION ` +
+        `SELECT "video"."id" FROM "video" INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ` +
+        `  INNER JOIN "actor" "channelActor" ON "videoChannel"."id" = "channelActor"."videoChannelId" ` +
+        `  WHERE "channelActor"."id" IN (${targetActorIdQuery}) ` +
+        `UNION ` +
+        `SELECT "video"."id" FROM "video" INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ` +
+        `  INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ` +
+        `  INNER JOIN "actor" "accountActor" ON "account"."id" = "accountActor"."accountId" ` +
+        `  WHERE "accountActor"."id" IN (${targetActorIdQuery}) `
 
       if (options.orLocalVideos) {
-        query += 'OR "video"."remote" IS FALSE'
+        cteQuery += 'UNION SELECT "video"."id" FROM "video" WHERE "remote" IS FALSE'
       }
 
-      query += ')'
+      cteQuery += ')'
+
+      this.cte.push(cteQuery)
+
+      this.joins.push('INNER JOIN "videoCandidates" ON "video"."id" = "videoCandidates"."videoId"')
     } else {
+      this.joinChannel()
+
+      let query = ''
+
       query = '(' +
         '  EXISTS (' + // Videos shared by actors (instances, channels) we follow
         '    SELECT 1 FROM "videoShare" ' +
@@ -506,9 +514,9 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       }
 
       query += ')'
+      this.and.push(query)
     }
 
-    this.and.push(query)
     this.replacements.followerActorId = options.actorId
   }
 

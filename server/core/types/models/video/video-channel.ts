@@ -18,6 +18,7 @@ import {
   MActorAPChannel,
   MActorAPI,
   MActorAccountChannelId,
+  MActorAudience,
   MActorDefault,
   MActorDefaultBanner,
   MActorDefaultLight,
@@ -67,6 +68,7 @@ export type MChannelActor =
   & Use<'Actor', MActor>
 
 export type MChannelUrl = Use<'Actor', MActorUrl>
+export type MChannelAudience = Use<'Actor', MActorAudience>
 
 // Default scope
 export type MChannelDefault =

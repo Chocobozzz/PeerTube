@@ -1,5 +1,6 @@
 import { AccountSummary } from '../../actors/index.js'
 import { VideoChannelSummary } from '../channel/index.js'
+import { Thumbnail } from '../thumbnail/thumbnail.model.js'
 import { VideoConstant } from '../video-constant.model.js'
 import { VideoPlaylistPrivacyType } from './video-playlist-privacy.model.js'
 import { VideoPlaylistType_Type } from './video-playlist-type.model.js'
@@ -17,8 +18,16 @@ export interface VideoPlaylist {
   description: string
   privacy: VideoConstant<VideoPlaylistPrivacyType>
 
+  /**
+   * @deprecated in 8.1, use thumbnails array instead
+   */
   thumbnailPath: string
+  /**
+   * @deprecated in 8.1, use thumbnails array instead
+   */
   thumbnailUrl?: string
+
+  thumbnails: Thumbnail[]
 
   videosLength: number
 
