@@ -36,6 +36,7 @@ describe('Test video lives API validator', function () {
   let video: VideoCreateResult
   let videoIdNotLive: number
   let command: LiveCommand
+  let dvrMaxWindowSeconds: number
 
   // ---------------------------------------------------------------
 
@@ -60,6 +61,11 @@ describe('Test video lives API validator', function () {
         }
       }
     })
+
+    {
+      const config = await server.config.getConfig()
+      dvrMaxWindowSeconds = config.live.dvrMaxWindowSeconds
+    }
 
     userAccessToken = await server.users.generateUserAndToken('user1')
     editorToken = await server.channelCollaborators.createEditor('editor', 'root_channel')
@@ -98,6 +104,8 @@ describe('Test video lives API validator', function () {
         replaySettings: undefined,
         permanentLive: true,
         latencyMode: LiveVideoLatencyMode.DEFAULT,
+        dvrEnabled: true,
+        dvrWindowSeconds: Math.max(1, Math.floor(dvrMaxWindowSeconds / 2)),
         schedules: [
           {
             startAt: new Date(Date.now() + 1000 * 60 * 60) // 1 hour later
@@ -277,6 +285,22 @@ describe('Test video lives API validator', function () {
       const fields = { ...baseCorrectParams, latencyMode: LiveVideoLatencyMode.HIGH_LATENCY }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should fail with a bad dvrWindowSeconds', async function () {
+      const toTests = [ -1, 0, 0.5, dvrMaxWindowSeconds + 1 ]
+
+      for (const dvrWindowSeconds of toTests) {
+        const fields = { ...baseCorrectParams, dvrWindowSeconds }
+
+        await makePostBodyRequest({
+          url: server.url,
+          path,
+          token: server.accessToken,
+          fields,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      }
     })
 
     it('Should fail with an invalid schedules', async function () {
@@ -526,6 +550,28 @@ describe('Test video lives API validator', function () {
       const fields = { latencyMode: 42 as any }
 
       await command.update({ videoId: video.id, fields, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should fail with bad dvrWindowSeconds', async function () {
+      const targetVideoId = video?.id || (await command.create({
+        fields: {
+          name: 'live dvr update validation',
+          channelId,
+          privacy: VideoPrivacy.PUBLIC
+        }
+      })).id
+
+      const toTests = [ -1, 0, 0.5, dvrMaxWindowSeconds + 1 ]
+
+      for (const dvrWindowSeconds of toTests) {
+        const fields = { dvrWindowSeconds } as any
+
+        await command.update({
+          videoId: targetVideoId,
+          fields,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      }
     })
 
     it('Should fail with a bad privacy for replay settings', async function () {

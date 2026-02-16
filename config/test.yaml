@@ -35,6 +35,9 @@ smtp:
   from_address: 'test-admin@127.0.0.1'
   username: null
   password: null
+  
+object_storage:
+  force_path_style: false
 
 log:
   level: 'debug'
