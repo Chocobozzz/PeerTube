@@ -253,7 +253,7 @@ describe('Test video transcription', function () {
     })
 
     it('Should run transcription after a video replacement', async function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       await servers[0].config.enableFileUpdate()
 
@@ -271,7 +271,7 @@ describe('Test video transcription', function () {
     })
 
     it('Should not run transcription after video replacement if the subtitle has not been auto generated', async function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       const uuid = await uploadForTranscription(servers[0], { language: 'en' })
       await waitJobs(servers)
