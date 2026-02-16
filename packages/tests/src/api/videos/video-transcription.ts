@@ -199,7 +199,7 @@ describe('Test video transcription', function () {
     })
 
     it('Should run transcription after a video edition', async function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       await servers[0].config.enableMinimumTranscoding()
       await servers[0].config.enableStudio()

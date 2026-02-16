@@ -124,8 +124,9 @@ describe('Test video imports', function () {
         expect(video.name).to.equal('small video - youtube')
 
         {
-          expect(video.thumbnailPath).to.match(new RegExp(`^/lazy-static/thumbnails/.+.webp$`))
-          expect(video.previewPath).to.match(new RegExp(`^/lazy-static/previews/.+.webp$`))
+          // yt-dlp may keep the original JPG thumbnail format depending on extractor metadata.
+          expect(video.thumbnailPath).to.match(new RegExp(`^/lazy-static/thumbnails/.+\\.(webp|jpe?g)$`))
+          expect(video.previewPath).to.match(new RegExp(`^/lazy-static/previews/.+\\.(webp|jpe?g)$`))
 
           // FIXME: re-enable when we'll support webp pixel match
           // const suffix = mode === 'yt-dlp'
