@@ -491,6 +491,8 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
 
     if (!skipLoader) this.loading = true
 
+    this.selectedRows = []
+
     return new Promise<void>((res, rej) => {
       this.dataLoader()({
         pagination: this.pagination,
