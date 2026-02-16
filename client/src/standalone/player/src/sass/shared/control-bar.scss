@@ -80,7 +80,6 @@ $chapter-marker-size: 9px;
   .vjs-resolution-control,
   .vjs-fullscreen-control,
   .vjs-peertube-link,
-  .vjs-popout-control,
   .vjs-theater-control,
   .vjs-caption-toggle-control,
   .vjs-settings {
@@ -257,14 +256,6 @@ $chapter-marker-size: 9px;
     .vjs-icon-placeholder {
       transition: transform 0.2s ease;
     }
-  }
-
-  .vjs-popout-control {
-    width: var(--button-width);
-    cursor: pointer;
-
-    @include disable-outline;
-    @include inject-icon("./svg/popout.svg", calc(var(--icon-size) - 4px));
   }
 
   .vjs-progress-control:hover .vjs-slider,
@@ -668,10 +659,6 @@ $chapter-marker-size: 9px;
   .vjs-theater-control {
     display: none;
   }
-
-  .vjs-popout-control {
-    display: none;
-  }
 }
 
 .video-js.vjs-peertube-skin.vjs-size-570 .vjs-control-bar {
@@ -714,10 +701,6 @@ $chapter-marker-size: 9px;
   .vjs-next-video,
   .vjs-previous-video {
     display: none !important;
-  }
-
-  .vjs-popout-control {
-    display: none;
   }
 
   .vjs-peertube-link {
