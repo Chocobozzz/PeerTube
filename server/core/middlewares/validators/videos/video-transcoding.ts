@@ -6,7 +6,7 @@ import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import express from 'express'
 import { body } from 'express-validator'
 import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from '../shared/index.js'
-import { checkVideoCanBeTranscribed } from './shared/video-validators.js'
+import { checkVideoCanBeTranscribedOrTranscoded } from './shared/video-validators.js'
 
 const createTranscodingValidator = [
   isValidVideoIdParam('videoId'),
@@ -24,17 +24,17 @@ const createTranscodingValidator = [
     if (!await doesVideoExist(req.params.videoId, res, 'all')) return
 
     const video = res.locals.videoAll
+    const body = req.body as VideoTranscodingCreate
 
-    if (!checkVideoCanBeTranscribed(video, req, res)) return
+    if (!checkVideoCanBeTranscribedOrTranscoded({ video, req, res, skipStateCheck: body.forceTranscoding === true })) return
 
     if (CONFIG.TRANSCODING.ENABLED !== true) {
       return res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
-        message: 'Cannot run transcoding job because transcoding is disabled on this instance'
+        message: req.t('Cannot run transcoding job because transcoding is disabled on this instance')
       })
     }
 
-    const body = req.body as VideoTranscodingCreate
     if (body.forceTranscoding === true) return next()
 
     const info = await VideoJobInfoModel.load(video.id)
@@ -42,7 +42,7 @@ const createTranscodingValidator = [
       return res.fail({
         status: HttpStatusCode.CONFLICT_409,
         type: ServerErrorCode.VIDEO_ALREADY_BEING_TRANSCODED,
-        message: 'This video is already being transcoded'
+        message: req.t('This video is already being transcoded')
       })
     }
 

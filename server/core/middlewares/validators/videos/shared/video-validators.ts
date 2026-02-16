@@ -102,7 +102,16 @@ export function checkVideoFileCanBeEdited (video: MVideo, req: express.Request, 
   return true
 }
 
-export function checkVideoCanBeTranscribed (video: MVideo, req: express.Request, res: express.Response) {
+export function checkVideoCanBeTranscribedOrTranscoded (options: {
+  video: MVideo
+  req: express.Request
+  res: express.Response
+
+  // Default false
+  skipStateCheck?: boolean
+}) {
+  const { video, req, res, skipStateCheck = false } = options
+
   if (video.remote) {
     res.fail({
       status: HttpStatusCode.BAD_REQUEST_400,
@@ -118,6 +127,8 @@ export function checkVideoCanBeTranscribed (video: MVideo, req: express.Request,
     })
     return false
   }
+
+  if (skipStateCheck) return true
 
   const incompatibleStates = new Set<VideoStateType>([
     VideoState.TO_IMPORT,
