@@ -124,6 +124,14 @@
         <my-video-state-badge [video]="video"></my-video-state-badge>
       </td>
     }
+
+    @if (table.isColumnDisplayed('language')) {
+      <td>
+        @if (video.language?.label) {
+          {{ video.language.label }}
+        }
+      </td>
+    }
   </ng-template>
 
   <ng-template #actionCell let-video>
