@@ -109,6 +109,15 @@ body {
   .vjs-poster {
     outline: 0;
     background-size: cover;
+    overflow: hidden;
+
+    img {
+      // We want the object in contain mode, but the iframe ratio may be a little bit different that the image ratio
+      // So we add extra pixels to ensure we don't have black borders
+      object-fit: contain;
+      width: calc(100% + 2px);
+      height: calc(100% + 2px);
+    }
   }
 
   // Theater mode is enabled

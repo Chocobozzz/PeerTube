@@ -1,3 +1,5 @@
+import { maxBy } from './array.js'
+
 export function findAppropriateImage<T extends { width: number }> (images: T[], wantedWidth: number) {
   if (!wantedWidth) throw new Error('Invalid width to find appropriate image')
   if (!images || images.length === 0) return undefined
@@ -10,5 +12,5 @@ export function findAppropriateImage<T extends { width: number }> (images: T[], 
     }
   }
 
-  return candidate || images[0]
+  return candidate || maxBy(images, 'width')
 }
