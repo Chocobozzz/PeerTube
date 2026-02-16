@@ -189,6 +189,7 @@ export function checkMissedConfig () {
     'object_storage.enabled',
     'object_storage.endpoint',
     'object_storage.region',
+    'object_storage.force_path_style',
     'object_storage.upload_acl.public',
     'object_storage.upload_acl.private',
     'object_storage.proxy.proxify_private_files',
