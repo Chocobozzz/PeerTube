@@ -285,31 +285,30 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
   // ---------------------------------------------------------------------------
 
   saveSelectedColumns () {
-    const enabled = this.columns.filter(c => c.selected === false).map(c => c.id)
+    const enabled = this.columns.filter(c => c.selected !== false).map(c => c.id)
 
-    this.peertubeLocalStorage.setItem(this.getColumnDisabledLocalStorageKey(), JSON.stringify(enabled))
+    this.peertubeLocalStorage.setItem(this.getColumnLocalStorageKey(), JSON.stringify(enabled))
   }
 
   private loadSelectedColumns () {
-    const disabledString = this.peertubeLocalStorage.getItem(this.getColumnDisabledLocalStorageKey())
-    if (!disabledString) return
+    const enabledString = this.peertubeLocalStorage.getItem(this.getColumnLocalStorageKey())
 
+    if (!enabledString) return
     try {
-      const disabled = JSON.parse(disabledString)
+      const enabled = JSON.parse(enabledString)
 
       for (const column of this.columns) {
-        if (!disabled.includes(column.id)) continue
-
-        column.selected = false
+        column.selected = enabled.includes(column.id)
       }
     } catch (err) {
       logger.error('Cannot load selected columns.', err)
     }
   }
 
-  private getColumnDisabledLocalStorageKey () {
-    return 'rest-table-columns-disabled-' + this.key()
+  private getColumnLocalStorageKey () {
+    return 'rest-table-columns-' + this.key()
   }
+
   // ---------------------------------------------------------------------------
 
   private loadTableSettings () {
