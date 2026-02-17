@@ -174,12 +174,9 @@ static_files:
 
 object_storage:
   enabled: false
-
-  # Without protocol, will default to HTTPS
-  # Your S3 provider must support virtual hosting of buckets as PeerTube doesn't support path style requests
-  endpoint: '' # 's3.amazonaws.com' or 's3.fr-par.scw.cloud' for example
-
+  endpoint: ''
   region: 'us-east-1'
+  force_path_style: false
 
   upload_acl:
     # Set this ACL on each uploaded object of public/unlisted videos
