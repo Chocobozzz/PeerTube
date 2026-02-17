@@ -19,7 +19,7 @@ export class VideoAlertComponent {
 
   private readonly videoStateMessage = inject(VideoStateMessageService)
 
-  canSeeMoreInfo () {
+  canSeeMoreStateInfo () {
     return !!(this.user()?.hasRight(UserRight.UPDATE_ANY_VIDEO))
   }
 
@@ -27,7 +27,18 @@ export class VideoAlertComponent {
     const video = this.video()
     if (!video) return undefined
 
-    return this.videoStateMessage.buildWarn(video.id, video.state.id)
+    return this.videoStateMessage.buildWarn({ videoId: video.id, state: video.state.id })
+  }
+
+  getAlertError () {
+    const video = this.video()
+    if (!video) return undefined
+
+    return this.videoStateMessage.buildErr({
+      videoId: video.id,
+      blacklisted: video.blacklisted,
+      blacklistedReason: video.blacklistedReason
+    })
   }
 
   hasVideoScheduledPublication () {

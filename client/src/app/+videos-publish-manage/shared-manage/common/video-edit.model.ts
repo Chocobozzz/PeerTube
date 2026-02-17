@@ -112,6 +112,7 @@ type UpdateFromAPIOptions = {
     | 'aspectRatio'
     | 'views'
     | 'blacklisted'
+    | 'blacklistedReason'
     | 'thumbnails'
     | 'state'
     | 'isLive'
@@ -165,6 +166,7 @@ export class VideoEdit {
     duration: number
     likes: number
     blacklisted: boolean
+    blacklistedReason: string
 
     ownerAccountId: number
     ownerAccountDisplayName: string
@@ -187,6 +189,7 @@ export class VideoEdit {
     likes: number
 
     blacklisted: boolean
+    blacklistedReason: string
 
     ownerAccountId: number
     ownerAccountDisplayName: string
@@ -414,6 +417,7 @@ export class VideoEdit {
     this.metadata.likes = video.likes
     this.metadata.aspectRatio = video.aspectRatio
     this.metadata.blacklisted = video.blacklisted
+    this.metadata.blacklistedReason = video.blacklistedReason
 
     this.metadata.isLive = video.isLive
 
@@ -1047,6 +1051,7 @@ export class VideoEdit {
       likes: this.metadata.likes,
       duration: this.metadata.duration,
       blacklisted: this.metadata.blacklisted,
+      blacklistedReason: this.metadata.blacklistedReason,
 
       ownerAccountId: this.metadata.ownerAccountId,
       ownerAccountDisplayName: this.metadata.ownerAccountDisplayName,
