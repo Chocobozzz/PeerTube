@@ -212,7 +212,15 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
       fromDescription: false,
       finalFallback: undefined
     },
-    liveAttributes: pick(videoInfo, [ 'saveReplay', 'permanentLive', 'latencyMode', 'dvrEnabled', 'dvrWindowSeconds', 'replaySettings', 'schedules' ]),
+    liveAttributes: pick(videoInfo, [
+      'saveReplay',
+      'permanentLive',
+      'latencyMode',
+      'dvrEnabled',
+      'dvrWindowSeconds',
+      'replaySettings',
+      'schedules'
+    ]),
     videoAttributeResultHook: 'filter:api.video.live.video-attribute.result',
     lTags,
     videoAttributes: {

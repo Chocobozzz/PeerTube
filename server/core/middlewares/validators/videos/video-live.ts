@@ -7,7 +7,11 @@ import {
   UserRight,
   VideoState
 } from '@peertube/peertube-models'
-import { areLiveSchedulesValid, isLiveDvrWindowSecondsValid, isLiveLatencyModeValid } from '@server/helpers/custom-validators/video-lives.js'
+import {
+  areLiveSchedulesValid,
+  isLiveDvrWindowSecondsValid,
+  isLiveLatencyModeValid
+} from '@server/helpers/custom-validators/video-lives.js'
 import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import { isLocalLiveVideoAccepted } from '@server/lib/moderation.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
