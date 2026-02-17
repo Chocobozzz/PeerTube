@@ -19,7 +19,6 @@ import {
   doubleFollow,
   killallServers,
   LiveCommand,
-  makeGetRequest,
   makeRawRequest,
   PeerTubeServer,
   sendRTMPStream,
@@ -30,9 +29,9 @@ import {
   waitJobs,
   waitUntilLivePublishedOnAllServers
 } from '@peertube/peertube-server-commands'
-import { testImageGeneratedByFFmpeg } from '@tests/shared/checks.js'
 import { testLiveVideoResolutions } from '@tests/shared/live.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
+import { checkThumbnails } from '@tests/shared/videos.js'
 import { expect } from 'chai'
 import { basename, join } from 'path'
 
@@ -96,8 +95,7 @@ describe('Test live', function () {
           replaySettings: { privacy: VideoPrivacy.PUBLIC },
           latencyMode: LiveVideoLatencyMode.SMALL_LATENCY,
           privacy: VideoPrivacy.PUBLIC,
-          previewfile: 'video_short1-preview.webm.jpg',
-          thumbnailfile: 'video_short1.webm.jpg'
+          thumbnailfile: 'video_short1.webm-thumbnail-850x480.jpg'
         }
       })
       liveVideoUUID = live.uuid
@@ -127,8 +125,11 @@ describe('Test live', function () {
         expect(video.downloadEnabled).to.be.false
         expect(video.privacy.id).to.equal(VideoPrivacy.PUBLIC)
 
-        await testImageGeneratedByFFmpeg(server.url, 'video_short1-preview.webm', video.previewPath)
-        await testImageGeneratedByFFmpeg(server.url, 'video_short1.webm', video.thumbnailPath)
+        await checkThumbnails({
+          server,
+          video,
+          thumbnails: [ 'video_short1.webm-thumbnail-850x480.jpg', 'video_short1.webm.jpg' ]
+        })
 
         const live = await server.live.get({ videoId: liveVideoUUID })
 
@@ -168,8 +169,9 @@ describe('Test live', function () {
         expect(video.privacy.id).to.equal(VideoPrivacy.UNLISTED)
         expect(video.nsfw).to.be.true
 
-        await makeGetRequest({ url: server.url, path: video.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
-        await makeGetRequest({ url: server.url, path: video.previewPath, expectedStatus: HttpStatusCode.OK_200 })
+        for (const t of video.thumbnails) {
+          await makeRawRequest({ url: t.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+        }
       }
     })
 

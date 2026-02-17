@@ -1,5 +1,20 @@
 # Changelog
 
+## v8.0.2
+
+### IMPORTANT NOTES
+
+ * Follow v8.0.0 IMPORTANT NOTES if you upgrade from PeerTube <= v7.3.0
+
+### Bug fixes
+
+ * Fix PostgreSQL CPU usage and broken PeerTube instance on instances with a many subscriptions or big federation
+ * Fix login URL in registration email
+ * Remove the trailing comma in the plugins `package.json` files that broke the update/installation process
+ * Fix broken channel sync if private privacy is removed by a plugin
+ * Fix restoring *My Videos* sort after a search
+
+
 ## v8.0.1
 
 ### IMPORTANT NOTES

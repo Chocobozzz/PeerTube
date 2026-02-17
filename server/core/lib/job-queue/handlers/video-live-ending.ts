@@ -1,5 +1,5 @@
 import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo, getVideoStreamFPS } from '@peertube/peertube-ffmpeg'
-import { ThumbnailType, VideoFileStream, VideoLiveEndingPayload, VideoState } from '@peertube/peertube-models'
+import { VideoFileStream, VideoLiveEndingPayload, VideoState } from '@peertube/peertube-models'
 import { peertubeTruncate } from '@server/helpers/core-utils.js'
 import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url.js'
@@ -11,7 +11,11 @@ import {
   getHLSDirectory,
   getLiveReplayBaseDirectory
 } from '@server/lib/paths.js'
-import { generateLocalVideoMiniature, regenerateMiniaturesIfNeeded, updateLocalVideoMiniatureFromExisting } from '@server/lib/thumbnail.js'
+import {
+  createLocalVideoThumbnailsFromVideo,
+  regenerateLocalVideoThumbnailsFromVideoIfNeeded,
+  createLocalVideoThumbnailsFromImage
+} from '@server/lib/thumbnail.js'
 import { generateHlsPlaylistResolutionFromTS } from '@server/lib/transcoding/hls-transcoding.js'
 import { createTranscriptionTaskIfNeeded } from '@server/lib/video-captions.js'
 import { addLocalOrRemoteStoryboardJobIfNeeded } from '@server/lib/video-jobs.js'
@@ -202,32 +206,25 @@ async function copyOrRegenerateThumbnails (options: {
   const { liveVideo, replayVideo } = options
 
   let thumbnails: MThumbnail[] = []
-  const preview = liveVideo.getPreview()
 
-  if (preview?.automaticallyGenerated === false) {
-    thumbnails = await Promise.all(
-      [ ThumbnailType.MINIATURE, ThumbnailType.PREVIEW ].map(type => {
-        return updateLocalVideoMiniatureFromExisting({
-          inputPath: preview.getPath(),
-          video: replayVideo,
-          type,
-          automaticallyGenerated: false,
-          keepOriginal: true
-        })
-      })
-    )
+  const bestThumbnail = liveVideo.getBestThumbnail()
+
+  if (bestThumbnail.automaticallyGenerated === false) {
+    thumbnails = await createLocalVideoThumbnailsFromImage({
+      inputPath: bestThumbnail.getFSPath(),
+      video: replayVideo,
+      automaticallyGenerated: false,
+      keepOriginal: true
+    })
   } else {
-    thumbnails = await generateLocalVideoMiniature({
+    thumbnails = await createLocalVideoThumbnailsFromVideo({
       video: replayVideo,
       videoFile: replayVideo.getMaxQualityFile(VideoFileStream.VIDEO) || replayVideo.getMaxQualityFile(VideoFileStream.AUDIO),
-      types: [ ThumbnailType.MINIATURE, ThumbnailType.PREVIEW ],
       ffprobe: undefined
     })
   }
 
-  for (const thumbnail of thumbnails) {
-    await replayVideo.addAndSaveThumbnail(thumbnail)
-  }
+  await replayVideo.replaceAndSaveThumbnails(thumbnails)
 }
 
 async function replaceLiveByReplay (options: {
@@ -285,7 +282,7 @@ async function replaceLiveByReplay (options: {
 
   // Regenerate the thumbnail & preview?
   try {
-    await regenerateMiniaturesIfNeeded(videoWithFiles, undefined)
+    await regenerateLocalVideoThumbnailsFromVideoIfNeeded(videoWithFiles, undefined)
   } catch (err) {
     logger.error(`Cannot regenerate thumbnails of ended live ${videoWithFiles.uuid}`, lTags(liveVideo.uuid))
   }

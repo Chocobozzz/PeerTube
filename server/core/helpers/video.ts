@@ -1,9 +1,16 @@
 import { VideoPrivacy } from '@peertube/peertube-models'
 import { CONFIG } from '@server/initializers/config.js'
 import { isStreamingPlaylist, MStreamingPlaylistVideo, MVideo } from '@server/types/models/index.js'
-import { Response } from 'express'
+import express from 'express'
 
-export function getVideoWithAttributes (res: Response) {
+export function getVideoThumbnailFile (files: express.UploadFiles): Express.Multer.File {
+  const file = files?.['previewfile'] || files?.['thumbnailfile']
+  if (!file) return undefined
+
+  return file[0]
+}
+
+export function getVideoWithAttributes (res: express.Response) {
   return res.locals.videoAPI || res.locals.videoAll || res.locals.onlyVideo
 }
 

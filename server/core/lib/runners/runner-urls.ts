@@ -8,8 +8,8 @@ export function generateRunnerTranscodingAudioInputFileUrl (jobUUID: string, vid
   return WEBSERVER.URL + '/api/v1/runners/jobs/' + jobUUID + '/files/videos/' + videoUUID + '/max-quality/audio'
 }
 
-export function generateRunnerTranscodingVideoPreviewFileUrl (jobUUID: string, videoUUID: string) {
-  return WEBSERVER.URL + '/api/v1/runners/jobs/' + jobUUID + '/files/videos/' + videoUUID + '/previews/max-quality'
+export function generateRunnerTranscodingVideoThumbnailFileUrl (jobUUID: string, videoUUID: string) {
+  return WEBSERVER.URL + '/api/v1/runners/jobs/' + jobUUID + '/files/videos/' + videoUUID + '/thumbnails/max-quality'
 }
 
 export function generateRunnerEditionTranscodingVideoInputFileUrl (jobUUID: string, videoUUID: string, filename: string) {

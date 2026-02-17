@@ -159,7 +159,7 @@ export enum ScopeNames {
               model: VideoModel.unscoped(),
               include: [
                 {
-                  attributes: [ 'filename', 'fileUrl', 'type' ],
+                  attributes: [ 'filename', 'fileUrl', 'width', 'height' ],
                   model: ThumbnailModel
                 },
                 {
@@ -502,6 +502,8 @@ export class AbuseModel extends SequelizeModel<AbuseModel> {
     const abuseModel = this.VideoAbuse
     const entity = abuseModel.Video || abuseModel.deletedVideo
 
+    const video = abuseModel.Video
+
     return {
       id: entity.id,
       uuid: entity.uuid,
@@ -512,11 +514,13 @@ export class AbuseModel extends SequelizeModel<AbuseModel> {
       startAt: abuseModel.startAt,
       endAt: abuseModel.endAt,
 
-      deleted: !abuseModel.Video,
-      blacklisted: abuseModel.Video?.isBlacklisted() || false,
-      thumbnailPath: abuseModel.Video?.getMiniatureStaticPath(),
+      deleted: !video,
+      blacklisted: video?.isBlacklisted() || false,
 
-      channel: abuseModel.Video?.VideoChannel.toFormattedJSON() || abuseModel.deletedVideo?.channel
+      thumbnailPath: video?.getSmallestThumbnailStaticPath(),
+      thumbnails: video?.Thumbnails.map(t => t.toFormattedJSON()) || [],
+
+      channel: video?.VideoChannel.toFormattedJSON() || abuseModel.deletedVideo?.channel
     }
   }
 

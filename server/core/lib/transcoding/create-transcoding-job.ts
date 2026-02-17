@@ -7,7 +7,6 @@ export function createOptimizeOrMergeAudioJobs (options: {
   videoFile: MVideoFile
   isNewVideo: boolean
   user: MUserId
-  videoFileAlreadyLocked: boolean
 }) {
   return getJobBuilder().createOptimizeOrMergeAudioJobs(options)
 }

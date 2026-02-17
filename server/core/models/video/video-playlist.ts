@@ -8,7 +8,8 @@ import {
   type VideoPlaylistPrivacyType,
   type VideoPlaylistType_Type
 } from '@peertube/peertube-models'
-import { buildUUID, uuidToShort } from '@peertube/peertube-node-utils'
+import { uuidToShort } from '@peertube/peertube-node-utils'
+import { generateImageFilename } from '@server/helpers/image-utils.js'
 import { activityPubCollectionPagination } from '@server/lib/activitypub/collection.js'
 import { MAccountId, MChannelId, MVideoPlaylistElement } from '@server/types/models/index.js'
 import { join } from 'path'
@@ -39,7 +40,6 @@ import {
   ACTIVITY_PUB,
   CONSTRAINTS_FIELDS,
   LAZY_STATIC_PATHS,
-  THUMBNAILS_SIZE,
   USER_EXPORT_MAX_ITEMS,
   VIDEO_PLAYLIST_PRIVACIES,
   VIDEO_PLAYLIST_TYPES,
@@ -532,6 +532,10 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
   async setAndSaveThumbnail (thumbnail: MThumbnail, t: Transaction) {
     thumbnail.videoPlaylistId = this.id
 
+    if (this.Thumbnail && thumbnail.id !== this.Thumbnail?.id) {
+      await this.Thumbnail.destroy({ transaction: t })
+    }
+
     this.Thumbnail = await thumbnail.save({ transaction: t })
   }
 
@@ -550,11 +554,11 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
     return false
   }
 
-  generateThumbnailName () {
-    const extension = '.jpg'
-
-    return 'playlist-' + buildUUID() + extension
+  generateThumbnailName (extension: string) {
+    return 'playlist-' + generateImageFilename(extension)
   }
+
+  // ---------------------------------------------------------------------------
 
   getThumbnailUrl () {
     if (!this.hasThumbnail()) return null
@@ -567,6 +571,8 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
 
     return join(LAZY_STATIC_PATHS.THUMBNAILS, this.Thumbnail.filename)
   }
+
+  // ---------------------------------------------------------------------------
 
   getWatchStaticPath () {
     return buildPlaylistWatchPath({ shortUUID: uuidToShort(this.uuid) })
@@ -639,6 +645,10 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
       },
 
       thumbnailPath: this.getThumbnailStaticPath(),
+      thumbnails: this.Thumbnail
+        ? [ this.Thumbnail.toFormattedJSON() ]
+        : [],
+
       embedPath: this.getEmbedStaticPath(),
 
       type: {
@@ -671,8 +681,8 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
         type: 'Image' as 'Image',
         url: this.getThumbnailUrl(),
         mediaType: 'image/jpeg' as 'image/jpeg',
-        width: THUMBNAILS_SIZE.width,
-        height: THUMBNAILS_SIZE.height
+        width: this.Thumbnail.width,
+        height: this.Thumbnail.height
       }
     }
 

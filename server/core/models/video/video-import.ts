@@ -1,4 +1,5 @@
 import { VideoImport, type VideoImportPayload, VideoImportState, type VideoImportStateType } from '@peertube/peertube-models'
+import { CONFIG } from '@server/initializers/config.js'
 import { MVideoImport, MVideoImportDefault, MVideoImportFormattable } from '@server/types/models/video/video-import.js'
 import { Op } from 'sequelize'
 import {
@@ -17,12 +18,11 @@ import {
 import { isVideoImportStateValid, isVideoImportTargetUrlValid } from '../../helpers/custom-validators/video-imports.js'
 import { isVideoMagnetUriValid } from '../../helpers/custom-validators/videos.js'
 import { CONSTRAINTS_FIELDS, VIDEO_IMPORT_STATES } from '../../initializers/constants.js'
-import { buildSQLAttributes, SequelizeModel, throwIfNotValid } from '../shared/index.js'
+import { buildSQLAttributes, getSort, SequelizeModel, throwIfNotValid } from '../shared/index.js'
 import { UserModel } from '../user/user.js'
 import { ListVideoImportsOptions, VideoImportListQueryBuilder } from './sql/import/video-import-list-query-builder.js'
 import { VideoChannelSyncModel } from './video-channel-sync.js'
 import { VideoModel, ScopeNames as VideoModelScopeNames } from './video.js'
-import { CONFIG } from '@server/initializers/config.js'
 
 const defaultVideoScope = () => {
   return VideoModel.scope([
@@ -220,6 +220,17 @@ export class VideoImportModel extends SequelizeModel<VideoImportModel> {
         }
       },
       limit: 100
+    })
+  }
+
+  static loadLastImportBySyncId (options: {
+    channelSyncId: number
+  }) {
+    return VideoImportModel.findOne<MVideoImportDefault>({
+      where: {
+        videoChannelSyncId: options.channelSyncId
+      },
+      order: getSort('-createdAt')
     })
   }
 

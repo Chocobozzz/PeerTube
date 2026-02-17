@@ -1,16 +1,16 @@
 import { escapeHTML, forceNumber } from '@peertube/peertube-core-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
+import { logger } from '@server/helpers/logger.js'
 import { getOrCreateAPActor } from '@server/lib/activitypub/actors/get.js'
 import { loadActorUrlOrGetFromWebfinger } from '@server/lib/activitypub/actors/webfinger.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
-import { MChannelSummary } from '@server/types/models/index.js'
+import { MChannelSummary, MThumbnail } from '@server/types/models/index.js'
 import cors from 'cors'
 import express from 'express'
-import { EMBED_SIZE, PREVIEWS_SIZE, THUMBNAILS_SIZE, WEBSERVER } from '../initializers/constants.js'
+import { EMBED_SIZE, WEBSERVER } from '../initializers/constants.js'
 import { apiRateLimiter, asyncMiddleware, oembedValidator } from '../middlewares/index.js'
 import { accountHandleGetValidatorFactory } from '../middlewares/validators/index.js'
-import { logger } from '@server/helpers/logger.js'
 
 const servicesRouter = express.Router()
 
@@ -51,8 +51,7 @@ function generatePlaylistOEmbed (req: express.Request, res: express.Response) {
     channel: playlist.VideoChannel,
     title: playlist.name,
     embedPath: playlist.getEmbedStaticPath() + buildPlayerURLQuery(req.query.url),
-    previewPath: playlist.getThumbnailStaticPath(),
-    previewSize: THUMBNAILS_SIZE,
+    thumbnail: playlist.Thumbnail,
     req
   })
 
@@ -66,8 +65,7 @@ function generateVideoOEmbed (req: express.Request, res: express.Response) {
     channel: video.VideoChannel,
     title: video.name,
     embedPath: video.getEmbedStaticPath() + buildPlayerURLQuery(req.query.url),
-    previewPath: video.getPreviewStaticPath(),
-    previewSize: PREVIEWS_SIZE,
+    thumbnail: video.getBestThumbnail(),
     req
   })
 
@@ -116,14 +114,11 @@ function buildOEmbed (options: {
   req: express.Request
   title: string
   channel: MChannelSummary
-  previewPath: string | null
   embedPath: string
-  previewSize: {
-    height: number
-    width: number
-  }
+
+  thumbnail: MThumbnail
 }) {
-  const { req, previewSize, previewPath, title, channel, embedPath } = options
+  const { req, thumbnail, title, channel, embedPath } = options
 
   const webserverUrl = WEBSERVER.URL
   const maxHeight = forceNumber(req.query.maxheight)
@@ -132,23 +127,11 @@ function buildOEmbed (options: {
   const embedUrl = webserverUrl + embedPath
   const embedTitle = escapeHTML(title)
 
-  let thumbnailUrl = previewPath
-    ? webserverUrl + previewPath
-    : undefined
-
   let embedWidth = EMBED_SIZE.width
   if (maxWidth < embedWidth) embedWidth = maxWidth
 
   let embedHeight = EMBED_SIZE.height
   if (maxHeight < embedHeight) embedHeight = maxHeight
-
-  // Our thumbnail is too big for the consumer
-  if (
-    (maxHeight !== undefined && maxHeight < previewSize.height) ||
-    (maxWidth !== undefined && maxWidth < previewSize.width)
-  ) {
-    thumbnailUrl = undefined
-  }
 
   const html = `<iframe width="${embedWidth}" height="${embedHeight}" sandbox="allow-same-origin allow-scripts allow-popups allow-forms" ` +
     `title="${embedTitle}" src="${embedUrl}" style="border: none" allow="fullscreen"></iframe>`
@@ -166,10 +149,10 @@ function buildOEmbed (options: {
     provider_url: webserverUrl
   }
 
-  if (thumbnailUrl !== undefined) {
-    json.thumbnail_url = thumbnailUrl
-    json.thumbnail_width = previewSize.width
-    json.thumbnail_height = previewSize.height
+  if (thumbnail && (!maxHeight || thumbnail.height < maxHeight) && (!maxWidth || thumbnail.width < maxWidth)) {
+    json.thumbnail_url = webserverUrl + thumbnail.getFileStaticPath()
+    json.thumbnail_width = thumbnail.width
+    json.thumbnail_height = thumbnail.height
   }
 
   return json

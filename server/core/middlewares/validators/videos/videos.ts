@@ -176,8 +176,8 @@ export const videosAddResumableInitValidator = [
     const user = res.locals.oauth.token.User
     const cleanup = () => cleanUpReqFiles(req)
 
-    logger.debug('Checking videosAddResumableInitValidator parameters and headers', {
-      parameters: req.body,
+    logger.debug('Checking videosAddResumableInitValidator body and headers', {
+      body: req.body,
       headers: req.headers,
       files: req.files
     })

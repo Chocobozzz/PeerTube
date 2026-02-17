@@ -18,6 +18,7 @@ export class ThemeManager {
 
   private readonly configCSSVariableMap: ConfigCSSVariableMap = {
     primaryColor: '--primary',
+    onPrimaryColor: '--on-primary',
     foregroundColor: '--fg',
     backgroundColor: '--bg',
     backgroundSecondaryColor: '--bg-secondary',
@@ -176,11 +177,11 @@ export class ThemeManager {
         })
       }
 
-      const isMenuDarkTheme = () => {
+      const isComponentDarkTheme = (component: 'header' | 'menu') => {
         return this.isDarkTheme({
-          fg: computedStyle.getPropertyValue('--menu-fg'),
-          bg: computedStyle.getPropertyValue('--menu-bg'),
-          isDarkVar: computedStyle.getPropertyValue('--is-menu-dark')
+          fg: computedStyle.getPropertyValue(`--${component}-fg`),
+          bg: computedStyle.getPropertyValue(`--${component}-bg`),
+          isDarkVar: computedStyle.getPropertyValue(`--is-${component}-dark`)
         })
       }
 
@@ -192,8 +193,11 @@ export class ThemeManager {
 
         { prefix: 'input-bg', invertIfDark: true, step: 5, darkTheme: isGlobalDarkTheme },
 
-        { prefix: 'menu-fg', invertIfDark: true, step: 5, darkTheme: isMenuDarkTheme },
-        { prefix: 'menu-bg', invertIfDark: true, step: 5, darkTheme: isMenuDarkTheme }
+        { prefix: 'menu-fg', invertIfDark: true, step: 5, darkTheme: () => isComponentDarkTheme('menu') },
+        { prefix: 'menu-bg', invertIfDark: true, step: 5, darkTheme: () => isComponentDarkTheme('menu') },
+
+        { prefix: 'header-fg', invertIfDark: true, step: 5, darkTheme: () => isComponentDarkTheme('header') },
+        { prefix: 'header-bg', invertIfDark: true, step: 5, darkTheme: () => isComponentDarkTheme('header') }
       ] as { prefix: string, invertIfDark: boolean, step: number, darkTheme: () => boolean, fallbacks?: Record<string, string> }[]
 
       for (const { prefix, invertIfDark, step, darkTheme, fallbacks = {} } of toProcess) {

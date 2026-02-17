@@ -6,12 +6,13 @@ import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { PlayerSettingModel } from '@server/models/video/player-setting.js'
 import { VideoChapterModel } from '@server/models/video/video-chapter.js'
+import { VideoModel } from '@server/models/video/video.js'
 import { MAccountId, MActorId, MChannelId, MVideoId } from '@server/types/models/index.js'
 import cors from 'cors'
 import express from 'express'
 import { activityPubContextify } from '../../helpers/activity-pub-utils.js'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers/constants.js'
-import { audiencify, getPlaylistAudience, getPublicAudience, getVideoAudience } from '../../lib/activitypub/audience.js'
+import { audiencify, getCommentAudience, getPlaylistAudience, getPublicAudience, getVideoAudience } from '../../lib/activitypub/audience.js'
 import { buildAnnounceWithVideoAudience, buildApprovalActivity, buildLikeActivity } from '../../lib/activitypub/send/index.js'
 import { buildCreateActivity } from '../../lib/activitypub/send/send-create.js'
 import { buildDislikeActivity } from '../../lib/activitypub/send/send-dislike.js'
@@ -338,7 +339,7 @@ async function videoController (req: express.Request, res: express.Response) {
   // We need captions to render AP object
   const videoAP = await video.lightAPToFullAP(undefined)
 
-  const audience = getVideoAudience(videoAP.VideoChannel.Account.Actor, videoAP.privacy)
+  const audience = getVideoAudience({ account: videoAP.VideoChannel.Account, channel: videoAP.VideoChannel, privacy: videoAP.privacy })
   const videoObject = audiencify(await videoAP.toActivityPubObject(), audience)
 
   if (req.path.endsWith('/activity')) {
@@ -354,7 +355,7 @@ async function videoAnnounceController (req: express.Request, res: express.Respo
 
   if (redirectIfNotOwned(share.url, res)) return
 
-  const { activity } = await buildAnnounceWithVideoAudience(share.Actor, share, res.locals.videoAll, undefined)
+  const activity = buildAnnounceWithVideoAudience(share.Actor, share, res.locals.videoAll)
 
   return activityPubResponse(activityPubContextify(activity, 'Announce', getContextFilter()), res)
 }
@@ -469,7 +470,8 @@ async function videoCommentController (req: express.Request, res: express.Respon
   let videoCommentObject = videoComment.toActivityPubObject(threadParentComments)
 
   if (videoComment.Account) {
-    const audience = getPublicAudience(videoComment.Account.Actor)
+    const video = await VideoModel.loadByUrlAndPopulateAccount(videoComment.Video.url)
+    const audience = getCommentAudience({ comment: videoComment, video, threadParentComments })
     videoCommentObject = audiencify(videoCommentObject, audience)
 
     if (req.path.endsWith('/activity')) {

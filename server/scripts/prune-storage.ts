@@ -1,8 +1,8 @@
 import { createCommand } from '@commander-js/extra-typings'
 import { uniqify } from '@peertube/peertube-core-utils'
-import { FileStorage, ThumbnailType, ThumbnailType_Type } from '@peertube/peertube-models'
+import { FileStorage } from '@peertube/peertube-models'
 import { DIRECTORIES, USER_EXPORT_FILE_PREFIX } from '@server/initializers/constants.js'
-import { listKeysOfPrefix, removeObjectByFullKey } from '@server/lib/object-storage/object-storage-helpers.js'
+import { BucketInfo, listKeysOfPrefix, removeObjectByFullKey } from '@server/lib/object-storage/object-storage-helpers.js'
 import { UserExportModel } from '@server/models/user/user-export.js'
 import { StoryboardModel } from '@server/models/video/storyboard.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
@@ -90,7 +90,7 @@ class ObjectStoragePruner {
   }
 
   private async findFilesToDelete (
-    config: { BUCKET_NAME: string, PREFIX?: string },
+    config: BucketInfo,
     existFun: (file: string) => Promise<boolean> | boolean
   ) {
     try {
@@ -187,8 +187,7 @@ class FSPruner {
 
     await this.findFilesToDelete(CONFIG.STORAGE.REDUNDANCY_DIR, this.doesRedundancyExistFactory())
 
-    await this.findFilesToDelete(CONFIG.STORAGE.PREVIEWS_DIR, this.doesThumbnailExistFactory(true, ThumbnailType.PREVIEW))
-    await this.findFilesToDelete(CONFIG.STORAGE.THUMBNAILS_DIR, this.doesThumbnailExistFactory(false, ThumbnailType.MINIATURE))
+    await this.findFilesToDelete(CONFIG.STORAGE.THUMBNAILS_DIR, this.doesThumbnailExistFactory())
 
     await this.findFilesToDelete(CONFIG.STORAGE.CAPTIONS_DIR, this.doesCaptionExistFactory())
 
@@ -264,15 +263,11 @@ class FSPruner {
     return (filePath: string) => VideoFileModel.doesOwnedTorrentFileExist(basename(filePath))
   }
 
-  private doesThumbnailExistFactory (keepOnlyOwned: boolean, type: ThumbnailType_Type) {
+  private doesThumbnailExistFactory () {
     return async (filePath: string) => {
-      const thumbnail = await ThumbnailModel.loadByFilename(basename(filePath), type)
+      const thumbnail = await ThumbnailModel.loadByFilename(basename(filePath))
       if (!thumbnail) return false
-
-      if (keepOnlyOwned) {
-        const video = await VideoModel.load(thumbnail.videoId)
-        if (video.isLocal() === false) return false
-      }
+      if (thumbnail.isLocal() === false) return false
 
       return true
     }
@@ -281,22 +276,28 @@ class FSPruner {
   private doesActorImageExistFactory () {
     return async (filePath: string) => {
       const image = await ActorImageModel.loadByFilename(basename(filePath))
+      if (!image) return false
+      if (image.isLocal() === false) return false
 
-      return !!image
+      return true
     }
   }
 
   private doesStoryboardExistFactory () {
     return async (filePath: string) => {
       const storyboard = await StoryboardModel.loadByFilename(basename(filePath))
+      if (!storyboard) return false
+      if (storyboard.isLocal() === false) return false
 
-      return !!storyboard
+      return true
     }
   }
 
   private doesCaptionExistFactory () {
     return async (filePath: string) => {
-      const caption = await VideoCaptionModel.loadWithVideoByFilename(basename(filePath))
+      const caption = await VideoCaptionModel.loadByFilename(basename(filePath))
+      if (!caption) return false
+      if (caption.isLocal() === false) return false
 
       return !!caption
     }
@@ -330,7 +331,8 @@ class FSPruner {
     return (filePath: string) => {
       const filename = basename(filePath)
 
-      // Only detect non-existing user export
+      // Only detect user exports, since we're in the persistent tmp directory
+      // We don't want to delete other files that could be in this directory for other reasons
       if (!filename.startsWith(USER_EXPORT_FILE_PREFIX)) return true
 
       return UserExportModel.doesOwnedFileExist(filename, FileStorage.FILE_SYSTEM)

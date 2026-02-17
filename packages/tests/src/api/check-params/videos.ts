@@ -486,7 +486,7 @@ describe('Test videos API validator', function () {
       it('Should fail with an incorrect thumbnail file', async function () {
         const fields = baseCorrectParams
         const attaches = {
-          thumbnailfile: buildAbsoluteFixturePath('video_short.mp4'),
+          thumbnailfile: buildAbsoluteFixturePath('video-720p.torrent'),
           fixture: buildAbsoluteFixturePath('video_short.mp4')
         }
 
@@ -506,7 +506,7 @@ describe('Test videos API validator', function () {
       it('Should fail with an incorrect preview file', async function () {
         const fields = baseCorrectParams
         const attaches = {
-          previewfile: buildAbsoluteFixturePath('video_short.mp4'),
+          previewfile: buildAbsoluteFixturePath('video-720p.torrent'),
           fixture: buildAbsoluteFixturePath('video_short.mp4')
         }
 

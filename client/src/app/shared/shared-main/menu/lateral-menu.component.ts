@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common'
-import { Component, input } from '@angular/core'
+import { Component, inject, input } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { DomSanitizer } from '@angular/platform-browser'
 import { RouterModule } from '@angular/router'
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { GlobalIconComponent, GlobalIconName } from '../../shared-icons/global-icon.component'
@@ -40,8 +41,12 @@ export type LateralMenuConfig = {
   ]
 })
 export class LateralMenuComponent {
+  private domSanitizer = inject(DomSanitizer)
+
   config = input.required<LateralMenuConfig>()
   globalQueryParams = input<Record<string, any>>()
+
+  lateralMenuBackground = this.domSanitizer.bypassSecurityTrustHtml(require('./lateral-menu-background.svg'))
 
   isDisplayed (entry: LateralMenuLinkEntry) {
     if (!entry.isDisplayed) return true

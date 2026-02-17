@@ -8,7 +8,7 @@ import { getServerActor } from '@server/models/application/application.js'
 import { getCategoryLabel } from '@server/models/video/formatter/index.js'
 import { DisplayOnlyForFollowerOptions } from '@server/models/video/sql/video/index.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MChannelHostOnly, MThumbnail, MUserDefault } from '@server/types/models/index.js'
+import { MChannelHostOnly, MUserDefault } from '@server/types/models/index.js'
 
 export async function getVideosForFeeds (options: {
   sort: string
@@ -26,17 +26,17 @@ export async function getVideosForFeeds (options: {
   const { data } = await Hooks.wrapPromiseFun(
     VideoModel.listForApi.bind(VideoModel),
     {
-    start: 0,
-    count: CONFIG.FEEDS.VIDEOS.COUNT,
-    displayOnlyForFollower: {
-      actorId: server.id,
-      orLocalVideos: true
-    },
-    hasFiles: true,
-    countVideos: false,
+      start: 0,
+      count: CONFIG.FEEDS.VIDEOS.COUNT,
+      displayOnlyForFollower: {
+        actorId: server.id,
+        orLocalVideos: true
+      },
+      hasFiles: true,
+      countVideos: false,
 
-    ...options
-  },
+      ...options
+    },
     'filter:feed.videos.list.result'
   )
 
@@ -45,10 +45,6 @@ export async function getVideosForFeeds (options: {
 
 export function getCommonVideoFeedAttributes (video: VideoModel) {
   const localLink = WEBSERVER.URL + video.getWatchStaticPath()
-
-  const thumbnailModels: MThumbnail[] = []
-  if (video.hasPreview()) thumbnailModels.push(video.getPreview())
-  if (video.hasMiniature()) thumbnailModels.push(video.getMiniature())
 
   return {
     title: video.name,
@@ -63,8 +59,8 @@ export function getCommonVideoFeedAttributes (video: VideoModel) {
       ? [ { name: getCategoryLabel(video.category) } ]
       : undefined,
 
-    thumbnails: thumbnailModels.map(t => ({
-      url: WEBSERVER.URL + t.getLocalStaticPath(),
+    thumbnails: video.Thumbnails.map(t => ({
+      url: WEBSERVER.URL + t.getFileStaticPath(),
       width: t.width,
       height: t.height
     }))

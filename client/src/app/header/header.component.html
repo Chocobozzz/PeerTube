@@ -43,6 +43,7 @@
       <my-button
         i18n-title title="Go to the page where you can manage your account"
         theme="tertiary" rounded="true" class="margin-button settings-button" icon="cog" ptRouterLink="/my-account"
+        inheritColor="true"
       ></my-button>
 
       <div
@@ -95,7 +96,7 @@
             </button>
           }
 
-          <button ngbDropdownItem (click)="logout($event)" class="dropdown-item">
+          <button ngbDropdownItem (click)="logout($event)" class="dropdown-item logout">
             <my-global-icon iconName="sign-out" aria-hidden="true"></my-global-icon>
             <ng-container i18n>Log out</ng-container>
           </button>

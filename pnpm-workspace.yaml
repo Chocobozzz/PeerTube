@@ -20,6 +20,7 @@ onlyBuiltDependencies:
   - node-datachannel
   - utf-8-validate
   - utp-native
+  - sharp
 
 patchedDependencies:
   '@types/markdown-it': pnpm-patches/@types__markdown-it.patch

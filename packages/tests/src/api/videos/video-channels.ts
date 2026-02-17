@@ -292,7 +292,12 @@ describe('Test video channels', function () {
       for (const avatar of videoChannel.avatars) {
         avatarUrls[server.port] = avatar.fileUrl
         await testImage({ url: avatarUrls[server.port], name: `avatar-resized-${avatar.width}x${avatar.width}.png` })
-        await testFileExistsOnFSOrNot(server, 'avatars', basename(avatarUrls[server.port]), true)
+
+        if (i === 0) {
+          await testFileExistsOnFSOrNot(server, 'avatars', basename(avatarUrls[server.port]), true)
+        } else {
+          await testFileExistsOnFSOrNot(server, 'avatars', basename(avatarUrls[server.port]), false)
+        }
 
         const row = await sqlCommands[i].getActorImage(basename(avatarUrls[server.port]))
 
@@ -325,7 +330,12 @@ describe('Test video channels', function () {
       for (const banner of videoChannel.banners) {
         bannerUrls[server.port] = banner.fileUrl
         await testImage({ url: bannerUrls[server.port], name: `banner-resized-${banner.width}.jpg` })
-        await testFileExistsOnFSOrNot(server, 'avatars', basename(bannerUrls[server.port]), true)
+
+        if (i === 0) {
+          await testFileExistsOnFSOrNot(server, 'avatars', basename(bannerUrls[server.port]), true)
+        } else {
+          await testFileExistsOnFSOrNot(server, 'avatars', basename(bannerUrls[server.port]), false)
+        }
 
         const row = await sqlCommands[i].getActorImage(basename(bannerUrls[server.port]))
         expect(expectedSizes.some(({ height, width }) => row.height === height && row.width === width)).to.equal(true)

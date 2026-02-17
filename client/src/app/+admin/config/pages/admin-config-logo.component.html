@@ -17,7 +17,7 @@
           </div>
         </div>
 
-        <my-preview-upload class="avatar-preview" formControlName="avatar" inputName="avatar" displayDelete="true"></my-preview-upload>
+        <my-image-input class="avatar-preview" formControlName="avatar" inputName="avatar" displayDelete="true" [fileConstraints]="avatarFileConstraints"></my-image-input>
       </div>
 
       <div class="form-group">
@@ -31,7 +31,7 @@
           </p>
         </div>
 
-        <my-preview-upload class="banner-preview" formControlName="banner" inputName="banner" displayDelete="true"></my-preview-upload>
+        <my-image-input class="banner-preview" formControlName="banner" inputName="banner" displayDelete="true" [fileConstraints]="avatarFileConstraints"></my-image-input>
       </div>
 
       <div class="form-group">
@@ -43,17 +43,18 @@
             <ng-container i18n>If not set, the <strong>Square icon</strong> will be used.</ng-container>
           </p>
 
-          <p i18n>It will be resized to 32x32 pixels and converted to .png format.</p>
+          <p i18n>If the image is not in .svg format, it will be resized to 32x32 pixels and converted to .png format.</p>
         </div>
 
-        <my-preview-upload
+        <my-image-input
           class="favicon-preview"
           formControlName="favicon"
           inputName="favicon"
           displayDelete="true"
           buttonsAside="true"
           [previewSize]="{ height: '32px', width: '32px' }"
-        ></my-preview-upload>
+          [fileConstraints]="logoFileConstraints"
+        ></my-image-input>
       </div>
 
       <div class="form-group">
@@ -65,17 +66,18 @@
             <ng-container i18n>If not set, the <strong>Square icon</strong> will be used.</ng-container>
           </p>
 
-          <p i18n>Its height will be reduced to 48 pixels and the width will be calculated based on the original file ratio.</p>
+          <p i18n>If the image is not in .svg format, its height will be reduced to 48 pixels and the width will be calculated based on the original file ratio.</p>
         </div>
 
-        <my-preview-upload
+        <my-image-input
           class="header-wide-preview"
           formControlName="header-wide"
           inputName="header-wide"
           displayDelete="true"
           buttonsAside="true"
           [previewSize]="{ height: '48px', width: 'auto' }"
-        ></my-preview-upload>
+          [fileConstraints]="logoFileConstraints"
+        ></my-image-input>
       </div>
 
       <div class="form-group">
@@ -100,17 +102,18 @@
             <ng-container i18n>If not set, the <strong>Square icon</strong> will be used.</ng-container>
           </p>
 
-          <p i18n>It will be resized to 48x48 pixels.</p>
+          <p i18n>If the image is not in .svg format, it will be resized to 48x48 pixels.</p>
         </div>
 
-        <my-preview-upload
+        <my-image-input
           class="header-square-preview"
           formControlName="header-square"
           inputName="header-square"
           displayDelete="true"
           buttonsAside="true"
           [previewSize]="{ height: '48px', width: '48px' }"
-        ></my-preview-upload>
+          [fileConstraints]="logoFileConstraints"
+        ></my-image-input>
       </div>
 
       <div class="form-group">
@@ -122,10 +125,10 @@
             <ng-container i18n>If not set, the <strong>Square icon</strong> will be used.</ng-container>
           </p>
 
-          <p i18n>It will be resized to 1200x650 pixels.</p>
+          <p i18n>If the image is not in .svg format, it will be resized to 1200x650 pixels.</p>
         </div>
 
-        <my-preview-upload class="opengraph-preview" formControlName="opengraph" inputName="opengraph" displayDelete="true"></my-preview-upload>
+        <my-image-input class="opengraph-preview" formControlName="opengraph" inputName="opengraph" displayDelete="true" [fileConstraints]="logoFileConstraints"></my-image-input>
       </div>
     </div>
   </div>

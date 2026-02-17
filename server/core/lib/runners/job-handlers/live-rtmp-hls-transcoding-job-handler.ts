@@ -36,8 +36,9 @@ type CreateOptions = {
 }
 
 // eslint-disable-next-line max-len
-export class LiveRTMPHLSTranscodingJobHandler extends AbstractJobHandler<CreateOptions, LiveRTMPHLSTranscodingUpdatePayload, LiveRTMPHLSTranscodingSuccess> {
-
+export class LiveRTMPHLSTranscodingJobHandler
+  extends AbstractJobHandler<CreateOptions, LiveRTMPHLSTranscodingUpdatePayload, LiveRTMPHLSTranscodingSuccess>
+{
   async create (options: CreateOptions) {
     const { video, rtmpUrl, toTranscode, playlist, segmentDuration, segmentListSize, outputDirectory, sessionId } = options
 
@@ -65,7 +66,7 @@ export class LiveRTMPHLSTranscodingJobHandler extends AbstractJobHandler<CreateO
       jobUUID,
       payload,
       privatePayload,
-      priority: JOB_PRIORITY.TRANSCODING
+      priority: JOB_PRIORITY.REQUIRED_TRANSCODING
     })
 
     return job
@@ -106,7 +107,9 @@ export class LiveRTMPHLSTranscodingJobHandler extends AbstractJobHandler<CreateO
 
     logger.debug(
       'Runner live RTMP to HLS job %s for %s updated.',
-      runnerJob.uuid, videoUUID, { updatePayload, ...this.lTags(videoUUID, runnerJob.uuid) }
+      runnerJob.uuid,
+      videoUUID,
+      { updatePayload, ...this.lTags(videoUUID, runnerJob.uuid) }
     )
   }
 

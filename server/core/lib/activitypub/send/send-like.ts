@@ -4,7 +4,7 @@ import { logger } from '../../../helpers/logger.js'
 import { MActor, MActorAudience, MVideoAccountLight, MVideoUrl } from '../../../types/models/index.js'
 import { audiencify, getPublicAudience } from '../audience.js'
 import { getVideoLikeActivityPubUrlByLocalActor } from '../url.js'
-import { sendVideoActivityToOrigin } from './shared/send-utils.js'
+import { sendVideoRelatedActivityToOrigin } from './shared/send-utils.js'
 
 function sendLike (byActor: MActor, video: MVideoAccountLight, transaction: Transaction) {
   logger.info('Creating job to like %s.', video.url)
@@ -15,7 +15,7 @@ function sendLike (byActor: MActor, video: MVideoAccountLight, transaction: Tran
     return buildLikeActivity(url, byActor, video, audience)
   }
 
-  return sendVideoActivityToOrigin(activityBuilder, { byActor, video, transaction, contextType: 'Rate' })
+  return sendVideoRelatedActivityToOrigin(activityBuilder, { byActor, video, transaction, contextType: 'Rate' })
 }
 
 function buildLikeActivity (url: string, byActor: MActorAudience, video: MVideoUrl, audience?: ActivityAudience): ActivityLike {

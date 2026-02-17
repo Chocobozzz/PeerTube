@@ -29,8 +29,8 @@
   --co-logo-size: 34px;
   --co-root-padding: 1.5rem;
 
-  color: pvar(--header-fg);
-  background-color: pvar(--header-bg);
+  color: pvar(--header-fg-500);
+  background-color: pvar(--header-bg-500);
 
   padding: var(--co-root-padding);
   width: 100%;
@@ -122,13 +122,13 @@ my-search-typeahead {
 
   .display-name {
     font-weight: $font-bold;
-    color: pvar(--fg);
+    color: pvar(--header-fg-500);
     line-height: 1;
     padding-top: 3px;
   }
 
   .username {
-    color: pvar(--fg-300);
+    color: pvar(--header-fg-300);
   }
 
   > .dropdown-toggle {
@@ -150,6 +150,10 @@ my-actor-avatar {
 
 .login-icon {
   display: none;
+}
+
+.tertiary-button {
+  color: pvar(--header-fg-200);
 }
 
 @media screen and (max-width: $menu-overlay-view) {

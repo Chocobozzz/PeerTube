@@ -93,9 +93,11 @@ my-actor-host {
   }
 }
 
-// Grid mode
+// Grid mode inherited from parent component
 // Takes all the width on mobile
 .video-miniature:not(.display-as-row) {
+  --thumbnail-width: var(--co-miniature-max-width); // Required by video-thumbnail component
+
   display: flex;
   flex-direction: column;
   padding-bottom: 1rem;
@@ -173,6 +175,7 @@ my-actor-host {
 
   --co-row-thumbnail-width: #{$video-thumbnail-width};
   --co-row-thumbnail-height: #{$video-thumbnail-height};
+  --thumbnail-width: var(--co-row-thumbnail-width); // Required by video-thumbnail component
 
   display: flex;
   flex-direction: row;

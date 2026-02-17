@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { getAllFiles, wait } from '@peertube/peertube-core-utils'
+import { getAllFiles } from '@peertube/peertube-core-utils'
 import { FileStorage, HttpStatusCode, HttpStatusCodeType, VideoPlaylistPrivacy, VideoPrivacy } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled, buildUUID } from '@peertube/peertube-node-utils'
 import {
@@ -10,7 +10,6 @@ import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
-  killallServers,
   makeRawRequest,
   setAccessTokensToServers,
   setDefaultVideoChannel,
@@ -40,9 +39,9 @@ describe('Test prune storage CLI', function () {
 
     for (const server of servers) {
       await server.videos.quickUpload({ name: 'video 1', privacy: VideoPrivacy.PUBLIC })
-      await server.videos.quickUpload({ name: 'video 2', privacy: VideoPrivacy.PUBLIC })
+      const { uuid } = await server.videos.quickUpload({ name: 'video 2', privacy: VideoPrivacy.PUBLIC })
 
-      const { uuid } = await server.videos.quickUpload({ name: 'video 3', privacy: VideoPrivacy.PRIVATE })
+      await server.videos.quickUpload({ name: 'video 3', privacy: VideoPrivacy.PRIVATE })
 
       await server.captions.add({
         language: 'ar',
@@ -57,7 +56,7 @@ describe('Test prune storage CLI', function () {
           displayName: 'playlist',
           privacy: VideoPlaylistPrivacy.PUBLIC,
           videoChannelId: server.store.channel.id,
-          thumbnailfile: 'custom-thumbnail.jpg'
+          thumbnailfile: 'custom-thumbnail-280x157.jpg'
         }
       })
     }
@@ -69,29 +68,6 @@ describe('Test prune storage CLI', function () {
     }
 
     await doubleFollow(servers[0], servers[1])
-
-    // Lazy load the remote avatars
-    {
-      const account = await servers[0].accounts.get({ accountName: 'root@' + servers[1].host })
-
-      for (const avatar of account.avatars) {
-        await makeRawRequest({ url: avatar.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
-      }
-    }
-
-    {
-      const account = await servers[1].accounts.get({ accountName: 'root@' + servers[0].host })
-      for (const avatar of account.avatars) {
-        await makeRawRequest({ url: avatar.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
-      }
-    }
-
-    await wait(1000)
-
-    await waitJobs(servers)
-    await killallServers(servers)
-
-    await wait(1000)
   })
 
   describe('On filesystem', function () {
@@ -105,48 +81,99 @@ describe('Test prune storage CLI', function () {
       }
     }
 
-    async function assertCountAreOkay () {
-      for (const server of servers) {
-        const videosCount = await server.servers.countFiles('web-videos')
-        expect(videosCount).to.equal(5) // 2 videos with 2 resolutions + private directory
+    async function checkLocalFilesCount () {
+      const server = servers[0]
 
-        const privateVideosCount = await server.servers.countFiles('web-videos/private')
-        expect(privateVideosCount).to.equal(2)
+      const videosCount = await server.servers.countFiles('web-videos')
+      expect(videosCount).to.equal(5) // 2 videos with 2 resolutions + private directory
 
-        const torrentsCount = await server.servers.countFiles('torrents')
-        expect(torrentsCount).to.equal(12)
+      const privateVideosCount = await server.servers.countFiles('web-videos/private')
+      expect(privateVideosCount).to.equal(2)
 
-        const previewsCount = await server.servers.countFiles('previews')
-        expect(previewsCount).to.equal(3)
+      const torrentsCount = await server.servers.countFiles('torrents')
+      expect(torrentsCount).to.equal(12)
 
-        const thumbnailsCount = await server.servers.countFiles('thumbnails')
-        expect(thumbnailsCount).to.equal(5) // 3 local videos, 1 local playlist, 2 remotes videos (lazy downloaded) and 1 remote playlist
+      const thumbnailsCount = await server.servers.countFiles('thumbnails')
+      // 6 of 3 local videos (2 sizes for each)
+      // 1 local playlist
+      expect(thumbnailsCount).to.equal(7)
 
-        const avatarsCount = await server.servers.countFiles('avatars')
-        expect(avatarsCount).to.equal(8)
+      const avatarsCount = await server.servers.countFiles('avatars')
+      expect(avatarsCount).to.equal(4)
 
-        const hlsRootCount = await server.servers.countFiles(join('streaming-playlists', 'hls'))
-        expect(hlsRootCount).to.equal(3) // 2 videos + private directory
+      const hlsRootCount = await server.servers.countFiles(join('streaming-playlists', 'hls'))
+      expect(hlsRootCount).to.equal(3) // 2 videos + private directory
 
-        const hlsPrivateRootCount = await server.servers.countFiles(join('streaming-playlists', 'hls', 'private'))
-        expect(hlsPrivateRootCount).to.equal(1)
+      const hlsPrivateRootCount = await server.servers.countFiles(join('streaming-playlists', 'hls', 'private'))
+      expect(hlsPrivateRootCount).to.equal(1)
 
-        const originalVideoFilesCount = await server.servers.countFiles(join('original-video-files'))
-        expect(originalVideoFilesCount).to.equal(3)
+      const originalVideoFilesCount = await server.servers.countFiles('original-video-files')
+      expect(originalVideoFilesCount).to.equal(3)
 
-        const storyboardsCount = await server.servers.countFiles(join('storyboards'))
-        expect(storyboardsCount).to.equal(3)
+      const storyboardsCount = await server.servers.countFiles('storyboards')
+      expect(storyboardsCount).to.equal(3)
 
-        const captionsCount = await server.servers.countFiles(join('captions'))
-        expect(captionsCount).to.equal(1)
+      const captionsCount = await server.servers.countFiles('captions')
+      expect(captionsCount).to.equal(1)
 
-        const userExportFilesCount = await server.servers.countFiles(join('tmp-persistent'))
-        expect(userExportFilesCount).to.equal(1)
-      }
+      const userExportFilesCount = await server.servers.countFiles('tmp-persistent')
+      expect(userExportFilesCount).to.equal(1)
+    }
+
+    async function checkCacheFilesCountBeforeLazyLoad () {
+      expect(await servers[0].servers.countFiles(join('cache', 'avatars'))).to.equal(0)
+      expect(await servers[0].servers.countFiles(join('cache', 'storyboards'))).to.equal(0)
+      expect(await servers[0].servers.countFiles(join('cache', 'thumbnails'))).to.equal(0)
+      expect(await servers[0].servers.countFiles(join('cache', 'video-captions'))).to.equal(0)
+    }
+
+    async function checkCacheFilesCountAfterLazyLoad () {
+      expect(await servers[0].servers.countFiles(join('cache', 'avatars'))).to.equal(4)
+      expect(await servers[0].servers.countFiles(join('cache', 'storyboards'))).to.equal(2)
+      expect(await servers[0].servers.countFiles(join('cache', 'thumbnails'))).to.equal(4)
+      expect(await servers[0].servers.countFiles(join('cache', 'video-captions'))).to.equal(1)
     }
 
     it('Should have the files on the disk', async function () {
-      await assertCountAreOkay()
+      await checkLocalFilesCount()
+      await checkCacheFilesCountBeforeLazyLoad()
+    })
+
+    it('Should lazy load remote files', async function () {
+      // Lazy load remote avatars
+      {
+        const account = await servers[0].accounts.get({ accountName: 'root@' + servers[1].host })
+
+        for (const avatar of account.avatars) {
+          await makeRawRequest({ url: avatar.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+        }
+      }
+
+      // Lazy load video captions, storyboards and thumbnails
+      {
+        const { data: videos } = await servers[0].videos.list()
+        expect(videos).to.have.lengthOf(4)
+
+        for (const video of videos) {
+          const { data: captions } = await servers[0].captions.list({ videoId: video.uuid })
+          const { storyboards } = await servers[0].storyboard.list({ id: video.uuid })
+
+          for (const caption of captions) {
+            await makeRawRequest({ url: caption.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+          }
+
+          for (const storyboard of storyboards) {
+            await makeRawRequest({ url: storyboard.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+          }
+
+          for (const thumbnail of video.thumbnails) {
+            await makeRawRequest({ url: thumbnail.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+          }
+        }
+      }
+
+      await checkLocalFilesCount()
+      await checkCacheFilesCountAfterLazyLoad()
     })
 
     it('Should create some dirty files', async function () {
@@ -178,7 +205,7 @@ describe('Test prune storage CLI', function () {
           badNames['torrents'] = [ n1, n2 ]
         }
 
-        for (const name of [ 'thumbnails', 'previews', 'avatars', 'storyboards' ]) {
+        for (const name of [ 'thumbnails', 'avatars', 'storyboards' ]) {
           const base = servers[0].servers.buildDirectory(name)
 
           const n1 = buildUUID() + '.png'
@@ -244,7 +271,8 @@ describe('Test prune storage CLI', function () {
     })
 
     it('Should have removed files', async function () {
-      await assertCountAreOkay()
+      await checkLocalFilesCount()
+      await checkCacheFilesCountAfterLazyLoad()
 
       for (const directory of Object.keys(badNames)) {
         for (const name of badNames[directory]) {
@@ -307,6 +335,7 @@ describe('Test prune storage CLI', function () {
 
       await objectStorage.prepareDefaultMockBuckets()
 
+      await servers[0].kill()
       await servers[0].run(objectStorage.getDefaultMockConfig({ proxifyPrivateFiles: false }))
 
       {

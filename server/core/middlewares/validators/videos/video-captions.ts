@@ -17,7 +17,7 @@ import {
   isValidVideoIdParam,
   isValidVideoPasswordHeader
 } from '../shared/index.js'
-import { checkVideoCanBeTranscribed } from './shared/video-validators.js'
+import { checkVideoCanBeTranscribedOrTranscoded } from './shared/video-validators.js'
 
 export const addVideoCaptionValidator = [
   isValidVideoIdParam('videoId'),
@@ -80,7 +80,7 @@ export const generateVideoCaptionValidator = [
 
     const video = res.locals.videoAll
 
-    if (!checkVideoCanBeTranscribed(video, req, res)) return
+    if (!checkVideoCanBeTranscribedOrTranscoded({ video, req, res })) return
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User

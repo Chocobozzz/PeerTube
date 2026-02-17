@@ -28,7 +28,7 @@ import {
   VideoTranscriptionPayload
 } from '@peertube/peertube-models'
 import { jobStates } from '@server/helpers/custom-validators/jobs.js'
-import { CONFIG } from '@server/initializers/config.js'
+import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config.js'
 import { processVideoRedundancy } from '@server/lib/job-queue/handlers/video-redundancy.js'
 import {
   FlowJob,
@@ -218,6 +218,12 @@ class JobQueue {
     })
 
     this.addRepeatableJobs()
+
+    registerConfigChangedHandler(() => {
+      for (const handlerName of Object.keys(handlers)) {
+        this.workers[handlerName].concurrency = this.getJobConcurrency(handlerName)
+      }
+    })
   }
 
   private buildWorker (handlerName: JobType) {

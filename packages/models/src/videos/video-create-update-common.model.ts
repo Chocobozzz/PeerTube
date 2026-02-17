@@ -23,6 +23,7 @@ export interface VideoCreateUpdateCommon {
   waitTranscoding?: boolean
   channelId?: number
   thumbnailfile?: Blob
+  // TODO: remove in v10, deprecated in 8.1
   previewfile?: Blob
   scheduleUpdate?: VideoScheduleUpdate
   originallyPublishedAt?: Date | string

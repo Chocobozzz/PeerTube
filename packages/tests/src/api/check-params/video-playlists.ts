@@ -258,7 +258,7 @@ describe('Test video playlists API validator', function () {
         attributes: {
           displayName: 'display name',
           privacy: VideoPlaylistPrivacy.UNLISTED,
-          thumbnailfile: 'custom-thumbnail.jpg',
+          thumbnailfile: 'custom-thumbnail-280x157.jpg',
           videoChannelId: server.store.channel.id,
 
           ...attributes

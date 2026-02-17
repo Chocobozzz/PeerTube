@@ -567,7 +567,7 @@ export class VideoService {
       [VideoLicence['CC-BY-NC-ND']]: $localize`CC-BY-NC-ND`,
       [VideoLicence['CC0']]: '',
       [VideoLicence.PDM]: $localize`Public domain mark`,
-      [VideoLicence['COPYRIGHT']]: $localize`You are the owner of the content or you have the rights of the copyright holders`
+      [VideoLicence['ALL_RIGHTS_RESERVED']]: $localize`You are the owner of the content or you have the rights of the copyright holders`
     }
 
     return serverLicences.map(p => {

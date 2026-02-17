@@ -225,15 +225,13 @@ class MuxingSession extends EventEmitter implements MuxingSession {
 
           logger.debug('Uploading live master playlist on object storage for %s', this.videoUUID, { masterContent, ...this.lTags() })
 
-          const url = await storeHLSFileFromContent(
+          await storeHLSFileFromContent(
             {
-              playlist: this.streamingPlaylist,
+              video: this.streamingPlaylist.Video,
               pathOrFilename: this.streamingPlaylist.playlistFilename,
               content: masterContent
             }
           )
-
-          this.streamingPlaylist.playlistUrl = url
         }
 
         this.streamingPlaylist.assignP2PMediaLoaderInfoHashes(this.videoLive.Video, this.allResolutions.map(r => ({ height: r })))
@@ -294,7 +292,7 @@ class MuxingSession extends EventEmitter implements MuxingSession {
 
       if (this.streamingPlaylist.storage === FileStorage.OBJECT_STORAGE) {
         try {
-          await removeHLSFileObjectStorageByPath(this.streamingPlaylist, segmentPath)
+          await removeHLSFileObjectStorageByPath(this.streamingPlaylist.Video, segmentPath)
         } catch (err) {
           logger.error('Cannot remove segment %s from object storage', segmentPath, { err, ...this.lTags() })
         }
@@ -381,7 +379,7 @@ class MuxingSession extends EventEmitter implements MuxingSession {
 
     if (this.streamingPlaylist.storage === FileStorage.OBJECT_STORAGE) {
       try {
-        await storeHLSFileFromPath(this.streamingPlaylist, segmentPath)
+        await storeHLSFileFromPath(this.streamingPlaylist.Video, segmentPath)
 
         await this.processM3U8ToObjectStorage(segmentPath)
       } catch (err) {
@@ -416,7 +414,7 @@ class MuxingSession extends EventEmitter implements MuxingSession {
       const queue = this.objectStorageSendQueues.get(m3u8Path)
       await queue.add(() =>
         storeHLSFileFromContent({
-          playlist: this.streamingPlaylist,
+          video: this.streamingPlaylist.Video,
           pathOrFilename: m3u8Path,
           content: filteredPlaylistContent
         })

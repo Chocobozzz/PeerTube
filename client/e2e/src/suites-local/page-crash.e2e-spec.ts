@@ -60,13 +60,15 @@ describe('Page crash', () => {
     videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
 
     await prepareWebBrowser()
-
-    await loginPage.loginAsRootUser()
   })
 
   for (const language of languages) {
     describe('For language: ' + language, () => {
       describe('Logged in user', () => {
+        before(async () => {
+          await loginPage.loginAsRootUser()
+        })
+
         it('Should change the language', async function () {
           await go('/')
 
@@ -124,11 +126,10 @@ describe('Page crash', () => {
         })
 
         it('Should go on signup page', async function () {
-          await loginPage.loginAsRootUser()
+          await $('.create-account-button').waitForClickable()
+          await $('.create-account-button').click()
 
-          await go('/auth/signup')
-
-          await $('my-signup-page').waitForExist()
+          await $('.callout-content > h4').waitForExist()
         })
       })
 

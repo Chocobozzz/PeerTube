@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common'
-import { booleanAttribute, Component, inject, input, OnChanges, output, viewChild } from '@angular/core'
+import { booleanAttribute, Component, ElementRef, inject, input, numberAttribute, OnChanges, output, viewChild } from '@angular/core'
 import { RouterLink } from '@angular/router'
-import { ScreenService } from '@app/core'
-import { getAPIUrl } from '@app/helpers'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { Video as VideoServerModel, VideoState } from '@peertube/peertube-models'
+import { findAppropriateImageFileUrl } from '@root-helpers/images'
+import { logger } from '@root-helpers/logger'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
-import { Video } from '../shared-main/video/video.model'
 import { FromNowPipe } from '../shared-main/date/from-now.pipe'
+import { Video } from '../shared-main/video/video.model'
 
 export type VideoThumbnailInput = Pick<
   VideoServerModel,
@@ -17,10 +17,7 @@ export type VideoThumbnailInput = Pick<
   | 'shortUUID'
   | 'isLive'
   | 'state'
-  | 'previewPath'
-  | 'previewUrl'
-  | 'thumbnailPath'
-  | 'thumbnailUrl'
+  | 'thumbnails'
   | 'userHistory'
   | 'originallyPublishedAt'
   | 'liveSchedules'
@@ -33,7 +30,7 @@ export type VideoThumbnailInput = Pick<
   imports: [ CommonModule, RouterLink, NgbTooltip, GlobalIconComponent, FromNowPipe ]
 })
 export class VideoThumbnailComponent implements OnChanges {
-  private screenService = inject(ScreenService)
+  private el = inject(ElementRef)
 
   readonly video = input.required<VideoThumbnailInput>()
 
@@ -53,6 +50,8 @@ export class VideoThumbnailComponent implements OnChanges {
 
   readonly watchLaterTooltip = viewChild<NgbTooltip>('watchLaterTooltip')
   readonly watchLaterClick = output<boolean>()
+
+  readonly widthPx = input(undefined, { transform: numberAttribute })
 
   addToWatchLaterText: string
   removeFromWatchLaterText: string
@@ -103,11 +102,24 @@ export class VideoThumbnailComponent implements OnChanges {
     const video = this.video()
     if (!video) return ''
 
-    if (this.screenService.isInMobileView()) {
-      return video.previewUrl || getAPIUrl() + video.previewPath
+    const computedStyle = window.getComputedStyle(this.el.nativeElement)
+
+    let width = this.widthPx()
+
+    if (!width) {
+      const cssVariable = computedStyle.getPropertyValue('--thumbnail-width')
+
+      const widthStr = cssVariable.replace('px', '').trim()
+
+      if (!widthStr) {
+        logger.error('Cannot find thumbnail width in CSS variables. Fallback to 280px')
+        return ''
+      }
+
+      width = +widthStr
     }
 
-    return video.thumbnailUrl || getAPIUrl() + video.thumbnailPath
+    return findAppropriateImageFileUrl(video.thumbnails, width)
   }
 
   getProgressPercent () {

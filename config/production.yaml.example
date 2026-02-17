@@ -79,6 +79,11 @@ database:
   hostname: '127.0.0.1'
   port: 5432
   ssl: false
+  ssl_settings:
+    reject_unauthorized: false
+    ca: '/absolute/path/to/server-certificates/root.crt'
+    cert: '/absolute/path/to/client-certificates/postgresql.crt'
+    key: '/absolute/path/to/client-key/postgresql.key'
   suffix: '_prod'
   username: 'peertube'
   password: 'peertube'
@@ -93,9 +98,21 @@ redis:
   port: 6379
   auth: null
   db: 0
+  enable_tls: false
+  tls_settings:
+    reject_unauthorized: false
+    ca: '/absolute/path/to/server-certificates/root.crt'
+    cert: '/absolute/path/to/client-certificates/postgresql.crt'
+    key: '/absolute/path/to/client-key/postgresql.key'
+
   sentinel:
     enabled: false
     enable_tls: false
+    tls_settings:
+      reject_unauthorized: false
+      ca: '/absolute/path/to/server-certificates/root.crt'
+      cert: '/absolute/path/to/client-certificates/postgresql.crt'
+      key: '/absolute/path/to/client-key/postgresql.key'
     master_name: ''
     password: ''
     sentinels:
@@ -479,9 +496,6 @@ thumbnails:
     # Minimum value is 2
     frames_to_analyze: 50
 
-  # Only two sizes are currently supported for now (not less, not more)
-  # 1 size for the thumbnail (displayed in video miniatures)
-  # 1 size for the preview (displayed in the video player)
   sizes:
     -
       width: 280
@@ -537,16 +551,6 @@ download_generate_video:
 # the following keys will have no effect /!\
 #
 ###############################################################################
-
-cache:
-  previews:
-    size: 500 # Max number of previews you want to cache
-  captions:
-    size: 500 # Max number of video captions/subtitles you want to cache
-  torrents:
-    size: 500 # Max number of video torrents you want to cache
-  storyboards:
-    size: 500 # Max number of video storyboards you want to cache
 
 admin:
   # Used to generate the root user at first startup
@@ -821,7 +825,7 @@ import:
     timeout: '2 hours'
 
     # Number of attempts a user or the channel sync process can do to import a video if an error occurs during the import process
-    max_attempts: 3
+    max_attempts: 5
 
     # Classic HTTP or all sites supported by youtube-dl https://rg3.github.io/youtube-dl/supportedsites.html
     http:
@@ -1059,6 +1063,7 @@ theme:
   # If you need more advanced customizations, install or develop a dedicated theme: https://docs.joinpeertube.org/contribute/plugins
   customization:
     primary_color: null # Hex color. Example: '#FF8F37'
+    on_primary_color: null # Hex color
 
     foreground_color: null # Hex color
     background_color: null # Hex color

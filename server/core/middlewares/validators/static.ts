@@ -10,7 +10,7 @@ import { logger } from '@server/helpers/logger.js'
 import { LRU_CACHE } from '@server/initializers/constants.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MStreamingPlaylist, MVideoFile, MVideoThumbnailBlacklist } from '@server/types/models/index.js'
+import { MVideoFile, MVideoThumbnailBlacklist } from '@server/types/models/index.js'
 import express from 'express'
 import { param, query } from 'express-validator'
 import { LRUCache } from 'lru-cache'
@@ -21,7 +21,6 @@ type LRUValue = {
   allowed: boolean
   video?: MVideoThumbnailBlacklist
   file?: MVideoFile
-  playlist?: MStreamingPlaylist
 }
 
 const staticFileTokenBypass = new LRUCache<string, LRUValue>({
@@ -119,12 +118,11 @@ export const ensureCanAccessPrivateVideoHLSFiles = [
     const cacheKey = token + '-' + videoUUID
 
     if (staticFileTokenBypass.has(cacheKey)) {
-      const { allowed, file, playlist, video } = staticFileTokenBypass.get(cacheKey)
+      const { allowed, file, video } = staticFileTokenBypass.get(cacheKey)
 
       if (allowed === true) {
         res.locals.onlyVideo = video
         res.locals.videoFile = file
-        res.locals.videoStreamingPlaylist = playlist
 
         return next()
       }
@@ -140,7 +138,6 @@ export const ensureCanAccessPrivateVideoHLSFiles = [
 
     res.locals.onlyVideo = result.video
     res.locals.videoFile = result.file
-    res.locals.videoStreamingPlaylist = result.playlist
 
     return next()
   }
@@ -185,7 +182,6 @@ async function isHLSAllowed (req: express.Request, res: express.Response, videoU
   return {
     file,
     video,
-    playlist: video.getHLSPlaylist(),
     allowed: await checkCanAccessVideoStaticFiles({ req, res, video, paramId: video.uuid })
   }
 }

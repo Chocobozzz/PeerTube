@@ -1,22 +1,22 @@
-import express from 'express'
-import { Server } from 'http'
-import { join } from 'path'
+import { ffprobePromise } from '@peertube/peertube-ffmpeg'
+import { FileStorage, VideoBlacklistCreate } from '@peertube/peertube-models'
 import { buildLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
-import { AccountModel } from '@server/models/account/account.js'
 import { AccountBlocklistModel } from '@server/models/account/account-blocklist.js'
+import { AccountModel } from '@server/models/account/account.js'
 import { getServerActor } from '@server/models/application/application.js'
-import { ServerModel } from '@server/models/server/server.js'
 import { ServerBlocklistModel } from '@server/models/server/server-blocklist.js'
+import { ServerModel } from '@server/models/server/server.js'
 import { UserModel } from '@server/models/user/user.js'
-import { VideoModel } from '@server/models/video/video.js'
 import { VideoBlacklistModel } from '@server/models/video/video-blacklist.js'
+import { VideoModel } from '@server/models/video/video.js'
 import { MPlugin, MVideo, UserNotificationModelForApi } from '@server/types/models/index.js'
 import { PeerTubeHelpers } from '@server/types/plugins/index.js'
-import { ffprobePromise } from '@peertube/peertube-ffmpeg'
-import { VideoBlacklistCreate, FileStorage } from '@peertube/peertube-models'
+import express from 'express'
+import { Server } from 'http'
+import { join } from 'path'
 import { addAccountInBlocklist, addServerInBlocklist, removeAccountFromBlocklist, removeServerFromBlocklist } from '../blocklist.js'
 import { PeerTubeSocket } from '../peertube-socket.js'
 import { ServerConfigManager } from '../server-config-manager.js'
@@ -136,9 +136,16 @@ function buildVideosHelpers () {
         : []
 
       const thumbnails = video.Thumbnails.map(t => ({
-        type: t.type,
-        url: t.getOriginFileUrl(video),
-        path: t.getPath()
+        type: t.width > 300
+          ? 2 as const // Preview
+          : 1 as const, // Thumbnail
+
+        width: t.width,
+        height: t.height,
+        url: t.getLocalFileUrl(),
+        path: t.isLocal()
+          ? t.getFSPath()
+          : null
       }))
 
       return {
