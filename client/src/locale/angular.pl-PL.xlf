@@ -1443,9 +1443,9 @@
           <context context-type="linenumber">422</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3044142083883783523" datatype="html">
+      <trans-unit id="3044142083883783523" datatype="html" xml:space="preserve">
         <source>Updated <x id="INTERPOLATION"/></source>
-        <target state="translated">Zaktualizowano <x id="INTERPOLATION" equiv-text="{{ playlist.updatedAt | myFromNow }}"/></target>
+        <target state="translated">Zaktualizowano <x id="INTERPOLATION"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-miniature.component.html</context>
           <context context-type="linenumber">40</context>
@@ -1599,9 +1599,9 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8890926675057871150" datatype="html">
+      <trans-unit id="8890926675057871150" datatype="html" xml:space="preserve">
         <source>Delete from <x id="INTERPOLATION"/></source>
-        <target state="translated">Usuń z <x id="INTERPOLATION" equiv-text="{{ playlist?.displayName }}"/></target>
+        <target state="translated">Usuń z <x id="INTERPOLATION"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.html</context>
           <context context-type="linenumber">135</context>
@@ -2097,7 +2097,7 @@
       </trans-unit>
       <trans-unit id="330610135077253864" datatype="html" xml:space="preserve">
         <source>Live streaming enabled</source>
-        <target state="translated">Czy są włączone?</target>
+        <target state="translated">Czy są włączone</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">84</context>
@@ -2902,7 +2902,8 @@
       <trans-unit id="1190256911880544559" datatype="html" xml:space="preserve">
         <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>.
 The link will expire within 1 hour.</source>
-        <target state="translated">E-mail z instrukcjami do resetowania hasła został wysłany na adres <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Link będzie ważny przez 1 godzinę.</target>
+        <target state="translated">E-mail z instrukcjami do resetowania hasła został wysłany na adres <x id="PH" equiv-text="this.forgotPasswordEmail"/>. 
+Link będzie ważny przez 1 godzinę.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
           <context context-type="linenumber">190</context>
@@ -3128,7 +3129,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7772973173091400795" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> has been created using <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, a video creation platform developed by Framasoft. <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> is a french non-profit organization that offers alternatives to Big Tech's digital tools </source>
-        <target state="translated"><x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> została stworzona z użyciem <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>PeerTube'a<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, platformy pozwalającej na publikację filmów stworzonej przez Framasoft. <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to francuska organizacja non-profit oferująca narzędzia alternatywne dla tych od Big Techów </target>
+        <target state="translated">Platforma <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> została stworzona z użyciem <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>PeerTube'a<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, platformy wideo, która została stworzona przez Framasoft. <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> jest francuską organizacją pozarządową, która oferuje alternatywy dla narzędzi cyfrowych od Big Techów </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">50</context>
@@ -5463,7 +5464,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2387076994218428275" datatype="html" xml:space="preserve">
         <source>A modal window will open for you to specify the local account to which you want to transfer your video</source>
-        <target state="translated">Zostanie otwarte okno dialogowe pozwalające na podanie nazwy konta w tym serwisie, na które chcesz przenieść prawa do swojego filmu.</target>
+        <target state="translated">Zostanie otwarte okno dialogowe pozwalające na podanie nazwy konta w tym serwisie, na które chcesz przenieść prawa do swojego filmu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">215</context>
@@ -6151,7 +6152,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7099631707196015765" datatype="html" xml:space="preserve">
         <source>Image that will be merged with your audio file. <x id="LINE_BREAK"/> The chosen image will be definitive and cannot be modified. </source>
-        <target state="translated">Obraz, który zostanie połączony z twoim plikiem audio. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Wybrany obraz jest finalny i nie może być później zmieniony. </target>
+        <target state="translated">Obraz, który zostanie połączony z twoim plikiem audio. <x id="LINE_BREAK"/> Wybrany obraz jest ostateczny i nie może być później zmieniony. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/upload/video-upload.component.html</context>
           <context context-type="linenumber">28</context>
@@ -7472,9 +7473,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="687548610091961489">
+      <trans-unit id="687548610091961489" xml:space="preserve">
         <source>By <x id="INTERPOLATION"/></source>
-        <target>Od <x id="INTERPOLATION" equiv-text="{{ video.byAccount }}"/></target>
+        <target state="translated">Od <x id="INTERPOLATION"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">75</context>
@@ -7790,7 +7791,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6390009909920475335" datatype="html" xml:space="preserve">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video()?.account?.displayName || 'the author' }}"/> and others </source>
-        <target state="translated">Zobacz <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 odpowiedź} other {{{ comment.totalReplies }} odpowiedzi}}"/> od <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'autora' }}"/> i innych użytkowników </target>
+        <target state="translated">Zobacz <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 odpowiedź} few {{{ comment.totalReplies }} odpowiedzi} other {{{ comment.totalReplies }} odpowiedzi}}"/> od <x id="INTERPOLATION_1" equiv-text="{{ video()?.account?.displayName || 'the author' }}"/> i innych </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">83</context>
@@ -7812,17 +7813,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="127329338495775339" datatype="html">
+      <trans-unit id="127329338495775339" datatype="html" xml:space="preserve">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video()?.account?.displayName || 'the author' }}"/> </source>
-        <target state="translated">Zobacz <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 odpowiedź} other {{{ comment.totalReplies }} odpowiedzi}}"/> od <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'autora' }}"/> </target>
+        <target state="translated">Zobacz <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 odpowiedź} few {{{ comment.totalReplies }} odpowiedzi} other {{{ comment.totalReplies }} odpowiedzi}}"/> od <x id="INTERPOLATION_1" equiv-text="{{ video()?.account?.displayName || 'autora' }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5535545444690528619" datatype="html">
+      <trans-unit id="5535545444690528619" datatype="html" xml:space="preserve">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/></source>
-        <target state="translated">Zobacz <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 odpowiedź} other {{{ comment.totalReplies }} odpowiedzi}}"/></target>
+        <target state="translated">Zobacz <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 odpowiedź} few {{{ comment.totalReplies }} odpowiedzi} other {{{ comment.totalReplies }} odpowiedzi}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">91</context>
@@ -10304,9 +10305,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2232767208623640457" datatype="html">
+      <trans-unit id="2232767208623640457" datatype="html" xml:space="preserve">
         <source>By <x id="INTERPOLATION"/> -&gt;</source>
-        <target state="translated">Od <x id="INTERPOLATION" equiv-text="{{ log.by }}"/> -&gt;</target>
+        <target state="translated">Od <x id="INTERPOLATION"/> -&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">77</context>
@@ -12800,7 +12801,13 @@ The link will expire within 1 hour.</source>
   color: red;
   <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
   <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Użyj bezpośrednio kodu CSS. Przykład:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Wpisz na początku <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/>, żeby nadpisać style. Przykład:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
+        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Użyj bezpośrednio kodu CSS. Przykład:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>  #custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
+  color: red;
+  <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
+  <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Wpisz na początku <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/>, żeby nadpisać style. Przykład:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>  #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
+  color: red;
+  <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
+  <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">202</context>
@@ -14053,7 +14060,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="9131836378905533756" xml:space="preserve">
         <source>Created by <x id="INTERPOLATION"/></source>
-        <target state="translated">Utworzone przez <x id="INTERPOLATION" equiv-text="{{ videoChannel.ownerBy }}"/></target>
+        <target state="translated">Utworzone przez <x id="INTERPOLATION"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.html</context>
           <context context-type="linenumber">27</context>
@@ -14981,9 +14988,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7766488542631150871" datatype="html">
+      <trans-unit id="7766488542631150871" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Brak filmów} =1 {1 film} other {<x id="INTERPOLATION" equiv-text="{{ playlist.videosLength }}"/> filmów}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Brak filmów} =1 {1 film} few {<x id="INTERPOLATION"/> filmy} many {<x id="INTERPOLATION"/> filmów}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">32</context>
@@ -15315,7 +15322,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7257048945916143687" datatype="html" xml:space="preserve">
         <source>For more information, please visit <x id="START_LINK"/>joinpeertube.org<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">Aby dowiedzieć się więcej, odwiedź stronę <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Aby dowiedzieć się więcej, odwiedź stronę <x id="START_LINK"/>joinpeertube.org<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">19</context>
@@ -15919,7 +15926,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7098240021806375524" datatype="html" xml:space="preserve">
         <source> <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> platform subscribes to content from <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/follows&quot; target=&quot;_blank&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/> <x id="ICU" equiv-text="{totalFollowing,                   plural, =1 {other platform} other {other platforms}}" xid="3907811049330252725"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated">Platforma <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> obserwuje zawartość z <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/follows&quot; target=&quot;_blank&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/> <x id="ICU" xid="3907811049330252725" equiv-text="{totalFollowing, plural, =1 {innej platformy} other {innych platform}}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated"> Platforma <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> obserwuje zawartość z <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/follows&quot; target=&quot;_blank&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/> <x id="ICU" xid="3907811049330252725" equiv-text="{totalFollowing, plural, =1 {innej platformy} other {innych platform}}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">113</context>
@@ -25349,7 +25356,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7319525983375433281" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No playlist} =1 {1 playlist} other {<x id="INTERPOLATION"/> playlists}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Brak playlist} =1 {1 playlista} many {<x id="INTERPOLATION"/> playlist} other {<x id="INTERPOLATION"/> playlisty}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Brak playlist} =1 {1 playlista} few {<x id="INTERPOLATION"/> playlisty} many {<x id="INTERPOLATION"/> playlist}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
           <context context-type="linenumber">32</context>
@@ -25501,7 +25508,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1314383205093440631" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete {count, plural, =1 {this video} other {these <x id="count"/> videos}}?</source>
-        <target state="translated">Czy na pewno chcesz usunąć {count, plural, =1 {wybrany film} many {<x id="count"/> filmów} other {these <x id="count"/> filmy}}?</target>
+        <target state="translated">Czy na pewno chcesz usunąć {count, plural, =1 {wybrany film} few {<x id="count"/> filmy} many {<x id="count"/> filmów}}?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">312</context>
