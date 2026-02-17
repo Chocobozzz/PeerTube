@@ -179,7 +179,10 @@ export class VideoActionsDropdownComponent implements OnChanges {
   isVideoEditable () {
     if (!this.user) return false
 
-    return this.video().isEditableBy(this.user, this.serverService.getHTMLConfig().videoStudio.enabled)
+    return this.video().isStudioEditableBy({
+      user: this.user,
+      studioEnabled: this.serverService.getHTMLConfig().videoStudio.enabled
+    })
   }
 
   isVideoStatsAvailable () {
