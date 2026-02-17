@@ -11,6 +11,7 @@ import { isHostValid } from '@server/helpers/custom-validators/servers.js'
 import { VideoLoadType } from '@server/lib/model-loaders/video.js'
 import { Redis } from '@server/lib/redis.js'
 import { buildUploadXFile, safeUploadXCleanup } from '@server/lib/uploadx.js'
+import { VideoChangeOwnershipModel } from '@server/models/video/video-change-ownership.js'
 import { ExpressPromiseHandler } from '@server/types/express-handler.js'
 import { MUserAccountId, MVideoFullLight } from '@server/types/models/index.js'
 import express from 'express'
@@ -234,17 +235,7 @@ export const videosUpdateValidator = getCommonVideoEditAttributes().concat([
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
-    if (
-      !await checkCanManageVideo({
-        user,
-        video: res.locals.videoAll,
-        right: UserRight.UPDATE_ANY_VIDEO,
-        req,
-        res,
-        checkIsLocal: true,
-        checkIsOwner: false
-      })
-    ) {
+    if (!await checkCanManageVideo({ user, video, right: UserRight.UPDATE_ANY_VIDEO, req, res, checkIsLocal: true, checkIsOwner: false })) {
       return cleanUpReqFiles(req)
     }
 
@@ -255,13 +246,21 @@ export const videosUpdateValidator = getCommonVideoEditAttributes().concat([
       return cleanUpReqFiles(req)
     }
 
-    if (res.locals.videoChannel && res.locals.videoChannel.accountId !== video.VideoChannel.accountId) {
-      res.fail({
-        status: HttpStatusCode.BAD_REQUEST_400,
-        message: req.t('The channel must belong to the same account as the original channel')
-      })
+    // Not the same account as original video channel
+    if (
+      res.locals.videoChannel &&
+      res.locals.videoChannel.accountId !== video.VideoChannel.accountId
+    ) {
+      const ownershipChange = await VideoChangeOwnershipModel.loadPendingByVideo(video.id)
 
-      return cleanUpReqFiles(req)
+      if (ownershipChange) {
+        res.fail({
+          status: HttpStatusCode.BAD_REQUEST_400,
+          message: req.t('Cannot change video channel owner because there is already a pending ownership change for this video')
+        })
+
+        return cleanUpReqFiles(req)
+      }
     }
 
     return next()

@@ -727,7 +727,10 @@ export const VIDEO_CHANNEL_ACTIVITY_ACTIONS: { [id in VideoChannelActivityAction
   [VideoChannelActivityAction.UPDATE_SOURCE_FILE]: 'Update source file',
   [VideoChannelActivityAction.UPDATE_ELEMENTS]: 'Update elements',
   [VideoChannelActivityAction.REMOVE_CHANNEL_OWNERSHIP]: 'Remove channel ownership',
-  [VideoChannelActivityAction.CREATE_CHANNEL_OWNERSHIP]: 'Create channel ownership'
+  [VideoChannelActivityAction.CREATE_CHANNEL_OWNERSHIP]: 'Create channel ownership',
+  [VideoChannelActivityAction.SEND_OWNERSHIP_REQUEST]: 'Send ownership request',
+  [VideoChannelActivityAction.ACCEPT_OWNERSHIP_REQUEST]: 'Accept ownership request',
+  [VideoChannelActivityAction.REFUSE_OWNERSHIP_REQUEST]: 'Refuse ownership request'
 }
 
 export const VIDEO_CHANNEL_ACTIVITY_TARGETS: { [id in VideoChannelActivityTargetType]: string } = {

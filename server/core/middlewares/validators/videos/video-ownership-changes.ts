@@ -29,7 +29,7 @@ export const videosChangeOwnershipValidator = [
         user: res.locals.oauth.token.User,
         video: res.locals.videoAll,
         right: UserRight.CHANGE_VIDEO_OWNERSHIP,
-        checkIsOwner: true,
+        checkIsOwner: false,
         checkIsLocal: true,
         req,
         res

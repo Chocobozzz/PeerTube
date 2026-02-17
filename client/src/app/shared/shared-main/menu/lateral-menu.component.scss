@@ -15,6 +15,9 @@ ul {
   top: 0;
   opacity: 0.4;
   z-index: 0;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
 
   ::ng-deep svg {
     color: pvar(--bg-secondary-450);

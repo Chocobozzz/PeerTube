@@ -12,6 +12,7 @@ import { PlayerSettingsService } from '@app/shared/shared-video/player-settings.
 import {
   LiveVideo,
   PlayerVideoSettings,
+  UserRight,
   UserVideoQuota,
   VideoCaption,
   VideoChapter,
@@ -64,7 +65,7 @@ export class VideoManageResolver {
           async ([
             video,
             videoSource,
-            allUserChannels,
+            userChannels,
             captions,
             chapters,
             live,
@@ -85,7 +86,7 @@ export class VideoManageResolver {
 
             return {
               video,
-              userChannels: allUserChannels.filter(c => c.ownerAccountId === video.channel.ownerAccount.id),
+              userChannels,
               captions,
               chapters,
               videoSource,

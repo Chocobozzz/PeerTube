@@ -513,7 +513,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
 
   // ---------------------------------------------------------------------------
 
-  isEditor () {
-    return this.videoEdit.getVideoAttributes().ownerAccountId !== this.authService.getUser().account.id
+  isVideoOwner () {
+    return this.videoEdit.getVideoAttributes().ownerAccountId === this.authService.getUser().account.id
   }
 }

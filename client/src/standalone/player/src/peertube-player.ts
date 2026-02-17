@@ -146,8 +146,6 @@ export class PeerTubePlayer {
   }
 
   setPoster (thumbnails: Thumbnail[]) {
-    console.log('coucou')
-
     // Use HTML video element to display poster
     if (!this.player) {
       const playerEl = this.options.playerElement()
