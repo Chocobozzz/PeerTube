@@ -12,7 +12,6 @@ import { PlayerSettingsService } from '@app/shared/shared-video/player-settings.
 import {
   LiveVideo,
   PlayerVideoSettings,
-  UserRight,
   UserVideoQuota,
   VideoCaption,
   VideoChapter,

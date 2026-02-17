@@ -1,5 +1,6 @@
 import './channel-activities.js'
 import './channel-import-videos.js'
+import './fep-1b12.js'
 import './generate-download.js'
 import './multiple-servers.js'
 import './player-settings.js'

@@ -43,7 +43,13 @@ export abstract class APVideoAbstractBuilder {
   protected abstract lTags: LoggerTagsFn
 
   protected async getOrCreateVideoChannelFromVideoObject () {
-    const channel = await findOwner(this.videoObject.id, this.videoObject.attributedTo, 'Group')
+    const channel = await findOwner({
+      rootUrl: this.videoObject.id,
+      attributedTo: this.videoObject.attributedTo,
+      audience: this.videoObject.audience,
+      type: 'Group'
+    })
+
     if (!channel) throw new Error('Cannot find associated video channel to video ' + this.videoObject.id)
 
     return getOrCreateAPActor(channel.id, 'all')

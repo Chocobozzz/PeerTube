@@ -1,4 +1,4 @@
-import { ActivityAudience, VideoPlaylistPrivacy, VideoPlaylistPrivacyType, VideoPrivacy, VideoPrivacyType } from '@peertube/peertube-models'
+import { ActivityAudience, VideoPlaylistPrivacyType, VideoPrivacy, VideoPrivacyType } from '@peertube/peertube-models'
 import { getAPPublicValue } from '@server/helpers/activity-pub-utils.js'
 import {
   MAccountAudience,
@@ -72,11 +72,24 @@ export function getCommentAudience (options: {
   return audience
 }
 
-export function getPlaylistAudience (actorSender: MActorFollowersUrl, privacy: VideoPlaylistPrivacyType) {
-  const followerUrls = [ actorSender.followersUrl ]
+export function getPlaylistAudience (options: {
+  account: MAccountAudience
+  channel: MChannelAudience
+  privacy: VideoPlaylistPrivacyType
+}) {
+  const { account, channel, privacy } = options
+  const followerUrls = [ account.Actor.followersUrl ]
 
-  if (privacy === VideoPlaylistPrivacy.PUBLIC) return _buildPublicAudience({ cc: followerUrls })
-  else if (privacy === VideoPlaylistPrivacy.UNLISTED) return _buildUnlistedAudience()
+  if (privacy === VideoPrivacy.PUBLIC) {
+    return _buildPublicAudience({
+      to: [ channel.Actor.url ], // fep-1b12
+      cc: followerUrls
+    })
+  }
+
+  if (privacy === VideoPrivacy.UNLISTED) {
+    return _buildUnlistedAudience()
+  }
 
   throw new Error(`Cannot get audience of non public/unlisted playlist privacy type (${privacy})`)
 }

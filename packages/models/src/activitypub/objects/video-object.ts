@@ -65,12 +65,14 @@ export interface VideoObject {
   hasParts: string | VideoChapterObject[]
   playerSettings: string
 
-  attributedTo: ActivityPubAttributedTo[]
+  attributedTo: ActivityPubAttributedTo[] | string
 
   preview?: ActivityPubStoryboard[]
 
   to?: string[]
   cc?: string[]
+
+  audience: string
 
   // For export
   attachment?: {
