@@ -123,7 +123,7 @@ export class Html5Hlsjs {
   private _duration: number = null
   private metadata: ManifestParsedData = null
   private isLive: boolean = null
-  private isLiveDvr: boolean = false
+  private isLiveDvr = false
   private dvrDuration: number = null
   private edgeMargin: number = null
 

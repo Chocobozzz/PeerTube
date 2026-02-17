@@ -82,7 +82,10 @@ type CreateFromImportOptions = LoadFromPublishOptions & Pick<VideoImportCreate, 
 
 type CreateFromLiveOptions =
   & CreateFromUploadOptions
-  & Required<Pick<LiveVideoCreate, 'permanentLive' | 'latencyMode' | 'dvrEnabled' | 'dvrWindowSeconds' | 'saveReplay' | 'replaySettings' | 'schedules'>>
+  & Required<Pick<
+    LiveVideoCreate,
+    'permanentLive' | 'latencyMode' | 'dvrEnabled' | 'dvrWindowSeconds' | 'saveReplay' | 'replaySettings' | 'schedules'
+  >>
 
 type UpdateFromAPIOptions = {
   video?: Pick<
