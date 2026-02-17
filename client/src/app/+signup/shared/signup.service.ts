@@ -2,7 +2,7 @@ import { catchError, tap } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
 import { RestExtractor, UserService } from '@app/core'
-import { UserRegister, UserRegistration as UserRegistrationServerModel } from '@peertube/peertube-models'
+import { UserRegister, UserRegistrationRequest, UserRegistration as UserRegistrationServerModel } from '@peertube/peertube-models'
 
 @Injectable()
 export class SignupService {
@@ -16,6 +16,11 @@ export class SignupService {
                  tap(() => this.userService.setSignupInThisSession(true)),
                  catchError(err => this.restExtractor.handleError(err))
                )
+  }
+
+  requestSignup (userCreate: UserRegistrationRequest) {
+    return this.authHttp.post(UserService.BASE_USERS_URL + 'registrations/request', userCreate)
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   // ---------------------------------------------------------------------------

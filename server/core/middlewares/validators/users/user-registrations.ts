@@ -30,7 +30,7 @@ const usersRequestRegistrationValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const body: UserRegistrationRequest = req.body
-    // CONFIG.SIGNUP.REQUIRES_APPROVAL is only used for deprecated /registrations/request endpoint
+    // CONFIG.SIGNUP.REQUIRES_APPROVAL is only used for /registrations/request endpoint
     const requiresApproval = (res.locals.signupMode && res.locals.signupMode === 'request-registration') || CONFIG.SIGNUP.REQUIRES_APPROVAL
 
     if (requiresApproval !== true) {
@@ -72,7 +72,7 @@ const determineSignupMode = [
 
 function ensureUserRegistrationAllowedFactory (sm?: SignupMode) {
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const signupMode = sm || res.locals.signupMode // sm is provided by deprecated /registrations/request endpoint
+    const signupMode = sm || res.locals.signupMode // sm is provided by /registrations/request endpoint
     const allowedParams = {
       body: req.body,
       ip: req.ip,

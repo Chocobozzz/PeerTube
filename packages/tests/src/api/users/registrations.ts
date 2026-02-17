@@ -83,43 +83,35 @@ describe('Test registrations', function () {
     })
   })
 
-  describe('Deprecated registration requests', function () {
+  describe('Eventual registration requests', function () {
     before(async function () {
       this.timeout(60000)
 
       await server.config.enableSignup(true)
-
-      {
-        await server.registrations.requestRegistration({
-          username: 'deprecated_user4',
-          email: 'deprecated_user4@example.com',
-          registrationReason: 'registration reason 4'
-        })
-      }
     })
 
     it('Should request a registration without a channel', async function () {
       {
-        await server.registrations.requestRegistration({
-          username: 'deprecated_user2',
-          displayName: 'my super deprecated_user 2',
-          email: 'deprecated_user2@example.com',
-          password: 'deprecated_user2password',
+        await server.registrations.register({
+          username: 'request_user2',
+          displayName: 'my super request_user 2',
+          email: 'request_user2@example.com',
+          password: 'request_user2password',
           registrationReason: 'registration reason 2'
         })
       }
     })
 
     it('Should request a registration with a channel', async function () {
-      await server.registrations.requestRegistration({
-        username: 'deprecated_user3',
-        displayName: 'my super deprecated_user 3',
+      await server.registrations.register({
+        username: 'request_user3',
+        displayName: 'my super request_user 3',
         channel: {
-          displayName: 'my deprecated_user 3 channel',
-          name: 'super_deprecated_user3_channel'
+          displayName: 'my request_user 3 channel',
+          name: 'super_request_user3_channel'
         },
-        email: 'deprecated_user3@example.com',
-        password: 'deprecated_user3password',
+        email: 'request_user3@example.com',
+        password: 'request_user3password',
         registrationReason: 'registration reason 3'
       })
     })
@@ -147,33 +139,31 @@ describe('Test registrations', function () {
       await server.config.enableSignup(true)
 
       {
-        await server.registrations.register({
+        const { id } = await server.registrations.requestRegistration({
           username: 'user4',
           registrationReason: 'registration reason 4'
         })
-        const registrations = await server.registrations.list()
 
-        id4 = registrations.data[0].id
+        id4 = id
       }
     })
 
     it('Should request a registration without a channel', async function () {
       {
-        await server.registrations.register({
+        const { id } = await server.registrations.requestRegistration({
           username: 'user2',
           displayName: 'my super user 2',
           email: 'user2@example.com',
           password: 'user2password',
           registrationReason: 'registration reason 2'
         })
-        const registrations = await server.registrations.list()
 
-        id2 = registrations.data[0].id
+        id2 = id
       }
     })
 
     it('Should request a registration with a channel', async function () {
-      await server.registrations.register({
+      const { id } = await server.registrations.requestRegistration({
         username: 'user3',
         displayName: 'my super user 3',
         channel: {
@@ -185,8 +175,7 @@ describe('Test registrations', function () {
         registrationReason: 'registration reason 3'
       })
 
-      const registrations = await server.registrations.list()
-      id3 = registrations.data[0].id
+      id3 = id
     })
 
     it('Should list these registration requests', async function () {
@@ -398,22 +387,20 @@ describe('Test registrations', function () {
       let id2: number
 
       {
-        await server.registrations.register({
+        const { id } = await server.registrations.requestRegistration({
           username: 'user7',
           email: 'user7@example.com',
           registrationReason: 'tt'
         })
-        const registrations = await server.registrations.list()
-        id1 = registrations.data[0].id
+        id1 = id
       }
       {
-        await server.registrations.register({
+        const { id } = await server.registrations.requestRegistration({
           username: 'user8',
           email: 'user8@example.com',
           registrationReason: 'tt'
         })
-        const registrations = await server.registrations.list()
-        id2 = registrations.data[0].id
+        id2 = id
       }
 
       await server.registrations.accept({ id: id1, moderationResponse: 'tt', preventEmailDelivery: true })
@@ -434,7 +421,7 @@ describe('Test registrations', function () {
       let id2: number
 
       {
-        await server.registrations.register({
+        const { id } = await server.registrations.requestRegistration({
           registrationReason: 'tt',
           username: 'user5',
           password: 'user5password',
@@ -444,19 +431,17 @@ describe('Test registrations', function () {
           }
         })
 
-        const registrations = await server.registrations.list()
-        id1 = registrations.data[0].id
+        id1 = id
       }
 
       {
-        await server.registrations.register({
+        const { id } = await server.registrations.requestRegistration({
           registrationReason: 'tt',
           username: 'user6',
           password: 'user6password'
         })
 
-        const registrations = await server.registrations.list()
-        id2 = registrations.data[0].id
+        id2 = id
       }
 
       await server.registrations.accept({ id: id1, moderationResponse: 'tt' })
