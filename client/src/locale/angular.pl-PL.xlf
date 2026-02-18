@@ -12563,7 +12563,7 @@ Link będzie ważny przez 1 godzinę.</target>
       </trans-unit>
       <trans-unit id="4806060468959678872" datatype="html" xml:space="preserve">
         <source>This option adds the ability for the HLS player to propose the "Audio only" quality to users.</source>
-        <target state="translated">Ta opcja włącza możliwość odtwarzaczowi HLS proponowanie użytkownikom jakości pn. „tylko ścieżka dźwiękowa”.</target>
+        <target state="translated">Ta opcja włącza możliwość odtwarzaczowi HLS proponowanie użytkownikom jakości pn. „Tylko dźwięk”.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">126</context>
@@ -16310,7 +16310,7 @@ Link będzie ważny przez 1 godzinę.</target>
       </trans-unit>
       <trans-unit id="5508725342419733476" datatype="html" xml:space="preserve">
         <source>"Split audio and video" must be enabled for the PeerTube player to propose an "Audio only" resolution to users</source>
-        <target state="translated">Opcja „Podziel ścieżki dźwięku oraz obrazu” musi być włączona dla odtwarzacza na PeerTube'ie, żeby móc proponować użytkownikom rozdzielczość „Tylko ścieżka dźwiękowa”</target>
+        <target state="translated">Opcja „Podziel ścieżki dźwięku oraz obrazu” musi być włączona dla odtwarzacza na PeerTube'ie, żeby móc proponować użytkownikom rozdzielczość „Tylko dźwięk”</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context>
           <context context-type="linenumber">60</context>
