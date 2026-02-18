@@ -128,7 +128,7 @@ export const sequelizeTypescript = new SequelizeTypescript({
       newMessage += ' in ' + executionTimeMs + 'ms'
     }
 
-    logger.debug(newMessage, { sql: message, executionTimeMs, tags: [ 'sql' ] })
+    logger.debug(newMessage, { sql: message, tags: [ 'sql' ] })
   }
 })
 
