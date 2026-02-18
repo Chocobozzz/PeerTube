@@ -53,7 +53,7 @@ export function getResolutionLabel (options: {
 }) {
   const { height, width } = options
 
-  if (options.resolution === 0) return 'Audio only'
+  if (options.resolution === 0) return $localize`Audio only`
 
   let resolution = options.resolution
 
