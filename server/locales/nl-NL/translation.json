@@ -199,7 +199,7 @@
     "Cannot use non unicast IP as targetUrl.": "Cannot use non unicast IP as targetUrl.",
     "Cannot parse HTTP signature": "Cannot parse HTTP signature",
     "Invalid key ID": "Invalid key ID",
-    "Invalid signature": "Invalid signature",
+    "Invalid signature": "Ongeldige handtekening",
     "Authentication is required": "Authentication is required",
     "Server configuration is static and cannot be edited": "Server configuration is static and cannot be edited",
     "SMTP is not configured but you require signup email verification.": "SMTP is not configured but you require signup email verification.",
