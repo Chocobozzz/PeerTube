@@ -160,28 +160,29 @@ export class VideosListComponent implements OnInit, OnDestroy {
 
         this.subscribeToAnonymousUpdate()
         this.subscribeToQueryParamsChange()
+
+        this.filters.load(this.route.snapshot.queryParams)
+
+        this.filters.onChange(() => {
+          debugLogger('Filters changed', this.filters)
+
+          // We'll reload videos, but avoid weird UI effect
+          this.videos = []
+          this.highlightedLives = []
+
+          this.updateUrl()
+
+          this.reloadSyndicationItems()
+          this.reloadVideos()
+
+          this.filtersChanged.emit(this.filters)
+        })
+
+        this.handlePagination()
+        this.reloadSyndicationItems()
+
+        this.loadMoreVideos({ reset: true })
       })
-
-    this.filters.load(this.route.snapshot.queryParams)
-
-    this.filters.onChange(() => {
-      debugLogger('Filters changed', this.filters)
-
-      // We'll reload videos, but avoid weird UI effect
-      this.videos = []
-      this.highlightedLives = []
-
-      this.updateUrl()
-
-      this.reloadSyndicationItems()
-      this.reloadVideos()
-
-      this.filtersChanged.emit(this.filters)
-    })
-
-    this.handlePagination()
-    this.reloadSyndicationItems()
-    this.loadMoreVideos(true)
   }
 
   ngOnDestroy () {
@@ -215,7 +216,11 @@ export class VideosListComponent implements OnInit, OnDestroy {
     return true
   }
 
-  loadMoreVideos (reset = false) {
+  loadMoreVideos (options: {
+    reset?: boolean
+  } = {}) {
+    const { reset = false } = options
+
     let liveFilters: VideoFilters
     let videoFilters: VideoFilters
 
@@ -246,7 +251,8 @@ export class VideosListComponent implements OnInit, OnDestroy {
 
   reloadVideos () {
     resetCurrentPage(this.pagination)
-    this.loadMoreVideos(true)
+
+    this.loadMoreVideos({ reset: true })
   }
 
   removeVideoFromArray (video: Video) {
@@ -384,7 +390,7 @@ export class VideosListComponent implements OnInit, OnDestroy {
       resetCurrentPage(this.pagination)
       this.pagination.currentPage = +page
 
-      this.loadMoreVideos(true)
+      this.loadMoreVideos({ reset: true })
     })
   }
 }
