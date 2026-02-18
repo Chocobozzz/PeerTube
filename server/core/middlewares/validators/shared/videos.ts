@@ -339,19 +339,17 @@ export async function checkCanManageVideo (options: {
   return true
 }
 
-type NewType = MUserId
-
 // ---------------------------------------------------------------------------
 
 export async function checkUserQuota (options: {
-  user: NewType
+  channelUser: MUserId
   videoFileSize: number
   req: Request
   res: Response
 }) {
-  const { user, videoFileSize, req, res } = options
+  const { channelUser, videoFileSize, req, res } = options
 
-  if (await isUserQuotaValid({ userId: user.id, uploadSize: videoFileSize }) === false) {
+  if (await isUserQuotaValid({ channelUserId: channelUser.id, uploadSize: videoFileSize }) === false) {
     res.fail({
       status: HttpStatusCode.PAYLOAD_TOO_LARGE_413,
       message: req.t('The user video quota is exceeded with this video'),

@@ -5,18 +5,18 @@ import { logger } from '@server/helpers/logger.js'
 import { CONSTRAINTS_FIELDS, VIDEO_STATES } from '@server/initializers/constants.js'
 import { isLocalVideoFileAccepted } from '@server/lib/moderation.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
-import { MUserAccountId, MVideo } from '@server/types/models/index.js'
+import { MUserId, MVideo } from '@server/types/models/index.js'
 import express from 'express'
 import { checkUserQuota } from '../../shared/index.js'
 
 export async function commonVideoFileChecks (options: {
   req: express.Request
   res: express.Response
-  user: MUserAccountId
+  channelUser: MUserId
   videoFileSize: number
   files: express.UploadFilesForCheck
 }): Promise<boolean> {
-  const { req, res, user, videoFileSize, files } = options
+  const { req, res, channelUser, videoFileSize, files } = options
 
   if (!isVideoFileMimeTypeValid(files)) {
     res.fail({
@@ -38,7 +38,7 @@ export async function commonVideoFileChecks (options: {
     return false
   }
 
-  if (await checkUserQuota({ user, videoFileSize, req, res }) === false) return false
+  if (await checkUserQuota({ channelUser, videoFileSize, req, res }) === false) return false
 
   return true
 }
@@ -61,10 +61,12 @@ export async function isVideoFileAccepted (options: {
 
   if (acceptedResult?.accepted !== true) {
     logger.info('Refused local video file.', { acceptedResult, acceptParameters })
+
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
       message: acceptedResult.errorMessage || req.t('Refused local video file')
     })
+
     return false
   }
 

@@ -58,7 +58,7 @@ export const userImportRequestResumableInitValidator = [
 
     const fileMetadata = res.locals.uploadVideoFileResumableMetadata
     const user = res.locals.user
-    if (await isUserQuotaValid({ userId: user.id, uploadSize: fileMetadata.size }) === false) {
+    if (await isUserQuotaValid({ channelUserId: user.id, uploadSize: fileMetadata.size }) === false) {
       return res.fail({
         message: 'User video quota is exceeded with this import',
         status: HttpStatusCode.PAYLOAD_TOO_LARGE_413,

@@ -68,13 +68,13 @@ export const replaceVideoSourceResumableValidator = [
 
 export const replaceVideoSourceResumableInitValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const user = res.locals.oauth.token.User
-
     if (!await checkCanUpdateVideoFile({ req, res })) return
 
     const fileMetadata = res.locals.uploadVideoFileResumableMetadata
     const files = { videofile: [ fileMetadata ] }
-    if (await commonVideoFileChecks({ req, res, user, videoFileSize: fileMetadata.size, files }) === false) return
+    const channelUser = { id: res.locals.videoAll.VideoChannel.Account.userId }
+
+    if (await commonVideoFileChecks({ req, res, channelUser, videoFileSize: fileMetadata.size, files }) === false) return
 
     return next()
   }
