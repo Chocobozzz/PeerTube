@@ -3192,6 +3192,9 @@ paths:
                 contentType: image/jpeg
               previewfile:
                 contentType: image/jpeg
+              tags:
+                style: form
+                explode: true
     get:
       summary: Get a video
       operationId: getVideo
