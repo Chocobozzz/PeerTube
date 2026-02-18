@@ -16,7 +16,7 @@
       <input type="radio" name="video-file" [id]="'file-' + file.id" [(ngModel)]="videoFileChosen" [value]="'file-' + file.id">
 
       <label [for]="'file-' + file.id">
-        <strong>{{ getLabel(file) }}</strong>
+        <strong i18n>{{ getLabel(file) }}</strong>
 
         <span class="muted">
           {{ getFileSize(file) | bytes: 1 }}
