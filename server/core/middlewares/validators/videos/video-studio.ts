@@ -88,7 +88,8 @@ const videoStudioAddEditionValidator = [
 
     // Try to make an approximation of bytes added by the intro/outro
     const additionalBytes = await approximateIntroOutroAdditionalSize(video, body.tasks, i => getTaskFileFromReq(files, i).path)
-    if (await checkUserQuota({ user, videoFileSize: additionalBytes, req, res }) === false) return cleanUpReqFiles(req)
+    const channelUser = { id: res.locals.videoAll.VideoChannel.Account.userId }
+    if (await checkUserQuota({ channelUser, videoFileSize: additionalBytes, req, res }) === false) return cleanUpReqFiles(req)
 
     return next()
   }

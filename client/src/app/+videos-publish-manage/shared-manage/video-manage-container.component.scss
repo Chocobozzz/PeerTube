@@ -12,9 +12,28 @@
   }
 }
 
-.video-header-block {
+.video-header-block,
+.video-alert {
   border-radius: 14px;
+}
+
+.video-header-block,
+.video-warn {
   background-color: pvar(--bg-secondary-350);
+}
+
+.video-warn {
+  color: pvar(--fg-300);
+}
+
+.video-err {
+  border: 0;
+}
+
+.video-alert {
+  padding: 1rem 1.5rem;
+
+  @include font-size(14px);
 }
 
 .video-actions-container {
@@ -70,11 +89,4 @@
     padding: 0.5rem;
     gap: 0.5rem;
   }
-}
-
-.video-state {
-  color: pvar(--fg-300);
-  padding: 1rem 1.5rem;
-
-  @include font-size(14px);
 }

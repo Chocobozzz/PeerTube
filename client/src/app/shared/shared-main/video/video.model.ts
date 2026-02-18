@@ -241,10 +241,6 @@ export class Video implements VideoServerModel {
 
   // ---------------------------------------------------------------------------
 
-  isRemovableBy (user: AuthUser) {
-    return user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.REMOVE_ANY_VIDEO))
-  }
-
   isBlockableBy (user: AuthUser) {
     return this.blacklisted !== true && user && user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) === true
   }
@@ -254,13 +250,20 @@ export class Video implements VideoServerModel {
   }
 
   isUpdatableBy (user: AuthUser) {
-    return user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.UPDATE_ANY_VIDEO))
+    return user && this.isLocal === true && (user.isEditorOfChannel(this.channel) || user.hasRight(UserRight.UPDATE_ANY_VIDEO))
   }
 
-  isEditableBy (user: AuthUser, videoStudioEnabled: boolean) {
-    return videoStudioEnabled &&
+  isStudioEditableBy (options: {
+    user: AuthUser
+    studioEnabled: boolean
+  }) {
+    return options.studioEnabled &&
       this.state?.id === VideoState.PUBLISHED &&
-      this.isUpdatableBy(user)
+      this.isUpdatableBy(options.user)
+  }
+
+  isRemovableBy (user: AuthUser) {
+    return user && this.isLocal === true && (user.isEditorOfChannel(this.channel) || user.hasRight(UserRight.REMOVE_ANY_VIDEO))
   }
 
   // ---------------------------------------------------------------------------

@@ -120,12 +120,12 @@ export const sequelizeTypescript = new SequelizeTypescript({
   },
   benchmark: isTestOrDevInstance(),
   isolationLevel: Transaction.ISOLATION_LEVELS.SERIALIZABLE,
-  logging: (message: string, benchmark: number) => {
+  logging: (message: string, executionTimeMs: number) => {
     if (process.env.NODE_DB_LOG === 'false') return
 
     let newMessage = 'Executed SQL request'
-    if (isTestOrDevInstance() === true && benchmark !== undefined) {
-      newMessage += ' in ' + benchmark + 'ms'
+    if (executionTimeMs !== undefined) {
+      newMessage += ' in ' + executionTimeMs + 'ms'
     }
 
     logger.debug(newMessage, { sql: message, tags: [ 'sql' ] })

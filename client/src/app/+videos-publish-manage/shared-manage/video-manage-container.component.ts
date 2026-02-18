@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { Notifier, ScreenService } from '@app/core'
 import { HeaderService } from '@app/header/header.service'
+import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { VideoStateMessageService } from '@app/shared/shared-video/video-state-message.service'
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
@@ -26,7 +27,8 @@ import { VideoManageMenuComponent } from './video-manage-menu.component'
     ManageErrorsComponent,
     NgbTooltipModule,
     UploadProgressComponent,
-    VideoManageMenuComponent
+    VideoManageMenuComponent,
+    AlertComponent
   ]
 })
 export class VideoManageContainerComponent implements OnInit, OnDestroy {
@@ -73,10 +75,20 @@ export class VideoManageContainerComponent implements OnInit, OnDestroy {
 
   // ---------------------------------------------------------------------------
 
-  getStateWarning () {
+  getVideoWarning () {
     const video = this.videoEdit.getVideoAttributes()
 
-    return this.videoStateMessage.buildWarn(video.id, video.state)
+    return this.videoStateMessage.buildWarn({ videoId: video.id, state: video.state })
+  }
+
+  getVideoError () {
+    const video = this.videoEdit.getVideoAttributes()
+
+    return this.videoStateMessage.buildErr({
+      videoId: video.id,
+      blacklisted: video.blacklisted,
+      blacklistedReason: video.blacklistedReason
+    })
   }
 
   // ---------------------------------------------------------------------------

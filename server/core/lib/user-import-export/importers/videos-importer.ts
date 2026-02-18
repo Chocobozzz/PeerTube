@@ -190,7 +190,7 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
 
     let ffprobe: FfprobeData
     if (videoFilePath) {
-      if (await isUserQuotaValid({ userId: this.user.id, uploadSize: videoSize, checkDaily: false }) === false) {
+      if (await isUserQuotaValid({ channelUserId: this.user.id, uploadSize: videoSize, checkDaily: false }) === false) {
         throw new Error(`Cannot import video ${videoImportData.name} for user ${this.user.username} because of exceeded quota`)
       }
 
