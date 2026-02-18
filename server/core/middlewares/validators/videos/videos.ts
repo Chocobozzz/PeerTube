@@ -108,7 +108,7 @@ export const videosAddLegacyValidator = [
       !await commonVideoChecks({ req, res, videoFileSize: videoFile.size, files: req.files }) ||
       !isValidPasswordProtectedPrivacy(req, res) ||
       !await addDurationToVideoFileIfNeeded({ videoFile, res, middlewareName: 'videosAddLegacyValidator' }) ||
-      !await isVideoFileAccepted({ req, res, videoFile, hook: 'filter:api.video.upload.accept.result' })
+      !await isVideoFileAccepted({ req, res, videoBody: req.body, videoFile, hook: 'filter:api.video.upload.accept.result' })
     ) {
       return cleanUpReqFiles(req)
     }
@@ -151,7 +151,16 @@ export const videosAddResumableValidator = [
     }
 
     if (!await addDurationToVideoFileIfNeeded({ videoFile: file, res, middlewareName: 'videosAddResumableValidator' })) return cleanup()
-    if (!await isVideoFileAccepted({ req, res, videoFile: file, hook: 'filter:api.video.upload.accept.result' })) return cleanup()
+
+    if (
+      !await isVideoFileAccepted({
+        req,
+        res,
+        videoFile: file,
+        videoBody: file.metadata,
+        hook: 'filter:api.video.upload.accept.result'
+      })
+    ) return cleanup()
 
     res.locals.uploadVideoFileResumable = { ...file, originalname: file.filename }
 

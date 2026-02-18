@@ -46,14 +46,15 @@ export async function commonVideoFileChecks (options: {
 export async function isVideoFileAccepted (options: {
   req: express.Request
   res: express.Response
+  videoBody: Record<string, any>
   videoFile: express.VideoLegacyUploadFile
   hook: Extract<ServerFilterHookName, 'filter:api.video.upload.accept.result' | 'filter:api.video.update-file.accept.result'>
 }) {
-  const { req, res, videoFile, hook } = options
+  const { req, res, videoBody, videoFile, hook } = options
 
   // Check we accept this video
   const acceptParameters = {
-    videoBody: req.body,
+    videoBody,
     videoFile,
     user: res.locals.oauth.token.User
   }

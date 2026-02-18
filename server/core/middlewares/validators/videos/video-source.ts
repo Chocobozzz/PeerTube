@@ -56,7 +56,15 @@ export const replaceVideoSourceResumableValidator = [
       return cleanup()
     }
 
-    if (!await isVideoFileAccepted({ req, res, videoFile: file, hook: 'filter:api.video.update-file.accept.result' })) {
+    if (
+      !await isVideoFileAccepted({
+        req,
+        res,
+        videoFile: file,
+        videoBody: file.metadata,
+        hook: 'filter:api.video.update-file.accept.result'
+      })
+    ) {
       return cleanup()
     }
 
