@@ -153,7 +153,7 @@ describe('Test user videos', function () {
 
         const video = data[0]
         expect(video.name).to.equal('super user video')
-        expect(video.thumbnails).to.have.lengthOf(4)
+        expect(video.thumbnails).to.have.lengthOf(5)
       }
 
       {
