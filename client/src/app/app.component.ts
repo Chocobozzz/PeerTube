@@ -239,7 +239,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     eventsObs.pipe(
       filter((e: Event): e is RouteConfigLoadEnd => e instanceof RouteConfigLoadEnd)
     ).subscribe(e => {
-      console.log(e)
       if (e.route.data?.preloaded) return // This route is preloaded, don't display the loading indicator
 
       this.loadingBar.useRef('router-' + e.route.path).complete()

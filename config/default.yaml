@@ -11,6 +11,7 @@ webserver:
   port: 9000
 
 # Secrets you need to generate the first time you run PeerTube
+# Mainly used to sign JWT tokens and TOTP
 secrets:
   # Generate one using `openssl rand -hex 32`
   peertube: ''
