@@ -224,7 +224,7 @@ export class VideoManageController implements OnDestroy {
 
     this.cancelUploadIfNeeded()
 
-    this.loadingBar.useRef().start()
+    this.loadingBar.useRef('update-video').start()
     this.isUpdatingVideo = true
 
     const videoAttributes = this.videoEdit.getVideoAttributes()
@@ -315,7 +315,7 @@ export class VideoManageController implements OnDestroy {
         debugLogger('Update complete')
 
         this.videoEdit.onSave()
-        this.loadingBar.useRef().complete()
+        this.loadingBar.useRef('update-video').complete()
         this.isUpdatingVideo = false
         this.updatedSubject.next()
         this.embedVersion++
@@ -359,7 +359,7 @@ export class VideoManageController implements OnDestroy {
     this.videoUploadedSubject = new Subject<void>()
 
     this.pendingUpdateObs = undefined
-    this.loadingBar.useRef().complete()
+    this.loadingBar.useRef('update-video').complete()
 
     this.resetUploadState()
   }

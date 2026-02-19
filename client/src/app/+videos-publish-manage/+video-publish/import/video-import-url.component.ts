@@ -118,7 +118,7 @@ export class VideoImportUrlComponent implements OnInit, AfterViewInit, CanCompon
     this.manageController.setConfig({ manageType: 'import-url', serverConfig: this.serverService.getHTMLConfig() })
     this.manageController.setVideoEdit(videoEdit)
 
-    this.loadingBar.useRef().start()
+    this.loadingBar.useRef('import-video').start()
 
     this.videoImportService.importVideo(videoEdit.toVideoImportCreate(this.highestPrivacy()))
       .pipe(
@@ -135,7 +135,7 @@ export class VideoImportUrlComponent implements OnInit, AfterViewInit, CanCompon
         next: async ({ video, playerSettings, captions, chapters }) => {
           await videoEdit.loadFromAPI({ video, captions, playerSettings, chapters, loadPrivacy: false })
 
-          this.loadingBar.useRef().complete()
+          this.loadingBar.useRef('import-video').complete()
 
           debugLogger(`URL import created`)
 
@@ -147,7 +147,7 @@ export class VideoImportUrlComponent implements OnInit, AfterViewInit, CanCompon
         },
 
         error: err => {
-          this.loadingBar.useRef().complete()
+          this.loadingBar.useRef('import-video').complete()
           this.isImportingVideo = false
           this.firstStepError.emit()
           this.notifier.handleError(err)

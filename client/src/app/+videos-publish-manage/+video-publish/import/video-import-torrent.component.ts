@@ -130,7 +130,7 @@ export class VideoImportTorrentComponent implements OnInit, AfterViewInit, CanCo
     this.manageController.setConfig({ manageType: 'import-torrent', serverConfig: this.serverService.getHTMLConfig() })
     this.manageController.setVideoEdit(videoEdit)
 
-    this.loadingBar.useRef().start()
+    this.loadingBar.useRef('import-video').start()
 
     this.videoImportService.importVideo(videoEdit.toVideoImportCreate(this.highestPrivacy()))
       .pipe(switchMap(({ video }) => {
@@ -143,7 +143,7 @@ export class VideoImportTorrentComponent implements OnInit, AfterViewInit, CanCo
         next: async ([ video, playerSettings ]) => {
           await videoEdit.loadFromAPI({ video, playerSettings, loadPrivacy: false })
 
-          this.loadingBar.useRef().complete()
+          this.loadingBar.useRef('import-video').complete()
 
           debugLogger(`Torrent/magnet import created`)
 
@@ -157,7 +157,7 @@ export class VideoImportTorrentComponent implements OnInit, AfterViewInit, CanCo
         error: err => {
           this.isImportingVideo = false
 
-          this.loadingBar.useRef().complete()
+          this.loadingBar.useRef('import-video').complete()
           this.firstStepError.emit()
 
           const error = err.body as PeerTubeProblemDocument
