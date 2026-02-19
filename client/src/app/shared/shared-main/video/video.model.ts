@@ -207,6 +207,11 @@ export class Video implements VideoServerModel {
 
     this.streamingPlaylists = hash.streamingPlaylists
     this.files = hash.files
+
+    for (const file of this.getAllVideoFiles()) {
+      file.resolution.label = peertubeTranslate(file.resolution.label, translations)
+    }
+
     this.videoSource = hash.videoSource
 
     this.userHistory = hash.userHistory
@@ -332,6 +337,10 @@ export class Video implements VideoServerModel {
 
   hasWebVideos () {
     return this.files && this.files.length !== 0
+  }
+
+  getAllVideoFiles () {
+    return getAllFiles(this)
   }
 
   isLiveInfoAvailableBy (user: AuthUser) {
