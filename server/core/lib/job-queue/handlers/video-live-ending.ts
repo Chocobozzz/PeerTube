@@ -207,7 +207,7 @@ async function copyOrRegenerateThumbnails (options: {
 
   let thumbnails: MThumbnail[] = []
 
-  const bestThumbnail = liveVideo.getBestThumbnail()
+  const bestThumbnail = liveVideo.getBestThumbnail('16:9')
 
   if (bestThumbnail.automaticallyGenerated === false) {
     thumbnails = await createLocalVideoThumbnailsFromImage({

@@ -167,7 +167,7 @@ describe('Test multiple servers', function () {
         support: 'my super support text for server 2',
         tags: [ 'tag1p2', 'tag2p2', 'tag3p2' ],
         fixture: 'video_short2.webm',
-        thumbnailfile: 'custom-thumbnail-850x480.jpg'
+        thumbnailfile: 'custom-thumbnail-input.jpg'
       }
       await servers[1].videos.upload({ token: userAccessToken, attributes, mode: 'resumable' })
 
@@ -225,7 +225,7 @@ describe('Test multiple servers', function () {
               size: 750000
             }
           ],
-          thumbnails: [ 'custom-thumbnail-280x157.jpg', 'custom-thumbnail-850x480.jpg' ]
+          thumbnails: [ 'custom-thumbnail-280x157.jpg', 'custom-thumbnail-850x480.jpg', 'custom-thumbnail-1920x1080.jpg' ]
         }
 
         const { data } = await server.videos.list()
@@ -626,7 +626,7 @@ describe('Test multiple servers', function () {
         description: 'my super description updated',
         support: 'my super support text updated',
         tags: [ 'tag_up_1', 'tag_up_2' ],
-        thumbnailfile: 'custom-thumbnail-850x480.jpg',
+        thumbnailfile: 'custom-thumbnail-input.jpg',
         originallyPublishedAt: '2019-02-11T13:38:14.449Z'
       }
 
@@ -784,7 +784,10 @@ describe('Test multiple servers', function () {
       for (const server of servers) {
         const video = await server.videos.get({ id: videoUUID })
 
-        await testImageGeneratedByFFmpeg({ name: 'video_short1.webm-thumbnail-850x480.jpg', url: maxBy(video.thumbnails, 'width').fileUrl })
+        await testImageGeneratedByFFmpeg({
+          name: 'video_short1.webm-thumbnail-1920x1080.jpg',
+          url: maxBy(video.thumbnails, 'width').fileUrl
+        })
       }
     })
   })

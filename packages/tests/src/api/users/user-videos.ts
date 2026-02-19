@@ -138,7 +138,7 @@ describe('Test user videos', function () {
 
       const video = data[0]
       expect(video.name).to.equal('super user video')
-      expect(video.thumbnails).to.have.lengthOf(2)
+      expect(video.thumbnails).to.have.lengthOf(5)
     })
 
     it('Should be able to filter by a specific channel in my videos', async function () {
@@ -153,7 +153,7 @@ describe('Test user videos', function () {
 
         const video = data[0]
         expect(video.name).to.equal('super user video')
-        expect(video.thumbnails).to.have.lengthOf(2)
+        expect(video.thumbnails).to.have.lengthOf(4)
       }
 
       {

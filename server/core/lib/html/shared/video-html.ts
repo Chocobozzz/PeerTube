@@ -98,7 +98,7 @@ export class VideoHtml {
     let customHTML = TagsHtml.addTitleTag(html, video.name)
     customHTML = TagsHtml.addDescriptionTag(customHTML, escapedTruncatedDescription)
 
-    const thumbnail = video.getBestThumbnail()
+    const thumbnail = video.getBestThumbnail('16:9')
 
     return TagsHtml.addTags(customHTML, {
       url: WEBSERVER.URL + video.getWatchStaticPath(),

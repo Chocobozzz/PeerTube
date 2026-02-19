@@ -152,7 +152,7 @@ describe('Save replay setting', function () {
     for (const server of servers) {
       const video = await server.videos.get({ id: videoId })
 
-      await _checkVideoThumbnails({ video, server, thumbnails, strict: true })
+      await _checkVideoThumbnails({ video, server, thumbnails })
     }
   }
 
@@ -365,7 +365,7 @@ describe('Save replay setting', function () {
         attributes: {
           name: 'video updated',
           privacy: VideoPrivacy.PUBLIC,
-          thumbnailfile: 'custom-thumbnail-850x480.jpg'
+          thumbnailfile: 'custom-thumbnail-input.jpg'
         }
       })
       await waitJobs(servers)
@@ -433,7 +433,7 @@ describe('Save replay setting', function () {
           permanent: true,
           replay: true,
           replaySettings: { privacy: VideoPrivacy.UNLISTED },
-          thumbnailfile: 'custom-thumbnail-850x480.jpg'
+          thumbnailfile: 'custom-thumbnail-input.jpg'
         })
 
         await waitJobs(servers)
@@ -677,7 +677,7 @@ describe('Save replay setting', function () {
       it('Should update the live replay thumbnail', async function () {
         await servers[0].videos.update({
           id: lastReplayUUID,
-          attributes: { thumbnailfile: 'custom-thumbnail-850x480.jpg' }
+          attributes: { thumbnailfile: 'custom-thumbnail-input.jpg' }
         })
         await waitJobs(servers)
 

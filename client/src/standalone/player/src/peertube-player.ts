@@ -1,4 +1,4 @@
-import { buildVideoLink, decorateVideoLink, findAppropriateImage, isDefaultLocale, pick } from '@peertube/peertube-core-utils'
+import { buildVideoLink, decorateVideoLink, findAppropriateThumbnail, isDefaultLocale, pick } from '@peertube/peertube-core-utils'
 import { Thumbnail } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { PluginsManager } from '@root-helpers/plugins-manager'
@@ -150,13 +150,17 @@ export class PeerTubePlayer {
     if (!this.player) {
       const playerEl = this.options.playerElement()
 
-      this.options.playerElement().poster = findAppropriateImage(thumbnails, playerEl.clientWidth || window.innerWidth)?.fileUrl || ''
+      const width = playerEl.clientWidth || window.innerWidth
+
+      this.options.playerElement().poster = findAppropriateThumbnail(thumbnails, width, '16:9')?.fileUrl || ''
       return
     }
 
     // Prefer using player poster API
     if (this.player) {
-      this.player.poster(findAppropriateImage(thumbnails, this.player.el().clientWidth || window.innerWidth)?.fileUrl || '')
+      const width = this.player.el().clientWidth || window.innerWidth
+
+      this.player.poster(findAppropriateThumbnail(thumbnails, width, '16:9')?.fileUrl || '')
     }
 
     this.options.playerElement().poster = ''
@@ -393,7 +397,7 @@ export class PeerTubePlayer {
   private getVideojsOptions (): VideojsPlayerOptions {
     const posterWidth = this.options.playerElement().clientWidth || window.innerWidth
 
-    const poster = findAppropriateImage(this.currentLoadOptions.thumbnails, posterWidth)?.fileUrl || ''
+    const poster = findAppropriateThumbnail(this.currentLoadOptions.thumbnails, posterWidth, '16:9')?.fileUrl || ''
 
     const html5 = {
       preloadTextTracks: false,

@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { Notifier, ScreenService } from '@app/core'
 import { HeaderService } from '@app/header/header.service'
-import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { VideoStateMessageService } from '@app/shared/shared-video/video-state-message.service'
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
@@ -27,8 +26,7 @@ import { VideoManageMenuComponent } from './video-manage-menu.component'
     ManageErrorsComponent,
     NgbTooltipModule,
     UploadProgressComponent,
-    VideoManageMenuComponent,
-    AlertComponent
+    VideoManageMenuComponent
   ]
 })
 export class VideoManageContainerComponent implements OnInit, OnDestroy {

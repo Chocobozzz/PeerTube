@@ -2,6 +2,7 @@ import { buildVideoEmbedPath, buildVideoWatchPath, maxBy, minBy, pick, wait } fr
 import {
   FileStorage,
   ResultList,
+  ThumbnailAspectRatio,
   UserRight,
   Video,
   VideoDetails,
@@ -153,7 +154,7 @@ import {
 } from './sql/video/index.js'
 import { StoryboardModel } from './storyboard.js'
 import { TagModel } from './tag.js'
-import { ThumbnailModel } from './thumbnail.js'
+import { ThumbnailModel, thumbnailAPIAttributes } from './thumbnail.js'
 import { VideoBlacklistModel } from './video-blacklist.js'
 import { VideoCaptionModel } from './video-caption.js'
 import { SummaryOptions, VideoChannelModel, ScopeNames as VideoChannelScopeNames } from './video-channel.js'
@@ -210,7 +211,7 @@ export type ForAPIOptions = {
         required: true
       },
       {
-        attributes: [ 'width', 'height', 'fileUrl', 'filename' ],
+        attributes: thumbnailAPIAttributes,
         model: ThumbnailModel,
         required: false
       }
@@ -1920,30 +1921,43 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
   // ---------------------------------------------------------------------------
 
-  getBestThumbnail (this: Pick<MVideoThumbnail, 'Thumbnails'>) {
+  getBestThumbnail (this: Pick<MVideoThumbnail, 'Thumbnails' | 'filterThumbnails'>, ratio: ThumbnailAspectRatio, maxWidth?: number) {
     if (!this.Thumbnails || this.Thumbnails.length === 0) return undefined
 
-    return maxBy(this.Thumbnails, 'width')
+    return maxBy(this.filterThumbnails(ratio, maxWidth), 'width')
   }
 
-  getBestThumbnailStaticPath (this: Pick<MVideoThumbnail, 'Thumbnails' | 'getBestThumbnail'>) {
-    const thumbnail = this.getBestThumbnail()
+  getBestThumbnailStaticPath (
+    this: Pick<MVideoThumbnail, 'Thumbnails' | 'filterThumbnails' | 'getBestThumbnail'>,
+    ratio: ThumbnailAspectRatio,
+    maxWidth?: number
+  ) {
+    const thumbnail = this.getBestThumbnail(ratio, maxWidth)
     if (!thumbnail) return null
 
     return thumbnail.getFileStaticPath()
   }
 
-  getSmallestThumbnail (this: Pick<MVideoThumbnail, 'Thumbnails'>) {
+  getSmallestThumbnail (this: Pick<MVideoThumbnail, 'Thumbnails' | 'filterThumbnails'>, ratio: ThumbnailAspectRatio) {
     if (!this.Thumbnails || this.Thumbnails.length === 0) return undefined
 
-    return minBy(this.Thumbnails, 'width')
+    return minBy(this.filterThumbnails(ratio), 'width')
   }
 
-  getSmallestThumbnailStaticPath (this: Pick<MVideoThumbnail, 'Thumbnails' | 'getSmallestThumbnail'>) {
-    const thumbnail = this.getSmallestThumbnail()
+  getSmallestThumbnailStaticPath (
+    this: Pick<MVideoThumbnail, 'Thumbnails' | 'filterThumbnails' | 'getSmallestThumbnail'>,
+    ratio: ThumbnailAspectRatio
+  ) {
+    const thumbnail = this.getSmallestThumbnail(ratio)
     if (!thumbnail) return null
 
     return thumbnail.getFileStaticPath()
+  }
+
+  filterThumbnails (this: Pick<MVideoThumbnail, 'Thumbnails'>, ratio: ThumbnailAspectRatio, maxWidth?: number) {
+    if (!this.Thumbnails) return []
+
+    return this.Thumbnails.filter(t => t.aspectRatio === ratio && (!maxWidth || t.width <= maxWidth))
   }
 
   // ---------------------------------------------------------------------------

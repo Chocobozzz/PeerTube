@@ -1,8 +1,9 @@
-import { sortBy } from '@peertube/peertube-core-utils'
+import { guessAspectRatio, sortBy } from '@peertube/peertube-core-utils'
 import {
   BroadcastMessageLevel,
   NSFWPolicyType,
   PlayerTheme,
+  ThumbnailAspectRatio,
   VideoCommentPolicyType,
   VideoPrivacyType,
   VideoRedundancyConfigFilter,
@@ -522,7 +523,12 @@ const CONFIG = {
     GENERATION_FROM_VIDEO: {
       FRAMES_TO_ANALYZE: config.get<number>('thumbnails.generation_from_video.frames_to_analyze')
     },
-    SIZES: sortBy(config.get<{ width: number, height: number }[]>('thumbnails.sizes'), 'width')
+    SIZES: sortBy(config.get<{ width: number, height: number, aspect_ratio?: ThumbnailAspectRatio }[]>('thumbnails.sizes'), 'width')
+      .map(size => ({
+        width: size.width,
+        height: size.height,
+        aspectRatio: size.aspect_ratio || guessAspectRatio(size.width, size.height)
+      }))
   },
   STATS: {
     REGISTRATION_REQUESTS: {

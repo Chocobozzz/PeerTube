@@ -10,7 +10,7 @@ import {
   VideoPlaylistType,
   VideoPlaylistType_Type
 } from '@peertube/peertube-models'
-import { findAppropriateImageFileUrl } from '@root-helpers/images'
+import { findAppropriateThumbnailFileUrl } from '@root-helpers/images'
 import { Actor } from '../shared-main/account/actor.model'
 
 export class VideoPlaylist implements ServerVideoPlaylist {
@@ -99,6 +99,6 @@ export class VideoPlaylist implements ServerVideoPlaylist {
   getThumbnailUrl (width: number) {
     const defaultUrl = getAPIUrl() + '/client/assets/images/default-playlist.jpg'
 
-    return findAppropriateImageFileUrl(this.thumbnails, width) || defaultUrl
+    return findAppropriateThumbnailFileUrl(this.thumbnails, width, '16:9') || defaultUrl
   }
 }

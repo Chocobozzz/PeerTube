@@ -115,8 +115,8 @@ export function videoModelToFormattedJSON (video: MVideoFormattable, options: Vi
     likes: video.likes,
     dislikes: video.dislikes,
 
-    thumbnailPath: video.getSmallestThumbnailStaticPath(),
-    previewPath: video.getBestThumbnailStaticPath(),
+    thumbnailPath: video.getSmallestThumbnailStaticPath('16:9'),
+    previewPath: video.getBestThumbnailStaticPath('16:9'),
 
     thumbnails: (video.Thumbnails || []).map(t => t.toFormattedJSON()),
 

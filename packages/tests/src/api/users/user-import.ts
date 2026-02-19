@@ -441,14 +441,14 @@ function runTest (withObjectStorage: boolean) {
 
             attributes: {
               name: 'noah public video second channel',
-              privacy: (VideoPrivacy.PUBLIC),
-              category: (12),
+              privacy: VideoPrivacy.PUBLIC,
+              category: 12,
               tags: [ 'tag1', 'tag2' ],
               commentsPolicy: VideoCommentPolicy.DISABLED,
               downloadEnabled: false,
               nsfw: false,
-              description: ('video description'),
-              support: ('video support'),
+              description: 'video description',
+              support: 'video support',
               language: 'fr',
               licence: 1,
               originallyPublishedAt: new Date(0).toISOString(),
@@ -479,7 +479,7 @@ function runTest (withObjectStorage: boolean) {
                   size: 23000
                 }
               ],
-              thumbnails: [ 'custom-thumbnail-280x157.jpg', 'custom-thumbnail-850x480.jpg' ]
+              thumbnails: [ 'custom-thumbnail-user-import-280x157.jpg', 'custom-thumbnail-user-import-850x480.jpg' ]
             }
           })
         }

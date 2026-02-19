@@ -1,3 +1,4 @@
+import { guessAspectRatio } from '@peertube/peertube-core-utils'
 import { ActivityTagObject, VideoChaptersObject, VideoObject, VideoStreamingPlaylistType_Type } from '@peertube/peertube-models'
 import { isVideoChaptersObjectValid } from '@server/helpers/custom-validators/activitypub/video-chapters.js'
 import { deleteAllModels, filterNonExistingModels, retryTransactionWrapper } from '@server/helpers/database-utils.js'
@@ -62,7 +63,13 @@ export abstract class APVideoAbstractBuilder {
       return undefined
     }
 
-    const thumbnails = icons.map(icon => updateRemoteVideoThumbnail({ fileUrl: icon.url, video, size: icon }))
+    const thumbnails = icons.map(icon => {
+      return updateRemoteVideoThumbnail({
+        fileUrl: icon.url,
+        video,
+        size: { ...icon, aspectRatio: guessAspectRatio(icon.width, icon.height) }
+      })
+    })
 
     await video.replaceAndSaveThumbnails(thumbnails, t)
   }

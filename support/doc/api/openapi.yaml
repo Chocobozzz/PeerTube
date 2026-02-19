@@ -8908,6 +8908,9 @@ components:
           type: integer
         height:
           type: integer
+        aspectRatio:
+          type: string
+          example: '16:9'
     VideoFile:
       properties:
         id:

@@ -164,8 +164,8 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
 
       url: video.url,
 
-      thumbnailUrl: video.getBestThumbnail()?.getLocalFileUrl() || null,
-      previewUrl: video.getBestThumbnail()?.getLocalFileUrl() || null,
+      thumbnailUrl: video.getBestThumbnail('16:9')?.getLocalFileUrl() || null,
+      previewUrl: video.getBestThumbnail('16:9')?.getLocalFileUrl() || null,
       thumbnails: video.Thumbnails.map(t => ({
         width: t.width,
         height: t.height,
@@ -297,7 +297,7 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
     chapters: MVideoChapter[],
     exportedVideoFileOrSource: MVideoFile | MVideoSource
   ): Promise<ActivityCreate<VideoObject>> {
-    const icon = video.getBestThumbnail()
+    const icon = video.getBestThumbnail('16:9')
 
     const audience = getVideoAudience({
       account: video.VideoChannel.Account,
@@ -405,7 +405,7 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
       relativePathsFromJSON.captions[caption.language] = join(this.relativeStaticDirPath, this.getArchiveCaptionFilePath(video, caption))
     }
 
-    const thumbnail = video.getBestThumbnail()
+    const thumbnail = video.getBestThumbnail('16:9')
     if (thumbnail) {
       staticFiles.push({
         archivePath: this.getArchiveThumbnailFilePath(video, thumbnail),

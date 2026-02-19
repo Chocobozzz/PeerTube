@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
 
-import { maxBy, minBy, uuidRegex } from '@peertube/peertube-core-utils'
+import { uuidRegex } from '@peertube/peertube-core-utils'
 import { ffprobePromise } from '@peertube/peertube-ffmpeg'
 import {
   FileStorage,
@@ -273,7 +273,7 @@ export async function completeVideoCheck (options: {
   if (attributes.thumbnails) {
     await checkThumbnails({ video, thumbnails: attributes.thumbnails, server })
   } else {
-    await checkThumbnails({ video, thumbnails: [ attributes.fixture + '.jpg' ], strict: false, server })
+    await checkThumbnails({ video, thumbnails: [ attributes.fixture + '.jpg' ], server })
   }
 
   if (attributes.files) {
@@ -449,9 +449,8 @@ export async function checkThumbnails (options: {
   video?: Video
   playlist?: VideoPlaylist
   thumbnails: string[]
-  strict?: boolean // default true
 }) {
-  const { server, video, playlist, strict = true } = options
+  const { server, video, playlist } = options
 
   const thumbnails = options.thumbnails.map(t => {
     const matched = t.match(/-(\d+)x(\d+)/)
@@ -469,13 +468,32 @@ export async function checkThumbnails (options: {
 
   const entity = video || playlist
 
-  if (strict) {
-    expect(entity.thumbnails).to.have.lengthOf(thumbnails.length)
+  const toCheck = entity.thumbnails.map(t => ({
+    width: t.width,
+    height: t.height,
+    aspectRatio: t.aspectRatio
+  }))
+
+  if (video) {
+    expect(toCheck).to.deep.include.members([
+      { width: 1400, height: 1400, aspectRatio: '1:1' },
+      { width: 280, height: 157, aspectRatio: '16:9' },
+      { width: 850, height: 480, aspectRatio: '16:9' },
+      { width: 1280, height: 720, aspectRatio: '16:9' },
+      { width: 1920, height: 1080, aspectRatio: '16:9' }
+    ])
+
+    expect(toCheck).to.have.lengthOf(5)
+  } else if (playlist) {
+    expect(toCheck).to.deep.include.members([
+      { width: 280, height: 157, aspectRatio: '16:9' }
+    ])
+
+    expect(toCheck).to.have.lengthOf(1)
   }
 
   for (const thumbnail of thumbnails) {
     const videoThumbnail = entity.thumbnails.find(t => t.width === thumbnail.width && t.height === thumbnail.height)
-    expect(videoThumbnail).to.exist
 
     expectStartWith(videoThumbnail.fileUrl, server.url)
 
@@ -483,10 +501,18 @@ export async function checkThumbnails (options: {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-deprecated
-  await testImageGeneratedByFFmpeg({ name: minBy(thumbnails, 'width').filename, url: server.url + entity.thumbnailPath })
+  await testImageGeneratedByFFmpeg({
+    name: thumbnails.find(t => t.width === 280 && t.height === 157).filename,
+    url: server.url + entity.thumbnailPath
+  })
 
-  if (video && thumbnails.length > 1) {
+  const preview = thumbnails.find(t => t.width === 1920 && t.height === 1080)
+
+  if (video && preview) {
     // eslint-disable-next-line @typescript-eslint/no-deprecated
-    await testImageGeneratedByFFmpeg({ name: maxBy(thumbnails, 'width').filename, url: server.url + video.previewPath })
+    await testImageGeneratedByFFmpeg({
+      name: preview.filename,
+      url: server.url + video.previewPath
+    })
   }
 }

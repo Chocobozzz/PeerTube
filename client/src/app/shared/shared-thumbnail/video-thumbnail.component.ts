@@ -3,7 +3,7 @@ import { booleanAttribute, Component, ElementRef, inject, input, numberAttribute
 import { RouterLink } from '@angular/router'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { Video as VideoServerModel, VideoState } from '@peertube/peertube-models'
-import { findAppropriateImageFileUrl } from '@root-helpers/images'
+import { findAppropriateThumbnailFileUrl } from '@root-helpers/images'
 import { logger } from '@root-helpers/logger'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { FromNowPipe } from '../shared-main/date/from-now.pipe'
@@ -119,7 +119,7 @@ export class VideoThumbnailComponent implements OnChanges {
       width = +widthStr
     }
 
-    return findAppropriateImageFileUrl(video.thumbnails, width)
+    return findAppropriateThumbnailFileUrl(video.thumbnails, width, '16:9')
   }
 
   getProgressPercent () {

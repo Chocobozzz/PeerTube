@@ -217,7 +217,7 @@ export class VideoDownload {
   // ---------------------------------------------------------------------------
 
   private async buildCoverInput () {
-    const thumbnail = this.video.getBestThumbnail()
+    const thumbnail = this.video.getBestThumbnail('16:9')
 
     if (this.video.isLocal()) return { coverPath: thumbnail?.getFSPath() }
 

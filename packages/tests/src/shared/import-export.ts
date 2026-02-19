@@ -241,7 +241,7 @@ export async function prepareImportExportTests (options: {
       waitTranscoding: true,
       channelId: noahSecondChannelId,
       privacy: VideoPrivacy.PUBLIC,
-      thumbnailfile: 'custom-thumbnail-850x480.jpg'
+      thumbnailfile: 'custom-thumbnail-input.jpg'
     }
   })
 
