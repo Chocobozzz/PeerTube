@@ -296,6 +296,7 @@ export async function checkCanManageVideo (options: {
   video: MVideoAccountLight
   right: UserRightType
   req: Request
+  // null if you don't want the function to send a response when the user cannot manage the video, but just return false
   res: Response | null
   checkIsLocal: boolean
   checkIsOwner: boolean

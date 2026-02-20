@@ -12,9 +12,9 @@ import {
   getLiveReplayBaseDirectory
 } from '@server/lib/paths.js'
 import {
+  createLocalVideoThumbnailsFromImage,
   createLocalVideoThumbnailsFromVideo,
-  regenerateLocalVideoThumbnailsFromVideoIfNeeded,
-  createLocalVideoThumbnailsFromImage
+  regenerateLocalVideoThumbnailsFromVideoIfNeeded
 } from '@server/lib/thumbnail.js'
 import { generateHlsPlaylistResolutionFromTS } from '@server/lib/transcoding/hls-transcoding.js'
 import { createTranscriptionTaskIfNeeded } from '@server/lib/video-captions.js'
@@ -23,7 +23,9 @@ import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { isVideoInPublicDirectory } from '@server/lib/video-privacy.js'
 import { moveToNextState } from '@server/lib/video-state.js'
 import { setVideoTags } from '@server/lib/video.js'
+import { PlayerSettingModel } from '@server/models/video/player-setting.js'
 import { VideoBlacklistModel } from '@server/models/video/video-blacklist.js'
+import { VideoEmbedPrivacyDomainModel } from '@server/models/video/video-embed-privacy-domain.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting.js'
 import { VideoLiveSessionModel } from '@server/models/video/video-live-session.js'
@@ -146,6 +148,7 @@ async function saveReplayToExternalVideo (options: {
     language: liveVideo.language,
     commentsPolicy: liveVideo.commentsPolicy,
     downloadEnabled: liveVideo.downloadEnabled,
+    embedPrivacyPolicy: liveVideo.embedPrivacyPolicy,
     waitTranscoding: true,
     nsfw: liveVideo.nsfw,
     description: liveVideo.description,
@@ -177,6 +180,21 @@ async function saveReplayToExternalVideo (options: {
       reason: blacklist.reason,
       type: blacklist.type
     })
+  }
+
+  // Inherit player settings
+  const playerSettings = await PlayerSettingModel.loadByVideoId(liveVideo.id)
+  if (playerSettings) {
+    await PlayerSettingModel.create({
+      videoId: replayVideo.id,
+      theme: playerSettings.theme
+    })
+  }
+
+  // Inherit video embed privacy
+  const domains = await VideoEmbedPrivacyDomainModel.list(liveVideo.id)
+  if (domains.length !== 0) {
+    await VideoEmbedPrivacyDomainModel.addDomains(domains.map(d => d.domain), replayVideo.id)
   }
 
   await assignReplayFilesToVideo({ video: replayVideo, replayDirectory })

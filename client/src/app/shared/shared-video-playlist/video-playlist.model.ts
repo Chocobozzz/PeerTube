@@ -1,11 +1,11 @@
-import { getAPIUrl, getOriginUrl } from '@app/helpers'
+import { getAPIUrl, getEmbedUrl } from '@app/helpers'
 import { buildPlaylistWatchPath, peertubeTranslate } from '@peertube/peertube-core-utils'
 import {
   AccountSummary,
+  ConstantLabel,
   VideoPlaylist as ServerVideoPlaylist,
   Thumbnail,
   VideoChannelSummary,
-  VideoConstant,
   VideoPlaylistPrivacyType,
   VideoPlaylistType,
   VideoPlaylistType_Type
@@ -24,11 +24,11 @@ export class VideoPlaylist implements ServerVideoPlaylist {
 
   displayName: string
   description: string
-  privacy: VideoConstant<VideoPlaylistPrivacyType>
+  privacy: ConstantLabel<VideoPlaylistPrivacyType>
 
   videosLength: number
 
-  type: VideoConstant<VideoPlaylistType_Type>
+  type: ConstantLabel<VideoPlaylistType_Type>
 
   createdAt: Date | string
   updatedAt: Date | string
@@ -68,7 +68,7 @@ export class VideoPlaylist implements ServerVideoPlaylist {
     this.privacy = hash.privacy
 
     this.embedPath = hash.embedPath
-    this.embedUrl = hash.embedUrl || (getOriginUrl() + hash.embedPath)
+    this.embedUrl = hash.embedUrl || (getEmbedUrl() + hash.embedPath)
 
     this.videosLength = hash.videosLength
 

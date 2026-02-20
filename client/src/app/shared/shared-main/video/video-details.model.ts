@@ -1,9 +1,11 @@
 import { Account } from '@app/shared/shared-main/account/account.model'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import {
+  ConstantLabel,
   VideoCommentPolicyType,
-  VideoConstant,
   VideoDetails as VideoDetailsServerModel,
+  VideoEmbedPrivacyPolicy,
+  VideoEmbedPrivacyPolicyType,
   VideoFile,
   VideoStateType,
   VideoStreamingPlaylist,
@@ -19,7 +21,7 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   tags: string[]
   downloadEnabled: boolean
 
-  commentsPolicy: VideoConstant<VideoCommentPolicyType>
+  commentsPolicy: ConstantLabel<VideoCommentPolicyType>
 
   likesPercent: number
   dislikesPercent: number
@@ -28,11 +30,13 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
 
   inputFileUpdatedAt: Date | string
 
+  embedPrivacyPolicy: ConstantLabel<VideoEmbedPrivacyPolicyType>
+
   // These fields are not optional
   declare files: VideoFile[]
   declare streamingPlaylists: VideoStreamingPlaylist[]
   declare waitTranscoding: boolean
-  declare state: VideoConstant<VideoStateType>
+  declare state: ConstantLabel<VideoStateType>
 
   constructor (hash: VideoDetailsServerModel, translations = {}) {
     super(hash, translations)
@@ -48,6 +52,8 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
 
     this.trackerUrls = hash.trackerUrls
 
+    this.embedPrivacyPolicy = hash.embedPrivacyPolicy
+
     this.buildLikeAndDislikePercents()
   }
 
@@ -62,5 +68,9 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
 
   hasHlsPlaylist () {
     return !!this.getHlsPlaylist()
+  }
+
+  hasEmbedRestrictions () {
+    return this.embedPrivacyPolicy.id !== VideoEmbedPrivacyPolicy.ALL_ALLOWED
   }
 }

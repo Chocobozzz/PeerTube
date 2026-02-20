@@ -1,15 +1,15 @@
-import { VideoConstant } from '../../videos/index.js'
+import { ConstantLabel } from '../../common/constant-label.model.js'
 import { RunnerJobPayload } from './runner-job-payload.model.js'
 import { RunnerJobPrivatePayload } from './runner-job-private-payload.model.js'
 import { RunnerJobStateType } from './runner-job-state.model.js'
 import { RunnerJobType } from './runner-job-type.type.js'
 
-export interface RunnerJob <T extends RunnerJobPayload = RunnerJobPayload> {
+export interface RunnerJob<T extends RunnerJobPayload = RunnerJobPayload> {
   uuid: string
 
   type: RunnerJobType
 
-  state: VideoConstant<RunnerJobStateType>
+  state: ConstantLabel<RunnerJobStateType>
 
   payload: T
 
@@ -26,7 +26,7 @@ export interface RunnerJob <T extends RunnerJobPayload = RunnerJobPayload> {
 
   parent?: {
     type: RunnerJobType
-    state: VideoConstant<RunnerJobStateType>
+    state: ConstantLabel<RunnerJobStateType>
     uuid: string
   }
 
@@ -40,6 +40,8 @@ export interface RunnerJob <T extends RunnerJobPayload = RunnerJobPayload> {
 }
 
 // eslint-disable-next-line max-len
-export interface RunnerJobAdmin <T extends RunnerJobPayload = RunnerJobPayload, U extends RunnerJobPrivatePayload = RunnerJobPrivatePayload> extends RunnerJob<T> {
+export interface RunnerJobAdmin<T extends RunnerJobPayload = RunnerJobPayload, U extends RunnerJobPrivatePayload = RunnerJobPrivatePayload>
+  extends RunnerJob<T>
+{
   privatePayload: U
 }

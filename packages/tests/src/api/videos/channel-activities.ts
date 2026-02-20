@@ -5,6 +5,7 @@ import {
   VideoChannelActivityAction,
   VideoChannelActivityTarget,
   VideoCreateResult,
+  VideoEmbedPrivacyPolicy,
   VideoImport,
   VideoPlaylistCreateResult,
   VideoPlaylistElementCreateResult,
@@ -350,6 +351,21 @@ describe('Test channel activities', function () {
       expect(a.targetType.id).to.equal(VideoChannelActivityTarget.VIDEO)
     })
 
+    it('Should update embed privacy', async function () {
+      const a = await getActivityAfterAction(async () => {
+        await server.videoEmbedPrivacy.update({
+          videoId: video.id,
+          policy: VideoEmbedPrivacyPolicy.ALLOWLIST,
+          domains: [ 'example.com' ],
+          token: editorToken
+        })
+      })
+
+      expect(a.account.name).to.equal('editor')
+      expect(a.action.id).to.equal(VideoChannelActivityAction.UPDATE_EMBED_POLICY)
+      expect(a.targetType.id).to.equal(VideoChannelActivityTarget.VIDEO)
+    })
+
     it('Should delete the video', async function () {
       const a = await getActivityAfterAction(() => {
         return server.videos.remove({ id: video.id })
@@ -386,6 +402,88 @@ describe('Test channel activities', function () {
         expect(a2.action.id).to.equal(VideoChannelActivityAction.CREATE_CHANNEL_OWNERSHIP)
         expect(a2.targetType.id).to.equal(VideoChannelActivityTarget.VIDEO)
         expect(a2.video.name).to.equal('video to change channel')
+      }
+    })
+  })
+
+  describe('Ownership changes', function () {
+    let video: VideoCreateResult
+    let receiverToken: string
+
+    before(async function () {
+      video = await server.videos.quickUpload({ name: 'video for ownership change', channelId })
+      receiverToken = await server.users.generateUserAndToken('receiver')
+    })
+
+    it('Should send an ownership change request', async function () {
+      const a = await getActivityAfterAction(() => {
+        return server.changeOwnership.create({ username: 'receiver', videoId: video.id })
+      })
+
+      expect(a.action.id).to.equal(VideoChannelActivityAction.SEND_OWNERSHIP_REQUEST)
+      expect(a.targetType.id).to.equal(VideoChannelActivityTarget.VIDEO)
+
+      expect(a.account.name).to.equal('root')
+
+      expect(a.video.name).to.equal('video for ownership change')
+
+      expect(a.targetAccount.username).to.equal('receiver')
+      expect(a.targetAccount.url).to.equal(server.url + '/accounts/receiver')
+      expect(a.targetAccount.displayName).to.equal('receiver')
+    })
+
+    it('Should refuse an ownership change request', async function () {
+      const { data } = await server.changeOwnership.list({ token: receiverToken })
+
+      const a = await getActivityAfterAction(() => {
+        return server.changeOwnership.refuse({ ownershipId: data[0].id, token: receiverToken })
+      })
+
+      expect(a.action.id).to.equal(VideoChannelActivityAction.REFUSE_OWNERSHIP_REQUEST)
+      expect(a.targetType.id).to.equal(VideoChannelActivityTarget.VIDEO)
+
+      expect(a.account.name).to.equal('receiver')
+
+      expect(a.video.name).to.equal('video for ownership change')
+
+      expect(a.targetAccount.username).to.equal('receiver')
+      expect(a.targetAccount.url).to.equal(server.url + '/accounts/receiver')
+      expect(a.targetAccount.displayName).to.equal('receiver')
+    })
+
+    it('Should accept an ownership change request', async function () {
+      await server.changeOwnership.create({ username: 'receiver', videoId: video.id })
+      const { data } = await server.changeOwnership.list({ token: receiverToken })
+
+      const a = await getActivityAfterAction(async () => {
+        return server.changeOwnership.accept({
+          ownershipId: data[0].id,
+          channelId: await server.channels.getDefaultId({ token: receiverToken }),
+          token: receiverToken
+        })
+      })
+
+      {
+        expect(a.action.id).to.equal(VideoChannelActivityAction.ACCEPT_OWNERSHIP_REQUEST)
+        expect(a.targetType.id).to.equal(VideoChannelActivityTarget.VIDEO)
+
+        expect(a.account.name).to.equal('receiver')
+
+        expect(a.video.name).to.equal('video for ownership change')
+
+        expect(a.targetAccount.username).to.equal('receiver')
+        expect(a.targetAccount.url).to.equal(server.url + '/accounts/receiver')
+        expect(a.targetAccount.displayName).to.equal('receiver')
+      }
+
+      {
+        const { data } = await server.channels.listActivities({ channelName: 'receiver_channel', sort: '-createdAt' })
+        const a = data[0]
+
+        expect(a.action.id).to.equal(VideoChannelActivityAction.ACCEPT_OWNERSHIP_REQUEST)
+        expect(a.targetType.id).to.equal(VideoChannelActivityTarget.VIDEO)
+
+        expect(a.video.name).to.equal('video for ownership change')
       }
     })
   })

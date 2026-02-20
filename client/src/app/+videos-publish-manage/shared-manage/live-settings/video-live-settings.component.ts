@@ -10,7 +10,7 @@ import {
   HTMLServerConfig,
   LiveVideoLatencyMode,
   LiveVideoLatencyModeType,
-  VideoConstant,
+  ConstantLabel,
   VideoPrivacy,
   VideoPrivacyType,
   VideoState
@@ -85,7 +85,7 @@ export class VideoLiveSettingsComponent implements OnInit, OnDestroy {
   calendarDateFormat: string
   myYearRange: string
 
-  replayPrivacies: VideoConstant<VideoPrivacyType>[] = []
+  replayPrivacies: ConstantLabel<VideoPrivacyType>[] = []
 
   latencyModes: SelectOptionsItem[] = [
     {

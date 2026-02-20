@@ -44,7 +44,7 @@ export const videosChangeOwnershipValidator = [
       return
     }
 
-    res.locals.nextOwner = nextOwner
+    res.locals.videoChangeOwnershipNextOwner = nextOwner
     return next()
   }
 ]

@@ -7,6 +7,7 @@ import {
   UserNotificationSettingValue,
   VideoCommentPolicy,
   VideoCreateResult,
+  VideoEmbedPrivacyPolicy,
   VideoPlaylistPrivacy,
   VideoPlaylistType,
   VideoPrivacy,
@@ -510,6 +511,7 @@ function runTest (withObjectStorage: boolean) {
         await remoteServer.videos.get({ id: liveVideo.uuid, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
         const video = await remoteServer.videos.getWithPassword({ id: liveVideo.uuid, password: 'password1' })
         const live = await remoteServer.live.get({ videoId: liveVideo.uuid, token: remoteNoahToken })
+        const liveEmbedPrivacy = await remoteServer.videoEmbedPrivacy.get({ videoId: liveVideo.uuid, token: remoteNoahToken })
 
         expect(video.isLive).to.be.true
         expect(live.latencyMode).to.equal(LiveVideoLatencyMode.SMALL_LATENCY)
@@ -527,6 +529,9 @@ function runTest (withObjectStorage: boolean) {
         expect(video.streamingPlaylists).to.have.lengthOf(0)
 
         expect(video.state.id).to.equal(VideoState.WAITING_FOR_LIVE)
+
+        expect(liveEmbedPrivacy.policy.id).to.equal(VideoEmbedPrivacyPolicy.ALLOWLIST)
+        expect(liveEmbedPrivacy.domains).to.deep.equal([ 'example.com' ])
       }
     })
   })

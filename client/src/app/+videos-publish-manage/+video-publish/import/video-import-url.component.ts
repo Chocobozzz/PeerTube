@@ -9,6 +9,8 @@ import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video
 import { VideoChapterService } from '@app/shared/shared-main/video/video-chapter.service'
 import { VideoImportService } from '@app/shared/shared-main/video/video-import.service'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { PlayerSettingsService } from '@app/shared/shared-video/player-settings.service'
+import { VideoEmbedPrivacyService } from '@app/shared/shared-video/video-embed-privacy.service'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { UserVideoQuota, VideoPrivacyType } from '@peertube/peertube-models'
 import debug from 'debug'
@@ -19,7 +21,6 @@ import { SelectChannelComponent } from '../../../shared/shared-forms/select/sele
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
 import { VideoManageContainerComponent } from '../../shared-manage/video-manage-container.component'
-import { PlayerSettingsService } from '@app/shared/shared-video/player-settings.service'
 
 const debugLogger = debug('peertube:video-publish')
 
@@ -51,6 +52,7 @@ export class VideoImportUrlComponent implements OnInit, AfterViewInit, CanCompon
   private chapterService = inject(VideoChapterService)
   private captionService = inject(VideoCaptionService)
   private playerSettingsService = inject(PlayerSettingsService)
+  private videoEmbedPrivacyService = inject(VideoEmbedPrivacyService)
 
   readonly userChannels = input.required<SelectChannelItem[]>()
   readonly userQuota = input.required<UserVideoQuota>()
@@ -127,13 +129,22 @@ export class VideoImportUrlComponent implements OnInit, AfterViewInit, CanCompon
             this.captionService.listCaptions(video.uuid),
             this.chapterService.getChapters({ videoId: video.uuid }),
             this.playerSettingsService.getVideoSettings({ videoId: video.uuid, raw: true }),
-            this.videoService.getVideo({ videoId: video.uuid })
-          ]).pipe(map(([ { data: captions }, { chapters }, playerSettings, video ]) => ({ captions, chapters, playerSettings, video })))
+            this.videoService.getVideo({ videoId: video.uuid }),
+            this.videoEmbedPrivacyService.getPrivacy({ videoId: video.uuid })
+          ]).pipe(
+            map(([ { data: captions }, { chapters }, playerSettings, video, embedPrivacy ]) => ({
+              captions,
+              chapters,
+              playerSettings,
+              video,
+              embedPrivacy
+            }))
+          )
         })
       )
       .subscribe({
-        next: async ({ video, playerSettings, captions, chapters }) => {
-          await videoEdit.loadFromAPI({ video, captions, playerSettings, chapters, loadPrivacy: false })
+        next: async ({ video, playerSettings, captions, chapters, embedPrivacy }) => {
+          await videoEdit.loadFromAPI({ video, captions, playerSettings, chapters, embedPrivacy, loadPrivacy: false })
 
           this.loadingBar.useRef('import-video').complete()
 

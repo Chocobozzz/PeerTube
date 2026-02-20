@@ -38,6 +38,9 @@ export interface VideoObject {
   waitTranscoding: boolean
   state: VideoStateType
 
+  // If null, the embed has restrictions
+  embedUrl: string | null
+
   published: string
   originallyPublishedAt: string
   updated: string

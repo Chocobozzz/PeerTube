@@ -2,7 +2,7 @@ import { Component, OnInit, inject, input, output } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { AdvancedSearch } from '@app/shared/shared-search/advanced-search.model'
-import { HTMLServerConfig, VideoConstant } from '@peertube/peertube-models'
+import { HTMLServerConfig, ConstantLabel } from '@peertube/peertube-models'
 import { SelectTagsComponent } from '../shared/shared-forms/select/select-tags.component'
 
 type FormOption = { id: string, label: string }
@@ -19,9 +19,9 @@ export class SearchFiltersComponent implements OnInit {
   advancedSearch = input<AdvancedSearch>(new AdvancedSearch())
   filtered = output<AdvancedSearch>()
 
-  videoCategories: VideoConstant<number>[] = []
-  videoLicences: VideoConstant<number>[] = []
-  videoLanguages: VideoConstant<string>[] = []
+  videoCategories: ConstantLabel<number>[] = []
+  videoLicences: ConstantLabel<number>[] = []
+  videoLanguages: ConstantLabel<string>[] = []
 
   publishedDateRanges: FormOption[] = []
   sorts: FormOption[] = []

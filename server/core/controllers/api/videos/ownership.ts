@@ -65,7 +65,7 @@ export {
 async function giveVideoOwnership (req: express.Request, res: express.Response) {
   const video = res.locals.videoAll
   const initiatorAccountId = res.locals.oauth.token.User.Account.id
-  const nextOwner = res.locals.nextOwner
+  const nextOwner = res.locals.videoChangeOwnershipNextOwner
 
   await sequelizeTypescript.transaction(async t => {
     await VideoChangeOwnershipModel.findOrCreate({

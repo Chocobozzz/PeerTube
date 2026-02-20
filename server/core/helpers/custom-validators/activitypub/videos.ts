@@ -88,6 +88,8 @@ export function sanitizeAndCheckVideoTorrentObject (video: VideoObject) {
 
   if (exists(video.audience) && !isActivityPubUrlValid(video.audience)) return fail('audience')
 
+  if (exists(video.embedUrl) && !isActivityPubUrlValid(video.embedUrl)) return fail('embedUrl')
+
   if (video.attributedTo.length === 0) return fail('attributedTo')
 
   return true

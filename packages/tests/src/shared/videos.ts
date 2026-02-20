@@ -503,6 +503,7 @@ export async function checkThumbnails (options: {
   // eslint-disable-next-line @typescript-eslint/no-deprecated
   await testImageGeneratedByFFmpeg({
     name: thumbnails.find(t => t.width === 280 && t.height === 157).filename,
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
     url: server.url + entity.thumbnailPath
   })
 
@@ -512,6 +513,7 @@ export async function checkThumbnails (options: {
     // eslint-disable-next-line @typescript-eslint/no-deprecated
     await testImageGeneratedByFFmpeg({
       name: preview.filename,
+      // eslint-disable-next-line @typescript-eslint/no-deprecated
       url: server.url + video.previewPath
     })
   }

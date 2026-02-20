@@ -18,6 +18,7 @@ import { isArray } from '../../../helpers/custom-validators/misc.js'
 import {
   VIDEO_CATEGORIES,
   VIDEO_COMMENTS_POLICY,
+  VIDEO_EMBED_PRIVACY_POLICIES,
   VIDEO_LANGUAGES,
   VIDEO_LICENCES,
   VIDEO_PRIVACIES,
@@ -180,13 +181,20 @@ export function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetail
 
     downloadEnabled: video.downloadEnabled,
     waitTranscoding: video.waitTranscoding,
+
     inputFileUpdatedAt: video.inputFileUpdatedAt,
+
     state: {
       id: video.state,
       label: getStateLabel(video.state)
     },
 
-    trackerUrls: video.getTrackerUrls()
+    trackerUrls: video.getTrackerUrls(),
+
+    embedPrivacyPolicy: {
+      id: video.embedPrivacyPolicy,
+      label: VIDEO_EMBED_PRIVACY_POLICIES[video.embedPrivacyPolicy]
+    }
   }
 
   span.end()

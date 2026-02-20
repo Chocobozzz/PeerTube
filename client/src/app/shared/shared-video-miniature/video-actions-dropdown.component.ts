@@ -188,8 +188,8 @@ export class VideoActionsDropdownComponent implements OnChanges {
   isVideoStatsAvailable () {
     if (!this.user) return false
 
-    const video = this.video()
-    return video.isLocal && video.isOwnerOrHasSeeAllVideosRight(this.user)
+    // Users that can update the video can also see its stats
+    return this.video().isUpdatableBy(this.user)
   }
 
   isVideoRemovable () {
@@ -226,6 +226,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
 
   isVideoDownloadableByAnonymous () {
     const video = this.video()
+
     return (
       video &&
       video.isLive !== true &&
@@ -238,10 +239,11 @@ export class VideoActionsDropdownComponent implements OnChanges {
     if (!this.user) return false
 
     const video = this.video()
+
     return (
       video &&
       video.isLive !== true &&
-      video.isOwnerOrHasSeeAllVideosRight(this.user)
+      video.isUpdatableBy(this.user)
     )
   }
 

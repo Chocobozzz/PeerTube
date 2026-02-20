@@ -130,7 +130,8 @@ Object.values(VIDEO_CATEGORIES)
     'By {1}',
     'Unavailable video',
     'Audio only',
-    'Unknown'
+    'Unknown',
+    'This video is not allowed to be embedded on this domain.'
   ])
   .forEach(v => {
     serverKeys[v] = v

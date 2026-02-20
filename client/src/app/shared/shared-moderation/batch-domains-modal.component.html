@@ -10,7 +10,7 @@
   <div class="modal-body">
     <form novalidate [formGroup]="form" (ngSubmit)="submit()">
       <div class="form-group">
-        <label i18n for="hosts">1 host (without "http://") per line</label>
+        <label i18n for="hosts">1 domain (without "http://") per line</label>
 
         <textarea
           [placeholder]="placeholder()" formControlName="hosts" type="text" id="hosts" name="hosts"

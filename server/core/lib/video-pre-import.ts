@@ -1,6 +1,7 @@
 import {
   NSFWFlag,
   VideoChannelActivityAction,
+  VideoEmbedPrivacyPolicy,
   VideoImportCreate,
   VideoImportPayload,
   VideoImportState,
@@ -121,6 +122,7 @@ export async function buildVideoFromImport ({ channelId, importData, importDataO
     commentsPolicy: importDataOverride?.commentsPolicy ?? CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY,
     downloadEnabled: importDataOverride?.downloadEnabled ?? CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
     waitTranscoding: importDataOverride?.waitTranscoding ?? true,
+    embedPrivacyPolicy: VideoEmbedPrivacyPolicy.ALL_ALLOWED,
     state: VideoState.TO_IMPORT,
     nsfw: importDataOverride?.nsfw || importData.nsfw || false,
     nsfwFlags: importDataOverride?.nsfwFlags || NSFWFlag.NONE,

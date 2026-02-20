@@ -1,14 +1,14 @@
 import { AuthUser } from '@app/core'
 import { User } from '@app/core/users/user.model'
-import { durationToString, getOriginUrl } from '@app/helpers'
+import { durationToString, getEmbedUrl } from '@app/helpers'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
 import { buildVideoWatchPath, getAllFiles, peertubeTranslate } from '@peertube/peertube-core-utils'
 import {
   ActorImage,
+  ConstantLabel,
   HTMLServerConfig,
   Thumbnail,
   UserRight,
-  VideoConstant,
   VideoFile,
   VideoPrivacy,
   VideoPrivacyType,
@@ -31,10 +31,10 @@ export class Video implements VideoServerModel {
   publishedAt: Date
   originallyPublishedAt: Date | string
 
-  category: VideoConstant<number>
-  licence: VideoConstant<number>
-  language: VideoConstant<string>
-  privacy: VideoConstant<VideoPrivacyType>
+  category: ConstantLabel<number>
+  licence: ConstantLabel<number>
+  language: ConstantLabel<string>
+  privacy: ConstantLabel<VideoPrivacyType>
 
   truncatedDescription: string
   description: string
@@ -81,7 +81,7 @@ export class Video implements VideoServerModel {
   originInstanceHost: string
 
   waitTranscoding?: boolean
-  state?: VideoConstant<VideoStateType>
+  state?: ConstantLabel<VideoStateType>
   scheduledUpdate?: VideoScheduleUpdate
 
   blacklisted?: boolean
@@ -168,7 +168,7 @@ export class Video implements VideoServerModel {
     this.name = hash.name
 
     this.embedPath = hash.embedPath
-    this.embedUrl = hash.embedUrl || (getOriginUrl() + hash.embedPath)
+    this.embedUrl = hash.embedUrl || (getEmbedUrl() + hash.embedPath)
 
     this.url = hash.url
 
@@ -255,7 +255,11 @@ export class Video implements VideoServerModel {
   }
 
   isUpdatableBy (user: AuthUser) {
-    return user && this.isLocal === true && (user.isEditorOfChannel(this.channel) || user.hasRight(UserRight.UPDATE_ANY_VIDEO))
+    return user && this.isLocal === true && (
+      user.isOwnerOfChannel(this.channel) ||
+      user.isEditorOfChannel(this.channel) ||
+      user.hasRight(UserRight.UPDATE_ANY_VIDEO)
+    )
   }
 
   isStudioEditableBy (options: {
@@ -268,22 +272,14 @@ export class Video implements VideoServerModel {
   }
 
   isRemovableBy (user: AuthUser) {
-    return user && this.isLocal === true && (user.isEditorOfChannel(this.channel) || user.hasRight(UserRight.REMOVE_ANY_VIDEO))
+    return user && this.isLocal === true && (
+      user.isOwnerOfChannel(this.channel) ||
+      user.isEditorOfChannel(this.channel) ||
+      user.hasRight(UserRight.REMOVE_ANY_VIDEO)
+    )
   }
 
   // ---------------------------------------------------------------------------
-
-  isOwner (user: AuthUser) {
-    return user && this.isLocal === true && this.account.name === user.username
-  }
-
-  hasSeeAllVideosRight (user: AuthUser) {
-    return user?.hasRight(UserRight.SEE_ALL_VIDEOS)
-  }
-
-  isOwnerOrHasSeeAllVideosRight (user: AuthUser) {
-    return this.isOwner(user) || this.hasSeeAllVideosRight(user)
-  }
 
   canRemoveOneFile (user: AuthUser) {
     return this.isLocal &&

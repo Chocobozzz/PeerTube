@@ -9,6 +9,7 @@ import {
   ActivityUrlObject,
   nsfwFlagsToString,
   VideoCommentPolicy,
+  VideoEmbedPrivacyPolicy,
   VideoObject
 } from '@peertube/peertube-models'
 import { getAPPublicValue } from '@server/helpers/activity-pub-utils.js'
@@ -124,6 +125,10 @@ export function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
     comments: getLocalVideoCommentsActivityPubUrl(video),
     hasParts: getLocalVideoChaptersActivityPubUrl(video),
     playerSettings: getLocalVideoPlayerSettingsActivityPubUrl(video),
+
+    embedUrl: video.embedPrivacyPolicy === VideoEmbedPrivacyPolicy.ALL_ALLOWED
+      ? video.getEmbedStaticUrl()
+      : null,
 
     attributedTo: process.env.FEP_1B12_ONLY !== 'true'
       ? [

@@ -17,6 +17,7 @@ import {
   VideoState,
   VideoStreamingPlaylistType,
   type VideoCommentPolicyType,
+  type VideoEmbedPrivacyPolicyType,
   type VideoPrivacyType,
   type VideoStateType
 } from '@peertube/peertube-models'
@@ -553,6 +554,10 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   @AllowNull(false)
   @Column
   declare downloadEnabled: boolean
+
+  @AllowNull(false)
+  @Column
+  declare embedPrivacyPolicy: VideoEmbedPrivacyPolicyType
 
   @AllowNull(false)
   @Column
@@ -1972,6 +1977,10 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
   getEmbedStaticPath () {
     return buildVideoEmbedPath({ shortUUID: uuidToShort(this.uuid) })
+  }
+
+  getEmbedStaticUrl () {
+    return WEBSERVER.URL + buildVideoEmbedPath({ shortUUID: uuidToShort(this.uuid) })
   }
 
   toFormattedJSON (this: MVideoFormattable, options?: VideoFormattingJSONOptions): Video {

@@ -23,6 +23,7 @@ import { VideoChannelActivityModel } from '@server/models/video/video-channel-ac
 import { VideoChannelCollaboratorModel } from '@server/models/video/video-channel-collaborator.js'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync.js'
 import { VideoChapterModel } from '@server/models/video/video-chapter.js'
+import { VideoEmbedPrivacyDomainModel } from '@server/models/video/video-embed-privacy-domain.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting.js'
 import { VideoLiveScheduleModel } from '@server/models/video/video-live-schedule.js'
@@ -211,7 +212,8 @@ export async function initDatabaseModels (silent: boolean) {
     VideoLiveScheduleModel,
     PlayerSettingModel,
     VideoChannelCollaboratorModel,
-    ActorReservedModel
+    ActorReservedModel,
+    VideoEmbedPrivacyDomainModel
   ])
 
   // Check extensions exist in the database

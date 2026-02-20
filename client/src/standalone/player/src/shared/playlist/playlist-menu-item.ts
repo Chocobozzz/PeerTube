@@ -84,7 +84,7 @@ class PlaylistMenuItem extends Component {
 
     const thumbnail = super.createEl('img', {
       src: videoElement.video.thumbnails.length !== 0
-        ? window.location.origin + findAppropriateThumbnail(videoElement.video.thumbnails, 80, '16:9').fileUrl // Keep 80 in sync with CSS
+        ? findAppropriateThumbnail(videoElement.video.thumbnails, 80, '16:9').fileUrl // Keep 80 in sync with CSS
         : ''
     })
 

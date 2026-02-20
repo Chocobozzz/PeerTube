@@ -118,7 +118,7 @@ export class VideoHtml {
         : undefined,
 
       videoOrPlaylist: {
-        embedUrl: WEBSERVER.URL + video.getEmbedStaticPath(),
+        embedUrl: video.getEmbedStaticUrl(),
         oembedUrl: this.getOEmbedUrl(video, currentQuery),
 
         channel: {

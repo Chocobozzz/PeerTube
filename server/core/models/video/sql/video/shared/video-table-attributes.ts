@@ -299,6 +299,7 @@ export class VideoTableAttributes {
       'url',
       'commentsPolicy',
       'downloadEnabled',
+      'embedPrivacyPolicy',
       'waitTranscoding',
       'state',
       'publishedAt',
