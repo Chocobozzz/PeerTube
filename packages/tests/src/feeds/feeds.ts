@@ -211,20 +211,22 @@ describe('Test syndication feeds', () => {
         const enclosure = xmlDoc.rss.channel.item.enclosure
         expect(enclosure).to.exist
         expectStartWith(enclosure['@_url'], `${serverHLSOnly.url}/static/web-videos/`)
-        expect(enclosure['@_url']).to.contain('.m4a')
+        expect(enclosure['@_url']).to.contain('.mp4')
         expect(enclosure['@_type']).to.equal('audio/x-m4a')
 
         const res = await makeRawRequest({ url: enclosure['@_url'], expectedStatus: HttpStatusCode.OK_200 })
-        expect(res.headers['content-type']).to.equal('audio/mp4')
+        expect(res.headers['content-type']).to.equal('video/mp4')
         expect(res.headers['content-disposition']).to.not.exist
 
         const alternateEnclosures = xmlDoc.rss.channel.item['podcast:alternateEnclosure']
         expect(alternateEnclosures).to.be.an('array')
 
+        expect(alternateEnclosures.length).to.equal(7) // Web video audio + HLS (144p, 240p, 360p, 480p, 720p) + m3u8 master playlist
+
         const audioEnclosure = alternateEnclosures.find(e => e['@_type'] === 'audio/x-m4a')
         expect(audioEnclosure).to.exist
         expect(audioEnclosure['@_default']).to.equal(true)
-        expect(audioEnclosure['podcast:source']['@_uri']).to.equal(enclosure['@_url'])
+        expect(audioEnclosure['podcast:source'][0]['@_uri']).to.equal(enclosure['@_url'])
 
         const videoEnclosure = alternateEnclosures.find(e => e['@_type'] === 'video/mp4')
         expect(videoEnclosure).to.exist
@@ -489,9 +491,9 @@ describe('Test syndication feeds', () => {
         const jsonObj = JSON.parse(json)
         expect(jsonObj.items.length).to.be.equal(1)
         expect(jsonObj.items[0].attachments).to.exist
-        expect(jsonObj.items[0].attachments.length).to.be.eq(12)
+        expect(jsonObj.items[0].attachments.length).to.be.eq(7)
 
-        for (let i = 0; i < 12; i++) {
+        for (let i = 0; i < 7; i++) {
           expect(jsonObj.items[0].attachments[i].mime_type).to.be.eq('application/x-bittorrent')
           expect(jsonObj.items[0].attachments[i].size_in_bytes).to.be.greaterThan(0)
           expect(jsonObj.items[0].attachments[i].url).to.exist

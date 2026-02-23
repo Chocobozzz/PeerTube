@@ -88,7 +88,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.transcoding.alwaysTranscodeOriginalResolution).to.be.true
   expect(data.transcoding.fps.max).to.equal(60)
   expect(data.transcoding.webVideos.enabled).to.be.true
-  expect(data.transcoding.alwaysTranscodePodcastOptimizedAudio).to.be.true
+  expect(data.transcoding.alwaysTranscodePodcastOptimizedAudio).to.be.false
   expect(data.transcoding.hls.enabled).to.be.true
   expect(data.transcoding.hls.splitAudioAndVideo).to.be.false
   expect(data.transcoding.originalFile.keep).to.be.false
