@@ -169,6 +169,7 @@ export interface CustomConfig {
     resolutions: ConfigResolutions
 
     alwaysTranscodeOriginalResolution: boolean
+    alwaysTranscodePodcastOptimizedAudio: boolean
 
     fps: {
       max: number

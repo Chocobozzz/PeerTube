@@ -86,6 +86,9 @@ describe('Test transcription in peertube-runner program', function () {
       })
     })
 
+    describe('With custom web video transcoding configuration', function () {
+
+
     describe('On object storage', function () {
       if (areMockObjectStorageTestsDisabled()) return
 
@@ -160,6 +163,7 @@ describe('Test transcription in peertube-runner program', function () {
         await checkLanguage(servers, uuid, null)
       })
     })
+
 
     describe('Check cleanup', function () {
       it('Should have an empty cache directory', async function () {

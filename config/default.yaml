@@ -657,6 +657,11 @@ transcoding:
   # Transcode and keep original resolution, even if it's above your maximum enabled resolution
   always_transcode_original_resolution: true
 
+  # If web_videos transcoding is not enabled, some podcast applications may not be able to correctly play the HLS audio file
+  # Enabling this option ensures that PeerTube always produces an audio file in a format compatible with podcasts
+  # even if web_videos transcoding or audio resolution are disabled
+  always_transcode_podcast_optimized_audio: true
+
   fps:
     # Cap transcoded video FPS
     # Max resolution file still keeps the original FPS

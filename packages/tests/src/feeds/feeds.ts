@@ -108,7 +108,16 @@ describe('Test syndication feeds', () => {
       await servers[0].comments.createThread({ videoId: id, text: 'comment on password protected video' })
     }
 
-    await serverHLSOnly.videos.upload({ attributes: { name: 'hls only video', nsfw: true } })
+    {
+      await serverHLSOnly.config.updateExistingConfig({
+        newConfig: {
+          transcoding: {
+            alwaysTranscodePodcastOptimizedAudio: true
+          }
+        }
+      })
+      await serverHLSOnly.videos.upload({ attributes: { name: 'hls only video', nsfw: true } })
+    }
 
     await waitJobs([ ...servers, serverHLSOnly ])
 
@@ -201,7 +210,7 @@ describe('Test syndication feeds', () => {
 
         const enclosure = xmlDoc.rss.channel.item.enclosure
         expect(enclosure).to.exist
-        expectStartWith(enclosure['@_url'], `${serverHLSOnly.url}/download/videos/generate/`)
+        expectStartWith(enclosure['@_url'], `${serverHLSOnly.url}/static/web-videos/`)
         expect(enclosure['@_url']).to.contain('.m4a')
         expect(enclosure['@_type']).to.equal('audio/x-m4a')
 
@@ -216,6 +225,11 @@ describe('Test syndication feeds', () => {
         expect(audioEnclosure).to.exist
         expect(audioEnclosure['@_default']).to.equal(true)
         expect(audioEnclosure['podcast:source']['@_uri']).to.equal(enclosure['@_url'])
+
+        const videoEnclosure = alternateEnclosures.find(e => e['@_type'] === 'video/mp4')
+        expect(videoEnclosure).to.exist
+        expect(videoEnclosure['@_default']).to.equal(false)
+        expectStartWith(videoEnclosure['podcast:source']['@_uri'], `${serverHLSOnly.url}/download/videos/generate/`)
 
         const hlsEnclosure = alternateEnclosures.find(e => e['@_type'] === 'application/x-mpegURL')
         expect(hlsEnclosure).to.exist
@@ -475,9 +489,9 @@ describe('Test syndication feeds', () => {
         const jsonObj = JSON.parse(json)
         expect(jsonObj.items.length).to.be.equal(1)
         expect(jsonObj.items[0].attachments).to.exist
-        expect(jsonObj.items[0].attachments.length).to.be.eq(6)
+        expect(jsonObj.items[0].attachments.length).to.be.eq(12)
 
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < 12; i++) {
           expect(jsonObj.items[0].attachments[i].mime_type).to.be.eq('application/x-bittorrent')
           expect(jsonObj.items[0].attachments[i].size_in_bytes).to.be.greaterThan(0)
           expect(jsonObj.items[0].attachments[i].url).to.exist

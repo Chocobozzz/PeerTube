@@ -643,6 +643,9 @@ const CONFIG = {
     get ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION () {
       return config.get<boolean>('transcoding.always_transcode_original_resolution')
     },
+    get ALWAYS_TRANSCODE_PODCAST_OPTIMIZED_AUDIO () {
+      return config.get<boolean>('transcoding.always_transcode_podcast_optimized_audio')
+    },
     RESOLUTIONS: {
       get '0p' () {
         return config.get<boolean>('transcoding.resolutions.0p')
