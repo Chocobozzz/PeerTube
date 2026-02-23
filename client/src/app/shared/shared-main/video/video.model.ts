@@ -155,6 +155,8 @@ export class Video implements VideoServerModel {
       ? hash.liveSchedules.map(schedule => ({ startAt: new Date(schedule.startAt.toString()) }))
       : null
 
+    // Required for search index backward compatibility, as `thumbnails` was introduced in peertube 8.1
+    this.thumbnailUrl = hash.thumbnailUrl
     this.thumbnails = hash.thumbnails
 
     this.duration = hash.duration

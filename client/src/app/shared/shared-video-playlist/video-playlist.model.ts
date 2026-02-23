@@ -74,6 +74,8 @@ export class VideoPlaylist implements ServerVideoPlaylist {
 
     this.type = hash.type
 
+    // Required for search index backward compatibility, as `thumbnails` was introduced in peertube 8.1
+    this.thumbnailUrl = hash.thumbnailUrl
     this.thumbnails = hash.thumbnails
 
     this.createdAt = new Date(hash.createdAt)
@@ -98,6 +100,10 @@ export class VideoPlaylist implements ServerVideoPlaylist {
 
   getThumbnailUrl (width: number) {
     const defaultUrl = getAPIUrl() + '/client/assets/images/default-playlist.jpg'
+
+    if (!this.thumbnails) {
+      return this.thumbnailUrl || defaultUrl
+    }
 
     return findAppropriateThumbnailFileUrl(this.thumbnails, width, '16:9') || defaultUrl
   }

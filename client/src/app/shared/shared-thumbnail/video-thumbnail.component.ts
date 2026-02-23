@@ -21,6 +21,7 @@ export type VideoThumbnailInput = Pick<
   | 'userHistory'
   | 'originallyPublishedAt'
   | 'liveSchedules'
+  | 'thumbnailUrl'
 >
 
 @Component({
@@ -101,6 +102,9 @@ export class VideoThumbnailComponent implements OnChanges {
   getImageUrl () {
     const video = this.video()
     if (!video) return ''
+
+    // From search index, handle instances that do not have `thumbnails` introduced in peertube 8.1
+    if (!video.thumbnails) return video.thumbnailUrl
 
     const computedStyle = window.getComputedStyle(this.el.nativeElement)
 
