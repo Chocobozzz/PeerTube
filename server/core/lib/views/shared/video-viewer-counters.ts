@@ -3,6 +3,7 @@ import { exists } from '@server/helpers/custom-validators/misc.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { VIEW_LIFETIME } from '@server/initializers/constants.js'
 import { sendView } from '@server/lib/activitypub/send/send-view.js'
+import { canVideoBeFederated } from '@server/lib/activitypub/videos/federate.js'
 import { PeerTubeSocket } from '@server/lib/peertube-socket.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { VideoModel } from '@server/models/video/video.js'
@@ -23,7 +24,6 @@ type Viewer = {
 }
 
 export class VideoViewerCounters {
-
   // expires is new Date().getTime()
   private readonly viewersPerVideo = new Map<number, Viewer[]>()
   private readonly idToViewer = new Map<string, Viewer>()
@@ -90,7 +90,8 @@ export class VideoViewerCounters {
     const { video, viewerExpires, viewerId, viewerResultCounter } = options
 
     logger.debug(
-      'Adding remote viewer to remote video %s.', video.uuid,
+      'Adding remote viewer to remote video %s.',
+      video.uuid,
       { viewerId, viewerResultCounter, viewerExpires, ...lTags(video.uuid) }
     )
 
@@ -199,19 +200,19 @@ export class VideoViewerCounters {
         if (newViewers.length === 0) this.viewersPerVideo.delete(videoId)
         else this.viewersPerVideo.set(videoId, newViewers)
 
-        const video = await VideoModel.loadImmutableAttributes(videoId)
+        const video = await VideoModel.loadWithBlacklist(videoId)
 
         if (video) {
           this.notifyClients(video)
 
           // Let total viewers expire on remote instances if there are no more viewers
-          if (video.remote === false && newViewers.length !== 0) {
+          if (newViewers.length !== 0 && canVideoBeFederated(video, false)) {
             await this.federateTotalViewers(video)
           }
         }
       }
     } catch (err) {
-      logger.error('Error in video clean viewers scheduler.', { err, ...lTags() })
+      logger.error('Error in video viewer counters scheduler.', { err, ...lTags() })
     }
 
     this.processingViewerCounters = false
