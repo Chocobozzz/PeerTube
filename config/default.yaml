@@ -218,10 +218,10 @@ object_storage:
   streaming_playlists:
     # Bucket name created on your object storage provider
     # PeerTube will access it via {bucket_name}.example.com
-    bucket_name: 'streaming-playlists'
+    bucket_name: 'peertube'
 
     # Allows setting all buckets to the same value but with a different prefix
-    prefix: '' # Example: 'streaming-playlists:'
+    prefix: 'streaming-playlists/'
 
     # Base url for object URL generation, scheme and host will be replaced by this URL
     # Useful when you want to use a CDN/external proxy
@@ -234,25 +234,25 @@ object_storage:
     store_live_streams: false
 
   web_videos:
-    bucket_name: 'web-videos'
-    prefix: ''
+    bucket_name: 'peertube'
+    prefix: 'web-videos/'
     base_url: ''
 
   user_exports:
-    bucket_name: 'user-exports'
-    prefix: ''
+    bucket_name: 'peertube'
+    prefix: 'user-exports/'
     base_url: ''
 
   # Same settings but for original video files
   original_video_files:
-    bucket_name: 'original-video-files'
-    prefix: ''
+    bucket_name: 'peertube'
+    prefix: 'original-video-files/'
     base_url: ''
 
   # Video captions
   captions:
-    bucket_name: 'captions'
-    prefix: ''
+    bucket_name: 'peertube'
+    prefix: 'captions/'
     base_url: ''
 
 log:
