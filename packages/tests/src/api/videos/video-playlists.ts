@@ -1123,42 +1123,45 @@ describe('Test video playlists', function () {
         43000,
         servers[0].store.videos[4].id
       ]
-      const obj = await commands[0].videosExist({ videoIds })
 
-      {
-        const elem = obj[servers[0].store.videos[0].id]
-        expect(elem).to.have.lengthOf(1)
-        expect(elem[0].playlistElementId).to.exist
-        expect(elem[0].playlistDisplayName).to.equal(playlistServer1DisplayName)
-        expect(elem[0].playlistShortUUID).to.equal(uuidToShort(playlistServer1UUID))
-        expect(elem[0].playlistId).to.equal(playlistServer1Id)
-        expect(elem[0].startTimestamp).to.equal(15)
-        expect(elem[0].stopTimestamp).to.equal(28)
+      for (const token of [ editorToken, servers[0].accessToken ]) {
+        const obj = await commands[0].videosExist({ videoIds, token })
+
+        {
+          const elem = obj[servers[0].store.videos[0].id]
+          expect(elem).to.have.lengthOf(1)
+          expect(elem[0].playlistElementId).to.exist
+          expect(elem[0].playlistDisplayName).to.equal(playlistServer1DisplayName)
+          expect(elem[0].playlistShortUUID).to.equal(uuidToShort(playlistServer1UUID))
+          expect(elem[0].playlistId).to.equal(playlistServer1Id)
+          expect(elem[0].startTimestamp).to.equal(15)
+          expect(elem[0].stopTimestamp).to.equal(28)
+        }
+
+        {
+          const elem = obj[servers[0].store.videos[3].id]
+          expect(elem).to.have.lengthOf(1)
+          expect(elem[0].playlistElementId).to.equal(playlistElementServer1Video4)
+          expect(elem[0].playlistDisplayName).to.equal(playlistServer1DisplayName)
+          expect(elem[0].playlistShortUUID).to.equal(uuidToShort(playlistServer1UUID))
+          expect(elem[0].playlistId).to.equal(playlistServer1Id)
+          expect(elem[0].startTimestamp).to.equal(1)
+          expect(elem[0].stopTimestamp).to.equal(35)
+        }
+
+        {
+          const elem = obj[servers[0].store.videos[4].id]
+          expect(elem).to.have.lengthOf(1)
+          expect(elem[0].playlistId).to.equal(playlistServer1Id)
+          expect(elem[0].playlistDisplayName).to.equal(playlistServer1DisplayName)
+          expect(elem[0].playlistShortUUID).to.equal(uuidToShort(playlistServer1UUID))
+          expect(elem[0].startTimestamp).to.equal(45)
+          expect(elem[0].stopTimestamp).to.equal(null)
+        }
+
+        expect(obj[42000]).to.have.lengthOf(0)
+        expect(obj[43000]).to.have.lengthOf(0)
       }
-
-      {
-        const elem = obj[servers[0].store.videos[3].id]
-        expect(elem).to.have.lengthOf(1)
-        expect(elem[0].playlistElementId).to.equal(playlistElementServer1Video4)
-        expect(elem[0].playlistDisplayName).to.equal(playlistServer1DisplayName)
-        expect(elem[0].playlistShortUUID).to.equal(uuidToShort(playlistServer1UUID))
-        expect(elem[0].playlistId).to.equal(playlistServer1Id)
-        expect(elem[0].startTimestamp).to.equal(1)
-        expect(elem[0].stopTimestamp).to.equal(35)
-      }
-
-      {
-        const elem = obj[servers[0].store.videos[4].id]
-        expect(elem).to.have.lengthOf(1)
-        expect(elem[0].playlistId).to.equal(playlistServer1Id)
-        expect(elem[0].playlistDisplayName).to.equal(playlistServer1DisplayName)
-        expect(elem[0].playlistShortUUID).to.equal(uuidToShort(playlistServer1UUID))
-        expect(elem[0].startTimestamp).to.equal(45)
-        expect(elem[0].stopTimestamp).to.equal(null)
-      }
-
-      expect(obj[42000]).to.have.lengthOf(0)
-      expect(obj[43000]).to.have.lengthOf(0)
     })
 
     it('Should automatically update updatedAt field of playlists', async function () {
