@@ -22,3 +22,11 @@ export function getRtcConfig (stunServers: string[]) {
     iceServers: shuffle(stunServers.map(s => ({ urls: s }))).slice(0, 2)
   }
 }
+
+export function isInIframe () {
+  try {
+    return window.self !== window.top
+  } catch {
+    return true
+  }
+}

@@ -552,6 +552,10 @@ $chapter-marker-size: 9px;
       @include update-icon("./svg/theme-lucide/open-fullscreen-lucide.svg", var(--icon-size));
     }
 
+    .vjs-popout-control {
+      @include update-icon("./svg/theme-lucide/picture-in-picture.svg", var(--icon-size));
+    }
+
     .vjs-caption-toggle-control:not(.enabled) {
       @include inject-icon("./svg/theme-lucide/cc-disabled-lucide.svg", var(--icon-size));
     }

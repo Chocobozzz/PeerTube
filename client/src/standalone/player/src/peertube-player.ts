@@ -56,6 +56,7 @@ import {
   VideojsPlayerOptions,
   VideoJSPluginOptions
 } from './types'
+import { isInIframe } from './shared/common'
 
 const CaptionsButton = videojs.getComponent('CaptionsButton') as any
 // Change Captions to Subtitles/CC
@@ -268,7 +269,7 @@ export class PeerTubePlayer {
         saveAverageBandwidth(Math.floor(data.bandwidthEstimate))
       })
 
-      if (this.isInIframe()) {
+      if (isInIframe()) {
         // Disable custom and native context menus in embeds.
         this.player.on('contextmenu', (event: Event) => {
           event.preventDefault()
@@ -595,13 +596,5 @@ export class PeerTubePlayer {
     }
 
     return { content }
-  }
-
-  private isInIframe () {
-    try {
-      return window.self !== window.top
-    } catch {
-      return true
-    }
   }
 }
