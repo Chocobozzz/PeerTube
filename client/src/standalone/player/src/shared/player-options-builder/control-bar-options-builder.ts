@@ -46,9 +46,9 @@ export class ControlBarOptionsBuilder {
 
       ...this.getPeerTubeLinkButton(),
 
-      ...this.getPopoutButton(),
-
       ...this.getTheaterButton(),
+
+      ...this.getPopoutButton(),
 
       fullscreenToggle: {}
     }
