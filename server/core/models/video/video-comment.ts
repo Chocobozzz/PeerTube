@@ -132,6 +132,9 @@ export enum ScopeNames {
       fields: [
         { name: 'createdAt', order: 'DESC' }
       ]
+    },
+    {
+      fields: [ 'inReplyToCommentId' ]
     }
   ]
 })
