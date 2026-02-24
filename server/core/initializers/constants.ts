@@ -1461,6 +1461,7 @@ function buildVideoMimetypeExt () {
 
       Object.assign(data, {
         'video/x-matroska': '.mkv',
+        'video/matroska': '.mkv',
 
         // Developed by Apple
         'video/quicktime': [ '.mov', '.qt', '.mqv' ], // often used as output format by editing software
