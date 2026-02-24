@@ -2229,7 +2229,6 @@ paths:
         - Videos
         - My User
       parameters:
-        - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
