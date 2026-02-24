@@ -206,7 +206,7 @@ export class VideoViewerCounters {
           this.notifyClients(video)
 
           // Let total viewers expire on remote instances if there are no more viewers
-          if (newViewers.length !== 0 && canVideoBeFederated(video, false)) {
+          if (newViewers.length !== 0 && video.isLocal() && canVideoBeFederated(video, false)) {
             await this.federateTotalViewers(video)
           }
         }
