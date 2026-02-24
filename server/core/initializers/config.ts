@@ -13,13 +13,13 @@ import { buildPath, root } from '@peertube/peertube-node-utils'
 import { TranscriptionEngineName, WhisperBuiltinModelName } from '@peertube/peertube-transcription'
 import { decacheModule } from '@server/helpers/decache.js'
 import bytes from 'bytes'
-import { IConfig } from 'config'
+import { type Config } from 'config'
 import { createRequire } from 'module'
 import { dirname, join } from 'path'
 import { parseBytes, parseDurationToMs } from '../helpers/core-utils.js'
 
 const require = createRequire(import.meta.url)
-let config: IConfig = require('config')
+let config: Config = require('config')
 
 const configChangedHandlers: Function[] = []
 
@@ -1215,7 +1215,7 @@ function getLocalConfigFilePath () {
   return join(localConfigDir, filename + '.json')
 }
 
-function getConfigModule () {
+function getConfigModule (): Config {
   return config
 }
 
