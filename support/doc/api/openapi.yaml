@@ -1077,7 +1077,7 @@ paths:
         '204':
           description: successful operation
 
-  '/api/v1/config/instance-logo/:logoType/pick':
+  '/api/v1/config/instance-logo/{logoType}/pick':
     post:
       summary: Update instance logo
       security:
@@ -1112,7 +1112,7 @@ paths:
               logofile:
                 contentType: image/png, image/jpeg
 
-  '/api/v1/config/instance-logo/:logoType':
+  '/api/v1/config/instance-logo/{logoType}':
     delete:
       summary: Delete instance logo
       security:
