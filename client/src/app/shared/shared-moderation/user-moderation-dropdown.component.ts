@@ -278,11 +278,11 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
   }
 
   private isMyUser (user: User) {
-    return user && this.authService.getUser().id === user.id
+    return this.authService.getUser().id === user?.id
   }
 
   private isMyAccount (account: AccountMutedStatus) {
-    return account && this.authService.getUser().account.id === account.id
+    return this.authService.getUser().account.id === account?.id
   }
 
   private async buildActions () {

@@ -9,8 +9,7 @@
   "private": false,
   "devDependencies": {
     "application-config": "^3.0.0",
-    "cli-table3": "^0.6.0",
+    "cli-table3": "^0.6.5",
     "netrc-parser": "^3.1.6"
-  },
-  "dependencies": {}
+  }
 }

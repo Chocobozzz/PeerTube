@@ -9,10 +9,10 @@
     "@iarna/toml": "^2.2.5",
     "@types/follow-redirects": "1.14.4",
     "cli-table3": "^0.6.5",
-    "env-paths": "^3.0.0",
-    "follow-redirects": "^1.15.5",
+    "env-paths": "^4.0.0",
+    "follow-redirects": "^1.15.11",
     "net-ipc": "^2.2.2",
-    "pino": "^9.6.0",
-    "pino-pretty": "^13.0.0"
+    "pino": "^10.3.1",
+    "pino-pretty": "^13.1.3"
   }
 }
