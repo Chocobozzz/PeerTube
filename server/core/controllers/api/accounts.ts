@@ -194,7 +194,7 @@ async function listAccountPlaylists (req: express.Request, res: express.Response
 
   // Allow users to see their private/unlisted video playlists
   let listMyPlaylists = false
-  if (res.locals.oauth && res.locals.oauth.token.User.Account.id === res.locals.account.id) {
+  if (res.locals.oauth?.token.User.Account.id === res.locals.account.id) {
     listMyPlaylists = true
   }
 
