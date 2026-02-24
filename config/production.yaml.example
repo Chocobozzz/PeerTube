@@ -1237,7 +1237,7 @@ defaults:
       enabled: true
 
   player:
-    theme: 'galaxy' # 'galaxy' | 'lucide'
+    theme: 'lucide' # 'galaxy' | 'lucide'
 
     # By default, playback starts automatically when opening a video
     auto_play: true
