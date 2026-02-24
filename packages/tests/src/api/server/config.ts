@@ -155,7 +155,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.defaults.publish.privacy).to.equal(VideoPrivacy.PUBLIC)
   expect(data.defaults.p2p.embed.enabled).to.be.true
   expect(data.defaults.p2p.webapp.enabled).to.be.true
-  expect(data.defaults.player.theme).to.equal('galaxy')
+  expect(data.defaults.player.theme).to.equal('lucide')
   expect(data.defaults.player.autoPlay).to.be.true
 
   expect(data.email.body.signature).to.equal('')
@@ -459,7 +459,7 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       },
       player: {
         autoPlay: false,
-        theme: 'lucide'
+        theme: 'galaxy'
       }
     },
     email: {

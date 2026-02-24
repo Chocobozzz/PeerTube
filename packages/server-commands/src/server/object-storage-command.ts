@@ -45,24 +45,29 @@ export class ObjectStorageCommand {
 
         streaming_playlists: {
           bucket_name: this.getMockStreamingPlaylistsBucketName(),
+          prefix: '',
 
           store_live_streams: storeLiveStreams
         },
 
         web_videos: {
-          bucket_name: this.getMockWebVideosBucketName()
+          bucket_name: this.getMockWebVideosBucketName(),
+          prefix: ''
         },
 
         user_exports: {
-          bucket_name: this.getMockUserExportBucketName()
+          bucket_name: this.getMockUserExportBucketName(),
+          prefix: ''
         },
 
         original_video_files: {
-          bucket_name: this.getMockOriginalFileBucketName()
+          bucket_name: this.getMockOriginalFileBucketName(),
+          prefix: ''
         },
 
         captions: {
-          bucket_name: this.getMockCaptionsBucketName()
+          bucket_name: this.getMockCaptionsBucketName(),
+          prefix: ''
         },
 
         proxy: {
