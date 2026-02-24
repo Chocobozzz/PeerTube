@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core'
+import { generateNaiveHash } from '@peertube/peertube-core-utils'
 import { VideoState, VideoStateType } from '@peertube/peertube-models'
 
-type WarnResult = {
+type WarnMessageResult = {
   title: string
+
   manageMain: string
   manageSecondary: string
+
   watchMain: string
   watchSecondary: string
 
@@ -15,22 +18,40 @@ type WarnResult = {
   }
 }
 
+type ErrMessageResult = {
+  title: string
+  main: string
+}
+
 @Injectable()
 export class VideoStateMessageService {
-  private cacheKey: string
-  private cacheResult: WarnResult
+  private warnCacheKey: string
+  private warnCacheResult: WarnMessageResult
 
-  buildWarn (videoId: number, state: VideoStateType): WarnResult {
+  private errCacheKey: string
+  private errCacheResult: ErrMessageResult
+
+  buildWarn (options: {
+    videoId: number
+    state: VideoStateType
+  }): WarnMessageResult {
+    const { videoId, state } = options
+
     const key = `${videoId}-${state}`
-    if (this.cacheKey === key && this.cacheResult) return this.cacheResult
+    if (this.warnCacheKey === key && this.warnCacheResult) return this.warnCacheResult
 
-    this.cacheResult = this._buildWarn(videoId, state)
-    this.cacheKey = key
+    this.warnCacheResult = this._buildWarn(options)
+    this.warnCacheKey = key
 
-    return this.cacheResult
+    return this.warnCacheResult
   }
 
-  private _buildWarn (videoId: number, state: VideoStateType): WarnResult {
+  private _buildWarn (options: {
+    videoId: number
+    state: VideoStateType
+  }): WarnMessageResult {
+    const { videoId, state } = options
+
     const manageProcessed = $localize`Your video file is being processed.`
     const manageFeaturesDisabled = $localize`This can take a while and some features may not be available until it is complete.`
     const manageContactAdmin = $localize`Contact your administrator to fix it.`
@@ -144,6 +165,38 @@ export class VideoStateMessageService {
 
       default:
         return state satisfies never
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+
+  buildErr (options: {
+    videoId: number
+    blacklisted: boolean
+    blacklistedReason: string
+  }): ErrMessageResult {
+    const { videoId, blacklisted, blacklistedReason } = options
+
+    const key = `${videoId}-${blacklisted}-${generateNaiveHash(blacklistedReason)}`
+    if (this.errCacheKey === key && this.errCacheResult) return this.errCacheResult
+
+    this.errCacheResult = this._buildErr(options)
+    this.errCacheKey = key
+
+    return this.errCacheResult
+  }
+
+  private _buildErr (options: {
+    blacklisted: boolean
+    blacklistedReason: string
+  }): ErrMessageResult {
+    const { blacklisted, blacklistedReason } = options
+
+    if (!blacklisted) return undefined
+
+    return {
+      title: $localize`Blocked video`,
+      main: blacklistedReason || $localize`Your video has been blocked by the platform`
     }
   }
 }

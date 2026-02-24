@@ -4,10 +4,12 @@ import {
   RunnerJobVODHLSTranscodingPayload,
   RunnerJobVODHLSTranscodingPrivatePayload,
   VideoFileStreamType,
+  VideoResolution,
   VODHLSTranscodingSuccess
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { logger } from '@server/helpers/logger.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { onTranscodingEnded } from '@server/lib/transcoding/ended-transcoding.js'
 import { onHLSVideoFileTranscoding } from '@server/lib/transcoding/hls-transcoding.js'
 import { removeAllWebVideoFiles } from '@server/lib/video-file.js'
@@ -109,9 +111,16 @@ export class VODHLSTranscodingJobHandler
     })
 
     if (!missingStream && privatePayload.deleteWebVideoFiles === true) {
-      logger.info('Removing web video files of %s now we have a HLS version of it.', video.uuid, this.lTags(video.uuid))
+      const resolutionExceptions = CONFIG.TRANSCODING.ALWAYS_TRANSCODE_PODCAST_OPTIMIZED_AUDIO
+        ? [ VideoResolution.H_NOVIDEO ]
+        : []
 
-      await removeAllWebVideoFiles(video)
+      logger.info('Removing web video files of %s now we have a HLS version of it.', video.uuid, {
+        resolutionExceptions,
+        ...this.lTags(video.uuid)
+      })
+
+      await removeAllWebVideoFiles(video, { resolutionExceptions })
     }
 
     await onTranscodingEnded({

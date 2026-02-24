@@ -1,7 +1,7 @@
 import { Account } from '../../actors/account.model.js'
 import { VideoChannel } from '../../videos/channel/video-channel.model.js'
 import { Thumbnail } from '../../videos/index.js'
-import { VideoConstant } from '../../videos/video-constant.model.js'
+import { ConstantLabel } from '../../common/constant-label.model.js'
 import { AbusePredefinedReasonsString } from './abuse-reason.model.js'
 import { AbuseStateType } from './abuse-state.model.js'
 
@@ -55,7 +55,7 @@ export interface AdminAbuse {
   reporterAccount: Account
   flaggedAccount: Account
 
-  state: VideoConstant<AbuseStateType>
+  state: ConstantLabel<AbuseStateType>
   moderationComment?: string
 
   video?: AdminVideoAbuse

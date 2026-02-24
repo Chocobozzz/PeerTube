@@ -77,7 +77,7 @@ async function getOrCreateAPActor (
 }
 
 async function getOrCreateAPOwner (actorObject: ActivityPubActor, actorId: string) {
-  const accountAttributedTo = await findOwner(actorId, actorObject.attributedTo, 'Person')
+  const accountAttributedTo = await findOwner({ rootUrl: actorId, attributedTo: actorObject.attributedTo, type: 'Person' })
   if (!accountAttributedTo) {
     throw new Error(`Cannot find account attributed to video channel ${actorId}`)
   }
@@ -94,8 +94,19 @@ async function getOrCreateAPOwner (actorObject: ActivityPubActor, actorId: strin
   }
 }
 
-async function findOwner (rootUrl: string, attributedTo: APObjectId[] | APObjectId, type: 'Person' | 'Group') {
-  for (const actorToCheck of arrayify(attributedTo)) {
+async function findOwner (options: {
+  rootUrl: string
+  attributedTo: APObjectId[] | APObjectId
+  audience?: string
+  type: 'Person' | 'Group'
+}) {
+  const { rootUrl, attributedTo, audience, type } = options
+
+  const actorsToCheck = arrayify(attributedTo)
+  // Priority to audience
+  if (audience) actorsToCheck.unshift(audience) // fep-1b12
+
+  for (const actorToCheck of actorsToCheck) {
     const actorObject = await fetchAPObjectIfNeeded<ActivityPubActor>(getAPId(actorToCheck))
 
     if (!actorObject) {

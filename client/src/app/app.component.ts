@@ -225,14 +225,26 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       filter(() => this.screenService.isInSmallView() || this.screenService.isInTouchScreen())
     ).subscribe(() => this.menu.setMenuCollapsed(true)) // User clicked on a link in the menu, change the page
 
+    // ---------------------------------------------------------------------------
     // Handle lazy loaded module
+    // ---------------------------------------------------------------------------
     eventsObs.pipe(
       filter((e: Event): e is RouteConfigLoadStart => e instanceof RouteConfigLoadStart)
-    ).subscribe(() => this.loadingBar.useRef().start())
+    ).subscribe(e => {
+      if (e.route.data?.preloaded) return // This route is preloaded, don't display the loading indicator
+
+      this.loadingBar.useRef('router-' + e.route.path).start()
+    })
 
     eventsObs.pipe(
       filter((e: Event): e is RouteConfigLoadEnd => e instanceof RouteConfigLoadEnd)
-    ).subscribe(() => this.loadingBar.useRef().complete())
+    ).subscribe(e => {
+      if (e.route.data?.preloaded) return // This route is preloaded, don't display the loading indicator
+
+      this.loadingBar.useRef('router-' + e.route.path).complete()
+    })
+
+    // ---------------------------------------------------------------------------
 
     // We need this to prevent circular dependency between the router and the custom reuse strategy
     eventsObs.pipe(

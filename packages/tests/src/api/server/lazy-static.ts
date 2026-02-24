@@ -54,7 +54,7 @@ describe('Test lazy static endpoints', function () {
 
   async function checkCachedFiles (options: { populated: boolean }) {
     if (options.populated) {
-      expect(await servers[1].servers.countFiles(join('cache', 'thumbnails'))).to.equal(2)
+      expect(await servers[1].servers.countFiles(join('cache', 'thumbnails'))).to.equal(5)
       expect(await servers[1].servers.countFiles(join('cache', 'avatars'))).to.equal(2 * 4)
       expect(await servers[1].servers.countFiles(join('cache', 'storyboards'))).to.equal(1)
       expect(await servers[1].servers.countFiles(join('cache', 'video-captions'))).to.equal(1)

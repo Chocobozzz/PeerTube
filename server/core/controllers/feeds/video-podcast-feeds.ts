@@ -217,7 +217,7 @@ async function addVODPodcastItem (options: {
     .map(f => buildVODWebVideoFile(video, f))
     .sort(sortObjectComparator('bitrate', 'asc'))
 
-  const streamingPlaylistFiles = buildVODStreamingPlaylists(video)
+  const streamingPlaylistFiles = buildVODStreamingPlaylistsIfMissingWebVideoFile(video)
 
   // Order matters here, the first media URI will be the "default"
   // So web videos are default if enabled
@@ -273,7 +273,7 @@ function buildVODWebVideoFile (video: MVideo, videoFile: VideoFile) {
   }
 }
 
-function buildVODStreamingPlaylists (video: MVideoFullLight) {
+function buildVODStreamingPlaylistsIfMissingWebVideoFile (video: MVideoFullLight) {
   const hls = video.getHLSPlaylist()
   if (!hls) return []
 
@@ -281,6 +281,7 @@ function buildVODStreamingPlaylists (video: MVideoFullLight) {
 
   return [
     ...hls.VideoFiles
+      .filter(videoFile => !video.VideoFiles.some(f => f.fps === videoFile.fps && f.resolution === videoFile.resolution))
       .sort(sortObjectComparator('resolution', 'asc'))
       .map(videoFile => {
         const files = [ videoFile ]

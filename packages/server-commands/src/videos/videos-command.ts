@@ -432,7 +432,7 @@ export class VideosCommand extends AbstractCommand {
     completedExpectedStatus?: HttpStatusCodeType
     videoChannelId?: number
   } = {}) {
-    const { mode = 'legacy', videoChannelId, waitTorrentGeneration = true } = options
+    const { mode = 'legacy', videoChannelId, completedExpectedStatus = HttpStatusCode.OK_200, waitTorrentGeneration = true } = options
     let defaultChannelId = 1
 
     if (!videoChannelId) {
@@ -474,7 +474,7 @@ export class VideosCommand extends AbstractCommand {
 
     // Wait torrent generation
     const expectedStatus = this.buildExpectedStatus({ ...options, defaultExpectedStatus: HttpStatusCode.OK_200 })
-    if (expectedStatus === HttpStatusCode.OK_200 && waitTorrentGeneration) {
+    if (expectedStatus === HttpStatusCode.OK_200 && completedExpectedStatus === HttpStatusCode.OK_200 && waitTorrentGeneration) {
       let video: VideoDetails
 
       do {

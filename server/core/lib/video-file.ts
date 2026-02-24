@@ -114,16 +114,22 @@ export async function removeHLSFile (video: MVideoWithAllFiles, fileToDeleteId: 
 
 // ---------------------------------------------------------------------------
 
-export async function removeAllWebVideoFiles (video: MVideoWithAllFiles) {
+export async function removeAllWebVideoFiles (video: MVideoWithAllFiles, options: {
+  resolutionExceptions?: number[]
+} = {}) {
+  const { resolutionExceptions = [] } = options
+
   const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
   try {
     for (const file of video.VideoFiles) {
+      if (resolutionExceptions.includes(file.resolution)) continue
+
       await video.removeWebVideoFile(file)
       await file.destroy()
-    }
 
-    video.VideoFiles = []
+      video.VideoFiles = video.VideoFiles.filter(f => f.id !== file.id)
+    }
   } finally {
     videoFileMutexReleaser()
   }

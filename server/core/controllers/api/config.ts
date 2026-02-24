@@ -429,6 +429,7 @@ function customConfig (): CustomConfig {
         '2160p': CONFIG.TRANSCODING.RESOLUTIONS['2160p']
       },
       alwaysTranscodeOriginalResolution: CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION,
+      alwaysTranscodePodcastOptimizedAudio: CONFIG.TRANSCODING.ALWAYS_TRANSCODE_PODCAST_OPTIMIZED_AUDIO,
       fps: {
         max: CONFIG.TRANSCODING.FPS.MAX
       },

@@ -31,7 +31,7 @@ async function processVideo (id: number) {
 
   console.log('Processing video %s.', video.name)
 
-  const bestImage = video.getBestThumbnail()
+  const bestImage = video.getBestThumbnail('16:9')
 
   if (!await pathExists(bestImage.getFSPath())) {
     throw new Error(`Thumbnail ${bestImage.getFSPath()} does not exist on disk`)
@@ -44,6 +44,7 @@ async function processVideo (id: number) {
       filename: generateImageFilename(),
       height: size.height,
       width: size.width,
+      aspectRatio: size.aspectRatio,
       fileUrl: null,
       automaticallyGenerated: bestImage.automaticallyGenerated,
       cached: false

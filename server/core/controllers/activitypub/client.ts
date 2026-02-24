@@ -535,7 +535,7 @@ async function videoPlaylistController (req: express.Request, res: express.Respo
   playlist.OwnerAccount = await AccountModel.load(playlist.ownerAccountId)
 
   const json = await playlist.toActivityPubObject(req.query.page, null)
-  const audience = getPlaylistAudience(playlist.OwnerAccount.Actor, playlist.privacy)
+  const audience = getPlaylistAudience({ account: playlist.OwnerAccount, channel: playlist.VideoChannel, privacy: playlist.privacy })
   const object = audiencify(json, audience)
 
   return activityPubResponse(activityPubContextify(object, 'Playlist', getContextFilter()), res)

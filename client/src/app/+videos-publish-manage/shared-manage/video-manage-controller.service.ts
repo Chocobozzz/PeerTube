@@ -10,12 +10,14 @@ import { VideoPasswordService } from '@app/shared/shared-main/video/video-passwo
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
 import { PlayerSettingsService } from '@app/shared/shared-video/player-settings.service'
+import { VideoEmbedPrivacyService } from '@app/shared/shared-video/video-embed-privacy.service'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import {
+  ConstantLabel,
   HTMLServerConfig,
   HttpStatusCode,
+  LiveVideo,
   UserVideoQuota,
-  VideoConstant,
   VideoPassword,
   VideoPrivacy,
   VideoPrivacyType,
@@ -49,11 +51,12 @@ export class VideoManageController implements OnDestroy {
   private videoStudio = inject(VideoStudioService)
   private peertubeRouter = inject(PeerTubeRouterService)
   private playerSettingsService = inject(PlayerSettingsService)
+  private videoEmbedPrivacyService = inject(VideoEmbedPrivacyService)
 
   private videoEdit: VideoEdit
   private userChannels: SelectChannelItem[]
   private userQuota: UserVideoQuota
-  private privacies: VideoConstant<VideoPrivacyType>[]
+  private privacies: ConstantLabel<VideoPrivacyType>[]
 
   private manageType: VideoManageType
   private serverConfig: HTMLServerConfig
@@ -138,7 +141,7 @@ export class VideoManageController implements OnDestroy {
     videoEdit: VideoEdit
     userChannels: SelectChannelItem[]
     userQuota: UserVideoQuota
-    privacies: VideoConstant<VideoPrivacyType>[]
+    privacies: ConstantLabel<VideoPrivacyType>[]
   }) {
     this.videoEdit = store.videoEdit
     this.userChannels = store.userChannels
@@ -224,7 +227,7 @@ export class VideoManageController implements OnDestroy {
 
     this.cancelUploadIfNeeded()
 
-    this.loadingBar.useRef().start()
+    this.loadingBar.useRef('update-video').start()
     this.isUpdatingVideo = true
 
     const videoAttributes = this.videoEdit.getVideoAttributes()
@@ -265,6 +268,13 @@ export class VideoManageController implements OnDestroy {
         return this.liveVideoService.updateLive(videoAttributes.uuid, this.videoEdit.toLiveUpdate())
       }),
       switchMap(() => {
+        if (!this.videoEdit.hasEmbedPrivacyChanges()) return of(true)
+
+        debugLogger('Update embed privacy')
+
+        return this.videoEmbedPrivacyService.updatePrivacy({ videoId: videoAttributes.uuid, settings: this.videoEdit.getEmbedPrivacy() })
+      }),
+      switchMap(() => {
         debugLogger('Update video')
 
         return this.videoService.updateVideo(videoAttributes.uuid, this.videoEdit.toVideoUpdate())
@@ -276,38 +286,42 @@ export class VideoManageController implements OnDestroy {
 
         return this.videoStudio.editVideo(videoAttributes.uuid, this.videoEdit.getStudioTasks())
           .pipe(tap(() => this.videoEdit.resetStudio()))
-      }),
+      })
+    ).pipe( // https://stackoverflow.com/questions/69260751/angular-observable-pipe-limit
       switchMap(() => {
-        return forkJoin([
-          this.videoService.getVideo({ videoId: videoAttributes.uuid }),
+        return forkJoin({
+          video: this.videoService.getVideo({ videoId: videoAttributes.uuid }),
 
-          this.videoEdit.getVideoAttributes().privacy === VideoPrivacy.PASSWORD_PROTECTED
+          videoPasswords: this.videoEdit.getVideoAttributes().privacy === VideoPrivacy.PASSWORD_PROTECTED
             ? this.videoPasswordService.getVideoPasswords({ videoUUID: videoAttributes.uuid })
             : of([] as VideoPassword[]),
 
-          isLive
+          live: isLive
             ? this.liveVideoService.getVideoLive(videoAttributes.uuid)
-            : of(undefined),
+            : of(undefined as LiveVideo),
 
-          !isLive
+          chaptersRes: !isLive
             ? this.videoChapterService.getChapters({ videoId: videoAttributes.uuid })
             : of(undefined),
 
-          !isLive
+          captionsRes: !isLive
             ? this.videoCaptionService.listCaptions(videoAttributes.uuid)
             : of(undefined),
 
-          this.playerSettingsService.getVideoSettings({ videoId: videoAttributes.uuid, raw: true })
-        ])
+          playerSettings: this.playerSettingsService.getVideoSettings({ videoId: videoAttributes.uuid, raw: true }),
+
+          embedPrivacy: this.videoEmbedPrivacyService.getPrivacy({ videoId: videoAttributes.uuid })
+        })
       }),
-      switchMap(([ video, videoPasswords, live, chaptersRes, captionsRes, playerSettings ]) => {
+      switchMap(({ video, videoPasswords, live, chaptersRes, captionsRes, playerSettings, embedPrivacy }) => {
         return this.videoEdit.loadFromAPI({
           video,
           videoPasswords: videoPasswords.map(p => p.password),
           live,
           chapters: chaptersRes?.chapters,
           captions: captionsRes?.data,
-          playerSettings
+          playerSettings,
+          embedPrivacy
         })
       }),
       first(), // To complete
@@ -315,7 +329,7 @@ export class VideoManageController implements OnDestroy {
         debugLogger('Update complete')
 
         this.videoEdit.onSave()
-        this.loadingBar.useRef().complete()
+        this.loadingBar.useRef('update-video').complete()
         this.isUpdatingVideo = false
         this.updatedSubject.next()
         this.embedVersion++
@@ -359,7 +373,7 @@ export class VideoManageController implements OnDestroy {
     this.videoUploadedSubject = new Subject<void>()
 
     this.pendingUpdateObs = undefined
-    this.loadingBar.useRef().complete()
+    this.loadingBar.useRef('update-video').complete()
 
     this.resetUploadState()
   }

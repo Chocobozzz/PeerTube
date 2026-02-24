@@ -183,7 +183,7 @@ describe('Test JSONLD HTML tags', function () {
 
         expect(jsonld.contentRating).to.equal('Mature')
 
-        expect(jsonld.caption).to.deep.equal([
+        expect(jsonld.caption).to.have.deep.members([
           {
             '@type': 'MediaObject',
             'contentUrl': captions.find(c => c.language.id === 'en').fileUrl,

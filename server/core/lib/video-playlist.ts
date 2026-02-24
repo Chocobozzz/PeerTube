@@ -35,7 +35,7 @@ export async function createWatchLaterPlaylist (account: MAccount, t: Transactio
 export async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylistThumbnail, video: MVideoThumbnail) {
   logger.info('Generating default thumbnail to playlist %s.', videoPlaylist.url)
 
-  const videoThumbnail = video.getBestThumbnail()
+  const videoThumbnail = video.getBestThumbnail('16:9')
   if (!videoThumbnail) {
     logger.info('Cannot generate thumbnail for playlist %s because video %s does not have any.', videoPlaylist.url, video.url)
     return

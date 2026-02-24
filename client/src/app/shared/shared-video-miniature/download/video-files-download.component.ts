@@ -64,19 +64,8 @@ export class VideoFilesDownloadComponent implements OnInit {
 
   ngOnInit () {
     if (this.hasFiles()) {
-      this.onResolutionIdChange(this.getVideoFiles()[0].resolution.id)
+      this.onResolutionIdChange(this.video().getFilesForDownload()[0].resolution.id)
     }
-  }
-
-  getVideoFiles () {
-    const video = this.video()
-    if (!video) return []
-    if (video.files.length !== 0) return video.files
-
-    const hls = video.getHlsPlaylist()
-    if (hls) return hls.files
-
-    return []
   }
 
   // ---------------------------------------------------------------------------
@@ -117,13 +106,13 @@ export class VideoFilesDownloadComponent implements OnInit {
   // ---------------------------------------------------------------------------
 
   hasFiles () {
-    return this.getVideoFiles().length !== 0
+    return this.video().getFilesForDownload().length !== 0
   }
 
   getVideoFile () {
     if (this.activeResolutionId === 'original') return undefined
 
-    const file = this.getVideoFiles()
+    const file = this.video().getFilesForDownload()
       .find(f => f.resolution.id === this.activeResolutionId)
 
     if (!file) {

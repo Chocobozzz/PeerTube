@@ -357,6 +357,7 @@ x-tagGroups:
       - Live Videos
       - Channels Sync
       - Video Passwords
+      - Video Embed Privacy
   - name: Search
     tags:
       - Search
@@ -3192,6 +3193,9 @@ paths:
                 contentType: image/jpeg
               previewfile:
                 contentType: image/jpeg
+              tags:
+                style: form
+                explode: true
     get:
       summary: Get a video
       operationId: getVideo
@@ -4578,6 +4582,106 @@ paths:
           description: successful operation
         '404':
           description: video not found
+
+  /api/v1/videos/{id}/embed-privacy:
+    get:
+      summary: Get video embed privacy
+      description: "**PeerTube >= 8.1**"
+      operationId: getVideoEmbedPrivacy
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - Video Embed Privacy
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  policy:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/VideoEmbedPrivacy'
+                      label:
+                        type: string
+                        example: Allowlist
+                  domains:
+                    type: array
+                    items:
+                      type: string
+                      example: 'example.com'
+        '400':
+          description: invalid request
+    put:
+      summary: Update video embed privacy
+      description: "**PeerTube >= 8.1**"
+      operationId: updateVideoEmbedPrivacy
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - Video Embed Privacy
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                policy:
+                  $ref: '#/components/schemas/VideoEmbedPrivacy'
+                domains:
+                  type: array
+                  items:
+                    type: string
+                    example: 'example.com'
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: invalid request
+
+  /api/v1/videos/{id}/embed-privacy/allowed:
+    get:
+      summary: Check if embed is allowed
+      description: "**PeerTube >= 8.1** Check if video embed is allowed on a specific domain according to the video embed privacy settings"
+      operationId: isVideoEmbedOnDomainAllowed
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - Video Embed Privacy
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+        - name: domain
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The domain to check if embed is allowed
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  domainAllowed:
+                    type: boolean
+                  userBypassAllowed:
+                    description: Whether the user can bypass embed restrictions for this video, either because they are the owner/editor of the video or because they have a moderator or admin role
+                    nullable: true
+                    type: boolean
+        '400':
+          description: invalid request
 
   /api/v1/videos/{id}/passwords:
     get:
@@ -8908,6 +9012,9 @@ components:
           type: integer
         height:
           type: integer
+        aspectRatio:
+          type: string
+          example: '16:9'
     VideoFile:
       properties:
         id:
@@ -9106,6 +9213,7 @@ components:
           deprecated: true
           type: string
         thumbnails:
+          description: "**PeerTube >= 8.1** Array of thumbnails for the video"
           type: array
           items:
             $ref: '#/components/schemas/Thumbnail'
@@ -9443,6 +9551,7 @@ components:
               deprecated: true
               type: string
             thumbnails:
+              description: "**PeerTube >= 8.1** Array of thumbnails for the video"
               type: array
               items:
                 $ref: '#/components/schemas/Thumbnail'
@@ -9531,6 +9640,7 @@ components:
           deprecated: true
           type: string
         thumbnails:
+          description: "**PeerTube >= 8.1** Array of thumbnails for the video"
           type: array
           items:
             $ref: '#/components/schemas/Thumbnail'
@@ -12577,6 +12687,18 @@ components:
       items:
         $ref: "#/components/schemas/VideoPassword/properties/password"
       uniqueItems: true
+
+    VideoEmbedPrivacy:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+      description: >
+        The video embed privacy level:
+          - `1` All allowed: anyone can embed the video
+          - `2` Allowlist: only the domains in the allowlist can embed the video
+          - `3` Remote restrictions: the remote instance has restrictions on where the video can be embedded
 
     PlayerTheme:
       type: string

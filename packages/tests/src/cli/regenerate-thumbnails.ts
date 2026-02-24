@@ -138,7 +138,7 @@ describe('Test regenerate thumbnails CLI', function () {
   })
 
   it('Should have the appropriate thumbnails count', async function () {
-    expect(await servers[0].servers.countFiles('thumbnails')).to.equal(4)
+    expect(await servers[0].servers.countFiles('thumbnails')).to.equal(10)
     expect(await servers[0].servers.countFiles('cache/thumbnails')).to.equal(0)
   })
 
@@ -149,8 +149,8 @@ describe('Test regenerate thumbnails CLI', function () {
       await makeRawRequest({ url: thumbnail.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
     }
 
-    expect(await servers[0].servers.countFiles('thumbnails')).to.equal(4)
-    expect(await servers[0].servers.countFiles('cache/thumbnails')).to.equal(2)
+    expect(await servers[0].servers.countFiles('thumbnails')).to.equal(10)
+    expect(await servers[0].servers.countFiles('cache/thumbnails')).to.equal(5)
   })
 
   after(async function () {

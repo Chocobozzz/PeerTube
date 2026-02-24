@@ -10,6 +10,7 @@ import {
   ActivityVideoUrlObject,
   NSFWFlag,
   stringToNSFWFlag,
+  VideoEmbedPrivacyPolicy,
   VideoFileFormatFlag,
   VideoFileStream,
   VideoObject,
@@ -304,6 +305,10 @@ export function getVideoAttributesFromObject (videoChannel: MChannelId, videoObj
     inputFileUpdatedAt: videoObject.uploadDate
       ? new Date(videoObject.uploadDate)
       : null,
+
+    embedPrivacyPolicy: videoObject.embedUrl
+      ? VideoEmbedPrivacyPolicy.ALL_ALLOWED
+      : VideoEmbedPrivacyPolicy.REMOTE_RESTRICTIONS,
 
     updatedAt: new Date(videoObject.updated),
     views: videoObject.views,

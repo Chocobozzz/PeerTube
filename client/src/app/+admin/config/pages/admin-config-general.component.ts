@@ -24,7 +24,7 @@ import { USER_VIDEO_QUOTA_DAILY_VALIDATOR, USER_VIDEO_QUOTA_VALIDATOR } from '@a
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
-import { BroadcastMessageLevel, CustomConfig, VideoCommentPolicyType, VideoConstant, VideoPrivacyType } from '@peertube/peertube-models'
+import { BroadcastMessageLevel, CustomConfig, VideoCommentPolicyType, ConstantLabel, VideoPrivacyType } from '@peertube/peertube-models'
 import { Subscription } from 'rxjs'
 import { pairwise } from 'rxjs/operators'
 import { SelectOptionsItem } from 'src/types/select-options-item.model'
@@ -264,9 +264,9 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
     this.customConfig = this.route.parent.snapshot.data['customConfig']
 
     const data = this.route.snapshot.data as {
-      licences: VideoConstant<number>[]
-      privacies: VideoConstant<VideoPrivacyType>[]
-      commentPolicies: VideoConstant<VideoCommentPolicyType>[]
+      licences: ConstantLabel<number>[]
+      privacies: ConstantLabel<VideoPrivacyType>[]
+      commentPolicies: ConstantLabel<VideoCommentPolicyType>[]
     }
 
     this.privacyOptions = this.videoService.explainedPrivacyLabels(data.privacies).videoPrivacies

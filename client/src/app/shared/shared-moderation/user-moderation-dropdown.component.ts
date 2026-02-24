@@ -355,7 +355,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
     const displayOptions = this.displayOptions()
 
     const hasManageRight = this.user() && displayOptions.instanceUser && authUser.hasRight(UserRight.MANAGE_USERS) &&
-      authUser.canManage(this.user())
+      authUser.canManageUser(this.user())
 
     const hasAccountBlocklistRight = this.account() && displayOptions.instanceAccount &&
       authUser.hasRight(UserRight.MANAGE_ACCOUNTS_BLOCKLIST)

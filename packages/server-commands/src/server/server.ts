@@ -43,6 +43,7 @@ import {
   ServicesCommand,
   StoryboardCommand,
   StreamingPlaylistsCommand,
+  VideoEmbedPrivacyCommand,
   VideoImportsCommand,
   VideoPasswordsCommand,
   VideoStatsCommand,
@@ -152,6 +153,7 @@ export class PeerTubeServer {
   videoStudio?: VideoStudioCommand
   videos?: VideosCommand
   videoStats?: VideoStatsCommand
+  videoEmbedPrivacy?: VideoEmbedPrivacyCommand
   views?: ViewsCommand
   twoFactor?: TwoFactorCommand
   videoToken?: VideoTokenCommand
@@ -462,6 +464,7 @@ export class PeerTubeServer {
     this.videos = new VideosCommand(this)
     this.videoStudio = new VideoStudioCommand(this)
     this.videoStats = new VideoStatsCommand(this)
+    this.videoEmbedPrivacy = new VideoEmbedPrivacyCommand(this)
     this.views = new ViewsCommand(this)
     this.twoFactor = new TwoFactorCommand(this)
     this.videoToken = new VideoTokenCommand(this)

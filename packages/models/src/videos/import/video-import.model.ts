@@ -1,4 +1,4 @@
-import { VideoConstant } from '../video-constant.model.js'
+import { ConstantLabel } from '../../common/constant-label.model.js'
 import { Video } from '../video.model.js'
 import { VideoImportStateType } from './video-import-state.enum.js'
 
@@ -14,7 +14,7 @@ export interface VideoImport {
   createdAt: string
   updatedAt: string
   originallyPublishedAt?: string
-  state: VideoConstant<VideoImportStateType>
+  state: ConstantLabel<VideoImportStateType>
   error?: string
 
   video?: Video & { tags: string[] }

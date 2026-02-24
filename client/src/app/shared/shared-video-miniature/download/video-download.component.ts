@@ -98,7 +98,8 @@ export class VideoDownloadComponent {
     if (!this.video.isLocal || !this.authService.isLoggedIn()) return of(undefined)
 
     const user = this.authService.getUser()
-    if (!this.video.isOwnerOrHasSeeAllVideosRight(user)) return of(undefined)
+    // User that can update the video can also get the original video file
+    if (!this.video.isUpdatableBy(user)) return of(undefined)
 
     return this.videoService.getSource(this.video.id)
       .pipe(catchError(err => {

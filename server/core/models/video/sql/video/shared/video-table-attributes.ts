@@ -1,3 +1,5 @@
+import { thumbnailAPIAttributes } from '@server/models/video/thumbnail.js'
+
 /**
  * Class to build video attributes/join names we want to fetch from the database
  */
@@ -48,13 +50,11 @@ export class VideoTableAttributes {
   }
 
   getThumbnailAttributes () {
-    let attributeKeys = [ 'id', 'filename', 'height', 'width', 'fileUrl' ]
+    // We need the id to efficiently build the model
+    let attributeKeys = [ 'id', ...thumbnailAPIAttributes ] as string[]
 
     if (this.mode === 'get') {
       attributeKeys = attributeKeys.concat([
-        'height',
-        'width',
-        'fileUrl',
         'cached',
         'automaticallyGenerated',
         'videoId',
@@ -299,6 +299,7 @@ export class VideoTableAttributes {
       'url',
       'commentsPolicy',
       'downloadEnabled',
+      'embedPrivacyPolicy',
       'waitTranscoding',
       'state',
       'publishedAt',

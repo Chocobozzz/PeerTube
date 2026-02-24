@@ -265,7 +265,7 @@ describe('Test a single server', function () {
       videosListBase = data
 
       for (const video of data) {
-        await checkThumbnails({ video, server, thumbnails: [ video.name.replace(' name', '') + '.jpg' ], strict: false })
+        await checkThumbnails({ video, server, thumbnails: [ video.name.replace(' name', '') + '.jpg' ] })
       }
     })
 

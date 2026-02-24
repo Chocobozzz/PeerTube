@@ -5,7 +5,7 @@ import { RouterLink } from '@angular/router'
 import { AuthService, RedirectService } from '@app/core'
 import { ServerService } from '@app/core/server/server.service'
 import { NgbCollapse } from '@ng-bootstrap/ng-bootstrap'
-import { UserRight, VideoConstant } from '@peertube/peertube-models'
+import { UserRight, ConstantLabel } from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import debug from 'debug'
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
@@ -70,8 +70,8 @@ export class VideoFiltersHeaderComponent implements OnInit {
   instanceName: string
   totalFollowing: number
 
-  private videoCategories: VideoConstant<number>[] = []
-  private videoLanguages: VideoConstant<string>[] = []
+  private videoCategories: ConstantLabel<number>[] = []
+  private videoLanguages: ConstantLabel<string>[] = []
 
   ngOnInit () {
     this.instanceName = this.server.getHTMLConfig().instance.name

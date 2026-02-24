@@ -110,8 +110,8 @@ class MuxingSession extends EventEmitter implements MuxingSession {
 
   private aborted = false
 
-  private readonly isAbleToUploadVideoWithCache = memoizee((userId: number) => {
-    return isUserQuotaValid({ userId, uploadSize: 1000 })
+  private readonly isAbleToUploadVideoWithCache = memoizee((channelUserId: number) => {
+    return isUserQuotaValid({ channelUserId, uploadSize: 1000 })
   }, { maxAge: MEMOIZE_TTL.LIVE_ABLE_TO_UPLOAD })
 
   private readonly hasClientSocketInBadHealthWithCache = memoizee((sessionId: string) => {

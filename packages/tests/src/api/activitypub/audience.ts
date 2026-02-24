@@ -39,6 +39,7 @@ describe('Test ActivityPub audience', function () {
 
     expect(body.to).to.have.members([ publicUrl, servers[0].url + '/video-channels/root_channel' ])
     expect(body.cc).to.have.members([ servers[0].url + '/accounts/root/followers' ])
+    expect(body.audience).to.equal(servers[0].url + '/video-channels/root_channel')
   })
 
   it('Should have a correct audience for a thread', async function () {
@@ -52,6 +53,7 @@ describe('Test ActivityPub audience', function () {
       servers[0].url + '/accounts/user/followers',
       servers[0].url + '/accounts/root'
     ])
+    expect(body.audience).to.equal(servers[0].url + '/video-channels/root_channel')
   })
 
   it('Should have the correct audience for a reply', async function () {
@@ -69,6 +71,7 @@ describe('Test ActivityPub audience', function () {
       servers[0].url + '/accounts/root',
       servers[1].url + '/accounts/root/followers'
     ])
+    expect(body.audience).to.equal(servers[0].url + '/video-channels/root_channel')
   })
 
   after(async function () {

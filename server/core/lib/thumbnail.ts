@@ -1,5 +1,5 @@
 import { sortBy } from '@peertube/peertube-core-utils'
-import { VideoFileStream } from '@peertube/peertube-models'
+import { ThumbnailAspectRatio, VideoFileStream } from '@peertube/peertube-models'
 import { generateThumbnailFromVideo } from '@server/helpers/ffmpeg/ffmpeg-image.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import Bluebird from 'bluebird'
@@ -18,7 +18,7 @@ import { downloadImageFromWorker } from './worker/parent-process.js'
 
 const lTags = loggerTagsFactory('thumbnail')
 
-type ImageSize = { height: number, width: number }
+type ImageSize = { height: number, width: number, aspectRatio: ThumbnailAspectRatio }
 
 export function createLocalPlaylistThumbnailFromImage (options: {
   inputPath: string
@@ -29,7 +29,7 @@ export function createLocalPlaylistThumbnailFromImage (options: {
   const { inputPath, playlist, automaticallyGenerated, keepOriginal = false } = options
   const size = CONFIG.THUMBNAILS.SIZES[0] // Minimum size
 
-  const { filename, outputPath, height, width } = buildMetadataFromPlaylist({
+  const { filename, outputPath, height, width, aspectRatio } = buildMetadataFromPlaylist({
     playlist,
     size,
     extension: getImageExtension(inputPath)
@@ -44,6 +44,7 @@ export function createLocalPlaylistThumbnailFromImage (options: {
     filename,
     height,
     width,
+    aspectRatio,
     automaticallyGenerated,
     cached: false
   })
@@ -57,7 +58,11 @@ export function updateRemotePlaylistThumbnailFromUrl (options: {
   const size = CONFIG.THUMBNAILS.SIZES[0] // Minimum size
   const extension = getImageExtension(fileUrl)
 
-  const { filename: generatedFilename, height, width, existingThumbnail } = buildMetadataFromPlaylist({ playlist, size, extension })
+  const { filename: generatedFilename, height, width, aspectRatio, existingThumbnail } = buildMetadataFromPlaylist({
+    playlist,
+    size,
+    extension
+  })
 
   // Only change thumbnail filename if the file changed
   if (hasThumbnailUrlChanged({ existingThumbnail, fileUrl, extension })) {
@@ -74,6 +79,7 @@ export function updateRemotePlaylistThumbnailFromUrl (options: {
     thumbnail.filename = generatedFilename
     thumbnail.height = height
     thumbnail.width = width
+    thumbnail.aspectRatio = aspectRatio
     thumbnail.fileUrl = fileUrl
     thumbnail.cached = false
 
@@ -82,13 +88,14 @@ export function updateRemotePlaylistThumbnailFromUrl (options: {
 
   existingThumbnail.height = height
   existingThumbnail.width = width
+  existingThumbnail.aspectRatio = aspectRatio
 
   return existingThumbnail
 }
 
 // ---------------------------------------------------------------------------
 
-export function createLocalVideoThumbnailsFromImage (options: {
+export async function createLocalVideoThumbnailsFromImage (options: {
   inputPath: string
   video: MVideoThumbnail
   automaticallyGenerated: boolean
@@ -96,11 +103,22 @@ export function createLocalVideoThumbnailsFromImage (options: {
 }) {
   const { inputPath, automaticallyGenerated, video, keepOriginal = false } = options
 
-  return Promise.all(
+  const thumbnails = await Promise.all(
     CONFIG.THUMBNAILS.SIZES.map(size =>
-      _createLocalVideoThumbnailFromImage({ inputPath, video, automaticallyGenerated, size, keepOriginal })
+      // We'll delete origin file ourselves after all thumbnails are generated, to avoid deleting it before generating all thumbnails
+      _createLocalVideoThumbnailFromImage({ inputPath, video, automaticallyGenerated, size, keepOriginal: true })
     )
   )
+
+  if (!keepOriginal) {
+    try {
+      await remove(inputPath)
+    } catch (err) {
+      logger.error('Cannot remove original image after thumbnail generation.', { err, ...lTags() })
+    }
+  }
+
+  return thumbnails
 }
 
 function _createLocalVideoThumbnailFromImage (options: {
@@ -108,11 +126,11 @@ function _createLocalVideoThumbnailFromImage (options: {
   video: MVideoThumbnail
   automaticallyGenerated: boolean
   size: ImageSize
-  keepOriginal?: boolean // default to false
+  keepOriginal: boolean
 }) {
-  const { inputPath, video, automaticallyGenerated, size, keepOriginal = false } = options
+  const { inputPath, video, automaticallyGenerated, size, keepOriginal } = options
 
-  const { filename, outputPath, height, width } = buildMetadataFromVideo({
+  const { filename, outputPath, height, width, aspectRatio } = buildMetadataFromVideo({
     video,
     size,
     extension: getImageExtension(inputPath)
@@ -127,6 +145,7 @@ function _createLocalVideoThumbnailFromImage (options: {
     filename,
     height,
     width,
+    aspectRatio,
     automaticallyGenerated,
     cached: false
   })
@@ -148,8 +167,8 @@ export function createLocalVideoThumbnailsFromVideo (options: {
     let biggestImagePath: string
 
     // Get bigger images to generate first
-    return Bluebird.mapSeries(sortBy(metadata, 'height').reverse(), metadata => {
-      const { filename, basePath, height, width, outputPath } = metadata
+    return Bluebird.mapSeries(sortBy(metadata, 'width').reverse(), metadata => {
+      const { filename, basePath, height, width, aspectRatio, outputPath } = metadata
 
       let thumbnailCreator: () => Promise<any>
 
@@ -180,13 +199,16 @@ export function createLocalVideoThumbnailsFromVideo (options: {
           })
       }
 
-      if (!biggestImagePath) biggestImagePath = outputPath
+      if (!biggestImagePath && aspectRatio === '16:9') {
+        biggestImagePath = outputPath
+      }
 
       return createThumbnailFromFunction({
         thumbnailCreator,
         filename,
         height,
         width,
+        aspectRatio,
         automaticallyGenerated: true,
         cached: false
       })
@@ -215,13 +237,13 @@ function _createLocalVideoThumbnailFromUrl (options: {
   const { downloadUrl, video, size } = options
 
   const extension = getImageExtension(downloadUrl)
-  const { filename, basePath, height, width } = buildMetadataFromVideo({ video, size, extension })
+  const { filename, basePath, height, width, aspectRatio } = buildMetadataFromVideo({ video, size, extension })
 
   const thumbnailCreator = () => {
     return downloadImageFromWorker({ url: downloadUrl, destDir: basePath, destName: filename, size: { width, height } })
   }
 
-  return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, cached: false })
+  return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, aspectRatio, cached: false })
 }
 
 // ---------------------------------------------------------------------------
@@ -234,7 +256,7 @@ export function updateRemoteVideoThumbnail (options: {
   const { fileUrl, video, size } = options
 
   const extension = getImageExtension(fileUrl)
-  const { filename: generatedFilename, height, width, existingThumbnail } = buildMetadataFromVideo({ video, size, extension })
+  const { filename: generatedFilename, height, width, aspectRatio, existingThumbnail } = buildMetadataFromVideo({ video, size, extension })
 
   if (hasThumbnailUrlChanged({ existingThumbnail, fileUrl, video, extension })) {
     if (existingThumbnail) {
@@ -249,6 +271,7 @@ export function updateRemoteVideoThumbnail (options: {
     thumbnail.filename = generatedFilename
     thumbnail.height = height
     thumbnail.width = width
+    thumbnail.aspectRatio = aspectRatio
     thumbnail.fileUrl = fileUrl
     thumbnail.cached = false
 
@@ -258,6 +281,7 @@ export function updateRemoteVideoThumbnail (options: {
   // Update sizes, that PeerTube did not federate in previous versions
   existingThumbnail.height = height
   existingThumbnail.width = width
+  existingThumbnail.aspectRatio = aspectRatio
 
   return existingThumbnail
 }
@@ -320,7 +344,8 @@ function buildMetadataFromPlaylist (options: {
     existingThumbnail: playlist.Thumbnail,
     outputPath: join(CONFIG.STORAGE.THUMBNAILS_DIR, filename),
     height: size.height,
-    width: size.width
+    width: size.width,
+    aspectRatio: size.aspectRatio
   }
 }
 
@@ -343,7 +368,8 @@ function buildMetadataFromVideo (options: {
     existingThumbnail,
     outputPath: join(CONFIG.STORAGE.THUMBNAILS_DIR, filename),
     height: size.height,
-    width: size.width
+    width: size.width,
+    aspectRatio: size.aspectRatio
   }
 }
 
@@ -352,6 +378,7 @@ async function createThumbnailFromFunction (parameters: {
   filename: string
   height: number
   width: number
+  aspectRatio: ThumbnailAspectRatio
   cached: boolean
   automaticallyGenerated?: boolean
   fileUrl?: string
@@ -361,6 +388,7 @@ async function createThumbnailFromFunction (parameters: {
     filename,
     width,
     height,
+    aspectRatio,
     cached,
     automaticallyGenerated = null,
     fileUrl = null
@@ -374,6 +402,7 @@ async function createThumbnailFromFunction (parameters: {
   thumbnail.fileUrl = fileUrl
   thumbnail.automaticallyGenerated = automaticallyGenerated
   thumbnail.cached = cached
+  thumbnail.aspectRatio = aspectRatio
 
   await thumbnailCreator()
 

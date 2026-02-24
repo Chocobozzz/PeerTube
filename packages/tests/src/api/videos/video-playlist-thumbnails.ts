@@ -96,7 +96,7 @@ describe('Playlist thumbnail', function () {
         displayName: 'playlist with thumbnail',
         privacy: VideoPlaylistPrivacy.PUBLIC,
         videoChannelId: servers[1].store.channel.id,
-        thumbnailfile: 'custom-thumbnail-850x480.jpg'
+        thumbnailfile: 'custom-thumbnail-input.jpg'
       }
     })
     playlistWithThumbnailId = created.id

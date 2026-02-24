@@ -198,7 +198,7 @@ async function checkUserQuotaOrThrow (video: MVideoFullLight, payload: VideoStud
   const filePathFinder = (i: number) => (payload.tasks[i] as VideoStudioTaskIntroPayload | VideoStudioTaskOutroPayload).options.file
 
   const additionalBytes = await approximateIntroOutroAdditionalSize(video, payload.tasks, filePathFinder)
-  if (await isUserQuotaValid({ userId: user.id, uploadSize: additionalBytes }) === false) {
+  if (await isUserQuotaValid({ channelUserId: user.id, uploadSize: additionalBytes }) === false) {
     throw new Error('Quota exceeded for this user to edit the video')
   }
 }
