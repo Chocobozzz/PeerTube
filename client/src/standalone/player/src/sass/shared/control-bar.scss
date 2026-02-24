@@ -689,6 +689,10 @@ $chapter-marker-size: 9px;
       display: none !important;
     }
   }
+
+  .vjs-popout-control {
+    display: none;
+  }
 }
 
 .video-js.vjs-peertube-skin.vjs-size-350 .vjs-control-bar {
@@ -697,10 +701,6 @@ $chapter-marker-size: 9px;
   .vjs-next-video,
   .vjs-previous-video {
     display: none !important;
-  }
-
-  .vjs-popout-control {
-    display: none;
   }
 
   .vjs-peertube-link {
