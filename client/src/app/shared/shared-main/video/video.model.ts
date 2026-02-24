@@ -281,6 +281,25 @@ export class Video implements VideoServerModel {
     )
   }
 
+  canBypassPassword (user: AuthUser) {
+    return this.privacy.id === VideoPrivacy.PASSWORD_PROTECTED &&
+      user &&
+      this.isLocal === true && (
+        user.isOwnerOfChannel(this.channel) ||
+        user.isEditorOfChannel(this.channel) ||
+        user.hasRight(UserRight.SEE_ALL_VIDEOS)
+      )
+  }
+
+  isLiveInfoAvailableBy (user: AuthUser) {
+    return this.isLive &&
+      user && this.isLocal === true && (
+        user.isOwnerOfChannel(this.channel) ||
+        user.isEditorOfChannel(this.channel) ||
+        user.hasRight(UserRight.GET_ANY_LIVE)
+      )
+  }
+
   // ---------------------------------------------------------------------------
 
   canRemoveOneFile (user: AuthUser) {
@@ -299,6 +318,10 @@ export class Video implements VideoServerModel {
   }
 
   // ---------------------------------------------------------------------------
+
+  canBeDuplicatedBy (user: AuthUser) {
+    return user && this.isLocal === false && user.hasRight(UserRight.MANAGE_VIDEOS_REDUNDANCIES)
+  }
 
   canRunTranscoding (user: AuthUser) {
     return this.isLocal &&
@@ -339,21 +362,5 @@ export class Video implements VideoServerModel {
 
   getAllVideoFiles () {
     return getAllFiles(this)
-  }
-
-  isLiveInfoAvailableBy (user: AuthUser) {
-    return this.isLive &&
-      user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.GET_ANY_LIVE))
-  }
-
-  canBeDuplicatedBy (user: AuthUser) {
-    return user && this.isLocal === false && user.hasRight(UserRight.MANAGE_VIDEOS_REDUNDANCIES)
-  }
-
-  canBypassPassword (user: AuthUser) {
-    return this.privacy.id === VideoPrivacy.PASSWORD_PROTECTED &&
-      user &&
-      this.isLocal === true &&
-      (this.account.name === user.username || user.hasRight(UserRight.SEE_ALL_VIDEOS))
   }
 }
