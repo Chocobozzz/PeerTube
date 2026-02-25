@@ -27,5 +27,5 @@ cd ../
 npm run i18n:create-custom-files
 
 # Generate server translations
-./node_modules/.bin/i18next-cli -c server/.i18next.config.ts
+./node_modules/.bin/i18next-cli -c server/.i18next.config.ts extract
 
