@@ -224,6 +224,7 @@ function updateInstanceImageFactory (imageType: ActorImageType_Type) {
 
     await updateServerActorImages(imageType)
 
+    getServerActor.clear()
     ClientHtml.invalidateCache()
     ModelCache.Instance.clearCache('server-account')
 
@@ -239,6 +240,7 @@ function deleteInstanceImageFactory (imageType: ActorImageType_Type) {
 
     await updateServerActorImages(imageType)
 
+    getServerActor.clear()
     ClientHtml.invalidateCache()
     ModelCache.Instance.clearCache('server-account')
 
@@ -267,6 +269,7 @@ async function updateInstanceLogo (req: express.Request, res: express.Response) 
     type: logoTypeToUploadImageEnum(req.params.logoType as LogoType)
   })
 
+  getServerActor.clear()
   ClientHtml.invalidateCache()
   ModelCache.Instance.clearCache('server-account')
 
@@ -279,6 +282,7 @@ async function deleteInstanceLogo (req: express.Request, res: express.Response) 
     type: logoTypeToUploadImageEnum(req.params.logoType as LogoType)
   })
 
+  getServerActor.clear()
   ClientHtml.invalidateCache()
   ModelCache.Instance.clearCache('server-account')
 

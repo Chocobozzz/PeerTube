@@ -92,7 +92,11 @@ export async function deleteUploadImages (options: {
         await toDelete.destroy({ transaction: t })
       }
 
-      actor.UploadImages = []
+      // Only remove the deleted images from the cached actor - do NOT clear the entire
+      // UploadImages array, as actor is the memoized getServerActor() return value.
+      // Clearing it would cause all logo previews to disappear on the admin config page.
+      const deletedIds = new Set(imagesToDelete.map(i => i.id))
+      actor.UploadImages = actor.UploadImages.filter(image => !deletedIds.has(image.id))
     })
   })
 }
