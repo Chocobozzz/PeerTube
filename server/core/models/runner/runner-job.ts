@@ -10,7 +10,7 @@ import {
 import { isArray, isUUIDValid } from '@server/helpers/custom-validators/misc.js'
 import { CONSTRAINTS_FIELDS, RUNNER_JOB_STATES } from '@server/initializers/constants.js'
 import { MRunnerJob, MRunnerJobRunner, MRunnerJobRunnerParent } from '@server/types/models/runners/index.js'
-import { Op, Transaction } from 'sequelize'
+import { literal, Op, Transaction } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -24,7 +24,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { SequelizeModel, getSort, searchAttribute } from '../shared/index.js'
+import { SequelizeModel, getSort, parseAggregateResult, searchAttribute } from '../shared/index.js'
 import { RunnerModel } from './runner.js'
 
 enum ScopeNames {
@@ -276,6 +276,24 @@ export class RunnerJobModel extends SequelizeModel<RunnerJobModel> {
       RunnerJobModel.scope([ ScopeNames.WITH_RUNNER ]).count(query),
       RunnerJobModel.scope([ ScopeNames.WITH_RUNNER, ScopeNames.WITH_PARENT ]).findAll<MRunnerJobRunnerParent>(query)
     ]).then(([ total, data ]) => ({ total, data }))
+  }
+
+  static getStats () {
+    return RunnerJobModel.findAll<MRunnerJob>({
+      attributes: [
+        'type',
+        'state',
+        [ literal('COUNT(*)'), 'count' ]
+      ],
+      group: [ 'type', 'state' ],
+      raw: true
+    }).then(rows => {
+      return (rows as any[]).map(row => ({
+        jobType: row.type as RunnerJobType,
+        state: row.state as RunnerJobStateType,
+        count: parseAggregateResult(row.count)
+      }))
+    })
   }
 
   static updateDependantJobsOf (runnerJob: MRunnerJob) {
