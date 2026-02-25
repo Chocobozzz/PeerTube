@@ -277,6 +277,7 @@ export class ConfigCommand extends AbstractCommand {
     with0p?: boolean
 
     alwaysTranscodeOriginalResolution?: boolean
+    alwaysTranscodePodcastOptimizedAudio?: boolean
 
     maxFPS?: number
   } = {}) {
@@ -287,6 +288,7 @@ export class ConfigCommand extends AbstractCommand {
       keepOriginal,
       splitAudioAndVideo,
       alwaysTranscodeOriginalResolution,
+      alwaysTranscodePodcastOptimizedAudio,
       maxFPS
     } = options
 
@@ -317,6 +319,7 @@ export class ConfigCommand extends AbstractCommand {
           resolutions,
 
           alwaysTranscodeOriginalResolution,
+          alwaysTranscodePodcastOptimizedAudio,
 
           webVideos: {
             enabled: webVideo

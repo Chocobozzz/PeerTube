@@ -248,7 +248,7 @@
     "eslint": "^9.39.3",
     "eslint-config-love": "^133.0.0",
     "fast-xml-parser": "^5.3.7",
-    "i18next-parser": "^9.4.0",
+    "i18next-cli": "^1.43.0",
     "jszip": "^3.10.1",
     "maildev": "^2.2.1",
     "mocha": "^11.7.5",

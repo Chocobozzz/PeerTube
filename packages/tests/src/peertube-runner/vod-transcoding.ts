@@ -431,6 +431,14 @@ describe('Test VOD transcoding in peertube-runner program', function () {
 
         expect(video.files.map(f => f.resolution.id)).to.have.members([ 0 ])
         expect(video.streamingPlaylists[0].files.map(f => f.resolution.id)).to.have.members([ 240, 720 ])
+
+        await servers[0].config.updateExistingConfig({
+          newConfig: {
+            transcoding: {
+              alwaysTranscodePodcastOptimizedAudio: false
+            }
+          }
+        })
       })
     })
   })
