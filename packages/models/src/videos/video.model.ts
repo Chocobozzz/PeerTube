@@ -1,10 +1,11 @@
 import { Account, AccountSummary } from '../actors/index.js'
 import { VideoChannel, VideoChannelSummary } from './channel/video-channel.model.js'
 import { VideoCommentPolicyType } from './comment/video-comment-policy.enum.js'
+import { VideoEmbedPrivacyPolicyType } from './embed-privacy/video-embed-privacy-policy.enum.js'
 import { VideoFile } from './file/index.js'
 import { LiveVideoScheduleEdit } from './live/live-video-schedule.model.js'
 import { Thumbnail } from './thumbnail/thumbnail.model.js'
-import { VideoConstant } from './video-constant.model.js'
+import { ConstantLabel } from '../common/constant-label.model.js'
 import { VideoPrivacyType } from './video-privacy.enum.js'
 import { VideoScheduleUpdate } from './video-schedule-update.model.js'
 import { VideoSource } from './video-source.model.js'
@@ -20,10 +21,10 @@ export interface Video extends Partial<VideoAdditionalAttributes> {
   updatedAt: Date | string
   publishedAt: Date | string
   originallyPublishedAt: Date | string
-  category: VideoConstant<number>
-  licence: VideoConstant<number>
-  language: VideoConstant<string>
-  privacy: VideoConstant<VideoPrivacyType>
+  category: ConstantLabel<number>
+  licence: ConstantLabel<number>
+  language: ConstantLabel<string>
+  privacy: ConstantLabel<VideoPrivacyType>
 
   // Deprecated in 5.0 in favour of truncatedDescription
   description: string
@@ -89,7 +90,7 @@ export interface Video extends Partial<VideoAdditionalAttributes> {
 // Not included by default, needs query params
 export interface VideoAdditionalAttributes {
   waitTranscoding: boolean
-  state: VideoConstant<VideoStateType>
+  state: ConstantLabel<VideoStateType>
   scheduledUpdate: VideoScheduleUpdate
 
   blacklisted: boolean
@@ -123,7 +124,7 @@ export interface VideoDetails extends Video {
 
   // Not optional in details (unlike in parent Video)
   waitTranscoding: boolean
-  state: VideoConstant<VideoStateType>
+  state: ConstantLabel<VideoStateType>
 
   trackerUrls: string[]
 
@@ -131,4 +132,6 @@ export interface VideoDetails extends Video {
   streamingPlaylists: VideoStreamingPlaylist[]
 
   inputFileUpdatedAt: string | Date
+
+  embedPrivacyPolicy: ConstantLabel<VideoEmbedPrivacyPolicyType>
 }

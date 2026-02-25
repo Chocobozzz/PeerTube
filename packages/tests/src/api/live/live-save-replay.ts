@@ -5,6 +5,7 @@ import {
   HttpStatusCode,
   HttpStatusCodeType,
   LiveVideoError,
+  VideoEmbedPrivacyPolicy,
   VideoPrivacy,
   VideoPrivacyType,
   VideoState,
@@ -61,6 +62,7 @@ describe('Save replay setting', function () {
         thumbnailfile: options.thumbnailfile
       }
     })
+
     return uuid
   }
 
@@ -152,7 +154,7 @@ describe('Save replay setting', function () {
     for (const server of servers) {
       const video = await server.videos.get({ id: videoId })
 
-      await _checkVideoThumbnails({ video, server, thumbnails, strict: true })
+      await _checkVideoThumbnails({ video, server, thumbnails })
     }
   }
 
@@ -293,6 +295,13 @@ describe('Save replay setting', function () {
 
       liveVideoUUID = await createLiveWrapper({ permanent: false, replay: true, replaySettings: { privacy: VideoPrivacy.UNLISTED } })
 
+      await servers[0].playerSettings.updateForVideo({ theme: 'lucide', videoId: liveVideoUUID })
+      await servers[0].videoEmbedPrivacy.update({
+        videoId: liveVideoUUID,
+        domains: [ 'example.com' ],
+        policy: VideoEmbedPrivacyPolicy.ALLOWLIST
+      })
+
       await waitJobs(servers)
 
       await checkVideosExist(liveVideoUUID, 0, HttpStatusCode.OK_200)
@@ -335,6 +344,13 @@ describe('Save replay setting', function () {
       await checkVideoState(liveVideoUUID, VideoState.PUBLISHED)
       await checkVideoPrivacy(liveVideoUUID, VideoPrivacy.UNLISTED)
       await checkVideoTags(liveVideoUUID, [ 'tag1', 'tag2' ])
+
+      const playerSettings = await servers[0].playerSettings.getForVideo({ videoId: liveVideoUUID })
+      expect(playerSettings.theme).to.equal('lucide')
+
+      const videoEmbedPrivacy = await servers[0].videoEmbedPrivacy.get({ videoId: liveVideoUUID })
+      expect(videoEmbedPrivacy.policy.id).to.equal(VideoEmbedPrivacyPolicy.ALLOWLIST)
+      expect(videoEmbedPrivacy.domains).to.deep.equal([ 'example.com' ])
     })
 
     it('Should find the replay live session', async function () {
@@ -365,7 +381,7 @@ describe('Save replay setting', function () {
         attributes: {
           name: 'video updated',
           privacy: VideoPrivacy.PUBLIC,
-          thumbnailfile: 'custom-thumbnail-850x480.jpg'
+          thumbnailfile: 'custom-thumbnail-input.jpg'
         }
       })
       await waitJobs(servers)
@@ -433,7 +449,14 @@ describe('Save replay setting', function () {
           permanent: true,
           replay: true,
           replaySettings: { privacy: VideoPrivacy.UNLISTED },
-          thumbnailfile: 'custom-thumbnail-850x480.jpg'
+          thumbnailfile: 'custom-thumbnail-input.jpg'
+        })
+
+        await servers[0].playerSettings.updateForVideo({ theme: 'lucide', videoId: liveVideoUUID })
+        await servers[0].videoEmbedPrivacy.update({
+          videoId: liveVideoUUID,
+          domains: [ 'example.com' ],
+          policy: VideoEmbedPrivacyPolicy.ALLOWLIST
         })
 
         await waitJobs(servers)
@@ -483,6 +506,13 @@ describe('Save replay setting', function () {
         await servers[1].videos.get({ id: lastReplayUUID, expectedStatus: HttpStatusCode.OK_200 })
 
         await checkVideoTags(lastReplayUUID, [ 'tag1', 'tag2' ])
+
+        const playerSettings = await servers[0].playerSettings.getForVideo({ videoId: lastReplayUUID })
+        expect(playerSettings.theme).to.equal('lucide')
+
+        const videoEmbedPrivacy = await servers[0].videoEmbedPrivacy.get({ videoId: lastReplayUUID })
+        expect(videoEmbedPrivacy.policy.id).to.equal(VideoEmbedPrivacyPolicy.ALLOWLIST)
+        expect(videoEmbedPrivacy.domains).to.deep.equal([ 'example.com' ])
       })
 
       it('Should have appropriate ended session and replay live session', async function () {
@@ -677,7 +707,7 @@ describe('Save replay setting', function () {
       it('Should update the live replay thumbnail', async function () {
         await servers[0].videos.update({
           id: lastReplayUUID,
-          attributes: { thumbnailfile: 'custom-thumbnail-850x480.jpg' }
+          attributes: { thumbnailfile: 'custom-thumbnail-input.jpg' }
         })
         await waitJobs(servers)
 

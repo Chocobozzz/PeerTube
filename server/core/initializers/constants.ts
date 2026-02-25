@@ -30,6 +30,8 @@ import {
   VideoChannelSyncStateType,
   VideoCommentPolicy,
   VideoCommentPolicyType,
+  VideoEmbedPrivacyPolicy,
+  VideoEmbedPrivacyPolicyType,
   VideoImportState,
   VideoImportStateType,
   VideoLicence,
@@ -58,7 +60,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 990
+export const LAST_MIGRATION_VERSION = 1000
 
 // ---------------------------------------------------------------------------
 
@@ -727,7 +729,11 @@ export const VIDEO_CHANNEL_ACTIVITY_ACTIONS: { [id in VideoChannelActivityAction
   [VideoChannelActivityAction.UPDATE_SOURCE_FILE]: 'Update source file',
   [VideoChannelActivityAction.UPDATE_ELEMENTS]: 'Update elements',
   [VideoChannelActivityAction.REMOVE_CHANNEL_OWNERSHIP]: 'Remove channel ownership',
-  [VideoChannelActivityAction.CREATE_CHANNEL_OWNERSHIP]: 'Create channel ownership'
+  [VideoChannelActivityAction.CREATE_CHANNEL_OWNERSHIP]: 'Create channel ownership',
+  [VideoChannelActivityAction.SEND_OWNERSHIP_REQUEST]: 'Send ownership request',
+  [VideoChannelActivityAction.ACCEPT_OWNERSHIP_REQUEST]: 'Accept ownership request',
+  [VideoChannelActivityAction.REFUSE_OWNERSHIP_REQUEST]: 'Refuse ownership request',
+  [VideoChannelActivityAction.UPDATE_EMBED_POLICY]: 'Update embed policy'
 }
 
 export const VIDEO_CHANNEL_ACTIVITY_TARGETS: { [id in VideoChannelActivityTargetType]: string } = {
@@ -736,6 +742,12 @@ export const VIDEO_CHANNEL_ACTIVITY_TARGETS: { [id in VideoChannelActivityTarget
   [VideoChannelActivityTarget.PLAYLIST]: 'Playlist',
   [VideoChannelActivityTarget.VIDEO]: 'Video',
   [VideoChannelActivityTarget.VIDEO_IMPORT]: 'Video import'
+}
+
+export const VIDEO_EMBED_PRIVACY_POLICIES: { [id in VideoEmbedPrivacyPolicyType]: string } = {
+  [VideoEmbedPrivacyPolicy.ALL_ALLOWED]: 'All allowed',
+  [VideoEmbedPrivacyPolicy.ALLOWLIST]: 'Allowlist',
+  [VideoEmbedPrivacyPolicy.REMOTE_RESTRICTIONS]: 'Remote restrictions'
 }
 
 export const MIMETYPES = {
@@ -1450,6 +1462,7 @@ function buildVideoMimetypeExt () {
 
       Object.assign(data, {
         'video/x-matroska': '.mkv',
+        'video/matroska': '.mkv',
 
         // Developed by Apple
         'video/quicktime': [ '.mov', '.qt', '.mqv' ], // often used as output format by editing software
@@ -1476,7 +1489,7 @@ function buildVideoMimetypeExt () {
 
         // The standard video format used by many Sony and Panasonic HD camcorders.
         // It is also used for storing high definition video on Blu-ray discs.
-        'video/mp2t': [ '.mts', 'ts' ],
+        'video/mp2t': [ '.mts', '.ts' ],
         'video/vnd.dlna.mpeg-tts': '.mts',
 
         'video/m2ts': '.m2ts',

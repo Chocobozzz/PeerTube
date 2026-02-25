@@ -143,7 +143,7 @@ export async function mergeAudioVideofile (options: {
       const videoOutputPath = join(transcodeDirectory, video.id + '-transcoded' + newExtname)
 
       // If the user updates the video thumbnails during transcoding
-      const thumbnailPath = video.getBestThumbnail().getFSPath()
+      const thumbnailPath = video.getBestThumbnail('16:9').getFSPath()
       const tmpThumbnailPath = join(CONFIG.STORAGE.TMP_DIR, basename(thumbnailPath))
       await copyFile(thumbnailPath, tmpThumbnailPath)
 

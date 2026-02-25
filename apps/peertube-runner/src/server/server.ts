@@ -82,6 +82,8 @@ export class RunnerServer {
     logger.info(`Using ${ConfigManager.Instance.getTranscodingDirectory()} for transcoding directory`)
     logger.info(`Using ${ConfigManager.Instance.getStoryboardDirectory()} for storyboard directory`)
 
+    logger.info(`Server is ready to process jobs`)
+
     this.initialized = true
     await this.checkAvailableJobs()
   }

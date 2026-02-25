@@ -14,7 +14,13 @@ import { accountHandleGetValidatorFactory } from '../middlewares/validators/inde
 
 const servicesRouter = express.Router()
 
-servicesRouter.use('/oembed', cors(), apiRateLimiter, asyncMiddleware(oembedValidator), generateOEmbed)
+servicesRouter.use(
+  '/oembed',
+  cors(),
+  apiRateLimiter,
+  asyncMiddleware(oembedValidator),
+  generateOEmbed
+)
 
 // TODO: deprecated, remove in PeerTube 8.1
 servicesRouter.use(
@@ -65,7 +71,7 @@ function generateVideoOEmbed (req: express.Request, res: express.Response) {
     channel: video.VideoChannel,
     title: video.name,
     embedPath: video.getEmbedStaticPath() + buildPlayerURLQuery(req.query.url),
-    thumbnail: video.getBestThumbnail(),
+    thumbnail: video.getBestThumbnail('16:9', 1280),
     req
   })
 

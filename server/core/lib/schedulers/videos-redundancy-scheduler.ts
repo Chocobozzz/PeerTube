@@ -65,7 +65,6 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
         const candidateToDuplicate = {
           video: videoToDuplicate,
           redundancy: redundancyConfig,
-          files: videoToDuplicate.VideoFiles,
           streamingPlaylists: videoToDuplicate.VideoStreamingPlaylists
         }
 

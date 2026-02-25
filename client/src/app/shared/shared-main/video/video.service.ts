@@ -27,7 +27,7 @@ import {
   UserVideoRateType,
   UserVideoRateUpdate,
   VideoChannel as VideoChannelServerModel,
-  VideoConstant,
+  ConstantLabel,
   VideoDetails as VideoDetailsServerModel,
   VideoFile,
   VideoFileMetadata,
@@ -534,7 +534,7 @@ export class VideoService {
 
   // ---------------------------------------------------------------------------
 
-  explainedPrivacyLabels (serverPrivacies: VideoConstant<VideoPrivacyType>[], defaultPrivacyId: VideoPrivacyType = VideoPrivacy.PUBLIC) {
+  explainedPrivacyLabels (serverPrivacies: ConstantLabel<VideoPrivacyType>[], defaultPrivacyId: VideoPrivacyType = VideoPrivacy.PUBLIC) {
     const descriptions = {
       [VideoPrivacy.PRIVATE]: $localize`Only I can see this video`,
       [VideoPrivacy.UNLISTED]: $localize`Only shareable via a private link`,
@@ -557,7 +557,7 @@ export class VideoService {
     }
   }
 
-  explainedLicenceLabels (serverLicences: VideoConstant<VideoLicenceType>[]) {
+  explainedLicenceLabels (serverLicences: ConstantLabel<VideoLicenceType>[]) {
     const descriptions = {
       [VideoLicence['CC-BY']]: $localize`CC-BY`,
       [VideoLicence['CC-BY-SA']]: $localize`CC-BY-SA`,
@@ -599,7 +599,7 @@ export class VideoService {
     return $localize`This video contains sensitive content: ${flags.join(' - ')}`
   }
 
-  getMostPrivatePrivacy (serverPrivacies: VideoConstant<VideoPrivacyType>[]) {
+  getMostPrivatePrivacy (serverPrivacies: ConstantLabel<VideoPrivacyType>[]) {
     // We do not add a password as this requires additional configuration.
     const order = [
       VideoPrivacy.PRIVATE,
@@ -611,7 +611,7 @@ export class VideoService {
     return this.getPrivacyFromOrder(serverPrivacies, order)
   }
 
-  private getPrivacyFromOrder (serverPrivacies: VideoConstant<VideoPrivacyType>[], order: VideoPrivacyType[]) {
+  private getPrivacyFromOrder (serverPrivacies: ConstantLabel<VideoPrivacyType>[], order: VideoPrivacyType[]) {
     for (const privacy of order) {
       if (serverPrivacies.find(p => p.id === privacy)) {
         return privacy

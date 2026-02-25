@@ -45,6 +45,7 @@ import { federateVideoIfNeeded } from '../../activitypub/videos/index.js'
 import { Notifier } from '../../notifier/index.js'
 import { createLocalVideoThumbnailsFromVideo } from '../../thumbnail.js'
 import { JobQueue } from '../job-queue.js'
+import { UserModel } from '@server/models/user/user.js'
 
 async function processVideoImport (job: Job): Promise<VideoImportPreventExceptionResult> {
   const payload = job.data as VideoImportPayload
@@ -152,7 +153,9 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
 
     // Get information about this video
     const stats = await stat(tmpVideoPath)
-    const isAble = await isUserQuotaValid({ userId: videoImport.User.id, uploadSize: stats.size })
+    const user = await UserModel.loadByVideoId(videoImport.videoId)
+
+    const isAble = await isUserQuotaValid({ channelUserId: user.id, uploadSize: stats.size })
     if (isAble === false) {
       throw new Error('The user video quota is exceeded with this video to import.')
     }

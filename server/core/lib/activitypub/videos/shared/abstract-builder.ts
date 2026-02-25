@@ -1,3 +1,4 @@
+import { guessAspectRatio } from '@peertube/peertube-core-utils'
 import { ActivityTagObject, VideoChaptersObject, VideoObject, VideoStreamingPlaylistType_Type } from '@peertube/peertube-models'
 import { isVideoChaptersObjectValid } from '@server/helpers/custom-validators/activitypub/video-chapters.js'
 import { deleteAllModels, filterNonExistingModels, retryTransactionWrapper } from '@server/helpers/database-utils.js'
@@ -43,7 +44,13 @@ export abstract class APVideoAbstractBuilder {
   protected abstract lTags: LoggerTagsFn
 
   protected async getOrCreateVideoChannelFromVideoObject () {
-    const channel = await findOwner(this.videoObject.id, this.videoObject.attributedTo, 'Group')
+    const channel = await findOwner({
+      rootUrl: this.videoObject.id,
+      attributedTo: this.videoObject.attributedTo,
+      audience: this.videoObject.audience,
+      type: 'Group'
+    })
+
     if (!channel) throw new Error('Cannot find associated video channel to video ' + this.videoObject.id)
 
     return getOrCreateAPActor(channel.id, 'all')
@@ -56,7 +63,13 @@ export abstract class APVideoAbstractBuilder {
       return undefined
     }
 
-    const thumbnails = icons.map(icon => updateRemoteVideoThumbnail({ fileUrl: icon.url, video, size: icon }))
+    const thumbnails = icons.map(icon => {
+      return updateRemoteVideoThumbnail({
+        fileUrl: icon.url,
+        video,
+        size: { ...icon, aspectRatio: guessAspectRatio(icon.width, icon.height) }
+      })
+    })
 
     await video.replaceAndSaveThumbnails(thumbnails, t)
   }
@@ -220,7 +233,7 @@ export abstract class APVideoAbstractBuilder {
   }) {
     const { video, transaction, oldVideo } = options
 
-    if (oldVideo && video.name === oldVideo.name && video.description === oldVideo.description) return
+    if (video.name === oldVideo?.name && video.description === oldVideo.description) return
 
     const automaticTags = await new AutomaticTagger().buildVideoAutomaticTags({ video, transaction })
     await setAndSaveVideoAutomaticTags({ video, automaticTags, transaction })

@@ -373,7 +373,7 @@ describe('Test video source management', function () {
         const { uuid } = await servers[0].videos.upload({
           attributes: {
             name: 'custom miniatures',
-            thumbnailfile: 'custom-thumbnail-850x480.jpg'
+            thumbnailfile: 'custom-thumbnail-input.jpg'
           }
         })
 

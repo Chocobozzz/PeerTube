@@ -2,10 +2,6 @@
 @use "_mixins" as *;
 @use "_form-mixins" as *;
 
-my-timestamp-input {
-  width: 100px;
-}
-
 my-input-text {
   width: 100%;
 }
@@ -33,6 +29,14 @@ my-input-text {
 .alert,
 .embed {
   margin-top: 20px;
+}
+
+h5 {
+  font-size: 1.15rem;
+}
+
+my-timestamp-input {
+  width: 100px;
 }
 
 .filters {
@@ -65,15 +69,4 @@ my-input-text {
       @include margin-left(10px);
     }
   }
-}
-
-.alert-private {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
-
-h5 {
-  font-size: 1.15rem;
 }

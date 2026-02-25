@@ -42,7 +42,7 @@ import {
 } from '../../types/models/index.js'
 import { AccountModel, ScopeNames as AccountScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account.js'
 import { SequelizeModel, getSort, parseAggregateResult, throwIfNotValid } from '../shared/index.js'
-import { ThumbnailModel } from '../video/thumbnail.js'
+import { ThumbnailModel, thumbnailAPIAttributes } from '../video/thumbnail.js'
 import { VideoBlacklistModel } from '../video/video-blacklist.js'
 import { SummaryOptions as ChannelSummaryOptions, VideoChannelModel, ScopeNames as VideoChannelScopeNames } from '../video/video-channel.js'
 import { ScopeNames as CommentScopeNames, VideoCommentModel } from '../video/video-comment.js'
@@ -159,7 +159,7 @@ export enum ScopeNames {
               model: VideoModel.unscoped(),
               include: [
                 {
-                  attributes: [ 'filename', 'fileUrl', 'width', 'height' ],
+                  attributes: thumbnailAPIAttributes,
                   model: ThumbnailModel
                 },
                 {
@@ -517,7 +517,7 @@ export class AbuseModel extends SequelizeModel<AbuseModel> {
       deleted: !video,
       blacklisted: video?.isBlacklisted() || false,
 
-      thumbnailPath: video?.getSmallestThumbnailStaticPath(),
+      thumbnailPath: video?.getSmallestThumbnailStaticPath('16:9'),
       thumbnails: video?.Thumbnails.map(t => t.toFormattedJSON()) || [],
 
       channel: video?.VideoChannel.toFormattedJSON() || abuseModel.deletedVideo?.channel
@@ -579,8 +579,8 @@ export class AbuseModel extends SequelizeModel<AbuseModel> {
         ? this.ReporterAccount.toFormattedJSON()
         : null,
 
-      countReportsForReporter: (countReportsForReporter || 0),
-      countReportsForReportee: (countReportsForReportee || 0)
+      countReportsForReporter: countReportsForReporter || 0,
+      countReportsForReportee: countReportsForReportee || 0
     })
   }
 

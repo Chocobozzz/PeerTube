@@ -111,8 +111,8 @@ async function getSitemapLocalVideoUrls () {
               'title': truncate(v.name, { length: 100, omission: '...' }),
               // Sitemap description should be < 2000 characters
               'description': truncate(v.description || v.name, { length: 2000, omission: '...' }),
-              'player_loc': WEBSERVER.URL + v.getEmbedStaticPath(),
-              'thumbnail_loc': WEBSERVER.URL + v.getSmallestThumbnailStaticPath(),
+              'player_loc': v.getEmbedStaticUrl(),
+              'thumbnail_loc': WEBSERVER.URL + v.getSmallestThumbnailStaticPath('16:9'),
               'content_loc': contentLoc,
               'duration': v.duration,
               'view_count': v.views,

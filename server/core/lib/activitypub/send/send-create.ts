@@ -87,10 +87,11 @@ export async function sendCreateVideoPlaylist (playlist: MVideoPlaylistFull, tra
 
   logger.info('Creating job to send create video playlist of %s.', playlist.url, lTags(playlist.uuid))
 
-  const byActor = playlist.OwnerAccount.Actor
-  const audience = getPlaylistAudience(byActor, playlist.privacy)
+  const audience = getPlaylistAudience({ account: playlist.OwnerAccount, channel: playlist.VideoChannel, privacy: playlist.privacy })
 
   const object = await playlist.toActivityPubObject(null, transaction)
+
+  const byActor = playlist.OwnerAccount.Actor
   const createActivity = buildCreateActivity(playlist.url, byActor, object, audience)
 
   const serverActor = await getServerActor()

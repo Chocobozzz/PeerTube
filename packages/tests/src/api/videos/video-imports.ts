@@ -339,7 +339,7 @@ describe('Test video imports', function () {
             name: 'my super name',
             description: 'my super description',
             tags: [ 'supertag1', 'supertag2' ],
-            thumbnailfile: 'custom-thumbnail-850x480.jpg'
+            thumbnailfile: 'custom-thumbnail-input.jpg'
           }
         })
         expect(video.name).to.equal('my super name')

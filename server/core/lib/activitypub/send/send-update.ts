@@ -100,7 +100,11 @@ export async function sendUpdateVideoPlaylist (videoPlaylist: MVideoPlaylistFull
   const url = getUpdateActivityPubUrl(videoPlaylist.url, videoPlaylist.updatedAt.toISOString())
 
   const object = await videoPlaylist.toActivityPubObject(null, transaction)
-  const audience = getPlaylistAudience(byActor, videoPlaylist.privacy)
+  const audience = getPlaylistAudience({
+    account: videoPlaylist.OwnerAccount,
+    channel: videoPlaylist.VideoChannel,
+    privacy: videoPlaylist.privacy
+  })
 
   const updateActivity = buildUpdateActivity(url, byActor, object, audience)
 

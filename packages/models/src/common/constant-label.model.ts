@@ -1,4 +1,4 @@
-export interface VideoConstant<T> {
+export interface ConstantLabel<T> {
   id: T
   label: string
   description?: string

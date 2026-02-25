@@ -50,7 +50,7 @@ async function checkCommentNotification (
   await waitJobs([ mainServer, comment.server ])
 
   const { data } = await mainServer.notifications.list({ start: 0, count: 30 })
-  const commentNotifications = data.filter(n => n.comment && n.comment.video.uuid === comment.videoUUID && n.createdAt >= createdAt)
+  const commentNotifications = data.filter(n => n.comment?.video.uuid === comment.videoUUID && n.createdAt >= createdAt)
 
   if (check === 'presence') expect(commentNotifications).to.have.lengthOf(1)
   else expect(commentNotifications).to.have.lengthOf(0)

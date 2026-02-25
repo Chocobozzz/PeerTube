@@ -60,11 +60,13 @@ export class SelectOptionsComponent implements ControlValueAccessor {
 
   // Allow plugins to update our value
   @HostListener('change', [ '$event.target' ])
-  handleChange (target: HTMLInputElement) {
-    // Prevent the primeng search input to update our value
-    if (target.role === 'searchbox') return
+  handleChange (target: EventTarget) {
+    const el = target as HTMLInputElement
 
-    this.writeValue(target.value)
+    // Prevent the primeng search input to update our value
+    if (el.role === 'searchbox') return
+
+    this.writeValue(el.value)
     this.onModelChange()
   }
 

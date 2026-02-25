@@ -9,13 +9,15 @@ import { VideoPasswordService } from '@app/shared/shared-main/video/video-passwo
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
 import { PlayerSettingsService } from '@app/shared/shared-video/player-settings.service'
+import { VideoEmbedPrivacyService } from '@app/shared/shared-video/video-embed-privacy.service'
 import {
+  ConstantLabel,
   LiveVideo,
   PlayerVideoSettings,
   UserVideoQuota,
   VideoCaption,
   VideoChapter,
-  VideoConstant,
+  VideoEmbedPrivacy,
   VideoPassword,
   VideoPrivacy,
   VideoPrivacyType,
@@ -36,9 +38,10 @@ export type VideoManageResolverData = {
   live: LiveVideo
   videoPasswords: VideoPassword[]
   userQuota: UserVideoQuota
-  privacies: VideoConstant<VideoPrivacyType>[]
+  privacies: ConstantLabel<VideoPrivacyType>[]
   videoEdit: VideoEdit
   playerSettings: PlayerVideoSettings
+  embedPrivacy: VideoEmbedPrivacy
 }
 
 @Injectable()
@@ -53,6 +56,7 @@ export class VideoManageResolver {
   private userService = inject(UserService)
   private serverService = inject(ServerService)
   private playerSettingsService = inject(PlayerSettingsService)
+  private videoEmbedPrivacyService = inject(VideoEmbedPrivacyService)
 
   resolve (route: ActivatedRouteSnapshot) {
     const uuid: string = route.params['uuid']
@@ -64,14 +68,15 @@ export class VideoManageResolver {
           async ([
             video,
             videoSource,
-            allUserChannels,
+            userChannels,
             captions,
             chapters,
             live,
             videoPasswords,
             userQuota,
             privacies,
-            playerSettings
+            playerSettings,
+            embedPrivacy
           ]) => {
             const videoEdit = await VideoEdit.createFromAPI(this.serverService.getHTMLConfig(), {
               video,
@@ -80,12 +85,13 @@ export class VideoManageResolver {
               live,
               videoSource,
               playerSettings,
-              videoPasswords: videoPasswords.map(p => p.password)
+              videoPasswords: videoPasswords.map(p => p.password),
+              embedPrivacy
             })
 
             return {
               video,
-              userChannels: allUserChannels.filter(c => c.ownerAccountId === video.channel.ownerAccount.id),
+              userChannels,
               captions,
               chapters,
               videoSource,
@@ -94,7 +100,8 @@ export class VideoManageResolver {
               userQuota,
               privacies,
               videoEdit,
-              playerSettings
+              playerSettings,
+              embedPrivacy
             } satisfies VideoManageResolverData
           }
         ),
@@ -140,7 +147,9 @@ export class VideoManageResolver {
 
       this.serverService.getVideoPrivacies(),
 
-      this.playerSettingsService.getVideoSettings({ videoId: video.uuid, raw: true })
+      this.playerSettingsService.getVideoSettings({ videoId: video.uuid, raw: true }),
+
+      this.videoEmbedPrivacyService.getPrivacy({ videoId: video.uuid })
     ] as const
   }
 }

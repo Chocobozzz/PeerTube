@@ -7,7 +7,7 @@ import {
   ServerConfig,
   ServerStats,
   VideoCommentPolicy,
-  VideoConstant,
+  ConstantLabel,
   VideoLicenceType,
   VideoPlaylistPrivacyType,
   VideoPrivacyType
@@ -31,11 +31,11 @@ export class ServerService {
   configReloaded = new Subject<ServerConfig>()
 
   private localeObservable: Observable<any>
-  private videoLicensesObservable: Observable<VideoConstant<VideoLicenceType>[]>
-  private videoCategoriesObservable: Observable<VideoConstant<number>[]>
-  private videoPrivaciesObservable: Observable<VideoConstant<VideoPrivacyType>[]>
-  private videoPlaylistPrivaciesObservable: Observable<VideoConstant<VideoPlaylistPrivacyType>[]>
-  private videoLanguagesObservable: Observable<VideoConstant<string>[]>
+  private videoLicensesObservable: Observable<ConstantLabel<VideoLicenceType>[]>
+  private videoCategoriesObservable: Observable<ConstantLabel<number>[]>
+  private videoPrivaciesObservable: Observable<ConstantLabel<VideoPrivacyType>[]>
+  private videoPlaylistPrivaciesObservable: Observable<ConstantLabel<VideoPlaylistPrivacyType>[]>
+  private videoLanguagesObservable: Observable<ConstantLabel<string>[]>
   private configObservable: Observable<ServerConfig>
 
   private configLoaded = false
@@ -196,7 +196,7 @@ export class ServerService {
             .pipe(map(data => ({ data, translations })))
         }),
         map(({ data, translations }) => {
-          const hashToPopulate: VideoConstant<T>[] = Object.keys(data)
+          const hashToPopulate: ConstantLabel<T>[] = Object.keys(data)
             .map(dataKey => {
               const label = data[dataKey]
 

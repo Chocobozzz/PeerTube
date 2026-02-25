@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnInit, OnDestroy, inject } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { CanComponentDeactivate, Notifier, ServerService } from '@app/core'
@@ -50,6 +50,7 @@ type Form = {
 
     resolutions: FormGroup<FormResolutions>
     alwaysTranscodeOriginalResolution: FormControl<boolean>
+    alwaysTranscodePodcastOptimizedAudio: FormControl<boolean>
 
     remoteRunners: FormGroup<{
       enabled: FormControl<boolean>
@@ -158,6 +159,7 @@ export class AdminConfigVODComponent implements OnInit, OnDestroy, CanComponentD
 
         resolutions: this.adminConfigService.buildFormResolutions('vod'),
         alwaysTranscodeOriginalResolution: null,
+        alwaysTranscodePodcastOptimizedAudio: null,
 
         remoteRunners: {
           enabled: null

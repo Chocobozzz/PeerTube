@@ -94,9 +94,9 @@ describe('Test prune storage CLI', function () {
       expect(torrentsCount).to.equal(12)
 
       const thumbnailsCount = await server.servers.countFiles('thumbnails')
-      // 6 of 3 local videos (2 sizes for each)
+      // 15 of 3 local videos (5 sizes for each)
       // 1 local playlist
-      expect(thumbnailsCount).to.equal(7)
+      expect(thumbnailsCount).to.equal(16)
 
       const avatarsCount = await server.servers.countFiles('avatars')
       expect(avatarsCount).to.equal(4)
@@ -130,7 +130,7 @@ describe('Test prune storage CLI', function () {
     async function checkCacheFilesCountAfterLazyLoad () {
       expect(await servers[0].servers.countFiles(join('cache', 'avatars'))).to.equal(4)
       expect(await servers[0].servers.countFiles(join('cache', 'storyboards'))).to.equal(2)
-      expect(await servers[0].servers.countFiles(join('cache', 'thumbnails'))).to.equal(4)
+      expect(await servers[0].servers.countFiles(join('cache', 'thumbnails'))).to.equal(10)
       expect(await servers[0].servers.countFiles(join('cache', 'video-captions'))).to.equal(1)
     }
 

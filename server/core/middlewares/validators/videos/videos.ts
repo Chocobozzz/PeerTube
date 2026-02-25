@@ -11,8 +11,9 @@ import { isHostValid } from '@server/helpers/custom-validators/servers.js'
 import { VideoLoadType } from '@server/lib/model-loaders/video.js'
 import { Redis } from '@server/lib/redis.js'
 import { buildUploadXFile, safeUploadXCleanup } from '@server/lib/uploadx.js'
+import { VideoChangeOwnershipModel } from '@server/models/video/video-change-ownership.js'
 import { ExpressPromiseHandler } from '@server/types/express-handler.js'
-import { MUserAccountId, MVideoFullLight } from '@server/types/models/index.js'
+import { MVideoFullLight } from '@server/types/models/index.js'
 import express from 'express'
 import { body, param, query, ValidationChain } from 'express-validator'
 import {
@@ -59,6 +60,7 @@ import {
   checkCanAccessVideoStaticFiles,
   checkCanManageVideo,
   checkCanSeeVideo,
+  checkUserQuota,
   doesChannelIdExist,
   doesVideoExist,
   doesVideoFileOfVideoExist,
@@ -101,13 +103,12 @@ export const videosAddLegacyValidator = [
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
 
     const videoFile: express.VideoLegacyUploadFile = req.files['videofile'][0]
-    const user = res.locals.oauth.token.User
 
     if (
-      !await commonVideoChecksPass({ req, res, user, videoFileSize: videoFile.size, files: req.files }) ||
+      !await commonVideoChecks({ req, res, videoFileSize: videoFile.size, files: req.files }) ||
       !isValidPasswordProtectedPrivacy(req, res) ||
       !await addDurationToVideoFileIfNeeded({ videoFile, res, middlewareName: 'videosAddLegacyValidator' }) ||
-      !await isVideoFileAccepted({ req, res, videoFile, hook: 'filter:api.video.upload.accept.result' })
+      !await isVideoFileAccepted({ req, res, videoBody: req.body, videoFile, hook: 'filter:api.video.upload.accept.result' })
     ) {
       return cleanUpReqFiles(req)
     }
@@ -150,7 +151,16 @@ export const videosAddResumableValidator = [
     }
 
     if (!await addDurationToVideoFileIfNeeded({ videoFile: file, res, middlewareName: 'videosAddResumableValidator' })) return cleanup()
-    if (!await isVideoFileAccepted({ req, res, videoFile: file, hook: 'filter:api.video.upload.accept.result' })) return cleanup()
+
+    if (
+      !await isVideoFileAccepted({
+        req,
+        res,
+        videoFile: file,
+        videoBody: file.metadata,
+        hook: 'filter:api.video.upload.accept.result'
+      })
+    ) return cleanup()
 
     res.locals.uploadVideoFileResumable = { ...file, originalname: file.filename }
 
@@ -173,7 +183,6 @@ export const videosAddResumableInitValidator = [
     .custom(isVideoSourceFilenameValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const user = res.locals.oauth.token.User
     const cleanup = () => cleanUpReqFiles(req)
 
     logger.debug('Checking videosAddResumableInitValidator body and headers', {
@@ -186,7 +195,7 @@ export const videosAddResumableInitValidator = [
 
     const fileMetadata = res.locals.uploadVideoFileResumableMetadata
     const files = { videofile: [ fileMetadata ] }
-    if (!await commonVideoChecksPass({ req, res, user, videoFileSize: fileMetadata.size, files })) return cleanup()
+    if (!await commonVideoChecks({ req, res, videoFileSize: fileMetadata.size, files })) return cleanup()
 
     if (!isValidPasswordProtectedPrivacy(req, res)) return cleanup()
 
@@ -234,17 +243,7 @@ export const videosUpdateValidator = getCommonVideoEditAttributes().concat([
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
-    if (
-      !await checkCanManageVideo({
-        user,
-        video: res.locals.videoAll,
-        right: UserRight.UPDATE_ANY_VIDEO,
-        req,
-        res,
-        checkIsLocal: true,
-        checkIsOwner: false
-      })
-    ) {
+    if (!await checkCanManageVideo({ user, video, right: UserRight.UPDATE_ANY_VIDEO, req, res, checkIsLocal: true, checkIsOwner: false })) {
       return cleanUpReqFiles(req)
     }
 
@@ -255,13 +254,26 @@ export const videosUpdateValidator = getCommonVideoEditAttributes().concat([
       return cleanUpReqFiles(req)
     }
 
-    if (res.locals.videoChannel && res.locals.videoChannel.accountId !== video.VideoChannel.accountId) {
-      res.fail({
-        status: HttpStatusCode.BAD_REQUEST_400,
-        message: req.t('The channel must belong to the same account as the original channel')
-      })
+    const targetChannel = res.locals.videoChannel
 
-      return cleanUpReqFiles(req)
+    // Not the same account as original video channel
+    if (targetChannel && targetChannel.accountId !== video.VideoChannel.accountId) {
+      const ownershipChange = await VideoChangeOwnershipModel.loadPendingByVideo(video.id)
+
+      if (ownershipChange) {
+        res.fail({
+          status: HttpStatusCode.BAD_REQUEST_400,
+          message: req.t('Cannot change video channel owner because there is already a pending ownership change for this video')
+        })
+
+        return cleanUpReqFiles(req)
+      }
+
+      // Check quota of the target channel
+      const channelUser = { id: targetChannel.Account.userId }
+      if (!await checkUserQuota({ channelUser, videoFileSize: video.getMaxQualityBytes(), req, res })) {
+        return false
+      }
     }
 
     return next()
@@ -645,10 +657,9 @@ function areErrorsInScheduleUpdate (req: express.Request, res: express.Response)
   return false
 }
 
-async function commonVideoChecksPass (options: {
+async function commonVideoChecks (options: {
   req: express.Request
   res: express.Response
-  user: MUserAccountId
   videoFileSize: number
   files: express.UploadFilesForCheck
 }): Promise<boolean> {
@@ -661,7 +672,15 @@ async function commonVideoChecksPass (options: {
     return false
   }
 
-  if (!await commonVideoFileChecks(options)) return false
+  if (
+    !await commonVideoFileChecks({
+      req,
+      res,
+      channelUser: { id: res.locals.videoChannel.Account.userId },
+      videoFileSize: options.videoFileSize,
+      files: options.files
+    })
+  ) return false
 
   return true
 }

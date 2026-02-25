@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { maxBy } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, Video, VideoPlaylistPrivacy } from '@peertube/peertube-models'
 import {
   cleanupTests,
@@ -86,7 +85,7 @@ describe('Test services', function () {
             `title="${video.name}" src="http://${servers[0].host}/videos/embed/${video.shortUUID}${suffix.output}" ` +
             'style="border: none" allow="fullscreen"></iframe>'
 
-          const thumbnail = maxBy(video.thumbnails, 'width')
+          const thumbnail = video.thumbnails.find(t => t.width === 1280 && t.height === 720)
 
           expect(res.body.html).to.equal(expectedHtml)
           expect(res.body.title).to.equal(video.name)
@@ -94,8 +93,8 @@ describe('Test services', function () {
           expect(res.body.width).to.equal(560)
           expect(res.body.height).to.equal(315)
           expect(res.body.thumbnail_url).to.equal(thumbnail.fileUrl)
-          expect(res.body.thumbnail_width).to.equal(850)
-          expect(res.body.thumbnail_height).to.equal(480)
+          expect(res.body.thumbnail_width).to.equal(1280)
+          expect(res.body.thumbnail_height).to.equal(720)
         }
       }
     })

@@ -1,5 +1,9 @@
-import { VideoChangeOwnership, type VideoChangeOwnershipStatusType } from '@peertube/peertube-models'
-import { MVideoChangeOwnershipFormattable, MVideoChangeOwnershipFull } from '@server/types/models/video/video-change-ownership.js'
+import { VideoChangeOwnership, VideoChangeOwnershipStatus, type VideoChangeOwnershipStatusType } from '@peertube/peertube-models'
+import {
+  MVideoChangeOwnership,
+  MVideoChangeOwnershipFormattable,
+  MVideoChangeOwnershipFull
+} from '@server/types/models/video/video-change-ownership.js'
 import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { AccountModel } from '../account/account.js'
 import { SequelizeModel, getSort } from '../shared/index.js'
@@ -121,6 +125,15 @@ export class VideoChangeOwnershipModel extends SequelizeModel<VideoChangeOwnersh
   static load (id: number): Promise<MVideoChangeOwnershipFull> {
     return VideoChangeOwnershipModel.scope([ ScopeNames.WITH_ACCOUNTS, ScopeNames.WITH_VIDEO ])
       .findByPk(id)
+  }
+
+  static loadPendingByVideo (videoId: number): Promise<MVideoChangeOwnership> {
+    return VideoChangeOwnershipModel.findOne({
+      where: {
+        videoId,
+        status: VideoChangeOwnershipStatus.WAITING
+      }
+    })
   }
 
   toFormattedJSON (this: MVideoChangeOwnershipFormattable): VideoChangeOwnership {

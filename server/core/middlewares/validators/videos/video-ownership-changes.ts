@@ -29,7 +29,7 @@ export const videosChangeOwnershipValidator = [
         user: res.locals.oauth.token.User,
         video: res.locals.videoAll,
         right: UserRight.CHANGE_VIDEO_OWNERSHIP,
-        checkIsOwner: true,
+        checkIsOwner: false,
         checkIsLocal: true,
         req,
         res
@@ -44,7 +44,7 @@ export const videosChangeOwnershipValidator = [
       return
     }
 
-    res.locals.nextOwner = nextOwner
+    res.locals.videoChangeOwnershipNextOwner = nextOwner
     return next()
   }
 ]
@@ -105,7 +105,7 @@ async function checkCanAccept (video: MVideoWithAllFiles, req: express.Request, 
     if (video.state !== VideoState.WAITING_FOR_LIVE) {
       res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
-        message: req.t('You can accept an ownership change of a published live.')
+        message: req.t('You cannot accept an ownership change of a published live.')
       })
 
       return false
@@ -114,9 +114,9 @@ async function checkCanAccept (video: MVideoWithAllFiles, req: express.Request, 
     return true
   }
 
-  const user = res.locals.oauth.token.User
+  const channelUser = res.locals.oauth.token.User
 
-  if (!await checkUserQuota({ user, videoFileSize: video.getMaxQualityBytes(), req, res })) return false
+  if (!await checkUserQuota({ channelUser, videoFileSize: video.getMaxQualityBytes(), req, res })) return false
 
   return true
 }

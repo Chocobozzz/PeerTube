@@ -71,6 +71,7 @@ import { ListVideoPlaylistsOptions, VideoPlaylistListQueryBuilder } from './sql/
 import { ThumbnailModel } from './thumbnail.js'
 import { VideoChannelModel, ScopeNames as VideoChannelScopeNames } from './video-channel.js'
 import { VideoPlaylistElementModel } from './video-playlist-element.js'
+import { VideoChannelCollaboratorModel } from './video-channel-collaborator.js'
 
 enum ScopeNames {
   WITH_VIDEOS_LENGTH = 'WITH_VIDEOS_LENGTH',
@@ -313,27 +314,48 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
     }))
   }
 
-  static listPlaylistSummariesOf (accountId: number, videoIds: number[]): Promise<MVideoPlaylistSummaryWithElements[]> {
-    const query = {
-      attributes: [ 'id', 'name', 'uuid' ],
+  static async listPlaylistSummariesOf (accountId: number, videoIds: number[]): Promise<MVideoPlaylistSummaryWithElements[]> {
+    const elementsInclude = {
+      attributes: [ 'id', 'videoId', 'startTimestamp', 'stopTimestamp' ],
+      model: VideoPlaylistElementModel.unscoped(),
       where: {
-        ownerAccountId: accountId
-      },
-      include: [
-        {
-          attributes: [ 'id', 'videoId', 'startTimestamp', 'stopTimestamp' ],
-          model: VideoPlaylistElementModel.unscoped(),
-          where: {
-            videoId: {
-              [Op.in]: videoIds
-            }
-          },
-          required: true
+        videoId: {
+          [Op.in]: videoIds
         }
-      ]
+      },
+      required: true
     }
 
-    return VideoPlaylistModel.findAll(query)
+    const attributes = [ 'id', 'name', 'uuid' ]
+
+    const owned = await VideoPlaylistModel.findAll({
+      attributes,
+      where: { ownerAccountId: accountId },
+      include: [ elementsInclude ]
+    })
+
+    const collaborations = await VideoPlaylistModel.findAll({
+      attributes,
+      include: [
+        elementsInclude,
+
+        {
+          model: VideoChannelModel.unscoped(),
+          required: true,
+          include: [
+            {
+              model: VideoChannelCollaboratorModel.unscoped(),
+              required: true,
+              where: {
+                accountId
+              }
+            }
+          ]
+        }
+      ]
+    })
+
+    return [ ...owned, ...collaborations ]
   }
 
   static listPlaylistForExport (accountId: number): Promise<MVideoPlaylistFull[]> {
@@ -690,6 +712,9 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
       .then(o => {
         return Object.assign(o, {
           type: 'Playlist' as 'Playlist',
+
+          audience: this.VideoChannel?.Actor.url,
+
           name: this.name,
           content: this.description,
           mediaType: 'text/markdown' as 'text/markdown',
@@ -697,7 +722,9 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
           videoChannelPosition: this.videoChannelPosition,
           published: this.createdAt.toISOString(),
           updated: this.updatedAt.toISOString(),
-          attributedTo: this.VideoChannel ? [ this.VideoChannel.Actor.url ] : [],
+          attributedTo: process.env.FEP_1B12_ONLY !== 'true' && this.VideoChannel
+            ? [ this.VideoChannel.Actor.url ]
+            : [],
           icon
         })
       })

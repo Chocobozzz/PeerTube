@@ -1,12 +1,13 @@
 import { pick } from '@peertube/peertube-core-utils'
 import { ffprobePromise, getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
-import { LiveVideoLatencyMode, VideoExportJSON, VideoPrivacy, VideoState } from '@peertube/peertube-models'
+import { LiveVideoLatencyMode, VideoEmbedPrivacyPolicy, VideoExportJSON, VideoPrivacy, VideoState } from '@peertube/peertube-models'
 import { buildUUID, getFileSize } from '@peertube/peertube-node-utils'
 import { isArray, isBooleanValid, isUUIDValid } from '@server/helpers/custom-validators/misc.js'
 import { isPlayerVideoThemeSettingValid } from '@server/helpers/custom-validators/player-settings.js'
 import { isVideoCaptionLanguageValid } from '@server/helpers/custom-validators/video-captions.js'
 import { isVideoChannelUsernameValid } from '@server/helpers/custom-validators/video-channels.js'
 import { isVideoChapterTimecodeValid, isVideoChapterTitleValid } from '@server/helpers/custom-validators/video-chapters.js'
+import { areVideoEmbedPrivacyDomainsValid, isVideoEmbedPrivacyPolicyValid } from '@server/helpers/custom-validators/video-embed-privacy.js'
 import { isLiveLatencyModeValid, isLiveScheduleValid } from '@server/helpers/custom-validators/video-lives.js'
 import {
   isPasswordValid,
@@ -35,6 +36,7 @@ import { createLocalCaption, updateHLSMasterOnCaptionChange } from '@server/lib/
 import { buildNextVideoState } from '@server/lib/video-state.js'
 import { PlayerSettingModel } from '@server/models/video/player-setting.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
+import { VideoEmbedPrivacyDomainModel } from '@server/models/video/video-embed-privacy-domain.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MChannelId, MVideoFullLight } from '@server/types/models/index.js'
 import { FfprobeData } from 'fluent-ffmpeg'
@@ -61,6 +63,7 @@ type SanitizedObject = Pick<
   | 'isLive'
   | 'commentsPolicy'
   | 'downloadEnabled'
+  | 'videoEmbedPrivacy'
   | 'waitTranscoding'
   | 'originallyPublishedAt'
   | 'tags'
@@ -101,6 +104,10 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
     if (!isVideoSourceFilenameValid(o.source?.inputFilename)) o.source = undefined
 
     if (!isVideoOriginallyPublishedAtValid(o.originallyPublishedAt)) o.originallyPublishedAt = null
+
+    if (!o.videoEmbedPrivacy) o.videoEmbedPrivacy = { policy: VideoEmbedPrivacyPolicy.ALL_ALLOWED, domains: [] }
+    if (!isVideoEmbedPrivacyPolicyValid(o.videoEmbedPrivacy.policy)) o.videoEmbedPrivacy.policy = VideoEmbedPrivacyPolicy.ALL_ALLOWED
+    if (!areVideoEmbedPrivacyDomainsValid(o.videoEmbedPrivacy.domains)) o.videoEmbedPrivacy.domains = []
 
     if (!isArray(o.tags)) o.tags = []
     if (!isArray(o.captions)) o.captions = []
@@ -159,6 +166,7 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
       'isLive',
       'commentsPolicy',
       'downloadEnabled',
+      'videoEmbedPrivacy',
       'waitTranscoding',
       'originallyPublishedAt',
       'tags',
@@ -196,7 +204,7 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
 
     let ffprobe: FfprobeData
     if (videoFilePath) {
-      if (await isUserQuotaValid({ userId: this.user.id, uploadSize: videoSize, checkDaily: false }) === false) {
+      if (await isUserQuotaValid({ channelUserId: this.user.id, uploadSize: videoSize, checkDaily: false }) === false) {
         throw new Error(`Cannot import video ${videoImportData.name} for user ${this.user.username} because of exceeded quota`)
       }
 
@@ -249,7 +257,9 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
 
         state: videoImportData.isLive
           ? VideoState.WAITING_FOR_LIVE
-          : buildNextVideoState()
+          : buildNextVideoState(),
+
+        embedPrivacyPolicy: videoImportData.videoEmbedPrivacy.policy
       },
 
       liveAttributes: videoImportData.live,
@@ -269,6 +279,7 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
 
     await this.importCaptions(video, videoImportData)
     await this.importPlayerSettings(video, videoImportData)
+    await this.importVideoEmbedPrivacyDomains(video, videoImportData)
 
     logger.info('Video %s imported.', video.name, lTags(video.uuid))
 
@@ -318,6 +329,12 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
       theme: playerSettings.theme,
       videoId: video.id
     })
+  }
+
+  private async importVideoEmbedPrivacyDomains (video: MVideoFullLight, videoImportData: SanitizedObject) {
+    if (videoImportData.videoEmbedPrivacy.domains.length === 0) return
+
+    await VideoEmbedPrivacyDomainModel.addDomains(videoImportData.videoEmbedPrivacy.domains, video.id)
   }
 
   private async checkVideoFileIsAcceptedOrThrow (options: {

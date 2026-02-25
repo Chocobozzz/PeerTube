@@ -3,21 +3,32 @@ import { root } from '@peertube/peertube-node-utils'
 import { PeerTubeServer } from '@peertube/peertube-server-commands'
 import { ChildProcess, fork, ForkOptions } from 'child_process'
 import { execaNode } from 'execa'
+import { remove } from 'fs-extra'
+import { readFile, writeFile } from 'fs/promises'
 import { join } from 'path'
 
+type RunOptions = {
+  jobType?: RunnerJobType
+  hideLogs?: boolean // default true
+  autoDeleteConfig?: boolean // default true
+}
 export class PeerTubeRunnerProcess {
   private app?: ChildProcess
+  private runOptions: RunOptions
 
   constructor (private readonly server: PeerTubeServer) {
   }
 
-  runServer (options: {
-    jobType?: RunnerJobType
-    hideLogs?: boolean // default true
-  } = {}) {
-    const { jobType, hideLogs = true } = options
+  runServer (options: RunOptions = {}) {
+    this.runOptions = options
 
-    return new Promise<void>((res, rej) => {
+    const { jobType, hideLogs = true, autoDeleteConfig = true } = options
+
+    return new Promise<void>(async (res, rej) => {
+      if (autoDeleteConfig) {
+        await remove(await this.getConfigFilePath())
+      }
+
       const args = [ 'server', '--verbose', ...this.buildIdArg() ]
 
       if (jobType) {
@@ -43,9 +54,11 @@ export class PeerTubeRunnerProcess {
         if (!hideLogs) {
           console.log(str)
         }
-      })
 
-      res()
+        if (data.toString().includes('Server is ready to process jobs')) {
+          res()
+        }
+      })
     })
   }
 
@@ -120,6 +133,20 @@ export class PeerTubeRunnerProcess {
 
   // ---------------------------------------------------------------------------
 
+  async setConcurrency (concurrency: number) {
+    this.kill()
+
+    const configFilePath = await this.getConfigFilePath()
+
+    const content = await readFile(configFilePath, 'utf-8')
+
+    await writeFile(configFilePath, content.replace(/concurrency = \d+/, `concurrency = ${concurrency}`))
+
+    await this.runServer({ ...this.runOptions, autoDeleteConfig: false })
+  }
+
+  // ---------------------------------------------------------------------------
+
   getId () {
     return 'test-' + this.server.internalServerNumber
   }
@@ -134,5 +161,13 @@ export class PeerTubeRunnerProcess {
 
   private runCommand (path: string, args: string[]) {
     return execaNode(path, args, { env: { ...process.env, NODE_OPTIONS: '' } })
+  }
+
+  private async getConfigFilePath () {
+    const args = [ 'get-config-file-path', ...this.buildIdArg() ]
+
+    const { stdout } = await this.runCommand(this.getRunnerPath(), args)
+
+    return stdout.trim()
   }
 }

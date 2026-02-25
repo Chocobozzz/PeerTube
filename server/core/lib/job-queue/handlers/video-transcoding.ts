@@ -3,8 +3,10 @@ import {
   MergeAudioTranscodingPayload,
   NewWebVideoResolutionTranscodingPayload,
   OptimizeTranscodingPayload,
+  VideoResolution,
   VideoTranscodingPayload
 } from '@peertube/peertube-models'
+import { CONFIG } from '@server/initializers/config.js'
 import { hasMissingHLSStreams } from '@server/lib/runners/job-handlers/shared/utils.js'
 import { onTranscodingEnded } from '@server/lib/transcoding/ended-transcoding.js'
 import { generateHlsPlaylistResolution } from '@server/lib/transcoding/hls-transcoding.js'
@@ -153,9 +155,16 @@ async function handleHLSJob (job: Job, payload: HLSTranscodingPayload, videoArg:
   })
 
   if (!missingStream && payload.deleteWebVideoFiles === true) {
-    logger.info('Removing Web Video files of %s now we have a HLS version of it.', video.uuid, lTags(video.uuid))
+    const resolutionExceptions = CONFIG.TRANSCODING.ALWAYS_TRANSCODE_PODCAST_OPTIMIZED_AUDIO
+      ? [ VideoResolution.H_NOVIDEO ]
+      : []
 
-    await removeAllWebVideoFiles(video)
+    logger.info('Removing Web Video files of %s now we have a HLS version of it.', video.uuid, {
+      resolutionExceptions,
+      ...lTags(video.uuid)
+    })
+
+    await removeAllWebVideoFiles(video, { resolutionExceptions })
   }
 
   // Splitted audio, wait audio & video generation before moving the video in its next state

@@ -32,8 +32,9 @@ export function computeResolutionsToTranscode (options: {
   includeInput: boolean
   strictLower: boolean
   hasAudio: boolean
+  forceAudioResolution?: boolean
 }) {
-  const { input, type, includeInput, strictLower, hasAudio } = options
+  const { input, type, includeInput, strictLower, hasAudio, forceAudioResolution } = options
 
   const configResolutions = type === 'vod'
     ? CONFIG.TRANSCODING.RESOLUTIONS
@@ -70,6 +71,10 @@ export function computeResolutionsToTranscode (options: {
   if (includeInput) {
     // Always use an even resolution to avoid issues with ffmpeg
     resolutionsEnabled.add(toEven(input))
+  }
+
+  if (forceAudioResolution === true && hasAudio) {
+    resolutionsEnabled.add(VideoResolution.H_NOVIDEO)
   }
 
   return Array.from(resolutionsEnabled)

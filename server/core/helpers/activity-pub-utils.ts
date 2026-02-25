@@ -128,6 +128,8 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
     schedules: 'sc:eventSchedule',
     startDate: 'sc:startDate',
 
+    embedUrl: 'sc:embedUrl',
+
     uploadDate: 'sc:uploadDate',
 
     hasParts: 'sc:hasParts',

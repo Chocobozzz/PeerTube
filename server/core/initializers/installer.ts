@@ -6,7 +6,7 @@ import { initPNPM } from '@server/lib/plugins/package-manager.js'
 import { RunnerRegistrationTokenModel } from '@server/models/runner/runner-registration-token.js'
 import { ensureDir, remove } from 'fs-extra/esm'
 import { readdir } from 'fs/promises'
-import passwordGenerator from 'password-generator'
+import { generatePassword } from 'password-generator'
 import { join } from 'path'
 import { logger } from '../helpers/logger.js'
 import { buildUser, createApplicationActor, createUserAccountAndChannelAndPlaylist } from '../lib/user.js'
@@ -102,8 +102,8 @@ async function createOAuthClientIfNotExist () {
 
   logger.info('Creating a default OAuth Client.')
 
-  const id = passwordGenerator(32, false, /[a-z0-9]/)
-  const secret = passwordGenerator(32, false, /[a-zA-Z0-9]/)
+  const id = await generatePassword(32, false, /[a-z0-9]/)
+  const secret = await generatePassword(32, false, /[a-zA-Z0-9]/)
   const client = new OAuthClientModel({
     clientId: id,
     clientSecret: secret,
@@ -144,7 +144,7 @@ async function createOAuthAdminIfNotExist () {
   } else if (process.env.PT_INITIAL_ROOT_PASSWORD) {
     password = process.env.PT_INITIAL_ROOT_PASSWORD
   } else {
-    password = passwordGenerator(16, true)
+    password = await generatePassword(16, true)
   }
 
   const user = buildUser({

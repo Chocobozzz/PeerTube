@@ -12,6 +12,9 @@ import {
   VideoChapter,
   VideoCreate,
   VideoDetails,
+  VideoEmbedPrivacy,
+  VideoEmbedPrivacyPolicy,
+  VideoEmbedPrivacyUpdate,
   VideoImportCreate,
   VideoPrivacy,
   VideoPrivacyType,
@@ -28,6 +31,7 @@ import debug from 'debug'
 import { Jsonify, SharedUnionFieldsDeep } from 'type-fest'
 import { VideoCaptionWithPathEdit } from './video-caption-edit.model'
 import { VideoChaptersEdit } from './video-chapters-edit.model'
+import { splitAndGetNotEmpty } from '@root-helpers/string'
 
 const debugLogger = debug('peertube:video-manage:video-edit')
 
@@ -69,6 +73,11 @@ type StudioForm = {
 }
 
 type PlayerSettingsForm = PlayerVideoSettingsUpdate
+
+type EmbedPrivacyForm = {
+  videoPrivacyEmbedEnableAllowlist?: boolean
+  videoPrivacyEmbedAllowlistDomains?: string
+}
 
 // ---------------------------------------------------------------------------
 
@@ -116,6 +125,7 @@ type UpdateFromAPIOptions = {
     | 'aspectRatio'
     | 'views'
     | 'blacklisted'
+    | 'blacklistedReason'
     | 'thumbnails'
     | 'state'
     | 'isLive'
@@ -126,6 +136,7 @@ type UpdateFromAPIOptions = {
   videoPasswords?: string[]
   videoSource?: VideoSource
   playerSettings: PlayerVideoSettings
+  embedPrivacy: VideoEmbedPrivacy
 }
 
 // ---------------------------------------------------------------------------
@@ -154,7 +165,8 @@ export class VideoEdit {
   private live: LiveUpdate
   private replaceFile: File
   private studioTasks: VideoStudioTask[] = []
-  private playerSettings: PlayerVideoSettings
+  private playerSettings: PlayerVideoSettingsUpdate
+  private embedPrivacy: VideoEmbedPrivacyUpdate
 
   private videoImport: Pick<VideoImportCreate, 'magnetUri' | 'torrentfile' | 'targetUrl'>
 
@@ -169,6 +181,7 @@ export class VideoEdit {
     duration: number
     likes: number
     blacklisted: boolean
+    blacklistedReason: string
 
     ownerAccountId: number
     ownerAccountDisplayName: string
@@ -191,6 +204,7 @@ export class VideoEdit {
     likes: number
 
     blacklisted: boolean
+    blacklistedReason: string
 
     ownerAccountId: number
     ownerAccountDisplayName: string
@@ -203,7 +217,9 @@ export class VideoEdit {
     thumbnailfile?: { size: number }
 
     live?: LiveUpdate
-    playerSettings?: PlayerVideoSettings
+    playerSettings?: PlayerVideoSettingsUpdate
+
+    embedPrivacy?: VideoEmbedPrivacyUpdate
 
     pluginData?: any
     pluginDefaults?: Record<string, string | boolean>
@@ -310,6 +326,7 @@ export class VideoEdit {
 
   // ---------------------------------------------------------------------------
 
+  // Build a new VideoEdit model based on data coming from the API
   static async createFromAPI (serverConfig: HTMLServerConfig, options: UpdateFromAPIOptions) {
     const videoEdit = new VideoEdit(serverConfig)
     await videoEdit.loadFromAPI(options)
@@ -318,13 +335,14 @@ export class VideoEdit {
   }
 
   async loadFromAPI (options: UpdateFromAPIOptions & { loadPrivacy?: boolean }) {
-    const { video, videoPasswords, live, chapters, captions, videoSource, playerSettings, loadPrivacy = true } = options
+    const { video, videoPasswords, live, chapters, captions, videoSource, playerSettings, embedPrivacy, loadPrivacy = true } = options
 
     debugLogger('Load from API', options)
 
     this.loadVideo({ video, videoPasswords, saveInStore: true, loadPrivacy })
     this.loadLive(live)
     this.loadPlayerSettings(playerSettings)
+    this.loadEmbedPrivacy(embedPrivacy)
 
     if (captions !== undefined) {
       this.captions = captions
@@ -420,6 +438,7 @@ export class VideoEdit {
     this.metadata.likes = video.likes
     this.metadata.aspectRatio = video.aspectRatio
     this.metadata.blacklisted = video.blacklisted
+    this.metadata.blacklistedReason = video.blacklistedReason
 
     this.metadata.isLive = video.isLive
 
@@ -490,6 +509,18 @@ export class VideoEdit {
 
     this.playerSettings = buildObj()
     this.saveStore.playerSettings = buildObj()
+  }
+
+  private loadEmbedPrivacy (embedPrivacy: UpdateFromAPIOptions['embedPrivacy']) {
+    const buildObj = () => {
+      return {
+        policy: embedPrivacy.policy.id,
+        domains: embedPrivacy.domains ?? []
+      }
+    }
+
+    this.embedPrivacy = buildObj()
+    this.saveStore.embedPrivacy = buildObj()
   }
 
   loadAfterPublish (options: {
@@ -858,13 +889,33 @@ export class VideoEdit {
     }
   }
 
-  toPlayerSettingsUpdate (): PlayerVideoSettingsUpdate {
-    if (!this.playerSettings) return undefined
+  // ---------------------------------------------------------------------------
 
-    return {
-      theme: this.playerSettings.theme
+  loadFromEmbedPrivacyForm (value: EmbedPrivacyForm) {
+    this.embedPrivacy = {
+      policy: value.videoPrivacyEmbedEnableAllowlist
+        ? VideoEmbedPrivacyPolicy.ALLOWLIST
+        : VideoEmbedPrivacyPolicy.ALL_ALLOWED,
+
+      domains: splitAndGetNotEmpty(value.videoPrivacyEmbedAllowlistDomains)
     }
   }
+
+  toEmbedPrivacyFormPatch (): Required<EmbedPrivacyForm> {
+    if (!this.embedPrivacy) {
+      return {
+        videoPrivacyEmbedEnableAllowlist: false,
+        videoPrivacyEmbedAllowlistDomains: ''
+      }
+    }
+
+    return {
+      videoPrivacyEmbedEnableAllowlist: this.embedPrivacy.policy === VideoEmbedPrivacyPolicy.ALLOWLIST,
+      videoPrivacyEmbedAllowlistDomains: this.embedPrivacy.domains.join('\n')
+    }
+  }
+
+  // ---------------------------------------------------------------------------
 
   // ---------------------------------------------------------------------------
 
@@ -898,6 +949,10 @@ export class VideoEdit {
 
   getPlayerSettings () {
     return this.playerSettings
+  }
+
+  getEmbedPrivacy () {
+    return this.embedPrivacy
   }
 
   getStudioTasksSummary () {
@@ -1031,6 +1086,21 @@ export class VideoEdit {
     return changes
   }
 
+  hasEmbedPrivacyChanges () {
+    if (!this.embedPrivacy) return false
+    if (!this.saveStore.embedPrivacy) return true
+
+    const changes = !this.areSameObjects(this.embedPrivacy, this.saveStore.embedPrivacy)
+
+    debugLogger('Check if embed privacy has changes', {
+      embedPrivacy: this.embedPrivacy,
+      saveEmbedPrivacy: this.saveStore.embedPrivacy,
+      changes
+    })
+
+    return changes
+  }
+
   // ---------------------------------------------------------------------------
 
   hasPendingChanges () {
@@ -1041,7 +1111,8 @@ export class VideoEdit {
       this.hasChaptersChanges() ||
       this.hasCommonChanges() ||
       this.hasPluginDataChanges() ||
-      this.hasPlayerSettingsChanges()
+      this.hasPlayerSettingsChanges() ||
+      this.hasEmbedPrivacyChanges()
   }
 
   // ---------------------------------------------------------------------------
@@ -1064,6 +1135,7 @@ export class VideoEdit {
       likes: this.metadata.likes,
       duration: this.metadata.duration,
       blacklisted: this.metadata.blacklisted,
+      blacklistedReason: this.metadata.blacklistedReason,
 
       ownerAccountId: this.metadata.ownerAccountId,
       ownerAccountDisplayName: this.metadata.ownerAccountDisplayName,

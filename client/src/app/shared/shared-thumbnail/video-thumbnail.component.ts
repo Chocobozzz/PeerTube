@@ -3,7 +3,7 @@ import { booleanAttribute, Component, ElementRef, inject, input, numberAttribute
 import { RouterLink } from '@angular/router'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { Video as VideoServerModel, VideoState } from '@peertube/peertube-models'
-import { findAppropriateImageFileUrl } from '@root-helpers/images'
+import { findAppropriateThumbnailFileUrl } from '@root-helpers/images'
 import { logger } from '@root-helpers/logger'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { FromNowPipe } from '../shared-main/date/from-now.pipe'
@@ -21,6 +21,7 @@ export type VideoThumbnailInput = Pick<
   | 'userHistory'
   | 'originallyPublishedAt'
   | 'liveSchedules'
+  | 'thumbnailUrl'
 >
 
 @Component({
@@ -102,6 +103,9 @@ export class VideoThumbnailComponent implements OnChanges {
     const video = this.video()
     if (!video) return ''
 
+    // From search index, handle instances that do not have `thumbnails` introduced in peertube 8.1
+    if (!video.thumbnails) return video.thumbnailUrl
+
     const computedStyle = window.getComputedStyle(this.el.nativeElement)
 
     let width = this.widthPx()
@@ -119,7 +123,7 @@ export class VideoThumbnailComponent implements OnChanges {
       width = +widthStr
     }
 
-    return findAppropriateImageFileUrl(video.thumbnails, width)
+    return findAppropriateThumbnailFileUrl(video.thumbnails, width, '16:9')
   }
 
   getProgressPercent () {

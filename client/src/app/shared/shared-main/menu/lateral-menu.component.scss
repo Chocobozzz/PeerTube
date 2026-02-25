@@ -13,8 +13,11 @@ ul {
 .svg-container {
   position: absolute;
   top: 0;
-  opacity: 0.4;
+  opacity: 0.3;
   z-index: 0;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
 
   ::ng-deep svg {
     color: pvar(--bg-secondary-450);

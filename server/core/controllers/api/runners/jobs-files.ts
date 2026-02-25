@@ -140,7 +140,7 @@ function getMaxQualityVideoThumbnail (req: express.Request, res: express.Respons
     lTags(runner.name, runnerJob.id, runnerJob.type)
   )
 
-  const file = video.getBestThumbnail()
+  const file = video.getBestThumbnail('16:9')
 
   return res.sendFile(file.getFSPath())
 }

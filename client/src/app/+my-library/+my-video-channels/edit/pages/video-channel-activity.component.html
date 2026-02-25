@@ -176,6 +176,30 @@
           }
         }
       }
+
+      @case (12) { <!-- VideoChannelActivityAction.SEND_OWNERSHIP_REQUEST) -->
+        <ng-container i18n>
+          <strong>{{ account }}</strong> sent an ownership request to {{ a.targetAccount.displayName }} for video <a [routerLink]="[ '/w', a.video.shortUUID ]">{{ a.video.name }}</a>
+        </ng-container>
+      }
+
+      @case (13) { <!-- VideoChannelActivityAction.ACCEPT_OWNERSHIP_REQUEST) -->
+        <ng-container i18n>
+          <strong>{{ account }}</strong> accepted an ownership request for video <a [routerLink]="[ '/w', a.video.shortUUID ]">{{ a.video.name }}</a>
+        </ng-container>
+      }
+
+      @case (14) { <!-- VideoChannelActivityAction.REFUSE_OWNERSHIP_REQUEST) -->
+        <ng-container i18n>
+          <strong>{{ account }}</strong> refused an ownership request for video <a [routerLink]="[ '/w', a.video.shortUUID ]">{{ a.video.name }}</a>
+        </ng-container>
+      }
+
+      @case (15) { <!-- VideoChannelActivityAction.UPDATE_EMBED_POLICY) -->
+        <ng-container i18n>
+          <strong>{{ account }}</strong> updated embed policy of video <a [routerLink]="[ '/w', a.video.shortUUID ]">{{ a.video.name }}</a>
+        </ng-container>
+      }
     }
   </div>
 

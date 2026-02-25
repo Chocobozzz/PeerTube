@@ -89,6 +89,7 @@ export function checkMissedConfig () {
     'transcoding.original_file.keep',
     'transcoding.threads',
     'transcoding.allow_additional_extensions',
+    'transcoding.always_transcode_podcast_optimized_audio',
     'transcoding.web_videos.enabled',
     'transcoding.hls.enabled',
     'transcoding.profile',

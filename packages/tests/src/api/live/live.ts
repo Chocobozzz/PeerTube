@@ -141,7 +141,7 @@ describe('Test live', function () {
           replaySettings: { privacy: VideoPrivacy.PUBLIC },
           latencyMode: LiveVideoLatencyMode.SMALL_LATENCY,
           privacy: VideoPrivacy.PUBLIC,
-          thumbnailfile: 'video_short1.webm-thumbnail-850x480.jpg'
+          thumbnailfile: 'custom-thumbnail-input.jpg'
         }
       })
       liveVideoUUID = live.uuid
@@ -174,7 +174,7 @@ describe('Test live', function () {
         await checkThumbnails({
           server,
           video,
-          thumbnails: [ 'video_short1.webm-thumbnail-850x480.jpg', 'video_short1.webm.jpg' ]
+          thumbnails: [ 'custom-thumbnail-850x480.jpg', 'custom-thumbnail-280x157.jpg' ]
         })
 
         const live = await server.live.get({ videoId: liveVideoUUID })
