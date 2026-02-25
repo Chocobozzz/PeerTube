@@ -38,7 +38,7 @@ export class MyAccountTwoFactorButtonComponent implements OnInit {
           this.notifier.success($localize`Two factor authentication disabled`)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 }

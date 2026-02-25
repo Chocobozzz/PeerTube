@@ -1,5 +1,3 @@
-import cors from 'cors'
-import express from 'express'
 import { OBJECT_STORAGE_PROXY_PATHS } from '@server/initializers/constants.js'
 import { proxifyHLS, proxifyWebVideoFile } from '@server/lib/object-storage/index.js'
 import {
@@ -9,6 +7,8 @@ import {
   ensurePrivateObjectStorageProxyIsEnabled,
   optionalAuthenticate
 } from '@server/middlewares/index.js'
+import cors from 'cors'
+import express from 'express'
 import { doReinjectVideoFileToken } from './shared/m3u8-playlist.js'
 
 const objectStorageProxyRouter = express.Router()
@@ -23,7 +23,8 @@ objectStorageProxyRouter.get(
   asyncMiddleware(proxifyWebVideoController)
 )
 
-objectStorageProxyRouter.get(OBJECT_STORAGE_PROXY_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS + ':videoUUID/:filename',
+objectStorageProxyRouter.get(
+  OBJECT_STORAGE_PROXY_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS + ':videoUUID/:filename',
   ensurePrivateObjectStorageProxyIsEnabled,
   optionalAuthenticate,
   asyncMiddleware(ensureCanAccessPrivateVideoHLSFiles),
@@ -43,7 +44,6 @@ function proxifyWebVideoController (req: express.Request, res: express.Response)
 }
 
 function proxifyHLSController (req: express.Request, res: express.Response) {
-  const playlist = res.locals.videoStreamingPlaylist
   const video = res.locals.onlyVideo
   const filename = req.params.filename
 
@@ -52,7 +52,6 @@ function proxifyHLSController (req: express.Request, res: express.Response) {
   return proxifyHLS({
     req,
     res,
-    playlist,
     video,
     filename,
     reinjectVideoFileToken

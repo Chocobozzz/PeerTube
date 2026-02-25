@@ -261,7 +261,7 @@ export class VideoStatsComponent implements OnInit {
           this.buildOverallStatCard(res)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -280,7 +280,7 @@ export class VideoStatsComponent implements OnInit {
           this.dateFilters = this.dateFilters.concat(newFilters)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -294,7 +294,7 @@ export class VideoStatsComponent implements OnInit {
         error: err => {
           if (err.status === HttpStatusCode.NOT_FOUND_404) return
 
-          this.notifier.error(err.message)
+          this.notifier.handleError(err)
         }
       })
   }
@@ -412,7 +412,7 @@ export class VideoStatsComponent implements OnInit {
         this.chartOptions[this.activeGraphId] = this.buildChartOptions(this.activeGraphId)
       },
 
-      error: err => this.notifier.error(err.message)
+      error: err => this.notifier.handleError(err)
     })
   }
 

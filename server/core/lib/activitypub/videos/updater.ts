@@ -68,12 +68,7 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
         runInReadCommittedTransaction(t => this.setTrackers(videoUpdated, t)),
         runInReadCommittedTransaction(t => this.setStoryboard(videoUpdated, t)),
         runInReadCommittedTransaction(t => this.setAutomaticTags({ video: videoUpdated, transaction: t, oldVideo })),
-        runInReadCommittedTransaction(t => {
-          return Promise.all([
-            this.setPreview(videoUpdated, t),
-            this.setThumbnail(videoUpdated, t)
-          ])
-        }),
+        runInReadCommittedTransaction(t => this.setThumbnails(videoUpdated, t)),
         this.setOrDeleteLive(videoUpdated)
       ])
 
@@ -149,6 +144,7 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
     this.video.views = videoData.views
     this.video.isLive = videoData.isLive
     this.video.aspectRatio = videoData.aspectRatio
+    this.video.embedPrivacyPolicy = videoData.embedPrivacyPolicy
 
     // Ensures we update the updatedAt attribute, even if main attributes did not change
     this.video.changed('updatedAt', true)

@@ -1,6 +1,6 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_form-mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
 
 form {
   margin-top: 40px;
@@ -18,11 +18,9 @@ form {
 
 .peertube-select-container {
   margin-bottom: 1rem;
-
-  @include peertube-select-container(auto);
 }
 
-input[type=text] {
+input[type="text"] {
   @include peertube-input-text(100%);
 }
 

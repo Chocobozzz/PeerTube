@@ -12,7 +12,7 @@ import { VideoPathManager } from '../video-path-manager.js'
 import { setVideoPrivacy } from '../video-privacy.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
-const lTags = loggerTagsFactory('update-videos-scheduler')
+const lTags = loggerTagsFactory('schedulers', 'update-videos')
 
 export class UpdateVideosScheduler extends AbstractScheduler {
   private static instance: AbstractScheduler
@@ -20,7 +20,7 @@ export class UpdateVideosScheduler extends AbstractScheduler {
   protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.UPDATE_VIDEOS
 
   private constructor () {
-    super()
+    super({ randomRunOnEnable: false })
   }
 
   protected async internalExecute () {
@@ -28,6 +28,8 @@ export class UpdateVideosScheduler extends AbstractScheduler {
   }
 
   private async updateVideos () {
+    logger.debug('Running update videos scheduler', lTags())
+
     if (!await ScheduleVideoUpdateModel.areVideosToUpdate()) return undefined
 
     const schedules = await ScheduleVideoUpdateModel.listVideosToUpdate()
@@ -59,7 +61,7 @@ export class UpdateVideosScheduler extends AbstractScheduler {
       const video = await VideoModel.loadFull(schedule.videoId, t)
       if (video.state === VideoState.TO_TRANSCODE) return null
 
-      logger.info('Executing scheduled video update on %s.', video.uuid)
+      logger.info('Executing scheduled video update on ' + video.uuid, lTags(video.uuid))
 
       if (schedule.privacy) {
         isNewVideoForFederation = isNewVideoPrivacyForFederation(video.privacy, schedule.privacy)

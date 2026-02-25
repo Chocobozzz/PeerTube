@@ -304,23 +304,25 @@ export const usersUpdateMeValidator = [
     ) {
       return res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
-        message: 'Cannot use same flags in nsfwFlagsDisplayed, nsfwFlagsHidden, nsfwFlagsBlurred and nsfwFlagsWarned at the same time'
+        message: req.t(
+          'Cannot use same flags in nsfwFlagsDisplayed, nsfwFlagsHidden, nsfwFlagsBlurred and nsfwFlagsWarned at the same time'
+        )
       })
     }
 
     if (body.password || body.email) {
       if (user.pluginAuth !== null) {
-        return res.fail({ message: 'You cannot update your email or password that is associated with an external auth system.' })
+        return res.fail({ message: req.t('You cannot update your email or password that is associated with an external auth system.') })
       }
 
       if (!body.currentPassword) {
-        return res.fail({ message: 'currentPassword parameter is missing' })
+        return res.fail({ message: req.t('currentPassword parameter is missing') })
       }
 
       if (await user.isPasswordMatch(body.currentPassword) !== true) {
         return res.fail({
           status: HttpStatusCode.UNAUTHORIZED_401,
-          message: 'currentPassword is invalid.',
+          message: req.t('currentPassword is invalid.'),
           type: ServerErrorCode.CURRENT_PASSWORD_IS_INVALID
         })
       }

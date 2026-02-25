@@ -42,12 +42,15 @@
                 } @else if (action.actorAvatar) {
                   <my-actor-avatar size="24" [actor]="action.actorAvatar.actor" [actorType]="action.actorAvatar.type"></my-actor-avatar>
                 }
+
                 <div class="item-label">
                   <span class="d-inline-flex align-items-center">
                     {{ action.label }}
+
                     @if (dropdownItemExtra) {
                       <ng-template *ngTemplateOutlet="dropdownItemExtra; context: { action }"></ng-template>
                     }
+
                     @if (action.ownerOrModeratorPrivilege && action.ownerOrModeratorPrivilege()) {
                       <my-global-icon
                         iconName="shield"
@@ -56,6 +59,7 @@
                       ></my-global-icon>
                     }
                   </span>
+
                   @if (action.description) {
                     <small class="muted action-description">{{ action.description }}</small>
                   }
@@ -95,6 +99,7 @@
             </div>
           }
         }
+
         @if (areActionsDisplayed(actions, entry())) {
           <div class="dropdown-divider"></div>
         }

@@ -37,7 +37,7 @@ import {
 } from '../../../middlewares/index.js'
 import { updateAvatarValidator } from '../../../middlewares/validators/actor-image.js'
 import {
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidatorFactory,
   deleteMeValidator,
   listMyVideoImportsValidator,
   listCommentsOnUserVideosValidator,
@@ -93,7 +93,7 @@ meRouter.get(
   videosSortValidator,
   setDefaultVideosSort,
   setDefaultPagination,
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidatorFactory({ allowPrivacyFilterForAllUsers: true }),
   asyncMiddleware(listMyVideosValidator),
   asyncMiddleware(listMyVideos)
 )

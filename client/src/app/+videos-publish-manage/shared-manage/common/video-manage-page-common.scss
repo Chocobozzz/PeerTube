@@ -8,10 +8,6 @@
   }
 }
 
-.peertube-select-container {
-  @include peertube-select-container(auto);
-}
-
 my-peertube-checkbox {
   display: block;
   margin-bottom: 1rem;
@@ -25,6 +21,10 @@ input[type="text"] {
   display: block;
 
   @include peertube-input-text(100%);
+}
+
+textarea {
+  @include peertube-textarea(100%, 150px);
 }
 
 p-calendar {

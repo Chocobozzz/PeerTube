@@ -21,7 +21,8 @@
           <my-button
             theme="primary" class="save-button"
             icon="circle-tick"
-            [disabled]="!canUpdate() || !hasPendingChanges()"  (click)="onWantToUpdate()"
+            [disabled]="!canUpdate() || !hasPendingChanges()" (click)="onWantToUpdate()"
+            [loading]="isUpdating"
             form="video-manage-form"
             >
             @if (hasStudioTasks()) {
@@ -36,15 +37,22 @@
       </div>
     </div>
 
-    @if (getStateWarning()?.title) {
-      <div class="video-state video-header-block mt-2">
-        <div class="alert-title">{{ getStateWarning().title }}</div>
-        <strong class="me-1">{{ getStateWarning().manageMain }}</strong>
-        <span>{{ getStateWarning().manageSecondary }}</span>
+    @if (getVideoError()?.title) {
+      <div class="video-alert video-err alert alert-danger mt-2" role="alert">
+        <div class="alert-title">{{ getVideoError().title }}</div>
+        <div class="me-1">{{ getVideoError().main }}</div>
+      </div>
+    }
 
-        @if (getStateWarning().routerLink) {
+    @if (getVideoWarning()?.title) {
+      <div class="video-alert video-warn mt-2" role="alert">
+        <div class="alert-title">{{ getVideoWarning().title }}</div>
+        <strong class="me-1">{{ getVideoWarning().manageMain }}</strong>
+        <span>{{ getVideoWarning().manageSecondary }}</span>
+
+        @if (getVideoWarning().routerLink) {
           <span class="ms-1">
-            <a [routerLink]="getStateWarning().routerLink.link" [queryParams]="getStateWarning().routerLink.queryParams">{{ getStateWarning().routerLink.text }}</a>
+            <a [routerLink]="getVideoWarning().routerLink.link" [queryParams]="getVideoWarning().routerLink.queryParams">{{ getVideoWarning().routerLink.text }}</a>
           </span>
         }
       </div>

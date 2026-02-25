@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { testImageGeneratedByFFmpeg } from '@tests/shared/checks.js'
 import { VideoPlaylistPrivacy } from '@peertube/peertube-models'
 import {
   cleanupTests,
@@ -12,6 +10,8 @@ import {
   setDefaultVideoChannel,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { checkThumbnails } from '@tests/shared/videos.js'
+import { expect } from 'chai'
 
 describe('Playlist thumbnail', function () {
   let servers: PeerTubeServer[] = []
@@ -83,7 +83,8 @@ describe('Playlist thumbnail', function () {
 
     for (const server of servers) {
       const p = await getPlaylistWithoutThumbnail(server)
-      await testImageGeneratedByFFmpeg(server.url, 'thumbnail-playlist', p.thumbnailPath)
+
+      await checkThumbnails({ server, playlist: p, thumbnails: [ 'thumbnail-playlist-280x157.jpg' ] })
     }
   })
 
@@ -95,7 +96,7 @@ describe('Playlist thumbnail', function () {
         displayName: 'playlist with thumbnail',
         privacy: VideoPlaylistPrivacy.PUBLIC,
         videoChannelId: servers[1].store.channel.id,
-        thumbnailfile: 'custom-thumbnail.jpg'
+        thumbnailfile: 'custom-thumbnail-input.jpg'
       }
     })
     playlistWithThumbnailId = created.id
@@ -110,7 +111,8 @@ describe('Playlist thumbnail', function () {
 
     for (const server of servers) {
       const p = await getPlaylistWithThumbnail(server)
-      await testImageGeneratedByFFmpeg(server.url, 'custom-thumbnail', p.thumbnailPath)
+
+      await checkThumbnails({ server, playlist: p, thumbnails: [ 'custom-thumbnail-280x157.jpg' ] })
     }
   })
 
@@ -135,7 +137,8 @@ describe('Playlist thumbnail', function () {
 
     for (const server of servers) {
       const p = await getPlaylistWithoutThumbnail(server)
-      await testImageGeneratedByFFmpeg(server.url, 'thumbnail-playlist', p.thumbnailPath)
+
+      await checkThumbnails({ server, playlist: p, thumbnails: [ 'thumbnail-playlist-280x157.jpg' ] })
     }
   })
 
@@ -160,7 +163,8 @@ describe('Playlist thumbnail', function () {
 
     for (const server of servers) {
       const p = await getPlaylistWithThumbnail(server)
-      await testImageGeneratedByFFmpeg(server.url, 'custom-thumbnail', p.thumbnailPath)
+
+      await checkThumbnails({ server, playlist: p, thumbnails: [ 'custom-thumbnail-280x157.jpg' ] })
     }
   })
 
@@ -176,7 +180,8 @@ describe('Playlist thumbnail', function () {
 
     for (const server of servers) {
       const p = await getPlaylistWithoutThumbnail(server)
-      await testImageGeneratedByFFmpeg(server.url, 'thumbnail-playlist', p.thumbnailPath)
+
+      await checkThumbnails({ server, playlist: p, thumbnails: [ 'thumbnail-playlist-280x157.jpg' ] })
     }
   })
 
@@ -192,11 +197,12 @@ describe('Playlist thumbnail', function () {
 
     for (const server of servers) {
       const p = await getPlaylistWithThumbnail(server)
-      await testImageGeneratedByFFmpeg(server.url, 'custom-thumbnail', p.thumbnailPath)
+
+      await checkThumbnails({ server, playlist: p, thumbnails: [ 'custom-thumbnail-280x157.jpg' ] })
     }
   })
 
-  it('Should the thumbnail when we delete the last element', async function () {
+  it('Should delete the thumbnail when we delete the last element', async function () {
     this.timeout(30000)
 
     await servers[1].playlists.removeElement({
@@ -208,7 +214,9 @@ describe('Playlist thumbnail', function () {
 
     for (const server of servers) {
       const p = await getPlaylistWithoutThumbnail(server)
+      // eslint-disable-next-line @typescript-eslint/no-deprecated
       expect(p.thumbnailPath).to.be.null
+      expect(p.thumbnails).to.have.lengthOf(0)
     }
   })
 
@@ -224,7 +232,8 @@ describe('Playlist thumbnail', function () {
 
     for (const server of servers) {
       const p = await getPlaylistWithThumbnail(server)
-      await testImageGeneratedByFFmpeg(server.url, 'custom-thumbnail', p.thumbnailPath)
+
+      await checkThumbnails({ server, playlist: p, thumbnails: [ 'custom-thumbnail-280x157.jpg' ] })
     }
   })
 

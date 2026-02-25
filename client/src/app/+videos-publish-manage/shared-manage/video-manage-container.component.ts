@@ -48,7 +48,8 @@ export class VideoManageContainerComponent implements OnInit, OnDestroy {
 
   canRetryUpload = true
 
-  private isUpdating = false
+  isUpdating = false
+
   private videoEdit: VideoEdit
 
   ngOnInit (): void {
@@ -72,10 +73,20 @@ export class VideoManageContainerComponent implements OnInit, OnDestroy {
 
   // ---------------------------------------------------------------------------
 
-  getStateWarning () {
+  getVideoWarning () {
     const video = this.videoEdit.getVideoAttributes()
 
-    return this.videoStateMessage.buildWarn(video.id, video.state)
+    return this.videoStateMessage.buildWarn({ videoId: video.id, state: video.state })
+  }
+
+  getVideoError () {
+    const video = this.videoEdit.getVideoAttributes()
+
+    return this.videoStateMessage.buildErr({
+      videoId: video.id,
+      blacklisted: video.blacklisted,
+      blacklistedReason: video.blacklistedReason
+    })
   }
 
   // ---------------------------------------------------------------------------

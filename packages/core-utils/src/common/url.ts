@@ -1,8 +1,8 @@
 import { Video, VideoPlaylist } from '@peertube/peertube-models'
 import { secondsToTime } from './date.js'
 
-function addQueryParams (url: string, params: { [ id: string ]: string }) {
-  const objUrl = new URL(url)
+function addQueryParams (url: string, params: { [ id: string ]: string }, baseUrl?: string) {
+  const objUrl = new URL(url, baseUrl)
 
   for (const key of Object.keys(params)) {
     objUrl.searchParams.append(key, params[key])
@@ -11,8 +11,8 @@ function addQueryParams (url: string, params: { [ id: string ]: string }) {
   return objUrl.toString()
 }
 
-function removeQueryParams (url: string) {
-  const objUrl = new URL(url)
+function removeQueryParams (url: string, baseUrl?: string) {
+  const objUrl = new URL(url, baseUrl)
 
   objUrl.searchParams.forEach((_v, k) => objUrl.searchParams.delete(k))
 

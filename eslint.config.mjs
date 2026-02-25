@@ -14,7 +14,7 @@ export default defineConfig([
     '*.js',
     'client',
     'dist',
-    'server/.i18next-parser.config.ts'
+    'server/.i18next.config.ts'
   ]),
 
   {

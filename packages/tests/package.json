@@ -8,7 +8,7 @@
     "@peertube/peertube-transcription-devtools": "workspace:*",
     "@types/superagent": "^8.1.9",
     "@types/supertest": "^6.0.3",
-    "supertest": "^7.1.4"
+    "supertest": "^7.2.2"
   },
   "scripts": {
     "build": "tsc",

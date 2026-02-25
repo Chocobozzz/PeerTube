@@ -5,7 +5,7 @@ import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants.js'
 import { getRunnerJobHandlerClass } from '../runners/index.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
-const lTags = loggerTagsFactory('runner')
+const lTags = loggerTagsFactory('schedulers', 'runner')
 
 export class RunnerJobWatchDogScheduler extends AbstractScheduler {
   private static instance: AbstractScheduler
@@ -13,7 +13,7 @@ export class RunnerJobWatchDogScheduler extends AbstractScheduler {
   protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.RUNNER_JOB_WATCH_DOG
 
   private constructor () {
-    super()
+    super({ randomRunOnEnable: false })
   }
 
   protected async internalExecute () {

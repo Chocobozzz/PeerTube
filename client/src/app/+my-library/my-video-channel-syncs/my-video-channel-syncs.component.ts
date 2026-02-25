@@ -118,7 +118,7 @@ export class MyVideoChannelSyncsComponent implements OnInit {
           this.notifier.success($localize`Synchronization removed successfully for ${videoChannelSync.channel.displayName}.`)
           this.table().loadData()
         },
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -128,7 +128,7 @@ export class MyVideoChannelSyncsComponent implements OnInit {
         next: () => {
           this.notifier.success($localize`Full synchronization requested successfully for ${videoChannelSync.channel.displayName}.`)
         },
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

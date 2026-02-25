@@ -44,7 +44,7 @@ export class MyAutoTagPoliciesComponent implements OnInit {
         this.notifier.success($localize`Comment policies updated`)
       },
 
-      error: err => this.notifier.error(err.message)
+      error: err => this.notifier.handleError(err)
     })
   }
 

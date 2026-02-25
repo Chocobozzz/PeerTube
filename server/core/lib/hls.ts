@@ -2,6 +2,7 @@ import { sortBy, uniqify, uuidRegex } from '@peertube/peertube-core-utils'
 import { ffprobePromise, getVideoStreamDimensionsInfo } from '@peertube/peertube-ffmpeg'
 import { FileStorage, VideoResolution } from '@peertube/peertube-models'
 import { sha256 } from '@peertube/peertube-node-utils'
+import { ApplicationModel } from '@server/models/application/application.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { MStreamingPlaylist, MStreamingPlaylistFilesVideo, MVideo, MVideoCaption } from '@server/types/models/index.js'
 import { ensureDir, move, outputJSON, remove } from 'fs-extra/esm'
@@ -25,7 +26,21 @@ import { VideoPathManager } from './video-path-manager.js'
 const lTags = loggerTagsFactory('hls')
 
 export async function updateStreamingPlaylistsInfohashesIfNeeded () {
-  const playlistsToUpdateIds = await VideoStreamingPlaylistModel.listByIncorrectPeerVersion()
+  let playlistsToUpdateIds = new Set(await VideoStreamingPlaylistModel.listIdsByIncorrectPeerVersion())
+
+  if (playlistsToUpdateIds.size !== 0) {
+    logger.info(`Will update ${playlistsToUpdateIds.size} streaming playlists infohash because of protocol version change.`, lTags())
+  }
+
+  if (await ApplicationModel.streamingPlaylistBaseUrlChanged()) {
+    const localIds = await VideoStreamingPlaylistModel.listIdsLocals()
+
+    if (localIds.length !== 0) {
+      logger.info(`Will update ${localIds.length} local streaming playlists infohash because of object storage base URL change.`, lTags())
+
+      playlistsToUpdateIds = new Set([ ...playlistsToUpdateIds, ...localIds ])
+    }
+  }
 
   // Use separate SQL queries, because we could have many videos to update
   for (const playlistId of playlistsToUpdateIds) {
@@ -133,6 +148,8 @@ function updateMasterHLSPlaylist (video: MVideo, playlistArg: MStreamingPlaylist
 
     const masterPlaylists = [ '#EXTM3U', '#EXT-X-VERSION:3', '', ...extMediaSubtitle, '', ...extMediaAudio, '', ...extStreamInfo ]
 
+    await playlist.reload()
+
     if (playlist.playlistFilename) {
       await video.removeStreamingPlaylistFile(playlist, playlist.playlistFilename)
     }
@@ -141,8 +158,8 @@ function updateMasterHLSPlaylist (video: MVideo, playlistArg: MStreamingPlaylist
     const masterPlaylistContent = masterPlaylists.join('\n') + '\n'
 
     if (playlist.storage === FileStorage.OBJECT_STORAGE) {
-      playlist.playlistUrl = await storeHLSFileFromContent({
-        playlist,
+      await storeHLSFileFromContent({
+        video,
         pathOrFilename: playlist.playlistFilename,
         content: masterPlaylistContent
       })
@@ -198,8 +215,8 @@ function updateSha256VODSegments (video: MVideo, playlistArg: MStreamingPlaylist
     playlist.segmentsSha256Filename = generateHlsSha256SegmentsFilename(video.isLive)
 
     if (playlist.storage === FileStorage.OBJECT_STORAGE) {
-      playlist.segmentsSha256Url = await storeHLSFileFromContent({
-        playlist,
+      await storeHLSFileFromContent({
+        video,
         pathOrFilename: playlist.segmentsSha256Filename,
         content: JSON.stringify(json)
       })
@@ -315,7 +332,7 @@ export function buildCaptionM3U8Content (options: {
   const { video, caption } = options
 
   return `#EXTM3U\n#EXT-X-VERSION:3\n#EXT-X-TARGETDURATION:${video.duration}\n#EXT-X-MEDIA-SEQUENCE:0\n` +
-    `#EXTINF:${video.duration},\n${caption.getFileUrl(video)}\n#EXT-X-ENDLIST\n`
+    `#EXTINF:${video.duration},\n${caption.getLocalFileUrl()}\n#EXT-X-ENDLIST\n`
 }
 
 // ---------------------------------------------------------------------------

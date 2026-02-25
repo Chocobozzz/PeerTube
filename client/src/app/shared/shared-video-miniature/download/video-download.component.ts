@@ -5,6 +5,7 @@ import { AuthService, HooksService } from '@app/core'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCaption, VideoSource } from '@peertube/peertube-models'
+import { logger } from '@root-helpers/logger'
 import { videoRequiresFileToken } from '@root-helpers/video'
 import { of } from 'rxjs'
 import { catchError } from 'rxjs/operators'
@@ -97,11 +98,12 @@ export class VideoDownloadComponent {
     if (!this.video.isLocal || !this.authService.isLoggedIn()) return of(undefined)
 
     const user = this.authService.getUser()
-    if (!this.video.isOwnerOrHasSeeAllVideosRight(user)) return of(undefined)
+    // User that can update the video can also get the original video file
+    if (!this.video.isUpdatableBy(user)) return of(undefined)
 
     return this.videoService.getSource(this.video.id)
       .pipe(catchError(err => {
-        console.error('Cannot get source file', err)
+        logger.error('Cannot get source file', err)
 
         return of(undefined)
       }))

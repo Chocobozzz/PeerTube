@@ -78,7 +78,7 @@ export class PluginListInstalledComponent implements OnInit {
           this.onDataSubject.next(res.data)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -142,7 +142,7 @@ export class PluginListInstalledComponent implements OnInit {
         },
 
         error: err => {
-          this.notifier.error(err.message)
+          this.notifier.handleError(err)
           this.uninstalling[pluginKey] = false
         }
       })
@@ -176,7 +176,7 @@ export class PluginListInstalledComponent implements OnInit {
         },
 
         error: err => {
-          this.notifier.error(err.message)
+          this.notifier.handleError(err)
           this.updating[pluginKey] = false
         }
       })

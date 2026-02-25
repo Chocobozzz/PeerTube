@@ -15,7 +15,7 @@ import { logger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import {
   asyncMiddleware,
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidatorFactory,
   openapiOperationDoc,
   optionalAuthenticate,
   paginationValidator,
@@ -39,7 +39,7 @@ searchVideosRouter.get(
   videosSearchSortValidator,
   setDefaultSearchSort,
   optionalAuthenticate,
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidatorFactory(),
   videosSearchValidator,
   asyncMiddleware(searchVideos)
 )

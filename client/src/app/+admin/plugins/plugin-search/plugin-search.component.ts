@@ -161,7 +161,7 @@ export class PluginSearchComponent implements OnInit {
         error: err => {
           this.installing[plugin.npmName] = false
 
-          this.notifier.error(err.message)
+          this.notifier.handleError(err)
         }
       })
   }

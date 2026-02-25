@@ -317,6 +317,18 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
     }
   }
 
+  protected includeCaptions () {
+    this.addJoin(
+      'LEFT JOIN "videoCaption" AS "VideoCaptions" ON "video"."id" = "VideoCaptions"."videoId"'
+    )
+
+    this.attributes = {
+      ...this.attributes,
+
+      ...this.buildAttributesObject('VideoCaptions', this.tables.getCaptionAttributes())
+    }
+  }
+
   protected buildActorInclude (prefixKey: string) {
     return this.buildAttributesObject(prefixKey, this.tables.getActorAttributes())
   }

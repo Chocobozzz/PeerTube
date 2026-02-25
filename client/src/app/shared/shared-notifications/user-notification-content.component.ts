@@ -85,7 +85,7 @@ export class UserNotificationContentComponent {
           this.router.navigate(this.n.url)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -100,7 +100,7 @@ export class UserNotificationContentComponent {
           this.n.payload.videoChannelCollaborator.state.id = VideoChannelCollaboratorState.REJECTED
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 }

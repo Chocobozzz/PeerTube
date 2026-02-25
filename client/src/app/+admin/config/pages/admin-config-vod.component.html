@@ -80,12 +80,12 @@
                     <my-peertube-checkbox
                       inputName="transcodingWebVideosEnabled" formControlName="enabled"
                       i18n-labelText labelText="Web Videos enabled"
-                      >
-                      <ng-template ptTemplate="help">
+                    >
+                      <ng-container ngProjectAs="description">
                         <ng-container>
-                          <p i18n>If you also enabled HLS support, it will multiply videos storage by 2</p>
+                          <div i18n>If you also enable HLS output, video storage will be multiplied by 2</div>
                         </ng-container>
-                      </ng-template>
+                      </ng-container>
                     </my-peertube-checkbox>
                   </div>
                 </ng-container>
@@ -97,6 +97,10 @@
                       i18n-labelText labelText="HLS with P2P support enabled"
                       [recommended]="true"
                       >
+                      <ng-container ngProjectAs="description">
+                        <div i18n>If you also enable Web Videos output, video storage will be multiplied by 2</div>
+                      </ng-container>
+
                       <ng-template ptTemplate="help">
                         <ng-container i18n>
                           <strong>Requires ffmpeg >= 4.1</strong>
@@ -107,14 +111,12 @@
                             <li>Faster playback especially with long videos</li>
                             <li>More stable playback (less bugs/infinite loading)</li>
                           </ul>
-
-                          <p>If you also enabled Web Videos support, it will multiply videos storage by 2</p>
                         </ng-container>
                       </ng-template>
 
                       <ng-container ngProjectAs="extra">
 
-                        <div class="form-group" [ngClass]="getHLSDisabledClass()">
+                        <div class="form-group" class="mb-0" [ngClass]="getHLSDisabledClass()">
                           <my-peertube-checkbox
                             inputName="transcodingHlsSplitAudioAndVideo" formControlName="splitAudioAndVideo"
                             i18n-labelText labelText="Split audio and video streams"
@@ -134,6 +136,18 @@
 
                   </div>
                 </ng-container>
+
+                <div class="form-group">
+                  <my-peertube-checkbox
+                    inputName="transcodingAlwaysTranscodePodcastOptimizedAudio" formControlName="alwaysTranscodePodcastOptimizedAudio"
+                    i18n-labelText labelText="Always generate an audio file optimized for podcast applications"
+                    >
+                    <ng-container ngProjectAs="description">
+                      <div i18n>HLS audio files are not always played correctly by podcast applications</div>
+                      <div i18n>This option ensures that an optimized audio file is generated for podcast applications, even if Web Videos output is disabled</div>
+                    </ng-container>
+                  </my-peertube-checkbox>
+                </div>
 
                 <div class="form-group" formGroupName="fps" [ngClass]="getTranscodingDisabledClass()">
                   <label i18n for="transcodingFPSMax">Max video FPS</label>
@@ -230,7 +244,7 @@
 
         <div class="form-group" [ngClass]="getLocalTranscodingDisabledClass()">
           <label i18n for="transcodingConcurrency">Transcoding jobs concurrency</label>
-          <span class="small muted ms-1" i18n>allows to transcode multiple files in parallel. ⚠️ Requires a PeerTube restart</span>
+          <span class="small muted ms-1" i18n>allows to transcode multiple files in parallel</span>
 
           <div class="number-with-unit">
             <input type="number" id="transcodingConcurrency" formControlName="concurrency" />

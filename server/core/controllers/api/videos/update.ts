@@ -2,18 +2,19 @@ import { forceNumber } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
   NSFWFlag,
-  ThumbnailType,
   VideoChannelActivityAction,
   VideoPrivacy,
   VideoPrivacyType,
   VideoUpdate
 } from '@peertube/peertube-models'
 import { exists } from '@server/helpers/custom-validators/misc.js'
+import { getVideoThumbnailFile } from '@server/helpers/video.js'
+import { sendDeleteVideo } from '@server/lib/activitypub/send/send-delete.js'
 import { changeVideoChannelShare } from '@server/lib/activitypub/share.js'
 import { isNewVideoPrivacyForFederation, isPrivacyForFederation } from '@server/lib/activitypub/videos/federate.js'
 import { AutomaticTagger } from '@server/lib/automatic-tags/automatic-tagger.js'
 import { setAndSaveVideoAutomaticTags } from '@server/lib/automatic-tags/automatic-tags.js'
-import { updateLocalVideoMiniatureFromExisting } from '@server/lib/thumbnail.js'
+import { createLocalVideoThumbnailsFromImage } from '@server/lib/thumbnail.js'
 import { replaceChaptersFromDescriptionIfNeeded } from '@server/lib/video-chapters.js'
 import { addVideoJobsAfterUpdate } from '@server/lib/video-jobs.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
@@ -24,7 +25,7 @@ import { VideoChannelActivityModel } from '@server/models/video/video-channel-ac
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { FilteredModelAttributes } from '@server/types/index.js'
 import { MVideoFullLight, MVideoThumbnail } from '@server/types/models/index.js'
-import express, { UploadFiles } from 'express'
+import express from 'express'
 import { Transaction } from 'sequelize'
 import { VideoAuditView, auditLoggerFactory, getAuditIdFromRes } from '../../../helpers/audit-logger.js'
 import { resetSequelizeInstance } from '../../../helpers/database-utils.js'
@@ -70,7 +71,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
   const hadPrivacyForFederation = isPrivacyForFederation(videoFromReq.privacy)
   const oldPrivacy = videoFromReq.privacy
 
-  const thumbnails = await buildVideoThumbnailsFromReq(videoFromReq, req.files)
+  const thumbnails = await buildVideoThumbnailsFromReq(videoFromReq, req)
   const videoFileLockReleaser = await VideoPathManager.Instance.lockFiles(videoFromReq.uuid)
 
   try {
@@ -134,9 +135,8 @@ async function updateVideo (req: express.Request, res: express.Response) {
 
       const videoInstanceUpdated = await video.save({ transaction: t }) as MVideoFullLight
 
-      // Thumbnail & preview updates?
-      for (const thumbnail of thumbnails) {
-        await videoInstanceUpdated.addAndSaveThumbnail(thumbnail, t)
+      if (thumbnails.length !== 0) {
+        await videoInstanceUpdated.replaceAndSaveThumbnails(thumbnails, t)
       }
 
       // Video tags update?
@@ -265,7 +265,7 @@ async function updateVideoPrivacy (options: {
 
   // Unfederate the video if the new privacy is not compatible with federation
   if (hadPrivacyForFederation && !isPrivacyForFederation(videoInstance.privacy)) {
-    await VideoModel.sendDelete(videoInstance, { transaction })
+    await sendDeleteVideo({ video: videoInstance, deleteForPrivacyChange: true, transaction })
   }
 
   return isNewVideoForFederation
@@ -297,29 +297,13 @@ async function updateSchedule (videoInstance: MVideoFullLight, videoInfoToUpdate
   }
 }
 
-async function buildVideoThumbnailsFromReq (video: MVideoThumbnail, files: UploadFiles) {
-  const promises = [
-    {
-      type: ThumbnailType.MINIATURE,
-      fieldName: 'thumbnailfile'
-    },
-    {
-      type: ThumbnailType.PREVIEW,
-      fieldName: 'previewfile'
-    }
-  ].map(p => {
-    const fields = files?.[p.fieldName]
-    if (!fields) return undefined
+async function buildVideoThumbnailsFromReq (video: MVideoThumbnail, req: express.Request) {
+  const file = getVideoThumbnailFile(req.files)
+  if (!file) return []
 
-    return updateLocalVideoMiniatureFromExisting({
-      inputPath: fields[0].path,
-      video,
-      type: p.type,
-      automaticallyGenerated: false
-    })
+  return createLocalVideoThumbnailsFromImage({
+    inputPath: file.path,
+    video,
+    automaticallyGenerated: false
   })
-
-  const thumbnailsOrUndefined = await Promise.all(promises)
-
-  return thumbnailsOrUndefined.filter(t => !!t)
 }

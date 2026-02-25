@@ -23,7 +23,7 @@ import {
   VideoStudioCommand,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { basename } from 'path'
 
 const badUUID = '910ec12a-d9e6-458b-a274-0abb655f9464'
@@ -132,7 +132,7 @@ describe('Test managing runners', function () {
       })
 
       it('Should fail to list with an incorrect sort', async function () {
-        await checkBadSortPagination(server.url, path, server.accessToken)
+        await checkBadSort(server.url, path, server.accessToken)
       })
 
       it('Should succeed to list with the correct params', async function () {
@@ -237,7 +237,7 @@ describe('Test managing runners', function () {
       })
 
       it('Should fail to list with an incorrect sort', async function () {
-        await checkBadSortPagination(server.url, path, server.accessToken)
+        await checkBadSort(server.url, path, server.accessToken)
       })
 
       it('Should fail with an invalid state', async function () {
@@ -310,7 +310,7 @@ describe('Test managing runners', function () {
       })
 
       it('Should fail to list with an incorrect sort', async function () {
-        await checkBadSortPagination(server.url, path, server.accessToken)
+        await checkBadSort(server.url, path, server.accessToken)
       })
 
       it('Should fail with an invalid state', async function () {
@@ -387,7 +387,7 @@ describe('Test managing runners', function () {
       const { jobUUID, expectedStatus, videoUUID, runnerToken, jobToken } = options
 
       const basePath = '/api/v1/runners/jobs/' + jobUUID + '/files/videos/' + videoUUID
-      const paths = [ `${basePath}/max-quality`, `${basePath}/previews/max-quality` ]
+      const paths = [ `${basePath}/max-quality`, `${basePath}/thumbnails/max-quality` ]
 
       for (const path of paths) {
         await makePostBodyRequest({ url: server.url, path, fields: { runnerToken, jobToken }, expectedStatus })
@@ -810,7 +810,7 @@ describe('Test managing runners', function () {
         })
 
         it('Should fail with an invalid vod audio merge payload', async function () {
-          const attributes = { name: 'audio_with_preview', previewfile: 'custom-preview.jpg', fixture: 'sample.ogg' }
+          const attributes = { name: 'audio_with_preview', thumbnailfile: 'custom-thumbnail-big.jpg', fixture: 'sample.ogg' }
           await server.videos.upload({ attributes, mode: 'legacy' })
 
           await waitJobs([ server ])

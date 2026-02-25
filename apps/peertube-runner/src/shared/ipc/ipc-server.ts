@@ -33,6 +33,10 @@ export class IPCServer {
     })
   }
 
+  stop () {
+    return this.netIPC?.close()
+  }
+
   private async process (req: IPCRequest) {
     switch (req.type) {
       case 'register':

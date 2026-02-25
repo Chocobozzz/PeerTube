@@ -6,6 +6,7 @@ import { VideoManageController } from '@app/+videos-publish-manage/shared-manage
 import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
 import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
 import { PlayerSettingsService } from '@app/shared/shared-video/player-settings.service'
+import { VideoEmbedPrivacyService } from '@app/shared/shared-video/video-embed-privacy.service'
 import { LiveVideoLatencyMode, PeerTubeProblemDocument, ServerErrorCode, UserVideoQuota, VideoPrivacyType } from '@peertube/peertube-models'
 import debug from 'debug'
 import { forkJoin, map, switchMap } from 'rxjs'
@@ -40,6 +41,7 @@ export class VideoGoLiveComponent implements OnInit, AfterViewInit, CanComponent
   private manageController = inject(VideoManageController)
   private route = inject(ActivatedRoute)
   private playerSettingsService = inject(PlayerSettingsService)
+  private videoEmbedPrivacyService = inject(VideoEmbedPrivacyService)
 
   readonly userChannels = input.required<SelectChannelItem[]>()
   readonly userQuota = input.required<UserVideoQuota>()
@@ -104,14 +106,15 @@ export class VideoGoLiveComponent implements OnInit, AfterViewInit, CanComponent
         switchMap(({ video }) => {
           return forkJoin([
             this.liveVideoService.getVideoLive(video.uuid),
-            this.playerSettingsService.getVideoSettings({ videoId: video.uuid, raw: true })
-          ]).pipe(map(([ live, playerSettings ]) => ({ live, playerSettings, video })))
+            this.playerSettingsService.getVideoSettings({ videoId: video.uuid, raw: true }),
+            this.videoEmbedPrivacyService.getPrivacy({ videoId: video.uuid })
+          ]).pipe(map(([ live, playerSettings, embedPrivacy ]) => ({ live, playerSettings, embedPrivacy, video })))
         })
       )
       .subscribe({
-        next: async ({ video: { id, uuid, shortUUID }, live, playerSettings }) => {
+        next: async ({ video: { id, uuid, shortUUID }, live, playerSettings, embedPrivacy }) => {
           videoEdit.loadAfterPublish({ video: { id, uuid, shortUUID } })
-          await videoEdit.loadFromAPI({ live, playerSettings, loadPrivacy: false })
+          await videoEdit.loadFromAPI({ live, playerSettings, embedPrivacy, loadPrivacy: false })
 
           debugLogger(`Live published`)
 
@@ -124,18 +127,17 @@ export class VideoGoLiveComponent implements OnInit, AfterViewInit, CanComponent
 
         error: err => {
           this.firstStepError.emit()
+          this.isGoingLive = false
 
-          let message = err.message
           const error = err.body as PeerTubeProblemDocument
 
           if (error?.code === ServerErrorCode.MAX_INSTANCE_LIVES_LIMIT_REACHED) {
-            message = $localize`Cannot create live because this platform has too many created lives`
+            this.notifier.error($localize`Cannot create live because this platform has too many created lives`)
           } else if (error?.code === ServerErrorCode.MAX_USER_LIVES_LIMIT_REACHED) {
-            message = $localize`Cannot create live because you created too many lives`
+            this.notifier.error($localize`Cannot create live because you created too many lives`)
+          } else {
+            this.notifier.handleError(err)
           }
-
-          this.notifier.error(message)
-          this.isGoingLive = false
         }
       })
   }

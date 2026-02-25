@@ -1,7 +1,7 @@
 import { Job } from 'bullmq'
 import { copy } from 'fs-extra/esm'
 import { VideoFileImportPayload } from '@peertube/peertube-models'
-import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent.js'
+import { createTorrentAndSetInfoHash } from '@server/lib/webtorrent.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
@@ -27,7 +27,16 @@ async function processVideoFileImport (job: Job) {
   await updateVideoFile(video, payload.filePath)
 
   if (CONFIG.OBJECT_STORAGE.ENABLED) {
-    await JobQueue.Instance.createJob(await buildMoveVideoJob({ video, previousVideoState: video.state, type: 'move-to-object-storage' }))
+    await JobQueue.Instance.createJob(
+      await buildMoveVideoJob({
+        type: 'move-to-object-storage',
+        video,
+        moveVideoState: {
+          isNewVideo: false,
+          previousVideoState: video.state
+        }
+      })
+    )
   } else {
     await federateVideoIfNeeded(video, false)
   }

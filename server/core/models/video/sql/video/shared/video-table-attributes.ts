@@ -1,3 +1,5 @@
+import { thumbnailAPIAttributes } from '@server/models/video/thumbnail.js'
+
 /**
  * Class to build video attributes/join names we want to fetch from the database
  */
@@ -48,14 +50,12 @@ export class VideoTableAttributes {
   }
 
   getThumbnailAttributes () {
-    let attributeKeys = [ 'id', 'type', 'filename' ]
+    // We need the id to efficiently build the model
+    let attributeKeys = [ 'id', ...thumbnailAPIAttributes ] as string[]
 
     if (this.mode === 'get') {
       attributeKeys = attributeKeys.concat([
-        'height',
-        'width',
-        'fileUrl',
-        'onDisk',
+        'cached',
         'automaticallyGenerated',
         'videoId',
         'videoPlaylistId',
@@ -215,6 +215,10 @@ export class VideoTableAttributes {
     return [ 'id', 'fileUrl' ]
   }
 
+  getCaptionAttributes () {
+    return [ 'id', 'language', 'fileUrl', 'storage', 'filename', 'automaticallyGenerated', 'm3u8Filename', 'm3u8Url' ]
+  }
+
   getActorAttributes () {
     let attributeKeys = [
       'id',
@@ -251,7 +255,7 @@ export class VideoTableAttributes {
       'filename',
       'type',
       'fileUrl',
-      'onDisk',
+      'cached',
       'createdAt',
       'updatedAt'
     ]
@@ -295,6 +299,7 @@ export class VideoTableAttributes {
       'url',
       'commentsPolicy',
       'downloadEnabled',
+      'embedPrivacyPolicy',
       'waitTranscoding',
       'state',
       'publishedAt',

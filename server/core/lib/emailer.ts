@@ -1,5 +1,5 @@
 import { arrayify } from '@peertube/peertube-core-utils'
-import { EmailPayload, SendEmailDefaultOptions, To, UserExportState, UserRegistrationState } from '@peertube/peertube-models'
+import { EmailPayload, MailAction, SendEmailDefaultOptions, To, UserExportState, UserRegistrationState } from '@peertube/peertube-models'
 import { getFilenameWithoutExt, isTestOrDevInstance, root } from '@peertube/peertube-node-utils'
 import { t } from '@server/helpers/i18n.js'
 import { toSafeMailHtml } from '@server/helpers/markdown.js'
@@ -229,13 +229,13 @@ export class Emailer {
 
     let template: string
     let subject: string
-    let action: { text: string, href: string }
+    let action: MailAction
 
     if (registration.state === UserRegistrationState.ACCEPTED) {
       template = 'user-registration-request-accepted'
       subject = t('Your registration request for {username} has been accepted', language, { username: registration.username })
 
-      action = { text: t('Login to your account', language), href: loginUrl }
+      action = { text: t('Login to your account', language), url: loginUrl }
     } else {
       template = 'user-registration-request-rejected'
       subject = t('Your registration request for {username} has been rejected', language, { username: registration.username })
@@ -400,6 +400,7 @@ export class Emailer {
           fg: CONFIG.THEME.CUSTOMIZATION.FOREGROUND_COLOR || '#000',
           bg: CONFIG.THEME.CUSTOMIZATION.BACKGROUND_COLOR || '#fff',
           primary: CONFIG.THEME.CUSTOMIZATION.PRIMARY_COLOR || '#FF8F37',
+          onPrimary: CONFIG.THEME.CUSTOMIZATION.ON_PRIMARY_COLOR || '#000',
           language: to.language,
           logoUrl: ServerConfigManager.Instance.getLogoUrl(await getServerActor(), 192)
         }

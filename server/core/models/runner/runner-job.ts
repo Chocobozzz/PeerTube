@@ -63,6 +63,9 @@ enum ScopeNames {
     },
     {
       fields: [ 'runnerId' ]
+    },
+    {
+      fields: [ 'dependsOnRunnerJobId' ]
     }
   ]
 })

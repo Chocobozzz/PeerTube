@@ -16,6 +16,8 @@ export interface VideoCommentObject {
 
   replyApproval: string | null
 
+  audience: string
+
   to?: string[]
   cc?: string[]
 }

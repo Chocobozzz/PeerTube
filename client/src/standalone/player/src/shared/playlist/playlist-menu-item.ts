@@ -1,4 +1,4 @@
-import { secondsToTime } from '@peertube/peertube-core-utils'
+import { findAppropriateThumbnail, secondsToTime } from '@peertube/peertube-core-utils'
 import { VideoPlaylistElement } from '@peertube/peertube-models'
 import videojs from 'video.js'
 import { PlaylistItemOptions, VideojsComponent, VideojsComponentOptions, VideojsPlayer } from '../../types'
@@ -83,7 +83,9 @@ class PlaylistMenuItem extends Component {
     positionBlock.appendChild(player)
 
     const thumbnail = super.createEl('img', {
-      src: window.location.origin + videoElement.video.thumbnailPath
+      src: videoElement.video.thumbnails.length !== 0
+        ? findAppropriateThumbnail(videoElement.video.thumbnails, 80, '16:9').fileUrl // Keep 80 in sync with CSS
+        : ''
     })
 
     const infoBlock = super.createEl('div', {

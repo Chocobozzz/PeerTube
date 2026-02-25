@@ -16,7 +16,7 @@ import { MStreamingPlaylist, MVideo, MVideoCaption, MVideoFullLight, MVideoId, M
 import { MutexInterface } from 'async-mutex'
 import { ensureDir, remove } from 'fs-extra/esm'
 import { writeFile } from 'fs/promises'
-import { join } from 'path'
+import { dirname, join } from 'path'
 import { federateVideoIfNeeded } from './activitypub/videos/federate.js'
 import { buildCaptionM3U8Content, updateM3U8AndShaPlaylist } from './hls.js'
 import { JobQueue } from './job-queue/job-queue.js'
@@ -39,7 +39,8 @@ export async function createLocalCaption (options: {
     filename: VideoCaptionModel.generateCaptionName(language),
     storage: FileStorage.FILE_SYSTEM,
     language,
-    automaticallyGenerated
+    automaticallyGenerated,
+    cached: false
   }) as MVideoCaption
 
   await moveAndProcessCaptionFile({ path }, videoCaption)
@@ -200,7 +201,13 @@ export async function generateSubtitle (options: {
         format: 'vtt'
       })
 
-      await onTranscriptionEnded({ video, language: transcriptFile.language, vttPath: transcriptFile.path })
+      const refreshedVideo = await VideoModel.loadFull(video.uuid)
+      if (!refreshedVideo) {
+        logger.info(`Do not process transcription for video ${video.uuid}: it does not exist anymore.`, lTags(video.uuid))
+        return
+      }
+
+      await onTranscriptionEnded({ video: refreshedVideo, language: transcriptFile.language, vttPath: transcriptFile.path })
     })
   } finally {
     if (outputPath) await remove(outputPath)
@@ -266,6 +273,7 @@ export async function upsertCaptionPlaylistOnFS (caption: MVideoCaption, video: 
   logger.debug(`Creating caption playlist ${m3u8Destination} of video ${video.uuid}`, lTags(video.uuid))
 
   const content = buildCaptionM3U8Content({ video, caption })
+  await ensureDir(dirname(m3u8Destination))
   await writeFile(m3u8Destination, content, 'utf8')
 
   return m3u8Filename

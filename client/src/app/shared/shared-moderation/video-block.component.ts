@@ -100,7 +100,7 @@ export class VideoBlockComponent extends FormReactive implements OnInit {
           this.videoBlocked.emit()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 }

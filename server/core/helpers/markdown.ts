@@ -1,13 +1,11 @@
-import MarkdownItClass from 'markdown-it'
-// FIXME: use direct import: import markdownItEmoji from 'markdown-it-emoji/lib/light.mjs' if it improves perf'
-// when https://github.com/privatenumber/tsx/issues/334 is fixed
 import {
   getDefaultSanitizeOptions,
   getMailHtmlSanitizeOptions,
   getTextOnlySanitizeOptions,
   TEXT_WITH_HTML_RULES
 } from '@peertube/peertube-core-utils'
-import { light as markdownItEmoji } from 'markdown-it-emoji'
+import MarkdownItClass from 'markdown-it'
+import markdownItEmoji from 'markdown-it-emoji/lib/light.mjs'
 import sanitizeHtml from 'sanitize-html'
 
 const defaultSanitizeOptions = getDefaultSanitizeOptions()

@@ -61,7 +61,7 @@ export class MyAccountTwoFactorComponent implements OnInit {
         this.step = 'confirm'
       },
 
-      error: err => this.notifier.error(err.message)
+      error: err => this.notifier.handleError(err)
     })
   }
 
@@ -79,7 +79,7 @@ export class MyAccountTwoFactorComponent implements OnInit {
         this.router.navigateByUrl('/my-account/settings')
       },
 
-      error: err => this.notifier.error(err.message)
+      error: err => this.notifier.handleError(err)
     })
   }
 

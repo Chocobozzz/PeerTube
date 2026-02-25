@@ -90,7 +90,7 @@ export class VideoChannelActivitiesComponent implements OnInit, OnDestroy {
         this.onDataSubject.next(res.data)
       },
 
-      error: err => this.notifier.error(err.message)
+      error: err => this.notifier.handleError(err)
     })
   }
 }

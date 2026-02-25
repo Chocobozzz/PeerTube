@@ -16,6 +16,7 @@
   "references": [
     { "path": "../models/tsconfig.types.json" },
     { "path": "../typescript-utils/tsconfig.types.json" },
+    { "path": "../transcription/tsconfig.types.json" },
     { "path": "../../server/tsconfig.types.json" },
     { "path": "./src/client/tsconfig.types.json" }
   ],

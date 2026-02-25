@@ -17,8 +17,7 @@ export function isAndroid () {
 }
 
 export function isSafari () {
-  return browser.capabilities['browserName'] &&
-    browser.capabilities['browserName'].toLowerCase() === 'safari'
+  return browser.capabilities['browserName']?.toLowerCase() === 'safari'
 }
 
 export function isIOS () {

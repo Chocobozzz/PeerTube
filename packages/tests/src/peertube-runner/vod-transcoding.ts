@@ -4,6 +4,7 @@ import { VideoPrivacy, VideoResolution } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
+  ConfigCommand,
   createMultipleServers,
   doubleFollow,
   ObjectStorageCommand,
@@ -391,6 +392,53 @@ describe('Test VOD transcoding in peertube-runner program', function () {
 
         const resolutions = getAllFiles(video).map(f => f.resolution.id)
         expect(resolutions).to.have.members([ 240, 240, 480, 480 ])
+      })
+
+      it('Should have a custom web video transcoding configuration', async function () {
+        await servers[0].config.updateExistingConfig({
+          newConfig: {
+            transcoding: {
+              enabled: true,
+              originalFile: {
+                keep: false
+              },
+
+              allowAudioFiles: true,
+              allowAdditionalExtensions: true,
+
+              resolutions: ConfigCommand.getCustomConfigResolutions([ 240, 720, 1080 ]),
+
+              alwaysTranscodeOriginalResolution: true,
+              alwaysTranscodePodcastOptimizedAudio: true,
+
+              hls: {
+                enabled: true,
+                splitAudioAndVideo: false
+              },
+
+              webVideos: {
+                enabled: false
+              }
+            }
+          }
+        })
+
+        const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
+
+        await waitJobs(servers, { runnerJobs: true })
+
+        const video = await servers[0].videos.get({ id: uuid })
+
+        expect(video.files.map(f => f.resolution.id)).to.have.members([ 0 ])
+        expect(video.streamingPlaylists[0].files.map(f => f.resolution.id)).to.have.members([ 240, 720 ])
+
+        await servers[0].config.updateExistingConfig({
+          newConfig: {
+            transcoding: {
+              alwaysTranscodePodcastOptimizedAudio: false
+            }
+          }
+        })
       })
     })
   })

@@ -34,8 +34,16 @@
       <my-alert type="danger">
         {{ error }}
 
-        @if (error === 'User email is not verified.') {
+        @if (emailNotVerifiedError) {
           <a class="ms-1 link-primary" i18n routerLink="/verify-account/ask-send-email">Request new verification email</a>
+        }
+
+        @if (passwordTooLongError) {
+          <div>
+            <button type="button" i18n class="button-unstyle link-primary" (click)="openForgotPasswordModal()">
+              Reset your password
+            </button>
+          </div>
         }
       </my-alert>
     }

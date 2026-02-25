@@ -1,5 +1,6 @@
 import { escapeAttribute, escapeHTML } from '@peertube/peertube-core-utils'
 import { mdToPlainText } from '@server/helpers/markdown.js'
+import { getActivityStreamDuration } from '@server/lib/activitypub/activity.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
 import { getServerActor } from '@server/models/application/application.js'
 import truncate from 'lodash-es/truncate.js'
@@ -8,6 +9,51 @@ import { CONFIG } from '../../../initializers/config.js'
 import { CUSTOM_HTML_TAG_COMMENTS, EMBED_SIZE, WEBSERVER } from '../../../initializers/constants.js'
 import { MVideo, MVideoPlaylist } from '../../../types/models/index.js'
 import { Hooks } from '../../plugins/hooks.js'
+
+type JsonldSchema = {
+  '@context': 'http://schema.org'
+  '@type': string
+
+  name: string
+  description: string
+  image: string
+  url: string
+
+  embedUrl?: string
+  uploadDate?: string
+
+  thumbnailUrl?: string
+  numberOfItems?: number
+  duration?: string
+  inLanguage?: string
+
+  interactionStatistic?: {
+    '@type': 'InteractionCounter'
+    interactionType: string
+    userInteractionCount: number
+  }[]
+
+  keywords?: string[]
+
+  author?: {
+    '@type': 'Organization'
+    name: string
+    url: string
+  }
+
+  contentRating?: 'Mature' | 'General Audience'
+
+  datePublished?: string
+  dateModified?: string
+
+  caption?: {
+    '@type': 'MediaObject'
+    'contentUrl': string
+    'encodingFormat': string
+    'inLanguage': string
+    'name': string
+  }[]
+}
 
 export type TagsOptions = {
   forbidIndexation: boolean
@@ -41,14 +87,37 @@ export type TagsOptions = {
     height: number
   }
 
-  embed?: {
-    url: string
+  videoOrPlaylist?: {
+    embedUrl: string
+    oembedUrl: string
+    updatedAt: string
     createdAt: string
-    duration?: string
-    views?: number
+
+    channel?: {
+      displayName: string
+      url: string
+    }
   }
 
-  oembedUrl?: string
+  video?: {
+    duration: number
+    language: string
+    tags: string[]
+
+    views: number
+    likes: number
+    dislikes: number
+
+    nsfw: boolean
+    publishedAt: string
+
+    captions: {
+      label: string
+      mediaType: string
+      language: string
+      url: string
+    }[]
+  }
 
   rssFeeds?: {
     title: string
@@ -89,7 +158,7 @@ export class TagsHtml {
   // ---------------------------------------------------------------------------
 
   static async addTags (htmlStringPage: string, tagsValues: TagsOptions, context: HookContext) {
-    const { url, escapedTitle, oembedUrl, forbidIndexation, embedIndexation, relMe, rssFeeds } = tagsValues
+    const { url, escapedTitle, videoOrPlaylist, forbidIndexation, embedIndexation, relMe, rssFeeds } = tagsValues
     const serverActor = await getServerActor()
 
     let tagsStr = ''
@@ -109,8 +178,8 @@ export class TagsHtml {
     }
 
     // OEmbed
-    if (oembedUrl) {
-      const href = WEBSERVER.URL + '/services/oembed?url=' + encodeURIComponent(oembedUrl)
+    if (videoOrPlaylist?.oembedUrl) {
+      const href = WEBSERVER.URL + '/services/oembed?url=' + encodeURIComponent(videoOrPlaylist.oembedUrl)
 
       tagsStr += `<link rel="alternate" type="application/json+oembed" href="${href}" title="${escapeAttribute(escapedTitle)}" />`
     }
@@ -178,9 +247,9 @@ export class TagsHtml {
     metaTags['og:url'] = tags.url
     metaTags['og:description'] = tags.escapedTruncatedDescription
 
-    if (tags.embed) {
-      metaTags['og:video:url'] = tags.embed.url
-      metaTags['og:video:secure_url'] = tags.embed.url
+    if (tags.videoOrPlaylist) {
+      metaTags['og:video:url'] = tags.videoOrPlaylist.embedUrl
+      metaTags['og:video:secure_url'] = tags.videoOrPlaylist.embedUrl
       metaTags['og:video:type'] = 'text/html'
       metaTags['og:video:width'] = EMBED_SIZE.width
       metaTags['og:video:height'] = EMBED_SIZE.height
@@ -216,8 +285,8 @@ export class TagsHtml {
       metaTags['twitter:image:height'] = tags.image.height
     }
 
-    if (tags.twitterCard === 'player') {
-      metaTags['twitter:player'] = tags.embed.url
+    if (tags.twitterCard === 'player' && tags.videoOrPlaylist) {
+      metaTags['twitter:player'] = tags.videoOrPlaylist.embedUrl
       metaTags['twitter:player:width'] = EMBED_SIZE.width
       metaTags['twitter:player:height'] = EMBED_SIZE.height
     }
@@ -250,7 +319,7 @@ export class TagsHtml {
       return Hooks.wrapObject(profilePageSchema, 'filter:html.client.json-ld.result', context)
     }
 
-    const schema = {
+    const schema: JsonldSchema = {
       '@context': 'http://schema.org',
       '@type': tags.schemaType,
       'name': tags.escapedTitle,
@@ -264,13 +333,70 @@ export class TagsHtml {
       schema['thumbnailUrl'] = tags.image?.url
     }
 
-    if (tags.embed) {
-      schema['embedUrl'] = tags.embed.url
-      schema['uploadDate'] = tags.embed.createdAt
+    if (tags.videoOrPlaylist) {
+      const videoOrPlaylist = tags.videoOrPlaylist
+      const video = tags.video
 
-      if (tags.embed.duration) schema['duration'] = tags.embed.duration
+      schema['publisher'] = {
+        '@type': 'Organization',
+        'name': CONFIG.INSTANCE.NAME,
+        'url': WEBSERVER.URL
+      }
+
+      schema['embedUrl'] = videoOrPlaylist.embedUrl
+      schema['uploadDate'] = videoOrPlaylist.createdAt
 
       schema['thumbnailUrl'] = tags.image?.url
+
+      schema['dateModified'] = videoOrPlaylist.updatedAt
+
+      if (videoOrPlaylist.channel) {
+        schema['author'] = {
+          '@type': 'Organization',
+          'name': videoOrPlaylist.channel.displayName,
+          'url': videoOrPlaylist.channel.url
+        }
+      }
+
+      if (video) {
+        schema['datePublished'] = video.publishedAt
+
+        schema['interactionStatistic'] = [
+          {
+            '@type': 'InteractionCounter',
+            'interactionType': 'http://schema.org/WatchAction',
+            'userInteractionCount': video.views
+          },
+          {
+            '@type': 'InteractionCounter',
+            'interactionType': 'http://schema.org/LikeAction',
+            'userInteractionCount': video.likes
+          },
+          {
+            '@type': 'InteractionCounter',
+            'interactionType': 'http://schema.org/DislikeAction',
+            'userInteractionCount': video.dislikes
+          }
+        ]
+
+        if (video.duration) schema['duration'] = getActivityStreamDuration(video.duration)
+        if (video.language) schema['inLanguage'] = video.language
+
+        if (video.tags.length !== 0) schema['keywords'] = video.tags
+
+        if (video.captions.length !== 0) {
+          schema['caption'] = video.captions.map(c => ({
+            '@type': 'MediaObject',
+            'contentUrl': c.url,
+            'encodingFormat': c.mediaType,
+            'inLanguage': c.language,
+            'name': c.label
+          }))
+        }
+
+        if (video.nsfw) schema['contentRating'] = 'Mature'
+        else schema['contentRating'] = 'General Audience'
+      }
     }
 
     return Hooks.wrapObject(schema, 'filter:html.client.json-ld.result', context)

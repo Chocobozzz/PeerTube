@@ -24,8 +24,8 @@ import {
   setDefaultVideoChannel,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { testImageGeneratedByFFmpeg } from '@tests/shared/checks.js'
 import { checkPlaylistFilesWereRemoved } from '@tests/shared/video-playlists.js'
+import { checkThumbnails } from '@tests/shared/videos.js'
 import { expect } from 'chai'
 
 async function checkPlaylistElementType (
@@ -138,7 +138,7 @@ describe('Test video playlists', function () {
           displayName: 'my normal playlist',
           privacy: VideoPlaylistPrivacy.PUBLIC,
           description: 'my super description',
-          thumbnailfile: 'custom-thumbnail.jpg',
+          thumbnailfile: 'custom-thumbnail-280x157.jpg',
           videoChannelId: servers[0].store.channel.id
         }
       })
@@ -231,7 +231,7 @@ describe('Test video playlists', function () {
           displayName: 'my super playlist',
           privacy: VideoPlaylistPrivacy.PUBLIC,
           description: 'my super description',
-          thumbnailfile: 'custom-thumbnail.jpg',
+          thumbnailfile: 'custom-thumbnail-280x157.jpg',
           videoChannelId: servers[0].store.channel.id
         }
       })
@@ -288,7 +288,7 @@ describe('Test video playlists', function () {
           attributes: {
             displayName: 'playlist 3',
             privacy: VideoPlaylistPrivacy.PUBLIC,
-            thumbnailfile: 'custom-thumbnail.jpg',
+            thumbnailfile: 'custom-thumbnail-280x157.jpg',
             videoChannelId: servers[1].store.channel.id
           }
         })
@@ -315,11 +315,20 @@ describe('Test video playlists', function () {
 
         const playlist2 = body.data.find(p => p.displayName === 'playlist 2')
         expect(playlist2).to.not.be.undefined
-        await testImageGeneratedByFFmpeg(server.url, 'thumbnail-playlist', playlist2.thumbnailPath)
+
+        await checkThumbnails({
+          server,
+          thumbnails: [ 'thumbnail-playlist-280x157.jpg' ],
+          playlist: playlist2
+        })
 
         const playlist3 = body.data.find(p => p.displayName === 'playlist 3')
         expect(playlist3).to.not.be.undefined
-        await testImageGeneratedByFFmpeg(server.url, 'custom-thumbnail', playlist3.thumbnailPath)
+        await checkThumbnails({
+          server,
+          thumbnails: [ 'custom-thumbnail-280x157.jpg' ],
+          playlist: playlist3
+        })
       }
 
       const body = await servers[2].playlists.list({ start: 0, count: 5 })
@@ -337,7 +346,12 @@ describe('Test video playlists', function () {
 
       const playlist2 = body.data.find(p => p.displayName === 'playlist 2')
       expect(playlist2).to.not.be.undefined
-      await testImageGeneratedByFFmpeg(servers[2].url, 'thumbnail-playlist', playlist2.thumbnailPath)
+
+      await checkThumbnails({
+        server: servers[2],
+        thumbnails: [ 'thumbnail-playlist-280x157.jpg' ],
+        playlist: playlist2
+      })
 
       expect(body.data.find(p => p.displayName === 'playlist 3')).to.not.be.undefined
     })
@@ -655,7 +669,7 @@ describe('Test video playlists', function () {
           displayName: 'playlist 3 updated',
           description: 'description updated',
           privacy: VideoPlaylistPrivacy.UNLISTED,
-          thumbnailfile: 'custom-thumbnail.jpg',
+          thumbnailfile: 'custom-thumbnail-280x157.jpg',
           videoChannelId: servers[1].store.channel.id
         },
         playlistId: playlistServer2Id2
@@ -1109,42 +1123,45 @@ describe('Test video playlists', function () {
         43000,
         servers[0].store.videos[4].id
       ]
-      const obj = await commands[0].videosExist({ videoIds })
 
-      {
-        const elem = obj[servers[0].store.videos[0].id]
-        expect(elem).to.have.lengthOf(1)
-        expect(elem[0].playlistElementId).to.exist
-        expect(elem[0].playlistDisplayName).to.equal(playlistServer1DisplayName)
-        expect(elem[0].playlistShortUUID).to.equal(uuidToShort(playlistServer1UUID))
-        expect(elem[0].playlistId).to.equal(playlistServer1Id)
-        expect(elem[0].startTimestamp).to.equal(15)
-        expect(elem[0].stopTimestamp).to.equal(28)
+      for (const token of [ editorToken, servers[0].accessToken ]) {
+        const obj = await commands[0].videosExist({ videoIds, token })
+
+        {
+          const elem = obj[servers[0].store.videos[0].id]
+          expect(elem).to.have.lengthOf(1)
+          expect(elem[0].playlistElementId).to.exist
+          expect(elem[0].playlistDisplayName).to.equal(playlistServer1DisplayName)
+          expect(elem[0].playlistShortUUID).to.equal(uuidToShort(playlistServer1UUID))
+          expect(elem[0].playlistId).to.equal(playlistServer1Id)
+          expect(elem[0].startTimestamp).to.equal(15)
+          expect(elem[0].stopTimestamp).to.equal(28)
+        }
+
+        {
+          const elem = obj[servers[0].store.videos[3].id]
+          expect(elem).to.have.lengthOf(1)
+          expect(elem[0].playlistElementId).to.equal(playlistElementServer1Video4)
+          expect(elem[0].playlistDisplayName).to.equal(playlistServer1DisplayName)
+          expect(elem[0].playlistShortUUID).to.equal(uuidToShort(playlistServer1UUID))
+          expect(elem[0].playlistId).to.equal(playlistServer1Id)
+          expect(elem[0].startTimestamp).to.equal(1)
+          expect(elem[0].stopTimestamp).to.equal(35)
+        }
+
+        {
+          const elem = obj[servers[0].store.videos[4].id]
+          expect(elem).to.have.lengthOf(1)
+          expect(elem[0].playlistId).to.equal(playlistServer1Id)
+          expect(elem[0].playlistDisplayName).to.equal(playlistServer1DisplayName)
+          expect(elem[0].playlistShortUUID).to.equal(uuidToShort(playlistServer1UUID))
+          expect(elem[0].startTimestamp).to.equal(45)
+          expect(elem[0].stopTimestamp).to.equal(null)
+        }
+
+        expect(obj[42000]).to.have.lengthOf(0)
+        expect(obj[43000]).to.have.lengthOf(0)
       }
-
-      {
-        const elem = obj[servers[0].store.videos[3].id]
-        expect(elem).to.have.lengthOf(1)
-        expect(elem[0].playlistElementId).to.equal(playlistElementServer1Video4)
-        expect(elem[0].playlistDisplayName).to.equal(playlistServer1DisplayName)
-        expect(elem[0].playlistShortUUID).to.equal(uuidToShort(playlistServer1UUID))
-        expect(elem[0].playlistId).to.equal(playlistServer1Id)
-        expect(elem[0].startTimestamp).to.equal(1)
-        expect(elem[0].stopTimestamp).to.equal(35)
-      }
-
-      {
-        const elem = obj[servers[0].store.videos[4].id]
-        expect(elem).to.have.lengthOf(1)
-        expect(elem[0].playlistId).to.equal(playlistServer1Id)
-        expect(elem[0].playlistDisplayName).to.equal(playlistServer1DisplayName)
-        expect(elem[0].playlistShortUUID).to.equal(uuidToShort(playlistServer1UUID))
-        expect(elem[0].startTimestamp).to.equal(45)
-        expect(elem[0].stopTimestamp).to.equal(null)
-      }
-
-      expect(obj[42000]).to.have.lengthOf(0)
-      expect(obj[43000]).to.have.lengthOf(0)
     })
 
     it('Should automatically update updatedAt field of playlists', async function () {
@@ -1533,7 +1550,7 @@ describe('Test video playlists', function () {
           displayName: 'playlist 0 updated',
           description: 'description updated',
           privacy: VideoPlaylistPrivacy.UNLISTED,
-          thumbnailfile: 'custom-thumbnail.jpg',
+          thumbnailfile: 'custom-thumbnail-280x157.jpg',
           videoChannelId: channelId1
         }
       })

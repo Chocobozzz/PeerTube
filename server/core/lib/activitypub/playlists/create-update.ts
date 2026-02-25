@@ -1,11 +1,11 @@
 import { HttpStatusCode, PlaylistObject } from '@peertube/peertube-models'
-import { isArray } from '@server/helpers/custom-validators/misc.js'
+import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { PeerTubeRequestError } from '@server/helpers/requests.js'
 import { CRAWL_REQUEST_CONCURRENCY } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
-import { updateRemotePlaylistMiniatureFromUrl } from '@server/lib/thumbnail.js'
+import { updateRemotePlaylistThumbnailFromUrl } from '@server/lib/thumbnail.js'
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { FilteredModelAttributes } from '@server/types/index.js'
@@ -22,7 +22,6 @@ import {
   playlistElementObjectToDBAttributes,
   playlistObjectToDBAttributes
 } from './shared/index.js'
-import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 
 const lTags = loggerTagsFactory('ap', 'video-playlist')
 
@@ -96,19 +95,24 @@ export async function createOrUpdateVideoPlaylist (options: {
 // ---------------------------------------------------------------------------
 
 async function getRemotePlaylistChannel (playlistObject: PlaylistObject) {
-  if (!isArray(playlistObject.attributedTo) || playlistObject.attributedTo.length !== 1) {
-    throw new Error('Not attributed to for playlist object ' + getAPId(playlistObject))
+  let channelUrl: string
+
+  if (isActivityPubUrlValid(playlistObject.audience)) { // fep-1b12
+    channelUrl = getAPId(playlistObject.audience)
+  } else if (playlistObject.attributedTo.length !== 0) {
+    channelUrl = getAPId(playlistObject.attributedTo[0])
+  } else {
+    throw new Error('Missing "audience" or "attributedTo" attribute for playlist object ' + getAPId(playlistObject))
   }
 
-  const channelUrl = getAPId(playlistObject.attributedTo[0])
   if (!checkUrlsSameHost(channelUrl, playlistObject.id)) {
-    throw new Error(`Playlist ${playlistObject.id} and "attributedTo" channel ${channelUrl} are not on the same host`)
+    throw new Error(`Playlist ${getAPId(playlistObject)} and "audience" or "attributedTo" channel ${channelUrl} are not on the same host`)
   }
 
   const actor = await getOrCreateAPActor(channelUrl, 'all')
 
   if (!actor.VideoChannel) {
-    throw new Error(`Playlist ${playlistObject.id} "attributedTo" is not a video channel.`)
+    throw new Error(`Playlist ${getAPId(playlistObject)} "audience" or "attributedTo" is not a video channel`)
   }
 
   return actor.VideoChannel
@@ -130,12 +134,12 @@ async function updatePlaylistThumbnail (playlistObject: PlaylistObject, playlist
     let thumbnailModel: MThumbnail
 
     try {
-      thumbnailModel = await updateRemotePlaylistMiniatureFromUrl({ downloadUrl: playlistObject.icon.url, playlist })
+      thumbnailModel = updateRemotePlaylistThumbnailFromUrl({ fileUrl: playlistObject.icon.url, playlist })
       await playlist.setAndSaveThumbnail(thumbnailModel, undefined)
     } catch (err) {
       logger.warn('Cannot set thumbnail of %s.', playlistObject.id, { err, ...lTags(playlistObject.id, playlist.uuid, playlist.url) })
 
-      if (thumbnailModel) await thumbnailModel.removeThumbnail()
+      if (thumbnailModel) await thumbnailModel.removeFile()
     }
 
     return

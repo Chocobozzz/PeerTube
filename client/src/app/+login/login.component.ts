@@ -59,7 +59,11 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
   readonly instanceAboutAccordion = viewChild<InstanceAboutAccordionComponent>('instanceAboutAccordion')
 
   accordion: NgbAccordionDirective
+
   error: string = null
+  emailNotVerifiedError = false
+  passwordTooLongError = false
+
   forgotPasswordEmail = ''
 
   isAuthenticatedWithExternalAuth = false
@@ -156,6 +160,8 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
 
   login () {
     this.error = null
+    this.emailNotVerifiedError = false
+    this.passwordTooLongError = false
 
     const options = {
       username: this.form.value['username'],
@@ -188,7 +194,7 @@ The link will expire within 1 hour.`
           this.hideForgotPasswordModal()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -242,12 +248,12 @@ The link will expire within 1 hour.`
       return
     }
 
-    if (err.message.includes('credentials are invalid')) {
+    if (err.body?.code === ServerErrorCode.INVALID_GRANT) {
       this.error = $localize`Incorrect username or password.`
       return
     }
 
-    if (err.message.includes('blocked')) {
+    if (err.body?.code === ServerErrorCode.ACCOUNT_BLOCKED) {
       this.error = $localize`Your account is blocked.`
       return
     }
@@ -260,6 +266,16 @@ The link will expire within 1 hour.`
     if (err.body?.code === ServerErrorCode.ACCOUNT_APPROVAL_REJECTED) {
       this.error = $localize`Registration approval has been rejected for this account.`
       return
+    }
+
+    if (err.body?.code === ServerErrorCode.TOO_LONG_PASSWORD) {
+      this.error = $localize`Your current password is too long. Please reset it.`
+      this.passwordTooLongError = true
+      return
+    }
+
+    if (err.body?.code === ServerErrorCode.EMAIL_NOT_VERIFIED) {
+      this.emailNotVerifiedError = true
     }
 
     this.error = err.message

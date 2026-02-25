@@ -23,6 +23,10 @@ export function checkMissedConfig () {
     'database.username',
     'database.password',
     'database.pool.max',
+    'database.ssl_settings.reject_unauthorized',
+    'database.ssl_settings.ca',
+    'database.ssl_settings.cert',
+    'database.ssl_settings.key',
     'smtp.hostname',
     'smtp.port',
     'smtp.username',
@@ -70,10 +74,6 @@ export function checkMissedConfig () {
     'csp.report_uri',
     'security.frameguard.enabled',
     'security.powered_by_header.enabled',
-    'cache.previews.size',
-    'cache.captions.size',
-    'cache.torrents.size',
-    'cache.storyboards.size',
     'admin.email',
     'contact_form.enabled',
     'signup.enabled',
@@ -89,6 +89,7 @@ export function checkMissedConfig () {
     'transcoding.original_file.keep',
     'transcoding.threads',
     'transcoding.allow_additional_extensions',
+    'transcoding.always_transcode_podcast_optimized_audio',
     'transcoding.web_videos.enabled',
     'transcoding.hls.enabled',
     'transcoding.profile',
@@ -189,6 +190,7 @@ export function checkMissedConfig () {
     'object_storage.enabled',
     'object_storage.endpoint',
     'object_storage.region',
+    'object_storage.force_path_style',
     'object_storage.upload_acl.public',
     'object_storage.upload_acl.private',
     'object_storage.proxy.proxify_private_files',
@@ -268,7 +270,7 @@ export function checkMissedConfig () {
     [ // set
       [ 'redis.hostname', 'redis.port' ], // alternative
       [ 'redis.socket' ],
-      [ 'redis.sentinel.master_name', 'redis.sentinel.sentinels[0].hostname', 'redis.sentinel.sentinels[0].port' ]
+      [ 'redis.sentinel.master_name', 'redis.sentinel.sentinels[0].host', 'redis.sentinel.sentinels[0].port' ]
     ]
   ]
   const miss: string[] = []

@@ -15,7 +15,7 @@ import {
   makePostBodyRequest,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 import { checkUploadVideoParam } from '@tests/shared/videos.js'
 import { expect } from 'chai'
@@ -564,7 +564,7 @@ describe('Test video passwords validator', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, path + video.uuid + '/passwords', server.accessToken)
+      await checkBadSort(server.url, path + video.uuid + '/passwords', server.accessToken)
     })
 
     it('Should fail for unauthenticated user', async function () {

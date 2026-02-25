@@ -69,7 +69,7 @@
 
   <div class="modal-body">
     <span i18n>
-      You can comment using an account on any ActivityPub-compatible instance (PeerTube/Mastodon/Pleroma account for example).
+      You can comment using an account on any ActivityPub-compatible instance (PeerTube/Mastodon account for example).
     </span>
 
     <my-remote-subscribe [interact]="true" [uri]="getUri()"></my-remote-subscribe>
@@ -81,7 +81,7 @@
       (click)="hideModals()" (key.enter)="hideModals()"
       >
 
-    <my-login-link i18n-label label="Login to comment" className="peertube-button-link primary-button"></my-login-link>
+    <my-login-link i18n-label label="Login to comment" className="peertube-button-link primary-button" (click)="hideModals()"></my-login-link>
   </div>
 </ng-template>
 

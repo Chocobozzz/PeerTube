@@ -357,7 +357,7 @@ async function startApplication () {
       }
     }
 
-    ApplicationModel.updateNodeVersions()
+    ApplicationModel.updateNodeVersionsOrConfig()
       .catch(err => logger.error('Cannot update node versions.', { err }))
 
     JobQueue.Instance.start()

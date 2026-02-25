@@ -131,18 +131,18 @@ export class UserListComponent implements OnInit, OnDestroy {
           label: $localize`Delete`,
           description: $localize`Videos will be deleted, comments will be tombstoned.`,
           handler: users => this.removeUsers(users),
-          isDisplayed: users => users.every(u => this.authUser.canManage(u))
+          isDisplayed: users => users.every(u => this.authUser.canManageUser(u))
         },
         {
           label: $localize`Ban`,
           description: $localize`User won't be able to login anymore, but videos and comments will be kept as is.`,
           handler: users => this.openBanUserModal(users),
-          isDisplayed: users => users.every(u => this.authUser.canManage(u) && u.blocked === false)
+          isDisplayed: users => users.every(u => this.authUser.canManageUser(u) && u.blocked === false)
         },
         {
           label: $localize`Unban`,
           handler: users => this.unbanUsers(users),
-          isDisplayed: users => users.every(u => this.authUser.canManage(u) && u.blocked === true)
+          isDisplayed: users => users.every(u => this.authUser.canManageUser(u) && u.blocked === true)
         }
       ],
       [
@@ -150,14 +150,14 @@ export class UserListComponent implements OnInit, OnDestroy {
           label: $localize`Set email as verified`,
           handler: users => this.setEmailsAsVerified(users),
           isDisplayed: users => {
-            return users.every(u => this.authUser.canManage(u) && !u.blocked && u.emailVerified !== true)
+            return users.every(u => this.authUser.canManageUser(u) && !u.blocked && u.emailVerified !== true)
           }
         },
         {
           label: $localize`Re-send verification emails`,
           handler: users => this.resendVerificationEmails(users),
           isDisplayed: users => {
-            return users.every(u => this.authUser.canManage(u) && !u.blocked && u.emailVerified !== true && !u.pluginAuth)
+            return users.every(u => this.authUser.canManageUser(u) && !u.blocked && u.emailVerified !== true && !u.pluginAuth)
           }
         }
       ]
@@ -221,7 +221,7 @@ export class UserListComponent implements OnInit, OnDestroy {
           this.table().loadData()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -251,7 +251,7 @@ export class UserListComponent implements OnInit, OnDestroy {
           this.table().loadData()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -269,7 +269,7 @@ export class UserListComponent implements OnInit, OnDestroy {
           this.table().loadData()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -285,7 +285,7 @@ export class UserListComponent implements OnInit, OnDestroy {
           )
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

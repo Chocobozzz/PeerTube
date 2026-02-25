@@ -35,7 +35,7 @@ import {
   HTMLServerConfig,
   RegisterClientFormFieldOptions,
   RegisterClientVideoFieldOptions,
-  VideoConstant,
+  ConstantLabel,
   VideoPrivacy,
   VideoPrivacyType
 } from '@peertube/peertube-models'
@@ -73,7 +73,7 @@ type Form = {
   language: FormControl<string>
   description: FormControl<string>
   tags: FormArray<FormControl<string>>
-  previewfile: FormControl<Blob>
+  thumbnailfile: FormControl<Blob>
   support: FormControl<string>
   schedulePublicationAt: FormControl<Date>
   pluginData: FormGroup
@@ -132,10 +132,10 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
   forbidScheduledPublication: boolean
   hideWaitTranscoding: boolean
 
-  videoPrivacies: VideoConstant<VideoEditPrivacyType>[] = []
-  videoCategories: VideoConstant<number>[] = []
-  videoLicences: VideoConstant<number>[] = []
-  videoLanguages: VideoConstant<string>[] = []
+  videoPrivacies: ConstantLabel<VideoEditPrivacyType>[] = []
+  videoCategories: ConstantLabel<number>[] = []
+  videoLicences: ConstantLabel<number>[] = []
+  videoLanguages: ConstantLabel<string>[] = []
 
   pluginDataFormGroup: FormGroup
 
@@ -287,7 +287,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
       language: VIDEO_LANGUAGE_VALIDATOR,
       description: VIDEO_DESCRIPTION_VALIDATOR,
       tags: VIDEO_TAGS_ARRAY_VALIDATOR,
-      previewfile: null,
+      thumbnailfile: null,
       support: VIDEO_SUPPORT_VALIDATOR,
       schedulePublicationAt: VIDEO_SCHEDULE_PUBLICATION_AT_VALIDATOR
     }
@@ -497,7 +497,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
           this.router.navigate([ '/my-library/videos' ])
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -513,7 +513,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
 
   // ---------------------------------------------------------------------------
 
-  isEditor () {
-    return this.videoEdit.getVideoAttributes().ownerAccountId !== this.authService.getUser().account.id
+  isVideoOwner () {
+    return this.videoEdit.getVideoAttributes().ownerAccountId === this.authService.getUser().account.id
   }
 }

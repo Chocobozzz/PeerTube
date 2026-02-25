@@ -1,6 +1,10 @@
+import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { OAuthTokenModel } from '@server/models/oauth/oauth-token.js'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
+import { isProdInstance } from '@peertube/peertube-node-utils'
+
+const lTags = loggerTagsFactory('schedulers')
 
 type UpdatePayload = {
   lastActivityDate: Date
@@ -16,7 +20,7 @@ export class UpdateTokenSessionScheduler extends AbstractScheduler {
   private toUpdate = new Map<number, UpdatePayload>()
 
   private constructor () {
-    super()
+    super({ randomRunOnEnable: false })
   }
 
   addToUpdate (id: number, payload: UpdatePayload) {
@@ -24,6 +28,9 @@ export class UpdateTokenSessionScheduler extends AbstractScheduler {
   }
 
   protected async internalExecute () {
+    // Log only on production instances to reduce noise on development/test instances
+    if (isProdInstance()) logger.debug('Running update token session scheduler', lTags())
+
     const entriesToUpdate = this.toUpdate.entries()
     this.toUpdate = new Map()
 

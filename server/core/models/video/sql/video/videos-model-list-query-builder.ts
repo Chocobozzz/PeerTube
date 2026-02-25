@@ -53,11 +53,17 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
           this.streamingPlaylistFilesQueryBuilder.queryStreamingPlaylistVideos(fileQueryOptions)
         ])
 
-        return this.videoModelBuilder.buildVideosFromRows({ rows, include: options.include, rowsStreamingPlaylist, rowsWebVideoFiles })
+        return this.videoModelBuilder.buildVideosFromRows({
+          rows,
+          include: options.include,
+          addCaptions: false,
+          rowsStreamingPlaylist,
+          rowsWebVideoFiles
+        })
       }
     }
 
-    return this.videoModelBuilder.buildVideosFromRows({ rows, include: options.include })
+    return this.videoModelBuilder.buildVideosFromRows({ rows, include: options.include, addCaptions: false })
   }
 
   private buildInnerQuery (options: BuildVideosListQueryOptions) {

@@ -10,7 +10,7 @@ import {
   setAccessTokensToServers,
   setDefaultAccountAvatar
 } from '@peertube/peertube-server-commands'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 
 describe('Test watched words API validators', function () {
   let server: PeerTubeServer
@@ -57,7 +57,6 @@ describe('Test watched words API validators', function () {
   })
 
   describe('Account & server watched words', function () {
-
     describe('When listing watched words', function () {
       const paths = [
         '/api/v1/watched-words/accounts/user1/lists',
@@ -89,13 +88,13 @@ describe('Test watched words API validators', function () {
         for (const path of paths) {
           await checkBadStartPagination(server.url, path, userToken)
           await checkBadCountPagination(server.url, path, userToken)
-          await checkBadSortPagination(server.url, path, userToken)
+          await checkBadSort(server.url, path, userToken)
         }
       })
     })
 
     describe('When adding/updating watched words', function () {
-      const baseParams = () => ([
+      const baseParams = () => [
         {
           token: userToken,
           accountName: 'user1',
@@ -109,7 +108,7 @@ describe('Test watched words API validators', function () {
           words: [ 'word1' ],
           listId: serverListId
         }
-      ])
+      ]
 
       it('Should fail with an unauthenticated user', async function () {
         for (const baseParam of baseParams()) {
@@ -182,7 +181,7 @@ describe('Test watched words API validators', function () {
     })
 
     describe('When deleting watched words', function () {
-      const baseParams = () => ([
+      const baseParams = () => [
         {
           token: userToken,
           accountName: 'user1',
@@ -192,7 +191,7 @@ describe('Test watched words API validators', function () {
           token: moderatorToken,
           listId: serverListId
         }
-      ])
+      ]
 
       it('Should fail with an unauthenticated user', async function () {
         for (const baseParam of baseParams()) {
@@ -215,7 +214,6 @@ describe('Test watched words API validators', function () {
   })
 
   describe('Account specific watched words', function () {
-
     describe('When listing watched words', function () {
       it('Should fail with an unknown account', async function () {
         await command.listWordsLists({ accountName: 'unknown', expectedStatus: HttpStatusCode.NOT_FOUND_404 })

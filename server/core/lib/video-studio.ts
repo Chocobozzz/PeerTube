@@ -2,8 +2,9 @@ import { buildAspectRatio } from '@peertube/peertube-core-utils'
 import { getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
 import { VideoStudioEditionPayload, VideoStudioTask, VideoStudioTaskPayload } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
-import { createTorrentAndSetInfoHashFromPath } from '@server/helpers/webtorrent.js'
 import { CONFIG } from '@server/initializers/config.js'
+import { createTorrentAndSetInfoHashFromPath } from '@server/lib/webtorrent.js'
+import { VideoModel } from '@server/models/video/video.js'
 import { MUser, MVideoFile, MVideoFullLight, MVideoWithAllFiles, MVideoWithFile } from '@server/types/models/index.js'
 import { move, remove } from 'fs-extra/esm'
 import { join } from 'path'
@@ -75,7 +76,7 @@ export async function createVideoStudioJob (options: {
 }) {
   const { video, user, payload } = options
 
-  const priority = await getTranscodingJobPriority({ user, type: 'studio', fallback: 0 })
+  const priority = await getTranscodingJobPriority({ user, type: 'studio' })
 
   if (CONFIG.VIDEO_STUDIO.REMOTE_RUNNERS.ENABLED) {
     await new VideoStudioTranscodingJobHandler().create({ video, tasks: payload.tasks, priority })
@@ -90,47 +91,56 @@ export async function onVideoStudioEnded (options: {
   tasks: VideoStudioTaskPayload[]
   video: MVideoFullLight
 }) {
-  const { video, tasks, editionResultPath } = options
+  const { tasks, editionResultPath } = options
 
   const newFile = await buildNewFile({ path: editionResultPath, mode: 'web-video' })
-  newFile.videoId = video.id
 
-  const outputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, newFile)
-  await move(editionResultPath, outputPath)
+  const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(options.video.uuid)
 
-  await safeCleanupStudioTMPFiles(tasks)
+  try {
+    const video = await VideoModel.loadFull(options.video.uuid)
+    newFile.videoId = video.id
 
-  await createTorrentAndSetInfoHashFromPath(video, newFile, outputPath)
-  await removeAllFiles(video, newFile)
+    const outputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, newFile)
+    await move(editionResultPath, outputPath)
+    videoFileMutexReleaser()
 
-  await newFile.save()
+    await safeCleanupStudioTMPFiles(tasks)
 
-  video.duration = await getVideoStreamDuration(outputPath)
-  video.aspectRatio = buildAspectRatio({ width: newFile.width, height: newFile.height })
-  await video.save()
+    await createTorrentAndSetInfoHashFromPath(video, newFile, outputPath)
+    await removeAllFiles(video, newFile)
 
-  await JobQueue.Instance.createSequentialJobFlow(
-    await buildLocalStoryboardJobIfNeeded({ video, federate: false }),
-    {
-      type: 'federate-video' as 'federate-video',
-      payload: {
-        videoUUID: video.uuid,
-        isNewVideoForFederation: false
-      }
-    },
-    {
-      type: 'transcoding-job-builder' as 'transcoding-job-builder',
-      payload: {
-        videoUUID: video.uuid,
-        optimizeJob: {
-          isNewVideo: false
+    await newFile.save()
+
+    video.duration = await getVideoStreamDuration(outputPath)
+    video.aspectRatio = buildAspectRatio({ width: newFile.width, height: newFile.height })
+    await video.save()
+
+    await JobQueue.Instance.createSequentialJobFlow(
+      await buildLocalStoryboardJobIfNeeded({ video, federate: false }),
+      {
+        type: 'federate-video' as 'federate-video',
+        payload: {
+          videoUUID: video.uuid,
+          isNewVideoForFederation: false
+        }
+      },
+      {
+        type: 'transcoding-job-builder' as 'transcoding-job-builder',
+        payload: {
+          videoUUID: video.uuid,
+          optimizeJob: {
+            isNewVideo: false
+          }
         }
       }
-    }
-  )
+    )
 
-  await addRemoteStoryboardJobIfNeeded(video)
-  await regenerateTranscriptionTaskIfNeeded(video)
+    await addRemoteStoryboardJobIfNeeded(video)
+    await regenerateTranscriptionTaskIfNeeded(video)
+  } finally {
+    videoFileMutexReleaser()
+  }
 }
 
 // ---------------------------------------------------------------------------

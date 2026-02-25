@@ -81,7 +81,7 @@ export class WatchedWordsListSaveModalComponent extends FormReactive implements 
         this.listAddedOrUpdated.emit()
       },
 
-      error: err => this.notifier.error(err.message)
+      error: err => this.notifier.handleError(err)
     })
 
     this.hide()

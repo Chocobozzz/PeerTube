@@ -1,10 +1,15 @@
-import { ComponentRef, Injectable } from '@angular/core'
+import { ComponentRef, inject, Injectable } from '@angular/core'
 import { ActivatedRouteSnapshot, DetachedRouteHandle, RouteReuseStrategy } from '@angular/router'
-import { logger } from '@root-helpers/logger'
+import debug from 'debug'
 import { DisableForReuseHook } from './disable-for-reuse-hook'
+import { RouterStatusService } from './router-status.service'
+
+const debugLogger = debug('peertube:router:CustomReuseStrategy')
 
 @Injectable()
 export class CustomReuseStrategy implements RouteReuseStrategy {
+  private routerStatus = inject(RouterStatusService)
+
   storedRouteHandles = new Map<string, DetachedRouteHandle>()
   recentlyUsed: string
 
@@ -22,7 +27,7 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
     const key = this.generateKey(route)
     this.recentlyUsed = key
 
-    logger.info(`Storing component ${key} to reuse later.`)
+    debugLogger(`Storing component ${key} to reuse later.`)
 
     const componentRef = (handle as any).componentRef as ComponentRef<DisableForReuseHook>
     componentRef.instance.disableForReuse()
@@ -36,7 +41,13 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
   // Return true if we have a stored route object for the next route
   shouldAttach (route: ActivatedRouteSnapshot): boolean {
     const key = this.generateKey(route)
-    return this.isReuseEnabled(route) && this.storedRouteHandles.has(key)
+    const isNavigatingBack = this.routerStatus.isNavigatingBack
+
+    const should = !!key && isNavigatingBack === true && this.isReuseEnabled(route) && this.storedRouteHandles.has(key)
+
+    if (key) debugLogger(`Should attach ${key}? Answer: ${should}`, { isNavigatingBack })
+
+    return should
   }
 
   // If we returned true in shouldAttach(), now return the actual route data for restoration
@@ -46,7 +57,7 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
     const key = this.generateKey(route)
     this.recentlyUsed = key
 
-    logger.info(`Reusing component ${key}.`)
+    debugLogger(`Reusing component ${key}.`)
 
     const handle = this.storedRouteHandles.get(key)
     if (!handle) return handle
@@ -65,7 +76,7 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
       this.storedRouteHandles.forEach((r, key) => {
         if (key === this.recentlyUsed) return
 
-        logger.info(`Removing stored component ${key}`)
+        debugLogger(`Removing stored component ${key}`)
         ;(r as any).componentRef.destroy()
         this.storedRouteHandles.delete(key)
       })

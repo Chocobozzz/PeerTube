@@ -22,8 +22,7 @@
             <ng-container i18n>Videos on <strong>{{ instanceName }}</strong></ng-container>
           } @else {
             <ng-container i18n>
-              Videos on <strong>{{ instanceName }}</strong> and <strong>{{ totalFollowing }}</strong> {totalFollowing, plural, =1 {other platform} other {other
-              platforms}}
+              Videos on <strong>{{ instanceName }}</strong> and <strong>{{ totalFollowing }}</strong> {totalFollowing, plural, =1 {other platform} other {other platforms}}
             </ng-container>
           }
         </div>
@@ -76,7 +75,7 @@
           <ng-container i18n>Content preferences</ng-container>
 
           <div class="with-description">
-            <span i18n>You always use the same preferences?</span>
+            <span class="me-1" i18n>You always use the same preferences?</span>
 
             <span i18n>Update your <a routerLink="/my-account/settings" fragment="video-languages-subtitles" (click)="onAccountSettingsClick($event)"
               >default settings</a></span>
@@ -110,8 +109,8 @@
 
             <div class="with-description">
               <div i18n>
-                {{ instanceName }} platform subscribes to content from <a routerLink="/about/follows" target="_blank">{{ totalFollowing }} {totalFollowing,
-                  plural, =1 {other platform} other {other platforms}}</a>.
+                {{ instanceName }} platform subscribes to content from
+                <a routerLink="/about/follows" target="_blank">{{ totalFollowing }} {totalFollowing, plural, =1 {other platform} other {other platforms}}</a>.
               </div>
               <div i18n>Set your display preferences here.</div>
             </div>

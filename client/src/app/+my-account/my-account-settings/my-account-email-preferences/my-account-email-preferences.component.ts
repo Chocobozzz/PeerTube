@@ -46,7 +46,7 @@ export class MyAccountEmailPreferencesComponent extends FormReactive implements 
           this.user.update(u => ({ ...u, emailPublic: details.emailPublic }))
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 }

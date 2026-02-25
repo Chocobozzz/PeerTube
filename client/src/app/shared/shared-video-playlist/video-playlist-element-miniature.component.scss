@@ -1,21 +1,27 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_miniature' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_miniature" as *;
 
 $thumbnail-width: 130px;
 $thumbnail-height: 72px;
+
+.video {
+  --co-miniature-width: #{$thumbnail-width};
+  --co-miniature-height: #{$thumbnail-height};
+  --thumbnail-width: var(--co-miniature-width); // Required by video-thumbnail component
+}
 
 my-timestamp-input {
   width: 100px;
 }
 
 my-video-thumbnail {
-  @include thumbnail-size-component($thumbnail-width, $thumbnail-height);
+  @include thumbnail-size-component(var(--co-miniature-width), var(--co-miniature-height));
 }
 
 .fake-thumbnail {
-  width: $thumbnail-width;
-  height: $thumbnail-height;
+  width: var(--co-miniature-width);
+  height: var(--co-miniature-height);
   background-color: #ececec;
 }
 
@@ -151,7 +157,6 @@ my-video-thumbnail,
 }
 
 .dropdown-menu {
-
   .dropdown-item {
     cursor: pointer;
 

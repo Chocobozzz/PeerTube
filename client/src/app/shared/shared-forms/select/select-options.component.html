@@ -32,7 +32,7 @@
     } @else {
       <div>
         <div class="d-flex align-items-center item-label custom-item">
-          @if (item.imageUrl) {
+          @if (item?.imageUrl) {
             <img alt="" class="me-2" [src]="item.imageUrl" />
           }
 

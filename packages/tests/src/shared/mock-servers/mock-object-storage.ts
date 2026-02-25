@@ -12,7 +12,13 @@ export class MockObjectStorageProxy {
     const app = express()
 
     app.get('/:bucketName/:path(*)', (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const url = `http://${req.params.bucketName}.${ObjectStorageCommand.getMockEndpointHost()}/${req.params.path}`
+      const bucketName = req.params.bucketName
+
+      let path = req.params.path
+      // Some tests use `/:bucketName/:bucketName/:path` structure
+      path = path.replace(new RegExp(`^${bucketName}/`), '')
+
+      const url = `http://${bucketName}.${ObjectStorageCommand.getMockEndpointHost()}/${path}`
 
       if (process.env.DEBUG) {
         console.log('Receiving request on mocked server %s.', req.url)

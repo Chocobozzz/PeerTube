@@ -15,15 +15,17 @@ interface MailTemplate extends Base {
   text?: undefined
 }
 
+export interface MailAction {
+  url: string
+  text: string
+}
+
 interface MailText extends Base {
   text: string
 
   locals?: Partial<SendEmailDefaultLocalsOptions> & {
     title?: string
-    action?: {
-      url: string
-      text: string
-    }
+    action?: MailAction
   }
 }
 
@@ -34,6 +36,7 @@ interface SendEmailDefaultLocalsOptions {
 
   fg: string
   bg: string
+  onPrimary: string
   primary: string
   language: string
   logoUrl: string

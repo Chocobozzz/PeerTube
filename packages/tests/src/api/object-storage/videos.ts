@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import { getAllFiles, getHLS } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoDetails } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
@@ -14,17 +15,35 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { expectLogDoesNotContain, expectStartWith } from '@tests/shared/checks.js'
+import { expectStartWith } from '@tests/shared/checks.js'
 import { checkTmpIsEmpty } from '@tests/shared/directories.js'
 import { generateHighBitrateVideo } from '@tests/shared/generate.js'
 import { MockObjectStorageProxy } from '@tests/shared/mock-servers/mock-object-storage.js'
+import { checkWebTorrentWorks } from '@tests/shared/p2p.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
 import { checkPlaylistInfohash } from '@tests/shared/streaming-playlists.js'
-import { checkWebTorrentWorks } from '@tests/shared/p2p.js'
 import bytes from 'bytes'
 import { expect } from 'chai'
 import { stat } from 'fs/promises'
 import merge from 'lodash-es/merge.js'
+
+function buildBaseUrl (options: {
+  baseMockUrl: string
+  bucket: string
+  pathStyle: boolean
+}) {
+  const { baseMockUrl, bucket, pathStyle } = options
+
+  if (baseMockUrl) {
+    if (pathStyle) return `${baseMockUrl}/${bucket}/${bucket}/`
+
+    return `${baseMockUrl}/${bucket}/`
+  }
+
+  if (pathStyle) return `http://${ObjectStorageCommand.getMockEndpointHost()}/${bucket}/`
+
+  return `http://${bucket}.${ObjectStorageCommand.getMockEndpointHost()}/`
+}
 
 async function checkFiles (options: {
   server: PeerTubeServer
@@ -32,6 +51,8 @@ async function checkFiles (options: {
   originSQLCommand: SQLCommand
 
   video: VideoDetails
+
+  pathStyle: boolean
 
   baseMockUrl?: string
 
@@ -50,15 +71,12 @@ async function checkFiles (options: {
     webVideoBucket,
     baseMockUrl,
     playlistPrefix,
-    webVideoPrefix
+    webVideoPrefix,
+    pathStyle
   } = options
 
-  let allFiles = video.files
-
   for (const file of video.files) {
-    const baseUrl = baseMockUrl
-      ? `${baseMockUrl}/${webVideoBucket}/`
-      : `http://${webVideoBucket}.${ObjectStorageCommand.getMockEndpointHost()}/`
+    const baseUrl = buildBaseUrl({ baseMockUrl, bucket: webVideoBucket, pathStyle })
 
     const prefix = webVideoPrefix || ''
     const start = baseUrl + prefix
@@ -75,11 +93,7 @@ async function checkFiles (options: {
   const hls = video.streamingPlaylists[0]
 
   if (hls) {
-    allFiles = allFiles.concat(hls.files)
-
-    const baseUrl = baseMockUrl
-      ? `${baseMockUrl}/${playlistBucket}/`
-      : `http://${playlistBucket}.${ObjectStorageCommand.getMockEndpointHost()}/`
+    const baseUrl = buildBaseUrl({ baseMockUrl, bucket: playlistBucket, pathStyle })
 
     const prefix = playlistPrefix || ''
     const start = baseUrl + prefix
@@ -107,6 +121,7 @@ async function checkFiles (options: {
     }
   }
 
+  const allFiles = getAllFiles(video)
   for (const file of allFiles) {
     await checkWebTorrentWorks(file.magnetUri)
 
@@ -118,6 +133,8 @@ async function checkFiles (options: {
 }
 
 function runTestSuite (options: {
+  pathStyle: boolean
+
   fixture?: string
 
   maxUploadPart?: string
@@ -130,8 +147,9 @@ function runTestSuite (options: {
 
   useMockBaseUrl?: boolean
 }) {
+  const { fixture, pathStyle, useMockBaseUrl } = options
+
   const mockObjectStorageProxy = new MockObjectStorageProxy()
-  const { fixture } = options
   let baseMockUrl: string
 
   let servers: PeerTubeServer[]
@@ -143,22 +161,14 @@ function runTestSuite (options: {
   const uuidsToDelete: string[] = []
   let deletedUrls: string[] = []
 
-  before(async function () {
-    this.timeout(240000)
-
-    const port = await mockObjectStorageProxy.initialize()
-    baseMockUrl = options.useMockBaseUrl
-      ? `http://127.0.0.1:${port}`
-      : undefined
-
-    await objectStorage.createMockBucket(options.playlistBucket)
-    await objectStorage.createMockBucket(options.webVideoBucket)
-
-    const config = {
+  function getConfig () {
+    return {
       object_storage: {
         enabled: true,
         endpoint: 'http://' + ObjectStorageCommand.getMockEndpointHost(),
         region: ObjectStorageCommand.getMockRegion(),
+
+        force_path_style: pathStyle,
 
         credentials: ObjectStorageCommand.getMockCredentialsConfig(),
 
@@ -181,8 +191,20 @@ function runTestSuite (options: {
         }
       }
     }
+  }
 
-    servers = await createMultipleServers(2, config)
+  before(async function () {
+    this.timeout(240000)
+
+    const port = await mockObjectStorageProxy.initialize()
+    baseMockUrl = useMockBaseUrl
+      ? `http://127.0.0.1:${port}`
+      : undefined
+
+    await objectStorage.createMockBucket(options.playlistBucket)
+    await objectStorage.createMockBucket(options.webVideoBucket)
+
+    servers = await createMultipleServers(2, getConfig())
 
     await setAccessTokensToServers(servers)
     await doubleFollow(servers[0], servers[1])
@@ -230,6 +252,29 @@ function runTestSuite (options: {
     }
   })
 
+  if (options.useMockBaseUrl) {
+    it('Should update streaming playlist infohash if object storage base url changed', async function () {
+      const newBaseMockUrl = `http://example.com`
+
+      await servers[1].kill()
+
+      await servers[1].run(
+        merge(getConfig(), {
+          object_storage: {
+            streaming_playlists: {
+              base_url: `${newBaseMockUrl}/${options.playlistBucket}`
+            }
+          }
+        })
+      )
+
+      const { uuid } = await servers[1].videos.find({ name: 'video 2' })
+      const video = await servers[1].videos.get({ id: uuid })
+
+      await checkPlaylistInfohash({ video, files: getHLS(video).files, sqlCommand: sqlCommands[1] })
+    })
+  }
+
   it('Should fetch correctly all the files', async function () {
     for (const url of deletedUrls.concat(keptUrls)) {
       await makeRawRequest({ url, expectedStatus: HttpStatusCode.OK_200 })
@@ -256,12 +301,6 @@ function runTestSuite (options: {
   it('Should have an empty tmp directory', async function () {
     for (const server of servers) {
       await checkTmpIsEmpty(server)
-    }
-  })
-
-  it('Should not have downloaded files from object storage', async function () {
-    for (const server of servers) {
-      await expectLogDoesNotContain(server, 'from object storage')
     }
   })
 
@@ -364,7 +403,7 @@ describe('Object storage for videos', function () {
       await waitJobs([ server ], { skipDelayed: true })
       const video = await server.videos.get({ id: uuid })
 
-      expectStartWith(video.files[0].fileUrl, objectStorage.getMockWebVideosBaseUrl())
+      expectStartWith(video.files[0].fileUrl, objectStorage.getMockWebVideosBaseUrl({ pathStyle: false }))
     })
 
     after(async function () {
@@ -374,32 +413,75 @@ describe('Object storage for videos', function () {
     })
   })
 
-  describe('Test simple object storage', function () {
-    runTestSuite({
-      playlistBucket: objectStorage.getMockBucketName('streaming-playlists'),
-      webVideoBucket: objectStorage.getMockBucketName('web-videos')
+  describe('Host style', function () {
+    describe('Test simple object storage', function () {
+      runTestSuite({
+        playlistBucket: objectStorage.getMockBucketName('streaming-playlists'),
+        webVideoBucket: objectStorage.getMockBucketName('web-videos'),
+        pathStyle: false
+      })
+    })
+
+    describe('Test object storage with prefix', function () {
+      runTestSuite({
+        playlistBucket: objectStorage.getMockBucketName('mybucket'),
+        webVideoBucket: objectStorage.getMockBucketName('mybucket'),
+
+        playlistPrefix: 'streaming-playlists_',
+        webVideoPrefix: 'webvideo_',
+
+        pathStyle: false
+      })
+    })
+
+    describe('Test object storage with prefix and base URL', function () {
+      runTestSuite({
+        playlistBucket: objectStorage.getMockBucketName('mybucket'),
+        webVideoBucket: objectStorage.getMockBucketName('mybucket'),
+
+        playlistPrefix: 'streaming-playlists/',
+        webVideoPrefix: 'webvideo/',
+
+        useMockBaseUrl: true,
+
+        pathStyle: false
+      })
     })
   })
 
-  describe('Test object storage with prefix', function () {
-    runTestSuite({
-      playlistBucket: objectStorage.getMockBucketName('mybucket'),
-      webVideoBucket: objectStorage.getMockBucketName('mybucket'),
-
-      playlistPrefix: 'streaming-playlists_',
-      webVideoPrefix: 'webvideo_'
+  describe('Path style', function () {
+    describe('Test simple object storage', function () {
+      runTestSuite({
+        playlistBucket: objectStorage.getMockBucketName('streaming-playlists'),
+        webVideoBucket: objectStorage.getMockBucketName('web-videos'),
+        pathStyle: true
+      })
     })
-  })
 
-  describe('Test object storage with prefix and base URL', function () {
-    runTestSuite({
-      playlistBucket: objectStorage.getMockBucketName('mybucket'),
-      webVideoBucket: objectStorage.getMockBucketName('mybucket'),
+    describe('Test object storage with prefix', function () {
+      runTestSuite({
+        playlistBucket: objectStorage.getMockBucketName('mybucket'),
+        webVideoBucket: objectStorage.getMockBucketName('mybucket'),
 
-      playlistPrefix: 'streaming-playlists/',
-      webVideoPrefix: 'webvideo/',
+        playlistPrefix: 'streaming-playlists_',
+        webVideoPrefix: 'webvideo_',
 
-      useMockBaseUrl: true
+        pathStyle: true
+      })
+    })
+
+    describe('Test object storage with prefix and base URL', function () {
+      runTestSuite({
+        playlistBucket: objectStorage.getMockBucketName('mybucket'),
+        webVideoBucket: objectStorage.getMockBucketName('mybucket'),
+
+        playlistPrefix: 'streaming-playlists/',
+        webVideoPrefix: 'webvideo/',
+
+        useMockBaseUrl: true,
+
+        pathStyle: true
+      })
     })
   })
 
@@ -423,7 +505,8 @@ describe('Object storage for videos', function () {
       maxUploadPart,
       playlistBucket: objectStorage.getMockBucketName('streaming-playlists'),
       webVideoBucket: objectStorage.getMockBucketName('web-videos'),
-      fixture
+      fixture,
+      pathStyle: false
     })
   })
 })

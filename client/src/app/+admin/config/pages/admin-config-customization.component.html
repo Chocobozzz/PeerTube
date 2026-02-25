@@ -91,7 +91,11 @@
               }
 
               @if (field.type === 'color') {
-                <p-colorpicker class="d-block" [inputId]="field.inputId" [formControlName]="field.name" />
+                <my-peertube-color-picker 
+                  [inputId]="field.inputId" 
+                  [formControlName]="field.name" 
+                  [formError]="formErrors.theme.customization[field.name]" 
+                  />
               } @else if (field.type === 'radius') {
                 <my-select-custom-value
                   [labelId]="field.inputId"

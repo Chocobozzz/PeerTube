@@ -2,14 +2,16 @@ import {
   HttpStatusCode,
   HttpStatusCodeType,
   ServerErrorCode,
-  ThumbnailType,
   VideoImportCreate,
   VideoImportPayload,
   VideoImportState
 } from '@peertube/peertube-models'
-import { retryImport } from '@server/lib/video-post-import.js'
-import { buildVideoFromImport, buildYoutubeDLImport, insertFromImportIntoDB, YoutubeDlImportError } from '@server/lib/video-pre-import.js'
-import { MThumbnail, MVideoThumbnail } from '@server/types/models/index.js'
+import { getVideoThumbnailFile } from '@server/helpers/video.js'
+import { YoutubeDlImportError, YoutubeDlImportErrorCode } from '@server/helpers/youtube-dl/youtube-dl-wrapper.js'
+import { createLocalVideoThumbnailsFromImage } from '@server/lib/thumbnail.js'
+import { buildRetryImportJob } from '@server/lib/video-post-import.js'
+import { buildVideoFromImport, buildYoutubeDLImport, insertFromImportIntoDB } from '@server/lib/video-pre-import.js'
+import { MVideoThumbnail } from '@server/types/models/index.js'
 import express from 'express'
 import { move } from 'fs-extra/esm'
 import { readFile } from 'fs/promises'
@@ -24,7 +26,6 @@ import { getSecureTorrentName } from '../../../helpers/utils.js'
 import { CONFIG } from '../../../initializers/config.js'
 import { MIMETYPES } from '../../../initializers/constants.js'
 import { JobQueue } from '../../../lib/job-queue/job-queue.js'
-import { updateLocalVideoMiniatureFromExisting } from '../../../lib/thumbnail.js'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -100,7 +101,7 @@ async function cancelVideoImport (req: express.Request, res: express.Response) {
 async function retryVideoImport (req: express.Request, res: express.Response) {
   const videoImport = res.locals.videoImport
 
-  await retryImport(videoImport)
+  await JobQueue.Instance.createJob(await buildRetryImportJob(videoImport))
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
@@ -139,13 +140,11 @@ async function handleTorrentImport (req: express.Request, res: express.Response,
     importType: 'torrent'
   })
 
-  const thumbnailModel = await processThumbnail(req, video)
-  const previewModel = await processPreview(req, video)
+  const thumbnails = await processThumbnails(req, video)
 
   const videoImport = await insertFromImportIntoDB({
     video,
-    thumbnailModel,
-    previewModel,
+    thumbnails,
     videoChannel: res.locals.videoChannel,
     tags: body.tags || undefined,
     user,
@@ -179,10 +178,11 @@ async function handleTorrentImport (req: express.Request, res: express.Response,
 
 function statusFromYtDlImportError (err: YoutubeDlImportError): HttpStatusCodeType {
   switch (err.code) {
-    case YoutubeDlImportError.CODE.NOT_ONLY_UNICAST_URL:
+    case YoutubeDlImportErrorCode.NOT_ONLY_UNICAST_URL:
       return HttpStatusCode.FORBIDDEN_403
 
-    case YoutubeDlImportError.CODE.FETCH_ERROR:
+    case YoutubeDlImportErrorCode.FETCH_ERROR:
+    case YoutubeDlImportErrorCode.IS_LIVE:
       return HttpStatusCode.BAD_REQUEST_400
 
     default:
@@ -196,12 +196,13 @@ async function handleYoutubeDlImport (req: express.Request, res: express.Respons
   const user = res.locals.oauth.token.User
 
   try {
+    const thumbnailfile = getVideoThumbnailFile(req.files)
+
     const { job, videoImport } = await buildYoutubeDLImport({
       targetUrl,
       channel: res.locals.videoChannel,
       importDataOverride: body,
-      thumbnailFilePath: req.files?.['thumbnailfile']?.[0].path,
-      previewFilePath: req.files?.['previewfile']?.[0].path,
+      thumbnailFilePath: thumbnailfile?.path,
       user
     })
     await JobQueue.Instance.createJob(job)
@@ -222,36 +223,15 @@ async function handleYoutubeDlImport (req: express.Request, res: express.Respons
   }
 }
 
-async function processThumbnail (req: express.Request, video: MVideoThumbnail) {
-  const thumbnailField = req.files ? req.files['thumbnailfile'] : undefined
-  if (thumbnailField) {
-    const thumbnailPhysicalFile = thumbnailField[0]
+function processThumbnails (req: express.Request, video: MVideoThumbnail) {
+  const file = getVideoThumbnailFile(req.files)
+  if (!file) return []
 
-    return updateLocalVideoMiniatureFromExisting({
-      inputPath: thumbnailPhysicalFile.path,
-      video,
-      type: ThumbnailType.MINIATURE,
-      automaticallyGenerated: false
-    })
-  }
-
-  return undefined
-}
-
-async function processPreview (req: express.Request, video: MVideoThumbnail): Promise<MThumbnail> {
-  const previewField = req.files ? req.files['previewfile'] : undefined
-  if (previewField) {
-    const previewPhysicalFile = previewField[0]
-
-    return updateLocalVideoMiniatureFromExisting({
-      inputPath: previewPhysicalFile.path,
-      video,
-      type: ThumbnailType.PREVIEW,
-      automaticallyGenerated: false
-    })
-  }
-
-  return undefined
+  return createLocalVideoThumbnailsFromImage({
+    inputPath: file.path,
+    video,
+    automaticallyGenerated: false
+  })
 }
 
 async function processTorrentOrAbortRequest (req: express.Request, res: express.Response, torrentfile: Express.Multer.File) {

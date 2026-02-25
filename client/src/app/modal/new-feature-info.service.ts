@@ -41,7 +41,7 @@ export class NewFeatureInfoService {
           .subscribe({
             next: () => this.auth.refreshUserInformation(),
 
-            error: err => this.notifier.error(err.message)
+            error: err => this.notifier.handleError(err)
           })
       })
     })

@@ -86,6 +86,10 @@ export function sanitizeAndCheckVideoTorrentObject (video: VideoObject) {
   if (exists(video.uploadDate) && !isDateValid(video.uploadDate)) return fail('uploadDate')
   if (exists(video.content) && !isRemoteVideoContentValid(video.mediaType, video.content)) return fail('mediaType/content')
 
+  if (exists(video.audience) && !isActivityPubUrlValid(video.audience)) return fail('audience')
+
+  if (exists(video.embedUrl) && !isActivityPubUrlValid(video.embedUrl)) return fail('embedUrl')
+
   if (video.attributedTo.length === 0) return fail('attributedTo')
 
   return true

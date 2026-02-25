@@ -27,7 +27,7 @@ $width-size: 275px;
   }
 
   .peertube-select-container {
-    @include peertube-select-container($width-size);
+    @include responsive-width($width-size);
   }
 
   my-select-channel,

@@ -1,4 +1,3 @@
-
 import { Component, inject, OnDestroy, OnInit } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Router } from '@angular/router'
@@ -29,7 +28,7 @@ import { VideoChannelEdit } from '../video-channel-edit.model'
     UserAutoCompleteComponent,
     GlobalIconComponent,
     CollaboratorStateComponent
-]
+  ]
 })
 export class VideoChannelEditEditorsComponent implements OnInit, OnDestroy {
   private confirmService = inject(ConfirmService)
@@ -92,7 +91,7 @@ export class VideoChannelEditEditorsComponent implements OnInit, OnDestroy {
                 }
               },
 
-              error: err => this.notifier.error(err.message)
+              error: err => this.notifier.handleError(err)
             })
         }
       }
@@ -143,7 +142,7 @@ export class VideoChannelEditEditorsComponent implements OnInit, OnDestroy {
           this.newEditorUsername = ''
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 }

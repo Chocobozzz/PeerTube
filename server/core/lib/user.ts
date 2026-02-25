@@ -229,12 +229,12 @@ export async function getOriginalVideoFileTotalDailyFromUser (user: MUserId) {
 }
 
 export async function isUserQuotaValid (options: {
-  userId: number
+  channelUserId: number
   uploadSize: number
   checkDaily?: boolean // default true
 }) {
-  const { userId, uploadSize, checkDaily = true } = options
-  const user = await UserModel.loadById(userId)
+  const { channelUserId, uploadSize, checkDaily = true } = options
+  const user = await UserModel.loadById(channelUserId)
 
   if (user.videoQuota === -1 && user.videoQuotaDaily === -1) return Promise.resolve(true)
 
@@ -248,7 +248,7 @@ export async function isUserQuotaValid (options: {
 
   logger.debug(
     'Check user %d quota to upload content.',
-    userId,
+    channelUserId,
     { totalBytes, totalBytesDaily, videoQuota: user.videoQuota, videoQuotaDaily: user.videoQuotaDaily, uploadSize }
   )
 

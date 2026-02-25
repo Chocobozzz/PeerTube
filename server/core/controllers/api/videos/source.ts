@@ -3,7 +3,7 @@ import { HttpStatusCode, VideoChannelActivityAction, VideoState } from '@peertub
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { CreateJobArgument, CreateJobOptions, JobQueue } from '@server/lib/job-queue/index.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
-import { regenerateMiniaturesIfNeeded } from '@server/lib/thumbnail.js'
+import { regenerateLocalVideoThumbnailsFromVideoIfNeeded } from '@server/lib/thumbnail.js'
 import { setupUploadResumableRoutes } from '@server/lib/uploadx.js'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
 import { regenerateTranscriptionTaskIfNeeded } from '@server/lib/video-captions.js'
@@ -162,7 +162,7 @@ async function replaceVideoSourceResumable (req: express.Request, res: express.R
       createdAt: inputFileUpdatedAt
     })
 
-    await regenerateMiniaturesIfNeeded(video, res.locals.ffprobe)
+    await regenerateLocalVideoThumbnailsFromVideoIfNeeded(video, res.locals.ffprobe)
     await video.VideoChannel.setAsUpdated()
 
     await addVideoJobsAfterUpload(video, videoFile.withVideoOrPlaylist(video))
@@ -200,7 +200,16 @@ async function addVideoJobsAfterUpload (video: MVideoFullLight, videoFile: MVide
   ]
 
   if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
-    jobs.push(await buildMoveVideoJob({ video, isNewVideo: false, previousVideoState: undefined, type: 'move-to-object-storage' }))
+    jobs.push(
+      await buildMoveVideoJob({
+        type: 'move-to-object-storage',
+        video,
+        moveVideoState: {
+          isNewVideo: false,
+          previousVideoState: undefined
+        }
+      })
+    )
   }
 
   if (video.state === VideoState.TO_TRANSCODE) {

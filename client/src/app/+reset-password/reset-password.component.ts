@@ -50,7 +50,7 @@ export class ResetPasswordComponent extends FormReactive implements OnInit {
           this.router.navigate([ '/login' ])
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

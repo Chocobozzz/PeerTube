@@ -181,7 +181,7 @@ export class VideoOverviewComponent implements OnInit, OnDestroy, AfterViewCheck
         },
 
         error: err => {
-          this.notifier.error(err.message)
+          this.notifier.handleError(err)
           this.isLoading = false
         }
       })

@@ -9,6 +9,7 @@
     [displayWatchLaterPlaylist]="isWatchLaterPlaylistDisplayed()"
     [inWatchLaterPlaylist]="inWatchLaterPlaylist"
     (watchLaterClick)="onWatchLaterClick($event)"
+    [widthPx]="thumbnailWidthPx()"
   >
     <!-- Don't use use imbricated @if that seems broken with content projection (Angular 20.3) -->
     @if (displayOptions().privacyLabel && isUnlistedVideo()) {

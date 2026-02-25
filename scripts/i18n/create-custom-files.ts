@@ -26,8 +26,10 @@ const playerKeys = {
   'Auto': 'Auto',
   'Speed': 'Speed',
   'Subtitles/CC': 'Subtitles/CC',
+  'Peers': 'Peers',
   'peers': 'peers',
   'peer': 'peer',
+  'no peers': 'no peers',
   'Go to the video page': 'Go to the video page',
   'Settings': 'Settings',
   'Watching this video may reveal your IP address to others.': 'Watching this video may reveal your IP address to others.',
@@ -126,16 +128,14 @@ Object.values(VIDEO_CATEGORIES)
     'We cannot fetch the playlist. Please try again later.',
     'Playlist: {1}',
     'By {1}',
-    'Unavailable video'
+    'Unavailable video',
+    'Audio only',
+    'Unknown',
+    'This video is not allowed to be embedded on this domain.'
   ])
   .forEach(v => {
     serverKeys[v] = v
   })
-
-// More keys
-Object.assign(serverKeys, {
-  Unknown: 'Unknown'
-})
 
 // ISO 639 keys
 const languageKeys: any = {}

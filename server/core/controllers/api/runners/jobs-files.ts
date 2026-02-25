@@ -33,11 +33,11 @@ runnerJobFilesRouter.post(
 )
 
 runnerJobFilesRouter.post(
-  '/jobs/:jobUUID/files/videos/:videoId/previews/max-quality',
+  [ '/jobs/:jobUUID/files/videos/:videoId/thumbnails/max-quality', '/jobs/:jobUUID/files/videos/:videoId/previews/max-quality' ],
   apiRateLimiter,
   asyncMiddleware(jobOfRunnerGetValidatorFactory([ RunnerJobState.PROCESSING ])),
   asyncMiddleware(runnerJobGetVideoTranscodingFileValidator),
-  getMaxQualityVideoPreview
+  getMaxQualityVideoThumbnail
 )
 
 runnerJobFilesRouter.post(
@@ -107,7 +107,6 @@ async function serveVideoFile (options: {
         req,
         res,
         filename: file.filename,
-        playlist: video.getHLSPlaylist(),
         reinjectVideoFileToken: false,
         video
       })
@@ -128,7 +127,7 @@ async function serveVideoFile (options: {
 
 // ---------------------------------------------------------------------------
 
-function getMaxQualityVideoPreview (req: express.Request, res: express.Response) {
+function getMaxQualityVideoThumbnail (req: express.Request, res: express.Response) {
   const runnerJob = res.locals.runnerJob
   const runner = runnerJob.Runner
   const video = res.locals.videoAll
@@ -141,9 +140,9 @@ function getMaxQualityVideoPreview (req: express.Request, res: express.Response)
     lTags(runner.name, runnerJob.id, runnerJob.type)
   )
 
-  const file = video.getPreview()
+  const file = video.getBestThumbnail('16:9')
 
-  return res.sendFile(file.getPath())
+  return res.sendFile(file.getFSPath())
 }
 
 function getVideoStudioTaskFile (req: express.Request, res: express.Response) {

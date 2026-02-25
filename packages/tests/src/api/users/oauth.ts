@@ -184,6 +184,7 @@ describe('Test oauth', function () {
   describe('Token sessions', function () {
     let user10: MyUser
     let user10Token: string
+    let user10Token2: string
 
     let user20: MyUser
     let user20Token: string
@@ -204,7 +205,6 @@ describe('Test oauth', function () {
         })
 
         user10Token = res.access_token
-        user10 = await server.users.getMyInfo({ token: user10Token })
       }
 
       {
@@ -221,8 +221,12 @@ describe('Test oauth', function () {
     })
 
     it('Should create multiple token sessions', async function () {
+      user10Token2 = await server.login.getAccessToken({ username: 'user10', password: 'password' })
       await server.login.getAccessToken({ username: 'user10', password: 'password' })
-      await server.login.getAccessToken({ username: 'user10', password: 'password' })
+
+      user10 = await server.users.getMyInfo({ token: user10Token2 })
+
+      await wait(2000)
     })
 
     it('Should list sessions of a user', async function () {
@@ -245,12 +249,15 @@ describe('Test oauth', function () {
       }
 
       {
-        const { data, total } = await server.login.listSessions({ userId: user10.id, token: user10Token, sort: 'createdAt' })
+        const { data, total } = await server.login.listSessions({ userId: user10.id, token: user10Token2, sort: 'createdAt' })
         expect(total).to.equal(3)
         expect(data.length).to.equal(3)
 
+        // Wait last activity scheduler
+        await wait(2000)
+
         const session = data[0]
-        expect(session.currentSession).to.be.true
+        expect(session.currentSession).to.be.false
 
         expect(new Date(session.lastActivityDate).getTime()).to.be.above(beforeAllDate)
         expect(new Date(session.createdAt).getTime()).to.be.above(beforeAllDate)
@@ -262,7 +269,7 @@ describe('Test oauth', function () {
         expect(session.loginDevice).to.equal('web')
         expect(session.lastActivityDevice).to.equal(session.loginDevice)
 
-        expect(data[1].currentSession).to.be.false
+        expect(data[1].currentSession).to.be.true
         expect(data[2].currentSession).to.be.false
       }
 

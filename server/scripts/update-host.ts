@@ -1,4 +1,4 @@
-import { updateTorrentMetadata } from '@server/helpers/webtorrent.js'
+import { updateTorrentMetadata } from '@server/lib/webtorrent.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { initDatabaseModels } from '@server/initializers/database.js'

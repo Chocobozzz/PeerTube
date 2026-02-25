@@ -217,13 +217,13 @@ async function addVODPodcastItem (options: {
     .map(f => buildVODWebVideoFile(video, f))
     .sort(sortObjectComparator('bitrate', 'asc'))
 
-  const streamingPlaylistFiles = buildVODStreamingPlaylists(video)
+  const streamingPlaylistFiles = buildVODStreamingPlaylistsIfMissingWebVideoFile(video)
 
   // Order matters here, the first media URI will be the "default"
   // So web videos are default if enabled
   const media = [ ...webVideos, ...streamingPlaylistFiles ]
 
-  const videoCaptions = buildVODCaptions(video, captionsGroup[video.id])
+  const videoCaptions = buildVODCaptions(captionsGroup[video.id])
   const item = await generatePodcastItem({ video, liveItem: false, media })
 
   feed.addPodcastItem({ ...item, subTitle: videoCaptions })
@@ -273,7 +273,7 @@ function buildVODWebVideoFile (video: MVideo, videoFile: VideoFile) {
   }
 }
 
-function buildVODStreamingPlaylists (video: MVideoFullLight) {
+function buildVODStreamingPlaylistsIfMissingWebVideoFile (video: MVideoFullLight) {
   const hls = video.getHLSPlaylist()
   if (!hls) return []
 
@@ -281,6 +281,7 @@ function buildVODStreamingPlaylists (video: MVideoFullLight) {
 
   return [
     ...hls.VideoFiles
+      .filter(videoFile => !video.VideoFiles.some(f => f.fps === videoFile.fps && f.resolution === videoFile.resolution))
       .sort(sortObjectComparator('resolution', 'asc'))
       .map(videoFile => {
         const files = [ videoFile ]
@@ -335,13 +336,13 @@ function buildLiveStreamingPlaylists (video: MVideoFullLight) {
   ]
 }
 
-function buildVODCaptions (video: MVideo, videoCaptions: MVideoCaptionVideo[]) {
+function buildVODCaptions (videoCaptions: MVideoCaptionVideo[]) {
   return videoCaptions.map(caption => {
     const type = MIMETYPES.VIDEO_CAPTIONS.EXT_MIMETYPE[extname(caption.filename)]
     if (!type) return null
 
     return {
-      url: caption.getFileUrl(video),
+      url: caption.getLocalFileUrl(),
       language: caption.language,
       type,
       rel: 'captions'

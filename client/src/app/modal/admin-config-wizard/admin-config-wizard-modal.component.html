@@ -1,9 +1,9 @@
-<ng-template #modal let-hide="close">
+<ng-template #modal>
   <div class="modal-body">
     <my-admin-config-wizard-stepper #stepper>
       @if (showWelcome) {
         <cdk-step i18n-label label="Welcome introduction">
-          <my-admin-config-wizard-welcome (back)="stepper.previous()" (next)="stepper.next()" (hide)="hide()"></my-admin-config-wizard-welcome>
+          <my-admin-config-wizard-welcome (back)="stepper.previous()" (next)="stepper.next()" (hide)="hide($event)"></my-admin-config-wizard-welcome>
         </cdk-step>
       }
 
@@ -32,7 +32,7 @@
 
       @if (showWelcome) {
         <cdk-step i18n-label label="Post configuration documentation">
-          <my-admin-config-wizard-documentation (hide)="hide()"></my-admin-config-wizard-documentation>
+          <my-admin-config-wizard-documentation (hide)="hide({ doNotOpenAgain: true })"></my-admin-config-wizard-documentation>
         </cdk-step>
       }
     </my-admin-config-wizard-stepper>

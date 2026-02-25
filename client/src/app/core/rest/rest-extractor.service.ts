@@ -1,10 +1,10 @@
-import { throwError as observableThrowError } from 'rxjs'
 import { HttpHeaderResponse } from '@angular/common/http'
 import { Injectable, LOCALE_ID, inject } from '@angular/core'
 import { Router } from '@angular/router'
 import { DateFormat, dateToHuman } from '@app/helpers'
 import { HttpStatusCode, HttpStatusCodeType, ResultList } from '@peertube/peertube-models'
-import { logger } from '@root-helpers/logger'
+import { PeerTubeHTTPError, PeerTubeReconnectError } from '@root-helpers/errors'
+import { throwError as observableThrowError } from 'rxjs'
 
 @Injectable()
 export class RestExtractor {
@@ -70,36 +70,31 @@ export class RestExtractor {
       errorObj.body = err.error
     }
 
-    return observableThrowError(() => errorObj)
+    return observableThrowError(() => {
+      if (err instanceof PeerTubeReconnectError) {
+        return err
+      }
+
+      if (err.status) {
+        return new PeerTubeHTTPError(errorMessage, {
+          status: err.status,
+          body: errorObj.body,
+          headers: errorObj.headers,
+          url: err.url
+        })
+      }
+
+      return err
+    })
   }
 
   private buildErrorMessage (err: any) {
-    if (err.error instanceof Error) {
-      // A client-side or network error occurred. Handle it accordingly.
-      const errorMessage = err.error.detail || err.error.title
-      logger.error('An error occurred:', errorMessage)
+    if (err.error instanceof Error) return err.error.detail || err.error.title
+    if (typeof err.error === 'string') return err.error
+    if (err.status !== undefined) return this.buildServerErrorMessage(err)
+    if (typeof err === 'string') return err
 
-      return errorMessage
-    }
-
-    if (typeof err.error === 'string') {
-      return err.error
-    }
-
-    if (err.status !== undefined) {
-      // A fetch response
-      const errorMessage = this.buildServerErrorMessage(err)
-
-      const message = `Backend returned code ${err.status}, errorMessage is: ${errorMessage}`
-
-      if (err.status === HttpStatusCode.NOT_FOUND_404) logger.clientError(message)
-      else logger.error(message, { type: err.type, url: err.url })
-
-      return errorMessage
-    }
-
-    logger.error(err)
-    return err
+    return err.message || err.detail || $localize`Unknown error`
   }
 
   private buildServerErrorMessage (err: any) {

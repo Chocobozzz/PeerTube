@@ -160,27 +160,29 @@ export class VideosListComponent implements OnInit, OnDestroy {
 
         this.subscribeToAnonymousUpdate()
         this.subscribeToQueryParamsChange()
+
+        this.filters.load(this.route.snapshot.queryParams)
+
+        this.filters.onChange(() => {
+          debugLogger('Filters changed', this.filters)
+
+          // We'll reload videos, but avoid weird UI effect
+          this.videos = []
+          this.highlightedLives = []
+
+          this.updateUrl()
+
+          this.reloadSyndicationItems()
+          this.reloadVideos()
+
+          this.filtersChanged.emit(this.filters)
+        })
+
+        this.handlePagination()
+        this.reloadSyndicationItems()
+
+        this.loadMoreVideos({ reset: true })
       })
-
-    this.filters.load(this.route.snapshot.queryParams)
-
-    this.filters.onChange(() => {
-      debugLogger('Filters changed', this.filters)
-
-      // We'll reload videos, but avoid weird UI effect
-      this.videos = []
-      this.highlightedLives = []
-
-      this.updateUrl()
-
-      this.reloadSyndicationItems()
-      this.reloadVideos()
-
-      this.filtersChanged.emit(this.filters)
-    })
-
-    this.reloadSyndicationItems()
-    this.reloadVideos()
   }
 
   ngOnDestroy () {
@@ -201,14 +203,24 @@ export class VideosListComponent implements OnInit, OnDestroy {
     }
 
     // No more results
-    if (this.lastQueryLength !== undefined && this.lastQueryLength < this.pagination.itemsPerPage) return
+    if (!this.hasMoreResults()) return
 
     this.pagination.currentPage += 1
 
     this.loadMoreVideos()
   }
 
-  loadMoreVideos (reset = false) {
+  hasMoreResults () {
+    if (this.lastQueryLength !== undefined && this.lastQueryLength < this.pagination.itemsPerPage) return false
+
+    return true
+  }
+
+  loadMoreVideos (options: {
+    reset?: boolean
+  } = {}) {
+    const { reset = false } = options
+
     let liveFilters: VideoFilters
     let videoFilters: VideoFilters
 
@@ -239,7 +251,8 @@ export class VideosListComponent implements OnInit, OnDestroy {
 
   reloadVideos () {
     resetCurrentPage(this.pagination)
-    this.loadMoreVideos(true)
+
+    this.loadMoreVideos({ reset: true })
   }
 
   removeVideoFromArray (video: Video) {
@@ -250,6 +263,14 @@ export class VideosListComponent implements OnInit, OnDestroy {
     }
 
     this.highlightedLives = this.highlightedLives.filter(v => v.id !== video.id)
+  }
+
+  getNextPageQueryParams () {
+    return {
+      ...this.route.snapshot.queryParams,
+
+      page: (this.pagination.currentPage + 1) + ''
+    }
   }
 
   private calcPageSizes () {
@@ -346,11 +367,30 @@ export class VideosListComponent implements OnInit, OnDestroy {
         },
 
         error: err => {
-          const message = $localize`Cannot load more videos. Try again later.`
+          const message = $localize`Cannot load more videos. Please try again later.`
 
           logger.error(message, err)
           this.notifier.error(message)
         }
       })
+  }
+
+  // Handle "Load more" button for SEO
+  private handlePagination () {
+    const initPage = this.route.snapshot.queryParams['page']
+
+    this.pagination.currentPage = initPage
+      ? +initPage
+      : 1
+
+    this.route.queryParams.subscribe(queryParams => {
+      const page = queryParams['page']
+      if (!page || +page === this.pagination.currentPage) return
+
+      resetCurrentPage(this.pagination)
+      this.pagination.currentPage = +page
+
+      this.loadMoreVideos({ reset: true })
+    })
   }
 }

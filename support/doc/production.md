@@ -16,27 +16,23 @@ Follow the steps of the [dependencies guide](/support/doc/dependencies.md).
 
 Create a `peertube` user with `/var/www/peertube` home:
 
-```bash
-sudo useradd -m -d /var/www/peertube -s /usr/sbin/nologin -p peertube peertube
+::: code-group
+
+```bash [GNU/Linux]
+sudo useradd -m -d /var/www/peertube -s /usr/sbin/nologin peertube
 ```
 
-Set its password:
-```bash
-sudo passwd peertube
+```bash [FreeBSD]
+sudo pw useradd -n peertube -d /var/www/peertube -s /usr/sbin/nologin -m
 ```
+
+:::
 
 Ensure the peertube root directory is traversable by nginx:
 
 ```bash
-ls -ld /var/www/peertube # Should be drwxr-xr-x
+sudo chmod 755 /var/www/peertube
 ```
-
-**On FreeBSD**
-
-```bash
-sudo pw useradd -n peertube -d /var/www/peertube -s /usr/sbin/nologin -m
-```
-or use `adduser` to create it interactively.
 
 ### :card_file_box: Database
 
@@ -278,7 +274,7 @@ The administrator username is `root` and the password is automatically generated
 logs (path defined in `production.yaml`). You can also set another password with:
 
 ```bash
-cd /var/www/peertube/peertube-latest && NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run reset-password -- -u root
+cd /var/www/peertube/peertube-latest && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run reset-password -- -u root
 ```
 
 Alternatively you can set the environment variable `PT_INITIAL_ROOT_PASSWORD`,

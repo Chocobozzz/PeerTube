@@ -66,7 +66,7 @@ export type MVideo = Omit<
 export type MVideoId = Pick<MVideo, 'id'>
 export type MVideoUrl = Pick<MVideo, 'url'>
 export type MVideoUUID = Pick<MVideo, 'uuid'>
-export type MVideoPrivacy = Pick<MVideo, 'privacy' | 'uuid'>
+export type MVideoPrivacy = Pick<MVideo, 'privacy' | 'uuid' | 'hasPrivateStaticPath'>
 
 export type MVideoImmutable = Pick<MVideo, 'id' | 'url' | 'uuid' | 'remote' | 'isLocal'>
 export type MVideoOwned = Pick<MVideo, 'remote' | 'isLocal'>
@@ -115,6 +115,14 @@ export type MVideoWithCaptions =
 export type MVideoWithStreamingPlaylist =
   & MVideo
   & Use<'VideoStreamingPlaylists', MStreamingPlaylistFiles[]>
+
+export type MVideoSeo =
+  & MVideo
+  & Use<'Thumbnails', MThumbnail[]>
+  & Use<'VideoBlacklist', MVideoBlacklistLight>
+  & Use<'VideoChannel', MChannelAccountLight>
+  & Use<'Tags', MTag[]>
+  & Use<'VideoCaptions', MVideoCaptionLanguageUrl[]>
 
 // ############################################################################
 

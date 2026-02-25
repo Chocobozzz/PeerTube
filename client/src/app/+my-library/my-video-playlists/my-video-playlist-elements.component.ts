@@ -105,7 +105,7 @@ export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
           this.reorderClientPositions()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 
@@ -151,7 +151,7 @@ export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
           this.notifier.success($localize`Playlist ${videoPlaylist.displayName} deleted.`)
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 

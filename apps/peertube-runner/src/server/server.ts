@@ -27,6 +27,8 @@ export class RunnerServer {
   private cleaningUp = false
   private initialized = false
 
+  private ipcServer: IPCServer
+
   private readonly enabledJobsArray: RunnerJobType[]
 
   private readonly sockets = new Map<PeerTubeServer, Socket>()
@@ -53,9 +55,9 @@ export class RunnerServer {
     }
 
     // Run IPC
-    const ipcServer = new IPCServer()
+    this.ipcServer = new IPCServer()
     try {
-      await ipcServer.run(this)
+      await this.ipcServer.run(this)
     } catch (err) {
       logger.error(err, 'Cannot start local socket for IPC communication')
       process.exit(-1)
@@ -79,6 +81,8 @@ export class RunnerServer {
 
     logger.info(`Using ${ConfigManager.Instance.getTranscodingDirectory()} for transcoding directory`)
     logger.info(`Using ${ConfigManager.Instance.getStoryboardDirectory()} for storyboard directory`)
+
+    logger.info(`Server is ready to process jobs`)
 
     this.initialized = true
     await this.checkAvailableJobs()
@@ -375,6 +379,7 @@ export class RunnerServer {
       }
 
       await this.cleanupTMP()
+      await this.ipcServer?.stop()
     } catch (err) {
       logger.error(err)
       process.exit(-1)

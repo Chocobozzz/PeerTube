@@ -1,12 +1,13 @@
-import { ensureDir, remove } from 'fs-extra/esm'
-import { readdir } from 'fs/promises'
-import passwordGenerator from 'password-generator'
-import { join } from 'path'
 import { UserRole } from '@peertube/peertube-models'
 import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { generateRunnerRegistrationToken } from '@server/helpers/token-generator.js'
 import { getNodeABIVersion } from '@server/helpers/version.js'
+import { initPNPM } from '@server/lib/plugins/package-manager.js'
 import { RunnerRegistrationTokenModel } from '@server/models/runner/runner-registration-token.js'
+import { ensureDir, remove } from 'fs-extra/esm'
+import { readdir } from 'fs/promises'
+import { generatePassword } from 'password-generator'
+import { join } from 'path'
 import { logger } from '../helpers/logger.js'
 import { buildUser, createApplicationActor, createUserAccountAndChannelAndPlaylist } from '../lib/user.js'
 import { ApplicationModel } from '../models/application/application.js'
@@ -15,7 +16,6 @@ import { applicationExist, clientsExist, usersExist } from './checker-after-init
 import { CONFIG } from './config.js'
 import { DIRECTORIES, FILES_CACHE, LAST_MIGRATION_VERSION } from './constants.js'
 import { sequelizeTypescript } from './database.js'
-import { initPNPM } from '@server/lib/plugins/package-manager.js'
 
 async function installApplication () {
   try {
@@ -33,7 +33,7 @@ async function installApplication () {
         }),
 
       // Directories
-      removeCacheAndTmpDirectories()
+      removeTmpDirectory()
         .then(() => createDirectoriesIfNotExist())
     ])
   } catch (err) {
@@ -50,20 +50,8 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function removeCacheAndTmpDirectories () {
-  const cacheDirectories = Object.keys(FILES_CACHE)
-    .map(k => FILES_CACHE[k].DIRECTORY)
-
-  const tasks: Promise<any>[] = []
-
-  // Cache directories
-  for (const dir of cacheDirectories) {
-    tasks.push(removeDirectoryOrContent(dir))
-  }
-
-  tasks.push(removeDirectoryOrContent(CONFIG.STORAGE.TMP_DIR))
-
-  return Promise.all(tasks)
+function removeTmpDirectory () {
+  return removeDirectoryOrContent(CONFIG.STORAGE.TMP_DIR)
 }
 
 async function removeDirectoryOrContent (dir: string) {
@@ -100,9 +88,9 @@ function createDirectoriesIfNotExist () {
   tasks.push(ensureDir(DIRECTORIES.HLS_STREAMING_PLAYLIST.PUBLIC))
   tasks.push(ensureDir(DIRECTORIES.WEB_VIDEOS.PUBLIC))
   tasks.push(ensureDir(DIRECTORIES.WEB_VIDEOS.PRIVATE))
-
-  // Resumable upload directory
+  tasks.push(ensureDir(DIRECTORIES.UPLOAD_IMAGES))
   tasks.push(ensureDir(DIRECTORIES.RESUMABLE_UPLOAD))
+  tasks.push(ensureDir(DIRECTORIES.HLS_REDUNDANCY))
 
   return Promise.all(tasks)
 }
@@ -114,8 +102,8 @@ async function createOAuthClientIfNotExist () {
 
   logger.info('Creating a default OAuth Client.')
 
-  const id = passwordGenerator(32, false, /[a-z0-9]/)
-  const secret = passwordGenerator(32, false, /[a-zA-Z0-9]/)
+  const id = await generatePassword(32, false, /[a-z0-9]/)
+  const secret = await generatePassword(32, false, /[a-zA-Z0-9]/)
   const client = new OAuthClientModel({
     clientId: id,
     clientSecret: secret,
@@ -156,7 +144,7 @@ async function createOAuthAdminIfNotExist () {
   } else if (process.env.PT_INITIAL_ROOT_PASSWORD) {
     password = process.env.PT_INITIAL_ROOT_PASSWORD
   } else {
-    password = passwordGenerator(16, true)
+    password = await generatePassword(16, true)
   }
 
   const user = buildUser({

@@ -61,7 +61,7 @@ export class ModerationCommentModalComponent extends FormReactive implements OnI
           this.hide()
         },
 
-        error: err => this.notifier.error(err.message)
+        error: err => this.notifier.handleError(err)
       })
   }
 }

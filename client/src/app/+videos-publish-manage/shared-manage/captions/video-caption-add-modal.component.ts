@@ -7,7 +7,7 @@ import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.serv
 import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-options.component'
 import { VideoCaptionEdit } from '@app/+videos-publish-manage/shared-manage/common/video-caption-edit.model'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
-import { HTMLServerConfig, VideoConstant } from '@peertube/peertube-models'
+import { HTMLServerConfig, ConstantLabel } from '@peertube/peertube-models'
 import { ReactiveFileComponent } from '../../../shared/shared-forms/reactive-file.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 
@@ -29,7 +29,7 @@ export class VideoCaptionAddModalComponent extends FormReactive implements OnIni
 
   readonly modal = viewChild<ElementRef>('modal')
 
-  videoCaptionLanguages: VideoConstant<string>[] = []
+  videoCaptionLanguages: ConstantLabel<string>[] = []
 
   private openedModal: NgbModalRef
 

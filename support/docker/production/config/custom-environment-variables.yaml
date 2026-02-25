@@ -68,6 +68,10 @@ object_storage:
 
   region: "PEERTUBE_OBJECT_STORAGE_REGION"
 
+  force_path_style:
+    __name: "PEERTUBE_OBJECT_STORAGE_FORCE_PATH_STYLE"
+    __format: "json"
+
   upload_acl:
     public: "PEERTUBE_OBJECT_STORAGE_UPLOAD_ACL_PUBLIC"
     private: "PEERTUBE_OBJECT_STORAGE_UPLOAD_ACL_PRIVATE"

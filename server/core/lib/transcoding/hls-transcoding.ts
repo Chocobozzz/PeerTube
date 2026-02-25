@@ -1,8 +1,8 @@
 import { pick } from '@peertube/peertube-core-utils'
-import { getVideoStreamDuration, HLSFromTSTranscodeOptions, HLSTranscodeOptions } from '@peertube/peertube-ffmpeg'
+import { canCopyForHLS, getVideoStreamDuration, HLSFromTSTranscodeOptions, HLSTranscodeOptions } from '@peertube/peertube-ffmpeg'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
-import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
+import { createTorrentAndSetInfoHash } from '@server/lib/webtorrent.js'
 import { MVideo } from '@server/types/models/index.js'
 import { MutexInterface } from 'async-mutex'
 import { Job } from 'bullmq'
@@ -13,10 +13,10 @@ import { VideoFileModel } from '../../models/video/video-file.js'
 import { VideoStreamingPlaylistModel } from '../../models/video/video-streaming-playlist.js'
 import { renameVideoFileInPlaylist, updateM3U8AndShaPlaylist } from '../hls.js'
 import { generateHLSVideoFilename, getHLSResolutionPlaylistFilename } from '../paths.js'
+import { createAllCaptionPlaylistsOnFSIfNeeded } from '../video-captions.js'
 import { buildNewFile } from '../video-file.js'
 import { VideoPathManager } from '../video-path-manager.js'
 import { buildFFmpegVOD } from './shared/index.js'
-import { createAllCaptionPlaylistsOnFSIfNeeded } from '../video-captions.js'
 
 // Concat TS segments from a live video to a fragmented mp4 HLS playlist
 export async function generateHlsPlaylistResolutionFromTS (options: {
@@ -45,7 +45,6 @@ export function generateHlsPlaylistResolution (options: {
 
   resolution: number
   fps: number
-  copyCodecs: boolean
   inputFileMutexReleaser: MutexInterface.Releaser
   separatedAudio: boolean
   job?: Job
@@ -59,7 +58,6 @@ export function generateHlsPlaylistResolution (options: {
       'video',
       'resolution',
       'fps',
-      'copyCodecs',
       'separatedAudio',
       'inputFileMutexReleaser',
       'job'
@@ -158,7 +156,6 @@ async function generateHlsPlaylistCommon (options: {
 
   separatedAudio?: boolean
 
-  copyCodecs?: boolean
   isAAC?: boolean
 
   job?: Job
@@ -170,7 +167,6 @@ async function generateHlsPlaylistCommon (options: {
     separatedAudioInputPath,
     resolution,
     fps,
-    copyCodecs,
     separatedAudio,
     isAAC,
     job,
@@ -198,7 +194,9 @@ async function generateHlsPlaylistCommon (options: {
 
     resolution,
     fps,
-    copyCodecs,
+
+    copyCodecs: !separatedAudioInputPath && await canCopyForHLS({ fps, resolution, path: videoInputPath }),
+
     separatedAudio,
 
     isAAC,

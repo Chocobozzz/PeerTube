@@ -84,46 +84,52 @@ describe('Test generate download', function () {
       return probeResBody(body)
     }
 
-    function checkProbe (probe: FfprobeData, options: { hasVideo: boolean, hasAudio: boolean, hasImage: boolean }) {
+    function checkProbe (probe: FfprobeData, options: { hasVideo: boolean, hasAudio: boolean, hasImage: boolean, muxed: boolean }) {
       expect(probe.streams.some(s => s.codec_type === 'video' && s.codec_name !== 'mjpeg')).to.equal(options.hasVideo)
       expect(probe.streams.some(s => s.codec_type === 'audio')).to.equal(options.hasAudio)
       expect(probe.streams.some(s => s.codec_name === 'mjpeg')).to.equal(options.hasImage)
+
+      if (options.muxed) {
+        expect(probe.format.tags.compatible_brands).to.include('iso6')
+      } else {
+        expect(probe.format.tags.compatible_brands).to.not.include('iso6')
+      }
     }
 
     it('Should generate a classic web video file', async function () {
       const probe = await getProbe('common', video => [ getVideoFile(video.files).id ])
 
-      checkProbe(probe, { hasAudio: true, hasVideo: true, hasImage: false })
+      checkProbe(probe, { hasAudio: true, hasVideo: true, hasImage: false, muxed: false })
     })
 
     it('Should generate a classic HLS file', async function () {
       const probe = await getProbe('common', video => [ getVideoFile(getHLS(video).files).id ])
 
-      checkProbe(probe, { hasAudio: true, hasVideo: true, hasImage: false })
+      checkProbe(probe, { hasAudio: true, hasVideo: true, hasImage: false, muxed: true })
     })
 
     it('Should generate an audio only web video file', async function () {
       const probe = await getProbe('common', video => [ getAudioOnlyFile(video.files).id ])
 
-      checkProbe(probe, { hasAudio: true, hasVideo: false, hasImage: true })
+      checkProbe(probe, { hasAudio: true, hasVideo: false, hasImage: true, muxed: true })
     })
 
     it('Should generate an audio only HLS file', async function () {
       const probe = await getProbe('common', video => [ getAudioOnlyFile(getHLS(video).files).id ])
 
-      checkProbe(probe, { hasAudio: true, hasVideo: false, hasImage: true })
+      checkProbe(probe, { hasAudio: true, hasVideo: false, hasImage: true, muxed: true })
     })
 
     it('Should generate a video only file', async function () {
       const probe = await getProbe('splitted', video => [ getVideoFile(getHLS(video).files).id ])
 
-      checkProbe(probe, { hasAudio: false, hasVideo: true, hasImage: false })
+      checkProbe(probe, { hasAudio: false, hasVideo: true, hasImage: false, muxed: true })
     })
 
     it('Should merge audio and video files', async function () {
       const probe = await getProbe('splitted', video => [ getVideoFile(getHLS(video).files).id, getAudioFile(getHLS(video).files).id ])
 
-      checkProbe(probe, { hasAudio: true, hasVideo: true, hasImage: false })
+      checkProbe(probe, { hasAudio: true, hasVideo: true, hasImage: false, muxed: true })
     })
 
     it('Should have cleaned the TMP directory', async function () {
@@ -152,7 +158,7 @@ describe('Test generate download', function () {
           videoFileIds: [ file.id ],
           expectedStatus: server === servers[0]
             ? HttpStatusCode.OK_200
-            : HttpStatusCode.INTERNAL_SERVER_ERROR_500
+            : HttpStatusCode.SERVICE_UNAVAILABLE_503
         })
       }
     })

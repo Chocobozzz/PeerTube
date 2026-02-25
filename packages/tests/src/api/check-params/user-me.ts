@@ -12,7 +12,7 @@ import {
   setAccessTokensToServers,
   UsersCommand
 } from '@peertube/peertube-server-commands'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
 
 describe('Test my user API validators', function () {
@@ -113,12 +113,23 @@ describe('Test my user API validators', function () {
     })
 
     it('Should fail with a too long password', async function () {
-      const fields = {
-        currentPassword: 'password',
-        password: 'super'.repeat(61)
+      {
+        const fields = {
+          currentPassword: 'password',
+          password: 'super'.repeat(61)
+        }
+
+        await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
       }
 
-      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
+      {
+        const fields = {
+          currentPassword: 'password',
+          password: '😁'.repeat(20)
+        }
+
+        await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
+      }
     })
 
     it('Should fail without the current password', async function () {
@@ -449,7 +460,7 @@ describe('Test my user API validators', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, path, userToken)
+      await checkBadSort(server.url, path, userToken)
     })
 
     it('Should fail with a unauthenticated user', async function () {
@@ -487,7 +498,7 @@ describe('Test my user API validators', function () {
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, path, userToken)
+      await checkBadSort(server.url, path, userToken)
     })
 
     it('Should fail with a unauthenticated user', async function () {

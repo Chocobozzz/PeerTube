@@ -102,15 +102,17 @@ async function getSitemapLocalVideoUrls () {
           v.getMaxQualityFile(VideoFileStream.AUDIO)?.getFileUrl(v)
 
         return {
-          url: WEBSERVER.URL + v.getWatchStaticPath(),
+          url: process.env.EXPERIMENTAL_SITEMAP_VIDEO_URL === 'true'
+            ? WEBSERVER.URL + '/videos/watch/' + v.uuid
+            : WEBSERVER.URL + v.getWatchStaticPath(),
           video: [
             {
               // Sitemap title should be < 100 characters
               'title': truncate(v.name, { length: 100, omission: '...' }),
               // Sitemap description should be < 2000 characters
               'description': truncate(v.description || v.name, { length: 2000, omission: '...' }),
-              'player_loc': WEBSERVER.URL + v.getEmbedStaticPath(),
-              'thumbnail_loc': WEBSERVER.URL + v.getMiniatureStaticPath(),
+              'player_loc': v.getEmbedStaticUrl(),
+              'thumbnail_loc': WEBSERVER.URL + v.getSmallestThumbnailStaticPath('16:9'),
               'content_loc': contentLoc,
               'duration': v.duration,
               'view_count': v.views,

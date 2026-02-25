@@ -18,7 +18,7 @@ import {
   asyncRetryTransactionMiddleware,
   authenticate,
   checkVideoFollowConstraints,
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidatorFactory,
   optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
@@ -33,6 +33,7 @@ import { blacklistRouter } from './blacklist.js'
 import { videoCaptionsRouter } from './captions.js'
 import { videoChaptersRouter } from './chapters.js'
 import { videoCommentRouter } from './comment.js'
+import { videoEmbedPrivacyRouter } from './embed-privacy.js'
 import { filesRouter } from './files.js'
 import { videoImportsRouter } from './import.js'
 import { liveRouter } from './live.js'
@@ -73,6 +74,7 @@ videosRouter.use('/', videoPasswordRouter)
 videosRouter.use('/', storyboardRouter)
 videosRouter.use('/', videoSourceRouter)
 videosRouter.use('/', videoChaptersRouter)
+videosRouter.use('/', videoEmbedPrivacyRouter)
 
 videosRouter.get('/categories', openapiOperationDoc({ operationId: 'getCategories' }), listVideoCategories)
 videosRouter.get('/licences', openapiOperationDoc({ operationId: 'getLicences' }), listVideoLicences)
@@ -87,7 +89,7 @@ videosRouter.get(
   setDefaultVideosSort,
   setDefaultPagination,
   optionalAuthenticate,
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidatorFactory(),
   asyncMiddleware(listVideos)
 )
 

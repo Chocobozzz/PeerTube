@@ -75,8 +75,8 @@ describe('Test users email verification', function () {
   })
 
   it('Should not allow login for user with unverified email', async function () {
-    const { detail } = await server.login.login({ user: user1, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
-    expect(detail).to.contain('User email is not verified.')
+    const { code } = await server.login.login({ user: user1, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    expect(code).to.equal('email_not_verified')
   })
 
   it('Should verify the user via email and allow login', async function () {

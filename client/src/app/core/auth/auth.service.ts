@@ -1,10 +1,10 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http'
-import { Injectable, inject } from '@angular/core'
+import { inject, Injectable } from '@angular/core'
 import { Router } from '@angular/router'
 import { Hotkey, HotkeysService } from '@app/core'
 import { Notifier } from '@app/core/notification/notifier.service'
 import { HttpStatusCode, OAuthClientLocal, User, UserLogin, UserRefreshToken, MyUser as UserServerModel } from '@peertube/peertube-models'
-import { logger, OAuthUserTokens, objectToUrlEncoded, peertubeLocalStorage } from '@root-helpers/index'
+import { logger, OAuthUserTokens, objectToUrlEncoded, peertubeLocalStorage, PeerTubeReconnectError } from '@root-helpers/index'
 import { Observable, of, ReplaySubject, Subject, throwError } from 'rxjs'
 import { catchError, map, mergeMap, share, tap } from 'rxjs/operators'
 import { environment } from '../../../environments/environment'
@@ -190,7 +190,11 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         }
       },
 
-      error: err => logger.error(err)
+      error: err => {
+        if (!(err instanceof PeerTubeReconnectError)) {
+          logger.error(err)
+        }
+      }
     })
 
     this.user = null
@@ -200,7 +204,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
 
   refreshAccessToken () {
     if (this.refreshingTokenObservable) return this.refreshingTokenObservable
-    if (!this.getAccessToken()) return throwError(() => new Error($localize`You need to reconnect`))
+    if (!this.getAccessToken()) return throwError(() => new PeerTubeReconnectError($localize`You need to reconnect`, true))
 
     logger.info('Refreshing token...')
 
@@ -222,13 +226,13 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           this.refreshingTokenObservable = null
         }),
         catchError(err => {
-          logger.clientError(err)
+          logger.clientError(err.message, err)
           this.logout()
 
           this.notifier.info($localize`Your authentication has expired, you need to reconnect.`, undefined, undefined, true)
           this.refreshingTokenObservable = null
 
-          return throwError(() => new Error($localize`You need to reconnect`))
+          throw new PeerTubeReconnectError($localize`You need to reconnect`, true)
         }),
         share()
       )
