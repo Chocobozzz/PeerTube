@@ -174,7 +174,7 @@ static_files:
 
 object_storage:
   enabled: false
-  endpoint: ''
+  endpoint: '' # 's3.amazonaws.com' or 's3.fr-par.scw.cloud' for example
   region: 'us-east-1'
   force_path_style: false
 
@@ -678,8 +678,8 @@ live:
   # /!\ transcoding.enabled (and not live.transcoding.enabled) has to be true to create a replay
   allow_replay: true
 
-  # Max DVR window length in seconds (2 hours by default)
-  dvr_max_window_seconds: 7200
+  # Max DVR window length in milliseconds (2 hours by default)
+  dvr_max_window: 7200000
 
   # Allow your users to change latency settings (small latency/default/high latency)
   # Small latency live streams cannot use P2P

@@ -149,8 +149,8 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
       if (exists(body.permanentLive)) videoLive.permanentLive = body.permanentLive
       if (exists(body.latencyMode)) videoLive.latencyMode = body.latencyMode
       if (exists(body.dvrEnabled)) videoLive.dvrEnabled = body.dvrEnabled
-      if (exists(body.dvrWindowSeconds)) {
-        videoLive.dvrWindowSeconds = Math.min(body.dvrWindowSeconds, CONFIG.LIVE.DVR_MAX_WINDOW_SECONDS)
+      if (exists(body.dvrWindow)) {
+        videoLive.dvrWindow = Math.min(body.dvrWindow, CONFIG.LIVE.DVR_MAX_WINDOW)
       }
 
       if (body.schedules !== undefined) {
@@ -217,7 +217,7 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
       'permanentLive',
       'latencyMode',
       'dvrEnabled',
-      'dvrWindowSeconds',
+      'dvrWindow',
       'replaySettings',
       'schedules'
     ]),

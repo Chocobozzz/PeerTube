@@ -73,7 +73,7 @@ describe('Test live', function () {
 
   describe('Live DVR settings', function () {
     let liveVideoUUID: string
-    const updatedDvrWindowSeconds = 1800
+    const updatedDvrWindow = 30 * 60 * 1000
 
     it('Should create a live with custom DVR settings', async function () {
       const live = await commands[0].create({
@@ -91,7 +91,7 @@ describe('Test live', function () {
       const videoLive = await servers[0].live.get({ videoId: liveVideoUUID })
 
       expect(videoLive.dvrEnabled).to.be.false
-      expect(videoLive.dvrWindowSeconds).to.be.greaterThan(0)
+      expect(videoLive.dvrWindow).to.be.greaterThan(0)
     })
 
     it('Should update DVR settings on the live', async function () {
@@ -99,7 +99,7 @@ describe('Test live', function () {
         videoId: liveVideoUUID,
         fields: {
           dvrEnabled: true,
-          dvrWindowSeconds: updatedDvrWindowSeconds
+          dvrWindow: updatedDvrWindow
         }
       })
 
@@ -108,7 +108,7 @@ describe('Test live', function () {
       const videoLive = await servers[0].live.get({ videoId: liveVideoUUID })
 
       expect(videoLive.dvrEnabled).to.be.true
-      expect(videoLive.dvrWindowSeconds).to.equal(updatedDvrWindowSeconds)
+      expect(videoLive.dvrWindow).to.equal(updatedDvrWindow)
     })
 
     it('Should delete the DVR test live', async function () {

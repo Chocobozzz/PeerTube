@@ -245,7 +245,7 @@ export interface ServerConfig {
     enabled: boolean
 
     allowReplay: boolean
-    dvrMaxWindowSeconds: number
+    dvrMaxWindow: number
     latencySetting: {
       enabled: boolean
     }

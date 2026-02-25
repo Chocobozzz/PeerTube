@@ -36,7 +36,7 @@ describe('Test video lives API validator', function () {
   let video: VideoCreateResult
   let videoIdNotLive: number
   let command: LiveCommand
-  let dvrMaxWindowSeconds: number
+  let dvrMaxWindow: number
 
   // ---------------------------------------------------------------
 
@@ -64,7 +64,7 @@ describe('Test video lives API validator', function () {
 
     {
       const config = await server.config.getConfig()
-      dvrMaxWindowSeconds = config.live.dvrMaxWindowSeconds
+      dvrMaxWindow = config.live.dvrMaxWindow
     }
 
     userAccessToken = await server.users.generateUserAndToken('user1')
@@ -105,7 +105,7 @@ describe('Test video lives API validator', function () {
         permanentLive: true,
         latencyMode: LiveVideoLatencyMode.DEFAULT,
         dvrEnabled: true,
-        dvrWindowSeconds: Math.max(1, Math.floor(dvrMaxWindowSeconds / 2)),
+        dvrWindow: Math.max(1, Math.floor(dvrMaxWindow / 2)),
         schedules: [
           {
             startAt: new Date(Date.now() + 1000 * 60 * 60) // 1 hour later
@@ -287,11 +287,11 @@ describe('Test video lives API validator', function () {
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
-    it('Should fail with a bad dvrWindowSeconds', async function () {
-      const toTests = [ -1, 0, 0.5, dvrMaxWindowSeconds + 1 ]
+    it('Should fail with a bad dvrWindow', async function () {
+      const toTests = [ -1, 0, 0.5, dvrMaxWindow + 1 ]
 
-      for (const dvrWindowSeconds of toTests) {
-        const fields = { ...baseCorrectParams, dvrWindowSeconds }
+      for (const dvrWindow of toTests) {
+        const fields = { ...baseCorrectParams, dvrWindow }
 
         await makePostBodyRequest({
           url: server.url,
@@ -552,7 +552,7 @@ describe('Test video lives API validator', function () {
       await command.update({ videoId: video.id, fields, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
-    it('Should fail with bad dvrWindowSeconds', async function () {
+    it('Should fail with bad dvrWindow', async function () {
       const targetVideoId = video?.id || (await command.create({
         fields: {
           name: 'live dvr update validation',
@@ -561,10 +561,10 @@ describe('Test video lives API validator', function () {
         }
       })).id
 
-      const toTests = [ -1, 0, 0.5, dvrMaxWindowSeconds + 1 ]
+      const toTests = [ -1, 0, 0.5, dvrMaxWindow + 1 ]
 
-      for (const dvrWindowSeconds of toTests) {
-        const fields = { dvrWindowSeconds } as any
+      for (const dvrWindow of toTests) {
+        const fields = { dvrWindow } as any
 
         await command.update({
           videoId: targetVideoId,

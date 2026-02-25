@@ -62,9 +62,9 @@ export class VideoLiveModel extends SequelizeModel<VideoLiveModel> {
   @AllowNull(false)
   @Column({
     type: DataType.INTEGER,
-    defaultValue: 7200
+    defaultValue: 7200000
   })
-  declare dvrWindowSeconds: number
+  declare dvrWindow: number
 
   @CreatedAt
   declare createdAt: Date
@@ -205,7 +205,7 @@ export class VideoLiveModel extends SequelizeModel<VideoLiveModel> {
       replaySettings,
       latencyMode: this.latencyMode,
       dvrEnabled: this.dvrEnabled,
-      dvrWindowSeconds: this.dvrWindowSeconds,
+      dvrWindow: this.dvrWindow,
       schedules: (this.LiveSchedules || []).map(schedule => schedule.toFormattedJSON())
     }
   }

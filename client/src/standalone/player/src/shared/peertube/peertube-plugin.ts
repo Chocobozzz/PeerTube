@@ -574,6 +574,12 @@ class PeerTubePlugin extends Plugin {
   private updateControlBar () {
     debugLogger('Updating control bar')
 
+    if (this.options.isLive() && this.options.isLiveDvr()) {
+      this.player.addClass('vjs-live-dvr')
+    } else {
+      this.player.removeClass('vjs-live-dvr')
+    }
+
     if (this.options.isLive()) {
       this.getPlaybackRateButton().hide()
 

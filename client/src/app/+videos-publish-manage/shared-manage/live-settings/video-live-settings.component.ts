@@ -232,7 +232,7 @@ export class VideoLiveSettingsComponent implements OnInit, OnDestroy {
   }
 
   getMaxDvrWindowHours () {
-    return Math.round((this.serverConfig.live.dvrMaxWindowSeconds / 3600) * 100) / 100
+    return Math.round((this.serverConfig.live.dvrMaxWindow / (1000 * 60 * 60)) * 100) / 100
   }
 
   getDvrWindowStepHours () {

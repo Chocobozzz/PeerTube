@@ -60,17 +60,17 @@ export function getLiveSegmentTime (latencyMode: LiveVideoLatencyModeType) {
   return VIDEO_LIVE.SEGMENT_TIME_SECONDS.DEFAULT_LATENCY
 }
 
-export function getLiveSegmentListSize (latencyMode: LiveVideoLatencyModeType, dvrEnabled: boolean, dvrWindowSeconds?: number) {
+export function getLiveSegmentListSize (latencyMode: LiveVideoLatencyModeType, dvrEnabled: boolean, dvrWindow?: number) {
   if (dvrEnabled !== true) return VIDEO_LIVE.SEGMENTS_LIST_SIZE
 
   const segmentDuration = getLiveSegmentTime(latencyMode)
-  const maxDvrWindowSeconds = VIDEO_LIVE.DVR_MAX_WINDOW_SECONDS
+  const maxDvrWindow = VIDEO_LIVE.DVR_MAX_WINDOW
 
-  const sanitizedWindowSeconds = Number.isFinite(dvrWindowSeconds) && dvrWindowSeconds > 0
-    ? Math.min(dvrWindowSeconds, maxDvrWindowSeconds)
-    : maxDvrWindowSeconds
+  const sanitizedWindow = Number.isFinite(dvrWindow) && dvrWindow > 0
+    ? Math.min(dvrWindow, maxDvrWindow)
+    : maxDvrWindow
 
-  return Math.ceil(sanitizedWindowSeconds / segmentDuration)
+  return Math.ceil((sanitizedWindow / 1000) / segmentDuration)
 }
 
 // ---------------------------------------------------------------------------

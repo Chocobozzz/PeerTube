@@ -17,6 +17,6 @@ export function areLiveSchedulesValid (schedules: any[]) {
   return schedules.every(schedule => isLiveScheduleValid(schedule))
 }
 
-export function isLiveDvrWindowSecondsValid (value: unknown, maxDvrWindowSeconds: number) {
-  return typeof value === 'number' && Number.isInteger(value) && value > 0 && value <= maxDvrWindowSeconds
+export function isLiveDvrWindowValid (value: unknown, maxDvrWindow: number) {
+  return typeof value === 'number' && Number.isInteger(value) && value > 0 && value <= maxDvrWindow
 }

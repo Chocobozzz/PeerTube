@@ -176,9 +176,8 @@ object_storage:
   # Without protocol, will default to HTTPS
   # Your S3 provider must support virtual hosting of buckets as PeerTube doesn't support path style requests
   endpoint: '' # 's3.amazonaws.com' or 's3.fr-par.scw.cloud' for example
-
   region: 'us-east-1'
-
+  force_path_style: false
   upload_acl:
     # Set this ACL on each uploaded object of public/unlisted videos
     # Use null if your S3 provider does not support object ACL
@@ -691,8 +690,8 @@ live:
   # /!\ transcoding.enabled (and not live.transcoding.enabled) has to be true to create a replay
   allow_replay: true
 
-  # Max DVR window length in seconds (2 hours by default)
-  dvr_max_window_seconds: 7200
+  # Max DVR window length in milliseconds (2 hours by default)
+  dvr_max_window: 7200000
 
   # Allow your users to change latency settings (small latency/default/high latency)
   # Small latency live streams cannot use P2P

@@ -38,7 +38,7 @@ export interface VideoExportJSON {
       permanentLive: boolean
       latencyMode: LiveVideoLatencyModeType
       dvrEnabled: boolean
-      dvrWindowSeconds?: number
+      dvrWindow?: number
       streamKey: string
 
       replaySettings?: {

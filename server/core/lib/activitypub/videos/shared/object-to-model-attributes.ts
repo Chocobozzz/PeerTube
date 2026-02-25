@@ -198,7 +198,7 @@ export function getLiveAttributesFromObject (video: MVideoId, videoObject: Video
     permanentLive: videoObject.permanentLive,
     latencyMode: videoObject.latencyMode,
     dvrEnabled: false,
-    dvrWindowSeconds: CONFIG.LIVE.DVR_MAX_WINDOW_SECONDS,
+    dvrWindow: CONFIG.LIVE.DVR_MAX_WINDOW,
     videoId: video.id
   }
 }

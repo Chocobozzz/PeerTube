@@ -5,13 +5,20 @@ async function up (utils: {
   queryInterface: Sequelize.QueryInterface
   sequelize: Sequelize.Sequelize
 }): Promise<void> {
-  const metadata = {
+  const dvrEnabled = {
     type: Sequelize.BOOLEAN,
     allowNull: false,
     defaultValue: false
   }
 
-  await utils.queryInterface.addColumn('videoLive', 'dvrEnabled', metadata, { transaction: utils.transaction })
+  const dvrWindow = {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    defaultValue: 7200000
+  }
+
+  await utils.queryInterface.addColumn('videoLive', 'dvrEnabled', dvrEnabled, { transaction: utils.transaction })
+  await utils.queryInterface.addColumn('videoLive', 'dvrWindow', dvrWindow, { transaction: utils.transaction })
 }
 
 function down () {

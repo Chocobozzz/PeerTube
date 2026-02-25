@@ -40,9 +40,7 @@ type Customizations = {
   originUrl: boolean
   autoplay: boolean
   muted: boolean
-
   embedP2P: boolean
-  embedPiP: boolean
   onlyEmbedUrl: boolean
   title: boolean
   warningTitle: boolean
@@ -308,7 +306,6 @@ export class VideoShareComponent {
         warningTitle: this.customizations.warningTitle,
         controlBar: this.customizations.controlBar,
         peertubeLink: this.customizations.peertubeLink,
-        pip: this.customizations.embedPiP ? undefined : false,
         contextMenu: this.customizations.contextMenu ? undefined : false,
 
         // If using default value, we don't need to specify it
