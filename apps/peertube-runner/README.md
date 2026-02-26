@@ -38,5 +38,5 @@ node apps/peertube-runner/dist/peertube-runner.mjs --help
 
 ```bash
 cd peertube-root
-(cd apps/peertube-runner && npm version patch) && npm run build:peertube-runner && (cd apps/peertube-runner && npm publish --access=public)
+(cd apps/peertube-runner && npm version patch) && npm run build:peertube-runner && (cd apps/peertube-runner && npm login && npm publish --access=public)
 ```
