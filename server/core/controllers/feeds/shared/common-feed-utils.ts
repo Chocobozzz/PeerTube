@@ -5,10 +5,11 @@ import { ActorImageType } from '@peertube/peertube-models'
 import { mdToPlainText } from '@server/helpers/markdown.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
+import { regenerateActorImageFiles } from '@server/lib/local-actor.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { UserModel } from '@server/models/user/user.js'
-import { MAccountDefault, MChannelBannerAccountDefault, MUser, MVideoFullLight } from '@server/types/models/index.js'
+import { MAccountDefault, MChannelBannerAccountDefault, MChannelDefault, MUser, MVideoFullLight } from '@server/types/models/index.js'
 import express from 'express'
 
 export async function initFeed (parameters: {
@@ -117,7 +118,7 @@ export async function buildFeedMetadata (options: {
 }) {
   const { video, videoChannel, account } = options
 
-  let imageUrl = ServerConfigManager.Instance.getLogoUrl(await getServerActor(), 512)
+  let imageUrl = ServerConfigManager.Instance.getLogoUrl(await getServerActor(), 1500)
   let ownerImageUrl: string
   let name: string
   let description: string
@@ -133,7 +134,7 @@ export async function buildFeedMetadata (options: {
     link = ownerLink
 
     if (videoChannel.Actor.hasImage(ActorImageType.AVATAR)) {
-      imageUrl = WEBSERVER.URL + videoChannel.Actor.getMaxQualityImage(ActorImageType.AVATAR).getStaticPath()
+      imageUrl = await getOrGenerateImageUrl(videoChannel)
       ownerImageUrl = imageUrl
     }
 
@@ -145,7 +146,7 @@ export async function buildFeedMetadata (options: {
     link = ownerLink
 
     if (account.Actor.hasImage(ActorImageType.AVATAR)) {
-      imageUrl = WEBSERVER.URL + account.Actor.getMaxQualityImage(ActorImageType.AVATAR).getStaticPath()
+      imageUrl = await getOrGenerateImageUrl(account)
       ownerImageUrl = imageUrl
     }
 
@@ -167,4 +168,21 @@ export async function buildFeedMetadata (options: {
   }
 
   return { name, description, imageUrl, ownerImageUrl, email, link, ownerLink }
+}
+
+// ---------------------------------------------------------------------------
+// Private
+// ---------------------------------------------------------------------------
+
+async function getOrGenerateImageUrl (accountOrChannel: MChannelDefault | MAccountDefault) {
+  let image = accountOrChannel.Actor.getMaxQualityImage(ActorImageType.AVATAR)
+  if (!image) throw new Error('No avatar image found for the account or channel')
+
+  if (accountOrChannel.Actor.isLocal() && image.width < 1500) {
+    await regenerateActorImageFiles({ accountOrChannel, type: ActorImageType.AVATAR })
+  }
+
+  image = accountOrChannel.Actor.getMaxQualityImage(ActorImageType.AVATAR)
+
+  return image.getLocalFileUrl()
 }

@@ -9,40 +9,40 @@ import { readFile, writeFile } from 'fs/promises'
 import { join, parse } from 'path'
 
 // Default interval -> 5 minutes
-function dateIsValid (dateString: string | Date, interval = 300000) {
+export function dateIsValid (dateString: string | Date, interval = 300000) {
   const dateToCheck = new Date(dateString)
   const now = new Date()
 
   return Math.abs(now.getTime() - dateToCheck.getTime()) <= interval
 }
 
-function expectStartWith (str: string, start: string) {
+export function expectStartWith (str: string, start: string) {
   expect(str.startsWith(start), `${str} does not start with ${start}`).to.be.true
 }
 
-function expectNotStartWith (str: string, start: string) {
+export function expectNotStartWith (str: string, start: string) {
   expect(str.startsWith(start), `${str} does not start with ${start}`).to.be.false
 }
 
-function expectEndWith (str: string, end: string) {
+export function expectEndWith (str: string, end: string) {
   expect(str.endsWith(end), `${str} does not end with ${end}`).to.be.true
 }
 
 // ---------------------------------------------------------------------------
 
-async function expectLogDoesNotContain (server: PeerTubeServer, str: string) {
+export async function expectLogDoesNotContain (server: PeerTubeServer, str: string) {
   const content = await server.servers.getLogContent()
 
   expect(content.toString()).to.not.contain(str)
 }
 
-async function expectLogContain (server: PeerTubeServer, str: string) {
+export async function expectLogContain (server: PeerTubeServer, str: string) {
   const content = await server.servers.getLogContent()
 
   expect(content.toString()).to.contain(str)
 }
 
-async function testAvatarSize (options: {
+export async function testAvatarSize (options: {
   url: string
   imageName: string
   avatar: {
@@ -79,7 +79,7 @@ async function testAvatarSize (options: {
   }
 }
 
-async function testImageGeneratedByFFmpeg (options: {
+export async function testImageGeneratedByFFmpeg (options: {
   url: string
   name: string
 }) {
@@ -94,7 +94,7 @@ async function testImageGeneratedByFFmpeg (options: {
   return testImage(options)
 }
 
-async function testImage (options: {
+export async function testImage (options: {
   name: string
   url: string
 }) {
@@ -135,15 +135,30 @@ async function testImage (options: {
   }
 }
 
-async function testFileExistsOnFSOrNot (server: PeerTubeServer, directory: string, filePath: string, exist: boolean) {
+export async function testFileExistsOnFSOrNot (server: PeerTubeServer, directory: string, filePath: string, exist: boolean) {
   const base = server.servers.buildDirectory(directory)
 
   expect(await pathExists(join(base, filePath))).to.equal(exist)
 }
 
+export async function testImageSize (options: {
+  buffer: Buffer
+  width: number
+  height: number
+}) {
+  const { buffer, width, height } = options
+
+  const sharp = (await import('sharp')).default
+  const img = sharp(buffer)
+  const metadata = await img.metadata()
+
+  expect(metadata.width).to.equal(width)
+  expect(metadata.height).to.equal(height)
+}
+
 // ---------------------------------------------------------------------------
 
-function checkBadStartPagination (url: string, path: string, token?: string, query = {}) {
+export function checkBadStartPagination (url: string, path: string, token?: string, query = {}) {
   return makeGetRequest({
     url,
     path,
@@ -153,7 +168,7 @@ function checkBadStartPagination (url: string, path: string, token?: string, que
   })
 }
 
-async function checkBadCountPagination (url: string, path: string, token?: string, query = {}) {
+export async function checkBadCountPagination (url: string, path: string, token?: string, query = {}) {
   await makeGetRequest({
     url,
     path,
@@ -171,7 +186,7 @@ async function checkBadCountPagination (url: string, path: string, token?: strin
   })
 }
 
-function checkBadSort (url: string, path: string, token?: string, query = {}) {
+export function checkBadSort (url: string, path: string, token?: string, query = {}) {
   return makeGetRequest({
     url,
     path,
@@ -183,7 +198,7 @@ function checkBadSort (url: string, path: string, token?: string, query = {}) {
 
 // ---------------------------------------------------------------------------
 
-async function checkVideoDuration (server: PeerTubeServer, videoUUID: string, duration: number) {
+export async function checkVideoDuration (server: PeerTubeServer, videoUUID: string, duration: number) {
   const video = await server.videos.get({ id: videoUUID })
 
   expect(video.duration).to.be.approximately(duration, 1)
@@ -195,21 +210,4 @@ async function checkVideoDuration (server: PeerTubeServer, videoUUID: string, du
       expect(Math.round(stream.duration)).to.be.approximately(duration, 1)
     }
   }
-}
-
-export {
-  checkBadCountPagination,
-  checkBadSort,
-  checkBadStartPagination,
-  checkVideoDuration,
-  dateIsValid,
-  expectEndWith,
-  expectLogContain,
-  expectLogDoesNotContain,
-  expectNotStartWith,
-  expectStartWith,
-  testAvatarSize,
-  testFileExistsOnFSOrNot,
-  testImage,
-  testImageGeneratedByFFmpeg
 }

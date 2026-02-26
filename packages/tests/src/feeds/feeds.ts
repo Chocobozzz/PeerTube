@@ -16,7 +16,7 @@ import {
   stopFfmpeg,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { expectStartWith } from '@tests/shared/checks.js'
+import { expectStartWith, testImageSize } from '@tests/shared/checks.js'
 import * as chai from 'chai'
 import chaiJSONSChema from 'chai-json-schema'
 import chaiXML from 'chai-xml'
@@ -352,7 +352,11 @@ describe('Test syndication feeds', () => {
         expect(channel['itunes:author']).to.equal('PeerTube')
 
         expect(channel['itunes:image']['@_href']).to.exist
-        await makeRawRequest({ url: channel['itunes:image']['@_href'], expectedStatus: HttpStatusCode.OK_200 })
+
+        {
+          const { body } = await makeRawRequest({ url: channel['itunes:image']['@_href'], expectedStatus: HttpStatusCode.OK_200 })
+          await testImageSize({ buffer: body, width: 1500, height: 1500 })
+        }
 
         const item = xmlDoc.rss.channel.item
 
