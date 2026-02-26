@@ -152,7 +152,7 @@ export class PeerTubeRunnerProcess {
   }
 
   private getRunnerPath () {
-    return join(root(), 'apps', 'peertube-runner', 'dist', 'peertube-runner.js')
+    return join(root(), 'apps', 'peertube-runner', 'dist', 'peertube-runner.mjs')
   }
 
   private buildIdArg () {

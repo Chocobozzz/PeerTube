@@ -31,7 +31,7 @@ npm run build:peertube-runner
 
 ```bash
 cd peertube-root
-node apps/peertube-runner/dist/peertube-runner.js --help
+node apps/peertube-runner/dist/peertube-runner.mjs --help
 ```
 
 ### Publish on NPM

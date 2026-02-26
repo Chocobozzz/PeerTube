@@ -7,6 +7,7 @@
   * You need to manually execute a migration script **after upgrading**, while PeerTube is running and the database migration is complete (`Migrations finished. New migration version schema: 1000` in PeerTube startup logs):
     * Classic installation: `cd /var/www/peertube/peertube-latest && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production node dist/scripts/migrations/peertube-8.1.js`
     * Docker installation: `cd /var/www/peertube-docker && docker compose exec -u peertube peertube node dist/scripts/migrations/peertube-8.1.js`
+  * Running [regenerate-thumbnails](https://docs.joinpeertube.org/maintain/tools#regenerate-video-thumbnails) and [prune-storage](https://docs.joinpeertube.org/maintain/tools#prune-filesystem-object-storage) scripts after the upgrade and migration script is highly recommended
 
 ### Maintenance
 
