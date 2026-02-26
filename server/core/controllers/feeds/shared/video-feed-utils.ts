@@ -59,7 +59,7 @@ export function getCommonVideoFeedAttributes (video: VideoModel) {
       ? [ { name: getCategoryLabel(video.category) } ]
       : undefined,
 
-    thumbnails: video.Thumbnails.map(t => ({
+    thumbnails: video.filterThumbnails('1:1').map(t => ({
       url: WEBSERVER.URL + t.getFileStaticPath(),
       width: t.width,
       height: t.height

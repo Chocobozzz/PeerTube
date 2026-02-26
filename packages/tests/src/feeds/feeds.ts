@@ -351,9 +351,9 @@ describe('Test syndication feeds', () => {
 
         expect(channel['itunes:author']).to.equal('PeerTube')
 
-        expect(channel['itunes:image']['@_href']).to.exist
-
         {
+          expect(channel['itunes:image']['@_href']).to.exist
+
           const { body } = await makeRawRequest({ url: channel['itunes:image']['@_href'], expectedStatus: HttpStatusCode.OK_200 })
           await testImageSize({ buffer: body, width: 1500, height: 1500 })
         }
@@ -361,6 +361,13 @@ describe('Test syndication feeds', () => {
         const item = xmlDoc.rss.channel.item
 
         expect(item['itunes:duration']).to.equal(5)
+
+        {
+          expect(item['itunes:image']['@_href']).to.exist
+
+          const { body } = await makeRawRequest({ url: item['itunes:image']['@_href'], expectedStatus: HttpStatusCode.OK_200 })
+          await testImageSize({ buffer: body, width: 1400, height: 1400 })
+        }
       })
 
       it('Should have p20url podcast txt attribute with local podcast feed', async function () {
