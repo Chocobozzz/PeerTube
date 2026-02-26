@@ -1,5 +1,10 @@
 import { Meter } from '@opentelemetry/api'
+import { RunnerJobState } from '@peertube/peertube-models'
 import { RunnerJobModel } from '@server/models/runner/runner-job.js'
+
+const stateLabels = Object.fromEntries(
+  Object.entries(RunnerJobState).map(([ key, value ]) => [ value, key.toLowerCase() ])
+) as Record<number, string>
 
 export class RunnerJobQueueObserversBuilder {
 
@@ -14,7 +19,7 @@ export class RunnerJobQueueObserversBuilder {
       const stats = await RunnerJobModel.getStats()
 
       for (const { jobType, state, count } of stats) {
-        observableResult.observe(count, { jobType, state })
+        observableResult.observe(count, { jobType, state: stateLabels[state] })
       }
     })
   }
