@@ -1,5 +1,119 @@
 # Changelog
 
+## v8.1.0-rc.1
+
+### IMPORTANT NOTES
+
+  * You need to manually execute a migration script **after upgrading**, while PeerTube is running and the database migration is complete (`Migrations finished. New migration version schema: 1000` in PeerTube startup logs):
+    * Classic installation: `cd /var/www/peertube/peertube-latest && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production node dist/scripts/migrations/peertube-8.1.js`
+    * Docker installation: `cd /var/www/peertube-docker && docker compose exec -u peertube peertube node dist/scripts/migrations/peertube-8.1.js`
+
+### Maintenance
+
+  * Migrate to the `sharp` NodeJS dependency to process images. This is a native dependency that provides prebuilt binaries, but some systems (like FreeBSD) may require an additional step after PeerTube dependencies installation:
+    * Install `sharp` dependencies: https://sharp.pixelplumbing.com/install/#building-from-source
+    * Run `npm explore sharp -- npm run build` in `peertube-latest` directory
+  * Merge the `previews` directory into the `thumbnails` directory. The migration script will automatically move files
+    The `previews` directory and configuration are kept for compatibility reasons
+  * The `cache` directory is no longer deleted at PeerTube startup, to keep files cached from the previous run
+
+### Configuration
+
+*This section is not exhaustive*
+
+  * **Important** Generate more thumbnail sizes for videos in `thumbnails.sizes`. We recommend admins apply the same settings
+  * Update default object storage configuration to use different `prefix` values with the same `bucket_name` for each object type (`web_videos`, `user_exports`, etc.), so it is easier to add more object types in the future
+  * Use the `lucide` player theme by default
+  * `import.videos.http.force_ipv4` is now `true` by default to reduce rate limiting on some platforms
+  * Add *On Primary* color configuration (`theme.customization.on_primary_color`) to choose the foreground color when the background color is *Primary*
+
+### Docker
+
+ * Add `va-driver-all` to the PeerTube Docker image [#7346](https://github.com/Chocobozzz/PeerTube/pull/7346)
+
+### Plugins/Themes/Embed/REST APIs
+
+  * REST API:
+    * Deprecate `previewfile` when publishing a video. Use `thumbnailfile` instead
+    * Deprecate `thumbnailPath` and `previewPath` `Video` fields. Use the `thumbnails` array instead
+    * Deprecate the `thumbnailPath` `VideoPlaylist` field. Use the `thumbnails` array instead
+    * Remove unused `fileUrl` from `UserExport` and `VideoSource`
+    * Deprecate `/lazy-static/previews/:filename`. Use `/lazy-static/thumbnails/:filename` instead
+  * Server plugin hooks (https://docs.joinpeertube.org/api/plugins):
+    * Add `filter:feed.videos.list.result` [#7355](https://github.com/Chocobozzz/PeerTube/pull/7355)
+    * Replace `torrentPath` with `torrentFilename` and `torrentStream` for remote torrents in `filter:api.download.torrent.allowed.result` context
+
+### Features
+
+  * :tada: Allow uploaders to restrict domains where their video can be embedded :tada:
+  * Add an admin config to ensure an optimized podcast audio file is transcoded
+  * Support 3.0x playback speed for non-premium users :grin:
+  * Optimize transcoding job queue:
+    * Do not wait for all transcoding tasks to publish the video
+    * Do not wait for all transcoding tasks to move video files in object storage
+    * Lower priority on low video resolutions to avoid blocking video publication during bursts of uploads
+    * More transcoding job parallelization
+  * More reliable channel sync:
+    * Reduce youtube-dl calls to reduce rate limiting
+    * Handle cases where the video is not available/doesn't exist
+    * Handle lives that are still being post-processed
+    * Stop sync on get video info failure to retry at the same point next time
+  * UX:
+    * Support raw hex colors in color picker input [#7337](https://github.com/Chocobozzz/PeerTube/pull/7337)
+    * Group notifications by date
+    * Display blocked video information on the video manage page
+    * Add a loading icon when updating the video
+    * Improve the error message when the user password is too long
+    * Add `g l` hotkey to go to the login page
+    * Add ability to display video language on the `My Videos` page (column is hidden by default)
+  * Improve video SEO
+  * Support `png` and `webp` video thumbnails
+  * Support `svg` logos for admins
+  * Better email notification when a subscribed channel published a video [#7395](https://github.com/Chocobozzz/PeerTube/pull/7395)
+  * Add compatibility with ActivityPub FEP-1b12 (used by Lemmy, PieFed, Mbin...)
+  * Introduce a new cache system for remote thumbnails, storyboards, captions, and actor avatars/banners
+  * Support Redis TLS connections [#7404](https://github.com/Chocobozzz/PeerTube/pull/7404)
+  * Support PostgreSQL TLS connections [#7366](https://github.com/Chocobozzz/PeerTube/pull/7366)
+  * Support path style requests for object storage
+  * Improve channel collaboration:
+    * An editor can now move a video they can manage to a channel they can manage (owner/editor)
+    * An editor can send a *change ownership request* for a video they can manage
+    * Editors can add videos to playlists of collaborated channels
+    * Add quick actions (*Manage*, *Remove*) to the video dropdown for editors too
+  * Performance:
+    * Create video file torrents in a worker thread
+    * Optimize videos list SQL query with complex sort (trending, hot, etc.)
+    * When possible, send raw files directly instead of muxing when downloading a video
+  * Improve podcast feed images compatibility with Apple Podcast
+
+### Bug fixes
+
+  * Fix videos list inconsistencies when going back to that page
+  * Do not display an empty details block in embed on error
+  * Prevent incomplete segment reads for live streams [#7333](https://github.com/Chocobozzz/PeerTube/pull/7333)
+  * Fix video download filename on Safari
+  * Fix broken P2P when updating object storage base URL
+  * Fix Redis sentinel support [#7365](https://github.com/Chocobozzz/PeerTube/pull/7365)
+  * Correctly use header colors defined by the admin
+  * Fix broken transcoding on remote runner when split video/audio is enabled
+  * Fix server config not refreshing after admin settings save [#7413](https://github.com/Chocobozzz/PeerTube/pull/7413)
+  * Prevent exception when the account is not loaded yet in the user moderation dropdown
+  * Prevent black borders when embedding a video
+  * Fix default scope defined by the admin when browsing videos
+  * Force transcoding even if the video state is not compatible
+  * Fix broken video studio task when updating video privacy at the same time
+  * Reset selected rows when loading data in tables
+  * Take into account channel owner video quota when an editor publishes a video to a collaborated channel
+  * Fix watching a password protected video as an editor
+  * Fix video metadata in `filter:api.video.upload.accept.result` context
+  * Correctly take into account the user language filter when browsing videos
+  * Fix `.ts` video file upload [#7458](https://github.com/Chocobozzz/PeerTube/pull/7458)
+  * Fix `.mkv` video file upload on latest Chrome
+  * Fix deleting all instance logo when deleting a specific logo
+  * Fix getting unsupported Node.js from PATH with yt-dlp [#7468](https://github.com/Chocobozzz/PeerTube/pull/7468)
+
+
+
 ## v8.0.2
 
 ### IMPORTANT NOTES
