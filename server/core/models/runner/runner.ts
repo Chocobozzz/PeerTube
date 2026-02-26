@@ -88,6 +88,10 @@ export class RunnerModel extends SequelizeModel<RunnerModel> {
     return RunnerModel.findOne(query)
   }
 
+  static listAll () {
+    return RunnerModel.findAll<MRunner>()
+  }
+
   static listForApi (options: {
     start: number
     count: number
