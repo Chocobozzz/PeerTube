@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.5.0
+
+ * Migrate to `tsdown` to build the runner. The peertube-runner filename is now `peertube.runner.mjs`
+ * Cleanup IPC socket when stopping the runner
+
 ## v0.4.0
 
  * Copy codecs for HLS transcoding if possible

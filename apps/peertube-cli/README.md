@@ -31,7 +31,7 @@ npm run build:peertube-cli
 
 ```bash
 cd peertube-root
-node apps/peertube-cli/dist/peertube-cli.js --help
+node apps/peertube-cli/dist/peertube.js --help
 ```
 
 ## Publish on NPM

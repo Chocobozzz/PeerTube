@@ -92,6 +92,29 @@ export async function deleteLocalActorImageFile (accountOrChannel: MAccountDefau
   })
 }
 
+export async function regenerateActorImageFiles (options: {
+  accountOrChannel: MAccountDefault | MChannelDefault
+  type: ActorImageType_Type
+}) {
+  const { accountOrChannel, type } = options
+
+  if (accountOrChannel.Actor.isLocal() !== true) {
+    throw new Error('Cannot regenerate actor image files for a remote actor')
+  }
+
+  const image = accountOrChannel.Actor.getMaxQualityImage(type)
+  if (!image) return
+
+  const physicalFilePath = image.getFSPath()
+
+  return updateLocalActorImageFiles({
+    accountOrChannel,
+    imagePhysicalFile: { path: physicalFilePath },
+    type,
+    sendActorUpdate: true
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export async function findAvailableLocalActorName (baseName: string, transaction?: Transaction) {

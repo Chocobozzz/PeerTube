@@ -19,7 +19,7 @@ describe('Test CLI wrapper', function () {
 
   let cliCommand: CLICommand
 
-  const cmd = 'node ./apps/peertube-cli/dist/peertube.js'
+  const cmd = 'node ./apps/peertube-cli/dist/peertube.mjs'
 
   before(async function () {
     this.timeout(30000)
@@ -46,7 +46,6 @@ describe('Test CLI wrapper', function () {
   })
 
   describe('Authentication and instance selection', function () {
-
     it('Should get an access token', async function () {
       const { stdout } = await cliCommand.execWithEnv(`${cmd} token --url ${server.url} --username user_1 --password super_password`)
       const token = stdout.trim()
@@ -95,7 +94,6 @@ describe('Test CLI wrapper', function () {
   })
 
   describe('Video upload', function () {
-
     it('Should upload a video', async function () {
       this.timeout(60000)
 
@@ -117,7 +115,6 @@ describe('Test CLI wrapper', function () {
   })
 
   describe('Admin auth', function () {
-
     it('Should remove the auth user', async function () {
       await cliCommand.execWithEnv(`${cmd} auth del ${server.url}`)
 
@@ -131,7 +128,6 @@ describe('Test CLI wrapper', function () {
   })
 
   describe('Manage plugins', function () {
-
     it('Should install a plugin', async function () {
       this.timeout(60000)
 
