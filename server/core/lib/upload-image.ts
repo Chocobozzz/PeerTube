@@ -90,9 +90,9 @@ export async function deleteUploadImages (options: {
 
       for (const toDelete of imagesToDelete) {
         await toDelete.destroy({ transaction: t })
-      }
 
-      actor.UploadImages = []
+        actor.UploadImages = actor.UploadImages.filter(image => image.id !== toDelete.id)
+      }
     })
   })
 }
