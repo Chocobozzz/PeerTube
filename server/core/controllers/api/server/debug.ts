@@ -22,7 +22,7 @@ import { VideoViewsManager } from '@server/lib/views/video-views-manager.js'
 import express from 'express'
 import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../../middlewares/index.js'
 import { RemoveOldViewsScheduler } from '@server/lib/schedulers/remove-old-views-scheduler.js'
-import { VideoDownloadStats } from '@server/lib/stats/video-download.js'
+import { VideoViewerStats } from '@server/lib/views/shared/video-viewer-stats.js'
 
 const debugRouter = express.Router()
 
@@ -61,7 +61,7 @@ async function runCommand (req: express.Request, res: express.Response) {
   const processors: { [id in SendDebugCommand['command']]: () => Promise<any> } = {
     'remove-dandling-resumable-uploads': () => RemoveDanglingResumableUploadsScheduler.Instance.execute(),
     'remove-expired-user-exports': () => RemoveExpiredUserExportsScheduler.Instance.execute(),
-    'process-video-downloads': () => VideoDownloadStats.save(),
+    'process-video-downloads': () => VideoViewerStats.save(),
     'process-video-views-buffer': () => VideoViewsBufferScheduler.Instance.execute(),
     'process-video-viewers': () => VideoViewsManager.Instance.processViewerStats(),
     'process-update-videos-scheduler': () => UpdateVideosScheduler.Instance.execute(),

@@ -16,7 +16,7 @@ import {
   videoTimeseriesStatsValidator
 } from '../../../middlewares/index.js'
 import { MVideo } from '@server/types/models/index.js'
-import { VideoDownloadModel } from '@server/models/download/video-download.js'
+import { VideoViewModel } from '@server/models/view/video-view.js'
 
 const statsRouter = express.Router()
 
@@ -103,7 +103,7 @@ async function getTimeseriesStats (req: express.Request, res: express.Response) 
 
   switch (metric) {
     case "downloads":
-      handler = VideoDownloadModel.getTimeserieStats
+      handler = VideoViewModel.getTimeserieStats
       break
     default:
       handler = LocalVideoViewerModel.getTimeserieStats

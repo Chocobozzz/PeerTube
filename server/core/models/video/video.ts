@@ -168,7 +168,6 @@ import { VideoShareModel } from './video-share.js'
 import { VideoSourceModel } from './video-source.js'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist.js'
 import { VideoTagModel } from './video-tag.js'
-import { VideoDownloadModel } from '../download/video-download.js'
 
 const lTags = loggerTagsFactory('video')
 
@@ -714,15 +713,6 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     onDelete: 'cascade'
   })
   declare VideoViews: Awaited<VideoViewModel>[]
-
-  @HasMany(() => VideoDownloadModel, {
-    foreignKey: {
-      name: 'videoId',
-      allowNull: false
-    },
-    onDelete: 'cascade'
-  })
-  declare VideoDownloads: Awaited<VideoDownloadModel>[]
 
   @HasMany(() => UserVideoHistoryModel, {
     foreignKey: {

@@ -1,5 +1,5 @@
-import { VideoDownloadStats } from "@server/lib/stats/video-download.js"
+import { VideoViewerStats } from "@server/lib/views/shared/video-viewer-stats.js"
 
 export async function processVideosDownloadsStats() {
-  await VideoDownloadStats.save()
+  await VideoViewerStats.save()
 }
