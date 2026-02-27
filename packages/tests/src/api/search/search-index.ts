@@ -398,7 +398,7 @@ describe('Test index search', function () {
       expect(videoPlaylist.videoChannel.url).to.equal('https://peertube2.cpy.re/video-channels/chocobozzz_channel')
       expect(videoPlaylist.videoChannel.name).to.equal('chocobozzz_channel')
       expect(videoPlaylist.videoChannel.host).to.equal('peertube2.cpy.re')
-      expect(videoPlaylist.videoChannel.avatars.length).to.equal(2, 'Channel should have two avatar images')
+      expect(videoPlaylist.videoChannel.avatars.length).to.equal(4, 'Channel should have four avatar images')
     }
 
     it('Should make a simple search and not have results', async function () {
