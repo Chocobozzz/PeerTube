@@ -98,6 +98,10 @@ describe('Test video imports', function () {
         await setAccessTokensToServers(servers)
         await setDefaultVideoChannel(servers)
 
+
+        const user = await servers[0].users.getMyInfo()
+        await servers[0].users.update({ userId: user.id, videoQuota: -1 })
+
         for (const server of servers) {
           await server.config.updateExistingConfig({
             newConfig: {
