@@ -192,6 +192,10 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
     return this.server.getHTMLConfig().live.rtmp.port
   }
 
+  get defaultsLiveSaveReplayControl () {
+    return this.form.controls.defaults.controls.live.controls.saveReplay
+  }
+
   isLiveEnabled () {
     return this.form.value.live.enabled === true
   }

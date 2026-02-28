@@ -38,7 +38,7 @@
 
               <div class="form-group" [ngClass]="getDisabledLiveClass()">
                 <my-peertube-checkbox
-                  inputName="liveSaveReplay" [formControl]="form.get('defaults.live.saveReplay')"
+                  inputName="liveSaveReplay" [formControl]="defaultsLiveSaveReplayControl"
                   i18n-labelText labelText="Automatically publish a replay by default"
                   >
                   <ng-container ngProjectAs="description" i18n>
