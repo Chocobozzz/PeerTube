@@ -99,7 +99,6 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
 
   expect(data.live.enabled).to.be.false
   expect(data.live.allowReplay).to.be.false
-  expect(data.live.saveReplayByDefault).to.be.false
   expect(data.live.latencySetting.enabled).to.be.true
   expect(data.live.maxDuration).to.equal(-1)
   expect(data.live.maxInstanceLives).to.equal(20)
@@ -158,6 +157,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.defaults.publish.downloadEnabled).to.be.true
   expect(data.defaults.publish.licence).to.be.null
   expect(data.defaults.publish.privacy).to.equal(VideoPrivacy.PUBLIC)
+  expect(data.defaults.live.saveReplay).to.be.false
   expect(data.defaults.p2p.embed.enabled).to.be.true
   expect(data.defaults.p2p.webapp.enabled).to.be.true
   expect(data.defaults.player.theme).to.equal('galaxy')
@@ -329,7 +329,6 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
     live: {
       enabled: true,
       allowReplay: true,
-      saveReplayByDefault: false,
       latencySetting: {
         enabled: false
       },
@@ -467,6 +466,9 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
         downloadEnabled: false,
         licence: 2,
         privacy: VideoPrivacy.INTERNAL
+      },
+      live: {
+        saveReplay: false
       },
       p2p: {
         embed: {

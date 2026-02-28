@@ -106,7 +106,6 @@ live:
   enabled: false
 
   allow_replay: false
-  save_replay_by_default: false
 
   rtmp:
     port: 1935
@@ -177,3 +176,7 @@ video_transcription:
 user:
   password_constraints:
     min_length: 6
+
+defaults:
+  live:
+    save_replay: false
