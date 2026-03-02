@@ -221,7 +221,7 @@ describe('Test registrations API validators', function () {
         await makePostBodyRequest({ url: server.url, path: registrationPath, fields, expectedStatus: HttpStatusCode.OK_200 })
       })
 
-      it('Should fail if registration reason isnt provided', async function () {
+      it('Should fail if the instance requires approval', async function () {
         this.timeout(60000)
 
         await server.config.enableSignup(true)

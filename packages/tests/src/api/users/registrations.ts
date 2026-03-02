@@ -84,6 +84,9 @@ describe('Test registrations', function () {
   })
 
   describe('Eventual registration requests', function () {
+    let id1: number
+    let id2: number
+
     before(async function () {
       this.timeout(60000)
 
@@ -91,15 +94,16 @@ describe('Test registrations', function () {
     })
 
     it('Should request a registration without a channel', async function () {
-      {
-        await server.registrations.register({
-          username: 'request_user2',
-          displayName: 'my super request_user 2',
-          email: 'request_user2@example.com',
-          password: 'request_user2password',
-          registrationReason: 'registration reason 2'
-        })
-      }
+      await server.registrations.register({
+        username: 'request_user2',
+        displayName: 'my super request_user 2',
+        email: 'request_user2@example.com',
+        password: 'request_user2password',
+        registrationReason: 'registration reason 2'
+      })
+
+      const registrations = await server.registrations.list()
+      id1 = registrations.data[0].id
     })
 
     it('Should request a registration with a channel', async function () {
@@ -114,6 +118,57 @@ describe('Test registrations', function () {
         password: 'request_user3password',
         registrationReason: 'registration reason 3'
       })
+
+      const registrations = await server.registrations.list()
+      id2 = registrations.data[0].id
+    })
+
+    it('Should list these registration requests', async function () {
+      const { total, data } = await server.registrations.list({ sort: '-createdAt' })
+      expect(total).to.equal(2)
+      expect(data).to.have.lengthOf(2)
+
+      {
+        expect(data[1].id).to.equal(id1)
+        expect(data[1].username).to.equal('request_user2')
+        expect(data[1].accountDisplayName).to.equal('my super request_user 2')
+
+        expect(data[1].channelDisplayName).to.be.null
+        expect(data[1].channelHandle).to.be.null
+
+        expect(data[1].createdAt).to.exist
+        expect(data[1].updatedAt).to.exist
+
+        expect(data[1].email).to.equal('request_user2@example.com')
+        expect(data[1].emailVerified).to.be.null
+
+        expect(data[1].moderationResponse).to.be.null
+        expect(data[1].registrationReason).to.equal('registration reason 2')
+        expect(data[1].state.id).to.equal(UserRegistrationState.PENDING)
+        expect(data[1].state.label).to.equal('Pending')
+        expect(data[1].user).to.be.null
+      }
+
+      {
+        expect(data[0].id).to.equal(id2)
+        expect(data[0].username).to.equal('request_user3')
+        expect(data[0].accountDisplayName).to.equal('my super request_user 3')
+
+        expect(data[0].channelDisplayName).to.equal('my request_user 3 channel')
+        expect(data[0].channelHandle).to.equal('super_request_user3_channel')
+
+        expect(data[0].createdAt).to.exist
+        expect(data[0].updatedAt).to.exist
+
+        expect(data[0].email).to.equal('request_user3@example.com')
+        expect(data[0].emailVerified).to.be.null
+
+        expect(data[0].moderationResponse).to.be.null
+        expect(data[0].registrationReason).to.equal('registration reason 3')
+        expect(data[0].state.id).to.equal(UserRegistrationState.PENDING)
+        expect(data[0].state.label).to.equal('Pending')
+        expect(data[0].user).to.be.null
+      }
     })
 
     after(async function () {
@@ -160,7 +215,8 @@ describe('Test registrations', function () {
         })
 
         const registrations = await server.registrations.list()
-        id2 = registrations.data[0].id      }
+        id2 = registrations.data[0].id
+      }
     })
 
     it('Should request a registration with a channel', async function () {

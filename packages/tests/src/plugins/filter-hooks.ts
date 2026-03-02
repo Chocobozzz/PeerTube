@@ -4,6 +4,7 @@ import {
   HttpStatusCode,
   MyUser,
   PeerTubeProblemDocument,
+  UserRegistrationState,
   VideoDetails,
   VideoImportState,
   VideoPlaylist,
@@ -498,7 +499,8 @@ describe('Test plugin filter hooks', function () {
       await servers[0].registrations.register({ username: 'waiting_john' })
       const registrations = await servers[0].registrations.list()
 
-      expect(registrations.data.map((reg) => reg.username)).to.contain('waiting_john')
+      expect(registrations.data[0].username).to.equal('waiting_john')
+      expect(registrations.data[0].state.id).to.equal(UserRegistrationState.PENDING)
     })
 
     it('Should not require approval', async function () {

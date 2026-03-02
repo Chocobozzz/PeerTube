@@ -31,7 +31,7 @@ const usersRequestRegistrationValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const body: UserRegistrationRequest = req.body
     // CONFIG.SIGNUP.REQUIRES_APPROVAL is only used for /registrations/request endpoint
-    const requiresApproval = (res.locals.signupMode && res.locals.signupMode === 'request-registration') || CONFIG.SIGNUP.REQUIRES_APPROVAL
+    const requiresApproval = (res.locals.signupMode === 'request-registration') || CONFIG.SIGNUP.REQUIRES_APPROVAL
 
     if (requiresApproval !== true) {
       return res.fail({
