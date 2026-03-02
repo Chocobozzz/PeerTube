@@ -137,6 +137,10 @@
             "translation": "src/locale/angular.vi-VN.xlf",
             "baseHref": "/client/vi-VN/"
           },
+          "ka": {
+            "translation": "src/locale/angular.ka.xlf",
+            "baseHref": "/client/ka/"
+          },
           "kab": {
             "translation": "src/locale/angular.kab.xlf",
             "baseHref": "/client/kab/"
