@@ -56,6 +56,7 @@ type Form = {
 
     customization: FormGroup<{
       primaryColor: FormControl<string>
+      borderPrimaryColor: FormControl<string>
       onPrimaryColor: FormControl<string>
       foregroundColor: FormControl<string>
       backgroundColor: FormControl<string>
@@ -130,6 +131,7 @@ export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, Can
     { label: string, description?: string, type: FieldType, items?: SelectOptionsItem[] }
   > = {
     primaryColor: { label: $localize`Primary color`, type: 'color' },
+    borderPrimaryColor: { label: $localize`Border primary color`, type: 'color' },
     onPrimaryColor: { label: $localize`On primary color`, type: 'color' },
     foregroundColor: { label: $localize`Foreground color`, type: 'color' },
     backgroundColor: { label: $localize`Background color`, type: 'color' },
@@ -275,6 +277,7 @@ export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, Can
         default: null,
         customization: {
           primaryColor: HEX_COLOR_CODE_VALIDATOR,
+          borderPrimaryColor: HEX_COLOR_CODE_VALIDATOR,
           onPrimaryColor: HEX_COLOR_CODE_VALIDATOR,
           foregroundColor: HEX_COLOR_CODE_VALIDATOR,
           backgroundColor: HEX_COLOR_CODE_VALIDATOR,

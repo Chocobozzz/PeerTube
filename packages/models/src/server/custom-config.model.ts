@@ -64,6 +64,7 @@ export interface CustomConfig {
 
     customization: {
       primaryColor: string
+      borderPrimaryColor: string
       onPrimaryColor: string
       foregroundColor: string
       backgroundColor: string

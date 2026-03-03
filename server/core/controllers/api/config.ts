@@ -342,6 +342,7 @@ function customConfig (): CustomConfig {
 
       customization: {
         primaryColor: CONFIG.THEME.CUSTOMIZATION.PRIMARY_COLOR,
+        borderPrimaryColor: CONFIG.THEME.CUSTOMIZATION.BORDER_PRIMARY_COLOR,
         onPrimaryColor: CONFIG.THEME.CUSTOMIZATION.ON_PRIMARY_COLOR,
         foregroundColor: CONFIG.THEME.CUSTOMIZATION.FOREGROUND_COLOR,
         backgroundColor: CONFIG.THEME.CUSTOMIZATION.BACKGROUND_COLOR,
