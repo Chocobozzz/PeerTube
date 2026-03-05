@@ -1,5 +1,5 @@
-import { MAX_SQL_DELETE_ITEMS } from "@server/initializers/constants.js";
-import { literal, Op, QueryTypes } from "sequelize";
+import { MAX_SQL_DELETE_ITEMS } from "@server/initializers/constants.js"
+import { literal, Op, QueryTypes } from "sequelize"
 import {
 	AllowNull,
 	BelongsTo,
@@ -9,15 +9,15 @@ import {
 	Default,
 	ForeignKey,
 	Table,
-} from "sequelize-typescript";
-import { safeBulkDestroy, SequelizeModel } from "../shared/index.js";
-import { VideoModel } from "../video/video.js";
+} from "sequelize-typescript"
+import { safeBulkDestroy, SequelizeModel } from "../shared/index.js"
+import { VideoModel } from "../video/video.js"
 import {
 	VideoDownloadStatsTimeserieMetric,
 	VideoStatsTimeserie,
-} from "@peertube/peertube-models";
-import { MVideo } from "@server/types/models/index.js";
-import { buildGroupByAndBoundaries } from "@server/lib/timeserie.js";
+} from "@peertube/peertube-models"
+import { MVideo } from "@server/types/models/index.js"
+import { buildGroupByAndBoundaries } from "@server/lib/timeserie.js"
 
 /**
  * Aggregate views of all videos federated with our instance
@@ -27,39 +27,39 @@ import { buildGroupByAndBoundaries } from "@server/lib/timeserie.js";
 @Table({
 	tableName: "videoStats",
 	updatedAt: false,
-	indexes: [{
-			fields: ["videoId"],
+	indexes: [ {
+			fields: [ "videoId" ],
 		},
 		{
-			fields: ["startDate"],
+			fields: [ "startDate" ],
 		},
 	],
 })
 export class VideoStatsModel extends SequelizeModel < VideoStatsModel > {
 	@CreatedAt
-	declare createdAt: Date;
+	declare createdAt: Date
 
 	@AllowNull(false)
 	@Column(DataType.DATE)
-	declare startDate: Date;
+	declare startDate: Date
 
 	@AllowNull(false)
 	@Column(DataType.DATE)
-	declare endDate: Date;
+	declare endDate: Date
 
 	@AllowNull(false)
 	@Default(0)
 	@Column
-	declare views: number;
+	declare views: number
 
 	@AllowNull(false)
 	@Default(0)
 	@Column
-	declare downloads: number;
+	declare downloads: number
 
 	@ForeignKey(() => VideoModel)
 	@Column
-	declare videoId: number;
+	declare videoId: number
 
 	@BelongsTo(() => VideoModel, {
 		foreignKey: {
@@ -67,7 +67,7 @@ export class VideoStatsModel extends SequelizeModel < VideoStatsModel > {
 		},
 		onDelete: "CASCADE",
 	})
-	declare Video: Awaited < VideoModel > ;
+	declare Video: Awaited < VideoModel > 
 
 	static removeOldRemoteViews(beforeDate: string) {
 		return safeBulkDestroy(() => {
@@ -83,8 +83,8 @@ export class VideoStatsModel extends SequelizeModel < VideoStatsModel > {
 					},
 				},
 				limit: MAX_SQL_DELETE_ITEMS,
-			});
-		});
+			})
+		})
 	}
 
 	static removeOldLocalViews(beforeDate: string) {
@@ -101,8 +101,8 @@ export class VideoStatsModel extends SequelizeModel < VideoStatsModel > {
 					},
 				},
 				limit: MAX_SQL_DELETE_ITEMS,
-			});
-		});
+			})
+		})
 	}
 
 	static async getTimeserieStats(options: {
@@ -111,12 +111,12 @@ export class VideoStatsModel extends SequelizeModel < VideoStatsModel > {
 		startDate: string;
 		endDate: string;
 	}): Promise < VideoStatsTimeserie > {
-		const { video } = options;
+		const { video } = options
 
 		const { groupInterval, startDate, endDate } = buildGroupByAndBoundaries(
 			options.startDate,
 			options.endDate,
-		);
+		)
 
 		const query = `WITH "intervals" AS (
       SELECT
@@ -135,7 +135,7 @@ export class VideoStatsModel extends SequelizeModel < VideoStatsModel > {
           "videoStats"."startDate" >= "intervals"."startDate"
     ORDER BY
       "intervals"."startDate"
-    `;
+    `
 
 		const queryOptions = {
 			type: QueryTypes.SELECT as QueryTypes.SELECT,
@@ -145,12 +145,12 @@ export class VideoStatsModel extends SequelizeModel < VideoStatsModel > {
 				groupInterval,
 				videoId: video.id,
 			},
-		};
+		}
 
 		const rows = await VideoStatsModel.sequelize.query < any > (
 			query,
 			queryOptions,
-		);
+		)
 
 		return {
 			groupInterval,
@@ -158,6 +158,6 @@ export class VideoStatsModel extends SequelizeModel < VideoStatsModel > {
 				date: r.date,
 				value: parseInt(r.value),
 			})),
-		};
+		}
 	}
 }
