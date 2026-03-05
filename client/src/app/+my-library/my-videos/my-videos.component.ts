@@ -32,7 +32,7 @@ import { VideoNSFWBadgeComponent } from '../../shared/shared-video/video-nsfw-ba
 import { VideoStateBadgeComponent } from '../../shared/shared-video/video-state-badge.component'
 import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.component'
 
-type ColumnName = 'duration' | 'name' | 'privacy' | 'sensitive' | 'playlists' | 'insights' | 'published' | 'state' | 'comments'
+type ColumnName = 'duration' | 'name' | 'language' | 'privacy' | 'sensitive' | 'playlists' | 'insights' | 'published' | 'state' | 'comments'
 type CommonFilter = 'live' | 'vod' | 'private' | 'internal' | 'unlisted' | 'password-protected' | 'public'
 
 type VideoType = 'live' | 'vod'
@@ -130,7 +130,8 @@ export class MyVideosComponent implements OnInit, OnDestroy {
       { id: 'insights', label: $localize`Insights`, selected: true, sortable: true, sortKey: 'views' },
       { id: 'comments', label: $localize`Comments`, selected: true, sortable: true },
       { id: 'published', label: $localize`Published`, selected: true, sortable: true, sortKey: 'publishedAt' },
-      { id: 'state', label: $localize`State`, selected: true, sortable: false }
+      { id: 'state', label: $localize`State`, selected: true, sortable: false },
+      { id: 'language', label: $localize`Language`, selected: false, sortable: false }
     ]
 
     this.filterItems = [

@@ -13,9 +13,7 @@ import { CONFIG, isEmailEnabled } from '@server/initializers/config.js'
 import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME, PEERTUBE_VERSION, WEBSERVER } from '@server/initializers/constants.js'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '@server/lib/signup.js'
 import { ActorCustomPageModel } from '@server/models/account/actor-custom-page.js'
-import { ActorImageModel } from '@server/models/actor/actor-image.js'
 import { getServerActor } from '@server/models/application/application.js'
-import { UploadImageModel } from '@server/models/application/upload-image.js'
 import { PluginModel } from '@server/models/server/plugin.js'
 import { MActorImage, MActorUploadImages, MUploadImage } from '@server/types/models/index.js'
 import { Hooks } from './plugins/hooks.js'
@@ -187,6 +185,7 @@ class ServerConfigManager {
         default: defaultTheme,
         customization: {
           primaryColor: CONFIG.THEME.CUSTOMIZATION.PRIMARY_COLOR,
+          onPrimaryColor: CONFIG.THEME.CUSTOMIZATION.ON_PRIMARY_COLOR,
           foregroundColor: CONFIG.THEME.CUSTOMIZATION.FOREGROUND_COLOR,
           backgroundColor: CONFIG.THEME.CUSTOMIZATION.BACKGROUND_COLOR,
           backgroundSecondaryColor: CONFIG.THEME.CUSTOMIZATION.BACKGROUND_SECONDARY_COLOR,
@@ -307,6 +306,14 @@ class ServerConfigManager {
             max: CONSTRAINTS_FIELDS.ACTORS.IMAGE.FILE_SIZE.max
           },
           extensions: CONSTRAINTS_FIELDS.ACTORS.IMAGE.EXTNAME
+        }
+      },
+      logo: {
+        file: {
+          size: {
+            max: CONSTRAINTS_FIELDS.LOGO.IMAGE.FILE_SIZE.max
+          },
+          extensions: CONSTRAINTS_FIELDS.LOGO.IMAGE.EXTNAME
         }
       },
       video: {
@@ -542,7 +549,7 @@ class ServerConfigManager {
     return maxBy(this.getOpenGraphLogos(serverActor), 'width')
   }
 
-  getLogoUrl (serverActor: MActorUploadImages, width: 192 | 512) {
+  getLogoUrl (serverActor: MActorUploadImages, width: 192 | 512 | 1500) {
     const customLogo = this.getLogo(serverActor, width)
 
     if (customLogo) {
@@ -552,7 +559,7 @@ class ServerConfigManager {
     return `${WEBSERVER.URL}/client/assets/images/icons/icon-${width}x${width}.png`
   }
 
-  getLogo (serverActor: MActorUploadImages, width: 192 | 512) {
+  getLogo (serverActor: MActorUploadImages, width: 192 | 512 | 1500) {
     if (serverActor.Avatars.length > 0) {
       return findAppropriateImage(serverActor.Avatars, width)
     }
@@ -644,7 +651,7 @@ class ServerConfigManager {
       height: logo.height,
       width: logo.width,
       type,
-      fileUrl: UploadImageModel.getImageUrl(logo),
+      fileUrl: logo.getLocalFileUrl(),
       isFallback
     }
   }
@@ -654,7 +661,7 @@ class ServerConfigManager {
       height: logo.height,
       width: logo.width,
       type,
-      fileUrl: ActorImageModel.getImageUrl(logo),
+      fileUrl: logo.getLocalFileUrl(),
       isFallback
     }
   }

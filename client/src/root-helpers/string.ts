@@ -16,7 +16,9 @@ export function randomString (length: number) {
   return result
 }
 
-export function splitAndGetNotEmpty (value: string) {
+export function splitAndGetNotEmpty (value: string): string[] {
+  if (!value) return []
+
   return value
     .split('\n')
     .filter(line => line && line.length !== 0) // Eject empty lines

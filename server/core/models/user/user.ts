@@ -14,6 +14,7 @@ import {
   type UserRoleType
 } from '@peertube/peertube-models'
 import { isNSFWFlagsValid } from '@server/helpers/custom-validators/videos.js'
+import { englishLanguage } from '@server/helpers/i18n.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { TokensCache } from '@server/lib/auth/tokens-cache.js'
 import { LiveQuotaStore } from '@server/lib/live/index.js'
@@ -983,7 +984,7 @@ export class UserModel extends SequelizeModel<UserModel> {
   }
 
   getLanguage () {
-    return this.language || CONFIG.INSTANCE.DEFAULT_LANGUAGE
+    return this.language || CONFIG.INSTANCE.DEFAULT_LANGUAGE || englishLanguage
   }
 
   toFormattedJSON (this: MUserFormattable, parameters: { withAdminFlags?: boolean } = {}): User {
@@ -1031,7 +1032,7 @@ export class UserModel extends SequelizeModel<UserModel> {
       autoPlayNextVideoPlaylist: this.autoPlayNextVideoPlaylist,
       videoLanguages: this.videoLanguages,
 
-      language: this.getLanguage(),
+      language: this.language,
 
       role: {
         id: this.role,

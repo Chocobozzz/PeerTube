@@ -213,7 +213,7 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
   declare VideoPlaylists: Awaited<VideoPlaylistModel>[]
 
   @HasMany(() => VideoChannelCollaboratorModel, {
-    foreignKey: 'accountId',
+    foreignKey: 'channelId',
     onDelete: 'CASCADE'
   })
   declare VideoChannelCollaborators: Awaited<VideoChannelCollaboratorModel>[]

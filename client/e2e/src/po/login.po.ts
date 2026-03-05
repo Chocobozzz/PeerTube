@@ -71,7 +71,7 @@ export class LoginPage {
     await loggedInDropdown.waitForClickable()
     await loggedInDropdown.click()
 
-    const logout = $('.dropdown-item*=Log out')
+    const logout = $('.dropdown-item.logout')
 
     await logout.waitForClickable()
     await logout.click()

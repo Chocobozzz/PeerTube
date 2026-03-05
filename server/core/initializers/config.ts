@@ -1,7 +1,9 @@
+import { guessAspectRatio, sortBy } from '@peertube/peertube-core-utils'
 import {
   BroadcastMessageLevel,
   NSFWPolicyType,
   PlayerTheme,
+  ThumbnailAspectRatio,
   VideoCommentPolicyType,
   VideoPrivacyType,
   VideoRedundancyConfigFilter,
@@ -11,13 +13,13 @@ import { buildPath, root } from '@peertube/peertube-node-utils'
 import { TranscriptionEngineName, WhisperBuiltinModelName } from '@peertube/peertube-transcription'
 import { decacheModule } from '@server/helpers/decache.js'
 import bytes from 'bytes'
-import { IConfig } from 'config'
+import { type Config } from 'config'
 import { createRequire } from 'module'
 import { dirname, join } from 'path'
 import { parseBytes, parseDurationToMs } from '../helpers/core-utils.js'
 
 const require = createRequire(import.meta.url)
-let config: IConfig = require('config')
+let config: Config = require('config')
 
 const configChangedHandlers: Function[] = []
 
@@ -38,6 +40,22 @@ const CONFIG = {
     HOSTNAME: config.get<string>('database.hostname'),
     PORT: config.get<number>('database.port'),
     SSL: config.get<boolean>('database.ssl'),
+    SSL_SETTINGS: {
+      get REJECT_UNAUTHORIZED () {
+        return config.has('database.ssl_settings.reject_unauthorized')
+          ? config.get<boolean>('database.ssl_settings.reject_unauthorized')
+          : false
+      },
+      get CA () {
+        return config.has('database.ssl_settings.ca') ? config.get<string>('database.ssl_settings.ca') : null
+      },
+      get CERT () {
+        return config.has('database.ssl_settings.cert') ? config.get<string>('database.ssl_settings.cert') : null
+      },
+      get KEY () {
+        return config.has('database.ssl_settings.key') ? config.get<string>('database.ssl_settings.key') : null
+      }
+    },
     USERNAME: config.get<string>('database.username'),
     PASSWORD: config.get<string>('database.password'),
     POOL: {
@@ -50,11 +68,43 @@ const CONFIG = {
     SOCKET: config.has('redis.socket') ? config.get<string>('redis.socket') : null,
     AUTH: config.has('redis.auth') ? config.get<string>('redis.auth') : null,
     DB: config.has('redis.db') ? config.get<number>('redis.db') : null,
+    ENABLE_TLS: config.has('redis.enable_tls') ? config.get<boolean>('redis.enable_tls') : false,
+    TLS_SETTINGS: {
+      get REJECT_UNAUTHORIZED () {
+        return config.get<boolean>('redis.tls_settings.reject_unauthorized')
+      },
+      get CA () {
+        return config.get<string>('redis.tls_settings.ca')
+      },
+      get CERT () {
+        return config.get<string>('redis.tls_settings.cert')
+      },
+      get KEY () {
+        return config.get<string>('redis.tls_settings.key')
+      }
+    },
     SENTINEL: {
       ENABLED: config.has('redis.sentinel.enabled') ? config.get<boolean>('redis.sentinel.enabled') : false,
       ENABLE_TLS: config.has('redis.sentinel.enable_tls') ? config.get<boolean>('redis.sentinel.enable_tls') : false,
-      SENTINELS: config.has('redis.sentinel.sentinels') ? config.get<{ hostname: string, port: number }[]>('redis.sentinel.sentinels') : [],
-      MASTER_NAME: config.has('redis.sentinel.master_name') ? config.get<string>('redis.sentinel.master_name') : null
+      TLS_SETTINGS: {
+        get REJECT_UNAUTHORIZED () {
+          return config.has('redis.sentinel.tls_settings.reject_unauthorized')
+            ? config.get<boolean>('redis.sentinel.tls_settings.reject_unauthorized')
+            : false
+        },
+        get CA () {
+          return config.has('redis.sentinel.tls_settings.ca') ? config.get<string>('redis.sentinel.tls_settings.ca') : null
+        },
+        get CERT () {
+          return config.has('redis.sentinel.tls_settings.cert') ? config.get<string>('redis.sentinel.tls_settings.cert') : null
+        },
+        get KEY () {
+          return config.has('redis.sentinel.tls_settings.key') ? config.get<string>('redis.sentinel.tls_settings.key') : null
+        }
+      },
+      SENTINELS: config.has('redis.sentinel.sentinels') ? config.get<{ host: string, port: number }[]>('redis.sentinel.sentinels') : [],
+      MASTER_NAME: config.has('redis.sentinel.master_name') ? config.get<string>('redis.sentinel.master_name') : null,
+      PASSWORD: config.has('redis.sentinel.password') ? config.get<string>('redis.sentinel.password') : null
     }
   },
   SMTP: {
@@ -473,7 +523,12 @@ const CONFIG = {
     GENERATION_FROM_VIDEO: {
       FRAMES_TO_ANALYZE: config.get<number>('thumbnails.generation_from_video.frames_to_analyze')
     },
-    SIZES: config.get<{ width: number, height: number }[]>('thumbnails.sizes')
+    SIZES: sortBy(config.get<{ width: number, height: number, aspect_ratio?: ThumbnailAspectRatio }[]>('thumbnails.sizes'), 'width')
+      .map(size => ({
+        width: size.width,
+        height: size.height,
+        aspectRatio: size.aspect_ratio || guessAspectRatio(size.width, size.height)
+      }))
   },
   STATS: {
     REGISTRATION_REQUESTS: {
@@ -587,6 +642,9 @@ const CONFIG = {
     },
     get ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION () {
       return config.get<boolean>('transcoding.always_transcode_original_resolution')
+    },
+    get ALWAYS_TRANSCODE_PODCAST_OPTIMIZED_AUDIO () {
+      return config.get<boolean>('transcoding.always_transcode_podcast_optimized_audio')
     },
     RESOLUTIONS: {
       get '0p' () {
@@ -890,28 +948,6 @@ const CONFIG = {
       }
     }
   },
-  CACHE: {
-    PREVIEWS: {
-      get SIZE () {
-        return config.get<number>('cache.previews.size')
-      }
-    },
-    VIDEO_CAPTIONS: {
-      get SIZE () {
-        return config.get<number>('cache.captions.size')
-      }
-    },
-    TORRENTS: {
-      get SIZE () {
-        return config.get<number>('cache.torrents.size')
-      }
-    },
-    STORYBOARDS: {
-      get SIZE () {
-        return config.get<number>('cache.storyboards.size')
-      }
-    }
-  },
   INSTANCE: {
     get NAME () {
       return config.get<string>('instance.name')
@@ -1058,6 +1094,9 @@ const CONFIG = {
       get PRIMARY_COLOR () {
         return config.get<string>('theme.customization.primary_color')
       },
+      get ON_PRIMARY_COLOR () {
+        return config.get<string>('theme.customization.on_primary_color')
+      },
       get FOREGROUND_COLOR () {
         return config.get<string>('theme.customization.foreground_color')
       },
@@ -1176,7 +1215,7 @@ function getLocalConfigFilePath () {
   return join(localConfigDir, filename + '.json')
 }
 
-function getConfigModule () {
+function getConfigModule (): Config {
   return config
 }
 

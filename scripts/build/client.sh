@@ -25,6 +25,7 @@ languages=(
     is:is
     it:it-IT
     ja:ja-JP
+    ka:ka
     kab:kab
     nb:nb-NO
     nl:nl-NL

@@ -1,11 +1,8 @@
-import { ColorActionName } from '@jimp/plugin-color'
 import { buildUUID, getLowercaseExtension } from '@peertube/peertube-node-utils'
 import { copy, remove } from 'fs-extra/esm'
 import { readFile } from 'fs/promises'
-import { processImage as processImageByFFmpeg } from './ffmpeg/index.js'
+import sharp from 'sharp'
 import { logger } from './logger.js'
-
-import type Jimp from 'jimp'
 
 export function generateImageFilename (extension = '.jpg') {
   return buildUUID() + extension
@@ -22,17 +19,12 @@ export async function processImage (options: {
   const extension = getLowercaseExtension(path)
 
   if (path === destination) {
-    throw new Error('Jimp/FFmpeg needs an input path different that the output path.')
+    throw new Error('Input path must be different from output path.')
   }
 
   logger.debug('Processing image %s to %s.', path, destination)
 
-  // Use FFmpeg to process GIF
-  if (extension === '.gif' || extension === '.webp') {
-    await processImageByFFmpeg({ path, destination, newSize })
-  } else {
-    await jimpProcessor({ path, destination, newSize, inputExt: extension })
-  }
+  await sharpProcessor({ path, destination, newSize, inputExt: extension, animated: extension.toLowerCase() === '.gif' })
 
   if (keepOriginal !== true) await remove(path)
 
@@ -40,15 +32,11 @@ export async function processImage (options: {
 }
 
 export async function getImageSize (path: string) {
-  const inputBuffer = await readFile(path)
-
-  const Jimp = await import('jimp')
-
-  const image = await Jimp.default.read(inputBuffer)
+  const metadata = await sharp(path).metadata()
 
   return {
-    width: image.getWidth(),
-    height: image.getHeight()
+    width: metadata.width,
+    height: metadata.height
   }
 }
 
@@ -71,7 +59,7 @@ export async function buildImageSize (imagePath: string, sizeArg: { width?: numb
 // Private
 // ---------------------------------------------------------------------------
 
-async function jimpProcessor (options: {
+async function sharpProcessor (options: {
   path: string
   destination: string
   newSize?: {
@@ -79,13 +67,24 @@ async function jimpProcessor (options: {
     height: number
   }
   inputExt: string
+  animated: boolean
 }) {
-  const { path, newSize, inputExt, destination } = options
+  const { path, newSize, inputExt, destination, animated } = options
 
   const inputBuffer = await readFile(path)
 
-  const Jimp = await import('jimp')
-  const sourceImage = await Jimp.default.read(inputBuffer)
+  const sharpInstance = buildSharp({
+    inputBuffer,
+    animated
+  })
+
+  const metadata = await sharpInstance.metadata()
+
+  if (metadata.pages > 200) {
+    logger.info('Too much frames in animated image ' + path + ', skipping animation')
+
+    return sharpProcessor({ ...options, animated: false })
+  }
 
   await remove(destination)
 
@@ -93,7 +92,7 @@ async function jimpProcessor (options: {
 
   if (
     skipProcessing({
-      sourceImage,
+      metadata,
       newSize,
       imageBytes: inputBuffer.byteLength,
       inputExt,
@@ -104,52 +103,57 @@ async function jimpProcessor (options: {
   }
 
   if (newSize) {
-    await autoResize({ sourceImage, newSize, destination })
+    await autoResize({ sharpInstance, metadata, newSize, destination })
   } else {
-    await write(sourceImage, destination)
+    await writeSharp({ sharpInstance, destination })
   }
 }
 
-function autoResize (options: {
-  sourceImage: Jimp
+async function autoResize (options: {
+  sharpInstance: sharp.Sharp
+  metadata: sharp.Metadata
   newSize: { width: number, height: number }
   destination: string
 }) {
-  const { sourceImage, newSize, destination } = options
+  const { sharpInstance, metadata, newSize, destination } = options
 
   // Portrait mode targeting a landscape, apply some effect on the image
-  const sourceIsPortrait = sourceImage.getWidth() <= sourceImage.getHeight()
+  const sourceIsPortrait = metadata.width <= metadata.height
   const destIsPortraitOrSquare = newSize.width <= newSize.height
 
-  removeExif(sourceImage)
-
   if (sourceIsPortrait && !destIsPortraitOrSquare) {
-    const baseImage = sourceImage.cloneQuiet().cover(newSize.width, newSize.height)
-      .color([ { apply: ColorActionName.SHADE, params: [ 50 ] } ])
+    const foregroundImage = sharpInstance.clone()
+      .resize(newSize.width, newSize.height, { fit: 'inside' })
 
-    const topImage = sourceImage.cloneQuiet().contain(newSize.width, newSize.height)
+    return writeSharp({
+      sharpInstance: sharpInstance
+        .resize(newSize.width, newSize.height, { fit: 'cover' })
+        .modulate({ brightness: 0.5 })
+        .composite([ { input: await foregroundImage.toBuffer(), gravity: 'center' } ]),
 
-    return write(baseImage.blit(topImage, 0, 0), destination)
+      destination
+    })
   }
 
-  return write(sourceImage.cover(newSize.width, newSize.height), destination)
-}
+  return writeSharp({
+    sharpInstance: sharpInstance
+      .resize(newSize.width, newSize.height, { fit: 'cover' }),
 
-function write (image: Jimp, destination: string) {
-  return image.quality(80).writeAsync(destination)
+    destination
+  })
 }
 
 function skipProcessing (options: {
-  sourceImage: Jimp
+  metadata: sharp.Metadata
   newSize?: { width: number, height: number }
   imageBytes: number
   inputExt: string
   outputExt: string
 }) {
-  const { sourceImage, newSize, imageBytes, inputExt, outputExt } = options
+  const { metadata, newSize, imageBytes, inputExt, outputExt } = options
 
-  if (hasExif(sourceImage)) return false
-  if (newSize && (sourceImage.getWidth() !== newSize.width || sourceImage.getHeight() !== newSize.height)) return false
+  if (metadata.exif) return false
+  if (newSize && (metadata.width !== newSize.width || metadata.height !== newSize.height)) return false
   if (inputExt !== outputExt) return false
 
   const kB = 1000
@@ -162,10 +166,32 @@ function skipProcessing (options: {
   return imageBytes <= 15 * kB
 }
 
-function hasExif (image: Jimp) {
-  return !!(image.bitmap as any).exifBuffer
+function buildSharp (options: {
+  inputBuffer: Buffer
+  animated: boolean
+}) {
+  const { inputBuffer, animated } = options
+
+  return sharp(inputBuffer, { animated })
 }
 
-function removeExif (image: Jimp) {
-  ;(image.bitmap as any).exifBuffer = null
+function writeSharp (options: {
+  sharpInstance: sharp.Sharp
+  destination: string
+}) {
+  const { sharpInstance, destination } = options
+
+  if (destination.endsWith('.jpg')) {
+    return sharpInstance
+      .jpeg({ quality: 85 }) // mozjpeg option seems to cause some issues to ffmpeg (probe difficulties), so prefer to not enable it
+      .toFile(destination)
+  }
+
+  if (destination.endsWith('.png')) {
+    return sharpInstance
+      .png({ palette: true })
+      .toFile(destination)
+  }
+
+  return sharpInstance.toFile(destination)
 }

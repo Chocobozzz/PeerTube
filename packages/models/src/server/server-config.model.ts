@@ -32,6 +32,13 @@ export interface RegisteredIdAndPassAuthConfig {
   weight: number
 }
 
+export interface FileConstraints {
+  size: {
+    max: number
+  }
+  extensions: string[]
+}
+
 export interface ServerConfig {
   serverVersion: string
   serverCommit?: string
@@ -186,6 +193,7 @@ export interface ServerConfig {
 
     customization: {
       primaryColor: string
+      onPrimaryColor: string
       foregroundColor: string
       backgroundColor: string
       backgroundSecondaryColor: string
@@ -313,42 +321,26 @@ export interface ServerConfig {
   }
 
   avatar: {
-    file: {
-      size: {
-        max: number
-      }
-      extensions: string[]
-    }
+    file: FileConstraints
   }
 
   banner: {
-    file: {
-      size: {
-        max: number
-      }
-      extensions: string[]
-    }
+    file: FileConstraints
+  }
+
+  logo: {
+    file: FileConstraints
   }
 
   video: {
-    image: {
-      size: {
-        max: number
-      }
-      extensions: string[]
-    }
+    image: FileConstraints
     file: {
       extensions: string[]
     }
   }
 
   videoCaption: {
-    file: {
-      size: {
-        max: number
-      }
-      extensions: string[]
-    }
+    file: FileConstraints
   }
 
   user: {

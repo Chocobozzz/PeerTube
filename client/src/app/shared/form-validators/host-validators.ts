@@ -70,8 +70,8 @@ export const UNIQUE_HOSTS_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.required, validHosts, unique ],
   MESSAGES: {
     required: $localize`Domain is required.`,
-    validHosts: $localize`Hosts entered are invalid.`,
-    unique: $localize`Hosts entered contain duplicates.`
+    validHosts: $localize`Domains entered are invalid.`,
+    unique: $localize`Domains entered contain duplicates.`
   }
 }
 
@@ -79,7 +79,7 @@ export const UNIQUE_HOSTS_OR_HANDLE_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.required, validHostsOrHandles, unique ],
   MESSAGES: {
     required: $localize`Domain is required.`,
-    validHostsOrHandles: $localize`Hosts or handles are invalid.`,
-    unique: $localize`Hosts or handles contain duplicates.`
+    validHostsOrHandles: $localize`Domains or handles are invalid.`,
+    unique: $localize`Domains or handles contain duplicates.`
   }
 }

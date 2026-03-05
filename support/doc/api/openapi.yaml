@@ -357,6 +357,7 @@ x-tagGroups:
       - Live Videos
       - Channels Sync
       - Video Passwords
+      - Video Embed Privacy
   - name: Search
     tags:
       - Search
@@ -364,8 +365,8 @@ x-tagGroups:
     tags:
       - Abuses
       - Video Blocks
-      - Account Blocks
-      - Server Blocks
+      - Account Blocklist
+      - Server Blocklist
       - Automatic Tags
       - Watched Words
   - name: Instance
@@ -1076,7 +1077,7 @@ paths:
         '204':
           description: successful operation
 
-  '/api/v1/config/instance-logo/:logoType/pick':
+  '/api/v1/config/instance-logo/{logoType}/pick':
     post:
       summary: Update instance logo
       security:
@@ -1111,7 +1112,7 @@ paths:
               logofile:
                 contentType: image/png, image/jpeg
 
-  '/api/v1/config/instance-logo/:logoType':
+  '/api/v1/config/instance-logo/{logoType}':
     delete:
       summary: Delete instance logo
       security:
@@ -1519,6 +1520,59 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateUser'
         required: true
+
+  /api/v1/users/{id}/block:
+    post:
+      summary: Block a user
+      description: Prevent a user from logging in and interacting with the instance
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                  description: Optional reason for blocking the user
+                  minLength: 0
+                  maxLength: 500
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: invalid user id
+        '403':
+          description: insufficient permissions to block users
+        '404':
+          description: user not found
+
+  /api/v1/users/{id}/unblock:
+    post:
+      summary: Unblock a user
+      description: Allow a previously blocked user to login and interact with the instance
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: invalid user id
+        '403':
+          description: insufficient permissions to unblock users
+        '404':
+          description: user not found
 
   /api/v1/oauth-clients/local:
     get:
@@ -2184,6 +2238,22 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateMe'
         required: true
+    delete:
+      summary: Delete my account
+      operationId: deleteMe
+      description: Delete the authenticated user's account and all associated data
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - My User
+      responses:
+        '204':
+          description: successful operation - account deleted
+        '400':
+          description: invalid request parameters
+        '401':
+          description: authentication required
 
   '/api/v1/users/me/videos/comments':
     get:
@@ -2228,7 +2298,6 @@ paths:
         - Videos
         - My User
       parameters:
-        - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
@@ -3130,7 +3199,8 @@ paths:
                   type: string
                   format: binary
                 previewfile:
-                  description: Video preview file
+                  description: Deprecated in PeerTube v8.1, use thumbnailfile instead
+                  deprecated: true
                   type: string
                   format: binary
                 category:
@@ -3191,6 +3261,9 @@ paths:
                 contentType: image/jpeg
               previewfile:
                 contentType: image/jpeg
+              tags:
+                style: form
+                explode: true
     get:
       summary: Get a video
       operationId: getVideo
@@ -3724,7 +3797,8 @@ paths:
                   type: string
                   format: binary
                 previewfile:
-                  description: Live video/replay preview file
+                  description: Deprecated in PeerTube v8.1, use thumbnailfile instead
+                  deprecated: true
                   type: string
                   format: binary
                 privacy:
@@ -4577,6 +4651,106 @@ paths:
         '404':
           description: video not found
 
+  /api/v1/videos/{id}/embed-privacy:
+    get:
+      summary: Get video embed privacy
+      description: "**PeerTube >= 8.1**"
+      operationId: getVideoEmbedPrivacy
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - Video Embed Privacy
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  policy:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/VideoEmbedPrivacy'
+                      label:
+                        type: string
+                        example: Allowlist
+                  domains:
+                    type: array
+                    items:
+                      type: string
+                      example: 'example.com'
+        '400':
+          description: invalid request
+    put:
+      summary: Update video embed privacy
+      description: "**PeerTube >= 8.1**"
+      operationId: updateVideoEmbedPrivacy
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - Video Embed Privacy
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                policy:
+                  $ref: '#/components/schemas/VideoEmbedPrivacy'
+                domains:
+                  type: array
+                  items:
+                    type: string
+                    example: 'example.com'
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: invalid request
+
+  /api/v1/videos/{id}/embed-privacy/allowed:
+    get:
+      summary: Check if embed is allowed
+      description: "**PeerTube >= 8.1** Check if video embed is allowed on a specific domain according to the video embed privacy settings"
+      operationId: isVideoEmbedOnDomainAllowed
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - Video Embed Privacy
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+        - name: domain
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The domain to check if embed is allowed
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  domainAllowed:
+                    type: boolean
+                  userBypassAllowed:
+                    description: Whether the user can bypass embed restrictions for this video, either because they are the owner/editor of the video or because they have a moderator or admin role
+                    nullable: true
+                    type: boolean
+        '400':
+          description: invalid request
+
   /api/v1/videos/{id}/passwords:
     get:
       summary: List video passwords
@@ -5396,7 +5570,7 @@ paths:
                       type: object
                       properties:
                         id:
-                          description: object id for the video
+                          description: Playlist element id
                           allOf:
                             - $ref: '#/components/schemas/id'
                         position:
@@ -5410,7 +5584,7 @@ paths:
                         stopTimestamp:
                           type: integer
                           nullable: true
-                          example: 42
+                          example: 41
                           format: seconds
                         video:
                           $ref: '#/components/schemas/Video'
@@ -6128,8 +6302,8 @@ paths:
   /api/v1/blocklist/status:
     get:
       tags:
-        - Account Blocks
-        - Server Blocks
+        - Account Blocklist
+        - Server Blocklist
       summary: Get block status of accounts/hosts
       parameters:
         -
@@ -6158,11 +6332,205 @@ paths:
               schema:
                 $ref: '#/components/schemas/BlockStatus'
 
+  /api/v1/users/me/blocklist/accounts:
+    get:
+      summary: List accounts blocked by my account
+      description: Get the list of accounts that the authenticated user has blocked
+      operationId: getMyBlockedAccounts
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - Account Blocklist
+      parameters:
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - name: search
+          in: query
+          required: false
+          description: Search query string
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AccountBlock'
+        '401':
+          description: authentication required
+    post:
+      summary: Block an account by my account
+      description: Add an account to the authenticated user's blocklist
+      operationId: blockAccount
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - Account Blocklist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                accountName:
+                  type: string
+                  description: "Account name to block (format: name@host)"
+                  example: 'user@example.com'
+              required:
+                - accountName
+      responses:
+        '204':
+          description: successful operation - account blocked
+        '400':
+          description: invalid account name
+        '401':
+          description: authentication required
+        '404':
+          description: account not found
+
+  /api/v1/users/me/blocklist/accounts/{accountName}:
+    delete:
+      summary: Unblock an account by my account
+      description: Remove an account from the authenticated user's blocklist
+      operationId: unblockAccount
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - Account Blocklist
+      parameters:
+        - name: accountName
+          in: path
+          required: true
+          description: "Account name to unblock (format: name@host)"
+          schema:
+            type: string
+            example: 'user@example.com'
+      responses:
+        '204':
+          description: successful operation - account unblocked
+        '400':
+          description: invalid account name
+        '401':
+          description: authentication required
+        '404':
+          description: account block not found
+
+  /api/v1/users/me/blocklist/servers:
+    get:
+      summary: List servers blocked by my account
+      description: Get the list of servers that the authenticated user has blocked
+      operationId: getMyBlockedServers
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - Account Blocklist
+      parameters:
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - name: search
+          in: query
+          required: false
+          description: Search query string
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ServerBlock'
+        '401':
+          description: authentication required
+    post:
+      summary: Block a server by my account
+      description: Add a server to the authenticated user's blocklist
+      operationId: blockServer
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - Account Blocklist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                host:
+                  type: string
+                  description: Server host to block
+                  example: 'example.com'
+              required:
+                - host
+      responses:
+        '204':
+          description: successful operation - server blocked
+        '400':
+          description: invalid server host
+        '401':
+          description: authentication required
+        '404':
+          description: server not found
+
+  /api/v1/users/me/blocklist/servers/{host}:
+    delete:
+      summary: Unblock a server by my account
+      description: Remove a server from the authenticated user's blocklist
+      operationId: unblockServer
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - Account Blocklist
+      parameters:
+        - name: host
+          in: path
+          required: true
+          description: Server host to unblock
+          schema:
+            type: string
+            example: 'example.com'
+      responses:
+        '204':
+          description: successful operation - server unblocked
+        '400':
+          description: invalid server host
+        '401':
+          description: authentication required
+        '404':
+          description: server block not found
+
   /api/v1/server/blocklist/accounts:
     get:
       tags:
-        - Account Blocks
-      summary: List account blocks
+        - Server Blocklist
+      summary: List blocked accounts by server
       security:
         - OAuth2:
           - admin
@@ -6173,10 +6541,22 @@ paths:
       responses:
         '200':
           description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AccountBlock'
     post:
       tags:
-        - Account Blocks
-      summary: Block an account
+        - Server Blocklist
+      summary: Block an account by server
       security:
         - OAuth2:
           - admin
@@ -6201,8 +6581,8 @@ paths:
   '/api/v1/server/blocklist/accounts/{accountName}':
     delete:
       tags:
-        - Account Blocks
-      summary: Unblock an account by its handle
+        - Server Blocklist
+      summary: Unblock an account by server
       security:
         - OAuth2:
           - admin
@@ -6222,8 +6602,8 @@ paths:
   /api/v1/server/blocklist/servers:
     get:
       tags:
-        - Server Blocks
-      summary: List server blocks
+        - Server Blocklist
+      summary: List blocked servers by server
       security:
         - OAuth2:
           - admin
@@ -6234,10 +6614,22 @@ paths:
       responses:
         '200':
           description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ServerBlock'
     post:
       tags:
-        - Server Blocks
-      summary: Block a server
+        - Server Blocklist
+      summary: Block a server by server
       security:
         - OAuth2:
           - admin
@@ -6262,8 +6654,8 @@ paths:
   '/api/v1/server/blocklist/servers/{host}':
     delete:
       tags:
-        - Server Blocks
-      summary: Unblock a server by its domain
+        - Server Blocklist
+      summary: Unblock a server by server
       security:
         - OAuth2:
           - admin
@@ -6279,7 +6671,7 @@ paths:
         '204':
           description: successful operation
         '404':
-          description: account block does not exist
+          description: server block does not exist
 
   /api/v1/server/redundancy/{host}:
     put:
@@ -8899,6 +9291,17 @@ components:
           nullable: true
           allOf:
             - $ref: '#/components/schemas/Video'
+    Thumbnail:
+      properties:
+        fileUrl:
+          type: string
+        width:
+          type: integer
+        height:
+          type: integer
+        aspectRatio:
+          type: string
+          example: '16:9'
     VideoFile:
       properties:
         id:
@@ -9089,11 +9492,18 @@ components:
           minLength: 3
           maxLength: 120
         thumbnailPath:
+          description: Deprecated in PeerTube v8.1, use thumbnails instead
+          deprecated: true
           type: string
-          example: /lazy-static/thumbnails/a65bc12f-9383-462e-81ae-8207e8b434ee.jpg
         previewPath:
+          description: Deprecated in PeerTube v8.1, use thumbnails instead
+          deprecated: true
           type: string
-          example: /lazy-static/previews/a65bc12f-9383-462e-81ae-8207e8b434ee.jpg
+        thumbnails:
+          description: "**PeerTube >= 8.1** Array of thumbnails for the video"
+          type: array
+          items:
+            $ref: '#/components/schemas/Thumbnail'
         embedPath:
           type: string
           example: /videos/embed/a65bc12f-9383-462e-81ae-8207e8b434ee
@@ -9278,6 +9688,29 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/FileRedundancyInformation'
+    AccountBlock:
+      properties:
+        byAccount:
+          $ref: '#/components/schemas/Account'
+        blockedAccount:
+          $ref: '#/components/schemas/Account'
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+    ServerBlock:
+      properties:
+        byAccount:
+          $ref: '#/components/schemas/Account'
+        blockedServer:
+          type: object
+          properties:
+            host:
+              type: string
+              format: hostname
+        createdAt:
+          type: string
+          format: date-time
     CommentAutoTagPolicies:
       properties:
         review:
@@ -9424,7 +9857,14 @@ components:
             blacklisted:
               type: boolean
             thumbnailPath:
+              description: Deprecated in PeerTube v8.1, use thumbnails instead
+              deprecated: true
               type: string
+            thumbnails:
+              description: "**PeerTube >= 8.1** Array of thumbnails for the video"
+              type: array
+              items:
+                $ref: '#/components/schemas/Thumbnail'
             channel:
               $ref: '#/components/schemas/VideoChannel'
         createdAt:
@@ -9506,7 +9946,14 @@ components:
           type: integer
           minimum: 0
         thumbnailPath:
+          description: Deprecated in PeerTube v8.1, use thumbnails instead
+          deprecated: true
           type: string
+        thumbnails:
+          description: "**PeerTube >= 8.1** Array of thumbnails for the video"
+          type: array
+          items:
+            $ref: '#/components/schemas/Thumbnail'
         privacy:
           $ref: '#/components/schemas/VideoPlaylistPrivacyConstant'
         type:
@@ -10792,7 +11239,8 @@ components:
           type: string
           format: binary
         previewfile:
-          description: Video preview file
+          description: Deprecated in PeerTube v8.1, use thumbnailfile instead
+          deprecated: true
           type: string
           format: binary
         videoPasswords:
@@ -10828,7 +11276,8 @@ components:
               type: string
               format: binary
             previewfile:
-              description: Video preview file
+              description: Deprecated in PeerTube v8.1, use thumbnailfile instead
+              deprecated: true
               type: string
               format: binary
     VideoUploadResponse:
@@ -12552,6 +13001,18 @@ components:
       items:
         $ref: "#/components/schemas/VideoPassword/properties/password"
       uniqueItems: true
+
+    VideoEmbedPrivacy:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+      description: >
+        The video embed privacy level:
+          - `1` All allowed: anyone can embed the video
+          - `2` Allowlist: only the domains in the allowlist can embed the video
+          - `3` Remote restrictions: the remote instance has restrictions on where the video can be embedded
 
     PlayerTheme:
       type: string

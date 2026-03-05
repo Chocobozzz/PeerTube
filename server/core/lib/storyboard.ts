@@ -87,7 +87,8 @@ export async function insertStoryboardInDatabase (options: {
         spriteHeight,
         spriteWidth,
         spriteDuration,
-        videoId: video.id
+        videoId: video.id,
+        cached: false
       }, { transaction })
 
       if (federate) {

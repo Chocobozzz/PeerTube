@@ -1,5 +1,6 @@
 import { HttpStatusCode, UserRight, VideoState, VideoTranscodingCreate } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { createTranscodingJobs } from '@server/lib/transcoding/create-transcoding-job.js'
 import { computeResolutionsToTranscode } from '@server/lib/transcoding/transcoding-resolutions.js'
@@ -10,7 +11,8 @@ import { asyncMiddleware, authenticate, createTranscodingValidator, ensureUserHa
 const lTags = loggerTagsFactory('api', 'video')
 const transcodingRouter = express.Router()
 
-transcodingRouter.post('/:videoId/transcoding',
+transcodingRouter.post(
+  '/:videoId/transcoding',
   authenticate,
   ensureUserHasRight(UserRight.RUN_VIDEO_TRANSCODING),
   asyncMiddleware(createTranscodingValidator),
@@ -37,10 +39,23 @@ async function createTranscoding (req: express.Request, res: express.Response) {
   const hasAudio = video.hasAudio()
 
   const resolutions = await Hooks.wrapObject(
-    computeResolutionsToTranscode({ input: maxResolution, type: 'vod', includeInput: true, strictLower: false, hasAudio }),
+    computeResolutionsToTranscode({
+      input: maxResolution,
+      type: 'vod',
+      includeInput: true,
+      strictLower: false,
+      hasAudio,
+      forceAudioResolution: body.transcodingType === 'web-video' && CONFIG.TRANSCODING.ALWAYS_TRANSCODE_PODCAST_OPTIMIZED_AUDIO
+    }),
     'filter:transcoding.manual.resolutions-to-transcode.result',
     body
   )
+
+  logger.debug(`Resolutions built for manual transcoding ${body.transcodingType} for video ${video.uuid}`, {
+    resolutions,
+
+    ...lTags(video.uuid)
+  })
 
   if (resolutions.length === 0) {
     return res.sendStatus(HttpStatusCode.NO_CONTENT_204)

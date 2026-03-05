@@ -98,7 +98,7 @@ export class VideoHtml {
     let customHTML = TagsHtml.addTitleTag(html, video.name)
     customHTML = TagsHtml.addDescriptionTag(customHTML, escapedTruncatedDescription)
 
-    const preview = video.getPreview()
+    const thumbnail = video.getBestThumbnail('16:9')
 
     return TagsHtml.addTags(customHTML, {
       url: WEBSERVER.URL + video.getWatchStaticPath(),
@@ -113,12 +113,12 @@ export class VideoHtml {
 
       embedIndexation: isEmbed,
 
-      image: preview
-        ? { url: WEBSERVER.URL + video.getPreviewStaticPath(), width: preview.width, height: preview.height }
+      image: thumbnail
+        ? { url: WEBSERVER.URL + thumbnail.getFileStaticPath(), width: thumbnail.width, height: thumbnail.height }
         : undefined,
 
       videoOrPlaylist: {
-        embedUrl: WEBSERVER.URL + video.getEmbedStaticPath(),
+        embedUrl: video.getEmbedStaticUrl(),
         oembedUrl: this.getOEmbedUrl(video, currentQuery),
 
         channel: {
@@ -143,7 +143,7 @@ export class VideoHtml {
           label: VideoCaptionModel.getLanguageLabel(c.language),
           mediaType: 'text/vtt',
           language: c.language,
-          url: c.getFileUrl(video)
+          url: c.getLocalFileUrl()
         }))
       },
 

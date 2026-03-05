@@ -155,9 +155,6 @@ function runTest (withObjectStorage: boolean) {
     await waitJobs([ server ])
   })
 
-  it('Should not export collaborations', async function () {
-  })
-
   it('Should have received an email on archive creation', async function () {
     const email = emails.find(e => {
       return e['to'][0]['address'] === 'admin' + server.internalServerNumber + '@example.com' &&

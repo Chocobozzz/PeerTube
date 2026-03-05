@@ -7,7 +7,7 @@ import { Op, Transaction } from 'sequelize'
 import { AfterDestroy, AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
 import { logger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
-import { LAZY_STATIC_PATHS, MIMETYPES, WEBSERVER } from '../../initializers/constants.js'
+import { FILES_CACHE, LAZY_STATIC_PATHS, MIMETYPES, WEBSERVER } from '../../initializers/constants.js'
 import { SequelizeModel, buildSQLAttributes } from '../shared/index.js'
 import { ActorModel } from './actor.js'
 
@@ -45,7 +45,7 @@ export class ActorImageModel extends SequelizeModel<ActorImageModel> {
 
   @AllowNull(false)
   @Column
-  declare onDisk: boolean
+  declare cached: boolean
 
   @AllowNull(false)
   @Column
@@ -74,7 +74,7 @@ export class ActorImageModel extends SequelizeModel<ActorImageModel> {
     logger.info('Removing actor image file %s.', instance.filename)
 
     // Don't block the transaction
-    instance.removeImage()
+    instance.removeFile()
       .catch(err => logger.error('Cannot remove actor image file %s.', instance.filename, { err }))
   }
 
@@ -120,30 +120,15 @@ export class ActorImageModel extends SequelizeModel<ActorImageModel> {
     return { avatars, banners }
   }
 
-  static listRemoteOnDisk () {
+  static listRemoteCached () {
     return this.findAll<MActorImage>({
       where: {
-        onDisk: true
-      },
-      include: [
-        {
-          attributes: [ 'id' ],
-          model: ActorModel.unscoped(),
-          required: true,
-          where: {
-            serverId: {
-              [Op.ne]: null
-            }
-          }
+        cached: true,
+        fileUrl: {
+          [Op.ne]: null
         }
-      ]
+      }
     })
-  }
-
-  static getImageUrl (image: MActorImagePath) {
-    if (!image) return undefined
-
-    return WEBSERVER.URL + image.getStaticPath()
   }
 
   // ---------------------------------------------------------------------------
@@ -153,7 +138,7 @@ export class ActorImageModel extends SequelizeModel<ActorImageModel> {
       height: this.height,
       width: this.width,
       path: this.getStaticPath(),
-      fileUrl: ActorImageModel.getImageUrl(this),
+      fileUrl: this.getLocalFileUrl(),
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
     }
@@ -165,8 +150,15 @@ export class ActorImageModel extends SequelizeModel<ActorImageModel> {
       mediaType: this.getMimeType(),
       height: this.height,
       width: this.width,
-      url: ActorImageModel.getImageUrl(this)
+      url: this.getLocalFileUrl()
     }
+  }
+
+  // ---------------------------------------------------------------------------
+
+  getLocalFileUrl (this: MActorImagePath) {
+    // Remote files are cached by our instance
+    return WEBSERVER.URL + this.getStaticPath()
   }
 
   getStaticPath (this: MActorImagePath) {
@@ -182,13 +174,22 @@ export class ActorImageModel extends SequelizeModel<ActorImageModel> {
     }
   }
 
-  getPath () {
+  getFSPath () {
     return join(CONFIG.STORAGE.ACTOR_IMAGES_DIR, this.filename)
   }
 
-  removeImage () {
-    const imagePath = join(CONFIG.STORAGE.ACTOR_IMAGES_DIR, this.filename)
-    return remove(imagePath)
+  getFSCachedPath () {
+    return join(FILES_CACHE.AVATARS.DIRECTORY, this.filename)
+  }
+
+  removeFile () {
+    const path = this.cached
+      ? this.getFSCachedPath()
+      : this.getFSPath()
+
+    logger.info('Removing actor image file ' + path)
+
+    return remove(path)
   }
 
   isLocal () {

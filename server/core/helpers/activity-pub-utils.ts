@@ -57,8 +57,8 @@ export async function getApplicationActorOfHost (host: string) {
   return found?.href || undefined
 }
 
-export function getAPPublicValue (): 'https://www.w3.org/ns/activitystreams#Public' {
-  return 'https://www.w3.org/ns/activitystreams#Public'
+export function getAPPublicValue () {
+  return 'https://www.w3.org/ns/activitystreams#Public' as const
 }
 
 export function hasAPPublic (collection: string[] | string) {
@@ -127,6 +127,8 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
     originallyPublishedAt: 'sc:datePublished',
     schedules: 'sc:eventSchedule',
     startDate: 'sc:startDate',
+
+    embedUrl: 'sc:embedUrl',
 
     uploadDate: 'sc:uploadDate',
 

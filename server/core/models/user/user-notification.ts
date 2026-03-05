@@ -9,7 +9,6 @@ import { isUserNotificationTypeValid } from '../../helpers/custom-validators/use
 import { AbuseModel } from '../abuse/abuse.js'
 import { AccountModel } from '../account/account.js'
 import { ActorFollowModel } from '../actor/actor-follow.js'
-import { ActorImageModel } from '../actor/actor-image.js'
 import { ApplicationModel } from '../application/application.js'
 import { PluginModel } from '../server/plugin.js'
 import { SequelizeModel, throwIfNotValid } from '../shared/index.js'
@@ -114,6 +113,14 @@ import { UserModel } from './user.js'
       fields: [ 'channelCollaboratorId' ],
       where: {
         channelCollaboratorId: {
+          [Op.ne]: null
+        }
+      }
+    },
+    {
+      fields: [ 'videoCaptionId' ],
+      where: {
+        videoCaptionId: {
           [Op.ne]: null
         }
       }
@@ -618,7 +625,7 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
 
   formatAvatar (a: UserNotificationIncludes.ActorImageInclude) {
     return {
-      fileUrl: ActorImageModel.getImageUrl(a),
+      fileUrl: a.getLocalFileUrl(),
       path: a.getStaticPath(),
       width: a.width
     }

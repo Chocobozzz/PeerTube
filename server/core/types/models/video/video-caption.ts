@@ -15,7 +15,16 @@ export type MVideoCaptionFilename = Pick<MVideoCaption, 'filename' | 'getFileSta
 
 export type MVideoCaptionUrl = Pick<
   MVideoCaption,
-  'filename' | 'getFileStaticPath' | 'storage' | 'fileUrl' | 'm3u8Url' | 'getFileUrl' | 'getM3U8Url' | 'm3u8Filename' | 'getM3U8StaticPath'
+  | 'filename'
+  | 'getFileStaticPath'
+  | 'storage'
+  | 'fileUrl'
+  | 'm3u8Url'
+  | 'getLocalFileUrl'
+  | 'getM3U8Url'
+  | 'm3u8Filename'
+  | 'getM3U8StaticPath'
+  | 'isLocal'
 >
 
 export type MVideoCaptionLanguageUrl = Pick<
@@ -28,16 +37,22 @@ export type MVideoCaptionLanguageUrl = Pick<
   | 'm3u8Filename'
   | 'm3u8Url'
   | 'toActivityPubObject'
-  | 'getFileUrl'
+  | 'getLocalFileUrl'
   | 'getFileStaticPath'
-  | 'getOriginFileUrl'
   | 'getM3U8Url'
   | 'getM3U8StaticPath'
+  | 'isLocal'
 >
 
 export type MVideoCaptionVideo =
   & MVideoCaption
-  & Use<'Video', Pick<MVideo, 'id' | 'name' | 'remote' | 'uuid' | 'url' | 'state' | 'getWatchStaticPath' | 'isLocal' | 'privacy'>>
+  & Use<
+    'Video',
+    Pick<
+      MVideo,
+      'id' | 'name' | 'remote' | 'uuid' | 'url' | 'state' | 'getWatchStaticPath' | 'isLocal' | 'privacy' | 'hasPrivateStaticPath'
+    >
+  >
 
 // ############################################################################
 

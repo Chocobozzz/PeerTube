@@ -1,16 +1,21 @@
 {
   "name": "@peertube/peertube-cli",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "type": "module",
-  "main": "dist/peertube.js",
-  "bin": "dist/peertube.js",
-  "scripts": {},
+  "bin": "dist/peertube.mjs",
   "license": "AGPL-3.0",
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch"
+  },
   "private": false,
   "devDependencies": {
     "application-config": "^3.0.0",
-    "cli-table3": "^0.6.0",
-    "netrc-parser": "^3.1.6"
+    "cli-table3": "^0.6.5",
+    "netrc-parser": "^3.1.6",
+    "tsdown": "0.21.0-beta.2"
   },
-  "dependencies": {}
+  "exports": {
+    ".": "./dist/peertube-runner.mjs"
+  }
 }

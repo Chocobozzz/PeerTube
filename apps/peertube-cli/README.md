@@ -31,12 +31,12 @@ npm run build:peertube-cli
 
 ```bash
 cd peertube-root
-node apps/peertube-cli/dist/peertube-cli.js --help
+node apps/peertube-cli/dist/peertube.js --help
 ```
 
 ## Publish on NPM
 
 ```bash
 cd peertube-root
-(cd apps/peertube-cli && npm version patch) && npm run build:peertube-cli && (cd apps/peertube-cli && npm publish --access=public)
+(cd apps/peertube-cli && npm version patch) && npm run build:peertube-cli && (cd apps/peertube-cli && npm login && npm publish --access=public)
 ```

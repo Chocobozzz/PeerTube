@@ -21,6 +21,9 @@ onlyBuiltDependencies:
   - utf-8-validate
   - utp-native
 
+ignoredBuiltDependencies:
+  - sharp
+
 patchedDependencies:
   '@types/markdown-it': pnpm-patches/@types__markdown-it.patch
   tinykeys: pnpm-patches/tinykeys.patch

@@ -82,12 +82,7 @@ class LiveSegmentShaStore {
       await rename(this.sha256PathTMP, this.sha256Path)
 
       if (this.sendToObjectStorage) {
-        const url = await storeHLSFileFromPath(this.streamingPlaylist, this.sha256Path)
-
-        if (this.streamingPlaylist.segmentsSha256Url !== url) {
-          this.streamingPlaylist.segmentsSha256Url = url
-          await this.streamingPlaylist.save()
-        }
+        await storeHLSFileFromPath(this.streamingPlaylist.Video, this.sha256Path)
       }
     })
   }

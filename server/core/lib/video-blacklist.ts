@@ -43,7 +43,7 @@ export async function autoBlacklistVideoIfNeeded (parameters: {
   const videoBlacklistToCreate = {
     videoId: video.id,
     unfederated: true,
-    reason: t('Automatically blocked. Moderator review is required.', user?.getLanguage() ?? englishLanguage),
+    reason: t('The video has been automatically blocked. A moderator review is required.', user?.getLanguage() ?? englishLanguage),
     type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED
   }
   const [ videoBlacklist ] = await VideoBlacklistModel.findOrCreate<MVideoBlacklistVideo>({
@@ -78,7 +78,7 @@ export async function blacklistVideo (videoInstance: MVideoAccountLight, options
   blacklist.Video = videoInstance
 
   if (options.unfederate === true) {
-    await sendDeleteVideo(videoInstance, undefined)
+    await sendDeleteVideo({ video: videoInstance, transaction: undefined })
   }
 
   if (videoInstance.isLive) {

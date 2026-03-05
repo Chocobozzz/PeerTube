@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import { maxBy } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoCreateResult, VideoPlaylistCreateResult, VideoPrivacy } from '@peertube/peertube-models'
 import {
   PeerTubeServer,
@@ -108,13 +109,15 @@ describe('Test JSONLD HTML tags', function () {
         const video = await server.videos.get({ id: publicVideo.uuid })
         const jsonld = await getJSONLD(server, getWatchVideoBasePaths()[0] + publicVideo.uuid)
 
+        const thumbnailUrl = maxBy(video.thumbnails, 'width').fileUrl
+
         expect(jsonld).to.deep.equal({
           '@context': 'http://schema.org',
           '@type': 'VideoObject',
           'name': 'simple public video',
           'description': '',
-          'image': server.url + video.previewPath,
-          'thumbnailUrl': server.url + video.previewPath,
+          'image': thumbnailUrl,
+          thumbnailUrl,
           'duration': 'PT' + video.duration + 'S',
           'url': server.url + '/w/' + publicVideo.shortUUID,
           'embedUrl': server.url + '/videos/embed/' + publicVideo.shortUUID,
@@ -180,7 +183,7 @@ describe('Test JSONLD HTML tags', function () {
 
         expect(jsonld.contentRating).to.equal('Mature')
 
-        expect(jsonld.caption).to.deep.equal([
+        expect(jsonld.caption).to.have.deep.members([
           {
             '@type': 'MediaObject',
             'contentUrl': captions.find(c => c.language.id === 'en').fileUrl,
@@ -210,6 +213,7 @@ describe('Test JSONLD HTML tags', function () {
       for (const server of servers) {
         const jsonld = await getJSONLD(server, getWatchPlaylistBasePaths()[0] + publicPlaylist.uuid)
         const playlist = await server.playlists.get({ playlistId: publicPlaylist.uuid })
+        const thumbnailUrl = maxBy(playlist.thumbnails, 'width').fileUrl
 
         expect(jsonld).to.deep.equal({
           '@context': 'http://schema.org',
@@ -220,8 +224,8 @@ describe('Test JSONLD HTML tags', function () {
           'numberOfItems': 1,
 
           'embedUrl': server.url + playlist.embedPath,
-          'image': server.url + playlist.thumbnailPath,
-          'thumbnailUrl': server.url + playlist.thumbnailPath,
+          'image': thumbnailUrl,
+          thumbnailUrl,
 
           'author': {
             '@type': 'Organization',

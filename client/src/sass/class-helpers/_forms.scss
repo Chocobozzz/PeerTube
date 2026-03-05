@@ -14,6 +14,10 @@
   @include peertube-input-text(100%);
 }
 
+.pt-textarea {
+  @include peertube-textarea(100%, 150px);
+}
+
 .form-group {
   margin-bottom: 1.5rem;
 }

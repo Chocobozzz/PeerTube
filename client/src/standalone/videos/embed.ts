@@ -3,6 +3,7 @@ import {
   ResultList,
   ServerErrorCode,
   VideoDetails,
+  VideoEmbedPrivacyPolicy,
   VideoPlaylist,
   VideoPlaylistElement,
   VideoState
@@ -224,7 +225,7 @@ export class PeerTubeEmbed {
         playerSettingsPromise
       } = await this.videoFetcher.loadVideo({ videoId: uuid, videoPassword: this.videoPassword })
 
-      return this.buildVideoPlayer({
+      return await this.buildVideoPlayer({
         videoResponse,
         captionsPromise,
         chaptersPromise,
@@ -233,8 +234,17 @@ export class PeerTubeEmbed {
         forceAutoplay
       })
     } catch (err) {
-      if (await this.handlePasswordError(err)) this.loadVideoAndBuildPlayer({ ...options })
-      else this.playerHTML.displayError(err.message, await this.translationsPromise)
+      if (await this.handlePasswordError(err)) {
+        this.loadVideoAndBuildPlayer({ ...options })
+        return
+      }
+
+      if (this.player?.usingPlugin('peertube')) {
+        this.player.peertube().displayFatalError({ error: err, log: false, isTechnicalError: false })
+        return
+      }
+
+      this.playerHTML.displayError(err.message, await this.translationsPromise)
     }
   }
 
@@ -260,11 +270,15 @@ export class PeerTubeEmbed {
           ? await this.videoFetcher.loadVideoToken(videoInfo, this.videoPassword)
           : undefined
 
-        return { live, video: videoInfo, videoFileToken }
+        const allowed = videoInfo.embedPrivacyPolicy.id !== VideoEmbedPrivacyPolicy.ALL_ALLOWED
+          ? await this.videoFetcher.loadEmbedAllowed(videoInfo)
+          : true
+
+        return { live, video: videoInfo, videoFileToken, allowed }
       })
 
     const [
-      { video, live, videoFileToken },
+      { video, live, videoFileToken, allowed },
       translations,
       captionsResponse,
       chaptersResponse,
@@ -279,6 +293,10 @@ export class PeerTubeEmbed {
       playerSettingsPromise,
       this.buildPlayerIfNeeded()
     ])
+
+    if (!allowed) {
+      throw new Error('This video is not allowed to be embedded on this domain.')
+    }
 
     const playlist = this.playlistTracker
       ? {
@@ -399,7 +417,7 @@ export class PeerTubeEmbed {
     this.peertubePlayer.unload()
     this.peertubePlayer.disable()
 
-    this.peertubePlayer.setPoster(video.previewPath)
+    this.peertubePlayer.setPoster(video.thumbnails)
   }
 
   private async handlePasswordError (err: PeerTubeServerError) {

@@ -1,5 +1,5 @@
 import { ContextType } from '../activitypub/context.js'
-import { VideoStateType } from '../videos/index.js'
+import { VideoFileStreamType, VideoStateType } from '../videos/index.js'
 import { VideoStudioTaskCut } from '../videos/studio/index.js'
 import { SendEmailOptions } from './emailer.model.js'
 
@@ -145,7 +145,7 @@ export type ManageVideoTorrentPayload = {
 
 interface BaseTranscodingPayload {
   videoUUID: string
-  hasChildren?: boolean
+  canMoveVideoState: boolean
   isNewVideo?: boolean
 }
 
@@ -153,11 +153,14 @@ export interface HLSTranscodingPayload extends BaseTranscodingPayload {
   type: 'new-resolution-to-hls'
   resolution: number
   fps: number
-  copyCodecs: boolean
 
   separatedAudio: boolean
 
   deleteWebVideoFiles: boolean
+
+  inputStreams: VideoFileStreamType[]
+
+  transcodingRequestAt: string
 }
 
 export interface NewWebVideoResolutionTranscodingPayload extends BaseTranscodingPayload {
@@ -175,8 +178,6 @@ export interface MergeAudioTranscodingPayload extends BaseTranscodingPayload {
 
 export interface OptimizeTranscodingPayload extends BaseTranscodingPayload {
   type: 'optimize-to-web-video'
-
-  quickTranscode: boolean
 }
 
 export type VideoTranscodingPayload =
@@ -204,8 +205,15 @@ export type MoveStoragePayload = MoveVideoStoragePayload | MoveCaptionPayload
 
 export interface MoveVideoStoragePayload {
   videoUUID: string
-  isNewVideo: boolean
-  previousVideoState: VideoStateType
+
+  // FIXME: old API compatibility, remove in PeerTube v9
+  isNewVideo?: boolean
+  previousVideoState?: VideoStateType
+
+  moveVideoState?: {
+    isNewVideo: boolean
+    previousVideoState: VideoStateType
+  }
 }
 
 export interface MoveCaptionPayload {
@@ -274,6 +282,7 @@ export interface VideoChannelImportPayload {
 
 export interface AfterVideoChannelImportPayload {
   channelSyncId: number
+  buildJobErrors: number
 }
 
 // ---------------------------------------------------------------------------

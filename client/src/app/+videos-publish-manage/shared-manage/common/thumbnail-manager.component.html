@@ -13,7 +13,7 @@
       @if (imageSrc) {
         <img [src]="imageSrc" alt="Current thumbnail" i18n-alt />
 
-        <div class="muted-2 fs-8 mt-1">Current thumbnail</div>
+        <div class="muted-2 fs-8 mt-1" i18n>Current thumbnail</div>
       } @else {
         <div class="no-image">
           <svg width="28" height="20" viewBox="0 0 28 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -25,7 +25,7 @@
     </div>
 
     <div class="mt-3">
-      <div class="muted-1">
+      <div class="muted-1" i18n>
         <strong>Drag and drop your thumbnail here</strong> or click on the button below to modify it:
       </div>
 

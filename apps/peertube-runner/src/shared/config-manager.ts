@@ -1,7 +1,7 @@
-import { parse, stringify } from '@iarna/toml'
+import { parse, stringify } from 'smol-toml'
 import { TranscriptionEngineName, WhisperBuiltinModelName } from '@peertube/peertube-transcription'
 import envPaths from 'env-paths'
-import { ensureDir, pathExists, remove } from 'fs-extra/esm'
+import { ensureDir, pathExists } from 'fs-extra/esm'
 import { readFile, writeFile } from 'fs/promises'
 import merge from 'lodash-es/merge.js'
 import { dirname, join } from 'path'
@@ -64,13 +64,12 @@ export class ConfigManager {
     this.configFilePath = join(this.getConfigDir(), 'config.toml')
   }
 
+  getConfigDirectory () {
+    return this.configFilePath
+  }
+
   async load () {
     logger.info(`Using ${this.configFilePath} as configuration file`)
-
-    if (this.isTestInstance()) {
-      logger.info('Removing configuration file as we are using the "test" id')
-      await remove(this.configFilePath)
-    }
 
     await ensureDir(dirname(this.configFilePath))
 
@@ -131,8 +130,6 @@ export class ConfigManager {
   getConfigDir () {
     return join(paths.config, this.id)
   }
-
-  // ---------------------------------------------------------------------------
 
   isTestInstance () {
     return typeof this.id === 'string' && this.id.match(/^test-\d$/)

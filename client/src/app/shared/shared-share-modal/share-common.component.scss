@@ -1,0 +1,72 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
+
+my-input-text {
+  width: 100%;
+}
+
+.playlist {
+  margin-bottom: 50px;
+}
+
+.peertube-select-container {
+  @include responsive-width(200px);
+}
+
+.qr-code-group {
+  text-align: center;
+}
+
+.nav-content {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.alert,
+.embed {
+  margin-top: 20px;
+}
+
+h5 {
+  font-size: 1.15rem;
+}
+
+my-timestamp-input {
+  width: 100px;
+}
+
+.filters {
+  margin-top: 30px;
+
+  .advanced-filters.show {
+    overflow: visible !important;
+  }
+
+  .advanced-filters-button {
+    font-weight: $font-semibold;
+  }
+
+  .video-caption-block {
+    display: flex;
+    align-items: center;
+
+    .peertube-select-container {
+      @include margin-left(10px);
+    }
+  }
+
+  .start-at,
+  .stop-at {
+    width: 300px;
+    display: flex;
+    align-items: center;
+
+    my-timestamp-input {
+      @include margin-left(10px);
+    }
+  }
+}

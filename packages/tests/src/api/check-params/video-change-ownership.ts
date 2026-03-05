@@ -13,6 +13,7 @@ describe('Test video change ownership API validator', function () {
 
   let userVideo: VideoCreateResult
   let rootVideo: VideoCreateResult
+  let rootVideo2: VideoCreateResult
 
   // ---------------------------------------------------------------
 
@@ -29,6 +30,7 @@ describe('Test video change ownership API validator', function () {
     userEditorToken = await server.channelCollaborators.createEditor('user_editor', 'user_channel')
 
     rootVideo = await server.videos.quickUpload({ name: 'root video' })
+    rootVideo2 = await server.videos.quickUpload({ name: 'root video 2' })
     userVideo = await server.videos.quickUpload({ name: 'user video', token: userToken })
   })
 
@@ -43,7 +45,7 @@ describe('Test video change ownership API validator', function () {
     })
 
     it('Should fail with a video of another user', async function () {
-      for (const token of [ userToken, rootEditorToken ]) {
+      for (const token of [ userToken, userEditorToken ]) {
         await server.changeOwnership.create({
           videoId: rootVideo.id,
           username: 'another_user',
@@ -71,6 +73,7 @@ describe('Test video change ownership API validator', function () {
     })
 
     it('Should succeed with valid params', async function () {
+      await server.changeOwnership.create({ videoId: rootVideo2.id, username: 'user', token: rootEditorToken })
       await server.changeOwnership.create({ videoId: rootVideo.id, username: 'user' })
     })
   })

@@ -85,16 +85,16 @@ describe('Test services', function () {
             `title="${video.name}" src="http://${servers[0].host}/videos/embed/${video.shortUUID}${suffix.output}" ` +
             'style="border: none" allow="fullscreen"></iframe>'
 
-          const expectedThumbnailUrl = 'http://' + servers[0].host + video.previewPath
+          const thumbnail = video.thumbnails.find(t => t.width === 1280 && t.height === 720)
 
           expect(res.body.html).to.equal(expectedHtml)
           expect(res.body.title).to.equal(video.name)
           expect(res.body.author_name).to.equal(servers[0].store.channel.displayName)
           expect(res.body.width).to.equal(560)
           expect(res.body.height).to.equal(315)
-          expect(res.body.thumbnail_url).to.equal(expectedThumbnailUrl)
-          expect(res.body.thumbnail_width).to.equal(850)
-          expect(res.body.thumbnail_height).to.equal(480)
+          expect(res.body.thumbnail_url).to.equal(thumbnail.fileUrl)
+          expect(res.body.thumbnail_width).to.equal(1280)
+          expect(res.body.thumbnail_height).to.equal(720)
         }
       }
     })

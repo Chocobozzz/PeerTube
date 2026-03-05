@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
 import { wait } from '@peertube/peertube-core-utils'
 import { Video, VideoCommentPolicy, VideoPrivacy } from '@peertube/peertube-models'
-import { checkVideoFilesWereRemoved, completeVideoCheck } from '@tests/shared/videos.js'
-import { testImageGeneratedByFFmpeg } from '@tests/shared/checks.js'
 import {
   cleanupTests,
   createSingleServer,
@@ -14,6 +11,8 @@ import {
   setDefaultChannelAvatar,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { checkVideoFilesWereRemoved, checkThumbnails, completeVideoCheck } from '@tests/shared/videos.js'
+import { expect } from 'chai'
 
 describe('Test a single server', function () {
   function runSuite (mode: 'legacy' | 'resumable') {
@@ -266,8 +265,7 @@ describe('Test a single server', function () {
       videosListBase = data
 
       for (const video of data) {
-        const videoName = video.name.replace(' name', '')
-        await testImageGeneratedByFFmpeg(server.url, videoName, video.thumbnailPath)
+        await checkThumbnails({ video, server, thumbnails: [ video.name.replace(' name', '') + '.jpg' ] })
       }
     })
 

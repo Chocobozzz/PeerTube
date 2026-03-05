@@ -81,7 +81,7 @@ class VideoPathManager {
         const playlist = (videoFile as MVideoFileStreamingPlaylistVideo).VideoStreamingPlaylist
 
         createMethods.push({
-          method: () => makeHLSFileAvailable(playlist, videoFile.filename, destination),
+          method: () => makeHLSFileAvailable(playlist.Video, videoFile.filename, destination),
           clean: true
         })
       } else {
@@ -130,11 +130,10 @@ class VideoPathManager {
       })
     }
 
-    const playlist = videoFile.VideoStreamingPlaylist
     return this.makeAvailableFactory({
       createMethods: [
         {
-          method: () => makeHLSFileAvailable(playlist, filename, this.buildTMPDestination(filename)),
+          method: () => makeHLSFileAvailable(videoFile.VideoStreamingPlaylist.Video, filename, this.buildTMPDestination(filename)),
           clean: true
         }
       ],
@@ -158,7 +157,7 @@ class VideoPathManager {
     return this.makeAvailableFactory({
       createMethods: [
         {
-          method: () => makeHLSFileAvailable(playlist, filename, this.buildTMPDestination(filename)),
+          method: () => makeHLSFileAvailable(playlist.Video, filename, this.buildTMPDestination(filename)),
           clean: true
         }
       ],

@@ -1,10 +1,11 @@
+import { generateImageFilename, processImage } from '@server/helpers/image-utils.js'
+import { CONFIG } from '@server/initializers/config.js'
+import { initDatabaseModels } from '@server/initializers/database.js'
+import { ThumbnailModel } from '@server/models/video/thumbnail.js'
+import { VideoModel } from '@server/models/video/video.js'
 import Bluebird from 'bluebird'
 import { program } from 'commander'
-import { pathExists, remove } from 'fs-extra/esm'
-import { generateImageFilename, processImage } from '@server/helpers/image-utils.js'
-import { THUMBNAILS_SIZE } from '@server/initializers/constants.js'
-import { initDatabaseModels } from '@server/initializers/database.js'
-import { VideoModel } from '@server/models/video/video.js'
+import { pathExists } from 'fs-extra/esm'
 
 program
   .description('Regenerate local thumbnails using preview files')
@@ -30,35 +31,42 @@ async function processVideo (id: number) {
 
   console.log('Processing video %s.', video.name)
 
-  const thumbnail = video.getMiniature()
-  const preview = video.getPreview()
+  const bestImage = video.getBestThumbnail('16:9')
 
-  const previewPath = preview.getPath()
-
-  if (!await pathExists(previewPath)) {
-    throw new Error(`Preview ${previewPath} does not exist on disk`)
+  if (!await pathExists(bestImage.getFSPath())) {
+    throw new Error(`Thumbnail ${bestImage.getFSPath()} does not exist on disk`)
   }
 
-  const size = {
-    width: THUMBNAILS_SIZE.width,
-    height: THUMBNAILS_SIZE.height
+  const oldThumbnails = [ ...video.Thumbnails ]
+
+  const thumbnails = await Bluebird.mapSeries(CONFIG.THUMBNAILS.SIZES, async size => {
+    const thumbnail = new ThumbnailModel({
+      filename: generateImageFilename(),
+      height: size.height,
+      width: size.width,
+      aspectRatio: size.aspectRatio,
+      fileUrl: null,
+      automaticallyGenerated: bestImage.automaticallyGenerated,
+      cached: false
+    })
+
+    await processImage({
+      path: bestImage.getFSPath(),
+      destination: thumbnail.getFSPath(),
+      newSize: size,
+      keepOriginal: true
+    })
+
+    return thumbnail
+  })
+
+  await video.replaceAndSaveThumbnails(thumbnails)
+
+  for (const oldThumbnail of oldThumbnails) {
+    // Explicitly remove the file
+    // We have a destroy hook but it's async, so ensure we wait for it to be done before ending the script
+    await oldThumbnail.removeFile()
   }
-
-  const oldPath = thumbnail.getPath()
-
-  // Update thumbnail
-  thumbnail.filename = generateImageFilename()
-  thumbnail.width = size.width
-  thumbnail.height = size.height
-
-  const thumbnailPath = thumbnail.getPath()
-  await processImage({ path: previewPath, destination: thumbnailPath, newSize: size, keepOriginal: true })
-
-  // Save new attributes
-  await thumbnail.save()
-
-  // Remove old thumbnail
-  await remove(oldPath)
 
   // Don't federate, remote instances will refresh the thumbnails after a while
 }

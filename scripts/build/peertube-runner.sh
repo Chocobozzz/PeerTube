@@ -9,4 +9,4 @@ rm -rf ./dist
 rm -rf ./dist
 mkdir ./dist
 
-node ./scripts/build.js
+npm run build

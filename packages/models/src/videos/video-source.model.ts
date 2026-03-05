@@ -1,16 +1,15 @@
 import { VideoFileMetadata } from './file/index.js'
-import { VideoConstant } from './video-constant.model.js'
+import { ConstantLabel } from '../common/constant-label.model.js'
 
 export interface VideoSource {
   inputFilename: string
 
-  resolution?: VideoConstant<number>
+  resolution?: ConstantLabel<number>
   size?: number // Bytes
 
   width?: number
   height?: number
 
-  fileUrl: string
   fileDownloadUrl: string
 
   fps?: number

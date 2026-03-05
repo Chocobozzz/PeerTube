@@ -13,7 +13,7 @@ import {
 } from '@app/shared/form-validators/form-validator.model'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { PeertubeColorPickerComponent } from '@app/shared/shared-forms/peertube-color-picker.component'
-import { PreviewUploadComponent } from '@app/shared/shared-forms/preview-upload.component'
+import { ImageInputComponent } from '@app/shared/shared-forms/image-input.component'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 import { findAppropriateImage } from '@peertube/peertube-core-utils'
 import { logger } from '@root-helpers/logger'
@@ -38,7 +38,7 @@ export type FormEditInfo = FormDefaultTyped<Form>
     PeertubeColorPickerComponent,
     CdkStepperModule,
     ButtonComponent,
-    PreviewUploadComponent
+    ImageInputComponent
   ]
 })
 export class AdminConfigWizardEditInfoComponent implements OnInit {
@@ -70,6 +70,10 @@ export class AdminConfigWizardEditInfoComponent implements OnInit {
           logger.error('Could not fetch instance avatar')
         })
     }
+  }
+
+  get avatarFileConstraints () {
+    return this.server.getHTMLConfig().avatar.file
   }
 
   private buildForm () {

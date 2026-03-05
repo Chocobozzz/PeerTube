@@ -1,28 +1,17 @@
-import prompt from 'prompt'
+import prompts from 'prompts'
 
 export async function askConfirmation (message: string) {
-  return new Promise((res, rej) => {
-    prompt.start()
-
-    const schema = {
-      properties: {
-        confirm: {
-          type: 'string',
-          description: message + ' (y/n)',
-          default: 'n',
-          validator: /y[es]*|n[o]?/,
-          warning: 'Must respond yes or no',
-          required: true
-        }
-      }
+  const result = await prompts({
+    type: 'confirm',
+    name: 'confirm',
+    message
+  }, {
+    onCancel: () => {
+      process.exit(1)
     }
-
-    prompt.get(schema, function (err, result) {
-      if (err) return rej(err)
-
-      return res(result.confirm?.match(/y/) !== null)
-    })
   })
+
+  return result.confirm === true
 }
 
 export function displayPeerTubeMustBeStoppedWarning () {

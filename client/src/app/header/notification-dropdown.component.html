@@ -18,7 +18,7 @@
   <a
     i18n-title
     title="View your notifications"
-    class="peertube-button tertiary-button rounded-icon-button notification-inbox-link"
+    class="peertube-button tertiary-button rounded-icon-button notification-inbox-link inherit-color"
     routerLink="/my-account/notifications"
     routerLinkActive="active"
     #link
@@ -41,7 +41,7 @@
     <button
       i18n-title
       title="View your notifications"
-      class="peertube-button tertiary-button rounded-icon-button disable-dropdown-caret notification-inbox-dropdown"
+      class="peertube-button tertiary-button rounded-icon-button disable-dropdown-caret notification-inbox-dropdown inherit-color"
       [ngClass]="{ 'shown': opened, 'hidden': isInMobileView }"
       ngbDropdownToggle
       >

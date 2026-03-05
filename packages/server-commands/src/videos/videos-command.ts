@@ -28,6 +28,7 @@ import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 export type VideoEdit = Partial<Omit<VideoCreate, 'thumbnailfile' | 'previewfile'>> & {
   fixture?: string
   thumbnailfile?: string
+  // TODO: remove when previewfile is deleted from the server
   previewfile?: string
 }
 
@@ -371,10 +372,9 @@ export class VideosCommand extends AbstractCommand {
     const path = '/api/v1/videos/' + id
 
     // Upload request
-    if (attributes.thumbnailfile || attributes.previewfile) {
+    if (attributes.thumbnailfile) {
       const attaches: any = {}
       if (attributes.thumbnailfile) attaches.thumbnailfile = attributes.thumbnailfile
-      if (attributes.previewfile) attaches.previewfile = attributes.previewfile
 
       return this.putUploadRequest({
         ...options,
@@ -382,8 +382,7 @@ export class VideosCommand extends AbstractCommand {
         path,
         fields: options.attributes,
         attaches: {
-          thumbnailfile: attributes.thumbnailfile,
-          previewfile: attributes.previewfile
+          thumbnailfile: attributes.thumbnailfile
         },
         implicitToken: true,
         defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
@@ -433,7 +432,7 @@ export class VideosCommand extends AbstractCommand {
     completedExpectedStatus?: HttpStatusCodeType
     videoChannelId?: number
   } = {}) {
-    const { mode = 'legacy', videoChannelId, waitTorrentGeneration = true } = options
+    const { mode = 'legacy', videoChannelId, completedExpectedStatus = HttpStatusCode.OK_200, waitTorrentGeneration = true } = options
     let defaultChannelId = 1
 
     if (!videoChannelId) {
@@ -475,7 +474,7 @@ export class VideosCommand extends AbstractCommand {
 
     // Wait torrent generation
     const expectedStatus = this.buildExpectedStatus({ ...options, defaultExpectedStatus: HttpStatusCode.OK_200 })
-    if (expectedStatus === HttpStatusCode.OK_200 && waitTorrentGeneration) {
+    if (expectedStatus === HttpStatusCode.OK_200 && completedExpectedStatus === HttpStatusCode.OK_200 && waitTorrentGeneration) {
       let video: VideoDetails
 
       do {
@@ -673,16 +672,14 @@ export class VideosCommand extends AbstractCommand {
   }
 
   buildUploadFields (attributes: VideoEdit) {
-    return omit(attributes, [ 'fixture', 'thumbnailfile', 'previewfile' ])
+    return omit(attributes, [ 'fixture', 'thumbnailfile' ])
   }
 
   buildUploadAttaches (attributes: VideoEdit, includeFixture: boolean) {
     const attaches: { [name: string]: string } = {}
 
-    for (const key of [ 'thumbnailfile', 'previewfile' ]) {
-      if (attributes[key]) attaches[key] = buildAbsoluteFixturePath(attributes[key])
-    }
-
+    if (attributes.thumbnailfile) attaches.thumbnailfile = buildAbsoluteFixturePath(attributes.thumbnailfile)
+    if (attributes.previewfile) attaches.previewfile = buildAbsoluteFixturePath(attributes.previewfile)
     if (includeFixture && attributes.fixture) attaches.videofile = buildAbsoluteFixturePath(attributes.fixture)
 
     return attaches

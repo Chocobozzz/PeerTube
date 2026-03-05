@@ -11,7 +11,7 @@ import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video
 import { EmbedComponent } from '@app/shared/shared-main/video/embed.component'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { millisecondsToVttTime, sortBy, timeToInt } from '@peertube/peertube-core-utils'
-import { HTMLServerConfig, VideoConstant } from '@peertube/peertube-models'
+import { HTMLServerConfig, ConstantLabel } from '@peertube/peertube-models'
 import { parse } from '@plussub/srt-vtt-parser'
 import { PeerTubePlayer } from '../../../../standalone/embed-player-api/player'
 import { ConfirmService, Notifier, ServerService } from '../../../core'
@@ -74,7 +74,7 @@ export class VideoCaptionEditModalComponent extends FormReactive implements OnIn
 
   activeSegment: Segment
 
-  videoCaptionLanguages: VideoConstant<string>[] = []
+  videoCaptionLanguages: ConstantLabel<string>[] = []
 
   timestampParser = this.webvttToMS.bind(this)
   timestampFormatter = millisecondsToVttTime

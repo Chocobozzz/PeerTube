@@ -1,7 +1,7 @@
 import {
   RunnerJobVODAudioMergeTranscodingPrivatePayload,
   RunnerJobVODWebVideoTranscodingPrivatePayload,
-  VideoResolution
+  VideoFileStreamType
 } from '@peertube/peertube-models'
 import { logger, LoggerTagsFn } from '@server/helpers/logger.js'
 import { onTranscodingEnded } from '@server/lib/transcoding/ended-transcoding.js'
@@ -24,7 +24,7 @@ export async function onVODWebVideoOrAudioMergeTranscodingJob (options: {
 
   await onWebVideoFileTranscoding({ video, videoOutputPath: videoFilePath, deleteWebInputVideoFile, wasAudioFile })
 
-  await onTranscodingEnded({ isNewVideo: privatePayload.isNewVideo, moveVideoToNextState: true, video })
+  await onTranscodingEnded({ isNewVideo: privatePayload.isNewVideo, moveVideoToNextState: privatePayload.canMoveVideoState, video })
 }
 
 export async function loadRunnerVideo (runnerJob: MRunnerJob, lTags: LoggerTagsFn) {
@@ -39,18 +39,24 @@ export async function loadRunnerVideo (runnerJob: MRunnerJob, lTags: LoggerTagsF
   return video
 }
 
-export async function isVideoMissHLSAudio (options: {
-  resolution: number
-  separatedAudio: boolean
+export async function hasMissingHLSStreams (options: {
+  inputStreams: VideoFileStreamType[]
+  transcodingRequestAt: string
   videoId: string | number
 }) {
-  if (!options.separatedAudio) return false
+  const { videoId, inputStreams, transcodingRequestAt } = options
 
-  if (options.resolution !== VideoResolution.H_NOVIDEO) {
-    const video = await VideoModel.loadFull(options.videoId)
+  const video = await VideoModel.loadFull(videoId)
+  const hlsFiles = video.getHLSPlaylist().VideoFiles
 
-    // Video doesn't have audio file yet
-    if (video.hasAudio() !== true) return true
+  for (const inputStream of inputStreams) {
+    const hasStream = hlsFiles.some(f => {
+      // Compare creation dates to avoid using files created before the root job (e.g., from a previous transcoding)
+      return new Date(f.createdAt).getTime() >= new Date(transcodingRequestAt).getTime() &&
+        (f.streams & inputStream)
+    })
+
+    if (!hasStream) return true
   }
 
   return false
