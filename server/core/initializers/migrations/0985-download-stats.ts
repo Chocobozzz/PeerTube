@@ -16,8 +16,10 @@ async function up(utils: {
       },
     )
 
+    await utils.queryInterface.renameTable("videoView", "videoStats")
+
     await utils.queryInterface.addColumn(
-      "videoView",
+      "videoStats",
       "downloads", {
         type: Sequelize.INTEGER,
         defaultValue: 0,
@@ -36,9 +38,12 @@ async function down(utils: {
   await utils.queryInterface.removeColumn("video", "downloads", {
     transaction: utils.transaction,
   })
-  await utils.queryInterface.removeColumn("videoView", "downloads", {
+
+  await utils.queryInterface.removeColumn("videoStats", "downloads", {
     transaction: utils.transaction,
   })
+
+  await utils.queryInterface.renameTable("videoStats", "videoView")
 }
 
 export { up, down }

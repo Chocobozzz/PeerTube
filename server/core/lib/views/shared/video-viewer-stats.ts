@@ -11,7 +11,7 @@ import { Redis } from '@server/lib/redis.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { LocalVideoViewerWatchSectionModel } from '@server/models/view/local-video-viewer-watch-section.js'
 import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer.js'
-import { VideoViewModel } from '@server/models/view/video-view.js'
+import { VideoStatsModel } from '@server/models/view/video-stats.js'
 import { MVideo, MVideoImmutable, MVideoThumbnail } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 
@@ -261,7 +261,7 @@ export class VideoViewerStats {
       )
 
       try {
-        const record = await VideoViewModel.findOne({
+        const record = await VideoStatsModel.findOne({
           where: { videoId, startDate },
         })
         if (record) {
@@ -270,7 +270,7 @@ export class VideoViewerStats {
           await record.save()
         } else {
           // Create a new time slice for this video downloads
-          await VideoViewModel.create({
+          await VideoStatsModel.create({
             startDate: new Date(startDate),
             endDate: new Date(endDate),
             downloads: 1,
