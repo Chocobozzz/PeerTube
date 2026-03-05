@@ -1521,6 +1521,59 @@ paths:
               $ref: '#/components/schemas/UpdateUser'
         required: true
 
+  /api/v1/users/{id}/block:
+    post:
+      summary: Block a user
+      description: Prevent a user from logging in and interacting with the instance
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                  description: Optional reason for blocking the user
+                  minLength: 0
+                  maxLength: 500
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: invalid user id
+        '403':
+          description: insufficient permissions to block users
+        '404':
+          description: user not found
+
+  /api/v1/users/{id}/unblock:
+    post:
+      summary: Unblock a user
+      description: Allow a previously blocked user to login and interact with the instance
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: invalid user id
+        '403':
+          description: insufficient permissions to unblock users
+        '404':
+          description: user not found
+
   /api/v1/oauth-clients/local:
     get:
       summary: Login prerequisite
@@ -2185,6 +2238,22 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateMe'
         required: true
+    delete:
+      summary: Delete my account
+      operationId: deleteMe
+      description: Delete the authenticated user's account and all associated data
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - My User
+      responses:
+        '204':
+          description: successful operation - account deleted
+        '400':
+          description: invalid request parameters
+        '401':
+          description: authentication required
 
   '/api/v1/users/me/videos/comments':
     get:
