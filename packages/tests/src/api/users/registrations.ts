@@ -266,7 +266,7 @@ describe('Test registrations', function () {
       expect(me.videoChannels[0].displayName).to.equal('Main user2 channel')
       expect(me.role.id).to.equal(UserRole.USER)
       expect(me.email).to.equal('user2@example.com')
-      expect(me.language).to.equal('fr')
+      expect(me.language).to.be.null
     })
 
     it('Should have created the appropriate attributes for user 3', async function () {
@@ -279,7 +279,7 @@ describe('Test registrations', function () {
       expect(me.videoChannels[0].displayName).to.equal('my user 3 channel')
       expect(me.role.id).to.equal(UserRole.USER)
       expect(me.email).to.equal('user3@example.com')
-      expect(me.language).to.equal('fr')
+      expect(me.language).to.be.null
     })
 
     it('Should list these accepted/rejected registration requests', async function () {
