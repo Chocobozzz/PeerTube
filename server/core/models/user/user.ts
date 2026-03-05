@@ -1032,7 +1032,7 @@ export class UserModel extends SequelizeModel<UserModel> {
       autoPlayNextVideoPlaylist: this.autoPlayNextVideoPlaylist,
       videoLanguages: this.videoLanguages,
 
-      language: this.getLanguage(),
+      language: this.language,
 
       role: {
         id: this.role,
