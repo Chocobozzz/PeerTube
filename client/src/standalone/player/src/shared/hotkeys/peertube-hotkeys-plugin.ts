@@ -157,7 +157,7 @@ class PeerTubeHotkeysPlugin extends Plugin {
       {
         accept: e => e.key === 'h',
         cb: () => {
-          this.player.toggleClass("vid-flip-h")
+          this.player.toggleClass("vjs-vid-flip-h")
         }
       }
     ]
