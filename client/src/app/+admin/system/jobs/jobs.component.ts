@@ -14,6 +14,7 @@ import { ButtonComponent } from '../../../shared/shared-main/buttons/button.comp
 import { NumberFormatterPipe } from '../../../shared/shared-main/common/number-formatter.pipe'
 import { TableColumnInfo, TableComponent, TableQueryParams } from '../../../shared/shared-tables/table.component'
 import { JobService } from './job.service'
+import { RouterLink } from '@angular/router'
 
 type ColumnName = 'id' | 'type' | 'priority' | 'state' | 'progress' | 'createdAt' | 'processed'
 
@@ -32,7 +33,8 @@ type QueryParams = TableQueryParams & {
     ButtonComponent,
     SelectOptionsComponent,
     TableComponent,
-    NumberFormatterPipe
+    NumberFormatterPipe,
+    RouterLink
   ]
 })
 export class JobsComponent implements OnInit {

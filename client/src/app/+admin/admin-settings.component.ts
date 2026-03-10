@@ -107,16 +107,16 @@ export class AdminSettingsComponent implements OnInit {
 
     this.menuEntries.push({
       label: $localize`Runners`,
-      routerLink: '/admin/settings/system/runners/runners-list',
+      routerLink: '/admin/settings/system/runners/jobs-list',
       children: [
-        {
-          label: $localize`Remote runners`,
-          routerLink: '/admin/settings/system/runners/runners-list'
-        },
-
         {
           label: $localize`Runner jobs`,
           routerLink: '/admin/settings/system/runners/jobs-list'
+        },
+
+        {
+          label: $localize`Remote runners`,
+          routerLink: '/admin/settings/system/runners/runners-list'
         },
 
         {
@@ -172,6 +172,7 @@ export class AdminSettingsComponent implements OnInit {
     return config.transcoding.remoteRunners.enabled ||
       config.live.transcoding.remoteRunners.enabled ||
       config.videoStudio.remoteRunners.enabled ||
-      config.videoTranscription.remoteRunners.enabled
+      config.videoTranscription.remoteRunners.enabled ||
+      config.storyboards.remoteRunners.enabled
   }
 }
