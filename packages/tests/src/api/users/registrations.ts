@@ -322,7 +322,7 @@ describe('Test registrations', function () {
       }
     })
 
-    it('Shoulde delete a registration', async function () {
+    it('Should delete a registration', async function () {
       await server.registrations.delete({ id: id2 })
       await server.registrations.delete({ id: id3 })
 
