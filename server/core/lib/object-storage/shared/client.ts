@@ -5,30 +5,8 @@ import { getProxyAgent } from '@server/helpers/requests.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { lTags } from './logger.js'
 
-async function getProxyRequestHandler () {
-  if (!isProxyEnabled()) return null
-
-  const { agent } = getProxyAgent()
-
-  const { NodeHttpHandler } = await import('@smithy/node-http-handler')
-
-  return new NodeHttpHandler({
-    httpAgent: agent.http,
-    httpsAgent: agent.https
-  })
-}
-
-let endpointParsed: URL
-function getEndpointParsed () {
-  if (endpointParsed) return endpointParsed
-
-  endpointParsed = new URL(getEndpoint())
-
-  return endpointParsed
-}
-
 let s3ClientPromise: Promise<S3Client>
-function getClient () {
+export function getClient () {
   if (s3ClientPromise !== undefined) return s3ClientPromise
 
   s3ClientPromise = (async () => {
@@ -62,17 +40,8 @@ function getClient () {
   return s3ClientPromise
 }
 
-// ---------------------------------------------------------------------------
-
-export {
-  getEndpointParsed,
-  getClient
-}
-
-// ---------------------------------------------------------------------------
-
 let endpoint: string
-function getEndpoint () {
+export function getEndpoint () {
   if (endpoint) return endpoint
 
   const endpointConfig = CONFIG.OBJECT_STORAGE.ENDPOINT
@@ -81,4 +50,21 @@ function getEndpoint () {
     : 'https://' + CONFIG.OBJECT_STORAGE.ENDPOINT
 
   return endpoint
+}
+
+// ---------------------------------------------------------------------------
+// Private
+// ---------------------------------------------------------------------------
+
+async function getProxyRequestHandler () {
+  if (!isProxyEnabled()) return null
+
+  const { agent } = getProxyAgent()
+
+  const { NodeHttpHandler } = await import('@smithy/node-http-handler')
+
+  return new NodeHttpHandler({
+    httpAgent: agent.http,
+    httpsAgent: agent.https
+  })
 }
