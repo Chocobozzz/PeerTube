@@ -6,7 +6,7 @@
         <source>Close</source>
         <target state="translated">关闭</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/alert/alert.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/alert/alert.ts</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
@@ -15,7 +15,7 @@
         <target state="translated">轮播项 <x id="INTERPOLATION" equiv-text="get wrap("/> 共 <x id="INTERPOLATION_1" equiv-text=".value; }"/> </target>
         <note priority="1" from="description">Currently selected slide number read by screen reader</note>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/carousel/carousel.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/carousel/carousel.ts</context>
           <context context-type="linenumber">131</context>
         </context-group>
       </trans-unit>
@@ -23,7 +23,7 @@
         <source>Previous</source>
         <target state="translated">上一项</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/carousel/carousel.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/carousel/carousel.ts</context>
           <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
@@ -31,7 +31,7 @@
         <source>Next</source>
         <target state="translated">下一项</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/carousel/carousel.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/carousel/carousel.ts</context>
           <context context-type="linenumber">176</context>
         </context-group>
       </trans-unit>
@@ -39,11 +39,11 @@
         <source>Select month</source>
         <target state="translated">选择月份</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
           <context context-type="linenumber">91</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
           <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
@@ -51,11 +51,11 @@
         <source>Select year</source>
         <target state="translated">选择年份</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
           <context context-type="linenumber">91</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
           <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
@@ -63,11 +63,11 @@
         <source>Previous month</source>
         <target state="translated">上个月</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/datepicker/datepicker-navigation.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/datepicker/datepicker-navigation.ts</context>
           <context context-type="linenumber">83</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/datepicker/datepicker-navigation.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/datepicker/datepicker-navigation.ts</context>
           <context context-type="linenumber">109</context>
         </context-group>
       </trans-unit>
@@ -75,11 +75,11 @@
         <source>Next month</source>
         <target state="translated">下个月</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/datepicker/datepicker-navigation.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/datepicker/datepicker-navigation.ts</context>
           <context context-type="linenumber">112</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/datepicker/datepicker-navigation.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/datepicker/datepicker-navigation.ts</context>
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
@@ -87,7 +87,7 @@
         <source>««</source>
         <target state="translated">««</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">291</context>
         </context-group>
       </trans-unit>
@@ -95,7 +95,7 @@
         <source>«</source>
         <target state="translated">«</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">318</context>
         </context-group>
       </trans-unit>
@@ -103,7 +103,7 @@
         <source>»</source>
         <target state="translated">»</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">347</context>
         </context-group>
       </trans-unit>
@@ -111,7 +111,7 @@
         <source>»»</source>
         <target state="translated">»»</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">377</context>
         </context-group>
       </trans-unit>
@@ -119,7 +119,7 @@
         <source>First</source>
         <target state="translated">第一页</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">401</context>
         </context-group>
       </trans-unit>
@@ -127,7 +127,7 @@
         <source>Previous</source>
         <target state="translated">上一页</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">425</context>
         </context-group>
       </trans-unit>
@@ -135,7 +135,7 @@
         <source>Next</source>
         <target state="translated">下一页</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">446</context>
         </context-group>
       </trans-unit>
@@ -143,17 +143,19 @@
         <source>Last</source>
         <target state="translated">最后一页</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">476</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="nd so on.    *"/> </source>
+        <source>
+          <x id="INTERPOLATION" equiv-text="nd so on.    *"/>
+        </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="nd so on.    *"/>
         </target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/progressbar/progressbar.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/progressbar/progressbar.ts</context>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
@@ -161,7 +163,7 @@
         <source>HH</source>
         <target state="translated">HH</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">249</context>
         </context-group>
       </trans-unit>
@@ -169,7 +171,7 @@
         <source>Hours</source>
         <target state="translated">小时</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">283</context>
         </context-group>
       </trans-unit>
@@ -177,7 +179,7 @@
         <source>MM</source>
         <target state="translated">MM</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">308</context>
         </context-group>
       </trans-unit>
@@ -185,7 +187,7 @@
         <source>Minutes</source>
         <target state="translated">分钟</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">339</context>
         </context-group>
       </trans-unit>
@@ -193,7 +195,7 @@
         <source>Increment hours</source>
         <target state="translated">增加小时数</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">369</context>
         </context-group>
       </trans-unit>
@@ -201,7 +203,7 @@
         <source>Decrement hours</source>
         <target state="translated">减少小时数</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">404</context>
         </context-group>
       </trans-unit>
@@ -209,7 +211,7 @@
         <source>Increment minutes</source>
         <target state="translated">增加分钟数</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">436</context>
         </context-group>
       </trans-unit>
@@ -217,7 +219,7 @@
         <source>Decrement minutes</source>
         <target state="translated">减少分钟数</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
@@ -225,7 +227,7 @@
         <source>SS</source>
         <target state="translated">SS</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
@@ -233,7 +235,7 @@
         <source>Seconds</source>
         <target state="translated">秒</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
@@ -241,7 +243,7 @@
         <source>Increment seconds</source>
         <target state="translated">增加秒数</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
@@ -249,17 +251,19 @@
         <source>Decrement seconds</source>
         <target state="translated">减少秒数</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
-        <source><x id="INTERPOLATION"/> </source>
+        <source>
+          <x id="INTERPOLATION"/>
+        </source>
         <target state="translated">
           <x id="INTERPOLATION"/>
         </target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
@@ -267,7 +271,7 @@
         <source>Close</source>
         <target state="translated">关闭</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/toast/toast.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/toast/toast.ts</context>
           <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
@@ -2914,7 +2918,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
-        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
+        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>.
+The link will expire within 1 hour.</source>
         <target state="translated">一封带有重置密码说明的电子邮件将被发送到 <x id="PH" equiv-text="this.forgotPasswordEmail"/>。该链接将在 1 小时内到期。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
@@ -4112,7 +4117,7 @@
         <target>发现更多</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">568</context>
+          <context context-type="linenumber">593</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.html</context>
@@ -4126,19 +4131,13 @@
       <trans-unit id="6699890091238112345" datatype="html" xml:space="preserve">
         <source>Browse all videos</source>
         <target state="translated">浏览所有视频</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">569</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context><context context-type="linenumber">594</context></context-group></trans-unit>
       <trans-unit id="5174743927852553765" datatype="html" xml:space="preserve">
         <source>Browse local videos</source>
         <target state="translated">浏览本地视频</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">570</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context><context context-type="linenumber">595</context></context-group></trans-unit>
       <trans-unit id="5491172370003945798" datatype="html" xml:space="preserve">
         <source>Browse videos</source>
         <target state="translated">浏览视频</target>
@@ -11204,15 +11203,9 @@
       <trans-unit id="4924378635140045267" datatype="html" xml:space="preserve">
         <source>⚠️ This functionality requires a lot of attention and extra moderation</source>
         <target state="translated">⚠️ 此功能需要大量注意力和额外管理</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">179</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">636</context>
-        </context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">179</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">647</context></context-group></trans-unit>
       <trans-unit id="4555457172864212828">
         <source>Users</source>
         <target>用户</target>
@@ -11358,7 +11351,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">864</context>
+          <context context-type="linenumber">875</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
@@ -11601,12 +11594,20 @@
           <context context-type="linenumber">519</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="6375285763528205588" datatype="html">
+        <source>Default download policy</source>
+        <target state="new">Default download policy</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
+          <context context-type="linenumber">530,532</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="424703522835656806" datatype="html">
         <source>VIDEO CHANNELS</source>
         <target state="translated">视频频道</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">534</context>
+          <context context-type="linenumber">545</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7026684190224451991" datatype="html">
@@ -11614,7 +11615,7 @@
         <target state="translated">每用户的最多视频频道</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">539</context>
+          <context context-type="linenumber">550</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3840267063842708224" datatype="html">
@@ -11622,7 +11623,7 @@
         <target state="translated">{VAR_PLURAL, plural, =1 {个频道} other {个频道}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">550</context>
+          <context context-type="linenumber">561</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3428986951244800347" datatype="html">
@@ -11638,7 +11639,7 @@
         <target state="translated">搜索</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">732</context>
+          <context context-type="linenumber">743</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3442084803796199253" datatype="html">
@@ -11646,135 +11647,104 @@
         <target state="translated">允许用户进行远程 URI/用户名/频道名搜索</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">743</context>
+          <context context-type="linenumber">754</context>
         </context-group>
       </trans-unit>
       <trans-unit id="481446928803565156" datatype="html" xml:space="preserve">
         <source>Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors that may not be federated with your platform</source>
         <target state="translated">允许 <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>用户<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>查找可能没有和你的平台联邦的远程视频/演员</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">746</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">757</context></context-group></trans-unit>
       <trans-unit id="7295422540935146771" datatype="html">
         <source>Allow anonymous to do remote URI/handle search</source>
         <target state="translated">允许匿名执行远程 URI/用户名/频道名搜索</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">756</context>
+          <context context-type="linenumber">767</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7372107248244982956" datatype="html" xml:space="preserve">
         <source>Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>anonymous users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors that may not be federated with your platform</source>
         <target state="translated">允许 <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>匿名用户<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 查找可能没有和你的平台联邦的远程视频/演员</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">759</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">770</context></context-group></trans-unit>
       <trans-unit id="2331464426553277323" datatype="html">
         <source>Search index URL</source>
         <target state="translated">搜索索引 URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">774</context>
+          <context context-type="linenumber">785</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2653219516680751118" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>your own search index<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> or choose the official one, <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://sepiasearch.org&quot;&gt;"/>https://sepiasearch.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, that is not moderated. </source>
         <target state="translated">使用 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>你自己的搜索索引<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> 或选择不受管的官方索引 <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://sepiasearch.org&quot;&gt;"/>https://sepiasearch.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>。 </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">777</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">788</context></context-group></trans-unit>
       <trans-unit id="8524278911521465398" datatype="html">
         <source>Disable local search in search bar</source>
         <target state="translated">在搜索栏中禁用本地搜索</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">799</context>
+          <context context-type="linenumber">810</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6117138245696620472" datatype="html" xml:space="preserve">
         <source>USER IMPORT/EXPORT</source>
         <target state="translated">用户导入/导出</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">826</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">837</context></context-group></trans-unit>
       <trans-unit id="6056998652615283808" datatype="html" xml:space="preserve">
         <source>Allow your users to import a data archive</source>
         <target state="translated">允许您的用户导入数据档案</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">833</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">844</context></context-group></trans-unit>
       <trans-unit id="4091781230315618850" datatype="html" xml:space="preserve">
         <source>Video quota is checked on import so the user doesn't upload a too big archive file</source>
         <target state="translated">导入时会检查视频配额，以便用户不会上传太大的存档文件</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">835</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">846</context></context-group></trans-unit>
       <trans-unit id="3112747752460656486" datatype="html" xml:space="preserve">
         <source>Video quota (daily quota is not taken into account) is also checked for each video when PeerTube is processing the import</source>
         <target state="translated">PeerTube 在处理导入时也会检查每个视频的视频配额（不考虑每日配额）</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">836</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">847</context></context-group></trans-unit>
       <trans-unit id="4793397386811591255" datatype="html" xml:space="preserve">
         <source>Allow your users to export their data</source>
         <target state="translated">允许您的用户导出其数据</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">846</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">857</context></context-group></trans-unit>
       <trans-unit id="74636758368624456" datatype="html" xml:space="preserve">
         <source>Users can export their PeerTube data in a .zip for backup or re-import. Only one export at a time is allowed per user</source>
         <target state="translated">用户可以将 PeerTube 数据导出为 .zip 文件进行备份或重新导入。每个用户每次只能导出一次</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">848</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">859</context></context-group></trans-unit>
       <trans-unit id="7396688046674522189" datatype="html" xml:space="preserve">
         <source>Max user video quota allowed to generate the export</source>
         <target state="translated">允许生成导出的最大用户视频配额</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">853</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">864</context></context-group></trans-unit>
       <trans-unit id="1967420418158999705" datatype="html" xml:space="preserve">
         <source>If the user decides to include the video files in the archive</source>
         <target state="translated">如果用户决定将视频文件包含在档案中</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">855</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">866</context></context-group></trans-unit>
       <trans-unit id="8092614302698579026" datatype="html" xml:space="preserve">
         <source>User export expiration</source>
         <target state="translated">用户导出到期</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">874</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">885</context></context-group></trans-unit>
       <trans-unit id="8981181756195068779" datatype="html" xml:space="preserve">
         <source>The archive file is deleted after this period</source>
         <target state="translated">压缩文件过了这段时间被删除了</target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">893</context></context-group></trans-unit>
+      <trans-unit id="5344594655022049812" datatype="html">
+        <source>Allowed</source>
+        <target state="new">Allowed</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">882</context>
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
+          <context context-type="linenumber">264</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4444955208013675027" datatype="html">
@@ -11782,23 +11752,20 @@
         <target state="translated">搜索栏默认使用全局搜索索引</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">809</context>
+          <context context-type="linenumber">820</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4557533619513324614" datatype="html" xml:space="preserve">
         <source>Otherwise, the local search will be used by default</source>
         <target state="translated">否则，将默认使用本地搜索</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">812</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">823</context></context-group></trans-unit>
       <trans-unit id="6476750382562952780" datatype="html">
         <source>Enable global search</source>
         <target state="translated">启用全局搜索</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">767</context>
+          <context context-type="linenumber">778</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
@@ -11808,105 +11775,72 @@
       <trans-unit id="4519166881363617842" datatype="html" xml:space="preserve">
         <source>⚠️ This functionality depends heavily on the moderation of platforms followed by the search index you select</source>
         <target state="translated">⚠️ 此功能严重依赖你选择的搜索索引所遵照的平台管理</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">769</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">780</context></context-group></trans-unit>
       <trans-unit id="836183323506117145" datatype="html">
         <source>FEDERATION</source>
         <target state="translated">联邦</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">562</context>
+          <context context-type="linenumber">573</context>
         </context-group>
       </trans-unit>
       <trans-unit id="75928143875482960" datatype="html" xml:space="preserve">
         <source>Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; routerLink=&quot;/admin/settings/follows&quot;&gt;"/>relations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> with other platforms. </source>
         <target state="translated">管理和其他平台的 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; routerLink=&quot;/admin/settings/follows&quot;&gt;"/>关系<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">564</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">575</context></context-group></trans-unit>
       <trans-unit id="2072884891614263775" datatype="html" xml:space="preserve">
         <source>Accept comments made on remote platforms</source>
         <target state="translated">接受远程平台上的评论</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">575</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">586</context></context-group></trans-unit>
       <trans-unit id="5963121551419269989" datatype="html" xml:space="preserve">
         <source>This setting is not retroactive: current comments from remote platforms will not be deleted</source>
         <target state="translated">此设置是非回溯性的：不会删除来自远程平台的当前评论</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">578</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">589</context></context-group></trans-unit>
       <trans-unit id="735929773748569631" datatype="html" xml:space="preserve">
         <source>Remote actors can follow channels of your platform</source>
         <target state="translated">远程平台的演员可以关注你平台的频道</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">591</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">602</context></context-group></trans-unit>
       <trans-unit id="7331615583751184681" datatype="html" xml:space="preserve">
         <source>This setting is not retroactive: current followers of channels of your platform will not be affected</source>
         <target state="translated">此设置不是回溯性的：你平台频道的当前关注者不会受影响</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">594</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">605</context></context-group></trans-unit>
       <trans-unit id="4707019046470605528" datatype="html" xml:space="preserve">
         <source>Remote actors can follow your platform</source>
         <target state="translated">远程平台的演员可以关注你的平台</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">606</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">617</context></context-group></trans-unit>
       <trans-unit id="5240371005291842688" datatype="html" xml:space="preserve">
         <source>This setting is not retroactive: current followers of your platform will not be affected</source>
         <target state="translated">此设置不是回溯性的：你平台当前关注者不会受影响</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">609</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">620</context></context-group></trans-unit>
       <trans-unit id="4899539058271084907" datatype="html" xml:space="preserve">
         <source>Manually approve new followers that follow your platform</source>
         <target state="translated">手动批准关注你平台的新关注者</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">619</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">630</context></context-group></trans-unit>
       <trans-unit id="6240145294614933263" datatype="html" xml:space="preserve">
         <source>Automatically follow back followers that follow your platform</source>
         <target state="translated">自动回关关注你平台的关注者</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">633</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">644</context></context-group></trans-unit>
       <trans-unit id="2362368426377094869" datatype="html" xml:space="preserve">
         <source>Automatically follow platforms of a public index</source>
         <target state="translated">自动关注公共索引平台</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">648</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">659</context></context-group></trans-unit>
       <trans-unit id="2092224316392295720" datatype="html">
         <source>⚠️ This functionality requires a lot of attention and extra moderation.</source>
         <target state="translated">⚠️此功能需要大量关注并进行额外的审查。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">651</context>
+          <context context-type="linenumber">662</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1206277798664538171" datatype="html" xml:space="preserve">
@@ -11922,47 +11856,35 @@
         <target state="translated">索引 URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">665</context>
+          <context context-type="linenumber">676</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2709958363414972972" datatype="html" xml:space="preserve">
         <source>PLAYER</source>
         <target state="translated">播放器</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">690</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">701</context></context-group></trans-unit>
       <trans-unit id="286395473992592179" datatype="html" xml:space="preserve">
         <source>Automatically play videos in the player</source>
         <target state="translated">自动在播放器中播放视频</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">702</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">713</context></context-group></trans-unit>
       <trans-unit id="3184039004441581991" datatype="html" xml:space="preserve">
         <source>Enable P2P streaming by default on your platform</source>
         <target state="translated">在平台上默认启用 P2P 串流</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">713</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">724</context></context-group></trans-unit>
       <trans-unit id="6069715963308979270" datatype="html" xml:space="preserve">
         <source>Enable P2P streaming by default for videos embedded on external websites</source>
         <target state="translated">对嵌入在外部网站的视频默认启用 P2P 串流</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">722</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context><context context-type="linenumber">733</context></context-group></trans-unit>
       <trans-unit id="9076632742417302918" datatype="html">
         <source>See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferer&quot; target=&quot;_blank&quot;&gt;"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information about the expected URL </source>
         <target state="translated">查看 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferer&quot; target=&quot;_blank&quot;&gt;"/>文档<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> 以获取期望 URL 的相关信息 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">654</context>
+          <context context-type="linenumber">665</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3946988229617310200" datatype="html">
@@ -12048,39 +11970,24 @@
       <trans-unit id="4776429682428363094" datatype="html" xml:space="preserve">
         <source>1 day</source>
         <target state="translated">1 天</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">280</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-main/date/days-duration-formatter.pipe.ts</context>
-          <context context-type="linenumber">12</context>
-        </context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context><context context-type="linenumber">289</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/date/days-duration-formatter.pipe.ts</context><context context-type="linenumber">12</context></context-group></trans-unit>
       <trans-unit id="5730801210509951539" datatype="html" xml:space="preserve">
         <source>2 days</source>
         <target state="translated">2 天</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">281</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context><context context-type="linenumber">290</context></context-group></trans-unit>
       <trans-unit id="8542568275115626925" datatype="html" xml:space="preserve">
         <source>7 days</source>
         <target state="translated">7 天</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">282</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context><context context-type="linenumber">291</context></context-group></trans-unit>
       <trans-unit id="7152095234138763013" datatype="html" xml:space="preserve">
         <source>30 days</source>
         <target state="translated">30 天</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">283</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context><context context-type="linenumber">292</context></context-group></trans-unit>
       <trans-unit id="493135676263039396" datatype="html">
         <source>LIVE</source>
         <target state="translated">直播</target>
@@ -16583,17 +16490,14 @@
         <target state="translated">你已经启用注册：我们自动启用了下面“视频”部分的“自动屏蔽新视频”复选框。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">604</context>
+          <context context-type="linenumber">629</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5566531034799611502" datatype="html" xml:space="preserve">
         <source>General configuration updated.</source>
         <target state="translated">更新了常规配置。</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">626</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context><context context-type="linenumber">660</context></context-group></trans-unit>
       <trans-unit id="6266228793864841619" datatype="html" xml:space="preserve">
         <source>Live configuration updated.</source>
         <target state="translated">更新了直播配置。</target>
@@ -20978,7 +20882,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
-        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
+        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>.
+Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
         <target state="translated">无法检索 OAuth 客户端证书：<x id="PH" equiv-text="err.text"/>。确保你你已正确配置 PeerTube（config/ directory），特别是“webserver”部分。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
@@ -21018,7 +20923,7 @@
         <target state="translated">主页</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">564</context>
+          <context context-type="linenumber">589</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/home-menu.component.ts</context>
@@ -23586,31 +23491,13 @@
       <trans-unit id="5769292297914455214" datatype="html" xml:space="preserve">
         <source>Disabled</source>
         <target state="translated">已禁用</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
-          <context context-type="linenumber">74</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
-          <context context-type="linenumber">54</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
-          <context context-type="linenumber">67</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
-          <context context-type="linenumber">88</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/private-instance-config.component.ts</context>
-          <context context-type="linenumber">52</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
-          <context context-type="linenumber">76</context>
-        </context-group>
-      </trans-unit>
+        
+        
+        
+        
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context><context context-type="linenumber">265</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context><context context-type="linenumber">74</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context><context context-type="linenumber">54</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context><context context-type="linenumber">67</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context><context context-type="linenumber">88</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/private-instance-config.component.ts</context><context context-type="linenumber">52</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">76</context></context-group></trans-unit>
       <trans-unit id="7401094473118142911" datatype="html" xml:space="preserve">
         <source>Your community cannot import or synchronize content from remote platforms</source>
         <target state="translated">社区不能导入或同步来自远程平台的内容</target>
@@ -26443,7 +26330,9 @@
         </context-group>
       </trans-unit>
       <trans-unit id="187187500641108332" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/> </source>
+        <source>
+          <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
+        </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
         </target>
