@@ -1,6 +1,6 @@
 # Changelog
 
-## v8.1.0-rc.1
+## v8.1.0
 
 ### IMPORTANT NOTES
 
