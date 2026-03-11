@@ -1,5 +1,17 @@
 # Changelog
 
+## v8.1.1
+
+### IMPORTANT NOTES
+
+ * Follow v8.1.0 IMPORTANT NOTES if you upgrade from PeerTube <= v8.0.2
+
+### Bug fixes
+
+ * Fix bad URL for objects stored in object storage
+ * Fix broken actor avatar in "Discover" page
+
+
 ## v8.1.0
 
 ### IMPORTANT NOTES
