@@ -6,8 +6,12 @@ packages:
   - client/packages/*
   - client/src/standalone/player
 
+ignoredBuiltDependencies:
+  - sharp
+
 onlyBuiltDependencies:
   - '@parcel/watcher'
+  - '@swc/core'
   - bcrypt
   - bufferutil
   - core-js
@@ -18,11 +22,9 @@ onlyBuiltDependencies:
   - lmdb
   - msgpackr-extract
   - node-datachannel
+  - protobufjs
   - utf-8-validate
   - utp-native
-
-ignoredBuiltDependencies:
-  - sharp
 
 patchedDependencies:
   '@types/markdown-it': pnpm-patches/@types__markdown-it.patch
