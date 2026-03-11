@@ -38,7 +38,7 @@ const videoStudioAddEditionValidator = [
     const body: VideoStudioCreateEdition = req.body
     const files = req.files as Express.Multer.File[]
 
-    const video = res.locals.videoAll
+    const video = res.locals.videoFull
     const videoIsAudio = video.hasAudio() && !video.hasVideo()
 
     for (let i = 0; i < body.tasks.length; i++) {
@@ -88,7 +88,7 @@ const videoStudioAddEditionValidator = [
 
     // Try to make an approximation of bytes added by the intro/outro
     const additionalBytes = await approximateIntroOutroAdditionalSize(video, body.tasks, i => getTaskFileFromReq(files, i).path)
-    const channelUser = { id: res.locals.videoAll.VideoChannel.Account.userId }
+    const channelUser = { id: res.locals.videoFull.VideoChannel.Account.userId }
     if (await checkUserQuota({ channelUser, videoFileSize: additionalBytes, req, res }) === false) return cleanUpReqFiles(req)
 
     return next()

@@ -22,7 +22,8 @@ import { VideoBlacklistModel } from '../../../models/video/video-blacklist.js'
 
 const blacklistRouter = express.Router()
 
-blacklistRouter.post('/:videoId/blacklist',
+blacklistRouter.post(
+  '/:videoId/blacklist',
   openapiOperationDoc({ operationId: 'addVideoBlock' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_VIDEO_BLACKLIST),
@@ -30,7 +31,8 @@ blacklistRouter.post('/:videoId/blacklist',
   asyncMiddleware(addVideoToBlacklistController)
 )
 
-blacklistRouter.get('/blacklist',
+blacklistRouter.get(
+  '/blacklist',
   openapiOperationDoc({ operationId: 'getVideoBlocks' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_VIDEO_BLACKLIST),
@@ -42,14 +44,16 @@ blacklistRouter.get('/blacklist',
   asyncMiddleware(listBlacklist)
 )
 
-blacklistRouter.put('/:videoId/blacklist',
+blacklistRouter.put(
+  '/:videoId/blacklist',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_VIDEO_BLACKLIST),
   asyncMiddleware(videosBlacklistUpdateValidator),
   asyncMiddleware(updateVideoBlacklistController)
 )
 
-blacklistRouter.delete('/:videoId/blacklist',
+blacklistRouter.delete(
+  '/:videoId/blacklist',
   openapiOperationDoc({ operationId: 'delVideoBlock' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_VIDEO_BLACKLIST),
@@ -66,7 +70,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function addVideoToBlacklistController (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.videoAll
+  const videoInstance = res.locals.videoWithRights
   const body: VideoBlacklistCreate = req.body
 
   await blacklistVideo(videoInstance, body)
@@ -102,7 +106,7 @@ async function listBlacklist (req: express.Request, res: express.Response) {
 
 async function removeVideoFromBlacklistController (req: express.Request, res: express.Response) {
   const videoBlacklist = res.locals.videoBlacklist
-  const video = res.locals.videoAll
+  const video = res.locals.videoWithRights
 
   await unblacklistVideo(videoBlacklist, video)
 

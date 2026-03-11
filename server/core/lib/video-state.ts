@@ -4,7 +4,7 @@ import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MVideo, MVideoFullLight, MVideoUUID } from '@server/types/models/index.js'
+import { MVideo, MVideoFull, MVideoUUID } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 import { federateVideoIfNeeded } from './activitypub/videos/index.js'
 import { JobQueue } from './job-queue/index.js'
@@ -82,7 +82,7 @@ export function moveToNextState (options: {
 // ---------------------------------------------------------------------------
 
 export async function moveToExternalStorageState (options: {
-  video: MVideoFullLight
+  video: MVideoFull
   isNewVideo: boolean
   transaction: Transaction
 }) {
@@ -114,7 +114,7 @@ export async function moveToExternalStorageState (options: {
 }
 
 export async function moveToFileSystemState (options: {
-  video: MVideoFullLight
+  video: MVideoFull
   isNewVideo: boolean
   transaction: Transaction
 }) {
@@ -173,7 +173,7 @@ export function moveToFailedMoveToFileSystemState (video: MVideo) {
 // ---------------------------------------------------------------------------
 
 async function moveToPublishedState (options: {
-  video: MVideoFullLight
+  video: MVideoFull
   isNewVideo: boolean
   transaction: Transaction
   previousVideoState?: VideoStateType

@@ -32,7 +32,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function viewVideo (req: express.Request, res: express.Response) {
-  const video = res.locals.onlyImmutableVideo
+  const video = res.locals.videoImmutable
 
   const body = req.body as VideoView
   const ip = req.ip

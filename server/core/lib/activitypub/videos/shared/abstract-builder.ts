@@ -21,8 +21,8 @@ import {
   MVideo,
   MVideoCaption,
   MVideoFile,
-  MVideoFullLight,
-  MVideoThumbnail
+  MVideoFull,
+  MVideoThumbnails
 } from '@server/types/models/index.js'
 import { CreationAttributes, Transaction } from 'sequelize'
 import { fetchAP } from '../../activity.js'
@@ -56,7 +56,7 @@ export abstract class APVideoAbstractBuilder {
     return getOrCreateAPActor(channel.id, 'all')
   }
 
-  protected async setThumbnails (video: MVideoThumbnail, t?: Transaction) {
+  protected async setThumbnails (video: MVideoThumbnails, t?: Transaction) {
     const icons = this.videoObject.icon
     if (icons.length === 0) {
       logger.warn('Cannot find thumbnails in video object', { object: this.videoObject, ...this.lTags() })
@@ -74,17 +74,17 @@ export abstract class APVideoAbstractBuilder {
     await video.replaceAndSaveThumbnails(thumbnails, t)
   }
 
-  protected async setTags (video: MVideoFullLight, t: Transaction) {
+  protected async setTags (video: MVideoFull, t: Transaction) {
     const tags = getTagsFromObject(this.videoObject)
     await setVideoTags({ video, tags, transaction: t })
   }
 
-  protected async setTrackers (video: MVideoFullLight, t: Transaction) {
+  protected async setTrackers (video: MVideoFull, t: Transaction) {
     const trackers = getTrackerUrls(this.videoObject, video)
     await setVideoTrackers({ video, trackers, transaction: t })
   }
 
-  protected async insertOrReplaceCaptions (video: MVideoFullLight, t: Transaction) {
+  protected async insertOrReplaceCaptions (video: MVideoFull, t: Transaction) {
     const existingCaptions = await VideoCaptionModel.listVideoCaptions(video.id, t)
 
     let captionsToCreate = getCaptionAttributesFromObject(video, this.videoObject)
@@ -109,7 +109,7 @@ export abstract class APVideoAbstractBuilder {
     }
   }
 
-  protected async insertOrReplaceStoryboard (video: MVideoFullLight, t: Transaction) {
+  protected async insertOrReplaceStoryboard (video: MVideoFull, t: Transaction) {
     const existingStoryboard = await StoryboardModel.loadByVideo(video.id, t)
     if (existingStoryboard) await existingStoryboard.destroy({ transaction: t })
 
@@ -119,7 +119,7 @@ export abstract class APVideoAbstractBuilder {
     return StoryboardModel.create(storyboardAttributes, { transaction: t })
   }
 
-  protected async insertOrReplaceLive (video: MVideoFullLight, transaction: Transaction) {
+  protected async insertOrReplaceLive (video: MVideoFull, transaction: Transaction) {
     const attributes = getLiveAttributesFromObject(video, this.videoObject)
     const [ videoLive ] = await VideoLiveModel.upsert(attributes, { transaction, returning: true })
 
@@ -133,7 +133,7 @@ export abstract class APVideoAbstractBuilder {
     }
   }
 
-  protected async setWebVideoFiles (video: MVideoFullLight, t: Transaction) {
+  protected async setWebVideoFiles (video: MVideoFull, t: Transaction) {
     const videoFileAttributes = getFileAttributesFromUrl(video, this.videoObject.url)
     const newVideoFiles = videoFileAttributes.map(a => new VideoFileModel(a))
 
@@ -145,7 +145,7 @@ export abstract class APVideoAbstractBuilder {
     video.VideoFiles = await Promise.all(upsertTasks)
   }
 
-  protected async updateChapters (video: MVideoFullLight) {
+  protected async updateChapters (video: MVideoFull) {
     if (!this.videoObject.hasParts || typeof this.videoObject.hasParts !== 'string') return
 
     const { body } = await fetchAP<VideoChaptersObject>(this.videoObject.hasParts)
@@ -165,7 +165,7 @@ export abstract class APVideoAbstractBuilder {
     })
   }
 
-  protected async upsertPlayerSettings (video: MVideoFullLight) {
+  protected async upsertPlayerSettings (video: MVideoFull) {
     if (typeof this.videoObject.playerSettings !== 'string') return
 
     await upsertAPPlayerSettings({
@@ -176,7 +176,7 @@ export abstract class APVideoAbstractBuilder {
     })
   }
 
-  protected async setStreamingPlaylists (video: MVideoFullLight, t: Transaction) {
+  protected async setStreamingPlaylists (video: MVideoFull, t: Transaction) {
     const streamingPlaylistAttributes = getStreamingPlaylistAttributesFromObject(video, this.videoObject)
     const newStreamingPlaylists = streamingPlaylistAttributes.map(a => new VideoStreamingPlaylistModel(a))
 

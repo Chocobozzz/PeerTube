@@ -20,7 +20,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function doNotifyNewVideo (payload: NotifyPayload & { action: 'new-video' }) {
-  const refreshedVideo = await VideoModel.loadFull(payload.videoUUID)
+  const refreshedVideo = await VideoModel.loadWithRights(payload.videoUUID)
   if (!refreshedVideo) return
 
   Notifier.Instance.notifyOnNewVideoOrLiveIfNeeded(refreshedVideo)

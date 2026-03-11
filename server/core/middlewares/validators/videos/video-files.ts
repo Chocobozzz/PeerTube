@@ -12,7 +12,7 @@ export const videoFilesDeleteWebVideoValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.id, res)) return
 
-    const video = res.locals.videoAll
+    const video = res.locals.videoFull
 
     if (!checkLocalVideo(video, res)) return
 
@@ -44,7 +44,7 @@ export const videoFilesDeleteWebVideoFileValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.id, res)) return
 
-    const video = res.locals.videoAll
+    const video = res.locals.videoFull
 
     if (!checkLocalVideo(video, res)) return
 
@@ -76,7 +76,7 @@ export const videoFilesDeleteHLSValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.id, res)) return
 
-    const video = res.locals.videoAll
+    const video = res.locals.videoFull
 
     if (!checkLocalVideo(video, res)) return
 
@@ -108,7 +108,7 @@ export const videoFilesDeleteHLSFileValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.id, res)) return
 
-    const video = res.locals.videoAll
+    const video = res.locals.videoFull
 
     if (!checkLocalVideo(video, res)) return
 

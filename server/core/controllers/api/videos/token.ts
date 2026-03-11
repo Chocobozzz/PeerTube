@@ -1,13 +1,14 @@
 import express from 'express'
 import { VideoTokensManager } from '@server/lib/video-tokens-manager.js'
 import { VideoPrivacy, VideoToken } from '@peertube/peertube-models'
-import { asyncMiddleware, optionalAuthenticate, videoFileTokenValidator, videosCustomGetValidator } from '../../../middlewares/index.js'
+import { asyncMiddleware, optionalAuthenticate, videoFileTokenValidator, videoGetValidatorFactory } from '../../../middlewares/index.js'
 
 const tokenRouter = express.Router()
 
-tokenRouter.post('/:id/token',
+tokenRouter.post(
+  '/:id/token',
   optionalAuthenticate,
-  asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
+  asyncMiddleware(videoGetValidatorFactory('with-blacklist')),
   videoFileTokenValidator,
   generateToken
 )
@@ -21,7 +22,7 @@ export {
 // ---------------------------------------------------------------------------
 
 function generateToken (req: express.Request, res: express.Response) {
-  const video = res.locals.onlyVideo
+  const video = res.locals.videoWithBlacklist
 
   const files = video.privacy === VideoPrivacy.PASSWORD_PROTECTED
     ? VideoTokensManager.Instance.createForPasswordProtectedVideo({ videoUUID: video.uuid })

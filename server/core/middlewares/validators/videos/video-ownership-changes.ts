@@ -21,13 +21,13 @@ export const videosChangeOwnershipValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.videoId, res)) return
+    if (!await doesVideoExist(req.params.videoId, res, 'with-rights')) return
 
     // Check if the user who did the request is able to change the ownership of the video
     if (
       !await checkCanManageVideo({
         user: res.locals.oauth.token.User,
-        video: res.locals.videoAll,
+        video: res.locals.videoWithRights,
         right: UserRight.CHANGE_VIDEO_OWNERSHIP,
         checkIsOwner: false,
         checkIsLocal: true,

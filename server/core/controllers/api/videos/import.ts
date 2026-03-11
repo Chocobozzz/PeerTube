@@ -11,7 +11,7 @@ import { YoutubeDlImportError, YoutubeDlImportErrorCode } from '@server/helpers/
 import { createLocalVideoThumbnailsFromImage } from '@server/lib/thumbnail.js'
 import { buildRetryImportJob } from '@server/lib/video-post-import.js'
 import { buildVideoFromImport, buildYoutubeDLImport, insertFromImportIntoDB } from '@server/lib/video-pre-import.js'
-import { MVideoThumbnail } from '@server/types/models/index.js'
+import { MVideoThumbnails } from '@server/types/models/index.js'
 import express from 'express'
 import { move } from 'fs-extra/esm'
 import { readFile } from 'fs/promises'
@@ -223,7 +223,7 @@ async function handleYoutubeDlImport (req: express.Request, res: express.Respons
   }
 }
 
-function processThumbnails (req: express.Request, video: MVideoThumbnail) {
+function processThumbnails (req: express.Request, video: MVideoThumbnails) {
   const file = getVideoThumbnailFile(req.files)
   if (!file) return []
 

@@ -22,7 +22,7 @@ import { checkCanManageVideo } from '@server/middlewares/validators/shared/video
 import {
   videoLiveAddValidator,
   videoLiveFindReplaySessionValidator,
-  videoLiveGetValidator,
+  videoLiveGetValidatorFactory,
   videoLiveListSessionsValidator,
   videoLiveUpdateValidator
 } from '@server/middlewares/validators/videos/video-live.js'
@@ -62,7 +62,7 @@ liveRouter.get(
   authenticate,
   liveSessionsSortValidator,
   setLiveSessionsSort,
-  asyncMiddleware(videoLiveGetValidator),
+  asyncMiddleware(videoLiveGetValidatorFactory('with-rights')),
   asyncMiddleware(videoLiveListSessionsValidator),
   asyncMiddleware(listLiveVideoSessions)
 )
@@ -70,14 +70,14 @@ liveRouter.get(
 liveRouter.get(
   '/live/:videoId',
   optionalAuthenticate,
-  asyncMiddleware(videoLiveGetValidator),
+  asyncMiddleware(videoLiveGetValidatorFactory('with-rights')),
   asyncMiddleware(getLiveVideo)
 )
 
 liveRouter.put(
   '/live/:videoId',
   authenticate,
-  asyncMiddleware(videoLiveGetValidator),
+  asyncMiddleware(videoLiveGetValidatorFactory('full')),
   asyncMiddleware(videoLiveUpdateValidator),
   asyncRetryTransactionMiddleware(updateLiveVideo)
 )
@@ -99,7 +99,17 @@ export {
 async function getLiveVideo (req: express.Request, res: express.Response) {
   const videoLive = res.locals.videoLive
 
-  return res.json(videoLive.toFormattedJSON(await canSeePrivateLiveInformation(req, res)))
+  const canSeePrivateLiveInformation = await checkCanManageVideo({
+    user: res.locals.oauth?.token.User,
+    video: res.locals.videoWithRights,
+    right: UserRight.GET_ANY_LIVE,
+    req,
+    res: null,
+    checkIsLocal: true,
+    checkIsOwner: false
+  })
+
+  return res.json(videoLive.toFormattedJSON(canSeePrivateLiveInformation))
 }
 
 function getLiveReplaySession (req: express.Request, res: express.Response) {
@@ -120,22 +130,10 @@ async function listLiveVideoSessions (req: express.Request, res: express.Respons
   return res.json(getFormattedObjects(data, data.length))
 }
 
-function canSeePrivateLiveInformation (req: express.Request, res: express.Response) {
-  return checkCanManageVideo({
-    user: res.locals.oauth?.token.User,
-    video: res.locals.videoAll,
-    right: UserRight.GET_ANY_LIVE,
-    req,
-    res: null,
-    checkIsLocal: true,
-    checkIsOwner: false
-  })
-}
-
 async function updateLiveVideo (req: express.Request, res: express.Response) {
   const body: LiveVideoUpdate = req.body
 
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
   const videoLive = res.locals.videoLive
 
   await retryTransactionWrapper(() => {

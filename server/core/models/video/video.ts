@@ -101,15 +101,16 @@ import {
   MVideoFileVideo,
   MVideoFormattable,
   MVideoFormattableDetails,
-  MVideoFullLight,
+  MVideoFull,
   MVideoId,
   MVideoImmutable,
   MVideoOwned,
   MVideoSeo,
-  MVideoThumbnail,
-  MVideoThumbnailBlacklist,
+  MVideoThumbnails,
   MVideoWithAllFiles,
+  MVideoWithBlacklist,
   MVideoWithFile,
+  MVideoWithRights,
   type MVideo,
   type MVideoAccountLight
 } from '../../types/models/index.js'
@@ -1341,28 +1342,28 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return VideoModel.count(options)
   }
 
-  static load (id: number | string, transaction?: Transaction): Promise<MVideoThumbnail> {
+  static load (id: number | string, transaction?: Transaction): Promise<MVideo> {
+    const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
+
+    return queryBuilder.queryVideo({ id, transaction, type: 'video' })
+  }
+
+  static loadWithThumbnails (id: number | string, transaction?: Transaction): Promise<MVideoThumbnails> {
     const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
 
     return queryBuilder.queryVideo({ id, transaction, type: 'thumbnails' })
   }
 
-  static loadWithBlacklist (id: number | string, transaction?: Transaction): Promise<MVideoThumbnailBlacklist> {
+  static loadWithBlacklist (id: number | string, transaction?: Transaction): Promise<MVideoWithBlacklist> {
     const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
 
-    return queryBuilder.queryVideo({ id, transaction, type: 'thumbnails-blacklist' })
+    return queryBuilder.queryVideo({ id, transaction, type: 'blacklist' })
   }
 
   static loadForSEO (id: number | string, transaction?: Transaction): Promise<MVideoSeo> {
     const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
 
     return queryBuilder.queryVideo({ id, transaction, type: 'seo' })
-  }
-
-  static loadAndPopulateAccountAndFiles (id: number | string, transaction?: Transaction): Promise<MVideoAccountLightBlacklistAllFiles> {
-    const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
-
-    return queryBuilder.queryVideo({ id, transaction, type: 'account-blacklist-files' })
   }
 
   static loadImmutableAttributes (id: number | string, t?: Transaction): Promise<MVideoImmutable> {
@@ -1415,16 +1416,16 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return queryBuilder.queryVideo({ id, transaction, type: 'all-files', logging })
   }
 
-  static loadByUrl (url: string, transaction?: Transaction): Promise<MVideoThumbnail> {
+  static loadByUrl (url: string, transaction?: Transaction): Promise<MVideoThumbnails> {
     const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
 
     return queryBuilder.queryVideo({ url, transaction, type: 'thumbnails' })
   }
 
-  static loadByUrlWithBlacklist (url: string, transaction?: Transaction): Promise<MVideoThumbnailBlacklist> {
+  static loadByUrlWithBlacklist (url: string, transaction?: Transaction): Promise<MVideoWithBlacklist> {
     const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
 
-    return queryBuilder.queryVideo({ url, transaction, type: 'thumbnails-blacklist' })
+    return queryBuilder.queryVideo({ url, transaction, type: 'blacklist' })
   }
 
   static loadByUrlAndPopulateAccount (url: string, transaction?: Transaction): Promise<MVideoAccountLight> {
@@ -1439,10 +1440,16 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return queryBuilder.queryVideo({ url, transaction, type: 'account-blacklist-files' })
   }
 
-  static loadFull (id: number | string, t?: Transaction, userId?: number): Promise<MVideoFullLight> {
+  static loadFull (id: number | string, t?: Transaction, userId?: number): Promise<MVideoFull> {
     const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
 
     return queryBuilder.queryVideo({ id, transaction: t, type: 'full', userId })
+  }
+
+  static loadWithRights (id: number | string, t?: Transaction, userId?: number): Promise<MVideoWithRights> {
+    const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
+
+    return queryBuilder.queryVideo({ id, transaction: t, type: 'account-blacklist', userId })
   }
 
   static loadForGetAPI (parameters: {
@@ -1926,14 +1933,14 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
   // ---------------------------------------------------------------------------
 
-  getBestThumbnail (this: Pick<MVideoThumbnail, 'Thumbnails' | 'filterThumbnails'>, ratio: ThumbnailAspectRatio, maxWidth?: number) {
+  getBestThumbnail (this: Pick<MVideoThumbnails, 'Thumbnails' | 'filterThumbnails'>, ratio: ThumbnailAspectRatio, maxWidth?: number) {
     if (!this.Thumbnails || this.Thumbnails.length === 0) return undefined
 
     return maxBy(this.filterThumbnails(ratio, maxWidth), 'width')
   }
 
   getBestThumbnailStaticPath (
-    this: Pick<MVideoThumbnail, 'Thumbnails' | 'filterThumbnails' | 'getBestThumbnail'>,
+    this: Pick<MVideoThumbnails, 'Thumbnails' | 'filterThumbnails' | 'getBestThumbnail'>,
     ratio: ThumbnailAspectRatio,
     maxWidth?: number
   ) {
@@ -1943,14 +1950,14 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return thumbnail.getFileStaticPath()
   }
 
-  getSmallestThumbnail (this: Pick<MVideoThumbnail, 'Thumbnails' | 'filterThumbnails'>, ratio: ThumbnailAspectRatio) {
+  getSmallestThumbnail (this: Pick<MVideoThumbnails, 'Thumbnails' | 'filterThumbnails'>, ratio: ThumbnailAspectRatio) {
     if (!this.Thumbnails || this.Thumbnails.length === 0) return undefined
 
     return minBy(this.filterThumbnails(ratio), 'width')
   }
 
   getSmallestThumbnailStaticPath (
-    this: Pick<MVideoThumbnail, 'Thumbnails' | 'filterThumbnails' | 'getSmallestThumbnail'>,
+    this: Pick<MVideoThumbnails, 'Thumbnails' | 'filterThumbnails' | 'getSmallestThumbnail'>,
     ratio: ThumbnailAspectRatio
   ) {
     const thumbnail = this.getSmallestThumbnail(ratio)
@@ -1959,7 +1966,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return thumbnail.getFileStaticPath()
   }
 
-  filterThumbnails (this: Pick<MVideoThumbnail, 'Thumbnails'>, ratio: ThumbnailAspectRatio, maxWidth?: number) {
+  filterThumbnails (this: Pick<MVideoThumbnails, 'Thumbnails'>, ratio: ThumbnailAspectRatio, maxWidth?: number) {
     if (!this.Thumbnails) return []
 
     return this.Thumbnails.filter(t => t.aspectRatio === ratio && (!maxWidth || t.width <= maxWidth))

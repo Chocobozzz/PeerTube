@@ -34,7 +34,7 @@ import {
   MVideoAccountDefault,
   MVideoImportFormattable,
   MVideoTag,
-  MVideoThumbnail,
+  MVideoThumbnails,
   MVideoWithBlacklistLight
 } from '@server/types/models/index.js'
 import express from 'express'
@@ -47,7 +47,7 @@ import { replaceChapters, replaceChaptersFromDescriptionIfNeeded } from './video
 // ---------------------------------------------------------------------------
 
 export async function insertFromImportIntoDB (parameters: {
-  video: MVideoThumbnail
+  video: MVideoThumbnails
   thumbnails: MThumbnail[]
   videoChannel: MChannelAccountDefault
   tags: string[]
@@ -62,7 +62,7 @@ export async function insertFromImportIntoDB (parameters: {
 
     const videoCreated = await video.save(
       sequelizeOptions
-    ) as (MVideoAccountDefault & MVideoWithBlacklistLight & MVideoTag & MVideoThumbnail)
+    ) as (MVideoAccountDefault & MVideoWithBlacklistLight & MVideoTag & MVideoThumbnails)
     videoCreated.VideoChannel = videoChannel
 
     if (thumbnails.length !== 0) {
@@ -112,7 +112,7 @@ export async function buildVideoFromImport ({ channelId, importData, importDataO
   importData: YoutubeDLInfo
   importDataOverride?: Partial<VideoImportCreate>
   importType: 'url' | 'torrent'
-}): Promise<MVideoThumbnail> {
+}): Promise<MVideoThumbnails> {
   let videoData = {
     name: importDataOverride?.name || importData.name || 'Unknown name',
     remote: false,
@@ -293,7 +293,7 @@ export async function buildYoutubeDLImport (options: {
 async function processThumbnails (options: {
   inputPath?: string
   downloadUrl?: string
-  video: MVideoThumbnail
+  video: MVideoThumbnails
 }): Promise<MThumbnail[]> {
   const { inputPath, downloadUrl, video } = options
 

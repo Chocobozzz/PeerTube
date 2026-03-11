@@ -9,7 +9,7 @@ import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { getVideoFileMimeType } from '@server/lib/video-file.js'
 import { buildPodcastGroupsCache, cacheRouteFactory, videoFeedsPodcastSetCacheKey } from '@server/middlewares/index.js'
-import { MVideo, MVideoCaptionVideo, MVideoFullLight } from '@server/types/models/index.js'
+import { MVideo, MVideoCaptionVideo, MVideoFull } from '@server/types/models/index.js'
 import express from 'express'
 import { extname } from 'path'
 import { MIMETYPES, ROUTE_CACHE_LIFETIME, VIDEO_CATEGORIES, WEBSERVER } from '../../initializers/constants.js'
@@ -273,7 +273,7 @@ function buildVODWebVideoFile (video: MVideo, videoFile: VideoFile) {
   }
 }
 
-function buildVODStreamingPlaylistsIfMissingWebVideoFile (video: MVideoFullLight) {
+function buildVODStreamingPlaylistsIfMissingWebVideoFile (video: MVideoFull) {
   const hls = video.getHLSPlaylist()
   if (!hls) return []
 
@@ -321,7 +321,7 @@ function buildVODStreamingPlaylistsIfMissingWebVideoFile (video: MVideoFullLight
   ]
 }
 
-function buildLiveStreamingPlaylists (video: MVideoFullLight) {
+function buildLiveStreamingPlaylists (video: MVideoFull) {
   const hls = video.getHLSPlaylist()
 
   return [

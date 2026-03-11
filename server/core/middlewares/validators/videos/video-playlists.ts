@@ -262,7 +262,7 @@ export const videoPlaylistsAddVideoValidator = [
     if (areValidationErrors(req, res)) return
 
     if (!await doesVideoPlaylistExist({ id: req.params.playlistId, req, res, fetchType: 'all' })) return
-    if (!await doesVideoExist(req.body.videoId, res, 'only-video-and-blacklist')) return
+    if (!await doesVideoExist(req.body.videoId, res, 'with-thumbnails')) return
 
     const videoPlaylist = getPlaylist(res)
 

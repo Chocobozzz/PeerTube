@@ -14,7 +14,7 @@ import { buildNextVideoState } from '@server/lib/video-state.js'
 import { openapiOperationDoc } from '@server/middlewares/doc.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MStreamingPlaylistFiles, MVideo, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
+import { MStreamingPlaylistFiles, MVideo, MVideoFile, MVideoFull } from '@server/types/models/index.js'
 import express from 'express'
 import { move } from 'fs-extra/esm'
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
@@ -65,7 +65,7 @@ export {
 
 async function deleteVideoLatestSourceFile (req: express.Request, res: express.Response) {
   const videoSource = res.locals.videoSource
-  const video = res.locals.videoAll
+  const video = res.locals.videoWithRights
 
   await video.removeOriginalFile(videoSource)
 
@@ -96,10 +96,10 @@ async function replaceVideoSourceResumable (req: express.Request, res: express.R
   const videoFile = await buildNewFile({ path: videoPhysicalFile.path, mode: 'web-video', ffprobe: res.locals.ffprobe })
   const originalFilename = videoPhysicalFile.originalname
 
-  const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(res.locals.videoAll.uuid)
+  const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(res.locals.videoFull.uuid)
 
   try {
-    const destination = VideoPathManager.Instance.getFSVideoFileOutputPath(res.locals.videoAll, videoFile)
+    const destination = VideoPathManager.Instance.getFSVideoFileOutputPath(res.locals.videoFull, videoFile)
     await move(videoPhysicalFile.path, destination)
 
     let oldWebVideoFiles: MVideoFile[] = []
@@ -108,7 +108,7 @@ async function replaceVideoSourceResumable (req: express.Request, res: express.R
     const inputFileUpdatedAt = new Date()
 
     const video = await sequelizeTypescript.transaction(async transaction => {
-      const video = await VideoModel.loadFull(res.locals.videoAll.id, transaction)
+      const video = await VideoModel.loadFull(res.locals.videoFull.id, transaction)
 
       oldWebVideoFiles = video.VideoFiles
       oldStreamingPlaylists = video.VideoStreamingPlaylists
@@ -177,7 +177,7 @@ async function replaceVideoSourceResumable (req: express.Request, res: express.R
   }
 }
 
-async function addVideoJobsAfterUpload (video: MVideoFullLight, videoFile: MVideoFile) {
+async function addVideoJobsAfterUpload (video: MVideoFull, videoFile: MVideoFile) {
   const jobs: (CreateJobArgument & CreateJobOptions)[] = [
     {
       type: 'manage-video-torrent' as const,

@@ -19,7 +19,7 @@ import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { approximateIntroOutroAdditionalSize, onVideoStudioEnded, safeCleanupStudioTMPFiles } from '@server/lib/video-studio.js'
 import { UserModel } from '@server/models/user/user.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MVideo, MVideoFullLight } from '@server/types/models/index.js'
+import { MVideo, MVideoFull } from '@server/types/models/index.js'
 import { MutexInterface } from 'async-mutex'
 import { Job } from 'bullmq'
 import { remove } from 'fs-extra/esm'
@@ -192,7 +192,7 @@ function processAddWatermark (options: TaskProcessorOptions<VideoStudioTaskWater
 
 // ---------------------------------------------------------------------------
 
-async function checkUserQuotaOrThrow (video: MVideoFullLight, payload: VideoStudioEditionPayload) {
+async function checkUserQuotaOrThrow (video: MVideoFull, payload: VideoStudioEditionPayload) {
   const user = await UserModel.loadByVideoId(video.id)
 
   const filePathFinder = (i: number) => (payload.tasks[i] as VideoStudioTaskIntroPayload | VideoStudioTaskOutroPayload).options.file

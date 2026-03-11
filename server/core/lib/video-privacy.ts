@@ -1,7 +1,7 @@
 import { FileStorage, VideoPrivacy, VideoPrivacyType } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { DIRECTORIES } from '@server/initializers/constants.js'
-import { MVideo, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
+import { MVideo, MVideoFile, MVideoFull } from '@server/types/models/index.js'
 import { move } from 'fs-extra/esm'
 import { join } from 'path'
 import { updateHLSFilesACL, updateWebVideoFileACL } from './object-storage/index.js'
@@ -30,7 +30,7 @@ export function isVideoInPublicDirectory (privacy: VideoPrivacyType) {
   return !isVideoInPrivateDirectory(privacy)
 }
 
-export async function moveFilesIfPrivacyChanged (video: MVideoFullLight, oldPrivacy: VideoPrivacyType) {
+export async function moveFilesIfPrivacyChanged (video: MVideoFull, oldPrivacy: VideoPrivacyType) {
   // Now public, previously private
   if (isVideoInPublicDirectory(video.privacy) && isVideoInPrivateDirectory(oldPrivacy)) {
     await moveFiles({ type: 'private-to-public', video })
@@ -56,7 +56,7 @@ type MoveType = 'private-to-public' | 'public-to-private'
 
 async function moveFiles (options: {
   type: MoveType
-  video: MVideoFullLight
+  video: MVideoFull
 }) {
   const { type, video } = options
 

@@ -24,7 +24,7 @@ import { openapiOperationDoc } from '@server/middlewares/doc.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { FilteredModelAttributes } from '@server/types/index.js'
-import { MVideoFullLight, MVideoThumbnail } from '@server/types/models/index.js'
+import { MVideoFull, MVideoThumbnails } from '@server/types/models/index.js'
 import express from 'express'
 import { Transaction } from 'sequelize'
 import { VideoAuditView, auditLoggerFactory, getAuditIdFromRes } from '../../../helpers/audit-logger.js'
@@ -63,7 +63,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function updateVideo (req: express.Request, res: express.Response) {
-  const videoFromReq = res.locals.videoAll
+  const videoFromReq = res.locals.videoFull
   const oldVideoAuditView = new VideoAuditView(videoFromReq.toFormattedDetailsJSON())
   const body: VideoUpdate = req.body
   const user = res.locals.oauth.token.User
@@ -133,7 +133,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
         await video.setAsRefreshed(t)
       }
 
-      const videoInstanceUpdated = await video.save({ transaction: t }) as MVideoFullLight
+      const videoInstanceUpdated = await video.save({ transaction: t }) as MVideoFull
 
       if (thumbnails.length !== 0) {
         await videoInstanceUpdated.replaceAndSaveThumbnails(thumbnails, t)
@@ -242,7 +242,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
 
 // Return a boolean indicating if the video is considered as "new" for remote instances in the federation
 async function updateVideoPrivacy (options: {
-  videoInstance: MVideoFullLight
+  videoInstance: MVideoFull
   videoInfoToUpdate: VideoUpdate
   hadPrivacyForFederation: boolean
   transaction: Transaction
@@ -271,7 +271,7 @@ async function updateVideoPrivacy (options: {
   return isNewVideoForFederation
 }
 
-async function updateSchedule (videoInstance: MVideoFullLight, videoInfoToUpdate: VideoUpdate, transaction: Transaction) {
+async function updateSchedule (videoInstance: MVideoFull, videoInfoToUpdate: VideoUpdate, transaction: Transaction) {
   if (videoInfoToUpdate.scheduleUpdate) {
     const updateAt = new Date(videoInfoToUpdate.scheduleUpdate.updateAt)
 
@@ -297,7 +297,7 @@ async function updateSchedule (videoInstance: MVideoFullLight, videoInfoToUpdate
   }
 }
 
-async function buildVideoThumbnailsFromReq (video: MVideoThumbnail, req: express.Request) {
+async function buildVideoThumbnailsFromReq (video: MVideoThumbnails, req: express.Request) {
   const file = getVideoThumbnailFile(req.files)
   if (!file) return []
 

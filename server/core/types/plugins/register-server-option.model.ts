@@ -16,7 +16,7 @@ import {
   VideoBlacklistCreate
 } from '@peertube/peertube-models'
 import { ActorModel } from '@server/models/actor/actor.js'
-import { MUserDefault, MVideo, MVideoThumbnail, MVideoWithAllFiles, UserNotificationModelForApi } from '../models/index.js'
+import { MUserDefault, MVideo, MVideoThumbnails, MVideoWithAllFiles, UserNotificationModelForApi } from '../models/index.js'
 import {
   RegisterServerAuthExternalOptions,
   RegisterServerAuthExternalResult,
@@ -32,9 +32,9 @@ export type PeerTubeHelpers = {
   }
 
   videos: {
-    loadByUrl: (url: string) => Promise<MVideoThumbnail>
+    loadByUrl: (url: string) => Promise<MVideoThumbnails>
     loadByIdOrUUIDWithFiles: (id: number | string) => Promise<MVideoWithAllFiles>
-    loadByIdOrUUID: (id: number | string) => Promise<MVideoThumbnail>
+    loadByIdOrUUID: (id: number | string) => Promise<MVideoThumbnails>
 
     removeVideo: (videoId: number) => Promise<void>
 

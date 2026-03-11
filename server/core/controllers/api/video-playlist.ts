@@ -415,7 +415,7 @@ async function removeVideoPlaylist (req: express.Request, res: express.Response)
 async function addVideoInPlaylist (req: express.Request, res: express.Response) {
   const body: VideoPlaylistElementCreate = req.body
   const videoPlaylist = res.locals.videoPlaylistFull
-  const video = res.locals.onlyVideo
+  const video = res.locals.videoThumbnails
 
   const playlistElement = await sequelizeTypescript.transaction(async t => {
     const position = await VideoPlaylistElementModel.getNextPositionOf(videoPlaylist.id, t)

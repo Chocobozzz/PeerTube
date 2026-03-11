@@ -15,7 +15,8 @@ import {
   MPlugin,
   MVideoAccountLight,
   MVideoCaptionVideo,
-  MVideoFullLight
+  MVideoFull,
+  MVideoWithSchedule
 } from '../../types/models/index.js'
 import { JobQueue } from '../job-queue/index.js'
 import { PeerTubeSocket } from '../peertube-socket.js'
@@ -97,7 +98,7 @@ class Notifier {
       .catch(err => logger.error('Cannot notify subscribers of new video %s.', video.url, { err }))
   }
 
-  notifyOnVideoPublishedAfterTranscoding (video: MVideoFullLight): void {
+  notifyOnVideoPublishedAfterTranscoding (video: MVideoAccountLight & MVideoWithSchedule): void {
     const models = this.notificationModels.publicationAfterTranscoding
 
     logger.debug('Notify on published video after transcoding', { video: video.url, ...lTags() })
@@ -106,7 +107,7 @@ class Notifier {
       .catch(err => logger.error('Cannot notify owner that its video %s has been published after transcoding.', video.url, { err }))
   }
 
-  notifyOnVideoPublishedAfterScheduledUpdate (video: MVideoFullLight): void {
+  notifyOnVideoPublishedAfterScheduledUpdate (video: MVideoAccountLight & MVideoWithSchedule): void {
     const models = this.notificationModels.publicationAfterScheduleUpdate
 
     logger.debug('Notify on published video after scheduled update', { video: video.url, ...lTags() })
@@ -115,7 +116,7 @@ class Notifier {
       .catch(err => logger.error('Cannot notify owner that its video %s has been published after scheduled update.', video.url, { err }))
   }
 
-  notifyOnVideoPublishedAfterRemovedFromAutoBlacklist (video: MVideoFullLight): void {
+  notifyOnVideoPublishedAfterRemovedFromAutoBlacklist (video: MVideoAccountLight & MVideoWithSchedule): void {
     const models = this.notificationModels.publicationAfterAutoUnblacklist
 
     logger.debug('Notify on published video after being removed from auto blacklist', { video: video.url, ...lTags() })
@@ -171,7 +172,7 @@ class Notifier {
       .catch(err => logger.error('Cannot notify video owner of new video blacklist of %s.', videoBlacklist.Video.url, { err }))
   }
 
-  notifyOnVideoUnblacklist (video: MVideoFullLight): void {
+  notifyOnVideoUnblacklist (video: MVideoAccountLight): void {
     const models = this.notificationModels.unblacklist
 
     logger.debug('Notify on video unblacklist', { video: video.url, ...lTags() })
@@ -277,7 +278,7 @@ class Notifier {
       .catch(err => logger.error('Cannot notify on new plugin version %s.', plugin.name, { err }))
   }
 
-  notifyOfFinishedVideoStudioEdition (video: MVideoFullLight) {
+  notifyOfFinishedVideoStudioEdition (video: MVideoFull) {
     const models = this.notificationModels.videoStudioEditionFinished
 
     logger.debug('Notify on finished video studio edition', { video: video.url, ...lTags() })

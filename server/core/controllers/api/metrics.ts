@@ -8,10 +8,7 @@ const metricsRouter = express.Router()
 
 metricsRouter.use(apiRateLimiter)
 
-metricsRouter.post('/playback',
-  asyncMiddleware(addPlaybackMetricValidator),
-  addPlaybackMetric
-)
+metricsRouter.post('/playback', asyncMiddleware(addPlaybackMetricValidator), addPlaybackMetric)
 
 // ---------------------------------------------------------------------------
 
@@ -28,7 +25,7 @@ function addPlaybackMetric (req: express.Request, res: express.Response) {
 
   const body: PlaybackMetricCreate = req.body
 
-  OpenTelemetryMetrics.Instance.observePlaybackMetric(res.locals.onlyImmutableVideo, body)
+  OpenTelemetryMetrics.Instance.observePlaybackMetric(res.locals.videoImmutable, body)
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

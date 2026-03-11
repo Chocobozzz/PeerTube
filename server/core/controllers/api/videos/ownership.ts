@@ -1,7 +1,7 @@
 import { HttpStatusCode, VideoChangeOwnershipStatus, VideoChannelActivityAction } from '@peertube/peertube-models'
 import { canVideoBeFederated } from '@server/lib/activitypub/videos/federate.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
-import { MVideoFullLight } from '@server/types/models/index.js'
+import { MVideoFull } from '@server/types/models/index.js'
 import express from 'express'
 import { logger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
@@ -63,7 +63,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function giveVideoOwnership (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
+  const video = res.locals.videoWithRights
   const initiatorAccountId = res.locals.oauth.token.User.Account.id
   const nextOwner = res.locals.videoChangeOwnershipNextOwner
 
@@ -124,7 +124,7 @@ function acceptOwnership (req: express.Request, res: express.Response) {
 
     targetVideo.channelId = channel.id
 
-    const targetVideoUpdated = await targetVideo.save({ transaction: t }) as MVideoFullLight
+    const targetVideoUpdated = await targetVideo.save({ transaction: t }) as MVideoFull
     targetVideoUpdated.VideoChannel = channel
 
     if (canVideoBeFederated(targetVideoUpdated)) {

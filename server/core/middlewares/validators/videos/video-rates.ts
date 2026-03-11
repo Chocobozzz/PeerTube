@@ -20,7 +20,7 @@ const videoUpdateRateValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.id, res)) return
 
-    if (!await checkCanSeeVideo({ req, res, paramId: req.params.id, video: res.locals.videoAll })) return
+    if (!await checkCanSeeVideo({ req, res, paramId: req.params.id, video: res.locals.videoFull })) return
 
     return next()
   }

@@ -1,14 +1,14 @@
+import { UserNotificationType } from '@peertube/peertube-models'
+import { tu } from '@server/helpers/i18n.js'
 import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
-import { UserModel } from '@server/models/user/user.js'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
-import { MUserDefault, MUserWithNotificationSetting, MVideoFullLight, UserNotificationModelForApi } from '@server/types/models/index.js'
-import { UserNotificationType } from '@peertube/peertube-models'
+import { UserModel } from '@server/models/user/user.js'
+import { MUserDefault, MUserWithNotificationSetting, MVideoAccountLight, UserNotificationModelForApi } from '@server/types/models/index.js'
 import { AbstractNotification } from '../common/abstract-notification.js'
-import { tu } from '@server/helpers/i18n.js'
 
-export class UnblacklistForOwner extends AbstractNotification<MVideoFullLight> {
+export class UnblacklistForOwner extends AbstractNotification<MVideoAccountLight> {
   private user: MUserDefault
 
   async prepare () {

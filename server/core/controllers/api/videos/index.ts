@@ -23,7 +23,7 @@ import {
   paginationValidator,
   setDefaultPagination,
   setDefaultVideosSort,
-  videosCustomGetValidator,
+  videoGetValidatorFactory,
   videosRemoveValidator,
   videosSortValidator
 } from '../../../middlewares/index.js'
@@ -97,7 +97,7 @@ videosRouter.get(
   '/:id',
   openapiOperationDoc({ operationId: 'getVideo' }),
   optionalAuthenticate,
-  asyncMiddleware(videosCustomGetValidator('for-api')),
+  asyncMiddleware(videoGetValidatorFactory('for-api')),
   asyncMiddleware(checkVideoFollowConstraints),
   asyncMiddleware(getVideo)
 )
@@ -177,7 +177,7 @@ async function listVideos (req: express.Request, res: express.Response) {
 }
 
 async function removeVideo (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.videoAll
+  const videoInstance = res.locals.videoFull
 
   await sequelizeTypescript.transaction(async t => {
     await videoInstance.destroy({ transaction: t })

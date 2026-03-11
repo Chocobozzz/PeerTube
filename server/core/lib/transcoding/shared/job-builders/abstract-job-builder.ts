@@ -4,7 +4,7 @@ import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { DEFAULT_AUDIO_MERGE_RESOLUTION, DEFAULT_AUDIO_RESOLUTION } from '@server/initializers/constants.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
-import { MUserId, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
+import { MUserId, MVideoFile, MVideoFull } from '@server/types/models/index.js'
 import { buildOriginalFileResolution, computeResolutionsToTranscode } from '../../transcoding-resolutions.js'
 
 const lTags = loggerTagsFactory('transcoding')
@@ -13,7 +13,7 @@ export type TranscodingPriorityType = 'required' | 'optional'
 
 export abstract class AbstractJobBuilder<P extends { transcodingPriority: TranscodingPriorityType }> {
   async createOptimizeOrMergeAudioJobs (options: {
-    video: MVideoFullLight
+    video: MVideoFull
     videoFile: MVideoFile
     isNewVideo: boolean
     user: MUserId
@@ -136,7 +136,7 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
 
   async createTranscodingJobs (options: {
     transcodingType: 'hls' | 'web-video'
-    video: MVideoFullLight
+    video: MVideoFull
     resolutions: number[]
     isNewVideo: boolean
     user: MUserId | null
@@ -213,7 +213,7 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
   }
 
   private async buildLowerResolutionJobPayloads (options: {
-    video: MVideoFullLight
+    video: MVideoFull
     inputVideoResolution: number
     inputVideoFPS: number
     inputStreams: VideoFileStreamType[]
@@ -315,7 +315,7 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
   // ---------------------------------------------------------------------------
 
   protected abstract createJobs (options: {
-    video: MVideoFullLight
+    video: MVideoFull
     payloads: {
       parent: P
 
@@ -328,7 +328,7 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
   }): Promise<void>
 
   protected abstract buildMergeAudioPayload (options: {
-    video: MVideoFullLight
+    video: MVideoFull
     inputFile: MVideoFile
     isNewVideo: boolean
     resolution: number
@@ -339,7 +339,7 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
   }): P
 
   protected abstract buildOptimizePayload (options: {
-    video: MVideoFullLight
+    video: MVideoFull
     isNewVideo: boolean
     inputFile: MVideoFile
     resolution: number
@@ -350,7 +350,7 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
   }): P
 
   protected abstract buildHLSJobPayload (options: {
-    video: MVideoFullLight
+    video: MVideoFull
     resolution: number
     fps: number
     isNewVideo: boolean
@@ -366,7 +366,7 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
   }): P
 
   protected abstract buildWebVideoJobPayload (options: {
-    video: MVideoFullLight
+    video: MVideoFull
     resolution: number
     fps: number
     isNewVideo: boolean

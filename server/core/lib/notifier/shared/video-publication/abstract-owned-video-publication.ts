@@ -1,13 +1,19 @@
-import { logger } from '@server/helpers/logger.js'
-import { t } from '@server/helpers/i18n.js'
-import { WEBSERVER } from '@server/initializers/constants.js'
-import { UserModel } from '@server/models/user/user.js'
-import { UserNotificationModel } from '@server/models/user/user-notification.js'
-import { MUserDefault, MUserWithNotificationSetting, MVideoFullLight, UserNotificationModelForApi } from '@server/types/models/index.js'
 import { UserNotificationType } from '@peertube/peertube-models'
+import { t } from '@server/helpers/i18n.js'
+import { logger } from '@server/helpers/logger.js'
+import { WEBSERVER } from '@server/initializers/constants.js'
+import { UserNotificationModel } from '@server/models/user/user-notification.js'
+import { UserModel } from '@server/models/user/user.js'
+import {
+  MUserDefault,
+  MUserWithNotificationSetting,
+  MVideoWithRights,
+  MVideoWithSchedule,
+  UserNotificationModelForApi
+} from '@server/types/models/index.js'
 import { AbstractNotification } from '../common/abstract-notification.js'
 
-export abstract class AbstractOwnedVideoPublication extends AbstractNotification<MVideoFullLight> {
+export abstract class AbstractOwnedVideoPublication extends AbstractNotification<MVideoWithRights & MVideoWithSchedule> {
   protected user: MUserDefault
 
   async prepare () {

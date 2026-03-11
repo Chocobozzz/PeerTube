@@ -10,7 +10,7 @@ import { logger } from '@server/helpers/logger.js'
 import { LRU_CACHE } from '@server/initializers/constants.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MVideoFile, MVideoThumbnailBlacklist } from '@server/types/models/index.js'
+import { MVideoFile, MVideoWithBlacklist } from '@server/types/models/index.js'
 import express from 'express'
 import { param, query } from 'express-validator'
 import { LRUCache } from 'lru-cache'
@@ -19,7 +19,7 @@ import { areValidationErrors, checkCanAccessVideoStaticFiles, isValidVideoPasswo
 
 type LRUValue = {
   allowed: boolean
-  video?: MVideoThumbnailBlacklist
+  video?: MVideoWithBlacklist
   file?: MVideoFile
 }
 
@@ -45,7 +45,7 @@ export const ensureCanAccessVideoPrivateWebVideoFiles = [
       const { allowed, file, video } = staticFileTokenBypass.get(cacheKey)
 
       if (allowed === true) {
-        res.locals.onlyVideo = video
+        res.locals.videoWithBlacklist = video
         res.locals.videoFile = file
 
         return next()
@@ -60,7 +60,7 @@ export const ensureCanAccessVideoPrivateWebVideoFiles = [
 
     if (result.allowed !== true) return
 
-    res.locals.onlyVideo = result.video
+    res.locals.videoWithBlacklist = result.video
     res.locals.videoFile = result.file
 
     return next()
@@ -121,7 +121,7 @@ export const ensureCanAccessPrivateVideoHLSFiles = [
       const { allowed, file, video } = staticFileTokenBypass.get(cacheKey)
 
       if (allowed === true) {
-        res.locals.onlyVideo = video
+        res.locals.videoWithBlacklist = video
         res.locals.videoFile = file
 
         return next()
@@ -136,7 +136,7 @@ export const ensureCanAccessPrivateVideoHLSFiles = [
 
     if (result.allowed !== true) return
 
-    res.locals.onlyVideo = result.video
+    res.locals.videoWithBlacklist = result.video
     res.locals.videoFile = result.file
 
     return next()
@@ -168,7 +168,7 @@ async function isWebVideoAllowed (req: express.Request, res: express.Response) {
 async function isHLSAllowed (req: express.Request, res: express.Response, videoUUID: string) {
   const filename = basename(req.path)
 
-  const video = await VideoModel.loadAndPopulateAccountAndFiles(videoUUID)
+  const video = await VideoModel.loadWithBlacklist(videoUUID)
 
   if (!video) {
     logger.debug('Unknown static file %s to serve', req.originalUrl, { videoUUID })

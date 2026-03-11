@@ -51,7 +51,7 @@ const addPlaybackMetricValidator = [
     const body: PlaybackMetricCreate = req.body
 
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(body.videoId, res, 'unsafe-only-immutable-attributes')) return
+    if (!await doesVideoExist(body.videoId, res, 'unsafe-immutable-only')) return
 
     return next()
   }

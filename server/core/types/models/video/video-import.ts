@@ -1,7 +1,7 @@
 import { VideoImportModel } from '@server/models/video/video-import.js'
 import { PickWith, PickWithOpt } from '@peertube/peertube-typescript-utils'
 import { MUser } from '../user/user.js'
-import { MVideo, MVideoAccountLight, MVideoFormattable, MVideoTag, MVideoThumbnail, MVideoWithFile } from './video.js'
+import { MVideo, MVideoAccountLight, MVideoFormattable, MVideoTag, MVideoThumbnails, MVideoWithFile } from './video.js'
 
 type Use<K extends keyof VideoImportModel, M> = PickWith<VideoImportModel, K, M>
 
@@ -15,7 +15,7 @@ export type MVideoImportVideo =
 
 // ############################################################################
 
-type VideoAssociation = MVideoTag & MVideoAccountLight & MVideoThumbnail
+type VideoAssociation = MVideoTag & MVideoAccountLight & MVideoThumbnails
 
 export type MVideoImportDefault =
   & MVideoImport

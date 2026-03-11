@@ -204,7 +204,7 @@ async function listCommentsOnUserVideos (req: express.Request, res: express.Resp
     heldForReview: req.query.isHeldForReview,
 
     videoChannelOwnerId: res.locals.videoChannel?.id,
-    videoId: res.locals.videoAll?.id
+    videoId: res.locals.videoWithRights?.id
   })
 
   return res.json({

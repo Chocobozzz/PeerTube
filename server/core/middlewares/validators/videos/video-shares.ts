@@ -14,9 +14,9 @@ export const videosShareValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.id, res)) return
+    if (!await doesVideoExist(req.params.id, res, 'with-blacklist')) return
 
-    const video = res.locals.videoAll
+    const video = res.locals.videoWithBlacklist
     if (!canVideoBeFederated(video)) res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
     const share = await VideoShareModel.load(req.params.actorId, video.id)

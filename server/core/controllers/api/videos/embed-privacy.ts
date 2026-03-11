@@ -58,8 +58,8 @@ export {
 // ---------------------------------------------------------------------------
 
 async function getVideoEmbedPrivacy (req: express.Request, res: express.Response) {
-  const domains = await VideoEmbedPrivacyDomainModel.list(res.locals.videoAll.id)
-  const video = res.locals.videoAll
+  const video = res.locals.videoWithRights
+  const domains = await VideoEmbedPrivacyDomainModel.list(video.id)
 
   return res.json(
     {
@@ -73,7 +73,7 @@ async function getVideoEmbedPrivacy (req: express.Request, res: express.Response
 }
 
 async function isVideoEmbedOnDomainAllowed (req: express.Request, res: express.Response) {
-  const video = res.locals.onlyVideo
+  const video = res.locals.videoWithBlacklist
 
   const domainAllowed = video.embedPrivacyPolicy === VideoEmbedPrivacyPolicy.ALL_ALLOWED
     ? true
@@ -88,7 +88,7 @@ async function isVideoEmbedOnDomainAllowed (req: express.Request, res: express.R
   if (domainAllowed === false && user) {
     userBypassAllowed = await checkCanManageVideo({
       user,
-      video: await VideoModel.loadFull(video.id),
+      video: await VideoModel.loadWithRights(video.id),
       right: UserRight.UPDATE_ANY_VIDEO,
       checkIsOwner: false,
       checkIsLocal: false,
@@ -101,7 +101,7 @@ async function isVideoEmbedOnDomainAllowed (req: express.Request, res: express.R
 }
 
 async function updateVideoEmbedPrivacy (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
   const body = req.body as VideoEmbedPrivacyUpdate
 
   await VideoPasswordModel.sequelize.transaction(async (t: Transaction) => {

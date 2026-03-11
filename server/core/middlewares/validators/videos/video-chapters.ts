@@ -15,10 +15,10 @@ export const updateVideoChaptersValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
 
-    if (res.locals.videoAll.isLive) {
+    if (res.locals.videoFull.isLive) {
       return res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
-        message: 'You cannot add chapters to a live video'
+        message: req.t('You cannot add chapters to a live video')
       })
     }
 
@@ -27,7 +27,7 @@ export const updateVideoChaptersValidator = [
     if (
       !await checkCanManageVideo({
         user,
-        video: res.locals.videoAll,
+        video: res.locals.videoFull,
         right: UserRight.UPDATE_ANY_VIDEO,
         req,
         res,

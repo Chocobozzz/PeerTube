@@ -87,18 +87,6 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
     }
   }
 
-  protected includeOwnerUser () {
-    this.addJoin('INNER JOIN "videoChannel" AS "VideoChannel" ON "video"."channelId" = "VideoChannel"."id"')
-    this.addJoin('INNER JOIN "account" AS "VideoChannel->Account" ON "VideoChannel"."accountId" = "VideoChannel->Account"."id"')
-
-    this.attributes = {
-      ...this.attributes,
-
-      ...this.buildAttributesObject('VideoChannel', this.tables.getChannelAttributes()),
-      ...this.buildAttributesObject('VideoChannel->Account', this.tables.getUserAccountAttributes())
-    }
-  }
-
   protected includeThumbnails () {
     this.addJoin('LEFT OUTER JOIN "thumbnail" AS "Thumbnails" ON "video"."id" = "Thumbnails"."videoId"')
 

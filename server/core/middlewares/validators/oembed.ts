@@ -1,10 +1,10 @@
+import { HttpStatusCode, VideoPlaylistPrivacy, VideoPrivacy } from '@peertube/peertube-models'
+import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
+import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
+import { VideoModel } from '@server/models/video/video.js'
 import express from 'express'
 import { query } from 'express-validator'
 import { join } from 'path'
-import { HttpStatusCode, VideoPlaylistPrivacy, VideoPrivacy } from '@peertube/peertube-models'
-import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
-import { loadVideo } from '@server/lib/model-loaders/index.js'
-import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { isIdOrUUIDValid, isUUIDValid, toCompleteUUID } from '../../helpers/custom-validators/misc.js'
 import { WEBSERVER } from '../../initializers/constants.js'
 import { areValidationErrors } from './shared/index.js'
@@ -101,7 +101,7 @@ const oembedValidator = [
     }
 
     if (isVideo) {
-      const video = await loadVideo(elementId, 'all')
+      const video = await VideoModel.loadWithRights(elementId)
 
       if (!video) {
         return res.fail({
@@ -112,9 +112,10 @@ const oembedValidator = [
 
       if (
         video.privacy === VideoPrivacy.PUBLIC ||
-        (video.privacy === VideoPrivacy.UNLISTED && isUUIDValid(elementId) === true)
+        (video.privacy === VideoPrivacy.UNLISTED && isUUIDValid(elementId) === true) ||
+        video.VideoBlacklist
       ) {
-        res.locals.videoAll = video
+        res.locals.videoWithRights = video
         return next()
       }
 
@@ -147,7 +148,6 @@ const oembedValidator = [
       message: 'Playlist is not public'
     })
   }
-
 ]
 
 // ---------------------------------------------------------------------------

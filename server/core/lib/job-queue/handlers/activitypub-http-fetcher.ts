@@ -1,24 +1,24 @@
-import { Job } from 'bullmq'
 import { ActivitypubHttpFetcherPayload, FetchType } from '@peertube/peertube-models'
+import { AccountModel } from '@server/models/account/account.js'
+import { Job } from 'bullmq'
 import { logger } from '../../../helpers/logger.js'
-import { VideoModel } from '../../../models/video/video.js'
 import { VideoCommentModel } from '../../../models/video/video-comment.js'
 import { VideoShareModel } from '../../../models/video/video-share.js'
-import { MAccountDefault, MVideoFullLight } from '../../../types/models/index.js'
+import { VideoModel } from '../../../models/video/video.js'
+import { MAccountDefault, MVideo } from '../../../types/models/index.js'
 import { crawlCollectionPage } from '../../activitypub/crawl.js'
 import { createAccountPlaylists } from '../../activitypub/playlists/index.js'
 import { processActivities } from '../../activitypub/process/index.js'
 import { addVideoShares } from '../../activitypub/share.js'
 import { addVideoComments } from '../../activitypub/video-comments.js'
-import { AccountModel } from '@server/models/account/account.js'
 
 async function processActivityPubHttpFetcher (job: Job) {
   logger.info('Processing ActivityPub fetcher in job %s.', job.id)
 
   const payload = job.data as ActivitypubHttpFetcherPayload
 
-  let video: MVideoFullLight
-  if (payload.videoId) video = await VideoModel.loadFull(payload.videoId)
+  let video: MVideo
+  if (payload.videoId) video = await VideoModel.load(payload.videoId)
 
   let account: MAccountDefault
   if (payload.accountId) account = await AccountModel.load(payload.accountId)

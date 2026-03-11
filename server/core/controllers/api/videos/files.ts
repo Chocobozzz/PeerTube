@@ -15,38 +15,43 @@ import {
   videoFilesDeleteHLSValidator,
   videoFilesDeleteWebVideoFileValidator,
   videoFilesDeleteWebVideoValidator,
-  videosGetValidator
+  videoGetValidatorFactory
 } from '../../../middlewares/index.js'
 
 const lTags = loggerTagsFactory('api', 'video')
 const filesRouter = express.Router()
 
-filesRouter.get('/:id/metadata/:videoFileId',
-  asyncMiddleware(videosGetValidator),
+filesRouter.get(
+  '/:id/metadata/:videoFileId',
+  asyncMiddleware(videoGetValidatorFactory('with-blacklist')),
   asyncMiddleware(videoFileMetadataGetValidator),
   asyncMiddleware(getVideoFileMetadata)
 )
 
-filesRouter.delete('/:id/hls',
+filesRouter.delete(
+  '/:id/hls',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_VIDEO_FILES),
   asyncMiddleware(videoFilesDeleteHLSValidator),
   asyncMiddleware(removeHLSPlaylistController)
 )
-filesRouter.delete('/:id/hls/:videoFileId',
+filesRouter.delete(
+  '/:id/hls/:videoFileId',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_VIDEO_FILES),
   asyncMiddleware(videoFilesDeleteHLSFileValidator),
   asyncMiddleware(removeHLSFileController)
 )
 
-filesRouter.delete('/:id/web-videos',
+filesRouter.delete(
+  '/:id/web-videos',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_VIDEO_FILES),
   asyncMiddleware(videoFilesDeleteWebVideoValidator),
   asyncMiddleware(removeAllWebVideoFilesController)
 )
-filesRouter.delete('/:id/web-videos/:videoFileId',
+filesRouter.delete(
+  '/:id/web-videos/:videoFileId',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_VIDEO_FILES),
   asyncMiddleware(videoFilesDeleteWebVideoFileValidator),
@@ -70,7 +75,7 @@ async function getVideoFileMetadata (req: express.Request, res: express.Response
 // ---------------------------------------------------------------------------
 
 async function removeHLSPlaylistController (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
 
   logger.info('Deleting HLS playlist of %s.', video.url, lTags(video.uuid))
   await removeHLSPlaylist(video)
@@ -81,7 +86,7 @@ async function removeHLSPlaylistController (req: express.Request, res: express.R
 }
 
 async function removeHLSFileController (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
   const videoFileId = +req.params.videoFileId
 
   logger.info('Deleting HLS file %d of %s.', videoFileId, video.url, lTags(video.uuid))
@@ -97,7 +102,7 @@ async function removeHLSFileController (req: express.Request, res: express.Respo
 // ---------------------------------------------------------------------------
 
 async function removeAllWebVideoFilesController (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
 
   logger.info('Deleting Web Video files of %s.', video.url, lTags(video.uuid))
 
@@ -108,7 +113,7 @@ async function removeAllWebVideoFilesController (req: express.Request, res: expr
 }
 
 async function removeWebVideoFileController (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
 
   const videoFileId = +req.params.videoFileId
   logger.info('Deleting Web Video file %d of %s.', videoFileId, video.url, lTags(video.uuid))

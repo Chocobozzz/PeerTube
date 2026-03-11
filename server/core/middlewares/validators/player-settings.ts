@@ -20,9 +20,9 @@ export const getVideoPlayerSettingsValidator = [
 
     const raw = req.query.raw === true
 
-    if (!await doesVideoExist(req.params.videoId, res, raw ? 'all' : 'only-video-and-blacklist')) return
+    if (!await doesVideoExist(req.params.videoId, res, 'with-rights')) return
 
-    const video = res.locals.onlyVideo || res.locals.videoAll
+    const video = res.locals.videoWithRights
     if (!await checkCanSeeVideo({ req, res, video, paramId: req.params.videoId })) return
 
     if (raw === true) {
@@ -31,7 +31,7 @@ export const getVideoPlayerSettingsValidator = [
       if (
         !await checkCanManageVideo({
           user,
-          video: res.locals.videoAll,
+          video,
           right: UserRight.UPDATE_ANY_VIDEO,
           req,
           res,
@@ -82,13 +82,13 @@ export const updateVideoPlayerSettingsValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    if (!await doesVideoExist(req.params.videoId, res, 'all')) return
+    if (!await doesVideoExist(req.params.videoId, res, 'full')) return
 
     const user = res.locals.oauth.token.User
     if (
       !await checkCanManageVideo({
         user,
-        video: res.locals.videoAll,
+        video: res.locals.videoFull,
         right: UserRight.UPDATE_ANY_VIDEO,
         req,
         res,

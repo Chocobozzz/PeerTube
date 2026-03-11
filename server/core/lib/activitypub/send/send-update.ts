@@ -13,7 +13,7 @@ import {
   MActorLight,
   MChannelDefault,
   MVideoAPLight,
-  MVideoFullLight,
+  MVideoFull,
   MVideoPlaylistFull,
   MVideoRedundancyVideo
 } from '../../../types/models/index.js'
@@ -122,7 +122,7 @@ export async function sendUpdateVideoPlaylist (videoPlaylist: MVideoPlaylistFull
   })
 }
 
-export async function sendUpdateVideoPlayerSettings (video: MVideoFullLight, settings: MPlayerSetting, transaction: Transaction) {
+export async function sendUpdateVideoPlayerSettings (video: MVideoFull, settings: MPlayerSetting, transaction: Transaction) {
   if (!canVideoBeFederated(video, false)) return
 
   const byActor = video.VideoChannel.Account.Actor

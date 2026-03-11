@@ -9,7 +9,7 @@ import { regenerateActorImageFiles } from '@server/lib/local-actor.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { UserModel } from '@server/models/user/user.js'
-import { MAccountDefault, MChannelBannerAccountDefault, MChannelDefault, MUser, MVideoFullLight } from '@server/types/models/index.js'
+import { MAccountDefault, MChannelBannerAccountDefault, MChannelDefault, MUser, MVideo } from '@server/types/models/index.js'
 import express from 'express'
 
 export async function initFeed (parameters: {
@@ -114,7 +114,7 @@ export function sendFeed (feed: Feed, req: express.Request, res: express.Respons
 export async function buildFeedMetadata (options: {
   videoChannel?: MChannelBannerAccountDefault
   account?: MAccountDefault
-  video?: MVideoFullLight
+  video?: MVideo
 }) {
   const { video, videoChannel, account } = options
 

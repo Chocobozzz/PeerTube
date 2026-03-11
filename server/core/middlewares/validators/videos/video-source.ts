@@ -1,9 +1,7 @@
 import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
-import { getVideoWithAttributes } from '@server/helpers/video.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { buildUploadXFile, safeUploadXCleanup } from '@server/lib/uploadx.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
-import { MVideoFullLight } from '@server/types/models/index.js'
 import { Metadata as UploadXMetadata } from '@uploadx/core'
 import express from 'express'
 import { param } from 'express-validator'
@@ -21,9 +19,9 @@ export const videoSourceGetLatestValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.id, res, 'all')) return
+    if (!await doesVideoExist(req.params.id, res, 'with-rights')) return
 
-    const video = getVideoWithAttributes(res) as MVideoFullLight
+    const video = res.locals.videoWithRights
 
     const user = res.locals.oauth.token.User
     if (!await checkCanManageVideo({ user, video, right: UserRight.UPDATE_ANY_VIDEO, req, res, checkIsLocal: true, checkIsOwner: false })) {
@@ -80,7 +78,7 @@ export const replaceVideoSourceResumableInitValidator = [
 
     const fileMetadata = res.locals.uploadVideoFileResumableMetadata
     const files = { videofile: [ fileMetadata ] }
-    const channelUser = { id: res.locals.videoAll.VideoChannel.Account.userId }
+    const channelUser = { id: res.locals.videoFull.VideoChannel.Account.userId }
 
     if (await commonVideoFileChecks({ req, res, channelUser, videoFileSize: fileMetadata.size, files }) === false) return
 
@@ -131,7 +129,7 @@ async function checkCanUpdateVideoFile (options: {
   if (!await doesVideoExist(req.params.id, res)) return false
 
   const user = res.locals.oauth.token.User
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
 
   if (!await checkCanManageVideo({ user, video, right: UserRight.UPDATE_ANY_VIDEO, req, res, checkIsLocal: true, checkIsOwner: false })) {
     return false

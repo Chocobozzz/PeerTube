@@ -21,9 +21,9 @@ const createTranscodingValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.videoId, res, 'all')) return
+    if (!await doesVideoExist(req.params.videoId, res, 'full')) return
 
-    const video = res.locals.videoAll
+    const video = res.locals.videoFull
     const body = req.body as VideoTranscodingCreate
 
     if (!checkVideoCanBeTranscribedOrTranscoded({ video, req, res, skipStateCheck: body.forceTranscoding === true })) return

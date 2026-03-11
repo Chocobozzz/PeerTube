@@ -12,7 +12,7 @@ import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MStreamingPlaylist, MVideo, MVideoCaption, MVideoFullLight, MVideoId, MVideoUUID, MVideoUrl } from '@server/types/models/index.js'
+import { MStreamingPlaylist, MVideo, MVideoCaption, MVideoFull, MVideoId, MVideoUUID, MVideoUrl } from '@server/types/models/index.js'
 import { MutexInterface } from 'async-mutex'
 import { ensureDir, remove } from 'fs-extra/esm'
 import { writeFile } from 'fs/promises'
@@ -219,7 +219,7 @@ export async function generateSubtitle (options: {
 }
 
 export async function onTranscriptionEnded (options: {
-  video: MVideoFullLight
+  video: MVideoFull
   language: string
   vttPath: string
   lTags?: (string | number)[]

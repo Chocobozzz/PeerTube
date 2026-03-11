@@ -29,7 +29,7 @@ async function processLikeVideo (byActor: MActorSignature, activity: ActivityLik
   const byAccount = byActor.Account
   if (!byAccount) throw new Error('Cannot create like with the non account actor ' + byActor.url)
 
-  const { video: onlyVideo } = await maybeGetOrCreateAPVideo({ videoObject: videoUrl, fetchType: 'only-video-and-blacklist' })
+  const { video: onlyVideo } = await maybeGetOrCreateAPVideo({ videoObject: videoUrl, fetchType: 'with-blacklist' })
   if (!onlyVideo?.isLocal()) return
 
   if (!canVideoBeFederated(onlyVideo)) {

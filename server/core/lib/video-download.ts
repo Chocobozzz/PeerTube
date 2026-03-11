@@ -4,7 +4,7 @@ import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg/ffmpeg-op
 import { logger } from '@server/helpers/logger.js'
 import { buildRequestError, doRequestAndSaveToFile, generateRequestStream } from '@server/helpers/requests.js'
 import { REQUEST_TIMEOUTS } from '@server/initializers/constants.js'
-import { isWebVideoFile, MVideoFile, MVideoThumbnail } from '@server/types/models/index.js'
+import { isWebVideoFile, MVideoFile, MVideoThumbnails } from '@server/types/models/index.js'
 import { remove } from 'fs-extra/esm'
 import { Readable, Writable } from 'stream'
 import { pipeline } from 'stream/promises'
@@ -26,13 +26,13 @@ export class VideoDownload {
   private readonly tmpDestinations: string[] = []
   private ffmpegContainer: FFmpegContainer
 
-  private readonly video: MVideoThumbnail
+  private readonly video: MVideoThumbnails
   private readonly videoFiles: MVideoFile[]
 
   private allowDirectSending = true
 
   constructor (options: {
-    video: MVideoThumbnail
+    video: MVideoThumbnails
     videoFiles: MVideoFile[]
   }) {
     this.video = options.video

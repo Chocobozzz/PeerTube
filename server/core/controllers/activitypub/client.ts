@@ -34,7 +34,7 @@ import {
   asyncMiddleware,
   executeIfActivityPub,
   videoChannelsHandleValidatorFactory,
-  videosCustomGetValidator,
+  videoGetValidatorFactory,
   videosShareValidator
 } from '../../middlewares/index.js'
 import {
@@ -109,7 +109,7 @@ activityPubClientRouter.get(
   '/videos/watch/:id/comments',
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
+  asyncMiddleware(videoGetValidatorFactory('with-blacklist')),
   asyncMiddleware(videoCommentsController)
 )
 activityPubClientRouter.get(
@@ -141,21 +141,21 @@ activityPubClientRouter.get(
   executeIfActivityPub,
   activityPubRateLimiter,
   cacheRoute(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS),
-  asyncMiddleware(videosCustomGetValidator('all')),
+  asyncMiddleware(videoGetValidatorFactory('full')),
   asyncMiddleware(videoController)
 )
 activityPubClientRouter.get(
   '/videos/watch/:id/activity',
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(videosCustomGetValidator('all')),
+  asyncMiddleware(videoGetValidatorFactory('full')),
   asyncMiddleware(videoController)
 )
 activityPubClientRouter.get(
   '/videos/watch/:id/announces',
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
+  asyncMiddleware(videoGetValidatorFactory('with-blacklist')),
   asyncMiddleware(videoAnnouncesController)
 )
 activityPubClientRouter.get(
@@ -169,21 +169,21 @@ activityPubClientRouter.get(
   '/videos/watch/:id/likes',
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
+  asyncMiddleware(videoGetValidatorFactory('with-blacklist')),
   asyncMiddleware(videoLikesController)
 )
 activityPubClientRouter.get(
   '/videos/watch/:id/dislikes',
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
+  asyncMiddleware(videoGetValidatorFactory('with-blacklist')),
   asyncMiddleware(videoDislikesController)
 )
 activityPubClientRouter.get(
   '/videos/watch/:id/player-settings',
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
+  asyncMiddleware(videoGetValidatorFactory('with-blacklist')),
   asyncMiddleware(videoPlayerSettingsController)
 )
 
@@ -203,7 +203,7 @@ activityPubClientRouter.get(
   activityPubRateLimiter,
   apVideoChaptersSetCacheKey,
   chaptersCacheRouteMiddleware(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS),
-  asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
+  asyncMiddleware(videoGetValidatorFactory('with-blacklist')),
   asyncMiddleware(videoChaptersController)
 )
 
@@ -332,7 +332,7 @@ function getAccountVideoRateFactory (rateType: VideoRateType) {
 }
 
 async function videoController (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
 
   if (redirectIfNotOwned(video.url, res)) return
 
@@ -355,13 +355,13 @@ async function videoAnnounceController (req: express.Request, res: express.Respo
 
   if (redirectIfNotOwned(share.url, res)) return
 
-  const activity = buildAnnounceWithVideoAudience(share.Actor, share, res.locals.videoAll)
+  const activity = buildAnnounceWithVideoAudience(share.Actor, share, res.locals.videoWithBlacklist)
 
   return activityPubResponse(activityPubContextify(activity, 'Announce', getContextFilter()), res)
 }
 
 async function videoAnnouncesController (req: express.Request, res: express.Response) {
-  const video = res.locals.onlyVideo
+  const video = res.locals.videoWithBlacklist
 
   if (redirectIfNotOwned(video.url, res)) return
 
@@ -378,7 +378,7 @@ async function videoAnnouncesController (req: express.Request, res: express.Resp
 }
 
 async function videoLikesController (req: express.Request, res: express.Response) {
-  const video = res.locals.onlyVideo
+  const video = res.locals.videoWithBlacklist
 
   if (redirectIfNotOwned(video.url, res)) return
 
@@ -388,7 +388,7 @@ async function videoLikesController (req: express.Request, res: express.Response
 }
 
 async function videoDislikesController (req: express.Request, res: express.Response) {
-  const video = res.locals.onlyVideo
+  const video = res.locals.videoWithBlacklist
 
   if (redirectIfNotOwned(video.url, res)) return
 
@@ -398,7 +398,7 @@ async function videoDislikesController (req: express.Request, res: express.Respo
 }
 
 async function videoCommentsController (req: express.Request, res: express.Response) {
-  const video = res.locals.onlyVideo
+  const video = res.locals.videoWithBlacklist
 
   if (redirectIfNotOwned(video.url, res)) return
 
@@ -418,7 +418,7 @@ async function videoCommentsController (req: express.Request, res: express.Respo
 // ---------------------------------------------------------------------------
 
 async function videoPlayerSettingsController (req: express.Request, res: express.Response) {
-  const video = res.locals.onlyVideo
+  const video = res.locals.videoWithBlacklist
 
   if (redirectIfNotOwned(video.url, res)) return
 
@@ -494,7 +494,7 @@ async function videoCommentApprovedController (req: express.Request, res: expres
 }
 
 async function videoChaptersController (req: express.Request, res: express.Response) {
-  const video = res.locals.onlyVideo
+  const video = res.locals.videoWithBlacklist
 
   if (redirectIfNotOwned(video.url, res)) return
 

@@ -10,7 +10,7 @@ import { generateImageFilename, processImage } from '../helpers/image-utils.js'
 import { CONFIG } from '../initializers/config.js'
 import { ASSETS_PATH, MIMETYPES } from '../initializers/constants.js'
 import { ThumbnailModel } from '../models/video/thumbnail.js'
-import { MVideoFile, MVideoThumbnail, MVideoUUID, MVideoWithAllFiles } from '../types/models/index.js'
+import { MVideoFile, MVideoThumbnails, MVideoUUID, MVideoWithAllFiles } from '../types/models/index.js'
 import { MThumbnail } from '../types/models/video/thumbnail.js'
 import { MVideoPlaylistThumbnail } from '../types/models/video/video-playlist.js'
 import { VideoPathManager } from './video-path-manager.js'
@@ -97,7 +97,7 @@ export function updateRemotePlaylistThumbnailFromUrl (options: {
 
 export async function createLocalVideoThumbnailsFromImage (options: {
   inputPath: string
-  video: MVideoThumbnail
+  video: MVideoThumbnails
   automaticallyGenerated: boolean
   keepOriginal?: boolean // default to false
 }) {
@@ -123,7 +123,7 @@ export async function createLocalVideoThumbnailsFromImage (options: {
 
 function _createLocalVideoThumbnailFromImage (options: {
   inputPath: string
-  video: MVideoThumbnail
+  video: MVideoThumbnails
   automaticallyGenerated: boolean
   size: ImageSize
   keepOriginal: boolean
@@ -155,7 +155,7 @@ function _createLocalVideoThumbnailFromImage (options: {
 
 // Returns thumbnail models sorted by their size (height) in descendent order (biggest first)
 export function createLocalVideoThumbnailsFromVideo (options: {
-  video: MVideoThumbnail
+  video: MVideoThumbnails
   videoFile: MVideoFile
   ffprobe: FfprobeData
 }): Promise<MThumbnail[]> {
@@ -220,7 +220,7 @@ export function createLocalVideoThumbnailsFromVideo (options: {
 
 export function createLocalVideoThumbnailsFromUrl (options: {
   downloadUrl: string
-  video: MVideoThumbnail
+  video: MVideoThumbnails
 }) {
   const { downloadUrl, video } = options
 
@@ -231,7 +231,7 @@ export function createLocalVideoThumbnailsFromUrl (options: {
 
 function _createLocalVideoThumbnailFromUrl (options: {
   downloadUrl: string
-  video: MVideoThumbnail
+  video: MVideoThumbnails
   size: ImageSize
 }) {
   const { downloadUrl, video, size } = options
@@ -250,7 +250,7 @@ function _createLocalVideoThumbnailFromUrl (options: {
 
 export function updateRemoteVideoThumbnail (options: {
   fileUrl: string
-  video: MVideoThumbnail
+  video: MVideoThumbnails
   size: ImageSize
 }) {
   const { fileUrl, video, size } = options
@@ -350,7 +350,7 @@ function buildMetadataFromPlaylist (options: {
 }
 
 function buildMetadataFromVideo (options: {
-  video: MVideoThumbnail
+  video: MVideoThumbnails
   size: ImageSize
   extension: string
 }) {

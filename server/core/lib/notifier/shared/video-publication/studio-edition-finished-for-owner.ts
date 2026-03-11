@@ -4,10 +4,10 @@ import { logger } from '@server/helpers/logger.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
 import { UserModel } from '@server/models/user/user.js'
-import { MUserDefault, MUserWithNotificationSetting, MVideoFullLight, UserNotificationModelForApi } from '@server/types/models/index.js'
+import { MUserDefault, MUserWithNotificationSetting, MVideoFull, UserNotificationModelForApi } from '@server/types/models/index.js'
 import { AbstractNotification } from '../common/abstract-notification.js'
 
-export class StudioEditionFinishedForOwner extends AbstractNotification<MVideoFullLight> {
+export class StudioEditionFinishedForOwner extends AbstractNotification<MVideoFull> {
   private user: MUserDefault
 
   async prepare () {
