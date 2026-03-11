@@ -18,6 +18,9 @@ patchedDependencies:
   video.js:
     hash: 66459642658d85da52b45ff0472242e9daade1ff3dd765974103db72a7c55377
     path: pnpm-patches/video.js.patch
+  webfinger.js:
+    hash: 4c368a7cb36dd9beb42b539e94c7bd010b60fc629ac54a67833117ebdb361b2a
+    path: pnpm-patches/webfinger.js.patch
 
 importers:
 
@@ -349,7 +352,7 @@ importers:
         version: 13.15.26
       webfinger.js:
         specifier: 2.8.2
-        version: 2.8.2
+        version: 2.8.2(patch_hash=4c368a7cb36dd9beb42b539e94c7bd010b60fc629ac54a67833117ebdb361b2a)
       winston:
         specifier: 3.19.0
         version: 3.19.0
@@ -22243,7 +22246,7 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  webfinger.js@2.8.2: {}
+  webfinger.js@2.8.2(patch_hash=4c368a7cb36dd9beb42b539e94c7bd010b60fc629ac54a67833117ebdb361b2a): {}
 
   webidl-conversions@7.0.0: {}
 

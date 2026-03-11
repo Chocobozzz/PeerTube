@@ -30,3 +30,4 @@ patchedDependencies:
   '@types/markdown-it': pnpm-patches/@types__markdown-it.patch
   tinykeys: pnpm-patches/tinykeys.patch
   video.js: pnpm-patches/video.js.patch
+  webfinger.js: pnpm-patches/webfinger.js.patch
