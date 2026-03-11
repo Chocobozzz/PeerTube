@@ -11,7 +11,7 @@ export function getVideoThumbnailFile (files: express.UploadFiles): Express.Mult
 }
 
 export function getVideoWithAttributes (res: express.Response) {
-  return res.locals.videoAPI || res.locals.videoAll || res.locals.onlyVideo
+  return res.locals.videoAPI || res.locals.videoFull || res.locals.videoWithBlacklist || res.locals.videoWithRights
 }
 
 export function extractVideo (videoOrPlaylist: MVideo | MStreamingPlaylistVideo) {

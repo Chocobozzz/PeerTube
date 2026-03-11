@@ -13,7 +13,7 @@ import { Redis } from '@server/lib/redis.js'
 import { buildUploadXFile, safeUploadXCleanup } from '@server/lib/uploadx.js'
 import { VideoChangeOwnershipModel } from '@server/models/video/video-change-ownership.js'
 import { ExpressPromiseHandler } from '@server/types/express-handler.js'
-import { MVideoFullLight } from '@server/types/models/index.js'
+import { MVideoFull } from '@server/types/models/index.js'
 import express from 'express'
 import { body, param, query, ValidationChain } from 'express-validator'
 import {
@@ -236,7 +236,7 @@ export const videosUpdateValidator = getCommonVideoEditAttributes().concat([
 
     if (!isValidPasswordProtectedPrivacy(req, res)) return cleanUpReqFiles(req)
 
-    const video = res.locals.videoAll
+    const video = res.locals.videoFull
     if (exists(req.body.privacy) && video.isLive && video.privacy !== req.body.privacy && video.state !== VideoState.WAITING_FOR_LIVE) {
       return res.fail({ message: req.t('Cannot update privacy of a live that has already started') })
     }
@@ -308,8 +308,8 @@ export async function checkVideoFollowConstraints (req: express.Request, res: ex
   })
 }
 
-type FetchType = Extract<VideoLoadType, 'for-api' | 'all' | 'only-video-and-blacklist' | 'unsafe-only-immutable-attributes'>
-export const videosCustomGetValidator = (fetchType: FetchType) => {
+type FetchType = Extract<VideoLoadType, 'for-api' | 'full' | 'with-blacklist' | 'unsafe-immutable-only'>
+export const videoGetValidatorFactory = (fetchType: FetchType) => {
   return [
     isValidVideoIdParam('id'),
 
@@ -320,9 +320,9 @@ export const videosCustomGetValidator = (fetchType: FetchType) => {
       if (!await doesVideoExist(req.params.id, res, fetchType)) return
 
       // Controllers does not need to check video rights
-      if (fetchType === 'unsafe-only-immutable-attributes') return next()
+      if (fetchType === 'unsafe-immutable-only') return next()
 
-      const video = getVideoWithAttributes(res) as MVideoFullLight
+      const video = getVideoWithAttributes(res) as MVideoFull
 
       if (!await checkCanSeeVideo({ req, res, video, paramId: req.params.id })) return
 
@@ -331,9 +331,7 @@ export const videosCustomGetValidator = (fetchType: FetchType) => {
   ]
 }
 
-export const videosGetValidator = videosCustomGetValidator('all')
-
-export const videoFileMetadataGetValidator = getCommonVideoEditAttributes().concat([
+export const videoFileMetadataGetValidator = [
   isValidVideoIdParam('id'),
 
   param('videoFileId')
@@ -345,14 +343,14 @@ export const videoFileMetadataGetValidator = getCommonVideoEditAttributes().conc
 
     return next()
   }
-])
+]
 
 export const videosDownloadValidator = [
   isValidVideoIdParam('id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.id, res, 'all')) return
+    if (!await doesVideoExist(req.params.id, res, 'full')) return
 
     const video = getVideoWithAttributes(res)
 
@@ -386,7 +384,7 @@ export const videosRemoveValidator = [
     if (
       !await checkCanManageVideo({
         user: res.locals.oauth.token.User,
-        video: res.locals.videoAll,
+        video: res.locals.videoFull,
         right: UserRight.REMOVE_ANY_VIDEO,
         req,
         res,

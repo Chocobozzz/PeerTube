@@ -16,12 +16,12 @@ import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { moveToFailedTranscodingState } from '@server/lib/video-state.js'
 import { UserModel } from '@server/models/user/user.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
-import { MUser, MUserId, MVideoFullLight } from '@server/types/models/index.js'
+import { MUser, MUserId, MVideoFull } from '@server/types/models/index.js'
 import { Job } from 'bullmq'
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
 import { VideoModel } from '../../../models/video/video.js'
 
-type HandlerFunction = (job: Job, payload: VideoTranscodingPayload, video: MVideoFullLight, user: MUser) => Promise<void>
+type HandlerFunction = (job: Job, payload: VideoTranscodingPayload, video: MVideoFull, user: MUser) => Promise<void>
 
 const handlers: { [id in VideoTranscodingPayload['type']]: HandlerFunction } = {
   'new-resolution-to-hls': handleHLSJob,
@@ -77,7 +77,7 @@ export {
 // Job handlers
 // ---------------------------------------------------------------------------
 
-async function handleWebVideoMergeAudioJob (job: Job, payload: MergeAudioTranscodingPayload, video: MVideoFullLight, user: MUserId) {
+async function handleWebVideoMergeAudioJob (job: Job, payload: MergeAudioTranscodingPayload, video: MVideoFull, user: MUserId) {
   logger.info('Handling merge audio transcoding job for %s.', video.uuid, lTags(video.uuid), { payload })
 
   await mergeAudioVideofile({ video, resolution: payload.resolution, fps: payload.fps, job })
@@ -87,7 +87,7 @@ async function handleWebVideoMergeAudioJob (job: Job, payload: MergeAudioTransco
   await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState: payload.canMoveVideoState, video })
 }
 
-async function handleWebVideoOptimizeJob (job: Job, payload: OptimizeTranscodingPayload, video: MVideoFullLight, user: MUserId) {
+async function handleWebVideoOptimizeJob (job: Job, payload: OptimizeTranscodingPayload, video: MVideoFull, user: MUserId) {
   logger.info('Handling optimize transcoding job for %s.', video.uuid, lTags(video.uuid), { payload })
 
   await optimizeOriginalVideofile({ video, job })
@@ -99,7 +99,7 @@ async function handleWebVideoOptimizeJob (job: Job, payload: OptimizeTranscoding
 
 // ---------------------------------------------------------------------------
 
-async function handleNewWebVideoResolutionJob (job: Job, payload: NewWebVideoResolutionTranscodingPayload, video: MVideoFullLight) {
+async function handleNewWebVideoResolutionJob (job: Job, payload: NewWebVideoResolutionTranscodingPayload, video: MVideoFull) {
   logger.info('Handling Web Video transcoding job for %s.', video.uuid, lTags(video.uuid), { payload })
 
   await transcodeNewWebVideoResolution({ video, resolution: payload.resolution, fps: payload.fps, job })
@@ -112,11 +112,11 @@ async function handleNewWebVideoResolutionJob (job: Job, payload: NewWebVideoRes
 
 // ---------------------------------------------------------------------------
 
-async function handleHLSJob (job: Job, payload: HLSTranscodingPayload, videoArg: MVideoFullLight) {
+async function handleHLSJob (job: Job, payload: HLSTranscodingPayload, videoArg: MVideoFull) {
   logger.info('Handling HLS transcoding job for %s.', videoArg.uuid, lTags(videoArg.uuid), { payload })
 
   const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(videoArg.uuid)
-  let video: MVideoFullLight
+  let video: MVideoFull
 
   try {
     video = await VideoModel.loadFull(videoArg.uuid)

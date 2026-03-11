@@ -4,7 +4,7 @@ import { PeerTubeRequestError } from '@server/helpers/requests.js'
 import { JobQueue } from '@server/lib/job-queue/job-queue.js'
 import { VideoLoadByUrlType } from '@server/lib/model-loaders/index.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MVideo, MVideoFullLight, MVideoThumbnail } from '@server/types/models/index.js'
+import { MVideo, MVideoFull, MVideoThumbnails } from '@server/types/models/index.js'
 import { ActorFollowHealthCache } from '../../actor-follow-health-cache.js'
 import { fetchRemoteVideo, SyncParam, syncVideoExternalAttributes } from './shared/index.js'
 import { APVideoUpdater } from './updater.js'
@@ -20,15 +20,15 @@ export function scheduleVideoRefreshIfNeeded (video: MVideo) {
 }
 
 export async function refreshVideoIfNeeded (options: {
-  video: MVideoThumbnail
+  video: MVideoThumbnails
   fetchedType: VideoLoadByUrlType
   syncParam: SyncParam
-}): Promise<MVideoThumbnail> {
+}): Promise<MVideoThumbnails> {
   if (!options.video.isOutdated()) return options.video
 
   // We need more attributes if the argument video was fetched with not enough joints
-  const video = options.fetchedType === 'all'
-    ? options.video as MVideoFullLight
+  const video = options.fetchedType === 'full'
+    ? options.video as MVideoFull
     : await VideoModel.loadByUrlAndPopulateAccountAndFiles(options.video.url)
 
   const lTags = loggerTagsFactory('ap', 'video', 'refresh', video.uuid, video.url)

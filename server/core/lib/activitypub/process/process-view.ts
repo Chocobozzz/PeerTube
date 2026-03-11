@@ -24,7 +24,7 @@ async function processCreateView (activity: ActivityView, byActor: MActorSignatu
 
   const { video } = await getOrCreateAPVideo({
     videoObject,
-    fetchType: 'only-video-and-blacklist',
+    fetchType: 'with-blacklist',
     allowRefresh: false
   })
 

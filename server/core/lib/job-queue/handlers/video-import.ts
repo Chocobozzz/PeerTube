@@ -28,7 +28,7 @@ import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
 import { createTorrentAndSetInfoHash, downloadWebTorrentVideo } from '@server/lib/webtorrent.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
-import { MUserId, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
+import { MUserId, MVideoFile, MVideoFull } from '@server/types/models/index.js'
 import { MVideoImport, MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/types/models/video/video-import.js'
 import { Job } from 'bullmq'
 import { FfprobeData } from 'fluent-ffmpeg'
@@ -288,7 +288,7 @@ async function generateThumbnails (options: {
 
 async function afterImportSuccess (options: {
   videoImport: MVideoImport
-  video: MVideoFullLight
+  video: MVideoFull
   videoFile: MVideoFile
   user: MUserId
 

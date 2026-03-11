@@ -85,7 +85,7 @@ function buildVideosHelpers () {
     },
 
     loadByIdOrUUID: (id: number | string) => {
-      return VideoModel.load(id)
+      return VideoModel.loadWithThumbnails(id)
     },
 
     loadByIdOrUUIDWithFiles: (id: number | string) => {

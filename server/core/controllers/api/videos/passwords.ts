@@ -62,7 +62,7 @@ export {
 
 async function listVideoPasswords (req: express.Request, res: express.Response) {
   const options = {
-    videoId: res.locals.videoAll.id,
+    videoId: res.locals.videoWithRights.id,
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort
@@ -74,7 +74,7 @@ async function listVideoPasswords (req: express.Request, res: express.Response) 
 }
 
 async function updateVideoPasswordList (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
+  const video = res.locals.videoWithRights
   const videoId = video.id
 
   const passwordArray = req.body.passwords as string[]
@@ -98,7 +98,7 @@ async function updateVideoPasswordList (req: express.Request, res: express.Respo
 }
 
 async function addVideoPassword (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
+  const video = res.locals.videoWithRights
   const videoId = video.id
 
   const newPassword = req.body.password as string
@@ -113,7 +113,7 @@ async function addVideoPassword (req: express.Request, res: express.Response) {
 }
 
 async function removeVideoPassword (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.videoAll
+  const videoInstance = res.locals.videoWithRights
   const password = res.locals.videoPassword
 
   await VideoPasswordModel.deletePassword(password.id)

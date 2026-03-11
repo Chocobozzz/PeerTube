@@ -8,7 +8,7 @@ import { copy } from 'fs-extra/esm'
 import { extname, join } from 'path'
 import { Transaction } from 'sequelize'
 import { VideoPlaylistModel } from '../models/video/video-playlist.js'
-import { MAccount, MVideoThumbnail } from '../types/models/index.js'
+import { MAccount, MVideoThumbnails } from '../types/models/index.js'
 import { MVideoPlaylistOwner, MVideoPlaylistThumbnail } from '../types/models/video/video-playlist.js'
 import { sendUpdateVideoPlaylist } from './activitypub/send/send-update.js'
 import { getLocalVideoPlaylistActivityPubUrl } from './activitypub/url.js'
@@ -32,7 +32,7 @@ export async function createWatchLaterPlaylist (account: MAccount, t: Transactio
   return videoPlaylist
 }
 
-export async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylistThumbnail, video: MVideoThumbnail) {
+export async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylistThumbnail, video: MVideoThumbnails) {
   logger.info('Generating default thumbnail to playlist %s.', videoPlaylist.url)
 
   const videoThumbnail = video.getBestThumbnail('16:9')

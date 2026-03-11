@@ -38,7 +38,7 @@ import { PlayerSettingModel } from '@server/models/video/player-setting.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { VideoEmbedPrivacyDomainModel } from '@server/models/video/video-embed-privacy-domain.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MChannelId, MVideoFullLight } from '@server/types/models/index.js'
+import { MChannelId, MVideoFull } from '@server/types/models/index.js'
 import { FfprobeData } from 'fluent-ffmpeg'
 import { parse } from 'path'
 import { AbstractUserImporter } from './abstract-user-importer.js'
@@ -280,7 +280,7 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
     return { duplicate: false }
   }
 
-  private async importCaptions (video: MVideoFullLight, videoImportData: SanitizedObject) {
+  private async importCaptions (video: MVideoFull, videoImportData: SanitizedObject) {
     const captionPaths: string[] = []
     let updateHLS = false
 
@@ -315,7 +315,7 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
     return captionPaths
   }
 
-  private async importPlayerSettings (video: MVideoFullLight, videoImportData: SanitizedObject) {
+  private async importPlayerSettings (video: MVideoFull, videoImportData: SanitizedObject) {
     const playerSettings = videoImportData.playerSettings
     if (!playerSettings?.theme) return
 
@@ -325,7 +325,7 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
     })
   }
 
-  private async importVideoEmbedPrivacyDomains (video: MVideoFullLight, videoImportData: SanitizedObject) {
+  private async importVideoEmbedPrivacyDomains (video: MVideoFull, videoImportData: SanitizedObject) {
     if (videoImportData.videoEmbedPrivacy.domains.length === 0) return
 
     await VideoEmbedPrivacyDomainModel.addDomains(videoImportData.videoEmbedPrivacy.domains, video.id)

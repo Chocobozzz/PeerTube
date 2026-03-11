@@ -13,7 +13,7 @@ export const isVideoEmbedOnDomainAllowedValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.videoId, res, 'only-video-and-blacklist')) return
+    if (!await doesVideoExist(req.params.videoId, res, 'with-blacklist')) return
 
     return next()
   }
@@ -24,12 +24,12 @@ export const getVideoEmbedPrivacyValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.videoId, res)) return
+    if (!await doesVideoExist(req.params.videoId, res, 'with-rights')) return
 
     if (
       !await checkCanManageVideo({
         user: res.locals.oauth.token.User,
-        video: res.locals.videoAll,
+        video: res.locals.videoWithRights,
         right: UserRight.UPDATE_ANY_VIDEO,
         checkIsOwner: false,
         checkIsLocal: true,
@@ -54,12 +54,12 @@ export const updateVideoEmbedPrivacyValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.videoId, res)) return
+    if (!await doesVideoExist(req.params.videoId, res, 'full')) return
 
     if (
       !await checkCanManageVideo({
         user: res.locals.oauth.token.User,
-        video: res.locals.videoAll,
+        video: res.locals.videoFull,
         right: UserRight.UPDATE_ANY_VIDEO,
         checkIsOwner: false,
         checkIsLocal: true,

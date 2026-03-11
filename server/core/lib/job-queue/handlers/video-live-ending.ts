@@ -38,9 +38,8 @@ import {
   MVideoLive,
   MVideoLiveSession,
   MVideoTag,
-  MVideoThumbnail,
-  MVideoWithAllFiles,
-  MVideoWithFileThumbnail
+  MVideoThumbnails,
+  MVideoWithAllFiles
 } from '@server/types/models/index.js'
 import { Job } from 'bullmq'
 import { pathExists, remove } from 'fs-extra/esm'
@@ -59,7 +58,7 @@ export async function processVideoLiveEnding (job: Job) {
     logger.warn('Video live %d does not exist anymore. Cannot process live ending.', payload.videoId, lTags())
   }
 
-  const video = await VideoModel.load(payload.videoId)
+  const video = await VideoModel.loadWithThumbnails(payload.videoId)
   const live = await VideoLiveModel.loadByVideoId(payload.videoId)
   const liveSession = await VideoLiveSessionModel.load(payload.liveSessionId)
 
@@ -121,7 +120,7 @@ export async function processVideoLiveEnding (job: Job) {
 // ---------------------------------------------------------------------------
 
 async function saveReplayToExternalVideo (options: {
-  liveVideo: MVideoThumbnail
+  liveVideo: MVideoThumbnails
   liveSession: MVideoLiveSession
   publishedAt: string
   replayDirectory: string
@@ -218,8 +217,8 @@ async function saveReplayToExternalVideo (options: {
 }
 
 async function copyOrRegenerateThumbnails (options: {
-  liveVideo: MVideoThumbnail
-  replayVideo: MVideoWithFileThumbnail
+  liveVideo: MVideoThumbnails
+  replayVideo: MVideoWithAllFiles
 }) {
   const { liveVideo, replayVideo } = options
 

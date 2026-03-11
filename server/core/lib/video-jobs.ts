@@ -9,8 +9,8 @@ import {
 import { CONFIG } from '@server/initializers/config.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MVideo, MVideoFile, MVideoFullLight, MVideoUUID } from '@server/types/models/index.js'
-import { CreateJobTypeAndPayload, CreateJobOptions, JobQueue } from './job-queue/job-queue.js'
+import { MVideo, MVideoFile, MVideoFull, MVideoUUID } from '@server/types/models/index.js'
+import { CreateJobOptions, CreateJobTypeAndPayload, JobQueue } from './job-queue/job-queue.js'
 import { VideoStoryboardJobHandler } from './runners/index.js'
 import { createTranscriptionTaskIfNeeded } from './video-captions.js'
 import { moveFilesIfPrivacyChanged } from './video-privacy.js'
@@ -171,7 +171,7 @@ export async function addVideoJobsAfterCreation (options: {
 }
 
 export async function addVideoJobsAfterUpdate (options: {
-  video: MVideoFullLight
+  video: MVideoFull
   isNewVideoForFederation: boolean
 
   nameChanged: boolean

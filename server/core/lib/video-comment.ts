@@ -13,8 +13,7 @@ import {
   MCommentOwnerVideo,
   MCommentOwnerVideoReply,
   MUserAccountId,
-  MVideoAccountLight,
-  MVideoFullLight
+  MVideoAccountLight
 } from '../types/models/index.js'
 import { sendCreateVideoCommentIfNeeded, sendDeleteVideoComment, sendReplyApproval } from './activitypub/send/index.js'
 import { getLocalVideoCommentActivityPubUrl } from './activitypub/url.js'
@@ -71,7 +70,7 @@ export async function approveComment (commentArg: MComment) {
 export async function createLocalVideoComment (options: {
   text: string
   inReplyToComment: MComment | null
-  video: MVideoFullLight
+  video: MVideoAccountLight
   user: MUserAccountId
 }) {
   const { user, video, text, inReplyToComment } = options

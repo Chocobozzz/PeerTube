@@ -4,7 +4,7 @@ import { sequelizeTypescript } from '@server/initializers/database.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MVideoFullLight, MVideoThumbnail } from '@server/types/models/index.js'
+import { MVideoFull, MVideoThumbnails } from '@server/types/models/index.js'
 import { APVideoAbstractBuilder } from './abstract-builder.js'
 import { getVideoAttributesFromObject } from './object-to-model-attributes.js'
 
@@ -25,10 +25,10 @@ export class APVideoCreator extends APVideoAbstractBuilder {
     channel.Actor = channelActor
 
     const videoData = getVideoAttributesFromObject(channel, this.videoObject, this.videoObject.to)
-    const video = VideoModel.build({ ...videoData, likes: 0, dislikes: 0 }) as MVideoThumbnail
+    const video = VideoModel.build({ ...videoData, likes: 0, dislikes: 0 }) as MVideoThumbnails
 
     const { autoBlacklisted, videoCreated } = await sequelizeTypescript.transaction(async t => {
-      const videoCreated = await video.save({ transaction: t }) as MVideoFullLight
+      const videoCreated = await video.save({ transaction: t }) as MVideoFull
       videoCreated.VideoChannel = channel
 
       await this.setThumbnails(videoCreated, t)

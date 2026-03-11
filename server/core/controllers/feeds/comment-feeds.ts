@@ -43,7 +43,7 @@ export {
 
 async function generateVideoCommentsFeed (req: express.Request, res: express.Response) {
   const start = 0
-  const video = res.locals.videoAll
+  const video = res.locals.videoWithRights
   const account = res.locals.account
   const videoChannel = res.locals.videoChannel
 

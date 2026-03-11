@@ -54,7 +54,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function getOverallStats (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
+  const video = res.locals.videoWithRights
   const query = req.query as VideoStatsOverallQuery
 
   const stats = await LocalVideoViewerModel.getOverallStats({
@@ -67,7 +67,7 @@ async function getOverallStats (req: express.Request, res: express.Response) {
 }
 
 async function getUserAgentStats (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
+  const video = res.locals.videoWithRights
   const query = req.query as VideoStatsUserAgentQuery
 
   const stats = await LocalVideoViewerModel.getUserAgentStats({
@@ -80,7 +80,7 @@ async function getUserAgentStats (req: express.Request, res: express.Response) {
 }
 
 async function getRetentionStats (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
+  const video = res.locals.videoWithRights
 
   const stats = await LocalVideoViewerModel.getRetentionStats(video)
 
@@ -88,7 +88,7 @@ async function getRetentionStats (req: express.Request, res: express.Response) {
 }
 
 async function getTimeseriesStats (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
+  const video = res.locals.videoWithRights
   const metric = req.params.metric as VideoStatsTimeserieMetric
   const query = req.query as VideoStatsTimeserieQuery
 
