@@ -44,6 +44,7 @@ export type Activity =
   | ActivityFlag
   | ActivityApproveReply
   | ActivityRejectReply
+  | ActivityDownload
 
 export type ActivityType =
   | 'Create'
@@ -60,6 +61,7 @@ export type ActivityType =
   | 'Flag'
   | 'ApproveReply'
   | 'RejectReply'
+  | 'Download'
 
 export interface ActivityAudience {
   to: string[]
@@ -161,4 +163,10 @@ export interface ActivityFlag extends BaseActivity {
   tag?: ActivityFlagReasonObject[]
   startAt?: number
   endAt?: number
+}
+
+export interface ActivityDownload extends BaseActivity {
+  type: 'Download'
+  actor: string
+  object: APObjectId
 }

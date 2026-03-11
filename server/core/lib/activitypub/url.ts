@@ -129,6 +129,10 @@ export function getLocalApproveReplyActivityPubUrl (video: MVideoUUID, comment: 
   return getLocalVideoCommentActivityPubUrl(video, comment) + '/approve-reply'
 }
 
+export function getDownloadsActivityPubUrl (byActor: MActorUrl, video: MVideoId) {
+  return byActor.url + '/downloads/videos/' + video.id
+}
+
 // ---------------------------------------------------------------------------
 
 // Try to fetch target URL

@@ -6,8 +6,10 @@ import { generateRandomString } from '@server/helpers/utils.js'
 import { MAX_LOCAL_VIEWER_WATCH_SECTIONS, VIEWER_SYNC_REDIS, VIEW_LIFETIME } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { sendCreateWatchAction } from '@server/lib/activitypub/send/index.js'
+import { sendDownload } from '@server/lib/activitypub/send/send-download.js'
 import { getLocalVideoViewerActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { Redis } from '@server/lib/redis.js'
+import { getServerActor } from '@server/models/application/application.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { LocalVideoViewerWatchSectionModel } from '@server/models/view/local-video-viewer-watch-section.js'
 import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer.js'
@@ -211,6 +213,8 @@ export class VideoViewerStats {
 
     try {
       await Redis.Instance.setStats(REDIS_SCOPES.DOWNLOAD, sessionId, videoId, stats)
+
+      await sendDownload({ byActor: await getServerActor(), video, downloadsCount: 1 })
     } catch (err) {
       logger.error("Cannot write download into redis", {
         sessionId,
