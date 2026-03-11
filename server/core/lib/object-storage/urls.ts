@@ -27,30 +27,9 @@ export function buildObjectStorageWebVideoPrivateFileUrl (filename: string) {
 // Private
 // ---------------------------------------------------------------------------
 
-let baseUrl: string
 function buildBaseUrl (bucketInfo: BucketInfo) {
-  if (baseUrl) return baseUrl
-
-  baseUrl = _buildBaseUrl(bucketInfo)
-
-  return baseUrl
-}
-
-function _buildBaseUrl (bucketInfo: BucketInfo) {
-  let endpointParsed: URL
-
-  try {
-    endpointParsed = new URL(getEndpoint())
-  } catch (error) {
-    logger.error(
-      `Invalid object storage endpoint URL: ${getEndpoint()}. ` +
-        `If you enabled object storage, ensure object_storage.endpoint is correctly configured. ` +
-        `Otherwise, check that you have correctly moved all your videos to your local filesystem.`,
-      lTags()
-    )
-
-    return ''
-  }
+  const endpointParsed = getEndpointParsed()
+  if (!endpointParsed) return ''
 
   let baseUrlConfig = bucketInfo.BASE_URL
   if (baseUrlConfig && !baseUrlConfig.endsWith('/')) baseUrlConfig += '/'
@@ -64,4 +43,25 @@ function _buildBaseUrl (bucketInfo: BucketInfo) {
   if (baseUrlConfig) return baseUrlConfig
 
   return `${endpointParsed.protocol}//${bucketInfo.BUCKET_NAME}.${endpointParsed.host}/`
+}
+
+let endpointParsed: URL
+
+function getEndpointParsed () {
+  if (!endpointParsed) {
+    try {
+      endpointParsed = new URL(getEndpoint())
+    } catch (error) {
+      logger.error(
+        `Invalid object storage endpoint URL: ${getEndpoint()}. ` +
+          `If you enabled object storage, ensure object_storage.endpoint is correctly configured. ` +
+          `Otherwise, check that you have correctly moved all your videos to your local filesystem.`,
+        lTags()
+      )
+
+      return undefined
+    }
+  }
+
+  return endpointParsed
 }
