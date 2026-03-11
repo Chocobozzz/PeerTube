@@ -1,19 +1,19 @@
 import {
 	ActivityAudience,
 	ActivityDownload,
-} from "@peertube/peertube-models";
-import { VideoViewsManager } from "@server/lib/views/video-views-manager.js";
+} from "@peertube/peertube-models"
+import { VideoViewsManager } from "@server/lib/views/video-views-manager.js"
 import {
 	MActorAudience,
 	MActorLight,
 	MVideoImmutable,
 	MVideoUrl,
-} from "@server/types/models/index.js";
-import { Transaction } from "sequelize";
-import { logger } from "../../../helpers/logger.js";
-import { audiencify, getPublicAudience } from "../audience.js";
-import { getDownloadsActivityPubUrl } from "../url.js";
-import { sendVideoRelatedActivity } from "./shared/send-utils.js";
+} from "@server/types/models/index.js"
+import { Transaction } from "sequelize"
+import { logger } from "../../../helpers/logger.js"
+import { audiencify, getPublicAudience } from "../audience.js"
+import { getDownloadsActivityPubUrl } from "../url.js"
+import { sendVideoRelatedActivity } from "./shared/send-utils.js"
 
 async function sendDownload(options: {
 	byActor: MActorLight;
@@ -21,12 +21,12 @@ async function sendDownload(options: {
 	downloadsCount ? : number;
 	transaction ? : Transaction;
 }) {
-	const { byActor, downloadsCount, video, transaction } = options;
+	const { byActor, downloadsCount, video, transaction } = options
 
-	logger.info("Creating job to send downloads of %s.", video.url);
+	logger.info("Creating job to send downloads of %s.", video.url)
 
 	const activityBuilder = (audience: ActivityAudience) => {
-		const url = getDownloadsActivityPubUrl(byActor, video);
+		const url = getDownloadsActivityPubUrl(byActor, video)
 
 		return buildDownloadActivity({
 			url,
@@ -34,8 +34,8 @@ async function sendDownload(options: {
 			video,
 			audience,
 			downloadsCount,
-		});
-	};
+		})
+	}
 
 	return sendVideoRelatedActivity(activityBuilder, {
 		byActor,
@@ -43,12 +43,12 @@ async function sendDownload(options: {
 		transaction,
 		contextType: "Download",
 		parallelizable: true,
-	});
+	})
 }
 
 // ---------------------------------------------------------------------------
 
-export { sendDownload };
+export { sendDownload }
 
 // ---------------------------------------------------------------------------
 
@@ -65,17 +65,17 @@ function buildDownloadActivity(options: {
 		downloadsCount,
 		video,
 		audience = getPublicAudience(byActor),
-	} = options;
+	} = options
 
 	const base = {
 		id: url,
 		type: "Download" as "Download",
 		actor: byActor.url,
 		object: video.url,
-	};
+	}
 
 	if (downloadsCount === undefined) {
-		return audiencify(base, audience);
+		return audiencify(base, audience)
 	}
 
 	return audiencify({
@@ -92,5 +92,5 @@ function buildDownloadActivity(options: {
 			},
 		},
 		audience,
-	);
+	)
 }
