@@ -441,6 +441,8 @@ On a fresh install of [FreeBSD](https://www.freebsd.org), new system or new jail
     pkg install -y sudo bash wget git python nginx pkgconf postgresql13-server postgresql13-contrib redis openssl node npm yarn ffmpeg unzip
     ```
 
+1. install `sharp` build dependencies: https://sharp.pixelplumbing.com/install/#building-from-source
+
 1. **PeerTube <= v7.3 only** Install Yarn:
     ```sh
     pkg install -y yarn
