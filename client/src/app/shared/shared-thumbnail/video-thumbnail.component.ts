@@ -113,14 +113,16 @@ export class VideoThumbnailComponent implements OnChanges {
     if (!width) {
       const cssVariable = computedStyle.getPropertyValue('--thumbnail-width')
 
-      const widthStr = cssVariable.replace('px', '').trim()
+      const widthStr = cssVariable === '100%'
+        ? window.innerWidth
+        : cssVariable.replace('px', '').trim()
 
       if (!widthStr) {
         logger.error('Cannot find thumbnail width in CSS variables. Fallback to 280px')
-        return ''
+        width = 280
+      } else {
+        width = +widthStr
       }
-
-      width = +widthStr
     }
 
     return findAppropriateThumbnailFileUrl(video.thumbnails, width, '16:9')
