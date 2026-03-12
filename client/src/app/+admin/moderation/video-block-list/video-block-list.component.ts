@@ -8,14 +8,15 @@ import { ResultList, VideoBlacklist as VideoBlacklistServer, VideoBlacklistType,
 import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
 import { switchMap } from 'rxjs/operators'
 import { environment } from 'src/environments/environment'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
+import { AdvancedFilterDef } from '../../../shared/shared-forms/advanced-input-filter.component'
 import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
 import { NumberFormatterPipe } from '../../../shared/shared-main/common/number-formatter.pipe'
 import { EmbedComponent } from '../../../shared/shared-main/video/embed.component'
-import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../../../shared/shared-tables/table.component'
+import { DataLoaderOptionsBase, TableColumnInfo, TableComponent } from '../../../shared/shared-tables/table.component'
 import { VideoCellComponent } from '../../../shared/shared-tables/video-cell.component'
 import { VideoNSFWBadgeComponent } from '../../../shared/shared-video/video-nsfw-badge.component'
 
+type DataLoaderParameter = Parameters<VideoBlockListComponent['_dataLoader']>[0]
 type VideoBlacklist = VideoBlacklistServer & { reasonHtml?: string }
 
 @Component({
@@ -23,7 +24,6 @@ type VideoBlacklist = VideoBlacklistServer & { reasonHtml?: string }
   templateUrl: './video-block-list.component.html',
   styleUrls: [ '../../../shared/shared-moderation/moderation.scss' ],
   imports: [
-    AdvancedInputFilterComponent,
     ActionDropdownComponent,
     VideoCellComponent,
     EmbedComponent,
@@ -41,24 +41,21 @@ export class VideoBlockListComponent implements OnInit {
   private markdownRenderer = inject(MarkdownService)
   private videoService = inject(VideoService)
 
-  readonly table = viewChild<TableComponent<VideoBlacklist>>('table')
+  readonly table = viewChild<TableComponent<VideoBlacklist, DataLoaderParameter>>('table')
 
   blocklistTypeFilter: VideoBlacklistType_Type
 
   videoBlocklistActions: DropdownAction<VideoBlacklist>[][] = []
 
-  inputFilters: AdvancedInputFilter[] = [
+  inputFilters: AdvancedFilterDef<DataLoaderParameter>[] = [
     {
-      title: $localize`Advanced filters`,
-      children: [
-        {
-          value: 'type:auto',
-          label: $localize`Automatic blocks`
-        },
-        {
-          value: 'type:manual',
-          label: $localize`Manual blocks`
-        }
+      type: 'options',
+      key: 'type',
+      title: $localize`Block type`,
+      options: [
+        { value: 'all', label: $localize`All` },
+        { value: VideoBlacklistType['AUTO_BEFORE_PUBLISHED'], label: $localize`Automatic blocks` },
+        { value: VideoBlacklistType['MANUAL'], label: $localize`Manual blocks` }
       ]
     }
   ]
@@ -176,7 +173,7 @@ export class VideoBlockListComponent implements OnInit {
     })
   }
 
-  private _dataLoader (options: DataLoaderOptions) {
+  private _dataLoader (options: DataLoaderOptionsBase & { type?: VideoBlacklistType_Type }) {
     return this.videoBlocklistService.listBlocks(options)
       .pipe(
         switchMap(async (resultList: ResultList<VideoBlacklist>) => {

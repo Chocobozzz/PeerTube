@@ -61,7 +61,7 @@ export class AccountReportComponent extends FormReactive implements OnInit {
       predefinedReasons: mapValues(abusePredefinedReasonsMap, _ => null as any)
     })
 
-    this.predefinedReasons = this.abuseService.getPrefefinedReasons('account')
+    this.predefinedReasons = this.abuseService.getPredefinedReasons('account')
   }
 
   show (account: Account) {

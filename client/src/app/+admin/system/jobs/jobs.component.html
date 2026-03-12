@@ -9,35 +9,11 @@
   paginatorText="jobs per page"
   columnConfig="true"
   [dataLoader]="dataLoader"
-  [customParseQueryParams]="customParseQueryParams"
-  [customUpdateUrl]="customUpdateUrl"
+  [inputFilters]="inputFilters"
+  refreshButton="true"
   >
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No job} =1 {1 job} other {{{ totalRecords | myNumberFormatter }} jobs}}</ng-container>
-  </ng-template>
-
-  <ng-template #captionRight>
-    <div class="select-filter-block">
-      <label for="jobType" i18n>Job type</label>
-
-      <my-select-options
-        class="select-job-type" inputId="jobType" filter="true"
-        [items]="jobTypeItems" [(ngModel)]="jobType" (ngModelChange)="onJobStateOrTypeChanged()"
-      ></my-select-options>
-    </div>
-
-    <div class="select-filter-block">
-      <label for="jobState" i18n>Job state</label>
-
-      <my-select-options
-        class="select-job-state" inputId="jobState"
-        [items]="jobStateItems" [(ngModel)]="jobState" (ngModelChange)="onJobStateOrTypeChanged()"
-      ></my-select-options>
-    </div>
-
-    <div class="align-self-end">
-      <my-button i18n-label label="Refresh" icon="refresh" (click)="table.loadData()"></my-button>
-    </div>
   </ng-template>
 
   <ng-template #tableCells let-job>
@@ -100,20 +76,14 @@
     </div>
   </ng-template>
 
-  <ng-template #noResults>
-    @if (jobState === 'all') {
-      @if (jobType === 'all') {
-        <ng-container i18n>No jobs found.</ng-container>
+  <ng-template #noResults let-search="search" let-filters="filters">
+    <div>
+      @if (search || filters) {
+        <ng-container i18n>No job found for the current filters.</ng-container>
       } @else {
-        <ng-container i18n>No <code>{{ jobType }}</code> jobs found.</ng-container>
+        <ng-container i18n>No job found.</ng-container>
       }
-    } @else {
-      @if (jobType === 'all') {
-        <ng-container i18n>No <span [ngClass]="getJobStateClasses(jobState)">{{ jobState }}</span> jobs found.</ng-container>
-      } @else {
-        <ng-container i18n>No <code>{{ jobType }}</code> jobs found that are <span [ngClass]="getJobStateClasses(jobState)">{{ jobState }}</span>.</ng-container>
-      }
-    }
+    </div>
   </ng-template>
 
 </my-table>

@@ -2,14 +2,20 @@ import { CommonModule } from '@angular/common'
 import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { ConfirmService, Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
-import { RunnerJob, RunnerJobState } from '@peertube/peertube-models'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../../shared/shared-forms/advanced-input-filter.component'
+import { PeerTubeBadgeService } from '@app/shared/shared-main/common/peertube-badge.service'
+import { RunnerJob, RunnerJobState, RunnerJobStateType, RunnerJobType } from '@peertube/peertube-models'
+import { AdvancedFilterDef } from '../../../../shared/shared-forms/advanced-input-filter.component'
 import { ActionDropdownComponent, DropdownAction } from '../../../../shared/shared-main/buttons/action-dropdown.component'
-import { ButtonComponent } from '../../../../shared/shared-main/buttons/button.component'
 import { NumberFormatterPipe } from '../../../../shared/shared-main/common/number-formatter.pipe'
-import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../../../../shared/shared-tables/table.component'
+import { DataLoaderOptionsBase, TableColumnInfo, TableComponent } from '../../../../shared/shared-tables/table.component'
 import { RunnerJobFormatted, RunnerService } from '../runner.service'
 
+type RunnerJobStateFilter = 'completed' | 'pending' | 'processing' | 'errored'
+
+type DataLoaderParameter = DataLoaderOptionsBase & {
+  state?: RunnerJobStateFilter
+  jobType?: RunnerJobType
+}
 type ColumnName = 'uuid' | 'type' | 'state' | 'priority' | 'progress' | 'runner' | 'createdAt' | 'processed'
 
 @Component({
@@ -18,8 +24,6 @@ type ColumnName = 'uuid' | 'type' | 'state' | 'priority' | 'progress' | 'runner'
   imports: [
     CommonModule,
     ActionDropdownComponent,
-    AdvancedInputFilterComponent,
-    ButtonComponent,
     TableComponent,
     NumberFormatterPipe
   ]
@@ -28,33 +32,47 @@ export class RunnerJobListComponent implements OnInit {
   private runnerService = inject(RunnerService)
   private notifier = inject(Notifier)
   private confirmService = inject(ConfirmService)
+  private peertubeBadgeService = inject(PeerTubeBadgeService)
 
-  readonly table = viewChild<TableComponent<RunnerJobFormatted, ColumnName>>('table')
+  readonly table = viewChild<TableComponent<RunnerJobFormatted, DataLoaderParameter, ColumnName>>('table')
 
   actions: DropdownAction<RunnerJob>[][] = []
   bulkActions: DropdownAction<RunnerJob[]>[][] = []
 
-  inputFilters: AdvancedInputFilter[] = [
+  private jobStates: RunnerJobStateFilter[] = [ 'completed', 'pending', 'processing', 'errored' ]
+
+  private jobTypes: RunnerJobType[] = [
+    'vod-web-video-transcoding',
+    'vod-hls-transcoding',
+    'vod-audio-merge-transcoding',
+    'live-rtmp-hls-transcoding',
+    'video-studio-transcoding',
+    'video-transcription',
+    'generate-video-storyboard'
+  ]
+
+  inputFilters: AdvancedFilterDef<DataLoaderParameter>[] = [
     {
-      title: $localize`Advanced filters`,
-      children: [
-        {
-          value: 'state:completed',
-          label: $localize`Completed jobs`
-        },
-        {
-          value: 'state:pending state:waiting-for-parent-job',
-          label: $localize`Pending jobs`
-        },
-        {
-          value: 'state:processing',
-          label: $localize`Jobs that are being processed`
-        },
-        {
-          value: 'state:errored state:parent-errored',
-          label: $localize`Failed jobs`
-        }
-      ]
+      type: 'select',
+      key: 'jobType',
+      title: $localize`Job type`,
+      clearable: true,
+      items: this.jobTypes.map(t => ({
+        id: t,
+        label: t.toLocaleUpperCase(),
+        classes: [ 'pt-badge', this.getRandomRunnerTypeBadge(t) ]
+      }))
+    },
+    {
+      type: 'select',
+      key: 'state',
+      title: $localize`Job state`,
+      clearable: true,
+      items: this.jobStates.map(s => ({
+        id: s,
+        label: s.toLocaleUpperCase(),
+        classes: [ 'pt-badge', this.getRandomRunnerNameBadge(s) ]
+      }))
     }
   ]
 
@@ -108,6 +126,8 @@ export class RunnerJobListComponent implements OnInit {
       ]
     ]
   }
+
+  // ---------------------------------------------------------------------------
 
   async cancelJobs (jobs: RunnerJob[]) {
     const message = formatICU(
@@ -182,17 +202,37 @@ export class RunnerJobListComponent implements OnInit {
   }
 
   getRandomRunnerNameBadge (value: string) {
-    return this.table().getRandomBadge('runner', value)
+    return this.peertubeBadgeService.getRandomBadge('runner', value)
   }
 
   getRandomRunnerTypeBadge (value: string) {
-    return this.table().getRandomBadge('type', value)
+    return this.peertubeBadgeService.getRandomBadge('type', value)
   }
 
-  private _dataLoader (options: DataLoaderOptions) {
-    const { pagination, sort, search } = options
+  private _dataLoader (
+    options: DataLoaderOptionsBase & {
+      state?: RunnerJobStateFilter
+      jobType?: RunnerJobType
+    }
+  ) {
+    const { pagination, sort, search, state, jobType } = options
 
-    return this.runnerService.listRunnerJobs({ pagination, sort, search })
+    let stateOneOf: RunnerJobStateType[]
+
+    if (state) {
+      stateOneOf = []
+
+      if (state === 'completed') stateOneOf.push(RunnerJobState.COMPLETED)
+      else if (state === 'pending') {
+        stateOneOf.push(RunnerJobState.PENDING)
+        stateOneOf.push(RunnerJobState.WAITING_FOR_PARENT_JOB)
+      } else if (state === 'processing') stateOneOf.push(RunnerJobState.PROCESSING)
+      else if (state === 'errored') {
+        stateOneOf.push(RunnerJobState.ERRORED)
+        stateOneOf.push(RunnerJobState.PARENT_ERRORED)
+      }
+    }
+    return this.runnerService.listRunnerJobs({ pagination, sort, search, stateOneOf, jobType })
   }
 
   private canCancelJob (job: RunnerJob) {

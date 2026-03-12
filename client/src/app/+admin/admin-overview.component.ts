@@ -31,10 +31,7 @@ export class AdminOverviewComponent implements OnInit {
     if (this.hasRight(UserRight.SEE_ALL_VIDEOS)) {
       this.menuEntries.push({
         label: $localize`Videos`,
-        routerLink: '/admin/overview/videos',
-        queryParams: {
-          search: 'isLocal:true'
-        }
+        routerLink: '/admin/overview/videos'
       })
     }
 

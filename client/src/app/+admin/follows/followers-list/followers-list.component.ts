@@ -3,14 +3,16 @@ import { ConfirmService, Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { InstanceFollowService } from '@app/shared/shared-instance/instance-follow.service'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
-import { DataLoaderOptions, TableColumnInfo, TableComponent } from '@app/shared/shared-tables/table.component'
-import { ActorFollow } from '@peertube/peertube-models'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
+import { DataLoaderOptionsBase, TableColumnInfo, TableComponent } from '@app/shared/shared-tables/table.component'
+import { ActorFollow, FollowState } from '@peertube/peertube-models'
+import { AdvancedFilterDef } from '../../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
 import { NumberFormatterPipe } from '../../../shared/shared-main/common/number-formatter.pipe'
+
+type DataLoaderParameter = Parameters<FollowersListComponent['_dataLoader']>[0]
 
 @Component({
   selector: 'my-followers-list',
@@ -18,7 +20,6 @@ import { NumberFormatterPipe } from '../../../shared/shared-main/common/number-f
   styleUrls: [ './followers-list.component.scss' ],
   imports: [
     GlobalIconComponent,
-    AdvancedInputFilterComponent,
     ButtonComponent,
     DeleteButtonComponent,
     PTDatePipe,
@@ -31,9 +32,9 @@ export class FollowersListComponent implements OnInit {
   private notifier = inject(Notifier)
   private followService = inject(InstanceFollowService)
 
-  readonly table = viewChild<TableComponent<ActorFollow>>('table')
+  readonly table = viewChild<TableComponent<ActorFollow, DataLoaderParameter>>('table')
 
-  searchFilters: AdvancedInputFilter[] = []
+  inputFilters: AdvancedFilterDef<DataLoaderParameter>[] = []
 
   bulkActions: DropdownAction<ActorFollow[]>[] = []
 
@@ -51,7 +52,7 @@ export class FollowersListComponent implements OnInit {
   }
 
   ngOnInit () {
-    this.searchFilters = this.followService.buildFollowsListFilters()
+    this.inputFilters = this.followService.buildFollowsListFilters()
 
     this.bulkActions = [
       {
@@ -149,9 +150,7 @@ export class FollowersListComponent implements OnInit {
     return follow.follower.name + '@' + follow.follower.host
   }
 
-  private _dataLoader (options: DataLoaderOptions) {
-    const { pagination, sort, search } = options
-
-    return this.followService.getFollowers({ pagination, sort, search })
+  private _dataLoader (options: DataLoaderOptionsBase & { state: FollowState }) {
+    return this.followService.listFollowers(options)
   }
 }

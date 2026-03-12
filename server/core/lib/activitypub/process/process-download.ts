@@ -22,7 +22,7 @@ async function processCreateDownload (activity: ActivityView) {
 
   const { video } = await getOrCreateAPVideo({
     videoObject,
-    fetchType: 'only-video-and-blacklist',
+    fetchType: 'with-blacklist',
     allowRefresh: false
   })
 

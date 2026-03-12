@@ -103,7 +103,7 @@ export class VideoFiltersHeaderComponent implements OnInit {
     this.serverService.getVideoLanguages()
       .subscribe(languages => this.videoLanguages = languages)
 
-    this.followService.getFollowing({ pagination: { count: 1, start: 0 }, state: 'accepted' })
+    this.followService.listSubscriptions({ pagination: { count: 1, start: 0 }, state: 'accepted' })
       .subscribe(({ total }) => this.totalFollowing = total)
 
     this.buildQuickFilters()

@@ -6,11 +6,10 @@ import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { ResultList, UserRegistration as UserRegistrationServer, UserRegistrationState } from '@peertube/peertube-models'
 import { switchMap } from 'rxjs'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
 import { NumberFormatterPipe } from '../../../shared/shared-main/common/number-formatter.pipe'
-import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../../../shared/shared-tables/table.component'
+import { DataLoaderOptionsBase, TableColumnInfo, TableComponent } from '../../../shared/shared-tables/table.component'
 import { UserEmailInfoComponent } from '../../shared/user-email-info.component'
 import { AdminRegistrationService } from './admin-registration.service'
 import { ProcessRegistrationModalComponent } from './process-registration-modal.component'
@@ -25,7 +24,6 @@ type ColumnName = 'account' | 'email' | 'channel' | 'registrationReason' | 'stat
   imports: [
     GlobalIconComponent,
     ActionDropdownComponent,
-    AdvancedInputFilterComponent,
     NgbTooltip,
     UserEmailInfoComponent,
     ProcessRegistrationModalComponent,
@@ -44,12 +42,10 @@ export class RegistrationListComponent implements OnInit {
   private adminRegistrationService = inject(AdminRegistrationService)
 
   readonly processRegistrationModal = viewChild<ProcessRegistrationModalComponent>('processRegistrationModal')
-  readonly table = viewChild<TableComponent<UserRegistration, ColumnName>>('table')
+  readonly table = viewChild<TableComponent<UserRegistration, DataLoaderOptionsBase, ColumnName>>('table')
 
   registrationActions: DropdownAction<UserRegistration>[][] = []
   bulkActions: DropdownAction<UserRegistration[]>[] = []
-
-  inputFilters: AdvancedInputFilter[] = []
 
   requiresEmailVerification: boolean
 
@@ -115,7 +111,7 @@ export class RegistrationListComponent implements OnInit {
     this.table().reloadData({ field: 'createdAt', order: -1 })
   }
 
-  private _dataLoader (options: DataLoaderOptions) {
+  private _dataLoader (options: DataLoaderOptionsBase) {
     return this.adminRegistrationService.listRegistrations(options)
       .pipe(
         switchMap(async (resultList: ResultList<UserRegistration>) => {

@@ -1,5 +1,5 @@
-import { Component, OnInit, inject, viewChild } from '@angular/core'
-import { ActivatedRoute, RouterLink } from '@angular/router'
+import { Component, inject, OnInit, viewChild } from '@angular/core'
+import { RouterLink } from '@angular/router'
 import { AuthService, ConfirmService, Notifier, ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
@@ -15,14 +15,13 @@ import { getAllFiles } from '@peertube/peertube-core-utils'
 import { FileStorage, NSFWFlag, UserRight, VideoFile, VideoState, VideoStreamingPlaylistType } from '@peertube/peertube-models'
 import { videoRequiresFileToken } from '@root-helpers/video'
 import { TableRowExpandEvent } from 'primeng/table'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
+import { AdvancedFilterDef } from '../../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
-import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 import { BytesPipe } from '../../../shared/shared-main/common/bytes.pipe'
 import { NumberFormatterPipe } from '../../../shared/shared-main/common/number-formatter.pipe'
 import { EmbedComponent } from '../../../shared/shared-main/video/embed.component'
-import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../../../shared/shared-tables/table.component'
+import { DataLoaderOptionsBase, TableColumnInfo, TableComponent } from '../../../shared/shared-tables/table.component'
 import { VideoCellComponent } from '../../../shared/shared-tables/video-cell.component'
 import {
   VideoActionsDisplayType,
@@ -30,6 +29,8 @@ import {
 } from '../../../shared/shared-video-miniature/video-actions-dropdown.component'
 import { VideoNSFWBadgeComponent } from '../../../shared/shared-video/video-nsfw-badge.component'
 import { VideoAdminService } from './video-admin.service'
+
+type DataLoaderParameter = Parameters<VideoListComponent['_dataLoader']>[0]
 
 type ColumnName =
   | 'video'
@@ -43,8 +44,6 @@ type ColumnName =
   styleUrls: [ './video-list.component.scss' ],
   imports: [
     GlobalIconComponent,
-    AdvancedInputFilterComponent,
-    ButtonComponent,
     VideoActionsDropdownComponent,
     VideoCellComponent,
     EmbedComponent,
@@ -59,7 +58,6 @@ type ColumnName =
   ]
 })
 export class VideoListComponent implements OnInit {
-  private route = inject(ActivatedRoute)
   private confirmService = inject(ConfirmService)
   private auth = inject(AuthService)
   private notifier = inject(Notifier)
@@ -71,10 +69,12 @@ export class VideoListComponent implements OnInit {
   private videoFileTokenService = inject(VideoFileTokenService)
 
   readonly videoBlockModal = viewChild<VideoBlockComponent>('videoBlockModal')
-  readonly table = viewChild<TableComponent<Video>>('table')
+  readonly table = viewChild<TableComponent<Video, DataLoaderParameter, ColumnName>>('table')
 
   bulkActions: DropdownAction<Video[]>[][] = []
-  inputFilters: AdvancedInputFilter[]
+
+  defaultInputFilterValues: Partial<DataLoaderParameter> = {}
+  inputFilters: AdvancedFilterDef<DataLoaderParameter>[] = []
 
   videoActionsOptions: VideoActionsDisplayType = {
     playlist: false,
@@ -115,7 +115,87 @@ export class VideoListComponent implements OnInit {
   }
 
   ngOnInit () {
-    this.inputFilters = this.videoAdminService.buildAdminInputFilter()
+    this.defaultInputFilterValues = { isLocal: true }
+
+    this.inputFilters = [
+      {
+        type: 'options',
+        key: 'isLocal',
+        title: $localize`Videos scope`,
+        options: [
+          { value: 'all', label: $localize`All` },
+          { value: false, label: $localize`Remote videos` },
+          { value: true, label: $localize`Local videos` }
+        ]
+      },
+
+      {
+        type: 'options',
+        key: 'nsfw',
+        title: $localize`Sensitive videos`,
+        options: [
+          { value: 'all', label: $localize`All` },
+          { value: 'true', label: $localize`Sensitive` },
+          { value: 'false', label: $localize`Non sensitive` }
+        ]
+      },
+
+      {
+        type: 'title',
+        title: $localize`Moderation`
+      },
+
+      {
+        type: 'checkbox',
+        key: 'excludeMuted',
+        label: $localize`Exclude muted accounts`
+      },
+
+      {
+        type: 'checkbox',
+        key: 'excludePublic',
+        label: $localize`Exclude public videos`
+      },
+
+      {
+        type: 'options',
+        key: 'isLive',
+        title: $localize`Video type`,
+        options: [
+          { value: 'all', label: $localize`All` },
+          { value: false, label: $localize`VOD` },
+          { value: true, label: $localize`Live` }
+        ]
+      },
+
+      {
+        type: 'options',
+        key: 'hasWebVideoFiles',
+        title: $localize`Web files (local only)`,
+        options: [
+          { value: 'all', label: $localize`All` },
+          { value: true, label: $localize`With Web Videos files` },
+          { value: false, label: $localize`Without Web Videos files` }
+        ]
+      },
+
+      {
+        type: 'options',
+        key: 'hasHLSFiles',
+        title: $localize`HLS files (local only)`,
+        options: [
+          { value: 'all', label: $localize`All` },
+          { value: true, label: $localize`With HLS files` },
+          { value: false, label: $localize`Without HLS files` }
+        ]
+      },
+
+      {
+        type: 'tags',
+        key: 'autoTagOneOf',
+        title: $localize`Auto tags`
+      }
+    ]
 
     this.bulkActions = [
       [
@@ -266,15 +346,6 @@ export class VideoListComponent implements OnInit {
       })
   }
 
-  buildSearchAutoTag (tag: string) {
-    const str = `autoTag:"${tag}"`
-
-    const search = this.route.snapshot.queryParams.search
-    if (search) return search + ' ' + str
-
-    return str
-  }
-
   // ---------------------------------------------------------------------------
 
   onRowExpand (event: TableRowExpandEvent) {
@@ -297,13 +368,13 @@ export class VideoListComponent implements OnInit {
 
   // ---------------------------------------------------------------------------
 
-  private _dataLoader (options: DataLoaderOptions) {
-    return this.videoAdminService.getAdminVideos({
-      ...options,
-
+  private _dataLoader (options: DataLoaderOptionsBase & Partial<Parameters<VideoAdminService['listAdminVideos']>[0]>) {
+    return this.videoAdminService.listAdminVideos({
       // Always list NSFW video, overriding instance/user setting
+      nsfwFlagsExcluded: NSFWFlag.NONE,
       nsfw: 'both',
-      nsfwFlagsExcluded: NSFWFlag.NONE
+
+      ...options
     })
   }
 

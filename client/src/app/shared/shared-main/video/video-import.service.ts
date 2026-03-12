@@ -30,33 +30,17 @@ export class VideoImportService {
     pagination: RestPagination
     sort: SortMeta
     includeCollaborations: boolean
+    id?: number
+    videoId?: number
+    videoChannelSyncId?: number
+    targetUrl?: string
     search?: string
   }): Observable<ResultList<VideoImport>> {
-    const { pagination, sort, search, includeCollaborations } = options
+    const { pagination, sort, ...otherOptions } = options
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
-
-    if (includeCollaborations) params = params.append('includeCollaborations', 'true')
-
-    if (search) {
-      const filters = this.restService.parseQueryStringFilter(search, {
-        id: {
-          prefix: 'id:'
-        },
-        videoId: {
-          prefix: 'videoId:'
-        },
-        videoChannelSyncId: {
-          prefix: 'videoChannelSyncId:'
-        },
-        targetUrl: {
-          prefix: 'targetUrl:'
-        }
-      })
-
-      params = this.restService.addObjectParams(params, filters)
-    }
+    params = this.restService.addObjectParams(params, otherOptions)
 
     return this.authHttp
       .get<ResultList<VideoImport>>(UserService.BASE_USERS_URL + 'me/videos/imports', { params })

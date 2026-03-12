@@ -28,10 +28,6 @@ input[type="number"] {
   @include peertube-input-text($form-base-input-width);
 }
 
-input[type="checkbox"] {
-  @include peertube-checkbox;
-}
-
 .peertube-select-container {
   @include responsive-width($form-base-input-width);
 }

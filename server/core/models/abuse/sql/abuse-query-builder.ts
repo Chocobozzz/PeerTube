@@ -49,8 +49,10 @@ function buildAbuseListQuery (options: BuildAbusesQueryOptions, type: 'count' | 
 
   if (options.serverAccountId || options.userAccountId) {
     whereAnd.push(
-      '"abuse"."reporterAccountId" IS NULL OR ' +
-      '"abuse"."reporterAccountId" NOT IN (' + buildBlockedAccountSQL([ options.serverAccountId, options.userAccountId ]) + ')'
+      '(' +
+        '"abuse"."reporterAccountId" IS NULL OR ' +
+        '"abuse"."reporterAccountId" NOT IN (' + buildBlockedAccountSQL([ options.serverAccountId, options.userAccountId ]) + ')' +
+        ')'
     )
   }
 
@@ -128,7 +130,6 @@ function buildAbuseListQuery (options: BuildAbusesQueryOptions, type: 'count' | 
 
   let suffix = ''
   if (type !== 'count') {
-
     if (options.sort) {
       const order = buildAbuseOrder(options.sort)
       suffix += `${order} `

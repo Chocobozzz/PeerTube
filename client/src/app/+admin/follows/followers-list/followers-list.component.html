@@ -7,13 +7,12 @@
   [dataLoader]="dataLoader"
   columnConfig="false"
   [bulkActions]="bulkActions"
+  refreshButton="true"
+  searchInput="true"
+  [inputFilters]="inputFilters"
   >
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No follower} =1 {1 follower} other {{{ totalRecords | myNumberFormatter }} followers}}</ng-container>
-  </ng-template>
-
-  <ng-template #captionRight>
-    <my-advanced-input-filter [filters]="searchFilters" (search)="table.onSearch($event)"></my-advanced-input-filter>
   </ng-template>
 
   <ng-template #tableCells let-follow>
@@ -51,8 +50,8 @@
     }
   </ng-template>
 
-  <ng-template #noResults let-search>
-    @if (search) {
+  <ng-template #noResults let-search="search" let-hasFilters="hasFilters">
+    @if (search || hasFilters) {
       <ng-container i18n>No follower found matching current filters.</ng-container>
     } @else {
       <ng-container i18n>Your instance doesn't have any follower.</ng-container>

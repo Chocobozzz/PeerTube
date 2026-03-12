@@ -41,11 +41,29 @@
         }
       </div>
 
-      @if (captionRight) {
-        <div class="ms-auto right-block">
+      <div class="ms-auto right-block">
+        @if (searchInput()) {
+          <my-search-input
+            inputId="table-search" icon="true" emitOnInit="false" i18n-placeholder placeholder="Search"
+            (search)="onSearch($event)"
+          ></my-search-input>
+        }
+
+        @if (inputFilters()) {
+          <my-advanced-input-filter
+            #advancedInputFilter
+            [filters]="inputFilters()" (filtersChange)="onFiltersChange($event)" [defaultValues]="defaultInputFilterValues()"
+          ></my-advanced-input-filter>
+        }
+
+        @if (refreshButton()) {
+          <my-button i18n-label label="Refresh" icon="refresh" (click)="loadData()"></my-button>
+        }
+
+        @if (captionRight) {
           <ng-template *ngTemplateOutlet="captionRight"></ng-template>
+        }
         </div>
-      }
     </div>
   </ng-template>
 
@@ -208,7 +226,7 @@
         <td myAutoColspan>
           <div class="no-results">
             @if (noResults) {
-              <ng-template *ngTemplateOutlet="noResults; context: { $implicit: search }"></ng-template>
+              <ng-template *ngTemplateOutlet="noResults; context: { search: search, hasFilters: hasFilters() }"></ng-template>
             } @else {
               <ng-container i18n>No results found.</ng-container>
             }

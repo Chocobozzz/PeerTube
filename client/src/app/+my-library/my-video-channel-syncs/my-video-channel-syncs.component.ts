@@ -11,7 +11,7 @@ import { first, mergeMap } from 'rxjs'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
 import { ActionDropdownComponent, DropdownAction } from '../../shared/shared-main/buttons/action-dropdown.component'
 import { NumberFormatterPipe } from '../../shared/shared-main/common/number-formatter.pipe'
-import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../../shared/shared-tables/table.component'
+import { DataLoaderOptionsBase, TableColumnInfo, TableComponent } from '../../shared/shared-tables/table.component'
 
 @Component({
   templateUrl: './my-video-channel-syncs.component.html',
@@ -72,7 +72,7 @@ export class MyVideoChannelSyncsComponent implements OnInit {
         {
           label: $localize`List imports`,
           linkBuilder: () => [ '/my-library/video-imports' ],
-          queryParamsBuilder: sync => ({ search: `videoChannelSyncId:${sync.id}` }),
+          queryParamsBuilder: sync => ({ videoChannelSyncId: sync.id }),
           iconName: 'cloud-download'
         }
       ],
@@ -92,7 +92,7 @@ export class MyVideoChannelSyncsComponent implements OnInit {
     ]
   }
 
-  private _dataLoader (options: DataLoaderOptions) {
+  private _dataLoader (options: DataLoaderOptionsBase) {
     return this.authService.userInformationLoaded
       .pipe(
         first(),

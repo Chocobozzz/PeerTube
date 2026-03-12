@@ -7,16 +7,15 @@
   [dataLoader]="dataLoader"
   columnConfig="false"
   [bulkActions]="bulkActions"
+  refreshButton="true"
+  searchInput="true"
+  [inputFilters]="inputFilters"
   >
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No subscription} =1 {1 subscription} other {{{ totalRecords | myNumberFormatter }} subscriptions}}</ng-container>
   </ng-template>
 
   <ng-template #captionRight>
-    <my-advanced-input-filter [filters]="searchFilters" (search)="table.onSearch($event)"></my-advanced-input-filter>
-
-    <my-button i18n-label label="Refresh" icon="refresh" (click)="table.loadData()"></my-button>
-
     <button class="peertube-create-button" (click)="openFollowModal()">
       <my-global-icon iconName="following" aria-hidden="true"></my-global-icon>
       <ng-container i18n>Follow</ng-container>
@@ -58,8 +57,8 @@
     <my-delete-button label (click)="removeFollowing([ follow ])"></my-delete-button>
   </ng-template>
 
-  <ng-template #noResults let-search>
-    @if (search) {
+  <ng-template #noResults let-search="search" let-hasFilters="hasFilters">
+    @if (search || hasFilters) {
       <ng-container i18n>No host found matching current filters.</ng-container>
     } @else {
       <ng-container i18n>Your instance is not following anyone.</ng-container>

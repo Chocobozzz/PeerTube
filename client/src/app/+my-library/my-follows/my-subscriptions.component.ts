@@ -6,7 +6,7 @@ import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.mode
 import { UserSubscriptionService } from '@app/shared/shared-user-subscription/user-subscription.service'
 import { Subject } from 'rxjs'
 import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
-import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
+import { SearchInputComponent } from '../../shared/shared-forms/search-input.component'
 import { InfiniteScrollerDirective } from '../../shared/shared-main/common/infinite-scroller.directive'
 import { SubscribeButtonComponent } from '../../shared/shared-user-subscription/subscribe-button.component'
 
@@ -14,7 +14,7 @@ import { SubscribeButtonComponent } from '../../shared/shared-user-subscription/
   templateUrl: './my-subscriptions.component.html',
   styleUrls: [ './my-subscriptions.component.scss' ],
   imports: [
-    AdvancedInputFilterComponent,
+    SearchInputComponent,
     InfiniteScrollerDirective,
     ActorAvatarComponent,
     RouterLink,

@@ -11,7 +11,8 @@ import {
   OnInit,
   output,
   SimpleChanges,
-  TemplateRef
+  TemplateRef,
+  viewChild
 } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
@@ -24,7 +25,13 @@ import debug from 'debug'
 import { SharedModule, SortMeta } from 'primeng/api'
 import { TableLazyLoadEvent, TableModule, TableRowExpandEvent, TableRowReorderEvent } from 'primeng/table'
 import { finalize, Observable, Subscription } from 'rxjs'
+import {
+  AdvancedFilterDef,
+  AdvancedInputFilterComponent,
+  parseQueryParamsToAdvancedFilters
+} from '../shared-forms/advanced-input-filter.component'
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
+import { SearchInputComponent } from '../shared-forms/search-input.component'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { ActionDropdownComponent, DropdownAction } from '../shared-main/buttons/action-dropdown.component'
 import { ButtonComponent } from '../shared-main/buttons/button.component'
@@ -33,12 +40,12 @@ import { TableExpanderIconComponent } from './table-expander-icon.component'
 
 const debugLogger = debug('peertube:table')
 
-export type DataLoaderOptions = {
+export type DataLoaderOptionsBase = {
   pagination: RestPagination
   sort: SortMeta
   search?: string
 }
-export type DataLoader<Data> = (options: DataLoaderOptions) => Observable<ResultList<Data>>
+export type DataLoader<DataLoaderOptions extends DataLoaderOptionsBase, Data> = (options: DataLoaderOptions) => Observable<ResultList<Data>>
 
 export type TableQueryParams = {
   start?: number
@@ -82,22 +89,29 @@ type BulkActions<Data> = DropdownAction<Data[]>[][] | DropdownAction<Data[]>[]
     PeertubeCheckboxComponent,
     AutoColspanDirective,
     TableExpanderIconComponent,
-    GlobalIconComponent
+    GlobalIconComponent,
+    SearchInputComponent,
+    AdvancedInputFilterComponent
   ]
 })
-export class TableComponent<Data, ColumnName = string, QueryParams extends TableQueryParams = TableQueryParams>
-  implements OnInit, OnDestroy, OnChanges
-{
+export class TableComponent<
+  Data,
+  DataLoaderOptions extends DataLoaderOptionsBase = DataLoaderOptionsBase,
+  ColumnName = string,
+  QueryParams extends TableQueryParams = TableQueryParams
+> implements OnInit, OnDestroy, OnChanges {
   private peertubeLocalStorage = inject(LocalStorageService)
   private route = inject(ActivatedRoute)
   private peertubeRouter = inject(PeerTubeRouterService)
   private notifier = inject(Notifier)
   private screenService = inject(ScreenService)
 
+  private advancedInputFilter = viewChild<AdvancedInputFilterComponent<DataLoaderOptions>>('advancedInputFilter')
+
   readonly key = input.required<string>()
   readonly dataKey = input<string>('id')
   readonly defaultColumns = input.required<TableColumnInfo<ColumnName>[]>()
-  readonly dataLoader = input.required<DataLoader<Data>>()
+  readonly dataLoader = input.required<DataLoader<DataLoaderOptionsBase, Data>>()
 
   readonly reorderableRows = input(false, { transform: booleanAttribute })
   readonly dragHandleTitle = input<string>(undefined)
@@ -118,6 +132,16 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
   readonly customUpdateUrl = input<() => Partial<QueryParams>>(() => ({}))
 
   readonly cellWrap = input(false, { transform: booleanAttribute })
+
+  readonly searchInput = input(false, { transform: booleanAttribute })
+  readonly canUseMatchSort = input(false, { transform: booleanAttribute })
+
+  readonly refreshButton = input(false, { transform: booleanAttribute })
+
+  readonly inputFilters = input<AdvancedFilterDef<DataLoaderOptions>[]>()
+  readonly defaultInputFilterValues = input<Partial<DataLoaderOptions>>()
+
+  private inputFilterValues: Partial<DataLoaderOptions> = {}
 
   @ContentChild('totalTitle', { descendants: false })
   totalTitle: TemplateRef<any>
@@ -142,6 +166,8 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
 
   readonly rowExpand = output<TableRowExpandEvent>()
   readonly rowReorder = output<TableRowReorderEvent>()
+  readonly filtersChange = output<Partial<DataLoaderOptions>>()
+  readonly searchChange = output<string>()
 
   selectedRows: Data[] = []
   expandedRows = {}
@@ -162,11 +188,6 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
   loading = false
 
   sortTooltip = $localize`Sort by this column`
-
-  // First string is badge column type
-  // Inner Map is value -> badge name
-  private valueToBadge = new Map<string, Map<string, string>>()
-  private badgesUsed = new Set<string>()
 
   private lastLazyLoadEvent: TableLazyLoadEvent
   private routeSubscription: Subscription
@@ -224,13 +245,13 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
 
   // ---------------------------------------------------------------------------
 
-  onSearch (search: string, canUseMatchSort = false) {
-    debugLogger('On search', { search, canUseMatchSort })
+  onSearch (search: string) {
+    debugLogger('On search', { search, canUseMatchSort: this.canUseMatchSort() })
 
     this.search = search
 
     if (this.search) {
-      if (canUseMatchSort && this.sort.field !== 'match') {
+      if (this.canUseMatchSort() && this.sort.field !== 'match') {
         debugLogger('Saving previous sort on search', { saveSort: this.sort })
 
         this.saveSort = { ...this.sort }
@@ -246,15 +267,32 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
       }
     }
 
+    this.searchChange.emit(this.search)
+
     this.resetPagination()
     this.updateUrl()
   }
 
-  onFilter () {
-    debugLogger('On filter')
+  onFiltersChange (filters: Partial<DataLoaderOptions> = {}) {
+    debugLogger('On filter', filters)
+
+    this.loadFilters(filters)
+
+    this.filtersChange.emit(filters)
 
     this.resetPagination()
     this.updateUrl()
+  }
+
+  // Remove default options from filters
+  private loadFilters (filters: Partial<DataLoaderOptions> = {}) {
+    this.inputFilterValues = {}
+
+    for (const [ key, value ] of Object.entries(filters)) {
+      ;(this.inputFilterValues as any)[key] = value !== undefined && value !== 'all'
+        ? value
+        : undefined
+    }
   }
 
   reloadData (sort?: SortMeta) {
@@ -398,6 +436,10 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
     if (queryParams.sortOrder !== undefined) this.sort.order = +queryParams.sortOrder
     if (queryParams.sortField !== undefined) this.sort.field = queryParams.sortField
 
+    if (this.inputFilters()) {
+      this.loadFilters(parseQueryParamsToAdvancedFilters(this.inputFilters(), this.route.snapshot.queryParams))
+    }
+
     this.customParseQueryParams()(queryParams)
 
     this.loadData()
@@ -411,6 +453,8 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
     const newParams: TableQueryParams = {
       ...this.route.snapshot.queryParams,
       ...this.customUpdateUrl()(),
+
+      ...this.inputFilterValues,
 
       search: this.search,
       start: this.pagination.start,
@@ -451,38 +495,6 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
     return this.bulkActions() && this.bulkActions().length !== 0
   }
 
-  getRandomBadge (type: string, value: string): string {
-    if (!this.valueToBadge.has(type)) {
-      this.valueToBadge.set(type, new Map())
-    }
-
-    const badges = this.valueToBadge.get(type)
-    const badge = badges.get(value)
-    if (badge) return badge
-
-    const toTry = [
-      'badge-yellow',
-      'badge-purple',
-      'badge-blue',
-      'badge-brown',
-      'badge-green',
-      'badge-secondary'
-    ]
-
-    for (const badge of toTry) {
-      if (!this.badgesUsed.has(badge)) {
-        this.badgesUsed.add(badge)
-        badges.set(value, badge)
-        return badge
-      }
-    }
-
-    // Reset, we used all available badges
-    this.badgesUsed.clear()
-
-    return this.getRandomBadge(type, value)
-  }
-
   loadData (options: {
     skipLoader?: boolean // default false
   } = {}) {
@@ -494,6 +506,8 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
 
     return new Promise<void>((res, rej) => {
       this.dataLoader()({
+        ...this.inputFilterValues,
+
         pagination: this.pagination,
         sort: this.sort,
         search: this.search
@@ -513,5 +527,11 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
           }
         })
     })
+  }
+
+  hasFilters () {
+    const active = this.advancedInputFilter()?.activeCount() || 0
+
+    return active !== 0
   }
 }

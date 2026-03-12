@@ -4,7 +4,6 @@ import { NumberFormatterPipe } from '../shared-main/common/number-formatter.pipe
 
 @Component({
   selector: 'my-video-views-counter',
-  styleUrls: [ './video-views-counter.component.scss' ],
   templateUrl: './video-views-counter.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ NumberFormatterPipe ]

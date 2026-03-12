@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, inject, input, viewChild } from '@angular/core'
-import { ActivatedRoute, RouterLink } from '@angular/router'
+import { RouterLink } from '@angular/router'
 import { AuthService, ConfirmService, HooksService, MarkdownService, Notifier, PluginService } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { BulkService } from '@app/shared/shared-moderation/bulk.service'
@@ -8,14 +8,15 @@ import { VideoCommentService } from '@app/shared/shared-video-comment/video-comm
 import { BulkRemoveCommentsOfBody, UserRight } from '@peertube/peertube-models'
 import { switchMap } from 'rxjs'
 import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../shared-forms/advanced-input-filter.component'
+import { AdvancedFilterDef } from '../shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { ActionDropdownComponent, DropdownAction } from '../shared-main/buttons/action-dropdown.component'
-import { ButtonComponent } from '../shared-main/buttons/button.component'
 import { CollaboratorStateComponent } from '../shared-main/channel/collaborator-state.component'
 import { PTDatePipe } from '../shared-main/common/date.pipe'
 import { NumberFormatterPipe } from '../shared-main/common/number-formatter.pipe'
-import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../shared-tables/table.component'
+import { DataLoaderOptionsBase, TableColumnInfo, TableComponent } from '../shared-tables/table.component'
+
+type DataLoaderParameter = Parameters<VideoCommentListAdminOwnerComponent['_dataLoader']>[0]
 
 type ColumnName =
   | 'account'
@@ -30,8 +31,6 @@ type ColumnName =
   styleUrls: [ '../shared-moderation/moderation.scss', './video-comment-list-admin-owner.component.scss' ],
   imports: [
     ActionDropdownComponent,
-    AdvancedInputFilterComponent,
-    ButtonComponent,
     ActorAvatarComponent,
     PTDatePipe,
     RouterLink,
@@ -42,7 +41,6 @@ type ColumnName =
   ]
 })
 export class VideoCommentListAdminOwnerComponent implements OnInit, OnDestroy {
-  private route = inject(ActivatedRoute)
   private auth = inject(AuthService)
   private notifier = inject(Notifier)
   private confirmService = inject(ConfirmService)
@@ -55,11 +53,11 @@ export class VideoCommentListAdminOwnerComponent implements OnInit, OnDestroy {
   readonly key = input.required<string>()
   readonly mode = input.required<'user' | 'admin'>()
 
-  readonly table = viewChild<TableComponent<VideoCommentForAdminOrUser, ColumnName>>('table')
+  readonly table = viewChild<TableComponent<VideoCommentForAdminOrUser, DataLoaderParameter, ColumnName>>('table')
 
   videoCommentActions: DropdownAction<VideoCommentForAdminOrUser>[][] = []
   bulkActions: DropdownAction<VideoCommentForAdminOrUser[]>[] = []
-  inputFilters: AdvancedInputFilter[] = []
+  inputFilters: AdvancedFilterDef<DataLoaderParameter>[] = []
 
   columns: TableColumnInfo<ColumnName>[] = [
     { id: 'video', label: $localize`Commented video`, sortable: false },
@@ -157,39 +155,66 @@ export class VideoCommentListAdminOwnerComponent implements OnInit, OnDestroy {
   }
 
   private buildInputFilters () {
+    this.inputFilters = []
+
     if (this.mode() === 'admin') {
       this.inputFilters = [
+        ...this.inputFilters,
+
         {
-          title: $localize`Advanced filters`,
-          children: [
-            {
-              value: 'local:true',
-              label: $localize`Local comments`
-            },
-            {
-              value: 'local:false',
-              label: $localize`Remote comments`
-            },
-            {
-              value: 'localVideo:true',
-              label: $localize`Comments on local videos`
-            }
+          type: 'options',
+          key: 'isLocal',
+          title: $localize`Comment scope`,
+          options: [
+            { value: 'all', label: $localize`All` },
+            { value: true, label: $localize`Local` },
+            { value: false, label: $localize`Remote` }
           ]
+        },
+        {
+          type: 'title',
+          title: $localize`Commented video scope`
+        },
+        {
+          type: 'checkbox',
+          key: 'onLocalVideo',
+          label: $localize`Comments on local videos`
         }
       ]
+    } else {
+      this.inputFilters = [
+        ...this.inputFilters,
 
-      return
+        {
+          type: 'title',
+          title: $localize`Moderation`
+        },
+
+        {
+          type: 'checkbox',
+          key: 'isHeldForReview',
+          label: $localize`Awaiting your approval`
+        }
+      ]
     }
 
     this.inputFilters = [
+      ...this.inputFilters,
+
       {
-        title: $localize`Advanced filters`,
-        children: [
-          {
-            value: 'heldForReview:true',
-            label: $localize`Display comments awaiting your approval`
-          }
-        ]
+        type: 'text',
+        key: 'searchAccount',
+        title: $localize`Search by account`
+      },
+      {
+        type: 'text',
+        key: 'searchVideo',
+        title: $localize`Search by video`
+      },
+      {
+        type: 'tags',
+        key: 'autoTagOneOf',
+        title: $localize`Search by auto tag`
       }
     ]
   }
@@ -198,16 +223,12 @@ export class VideoCommentListAdminOwnerComponent implements OnInit, OnDestroy {
     return this.markdownRenderer.textMarkdownToHTML({ markdown: text, withHtml: true, withEmoji: true })
   }
 
-  buildSearchAutoTag (tag: string) {
-    const str = `autoTag:"${tag}"`
-
-    const search = this.route.snapshot.queryParams.search
-    if (search) return search + ' ' + str
-
-    return str
-  }
-
-  private _dataLoader (options: DataLoaderOptions) {
+  private _dataLoader (
+    options:
+      & DataLoaderOptionsBase
+      & Parameters<VideoCommentService['listAdminVideoComments']>[0]
+      & Parameters<VideoCommentService['listVideoCommentsOfMyVideos']>[0]
+  ) {
     const method = this.mode() === 'admin'
       ? this.videoCommentService.listAdminVideoComments.bind(this.videoCommentService)
       : this.videoCommentService.listVideoCommentsOfMyVideos.bind(this.videoCommentService)

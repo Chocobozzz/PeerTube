@@ -671,7 +671,7 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
   }
 
   getCommentUserReviewPath () {
-    return '/my-account/videos/comments?search=heldForReview:true'
+    return '/my-account/videos/comments?isHeldForReview=true'
   }
 
   getThreadId (): number {

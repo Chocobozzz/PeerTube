@@ -14,7 +14,7 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { UserRole, UserRoleType } from '@peertube/peertube-models'
 import { map, switchMap } from 'rxjs'
 import { ActorAvatarComponent } from '../../../../shared/shared-actor-image/actor-avatar.component'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../../shared/shared-forms/advanced-input-filter.component'
+import { AdvancedFilterDef } from '../../../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
 import { DropdownAction } from '../../../../shared/shared-main/buttons/action-dropdown.component'
 import { BytesPipe } from '../../../../shared/shared-main/common/bytes.pipe'
@@ -24,9 +24,10 @@ import {
   UserModerationDisplayType,
   UserModerationDropdownComponent
 } from '../../../../shared/shared-moderation/user-moderation-dropdown.component'
-import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../../../../shared/shared-tables/table.component'
+import { DataLoaderOptionsBase, TableColumnInfo, TableComponent } from '../../../../shared/shared-tables/table.component'
 import { UserEmailInfoComponent } from '../../../shared/user-email-info.component'
 
+type DataLoaderParameter = Parameters<UserListComponent['_dataLoader']>[0]
 type User = UserAdmin & { accountMutedStatus: AccountMutedStatus }
 
 type ColumnName =
@@ -49,7 +50,6 @@ type ColumnName =
     GlobalIconComponent,
     CommonModule,
     RouterLink,
-    AdvancedInputFilterComponent,
     FormsModule,
     NgbTooltip,
     NgClass,
@@ -75,18 +75,19 @@ export class UserListComponent implements OnInit, OnDestroy {
   private userService = inject(UserService)
 
   readonly userBanModal = viewChild<UserBanModalComponent>('userBanModal')
-  readonly table = viewChild<TableComponent<User, ColumnName>>('table')
+  readonly table = viewChild<TableComponent<User, DataLoaderParameter, ColumnName>>('table')
 
   bulkActions: DropdownAction<User[]>[][] = []
 
-  inputFilters: AdvancedInputFilter[] = [
+  inputFilters: AdvancedFilterDef<DataLoaderParameter>[] = [
     {
-      title: $localize`Advanced filters`,
-      children: [
-        {
-          value: 'banned:true',
-          label: $localize`Banned users`
-        }
+      type: 'options',
+      key: 'blocked',
+      title: $localize`Ban status`,
+      options: [
+        { value: 'all', label: $localize`All` },
+        { value: true, label: $localize`Banned` },
+        { value: false, label: $localize`Not banned` }
       ]
     }
   ]
@@ -289,7 +290,7 @@ export class UserListComponent implements OnInit, OnDestroy {
       })
   }
 
-  private _dataLoader (options: DataLoaderOptions) {
+  private _dataLoader (options: DataLoaderOptionsBase & { blocked?: boolean }) {
     return this.userAdminService.listUsers(options)
       .pipe(
         switchMap(result => {

@@ -7,7 +7,7 @@ import { logger } from '@root-helpers/logger'
 import debug from 'debug'
 import { switchMap } from 'rxjs'
 import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../shared-forms/advanced-input-filter.component'
+import { AdvancedFilterDef } from '../shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { Account } from '../shared-main/account/account.model'
 import { Actor } from '../shared-main/account/actor.model'
@@ -19,7 +19,7 @@ import { VideoService } from '../shared-main/video/video.service'
 import { AbuseService } from '../shared-moderation/abuse.service'
 import { BlocklistService } from '../shared-moderation/blocklist.service'
 import { VideoBlockService } from '../shared-moderation/video-block.service'
-import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../shared-tables/table.component'
+import { TableColumnInfo, TableComponent } from '../shared-tables/table.component'
 import { VideoCellComponent } from '../shared-tables/video-cell.component'
 import { VideoCommentService } from '../shared-video-comment/video-comment.service'
 import { AbuseDetailsComponent } from './abuse-details.component'
@@ -29,12 +29,13 @@ import { ProcessedAbuse } from './processed-abuse.model'
 
 const debugLogger = debug('peertube:moderation:AbuseListTableComponent')
 
+type DataLoaderParameter = Parameters<AbuseListTableComponent['_dataLoader']>[0]
+
 @Component({
   selector: 'my-abuse-list-table',
   templateUrl: './abuse-list-table.component.html',
   styleUrls: [ '../shared-moderation/moderation.scss', './abuse-list-table.component.scss' ],
   imports: [
-    AdvancedInputFilterComponent,
     NgbTooltip,
     ActionDropdownComponent,
     ActorAvatarComponent,
@@ -62,37 +63,59 @@ export class AbuseListTableComponent implements OnInit, OnDestroy {
 
   readonly viewType = input<'admin' | 'user'>(undefined)
 
-  readonly table = viewChild<TableComponent<ProcessedAbuse>>('table')
+  readonly table = viewChild<TableComponent<ProcessedAbuse, DataLoaderParameter>>('table')
   readonly abuseMessagesModal = viewChild<AbuseMessageModalComponent>('abuseMessagesModal')
   readonly moderationCommentModal = viewChild<ModerationCommentModalComponent>('moderationCommentModal')
 
   abuseActions: DropdownAction<ProcessedAbuse>[][] = []
 
-  inputFilters: AdvancedInputFilter[] = [
+  inputFilters: AdvancedFilterDef<DataLoaderParameter>[] = [
     {
-      title: $localize`Advanced filters`,
-      children: [
-        {
-          value: 'state:pending',
-          label: $localize`Unsolved reports`
-        },
-        {
-          value: 'state:accepted',
-          label: $localize`Accepted reports`
-        },
-        {
-          value: 'state:rejected',
-          label: $localize`Refused reports`
-        },
-        {
-          value: 'videoIs:blacklisted',
-          label: $localize`Reports with blocked videos`
-        },
-        {
-          value: 'videoIs:deleted',
-          label: $localize`Reports with deleted videos`
-        }
+      type: 'options',
+      key: 'state',
+      title: $localize`Report state`,
+      options: [
+        { value: 'all', label: $localize`All` },
+        { value: AbuseState.PENDING, label: $localize`Unsolved reports` },
+        { value: AbuseState.ACCEPTED, label: $localize`Accepted reports` },
+        { value: AbuseState.REJECTED, label: $localize`Refused reports` }
       ]
+    },
+    {
+      type: 'options',
+      key: 'videoIs',
+      title: $localize`Video status`,
+      options: [
+        { value: 'all', label: $localize`All` },
+        { value: 'blacklisted', label: $localize`With blocked videos` },
+        { value: 'deleted', label: $localize`With deleted videos` }
+      ]
+    },
+    {
+      type: 'select',
+      title: $localize`Predefined reason`,
+      key: 'predefinedReason',
+      items: this.abuseService.getPredefinedReasons('all')
+        .map(reason => ({ id: reason.id, label: reason.label }))
+    },
+    {
+      type: 'text',
+      key: 'searchReporter',
+      title: $localize`Reporter`,
+      placeholder: $localize`Search by reporter name...`
+    },
+    {
+      type: 'text',
+      key: 'searchReportee',
+      title: $localize`Reportee`,
+      placeholder: $localize`Search by reportee name...`
+    },
+    {
+      type: 'text',
+      constraint: 'numeric',
+      key: 'id',
+      title: $localize`Report ID`,
+      placeholder: $localize`Search by report ID...`
     }
   ]
 
@@ -239,12 +262,12 @@ export class AbuseListTableComponent implements OnInit, OnDestroy {
     )
   }
 
-  private _dataLoader (options: DataLoaderOptions) {
+  private _dataLoader (options: Parameters<AbuseService['listAdminAbuses']>[0]) {
     debugLogger('Loading data.')
 
     const observable = this.viewType() === 'admin'
-      ? this.abuseService.getAdminAbuses(options)
-      : this.abuseService.getUserAbuses(options)
+      ? this.abuseService.listAdminAbuses(options)
+      : this.abuseService.listUserAbuses(options)
 
     return observable.pipe(switchMap(async (resultList: ResultList<ProcessedAbuse>) => {
       const abuses: ProcessedAbuse[] = []

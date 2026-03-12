@@ -7,13 +7,10 @@
   [dataLoader]="dataLoader"
   columnConfig="true"
   [bulkActions]="bulkActions"
+  searchInput="true"
   >
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No registration} =1 {1 registration} other {{{ totalRecords | myNumberFormatter }} registrations}}</ng-container>
-  </ng-template>
-
-  <ng-template #captionRight>
-    <my-advanced-input-filter (search)="table.onSearch($event)"></my-advanced-input-filter>
   </ng-template>
 
   <ng-template #tableCells let-registration>
@@ -101,8 +98,8 @@
     </div>
   </ng-template>
 
-  <ng-template #noResults let-search>
-    @if (search) {
+  <ng-template #noResults let-search="search" let-hasFilters="hasFilters">
+    @if (search || hasFilters) {
       <ng-container i18n>No registrations found matching current filters.</ng-container>
     } @else {
       <ng-container i18n>No registrations found.</ng-container>

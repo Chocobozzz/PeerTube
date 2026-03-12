@@ -219,6 +219,7 @@ export class VideoService {
       nsfw,
       nsfwFlagsExcluded,
       nsfwFlagsIncluded,
+      autoTagOneOf,
 
       ...otherOptions
     } = options
@@ -233,6 +234,7 @@ export class VideoService {
     if (Array.isArray(languageOneOf)) newParams = this.restService.addArrayParams(newParams, 'languageOneOf', languageOneOf)
     if (Array.isArray(categoryOneOf)) newParams = this.restService.addArrayParams(newParams, 'categoryOneOf', categoryOneOf)
     if (Array.isArray(privacyOneOf)) newParams = this.restService.addArrayParams(newParams, 'privacyOneOf', privacyOneOf)
+    if (Array.isArray(autoTagOneOf)) newParams = this.restService.addArrayParams(newParams, 'autoTagOneOf', autoTagOneOf)
     if (search) newParams = newParams.set('search', search)
 
     newParams = this.buildNSFWParams(newParams, { nsfw, nsfwFlagsExcluded, nsfwFlagsIncluded })

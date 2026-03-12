@@ -1,21 +1,22 @@
 import { CommonModule } from '@angular/common'
 import { Component, inject, OnInit, viewChild } from '@angular/core'
 import { Notifier } from '@app/core'
+import { AdvancedFilterDef } from '@app/shared/shared-forms/advanced-input-filter.component'
 import { ActionDropdownComponent, DropdownAction } from '@app/shared/shared-main/buttons/action-dropdown.component'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { VideoImportService } from '@app/shared/shared-main/video/video-import.service'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { ActorCellComponent } from '@app/shared/shared-tables/actor-cell.component'
 import { VideoImport, VideoImportState, VideoImportStateType } from '@peertube/peertube-models'
-import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
 import { NumberFormatterPipe } from '../../shared/shared-main/common/number-formatter.pipe'
-import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../../shared/shared-tables/table.component'
+import { DataLoaderOptionsBase, TableColumnInfo, TableComponent } from '../../shared/shared-tables/table.component'
+
+type DataLoaderParameter = Parameters<MyVideoImportsComponent['_dataLoader']>[0]
 
 @Component({
   templateUrl: './my-video-imports.component.html',
   styleUrls: [ './my-video-imports.component.scss' ],
   imports: [
-    AdvancedInputFilterComponent,
     CommonModule,
     CommonModule,
     PTDatePipe,
@@ -29,7 +30,34 @@ export class MyVideoImportsComponent implements OnInit {
   private notifier = inject(Notifier)
   private videoImportService = inject(VideoImportService)
 
-  readonly table = viewChild<TableComponent<VideoImport>>('table')
+  readonly table = viewChild<TableComponent<VideoImport, DataLoaderParameter>>('table')
+
+  inputFilters: AdvancedFilterDef<DataLoaderParameter>[] = [
+    {
+      key: 'targetUrl',
+      type: 'text',
+      title: $localize`Target URL`,
+      placeholder: $localize`https://example.com/.../video.mp4`
+    },
+    {
+      key: 'id',
+      type: 'text',
+      title: $localize`Import ID`,
+      constraint: 'numeric'
+    },
+    {
+      key: 'videoId',
+      type: 'text',
+      title: $localize`Video ID`,
+      constraint: 'numeric'
+    },
+    {
+      key: 'videoChannelSyncId',
+      type: 'text',
+      title: $localize`Channel sync ID`,
+      constraint: 'numeric'
+    }
+  ]
 
   videoImportActions: DropdownAction<VideoImport>[] = []
 
@@ -149,7 +177,15 @@ export class MyVideoImportsComponent implements OnInit {
       })
   }
 
-  private _dataLoader (options: DataLoaderOptions) {
+  private _dataLoader (
+    options: DataLoaderOptionsBase & {
+      id?: number
+      videoId?: number
+      videoChannelSyncId?: number
+      targetUrl?: string
+      search?: string
+    }
+  ) {
     return this.videoImportService.listMyVideoImports({ ...options, includeCollaborations: true })
   }
 }

@@ -1,11 +1,11 @@
-import { SortMeta } from 'primeng/api'
-import { from as observableFrom, Observable } from 'rxjs'
-import { catchError, concatMap, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
 import { arrayify } from '@peertube/peertube-core-utils'
-import { ResultList, VideoBlacklist, VideoBlacklistType, VideoBlacklistType_Type } from '@peertube/peertube-models'
+import { ResultList, VideoBlacklist, VideoBlacklistType_Type } from '@peertube/peertube-models'
+import { SortMeta } from 'primeng/api'
+import { Observable, from as observableFrom } from 'rxjs'
+import { catchError, concatMap, toArray } from 'rxjs/operators'
 import { environment } from '../../../environments/environment'
 
 @Injectable()
@@ -27,21 +27,7 @@ export class VideoBlockService {
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
-    if (search) {
-      const filters = this.restService.parseQueryStringFilter(search, {
-        type: {
-          prefix: 'type:',
-          handler: v => {
-            if (v === 'manual') return VideoBlacklistType.MANUAL
-            if (v === 'auto') return VideoBlacklistType.AUTO_BEFORE_PUBLISHED
-
-            return undefined
-          }
-        }
-      })
-
-      params = this.restService.addObjectParams(params, filters)
-    }
+    if (search) params = params.append('search', search)
     if (type) params = params.append('type', type.toString())
 
     return this.authHttp.get<ResultList<VideoBlacklist>>(VideoBlockService.BASE_VIDEOS_URL + 'blacklist', { params })

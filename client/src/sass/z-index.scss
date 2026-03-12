@@ -1,5 +1,5 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
 
 .root-header {
   z-index: z(root-header);
@@ -13,10 +13,14 @@ ngx-loading-bar {
   z-index: z(root-header) + 1 !important;
 }
 
-// Dropdown added to body, override default z-index
 body > .dropdown,
-body > .dropup {
+body > .dropup,
+body > .p-overlay {
   z-index: z(dropdown) !important;
+
+  .p-overlay {
+    z-index: z(dropdown) + 1 !important;
+  }
 }
 
 .list-overflow-menu,

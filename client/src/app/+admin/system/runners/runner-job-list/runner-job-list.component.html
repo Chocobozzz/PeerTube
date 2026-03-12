@@ -8,15 +8,12 @@
   columnConfig="true"
   [dataLoader]="dataLoader"
   [bulkActions]="bulkActions"
+  searchInput="true"
+  refreshButton="true"
+  [inputFilters]="inputFilters"
   >
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No job} =1 {1 job} other {{{ totalRecords | myNumberFormatter }} jobs}}</ng-container>
-  </ng-template>
-
-  <ng-template #captionRight>
-    <my-advanced-input-filter class="me-2" [filters]="inputFilters" (search)="table.onSearch($event)"></my-advanced-input-filter>
-
-    <my-button i18n-label label="Refresh" icon="refresh" (click)="table.loadData()"></my-button>
   </ng-template>
 
   <ng-template #tableCells let-runnerJob>
