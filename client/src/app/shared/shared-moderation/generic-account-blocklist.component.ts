@@ -1,7 +1,7 @@
 import { Component, inject, input, viewChild } from '@angular/core'
 import { Notifier } from '@app/core'
 import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
-import { AdvancedInputFilterComponent } from '../shared-forms/advanced-input-filter.component'
+import { SearchInputComponent } from '../shared-forms/search-input.component'
 import { PTDatePipe } from '../shared-main/common/date.pipe'
 import { NumberFormatterPipe } from '../shared-main/common/number-formatter.pipe'
 import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../shared-tables/table.component'
@@ -14,7 +14,7 @@ import { BlocklistComponentType, BlocklistService } from './blocklist.service'
   imports: [
     TableComponent,
     NumberFormatterPipe,
-    AdvancedInputFilterComponent,
+    SearchInputComponent,
     ActorAvatarComponent,
     PTDatePipe
   ]

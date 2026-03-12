@@ -15,7 +15,7 @@ import { getAllFiles } from '@peertube/peertube-core-utils'
 import { FileStorage, NSFWFlag, UserRight, VideoFile, VideoState, VideoStreamingPlaylistType } from '@peertube/peertube-models'
 import { videoRequiresFileToken } from '@root-helpers/video'
 import { TableRowExpandEvent } from 'primeng/table'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
+import { AdvancedInputFilterComponent, FilterDef } from '../../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
@@ -74,7 +74,7 @@ export class VideoListComponent implements OnInit {
   readonly table = viewChild<TableComponent<Video>>('table')
 
   bulkActions: DropdownAction<Video[]>[][] = []
-  inputFilters: AdvancedInputFilter[]
+  inputFilters: FilterDef[]
 
   videoActionsOptions: VideoActionsDisplayType = {
     playlist: false,

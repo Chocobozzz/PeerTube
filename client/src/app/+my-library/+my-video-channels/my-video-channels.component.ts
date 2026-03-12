@@ -23,7 +23,7 @@ import { ChartModule } from 'primeng/chart'
 import { Subject, first, switchMap } from 'rxjs'
 import { SelectOptionsItem } from 'src/types'
 import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
-import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
+import { SearchInputComponent } from '../../shared/shared-forms/search-input.component'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
 import { DeleteButtonComponent } from '../../shared/shared-main/buttons/delete-button.component'
 import { EditButtonComponent } from '../../shared/shared-main/buttons/edit-button.component'
@@ -43,7 +43,7 @@ type DisplayFilter = 'all' | 'owned'
     FormsModule,
     RouterLink,
     ChannelsSetupMessageComponent,
-    AdvancedInputFilterComponent,
+    SearchInputComponent,
     InfiniteScrollerDirective,
     ActorAvatarComponent,
     EditButtonComponent,

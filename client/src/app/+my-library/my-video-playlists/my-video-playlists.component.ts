@@ -15,7 +15,7 @@ import { SortMeta } from 'primeng/api'
 import { TableRowReorderEvent } from 'primeng/table'
 import { Subject, tap } from 'rxjs'
 import { ChannelToggleComponent } from '../../shared/shared-channels/channel-toggle.component'
-import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
+import { SearchInputComponent } from '../../shared/shared-forms/search-input.component'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
 import { DeleteButtonComponent } from '../../shared/shared-main/buttons/delete-button.component'
 import { EditButtonComponent } from '../../shared/shared-main/buttons/edit-button.component'
@@ -38,7 +38,7 @@ const debugLogger = debug('peertube:my-video-playlists')
   imports: [
     FormsModule,
     GlobalIconComponent,
-    AdvancedInputFilterComponent,
+    SearchInputComponent,
     RouterLink,
     VideoPlaylistMiniatureComponent,
     DeleteButtonComponent,

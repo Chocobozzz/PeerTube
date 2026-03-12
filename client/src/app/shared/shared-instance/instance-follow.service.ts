@@ -7,7 +7,7 @@ import { RestExtractor, RestPagination, RestService } from '@app/core'
 import { arrayify } from '@peertube/peertube-core-utils'
 import { ActivityPubActorType, ActorFollow, FollowState, ResultList, ServerFollowCreate } from '@peertube/peertube-models'
 import { environment } from '../../../environments/environment'
-import { AdvancedInputFilter } from '../shared-forms/advanced-input-filter.component'
+import { FilterDef } from '../shared-forms/advanced-input-filter.component'
 
 @Injectable()
 export class InstanceFollowService {
@@ -133,23 +133,16 @@ export class InstanceFollowService {
       )
   }
 
-  buildFollowsListFilters (): AdvancedInputFilter[] {
+  buildFollowsListFilters (): FilterDef[] {
     return [
       {
-        title: $localize`Advanced filters`,
-        children: [
-          {
-            value: 'state:accepted',
-            label: $localize`Accepted follows`
-          },
-          {
-            value: 'state:rejected',
-            label: $localize`Rejected follows`
-          },
-          {
-            value: 'state:pending',
-            label: $localize`Pending follows`
-          }
+        type: 'options',
+        key: 'state',
+        title: $localize`Follow state`,
+        options: [
+          { value: 'accepted', label: $localize`Accepted follows` },
+          { value: 'rejected', label: $localize`Rejected follows` },
+          { value: 'pending', label: $localize`Pending follows` }
         ]
       }
     ]

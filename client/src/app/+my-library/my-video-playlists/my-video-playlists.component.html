@@ -36,10 +36,10 @@
   </ng-template>
 
   <ng-template #captionRight>
-    <my-advanced-input-filter
+    <my-search-input
       inputId="table-search" icon="true" emitOnInit="false" i18n-placeholder placeholder="Search your playlists"
       (search)="table.onSearch($event)"
-    ></my-advanced-input-filter>
+    ></my-search-input>
 
     <a class="peertube-create-button" routerLink="create">
       <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>

@@ -5,7 +5,7 @@
     <span class="total-items">{{ getTotalTitle() }}</span>
   }
 
-  <my-advanced-input-filter class="d-block ms-auto" (search)="onSearch($event)" emitOnInit="true" i18n-placeholder placeholder="Search a channel"></my-advanced-input-filter>
+  <my-search-input class="d-block ms-auto" (search)="onSearch($event)" emitOnInit="true" i18n-placeholder placeholder="Search a channel"></my-search-input>
 
   @if (user.isCollaboratingToChannels()) {
     <div class="d-flex align-items-center">

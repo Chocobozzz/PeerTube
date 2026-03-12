@@ -1,0 +1,31 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
+
+.input-group {
+  width: fit-content;
+}
+
+input {
+  @include peertube-input-text(250px);
+}
+
+.has-icon input {
+  padding-inline-start: 46px;
+}
+
+.search-button {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 20px;
+  color: pvar(--fg-200);
+
+  my-global-icon {
+    @include global-icon-size(19px);
+  }
+}
+
+.form-control-clear my-global-icon {
+  @include global-icon-size(19px);
+}

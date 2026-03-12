@@ -1,68 +1,107 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_form-mixins' as *;
+@use "_variables" as *;
+@use "_button-mixins" as *;
+@use "_mixins" as *;
 
-.input-group {
-  width: fit-content;
+// ---------------------------------------------------------------------------
+// Toggle button
+// ---------------------------------------------------------------------------
+
+.filter-toggle {
+  my-global-icon {
+    @include global-icon-size(20px);
+  }
+
+  .active-counter {
+    background-color: var(--primary);
+    color: var(--on-primary);
+    font-weight: $font-bold;
+    font-size: 11px;
+    border-radius: 100%;
+    padding: 2px 6px;
+  }
 }
 
-.dropdown-item {
-  font-size: 14px;
+// ---------------------------------------------------------------------------
+// Dropdown panel
+// ---------------------------------------------------------------------------
+
+.filter-panel {
+  min-width: 200px;
+  max-width: 340px;
+  border: 1px solid pvar(--input-border-color);
+  border-radius: pvar(--input-border-radius);
 }
 
-input {
-  @include peertube-input-text(250px);
+.filter-panel-body {
+  max-height: 60vh;
+  overflow: auto;
 }
 
-.has-icon input {
-  padding-inline-start: 46px;
+// ---------------------------------------------------------------------------
+// Filter groups
+// ---------------------------------------------------------------------------
+
+.filter-group {
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+  }
 }
 
-.search-button {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 20px;
-  color: pvar(--fg-200);
+.filter-group-title {
+  display: block;
+  font-size: 12px;
+  font-weight: $font-bold;
+  text-transform: uppercase;
+  color: pvar(--fg-300);
+  margin-bottom: 0.5rem;
+}
+
+// ---------------------------------------------------------------------------
+// Option buttons
+// ---------------------------------------------------------------------------
+
+.filter-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filter-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 13px;
+  border: 1px solid pvar(--bg-secondary-500);
+  border-radius: 20px;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
 
   my-global-icon {
-    @include global-icon-size(19px);
-  }
-}
+    color: pvar(--primary);
 
-.input-group-text {
-  background-color: transparent;
-  transition: 0.3s ease-out;
+    @include global-icon-size(13px);
+  }
 
   &:hover {
-    background-color: pvar(--input-bg);
+    background-color: pvar(--bg-secondary-400);
+  }
+
+  &.active {
+    border-color: pvar(--primary);
+    background-color: pvar(--primary);
+    color: var(--on-primary);
+
+    my-global-icon {
+      color: var(--on-primary);
+    }
   }
 }
 
-.form-control-clear my-global-icon {
-  @include global-icon-size(19px);
-}
+// ---------------------------------------------------------------------------
+// Footer
+// ---------------------------------------------------------------------------
 
-div[role=menu] my-global-icon {
-  $size: 19px;
-  $margin: 2px;
-
-  opacity: 1;
-
-  @include global-icon-size($size);
-  @include margin-right($margin);
-
-  &.no-visible {
-    width: 0;
-    height: 0;
-
-    @include margin-right($size + $margin);
-  }
-}
-
-
-
-div[role=menu] {
-  max-height: 50vh;
-  overflow: auto;
+.filter-footer {
+  border-top: 1px solid pvar(--input-border-color);
+  background-color: pvar(--bg);
 }

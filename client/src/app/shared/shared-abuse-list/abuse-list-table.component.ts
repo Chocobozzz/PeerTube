@@ -7,7 +7,7 @@ import { logger } from '@root-helpers/logger'
 import debug from 'debug'
 import { switchMap } from 'rxjs'
 import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../shared-forms/advanced-input-filter.component'
+import { AdvancedInputFilterComponent, FilterDef } from '../shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { Account } from '../shared-main/account/account.model'
 import { Actor } from '../shared-main/account/actor.model'
@@ -68,30 +68,24 @@ export class AbuseListTableComponent implements OnInit, OnDestroy {
 
   abuseActions: DropdownAction<ProcessedAbuse>[][] = []
 
-  inputFilters: AdvancedInputFilter[] = [
+  inputFilters: FilterDef[] = [
     {
-      title: $localize`Advanced filters`,
-      children: [
-        {
-          value: 'state:pending',
-          label: $localize`Unsolved reports`
-        },
-        {
-          value: 'state:accepted',
-          label: $localize`Accepted reports`
-        },
-        {
-          value: 'state:rejected',
-          label: $localize`Refused reports`
-        },
-        {
-          value: 'videoIs:blacklisted',
-          label: $localize`Reports with blocked videos`
-        },
-        {
-          value: 'videoIs:deleted',
-          label: $localize`Reports with deleted videos`
-        }
+      type: 'options',
+      key: 'state',
+      title: $localize`Report state`,
+      options: [
+        { value: 'pending', label: $localize`Unsolved reports` },
+        { value: 'accepted', label: $localize`Accepted reports` },
+        { value: 'rejected', label: $localize`Refused reports` }
+      ]
+    },
+    {
+      type: 'options',
+      key: 'videoIs',
+      title: $localize`Report video`,
+      options: [
+        { value: 'blacklisted', label: $localize`Reports with blocked videos` },
+        { value: 'deleted', label: $localize`Reports with deleted videos` }
       ]
     }
   ]

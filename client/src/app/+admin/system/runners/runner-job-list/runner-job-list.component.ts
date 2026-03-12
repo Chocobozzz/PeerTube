@@ -3,7 +3,7 @@ import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { ConfirmService, Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { RunnerJob, RunnerJobState } from '@peertube/peertube-models'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../../shared/shared-forms/advanced-input-filter.component'
+import { AdvancedInputFilterComponent, FilterDef } from '../../../../shared/shared-forms/advanced-input-filter.component'
 import { ActionDropdownComponent, DropdownAction } from '../../../../shared/shared-main/buttons/action-dropdown.component'
 import { ButtonComponent } from '../../../../shared/shared-main/buttons/button.component'
 import { NumberFormatterPipe } from '../../../../shared/shared-main/common/number-formatter.pipe'
@@ -34,25 +34,23 @@ export class RunnerJobListComponent implements OnInit {
   actions: DropdownAction<RunnerJob>[][] = []
   bulkActions: DropdownAction<RunnerJob[]>[][] = []
 
-  inputFilters: AdvancedInputFilter[] = [
+  inputFilters: FilterDef[] = [
     {
-      title: $localize`Advanced filters`,
-      children: [
+      type: 'options',
+      key: 'state',
+      title: $localize`Job state`,
+      options: [
+        { value: 'completed', label: $localize`Completed jobs` },
         {
-          value: 'state:completed',
-          label: $localize`Completed jobs`
+          value: 'pending',
+          label: $localize`Pending jobs`,
+          rawToken: 'state:pending state:waiting-for-parent-job'
         },
+        { value: 'processing', label: $localize`Jobs that are being processed` },
         {
-          value: 'state:pending state:waiting-for-parent-job',
-          label: $localize`Pending jobs`
-        },
-        {
-          value: 'state:processing',
-          label: $localize`Jobs that are being processed`
-        },
-        {
-          value: 'state:errored state:parent-errored',
-          label: $localize`Failed jobs`
+          value: 'errored',
+          label: $localize`Failed jobs`,
+          rawToken: 'state:errored state:parent-errored'
         }
       ]
     }

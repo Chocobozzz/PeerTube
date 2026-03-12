@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
-import { AdvancedInputFilter } from '@app/shared/shared-forms/advanced-input-filter.component'
+import { FilterDef } from '@app/shared/shared-forms/advanced-input-filter.component'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { VideoListParams, VideoService } from '@app/shared/shared-main/video/video.service'
 import { getAllPrivacies, omit } from '@peertube/peertube-core-utils'
@@ -37,80 +37,56 @@ export class VideoAdminService {
       )
   }
 
-  buildAdminInputFilter (): AdvancedInputFilter[] {
+  buildAdminInputFilter (): FilterDef[] {
     return [
       {
-        title: $localize`Moderation`,
-        children: [
-          {
-            value: 'nsfw:true',
-            label: $localize`Sensitive videos`
-          }
-        ]
+        type: 'checkbox',
+        key: 'nsfw',
+        label: $localize`Sensitive videos`
       },
 
       {
+        type: 'options',
+        key: 'isLive',
         title: $localize`Video type`,
-        children: [
-          {
-            value: 'isLive:false',
-            label: $localize`VOD`
-          },
-          {
-            value: 'isLive:true',
-            label: $localize`Live`
-          }
+        options: [
+          { value: 'false', label: $localize`VOD` },
+          { value: 'true', label: $localize`Live` }
         ]
       },
 
       {
-        title: $localize`Video files`,
-        children: [
-          {
-            value: 'webVideos:true isLocal:true',
-            label: $localize`With Web Videos`
-          },
-          {
-            value: 'webVideos:false isLocal:true',
-            label: $localize`Without Web Videos`
-          },
-          {
-            value: 'hls:true isLocal:true',
-            label: $localize`With HLS`
-          },
-          {
-            value: 'hls:false isLocal:true',
-            label: $localize`Without HLS`
-          }
+        type: 'options',
+        key: 'videoFiles',
+        title: $localize`Video files (local only)`,
+        options: [
+          { value: 'webVideos-true', label: $localize`With Web Videos`, rawToken: 'webVideos:true isLocal:true' },
+          { value: 'webVideos-false', label: $localize`Without Web Videos`, rawToken: 'webVideos:false isLocal:true' },
+          { value: 'hls-true', label: $localize`With HLS`, rawToken: 'hls:true isLocal:true' },
+          { value: 'hls-false', label: $localize`Without HLS`, rawToken: 'hls:false isLocal:true' }
         ]
       },
 
       {
+        type: 'options',
+        key: 'isLocal',
         title: $localize`Videos scope`,
-        children: [
-          {
-            value: 'isLocal:false',
-            label: $localize`Remote videos`
-          },
-          {
-            value: 'isLocal:true',
-            label: $localize`Local videos`
-          }
+        options: [
+          { value: 'false', label: $localize`Remote videos` },
+          { value: 'true', label: $localize`Local videos` }
         ]
       },
 
       {
-        title: $localize`Exclude`,
-        children: [
-          {
-            value: 'excludeMuted',
-            label: $localize`Exclude muted accounts`
-          },
-          {
-            value: 'excludePublic',
-            label: $localize`Exclude public videos`
-          }
-        ]
+        type: 'checkbox',
+        key: 'excludeMuted',
+        label: $localize`Exclude muted accounts`
+      },
+
+      {
+        type: 'checkbox',
+        key: 'excludePublic',
+        label: $localize`Exclude public videos`
       }
     ]
   }

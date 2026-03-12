@@ -5,7 +5,7 @@ import { InstanceFollowService } from '@app/shared/shared-instance/instance-foll
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { DataLoaderOptions, TableColumnInfo, TableComponent } from '@app/shared/shared-tables/table.component'
 import { ActorFollow } from '@peertube/peertube-models'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
+import { AdvancedInputFilterComponent, FilterDef } from '../../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
@@ -33,7 +33,7 @@ export class FollowersListComponent implements OnInit {
 
   readonly table = viewChild<TableComponent<ActorFollow>>('table')
 
-  searchFilters: AdvancedInputFilter[] = []
+  searchFilters: FilterDef[] = []
 
   bulkActions: DropdownAction<ActorFollow[]>[] = []
 

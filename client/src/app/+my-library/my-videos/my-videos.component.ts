@@ -16,7 +16,7 @@ import uniqBy from 'lodash-es/uniqBy'
 import { SortMeta } from 'primeng/api'
 import { tap } from 'rxjs/operators'
 import { SelectOptionsItem } from 'src/types'
-import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
+import { SearchInputComponent } from '../../shared/shared-forms/search-input.component'
 import { SelectCheckboxComponent } from '../../shared/shared-forms/select/select-checkbox.component'
 import { DropdownAction } from '../../shared/shared-main/buttons/action-dropdown.component'
 import { ButtonComponent } from '../../shared/shared-main/buttons/button.component'
@@ -48,7 +48,7 @@ type QueryParams = TableQueryParams & {
   styleUrls: [ './my-videos.component.scss' ],
   imports: [
     FormsModule,
-    AdvancedInputFilterComponent,
+    SearchInputComponent,
     ButtonComponent,
     NgbTooltipModule,
     VideoActionsDropdownComponent,

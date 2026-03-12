@@ -6,7 +6,7 @@ import { UserSubscriptionService } from '@app/shared/shared-user-subscription/us
 import { ActorFollow } from '@peertube/peertube-models'
 import { Subject } from 'rxjs'
 import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
+import { AdvancedInputFilterComponent, FilterDef } from '../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
 import { InfiniteScrollerDirective } from '../../shared/shared-main/common/infinite-scroller.directive'
 
@@ -32,24 +32,20 @@ export class MyFollowersComponent implements OnInit {
   onDataSubject = new Subject<any[]>()
   search: string
 
-  inputFilters: AdvancedInputFilter[]
+  inputFilters: FilterDef[]
 
   ngOnInit () {
-    if (this.route.snapshot.queryParams['search']) {
-      this.search = this.route.snapshot.queryParams['search']
-    }
-
-    const channelFilters = this.auth.getUser().videoChannels.map(c => {
-      return {
-        value: 'channel:' + c.name,
-        label: c.name
-      }
-    })
+    const channelOptions = this.auth.getUser().videoChannels.map(c => ({
+      value: c.name,
+      label: c.name
+    }))
 
     this.inputFilters = [
       {
+        type: 'options',
+        key: 'channel',
         title: $localize`Channel filters`,
-        children: channelFilters
+        options: channelOptions
       }
     ]
   }

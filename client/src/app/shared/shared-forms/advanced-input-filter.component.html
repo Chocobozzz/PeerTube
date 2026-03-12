@@ -1,39 +1,76 @@
-<div class="input-group has-clear flex-nowrap" [ngClass]="{ 'has-icon': icon() }" ngbDropdown placement="bottom-left auto" container="body">
+@if (hasFilters()) {
+  <div ngbDropdown placement="bottom-start auto" container="body" (openChange)="$event && onDropdownOpen()" #dropdown="ngbDropdown">
 
-  @if (hasFilters()) {
-    <button class="input-group-text c-hand" title="Open quick filters" i18n-title ngbDropdownToggle>
-    </button>
+    <button class="peertube-button secondary-button filter-toggle" ngbDropdownToggle type="button" title="Open filters" i18n-title>
+      <my-global-icon iconName="filter" aria-hidden="true"></my-global-icon>
 
-    <div role="menu" ngbDropdownMenu>
-      @for (group of filters(); track group) {
-        <div class="dropdown-header">{{ group.title }}</div>
+      <span i18n>Filters</span>
 
-        @for (filter of group.children; track filter) {
-          <button (click)="onFilterClick(filter)" class="dropdown-item">
-            <my-global-icon [ngClass]="{ 'no-visible': !isFilterEnabled(filter) }" iconName="tick"></my-global-icon>
-            {{ filter.label }}
-          </button>
-        }
+      @if (activeCount() > 0) {
+        <span class="active-counter ms-1">{{ activeCount() }}</span>
       }
-    </div>
-  }
-
-  @if (icon()) {
-    <button class="button-unstyle search-button" title="Search" i18n-title (click)="onSearchClick()">
-      <my-global-icon iconName="search"></my-global-icon>
     </button>
-  }
 
-  <input
-    type="text" [name]="inputId()" [id]="inputId()" [placeholder]="placeholder()"
-    class="last-in-group"
-    [ngClass]="{ 'first-in-group': !hasFilters() }"
-    [(ngModel)]="searchValue"
-    (keyup)="onInputSearch($event)"
-    #input
-    >
+    <div ngbDropdownMenu class="filter-panel p-0">
+      <div class="filter-panel-body p-3">
+        @for (def of filters(); track def.key) {
 
-  <button class="p-0 border-0 form-control-clear" title="Clear filter" i18n-title (click)="onResetTableFilter(); input.focus()">
-    <my-global-icon iconName="cross" ></my-global-icon>
-  </button>
-</div>
+          @if (def.type === 'options') {
+            <div class="filter-group">
+              <div class="filter-group-title">{{ def.title }}</div>
+
+              <div class="filter-options">
+                @for (option of def.options; track option.value) {
+                  <button
+                    type="button"
+                    class="filter-option"
+                    [class.active]="isOptionSelected(def, option.value)"
+                    (click)="onOptionClick(def, option.value)"
+                  >
+                    @if (isOptionSelected(def, option.value)) {
+                      <my-global-icon iconName="tick" aria-hidden="true"></my-global-icon>
+                    }
+                    {{ option.label }}
+                  </button>
+                }
+              </div>
+            </div>
+          }
+
+          @if (def.type === 'checkbox') {
+            <div class="filter-group">
+              <my-peertube-checkbox
+                [inputName]="def.key"
+                [labelText]="def.label"
+                [checked]="getCheckboxValue(def.key)"
+                (checkedChange)="setCheckboxValue(def.key, $event)"
+              ></my-peertube-checkbox>
+            </div>
+          }
+
+          @if (def.type === 'select') {
+            <div class="filter-group">
+              <label class="filter-group-title" [for]="'filter-select-' + def.key">{{ def.title }}</label>
+
+              <my-select-options
+                [inputId]="'filter-select-' + def.key"
+                [items]="def.items"
+                [clearable]="def.clearable ?? true"
+                [ngModel]="getSelectValue(def.key)"
+                (ngModelChange)="setSelectValue(def.key, $event)"
+              ></my-select-options>
+            </div>
+          }
+
+        }
+      </div>
+
+      <div class="filter-footer d-flex gap-2 p-2">
+        <my-button type="button" theme="primary" small="true" (click)="applyFilters(dropdown)" i18n>Apply</my-button>
+        <my-button type="button" theme="secondary" small="true" (click)="resetFilters(dropdown)" i18n>Reset</my-button>
+      </div>
+    </div>
+
+  </div>
+}
+

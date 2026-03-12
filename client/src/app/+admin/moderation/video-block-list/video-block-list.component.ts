@@ -8,7 +8,7 @@ import { ResultList, VideoBlacklist as VideoBlacklistServer, VideoBlacklistType,
 import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
 import { switchMap } from 'rxjs/operators'
 import { environment } from 'src/environments/environment'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
+import { AdvancedInputFilterComponent, FilterDef } from '../../../shared/shared-forms/advanced-input-filter.component'
 import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
 import { NumberFormatterPipe } from '../../../shared/shared-main/common/number-formatter.pipe'
 import { EmbedComponent } from '../../../shared/shared-main/video/embed.component'
@@ -47,18 +47,14 @@ export class VideoBlockListComponent implements OnInit {
 
   videoBlocklistActions: DropdownAction<VideoBlacklist>[][] = []
 
-  inputFilters: AdvancedInputFilter[] = [
+  inputFilters: FilterDef[] = [
     {
-      title: $localize`Advanced filters`,
-      children: [
-        {
-          value: 'type:auto',
-          label: $localize`Automatic blocks`
-        },
-        {
-          value: 'type:manual',
-          label: $localize`Manual blocks`
-        }
+      type: 'options',
+      key: 'type',
+      title: $localize`Block type`,
+      options: [
+        { value: 'auto', label: $localize`Automatic blocks` },
+        { value: 'manual', label: $localize`Manual blocks` }
       ]
     }
   ]

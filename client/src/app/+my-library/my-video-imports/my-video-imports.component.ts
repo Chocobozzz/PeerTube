@@ -7,7 +7,7 @@ import { VideoImportService } from '@app/shared/shared-main/video/video-import.s
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { ActorCellComponent } from '@app/shared/shared-tables/actor-cell.component'
 import { VideoImport, VideoImportState, VideoImportStateType } from '@peertube/peertube-models'
-import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
+import { SearchInputComponent } from '../../shared/shared-forms/search-input.component'
 import { NumberFormatterPipe } from '../../shared/shared-main/common/number-formatter.pipe'
 import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../../shared/shared-tables/table.component'
 
@@ -15,7 +15,7 @@ import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../../shared
   templateUrl: './my-video-imports.component.html',
   styleUrls: [ './my-video-imports.component.scss' ],
   imports: [
-    AdvancedInputFilterComponent,
+    SearchInputComponent,
     CommonModule,
     CommonModule,
     PTDatePipe,

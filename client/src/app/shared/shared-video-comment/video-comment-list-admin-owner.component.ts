@@ -8,7 +8,7 @@ import { VideoCommentService } from '@app/shared/shared-video-comment/video-comm
 import { BulkRemoveCommentsOfBody, UserRight } from '@peertube/peertube-models'
 import { switchMap } from 'rxjs'
 import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../shared-forms/advanced-input-filter.component'
+import { AdvancedInputFilterComponent, FilterDef } from '../shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { ActionDropdownComponent, DropdownAction } from '../shared-main/buttons/action-dropdown.component'
 import { ButtonComponent } from '../shared-main/buttons/button.component'
@@ -59,7 +59,7 @@ export class VideoCommentListAdminOwnerComponent implements OnInit, OnDestroy {
 
   videoCommentActions: DropdownAction<VideoCommentForAdminOrUser>[][] = []
   bulkActions: DropdownAction<VideoCommentForAdminOrUser[]>[] = []
-  inputFilters: AdvancedInputFilter[] = []
+  inputFilters: FilterDef[] = []
 
   columns: TableColumnInfo<ColumnName>[] = [
     { id: 'video', label: $localize`Commented video`, sortable: false },
@@ -160,21 +160,18 @@ export class VideoCommentListAdminOwnerComponent implements OnInit, OnDestroy {
     if (this.mode() === 'admin') {
       this.inputFilters = [
         {
-          title: $localize`Advanced filters`,
-          children: [
-            {
-              value: 'local:true',
-              label: $localize`Local comments`
-            },
-            {
-              value: 'local:false',
-              label: $localize`Remote comments`
-            },
-            {
-              value: 'localVideo:true',
-              label: $localize`Comments on local videos`
-            }
+          type: 'options',
+          key: 'local',
+          title: $localize`Comment scope`,
+          options: [
+            { value: 'true', label: $localize`Local comments` },
+            { value: 'false', label: $localize`Remote comments` }
           ]
+        },
+        {
+          type: 'checkbox',
+          key: 'localVideo',
+          label: $localize`Comments on local videos`
         }
       ]
 
@@ -183,13 +180,9 @@ export class VideoCommentListAdminOwnerComponent implements OnInit, OnDestroy {
 
     this.inputFilters = [
       {
-        title: $localize`Advanced filters`,
-        children: [
-          {
-            value: 'heldForReview:true',
-            label: $localize`Display comments awaiting your approval`
-          }
-        ]
+        type: 'checkbox',
+        key: 'heldForReview',
+        label: $localize`Display comments awaiting your approval`
       }
     ]
   }

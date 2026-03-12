@@ -6,7 +6,7 @@ import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { ResultList, UserRegistration as UserRegistrationServer, UserRegistrationState } from '@peertube/peertube-models'
 import { switchMap } from 'rxjs'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
+import { SearchInputComponent } from '../../../shared/shared-forms/search-input.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
 import { NumberFormatterPipe } from '../../../shared/shared-main/common/number-formatter.pipe'
@@ -25,7 +25,7 @@ type ColumnName = 'account' | 'email' | 'channel' | 'registrationReason' | 'stat
   imports: [
     GlobalIconComponent,
     ActionDropdownComponent,
-    AdvancedInputFilterComponent,
+    SearchInputComponent,
     NgbTooltip,
     UserEmailInfoComponent,
     ProcessRegistrationModalComponent,
@@ -48,8 +48,6 @@ export class RegistrationListComponent implements OnInit {
 
   registrationActions: DropdownAction<UserRegistration>[][] = []
   bulkActions: DropdownAction<UserRegistration[]>[] = []
-
-  inputFilters: AdvancedInputFilter[] = []
 
   requiresEmailVerification: boolean
 

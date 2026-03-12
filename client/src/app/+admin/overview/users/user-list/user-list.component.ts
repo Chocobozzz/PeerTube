@@ -14,7 +14,7 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { UserRole, UserRoleType } from '@peertube/peertube-models'
 import { map, switchMap } from 'rxjs'
 import { ActorAvatarComponent } from '../../../../shared/shared-actor-image/actor-avatar.component'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../../shared/shared-forms/advanced-input-filter.component'
+import { AdvancedInputFilterComponent, FilterDef } from '../../../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
 import { DropdownAction } from '../../../../shared/shared-main/buttons/action-dropdown.component'
 import { BytesPipe } from '../../../../shared/shared-main/common/bytes.pipe'
@@ -79,15 +79,11 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   bulkActions: DropdownAction<User[]>[][] = []
 
-  inputFilters: AdvancedInputFilter[] = [
+  inputFilters: FilterDef[] = [
     {
-      title: $localize`Advanced filters`,
-      children: [
-        {
-          value: 'banned:true',
-          label: $localize`Banned users`
-        }
-      ]
+      type: 'checkbox',
+      key: 'banned',
+      label: $localize`Banned users`
     }
   ]
 
