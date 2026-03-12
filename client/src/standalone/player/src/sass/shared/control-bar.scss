@@ -605,7 +605,7 @@ $chapter-marker-size: 9px;
     }
   }
 
-  &.vjs-live {
+  &.vjs-live:not(.vjs-live-dvr) {
     // Take the available space for the control bar
     .vjs-progress-control {
       display: flex;
@@ -618,6 +618,26 @@ $chapter-marker-size: 9px;
     --icon-size: 1.625rem; // 26px;
     --button-width: 2.5rem;
     --control-bar-font-size: 1rem;
+  }
+}
+
+// Force seekbar visibility for Live DVR
+.video-js.vjs-live.vjs-live-dvr {
+  .vjs-progress-control {
+    display: flex !important;
+    visibility: visible !important;
+  }
+
+  .vjs-progress-control.vjs-hidden {
+    display: flex !important;
+    visibility: visible !important;
+  }
+
+  .vjs-current-time.vjs-hidden,
+  .vjs-duration.vjs-hidden,
+  .vjs-time-divider.vjs-hidden {
+    display: flex !important;
+    visibility: visible !important;
   }
 }
 
@@ -664,7 +684,7 @@ $chapter-marker-size: 9px;
     max-width: 100px;
   }
 
-  &.vjs-live {
+  &.vjs-live:not(.vjs-live-dvr) {
     .vjs-duration {
       display: none !important;
     }
@@ -693,7 +713,7 @@ $chapter-marker-size: 9px;
     @include margin-left(0);
   }
 
-  &.vjs-live {
+  &.vjs-live:not(.vjs-live-dvr) {
     .vjs-current-time {
       display: none !important;
     }

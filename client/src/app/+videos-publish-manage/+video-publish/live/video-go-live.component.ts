@@ -93,6 +93,8 @@ export class VideoGoLiveComponent implements OnInit, AfterViewInit, CanComponent
       support: this.userChannels().find(c => c.id === this.firstStepChannelId).support ?? '',
       permanentLive: this.firstStepPermanentLive,
       latencyMode: LiveVideoLatencyMode.DEFAULT,
+      dvrEnabled: true,
+      dvrWindow: serverConfig.live.dvrMaxWindow,
       saveReplay: this.isReplayAllowed(),
       replaySettings: { privacy: this.highestPrivacy() },
       schedules: [],

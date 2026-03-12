@@ -175,14 +175,8 @@ static_files:
 
 object_storage:
   enabled: false
-
-  # Without protocol, will default to HTTPS
-  # Your S3 provider must support virtual hosting of buckets as PeerTube doesn't support path style requests
   endpoint: '' # 's3.amazonaws.com' or 's3.fr-par.scw.cloud' for example
-
   region: 'us-east-1'
-
-  # Use path style requests if the S3 provider does not support virtual hosting of buckets
   force_path_style: false
 
   upload_acl:
@@ -707,6 +701,9 @@ live:
   # If the user daily/total quota is reached, PeerTube will stop the live
   # /!\ transcoding.enabled (and not live.transcoding.enabled) has to be true to create a replay
   allow_replay: true
+
+  # Max DVR window length in milliseconds (2 hours by default)
+  dvr_max_window: 7200000
 
   # Allow your users to change latency settings (small latency/default/high latency)
   # Small latency live streams cannot use P2P

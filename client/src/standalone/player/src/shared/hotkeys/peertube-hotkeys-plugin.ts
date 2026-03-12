@@ -7,6 +7,7 @@ const Plugin = videojs.getPlugin('plugin') as typeof VideojsPlugin
 
 export type HotkeysOptions = {
   isLive: boolean
+  isLiveDvr?: boolean
 }
 
 class PeerTubeHotkeysPlugin extends Plugin {
@@ -18,11 +19,13 @@ class PeerTubeHotkeysPlugin extends Plugin {
   declare private readonly handlers: KeyHandler[]
 
   declare private readonly isLive: boolean
+  declare private readonly isLiveDvr: boolean
 
   constructor (player: VideojsPlayer, options: HotkeysOptions) {
     super(player)
 
     this.isLive = options.isLive
+    this.isLiveDvr = options.isLiveDvr === true
 
     this.handlers = this.buildHandlers()
 
@@ -154,7 +157,7 @@ class PeerTubeHotkeysPlugin extends Plugin {
       }
     ]
 
-    if (this.isLive) return handlers
+    if (this.isLive && this.isLiveDvr !== true) return handlers
 
     return handlers.concat(this.buildVODHandlers())
   }
@@ -165,7 +168,7 @@ class PeerTubeHotkeysPlugin extends Plugin {
       {
         accept: e => this.isNaked(e, 'ArrowLeft') || this.isNaked(e, 'MediaRewind'),
         cb: e => {
-          if (this.isLive) return
+          if (!this.canSeek()) return
 
           e.preventDefault()
 
@@ -178,7 +181,7 @@ class PeerTubeHotkeysPlugin extends Plugin {
       {
         accept: e => this.isNaked(e, 'ArrowRight') || this.isNaked(e, 'MediaForward'),
         cb: e => {
-          if (this.isLive) return
+          if (!this.canSeek()) return
 
           e.preventDefault()
 
@@ -193,7 +196,7 @@ class PeerTubeHotkeysPlugin extends Plugin {
       handlers.push({
         accept: e => this.isNakedOrShift(e, i + ''),
         cb: e => {
-          if (this.isLive) return
+          if (!this.canSeek()) return
 
           e.preventDefault()
 
@@ -251,6 +254,10 @@ class PeerTubeHotkeysPlugin extends Plugin {
     }
 
     return key.toUpperCase()
+  }
+
+  private canSeek () {
+    return this.isLive !== true || this.isLiveDvr === true
   }
 }
 

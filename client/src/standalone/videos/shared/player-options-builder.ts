@@ -349,12 +349,14 @@ export class PlayerOptionsBuilder {
   }
 
   private buildLiveOptions (video: VideoDetails, live: LiveVideo) {
-    if (!video.isLive) return { isLive: false }
+    if (!video.isLive) return { isLive: false, isLiveDvr: false }
 
     return {
       isLive: true,
+      isLiveDvr: live.dvrEnabled === true,
       liveOptions: {
-        latencyMode: live.latencyMode
+        latencyMode: live.latencyMode,
+        dvrEnabled: live.dvrEnabled === true
       }
     }
   }

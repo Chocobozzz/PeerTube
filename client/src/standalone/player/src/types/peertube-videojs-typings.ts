@@ -108,6 +108,7 @@ export type PeerTubePluginOptions = {
 
   videoCaptions: () => VideoJSCaption[]
   isLive: () => boolean
+  isLiveDvr: () => boolean
   videoUUID: () => string
   subtitle: () => string
 
@@ -197,7 +198,7 @@ export type HLSLoaderClass = {
 
   getEngine(): HlsJsP2PEngine
 }
-export type HLSPluginOptions = Partial<HlsConfig & { cueHandler: any, p2pMediaLoaderOptions: CoreConfig }>
+export type HLSPluginOptions = Partial<HlsConfig & { cueHandler: any, p2pMediaLoaderOptions: CoreConfig, peertubeLiveDvr?: boolean }>
 
 export type P2PMediaLoaderPluginOptions = {
   redundancyUrlManager: RedundancyUrlManager | null

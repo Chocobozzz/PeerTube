@@ -71,6 +71,52 @@ describe('Test live', function () {
     commands = servers.map(s => s.live)
   })
 
+  describe('Live DVR settings', function () {
+    let liveVideoUUID: string
+    const updatedDvrWindow = 30 * 60 * 1000
+
+    it('Should create a live with custom DVR settings', async function () {
+      const live = await commands[0].create({
+        fields: {
+          name: 'live dvr settings',
+          channelId: servers[0].store.channel.id,
+          privacy: VideoPrivacy.PUBLIC,
+          permanentLive: true
+        }
+      })
+      liveVideoUUID = live.uuid
+
+      await waitJobs(servers)
+
+      const videoLive = await servers[0].live.get({ videoId: liveVideoUUID })
+
+      expect(videoLive.dvrEnabled).to.be.false
+      expect(videoLive.dvrWindow).to.be.greaterThan(0)
+    })
+
+    it('Should update DVR settings on the live', async function () {
+      await commands[0].update({
+        videoId: liveVideoUUID,
+        fields: {
+          dvrEnabled: true,
+          dvrWindow: updatedDvrWindow
+        }
+      })
+
+      await waitJobs(servers)
+
+      const videoLive = await servers[0].live.get({ videoId: liveVideoUUID })
+
+      expect(videoLive.dvrEnabled).to.be.true
+      expect(videoLive.dvrWindow).to.equal(updatedDvrWindow)
+    })
+
+    it('Should delete the DVR test live', async function () {
+      await servers[0].videos.remove({ id: liveVideoUUID })
+      await waitJobs(servers)
+    })
+  })
+
   describe('Live creation, update and delete', function () {
     let liveVideoUUID: string
 

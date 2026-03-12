@@ -12,6 +12,7 @@ import { exists, isArray } from '@server/helpers/custom-validators/misc.js'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { createReqFiles } from '@server/helpers/express-utils.js'
 import { getFormattedObjects } from '@server/helpers/utils.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { getVideoThumbnailFile } from '@server/helpers/video.js'
 import { ASSETS_PATH, MIMETYPES } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
@@ -147,6 +148,10 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
 
       if (exists(body.permanentLive)) videoLive.permanentLive = body.permanentLive
       if (exists(body.latencyMode)) videoLive.latencyMode = body.latencyMode
+      if (exists(body.dvrEnabled)) videoLive.dvrEnabled = body.dvrEnabled
+      if (exists(body.dvrWindow)) {
+        videoLive.dvrWindow = Math.min(body.dvrWindow, CONFIG.LIVE.DVR_MAX_WINDOW)
+      }
 
       if (body.schedules !== undefined) {
         await VideoLiveScheduleModel.deleteAllOfLiveId(videoLive.id, t)
@@ -207,7 +212,15 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
       fromDescription: false,
       finalFallback: undefined
     },
-    liveAttributes: pick(videoInfo, [ 'saveReplay', 'permanentLive', 'latencyMode', 'replaySettings', 'schedules' ]),
+    liveAttributes: pick(videoInfo, [
+      'saveReplay',
+      'permanentLive',
+      'latencyMode',
+      'dvrEnabled',
+      'dvrWindow',
+      'replaySettings',
+      'schedules'
+    ]),
     videoAttributeResultHook: 'filter:api.video.live.video-attribute.result',
     lTags,
     videoAttributes: {

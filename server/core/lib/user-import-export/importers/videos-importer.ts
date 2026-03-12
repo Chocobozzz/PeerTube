@@ -125,6 +125,12 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
       if (!isBooleanValid(o.live.saveReplay)) o.live.saveReplay = false
       if (o.live.saveReplay && !isVideoReplayPrivacyValid(o.live.replaySettings.privacy)) return undefined
 
+      if (!isBooleanValid(o.live.dvrEnabled)) o.live.dvrEnabled = false
+      if (!Number.isInteger(o.live.dvrWindow) || o.live.dvrWindow <= 0) {
+        o.live.dvrWindow = CONFIG.LIVE.DVR_MAX_WINDOW
+      }
+      o.live.dvrWindow = Math.min(o.live.dvrWindow, CONFIG.LIVE.DVR_MAX_WINDOW)
+
       if (!o.live.latencyMode || !isLiveLatencyModeValid(o.live.latencyMode)) o.live.latencyMode = LiveVideoLatencyMode.DEFAULT
 
       if (!o.live.streamKey) o.live.streamKey = buildUUID()

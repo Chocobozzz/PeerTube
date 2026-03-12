@@ -307,7 +307,10 @@ export class PeerTubePlayer {
     })
 
     if (this.options.enableHotkeys === true) {
-      this.player.peerTubeHotkeysPlugin({ isLive: this.currentLoadOptions.isLive })
+      this.player.peerTubeHotkeysPlugin({
+        isLive: this.currentLoadOptions.isLive,
+        isLiveDvr: this.currentLoadOptions.isLiveDvr
+      })
     }
 
     if (this.currentLoadOptions.playlist) {
@@ -422,6 +425,7 @@ export class PeerTubePlayer {
 
         videoCaptions: () => this.currentLoadOptions.videoCaptions,
         isLive: () => this.currentLoadOptions.isLive,
+        isLiveDvr: () => this.currentLoadOptions.isLiveDvr,
         videoUUID: () => this.currentLoadOptions.videoUUID,
         subtitle: () => this.currentLoadOptions.subtitle,
 
@@ -586,4 +590,5 @@ export class PeerTubePlayer {
 
     return { content }
   }
+
 }

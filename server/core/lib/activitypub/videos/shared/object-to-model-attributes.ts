@@ -25,6 +25,7 @@ import { exists, isArray } from '@server/helpers/custom-validators/misc.js'
 import { isVideoFileInfoHashValid } from '@server/helpers/custom-validators/videos.js'
 import { generateImageFilename } from '@server/helpers/image-utils.js'
 import { getExtFromMimetype } from '@server/helpers/video.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { MIMETYPES, P2P_MEDIA_LOADER_PEER_VERSION } from '@server/initializers/constants.js'
 import { generateTorrentFileName } from '@server/lib/paths.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
@@ -197,6 +198,8 @@ export function getLiveAttributesFromObject (video: MVideoId, videoObject: Video
     saveReplay: videoObject.liveSaveReplay,
     permanentLive: videoObject.permanentLive,
     latencyMode: videoObject.latencyMode,
+    dvrEnabled: false,
+    dvrWindow: CONFIG.LIVE.DVR_MAX_WINDOW,
     videoId: video.id
   }
 }

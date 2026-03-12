@@ -67,9 +67,11 @@ export type PeerTubePlayerLoadOptions = {
   embedTitle: string
 
   isLive: boolean
+  isLiveDvr: boolean
 
   liveOptions?: {
     latencyMode: LiveVideoLatencyModeType
+    dvrEnabled?: boolean
   }
 
   videoCaptions: VideoJSCaption[]
