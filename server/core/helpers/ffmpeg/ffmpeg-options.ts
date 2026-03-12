@@ -21,7 +21,12 @@ export function getFFmpegCommandWrapperOptions (type: CommandType, availableEnco
       warn: logger.warn.bind(logger),
       error: logger.error.bind(logger)
     },
-    lTags: { tags: [ 'ffmpeg' ] }
+    lTags: { tags: [ 'ffmpeg' ] },
+    audioLoudnorm: type === 'vod'
+      ? CONFIG.TRANSCODING.AUDIO_LOUDNORM.ENABLED
+      : type === 'live'
+        ? CONFIG.LIVE.TRANSCODING.AUDIO_LOUDNORM.ENABLED
+        : false
   }
 }
 
