@@ -1,8 +1,9 @@
-import { VideoStatsTimeserieMetric } from '@peertube/peertube-models'
+import { VideoDownloadStatsTimeserieMetric, VideoStatsTimeserieMetric } from '@peertube/peertube-models'
 
-const validMetrics = new Set<VideoStatsTimeserieMetric>([
+const validMetrics = new Set<VideoStatsTimeserieMetric|VideoDownloadStatsTimeserieMetric>([
   'viewers',
-  'aggregateWatchTime'
+  'aggregateWatchTime',
+  'downloads'
 ])
 
 function isValidStatTimeserieMetric (value: VideoStatsTimeserieMetric) {

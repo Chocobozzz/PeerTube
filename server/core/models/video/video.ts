@@ -137,7 +137,7 @@ import {
 } from '../shared/index.js'
 import { UserVideoHistoryModel } from '../user/user-video-history.js'
 import { UserModel } from '../user/user.js'
-import { VideoViewModel } from '../view/video-view.js'
+import { VideoStatsModel } from '../view/video-stats.js'
 import { videoModelToActivityPubObject } from './formatter/video-activity-pub-format.js'
 import {
   VideoFormattingJSONOptions,
@@ -517,6 +517,13 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   @IsInt
   @Min(0)
   @Column
+  declare downloads: number
+
+  @AllowNull(false)
+  @Default(0)
+  @IsInt
+  @Min(0)
+  @Column
   declare likes: number
 
   @AllowNull(false)
@@ -704,14 +711,14 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   })
   declare VideoComments: Awaited<VideoCommentModel>[]
 
-  @HasMany(() => VideoViewModel, {
+  @HasMany(() => VideoStatsModel, {
     foreignKey: {
       name: 'videoId',
       allowNull: false
     },
     onDelete: 'cascade'
   })
-  declare VideoViews: Awaited<VideoViewModel>[]
+  declare VideoViews: Awaited<VideoStatsModel>[]
 
   @HasMany(() => UserVideoHistoryModel, {
     foreignKey: {
@@ -1468,6 +1475,15 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     // Sequelize could return null...
     if (!totalLocalVideoViews) totalLocalVideoViews = 0
 
+    const totalLocalVideoDownloads = await VideoModel.sum('downloads', {
+      where: {
+        remote: false
+      }
+    })
+
+    // Sequelize could return null...
+    if (!totalLocalVideoViews) totalLocalVideoViews = 0
+
     const baseOptions = {
       start: 0,
       count: 0,
@@ -1490,6 +1506,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return {
       totalLocalVideos,
       totalLocalVideoViews,
+      totalLocalVideoDownloads,
       totalVideos
     }
   }
@@ -1654,7 +1671,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return {
       attributes: [],
       subQuery: false,
-      model: VideoViewModel,
+      model: VideoStatsModel,
       required: false,
       where: {
         startDate: {

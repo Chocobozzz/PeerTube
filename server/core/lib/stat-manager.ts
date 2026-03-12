@@ -47,7 +47,7 @@ class StatsManager {
   }
 
   async getStats () {
-    const { totalLocalVideos, totalLocalVideoViews, totalVideos } = await VideoModel.getStats()
+    const { totalLocalVideos, totalLocalVideoViews, totalLocalVideoDownloads, totalVideos } = await VideoModel.getStats()
     const { totalLocalVideoComments, totalVideoComments } = await VideoCommentModel.getStats()
     const {
       totalUsers,
@@ -85,6 +85,7 @@ class StatsManager {
 
       totalLocalVideos,
       totalLocalVideoViews,
+      totalLocalVideoDownloads,
       totalLocalVideoComments,
       totalLocalVideoFilesSize,
 
@@ -148,6 +149,7 @@ class StatsManager {
       Dislike: 0,
       Flag: 0,
       View: 0,
+      Download: 0,
       ApproveReply: 0,
       RejectReply: 0
     }
@@ -172,6 +174,7 @@ class StatsManager {
       totalActivityPubDislikeMessagesSuccesses: this.inboxMessages.successesPerType.Dislike,
       totalActivityPubFlagMessagesSuccesses: this.inboxMessages.successesPerType.Flag,
       totalActivityPubViewMessagesSuccesses: this.inboxMessages.successesPerType.View,
+      totalActivityPubDownloadMessagesSuccesses: this.inboxMessages.successesPerType.Download,
       totalActivityPubApproveReplyMessagesSuccesses: this.inboxMessages.successesPerType.ApproveReply,
       totalActivityPubRejectReplyMessagesSuccesses: this.inboxMessages.successesPerType.RejectReply,
 
@@ -187,6 +190,7 @@ class StatsManager {
       totalActivityPubDislikeMessagesErrors: this.inboxMessages.errorsPerType.Dislike,
       totalActivityPubFlagMessagesErrors: this.inboxMessages.errorsPerType.Flag,
       totalActivityPubViewMessagesErrors: this.inboxMessages.errorsPerType.View,
+      totalActivityPubDownloadMessagesErrors: this.inboxMessages.errorsPerType.Download,
       totalActivityPubApproveReplyMessagesErrors: this.inboxMessages.errorsPerType.ApproveReply,
       totalActivityPubRejectReplyMessagesErrors: this.inboxMessages.errorsPerType.RejectReply,
 

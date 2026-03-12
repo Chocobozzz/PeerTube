@@ -231,12 +231,12 @@ export class VideoChannelListQueryBuilder extends AbstractListQuery {
               `SELECT generate_series(date_trunc('day', now()) - '${this.options.statsDaysPrior} day'::interval, ` +
                      `date_trunc('day', now()), '1 day'::interval) AS day ` +
             ') ' +
-            'SELECT days.day AS day, COALESCE(SUM("videoView".views), 0) AS views ' +
+            'SELECT days.day AS day, COALESCE(SUM("videoStats".views), 0) AS views ' +
             'FROM days ' +
             'LEFT JOIN (' +
-              '"videoView" INNER JOIN "video" ON "videoView"."videoId" = "video"."id" ' +
+              '"videoStats" INNER JOIN "video" ON "videoStats"."videoId" = "video"."id" ' +
               'AND "video"."channelId" = "VideoChannelModel"."id"' +
-            `) ON date_trunc('day', "videoView"."startDate") = date_trunc('day', days.day) ` +
+            `) ON date_trunc('day', "videoStats"."startDate") = date_trunc('day', days.day) ` +
             'GROUP BY day ORDER BY day ' +
           ') t' +
         ') AS "viewsPerDay"'

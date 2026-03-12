@@ -18,3 +18,4 @@ export type ContextType =
   | 'ApproveReply'
   | 'RejectReply'
   | 'PlayerSettings'
+  | 'Download'

@@ -6,6 +6,7 @@ export interface Debug {
 export type SendDebugCommand = {
   command:
     | 'remove-dandling-resumable-uploads'
+    | 'process-video-downloads'
     | 'process-video-views-buffer'
     | 'process-video-viewers'
     | 'process-video-channel-sync-latest'

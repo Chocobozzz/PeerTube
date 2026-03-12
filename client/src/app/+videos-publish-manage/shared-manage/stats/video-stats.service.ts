@@ -4,6 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
 import { RestExtractor } from '@app/core'
 import {
+  VideoDownloadStatsTimeserieMetric,
   VideoStatsOverall,
   VideoStatsRetention,
   VideoStatsTimeserie,
@@ -38,7 +39,7 @@ export class VideoStatsService {
 
   getTimeserieStats (options: {
     videoId: string
-    metric: VideoStatsTimeserieMetric
+    metric: VideoStatsTimeserieMetric | VideoDownloadStatsTimeserieMetric
     startDate?: Date
     endDate?: Date
   }) {

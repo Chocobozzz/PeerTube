@@ -17,6 +17,7 @@ import {
 } from './object-storage/videos.js'
 import { VideoPathManager } from './video-path-manager.js'
 import { createReadStream } from 'fs'
+import { VideoViewerStats } from './views/shared/video-viewer-stats.js'
 
 export class VideoDownload {
   static totalDownloads = 0
@@ -80,6 +81,8 @@ export class VideoDownload {
             })
 
             logger.info(`Mux ended for video ${this.video.url}`, { inputs: this.inputsToLog(), ...lTags(this.video.uuid) })
+
+            await VideoViewerStats.add({video: this.video})
 
             res()
           } catch (err) {

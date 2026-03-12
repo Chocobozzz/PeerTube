@@ -8664,6 +8664,7 @@ components:
           - video-transcoding
           - video-file-import
           - video-import
+          - videos-downloads-stats
           - videos-views-stats
           - activitypub-refresher
           - video-redundancy
@@ -10683,6 +10684,9 @@ components:
         totalLocalVideoViews:
           type: number
           description: Total video views made on the instance
+        totalLocalVideoDownloads:
+          type: number
+          description: Total video downloads made on the instance
         totalLocalVideoComments:
           type: number
           description: Total comments made by local users
@@ -11130,6 +11134,7 @@ components:
             - video-transcoding
             - email
             - video-import
+            - videos-downloads-stats
             - videos-views-stats
             - activitypub-refresher
             - video-redundancy

@@ -2,18 +2,26 @@ import { VideoViewEvent } from '@peertube/peertube-models'
 import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { GeoIP } from '@server/helpers/geo-ip.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { generateRandomString } from '@server/helpers/utils.js'
 import { MAX_LOCAL_VIEWER_WATCH_SECTIONS, VIEWER_SYNC_REDIS, VIEW_LIFETIME } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { sendCreateWatchAction } from '@server/lib/activitypub/send/index.js'
+import { sendDownload } from '@server/lib/activitypub/send/send-download.js'
 import { getLocalVideoViewerActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { Redis } from '@server/lib/redis.js'
+import { getServerActor } from '@server/models/application/application.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { LocalVideoViewerWatchSectionModel } from '@server/models/view/local-video-viewer-watch-section.js'
 import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer.js'
-import { MVideo, MVideoImmutable } from '@server/types/models/index.js'
+import { VideoStatsModel } from '@server/models/view/video-stats.js'
+import { MVideo, MVideoImmutable, MVideoThumbnail } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 
 const lTags = loggerTagsFactory('views')
+
+const REDIS_SCOPES = {
+  DOWNLOAD: "download"
+}
 
 type LocalViewerStats = {
   firstUpdated: number // Date.getTime()
@@ -34,6 +42,11 @@ type LocalViewerStats = {
   subdivisionName: string
 
   videoId: number
+}
+
+type DownloadStats = {
+  videoId: number;
+  downloadedAt: number; // Date.getTime()
 }
 
 export class VideoViewerStats {
@@ -184,6 +197,105 @@ export class VideoViewerStats {
     }
 
     this.processingViewersStats = false
+  }
+
+  /**
+   * Record a video download into Redis
+   */
+  static async add({ video }: { video: MVideoThumbnail }) {
+    const sessionId = await generateRandomString(32)
+    const videoId = video.id
+
+    const stats: DownloadStats = {
+      videoId,
+      downloadedAt: new Date().getTime(),
+    }
+
+    try {
+      await Redis.Instance.setStats(REDIS_SCOPES.DOWNLOAD, sessionId, videoId, stats)
+
+      await sendDownload({ byActor: await getServerActor(), video, downloadsCount: 1 })
+    } catch (err) {
+      logger.error("Cannot write download into redis", {
+        sessionId,
+        videoId,
+        stats,
+        err,
+      })
+    }
+  }
+
+  /**
+   * Aggregate video downloads from Redis into SQL database
+   */
+  static async save() {
+    logger.debug("Saving download stats to DB", lTags())
+
+    const keys = await Redis.Instance.getStatsKeys(REDIS_SCOPES.DOWNLOAD)
+    if (keys.length === 0) return
+
+    logger.debug("Processing %d video download(s)", keys.length)
+
+    for (const key of keys) {
+      const stats: DownloadStats = await Redis.Instance.getStats({ key })
+
+      const videoId = stats.videoId
+      const video = await VideoModel.load(videoId)
+      if (!video) {
+        logger.debug(
+          "Video %d does not exist anymore, skipping videos view stats.",
+          videoId,
+        )
+        try {
+          await Redis.Instance.deleteStatsKey(REDIS_SCOPES.DOWNLOAD, key)
+        } catch (err) {
+          logger.error("Cannot remove key %s from Redis", key)
+        }
+        continue
+      }
+
+      const downloadedAt = new Date(stats.downloadedAt)
+      const startDate = new Date(downloadedAt.setMinutes(0, 0, 0))
+      const endDate = new Date(downloadedAt.setMinutes(59, 59, 999))
+
+      logger.info(
+        "date range: %s -> %s",
+        startDate.toISOString(),
+        endDate.toISOString(),
+      )
+
+      try {
+        const record = await VideoStatsModel.findOne({
+          where: { videoId, startDate },
+        })
+        if (record) {
+          // Increment download count for current time slice
+          record.downloads++
+          await record.save()
+        } else {
+          // Create a new time slice for this video downloads
+          await VideoStatsModel.create({
+            startDate: new Date(startDate),
+            endDate: new Date(endDate),
+            downloads: 1,
+            videoId,
+          })
+        }
+
+        // Increment video total download count
+        video.downloads++
+        await video.save()
+
+        await Redis.Instance.deleteStatsKey(REDIS_SCOPES.DOWNLOAD, key)
+      } catch (err) {
+        logger.error(
+          "Cannot update video views stats of video %d on range %s -> %s",
+          videoId,
+          startDate.toISOString(),
+          endDate.toISOString(), { err },
+        )
+      }
+    }
   }
 
   private async saveViewerStats (video: MVideo, stats: LocalViewerStats, transaction: Transaction) {

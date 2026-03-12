@@ -313,7 +313,14 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
     },
 
     theme: 'pt:theme'
-  })
+  }),
+
+  Download: buildContext({
+    DownloadAction: 'sc:DownloadAction',
+    InteractionCounter: 'sc:InteractionCounter',
+    interactionType: 'sc:interactionType',
+    userInteractionCount: 'sc:userInteractionCount'
+  }),
 }
 
 let allContext: (string | ContextValue)[]
