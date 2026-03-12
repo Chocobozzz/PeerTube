@@ -37,7 +37,7 @@ export async function synchronizeChannel (options: {
       CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
     )
 
-    const lTags = loggerTagsFactory(...rootLTags().tags, channelSync.externalChannelUrl, channelUsername)
+    const lTags = loggerTagsFactory(...rootLTags().tags, externalChannelUrl, channelUsername)
 
     const targetUrls = await youtubeDL.getInfoForListImport({
       userLanguage: user.getLanguage(),
@@ -45,7 +45,7 @@ export async function synchronizeChannel (options: {
     })
 
     logger.info(
-      `Fetched ${targetUrls.length} candidate URLs for sync channel ${channelSync.externalChannelUrl}.`,
+      `Fetched ${targetUrls.length} candidate URLs.`,
       { targetUrls, ...lTags() }
     )
 
@@ -94,14 +94,17 @@ export async function synchronizeChannel (options: {
       }
     }
 
-    const failed = await VideoImportModel.listFailedBySyncId({ channelSyncId: channelSync.id })
-    for (const videoImport of failed) {
-      logger.info(
-        `Retrying failed video import (id: ${videoImport.id}) for channel "${channel.Actor.preferredUsername}"`,
-        rootLTags()
-      )
+    // Retry failed imports from this sync (if any)
+    if (channelSync) {
+      const failed = await VideoImportModel.listFailedBySyncId({ channelSyncId: channelSync.id })
+      for (const videoImport of failed) {
+        logger.info(
+          `Retrying failed video import (id: ${videoImport.id}) for channel "${channel.Actor.preferredUsername}"`,
+          rootLTags()
+        )
 
-      children.push(await buildRetryImportJob(videoImport))
+        children.push(await buildRetryImportJob(videoImport))
+      }
     }
 
     // Will update the channel sync status
@@ -116,8 +119,11 @@ export async function synchronizeChannel (options: {
     await JobQueue.Instance.createJobWithChildren(parent, children)
   } catch (err) {
     logger.error(`Failed to import ${externalChannelUrl} in channel ${channelUsername}`, { err, ...rootLTags() })
-    channelSync.state = VideoChannelSyncState.FAILED
-    await channelSync.save()
+
+    if (channelSync) {
+      channelSync.state = VideoChannelSyncState.FAILED
+      await channelSync.save()
+    }
   }
 }
 
@@ -125,7 +131,7 @@ export async function synchronizeChannel (options: {
 
 async function skipImport (options: {
   channel: MChannelAccountDefault
-  channelSync: MChannelSync
+  channelSync?: MChannelSync
   targetUrl: string
   lTags: LoggerTagsFn
 }) {
