@@ -58,10 +58,12 @@ export class VideoShareComponent {
 
       // Embed options
       embedP2P: this.server.getHTMLConfig().defaults.p2p.embed.enabled,
+      embedPiP: true,
       onlyEmbedUrl: false,
       title: true,
       warningTitle: true,
       controlBar: true,
+      contextMenu: true,
       peertubeLink: true,
       responsive: false,
 

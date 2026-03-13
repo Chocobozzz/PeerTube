@@ -18,7 +18,6 @@ class PeerTubeHotkeysPlugin extends Plugin {
   declare private readonly handlers: KeyHandler[]
 
   declare private readonly isLive: boolean
-
   constructor (player: VideojsPlayer, options: HotkeysOptions) {
     super(player)
 
@@ -252,6 +251,7 @@ class PeerTubeHotkeysPlugin extends Plugin {
 
     return key.toUpperCase()
   }
+
 }
 
 videojs.registerPlugin('peerTubeHotkeysPlugin', PeerTubeHotkeysPlugin)

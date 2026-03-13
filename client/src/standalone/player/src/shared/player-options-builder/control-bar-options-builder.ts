@@ -3,14 +3,16 @@ import {
   PeerTubeLinkButtonOptions,
   PeerTubePlayerConstructorOptions,
   PeerTubePlayerLoadOptions,
+  PopoutButtonOptions,
   TheaterButtonOptions
 } from '../../types'
 
 type ControlBarOptionsBuilderConstructorOptions =
-  & Pick<PeerTubePlayerConstructorOptions, 'peertubeLink' | 'instanceName' | 'theaterButton'>
+  & Pick<PeerTubePlayerConstructorOptions, 'peertubeLink' | 'instanceName' | 'theaterButton' | 'popoutButton'>
   & {
     videoShortUUID: () => string
     p2pEnabled: () => boolean
+    embedUrl: () => string
 
     previousVideo: () => PeerTubePlayerLoadOptions['previousVideo']
     nextVideo: () => PeerTubePlayerLoadOptions['nextVideo']
@@ -45,6 +47,8 @@ export class ControlBarOptionsBuilder {
       ...this.getPeerTubeLinkButton(),
 
       ...this.getTheaterButton(),
+
+      ...this.getPopoutButton(),
 
       fullscreenToggle: {}
     }
@@ -130,6 +134,17 @@ export class ControlBarOptionsBuilder {
 
     return {
       theaterButton: options
+    }
+  }
+
+  private getPopoutButton () {
+    const options: PopoutButtonOptions = {
+      isDisplayed: () => this.options.popoutButton,
+      embedUrl: this.options.embedUrl
+    }
+
+    return {
+      popoutButton: options
     }
   }
 }

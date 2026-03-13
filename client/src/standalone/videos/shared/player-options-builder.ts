@@ -214,6 +214,7 @@ export class PlayerOptionsBuilder {
       instanceName: serverConfig.instance.name,
 
       theaterButton: false,
+      popoutButton: false,
 
       serverUrl: getBackendUrl(),
       stunServers: serverConfig.webrtc.stunServers,

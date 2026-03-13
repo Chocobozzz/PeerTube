@@ -80,6 +80,7 @@ $chapter-marker-size: 9px;
   .vjs-resolution-control,
   .vjs-fullscreen-control,
   .vjs-peertube-link,
+  .vjs-popout-control,
   .vjs-theater-control,
   .vjs-caption-toggle-control,
   .vjs-settings {
@@ -256,6 +257,17 @@ $chapter-marker-size: 9px;
     .vjs-icon-placeholder {
       transition: transform 0.2s ease;
     }
+  }
+
+  .vjs-popout-control {
+    width: var(--button-width);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @include disable-outline;
+    @include inject-icon("./svg/picture-in-picture.svg", var(--icon-size));
   }
 
   .vjs-progress-control:hover .vjs-slider,
@@ -540,6 +552,10 @@ $chapter-marker-size: 9px;
       @include update-icon("./svg/theme-lucide/open-fullscreen-lucide.svg", var(--icon-size));
     }
 
+    .vjs-popout-control {
+      @include update-icon("./svg/theme-lucide/picture-in-picture.svg", var(--icon-size));
+    }
+
     .vjs-caption-toggle-control:not(.enabled) {
       @include inject-icon("./svg/theme-lucide/cc-disabled-lucide.svg", var(--icon-size));
     }
@@ -672,6 +688,10 @@ $chapter-marker-size: 9px;
     .vjs-peertube {
       display: none !important;
     }
+  }
+
+  .vjs-popout-control {
+    display: none;
   }
 }
 
