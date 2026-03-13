@@ -61,6 +61,7 @@ import {
 } from './models/index.js'
 import { MRunner, MRunnerJobRunner, MRunnerRegistrationToken } from './models/runners/index.js'
 import { MVideoSource } from './models/video/video-source.js'
+import { SignupMode } from '@server/lib/signup.ts'
 
 declare module 'express' {
   export interface Request {
@@ -129,6 +130,8 @@ declare module 'express' {
     }) => void
 
     locals: {
+      signupMode?: SignupMode
+
       requestStart: number
 
       apicacheGroups: string[]

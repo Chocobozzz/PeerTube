@@ -6,7 +6,14 @@ import { AuthService, ServerService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance/instance-about-accordion.component'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
-import { PeerTubeProblemDocument, ServerConfig, ServerStats, UserRegister } from '@peertube/peertube-models'
+import {
+  UserRegistrationState,
+  PeerTubeProblemDocument,
+  ServerConfig,
+  ServerStats,
+  UserRegister,
+  UserRegistration
+} from '@peertube/peertube-models'
 import { LoaderComponent } from '../../shared/shared-main/common/loader.component'
 import { SignupLabelComponent } from '../../shared/shared-main/users/signup-label.component'
 import { SignupStepTitleComponent } from '../shared/signup-step-title.component'
@@ -81,13 +88,18 @@ export class RegisterComponent implements OnInit {
   serverStats: ServerStats
 
   private serverConfig: ServerConfig
+  private _requiresApproval: boolean
 
   get requiresEmailVerification () {
     return this.serverConfig.signup.requiresEmailVerification
   }
 
   get requiresApproval () {
-    return this.serverConfig.signup.requiresApproval
+    return this._requiresApproval ?? this.serverConfig.signup.requiresApproval
+  }
+
+  set requiresApproval (value: boolean) {
+    this._requiresApproval = value
   }
 
   get minimumAge () {
@@ -194,10 +206,15 @@ export class RegisterComponent implements OnInit {
 
     const obs = this.requiresApproval
       ? this.signupService.requestSignup(body)
-      : this.signupService.directSignup(body)
+      : this.signupService.signup(body)
 
     obs.subscribe({
-      next: () => {
+      next: (registration) => {
+        if ('state' in registration) {
+          const { state } = registration as UserRegistration
+          this.requiresApproval = state.id === UserRegistrationState.PENDING
+        }
+
         if (this.requiresEmailVerification || this.requiresApproval) {
           this.signupSuccess = true
           return

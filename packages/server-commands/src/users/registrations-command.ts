@@ -20,13 +20,13 @@ export class RegistrationsCommand extends AbstractCommand {
 
       path,
       fields: {
-        ...pick(options, [ 'username', 'displayName', 'channel' ]),
+        ...pick(options, [ 'username', 'displayName', 'channel', 'registrationReason' ]),
 
         password,
         email
       },
       implicitToken: false,
-      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+      defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
 
