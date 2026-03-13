@@ -657,6 +657,8 @@ cd /var/www/peertube-docker; \
 
 ### Prune filesystem/object storage
 
+**PeerTube must be stopped before running this script**
+
 Some transcoded videos or shutdown at a bad time can leave some unused files on your storage.
 To delete these files (a confirmation will be demanded first):
 
