@@ -400,6 +400,46 @@ describe('Test plugins', function () {
     })
   })
 
+  it('Should return default value for a setting if not set in DB', async function () {
+    const pluginPath = PluginsCommand.getPluginTestPath('')
+    await command.install({ path: pluginPath })
+
+    await wait(1000)
+
+    const checkSetting = async (expected: any) => {
+      const res = await makeGetRequest({
+        url: server.url,
+        path: '/plugins/test/router/get-setting',
+        expectedStatus: HttpStatusCode.OK_200
+      })
+      expect(res.body.val).to.equal(expected)
+    }
+
+    try {
+      await checkSetting('default-value')
+
+      await command.updateSettings({
+        npmName: 'peertube-plugin-test',
+        settings: {
+          'some_other_setting': 'value'
+        }
+      })
+
+      await checkSetting('default-value')
+
+      await command.updateSettings({
+        npmName: 'peertube-plugin-test',
+        settings: {
+          'test-setting': 'updated-value'
+        }
+      })
+
+      await checkSetting('updated-value')
+    } finally {
+      await command.uninstall({ npmName: 'peertube-plugin-test' })
+    }
+  })
+
   after(async function () {
     await sqlCommand.cleanup()
 
