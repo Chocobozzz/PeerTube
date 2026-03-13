@@ -56,6 +56,12 @@ type Form = {
       profile: FormControl<string>
     }>
   }>
+
+  defaults: FormGroup<{
+    live: FormGroup<{
+      saveReplay: FormControl<boolean>
+    }>
+  }>
 }
 
 @Component({
@@ -152,6 +158,12 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
             max: TRANSCODING_MAX_FPS_VALIDATOR
           }
         }
+      },
+
+      defaults: {
+        live: {
+          saveReplay: null
+        }
       }
     }
 
@@ -178,6 +190,10 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
 
   getLiveRTMPPort () {
     return this.server.getHTMLConfig().live.rtmp.port
+  }
+
+  get defaultsLiveSaveReplayControl () {
+    return this.form.controls.defaults.controls.live.controls.saveReplay
   }
 
   isLiveEnabled () {

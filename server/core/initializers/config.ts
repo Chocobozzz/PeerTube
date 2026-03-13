@@ -213,6 +213,11 @@ const CONFIG = {
         return config.get<number>('defaults.publish.licence')
       }
     },
+    LIVE: {
+      get SAVE_REPLAY () {
+        return config.get<boolean>('defaults.live.save_replay')
+      }
+    },
     P2P: {
       WEBAPP: {
         get ENABLED () {

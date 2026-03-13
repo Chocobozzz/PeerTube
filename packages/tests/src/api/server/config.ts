@@ -153,6 +153,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.defaults.publish.downloadEnabled).to.be.true
   expect(data.defaults.publish.licence).to.be.null
   expect(data.defaults.publish.privacy).to.equal(VideoPrivacy.PUBLIC)
+  expect(data.defaults.live.saveReplay).to.be.false
   expect(data.defaults.p2p.embed.enabled).to.be.true
   expect(data.defaults.p2p.webapp.enabled).to.be.true
   expect(data.defaults.player.theme).to.equal('lucide')
@@ -448,6 +449,9 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
         downloadEnabled: false,
         licence: 2,
         privacy: VideoPrivacy.INTERNAL
+      },
+      live: {
+        saveReplay: false
       },
       p2p: {
         embed: {

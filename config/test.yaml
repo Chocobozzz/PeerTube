@@ -177,3 +177,7 @@ video_transcription:
 user:
   password_constraints:
     min_length: 6
+
+defaults:
+  live:
+    save_replay: false

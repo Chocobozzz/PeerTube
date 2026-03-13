@@ -1215,6 +1215,12 @@ defaults:
     # No licence by default
     licence: null
 
+  live:
+    # Default value for "automatically publish a replay when your live ends" checkbox
+    # when creating a new live video
+    # If live.allow_replay is false, this setting has no effect
+    save_replay: false
+
   p2p:
     # Enable P2P by default in PeerTube client
     # Can be enabled/disabled by anonymous users and logged in users
