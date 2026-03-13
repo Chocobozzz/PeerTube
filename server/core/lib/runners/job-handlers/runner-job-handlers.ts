@@ -19,6 +19,8 @@ const processors: Record<RunnerJobType, new() => AbstractJobHandler<unknown, Run
   'generate-video-storyboard': VideoStoryboardJobHandler
 }
 
+export const runnerJobTypes = Object.keys(processors)
+
 export function getRunnerJobHandlerClass (job: MRunnerJob) {
   return processors[job.type]
 }

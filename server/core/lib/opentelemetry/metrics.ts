@@ -12,6 +12,8 @@ import {
   LivesObserversBuilder,
   NodeJSObserversBuilder,
   PlaybackMetrics,
+  RunnerJobQueueObserversBuilder,
+  RunnerObserversBuilder,
   StatsObserversBuilder,
   ViewersObserversBuilder
 } from './metric-helpers/index.js'
@@ -72,6 +74,8 @@ class OpenTelemetryMetrics {
 
     new NodeJSObserversBuilder(this.meter).buildObservers()
     new JobQueueObserversBuilder(this.meter).buildObservers()
+    new RunnerJobQueueObserversBuilder(this.meter).buildObservers()
+    new RunnerObserversBuilder(this.meter).buildObservers()
     new StatsObserversBuilder(this.meter).buildObservers()
     new LivesObserversBuilder(this.meter).buildObservers()
     new ViewersObserversBuilder(this.meter).buildObservers()
