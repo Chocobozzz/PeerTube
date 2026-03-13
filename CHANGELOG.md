@@ -1,5 +1,18 @@
 # Changelog
 
+## v8.1.2
+
+### IMPORTANT NOTES
+
+ * Follow v8.1.0 IMPORTANT NOTES if you upgrade from PeerTube <= v8.0.2
+
+### Bug fixes
+
+ * Fix broken thumbnails on account page
+ * Fix broken initial channel import
+ * Fix broken root password generation
+
+
 ## v8.1.1
 
 ### IMPORTANT NOTES
