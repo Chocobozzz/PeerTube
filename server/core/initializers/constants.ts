@@ -909,6 +909,7 @@ export const ENCRYPTION = {
   ENCODING: 'hex' as Encoding
 }
 
+export const ADMIN_MEMORABLE_PASSWORD_GENERATION_LENGTH = 20
 export const USER_PASSWORD_RESET_LIFETIME = 60000 * 60 // 60 minutes
 export const USER_PASSWORD_CREATE_LIFETIME = 60000 * 60 * 24 * 7 // 7 days
 
