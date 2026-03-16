@@ -137,7 +137,7 @@ import {
 } from '../shared/index.js'
 import { UserVideoHistoryModel } from '../user/user-video-history.js'
 import { UserModel } from '../user/user.js'
-import { VideoStatsModel } from '../stat/video-stats.js'
+import { VideoStatModel } from '../stat/video-stat.js'
 import { videoModelToActivityPubObject } from './formatter/video-activity-pub-format.js'
 import {
   VideoFormattingJSONOptions,
@@ -711,14 +711,14 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   })
   declare VideoComments: Awaited<VideoCommentModel>[]
 
-  @HasMany(() => VideoStatsModel, {
+  @HasMany(() => VideoStatModel, {
     foreignKey: {
       name: 'videoId',
       allowNull: false
     },
     onDelete: 'cascade'
   })
-  declare VideoViews: Awaited<VideoStatsModel>[]
+  declare VideoStats: Awaited<VideoStatModel>[]
 
   @HasMany(() => UserVideoHistoryModel, {
     foreignKey: {
@@ -1671,7 +1671,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return {
       attributes: [],
       subQuery: false,
-      model: VideoStatsModel,
+      model: VideoStatModel,
       required: false,
       where: {
         startDate: {

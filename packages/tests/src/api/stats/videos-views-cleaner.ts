@@ -53,7 +53,7 @@ describe('Test video views cleaner', function () {
 
       await killallServers([ servers[0] ])
       await servers[0].run({ views: { videos: { remote: { max_age: '10 days' } } } })
-      await servers[0].debug.sendCommand({ body: { command: 'process-remove-old-views' } })
+      await servers[0].debug.sendCommand({ body: { command: 'process-remove-old-stats' } })
 
       for (let i = 0; i < servers.length; i++) {
         const total = await sqlCommands[i].countVideoViewsOf(videoIdServer1)
@@ -75,7 +75,7 @@ describe('Test video views cleaner', function () {
 
       await killallServers([ servers[0] ])
       await servers[0].run({ views: { videos: { remote: { max_age: '5 seconds' } } } })
-      await servers[0].debug.sendCommand({ body: { command: 'process-remove-old-views' } })
+      await servers[0].debug.sendCommand({ body: { command: 'process-remove-old-stats' } })
 
       for (let i = 0; i < servers.length; i++) {
         const total = await sqlCommands[i].countVideoViewsOf(videoIdServer1)
@@ -100,7 +100,7 @@ describe('Test video views cleaner', function () {
 
       await killallServers([ servers[0] ])
       await servers[0].run({ views: { videos: { local: { max_age: '5 hours' } } } })
-      await servers[0].debug.sendCommand({ body: { command: 'process-remove-old-views' } })
+      await servers[0].debug.sendCommand({ body: { command: 'process-remove-old-stats' } })
 
       for (let i = 0; i < servers.length; i++) {
         const total = await sqlCommands[i].countVideoViewsOf(videoIdServer1)
@@ -123,7 +123,7 @@ describe('Test video views cleaner', function () {
 
       await killallServers([ servers[0] ])
       await servers[0].run({ views: { videos: { local: { max_age: '5 seconds' } } } })
-      await servers[0].debug.sendCommand({ body: { command: 'process-remove-old-views' } })
+      await servers[0].debug.sendCommand({ body: { command: 'process-remove-old-stats' } })
 
       {
         const totalServer1 = await sqlCommands[0].countVideoViewsOf(videoIdServer1)

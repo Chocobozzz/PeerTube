@@ -12,7 +12,7 @@ import { uuidToShort } from '@peertube/peertube-node-utils'
 import { tracer } from '@server/lib/opentelemetry/tracing.js'
 import { getHLSResolutionPlaylistFilename } from '@server/lib/paths.js'
 import { getLocalVideoFileMetadataUrl } from '@server/lib/video-urls.js'
-import { VideoViewsManager } from '@server/lib/stats/video-views-manager.js'
+import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
 import { generateMagnetUri } from '@server/lib/webtorrent.js'
 import { isArray } from '../../../helpers/custom-validators/misc.js'
 import {
@@ -111,7 +111,7 @@ export function videoModelToFormattedJSON (video: MVideoFormattable, options: Vi
     aspectRatio: video.aspectRatio,
 
     views: video.views,
-    viewers: VideoViewsManager.Instance.getTotalViewersOf(video),
+    viewers: VideoStatsManager.Instance.getTotalViewersOf(video),
 
     downloads: video.downloads,
 

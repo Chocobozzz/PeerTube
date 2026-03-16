@@ -115,7 +115,7 @@ export class VideoStats {
   }
 
   async addRemoteDownload (options: {
-    video: MVideo
+    video: MVideoImmutable
   }) {
     const { video } = options
 

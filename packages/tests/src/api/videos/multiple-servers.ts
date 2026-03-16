@@ -514,7 +514,7 @@ describe('Test multiple servers', function () {
       await waitJobs(servers)
 
       for (const server of servers) {
-        await server.debug.sendCommand({ body: { command: 'process-video-views-buffer' } })
+        await server.debug.sendCommand({ body: { command: 'process-video-stats-buffer' } })
       }
 
       await waitJobs(servers)
@@ -550,7 +550,7 @@ describe('Test multiple servers', function () {
       await waitJobs(servers)
 
       for (const server of servers) {
-        await server.debug.sendCommand({ body: { command: 'process-video-views-buffer' } })
+        await server.debug.sendCommand({ body: { command: 'process-video-stats-buffer' } })
       }
 
       await waitJobs(servers)

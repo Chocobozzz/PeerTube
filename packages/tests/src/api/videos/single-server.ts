@@ -189,7 +189,7 @@ describe('Test a single server', function () {
       await server.views.simulateView({ id: videoId })
       await server.views.simulateView({ id: videoId })
 
-      await server.debug.sendCommand({ body: { command: 'process-video-views-buffer' } })
+      await server.debug.sendCommand({ body: { command: 'process-video-stats-buffer' } })
 
       const video = await server.videos.get({ id: videoId })
       expect(video.views).to.equal(3)

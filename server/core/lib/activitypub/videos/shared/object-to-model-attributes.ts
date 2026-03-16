@@ -312,6 +312,7 @@ export function getVideoAttributesFromObject (videoChannel: MChannelId, videoObj
 
     updatedAt: new Date(videoObject.updated),
     views: videoObject.views,
+    downloads: videoObject.downloads || 0,
     remote: true,
     privacy
   }

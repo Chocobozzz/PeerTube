@@ -13,7 +13,7 @@ import { VideoModel } from '../video/video.js'
  */
 
 @Table({
-  tableName: 'videoStats',
+  tableName: 'videoStat',
   updatedAt: false,
   indexes: [ {
     fields: [ 'videoId' ]
@@ -21,7 +21,7 @@ import { VideoModel } from '../video/video.js'
     fields: [ 'startDate' ]
   } ]
 })
-export class VideoStatsModel extends SequelizeModel<VideoStatsModel> {
+export class VideoStatModel extends SequelizeModel<VideoStatModel> {
   @CreatedAt
   declare createdAt: Date
 
@@ -55,9 +55,9 @@ export class VideoStatsModel extends SequelizeModel<VideoStatsModel> {
   })
   declare Video: Awaited<VideoModel>
 
-  static removeOldRemoteViews (beforeDate: string) {
+  static removeOldRemoteStats (beforeDate: string) {
     return safeBulkDestroy(() => {
-      return VideoStatsModel.destroy({
+      return VideoStatModel.destroy({
         where: {
           startDate: {
             [Op.lt]: beforeDate
@@ -73,9 +73,9 @@ export class VideoStatsModel extends SequelizeModel<VideoStatsModel> {
     })
   }
 
-  static removeOldLocalViews (beforeDate: string) {
+  static removeOldLocalStats (beforeDate: string) {
     return safeBulkDestroy(() => {
-      return VideoStatsModel.destroy({
+      return VideoStatModel.destroy({
         where: {
           startDate: {
             [Op.lt]: beforeDate
@@ -110,14 +110,14 @@ export class VideoStatsModel extends SequelizeModel<VideoStatsModel> {
         generate_series(:startDate::timestamptz, :endDate::timestamptz, :groupInterval::interval) serie("time")
     )
     SELECT
-      "intervals"."startDate" AS date, COALESCE("videoStats"."downloads", 0) AS value
+      "intervals"."startDate" AS date, COALESCE("videoStat"."downloads", 0) AS value
     FROM
       "intervals"
-      LEFT JOIN "videoStats" ON "videoStats"."videoId" = :videoId
+      LEFT JOIN "videoStat" ON "videoStat"."videoId" = :videoId
         AND
-          "videoStats"."startDate" <= "intervals"."endDate"
+          "videoStat"."startDate" <= "intervals"."endDate"
         AND
-          "videoStats"."startDate" >= "intervals"."startDate"
+          "videoStat"."startDate" >= "intervals"."startDate"
     ORDER BY
       "intervals"."startDate"
     `
@@ -132,7 +132,7 @@ export class VideoStatsModel extends SequelizeModel<VideoStatsModel> {
       }
     }
 
-    const rows = await VideoStatsModel.sequelize.query<any>(
+    const rows = await VideoStatModel.sequelize.query<any>(
       query,
       queryOptions
     )

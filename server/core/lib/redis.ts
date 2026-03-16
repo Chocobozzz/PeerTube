@@ -238,8 +238,8 @@ class Redis {
 
   /* ************ Video stats ************ */
 
-  addVideoStat (type: StatKind, videoId: number) {
-    const { videoKey, setKey } = this.generateVideoStatsKeys(type, { videoId })
+  addVideoStat (kind: StatKind, videoId: number) {
+    const { videoKey, setKey } = this.generateVideoStatsKeys({ kind, videoId })
 
     return Promise.all([
       this.addToSet(setKey, videoId.toString()),
@@ -247,40 +247,42 @@ class Redis {
     ])
   }
 
-  async getVideoStats (type: StatKind, videoId: number, hour: number) {
-    const { videoKey } = this.generateVideoStatsKeys(type, { videoId, hour })
+  async getVideoStats (kind: StatKind, videoId: number, hour: number) {
+    const { videoKey } = this.generateVideoStatsKeys({ kind, videoId, hour })
 
     const valueString = await this.getValue(videoKey)
     const valueInt = parseInt(valueString, 10)
 
     if (isNaN(valueInt)) {
-      logger.error(`Cannot get videos ${type} stats of video ${videoId} in hour ${hour}: ${type} number is NaN (${valueString}).`, lTags())
+      logger.error(`Cannot get videos ${kind} stats of video ${videoId} in hour ${hour}: ${kind} number is NaN (${valueString}).`, lTags())
       return undefined
     }
 
     return valueInt
   }
 
-  async listVideosForStats (type: StatKind, hour: number) {
-    const { setKey } = this.generateVideoStatsKeys(type, { hour })
+  async listVideosForStats (hour: number) {
+    const { setKey } = this.generateVideoStatsKeys({ hour })
 
     const stringIds = await this.getSet(setKey)
     return stringIds.map(s => parseInt(s, 10))
   }
 
-  deleteVideoStats (type: StatKind, videoId: number, hour: number) {
-    const { setKey, videoKey } = this.generateVideoStatsKeys(type, { videoId, hour })
+  async deleteVideoStats (videoId: number, hour: number) {
+    for (const kind of ([ 'views', 'downloads' ] as StatKind[])) {
+      const { setKey, videoKey } = this.generateVideoStatsKeys({ kind, videoId, hour })
 
-    return Promise.all([
-      this.deleteFromSet(setKey, videoId.toString()),
-      this.deleteKey(videoKey)
-    ])
+      await Promise.all([
+        this.deleteFromSet(setKey, videoId.toString()),
+        this.deleteKey(videoKey)
+      ])
+    }
   }
 
   /* ************ Local video stats buffer ************ */
 
-  addLocalVideoStat (type: StatKind, videoId: number) {
-    const { videoKey, setKey } = this.generateLocalVideoStatKeys(type, videoId)
+  addLocalVideoStat (kind: StatKind, videoId: number) {
+    const { videoKey, setKey } = this.generateLocalVideoStatKeys(kind, videoId)
 
     return Promise.all([
       this.addToSet(setKey, videoId.toString()),
@@ -288,34 +290,33 @@ class Redis {
     ])
   }
 
-  async getLocalVideoStats (type: StatKind, videoId: number) {
-    const { videoKey } = this.generateLocalVideoStatKeys(type, videoId)
+  async getLocalVideoStats (kind: StatKind, videoId: number) {
+    const { videoKey } = this.generateLocalVideoStatKeys(kind, videoId)
 
     const valueString = await this.getValue(videoKey)
     const valueInt = parseInt(valueString, 10)
 
-    if (isNaN(valueInt)) {
-      logger.error(`Cannot get videos ${type} of video ${videoId}: ${type} number is NaN (${valueString}).`, lTags())
-      return undefined
-    }
+    if (isNaN(valueInt)) return undefined
 
     return valueInt
   }
 
-  async listLocalVideosWithStats (type: StatKind) {
-    const { setKey } = this.generateLocalVideoStatKeys(type)
+  async listLocalVideosWithStats () {
+    const { setKey } = this.generateLocalVideoStatKeys()
 
     const stringIds = await this.getSet(setKey)
     return stringIds.map(s => parseInt(s, 10))
   }
 
-  deleteLocalVideoStats (type: StatKind, videoId: number) {
-    const { setKey, videoKey } = this.generateLocalVideoStatKeys(type, videoId)
+  async deleteLocalVideoStats (videoId: number) {
+    for (const kind of ([ 'views', 'downloads' ] as StatKind[])) {
+      const { setKey, videoKey } = this.generateLocalVideoStatKeys(kind, videoId)
 
-    return Promise.all([
-      this.deleteFromSet(setKey, videoId.toString()),
-      this.deleteKey(videoKey)
-    ])
+      await Promise.all([
+        this.deleteFromSet(setKey, videoId.toString()),
+        this.deleteKey(videoKey)
+      ])
+    }
   }
 
   /* ************ Video viewers stats ************ */
@@ -425,9 +426,14 @@ class Redis {
   /* ************ Keys generation ************ */
 
   private generateLocalVideoStatKeys (type: StatKind, videoId: number): { setKey: string, videoKey: string }
-  private generateLocalVideoStatKeys (type: StatKind): { setKey: string }
-  private generateLocalVideoStatKeys (type: StatKind, videoId?: number) {
-    return { setKey: `local-video-${type}-buffer`, videoKey: `local-video-${type}-buffer-${videoId}` }
+  private generateLocalVideoStatKeys (): { setKey: string }
+  private generateLocalVideoStatKeys (type?: StatKind, videoId?: number) {
+    const setKey = `local-video-stats-buffer`
+    if (!type || !videoId) return { setKey }
+
+    const videoKey = `local-video-${type}-buffer-${videoId}`
+
+    return { setKey, videoKey }
   }
 
   generateLocalVideoViewerKeys (sessionId: string, videoId: number): { setKey: string, viewerKey: string }
@@ -442,12 +448,18 @@ class Redis {
     }
   }
 
-  private generateVideoStatsKeys (type: StatKind, options: { videoId?: number, hour?: number }) {
+  private generateVideoStatsKeys (options: { hour: number }): { setKey: string }
+  private generateVideoStatsKeys (options: { videoId: number, hour?: number, kind: StatKind }): { setKey: string, videoKey: string }
+  private generateVideoStatsKeys (options: { kind?: StatKind, videoId?: number, hour?: number }) {
     const hour = exists(options.hour)
       ? options.hour
       : new Date().getHours()
 
-    return { setKey: `videos-${type}-h${hour}`, videoKey: `video-${type}-${options.videoId}-h${hour}` }
+    if (!options.kind || !options.videoId) {
+      return { setKey: `videos-stats-h${hour}` }
+    }
+
+    return { setKey: `videos-stats-h${hour}`, videoKey: `video-${options.kind}-${options.videoId}-h${hour}` }
   }
 
   generateKeysForStats (scope: string, sessionId: string, videoId: number): { setKey: string, key: string }

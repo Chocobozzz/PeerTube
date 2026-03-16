@@ -1,7 +1,7 @@
 import { ActivityView } from '@peertube/peertube-models'
+import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { getOrCreateAPVideo } from '../videos/index.js'
-import { VideoViewerStats } from '@server/lib/stats/shared/video-viewer-stats.js'
 
 async function processDownloadActivity (options: APProcessorOptions<ActivityView>) {
   const { activity } = options
@@ -26,5 +26,5 @@ async function processCreateDownload (activity: ActivityView) {
     allowRefresh: false
   })
 
-  await VideoViewerStats.add({ video })
+  await VideoStatsManager.Instance.processRemoteDownload({ video })
 }

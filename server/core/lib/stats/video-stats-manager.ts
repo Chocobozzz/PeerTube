@@ -3,7 +3,7 @@ import { sha256 } from '@peertube/peertube-node-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { MVideo, MVideoImmutable } from '@server/types/models/index.js'
-import { VideoScope, VideoViewerCounters, VideoViewerStats, VideoStats, ViewerScope } from './shared/index.js'
+import { VideoScope, VideoStats, VideoViewerCounters, VideoViewerStats, ViewerScope } from './shared/index.js'
 
 /**
  * If processing a local view:
@@ -22,14 +22,14 @@ import { VideoScope, VideoViewerCounters, VideoViewerStats, VideoStats, ViewerSc
  * Viewers statistics are sent to origin instance using the `WatchAction` ActivityPub object
  */
 
-const lTags = loggerTagsFactory('views')
+const lTags = loggerTagsFactory('stats')
 
-export class VideoViewsManager {
-  private static instance: VideoViewsManager
+export class VideoStatsManager {
+  private static instance: VideoStatsManager
 
   private videoViewerStats: VideoViewerStats
   private videoViewerCounters: VideoViewerCounters
-  private videoViews: VideoStats
+  private videoStats: VideoStats
 
   private constructor () {
   }
@@ -37,7 +37,7 @@ export class VideoViewsManager {
   init () {
     this.videoViewerStats = new VideoViewerStats()
     this.videoViewerCounters = new VideoViewerCounters()
-    this.videoViews = new VideoStats()
+    this.videoStats = new VideoStats()
   }
 
   async processLocalView (options: {
@@ -66,7 +66,7 @@ export class VideoViewsManager {
     // Do it after added local viewer to fetch updated information
     const watchTime = await this.videoViewerStats.getWatchTime(video.id, sessionId)
 
-    const successView = await this.videoViews.addLocalView({ video, watchTime, sessionId })
+    const successView = await this.videoStats.addLocalView({ video, watchTime, sessionId })
 
     return { successView, successViewer }
   }
@@ -93,8 +93,32 @@ export class VideoViewsManager {
     }
 
     // Just a view
-    await this.videoViews.addRemoteView({ video })
+    await this.videoStats.addRemoteView({ video })
   }
+
+  // ---------------------------------------------------------------------------
+
+  async processLocalDownload (options: {
+    video: MVideoImmutable
+  }) {
+    const { video } = options
+
+    logger.debug('Processing local download for %s.', video.url, lTags())
+
+    await this.videoStats.addLocalDownload({ video })
+  }
+
+  async processRemoteDownload (options: {
+    video: MVideoImmutable
+  }) {
+    const { video } = options
+
+    logger.debug('Processing remote download for %s.', video.url, lTags())
+
+    await this.videoStats.addRemoteDownload({ video })
+  }
+
+  // ---------------------------------------------------------------------------
 
   getTotalViewersOf (video: MVideo) {
     return this.videoViewerCounters.getTotalViewersOf(video)

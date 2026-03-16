@@ -5,6 +5,7 @@ import { logger } from '@server/helpers/logger.js'
 import { buildRequestError, doRequestAndSaveToFile, generateRequestStream } from '@server/helpers/requests.js'
 import { REQUEST_TIMEOUTS } from '@server/initializers/constants.js'
 import { isWebVideoFile, MVideoFile, MVideoThumbnail } from '@server/types/models/index.js'
+import { createReadStream } from 'fs'
 import { remove } from 'fs-extra/esm'
 import { Readable, Writable } from 'stream'
 import { pipeline } from 'stream/promises'
@@ -16,8 +17,6 @@ import {
   makeWebVideoFileAvailable
 } from './object-storage/videos.js'
 import { VideoPathManager } from './video-path-manager.js'
-import { createReadStream } from 'fs'
-import { VideoViewerStats } from './stats/shared/video-viewer-stats.js'
 
 export class VideoDownload {
   static totalDownloads = 0
@@ -81,8 +80,6 @@ export class VideoDownload {
             })
 
             logger.info(`Mux ended for video ${this.video.url}`, { inputs: this.inputsToLog(), ...lTags(this.video.uuid) })
-
-            await VideoViewerStats.add({ video: this.video })
 
             res()
           } catch (err) {

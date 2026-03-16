@@ -1,8 +1,12 @@
 import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
-import { VideoStatsModel } from '@server/models/stat/video-stats.js'
+import { VideoStatModel } from '@server/models/stat/video-stat.js'
 import { logger } from '../../../helpers/logger.js'
 import { VideoModel } from '../../../models/video/video.js'
 import { Redis } from '../../redis.js'
+
+/**
+ * Add number of stats grabbed in a time-range to the database, so we can calculate stats timeseries
+ */
 
 export async function processVideosStats () {
   const lastHour = new Date()
@@ -14,12 +18,8 @@ export async function processVideosStats () {
   const startDate = lastHour.setMinutes(0, 0, 0)
   const endDate = lastHour.setMinutes(59, 59, 999)
 
-  const videoIds = new Set([
-    ...await Redis.Instance.listVideosForStats('views', hour),
-    ...await Redis.Instance.listVideosForStats('downloads', hour)
-  ])
-
-  if (videoIds.size === 0) return
+  const videoIds = await Redis.Instance.listVideosForStats(hour)
+  if (videoIds.length === 0) return
 
   logger.info(`Processing videos stats in job for hour ${hour}`)
 
@@ -28,8 +28,7 @@ export async function processVideosStats () {
       const views = await Redis.Instance.getVideoStats('views', videoId, hour)
       const downloads = await Redis.Instance.getVideoStats('downloads', videoId, hour)
 
-      await Redis.Instance.deleteVideoStats('views', videoId, hour)
-      await Redis.Instance.deleteVideoStats('downloads', videoId, hour)
+      await Redis.Instance.deleteVideoStats(videoId, hour)
 
       if (!views && !downloads) continue
 
@@ -48,7 +47,7 @@ export async function processVideosStats () {
           continue
         }
 
-        await VideoStatsModel.create({
+        await VideoStatModel.create({
           startDate: new Date(startDate),
           endDate: new Date(endDate),
 

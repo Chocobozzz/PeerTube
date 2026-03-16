@@ -5,7 +5,7 @@ import {
   VideoStatsUserAgentQuery
 } from '@peertube/peertube-models'
 import { LocalVideoViewerModel } from '@server/models/stat/local-video-viewer.js'
-import { VideoStatsModel } from '@server/models/stat/video-stats.js'
+import { VideoStatModel } from '@server/models/stat/video-stat.js'
 import express from 'express'
 import {
   asyncMiddleware,
@@ -99,7 +99,7 @@ async function getTimeseriesStats (req: express.Request, res: express.Response) 
   }
 
   const stats = metric === 'downloads'
-    ? await VideoStatsModel.getDownloadTimeserieStats(options)
+    ? await VideoStatModel.getDownloadTimeserieStats(options)
     : await LocalVideoViewerModel.getTimeserieStats({ ...options, metric })
 
   return res.json(stats)

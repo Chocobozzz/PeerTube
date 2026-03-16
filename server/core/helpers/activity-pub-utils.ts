@@ -140,6 +140,10 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
       '@type': 'sc:Number',
       '@id': 'pt:views'
     },
+    downloads: {
+      '@type': 'sc:Number',
+      '@id': 'pt:downloads'
+    },
     state: {
       '@type': 'sc:Number',
       '@id': 'pt:state'
@@ -320,7 +324,7 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
     InteractionCounter: 'sc:InteractionCounter',
     interactionType: 'sc:interactionType',
     userInteractionCount: 'sc:userInteractionCount'
-  }),
+  })
 }
 
 let allContext: (string | ContextValue)[]

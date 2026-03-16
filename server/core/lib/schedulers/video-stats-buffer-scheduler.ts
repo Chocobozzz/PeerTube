@@ -21,34 +21,43 @@ export class VideoStatsBufferScheduler extends AbstractScheduler {
   }
 
   protected async internalExecute () {
-    for (const statKind of [ 'views', 'downloads' ] as const) {
-      logger.debug(`Running video stats buffer scheduler for '${statKind}'`, lTags())
+    logger.debug(`Running video stats buffer scheduler`, lTags())
 
-      const videoIds = await Redis.Instance.listLocalVideosWithStats(statKind)
-      if (videoIds.length === 0) return
+    const videoIds = await Redis.Instance.listLocalVideosWithStats()
+    if (videoIds.length === 0) return
 
-      for (const videoId of videoIds) {
-        try {
-          const views = await Redis.Instance.getLocalVideoStats(statKind, videoId)
-          await Redis.Instance.deleteLocalVideoStats(statKind, videoId)
+    for (const videoId of videoIds) {
+      try {
+        const views = await Redis.Instance.getLocalVideoStats('views', videoId)
+        const downloads = await Redis.Instance.getLocalVideoStats('downloads', videoId)
 
-          const video = await VideoModel.loadFull(videoId)
-          if (!video) {
-            logger.debug(`Video ${videoId} does not exist anymore, skipping videos ${statKind} addition.`, lTags())
-            continue
-          }
+        await Redis.Instance.deleteLocalVideoStats(videoId)
 
-          logger.info(`Processing local video ${video.uuid} ${statKind} buffer.`, lTags(video.uuid))
+        if (!views && !downloads) continue
 
-          // If this is a remote video, the origin instance will send us an update
-          await VideoModel.incrementStats(statKind, videoId, views)
-
-          // Send video update
-          video.views += views
-          await federateVideoIfNeeded(video, false)
-        } catch (err) {
-          logger.error(`Cannot process local video ${statKind} buffer of video ${videoId}.`, { err, ...lTags() })
+        const video = await VideoModel.loadFull(videoId)
+        if (!video) {
+          logger.debug(`Video ${videoId} does not exist anymore, skipping videos stats addition.`, lTags())
+          continue
         }
+
+        logger.info(`Processing local video ${video.uuid} stats buffer.`, lTags(video.uuid))
+
+        // If this is a remote video, the origin instance will send us an update
+        if (views) {
+          video.views += views
+          await VideoModel.incrementStats('views', videoId, views)
+        }
+
+        if (downloads) {
+          video.downloads += downloads
+          await VideoModel.incrementStats('downloads', videoId, downloads)
+        }
+
+        // Send video update
+        await federateVideoIfNeeded(video, false)
+      } catch (err) {
+        logger.error(`Cannot process local video stats buffer of video ${videoId}.`, { err, ...lTags() })
       }
     }
   }

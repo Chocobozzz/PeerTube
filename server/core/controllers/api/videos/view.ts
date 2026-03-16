@@ -1,6 +1,6 @@
 import { HttpStatusCode, VideoView } from '@peertube/peertube-models'
 import { Hooks } from '@server/lib/plugins/hooks.js'
-import { VideoViewsManager } from '@server/lib/stats/video-views-manager.js'
+import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
 import { MVideoId } from '@server/types/models/index.js'
 import express from 'express'
 import {
@@ -37,7 +37,7 @@ async function viewVideo (req: express.Request, res: express.Response) {
   const body = req.body as VideoView
   const ip = req.ip
 
-  const { successView } = await VideoViewsManager.Instance.processLocalView({
+  const { successView } = await VideoStatsManager.Instance.processLocalView({
     video,
     ip,
     currentTime: body.currentTime,

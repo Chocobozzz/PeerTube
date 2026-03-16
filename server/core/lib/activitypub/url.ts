@@ -1,3 +1,4 @@
+import { buildSUUID } from '@peertube/peertube-node-utils'
 import { REMOTE_SCHEME, WEBSERVER } from '../../initializers/constants.js'
 import {
   MAbuseFull,
@@ -130,7 +131,7 @@ export function getLocalApproveReplyActivityPubUrl (video: MVideoUUID, comment: 
 }
 
 export function getDownloadsActivityPubUrl (byActor: MActorUrl, video: MVideoId) {
-  return byActor.url + '/downloads/videos/' + video.id
+  return byActor.url + '/downloads/videos/' + video.id + '/' + buildSUUID()
 }
 
 // ---------------------------------------------------------------------------
