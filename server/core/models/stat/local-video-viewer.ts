@@ -319,7 +319,7 @@ export class LocalVideoViewerModel extends SequelizeModel<LocalVideoViewerModel>
 
   static async getTimeserieStats (options: {
     video: MVideo
-    metric: VideoStatsTimeserieMetric
+    metric: Extract<VideoStatsTimeserieMetric, 'viewers' | 'aggregateWatchTime'>
     startDate: string
     endDate: string
   }): Promise<VideoStatsTimeserie> {
@@ -327,12 +327,12 @@ export class LocalVideoViewerModel extends SequelizeModel<LocalVideoViewerModel>
 
     const { groupInterval, startDate, endDate } = buildGroupByAndBoundaries(options.startDate, options.endDate)
 
-    const selectMetrics: { [id in VideoStatsTimeserieMetric]: string } = {
+    const selectMetrics: { [id in Extract<VideoStatsTimeserieMetric, 'viewers' | 'aggregateWatchTime'>]: string } = {
       viewers: 'COUNT("localVideoViewer"."id")',
       aggregateWatchTime: 'SUM("localVideoViewer"."watchTime")'
     }
 
-    const intervalWhere: { [id in VideoStatsTimeserieMetric]: string } = {
+    const intervalWhere: { [id in Extract<VideoStatsTimeserieMetric, 'viewers' | 'aggregateWatchTime'>]: string } = {
       // Viewer is still in the interval. Overlap algorithm
       viewers: '"localVideoViewer"."startDate" <= "intervals"."endDate" ' +
         'AND "localVideoViewer"."endDate" >= "intervals"."startDate"',

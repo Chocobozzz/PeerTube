@@ -1,12 +1,11 @@
 import {
-  VideoDownloadStatsTimeserieMetric,
   VideoStatsOverallQuery,
-  VideoStatsTimeserie,
   VideoStatsTimeserieMetric,
   VideoStatsTimeserieQuery,
   VideoStatsUserAgentQuery
 } from '@peertube/peertube-models'
 import { LocalVideoViewerModel } from '@server/models/stat/local-video-viewer.js'
+import { VideoStatsModel } from '@server/models/stat/video-stats.js'
 import express from 'express'
 import {
   asyncMiddleware,
@@ -15,8 +14,6 @@ import {
   videoRetentionStatsValidator,
   videoTimeseriesStatsValidator
 } from '../../../middlewares/index.js'
-import { MVideo } from '@server/types/models/index.js'
-import { VideoStatsModel } from '@server/models/stat/video-stats.js'
 
 const statsRouter = express.Router()
 
@@ -92,31 +89,18 @@ async function getRetentionStats (req: express.Request, res: express.Response) {
 
 async function getTimeseriesStats (req: express.Request, res: express.Response) {
   const video = res.locals.videoAll
-  const metric = req.params.metric as VideoStatsTimeserieMetric | VideoDownloadStatsTimeserieMetric
-
-  let handler: (options: {
-    video: MVideo
-    metric: VideoStatsTimeserieMetric | VideoDownloadStatsTimeserieMetric
-    startDate: string
-    endDate: string
-  }) => Promise<VideoStatsTimeserie>
-
-  switch (metric) {
-    case 'downloads':
-      handler = VideoStatsModel.getTimeserieStats
-      break
-    default:
-      handler = LocalVideoViewerModel.getTimeserieStats
-  }
-
+  const metric = req.params.metric as VideoStatsTimeserieMetric
   const query = req.query as VideoStatsTimeserieQuery
 
-  const stats = await handler({
+  const options = {
     video,
-    metric,
     startDate: query.startDate ?? video.createdAt.toISOString(),
     endDate: query.endDate ?? new Date().toISOString()
-  })
+  }
+
+  const stats = metric === 'downloads'
+    ? await VideoStatsModel.getDownloadTimeserieStats(options)
+    : await LocalVideoViewerModel.getTimeserieStats({ ...options, metric })
 
   return res.json(stats)
 }

@@ -1,11 +1,11 @@
+import { VideoStatsTimeserie } from '@peertube/peertube-models'
 import { MAX_SQL_DELETE_ITEMS } from '@server/initializers/constants.js'
+import { buildGroupByAndBoundaries } from '@server/lib/timeserie.js'
+import { MVideo } from '@server/types/models/index.js'
 import { literal, Op, QueryTypes } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, Table } from 'sequelize-typescript'
 import { safeBulkDestroy, SequelizeModel } from '../shared/index.js'
 import { VideoModel } from '../video/video.js'
-import { VideoDownloadStatsTimeserieMetric, VideoStatsTimeserie } from '@peertube/peertube-models'
-import { MVideo } from '@server/types/models/index.js'
-import { buildGroupByAndBoundaries } from '@server/lib/timeserie.js'
 
 /**
  * Aggregate views of all videos federated with our instance
@@ -91,9 +91,8 @@ export class VideoStatsModel extends SequelizeModel<VideoStatsModel> {
     })
   }
 
-  static async getTimeserieStats (options: {
+  static async getDownloadTimeserieStats (options: {
     video: MVideo
-    metric: VideoDownloadStatsTimeserieMetric
     startDate: string
     endDate: string
   }): Promise<VideoStatsTimeserie> {
@@ -111,7 +110,7 @@ export class VideoStatsModel extends SequelizeModel<VideoStatsModel> {
         generate_series(:startDate::timestamptz, :endDate::timestamptz, :groupInterval::interval) serie("time")
     )
     SELECT
-      "intervals"."startDate" AS date, COALESCE("videoStats"."downloads", 0) AS value
+      "intervals"."startDate" AS date, COALESCE("videoStats"."", 0) AS value
     FROM
       "intervals"
       LEFT JOIN "videoStats" ON "videoStats"."videoId" = :videoId

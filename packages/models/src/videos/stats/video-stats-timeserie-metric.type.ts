@@ -1,2 +1,1 @@
-export type VideoStatsTimeserieMetric = 'viewers' | 'aggregateWatchTime'
-export type VideoDownloadStatsTimeserieMetric = 'downloads'
+export type VideoStatsTimeserieMetric = 'viewers' | 'aggregateWatchTime' | 'downloads'

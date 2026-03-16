@@ -11,7 +11,6 @@ import { secondsToTime } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
   LiveVideoSession,
-  VideoDownloadStatsTimeserieMetric,
   VideoStatsOverall,
   VideoStatsRetention,
   VideoStatsTimeserie,
@@ -33,7 +32,7 @@ import { VideoStatsService } from './video-stats.service'
 
 const BAR_GRAPHS = [ 'countries', 'regions', 'clients', 'devices', 'operatingSystems' ] as const
 type BarGraphs = typeof BAR_GRAPHS[number]
-type ActiveGraphId = VideoStatsTimeserieMetric | VideoDownloadStatsTimeserieMetric | 'retention' | BarGraphs
+type ActiveGraphId = VideoStatsTimeserieMetric | 'retention' | BarGraphs
 
 type GeoData = { name: string, viewers: number }[]
 
@@ -342,7 +341,7 @@ export class VideoStatsComponent implements OnInit {
       },
       {
         label: $localize`Downloads`,
-        value: this.numberFormatter.transform(this.videoEdit.getVideoAttributes().downloads),
+        value: this.numberFormatter.transform(this.videoEdit.getVideoAttributes().downloads)
       },
       {
         label: $localize`Likes`,
