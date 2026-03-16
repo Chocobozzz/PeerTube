@@ -17,12 +17,12 @@ import { RemoveDanglingResumableUploadsScheduler } from '@server/lib/schedulers/
 import { RemoveExpiredUserExportsScheduler } from '@server/lib/schedulers/remove-expired-user-exports-scheduler.js'
 import { UpdateVideosScheduler } from '@server/lib/schedulers/update-videos-scheduler.js'
 import { VideoChannelSyncLatestScheduler } from '@server/lib/schedulers/video-channel-sync-latest-scheduler.js'
-import { VideoViewsBufferScheduler } from '@server/lib/schedulers/video-views-buffer-scheduler.js'
-import { VideoViewsManager } from '@server/lib/views/video-views-manager.js'
+import { VideoStatsBufferScheduler } from '@server/lib/schedulers/video-stats-buffer-scheduler.js'
+import { VideoViewsManager } from '@server/lib/stats/video-views-manager.js'
 import express from 'express'
 import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../../middlewares/index.js'
 import { RemoveOldViewsScheduler } from '@server/lib/schedulers/remove-old-views-scheduler.js'
-import { VideoViewerStats } from '@server/lib/views/shared/video-viewer-stats.js'
+import { VideoViewerStats } from '@server/lib/stats/shared/video-viewer-stats.js'
 
 const debugRouter = express.Router()
 
@@ -62,7 +62,7 @@ async function runCommand (req: express.Request, res: express.Response) {
     'remove-dandling-resumable-uploads': () => RemoveDanglingResumableUploadsScheduler.Instance.execute(),
     'remove-expired-user-exports': () => RemoveExpiredUserExportsScheduler.Instance.execute(),
     'process-video-downloads': () => VideoViewerStats.save(),
-    'process-video-views-buffer': () => VideoViewsBufferScheduler.Instance.execute(),
+    'process-video-views-buffer': () => VideoStatsBufferScheduler.Instance.execute(),
     'process-video-viewers': () => VideoViewsManager.Instance.processViewerStats(),
     'process-update-videos-scheduler': () => UpdateVideosScheduler.Instance.execute(),
     'process-video-channel-sync-latest': () => VideoChannelSyncLatestScheduler.Instance.execute(),

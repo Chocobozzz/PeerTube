@@ -1520,9 +1520,9 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     })
   }
 
-  static incrementViews (id: number, views: number) {
-    return VideoModel.increment('views', {
-      by: views,
+  static incrementStats (column: 'views' | 'downloads', id: number, by: number) {
+    return VideoModel.increment(column, {
+      by,
       where: {
         id
       }

@@ -1,7 +1,7 @@
 import { ActivityView } from '@peertube/peertube-models'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { getOrCreateAPVideo } from '../videos/index.js'
-import { VideoViewerStats } from '@server/lib/views/shared/video-viewer-stats.js'
+import { VideoViewerStats } from '@server/lib/stats/shared/video-viewer-stats.js'
 
 async function processDownloadActivity (options: APProcessorOptions<ActivityView>) {
   const { activity } = options

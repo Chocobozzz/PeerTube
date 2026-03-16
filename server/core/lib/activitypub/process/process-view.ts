@@ -1,5 +1,5 @@
 import { ActivityView } from '@peertube/peertube-models'
-import { VideoViewsManager } from '@server/lib/views/video-views-manager.js'
+import { VideoViewsManager } from '@server/lib/stats/video-views-manager.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MActorSignature } from '../../../types/models/index.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'

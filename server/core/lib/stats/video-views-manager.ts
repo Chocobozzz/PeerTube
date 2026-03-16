@@ -3,7 +3,7 @@ import { sha256 } from '@peertube/peertube-node-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { MVideo, MVideoImmutable } from '@server/types/models/index.js'
-import { VideoScope, VideoViewerCounters, VideoViewerStats, VideoViews, ViewerScope } from './shared/index.js'
+import { VideoScope, VideoViewerCounters, VideoViewerStats, VideoStats, ViewerScope } from './shared/index.js'
 
 /**
  * If processing a local view:
@@ -29,7 +29,7 @@ export class VideoViewsManager {
 
   private videoViewerStats: VideoViewerStats
   private videoViewerCounters: VideoViewerCounters
-  private videoViews: VideoViews
+  private videoViews: VideoStats
 
   private constructor () {
   }
@@ -37,7 +37,7 @@ export class VideoViewsManager {
   init () {
     this.videoViewerStats = new VideoViewerStats()
     this.videoViewerCounters = new VideoViewerCounters()
-    this.videoViews = new VideoViews()
+    this.videoViews = new VideoStats()
   }
 
   async processLocalView (options: {

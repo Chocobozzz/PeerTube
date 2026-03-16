@@ -8,7 +8,7 @@ import { safeBulkDestroy, SequelizeModel } from '../shared/index.js'
 import { VideoModel } from '../video/video.js'
 
 /**
- * Aggregate views of all videos federated with our instance
+ * Aggregate stats of all videos federated with our instance
  * Mainly used by the trending/hot algorithms
  */
 
@@ -110,7 +110,7 @@ export class VideoStatsModel extends SequelizeModel<VideoStatsModel> {
         generate_series(:startDate::timestamptz, :endDate::timestamptz, :groupInterval::interval) serie("time")
     )
     SELECT
-      "intervals"."startDate" AS date, COALESCE("videoStats"."", 0) AS value
+      "intervals"."startDate" AS date, COALESCE("videoStats"."downloads", 0) AS value
     FROM
       "intervals"
       LEFT JOIN "videoStats" ON "videoStats"."videoId" = :videoId

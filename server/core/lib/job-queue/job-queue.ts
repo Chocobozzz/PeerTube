@@ -74,8 +74,7 @@ import { processVideoLiveEnding } from './handlers/video-live-ending.js'
 import { processVideoStudioEdition } from './handlers/video-studio-edition.js'
 import { processVideoTranscoding } from './handlers/video-transcoding.js'
 import { processVideoTranscription } from './handlers/video-transcription.js'
-import { processVideosViewsStats } from './handlers/video-views-stats.js'
-import { processVideosDownloadsStats } from './handlers/video-download-stats.js'
+import { processVideosStats } from './handlers/video-stats.js'
 
 export type CreateJobArgument =
   | { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload }
@@ -90,8 +89,7 @@ export type CreateJobArgument =
   | { type: 'transcoding-job-builder', payload: TranscodingJobBuilderPayload }
   | { type: 'video-import', payload: VideoImportPayload }
   | { type: 'activitypub-refresher', payload: RefreshPayload }
-  | { type: 'videos-downloads-stats', payload: {} }
-  | { type: 'videos-views-stats', payload: {} }
+  | { type: 'videos-stats', payload: {} }
   | { type: 'video-live-ending', payload: VideoLiveEndingPayload }
   | { type: 'actor-keys', payload: ActorKeysPayload }
   | { type: 'video-redundancy', payload: VideoRedundancyPayload }
@@ -138,8 +136,7 @@ const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
   'video-redundancy': processVideoRedundancy,
   'video-studio-edition': processVideoStudioEdition,
   'video-transcoding': processVideoTranscoding,
-  'videos-downloads-stats': processVideosDownloadsStats,
-  'videos-views-stats': processVideosViewsStats,
+  'videos-stats': processVideosStats,
   'generate-video-storyboard': processGenerateStoryboard,
   'create-user-export': processCreateUserExport,
   'import-user-archive': processImportUserArchive,
@@ -176,8 +173,7 @@ const jobTypes: JobType[] = [
   'video-redundancy',
   'video-studio-edition',
   'video-transcription',
-  'videos-downloads-stats',
-  'videos-views-stats',
+  'videos-stats',
   'create-user-export',
   'import-user-archive',
   'video-transcoding'
@@ -524,16 +520,10 @@ class JobQueue {
   // ---------------------------------------------------------------------------
 
   private addRepeatableJobs () {
-    this.queues['videos-downloads-stats'].add('job', {}, {
-      repeat: REPEAT_JOBS['videos-downloads-stats'],
+    this.queues['videos-stats'].add('job', {}, {
+      repeat: REPEAT_JOBS['videos-stats'],
 
-      ...this.buildJobRemovalOptions('videos-downloads-stats')
-    }).catch(err => logger.error('Cannot add repeatable job.', { err }))
-
-    this.queues['videos-views-stats'].add('job', {}, {
-      repeat: REPEAT_JOBS['videos-views-stats'],
-
-      ...this.buildJobRemovalOptions('videos-views-stats')
+      ...this.buildJobRemovalOptions('videos-stats')
     }).catch(err => logger.error('Cannot add repeatable job.', { err }))
 
     if (CONFIG.FEDERATION.VIDEOS.CLEANUP_REMOTE_INTERACTIONS) {

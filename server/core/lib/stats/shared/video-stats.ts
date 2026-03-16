@@ -1,21 +1,26 @@
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { VIEW_LIFETIME } from '@server/initializers/constants.js'
+import { sendDownload } from '@server/lib/activitypub/send/send-download.js'
 import { sendView } from '@server/lib/activitypub/send/send-view.js'
 import { getCachedVideoDuration } from '@server/lib/video.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { MVideo, MVideoImmutable } from '@server/types/models/index.js'
 import { LRUCache } from 'lru-cache'
 import { Redis } from '../../redis.js'
-import { CONFIG } from '@server/initializers/config.js'
 
 const lTags = loggerTagsFactory('views')
 
-export class VideoViews {
+export class VideoStats {
   private readonly viewsCache = new LRUCache<string, boolean>({
     max: 10_000,
     ttl: VIEW_LIFETIME.VIEW
   })
+
+  // ---------------------------------------------------------------------------
+  // Views
+  // ---------------------------------------------------------------------------
 
   async addLocalView (options: {
     video: MVideoImmutable
@@ -58,10 +63,10 @@ export class VideoViews {
     const promises: Promise<any>[] = []
 
     if (video.isLocal()) {
-      promises.push(Redis.Instance.addLocalVideoView(video.id))
+      promises.push(Redis.Instance.addLocalVideoStat('views', video.id))
     }
 
-    promises.push(Redis.Instance.addVideoViewStats(video.id))
+    promises.push(Redis.Instance.addVideoStat('views', video.id))
 
     await Promise.all(promises)
   }
@@ -89,5 +94,49 @@ export class VideoViews {
     this.viewsCache.set(key, true)
 
     return Redis.Instance.setSessionIdVideoView(sessionId, videoUUID)
+  }
+
+  // ---------------------------------------------------------------------------
+  // Download
+  // ---------------------------------------------------------------------------
+
+  async addLocalDownload (options: {
+    video: MVideoImmutable
+  }) {
+    const { video } = options
+
+    logger.debug('Adding local download to video %s.', video.uuid, { ...lTags(video.uuid) })
+
+    await this.addDownload(video)
+
+    await sendDownload({ byActor: await getServerActor(), video })
+
+    return true
+  }
+
+  async addRemoteDownload (options: {
+    video: MVideo
+  }) {
+    const { video } = options
+
+    logger.debug('Adding remote download to video %s.', video.uuid, { ...lTags(video.uuid) })
+
+    await this.addDownload(video)
+
+    return true
+  }
+
+  // ---------------------------------------------------------------------------
+
+  private async addDownload (video: MVideoImmutable) {
+    const promises: Promise<any>[] = []
+
+    if (video.isLocal()) {
+      promises.push(Redis.Instance.addLocalVideoStat('downloads', video.id))
+    }
+
+    promises.push(Redis.Instance.addVideoStat('downloads', video.id))
+
+    await Promise.all(promises)
   }
 }
