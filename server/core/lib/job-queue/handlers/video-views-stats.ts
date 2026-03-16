@@ -1,5 +1,5 @@
 import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
-import { VideoStatsModel } from '@server/models/view/video-stats.js'
+import { VideoStatsModel } from '@server/models/stat/video-stats.js'
 import { logger } from '../../../helpers/logger.js'
 import { VideoModel } from '../../../models/video/video.js'
 import { Redis } from '../../redis.js'

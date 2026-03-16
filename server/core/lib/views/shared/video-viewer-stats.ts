@@ -11,16 +11,16 @@ import { getLocalVideoViewerActivityPubUrl } from '@server/lib/activitypub/url.j
 import { Redis } from '@server/lib/redis.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { LocalVideoViewerWatchSectionModel } from '@server/models/view/local-video-viewer-watch-section.js'
-import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer.js'
-import { VideoStatsModel } from '@server/models/view/video-stats.js'
+import { LocalVideoViewerWatchSectionModel } from '@server/models/stat/local-video-viewer-watch-section.js'
+import { LocalVideoViewerModel } from '@server/models/stat/local-video-viewer.js'
+import { VideoStatsModel } from '@server/models/stat/video-stats.js'
 import { MVideo, MVideoImmutable, MVideoThumbnail } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 
 const lTags = loggerTagsFactory('views')
 
 const REDIS_SCOPES = {
-  DOWNLOAD: "download"
+  DOWNLOAD: 'download'
 }
 
 type LocalViewerStats = {
@@ -45,8 +45,8 @@ type LocalViewerStats = {
 }
 
 type DownloadStats = {
-  videoId: number;
-  downloadedAt: number; // Date.getTime()
+  videoId: number
+  downloadedAt: number // Date.getTime()
 }
 
 export class VideoViewerStats {
@@ -202,13 +202,13 @@ export class VideoViewerStats {
   /**
    * Record a video download into Redis
    */
-  static async add({ video }: { video: MVideoThumbnail }) {
+  static async add ({ video }: { video: MVideoThumbnail }) {
     const sessionId = await generateRandomString(32)
     const videoId = video.id
 
     const stats: DownloadStats = {
       videoId,
-      downloadedAt: new Date().getTime(),
+      downloadedAt: new Date().getTime()
     }
 
     try {
@@ -216,11 +216,11 @@ export class VideoViewerStats {
 
       await sendDownload({ byActor: await getServerActor(), video, downloadsCount: 1 })
     } catch (err) {
-      logger.error("Cannot write download into redis", {
+      logger.error('Cannot write download into redis', {
         sessionId,
         videoId,
         stats,
-        err,
+        err
       })
     }
   }
@@ -228,13 +228,13 @@ export class VideoViewerStats {
   /**
    * Aggregate video downloads from Redis into SQL database
    */
-  static async save() {
-    logger.debug("Saving download stats to DB", lTags())
+  static async save () {
+    logger.debug('Saving download stats to DB', lTags())
 
     const keys = await Redis.Instance.getStatsKeys(REDIS_SCOPES.DOWNLOAD)
     if (keys.length === 0) return
 
-    logger.debug("Processing %d video download(s)", keys.length)
+    logger.debug('Processing %d video download(s)', keys.length)
 
     for (const key of keys) {
       const stats: DownloadStats = await Redis.Instance.getStats({ key })
@@ -243,13 +243,13 @@ export class VideoViewerStats {
       const video = await VideoModel.load(videoId)
       if (!video) {
         logger.debug(
-          "Video %d does not exist anymore, skipping videos view stats.",
-          videoId,
+          'Video %d does not exist anymore, skipping videos view stats.',
+          videoId
         )
         try {
           await Redis.Instance.deleteStatsKey(REDIS_SCOPES.DOWNLOAD, key)
         } catch (err) {
-          logger.error("Cannot remove key %s from Redis", key)
+          logger.error('Cannot remove key %s from Redis', key)
         }
         continue
       }
@@ -259,14 +259,14 @@ export class VideoViewerStats {
       const endDate = new Date(downloadedAt.setMinutes(59, 59, 999))
 
       logger.info(
-        "date range: %s -> %s",
+        'date range: %s -> %s',
         startDate.toISOString(),
-        endDate.toISOString(),
+        endDate.toISOString()
       )
 
       try {
         const record = await VideoStatsModel.findOne({
-          where: { videoId, startDate },
+          where: { videoId, startDate }
         })
         if (record) {
           // Increment download count for current time slice
@@ -278,7 +278,7 @@ export class VideoViewerStats {
             startDate: new Date(startDate),
             endDate: new Date(endDate),
             downloads: 1,
-            videoId,
+            videoId
           })
         }
 
@@ -289,10 +289,11 @@ export class VideoViewerStats {
         await Redis.Instance.deleteStatsKey(REDIS_SCOPES.DOWNLOAD, key)
       } catch (err) {
         logger.error(
-          "Cannot update video views stats of video %d on range %s -> %s",
+          'Cannot update video views stats of video %d on range %s -> %s',
           videoId,
           startDate.toISOString(),
-          endDate.toISOString(), { err },
+          endDate.toISOString(),
+          { err }
         )
       }
     }

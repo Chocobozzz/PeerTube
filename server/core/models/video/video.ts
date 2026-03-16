@@ -137,7 +137,7 @@ import {
 } from '../shared/index.js'
 import { UserVideoHistoryModel } from '../user/user-video-history.js'
 import { UserModel } from '../user/user.js'
-import { VideoStatsModel } from '../view/video-stats.js'
+import { VideoStatsModel } from '../stat/video-stats.js'
 import { videoModelToActivityPubObject } from './formatter/video-activity-pub-format.js'
 import {
   VideoFormattingJSONOptions,

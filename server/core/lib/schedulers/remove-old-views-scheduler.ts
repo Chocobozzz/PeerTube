@@ -1,5 +1,5 @@
-import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer.js'
-import { VideoStatsModel } from '@server/models/view/video-stats.js'
+import { LocalVideoViewerModel } from '@server/models/stat/local-video-viewer.js'
+import { VideoStatsModel } from '@server/models/stat/video-stats.js'
 import { logger, loggerTagsFactory } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants.js'
