@@ -96,8 +96,6 @@ my-actor-host {
 // Grid mode inherited from parent component
 // Takes all the width on mobile
 .video-miniature:not(.display-as-row) {
-  --thumbnail-width: var(--co-miniature-max-width); // Required by video-thumbnail component
-
   display: flex;
   flex-direction: column;
   padding-bottom: 1rem;
@@ -108,6 +106,8 @@ my-actor-host {
   }
 
   my-video-thumbnail {
+    --thumbnail-width: 100%; // Required by video-thumbnail component
+
     margin-bottom: 0.35rem;
 
     @include block-ratio($selector: "::ng-deep .video-thumbnail");

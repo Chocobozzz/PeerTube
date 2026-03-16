@@ -2217,7 +2217,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">636,637</context>
+          <context context-type="linenumber">647,648</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1206277798664538171" datatype="html">
@@ -2295,7 +2295,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">864</context>
+          <context context-type="linenumber">875</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
@@ -2552,193 +2552,200 @@
           <context context-type="linenumber">519,521</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="6375285763528205588" datatype="html">
+        <source>Default download policy</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
+          <context context-type="linenumber">530,532</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="424703522835656806" datatype="html">
         <source>VIDEO CHANNELS</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">534,535</context>
+          <context context-type="linenumber">545,546</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7026684190224451991" datatype="html">
         <source>Max video channels per user</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">539,541</context>
+          <context context-type="linenumber">550,552</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3840267063842708224" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {channel} other {channels}}</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">550</context>
+          <context context-type="linenumber">561</context>
         </context-group>
       </trans-unit>
       <trans-unit id="836183323506117145" datatype="html">
         <source>FEDERATION</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">562,563</context>
+          <context context-type="linenumber">573,574</context>
         </context-group>
       </trans-unit>
       <trans-unit id="75928143875482960" datatype="html">
         <source> Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; routerLink=&quot;/admin/settings/follows&quot;>"/>relations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> with other platforms. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">564,566</context>
+          <context context-type="linenumber">575,577</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2072884891614263775" datatype="html">
         <source>Accept comments made on remote platforms</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">575,576</context>
+          <context context-type="linenumber">586,587</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5963121551419269989" datatype="html">
         <source>This setting is not retroactive: current comments from remote platforms will not be deleted</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">578,579</context>
+          <context context-type="linenumber">589,590</context>
         </context-group>
       </trans-unit>
       <trans-unit id="735929773748569631" datatype="html">
         <source>Remote actors can follow channels of your platform</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">591,592</context>
+          <context context-type="linenumber">602,603</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7331615583751184681" datatype="html">
         <source>This setting is not retroactive: current followers of channels of your platform will not be affected</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">594,595</context>
+          <context context-type="linenumber">605,606</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4707019046470605528" datatype="html">
         <source>Remote actors can follow your platform</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">606,607</context>
+          <context context-type="linenumber">617,618</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5240371005291842688" datatype="html">
         <source>This setting is not retroactive: current followers of your platform will not be affected</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">609,610</context>
+          <context context-type="linenumber">620,621</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4899539058271084907" datatype="html">
         <source>Manually approve new followers that follow your platform</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">619,620</context>
+          <context context-type="linenumber">630,631</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6240145294614933263" datatype="html">
         <source>Automatically follow back followers that follow your platform</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">633,634</context>
+          <context context-type="linenumber">644,645</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2362368426377094869" datatype="html">
         <source>Automatically follow platforms of a public index</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">648,649</context>
+          <context context-type="linenumber">659,660</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2092224316392295720" datatype="html">
         <source>⚠️ This functionality requires a lot of attention and extra moderation.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">651,653</context>
+          <context context-type="linenumber">662,664</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9076632742417302918" datatype="html">
         <source> See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a                       class=&quot;link-primary&quot;                       href=&quot;https://docs.joinpeertube.org/admin/following-instances#automatically-follow-other-instances&quot;                       rel=&quot;noopener noreferrer&quot;                       target=&quot;_blank&quot;                     >"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> for more information about the expected URL </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">654,660</context>
+          <context context-type="linenumber">665,671</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1718269478813020014" datatype="html">
         <source>Index URL</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">665,666</context>
+          <context context-type="linenumber">676,677</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2709958363414972972" datatype="html">
         <source>PLAYER</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">690,691</context>
+          <context context-type="linenumber">701,702</context>
         </context-group>
       </trans-unit>
       <trans-unit id="286395473992592179" datatype="html">
         <source>Automatically play videos in the player</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">702,703</context>
+          <context context-type="linenumber">713,714</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3184039004441581991" datatype="html">
         <source>Enable P2P streaming by default on your platform</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">713,714</context>
+          <context context-type="linenumber">724,725</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6069715963308979270" datatype="html">
         <source>Enable P2P streaming by default for videos embedded on external websites</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">722,723</context>
+          <context context-type="linenumber">733,734</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2054846790157376783" datatype="html">
         <source>SEARCH</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">732,733</context>
+          <context context-type="linenumber">743,744</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3442084803796199253" datatype="html">
         <source>Allow users to do remote URI/handle search</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">743,744</context>
+          <context context-type="linenumber">754,755</context>
         </context-group>
       </trans-unit>
       <trans-unit id="481446928803565156" datatype="html">
         <source>Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>your users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> to look up remote videos/actors that may not be federated with your platform</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">746,747</context>
+          <context context-type="linenumber">757,758</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7295422540935146771" datatype="html">
         <source>Allow anonymous to do remote URI/handle search</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">756,757</context>
+          <context context-type="linenumber">767,768</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7372107248244982956" datatype="html">
         <source>Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>anonymous users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> to look up remote videos/actors that may not be federated with your platform</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">759,760</context>
+          <context context-type="linenumber">770,771</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6476750382562952780" datatype="html">
         <source>Enable global search</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">767,768</context>
+          <context context-type="linenumber">778,779</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
@@ -2749,119 +2756,157 @@
         <source>⚠️ This functionality depends heavily on the moderation of platforms followed by the search index you select</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">769,770</context>
+          <context context-type="linenumber">780,781</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2331464426553277323" datatype="html">
         <source>Search index URL</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">774,776</context>
+          <context context-type="linenumber">785,787</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2653219516680751118" datatype="html">
         <source> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;>"/>your own search index<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> or choose the official one, <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://sepiasearch.org&quot;>"/>https://sepiasearch.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>, that is not moderated. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">777,778</context>
+          <context context-type="linenumber">788,789</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8524278911521465398" datatype="html">
         <source>Disable local search in search bar</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">799,800</context>
+          <context context-type="linenumber">810,811</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4444955208013675027" datatype="html">
         <source>Search bar uses the global search index by default</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">809,810</context>
+          <context context-type="linenumber">820,821</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4557533619513324614" datatype="html">
         <source>Otherwise, the local search will be used by default</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">812,813</context>
+          <context context-type="linenumber">823,824</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6117138245696620472" datatype="html">
         <source>USER IMPORT/EXPORT</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">826,827</context>
+          <context context-type="linenumber">837,838</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6056998652615283808" datatype="html">
         <source>Allow your users to import a data archive</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">833,834</context>
+          <context context-type="linenumber">844,845</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4091781230315618850" datatype="html">
         <source>Video quota is checked on import so the user doesn't upload a too big archive file</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">835,836</context>
+          <context context-type="linenumber">846,847</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3112747752460656486" datatype="html">
         <source>Video quota (daily quota is not taken into account) is also checked for each video when PeerTube is processing the import</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">836,837</context>
+          <context context-type="linenumber">847,848</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4793397386811591255" datatype="html">
         <source>Allow your users to export their data</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">846,847</context>
+          <context context-type="linenumber">857,858</context>
         </context-group>
       </trans-unit>
       <trans-unit id="74636758368624456" datatype="html">
         <source>Users can export their PeerTube data in a .zip for backup or re-import. Only one export at a time is allowed per user</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">848,849</context>
+          <context context-type="linenumber">859,860</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7396688046674522189" datatype="html">
         <source>Max user video quota allowed to generate the export</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">853,855</context>
+          <context context-type="linenumber">864,866</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1967420418158999705" datatype="html">
         <source>If the user decides to include the video files in the archive</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">855,857</context>
+          <context context-type="linenumber">866,868</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8092614302698579026" datatype="html">
         <source>User export expiration</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">874,876</context>
+          <context context-type="linenumber">885,887</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8981181756195068779" datatype="html">
         <source>The archive file is deleted after this period</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">882,884</context>
+          <context context-type="linenumber">893,895</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5344594655022049812" datatype="html">
+        <source>Allowed</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
+          <context context-type="linenumber">264</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5769292297914455214" datatype="html">
+        <source>Disabled</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
+          <context context-type="linenumber">265</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
+          <context context-type="linenumber">54</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
+          <context context-type="linenumber">88</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/private-instance-config.component.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
+          <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4776429682428363094" datatype="html">
         <source>1 day</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">280</context>
+          <context context-type="linenumber">289</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/days-duration-formatter.pipe.ts</context>
@@ -2872,28 +2917,28 @@
         <source>2 days</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">281</context>
+          <context context-type="linenumber">290</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8542568275115626925" datatype="html">
         <source>7 days</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">282</context>
+          <context context-type="linenumber">291</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7152095234138763013" datatype="html">
         <source>30 days</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">283</context>
+          <context context-type="linenumber">292</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2821179408673282599" datatype="html">
         <source>Home</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">564</context>
+          <context context-type="linenumber">589</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/home-menu.component.ts</context>
@@ -2908,7 +2953,7 @@
         <source>Discover</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">568</context>
+          <context context-type="linenumber">593</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.html</context>
@@ -2923,28 +2968,28 @@
         <source>Browse all videos</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">569</context>
+          <context context-type="linenumber">594</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5174743927852553765" datatype="html">
         <source>Browse local videos</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">570</context>
+          <context context-type="linenumber">595</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3203902538239082422" datatype="html">
         <source>You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">604</context>
+          <context context-type="linenumber">629</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5566531034799611502" datatype="html">
         <source>General configuration updated.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">626</context>
+          <context context-type="linenumber">660</context>
         </context-group>
       </trans-unit>
       <trans-unit id="931264342164481222" datatype="html">
@@ -17175,33 +17220,6 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5769292297914455214" datatype="html">
-        <source>Disabled</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
-          <context context-type="linenumber">74</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
-          <context context-type="linenumber">54</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
-          <context context-type="linenumber">67</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.ts</context>
-          <context context-type="linenumber">88</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/private-instance-config.component.ts</context>
-          <context context-type="linenumber">52</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
-          <context context-type="linenumber">76</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="7401094473118142911" datatype="html">
         <source>Your community cannot import or synchronize content from remote platforms</source>
         <context-group purpose="location">
@@ -24200,14 +24218,14 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="ngb.alert.close" datatype="html">
         <source>Close</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/alert/alert.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/alert/alert.ts</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.carousel.slide-number" datatype="html">
         <source> Slide <x id="INTERPOLATION"/> of <x id="INTERPOLATION_1"/> </source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/carousel/carousel.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/carousel/carousel.ts</context>
           <context context-type="linenumber">131</context>
         </context-group>
         <note priority="1" from="description">Currently selected slide number read by screen reader</note>
@@ -24215,219 +24233,219 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="ngb.carousel.previous" datatype="html">
         <source>Previous</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/carousel/carousel.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/carousel/carousel.ts</context>
           <context context-type="linenumber">147,148</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.carousel.next" datatype="html">
         <source>Next</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/carousel/carousel.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/carousel/carousel.ts</context>
           <context context-type="linenumber">176,177</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.datepicker.select-month" datatype="html">
         <source>Select month</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
           <context context-type="linenumber">91</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
           <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.datepicker.select-year" datatype="html">
         <source>Select year</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
           <context context-type="linenumber">91</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
           <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.datepicker.previous-month" datatype="html">
         <source>Previous month</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/datepicker/datepicker-navigation.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/datepicker/datepicker-navigation.ts</context>
           <context context-type="linenumber">83,85</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/datepicker/datepicker-navigation.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/datepicker/datepicker-navigation.ts</context>
           <context context-type="linenumber">109,112</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.datepicker.next-month" datatype="html">
         <source>Next month</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/datepicker/datepicker-navigation.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/datepicker/datepicker-navigation.ts</context>
           <context context-type="linenumber">112</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/datepicker/datepicker-navigation.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/datepicker/datepicker-navigation.ts</context>
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.first" datatype="html">
         <source>««</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">291,294</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.previous" datatype="html">
         <source>«</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">318,321</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.next" datatype="html">
         <source>»</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">347</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.last" datatype="html">
         <source>»»</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">377</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.first-aria" datatype="html">
         <source>First</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">401,402</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.previous-aria" datatype="html">
         <source>Previous</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">425</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.next-aria" datatype="html">
         <source>Next</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">446,447</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.last-aria" datatype="html">
         <source>Last</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">476,477</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
         <source><x id="INTERPOLATION"/></source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/progressbar/progressbar.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/progressbar/progressbar.ts</context>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.HH" datatype="html">
         <source>HH</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">249,250</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.hours" datatype="html">
         <source>Hours</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">283,285</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.MM" datatype="html">
         <source>MM</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">308,309</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.minutes" datatype="html">
         <source>Minutes</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">339,340</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-hours" datatype="html">
         <source>Increment hours</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">369,370</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-hours" datatype="html">
         <source>Decrement hours</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">404,405</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-minutes" datatype="html">
         <source>Increment minutes</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">436,440</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-minutes" datatype="html">
         <source>Decrement minutes</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.SS" datatype="html">
         <source>SS</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.seconds" datatype="html">
         <source>Seconds</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-seconds" datatype="html">
         <source>Increment seconds</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-seconds" datatype="html">
         <source>Decrement seconds</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
         <source><x id="INTERPOLATION"/></source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.toast.close-aria" datatype="html">
         <source>Close</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.5_@angular+core@21.1.5_@angular+_486a846e6cd161860d84cd3c5f329f94/node_modules/src/toast/toast.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.1.6_@angular+core@21.1.6_@angular+_9f9e1bdc6915608feb5137b2b2f051ff/node_modules/src/toast/toast.ts</context>
           <context context-type="linenumber">104,107</context>
         </context-group>
       </trans-unit>
