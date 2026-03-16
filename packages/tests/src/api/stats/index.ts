@@ -1,3 +1,4 @@
+export * from './video-downloads-counter.js'
 export * from './video-views-counter.js'
 export * from './video-views-overall-stats.js'
 export * from './video-views-retention-stats.js'
