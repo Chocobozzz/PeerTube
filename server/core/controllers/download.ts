@@ -39,6 +39,7 @@ import {
   videosDownloadValidator,
   videosGenerateDownloadValidator
 } from '../middlewares/index.js'
+import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
 
 const lTags = loggerTagsFactory('download')
 
@@ -176,6 +177,9 @@ async function downloadWebVideoFile (req: express.Request, res: express.Response
 
   const downloadFilename = buildDownloadFilename({ video, resolution: videoFile.resolution, extname: videoFile.extname })
 
+  VideoStatsManager.Instance.processLocalDownload({ video })
+    .catch(err => logger.error(`Cannot process local download stats for video ${video.uuid}`, { err, ...lTags(video.uuid) }))
+
   if (videoFile.storage === FileStorage.OBJECT_STORAGE) {
     return redirectVideoDownloadToObjectStorage({ res, video, file: videoFile, downloadFilename })
   }
@@ -213,6 +217,9 @@ async function downloadHLSVideoFile (req: express.Request, res: express.Response
   )
 
   if (!checkAllowResult(res, allowParameters, allowedResult)) return
+
+  VideoStatsManager.Instance.processLocalDownload({ video })
+    .catch(err => logger.error(`Cannot process local download stats for video ${video.uuid}`, { err, ...lTags(video.uuid) }))
 
   const downloadFilename = buildDownloadFilename({ video, streamingPlaylist, resolution: videoFile.resolution, extname: videoFile.extname })
 
@@ -286,6 +293,9 @@ async function downloadGeneratedVideoFile (req: express.Request, res: express.Re
   }
 
   res.type(extname)
+
+  VideoStatsManager.Instance.processLocalDownload({ video })
+    .catch(err => logger.error(`Cannot process local download stats for video ${video.uuid}`, { err, ...lTags(video.uuid) }))
 
   try {
     await new VideoDownload({ video, videoFiles }).muxToMergeVideoFiles(res)

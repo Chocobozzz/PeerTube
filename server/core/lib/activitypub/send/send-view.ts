@@ -1,5 +1,5 @@
 import { ActivityAudience, ActivityView } from '@peertube/peertube-models'
-import { VideoViewsManager } from '@server/lib/views/video-views-manager.js'
+import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
 import { MActorAudience, MActorLight, MVideoImmutable, MVideoUrl } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 import { logger } from '../../../helpers/logger.js'
@@ -58,7 +58,7 @@ function buildViewActivity (options: {
   return audiencify({
     ...base,
 
-    expires: new Date(VideoViewsManager.Instance.buildViewerExpireTime()).toISOString(),
+    expires: new Date(VideoStatsManager.Instance.buildViewerExpireTime()).toISOString(),
 
     result: {
       interactionType: 'WatchAction',

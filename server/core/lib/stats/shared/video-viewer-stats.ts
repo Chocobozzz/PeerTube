@@ -7,9 +7,9 @@ import { sequelizeTypescript } from '@server/initializers/database.js'
 import { sendCreateWatchAction } from '@server/lib/activitypub/send/index.js'
 import { getLocalVideoViewerActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { Redis } from '@server/lib/redis.js'
+import { LocalVideoViewerWatchSectionModel } from '@server/models/stat/local-video-viewer-watch-section.js'
+import { LocalVideoViewerModel } from '@server/models/stat/local-video-viewer.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { LocalVideoViewerWatchSectionModel } from '@server/models/view/local-video-viewer-watch-section.js'
-import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer.js'
 import { MVideo, MVideoImmutable } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 
@@ -35,7 +35,6 @@ type LocalViewerStats = {
 
   videoId: number
 }
-
 export class VideoViewerStats {
   private processingViewersStats = false
   private processingRedisWrites = false

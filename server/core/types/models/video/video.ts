@@ -46,6 +46,7 @@ export type MVideo = Omit<
   | 'AccountVideoRates'
   | 'VideoComments'
   | 'VideoViews'
+  | 'VideoDownloads'
   | 'UserVideoHistories'
   | 'ScheduleVideoUpdate'
   | 'VideoBlacklist'

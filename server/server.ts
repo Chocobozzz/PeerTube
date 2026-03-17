@@ -126,14 +126,14 @@ import { advertiseDoNotTrack } from './core/middlewares/dnt.js'
 import { apiFailMiddleware } from './core/middlewares/error.js'
 import { Redis } from './core/lib/redis.js'
 import { ActorFollowScheduler } from './core/lib/schedulers/actor-follow-scheduler.js'
-import { RemoveOldViewsScheduler } from './core/lib/schedulers/remove-old-views-scheduler.js'
+import { RemoveOldStatsScheduler } from './core/lib/schedulers/remove-old-stats-scheduler.js'
 import { UpdateVideosScheduler } from './core/lib/schedulers/update-videos-scheduler.js'
 import { YoutubeDlUpdateScheduler } from './core/lib/schedulers/youtube-dl-update-scheduler.js'
 import { VideosRedundancyScheduler } from './core/lib/schedulers/videos-redundancy-scheduler.js'
 import { RemoveOldHistoryScheduler } from './core/lib/schedulers/remove-old-history-scheduler.js'
 import { AutoFollowIndexInstances } from './core/lib/schedulers/auto-follow-index-instances.js'
 import { RemoveDanglingResumableUploadsScheduler } from './core/lib/schedulers/remove-dangling-resumable-uploads-scheduler.js'
-import { VideoViewsBufferScheduler } from './core/lib/schedulers/video-views-buffer-scheduler.js'
+import { VideoStatsBufferScheduler } from './core/lib/schedulers/video-stats-buffer-scheduler.js'
 import { GeoIPUpdateScheduler } from './core/lib/schedulers/geo-ip-update-scheduler.js'
 import { RunnerJobWatchDogScheduler } from './core/lib/schedulers/runner-job-watch-dog-scheduler.js'
 import { isHTTPSignatureDigestValid } from './core/helpers/peertube-crypto.js'
@@ -146,7 +146,7 @@ import { PluginManager } from './core/lib/plugins/plugin-manager.js'
 import { LiveManager } from './core/lib/live/index.js'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
-import { VideoViewsManager } from '@server/lib/views/video-views-manager.js'
+import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
 import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { OpenTelemetryMetrics } from '@server/lib/opentelemetry/metrics.js'
 import { ApplicationModel } from '@server/models/application/application.js'
@@ -318,13 +318,13 @@ async function startApplication () {
   YoutubeDlUpdateScheduler.Instance.enable()
   VideosRedundancyScheduler.Instance.enable()
   RemoveOldHistoryScheduler.Instance.enable()
-  RemoveOldViewsScheduler.Instance.enable()
+  RemoveOldStatsScheduler.Instance.enable()
   PluginsCheckScheduler.Instance.enable()
   PeerTubeVersionCheckScheduler.Instance.enable()
   AutoFollowIndexInstances.Instance.enable()
   RemoveDanglingResumableUploadsScheduler.Instance.enable()
   VideoChannelSyncLatestScheduler.Instance.enable()
-  VideoViewsBufferScheduler.Instance.enable()
+  VideoStatsBufferScheduler.Instance.enable()
   GeoIPUpdateScheduler.Instance.enable()
   RunnerJobWatchDogScheduler.Instance.enable()
   RemoveExpiredUserExportsScheduler.Instance.enable()
@@ -337,7 +337,7 @@ async function startApplication () {
   PluginManager.Instance.registerWebSocketRouter()
 
   PeerTubeSocket.Instance.init(server)
-  VideoViewsManager.Instance.init()
+  VideoStatsManager.Instance.init()
 
   updateStreamingPlaylistsInfohashesIfNeeded()
     .catch(err => logger.error('Cannot update streaming playlist infohashes.', { err }))

@@ -142,6 +142,7 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
     this.video.privacy = videoData.privacy
     this.video.channelId = videoData.channelId
     this.video.views = videoData.views
+    this.video.downloads = videoData.downloads
     this.video.isLive = videoData.isLive
     this.video.aspectRatio = videoData.aspectRatio
     this.video.embedPrivacyPolicy = videoData.embedPrivacyPolicy

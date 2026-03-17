@@ -137,7 +137,7 @@ import {
 } from '../shared/index.js'
 import { UserVideoHistoryModel } from '../user/user-video-history.js'
 import { UserModel } from '../user/user.js'
-import { VideoViewModel } from '../view/video-view.js'
+import { VideoStatModel } from '../stat/video-stat.js'
 import { videoModelToActivityPubObject } from './formatter/video-activity-pub-format.js'
 import {
   VideoFormattingJSONOptions,
@@ -517,6 +517,13 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   @IsInt
   @Min(0)
   @Column
+  declare downloads: number
+
+  @AllowNull(false)
+  @Default(0)
+  @IsInt
+  @Min(0)
+  @Column
   declare likes: number
 
   @AllowNull(false)
@@ -704,14 +711,14 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   })
   declare VideoComments: Awaited<VideoCommentModel>[]
 
-  @HasMany(() => VideoViewModel, {
+  @HasMany(() => VideoStatModel, {
     foreignKey: {
       name: 'videoId',
       allowNull: false
     },
     onDelete: 'cascade'
   })
-  declare VideoViews: Awaited<VideoViewModel>[]
+  declare VideoStats: Awaited<VideoStatModel>[]
 
   @HasMany(() => UserVideoHistoryModel, {
     foreignKey: {
@@ -1465,8 +1472,15 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       }
     })
 
-    // Sequelize could return null...
+    let totalLocalVideoDownloads = await VideoModel.sum('downloads', {
+      where: {
+        remote: false
+      }
+    })
+
+    // Sequelize can return null
     if (!totalLocalVideoViews) totalLocalVideoViews = 0
+    if (!totalLocalVideoDownloads) totalLocalVideoDownloads = 0
 
     const baseOptions = {
       start: 0,
@@ -1490,6 +1504,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return {
       totalLocalVideos,
       totalLocalVideoViews,
+      totalLocalVideoDownloads,
       totalVideos
     }
   }
@@ -1503,9 +1518,9 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     })
   }
 
-  static incrementViews (id: number, views: number) {
-    return VideoModel.increment('views', {
-      by: views,
+  static incrementStats (column: 'views' | 'downloads', id: number, by: number) {
+    return VideoModel.increment(column, {
+      by,
       where: {
         id
       }
@@ -1654,7 +1669,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return {
       attributes: [],
       subQuery: false,
-      model: VideoViewModel,
+      model: VideoStatModel,
       required: false,
       where: {
         startDate: {

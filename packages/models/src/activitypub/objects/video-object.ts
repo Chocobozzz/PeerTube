@@ -22,6 +22,7 @@ export interface VideoObject {
   subtitleLanguage: VideoCaptionObject[]
 
   views: number
+  downloads: number
 
   sensitive: boolean
   summary: string

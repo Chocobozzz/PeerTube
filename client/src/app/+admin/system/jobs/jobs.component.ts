@@ -81,7 +81,7 @@ export class JobsComponent implements OnInit {
     'video-studio-edition',
     'video-transcoding',
     'video-transcription',
-    'videos-views-stats'
+    'videos-stats'
   ]
   jobTypeItems: SelectOptionsItem[] = this.jobTypes.map(i => ({ id: i, label: i }))
 

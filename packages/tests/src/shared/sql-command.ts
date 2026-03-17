@@ -42,8 +42,8 @@ export class SQLCommand {
   }
 
   async countVideoViewsOf (uuid: string) {
-    const query = 'SELECT SUM("videoView"."views") AS "total" FROM "videoView" ' +
-      `INNER JOIN "video" ON "video"."id" = "videoView"."videoId" WHERE "video"."uuid" = :uuid`
+    const query = 'SELECT SUM("videoStat"."views") AS "total" FROM "videoStat" ' +
+      `INNER JOIN "video" ON "video"."id" = "videoStat"."videoId" WHERE "video"."uuid" = :uuid`
 
     const [ { total } ] = await this.selectQuery<{ total: number }>(query, { uuid })
     if (!total) return 0

@@ -74,6 +74,7 @@ export function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
     licence,
     language,
     views: video.views,
+    downloads: video.downloads,
 
     sensitive: video.nsfw,
     summary: video.nsfwSummary,

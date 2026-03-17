@@ -1,8 +1,7 @@
-import { catchError } from 'rxjs'
-import { environment } from 'src/environments/environment'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
 import { RestExtractor } from '@app/core'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
 import {
   VideoStatsOverall,
   VideoStatsRetention,
@@ -10,7 +9,8 @@ import {
   VideoStatsTimeserieMetric,
   VideoStatsUserAgent
 } from '@peertube/peertube-models'
-import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { catchError } from 'rxjs'
+import { environment } from 'src/environments/environment'
 
 @Injectable({
   providedIn: 'root'
