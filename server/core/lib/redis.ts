@@ -253,10 +253,7 @@ class Redis {
     const valueString = await this.getValue(videoKey)
     const valueInt = parseInt(valueString, 10)
 
-    if (isNaN(valueInt)) {
-      logger.error(`Cannot get videos ${kind} stats of video ${videoId} in hour ${hour}: ${kind} number is NaN (${valueString}).`, lTags())
-      return undefined
-    }
+    if (isNaN(valueInt)) return undefined
 
     return valueInt
   }
