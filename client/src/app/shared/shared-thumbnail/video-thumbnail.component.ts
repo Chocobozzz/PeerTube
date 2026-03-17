@@ -117,7 +117,7 @@ export class VideoThumbnailComponent implements OnChanges {
         ? window.innerWidth
         : cssVariable.replace('px', '').trim()
 
-      if (!widthStr) {
+      if (!widthStr || isNaN(+widthStr)) {
         logger.error('Cannot find thumbnail width in CSS variables. Fallback to 280px')
         width = 280
       } else {
