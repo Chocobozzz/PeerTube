@@ -1158,18 +1158,6 @@ export const totalCPUs = Math.max(cpus().length, 1)
 
 export const WORKER_THREADS = {
   IDLE_TIMEOUT: 1000 * 10, // 10 seconds
-  DOWNLOAD_IMAGE: {
-    CONCURRENCY: 3,
-    MAX_THREADS: 1
-  },
-  PROCESS_IMAGE: {
-    CONCURRENCY: 1,
-    MAX_THREADS: Math.min(totalCPUs, 5)
-  },
-  GET_IMAGE_SIZE: {
-    CONCURRENCY: 1,
-    MAX_THREADS: Math.min(totalCPUs, 5)
-  },
   SIGN_JSON_LD_OBJECT: {
     CONCURRENCY: 1,
     MAX_THREADS: 1 // FIXME: we would want 2 threads but there is an issue with JSONLD in worker thread where CPU jumps and stays at 100%

@@ -13,8 +13,8 @@ import { ThumbnailModel } from '../models/video/thumbnail.js'
 import { MVideoFile, MVideoThumbnail, MVideoUUID, MVideoWithAllFiles } from '../types/models/index.js'
 import { MThumbnail } from '../types/models/video/thumbnail.js'
 import { MVideoPlaylistThumbnail } from '../types/models/video/video-playlist.js'
+import downloadImage from './image-downloader.js'
 import { VideoPathManager } from './video-path-manager.js'
-import { downloadImageFromWorker } from './worker/parent-process.js'
 
 const lTags = loggerTagsFactory('thumbnail')
 
@@ -240,7 +240,7 @@ function _createLocalVideoThumbnailFromUrl (options: {
   const { filename, basePath, height, width, aspectRatio } = buildMetadataFromVideo({ video, size, extension })
 
   const thumbnailCreator = () => {
-    return downloadImageFromWorker({ url: downloadUrl, destDir: basePath, destName: filename, size: { width, height } })
+    return downloadImage({ url: downloadUrl, destDir: basePath, destName: filename, size: { width, height } })
   }
 
   return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, aspectRatio, cached: false })

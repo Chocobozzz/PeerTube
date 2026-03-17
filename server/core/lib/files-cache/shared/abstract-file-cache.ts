@@ -1,7 +1,7 @@
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { logger } from '@server/helpers/logger.js'
 import { CachePromise } from '@server/helpers/promise-cache.js'
-import { doRequestAndSaveToFile } from '@server/helpers/requests.js'
+import { doRequestAndSaveToFile, PeerTubeRequestError } from '@server/helpers/requests.js'
 import { LRU_CACHE, STATIC_MAX_AGE } from '@server/initializers/constants.js'
 import express from 'express'
 import { LRUCache } from 'lru-cache'
@@ -67,7 +67,7 @@ export abstract class AbstractFileCache<M extends FileModel> {
       try {
         await this.downloadRemoteFile(file)
       } catch (err) {
-        if (err.status === HttpStatusCode.NOT_FOUND_404) {
+        if ((err as PeerTubeRequestError).statusCode === HttpStatusCode.NOT_FOUND_404) {
           this.onLazyFetchNotFound(file)
         } else {
           logger.warn('Cannot process remote image %s.', file.fileUrl, { err })

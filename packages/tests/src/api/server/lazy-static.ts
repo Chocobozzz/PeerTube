@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await,@typescript-eslint/no-floating-promises */
 
+import { wait } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, HttpStatusCodeType } from '@peertube/peertube-models'
 import {
   cleanupTests,
@@ -145,6 +146,9 @@ describe('Test lazy static endpoints', function () {
 
     await servers[1].run()
 
+    // Wait video info expiration
+    await wait(5000)
+
     await testLazyStatic(HttpStatusCode.NOT_FOUND_404)
     await waitJobs(servers)
     await testLazyStatic(HttpStatusCode.OK_200)
@@ -152,6 +156,8 @@ describe('Test lazy static endpoints', function () {
 
   it('Should still have files after a server restart', async function () {
     this.timeout(60000)
+
+    await fetchRemoteData()
 
     await servers[0].kill()
     await servers[0].run()
