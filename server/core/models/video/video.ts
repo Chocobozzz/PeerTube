@@ -1904,16 +1904,16 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       throw new Error('Cannot replace thumbnails with an empty array, at least one thumbnail is required')
     }
 
-    if (Array.isArray(this.Thumbnails) === false) this.Thumbnails = []
+    let oldThumbnails = Array.isArray(this.Thumbnails)
+      ? [ ...this.Thumbnails ]
+      : []
 
-    let oldThumbnails = [ ...this.Thumbnails ]
+    this.Thumbnails = []
 
     for (const thumbnail of thumbnails) {
       thumbnail.videoId = this.id
 
       const savedThumbnail = await thumbnail.save({ transaction })
-
-      this.Thumbnails = this.Thumbnails.filter(t => t.id !== savedThumbnail.id)
       oldThumbnails = oldThumbnails.filter(t => t.id !== savedThumbnail.id)
 
       this.Thumbnails.push(savedThumbnail)
