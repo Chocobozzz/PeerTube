@@ -25,6 +25,7 @@ export abstract class AbstractFileCache<M extends FileModel> {
   protected abstract loadModel (filename: string): Promise<M>
   protected abstract getFSFilePath (model: M): string
   protected abstract getFSFileCachedPath (model: M): string
+  protected abstract onLazyFetchNotFound (model: M): any
 
   async lazyServe (options: {
     filename: string
@@ -66,7 +67,11 @@ export abstract class AbstractFileCache<M extends FileModel> {
       try {
         await this.downloadRemoteFile(file)
       } catch (err) {
-        logger.warn('Cannot process remote image %s.', file.fileUrl, { err })
+        if (err.status === HttpStatusCode.NOT_FOUND_404) {
+          this.onLazyFetchNotFound(file)
+        } else {
+          logger.warn('Cannot process remote image %s.', file.fileUrl, { err })
+        }
 
         return undefined
       }
