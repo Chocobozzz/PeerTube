@@ -212,7 +212,7 @@ function setValidRemoteIcon (video: any) {
   video.icon = video.icon.filter(icon => {
     return icon.type === 'Image' &&
       isActivityPubUrlValid(icon.url) &&
-      icon.mediaType === 'image/jpeg' &&
+      !!MIMETYPES.IMAGE.MIMETYPE_EXT[icon.mediaType] &&
       validator.default.isInt(icon.width + '', { min: 0 }) &&
       validator.default.isInt(icon.height + '', { min: 0 })
   })
@@ -253,12 +253,12 @@ function setValidStoryboard (video: VideoObject) {
   if (!video.preview) return true
   if (!Array.isArray(video.preview)) return false
 
-  video.preview = video.preview.filter(p => isStorybordValid(p))
+  video.preview = video.preview.filter(p => isStoryboardValid(p))
 
   return true
 }
 
-function isStorybordValid (preview: ActivityPubStoryboard) {
+function isStoryboardValid (preview: ActivityPubStoryboard) {
   if (!preview) return false
 
   if (
@@ -270,7 +270,7 @@ function isStorybordValid (preview: ActivityPubStoryboard) {
   }
 
   preview.url = preview.url.filter(u => {
-    return u.mediaType === 'image/jpeg' &&
+    return !!MIMETYPES.IMAGE.MIMETYPE_EXT[u.mediaType] &&
       isActivityPubUrlValid(u.href) &&
       validator.default.isInt(u.width + '', { min: 0 }) &&
       validator.default.isInt(u.height + '', { min: 0 }) &&
