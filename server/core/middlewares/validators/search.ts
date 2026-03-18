@@ -1,8 +1,15 @@
-import express from 'express'
-import { query } from 'express-validator'
 import { isSearchTargetValid } from '@server/helpers/custom-validators/search.js'
 import { isHostValid } from '@server/helpers/custom-validators/servers.js'
-import { areUUIDsValid, isDateValid, isNotEmptyStringArray, toCompleteUUIDs } from '../../helpers/custom-validators/misc.js'
+import express from 'express'
+import { query } from 'express-validator'
+import {
+  areUUIDsValid,
+  hasArrayLength,
+  isDateValid,
+  isNotEmptyStringArray,
+  toArray,
+  toCompleteUUIDs
+} from '../../helpers/custom-validators/misc.js'
 import { areValidationErrors } from './shared/index.js'
 
 const videosSearchValidator = [
@@ -33,7 +40,8 @@ const videosSearchValidator = [
 
   query('uuids')
     .optional()
-    .toArray()
+    .customSanitizer(toArray)
+    .custom(v => hasArrayLength(v, { max: 100 }))
     .customSanitizer(toCompleteUUIDs)
     .custom(areUUIDsValid).withMessage('Should have valid array of uuid'),
 
@@ -63,7 +71,8 @@ const videoChannelsListSearchValidator = [
 
   query('handles')
     .optional()
-    .toArray()
+    .customSanitizer(toArray)
+    .custom(v => hasArrayLength(v, { max: 100 }))
     .custom(isNotEmptyStringArray).withMessage('Should have valid array of handles'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -88,7 +97,8 @@ const videoPlaylistsListSearchValidator = [
 
   query('uuids')
     .optional()
-    .toArray()
+    .customSanitizer(toArray)
+    .custom(v => hasArrayLength(v, { max: 100 }))
     .customSanitizer(toCompleteUUIDs)
     .custom(areUUIDsValid).withMessage('Should have valid array of uuid'),
 
@@ -102,7 +112,7 @@ const videoPlaylistsListSearchValidator = [
 // ---------------------------------------------------------------------------
 
 export {
-  videosSearchValidator,
   videoChannelsListSearchValidator,
-  videoPlaylistsListSearchValidator
+  videoPlaylistsListSearchValidator,
+  videosSearchValidator
 }

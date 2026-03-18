@@ -10,7 +10,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideo, MVideoFile, MVideoFullLight, MVideoUUID } from '@server/types/models/index.js'
-import { CreateJobArgument, CreateJobOptions, JobQueue } from './job-queue/job-queue.js'
+import { CreateJobTypeAndPayload, CreateJobOptions, JobQueue } from './job-queue/job-queue.js'
 import { VideoStoryboardJobHandler } from './runners/index.js'
 import { createTranscriptionTaskIfNeeded } from './video-captions.js'
 import { moveFilesIfPrivacyChanged } from './video-privacy.js'
@@ -106,7 +106,7 @@ export async function addVideoJobsAfterCreation (options: {
 }) {
   const { video, videoFile, generateTranscription } = options
 
-  const jobs: (CreateJobArgument & CreateJobOptions)[] = [
+  const jobs: (CreateJobTypeAndPayload & CreateJobOptions)[] = [
     {
       type: 'manage-video-torrent' as 'manage-video-torrent',
       payload: {
@@ -178,7 +178,7 @@ export async function addVideoJobsAfterUpdate (options: {
   oldPrivacy: VideoPrivacyType
 }) {
   const { video, nameChanged, oldPrivacy, isNewVideoForFederation } = options
-  const jobs: CreateJobArgument[] = []
+  const jobs: CreateJobTypeAndPayload[] = []
 
   const filePathChanged = await moveFilesIfPrivacyChanged(video, oldPrivacy)
   const hls = video.getHLSPlaylist()

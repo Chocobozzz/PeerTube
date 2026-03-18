@@ -54,54 +54,57 @@ export function getTagsFromObject (videoObject: VideoObject) {
 
 export function getFileAttributesFromUrl (
   videoOrPlaylist: MVideo | MStreamingPlaylistVideo,
-  urls: (ActivityTagObject | ActivityUrlObject)[]
+  urls: (ActivityTagObject | ActivityUrlObject)[],
+  oldFiles: MVideoFile[]
 ) {
-  const fileUrls = urls.filter(u => isAPVideoUrlObject(u))
-  if (fileUrls.length === 0) return []
+  const fileUrlObjects = urls.filter(u => isAPVideoUrlObject(u))
+  if (fileUrlObjects.length === 0) return []
 
   const attributes: FilteredModelAttributes<VideoFileModel>[] = []
-  for (const fileUrl of fileUrls) {
+  for (const fileUrlObject of fileUrlObjects) {
     // Fetch associated metadata url, if any
     const metadata = urls.filter(isAPVideoFileUrlMetadataObject)
       .find(u => {
-        return u.height === fileUrl.height &&
-          u.fps === fileUrl.fps &&
-          u.rel.includes(fileUrl.mediaType)
+        return u.height === fileUrlObject.height &&
+          u.fps === fileUrlObject.fps &&
+          u.rel.includes(fileUrlObject.mediaType)
       })
 
-    const extname = getExtFromMimetype(MIMETYPES.VIDEO.MIMETYPE_EXT, fileUrl.mediaType)
-    const resolution = fileUrl.height
+    const extname = getExtFromMimetype(MIMETYPES.VIDEO.MIMETYPE_EXT, fileUrlObject.mediaType)
+    const resolution = fileUrlObject.height
 
     const [ videoId, videoStreamingPlaylistId ] = isStreamingPlaylist(videoOrPlaylist)
       ? [ null, videoOrPlaylist.id ]
       : [ videoOrPlaylist.id, null ]
 
-    const { torrentFilename, infoHash, torrentUrl } = getTorrentRelatedInfo({ videoOrPlaylist, urls, fileUrl })
+    const fileUrl = fileUrlObject.href
+    const existingFile = oldFiles.find(f => f.fileUrl === fileUrl)
+    const { torrentFilename, infoHash, torrentUrl } = getTorrentRelatedInfo({ videoOrPlaylist, urls, fileUrlObject, existingFile })
 
     const attribute: Partial<AttributesOnly<MVideoFile>> = {
       extname,
       resolution,
 
-      size: fileUrl.size,
-      fps: exists(fileUrl.fps) && fileUrl.fps >= 0
-        ? fileUrl.fps
+      size: fileUrlObject.size,
+      fps: exists(fileUrlObject.fps) && fileUrlObject.fps >= 0
+        ? fileUrlObject.fps
         : -1,
 
       metadataUrl: metadata?.href,
 
-      width: fileUrl.width,
-      height: fileUrl.height,
+      width: fileUrlObject.width,
+      height: fileUrlObject.height,
 
       // Use the name of the remote file because we don't proxify video file requests
-      filename: basename(fileUrl.href),
-      fileUrl: fileUrl.href,
+      filename: basename(fileUrl),
+      fileUrl,
 
       infoHash,
       torrentFilename,
       torrentUrl,
 
-      formatFlags: buildFileFormatFlags(fileUrl, isStreamingPlaylist(videoOrPlaylist)),
-      streams: buildFileStreams(fileUrl, resolution),
+      formatFlags: buildFileFormatFlags(fileUrlObject, isStreamingPlaylist(videoOrPlaylist)),
+      streams: buildFileStreams(fileUrlObject, resolution),
 
       // This is a video file owned by a video or by a streaming playlist
       videoId,
@@ -349,13 +352,14 @@ function isAPSensitiveTagObject (tag: any): tag is ActivitySensitiveTagObject {
 function getTorrentRelatedInfo (options: {
   videoOrPlaylist: MVideo | MStreamingPlaylistVideo
   urls: (ActivityTagObject | ActivityUrlObject)[]
-  fileUrl: ActivityVideoUrlObject
+  fileUrlObject: ActivityVideoUrlObject
+  existingFile?: MVideoFile
 }) {
-  const { urls, fileUrl, videoOrPlaylist } = options
+  const { urls, fileUrlObject, videoOrPlaylist, existingFile } = options
 
   // Fetch associated magnet uri
   const magnet = urls.filter(isAPMagnetUrlObject)
-    .find(u => u.height === fileUrl.height)
+    .find(u => u.height === fileUrlObject.height)
 
   if (!magnet) {
     return {
@@ -378,7 +382,7 @@ function getTorrentRelatedInfo (options: {
     torrentUrl,
 
     // Use our own torrent name since we proxify torrent requests
-    torrentFilename: generateTorrentFileName(videoOrPlaylist, fileUrl.height),
+    torrentFilename: existingFile?.torrentFilename ?? generateTorrentFileName(videoOrPlaylist, fileUrlObject.height),
 
     infoHash: magnetParsed.infoHash
   }

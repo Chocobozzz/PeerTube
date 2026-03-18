@@ -149,8 +149,13 @@ describe('Test videos API validator', function () {
       await makeGetRequest({ url: server.url, path, query: customQuery, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
+    it('Should fail with too many uuids', async function () {
+      const customQuery = { ...query, uuids: new Array(101).fill('dfd70b83-639f-4980-94af-304a56ab4b35') }
+      await makeGetRequest({ url: server.url, path, query: customQuery, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
     it('Should succeed with valid uuids', async function () {
-      const customQuery = { ...query, uuids: [ 'dfd70b83-639f-4980-94af-304a56ab4b35' ] }
+      const customQuery = { ...query, uuids: new Array(90).fill('dfd70b83-639f-4980-94af-304a56ab4b35') }
       await makeGetRequest({ url: server.url, path, query: customQuery, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
@@ -184,8 +189,18 @@ describe('Test videos API validator', function () {
       await makeGetRequest({ url: server.url, path, query: customQuery, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
+    it('Should fail with too many uuids', async function () {
+      const customQuery = { ...query, uuids: new Array(101).fill('dfd70b83-639f-4980-94af-304a56ab4b35') }
+      await makeGetRequest({ url: server.url, path, query: customQuery, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
     it('Should succeed with the correct parameters', async function () {
-      await makeGetRequest({ url: server.url, path, query, expectedStatus: HttpStatusCode.OK_200 })
+      await makeGetRequest({
+        url: server.url,
+        path,
+        query: { ...query, uuids: new Array(90).fill('dfd70b83-639f-4980-94af-304a56ab4b35') },
+        expectedStatus: HttpStatusCode.OK_200
+      })
     })
   })
 
@@ -217,8 +232,18 @@ describe('Test videos API validator', function () {
       await makeGetRequest({ url: server.url, path, query: { ...query, handles: [ '' ] }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
+    it('Should fail with too many handles', async function () {
+      const customQuery = { ...query, handles: new Array(101).fill('handle') }
+      await makeGetRequest({ url: server.url, path, query: customQuery, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
     it('Should succeed with the correct parameters', async function () {
-      await makeGetRequest({ url: server.url, path, query, expectedStatus: HttpStatusCode.OK_200 })
+      await makeGetRequest({
+        url: server.url,
+        path,
+        query: { ...query, handles: new Array(90).fill('handle') },
+        expectedStatus: HttpStatusCode.OK_200
+      })
     })
   })
 

@@ -110,13 +110,16 @@ export abstract class APVideoAbstractBuilder {
   }
 
   protected async insertOrReplaceStoryboard (video: MVideoFullLight, t: Transaction) {
+    const storyboardAttributes = getStoryboardAttributeFromObject(video, this.videoObject)
+
     const existingStoryboard = await StoryboardModel.loadByVideo(video.id, t)
+    if (existingStoryboard?.fileUrl === storyboardAttributes?.fileUrl) return
+
     if (existingStoryboard) await existingStoryboard.destroy({ transaction: t })
 
-    const storyboardAttributes = getStoryboardAttributeFromObject(video, this.videoObject)
-    if (!storyboardAttributes) return
-
-    return StoryboardModel.create(storyboardAttributes, { transaction: t })
+    if (storyboardAttributes) {
+      await StoryboardModel.create(storyboardAttributes, { transaction: t })
+    }
   }
 
   protected async insertOrReplaceLive (video: MVideoFullLight, transaction: Transaction) {
@@ -134,11 +137,12 @@ export abstract class APVideoAbstractBuilder {
   }
 
   protected async setWebVideoFiles (video: MVideoFullLight, t: Transaction) {
-    const videoFileAttributes = getFileAttributesFromUrl(video, this.videoObject.url)
-    const newVideoFiles = videoFileAttributes.map(a => new VideoFileModel(a))
+    const oldFiles = video.VideoFiles || []
+
+    const newVideoFiles = getFileAttributesFromUrl(video, this.videoObject.url, oldFiles).map(a => new VideoFileModel(a))
 
     // Remove video files that do not exist anymore
-    await deleteAllModels(filterNonExistingModels(video.VideoFiles || [], newVideoFiles), t)
+    await deleteAllModels(filterNonExistingModels(oldFiles, newVideoFiles), t)
 
     // Update or add other one
     const upsertTasks = newVideoFiles.map(f => VideoFileModel.customUpsert(f, 'video', t))
@@ -217,7 +221,11 @@ export abstract class APVideoAbstractBuilder {
   ) {
     const oldStreamingPlaylistFiles = this.getStreamingPlaylistFiles(oldPlaylists || [], playlistModel.type)
 
-    const newVideoFiles: MVideoFile[] = getFileAttributesFromUrl(playlistModel, tagObjects).map(a => new VideoFileModel(a))
+    const newVideoFiles: MVideoFile[] = getFileAttributesFromUrl(
+      playlistModel,
+      tagObjects,
+      oldStreamingPlaylistFiles
+    ).map(a => new VideoFileModel(a))
 
     await deleteAllModels(filterNonExistingModels(oldStreamingPlaylistFiles, newVideoFiles), t)
 

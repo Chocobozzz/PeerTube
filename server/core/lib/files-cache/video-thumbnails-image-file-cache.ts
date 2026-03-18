@@ -2,7 +2,7 @@ import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { ThumbnailModel } from '@server/models/video/thumbnail.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MThumbnail } from '@server/types/models/index.js'
-import { JobQueue } from '../job-queue/job-queue.js'
+import { scheduleVideoRefreshIfNeeded } from '../activitypub/videos/refresh.js'
 import { AbstractImageFileCache } from './shared/abstract-image-file-cache.js'
 
 const lTags = loggerTagsFactory('lazy-load', 'video-thumbnails')
@@ -24,7 +24,7 @@ export class VideoThumbnailsImageFileCache extends AbstractImageFileCache<MThumb
     try {
       const video = await VideoModel.load(model.videoId)
 
-      JobQueue.Instance.createJobAsync({ type: 'activitypub-refresher', payload: { type: 'video', url: video.url } })
+      scheduleVideoRefreshIfNeeded(video)
     } catch (err) {
       logger.error('Error while refreshing video for lazy fetch', { ...lTags(), err })
     }

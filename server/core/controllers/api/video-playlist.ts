@@ -13,7 +13,7 @@ import {
   VideoPlaylistUpdate
 } from '@peertube/peertube-models'
 import { uuidToShort } from '@peertube/peertube-node-utils'
-import { scheduleRefreshIfNeeded } from '@server/lib/activitypub/playlists/index.js'
+import { schedulePlaylistRefreshIfNeeded } from '@server/lib/activitypub/playlists/index.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import {
   generateThumbnailForPlaylist,
@@ -170,7 +170,7 @@ async function listVideoPlaylists (req: express.Request, res: express.Response) 
 function getVideoPlaylist (req: express.Request, res: express.Response) {
   const videoPlaylist = res.locals.videoPlaylistSummary
 
-  scheduleRefreshIfNeeded(videoPlaylist)
+  schedulePlaylistRefreshIfNeeded(videoPlaylist)
 
   return res.json(videoPlaylist.toFormattedJSON())
 }

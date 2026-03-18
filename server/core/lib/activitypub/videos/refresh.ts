@@ -1,14 +1,25 @@
+import { HttpStatusCode } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { PeerTubeRequestError } from '@server/helpers/requests.js'
+import { JobQueue } from '@server/lib/job-queue/job-queue.js'
 import { VideoLoadByUrlType } from '@server/lib/model-loaders/index.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MVideoAccountLightBlacklistAllFiles, MVideoThumbnail } from '@server/types/models/index.js'
-import { HttpStatusCode } from '@peertube/peertube-models'
+import { MVideo, MVideoFullLight, MVideoThumbnail } from '@server/types/models/index.js'
 import { ActorFollowHealthCache } from '../../actor-follow-health-cache.js'
 import { fetchRemoteVideo, SyncParam, syncVideoExternalAttributes } from './shared/index.js'
 import { APVideoUpdater } from './updater.js'
 
-async function refreshVideoIfNeeded (options: {
+export function scheduleVideoRefreshIfNeeded (video: MVideo) {
+  if (!video.isOutdated()) return
+
+  JobQueue.Instance.createJobAsync({
+    type: 'activitypub-refresher',
+    deduplicationId: `video-refresh-${video.url}`,
+    payload: { type: 'video', url: video.url }
+  })
+}
+
+export async function refreshVideoIfNeeded (options: {
   video: MVideoThumbnail
   fetchedType: VideoLoadByUrlType
   syncParam: SyncParam
@@ -17,7 +28,7 @@ async function refreshVideoIfNeeded (options: {
 
   // We need more attributes if the argument video was fetched with not enough joints
   const video = options.fetchedType === 'all'
-    ? options.video as MVideoAccountLightBlacklistAllFiles
+    ? options.video as MVideoFullLight
     : await VideoModel.loadByUrlAndPopulateAccountAndFiles(options.video.url)
 
   const lTags = loggerTagsFactory('ap', 'video', 'refresh', video.uuid, video.url)
@@ -61,10 +72,4 @@ async function refreshVideoIfNeeded (options: {
     await video.setAsRefreshed()
     return video
   }
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  refreshVideoIfNeeded
 }

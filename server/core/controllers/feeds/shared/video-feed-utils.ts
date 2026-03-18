@@ -46,6 +46,9 @@ export async function getVideosForFeeds (options: {
 export function getCommonVideoFeedAttributes (video: VideoModel) {
   const localLink = WEBSERVER.URL + video.getWatchStaticPath()
 
+  let thumbnails = video.filterThumbnails('1:1')
+  if (thumbnails.length === 0) thumbnails = video.filterThumbnails('16:9')
+
   return {
     title: video.name,
     link: localLink,
@@ -59,7 +62,7 @@ export function getCommonVideoFeedAttributes (video: VideoModel) {
       ? [ { name: getCategoryLabel(video.category) } ]
       : undefined,
 
-    thumbnails: video.filterThumbnails('1:1').map(t => ({
+    thumbnails: thumbnails.map(t => ({
       url: WEBSERVER.URL + t.getFileStaticPath(),
       width: t.width,
       height: t.height

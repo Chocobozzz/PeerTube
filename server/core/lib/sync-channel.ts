@@ -6,7 +6,7 @@ import { buildYoutubeDLImport } from '@server/lib/video-pre-import.js'
 import { UserModel } from '@server/models/user/user.js'
 import { VideoImportModel } from '@server/models/video/video-import.js'
 import { MChannelAccountDefault, MChannelSync } from '@server/types/models/index.js'
-import { CreateJobArgument, JobQueue } from './job-queue/index.js'
+import { CreateJobTypeAndPayload, JobQueue } from './job-queue/index.js'
 import { ServerConfigManager } from './server-config-manager.js'
 import { buildRetryImportJob } from './video-post-import.js'
 import { getLeastPrivatePrivacy } from './video.js'
@@ -49,7 +49,7 @@ export async function synchronizeChannel (options: {
       { targetUrls, ...lTags() }
     )
 
-    const children: CreateJobArgument[] = []
+    const children: CreateJobTypeAndPayload[] = []
 
     let buildJobErrors = 0
 
@@ -108,7 +108,7 @@ export async function synchronizeChannel (options: {
     }
 
     // Will update the channel sync status
-    const parent: CreateJobArgument = {
+    const parent: CreateJobTypeAndPayload = {
       type: 'after-video-channel-import',
       payload: {
         channelSyncId: channelSync?.id,

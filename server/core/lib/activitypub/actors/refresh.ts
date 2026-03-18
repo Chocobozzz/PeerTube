@@ -2,9 +2,10 @@ import { HttpStatusCode } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CachePromiseFactory } from '@server/helpers/promise-cache.js'
 import { PeerTubeRequestError } from '@server/helpers/requests.js'
+import { JobQueue } from '@server/lib/job-queue/job-queue.js'
 import { ActorLoadByUrlType } from '@server/lib/model-loaders/index.js'
 import { ActorModel } from '@server/models/actor/actor.js'
-import { MActorFull, MActorOutdated } from '@server/types/models/index.js'
+import { MActorFull, MActorOutdated, MActorUrl } from '@server/types/models/index.js'
 import { fetchRemoteActor } from './shared/index.js'
 import { APActorUpdater } from './updater.js'
 import { getUrlFromWebfinger } from './webfinger.js'
@@ -16,20 +17,28 @@ type RefreshOptions<T> = {
   fetchedType: Extract<ActorLoadByUrlType, 'all'> | 'partial'
 }
 
+// ---------------------------------------------------------------------------
+
 const promiseCache = new CachePromiseFactory(
   doRefresh,
   (options: RefreshOptions<MActorFull | MActorOutdated>) => options.actor.id + ''
 )
 
-function refreshActorIfNeeded<T extends MActorFull | MActorOutdated> (options: RefreshOptions<T>): RefreshResult<T> {
+export function refreshActorIfNeeded<T extends MActorFull | MActorOutdated> (options: RefreshOptions<T>): RefreshResult<T> {
   const actorArg = options.actor
   if (!actorArg.isOutdated()) return Promise.resolve({ actor: actorArg, refreshed: false })
 
   return promiseCache.run(options)
 }
 
-export {
-  refreshActorIfNeeded
+export function scheduleActorRefreshIfNeeded (actor: MActorOutdated & MActorUrl) {
+  if (!actor.isOutdated()) return
+
+  JobQueue.Instance.createJobAsync({
+    type: 'activitypub-refresher',
+    payload: { type: 'actor', url: actor.url },
+    deduplicationId: `refresh-actor-${actor.url}`
+  })
 }
 
 // ---------------------------------------------------------------------------
