@@ -3,7 +3,6 @@ import { UploadFilesForCheck } from 'express'
 import 'multer'
 import { sep } from 'path'
 import validator from 'validator'
-import { logger } from '../logger.js'
 
 export function exists (value: any) {
   return value !== undefined && value !== null
