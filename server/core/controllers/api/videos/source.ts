@@ -1,7 +1,7 @@
 import { buildAspectRatio } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoChannelActivityAction, VideoState } from '@peertube/peertube-models'
 import { sequelizeTypescript } from '@server/initializers/database.js'
-import { CreateJobArgument, CreateJobOptions, JobQueue } from '@server/lib/job-queue/index.js'
+import { CreateJobTypeAndPayload, CreateJobOptions, JobQueue } from '@server/lib/job-queue/index.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { regenerateLocalVideoThumbnailsFromVideoIfNeeded } from '@server/lib/thumbnail.js'
 import { setupUploadResumableRoutes } from '@server/lib/uploadx.js'
@@ -178,7 +178,7 @@ async function replaceVideoSourceResumable (req: express.Request, res: express.R
 }
 
 async function addVideoJobsAfterUpload (video: MVideoFullLight, videoFile: MVideoFile) {
-  const jobs: (CreateJobArgument & CreateJobOptions)[] = [
+  const jobs: (CreateJobTypeAndPayload & CreateJobOptions)[] = [
     {
       type: 'manage-video-torrent' as const,
       payload: {

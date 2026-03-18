@@ -1,8 +1,7 @@
 import { APObjectId } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { logger } from '@server/helpers/logger.js'
-import { JobQueue } from '@server/lib/job-queue/index.js'
-import { loadVideoByUrl, VideoLoadByUrlType } from '@server/lib/model-loaders/index.js'
+import { loadVideoByUrl } from '@server/lib/model-loaders/index.js'
 import {
   MVideoAccountLightBlacklistAllFiles,
   MVideoImmutable,
@@ -10,10 +9,10 @@ import {
   MVideoThumbnailBlacklist
 } from '@server/types/models/index.js'
 import { getAPId } from '../activity.js'
-import { refreshVideoIfNeeded } from './refresh.js'
+import { refreshVideoIfNeeded, scheduleVideoRefreshIfNeeded } from './refresh.js'
 import { APVideoCreator, fetchRemoteVideo, SyncParam, syncVideoExternalAttributes } from './shared/index.js'
 
-type GetVideoResult <T> = Promise<{
+type GetVideoResult<T> = Promise<{
   video: T
   created: boolean
   autoBlacklisted?: boolean
@@ -55,12 +54,22 @@ export async function getOrCreateAPVideo (
 
   // Get video url
   const videoUrl = getAPId(options.videoObject)
-  let videoFromDatabase = await loadVideoByUrl(videoUrl, fetchType)
+  const videoFromDatabase = await loadVideoByUrl(videoUrl, fetchType)
 
   if (videoFromDatabase) {
-    if (allowRefresh === true) {
-      // Typings ensure allowRefresh === false in unsafe-only-immutable-attributes fetch type
-      videoFromDatabase = await scheduleRefresh(videoFromDatabase as MVideoThumbnail, fetchType, syncParam)
+    // We know that allowRefresh === false on `unsafe-only-immutable-attributes` fetch type because of type definitions
+    let video = videoFromDatabase as MVideoThumbnail
+
+    if (allowRefresh === true && video.isOutdated()) {
+      if (syncParam.refreshVideo === true) {
+        video = await refreshVideoIfNeeded({
+          video,
+          fetchedType: fetchType,
+          syncParam
+        })
+      } else {
+        scheduleVideoRefreshIfNeeded(video)
+      }
     }
 
     return { video: videoFromDatabase, created: false }
@@ -106,29 +115,4 @@ export async function maybeGetOrCreateAPVideo (options: GetVideoParamAll | GetVi
     logger.debug('Cannot fetch remote video ' + options.videoObject + ': maybe not a video object?', { err })
     return { video: undefined, created: false }
   }
-}
-
-// ---------------------------------------------------------------------------
-// Private
-// ---------------------------------------------------------------------------
-
-async function scheduleRefresh (video: MVideoThumbnail, fetchType: VideoLoadByUrlType, syncParam: SyncParam) {
-  if (!video.isOutdated()) return video
-
-  const refreshOptions = {
-    video,
-    fetchedType: fetchType,
-    syncParam
-  }
-
-  if (syncParam.refreshVideo === true) {
-    return refreshVideoIfNeeded(refreshOptions)
-  }
-
-  await JobQueue.Instance.createJob({
-    type: 'activitypub-refresher',
-    payload: { type: 'video', url: video.url }
-  })
-
-  return video
 }

@@ -1,12 +1,12 @@
 import { VideoPlaylistForAccountListQuery } from '@peertube/peertube-models'
 import { pickCommonVideoQuery } from '@server/helpers/query.js'
+import { scheduleActorRefreshIfNeeded } from '@server/lib/activitypub/actors/refresh.js'
 import { ActorFollowModel } from '@server/models/actor/actor-follow.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync.js'
 import express from 'express'
 import { buildNSFWFilters, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils.js'
 import { getFormattedObjects } from '../../helpers/utils.js'
-import { JobQueue } from '../../lib/job-queue/index.js'
 import { Hooks } from '../../lib/plugins/hooks.js'
 import {
   apiRateLimiter,
@@ -146,9 +146,7 @@ export {
 function getAccount (req: express.Request, res: express.Response) {
   const account = res.locals.account
 
-  if (account.isOutdated()) {
-    JobQueue.Instance.createJobAsync({ type: 'activitypub-refresher', payload: { type: 'actor', url: account.Actor.url } })
-  }
+  scheduleActorRefreshIfNeeded(account.Actor)
 
   return res.json(account.toFormattedJSON())
 }
