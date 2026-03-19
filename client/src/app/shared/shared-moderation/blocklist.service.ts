@@ -150,11 +150,15 @@ export class BlocklistService {
       .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  blockServerByInstance (host: string) {
-    const body = { host }
+  blockServerByInstance (hostsArg: string | string[]) {
+    const hosts = arrayify(hostsArg)
 
-    return this.authHttp.post(BlocklistService.BASE_SERVER_BLOCKLIST_URL + '/servers', body)
-      .pipe(catchError(err => this.restExtractor.handleError(err)))
+    return from(hosts)
+      .pipe(
+        concatMap(host => this.authHttp.post(BlocklistService.BASE_SERVER_BLOCKLIST_URL + '/servers', { host })),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   unblockServerByInstance (host: string) {

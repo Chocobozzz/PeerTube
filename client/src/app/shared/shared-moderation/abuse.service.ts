@@ -12,10 +12,11 @@ import {
   ResultList,
   UserAbuse
 } from '@peertube/peertube-models'
+import { arrayify } from '@peertube/peertube-core-utils'
 import { omit } from 'lodash-es'
 import { SortMeta } from 'primeng/api'
-import { Observable } from 'rxjs'
-import { catchError } from 'rxjs/operators'
+import { Observable, from } from 'rxjs'
+import { catchError, concatMap, toArray } from 'rxjs/operators'
 import { environment } from '../../../environments/environment'
 
 @Injectable()
@@ -85,18 +86,26 @@ export class AbuseService {
       .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
-  updateAbuse (abuse: AdminAbuse, abuseUpdate: AbuseUpdate) {
-    const url = AbuseService.BASE_ABUSE_URL + '/' + abuse.id
+  updateAbuse (abuseArg: AdminAbuse | AdminAbuse[], abuseUpdate: AbuseUpdate) {
+    const abuses = arrayify(abuseArg)
 
-    return this.authHttp.put(url, abuseUpdate)
-      .pipe(catchError(res => this.restExtractor.handleError(res)))
+    return from(abuses)
+      .pipe(
+        concatMap(abuse => this.authHttp.put(AbuseService.BASE_ABUSE_URL + '/' + abuse.id, abuseUpdate)),
+        toArray(),
+        catchError(res => this.restExtractor.handleError(res))
+      )
   }
 
-  removeAbuse (abuse: AdminAbuse) {
-    const url = AbuseService.BASE_ABUSE_URL + '/' + abuse.id
+  removeAbuse (abuseArg: AdminAbuse | AdminAbuse[]) {
+    const abuses = arrayify(abuseArg)
 
-    return this.authHttp.delete(url)
-      .pipe(catchError(res => this.restExtractor.handleError(res)))
+    return from(abuses)
+      .pipe(
+        concatMap(abuse => this.authHttp.delete(AbuseService.BASE_ABUSE_URL + '/' + abuse.id)),
+        toArray(),
+        catchError(res => this.restExtractor.handleError(res))
+      )
   }
 
   addAbuseMessage (abuse: UserAbuse, message: string) {
