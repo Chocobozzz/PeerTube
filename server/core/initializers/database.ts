@@ -125,7 +125,7 @@ export const sequelizeTypescript = new SequelizeTypescript({
     if (process.env.NODE_DB_LOG === 'false') return
 
     let newMessage = 'Executed SQL request'
-    if (executionTimeMs !== undefined) {
+    if (isTestOrDevInstance() && executionTimeMs !== undefined) {
       newMessage += ' in ' + executionTimeMs + 'ms'
     }
 
