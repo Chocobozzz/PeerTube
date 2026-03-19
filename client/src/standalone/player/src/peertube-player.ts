@@ -30,6 +30,7 @@ import './shared/nsfw/peertube-nsfw-plugin'
 import './shared/p2p-media-loader/hls-plugin'
 import './shared/p2p-media-loader/p2p-media-loader-plugin'
 import './shared/peertube/peertube-plugin'
+import './shared/video-filter/video-flip-horizontally-plugin'
 import { ControlBarOptionsBuilder, HLSOptionsBuilder, WebVideoOptionsBuilder } from './shared/player-options-builder'
 import './shared/playlist/playlist-plugin'
 import './shared/resolutions/peertube-resolutions-plugin'
@@ -306,6 +307,8 @@ export class PeerTubePlayer {
         liveDvrEnabled: this.currentLoadOptions.liveOptions?.dvrEnabled === true
       })
     }
+
+    this.player.videoFlipHorizontallyPlugin()
 
     if (this.currentLoadOptions.playlist) {
       this.player.playlist(this.currentLoadOptions.playlist)
