@@ -8,7 +8,7 @@ import {
   UserRegistrationState,
   UserRight
 } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
+import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { InboxManager } from '@server/lib/activitypub/inbox-manager.js'
@@ -22,6 +22,8 @@ import { VideoStatsBufferScheduler } from '@server/lib/schedulers/video-stats-bu
 import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
 import express from 'express'
 import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../../middlewares/index.js'
+
+const lTags = loggerTagsFactory('debug-controller')
 
 const debugRouter = express.Router()
 
@@ -71,6 +73,8 @@ async function runCommand (req: express.Request, res: express.Response) {
   if (!processors[body.command]) {
     return res.fail({ message: 'Invalid command' })
   }
+
+  logger.info('Executing debug command: ' + body.command, lTags())
 
   await processors[body.command]()
 
