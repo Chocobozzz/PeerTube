@@ -89,6 +89,17 @@ export class UserListComponent implements OnInit, OnDestroy {
         { value: true, label: $localize`Banned` },
         { value: false, label: $localize`Not banned` }
       ]
+    },
+    {
+      type: 'options',
+      key: 'role',
+      title: $localize`Role`,
+      options: [
+        { value: 'all', label: $localize`All` },
+        { value: UserRole.ADMINISTRATOR, label: $localize`Administrator` },
+        { value: UserRole.MODERATOR, label: $localize`Moderator` },
+        { value: UserRole.USER, label: $localize`User` }
+      ]
     }
   ]
 
@@ -290,7 +301,12 @@ export class UserListComponent implements OnInit, OnDestroy {
       })
   }
 
-  private _dataLoader (options: DataLoaderOptionsBase & { blocked?: boolean }) {
+  private _dataLoader (
+    options: DataLoaderOptionsBase & {
+      blocked?: boolean
+      role?: UserRoleType
+    }
+  ) {
     return this.userAdminService.listUsers(options)
       .pipe(
         switchMap(result => {

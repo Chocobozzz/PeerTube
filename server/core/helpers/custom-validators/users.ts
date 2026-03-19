@@ -106,7 +106,7 @@ export function isUserBlockedReasonValid (value: any) {
 export function isUserRoleValid (value: any) {
   return exists(value) &&
     validator.default.isInt('' + value) &&
-    [ UserRole.ADMINISTRATOR, UserRole.MODERATOR, UserRole.USER ].includes(value)
+    [ UserRole.ADMINISTRATOR, UserRole.MODERATOR, UserRole.USER ].includes(+value as any)
 }
 
 export function isUserFeatureInfo (value: string) {

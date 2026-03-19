@@ -178,6 +178,22 @@ describe('Test users', function () {
         expect(data[1].username).to.equal('user_1')
       }
     })
+
+    it('Should filter users by role', async function () {
+      {
+        const { total, data } = await server.users.list({ role: UserRole.ADMINISTRATOR })
+        expect(total).to.equal(1)
+        expect(data.length).to.equal(1)
+        expect(data[0].username).to.equal('root')
+      }
+
+      {
+        const { total, data } = await server.users.list({ role: UserRole.USER })
+        expect(total).to.equal(1)
+        expect(data.length).to.equal(1)
+        expect(data[0].username).to.equal('user_1')
+      }
+    })
   })
 
   describe('Update my account', function () {

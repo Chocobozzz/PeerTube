@@ -1452,6 +1452,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/usersSearch'
         - $ref: '#/components/parameters/usersBlocked'
+        - $ref: '#/components/parameters/usersRole'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/usersSort'
@@ -8191,6 +8192,13 @@ components:
       description: Filter results down to (un)banned users
       schema:
         type: boolean
+    usersRole:
+      name: role
+      in: query
+      required: false
+      description: Filter results down to users with a specific role
+      schema:
+        $ref: '#/components/schemas/UserRole'
     usersSort:
       name: sort
       in: query

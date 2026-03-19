@@ -56,14 +56,16 @@ export class UserAdminService {
     sort: SortMeta
     search?: string
     blocked?: boolean
+    role?: UserRoleType
   }) {
-    const { pagination, sort, search, blocked } = parameters
+    const { pagination, sort, search, blocked, role } = parameters
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
     if (search) params = params.append('search', search)
     if (blocked !== undefined) params = params.append('blocked', blocked.toString())
+    if (role !== undefined) params = params.append('role', role.toString())
 
     return this.authHttp.get<ResultList<UserServerModel>>(UserService.BASE_USERS_URL, { params })
       .pipe(
