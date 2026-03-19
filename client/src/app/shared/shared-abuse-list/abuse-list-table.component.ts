@@ -412,7 +412,7 @@ export class AbuseListTableComponent implements OnInit, OnDestroy {
         label: $localize`Block video`,
         isDisplayed: abuse => abuse.video && !abuse.video.deleted && !abuse.video.blacklisted,
         handler: abuse => {
-          this.videoBlocklistService.blockVideo([ { videoId: abuse.video.id, unfederate: abuse.video.channel.isLocal } ])
+          this.videoBlocklistService.blockVideos([ { videoId: abuse.video.id, unfederate: abuse.video.channel.isLocal } ])
             .subscribe({
               next: () => {
                 this.notifier.success($localize`Video blocked.`)
@@ -428,7 +428,7 @@ export class AbuseListTableComponent implements OnInit, OnDestroy {
         label: $localize`Unblock video`,
         isDisplayed: abuse => abuse.video && !abuse.video.deleted && abuse.video.blacklisted,
         handler: abuse => {
-          this.videoBlocklistService.unblockVideo(abuse.video.id)
+          this.videoBlocklistService.unblockVideos(abuse.video.id)
             .subscribe({
               next: () => {
                 this.notifier.success($localize`Video unblocked.`)

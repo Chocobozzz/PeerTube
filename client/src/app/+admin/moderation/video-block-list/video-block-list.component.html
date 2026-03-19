@@ -7,6 +7,7 @@
   [dataLoader]="dataLoader"
   columnConfig="false"
   [inputFilters]="inputFilters"
+  [bulkActions]="bulkActions"
   searchInput="true"
   >
   <ng-template #totalTitle let-totalRecords>
@@ -22,6 +23,10 @@
           }
         </div>
       </my-video-cell>
+    </td>
+
+    <td>
+      <my-privacy-badge [video]="videoBlock.video"></my-privacy-badge>
     </td>
 
     <td>

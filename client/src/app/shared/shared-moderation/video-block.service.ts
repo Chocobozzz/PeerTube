@@ -34,7 +34,7 @@ export class VideoBlockService {
       .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
-  unblockVideo (videoIdArgs: number | number[]) {
+  unblockVideos (videoIdArgs: number | number[]) {
     const videoIds = arrayify(videoIdArgs)
 
     return observableFrom(videoIds)
@@ -45,7 +45,7 @@ export class VideoBlockService {
       )
   }
 
-  blockVideo (options: {
+  blockVideos (options: {
     videoId: number
     reason?: string
     unfederate: boolean

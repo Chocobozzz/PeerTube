@@ -405,7 +405,7 @@ export class VideoListComponent implements OnInit {
   }
 
   private unblockVideos (videos: Video[]) {
-    this.videoBlockService.unblockVideo(videos.map(v => v.id))
+    this.videoBlockService.unblockVideos(videos.map(v => v.id))
       .subscribe({
         next: () => {
           this.notifier.success(

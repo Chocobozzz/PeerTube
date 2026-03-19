@@ -17,7 +17,7 @@ import { logger, loggerTagsFactory } from '../helpers/logger.js'
 import { CONFIG } from '../initializers/config.js'
 import { VideoBlacklistModel } from '../models/video/video-blacklist.js'
 import { sendDeleteVideo } from './activitypub/send/index.js'
-import { federateVideoIfNeeded } from './activitypub/videos/index.js'
+import { federateVideoIfNeeded, isPrivacyForFederation } from './activitypub/videos/index.js'
 import { LiveManager } from './live/live-manager.js'
 import { Notifier } from './notifier/index.js'
 import { Hooks } from './plugins/hooks.js'
@@ -79,7 +79,7 @@ export async function blacklistVideo (videoInstance: MVideoAccountLight, options
   })
   blacklist.Video = videoInstance
 
-  if (options.unfederate === true) {
+  if (options.unfederate === true && videoInstance.isLocal() && isPrivacyForFederation(videoInstance.privacy)) {
     await sendDeleteVideo({ video: videoInstance, transaction: undefined })
   }
 

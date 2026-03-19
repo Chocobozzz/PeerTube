@@ -1,8 +1,10 @@
 import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { ConfirmService, MarkdownService, Notifier, ServerService } from '@app/core'
+import { formatICU } from '@app/helpers'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
+import { PrivacyBadgeComponent } from '@app/shared/shared-video/privacy-badge.component'
 import { buildVideoEmbedLink, decorateVideoLink } from '@peertube/peertube-core-utils'
 import { ResultList, VideoBlacklist as VideoBlacklistServer, VideoBlacklistType, VideoBlacklistType_Type } from '@peertube/peertube-models'
 import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
@@ -30,7 +32,8 @@ type VideoBlacklist = VideoBlacklistServer & { reasonHtml?: string }
     PTDatePipe,
     VideoNSFWBadgeComponent,
     TableComponent,
-    NumberFormatterPipe
+    NumberFormatterPipe,
+    PrivacyBadgeComponent
   ]
 })
 export class VideoBlockListComponent implements OnInit {
@@ -46,6 +49,7 @@ export class VideoBlockListComponent implements OnInit {
   blocklistTypeFilter: VideoBlacklistType_Type
 
   videoBlocklistActions: DropdownAction<VideoBlacklist>[][] = []
+  bulkActions: DropdownAction<VideoBlacklist[]>[][] = []
 
   inputFilters: AdvancedFilterDef<DataLoaderParameter>[] = [
     {
@@ -62,6 +66,7 @@ export class VideoBlockListComponent implements OnInit {
 
   columns: TableColumnInfo<string>[] = [
     { id: 'name', label: $localize`Video`, sortable: true },
+    { id: 'privacy', label: $localize`Privacy`, sortable: false },
     { id: 'sensitive', label: $localize`Sensitive`, sortable: false },
     { id: 'unfederated', label: $localize`Unfederated`, sortable: false },
     { id: 'createdAt', label: $localize`Date`, sortable: true }
@@ -81,18 +86,7 @@ export class VideoBlockListComponent implements OnInit {
         },
         {
           label: $localize`Switch video block to manual`,
-          handler: videoBlock => {
-            this.videoBlocklistService.unblockVideo(videoBlock.video.id).pipe(
-              switchMap(_ => this.videoBlocklistService.blockVideo([ { videoId: videoBlock.video.id, unfederate: true } ]))
-            ).subscribe({
-              next: () => {
-                this.notifier.success($localize`Video ${videoBlock.video.name} switched to manual block.`)
-                this.table().loadData()
-              },
-
-              error: err => this.notifier.handleError(err)
-            })
-          },
+          handler: videoBlock => this.switchVideosBlockToManual([ videoBlock ]),
           isDisplayed: videoBlock => videoBlock.type === VideoBlacklistType.AUTO_BEFORE_PUBLISHED
         }
       ],
@@ -103,28 +97,41 @@ export class VideoBlockListComponent implements OnInit {
         },
         {
           label: $localize`Unblock`,
-          handler: videoBlock => this.unblockVideo(videoBlock)
+          handler: videoBlock => this.unblockVideos([ videoBlock ])
         },
 
         {
-          label: $localize`Delete`,
-          handler: async videoBlock => {
-            const res = await this.confirmService.confirm(
-              $localize`Do you really want to delete this video?`,
-              $localize`Delete`
-            )
-            if (res === false) return
+          label: $localize`Delete video`,
+          handler: videoBlock => this.deleteVideos([ videoBlock ])
+        }
+      ]
+    ]
 
-            this.videoService.removeVideo(videoBlock.video.id)
-              .subscribe({
-                next: () => {
-                  this.notifier.success($localize`Video deleted.`)
-                  this.table().loadData()
-                },
-
-                error: err => this.notifier.handleError(err)
-              })
-          }
+    this.bulkActions = [
+      [
+        {
+          label: $localize`Internal actions`,
+          isHeader: true,
+          isDisplayed: entries => entries.every(entry => entry.type === VideoBlacklistType.AUTO_BEFORE_PUBLISHED)
+        },
+        {
+          label: $localize`Switch videos block to manual`,
+          handler: entries => this.switchVideosBlockToManual(entries),
+          isDisplayed: entries => entries.every(entry => entry.type === VideoBlacklistType.AUTO_BEFORE_PUBLISHED)
+        }
+      ],
+      [
+        {
+          label: $localize`Actions for videos`,
+          isHeader: true
+        },
+        {
+          label: $localize`Unblock`,
+          handler: entries => this.unblockVideos(entries)
+        },
+        {
+          label: $localize`Delete video`,
+          handler: entries => this.deleteVideos(entries)
         }
       ]
     ]
@@ -149,10 +156,90 @@ export class VideoBlockListComponent implements OnInit {
     const res = await this.confirmService.confirm(confirmMessage, $localize`Unblock`)
     if (res === false) return
 
-    this.videoBlocklistService.unblockVideo(entry.video.id)
+    this.videoBlocklistService.unblockVideos([ entry.video.id ])
       .subscribe({
         next: () => {
           this.notifier.success($localize`Video ${entry.video.name} unblocked.`)
+          this.table().loadData()
+        },
+
+        error: err => this.notifier.handleError(err)
+      })
+  }
+
+  async unblockVideos (entries: VideoBlacklist[]) {
+    const confirmMessage = formatICU(
+      $localize`Do you really want to unblock {count, plural, =1 {this video?} other {these {count} videos?}}`,
+      { count: entries.length }
+    )
+
+    const res = await this.confirmService.confirm(confirmMessage, $localize`Unblock`)
+    if (res === false) return
+
+    this.videoBlocklistService.unblockVideos(entries.map(entry => entry.video.id))
+      .subscribe({
+        next: () => {
+          this.notifier.success(
+            formatICU(
+              $localize`{count, plural, =1 {Video unblocked.} other {{count} videos unblocked.}}`,
+              { count: entries.length }
+            )
+          )
+          this.table().loadData()
+        },
+
+        error: err => this.notifier.handleError(err)
+      })
+  }
+
+  async switchVideosBlockToManual (entries: VideoBlacklist[]) {
+    const res = await this.confirmService.confirm(
+      formatICU(
+        $localize`Switch {count, plural, =1 {this auto block to manual?} other {{count} auto blocks to manual?}}`,
+        { count: entries.length }
+      ),
+      $localize`Switch`
+    )
+    if (res === false) return
+
+    const videoIds = entries.map(entry => entry.video.id)
+
+    this.videoBlocklistService.unblockVideos(videoIds).pipe(
+      switchMap(() => this.videoBlocklistService.blockVideos(videoIds.map(videoId => ({ videoId, unfederate: true }))))
+    ).subscribe({
+      next: () => {
+        this.notifier.success(
+          formatICU(
+            $localize`{count, plural, =1 {Video switched to manual block.} other {{count} videos switched to manual block.}}`,
+            { count: entries.length }
+          )
+        )
+        this.table().loadData()
+      },
+
+      error: err => this.notifier.handleError(err)
+    })
+  }
+
+  async deleteVideos (entries: VideoBlacklist[]) {
+    const res = await this.confirmService.confirm(
+      formatICU(
+        $localize`Do you really want to delete {count, plural, =1 {this video?} other {{count} videos?}}`,
+        { count: entries.length }
+      ),
+      $localize`Delete`
+    )
+    if (res === false) return
+
+    this.videoService.removeVideo(entries.map(entry => entry.video.id))
+      .subscribe({
+        next: () => {
+          this.notifier.success(
+            formatICU(
+              $localize`{count, plural, =1 {Video deleted.} other {{count} videos deleted.}}`,
+              { count: entries.length }
+            )
+          )
           this.table().loadData()
         },
 
