@@ -1,5 +1,23 @@
 # Changelog
 
+## v8.1.3
+
+### IMPORTANT NOTES
+
+ * Follow v8.1.0 IMPORTANT NOTES if you upgrade from PeerTube <= v8.0.2
+
+### SECURITY
+
+ * Updates vulnerable dependencies
+
+### Bug fixes
+
+ * Fix error 500 in home page if there are many channels
+ * Prevent 500 error for podcast feed
+ * Re-fetch remote videos if the thumbnail if not found
+ * Handle non jpg remote thumbnails
+
+
 ## v8.1.2
 
 ### IMPORTANT NOTES
