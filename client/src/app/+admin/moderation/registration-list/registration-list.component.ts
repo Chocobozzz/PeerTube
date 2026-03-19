@@ -1,5 +1,4 @@
 import { Component, OnInit, inject, viewChild } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
 import { ConfirmService, MarkdownService, Notifier, ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
@@ -33,8 +32,6 @@ type ColumnName = 'account' | 'email' | 'channel' | 'registrationReason' | 'stat
   ]
 })
 export class RegistrationListComponent implements OnInit {
-  protected route = inject(ActivatedRoute)
-  protected router = inject(Router)
   private server = inject(ServerService)
   private notifier = inject(Notifier)
   private markdownRenderer = inject(MarkdownService)
@@ -45,7 +42,7 @@ export class RegistrationListComponent implements OnInit {
   readonly table = viewChild<TableComponent<UserRegistration, DataLoaderOptionsBase, ColumnName>>('table')
 
   registrationActions: DropdownAction<UserRegistration>[][] = []
-  bulkActions: DropdownAction<UserRegistration[]>[] = []
+  bulkActions: DropdownAction<UserRegistration[]>[][] = []
 
   requiresEmailVerification: boolean
 
@@ -85,10 +82,24 @@ export class RegistrationListComponent implements OnInit {
     ]
 
     this.bulkActions = [
-      {
-        label: $localize`Delete`,
-        handler: registrations => this.removeRegistrations(registrations)
-      }
+      [
+        {
+          label: $localize`Accept`,
+          handler: registrations => this.openRegistrationRequestProcessModal(registrations, 'accept'),
+          isDisplayed: registrations => registrations.every(registration => registration.state.id === UserRegistrationState.PENDING)
+        },
+        {
+          label: $localize`Reject`,
+          handler: registrations => this.openRegistrationRequestProcessModal(registrations, 'reject'),
+          isDisplayed: registrations => registrations.every(registration => registration.state.id === UserRegistrationState.PENDING)
+        }
+      ],
+      [
+        {
+          label: $localize`Delete`,
+          handler: registrations => this.removeRegistrations(registrations)
+        }
+      ]
     ]
   }
 
@@ -125,8 +136,8 @@ export class RegistrationListComponent implements OnInit {
       )
   }
 
-  private openRegistrationRequestProcessModal (registration: UserRegistration, mode: 'accept' | 'reject') {
-    this.processRegistrationModal().openModal(registration, mode)
+  private openRegistrationRequestProcessModal (registrations: UserRegistration | UserRegistration[], mode: 'accept' | 'reject') {
+    this.processRegistrationModal().openModal(registrations, mode)
   }
 
   private async removeRegistrations (registrations: UserRegistration[]) {

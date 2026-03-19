@@ -2,7 +2,6 @@ import { Component, inject, input, viewChild } from '@angular/core'
 import { Notifier } from '@app/core'
 import { BatchDomainsModalComponent } from '@app/shared/shared-moderation/batch-domains-modal.component'
 import { ServerBlock } from '@peertube/peertube-models'
-import { SearchInputComponent } from '../shared-forms/search-input.component'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { PTDatePipe } from '../shared-main/common/date.pipe'
 import { NumberFormatterPipe } from '../shared-main/common/number-formatter.pipe'
@@ -15,7 +14,6 @@ import { BlocklistComponentType, BlocklistService } from './blocklist.service'
   imports: [
     TableComponent,
     NumberFormatterPipe,
-    SearchInputComponent,
     PTDatePipe,
     GlobalIconComponent,
     BatchDomainsModalComponent
