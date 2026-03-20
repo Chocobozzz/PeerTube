@@ -1,7 +1,7 @@
 import debug from 'debug'
 import videojs from 'video.js'
 import { VideojsButton, VideojsComponent, VideojsComponentOptions, VideojsPlayer } from '../../types'
-import { toTitleCase } from '../common'
+import { isInIframe, toTitleCase } from '../common'
 import { MenuFocusFixed } from './menu-focus-fixed'
 import { SettingsDialog } from './settings-dialog'
 import { SettingsMenuItem } from './settings-menu-item'
@@ -104,7 +104,7 @@ class SettingsButton extends Button {
   dispose () {
     document.removeEventListener('click', this.documentClickHandler)
 
-    if (this.isInIframe()) {
+    if (isInIframe()) {
       window.removeEventListener('blur', this.documentClickHandler)
     }
 
@@ -127,7 +127,7 @@ class SettingsButton extends Button {
   bindEvents () {
     document.addEventListener('click', this.documentClickHandler)
 
-    if (this.isInIframe()) {
+    if (isInIframe()) {
       window.addEventListener('blur', this.documentClickHandler)
     }
 
@@ -282,10 +282,6 @@ class SettingsButton extends Button {
     for (const menuChild of this.menu.children() as SettingsMenuItem[]) {
       menuChild.hideSubMenu()
     }
-  }
-
-  isInIframe () {
-    return window.self !== window.top
   }
 }
 

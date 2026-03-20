@@ -16,6 +16,7 @@ import './shared/control-bar/next-previous-video-button'
 import './shared/control-bar/p2p-info-button'
 import './shared/control-bar/peertube-link-button'
 import './shared/control-bar/peertube-live-display'
+import './shared/control-bar/popout-button'
 import './shared/control-bar/storyboard-plugin'
 import './shared/control-bar/theater-button'
 import './shared/control-bar/time-tooltip'
@@ -55,6 +56,7 @@ import {
   VideojsPlayerOptions,
   VideoJSPluginOptions
 } from './types'
+import { isInIframe } from './shared/common'
 
 const CaptionsButton = videojs.getComponent('CaptionsButton') as any
 // Change Captions to Subtitles/CC
@@ -267,7 +269,15 @@ export class PeerTubePlayer {
         saveAverageBandwidth(Math.floor(data.bandwidthEstimate))
       })
 
-      this.player.contextMenu(this.getContextMenuOptions())
+      if (isInIframe()) {
+        // Disable custom and native context menus in embeds.
+        this.player.on('contextmenu', (event: Event) => {
+          event.preventDefault()
+          event.stopPropagation()
+        })
+      } else {
+        this.player.contextMenu(this.getContextMenuOptions())
+      }
 
       this.displayNotificationWhenOffline()
     })
@@ -445,6 +455,7 @@ export class PeerTubePlayer {
 
       videoShortUUID: () => this.currentLoadOptions.videoShortUUID,
       p2pEnabled: () => this.currentLoadOptions.p2pEnabled,
+      embedUrl: () => this.currentLoadOptions.embedUrl,
 
       nextVideo: () => this.currentLoadOptions.nextVideo,
       previousVideo: () => this.currentLoadOptions.previousVideo

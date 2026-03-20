@@ -14,10 +14,13 @@ export type Customizations = {
   muted: boolean
 
   embedP2P: boolean
+  embedPiP: boolean
+
   onlyEmbedUrl: boolean
   title: boolean
   warningTitle: boolean
   controlBar: boolean
+  contextMenu: boolean
   peertubeLink: boolean
   responsive: boolean
 

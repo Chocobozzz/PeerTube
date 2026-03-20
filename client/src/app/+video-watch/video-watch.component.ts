@@ -706,6 +706,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       inactivityTimeout: 2500,
 
       theaterButton: true,
+      popoutButton: true,
 
       controls: urlOptions.controls,
       controlBar: urlOptions.controlBar,
