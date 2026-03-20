@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { ConfirmService, MarkdownService, Notifier, ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
+import { buildDropdownSimpleAndBulkActions } from '@app/shared/shared-main/buttons/action-dropdown-helpers'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { ResultList, UserRegistration as UserRegistrationServer, UserRegistrationState } from '@peertube/peertube-models'
@@ -61,46 +62,33 @@ export class RegistrationListComponent implements OnInit {
   constructor () {
     this.dataLoader = this._dataLoader.bind(this)
 
-    this.registrationActions = [
-      [
-        {
-          label: $localize`Accept this request`,
-          handler: registration => this.openRegistrationRequestProcessModal(registration, 'accept'),
-          isDisplayed: registration => registration.state.id === UserRegistrationState.PENDING
-        },
-        {
-          label: $localize`Reject this request`,
-          handler: registration => this.openRegistrationRequestProcessModal(registration, 'reject'),
-          isDisplayed: registration => registration.state.id === UserRegistrationState.PENDING
-        },
-        {
-          label: $localize`Remove this request`,
-          description: $localize`Remove the request from the list. The user can register again.`,
-          handler: registration => this.removeRegistrations([ registration ])
-        }
-      ]
-    ]
-
-    this.bulkActions = [
+    const { simpleActions, bulkActions } = buildDropdownSimpleAndBulkActions<UserRegistration>([
       [
         {
           label: $localize`Accept`,
           handler: registrations => this.openRegistrationRequestProcessModal(registrations, 'accept'),
-          isDisplayed: registrations => registrations.every(registration => registration.state.id === UserRegistrationState.PENDING)
+          isDisplayed: registration => registration.state.id === UserRegistrationState.PENDING,
+          enableBulk: true
         },
         {
           label: $localize`Reject`,
           handler: registrations => this.openRegistrationRequestProcessModal(registrations, 'reject'),
-          isDisplayed: registrations => registrations.every(registration => registration.state.id === UserRegistrationState.PENDING)
+          isDisplayed: registration => registration.state.id === UserRegistrationState.PENDING,
+          enableBulk: true
         }
       ],
       [
         {
-          label: $localize`Delete`,
-          handler: registrations => this.removeRegistrations(registrations)
+          label: $localize`Remove`,
+          description: $localize`Remove the request from the list. User can register again.`,
+          handler: registrations => this.removeRegistrations(registrations),
+          enableBulk: true
         }
       ]
-    ]
+    ])
+
+    this.registrationActions = simpleActions
+    this.bulkActions = bulkActions
   }
 
   ngOnInit () {

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common'
 import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { ConfirmService, Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
+import { buildDropdownSimpleAndBulkActions } from '@app/shared/shared-main/buttons/action-dropdown-helpers'
 import { PeerTubeBadgeService } from '@app/shared/shared-main/common/peertube-badge.service'
 import { RunnerJob, RunnerJobState, RunnerJobStateType, RunnerJobType } from '@peertube/peertube-models'
 import { AdvancedFilterDef } from '../../../../shared/shared-forms/advanced-input-filter.component'
@@ -94,37 +95,26 @@ export class RunnerJobListComponent implements OnInit {
   }
 
   ngOnInit () {
-    this.actions = [
-      [
-        {
-          label: $localize`Cancel this job`,
-          handler: job => this.cancelJobs([ job ]),
-          isDisplayed: job => this.canCancelJob(job)
-        }
-      ],
-      [
-        {
-          label: $localize`Delete this job`,
-          handler: job => this.removeJobs([ job ])
-        }
-      ]
-    ]
-
-    this.bulkActions = [
+    const { simpleActions, bulkActions } = buildDropdownSimpleAndBulkActions<RunnerJob>([
       [
         {
           label: $localize`Cancel`,
           handler: jobs => this.cancelJobs(jobs),
-          isDisplayed: jobs => jobs.every(j => this.canCancelJob(j))
+          isDisplayed: job => this.canCancelJob(job),
+          enableBulk: true
         }
       ],
       [
         {
           label: $localize`Delete`,
-          handler: jobs => this.removeJobs(jobs)
+          handler: jobs => this.removeJobs(jobs),
+          enableBulk: true
         }
       ]
-    ]
+    ])
+
+    this.actions = simpleActions
+    this.bulkActions = bulkActions
   }
 
   // ---------------------------------------------------------------------------

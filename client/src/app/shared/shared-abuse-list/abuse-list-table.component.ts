@@ -12,6 +12,7 @@ import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { Account } from '../shared-main/account/account.model'
 import { Actor } from '../shared-main/account/actor.model'
 import { ActionDropdownComponent, DropdownAction } from '../shared-main/buttons/action-dropdown.component'
+import { buildDropdownSimpleAndBulkActions } from '../shared-main/buttons/action-dropdown-helpers'
 import { PTDatePipe } from '../shared-main/common/date.pipe'
 import { NumberFormatterPipe } from '../shared-main/common/number-formatter.pipe'
 import { Video } from '../shared-main/video/video.model'
@@ -30,6 +31,25 @@ import { ProcessedAbuse } from './processed-abuse.model'
 const debugLogger = debug('peertube:moderation:AbuseListTableComponent')
 
 type DataLoaderParameter = Parameters<AbuseListTableComponent['_dataLoader']>[0]
+type DropdownActionForBuilder<T, D = never> =
+  & Omit<DropdownAction<T, D>, 'linkBuilder' | 'queryParamsBuilder' | 'handler'>
+  & {
+    handler?: (a: T[]) => any
+  }
+  & (
+    | {
+      enableBulk: true
+
+      linkBuilder?: never
+      queryParamsBuilder?: never
+    }
+    | {
+      enableBulk: false
+
+      linkBuilder?: DropdownAction<T, D>['linkBuilder']
+      queryParamsBuilder?: DropdownAction<T, D>['queryParamsBuilder']
+    }
+  )
 
 @Component({
   selector: 'my-abuse-list-table',
@@ -148,7 +168,7 @@ export class AbuseListTableComponent implements OnInit, OnDestroy {
       ]
     }
 
-    const abuseActions: DropdownAction<ProcessedAbuse>[][] = [
+    const { simpleActions, bulkActions } = buildDropdownSimpleAndBulkActions<ProcessedAbuse>([
       this.buildInternalActions(),
 
       this.buildFlaggedAccountActions(),
@@ -158,13 +178,13 @@ export class AbuseListTableComponent implements OnInit, OnDestroy {
       this.buildVideoActions(),
 
       this.buildAccountActions()
-    ]
+    ])
 
     this.abuseActions = viewType === 'admin'
-      ? await this.hooks.wrapObject(abuseActions, 'admin-comments', 'filter:admin-abuse-list.actions.create.result')
-      : abuseActions
+      ? await this.hooks.wrapObject(simpleActions, 'admin-comments', 'filter:admin-abuse-list.actions.create.result')
+      : simpleActions
 
-    this.bulkActions = this.buildBulkActions()
+    this.bulkActions = bulkActions.filter(actions => actions.length !== 0)
   }
 
   ngOnDestroy () {
@@ -298,227 +318,162 @@ export class AbuseListTableComponent implements OnInit, OnDestroy {
     }))
   }
 
-  private buildInternalActions (): DropdownAction<ProcessedAbuse>[] {
+  private buildInternalActions (): DropdownActionForBuilder<ProcessedAbuse>[] {
     return [
       {
         label: $localize`Internal actions`,
-        isHeader: true
+        isHeader: true,
+        enableBulk: true
       },
       {
         label: this.isAdminView()
           ? $localize`Messages with reporter`
           : $localize`Messages with moderators`,
-        handler: abuse => this.openAbuseMessagesModal(abuse),
-        isDisplayed: abuse => this.isLocalAbuse(abuse)
+        handler: abuses => this.openAbuseMessagesModal(abuses[0]),
+        isDisplayed: abuse => this.isLocalAbuse(abuse),
+        enableBulk: false
       },
       {
-        label: $localize`Update internal note`,
-        handler: abuse => this.openModerationCommentModal([ abuse ]),
-        isDisplayed: abuse => this.isAdminView() && !!abuse.moderationComment
+        label: $localize`Set internal note`,
+        handler: abuses => this.openModerationCommentModal(abuses),
+        isDisplayed: abuse => this.isAdminView(),
+        enableBulk: true
       },
       {
         label: $localize`Mark as accepted`,
-        handler: abuse => this.updateAbuseState(abuse, AbuseState.ACCEPTED),
-        isDisplayed: abuse => this.isAdminView() && !this.isAbuseAccepted(abuse)
+        handler: abuses => this.updateAbusesState(abuses, AbuseState.ACCEPTED),
+        isDisplayed: abuse => this.isAdminView() && !this.isAbuseAccepted(abuse),
+        enableBulk: true
       },
       {
         label: $localize`Mark as rejected`,
-        handler: abuse => this.updateAbuseState(abuse, AbuseState.REJECTED),
-        isDisplayed: abuse => this.isAdminView() && !this.isAbuseRejected(abuse)
-      },
-      {
-        label: $localize`Add internal note`,
-        handler: abuse => this.openModerationCommentModal([ abuse ]),
-        isDisplayed: abuse => this.isAdminView() && !abuse.moderationComment
+        handler: abuses => this.updateAbusesState(abuses, AbuseState.REJECTED),
+        isDisplayed: abuse => this.isAdminView() && !this.isAbuseRejected(abuse),
+        enableBulk: true
       },
       {
         label: $localize`Delete report`,
-        handler: abuse => this.removeAbuses([ abuse ]),
-        isDisplayed: () => this.isAdminView()
+        handler: abuses => this.removeAbuses(abuses),
+        isDisplayed: () => this.isAdminView(),
+        enableBulk: true
       }
     ]
   }
 
-  private buildBulkActions (): DropdownAction<ProcessedAbuse[]>[][] {
-    return [
-      [
-        {
-          label: $localize`Update internal note`,
-          handler: abuses => this.openModerationCommentModal(abuses),
-          isDisplayed: abuses => this.isAdminView() && abuses.every(abuse => !!abuse.moderationComment)
-        },
-        {
-          label: $localize`Mark as accepted`,
-          handler: abuses => this.updateAbusesState(abuses, AbuseState.ACCEPTED),
-          isDisplayed: abuses => this.isAdminView() && abuses.every(abuse => !this.isAbuseAccepted(abuse))
-        },
-        {
-          label: $localize`Mark as rejected`,
-          handler: abuses => this.updateAbusesState(abuses, AbuseState.REJECTED),
-          isDisplayed: abuses => this.isAdminView() && abuses.every(abuse => !this.isAbuseRejected(abuse))
-        },
-        {
-          label: $localize`Add internal note`,
-          handler: abuses => this.openModerationCommentModal(abuses),
-          isDisplayed: abuses => this.isAdminView() && abuses.every(abuse => !abuse.moderationComment)
-        },
-        {
-          label: $localize`Delete report`,
-          handler: abuses => this.removeAbuses(abuses),
-          isDisplayed: () => this.isAdminView()
-        }
-      ],
-      [
-        {
-          label: $localize`Mute account`,
-          handler: abuses => this.muteFlaggedAccounts(abuses),
-          isDisplayed: abuses => {
-            return this.isAdminView() && abuses.every(abuse => abuse.flaggedAccount && !abuse.comment && !abuse.video)
-          }
-        },
-        {
-          label: $localize`Mute server account`,
-          handler: abuses => this.muteFlaggedAccountServers(abuses),
-          isDisplayed: abuses => {
-            return this.isAdminView() && abuses.every(abuse => abuse.flaggedAccount && !abuse.comment && !abuse.video)
-          }
-        },
-        {
-          label: $localize`Mute reporter`,
-          handler: abuses => this.muteReporters(abuses),
-          isDisplayed: abuses => this.isAdminView() && abuses.every(abuse => !!abuse.reporterAccount)
-        },
-        {
-          label: $localize`Mute reporter server`,
-          handler: abuses => this.muteReporterServers(abuses),
-          isDisplayed: abuses => {
-            return this.isAdminView() && abuses.every(abuse => abuse.reporterAccount && !abuse.reporterAccount.userId)
-          }
-        }
-      ],
-      [
-        {
-          label: $localize`Block video`,
-          handler: abuses => this.blockAbuseVideos(abuses),
-          isDisplayed: abuses => {
-            return this.isAdminView() && abuses.every(abuse => abuse.video && !abuse.video.deleted && !abuse.video.blacklisted)
-          }
-        },
-        {
-          label: $localize`Unblock video`,
-          handler: abuses => this.unblockAbuseVideos(abuses),
-          isDisplayed: abuses => {
-            return this.isAdminView() && abuses.every(abuse => abuse.video && !abuse.video.deleted && abuse.video.blacklisted)
-          }
-        },
-        {
-          label: $localize`Delete video`,
-          handler: abuses => this.deleteAbuseVideos(abuses),
-          isDisplayed: abuses => this.isAdminView() && abuses.every(abuse => abuse.video && !abuse.video.deleted)
-        },
-        {
-          label: $localize`Delete comment`,
-          handler: abuses => this.deleteAbuseComments(abuses),
-          isDisplayed: abuses => this.isAdminView() && abuses.every(abuse => abuse.comment && !abuse.comment.deleted)
-        }
-      ]
-    ]
-  }
-
-  private buildFlaggedAccountActions (): DropdownAction<ProcessedAbuse>[] {
+  private buildFlaggedAccountActions (): DropdownActionForBuilder<ProcessedAbuse>[] {
     if (!this.isAdminView()) return []
 
     return [
       {
         label: $localize`Actions for the flagged account`,
         isHeader: true,
-        isDisplayed: abuse => abuse.flaggedAccount && !abuse.comment && !abuse.video
+        isDisplayed: abuse => abuse.flaggedAccount && !abuse.comment && !abuse.video,
+        enableBulk: true
       },
 
       {
         label: $localize`Mute account`,
         isDisplayed: abuse => abuse.flaggedAccount && !abuse.comment && !abuse.video,
-        handler: abuse => this.muteFlaggedAccounts([ abuse ])
+        handler: abuses => this.muteFlaggedAccounts(abuses),
+        enableBulk: true
       },
 
       {
         label: $localize`Mute server account`,
         isDisplayed: abuse => abuse.flaggedAccount && !abuse.comment && !abuse.video,
-        handler: abuse => this.muteFlaggedAccountServers([ abuse ])
+        handler: abuses => this.muteFlaggedAccountServers(abuses),
+        enableBulk: true
       }
     ]
   }
 
-  private buildAccountActions (): DropdownAction<ProcessedAbuse>[] {
+  private buildAccountActions (): DropdownActionForBuilder<ProcessedAbuse>[] {
     if (!this.isAdminView()) return []
 
     return [
       {
         label: $localize`Actions for the reporter`,
         isHeader: true,
-        isDisplayed: abuse => !!abuse.reporterAccount
+        isDisplayed: abuse => !!abuse.reporterAccount,
+        enableBulk: true
       },
 
       {
         label: $localize`Mute reporter`,
         isDisplayed: abuse => !!abuse.reporterAccount,
-        handler: abuse => this.muteReporters([ abuse ])
+        handler: abuses => this.muteReporters(abuses),
+        enableBulk: true
       },
 
       {
-        label: $localize`Mute server`,
+        label: $localize`Mute reporter server`,
         isDisplayed: abuse => abuse.reporterAccount && !abuse.reporterAccount.userId,
-        handler: abuse => this.muteReporterServers([ abuse ])
+        handler: abuses => this.muteReporterServers(abuses),
+        enableBulk: true
       }
     ]
   }
 
-  private buildVideoActions (): DropdownAction<ProcessedAbuse>[] {
+  private buildVideoActions (): DropdownActionForBuilder<ProcessedAbuse>[] {
     if (!this.isAdminView()) return []
 
     return [
       {
         label: $localize`Actions for the video`,
         isHeader: true,
-        isDisplayed: abuse => abuse.video && !abuse.video.deleted
+        isDisplayed: abuse => abuse.video && !abuse.video.deleted,
+        enableBulk: true
       },
       {
         label: $localize`Block video`,
         isDisplayed: abuse => abuse.video && !abuse.video.deleted && !abuse.video.blacklisted,
-        handler: abuse => this.blockAbuseVideos([ abuse ])
+        handler: abuses => this.blockAbuseVideos(abuses),
+        enableBulk: true
       },
       {
         label: $localize`Unblock video`,
         isDisplayed: abuse => abuse.video && !abuse.video.deleted && abuse.video.blacklisted,
-        handler: abuse => this.unblockAbuseVideos([ abuse ])
+        handler: abuses => this.unblockAbuseVideos(abuses),
+        enableBulk: true
       },
       {
         label: $localize`Delete video`,
         isDisplayed: abuse => abuse.video && !abuse.video.deleted,
-        handler: abuse => this.deleteAbuseVideos([ abuse ])
+        handler: abuses => this.deleteAbuseVideos(abuses),
+        enableBulk: true
       }
     ]
   }
 
-  private buildCommentActions (): DropdownAction<ProcessedAbuse>[] {
+  private buildCommentActions (): DropdownActionForBuilder<ProcessedAbuse>[] {
     if (!this.isAdminView()) return []
 
     return [
       {
         label: $localize`Actions for the comment`,
         isHeader: true,
-        isDisplayed: abuse => abuse.comment && !abuse.comment.deleted
+        isDisplayed: abuse => abuse.comment && !abuse.comment.deleted,
+        enableBulk: true
       },
 
       {
         label: $localize`Delete comment`,
         isDisplayed: abuse => abuse.comment && !abuse.comment.deleted,
-        handler: abuse => this.deleteAbuseComments([ abuse ])
+        handler: abuses => this.deleteAbuseComments(abuses),
+        enableBulk: true
       }
     ]
   }
 
-  private removeAbuses (abuses: AdminAbuse[]) {
+  private async removeAbuses (abuses: AdminAbuse[]) {
+    const message = formatICU(
+      $localize`Do you really want to delete {count, plural, =1 {this report?} other {{count} reports?}}`,
+      { count: abuses.length }
+    )
+
+    const res = await this.confirmService.confirm(message, $localize`Delete`)
+    if (res === false) return
+
     this.abuseService.removeAbuse(abuses)
       .subscribe({
         next: () => {
@@ -707,7 +662,7 @@ export class AbuseListTableComponent implements OnInit, OnDestroy {
     )
     if (res === false) return
 
-    this.commentService.deleteVideoComments(
+    this.commentService.deleteComments(
       abuses.map(abuse => ({
         videoId: abuse.comment.video.id,
         commentId: abuse.comment.id

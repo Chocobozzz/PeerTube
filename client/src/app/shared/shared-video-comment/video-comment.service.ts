@@ -185,19 +185,16 @@ export class VideoCommentService {
 
   // ---------------------------------------------------------------------------
 
-  deleteVideoComment (videoId: number | string, commentId: number) {
-    const url = `${VideoCommentService.BASE_VIDEO_URL + videoId}/comments/${commentId}`
-
-    return this.authHttp
-      .delete(url)
-      .pipe(catchError(err => this.restExtractor.handleError(err)))
-  }
-
-  deleteVideoComments (comments: { videoId: number | string, commentId: number }[]) {
+  deleteComments (comments: { videoId: number | string, commentId: number }[]) {
     return from(comments)
       .pipe(
-        concatMap(c => this.deleteVideoComment(c.videoId, c.commentId)),
-        toArray()
+        concatMap(c => {
+          const url = `${VideoCommentService.BASE_VIDEO_URL + c.videoId}/comments/${c.commentId}`
+
+          return this.authHttp.delete(url)
+        }),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
       )
   }
 

@@ -17,6 +17,7 @@ import { EmbedComponent } from '../../../shared/shared-main/video/embed.componen
 import { DataLoaderOptionsBase, TableColumnInfo, TableComponent } from '../../../shared/shared-tables/table.component'
 import { VideoCellComponent } from '../../../shared/shared-tables/video-cell.component'
 import { VideoNSFWBadgeComponent } from '../../../shared/shared-video/video-nsfw-badge.component'
+import { buildDropdownSimpleAndBulkActions } from '@app/shared/shared-main/buttons/action-dropdown-helpers'
 
 type DataLoaderParameter = Parameters<VideoBlockListComponent['_dataLoader']>[0]
 type VideoBlacklist = VideoBlacklistServer & { reasonHtml?: string }
@@ -77,64 +78,42 @@ export class VideoBlockListComponent implements OnInit {
   constructor () {
     this.dataLoader = this._dataLoader.bind(this)
 
-    this.videoBlocklistActions = [
+    const { simpleActions, bulkActions } = buildDropdownSimpleAndBulkActions<VideoBlacklist>([
       [
         {
           label: $localize`Internal actions`,
           isHeader: true,
-          isDisplayed: videoBlock => videoBlock.type === VideoBlacklistType.AUTO_BEFORE_PUBLISHED
+          isDisplayed: videoBlock => videoBlock.type === VideoBlacklistType.AUTO_BEFORE_PUBLISHED,
+          enableBulk: true
         },
         {
           label: $localize`Switch video block to manual`,
-          handler: videoBlock => this.switchVideosBlockToManual([ videoBlock ]),
-          isDisplayed: videoBlock => videoBlock.type === VideoBlacklistType.AUTO_BEFORE_PUBLISHED
-        }
-      ],
-      [
-        {
-          label: $localize`Actions for the video`,
-          isHeader: true
-        },
-        {
-          label: $localize`Unblock`,
-          handler: videoBlock => this.unblockVideos([ videoBlock ])
-        },
-
-        {
-          label: $localize`Delete video`,
-          handler: videoBlock => this.deleteVideos([ videoBlock ])
-        }
-      ]
-    ]
-
-    this.bulkActions = [
-      [
-        {
-          label: $localize`Internal actions`,
-          isHeader: true,
-          isDisplayed: entries => entries.every(entry => entry.type === VideoBlacklistType.AUTO_BEFORE_PUBLISHED)
-        },
-        {
-          label: $localize`Switch videos block to manual`,
-          handler: entries => this.switchVideosBlockToManual(entries),
-          isDisplayed: entries => entries.every(entry => entry.type === VideoBlacklistType.AUTO_BEFORE_PUBLISHED)
+          handler: videoBlocks => this.switchVideosBlockToManual(videoBlocks),
+          isDisplayed: videoBlock => videoBlock.type === VideoBlacklistType.AUTO_BEFORE_PUBLISHED,
+          enableBulk: true
         }
       ],
       [
         {
           label: $localize`Actions for videos`,
-          isHeader: true
+          isHeader: true,
+          enableBulk: true
         },
         {
           label: $localize`Unblock`,
-          handler: entries => this.unblockVideos(entries)
+          handler: entries => this.unblockVideos(entries),
+          enableBulk: true
         },
         {
           label: $localize`Delete video`,
-          handler: entries => this.deleteVideos(entries)
+          handler: entries => this.deleteVideos(entries),
+          enableBulk: true
         }
       ]
-    ]
+    ])
+
+    this.videoBlocklistActions = simpleActions
+    this.bulkActions = bulkActions
   }
 
   ngOnInit () {
