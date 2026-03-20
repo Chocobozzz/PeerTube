@@ -291,6 +291,7 @@ export class VideoTableAttributes {
       'support',
       'duration',
       'views',
+      'downloads',
       'likes',
       'dislikes',
       'remote',

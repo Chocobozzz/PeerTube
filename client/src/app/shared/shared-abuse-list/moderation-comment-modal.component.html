@@ -1,6 +1,6 @@
 <ng-template #modal>
   <div class="modal-header">
-    <h4 i18n class="modal-title">Moderation comment</h4>
+    <h4 class="modal-title">{{ getModalTitle() }}</h4>
 
     <button class="border-0 p-0" title="Close this modal" i18n-title (click)="hide()">
       <my-global-icon iconName="cross"></my-global-icon>
@@ -22,8 +22,12 @@
         }
       </div>
 
-      <div class="form-group" i18n>
-        This comment can only be seen by you or the other moderators.
+      <div class="form-group">
+        @if (hasMultipleAbuses()) {
+          <ng-container i18n>This comment will be set on all selected reports and can only be seen by moderators.</ng-container>
+        } @else {
+          <ng-container i18n>This comment can only be seen by you or the other moderators.</ng-container>
+        }
       </div>
 
       <div class="form-group inputs">
@@ -32,7 +36,7 @@
           (click)="hide()" (key.enter)="hide()"
           >
 
-        <input type="submit" i18n-value value="Update this comment" class="peertube-button primary-button" [disabled]="!form.valid" />
+        <input type="submit" [value]="getSubmitLabel()" class="peertube-button primary-button" [disabled]="!form.valid" />
       </div>
     </form>
   </div>

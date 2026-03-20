@@ -30,8 +30,8 @@ import { VideoLiveScheduleModel } from '@server/models/video/video-live-schedule
 import { VideoLiveSessionModel } from '@server/models/video/video-live-session.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
-import { LocalVideoViewerWatchSectionModel } from '@server/models/view/local-video-viewer-watch-section.js'
-import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer.js'
+import { LocalVideoViewerWatchSectionModel } from '@server/models/stat/local-video-viewer-watch-section.js'
+import { LocalVideoViewerModel } from '@server/models/stat/local-video-viewer.js'
 import { WatchedWordsListModel } from '@server/models/watched-words/watched-words-list.js'
 import { readFileSync } from 'fs'
 import pg from 'pg'
@@ -73,7 +73,7 @@ import { VideoShareModel } from '../models/video/video-share.js'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist.js'
 import { VideoTagModel } from '../models/video/video-tag.js'
 import { VideoModel } from '../models/video/video.js'
-import { VideoViewModel } from '../models/view/video-view.js'
+import { VideoStatModel } from '../models/stat/video-stat.js'
 import { CONFIG } from './config.js'
 
 pg.defaults.parseInt8 = true // Avoid BIGINT to be converted to string
@@ -125,7 +125,7 @@ export const sequelizeTypescript = new SequelizeTypescript({
     if (process.env.NODE_DB_LOG === 'false') return
 
     let newMessage = 'Executed SQL request'
-    if (executionTimeMs !== undefined) {
+    if (isTestOrDevInstance() && executionTimeMs !== undefined) {
       newMessage += ' in ' + executionTimeMs + 'ms'
     }
 
@@ -173,7 +173,7 @@ export async function initDatabaseModels (silent: boolean) {
     VideoCommentModel,
     ScheduleVideoUpdateModel,
     VideoImportModel,
-    VideoViewModel,
+    VideoStatModel,
     VideoRedundancyModel,
     UserVideoHistoryModel,
     VideoLiveModel,

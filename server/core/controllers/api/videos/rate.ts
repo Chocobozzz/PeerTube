@@ -6,7 +6,8 @@ import { userRateVideo } from '@server/lib/rate.js'
 
 const rateVideoRouter = express.Router()
 
-rateVideoRouter.put('/:id/rate',
+rateVideoRouter.put(
+  '/:id/rate',
   authenticate,
   asyncMiddleware(videoUpdateRateValidator),
   asyncRetryTransactionMiddleware(rateVideo)
@@ -22,7 +23,7 @@ export {
 
 async function rateVideo (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.User
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
 
   await userRateVideo({
     account: user.Account,

@@ -1,4 +1,4 @@
-import { parse, stringify } from '@iarna/toml'
+import { parse, stringify } from 'smol-toml'
 import { TranscriptionEngineName, WhisperBuiltinModelName } from '@peertube/peertube-transcription'
 import envPaths from 'env-paths'
 import { ensureDir, pathExists } from 'fs-extra/esm'

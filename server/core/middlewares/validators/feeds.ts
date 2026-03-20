@@ -160,8 +160,8 @@ export const videoCommentsFeedsValidator = [
     }
 
     if (req.query.videoId) {
-      if (!await doesVideoExist(req.query.videoId, res)) return
-      if (!await checkCanSeeVideo({ req, res, paramId: req.query.videoId, video: res.locals.videoAll })) return
+      if (!await doesVideoExist(req.query.videoId, res, 'with-rights')) return
+      if (!await checkCanSeeVideo({ req, res, paramId: req.query.videoId, video: res.locals.videoWithRights })) return
     }
 
     return next()

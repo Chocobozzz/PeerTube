@@ -7,13 +7,13 @@ import { VideoChannelActivityModel } from '@server/models/video/video-channel-ac
 import { VideoChapterModel } from '@server/models/video/video-chapter.js'
 import express from 'express'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate } from '../../../middlewares/index.js'
-import { updateVideoChaptersValidator, videosCustomGetValidator } from '../../../middlewares/validators/index.js'
+import { updateVideoChaptersValidator, videoGetValidatorFactory } from '../../../middlewares/validators/index.js'
 
 const videoChaptersRouter = express.Router()
 
 videoChaptersRouter.get(
   '/:id/chapters',
-  asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
+  asyncMiddleware(videoGetValidatorFactory('with-blacklist')),
   asyncMiddleware(listVideoChapters)
 )
 
@@ -33,14 +33,14 @@ export {
 // ---------------------------------------------------------------------------
 
 async function listVideoChapters (req: express.Request, res: express.Response) {
-  const chapters = await VideoChapterModel.listChaptersOfVideo(res.locals.onlyVideo.id)
+  const chapters = await VideoChapterModel.listChaptersOfVideo(res.locals.videoWithBlacklist.id)
 
   return res.json({ chapters: chapters.map(c => c.toFormattedJSON()) })
 }
 
 async function replaceVideoChapters (req: express.Request, res: express.Response) {
   const body = req.body as VideoChapterUpdate
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
 
   await retryTransactionWrapper(() => {
     return sequelizeTypescript.transaction(async t => {

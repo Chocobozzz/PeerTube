@@ -19,3 +19,13 @@
 my-global-icon[iconName="flag"] {
   @include global-icon-size(15px);
 }
+
+.moderation-expanded-text .chip {
+  align-items: baseline;
+
+  &::after {
+    content: "•";
+    display: inline-block;
+    margin: 0 0.25rem;
+  }
+}

@@ -9,7 +9,7 @@ import { VideoFileStream } from '@peertube/peertube-models'
 import { computeOutputFPS } from '@server/helpers/ffmpeg/index.js'
 import { createTorrentAndSetInfoHash } from '@server/lib/webtorrent.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
+import { MVideoFile, MVideoFull } from '@server/types/models/index.js'
 import { Job } from 'bullmq'
 import { move, remove } from 'fs-extra/esm'
 import { copyFile } from 'fs/promises'
@@ -26,7 +26,7 @@ import { buildOriginalFileResolution } from './transcoding-resolutions.js'
 
 // Optimize the original video file and replace it. The resolution is not changed.
 export async function optimizeOriginalVideofile (options: {
-  video: MVideoFullLight
+  video: MVideoFull
   job: Job
 }) {
   const { job } = options
@@ -77,7 +77,7 @@ export async function optimizeOriginalVideofile (options: {
 
 // Transcode the original/old/source video file to a lower resolution compatible with web browsers
 export async function transcodeNewWebVideoResolution (options: {
-  video: MVideoFullLight
+  video: MVideoFull
   resolution: number
   fps: number
   job: Job
@@ -123,7 +123,7 @@ export async function transcodeNewWebVideoResolution (options: {
 
 // Merge an image with an audio file to create a video
 export async function mergeAudioVideofile (options: {
-  video: MVideoFullLight
+  video: MVideoFull
   resolution: number
   fps: number
   job: Job
@@ -185,7 +185,7 @@ export async function mergeAudioVideofile (options: {
 }
 
 export async function onWebVideoFileTranscoding (options: {
-  video: MVideoFullLight
+  video: MVideoFull
   videoOutputPath: string
   wasAudioFile?: boolean // default false
   deleteWebInputVideoFile?: MVideoFile

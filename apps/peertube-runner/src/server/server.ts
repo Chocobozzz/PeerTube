@@ -26,6 +26,7 @@ export class RunnerServer {
   private gracefulShutdown = false
   private cleaningUp = false
   private initialized = false
+  private subsequentCheckAvailableErrors = 0
 
   private ipcServer: IPCServer
 
@@ -229,6 +230,7 @@ export class RunnerServer {
     this.checkingAvailableJobs = true
 
     let hadAvailableJob = false
+    let hadError = false
 
     for (const server of shuffle([ ...this.servers ])) {
       try {
@@ -241,7 +243,7 @@ export class RunnerServer {
 
         await this.tryToExecuteJobAsync(server, job)
       } catch (err) {
-        hadAvailableJob = false
+        hadError = true
 
         const code = (err.res?.body as PeerTubeProblemDocument)?.code
 
@@ -263,7 +265,14 @@ export class RunnerServer {
 
     this.checkingAvailableJobs = false
 
-    if (hadAvailableJob && this.canProcessMoreJobs()) {
+    this.subsequentCheckAvailableErrors = hadError
+      ? this.subsequentCheckAvailableErrors + 1
+      : 0
+
+    if (this.subsequentCheckAvailableErrors >= 5) {
+      // Don't retry indefinitely if we always have an error
+      this.subsequentCheckAvailableErrors = 0
+    } else if (hadAvailableJob && this.canProcessMoreJobs()) {
       await wait(2500)
 
       this.checkAvailableJobs()

@@ -3,13 +3,13 @@ import { sequelizeTypescript } from '@server/initializers/database.js'
 import { AccountVideoRateModel } from '@server/models/account/account-video-rate.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { getLocalRateUrl, sendVideoRateChange } from './activitypub/video-rates.js'
-import { MAccountId, MAccountUrl, MVideoFullLight } from '@server/types/models/index.js'
+import { MAccountId, MAccountUrl, MVideoFull } from '@server/types/models/index.js'
 import { UserVideoRateType } from '@peertube/peertube-models'
 
 export async function userRateVideo (options: {
   rateType: UserVideoRateType
   account: MAccountUrl & MAccountId
-  video: MVideoFullLight
+  video: MVideoFull
 }) {
   const { account, rateType, video } = options
 

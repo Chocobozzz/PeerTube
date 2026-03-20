@@ -6,6 +6,8 @@ export function findAppropriateThumbnail<T extends { width: number, aspectRatio:
   wantedWidth: number,
   ratio: ThumbnailAspectRatio
 ) {
+  if (!images) return null
+
   return findAppropriateImage(
     images.filter(img => img.aspectRatio === ratio),
     wantedWidth

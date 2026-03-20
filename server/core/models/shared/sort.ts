@@ -49,7 +49,7 @@ export function getVideoSort (value: string, lastSort: OrderItem = [ 'id', 'ASC'
 
   if (field.toLowerCase() === 'trending') { // Sort by aggregation
     return [
-      [ Sequelize.fn('COALESCE', Sequelize.fn('SUM', Sequelize.col('VideoViews.views')), '0'), direction ],
+      [ Sequelize.fn('COALESCE', Sequelize.fn('SUM', Sequelize.col('VideoStats.views')), '0'), direction ],
 
       [ Sequelize.col('VideoModel.views'), direction ],
 

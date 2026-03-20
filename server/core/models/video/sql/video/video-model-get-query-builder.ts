@@ -12,13 +12,14 @@ import { VideoTableAttributes } from './shared/video-table-attributes.js'
 export type GetType =
   | 'api'
   | 'full'
+  | 'account-blacklist'
   | 'account-blacklist-files'
   | 'account'
   | 'all-files'
   | 'thumbnails'
-  | 'thumbnails-blacklist'
+  | 'blacklist'
   | 'id'
-  | 'blacklist-rights'
+  | 'video'
   | 'seo'
 
 const videoFilesInclude = new Set<GetType>([ 'api', 'full', 'account-blacklist-files', 'all-files' ])
@@ -29,15 +30,14 @@ const liveInclude = new Set<GetType>([ 'api', 'full' ])
 const scheduleUpdateInclude = new Set<GetType>([ 'api', 'full' ])
 const tagsInclude = new Set<GetType>([ 'api', 'full', 'seo' ])
 const userHistoryInclude = new Set<GetType>([ 'api', 'full' ])
-const accountInclude = new Set<GetType>([ 'api', 'full', 'account', 'account-blacklist-files', 'seo' ])
-const ownerUserInclude = new Set<GetType>([ 'blacklist-rights' ])
+const accountInclude = new Set<GetType>([ 'api', 'full', 'account', 'account-blacklist', 'account-blacklist-files', 'seo' ])
 
 const blacklistedInclude = new Set<GetType>([
   'api',
   'full',
+  'account-blacklist',
   'account-blacklist-files',
-  'thumbnails-blacklist',
-  'blacklist-rights',
+  'blacklist',
   'seo'
 ])
 
@@ -47,7 +47,6 @@ const thumbnailsInclude = new Set<GetType>([
   'account-blacklist-files',
   'all-files',
   'thumbnails',
-  'thumbnails-blacklist',
   'seo'
 ])
 
@@ -165,10 +164,6 @@ export class VideosModelGetQuerySubBuilder extends AbstractVideoQueryBuilder {
 
     if (options.userId && userHistoryInclude.has(options.type)) {
       this.includeUserHistory(options.userId)
-    }
-
-    if (ownerUserInclude.has(options.type)) {
-      this.includeOwnerUser()
     }
 
     if (trackersInclude.has(options.type)) {

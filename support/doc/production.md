@@ -87,11 +87,22 @@ sudo -u peertube unzip -q peertube-${VERSION}.zip && sudo -u peertube rm peertub
 
 Install Peertube:
 
-```bash
+::: code-group
+
+```bash [GNU/Linux]
 cd /var/www/peertube
 sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest
 cd ./peertube-latest && sudo -H -u peertube npm run install-node-dependencies -- --production
 ```
+
+```bash [FreeBSD]
+cd /var/www/peertube
+sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest
+cd ./peertube-latest && sudo -H -u peertube npm run install-node-dependencies -- --production
+sudo -H -u peertube npm explore sharp -- npm run build
+```
+
+:::
 
 ### :wrench: PeerTube configuration
 
@@ -295,10 +306,20 @@ Now your instance is up you can:
 
 Run the upgrade script (the password it asks is PeerTube's database user password):
 
-```bash
+::: code-group
+
+```bash [GNU/Linux]
 cd /var/www/peertube/peertube-latest/scripts && sudo -H -u peertube ./upgrade.sh
 sudo systemctl restart peertube # Or use your OS command to restart PeerTube if you don't use systemd
 ```
+
+```bash [FreeBSD]
+cd /var/www/peertube/peertube-latest/scripts && sudo -H -u peertube ./upgrade.sh
+cd /var/www/peertube/peertube-latest && sudo -H -u peertube npm explore sharp -- npm run build
+sudo systemctl restart peertube # Or use your OS command to restart PeerTube if you don't use systemd
+```
+
+:::
 
 You may want to run `sudo -u peertube pnpm store prune` after several upgrades to free up disk space.
 

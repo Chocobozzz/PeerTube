@@ -6,7 +6,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MVideoFullLight } from '@server/types/models/index.js'
+import { MVideoFull } from '@server/types/models/index.js'
 import { getVideoStreamDimensionsInfo } from '@peertube/peertube-ffmpeg'
 import { logger } from '../../../helpers/logger.js'
 import { JobQueue } from '../job-queue.js'
@@ -52,7 +52,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function updateVideoFile (video: MVideoFullLight, inputFilePath: string) {
+async function updateVideoFile (video: MVideoFull, inputFilePath: string) {
   const { resolution } = await getVideoStreamDimensionsInfo(inputFilePath)
   const currentVideoFile = video.VideoFiles.find(videoFile => videoFile.resolution === resolution)
 

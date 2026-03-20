@@ -61,8 +61,6 @@ describe('Test notifications API', function () {
           typeOneOf: [ UserNotificationType.ABUSE_NEW_MESSAGE, UserNotificationType.NEW_VIDEO_FROM_SUBSCRIPTION ]
         })
 
-        console.log(data)
-
         expect(data).to.have.lengthOf(2)
         expect(total).to.equal(10)
       }

@@ -1,4 +1,4 @@
-import { Component, OnInit, forwardRef, input, model } from '@angular/core'
+import { Component, OnInit, booleanAttribute, forwardRef, input, model } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { isMobile } from '@root-helpers/web-browser'
 import { ChipsModule } from 'primeng/chips'
@@ -17,7 +17,7 @@ import { ChipsModule } from 'primeng/chips'
 })
 export class SelectTagsComponent implements OnInit, ControlValueAccessor {
   readonly inputId = input.required<string>()
-  readonly availableItems = input<string[]>([])
+  readonly small = input(false, { transform: booleanAttribute })
   readonly selectedItems = model<string[]>([])
   readonly placeholder = model($localize`Enter a new tag`)
 

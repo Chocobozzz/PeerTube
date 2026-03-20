@@ -1,6 +1,8 @@
 import { generateImageFilename, processImage } from '@server/helpers/image-utils.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { initDatabaseModels } from '@server/initializers/database.js'
+import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
+import { JobQueue } from '@server/lib/job-queue/job-queue.js'
 import { ThumbnailModel } from '@server/models/video/thumbnail.js'
 import { VideoModel } from '@server/models/video/video.js'
 import Bluebird from 'bluebird'
@@ -18,6 +20,8 @@ run()
 async function run () {
   await initDatabaseModels(true)
 
+  JobQueue.Instance.init()
+
   const ids = await VideoModel.listLocalIds()
 
   await Bluebird.map(ids, id => {
@@ -27,7 +31,7 @@ async function run () {
 }
 
 async function processVideo (id: number) {
-  const video = await VideoModel.loadWithFiles(id)
+  const video = await VideoModel.loadFull(id)
 
   console.log('Processing video %s.', video.name)
 
@@ -68,5 +72,5 @@ async function processVideo (id: number) {
     await oldThumbnail.removeFile()
   }
 
-  // Don't federate, remote instances will refresh the thumbnails after a while
+  await federateVideoIfNeeded(video, false)
 }

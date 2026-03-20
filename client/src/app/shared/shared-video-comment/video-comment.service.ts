@@ -76,20 +76,20 @@ export class VideoCommentService {
 
   // ---------------------------------------------------------------------------
 
-  listVideoCommentsOfMyVideos (options: {
-    pagination: RestPagination
-    sort: SortMeta
-    search?: string
-  }): Observable<ResultList<VideoCommentForAdminOrUser>> {
-    const { pagination, sort, search } = options
+  listVideoCommentsOfMyVideos (
+    options: Parameters<VideoCommentService['buildAdminVideoCommentsParams']>[0] & {
+      isHeldForReview?: boolean
+    }
+  ): Observable<ResultList<VideoCommentForAdminOrUser>> {
+    const { isHeldForReview } = options
+
     const url = VideoCommentService.BASE_ME_URL + 'videos/comments'
 
-    let params = new HttpParams()
-    params = this.restService.addRestGetParams(params, pagination, sort)
+    let params = this.buildAdminVideoCommentsParams(options)
     params = params.set('includeCollaborations', 'true')
 
-    if (search) {
-      params = this.buildParamsFromSearch(search, params)
+    if (isHeldForReview !== undefined) {
+      params = params.set('isHeldForReview', '' + isHeldForReview)
     }
 
     return this.authHttp.get<ResultList<VideoCommentForAdminOrUser>>(url, { params })
@@ -98,25 +98,47 @@ export class VideoCommentService {
       )
   }
 
-  listAdminVideoComments (options: {
-    pagination: RestPagination
-    sort: SortMeta
-    search?: string
-  }): Observable<ResultList<VideoCommentForAdminOrUser>> {
-    const { pagination, sort, search } = options
+  listAdminVideoComments (
+    options: Parameters<VideoCommentService['buildAdminVideoCommentsParams']>[0] & {
+      isLocal?: boolean
+      onLocalVideo?: boolean
+    }
+  ): Observable<ResultList<VideoCommentForAdminOrUser>> {
+    const { isLocal, onLocalVideo } = options
+
     const url = VideoCommentService.BASE_VIDEO_URL + 'comments'
 
-    let params = new HttpParams()
-    params = this.restService.addRestGetParams(params, pagination, sort)
+    let params = this.buildAdminVideoCommentsParams(options)
 
-    if (search) {
-      params = this.buildParamsFromSearch(search, params)
+    if (isLocal !== undefined) {
+      params = params.set('isLocal', '' + isLocal)
+    }
+
+    if (onLocalVideo !== undefined) {
+      params = params.set('onLocalVideo', '' + onLocalVideo)
     }
 
     return this.authHttp.get<ResultList<VideoCommentForAdminOrUser>>(url, { params })
       .pipe(
         catchError(res => this.restExtractor.handleError(res))
       )
+  }
+
+  private buildAdminVideoCommentsParams (options: {
+    pagination: RestPagination
+    sort: SortMeta
+    search?: string
+    searchAccount?: string
+    searchVideo?: string
+    autoTagOneOf?: string[]
+  }) {
+    const { pagination, sort, ...otherOptions } = options
+
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination, sort)
+    params = this.restService.addObjectParams(params, otherOptions)
+
+    return params
   }
 
   // ---------------------------------------------------------------------------
@@ -163,19 +185,16 @@ export class VideoCommentService {
 
   // ---------------------------------------------------------------------------
 
-  deleteVideoComment (videoId: number | string, commentId: number) {
-    const url = `${VideoCommentService.BASE_VIDEO_URL + videoId}/comments/${commentId}`
-
-    return this.authHttp
-      .delete(url)
-      .pipe(catchError(err => this.restExtractor.handleError(err)))
-  }
-
-  deleteVideoComments (comments: { videoId: number | string, commentId: number }[]) {
+  deleteComments (comments: { videoId: number | string, commentId: number }[]) {
     return from(comments)
       .pipe(
-        concatMap(c => this.deleteVideoComment(c.videoId, c.commentId)),
-        toArray()
+        concatMap(c => {
+          const url = `${VideoCommentService.BASE_VIDEO_URL + c.videoId}/comments/${c.commentId}`
+
+          return this.authHttp.delete(url)
+        }),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
       )
   }
 
@@ -238,33 +257,5 @@ export class VideoCommentService {
       : tree.children.some(c => c.hasDisplayedChildren)
 
     return Object.assign(tree, { hasDisplayedChildren })
-  }
-
-  private buildParamsFromSearch (search: string, params: HttpParams) {
-    const filters = this.restService.parseQueryStringFilter(search, {
-      isLocal: {
-        prefix: 'local:',
-        isBoolean: true
-      },
-      onLocalVideo: {
-        prefix: 'localVideo:',
-        isBoolean: true
-      },
-
-      isHeldForReview: {
-        prefix: 'heldForReview:',
-        isBoolean: true
-      },
-
-      autoTagOneOf: {
-        prefix: 'autoTag:',
-        multiple: true
-      },
-
-      searchAccount: { prefix: 'account:' },
-      searchVideo: { prefix: 'video:' }
-    })
-
-    return this.restService.addObjectParams(params, filters)
   }
 }

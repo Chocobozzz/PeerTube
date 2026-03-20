@@ -82,7 +82,7 @@ export class VideoStateMessageService {
           routerLink: {
             text: $localize`Review your import`,
             link: [ '/my-library/video-imports' ],
-            queryParams: { search: `videoId:${videoId}` }
+            queryParams: { videoId }
           }
         }
 
@@ -98,7 +98,7 @@ export class VideoStateMessageService {
           routerLink: {
             text: $localize`Review your import`,
             link: [ '/my-library/video-imports' ],
-            queryParams: { search: `videoId:${videoId}` }
+            queryParams: { videoId }
           }
         }
       }

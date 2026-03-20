@@ -1,4 +1,4 @@
-import { downloadImageFromWorker } from '@server/lib/worker/parent-process.js'
+import downloadImage from '@server/lib/image-downloader.js'
 import { basename, dirname } from 'path'
 import { AbstractFileCache, FileModel } from './abstract-file-cache.js'
 
@@ -18,7 +18,7 @@ export abstract class AbstractImageFileCache<M extends ImageFileModel> extends A
       size: this.getImageSize(image)
     }
 
-    return downloadImageFromWorker(downloaderOptions)
+    return downloadImage(downloaderOptions)
   }
 
   private getImageSize (image: M): { width: number, height: number } {

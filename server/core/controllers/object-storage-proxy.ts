@@ -44,7 +44,7 @@ function proxifyWebVideoController (req: express.Request, res: express.Response)
 }
 
 function proxifyHLSController (req: express.Request, res: express.Response) {
-  const video = res.locals.onlyVideo
+  const video = res.locals.videoWithBlacklist
   const filename = req.params.filename
 
   const reinjectVideoFileToken = filename.endsWith('.m3u8') && doReinjectVideoFileToken(req)

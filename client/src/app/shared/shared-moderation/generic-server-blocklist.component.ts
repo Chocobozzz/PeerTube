@@ -2,11 +2,10 @@ import { Component, inject, input, viewChild } from '@angular/core'
 import { Notifier } from '@app/core'
 import { BatchDomainsModalComponent } from '@app/shared/shared-moderation/batch-domains-modal.component'
 import { ServerBlock } from '@peertube/peertube-models'
-import { AdvancedInputFilterComponent } from '../shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { PTDatePipe } from '../shared-main/common/date.pipe'
 import { NumberFormatterPipe } from '../shared-main/common/number-formatter.pipe'
-import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../shared-tables/table.component'
+import { DataLoaderOptionsBase, TableColumnInfo, TableComponent } from '../shared-tables/table.component'
 import { BlocklistComponentType, BlocklistService } from './blocklist.service'
 
 @Component({
@@ -15,7 +14,6 @@ import { BlocklistComponentType, BlocklistService } from './blocklist.service'
   imports: [
     TableComponent,
     NumberFormatterPipe,
-    AdvancedInputFilterComponent,
     PTDatePipe,
     GlobalIconComponent,
     BatchDomainsModalComponent
@@ -87,7 +85,7 @@ export class GenericServerBlocklistComponent {
     })
   }
 
-  private _dataLoader (options: DataLoaderOptions) {
+  private _dataLoader (options: DataLoaderOptionsBase) {
     if (this.mode() === BlocklistComponentType.Account) {
       return this.blocklistService.getUserServerBlocklist(options)
     }

@@ -22,6 +22,7 @@
   [customUpdateUrl]="customUpdateUrl"
   [hasExpandedRow]="hasExpandedRow"
   columnConfig="false"
+  searchInput="true"
   [reorderableRows]="hasReorderableRows()"
   (rowReorder)="onRowReorder($event)"
   dragHandleTitle="Drag and drop this row to reorder playlists in your channel"
@@ -36,11 +37,6 @@
   </ng-template>
 
   <ng-template #captionRight>
-    <my-advanced-input-filter
-      inputId="table-search" icon="true" emitOnInit="false" i18n-placeholder placeholder="Search your playlists"
-      (search)="table.onSearch($event)"
-    ></my-advanced-input-filter>
-
     <a class="peertube-create-button" routerLink="create">
       <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
       <ng-container i18n>Create playlist</ng-container>
@@ -109,7 +105,7 @@
     {{ playlist.description }}
   </ng-template>
 
-  <ng-template #noResults let-search>
-    {{ getNoResults(search) }}
+  <ng-template #noResults let-search="search" let-hasFilters="hasFilters">
+    {{ getNoResults(!!search || hasFilters) }}
   </ng-template>
 </my-table>

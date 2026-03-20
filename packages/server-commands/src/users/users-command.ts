@@ -372,6 +372,7 @@ export class UsersCommand extends AbstractCommand {
     sort?: string
     search?: string
     blocked?: boolean
+    role?: UserRoleType
   } = {}) {
     const path = '/api/v1/users'
 
@@ -379,7 +380,7 @@ export class UsersCommand extends AbstractCommand {
       ...options,
 
       path,
-      query: pick(options, [ 'start', 'count', 'sort', 'search', 'blocked' ]),
+      query: pick(options, [ 'start', 'count', 'sort', 'search', 'blocked', 'role' ]),
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })

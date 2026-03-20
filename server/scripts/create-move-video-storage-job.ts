@@ -7,7 +7,7 @@ import { JobQueue } from '@server/lib/job-queue/index.js'
 import { hasVideoResourcesToBeMoved } from '@server/lib/move-storage/shared/move-video.js'
 import { moveToExternalStorageState, moveToFileSystemState } from '@server/lib/video-state.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MVideoFullLight } from '@server/types/models/index.js'
+import { MVideoFull } from '@server/types/models/index.js'
 
 const program = createCommand()
   .description('Move videos to another storage.')
@@ -106,7 +106,7 @@ async function run () {
 }
 
 async function createMoveJobIfNeeded (options: {
-  video: MVideoFullLight
+  video: MVideoFull
   targetStorage: FileStorageType
 
   handler: () => Promise<any>

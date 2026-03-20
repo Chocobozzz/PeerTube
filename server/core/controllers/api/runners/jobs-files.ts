@@ -9,7 +9,7 @@ import {
   runnerJobGetVideoStudioTaskFileValidator,
   runnerJobGetVideoTranscodingFileValidator
 } from '@server/middlewares/validators/runners/job-files.js'
-import { MVideoFileStreamingPlaylistVideo, MVideoFileVideo, MVideoFullLight } from '@server/types/models/index.js'
+import { MVideoFileStreamingPlaylistVideo, MVideoFileVideo, MVideoFull } from '@server/types/models/index.js'
 import express from 'express'
 
 const lTags = loggerTagsFactory('api', 'runner')
@@ -60,7 +60,7 @@ export {
 async function getMaxQualitySeparatedAudioFile (req: express.Request, res: express.Response) {
   const runnerJob = res.locals.runnerJob
   const runner = runnerJob.Runner
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
 
   logger.info(
     'Get max quality separated audio file of video %s of job %s for runner %s',
@@ -78,7 +78,7 @@ async function getMaxQualitySeparatedAudioFile (req: express.Request, res: expre
 async function getMaxQualityVideoFile (req: express.Request, res: express.Response) {
   const runnerJob = res.locals.runnerJob
   const runner = runnerJob.Runner
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
 
   logger.info(
     'Get max quality file of video %s of job %s for runner %s',
@@ -94,7 +94,7 @@ async function getMaxQualityVideoFile (req: express.Request, res: express.Respon
 }
 
 async function serveVideoFile (options: {
-  video: MVideoFullLight
+  video: MVideoFull
   file: MVideoFileVideo | MVideoFileStreamingPlaylistVideo
   req: express.Request
   res: express.Response
@@ -130,7 +130,7 @@ async function serveVideoFile (options: {
 function getMaxQualityVideoThumbnail (req: express.Request, res: express.Response) {
   const runnerJob = res.locals.runnerJob
   const runner = runnerJob.Runner
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
 
   logger.info(
     'Get max quality preview file of video %s of job %s for runner %s',
@@ -148,7 +148,7 @@ function getMaxQualityVideoThumbnail (req: express.Request, res: express.Respons
 function getVideoStudioTaskFile (req: express.Request, res: express.Response) {
   const runnerJob = res.locals.runnerJob
   const runner = runnerJob.Runner
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
   const filename = req.params.filename
 
   logger.info(

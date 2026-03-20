@@ -39,6 +39,9 @@ export class SelectOptionsComponent implements ControlValueAccessor {
 
   readonly clearable = input(false, { transform: booleanAttribute })
   readonly filter = input(false, { transform: booleanAttribute })
+  readonly small = input(false, { transform: booleanAttribute })
+
+  readonly appendTo = input<'body'>()
 
   readonly virtualScroll = input(false, { transform: booleanAttribute })
   readonly virtualScrollItemSize = input(39, { transform: numberAttribute })

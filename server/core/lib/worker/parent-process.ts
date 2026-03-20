@@ -4,49 +4,9 @@ import { join } from 'path'
 import { Piscina } from 'piscina'
 import type buildDigest from './workers/build-digest.js'
 import type createTorrentPromise from './workers/create-torrent.js'
-import type getImageSize from './workers/get-image-size.js'
 import type httpBroadcast from './workers/http-broadcast.js'
 import type httpUnicast from './workers/http-unicast.js'
-import type downloadImage from './workers/image-downloader.js'
 import type signJsonLDObject from './workers/sign-json-ld-object.js'
-
-let downloadImageWorker: Piscina
-
-export function downloadImageFromWorker (options: Parameters<typeof downloadImage>[0]): Promise<ReturnType<typeof downloadImage>> {
-  if (!downloadImageWorker) {
-    downloadImageWorker = new Piscina({
-      filename: new URL(join('workers', 'image-downloader.js'), import.meta.url).href,
-      concurrentTasksPerWorker: WORKER_THREADS.DOWNLOAD_IMAGE.CONCURRENCY,
-      maxThreads: WORKER_THREADS.DOWNLOAD_IMAGE.MAX_THREADS,
-      minThreads: 1,
-      idleTimeout: WORKER_THREADS.IDLE_TIMEOUT
-    })
-
-    downloadImageWorker.on('error', err => logger.error('Error in download image worker', { err }))
-  }
-
-  return downloadImageWorker.run(options)
-}
-
-// ---------------------------------------------------------------------------
-
-let getImageSizeWorker: Piscina
-
-export function getImageSizeFromWorker (options: Parameters<typeof getImageSize>[0]): Promise<ReturnType<typeof getImageSize>> {
-  if (!getImageSizeWorker) {
-    getImageSizeWorker = new Piscina({
-      filename: new URL(join('workers', 'get-image-size.js'), import.meta.url).href,
-      concurrentTasksPerWorker: WORKER_THREADS.GET_IMAGE_SIZE.CONCURRENCY,
-      maxThreads: WORKER_THREADS.GET_IMAGE_SIZE.MAX_THREADS,
-      minThreads: 1,
-      idleTimeout: WORKER_THREADS.IDLE_TIMEOUT
-    })
-
-    getImageSizeWorker.on('error', err => logger.error('Error in get image size worker', { err }))
-  }
-
-  return getImageSizeWorker.run(options)
-}
 
 // ---------------------------------------------------------------------------
 
@@ -184,16 +144,6 @@ export function createTorrentFromWorker (options: Parameters<typeof createTorren
 
 export function getWorkersStats () {
   return [
-    {
-      label: 'downloadImage',
-      queueSize: downloadImageWorker?.queueSize || 0,
-      completed: downloadImageWorker?.completed || 0
-    },
-    {
-      label: 'getImageSizeWorker',
-      queueSize: getImageSizeWorker?.queueSize || 0,
-      completed: getImageSizeWorker?.completed || 0
-    },
     {
       label: 'parallelHTTPBroadcastWorker',
       queueSize: parallelHTTPBroadcastWorker?.queueSize || 0,

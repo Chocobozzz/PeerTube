@@ -14,7 +14,7 @@ import { ApplicationModel } from '../models/application/application.js'
 import { OAuthClientModel } from '../models/oauth/oauth-client.js'
 import { applicationExist, clientsExist, usersExist } from './checker-after-init.js'
 import { CONFIG } from './config.js'
-import { DIRECTORIES, FILES_CACHE, LAST_MIGRATION_VERSION } from './constants.js'
+import { ADMIN_MEMORABLE_PASSWORD_GENERATION_LENGTH, DIRECTORIES, FILES_CACHE, LAST_MIGRATION_VERSION } from './constants.js'
 import { sequelizeTypescript } from './database.js'
 
 async function installApplication () {
@@ -144,7 +144,7 @@ async function createOAuthAdminIfNotExist () {
   } else if (process.env.PT_INITIAL_ROOT_PASSWORD) {
     password = process.env.PT_INITIAL_ROOT_PASSWORD
   } else {
-    password = await generatePassword(16, true)
+    password = await generatePassword(ADMIN_MEMORABLE_PASSWORD_GENERATION_LENGTH, true)
   }
 
   const user = buildUser({

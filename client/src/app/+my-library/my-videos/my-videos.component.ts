@@ -4,20 +4,18 @@ import { RouterLink } from '@angular/router'
 import { AuthService, AuthUser, ConfirmService, Notifier, RestPagination, ServerService } from '@app/core'
 import { HeaderService } from '@app/header/header.service'
 import { formatICU } from '@app/helpers'
+import { AdvancedFilterDef } from '@app/shared/shared-forms/advanced-input-filter.component'
 import { ChannelToggleComponent } from '@app/shared/shared-channels/channel-toggle.component'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { TableColumnInfo, TableComponent, TableQueryParams } from '@app/shared/shared-tables/table.component'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
-import { arrayify, pick } from '@peertube/peertube-core-utils'
+import { arrayify } from '@peertube/peertube-core-utils'
 import { VideoChannel, VideoExistInPlaylist, VideoPrivacy, VideoPrivacyType, VideosExistInPlaylists } from '@peertube/peertube-models'
 import uniqBy from 'lodash-es/uniqBy'
 import { SortMeta } from 'primeng/api'
 import { tap } from 'rxjs/operators'
-import { SelectOptionsItem } from 'src/types'
-import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
-import { SelectCheckboxComponent } from '../../shared/shared-forms/select/select-checkbox.component'
 import { DropdownAction } from '../../shared/shared-main/buttons/action-dropdown.component'
 import { ButtonComponent } from '../../shared/shared-main/buttons/button.component'
 import { PTDatePipe } from '../../shared/shared-main/common/date.pipe'
@@ -33,14 +31,12 @@ import { VideoStateBadgeComponent } from '../../shared/shared-video/video-state-
 import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.component'
 
 type ColumnName = 'duration' | 'name' | 'language' | 'privacy' | 'sensitive' | 'playlists' | 'insights' | 'published' | 'state' | 'comments'
-type CommonFilter = 'live' | 'vod' | 'private' | 'internal' | 'unlisted' | 'password-protected' | 'public'
 
-type VideoType = 'live' | 'vod'
 type QueryParams = TableQueryParams & {
   channelNameOneOf?: string[]
-  privacyOneOf?: string[]
-  videoType?: VideoType
 }
+
+type DataLoaderParameter = Parameters<MyVideosComponent['_dataLoader']>[0]
 
 @Component({
   selector: 'my-videos',
@@ -48,7 +44,6 @@ type QueryParams = TableQueryParams & {
   styleUrls: [ './my-videos.component.scss' ],
   imports: [
     FormsModule,
-    AdvancedInputFilterComponent,
     ButtonComponent,
     NgbTooltipModule,
     VideoActionsDropdownComponent,
@@ -57,7 +52,6 @@ type QueryParams = TableQueryParams & {
     NumberFormatterPipe,
     VideoStateBadgeComponent,
     ChannelToggleComponent,
-    SelectCheckboxComponent,
     PTDatePipe,
     VideoNSFWBadgeComponent,
     TableComponent,
@@ -74,7 +68,7 @@ export class MyVideosComponent implements OnInit, OnDestroy {
   private headerService = inject(HeaderService)
 
   readonly videoChangeOwnershipModal = viewChild<VideoChangeOwnershipComponent>('videoChangeOwnershipModal')
-  readonly table = viewChild<TableComponent<Video, ColumnName, QueryParams>>('table')
+  readonly table = viewChild<TableComponent<Video, DataLoaderParameter, ColumnName, QueryParams>>('table')
 
   videosContainedInPlaylists: VideosExistInPlaylists = {}
 
@@ -97,8 +91,7 @@ export class MyVideosComponent implements OnInit, OnDestroy {
   user: AuthUser
   channels: (VideoChannel & { selected: boolean })[] = []
 
-  filterItems: SelectOptionsItem<CommonFilter>[] = []
-  selectedFilterItems: CommonFilter[] = []
+  inputFilters: AdvancedFilterDef<DataLoaderParameter>[] = []
 
   columns: TableColumnInfo<ColumnName>[] = []
 
@@ -134,34 +127,30 @@ export class MyVideosComponent implements OnInit, OnDestroy {
       { id: 'language', label: $localize`Language`, selected: false, sortable: false }
     ]
 
-    this.filterItems = [
+    this.inputFilters = [
       {
-        id: 'live',
-        label: $localize`Lives`
+        type: 'options',
+        key: 'isLive',
+        title: $localize`Video type`,
+        options: [
+          { value: 'all', label: $localize`All` },
+          { value: true, label: $localize`Lives` },
+          { value: false, label: $localize`VOD` }
+        ]
       },
+
       {
-        id: 'vod',
-        label: $localize`VOD`
-      },
-      {
-        id: 'public',
-        label: $localize`Public videos`
-      },
-      {
-        id: 'internal',
-        label: $localize`Internal videos`
-      },
-      {
-        id: 'unlisted',
-        label: $localize`Unlisted videos`
-      },
-      {
-        id: 'password-protected',
-        label: $localize`Password protected videos`
-      },
-      {
-        id: 'private',
-        label: $localize`Private videos`
+        type: 'options',
+        key: 'privacyOneOf',
+        title: $localize`Privacy`,
+        options: [
+          { value: 'all', label: $localize`All` },
+          { value: VideoPrivacy.PUBLIC, label: $localize`Public videos` },
+          { value: VideoPrivacy.INTERNAL, label: $localize`Internal videos` },
+          { value: VideoPrivacy.UNLISTED, label: $localize`Unlisted videos` },
+          { value: VideoPrivacy.PASSWORD_PROTECTED, label: $localize`Password protected videos` },
+          { value: VideoPrivacy.PRIVATE, label: $localize`Private videos` }
+        ]
       }
     ]
 
@@ -173,42 +162,22 @@ export class MyVideosComponent implements OnInit, OnDestroy {
   }
 
   private _customParseQueryParams (queryParams: QueryParams) {
-    {
-      const enabledChannels = queryParams.channelNameOneOf
-        ? new Set(arrayify(queryParams.channelNameOneOf))
-        : new Set<string>()
+    const enabledChannels = queryParams.channelNameOneOf
+      ? new Set(arrayify(queryParams.channelNameOneOf))
+      : new Set<string>()
 
-      this.user = this.auth.getUser()
-      this.channels = [ ...this.user.videoChannels, ...this.user.videoChannelCollaborations ].map(c => ({
-        ...c,
+    this.user = this.auth.getUser()
+    this.channels = [ ...this.user.videoChannels, ...this.user.videoChannelCollaborations ].map(c => ({
+      ...c,
 
-        selected: enabledChannels.has(c.name)
-      }))
-    }
-
-    {
-      this.selectedFilterItems = []
-      const videoType = arrayify(queryParams.videoType)
-
-      if (videoType.includes('live')) this.selectedFilterItems.push('live')
-      if (videoType.includes('vod')) this.selectedFilterItems.push('vod')
-
-      const enabledPrivacies = queryParams.privacyOneOf
-        ? new Set(arrayify(queryParams.privacyOneOf).map(t => parseInt(t) as VideoPrivacyType))
-        : new Set<VideoPrivacyType>()
-
-      if (enabledPrivacies.has(VideoPrivacy.PUBLIC)) this.selectedFilterItems.push('public')
-      if (enabledPrivacies.has(VideoPrivacy.INTERNAL)) this.selectedFilterItems.push('internal')
-      if (enabledPrivacies.has(VideoPrivacy.UNLISTED)) this.selectedFilterItems.push('unlisted')
-      if (enabledPrivacies.has(VideoPrivacy.PASSWORD_PROTECTED)) this.selectedFilterItems.push('password-protected')
-      if (enabledPrivacies.has(VideoPrivacy.PRIVATE)) this.selectedFilterItems.push('private')
-    }
+      selected: enabledChannels.has(c.name)
+    }))
   }
 
   // ---------------------------------------------------------------------------
 
-  getNoResults (search?: string) {
-    if (search || this.selectedFilterItems.length !== 0) {
+  getNoResults (hasSearchOrFilters?: boolean) {
+    if (hasSearchOrFilters) {
       return $localize`No videos found matching your filters.`
     }
 
@@ -225,40 +194,7 @@ export class MyVideosComponent implements OnInit, OnDestroy {
     const channelNameOneOf = this.channels.filter(c => c.selected).map(c => c.name)
 
     return {
-      ...pick(this.buildCommonVideoFilters(), [ 'privacyOneOf', 'videoType' ]),
-
       channelNameOneOf
-    }
-  }
-
-  private buildCommonVideoFilters () {
-    const selectedFilterSet = new Set(this.selectedFilterItems)
-
-    let isLive: boolean
-    const videoType: VideoType[] = []
-    if (selectedFilterSet.has('live')) {
-      videoType.push('live')
-
-      if (!selectedFilterSet.has('vod')) isLive = true
-    }
-
-    if (selectedFilterSet.has('vod')) {
-      videoType.push('vod')
-
-      if (!selectedFilterSet.has('live')) isLive = false
-    }
-
-    const privacyOneOf: VideoPrivacyType[] = []
-    if (selectedFilterSet.has('public')) privacyOneOf.push(VideoPrivacy.PUBLIC)
-    if (selectedFilterSet.has('internal')) privacyOneOf.push(VideoPrivacy.INTERNAL)
-    if (selectedFilterSet.has('unlisted')) privacyOneOf.push(VideoPrivacy.UNLISTED)
-    if (selectedFilterSet.has('password-protected')) privacyOneOf.push(VideoPrivacy.PASSWORD_PROTECTED)
-    if (selectedFilterSet.has('private')) privacyOneOf.push(VideoPrivacy.PRIVATE)
-
-    return {
-      isLive,
-      videoType,
-      privacyOneOf
     }
   }
 
@@ -268,8 +204,10 @@ export class MyVideosComponent implements OnInit, OnDestroy {
     pagination: RestPagination
     sort: SortMeta
     search: string
+    isLive?: boolean
+    privacyOneOf?: VideoPrivacyType
   }) {
-    const { pagination, sort, search } = options
+    const { pagination, sort, search, isLive, privacyOneOf } = options
 
     const channelNameOneOf = this.channels.filter(c => c.selected).map(c => c.name)
 
@@ -283,7 +221,10 @@ export class MyVideosComponent implements OnInit, OnDestroy {
         ? channelNameOneOf
         : undefined,
 
-      ...pick(this.buildCommonVideoFilters(), [ 'isLive', 'privacyOneOf' ])
+      isLive,
+      privacyOneOf: privacyOneOf !== undefined
+        ? [ privacyOneOf ]
+        : undefined
     }).pipe(tap(({ data }) => this.fetchVideosContainedInPlaylists(data)))
   }
 

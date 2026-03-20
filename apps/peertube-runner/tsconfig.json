@@ -6,6 +6,9 @@
     "rootDir": "src",
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
+  "include": [
+    "src/**/*.ts"
+  ],
   "references": [
     { "path": "../../packages/core-utils" },
     { "path": "../../packages/ffmpeg" },

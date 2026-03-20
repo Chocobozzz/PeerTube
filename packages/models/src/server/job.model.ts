@@ -29,7 +29,7 @@ export type JobType =
   | 'video-redundancy'
   | 'video-studio-edition'
   | 'video-transcoding'
-  | 'videos-views-stats'
+  | 'videos-stats'
   | 'generate-video-storyboard'
   | 'create-user-export'
   | 'import-user-archive'

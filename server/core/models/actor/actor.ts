@@ -41,6 +41,7 @@ import {
   MActorHost,
   MActorHostOnly,
   MActorId,
+  MActorOutdated,
   MActorSummaryFormattable,
   MActorUrl,
   MActorWithInboxes
@@ -398,6 +399,17 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     return ActorModel.unscoped().findByPk(id, { transaction })
   }
 
+  static async loadForOutdated (id: number, transaction?: Transaction): Promise<MActorOutdated> {
+    const actorServer = await getServerActor()
+    if (id === actorServer.id) return actorServer
+
+    return ActorModel.unscoped().findOne({
+      attributes: [ 'id', 'createdAt', 'updatedAt', 'serverId' ],
+      where: { id },
+      transaction
+    })
+  }
+
   static loadFull (id: number, transaction?: Transaction): Promise<MActorFull> {
     return ActorModel.scope(ScopeNames.FULL).findByPk(id, { transaction })
   }
@@ -528,6 +540,15 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     }
 
     return ActorModel.unscoped().findOne(query)
+  }
+
+  static loadAndPopulateAccountAndChannel (id: number, transaction?: Transaction): Promise<MActorFull> {
+    const query = {
+      where: { id },
+      transaction
+    }
+
+    return ActorModel.scope(ScopeNames.FULL).findOne(query)
   }
 
   static loadByUrlAndPopulateAccountAndChannel (url: string, transaction?: Transaction): Promise<MActorFull> {
@@ -758,7 +779,7 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     return this.url + '/playlists'
   }
 
-  isLocal () {
+  isLocal (this: Pick<MActor, 'serverId'>) {
     return this.serverId === null
   }
 
@@ -812,7 +833,7 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     return findAppropriateImage(images, width)
   }
 
-  isOutdated () {
+  isOutdated (this: MActorOutdated) {
     if (this.isLocal()) return false
 
     return isOutdated(this, ACTIVITY_PUB.ACTOR_REFRESH_INTERVAL)

@@ -7,12 +7,10 @@ import {
   UserRight,
   VideoState
 } from '@peertube/peertube-models'
-import {
-  areLiveSchedulesValid,
-  isLiveDvrWindowValid,
-  isLiveLatencyModeValid
-} from '@server/helpers/custom-validators/video-lives.js'
+import { areLiveSchedulesValid, isLiveDvrWindowValid, isLiveLatencyModeValid } from '@server/helpers/custom-validators/video-lives.js'
+import { getVideoWithAttributes } from '@server/helpers/video.js'
 import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
+import { VideoLoadType } from '@server/lib/model-loaders/video.js'
 import { isLocalLiveVideoAccepted } from '@server/lib/moderation.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { VideoLiveSessionModel } from '@server/models/video/video-live-session.js'
@@ -28,26 +26,25 @@ import { CONFIG } from '../../../initializers/config.js'
 import { areValidationErrors, checkCanManageVideo, doesChannelIdExist, doesVideoExist, isValidVideoIdParam } from '../shared/index.js'
 import { areErrorsInNSFW, getCommonVideoEditAttributes } from './videos.js'
 
-export const videoLiveGetValidator = [
-  isValidVideoIdParam('videoId'),
+export const videoLiveGetValidatorFactory = (loadType: VideoLoadType) => {
+  return [
+    isValidVideoIdParam('videoId'),
 
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.videoId, res, 'all')) return
+    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      if (areValidationErrors(req, res)) return
+      if (!await doesVideoExist(req.params.videoId, res, loadType)) return
 
-    const videoLive = await VideoLiveModel.loadByVideoIdFull(res.locals.videoAll.id)
-    if (!videoLive) {
-      return res.fail({
-        status: HttpStatusCode.NOT_FOUND_404,
-        message: 'Live video not found'
-      })
+      const videoLive = await VideoLiveModel.loadByVideoIdFull(getVideoWithAttributes(res).id)
+      if (!videoLive) {
+        return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+      }
+
+      res.locals.videoLive = videoLive
+
+      return next()
     }
-
-    res.locals.videoLive = videoLive
-
-    return next()
-  }
-]
+  ]
+}
 
 export const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
@@ -228,7 +225,7 @@ export const videoLiveUpdateValidator = [
 
     if (!checkLiveSettingsReplayConsistency({ res, body })) return
 
-    if (res.locals.videoAll.state !== VideoState.WAITING_FOR_LIVE) {
+    if (res.locals.videoFull.state !== VideoState.WAITING_FOR_LIVE) {
       return res.fail({ message: 'Cannot update a live that has already started' })
     }
 
@@ -237,7 +234,7 @@ export const videoLiveUpdateValidator = [
     if (
       !await checkCanManageVideo({
         user,
-        video: res.locals.videoAll,
+        video: res.locals.videoFull,
         right: UserRight.GET_ANY_LIVE,
         req,
         res,
@@ -257,7 +254,7 @@ export const videoLiveListSessionsValidator = [
     if (
       !await checkCanManageVideo({
         user,
-        video: res.locals.videoAll,
+        video: res.locals.videoWithRights,
         right: UserRight.GET_ANY_LIVE,
         req,
         res,

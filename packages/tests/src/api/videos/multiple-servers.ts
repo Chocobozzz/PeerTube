@@ -479,6 +479,20 @@ describe('Test multiple servers', function () {
     let remoteVideosServer2 = []
     let remoteVideosServer3 = []
 
+    let fileUrls: string[] = []
+
+    async function grabFileUrls (videoUUID: string) {
+      const video = await servers[0].videos.get({ id: videoUUID })
+      const { storyboards } = await servers[0].storyboard.list({ id: videoUUID })
+
+      return [
+        ...video.files.map(f => f.fileUrl),
+        ...video.files.map(f => f.torrentUrl),
+        ...video.thumbnails.map(f => f.fileUrl),
+        ...storyboards.map(s => s.fileUrl)
+      ]
+    }
+
     before(async function () {
       {
         const { data } = await servers[0].videos.list()
@@ -495,6 +509,8 @@ describe('Test multiple servers', function () {
         localVideosServer3 = data.filter(video => video.isLocal === true).map(video => video.uuid)
         remoteVideosServer3 = data.filter(video => video.isLocal === false).map(video => video.uuid)
       }
+
+      fileUrls = await grabFileUrls(localVideosServer3[0])
     })
 
     it('Should view multiple videos on owned servers', async function () {
@@ -514,7 +530,7 @@ describe('Test multiple servers', function () {
       await waitJobs(servers)
 
       for (const server of servers) {
-        await server.debug.sendCommand({ body: { command: 'process-video-views-buffer' } })
+        await server.debug.sendCommand({ body: { command: 'process-video-stats-buffer' } })
       }
 
       await waitJobs(servers)
@@ -550,7 +566,7 @@ describe('Test multiple servers', function () {
       await waitJobs(servers)
 
       for (const server of servers) {
-        await server.debug.sendCommand({ body: { command: 'process-video-views-buffer' } })
+        await server.debug.sendCommand({ body: { command: 'process-video-stats-buffer' } })
       }
 
       await waitJobs(servers)
@@ -608,6 +624,12 @@ describe('Test multiple servers', function () {
           expect(baseVideo.dislikes).to.equal(sameVideo.dislikes, `Dislikes of ${sameVideo.uuid} do not correspond`)
         }
       }
+    })
+
+    it('Should not have updated torrent files/storyboards/thumbnails', async function () {
+      const newFileUrls = await grabFileUrls(localVideosServer3[0])
+
+      expect(newFileUrls).to.have.members(fileUrls)
     })
   })
 

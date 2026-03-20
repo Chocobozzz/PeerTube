@@ -16,6 +16,7 @@ import { MUserAccountId } from '@server/types/models/index.js'
 import express from 'express'
 import { body, param, query, ValidationChain } from 'express-validator'
 import {
+  hasArrayLength,
   isArrayOf,
   isIdOrUUIDValid,
   isIdValid,
@@ -262,7 +263,7 @@ export const videoPlaylistsAddVideoValidator = [
     if (areValidationErrors(req, res)) return
 
     if (!await doesVideoPlaylistExist({ id: req.params.playlistId, req, res, fetchType: 'all' })) return
-    if (!await doesVideoExist(req.body.videoId, res, 'only-video-and-blacklist')) return
+    if (!await doesVideoExist(req.body.videoId, res, 'with-thumbnails')) return
 
     const videoPlaylist = getPlaylist(res)
 
@@ -465,6 +466,7 @@ export const commonVideoPlaylistFiltersValidator = [
 export const doVideosInPlaylistExistValidator = [
   query('videoIds')
     .customSanitizer(toIntArray)
+    .custom(v => hasArrayLength(v, { max: 100 }))
     .custom(v => isArrayOf(v, isIdValid)).withMessage('Should have a valid video ids array'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {

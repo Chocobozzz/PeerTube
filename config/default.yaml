@@ -84,9 +84,9 @@ database:
   ssl: false
   ssl_settings:
     reject_unauthorized: false
-    ca: '/absolute/path/to/server-certificates/root.crt'
-    cert: '/absolute/path/to/client-certificates/postgresql.crt'
-    key: '/absolute/path/to/client-key/postgresql.key'
+    ca: null # '/absolute/path/to/server-certificates/root.crt'
+    cert: null # '/absolute/path/to/client-certificates/postgresql.crt'
+    key: null # '/absolute/path/to/client-key/postgresql.key'
   suffix: '_dev'
   username: 'peertube'
   password: 'peertube'
@@ -104,18 +104,18 @@ redis:
   enable_tls: false
   tls_settings:
     reject_unauthorized: false
-    ca: '/absolute/path/to/server-certificates/root.crt'
-    cert: '/absolute/path/to/client-certificates/postgresql.crt'
-    key: '/absolute/path/to/client-key/postgresql.key'
+    ca: null # '/absolute/path/to/server-certificates/root.crt'
+    cert: null # '/absolute/path/to/client-certificates/redis.crt'
+    key: null # '/absolute/path/to/client-key/redis.key'
 
   sentinel:
     enabled: false
     enable_tls: false
     tls_settings:
       reject_unauthorized: false
-      ca: '/absolute/path/to/server-certificates/root.crt'
-      cert: '/absolute/path/to/client-certificates/postgresql.crt'
-      key: '/absolute/path/to/client-key/postgresql.key'
+      ca: null # '/absolute/path/to/server-certificates/root.crt'
+      cert: null # '/absolute/path/to/client-certificates/redis.crt'
+      key: null # '/absolute/path/to/client-key/redis.key'
     master_name: ''
     password: ''
     sentinels:

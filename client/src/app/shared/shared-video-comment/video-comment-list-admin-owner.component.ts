@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, inject, input, viewChild } from '@angular/core'
-import { ActivatedRoute, RouterLink } from '@angular/router'
+import { RouterLink } from '@angular/router'
 import { AuthService, ConfirmService, HooksService, MarkdownService, Notifier, PluginService } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { BulkService } from '@app/shared/shared-moderation/bulk.service'
@@ -8,14 +8,16 @@ import { VideoCommentService } from '@app/shared/shared-video-comment/video-comm
 import { BulkRemoveCommentsOfBody, UserRight } from '@peertube/peertube-models'
 import { switchMap } from 'rxjs'
 import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../shared-forms/advanced-input-filter.component'
+import { AdvancedFilterDef } from '../shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
+import { buildDropdownSimpleAndBulkActions } from '../shared-main/buttons/action-dropdown-helpers'
 import { ActionDropdownComponent, DropdownAction } from '../shared-main/buttons/action-dropdown.component'
-import { ButtonComponent } from '../shared-main/buttons/button.component'
 import { CollaboratorStateComponent } from '../shared-main/channel/collaborator-state.component'
 import { PTDatePipe } from '../shared-main/common/date.pipe'
 import { NumberFormatterPipe } from '../shared-main/common/number-formatter.pipe'
-import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../shared-tables/table.component'
+import { DataLoaderOptionsBase, TableColumnInfo, TableComponent } from '../shared-tables/table.component'
+
+type DataLoaderParameter = Parameters<VideoCommentListAdminOwnerComponent['_dataLoader']>[0]
 
 type ColumnName =
   | 'account'
@@ -30,8 +32,6 @@ type ColumnName =
   styleUrls: [ '../shared-moderation/moderation.scss', './video-comment-list-admin-owner.component.scss' ],
   imports: [
     ActionDropdownComponent,
-    AdvancedInputFilterComponent,
-    ButtonComponent,
     ActorAvatarComponent,
     PTDatePipe,
     RouterLink,
@@ -42,7 +42,6 @@ type ColumnName =
   ]
 })
 export class VideoCommentListAdminOwnerComponent implements OnInit, OnDestroy {
-  private route = inject(ActivatedRoute)
   private auth = inject(AuthService)
   private notifier = inject(Notifier)
   private confirmService = inject(ConfirmService)
@@ -55,11 +54,11 @@ export class VideoCommentListAdminOwnerComponent implements OnInit, OnDestroy {
   readonly key = input.required<string>()
   readonly mode = input.required<'user' | 'admin'>()
 
-  readonly table = viewChild<TableComponent<VideoCommentForAdminOrUser, ColumnName>>('table')
+  readonly table = viewChild<TableComponent<VideoCommentForAdminOrUser, DataLoaderParameter, ColumnName>>('table')
 
   videoCommentActions: DropdownAction<VideoCommentForAdminOrUser>[][] = []
-  bulkActions: DropdownAction<VideoCommentForAdminOrUser[]>[] = []
-  inputFilters: AdvancedInputFilter[] = []
+  bulkActions: DropdownAction<VideoCommentForAdminOrUser[]>[][] = []
+  inputFilters: AdvancedFilterDef<DataLoaderParameter>[] = []
 
   columns: TableColumnInfo<ColumnName>[] = [
     { id: 'video', label: $localize`Commented video`, sortable: false },
@@ -87,7 +86,6 @@ export class VideoCommentListAdminOwnerComponent implements OnInit, OnDestroy {
     this.buildInputFilters()
 
     await this.buildCommentActions()
-    await this.buildBulkActions()
   }
 
   ngOnDestroy () {
@@ -97,12 +95,13 @@ export class VideoCommentListAdminOwnerComponent implements OnInit, OnDestroy {
   }
 
   private async buildCommentActions () {
-    const videoCommentActions: DropdownAction<VideoCommentForAdminOrUser>[][] = [
+    const { simpleActions, bulkActions } = buildDropdownSimpleAndBulkActions<VideoCommentForAdminOrUser>([
       [
         {
           label: $localize`Delete this comment`,
-          handler: comment => this.removeComment(comment),
-          isDisplayed: () => this.mode() === 'user' || this.user.hasRight(UserRight.MANAGE_ANY_VIDEO_COMMENT)
+          handler: comments => this.removeComments(comments),
+          isDisplayed: () => this.mode() === 'user' || this.user.hasRight(UserRight.MANAGE_ANY_VIDEO_COMMENT),
+          enableBulk: true
         },
         {
           label: $localize`Delete all comments of this account`,
@@ -113,43 +112,30 @@ export class VideoCommentListAdminOwnerComponent implements OnInit, OnDestroy {
               : $localize`This will delete comments on all your videos`
             : $localize`This will delete comments on all videos from your platform`,
 
-          handler: comment => this.removeCommentsOfAccount(comment),
+          handler: comments => this.removeCommentsOfAccount(comments[0]),
+
           isDisplayed: () => {
             if (this.mode() === 'user') return true
 
             return this.mode() === 'admin' && this.user.hasRight(UserRight.MANAGE_ANY_VIDEO_COMMENT)
-          }
+          },
+
+          enableBulk: false
         }
       ],
       [
         {
           label: $localize`Approve this comment`,
-          handler: comment => this.approveComments([ comment ]),
-          isDisplayed: comment => this.mode() === 'user' && comment.heldForReview
+          handler: comments => this.approveComments(comments),
+          isDisplayed: comment => this.mode() === 'user' && comment.heldForReview,
+          enableBulk: true
         }
       ]
-    ]
+    ])
 
     this.videoCommentActions = this.mode() === 'admin'
-      ? await this.hooks.wrapObject(videoCommentActions, 'admin-comments', 'filter:admin-video-comments-list.actions.create.result')
-      : videoCommentActions
-  }
-
-  private async buildBulkActions () {
-    const bulkActions: DropdownAction<VideoCommentForAdminOrUser[]>[] = [
-      {
-        label: $localize`Delete`,
-        handler: comments => this.removeComments(comments),
-        isDisplayed: () => this.mode() === 'user' || this.user.hasRight(UserRight.MANAGE_ANY_VIDEO_COMMENT),
-        iconName: 'delete'
-      },
-      {
-        label: $localize`Approve`,
-        handler: comments => this.approveComments(comments),
-        isDisplayed: comments => this.mode() === 'user' && comments.every(c => c.heldForReview),
-        iconName: 'tick'
-      }
-    ]
+      ? await this.hooks.wrapObject(simpleActions, 'admin-comments', 'filter:admin-video-comments-list.actions.create.result')
+      : simpleActions
 
     this.bulkActions = this.mode() === 'admin'
       ? await this.hooks.wrapObject(bulkActions, 'admin-comments', 'filter:admin-video-comments-list.bulk-actions.create.result')
@@ -157,39 +143,66 @@ export class VideoCommentListAdminOwnerComponent implements OnInit, OnDestroy {
   }
 
   private buildInputFilters () {
+    this.inputFilters = []
+
     if (this.mode() === 'admin') {
       this.inputFilters = [
+        ...this.inputFilters,
+
         {
-          title: $localize`Advanced filters`,
-          children: [
-            {
-              value: 'local:true',
-              label: $localize`Local comments`
-            },
-            {
-              value: 'local:false',
-              label: $localize`Remote comments`
-            },
-            {
-              value: 'localVideo:true',
-              label: $localize`Comments on local videos`
-            }
+          type: 'options',
+          key: 'isLocal',
+          title: $localize`Comment scope`,
+          options: [
+            { value: 'all', label: $localize`All` },
+            { value: true, label: $localize`Local` },
+            { value: false, label: $localize`Remote` }
           ]
+        },
+        {
+          type: 'title',
+          title: $localize`Commented video scope`
+        },
+        {
+          type: 'checkbox',
+          key: 'onLocalVideo',
+          label: $localize`Comments on local videos`
         }
       ]
+    } else {
+      this.inputFilters = [
+        ...this.inputFilters,
 
-      return
+        {
+          type: 'title',
+          title: $localize`Moderation`
+        },
+
+        {
+          type: 'checkbox',
+          key: 'isHeldForReview',
+          label: $localize`Awaiting your approval`
+        }
+      ]
     }
 
     this.inputFilters = [
+      ...this.inputFilters,
+
       {
-        title: $localize`Advanced filters`,
-        children: [
-          {
-            value: 'heldForReview:true',
-            label: $localize`Display comments awaiting your approval`
-          }
-        ]
+        type: 'text',
+        key: 'searchAccount',
+        title: $localize`Search by account`
+      },
+      {
+        type: 'text',
+        key: 'searchVideo',
+        title: $localize`Search by video`
+      },
+      {
+        type: 'tags',
+        key: 'autoTagOneOf',
+        title: $localize`Search by auto tag`
       }
     ]
   }
@@ -198,16 +211,12 @@ export class VideoCommentListAdminOwnerComponent implements OnInit, OnDestroy {
     return this.markdownRenderer.textMarkdownToHTML({ markdown: text, withHtml: true, withEmoji: true })
   }
 
-  buildSearchAutoTag (tag: string) {
-    const str = `autoTag:"${tag}"`
-
-    const search = this.route.snapshot.queryParams.search
-    if (search) return search + ' ' + str
-
-    return str
-  }
-
-  private _dataLoader (options: DataLoaderOptions) {
+  private _dataLoader (
+    options:
+      & DataLoaderOptionsBase
+      & Parameters<VideoCommentService['listAdminVideoComments']>[0]
+      & Parameters<VideoCommentService['listVideoCommentsOfMyVideos']>[0]
+  ) {
     const method = this.mode() === 'admin'
       ? this.videoCommentService.listAdminVideoComments.bind(this.videoCommentService)
       : this.videoCommentService.listVideoCommentsOfMyVideos.bind(this.videoCommentService)
@@ -249,10 +258,18 @@ export class VideoCommentListAdminOwnerComponent implements OnInit, OnDestroy {
       })
   }
 
-  private removeComments (comments: VideoCommentForAdminOrUser[]) {
+  private async removeComments (comments: VideoCommentForAdminOrUser[]) {
+    const message = formatICU(
+      $localize`Do you really want to remove {count, plural, =1 {this comment} other {{count} comments}}?`,
+      { count: comments.length }
+    )
+
+    const res = await this.confirmService.confirm(message, $localize`Remove`)
+    if (res === false) return
+
     const commentArgs = comments.map(c => ({ videoId: c.video.id, commentId: c.id }))
 
-    this.videoCommentService.deleteVideoComments(commentArgs)
+    this.videoCommentService.deleteComments(commentArgs)
       .subscribe({
         next: () => {
           this.notifier.success(
@@ -264,15 +281,6 @@ export class VideoCommentListAdminOwnerComponent implements OnInit, OnDestroy {
 
           this.table().loadData()
         },
-
-        error: err => this.notifier.handleError(err)
-      })
-  }
-
-  private removeComment (comment: VideoCommentForAdminOrUser) {
-    this.videoCommentService.deleteVideoComment(comment.video.id, comment.id)
-      .subscribe({
-        next: () => this.table().loadData(),
 
         error: err => this.notifier.handleError(err)
       })

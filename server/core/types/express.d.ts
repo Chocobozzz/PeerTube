@@ -32,7 +32,9 @@ import {
   MVideoPassword,
   MVideoPlaylistFull,
   MVideoPlaylistFullSummary,
-  MVideoThumbnailBlacklist,
+  MVideoThumbnails,
+  MVideoWithBlacklist,
+  MVideoWithRights,
   MWatchedWordsList
 } from '@server/types/models/index.js'
 import { MOAuthToken, MOAuthTokenUser } from '@server/types/models/oauth/oauth-token.js'
@@ -55,7 +57,7 @@ import {
   MUserDefault,
   MVideoBlacklist,
   MVideoCaptionVideo,
-  MVideoFullLight,
+  MVideoFull,
   MVideoRedundancyVideo,
   MVideoShareActor
 } from './models/index.js'
@@ -147,9 +149,11 @@ declare module 'express' {
       ffprobe?: FfprobeData
 
       videoAPI?: MVideoFormattableDetails
-      videoAll?: MVideoFullLight
-      onlyImmutableVideo?: MVideoImmutable
-      onlyVideo?: MVideoThumbnailBlacklist
+      videoFull?: MVideoFull
+      videoImmutable?: MVideoImmutable
+      videoWithBlacklist?: MVideoWithBlacklist
+      videoWithRights?: MVideoWithRights
+      videoThumbnails?: MVideoThumbnails
       videoId?: MVideoId
 
       videoLive?: MVideoLiveWithSettingSchedules

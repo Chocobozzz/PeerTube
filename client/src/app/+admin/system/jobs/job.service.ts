@@ -1,13 +1,11 @@
-import { SortMeta } from 'primeng/api'
-import { Observable } from 'rxjs'
-import { catchError, map } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
-import { Job, ResultList } from '@peertube/peertube-models'
+import { Job, JobState, JobType, ResultList } from '@peertube/peertube-models'
+import { SortMeta } from 'primeng/api'
+import { Observable } from 'rxjs'
+import { catchError, map } from 'rxjs/operators'
 import { environment } from '../../../../environments/environment'
-import { JobStateClient } from '../../../../types/job-state-client.type'
-import { JobTypeClient } from '../../../../types/job-type-client.type'
 
 @Injectable()
 export class JobService {
@@ -18,8 +16,8 @@ export class JobService {
   private static BASE_JOB_URL = environment.apiUrl + '/api/v1/jobs'
 
   listJobs (options: {
-    jobState?: JobStateClient
-    jobType: JobTypeClient
+    jobState?: JobState
+    jobType?: JobType
     pagination: RestPagination
     sort: SortMeta
   }): Observable<ResultList<Job>> {
@@ -28,7 +26,7 @@ export class JobService {
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
-    if (jobType !== 'all') params = params.append('jobType', jobType)
+    if (jobType) params = params.append('jobType', jobType)
 
     return this.authHttp.get<ResultList<Job>>(JobService.BASE_JOB_URL + `/${jobState || ''}`, { params })
       .pipe(

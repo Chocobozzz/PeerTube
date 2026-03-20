@@ -6,14 +6,13 @@
   paginatorText="servers per page"
   [dataLoader]="dataLoader"
   columnConfig="false"
+  searchInput="true"
 >
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No server} =1 {1 server} other {{{ totalRecords | myNumberFormatter }} servers}}</ng-container>
   </ng-template>
 
   <ng-template #captionRight>
-    <my-advanced-input-filter (search)="table.onSearch($event)"></my-advanced-input-filter>
-
     <button class="peertube-create-button" (click)="addServersToBlock()" (key.enter)="addServersToBlock()">
       <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
       <ng-container i18n>Mute domains</ng-container>
@@ -35,8 +34,8 @@
     <button class="peertube-button secondary-button" (click)="unblockServer(serverBlock)" i18n>Unmute</button>
   </ng-template>
 
-  <ng-template #noResults let-search>
-    @if (search) {
+  <ng-template #noResults let-search="search" let-hasFilters="hasFilters">
+    @if (search || hasFilters) {
       <ng-container i18n>No server found matching current filters.</ng-container>
     } @else {
       <ng-container i18n>No server found.</ng-container>

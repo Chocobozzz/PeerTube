@@ -284,7 +284,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
     const res = await this.confirmService.confirm(confirmMessage, $localize`Unblock ${this.video().name}`)
     if (res === false) return
 
-    this.videoBlocklistService.unblockVideo(this.video().id)
+    this.videoBlocklistService.unblockVideos(this.video().id)
       .subscribe({
         next: () => {
           const video = this.video()

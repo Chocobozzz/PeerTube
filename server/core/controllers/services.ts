@@ -5,6 +5,7 @@ import { getOrCreateAPActor } from '@server/lib/activitypub/actors/get.js'
 import { loadActorUrlOrGetFromWebfinger } from '@server/lib/activitypub/actors/webfinger.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
+import { VideoModel } from '@server/models/video/video.js'
 import { MChannelSummary, MThumbnail } from '@server/types/models/index.js'
 import cors from 'cors'
 import express from 'express'
@@ -19,7 +20,7 @@ servicesRouter.use(
   cors(),
   apiRateLimiter,
   asyncMiddleware(oembedValidator),
-  generateOEmbed
+  asyncMiddleware(generateOEmbed)
 )
 
 // TODO: deprecated, remove in PeerTube 8.1
@@ -44,8 +45,11 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function generateOEmbed (req: express.Request, res: express.Response) {
-  if (res.locals.videoAll) return generateVideoOEmbed(req, res)
+async function generateOEmbed (req: express.Request, res: express.Response) {
+  if (res.locals.videoWithRights) {
+    await generateVideoOEmbed(req, res)
+    return
+  }
 
   return generatePlaylistOEmbed(req, res)
 }
@@ -64,14 +68,15 @@ function generatePlaylistOEmbed (req: express.Request, res: express.Response) {
   return res.json(json)
 }
 
-function generateVideoOEmbed (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
+async function generateVideoOEmbed (req: express.Request, res: express.Response) {
+  const video = res.locals.videoWithRights
+  const videoWithThumbnails = await VideoModel.loadWithThumbnails(video.id)
 
   const json = buildOEmbed({
     channel: video.VideoChannel,
     title: video.name,
     embedPath: video.getEmbedStaticPath() + buildPlayerURLQuery(req.query.url),
-    thumbnail: video.getBestThumbnail('16:9', 1280),
+    thumbnail: videoWithThumbnails.getBestThumbnail('16:9', 1280),
     req
   })
 

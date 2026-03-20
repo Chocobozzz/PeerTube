@@ -10,14 +10,14 @@
   [dataLoader]="dataLoader"
   columnConfig="true"
   [hasExpandedRow]="hasExpandedRow"
+  [inputFilters]="inputFilters"
+  searchInput="true"
   >
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No users} =1 {1 user} other {{{ totalRecords | myNumberFormatter }} users}}</ng-container>
   </ng-template>
 
   <ng-template #captionRight>
-    <my-advanced-input-filter [filters]="inputFilters" (search)="table.onSearch($event)"></my-advanced-input-filter>
-
     <a class="peertube-create-button" routerLink="/admin/overview/users/create">
       <my-global-icon iconName="user-add" aria-hidden="true"></my-global-icon>
       <ng-container i18n>Create user</ng-container>

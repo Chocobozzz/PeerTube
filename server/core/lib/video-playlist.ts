@@ -8,12 +8,12 @@ import { copy } from 'fs-extra/esm'
 import { extname, join } from 'path'
 import { Transaction } from 'sequelize'
 import { VideoPlaylistModel } from '../models/video/video-playlist.js'
-import { MAccount, MVideoThumbnail } from '../types/models/index.js'
+import { MAccount, MVideoThumbnails } from '../types/models/index.js'
 import { MVideoPlaylistOwner, MVideoPlaylistThumbnail } from '../types/models/video/video-playlist.js'
 import { sendUpdateVideoPlaylist } from './activitypub/send/send-update.js'
 import { getLocalVideoPlaylistActivityPubUrl } from './activitypub/url.js'
+import downloadImage from './image-downloader.js'
 import { createLocalPlaylistThumbnailFromImage } from './thumbnail.js'
-import { downloadImageFromWorker } from './worker/parent-process.js'
 
 export async function createWatchLaterPlaylist (account: MAccount, t: Transaction) {
   const videoPlaylist: MVideoPlaylistOwner = new VideoPlaylistModel({
@@ -32,7 +32,7 @@ export async function createWatchLaterPlaylist (account: MAccount, t: Transactio
   return videoPlaylist
 }
 
-export async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylistThumbnail, video: MVideoThumbnail) {
+export async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylistThumbnail, video: MVideoThumbnails) {
   logger.info('Generating default thumbnail to playlist %s.', videoPlaylist.url)
 
   const videoThumbnail = video.getBestThumbnail('16:9')
@@ -46,7 +46,7 @@ export async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylis
   if (video.isLocal() === true) {
     await copy(videoThumbnail.getFSPath(), join(CONFIG.STORAGE.TMP_DIR, tmpImageName))
   } else {
-    await downloadImageFromWorker({
+    await downloadImage({
       url: videoThumbnail.fileUrl,
       destDir: CONFIG.STORAGE.TMP_DIR,
       destName: tmpImageName,

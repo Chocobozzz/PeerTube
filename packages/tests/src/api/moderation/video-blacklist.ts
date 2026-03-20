@@ -6,7 +6,8 @@ import {
   BlacklistCommand,
   cleanupTests,
   createMultipleServers,
-  doubleFollow, makeActivityPubGetRequest,
+  doubleFollow,
+  makeActivityPubGetRequest,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultChannelAvatar,
@@ -55,7 +56,6 @@ describe('Test video blacklist', function () {
   })
 
   describe('When listing/searching videos', function () {
-
     it('Should not have the video blacklisted in videos list/search on server 1', async function () {
       {
         const { total, data } = await servers[0].videos.list()
@@ -94,7 +94,6 @@ describe('Test video blacklist', function () {
   })
 
   describe('When listing manually blacklisted videos', function () {
-
     it('Should display all the blacklisted videos', async function () {
       const body = await command.list()
       expect(body.total).to.equal(2)
@@ -165,7 +164,6 @@ describe('Test video blacklist', function () {
   })
 
   describe('When updating blacklisted videos', function () {
-
     it('Should change the reason', async function () {
       await command.update({ videoId, reason: 'my super reason updated' })
 
@@ -319,6 +317,10 @@ describe('Test video blacklist', function () {
       }
     })
 
+    it('Should not crash when unfederating an internal blacklisted video', async function () {
+      const video = await servers[0].videos.quickUpload({ name: 'internal video', privacy: VideoPrivacy.INTERNAL })
+      await command.add({ videoId: video.uuid, reason: 'super reason', unfederate: true })
+    })
   })
 
   describe('When auto blacklist videos', function () {

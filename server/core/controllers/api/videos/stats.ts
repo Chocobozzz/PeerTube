@@ -4,7 +4,8 @@ import {
   VideoStatsTimeserieQuery,
   VideoStatsUserAgentQuery
 } from '@peertube/peertube-models'
-import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer.js'
+import { LocalVideoViewerModel } from '@server/models/stat/local-video-viewer.js'
+import { VideoStatModel } from '@server/models/stat/video-stat.js'
 import express from 'express'
 import {
   asyncMiddleware,
@@ -53,7 +54,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function getOverallStats (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
+  const video = res.locals.videoWithRights
   const query = req.query as VideoStatsOverallQuery
 
   const stats = await LocalVideoViewerModel.getOverallStats({
@@ -66,7 +67,7 @@ async function getOverallStats (req: express.Request, res: express.Response) {
 }
 
 async function getUserAgentStats (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
+  const video = res.locals.videoWithRights
   const query = req.query as VideoStatsUserAgentQuery
 
   const stats = await LocalVideoViewerModel.getUserAgentStats({
@@ -79,7 +80,7 @@ async function getUserAgentStats (req: express.Request, res: express.Response) {
 }
 
 async function getRetentionStats (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
+  const video = res.locals.videoWithRights
 
   const stats = await LocalVideoViewerModel.getRetentionStats(video)
 
@@ -87,17 +88,19 @@ async function getRetentionStats (req: express.Request, res: express.Response) {
 }
 
 async function getTimeseriesStats (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
+  const video = res.locals.videoWithRights
   const metric = req.params.metric as VideoStatsTimeserieMetric
-
   const query = req.query as VideoStatsTimeserieQuery
 
-  const stats = await LocalVideoViewerModel.getTimeserieStats({
+  const options = {
     video,
-    metric,
     startDate: query.startDate ?? video.createdAt.toISOString(),
     endDate: query.endDate ?? new Date().toISOString()
-  })
+  }
+
+  const stats = metric === 'downloads'
+    ? await VideoStatModel.getDownloadTimeserieStats(options)
+    : await LocalVideoViewerModel.getTimeserieStats({ ...options, metric })
 
   return res.json(stats)
 }

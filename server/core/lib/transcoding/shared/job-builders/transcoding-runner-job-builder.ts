@@ -5,7 +5,7 @@ import {
   VODHLSTranscodingJobHandler,
   VODWebVideoTranscodingJobHandler
 } from '@server/lib/runners/job-handlers/index.js'
-import { MUserId, MVideo, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
+import { MUserId, MVideo, MVideoFile, MVideoFull } from '@server/types/models/index.js'
 import { MRunnerJob } from '@server/types/models/runners/runner-job.js'
 import { getTranscodingJobPriority } from '../../transcoding-priority.js'
 import { AbstractJobBuilder, TranscodingPriorityType } from './abstract-job-builder.js'
@@ -90,7 +90,7 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder<FullPayload>
   // ---------------------------------------------------------------------------
 
   protected buildHLSJobPayload (options: {
-    video: MVideoFullLight
+    video: MVideoFull
     resolution: number
     fps: number
     isNewVideo: boolean
@@ -129,7 +129,7 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder<FullPayload>
   }
 
   protected buildWebVideoJobPayload (options: {
-    video: MVideoFullLight
+    video: MVideoFull
     resolution: number
     fps: number
     isNewVideo: boolean
@@ -159,7 +159,7 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder<FullPayload>
   }
 
   protected buildMergeAudioPayload (options: {
-    video: MVideoFullLight
+    video: MVideoFull
     inputFile: MVideoFile
     isNewVideo: boolean
     fps: number
@@ -190,7 +190,7 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder<FullPayload>
   }
 
   protected buildOptimizePayload (options: {
-    video: MVideoFullLight
+    video: MVideoFull
     inputFile: MVideoFile
     isNewVideo: boolean
     fps: number

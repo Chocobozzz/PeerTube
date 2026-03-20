@@ -683,7 +683,8 @@ describe('Test config', function () {
     describe('Banner', function () {
       const bannerUrls: string[] = []
 
-      it('Should update instance banner', async function () {
+      it('Should update instance banner/avatars', async function () {
+        await server.config.updateInstanceImage({ type: ActorImageType.AVATAR, fixture: 'avatar.png' })
         await server.config.updateInstanceImage({ type: ActorImageType.BANNER, fixture: 'banner.jpg' })
 
         const { banners } = await checkAndGetServerImages()
@@ -705,8 +706,9 @@ describe('Test config', function () {
       it('Should remove instance banner', async function () {
         await server.config.deleteInstanceImage({ type: ActorImageType.BANNER })
 
-        const { banners } = await checkAndGetServerImages()
+        const { banners, avatars } = await checkAndGetServerImages()
         expect(banners).to.have.lengthOf(0)
+        expect(avatars).to.not.have.lengthOf(0)
 
         for (const bannerUrl of bannerUrls) {
           await testFileExistsOnFSOrNot(server, 'avatars', basename(bannerUrl), false)
@@ -814,6 +816,8 @@ describe('Test config', function () {
         const logoPaths: string[] = []
 
         it('Should update instance header square icon', async function () {
+          await server.config.updateInstanceLogo({ type: 'favicon', fixture: 'avatar.png' })
+
           for (const extension of [ '.png', '.gif' ]) {
             const fixture = 'avatar' + extension
 
@@ -832,6 +836,8 @@ describe('Test config', function () {
 
             await makeRawRequest({ url: logos[0].fileUrl, expectedStatus: HttpStatusCode.OK_200 })
             await testFileExistsOnFSOrNot(server, 'uploads/images', basename(logos[0].fileUrl), true)
+
+            expect(htmlConfig.instance.logo.find(l => l.type === 'favicon' && l.isFallback === false)).to.exist
           }
         })
 
@@ -852,6 +858,11 @@ describe('Test config', function () {
           for (const logoPath of logoPaths) {
             await testFileExistsOnFSOrNot(server, 'uploads/images', basename(logoPath), false)
           }
+
+          // Check we only delete the appropriate file
+          expect(htmlConfig.instance.logo.find(l => l.type === 'favicon' && l.isFallback === false)).to.exist
+
+          await server.config.deleteInstanceLogo({ type: 'favicon' })
         })
       })
 

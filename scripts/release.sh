@@ -85,11 +85,15 @@ find dist/ packages/core-utils/dist/ \
                           "$directory_name/LICENSE" "$directory_name/README.md" \
                           "$directory_name/packages/core-utils/dist/" "$directory_name/packages/core-utils/package.json" \
                           "$directory_name/packages/ffmpeg/dist/" "$directory_name/packages/ffmpeg/package.json" \
-                          "$directory_name/packages/node-utils/dist/" "$directory_name/packages/node-utils/package.json" \
                           "$directory_name/packages/models/dist/" "$directory_name/packages/models/package.json" \
+                          "$directory_name/packages/node-utils/dist/" "$directory_name/packages/node-utils/package.json" \
+                          "$directory_name/packages/server-commands/package.json" \
                           "$directory_name/packages/transcription/dist/" "$directory_name/packages/transcription/package.json" \
+                          "$directory_name/packages/typescript-utils/package.json" \
                           "$directory_name/client/dist/" \
-                          "$directory_name/client/package.json" "$directory_name/config" \
+                          "$directory_name/client/src/standalone/player/package.json" \
+                          "$directory_name/client/package.json" \
+                          "$directory_name/config" \
                           "$directory_name/dist" "$directory_name/package.json" \
                           "$directory_name/scripts/upgrade.sh" "$directory_name/support/doc" "$directory_name/support/freebsd" \
                           "$directory_name/support/init.d" "$directory_name/support/nginx" "$directory_name/support/openapi" \

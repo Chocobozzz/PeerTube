@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: PeerTube
-  version: 8.0.0
+  version: 8.1.0
   contact:
     name: PeerTube Community
     url: https://joinpeertube.org
@@ -365,8 +365,8 @@ x-tagGroups:
     tags:
       - Abuses
       - Video Blocks
-      - Account Blocks
-      - Server Blocks
+      - Account Blocklist
+      - Server Blocklist
       - Automatic Tags
       - Watched Words
   - name: Instance
@@ -1452,6 +1452,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/usersSearch'
         - $ref: '#/components/parameters/usersBlocked'
+        - $ref: '#/components/parameters/usersRole'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/usersSort'
@@ -1520,6 +1521,59 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateUser'
         required: true
+
+  /api/v1/users/{id}/block:
+    post:
+      summary: Block a user
+      description: Prevent a user from logging in and interacting with the instance
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                  description: Optional reason for blocking the user
+                  minLength: 0
+                  maxLength: 500
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: invalid user id
+        '403':
+          description: insufficient permissions to block users
+        '404':
+          description: user not found
+
+  /api/v1/users/{id}/unblock:
+    post:
+      summary: Unblock a user
+      description: Allow a previously blocked user to login and interact with the instance
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: invalid user id
+        '403':
+          description: insufficient permissions to unblock users
+        '404':
+          description: user not found
 
   /api/v1/oauth-clients/local:
     get:
@@ -2185,6 +2239,22 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateMe'
         required: true
+    delete:
+      summary: Delete my account
+      operationId: deleteMe
+      description: Delete the authenticated user's account and all associated data
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - My User
+      responses:
+        '204':
+          description: successful operation - account deleted
+        '400':
+          description: invalid request parameters
+        '401':
+          description: authentication required
 
   '/api/v1/users/me/videos/comments':
     get:
@@ -6233,8 +6303,8 @@ paths:
   /api/v1/blocklist/status:
     get:
       tags:
-        - Account Blocks
-        - Server Blocks
+        - Account Blocklist
+        - Server Blocklist
       summary: Get block status of accounts/hosts
       parameters:
         -
@@ -6263,11 +6333,205 @@ paths:
               schema:
                 $ref: '#/components/schemas/BlockStatus'
 
+  /api/v1/users/me/blocklist/accounts:
+    get:
+      summary: List accounts blocked by my account
+      description: Get the list of accounts that the authenticated user has blocked
+      operationId: getMyBlockedAccounts
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - Account Blocklist
+      parameters:
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - name: search
+          in: query
+          required: false
+          description: Search query string
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AccountBlock'
+        '401':
+          description: authentication required
+    post:
+      summary: Block an account by my account
+      description: Add an account to the authenticated user's blocklist
+      operationId: blockAccount
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - Account Blocklist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                accountName:
+                  type: string
+                  description: "Account name to block (format: name@host)"
+                  example: 'user@example.com'
+              required:
+                - accountName
+      responses:
+        '204':
+          description: successful operation - account blocked
+        '400':
+          description: invalid account name
+        '401':
+          description: authentication required
+        '404':
+          description: account not found
+
+  /api/v1/users/me/blocklist/accounts/{accountName}:
+    delete:
+      summary: Unblock an account by my account
+      description: Remove an account from the authenticated user's blocklist
+      operationId: unblockAccount
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - Account Blocklist
+      parameters:
+        - name: accountName
+          in: path
+          required: true
+          description: "Account name to unblock (format: name@host)"
+          schema:
+            type: string
+            example: 'user@example.com'
+      responses:
+        '204':
+          description: successful operation - account unblocked
+        '400':
+          description: invalid account name
+        '401':
+          description: authentication required
+        '404':
+          description: account block not found
+
+  /api/v1/users/me/blocklist/servers:
+    get:
+      summary: List servers blocked by my account
+      description: Get the list of servers that the authenticated user has blocked
+      operationId: getMyBlockedServers
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - Account Blocklist
+      parameters:
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - name: search
+          in: query
+          required: false
+          description: Search query string
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ServerBlock'
+        '401':
+          description: authentication required
+    post:
+      summary: Block a server by my account
+      description: Add a server to the authenticated user's blocklist
+      operationId: blockServer
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - Account Blocklist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                host:
+                  type: string
+                  description: Server host to block
+                  example: 'example.com'
+              required:
+                - host
+      responses:
+        '204':
+          description: successful operation - server blocked
+        '400':
+          description: invalid server host
+        '401':
+          description: authentication required
+        '404':
+          description: server not found
+
+  /api/v1/users/me/blocklist/servers/{host}:
+    delete:
+      summary: Unblock a server by my account
+      description: Remove a server from the authenticated user's blocklist
+      operationId: unblockServer
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - Account Blocklist
+      parameters:
+        - name: host
+          in: path
+          required: true
+          description: Server host to unblock
+          schema:
+            type: string
+            example: 'example.com'
+      responses:
+        '204':
+          description: successful operation - server unblocked
+        '400':
+          description: invalid server host
+        '401':
+          description: authentication required
+        '404':
+          description: server block not found
+
   /api/v1/server/blocklist/accounts:
     get:
       tags:
-        - Account Blocks
-      summary: List account blocks
+        - Server Blocklist
+      summary: List blocked accounts by server
       security:
         - OAuth2:
           - admin
@@ -6278,10 +6542,22 @@ paths:
       responses:
         '200':
           description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AccountBlock'
     post:
       tags:
-        - Account Blocks
-      summary: Block an account
+        - Server Blocklist
+      summary: Block an account by server
       security:
         - OAuth2:
           - admin
@@ -6306,8 +6582,8 @@ paths:
   '/api/v1/server/blocklist/accounts/{accountName}':
     delete:
       tags:
-        - Account Blocks
-      summary: Unblock an account by its handle
+        - Server Blocklist
+      summary: Unblock an account by server
       security:
         - OAuth2:
           - admin
@@ -6327,8 +6603,8 @@ paths:
   /api/v1/server/blocklist/servers:
     get:
       tags:
-        - Server Blocks
-      summary: List server blocks
+        - Server Blocklist
+      summary: List blocked servers by server
       security:
         - OAuth2:
           - admin
@@ -6339,10 +6615,22 @@ paths:
       responses:
         '200':
           description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ServerBlock'
     post:
       tags:
-        - Server Blocks
-      summary: Block a server
+        - Server Blocklist
+      summary: Block a server by server
       security:
         - OAuth2:
           - admin
@@ -6367,8 +6655,8 @@ paths:
   '/api/v1/server/blocklist/servers/{host}':
     delete:
       tags:
-        - Server Blocks
-      summary: Unblock a server by its domain
+        - Server Blocklist
+      summary: Unblock a server by server
       security:
         - OAuth2:
           - admin
@@ -6384,7 +6672,7 @@ paths:
         '204':
           description: successful operation
         '404':
-          description: account block does not exist
+          description: server block does not exist
 
   /api/v1/server/redundancy/{host}:
     put:
@@ -7904,6 +8192,13 @@ components:
       description: Filter results down to (un)banned users
       schema:
         type: boolean
+    usersRole:
+      name: role
+      in: query
+      required: false
+      description: Filter results down to users with a specific role
+      schema:
+        $ref: '#/components/schemas/UserRole'
     usersSort:
       name: sort
       in: query
@@ -8377,7 +8672,7 @@ components:
           - video-transcoding
           - video-file-import
           - video-import
-          - videos-views-stats
+          - videos-stats
           - activitypub-refresher
           - video-redundancy
           - video-live-ending
@@ -9400,6 +9695,29 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/FileRedundancyInformation'
+    AccountBlock:
+      properties:
+        byAccount:
+          $ref: '#/components/schemas/Account'
+        blockedAccount:
+          $ref: '#/components/schemas/Account'
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+    ServerBlock:
+      properties:
+        byAccount:
+          $ref: '#/components/schemas/Account'
+        blockedServer:
+          type: object
+          properties:
+            host:
+              type: string
+              format: hostname
+        createdAt:
+          type: string
+          format: date-time
     CommentAutoTagPolicies:
       properties:
         review:
@@ -10373,6 +10691,9 @@ components:
         totalLocalVideoViews:
           type: number
           description: Total video views made on the instance
+        totalLocalVideoDownloads:
+          type: number
+          description: Total video downloads made on the instance
         totalLocalVideoComments:
           type: number
           description: Total comments made by local users
@@ -10820,7 +11141,7 @@ components:
             - video-transcoding
             - email
             - video-import
-            - videos-views-stats
+            - videos-stats
             - activitypub-refresher
             - video-redundancy
             - video-channel-import

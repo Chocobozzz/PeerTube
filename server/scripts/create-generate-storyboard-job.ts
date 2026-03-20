@@ -58,12 +58,15 @@ async function run () {
 
   for (const id of ids) {
     const videoFull = await VideoModel.load(id)
+    if (!videoFull || videoFull.isLive) continue
 
-    if (videoFull.isLive) continue
+    try {
+      await addLocalOrRemoteStoryboardJobIfNeeded({ video: videoFull, federate: true })
 
-    await addLocalOrRemoteStoryboardJobIfNeeded({ video: videoFull, federate: true })
-
-    console.log(`Created generate-storyboard job for ${videoFull.name}.`)
+      console.log(`Created generate-storyboard job for ${videoFull.name}.`)
+    } catch (err) {
+      console.error(`Error while creating generate-storyboard job for video ${videoFull.name}:`, err)
+    }
   }
 }
 

@@ -6,13 +6,12 @@
   paginatorText="imports per page"
   [dataLoader]="dataLoader"
   columnConfig="false"
+  searchInput="true"
+  [inputFilters]="inputFilters"
+  refreshButton="true"
 >
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No import} =1 {1 import} other {{{ totalRecords | myNumberFormatter }} imports}}</ng-container>
-  </ng-template>
-
-  <ng-template #captionRight>
-    <my-advanced-input-filter (search)="table.onSearch($event)"></my-advanced-input-filter>
   </ng-template>
 
   <ng-template #tableCells let-videoImport>

@@ -15,14 +15,7 @@ import { Hooks } from '@server/lib/plugins/hooks.js'
 import { VideoDownload } from '@server/lib/video-download.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
-import {
-  MStreamingPlaylist,
-  MStreamingPlaylistVideo,
-  MUserExport,
-  MVideo,
-  MVideoFile,
-  MVideoFullLight
-} from '@server/types/models/index.js'
+import { MStreamingPlaylist, MStreamingPlaylistVideo, MUserExport, MVideo, MVideoFile, MVideoFull } from '@server/types/models/index.js'
 import { MVideoSource } from '@server/types/models/video/video-source.js'
 import contentDisposition from 'content-disposition'
 import cors from 'cors'
@@ -39,6 +32,7 @@ import {
   videosDownloadValidator,
   videosGenerateDownloadValidator
 } from '../middlewares/index.js'
+import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
 
 const lTags = loggerTagsFactory('download')
 
@@ -149,7 +143,7 @@ async function downloadTorrent (req: express.Request, res: express.Response) {
 // ---------------------------------------------------------------------------
 
 async function downloadWebVideoFile (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
 
   const videoFile = getVideoFileFromReq(req, video.VideoFiles)
   if (!videoFile) {
@@ -176,6 +170,9 @@ async function downloadWebVideoFile (req: express.Request, res: express.Response
 
   const downloadFilename = buildDownloadFilename({ video, resolution: videoFile.resolution, extname: videoFile.extname })
 
+  VideoStatsManager.Instance.processLocalDownload({ video })
+    .catch(err => logger.error(`Cannot process local download stats for video ${video.uuid}`, { err, ...lTags(video.uuid) }))
+
   if (videoFile.storage === FileStorage.OBJECT_STORAGE) {
     return redirectVideoDownloadToObjectStorage({ res, video, file: videoFile, downloadFilename })
   }
@@ -186,7 +183,7 @@ async function downloadWebVideoFile (req: express.Request, res: express.Response
 }
 
 async function downloadHLSVideoFile (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
   const streamingPlaylist = getHLSPlaylist(video)
   if (!streamingPlaylist) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
@@ -214,6 +211,9 @@ async function downloadHLSVideoFile (req: express.Request, res: express.Response
 
   if (!checkAllowResult(res, allowParameters, allowedResult)) return
 
+  VideoStatsManager.Instance.processLocalDownload({ video })
+    .catch(err => logger.error(`Cannot process local download stats for video ${video.uuid}`, { err, ...lTags(video.uuid) }))
+
   const downloadFilename = buildDownloadFilename({ video, streamingPlaylist, resolution: videoFile.resolution, extname: videoFile.extname })
 
   if (videoFile.storage === FileStorage.OBJECT_STORAGE) {
@@ -228,7 +228,7 @@ async function downloadHLSVideoFile (req: express.Request, res: express.Response
 // ---------------------------------------------------------------------------
 
 async function downloadGeneratedVideoFile (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
   const filesToSelect = req.query.videoFileIds
 
   const videoFiles = video.getAllFiles()
@@ -287,6 +287,9 @@ async function downloadGeneratedVideoFile (req: express.Request, res: express.Re
 
   res.type(extname)
 
+  VideoStatsManager.Instance.processLocalDownload({ video })
+    .catch(err => logger.error(`Cannot process local download stats for video ${video.uuid}`, { err, ...lTags(video.uuid) }))
+
   try {
     await new VideoDownload({ video, videoFiles }).muxToMergeVideoFiles(res)
   } catch (err) {
@@ -334,7 +337,7 @@ function getVideoFileFromReq (req: express.Request, files: MVideoFile[]) {
   return files.find(f => f.resolution === resolution)
 }
 
-function getHLSPlaylist (video: MVideoFullLight) {
+function getHLSPlaylist (video: MVideoFull) {
   const playlist = video.VideoStreamingPlaylists.find(p => p.type === VideoStreamingPlaylistType.HLS)
   if (!playlist) return undefined
 

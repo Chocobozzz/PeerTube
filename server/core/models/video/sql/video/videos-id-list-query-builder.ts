@@ -808,10 +808,10 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   private groupForTrending (trendingDays: number) {
     const viewsGteDate = new Date(new Date().getTime() - (24 * 3600 * 1000) * trendingDays)
 
-    this.joins.push('LEFT JOIN "videoView" ON "video"."id" = "videoView"."videoId" AND "videoView"."startDate" >= :viewsGteDate')
+    this.joins.push('LEFT JOIN "videoStat" ON "video"."id" = "videoStat"."videoId" AND "videoStat"."startDate" >= :viewsGteDate')
     this.replacements.viewsGteDate = viewsGteDate
 
-    this.attributes.push('COALESCE(SUM("videoView"."views"), 0) AS "score"')
+    this.attributes.push('COALESCE(SUM("videoStat"."views"), 0) AS "score"')
 
     this.group = 'GROUP BY "video"."id"'
   }

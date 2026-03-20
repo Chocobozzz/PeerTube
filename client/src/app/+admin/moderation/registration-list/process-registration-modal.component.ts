@@ -2,11 +2,15 @@ import { CommonModule } from '@angular/common'
 import { Component, OnInit, inject, output, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier, ServerService } from '@app/core'
+import { formatICU } from '@app/helpers'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
+import { arrayify } from '@peertube/peertube-core-utils'
 import { UserRegistration } from '@peertube/peertube-models'
+import { from } from 'rxjs'
+import { concatMap, toArray } from 'rxjs/operators'
 import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { AdminRegistrationService } from './admin-registration.service'
@@ -28,7 +32,7 @@ export class ProcessRegistrationModalComponent extends FormReactive implements O
 
   readonly registrationProcessed = output()
 
-  registration: UserRegistration
+  registrations: UserRegistration[] = []
 
   private openedModal: NgbModalRef
   private processMode: 'accept' | 'reject'
@@ -48,18 +52,18 @@ export class ProcessRegistrationModalComponent extends FormReactive implements O
     return this.processMode === 'reject'
   }
 
-  openModal (registration: UserRegistration, mode: 'accept' | 'reject') {
+  openModal (registrationsArg: UserRegistration | UserRegistration[], mode: 'accept' | 'reject') {
     this.processMode = mode
-    this.registration = registration
+    this.registrations = arrayify(registrationsArg)
 
-    if (this.registration.emailVerified !== true || !this.isEmailEnabled()) {
+    if (this.shouldDisableEmailDelivery()) {
       this.form.get('preventEmailDelivery').disable()
     } else {
       this.form.get('preventEmailDelivery').enable()
     }
 
     this.form.patchValue({
-      preventEmailDelivery: !this.isEmailEnabled() || registration.emailVerified !== true
+      preventEmailDelivery: this.shouldDisableEmailDelivery()
     })
 
     this.openedModal = this.modalService.open(this.modal(), { centered: true })
@@ -67,16 +71,35 @@ export class ProcessRegistrationModalComponent extends FormReactive implements O
 
   hide () {
     this.form.reset()
+    this.registrations = []
 
     this.openedModal.close()
   }
 
   getSubmitValue () {
-    if (this.isAccept()) {
-      return $localize`Accept registration`
-    }
+    const count = this.registrations.length
+    const label = this.isAccept()
+      ? $localize`{count, plural, =1 {Accept registration} other {Accept registrations}}`
+      : $localize`{count, plural, =1 {Reject registration} other {Reject registrations}}`
 
-    return $localize`Reject registration`
+    return formatICU(label, { count })
+  }
+
+  getModalTitle () {
+    const count = this.registrations.length
+    const label = this.isAccept()
+      ? $localize`{count, plural, =1 {Accept registration} other {Accept {count} registrations}}`
+      : $localize`{count, plural, =1 {Reject registration} other {Reject {count} registrations}}`
+
+    return formatICU(label, { count })
+  }
+
+  hasMultipleRegistrations () {
+    return this.registrations.length > 1
+  }
+
+  get registration () {
+    return this.registrations[0]
   }
 
   processRegistration () {
@@ -93,37 +116,75 @@ export class ProcessRegistrationModalComponent extends FormReactive implements O
     return this.form.value.preventEmailDelivery
   }
 
+  hasUnverifiedEmails () {
+    return this.registrations.some(registration => registration.emailVerified !== true)
+  }
+
+  shouldDisableEmailDelivery () {
+    return !this.isEmailEnabled() || this.hasUnverifiedEmails()
+  }
+
   private acceptRegistration () {
-    this.registrationService.acceptRegistration({
-      registration: this.registration,
-      moderationResponse: this.form.value.moderationResponse,
-      preventEmailDelivery: this.form.value.preventEmailDelivery
-    }).subscribe({
-      next: () => {
-        this.notifier.success($localize`${this.registration.username} account created`)
+    const moderationResponse = this.form.value.moderationResponse
+    const preventEmailDelivery = this.form.value.preventEmailDelivery
 
-        this.registrationProcessed.emit()
-        this.hide()
-      },
+    from(this.registrations)
+      .pipe(
+        concatMap(registration =>
+          this.registrationService.acceptRegistration({
+            registration,
+            moderationResponse,
+            preventEmailDelivery
+          })
+        ),
+        toArray()
+      )
+      .subscribe({
+        next: () => {
+          const count = this.registrations.length
+          const message = formatICU(
+            $localize`{count, plural, =1 {{username} account created} other {{count} accounts created}}`,
+            { count, username: this.registration?.username }
+          )
 
-      error: err => this.notifier.handleError(err)
-    })
+          this.notifier.success(message)
+          this.registrationProcessed.emit()
+          this.hide()
+        },
+
+        error: err => this.notifier.handleError(err)
+      })
   }
 
   private rejectRegistration () {
-    this.registrationService.rejectRegistration({
-      registration: this.registration,
-      moderationResponse: this.form.value.moderationResponse,
-      preventEmailDelivery: this.form.value.preventEmailDelivery
-    }).subscribe({
-      next: () => {
-        this.notifier.success($localize`${this.registration.username} registration rejected`)
+    const moderationResponse = this.form.value.moderationResponse
+    const preventEmailDelivery = this.form.value.preventEmailDelivery
 
-        this.registrationProcessed.emit()
-        this.hide()
-      },
+    from(this.registrations)
+      .pipe(
+        concatMap(registration =>
+          this.registrationService.rejectRegistration({
+            registration,
+            moderationResponse,
+            preventEmailDelivery
+          })
+        ),
+        toArray()
+      )
+      .subscribe({
+        next: () => {
+          const count = this.registrations.length
+          const message = formatICU(
+            $localize`{count, plural, =1 {{username} registration rejected} other {{count} registrations rejected}}`,
+            { count, username: this.registration?.username }
+          )
 
-      error: err => this.notifier.handleError(err)
-    })
+          this.notifier.success(message)
+          this.registrationProcessed.emit()
+          this.hide()
+        },
+
+        error: err => this.notifier.handleError(err)
+      })
   }
 }

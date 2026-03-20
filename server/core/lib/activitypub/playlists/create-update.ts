@@ -177,7 +177,7 @@ async function buildElementsDBAttributes (elementUrls: string[], playlist: MVide
     try {
       const { elementObject } = await fetchRemotePlaylistElement(elementUrl)
 
-      const { video } = await getOrCreateAPVideo({ videoObject: { id: elementObject.url }, fetchType: 'only-video-and-blacklist' })
+      const { video } = await getOrCreateAPVideo({ videoObject: { id: elementObject.url }, fetchType: 'with-blacklist' })
 
       elementsToCreate.push(playlistElementObjectToDBAttributes(elementObject, playlist, video))
     } catch (err) {

@@ -1,5 +1,5 @@
 import { ActivityView } from '@peertube/peertube-models'
-import { VideoViewsManager } from '@server/lib/views/video-views-manager.js'
+import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MActorSignature } from '../../../types/models/index.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
@@ -24,11 +24,11 @@ async function processCreateView (activity: ActivityView, byActor: MActorSignatu
 
   const { video } = await getOrCreateAPVideo({
     videoObject,
-    fetchType: 'only-video-and-blacklist',
+    fetchType: 'with-blacklist',
     allowRefresh: false
   })
 
-  await VideoViewsManager.Instance.processRemoteView({
+  await VideoStatsManager.Instance.processRemoteView({
     video,
     viewerId: activity.id,
 
