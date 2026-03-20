@@ -7,8 +7,8 @@ import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServ
 describe('Test rate limit disabling', function () {
   let server: PeerTubeServer
 
-  async function restartWithConfig(max: number) {
-    if (server) await cleanupTests([server])
+  async function restartWithConfig (max: number) {
+    if (server) await cleanupTests([ server ])
 
     const config = {
       rates_limit: {
@@ -20,11 +20,11 @@ describe('Test rate limit disabling', function () {
     }
 
     server = await createSingleServer(1, config)
-    await setAccessTokensToServers([server])
+    await setAccessTokensToServers([ server ])
   }
 
   after(async function () {
-    await cleanupTests([server])
+    await cleanupTests([ server ])
   })
 
   it('Should rate limit API calls when max > 0', async function () {
