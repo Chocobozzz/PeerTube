@@ -342,6 +342,7 @@ export async function prepareImportExportTests (options: {
       channelId: noahSecondChannelId,
       name: 'noah live video',
       privacy: VideoPrivacy.PASSWORD_PROTECTED,
+      dvrWindow: 15,
       schedules: [
         { startAt: new Date(Date.now() + 1000 * 60 * 60).toISOString() }
       ]

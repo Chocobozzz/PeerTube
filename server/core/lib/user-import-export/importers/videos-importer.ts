@@ -8,7 +8,7 @@ import { isVideoCaptionLanguageValid } from '@server/helpers/custom-validators/v
 import { isVideoChannelUsernameValid } from '@server/helpers/custom-validators/video-channels.js'
 import { isVideoChapterTimecodeValid, isVideoChapterTitleValid } from '@server/helpers/custom-validators/video-chapters.js'
 import { areVideoEmbedPrivacyDomainsValid, isVideoEmbedPrivacyPolicyValid } from '@server/helpers/custom-validators/video-embed-privacy.js'
-import { isLiveLatencyModeValid, isLiveScheduleValid } from '@server/helpers/custom-validators/video-lives.js'
+import { isLiveDvrWindowValid, isLiveLatencyModeValid, isLiveScheduleValid } from '@server/helpers/custom-validators/video-lives.js'
 import {
   isPasswordValid,
   isVideoCategoryValid,
@@ -124,6 +124,10 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
 
       if (!isBooleanValid(o.live.saveReplay)) o.live.saveReplay = false
       if (o.live.saveReplay && !isVideoReplayPrivacyValid(o.live.replaySettings.privacy)) return undefined
+
+      if (!isLiveDvrWindowValid(o.live.dvrWindow, CONFIG.LIVE.DVR.MAX_WINDOW)) {
+        o.live.dvrWindow = CONFIG.LIVE.DVR.MAX_WINDOW
+      }
 
       if (!o.live.latencyMode || !isLiveLatencyModeValid(o.live.latencyMode)) o.live.latencyMode = LiveVideoLatencyMode.DEFAULT
 

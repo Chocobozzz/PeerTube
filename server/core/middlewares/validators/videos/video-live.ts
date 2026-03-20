@@ -7,7 +7,7 @@ import {
   UserRight,
   VideoState
 } from '@peertube/peertube-models'
-import { areLiveSchedulesValid, isLiveLatencyModeValid } from '@server/helpers/custom-validators/video-lives.js'
+import { areLiveSchedulesValid, isLiveDvrWindowValid, isLiveLatencyModeValid } from '@server/helpers/custom-validators/video-lives.js'
 import { getVideoWithAttributes } from '@server/helpers/video.js'
 import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import { VideoLoadType } from '@server/lib/model-loaders/video.js'
@@ -76,6 +76,12 @@ export const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
     .customSanitizer(toIntOrNull)
     .custom(isLiveLatencyModeValid),
 
+  body('dvrWindow')
+    .optional()
+    .customSanitizer(toIntOrNull)
+    .custom(v => isLiveDvrWindowValid(v, CONFIG.LIVE.DVR.MAX_WINDOW))
+    .withMessage('Should have a valid dvrWindow integer'),
+
   body('videoPasswords')
     .optional()
     .isArray()
@@ -96,7 +102,7 @@ export const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
 
       return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Live is not enabled on this instance',
+        message: req.t('Live is not enabled on this instance'),
         type: ServerErrorCode.LIVE_NOT_ENABLED
       })
     }
@@ -108,7 +114,7 @@ export const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
 
       return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Saving live replay is not enabled on this instance',
+        message: req.t('Saving live replay is not enabled on this instance'),
         type: ServerErrorCode.LIVE_NOT_ALLOWING_REPLAY
       })
     }
@@ -118,8 +124,13 @@ export const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
 
       return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Custom latency mode is not allowed by this instance'
+        message: req.t('Custom latency mode is not allowed by this instance')
       })
+    }
+
+    if (checkLiveDVRConsistency({ req, res, body }) !== true) {
+      cleanUpReqFiles(req)
+      return
     }
 
     if (!await doesChannelIdExist({ id: body.channelId, req, res, checkCanManage: true, checkIsLocal: true, checkIsOwner: false })) {
@@ -134,7 +145,7 @@ export const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
 
         return res.fail({
           status: HttpStatusCode.FORBIDDEN_403,
-          message: 'Cannot create this live because the max instance lives limit is reached.',
+          message: req.t('Cannot create this live because the max instance lives limit is reached.'),
           type: ServerErrorCode.MAX_INSTANCE_LIVES_LIMIT_REACHED
         })
       }
@@ -150,7 +161,7 @@ export const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
 
         return res.fail({
           status: HttpStatusCode.FORBIDDEN_403,
-          message: 'Cannot create this live because the max user lives limit is reached.',
+          message: req.t('Cannot create this live because the max user lives limit is reached.'),
           type: ServerErrorCode.MAX_USER_LIVES_LIMIT_REACHED
         })
       }
@@ -178,6 +189,12 @@ export const videoLiveUpdateValidator = [
     .customSanitizer(toIntOrNull)
     .custom(isLiveLatencyModeValid),
 
+  body('dvrWindow')
+    .optional()
+    .customSanitizer(toIntOrNull)
+    .custom(v => isLiveDvrWindowValid(v, CONFIG.LIVE.DVR.MAX_WINDOW))
+    .withMessage('Should have a valid dvrWindow integer'),
+
   body('schedules')
     .optional()
     .custom(areLiveSchedulesValid).withMessage('Should have a valid schedules array'),
@@ -190,21 +207,22 @@ export const videoLiveUpdateValidator = [
     if (hasValidSaveReplay(body) !== true) {
       return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Saving live replay is not allowed by this instance'
+        message: req.t('Saving live replay is not allowed by this instance')
       })
     }
 
     if (hasValidLatencyMode(body) !== true) {
       return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Custom latency mode is not allowed by this instance'
+        message: req.t('Custom latency mode is not allowed by this instance')
       })
     }
 
-    if (!checkLiveSettingsReplayConsistency({ res, body })) return
+    if (!checkLiveSettingsReplayConsistency({ req, res, body })) return
+    if (!checkLiveDVRConsistency({ req, res, body })) return
 
     if (res.locals.videoFull.state !== VideoState.WAITING_FOR_LIVE) {
-      return res.fail({ message: 'Cannot update a live that has already started' })
+      return res.fail({ message: req.t('Cannot update a live that has already started') })
     }
 
     // Check the user can manage the live
@@ -312,17 +330,18 @@ function hasValidLatencyMode (body: LiveVideoUpdate | LiveVideoCreate) {
 }
 
 function checkLiveSettingsReplayConsistency (options: {
+  req: express.Request
   res: express.Response
   body: LiveVideoUpdate
 }) {
-  const { res, body } = options
+  const { req, res, body } = options
 
   // We now save replays of this live, so replay settings are mandatory
   if (res.locals.videoLive.saveReplay !== true && body.saveReplay === true) {
     if (!exists(body.replaySettings)) {
       res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
-        message: 'Replay settings are missing now the live replay is saved'
+        message: req.t('Replay settings are missing now the live replay is saved')
       })
       return false
     }
@@ -330,7 +349,7 @@ function checkLiveSettingsReplayConsistency (options: {
     if (!exists(body.replaySettings.privacy)) {
       res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
-        message: 'Privacy replay setting is missing now the live replay is saved'
+        message: req.t('Privacy replay setting is missing now the live replay is saved')
       })
       return false
     }
@@ -341,10 +360,29 @@ function checkLiveSettingsReplayConsistency (options: {
     if (exists(body.replaySettings)) {
       res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
-        message: 'Cannot save replay settings since live replay is not enabled'
+        message: req.t('Cannot save replay settings since live replay is not enabled')
       })
       return false
     }
+  }
+
+  return true
+}
+
+function checkLiveDVRConsistency (options: {
+  req: express.Request
+  res: express.Response
+  body: LiveVideoUpdate
+}) {
+  const { req, res, body } = options
+
+  if (exists(body.dvrWindow) && body.dvrWindow > 0 && !CONFIG.LIVE.DVR.MAX_WINDOW) {
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: req.t('DVR is not enabled on this instance')
+    })
+
+    return false
   }
 
   return true

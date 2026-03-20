@@ -36,6 +36,7 @@ describe('Test video lives API validator', function () {
   let video: VideoCreateResult
   let videoIdNotLive: number
   let command: LiveCommand
+  const dvrMaxWindow = 50
 
   // ---------------------------------------------------------------
 
@@ -56,7 +57,10 @@ describe('Test video lives API validator', function () {
           },
           maxInstanceLives: 20,
           maxUserLives: 20,
-          allowReplay: true
+          allowReplay: true,
+          dvr: {
+            maxWindow: dvrMaxWindow
+          }
         }
       }
     })
@@ -98,6 +102,7 @@ describe('Test video lives API validator', function () {
         replaySettings: undefined,
         permanentLive: true,
         latencyMode: LiveVideoLatencyMode.DEFAULT,
+        dvrWindow: Math.max(1, Math.floor(dvrMaxWindow / 2)),
         schedules: [
           {
             startAt: new Date(Date.now() + 1000 * 60 * 60) // 1 hour later
@@ -277,6 +282,60 @@ describe('Test video lives API validator', function () {
       const fields = { ...baseCorrectParams, latencyMode: LiveVideoLatencyMode.HIGH_LATENCY }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should fail with a bad dvrWindow', async function () {
+      const toTests = [ -1, 0.5, dvrMaxWindow + 1 ]
+
+      for (const dvrWindow of toTests) {
+        const fields = { ...baseCorrectParams, dvrWindow }
+
+        await makePostBodyRequest({
+          url: server.url,
+          path,
+          token: server.accessToken,
+          fields,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      }
+    })
+
+    it('Should fail with dvr window set but the server does not allow it', async function () {
+      await server.config.updateExistingConfig({
+        newConfig: {
+          live: {
+            dvr: {
+              maxWindow: 0
+            }
+          }
+        }
+      })
+
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        token: server.accessToken,
+        fields: { ...baseCorrectParams, dvrWindow: 1 },
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        token: server.accessToken,
+        fields: { ...baseCorrectParams, dvrWindow: 0 },
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      await server.config.updateExistingConfig({
+        newConfig: {
+          live: {
+            dvr: {
+              maxWindow: dvrMaxWindow
+            }
+          }
+        }
+      })
     })
 
     it('Should fail with an invalid schedules', async function () {
@@ -526,6 +585,51 @@ describe('Test video lives API validator', function () {
       const fields = { latencyMode: 42 as any }
 
       await command.update({ videoId: video.id, fields, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should fail with bad dvrWindow', async function () {
+      const toTests = [ -1, 0.5, dvrMaxWindow + 1 ]
+
+      for (const dvrWindow of toTests) {
+        await command.update({
+          videoId: video.id,
+          fields: { dvrWindow },
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      }
+    })
+
+    it('Should fail with dvr window set but the server does not allow it', async function () {
+      await server.config.updateExistingConfig({
+        newConfig: {
+          live: {
+            dvr: {
+              maxWindow: 0
+            }
+          }
+        }
+      })
+
+      await command.update({
+        videoId: video.id,
+        fields: { dvrWindow: 1 },
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+
+      await command.update({
+        videoId: video.id,
+        fields: { dvrWindow: 0 }
+      })
+
+      await server.config.updateExistingConfig({
+        newConfig: {
+          live: {
+            dvr: {
+              maxWindow: dvrMaxWindow
+            }
+          }
+        }
+      })
     })
 
     it('Should fail with a bad privacy for replay settings', async function () {

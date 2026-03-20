@@ -160,7 +160,8 @@ function buildLiveAPAttributes (video: MVideoAP) {
       isLiveBroadcast: false,
       liveSaveReplay: null,
       permanentLive: null,
-      latencyMode: null
+      latencyMode: null,
+      dvrWindow: null
     }
   }
 
@@ -168,7 +169,8 @@ function buildLiveAPAttributes (video: MVideoAP) {
     isLiveBroadcast: true,
     liveSaveReplay: video.VideoLive.saveReplay,
     permanentLive: video.VideoLive.permanentLive,
-    latencyMode: video.VideoLive.latencyMode
+    latencyMode: video.VideoLive.latencyMode,
+    dvrWindow: getActivityStreamDuration(video.VideoLive.dvrWindow)
   }
 }
 

@@ -72,10 +72,6 @@ if (PlayProgressBar.prototype.options_.children.includes('timeTooltip') !== true
   PlayProgressBar.prototype.options_.children.push('timeTooltip')
 }
 
-// FIXME: https://github.com/videojs/video.js/pull/8988#issuecomment-3402464579
-const seekBar = videojs.getComponent('SeekBar') as any
-seekBar.prototype.pendingSeekTime = seekBar.prototype.getCurrentTime_
-
 export { videojs }
 
 export class PeerTubePlayer {
@@ -307,7 +303,10 @@ export class PeerTubePlayer {
     })
 
     if (this.options.enableHotkeys === true) {
-      this.player.peerTubeHotkeysPlugin({ isLive: this.currentLoadOptions.isLive })
+      this.player.peerTubeHotkeysPlugin({
+        isLive: this.currentLoadOptions.isLive,
+        liveDvrEnabled: this.currentLoadOptions.liveOptions?.dvrEnabled === true
+      })
     }
 
     if (this.currentLoadOptions.playlist) {
@@ -421,7 +420,10 @@ export class PeerTubePlayer {
         stopTime: () => this.currentLoadOptions.stopTime,
 
         videoCaptions: () => this.currentLoadOptions.videoCaptions,
+
         isLive: () => this.currentLoadOptions.isLive,
+        liveDvrEnabled: () => this.currentLoadOptions.liveOptions?.dvrEnabled === true,
+
         videoUUID: () => this.currentLoadOptions.videoUUID,
         subtitle: () => this.currentLoadOptions.subtitle,
 

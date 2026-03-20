@@ -35,7 +35,7 @@ smtp:
   from_address: 'test-admin@127.0.0.1'
   username: null
   password: null
-
+  
 log:
   level: 'debug'
   rotation:

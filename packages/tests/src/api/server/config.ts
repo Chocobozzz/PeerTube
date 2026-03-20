@@ -114,6 +114,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.live.transcoding.resolutions['2160p']).to.be.false
   expect(data.live.transcoding.alwaysTranscodeOriginalResolution).to.be.true
   expect(data.live.transcoding.fps.max).to.equal(60)
+  expect(data.live.dvr.maxWindow).to.equal(3600)
 
   expect(data.videoStudio.enabled).to.be.false
   expect(data.videoStudio.remoteRunners.enabled).to.be.false
@@ -339,6 +340,9 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
         fps: {
           max: 144
         }
+      },
+      dvr: {
+        maxWindow: 0
       }
     },
     videoStudio: {

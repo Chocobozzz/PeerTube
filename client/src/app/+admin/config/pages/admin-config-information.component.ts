@@ -20,7 +20,7 @@ import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.serv
 import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-options.component'
 import { SelectRadioComponent } from '@app/shared/shared-forms/select/select-radio.component'
 import { getCompleteLocale, I18N_LOCALES } from '@peertube/peertube-core-utils'
-import { ActorImage, CustomConfig, NSFWPolicyType, ConstantLabel } from '@peertube/peertube-models'
+import { ActorImage, ConstantLabel, CustomConfig, NSFWPolicyType } from '@peertube/peertube-models'
 import merge from 'lodash-es/merge'
 import { Subscription } from 'rxjs'
 import { SelectOptionsItem } from 'src/types/select-options-item.model'

@@ -98,10 +98,11 @@ export {
 
 async function getLiveVideo (req: express.Request, res: express.Response) {
   const videoLive = res.locals.videoLive
+  const video = res.locals.videoWithRights
 
-  const canSeePrivateLiveInformation = await checkCanManageVideo({
+  const canSeePrivateInformation = await checkCanManageVideo({
     user: res.locals.oauth?.token.User,
-    video: res.locals.videoWithRights,
+    video,
     right: UserRight.GET_ANY_LIVE,
     req,
     res: null,
@@ -109,7 +110,7 @@ async function getLiveVideo (req: express.Request, res: express.Response) {
     checkIsOwner: false
   })
 
-  return res.json(videoLive.toFormattedJSON(canSeePrivateLiveInformation))
+  return res.json(videoLive.toFormattedJSON({ isLocal: video.isLocal(), canSeePrivateInformation }))
 }
 
 function getLiveReplaySession (req: express.Request, res: express.Response) {
@@ -145,6 +146,7 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
 
       if (exists(body.permanentLive)) videoLive.permanentLive = body.permanentLive
       if (exists(body.latencyMode)) videoLive.latencyMode = body.latencyMode
+      if (exists(body.dvrWindow)) videoLive.dvrWindow = body.dvrWindow
 
       if (body.schedules !== undefined) {
         await VideoLiveScheduleModel.deleteAllOfLiveId(videoLive.id, t)
@@ -205,7 +207,14 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
       fromDescription: false,
       finalFallback: undefined
     },
-    liveAttributes: pick(videoInfo, [ 'saveReplay', 'permanentLive', 'latencyMode', 'replaySettings', 'schedules' ]),
+    liveAttributes: pick(videoInfo, [
+      'saveReplay',
+      'permanentLive',
+      'latencyMode',
+      'dvrWindow',
+      'replaySettings',
+      'schedules'
+    ]),
     videoAttributeResultHook: 'filter:api.video.live.video-attribute.result',
     lTags,
     videoAttributes: {

@@ -838,7 +838,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       : undefined
 
     const liveOptions = video.isLive
-      ? { latencyMode: liveVideo.latencyMode }
+      ? { latencyMode: liveVideo.latencyMode, dvrEnabled: liveVideo.dvrWindow > 0 }
       : undefined
 
     return {
@@ -928,7 +928,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       webVideo: {
         videoFiles: video.files
       }
-    }
+    } satisfies PeerTubePlayerLoadOptions
   }
 
   private async subscribeToLiveEventsIfNeeded (oldVideo: VideoDetails, newVideo: VideoDetails) {

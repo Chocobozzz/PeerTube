@@ -97,6 +97,10 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
       '@type': 'sc:Number',
       '@id': 'pt:latencyMode'
     },
+    dvrWindow: {
+      '@type': 'sc:Duration',
+      '@id': 'pt:dvrWindow'
+    },
 
     Infohash: 'pt:Infohash',
 

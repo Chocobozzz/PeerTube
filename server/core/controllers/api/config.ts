@@ -472,6 +472,9 @@ function customConfig (): CustomConfig {
         fps: {
           max: CONFIG.LIVE.TRANSCODING.FPS.MAX
         }
+      },
+      dvr: {
+        maxWindow: CONFIG.LIVE.DVR.MAX_WINDOW
       }
     },
     videoStudio: {

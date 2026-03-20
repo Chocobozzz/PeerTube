@@ -312,6 +312,11 @@ $chapter-marker-size: 9px;
   --peertube-link-max-width: 200px;
 }
 
+// Override video.js style
+.vjs-peertube-skin.vjs-live.vjs-live-dvr .vjs-control-bar .vjs-progress-control {
+  display: flex;
+}
+
 // ---------------------------------------------------------------------------
 // PeerTube Galaxy (original) Theme
 // ---------------------------------------------------------------------------
@@ -605,7 +610,7 @@ $chapter-marker-size: 9px;
     }
   }
 
-  &.vjs-live {
+  &.vjs-live:not(.vjs-live-dvr) {
     // Take the available space for the control bar
     .vjs-progress-control {
       display: flex;
@@ -664,7 +669,7 @@ $chapter-marker-size: 9px;
     max-width: 100px;
   }
 
-  &.vjs-live {
+  &.vjs-live:not(.vjs-live-dvr) {
     .vjs-duration {
       display: none !important;
     }
@@ -693,7 +698,7 @@ $chapter-marker-size: 9px;
     @include margin-left(0);
   }
 
-  &.vjs-live {
+  &.vjs-live:not(.vjs-live-dvr) {
     .vjs-current-time {
       display: none !important;
     }

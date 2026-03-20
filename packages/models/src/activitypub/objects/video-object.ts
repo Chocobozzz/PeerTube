@@ -31,6 +31,7 @@ export interface VideoObject {
   liveSaveReplay: boolean
   permanentLive: boolean
   latencyMode: LiveVideoLatencyModeType
+  dvrWindow: string
 
   commentsPolicy: VideoCommentPolicyType
   canReply: 'as:Public' | 'https://www.w3.org/ns/activitystreams#Public'
