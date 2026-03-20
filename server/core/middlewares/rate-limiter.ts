@@ -8,13 +8,17 @@ import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 
 const lTags = loggerTagsFactory('rate-limit')
 
-const whitelistRoles = new Set<UserRoleType>([ UserRole.ADMINISTRATOR, UserRole.MODERATOR ])
+const whitelistRoles = new Set<UserRoleType>([UserRole.ADMINISTRATOR, UserRole.MODERATOR])
 
-export function buildRateLimiter (options: {
+export function buildRateLimiter(options: {
   windowMs: number
   max: number
   skipFailedRequests?: boolean
 }) {
+  if (!options.max || options.max <= 0) {
+    return (req: express.Request, res: express.Response, next: express.NextFunction) => next()
+  }
+
   return RateLimit({
     windowMs: options.windowMs,
     max: options.max,
@@ -57,7 +61,7 @@ export const activityPubRateLimiter = buildRateLimiter({
 // Private
 // ---------------------------------------------------------------------------
 
-function sendRateLimited (req: express.Request, res: express.Response, options: RateLimitHandlerOptions) {
+function sendRateLimited(req: express.Request, res: express.Response, options: RateLimitHandlerOptions) {
   logger.debug('Rate limit exceeded for route ' + req.originalUrl, { route: req.originalUrl, ip: req.ip, ...lTags() })
 
   return res.status(options.statusCode).send(options.message)
