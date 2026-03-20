@@ -515,6 +515,7 @@ function runTest (withObjectStorage: boolean) {
 
         expect(video.isLive).to.be.true
         expect(live.latencyMode).to.equal(LiveVideoLatencyMode.SMALL_LATENCY)
+        expect(live.dvrWindow).to.equal(15)
         expect(live.saveReplay).to.be.true
         expect(live.permanentLive).to.be.true
         expect(live.streamKey).to.exist

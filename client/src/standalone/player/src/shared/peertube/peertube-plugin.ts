@@ -586,7 +586,7 @@ class PeerTubePlugin extends Plugin {
   private updateControlBar () {
     debugLogger('Updating control bar')
 
-    if (this.options.isLive() && this.options.isLiveDvr()) {
+    if (this.options.isLive() && this.options.liveDvrEnabled()) {
       this.player.addClass('vjs-live-dvr')
     } else {
       this.player.removeClass('vjs-live-dvr')
@@ -594,13 +594,14 @@ class PeerTubePlugin extends Plugin {
 
     if (this.options.isLive()) {
       this.getPlaybackRateButton().hide()
-
-      this.player.controlBar.getChild('progressControl').hide()
+      this.player.controlBar.getChild('peerTubeLiveDisplay').show()
       this.player.controlBar.getChild('currentTimeDisplay').hide()
       this.player.controlBar.getChild('timeDivider').hide()
       this.player.controlBar.getChild('durationDisplay').hide()
 
-      this.player.controlBar.getChild('peerTubeLiveDisplay').show()
+      if (!this.options.liveDvrEnabled()) {
+        this.player.controlBar.getChild('progressControl').hide()
+      }
     } else {
       this.getPlaybackRateButton().show()
 

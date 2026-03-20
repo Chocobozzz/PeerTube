@@ -717,8 +717,14 @@ const CONFIG = {
     get ALLOW_REPLAY () {
       return config.get<boolean>('live.allow_replay')
     },
-    get DVR_MAX_WINDOW () {
-      return config.get<number>('live.dvr_max_window')
+
+    DVR: {
+      get MAX_WINDOW () { // In seconds
+        const value = config.get<string>('live.dvr.max_window')
+        if (typeof value === 'number') return value
+
+        return Math.round(parseDurationToMs(value) / 1000)
+      }
     },
 
     LATENCY_SETTING: {

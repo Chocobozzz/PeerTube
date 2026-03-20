@@ -230,8 +230,9 @@ export class ConfigCommand extends AbstractCommand {
     transcoding?: boolean
     maxDuration?: number
     alwaysTranscodeOriginalResolution?: boolean
+    dvrMaxWindow?: number
   } = {}) {
-    const { allowReplay, transcoding, maxDuration, resolutions = 'min', alwaysTranscodeOriginalResolution } = options
+    const { allowReplay, transcoding, maxDuration, resolutions = 'min', alwaysTranscodeOriginalResolution, dvrMaxWindow } = options
 
     return this.updateExistingConfig({
       newConfig: {
@@ -247,6 +248,9 @@ export class ConfigCommand extends AbstractCommand {
             resolutions: Array.isArray(resolutions)
               ? ConfigCommand.getCustomConfigResolutions(resolutions)
               : ConfigCommand.getConfigResolutions(resolutions === 'max')
+          },
+          dvr: {
+            maxWindow: dvrMaxWindow
           }
         }
       }

@@ -1,5 +1,6 @@
 import { LiveVideoLatencyMode } from '@peertube/peertube-models'
-import { isDateValid } from './misc.js'
+import validator from 'validator'
+import { exists, isDateValid } from './misc.js'
 
 export function isLiveLatencyModeValid (value: any) {
   return [ LiveVideoLatencyMode.DEFAULT, LiveVideoLatencyMode.SMALL_LATENCY, LiveVideoLatencyMode.HIGH_LATENCY ].includes(value)
@@ -18,5 +19,5 @@ export function areLiveSchedulesValid (schedules: any[]) {
 }
 
 export function isLiveDvrWindowValid (value: unknown, maxDvrWindow: number) {
-  return typeof value === 'number' && Number.isInteger(value) && value > 0 && value <= maxDvrWindow
+  return exists(value) && validator.default.isInt('' + value, { min: 0, max: maxDvrWindow })
 }

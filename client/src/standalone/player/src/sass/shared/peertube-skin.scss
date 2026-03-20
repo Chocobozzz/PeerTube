@@ -120,6 +120,12 @@ body {
     }
   }
 
+  &.vjs-audio-poster-mode {
+    .vjs-poster {
+      cursor: default;
+    }
+  }
+
   // Theater mode is enabled
   &.vjs-theater-enabled {
     .vjs-theater-control {

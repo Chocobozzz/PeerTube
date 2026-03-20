@@ -213,6 +213,11 @@ export interface CustomConfig {
         max: number
       }
     }
+
+    dvr: {
+      // In seconds, 0 means no DVR
+      maxWindow: number
+    }
   }
 
   videoStudio: {

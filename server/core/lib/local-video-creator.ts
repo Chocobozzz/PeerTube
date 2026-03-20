@@ -49,18 +49,19 @@ type VideoAttributes = Omit<VideoCreate, 'channelId'> & {
   embedPrivacyPolicy?: VideoEmbedPrivacyPolicyType
 }
 
-type LiveAttributes = Pick<
-  LiveVideoCreate,
-  'permanentLive' |
-  'latencyMode' |
-  'dvrEnabled' |
-  'dvrWindow' |
-  'saveReplay' |
-  'replaySettings' |
-  'schedules'
-> & {
-  streamKey?: string
-}
+type LiveAttributes =
+  & Pick<
+    LiveVideoCreate,
+    | 'permanentLive'
+    | 'latencyMode'
+    | 'dvrWindow'
+    | 'saveReplay'
+    | 'replaySettings'
+    | 'schedules'
+  >
+  & {
+    streamKey?: string
+  }
 
 export type ThumbnailOption = {
   path: string
@@ -208,11 +209,7 @@ export class LocalVideoCreator {
             saveReplay: this.liveAttributes.saveReplay || false,
             permanentLive: this.liveAttributes.permanentLive || false,
             latencyMode: this.liveAttributes.latencyMode || LiveVideoLatencyMode.DEFAULT,
-            dvrEnabled: this.liveAttributes.dvrEnabled || false,
-            dvrWindow: Math.min(
-              this.liveAttributes.dvrWindow || CONFIG.LIVE.DVR_MAX_WINDOW,
-              CONFIG.LIVE.DVR_MAX_WINDOW
-            ),
+            dvrWindow: this.liveAttributes.dvrWindow ?? CONFIG.LIVE.DVR.MAX_WINDOW,
             streamKey: this.liveAttributes.streamKey || buildUUID()
           })
 

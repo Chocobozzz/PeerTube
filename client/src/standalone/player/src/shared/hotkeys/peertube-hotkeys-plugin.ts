@@ -7,7 +7,7 @@ const Plugin = videojs.getPlugin('plugin') as typeof VideojsPlugin
 
 export type HotkeysOptions = {
   isLive: boolean
-  isLiveDvr?: boolean
+  liveDvrEnabled?: boolean
 }
 
 class PeerTubeHotkeysPlugin extends Plugin {
@@ -19,13 +19,13 @@ class PeerTubeHotkeysPlugin extends Plugin {
   declare private readonly handlers: KeyHandler[]
 
   declare private readonly isLive: boolean
-  declare private readonly isLiveDvr: boolean
+  declare private readonly liveDvrEnabled: boolean
 
   constructor (player: VideojsPlayer, options: HotkeysOptions) {
     super(player)
 
     this.isLive = options.isLive
-    this.isLiveDvr = options.isLiveDvr === true
+    this.liveDvrEnabled = options.liveDvrEnabled === true
 
     this.handlers = this.buildHandlers()
 
@@ -157,7 +157,7 @@ class PeerTubeHotkeysPlugin extends Plugin {
       }
     ]
 
-    if (this.isLive && this.isLiveDvr !== true) return handlers
+    if (this.isLive && this.liveDvrEnabled !== true) return handlers
 
     return handlers.concat(this.buildVODHandlers())
   }
@@ -257,7 +257,7 @@ class PeerTubeHotkeysPlugin extends Plugin {
   }
 
   private canSeek () {
-    return this.isLive !== true || this.isLiveDvr === true
+    return this.isLive !== true || this.liveDvrEnabled === true
   }
 }
 

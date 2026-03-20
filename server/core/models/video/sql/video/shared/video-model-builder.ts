@@ -451,6 +451,7 @@ export class VideoModelBuilder {
     if (!id || this.liveDone.has(id)) return
 
     const attributes = this.grab(row, this.tables.getLiveAttributes(), 'VideoLive')
+
     videoModel.VideoLive = new VideoLiveModel(attributes, this.buildOpts)
 
     this.liveDone.add(id)

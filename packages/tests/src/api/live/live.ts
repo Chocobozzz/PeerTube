@@ -60,6 +60,9 @@ describe('Test live', function () {
           },
           transcoding: {
             enabled: false
+          },
+          dvr: {
+            maxWindow: 36
           }
         }
       }
@@ -73,7 +76,6 @@ describe('Test live', function () {
 
   describe('Live DVR settings', function () {
     let liveVideoUUID: string
-    const updatedDvrWindow = 30 * 60 * 1000
 
     it('Should create a live with custom DVR settings', async function () {
       const live = await commands[0].create({
@@ -81,34 +83,36 @@ describe('Test live', function () {
           name: 'live dvr settings',
           channelId: servers[0].store.channel.id,
           privacy: VideoPrivacy.PUBLIC,
-          permanentLive: true
+          permanentLive: true,
+          dvrWindow: 13
         }
       })
       liveVideoUUID = live.uuid
 
       await waitJobs(servers)
 
-      const videoLive = await servers[0].live.get({ videoId: liveVideoUUID })
+      for (const server of servers) {
+        const live = await server.live.get({ videoId: liveVideoUUID })
 
-      expect(videoLive.dvrEnabled).to.be.false
-      expect(videoLive.dvrWindow).to.be.greaterThan(0)
+        expect(live.dvrWindow).to.equal(13)
+      }
     })
 
     it('Should update DVR settings on the live', async function () {
       await commands[0].update({
         videoId: liveVideoUUID,
         fields: {
-          dvrEnabled: true,
-          dvrWindow: updatedDvrWindow
+          dvrWindow: 10
         }
       })
 
       await waitJobs(servers)
 
-      const videoLive = await servers[0].live.get({ videoId: liveVideoUUID })
+      for (const server of servers) {
+        const live = await server.live.get({ videoId: liveVideoUUID })
 
-      expect(videoLive.dvrEnabled).to.be.true
-      expect(videoLive.dvrWindow).to.equal(updatedDvrWindow)
+        expect(live.dvrWindow).to.equal(10)
+      }
     })
 
     it('Should delete the DVR test live', async function () {
@@ -192,6 +196,7 @@ describe('Test live', function () {
 
         expect(live.saveReplay).to.be.true
         expect(live.latencyMode).to.equal(LiveVideoLatencyMode.SMALL_LATENCY)
+        expect(live.dvrWindow).to.equal(36)
       }
     })
 

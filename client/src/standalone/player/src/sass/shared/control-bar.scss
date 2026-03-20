@@ -312,6 +312,11 @@ $chapter-marker-size: 9px;
   --peertube-link-max-width: 200px;
 }
 
+// Override video.js style
+.vjs-peertube-skin.vjs-live.vjs-live-dvr .vjs-control-bar .vjs-progress-control {
+  display: flex;
+}
+
 // ---------------------------------------------------------------------------
 // PeerTube Galaxy (original) Theme
 // ---------------------------------------------------------------------------
@@ -618,26 +623,6 @@ $chapter-marker-size: 9px;
     --icon-size: 1.625rem; // 26px;
     --button-width: 2.5rem;
     --control-bar-font-size: 1rem;
-  }
-}
-
-// Force seekbar visibility for Live DVR
-.video-js.vjs-live.vjs-live-dvr {
-  .vjs-progress-control {
-    display: flex !important;
-    visibility: visible !important;
-  }
-
-  .vjs-progress-control.vjs-hidden {
-    display: flex !important;
-    visibility: visible !important;
-  }
-
-  .vjs-current-time.vjs-hidden,
-  .vjs-duration.vjs-hidden,
-  .vjs-time-divider.vjs-hidden {
-    display: flex !important;
-    visibility: visible !important;
   }
 }
 

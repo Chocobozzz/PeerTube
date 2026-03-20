@@ -259,6 +259,7 @@ export function checkMissedConfig () {
     'live.transcoding.always_transcode_original_resolution',
     'live.transcoding.fps.max',
     'live.transcoding.remote_runners.enabled',
+    'live.dvr.max_window',
     'storyboards.enabled',
     'webrtc.stun_servers',
     'nsfw_flags_settings.enabled',

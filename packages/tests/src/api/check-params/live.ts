@@ -36,7 +36,7 @@ describe('Test video lives API validator', function () {
   let video: VideoCreateResult
   let videoIdNotLive: number
   let command: LiveCommand
-  let dvrMaxWindow: number
+  const dvrMaxWindow = 50
 
   // ---------------------------------------------------------------
 
@@ -57,15 +57,13 @@ describe('Test video lives API validator', function () {
           },
           maxInstanceLives: 20,
           maxUserLives: 20,
-          allowReplay: true
+          allowReplay: true,
+          dvr: {
+            maxWindow: dvrMaxWindow
+          }
         }
       }
     })
-
-    {
-      const config = await server.config.getConfig()
-      dvrMaxWindow = config.live.dvrMaxWindow
-    }
 
     userAccessToken = await server.users.generateUserAndToken('user1')
     editorToken = await server.channelCollaborators.createEditor('editor', 'root_channel')
@@ -104,7 +102,6 @@ describe('Test video lives API validator', function () {
         replaySettings: undefined,
         permanentLive: true,
         latencyMode: LiveVideoLatencyMode.DEFAULT,
-        dvrEnabled: true,
         dvrWindow: Math.max(1, Math.floor(dvrMaxWindow / 2)),
         schedules: [
           {
@@ -288,7 +285,7 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should fail with a bad dvrWindow', async function () {
-      const toTests = [ -1, 0, 0.5, dvrMaxWindow + 1 ]
+      const toTests = [ -1, 0.5, dvrMaxWindow + 1 ]
 
       for (const dvrWindow of toTests) {
         const fields = { ...baseCorrectParams, dvrWindow }
@@ -301,6 +298,44 @@ describe('Test video lives API validator', function () {
           expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
       }
+    })
+
+    it('Should fail with dvr window set but the server does not allow it', async function () {
+      await server.config.updateExistingConfig({
+        newConfig: {
+          live: {
+            dvr: {
+              maxWindow: 0
+            }
+          }
+        }
+      })
+
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        token: server.accessToken,
+        fields: { ...baseCorrectParams, dvrWindow: 1 },
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        token: server.accessToken,
+        fields: { ...baseCorrectParams, dvrWindow: 0 },
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      await server.config.updateExistingConfig({
+        newConfig: {
+          live: {
+            dvr: {
+              maxWindow: dvrMaxWindow
+            }
+          }
+        }
+      })
     })
 
     it('Should fail with an invalid schedules', async function () {
@@ -553,25 +588,48 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should fail with bad dvrWindow', async function () {
-      const targetVideoId = video?.id || (await command.create({
-        fields: {
-          name: 'live dvr update validation',
-          channelId,
-          privacy: VideoPrivacy.PUBLIC
-        }
-      })).id
-
-      const toTests = [ -1, 0, 0.5, dvrMaxWindow + 1 ]
+      const toTests = [ -1, 0.5, dvrMaxWindow + 1 ]
 
       for (const dvrWindow of toTests) {
-        const fields = { dvrWindow } as any
-
         await command.update({
-          videoId: targetVideoId,
-          fields,
+          videoId: video.id,
+          fields: { dvrWindow },
           expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
       }
+    })
+
+    it('Should fail with dvr window set but the server does not allow it', async function () {
+      await server.config.updateExistingConfig({
+        newConfig: {
+          live: {
+            dvr: {
+              maxWindow: 0
+            }
+          }
+        }
+      })
+
+      await command.update({
+        videoId: video.id,
+        fields: { dvrWindow: 1 },
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+
+      await command.update({
+        videoId: video.id,
+        fields: { dvrWindow: 0 }
+      })
+
+      await server.config.updateExistingConfig({
+        newConfig: {
+          live: {
+            dvr: {
+              maxWindow: dvrMaxWindow
+            }
+          }
+        }
+      })
     })
 
     it('Should fail with a bad privacy for replay settings', async function () {

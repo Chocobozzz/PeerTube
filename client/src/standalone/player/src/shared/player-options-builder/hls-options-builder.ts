@@ -220,7 +220,6 @@ export class HLSOptionsBuilder {
       startPosition: timeToInt(this.options.startTime),
 
       p2pMediaLoaderOptions: p2pMediaLoaderConfig.loader,
-      peertubeLiveDvr: this.options.liveOptions?.dvrEnabled === true,
 
       // p2p-media-loader uses hls.js loader to fetch m3u8 playlists
       xhrSetup: (xhr, url) => {
@@ -255,22 +254,16 @@ export class HLSOptionsBuilder {
 
   private getHLSLiveOptions () {
     const latencyMode = this.options.liveOptions.latencyMode
+    const liveSyncDurationCountMap = {
+      [LiveVideoLatencyMode.SMALL_LATENCY]: 2,
+      [LiveVideoLatencyMode.DEFAULT]: 2,
+      [LiveVideoLatencyMode.HIGH_LATENCY]: 10
+    }
 
-    switch (latencyMode) {
-      case LiveVideoLatencyMode.SMALL_LATENCY:
-        return {
-          liveSyncDurationCount: 2
-        }
+    return {
+      liveDvrEnabled: this.options.liveOptions.dvrEnabled,
 
-      case LiveVideoLatencyMode.HIGH_LATENCY:
-        return {
-          liveSyncDurationCount: 10
-        }
-
-      default:
-        return {
-          liveSyncDurationCount: 5
-        }
+      liveSyncDurationCount: liveSyncDurationCountMap[latencyMode] ?? liveSyncDurationCountMap[LiveVideoLatencyMode.DEFAULT]
     }
   }
 

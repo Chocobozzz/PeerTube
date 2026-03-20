@@ -15,7 +15,7 @@ import validator from 'validator'
 import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../../initializers/constants.js'
 import { peertubeTruncate } from '../../core-utils.js'
 import { exists, isArray, isBooleanValid, isDateValid, isUUIDValid } from '../misc.js'
-import { isLiveLatencyModeValid } from '../video-lives.js'
+import { isLiveDvrWindowValid, isLiveLatencyModeValid } from '../video-lives.js'
 import {
   isVideoCommentsPolicyValid,
   isVideoDescriptionValid,
@@ -26,6 +26,7 @@ import {
   isVideoViewsValid
 } from '../videos.js'
 import { isActivityPubUrlValid, isActivityPubVideoDurationValid, isBaseActivityValid, setValidAttributedTo } from './misc.js'
+import { getDurationFromActivityStream } from '@server/lib/activitypub/activity.js'
 
 export function sanitizeAndCheckVideoTorrentUpdateActivity (activity: any) {
   return isBaseActivityValid(activity, 'Update') &&
@@ -71,7 +72,10 @@ export function sanitizeAndCheckVideoTorrentObject (video: VideoObject) {
   if (!isVideoNameValid(video.name)) return fail('name')
 
   if (!isActivityPubVideoDurationValid(video.duration)) return fail('duration format')
-  if (!isVideoDurationValid(video.duration.replace(/[^0-9]+/g, ''))) return fail('duration')
+  if (!isVideoDurationValid('' + getDurationFromActivityStream(video.duration))) return fail('duration')
+
+  if (!isActivityPubVideoDurationValid(video.dvrWindow)) video.dvrWindow = 'PT0S'
+  if (!isLiveDvrWindowValid('' + getDurationFromActivityStream(video.dvrWindow), Infinity)) video.dvrWindow = 'PT0S'
 
   if (!isUUIDValid(video.uuid)) return fail('uuid')
 

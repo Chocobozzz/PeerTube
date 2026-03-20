@@ -13,7 +13,8 @@ export interface LiveVideo {
   replaySettings?: { privacy: VideoPrivacyType }
   permanentLive: boolean
   latencyMode: LiveVideoLatencyModeType
-  dvrEnabled: boolean
+
+  // DVR is enabled if dvrWindowMs is > 0
   dvrWindow: number
 
   schedules: LiveVideoScheduleEdit[]

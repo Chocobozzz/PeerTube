@@ -12,7 +12,6 @@ import { exists, isArray } from '@server/helpers/custom-validators/misc.js'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { createReqFiles } from '@server/helpers/express-utils.js'
 import { getFormattedObjects } from '@server/helpers/utils.js'
-import { CONFIG } from '@server/initializers/config.js'
 import { getVideoThumbnailFile } from '@server/helpers/video.js'
 import { ASSETS_PATH, MIMETYPES } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
@@ -99,10 +98,11 @@ export {
 
 async function getLiveVideo (req: express.Request, res: express.Response) {
   const videoLive = res.locals.videoLive
+  const video = res.locals.videoWithRights
 
-  const canSeePrivateLiveInformation = await checkCanManageVideo({
+  const canSeePrivateInformation = await checkCanManageVideo({
     user: res.locals.oauth?.token.User,
-    video: res.locals.videoWithRights,
+    video,
     right: UserRight.GET_ANY_LIVE,
     req,
     res: null,
@@ -110,7 +110,7 @@ async function getLiveVideo (req: express.Request, res: express.Response) {
     checkIsOwner: false
   })
 
-  return res.json(videoLive.toFormattedJSON(canSeePrivateLiveInformation))
+  return res.json(videoLive.toFormattedJSON({ isLocal: video.isLocal(), canSeePrivateInformation }))
 }
 
 function getLiveReplaySession (req: express.Request, res: express.Response) {
@@ -146,10 +146,7 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
 
       if (exists(body.permanentLive)) videoLive.permanentLive = body.permanentLive
       if (exists(body.latencyMode)) videoLive.latencyMode = body.latencyMode
-      if (exists(body.dvrEnabled)) videoLive.dvrEnabled = body.dvrEnabled
-      if (exists(body.dvrWindow)) {
-        videoLive.dvrWindow = Math.min(body.dvrWindow, CONFIG.LIVE.DVR_MAX_WINDOW)
-      }
+      if (exists(body.dvrWindow)) videoLive.dvrWindow = body.dvrWindow
 
       if (body.schedules !== undefined) {
         await VideoLiveScheduleModel.deleteAllOfLiveId(videoLive.id, t)
@@ -214,7 +211,6 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
       'saveReplay',
       'permanentLive',
       'latencyMode',
-      'dvrEnabled',
       'dvrWindow',
       'replaySettings',
       'schedules'

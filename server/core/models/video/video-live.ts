@@ -55,15 +55,9 @@ export class VideoLiveModel extends SequelizeModel<VideoLiveModel> {
   @Column
   declare latencyMode: LiveVideoLatencyModeType
 
+  // 0 if DVR is disabled, otherwise the DVR window in seconds
   @AllowNull(false)
   @Column
-  declare dvrEnabled: boolean
-
-  @AllowNull(false)
-  @Column({
-    type: DataType.INTEGER,
-    defaultValue: 7200000
-  })
   declare dvrWindow: number
 
   @CreatedAt
@@ -174,12 +168,15 @@ export class VideoLiveModel extends SequelizeModel<VideoLiveModel> {
     return VideoLiveModel.findOne<MVideoLiveVideoWithSettingSchedules>(query)
   }
 
-  toFormattedJSON (this: MVideoLiveWithSettingSchedules, canSeePrivateInformation: boolean): LiveVideo {
+  toFormattedJSON (this: MVideoLiveWithSettingSchedules, options: {
+    canSeePrivateInformation: boolean
+    isLocal: boolean
+  }): LiveVideo {
     let privateInformation: Pick<LiveVideo, 'rtmpUrl' | 'rtmpsUrl' | 'streamKey'> | {} = {}
 
     // If we don't have a stream key, it means this is a remote live so we don't specify the rtmp URL
     // We also display these private information only to the live owne/moderators
-    if (this.streamKey && canSeePrivateInformation === true) {
+    if (this.streamKey && options.canSeePrivateInformation === true) {
       privateInformation = {
         streamKey: this.streamKey,
 
@@ -204,8 +201,9 @@ export class VideoLiveModel extends SequelizeModel<VideoLiveModel> {
       saveReplay: this.saveReplay,
       replaySettings,
       latencyMode: this.latencyMode,
-      dvrEnabled: this.dvrEnabled,
-      dvrWindow: this.dvrWindow,
+      dvrWindow: options.isLocal
+        ? Math.min(this.dvrWindow, CONFIG.LIVE.DVR.MAX_WINDOW)
+        : this.dvrWindow,
       schedules: (this.LiveSchedules || []).map(schedule => schedule.toFormattedJSON())
     }
   }

@@ -1,4 +1,4 @@
-<my-admin-save-bar i18n-title title="Platform customization" (save)="save()" [form]="form" [formErrors]="formErrors"></my-admin-save-bar>
+<my-admin-save-bar i18n-title title="Platform customization" (save)="save()" [form]="form" [formErrors]="formErrors" [validationMessages]="validationMessages"></my-admin-save-bar>
 
 <form [formGroup]="form" id="admin-config-form">
   <div class="pt-two-cols">
@@ -91,10 +91,10 @@
               }
 
               @if (field.type === 'color') {
-                <my-peertube-color-picker 
-                  [inputId]="field.inputId" 
-                  [formControlName]="field.name" 
-                  [formError]="formErrors.theme.customization[field.name]" 
+                <my-peertube-color-picker
+                  [inputId]="field.inputId"
+                  [formControlName]="field.name"
+                  [formError]="formErrors.theme.customization[field.name]"
                   />
               } @else if (field.type === 'radius') {
                 <my-select-custom-value

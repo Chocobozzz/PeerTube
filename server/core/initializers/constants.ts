@@ -60,7 +60,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 1005
+export const LAST_MIGRATION_VERSION = 1010
 
 // ---------------------------------------------------------------------------
 
@@ -1131,7 +1131,6 @@ export const VIDEO_LIVE = {
     SMALL_LATENCY: 2 // 2 seconds
   },
   SEGMENTS_LIST_SIZE: 15, // 15 maximum segments in live playlist
-  DVR_MAX_WINDOW: CONFIG.LIVE.DVR_MAX_WINDOW,
   REPLAY_DIRECTORY: 'replay',
   EDGE_LIVE_DELAY_SEGMENTS_NOTIFICATION: 4,
   MAX_SOCKET_WAITING_DATA: 1024 * 1000 * 100, // 100MB

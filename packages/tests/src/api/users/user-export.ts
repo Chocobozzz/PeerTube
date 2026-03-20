@@ -578,6 +578,7 @@ function runTest (withObjectStorage: boolean) {
         expect(liveVideo.live.saveReplay).to.be.true
         expect(liveVideo.live.permanentLive).to.be.true
         expect(liveVideo.live.streamKey).to.exist
+        expect(liveVideo.live.dvrWindow).to.equal(15)
         expect(liveVideo.live.replaySettings.privacy).to.equal(VideoPrivacy.PUBLIC)
         expect(liveVideo.live.schedules).to.have.lengthOf(1)
         expect(liveVideo.live.schedules[0].startAt).to.exist

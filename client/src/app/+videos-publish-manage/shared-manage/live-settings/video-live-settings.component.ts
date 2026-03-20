@@ -3,19 +3,20 @@ import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { BuildFormArgument } from '@app/shared/form-validators/form-validator.model'
-import { FormReactiveErrors, FormReactiveService, FormReactiveMessages } from '@app/shared/shared-forms/form-reactive.service'
+import { FormReactiveErrors, FormReactiveMessages, FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import {
+  ConstantLabel,
   HTMLServerConfig,
   LiveVideoLatencyMode,
   LiveVideoLatencyModeType,
-  ConstantLabel,
   VideoPrivacy,
   VideoPrivacyType,
   VideoState
 } from '@peertube/peertube-models'
 import debug from 'debug'
+import { DatePickerModule } from 'primeng/datepicker'
 import { Subscription } from 'rxjs'
 import { SelectOptionsItem } from 'src/types/select-options-item.model'
 import { InputTextComponent } from '../../../shared/shared-forms/input-text.component'
@@ -24,12 +25,11 @@ import { SelectOptionsComponent } from '../../../shared/shared-forms/select/sele
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { PeerTubeTemplateDirective } from '../../../shared/shared-main/common/peertube-template.directive'
 import { TimeDurationFormatterPipe } from '../../../shared/shared-main/date/time-duration-formatter.pipe'
+import { I18nPrimengCalendarService } from '../common/i18n-primeng-calendar.service'
 import { VideoEdit } from '../common/video-edit.model'
 import { VideoManageController } from '../video-manage-controller.service'
 import { LiveDocumentationLinkComponent } from './live-documentation-link.component'
 import { LiveStreamInformationComponent } from './live-stream-information.component'
-import { I18nPrimengCalendarService } from '../common/i18n-primeng-calendar.service'
-import { DatePickerModule } from 'primeng/datepicker'
 
 const debugLogger = debug('peertube:video-manage')
 
@@ -37,8 +37,10 @@ type Form = {
   liveStreamKey: FormControl<string>
   permanentLive: FormControl<boolean>
   latencyMode: FormControl<LiveVideoLatencyModeType>
+
   dvrEnabled: FormControl<boolean>
-  dvrWindowHours: FormControl<number>
+  dvrWindowMinutes: FormControl<number>
+
   saveReplay: FormControl<boolean>
   replayPrivacy: FormControl<VideoPrivacyType>
 
@@ -144,12 +146,12 @@ export class VideoLiveSettingsComponent implements OnInit, OnDestroy {
       permanentLive: null,
       latencyMode: null,
       dvrEnabled: null,
-      dvrWindowHours: {
-        VALIDATORS: [ Validators.required, Validators.min(this.getDvrWindowStepHours()), Validators.max(this.getMaxDvrWindowHours()) ],
+      dvrWindowMinutes: {
+        VALIDATORS: [], // Validators are set on-demand
         MESSAGES: {
           required: $localize`DVR window is required.`,
           min: $localize`DVR window must be at least 1 minute.`,
-          max: $localize`DVR window exceeds the instance maximum.`
+          max: $localize`DVR window exceeds the maximum.`
         }
       },
       saveReplay: null,
@@ -188,6 +190,26 @@ export class VideoLiveSettingsComponent implements OnInit, OnDestroy {
 
     this.updatedSub = this.manageController.getUpdatedObs().subscribe(() => {
       this.form.patchValue(this.videoEdit.toLiveFormPatch())
+    })
+
+    this.form.controls.dvrEnabled.valueChanges.subscribe(dvrEnabled => {
+      const dvrWindowMinutes = this.form.controls.dvrWindowMinutes
+
+      if (dvrEnabled) {
+        dvrWindowMinutes.setValidators([
+          Validators.required,
+          Validators.min(1),
+          Validators.max(this.getMaxDvrWindowMinutes())
+        ])
+
+        if (!dvrWindowMinutes.value) {
+          dvrWindowMinutes.setValue(this.getMaxDvrWindowMinutes())
+        }
+      } else {
+        dvrWindowMinutes.clearValidators()
+      }
+
+      dvrWindowMinutes.updateValueAndValidity()
     })
   }
 
@@ -231,12 +253,12 @@ export class VideoLiveSettingsComponent implements OnInit, OnDestroy {
     return this.serverConfig.live.maxDuration / 1000
   }
 
-  getMaxDvrWindowHours () {
-    return Math.round((this.serverConfig.live.dvrMaxWindow / (1000 * 60 * 60)) * 100) / 100
+  getMaxDvrWindowMinutes () {
+    return Math.round(this.serverConfig.live.dvr.maxWindow / 60)
   }
 
-  getDvrWindowStepHours () {
-    return 1 / 60
+  isDvrEnabledByInstance () {
+    return this.serverConfig.live.dvr.maxWindow > 0
   }
 
   getInstanceName () {
