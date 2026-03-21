@@ -170,6 +170,19 @@ import:
       enabled:
         __name: "PEERTUBE_IMPORT_VIDEOS_HTTP"
         __format: "json"
+      force_ipv4:
+        __name: "PEERTUBE_IMPORT_VIDEOS_HTTP_FORCE_IPV4"
+        __format: "json"
+      proxies:
+        __name: "PEERTUBE_IMPORT_VIDEOS_HTTP_PROXIES"
+        __format: "json"
+      cookies:
+        enabled:
+          __name: "PEERTUBE_IMPORT_VIDEOS_HTTP_COOKIES_ENABLED"
+          __format: "json"
+      youtube_dl_release:
+        url: "PEERTUBE_IMPORT_VIDEOS_HTTP_YOUTUBE_DL_RELEASE_URL"
+        name: "PEERTUBE_IMPORT_VIDEOS_HTTP_YOUTUBE_DL_RELEASE_NAME"
     torrent:
       enabled:
         __name: "PEERTUBE_IMPORT_VIDEOS_TORRENT"

@@ -215,6 +215,7 @@ export class YoutubeDLCLI {
 
     let completeArgs = this.wrapWithJSRuntimeOptions(args)
     completeArgs = this.wrapWithProxyOptions(completeArgs)
+    completeArgs = this.wrapWithCookiesOptions(completeArgs)
     completeArgs = this.wrapWithIPOptions(completeArgs)
     completeArgs = this.wrapWithFFmpegOptions(completeArgs)
 
@@ -267,6 +268,18 @@ export class YoutubeDLCLI {
       logger.debug('Force ipv4 for YoutubeDL')
 
       return [ '--force-ipv4' ].concat(args)
+    }
+
+    return args
+  }
+
+  private wrapWithCookiesOptions (args: string[]) {
+    if (CONFIG.IMPORT.VIDEOS.HTTP.COOKIES.ENABLED) {
+      const cookiesFile = join(CONFIG.STORAGE.IMPORT_DIR, 'cookies.txt')
+
+      logger.debug('Using cookies file %s for YoutubeDL', cookiesFile, lTags())
+
+      return [ '--cookies', cookiesFile ].concat(args)
     }
 
     return args

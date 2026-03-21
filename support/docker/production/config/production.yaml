@@ -52,6 +52,7 @@ storage:
   torrents: '../data/torrents/'
   captions: '../data/captions/'
   cache: '../data/cache/'
+  import: '../data/import/'
   plugins: '../data/plugins/'
   uploads: '../data/uploads/'
   well_known: '../data/well-known/'

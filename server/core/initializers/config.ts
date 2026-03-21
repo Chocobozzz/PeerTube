@@ -251,6 +251,7 @@ const CONFIG = {
     CAPTIONS_DIR: buildPath(config.get<string>('storage.captions')),
     TORRENTS_DIR: buildPath(config.get<string>('storage.torrents')),
     CACHE_DIR: buildPath(config.get<string>('storage.cache')),
+    IMPORT_DIR: buildPath(config.get<string>('storage.import')),
     PLUGINS_DIR: buildPath(config.get<string>('storage.plugins')),
     CLIENT_OVERRIDES_DIR: buildPath(config.get<string>('storage.client_overrides')),
     WELL_KNOWN_DIR: buildPath(config.get<string>('storage.well_known')),
@@ -904,6 +905,12 @@ const CONFIG = {
 
         get PROXIES () {
           return config.get<string[]>('import.videos.http.proxies')
+        },
+
+        COOKIES: {
+          get ENABLED () {
+            return config.get<boolean>('import.videos.http.cookies.enabled')
+          }
         }
       },
       TORRENT: {

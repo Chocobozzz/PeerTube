@@ -154,6 +154,7 @@ storage:
   torrents: 'storage/torrents/'
   captions: 'storage/captions/'
   cache: 'storage/cache/'
+  import: 'storage/import/'
   plugins: 'storage/plugins/'
   well_known: 'storage/well-known/'
   # Various admin/user uploads that are not suitable for the folders above
@@ -883,6 +884,12 @@ import:
       # You may need to use a standalone youtube-dl binary (see `url` key comment above) to use this feature
       proxies:
 #        - "https://username:password@example.com:8888"
+
+      cookies:
+        # Enable this to pass cookies to youtube-dl/yt-dlp
+        # Export cookies from your browser in Netscape-format and save them to storage/import/cookies.txt 
+        # Useful when the remote site requires a logged-in browser session, age verification or anti-bot cookies
+        enabled: false
 
     # Magnet URI or torrent file (use classic TCP/UDP/WebSeed to download the file)
     torrent:

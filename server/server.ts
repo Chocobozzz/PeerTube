@@ -5,6 +5,9 @@ process.title = 'peertube'
 
 // ----------- Core checker -----------
 import { checkMissedConfig, checkFFmpeg, checkNodeVersion } from './core/initializers/checker-before-init.js'
+import { pathExists } from 'fs-extra/esm'
+import { chmod, writeFile } from 'fs/promises'
+import { join } from 'path'
 
 // Do not use barrels because we don't want to load all modules here (we need to initialize database first)
 import { CONFIG } from './core/initializers/config.js'
@@ -292,6 +295,7 @@ async function startApplication () {
   const hostname = CONFIG.LISTEN.HOSTNAME
 
   await installApplication()
+  await ensureYoutubeDLCookiesFile()
 
   // Check activity pub urls are valid
   checkActivityPubUrls()
@@ -383,4 +387,14 @@ async function startApplication () {
   })
 
   process.on('SIGINT', () => process.exit(0))
+}
+
+async function ensureYoutubeDLCookiesFile () {
+  const cookiesFile = join(CONFIG.STORAGE.IMPORT_DIR, 'cookies.txt')
+
+  if (!await pathExists(cookiesFile)) {
+    await writeFile(cookiesFile, '', { mode: 0o600 })
+  }
+
+  await chmod(cookiesFile, '600')
 }
