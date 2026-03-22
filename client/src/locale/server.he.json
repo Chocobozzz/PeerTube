@@ -69,7 +69,7 @@
     "This video is not available because the remote instance is not responding.": "הסרטון אינו זמין בגלל שהמופע המרוחק לא היה זמין.",
     "This playlist does not exist": "רשימת הניגון לא קיימת",
     "We cannot fetch the playlist. Please try again later.": "אנחנו לא יכולים להביא את רשימת הניגון. נסו שוב מאוחר יותר.",
-    "Playlist: {1}": "רשימת ניגון: [1]",
+    "Playlist: {1}": "רשימת נגינה: {1}",
     "By {1}": "ע״י [1]",
     "Unavailable video": "סרטון לא זמין",
     "Audio only": "שמע בלבד",
