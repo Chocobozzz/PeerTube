@@ -143,6 +143,8 @@ export class TableComponent<
 
   private inputFilterValues: Partial<DataLoaderOptions> = {}
 
+  private loadDataSub: Subscription
+
   @ContentChild('totalTitle', { descendants: false })
   totalTitle: TemplateRef<any>
 
@@ -207,6 +209,10 @@ export class TableComponent<
 
   ngOnDestroy () {
     this.routeSubscription?.unsubscribe()
+
+    if (this.loadDataSub?.closed === false) {
+      this.loadDataSub.unsubscribe()
+    }
   }
 
   ngOnChanges (changes: SimpleChanges) {
@@ -500,12 +506,16 @@ export class TableComponent<
   } = {}) {
     const { skipLoader = false } = options
 
+    if (this.loadDataSub?.closed === false) {
+      this.loadDataSub.unsubscribe()
+    }
+
     if (!skipLoader) this.loading = true
 
     this.selectedRows = []
 
     return new Promise<void>((res, rej) => {
-      this.dataLoader()({
+      this.loadDataSub = this.dataLoader()({
         ...this.inputFilterValues,
 
         pagination: this.pagination,
