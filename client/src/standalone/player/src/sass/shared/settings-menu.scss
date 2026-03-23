@@ -64,7 +64,7 @@ $setting-transition-easing: ease-out;
     .vjs-settings-panel-child {
       display: flex;
 
-      align-items: flex-end;
+      align-items: flex-start;
       white-space: nowrap;
 
       &:focus,
