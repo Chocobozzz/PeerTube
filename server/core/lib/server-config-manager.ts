@@ -107,6 +107,9 @@ class ServerConfigManager {
           privacy: CONFIG.DEFAULTS.PUBLISH.PRIVACY,
           licence: CONFIG.DEFAULTS.PUBLISH.LICENCE
         },
+        live: {
+          saveReplay: CONFIG.DEFAULTS.LIVE.SAVE_REPLAY
+        },
         p2p: {
           webapp: {
             enabled: CONFIG.DEFAULTS.P2P.WEBAPP.ENABLED

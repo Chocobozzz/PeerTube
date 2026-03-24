@@ -206,7 +206,7 @@ export class LocalVideoCreator {
 
         if (this.videoAttributes.isLive) {
           const videoLive = new VideoLiveModel({
-            saveReplay: this.liveAttributes.saveReplay || false,
+            saveReplay: this.liveAttributes.saveReplay || CONFIG.DEFAULTS.LIVE.SAVE_REPLAY,
             permanentLive: this.liveAttributes.permanentLive || false,
             latencyMode: this.liveAttributes.latencyMode || LiveVideoLatencyMode.DEFAULT,
             dvrWindow: this.liveAttributes.dvrWindow ?? CONFIG.LIVE.DVR.MAX_WINDOW,

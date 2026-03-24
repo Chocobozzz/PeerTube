@@ -62,6 +62,12 @@ type Form = {
       maxWindow: FormControl<number>
     }>
   }>
+
+  defaults: FormGroup<{
+    live: FormGroup<{
+      saveReplay: FormControl<boolean>
+    }>
+  }>
 }
 
 @Component({
@@ -163,6 +169,12 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
           enabled: null,
           maxWindow: MAX_DVR_WINDOW_MINUTES_VALIDATOR
         }
+      },
+
+      defaults: {
+        live: {
+          saveReplay: null
+        }
       }
     }
 
@@ -189,6 +201,10 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
 
   getLiveRTMPPort () {
     return this.server.getHTMLConfig().live.rtmp.port
+  }
+
+  get defaultsLiveSaveReplayControl () {
+    return this.form.controls.defaults.controls.live.controls.saveReplay
   }
 
   isLiveEnabled () {
@@ -237,6 +253,8 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
 
   save () {
     const value = {
+      ...this.form.value,
+
       live: {
         ...this.form.value.live,
 
@@ -268,6 +286,8 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
 
   private buildFormValue (customConfig: CustomConfig): FormDefaultTyped<Form> {
     return {
+      ...customConfig,
+
       live: {
         ...customConfig.live,
 
