@@ -737,6 +737,8 @@ export class ActorModel extends SequelizeModel<ActorModel> {
       },
       published: this.getCreatedAt().toISOString(),
 
+      indexable: true,
+
       icon,
 
       image
