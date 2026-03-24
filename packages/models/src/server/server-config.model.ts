@@ -99,6 +99,10 @@ export interface ServerConfig {
       licence: number
     }
 
+    live: {
+      saveReplay: boolean
+    }
+
     p2p: {
       webapp: {
         enabled: boolean

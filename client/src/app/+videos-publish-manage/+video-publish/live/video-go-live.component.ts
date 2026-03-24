@@ -94,7 +94,7 @@ export class VideoGoLiveComponent implements OnInit, AfterViewInit, CanComponent
       permanentLive: this.firstStepPermanentLive,
       latencyMode: LiveVideoLatencyMode.DEFAULT,
       dvrWindow: serverConfig.live.dvr.maxWindow,
-      saveReplay: this.isReplayAllowed(),
+      saveReplay: this.isReplayAllowed() && serverConfig.defaults.live.saveReplay,
       replaySettings: { privacy: this.highestPrivacy() },
       schedules: [],
       user: this.authService.getUser()
