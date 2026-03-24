@@ -1,4 +1,4 @@
-import { HttpStatusCode, LiveVideo, VideoDetails, VideoToken } from '@peertube/peertube-models'
+import { HttpStatusCode, LiveVideo, VideoDetails, VideoEmbedPrivacyAllowed, VideoToken } from '@peertube/peertube-models'
 import { logger } from '../../../root-helpers'
 import { PeerTubeServerError } from '../../../types'
 import { AuthHTTP } from './auth-http'
@@ -55,6 +55,17 @@ export class VideoFetcher {
     return this.http.fetch(this.getVideoTokenUrl(video.uuid), { optionalAuth: true, method: 'POST' }, videoPassword)
       .then(res => res.json() as Promise<VideoToken>)
       .then(token => token.files.token)
+  }
+
+  loadEmbedAllowed (video: VideoDetails) {
+    if (!document.referrer) return Promise.resolve({ allowed: false })
+
+    const params = new URLSearchParams()
+    params.append('domain', new URL(document.referrer).host)
+
+    return this.http.fetch(this.getVideoUrl(video.uuid) + '/embed-privacy/allowed?' + params.toString(), { optionalAuth: false })
+      .then(res => res.json() as Promise<VideoEmbedPrivacyAllowed>)
+      .then(({ domainAllowed }) => domainAllowed)
   }
 
   getVideoViewsUrl (videoUUID: string) {

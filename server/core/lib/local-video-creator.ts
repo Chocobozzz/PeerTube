@@ -4,10 +4,10 @@ import {
   LiveVideoLatencyMode,
   NSFWFlag,
   PeerTubeError,
-  ThumbnailType,
-  ThumbnailType_Type,
   VideoChannelActivityAction,
   VideoCreate,
+  VideoEmbedPrivacyPolicy,
+  VideoEmbedPrivacyPolicyType,
   VideoPrivacy,
   VideoStateType
 } from '@peertube/peertube-models'
@@ -23,7 +23,7 @@ import { VideoLiveScheduleModel } from '@server/models/video/video-live-schedule
 import { VideoLiveModel } from '@server/models/video/video-live.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MChannel, MChannelAccountLight, MThumbnail, MUserAccountId, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
+import { MChannel, MChannelAccountLight, MUserAccountId, MVideoFile, MVideoFull } from '@server/types/models/index.js'
 import { FilteredModelAttributes } from '@server/types/sequelize.js'
 import { FfprobeData } from 'fluent-ffmpeg'
 import { move } from 'fs-extra/esm'
@@ -32,7 +32,7 @@ import { federateVideoIfNeeded } from './activitypub/videos/federate.js'
 import { AutomaticTagger } from './automatic-tags/automatic-tagger.js'
 import { setAndSaveVideoAutomaticTags } from './automatic-tags/automatic-tags.js'
 import { Hooks } from './plugins/hooks.js'
-import { generateLocalVideoMiniature, updateLocalVideoMiniatureFromExisting } from './thumbnail.js'
+import { createLocalVideoThumbnailsFromImage, createLocalVideoThumbnailsFromVideo } from './thumbnail.js'
 import { autoBlacklistVideoIfNeeded } from './video-blacklist.js'
 import { replaceChapters, replaceChaptersFromDescriptionIfNeeded } from './video-chapters.js'
 import { buildNewFile, createVideoSource } from './video-file.js'
@@ -45,18 +45,29 @@ type VideoAttributes = Omit<VideoCreate, 'channelId'> & {
   isLive: boolean
   state: VideoStateType
   inputFilename: string
+
+  embedPrivacyPolicy?: VideoEmbedPrivacyPolicyType
 }
 
-type LiveAttributes = Pick<LiveVideoCreate, 'permanentLive' | 'latencyMode' | 'saveReplay' | 'replaySettings' | 'schedules'> & {
-  streamKey?: string
-}
+type LiveAttributes =
+  & Pick<
+    LiveVideoCreate,
+    | 'permanentLive'
+    | 'latencyMode'
+    | 'dvrWindow'
+    | 'saveReplay'
+    | 'replaySettings'
+    | 'schedules'
+  >
+  & {
+    streamKey?: string
+  }
 
-export type ThumbnailOptions = {
+export type ThumbnailOption = {
   path: string
-  type: ThumbnailType_Type
   automaticallyGenerated: boolean
   keepOriginal: boolean
-}[]
+}
 
 type ChaptersOption = { timecode: number, title: string }[]
 
@@ -77,7 +88,7 @@ export class LocalVideoCreator {
   private readonly channel: MChannelAccountLight
   private readonly videoAttributeResultHook: VideoAttributeHookFilter
 
-  private video: MVideoFullLight
+  private video: MVideoFull
   private videoFile: MVideoFile
   private videoPath: string
 
@@ -96,7 +107,7 @@ export class LocalVideoCreator {
       channel: MChannelAccountLight
       user: MUserAccountId
       videoAttributeResultHook: VideoAttributeHookFilter
-      thumbnails: ThumbnailOptions
+      thumbnail: ThumbnailOption
 
       chapters: ChaptersOption | undefined
       fallbackChapters: {
@@ -121,7 +132,7 @@ export class LocalVideoCreator {
   async create () {
     this.video = new VideoModel(
       await Hooks.wrapObject(this.buildVideo(this.videoAttributes, this.channel), this.videoAttributeResultHook)
-    ) as MVideoFullLight
+    ) as MVideoFull
 
     this.video.VideoChannel = this.channel
     this.video.url = getLocalVideoActivityPubUrl(this.video)
@@ -149,9 +160,7 @@ export class LocalVideoCreator {
           transaction
         })
 
-        for (const thumbnail of thumbnails) {
-          await this.video.addAndSaveThumbnail(thumbnail, transaction)
-        }
+        await this.video.replaceAndSaveThumbnails(thumbnails, transaction)
 
         if (this.videoFile) {
           this.videoFile.videoId = this.video.id
@@ -200,6 +209,7 @@ export class LocalVideoCreator {
             saveReplay: this.liveAttributes.saveReplay || false,
             permanentLive: this.liveAttributes.permanentLive || false,
             latencyMode: this.liveAttributes.latencyMode || LiveVideoLatencyMode.DEFAULT,
+            dvrWindow: this.liveAttributes.dvrWindow ?? CONFIG.LIVE.DVR.MAX_WINDOW,
             streamKey: this.liveAttributes.streamKey || buildUUID()
           })
 
@@ -264,42 +274,26 @@ export class LocalVideoCreator {
   }
 
   private async createThumbnails () {
-    const promises: Promise<MThumbnail>[] = []
-    let toGenerate = [ ThumbnailType.MINIATURE, ThumbnailType.PREVIEW ]
-
-    for (const type of [ ThumbnailType.MINIATURE, ThumbnailType.PREVIEW ]) {
-      const thumbnail = this.options.thumbnails.find(t => t.type === type)
-      if (!thumbnail) continue
-
-      promises.push(
-        updateLocalVideoMiniatureFromExisting({
-          inputPath: thumbnail.path,
-          video: this.video,
-          type,
-          automaticallyGenerated: thumbnail.automaticallyGenerated || false,
-          keepOriginal: thumbnail.keepOriginal
-        }).catch(err => {
-          // eslint-disable-next-line @typescript-eslint/only-throw-error
-          throw PeerTubeError.fromError(err, 'INVALID_IMAGE_FILE')
-        })
-      )
-
-      toGenerate = toGenerate.filter(t => t !== thumbnail.type)
+    if (this.options.thumbnail) {
+      return createLocalVideoThumbnailsFromImage({
+        automaticallyGenerated: this.options.thumbnail.automaticallyGenerated,
+        keepOriginal: this.options.thumbnail.keepOriginal,
+        inputPath: this.options.thumbnail.path,
+        video: this.video
+      }).catch(err => {
+        // eslint-disable-next-line @typescript-eslint/only-throw-error
+        throw PeerTubeError.fromError(err, 'INVALID_IMAGE_FILE')
+      })
     }
 
-    return [
-      ...await Promise.all(promises),
-
-      ...await generateLocalVideoMiniature({
-        video: this.video,
-        videoFile: this.videoFile,
-        types: toGenerate,
-        ffprobe: this.videoFileProbe
-      })
-    ]
+    return createLocalVideoThumbnailsFromVideo({
+      video: this.video,
+      videoFile: this.videoFile,
+      ffprobe: this.videoFileProbe
+    })
   }
 
-  private buildVideo (videoInfo: VideoAttributes, channel: MChannel): FilteredModelAttributes<VideoModel> {
+  private buildVideo (videoInfo: VideoAttributes, channel: MChannel) {
     return {
       name: videoInfo.name,
       state: videoInfo.state,
@@ -310,6 +304,8 @@ export class LocalVideoCreator {
       commentsPolicy: videoInfo.commentsPolicy ?? CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY,
       downloadEnabled: videoInfo.downloadEnabled ?? CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
       waitTranscoding: videoInfo.waitTranscoding || false,
+
+      embedPrivacyPolicy: videoInfo.embedPrivacyPolicy ?? VideoEmbedPrivacyPolicy.ALL_ALLOWED,
 
       nsfw: videoInfo.nsfw || false,
       nsfwSummary: videoInfo.nsfwSummary,
@@ -330,6 +326,6 @@ export class LocalVideoCreator {
 
       uuid: buildUUID(),
       duration: videoInfo.duration
-    }
+    } satisfies FilteredModelAttributes<VideoModel>
   }
 }

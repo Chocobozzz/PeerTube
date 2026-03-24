@@ -1,18 +1,20 @@
+import { pick } from '@peertube/peertube-core-utils'
+import { VideoFileStreamType } from '@peertube/peertube-models'
 import {
   VODAudioMergeTranscodingJobHandler,
   VODHLSTranscodingJobHandler,
   VODWebVideoTranscodingJobHandler
 } from '@server/lib/runners/job-handlers/index.js'
-import { MUserId, MVideo, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
+import { MUserId, MVideo, MVideoFile, MVideoFull } from '@server/types/models/index.js'
 import { MRunnerJob } from '@server/types/models/runners/runner-job.js'
 import { getTranscodingJobPriority } from '../../transcoding-priority.js'
-import { AbstractJobBuilder } from './abstract-job-builder.js'
+import { AbstractJobBuilder, TranscodingPriorityType } from './abstract-job-builder.js'
 
 /**
  * Class to build transcoding job in the local job queue
  */
 
-type Payload = {
+type BasePayload = {
   Builder: new() => VODHLSTranscodingJobHandler
   options: Omit<Parameters<VODHLSTranscodingJobHandler['create']>[0], 'priority'>
 } | {
@@ -23,34 +25,43 @@ type Payload = {
   options: Omit<Parameters<VODWebVideoTranscodingJobHandler['create']>[0], 'priority'>
 }
 
-type PayloadWithPriority = Payload & { higherPriority?: boolean }
+type FullPayload = BasePayload & { transcodingPriority: TranscodingPriorityType }
 
-// eslint-disable-next-line max-len
-export class TranscodingRunnerJobBuilder extends AbstractJobBuilder<Payload> {
+export class TranscodingRunnerJobBuilder extends AbstractJobBuilder<FullPayload> {
   protected async createJobs (options: {
     video: MVideo
-    payloads: [[PayloadWithPriority], ...(PayloadWithPriority[][])] // Array of sequential jobs to create that depend on parent job
+    payloads: {
+      parent: FullPayload | null
+      children: FullPayload[][]
+    }
     user: MUserId | null
   }): Promise<void> {
-    const { payloads, user } = options
+    const { payloads: { parent, children }, user } = options
 
-    const parent = payloads[0][0]
-    payloads.shift()
+    const requiredPriority = await getTranscodingJobPriority({ user, type: 'vod-required' })
+    const optionalPriority = await getTranscodingJobPriority({ user, type: 'vod-optional' })
 
-    const priority = await getTranscodingJobPriority({ user, type: 'vod', fallback: 0 })
+    const parentJob = parent
+      ? await this.createJob({
+        payload: parent,
 
-    const parentJob = await this.createJob({
-      payload: parent,
-      priority: parent.higherPriority ? priority - 1 : priority
-    })
+        priority: parent.transcodingPriority === 'required'
+          ? requiredPriority
+          : optionalPriority
+      })
+      : undefined
 
-    for (const parallelPayloads of payloads) {
+    for (const parallelPayloads of children) {
       let lastJob = parentJob
 
-      for (const parallelPayload of parallelPayloads) {
+      for (const sequentialPayload of parallelPayloads) {
         lastJob = await this.createJob({
-          payload: parallelPayload,
-          priority: parallelPayload.higherPriority ? priority - 1 : priority,
+          payload: sequentialPayload,
+
+          priority: sequentialPayload.transcodingPriority === 'required'
+            ? requiredPriority
+            : optionalPriority,
+
           dependsOnRunnerJob: lastJob
         })
       }
@@ -60,7 +71,7 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder<Payload> {
   }
 
   private createJob (options: {
-    payload: Payload
+    payload: FullPayload
     priority: number
     dependsOnRunnerJob?: MRunnerJob
   }) {
@@ -79,91 +90,137 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder<Payload> {
   // ---------------------------------------------------------------------------
 
   protected buildHLSJobPayload (options: {
-    video: MVideoFullLight
+    video: MVideoFull
     resolution: number
     fps: number
     isNewVideo: boolean
     separatedAudio: boolean
+
+    transcodingPriority: TranscodingPriorityType
+
+    canMoveVideoState: boolean
+    inputStreams: VideoFileStreamType[]
+    transcodingRequestAt: string
+
     deleteWebVideoFiles?: boolean // default false
-    copyCodecs?: boolean // default false
-  }): Payload {
-    const { video, resolution, fps, isNewVideo, separatedAudio, deleteWebVideoFiles = false } = options
+  }): FullPayload {
+    const { deleteWebVideoFiles = false } = options
 
     return {
       Builder: VODHLSTranscodingJobHandler,
 
       options: {
-        video,
-        resolution,
-        fps,
-        isNewVideo,
-        separatedAudio,
+        ...pick(options, [
+          'video',
+          'resolution',
+          'fps',
+          'isNewVideo',
+          'separatedAudio',
+          'canMoveVideoState',
+          'transcodingRequestAt',
+          'inputStreams'
+        ]),
+
         deleteWebVideoFiles
-      }
+      },
+
+      ...pick(options, [ 'transcodingPriority' ])
     }
   }
 
   protected buildWebVideoJobPayload (options: {
-    video: MVideoFullLight
+    video: MVideoFull
     resolution: number
     fps: number
     isNewVideo: boolean
-  }): Payload {
-    const { video, resolution, fps, isNewVideo } = options
 
+    transcodingPriority: TranscodingPriorityType
+    canMoveVideoState: boolean
+  }): FullPayload {
     return {
       Builder: VODWebVideoTranscodingJobHandler,
 
       options: {
-        video,
-        resolution,
-        fps,
-        isNewVideo,
+        ...pick(options, [
+          'video',
+          'resolution',
+          'fps',
+          'isNewVideo',
+          'canMoveVideoState',
+          'transcodingPriority',
+          'canMoveVideoState'
+        ]),
+
         deleteInputFileId: null
-      }
+      },
+
+      ...pick(options, [ 'transcodingPriority' ])
     }
   }
 
   protected buildMergeAudioPayload (options: {
-    video: MVideoFullLight
+    video: MVideoFull
     inputFile: MVideoFile
     isNewVideo: boolean
     fps: number
     resolution: number
-  }): Payload {
-    const { video, isNewVideo, inputFile, resolution, fps } = options
+
+    transcodingPriority: TranscodingPriorityType
+    canMoveVideoState: boolean
+  }): FullPayload {
+    const { inputFile } = options
 
     return {
       Builder: VODAudioMergeTranscodingJobHandler,
+
       options: {
-        video,
-        resolution,
-        fps,
-        isNewVideo,
+        ...pick(options, [
+          'video',
+          'resolution',
+          'fps',
+          'isNewVideo',
+          'canMoveVideoState'
+        ]),
+
         deleteInputFileId: inputFile.id
-      }
+      },
+
+      ...pick(options, [ 'transcodingPriority' ])
     }
   }
 
   protected buildOptimizePayload (options: {
-    video: MVideoFullLight
+    video: MVideoFull
     inputFile: MVideoFile
-    quickTranscode: boolean
     isNewVideo: boolean
     fps: number
     resolution: number
-  }): Payload {
-    const { video, isNewVideo, inputFile, fps, resolution } = options
+
+    transcodingPriority: TranscodingPriorityType
+    canMoveVideoState: boolean
+  }): FullPayload {
+    const { inputFile } = options
 
     return {
       Builder: VODWebVideoTranscodingJobHandler,
+
       options: {
-        video,
-        resolution,
-        fps,
-        isNewVideo,
+        ...pick(options, [
+          'video',
+          'resolution',
+          'fps',
+          'isNewVideo',
+          'canMoveVideoState'
+        ]),
+
         deleteInputFileId: inputFile.id
-      }
+      },
+
+      ...pick(options, [ 'transcodingPriority' ])
     }
+  }
+
+  protected reassignCanMoveVideoState (payload: FullPayload, canMoveVideoState: boolean) {
+    payload.options.canMoveVideoState = canMoveVideoState
   }
 }

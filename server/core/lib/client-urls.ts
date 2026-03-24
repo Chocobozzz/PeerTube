@@ -13,7 +13,7 @@ export const myVideoImportsUrl = `${WEBSERVER.URL}/my-library/video-imports`
 
 export function getAdminAbuseUrl (abuse: MAbuseId) {
   const suffix = abuse
-    ? '?search=%23' + abuse.id
+    ? '?id=' + abuse.id
     : ''
 
   return WEBSERVER.URL + '/admin/moderation/abuses/list' + suffix
@@ -21,7 +21,7 @@ export function getAdminAbuseUrl (abuse: MAbuseId) {
 
 export function getUserAbuseUrl (abuse: MAbuseId) {
   const suffix = abuse
-    ? '?search=%23' + abuse.id
+    ? '?id=' + abuse.id
     : ''
 
   return WEBSERVER.URL + '/my-account/abuses' + suffix

@@ -235,7 +235,7 @@ describe('Test channel synchronizations', function () {
         await sqlCommands[0].setImportUrl(importId, 'http://fail.example.com')
         await sqlCommands[0].setImportState(importId, VideoImportState.FAILED)
 
-        for (let i = 2; i < 7; i++) {
+        for (let i = 2; i < 6; i++) {
           await servers[0].debug.sendCommand({
             body: {
               command: 'process-video-channel-sync-latest'
@@ -246,10 +246,33 @@ describe('Test channel synchronizations', function () {
 
           {
             const { data } = await servers[0].videoImports.listMyVideoImports({ videoChannelSyncId: rootChannelSyncId })
-            expect(data[0].state.id).to.equal(VideoImportState.FAILED)
-            expect(data[0].error).to.include('fail.example.com')
-            expect(data[0].attempts).to.equal(Math.min(3, i))
+            const failedImport = data.find(i => i.id === importId)
+
+            expect(failedImport.state.id).to.equal(VideoImportState.FAILED)
+            expect(failedImport.error).to.include('fail.example.com')
+            expect(failedImport.attempts).to.equal(i)
           }
+
+          {
+            const { data } = await servers[0].channelSyncs.listByAccount({ accountName: 'root' })
+            const sync = data.find(s => s.id === rootChannelSyncId)
+            expect(sync.state.id).to.equal(VideoChannelSyncState.FAILED)
+          }
+        }
+
+        // Last one, sync stopped trying to import the failed job, so the sync is a success
+        await servers[0].debug.sendCommand({
+          body: {
+            command: 'process-video-channel-sync-latest'
+          }
+        })
+
+        await waitJobs(servers)
+
+        {
+          const { data } = await servers[0].channelSyncs.listByAccount({ accountName: 'root' })
+          const sync = data.find(s => s.id === rootChannelSyncId)
+          expect(sync.state.id).to.equal(VideoChannelSyncState.SYNCED)
         }
       })
 

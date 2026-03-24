@@ -54,7 +54,7 @@ describe('Test jobs', function () {
 
       let job = body.data[0]
       // Skip repeat jobs
-      if (job.type === 'videos-views-stats') job = body.data[1]
+      if (job.type === 'videos-stats') job = body.data[1]
 
       expect(job.state).to.equal('completed')
       expect(dateIsValid(job.createdAt as string)).to.be.true
@@ -99,15 +99,13 @@ describe('Test jobs', function () {
 
     await wait(5000)
 
-    {
-      const body = await servers[1].jobs.list({ state: 'waiting', jobType: 'video-transcoding' })
-      // root transcoding
-      expect(body.data).to.have.lengthOf(1)
+    for (const state of [ 'waiting', 'waiting-children' ] as const) {
+      const body = await servers[1].jobs.list({ state, jobType: 'video-transcoding' })
+      expect(body.data).to.have.lengthOf(0)
     }
 
     {
-      const body = await servers[1].jobs.list({ state: 'waiting-children', jobType: 'transcoding-job-builder' })
-      // next transcoding jobs
+      const body = await servers[1].jobs.list({ state: 'waiting', jobType: 'transcoding-job-builder' })
       expect(body.data).to.have.lengthOf(1)
     }
   })
@@ -119,8 +117,17 @@ describe('Test jobs', function () {
 
     await waitJobs(servers)
 
-    const body = await servers[1].jobs.list({ state: 'waiting', jobType: 'video-transcoding' })
-    expect(body.data).to.have.lengthOf(0)
+    for (const state of [ 'waiting', 'waiting-children' ] as const) {
+      {
+        const body = await servers[1].jobs.list({ state, jobType: 'video-transcoding' })
+        expect(body.data).to.have.lengthOf(0)
+      }
+
+      {
+        const body = await servers[1].jobs.list({ state, jobType: 'transcoding-job-builder' })
+        expect(body.data).to.have.lengthOf(0)
+      }
+    }
   })
 
   after(async function () {

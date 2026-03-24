@@ -318,9 +318,9 @@ export class PlayerOptionsBuilder {
         }
         : undefined,
 
-      poster: nsfwBlur
+      thumbnails: nsfwBlur
         ? null
-        : getBackendUrl() + video.previewPath,
+        : video.thumbnails,
 
       duration: video.duration,
       videoRatio: video.aspectRatio,
@@ -354,7 +354,8 @@ export class PlayerOptionsBuilder {
     return {
       isLive: true,
       liveOptions: {
-        latencyMode: live.latencyMode
+        latencyMode: live.latencyMode,
+        dvrEnabled: live.dvrWindow > 0
       }
     }
   }

@@ -104,7 +104,7 @@ async function populateAccountBlocklistStatus (options: {
 
 function getStatus (block: { accountId: number }, serverActor: MActorAccountId, user?: MUserAccountId) {
   return {
-    blockedByServer: !!(block && block.accountId === serverActor.Account.id),
+    blockedByServer: !!(block?.accountId === serverActor.Account.id),
     blockedByUser: !!(block && user && block.accountId === user.Account.id)
   }
 }

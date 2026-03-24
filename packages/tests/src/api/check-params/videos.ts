@@ -39,6 +39,7 @@ describe('Test videos API validator', function () {
 
   let channelId2: number
   let channelIdEditor: number
+  let channelIdEditor2: number
 
   let video: VideoCreateResult
   let privateVideo: VideoCreateResult
@@ -73,6 +74,9 @@ describe('Test videos API validator', function () {
 
     {
       channelIdEditor = await server.channels.getDefaultId({ token: editorToken })
+      const anotherEditorChannel = await server.channels.create({ attributes: { name: 'another_editor_channel' }, token: editorToken })
+
+      channelIdEditor2 = anotherEditorChannel.id
     }
 
     {
@@ -486,7 +490,7 @@ describe('Test videos API validator', function () {
       it('Should fail with an incorrect thumbnail file', async function () {
         const fields = baseCorrectParams
         const attaches = {
-          thumbnailfile: buildAbsoluteFixturePath('video_short.mp4'),
+          thumbnailfile: buildAbsoluteFixturePath('video-720p.torrent'),
           fixture: buildAbsoluteFixturePath('video_short.mp4')
         }
 
@@ -506,7 +510,7 @@ describe('Test videos API validator', function () {
       it('Should fail with an incorrect preview file', async function () {
         const fields = baseCorrectParams
         const attaches = {
-          previewfile: buildAbsoluteFixturePath('video_short.mp4'),
+          previewfile: buildAbsoluteFixturePath('video-720p.torrent'),
           fixture: buildAbsoluteFixturePath('video_short.mp4')
         }
 
@@ -716,15 +720,7 @@ describe('Test videos API validator', function () {
       })
     })
 
-    it('Should fail with the channel of another user', async function () {
-      const fields = { ...baseCorrectParams, channelId: channelIdEditor }
-
-      for (const token of [ server.accessToken, editorToken ]) {
-        await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token, fields })
-      }
-    })
-
-    it('Should fail with another channel of the same user if the editor does not have the right on the target channel', async function () {
+    it('Should fail to update channel if the editor does not have the right on the target channel', async function () {
       const fields = { ...baseCorrectParams, channelId: channelId2 }
 
       await makePutBodyRequest({
@@ -736,7 +732,7 @@ describe('Test videos API validator', function () {
       })
     })
 
-    it('Should fail with another channel of the same user if the editor does not have the right on the video', async function () {
+    it('Should fail to update channel if the editor does not have the right on the video', async function () {
       await server.videos.update({ id: video.id, attributes: { channelId: channelId2 } })
 
       const fields = { ...baseCorrectParams, channelId }
@@ -908,6 +904,31 @@ describe('Test videos API validator', function () {
         expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
+
+    it('Should fail with the channel of another user if the video has pending ownership change', async function () {
+      const video = await server.videos.quickUpload({ name: 'video to transfer', channelId: channelIdEditor, token: editorToken })
+
+      await server.changeOwnership.create({ videoId: video.id, username: 'root', token: editorToken })
+
+      // Can update video metadata
+      await server.videos.update({ id: video.id, attributes: { name: 'video to transfer 2' }, token: editorToken })
+      // Can update video channel to a channel of the same user
+      await server.videos.update({ id: video.id, attributes: { channelId: channelIdEditor2 }, token: editorToken })
+
+      // Cannot update video channel to a channel of another user
+      await server.videos.update({
+        id: video.id,
+        attributes: { channelId },
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400,
+        token: editorToken
+      })
+
+      const { data } = await server.changeOwnership.list()
+      await server.changeOwnership.refuse({ ownershipId: data[0].id })
+
+      // Can update video channel to a channel of another user now there's no pending ownership change
+      await server.videos.update({ id: video.id, attributes: { channelId }, token: editorToken })
+    })
   })
 
   describe('When getting a video', function () {
@@ -919,7 +940,7 @@ describe('Test videos API validator', function () {
       })
 
       expect(res.body.data).to.be.an('array')
-      expect(res.body.data.length).to.equal(6)
+      expect(res.body.data.length).to.equal(7)
     })
 
     it('Should fail without a correct uuid', async function () {

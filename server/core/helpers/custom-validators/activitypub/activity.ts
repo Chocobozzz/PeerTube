@@ -43,7 +43,8 @@ const activityCheckers: { [P in ActivityType]: (activity: Activity) => boolean }
   Flag: isFlagActivityValid,
   Dislike: isDislikeActivityValid,
   ApproveReply: isApproveReplyActivityValid,
-  RejectReply: isRejectReplyActivityValid
+  RejectReply: isRejectReplyActivityValid,
+  Download: isDownloadActivityValid
 }
 
 export function isActivityValid (activity: any) {
@@ -147,4 +148,10 @@ export function isRejectReplyActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'RejectReply') &&
     isActivityPubUrlValid(activity.object) &&
     isActivityPubUrlValid(activity.inReplyTo)
+}
+
+export function isDownloadActivityValid (activity: any) {
+  return isBaseActivityValid(activity, 'Download') &&
+    isActivityPubUrlValid(activity.actor) &&
+    isActivityPubUrlValid(activity.object)
 }

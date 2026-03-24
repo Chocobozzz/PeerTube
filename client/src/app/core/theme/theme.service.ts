@@ -88,7 +88,7 @@ export class ThemeService {
 
     for (const theme of this.themes) {
       // Already added this theme?
-      if (fromLocalStorage === false && this.themeFromLocalStorage && this.themeFromLocalStorage.name === theme.name) continue
+      if (fromLocalStorage === false && this.themeFromLocalStorage?.name === theme.name) continue
 
       const links = this.themeManager.injectTheme(theme, environment.apiUrl)
 
@@ -200,7 +200,7 @@ export class ThemeService {
     if (this.internalThemes.includes(this.themeFromLocalStorage.name)) return
 
     const loadedTheme = themes.find(t => t.name === this.themeFromLocalStorage.name)
-    if (!loadedTheme || loadedTheme.version !== this.themeFromLocalStorage.version) {
+    if (loadedTheme?.version !== this.themeFromLocalStorage.version) {
       // Need to remove this theme: we loaded an old version or a theme that does not exist anymore
       this.removeThemePlugins(this.themeFromLocalStorage.name)
       this.oldThemeName = undefined

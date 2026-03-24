@@ -7,7 +7,7 @@ export const VideoLicence = {
   'CC-BY-NC-ND': 6,
   'CC0': 7,
   'PDM': 8,
-  'COPYRIGHT': 9
+  'ALL_RIGHTS_RESERVED': 9
 } as const
 
 export type VideoLicenceType = typeof VideoLicence[keyof typeof VideoLicence]

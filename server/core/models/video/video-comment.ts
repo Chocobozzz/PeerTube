@@ -41,7 +41,6 @@ import {
   MCommentFormattable,
   MCommentId,
   MCommentOwner,
-  MCommentOwnerReplyVideoImmutable,
   MCommentOwnerVideoFeed,
   MCommentOwnerVideoReply,
   MVideo,
@@ -133,6 +132,9 @@ export enum ScopeNames {
       fields: [
         { name: 'createdAt', order: 'DESC' }
       ]
+    },
+    {
+      fields: [ 'inReplyToCommentId' ]
     }
   ]
 })
@@ -316,26 +318,6 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
     }
 
     return VideoCommentModel.scope([ ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_VIDEO, ScopeNames.WITH_IN_REPLY_TO ]).findOne(query)
-  }
-
-  static loadByUrlAndPopulateReplyAndVideoImmutableAndAccount (
-    url: string,
-    transaction?: Transaction
-  ): Promise<MCommentOwnerReplyVideoImmutable> {
-    const query = {
-      where: {
-        url
-      },
-      include: [
-        {
-          attributes: [ 'id', 'uuid', 'url', 'remote' ],
-          model: VideoModel.unscoped()
-        }
-      ],
-      transaction
-    }
-
-    return VideoCommentModel.scope([ ScopeNames.WITH_IN_REPLY_TO, ScopeNames.WITH_ACCOUNT ]).findOne(query)
   }
 
   // ---------------------------------------------------------------------------
@@ -689,7 +671,7 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
   }
 
   getCommentUserReviewPath () {
-    return '/my-account/videos/comments?search=heldForReview:true'
+    return '/my-account/videos/comments?isHeldForReview=true'
   }
 
   getThreadId (): number {
@@ -816,6 +798,7 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
       mediaType: 'text/markdown',
 
       inReplyTo,
+      audience: this.Video.VideoChannel.Actor.url,
       updated: this.updatedAt.toISOString(),
       published: this.createdAt.toISOString(),
       url: this.url,

@@ -33,7 +33,7 @@ export class CommentsExporter extends AbstractUserExporter<CommentsExportJSON> {
 
   private formatCommentsAP (comments: MCommentExport[]) {
     return Bluebird.mapSeries(comments, async ({ url }) => {
-      const comment = await VideoCommentModel.loadByUrlAndPopulateReplyAndVideoImmutableAndAccount(url)
+      const comment = await VideoCommentModel.loadByUrlAndPopulateAccountAndVideoAndReply(url)
 
       const threadParentComments = await VideoCommentModel.listThreadParentComments({ comment })
       let commentObject = comment.toActivityPubObject(threadParentComments) as VideoCommentObject

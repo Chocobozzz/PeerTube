@@ -19,7 +19,6 @@ import {
   doubleFollow,
   killallServers,
   LiveCommand,
-  makeGetRequest,
   makeRawRequest,
   PeerTubeServer,
   sendRTMPStream,
@@ -30,9 +29,9 @@ import {
   waitJobs,
   waitUntilLivePublishedOnAllServers
 } from '@peertube/peertube-server-commands'
-import { testImageGeneratedByFFmpeg } from '@tests/shared/checks.js'
 import { testLiveVideoResolutions } from '@tests/shared/live.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
+import { checkThumbnails } from '@tests/shared/videos.js'
 import { expect } from 'chai'
 import { basename, join } from 'path'
 
@@ -61,6 +60,9 @@ describe('Test live', function () {
           },
           transcoding: {
             enabled: false
+          },
+          dvr: {
+            maxWindow: 36
           }
         }
       }
@@ -70,6 +72,53 @@ describe('Test live', function () {
     await doubleFollow(servers[0], servers[1])
 
     commands = servers.map(s => s.live)
+  })
+
+  describe('Live DVR settings', function () {
+    let liveVideoUUID: string
+
+    it('Should create a live with custom DVR settings', async function () {
+      const live = await commands[0].create({
+        fields: {
+          name: 'live dvr settings',
+          channelId: servers[0].store.channel.id,
+          privacy: VideoPrivacy.PUBLIC,
+          permanentLive: true,
+          dvrWindow: 13
+        }
+      })
+      liveVideoUUID = live.uuid
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const live = await server.live.get({ videoId: liveVideoUUID })
+
+        expect(live.dvrWindow).to.equal(13)
+      }
+    })
+
+    it('Should update DVR settings on the live', async function () {
+      await commands[0].update({
+        videoId: liveVideoUUID,
+        fields: {
+          dvrWindow: 10
+        }
+      })
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const live = await server.live.get({ videoId: liveVideoUUID })
+
+        expect(live.dvrWindow).to.equal(10)
+      }
+    })
+
+    it('Should delete the DVR test live', async function () {
+      await servers[0].videos.remove({ id: liveVideoUUID })
+      await waitJobs(servers)
+    })
   })
 
   describe('Live creation, update and delete', function () {
@@ -96,8 +145,7 @@ describe('Test live', function () {
           replaySettings: { privacy: VideoPrivacy.PUBLIC },
           latencyMode: LiveVideoLatencyMode.SMALL_LATENCY,
           privacy: VideoPrivacy.PUBLIC,
-          previewfile: 'video_short1-preview.webm.jpg',
-          thumbnailfile: 'video_short1.webm.jpg'
+          thumbnailfile: 'custom-thumbnail-input.jpg'
         }
       })
       liveVideoUUID = live.uuid
@@ -127,8 +175,11 @@ describe('Test live', function () {
         expect(video.downloadEnabled).to.be.false
         expect(video.privacy.id).to.equal(VideoPrivacy.PUBLIC)
 
-        await testImageGeneratedByFFmpeg(server.url, 'video_short1-preview.webm', video.previewPath)
-        await testImageGeneratedByFFmpeg(server.url, 'video_short1.webm', video.thumbnailPath)
+        await checkThumbnails({
+          server,
+          video,
+          thumbnails: [ 'custom-thumbnail-850x480.jpg', 'custom-thumbnail-280x157.jpg' ]
+        })
 
         const live = await server.live.get({ videoId: liveVideoUUID })
 
@@ -145,6 +196,7 @@ describe('Test live', function () {
 
         expect(live.saveReplay).to.be.true
         expect(live.latencyMode).to.equal(LiveVideoLatencyMode.SMALL_LATENCY)
+        expect(live.dvrWindow).to.equal(36)
       }
     })
 
@@ -168,8 +220,9 @@ describe('Test live', function () {
         expect(video.privacy.id).to.equal(VideoPrivacy.UNLISTED)
         expect(video.nsfw).to.be.true
 
-        await makeGetRequest({ url: server.url, path: video.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
-        await makeGetRequest({ url: server.url, path: video.previewPath, expectedStatus: HttpStatusCode.OK_200 })
+        for (const t of video.thumbnails) {
+          await makeRawRequest({ url: t.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+        }
       }
     })
 

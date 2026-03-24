@@ -107,17 +107,18 @@ describe('Test index search', function () {
       expect(video.licence.label).to.equal('Attribution - Share Alike')
       expect(video.privacy.label).to.equal('Public')
       expect(video.duration).to.equal(113)
+      // eslint-disable-next-line @typescript-eslint/no-deprecated
       expect(video.thumbnailUrl.startsWith('https://framatube.org/lazy-static/thumbnails')).to.be.true
 
       expect(video.account.host).to.equal('framatube.org')
       expect(video.account.name).to.equal('framasoft')
       expect(video.account.url).to.equal('https://framatube.org/accounts/framasoft')
-      expect(video.account.avatars.length).to.equal(2, 'Account should have one avatar image')
+      expect(video.account.avatars.length).to.equal(4, 'Account should have four avatar images')
 
       expect(video.channel.host).to.equal('framatube.org')
       expect(video.channel.name).to.equal('joinpeertube')
       expect(video.channel.url).to.equal('https://framatube.org/video-channels/joinpeertube')
-      expect(video.channel.avatars.length).to.equal(2, 'Channel should have one avatar image')
+      expect(video.channel.avatars.length).to.equal(4, 'Channel should have four avatar images')
     }
 
     const baseSearch: VideosSearchQuery = {
@@ -320,13 +321,13 @@ describe('Test index search', function () {
       const videoChannel = body.data[0]
       expect(videoChannel.url).to.equal('https://framatube.org/video-channels/bf54d359-cfad-4935-9d45-9d6be93f63e8')
       expect(videoChannel.host).to.equal('framatube.org')
-      expect(videoChannel.avatars.length).to.equal(2, 'Channel should have two avatar images')
+      expect(videoChannel.avatars.length).to.equal(4, 'Channel should have four avatar images')
       expect(videoChannel.displayName).to.exist
 
       expect(videoChannel.ownerAccount.url).to.equal('https://framatube.org/accounts/framasoft')
       expect(videoChannel.ownerAccount.name).to.equal('framasoft')
       expect(videoChannel.ownerAccount.host).to.equal('framatube.org')
-      expect(videoChannel.ownerAccount.avatars.length).to.equal(2, 'Account should have two avatar images')
+      expect(videoChannel.ownerAccount.avatars.length).to.equal(4, 'Account should have four avatar images')
     }
 
     it('Should make a simple search and not have results', async function () {
@@ -375,6 +376,7 @@ describe('Test index search', function () {
       const videoPlaylist = body.data[0]
 
       expect(videoPlaylist.url).to.equal('https://peertube2.cpy.re/videos/watch/playlist/73804a40-da9a-40c2-b1eb-2c6d9eec8f0a')
+      // eslint-disable-next-line @typescript-eslint/no-deprecated
       expect(videoPlaylist.thumbnailUrl).to.exist
       expect(videoPlaylist.embedUrl).to.equal('https://peertube2.cpy.re/video-playlists/embed/fgei1ws1oa6FCaJ2qZPG29')
 
@@ -391,12 +393,12 @@ describe('Test index search', function () {
       expect(videoPlaylist.ownerAccount.url).to.equal('https://peertube2.cpy.re/accounts/chocobozzz')
       expect(videoPlaylist.ownerAccount.name).to.equal('chocobozzz')
       expect(videoPlaylist.ownerAccount.host).to.equal('peertube2.cpy.re')
-      expect(videoPlaylist.ownerAccount.avatars.length).to.equal(2, 'Account should have two avatar images')
+      expect(videoPlaylist.ownerAccount.avatars.length).to.equal(4, 'Account should have four avatar images')
 
       expect(videoPlaylist.videoChannel.url).to.equal('https://peertube2.cpy.re/video-channels/chocobozzz_channel')
       expect(videoPlaylist.videoChannel.name).to.equal('chocobozzz_channel')
       expect(videoPlaylist.videoChannel.host).to.equal('peertube2.cpy.re')
-      expect(videoPlaylist.videoChannel.avatars.length).to.equal(2, 'Channel should have two avatar images')
+      expect(videoPlaylist.videoChannel.avatars.length).to.equal(4, 'Channel should have four avatar images')
     }
 
     it('Should make a simple search and not have results', async function () {

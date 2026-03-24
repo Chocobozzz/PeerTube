@@ -21,12 +21,14 @@ type CreateOptions = {
   fps: number
   priority: number
   deleteInputFileId: number | null
+  canMoveVideoState: boolean
   dependsOnRunnerJob?: MRunnerJob
 }
 
 // eslint-disable-next-line max-len
-export class VODWebVideoTranscodingJobHandler extends AbstractVODTranscodingJobHandler<CreateOptions, RunnerJobUpdatePayload, VODWebVideoTranscodingSuccess> {
-
+export class VODWebVideoTranscodingJobHandler
+  extends AbstractVODTranscodingJobHandler<CreateOptions, RunnerJobUpdatePayload, VODWebVideoTranscodingSuccess>
+{
   async create (options: CreateOptions) {
     const { video, resolution, fps, priority, dependsOnRunnerJob } = options
 
@@ -48,7 +50,7 @@ export class VODWebVideoTranscodingJobHandler extends AbstractVODTranscodingJobH
     }
 
     const privatePayload: RunnerJobVODWebVideoTranscodingPrivatePayload = {
-      ...pick(options, [ 'isNewVideo', 'deleteInputFileId' ]),
+      ...pick(options, [ 'isNewVideo', 'deleteInputFileId', 'canMoveVideoState' ]),
 
       videoUUID: video.uuid
     }
@@ -85,7 +87,9 @@ export class VODWebVideoTranscodingJobHandler extends AbstractVODTranscodingJobH
 
     logger.info(
       'Runner VOD web video transcoding job %s for %s ended.',
-      runnerJob.uuid, video.uuid, this.lTags(video.uuid, runnerJob.uuid)
+      runnerJob.uuid,
+      video.uuid,
+      this.lTags(video.uuid, runnerJob.uuid)
     )
   }
 }

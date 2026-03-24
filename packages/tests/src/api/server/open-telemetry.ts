@@ -113,8 +113,9 @@ describe('Open Telemetry', function () {
 
       const res = await makeRawRequest({ url: metricsUrl, expectedStatus: HttpStatusCode.OK_200 })
 
-      // eslint-disable-next-line max-len
-      const label = `{videoOrigin="local",playerMode="p2p-media-loader",resolution="1080",fps="30",p2pEnabled="false",videoUUID="${video.uuid}"}`
+      const label =
+        // eslint-disable-next-line max-len
+        `{videoOrigin="local",playerMode="p2p-media-loader",resolution="1080",fps="30",p2pEnabled="false",videoUUID="${video.uuid}",otel_scope_name="default"}`
       expect(res.text).to.contain(`peertube_playback_p2p_peers${label} 42`)
       expect(res.text).to.not.contain(`peertube_playback_p2p_peers${label} 7`)
     })

@@ -81,6 +81,14 @@ export class StatsObserversBuilder {
       observableResult.observe(stats.totalLocalVideoViews, { viewOrigin: 'local' })
     })
 
+    this.meter.createObservableGauge('peertube_video_downloads_total', {
+      description: 'Total video downloads made on the instance'
+    }).addCallback(async observableResult => {
+      const stats = await this.getInstanceStats()
+
+      observableResult.observe(stats.totalLocalVideoDownloads, { viewOrigin: 'local' })
+    })
+
     this.meter.createObservableGauge('peertube_video_bytes_total', {
       description: 'Total bytes of videos'
     }).addCallback(async observableResult => {

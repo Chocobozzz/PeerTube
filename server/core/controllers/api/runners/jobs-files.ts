@@ -9,7 +9,7 @@ import {
   runnerJobGetVideoStudioTaskFileValidator,
   runnerJobGetVideoTranscodingFileValidator
 } from '@server/middlewares/validators/runners/job-files.js'
-import { MVideoFileStreamingPlaylistVideo, MVideoFileVideo, MVideoFullLight } from '@server/types/models/index.js'
+import { MVideoFileStreamingPlaylistVideo, MVideoFileVideo, MVideoFull } from '@server/types/models/index.js'
 import express from 'express'
 
 const lTags = loggerTagsFactory('api', 'runner')
@@ -33,11 +33,11 @@ runnerJobFilesRouter.post(
 )
 
 runnerJobFilesRouter.post(
-  '/jobs/:jobUUID/files/videos/:videoId/previews/max-quality',
+  [ '/jobs/:jobUUID/files/videos/:videoId/thumbnails/max-quality', '/jobs/:jobUUID/files/videos/:videoId/previews/max-quality' ],
   apiRateLimiter,
   asyncMiddleware(jobOfRunnerGetValidatorFactory([ RunnerJobState.PROCESSING ])),
   asyncMiddleware(runnerJobGetVideoTranscodingFileValidator),
-  getMaxQualityVideoPreview
+  getMaxQualityVideoThumbnail
 )
 
 runnerJobFilesRouter.post(
@@ -60,7 +60,7 @@ export {
 async function getMaxQualitySeparatedAudioFile (req: express.Request, res: express.Response) {
   const runnerJob = res.locals.runnerJob
   const runner = runnerJob.Runner
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
 
   logger.info(
     'Get max quality separated audio file of video %s of job %s for runner %s',
@@ -78,7 +78,7 @@ async function getMaxQualitySeparatedAudioFile (req: express.Request, res: expre
 async function getMaxQualityVideoFile (req: express.Request, res: express.Response) {
   const runnerJob = res.locals.runnerJob
   const runner = runnerJob.Runner
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
 
   logger.info(
     'Get max quality file of video %s of job %s for runner %s',
@@ -94,7 +94,7 @@ async function getMaxQualityVideoFile (req: express.Request, res: express.Respon
 }
 
 async function serveVideoFile (options: {
-  video: MVideoFullLight
+  video: MVideoFull
   file: MVideoFileVideo | MVideoFileStreamingPlaylistVideo
   req: express.Request
   res: express.Response
@@ -107,7 +107,6 @@ async function serveVideoFile (options: {
         req,
         res,
         filename: file.filename,
-        playlist: video.getHLSPlaylist(),
         reinjectVideoFileToken: false,
         video
       })
@@ -128,10 +127,10 @@ async function serveVideoFile (options: {
 
 // ---------------------------------------------------------------------------
 
-function getMaxQualityVideoPreview (req: express.Request, res: express.Response) {
+function getMaxQualityVideoThumbnail (req: express.Request, res: express.Response) {
   const runnerJob = res.locals.runnerJob
   const runner = runnerJob.Runner
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
 
   logger.info(
     'Get max quality preview file of video %s of job %s for runner %s',
@@ -141,15 +140,15 @@ function getMaxQualityVideoPreview (req: express.Request, res: express.Response)
     lTags(runner.name, runnerJob.id, runnerJob.type)
   )
 
-  const file = video.getPreview()
+  const file = video.getBestThumbnail('16:9')
 
-  return res.sendFile(file.getPath())
+  return res.sendFile(file.getFSPath())
 }
 
 function getVideoStudioTaskFile (req: express.Request, res: express.Response) {
   const runnerJob = res.locals.runnerJob
   const runner = runnerJob.Runner
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
   const filename = req.params.filename
 
   logger.info(

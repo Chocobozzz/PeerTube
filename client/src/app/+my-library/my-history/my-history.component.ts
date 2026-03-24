@@ -18,7 +18,7 @@ import { Video } from '@app/shared/shared-main/video/video.model'
 import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature/video-miniature.component'
 import { VideosSelectionComponent } from '@app/shared/shared-video-miniature/videos-selection.component'
 import { tap } from 'rxjs/operators'
-import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
+import { SearchInputComponent } from '../../shared/shared-forms/search-input.component'
 import { InputSwitchComponent } from '../../shared/shared-forms/input-switch.component'
 import { DeleteButtonComponent } from '../../shared/shared-main/buttons/delete-button.component'
 import { PeerTubeTemplateDirective } from '../../shared/shared-main/common/peertube-template.directive'
@@ -28,7 +28,7 @@ import { PeerTubeTemplateDirective } from '../../shared/shared-main/common/peert
   styleUrls: [ './my-history.component.scss' ],
   imports: [
     ButtonComponent,
-    AdvancedInputFilterComponent,
+    SearchInputComponent,
     InputSwitchComponent,
     FormsModule,
     VideosSelectionComponent,

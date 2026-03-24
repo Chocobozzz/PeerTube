@@ -128,7 +128,7 @@ export class SelectCheckboxDefaultAllComponent implements ControlValueAccessor, 
   private updateLabel () {
     const availableItems = this.availableItems()
 
-    if (this.selectedItems && availableItems && this.selectedItems.length === availableItems.length) {
+    if (this.selectedItems?.length === availableItems?.length) {
       this.selectedItemsLabel = this.allSelectedLabel()
     } else {
       this.selectedItemsLabel = this.selectedLabel()

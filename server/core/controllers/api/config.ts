@@ -109,7 +109,7 @@ configRouter.delete(
 configRouter.post(
   '/instance-logo/:logoType/pick',
   authenticate,
-  createReqFiles([ 'logofile' ], MIMETYPES.IMAGE.MIMETYPE_EXT),
+  createReqFiles([ 'logofile' ], MIMETYPES.LOGO_IMAGE.MIMETYPE_EXT),
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   updateOrDeleteLogoValidator,
   updateInstanceLogoValidator,
@@ -378,20 +378,6 @@ function customConfig (): CustomConfig {
         }
       }
     },
-    cache: {
-      previews: {
-        size: CONFIG.CACHE.PREVIEWS.SIZE
-      },
-      captions: {
-        size: CONFIG.CACHE.VIDEO_CAPTIONS.SIZE
-      },
-      torrents: {
-        size: CONFIG.CACHE.TORRENTS.SIZE
-      },
-      storyboards: {
-        size: CONFIG.CACHE.STORYBOARDS.SIZE
-      }
-    },
     signup: {
       enabled: CONFIG.SIGNUP.ENABLED,
       limit: CONFIG.SIGNUP.LIMIT,
@@ -443,6 +429,7 @@ function customConfig (): CustomConfig {
         '2160p': CONFIG.TRANSCODING.RESOLUTIONS['2160p']
       },
       alwaysTranscodeOriginalResolution: CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION,
+      alwaysTranscodePodcastOptimizedAudio: CONFIG.TRANSCODING.ALWAYS_TRANSCODE_PODCAST_OPTIMIZED_AUDIO,
       fps: {
         max: CONFIG.TRANSCODING.FPS.MAX
       },
@@ -485,6 +472,9 @@ function customConfig (): CustomConfig {
         fps: {
           max: CONFIG.LIVE.TRANSCODING.FPS.MAX
         }
+      },
+      dvr: {
+        maxWindow: CONFIG.LIVE.DVR.MAX_WINDOW
       }
     },
     videoStudio: {

@@ -7,10 +7,10 @@ import {
   areValidationErrors,
   checkCanDeleteVideoPassword,
   checkCanManageVideo,
+  checkVideoIsPasswordProtected,
   doesVideoExist,
   doesVideoPasswordExist,
-  isValidVideoIdParam,
-  checkVideoIsPasswordProtected
+  isValidVideoIdParam
 } from '../shared/index.js'
 
 export const listVideoPasswordValidator = [
@@ -19,7 +19,7 @@ export const listVideoPasswordValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    if (!await doesVideoExist(req.params.videoId, res)) return
+    if (!await doesVideoExist(req.params.videoId, res, 'with-rights')) return
     if (!checkVideoIsPasswordProtected(req, res)) return
 
     // Check if the user who did the request is able to access video password list
@@ -27,7 +27,7 @@ export const listVideoPasswordValidator = [
     if (
       !await checkCanManageVideo({
         user,
-        video: res.locals.videoAll,
+        video: res.locals.videoWithRights,
         right: UserRight.SEE_ALL_VIDEOS,
         req,
         res,
@@ -83,11 +83,11 @@ export const removeVideoPasswordValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    if (!await doesVideoExist(req.params.videoId, res)) return
+    if (!await doesVideoExist(req.params.videoId, res, 'with-rights')) return
     if (!checkVideoIsPasswordProtected(req, res)) return
     if (!await doesVideoPasswordExist({ id: req.params.passwordId, req, res })) return
 
-    if (!await checkCanDeleteVideoPassword({ user: res.locals.oauth.token.User, video: res.locals.videoAll, req, res })) return
+    if (!await checkCanDeleteVideoPassword({ user: res.locals.oauth.token.User, video: res.locals.videoWithRights, req, res })) return
 
     return next()
   }
@@ -98,7 +98,7 @@ export const removeVideoPasswordValidator = [
 // ---------------------------------------------------------------------------
 
 async function checkAddOrUpdatePasswords (req: express.Request, res: express.Response) {
-  if (!await doesVideoExist(req.params.videoId, res)) return false
+  if (!await doesVideoExist(req.params.videoId, res, 'with-rights')) return false
   if (!isValidPasswordProtectedPrivacy(req, res)) return false
 
   // Check if the user who did the request is able to update video passwords
@@ -106,7 +106,7 @@ async function checkAddOrUpdatePasswords (req: express.Request, res: express.Res
   if (
     !await checkCanManageVideo({
       user,
-      video: res.locals.videoAll,
+      video: res.locals.videoWithRights,
       right: UserRight.UPDATE_ANY_VIDEO,
       req,
       res,

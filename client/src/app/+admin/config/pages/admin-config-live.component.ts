@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnInit, OnDestroy, inject } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { CanComponentDeactivate, ServerService } from '@app/core'
 import {
+  MAX_DVR_WINDOW_MINUTES_VALIDATOR,
   MAX_INSTANCE_LIVES_VALIDATOR,
   MAX_LIVE_DURATION_VALIDATOR,
   MAX_USER_LIVES_VALIDATOR,
@@ -18,14 +19,14 @@ import {
 } from '@app/shared/form-validators/form-validator.model'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { CustomConfig } from '@peertube/peertube-models'
+import { Subscription } from 'rxjs'
 import { SelectOptionsItem } from 'src/types/select-options-item.model'
+import { AdminConfigService, FormResolutions, ResolutionOption } from '../../../shared/shared-admin/admin-config.service'
 import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
 import { SelectCustomValueComponent } from '../../../shared/shared-forms/select/select-custom-value.component'
 import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
 import { PeerTubeTemplateDirective } from '../../../shared/shared-main/common/peertube-template.directive'
-import { AdminConfigService, FormResolutions, ResolutionOption } from '../../../shared/shared-admin/admin-config.service'
 import { AdminSaveBarComponent } from '../shared/admin-save-bar.component'
-import { Subscription } from 'rxjs'
 
 type Form = {
   live: FormGroup<{
@@ -54,6 +55,11 @@ type Form = {
 
       threads: FormControl<number>
       profile: FormControl<string>
+    }>
+
+    dvr: FormGroup<{
+      enabled: FormControl<boolean>
+      maxWindow: FormControl<number>
     }>
   }>
 
@@ -124,7 +130,7 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
       .subscribe(customConfig => {
         this.customConfig = customConfig
 
-        this.form.patchValue(this.customConfig)
+        this.form.patchValue(this.buildFormValue(this.customConfig))
       })
   }
 
@@ -157,6 +163,11 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
           fps: {
             max: TRANSCODING_MAX_FPS_VALIDATOR
           }
+        },
+
+        dvr: {
+          enabled: null,
+          maxWindow: MAX_DVR_WINDOW_MINUTES_VALIDATOR
         }
       },
 
@@ -167,7 +178,7 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
       }
     }
 
-    const defaultValues: FormDefaultTyped<Form> = this.customConfig
+    const defaultValues: FormDefaultTyped<Form> = this.buildFormValue(this.customConfig)
 
     const {
       form,
@@ -200,12 +211,20 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
     return this.form.value.live.enabled === true
   }
 
+  isDvrEnabled () {
+    return this.form.value.live.dvr.enabled === true
+  }
+
   isRemoteRunnerLiveEnabled () {
     return this.form.value.live.transcoding.remoteRunners.enabled === true
   }
 
   getDisabledLiveClass () {
     return { 'disabled-checkbox-extra': !this.isLiveEnabled() }
+  }
+
+  getDisabledLiveDVRClass () {
+    return { 'disabled-checkbox-extra': !this.isLiveEnabled() || !this.isDvrEnabled() }
   }
 
   getDisabledLiveTranscodingClass () {
@@ -233,10 +252,22 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
   }
 
   save () {
+    const value = {
+      live: {
+        ...this.form.value.live,
+
+        dvr: {
+          maxWindow: this.form.value.live.dvr.enabled && this.form.value.live.dvr.maxWindow
+            ? this.form.value.live.dvr.maxWindow * 60
+            : 0
+        }
+      }
+    }
+
     this.adminConfigService.saveAndUpdateCurrent({
       currentConfig: this.customConfig,
       form: this.form,
-      formConfig: this.form.value,
+      formConfig: value,
       success: $localize`Live configuration updated.`
     })
   }
@@ -249,5 +280,18 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
         allowReplay: this.form.value.live.allowReplay
       }
     })
+  }
+
+  private buildFormValue (customConfig: CustomConfig): FormDefaultTyped<Form> {
+    return {
+      live: {
+        ...customConfig.live,
+
+        dvr: {
+          enabled: customConfig.live.dvr.maxWindow > 0,
+          maxWindow: Math.round(customConfig.live.dvr.maxWindow / 60)
+        }
+      }
+    }
   }
 }

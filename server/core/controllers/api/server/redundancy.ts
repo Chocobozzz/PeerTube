@@ -22,14 +22,16 @@ import {
 
 const serverRedundancyRouter = express.Router()
 
-serverRedundancyRouter.put('/redundancy/:host',
+serverRedundancyRouter.put(
+  '/redundancy/:host',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
   asyncMiddleware(updateServerRedundancyValidator),
   asyncMiddleware(updateRedundancy)
 )
 
-serverRedundancyRouter.get('/redundancy/videos',
+serverRedundancyRouter.get(
+  '/redundancy/videos',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_VIDEOS_REDUNDANCIES),
   listVideoRedundanciesValidator,
@@ -40,14 +42,16 @@ serverRedundancyRouter.get('/redundancy/videos',
   asyncMiddleware(listVideoRedundancies)
 )
 
-serverRedundancyRouter.post('/redundancy/videos',
+serverRedundancyRouter.post(
+  '/redundancy/videos',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_VIDEOS_REDUNDANCIES),
   addVideoRedundancyValidator,
   asyncMiddleware(addVideoRedundancy)
 )
 
-serverRedundancyRouter.delete('/redundancy/videos/:redundancyId',
+serverRedundancyRouter.delete(
+  '/redundancy/videos/:redundancyId',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_VIDEOS_REDUNDANCIES),
   removeVideoRedundancyValidator,
@@ -81,7 +85,7 @@ async function listVideoRedundancies (req: express.Request, res: express.Respons
 
 async function addVideoRedundancy (req: express.Request, res: express.Response) {
   const payload = {
-    videoId: res.locals.onlyVideo.id
+    videoId: res.locals.videoWithBlacklist.id
   }
 
   await JobQueue.Instance.createJob({

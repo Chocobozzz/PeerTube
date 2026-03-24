@@ -27,7 +27,7 @@ import {
   UserVideoRateType,
   UserVideoRateUpdate,
   VideoChannel as VideoChannelServerModel,
-  VideoConstant,
+  ConstantLabel,
   VideoDetails as VideoDetailsServerModel,
   VideoFile,
   VideoFileMetadata,
@@ -128,10 +128,11 @@ export class VideoService {
 
     isLive?: boolean
     privacyOneOf?: VideoPrivacyType[]
+    tagsOneOf?: string[]
     channelNameOneOf: string[]
     search?: string
   }): Observable<ResultList<Video>> {
-    const { videoPagination, restPagination, sort, channelNameOneOf, privacyOneOf, search, includeCollaborations } = options
+    const { videoPagination, restPagination, sort, channelNameOneOf, privacyOneOf, tagsOneOf, search, includeCollaborations } = options
 
     const pagination = videoPagination
       ? this.restService.componentToRestPagination(videoPagination)
@@ -145,6 +146,7 @@ export class VideoService {
     if (exists(options.isLive)) commonFilters.isLive = options.isLive
     if (options.search) commonFilters.search = search
     if (options.privacyOneOf) commonFilters.privacyOneOf = privacyOneOf
+    if (options.tagsOneOf) commonFilters.tagsOneOf = tagsOneOf
 
     params = this.restService.addObjectParams(params, commonFilters)
 
@@ -219,6 +221,7 @@ export class VideoService {
       nsfw,
       nsfwFlagsExcluded,
       nsfwFlagsIncluded,
+      autoTagOneOf,
 
       ...otherOptions
     } = options
@@ -233,6 +236,7 @@ export class VideoService {
     if (Array.isArray(languageOneOf)) newParams = this.restService.addArrayParams(newParams, 'languageOneOf', languageOneOf)
     if (Array.isArray(categoryOneOf)) newParams = this.restService.addArrayParams(newParams, 'categoryOneOf', categoryOneOf)
     if (Array.isArray(privacyOneOf)) newParams = this.restService.addArrayParams(newParams, 'privacyOneOf', privacyOneOf)
+    if (Array.isArray(autoTagOneOf)) newParams = this.restService.addArrayParams(newParams, 'autoTagOneOf', autoTagOneOf)
     if (search) newParams = newParams.set('search', search)
 
     newParams = this.buildNSFWParams(newParams, { nsfw, nsfwFlagsExcluded, nsfwFlagsIncluded })
@@ -534,7 +538,7 @@ export class VideoService {
 
   // ---------------------------------------------------------------------------
 
-  explainedPrivacyLabels (serverPrivacies: VideoConstant<VideoPrivacyType>[], defaultPrivacyId: VideoPrivacyType = VideoPrivacy.PUBLIC) {
+  explainedPrivacyLabels (serverPrivacies: ConstantLabel<VideoPrivacyType>[], defaultPrivacyId: VideoPrivacyType = VideoPrivacy.PUBLIC) {
     const descriptions = {
       [VideoPrivacy.PRIVATE]: $localize`Only I can see this video`,
       [VideoPrivacy.UNLISTED]: $localize`Only shareable via a private link`,
@@ -557,7 +561,7 @@ export class VideoService {
     }
   }
 
-  explainedLicenceLabels (serverLicences: VideoConstant<VideoLicenceType>[]) {
+  explainedLicenceLabels (serverLicences: ConstantLabel<VideoLicenceType>[]) {
     const descriptions = {
       [VideoLicence['CC-BY']]: $localize`CC-BY`,
       [VideoLicence['CC-BY-SA']]: $localize`CC-BY-SA`,
@@ -567,7 +571,7 @@ export class VideoService {
       [VideoLicence['CC-BY-NC-ND']]: $localize`CC-BY-NC-ND`,
       [VideoLicence['CC0']]: '',
       [VideoLicence.PDM]: $localize`Public domain mark`,
-      [VideoLicence['COPYRIGHT']]: $localize`You are the owner of the content or you have the rights of the copyright holders`
+      [VideoLicence['ALL_RIGHTS_RESERVED']]: $localize`You are the owner of the content or you have the rights of the copyright holders`
     }
 
     return serverLicences.map(p => {
@@ -599,7 +603,7 @@ export class VideoService {
     return $localize`This video contains sensitive content: ${flags.join(' - ')}`
   }
 
-  getMostPrivatePrivacy (serverPrivacies: VideoConstant<VideoPrivacyType>[]) {
+  getMostPrivatePrivacy (serverPrivacies: ConstantLabel<VideoPrivacyType>[]) {
     // We do not add a password as this requires additional configuration.
     const order = [
       VideoPrivacy.PRIVATE,
@@ -611,7 +615,7 @@ export class VideoService {
     return this.getPrivacyFromOrder(serverPrivacies, order)
   }
 
-  private getPrivacyFromOrder (serverPrivacies: VideoConstant<VideoPrivacyType>[], order: VideoPrivacyType[]) {
+  private getPrivacyFromOrder (serverPrivacies: ConstantLabel<VideoPrivacyType>[], order: VideoPrivacyType[]) {
     for (const privacy of order) {
       if (serverPrivacies.find(p => p.id === privacy)) {
         return privacy

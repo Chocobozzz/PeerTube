@@ -6,10 +6,14 @@ import { MVideoPlaylist, MVideoPlaylistOwnerDefault } from '@server/types/models
 import { createOrUpdateVideoPlaylist } from './create-update.js'
 import { fetchRemoteVideoPlaylist } from './shared/index.js'
 
-function scheduleRefreshIfNeeded (playlist: MVideoPlaylist) {
+function schedulePlaylistRefreshIfNeeded (playlist: MVideoPlaylist) {
   if (!playlist.isOutdated()) return
 
-  JobQueue.Instance.createJobAsync({ type: 'activitypub-refresher', payload: { type: 'video-playlist', url: playlist.url } })
+  JobQueue.Instance.createJobAsync({
+    type: 'activitypub-refresher',
+    payload: { type: 'video-playlist', url: playlist.url },
+    deduplicationId: `refresh-video-playlist-${playlist.url}`
+  })
 }
 
 async function refreshVideoPlaylistIfNeeded (videoPlaylist: MVideoPlaylistOwnerDefault): Promise<MVideoPlaylistOwnerDefault> {
@@ -51,5 +55,5 @@ async function refreshVideoPlaylistIfNeeded (videoPlaylist: MVideoPlaylistOwnerD
 
 export {
   refreshVideoPlaylistIfNeeded,
-  scheduleRefreshIfNeeded
+  schedulePlaylistRefreshIfNeeded
 }

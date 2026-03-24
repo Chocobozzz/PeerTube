@@ -43,9 +43,8 @@ export class VideosListAllComponent implements OnInit, OnDestroy, DisableForReus
   ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
 
-    const queryParams = this.route.snapshot.queryParams
-    this.defaultSort = queryParams.sort || this.serverConfig.client.browseVideos.defaultSort
-    this.defaultScope = queryParams.scope || this.serverConfig.client.browseVideos.defaultScope
+    this.defaultSort = this.serverConfig.client.browseVideos.defaultSort as VideoSortField
+    this.defaultScope = this.serverConfig.client.browseVideos.defaultScope as VideoFilterScope
 
     this.routeSub = this.route.params.subscribe(() => this.update())
   }

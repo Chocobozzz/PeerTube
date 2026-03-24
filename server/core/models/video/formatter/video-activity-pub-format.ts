@@ -9,13 +9,14 @@ import {
   ActivityUrlObject,
   nsfwFlagsToString,
   VideoCommentPolicy,
+  VideoEmbedPrivacyPolicy,
   VideoObject
 } from '@peertube/peertube-models'
 import { getAPPublicValue } from '@server/helpers/activity-pub-utils.js'
 import { isArray } from '@server/helpers/custom-validators/misc.js'
-import { generateMagnetUri } from '@server/lib/webtorrent.js'
 import { getActivityStreamDuration } from '@server/lib/activitypub/activity.js'
 import { getLocalVideoFileMetadataUrl } from '@server/lib/video-urls.js'
+import { generateMagnetUri } from '@server/lib/webtorrent.js'
 import { WEBSERVER } from '../../../initializers/constants.js'
 import {
   getLocalVideoChaptersActivityPubUrl,
@@ -73,6 +74,7 @@ export function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
     licence,
     language,
     views: video.views,
+    downloads: video.downloads,
 
     sensitive: video.nsfw,
     summary: video.nsfwSummary,
@@ -125,10 +127,24 @@ export function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
     hasParts: getLocalVideoChaptersActivityPubUrl(video),
     playerSettings: getLocalVideoPlayerSettingsActivityPubUrl(video),
 
-    attributedTo: [
-      video.VideoChannel.Account.Actor.url,
-      video.VideoChannel.Actor.url
-    ],
+    embedUrl: video.embedPrivacyPolicy === VideoEmbedPrivacyPolicy.ALL_ALLOWED
+      ? video.getEmbedStaticUrl()
+      : null,
+
+    attributedTo: process.env.FEP_1B12_ONLY !== 'true'
+      ? [
+        {
+          type: 'Person',
+          id: video.VideoChannel.Account.Actor.url
+        },
+        {
+          type: 'Group',
+          id: video.VideoChannel.Actor.url
+        }
+      ]
+      : video.VideoChannel.Account.Actor.url,
+
+    audience: video.VideoChannel.Actor.url,
 
     ...buildLiveAPAttributes(video)
   }
@@ -144,7 +160,8 @@ function buildLiveAPAttributes (video: MVideoAP) {
       isLiveBroadcast: false,
       liveSaveReplay: null,
       permanentLive: null,
-      latencyMode: null
+      latencyMode: null,
+      dvrWindow: null
     }
   }
 
@@ -152,7 +169,8 @@ function buildLiveAPAttributes (video: MVideoAP) {
     isLiveBroadcast: true,
     liveSaveReplay: video.VideoLive.saveReplay,
     permanentLive: video.VideoLive.permanentLive,
-    latencyMode: video.VideoLive.latencyMode
+    latencyMode: video.VideoLive.latencyMode,
+    dvrWindow: getActivityStreamDuration(video.VideoLive.dvrWindow)
   }
 }
 
@@ -169,7 +187,7 @@ function buildPreviewAPAttribute (video: MVideoAP): ActivityPubStoryboard[] {
         {
           mediaType: 'image/jpeg',
 
-          href: storyboard.getOriginFileUrl(video),
+          href: storyboard.getLocalFileUrl(),
 
           width: storyboard.totalWidth,
           height: storyboard.totalHeight,
@@ -309,9 +327,9 @@ function buildTags (video: MVideoAP): (ActivitySensitiveTagObject | ActivityHash
 }
 
 function buildIcon (video: MVideoAP): ActivityIconObject[] {
-  return [ video.getMiniature(), video.getPreview() ]
+  return video.Thumbnails
     .filter(i => !!i)
-    .map(i => i.toActivityPubObject(video))
+    .map(i => i.toActivityPubObject())
 }
 
 function buildSubtitleLanguage (video: MVideoAP) {

@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { pathExists } from 'fs-extra/esm'
-import { HttpStatusCode, ThumbnailType } from '@peertube/peertube-models'
+import { HttpStatusCode } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -44,7 +44,6 @@ describe('Test plugin helpers', function () {
   })
 
   describe('Logger', function () {
-
     it('Should have logged things', async function () {
       await servers[0].servers.waitUntilLog(servers[0].host + ' peertube-plugin-test-four', 1, false)
       await servers[0].servers.waitUntilLog('Hello world from plugin four', 1)
@@ -52,14 +51,12 @@ describe('Test plugin helpers', function () {
   })
 
   describe('Database', function () {
-
     it('Should have made a query', async function () {
       await servers[0].servers.waitUntilLog(`root email is admin${servers[0].internalServerNumber}@example.com`)
     })
   })
 
   describe('Config', function () {
-
     it('Should have the correct webserver url', async function () {
       await servers[0].servers.waitUntilLog(`server url is ${servers[0].url}`)
     })
@@ -89,14 +86,12 @@ describe('Test plugin helpers', function () {
   })
 
   describe('Server', function () {
-
     it('Should get the server actor', async function () {
       await servers[0].servers.waitUntilLog('server actor name is peertube')
     })
   })
 
   describe('Socket', function () {
-
     it('Should sendNotification without any exceptions', async () => {
       const user = await servers[0].users.create({ username: 'notis_redding', password: 'secret1234?' })
       await makePostBodyRequest({
@@ -123,7 +118,6 @@ describe('Test plugin helpers', function () {
   })
 
   describe('Plugin', function () {
-
     it('Should get the base static route', async function () {
       const res = await makeGetRequest({
         url: servers[0].url,
@@ -325,13 +319,17 @@ describe('Test plugin helpers', function () {
       {
         expect(body.thumbnails).to.be.an('array')
 
-        const miniature = body.thumbnails.find(t => t.type === ThumbnailType.MINIATURE)
+        const miniature = body.thumbnails.find(t => t.type === 1)
         expect(miniature).to.exist
+        expect(miniature.width).to.equal(280)
+        expect(miniature.height).to.equal(157)
         expect(await pathExists(miniature.path)).to.be.true
         await makeRawRequest({ url: miniature.url, expectedStatus: HttpStatusCode.OK_200 })
 
-        const preview = body.thumbnails.find(t => t.type === ThumbnailType.PREVIEW)
+        const preview = body.thumbnails.find(t => t.type === 2)
         expect(preview).to.exist
+        expect(preview.width).to.equal(850)
+        expect(preview.height).to.equal(480)
         expect(await pathExists(preview.path)).to.be.true
         await makeRawRequest({ url: preview.url, expectedStatus: HttpStatusCode.OK_200 })
       }

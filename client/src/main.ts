@@ -17,7 +17,6 @@ import localeOc from '@app/helpers/locales/oc'
 import { getFormProviders } from '@app/shared/shared-forms/shared-form-providers'
 import { languageInterceptor } from '@app/shared/shared-main/http/language-interceptor.service'
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap'
-import { LoadingBarModule } from '@ngx-loading-bar/core'
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 import { providePrimeNG } from 'primeng/config'
 import { ToastModule } from 'primeng/toast'
@@ -83,7 +82,6 @@ const bootstrap = () =>
 
       importProvidersFrom(
         LoadingBarHttpClientModule,
-        LoadingBarModule,
         ToastModule,
         NgbModalModule
       ),

@@ -22,15 +22,6 @@ export const SERVICES_TWITTER_USERNAME_VALIDATOR: BuildFormValidator = {
   }
 }
 
-export const CACHE_SIZE_VALIDATOR: BuildFormValidator = {
-  VALIDATORS: [ Validators.required, Validators.min(1), Validators.pattern('[0-9]+') ],
-  MESSAGES: {
-    required: $localize`Cache size is required.`,
-    min: $localize`Cache size must be greater than 1.`,
-    pattern: $localize`Cache size must be a number.`
-  }
-}
-
 export const SIGNUP_LIMIT_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.required, Validators.min(-1), Validators.pattern('-?[0-9]+') ],
   MESSAGES: {
@@ -135,5 +126,12 @@ export const EXPORT_MAX_USER_VIDEO_QUOTA_VALIDATOR: BuildFormValidator = {
   MESSAGES: {
     required: $localize`Max user video quota is required.`,
     min: $localize`Max user video video quota must be greater or equal to 1.`
+  }
+}
+
+export const MAX_DVR_WINDOW_MINUTES_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [ Validators.min(1) ],
+  MESSAGES: {
+    min: $localize`DVR window must be greater or equal to 1 minute.`
   }
 }

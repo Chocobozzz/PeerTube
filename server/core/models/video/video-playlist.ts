@@ -8,7 +8,8 @@ import {
   type VideoPlaylistPrivacyType,
   type VideoPlaylistType_Type
 } from '@peertube/peertube-models'
-import { buildUUID, uuidToShort } from '@peertube/peertube-node-utils'
+import { uuidToShort } from '@peertube/peertube-node-utils'
+import { generateImageFilename } from '@server/helpers/image-utils.js'
 import { activityPubCollectionPagination } from '@server/lib/activitypub/collection.js'
 import { MAccountId, MChannelId, MVideoPlaylistElement } from '@server/types/models/index.js'
 import { join } from 'path'
@@ -39,7 +40,6 @@ import {
   ACTIVITY_PUB,
   CONSTRAINTS_FIELDS,
   LAZY_STATIC_PATHS,
-  THUMBNAILS_SIZE,
   USER_EXPORT_MAX_ITEMS,
   VIDEO_PLAYLIST_PRIVACIES,
   VIDEO_PLAYLIST_TYPES,
@@ -71,6 +71,7 @@ import { ListVideoPlaylistsOptions, VideoPlaylistListQueryBuilder } from './sql/
 import { ThumbnailModel } from './thumbnail.js'
 import { VideoChannelModel, ScopeNames as VideoChannelScopeNames } from './video-channel.js'
 import { VideoPlaylistElementModel } from './video-playlist-element.js'
+import { VideoChannelCollaboratorModel } from './video-channel-collaborator.js'
 
 enum ScopeNames {
   WITH_VIDEOS_LENGTH = 'WITH_VIDEOS_LENGTH',
@@ -313,27 +314,48 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
     }))
   }
 
-  static listPlaylistSummariesOf (accountId: number, videoIds: number[]): Promise<MVideoPlaylistSummaryWithElements[]> {
-    const query = {
-      attributes: [ 'id', 'name', 'uuid' ],
+  static async listPlaylistSummariesOf (accountId: number, videoIds: number[]): Promise<MVideoPlaylistSummaryWithElements[]> {
+    const elementsInclude = {
+      attributes: [ 'id', 'videoId', 'startTimestamp', 'stopTimestamp' ],
+      model: VideoPlaylistElementModel.unscoped(),
       where: {
-        ownerAccountId: accountId
-      },
-      include: [
-        {
-          attributes: [ 'id', 'videoId', 'startTimestamp', 'stopTimestamp' ],
-          model: VideoPlaylistElementModel.unscoped(),
-          where: {
-            videoId: {
-              [Op.in]: videoIds
-            }
-          },
-          required: true
+        videoId: {
+          [Op.in]: videoIds
         }
-      ]
+      },
+      required: true
     }
 
-    return VideoPlaylistModel.findAll(query)
+    const attributes = [ 'id', 'name', 'uuid' ]
+
+    const owned = await VideoPlaylistModel.findAll({
+      attributes,
+      where: { ownerAccountId: accountId },
+      include: [ elementsInclude ]
+    })
+
+    const collaborations = await VideoPlaylistModel.findAll({
+      attributes,
+      include: [
+        elementsInclude,
+
+        {
+          model: VideoChannelModel.unscoped(),
+          required: true,
+          include: [
+            {
+              model: VideoChannelCollaboratorModel.unscoped(),
+              required: true,
+              where: {
+                accountId
+              }
+            }
+          ]
+        }
+      ]
+    })
+
+    return [ ...owned, ...collaborations ]
   }
 
   static listPlaylistForExport (accountId: number): Promise<MVideoPlaylistFull[]> {
@@ -532,6 +554,10 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
   async setAndSaveThumbnail (thumbnail: MThumbnail, t: Transaction) {
     thumbnail.videoPlaylistId = this.id
 
+    if (this.Thumbnail && thumbnail.id !== this.Thumbnail?.id) {
+      await this.Thumbnail.destroy({ transaction: t })
+    }
+
     this.Thumbnail = await thumbnail.save({ transaction: t })
   }
 
@@ -550,11 +576,11 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
     return false
   }
 
-  generateThumbnailName () {
-    const extension = '.jpg'
-
-    return 'playlist-' + buildUUID() + extension
+  generateThumbnailName (extension: string) {
+    return 'playlist-' + generateImageFilename(extension)
   }
+
+  // ---------------------------------------------------------------------------
 
   getThumbnailUrl () {
     if (!this.hasThumbnail()) return null
@@ -567,6 +593,8 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
 
     return join(LAZY_STATIC_PATHS.THUMBNAILS, this.Thumbnail.filename)
   }
+
+  // ---------------------------------------------------------------------------
 
   getWatchStaticPath () {
     return buildPlaylistWatchPath({ shortUUID: uuidToShort(this.uuid) })
@@ -639,6 +667,10 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
       },
 
       thumbnailPath: this.getThumbnailStaticPath(),
+      thumbnails: this.Thumbnail
+        ? [ this.Thumbnail.toFormattedJSON() ]
+        : [],
+
       embedPath: this.getEmbedStaticPath(),
 
       type: {
@@ -671,8 +703,8 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
         type: 'Image' as 'Image',
         url: this.getThumbnailUrl(),
         mediaType: 'image/jpeg' as 'image/jpeg',
-        width: THUMBNAILS_SIZE.width,
-        height: THUMBNAILS_SIZE.height
+        width: this.Thumbnail.width,
+        height: this.Thumbnail.height
       }
     }
 
@@ -680,6 +712,9 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
       .then(o => {
         return Object.assign(o, {
           type: 'Playlist' as 'Playlist',
+
+          audience: this.VideoChannel?.Actor.url,
+
           name: this.name,
           content: this.description,
           mediaType: 'text/markdown' as 'text/markdown',
@@ -687,7 +722,9 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
           videoChannelPosition: this.videoChannelPosition,
           published: this.createdAt.toISOString(),
           updated: this.updatedAt.toISOString(),
-          attributedTo: this.VideoChannel ? [ this.VideoChannel.Actor.url ] : [],
+          attributedTo: process.env.FEP_1B12_ONLY !== 'true' && this.VideoChannel
+            ? [ this.VideoChannel.Actor.url ]
+            : [],
           icon
         })
       })

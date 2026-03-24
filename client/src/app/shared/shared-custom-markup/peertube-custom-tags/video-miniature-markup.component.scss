@@ -1,7 +1,7 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
 
 my-video-miniature {
   display: inline-block;
-  width: $video-thumbnail-width;
+  width: $video-thumbnail-width; // Keep in sync with thumbnailSizes in template
 }

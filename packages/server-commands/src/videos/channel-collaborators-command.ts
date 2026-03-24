@@ -102,9 +102,7 @@ export class ChannelCollaboratorsCommand extends AbstractCommand {
   async createEditor (user: string, channel: string) {
     const collaboratorToken = await this.server.users.generateUserAndToken(user)
 
-    const { id } = await this.invite({ channel, target: user })
-
-    await this.accept({ channel, id, token: collaboratorToken })
+    await this.addEditor({ channel, editorToken: collaboratorToken, editor: user })
 
     return collaboratorToken
   }
@@ -115,5 +113,17 @@ export class ChannelCollaboratorsCommand extends AbstractCommand {
     await this.invite({ channel, target: user })
 
     return collaboratorToken
+  }
+
+  async addEditor (options: {
+    channel: string
+    editorToken: string
+    editor: string
+  }) {
+    const { editor, channel, editorToken } = options
+
+    const { id } = await this.invite({ channel, target: editor })
+
+    await this.accept({ channel, id, token: editorToken })
   }
 }

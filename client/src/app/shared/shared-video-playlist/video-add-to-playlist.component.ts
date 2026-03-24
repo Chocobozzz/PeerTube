@@ -19,6 +19,7 @@ import { secondsToTime } from '@peertube/peertube-core-utils'
 import {
   CachedVideoExistInPlaylist,
   Video,
+  VideoChannelSummary,
   VideoPlaylistCreate,
   VideoPlaylistElementCreate,
   VideoPlaylistElementUpdate,
@@ -31,6 +32,7 @@ import { VIDEO_PLAYLIST_DISPLAY_NAME_VALIDATOR } from '../form-validators/video-
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
 import { TimestampInputComponent } from '../shared-forms/timestamp-input.component'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
+import { CollaboratorStateComponent } from '../shared-main/channel/collaborator-state.component'
 import { CachedPlaylist, VideoPlaylistService } from './video-playlist.service'
 
 const debugLogger = debug('peertube:playlists:VideoAddToPlaylistComponent')
@@ -46,6 +48,7 @@ type PlaylistSummary = {
   id: number
   displayName: string
   optionalRowDisplayed: boolean
+  videoChannel?: VideoChannelSummary
 
   elements: PlaylistElement[]
 }
@@ -61,7 +64,8 @@ type PlaylistSummary = {
     PeertubeCheckboxComponent,
     GlobalIconComponent,
     TimestampInputComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CollaboratorStateComponent
   ]
 })
 export class VideoAddToPlaylistComponent extends FormReactive implements OnInit, OnChanges, OnDestroy, DisableForReuseHook {
@@ -361,8 +365,9 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     for (const playlist of this.playlistsData) {
       const existingPlaylists = existResult.filter(p => p.playlistId === playlist.id)
 
-      const playlistSummary = {
+      const playlistSummary: PlaylistSummary = {
         id: playlist.id,
+        videoChannel: playlist.videoChannel,
         optionalRowDisplayed: false,
         displayName: playlist.displayName,
         elements: existingPlaylists.map(e => ({

@@ -65,6 +65,8 @@ export type BuildVideosListQueryOptions = {
   hasWebVideoFiles?: boolean
 
   accountId?: number
+
+  onlyCollaborated?: boolean
   includeCollaborations?: boolean
 
   videoChannelId?: number
@@ -101,6 +103,8 @@ export type BuildVideosListQueryOptions = {
   excludeAlreadyWatched?: boolean
 }
 
+type SortDirection = 'ASC' | 'DESC'
+
 export class VideosIdListQueryBuilder extends AbstractRunQuery {
   protected replacements: any = {}
 
@@ -115,6 +119,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   private having = ''
 
   private sort = ''
+
   private limit = ''
   private offset = ''
 
@@ -148,10 +153,68 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   }
 
   private buildIdsListQuery (options: BuildVideosListQueryOptions) {
-    this.attributes = options.attributes || [ '"video"."id"' ]
+    if (options.attributes) {
+      this.attributes = [ ...options.attributes ]
+    } else if (options.isCount === true) {
+      this.attributes = [ 'COUNT(*) as "total"' ]
+    } else {
+      this.attributes = [ '"video"."id"' ]
+    }
 
     if (options.group) this.group = options.group
     if (options.having) this.having = options.having
+
+    if (options.includeCollaborations) {
+      if (!options.accountId) throw new Error('accountId parameter is required when includeCollaborations is true')
+
+      this.buildUnionIdsListQuery(options)
+    } else {
+      this.buildSingleIdsListQuery(options)
+    }
+  }
+
+  private buildUnionIdsListQuery (options: BuildVideosListQueryOptions) {
+    const { sortColumn } = this.buildSortAndPagination(options)
+    if (sortColumn === 'match') this.attributes.push('"similarity"')
+
+    const unionAttributes = new Set([ '"video"."id"' ])
+
+    const videoAttributesForSort = this.updateQueryForComplexSort({ ...options, column: sortColumn })
+
+    for (const attr of videoAttributesForSort) {
+      unionAttributes.add(`"video".${attr}`)
+    }
+
+    const baseOptions = {
+      ...options,
+
+      attributes: Array.from(unionAttributes),
+      isCount: false,
+      count: undefined,
+      start: undefined,
+      sort: undefined,
+      includeCollaborations: false
+    } satisfies BuildVideosListQueryOptions
+
+    const union = this.makeUnion([
+      { ...baseOptions, onlyCollaborated: false },
+      { ...baseOptions, onlyCollaborated: true }
+    ])
+
+    this.query = 'SELECT ' + this.attributes.join(', ') + ' FROM ' +
+      '(' + union + ') AS "video" ' +
+      this.joins.join(' ') + ' ' +
+      this.group + ' ' +
+      this.having + ' ' +
+      this.sort + ' ' +
+      this.limit + ' ' +
+      this.offset
+  }
+
+  private buildSingleIdsListQuery (options: BuildVideosListQueryOptions) {
+    const { sortColumn } = this.buildSortAndPagination(options)
+
+    this.updateQueryForComplexSort({ ...options, column: sortColumn })
 
     this.joins = this.joins.concat([
       'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId"',
@@ -186,8 +249,10 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       this.whereHost(options.host)
     }
 
-    if (options.accountId) {
-      this.whereAccountId({ accountId: options.accountId, includeCollaborations: options.includeCollaborations })
+    if (options.onlyCollaborated) {
+      this.whereOnlyCollaborated(options.accountId)
+    } else if (options.accountId) {
+      this.whereAccountId(options.accountId)
     }
 
     if (options.videoChannelId) {
@@ -199,7 +264,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     }
 
     if (options.displayOnlyForFollower) {
-      this.whereFollowerActorId({ ...options.displayOnlyForFollower, isCount: options.isCount === true })
+      this.whereFollowerActorId({ ...options.displayOnlyForFollower, isCount: options.isCount === true, sortColumn })
     }
 
     if (options.hasFiles === true) {
@@ -263,15 +328,6 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       this.whereLanguageOneOf(options.languageOneOf)
     }
 
-    // We don't exclude results in this so if we do a count we don't need to add this complex clause
-    if (options.isCount !== true) {
-      if (options.sort.endsWith('trending')) {
-        this.groupForTrending(options.trendingDays)
-      } else if (options.sort.endsWith('hot') || options.sort.endsWith('best')) {
-        this.addAttributeForHotOrBest(options.sort, options.user)
-      }
-    }
-
     if (options.historyOfUser) {
       this.joinHistory(options.historyOfUser.id)
     }
@@ -308,23 +364,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       }
     }
 
-    this.whereSearch(options.search)
-
-    if (options.isCount === true) {
-      this.setCountAttribute()
-    } else {
-      if (exists(options.sort)) {
-        this.setSort(options.sort)
-      }
-
-      if (exists(options.count)) {
-        this.setLimit(options.count)
-      }
-
-      if (exists(options.start)) {
-        this.setOffset(options.start)
-      }
-    }
+    this.whereSearch(options)
 
     const cteString = this.cte.length !== 0
       ? `WITH ${this.cte.join(', ')} `
@@ -341,8 +381,48 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       this.offset
   }
 
-  private setCountAttribute () {
-    this.attributes = [ 'COUNT(*) as "total"' ]
+  private buildSortAndPagination (options: BuildVideosListQueryOptions) {
+    if (options.isCount) return {}
+
+    let sortColumn: string
+    let sortDirection: SortDirection
+
+    if (options.sort) {
+      const { direction, field } = buildSortDirectionAndField(options.sort)
+
+      sortColumn = field
+      sortDirection = direction
+    }
+
+    if (exists(sortColumn)) {
+      this.setSort(sortColumn, sortDirection)
+    }
+
+    if (exists(options.count)) {
+      this.setLimit(options.count)
+    }
+
+    if (exists(options.start)) {
+      this.setOffset(options.start)
+    }
+
+    return { sortColumn, sortDirection }
+  }
+
+  private makeUnion (queryOptions: BuildVideosListQueryOptions[]) {
+    const queries: string[] = []
+
+    for (const queryOption of queryOptions) {
+      const builder = new VideosIdListQueryBuilder(this.sequelize)
+      const { query, replacements, queryConfig } = builder.getQuery(queryOption)
+
+      queries.push('(' + query + ')')
+
+      this.replacements = { ...this.replacements, ...replacements }
+      this.queryConfig = this.queryConfig || queryConfig
+    }
+
+    return queries.join(' UNION')
   }
 
   private joinHistory (userId: number) {
@@ -422,26 +502,20 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     this.replacements.host = host
   }
 
-  private whereAccountId (options: {
-    accountId: number
-    includeCollaborations: boolean
-  }) {
-    if (options.includeCollaborations !== true) {
-      this.and.push('"account"."id" = :accountId')
-      this.replacements.accountId = options.accountId
-      return
-    }
+  private whereAccountId (accountId: number) {
+    this.and.push('"account"."id" = :accountId')
+    this.replacements.accountId = accountId
+  }
 
+  private whereOnlyCollaborated (accountId: number) {
     this.joins.push(
-      'LEFT JOIN "videoChannelCollaborator" ON "videoChannelCollaborator"."channelId" = "videoChannel".id ' +
+      'INNER JOIN "videoChannelCollaborator" ON "videoChannelCollaborator"."channelId" = "videoChannel".id ' +
         'AND "videoChannelCollaborator"."state" = :channelCollaboratorState ' +
         // Ensure we join with max 1 collaborator to not duplicate rows
         'AND "videoChannelCollaborator"."accountId" = :accountId'
     )
 
-    this.and.push('("account"."id" = :accountId OR "videoChannelCollaborator"."accountId" = :accountId)')
-
-    this.replacements.accountId = options.accountId
+    this.replacements.accountId = accountId
     this.replacements.channelCollaboratorState = VideoChannelCollaboratorState.ACCEPTED
   }
 
@@ -457,9 +531,19 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     this.replacements.channelOneOf = channelOneOf
   }
 
-  private whereFollowerActorId (options: { actorId: number, orLocalVideos: boolean, isCount: boolean }) {
-    // EXISTS doesn't work very well with COUNT queries, so we use a CTE instead
-    if (options.isCount) {
+  private whereFollowerActorId (options: { sortColumn: string, actorId: number, orLocalVideos: boolean, isCount: boolean }) {
+    const complexSorts = new Set([
+      'trending',
+      'hot',
+      'best',
+      'match',
+      'localVideoFilesSize'
+    ])
+    const isComplexSort = options.sortColumn && complexSorts.has(options.sortColumn)
+
+    // EXISTS doesn't work very well with COUNT queries or complex sorts where PostgreSQL has to compute follow constraint for many rows
+    // So we use a CTE instead
+    if (options.isCount || isComplexSort) {
       // Don't use CTE on purpose, that seems to be slower in this case
       const targetActorIdQuery =
         `SELECT "targetActorId" FROM "actorFollow" WHERE "actorFollow"."actorId" = :followerActorId AND "actorFollow"."state" = 'accepted'`
@@ -690,9 +774,15 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     )
   }
 
-  private whereSearch (search?: string) {
+  private whereSearch (options: {
+    isCount?: boolean
+    search?: string
+  }) {
+    const { search, isCount } = options
+
     if (!search) {
-      this.attributes.push('0 as similarity')
+      if (!isCount) this.attributes.push('0 as similarity')
+
       return
     }
 
@@ -733,7 +823,9 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     let attribute = `COALESCE("trigramSearch"."similarity", 0)`
     if (this.group) attribute = `AVG(${attribute})`
 
-    this.attributes.push(`${attribute} as similarity`)
+    if (!isCount) {
+      this.attributes.push(`${attribute} as similarity`)
+    }
   }
 
   private whereNotBlacklisted () {
@@ -782,114 +874,135 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     this.replacements.excludeAlreadyWatchedUserId = userId
   }
 
-  private groupForTrending (trendingDays: number) {
-    const viewsGteDate = new Date(new Date().getTime() - (24 * 3600 * 1000) * trendingDays)
+  private updateQueryForComplexSort (options: {
+    column: string
+    trendingDays?: number
+    user?: MUserAccountId
+  }) {
+    const { column, trendingDays, user } = options
+    if (!column) return []
 
-    this.joins.push('LEFT JOIN "videoView" ON "video"."id" = "videoView"."videoId" AND "videoView"."startDate" >= :viewsGteDate')
-    this.replacements.viewsGteDate = viewsGteDate
+    let videoAttributesForSort: string[] = []
 
-    this.attributes.push('COALESCE(SUM("videoView"."views"), 0) AS "score"')
-
-    this.group = 'GROUP BY "video"."id"'
-  }
-
-  private addAttributeForHotOrBest (sort: string, user?: MUserAccountId) {
-    /**
-     * "Hotness" is a measure based on absolute view/comment/like/dislike numbers,
-     * with fixed weights only applied to their log values.
-     *
-     * This algorithm gives little chance for an old video to have a good score,
-     * for which recent spikes in interactions could be a sign of "hotness" and
-     * justify a better score. However there are multiple ways to achieve that
-     * goal, which is left for later. Yes, this is a TODO :)
-     *
-     * notes:
-     *  - weights and base score are in number of half-days.
-     *  - all comments are counted, regardless of being written by the video author or not
-     * see https://github.com/reddit-archive/reddit/blob/master/r2/r2/lib/db/_sorts.pyx#L47-L58
-     *  - we have less interactions than on reddit, so multiply weights by an arbitrary factor
-     */
-    const weights = {
-      like: 3 * 50,
-      dislike: -3 * 50,
-      view: Math.floor((1 / 3) * 50),
-      comment: 2 * 50, // a comment takes more time than a like to do, but can be done multiple times
-      history: -2 * 50
-    }
-
-    let attribute = `LOG(GREATEST(1, "video"."likes" - 1)) * ${weights.like} ` + // likes (+)
-      `+ LOG(GREATEST(1, "video"."dislikes" - 1)) * ${weights.dislike} ` + // dislikes (-)
-      `+ LOG("video"."views" + 1) * ${weights.view} ` + // views (+)
-      `+ LOG(GREATEST(1, "video"."comments")) * ${weights.comment} ` + // comments (+)
-      '+ (SELECT (EXTRACT(epoch FROM "video"."publishedAt") - 1446156582) / 47000) ' // base score (in number of half-days)
-
-    if (sort.endsWith('best') && user) {
-      this.joins.push(
-        'LEFT JOIN "userVideoHistory" ON "video"."id" = "userVideoHistory"."videoId" AND "userVideoHistory"."userId" = :bestUser'
+    if (column === 'originallyPublishedAt') {
+      this.attributes.push(
+        `COALESCE("video"."originallyPublishedAt", "video"."publishedAt") AS "publishedAtForOrder"`
       )
-      this.replacements.bestUser = user.id
 
-      attribute += `+ POWER(CASE WHEN "userVideoHistory"."id" IS NULL THEN 0 ELSE 1 END, 2.0) * ${weights.history} `
-    }
-
-    attribute += 'AS "score"'
-    this.attributes.push(attribute)
-  }
-
-  private setSort (sort: string) {
-    if (sort === '-originallyPublishedAt' || sort === 'originallyPublishedAt') {
-      this.attributes.push('COALESCE("video"."originallyPublishedAt", "video"."publishedAt") AS "publishedAtForOrder"')
-    }
-
-    if (sort === '-localVideoFilesSize' || sort === 'localVideoFilesSize') {
+      videoAttributesForSort.push('"originallyPublishedAt"', '"publishedAt"')
+    } else if (column === 'localVideoFilesSize') {
       this.attributes.push(
         '(' +
           'CASE ' +
-          'WHEN "video"."remote" IS TRUE THEN 0 ' + // Consider remote videos with size of 0
-          'ELSE (' +
-          '(SELECT COALESCE(SUM(size), 0) FROM "videoFile" WHERE "videoFile"."videoId" = "video"."id")' +
-          ' + ' +
-          '(' +
-          'SELECT COALESCE(SUM(size), 0) FROM "videoFile" ' +
-          'INNER JOIN "videoStreamingPlaylist" ON "videoStreamingPlaylist"."id" = "videoFile"."videoStreamingPlaylistId" ' +
-          'AND "videoStreamingPlaylist"."videoId" = "video"."id"' +
-          ')' +
-          ' + ' +
-          '(' +
-          'SELECT COALESCE(SUM(size), 0) FROM "videoSource" ' +
-          'WHERE "videoSource"."videoId" = "video"."id" AND "videoSource"."storage" IS NOT NULL' +
-          ')' +
-          ') END' +
+          `  WHEN "video"."remote" IS TRUE THEN 0 ` + // Consider remote videos with size of 0
+          '  ELSE (' +
+          `    (SELECT COALESCE(SUM(size), 0) FROM "videoFile" WHERE "videoFile"."videoId" = "video"."id")` +
+          '    + ' +
+          `    (` +
+          `      SELECT COALESCE(SUM(size), 0) FROM "videoFile" ` +
+          `      INNER JOIN "videoStreamingPlaylist" ON "videoStreamingPlaylist"."id" = "videoFile"."videoStreamingPlaylistId" ` +
+          `      AND "videoStreamingPlaylist"."videoId" = "video"."id"` +
+          '     )' +
+          '    + ' +
+          '    (' +
+          '     SELECT COALESCE(SUM(size), 0) FROM "videoSource" ' +
+          `     WHERE "videoSource"."videoId" = "video"."id" AND "videoSource"."storage" IS NOT NULL` +
+          '    )' +
+          '  ) END' +
           ') AS "localVideoFilesSize"'
       )
+
+      videoAttributesForSort.push('"remote"')
+    } else if (column === 'trending') {
+      const viewsGteDate = new Date(new Date().getTime() - (24 * 3600 * 1000) * trendingDays)
+
+      this.joins.push(
+        `LEFT JOIN "videoStat" ON "video"."id" = "videoStat"."videoId" AND "videoStat"."startDate" >= :viewsGteDate`
+      )
+      this.replacements.viewsGteDate = viewsGteDate
+
+      this.attributes.push('COALESCE(SUM("videoStat"."views"), 0) AS "score"')
+      videoAttributesForSort.push('"views"')
+
+      this.group = `GROUP BY "video"."id"`
+    } else if (column === 'hot' || column === 'best') {
+      /**
+       * "Hotness" is a measure based on absolute view/comment/like/dislike numbers,
+       * with fixed weights only applied to their log values.
+       *
+       * This algorithm gives little chance for an old video to have a good score,
+       * for which recent spikes in interactions could be a sign of "hotness" and
+       * justify a better score. However there are multiple ways to achieve that
+       * goal, which is left for later. Yes, this is a TODO :)
+       *
+       * notes:
+       *  - weights and base score are in number of half-days.
+       *  - all comments are counted, regardless of being written by the video author or not
+       * see https://github.com/reddit-archive/reddit/blob/master/r2/r2/lib/db/_sorts.pyx#L47-L58
+       *  - we have less interactions than on reddit, so multiply weights by an arbitrary factor
+       */
+      const weights = {
+        like: 3 * 50,
+        dislike: -3 * 50,
+        view: Math.floor((1 / 3) * 50),
+        comment: 2 * 50, // a comment takes more time than a like to do, but can be done multiple times
+        history: -2 * 50
+      }
+
+      let attribute = `LOG(GREATEST(1, "video"."likes" - 1)) * ${weights.like} ` + // likes (+)
+        `+ LOG(GREATEST(1, "video"."dislikes" - 1)) * ${weights.dislike} ` + // dislikes (-)
+        `+ LOG("video"."views" + 1) * ${weights.view} ` + // views (+)
+        `+ LOG(GREATEST(1, "video"."comments")) * ${weights.comment} ` + // comments (+)
+        `+ (SELECT (EXTRACT(epoch FROM "video"."publishedAt") - 1446156582) / 47000) ` // base score (in number of half-days)
+
+      if (column === 'best' && user) {
+        this.joins.push(
+          `LEFT JOIN "userVideoHistory" ON "video"."id" = "userVideoHistory"."videoId" ` +
+            `AND "userVideoHistory"."userId" = :bestUser`
+        )
+        this.replacements.bestUser = user.id
+
+        attribute += `+ POWER(CASE WHEN "userVideoHistory"."id" IS NULL THEN 0 ELSE 1 END, 2.0) * ${weights.history} `
+      }
+
+      attribute += 'AS "score"'
+      this.attributes.push(attribute)
+      videoAttributesForSort = [ '"likes"', '"dislikes"', '"views"', '"comments"', '"publishedAt"' ]
+    } else if (column === 'match') {
+      videoAttributesForSort = []
+    } else {
+      videoAttributesForSort = [ `"${column}"` ]
     }
 
-    this.sort = this.buildOrder(sort)
+    return videoAttributesForSort
   }
 
-  private buildOrder (value: string) {
-    const { direction, field } = buildSortDirectionAndField(value)
-    if (field.match(/^[a-zA-Z."]+$/) === null) throw new Error('Invalid sort column ' + field)
+  private setSort (column: string, direction: 'ASC' | 'DESC') {
+    this.sort = this.buildOrder(column, direction)
+  }
 
-    if (field.toLowerCase() === 'random') return 'ORDER BY RANDOM()'
-    if (field.toLowerCase() === 'total') return `ORDER BY "total" ${direction}`
+  private buildOrder (column: string, direction: 'ASC' | 'DESC') {
+    if (column.match(/^[a-zA-Z."]+$/) === null) throw new Error('Invalid sort column ' + column)
 
-    if ([ 'trending', 'hot', 'best' ].includes(field.toLowerCase())) { // Sort by aggregation
-      return `ORDER BY "score" ${direction}, "video"."views" ${direction}`
+    if (column === 'random') return 'ORDER BY RANDOM()'
+    if (column === 'total') return `ORDER BY "total" ${direction}`
+
+    if ([ 'trending', 'hot', 'best' ].includes(column)) { // Sort by aggregation
+      return `ORDER BY "score" ${direction}`
     }
 
     let firstSort: string
 
-    if (field.toLowerCase() === 'match') { // Search
+    if (column === 'match') { // Search
       firstSort = '"similarity"'
-    } else if (field === 'originallyPublishedAt') {
+    } else if (column === 'originallyPublishedAt') {
       firstSort = '"publishedAtForOrder"'
-    } else if (field === 'localVideoFilesSize') {
+    } else if (column === 'localVideoFilesSize') {
       firstSort = '"localVideoFilesSize"'
-    } else if (field.includes('.')) {
-      firstSort = field
+    } else if (column.includes('.')) {
+      firstSort = column
     } else {
-      firstSort = `"video"."${field}"`
+      firstSort = `"video"."${column}"`
     }
 
     return `ORDER BY ${firstSort} ${direction}, "video"."id" ASC`

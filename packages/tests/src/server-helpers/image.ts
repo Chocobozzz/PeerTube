@@ -36,7 +36,7 @@ describe('Image helpers', function () {
   const thumbnailSize = { width: 280, height: 157 }
 
   it('Should skip processing if the source image is okay', async function () {
-    const input = buildAbsoluteFixturePath('custom-thumbnail.jpg')
+    const input = buildAbsoluteFixturePath('custom-thumbnail-280x157.jpg')
     await processImage({ path: input, destination: imageDestJPG, newSize: thumbnailSize, keepOriginal: true })
 
     await checkBuffers(input, imageDestJPG, true)
@@ -44,13 +44,6 @@ describe('Image helpers', function () {
 
   it('Should not skip processing if the source image does not have the appropriate extension', async function () {
     const input = buildAbsoluteFixturePath('custom-thumbnail.png')
-    await processImage({ path: input, destination: imageDestJPG, newSize: thumbnailSize, keepOriginal: true })
-
-    await checkBuffers(input, imageDestJPG, false)
-  })
-
-  it('Should not skip processing if the source image does not have the appropriate size', async function () {
-    const input = buildAbsoluteFixturePath('custom-preview.jpg')
     await processImage({ path: input, destination: imageDestJPG, newSize: thumbnailSize, keepOriginal: true })
 
     await checkBuffers(input, imageDestJPG, false)

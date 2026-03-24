@@ -2,8 +2,8 @@ import { forceNumber, maxBy } from '@peertube/peertube-core-utils'
 import { FileStorage, HttpStatusCode, VideoResolution, VideoStreamingPlaylistType } from '@peertube/peertube-models'
 import { exists } from '@server/helpers/custom-validators/misc.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { generateRequestStream } from '@server/helpers/requests.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { VideoTorrentsSimpleFileCache } from '@server/lib/files-cache/index.js'
 import {
   generateHLSFilePresignedUrl,
   generateOriginalFilePresignedUrl,
@@ -14,18 +14,14 @@ import { getFSUserExportFilePath } from '@server/lib/paths.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { VideoDownload } from '@server/lib/video-download.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
-import {
-  MStreamingPlaylist,
-  MStreamingPlaylistVideo,
-  MUserExport,
-  MVideo,
-  MVideoFile,
-  MVideoFullLight
-} from '@server/types/models/index.js'
+import { VideoFileModel } from '@server/models/video/video-file.js'
+import { MStreamingPlaylist, MStreamingPlaylistVideo, MUserExport, MVideo, MVideoFile, MVideoFull } from '@server/types/models/index.js'
 import { MVideoSource } from '@server/types/models/video/video-source.js'
 import contentDisposition from 'content-disposition'
 import cors from 'cors'
 import express from 'express'
+import { join } from 'path'
+import { pipeline } from 'stream/promises'
 import { DOWNLOAD_PATHS, WEBSERVER } from '../initializers/constants.js'
 import {
   asyncMiddleware,
@@ -36,6 +32,7 @@ import {
   videosDownloadValidator,
   videosGenerateDownloadValidator
 } from '../middlewares/index.js'
+import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
 
 const lTags = loggerTagsFactory('download')
 
@@ -103,19 +100,23 @@ export {
 // ---------------------------------------------------------------------------
 
 async function downloadTorrent (req: express.Request, res: express.Response) {
-  const result = await VideoTorrentsSimpleFileCache.Instance.getFilePath(req.params.filename)
-  if (!result) {
-    return res.fail({
-      status: HttpStatusCode.NOT_FOUND_404,
-      message: 'Torrent file not found'
-    })
-  }
+  const file = await VideoFileModel.loadWithVideoOrPlaylistByTorrentFilename(req.params.filename)
+  if (!file) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+
+  const video = file.getVideo()
+
+  const path = video.isLocal()
+    ? join(CONFIG.STORAGE.TORRENTS_DIR, file.torrentFilename)
+    : undefined
+
+  const downloadFilename = `${video.name}-${file.resolution}p.torrent`
 
   const allowParameters = {
     req,
     res,
-    torrentPath: result.path,
-    downloadName: result.downloadName
+    torrentFilename: req.params.filename,
+    torrentPath: path,
+    downloadName: downloadFilename
   }
 
   const allowedResult = await Hooks.wrapFun(
@@ -126,13 +127,23 @@ async function downloadTorrent (req: express.Request, res: express.Response) {
 
   if (!checkAllowResult(res, allowParameters, allowedResult)) return
 
-  return res.download(result.path, result.downloadName)
+  if (video.isLocal()) {
+    return res.download(path, downloadFilename)
+  }
+
+  // Proxify remote request without cache
+  res.type('application/x-bittorrent')
+  res.setHeader('Content-disposition', contentDisposition(encodeURI(downloadFilename)))
+
+  const remoteUrl = file.getRemoteTorrentUrl(video)
+
+  await pipeline(generateRequestStream(remoteUrl), res)
 }
 
 // ---------------------------------------------------------------------------
 
 async function downloadWebVideoFile (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
 
   const videoFile = getVideoFileFromReq(req, video.VideoFiles)
   if (!videoFile) {
@@ -159,6 +170,9 @@ async function downloadWebVideoFile (req: express.Request, res: express.Response
 
   const downloadFilename = buildDownloadFilename({ video, resolution: videoFile.resolution, extname: videoFile.extname })
 
+  VideoStatsManager.Instance.processLocalDownload({ video })
+    .catch(err => logger.error(`Cannot process local download stats for video ${video.uuid}`, { err, ...lTags(video.uuid) }))
+
   if (videoFile.storage === FileStorage.OBJECT_STORAGE) {
     return redirectVideoDownloadToObjectStorage({ res, video, file: videoFile, downloadFilename })
   }
@@ -169,7 +183,7 @@ async function downloadWebVideoFile (req: express.Request, res: express.Response
 }
 
 async function downloadHLSVideoFile (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
   const streamingPlaylist = getHLSPlaylist(video)
   if (!streamingPlaylist) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
@@ -197,6 +211,9 @@ async function downloadHLSVideoFile (req: express.Request, res: express.Response
 
   if (!checkAllowResult(res, allowParameters, allowedResult)) return
 
+  VideoStatsManager.Instance.processLocalDownload({ video })
+    .catch(err => logger.error(`Cannot process local download stats for video ${video.uuid}`, { err, ...lTags(video.uuid) }))
+
   const downloadFilename = buildDownloadFilename({ video, streamingPlaylist, resolution: videoFile.resolution, extname: videoFile.extname })
 
   if (videoFile.storage === FileStorage.OBJECT_STORAGE) {
@@ -211,7 +228,7 @@ async function downloadHLSVideoFile (req: express.Request, res: express.Response
 // ---------------------------------------------------------------------------
 
 async function downloadGeneratedVideoFile (req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
   const filesToSelect = req.query.videoFileIds
 
   const videoFiles = video.getAllFiles()
@@ -270,6 +287,9 @@ async function downloadGeneratedVideoFile (req: express.Request, res: express.Re
 
   res.type(extname)
 
+  VideoStatsManager.Instance.processLocalDownload({ video })
+    .catch(err => logger.error(`Cannot process local download stats for video ${video.uuid}`, { err, ...lTags(video.uuid) }))
+
   try {
     await new VideoDownload({ video, videoFiles }).muxToMergeVideoFiles(res)
   } catch (err) {
@@ -317,7 +337,7 @@ function getVideoFileFromReq (req: express.Request, files: MVideoFile[]) {
   return files.find(f => f.resolution === resolution)
 }
 
-function getHLSPlaylist (video: MVideoFullLight) {
+function getHLSPlaylist (video: MVideoFull) {
   const playlist = video.VideoStreamingPlaylists.find(p => p.type === VideoStreamingPlaylistType.HLS)
   if (!playlist) return undefined
 

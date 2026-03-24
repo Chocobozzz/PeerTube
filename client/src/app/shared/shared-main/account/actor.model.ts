@@ -17,18 +17,6 @@ export abstract class Actor implements ServerActor {
 
   isLocal: boolean
 
-  static GET_ACTOR_AVATAR_URL (actor: { avatars: Pick<ActorImage, 'width' | 'fileUrl'>[] }, size?: number) {
-    const avatarsAscWidth = actor.avatars.sort((a, b) => a.width - b.width)
-
-    const avatar = size && avatarsAscWidth.length > 1
-      ? avatarsAscWidth.find(a => a.width >= size)
-      : avatarsAscWidth[avatarsAscWidth.length - 1] // Biggest one
-
-    if (!avatar) return ''
-
-    return avatar.fileUrl
-  }
-
   static CREATE_BY_STRING (accountName: string, host: string, forceHostname = false) {
     const thisHost = getBackendHost()
 

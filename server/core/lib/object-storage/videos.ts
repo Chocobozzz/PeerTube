@@ -1,6 +1,7 @@
 import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { MStreamingPlaylistVideo, MStreamingPlaylistVideoUUID, MVideo, MVideoCaption, MVideoFile } from '@server/types/models/index.js'
+import { MIMETYPES } from '@server/initializers/constants.js'
+import { MVideo, MVideoCaption, MVideoFile, MVideoPrivacy, MVideoUUID } from '@server/types/models/index.js'
 import { MVideoSource } from '@server/types/models/video/video-source.js'
 import { basename, extname, join } from 'path'
 import { getHLSDirectory } from '../paths.js'
@@ -25,50 +26,49 @@ import {
   updateObjectACL,
   updatePrefixACL
 } from './shared/index.js'
-import { MIMETYPES } from '@server/initializers/constants.js'
 
-export function listHLSFileKeysOf (playlist: MStreamingPlaylistVideo) {
-  return listKeysOfPrefix(generateHLSObjectBaseStorageKey(playlist), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
+export function listHLSFileKeysOf (video: MVideoUUID) {
+  return listKeysOfPrefix(generateHLSObjectBaseStorageKey(video), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
 }
 
 // ---------------------------------------------------------------------------
 
-export function storeHLSFileFromFilename (playlist: MStreamingPlaylistVideo, filename: string) {
+export function storeHLSFileFromFilename (video: MVideoPrivacy, filename: string) {
   return storeObject({
-    inputPath: join(getHLSDirectory(playlist.Video), filename),
-    objectStorageKey: generateHLSObjectStorageKey(playlist, filename),
+    inputPath: join(getHLSDirectory(video), filename),
+    objectStorageKey: generateHLSObjectStorageKey(video, filename),
     bucketInfo: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS,
-    isPrivate: playlist.Video.hasPrivateStaticPath(),
+    isPrivate: video.hasPrivateStaticPath(),
     contentType: getObjectStorageContentType(filename)
   })
 }
 
-export function storeHLSFileFromPath (playlist: MStreamingPlaylistVideo, path: string) {
+export function storeHLSFileFromPath (video: MVideoPrivacy, path: string) {
   const filename = basename(path)
 
   return storeObject({
     inputPath: path,
-    objectStorageKey: generateHLSObjectStorageKey(playlist, filename),
+    objectStorageKey: generateHLSObjectStorageKey(video, filename),
     bucketInfo: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS,
-    isPrivate: playlist.Video.hasPrivateStaticPath(),
+    isPrivate: video.hasPrivateStaticPath(),
     contentType: getObjectStorageContentType(filename)
   })
 }
 
 export function storeHLSFileFromContent (options: {
-  playlist: MStreamingPlaylistVideo
+  video: MVideoPrivacy
   pathOrFilename: string
   content: string
 }) {
-  const { playlist, pathOrFilename, content } = options
+  const { video, pathOrFilename, content } = options
 
   const filename = basename(pathOrFilename)
 
   return storeContent({
     content,
-    objectStorageKey: generateHLSObjectStorageKey(playlist, filename),
+    objectStorageKey: generateHLSObjectStorageKey(video, filename),
     bucketInfo: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS,
-    isPrivate: playlist.Video.hasPrivateStaticPath(),
+    isPrivate: video.hasPrivateStaticPath(),
     contentType: getObjectStorageContentType(filename)
   })
 }
@@ -119,26 +119,26 @@ export async function updateWebVideoFileACL (video: MVideo, file: MVideoFile) {
   })
 }
 
-export async function updateHLSFilesACL (playlist: MStreamingPlaylistVideo) {
+export async function updateHLSFilesACL (video: MVideoPrivacy) {
   await updatePrefixACL({
-    prefix: generateHLSObjectBaseStorageKey(playlist),
+    prefix: generateHLSObjectBaseStorageKey(video),
     bucketInfo: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS,
-    isPrivate: playlist.Video.hasPrivateStaticPath()
+    isPrivate: video.hasPrivateStaticPath()
   })
 }
 
 // ---------------------------------------------------------------------------
 
-export function removeHLSObjectStorage (playlist: MStreamingPlaylistVideoUUID) {
-  return removePrefix(generateHLSObjectBaseStorageKey(playlist), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
+export function removeHLSObjectStorage (video: MVideoPrivacy) {
+  return removePrefix(generateHLSObjectBaseStorageKey(video), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
 }
 
-export function removeHLSFileObjectStorageByFilename (playlist: MStreamingPlaylistVideoUUID, filename: string) {
-  return removeObject(generateHLSObjectStorageKey(playlist, filename), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
+export function removeHLSFileObjectStorageByFilename (video: MVideoPrivacy, filename: string) {
+  return removeObject(generateHLSObjectStorageKey(video, filename), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
 }
 
-export function removeHLSFileObjectStorageByPath (playlist: MStreamingPlaylistVideoUUID, path: string) {
-  return removeObject(generateHLSObjectStorageKey(playlist, basename(path)), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
+export function removeHLSFileObjectStorageByPath (video: MVideoPrivacy, path: string) {
+  return removeObject(generateHLSObjectStorageKey(video, basename(path)), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
 }
 
 export function removeHLSFileObjectStorageByFullKey (key: string) {
@@ -165,8 +165,8 @@ export function removeCaptionObjectStorage (videoCaption: MVideoCaption) {
 
 // ---------------------------------------------------------------------------
 
-export async function makeHLSFileAvailable (playlist: MStreamingPlaylistVideoUUID, filename: string, destination: string) {
-  const key = generateHLSObjectStorageKey(playlist, filename)
+export async function makeHLSFileAvailable (video: MVideoUUID, filename: string, destination: string) {
+  const key = generateHLSObjectStorageKey(video, filename)
 
   logger.info('Fetching HLS file %s from object storage to %s.', key, destination, lTags())
 
@@ -241,13 +241,13 @@ export function getWebVideoFileReadStream (options: {
 }
 
 export function getHLSFileReadStream (options: {
-  playlist: MStreamingPlaylistVideo
+  video: MVideoUUID
   filename: string
   rangeHeader: string
 }) {
-  const { playlist, filename, rangeHeader } = options
+  const { video, filename, rangeHeader } = options
 
-  const key = generateHLSObjectStorageKey(playlist, filename)
+  const key = generateHLSObjectStorageKey(video, filename)
 
   return createObjectReadStream({
     key,

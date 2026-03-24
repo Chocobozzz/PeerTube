@@ -293,7 +293,7 @@ describe('Test video studio API validator', function () {
       it('Should succeed with the correct params', async function () {
         this.timeout(360000)
 
-        await addWatermark('custom-thumbnail.jpg', HttpStatusCode.NO_CONTENT_204)
+        await addWatermark('custom-thumbnail-280x157.jpg', HttpStatusCode.NO_CONTENT_204)
 
         await waitJobs([ server ])
       })
@@ -325,8 +325,8 @@ describe('Test video studio API validator', function () {
       })
 
       it('Should fail with an invalid file', async function () {
-        await addIntroOutro('add-intro', 'custom-thumbnail.jpg')
-        await addIntroOutro('add-outro', 'custom-thumbnail.jpg')
+        await addIntroOutro('add-intro', 'custom-thumbnail-280x157.jpg')
+        await addIntroOutro('add-outro', 'custom-thumbnail-280x157.jpg')
       })
 
       it('Should fail with a file that does not contain video stream', async function () {
@@ -348,10 +348,12 @@ describe('Test video studio API validator', function () {
         this.timeout(360000)
 
         const user = await server.users.create({ username: 'user_quota_1' })
-        const token = await server.login.getAccessToken('user_quota_1')
-        const { uuid } = await server.videos.quickUpload({ token, name: 'video_quota_1', fixture: 'video_short.mp4' })
+        const userToken = await server.login.getAccessToken('user_quota_1')
+        const editorToken = await server.channelCollaborators.createEditor('editor_quota_1', 'user_quota_1_channel')
 
-        const addIntroOutroByUser = (type: 'add-intro' | 'add-outro', expectedStatus: HttpStatusCodeType) => {
+        const { uuid } = await server.videos.quickUpload({ token: userToken, name: 'video_quota_1', fixture: 'video_short.mp4' })
+
+        const addIntroOutroByUser = (type: 'add-intro' | 'add-outro', token: string, expectedStatus: HttpStatusCodeType) => {
           return command.createEditionTasks({
             token,
             videoId: uuid,
@@ -369,17 +371,19 @@ describe('Test video studio API validator', function () {
 
         await waitJobs([ server ])
 
-        const { videoQuotaUsed } = await server.users.getMyQuotaUsed({ token })
+        const { videoQuotaUsed } = await server.users.getMyQuotaUsed({ token: userToken })
         await server.users.update({ userId: user.id, videoQuota: Math.round(videoQuotaUsed * 2.5) })
 
         // Still valid
-        await addIntroOutroByUser('add-intro', HttpStatusCode.NO_CONTENT_204)
+        await addIntroOutroByUser('add-intro', userToken, HttpStatusCode.NO_CONTENT_204)
 
         await waitJobs([ server ])
 
         // Too much quota
-        await addIntroOutroByUser('add-intro', HttpStatusCode.PAYLOAD_TOO_LARGE_413)
-        await addIntroOutroByUser('add-outro', HttpStatusCode.PAYLOAD_TOO_LARGE_413)
+        for (const token of [ userToken, editorToken ]) {
+          await addIntroOutroByUser('add-intro', token, HttpStatusCode.PAYLOAD_TOO_LARGE_413)
+          await addIntroOutroByUser('add-outro', token, HttpStatusCode.PAYLOAD_TOO_LARGE_413)
+        }
       })
     })
   })

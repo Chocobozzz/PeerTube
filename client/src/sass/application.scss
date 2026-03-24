@@ -101,10 +101,13 @@ code {
   color: pvar(--fg-400);
   border-radius: 3px;
   padding: 0.2em 0.4em;
-  margin: auto 0.4em;
   font-size: 75%;
-  display: inline-block;
-  vertical-align: middle;
+
+  &:not(.code-inline) {
+    margin: auto 0.4em;
+    display: inline-block;
+    vertical-align: middle;
+  }
 }
 
 a {

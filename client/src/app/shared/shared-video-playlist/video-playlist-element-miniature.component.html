@@ -12,6 +12,7 @@
       <my-video-thumbnail
         [video]="playlistElement().video" [blur]="hasNSFWBlur(playlistElement().video)"
         [videoRouterLink]="buildRouterLink()" [queryParams]="buildRouterQuery()" [ariaLabel]="getVideoAriaLabel()"
+        sizes="130px"
       ></my-video-thumbnail>
     } @else {
       <div class="fake-thumbnail"></div>

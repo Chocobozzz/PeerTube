@@ -7,6 +7,8 @@ import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerServ
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { VideoImportService } from '@app/shared/shared-main/video/video-import.service'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { PlayerSettingsService } from '@app/shared/shared-video/player-settings.service'
+import { VideoEmbedPrivacyService } from '@app/shared/shared-video/video-embed-privacy.service'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { PeerTubeProblemDocument, ServerErrorCode, UserVideoQuota, VideoPrivacyType } from '@peertube/peertube-models'
@@ -18,7 +20,6 @@ import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.co
 import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
 import { VideoManageContainerComponent } from '../../shared-manage/video-manage-container.component'
 import { DragDropDirective } from '../shared/drag-drop.directive'
-import { PlayerSettingsService } from '@app/shared/shared-video/player-settings.service'
 
 const debugLogger = debug('peertube:video-publish')
 
@@ -52,6 +53,7 @@ export class VideoImportTorrentComponent implements OnInit, AfterViewInit, CanCo
   private serverService = inject(ServerService)
   private manageController = inject(VideoManageController)
   private route = inject(ActivatedRoute)
+  private videoEmbedPrivacyService = inject(VideoEmbedPrivacyService)
 
   readonly userChannels = input.required<SelectChannelItem[]>()
   readonly userQuota = input.required<UserVideoQuota>()
@@ -130,20 +132,21 @@ export class VideoImportTorrentComponent implements OnInit, AfterViewInit, CanCo
     this.manageController.setConfig({ manageType: 'import-torrent', serverConfig: this.serverService.getHTMLConfig() })
     this.manageController.setVideoEdit(videoEdit)
 
-    this.loadingBar.useRef().start()
+    this.loadingBar.useRef('import-video').start()
 
     this.videoImportService.importVideo(videoEdit.toVideoImportCreate(this.highestPrivacy()))
       .pipe(switchMap(({ video }) => {
         return forkJoin([
           this.videoService.getVideo({ videoId: video.uuid }),
-          this.playerSettingsService.getVideoSettings({ videoId: video.uuid, raw: true })
+          this.playerSettingsService.getVideoSettings({ videoId: video.uuid, raw: true }),
+          this.videoEmbedPrivacyService.getPrivacy({ videoId: video.uuid })
         ])
       }))
       .subscribe({
-        next: async ([ video, playerSettings ]) => {
-          await videoEdit.loadFromAPI({ video, playerSettings, loadPrivacy: false })
+        next: async ([ video, playerSettings, embedPrivacy ]) => {
+          await videoEdit.loadFromAPI({ video, playerSettings, embedPrivacy, loadPrivacy: false })
 
-          this.loadingBar.useRef().complete()
+          this.loadingBar.useRef('import-video').complete()
 
           debugLogger(`Torrent/magnet import created`)
 
@@ -157,7 +160,7 @@ export class VideoImportTorrentComponent implements OnInit, AfterViewInit, CanCo
         error: err => {
           this.isImportingVideo = false
 
-          this.loadingBar.useRef().complete()
+          this.loadingBar.useRef('import-video').complete()
           this.firstStepError.emit()
 
           const error = err.body as PeerTubeProblemDocument

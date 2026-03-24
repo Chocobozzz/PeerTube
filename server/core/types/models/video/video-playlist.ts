@@ -95,6 +95,7 @@ export type MVideoPlaylistFullSummary =
 
 export type MVideoPlaylistFormattable =
   & MVideoPlaylistVideosLength
+  & Use<'Thumbnail', MThumbnail>
   & Use<'OwnerAccount', MAccountSummaryFormattable>
   & Use<'VideoChannel', MChannelSummaryFormattable>
 

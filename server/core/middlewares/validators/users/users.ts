@@ -52,6 +52,10 @@ export const usersListValidator = [
     .customSanitizer(toBooleanOrNull)
     .isBoolean().withMessage('Should be a valid blocked boolean'),
 
+  query('role')
+    .optional()
+    .custom(isUserRoleValid),
+
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 

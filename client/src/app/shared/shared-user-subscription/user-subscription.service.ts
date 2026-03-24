@@ -1,16 +1,16 @@
-import debug from 'debug'
-import { merge, Observable, of, ReplaySubject, Subject } from 'rxjs'
-import { catchError, filter, map, switchMap, tap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable, inject } from '@angular/core'
+import { inject, Injectable } from '@angular/core'
 import { ComponentPaginationLight, RestExtractor, RestService } from '@app/core'
 import { buildBulkObservable } from '@app/helpers'
 import { ActorFollow, ResultList, VideoChannel as VideoChannelServer, VideoSortField } from '@peertube/peertube-models'
+import debug from 'debug'
+import { merge, Observable, of, ReplaySubject, Subject } from 'rxjs'
+import { catchError, filter, map, switchMap, tap } from 'rxjs/operators'
 import { environment } from '../../../environments/environment'
-import { Video } from '../shared-main/video/video.model'
 import { VideoChannel } from '../shared-main/channel/video-channel.model'
-import { VideoService } from '../shared-main/video/video.service'
 import { VideoChannelService } from '../shared-main/channel/video-channel.service'
+import { Video } from '../shared-main/video/video.model'
+import { VideoService } from '../shared-main/video/video.service'
 
 const debugLogger = debug('peertube:subscriptions:UserSubscriptionService')
 
@@ -51,27 +51,18 @@ export class UserSubscriptionService {
     pagination: ComponentPaginationLight
     nameWithHost: string
     search?: string
+    channel?: string
   }) {
-    const { pagination, nameWithHost, search } = parameters
-
-    let url = `${UserSubscriptionService.BASE_ACCOUNTS_URL}/${nameWithHost}/followers`
+    const { pagination, nameWithHost, search, channel } = parameters
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, this.restService.componentToRestPagination(pagination), '-createdAt')
 
-    if (search) {
-      const filters = this.restService.parseQueryStringFilter(search, {
-        channel: {
-          prefix: 'channel:'
-        }
-      })
+    if (search) params = params.append('search', search)
 
-      if (filters.channel) {
-        url = `${UserSubscriptionService.BASE_VIDEO_CHANNELS_URL}/${filters.channel}/followers`
-      }
-
-      params = this.restService.addObjectParams(params, { search: filters.search })
-    }
+    const url = channel
+      ? `${UserSubscriptionService.BASE_VIDEO_CHANNELS_URL}/${channel}/followers`
+      : `${UserSubscriptionService.BASE_ACCOUNTS_URL}/${nameWithHost}/followers`
 
     return this.authHttp
       .get<ResultList<ActorFollow>>(url, { params })

@@ -3,9 +3,11 @@ import {
   MergeAudioTranscodingPayload,
   NewWebVideoResolutionTranscodingPayload,
   OptimizeTranscodingPayload,
+  VideoResolution,
   VideoTranscodingPayload
 } from '@peertube/peertube-models'
-import { isHLSAudioMissing } from '@server/lib/runners/job-handlers/shared/utils.js'
+import { CONFIG } from '@server/initializers/config.js'
+import { hasMissingHLSStreams } from '@server/lib/runners/job-handlers/shared/utils.js'
 import { onTranscodingEnded } from '@server/lib/transcoding/ended-transcoding.js'
 import { generateHlsPlaylistResolution } from '@server/lib/transcoding/hls-transcoding.js'
 import { mergeAudioVideofile, optimizeOriginalVideofile, transcodeNewWebVideoResolution } from '@server/lib/transcoding/web-transcoding.js'
@@ -14,12 +16,12 @@ import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { moveToFailedTranscodingState } from '@server/lib/video-state.js'
 import { UserModel } from '@server/models/user/user.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
-import { MUser, MUserId, MVideoFullLight } from '@server/types/models/index.js'
+import { MUser, MUserId, MVideoFull } from '@server/types/models/index.js'
 import { Job } from 'bullmq'
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
 import { VideoModel } from '../../../models/video/video.js'
 
-type HandlerFunction = (job: Job, payload: VideoTranscodingPayload, video: MVideoFullLight, user: MUser) => Promise<void>
+type HandlerFunction = (job: Job, payload: VideoTranscodingPayload, video: MVideoFull, user: MUser) => Promise<void>
 
 const handlers: { [id in VideoTranscodingPayload['type']]: HandlerFunction } = {
   'new-resolution-to-hls': handleHLSJob,
@@ -75,53 +77,55 @@ export {
 // Job handlers
 // ---------------------------------------------------------------------------
 
-async function handleWebVideoMergeAudioJob (job: Job, payload: MergeAudioTranscodingPayload, video: MVideoFullLight, user: MUserId) {
+async function handleWebVideoMergeAudioJob (job: Job, payload: MergeAudioTranscodingPayload, video: MVideoFull, user: MUserId) {
   logger.info('Handling merge audio transcoding job for %s.', video.uuid, lTags(video.uuid), { payload })
 
   await mergeAudioVideofile({ video, resolution: payload.resolution, fps: payload.fps, job })
 
   logger.info('Merge audio transcoding job for %s ended.', video.uuid, lTags(video.uuid), { payload })
 
-  await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState: !payload.hasChildren, video })
+  await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState: payload.canMoveVideoState, video })
 }
 
-async function handleWebVideoOptimizeJob (job: Job, payload: OptimizeTranscodingPayload, video: MVideoFullLight, user: MUserId) {
+async function handleWebVideoOptimizeJob (job: Job, payload: OptimizeTranscodingPayload, video: MVideoFull, user: MUserId) {
   logger.info('Handling optimize transcoding job for %s.', video.uuid, lTags(video.uuid), { payload })
 
-  await optimizeOriginalVideofile({ video, quickTranscode: payload.quickTranscode, job })
+  await optimizeOriginalVideofile({ video, job })
 
   logger.info('Optimize transcoding job for %s ended.', video.uuid, lTags(video.uuid), { payload })
 
-  await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState: !payload.hasChildren, video })
+  await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState: payload.canMoveVideoState, video })
 }
 
 // ---------------------------------------------------------------------------
 
-async function handleNewWebVideoResolutionJob (job: Job, payload: NewWebVideoResolutionTranscodingPayload, video: MVideoFullLight) {
+async function handleNewWebVideoResolutionJob (job: Job, payload: NewWebVideoResolutionTranscodingPayload, video: MVideoFull) {
   logger.info('Handling Web Video transcoding job for %s.', video.uuid, lTags(video.uuid), { payload })
 
   await transcodeNewWebVideoResolution({ video, resolution: payload.resolution, fps: payload.fps, job })
 
   logger.info('Web Video transcoding job for %s ended.', video.uuid, lTags(video.uuid), { payload })
 
-  await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState: !payload.hasChildren, video })
+  // Always move video to next state, we're ready enough with this resolution
+  await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState: payload.canMoveVideoState, video })
 }
 
 // ---------------------------------------------------------------------------
 
-async function handleHLSJob (job: Job, payload: HLSTranscodingPayload, videoArg: MVideoFullLight) {
+async function handleHLSJob (job: Job, payload: HLSTranscodingPayload, videoArg: MVideoFull) {
   logger.info('Handling HLS transcoding job for %s.', videoArg.uuid, lTags(videoArg.uuid), { payload })
 
   const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(videoArg.uuid)
-  let video: MVideoFullLight
+  let video: MVideoFull
 
   try {
     video = await VideoModel.loadFull(videoArg.uuid)
 
     const { videoFile, separatedAudioFile } = video.getMaxQualityAudioAndVideoFiles()
+    const webVideoFile = video.getWebVideoFileResolution(payload.resolution)
 
-    const videoFileInputs = payload.copyCodecs
-      ? [ video.getWebVideoFileMinResolution(payload.resolution) ]
+    const videoFileInputs = webVideoFile
+      ? [ webVideoFile ]
       : [ videoFile, separatedAudioFile ].filter(v => !!v)
 
     await VideoPathManager.Instance.makeAvailableVideoFiles(videoFileInputs, ([ videoPath, separatedAudioPath ]) => {
@@ -134,7 +138,6 @@ async function handleHLSJob (job: Job, payload: HLSTranscodingPayload, videoArg:
         inputFileMutexReleaser,
         resolution: payload.resolution,
         fps: payload.fps,
-        copyCodecs: payload.copyCodecs,
         separatedAudio: payload.separatedAudio,
         job
       })
@@ -145,22 +148,27 @@ async function handleHLSJob (job: Job, payload: HLSTranscodingPayload, videoArg:
 
   logger.info('HLS transcoding job for %s ended.', video.uuid, lTags(video.uuid), { payload })
 
-  const missingAudio = await isHLSAudioMissing({
-    resolution: payload.resolution,
-    separatedAudio: payload.separatedAudio,
+  const missingStream = await hasMissingHLSStreams({
+    inputStreams: payload.inputStreams,
+    transcodingRequestAt: payload.transcodingRequestAt,
     videoId: videoArg.uuid
   })
 
-  if (!missingAudio && payload.deleteWebVideoFiles === true) {
-    logger.info('Removing Web Video files of %s now we have a HLS version of it.', video.uuid, lTags(video.uuid))
+  if (!missingStream && payload.deleteWebVideoFiles === true) {
+    const resolutionExceptions = CONFIG.TRANSCODING.ALWAYS_TRANSCODE_PODCAST_OPTIMIZED_AUDIO
+      ? [ VideoResolution.H_NOVIDEO ]
+      : []
 
-    await removeAllWebVideoFiles(video)
+    logger.info('Removing Web Video files of %s now we have a HLS version of it.', video.uuid, {
+      resolutionExceptions,
+      ...lTags(video.uuid)
+    })
+
+    await removeAllWebVideoFiles(video, { resolutionExceptions })
   }
 
-  // Splitted audio, wait audio generation before moving the video in its next state
-  const moveVideoToNextState = missingAudio
-    ? false
-    : !payload.hasChildren
+  // Splitted audio, wait audio & video generation before moving the video in its next state
+  const moveVideoToNextState = payload.canMoveVideoState && !missingStream
 
   await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState, video })
 }

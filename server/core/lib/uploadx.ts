@@ -14,7 +14,7 @@ export const uploadx = new Uploadx({
 
   expiration: { maxAge: undefined, rolling: true },
 
-  // Could be big with thumbnails/previews
+  // Could be big with a big thumbnail
   maxMetadataSize: '10MB',
 
   logger: {

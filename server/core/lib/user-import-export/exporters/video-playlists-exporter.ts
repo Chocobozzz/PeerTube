@@ -1,13 +1,12 @@
-import { ExportResult, AbstractUserExporter } from './abstract-user-exporter.js'
 import { VideoPlaylistsExportJSON } from '@peertube/peertube-models'
-import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
-import { extname, join } from 'path'
-import { createReadStream } from 'fs'
+import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { MThumbnail, MVideoPlaylist } from '@server/types/models/index.js'
+import { createReadStream } from 'fs'
+import { extname, join } from 'path'
+import { AbstractUserExporter, ExportResult } from './abstract-user-exporter.js'
 
-export class VideoPlaylistsExporter extends AbstractUserExporter <VideoPlaylistsExportJSON> {
-
+export class VideoPlaylistsExporter extends AbstractUserExporter<VideoPlaylistsExportJSON> {
   async export () {
     const playlistsJSON: VideoPlaylistsExportJSON['videoPlaylists'] = []
     const staticFiles: ExportResult<VideoPlaylistsExportJSON>['staticFiles'] = []
@@ -26,7 +25,7 @@ export class VideoPlaylistsExporter extends AbstractUserExporter <VideoPlaylists
 
         staticFiles.push({
           archivePath: this.getArchiveThumbnailPath(playlist, thumbnail),
-          readStreamFactory: () => Promise.resolve(createReadStream(thumbnail.getPath()))
+          readStreamFactory: () => Promise.resolve(createReadStream(thumbnail.getFSPath()))
         })
 
         archiveFiles.thumbnail = join(this.relativeStaticDirPath, this.getArchiveThumbnailPath(playlist, thumbnail))
@@ -48,7 +47,7 @@ export class VideoPlaylistsExporter extends AbstractUserExporter <VideoPlaylists
         createdAt: playlist.createdAt.toISOString(),
         updatedAt: playlist.updatedAt.toISOString(),
 
-        thumbnailUrl: playlist.Thumbnail?.getOriginFileUrl(playlist),
+        thumbnailUrl: playlist.Thumbnail?.getLocalFileUrl(),
 
         elements: elements.map(e => ({
           videoUrl: e.Video.url,

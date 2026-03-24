@@ -1,12 +1,11 @@
 import { FFmpegImage } from '@peertube/peertube-ffmpeg'
 import { GenerateStoryboardPayload, VideoFileStream } from '@peertube/peertube-models'
 import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg/index.js'
-import { generateImageFilename } from '@server/helpers/image-utils.js'
+import { generateImageFilename, getImageSize } from '@server/helpers/image-utils.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { STORYBOARD } from '@server/initializers/constants.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
-import { getImageSizeFromWorker } from '@server/lib/worker/parent-process.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { Job } from 'bullmq'
 import { join } from 'path'
@@ -85,7 +84,7 @@ export async function processGenerateStoryboard (job: Job): Promise<void> {
         filename,
         destination,
 
-        imageSize: await getImageSizeFromWorker(destination),
+        imageSize: await getImageSize(destination),
 
         spriteHeight,
         spriteWidth,

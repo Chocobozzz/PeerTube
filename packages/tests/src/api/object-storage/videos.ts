@@ -15,7 +15,7 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { expectLogDoesNotContain, expectStartWith } from '@tests/shared/checks.js'
+import { expectStartWith } from '@tests/shared/checks.js'
 import { checkTmpIsEmpty } from '@tests/shared/directories.js'
 import { generateHighBitrateVideo } from '@tests/shared/generate.js'
 import { MockObjectStorageProxy } from '@tests/shared/mock-servers/mock-object-storage.js'
@@ -301,12 +301,6 @@ function runTestSuite (options: {
   it('Should have an empty tmp directory', async function () {
     for (const server of servers) {
       await checkTmpIsEmpty(server)
-    }
-  })
-
-  it('Should not have downloaded files from object storage', async function () {
-    for (const server of servers) {
-      await expectLogDoesNotContain(server, 'from object storage')
     }
   })
 

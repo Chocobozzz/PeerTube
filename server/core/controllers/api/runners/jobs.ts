@@ -462,7 +462,8 @@ async function listRunnerJobs (req: express.Request, res: express.Response) {
     count: query.count,
     sort: query.sort,
     search: query.search,
-    stateOneOf: query.stateOneOf
+    stateOneOf: query.stateOneOf,
+    typeOneOf: query.typeOneOf
   })
 
   return res.json({

@@ -1,11 +1,11 @@
 import { FileStorageType } from '../../common/file-storage.enum.js'
-import { VideoConstant } from '../video-constant.model.js'
+import { ConstantLabel } from '../../common/constant-label.model.js'
 import { VideoFileMetadata } from './video-file-metadata.model.js'
 
 export interface VideoFile {
   id: number
 
-  resolution: VideoConstant<number>
+  resolution: ConstantLabel<number>
   size: number // Bytes
 
   width?: number

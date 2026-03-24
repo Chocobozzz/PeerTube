@@ -23,15 +23,17 @@ import { VideoChannelActivityModel } from '@server/models/video/video-channel-ac
 import { VideoChannelCollaboratorModel } from '@server/models/video/video-channel-collaborator.js'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync.js'
 import { VideoChapterModel } from '@server/models/video/video-chapter.js'
+import { VideoEmbedPrivacyDomainModel } from '@server/models/video/video-embed-privacy-domain.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting.js'
 import { VideoLiveScheduleModel } from '@server/models/video/video-live-schedule.js'
 import { VideoLiveSessionModel } from '@server/models/video/video-live-session.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
-import { LocalVideoViewerWatchSectionModel } from '@server/models/view/local-video-viewer-watch-section.js'
-import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer.js'
+import { LocalVideoViewerWatchSectionModel } from '@server/models/stat/local-video-viewer-watch-section.js'
+import { LocalVideoViewerModel } from '@server/models/stat/local-video-viewer.js'
 import { WatchedWordsListModel } from '@server/models/watched-words/watched-words-list.js'
+import { readFileSync } from 'fs'
 import pg from 'pg'
 import { QueryTypes, Transaction } from 'sequelize'
 import { Sequelize as SequelizeTypescript } from 'sequelize-typescript'
@@ -71,7 +73,7 @@ import { VideoShareModel } from '../models/video/video-share.js'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist.js'
 import { VideoTagModel } from '../models/video/video-tag.js'
 import { VideoModel } from '../models/video/video.js'
-import { VideoViewModel } from '../models/view/video-view.js'
+import { VideoStatModel } from '../models/stat/video-stat.js'
 import { CONFIG } from './config.js'
 
 pg.defaults.parseInt8 = true // Avoid BIGINT to be converted to string
@@ -86,10 +88,23 @@ const poolMax = CONFIG.DATABASE.POOL.MAX
 let dialectOptions: any = {}
 
 if (CONFIG.DATABASE.SSL) {
+  // For reference: https://node-postgres.com/features/ssl
   dialectOptions = {
     ssl: {
-      rejectUnauthorized: false
+      rejectUnauthorized: CONFIG.DATABASE.SSL_SETTINGS.REJECT_UNAUTHORIZED
     }
+  }
+
+  if (CONFIG.DATABASE.SSL_SETTINGS.CA) {
+    dialectOptions.ssl.ca = readFileSync(CONFIG.DATABASE.SSL_SETTINGS.CA, { encoding: 'utf-8' })
+  }
+
+  if (CONFIG.DATABASE.SSL_SETTINGS.CERT) {
+    dialectOptions.ssl.cert = readFileSync(CONFIG.DATABASE.SSL_SETTINGS.CERT, { encoding: 'utf-8' })
+  }
+
+  if (CONFIG.DATABASE.SSL_SETTINGS.KEY) {
+    dialectOptions.ssl.key = readFileSync(CONFIG.DATABASE.SSL_SETTINGS.KEY, { encoding: 'utf-8' })
   }
 }
 
@@ -106,12 +121,12 @@ export const sequelizeTypescript = new SequelizeTypescript({
   },
   benchmark: isTestOrDevInstance(),
   isolationLevel: Transaction.ISOLATION_LEVELS.SERIALIZABLE,
-  logging: (message: string, benchmark: number) => {
+  logging: (message: string, executionTimeMs: number) => {
     if (process.env.NODE_DB_LOG === 'false') return
 
     let newMessage = 'Executed SQL request'
-    if (isTestOrDevInstance() === true && benchmark !== undefined) {
-      newMessage += ' in ' + benchmark + 'ms'
+    if (isTestOrDevInstance() && executionTimeMs !== undefined) {
+      newMessage += ' in ' + executionTimeMs + 'ms'
     }
 
     logger.debug(newMessage, { sql: message, tags: [ 'sql' ] })
@@ -158,7 +173,7 @@ export async function initDatabaseModels (silent: boolean) {
     VideoCommentModel,
     ScheduleVideoUpdateModel,
     VideoImportModel,
-    VideoViewModel,
+    VideoStatModel,
     VideoRedundancyModel,
     UserVideoHistoryModel,
     VideoLiveModel,
@@ -197,7 +212,8 @@ export async function initDatabaseModels (silent: boolean) {
     VideoLiveScheduleModel,
     PlayerSettingModel,
     VideoChannelCollaboratorModel,
-    ActorReservedModel
+    ActorReservedModel,
+    VideoEmbedPrivacyDomainModel
   ])
 
   // Check extensions exist in the database

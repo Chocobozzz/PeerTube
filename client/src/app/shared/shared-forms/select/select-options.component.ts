@@ -39,6 +39,9 @@ export class SelectOptionsComponent implements ControlValueAccessor {
 
   readonly clearable = input(false, { transform: booleanAttribute })
   readonly filter = input(false, { transform: booleanAttribute })
+  readonly small = input(false, { transform: booleanAttribute })
+
+  readonly appendTo = input<'body'>()
 
   readonly virtualScroll = input(false, { transform: booleanAttribute })
   readonly virtualScrollItemSize = input(39, { transform: numberAttribute })
@@ -60,11 +63,13 @@ export class SelectOptionsComponent implements ControlValueAccessor {
 
   // Allow plugins to update our value
   @HostListener('change', [ '$event.target' ])
-  handleChange (target: HTMLInputElement) {
-    // Prevent the primeng search input to update our value
-    if (target.role === 'searchbox') return
+  handleChange (target: EventTarget) {
+    const el = target as HTMLInputElement
 
-    this.writeValue(target.value)
+    // Prevent the primeng search input to update our value
+    if (el.role === 'searchbox') return
+
+    this.writeValue(el.value)
     this.onModelChange()
   }
 

@@ -5,7 +5,7 @@ import { AuthService, AuthUser, CanComponentDeactivate, CanDeactivateGuard, Hook
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { NgbNav, NgbNavContent, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap'
-import { HTMLServerConfig, UserVideoQuota, VideoConstant, VideoPrivacyType } from '@peertube/peertube-models'
+import { HTMLServerConfig, UserVideoQuota, ConstantLabel, VideoPrivacyType } from '@peertube/peertube-models'
 import { SelectChannelItem } from 'src/types'
 import { HelpComponent } from '../../shared/shared-main/buttons/help.component'
 import { ChannelsSetupMessageComponent } from '../../shared/shared-main/channel/channels-setup-message.component'
@@ -79,7 +79,7 @@ export class VideoPublishComponent implements OnInit, CanComponentDeactivate {
 
   userChannels: SelectChannelItem[]
   userQuota: UserVideoQuota
-  privacies: VideoConstant<VideoPrivacyType>[]
+  privacies: ConstantLabel<VideoPrivacyType>[]
 
   private publishedIdQuery: string
   private uploadingQuery: string

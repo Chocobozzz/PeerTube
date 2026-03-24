@@ -20,7 +20,8 @@ my-select-options {
   max-width: 500px;
 }
 
-my-preview-upload {
+my-image-input {
+  // Keep it sync with image size requested by the component
   width: 223px;
   height: 122px;
 }

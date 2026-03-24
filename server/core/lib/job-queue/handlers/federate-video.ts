@@ -1,12 +1,12 @@
-import { Job } from 'bullmq'
+import { FederateVideoPayload } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { FederateVideoPayload } from '@peertube/peertube-models'
+import { Job } from 'bullmq'
 import { logger } from '../../../helpers/logger.js'
 
-function processFederateVideo (job: Job) {
+export function processFederateVideo (job: Job) {
   const payload = job.data as FederateVideoPayload
 
   logger.info('Processing video federation in job %s.', job.id)
@@ -19,10 +19,4 @@ function processFederateVideo (job: Job) {
       return federateVideoIfNeeded(video, payload.isNewVideoForFederation, t)
     })
   })
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  processFederateVideo
 }

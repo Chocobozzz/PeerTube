@@ -8,6 +8,7 @@ import { ThumbnailModel } from '../../thumbnail.js'
 import { VideoChannelModel } from '../../video-channel.js'
 import { VideoImportModel } from '../../video-import.js'
 import { VideoModel } from '../../video.js'
+import { VideoChannelSyncModel } from '../../video-channel-sync.js'
 
 export class VideoImportTableAttributes {
   @Memoize()
@@ -22,6 +23,7 @@ export class VideoImportTableAttributes {
     return VideoModel.getSQLAttributes('Video', 'Video.').join(', ')
   }
 
+  @Memoize()
   getVideoTagAttributes () {
     return TagModel.getSQLAttributes('Video->Tags', 'Video.Tags.').join(', ')
   }
@@ -77,5 +79,10 @@ export class VideoImportTableAttributes {
   @Memoize()
   getThumbnailAttributes () {
     return ThumbnailModel.getSQLAttributes('Video->Thumbnails', 'Video.Thumbnails.').join(', ')
+  }
+
+  @Memoize()
+  getChannelSyncAttributes () {
+    return VideoChannelSyncModel.getSQLAttributes('VideoChannelSync', 'VideoChannelSync.').join(', ')
   }
 }

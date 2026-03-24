@@ -1,4 +1,5 @@
-import { buildVideoLink, decorateVideoLink, isDefaultLocale, pick } from '@peertube/peertube-core-utils'
+import { buildVideoLink, decorateVideoLink, findAppropriateThumbnail, isDefaultLocale, pick } from '@peertube/peertube-core-utils'
+import { Thumbnail } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { PluginsManager } from '@root-helpers/plugins-manager'
 import { TranslationsManager } from '@root-helpers/translations-manager'
@@ -71,10 +72,6 @@ if (PlayProgressBar.prototype.options_.children.includes('timeTooltip') !== true
   PlayProgressBar.prototype.options_.children.push('timeTooltip')
 }
 
-// FIXME: https://github.com/videojs/video.js/pull/8988#issuecomment-3402464579
-const seekBar = videojs.getComponent('SeekBar') as any
-seekBar.prototype.pendingSeekTime = seekBar.prototype.getCurrentTime_
-
 export { videojs }
 
 export class PeerTubePlayer {
@@ -101,7 +98,7 @@ export class PeerTubePlayer {
   async load (loadOptions: PeerTubePlayerLoadOptions) {
     this.currentLoadOptions = loadOptions
 
-    this.setPoster('')
+    this.setPoster([])
 
     this.disposeDynamicPluginsIfNeeded()
 
@@ -130,7 +127,7 @@ export class PeerTubePlayer {
     this.player.autoplay(this.getAutoPlayValue(this.currentLoadOptions.autoplay))
 
     if (!this.player.autoplay()) {
-      this.setPoster(loadOptions.poster)
+      this.setPoster(loadOptions.thumbnails)
     }
 
     this.player.trigger('video-change')
@@ -144,15 +141,24 @@ export class PeerTubePlayer {
     if (this.player) this.player.dispose()
   }
 
-  setPoster (url: string) {
+  setPoster (thumbnails: Thumbnail[]) {
     // Use HTML video element to display poster
     if (!this.player) {
-      this.options.playerElement().poster = url
+      const playerEl = this.options.playerElement()
+
+      const width = playerEl.clientWidth || window.innerWidth
+
+      this.options.playerElement().poster = findAppropriateThumbnail(thumbnails, width, '16:9')?.fileUrl || ''
       return
     }
 
     // Prefer using player poster API
-    this.player?.poster(url)
+    if (this.player) {
+      const width = this.player.el().clientWidth || window.innerWidth
+
+      this.player.poster(findAppropriateThumbnail(thumbnails, width, '16:9')?.fileUrl || '')
+    }
+
     this.options.playerElement().poster = ''
   }
 
@@ -297,7 +303,10 @@ export class PeerTubePlayer {
     })
 
     if (this.options.enableHotkeys === true) {
-      this.player.peerTubeHotkeysPlugin({ isLive: this.currentLoadOptions.isLive })
+      this.player.peerTubeHotkeysPlugin({
+        isLive: this.currentLoadOptions.isLive,
+        liveDvrEnabled: this.currentLoadOptions.liveOptions?.dvrEnabled === true
+      })
     }
 
     if (this.currentLoadOptions.playlist) {
@@ -384,7 +393,11 @@ export class PeerTubePlayer {
     })
   }
 
-  getVideojsOptions (): VideojsPlayerOptions {
+  private getVideojsOptions (): VideojsPlayerOptions {
+    const posterWidth = this.options.playerElement().clientWidth || window.innerWidth
+
+    const poster = findAppropriateThumbnail(this.currentLoadOptions.thumbnails, posterWidth, '16:9')?.fileUrl || ''
+
     const html5 = {
       preloadTextTracks: false,
       // Prevent a bug on iOS where the text tracks added by peertube plugin are removed on play
@@ -407,13 +420,16 @@ export class PeerTubePlayer {
         stopTime: () => this.currentLoadOptions.stopTime,
 
         videoCaptions: () => this.currentLoadOptions.videoCaptions,
+
         isLive: () => this.currentLoadOptions.isLive,
+        liveDvrEnabled: () => this.currentLoadOptions.liveOptions?.dvrEnabled === true,
+
         videoUUID: () => this.currentLoadOptions.videoUUID,
         subtitle: () => this.currentLoadOptions.subtitle,
 
         videoRatio: () => this.currentLoadOptions.videoRatio,
 
-        poster: () => this.currentLoadOptions.poster,
+        poster: () => poster,
 
         autoPlayerRatio: this.options.autoPlayerRatio
       },
@@ -450,11 +466,11 @@ export class PeerTubePlayer {
 
       autoplay: this.getAutoPlayValue(this.currentLoadOptions.autoplay),
 
-      poster: this.currentLoadOptions.poster,
+      poster,
       preload: 'none' as 'none',
 
       inactivityTimeout: this.options.inactivityTimeout,
-      playbackRates: [ 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2 ],
+      playbackRates: [ 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3 ],
 
       plugins,
 

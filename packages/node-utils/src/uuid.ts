@@ -1,14 +1,14 @@
-import short, { SUUID } from 'short-uuid'
-import { v5 } from 'uuid'
+import { createTranslator, generate as generateShort } from 'short-uuid'
+import { v4, v5 } from 'uuid'
 
-const translator = short()
+const translator = createTranslator()
 
 export function buildUUID () {
-  return short.uuid()
+  return v4()
 }
 
-export function buildSUUID (): SUUID {
-  return short.generate()
+export function buildSUUID (): string {
+  return generateShort()
 }
 
 export function uuidToShort (uuid: string) {
@@ -32,5 +32,3 @@ export function isShortUUID (value: string) {
 export function buildUUIDv5FromURL (url: string) {
   return v5(url, v5.URL)
 }
-
-export type { SUUID }

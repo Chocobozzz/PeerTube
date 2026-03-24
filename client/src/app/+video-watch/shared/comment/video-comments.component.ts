@@ -223,7 +223,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     const res = await this.confirmService.confirm(message, title)
     if (res === false) return false
 
-    this.videoCommentService.deleteVideoComment(commentToDelete.videoId, commentToDelete.id)
+    this.videoCommentService.deleteComments([ { videoId: commentToDelete.videoId, commentId: commentToDelete.id } ])
       .subscribe({
         next: () => {
           if (this.highlightedThread?.id === commentToDelete.id) {

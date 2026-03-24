@@ -1,6 +1,7 @@
 import { wait } from '@peertube/peertube-core-utils'
 import { FileStorage, LiveVideoLatencyMode, LiveVideoLatencyModeType, VideoState } from '@peertube/peertube-models'
 import { logger } from '@server/helpers/logger.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { VIDEO_LIVE } from '@server/initializers/constants.js'
 import { MStreamingPlaylist, MStreamingPlaylistVideo, MVideo } from '@server/types/models/index.js'
 import { pathExists, remove } from 'fs-extra/esm'
@@ -38,7 +39,7 @@ export async function cleanupUnsavedNormalLive (video: MVideo, streamingPlaylist
 
   // We uploaded files to object storage too, remove them
   if (streamingPlaylist.storage === FileStorage.OBJECT_STORAGE) {
-    await removeHLSObjectStorage(streamingPlaylist.withVideo(video))
+    await removeHLSObjectStorage(video)
   }
 
   await remove(hlsDirectory)
@@ -58,6 +59,22 @@ export function getLiveSegmentTime (latencyMode: LiveVideoLatencyModeType) {
   }
 
   return VIDEO_LIVE.SEGMENT_TIME_SECONDS.DEFAULT_LATENCY
+}
+
+export function getLiveSegmentListSize (options: {
+  latencyMode: LiveVideoLatencyModeType
+  dvrWindow: number
+}) {
+  const { latencyMode, dvrWindow } = options
+
+  if (dvrWindow === 0) return VIDEO_LIVE.SEGMENTS_LIST_SIZE
+
+  const segmentDuration = getLiveSegmentTime(latencyMode)
+  const maxDvrWindow = CONFIG.LIVE.DVR.MAX_WINDOW
+
+  const sanitizedWindow = Math.min(dvrWindow, maxDvrWindow)
+
+  return Math.ceil(sanitizedWindow / segmentDuration)
 }
 
 // ---------------------------------------------------------------------------
@@ -97,7 +114,7 @@ async function cleanupTMPLiveFilesFromObjectStorage (streamingPlaylist: MStreami
 
   logger.info('Cleanup TMP live files from object storage for %s.', streamingPlaylist.Video.uuid)
 
-  const keys = await listHLSFileKeysOf(streamingPlaylist)
+  const keys = await listHLSFileKeysOf(streamingPlaylist.Video)
 
   for (const key of keys) {
     if (isTMPLiveFile(key)) {

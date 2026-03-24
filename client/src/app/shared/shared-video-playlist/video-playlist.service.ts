@@ -8,6 +8,7 @@ import {
   CachedVideosExistInPlaylists,
   ResultList,
   VideoPlaylistElement as ServerVideoPlaylistElement,
+  VideoChannelSummary,
   VideoExistInPlaylist,
   VideoPlaylistCreate,
   VideoPlaylistElementCreate,
@@ -31,7 +32,7 @@ import { VideoPlaylist } from './video-playlist.model'
 
 const debugLogger = debug('peertube:playlists:VideoPlaylistService')
 
-export type CachedPlaylist = VideoPlaylist | { id: number, displayName: string }
+export type CachedPlaylist = VideoPlaylist | { id: number, displayName: string, videoChannel?: VideoChannelSummary }
 
 @Injectable({ providedIn: 'root' })
 export class VideoPlaylistService {
@@ -141,6 +142,7 @@ export class VideoPlaylistService {
     const obs = this.listAccountPlaylists({
       account: user.account,
       sort: '-updatedAt',
+      includeCollaborations: true,
       search
     }).pipe(
       tap(result => {

@@ -16,8 +16,7 @@ import {
   MChannelAccountSummaryFormattable,
   MChannelActor,
   MChannelFormattable,
-  MChannelHostOnly,
-  MChannelUserId
+  MChannelHostOnly
 } from './video-channel.js'
 import { MVideoFile } from './video-file.js'
 import { MVideoLiveWithSchedules } from './video-live.js'
@@ -46,6 +45,7 @@ export type MVideo = Omit<
   | 'AccountVideoRates'
   | 'VideoComments'
   | 'VideoViews'
+  | 'VideoDownloads'
   | 'UserVideoHistories'
   | 'ScheduleVideoUpdate'
   | 'VideoBlacklist'
@@ -66,7 +66,7 @@ export type MVideo = Omit<
 export type MVideoId = Pick<MVideo, 'id'>
 export type MVideoUrl = Pick<MVideo, 'url'>
 export type MVideoUUID = Pick<MVideo, 'uuid'>
-export type MVideoPrivacy = Pick<MVideo, 'privacy' | 'uuid'>
+export type MVideoPrivacy = Pick<MVideo, 'privacy' | 'uuid' | 'hasPrivateStaticPath'>
 
 export type MVideoImmutable = Pick<MVideo, 'id' | 'url' | 'uuid' | 'remote' | 'isLocal'>
 export type MVideoOwned = Pick<MVideo, 'remote' | 'isLocal'>
@@ -83,21 +83,12 @@ export type MVideoWithFile =
   & Use<'VideoFiles', MVideoFile[]>
   & Use<'VideoStreamingPlaylists', MStreamingPlaylistFiles[]>
 
-export type MVideoThumbnail =
+export type MVideoThumbnails =
   & MVideo
   & Use<'Thumbnails', MThumbnail[]>
 
-export type MVideoIdThumbnail =
-  & MVideoId
-  & Use<'Thumbnails', MThumbnail[]>
-
-export type MVideoWithFileThumbnail =
-  & MVideoWithFile
-  & Use<'Thumbnails', MThumbnail[]>
-
-export type MVideoThumbnailBlacklist =
+export type MVideoWithBlacklist =
   & MVideo
-  & Use<'Thumbnails', MThumbnail[]>
   & Use<'VideoBlacklist', MVideoBlacklistLight>
 
 export type MVideoTag =
@@ -147,7 +138,7 @@ export type MVideoAccountLight =
 export type MVideoWithRights =
   & MVideo
   & Use<'VideoBlacklist', MVideoBlacklistLight>
-  & Use<'VideoChannel', MChannelUserId>
+  & Use<'VideoChannel', MChannelAccountLight>
 
 // ############################################################################
 
@@ -192,7 +183,7 @@ export type MVideoWithHost =
   & MVideo
   & Use<'VideoChannel', MChannelHostOnly>
 
-export type MVideoFullLight =
+export type MVideoFull =
   & MVideo
   & Use<'Thumbnails', MThumbnail[]>
   & Use<'VideoBlacklist', MVideoBlacklistLight>
@@ -250,7 +241,7 @@ export type MVideoForRedundancyAPI =
 // Format for API or AP object
 
 export type MVideoFormattable =
-  & MVideoThumbnail
+  & MVideoThumbnails
   & PickWithOpt<VideoModel, 'UserVideoHistories', MUserVideoHistoryTime[]>
   & Use<'VideoChannel', MChannelAccountSummaryFormattable>
   & PickWithOpt<VideoModel, 'ScheduleVideoUpdate', Pick<MScheduleVideoUpdate, 'updateAt' | 'privacy'>>
@@ -259,6 +250,7 @@ export type MVideoFormattable =
   & PickWithOpt<VideoModel, 'VideoFiles', MVideoFile[]>
   & PickWithOpt<VideoModel, 'VideoLive', MVideoLiveWithSchedules>
   & PickWithOpt<VideoModel, 'VideoAutomaticTags', MVideoAutomaticTagWithTag[]>
+  & PickWithOpt<VideoModel, 'Tags', MTag[]>
   & PickWithOpt<VideoModel, 'VideoSource', MVideoSource>
 
 export type MVideoFormattableDetails =

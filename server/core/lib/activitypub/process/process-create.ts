@@ -103,7 +103,7 @@ async function processCreateCacheFile (
   if (video.isLocal()) {
     // Don't resend the activity to the sender
     const exceptions = [ byActor ]
-    await forwardVideoRelatedActivity(activity, undefined, exceptions, video)
+    await forwardVideoRelatedActivity({ activity, transaction: undefined, followersException: exceptions, video })
   }
 }
 
@@ -174,7 +174,7 @@ async function processCreateVideoComment (
       // Don't resend the activity to the sender
       const exceptions = [ byActor ]
 
-      await forwardVideoRelatedActivity(activity, undefined, exceptions, video)
+      await forwardVideoRelatedActivity({ activity, transaction: undefined, followersException: exceptions, video })
     }
   }
 

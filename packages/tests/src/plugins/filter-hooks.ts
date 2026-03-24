@@ -25,9 +25,9 @@ import {
   waitJobs
 } from '@peertube/peertube-server-commands'
 import { expectEndWith } from '@tests/shared/checks.js'
+import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
 import { expect } from 'chai'
 import { FIXTURE_URLS } from '../shared/fixture-urls.js'
-import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
 
 describe('Test plugin filter hooks', function () {
   let servers: PeerTubeServer[]
@@ -209,9 +209,9 @@ describe('Test plugin filter hooks', function () {
 
   describe('Video/live/import accept', function () {
     it('Should run filter:api.video.upload.accept.result', async function () {
-      const options = { attributes: { name: 'video with bad word' }, expectedStatus: HttpStatusCode.FORBIDDEN_403 }
-      await servers[0].videos.upload({ mode: 'legacy', ...options })
-      await servers[0].videos.upload({ mode: 'resumable', ...options })
+      const options = { attributes: { name: 'video with bad word' } }
+      await servers[0].videos.upload({ mode: 'legacy', ...options, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await servers[0].videos.upload({ mode: 'resumable', ...options, completedExpectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should run filter:api.video.update-file.accept.result', async function () {

@@ -57,8 +57,8 @@ export async function getApplicationActorOfHost (host: string) {
   return found?.href || undefined
 }
 
-export function getAPPublicValue (): 'https://www.w3.org/ns/activitystreams#Public' {
-  return 'https://www.w3.org/ns/activitystreams#Public'
+export function getAPPublicValue () {
+  return 'https://www.w3.org/ns/activitystreams#Public' as const
 }
 
 export function hasAPPublic (collection: string[] | string) {
@@ -97,6 +97,10 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
       '@type': 'sc:Number',
       '@id': 'pt:latencyMode'
     },
+    dvrWindow: {
+      '@type': 'sc:Duration',
+      '@id': 'pt:dvrWindow'
+    },
 
     Infohash: 'pt:Infohash',
 
@@ -128,6 +132,8 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
     schedules: 'sc:eventSchedule',
     startDate: 'sc:startDate',
 
+    embedUrl: 'sc:embedUrl',
+
     uploadDate: 'sc:uploadDate',
 
     hasParts: 'sc:hasParts',
@@ -137,6 +143,10 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
     views: {
       '@type': 'sc:Number',
       '@id': 'pt:views'
+    },
+    downloads: {
+      '@type': 'sc:Number',
+      '@id': 'pt:downloads'
     },
     state: {
       '@type': 'sc:Number',
@@ -245,7 +255,10 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
     },
 
     lemmy: 'https://join-lemmy.org/ns#',
-    postingRestrictedToMods: 'lemmy:postingRestrictedToMods'
+    postingRestrictedToMods: 'lemmy:postingRestrictedToMods',
+
+    toot: 'http://joinmastodon.org/ns#',
+    indexable: 'toot:indexable'
   }),
 
   WatchAction: buildContext({
@@ -311,6 +324,13 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
     },
 
     theme: 'pt:theme'
+  }),
+
+  Download: buildContext({
+    DownloadAction: 'sc:DownloadAction',
+    InteractionCounter: 'sc:InteractionCounter',
+    interactionType: 'sc:interactionType',
+    userInteractionCount: 'sc:userInteractionCount'
   })
 }
 

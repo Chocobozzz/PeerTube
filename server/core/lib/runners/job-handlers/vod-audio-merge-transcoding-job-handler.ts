@@ -10,7 +10,7 @@ import { logger } from '@server/helpers/logger.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { MVideo } from '@server/types/models/index.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
-import { generateRunnerTranscodingVideoInputFileUrl, generateRunnerTranscodingVideoPreviewFileUrl } from '../runner-urls.js'
+import { generateRunnerTranscodingVideoInputFileUrl, generateRunnerTranscodingVideoThumbnailFileUrl } from '../runner-urls.js'
 import { AbstractVODTranscodingJobHandler } from './abstract-vod-transcoding-job-handler.js'
 import { loadRunnerVideo, onVODWebVideoOrAudioMergeTranscodingJob } from './shared/utils.js'
 
@@ -21,12 +21,14 @@ type CreateOptions = {
   fps: number
   priority: number
   deleteInputFileId: number | null
+  canMoveVideoState: boolean
   dependsOnRunnerJob?: MRunnerJob
 }
 
 // eslint-disable-next-line max-len
-export class VODAudioMergeTranscodingJobHandler extends AbstractVODTranscodingJobHandler<CreateOptions, RunnerJobUpdatePayload, VODAudioMergeTranscodingSuccess> {
-
+export class VODAudioMergeTranscodingJobHandler
+  extends AbstractVODTranscodingJobHandler<CreateOptions, RunnerJobUpdatePayload, VODAudioMergeTranscodingSuccess>
+{
   async create (options: CreateOptions) {
     const { video, resolution, fps, priority, dependsOnRunnerJob } = options
 
@@ -34,7 +36,7 @@ export class VODAudioMergeTranscodingJobHandler extends AbstractVODTranscodingJo
     const payload: RunnerJobVODAudioMergeTranscodingPayload = {
       input: {
         audioFileUrl: generateRunnerTranscodingVideoInputFileUrl(jobUUID, video.uuid),
-        previewFileUrl: generateRunnerTranscodingVideoPreviewFileUrl(jobUUID, video.uuid)
+        previewFileUrl: generateRunnerTranscodingVideoThumbnailFileUrl(jobUUID, video.uuid)
       },
       output: {
         resolution,
@@ -43,7 +45,7 @@ export class VODAudioMergeTranscodingJobHandler extends AbstractVODTranscodingJo
     }
 
     const privatePayload: RunnerJobVODWebVideoTranscodingPrivatePayload = {
-      ...pick(options, [ 'isNewVideo', 'deleteInputFileId' ]),
+      ...pick(options, [ 'isNewVideo', 'deleteInputFileId', 'canMoveVideoState' ]),
 
       videoUUID: video.uuid
     }
@@ -80,7 +82,9 @@ export class VODAudioMergeTranscodingJobHandler extends AbstractVODTranscodingJo
 
     logger.info(
       'Runner VOD audio merge transcoding job %s for %s ended.',
-      runnerJob.uuid, video.uuid, this.lTags(video.uuid, runnerJob.uuid)
+      runnerJob.uuid,
+      video.uuid,
+      this.lTags(video.uuid, runnerJob.uuid)
     )
   }
 }

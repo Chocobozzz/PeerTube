@@ -35,7 +35,7 @@ export class LiveStreamInformationComponent implements OnInit {
 
     const errors: { [id in LiveVideoErrorType]: string } = {
       [LiveVideoError.BAD_SOCKET_HEALTH]: $localize`Server too slow`,
-      [LiveVideoError.BLACKLISTED]: $localize`Live blacklisted`,
+      [LiveVideoError.BLACKLISTED]: $localize`Live blocked by the platform`,
       [LiveVideoError.DURATION_EXCEEDED]: $localize`Max duration exceeded`,
       [LiveVideoError.FFMPEG_ERROR]: $localize`Server error`,
       [LiveVideoError.QUOTA_EXCEEDED]: $localize`Quota exceeded`,

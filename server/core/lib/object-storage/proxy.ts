@@ -1,10 +1,10 @@
-import express from 'express'
-import { PassThrough, pipeline } from 'stream'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { buildReinjectVideoFileTokenQuery } from '@server/controllers/shared/m3u8-playlist.js'
 import { logger } from '@server/helpers/logger.js'
 import { StreamReplacer } from '@server/helpers/stream-replacer.js'
-import { MStreamingPlaylist, MVideo } from '@server/types/models/index.js'
+import { MVideo } from '@server/types/models/index.js'
+import express from 'express'
+import { PassThrough, pipeline } from 'stream'
 import { injectQueryToPlaylistUrls } from '../hls.js'
 import { getHLSFileReadStream, getWebVideoFileReadStream } from './videos.js'
 
@@ -36,18 +36,17 @@ export async function proxifyWebVideoFile (options: {
 export async function proxifyHLS (options: {
   req: express.Request
   res: express.Response
-  playlist: MStreamingPlaylist
   video: MVideo
   filename: string
   reinjectVideoFileToken: boolean
 }) {
-  const { req, res, playlist, video, filename, reinjectVideoFileToken } = options
+  const { req, res, video, filename, reinjectVideoFileToken } = options
 
   logger.debug('Proxifying HLS file %s from object storage.', filename)
 
   try {
     const { response: s3Response, stream } = await getHLSFileReadStream({
-      playlist: playlist.withVideo(video),
+      video,
       filename,
       rangeHeader: req.header('range')
     })

@@ -66,7 +66,7 @@ export {
 async function createEditionTasks (req: express.Request, res: express.Response) {
   const files = req.files as Express.Multer.File[]
   const body = req.body as VideoStudioCreateEdition
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
 
   video.state = VideoState.TO_EDIT
   await video.save()

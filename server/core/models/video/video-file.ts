@@ -12,7 +12,13 @@ import { logger } from '@server/helpers/logger.js'
 import { extractVideo } from '@server/helpers/video.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { buildRemoteUrl } from '@server/lib/activitypub/url.js'
-import { getHLSPrivateFileUrl, getObjectStoragePublicFileUrl, getWebVideoPrivateFileUrl } from '@server/lib/object-storage/index.js'
+import {
+  buildObjectStorageHLSPrivateFileUrl,
+  buildObjectStoragePublicFileUrl,
+  buildObjectStorageWebVideoPrivateFileUrl,
+  generateHLSObjectStorageKey,
+  generateWebVideoObjectStorageKey
+} from '@server/lib/object-storage/index.js'
 import { getFSTorrentFilePath } from '@server/lib/paths.js'
 import { getVideoFileMimeType } from '@server/lib/video-file.js'
 import { isVideoInPrivateDirectory } from '@server/lib/video-privacy.js'
@@ -191,22 +197,20 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
   @Column
   declare metadataUrl: string
 
-  // Could be null for remote files
   @AllowNull(true)
   @Column
   declare fileUrl: string
 
-  // Could be null for live files
+  // Can be null for live files
   @AllowNull(true)
   @Column
   declare filename: string
 
-  // Could be null for remote files
   @AllowNull(true)
   @Column
   declare torrentUrl: string
 
-  // Could be null for live files
+  // Can be null for live files
   @AllowNull(true)
   @Column
   declare torrentFilename: string
@@ -502,26 +506,32 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
 
   getObjectStorageUrl (video: MVideo) {
     if (video.hasPrivateStaticPath() && CONFIG.OBJECT_STORAGE.PROXY.PROXIFY_PRIVATE_FILES === true) {
-      return this.getPrivateObjectStorageUrl(video)
+      return this.buildPrivateObjectStorageUrl(video)
     }
 
-    return this.getPublicObjectStorageUrl()
+    return this.buildPublicObjectStorageUrl(video)
   }
 
-  private getPrivateObjectStorageUrl (video: MVideo) {
+  private buildPrivateObjectStorageUrl (video: MVideo) {
     if (this.isHLS()) {
-      return getHLSPrivateFileUrl(video, this.filename)
+      return buildObjectStorageHLSPrivateFileUrl(video, this.filename)
     }
 
-    return getWebVideoPrivateFileUrl(this.filename)
+    return buildObjectStorageWebVideoPrivateFileUrl(this.filename)
   }
 
-  private getPublicObjectStorageUrl () {
+  private buildPublicObjectStorageUrl (video: MVideo) {
     if (this.isHLS()) {
-      return getObjectStoragePublicFileUrl(this.fileUrl, CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
+      return buildObjectStoragePublicFileUrl({
+        bucket: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS,
+        key: generateHLSObjectStorageKey(video, this.filename)
+      })
     }
 
-    return getObjectStoragePublicFileUrl(this.fileUrl, CONFIG.OBJECT_STORAGE.WEB_VIDEOS)
+    return buildObjectStoragePublicFileUrl({
+      bucket: CONFIG.OBJECT_STORAGE.WEB_VIDEOS,
+      key: generateWebVideoObjectStorageKey(this.filename)
+    })
   }
 
   // ---------------------------------------------------------------------------
@@ -585,13 +595,7 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
   getTorrentUrl () {
     if (!this.torrentFilename) return null
 
-    return WEBSERVER.URL + this.getTorrentStaticPath()
-  }
-
-  getTorrentStaticPath () {
-    if (!this.torrentFilename) return null
-
-    return join(LAZY_STATIC_PATHS.TORRENTS, this.torrentFilename)
+    return WEBSERVER.URL + join(LAZY_STATIC_PATHS.TORRENTS, this.torrentFilename)
   }
 
   getTorrentDownloadUrl () {

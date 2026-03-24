@@ -106,24 +106,6 @@ export interface CustomConfig {
     }
   }
 
-  cache: {
-    previews: {
-      size: number
-    }
-
-    captions: {
-      size: number
-    }
-
-    torrents: {
-      size: number
-    }
-
-    storyboards: {
-      size: number
-    }
-  }
-
   signup: {
     enabled: boolean
     limit: number
@@ -187,6 +169,7 @@ export interface CustomConfig {
     resolutions: ConfigResolutions
 
     alwaysTranscodeOriginalResolution: boolean
+    alwaysTranscodePodcastOptimizedAudio: boolean
 
     fps: {
       max: number
@@ -229,6 +212,11 @@ export interface CustomConfig {
       fps: {
         max: number
       }
+    }
+
+    dvr: {
+      // In seconds, 0 means no DVR
+      maxWindow: number
     }
   }
 

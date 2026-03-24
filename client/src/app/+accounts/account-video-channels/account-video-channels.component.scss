@@ -1,7 +1,7 @@
-@use 'sass:math';
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_miniature' as *;
+@use "sass:math";
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_miniature" as *;
 
 .margin-content {
   @include grid-videos-miniature-margins;
@@ -77,12 +77,11 @@ my-subscribe-button {
   position: relative;
 
   my-video-miniature {
-    min-width: $video-thumbnail-medium-width;
+    min-width: $video-thumbnail-medium-width; // Keep it sync with thumbnailSizes defined in template
     max-width: $video-thumbnail-medium-width;
 
     @include margin-right(15px);
   }
-
 }
 
 .videos-overflow-workaround {

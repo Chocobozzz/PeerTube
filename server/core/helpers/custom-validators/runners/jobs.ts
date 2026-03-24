@@ -1,4 +1,5 @@
 import {
+  GenerateStoryboardSuccess,
   LiveRTMPHLSTranscodingSuccess,
   RunnerJobSuccessPayload,
   RunnerJobType,
@@ -7,8 +8,7 @@ import {
   VODAudioMergeTranscodingSuccess,
   VODHLSTranscodingSuccess,
   VODWebVideoTranscodingSuccess,
-  VideoStudioTranscodingSuccess,
-  GenerateStoryboardSuccess
+  VideoStudioTranscodingSuccess
 } from '@peertube/peertube-models'
 import { CONSTRAINTS_FIELDS, RUNNER_JOB_STATES } from '@server/initializers/constants.js'
 import { UploadFilesForCheck } from 'express'
@@ -76,6 +76,10 @@ export function isRunnerJobStateValid (value: any) {
 
 export function isRunnerJobArrayOfStateValid (value: any) {
   return isArray(value) && value.every(v => isRunnerJobStateValid(v))
+}
+
+export function isRunnerJobArrayOfTypeValid (value: any) {
+  return isArray(value) && value.every(v => isRunnerJobTypeValid(v))
 }
 
 // ---------------------------------------------------------------------------

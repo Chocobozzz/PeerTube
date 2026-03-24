@@ -1,7 +1,8 @@
 import { ffprobePromise, getChaptersFromContainer } from '@peertube/peertube-ffmpeg'
-import { isPeerTubeError, ThumbnailType, VideoCreate } from '@peertube/peertube-models'
+import { isPeerTubeError, VideoCreate } from '@peertube/peertube-models'
 import { uuidToShort } from '@peertube/peertube-node-utils'
 import { getResumableUploadPath } from '@server/helpers/upload.js'
+import { getVideoThumbnailFile } from '@server/helpers/video.js'
 import { LocalVideoCreator } from '@server/lib/local-video-creator.js'
 import { Redis } from '@server/lib/redis.js'
 import { setupUploadResumableRoutes, uploadx } from '@server/lib/uploadx.js'
@@ -117,14 +118,7 @@ async function addVideo (options: {
   })
   logger.debug(`Got ${containerChapters.length} chapters from video "${videoInfo.name}" container`, { containerChapters, ...lTags() })
 
-  const thumbnails = [ { type: ThumbnailType.MINIATURE, field: 'thumbnailfile' }, { type: ThumbnailType.PREVIEW, field: 'previewfile' } ]
-    .filter(({ field }) => !!files?.[field]?.[0])
-    .map(({ type, field }) => ({
-      path: files[field][0].path,
-      type,
-      automaticallyGenerated: false,
-      keepOriginal: false
-    }))
+  const thumbnailfile = getVideoThumbnailFile(files)
 
   const localVideoCreator = new LocalVideoCreator({
     lTags,
@@ -156,7 +150,13 @@ async function addVideo (options: {
 
     videoAttributeResultHook: 'filter:api.video.upload.video-attribute.result',
 
-    thumbnails
+    thumbnail: thumbnailfile
+      ? {
+        path: thumbnailfile.path,
+        automaticallyGenerated: false,
+        keepOriginal: false
+      }
+      : undefined
   })
 
   try {

@@ -239,7 +239,7 @@ export class YoutubeDLCLI {
 
   private wrapWithJSRuntimeOptions (args: string[]) {
     if (CONFIG.IMPORT.VIDEOS.HTTP.YOUTUBE_DL_RELEASE.NAME === 'yt-dlp') {
-      return [ '--js-runtimes', 'node' ].concat(args)
+      return [ '--js-runtimes', 'node:' + process.execPath ].concat(args)
     }
 
     return args

@@ -15,6 +15,7 @@ export interface ServerStats extends ActivityPubMessagesSuccess, ActivityPubMess
 
   totalLocalVideos: number
   totalLocalVideoViews: number
+  totalLocalVideoDownloads: number
   totalLocalVideoComments: number
   totalLocalVideoFilesSize: number
 

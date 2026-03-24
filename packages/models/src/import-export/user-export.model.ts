@@ -11,7 +11,6 @@ export interface UserExport {
   // In bytes
   size: number
 
-  fileUrl: string
   privateDownloadUrl: string
 
   createdAt: string | Date

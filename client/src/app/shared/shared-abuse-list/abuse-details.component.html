@@ -8,19 +8,19 @@
         <span class="moderation-expanded-label" i18n>Reporter</span>
 
         <span class="moderation-expanded-text">
-          <a [routerLink]="[ '.' ]" [queryParams]="{ 'search': 'reporter:&quot;' + abuse().reporterAccount.displayName + '&quot;' }"
-            class="chip me-1"
+          <a [routerLink]="[ '.' ]" [queryParams]="{ 'searchReporter': abuse().reporterAccount.displayName }"
+            class="chip"
           >
             <my-actor-avatar size="18" [actor]="abuse().reporterAccount" actorType="account"></my-actor-avatar>
             <span class="muted">{{ abuse().reporterAccount.nameWithHost }}</span>
           </a>
 
           <a
-            [routerLink]="[ '.' ]" [queryParams]="{ 'search': 'reporter:&quot;' + abuse().reporterAccount.displayName + '&quot;' }"
+            [routerLink]="[ '.' ]" [queryParams]="{ 'searchReporter': abuse().reporterAccount.displayName }"
             class="ms-auto muted abuse-details-links"
           >
             <ng-container i18n>{abuse().countReportsForReporter, plural, =1 {1 report} other {{{ abuse().countReportsForReporter }} reports}}</ng-container>
-            <my-global-icon iconName="flag"></my-global-icon>
+            <my-global-icon class="d-inline-block ms-1" iconName="flag"></my-global-icon>
           </a>
         </span>
       </div>
@@ -32,8 +32,8 @@
 
         <span class="moderation-expanded-text">
           <a
-            [routerLink]="[ '.' ]" [queryParams]="{ 'search': 'reportee:&quot;' +abuse().flaggedAccount.displayName + '&quot;' }"
-            class="chip me-1"
+            [routerLink]="[ '.' ]" [queryParams]="{ 'searchReportee': abuse().flaggedAccount.displayName }"
+            class="chip"
           >
             <my-actor-avatar size="18" [actor]="abuse().flaggedAccount" actorType="account"></my-actor-avatar>
             <span class="muted">{{ abuse().flaggedAccount ? abuse().flaggedAccount.nameWithHost : '' }}</span>
@@ -41,11 +41,11 @@
 
           @if (isAdminView()) {
             <a
-              [routerLink]="[ '.' ]" [queryParams]="{ 'search': 'reportee:&quot;' +abuse().flaggedAccount.displayName + '&quot;' }"
+              [routerLink]="[ '.' ]" [queryParams]="{ 'searchReportee': abuse().flaggedAccount.displayName }"
               class="ms-auto muted abuse-details-links"
             >
               <ng-container i18n>{abuse().countReportsForReportee, plural, =1 {1 report} other {{{ abuse().countReportsForReportee }} reports}}</ng-container>
-              <my-global-icon iconName="flag"></my-global-icon>
+              <my-global-icon class="d-inline-block ms-1" iconName="flag"></my-global-icon>
             </a>
           }
         </span>
@@ -63,7 +63,7 @@
     <div class="mt-3 d-flex">
       <span class="moderation-expanded-label">
         <ng-container i18n>Report</ng-container>
-        <a [routerLink]="[ '.' ]" [queryParams]="{ 'search': '#' + abuse().id  }" class="ms-1 muted">#{{ abuse().id }}</a>
+        <a [routerLink]="[ '.' ]" [queryParams]="{ 'id': abuse().id  }" class="ms-1 muted">#{{ abuse().id }}</a>
       </span>
 
       <span class="moderation-expanded-text" [innerHTML]="abuse().reasonHtml"></span>
@@ -72,7 +72,7 @@
     @if (predefinedReasons) {
       <div class="mt-2 d-flex gap-1">
         @for (reason of predefinedReasons; track reason) {
-          <a [routerLink]="[ '.' ]" [queryParams]="{ 'search': 'tag:' + reason.id  }" class="pt-badge badge-secondary">{{ reason.label }}</a>
+          <a [routerLink]="[ '.' ]" [queryParams]="{ 'predefinedReason': reason.id  }" class="pt-badge badge-secondary">{{ reason.label }}</a>
         }
       </div>
     }

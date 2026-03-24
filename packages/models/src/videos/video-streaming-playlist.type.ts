@@ -3,3 +3,5 @@ export const VideoStreamingPlaylistType = {
 } as const
 
 export type VideoStreamingPlaylistType_Type = typeof VideoStreamingPlaylistType[keyof typeof VideoStreamingPlaylistType]
+
+export type VideoStreamingPlaylistTypeString = 'hls' | 'unknown'

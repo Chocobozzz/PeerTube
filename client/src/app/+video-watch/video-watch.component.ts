@@ -838,7 +838,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       : undefined
 
     const liveOptions = video.isLive
-      ? { latencyMode: liveVideo.latencyMode }
+      ? { latencyMode: liveVideo.latencyMode, dvrEnabled: liveVideo.dvrWindow > 0 }
       : undefined
 
     return {
@@ -870,9 +870,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         !video.canBypassPassword(this.authUser),
       videoPassword: () => videoPassword,
 
-      poster: video.isNSFWBlurForUser(loggedInOrAnonymousUser, this.serverConfig)
+      thumbnails: video.isNSFWBlurForUser(loggedInOrAnonymousUser, this.serverConfig)
         ? null
-        : video.previewUrl,
+        : video.thumbnails,
 
       nsfwWarning: video.isNSFWHiddenOrWarned(loggedInOrAnonymousUser, this.serverConfig)
         ? {
@@ -928,7 +928,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       webVideo: {
         videoFiles: video.files
       }
-    }
+    } satisfies PeerTubePlayerLoadOptions
   }
 
   private async subscribeToLiveEventsIfNeeded (oldVideo: VideoDetails, newVideo: VideoDetails) {
@@ -980,7 +980,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.peertubePlayer.disable()
 
     if (hasPlayed || !this.video.isNSFWBlurForUser(this.authUser || this.anonymousUser, this.serverConfig)) {
-      this.peertubePlayer.setPoster(this.video.previewPath)
+      this.peertubePlayer.setPoster(this.video.thumbnails)
     }
   }
 

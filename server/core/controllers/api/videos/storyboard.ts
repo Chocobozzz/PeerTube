@@ -1,12 +1,13 @@
-import express from 'express'
 import { getVideoWithAttributes } from '@server/helpers/video.js'
 import { StoryboardModel } from '@server/models/video/storyboard.js'
-import { asyncMiddleware, videosGetValidator } from '../../../middlewares/index.js'
+import express from 'express'
+import { asyncMiddleware, videoGetValidatorFactory } from '../../../middlewares/index.js'
 
 const storyboardRouter = express.Router()
 
-storyboardRouter.get('/:id/storyboards',
-  asyncMiddleware(videosGetValidator),
+storyboardRouter.get(
+  '/:id/storyboards',
+  asyncMiddleware(videoGetValidatorFactory('with-blacklist')),
   asyncMiddleware(listStoryboards)
 )
 

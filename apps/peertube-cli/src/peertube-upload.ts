@@ -11,7 +11,6 @@ type UploadOptions = {
   username?: string
   password?: string
   thumbnail?: string
-  preview?: string
   file?: string
   videoName?: string
   category?: number
@@ -38,7 +37,6 @@ export function defineUploadProgram () {
     .option('-U, --username <username>', 'Username')
     .option('-p, --password <token>', 'Password')
     .option('-b, --thumbnail <thumbnailPath>', 'Thumbnail path')
-    .option('--preview <previewPath>', 'Preview path')
     .option('-f, --file <file>', 'Video absolute file path')
     .option('-n, --video-name <name>', 'Video name')
     .option('-c, --category <category_number>', 'Category number', parseInt)
@@ -105,8 +103,7 @@ async function run (options: UploadOptions) {
     ...baseAttributes,
 
     fixture: options.file,
-    thumbnailfile: options.thumbnail,
-    previewfile: options.preview
+    thumbnailfile: options.thumbnail
   }
 
   try {

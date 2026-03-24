@@ -1,4 +1,8 @@
-export class CachePromiseFactory <A, R> {
+/**
+ * A helper to avoid multiple concurrent calls to the same promise
+ * It is used in particular for refreshing remote actors, to avoid multiple refreshes at the same time.
+ */
+export class CachePromiseFactory<A, R> {
   private readonly running = new Map<string, Promise<R>>()
 
   constructor (

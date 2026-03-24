@@ -114,16 +114,22 @@ export async function removeHLSFile (video: MVideoWithAllFiles, fileToDeleteId: 
 
 // ---------------------------------------------------------------------------
 
-export async function removeAllWebVideoFiles (video: MVideoWithAllFiles) {
+export async function removeAllWebVideoFiles (video: MVideoWithAllFiles, options: {
+  resolutionExceptions?: number[]
+} = {}) {
+  const { resolutionExceptions = [] } = options
+
   const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
   try {
     for (const file of video.VideoFiles) {
+      if (resolutionExceptions.includes(file.resolution)) continue
+
       await video.removeWebVideoFile(file)
       await file.destroy()
-    }
 
-    video.VideoFiles = []
+      video.VideoFiles = video.VideoFiles.filter(f => f.id !== file.id)
+    }
   } finally {
     videoFileMutexReleaser()
   }
@@ -222,11 +228,10 @@ export async function saveNewOriginalFileIfNeeded (video: MVideo, videoFile: MVi
   const sourcePath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, videoFile)
 
   if (CONFIG.OBJECT_STORAGE.ENABLED) {
-    const fileUrl = await storeOriginalVideoFile(sourcePath, videoSource.keptOriginalFilename)
+    await storeOriginalVideoFile(sourcePath, videoSource.keptOriginalFilename)
     await remove(sourcePath)
 
     videoSource.storage = FileStorage.OBJECT_STORAGE
-    videoSource.fileUrl = fileUrl
   } else {
     const destinationPath = VideoPathManager.Instance.getFSOriginalVideoFilePath(videoSource.keptOriginalFilename)
     await move(sourcePath, destinationPath)

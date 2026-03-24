@@ -1,4 +1,4 @@
-import { UserActorImageJSON } from './actor-export.model.js'
+import { ImageExportJSON } from './image-export.model.js'
 
 export interface AccountExportJSON {
   url: string
@@ -10,7 +10,7 @@ export interface AccountExportJSON {
   updatedAt: string
   createdAt: string
 
-  avatars: UserActorImageJSON[]
+  avatars: ImageExportJSON[]
 
   archiveFiles: {
     avatar: string | null

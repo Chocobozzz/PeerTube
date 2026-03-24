@@ -9,7 +9,7 @@ import { VideoFileStream } from '@peertube/peertube-models'
 import { computeOutputFPS } from '@server/helpers/ffmpeg/index.js'
 import { createTorrentAndSetInfoHash } from '@server/lib/webtorrent.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
+import { MVideoFile, MVideoFull } from '@server/types/models/index.js'
 import { Job } from 'bullmq'
 import { move, remove } from 'fs-extra/esm'
 import { copyFile } from 'fs/promises'
@@ -21,15 +21,15 @@ import { buildNewFile, saveNewOriginalFileIfNeeded } from '../video-file.js'
 import { addLocalOrRemoteStoryboardJobIfNeeded } from '../video-jobs.js'
 import { VideoPathManager } from '../video-path-manager.js'
 import { buildFFmpegVOD } from './shared/index.js'
+import { canDoQuickTranscode } from './transcoding-quick-transcode.js'
 import { buildOriginalFileResolution } from './transcoding-resolutions.js'
 
 // Optimize the original video file and replace it. The resolution is not changed.
 export async function optimizeOriginalVideofile (options: {
-  video: MVideoFullLight
-  quickTranscode: boolean
+  video: MVideoFull
   job: Job
 }) {
-  const { quickTranscode, job } = options
+  const { job } = options
 
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const newExtname = '.mp4'
@@ -44,7 +44,7 @@ export async function optimizeOriginalVideofile (options: {
     const result = await VideoPathManager.Instance.makeAvailableVideoFile(inputVideoFile, async videoInputPath => {
       const videoOutputPath = join(transcodeDirectory, video.id + '-transcoded' + newExtname)
 
-      const transcodeType: TranscodeVODOptionsType = quickTranscode
+      const transcodeType: TranscodeVODOptionsType = await canDoQuickTranscode(videoInputPath, CONFIG.TRANSCODING.FPS.MAX)
         ? 'quick-transcode'
         : 'video'
 
@@ -77,7 +77,7 @@ export async function optimizeOriginalVideofile (options: {
 
 // Transcode the original/old/source video file to a lower resolution compatible with web browsers
 export async function transcodeNewWebVideoResolution (options: {
-  video: MVideoFullLight
+  video: MVideoFull
   resolution: number
   fps: number
   job: Job
@@ -123,7 +123,7 @@ export async function transcodeNewWebVideoResolution (options: {
 
 // Merge an image with an audio file to create a video
 export async function mergeAudioVideofile (options: {
-  video: MVideoFullLight
+  video: MVideoFull
   resolution: number
   fps: number
   job: Job
@@ -142,15 +142,15 @@ export async function mergeAudioVideofile (options: {
     const result = await VideoPathManager.Instance.makeAvailableVideoFile(inputVideoFile, async audioInputPath => {
       const videoOutputPath = join(transcodeDirectory, video.id + '-transcoded' + newExtname)
 
-      // If the user updates the video preview during transcoding
-      const previewPath = video.getPreview().getPath()
-      const tmpPreviewPath = join(CONFIG.STORAGE.TMP_DIR, basename(previewPath))
-      await copyFile(previewPath, tmpPreviewPath)
+      // If the user updates the video thumbnails during transcoding
+      const thumbnailPath = video.getBestThumbnail('16:9').getFSPath()
+      const tmpThumbnailPath = join(CONFIG.STORAGE.TMP_DIR, basename(thumbnailPath))
+      await copyFile(thumbnailPath, tmpThumbnailPath)
 
       const transcodeOptions: MergeAudioTranscodeOptions = {
         type: 'merge-audio',
 
-        videoInputPath: tmpPreviewPath,
+        videoInputPath: tmpThumbnailPath,
         audioPath: audioInputPath,
 
         outputPath: videoOutputPath,
@@ -164,9 +164,9 @@ export async function mergeAudioVideofile (options: {
       try {
         await buildFFmpegVOD(job).transcode(transcodeOptions)
 
-        await remove(tmpPreviewPath)
+        await remove(tmpThumbnailPath)
       } catch (err) {
-        await remove(tmpPreviewPath)
+        await remove(tmpThumbnailPath)
         throw err
       }
 
@@ -185,7 +185,7 @@ export async function mergeAudioVideofile (options: {
 }
 
 export async function onWebVideoFileTranscoding (options: {
-  video: MVideoFullLight
+  video: MVideoFull
   videoOutputPath: string
   wasAudioFile?: boolean // default false
   deleteWebInputVideoFile?: MVideoFile

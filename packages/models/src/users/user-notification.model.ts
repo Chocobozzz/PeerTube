@@ -2,7 +2,7 @@ import { FollowState } from '../actors/index.js'
 import { AbuseStateType } from '../moderation/index.js'
 import { PluginType_Type } from '../plugins/index.js'
 import { VideoChannelCollaboratorStateType } from '../videos/index.js'
-import { VideoConstant } from '../videos/video-constant.model.js'
+import { ConstantLabel } from '../common/constant-label.model.js'
 import { VideoStateType } from '../videos/video-state.enum.js'
 import { UserNotificationData } from './user-notification-data.model.js'
 
@@ -156,14 +156,14 @@ export interface UserNotification {
 
   videoCaption?: {
     id: number
-    language: VideoConstant<string>
+    language: ConstantLabel<string>
     video: VideoInfo
   }
 
   videoChannelCollaborator?: {
     id: number
 
-    state: VideoConstant<VideoChannelCollaboratorStateType>
+    state: ConstantLabel<VideoChannelCollaboratorStateType>
 
     channel: ActorInfo
     channelOwner: ActorInfo

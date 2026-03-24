@@ -52,29 +52,20 @@ describe('Test HLS with audio and video splitted', function () {
       await completeCheckHlsPlaylist({ servers, videoUUID: uuid, hlsOnly, splittedAudio: true, objectStorageBaseUrl })
     })
 
-    if (concurrency === 1) {
-      it('Should have processed audio just after first video resolution', async function () {
-        const { data } = await servers[0].jobs.list({ jobType: 'video-transcoding' })
+    it('Should have processed audio just after first video resolution', async function () {
+      const { data } = await servers[0].jobs.list({ jobType: 'video-transcoding' })
 
-        const hlsJobs = data.filter(job => {
-          const data = job.data as HLSTranscodingPayload
+      const hlsJobs = data.filter(job => {
+        const data = job.data as HLSTranscodingPayload
 
-          return data.videoUUID === videoUUIDs[0] && data.type === 'new-resolution-to-hls'
-        })
-
-        const dataForVideo = sortBy(hlsJobs, 'processedOn')
-
-        expect((dataForVideo[0].data as HLSTranscodingPayload).resolution).to.equal(720)
-
-        // FIXME: next job after parent succeeded should be audio but bullmq seems to fire another one when it updates the child state
-        // It's the reason why another video stream transcoding is executed before the audio
-        try {
-          expect((dataForVideo[1].data as HLSTranscodingPayload).resolution).to.equal(0)
-        } catch (err) {
-          expect((dataForVideo[2].data as HLSTranscodingPayload).resolution).to.equal(0)
-        }
+        return data.videoUUID === videoUUIDs[0] && data.type === 'new-resolution-to-hls'
       })
-    }
+
+      const dataForVideo = sortBy(hlsJobs, 'processedOn')
+
+      expect((dataForVideo[0].data as HLSTranscodingPayload).resolution).to.equal(720)
+      expect((dataForVideo[1].data as HLSTranscodingPayload).resolution).to.equal(0)
+    })
 
     it('Should upload an audio file and transcode it to HLS', async function () {
       this.timeout(120000)
@@ -169,7 +160,6 @@ describe('Test HLS with audio and video splitted', function () {
 
   for (const concurrency of [ 1, 2 ]) {
     describe(`With concurrency ${concurrency}`, function () {
-
       describe('With Web Video & HLS enabled', function () {
         runTestSuite({ hlsOnly: false, concurrency })
       })

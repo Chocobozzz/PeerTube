@@ -62,7 +62,11 @@ async function buildActivities (actor: MActorLight, start: number, count: number
 
   for (const video of data.data) {
     const byActor = video.VideoChannel.Account.Actor
-    const createActivityAudience = getVideoAudience(byActor, video.privacy)
+    const createActivityAudience = getVideoAudience({
+      account: video.VideoChannel.Account,
+      channel: video.VideoChannel,
+      privacy: video.privacy
+    })
 
     // This is a shared video
     if (video.VideoShares !== undefined && video.VideoShares.length !== 0) {

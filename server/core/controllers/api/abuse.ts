@@ -35,7 +35,8 @@ const abuseRouter = express.Router()
 
 abuseRouter.use(apiRateLimiter)
 
-abuseRouter.get('/',
+abuseRouter.get(
+  '/',
   openapiOperationDoc({ operationId: 'getAbuses' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_ABUSES),
@@ -46,32 +47,32 @@ abuseRouter.get('/',
   abuseListForAdminsValidator,
   asyncMiddleware(listAbusesForAdmins)
 )
-abuseRouter.put('/:id',
+abuseRouter.put(
+  '/:id',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_ABUSES),
   asyncMiddleware(abuseUpdateValidator),
   asyncRetryTransactionMiddleware(updateAbuse)
 )
-abuseRouter.post('/',
-  authenticate,
-  asyncMiddleware(abuseReportValidator),
-  asyncRetryTransactionMiddleware(reportAbuse)
-)
-abuseRouter.delete('/:id',
+abuseRouter.post('/', authenticate, asyncMiddleware(abuseReportValidator), asyncRetryTransactionMiddleware(reportAbuse))
+abuseRouter.delete(
+  '/:id',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_ABUSES),
   asyncMiddleware(abuseGetValidator),
   asyncRetryTransactionMiddleware(deleteAbuse)
 )
 
-abuseRouter.get('/:id/messages',
+abuseRouter.get(
+  '/:id/messages',
   authenticate,
   asyncMiddleware(getAbuseValidator),
   checkAbuseValidForMessagesValidator,
   asyncRetryTransactionMiddleware(listAbuseMessages)
 )
 
-abuseRouter.post('/:id/messages',
+abuseRouter.post(
+  '/:id/messages',
   authenticate,
   asyncMiddleware(getAbuseValidator),
   checkAbuseValidForMessagesValidator,
@@ -79,7 +80,8 @@ abuseRouter.post('/:id/messages',
   asyncRetryTransactionMiddleware(addAbuseMessage)
 )
 
-abuseRouter.delete('/:id/messages/:messageId',
+abuseRouter.delete(
+  '/:id/messages/:messageId',
   authenticate,
   asyncMiddleware(getAbuseValidator),
   checkAbuseValidForMessagesValidator,
@@ -166,7 +168,7 @@ async function deleteAbuse (req: express.Request, res: express.Response) {
 }
 
 async function reportAbuse (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.videoAll
+  const videoInstance = res.locals.videoFull
   const commentInstance = res.locals.videoCommentFull
   const accountInstance = res.locals.account
 

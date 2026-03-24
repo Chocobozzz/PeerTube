@@ -6,11 +6,10 @@ import { readFile } from 'fs/promises'
 import type { Instance as MagnetUriInstance } from 'magnet-uri'
 import type { ParseTorrent } from 'parse-torrent'
 import { basename, join } from 'path'
-import type { Torrent } from 'webtorrent'
-import WebTorrent from 'webtorrent'
+import type { Torrent, Instance, WebTorrent } from 'webtorrent'
 
 export async function checkWebTorrentWorks (magnetUri: string, pathMatch?: RegExp) {
-  let res: { webtorrent: WebTorrent.Instance, torrent: WebTorrent.Torrent }
+  let res: { webtorrent: Instance, torrent: Torrent }
 
   try {
     res = await webtorrentAdd(magnetUri)
@@ -56,13 +55,14 @@ export async function magnetUriEncode (data: MagnetUriInstance) {
 // ---------------------------------------------------------------------------
 
 async function webtorrentAdd (torrentId: string) {
-  const WebTorrent = (await import('webtorrent')).default
+  const WebTorrent: WebTorrent = (await import('webtorrent')).default
 
   const webtorrent = new WebTorrent({
     natUpnp: false,
     natPmp: false,
     utp: false,
-    lsd: false
+    lsd: false,
+    dht: false
   } as any)
 
   webtorrent.on('error', err => console.error('Error in webtorrent', err))

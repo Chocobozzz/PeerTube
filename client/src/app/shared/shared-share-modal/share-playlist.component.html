@@ -1,0 +1,116 @@
+<div class="playlist">
+  @if (video()) {
+    <h5 i18n class="text-center mb-4">Share the playlist</h5>
+  }
+
+  @if (isPrivatePlaylist()) {
+    <my-alert type="primary">
+      <div i18n>This playlist is private so you won't be able to share it with external users</div>
+
+      <a
+        i18n
+        class="peertube-button-link primary-button"
+        [routerLink]="[ '/my-library/video-playlists/update', playlist().shortUUID ]"
+        target="_blank"
+        rel="noopener noreferrer"
+      >Update playlist privacy</a>
+    </my-alert>
+  }
+
+  <div ngbNav #nav="ngbNav" class="nav-tabs" [(activeId)]="activePlaylistId">
+    <ng-container ngbNavItem="url">
+      <a ngbNavLink i18n>URL</a>
+
+      <ng-template ngbNavContent>
+        <div class="nav-content">
+          <my-input-text
+            inputId="playlist-url"
+            i18n-ariaLabel
+            ariaLabel="Playlist URL"
+            [value]="playlistUrl"
+            [withToggle]="false"
+            [withCopy]="true"
+            [show]="true"
+            [readonly]="true"
+          ></my-input-text>
+        </div>
+      </ng-template>
+    </ng-container>
+
+    <ng-container ngbNavItem="qrcode">
+      <a ngbNavLink i18n>QR-Code</a>
+
+      <ng-template ngbNavContent>
+        <div class="nav-content">
+          <qrcode [qrdata]="playlistUrl" [width]="256" level="Q"></qrcode>
+        </div>
+      </ng-template>
+    </ng-container>
+
+    <ng-container ngbNavItem="embed">
+      <a ngbNavLink i18n>Embed</a>
+
+      <ng-template ngbNavContent>
+        <div class="nav-content">
+          <my-input-text
+            inputId="playlist-embed-url"
+            i18n-ariaLabel
+            ariaLabel="Playlist embed URL"
+            [value]="customizations().onlyEmbedUrl ? playlistEmbedUrl : playlistEmbedHTML"
+            (change)="onUpdate()"
+            [withToggle]="false"
+            [withCopy]="true"
+            [show]="true"
+            [readonly]="true"
+          ></my-input-text>
+
+          @if (notSecure()) {
+            <my-alert i18n type="warning" class="mt-3">
+              The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS
+              websites).
+            </my-alert>
+          }
+
+          <div class="embed" [innerHTML]="playlistEmbedSafeHTML"></div>
+        </div>
+      </ng-template>
+    </ng-container>
+  </div>
+
+  <div [ngbNavOutlet]="nav"></div>
+
+  <div class="filters">
+    @if (video()) {
+      <div class="form-group">
+        <my-peertube-checkbox
+          inputName="includeVideoInPlaylist"
+          [(ngModel)]="customizations().includeVideoInPlaylist"
+          i18n-labelText
+          labelText="Share the playlist at this video position"
+        ></my-peertube-checkbox>
+      </div>
+    }
+
+    @if (isInEmbedTab()) {
+      <div class="form-group">
+        <my-peertube-checkbox
+          inputName="onlyEmbedUrl"
+          [(ngModel)]="customizations().onlyEmbedUrl"
+          i18n-labelText
+          labelText="Only display embed URL"
+        ></my-peertube-checkbox>
+      </div>
+
+      <div class="form-group">
+        <my-peertube-checkbox
+          inputName="responsive"
+          [(ngModel)]="customizations().responsive"
+          i18n-labelText
+          labelText="Responsive embed"
+        ></my-peertube-checkbox>
+      </div>
+    }
+
+    <my-plugin-placeholder pluginId="share-modal-playlist-settings"></my-plugin-placeholder>
+  </div>
+</div>

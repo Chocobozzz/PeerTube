@@ -198,8 +198,9 @@ export class UserRegistrationModel extends SequelizeModel<UserRegistrationModel>
     count: number
     sort: string
     search?: string
+    stateOneOf?: UserRegistrationStateType[]
   }) {
-    const { start, count, sort, search } = options
+    const { start, count, sort, search, stateOneOf } = options
 
     const where: WhereOptions = {}
 
@@ -217,6 +218,14 @@ export class UserRegistrationModel extends SequelizeModel<UserRegistrationModel>
             }
           }
         ]
+      })
+    }
+
+    if (Array.isArray(stateOneOf) && stateOneOf.length !== 0) {
+      Object.assign(where, {
+        state: {
+          [Op.in]: stateOneOf
+        }
       })
     }
 

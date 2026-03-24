@@ -185,8 +185,11 @@ async function revokeToken (
 
     TokensCache.Instance.clearCacheByToken(token.accessToken)
 
-    token.destroy()
-      .catch(err => logger.error('Cannot destroy token when revoking token.', { err }))
+    try {
+      await token.destroy()
+    } catch (err) {
+      logger.error('Cannot destroy token when revoking token.', { err })
+    }
 
     return { success: true, redirectUrl }
   }

@@ -179,14 +179,17 @@ export class VideoActionsDropdownComponent implements OnChanges {
   isVideoEditable () {
     if (!this.user) return false
 
-    return this.video().isEditableBy(this.user, this.serverService.getHTMLConfig().videoStudio.enabled)
+    return this.video().isStudioEditableBy({
+      user: this.user,
+      studioEnabled: this.serverService.getHTMLConfig().videoStudio.enabled
+    })
   }
 
   isVideoStatsAvailable () {
     if (!this.user) return false
 
-    const video = this.video()
-    return video.isLocal && video.isOwnerOrHasSeeAllVideosRight(this.user)
+    // Users that can update the video can also see its stats
+    return this.video().isUpdatableBy(this.user)
   }
 
   isVideoRemovable () {
@@ -223,6 +226,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
 
   isVideoDownloadableByAnonymous () {
     const video = this.video()
+
     return (
       video &&
       video.isLive !== true &&
@@ -235,10 +239,11 @@ export class VideoActionsDropdownComponent implements OnChanges {
     if (!this.user) return false
 
     const video = this.video()
+
     return (
       video &&
       video.isLive !== true &&
-      video.isOwnerOrHasSeeAllVideosRight(this.user)
+      video.isUpdatableBy(this.user)
     )
   }
 
@@ -279,7 +284,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
     const res = await this.confirmService.confirm(confirmMessage, $localize`Unblock ${this.video().name}`)
     if (res === false) return
 
-    this.videoBlocklistService.unblockVideo(this.video().id)
+    this.videoBlocklistService.unblockVideos(this.video().id)
       .subscribe({
         next: () => {
           const video = this.video()

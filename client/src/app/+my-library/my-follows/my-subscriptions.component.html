@@ -3,7 +3,7 @@
     <span class="total-items"> {{ getTotalTitle() }}</span>
   }
 
-  <my-advanced-input-filter class="d-block ms-auto" (search)="onSearch($event)" emitOnInit="true"></my-advanced-input-filter>
+  <my-search-input class="d-block ms-auto" (search)="onSearch($event)" emitOnInit="true"></my-search-input>
 </div>
 
 @if (pagination.totalItems === 0) {

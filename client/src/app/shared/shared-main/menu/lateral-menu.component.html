@@ -1,4 +1,7 @@
 <div class="menu">
+
+  <div class="svg-container" aria-hidden="true" [innerHTML]="lateralMenuBackground"></div>
+
   <h1>{{ config().title }}</h1>
 
   <ul class="ul-unstyle">
@@ -26,7 +29,13 @@
             <span class="label" *ngTemplateOutlet="label"></span>
           </my-unavailable-menu-entry>
         } @else {
-          <a [routerLink]="entry.routerLink" [queryParams]="globalQueryParams()" queryParamsHandling="merge" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a
+            [routerLink]="entry.routerLink"
+            [queryParams]="globalQueryParams()"
+            queryParamsHandling="merge"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
             <ng-container *ngTemplateOutlet="icon"></ng-container>
             <ng-container *ngTemplateOutlet="label"></ng-container>
           </a>

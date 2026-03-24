@@ -70,10 +70,6 @@ export class VideoSourceModel extends SequelizeModel<VideoSourceModel> {
   @Column
   declare storage: FileStorageType
 
-  @AllowNull(true)
-  @Column
-  declare fileUrl: string
-
   @ForeignKey(() => VideoModel)
   @Column
   declare videoId: number
@@ -144,7 +140,6 @@ export class VideoSourceModel extends SequelizeModel<VideoSourceModel> {
     return {
       inputFilename: this.inputFilename,
 
-      fileUrl: this.fileUrl,
       fileDownloadUrl: this.getFileDownloadUrl(),
 
       resolution: {

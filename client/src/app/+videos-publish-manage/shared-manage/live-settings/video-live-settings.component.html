@@ -86,6 +86,37 @@
           </div>
         </div>
 
+        @if (isDvrEnabledByInstance()) {
+          <div class="form-group">
+            <my-peertube-checkbox inputName="liveVideoDvrEnabled" formControlName="dvrEnabled">
+              <ng-template ptTemplate="label">
+                <ng-container i18n>Enable DVR</ng-container>
+              </ng-template>
+
+              <ng-container ngProjectAs="description">
+                <span i18n>Allows viewers to pause, rewind, and jump back to live during the stream</span>
+              </ng-container>
+            </my-peertube-checkbox>
+          </div>
+
+          @if (form.value.dvrEnabled === true) {
+            <div class="form-group ms-4">
+              <label i18n for="liveDvrWindowMinutes">DVR window</label>
+              <div class="form-group-description" i18n>Maximum is {{ getMaxDvrWindowMinutes() }} minutes</div>
+
+              <div class="number-with-unit">
+                <input type="number" id="liveDvrWindowMinutes" formControlName="dvrWindowMinutes" class="pt-input-text" />
+                <span i18n>{form.value.dvrWindowMinutes, plural, =1 {minute} other {minutes}}</span>
+              </div>
+
+
+              @if (formErrors.dvrWindowMinutes) {
+                <div class="form-error" role="alert">{{ formErrors.dvrWindowMinutes }}</div>
+              }
+            </div>
+          }
+        }
+
         @if (isSaveReplayAllowed()) {
           <div class="form-group">
             <my-peertube-checkbox inputName="liveVideoSaveReplay" formControlName="saveReplay">

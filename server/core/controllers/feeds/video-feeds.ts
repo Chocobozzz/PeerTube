@@ -199,7 +199,7 @@ function addVideosToFeed (feed: Feed, videos: VideoModel[]) {
       videos: videoFiles,
 
       embed: {
-        url: WEBSERVER.URL + video.getEmbedStaticPath(),
+        url: video.getEmbedStaticUrl(),
         allowFullscreen: true
       },
       player: {

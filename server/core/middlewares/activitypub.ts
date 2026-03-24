@@ -60,7 +60,7 @@ async function checkHttpSignature (req: Request, res: Response) {
   return wrapWithSpanAndContext('peertube.activitypub.checkHTTPSignature', async () => {
     // Compatibility with http-signature < v1.3
     const sig = req.headers['signature'] as string
-    if (sig && sig.startsWith('Signature ') === true) req.headers['signature'] = sig.replace(/^Signature /, '')
+    if (sig?.startsWith('Signature ') === true) req.headers['signature'] = sig.replace(/^Signature /, '')
 
     let parsed: ParsedDraftSignature
 

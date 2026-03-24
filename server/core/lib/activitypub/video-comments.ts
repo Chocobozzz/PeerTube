@@ -79,7 +79,7 @@ export async function resolveThread (params: ResolveThreadParams): ResolveThread
 async function resolveCommentFromDB (params: ResolveThreadParams) {
   const { url, comments, commentCreated } = params
 
-  const commentFromDatabase = await VideoCommentModel.loadByUrlAndPopulateReplyAndVideoImmutableAndAccount(url)
+  const commentFromDatabase = await VideoCommentModel.loadByUrlAndPopulateAccountAndVideoAndReply(url)
   if (!commentFromDatabase) return undefined
 
   let parentComments = comments.concat([ commentFromDatabase ])

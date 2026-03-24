@@ -7,13 +7,12 @@
   [dataLoader]="dataLoader"
   columnConfig="false"
   [bulkActions]="bulkActions"
+  refreshButton="true"
+  searchInput="true"
+  [inputFilters]="inputFilters"
   >
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No follower} =1 {1 follower} other {{{ totalRecords | myNumberFormatter }} followers}}</ng-container>
-  </ng-template>
-
-  <ng-template #captionRight>
-    <my-advanced-input-filter [filters]="searchFilters" (search)="table.onSearch($event)"></my-advanced-input-filter>
   </ng-template>
 
   <ng-template #tableCells let-follow>
@@ -26,11 +25,11 @@
 
     <td>
       @if (follow.state === 'accepted') {
-        <span class="pt-badge badge-green" i18n>Accepted</span>
+        <a routerLink="." [queryParams]="{ state: follow.state }" title="Filter by state: Accepted" class="pt-badge badge-green" i18n>Accepted</a>
       } @else if (follow.state === 'pending') {
-        <span class="pt-badge badge-yellow" i18n>Pending</span>
+        <a routerLink="." [queryParams]="{ state: follow.state }" title="Filter by state: Pending" class="pt-badge badge-yellow" i18n>Pending</a>
       } @else if (follow.state === 'rejected') {
-        <span class="pt-badge badge-red" i18n>Rejected</span>
+        <a routerLink="." [queryParams]="{ state: follow.state }" title="Filter by state: Rejected" class="pt-badge badge-red" i18n>Rejected</a>
       }
     </td>
 
@@ -51,8 +50,8 @@
     }
   </ng-template>
 
-  <ng-template #noResults let-search>
-    @if (search) {
+  <ng-template #noResults let-search="search" let-hasFilters="hasFilters">
+    @if (search || hasFilters) {
       <ng-container i18n>No follower found matching current filters.</ng-container>
     } @else {
       <ng-container i18n>Your instance doesn't have any follower.</ng-container>

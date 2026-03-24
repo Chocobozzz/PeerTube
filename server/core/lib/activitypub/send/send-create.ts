@@ -21,18 +21,16 @@ import {
   MVideoPlaylistFull,
   MVideoRedundancyStreamingPlaylistVideo
 } from '../../../types/models/index.js'
-import { audiencify, getPlaylistAudience, getPublicAudience, getVideoAudience } from '../audience.js'
+import { audiencify, getCommentAudience, getPlaylistAudience, getPublicAudience, getVideoAudience } from '../audience.js'
 import { canVideoBeFederated } from '../videos/federate.js'
 import {
   broadcastToActors,
   broadcastToFollowers,
   getActorsInvolvedInVideo,
-  getAudienceFromFollowersOf,
-  getVideoCommentAudience,
-  sendVideoActivityToOrigin,
   sendVideoRelatedActivity,
+  sendVideoRelatedActivityToOrigin,
   unicastTo
-} from './shared/index.js'
+} from './shared/send-utils.js'
 
 const lTags = loggerTagsFactory('ap', 'create')
 
@@ -44,7 +42,7 @@ export async function sendCreateVideo (video: MVideoAP, transaction: Transaction
   const byActor = video.VideoChannel.Account.Actor
   const videoObject = await video.toActivityPubObject()
 
-  const audience = getVideoAudience(byActor, video.privacy)
+  const audience = getVideoAudience({ account: video.VideoChannel.Account, channel: video.VideoChannel, privacy: video.privacy })
   const createActivity = buildCreateActivity(video.url, byActor, videoObject, audience)
 
   return broadcastToFollowers({
@@ -81,7 +79,7 @@ export async function sendCreateWatchAction (stats: MLocalVideoViewerWithWatchSe
     return buildCreateActivity(stats.url, byActor, stats.toActivityPubObject(), audience)
   }
 
-  return sendVideoActivityToOrigin(activityBuilder, { byActor, video: stats.Video, transaction, contextType: 'WatchAction' })
+  return sendVideoRelatedActivityToOrigin(activityBuilder, { byActor, video: stats.Video, transaction, contextType: 'WatchAction' })
 }
 
 export async function sendCreateVideoPlaylist (playlist: MVideoPlaylistFull, transaction: Transaction) {
@@ -89,10 +87,11 @@ export async function sendCreateVideoPlaylist (playlist: MVideoPlaylistFull, tra
 
   logger.info('Creating job to send create video playlist of %s.', playlist.url, lTags(playlist.uuid))
 
-  const byActor = playlist.OwnerAccount.Actor
-  const audience = getPlaylistAudience(byActor, playlist.privacy)
+  const audience = getPlaylistAudience({ account: playlist.OwnerAccount, channel: playlist.VideoChannel, privacy: playlist.privacy })
 
   const object = await playlist.toActivityPubObject(null, transaction)
+
+  const byActor = playlist.OwnerAccount.Actor
   const createActivity = buildCreateActivity(playlist.url, byActor, object, audience)
 
   const serverActor = await getServerActor()
@@ -110,9 +109,7 @@ export async function sendCreateVideoPlaylist (playlist: MVideoPlaylistFull, tra
 }
 
 export async function sendCreateVideoCommentIfNeeded (comment: MCommentOwnerVideoReply, transaction: Transaction) {
-  const isOrigin = comment.Video.isLocal()
-
-  if (isOrigin) {
+  if (comment.Video.isLocal()) {
     const videoWithBlacklist = await VideoModel.loadWithBlacklist(comment.Video.id)
 
     if (!canVideoBeFederated(videoWithBlacklist)) {
@@ -134,19 +131,11 @@ export async function sendCreateVideoCommentIfNeeded (comment: MCommentOwnerVide
   const threadParentComments = await VideoCommentModel.listThreadParentComments({ comment, transaction })
   const commentObject = comment.toActivityPubObject(threadParentComments) as VideoCommentObject
 
-  const actorsInvolvedInComment = await getActorsInvolvedInVideo(comment.Video, transaction)
-  // Add the actor that commented too
-  actorsInvolvedInComment.push(byActor)
-
   const parentsCommentActors = threadParentComments.filter(c => !c.isDeleted() && !c.heldForReview)
     .map(c => c.Account.Actor)
 
-  let audience: ActivityAudience
-  if (isOrigin) {
-    audience = getVideoCommentAudience(comment, threadParentComments, actorsInvolvedInComment, isOrigin)
-  } else {
-    audience = getAudienceFromFollowersOf(actorsInvolvedInComment.concat(parentsCommentActors))
-  }
+  const video = await VideoModel.loadByUrlAndPopulateAccount(comment.Video.url, transaction)
+  const audience = getCommentAudience({ comment, video, threadParentComments })
 
   const createActivity = buildCreateActivity(comment.url, byActor, commentObject, audience)
 
@@ -171,7 +160,11 @@ export async function sendCreateVideoCommentIfNeeded (comment: MCommentOwnerVide
   })
 
   // Send to actors involved in the comment
-  if (isOrigin) {
+  if (comment.Video.isLocal()) {
+    const actorsInvolvedInComment = await getActorsInvolvedInVideo(comment.Video, transaction)
+    // Add the actor that commented too
+    actorsInvolvedInComment.push(byActor)
+
     return broadcastToFollowers({
       data: createActivity,
       byActor,

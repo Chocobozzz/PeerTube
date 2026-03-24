@@ -164,7 +164,7 @@ export class ThumbnailManagerComponent implements OnInit, ControlValueAccessor {
 
     const blob: Blob = this.dataURItoBlob(dataUrl)
 
-    const file = new File([ blob ], 'preview-file-from-frame.jpg', { type: 'image/jpeg' })
+    const file = new File([ blob ], 'thumbnail-file-from-frame.jpg', { type: 'image/jpeg' })
 
     this.imageFile = file
 

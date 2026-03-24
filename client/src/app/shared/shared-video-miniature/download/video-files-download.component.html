@@ -28,7 +28,7 @@
     </ng-container>
   }
 
-  @for (file of getVideoFiles(); track file) {
+  @for (file of video().getFilesForDownload(); track file) {
     <ng-container [ngbNavItem]="file.resolution.id">
       <a ngbNavLink>{{ file.resolution.label }}</a>
       <ng-template ngbNavContent>

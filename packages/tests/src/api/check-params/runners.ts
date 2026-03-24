@@ -314,12 +314,49 @@ describe('Test managing runners', function () {
       })
 
       it('Should fail with an invalid state', async function () {
-        await server.runnerJobs.list({ start: 0, count: 5, sort: '-createdAt', stateOneOf: 42 as any })
-        await server.runnerJobs.list({ start: 0, count: 5, sort: '-createdAt', stateOneOf: [ 42 ] as any })
+        await server.runnerJobs.list({
+          start: 0,
+          count: 5,
+          sort: '-createdAt',
+          stateOneOf: 42 as any,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+
+        await server.runnerJobs.list({
+          start: 0,
+          count: 5,
+          sort: '-createdAt',
+          stateOneOf: [ 42 ] as any,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      })
+
+      it('Should fail with an invalid type', async function () {
+        await server.runnerJobs.list({
+          start: 0,
+          count: 5,
+          sort: '-createdAt',
+          typeOneOf: 42 as any,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+
+        await server.runnerJobs.list({
+          start: 0,
+          count: 5,
+          sort: '-createdAt',
+          typeOneOf: [ 42 ] as any,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
       })
 
       it('Should succeed with the correct params', async function () {
-        await server.runnerJobs.list({ start: 0, count: 5, sort: '-createdAt', stateOneOf: [ RunnerJobState.COMPLETED ] })
+        await server.runnerJobs.list({
+          start: 0,
+          count: 5,
+          sort: '-createdAt',
+          stateOneOf: [ RunnerJobState.COMPLETED ],
+          typeOneOf: [ 'vod-web-video-transcoding' ]
+        })
       })
     })
 
@@ -387,7 +424,7 @@ describe('Test managing runners', function () {
       const { jobUUID, expectedStatus, videoUUID, runnerToken, jobToken } = options
 
       const basePath = '/api/v1/runners/jobs/' + jobUUID + '/files/videos/' + videoUUID
-      const paths = [ `${basePath}/max-quality`, `${basePath}/previews/max-quality` ]
+      const paths = [ `${basePath}/max-quality`, `${basePath}/thumbnails/max-quality` ]
 
       for (const path of paths) {
         await makePostBodyRequest({ url: server.url, path, fields: { runnerToken, jobToken }, expectedStatus })
@@ -810,7 +847,7 @@ describe('Test managing runners', function () {
         })
 
         it('Should fail with an invalid vod audio merge payload', async function () {
-          const attributes = { name: 'audio_with_preview', previewfile: 'custom-preview.jpg', fixture: 'sample.ogg' }
+          const attributes = { name: 'audio_with_preview', thumbnailfile: 'custom-thumbnail-big.jpg', fixture: 'sample.ogg' }
           await server.videos.upload({ attributes, mode: 'legacy' })
 
           await waitJobs([ server ])

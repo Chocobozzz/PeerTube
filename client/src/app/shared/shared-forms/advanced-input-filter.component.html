@@ -1,39 +1,126 @@
-<div class="input-group has-clear flex-nowrap" [ngClass]="{ 'has-icon': icon() }" ngbDropdown placement="bottom-left auto" container="body">
+@if (hasFilters()) {
+  <div ngbDropdown placement="bottom-start auto" container="body" (openChange)="$event && onDropdownOpen()" #dropdown="ngbDropdown" [autoClose]="false">
 
-  @if (hasFilters()) {
-    <button class="input-group-text c-hand" title="Open quick filters" i18n-title ngbDropdownToggle>
-    </button>
+    <button class="peertube-button secondary-button filter-toggle" ngbDropdownToggle type="button" title="Open filters" i18n-title>
+      <my-global-icon iconName="filter" aria-hidden="true"></my-global-icon>
 
-    <div role="menu" ngbDropdownMenu>
-      @for (group of filters(); track group) {
-        <div class="dropdown-header">{{ group.title }}</div>
+      <span i18n>Filters</span>
 
-        @for (filter of group.children; track filter) {
-          <button (click)="onFilterClick(filter)" class="dropdown-item">
-            <my-global-icon [ngClass]="{ 'no-visible': !isFilterEnabled(filter) }" iconName="tick"></my-global-icon>
-            {{ filter.label }}
-          </button>
-        }
+      @if (activeCount() > 0) {
+        <span class="active-counter ms-2">{{ activeCount() }}</span>
       }
-    </div>
-  }
-
-  @if (icon()) {
-    <button class="button-unstyle search-button" title="Search" i18n-title (click)="onSearchClick()">
-      <my-global-icon iconName="search"></my-global-icon>
     </button>
-  }
 
-  <input
-    type="text" [name]="inputId()" [id]="inputId()" [placeholder]="placeholder()"
-    class="last-in-group"
-    [ngClass]="{ 'first-in-group': !hasFilters() }"
-    [(ngModel)]="searchValue"
-    (keyup)="onInputSearch($event)"
-    #input
-    >
+    <div ngbDropdownMenu class="filter-panel p-0">
+      <div class="filter-header d-flex align-items-center justify-content-between">
+        <span class="filter-header-title" i18n>Filters</span>
 
-  <button class="p-0 border-0 form-control-clear" title="Clear filter" i18n-title (click)="onResetTableFilter(); input.focus()">
-    <my-global-icon iconName="cross" ></my-global-icon>
-  </button>
-</div>
+        <my-button
+          rounded="true"
+          theme="tertiary"
+          icon="cross"
+          (click)="dropdown.close()"
+          i18n-title
+          title="Close filters"
+        ></my-button>
+      </div>
+
+      <div class="filter-panel-body px-3">
+        @for (def of filters(); track def) {
+
+          @if (def.type === 'title') {
+            <div class="filter-title">{{ def.title }}</div>
+          } @else if (def.type === 'options') {
+            @let key = def.key.toString();
+
+            <div>
+              <div class="filter-title">{{ def.title }}</div>
+
+              <div class="filter-options">
+                @for (option of def.options; track option.value) {
+                  <div class="peertube-radio-container small">
+                    <input
+                      type="radio"
+                      [name]="'filter-options-' + key"
+                      [id]="'filter-option-' + key + '-' + $index"
+                      [checked]="isOptionSelected(def, option.value)"
+                      (click)="onOptionInputClick($event, def, option.value)"
+                    >
+                    <label class="radio" [for]="'filter-option-' + key + '-' + $index">{{ option.label }}</label>
+                  </div>
+                }
+              </div>
+            </div>
+          } @else if (def.type === 'checkbox') {
+            @let key = def.key.toString();
+
+            <div class="mb-2">
+              <my-peertube-checkbox
+                [inputName]="key"
+                [labelText]="def.label"
+                [checked]="getCheckboxValue(key)"
+                (checkedChange)="setCheckboxValue(key, $event)"
+                small="true"
+              ></my-peertube-checkbox>
+            </div>
+          } @else if (def.type === 'select') {
+            @let key = def.key.toString();
+
+            <div class="mb-2">
+              <label class="filter-title" [for]="'filter-select-' + key">{{ def.title }}</label>
+
+              <my-select-options
+                [inputId]="'filter-select-' + key"
+                [items]="def.items"
+                [clearable]="def.clearable ?? true"
+                [filter]="def.filter ?? false"
+                [ngModel]="getSelectValue(key)"
+                (ngModelChange)="setSelectValue(key, $event)"
+                small="true"
+                appendTo="body"
+              ></my-select-options>
+            </div>
+          } @else if (def.type === 'tags') {
+            @let key = def.key.toString();
+
+            <div class="mb-2">
+              <label class="filter-title" [for]="'filter-tags-' + key">{{ def.title }}</label>
+
+              <my-select-tags
+                [inputId]="'filter-tags-' + key"
+                [selectedItems]="getTagsValue(key)"
+                (selectedItemsChange)="setTagsValue(key, $event)"
+                small="true"
+              ></my-select-tags>
+            </div>
+          } @else if (def.type === 'text') {
+            @let key = def.key.toString();
+
+            <div class="mb-2">
+              <label class="filter-title" [for]="'filter-text-' + key">{{ def.title }}</label>
+
+              <input
+                [id]="'filter-text-' + key"
+                type="text"
+                class="form-control pt-input-text"
+                [placeholder]="def.placeholder || ''"
+                [ngModel]="getTextValue(key)"
+                (ngModelChange)="setTextValue(key, $event)"
+                [attr.inputmode]="def.constraint === 'numeric' ? 'numeric' : 'text'"
+              >
+            </div>
+          }
+
+        }
+      </div>
+
+      <div class="filter-footer d-flex justify-content-between gap-1 p-3">
+        <my-button type="button" theme="secondary" small="true" (click)="resetFilters(dropdown)" i18n>Reset</my-button>
+
+        <my-button type="button" theme="primary" small="true" (click)="applyFilters(dropdown)" i18n>Apply</my-button>
+      </div>
+    </div>
+
+  </div>
+}
+

@@ -1,4 +1,4 @@
-import { To, UserNotificationType, VideoPrivacy, VideoState } from '@peertube/peertube-models'
+import { UserNotificationType, VideoPrivacy, VideoState } from '@peertube/peertube-models'
 import { logger } from '@server/helpers/logger.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
@@ -55,37 +55,25 @@ export class NewVideoOrLiveForSubscribers extends AbstractNotification<MVideoAcc
     const to = { email: user.email, language: user.getLanguage() }
 
     const channelName = this.payload.VideoChannel.getDisplayName()
+    const channelUrl = WEBSERVER.URL + this.payload.VideoChannel.getClientUrl()
     const videoUrl = WEBSERVER.URL + this.payload.getWatchStaticPath()
+    const videoName = this.payload.name
+    const isLive = this.payload.isLive
 
-    if (this.payload.isLive) return this.createLiveEmail(to, channelName, videoUrl)
+    const subject = isLive
+      ? t('{channelName} is live streaming', to.language, { channelName })
+      : t('{channelName} just published a new video: { videoName }', to.language, { channelName, videoName })
 
-    return this.createVideoEmail(to, channelName, videoUrl)
-  }
-
-  private createVideoEmail (to: To, channelName: string, videoUrl: string) {
     return {
+      template: 'video-published-for-subscribers',
       to,
-      subject: t('{channelName} just published a new video', to.language, { channelName }),
-      text: t('Your subscription {channelName} just published a new video: {videoName}.', to.language, {
+      subject,
+      locals: {
         channelName,
-        videoName: this.payload.name
-      }),
-      locals: {
-        title: t('{channelName} just published a new video', to.language, { channelName }),
-        action: {
-          text: t('View video', to.language),
-          url: videoUrl
-        }
-      }
-    }
-  }
-
-  private createLiveEmail (to: To, channelName: string, videoUrl: string) {
-    return {
-      to,
-      subject: t('{channelName} is live streaming', to.language, { channelName }),
-      text: t('Your subscription {channelName} is live streaming {videoName}', to.language, { channelName, videoName: this.payload.name }),
-      locals: {
+        channelUrl,
+        videoName,
+        videoUrl,
+        isLive,
         action: {
           text: t('View video', to.language),
           url: videoUrl

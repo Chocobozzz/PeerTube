@@ -80,6 +80,7 @@ Some env variables can be defined to disable/enable some tests:
  * `OBJECT_STORAGE_SCALEWAY_KEY_ID` and `OBJECT_STORAGE_SCALEWAY_ACCESS_KEY`: specify Scaleway API keys to test object storage ACL (not supported by our `chocobozzz/s3-ninja` container)
  * `YOUTUBE_DL_DOWNLOAD_BEARER_TOKEN`: bearer token to download youtube-dl binary
  * `YOUTUBE_DL_PROXY`: custom proxy URL for youtube-dl HTTP video import
+ * `AUTO_UPDATE_IMAGES`: if we change image processing algorithm/quality/codecs, automatically update the image on failure
 
 
 ### Debug server logs

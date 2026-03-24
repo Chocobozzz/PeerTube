@@ -115,7 +115,7 @@ async function generateSmallerAvatar (actor: MActorDefault) {
     fileUrl: null,
     height: imageSize.height,
     width: imageSize.width,
-    onDisk: true
+    cached: false
   }
 
   await updateActorImages(actor, ActorImageType.AVATAR, [ actorImageInfo ], undefined)

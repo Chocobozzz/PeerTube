@@ -28,7 +28,7 @@ import {
   VideoTranscriptionPayload
 } from '@peertube/peertube-models'
 import { jobStates } from '@server/helpers/custom-validators/jobs.js'
-import { CONFIG } from '@server/initializers/config.js'
+import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config.js'
 import { processVideoRedundancy } from '@server/lib/job-queue/handlers/video-redundancy.js'
 import {
   FlowJob,
@@ -74,9 +74,9 @@ import { processVideoLiveEnding } from './handlers/video-live-ending.js'
 import { processVideoStudioEdition } from './handlers/video-studio-edition.js'
 import { processVideoTranscoding } from './handlers/video-transcoding.js'
 import { processVideoTranscription } from './handlers/video-transcription.js'
-import { processVideosViewsStats } from './handlers/video-views-stats.js'
+import { processVideosStats } from './handlers/video-stats.js'
 
-export type CreateJobArgument =
+export type CreateJobTypeAndPayload =
   | { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload }
   | { type: 'activitypub-http-broadcast-parallel', payload: ActivitypubHttpBroadcastPayload }
   | { type: 'activitypub-http-unicast', payload: ActivitypubHttpUnicastPayload }
@@ -89,7 +89,7 @@ export type CreateJobArgument =
   | { type: 'transcoding-job-builder', payload: TranscodingJobBuilderPayload }
   | { type: 'video-import', payload: VideoImportPayload }
   | { type: 'activitypub-refresher', payload: RefreshPayload }
-  | { type: 'videos-views-stats', payload: {} }
+  | { type: 'videos-stats', payload: {} }
   | { type: 'video-live-ending', payload: VideoLiveEndingPayload }
   | { type: 'actor-keys', payload: ActorKeysPayload }
   | { type: 'video-redundancy', payload: VideoRedundancyPayload }
@@ -110,6 +110,7 @@ export type CreateJobOptions = {
   delay?: number
   priority?: number
   failParentOnFailure?: boolean
+  deduplicationId?: string
 }
 
 const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
@@ -136,7 +137,7 @@ const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
   'video-redundancy': processVideoRedundancy,
   'video-studio-edition': processVideoStudioEdition,
   'video-transcoding': processVideoTranscoding,
-  'videos-views-stats': processVideosViewsStats,
+  'videos-stats': processVideosStats,
   'generate-video-storyboard': processGenerateStoryboard,
   'create-user-export': processCreateUserExport,
   'import-user-archive': processImportUserArchive,
@@ -173,7 +174,7 @@ const jobTypes: JobType[] = [
   'video-redundancy',
   'video-studio-edition',
   'video-transcription',
-  'videos-views-stats',
+  'videos-stats',
   'create-user-export',
   'import-user-archive',
   'video-transcoding'
@@ -218,6 +219,12 @@ class JobQueue {
     })
 
     this.addRepeatableJobs()
+
+    registerConfigChangedHandler(() => {
+      for (const handlerName of Object.keys(handlers)) {
+        this.workers[handlerName].concurrency = this.getJobConcurrency(handlerName)
+      }
+    })
   }
 
   private buildWorker (handlerName: JobType) {
@@ -350,12 +357,12 @@ class JobQueue {
 
   // ---------------------------------------------------------------------------
 
-  createJobAsync (options: CreateJobArgument & CreateJobOptions): void {
+  createJobAsync (options: CreateJobTypeAndPayload & CreateJobOptions): void {
     this.createJob(options)
       .catch(err => logger.error('Cannot create job.', { err, options }))
   }
 
-  createJob (options: CreateJobArgument & CreateJobOptions | undefined) {
+  createJob (options: CreateJobTypeAndPayload & CreateJobOptions | undefined) {
     if (!options) return
 
     const queue: Queue = this.queues[options.type]
@@ -369,7 +376,7 @@ class JobQueue {
     return queue.add('job', options.payload, jobOptions)
   }
 
-  createSequentialJobFlow (...jobs: ((CreateJobArgument & CreateJobOptions) | undefined)[]) {
+  createSequentialJobFlow (...jobs: ((CreateJobTypeAndPayload & CreateJobOptions) | undefined)[]) {
     let lastJob: FlowJob
 
     logger.debug('Creating jobs in local job queue', { jobs })
@@ -389,7 +396,7 @@ class JobQueue {
     return this.flowProducer.add(lastJob)
   }
 
-  createJobWithChildren (parent: CreateJobArgument & CreateJobOptions, children: (CreateJobArgument & CreateJobOptions)[]) {
+  createJobWithChildren (parent: CreateJobTypeAndPayload & CreateJobOptions, children: (CreateJobTypeAndPayload & CreateJobOptions)[]) {
     return this.flowProducer.add({
       ...this.buildJobFlowOption(parent),
 
@@ -397,7 +404,7 @@ class JobQueue {
     })
   }
 
-  private buildJobFlowOption (job: CreateJobArgument & CreateJobOptions): FlowJob {
+  private buildJobFlowOption (job: CreateJobTypeAndPayload & CreateJobOptions): FlowJob {
     return {
       name: 'job',
       data: job.payload,
@@ -416,6 +423,12 @@ class JobQueue {
       attempts: JOB_ATTEMPTS[type],
       priority: options.priority,
       delay: options.delay,
+
+      deduplication: options.deduplicationId
+        ? {
+          id: options.deduplicationId
+        }
+        : undefined,
 
       ...this.buildJobRemovalOptions(type)
     }
@@ -514,10 +527,10 @@ class JobQueue {
   // ---------------------------------------------------------------------------
 
   private addRepeatableJobs () {
-    this.queues['videos-views-stats'].add('job', {}, {
-      repeat: REPEAT_JOBS['videos-views-stats'],
+    this.queues['videos-stats'].add('job', {}, {
+      repeat: REPEAT_JOBS['videos-stats'],
 
-      ...this.buildJobRemovalOptions('videos-views-stats')
+      ...this.buildJobRemovalOptions('videos-stats')
     }).catch(err => logger.error('Cannot add repeatable job.', { err }))
 
     if (CONFIG.FEDERATION.VIDEOS.CLEANUP_REMOTE_INTERACTIONS) {

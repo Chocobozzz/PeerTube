@@ -1,4 +1,5 @@
-import { Video, VideoChannelSummary, VideoConstant } from '../videos/index.js'
+import { ConstantLabel } from '../common/constant-label.model.js'
+import { Video, VideoChannelSummary } from '../videos/index.js'
 
 export interface ChannelOverview {
   channel: VideoChannelSummary
@@ -6,7 +7,7 @@ export interface ChannelOverview {
 }
 
 export interface CategoryOverview {
-  category: VideoConstant<number>
+  category: ConstantLabel<number>
   videos: Video[]
 }
 

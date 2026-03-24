@@ -24,6 +24,8 @@ describe('Test peertube-runner custom upload', function () {
   let mockUploadServerUrl: string
   let transcoded: string
 
+  const resolutions = [ 720 ]
+
   const mockUpload = new MockUpload()
 
   async function registerRunner () {
@@ -84,7 +86,7 @@ describe('Test peertube-runner custom upload', function () {
   })
 
   it('Should upload the file on another endpoint for web video', async function () {
-    await server.config.enableTranscoding({ hls: false, webVideo: true })
+    await server.config.enableTranscoding({ hls: false, webVideo: true, resolutions })
 
     await server.videos.quickUpload({ name: 'video 1' })
     await server.videos.quickUpload({ name: 'video 2' })

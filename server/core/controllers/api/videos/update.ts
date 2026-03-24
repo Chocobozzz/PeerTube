@@ -2,18 +2,19 @@ import { forceNumber } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
   NSFWFlag,
-  ThumbnailType,
   VideoChannelActivityAction,
   VideoPrivacy,
   VideoPrivacyType,
   VideoUpdate
 } from '@peertube/peertube-models'
 import { exists } from '@server/helpers/custom-validators/misc.js'
+import { getVideoThumbnailFile } from '@server/helpers/video.js'
+import { sendDeleteVideo } from '@server/lib/activitypub/send/send-delete.js'
 import { changeVideoChannelShare } from '@server/lib/activitypub/share.js'
 import { isNewVideoPrivacyForFederation, isPrivacyForFederation } from '@server/lib/activitypub/videos/federate.js'
 import { AutomaticTagger } from '@server/lib/automatic-tags/automatic-tagger.js'
 import { setAndSaveVideoAutomaticTags } from '@server/lib/automatic-tags/automatic-tags.js'
-import { updateLocalVideoMiniatureFromExisting } from '@server/lib/thumbnail.js'
+import { createLocalVideoThumbnailsFromImage } from '@server/lib/thumbnail.js'
 import { replaceChaptersFromDescriptionIfNeeded } from '@server/lib/video-chapters.js'
 import { addVideoJobsAfterUpdate } from '@server/lib/video-jobs.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
@@ -23,8 +24,8 @@ import { openapiOperationDoc } from '@server/middlewares/doc.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { FilteredModelAttributes } from '@server/types/index.js'
-import { MVideoFullLight, MVideoThumbnail } from '@server/types/models/index.js'
-import express, { UploadFiles } from 'express'
+import { MVideoFull, MVideoThumbnails } from '@server/types/models/index.js'
+import express from 'express'
 import { Transaction } from 'sequelize'
 import { VideoAuditView, auditLoggerFactory, getAuditIdFromRes } from '../../../helpers/audit-logger.js'
 import { resetSequelizeInstance } from '../../../helpers/database-utils.js'
@@ -62,7 +63,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function updateVideo (req: express.Request, res: express.Response) {
-  const videoFromReq = res.locals.videoAll
+  const videoFromReq = res.locals.videoFull
   const oldVideoAuditView = new VideoAuditView(videoFromReq.toFormattedDetailsJSON())
   const body: VideoUpdate = req.body
   const user = res.locals.oauth.token.User
@@ -70,7 +71,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
   const hadPrivacyForFederation = isPrivacyForFederation(videoFromReq.privacy)
   const oldPrivacy = videoFromReq.privacy
 
-  const thumbnails = await buildVideoThumbnailsFromReq(videoFromReq, req.files)
+  const thumbnails = await buildVideoThumbnailsFromReq(videoFromReq, req)
   const videoFileLockReleaser = await VideoPathManager.Instance.lockFiles(videoFromReq.uuid)
 
   try {
@@ -132,11 +133,10 @@ async function updateVideo (req: express.Request, res: express.Response) {
         await video.setAsRefreshed(t)
       }
 
-      const videoInstanceUpdated = await video.save({ transaction: t }) as MVideoFullLight
+      const videoInstanceUpdated = await video.save({ transaction: t }) as MVideoFull
 
-      // Thumbnail & preview updates?
-      for (const thumbnail of thumbnails) {
-        await videoInstanceUpdated.addAndSaveThumbnail(thumbnail, t)
+      if (thumbnails.length !== 0) {
+        await videoInstanceUpdated.replaceAndSaveThumbnails(thumbnails, t)
       }
 
       // Video tags update?
@@ -242,7 +242,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
 
 // Return a boolean indicating if the video is considered as "new" for remote instances in the federation
 async function updateVideoPrivacy (options: {
-  videoInstance: MVideoFullLight
+  videoInstance: MVideoFull
   videoInfoToUpdate: VideoUpdate
   hadPrivacyForFederation: boolean
   transaction: Transaction
@@ -265,13 +265,13 @@ async function updateVideoPrivacy (options: {
 
   // Unfederate the video if the new privacy is not compatible with federation
   if (hadPrivacyForFederation && !isPrivacyForFederation(videoInstance.privacy)) {
-    await VideoModel.sendDelete(videoInstance, { transaction })
+    await sendDeleteVideo({ video: videoInstance, deleteForPrivacyChange: true, transaction })
   }
 
   return isNewVideoForFederation
 }
 
-async function updateSchedule (videoInstance: MVideoFullLight, videoInfoToUpdate: VideoUpdate, transaction: Transaction) {
+async function updateSchedule (videoInstance: MVideoFull, videoInfoToUpdate: VideoUpdate, transaction: Transaction) {
   if (videoInfoToUpdate.scheduleUpdate) {
     const updateAt = new Date(videoInfoToUpdate.scheduleUpdate.updateAt)
 
@@ -297,29 +297,13 @@ async function updateSchedule (videoInstance: MVideoFullLight, videoInfoToUpdate
   }
 }
 
-async function buildVideoThumbnailsFromReq (video: MVideoThumbnail, files: UploadFiles) {
-  const promises = [
-    {
-      type: ThumbnailType.MINIATURE,
-      fieldName: 'thumbnailfile'
-    },
-    {
-      type: ThumbnailType.PREVIEW,
-      fieldName: 'previewfile'
-    }
-  ].map(p => {
-    const fields = files?.[p.fieldName]
-    if (!fields) return undefined
+async function buildVideoThumbnailsFromReq (video: MVideoThumbnails, req: express.Request) {
+  const file = getVideoThumbnailFile(req.files)
+  if (!file) return []
 
-    return updateLocalVideoMiniatureFromExisting({
-      inputPath: fields[0].path,
-      video,
-      type: p.type,
-      automaticallyGenerated: false
-    })
+  return createLocalVideoThumbnailsFromImage({
+    inputPath: file.path,
+    video,
+    automaticallyGenerated: false
   })
-
-  const thumbnailsOrUndefined = await Promise.all(promises)
-
-  return thumbnailsOrUndefined.filter(t => !!t)
 }

@@ -8,7 +8,6 @@ import {
   generateWebVideoObjectStorageKey
 } from './keys.js'
 import { buildKey, getClient } from './shared/index.js'
-import { getObjectStoragePublicFileUrl } from './urls.js'
 
 export async function generateWebVideoPresignedUrl (options: {
   file: MVideoFile
@@ -22,7 +21,7 @@ export async function generateWebVideoPresignedUrl (options: {
     downloadFilename
   })
 
-  return getObjectStoragePublicFileUrl(url, CONFIG.OBJECT_STORAGE.WEB_VIDEOS)
+  return replaceByBaseUrl(url, CONFIG.OBJECT_STORAGE.WEB_VIDEOS)
 }
 
 export async function generateHLSFilePresignedUrl (options: {
@@ -34,11 +33,11 @@ export async function generateHLSFilePresignedUrl (options: {
 
   const url = await generatePresignedUrl({
     bucket: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME,
-    key: buildKey(generateHLSObjectStorageKey(streamingPlaylist, file.filename), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS),
+    key: buildKey(generateHLSObjectStorageKey(streamingPlaylist.Video, file.filename), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS),
     downloadFilename
   })
 
-  return getObjectStoragePublicFileUrl(url, CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
+  return replaceByBaseUrl(url, CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
 }
 
 export async function generateUserExportPresignedUrl (options: {
@@ -53,7 +52,7 @@ export async function generateUserExportPresignedUrl (options: {
     downloadFilename
   })
 
-  return getObjectStoragePublicFileUrl(url, CONFIG.OBJECT_STORAGE.USER_EXPORTS)
+  return replaceByBaseUrl(url, CONFIG.OBJECT_STORAGE.USER_EXPORTS)
 }
 
 export async function generateOriginalFilePresignedUrl (options: {
@@ -68,7 +67,7 @@ export async function generateOriginalFilePresignedUrl (options: {
     downloadFilename
   })
 
-  return getObjectStoragePublicFileUrl(url, CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES)
+  return replaceByBaseUrl(url, CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES)
 }
 
 // ---------------------------------------------------------------------------
@@ -92,4 +91,11 @@ async function generatePresignedUrl (options: {
   })
 
   return getSignedUrl(await getClient(), command, { expiresIn: 3600 * 24 })
+}
+
+const regex = new RegExp('https?://[^/]+')
+function replaceByBaseUrl (fileUrl: string, bucket: { BASE_URL: string }) {
+  if (!bucket.BASE_URL) return fileUrl
+
+  return fileUrl.replace(regex, bucket.BASE_URL)
 }

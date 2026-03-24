@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject, input, model, output } from '@angular/core'
-import { AuthService, Notifier, User, UserService } from '@app/core'
+import { Notifier, User, UserService } from '@app/core'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { FindInBulkService } from '@app/shared/shared-search/find-in-bulk.service'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
@@ -19,7 +19,6 @@ import { CustomMarkupComponent } from './shared'
   imports: [ VideoMiniatureComponent ]
 })
 export class VideoMiniatureMarkupComponent implements CustomMarkupComponent, OnInit {
-  private auth = inject(AuthService)
   private findInBulk = inject(FindInBulkService)
   private notifier = inject(Notifier)
   private userService = inject(UserService)

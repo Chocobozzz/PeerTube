@@ -55,7 +55,7 @@ describe('Test users', function () {
         expect(user.id).to.be.a('number')
         expect(user.account.displayName).to.equal('user_1')
         expect(user.account.description).to.be.null
-        expect(user.language).to.equal('en')
+        expect(user.language).to.be.null
       }
 
       expect(userMe.adminFlags).to.equal(UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST)
@@ -176,6 +176,22 @@ describe('Test users', function () {
         expect(data.length).to.equal(2)
         expect(data[0].username).to.equal('root')
         expect(data[1].username).to.equal('user_1')
+      }
+    })
+
+    it('Should filter users by role', async function () {
+      {
+        const { total, data } = await server.users.list({ role: UserRole.ADMINISTRATOR })
+        expect(total).to.equal(1)
+        expect(data.length).to.equal(1)
+        expect(data[0].username).to.equal('root')
+      }
+
+      {
+        const { total, data } = await server.users.list({ role: UserRole.USER })
+        expect(total).to.equal(1)
+        expect(data.length).to.equal(1)
+        expect(data[0].username).to.equal('user_1')
       }
     })
   })
@@ -329,29 +345,6 @@ describe('Test users', function () {
       expect(user.noWelcomeModal).to.be.true
       expect(user.noInstanceConfigWarningModal).to.be.true
       expect(user.noAccountSetupWarningModal).to.be.true
-    })
-
-    it('Should update instance config and automatically update user language', async function () {
-      {
-        const user = await server.users.getMyInfo({ token: userToken })
-        expect(user.videoLanguages).to.be.null
-        expect(user.language).to.equal('en')
-      }
-
-      {
-        await server.config.updateExistingConfig({
-          newConfig: {
-            instance: {
-              defaultLanguage: 'es'
-            }
-          }
-        })
-      }
-
-      {
-        const user = await server.users.getMyInfo({ token: userToken })
-        expect(user.language).to.equal('es')
-      }
     })
 
     it('Should be able to update my languages', async function () {

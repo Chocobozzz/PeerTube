@@ -98,4 +98,9 @@ export class VideoPlaylistMiniatureComponent implements OnInit {
     this.ownerRouterLink = [ '/search/lazy-load-channel', { url: playlist.videoChannel.url } ]
     return
   }
+
+  getPlaylistThumbnailUrl () {
+    // Keep it sync with image size requested by the SASS file
+    return this.playlist().getThumbnailUrl(280)
+  }
 }

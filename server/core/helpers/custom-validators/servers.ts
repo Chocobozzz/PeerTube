@@ -3,7 +3,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants.js'
 import { exists, isArray } from './misc.js'
 
-function isHostValid (host: string) {
+export function isHostValid (host: string) {
   const isURLOptions = {
     require_host: true,
     require_tld: true
@@ -17,26 +17,17 @@ function isHostValid (host: string) {
   return exists(host) && validator.default.isURL(host, isURLOptions) && host.split('://').length === 1
 }
 
-function isEachUniqueHostValid (hosts: string[]) {
+export function isEachUniqueHostValid (hosts: string[]) {
   return isArray(hosts) &&
     hosts.every(host => {
       return isHostValid(host) && hosts.indexOf(host) === hosts.lastIndexOf(host)
     })
 }
 
-function isValidContactBody (value: any) {
+export function isValidContactBody (value: any) {
   return exists(value) && validator.default.isLength(value, CONSTRAINTS_FIELDS.CONTACT_FORM.BODY)
 }
 
-function isValidContactFromName (value: any) {
+export function isValidContactFromName (value: any) {
   return exists(value) && validator.default.isLength(value, CONSTRAINTS_FIELDS.CONTACT_FORM.FROM_NAME)
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  isValidContactBody,
-  isValidContactFromName,
-  isEachUniqueHostValid,
-  isHostValid
 }

@@ -9,12 +9,12 @@ import { dirname } from 'path'
 import { Readable } from 'stream'
 import { getClient } from './shared/client.js'
 import { lTags } from './shared/logger.js'
-import { getInternalUrl } from './urls.js'
 
 import type { _Object, ObjectCannedACL, PutObjectCommandInput, S3Client } from '@aws-sdk/client-s3'
 
 type BucketInfo = {
   BUCKET_NAME: string
+  BASE_URL: string
   PREFIX?: string
 }
 
@@ -54,7 +54,7 @@ async function storeObject (options: {
   bucketInfo: BucketInfo
   isPrivate: boolean
   contentType: string
-}): Promise<string> {
+}): Promise<void> {
   const { inputPath, objectStorageKey, bucketInfo, isPrivate, contentType } = options
 
   logger.debug('Uploading file %s to %s%s in bucket %s', inputPath, bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME, lTags())
@@ -70,7 +70,7 @@ async function storeContent (options: {
   bucketInfo: BucketInfo
   isPrivate: boolean
   contentType: string
-}): Promise<string> {
+}): Promise<void> {
   const { content, objectStorageKey, bucketInfo, isPrivate, contentType } = options
 
   logger.debug('Uploading %s content to %s%s in bucket %s', content, bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME, lTags())
@@ -84,7 +84,7 @@ async function storeStream (options: {
   bucketInfo: BucketInfo
   isPrivate: boolean
   contentType: string
-}): Promise<string> {
+}): Promise<void> {
   const { stream, objectStorageKey, bucketInfo, isPrivate, contentType } = options
 
   logger.debug('Streaming file to %s%s in bucket %s', bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME, lTags())
@@ -357,8 +357,6 @@ async function uploadToStorage (options: {
       bucketInfo.BUCKET_NAME,
       { ...lTags(), responseMetadata: response.$metadata }
     )
-
-    return getInternalUrl(bucketInfo, objectStorageKey)
   } catch (err) {
     // eslint-disable-next-line @typescript-eslint/only-throw-error
     throw parseS3Error(err)

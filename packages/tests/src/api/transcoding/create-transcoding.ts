@@ -82,7 +82,6 @@ function runTests (options: {
   })
 
   describe('Common transcoding', function () {
-
     it('Should generate HLS', async function () {
       this.timeout(60000)
 
@@ -306,7 +305,6 @@ function runTests (options: {
   })
 
   describe('With split audio and video', function () {
-
     async function runTest (options: {
       audio: boolean
       hls: boolean
@@ -408,10 +406,8 @@ function runTests (options: {
 }
 
 describe('Test create transcoding jobs from API', function () {
-
   for (const concurrency of [ 1, 2 ]) {
     describe('With concurrency ' + concurrency, function () {
-
       describe('On filesystem', function () {
         runTests({ concurrency, enableObjectStorage: false })
       })

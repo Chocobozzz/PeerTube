@@ -35,7 +35,7 @@ smtp:
   from_address: 'test-admin@127.0.0.1'
   username: null
   password: null
-
+  
 log:
   level: 'debug'
   rotation:
@@ -85,6 +85,7 @@ transcoding:
   enabled: true
   allow_additional_extensions: false
   allow_audio_files: false
+  always_transcode_podcast_optimized_audio: false
   threads: 2
   concurrency: 2
   resolutions:

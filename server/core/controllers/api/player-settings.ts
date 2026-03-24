@@ -61,7 +61,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function getVideoPlayerSettings (req: express.Request, res: express.Response) {
-  const video = res.locals.onlyVideo || res.locals.videoAll
+  const video = res.locals.videoWithRights
 
   const { videoSetting, channelSetting } = await PlayerSettingModel.loadByVideoIdOrChannelId({
     channelId: video.channelId,
@@ -91,7 +91,7 @@ async function getChannelPlayerSettings (req: express.Request, res: express.Resp
 
 async function updateVideoPlayerSettings (req: express.Request, res: express.Response) {
   const body: PlayerVideoSettingsUpdate = req.body
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
 
   const setting = await upsertPlayerSettings({ user: res.locals.oauth.token.User, settings: body, channel: undefined, video })
 

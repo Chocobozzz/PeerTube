@@ -12,6 +12,7 @@ import { VideoStudioService } from '../shared-manage/studio/video-studio.service
 import { VideoManageController } from '../shared-manage/video-manage-controller.service'
 import { VideoPublishComponent } from './video-publish.component'
 import { VideoPublishResolver } from './video-publish.resolver'
+import { VideoEmbedPrivacyService } from '@app/shared/shared-video/video-embed-privacy.service'
 
 const debugLogger = debug('peertube:video-publish')
 
@@ -49,7 +50,8 @@ export default [
       LiveVideoService,
       I18nPrimengCalendarService,
       VideoUploadService,
-      VideoStudioService
+      VideoStudioService,
+      VideoEmbedPrivacyService
     ],
     resolve: {
       resolverData: VideoPublishResolver

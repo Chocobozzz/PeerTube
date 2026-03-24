@@ -1,6 +1,7 @@
 import { getAverageTheoreticalBitrate, getMaxTheoreticalBitrate, getMinTheoreticalBitrate } from '@peertube/peertube-core-utils'
 import {
   buildStreamSuffix,
+  ffprobePromise,
   getAudioStream,
   getMaxAudioKBitrate,
   getVideoStream,
@@ -145,6 +146,25 @@ export async function canDoQuickVideoTranscode (path: string, maxFPS: number, pr
   if (bitRate > getMaxTheoreticalBitrate({ ...resolutionData, fps })) return false
 
   return true
+}
+
+// Copy codecs if the input file can be quick transcoded (appropriate bitrate, codecs, etc.)
+// And if the input resolution/fps are the same as the output resolution/fps
+export async function canCopyForHLS (options: {
+  path: string
+  fps: number
+  resolution: number
+}, probe?: FfprobeData): Promise<boolean> {
+  const { path, fps, resolution } = options
+
+  const inputProbe = probe ?? await ffprobePromise(path)
+  const { resolution: inputResolution } = await getVideoStreamDimensionsInfo(path, inputProbe)
+  const inputFPS = await getVideoStreamFPS(path, inputProbe)
+
+  return await canDoQuickAudioTranscode(path, probe) &&
+    await canDoQuickVideoTranscode(path, fps, probe) &&
+    resolution === inputResolution &&
+    (!inputResolution || fps === inputFPS)
 }
 
 // ---------------------------------------------------------------------------

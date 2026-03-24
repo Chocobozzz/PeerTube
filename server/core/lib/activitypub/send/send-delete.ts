@@ -1,6 +1,7 @@
 import { ActivityAudience, ActivityDelete } from '@peertube/peertube-models'
 import { AccountModel } from '@server/models/account/account.js'
 import { getServerActor } from '@server/models/application/application.js'
+import { VideoModel } from '@server/models/video/video.js'
 import { Transaction } from 'sequelize'
 import { logger } from '../../../helpers/logger.js'
 import { ActorModel } from '../../../models/actor/actor.js'
@@ -8,12 +9,23 @@ import { VideoCommentModel } from '../../../models/video/video-comment.js'
 import { VideoShareModel } from '../../../models/video/video-share.js'
 import { MActorUrl } from '../../../types/models/index.js'
 import { MCommentOwnerVideo, MVideoAccountLight, MVideoPlaylistFullSummary } from '../../../types/models/video/index.js'
-import { audiencify } from '../audience.js'
+import { audiencify, getCommentAudience } from '../audience.js'
 import { getDeleteActivityPubUrl } from '../url.js'
-import { getActorsInvolvedInVideo, getVideoCommentAudience } from './shared/index.js'
-import { broadcastToActors, broadcastToFollowers, sendVideoRelatedActivity, unicastTo } from './shared/send-utils.js'
+import {
+  broadcastToActors,
+  broadcastToFollowers,
+  getActorsInvolvedInVideo,
+  sendVideoRelatedActivity,
+  unicastTo
+} from './shared/send-utils.js'
 
-async function sendDeleteVideo (video: MVideoAccountLight, transaction: Transaction) {
+async function sendDeleteVideo (options: {
+  video: MVideoAccountLight
+  transaction: Transaction
+  deleteForPrivacyChange?: boolean // default false
+}) {
+  const { video, transaction, deleteForPrivacyChange = false } = options
+
   logger.info('Creating job to broadcast delete of video %s.', video.url)
 
   const byActor = video.VideoChannel.Account.Actor
@@ -24,7 +36,13 @@ async function sendDeleteVideo (video: MVideoAccountLight, transaction: Transact
     return buildDeleteActivity(url, video.url, byActor, audience)
   }
 
-  return sendVideoRelatedActivity(activityBuilder, { byActor, video, contextType: 'Delete', transaction })
+  return sendVideoRelatedActivity(activityBuilder, {
+    byActor,
+    video,
+    contextType: 'Delete',
+    transaction,
+    skipPrivacyCheck: deleteForPrivacyChange
+  })
 }
 
 async function sendDeleteActor (byActor: ActorModel, transaction: Transaction) {
@@ -50,27 +68,25 @@ async function sendDeleteActor (byActor: ActorModel, transaction: Transaction) {
   })
 }
 
-async function sendDeleteVideoComment (videoComment: MCommentOwnerVideo, transaction: Transaction) {
-  logger.info('Creating job to send delete of comment %s.', videoComment.url)
+async function sendDeleteVideoComment (comment: MCommentOwnerVideo, transaction: Transaction) {
+  logger.info('Creating job to send delete of comment %s.', comment.url)
 
-  const isVideoOrigin = videoComment.Video.isLocal()
+  const isVideoOrigin = comment.Video.isLocal()
 
-  const url = getDeleteActivityPubUrl(videoComment.url)
+  const url = getDeleteActivityPubUrl(comment.url)
 
-  const videoAccount = await AccountModel.load(videoComment.Video.VideoChannel.Account.id, transaction)
+  const videoAccount = await AccountModel.load(comment.Video.VideoChannel.Account.id, transaction)
 
-  const byActor = videoComment.isLocal()
-    ? videoComment.Account.Actor
+  const byActor = comment.isLocal()
+    ? comment.Account.Actor
     : videoAccount.Actor
 
-  const threadParentComments = await VideoCommentModel.listThreadParentComments({ comment: videoComment, transaction })
+  const threadParentComments = await VideoCommentModel.listThreadParentComments({ comment, transaction })
   const threadParentCommentsFiltered = threadParentComments.filter(c => !c.isDeleted() && !c.heldForReview)
 
-  const actorsInvolvedInComment = await getActorsInvolvedInVideo(videoComment.Video, transaction)
-  actorsInvolvedInComment.push(byActor) // Add the actor that commented the video
-
-  const audience = getVideoCommentAudience(videoComment, threadParentCommentsFiltered, actorsInvolvedInComment, isVideoOrigin)
-  const activity = buildDeleteActivity(url, videoComment.url, byActor, audience)
+  const video = await VideoModel.loadByUrlAndPopulateAccount(comment.Video.url, transaction)
+  const audience = getCommentAudience({ video, comment, threadParentComments: threadParentCommentsFiltered })
+  const activity = buildDeleteActivity(url, comment.url, byActor, audience)
 
   // This was a reply, send it to the parent actors
   const actorsException = [ byActor ]
@@ -94,6 +110,9 @@ async function sendDeleteVideoComment (videoComment: MCommentOwnerVideo, transac
 
   // Send to actors involved in the comment
   if (isVideoOrigin) {
+    const actorsInvolvedInComment = await getActorsInvolvedInVideo(comment.Video, transaction)
+    actorsInvolvedInComment.push(byActor) // Add the actor that commented the video
+
     return broadcastToFollowers({
       data: activity,
       byActor,

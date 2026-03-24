@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { ScreenService, ServerService } from '@app/core'
 import { HeaderService } from '@app/header/header.service'
-import { FormReactiveErrors, FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import { FormReactiveErrors, FormReactiveMessages, FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { PeertubeModalService } from '@app/shared/shared-main/peertube-modal/peertube-modal.service'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 import { AlertComponent } from '../../../shared/shared-main/common/alert.component'
@@ -28,6 +28,7 @@ export class AdminSaveBarComponent implements OnInit, OnDestroy {
   readonly title = input.required<string>()
   readonly form = input.required<FormGroup>()
   readonly formErrors = input.required<FormReactiveErrors>()
+  readonly validationMessages = input.required<FormReactiveMessages>()
   readonly inconsistentOptions = input<string>()
 
   readonly save = output()
@@ -65,6 +66,8 @@ export class AdminSaveBarComponent implements OnInit, OnDestroy {
 
   onSave (event: Event) {
     this.displayFormErrors = false
+
+    this.formReactiveService.forceCheck(this.form(), this.formErrors(), this.validationMessages())
 
     if (this.form().valid) {
       this.save.emit()

@@ -189,7 +189,13 @@ class PeerTubePlugin extends Plugin {
     this.alterInactivity()
   }
 
-  displayFatalError () {
+  displayFatalError (options: {
+    log?: boolean // default true
+    error?: Error | MediaError
+    isTechnicalError?: boolean // default true
+  } = {}) {
+    const { log = true, error = this.player.error(), isTechnicalError = true } = options
+
     // Already displayed an error
     if (this.errorModal) return
 
@@ -197,16 +203,20 @@ class PeerTubePlugin extends Plugin {
 
     this.player.loadingSpinner.hide()
 
-    const buildModal = (error: MediaError) => {
+    const buildModal = () => {
       const localize = this.player.localize.bind(this.player)
 
       const wrapper = document.createElement('div')
       const header = document.createElement('h1')
       header.innerText = localize('Failed to play video')
       wrapper.appendChild(header)
-      const desc = document.createElement('div')
-      desc.innerText = localize('The video failed to play due to technical issues.')
-      wrapper.appendChild(desc)
+
+      if (isTechnicalError) {
+        const desc = document.createElement('div')
+        desc.innerText = localize('The video failed to play due to technical issues.')
+        wrapper.appendChild(desc)
+      }
+
       const details = document.createElement('p')
       details.classList.add('error-details')
       details.innerText = error.message
@@ -215,7 +225,7 @@ class PeerTubePlugin extends Plugin {
       return wrapper
     }
 
-    this.errorModal = this.player.createModal(buildModal(this.player.error()), {
+    this.errorModal = this.player.createModal(buildModal(), {
       temporary: true,
       uncloseable: true
     })
@@ -223,11 +233,13 @@ class PeerTubePlugin extends Plugin {
 
     this.player.addClass('vjs-error-display-enabled')
 
-    // Google Bot may throw codecs, but it should not prevent indexing
-    if (/googlebot/i.test(navigator.userAgent)) {
-      console.error(this.player.error())
-    } else {
-      logger.error('Fatal error in player', this.player.error())
+    if (log) {
+      // Google Bot may throw codecs, but it should not prevent indexing
+      if (/googlebot/i.test(navigator.userAgent)) {
+        console.error(error)
+      } else {
+        logger.error('Fatal error in player', error)
+      }
     }
   }
 
@@ -393,9 +405,11 @@ class PeerTubePlugin extends Plugin {
     this.player.one('ended', this.videoViewOnEndedHandler)
 
     this.videoViewInterval = setInterval(() => {
-      if (ended) return
+      const player = this.player
 
-      const currentTime = Math.floor(this.player.currentTime())
+      if (!player || ended) return
+
+      const currentTime = Math.floor(player.currentTime())
 
       // No need to update
       if (currentTime === lastCurrentTime) return
@@ -574,15 +588,22 @@ class PeerTubePlugin extends Plugin {
   private updateControlBar () {
     debugLogger('Updating control bar')
 
+    if (this.options.isLive() && this.options.liveDvrEnabled()) {
+      this.player.addClass('vjs-live-dvr')
+    } else {
+      this.player.removeClass('vjs-live-dvr')
+    }
+
     if (this.options.isLive()) {
       this.getPlaybackRateButton().hide()
-
-      this.player.controlBar.getChild('progressControl').hide()
+      this.player.controlBar.getChild('peerTubeLiveDisplay').show()
       this.player.controlBar.getChild('currentTimeDisplay').hide()
       this.player.controlBar.getChild('timeDivider').hide()
       this.player.controlBar.getChild('durationDisplay').hide()
 
-      this.player.controlBar.getChild('peerTubeLiveDisplay').show()
+      if (!this.options.liveDvrEnabled()) {
+        this.player.controlBar.getChild('progressControl').hide()
+      }
     } else {
       this.getPlaybackRateButton().show()
 

@@ -13,7 +13,7 @@ import {
   VideoPlaylistUpdate
 } from '@peertube/peertube-models'
 import { uuidToShort } from '@peertube/peertube-node-utils'
-import { scheduleRefreshIfNeeded } from '@server/lib/activitypub/playlists/index.js'
+import { schedulePlaylistRefreshIfNeeded } from '@server/lib/activitypub/playlists/index.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import {
   generateThumbnailForPlaylist,
@@ -32,7 +32,7 @@ import { MIMETYPES, VIDEO_PLAYLIST_PRIVACIES } from '../../initializers/constant
 import { sequelizeTypescript } from '../../initializers/database.js'
 import { sendCreateVideoPlaylist, sendDeleteVideoPlaylist, sendUpdateVideoPlaylist } from '../../lib/activitypub/send/index.js'
 import { getLocalVideoPlaylistActivityPubUrl, getLocalVideoPlaylistElementActivityPubUrl } from '../../lib/activitypub/url.js'
-import { updateLocalPlaylistMiniatureFromExisting } from '../../lib/thumbnail.js'
+import { createLocalPlaylistThumbnailFromImage } from '../../lib/thumbnail.js'
 import {
   apiRateLimiter,
   asyncMiddleware,
@@ -170,7 +170,7 @@ async function listVideoPlaylists (req: express.Request, res: express.Response) 
 function getVideoPlaylist (req: express.Request, res: express.Response) {
   const videoPlaylist = res.locals.videoPlaylistSummary
 
-  scheduleRefreshIfNeeded(videoPlaylist)
+  schedulePlaylistRefreshIfNeeded(videoPlaylist)
 
   return res.json(videoPlaylist.toFormattedJSON())
 }
@@ -197,7 +197,7 @@ async function createVideoPlaylist (req: express.Request, res: express.Response)
 
   const thumbnailField = req.files?.['thumbnailfile']
   const thumbnailModel = thumbnailField
-    ? await updateLocalPlaylistMiniatureFromExisting({
+    ? await createLocalPlaylistThumbnailFromImage({
       inputPath: thumbnailField[0].path,
       playlist: videoPlaylist,
       automaticallyGenerated: false
@@ -259,7 +259,7 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
 
   const thumbnailField = req.files?.['thumbnailfile']
   const thumbnailModel = thumbnailField
-    ? await updateLocalPlaylistMiniatureFromExisting({
+    ? await createLocalPlaylistThumbnailFromImage({
       inputPath: thumbnailField[0].path,
       playlist,
       automaticallyGenerated: false
@@ -415,7 +415,7 @@ async function removeVideoPlaylist (req: express.Request, res: express.Response)
 async function addVideoInPlaylist (req: express.Request, res: express.Response) {
   const body: VideoPlaylistElementCreate = req.body
   const videoPlaylist = res.locals.videoPlaylistFull
-  const video = res.locals.onlyVideo
+  const video = res.locals.videoThumbnails
 
   const playlistElement = await sequelizeTypescript.transaction(async t => {
     const position = await VideoPlaylistElementModel.getNextPositionOf(videoPlaylist.id, t)
@@ -567,14 +567,14 @@ async function reorderVideosOfPlaylist (req: express.Request, res: express.Respo
 
     videoPlaylist.changed('updatedAt', true)
     await videoPlaylist.save({ transaction: t })
-
-    await sendUpdateVideoPlaylist(videoPlaylist, t)
   })
 
   // The first element changed
   if ((start === 1 || insertAfter === 0) && videoPlaylist.hasGeneratedThumbnail()) {
     await regeneratePlaylistThumbnail(videoPlaylist)
   }
+
+  await sendUpdateVideoPlaylist(videoPlaylist, undefined)
 
   logger.info(
     'Reordered playlist %s (inserted after position %d elements %d - %d).',

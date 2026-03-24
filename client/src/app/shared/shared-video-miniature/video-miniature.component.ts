@@ -66,6 +66,7 @@ export class VideoMiniatureComponent implements OnInit {
 
   readonly user = input.required<User>()
   readonly video = input.required<Video>()
+  readonly thumbnailSizes = input('')
 
   readonly displayOptions = input<MiniatureDisplayOptions>({
     date: true,
@@ -122,6 +123,8 @@ export class VideoMiniatureComponent implements OnInit {
 
   nsfwTooltip: string
 
+  defaultThumbnailSizes: string
+
   private ownerDisplayType: 'account' | 'videoChannel'
   private actionsLoaded = false
 
@@ -143,6 +146,12 @@ export class VideoMiniatureComponent implements OnInit {
 
   ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
+
+    if (this.displayAsRow()) {
+      this.defaultThumbnailSizes = '280px'
+    } else {
+      this.defaultThumbnailSizes = '(width <= 800px) 800px, 280px'
+    }
 
     this.buildVideoLink()
     this.buildOwnerLink()

@@ -1,12 +1,10 @@
-import { ActorImageModel } from '@server/models/actor/actor-image.js'
-import { ExportResult, AbstractUserExporter } from './abstract-user-exporter.js'
 import { ActorImageType } from '@peertube/peertube-models'
 import { MActor, MActorDefaultBanner, MActorImage } from '@server/types/models/index.js'
-import { extname, join } from 'path'
 import { createReadStream } from 'fs'
+import { extname, join } from 'path'
+import { AbstractUserExporter, ExportResult } from './abstract-user-exporter.js'
 
-export abstract class ActorExporter <T> extends AbstractUserExporter<T> {
-
+export abstract class ActorExporter<T> extends AbstractUserExporter<T> {
   protected exportActorJSON (actor: MActorDefaultBanner) {
     return {
       url: actor.url,
@@ -26,7 +24,8 @@ export abstract class ActorExporter <T> extends AbstractUserExporter<T> {
   protected exportActorImageJSON (images: MActorImage[]) {
     return images.map(i => ({
       width: i.width,
-      url: ActorImageModel.getImageUrl(i),
+      height: i.height,
+      url: i.getLocalFileUrl(),
       createdAt: i.createdAt.toISOString(),
       updatedAt: i.updatedAt.toISOString()
     }))
@@ -59,7 +58,7 @@ export abstract class ActorExporter <T> extends AbstractUserExporter<T> {
 
       staticFiles.push({
         archivePath: archivePathBuilder(image.filename),
-        readStreamFactory: () => Promise.resolve(createReadStream(image.getPath()))
+        readStreamFactory: () => Promise.resolve(createReadStream(image.getFSPath()))
       })
 
       const relativePath = join(this.relativeStaticDirPath, archivePathBuilder(image.filename))
