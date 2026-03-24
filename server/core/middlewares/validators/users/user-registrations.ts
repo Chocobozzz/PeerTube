@@ -19,7 +19,7 @@ import { checkRegistrationHandlesDoNotAlreadyExist, checkRegistrationIdExist } f
 import { pick } from '@peertube/peertube-core-utils'
 import { asyncMiddleware } from '@server/middlewares/async.js'
 
-const usersRegistrationValidator = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+const usersRegistrationValidator = (req: express.Request, res: express.Response, next: express.NextFunction) => {
   if (res.locals.signupMode === 'direct-registration') {
     return asyncMiddleware(usersCommonRegistrationValidatorFactory())(req, res, next)
   }
@@ -184,9 +184,7 @@ const listRegistrationsValidator = [
 
 export {
   determineSignupMode,
-
   usersRegistrationValidator,
-
   acceptOrRejectRegistrationValidator,
   ensureUserRegistrationAllowedFactory,
   ensureUserRegistrationAllowedForIP,

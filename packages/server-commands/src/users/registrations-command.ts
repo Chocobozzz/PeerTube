@@ -36,7 +36,7 @@ export class RegistrationsCommand extends AbstractCommand {
     const { password = 'password', email = options.username + '@example.com' } = options
     const path = '/api/v1/users/registrations/request'
 
-    return unwrapBody<UserRegistration>(this.postBodyRequest({
+    return unwrapBody<{ state: { id: UserRegistrationStateType, label: string } }>(this.postBodyRequest({
       ...options,
 
       path,

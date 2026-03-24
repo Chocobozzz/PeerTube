@@ -99,7 +99,7 @@ registrationsRouter.get(
 registrationsRouter.post(
   '/register',
   registrationRateLimiter,
-  determineSignupMode,
+  asyncMiddleware(determineSignupMode),
   asyncMiddleware(ensureUserRegistrationAllowedFactory()),
   ensureUserRegistrationAllowedForIP,
   usersRegistrationValidator,

@@ -2790,8 +2790,20 @@ paths:
       tags:
         - Register
       responses:
-        '204':
+        '200':
           description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  state:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/UserRegistrationState'
+                      label:
+                        type: string
         '400':
           description: request error
         '403':
@@ -2818,7 +2830,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserRegistration'
+                type: object
+                properties:
+                  state:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/UserRegistrationState'
+                      label:
+                        type: string
         '400':
           description: request error or signup approval is not enabled on the instance
         '403':
