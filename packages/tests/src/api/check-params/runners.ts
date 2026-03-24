@@ -23,7 +23,6 @@ import {
   VideoStudioCommand,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { isRunnerJobTypeValid } from '@peertube/peertube-server/core/helpers/custom-validators/runners/jobs.js'
 import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { basename } from 'path'
 

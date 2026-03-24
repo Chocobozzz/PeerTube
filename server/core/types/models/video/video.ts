@@ -250,6 +250,7 @@ export type MVideoFormattable =
   & PickWithOpt<VideoModel, 'VideoFiles', MVideoFile[]>
   & PickWithOpt<VideoModel, 'VideoLive', MVideoLiveWithSchedules>
   & PickWithOpt<VideoModel, 'VideoAutomaticTags', MVideoAutomaticTagWithTag[]>
+  & PickWithOpt<VideoModel, 'Tags', MTag[]>
   & PickWithOpt<VideoModel, 'VideoSource', MVideoSource>
 
 export type MVideoFormattableDetails =

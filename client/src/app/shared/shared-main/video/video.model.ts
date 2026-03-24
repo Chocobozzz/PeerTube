@@ -123,6 +123,7 @@ export class Video implements VideoServerModel {
 
   videoSource?: VideoSource
 
+  tags?: string[]
   automaticTags?: string[]
 
   comments: number
@@ -228,6 +229,7 @@ export class Video implements VideoServerModel {
 
     this.aspectRatio = hash.aspectRatio
 
+    this.tags = hash.tags
     this.automaticTags = hash.automaticTags
 
     this.comments = hash.comments

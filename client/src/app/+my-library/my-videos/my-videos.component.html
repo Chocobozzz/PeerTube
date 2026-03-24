@@ -41,10 +41,25 @@
       </td>
     }
 
+    @if (table.isColumnDisplayed('tags')) {
+      <td>
+        <div class="badges tags">
+          @for (tag of video.tags; track tag) {
+            <a class="pt-badge badge-secondary pt-badge-keep-case" routerLink="." [queryParams]="{ tagsOneOf: tag }">
+              {{ tag }}
+            </a>
+          }
+        </div>
+      </td>
+    }
+
     @if (table.isColumnDisplayed('privacy')) {
       <td>
         <div class="pt-badges-container">
-          <my-privacy-badge [video]="video"></my-privacy-badge>
+          <a routerLink="." [queryParams]="{ privacyOneOf: video.privacy.id }" [title]="getPrivacyFilterTitle(video.privacy.label)">
+            <my-privacy-badge displayTooltip="false" [video]="video"></my-privacy-badge>
+          </a>
+
           @if (video.blacklisted) {
             <span class="pt-badge badge-red" i18n [ngbTooltip]="video.blacklistedReason">Blocked</span>
           }
@@ -55,18 +70,6 @@
     @if (table.isColumnDisplayed('sensitive')) {
       <td>
         <my-video-nsfw-badge [video]="video"></my-video-nsfw-badge>
-      </td>
-    }
-
-    @if (table.isColumnDisplayed('playlists')) {
-      <td>
-        <div class="badges playlists">
-          @for (playlist of (videosContainedInPlaylists[video.id] || []); track playlist) {
-            <a class="pt-badge badge-secondary pt-badge-keep-case" [routerLink]="['/w/p/', playlist.playlistShortUUID]">
-              {{ playlist.playlistDisplayName }}
-            </a>
-          }
-        </div>
       </td>
     }
 
@@ -106,6 +109,18 @@
         @if (video.language?.id) {
           {{ video.language.label }}
         }
+      </td>
+    }
+
+    @if (table.isColumnDisplayed('playlists')) {
+      <td>
+        <div class="badges playlists">
+          @for (playlist of (videosContainedInPlaylists[video.id] || []); track playlist) {
+            <a class="pt-badge pt-badge-keep-case" [class]="getPlaylistBadge(playlist.playlistDisplayName)" [routerLink]="['/w/p/', playlist.playlistShortUUID]">
+              {{ playlist.playlistDisplayName }}
+            </a>
+          }
+        </div>
       </td>
     }
   </ng-template>

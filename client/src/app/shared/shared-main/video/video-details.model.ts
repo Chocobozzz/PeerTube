@@ -19,7 +19,6 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   declare account: Account
 
   support: string
-  tags: string[]
   downloadEnabled: boolean
 
   commentsPolicy: ConstantLabel<VideoCommentPolicyType>
@@ -38,6 +37,7 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   declare streamingPlaylists: VideoStreamingPlaylist[]
   declare waitTranscoding: boolean
   declare state: ConstantLabel<VideoStateType>
+  declare tags: string[]
 
   constructor (hash: VideoDetailsServerModel, translations = {}) {
     super(hash, translations)

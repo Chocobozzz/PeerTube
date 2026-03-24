@@ -329,7 +329,12 @@ export class TableComponent<
   // ---------------------------------------------------------------------------
 
   saveSelectedColumns () {
-    const enabled = this.columns.filter(c => c.selected !== false).map(c => c.id)
+    const enabled = this.columns.reduce((p, c) => {
+      return {
+        ...p,
+        [c.id as string]: c.selected !== false
+      }
+    }, {} as Record<string, boolean>)
 
     this.peertubeLocalStorage.setItem(this.getColumnLocalStorageKey(), JSON.stringify(enabled))
   }
@@ -338,11 +343,14 @@ export class TableComponent<
     const enabledString = this.peertubeLocalStorage.getItem(this.getColumnLocalStorageKey())
 
     if (!enabledString) return
+
     try {
       const enabled = JSON.parse(enabledString)
 
       for (const column of this.columns) {
-        column.selected = enabled.includes(column.id)
+        if (enabled[column.id] !== undefined) {
+          column.selected = enabled[column.id] === true
+        }
       }
     } catch (err) {
       logger.error('Cannot load selected columns.', err)
@@ -350,7 +358,7 @@ export class TableComponent<
   }
 
   private getColumnLocalStorageKey () {
-    return 'rest-table-columns-' + this.key()
+    return 'rest-table-columns-' + this.key() + '-state'
   }
 
   // ---------------------------------------------------------------------------

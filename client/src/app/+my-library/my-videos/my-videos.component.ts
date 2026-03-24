@@ -4,8 +4,9 @@ import { RouterLink } from '@angular/router'
 import { AuthService, AuthUser, ConfirmService, Notifier, RestPagination, ServerService } from '@app/core'
 import { HeaderService } from '@app/header/header.service'
 import { formatICU } from '@app/helpers'
-import { AdvancedFilterDef } from '@app/shared/shared-forms/advanced-input-filter.component'
 import { ChannelToggleComponent } from '@app/shared/shared-channels/channel-toggle.component'
+import { AdvancedFilterDef } from '@app/shared/shared-forms/advanced-input-filter.component'
+import { PeerTubeBadgeService } from '@app/shared/shared-main/common/peertube-badge.service'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { TableColumnInfo, TableComponent, TableQueryParams } from '@app/shared/shared-tables/table.component'
@@ -30,7 +31,18 @@ import { VideoNSFWBadgeComponent } from '../../shared/shared-video/video-nsfw-ba
 import { VideoStateBadgeComponent } from '../../shared/shared-video/video-state-badge.component'
 import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.component'
 
-type ColumnName = 'duration' | 'name' | 'language' | 'privacy' | 'sensitive' | 'playlists' | 'insights' | 'published' | 'state' | 'comments'
+type ColumnName =
+  | 'duration'
+  | 'name'
+  | 'tags'
+  | 'language'
+  | 'privacy'
+  | 'sensitive'
+  | 'playlists'
+  | 'insights'
+  | 'published'
+  | 'state'
+  | 'comments'
 
 type QueryParams = TableQueryParams & {
   channelNameOneOf?: string[]
@@ -66,6 +78,7 @@ export class MyVideosComponent implements OnInit, OnDestroy {
   private playlistService = inject(VideoPlaylistService)
   private server = inject(ServerService)
   private headerService = inject(HeaderService)
+  private badgeService = inject(PeerTubeBadgeService)
 
   readonly videoChangeOwnershipModal = viewChild<VideoChangeOwnershipComponent>('videoChangeOwnershipModal')
   readonly table = viewChild<TableComponent<Video, DataLoaderParameter, ColumnName, QueryParams>>('table')
@@ -117,14 +130,15 @@ export class MyVideosComponent implements OnInit, OnDestroy {
     this.columns = [
       { id: 'duration', label: $localize`Duration`, selected: true, sortable: true },
       { id: 'name', label: $localize`Name`, selected: true, sortable: true },
+      { id: 'tags', label: $localize`Tags`, selected: true, sortable: false },
       { id: 'privacy', label: $localize`Privacy`, selected: true, sortable: false },
       { id: 'sensitive', label: $localize`Sensitive`, selected: true, sortable: false },
-      { id: 'playlists', label: $localize`Playlists`, selected: true, sortable: false },
       { id: 'insights', label: $localize`Insights`, selected: true, sortable: true, sortKey: 'views' },
       { id: 'comments', label: $localize`Comments`, selected: true, sortable: true },
       { id: 'published', label: $localize`Published`, selected: true, sortable: true, sortKey: 'publishedAt' },
       { id: 'state', label: $localize`State`, selected: true, sortable: false },
-      { id: 'language', label: $localize`Language`, selected: false, sortable: false }
+      { id: 'language', label: $localize`Language`, selected: false, sortable: false },
+      { id: 'playlists', label: $localize`Playlists`, selected: true, sortable: false }
     ]
 
     this.inputFilters = [
@@ -151,6 +165,12 @@ export class MyVideosComponent implements OnInit, OnDestroy {
           { value: VideoPrivacy.PASSWORD_PROTECTED, label: $localize`Password protected videos` },
           { value: VideoPrivacy.PRIVATE, label: $localize`Private videos` }
         ]
+      },
+
+      {
+        type: 'tags',
+        key: 'tagsOneOf',
+        title: $localize`One of these tags`
       }
     ]
 
@@ -206,8 +226,9 @@ export class MyVideosComponent implements OnInit, OnDestroy {
     search: string
     isLive?: boolean
     privacyOneOf?: VideoPrivacyType
+    tagsOneOf?: string[]
   }) {
-    const { pagination, sort, search, isLive, privacyOneOf } = options
+    const { pagination, sort, search, isLive, privacyOneOf, tagsOneOf } = options
 
     const channelNameOneOf = this.channels.filter(c => c.selected).map(c => c.name)
 
@@ -222,9 +243,12 @@ export class MyVideosComponent implements OnInit, OnDestroy {
         : undefined,
 
       isLive,
+
       privacyOneOf: privacyOneOf !== undefined
         ? [ privacyOneOf ]
-        : undefined
+        : undefined,
+
+      tagsOneOf
     }).pipe(tap(({ data }) => this.fetchVideosContainedInPlaylists(data)))
   }
 
@@ -236,6 +260,10 @@ export class MyVideosComponent implements OnInit, OnDestroy {
           [videoId]: uniqBy(result[+videoId], (p: VideoExistInPlaylist) => p.playlistId)
         }), this.videosContainedInPlaylists)
       })
+  }
+
+  getPlaylistBadge (playlistName: string) {
+    return this.badgeService.getRandomBadge('playlist', playlistName)
   }
 
   async removeVideos (videos: Video[]) {
@@ -274,5 +302,9 @@ export class MyVideosComponent implements OnInit, OnDestroy {
         }
       ]
     ]
+  }
+
+  getPrivacyFilterTitle (privacy: string) {
+    return $localize`Filter by privacy: ${privacy}`
   }
 }

@@ -128,10 +128,11 @@ export class VideoService {
 
     isLive?: boolean
     privacyOneOf?: VideoPrivacyType[]
+    tagsOneOf?: string[]
     channelNameOneOf: string[]
     search?: string
   }): Observable<ResultList<Video>> {
-    const { videoPagination, restPagination, sort, channelNameOneOf, privacyOneOf, search, includeCollaborations } = options
+    const { videoPagination, restPagination, sort, channelNameOneOf, privacyOneOf, tagsOneOf, search, includeCollaborations } = options
 
     const pagination = videoPagination
       ? this.restService.componentToRestPagination(videoPagination)
@@ -145,6 +146,7 @@ export class VideoService {
     if (exists(options.isLive)) commonFilters.isLive = options.isLive
     if (options.search) commonFilters.search = search
     if (options.privacyOneOf) commonFilters.privacyOneOf = privacyOneOf
+    if (options.tagsOneOf) commonFilters.tagsOneOf = tagsOneOf
 
     params = this.restService.addObjectParams(params, commonFilters)
 

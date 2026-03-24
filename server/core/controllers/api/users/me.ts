@@ -147,7 +147,7 @@ async function listMyVideos (req: express.Request, res: express.Response) {
   const query = pickCommonVideoQuery(req.query)
 
   const include = (query.include || VideoInclude.NONE) | VideoInclude.BLACKLISTED | VideoInclude.NOT_PUBLISHED_STATE |
-    VideoInclude.BLOCKED_OWNER
+    VideoInclude.BLOCKED_OWNER | VideoInclude.TAGS
 
   const apiOptions = await Hooks.wrapObject(
     {
