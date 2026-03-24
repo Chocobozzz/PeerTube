@@ -155,14 +155,6 @@ class PeerTubeHotkeysPlugin extends Plugin {
           this.player.currentTime(this.player.currentTime() + dist)
         }
       },
-
-      // Flip video horizontally
-      {
-        accept: e => e.key === 'h',
-        cb: () => {
-          this.player.trigger('video-flip-horizontally-toggle');
-        }
-      }
     ]
 
     if (this.isLive && this.liveDvrEnabled !== true) return handlers
