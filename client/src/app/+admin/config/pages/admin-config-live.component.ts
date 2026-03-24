@@ -253,6 +253,8 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
 
   save () {
     const value = {
+      ...this.form.value,
+
       live: {
         ...this.form.value.live,
 
@@ -284,6 +286,8 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
 
   private buildFormValue (customConfig: CustomConfig): FormDefaultTyped<Form> {
     return {
+      ...customConfig,
+
       live: {
         ...customConfig.live,
 
