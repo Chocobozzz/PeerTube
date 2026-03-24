@@ -455,7 +455,7 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
         privacy: VideoPrivacy.INTERNAL
       },
       live: {
-        saveReplay: false
+        saveReplay: true
       },
       p2p: {
         embed: {

@@ -342,18 +342,18 @@ export interface CustomConfig {
   }
 
   defaults: {
-      publish: {
-        downloadEnabled: boolean
-        commentsPolicy: VideoCommentPolicyType
-        privacy: VideoPrivacyType
-        licence: number
-      }
+    publish: {
+      downloadEnabled: boolean
+      commentsPolicy: VideoCommentPolicyType
+      privacy: VideoPrivacyType
+      licence: number
+    }
 
-      live: {
-        saveReplay: boolean
-      }
+    live: {
+      saveReplay: boolean
+    }
 
-      p2p: {
+    p2p: {
       webapp: {
         enabled: boolean
       }
