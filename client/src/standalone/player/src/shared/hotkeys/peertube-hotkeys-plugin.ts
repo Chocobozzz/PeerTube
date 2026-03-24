@@ -154,7 +154,7 @@ class PeerTubeHotkeysPlugin extends Plugin {
           const dist = 1 / 30
           this.player.currentTime(this.player.currentTime() + dist)
         }
-      },
+      }
     ]
 
     if (this.isLive && this.liveDvrEnabled !== true) return handlers
