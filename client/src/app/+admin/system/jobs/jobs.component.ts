@@ -77,6 +77,7 @@ export class JobsComponent {
       key: 'jobType',
       title: $localize`Job type`,
       clearable: true,
+      filter: true,
       items: this.jobTypes.map(i => ({
         id: i,
         label: i.toLocaleUpperCase(),

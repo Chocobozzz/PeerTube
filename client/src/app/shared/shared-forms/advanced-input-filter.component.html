@@ -70,12 +70,10 @@
               <label class="filter-title" [for]="'filter-select-' + key">{{ def.title }}</label>
 
               <my-select-options
-                (mousedown)="$event.stopPropagation(); $event.stopImmediatePropagation(); $event.preventDefault()"
-                (mouseup)="$event.stopPropagation(); $event.stopImmediatePropagation(); $event.preventDefault()"
-                (click)="$event.stopPropagation(); $event.stopImmediatePropagation(); $event.preventDefault()"
                 [inputId]="'filter-select-' + key"
                 [items]="def.items"
                 [clearable]="def.clearable ?? true"
+                [filter]="def.filter ?? false"
                 [ngModel]="getSelectValue(key)"
                 (ngModelChange)="setSelectValue(key, $event)"
                 small="true"

@@ -40,7 +40,8 @@ export type SelectFilterDef<ServiceParameters extends Record<string, any>> = {
     key: Key
     title: string
     items: SelectOptionsItem<ServiceParameters[Key]>[]
-    clearable?: boolean
+    clearable?: boolean // default true
+    filter?: boolean // default false
   }
 }[Extract<keyof ServiceParameters, string>]
 
