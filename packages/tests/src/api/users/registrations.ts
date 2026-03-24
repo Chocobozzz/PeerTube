@@ -322,6 +322,16 @@ describe('Test registrations', function () {
       }
     })
 
+    it('Should filter these registration requests', async function () {
+      const { total, data } = await server.registrations.list({ sort: 'createdAt', stateOneOf: [ UserRegistrationState.ACCEPTED ] })
+      expect(total).to.equal(2)
+      expect(data).to.have.lengthOf(2)
+
+      for (const d of data) {
+        expect(d.state.id).to.equal(UserRegistrationState.ACCEPTED)
+      }
+    })
+
     it('Should delete a registration', async function () {
       await server.registrations.delete({ id: id2 })
       await server.registrations.delete({ id: id3 })

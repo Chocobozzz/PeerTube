@@ -4,13 +4,13 @@ import {
   ResultList,
   UserRegistration,
   UserRegistrationRequest,
+  UserRegistrationStateType,
   UserRegistrationUpdateState
 } from '@peertube/peertube-models'
 import { unwrapBody } from '../requests/index.js'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class RegistrationsCommand extends AbstractCommand {
-
   register (options: OverrideCommandOptions & Partial<UserRegistrationRequest> & Pick<UserRegistrationRequest, 'username'>) {
     const { password = 'password', email = options.username + '@example.com' } = options
     const path = '/api/v1/users/register'
@@ -83,9 +83,11 @@ export class RegistrationsCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  delete (options: OverrideCommandOptions & {
-    id: number
-  }) {
+  delete (
+    options: OverrideCommandOptions & {
+      id: number
+    }
+  ) {
     const { id } = options
     const path = '/api/v1/users/registrations/' + id
 
@@ -105,6 +107,7 @@ export class RegistrationsCommand extends AbstractCommand {
     count?: number
     sort?: string
     search?: string
+    stateOneOf?: UserRegistrationStateType[]
   } = {}) {
     const path = '/api/v1/users/registrations'
 
@@ -112,7 +115,7 @@ export class RegistrationsCommand extends AbstractCommand {
       ...options,
 
       path,
-      query: pick(options, [ 'start', 'count', 'sort', 'search' ]),
+      query: pick(options, [ 'start', 'count', 'sort', 'search', 'stateOneOf' ]),
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
@@ -120,9 +123,11 @@ export class RegistrationsCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  askSendVerifyEmail (options: OverrideCommandOptions & {
-    email: string
-  }) {
+  askSendVerifyEmail (
+    options: OverrideCommandOptions & {
+      email: string
+    }
+  ) {
     const { email } = options
     const path = '/api/v1/users/registrations/ask-send-verify-email'
 
@@ -136,10 +141,12 @@ export class RegistrationsCommand extends AbstractCommand {
     })
   }
 
-  verifyEmail (options: OverrideCommandOptions & {
-    registrationId: number
-    verificationString: string
-  }) {
+  verifyEmail (
+    options: OverrideCommandOptions & {
+      registrationId: number
+      verificationString: string
+    }
+  ) {
     const { registrationId, verificationString } = options
     const path = '/api/v1/users/registrations/' + registrationId + '/verify-email'
 

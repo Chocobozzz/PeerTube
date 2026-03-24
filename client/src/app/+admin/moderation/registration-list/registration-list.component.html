@@ -8,6 +8,7 @@
   columnConfig="true"
   [bulkActions]="bulkActions"
   searchInput="true"
+  [inputFilters]="inputFilters"
   >
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No registration} =1 {1 registration} other {{{ totalRecords | myNumberFormatter }} registrations}}</ng-container>
@@ -51,13 +52,13 @@
     @if (table.isColumnDisplayed('state')) {
       <td class="abuse-states">
         @if (isRegistrationAccepted(registration)) {
-          <div [title]="registration.state.label" class="pt-badge badge-success">
+          <a routerLink="." [queryParams]="{ state: registration.state.id }" [title]="getStateFilterTitle(registration.state.label)" class="pt-badge badge-success">
             <my-global-icon iconName="tick"></my-global-icon>
-          </div>
+          </a>
         } @else if (isRegistrationRejected(registration)) {
-          <div [title]="registration.state.label" class="pt-badge badge-danger">
+          <a routerLink="." [queryParams]="{ state: registration.state.id }" [title]="getStateFilterTitle(registration.state.label)" class="pt-badge badge-danger">
             <my-global-icon iconName="cross"></my-global-icon>
-          </div>
+          </a>
         }
       </td>
     }

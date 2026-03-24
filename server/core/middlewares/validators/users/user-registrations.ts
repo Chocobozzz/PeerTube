@@ -1,6 +1,11 @@
+import { arrayify } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, UserRegister, UserRegistrationRequest, UserRegistrationState } from '@peertube/peertube-models'
 import { exists, isBooleanValid, isIdValid, toBooleanOrNull } from '@server/helpers/custom-validators/misc.js'
-import { isRegistrationModerationResponseValid, isRegistrationReasonValid } from '@server/helpers/custom-validators/user-registration.js'
+import {
+  isRegistrationModerationResponseValid,
+  isRegistrationReasonValid,
+  isRegistrationStateArrayValid
+} from '@server/helpers/custom-validators/user-registration.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { loadReservedActorName } from '@server/lib/local-actor.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
@@ -130,6 +135,11 @@ const listRegistrationsValidator = [
   query('search')
     .optional()
     .custom(exists),
+
+  query('stateOneOf')
+    .optional()
+    .customSanitizer(arrayify)
+    .custom(isRegistrationStateArrayValid),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return

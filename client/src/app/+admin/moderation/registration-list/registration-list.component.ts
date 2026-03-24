@@ -1,10 +1,17 @@
 import { Component, OnInit, inject, viewChild } from '@angular/core'
+import { RouterLink } from '@angular/router'
 import { ConfirmService, MarkdownService, Notifier, ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
+import { AdvancedFilterDef } from '@app/shared/shared-forms/advanced-input-filter.component'
 import { buildDropdownSimpleAndBulkActions } from '@app/shared/shared-main/buttons/action-dropdown-helpers'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { ResultList, UserRegistration as UserRegistrationServer, UserRegistrationState } from '@peertube/peertube-models'
+import {
+  ResultList,
+  UserRegistration as UserRegistrationServer,
+  UserRegistrationState,
+  UserRegistrationStateType
+} from '@peertube/peertube-models'
 import { switchMap } from 'rxjs'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
@@ -16,12 +23,14 @@ import { ProcessRegistrationModalComponent } from './process-registration-modal.
 
 type UserRegistration = UserRegistrationServer & { registrationReasonHTML?: string, moderationResponseHTML?: string }
 type ColumnName = 'account' | 'email' | 'channel' | 'registrationReason' | 'state' | 'moderationResponse' | 'createdAt'
+type DataLoaderParameter = Parameters<RegistrationListComponent['_dataLoader']>[0]
 
 @Component({
   selector: 'my-registration-list',
   templateUrl: './registration-list.component.html',
   styleUrls: [ '../../../shared/shared-moderation/moderation.scss', './registration-list.component.scss' ],
   imports: [
+    RouterLink,
     GlobalIconComponent,
     ActionDropdownComponent,
     NgbTooltip,
@@ -58,6 +67,20 @@ export class RegistrationListComponent implements OnInit {
   ]
 
   dataLoader: typeof this._dataLoader
+
+  inputFilters: AdvancedFilterDef<DataLoaderParameter>[] = [
+    {
+      type: 'options',
+      key: 'state',
+      title: $localize`Registration state`,
+      options: [
+        { value: 'all', label: $localize`All registrations` },
+        { value: UserRegistrationState.ACCEPTED, label: $localize`Accepted registrations` },
+        { value: UserRegistrationState.REJECTED, label: $localize`Rejected registrations` },
+        { value: UserRegistrationState.PENDING, label: $localize`Pending registrations` }
+      ]
+    }
+  ]
 
   constructor () {
     this.dataLoader = this._dataLoader.bind(this)
@@ -110,8 +133,18 @@ export class RegistrationListComponent implements OnInit {
     this.table().reloadData({ field: 'createdAt', order: -1 })
   }
 
-  private _dataLoader (options: DataLoaderOptionsBase) {
-    return this.adminRegistrationService.listRegistrations(options)
+  getStateFilterTitle (stateLabel: string) {
+    return $localize`Filter by state: ${stateLabel}`
+  }
+
+  private _dataLoader (options: DataLoaderOptionsBase & { state?: UserRegistrationStateType }) {
+    const { state, ...restOptions } = options
+
+    let stateOneOf: UserRegistrationStateType[]
+
+    if (state) stateOneOf = [ state ]
+
+    return this.adminRegistrationService.listRegistrations({ ...restOptions, stateOneOf })
       .pipe(
         switchMap(async (resultList: ResultList<UserRegistration>) => {
           for (const registration of resultList.data) {

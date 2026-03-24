@@ -2918,6 +2918,13 @@ paths:
             - createdAt
             - state
             - -state
+        - name: stateOneOf
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/UserRegistrationState'
       responses:
         '200':
           description: successful operation
@@ -11853,6 +11860,14 @@ components:
       required:
         - moderationResponse
 
+    UserRegistrationState:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+      description: 'The registration state (Pending = `1`, Rejected = `2`, Accepted = `3`)'
+
     UserRegistration:
       properties:
         id:
@@ -11861,12 +11876,7 @@ components:
           type: object
           properties:
             id:
-              type: integer
-              enum:
-                - 1
-                - 2
-                - 3
-              description: 'The registration state (Pending = `1`, Rejected = `2`, Accepted = `3`)'
+              $ref: '#/components/schemas/UserRegistrationState'
             label:
               type: string
         registrationReason:

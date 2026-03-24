@@ -223,7 +223,8 @@ async function listRegistrations (req: express.Request, res: express.Response) {
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
-    search: req.query.search
+    search: req.query.search,
+    stateOneOf: req.query.stateOneOf
   })
 
   return res.json({
