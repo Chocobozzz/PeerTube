@@ -20,13 +20,13 @@ export class RegistrationsCommand extends AbstractCommand {
 
       path,
       fields: {
-        ...pick(options, [ 'username', 'displayName', 'channel' ]),
+        ...pick(options, [ 'username', 'displayName', 'channel', 'registrationReason' ]),
 
         password,
         email
       },
       implicitToken: false,
-      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+      defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
 
@@ -36,7 +36,7 @@ export class RegistrationsCommand extends AbstractCommand {
     const { password = 'password', email = options.username + '@example.com' } = options
     const path = '/api/v1/users/registrations/request'
 
-    return unwrapBody<UserRegistration>(this.postBodyRequest({
+    return unwrapBody<{ state: { id: UserRegistrationStateType, label: string } }>(this.postBodyRequest({
       ...options,
 
       path,
