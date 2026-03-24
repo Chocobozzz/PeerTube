@@ -405,9 +405,11 @@ class PeerTubePlugin extends Plugin {
     this.player.one('ended', this.videoViewOnEndedHandler)
 
     this.videoViewInterval = setInterval(() => {
-      if (ended) return
+      const player = this.player
 
-      const currentTime = Math.floor(this.player.currentTime())
+      if (!player || ended) return
+
+      const currentTime = Math.floor(player.currentTime())
 
       // No need to update
       if (currentTime === lastCurrentTime) return

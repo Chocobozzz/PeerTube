@@ -88,11 +88,15 @@ class MetricsPlugin extends Plugin {
     if (!this.options_.metricsUrl()) return
 
     this.metricsInterval = setInterval(() => {
+      const player = this.player
+
+      if (!player) return
+
       let resolution: number
       let fps: number
 
-      if (this.player.usingPlugin('p2pMediaLoader')) {
-        const level = this.player.p2pMediaLoader().getCurrentLevel()
+      if (player.usingPlugin('p2pMediaLoader')) {
+        const level = player.p2pMediaLoader().getCurrentLevel()
         if (!level) return
 
         resolution = Math.min(level.height || 0, level.width || 0)
@@ -101,8 +105,8 @@ class MetricsPlugin extends Plugin {
         fps = framerate
           ? parseInt(framerate, 10)
           : undefined
-      } else if (this.player.usingPlugin('webVideo')) {
-        const videoFile = this.player.webVideo().getCurrentVideoFile()
+      } else if (player.usingPlugin('webVideo')) {
+        const videoFile = player.webVideo().getCurrentVideoFile()
         if (!videoFile) return
 
         resolution = videoFile.resolution.id
