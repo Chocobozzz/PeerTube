@@ -9,8 +9,7 @@
 
 .root {
   --co-image-height: 78px;
-  --co-image-width: #{getWidth(78px)};
-  --thumbnail-width: var(--co-image-width); // Required by video-thumbnail component
+  --co-image-width: #{getWidth(78px)}; // Keep it sync with "sizes" attribute of my-video-thumbnail in the template
 
   display: flex;
   align-items: center;

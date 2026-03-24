@@ -49,6 +49,7 @@
             @for (video of getVideosOf(videoChannel); track video) {
               <my-video-miniature
                 [video]="video" [user]="userMiniature" [displayVideoActions]="true" [displayOptions]="miniatureDisplayOptions"
+                thumbnailSizes="201px"
               ></my-video-miniature>
             }
 

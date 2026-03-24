@@ -126,7 +126,6 @@
     .playlists {
       --co-miniature-min-width: #{$video-thumbnail-width - 25px};
       --co-miniature-max-width: #{$video-thumbnail-width};
-      --thumbnail-width: var(--co-miniature-max-width); // Required by video-thumbnail component
 
       display: grid;
       column-gap: 30px;
@@ -148,7 +147,7 @@
         my-video-playlist-miniature {
           display: block;
           min-width: var(--co-miniature-min-width);
-          max-width: var(--co-miniature-max-width);
+          max-width: var(--co-miniature-max-width); // Keep breakpoint in sync with thumbnailSizes in template
         }
       }
 
