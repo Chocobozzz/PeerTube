@@ -249,6 +249,11 @@ class P2pMediaLoaderPlugin extends Plugin {
     })
 
     this.networkInfoInterval = setInterval(() => {
+      const player = this.player
+      const hlsjs = this.hlsjs
+
+      if (!player || !hlsjs) return
+
       const p2pDownloadSpeed = this.arraySum(this.statsP2PBytes.pendingDownload)
       const p2pUploadSpeed = this.arraySum(this.statsP2PBytes.pendingUpload)
 
@@ -258,9 +263,9 @@ class P2pMediaLoaderPlugin extends Plugin {
       this.statsP2PBytes.pendingUpload = []
       this.statsHTTPBytes.pendingDownload = []
 
-      return this.player.trigger('network-info', {
+      return player.trigger('network-info', {
         source: 'p2p-media-loader',
-        bandwidthEstimate: (this.hlsjs as any).bandwidthEstimate / 8,
+        bandwidthEstimate: (hlsjs as any).bandwidthEstimate / 8,
         http: {
           downloadSpeed: httpDownloadSpeed,
           downloaded: this.statsHTTPBytes.totalDownload

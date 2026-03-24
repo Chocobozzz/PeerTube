@@ -50,10 +50,9 @@ my-video-miniature {
 
 .other-videos:not(.display-as-row) my-video-miniature {
   --co-miniature-max-width: #{$video-thumbnail-medium-width};
-  --thumbnail-width: var(--co-miniature-max-width); // Required by video-thumbnail component
 
   min-width: var(--co-miniature-min-width);
-  max-width: var(--co-miniature-max-width);
+  max-width: var(--co-miniature-max-width); // Keep it sync with thumbnailSizes defined in template
 }
 
 .display-as-row {

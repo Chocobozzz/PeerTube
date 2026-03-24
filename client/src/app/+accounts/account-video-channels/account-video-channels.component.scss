@@ -77,9 +77,7 @@ my-subscribe-button {
   position: relative;
 
   my-video-miniature {
-    --thumbnail-width: #{$video-thumbnail-medium-width}; // Required by video-thumbnail component
-
-    min-width: $video-thumbnail-medium-width;
+    min-width: $video-thumbnail-medium-width; // Keep it sync with thumbnailSizes defined in template
     max-width: $video-thumbnail-medium-width;
 
     @include margin-right(15px);
