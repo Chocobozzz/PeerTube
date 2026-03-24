@@ -19,7 +19,7 @@ import { isValidVideoCommentText } from '../../../helpers/custom-validators/vide
 import { logger } from '../../../helpers/logger.js'
 import { AcceptResult, isLocalVideoCommentReplyAccepted, isLocalVideoThreadAccepted } from '../../../lib/moderation.js'
 import { Hooks } from '../../../lib/plugins/hooks.js'
-import { MCommentOwnerVideoReply, MVideo, MVideoFullLight } from '../../../types/models/video/index.js'
+import { MCommentOwnerVideoReply, MVideo, MVideoAccountLight } from '../../../types/models/video/index.js'
 import {
   areValidationErrors,
   checkCanManageChannel,
@@ -51,7 +51,7 @@ export const listAllVideoCommentsForAdminValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    if (req.query.videoId && !await doesVideoExist(req.query.videoId, res, 'unsafe-only-immutable-attributes')) return
+    if (req.query.videoId && !await doesVideoExist(req.query.videoId, res, 'unsafe-immutable-only')) return
     if (
       req.query.videoChannelId &&
       !await doesChannelIdExist({ id: req.query.videoChannelId, checkCanManage: true, checkIsOwner: false, checkIsLocal: true, req, res })
@@ -75,7 +75,7 @@ export const listCommentsOnUserVideosValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    if (req.query.videoId && !await doesVideoExist(req.query.videoId, res, 'all')) return
+    if (req.query.videoId && !await doesVideoExist(req.query.videoId, res, 'with-rights')) return
 
     if (
       req.query.videoChannelId &&
@@ -92,7 +92,7 @@ export const listCommentsOnUserVideosValidator = [
 
     const user = res.locals.oauth.token.User
 
-    const video = res.locals.videoAll
+    const video = res.locals.videoWithRights
     if (
       video &&
       !await checkCanManageVideo({ user, video, right: UserRight.SEE_ALL_COMMENTS, req, res, checkIsLocal: true, checkIsOwner: false })
@@ -110,9 +110,9 @@ export const listVideoCommentThreadsValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.videoId, res, 'only-video-and-blacklist')) return
+    if (!await doesVideoExist(req.params.videoId, res, 'with-blacklist')) return
 
-    if (!await checkCanSeeVideo({ req, res, paramId: req.params.videoId, video: res.locals.onlyVideo })) return
+    if (!await checkCanSeeVideo({ req, res, paramId: req.params.videoId, video: res.locals.videoWithBlacklist })) return
 
     return next()
   }
@@ -127,10 +127,10 @@ export const listVideoThreadCommentsValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.videoId, res, 'only-video-and-blacklist')) return
-    if (!await doesVideoCommentThreadExist(req.params.threadId, res.locals.onlyVideo, res)) return
+    if (!await doesVideoExist(req.params.videoId, res, 'with-blacklist')) return
+    if (!await doesVideoCommentThreadExist(req.params.threadId, res.locals.videoWithBlacklist, res)) return
 
-    if (!await checkCanSeeVideo({ req, res, paramId: req.params.videoId, video: res.locals.onlyVideo })) return
+    if (!await checkCanSeeVideo({ req, res, paramId: req.params.videoId, video: res.locals.videoWithBlacklist })) return
 
     return next()
   }
@@ -145,12 +145,12 @@ export const addVideoCommentThreadValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.videoId, res)) return
+    if (!await doesVideoExist(req.params.videoId, res, 'with-rights')) return
 
-    if (!await checkCanSeeVideo({ req, res, paramId: req.params.videoId, video: res.locals.videoAll })) return
+    if (!await checkCanSeeVideo({ req, res, paramId: req.params.videoId, video: res.locals.videoWithRights })) return
 
-    if (!isVideoCommentsEnabled(res.locals.videoAll, res)) return
-    if (!await isVideoCommentAccepted(req, res, res.locals.videoAll, false)) return
+    if (!isVideoCommentsEnabled(res.locals.videoWithRights, res)) return
+    if (!await isVideoCommentAccepted(req, res, res.locals.videoWithRights, false)) return
 
     return next()
   }
@@ -166,13 +166,13 @@ export const addVideoCommentReplyValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.videoId, res)) return
+    if (!await doesVideoExist(req.params.videoId, res, 'with-rights')) return
 
-    if (!await checkCanSeeVideo({ req, res, paramId: req.params.videoId, video: res.locals.videoAll })) return
+    if (!await checkCanSeeVideo({ req, res, paramId: req.params.videoId, video: res.locals.videoWithRights })) return
 
-    if (!isVideoCommentsEnabled(res.locals.videoAll, res)) return
-    if (!await doesVideoCommentExist(req.params.commentId, res.locals.videoAll, res)) return
-    if (!await isVideoCommentAccepted(req, res, res.locals.videoAll, true)) return
+    if (!isVideoCommentsEnabled(res.locals.videoWithRights, res)) return
+    if (!await doesVideoCommentExist(req.params.commentId, res.locals.videoWithRights, res)) return
+    if (!await isVideoCommentAccepted(req, res, res.locals.videoWithRights, true)) return
 
     return next()
   }
@@ -186,11 +186,11 @@ export const videoCommentGetValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.videoId, res, 'only-video-and-blacklist')) return
+    if (!await doesVideoExist(req.params.videoId, res, 'with-blacklist')) return
 
-    if (!canVideoBeFederated(res.locals.onlyVideo)) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+    if (!canVideoBeFederated(res.locals.videoWithBlacklist)) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
-    if (!await doesVideoCommentExist(req.params.commentId, res.locals.onlyVideo, res)) return
+    if (!await doesVideoCommentExist(req.params.commentId, res.locals.videoWithBlacklist, res)) return
 
     return next()
   }
@@ -204,8 +204,8 @@ export const removeVideoCommentValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.videoId, res)) return
-    if (!await doesVideoCommentExist(req.params.commentId, res.locals.videoAll, res)) return
+    if (!await doesVideoExist(req.params.videoId, res, 'unsafe-immutable-only')) return
+    if (!await doesVideoCommentExist(req.params.commentId, res.locals.videoImmutable, res)) return
 
     if (!await checkCanDeleteVideoComment({ user: res.locals.oauth.token.User, videoComment: res.locals.videoCommentFull, req, res })) {
       return
@@ -223,8 +223,8 @@ export const approveVideoCommentValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.videoId, res)) return
-    if (!await doesVideoCommentExist(req.params.commentId, res.locals.videoAll, res)) return
+    if (!await doesVideoExist(req.params.videoId, res, 'unsafe-immutable-only')) return
+    if (!await doesVideoCommentExist(req.params.commentId, res.locals.videoImmutable, res)) return
 
     if (!await checkCanApproveVideoComment({ user: res.locals.oauth.token.User, videoComment: res.locals.videoCommentFull, req, res })) {
       return
@@ -322,7 +322,7 @@ async function checkCanManageCommentsOfVideo (options: {
   return false
 }
 
-async function isVideoCommentAccepted (req: express.Request, res: express.Response, video: MVideoFullLight, isReply: boolean) {
+async function isVideoCommentAccepted (req: express.Request, res: express.Response, video: MVideoAccountLight, isReply: boolean) {
   const acceptParameters = {
     video,
     commentBody: req.body,

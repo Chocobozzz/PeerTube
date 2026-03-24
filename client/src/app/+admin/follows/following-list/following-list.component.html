@@ -7,16 +7,15 @@
   [dataLoader]="dataLoader"
   columnConfig="false"
   [bulkActions]="bulkActions"
+  refreshButton="true"
+  searchInput="true"
+  [inputFilters]="inputFilters"
   >
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No subscription} =1 {1 subscription} other {{{ totalRecords | myNumberFormatter }} subscriptions}}</ng-container>
   </ng-template>
 
   <ng-template #captionRight>
-    <my-advanced-input-filter [filters]="searchFilters" (search)="table.onSearch($event)"></my-advanced-input-filter>
-
-    <my-button i18n-label label="Refresh" icon="refresh" (click)="table.loadData()"></my-button>
-
     <button class="peertube-create-button" (click)="openFollowModal()">
       <my-global-icon iconName="following" aria-hidden="true"></my-global-icon>
       <ng-container i18n>Follow</ng-container>
@@ -33,13 +32,11 @@
 
     <td>
       @if (follow.state === 'accepted') {
-        <span class="pt-badge badge-green" i18n>Accepted</span>
-      }
-      @if (follow.state === 'pending') {
-        <span class="pt-badge badge-yellow" i18n>Pending</span>
-      }
-      @if (follow.state === 'rejected') {
-        <span class="pt-badge badge-red" i18n>Rejected</span>
+        <a routerLink="." [queryParams]="{ state: follow.state }" title="Filter by state: Accepted" class="pt-badge badge-green" i18n>Accepted</a>
+      } @else if (follow.state === 'pending') {
+        <a routerLink="." [queryParams]="{ state: follow.state }" title="Filter by state: Pending" class="pt-badge badge-yellow" i18n>Pending</a>
+      } @else if (follow.state === 'rejected') {
+        <a routerLink="." [queryParams]="{ state: follow.state }" title="Filter by state: Rejected" class="pt-badge badge-red" i18n>Rejected</a>
       }
     </td>
 
@@ -58,8 +55,8 @@
     <my-delete-button label (click)="removeFollowing([ follow ])"></my-delete-button>
   </ng-template>
 
-  <ng-template #noResults let-search>
-    @if (search) {
+  <ng-template #noResults let-search="search" let-hasFilters="hasFilters">
+    @if (search || hasFilters) {
       <ng-container i18n>No host found matching current filters.</ng-container>
     } @else {
       <ng-container i18n>Your instance is not following anyone.</ng-container>

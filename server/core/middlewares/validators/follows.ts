@@ -1,12 +1,13 @@
-import express from 'express'
-import { body, param, query } from 'express-validator'
 import { HttpStatusCode, ServerFollowCreate } from '@peertube/peertube-models'
 import { isProdInstance } from '@peertube/peertube-node-utils'
 import { isEachUniqueHandleValid, isFollowStateValid, isRemoteHandleValid } from '@server/helpers/custom-validators/follows.js'
+import { hasArrayLength, toArray } from '@server/helpers/custom-validators/misc.js'
 import { loadActorUrlOrGetFromWebfinger } from '@server/lib/activitypub/actors/index.js'
 import { getRemoteNameAndHost } from '@server/lib/activitypub/follow.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { MActorFollowActorsDefault } from '@server/types/models/index.js'
+import express from 'express'
+import { body, param, query } from 'express-validator'
 import { isActorTypeValid, isValidActorHandle } from '../../helpers/custom-validators/activitypub/actor.js'
 import { isEachUniqueHostValid, isHostValid } from '../../helpers/custom-validators/servers.js'
 import { logger } from '../../helpers/logger.js'
@@ -32,11 +33,13 @@ const listFollowsValidator = [
 
 const followValidator = [
   body('hosts')
-    .toArray()
+    .customSanitizer(toArray)
+    .custom(v => hasArrayLength(v, { max: 100 }))
     .custom(isEachUniqueHostValid).withMessage('Should have an array of unique hosts'),
 
   body('handles')
-    .toArray()
+    .customSanitizer(toArray)
+    .custom(v => hasArrayLength(v, { max: 100 }))
     .custom(isEachUniqueHandleValid).withMessage('Should have an array of handles'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -147,10 +150,10 @@ const rejectFollowerValidator = [
 // ---------------------------------------------------------------------------
 
 export {
-  followValidator,
-  removeFollowingValidator,
-  getFollowerValidator,
   acceptFollowerValidator,
+  followValidator,
+  getFollowerValidator,
+  listFollowsValidator,
   rejectFollowerValidator,
-  listFollowsValidator
+  removeFollowingValidator
 }

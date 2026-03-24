@@ -96,8 +96,6 @@ my-actor-host {
 // Grid mode inherited from parent component
 // Takes all the width on mobile
 .video-miniature:not(.display-as-row) {
-  --thumbnail-width: var(--co-miniature-max-width); // Required by video-thumbnail component
-
   display: flex;
   flex-direction: column;
   padding-bottom: 1rem;
@@ -144,6 +142,7 @@ my-actor-host {
     margin-top: 3px;
   }
 
+  // Keep breakpoint in sync with thumbnailSizes in template
   @media screen and (max-width: $small-view) {
     width: 100%;
     margin-bottom: 25px;
@@ -173,9 +172,8 @@ my-actor-host {
   --co-fs-medium: #{$miniature-fs-row-medium};
   --co-fs-big: #{$miniature-fs-row-big};
 
-  --co-row-thumbnail-width: #{$video-thumbnail-width};
+  --co-row-thumbnail-width: #{$video-thumbnail-width}; // Keep in sync with thumbnailSizes in template
   --co-row-thumbnail-height: #{$video-thumbnail-height};
-  --thumbnail-width: var(--co-row-thumbnail-width); // Required by video-thumbnail component
 
   display: flex;
   flex-direction: row;

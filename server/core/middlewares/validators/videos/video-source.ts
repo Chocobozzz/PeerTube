@@ -1,9 +1,7 @@
 import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
-import { getVideoWithAttributes } from '@server/helpers/video.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { buildUploadXFile, safeUploadXCleanup } from '@server/lib/uploadx.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
-import { MVideoFullLight } from '@server/types/models/index.js'
 import { Metadata as UploadXMetadata } from '@uploadx/core'
 import express from 'express'
 import { param } from 'express-validator'
@@ -21,9 +19,9 @@ export const videoSourceGetLatestValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.id, res, 'all')) return
+    if (!await doesVideoExist(req.params.id, res, 'with-rights')) return
 
-    const video = getVideoWithAttributes(res) as MVideoFullLight
+    const video = res.locals.videoWithRights
 
     const user = res.locals.oauth.token.User
     if (!await checkCanManageVideo({ user, video, right: UserRight.UPDATE_ANY_VIDEO, req, res, checkIsLocal: true, checkIsOwner: false })) {
@@ -56,7 +54,15 @@ export const replaceVideoSourceResumableValidator = [
       return cleanup()
     }
 
-    if (!await isVideoFileAccepted({ req, res, videoFile: file, hook: 'filter:api.video.update-file.accept.result' })) {
+    if (
+      !await isVideoFileAccepted({
+        req,
+        res,
+        videoFile: file,
+        videoBody: file.metadata,
+        hook: 'filter:api.video.update-file.accept.result'
+      })
+    ) {
       return cleanup()
     }
 
@@ -68,13 +74,13 @@ export const replaceVideoSourceResumableValidator = [
 
 export const replaceVideoSourceResumableInitValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const user = res.locals.oauth.token.User
-
     if (!await checkCanUpdateVideoFile({ req, res })) return
 
     const fileMetadata = res.locals.uploadVideoFileResumableMetadata
     const files = { videofile: [ fileMetadata ] }
-    if (await commonVideoFileChecks({ req, res, user, videoFileSize: fileMetadata.size, files }) === false) return
+    const channelUser = { id: res.locals.videoFull.VideoChannel.Account.userId }
+
+    if (await commonVideoFileChecks({ req, res, channelUser, videoFileSize: fileMetadata.size, files }) === false) return
 
     return next()
   }
@@ -123,7 +129,7 @@ async function checkCanUpdateVideoFile (options: {
   if (!await doesVideoExist(req.params.id, res)) return false
 
   const user = res.locals.oauth.token.User
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
 
   if (!await checkCanManageVideo({ user, video, right: UserRight.UPDATE_ANY_VIDEO, req, res, checkIsLocal: true, checkIsOwner: false })) {
     return false

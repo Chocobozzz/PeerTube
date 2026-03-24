@@ -48,7 +48,7 @@ export class UserNotification {
 
           if (payload.comment.heldForReview) {
             this.url = '/my-account/videos/comments'
-            this.queryParams.search = 'heldForReview:true'
+            this.queryParams.isHeldForReview = 'true'
           } else {
             this.url = this.buildCommentUrl(payload.comment)
           }
@@ -57,19 +57,19 @@ export class UserNotification {
 
         case UserNotificationType.NEW_ABUSE_FOR_MODERATORS:
           this.url = '/admin/moderation/abuses/list'
-          this.queryParams.search = '#' + payload.abuse.id
+          this.queryParams.id = payload.abuse.id + ''
           break
 
         case UserNotificationType.ABUSE_STATE_CHANGE:
           this.url = '/my-account/abuses'
-          this.queryParams.search = '#' + payload.abuse.id
+          this.queryParams.id = payload.abuse.id + ''
           break
 
         case UserNotificationType.ABUSE_NEW_MESSAGE:
           this.url = user.hasRight(UserRight.MANAGE_ABUSES)
             ? '/admin/moderation/abuses/list'
             : '/my-account/abuses'
-          this.queryParams.search = '#' + payload.abuse.id
+          this.queryParams.id = payload.abuse.id + ''
           break
 
         case UserNotificationType.VIDEO_AUTO_BLACKLIST_FOR_MODERATORS:

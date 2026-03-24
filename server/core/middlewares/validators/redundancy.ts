@@ -29,7 +29,7 @@ const videoPlaylistRedundancyGetValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
 
-    const video = res.locals.videoAll
+    const video = res.locals.videoFull
     if (!canVideoBeFederated(video)) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
     const paramPlaylistType = req.params.streamingPlaylistType as unknown as number // We casted to int above
@@ -100,17 +100,17 @@ const addVideoRedundancyValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    if (!await doesVideoExist(req.body.videoId, res, 'only-video-and-blacklist')) return
+    if (!await doesVideoExist(req.body.videoId, res, 'with-blacklist')) return
 
-    if (res.locals.onlyVideo.remote === false) {
+    if (res.locals.videoWithBlacklist.remote === false) {
       return res.fail({ message: 'Cannot create a redundancy on a local video' })
     }
 
-    if (res.locals.onlyVideo.isLive) {
+    if (res.locals.videoWithBlacklist.isLive) {
       return res.fail({ message: 'Cannot create a redundancy of a live video' })
     }
 
-    const alreadyExists = await VideoRedundancyModel.isLocalByVideoUUIDExists(res.locals.onlyVideo.uuid)
+    const alreadyExists = await VideoRedundancyModel.isLocalByVideoUUIDExists(res.locals.videoWithBlacklist.uuid)
     if (alreadyExists) {
       return res.fail({
         status: HttpStatusCode.CONFLICT_409,

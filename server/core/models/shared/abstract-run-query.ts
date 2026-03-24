@@ -8,7 +8,7 @@ import { Col } from 'sequelize/lib/utils'
 
 export class AbstractRunQuery {
   protected query: string
-  protected replacements: any = {}
+  protected replacements: Record<string, string | number | string[] | number[]> = {}
 
   protected queryConfig = ''
 

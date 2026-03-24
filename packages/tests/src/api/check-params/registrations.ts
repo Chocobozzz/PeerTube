@@ -1,9 +1,10 @@
 import { omit } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, HttpStatusCodeType, UserRole } from '@peertube/peertube-models'
+import { HttpStatusCode, HttpStatusCodeType, UserRegistrationState, UserRole } from '@peertube/peertube-models'
 import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import {
   cleanupTests,
   createSingleServer,
+  makeGetRequest,
   makePostBodyRequest,
   PeerTubeServer,
   setAccessTokensToServers,
@@ -461,10 +462,27 @@ describe('Test registrations API validators', function () {
       })
     })
 
+    it('Should fail with an invalid stateOneOf', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path,
+        token: moderatorToken,
+        query: { stateOneOf: 'invalid' },
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
     it('Should succeed with the correct params', async function () {
       await server.registrations.list({
         token: moderatorToken,
         search: 'toto'
+      })
+    })
+
+    it('Should succeed with stateOneOf filter', async function () {
+      await server.registrations.list({
+        token: moderatorToken,
+        stateOneOf: [ UserRegistrationState.ACCEPTED, UserRegistrationState.REJECTED ]
       })
     })
   })

@@ -45,9 +45,14 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
     )
 
     this.addJoin(
-      'LEFT OUTER JOIN "actorImage" AS "VideoChannel->Actor->Avatars" ' +
-        'ON "VideoChannel->Actor"."id" = "VideoChannel->Actor->Avatars"."actorId" ' +
-        `AND "VideoChannel->Actor->Avatars"."type" = ${ActorImageType.AVATAR}`
+      `LEFT JOIN LATERAL (` +
+        `SELECT json_agg(` +
+        `  jsonb_build_object(` +
+        `    ` + this.tables.getAvatarAttributes().map(attr => `'${attr}', "${attr}"`).join(', ') +
+        `  )` +
+        `) AS "Avatars"` +
+        ` FROM "actorImage" WHERE "actorId" = "VideoChannel->Actor"."id" AND "type" = ${ActorImageType.AVATAR}` +
+        `) AS "VideoChannel->Actor->AvatarsJSON" ON TRUE`
     )
 
     this.attributes = {
@@ -55,7 +60,7 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
 
       ...this.buildAttributesObject('VideoChannel', this.tables.getChannelAttributes()),
       ...this.buildActorInclude('VideoChannel->Actor'),
-      ...this.buildAvatarInclude('VideoChannel->Actor->Avatars'),
+      '"VideoChannel->Actor->AvatarsJSON"."Avatars"': '"VideoChannel.Actor.AvatarsJSON"',
       ...this.buildServerInclude('VideoChannel->Actor->Server')
     }
   }
@@ -72,9 +77,14 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
     )
 
     this.addJoin(
-      'LEFT OUTER JOIN "actorImage" AS "VideoChannel->Account->Actor->Avatars" ' +
-        'ON "VideoChannel->Account->Actor"."id" = "VideoChannel->Account->Actor->Avatars"."actorId" ' +
-        `AND "VideoChannel->Account->Actor->Avatars"."type" = ${ActorImageType.AVATAR}`
+      `LEFT JOIN LATERAL (` +
+        `SELECT json_agg(` +
+        `  jsonb_build_object(` +
+        `    ` + this.tables.getAvatarAttributes().map(attr => `'${attr}', "${attr}"`).join(', ') +
+        `  )` +
+        `) AS "Avatars"` +
+        ` FROM "actorImage" WHERE "actorId" = "VideoChannel->Account->Actor"."id" AND "type" = ${ActorImageType.AVATAR}` +
+        `) AS "VideoChannel->Account->Actor->AvatarsJSON" ON TRUE`
     )
 
     this.attributes = {
@@ -82,30 +92,26 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
 
       ...this.buildAttributesObject('VideoChannel->Account', this.tables.getAccountAttributes()),
       ...this.buildActorInclude('VideoChannel->Account->Actor'),
-      ...this.buildAvatarInclude('VideoChannel->Account->Actor->Avatars'),
+      '"VideoChannel->Account->Actor->AvatarsJSON"."Avatars"': '"VideoChannel.Account.Actor.AvatarsJSON"',
       ...this.buildServerInclude('VideoChannel->Account->Actor->Server')
     }
   }
 
-  protected includeOwnerUser () {
-    this.addJoin('INNER JOIN "videoChannel" AS "VideoChannel" ON "video"."channelId" = "VideoChannel"."id"')
-    this.addJoin('INNER JOIN "account" AS "VideoChannel->Account" ON "VideoChannel"."accountId" = "VideoChannel->Account"."id"')
+  protected includeThumbnailsJSON () {
+    this.addJoin(
+      `  LEFT JOIN LATERAL (` +
+        `  SELECT json_agg(` +
+        `    jsonb_build_object(` +
+        `      ` + this.tables.getThumbnailAttributes().map(attr => `'${attr}', "${attr}"`).join(', ') +
+        `    )` +
+        `  ) AS "thumbnails" FROM "thumbnail" WHERE "videoId" = "video"."id"` +
+        `) AS "ThumbnailsJSON" ON TRUE`
+    )
 
     this.attributes = {
       ...this.attributes,
 
-      ...this.buildAttributesObject('VideoChannel', this.tables.getChannelAttributes()),
-      ...this.buildAttributesObject('VideoChannel->Account', this.tables.getUserAccountAttributes())
-    }
-  }
-
-  protected includeThumbnails () {
-    this.addJoin('LEFT OUTER JOIN "thumbnail" AS "Thumbnails" ON "video"."id" = "Thumbnails"."videoId"')
-
-    this.attributes = {
-      ...this.attributes,
-
-      ...this.buildAttributesObject('Thumbnails', this.tables.getThumbnailAttributes())
+      '"ThumbnailsJSON"."thumbnails"': '"ThumbnailsJSON"'
     }
   }
 

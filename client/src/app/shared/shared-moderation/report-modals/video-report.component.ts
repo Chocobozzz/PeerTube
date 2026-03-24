@@ -75,7 +75,7 @@ export class VideoReportComponent extends FormReactive implements OnInit {
       }
     })
 
-    this.predefinedReasons = this.abuseService.getPrefefinedReasons('video')
+    this.predefinedReasons = this.abuseService.getPredefinedReasons('video')
   }
 
   show () {

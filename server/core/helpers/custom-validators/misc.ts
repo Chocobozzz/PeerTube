@@ -165,11 +165,24 @@ export function toValueOrNull (value: string) {
   return value
 }
 
+export function toArray (value: any) {
+  if (!value) return []
+  if (isArray(value)) return value
+
+  if (typeof value === 'object' && value?.[0]) return Object.values(value)
+
+  return [ value ]
+}
+
 export function toIntArray (value: any) {
   if (!value) return []
-  if (isArray(value) === false) return [ validator.default.toInt(value) ]
+  if (isArray(value)) return value.map(v => validator.default.toInt(v))
 
-  return value.map(v => validator.default.toInt(v))
+  if (typeof value === 'object' && value?.[0]) return Object.values(value).map(v => validator.default.toInt(v + ''))
+
+  if (typeof value === 'string' || typeof value === 'number') return [ validator.default.toInt(value + '') ]
+
+  return []
 }
 
 // ---------------------------------------------------------------------------

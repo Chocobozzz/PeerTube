@@ -61,7 +61,7 @@ describe('House keeping CLI', function () {
   }
 
   async function checkLocalFiles () {
-    expect(await servers[0].servers.countFiles('thumbnails')).to.equal(2) // 2 images sizes per video
+    expect(await servers[0].servers.countFiles('thumbnails')).to.equal(5) // 5 images sizes per video
     expect(await servers[0].servers.countFiles('avatars')).to.equal(2 * 4) // 4 versions of 1 account and 1 channel
     expect(await servers[0].servers.countFiles('storyboards')).to.equal(1)
     expect(await servers[0].servers.countFiles('captions')).to.equal(1)
@@ -69,7 +69,7 @@ describe('House keeping CLI', function () {
 
   async function checkCachedFiles (options: { populated: boolean }) {
     if (options.populated) {
-      expect(await servers[0].servers.countFiles(join('cache', 'thumbnails'))).to.equal(2)
+      expect(await servers[0].servers.countFiles(join('cache', 'thumbnails'))).to.equal(5)
       expect(await servers[0].servers.countFiles(join('cache', 'avatars'))).to.equal(2 * 4)
       expect(await servers[0].servers.countFiles(join('cache', 'storyboards'))).to.equal(1)
       expect(await servers[0].servers.countFiles(join('cache', 'video-captions'))).to.equal(1)

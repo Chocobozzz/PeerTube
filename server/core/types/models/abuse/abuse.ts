@@ -52,6 +52,7 @@ export type MVideoAbuseFormattable =
       | 'Thumbnails'
       | 'getSmallestThumbnail'
       | 'getSmallestThumbnailStaticPath'
+      | 'filterThumbnails'
     >
   >
 

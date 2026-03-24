@@ -1,9 +1,17 @@
+@use "sass:math";
 @use "_variables" as *;
 @use "_mixins" as *;
 
 .p-select-list .p-select-option:hover {
   color: pvar(--fg);
   background: pvar(--bg-secondary-400);
+}
+
+p-select.small {
+  .p-select-label {
+    @include padding-left(calc(#{var(--p-select-padding-x)} / 2));
+    @include padding-right(calc(#{var(--p-select-padding-x)} / 2));
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -16,7 +24,6 @@
 }
 
 .p-inputchips-input {
-  // TODO: fix in upstream?
   gap: 1rem !important;
 
   input::placeholder {
@@ -31,6 +38,17 @@
 
 .p-inputchips.p-input-wrapper {
   width: 100%;
+}
+
+p-chips.small {
+  .p-inputchips-input {
+    padding-left: calc(#{pvar(--input-x-padding)} / 2) !important;
+    padding-right: calc(#{pvar(--input-x-padding)} / 2) !important;
+  }
+
+  .p-inputchips-input {
+    gap: 0.25rem !important;
+  }
 }
 
 // ---------------------------------------------------------------------------

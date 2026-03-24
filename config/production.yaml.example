@@ -9,6 +9,7 @@ webserver:
   port: 443
 
 # Secrets you need to generate the first time you run PeerTube
+# Mainly used to sign JWT tokens and TOTP
 secrets:
   # Generate one using `openssl rand -hex 32`
   peertube: ''
@@ -81,9 +82,9 @@ database:
   ssl: false
   ssl_settings:
     reject_unauthorized: false
-    ca: '/absolute/path/to/server-certificates/root.crt'
-    cert: '/absolute/path/to/client-certificates/postgresql.crt'
-    key: '/absolute/path/to/client-key/postgresql.key'
+    ca: null # '/absolute/path/to/server-certificates/root.crt'
+    cert: null # '/absolute/path/to/client-certificates/postgresql.crt'
+    key: null # '/absolute/path/to/client-key/postgresql.key'
   suffix: '_prod'
   username: 'peertube'
   password: 'peertube'
@@ -101,18 +102,18 @@ redis:
   enable_tls: false
   tls_settings:
     reject_unauthorized: false
-    ca: '/absolute/path/to/server-certificates/root.crt'
-    cert: '/absolute/path/to/client-certificates/postgresql.crt'
-    key: '/absolute/path/to/client-key/postgresql.key'
+    ca: null # '/absolute/path/to/server-certificates/root.crt'
+    cert: null # '/absolute/path/to/client-certificates/redis.crt'
+    key: null # '/absolute/path/to/client-key/redis.key'
 
   sentinel:
     enabled: false
     enable_tls: false
     tls_settings:
       reject_unauthorized: false
-      ca: '/absolute/path/to/server-certificates/root.crt'
-      cert: '/absolute/path/to/client-certificates/postgresql.crt'
-      key: '/absolute/path/to/client-key/postgresql.key'
+      ca: null # '/absolute/path/to/server-certificates/root.crt'
+      cert: null # '/absolute/path/to/client-certificates/redis.crt'
+      key: null # '/absolute/path/to/client-key/redis.key'
     master_name: ''
     password: ''
     sentinels:
@@ -215,10 +216,10 @@ object_storage:
   streaming_playlists:
     # Bucket name created on your object storage provider
     # PeerTube will access it via {bucket_name}.example.com
-    bucket_name: 'streaming-playlists'
+    bucket_name: 'peertube'
 
     # Allows setting all buckets to the same value but with a different prefix
-    prefix: '' # Example: 'streaming-playlists:'
+    prefix: 'streaming-playlists/'
 
     # Base url for object URL generation, scheme and host will be replaced by this URL
     # Useful when you want to use a CDN/external proxy
@@ -231,25 +232,25 @@ object_storage:
     store_live_streams: false
 
   web_videos:
-    bucket_name: 'web-videos'
-    prefix: ''
+    bucket_name: 'peertube'
+    prefix: 'web-videos/'
     base_url: ''
 
   user_exports:
-    bucket_name: 'user-exports'
-    prefix: ''
+    bucket_name: 'peertube'
+    prefix: 'user-exports/'
     base_url: ''
 
   # Same settings but for original video files
   original_video_files:
-    bucket_name: 'original-video-files'
-    prefix: ''
+    bucket_name: 'peertube'
+    prefix: 'original-video-files/'
     base_url: ''
 
   # Video captions
   captions:
-    bucket_name: 'captions'
-    prefix: ''
+    bucket_name: 'peertube'
+    prefix: 'captions/'
     base_url: ''
 
 log:
@@ -500,10 +501,28 @@ thumbnails:
     -
       width: 280
       height: 157
+      aspect_ratio: '16:9'
 
     -
       width: 850
       height: 480
+      aspect_ratio: '16:9'
+
+    -
+      width: 1280
+      height: 720
+      aspect_ratio: '16:9'
+
+    -
+      width: 1920
+      height: 1080
+      aspect_ratio: '16:9'
+
+    # For podcast applications
+    -
+      width: 1400
+      height: 1400
+      aspect_ratio: '1:1'
 
 stats:
   # Display registration requests stats (average response time, total requests...)
@@ -648,6 +667,11 @@ transcoding:
   # Transcode and keep original resolution, even if it's above your maximum enabled resolution
   always_transcode_original_resolution: true
 
+  # If web_videos transcoding is not enabled, some podcast applications may not be able to correctly play the HLS audio file
+  # Enabling this option ensures that PeerTube always produces an audio file in a format compatible with podcasts
+  # even if web_videos transcoding or audio resolution are disabled
+  always_transcode_podcast_optimized_audio: true
+
   fps:
     # Cap transcoded video FPS
     # Max resolution file still keeps the original FPS
@@ -693,6 +717,10 @@ live:
   # If the user daily/total quota is reached, PeerTube will stop the live
   # /!\ transcoding.enabled (and not live.transcoding.enabled) has to be true to create a replay
   allow_replay: true
+
+  # Allows viewers to rewind live streams
+  dvr:
+    max_window: '1 hour' # Set 0 to disable DVR
 
   # Allow your users to change latency settings (small latency/default/high latency)
   # Small latency live streams cannot use P2P
@@ -1213,7 +1241,7 @@ defaults:
       enabled: true
 
   player:
-    theme: 'galaxy' # 'galaxy' | 'lucide'
+    theme: 'lucide' # 'galaxy' | 'lucide'
 
     # By default, playback starts automatically when opening a video
     auto_play: true

@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 import { randomInt } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoImportState, VideoPrivacy } from '@peertube/peertube-models'
 import {
@@ -13,11 +11,15 @@ import {
   VideosCommand,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
+import { expect } from 'chai'
 
 describe('Test upload quota', function () {
   let server: PeerTubeServer
   let rootId: number
   let command: VideosCommand
+  let editorToken: string
+  let editorId: number
 
   // ---------------------------------------------------------------
 
@@ -34,6 +36,10 @@ describe('Test upload quota', function () {
     await server.users.update({ userId: rootId, videoQuota: 42 })
 
     command = server.videos
+
+    editorToken = await server.channelCollaborators.createEditor('editor', 'root_channel')
+    editorId = await server.users.getMyInfo({ token: editorToken }).then(info => info.id)
+    await server.users.update({ userId: editorId, videoQuota: -1, videoQuotaDaily: -1 })
   })
 
   describe('When having a video quota', function () {
@@ -70,20 +76,22 @@ describe('Test upload quota', function () {
     it('Should fail to import with HTTP/Torrent/magnet', async function () {
       this.timeout(120_000)
 
-      const baseAttributes = {
-        channelId: server.store.channel.id,
-        privacy: VideoPrivacy.PUBLIC
+      for (const token of [ server.accessToken, editorToken ]) {
+        const baseAttributes = {
+          channelId: server.store.channel.id,
+          privacy: VideoPrivacy.PUBLIC
+        }
+        await server.videoImports.importVideo({ token, attributes: { ...baseAttributes, targetUrl: FIXTURE_URLS.goodVideo } })
+        await server.videoImports.importVideo({ token, attributes: { ...baseAttributes, magnetUri: FIXTURE_URLS.magnet } })
+        await server.videoImports.importVideo({ token, attributes: { ...baseAttributes, torrentfile: 'video-720p.torrent' as any } })
       }
-      await server.videoImports.importVideo({ attributes: { ...baseAttributes, targetUrl: FIXTURE_URLS.goodVideo } })
-      await server.videoImports.importVideo({ attributes: { ...baseAttributes, magnetUri: FIXTURE_URLS.magnet } })
-      await server.videoImports.importVideo({ attributes: { ...baseAttributes, torrentfile: 'video-720p.torrent' as any } })
 
       await waitJobs([ server ])
 
       const { total, data: videoImports } = await server.videoImports.listMyVideoImports()
-      expect(total).to.equal(3)
+      expect(total).to.equal(6)
 
-      expect(videoImports).to.have.lengthOf(3)
+      expect(videoImports).to.have.lengthOf(6)
 
       for (const videoImport of videoImports) {
         expect(videoImport.state.id).to.equal(VideoImportState.FAILED)
@@ -97,8 +105,12 @@ describe('Test upload quota', function () {
     it('Should fail with a user having too many videos daily', async function () {
       await server.users.update({ userId: rootId, videoQuotaDaily: 42 })
 
-      await command.upload({ expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413, mode: 'legacy' })
-      await command.upload({ expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413, mode: 'resumable' })
+      for (const token of [ server.accessToken, editorToken ]) {
+        const attributes = { channelId: server.store.channel.id }
+
+        await command.upload({ token, expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413, mode: 'legacy', attributes })
+        await command.upload({ token, expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413, mode: 'resumable', attributes })
+      }
     })
   })
 
@@ -123,6 +135,52 @@ describe('Test upload quota', function () {
 
       await command.upload({ expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413, mode: 'legacy' })
       await command.upload({ expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413, mode: 'resumable' })
+    })
+  })
+
+  describe('With channel editors', function () {
+    it('Should take into account the quota of the target channel', async function () {
+      await server.users.update({ userId: rootId, videoQuota: 42, videoQuotaDaily: 42 })
+
+      await command.upload({
+        token: editorToken,
+        attributes: { channelId: server.store.channel.id },
+        expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413
+      })
+
+      await command.upload({
+        token: editorToken,
+        attributes: { channelId: await server.channels.getIdOf({ channelName: 'editor_channel' }) }
+      })
+    })
+
+    it('Should not be able to update the channel of a video if the target channel owner has no quota left', async function () {
+      await server.users.update({ userId: rootId, videoQuota: -1, videoQuotaDaily: -1 })
+      await server.users.update({ userId: editorId, videoQuota: 42, videoQuotaDaily: 42 })
+
+      await server.channels.create({ attributes: { name: 'root_channel2' }, token: server.accessToken })
+      await server.channelCollaborators.addEditor({ channel: 'root_channel2', editorToken, editor: 'editor' })
+
+      const { uuid } = await command.quickUpload({ name: 'video' })
+
+      // Another root channel, no problem
+      await command.update({
+        id: uuid,
+        token: editorToken,
+        attributes: {
+          channelId: await server.channels.getIdOf({ channelName: 'root_channel2' })
+        }
+      })
+
+      // Editor channel, failing
+      await command.update({
+        id: uuid,
+        token: editorToken,
+        attributes: {
+          channelId: await server.channels.getIdOf({ channelName: 'editor_channel' })
+        },
+        expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413
+      })
     })
   })
 

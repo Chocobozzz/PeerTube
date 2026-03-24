@@ -6,6 +6,8 @@ import {
   PeerTubeError,
   VideoChannelActivityAction,
   VideoCreate,
+  VideoEmbedPrivacyPolicy,
+  VideoEmbedPrivacyPolicyType,
   VideoPrivacy,
   VideoStateType
 } from '@peertube/peertube-models'
@@ -21,7 +23,7 @@ import { VideoLiveScheduleModel } from '@server/models/video/video-live-schedule
 import { VideoLiveModel } from '@server/models/video/video-live.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MChannel, MChannelAccountLight, MUserAccountId, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
+import { MChannel, MChannelAccountLight, MUserAccountId, MVideoFile, MVideoFull } from '@server/types/models/index.js'
 import { FilteredModelAttributes } from '@server/types/sequelize.js'
 import { FfprobeData } from 'fluent-ffmpeg'
 import { move } from 'fs-extra/esm'
@@ -30,7 +32,7 @@ import { federateVideoIfNeeded } from './activitypub/videos/federate.js'
 import { AutomaticTagger } from './automatic-tags/automatic-tagger.js'
 import { setAndSaveVideoAutomaticTags } from './automatic-tags/automatic-tags.js'
 import { Hooks } from './plugins/hooks.js'
-import { createLocalVideoThumbnailsFromVideo, createLocalVideoThumbnailsFromImage } from './thumbnail.js'
+import { createLocalVideoThumbnailsFromImage, createLocalVideoThumbnailsFromVideo } from './thumbnail.js'
 import { autoBlacklistVideoIfNeeded } from './video-blacklist.js'
 import { replaceChapters, replaceChaptersFromDescriptionIfNeeded } from './video-chapters.js'
 import { buildNewFile, createVideoSource } from './video-file.js'
@@ -43,11 +45,23 @@ type VideoAttributes = Omit<VideoCreate, 'channelId'> & {
   isLive: boolean
   state: VideoStateType
   inputFilename: string
+
+  embedPrivacyPolicy?: VideoEmbedPrivacyPolicyType
 }
 
-type LiveAttributes = Pick<LiveVideoCreate, 'permanentLive' | 'latencyMode' | 'saveReplay' | 'replaySettings' | 'schedules'> & {
-  streamKey?: string
-}
+type LiveAttributes =
+  & Pick<
+    LiveVideoCreate,
+    | 'permanentLive'
+    | 'latencyMode'
+    | 'dvrWindow'
+    | 'saveReplay'
+    | 'replaySettings'
+    | 'schedules'
+  >
+  & {
+    streamKey?: string
+  }
 
 export type ThumbnailOption = {
   path: string
@@ -74,7 +88,7 @@ export class LocalVideoCreator {
   private readonly channel: MChannelAccountLight
   private readonly videoAttributeResultHook: VideoAttributeHookFilter
 
-  private video: MVideoFullLight
+  private video: MVideoFull
   private videoFile: MVideoFile
   private videoPath: string
 
@@ -118,7 +132,7 @@ export class LocalVideoCreator {
   async create () {
     this.video = new VideoModel(
       await Hooks.wrapObject(this.buildVideo(this.videoAttributes, this.channel), this.videoAttributeResultHook)
-    ) as MVideoFullLight
+    ) as MVideoFull
 
     this.video.VideoChannel = this.channel
     this.video.url = getLocalVideoActivityPubUrl(this.video)
@@ -195,6 +209,7 @@ export class LocalVideoCreator {
             saveReplay: this.liveAttributes.saveReplay || false,
             permanentLive: this.liveAttributes.permanentLive || false,
             latencyMode: this.liveAttributes.latencyMode || LiveVideoLatencyMode.DEFAULT,
+            dvrWindow: this.liveAttributes.dvrWindow ?? CONFIG.LIVE.DVR.MAX_WINDOW,
             streamKey: this.liveAttributes.streamKey || buildUUID()
           })
 
@@ -278,7 +293,7 @@ export class LocalVideoCreator {
     })
   }
 
-  private buildVideo (videoInfo: VideoAttributes, channel: MChannel): FilteredModelAttributes<VideoModel> {
+  private buildVideo (videoInfo: VideoAttributes, channel: MChannel) {
     return {
       name: videoInfo.name,
       state: videoInfo.state,
@@ -289,6 +304,8 @@ export class LocalVideoCreator {
       commentsPolicy: videoInfo.commentsPolicy ?? CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY,
       downloadEnabled: videoInfo.downloadEnabled ?? CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
       waitTranscoding: videoInfo.waitTranscoding || false,
+
+      embedPrivacyPolicy: videoInfo.embedPrivacyPolicy ?? VideoEmbedPrivacyPolicy.ALL_ALLOWED,
 
       nsfw: videoInfo.nsfw || false,
       nsfwSummary: videoInfo.nsfwSummary,
@@ -309,6 +326,6 @@ export class LocalVideoCreator {
 
       uuid: buildUUID(),
       duration: videoInfo.duration
-    }
+    } satisfies FilteredModelAttributes<VideoModel>
   }
 }

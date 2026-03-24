@@ -1,5 +1,5 @@
 import { millisecondsToTime } from '@peertube/peertube-core-utils'
-import { SUUID, buildAbsoluteFixturePath, buildSUUID } from '@peertube/peertube-node-utils'
+import { buildAbsoluteFixturePath, buildSUUID } from '@peertube/peertube-node-utils'
 import {
   TranscriptFile,
   TranscriptionEngine,
@@ -15,7 +15,7 @@ import { createLogger, format, transports } from 'winston'
 import { TranscriptFileEvaluator } from './transcript-file-evaluator.js'
 
 interface BenchmarkResult {
-  uuid: SUUID
+  uuid: string
   WER?: number
   CER?: number
   duration?: number
@@ -23,11 +23,11 @@ interface BenchmarkResult {
   model?: string
 }
 
-type Benchmark = Record<SUUID, BenchmarkResult>
+type Benchmark = Record<string, BenchmarkResult>
 
 const benchmarkReducer = (benchmark: Benchmark = {}, benchmarkResult: BenchmarkResult) => ({
   ...benchmark,
-  [benchmarkResult.uuid]:  {
+  [benchmarkResult.uuid]: {
     ...benchmark[benchmarkResult.uuid],
     ...benchmarkResult
   }
@@ -80,12 +80,12 @@ void (async () => {
 
   // before
   await ensureDir(transcriptDirectory)
-  const performanceObserver = new PerformanceObserver((items) => {
+  const performanceObserver = new PerformanceObserver(items => {
     items
       .getEntries()
-      .forEach((entry) => {
+      .forEach(entry => {
         benchmarkResults = benchmarkReducer(benchmarkResults, {
-          uuid: entry.name as SUUID,
+          uuid: entry.name,
           duration: entry.duration
         })
       })

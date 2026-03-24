@@ -25,6 +25,7 @@ export class VideoImportListQueryBuilder extends AbstractListQuery {
   private builtThumbnailJoin = false
   private builtAccountAvatarJoin = false
   private builtChannelAvatarJoin = false
+  private builtChannelSyncJoin = false
 
   constructor (
     protected readonly sequelize: Sequelize,
@@ -174,6 +175,14 @@ export class VideoImportListQueryBuilder extends AbstractListQuery {
     this.builtChannelAvatarJoin = true
   }
 
+  private buildChannelSyncJoin () {
+    if (this.builtChannelSyncJoin) return
+
+    this.join += ' LEFT JOIN "videoChannelSync" "VideoChannelSync" ON "VideoChannelSync"."id" = "VideoImportModel"."videoChannelSyncId" '
+
+    this.builtChannelSyncJoin = true
+  }
+
   // ---------------------------------------------------------------------------
 
   protected buildQueryJoin () {
@@ -181,6 +190,7 @@ export class VideoImportListQueryBuilder extends AbstractListQuery {
     this.buildAccountAvatarsJoin()
     this.buildTagJoin()
     this.buildThumbnailJoin()
+    this.buildChannelSyncJoin()
   }
 
   protected buildQueryAttributes () {
@@ -190,7 +200,8 @@ export class VideoImportListQueryBuilder extends AbstractListQuery {
       this.tableAttributes.getVideoTagAttributes(),
       this.tableAttributes.getAccountAvatarAttributes(),
       this.tableAttributes.getChannelAvatarAttributes(),
-      this.tableAttributes.getThumbnailAttributes()
+      this.tableAttributes.getThumbnailAttributes(),
+      this.tableAttributes.getChannelSyncAttributes()
     ]
   }
 

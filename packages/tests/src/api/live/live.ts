@@ -60,6 +60,9 @@ describe('Test live', function () {
           },
           transcoding: {
             enabled: false
+          },
+          dvr: {
+            maxWindow: 36
           }
         }
       }
@@ -69,6 +72,53 @@ describe('Test live', function () {
     await doubleFollow(servers[0], servers[1])
 
     commands = servers.map(s => s.live)
+  })
+
+  describe('Live DVR settings', function () {
+    let liveVideoUUID: string
+
+    it('Should create a live with custom DVR settings', async function () {
+      const live = await commands[0].create({
+        fields: {
+          name: 'live dvr settings',
+          channelId: servers[0].store.channel.id,
+          privacy: VideoPrivacy.PUBLIC,
+          permanentLive: true,
+          dvrWindow: 13
+        }
+      })
+      liveVideoUUID = live.uuid
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const live = await server.live.get({ videoId: liveVideoUUID })
+
+        expect(live.dvrWindow).to.equal(13)
+      }
+    })
+
+    it('Should update DVR settings on the live', async function () {
+      await commands[0].update({
+        videoId: liveVideoUUID,
+        fields: {
+          dvrWindow: 10
+        }
+      })
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const live = await server.live.get({ videoId: liveVideoUUID })
+
+        expect(live.dvrWindow).to.equal(10)
+      }
+    })
+
+    it('Should delete the DVR test live', async function () {
+      await servers[0].videos.remove({ id: liveVideoUUID })
+      await waitJobs(servers)
+    })
   })
 
   describe('Live creation, update and delete', function () {
@@ -95,7 +145,7 @@ describe('Test live', function () {
           replaySettings: { privacy: VideoPrivacy.PUBLIC },
           latencyMode: LiveVideoLatencyMode.SMALL_LATENCY,
           privacy: VideoPrivacy.PUBLIC,
-          thumbnailfile: 'video_short1.webm-thumbnail-850x480.jpg'
+          thumbnailfile: 'custom-thumbnail-input.jpg'
         }
       })
       liveVideoUUID = live.uuid
@@ -128,7 +178,7 @@ describe('Test live', function () {
         await checkThumbnails({
           server,
           video,
-          thumbnails: [ 'video_short1.webm-thumbnail-850x480.jpg', 'video_short1.webm.jpg' ]
+          thumbnails: [ 'custom-thumbnail-850x480.jpg', 'custom-thumbnail-280x157.jpg' ]
         })
 
         const live = await server.live.get({ videoId: liveVideoUUID })
@@ -146,6 +196,7 @@ describe('Test live', function () {
 
         expect(live.saveReplay).to.be.true
         expect(live.latencyMode).to.equal(LiveVideoLatencyMode.SMALL_LATENCY)
+        expect(live.dvrWindow).to.equal(36)
       }
     })
 

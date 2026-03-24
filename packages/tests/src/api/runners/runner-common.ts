@@ -367,6 +367,17 @@ describe('Test runner common actions', function () {
           expect(data).to.have.lengthOf(0)
           expect(total).to.equal(0)
         }
+
+        {
+          const { total, data } = await server.runnerJobs.list({ typeOneOf: [ 'vod-hls-transcoding' ] })
+
+          expect(data).to.not.have.lengthOf(0)
+          expect(total).to.not.equal(0)
+
+          for (const job of data) {
+            expect(job.type).to.equal('vod-hls-transcoding')
+          }
+        }
       })
     })
 

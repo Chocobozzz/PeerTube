@@ -9,7 +9,7 @@ import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { getVideoFileMimeType } from '@server/lib/video-file.js'
 import { buildPodcastGroupsCache, cacheRouteFactory, videoFeedsPodcastSetCacheKey } from '@server/middlewares/index.js'
-import { MVideo, MVideoCaptionVideo, MVideoFullLight } from '@server/types/models/index.js'
+import { MVideo, MVideoCaptionVideo, MVideoFull } from '@server/types/models/index.js'
 import express from 'express'
 import { extname } from 'path'
 import { MIMETYPES, ROUTE_CACHE_LIFETIME, VIDEO_CATEGORIES, WEBSERVER } from '../../initializers/constants.js'
@@ -217,7 +217,7 @@ async function addVODPodcastItem (options: {
     .map(f => buildVODWebVideoFile(video, f))
     .sort(sortObjectComparator('bitrate', 'asc'))
 
-  const streamingPlaylistFiles = buildVODStreamingPlaylists(video)
+  const streamingPlaylistFiles = buildVODStreamingPlaylistsIfMissingWebVideoFile(video)
 
   // Order matters here, the first media URI will be the "default"
   // So web videos are default if enabled
@@ -273,7 +273,7 @@ function buildVODWebVideoFile (video: MVideo, videoFile: VideoFile) {
   }
 }
 
-function buildVODStreamingPlaylists (video: MVideoFullLight) {
+function buildVODStreamingPlaylistsIfMissingWebVideoFile (video: MVideoFull) {
   const hls = video.getHLSPlaylist()
   if (!hls) return []
 
@@ -281,6 +281,7 @@ function buildVODStreamingPlaylists (video: MVideoFullLight) {
 
   return [
     ...hls.VideoFiles
+      .filter(videoFile => !video.VideoFiles.some(f => f.fps === videoFile.fps && f.resolution === videoFile.resolution))
       .sort(sortObjectComparator('resolution', 'asc'))
       .map(videoFile => {
         const files = [ videoFile ]
@@ -320,7 +321,7 @@ function buildVODStreamingPlaylists (video: MVideoFullLight) {
   ]
 }
 
-function buildLiveStreamingPlaylists (video: MVideoFullLight) {
+function buildLiveStreamingPlaylists (video: MVideoFull) {
   const hls = video.getHLSPlaylist()
 
   return [

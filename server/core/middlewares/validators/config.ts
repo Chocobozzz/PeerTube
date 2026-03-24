@@ -132,6 +132,7 @@ export const customConfigUpdateValidator = [
   body('live.transcoding.alwaysTranscodeOriginalResolution').isBoolean(),
   body('live.transcoding.fps.max').custom(isIntOrNull),
   body('live.transcoding.remoteRunners.enabled').isBoolean(),
+  body('live.dvr.maxWindow').custom(isIntOrNull),
 
   body('search.remoteUri.users').isBoolean(),
   body('search.remoteUri.anonymous').isBoolean(),

@@ -12,6 +12,9 @@ import {
   VideoChapter,
   VideoCreate,
   VideoDetails,
+  VideoEmbedPrivacy,
+  VideoEmbedPrivacyPolicy,
+  VideoEmbedPrivacyUpdate,
   VideoImportCreate,
   VideoPrivacy,
   VideoPrivacyType,
@@ -24,6 +27,7 @@ import {
   VideoUpdate
 } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
+import { splitAndGetNotEmpty } from '@root-helpers/string'
 import debug from 'debug'
 import { Jsonify, SharedUnionFieldsDeep } from 'type-fest'
 import { VideoCaptionWithPathEdit } from './video-caption-edit.model'
@@ -48,9 +52,14 @@ type CommonUpdateForm =
     nsfwFlagSex?: boolean
   }
 
-type LiveUpdateForm = Omit<LiveVideoUpdate, 'replaySettings' | 'schedules'> & {
+type LiveUpdateForm = Omit<LiveVideoUpdate, 'replaySettings' | 'schedules' | 'dvrWindow'> & {
   replayPrivacy?: VideoPrivacyType
+
+  dvrEnabled?: boolean
+  dvrWindowMinutes?: number
+
   liveStreamKey?: string
+
   schedules?: {
     startAt?: Date
   }[]
@@ -69,6 +78,11 @@ type StudioForm = {
 
 type PlayerSettingsForm = PlayerVideoSettingsUpdate
 
+type EmbedPrivacyForm = {
+  videoPrivacyEmbedEnableAllowlist?: boolean
+  videoPrivacyEmbedAllowlistDomains?: string
+}
+
 // ---------------------------------------------------------------------------
 
 type LoadFromPublishOptions = Required<Pick<VideoCreate, 'channelId' | 'support'>> & Partial<Pick<VideoCreate, 'name'>> & {
@@ -81,7 +95,12 @@ type CreateFromImportOptions = LoadFromPublishOptions & Pick<VideoImportCreate, 
 
 type CreateFromLiveOptions =
   & CreateFromUploadOptions
-  & Required<Pick<LiveVideoCreate, 'permanentLive' | 'latencyMode' | 'saveReplay' | 'replaySettings' | 'schedules'>>
+  & Required<
+    Pick<
+      LiveVideoCreate,
+      'permanentLive' | 'latencyMode' | 'dvrWindow' | 'saveReplay' | 'replaySettings' | 'schedules'
+    >
+  >
 
 type UpdateFromAPIOptions = {
   video?: Pick<
@@ -111,7 +130,9 @@ type UpdateFromAPIOptions = {
     | 'likes'
     | 'aspectRatio'
     | 'views'
+    | 'downloads'
     | 'blacklisted'
+    | 'blacklistedReason'
     | 'thumbnails'
     | 'state'
     | 'isLive'
@@ -122,6 +143,7 @@ type UpdateFromAPIOptions = {
   videoPasswords?: string[]
   videoSource?: VideoSource
   playerSettings: PlayerVideoSettings
+  embedPrivacy: VideoEmbedPrivacy
 }
 
 // ---------------------------------------------------------------------------
@@ -150,7 +172,8 @@ export class VideoEdit {
   private live: LiveUpdate
   private replaceFile: File
   private studioTasks: VideoStudioTask[] = []
-  private playerSettings: PlayerVideoSettings
+  private playerSettings: PlayerVideoSettingsUpdate
+  private embedPrivacy: VideoEmbedPrivacyUpdate
 
   private videoImport: Pick<VideoImportCreate, 'magnetUri' | 'torrentfile' | 'targetUrl'>
 
@@ -161,10 +184,12 @@ export class VideoEdit {
     state: VideoStateType
     isLive: boolean
     views: number
+    downloads: number
     aspectRatio: number
     duration: number
     likes: number
     blacklisted: boolean
+    blacklistedReason: string
 
     ownerAccountId: number
     ownerAccountDisplayName: string
@@ -184,9 +209,11 @@ export class VideoEdit {
     aspectRatio: number
     duration: number
     views: number
+    downloads: number
     likes: number
 
     blacklisted: boolean
+    blacklistedReason: string
 
     ownerAccountId: number
     ownerAccountDisplayName: string
@@ -199,7 +226,9 @@ export class VideoEdit {
     thumbnailfile?: { size: number }
 
     live?: LiveUpdate
-    playerSettings?: PlayerVideoSettings
+    playerSettings?: PlayerVideoSettingsUpdate
+
+    embedPrivacy?: VideoEmbedPrivacyUpdate
 
     pluginData?: any
     pluginDefaults?: Record<string, string | boolean>
@@ -259,6 +288,8 @@ export class VideoEdit {
       latencyMode: options.latencyMode,
       permanentLive: options.permanentLive,
 
+      dvrWindow: options.dvrWindow,
+
       saveReplay: options.saveReplay,
 
       replaySettings: options.replaySettings
@@ -294,6 +325,7 @@ export class VideoEdit {
     this.common.pluginData = {}
 
     this.metadata.views = 0
+    this.metadata.downloads = 0
     this.metadata.likes = 0
 
     this.metadata.ownerAccountDisplayName = options.user.account.displayName
@@ -304,6 +336,7 @@ export class VideoEdit {
 
   // ---------------------------------------------------------------------------
 
+  // Build a new VideoEdit model based on data coming from the API
   static async createFromAPI (serverConfig: HTMLServerConfig, options: UpdateFromAPIOptions) {
     const videoEdit = new VideoEdit(serverConfig)
     await videoEdit.loadFromAPI(options)
@@ -312,13 +345,14 @@ export class VideoEdit {
   }
 
   async loadFromAPI (options: UpdateFromAPIOptions & { loadPrivacy?: boolean }) {
-    const { video, videoPasswords, live, chapters, captions, videoSource, playerSettings, loadPrivacy = true } = options
+    const { video, videoPasswords, live, chapters, captions, videoSource, playerSettings, embedPrivacy, loadPrivacy = true } = options
 
     debugLogger('Load from API', options)
 
     this.loadVideo({ video, videoPasswords, saveInStore: true, loadPrivacy })
     this.loadLive(live)
     this.loadPlayerSettings(playerSettings)
+    this.loadEmbedPrivacy(embedPrivacy)
 
     if (captions !== undefined) {
       this.captions = captions
@@ -411,9 +445,11 @@ export class VideoEdit {
     this.metadata.state = video.state.id
     this.metadata.duration = video.duration
     this.metadata.views = video.views
+    this.metadata.downloads = video.downloads
     this.metadata.likes = video.likes
     this.metadata.aspectRatio = video.aspectRatio
     this.metadata.blacklisted = video.blacklisted
+    this.metadata.blacklistedReason = video.blacklistedReason
 
     this.metadata.isLive = video.isLive
 
@@ -454,6 +490,7 @@ export class VideoEdit {
       return {
         permanentLive: live.permanentLive,
         latencyMode: live.latencyMode,
+        dvrWindow: live.dvrWindow,
         saveReplay: live.saveReplay,
 
         replaySettings: live.replaySettings
@@ -482,6 +519,18 @@ export class VideoEdit {
 
     this.playerSettings = buildObj()
     this.saveStore.playerSettings = buildObj()
+  }
+
+  private loadEmbedPrivacy (embedPrivacy: UpdateFromAPIOptions['embedPrivacy']) {
+    const buildObj = () => {
+      return {
+        policy: embedPrivacy.policy.id,
+        domains: embedPrivacy.domains ?? []
+      }
+    }
+
+    this.embedPrivacy = buildObj()
+    this.saveStore.embedPrivacy = buildObj()
   }
 
   loadAfterPublish (options: {
@@ -675,6 +724,14 @@ export class VideoEdit {
     if (values.latencyMode !== undefined) this.live.latencyMode = values.latencyMode
     if (values.saveReplay !== undefined) this.live.saveReplay = values.saveReplay
 
+    if (values.dvrWindowMinutes !== undefined) {
+      this.live.dvrWindow = this.dvrWindowMinutesToSeconds(values.dvrWindowMinutes)
+    }
+
+    if (values.dvrEnabled !== undefined && values.dvrEnabled === false) {
+      this.live.dvrWindow = 0
+    }
+
     if (values.replayPrivacy !== undefined) {
       this.live.replaySettings = values.replayPrivacy
         ? { privacy: values.replayPrivacy }
@@ -699,6 +756,10 @@ export class VideoEdit {
       liveStreamKey: this.metadata.live.streamKey,
       permanentLive: this.live.permanentLive,
       latencyMode: this.live.latencyMode,
+
+      dvrEnabled: this.live.dvrWindow > 0,
+      dvrWindowMinutes: this.dvrWindowToMinutes(this.live.dvrWindow),
+
       saveReplay: this.live.saveReplay,
 
       replayPrivacy: this.live.replaySettings
@@ -719,7 +780,7 @@ export class VideoEdit {
         ? this.live.replaySettings
         : undefined,
       latencyMode: this.live.latencyMode,
-
+      dvrWindow: this.live.dvrWindow,
       schedules: this.live.schedules
     }
   }
@@ -730,6 +791,7 @@ export class VideoEdit {
 
       permanentLive: this.live.permanentLive,
       latencyMode: this.live.latencyMode,
+      dvrWindow: this.live.dvrWindow,
       saveReplay: this.live.saveReplay,
       replaySettings: this.live.replaySettings,
       schedules: this.live.schedules
@@ -841,13 +903,33 @@ export class VideoEdit {
     }
   }
 
-  toPlayerSettingsUpdate (): PlayerVideoSettingsUpdate {
-    if (!this.playerSettings) return undefined
+  // ---------------------------------------------------------------------------
 
-    return {
-      theme: this.playerSettings.theme
+  loadFromEmbedPrivacyForm (value: EmbedPrivacyForm) {
+    this.embedPrivacy = {
+      policy: value.videoPrivacyEmbedEnableAllowlist
+        ? VideoEmbedPrivacyPolicy.ALLOWLIST
+        : VideoEmbedPrivacyPolicy.ALL_ALLOWED,
+
+      domains: splitAndGetNotEmpty(value.videoPrivacyEmbedAllowlistDomains)
     }
   }
+
+  toEmbedPrivacyFormPatch (): Required<EmbedPrivacyForm> {
+    if (!this.embedPrivacy) {
+      return {
+        videoPrivacyEmbedEnableAllowlist: false,
+        videoPrivacyEmbedAllowlistDomains: ''
+      }
+    }
+
+    return {
+      videoPrivacyEmbedEnableAllowlist: this.embedPrivacy.policy === VideoEmbedPrivacyPolicy.ALLOWLIST,
+      videoPrivacyEmbedAllowlistDomains: this.embedPrivacy.domains.join('\n')
+    }
+  }
+
+  // ---------------------------------------------------------------------------
 
   // ---------------------------------------------------------------------------
 
@@ -881,6 +963,10 @@ export class VideoEdit {
 
   getPlayerSettings () {
     return this.playerSettings
+  }
+
+  getEmbedPrivacy () {
+    return this.embedPrivacy
   }
 
   getStudioTasksSummary () {
@@ -1014,6 +1100,21 @@ export class VideoEdit {
     return changes
   }
 
+  hasEmbedPrivacyChanges () {
+    if (!this.embedPrivacy) return false
+    if (!this.saveStore.embedPrivacy) return true
+
+    const changes = !this.areSameObjects(this.embedPrivacy, this.saveStore.embedPrivacy)
+
+    debugLogger('Check if embed privacy has changes', {
+      embedPrivacy: this.embedPrivacy,
+      saveEmbedPrivacy: this.saveStore.embedPrivacy,
+      changes
+    })
+
+    return changes
+  }
+
   // ---------------------------------------------------------------------------
 
   hasPendingChanges () {
@@ -1024,7 +1125,8 @@ export class VideoEdit {
       this.hasChaptersChanges() ||
       this.hasCommonChanges() ||
       this.hasPluginDataChanges() ||
-      this.hasPlayerSettingsChanges()
+      this.hasPlayerSettingsChanges() ||
+      this.hasEmbedPrivacyChanges()
   }
 
   // ---------------------------------------------------------------------------
@@ -1044,15 +1146,25 @@ export class VideoEdit {
       isLive: this.metadata.isLive,
       aspectRatio: this.metadata.aspectRatio,
       views: this.metadata.views,
+      downloads: this.metadata.downloads,
       likes: this.metadata.likes,
       duration: this.metadata.duration,
       blacklisted: this.metadata.blacklisted,
+      blacklistedReason: this.metadata.blacklistedReason,
 
       ownerAccountId: this.metadata.ownerAccountId,
       ownerAccountDisplayName: this.metadata.ownerAccountDisplayName,
 
       live: this.metadata.live
     }
+  }
+
+  private dvrWindowToMinutes (seconds: number) {
+    return Math.round(seconds / 60)
+  }
+
+  private dvrWindowMinutesToSeconds (minutes: number) {
+    return minutes * 60
   }
 
   // ---------------------------------------------------------------------------

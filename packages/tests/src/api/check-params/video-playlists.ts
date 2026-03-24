@@ -808,6 +808,30 @@ describe('Test video playlists API validator', function () {
       })
     })
 
+    it('Should succeed with many handles', async function () {
+      const handles = Array.from({ length: 90 }, (_, i) => i + 1)
+
+      await makeGetRequest({
+        url: server.url,
+        token: server.accessToken,
+        path,
+        query: { videoIds: handles },
+        expectedStatus: HttpStatusCode.OK_200
+      })
+    })
+
+    it('Should fail with too many handles', async function () {
+      const handles = Array.from({ length: 101 }, (_, i) => i + 1)
+
+      await makeGetRequest({
+        url: server.url,
+        token: server.accessToken,
+        path,
+        query: { videoIds: handles },
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
     it('Should succeed with the correct params', async function () {
       await makeGetRequest({
         url: server.url,

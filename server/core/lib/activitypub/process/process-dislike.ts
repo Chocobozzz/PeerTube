@@ -27,7 +27,7 @@ async function processDislike (activity: ActivityDislike, byActor: MActorSignatu
 
   if (!byAccount) throw new Error('Cannot create dislike with the non account actor ' + byActor.url)
 
-  const { video: onlyVideo } = await maybeGetOrCreateAPVideo({ videoObject: videoUrl, fetchType: 'only-video-and-blacklist' })
+  const { video: onlyVideo } = await maybeGetOrCreateAPVideo({ videoObject: videoUrl, fetchType: 'with-blacklist' })
   if (!onlyVideo?.isLocal()) return
 
   if (!canVideoBeFederated(onlyVideo)) {

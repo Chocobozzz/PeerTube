@@ -189,7 +189,7 @@ describe('Test a single server', function () {
       await server.views.simulateView({ id: videoId })
       await server.views.simulateView({ id: videoId })
 
-      await server.debug.sendCommand({ body: { command: 'process-video-views-buffer' } })
+      await server.debug.sendCommand({ body: { command: 'process-video-stats-buffer' } })
 
       const video = await server.videos.get({ id: videoId })
       expect(video.views).to.equal(3)
@@ -265,7 +265,7 @@ describe('Test a single server', function () {
       videosListBase = data
 
       for (const video of data) {
-        await checkThumbnails({ video, server, thumbnails: [ video.name.replace(' name', '') + '.jpg' ], strict: false })
+        await checkThumbnails({ video, server, thumbnails: [ video.name.replace(' name', '') + '.jpg' ] })
       }
     })
 

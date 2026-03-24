@@ -90,21 +90,21 @@ describe('Test player settings', function () {
       channelHandle: 'root_channel',
       expectedRawVideo: 'channel-default',
       expectedRawChannel: 'instance-default',
-      expectedVideo: 'galaxy',
-      expectedChannel: 'galaxy'
+      expectedVideo: 'lucide',
+      expectedChannel: 'lucide'
     })
 
     await check({
       server: servers[1],
       videoId: video.uuid,
       channelHandle: 'root_channel@' + servers[0].host,
-      expectedVideo: 'galaxy',
-      expectedChannel: 'galaxy'
+      expectedVideo: 'lucide',
+      expectedChannel: 'lucide'
     })
   })
 
   it('Should update instance settings and return the updated settings', async function () {
-    await servers[0].config.updateExistingConfig({ newConfig: { defaults: { player: { theme: 'lucide' } } } })
+    await servers[0].config.updateExistingConfig({ newConfig: { defaults: { player: { theme: 'galaxy' } } } })
 
     await check({
       server: servers[0],
@@ -112,8 +112,8 @@ describe('Test player settings', function () {
       channelHandle: 'root_channel',
       expectedRawVideo: 'channel-default',
       expectedRawChannel: 'instance-default',
-      expectedVideo: 'lucide',
-      expectedChannel: 'lucide'
+      expectedVideo: 'galaxy',
+      expectedChannel: 'galaxy'
     })
 
     // Instance 2 keeps its own instance default
@@ -121,49 +121,24 @@ describe('Test player settings', function () {
       server: servers[1],
       videoId: video.uuid,
       channelHandle: 'root_channel@' + servers[0].host,
-      expectedVideo: 'galaxy',
-      expectedChannel: 'galaxy'
+      expectedVideo: 'lucide',
+      expectedChannel: 'lucide'
     })
 
     // Update instance 2 default theme to observe changes
-    await servers[1].config.updateExistingConfig({ newConfig: { defaults: { player: { theme: 'lucide' } } } })
+    await servers[1].config.updateExistingConfig({ newConfig: { defaults: { player: { theme: 'galaxy' } } } })
 
     await check({
       server: servers[1],
       videoId: video.uuid,
       channelHandle: 'root_channel@' + servers[0].host,
-      expectedVideo: 'lucide',
-      expectedChannel: 'lucide'
+      expectedVideo: 'galaxy',
+      expectedChannel: 'galaxy'
     })
   })
 
   it('Should update player settings of the channel and return the updated settings', async function () {
-    const { theme } = await servers[0].playerSettings.updateForChannel({ channelHandle: 'root_channel', theme: 'galaxy' })
-    expect(theme).to.equal('galaxy')
-
-    await waitJobs(servers)
-
-    await check({
-      server: servers[0],
-      videoId: video.uuid,
-      channelHandle: 'root_channel',
-      expectedRawVideo: 'channel-default',
-      expectedRawChannel: 'galaxy',
-      expectedVideo: 'galaxy',
-      expectedChannel: 'galaxy'
-    })
-
-    await check({
-      server: servers[1],
-      videoId: video.uuid,
-      channelHandle: 'root_channel@' + servers[0].host,
-      expectedVideo: 'galaxy',
-      expectedChannel: 'galaxy'
-    })
-  })
-
-  it('Should update player settings of the video and return the updated settings', async function () {
-    const { theme } = await servers[0].playerSettings.updateForVideo({ videoId: video.id, theme: 'lucide' })
+    const { theme } = await servers[0].playerSettings.updateForChannel({ channelHandle: 'root_channel', theme: 'lucide' })
     expect(theme).to.equal('lucide')
 
     await waitJobs(servers)
@@ -172,10 +147,10 @@ describe('Test player settings', function () {
       server: servers[0],
       videoId: video.uuid,
       channelHandle: 'root_channel',
-      expectedRawVideo: 'lucide',
-      expectedRawChannel: 'galaxy',
+      expectedRawVideo: 'channel-default',
+      expectedRawChannel: 'lucide',
       expectedVideo: 'lucide',
-      expectedChannel: 'galaxy'
+      expectedChannel: 'lucide'
     })
 
     await check({
@@ -183,7 +158,32 @@ describe('Test player settings', function () {
       videoId: video.uuid,
       channelHandle: 'root_channel@' + servers[0].host,
       expectedVideo: 'lucide',
-      expectedChannel: 'galaxy'
+      expectedChannel: 'lucide'
+    })
+  })
+
+  it('Should update player settings of the video and return the updated settings', async function () {
+    const { theme } = await servers[0].playerSettings.updateForVideo({ videoId: video.id, theme: 'galaxy' })
+    expect(theme).to.equal('galaxy')
+
+    await waitJobs(servers)
+
+    await check({
+      server: servers[0],
+      videoId: video.uuid,
+      channelHandle: 'root_channel',
+      expectedRawVideo: 'galaxy',
+      expectedRawChannel: 'lucide',
+      expectedVideo: 'galaxy',
+      expectedChannel: 'lucide'
+    })
+
+    await check({
+      server: servers[1],
+      videoId: video.uuid,
+      channelHandle: 'root_channel@' + servers[0].host,
+      expectedVideo: 'galaxy',
+      expectedChannel: 'lucide'
     })
   })
 
@@ -198,17 +198,17 @@ describe('Test player settings', function () {
       videoId: video.uuid,
       channelHandle: 'root_channel',
       expectedRawVideo: 'instance-default',
-      expectedRawChannel: 'galaxy',
-      expectedVideo: 'lucide',
-      expectedChannel: 'galaxy'
+      expectedRawChannel: 'lucide',
+      expectedVideo: 'galaxy',
+      expectedChannel: 'lucide'
     })
 
     await check({
       server: servers[1],
       videoId: video.uuid,
       channelHandle: 'root_channel@' + servers[0].host,
-      expectedVideo: 'lucide',
-      expectedChannel: 'galaxy'
+      expectedVideo: 'galaxy',
+      expectedChannel: 'lucide'
     })
   })
 
@@ -223,17 +223,17 @@ describe('Test player settings', function () {
       videoId: video.uuid,
       channelHandle: 'root_channel',
       expectedRawVideo: 'channel-default',
-      expectedRawChannel: 'galaxy',
-      expectedVideo: 'galaxy',
-      expectedChannel: 'galaxy'
+      expectedRawChannel: 'lucide',
+      expectedVideo: 'lucide',
+      expectedChannel: 'lucide'
     })
 
     await check({
       server: servers[1],
       videoId: video.uuid,
       channelHandle: 'root_channel@' + servers[0].host,
-      expectedVideo: 'galaxy',
-      expectedChannel: 'galaxy'
+      expectedVideo: 'lucide',
+      expectedChannel: 'lucide'
     })
   })
 
@@ -243,17 +243,17 @@ describe('Test player settings', function () {
       videoId: otherVideo.uuid,
       channelHandle: 'root_channel',
       expectedRawVideo: 'channel-default',
-      expectedRawChannel: 'galaxy',
-      expectedVideo: 'galaxy',
-      expectedChannel: 'galaxy'
+      expectedRawChannel: 'lucide',
+      expectedVideo: 'lucide',
+      expectedChannel: 'lucide'
     })
 
     await check({
       server: servers[1],
       videoId: otherVideo.uuid,
       channelHandle: 'root_channel@' + servers[0].host,
-      expectedVideo: 'galaxy',
-      expectedChannel: 'galaxy'
+      expectedVideo: 'lucide',
+      expectedChannel: 'lucide'
     })
   })
 
@@ -264,16 +264,16 @@ describe('Test player settings', function () {
       channelHandle: 'other_channel',
       expectedRawVideo: 'channel-default',
       expectedRawChannel: 'instance-default',
-      expectedVideo: 'lucide',
-      expectedChannel: 'lucide'
+      expectedVideo: 'galaxy',
+      expectedChannel: 'galaxy'
     })
 
     await check({
       server: servers[1],
       videoId: otherVideoAndChannel.uuid,
       channelHandle: 'other_channel@' + servers[0].host,
-      expectedVideo: 'lucide',
-      expectedChannel: 'lucide'
+      expectedVideo: 'galaxy',
+      expectedChannel: 'galaxy'
     })
   })
 

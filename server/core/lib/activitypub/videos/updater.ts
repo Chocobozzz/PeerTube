@@ -11,7 +11,7 @@ import {
   MChannelAccountLight,
   MChannelId,
   MVideoAccountLightBlacklistAllFiles,
-  MVideoFullLight
+  MVideoFull
 } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 import { haveActorsSameRemoteHost } from '../actors/check-actor.js'
@@ -142,24 +142,26 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
     this.video.privacy = videoData.privacy
     this.video.channelId = videoData.channelId
     this.video.views = videoData.views
+    this.video.downloads = videoData.downloads
     this.video.isLive = videoData.isLive
     this.video.aspectRatio = videoData.aspectRatio
+    this.video.embedPrivacyPolicy = videoData.embedPrivacyPolicy
 
     // Ensures we update the updatedAt attribute, even if main attributes did not change
     this.video.changed('updatedAt', true)
 
-    return this.video.save({ transaction }) as Promise<MVideoFullLight>
+    return this.video.save({ transaction }) as Promise<MVideoFull>
   }
 
-  private async setCaptions (videoUpdated: MVideoFullLight, t: Transaction) {
+  private async setCaptions (videoUpdated: MVideoFull, t: Transaction) {
     await this.insertOrReplaceCaptions(videoUpdated, t)
   }
 
-  private async setStoryboard (videoUpdated: MVideoFullLight, t: Transaction) {
+  private async setStoryboard (videoUpdated: MVideoFull, t: Transaction) {
     await this.insertOrReplaceStoryboard(videoUpdated, t)
   }
 
-  private async setOrDeleteLive (videoUpdated: MVideoFullLight, transaction?: Transaction) {
+  private async setOrDeleteLive (videoUpdated: MVideoFull, transaction?: Transaction) {
     if (!this.video.isLive) return
 
     if (this.video.isLive) return this.insertOrReplaceLive(videoUpdated, transaction)

@@ -39,6 +39,8 @@ describe('Test video state on peertube runners', function () {
 
     peertubeRunner = new PeerTubeRunnerProcess(servers[0])
     await peertubeRunner.runServer()
+    await peertubeRunner.setConcurrency(1)
+
     await peertubeRunner.registerPeerTubeInstance({ registrationToken, runnerName: 'runner' })
 
     await servers[0].config.setTranscodingConcurrency(1)
@@ -148,8 +150,8 @@ describe('Test video state on peertube runners', function () {
           { type: 'vod-web-video-transcoding', resolution: 720 },
           { type: 'vod-hls-transcoding', resolution: 720 },
           { type: 'vod-web-video-transcoding', resolution: 240 },
-          { type: 'vod-web-video-transcoding', resolution: 144 },
           { type: 'vod-hls-transcoding', resolution: 240 },
+          { type: 'vod-web-video-transcoding', resolution: 144 },
           { type: 'vod-hls-transcoding', resolution: 144 }
         ]
       })

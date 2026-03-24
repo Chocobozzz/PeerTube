@@ -63,6 +63,9 @@ enum ScopeNames {
     },
     {
       fields: [ 'runnerId' ]
+    },
+    {
+      fields: [ 'dependsOnRunnerJobId' ]
     }
   ]
 })
@@ -241,8 +244,9 @@ export class RunnerJobModel extends SequelizeModel<RunnerJobModel> {
     sort: string
     search?: string
     stateOneOf?: RunnerJobStateType[]
+    typeOneOf?: RunnerJobType[]
   }) {
-    const { start, count, sort, search, stateOneOf } = options
+    const { start, count, sort, search, stateOneOf, typeOneOf } = options
 
     const query = {
       offset: start,
@@ -268,6 +272,14 @@ export class RunnerJobModel extends SequelizeModel<RunnerJobModel> {
       query.where.push({
         state: {
           [Op.in]: stateOneOf
+        }
+      })
+    }
+
+    if (isArray(typeOneOf) && typeOneOf.length !== 0) {
+      query.where.push({
+        type: {
+          [Op.in]: typeOneOf
         }
       })
     }

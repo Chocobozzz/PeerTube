@@ -35,7 +35,7 @@ import {
   HTMLServerConfig,
   RegisterClientFormFieldOptions,
   RegisterClientVideoFieldOptions,
-  VideoConstant,
+  ConstantLabel,
   VideoPrivacy,
   VideoPrivacyType
 } from '@peertube/peertube-models'
@@ -132,10 +132,10 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
   forbidScheduledPublication: boolean
   hideWaitTranscoding: boolean
 
-  videoPrivacies: VideoConstant<VideoEditPrivacyType>[] = []
-  videoCategories: VideoConstant<number>[] = []
-  videoLicences: VideoConstant<number>[] = []
-  videoLanguages: VideoConstant<string>[] = []
+  videoPrivacies: ConstantLabel<VideoEditPrivacyType>[] = []
+  videoCategories: ConstantLabel<number>[] = []
+  videoLicences: ConstantLabel<number>[] = []
+  videoLanguages: ConstantLabel<string>[] = []
 
   pluginDataFormGroup: FormGroup
 
@@ -513,7 +513,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
 
   // ---------------------------------------------------------------------------
 
-  isEditor () {
-    return this.videoEdit.getVideoAttributes().ownerAccountId !== this.authService.getUser().account.id
+  isVideoOwner () {
+    return this.videoEdit.getVideoAttributes().ownerAccountId === this.authService.getUser().account.id
   }
 }

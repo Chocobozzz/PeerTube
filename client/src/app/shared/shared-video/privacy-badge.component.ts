@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject, input, LOCALE_ID, OnChanges } from '@angular/core'
+import { booleanAttribute, Component, inject, input, LOCALE_ID, OnChanges } from '@angular/core'
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { Video, VideoPlaylistPrivacy, VideoPlaylistPrivacyType, VideoPrivacy, VideoPrivacyType } from '@peertube/peertube-models'
 import { VideoPlaylist } from '../shared-video-playlist/video-playlist.model'
@@ -14,6 +14,7 @@ export class PrivacyBadgeComponent implements OnChanges {
 
   readonly video = input<Pick<Video, 'privacy' | 'scheduledUpdate'>>(undefined)
   readonly playlist = input<Pick<VideoPlaylist, 'privacy'>>(undefined)
+  readonly displayTooltip = input(true, { transform: booleanAttribute })
 
   private videoBadges: { [id in VideoPrivacyType]: string } = {
     [VideoPrivacy.PUBLIC]: 'badge-green',
@@ -36,7 +37,10 @@ export class PrivacyBadgeComponent implements OnChanges {
   ngOnChanges (): void {
     this.label = this.buildLabel()
     this.badgeClass = this.buildBadgeClass()
-    this.tooltip = this.buildTooltip()
+
+    this.tooltip = this.displayTooltip()
+      ? this.buildTooltip()
+      : undefined
   }
 
   buildBadgeClass () {

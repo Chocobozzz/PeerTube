@@ -41,4 +41,6 @@ export interface ActivityPubActor {
 
   // On channels only
   playerSettings?: string
+
+  indexable?: boolean
 }

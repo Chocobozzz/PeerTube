@@ -116,6 +116,14 @@ import { UserModel } from './user.js'
           [Op.ne]: null
         }
       }
+    },
+    {
+      fields: [ 'videoCaptionId' ],
+      where: {
+        videoCaptionId: {
+          [Op.ne]: null
+        }
+      }
     }
   ] as (ModelIndexesOptions & { where?: WhereOptions })[]
 })

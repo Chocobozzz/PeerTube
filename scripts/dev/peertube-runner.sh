@@ -10,4 +10,4 @@ cd ./apps/peertube-runner
 
 ../../node_modules/.bin/concurrently -k \
   "../../node_modules/.bin/tsc -w --noEmit" \
-  "node ./scripts/watch.js"
+  "npm run dev"

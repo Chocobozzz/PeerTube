@@ -167,7 +167,7 @@ describe('Test multiple servers', function () {
         support: 'my super support text for server 2',
         tags: [ 'tag1p2', 'tag2p2', 'tag3p2' ],
         fixture: 'video_short2.webm',
-        thumbnailfile: 'custom-thumbnail-850x480.jpg'
+        thumbnailfile: 'custom-thumbnail-input.jpg'
       }
       await servers[1].videos.upload({ token: userAccessToken, attributes, mode: 'resumable' })
 
@@ -225,7 +225,7 @@ describe('Test multiple servers', function () {
               size: 750000
             }
           ],
-          thumbnails: [ 'custom-thumbnail-280x157.jpg', 'custom-thumbnail-850x480.jpg' ]
+          thumbnails: [ 'custom-thumbnail-280x157.jpg', 'custom-thumbnail-850x480.jpg', 'custom-thumbnail-1920x1080.jpg' ]
         }
 
         const { data } = await server.videos.list()
@@ -479,6 +479,20 @@ describe('Test multiple servers', function () {
     let remoteVideosServer2 = []
     let remoteVideosServer3 = []
 
+    let fileUrls: string[] = []
+
+    async function grabFileUrls (videoUUID: string) {
+      const video = await servers[0].videos.get({ id: videoUUID })
+      const { storyboards } = await servers[0].storyboard.list({ id: videoUUID })
+
+      return [
+        ...video.files.map(f => f.fileUrl),
+        ...video.files.map(f => f.torrentUrl),
+        ...video.thumbnails.map(f => f.fileUrl),
+        ...storyboards.map(s => s.fileUrl)
+      ]
+    }
+
     before(async function () {
       {
         const { data } = await servers[0].videos.list()
@@ -495,6 +509,8 @@ describe('Test multiple servers', function () {
         localVideosServer3 = data.filter(video => video.isLocal === true).map(video => video.uuid)
         remoteVideosServer3 = data.filter(video => video.isLocal === false).map(video => video.uuid)
       }
+
+      fileUrls = await grabFileUrls(localVideosServer3[0])
     })
 
     it('Should view multiple videos on owned servers', async function () {
@@ -514,7 +530,7 @@ describe('Test multiple servers', function () {
       await waitJobs(servers)
 
       for (const server of servers) {
-        await server.debug.sendCommand({ body: { command: 'process-video-views-buffer' } })
+        await server.debug.sendCommand({ body: { command: 'process-video-stats-buffer' } })
       }
 
       await waitJobs(servers)
@@ -550,7 +566,7 @@ describe('Test multiple servers', function () {
       await waitJobs(servers)
 
       for (const server of servers) {
-        await server.debug.sendCommand({ body: { command: 'process-video-views-buffer' } })
+        await server.debug.sendCommand({ body: { command: 'process-video-stats-buffer' } })
       }
 
       await waitJobs(servers)
@@ -609,6 +625,12 @@ describe('Test multiple servers', function () {
         }
       }
     })
+
+    it('Should not have updated torrent files/storyboards/thumbnails', async function () {
+      const newFileUrls = await grabFileUrls(localVideosServer3[0])
+
+      expect(newFileUrls).to.have.members(fileUrls)
+    })
   })
 
   describe('Should manipulate these videos', function () {
@@ -626,7 +648,7 @@ describe('Test multiple servers', function () {
         description: 'my super description updated',
         support: 'my super support text updated',
         tags: [ 'tag_up_1', 'tag_up_2' ],
-        thumbnailfile: 'custom-thumbnail-850x480.jpg',
+        thumbnailfile: 'custom-thumbnail-input.jpg',
         originallyPublishedAt: '2019-02-11T13:38:14.449Z'
       }
 
@@ -784,7 +806,10 @@ describe('Test multiple servers', function () {
       for (const server of servers) {
         const video = await server.videos.get({ id: videoUUID })
 
-        await testImageGeneratedByFFmpeg({ name: 'video_short1.webm-thumbnail-850x480.jpg', url: maxBy(video.thumbnails, 'width').fileUrl })
+        await testImageGeneratedByFFmpeg({
+          name: 'video_short1.webm-thumbnail-1920x1080.jpg',
+          url: maxBy(video.thumbnails, 'width').fileUrl
+        })
       }
     })
   })

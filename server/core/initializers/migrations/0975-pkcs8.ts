@@ -1,3 +1,4 @@
+import { logger } from '@server/helpers/logger.js'
 import { createPrivateKey } from 'crypto'
 import * as Sequelize from 'sequelize'
 
@@ -12,12 +13,16 @@ async function up (utils: {
   )
 
   for (const { id, privateKey } of rows) {
-    const newPrivateKey = toPKCS8(privateKey)
+    try {
+      const newPrivateKey = toPKCS8(privateKey)
 
-    await utils.sequelize.query('UPDATE "actor" SET "privateKey" = :newPrivateKey WHERE "id" = :id', {
-      replacements: { newPrivateKey, id },
-      transaction: utils.transaction
-    })
+      await utils.sequelize.query('UPDATE "actor" SET "privateKey" = :newPrivateKey WHERE "id" = :id', {
+        replacements: { newPrivateKey, id },
+        transaction: utils.transaction
+      })
+    } catch (err) {
+      logger.error(`Failed to convert private key of actor ${id} to PKCS8 format`, { err })
+    }
   }
 }
 

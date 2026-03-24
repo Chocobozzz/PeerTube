@@ -57,6 +57,9 @@ const defaultVideoScope = () => {
     },
     {
       fields: [ 'userId' ]
+    },
+    {
+      fields: [ 'videoChannelSyncId' ]
     }
   ]
 })

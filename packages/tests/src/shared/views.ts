@@ -16,7 +16,7 @@ async function processViewersStats (servers: PeerTubeServer[]) {
   await wait(6000)
 
   for (const server of servers) {
-    await server.debug.sendCommand({ body: { command: 'process-video-views-buffer' } })
+    await server.debug.sendCommand({ body: { command: 'process-video-stats-buffer' } })
     await server.debug.sendCommand({ body: { command: 'process-video-viewers' } })
   }
 
@@ -25,7 +25,7 @@ async function processViewersStats (servers: PeerTubeServer[]) {
 
 async function processViewsBuffer (servers: PeerTubeServer[]) {
   for (const server of servers) {
-    await server.debug.sendCommand({ body: { command: 'process-video-views-buffer' } })
+    await server.debug.sendCommand({ body: { command: 'process-video-stats-buffer' } })
   }
 
   await waitJobs(servers)

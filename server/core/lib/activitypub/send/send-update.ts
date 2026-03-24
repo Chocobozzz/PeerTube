@@ -13,7 +13,7 @@ import {
   MActorLight,
   MChannelDefault,
   MVideoAPLight,
-  MVideoFullLight,
+  MVideoFull,
   MVideoPlaylistFull,
   MVideoRedundancyVideo
 } from '../../../types/models/index.js'
@@ -100,7 +100,11 @@ export async function sendUpdateVideoPlaylist (videoPlaylist: MVideoPlaylistFull
   const url = getUpdateActivityPubUrl(videoPlaylist.url, videoPlaylist.updatedAt.toISOString())
 
   const object = await videoPlaylist.toActivityPubObject(null, transaction)
-  const audience = getPlaylistAudience(byActor, videoPlaylist.privacy)
+  const audience = getPlaylistAudience({
+    account: videoPlaylist.OwnerAccount,
+    channel: videoPlaylist.VideoChannel,
+    privacy: videoPlaylist.privacy
+  })
 
   const updateActivity = buildUpdateActivity(url, byActor, object, audience)
 
@@ -118,7 +122,7 @@ export async function sendUpdateVideoPlaylist (videoPlaylist: MVideoPlaylistFull
   })
 }
 
-export async function sendUpdateVideoPlayerSettings (video: MVideoFullLight, settings: MPlayerSetting, transaction: Transaction) {
+export async function sendUpdateVideoPlayerSettings (video: MVideoFull, settings: MPlayerSetting, transaction: Transaction) {
   if (!canVideoBeFederated(video, false)) return
 
   const byActor = video.VideoChannel.Account.Actor

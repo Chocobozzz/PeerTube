@@ -176,6 +176,8 @@ export class VideoFilters {
 
     const cloned = new VideoFilters(this.defaultValues.get('sort'), this.defaultValues.get('scope'), this.hiddenFields)
 
+    cloned.setDefaultLanguages(this.defaultValues.get('languageOneOf'))
+
     cloned.setNSFWPolicy({
       nsfwPolicy: this.nsfwPolicy,
       nsfwFlagsDisplayed: this.nsfwFlagsDisplayed,

@@ -6,7 +6,7 @@ import { AuthService, AuthUser, ConfirmService, Notifier, RestPagination, Screen
 import { HeaderService } from '@app/header/header.service'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
 import { CollaboratorStateComponent } from '@app/shared/shared-main/channel/collaborator-state.component'
-import { TableColumnInfo, TableComponent, TableQueryParams } from '@app/shared/shared-tables/table.component'
+import { DataLoaderOptionsBase, TableColumnInfo, TableComponent, TableQueryParams } from '@app/shared/shared-tables/table.component'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 import { VideoChannel, VideoPlaylistType } from '@peertube/peertube-models'
@@ -15,7 +15,6 @@ import { SortMeta } from 'primeng/api'
 import { TableRowReorderEvent } from 'primeng/table'
 import { Subject, tap } from 'rxjs'
 import { ChannelToggleComponent } from '../../shared/shared-channels/channel-toggle.component'
-import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
 import { DeleteButtonComponent } from '../../shared/shared-main/buttons/delete-button.component'
 import { EditButtonComponent } from '../../shared/shared-main/buttons/edit-button.component'
@@ -38,7 +37,6 @@ const debugLogger = debug('peertube:my-video-playlists')
   imports: [
     FormsModule,
     GlobalIconComponent,
-    AdvancedInputFilterComponent,
     RouterLink,
     VideoPlaylistMiniatureComponent,
     DeleteButtonComponent,
@@ -61,7 +59,7 @@ export class MyVideoPlaylistsComponent implements OnInit, OnDestroy {
   private cdr = inject(ChangeDetectorRef)
   private screenService = inject(ScreenService)
 
-  readonly table = viewChild<TableComponent<VideoPlaylist, ColumnName, QueryParams>>('table')
+  readonly table = viewChild<TableComponent<VideoPlaylist, DataLoaderOptionsBase, ColumnName, QueryParams>>('table')
 
   user: AuthUser
   channels: (VideoChannel & { selected: boolean })[] = []
@@ -123,9 +121,9 @@ export class MyVideoPlaylistsComponent implements OnInit, OnDestroy {
 
   // ---------------------------------------------------------------------------
 
-  getNoResults (search?: string) {
-    if (search) {
-      return $localize`No playlists found matching your search.`
+  getNoResults (hasSearchOrFilters?: boolean) {
+    if (hasSearchOrFilters) {
+      return $localize`No playlists found matching your filters.`
     }
 
     if (this.getFilteredChannel()) {
@@ -208,7 +206,7 @@ export class MyVideoPlaylistsComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.table().onFilter()
+    this.table().onFiltersChange()
   }
 
   hasReorderableRows () {

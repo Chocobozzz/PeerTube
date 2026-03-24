@@ -1,4 +1,5 @@
-import { ActivityIconObject } from '@peertube/peertube-models'
+import { ActivityIconObject, Thumbnail, type ThumbnailAspectRatio } from '@peertube/peertube-models'
+import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { CONFIG } from '@server/initializers/config.js'
 import { MThumbnail } from '@server/types/models/index.js'
 import { remove } from 'fs-extra/esm'
@@ -22,6 +23,14 @@ import { SequelizeModel } from '../shared/sequelize-type.js'
 import { buildSQLAttributes } from '../shared/table.js'
 import { VideoPlaylistModel } from './video-playlist.js'
 import { VideoModel } from './video.js'
+
+export const thumbnailAPIAttributes = [
+  'filename',
+  'fileUrl',
+  'width',
+  'height',
+  'aspectRatio'
+] as const satisfies (keyof AttributesOnly<ThumbnailModel>)[]
 
 @Table({
   tableName: 'thumbnail',
@@ -53,6 +62,11 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
   @Default(null)
   @Column
   declare width: number
+
+  @AllowNull(false)
+  @Default(null)
+  @Column
+  declare aspectRatio: ThumbnailAspectRatio
 
   @AllowNull(true)
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.COMMONS.URL.max))
@@ -169,10 +183,11 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
 
   // ---------------------------------------------------------------------------
 
-  toFormattedJSON () {
+  toFormattedJSON (): Thumbnail {
     return {
       height: this.height,
       width: this.width,
+      aspectRatio: this.aspectRatio,
       fileUrl: this.getLocalFileUrl()
     }
   }

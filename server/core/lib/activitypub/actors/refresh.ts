@@ -1,10 +1,11 @@
+import { HttpStatusCode } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CachePromiseFactory } from '@server/helpers/promise-cache.js'
 import { PeerTubeRequestError } from '@server/helpers/requests.js'
+import { JobQueue } from '@server/lib/job-queue/job-queue.js'
 import { ActorLoadByUrlType } from '@server/lib/model-loaders/index.js'
 import { ActorModel } from '@server/models/actor/actor.js'
-import { MActorAccountChannelId, MActorFull } from '@server/types/models/index.js'
-import { HttpStatusCode } from '@peertube/peertube-models'
+import { MActorFull, MActorOutdated, MActorUrl } from '@server/types/models/index.js'
 import { fetchRemoteActor } from './shared/index.js'
 import { APActorUpdater } from './updater.js'
 import { getUrlFromWebfinger } from './webfinger.js'
@@ -13,31 +14,42 @@ type RefreshResult<T> = Promise<{ actor: T | MActorFull, refreshed: boolean }>
 
 type RefreshOptions<T> = {
   actor: T
-  fetchedType: ActorLoadByUrlType
+  fetchedType: Extract<ActorLoadByUrlType, 'all'> | 'partial'
 }
 
-const promiseCache = new CachePromiseFactory(doRefresh, (options: RefreshOptions<MActorFull | MActorAccountChannelId>) => options.actor.url)
+// ---------------------------------------------------------------------------
 
-function refreshActorIfNeeded<T extends MActorFull | MActorAccountChannelId> (options: RefreshOptions<T>): RefreshResult<T> {
+const promiseCache = new CachePromiseFactory(
+  doRefresh,
+  (options: RefreshOptions<MActorFull | MActorOutdated>) => options.actor.id + ''
+)
+
+export function refreshActorIfNeeded<T extends MActorFull | MActorOutdated> (options: RefreshOptions<T>): RefreshResult<T> {
   const actorArg = options.actor
   if (!actorArg.isOutdated()) return Promise.resolve({ actor: actorArg, refreshed: false })
 
   return promiseCache.run(options)
 }
 
-export {
-  refreshActorIfNeeded
+export function scheduleActorRefreshIfNeeded (actor: MActorOutdated & MActorUrl) {
+  if (!actor.isOutdated()) return
+
+  JobQueue.Instance.createJobAsync({
+    type: 'activitypub-refresher',
+    payload: { type: 'actor', url: actor.url },
+    deduplicationId: `refresh-actor-${actor.url}`
+  })
 }
 
 // ---------------------------------------------------------------------------
 
-async function doRefresh<T extends MActorFull | MActorAccountChannelId> (options: RefreshOptions<T>): RefreshResult<MActorFull> {
+async function doRefresh<T extends MActorFull | MActorOutdated> (options: RefreshOptions<T>): RefreshResult<MActorFull> {
   const { actor: actorArg, fetchedType } = options
 
   // We need more attributes
   const actor = fetchedType === 'all'
     ? actorArg as MActorFull
-    : await ActorModel.loadByUrlAndPopulateAccountAndChannel(actorArg.url)
+    : await ActorModel.loadAndPopulateAccountAndChannel(actorArg.id)
 
   const lTags = loggerTagsFactory('ap', 'actor', 'refresh', actor.url)
 

@@ -31,8 +31,8 @@ program.command('server')
   .option(
     '--enable-job <type>',
     'Enable this job type (multiple --enable-job options can be specified). ' +
-    'By default all supported jobs are enabled). ' +
-    'Supported job types: ' + getSupportedJobsList().join(', '),
+      'By default all supported jobs are enabled). ' +
+      'Supported job types: ' + getSupportedJobsList().join(', '),
     (value: RunnerJobType, previous: RunnerJobType[]) => [ ...previous, value ],
     []
   )
@@ -122,6 +122,12 @@ program.command('graceful-shutdown')
       console.error(err)
       process.exit(-1)
     }
+  })
+
+program.command('get-config-file-path')
+  .description('Get the path to the configuration file')
+  .action(() => {
+    console.log(ConfigManager.Instance.getConfigDirectory())
   })
 
 program.parse()

@@ -129,7 +129,7 @@ export class PluginManager implements ServerHook {
     const npmName = PluginModel.buildNpmName(name, PluginType.PLUGIN)
     const registered = this.getRegisteredPluginOrTheme(npmName)
 
-    if (!registered || registered.type !== PluginType.PLUGIN) return undefined
+    if (registered?.type !== PluginType.PLUGIN) return undefined
 
     return registered
   }
@@ -138,7 +138,7 @@ export class PluginManager implements ServerHook {
     const npmName = PluginModel.buildNpmName(name, PluginType.THEME)
     const registered = this.getRegisteredPluginOrTheme(npmName)
 
-    if (!registered || registered.type !== PluginType.THEME) return undefined
+    if (registered?.type !== PluginType.THEME) return undefined
 
     return registered
   }
@@ -175,14 +175,14 @@ export class PluginManager implements ServerHook {
 
   getRegisteredSettings (npmName: string) {
     const result = this.getRegisteredPluginOrTheme(npmName)
-    if (!result || result.type !== PluginType.PLUGIN) return []
+    if (result?.type !== PluginType.PLUGIN) return []
 
     return result.registerHelpers.getSettings()
   }
 
   getRouter (npmName: string) {
     const result = this.getRegisteredPluginOrTheme(npmName)
-    if (!result || result.type !== PluginType.PLUGIN) return null
+    if (result?.type !== PluginType.PLUGIN) return null
 
     return result.registerHelpers.getRouter()
   }
@@ -607,7 +607,7 @@ export class PluginManager implements ServerHook {
 
   private getAuth (npmName: string, authName: string) {
     const plugin = this.getRegisteredPluginOrTheme(npmName)
-    if (!plugin || plugin.type !== PluginType.PLUGIN) return null
+    if (plugin?.type !== PluginType.PLUGIN) return null
 
     let auths: (RegisterServerAuthPassOptions | RegisterServerAuthExternalOptions)[] = plugin.registerHelpers.getIdAndPassAuths()
     auths = auths.concat(plugin.registerHelpers.getExternalAuths())

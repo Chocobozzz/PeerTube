@@ -1,11 +1,11 @@
-import { SortMeta } from 'primeng/api'
-import { from } from 'rxjs'
-import { catchError, concatMap, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
 import { arrayify } from '@peertube/peertube-core-utils'
-import { ResultList, UserRegistration, UserRegistrationUpdateState } from '@peertube/peertube-models'
+import { ResultList, UserRegistration, UserRegistrationStateType, UserRegistrationUpdateState } from '@peertube/peertube-models'
+import { SortMeta } from 'primeng/api'
+import { from } from 'rxjs'
+import { catchError, concatMap, toArray } from 'rxjs/operators'
 import { environment } from '../../../../environments/environment'
 
 @Injectable()
@@ -20,17 +20,18 @@ export class AdminRegistrationService {
     pagination: RestPagination
     sort: SortMeta
     search?: string
+    stateOneOf?: UserRegistrationStateType[]
   }) {
-    const { pagination, sort, search } = options
+    const { pagination, sort, search, stateOneOf } = options
 
     const url = AdminRegistrationService.BASE_REGISTRATION_URL
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
-    if (search) {
-      params = params.append('search', search)
-    }
+    if (search) params = params.append('search', search)
+
+    params = this.restService.addObjectParams(params, { stateOneOf })
 
     return this.authHttp.get<ResultList<UserRegistration>>(url, { params })
       .pipe(

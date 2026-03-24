@@ -1,4 +1,8 @@
-<my-admin-save-bar i18n-title title="Live configuration" (save)="save()" [form]="form" [formErrors]="formErrors" [inconsistentOptions]="checkTranscodingConsistentOptions()"></my-admin-save-bar>
+<my-admin-save-bar
+  i18n-title title="Live configuration" (save)="save()"
+  [form]="form" [formErrors]="formErrors" [validationMessages]="validationMessages"
+  [inconsistentOptions]="checkTranscodingConsistentOptions()"
+></my-admin-save-bar>
 
 <form [formGroup]="form" id="admin-config-form">
 
@@ -33,6 +37,29 @@
                   inputName="liveAllowReplay" formControlName="allowReplay"
                   i18n-labelText labelText="Allow your users to automatically publish a replay of their live"
                   >
+                </my-peertube-checkbox>
+              </div>
+
+              <div formGroupName="dvr" class="form-group" [ngClass]="getDisabledLiveClass()">
+                <my-peertube-checkbox
+                  inputName="liveAllowDVR" formControlName="enabled"
+                  i18n-labelText labelText="Allow your users to enable DVR (pause/rewind live)"
+                  >
+
+                  <ng-container ngProjectAs="extra">
+                    <div class="form-group" [ngClass]="getDisabledLiveDVRClass()">
+                      <label i18n for="liveDvrMaxWindow">Allow video streamers to set the DVR window up to</label>
+
+                      <div class="number-with-unit">
+                        <input type="number" id="liveDvrMaxWindow" formControlName="maxWindow" />
+                        <span i18n>{form.value.live.dvr.maxWindow, plural, =1 {minute} other {minutes}}</span>
+                      </div>
+
+                      @if (formErrors.live.dvr.maxWindow) {
+                        <div class="form-error" role="alert">{{ formErrors.live.dvr.maxWindow }}</div>
+                      }
+                    </div>
+                  </ng-container>
                 </my-peertube-checkbox>
               </div>
 

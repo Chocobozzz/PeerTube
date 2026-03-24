@@ -354,7 +354,8 @@ export class PlayerOptionsBuilder {
     return {
       isLive: true,
       liveOptions: {
-        latencyMode: live.latencyMode
+        latencyMode: live.latencyMode,
+        dvrEnabled: live.dvrWindow > 0
       }
     }
   }

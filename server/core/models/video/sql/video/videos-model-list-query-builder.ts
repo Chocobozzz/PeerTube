@@ -85,7 +85,7 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
 
     this.includeChannels()
     this.includeAccounts()
-    this.includeThumbnails()
+    this.includeThumbnailsJSON()
 
     if (options.user) {
       this.includeUserHistory(options.user.id)

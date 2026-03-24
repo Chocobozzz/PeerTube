@@ -7,7 +7,7 @@ import {
   VideoFileStreamType,
   VideoTranscodingPayload
 } from '@peertube/peertube-models'
-import { CreateJobArgument, JobQueue } from '@server/lib/job-queue/index.js'
+import { CreateJobTypeAndPayload, JobQueue } from '@server/lib/job-queue/index.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { MUserId, MVideo } from '@server/types/models/index.js'
 import { getTranscodingJobPriority } from '../../transcoding-priority.js'
@@ -47,7 +47,7 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder<FullPayload> 
       })
     })
 
-    const transcodingJobBuilderJob: CreateJobArgument = {
+    const transcodingJobBuilderJob: CreateJobTypeAndPayload = {
       type: 'transcoding-job-builder',
       payload: {
         videoUUID: video.uuid,

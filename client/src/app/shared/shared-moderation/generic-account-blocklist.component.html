@@ -6,13 +6,10 @@
   paginatorText="accounts per page"
   [dataLoader]="dataLoader"
   columnConfig="false"
+  searchInput="true"
 >
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No account} =1 {1 account} other {{{ totalRecords | myNumberFormatter }} accounts}}</ng-container>
-  </ng-template>
-
-  <ng-template #captionRight>
-    <my-advanced-input-filter (search)="table.onSearch($event)"></my-advanced-input-filter>
   </ng-template>
 
   <ng-template #tableCells let-account>
@@ -36,8 +33,8 @@
     <button class="peertube-button secondary-button" (click)="unblockAccount(account)" i18n>Unmute</button>
   </ng-template>
 
-  <ng-template #noResults let-search>
-    @if (search) {
+  <ng-template #noResults let-search="search" let-hasFilters="hasFilters">
+    @if (search || hasFilters) {
       <ng-container i18n>No account found matching current filters.</ng-container>
     } @else {
       <ng-container i18n>No account found.</ng-container>

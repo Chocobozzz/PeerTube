@@ -86,6 +86,25 @@ describe('Test users admin API validators', function () {
         expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
+
+    it('Should fail with an invalid role filter', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path,
+        query: { role: 4 },
+        token: server.accessToken
+      })
+    })
+
+    it('Should succeed with the correct params', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path,
+        token: server.accessToken,
+        query: { role: UserRole.MODERATOR },
+        expectedStatus: HttpStatusCode.OK_200
+      })
+    })
   })
 
   describe('When adding a new user', function () {

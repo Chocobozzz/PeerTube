@@ -1,16 +1,16 @@
-import { getAPIUrl, getOriginUrl } from '@app/helpers'
+import { getAPIUrl, getEmbedUrl } from '@app/helpers'
 import { buildPlaylistWatchPath, peertubeTranslate } from '@peertube/peertube-core-utils'
 import {
   AccountSummary,
+  ConstantLabel,
   VideoPlaylist as ServerVideoPlaylist,
   Thumbnail,
   VideoChannelSummary,
-  VideoConstant,
   VideoPlaylistPrivacyType,
   VideoPlaylistType,
   VideoPlaylistType_Type
 } from '@peertube/peertube-models'
-import { findAppropriateImageFileUrl } from '@root-helpers/images'
+import { findAppropriateThumbnailFileUrl } from '@root-helpers/images'
 import { Actor } from '../shared-main/account/actor.model'
 
 export class VideoPlaylist implements ServerVideoPlaylist {
@@ -24,11 +24,11 @@ export class VideoPlaylist implements ServerVideoPlaylist {
 
   displayName: string
   description: string
-  privacy: VideoConstant<VideoPlaylistPrivacyType>
+  privacy: ConstantLabel<VideoPlaylistPrivacyType>
 
   videosLength: number
 
-  type: VideoConstant<VideoPlaylistType_Type>
+  type: ConstantLabel<VideoPlaylistType_Type>
 
   createdAt: Date | string
   updatedAt: Date | string
@@ -68,12 +68,14 @@ export class VideoPlaylist implements ServerVideoPlaylist {
     this.privacy = hash.privacy
 
     this.embedPath = hash.embedPath
-    this.embedUrl = hash.embedUrl || (getOriginUrl() + hash.embedPath)
+    this.embedUrl = hash.embedUrl || (getEmbedUrl() + hash.embedPath)
 
     this.videosLength = hash.videosLength
 
     this.type = hash.type
 
+    // Required for search index backward compatibility, as `thumbnails` was introduced in peertube 8.1
+    this.thumbnailUrl = hash.thumbnailUrl
     this.thumbnails = hash.thumbnails
 
     this.createdAt = new Date(hash.createdAt)
@@ -99,6 +101,10 @@ export class VideoPlaylist implements ServerVideoPlaylist {
   getThumbnailUrl (width: number) {
     const defaultUrl = getAPIUrl() + '/client/assets/images/default-playlist.jpg'
 
-    return findAppropriateImageFileUrl(this.thumbnails, width) || defaultUrl
+    if (!this.thumbnails) {
+      return this.thumbnailUrl || defaultUrl
+    }
+
+    return findAppropriateThumbnailFileUrl(this.thumbnails, width, '16:9') || defaultUrl
   }
 }

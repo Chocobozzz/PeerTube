@@ -13,15 +13,15 @@ export const runnerJobGetVideoTranscodingFileValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    if (!await doesVideoExist(req.params.videoId, res, 'all')) return
+    if (!await doesVideoExist(req.params.videoId, res, 'full')) return
 
     const runnerJob = res.locals.runnerJob
 
-    if (runnerJob.privatePayload.videoUUID !== res.locals.videoAll.uuid) {
+    if (runnerJob.privatePayload.videoUUID !== res.locals.videoFull.uuid) {
       return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
         message: 'Job is not associated to this video',
-        tags: [ ...tags, res.locals.videoAll.uuid ]
+        tags: [ ...tags, res.locals.videoFull.uuid ]
       })
     }
 
@@ -51,7 +51,7 @@ export const runnerJobGetVideoStudioTaskFileValidator = [
       return res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
         message: 'File is not associated to this edition task',
-        tags: [ ...tags, res.locals.videoAll.uuid ]
+        tags: [ ...tags, res.locals.videoFull.uuid ]
       })
     }
 

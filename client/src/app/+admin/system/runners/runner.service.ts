@@ -1,10 +1,18 @@
-import { SortMeta } from 'primeng/api'
-import { catchError, concatMap, forkJoin, from, map, toArray } from 'rxjs'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
 import { RestExtractor, RestPagination, RestService, ServerService } from '@app/core'
 import { arrayify, peertubeTranslate } from '@peertube/peertube-core-utils'
-import { ResultList, Runner, RunnerJob, RunnerJobAdmin, RunnerJobState, RunnerRegistrationToken } from '@peertube/peertube-models'
+import {
+  ResultList,
+  Runner,
+  RunnerJob,
+  RunnerJobAdmin,
+  RunnerJobStateType,
+  RunnerJobType,
+  RunnerRegistrationToken
+} from '@peertube/peertube-models'
+import { SortMeta } from 'primeng/api'
+import { catchError, concatMap, forkJoin, from, map, toArray } from 'rxjs'
 import { environment } from '../../../../environments/environment'
 
 export type RunnerJobFormatted = RunnerJob & {
@@ -50,15 +58,17 @@ export class RunnerService {
     pagination: RestPagination
     sort: SortMeta
     search?: string
+    stateOneOf?: RunnerJobStateType[]
+    typeOneOf?: RunnerJobType[]
   }) {
-    const { pagination, sort, search } = options
+    const { pagination, sort, search, stateOneOf, typeOneOf } = options
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
-    if (search) {
-      params = this.buildParamsFromSearch(search, params)
-    }
+    if (search) params = params.append('search', search)
+
+    params = this.restService.addObjectParams(params, { stateOneOf, typeOneOf })
 
     return forkJoin([
       this.authHttp.get<ResultList<RunnerJobAdmin>>(RunnerService.BASE_RUNNER_URL + '/jobs', { params }),
@@ -86,27 +96,6 @@ export class RunnerService {
       map(res => this.restExtractor.convertResultListDateToHuman(res, [ 'createdAt', 'startedAt', 'finishedAt' ], 'precise')),
       catchError(res => this.restExtractor.handleError(res))
     )
-  }
-
-  private buildParamsFromSearch (search: string, params: HttpParams) {
-    const filters = this.restService.parseQueryStringFilter(search, {
-      stateOneOf: {
-        prefix: 'state:',
-        multiple: true,
-        handler: v => {
-          if (v === 'completed') return RunnerJobState.COMPLETED
-          if (v === 'processing') return RunnerJobState.PROCESSING
-          if (v === 'errored') return RunnerJobState.ERRORED
-          if (v === 'pending') return RunnerJobState.PENDING
-          if (v === 'waiting-for-parent-job') return RunnerJobState.WAITING_FOR_PARENT_JOB
-          if (v === 'parent-errored') return RunnerJobState.PARENT_ERRORED
-
-          return undefined
-        }
-      }
-    })
-
-    return this.restService.addObjectParams(params, filters)
   }
 
   // ---------------------------------------------------------------------------

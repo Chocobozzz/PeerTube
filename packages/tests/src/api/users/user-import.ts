@@ -7,6 +7,7 @@ import {
   UserNotificationSettingValue,
   VideoCommentPolicy,
   VideoCreateResult,
+  VideoEmbedPrivacyPolicy,
   VideoPlaylistPrivacy,
   VideoPlaylistType,
   VideoPrivacy,
@@ -441,14 +442,14 @@ function runTest (withObjectStorage: boolean) {
 
             attributes: {
               name: 'noah public video second channel',
-              privacy: (VideoPrivacy.PUBLIC),
-              category: (12),
+              privacy: VideoPrivacy.PUBLIC,
+              category: 12,
               tags: [ 'tag1', 'tag2' ],
               commentsPolicy: VideoCommentPolicy.DISABLED,
               downloadEnabled: false,
               nsfw: false,
-              description: ('video description'),
-              support: ('video support'),
+              description: 'video description',
+              support: 'video support',
               language: 'fr',
               licence: 1,
               originallyPublishedAt: new Date(0).toISOString(),
@@ -479,7 +480,7 @@ function runTest (withObjectStorage: boolean) {
                   size: 23000
                 }
               ],
-              thumbnails: [ 'custom-thumbnail-280x157.jpg', 'custom-thumbnail-850x480.jpg' ]
+              thumbnails: [ 'custom-thumbnail-user-import-280x157.jpg', 'custom-thumbnail-user-import-850x480.jpg' ]
             }
           })
         }
@@ -510,9 +511,11 @@ function runTest (withObjectStorage: boolean) {
         await remoteServer.videos.get({ id: liveVideo.uuid, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
         const video = await remoteServer.videos.getWithPassword({ id: liveVideo.uuid, password: 'password1' })
         const live = await remoteServer.live.get({ videoId: liveVideo.uuid, token: remoteNoahToken })
+        const liveEmbedPrivacy = await remoteServer.videoEmbedPrivacy.get({ videoId: liveVideo.uuid, token: remoteNoahToken })
 
         expect(video.isLive).to.be.true
         expect(live.latencyMode).to.equal(LiveVideoLatencyMode.SMALL_LATENCY)
+        expect(live.dvrWindow).to.equal(15)
         expect(live.saveReplay).to.be.true
         expect(live.permanentLive).to.be.true
         expect(live.streamKey).to.exist
@@ -527,6 +530,9 @@ function runTest (withObjectStorage: boolean) {
         expect(video.streamingPlaylists).to.have.lengthOf(0)
 
         expect(video.state.id).to.equal(VideoState.WAITING_FOR_LIVE)
+
+        expect(liveEmbedPrivacy.policy.id).to.equal(VideoEmbedPrivacyPolicy.ALLOWLIST)
+        expect(liveEmbedPrivacy.domains).to.deep.equal([ 'example.com' ])
       }
     })
   })

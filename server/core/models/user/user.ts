@@ -522,8 +522,9 @@ export class UserModel extends SequelizeModel<UserModel> {
     sort: string
     search?: string
     blocked?: boolean
+    role?: UserRoleType
   }) {
-    const { start, count, sort, search, blocked } = parameters
+    const { start, count, sort, search, blocked, role } = parameters
     const where: WhereOptions = {}
 
     if (search) {
@@ -545,6 +546,10 @@ export class UserModel extends SequelizeModel<UserModel> {
 
     if (blocked !== undefined) {
       Object.assign(where, { blocked })
+    }
+
+    if (role !== undefined) {
+      Object.assign(where, { role })
     }
 
     const query: FindOptions = {
@@ -1032,7 +1037,7 @@ export class UserModel extends SequelizeModel<UserModel> {
       autoPlayNextVideoPlaylist: this.autoPlayNextVideoPlaylist,
       videoLanguages: this.videoLanguages,
 
-      language: this.getLanguage(),
+      language: this.language,
 
       role: {
         id: this.role,

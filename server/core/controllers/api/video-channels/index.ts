@@ -60,6 +60,7 @@ import { VideoPlaylistModel } from '../../../models/video/video-playlist.js'
 import { VideoModel } from '../../../models/video/video.js'
 import { channelCollaborators } from './video-channel-collaborators.js'
 import { videoChannelLogosRouter } from './video-channel-logos.js'
+import { scheduleActorRefreshIfNeeded } from '@server/lib/activitypub/actors/refresh.js'
 
 const auditLogger = auditLoggerFactory('channels')
 
@@ -307,9 +308,7 @@ async function getVideoChannel (req: express.Request, res: express.Response) {
   const id = res.locals.videoChannel.id
   const videoChannel = await Hooks.wrapObject(res.locals.videoChannel, 'filter:api.video-channel.get.result', { id })
 
-  if (videoChannel.isOutdated()) {
-    JobQueue.Instance.createJobAsync({ type: 'activitypub-refresher', payload: { type: 'actor', url: videoChannel.Actor.url } })
-  }
+  scheduleActorRefreshIfNeeded(videoChannel.Actor)
 
   return res.json(videoChannel.toFormattedJSON())
 }

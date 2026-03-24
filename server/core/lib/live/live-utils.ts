@@ -1,6 +1,7 @@
 import { wait } from '@peertube/peertube-core-utils'
 import { FileStorage, LiveVideoLatencyMode, LiveVideoLatencyModeType, VideoState } from '@peertube/peertube-models'
 import { logger } from '@server/helpers/logger.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { VIDEO_LIVE } from '@server/initializers/constants.js'
 import { MStreamingPlaylist, MStreamingPlaylistVideo, MVideo } from '@server/types/models/index.js'
 import { pathExists, remove } from 'fs-extra/esm'
@@ -58,6 +59,22 @@ export function getLiveSegmentTime (latencyMode: LiveVideoLatencyModeType) {
   }
 
   return VIDEO_LIVE.SEGMENT_TIME_SECONDS.DEFAULT_LATENCY
+}
+
+export function getLiveSegmentListSize (options: {
+  latencyMode: LiveVideoLatencyModeType
+  dvrWindow: number
+}) {
+  const { latencyMode, dvrWindow } = options
+
+  if (dvrWindow === 0) return VIDEO_LIVE.SEGMENTS_LIST_SIZE
+
+  const segmentDuration = getLiveSegmentTime(latencyMode)
+  const maxDvrWindow = CONFIG.LIVE.DVR.MAX_WINDOW
+
+  const sanitizedWindow = Math.min(dvrWindow, maxDvrWindow)
+
+  return Math.ceil(sanitizedWindow / segmentDuration)
 }
 
 // ---------------------------------------------------------------------------

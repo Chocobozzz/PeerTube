@@ -5,15 +5,17 @@ export function getAllPrivacies () {
 }
 
 export function getAllFiles (video: Partial<Pick<VideoDetails, 'files' | 'streamingPlaylists'>>) {
-  const files = video.files
+  const files = video.files || []
 
   const hls = getHLS(video)
-  if (hls) return files.concat(hls.files)
+  if (hls && Array.isArray(hls.files))  return files.concat(hls.files)
 
   return files
 }
 
 export function getHLS (video: Partial<Pick<VideoDetails, 'streamingPlaylists'>>) {
+  if (!Array.isArray(video.streamingPlaylists)) return null
+
   return video.streamingPlaylists.find(p => p.type === VideoStreamingPlaylistType.HLS)
 }
 

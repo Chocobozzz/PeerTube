@@ -1,4 +1,4 @@
-<my-admin-save-bar i18n-title title="General configuration" (save)="save()" [form]="form" [formErrors]="formErrors"></my-admin-save-bar>
+<my-admin-save-bar i18n-title title="General configuration" (save)="save()" [form]="form" [formErrors]="formErrors" [validationMessages]="validationMessages"></my-admin-save-bar>
 
 <form [formGroup]="form" id="admin-config-form">
   <div class="pt-two-cols">
@@ -522,6 +522,17 @@
 
           @if (formErrors.defaults.publish.commentsPolicy) {
             <div class="form-error" role="alert">{{ formErrors.defaults.publish.commentsPolicy }}</div>
+          }
+        </div>
+
+
+        <div class="form-group">
+          <label i18n for="defaultsDownloadPolicy">Default download policy</label>
+
+          <my-select-options inputId="defaultsDownloadPolicy" [items]="downloadPoliciesOptions" formControlName="downloadPolicy"></my-select-options>
+
+          @if (formErrors.defaults.publish.downloadPolicy) {
+            <div class="form-error" role="alert">{{ formErrors.defaults.publish.downloadPolicy }}</div>
           }
         </div>
       </ng-container>

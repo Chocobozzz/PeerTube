@@ -1,30 +1,31 @@
 import { Component, OnInit, inject, viewChild } from '@angular/core'
+import { RouterLink } from '@angular/router'
 import { ConfirmService, Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { InstanceFollowService } from '@app/shared/shared-instance/instance-follow.service'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
-import { ActorFollow } from '@peertube/peertube-models'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
+import { ActorFollow, FollowState } from '@peertube/peertube-models'
+import { AdvancedFilterDef } from '../../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
-import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
 import { NumberFormatterPipe } from '../../../shared/shared-main/common/number-formatter.pipe'
-import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../../../shared/shared-tables/table.component'
+import { DataLoaderOptionsBase, TableColumnInfo, TableComponent } from '../../../shared/shared-tables/table.component'
 import { RedundancyCheckboxComponent } from '../shared/redundancy-checkbox.component'
 import { FollowModalComponent } from './follow-modal.component'
+
+type DataLoaderParameter = Parameters<FollowingListComponent['_dataLoader']>[0]
 
 @Component({
   templateUrl: './following-list.component.html',
   styleUrls: [ './following-list.component.scss' ],
   imports: [
+    RouterLink,
     GlobalIconComponent,
-    AdvancedInputFilterComponent,
     DeleteButtonComponent,
     RedundancyCheckboxComponent,
     FollowModalComponent,
     PTDatePipe,
-    ButtonComponent,
     TableComponent,
     NumberFormatterPipe
   ]
@@ -35,9 +36,9 @@ export class FollowingListComponent implements OnInit {
   private followService = inject(InstanceFollowService)
 
   readonly followModal = viewChild<FollowModalComponent>('followModal')
-  readonly table = viewChild<TableComponent<ActorFollow>>('table')
+  readonly table = viewChild<TableComponent<ActorFollow, DataLoaderParameter>>('table')
 
-  searchFilters: AdvancedInputFilter[] = []
+  inputFilters: AdvancedFilterDef<DataLoaderParameter>[] = []
 
   bulkActions: DropdownAction<ActorFollow[]>[] = []
 
@@ -55,7 +56,7 @@ export class FollowingListComponent implements OnInit {
   }
 
   ngOnInit () {
-    this.searchFilters = this.followService.buildFollowsListFilters()
+    this.inputFilters = this.followService.buildFollowsListFilters()
 
     this.bulkActions = [
       {
@@ -104,9 +105,7 @@ export class FollowingListComponent implements OnInit {
       })
   }
 
-  private _dataLoader (options: DataLoaderOptions) {
-    const { pagination, sort, search } = options
-
-    return this.followService.getFollowing({ pagination, sort, search })
+  private _dataLoader (options: DataLoaderOptionsBase & { state?: FollowState }) {
+    return this.followService.listSubscriptions(options)
   }
 }

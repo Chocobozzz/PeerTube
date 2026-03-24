@@ -9,7 +9,15 @@ import {
 } from '@peertube/peertube-models'
 import { uuidToShort } from '@peertube/peertube-node-utils'
 import { VIDEO_CHANNEL_ACTIVITY_ACTIONS, VIDEO_CHANNEL_ACTIVITY_TARGETS } from '@server/initializers/constants.js'
-import { MChannelId, MChannelSync, MUserAccountId, MVideo, MVideoImport, MVideoPlaylist } from '@server/types/models/index.js'
+import {
+  MAccountActor,
+  MChannelId,
+  MChannelSync,
+  MUserAccountId,
+  MVideo,
+  MVideoImport,
+  MVideoPlaylist
+} from '@server/types/models/index.js'
 import { MChannelActivityFormattable } from '@server/types/models/video/video-channel-activity.js'
 import { Op, Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
@@ -56,6 +64,12 @@ interface VideoChannelActivityData {
   channelSync?: {
     id: number
     externalChannelUrl: string
+  }
+
+  targetAccount?: {
+    username: string
+    displayName: string
+    url: string
   }
 }
 
@@ -290,6 +304,40 @@ export class VideoChannelActivityModel extends SequelizeModel<VideoChannelActivi
     }, { transaction })
   }
 
+  static async addVideoOwnershipChangeActivity (options: {
+    action: VideoChannelActivityActionType
+    user: MUserAccountId
+    channel: MChannelId
+    video: MVideo
+    targetAccount: MAccountActor
+    transaction: Transaction
+  }) {
+    const { action, user, channel, video, targetAccount, transaction } = options
+
+    return this.create({
+      action,
+      targetType: VideoChannelActivityTarget.VIDEO,
+      data: {
+        video: {
+          id: video.id,
+          name: video.name,
+          uuid: video.uuid,
+          url: video.url,
+          isLive: video.isLive
+        },
+        targetAccount: {
+          username: targetAccount.Actor.preferredUsername,
+          displayName: targetAccount.name,
+          url: targetAccount.Actor.url
+        }
+      },
+      details: null,
+      accountId: user.Account.id,
+      videoChannelId: channel.id,
+      videoId: video.id
+    }, { transaction })
+  }
+
   static async addVideoImportActivity (options: {
     action: VideoChannelActivityActionType
     user: MUserAccountId
@@ -427,6 +475,7 @@ export class VideoChannelActivityModel extends SequelizeModel<VideoChannelActivi
       channel: this.formatChannel(),
       channelSync: this.formatSync(),
       videoImport: this.formatVideoImport(),
+      targetAccount: this.formatTargetAccount(),
 
       details: this.details,
       createdAt: this.createdAt
@@ -503,6 +552,16 @@ export class VideoChannelActivityModel extends SequelizeModel<VideoChannelActivi
     return {
       id: target.id,
       externalChannelUrl: target.externalChannelUrl
+    }
+  }
+
+  formatTargetAccount (): VideoChannelActivity['targetAccount'] {
+    if (!this.data.targetAccount) return null
+
+    return {
+      username: this.data.targetAccount.username,
+      displayName: this.data.targetAccount.displayName,
+      url: this.data.targetAccount.url
     }
   }
 }

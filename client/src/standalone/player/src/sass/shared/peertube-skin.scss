@@ -120,6 +120,12 @@ body {
     }
   }
 
+  &.vjs-audio-poster-mode {
+    .vjs-poster {
+      cursor: default;
+    }
+  }
+
   // Theater mode is enabled
   &.vjs-theater-enabled {
     .vjs-theater-control {
@@ -147,13 +153,14 @@ body {
   font-family: $main-fonts;
 
   .error-details {
-    margin-top: 40px;
-    font-size: 80%;
+    margin-top: 0.5rem;
   }
 }
 
 .vjs-modal-dialog-content {
-  padding-top: 40px !important;
+  padding-top: 0 !important;
+  display: flex;
+  align-items: center;
 }
 
 // Error display disabled

@@ -6,13 +6,12 @@
   paginatorText="abuses per page"
   [dataLoader]="dataLoader"
   columnConfig="false"
+  [inputFilters]="inputFilters"
+  [bulkActions]="bulkActions"
+  searchInput="true"
   >
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No abuse} =1 {1 abuse} other {{{ totalRecords | myNumberFormatter }} abuses}}</ng-container>
-  </ng-template>
-
-  <ng-template #captionRight>
-    <my-advanced-input-filter [filters]="inputFilters" (search)="table.onSearch($event)"></my-advanced-input-filter>
   </ng-template>
 
   <ng-template #tableCells let-abuse>
@@ -137,8 +136,8 @@
     <my-abuse-details [abuse]="abuse" [isAdminView]="isAdminView()"></my-abuse-details>
   </ng-template>
 
-  <ng-template #noResults let-search>
-    @if (search) {
+  <ng-template #noResults let-search="search" let-hasFilters="hasFilters">
+    @if (search || hasFilters) {
       <ng-container i18n>No abuses found matching current filters.</ng-container>
     } @else {
       <ng-container i18n>No abuses found.</ng-container>

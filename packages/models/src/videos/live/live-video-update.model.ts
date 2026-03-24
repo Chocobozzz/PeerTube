@@ -8,5 +8,7 @@ export interface LiveVideoUpdate {
   replaySettings?: { privacy: VideoPrivacyType }
   latencyMode?: LiveVideoLatencyModeType
 
+  dvrWindow?: number
+
   schedules?: LiveVideoScheduleEdit[]
 }

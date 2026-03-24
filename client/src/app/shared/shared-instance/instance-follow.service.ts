@@ -1,13 +1,13 @@
-import { SortMeta } from 'primeng/api'
-import { from, Observable } from 'rxjs'
-import { catchError, concatMap, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable, inject } from '@angular/core'
+import { inject, Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
 import { arrayify } from '@peertube/peertube-core-utils'
 import { ActivityPubActorType, ActorFollow, FollowState, ResultList, ServerFollowCreate } from '@peertube/peertube-models'
+import { SortMeta } from 'primeng/api'
+import { from, Observable } from 'rxjs'
+import { catchError, concatMap, toArray } from 'rxjs/operators'
 import { environment } from '../../../environments/environment'
-import { AdvancedInputFilter } from '../shared-forms/advanced-input-filter.component'
+import { AdvancedFilterDef } from '../shared-forms/advanced-input-filter.component'
 
 @Injectable()
 export class InstanceFollowService {
@@ -17,7 +17,7 @@ export class InstanceFollowService {
 
   private static BASE_APPLICATION_URL = environment.apiUrl + '/api/v1/server'
 
-  getFollowing (options: {
+  listSubscriptions (options: {
     pagination: RestPagination
     sort?: SortMeta
     search?: string
@@ -29,10 +29,7 @@ export class InstanceFollowService {
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
-    if (search) {
-      params = this.restService.addObjectParams(params, this.parseFollowsListFilters(search))
-    }
-
+    if (search) params = params.append('search', search)
     if (state) params = params.append('state', state)
     if (actorType) params = params.append('actorType', actorType)
 
@@ -40,7 +37,7 @@ export class InstanceFollowService {
       .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
-  getFollowers (options: {
+  listFollowers (options: {
     pagination: RestPagination
     sort: SortMeta
     search?: string
@@ -52,10 +49,7 @@ export class InstanceFollowService {
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
-    if (search) {
-      params = this.restService.addObjectParams(params, this.parseFollowsListFilters(search))
-    }
-
+    if (search) params = params.append('search', search)
     if (state) params = params.append('state', state)
     if (actorType) params = params.append('actorType', actorType)
 
@@ -133,33 +127,21 @@ export class InstanceFollowService {
       )
   }
 
-  buildFollowsListFilters (): AdvancedInputFilter[] {
+  // ---------------------------------------------------------------------------
+
+  buildFollowsListFilters (): AdvancedFilterDef<{ state: FollowState }>[] {
     return [
       {
-        title: $localize`Advanced filters`,
-        children: [
-          {
-            value: 'state:accepted',
-            label: $localize`Accepted follows`
-          },
-          {
-            value: 'state:rejected',
-            label: $localize`Rejected follows`
-          },
-          {
-            value: 'state:pending',
-            label: $localize`Pending follows`
-          }
+        type: 'options',
+        key: 'state',
+        title: $localize`Follow state`,
+        options: [
+          { value: 'all', label: $localize`All follows` },
+          { value: 'accepted', label: $localize`Accepted follows` },
+          { value: 'rejected', label: $localize`Rejected follows` },
+          { value: 'pending', label: $localize`Pending follows` }
         ]
       }
     ]
-  }
-
-  private parseFollowsListFilters (search: string) {
-    return this.restService.parseQueryStringFilter(search, {
-      state: {
-        prefix: 'state:'
-      }
-    })
   }
 }

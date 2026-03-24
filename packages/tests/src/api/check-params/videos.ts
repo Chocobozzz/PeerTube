@@ -18,9 +18,11 @@ import {
   makeDeleteRequest,
   makeGetRequest,
   makePutBodyRequest,
+  makeRawRequest,
   makeUploadRequest,
   setAccessTokensToServers,
-  setDefaultVideoChannel
+  setDefaultVideoChannel,
+  waitJobs
 } from '@peertube/peertube-server-commands'
 import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { checkUploadVideoParam } from '@tests/shared/videos.js'
@@ -39,6 +41,7 @@ describe('Test videos API validator', function () {
 
   let channelId2: number
   let channelIdEditor: number
+  let channelIdEditor2: number
 
   let video: VideoCreateResult
   let privateVideo: VideoCreateResult
@@ -73,6 +76,9 @@ describe('Test videos API validator', function () {
 
     {
       channelIdEditor = await server.channels.getDefaultId({ token: editorToken })
+      const anotherEditorChannel = await server.channels.create({ attributes: { name: 'another_editor_channel' }, token: editorToken })
+
+      channelIdEditor2 = anotherEditorChannel.id
     }
 
     {
@@ -589,6 +595,22 @@ describe('Test videos API validator', function () {
             expectedStatus: HttpStatusCode.OK_200
           })
         }
+
+        {
+          const attaches = baseCorrectAttaches
+
+          const { uuid } = await checkUploadVideoParam({
+            ...baseOptions(),
+
+            attributes: { ...fields, ...attaches, filename: '../'.repeat(20) + 'toto.mp4' },
+            expectedStatus: HttpStatusCode.OK_200
+          })
+
+          await waitJobs([ server ])
+
+          const video = await server.videos.get({ id: uuid })
+          await makeRawRequest({ url: video.files[0].fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+        }
       })
     }
 
@@ -716,15 +738,7 @@ describe('Test videos API validator', function () {
       })
     })
 
-    it('Should fail with the channel of another user', async function () {
-      const fields = { ...baseCorrectParams, channelId: channelIdEditor }
-
-      for (const token of [ server.accessToken, editorToken ]) {
-        await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token, fields })
-      }
-    })
-
-    it('Should fail with another channel of the same user if the editor does not have the right on the target channel', async function () {
+    it('Should fail to update channel if the editor does not have the right on the target channel', async function () {
       const fields = { ...baseCorrectParams, channelId: channelId2 }
 
       await makePutBodyRequest({
@@ -736,7 +750,7 @@ describe('Test videos API validator', function () {
       })
     })
 
-    it('Should fail with another channel of the same user if the editor does not have the right on the video', async function () {
+    it('Should fail to update channel if the editor does not have the right on the video', async function () {
       await server.videos.update({ id: video.id, attributes: { channelId: channelId2 } })
 
       const fields = { ...baseCorrectParams, channelId }
@@ -908,6 +922,31 @@ describe('Test videos API validator', function () {
         expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
+
+    it('Should fail with the channel of another user if the video has pending ownership change', async function () {
+      const video = await server.videos.quickUpload({ name: 'video to transfer', channelId: channelIdEditor, token: editorToken })
+
+      await server.changeOwnership.create({ videoId: video.id, username: 'root', token: editorToken })
+
+      // Can update video metadata
+      await server.videos.update({ id: video.id, attributes: { name: 'video to transfer 2' }, token: editorToken })
+      // Can update video channel to a channel of the same user
+      await server.videos.update({ id: video.id, attributes: { channelId: channelIdEditor2 }, token: editorToken })
+
+      // Cannot update video channel to a channel of another user
+      await server.videos.update({
+        id: video.id,
+        attributes: { channelId },
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400,
+        token: editorToken
+      })
+
+      const { data } = await server.changeOwnership.list()
+      await server.changeOwnership.refuse({ ownershipId: data[0].id })
+
+      // Can update video channel to a channel of another user now there's no pending ownership change
+      await server.videos.update({ id: video.id, attributes: { channelId }, token: editorToken })
+    })
   })
 
   describe('When getting a video', function () {
@@ -919,7 +958,7 @@ describe('Test videos API validator', function () {
       })
 
       expect(res.body.data).to.be.an('array')
-      expect(res.body.data.length).to.equal(6)
+      expect(res.body.data.length).to.equal(9)
     })
 
     it('Should fail without a correct uuid', async function () {

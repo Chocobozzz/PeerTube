@@ -1,68 +1,108 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_form-mixins' as *;
+@use "sass:math";
+@use "_variables" as *;
+@use "_button-mixins" as *;
+@use "_mixins" as *;
 
-.input-group {
-  width: fit-content;
-}
+// ---------------------------------------------------------------------------
+// Toggle button
+// ---------------------------------------------------------------------------
 
-.dropdown-item {
-  font-size: 14px;
-}
-
-input {
-  @include peertube-input-text(250px);
-}
-
-.has-icon input {
-  padding-inline-start: 46px;
-}
-
-.search-button {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 20px;
-  color: pvar(--fg-200);
-
+.filter-toggle {
   my-global-icon {
-    @include global-icon-size(19px);
+    @include global-icon-size(20px);
+  }
+
+  .active-counter {
+    background-color: var(--primary);
+    color: var(--on-primary);
+    font-weight: $font-bold;
+    font-size: 11px;
+    border-radius: 100%;
+    padding: 2px 6px;
+    position: relative;
+    top: -1px;
+  }
+
+  &::after {
+    display: none;
   }
 }
 
-.input-group-text {
-  background-color: transparent;
-  transition: 0.3s ease-out;
+// ---------------------------------------------------------------------------
+// Dropdown panel
+// ---------------------------------------------------------------------------
 
-  &:hover {
-    background-color: pvar(--input-bg);
-  }
+.filter-panel {
+  min-width: 280px;
+  max-width: 360px;
+  border: 1px solid pvar(--input-border-color);
+  border-radius: pvar(--input-border-radius);
 }
 
-.form-control-clear my-global-icon {
-  @include global-icon-size(19px);
+.filter-header {
+  border-bottom: 1px solid pvar(--input-border-color);
+  background-color: pvar(--bg-secondary-350);
+
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+
+  @include padding-left(1rem);
+
+  // Align button with form controls
+  @include padding-right(6px);
 }
 
-div[role=menu] my-global-icon {
-  $size: 19px;
-  $margin: 2px;
-
-  opacity: 1;
-
-  @include global-icon-size($size);
-  @include margin-right($margin);
-
-  &.no-visible {
-    width: 0;
-    height: 0;
-
-    @include margin-right($size + $margin);
-  }
+.filter-header-title {
+  font-size: 1rem;
+  font-weight: $font-bold;
+  text-transform: uppercase;
+  color: pvar(--fg-300);
 }
 
-
-
-div[role=menu] {
-  max-height: 50vh;
+.filter-panel-body {
+  max-height: 60vh;
   overflow: auto;
+}
+
+// ---------------------------------------------------------------------------
+// Filter groups
+// ---------------------------------------------------------------------------
+
+.filter-title {
+  display: block;
+  font-size: 12px;
+  font-weight: $font-bold;
+  text-transform: uppercase;
+  color: pvar(--fg-300);
+  margin-bottom: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+// ---------------------------------------------------------------------------
+// Option inputs
+// ---------------------------------------------------------------------------
+
+.filter-options {
+  display: flex;
+  flex-direction: column;
+}
+
+my-peertube-checkbox {
+  margin-bottom: 0.5rem;
+}
+
+.pt-input-text {
+  padding: pvar(--input-y-padding) calc(#{pvar(--input-x-padding)} / 2);
+
+  @include font-size(14px);
+}
+
+// ---------------------------------------------------------------------------
+// Footer
+// ---------------------------------------------------------------------------
+
+.filter-footer {
+  border-top: 1px solid pvar(--input-border-color);
+  background-color: pvar(--bg);
+  margin-top: 0.5rem;
 }

@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common'
 import { AccountService } from './account/account.service'
 import { VideoChannelSyncService } from './channel/video-channel-sync.service'
 import { VideoChannelService } from './channel/video-channel.service'
+import { PeerTubeBadgeService } from './common/peertube-badge.service'
 import { CustomPageService } from './custom-page/custom-page.service'
 import { FromNowPipe } from './date/from-now.pipe'
 import { AUTH_INTERCEPTOR_PROVIDER } from './http/auth-interceptor.service'
@@ -42,6 +43,7 @@ export function getMainProviders () {
     ActorRedirectGuard,
     InstanceService,
     VideoChannelSyncService,
-    HorizontalMenuService
+    HorizontalMenuService,
+    PeerTubeBadgeService
   ]
 }

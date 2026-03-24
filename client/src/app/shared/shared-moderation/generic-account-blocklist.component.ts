@@ -1,10 +1,9 @@
 import { Component, inject, input, viewChild } from '@angular/core'
 import { Notifier } from '@app/core'
 import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
-import { AdvancedInputFilterComponent } from '../shared-forms/advanced-input-filter.component'
 import { PTDatePipe } from '../shared-main/common/date.pipe'
 import { NumberFormatterPipe } from '../shared-main/common/number-formatter.pipe'
-import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../shared-tables/table.component'
+import { DataLoaderOptionsBase, TableColumnInfo, TableComponent } from '../shared-tables/table.component'
 import { AccountBlock } from './account-block.model'
 import { BlocklistComponentType, BlocklistService } from './blocklist.service'
 
@@ -14,7 +13,6 @@ import { BlocklistComponentType, BlocklistService } from './blocklist.service'
   imports: [
     TableComponent,
     NumberFormatterPipe,
-    AdvancedInputFilterComponent,
     ActorAvatarComponent,
     PTDatePipe
   ]
@@ -59,7 +57,7 @@ export class GenericAccountBlocklistComponent {
     )
   }
 
-  private _dataLoader (options: DataLoaderOptions) {
+  private _dataLoader (options: DataLoaderOptionsBase) {
     if (this.mode() === BlocklistComponentType.Account) {
       return this.blocklistService.getUserAccountBlocklist(options)
     }

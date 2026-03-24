@@ -166,6 +166,12 @@ export function getCountVideos (req: express.Request) {
   return req.query.skipCount !== true
 }
 
+export function getAuthUser (res: express.Response) {
+  return res.locals.oauth
+    ? res.locals.oauth.token.User
+    : undefined
+}
+
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------

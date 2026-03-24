@@ -4,7 +4,7 @@ import { VideoCommentModel } from '../../../models/video/video-comment.js'
 import { MAccountDefault, MAccountFormattable, MAccountUrl } from '../account/index.js'
 import { MCommentAutomaticTagWithTag } from '../automatic-tag/comment-automatic-tag.js'
 import { MChannelSummary } from './video-channel.js'
-import { MVideo, MVideoAccountIdUrl, MVideoAccountLight, MVideoFeed, MVideoIdUrl, MVideoImmutable, MVideoUUID } from './video.js'
+import { MVideo, MVideoAccountIdUrl, MVideoAccountLight, MVideoFeed, MVideoIdUrl, MVideoUUID } from './video.js'
 
 type Use<K extends keyof VideoCommentModel, M> = PickWith<VideoCommentModel, K, M>
 
@@ -51,12 +51,6 @@ export type MCommentOwnerVideoReply =
   & Use<'Video', MVideoAccountIdUrl>
   & Use<'InReplyToVideoComment', MComment>
 
-export type MCommentOwnerReplyVideoImmutable =
-  & MComment
-  & Use<'Account', MAccountDefault>
-  & Use<'InReplyToVideoComment', MComment>
-  & Use<'Video', MVideoImmutable>
-
 export type MCommentOwnerVideoFeed =
   & MCommentOwner
   & Use<'Video', MVideoFeed>
@@ -82,5 +76,5 @@ export type MCommentAdminOrUserFormattable =
 export type MCommentAP =
   & MComment
   & Use<'Account', MAccountUrl>
-  & PickWithOpt<VideoCommentModel, 'Video', MVideoImmutable>
+  & PickWithOpt<VideoCommentModel, 'Video', MVideoAccountIdUrl>
   & PickWithOpt<VideoCommentModel, 'InReplyToVideoComment', MCommentUrl>

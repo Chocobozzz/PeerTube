@@ -107,12 +107,15 @@
 
 // Thanks: https://codepen.io/manabox/pen/raQmpL
 @mixin peertube-radio-container {
+  --pt-radio-scale-font: 1;
+  --pt-radio-scale-el: 1;
+
   &[disabled] {
     opacity: 0.5;
   }
 
   label {
-    font-size: $form-input-font-size;
+    font-size: calc(#{$form-input-font-size} * var(--pt-radio-scale-font));
     color: pvar(--fg-350);
   }
 
@@ -135,9 +138,9 @@
   [type="radio"]:checked + label,
   [type="radio"]:not(:checked) + label {
     position: relative;
-    padding-left: 28px;
+    padding-left: calc(28px * var(--pt-radio-scale-el));
     cursor: pointer;
-    line-height: 20px;
+    line-height: calc(20px * var(--pt-radio-scale-el));
     display: inline-block;
     font-weight: $font-regular;
   }
@@ -147,9 +150,9 @@
     content: "";
     position: absolute;
     left: 0;
-    top: -1px;
-    width: 20px;
-    height: 20px;
+    top: calc(-1px * var(--pt-radio-scale-el));
+    width: calc(20px * var(--pt-radio-scale-el));
+    height: calc(20px * var(--pt-radio-scale-el));
     border: 2px solid pvar(--fg-300);
     border-radius: 100%;
   }
@@ -157,12 +160,12 @@
   [type="radio"]:checked + label::after,
   [type="radio"]:not(:checked) + label::after {
     content: "";
-    width: 10px;
-    height: 10px;
+    width: calc(10px * var(--pt-radio-scale-el));
+    height: calc(10px * var(--pt-radio-scale-el));
     background: pvar(--input-check-active-bg);
     position: absolute;
-    top: 4px;
-    left: 5px;
+    top: calc(4px * var(--pt-radio-scale-el));
+    left: calc(5px * var(--pt-radio-scale-el));
     border-radius: 100%;
     transition: all 0.2s ease;
   }
@@ -186,79 +189,9 @@
     margin-bottom: 10px;
     margin-left: 29px;
   }
-}
 
-@mixin peertube-checkbox {
-  $border-width: 2px;
-
-  opacity: 0;
-  position: absolute;
-
-  &:focus + span {
-    box-shadow: $focus-box-shadow-form;
-  }
-
-  // Checkbox
-  + span {
-    position: relative;
-    width: 20px;
-    min-width: 20px;
-    height: 20px;
-    border: $border-width solid pvar(--fg-400);
-    border-radius: 2px;
-    vertical-align: middle;
-    cursor: pointer;
-
-    &::after {
-      content: "";
-      position: absolute;
-      top: 4px;
-      left: 6px;
-      width: 5px;
-      height: 7px;
-      opacity: 0;
-      transform: rotate(45deg) scale(0);
-      border-right: 2px solid pvar(--input-check-active-fg);
-      border-bottom: 2px solid pvar(--input-check-active-fg);
-    }
-  }
-
-  // Checkbox checked
-  &:checked + span {
-    background: pvar(--input-check-active-bg);
-    animation: jelly 0.6s ease;
-
-    &::before {
-      content: "";
-      width: 100%;
-      height: 100%;
-      background: pvar(--input-check-active-bg);
-      position: absolute;
-      left: 0;
-      transition: all 0.2s ease;
-      border: 2px solid pvar(--input-check-active-fg);
-      border-radius: 2px;
-    }
-
-    &::after {
-      opacity: 1;
-      transform: rotate(45deg) scale(1);
-    }
-  }
-
-  // Label
-  + span + span {
-    font-weight: $font-regular;
-    cursor: pointer;
-    display: inline;
-    color: pvar(--fg-350);
-
-    @include margin-left(8px);
-  }
-
-  &[disabled] + span,
-  &[disabled] + span + span {
-    opacity: 0.5;
-    cursor: default;
+  &.small {
+    --pt-radio-scale-font: 0.875;
+    --pt-radio-scale-el: 0.8;
   }
 }

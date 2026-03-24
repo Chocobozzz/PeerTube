@@ -23,7 +23,7 @@ export async function checkNewVideoFromSubscription (
       checkActor(notification.video.channel)
     } else {
       expect(notification).to.satisfy((n: UserNotification) => {
-        return n === undefined || n.type !== UserNotificationType.NEW_VIDEO_FROM_SUBSCRIPTION || n.video.name !== videoName
+        return n?.type !== UserNotificationType.NEW_VIDEO_FROM_SUBSCRIPTION || n.video.name !== videoName
       })
     }
   }
@@ -55,7 +55,7 @@ export async function checkNewLiveFromSubscription (
       checkActor(notification.video.channel)
     } else {
       expect(notification).to.satisfy((n: UserNotification) => {
-        return n === undefined || n.type !== UserNotificationType.NEW_LIVE_FROM_SUBSCRIPTION || n.video.name !== videoName
+        return n?.type !== UserNotificationType.NEW_LIVE_FROM_SUBSCRIPTION || n.video.name !== videoName
       })
     }
   }

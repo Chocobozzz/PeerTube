@@ -9,7 +9,7 @@
 }
 
 <ng-template #aContent>
-  <img alt="" [attr.src]="getImageUrl()" [ngClass]="{ 'blur-filter': blur() }"  />
+  <img alt="" [attr.src]="src" [srcset]="srcset" [sizes]="sizes()" [ngClass]="{ 'blur-filter': blur() }"  />
 
   @if (displayWatchLaterPlaylist()) {
     <div class="actions-overlay">

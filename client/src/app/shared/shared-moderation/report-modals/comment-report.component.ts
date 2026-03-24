@@ -64,7 +64,7 @@ export class CommentReportComponent extends FormReactive implements OnInit {
       predefinedReasons: mapValues(abusePredefinedReasonsMap, _ => null as any)
     })
 
-    this.predefinedReasons = this.abuseService.getPrefefinedReasons('comment')
+    this.predefinedReasons = this.abuseService.getPredefinedReasons('comment')
   }
 
   show () {

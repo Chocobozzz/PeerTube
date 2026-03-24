@@ -29,7 +29,6 @@ Nothing to do here, Github will automatically send a webhook to Weblate that wil
  * Add it to [/packages/models/i18n/i18n.ts](/packages/core-utils/src/i18n/i18n.ts)
  * Add it to [/scripts/build/client.sh](/scripts/build/client.sh)
  * Add it to [/client/angular.json](/client/angular.json)
- * Add it to [/scripts/i18n/update.sh](/scripts/i18n/update.sh)
  * Lock [weblate project](https://weblate.framasoft.org/projects/peertube)
  * Run `npm run i18n:update`
  * Build the application and check the new language correctly works

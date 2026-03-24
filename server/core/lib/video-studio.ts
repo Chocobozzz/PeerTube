@@ -5,7 +5,7 @@ import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { createTorrentAndSetInfoHashFromPath } from '@server/lib/webtorrent.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MUser, MVideoFile, MVideoFullLight, MVideoWithAllFiles, MVideoWithFile } from '@server/types/models/index.js'
+import { MUser, MVideoFile, MVideoFull, MVideoWithAllFiles, MVideoWithFile } from '@server/types/models/index.js'
 import { move, remove } from 'fs-extra/esm'
 import { join } from 'path'
 import { JobQueue } from './job-queue/index.js'
@@ -49,7 +49,7 @@ export async function safeCleanupStudioTMPFiles (tasks: VideoStudioTaskPayload[]
 // ---------------------------------------------------------------------------
 
 export async function approximateIntroOutroAdditionalSize (
-  video: MVideoFullLight,
+  video: MVideoFull,
   tasks: VideoStudioTask[],
   fileFinder: (i: number) => string
 ) {
@@ -89,7 +89,7 @@ export async function createVideoStudioJob (options: {
 export async function onVideoStudioEnded (options: {
   editionResultPath: string
   tasks: VideoStudioTaskPayload[]
-  video: MVideoFullLight
+  video: MVideoFull
 }) {
   const { tasks, editionResultPath } = options
 

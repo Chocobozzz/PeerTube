@@ -3,6 +3,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import validator from 'validator'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants.js'
 import { exists } from '../misc.js'
+import { arrayify } from '@peertube/peertube-core-utils'
 
 export function isUrlValid (url: string) {
   const isURLOptions = {
@@ -53,12 +54,7 @@ export function isActivityPubHTMLUrlValid (url: ActivityHtmlUrlObject) {
 }
 
 export function setValidAttributedTo (obj: any) {
-  if (Array.isArray(obj.attributedTo) === false) {
-    obj.attributedTo = []
-    return true
-  }
-
-  obj.attributedTo = obj.attributedTo.filter(a => {
+  obj.attributedTo = arrayify(obj.attributedTo).filter(a => {
     return isActivityPubUrlValid(a) ||
       ((a.type === 'Group' || a.type === 'Person') && isActivityPubUrlValid(a.id))
   })

@@ -263,6 +263,12 @@ export abstract class AbstractCommand {
     const initStatus = initializeSessionRes.status
 
     if (videoFilePath && initStatus === HttpStatusCode.CREATED_201) {
+      if (expectedStatus !== HttpStatusCode.OK_200) {
+        throw new Error(
+          `Expected status code is not correct for resumable upload initialization. Expected ${expectedStatus} but got success`
+        )
+      }
+
       const locationHeader = initializeSessionRes.header['location']
       expect(locationHeader).to.not.be.undefined
 

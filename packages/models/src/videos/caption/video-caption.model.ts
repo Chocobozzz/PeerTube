@@ -1,7 +1,7 @@
-import { VideoConstant } from '../video-constant.model.js'
+import { ConstantLabel } from '../../common/constant-label.model.js'
 
 export interface VideoCaption {
-  language: VideoConstant<string>
+  language: ConstantLabel<string>
 
   // TODO: remove, deprecated in 8.0
   captionPath: string

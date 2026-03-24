@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await,@typescript-eslint/no-floating-promises */
 
-import { HttpStatusCode } from '@peertube/peertube-models'
+import { wait } from '@peertube/peertube-core-utils'
+import { HttpStatusCode, HttpStatusCodeType } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -54,7 +55,7 @@ describe('Test lazy static endpoints', function () {
 
   async function checkCachedFiles (options: { populated: boolean }) {
     if (options.populated) {
-      expect(await servers[1].servers.countFiles(join('cache', 'thumbnails'))).to.equal(2)
+      expect(await servers[1].servers.countFiles(join('cache', 'thumbnails'))).to.equal(5)
       expect(await servers[1].servers.countFiles(join('cache', 'avatars'))).to.equal(2 * 4)
       expect(await servers[1].servers.countFiles(join('cache', 'storyboards'))).to.equal(1)
       expect(await servers[1].servers.countFiles(join('cache', 'video-captions'))).to.equal(1)
@@ -119,8 +120,44 @@ describe('Test lazy static endpoints', function () {
     await checkCachedFiles({ populated: true })
   })
 
+  it('Should miss an update, but re-fetch the files on 404 error', async function () {
+    this.timeout(60000)
+
+    const updateServer1Files = async () => {
+      await servers[0].videos.update({ id: videoId, attributes: { thumbnailfile: 'custom-thumbnail.png' } })
+      await servers[0].users.updateMyAvatar({ fixture: 'custom-thumbnail.png' })
+      await waitJobs([ servers[0] ])
+    }
+
+    const testLazyStatic = async (expectedStatus: HttpStatusCodeType) => {
+      const video = await servers[1].videos.get({ id: videoId })
+      await makeRawRequest({ url: video.thumbnails[0].fileUrl, expectedStatus })
+
+      const user = await servers[1].accounts.get({ accountName: 'root@' + servers[0].host })
+      await makeRawRequest({ url: user.avatars[0].fileUrl, expectedStatus })
+    }
+
+    // Invalidate server 2 cache
+    await updateServer1Files()
+    await servers[1].kill()
+
+    // Server 2 miss another update
+    await updateServer1Files()
+
+    await servers[1].run()
+
+    // Wait video info expiration
+    await wait(5000)
+
+    await testLazyStatic(HttpStatusCode.NOT_FOUND_404)
+    await waitJobs(servers)
+    await testLazyStatic(HttpStatusCode.OK_200)
+  })
+
   it('Should still have files after a server restart', async function () {
     this.timeout(60000)
+
+    await fetchRemoteData()
 
     await servers[0].kill()
     await servers[0].run()

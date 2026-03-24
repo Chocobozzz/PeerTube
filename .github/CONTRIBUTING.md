@@ -136,6 +136,16 @@ More detailed documentation is available:
   * [Server code/architecture](https://docs.joinpeertube.org/contribute/architecture#server)
   * [Server development (adding a new feature...)](/support/doc/development/server.md)
 
+### Embed only
+
+The embed is a standalone application built using Vite.
+The generated files (HTML entrypoint and multiple JS and CSS files) are served by the Vite server (behind `localhost:5173/videos/embed/:videoUUID` or `localhost:5173/video-playlists/embed/:playlistUUID`).
+The following command will compile embed files and run the PeerTube server:
+
+```sh
+npm run dev:embed
+```
+
 ### Client side
 
 To develop on the client side:
@@ -145,31 +155,22 @@ npm run dev:client
 ```
 
 The API will listen on `localhost:9000` and the frontend on `localhost:3000`.
+Embed is also available on `localhost:5173`.
 Client files are automatically compiled on change, and the web browser will
 reload them automatically thanks to hot module replacement.
 
 More detailed documentation is available:
   * [Client code/architecture](https://docs.joinpeertube.org/contribute/architecture#client)
 
-
-### Client and server side
+### Client with embed and server side
 
 The API will listen on `localhost:9000` and the frontend on `localhost:3000`.
+Embed is also available on `localhost:5173`.
 File changes are automatically recompiled, injected in the web browser (no need to refresh manually)
 and the web server is automatically restarted.
 
 ```sh
 npm run dev
-```
-
-### Embed
-
-The embed is a standalone application built using Vite.
-The generated files (HTML entrypoint and multiple JS and CSS files) are served by the Vite server (behind `localhost:5173/videos/embed/:videoUUID` or `localhost:5173/video-playlists/embed/:playlistUUID`).
-The following command will compile embed files and run the PeerTube server:
-
-```sh
-npm run dev:embed
 ```
 
 ### RTL layout

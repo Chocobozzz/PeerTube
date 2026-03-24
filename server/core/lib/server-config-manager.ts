@@ -223,6 +223,9 @@ class ServerConfigManager {
         enabled: CONFIG.LIVE.ENABLED,
 
         allowReplay: CONFIG.LIVE.ALLOW_REPLAY,
+        dvr: {
+          maxWindow: CONFIG.LIVE.DVR.MAX_WINDOW
+        },
         latencySetting: {
           enabled: CONFIG.LIVE.LATENCY_SETTING.ENABLED
         },
@@ -549,7 +552,7 @@ class ServerConfigManager {
     return maxBy(this.getOpenGraphLogos(serverActor), 'width')
   }
 
-  getLogoUrl (serverActor: MActorUploadImages, width: 192 | 512) {
+  getLogoUrl (serverActor: MActorUploadImages, width: 192 | 512 | 1500) {
     const customLogo = this.getLogo(serverActor, width)
 
     if (customLogo) {
@@ -559,7 +562,7 @@ class ServerConfigManager {
     return `${WEBSERVER.URL}/client/assets/images/icons/icon-${width}x${width}.png`
   }
 
-  getLogo (serverActor: MActorUploadImages, width: 192 | 512) {
+  getLogo (serverActor: MActorUploadImages, width: 192 | 512 | 1500) {
     if (serverActor.Avatars.length > 0) {
       return findAppropriateImage(serverActor.Avatars, width)
     }

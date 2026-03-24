@@ -1,6 +1,5 @@
 import { randomInt } from '@peertube/peertube-core-utils'
 import { parallelTests } from '@peertube/peertube-node-utils'
-import MailDev from 'maildev'
 
 class MockSmtpServer {
   private static instance: MockSmtpServer
@@ -19,13 +18,15 @@ class MockSmtpServer {
       ? parseInt(process.env.MAILDEV_RELAY_PORT)
       : undefined
 
-    return new Promise<number>((res, rej) => {
+    return new Promise<number>(async (res, rej) => {
       const port = parallelTests() ? randomInt(1025, 2000) : 1025
       this.emails = emailsCollection
 
       if (this.started) {
         return res(undefined)
       }
+
+      const MailDev = await import('maildev').then(mod => mod.default)
 
       this.maildev = new MailDev({
         ip: '127.0.0.1',

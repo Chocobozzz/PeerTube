@@ -33,7 +33,7 @@ import {
 import { isUserQuotaValid } from '../../user.js'
 import { LiveQuotaStore } from '../live-quota-store.js'
 import { LiveSegmentShaStore } from '../live-segment-sha-store.js'
-import { buildConcatenatedName, getLiveSegmentTime } from '../live-utils.js'
+import { buildConcatenatedName, getLiveSegmentListSize, getLiveSegmentTime } from '../live-utils.js'
 import { AbstractTranscodingWrapper, FFmpegTranscodingWrapper, RemoteTranscodingWrapper } from './transcoding-wrapper/index.js'
 
 interface MuxingSessionEvents {
@@ -110,8 +110,8 @@ class MuxingSession extends EventEmitter implements MuxingSession {
 
   private aborted = false
 
-  private readonly isAbleToUploadVideoWithCache = memoizee((userId: number) => {
-    return isUserQuotaValid({ userId, uploadSize: 1000 })
+  private readonly isAbleToUploadVideoWithCache = memoizee((channelUserId: number) => {
+    return isUserQuotaValid({ channelUserId, uploadSize: 1000 })
   }, { maxAge: MEMOIZE_TTL.LIVE_ABLE_TO_UPLOAD })
 
   private readonly hasClientSocketInBadHealthWithCache = memoizee((sessionId: string) => {
@@ -542,7 +542,10 @@ class MuxingSession extends EventEmitter implements MuxingSession {
       hasVideo: this.hasVideo,
       probe: this.probe,
 
-      segmentListSize: VIDEO_LIVE.SEGMENTS_LIST_SIZE,
+      segmentListSize: getLiveSegmentListSize({
+        latencyMode: this.videoLive.latencyMode,
+        dvrWindow: this.videoLive.dvrWindow
+      }),
       segmentDuration: getLiveSegmentTime(this.videoLive.latencyMode),
 
       outDirectory: this.outDirectory

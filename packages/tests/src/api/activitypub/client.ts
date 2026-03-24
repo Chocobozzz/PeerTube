@@ -46,6 +46,8 @@ describe('Test ActivityPub', function () {
     expect(object.name).to.equal('root')
     expect(object.preferredUsername).to.equal('root')
 
+    expect(object.indexable).to.be.true
+
     if (hasIcon) {
       expect(arrayify(object.icon).map(i => i.width)).to.deep.equal([ 120, 48, 600, 1500 ])
     } else {
@@ -72,22 +74,23 @@ describe('Test ActivityPub', function () {
     expect(object.name).to.equal('Main root channel')
     expect(object.preferredUsername).to.equal('root_channel')
 
+    expect(object.indexable).to.be.true
+
     if (hasIcon) {
       expect(arrayify(object.icon).map(i => i.width)).to.deep.equal([ 120, 48, 600, 1500 ])
     } else {
       expect(object.icon).to.not.exist
     }
 
-    // TODO: enable in v8
-    // const htmlURLs = [
-    //   servers[0].url + '/video-channels/root_channel',
-    //   servers[0].url + '/c/root_channel',
-    //   servers[0].url + '/c/root_channel/videos'
-    // ]
+    const htmlURLs = [
+      servers[0].url + '/video-channels/root_channel',
+      servers[0].url + '/c/root_channel',
+      servers[0].url + '/c/root_channel/videos'
+    ]
 
-    // for (const htmlURL of htmlURLs) {
-    //   expect(object.url.find(u => u.href === htmlURL), htmlURL).to.exist
-    // }
+    for (const htmlURL of htmlURLs) {
+      expect(object.url.find(u => u.href === htmlURL), htmlURL).to.exist
+    }
   }
 
   async function testVideo (path: string) {

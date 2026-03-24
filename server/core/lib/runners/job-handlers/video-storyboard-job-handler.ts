@@ -6,12 +6,11 @@ import {
   VideoFileStream
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
-import { generateImageFilename } from '@server/helpers/image-utils.js'
+import { generateImageFilename, getImageSize } from '@server/helpers/image-utils.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { JOB_PRIORITY, STORYBOARD } from '@server/initializers/constants.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
-import { getImageSizeFromWorker } from '@server/lib/worker/parent-process.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
 import { move } from 'fs-extra/esm'
@@ -101,7 +100,7 @@ export class VideoStoryboardJobHandler extends AbstractJobHandler<CreateOptions,
       filename: destinationFilename,
       destination: destinationPath,
 
-      imageSize: await getImageSizeFromWorker(destinationPath),
+      imageSize: await getImageSize(destinationPath),
 
       spriteHeight: sprites.size.height,
       spriteWidth: sprites.size.width,

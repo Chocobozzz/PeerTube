@@ -88,6 +88,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.transcoding.alwaysTranscodeOriginalResolution).to.be.true
   expect(data.transcoding.fps.max).to.equal(60)
   expect(data.transcoding.webVideos.enabled).to.be.true
+  expect(data.transcoding.alwaysTranscodePodcastOptimizedAudio).to.be.false
   expect(data.transcoding.hls.enabled).to.be.true
   expect(data.transcoding.hls.splitAudioAndVideo).to.be.false
   expect(data.transcoding.originalFile.keep).to.be.false
@@ -113,6 +114,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.live.transcoding.resolutions['2160p']).to.be.false
   expect(data.live.transcoding.alwaysTranscodeOriginalResolution).to.be.true
   expect(data.live.transcoding.fps.max).to.equal(60)
+  expect(data.live.dvr.maxWindow).to.equal(3600)
 
   expect(data.videoStudio.enabled).to.be.false
   expect(data.videoStudio.remoteRunners.enabled).to.be.false
@@ -154,7 +156,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.defaults.publish.privacy).to.equal(VideoPrivacy.PUBLIC)
   expect(data.defaults.p2p.embed.enabled).to.be.true
   expect(data.defaults.p2p.webapp.enabled).to.be.true
-  expect(data.defaults.player.theme).to.equal('galaxy')
+  expect(data.defaults.player.theme).to.equal('lucide')
   expect(data.defaults.player.autoPlay).to.be.true
 
   expect(data.email.body.signature).to.equal('')
@@ -295,6 +297,7 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
         '2160p': false
       },
       alwaysTranscodeOriginalResolution: false,
+      alwaysTranscodePodcastOptimizedAudio: false,
       fps: {
         max: 120
       },
@@ -337,6 +340,9 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
         fps: {
           max: 144
         }
+      },
+      dvr: {
+        maxWindow: 0
       }
     },
     videoStudio: {
@@ -457,7 +463,7 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       },
       player: {
         autoPlay: false,
-        theme: 'lucide'
+        theme: 'galaxy'
       }
     },
     email: {
@@ -681,7 +687,8 @@ describe('Test config', function () {
     describe('Banner', function () {
       const bannerUrls: string[] = []
 
-      it('Should update instance banner', async function () {
+      it('Should update instance banner/avatars', async function () {
+        await server.config.updateInstanceImage({ type: ActorImageType.AVATAR, fixture: 'avatar.png' })
         await server.config.updateInstanceImage({ type: ActorImageType.BANNER, fixture: 'banner.jpg' })
 
         const { banners } = await checkAndGetServerImages()
@@ -703,8 +710,9 @@ describe('Test config', function () {
       it('Should remove instance banner', async function () {
         await server.config.deleteInstanceImage({ type: ActorImageType.BANNER })
 
-        const { banners } = await checkAndGetServerImages()
+        const { banners, avatars } = await checkAndGetServerImages()
         expect(banners).to.have.lengthOf(0)
+        expect(avatars).to.not.have.lengthOf(0)
 
         for (const bannerUrl of bannerUrls) {
           await testFileExistsOnFSOrNot(server, 'avatars', basename(bannerUrl), false)
@@ -812,6 +820,8 @@ describe('Test config', function () {
         const logoPaths: string[] = []
 
         it('Should update instance header square icon', async function () {
+          await server.config.updateInstanceLogo({ type: 'favicon', fixture: 'avatar.png' })
+
           for (const extension of [ '.png', '.gif' ]) {
             const fixture = 'avatar' + extension
 
@@ -830,6 +840,8 @@ describe('Test config', function () {
 
             await makeRawRequest({ url: logos[0].fileUrl, expectedStatus: HttpStatusCode.OK_200 })
             await testFileExistsOnFSOrNot(server, 'uploads/images', basename(logos[0].fileUrl), true)
+
+            expect(htmlConfig.instance.logo.find(l => l.type === 'favicon' && l.isFallback === false)).to.exist
           }
         })
 
@@ -850,6 +862,11 @@ describe('Test config', function () {
           for (const logoPath of logoPaths) {
             await testFileExistsOnFSOrNot(server, 'uploads/images', basename(logoPath), false)
           }
+
+          // Check we only delete the appropriate file
+          expect(htmlConfig.instance.logo.find(l => l.type === 'favicon' && l.isFallback === false)).to.exist
+
+          await server.config.deleteInstanceLogo({ type: 'favicon' })
         })
       })
 

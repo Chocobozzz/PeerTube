@@ -75,21 +75,14 @@ my-timestamp-input {
   }
 
   .optional-row-icon {
-    display: flex;
-    align-items: center;
-    font-size: 14px;
     cursor: pointer;
 
     @include margin-left(0.5rem);
 
     my-global-icon {
-      position: relative;
-      top: 1px;
-      width: 19px;
-      height: 19px;
       color: pvar(--fg-400);
 
-      @include margin-right(0);
+      @include global-icon-size(19px);
     }
 
     &:hover {

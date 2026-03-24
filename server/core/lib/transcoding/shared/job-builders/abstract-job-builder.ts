@@ -4,7 +4,7 @@ import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { DEFAULT_AUDIO_MERGE_RESOLUTION, DEFAULT_AUDIO_RESOLUTION } from '@server/initializers/constants.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
-import { MUserId, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
+import { MUserId, MVideoFile, MVideoFull } from '@server/types/models/index.js'
 import { buildOriginalFileResolution, computeResolutionsToTranscode } from '../../transcoding-resolutions.js'
 
 const lTags = loggerTagsFactory('transcoding')
@@ -13,7 +13,7 @@ export type TranscodingPriorityType = 'required' | 'optional'
 
 export abstract class AbstractJobBuilder<P extends { transcodingPriority: TranscodingPriorityType }> {
   async createOptimizeOrMergeAudioJobs (options: {
-    video: MVideoFullLight
+    video: MVideoFull
     videoFile: MVideoFile
     isNewVideo: boolean
     user: MUserId
@@ -136,7 +136,7 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
 
   async createTranscodingJobs (options: {
     transcodingType: 'hls' | 'web-video'
-    video: MVideoFullLight
+    video: MVideoFull
     resolutions: number[]
     isNewVideo: boolean
     user: MUserId | null
@@ -213,7 +213,7 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
   }
 
   private async buildLowerResolutionJobPayloads (options: {
-    video: MVideoFullLight
+    video: MVideoFull
     inputVideoResolution: number
     inputVideoFPS: number
     inputStreams: VideoFileStreamType[]
@@ -234,8 +234,17 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
     } = options
 
     // Create transcoding jobs if there are enabled resolutions
+    const computeResolutionsOptions = {
+      input: inputVideoResolution,
+      type: 'vod' as const,
+      includeInput: false,
+      strictLower: true,
+      hasAudio,
+      forceAudioResolution: CONFIG.TRANSCODING.ALWAYS_TRANSCODE_PODCAST_OPTIMIZED_AUDIO
+    }
+
     const resolutionsEnabled = await Hooks.wrapObject(
-      computeResolutionsToTranscode({ input: inputVideoResolution, type: 'vod', includeInput: false, strictLower: true, hasAudio }),
+      computeResolutionsToTranscode(computeResolutionsOptions),
       'filter:transcoding.auto.resolutions-to-transcode.result',
       options
     )
@@ -252,12 +261,12 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
         type: 'vod'
       })
 
-      let generateHLS = CONFIG.TRANSCODING.HLS.ENABLED
-      if (resolution === VideoResolution.H_NOVIDEO && hlsAudioAlreadyGenerated) generateHLS = false
-
       const parallelPayloads: P[] = []
 
-      if (CONFIG.TRANSCODING.WEB_VIDEOS.ENABLED) {
+      if (
+        CONFIG.TRANSCODING.WEB_VIDEOS.ENABLED ||
+        (resolution === VideoResolution.H_NOVIDEO && CONFIG.TRANSCODING.ALWAYS_TRANSCODE_PODCAST_OPTIMIZED_AUDIO)
+      ) {
         parallelPayloads.push(
           this.buildWebVideoJobPayload({
             video,
@@ -271,6 +280,14 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
       }
 
       // Create a subsequent job to create HLS resolution that will just copy web video codecs
+      let generateHLS = CONFIG.TRANSCODING.HLS.ENABLED
+
+      if (resolution === VideoResolution.H_NOVIDEO && (hlsAudioAlreadyGenerated || CONFIG.TRANSCODING.RESOLUTIONS['0p'] !== true)) {
+        // Audio already generated
+        // Or the global audio resolution is not enabled (can still be in that case if ALWAYS_TRANSCODE_PODCAST_OPTIMIZED_AUDIO is enabled)
+        generateHLS = false
+      }
+
       if (generateHLS) {
         parallelPayloads.push(
           this.buildHLSJobPayload({
@@ -298,7 +315,7 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
   // ---------------------------------------------------------------------------
 
   protected abstract createJobs (options: {
-    video: MVideoFullLight
+    video: MVideoFull
     payloads: {
       parent: P
 
@@ -311,7 +328,7 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
   }): Promise<void>
 
   protected abstract buildMergeAudioPayload (options: {
-    video: MVideoFullLight
+    video: MVideoFull
     inputFile: MVideoFile
     isNewVideo: boolean
     resolution: number
@@ -322,7 +339,7 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
   }): P
 
   protected abstract buildOptimizePayload (options: {
-    video: MVideoFullLight
+    video: MVideoFull
     isNewVideo: boolean
     inputFile: MVideoFile
     resolution: number
@@ -333,7 +350,7 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
   }): P
 
   protected abstract buildHLSJobPayload (options: {
-    video: MVideoFullLight
+    video: MVideoFull
     resolution: number
     fps: number
     isNewVideo: boolean
@@ -349,7 +366,7 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
   }): P
 
   protected abstract buildWebVideoJobPayload (options: {
-    video: MVideoFullLight
+    video: MVideoFull
     resolution: number
     fps: number
     isNewVideo: boolean

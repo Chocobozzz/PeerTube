@@ -2,14 +2,14 @@ import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { MVideoPlaylistFullSummary } from '@server/types/models/index.js'
 import { getAPId } from '../activity.js'
 import { createOrUpdateVideoPlaylist } from './create-update.js'
-import { scheduleRefreshIfNeeded } from './refresh.js'
+import { schedulePlaylistRefreshIfNeeded } from './refresh.js'
 import { fetchRemoteVideoPlaylist } from './shared/index.js'
 
 export async function getOrCreateAPVideoPlaylist (playlistUrl: string): Promise<MVideoPlaylistFullSummary> {
   const playlistFromDatabase = await VideoPlaylistModel.loadByUrlWithAccountAndChannelSummary(playlistUrl)
 
   if (playlistFromDatabase) {
-    scheduleRefreshIfNeeded(playlistFromDatabase)
+    schedulePlaylistRefreshIfNeeded(playlistFromDatabase)
 
     return playlistFromDatabase
   }

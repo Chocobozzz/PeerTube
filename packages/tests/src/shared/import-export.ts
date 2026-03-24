@@ -9,6 +9,7 @@ import {
   UserNotificationSettingValue,
   VideoCommentObject,
   VideoCommentPolicy,
+  VideoEmbedPrivacyPolicy,
   VideoObject,
   VideoPlaylistPrivacy,
   VideoPrivacy
@@ -241,7 +242,7 @@ export async function prepareImportExportTests (options: {
       waitTranscoding: true,
       channelId: noahSecondChannelId,
       privacy: VideoPrivacy.PUBLIC,
-      thumbnailfile: 'custom-thumbnail-850x480.jpg'
+      thumbnailfile: 'custom-thumbnail-input.jpg'
     }
   })
 
@@ -341,10 +342,18 @@ export async function prepareImportExportTests (options: {
       channelId: noahSecondChannelId,
       name: 'noah live video',
       privacy: VideoPrivacy.PASSWORD_PROTECTED,
+      dvrWindow: 15,
       schedules: [
         { startAt: new Date(Date.now() + 1000 * 60 * 60).toISOString() }
       ]
     },
+    token: noahToken
+  })
+
+  await server.videoEmbedPrivacy.update({
+    videoId: noahLive.uuid,
+    policy: VideoEmbedPrivacyPolicy.ALLOWLIST,
+    domains: [ 'example.com' ],
     token: noahToken
   })
 
@@ -374,6 +383,8 @@ export async function prepareImportExportTests (options: {
   })
 
   await waitJobs([ server, remoteServer ])
+
+  await server.channelCollaborators.addEditor({ channel: 'root_channel', editorToken: noahToken, editor: 'noah' })
 
   const { data: noahVideos } = await server.videos.listMyVideos({ token: noahToken, sort: '-publishedAt' })
   const noahVODNames = noahVideos.filter(v => !v.isLive).map(v => v.name)

@@ -22,7 +22,7 @@ import { checkCanManageVideo } from '@server/middlewares/validators/shared/video
 import {
   videoLiveAddValidator,
   videoLiveFindReplaySessionValidator,
-  videoLiveGetValidator,
+  videoLiveGetValidatorFactory,
   videoLiveListSessionsValidator,
   videoLiveUpdateValidator
 } from '@server/middlewares/validators/videos/video-live.js'
@@ -62,7 +62,7 @@ liveRouter.get(
   authenticate,
   liveSessionsSortValidator,
   setLiveSessionsSort,
-  asyncMiddleware(videoLiveGetValidator),
+  asyncMiddleware(videoLiveGetValidatorFactory('with-rights')),
   asyncMiddleware(videoLiveListSessionsValidator),
   asyncMiddleware(listLiveVideoSessions)
 )
@@ -70,14 +70,14 @@ liveRouter.get(
 liveRouter.get(
   '/live/:videoId',
   optionalAuthenticate,
-  asyncMiddleware(videoLiveGetValidator),
+  asyncMiddleware(videoLiveGetValidatorFactory('with-rights')),
   asyncMiddleware(getLiveVideo)
 )
 
 liveRouter.put(
   '/live/:videoId',
   authenticate,
-  asyncMiddleware(videoLiveGetValidator),
+  asyncMiddleware(videoLiveGetValidatorFactory('full')),
   asyncMiddleware(videoLiveUpdateValidator),
   asyncRetryTransactionMiddleware(updateLiveVideo)
 )
@@ -98,8 +98,19 @@ export {
 
 async function getLiveVideo (req: express.Request, res: express.Response) {
   const videoLive = res.locals.videoLive
+  const video = res.locals.videoWithRights
 
-  return res.json(videoLive.toFormattedJSON(await canSeePrivateLiveInformation(req, res)))
+  const canSeePrivateInformation = await checkCanManageVideo({
+    user: res.locals.oauth?.token.User,
+    video,
+    right: UserRight.GET_ANY_LIVE,
+    req,
+    res: null,
+    checkIsLocal: true,
+    checkIsOwner: false
+  })
+
+  return res.json(videoLive.toFormattedJSON({ isLocal: video.isLocal(), canSeePrivateInformation }))
 }
 
 function getLiveReplaySession (req: express.Request, res: express.Response) {
@@ -120,22 +131,10 @@ async function listLiveVideoSessions (req: express.Request, res: express.Respons
   return res.json(getFormattedObjects(data, data.length))
 }
 
-function canSeePrivateLiveInformation (req: express.Request, res: express.Response) {
-  return checkCanManageVideo({
-    user: res.locals.oauth?.token.User,
-    video: res.locals.videoAll,
-    right: UserRight.GET_ANY_LIVE,
-    req,
-    res: null,
-    checkIsLocal: true,
-    checkIsOwner: false
-  })
-}
-
 async function updateLiveVideo (req: express.Request, res: express.Response) {
   const body: LiveVideoUpdate = req.body
 
-  const video = res.locals.videoAll
+  const video = res.locals.videoFull
   const videoLive = res.locals.videoLive
 
   await retryTransactionWrapper(() => {
@@ -147,6 +146,7 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
 
       if (exists(body.permanentLive)) videoLive.permanentLive = body.permanentLive
       if (exists(body.latencyMode)) videoLive.latencyMode = body.latencyMode
+      if (exists(body.dvrWindow)) videoLive.dvrWindow = body.dvrWindow
 
       if (body.schedules !== undefined) {
         await VideoLiveScheduleModel.deleteAllOfLiveId(videoLive.id, t)
@@ -207,7 +207,14 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
       fromDescription: false,
       finalFallback: undefined
     },
-    liveAttributes: pick(videoInfo, [ 'saveReplay', 'permanentLive', 'latencyMode', 'replaySettings', 'schedules' ]),
+    liveAttributes: pick(videoInfo, [
+      'saveReplay',
+      'permanentLive',
+      'latencyMode',
+      'dvrWindow',
+      'replaySettings',
+      'schedules'
+    ]),
     videoAttributeResultHook: 'filter:api.video.live.video-attribute.result',
     lTags,
     videoAttributes: {

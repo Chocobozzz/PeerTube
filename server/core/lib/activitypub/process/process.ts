@@ -19,6 +19,7 @@ import { processReplyApprovalFactory } from './process-reply-approval.js'
 import { processUndoActivity } from './process-undo.js'
 import { processUpdateActivity } from './process-update.js'
 import { processViewActivity } from './process-view.js'
+import { processDownloadActivity } from './process-download.js'
 
 const processActivity: { [ P in ActivityType ]: (options: APProcessorOptions<Activity>) => Promise<any> } = {
   Create: processCreateActivity,
@@ -33,6 +34,7 @@ const processActivity: { [ P in ActivityType ]: (options: APProcessorOptions<Act
   Dislike: processDislikeActivity,
   Flag: processFlagActivity,
   View: processViewActivity,
+  Download: processDownloadActivity,
   ApproveReply: processReplyApprovalFactory('ApproveReply'),
   RejectReply: processReplyApprovalFactory('RejectReply')
 }

@@ -79,7 +79,7 @@ export class VideoBlockComponent extends FormReactive implements OnInit {
         : undefined
     }))
 
-    this.videoBlocklistService.blockVideo(options)
+    this.videoBlocklistService.blockVideos(options)
       .subscribe({
         next: () => {
           const message = formatICU(

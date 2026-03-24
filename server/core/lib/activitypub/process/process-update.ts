@@ -80,7 +80,7 @@ async function processUpdateVideo (activity: ActivityUpdate<VideoObject | string
   const { video, created } = await getOrCreateAPVideo({
     videoObject: videoObject.id,
     allowRefresh: false,
-    fetchType: 'all'
+    fetchType: 'full'
   })
   // We did not have this video, it has been created so no need to update
   if (created) return

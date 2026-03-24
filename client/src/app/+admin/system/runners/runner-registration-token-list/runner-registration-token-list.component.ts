@@ -6,7 +6,7 @@ import { ActionDropdownComponent, DropdownAction } from '../../../../shared/shar
 import { ButtonComponent } from '../../../../shared/shared-main/buttons/button.component'
 import { CopyButtonComponent } from '../../../../shared/shared-main/buttons/copy-button.component'
 import { NumberFormatterPipe } from '../../../../shared/shared-main/common/number-formatter.pipe'
-import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../../../../shared/shared-tables/table.component'
+import { DataLoaderOptionsBase, TableColumnInfo, TableComponent } from '../../../../shared/shared-tables/table.component'
 import { RunnerService } from '../runner.service'
 
 @Component({
@@ -85,7 +85,7 @@ export class RunnerRegistrationTokenListComponent implements OnInit {
       })
   }
 
-  private _dataLoader (options: DataLoaderOptions) {
+  private _dataLoader (options: DataLoaderOptionsBase) {
     return this.runnerService.listRegistrationTokens(options)
   }
 }

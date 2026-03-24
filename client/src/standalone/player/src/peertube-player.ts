@@ -1,4 +1,4 @@
-import { buildVideoLink, decorateVideoLink, findAppropriateImage, isDefaultLocale, pick } from '@peertube/peertube-core-utils'
+import { buildVideoLink, decorateVideoLink, findAppropriateThumbnail, isDefaultLocale, pick } from '@peertube/peertube-core-utils'
 import { Thumbnail } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { PluginsManager } from '@root-helpers/plugins-manager'
@@ -72,10 +72,6 @@ if (PlayProgressBar.prototype.options_.children.includes('timeTooltip') !== true
   PlayProgressBar.prototype.options_.children.push('timeTooltip')
 }
 
-// FIXME: https://github.com/videojs/video.js/pull/8988#issuecomment-3402464579
-const seekBar = videojs.getComponent('SeekBar') as any
-seekBar.prototype.pendingSeekTime = seekBar.prototype.getCurrentTime_
-
 export { videojs }
 
 export class PeerTubePlayer {
@@ -146,19 +142,21 @@ export class PeerTubePlayer {
   }
 
   setPoster (thumbnails: Thumbnail[]) {
-    console.log('coucou')
-
     // Use HTML video element to display poster
     if (!this.player) {
       const playerEl = this.options.playerElement()
 
-      this.options.playerElement().poster = findAppropriateImage(thumbnails, playerEl.clientWidth || window.innerWidth)?.fileUrl || ''
+      const width = playerEl.clientWidth || window.innerWidth
+
+      this.options.playerElement().poster = findAppropriateThumbnail(thumbnails, width, '16:9')?.fileUrl || ''
       return
     }
 
     // Prefer using player poster API
     if (this.player) {
-      this.player.poster(findAppropriateImage(thumbnails, this.player.el().clientWidth || window.innerWidth)?.fileUrl || '')
+      const width = this.player.el().clientWidth || window.innerWidth
+
+      this.player.poster(findAppropriateThumbnail(thumbnails, width, '16:9')?.fileUrl || '')
     }
 
     this.options.playerElement().poster = ''
@@ -305,7 +303,10 @@ export class PeerTubePlayer {
     })
 
     if (this.options.enableHotkeys === true) {
-      this.player.peerTubeHotkeysPlugin({ isLive: this.currentLoadOptions.isLive })
+      this.player.peerTubeHotkeysPlugin({
+        isLive: this.currentLoadOptions.isLive,
+        liveDvrEnabled: this.currentLoadOptions.liveOptions?.dvrEnabled === true
+      })
     }
 
     if (this.currentLoadOptions.playlist) {
@@ -395,7 +396,7 @@ export class PeerTubePlayer {
   private getVideojsOptions (): VideojsPlayerOptions {
     const posterWidth = this.options.playerElement().clientWidth || window.innerWidth
 
-    const poster = findAppropriateImage(this.currentLoadOptions.thumbnails, posterWidth)?.fileUrl || ''
+    const poster = findAppropriateThumbnail(this.currentLoadOptions.thumbnails, posterWidth, '16:9')?.fileUrl || ''
 
     const html5 = {
       preloadTextTracks: false,
@@ -419,7 +420,10 @@ export class PeerTubePlayer {
         stopTime: () => this.currentLoadOptions.stopTime,
 
         videoCaptions: () => this.currentLoadOptions.videoCaptions,
+
         isLive: () => this.currentLoadOptions.isLive,
+        liveDvrEnabled: () => this.currentLoadOptions.liveOptions?.dvrEnabled === true,
+
         videoUUID: () => this.currentLoadOptions.videoUUID,
         subtitle: () => this.currentLoadOptions.subtitle,
 
@@ -466,7 +470,7 @@ export class PeerTubePlayer {
       preload: 'none' as 'none',
 
       inactivityTimeout: this.options.inactivityTimeout,
-      playbackRates: [ 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2 ],
+      playbackRates: [ 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3 ],
 
       plugins,
 

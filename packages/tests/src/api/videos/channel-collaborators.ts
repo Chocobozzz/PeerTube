@@ -279,20 +279,52 @@ describe('Test channel collaborators', function () {
         await servers[0].videos.quickUpload({ name: 'video collab 2', channelId: channelCollabId, privacy: VideoPrivacy.PRIVATE })
 
         for (const token of [ collaborator1, collaborator2 ]) {
+          const videoSortableColumns = [
+            'name',
+            'duration',
+            'createdAt',
+            'publishedAt',
+            'originallyPublishedAt',
+            'views',
+            'likes',
+            'comments',
+            'trending',
+            'hot',
+            'best',
+            'localVideoFilesSize'
+          ]
+
+          // Check sort correctly works with our UNION
+          for (const sortColumn of videoSortableColumns) {
+            for (const order of [ '', '-' ]) {
+              const sort = `${order}${sortColumn}`
+
+              {
+                const videos = await servers[0].videos.listMyVideos({ token, sort, includeCollaborations: true })
+
+                expect(videos.total).to.equal(2)
+                expect(videos.data).to.have.lengthOf(2)
+
+                expect(videos.data.map(v => v.name)).to.have.members([ 'video collab 1', 'video collab 2' ])
+              }
+
+              {
+                const videos = await servers[0].videos.listMyVideos({ token, sort, includeCollaborations: false })
+
+                expect(videos.total).to.equal(0)
+                expect(videos.data).to.have.lengthOf(0)
+              }
+            }
+          }
+
+          // Search
           {
-            const videos = await servers[0].videos.listMyVideos({ token, includeCollaborations: true })
+            const videos = await servers[0].videos.listMyVideos({ token, sort: '-match', includeCollaborations: true, search: 'collab 1' })
 
             expect(videos.total).to.equal(2)
             expect(videos.data).to.have.lengthOf(2)
-            expect(videos.data[0].name).to.equal('video collab 2')
-            expect(videos.data[1].name).to.equal('video collab 1')
-          }
-
-          {
-            const videos = await servers[0].videos.listMyVideos({ token, includeCollaborations: false })
-
-            expect(videos.total).to.equal(0)
-            expect(videos.data).to.have.lengthOf(0)
+            expect(videos.data[0].name).to.equal('video collab 1')
+            expect(videos.data[1].name).to.equal('video collab 2')
           }
         }
 
@@ -492,13 +524,30 @@ describe('Test channel collaborators', function () {
         const { id } = await servers[0].channelCollaborators.invite({ channel: 'channel_collaboration2', target: 'collaborator1' })
         await servers[0].channelCollaborators.accept({ channel: 'channel_collaboration2', id, token: collaborator1 })
 
-        await servers[0].videos.update({ id: videoId, attributes: { channelId: channelCollabId2 }, token: collaborator1 })
+        {
+          await servers[0].videos.update({ id: videoId, attributes: { channelId: channelCollabId2 }, token: collaborator1 })
 
-        await waitJobs(servers)
+          await waitJobs(servers)
 
-        for (const server of servers) {
-          const video = await server.videos.get({ id: videoId })
-          expect(video.channel.name).to.equal('channel_collaboration2')
+          for (const server of servers) {
+            const video = await server.videos.get({ id: videoId })
+            expect(video.channel.name).to.equal('channel_collaboration2')
+          }
+        }
+
+        {
+          await servers[0].videos.update({
+            id: videoId,
+            attributes: { channelId: await servers[0].channels.getDefaultId({ token: collaborator1 }) },
+            token: collaborator1
+          })
+
+          await waitJobs(servers)
+
+          for (const server of servers) {
+            const video = await server.videos.get({ id: videoId })
+            expect(video.channel.name).to.equal('collaborator1_channel')
+          }
         }
       })
 

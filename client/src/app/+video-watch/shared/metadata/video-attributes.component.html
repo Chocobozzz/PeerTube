@@ -41,7 +41,7 @@
   @if (video().category.id) {
     <a
       class="attribute-value"
-      [routerLink]="[ '/search' ]" [queryParams]="{ categoryOneOf: [ video().category.id ] }"
+      [routerLink]="[ '/search' ]" [queryParams]="{ categoryOneOf: [ video().category.id ], resultType: 'videos' }"
     >{{ video().category.label }}</a>
   }
 </div>
@@ -54,7 +54,7 @@
   @if (video().licence.id) {
     <a
       class="attribute-value"
-      [routerLink]="[ '/search' ]" [queryParams]="{ licenceOneOf: [ video().licence.id ] }"
+      [routerLink]="[ '/search' ]" [queryParams]="{ licenceOneOf: [ video().licence.id ], resultType: 'videos' }"
     >{{ video().licence.label }}</a>
   }
 </div>
@@ -67,7 +67,7 @@
   @if (video().language.id) {
     <a
       class="attribute-value"
-      [routerLink]="[ '/search' ]" [queryParams]="{ languageOneOf: [ video().language.id ] }"
+      [routerLink]="[ '/search' ]" [queryParams]="{ languageOneOf: [ video().language.id ], resultType: 'videos' }"
     >{{ video().language.label }}</a>
   }
 </div>
@@ -76,7 +76,7 @@
   <span i18n class="attribute-label">Tags</span>
   @for (tag of getVideoTags(); track tag) {
     <a
-      class="attribute-value pt-badge badge-secondary me-1" [routerLink]="[ '/search' ]" [queryParams]="{ tagsOneOf: [ tag ] }"
+      class="attribute-value pt-badge badge-secondary me-1" [routerLink]="[ '/search' ]" [queryParams]="{ tagsOneOf: [ tag ], resultType: 'videos' }"
     >{{ tag }}</a>
   }
 </div>

@@ -131,9 +131,7 @@ export class FFmpegVOD {
       const probe = await ffprobePromise(videoInputPath)
       const videoStreamInfo = await getVideoStreamDimensionsInfo(videoInputPath, probe)
 
-      scaleFilterValue = videoStreamInfo?.isPortraitMode === true
-        ? `w=${resolution}:h=-2`
-        : `w=-2:h=${resolution}`
+      scaleFilterValue = this.getScaleFilterValue({ resolution, portraitMode: videoStreamInfo?.isPortraitMode === true })
     }
 
     await presetVOD({
@@ -179,7 +177,7 @@ export class FFmpegVOD {
       canCopyVideo: true,
       videoStreamOnly: false,
       fps: options.fps,
-      scaleFilterValue: this.getMergeAudioScaleFilterValue()
+      scaleFilterValue: this.getScaleFilterValue({ resolution: options.resolution, portraitMode: false })
     })
 
     command.outputOption('-preset:v veryfast')
@@ -190,8 +188,15 @@ export class FFmpegVOD {
   }
 
   // Avoid "height not divisible by 2" error
-  private getMergeAudioScaleFilterValue () {
-    return 'trunc(iw/2)*2:trunc(ih/2)*2'
+  private getScaleFilterValue (options: {
+    resolution: number
+    portraitMode: boolean
+  }) {
+    const { resolution, portraitMode } = options
+
+    return portraitMode === true
+      ? `w=${resolution}:h=-2`
+      : `w=-2:h=${resolution}`
   }
 
   // ---------------------------------------------------------------------------

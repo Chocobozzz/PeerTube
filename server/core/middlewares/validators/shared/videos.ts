@@ -14,17 +14,18 @@ import {
   MVideo,
   MVideoAccountLight,
   MVideoFormattableDetails,
-  MVideoFullLight,
+  MVideoFull,
   MVideoId,
   MVideoImmutable,
-  MVideoThumbnailBlacklist,
+  MVideoThumbnails,
   MVideoUUID,
+  MVideoWithBlacklist,
   MVideoWithRights
 } from '@server/types/models/index.js'
 import { Request, Response } from 'express'
 import { checkCanManageChannel } from './video-channels.js'
 
-export async function doesVideoExist (id: number | string, res: Response, fetchType: VideoLoadType = 'all') {
+export async function doesVideoExist (id: number | string, res: Response, fetchType: VideoLoadType = 'full') {
   const userId = res.locals.oauth ? res.locals.oauth.token.User.id : undefined
 
   const video = await loadVideo(id, fetchType, userId)
@@ -43,21 +44,33 @@ export async function doesVideoExist (id: number | string, res: Response, fetchT
       res.locals.videoAPI = video as MVideoFormattableDetails
       break
 
-    case 'all':
-      res.locals.videoAll = video as MVideoFullLight
+    case 'full':
+      res.locals.videoFull = video as MVideoFull
       break
 
-    case 'unsafe-only-immutable-attributes':
-      res.locals.onlyImmutableVideo = video as MVideoImmutable
+    case 'unsafe-immutable-only':
+      res.locals.videoImmutable = video as MVideoImmutable
       break
 
+    case 'none':
     case 'id':
       res.locals.videoId = video as MVideoId
       break
 
-    case 'only-video-and-blacklist':
-      res.locals.onlyVideo = video as MVideoThumbnailBlacklist
+    case 'with-blacklist':
+      res.locals.videoWithBlacklist = video as MVideoWithBlacklist
       break
+
+    case 'with-thumbnails':
+      res.locals.videoThumbnails = video as MVideoThumbnails
+      break
+
+    case 'with-rights':
+      res.locals.videoWithRights = video as MVideoWithRights
+      break
+
+    default:
+      return fetchType satisfies never
   }
 
   return true
@@ -221,7 +234,7 @@ async function getVideoWithRights (video: MVideoWithRights): Promise<MVideoWithR
 
   if (channel?.id && channel?.Account?.userId && channel?.Account?.id) return video
 
-  return VideoModel.loadFull(video.id)
+  return VideoModel.loadWithRights(video.id)
 }
 
 // ---------------------------------------------------------------------------
@@ -246,7 +259,7 @@ export async function checkCanAccessVideoSourceFile (options: {
 }): Promise<boolean> {
   const { req, res, videoId } = options
 
-  const video = await VideoModel.loadFull(videoId)
+  const video = await VideoModel.loadWithRights(videoId)
 
   let user = res.locals.oauth?.token.User
   if (!user) {
@@ -296,6 +309,7 @@ export async function checkCanManageVideo (options: {
   video: MVideoAccountLight
   right: UserRightType
   req: Request
+  // null if you don't want the function to send a response when the user cannot manage the video, but just return false
   res: Response | null
   checkIsLocal: boolean
   checkIsOwner: boolean
@@ -339,19 +353,17 @@ export async function checkCanManageVideo (options: {
   return true
 }
 
-type NewType = MUserId
-
 // ---------------------------------------------------------------------------
 
 export async function checkUserQuota (options: {
-  user: NewType
+  channelUser: MUserId
   videoFileSize: number
   req: Request
   res: Response
 }) {
-  const { user, videoFileSize, req, res } = options
+  const { channelUser, videoFileSize, req, res } = options
 
-  if (await isUserQuotaValid({ userId: user.id, uploadSize: videoFileSize }) === false) {
+  if (await isUserQuotaValid({ channelUserId: channelUser.id, uploadSize: videoFileSize }) === false) {
     res.fail({
       status: HttpStatusCode.PAYLOAD_TOO_LARGE_413,
       message: req.t('The user video quota is exceeded with this video'),

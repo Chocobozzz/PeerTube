@@ -1,5 +1,5 @@
 import { VideoChannelSummary } from '../channel/video-channel.model.js'
-import { VideoConstant } from '../video-constant.model.js'
+import { ConstantLabel } from '../../common/constant-label.model.js'
 import { VideoChannelSyncStateType } from './video-channel-sync-state.enum.js'
 
 export interface VideoChannelSync {
@@ -9,6 +9,6 @@ export interface VideoChannelSync {
 
   createdAt: string
   channel: VideoChannelSummary
-  state: VideoConstant<VideoChannelSyncStateType>
+  state: ConstantLabel<VideoChannelSyncStateType>
   lastSyncAt: string
 }

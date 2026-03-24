@@ -24,10 +24,20 @@
 @if (getAlertWarning()?.title) {
   <my-alert type="warning">
     <div class="alert-title">{{ getAlertWarning()?.title }}</div>
-    @if (canSeeMoreInfo()) {
+
+    @if (canSeeMoreStateInfo()) {
       {{ getAlertWarning().watchSecondary }}
     }
+
     {{ getAlertWarning().watchMain }}
+  </my-alert>
+}
+
+@if (getAlertError()?.title) {
+  <my-alert type="danger">
+    <div class="alert-title">{{ getAlertError()?.title }}</div>
+
+    {{ getAlertError().main }}
   </my-alert>
 }
 
@@ -35,13 +45,6 @@
   <my-alert i18n type="warning">
   There are no videos available in this playlist.
 </my-alert>
-}
-
-@if (video()?.blacklisted) {
-  <my-alert type="danger">
-    <div class="blocked-label" i18n>This video is blocked.</div>
-    {{ video().blacklistedReason }}
-  </my-alert>
 }
 
 @if (video()?.canBypassPassword(user())) {

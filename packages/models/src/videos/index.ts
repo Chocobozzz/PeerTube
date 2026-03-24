@@ -13,6 +13,7 @@ export * from './stats/index.js'
 export * from './transcoding/index.js'
 export * from './channel-sync/index.js'
 export * from './chapter/index.js'
+export * from './embed-privacy/index.js'
 
 export * from './nsfw-flag.enum.js'
 export * from './nsfw-policy.type.js'
@@ -20,9 +21,8 @@ export * from './nsfw-policy.type.js'
 export * from './storyboard.model.js'
 export * from './thumbnail/index.js'
 
-export * from './video-constant.model.js'
-export * from './video-create.model.js'
 export * from './video-create-update-common.model.js'
+export * from './video-create.model.js'
 
 export * from './video-licence.enum.js'
 export * from './video-privacy.enum.js'

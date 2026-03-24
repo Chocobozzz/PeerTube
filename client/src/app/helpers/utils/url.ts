@@ -12,6 +12,10 @@ export function getBackendUrl () {
   return environment.apiUrl || environment.originServerUrl || window.location.origin
 }
 
+export function getEmbedUrl () {
+  return environment.embedUrl || getOriginUrl()
+}
+
 export function getBackendHost () {
   return new URL(getBackendUrl()).host
 }

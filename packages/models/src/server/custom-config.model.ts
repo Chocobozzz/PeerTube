@@ -169,6 +169,7 @@ export interface CustomConfig {
     resolutions: ConfigResolutions
 
     alwaysTranscodeOriginalResolution: boolean
+    alwaysTranscodePodcastOptimizedAudio: boolean
 
     fps: {
       max: number
@@ -211,6 +212,11 @@ export interface CustomConfig {
       fps: {
         max: number
       }
+    }
+
+    dvr: {
+      // In seconds, 0 means no DVR
+      maxWindow: number
     }
   }
 

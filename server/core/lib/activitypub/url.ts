@@ -1,3 +1,4 @@
+import { buildSUUID } from '@peertube/peertube-node-utils'
 import { REMOTE_SCHEME, WEBSERVER } from '../../initializers/constants.js'
 import {
   MAbuseFull,
@@ -129,6 +130,10 @@ export function getLocalApproveReplyActivityPubUrl (video: MVideoUUID, comment: 
   return getLocalVideoCommentActivityPubUrl(video, comment) + '/approve-reply'
 }
 
+export function getDownloadsActivityPubUrl (byActor: MActorUrl, video: MVideoId) {
+  return byActor.url + '/downloads/videos/' + video.id + '/' + buildSUUID()
+}
+
 // ---------------------------------------------------------------------------
 
 // Try to fetch target URL
@@ -156,5 +161,5 @@ export function checkUrlsSameHost (url1: string, url2: string) {
   const idHost = new URL(url1).host
   const actorHost = new URL(url2).host
 
-  return idHost && actorHost && idHost.toLowerCase() === actorHost.toLowerCase()
+  return idHost?.toLowerCase() === actorHost?.toLowerCase()
 }

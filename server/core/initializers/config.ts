@@ -1,8 +1,9 @@
-import { sortBy } from '@peertube/peertube-core-utils'
+import { guessAspectRatio, sortBy } from '@peertube/peertube-core-utils'
 import {
   BroadcastMessageLevel,
   NSFWPolicyType,
   PlayerTheme,
+  ThumbnailAspectRatio,
   VideoCommentPolicyType,
   VideoPrivacyType,
   VideoRedundancyConfigFilter,
@@ -12,13 +13,13 @@ import { buildPath, root } from '@peertube/peertube-node-utils'
 import { TranscriptionEngineName, WhisperBuiltinModelName } from '@peertube/peertube-transcription'
 import { decacheModule } from '@server/helpers/decache.js'
 import bytes from 'bytes'
-import { IConfig } from 'config'
+import { type Config } from 'config'
 import { createRequire } from 'module'
 import { dirname, join } from 'path'
 import { parseBytes, parseDurationToMs } from '../helpers/core-utils.js'
 
 const require = createRequire(import.meta.url)
-let config: IConfig = require('config')
+let config: Config = require('config')
 
 const configChangedHandlers: Function[] = []
 
@@ -522,7 +523,12 @@ const CONFIG = {
     GENERATION_FROM_VIDEO: {
       FRAMES_TO_ANALYZE: config.get<number>('thumbnails.generation_from_video.frames_to_analyze')
     },
-    SIZES: sortBy(config.get<{ width: number, height: number }[]>('thumbnails.sizes'), 'width')
+    SIZES: sortBy(config.get<{ width: number, height: number, aspect_ratio?: ThumbnailAspectRatio }[]>('thumbnails.sizes'), 'width')
+      .map(size => ({
+        width: size.width,
+        height: size.height,
+        aspectRatio: size.aspect_ratio || guessAspectRatio(size.width, size.height)
+      }))
   },
   STATS: {
     REGISTRATION_REQUESTS: {
@@ -637,6 +643,9 @@ const CONFIG = {
     get ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION () {
       return config.get<boolean>('transcoding.always_transcode_original_resolution')
     },
+    get ALWAYS_TRANSCODE_PODCAST_OPTIMIZED_AUDIO () {
+      return config.get<boolean>('transcoding.always_transcode_podcast_optimized_audio')
+    },
     RESOLUTIONS: {
       get '0p' () {
         return config.get<boolean>('transcoding.resolutions.0p')
@@ -707,6 +716,15 @@ const CONFIG = {
 
     get ALLOW_REPLAY () {
       return config.get<boolean>('live.allow_replay')
+    },
+
+    DVR: {
+      get MAX_WINDOW () { // In seconds
+        const value = config.get<string>('live.dvr.max_window')
+        if (typeof value === 'number') return value
+
+        return Math.round(parseDurationToMs(value) / 1000)
+      }
     },
 
     LATENCY_SETTING: {
@@ -1206,7 +1224,7 @@ function getLocalConfigFilePath () {
   return join(localConfigDir, filename + '.json')
 }
 
-function getConfigModule () {
+function getConfigModule (): Config {
   return config
 }
 

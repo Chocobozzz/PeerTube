@@ -128,3 +128,10 @@ export const EXPORT_MAX_USER_VIDEO_QUOTA_VALIDATOR: BuildFormValidator = {
     min: $localize`Max user video video quota must be greater or equal to 1.`
   }
 }
+
+export const MAX_DVR_WINDOW_MINUTES_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [ Validators.min(1) ],
+  MESSAGES: {
+    min: $localize`DVR window must be greater or equal to 1 minute.`
+  }
+}

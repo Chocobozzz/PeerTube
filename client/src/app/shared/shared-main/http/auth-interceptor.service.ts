@@ -47,7 +47,7 @@ export class AuthInterceptor implements HttpInterceptor {
           }
 
           if (!this.authService.isOTPMissingError(err)) {
-            if (err.status === HttpStatusCode.UNAUTHORIZED_401 && error && error.code === OAuth2ErrorCode.INVALID_TOKEN) {
+            if (err.status === HttpStatusCode.UNAUTHORIZED_401 && error?.code === OAuth2ErrorCode.INVALID_TOKEN) {
               return this.handleTokenExpired(req, next)
             }
 

@@ -4,7 +4,7 @@ import { Notifier } from '@app/core'
 import { Account } from '@app/shared/shared-main/account/account.model'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { VideoOwnershipService } from '@app/shared/shared-main/video/video-ownership.service'
-import { DataLoaderOptions, TableColumnInfo, TableComponent } from '@app/shared/shared-tables/table.component'
+import { DataLoaderOptionsBase, TableColumnInfo, TableComponent } from '@app/shared/shared-tables/table.component'
 import { VideoChangeOwnership, VideoChangeOwnershipStatus, VideoChangeOwnershipStatusType } from '@peertube/peertube-models'
 import { map } from 'rxjs'
 import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
@@ -74,7 +74,7 @@ export class MyOwnershipComponent {
       })
   }
 
-  private _dataLoader (options: DataLoaderOptions) {
+  private _dataLoader (options: DataLoaderOptionsBase) {
     return this.videoOwnershipService.getOwnershipChanges(options.pagination, options.sort)
       .pipe(
         map(resultList => ({

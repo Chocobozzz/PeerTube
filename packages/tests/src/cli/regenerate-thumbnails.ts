@@ -1,4 +1,4 @@
-import { minBy, wait } from '@peertube/peertube-core-utils'
+import { minBy } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, Thumbnail, Video } from '@peertube/peertube-models'
 import {
   cleanupTests,
@@ -112,45 +112,29 @@ describe('Test regenerate thumbnails CLI', function () {
 
   it('Should regenerate remote thumbnails', async function () {
     await servers[1].cli.execWithEnv(`npm run regenerate-thumbnails`)
-  })
 
-  it('Should still have cached remote thumbnails on server 1', async function () {
-    for (const thumbnail of remoteVideo.thumbnails) {
-      const { body } = await makeRawRequest({ url: thumbnail.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+    await waitJobs(servers)
 
-      if (isTruncatedThumbnail(thumbnail)) {
-        expect(body).to.have.lengthOf(0)
-      } else {
+    for (const server of servers) {
+      const video = await server.videos.get({ id: remoteVideo.uuid })
+
+      for (const thumbnail of video.thumbnails) {
+        const { body } = await makeRawRequest({ url: thumbnail.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+
         expect(body).to.not.have.lengthOf(0)
       }
     }
   })
 
-  it('Should refresh the video and remove previous cached thumbnails', async function () {
-    await wait(10000)
-
-    await servers[0].videos.get({ id: remoteVideo.uuid }) // Refresh remote video thumbnails
-    await waitJobs(servers)
-
+  it('Should not have cached previous remote thumbnails on server 1', async function () {
     for (const thumbnail of remoteVideo.thumbnails) {
       await makeRawRequest({ url: thumbnail.fileUrl, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     }
   })
 
   it('Should have the appropriate thumbnails count', async function () {
-    expect(await servers[0].servers.countFiles('thumbnails')).to.equal(4)
-    expect(await servers[0].servers.countFiles('cache/thumbnails')).to.equal(0)
-  })
-
-  it('Should re-cache thumbnails on server 1', async function () {
-    const remoteVideoRefreshed = await servers[0].videos.get({ id: remoteVideo.uuid })
-
-    for (const thumbnail of remoteVideoRefreshed.thumbnails) {
-      await makeRawRequest({ url: thumbnail.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
-    }
-
-    expect(await servers[0].servers.countFiles('thumbnails')).to.equal(4)
-    expect(await servers[0].servers.countFiles('cache/thumbnails')).to.equal(2)
+    expect(await servers[0].servers.countFiles('thumbnails')).to.equal(10)
+    expect(await servers[0].servers.countFiles('cache/thumbnails')).to.equal(5)
   })
 
   after(async function () {

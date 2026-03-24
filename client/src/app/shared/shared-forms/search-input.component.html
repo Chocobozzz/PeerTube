@@ -1,0 +1,24 @@
+<div class="input-group has-clear flex-nowrap" [ngClass]="{ 'has-icon': icon() }">
+
+  @if (icon()) {
+    <button class="button-unstyle search-button" title="Search" i18n-title type="button" (click)="onSearchClick()">
+      <my-global-icon iconName="search"></my-global-icon>
+    </button>
+  }
+
+  <input
+    type="text"
+    [name]="inputId()"
+    [id]="inputId()"
+    [placeholder]="placeholder()"
+    class="last-in-group first-in-group"
+    [(ngModel)]="searchValue"
+    (keyup)="onInputSearch($event)"
+    #input
+  >
+
+  <button class="p-0 border-0 form-control-clear" title="Clear" i18n-title type="button" (click)="onClear(); input.focus()">
+    <my-global-icon iconName="cross"></my-global-icon>
+  </button>
+
+</div>

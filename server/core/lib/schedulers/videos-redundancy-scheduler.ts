@@ -65,7 +65,6 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
         const candidateToDuplicate = {
           video: videoToDuplicate,
           redundancy: redundancyConfig,
-          files: videoToDuplicate.VideoFiles,
           streamingPlaylists: videoToDuplicate.VideoStreamingPlaylists
         }
 
@@ -305,7 +304,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     const getVideoOptions = {
       videoObject: videoUrl,
       syncParam: { rates: false, shares: false, comments: false, refreshVideo: true },
-      fetchType: 'all' as 'all'
+      fetchType: 'full' as const
     }
     const { video } = await getOrCreateAPVideo(getVideoOptions)
 

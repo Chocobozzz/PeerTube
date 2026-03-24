@@ -66,7 +66,7 @@ describe('Test JSONLD HTML tags', function () {
       await servers[0].videos.rate({ id: publicVideo.id, rating: 'like' })
       await servers[0].views.simulateView({ id: publicVideo.id, xForwardedFor: '0.0.0.1,127.0.0.1' })
       await servers[0].views.simulateView({ id: publicVideo.id, xForwardedFor: '0.0.0.2,127.0.0.1' })
-      await servers[0].debug.sendCommand({ body: { command: 'process-video-views-buffer' } })
+      await servers[0].debug.sendCommand({ body: { command: 'process-video-stats-buffer' } })
     }
 
     {
@@ -183,7 +183,7 @@ describe('Test JSONLD HTML tags', function () {
 
         expect(jsonld.contentRating).to.equal('Mature')
 
-        expect(jsonld.caption).to.deep.equal([
+        expect(jsonld.caption).to.have.deep.members([
           {
             '@type': 'MediaObject',
             'contentUrl': captions.find(c => c.language.id === 'en').fileUrl,

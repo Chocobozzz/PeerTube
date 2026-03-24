@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core'
 import { AuthService, ServerService, UserService } from '@app/core'
 import { listUserChannelsForSelect } from '@app/helpers'
-import { UserVideoQuota, VideoConstant, VideoPrivacyType } from '@peertube/peertube-models'
+import { UserVideoQuota, ConstantLabel, VideoPrivacyType } from '@peertube/peertube-models'
 import { forkJoin } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { SelectChannelItem } from '../../../types'
@@ -9,7 +9,7 @@ import { SelectChannelItem } from '../../../types'
 export type VideoPublishResolverData = {
   videoChannels: SelectChannelItem[]
   userQuota: UserVideoQuota
-  privacies: VideoConstant<VideoPrivacyType>[]
+  privacies: ConstantLabel<VideoPrivacyType>[]
 }
 
 @Injectable()

@@ -4,7 +4,7 @@ import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { Runner } from '@peertube/peertube-models'
 import { ActionDropdownComponent, DropdownAction } from '../../../../shared/shared-main/buttons/action-dropdown.component'
 import { NumberFormatterPipe } from '../../../../shared/shared-main/common/number-formatter.pipe'
-import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../../../../shared/shared-tables/table.component'
+import { DataLoaderOptionsBase, TableColumnInfo, TableComponent } from '../../../../shared/shared-tables/table.component'
 import { RunnerService } from '../runner.service'
 
 @Component({
@@ -71,7 +71,7 @@ export class RunnerListComponent implements OnInit {
       })
   }
 
-  private _dataLoader (options: DataLoaderOptions) {
+  private _dataLoader (options: DataLoaderOptionsBase) {
     return this.runnerService.listRunners(options)
   }
 }

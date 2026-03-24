@@ -2,6 +2,7 @@ import { PlayerThemeVideoSetting } from '../../player/player-theme.type.js'
 import {
   LiveVideoLatencyModeType,
   VideoCommentPolicyType,
+  VideoEmbedPrivacyPolicyType,
   VideoFileMetadata,
   VideoPrivacyType,
   VideoStateType,
@@ -37,6 +38,7 @@ export interface VideoExportJSON {
       saveReplay: boolean
       permanentLive: boolean
       latencyMode: LiveVideoLatencyModeType
+      dvrWindow?: number
       streamKey: string
 
       replaySettings?: {
@@ -111,6 +113,11 @@ export interface VideoExportJSON {
 
     playerSettings?: {
       theme: PlayerThemeVideoSetting
+    }
+
+    videoEmbedPrivacy: {
+      policy: VideoEmbedPrivacyPolicyType
+      domains: string[]
     }
 
     archiveFiles: {

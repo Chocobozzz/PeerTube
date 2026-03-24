@@ -11,7 +11,7 @@ import { tap } from 'rxjs'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
 import { NumberFormatterPipe } from '../../../shared/shared-main/common/number-formatter.pipe'
-import { DataLoaderOptions, TableColumnInfo, TableComponent, TableQueryParams } from '../../../shared/shared-tables/table.component'
+import { DataLoaderOptionsBase, TableColumnInfo, TableComponent, TableQueryParams } from '../../../shared/shared-tables/table.component'
 import { VideoRedundancyInformationComponent } from './video-redundancy-information.component'
 
 type QueryParams = TableQueryParams & {
@@ -183,7 +183,7 @@ export class VideoRedundanciesListComponent implements OnInit {
       })
   }
 
-  private _dataLoader (options: DataLoaderOptions) {
+  private _dataLoader (options: DataLoaderOptionsBase) {
     return this.redundancyService.listVideoRedundancies({ ...options, target: this.displayType })
       .pipe(tap(() => this.dataLoaded = true))
   }

@@ -132,6 +132,11 @@ export class VideoStatsComponent implements OnInit {
         zoomEnabled: true
       },
       {
+        id: 'downloads',
+        label: $localize`Downloads`,
+        zoomEnabled: true
+      },
+      {
         id: 'countries',
         label: $localize`Countries`,
         zoomEnabled: false
@@ -242,7 +247,7 @@ export class VideoStatsComponent implements OnInit {
   }
 
   private isTimeserieGraph (graphId: ActiveGraphId) {
-    return graphId === 'aggregateWatchTime' || graphId === 'viewers'
+    return graphId === 'aggregateWatchTime' || graphId === 'viewers' || graphId === 'downloads'
   }
 
   private loadOverallStats () {
@@ -335,6 +340,10 @@ export class VideoStatsComponent implements OnInit {
         help: $localize`A view means that someone watched the video for several seconds (10 seconds by default)`
       },
       {
+        label: $localize`Downloads`,
+        value: this.numberFormatter.transform(this.videoEdit.getVideoAttributes().downloads)
+      },
+      {
         label: $localize`Likes`,
         value: this.numberFormatter.transform(this.videoEdit.getVideoAttributes().likes)
       }
@@ -399,6 +408,12 @@ export class VideoStatsComponent implements OnInit {
         endDate: this.statsEndDate,
         metric: 'viewers'
       }),
+      downloads: this.statsService.getTimeserieStats({
+        videoId,
+        startDate: this.statsStartDate,
+        endDate: this.statsEndDate,
+        metric: 'downloads'
+      }),
 
       countries: of(this.countries),
 
@@ -426,6 +441,7 @@ export class VideoStatsComponent implements OnInit {
       retention: (rawData: VideoStatsRetention) => this.buildRetentionChartOptions(rawData),
       aggregateWatchTime: (rawData: VideoStatsTimeserie) => this.buildTimeserieChartOptions(rawData),
       viewers: (rawData: VideoStatsTimeserie) => this.buildTimeserieChartOptions(rawData),
+      downloads: (rawData: VideoStatsTimeserie) => this.buildTimeserieChartOptions(rawData),
       countries: (rawData: GeoData) => this.buildGeoChartOptions(rawData),
       regions: (rawData: GeoData) => this.buildGeoChartOptions(rawData)
     }
