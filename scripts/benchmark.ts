@@ -283,7 +283,7 @@ async function prepare () {
   }
 
   servers = await Promise.all([
-    createSingleServer(1, config, { nodeArgs: [ '--inspect' ] }),
+    createSingleServer(1, config, { nodeArgs: [ '--inspect=9230' ] }),
     createSingleServer(2, config),
     createSingleServer(3, config)
   ])

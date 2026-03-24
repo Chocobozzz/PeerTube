@@ -268,28 +268,29 @@ export class VideoModelBuilder {
   }
 
   private addActorAvatar (row: SQLRow, actorPrefix: string, actor: ActorModel) {
-    const avatarPrefix = `${actorPrefix}.Avatars`
-    const id = row[`${avatarPrefix}.id`]
-    const key = `${row.id}${id}`
-
-    if (!id || this.actorImagesDone.has(key)) return
-
-    const attributes = this.grab(row, this.tables.getAvatarAttributes(), avatarPrefix)
-    const avatarModel = new ActorImageModel(attributes, this.buildOpts)
-    actor.Avatars.push(avatarModel)
-
+    const key = `${actorPrefix}${row.id}`
+    if (this.actorImagesDone.has(key)) return
     this.actorImagesDone.add(key)
+
+    const avatars = row[`${actorPrefix}.AvatarsJSON`] as any || []
+    for (const avatar of avatars) {
+      const avatarModel = new ActorImageModel(avatar, this.buildOpts)
+      actor.Avatars.push(avatarModel)
+    }
   }
 
   private addThumbnail (row: SQLRow, videoModel: VideoModel) {
-    const id = row['Thumbnails.id']
-    if (!id || this.thumbnailsDone.has(id)) return
+    if (this.thumbnailsDone.has(videoModel.id)) return
 
-    const attributes = this.grab(row, this.tables.getThumbnailAttributes(), 'Thumbnails')
-    const thumbnailModel = new ThumbnailModel(attributes, this.buildOpts)
-    videoModel.Thumbnails.push(thumbnailModel)
+    const thumbnails = row['ThumbnailsJSON'] as any || []
 
-    this.thumbnailsDone.add(id)
+    for (const thumbnail of thumbnails) {
+      const thumbnailModel = new ThumbnailModel(thumbnail, this.buildOpts)
+
+      videoModel.Thumbnails.push(thumbnailModel)
+    }
+
+    this.thumbnailsDone.add(videoModel.id)
   }
 
   private addWebVideoFile (row: SQLRow, videoModel: VideoModel) {

@@ -137,7 +137,7 @@ export class VideosModelGetQuerySubBuilder extends AbstractVideoQueryBuilder {
     }
 
     if (thumbnailsInclude.has(options.type)) {
-      this.includeThumbnails()
+      this.includeThumbnailsJSON()
     }
 
     if (blacklistedInclude.has(options.type)) {
