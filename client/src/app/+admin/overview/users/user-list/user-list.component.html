@@ -40,7 +40,7 @@
           <div class="pt-badge badge-red" i18n>Muted</div>
         }
         @if (user.blocked) {
-          <div class="pt-badge badge-red" i18n>Banned</div>
+          <a routerLink="." [queryParams]="{ blocked: true }" class="pt-badge badge-red" i18n-title title="Filter by banned users" i18n>Banned</a>
         }
       </td>
     }
@@ -48,9 +48,9 @@
     @if (table.isColumnDisplayed('role')) {
       <td>
         @if (user.blocked) {
-          <span class="pt-badge badge-banned" i18n-title title="The user is banned">{{ user.role.label }}</span>
+          <a routerLink="." [queryParams]="{ blocked: true }" class="pt-badge badge-banned" i18n-title title="Filter by banned users">{{ user.role.label }}</a>
         } @else {
-          <span class="pt-badge" [ngClass]="getRoleClass(user.role.id)">{{ user.role.label }}</span>
+          <a routerLink="." [queryParams]="{ role: user.role.id }" [title]="getRoleFilterTitle(user.role.label)" class="pt-badge" [ngClass]="getRoleClass(user.role.id)" >{{ user.role.label }}</a>
         }
       </td>
     }

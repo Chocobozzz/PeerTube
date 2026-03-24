@@ -301,6 +301,10 @@ export class UserListComponent implements OnInit, OnDestroy {
       })
   }
 
+  getRoleFilterTitle (roleLabel: string) {
+    return $localize`Filter by role: ${roleLabel}`
+  }
+
   private _dataLoader (
     options: DataLoaderOptionsBase & {
       blocked?: boolean
