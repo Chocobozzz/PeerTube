@@ -12,14 +12,7 @@ import { TableColumnInfo, TableComponent } from '../../../shared/shared-tables/t
 import { JobService } from './job.service'
 
 type ColumnName = 'id' | 'type' | 'priority' | 'state' | 'progress' | 'createdAt' | 'processed'
-
-type DataLoaderParameter = {
-  pagination: RestPagination
-  sort: SortMeta
-  search?: string
-  jobType?: JobType
-  jobState?: JobState
-}
+type DataLoaderParameter = Parameters<JobsComponent['_dataLoader']>[0]
 
 @Component({
   selector: 'my-jobs',
@@ -74,7 +67,7 @@ export class JobsComponent {
   readonly inputFilters: AdvancedFilterDef<DataLoaderParameter>[] = [
     {
       type: 'select',
-      key: 'jobType',
+      key: 'type',
       title: $localize`Job type`,
       clearable: true,
       filter: true,
@@ -86,7 +79,7 @@ export class JobsComponent {
     },
     {
       type: 'select',
-      key: 'jobState',
+      key: 'state',
       title: $localize`Job state`,
       clearable: true,
       items: this.jobStates.map(s => ({
@@ -159,19 +152,27 @@ export class JobsComponent {
     return this.peertubeBadgeService.getRandomBadge('type', type)
   }
 
+  getStateFilterTitle (state: string) {
+    return $localize`Filter by state: ${state.toLocaleUpperCase()}`
+  }
+
+  getTypeFilterTitle (type: string) {
+    return $localize`Filter by type: ${type.toLocaleUpperCase()}`
+  }
+
   private _dataLoader (options: {
     pagination: RestPagination
     sort: SortMeta
-    jobType?: JobType
-    jobState?: JobState
+    type?: JobType
+    state?: JobState
   }) {
-    const { pagination, sort, jobType, jobState } = options
+    const { pagination, sort, type, state } = options
 
-    this.displayGlobalProgress = !jobType || jobType === 'video-transcoding'
+    this.displayGlobalProgress = !type || type === 'video-transcoding'
 
     return this.jobsService.listJobs({
-      jobState,
-      jobType,
+      jobState: state,
+      jobType: type,
       pagination,
       sort
     })

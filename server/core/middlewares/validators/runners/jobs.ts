@@ -11,6 +11,7 @@ import { exists, isUUIDValid } from '@server/helpers/custom-validators/misc.js'
 import {
   isRunnerJobAbortReasonValid,
   isRunnerJobArrayOfStateValid,
+  isRunnerJobArrayOfTypeValid,
   isRunnerJobErrorMessageValid,
   isRunnerJobProgressValid,
   isRunnerJobSuccessPayloadValid,
@@ -128,7 +129,14 @@ export const listRunnerJobsValidator = [
     .customSanitizer(arrayify)
     .custom(isRunnerJobArrayOfStateValid),
 
+  query('typeOneOf')
+    .optional()
+    .customSanitizer(arrayify)
+    .custom(isRunnerJobArrayOfTypeValid),
+
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res, { tags })) return
+
     return next()
   }
 ]

@@ -11,7 +11,7 @@
   searchInput="true"
   refreshButton="true"
   [inputFilters]="inputFilters"
-  >
+>
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No job} =1 {1 job} other {{{ totalRecords | myNumberFormatter }} jobs}}</ng-container>
   </ng-template>
@@ -23,13 +23,25 @@
 
     @if (table.isColumnDisplayed('type')) {
       <td>
-        <span class="pt-badge ellipsis" [title]="runnerJob.type" [ngClass]="getRandomRunnerTypeBadge(runnerJob.type)">{{ runnerJob.type }}</span>
+        <a
+          routerLink="."
+          [queryParams]="{ type: runnerJob.type }"
+          class="pt-badge ellipsis"
+          [title]="getTypeFilterTitle(runnerJob.type)"
+          [ngClass]="getRandomRunnerTypeBadge(runnerJob.type)"
+        >{{ runnerJob.type }}</a>
       </td>
     }
 
     @if (table.isColumnDisplayed('state')) {
       <td>
-        <span class="pt-badge ellipsis" [title]="runnerJob.state.label" [ngClass]="getStateBadgeColor(runnerJob)">{{ runnerJob.state.label }}</span>
+        <a
+          routerLink="."
+          [queryParams]="{ state: runnerJob.state.id }"
+          class="pt-badge ellipsis"
+          [title]="getStateFilterTitle(runnerJob.state.label)"
+          [ngClass]="getStateBadgeColor(runnerJob)"
+        >{{ runnerJob.state.label }}</a>
       </td>
     }
 
@@ -61,23 +73,30 @@
     @if (table.isColumnDisplayed('processed')) {
       <td class="fs-7">
         <div>{{ runnerJob.startedAt }}</div>
-        <div>{{ runnerJob.finishedAt}}</div>
+        <div>{{ runnerJob.finishedAt }}</div>
       </td>
     }
   </ng-template>
 
   <ng-template #actionCell let-runnerJob>
     <my-action-dropdown
-      placement="bottom-right top-right left auto" container="body"
-      i18n-label label="Actions" [actions]="actions" [entry]="runnerJob"
+      placement="bottom-right top-right left auto"
+      container="body"
+      i18n-label
+      label="Actions"
+      [actions]="actions"
+      [entry]="runnerJob"
     ></my-action-dropdown>
   </ng-template>
 
   <ng-template #expandedRow let-runnerJob>
     <div class="mt-2 fs-7 font-monospace">
-      Parent job: {{ runnerJob.parent?.uuid || '-' }} <br />
-      Processed on {{ (runnerJob.startedAt || '-') }} <br />
-      Finished on {{ (runnerJob.finishedAt || '-') }} <br />
+      Parent job: {{ runnerJob.parent?.uuid || '-' }}
+      <br />
+      Processed on {{ runnerJob.startedAt || '-' }}
+      <br />
+      Finished on {{ runnerJob.finishedAt || '-' }}
+      <br />
     </div>
 
     <div class="mt-2">
@@ -91,7 +110,7 @@
     </div>
 
     @if (runnerJob.error) {
-      <pre class="text-danger" >{{ runnerJob.error }}</pre>
+      <pre class="text-danger">{{ runnerJob.error }}</pre>
     }
   </ng-template>
 

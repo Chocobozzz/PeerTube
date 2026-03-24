@@ -23,6 +23,7 @@ import {
   VideoStudioCommand,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { isRunnerJobTypeValid } from '@peertube/peertube-server/core/helpers/custom-validators/runners/jobs.js'
 import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { basename } from 'path'
 
@@ -314,12 +315,49 @@ describe('Test managing runners', function () {
       })
 
       it('Should fail with an invalid state', async function () {
-        await server.runnerJobs.list({ start: 0, count: 5, sort: '-createdAt', stateOneOf: 42 as any })
-        await server.runnerJobs.list({ start: 0, count: 5, sort: '-createdAt', stateOneOf: [ 42 ] as any })
+        await server.runnerJobs.list({
+          start: 0,
+          count: 5,
+          sort: '-createdAt',
+          stateOneOf: 42 as any,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+
+        await server.runnerJobs.list({
+          start: 0,
+          count: 5,
+          sort: '-createdAt',
+          stateOneOf: [ 42 ] as any,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      })
+
+      it('Should fail with an invalid type', async function () {
+        await server.runnerJobs.list({
+          start: 0,
+          count: 5,
+          sort: '-createdAt',
+          typeOneOf: 42 as any,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+
+        await server.runnerJobs.list({
+          start: 0,
+          count: 5,
+          sort: '-createdAt',
+          typeOneOf: [ 42 ] as any,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
       })
 
       it('Should succeed with the correct params', async function () {
-        await server.runnerJobs.list({ start: 0, count: 5, sort: '-createdAt', stateOneOf: [ RunnerJobState.COMPLETED ] })
+        await server.runnerJobs.list({
+          start: 0,
+          count: 5,
+          sort: '-createdAt',
+          stateOneOf: [ RunnerJobState.COMPLETED ],
+          typeOneOf: [ 'vod-web-video-transcoding' ]
+        })
       })
     })
 

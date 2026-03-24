@@ -10,13 +10,12 @@ import { ActionDropdownComponent, DropdownAction } from '../../../../shared/shar
 import { NumberFormatterPipe } from '../../../../shared/shared-main/common/number-formatter.pipe'
 import { DataLoaderOptionsBase, TableColumnInfo, TableComponent } from '../../../../shared/shared-tables/table.component'
 import { RunnerJobFormatted, RunnerService } from '../runner.service'
+import { RouterLink } from '@angular/router'
 
 type RunnerJobStateFilter = 'completed' | 'pending' | 'processing' | 'errored'
 
-type DataLoaderParameter = DataLoaderOptionsBase & {
-  state?: RunnerJobStateFilter
-  jobType?: RunnerJobType
-}
+type DataLoaderParameter = Parameters<RunnerJobListComponent['_dataLoader']>[0]
+
 type ColumnName = 'uuid' | 'type' | 'state' | 'priority' | 'progress' | 'runner' | 'createdAt' | 'processed'
 
 @Component({
@@ -24,6 +23,7 @@ type ColumnName = 'uuid' | 'type' | 'state' | 'priority' | 'progress' | 'runner'
   templateUrl: './runner-job-list.component.html',
   imports: [
     CommonModule,
+    RouterLink,
     ActionDropdownComponent,
     TableComponent,
     NumberFormatterPipe
@@ -55,7 +55,7 @@ export class RunnerJobListComponent implements OnInit {
   inputFilters: AdvancedFilterDef<DataLoaderParameter>[] = [
     {
       type: 'select',
-      key: 'jobType',
+      key: 'type',
       title: $localize`Job type`,
       clearable: true,
       items: this.jobTypes.map(t => ({
@@ -199,15 +199,24 @@ export class RunnerJobListComponent implements OnInit {
     return this.peertubeBadgeService.getRandomBadge('type', value)
   }
 
+  getTypeFilterTitle (type: string) {
+    return $localize`Filter jobs by type: ${type.toLocaleUpperCase()}`
+  }
+
+  getStateFilterTitle (state: string) {
+    return $localize`Filter jobs by state: ${state.toLocaleUpperCase()}`
+  }
+
   private _dataLoader (
     options: DataLoaderOptionsBase & {
       state?: RunnerJobStateFilter
-      jobType?: RunnerJobType
+      type?: RunnerJobType
     }
   ) {
-    const { pagination, sort, search, state, jobType } = options
+    const { pagination, sort, search, state, type } = options
 
     let stateOneOf: RunnerJobStateType[]
+    let typeOneOf: RunnerJobType[]
 
     if (state) {
       stateOneOf = []
@@ -222,7 +231,12 @@ export class RunnerJobListComponent implements OnInit {
         stateOneOf.push(RunnerJobState.PARENT_ERRORED)
       }
     }
-    return this.runnerService.listRunnerJobs({ pagination, sort, search, stateOneOf, jobType })
+
+    if (type) {
+      typeOneOf = [ type ]
+    }
+
+    return this.runnerService.listRunnerJobs({ pagination, sort, search, stateOneOf, typeOneOf })
   }
 
   private canCancelJob (job: RunnerJob) {

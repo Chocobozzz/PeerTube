@@ -7567,6 +7567,13 @@ paths:
             type: array
             items:
               $ref: '#/components/schemas/RunnerJobState'
+        - name: typeOneOf
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/RunnerJobType'
       responses:
         '200':
           description: successful operation
