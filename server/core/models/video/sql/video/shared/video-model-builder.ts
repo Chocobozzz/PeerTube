@@ -274,7 +274,18 @@ export class VideoModelBuilder {
 
     const avatars = row[`${actorPrefix}.AvatarsJSON`] as any || []
     for (const avatar of avatars) {
-      const avatarModel = new ActorImageModel(avatar, this.buildOpts)
+      const avatarModel = new ActorImageModel({
+        ...avatar,
+
+        createdAt: avatar.createdAt
+          ? new Date(avatar.createdAt)
+          : null,
+
+        updatedAt: avatar.updatedAt
+          ? new Date(avatar.updatedAt)
+          : null
+      }, this.buildOpts)
+
       actor.Avatars.push(avatarModel)
     }
   }
@@ -285,7 +296,17 @@ export class VideoModelBuilder {
     const thumbnails = row['ThumbnailsJSON'] as any || []
 
     for (const thumbnail of thumbnails) {
-      const thumbnailModel = new ThumbnailModel(thumbnail, this.buildOpts)
+      const thumbnailModel = new ThumbnailModel({
+        ...thumbnail,
+
+        createdAt: thumbnail.createdAt
+          ? new Date(thumbnail.createdAt)
+          : null,
+
+        updatedAt: thumbnail.updatedAt
+          ? new Date(thumbnail.updatedAt)
+          : null
+      }, this.buildOpts)
 
       videoModel.Thumbnails.push(thumbnailModel)
     }
