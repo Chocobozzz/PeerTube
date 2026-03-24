@@ -18,9 +18,11 @@ import {
   makeDeleteRequest,
   makeGetRequest,
   makePutBodyRequest,
+  makeRawRequest,
   makeUploadRequest,
   setAccessTokensToServers,
-  setDefaultVideoChannel
+  setDefaultVideoChannel,
+  waitJobs
 } from '@peertube/peertube-server-commands'
 import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { checkUploadVideoParam } from '@tests/shared/videos.js'
@@ -593,6 +595,22 @@ describe('Test videos API validator', function () {
             expectedStatus: HttpStatusCode.OK_200
           })
         }
+
+        {
+          const attaches = baseCorrectAttaches
+
+          const { uuid } = await checkUploadVideoParam({
+            ...baseOptions(),
+
+            attributes: { ...fields, ...attaches, filename: '../'.repeat(20) + 'toto.mp4' },
+            expectedStatus: HttpStatusCode.OK_200
+          })
+
+          await waitJobs([ server ])
+
+          const video = await server.videos.get({ id: uuid })
+          await makeRawRequest({ url: video.files[0].fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+        }
       })
     }
 
@@ -940,7 +958,7 @@ describe('Test videos API validator', function () {
       })
 
       expect(res.body.data).to.be.an('array')
-      expect(res.body.data.length).to.equal(7)
+      expect(res.body.data.length).to.equal(9)
     })
 
     it('Should fail without a correct uuid', async function () {
