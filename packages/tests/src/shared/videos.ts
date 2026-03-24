@@ -360,7 +360,7 @@ export async function saveVideoInServers (servers: PeerTubeServer[], uuid: strin
 export function checkUploadVideoParam (options: {
   server: PeerTubeServer
   token: string
-  attributes: Partial<VideoEdit>
+  attributes: Partial<VideoEdit> & { filename?: string }
   expectedStatus?: HttpStatusCodeType
   completedExpectedStatus?: HttpStatusCodeType
   mode?: 'legacy' | 'resumable'

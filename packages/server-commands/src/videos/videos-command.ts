@@ -426,7 +426,7 @@ export class VideosCommand extends AbstractCommand {
   // ---------------------------------------------------------------------------
 
   async upload (options: OverrideCommandOptions & {
-    attributes?: VideoEdit
+    attributes?: VideoEdit & { filename?: string }
     mode?: 'legacy' | 'resumable' // default legacy
     waitTorrentGeneration?: boolean // default true
     completedExpectedStatus?: HttpStatusCodeType
