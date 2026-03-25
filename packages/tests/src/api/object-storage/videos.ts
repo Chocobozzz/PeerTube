@@ -256,6 +256,8 @@ function runTestSuite (options: {
     it('Should update streaming playlist infohash if object storage base url changed', async function () {
       const newBaseMockUrl = `http://example.com`
 
+      await waitJobs(servers)
+
       await servers[1].kill()
 
       await servers[1].run(
