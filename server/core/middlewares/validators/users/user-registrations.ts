@@ -1,4 +1,4 @@
-import { arrayify } from '@peertube/peertube-core-utils'
+import { arrayify, pick } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, UserRegister, UserRegistrationRequest, UserRegistrationState } from '@peertube/peertube-models'
 import { exists, isBooleanValid, isIdValid, toBooleanOrNull } from '@server/helpers/custom-validators/misc.js'
 import {
@@ -9,6 +9,7 @@ import {
 import { CONFIG } from '@server/initializers/config.js'
 import { loadReservedActorName } from '@server/lib/local-actor.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { asyncMiddleware } from '@server/middlewares/async.js'
 import express from 'express'
 import { body, param, query, ValidationChain } from 'express-validator'
 import { isUserDisplayNameValid, isUserPasswordValid, isUserUsernameValid } from '../../../helpers/custom-validators/users.js'
@@ -16,8 +17,6 @@ import { isVideoChannelDisplayNameValid, isVideoChannelUsernameValid } from '../
 import { isSignupAllowed, isSignupAllowedForCurrentIP, SignupMode } from '../../../lib/signup.js'
 import { areValidationErrors, checkUsernameOrEmailDoNotAlreadyExist } from '../shared/index.js'
 import { checkRegistrationHandlesDoNotAlreadyExist, checkRegistrationIdExist } from './shared/user-registrations.js'
-import { pick } from '@peertube/peertube-core-utils'
-import { asyncMiddleware } from '@server/middlewares/async.js'
 
 const usersRegistrationValidator = (req: express.Request, res: express.Response, next: express.NextFunction) => {
   if (res.locals.signupMode === 'direct-registration') {
@@ -183,13 +182,13 @@ const listRegistrationsValidator = [
 // ---------------------------------------------------------------------------
 
 export {
-  determineSignupMode,
-  usersRegistrationValidator,
   acceptOrRejectRegistrationValidator,
+  determineSignupMode,
   ensureUserRegistrationAllowedFactory,
   ensureUserRegistrationAllowedForIP,
   getRegistrationValidator,
   listRegistrationsValidator,
+  usersRegistrationValidator,
   usersRequestRegistrationValidator
 }
 
