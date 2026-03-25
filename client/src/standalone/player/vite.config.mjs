@@ -20,7 +20,7 @@ export default defineConfig(() => {
         entry: resolve(__dirname, './src/index.ts'),
         name: 'PeerTubePlayer',
         fileName: 'peertube-player',
-        cssFilename: 'peertube-player.css'
+        cssFileName: 'peertube-player'
       }
     },
 

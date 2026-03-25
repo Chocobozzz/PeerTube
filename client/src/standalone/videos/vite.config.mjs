@@ -62,7 +62,7 @@ export default defineConfig(({ mode }) => {
 
       target: [ 'firefox78', 'ios14' ],
 
-      rollupOptions: {
+      rolldownOptions: {
         input: {
           embed: resolve(root, 'src', 'standalone', 'videos', 'embed.html'),
           'test-embed': resolve(root, 'src', 'standalone', 'videos', 'test-embed.html')
