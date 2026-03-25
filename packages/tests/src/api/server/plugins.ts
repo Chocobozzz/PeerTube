@@ -329,6 +329,15 @@ describe('Test plugins', function () {
     expect(user.theme).to.equal('instance-default')
   })
 
+  it('Should not be able to inject shell command in plugin path', async function () {
+    await command.install({
+      path: PluginsCommand.getPluginTestPath() + '; touch /tmp/toto.txt',
+      expectedStatus: HttpStatusCode.BAD_REQUEST_400
+    })
+
+    expect(await pathExists('/tmp/toto.txt')).to.be.false
+  })
+
   it('Should not install a broken plugin', async function () {
     this.timeout(60000)
 

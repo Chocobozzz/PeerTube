@@ -1,8 +1,8 @@
 import { isStableOrUnstableVersionValid } from '@server/helpers/custom-validators/misc.js'
+import { execa } from 'execa'
 import { outputJSON, pathExists, remove } from 'fs-extra/esm'
 import { readFile, writeFile } from 'fs/promises'
 import { join } from 'path'
-import { execShell } from '../../helpers/core-utils.js'
 import { isNpmPluginNameValid } from '../../helpers/custom-validators/plugins.js'
 import { logger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
@@ -18,34 +18,34 @@ export async function installNpmPlugin (npmName: string, versionArg?: string) {
   let toInstall = npmName
   if (version) toInstall += `@${version}`
 
-  const { stdout } = await execPNPM('add ' + toInstall)
+  const { stdout } = await execPNPM([ 'add', toInstall ])
 
   logger.debug('Added a pnpm package.', { stdout })
 }
 
 export async function installNpmPluginFromDisk (path: string) {
-  await execPNPM('add file:' + path)
+  await execPNPM([ 'add', 'file:' + path ])
 }
 
 export async function removeNpmPlugin (name: string) {
   checkNpmPluginNameOrThrow(name)
 
-  await execPNPM('remove ' + name)
+  await execPNPM([ 'remove', name ])
 }
 
 export async function rebuildNativePlugins () {
-  await execPNPM('rebuild')
+  await execPNPM([ 'rebuild' ])
 }
 
 // ---------------------------------------------------------------------------
 
-async function execPNPM (command: string) {
+async function execPNPM (commands: string[]) {
   try {
     const pluginDirectory = CONFIG.STORAGE.PLUGINS_DIR
 
-    return execShell(`pnpm ${command}`, { cwd: pluginDirectory })
+    return execa('pnpm', commands, { cwd: pluginDirectory })
   } catch (result) {
-    logger.error('Cannot exec pnpm.', { command, err: result.err, stderr: result.stderr })
+    logger.error('Cannot exec pnpm.', { commands, err: result.err, stderr: result.stderr })
 
     throw result.err as Error
   }
@@ -102,7 +102,7 @@ export async function initPNPM () {
     logger.info('Migrate from yarn.lock in plugin directory')
 
     try {
-      await execPNPM('import')
+      await execPNPM([ 'import' ])
       await remove(join(pluginDirectory, 'yarn.lock'))
     } catch (err) {
       logger.error(
