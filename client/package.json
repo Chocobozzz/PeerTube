@@ -69,6 +69,7 @@
     "@types/qrcode": "^1.5.6",
     "@types/sanitize-html": "2.16.0",
     "@types/sha.js": "^2.4.4",
+    "@vitejs/devtools": "^0.1.11",
     "@wdio/browserstack-service": "^9.24.0",
     "@wdio/cli": "^9.24.0",
     "@wdio/globals": "^9.23.0",

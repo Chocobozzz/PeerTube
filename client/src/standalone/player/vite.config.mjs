@@ -24,6 +24,10 @@ export default defineConfig(() => {
       }
     },
 
+    devtools: {
+      enabled: process.env.DEVTOOLS === 'true'
+    },
+
     css: getCSSConfig(root),
 
     resolve: {
