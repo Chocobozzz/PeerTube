@@ -430,7 +430,7 @@ describe('Test plugins', function () {
       await command.updateSettings({
         npmName: 'peertube-plugin-test',
         settings: {
-          'some_other_setting': 'value'
+          some_other_setting: 'value'
         }
       })
 
