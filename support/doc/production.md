@@ -319,7 +319,7 @@ cd /var/www/peertube/peertube-latest && sudo -H -u peertube npm explore sharp --
 
 :::
 
-The upgrade will create a `production.yaml.new` file with differences marked as merge conflicts.
+If you have `git` installed on your system, the upgrade will create a `production.yaml.new` file with differences marked as merge conflicts.
 Review this file and replace your existing `production.yaml` with it before restarting.
 
 ```bash
