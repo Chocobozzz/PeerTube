@@ -24,6 +24,7 @@ import {
 } from '../runner-urls.js'
 import { AbstractJobHandler } from './abstract-job-handler.js'
 import { loadRunnerVideo } from './shared/utils.js'
+import { sequelizeTypescript } from '@server/initializers/database.js'
 
 type CreateOptions = {
   video: MVideoWithFile
@@ -31,9 +32,10 @@ type CreateOptions = {
   priority: number
 }
 
-// dprint-ignore
 // eslint-disable-next-line max-len
-export class VideoStudioTranscodingJobHandler extends AbstractJobHandler<CreateOptions, RunnerJobUpdatePayload, VideoStudioTranscodingSuccess> {
+export class VideoStudioTranscodingJobHandler
+  extends AbstractJobHandler<CreateOptions, RunnerJobUpdatePayload, VideoStudioTranscodingSuccess>
+{
   async create (options: CreateOptions) {
     const { video, priority, tasks } = options
 
@@ -161,9 +163,11 @@ export class VideoStudioTranscodingJobHandler extends AbstractJobHandler<CreateO
     const payload = runnerJob.privatePayload as RunnerJobVideoStudioTranscodingPrivatePayload
     await safeCleanupStudioTMPFiles(payload.originalTasks)
 
-    const video = await loadRunnerVideo(options.runnerJob, this.lTags)
-    if (!video) return
+    await sequelizeTypescript.transaction(async transaction => {
+      const video = await loadRunnerVideo(options.runnerJob, this.lTags, transaction)
+      if (!video || video.state === VideoState.PUBLISHED) return
 
-    return video.setNewState(VideoState.PUBLISHED, false, undefined)
+      await video.setNewState(VideoState.PUBLISHED, false, transaction)
+    })
   }
 }
