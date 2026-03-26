@@ -26,7 +26,7 @@ const videoStudioAddEditionValidator = [
     if (CONFIG.VIDEO_STUDIO.ENABLED !== true) {
       res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
-        message: 'Video studio is disabled on this instance'
+        message: req.t('Video studio is disabled on this instance')
       })
 
       return cleanUpReqFiles(req)
@@ -47,7 +47,7 @@ const videoStudioAddEditionValidator = [
       if (!checkTask(req, task, i)) {
         res.fail({
           status: HttpStatusCode.BAD_REQUEST_400,
-          message: `Task ${task.name} is invalid`
+          message: req.t('Task {taskName} is invalid', { taskName: task.name })
         })
 
         return cleanUpReqFiles(req)
@@ -57,7 +57,7 @@ const videoStudioAddEditionValidator = [
         if (task.name === 'add-intro' || task.name === 'add-outro' || task.name === 'add-watermark') {
           res.fail({
             status: HttpStatusCode.BAD_REQUEST_400,
-            message: `Task ${task.name} is invalid: video does not contain a video stream`
+            message: req.t('Task {taskName} is invalid: video does not contain a video stream', { taskName: task.name })
           })
 
           return cleanUpReqFiles(req)
@@ -71,7 +71,7 @@ const videoStudioAddEditionValidator = [
         if (await isAudioFile(filePath)) {
           res.fail({
             status: HttpStatusCode.BAD_REQUEST_400,
-            message: `Task ${task.name} is invalid: input file does not contain a video stream`
+            message: req.t('Task {taskName} is invalid: input file does not contain a video stream', { taskName: task.name })
           })
 
           return cleanUpReqFiles(req)
@@ -104,7 +104,7 @@ export {
 // ---------------------------------------------------------------------------
 
 const taskCheckers: {
-  [id in VideoStudioTask['name']]: (task: VideoStudioTask, indice?: number, files?: Express.Multer.File[]) => boolean
+  [id in VideoStudioTask['name']]: (options: { task: VideoStudioTask, indice?: number, files?: Express.Multer.File[] }) => boolean
 } = {
   'cut': isStudioCutTaskValid,
   'add-intro': isStudioTaskAddIntroOutroValid,
@@ -116,5 +116,5 @@ function checkTask (req: express.Request, task: VideoStudioTask, indice?: number
   const checker = taskCheckers[task.name]
   if (!checker) return false
 
-  return checker(task, indice, req.files as Express.Multer.File[])
+  return checker({ task, indice, files: req.files as Express.Multer.File[] })
 }
