@@ -12,7 +12,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
-import { MockBlocklist } from '../shared/mock-servers/index.js'
+import { MockBlocklist } from '../shared/mock-servers/mock-plugin-blocklist.js'
 
 describe('Official plugin auto-mute', function () {
   const autoMuteListPath = '/plugins/auto-mute/router/api/v1/mute-list'

@@ -53,7 +53,7 @@ import {
   probeZIPFile,
   regenerateExport
 } from '@tests/shared/import-export.js'
-import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
+import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
 import { expect } from 'chai'
 
 function runTest (withObjectStorage: boolean) {

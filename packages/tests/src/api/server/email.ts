@@ -10,7 +10,7 @@ import {
   waitJobs
 } from '@peertube/peertube-server-commands'
 import { expectStartWith } from '@tests/shared/checks.js'
-import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
+import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
 import { config, expect } from 'chai'
 

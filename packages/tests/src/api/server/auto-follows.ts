@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { MockInstancesIndex } from '@tests/shared/mock-servers/index.js'
+import { MockInstancesIndex } from '@tests/shared/mock-servers/mock-instances-index.js'
 import { wait } from '@peertube/peertube-core-utils'
 import { cleanupTests, createMultipleServers, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@peertube/peertube-server-commands'
 
@@ -33,7 +33,8 @@ async function resetFollows (servers: PeerTubeServer[]) {
   try {
     await servers[0].follows.unfollow({ target: servers[1] })
     await servers[1].follows.unfollow({ target: servers[0] })
-  } catch { /* empty */
+  } catch {
+    /* empty */
   }
 
   await waitJobs(servers)
@@ -55,7 +56,6 @@ describe('Test auto follows', function () {
   })
 
   describe('Auto follow back', function () {
-
     it('Should not auto follow back if the option is not enabled', async function () {
       this.timeout(30000)
 

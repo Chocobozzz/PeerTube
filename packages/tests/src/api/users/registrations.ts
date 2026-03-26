@@ -9,7 +9,7 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
+import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
 import { expect } from 'chai'
 
 describe('Test registrations', function () {
@@ -513,7 +513,6 @@ describe('Test registrations', function () {
           username: 'user6',
           password: 'user6password'
         })
-
 
         const registrations = await server.registrations.list()
         id2 = registrations.data[0].id

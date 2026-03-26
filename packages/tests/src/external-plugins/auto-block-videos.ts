@@ -11,7 +11,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
-import { MockBlocklist } from '../shared/mock-servers/index.js'
+import { MockBlocklist } from '../shared/mock-servers/mock-plugin-blocklist.js'
 
 async function check (server: PeerTubeServer, videoUUID: string, exists = true) {
   const { data } = await server.videos.list()

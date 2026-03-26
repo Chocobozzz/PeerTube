@@ -26,7 +26,7 @@ import {
   waitJobs
 } from '@peertube/peertube-server-commands'
 import { expectEndWith } from '@tests/shared/checks.js'
-import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
+import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
 import { expect } from 'chai'
 import { FIXTURE_URLS } from '../shared/fixture-urls.js'
 
@@ -490,7 +490,6 @@ describe('Test plugin filter hooks', function () {
   })
 
   describe('Should run filter:api.user.signup.requires-approval.result', function () {
-
     before(async function () {
       await servers[0].config.updateExistingConfig({ newConfig: { signup: { requiresApproval: false } } })
     })
@@ -507,7 +506,7 @@ describe('Test plugin filter hooks', function () {
       await servers[0].registrations.register({ username: 'anybody' })
       const users = await servers[0].users.list()
 
-      expect(users.data.map((reg) => reg.username)).to.contain('anybody')
+      expect(users.data.map(reg => reg.username)).to.contain('anybody')
     })
   })
 

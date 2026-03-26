@@ -9,7 +9,7 @@ import {
   killallServers,
   PeerTubeServer
 } from '@peertube/peertube-server-commands'
-import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
+import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
 
 describe('Test contact form API validators', function () {
   let server: PeerTubeServer
