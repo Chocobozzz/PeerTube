@@ -2,7 +2,6 @@ import { Feed } from '@peertube/feed'
 import { buildDownloadFilesUrl } from '@peertube/peertube-core-utils'
 import { VideoInclude, VideoResolution } from '@peertube/peertube-models'
 import { getVideoFileMimeType } from '@server/lib/video-file.js'
-import { cacheRouteFactory } from '@server/middlewares/index.js'
 import { VideoModel } from '@server/models/video/video.js'
 import express from 'express'
 import { extname } from 'path'
@@ -10,6 +9,7 @@ import { buildNSFWFilters } from '../../helpers/express-utils.js'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers/constants.js'
 import {
   asyncMiddleware,
+  cacheRouteFactory,
   commonVideosFiltersValidatorFactory,
   feedsAccountOrChannelFiltersValidator,
   feedsFormatValidator,

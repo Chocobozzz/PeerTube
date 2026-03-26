@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
 import { wait } from '@peertube/peertube-core-utils'
@@ -50,7 +50,6 @@ describe('Test video privacy', function () {
   })
 
   describe('Private and internal videos', function () {
-
     it('Should upload a private and internal videos on server 1', async function () {
       this.timeout(50000)
 
@@ -131,7 +130,6 @@ describe('Test video privacy', function () {
   })
 
   describe('Unlisted videos', function () {
-
     it('Should upload an unlisted video on server 2', async function () {
       this.timeout(120000)
 
@@ -210,7 +208,6 @@ describe('Test video privacy', function () {
   })
 
   describe('Privacy update', function () {
-
     it('Should update the private and internal videos to public on server 1', async function () {
       this.timeout(100000)
 

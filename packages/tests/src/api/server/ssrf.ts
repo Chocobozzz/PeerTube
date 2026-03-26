@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { HttpStatusCode } from '@peertube/peertube-models'
 import {
@@ -38,7 +38,6 @@ describe('Test SSRF requests', function () {
   })
 
   describe('Disabled SSRF protection', function () {
-
     it('Should not forbid non-unicast federation', async function () {
       const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
       await waitJobs(servers)

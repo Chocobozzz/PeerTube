@@ -320,7 +320,7 @@ export class RunnerJobModel extends SequelizeModel<RunnerJobModel> {
   }
 
   setToErrorOrCancel (
-    // eslint-disable-next-line max-len
+    // oxlint-disable-next-line max-len
     state:
       | typeof RunnerJobState.PARENT_ERRORED
       | typeof RunnerJobState.ERRORED

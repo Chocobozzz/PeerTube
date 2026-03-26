@@ -39,7 +39,7 @@ export interface RunnerJob<T extends RunnerJobPayload = RunnerJobPayload> {
   }
 }
 
-// eslint-disable-next-line max-len
+// oxlint-disable-next-line max-len
 export interface RunnerJobAdmin<T extends RunnerJobPayload = RunnerJobPayload, U extends RunnerJobPrivatePayload = RunnerJobPrivatePayload>
   extends RunnerJob<T>
 {

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { wait } from '@peertube/peertube-core-utils'
 import { VideoStatsOverall } from '@peertube/peertube-models'
@@ -84,7 +84,6 @@ describe('Test views overall stats', function () {
 
       before(async function () {
         this.timeout(240000)
-
         ;({ vodVideoId, liveVideoId, ffmpegCommand: command } = await prepareViewsVideos({ servers, live: true, vod: true }))
       })
 
@@ -243,7 +242,6 @@ describe('Test views overall stats', function () {
 
       before(async function () {
         this.timeout(240000)
-
         ;({ vodVideoId: videoUUID } = await prepareViewsVideos({ servers, live: true, vod: true }))
       })
 

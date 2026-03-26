@@ -1,9 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import {
-  RunnerJobTranscriptionPayload,
-  TranscriptionSuccess
-} from '@peertube/peertube-models'
+import { RunnerJobTranscriptionPayload, TranscriptionSuccess } from '@peertube/peertube-models'
 import {
   PeerTubeServer,
   cleanupTests,

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { UserNotification, UserNotificationSettingValue, UserNotificationType } from '@peertube/peertube-models'
 import { cleanupTests, PeerTubeServer, waitJobs } from '@peertube/peertube-server-commands'

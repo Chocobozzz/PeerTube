@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
 import { wait } from '@peertube/peertube-core-utils'
@@ -51,7 +51,6 @@ describe('Test stats (excluding redundancy)', function () {
   })
 
   describe('Total stats', function () {
-
     it('Should have the correct stats on instance 1', async function () {
       const data = await servers[0].stats.get()
 
@@ -205,7 +204,6 @@ describe('Test stats (excluding redundancy)', function () {
   })
 
   describe('File sizes', function () {
-
     it('Should correctly count video file sizes if transcoding is enabled', async function () {
       this.timeout(120000)
 
@@ -252,7 +250,6 @@ describe('Test stats (excluding redundancy)', function () {
   })
 
   describe('ActivityPub', function () {
-
     it('Should have the correct AP stats', async function () {
       this.timeout(240000)
 
@@ -272,7 +269,18 @@ describe('Test stats (excluding redundancy)', function () {
       expect(second.totalActivityPubMessagesProcessed).to.be.greaterThan(first.totalActivityPubMessagesProcessed)
 
       const apTypes: ActivityType[] = [
-        'Create', 'Update', 'Delete', 'Follow', 'Accept', 'Announce', 'Undo', 'Like', 'Reject', 'View', 'Dislike', 'Flag'
+        'Create',
+        'Update',
+        'Delete',
+        'Follow',
+        'Accept',
+        'Announce',
+        'Undo',
+        'Like',
+        'Reject',
+        'View',
+        'Dislike',
+        'Flag'
       ]
 
       const processed = apTypes.reduce(
@@ -370,10 +378,10 @@ describe('Test stats (excluding redundancy)', function () {
     let userToken: string
 
     before(async function () {
-      userToken = await servers[0].users.generateUserAndToken('reporter');
+      userToken = await servers[0].users.generateUserAndToken('reporter')
 
-      ({ id: videoId } = await servers[0].videos.quickUpload({ name: 'to_report' }));
-      ({ id: commentId } = await servers[0].comments.createThread({ videoId, text: 'text' }))
+      ;({ id: videoId } = await servers[0].videos.quickUpload({ name: 'to_report' }))
+      ;({ id: commentId } = await servers[0].comments.createThread({ videoId, text: 'text' }))
     })
 
     it('Should not abuses stats available', async function () {
@@ -387,8 +395,8 @@ describe('Test stats (excluding redundancy)', function () {
     it('Should create abuses, process one and have correct stats', async function () {
       beforeTimestamp = new Date().getTime()
 
-      const { abuse: abuse1 } = await servers[0].abuses.report({ videoId, token: userToken, reason: 'abuse reason' });
-      ({ abuse: { id: abuse2 } } = await servers[0].abuses.report({ accountId: userAccountId, token: userToken, reason: 'abuse reason' }))
+      const { abuse: abuse1 } = await servers[0].abuses.report({ videoId, token: userToken, reason: 'abuse reason' })
+      ;({ abuse: { id: abuse2 } } = await servers[0].abuses.report({ accountId: userAccountId, token: userToken, reason: 'abuse reason' }))
       await servers[0].abuses.report({ commentId, token: userToken, reason: 'abuse reason' })
 
       await wait(1500)
@@ -430,7 +438,6 @@ describe('Test stats (excluding redundancy)', function () {
   })
 
   describe('Disabling stats', async function () {
-
     it('Should disable registration requests and abuses stats', async function () {
       this.timeout(60000)
 

@@ -281,7 +281,7 @@ export class LocalVideoCreator {
         inputPath: this.options.thumbnail.path,
         video: this.video
       }).catch(err => {
-        // eslint-disable-next-line @typescript-eslint/only-throw-error
+        // oxlint-disable-next-line @typescript-eslint/only-throw-error
         throw PeerTubeError.fromError(err, 'INVALID_IMAGE_FILE')
       })
     }

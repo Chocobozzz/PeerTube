@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { pick } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, HttpStatusCodeType, UserRole, VideoInclude, VideoPrivacy, VideosCommonQuery } from '@peertube/peertube-models'

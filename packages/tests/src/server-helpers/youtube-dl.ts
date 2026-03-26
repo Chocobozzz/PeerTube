@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
 import { YoutubeDLCLI } from '@peertube/peertube-server/core/helpers/youtube-dl/youtube-dl-cli.js'
 import { CONFIG } from '@peertube/peertube-server/core/initializers/config.js'
 
 describe('YoutubeDLCLI', function () {
-
   describe('wrapWithJSRuntimeOptions', function () {
     let cli: any
 

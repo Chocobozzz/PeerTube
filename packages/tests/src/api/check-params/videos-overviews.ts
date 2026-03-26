@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { cleanupTests, createSingleServer, PeerTubeServer } from '@peertube/peertube-server-commands'
 
@@ -14,7 +14,6 @@ describe('Test videos overview API validator', function () {
   })
 
   describe('When getting videos overview', function () {
-
     it('Should fail with a bad pagination', async function () {
       await server.overviews.getVideos({ page: 0, expectedStatus: 400 })
       await server.overviews.getVideos({ page: 100, expectedStatus: 400 })

@@ -590,7 +590,7 @@ export const commonVideosFiltersValidatorFactory = (options: {
 
       const user = res.locals.oauth?.token.User
 
-      if ((!user || user.hasRight(UserRight.SEE_ALL_VIDEOS) !== true)) {
+      if ((user?.hasRight(UserRight.SEE_ALL_VIDEOS) !== true)) {
         if (query.include || (options.allowPrivacyFilterForAllUsers !== true && query.privacyOneOf) || query.autoTagOneOf) {
           return res.fail({
             status: HttpStatusCode.UNAUTHORIZED_401,

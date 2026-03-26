@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { SQLCommand } from '@tests/shared/sql-command.js'
 import { wait } from '@peertube/peertube-core-utils'
@@ -68,7 +68,6 @@ describe('Test AP refresher', function () {
   })
 
   describe('Videos refresher', function () {
-
     it('Should remove a deleted remote video', async function () {
       this.timeout(60000)
 
@@ -107,7 +106,6 @@ describe('Test AP refresher', function () {
   })
 
   describe('Actors refresher', function () {
-
     it('Should remove a deleted actor', async function () {
       this.timeout(60000)
 
@@ -130,7 +128,6 @@ describe('Test AP refresher', function () {
   })
 
   describe('Playlist refresher', function () {
-
     it('Should remove a deleted playlist', async function () {
       this.timeout(60000)
 

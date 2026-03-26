@@ -11,7 +11,7 @@ import { exists } from '@server/helpers/custom-validators/misc.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { buildSortDirectionAndField } from '@server/models/shared/index.js'
 import { MUserAccountId, MUserId } from '@server/types/models/index.js'
-import { Sequelize, Transaction } from 'sequelize'
+import { Transaction } from 'sequelize'
 import validator from 'validator'
 import { AbstractRunQuery } from '../../../shared/abstract-run-query.js'
 import { createSafeIn, parseRowCountResult } from '../../../shared/index.js'
@@ -124,10 +124,6 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   private offset = ''
 
   private builtChannelJoin = false
-
-  constructor (protected readonly sequelize: Sequelize) {
-    super(sequelize)
-  }
 
   queryVideoIds (options: BuildVideosListQueryOptions) {
     this.buildIdsListQuery(options)

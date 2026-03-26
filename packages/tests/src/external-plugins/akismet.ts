@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
 import { HttpStatusCode } from '@peertube/peertube-models'
@@ -38,7 +38,6 @@ describe('Official plugin Akismet', function () {
   })
 
   describe('Local threads/replies', function () {
-
     before(async function () {
       const { uuid } = await servers[0].videos.quickUpload({ name: 'video 1' })
       videoUUID = uuid
@@ -67,7 +66,6 @@ describe('Official plugin Akismet', function () {
   })
 
   describe('Remote threads/replies', function () {
-
     before(async function () {
       this.timeout(60000)
 
@@ -126,7 +124,6 @@ describe('Official plugin Akismet', function () {
   })
 
   describe('Signup', function () {
-
     before(async function () {
       await servers[0].config.updateExistingConfig({
         newConfig: {

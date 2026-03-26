@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
 import { HttpStatusCode, HttpStatusCodeType, VideoPrivacy } from '@peertube/peertube-models'
@@ -40,7 +40,6 @@ describe('Test proxy', function () {
   })
 
   describe('Federation', function () {
-
     it('Should succeed federation with the appropriate proxy config', async function () {
       this.timeout(40000)
 
@@ -83,7 +82,6 @@ describe('Test proxy', function () {
   })
 
   describe('Videos import', async function () {
-
     function getProxyConfig (url: string) {
       return {
         import: {

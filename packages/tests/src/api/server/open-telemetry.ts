@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { HttpStatusCode, VideoPrivacy, VideoResolution } from '@peertube/peertube-models'
 import {
@@ -114,7 +114,7 @@ describe('Open Telemetry', function () {
       const res = await makeRawRequest({ url: metricsUrl, expectedStatus: HttpStatusCode.OK_200 })
 
       const label =
-        // eslint-disable-next-line max-len
+        // oxlint-disable-next-line max-len
         `{videoOrigin="local",playerMode="p2p-media-loader",resolution="1080",fps="30",p2pEnabled="false",videoUUID="${video.uuid}",otel_scope_name="default"}`
       expect(res.text).to.contain(`peertube_playback_p2p_peers${label} 42`)
       expect(res.text).to.not.contain(`peertube_playback_p2p_peers${label} 7`)

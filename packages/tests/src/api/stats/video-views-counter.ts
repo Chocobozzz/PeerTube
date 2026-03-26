@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { wait } from '@peertube/peertube-core-utils'
 import { buildUUID } from '@peertube/peertube-node-utils'
@@ -23,7 +23,6 @@ describe('Test video views/viewers counters', function () {
   }
 
   function runTests (options: { useSessionId: boolean }) {
-
     const generateSession = () => {
       if (!options.useSessionId) return undefined
 
@@ -85,9 +84,9 @@ describe('Test video views/viewers counters', function () {
       let command: FfmpegCommand
 
       before(async function () {
-        this.timeout(240000);
+        this.timeout(240000)
 
-        ({ vodVideoId, liveVideoId, ffmpegCommand: command } = await prepareViewsVideos({ servers, live: true, vod: true }))
+        ;({ vodVideoId, liveVideoId, ffmpegCommand: command } = await prepareViewsVideos({ servers, live: true, vod: true }))
       })
 
       it('Should display no views and viewers', async function () {
@@ -204,7 +203,6 @@ describe('Test video views/viewers counters', function () {
   }
 
   describe('Federation', function () {
-
     before(async function () {
       this.timeout(120000)
 
@@ -220,7 +218,6 @@ describe('Test video views/viewers counters', function () {
     })
 
     describe('View minimum duration config', function () {
-
       it('Should update "count_view_after" config', async function () {
         this.timeout(120000)
 
@@ -256,9 +253,9 @@ describe('Test video views/viewers counters', function () {
     before(async function () {
       this.timeout(120000)
 
-      servers = await prepareViewsServers({ viewExpiration: '5 seconds', trustViewerSessionId: false });
+      servers = await prepareViewsServers({ viewExpiration: '5 seconds', trustViewerSessionId: false })
 
-      ({ uuid: videoUUID } = await servers[0].videos.quickUpload({ name: 'video' }))
+      ;({ uuid: videoUUID } = await servers[0].videos.quickUpload({ name: 'video' }))
       await waitJobs(servers)
     })
 
@@ -280,5 +277,4 @@ describe('Test video views/viewers counters', function () {
       await cleanupTests(servers)
     })
   })
-
 })

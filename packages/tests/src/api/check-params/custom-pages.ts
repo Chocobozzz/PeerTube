@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { HttpStatusCode } from '@peertube/peertube-models'
 import {
@@ -31,7 +31,6 @@ describe('Test custom pages validators', function () {
   })
 
   describe('When updating instance homepage', function () {
-
     it('Should fail with an unauthenticated user', async function () {
       await makePutBodyRequest({
         url: server.url,
@@ -63,7 +62,6 @@ describe('Test custom pages validators', function () {
   })
 
   describe('When getting instance homapage', function () {
-
     it('Should succeed with the correct params', async function () {
       await makeGetRequest({
         url: server.url,

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { getAllFiles, omit } from '@peertube/peertube-core-utils'
 import { ffprobePromise, getAudioStream, hasAudioStream } from '@peertube/peertube-ffmpeg'

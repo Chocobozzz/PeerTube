@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { wordsToRegExp } from '@peertube/peertube-server/core/helpers/regexp.js'
 import { expect } from 'chai'
 
 describe('Regexp', function () {
-
   it('Should correctly create a regex from multiple latin words', function () {
     const regexp = wordsToRegExp([ 'hi', 'toto ', 'hello picsou' ])
 

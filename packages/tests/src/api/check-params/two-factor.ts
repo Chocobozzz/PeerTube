@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { HttpStatusCode } from '@peertube/peertube-models'
 import {
@@ -48,7 +48,6 @@ describe('Test two factor API validators', function () {
   })
 
   describe('When requesting two factor', function () {
-
     it('Should fail with an unknown user id', async function () {
       await server.twoFactor.request({ userId: 42, currentPassword: rootPassword, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
@@ -117,7 +116,6 @@ describe('Test two factor API validators', function () {
   })
 
   describe('When confirming two factor request', function () {
-
     it('Should fail with an unknown user id', async function () {
       await server.twoFactor.confirmRequest({
         userId: 42,
@@ -223,7 +221,6 @@ describe('Test two factor API validators', function () {
   })
 
   describe('When disabling two factor', function () {
-
     it('Should fail with an unknown user id', async function () {
       await server.twoFactor.disable({
         userId: 42,

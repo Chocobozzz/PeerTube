@@ -247,7 +247,7 @@ export class UserNotificationListQueryBuilder extends AbstractListQuery {
   }
 
   private getChannelJoin (tableName: string, columnJoin: string, aliasTableName = 'VideoChannel') {
-    // eslint-disable-next-line max-len
+    // oxlint-disable-next-line max-len
     return `INNER JOIN "videoChannel" AS "${tableName}->${aliasTableName}" ON "${tableName}"."${columnJoin}" = "${tableName}->${aliasTableName}".id ` +
       this.getActorJoin(`${tableName}->${aliasTableName}`, 'videoChannelId')
   }

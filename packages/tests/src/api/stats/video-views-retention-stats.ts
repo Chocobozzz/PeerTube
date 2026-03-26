@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { wait } from '@peertube/peertube-core-utils'
 import { PeerTubeServer, cleanupTests } from '@peertube/peertube-server-commands'
@@ -18,15 +18,14 @@ describe('Test views retention stats', function () {
     let vodVideoId: string
 
     function runTests (options: { useSessionId: boolean }) {
-
       const sessionField = options.useSessionId
         ? 'sessionId'
         : 'xForwardedFor'
 
       before(async function () {
-        this.timeout(240000);
+        this.timeout(240000)
 
-        ({ vodVideoId } = await prepareViewsVideos({ servers, live: false, vod: true }))
+        ;({ vodVideoId } = await prepareViewsVideos({ servers, live: false, vod: true }))
       })
 
       it('Should display empty retention', async function () {

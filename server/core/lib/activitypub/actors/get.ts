@@ -95,7 +95,7 @@ async function getOrCreateAPOwner (actorObject: ActivityPubActor, actorId: strin
   } catch (err) {
     logger.error(`Cannot get or create account attributed to video channel ${actorId}`)
 
-    // eslint-disable-next-line preserve-caught-error
+    // oxlint-disable-next-line preserve-caught-error
     throw new Error(err)
   }
 }

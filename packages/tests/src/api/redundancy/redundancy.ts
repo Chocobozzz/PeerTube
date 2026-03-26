@@ -1,12 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { wait } from '@peertube/peertube-core-utils'
-import {
-  VideoDetails,
-  VideoPrivacy,
-  VideoRedundancyStrategy,
-  VideoRedundancyStrategyWithManual
-} from '@peertube/peertube-models'
+import { VideoDetails, VideoPrivacy, VideoRedundancyStrategy, VideoRedundancyStrategyWithManual } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -221,7 +216,6 @@ async function disableRedundancyOnServer1 () {
 }
 
 describe('Test videos redundancy', function () {
-
   describe('With most-views strategy', function () {
     const strategy = 'most-views'
 

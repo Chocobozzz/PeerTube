@@ -385,7 +385,7 @@ class Notifier {
 
   private async sendNotifications<T> (models: (new(payload: T) => AbstractNotification<T>)[], payload: T) {
     for (const model of models) {
-      // eslint-disable-next-line new-cap
+      // oxlint-disable-next-line new-cap
       await this.notify(new model(payload))
     }
   }

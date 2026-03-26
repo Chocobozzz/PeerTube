@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { getHLS, removeFragmentedMP4Ext, uuidRegex, wait } from '@peertube/peertube-core-utils'
 import {

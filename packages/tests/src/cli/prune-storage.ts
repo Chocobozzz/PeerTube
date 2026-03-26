@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { getAllFiles } from '@peertube/peertube-core-utils'
 import { FileStorage, HttpStatusCode, HttpStatusCodeType, VideoPlaylistPrivacy, VideoPrivacy } from '@peertube/peertube-models'

@@ -145,7 +145,7 @@ async function getUser (usernameOrEmail?: string, password?: string, options?: {
   }
 
   // If we don't find the user, or if the user belongs to a plugin
-  if (!user || user.pluginAuth !== null || !password) return null
+  if (user?.pluginAuth !== null || !password) return null
 
   const passwordMatch = await user.isPasswordMatch(password)
   if (passwordMatch !== true) return null

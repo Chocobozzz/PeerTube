@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { sortObjectComparator } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, UserAdminFlag, UserRole, VideoBlacklist, VideoBlacklistType, VideoPrivacy } from '@peertube/peertube-models'

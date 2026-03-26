@@ -1,12 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { mdToPlainText } from '@peertube/peertube-server/core/helpers/markdown.js'
 import { expect } from 'chai'
 
 describe('Markdown helpers', function () {
-
   describe('Plain text', function () {
-
     it('Should convert a list to plain text', function () {
       const result = mdToPlainText(`* list 1
 * list 2

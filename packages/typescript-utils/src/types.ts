@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/array-type */
+/* oxlint-disable @typescript-eslint/array-type */
 
 export type FunctionPropertyNames<T> = {
   [K in keyof T]: T[K] extends Function ? K : never
@@ -46,7 +46,7 @@ export type Awaitable<T> = T | PromiseLike<T>
 
 // Thanks https://stackoverflow.com/a/52761156
 export type OverloadedParameters<T> =
-  // eslint-disable-next-line max-len
+  // oxlint-disable-next-line max-len
   T extends { (...args: infer A1): any, (...args: infer A2): any, (...args: infer A3): any, (...args: infer A4): any } ? A1 | A2 | A3 | A4 :
     T extends { (...args: infer A1): any, (...args: infer A2): any, (...args: infer A3): any } ? A1 | A2 | A3 :
     T extends { (...args: infer A1): any, (...args: infer A2): any } ? A1 | A2 :

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* oxlint-disable @typescript-eslint/no-unused-expressions */
 import { expect } from 'chai'
 import { VideoPlaylistPrivacyType, VideoPrivacyType } from '@peertube/peertube-models'
 import {

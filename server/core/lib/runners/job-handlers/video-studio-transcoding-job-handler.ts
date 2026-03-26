@@ -32,7 +32,7 @@ type CreateOptions = {
   priority: number
 }
 
-// eslint-disable-next-line max-len
+// oxlint-disable-next-line max-len
 export class VideoStudioTranscodingJobHandler
   extends AbstractJobHandler<CreateOptions, RunnerJobUpdatePayload, VideoStudioTranscodingSuccess>
 {

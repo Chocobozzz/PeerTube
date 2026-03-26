@@ -509,7 +509,7 @@ export class VideoChannelActivityModel extends SequelizeModel<VideoChannelActivi
   formatVideoImport (this: MChannelActivityFormattable): VideoChannelActivity['videoImport'] {
     if (this.targetType !== VideoChannelActivityTarget.VIDEO_IMPORT) return null
 
-    if (this.VideoImport && this.VideoImport.Video) {
+    if (this.VideoImport?.Video) {
       return {
         id: this.VideoImport.id,
         name: this.VideoImport.Video.name,

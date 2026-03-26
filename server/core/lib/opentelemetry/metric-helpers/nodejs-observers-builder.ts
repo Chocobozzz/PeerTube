@@ -178,7 +178,7 @@ export class NodeJSObserversBuilder {
 
       const data = {}
 
-      // eslint-disable-next-line @typescript-eslint/prefer-for-of
+      // oxlint-disable-next-line @typescript-eslint/prefer-for-of
       for (let i = 0; i < resources.length; i++) {
         const resource = resources[i]
 

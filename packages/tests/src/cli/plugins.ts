@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
 import {
@@ -43,11 +43,11 @@ describe('Test plugin CLI', function () {
     const config = await server.config.getConfig()
 
     const plugin = config.plugin.registered
-                         .find(p => p.name === 'test')
+      .find(p => p.name === 'test')
     expect(plugin).to.not.be.undefined
 
     const theme = config.theme.registered
-                        .find(t => t.name === 'background-red')
+      .find(t => t.name === 'background-red')
     expect(theme).to.not.be.undefined
   })
 
@@ -66,7 +66,7 @@ describe('Test plugin CLI', function () {
     const config = await server.config.getConfig()
 
     const plugin = config.plugin.registered
-                         .find(p => p.name === 'test')
+      .find(p => p.name === 'test')
     expect(plugin).to.be.undefined
   })
 

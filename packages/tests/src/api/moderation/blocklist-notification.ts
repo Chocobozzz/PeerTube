@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
 import { UserNotificationType, UserNotificationType_Type } from '@peertube/peertube-models'
@@ -55,7 +55,6 @@ describe('Test blocklist notifications', function () {
     }
 
     {
-
       await servers[1].subscriptions.add({ token: remoteUserToken, targetUri: 'user1_channel@' + servers[0].host })
       await servers[1].subscriptions.add({ token: remoteUserToken, targetUri: 'user2_channel@' + servers[0].host })
     }
@@ -100,7 +99,6 @@ describe('Test blocklist notifications', function () {
   })
 
   describe('User blocks another user', function () {
-
     before(async function () {
       this.timeout(30000)
 
@@ -131,7 +129,6 @@ describe('Test blocklist notifications', function () {
   })
 
   describe('User blocks another server', function () {
-
     before(async function () {
       this.timeout(30000)
 
@@ -162,7 +159,6 @@ describe('Test blocklist notifications', function () {
   })
 
   describe('Server blocks a user', function () {
-
     before(async function () {
       this.timeout(30000)
 
@@ -195,7 +191,6 @@ describe('Test blocklist notifications', function () {
   })
 
   describe('Server blocks a server', function () {
-
     before(async function () {
       this.timeout(30000)
 

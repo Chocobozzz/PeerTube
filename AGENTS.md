@@ -90,11 +90,11 @@ npm run dev               # server :9000, client :3000
 ### Lint & type-check
 
 ```bash
-# Full lint (ESLint + OpenAPI validation)
+# Full lint (oxlint + OpenAPI validation)
 npm run lint
 
-# ESLint only
-npm run eslint
+# Oxlint only
+npm run oxlint
 
 # Validate OpenAPI spec
 npm run swagger-cli -- validate support/doc/api/openapi.yaml
@@ -112,7 +112,7 @@ npm run start:server       # server only (--no-client)
 
 ## Code Style & Conventions
 
-### Formatting (enforced by ESLint)
+### Formatting (enforced by Oxlint)
 
 | Rule                | Value                                 |
 |---------------------|---------------------------------------|
@@ -151,10 +151,9 @@ router.get('/:id',
 
 No formal commit-message template.
 
-### ESLint config
+### Oxlint config
 
-Defined in `eslint.config.mjs`. Extends `eslint-config-love` with
-`@stylistic/eslint-plugin`. Applies to `server/**/*.ts`,
+Defined in `oxlint.config.mjs`. Applies to `server/**/*.ts`,
 `scripts/**/*.ts`, `packages/**/*.ts`, `apps/**/*.ts`. The `client/`
 directory has its own lint config.
 
@@ -254,7 +253,7 @@ npm run ci -- api-4       # moderation, redundancy, object-storage,
 npm run ci -- api-5       # transcoding, runners
 npm run ci -- client      # feeds, client, misc-endpoints, plugins
 npm run ci -- cli-plugin  # CLI and plugin tests
-npm run ci -- lint        # ESLint + OpenAPI validation + client lint
+npm run ci -- lint        # OXlint + OpenAPI validation + client lint
 npm run ci -- transcription
 npm run ci -- external-plugins
 

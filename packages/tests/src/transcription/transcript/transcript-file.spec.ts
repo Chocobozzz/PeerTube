@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* oxlint-disable @typescript-eslint/no-unused-expressions */
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import { TranscriptFile } from '@peertube/peertube-transcription'
 import { expect } from 'chai'

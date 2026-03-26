@@ -1,6 +1,5 @@
 import { ActivityPubActorType, FollowState } from '@peertube/peertube-models'
 import { AbstractListQueryOptions } from '@server/models/shared/abstract-list-query.js'
-import { Sequelize } from 'sequelize'
 import { InstanceListFollowsQueryBuilder } from './shared/instance-list-follows-query-builder.js'
 
 export interface ListFollowingOptions extends AbstractListQueryOptions {
@@ -11,13 +10,6 @@ export interface ListFollowingOptions extends AbstractListQueryOptions {
 }
 
 export class InstanceListFollowingQueryBuilder extends InstanceListFollowsQueryBuilder<ListFollowingOptions> {
-  constructor (
-    protected readonly sequelize: Sequelize,
-    protected readonly options: ListFollowingOptions
-  ) {
-    super(sequelize, options)
-  }
-
   protected buildSubQueryWhere () {
     this.buildActorFollowingJoin()
 

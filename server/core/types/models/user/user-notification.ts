@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/prefer-namespace-keyword */
+/* oxlint-disable @typescript-eslint/prefer-namespace-keyword */
 
 import { PickWith, PickWithOpt } from '@peertube/peertube-typescript-utils'
 import { VideoAbuseModel } from '@server/models/abuse/video-abuse.js'

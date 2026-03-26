@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
 
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
@@ -130,7 +130,7 @@ export async function testImage (options: {
       await writeFile(fixturePath, body)
     }
 
-    // eslint-disable-next-line preserve-caught-error
+    // oxlint-disable-next-line preserve-caught-error
     throw new Error(`${errorMsg}: ${err.message}`)
   }
 }

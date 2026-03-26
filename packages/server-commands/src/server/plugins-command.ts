@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { readJSON, writeJSON } from 'fs-extra/esm'
 import { join } from 'path'
@@ -19,18 +19,19 @@ import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class PluginsCommand extends AbstractCommand {
-
   static getPluginTestPath (suffix = '') {
     return buildAbsoluteFixturePath('peertube-plugin-test' + suffix)
   }
 
-  list (options: OverrideCommandOptions & {
-    start?: number
-    count?: number
-    sort?: string
-    pluginType?: PluginType_Type
-    uninstalled?: boolean
-  }) {
+  list (
+    options: OverrideCommandOptions & {
+      start?: number
+      count?: number
+      sort?: string
+      pluginType?: PluginType_Type
+      uninstalled?: boolean
+    }
+  ) {
     const { start, count, sort, pluginType, uninstalled } = options
     const path = '/api/v1/plugins'
 
@@ -50,15 +51,17 @@ export class PluginsCommand extends AbstractCommand {
     })
   }
 
-  listAvailable (options: OverrideCommandOptions & {
-    start?: number
-    count?: number
-    sort?: string
-    pluginType?: PluginType_Type
-    currentPeerTubeEngine?: string
-    search?: string
-    expectedStatus?: HttpStatusCodeType
-  }) {
+  listAvailable (
+    options: OverrideCommandOptions & {
+      start?: number
+      count?: number
+      sort?: string
+      pluginType?: PluginType_Type
+      currentPeerTubeEngine?: string
+      search?: string
+      expectedStatus?: HttpStatusCodeType
+    }
+  ) {
     const { start, count, sort, pluginType, search, currentPeerTubeEngine } = options
     const path = '/api/v1/plugins/available'
 
@@ -81,9 +84,11 @@ export class PluginsCommand extends AbstractCommand {
     })
   }
 
-  get (options: OverrideCommandOptions & {
-    npmName: string
-  }) {
+  get (
+    options: OverrideCommandOptions & {
+      npmName: string
+    }
+  ) {
     const path = '/api/v1/plugins/' + options.npmName
 
     return this.getRequestBody<PeerTubePlugin>({
@@ -95,10 +100,12 @@ export class PluginsCommand extends AbstractCommand {
     })
   }
 
-  updateSettings (options: OverrideCommandOptions & {
-    npmName: string
-    settings: any
-  }) {
+  updateSettings (
+    options: OverrideCommandOptions & {
+      npmName: string
+      settings: any
+    }
+  ) {
     const { npmName, settings } = options
     const path = '/api/v1/plugins/' + npmName + '/settings'
 
@@ -112,9 +119,11 @@ export class PluginsCommand extends AbstractCommand {
     })
   }
 
-  getRegisteredSettings (options: OverrideCommandOptions & {
-    npmName: string
-  }) {
+  getRegisteredSettings (
+    options: OverrideCommandOptions & {
+      npmName: string
+    }
+  ) {
     const path = '/api/v1/plugins/' + options.npmName + '/registered-settings'
 
     return this.getRequestBody<RegisteredServerSettings>({
@@ -126,9 +135,11 @@ export class PluginsCommand extends AbstractCommand {
     })
   }
 
-  getPublicSettings (options: OverrideCommandOptions & {
-    npmName: string
-  }) {
+  getPublicSettings (
+    options: OverrideCommandOptions & {
+      npmName: string
+    }
+  ) {
     const { npmName } = options
     const path = '/api/v1/plugins/' + npmName + '/public-settings'
 
@@ -141,9 +152,11 @@ export class PluginsCommand extends AbstractCommand {
     })
   }
 
-  getTranslations (options: OverrideCommandOptions & {
-    locale: string
-  }) {
+  getTranslations (
+    options: OverrideCommandOptions & {
+      locale: string
+    }
+  ) {
     const { locale } = options
     const path = '/plugins/translations/' + locale + '.json'
 
@@ -156,11 +169,13 @@ export class PluginsCommand extends AbstractCommand {
     })
   }
 
-  install (options: OverrideCommandOptions & {
-    path?: string
-    npmName?: string
-    pluginVersion?: string
-  }) {
+  install (
+    options: OverrideCommandOptions & {
+      path?: string
+      npmName?: string
+      pluginVersion?: string
+    }
+  ) {
     const { npmName, path, pluginVersion } = options
     const apiPath = '/api/v1/plugins/install'
 
@@ -174,10 +189,12 @@ export class PluginsCommand extends AbstractCommand {
     })
   }
 
-  update (options: OverrideCommandOptions & {
-    path?: string
-    npmName?: string
-  }) {
+  update (
+    options: OverrideCommandOptions & {
+      path?: string
+      npmName?: string
+    }
+  ) {
     const { npmName, path } = options
     const apiPath = '/api/v1/plugins/update'
 
@@ -191,9 +208,11 @@ export class PluginsCommand extends AbstractCommand {
     })
   }
 
-  uninstall (options: OverrideCommandOptions & {
-    npmName: string
-  }) {
+  uninstall (
+    options: OverrideCommandOptions & {
+      npmName: string
+    }
+  ) {
     const { npmName } = options
     const apiPath = '/api/v1/plugins/uninstall'
 
@@ -219,12 +238,14 @@ export class PluginsCommand extends AbstractCommand {
     })
   }
 
-  getExternalAuth (options: OverrideCommandOptions & {
-    npmName: string
-    npmVersion: string
-    authName: string
-    query?: any
-  }) {
+  getExternalAuth (
+    options: OverrideCommandOptions & {
+      npmName: string
+      npmVersion: string
+      authName: string
+      query?: any
+    }
+  ) {
     const { npmName, npmVersion, authName, query } = options
 
     const path = '/plugins/' + npmName + '/' + npmVersion + '/auth/' + authName

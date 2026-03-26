@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-redundant-type-constituents */
+/* oxlint-disable @typescript-eslint/no-redundant-type-constituents */
 
 type ObjectKeys<T> = T extends object ? `${Exclude<keyof T, symbol>}`[] :
   T extends number ? [] :

@@ -35,7 +35,7 @@ type CreateOptions = {
   outputDirectory: string
 }
 
-// eslint-disable-next-line max-len
+// oxlint-disable-next-line max-len
 export class LiveRTMPHLSTranscodingJobHandler
   extends AbstractJobHandler<CreateOptions, LiveRTMPHLSTranscodingUpdatePayload, LiveRTMPHLSTranscodingSuccess>
 {

@@ -1,11 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions, max-len */
+/* oxlint-disable @typescript-eslint/no-unused-expressions, max-len */
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
-import {
-  OpenaiTranscriber,
-  TranscriptFile,
-  TranscriptionModel,
-  WhisperBuiltinModel
-} from '@peertube/peertube-transcription'
+import { OpenaiTranscriber, TranscriptFile, TranscriptionModel, WhisperBuiltinModel } from '@peertube/peertube-transcription'
 import { TranscriptFileEvaluator, levenshteinDistance } from '@peertube/peertube-transcription-devtools'
 import { createConsoleLogger } from '@tests/shared/common.js'
 import { downloadCustomModelsIfNeeded, getCustomModelPath } from '@tests/shared/transcription.js'
@@ -53,7 +48,13 @@ describe('Open AI Whisper transcriber', function () {
   it('Should transcribe a media file and provide a valid path to a transcript file in `vtt` format', async function () {
     this.timeout(3 * 1000 * 60)
 
-    const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en', format: 'vtt', model, transcriptDirectory })
+    const transcript = await transcriber.transcribe({
+      mediaFilePath: shortVideoPath,
+      language: 'en',
+      format: 'vtt',
+      model,
+      transcriptDirectory
+    })
 
     expect(transcript.format).to.equals('vtt')
     expect(transcript.language).to.equals('en')
@@ -61,7 +62,13 @@ describe('Open AI Whisper transcriber', function () {
   })
 
   it('May produce a transcript file in the `srt` format', async function () {
-    const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en', format: 'srt', model, transcriptDirectory })
+    const transcript = await transcriber.transcribe({
+      mediaFilePath: shortVideoPath,
+      language: 'en',
+      format: 'srt',
+      model,
+      transcriptDirectory
+    })
 
     expect(transcript.format).to.equals('srt')
     expect(transcript.language).to.equals('en')
@@ -69,7 +76,13 @@ describe('Open AI Whisper transcriber', function () {
   })
 
   it('May produce a transcript file in the `txt` format', async function () {
-    const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en', format: 'txt', model, transcriptDirectory })
+    const transcript = await transcriber.transcribe({
+      mediaFilePath: shortVideoPath,
+      language: 'en',
+      format: 'txt',
+      model,
+      transcriptDirectory
+    })
 
     expect(transcript.format).to.equals('txt')
     expect(transcript.language).to.equals('en')
@@ -95,7 +108,13 @@ describe('Open AI Whisper transcriber', function () {
   it('May transcribe a media file in french', async function () {
     this.timeout(5 * 1000 * 60)
 
-    const transcript = await transcriber.transcribe({ mediaFilePath: frVideoPath, language: 'fr', format: 'txt', model, transcriptDirectory })
+    const transcript = await transcriber.transcribe({
+      mediaFilePath: frVideoPath,
+      language: 'fr',
+      format: 'txt',
+      model,
+      transcriptDirectory
+    })
 
     expect(transcript.format).to.equals('txt')
     expect(transcript.language).to.equals('fr')

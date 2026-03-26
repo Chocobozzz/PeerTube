@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
 import { wait } from '@peertube/peertube-core-utils'
@@ -60,7 +60,7 @@ describe('Test runner socket', function () {
     await server.videos.quickUpload({ name: 'video1' })
     await waitJobs([ server ])
 
-    // eslint-disable-next-line no-unmodified-loop-condition
+    // oxlint-disable-next-line no-unmodified-loop-condition
     while (pings !== 1) {
       await wait(500)
     }
@@ -68,7 +68,7 @@ describe('Test runner socket', function () {
     await server.videos.quickUpload({ name: 'video2' })
     await waitJobs([ server ])
 
-    // eslint-disable-next-line no-unmodified-loop-condition
+    // oxlint-disable-next-line no-unmodified-loop-condition
     while ((pings as number) !== 2) {
       await wait(500)
     }
@@ -84,7 +84,7 @@ describe('Test runner socket', function () {
     await server.videos.quickUpload({ name: 'video3' })
     await waitJobs([ server ])
 
-    // eslint-disable-next-line no-unmodified-loop-condition
+    // oxlint-disable-next-line no-unmodified-loop-condition
     while (pings !== 1) {
       await wait(500)
     }
@@ -92,7 +92,7 @@ describe('Test runner socket', function () {
     await server.runnerJobs.autoProcessWebVideoJob(runnerToken)
     await waitJobs([ server ])
 
-    // eslint-disable-next-line no-unmodified-loop-condition
+    // oxlint-disable-next-line no-unmodified-loop-condition
     while ((pings as number) !== 2) {
       await wait(500)
     }

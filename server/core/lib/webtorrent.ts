@@ -30,7 +30,7 @@ export async function downloadWebTorrentVideo (target: { uri: string, torrentNam
   const directoryPath = join(CONFIG.STORAGE.TMP_DIR, 'webtorrent')
   await ensureDir(directoryPath)
 
-  // eslint-disable-next-line new-cap
+  // oxlint-disable-next-line new-cap
   const webtorrent = new (await import('webtorrent')).default({
     natUpnp: false,
     natPmp: false,

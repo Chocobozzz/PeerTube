@@ -13,7 +13,7 @@ export interface PeerTubeInternalEvents {
   'chapters-updated': (options: { video: MVideoImmutable }) => void
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
+// oxlint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 declare interface InternalEventEmitter {
   on<U extends keyof PeerTubeInternalEvents>(
     event: U,
@@ -26,7 +26,7 @@ declare interface InternalEventEmitter {
   ): boolean
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
+// oxlint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 class InternalEventEmitter extends EventEmitter {
   private static instance: InternalEventEmitter
 

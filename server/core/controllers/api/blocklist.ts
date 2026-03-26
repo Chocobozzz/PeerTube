@@ -12,11 +12,7 @@ const blocklistRouter = express.Router()
 
 blocklistRouter.use(apiRateLimiter)
 
-blocklistRouter.get('/status',
-  optionalAuthenticate,
-  blocklistStatusValidator,
-  asyncMiddleware(getBlocklistStatus)
-)
+blocklistRouter.get('/status', optionalAuthenticate, blocklistStatusValidator, asyncMiddleware(getBlocklistStatus))
 
 // ---------------------------------------------------------------------------
 
@@ -105,6 +101,6 @@ async function populateAccountBlocklistStatus (options: {
 function getStatus (block: { accountId: number }, serverActor: MActorAccountId, user?: MUserAccountId) {
   return {
     blockedByServer: !!(block?.accountId === serverActor.Account.id),
-    blockedByUser: !!(block && user && block.accountId === user.Account.id)
+    blockedByUser: !!(block && block.accountId === user?.Account.id)
   }
 }

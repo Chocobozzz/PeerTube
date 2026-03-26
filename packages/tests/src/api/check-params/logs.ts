@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
 import { HttpStatusCode } from '@peertube/peertube-models'
@@ -33,7 +33,6 @@ describe('Test logs API validators', function () {
   })
 
   describe('When getting logs', function () {
-
     it('Should fail with a non authenticated user', async function () {
       await makeGetRequest({
         url: server.url,

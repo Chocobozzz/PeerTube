@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { checkBadCountPagination, checkBadStartPagination } from '@tests/shared/checks.js'
 import { HttpStatusCode } from '@peertube/peertube-models'
@@ -35,7 +35,6 @@ describe('Test videos history API validator', function () {
   })
 
   describe('When notifying a user is watching a video', function () {
-
     it('Should fail with a bad token', async function () {
       const fields = { currentTime: 5 }
       await makePutBodyRequest({ url: server.url, path: viewPath, fields, token: 'bad', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })

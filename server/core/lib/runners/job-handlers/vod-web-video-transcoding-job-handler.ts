@@ -25,7 +25,7 @@ type CreateOptions = {
   dependsOnRunnerJob?: MRunnerJob
 }
 
-// eslint-disable-next-line max-len
+// oxlint-disable-next-line max-len
 export class VODWebVideoTranscodingJobHandler
   extends AbstractVODTranscodingJobHandler<CreateOptions, RunnerJobUpdatePayload, VODWebVideoTranscodingSuccess>
 {

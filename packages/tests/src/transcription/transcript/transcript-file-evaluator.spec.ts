@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions, no-new, max-len */
+/* oxlint-disable @typescript-eslint/no-unused-expressions, no-new, max-len */
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import { TranscriptFile } from '@peertube/peertube-transcription'
 import { TranscriptFileEvaluator } from '@peertube/peertube-transcription-devtools'
@@ -37,7 +37,8 @@ describe('Transcript File Evaluator', function () {
     })
     const hypothesis = await TranscriptFile.write({
       path: join(transcriptDirectory, 'openai.txt'),
-      content: `Communiquez lors d'une classe transplante. Utilisez les photos prises lors de cette classe pour raconter quotidiennement le séjour vécu.
+      content:
+        `Communiquez lors d'une classe transplante. Utilisez les photos prises lors de cette classe pour raconter quotidiennement le séjour vécu.
 C'est le scénario P-Dagujic présenté par monsieur Navoli, professeur ainsi que le 3 sur une école alimentaire de Montpellier.
 La première application a utilisé ce ralame déatec. L'enseignant va alors transférer les différentes photos réalisés lors de la classe transplante.
 Dans un dossier, spécifique pour que les élèves puissent le retrouver plus facilement. Il téléverse donc ses photos dans le dossier, dans le venté, dans la médiatèque de la classe.

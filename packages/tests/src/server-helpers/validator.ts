@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { isStableOrUnstableVersionValid, isStableVersionValid } from '@peertube/peertube-server/core/helpers/custom-validators/misc.js'
 import {} from '@peertube/peertube-server/core/helpers/custom-validators/plugins.js'

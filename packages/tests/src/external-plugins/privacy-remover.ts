@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
 import {
@@ -29,7 +29,6 @@ describe('Official plugin Privacy Remover', function () {
   })
 
   describe('When disabling public privacy', function () {
-
     before(async function () {
       await servers[0].plugins.updateSettings({
         npmName: 'peertube-plugin-privacy-remover',
@@ -68,7 +67,6 @@ describe('Official plugin Privacy Remover', function () {
   })
 
   describe('When enabling public privacy', function () {
-
     before(async function () {
       await servers[0].plugins.updateSettings({
         npmName: 'peertube-plugin-privacy-remover',

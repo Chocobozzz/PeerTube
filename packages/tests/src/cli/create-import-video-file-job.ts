@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { HttpStatusCode, VideoDetails, VideoFile, VideoInclude } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled, buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
@@ -155,7 +155,6 @@ function runTests (enableObjectStorage: boolean) {
 }
 
 describe('Test create import video jobs CLI', function () {
-
   describe('On filesystem', function () {
     runTests(false)
   })

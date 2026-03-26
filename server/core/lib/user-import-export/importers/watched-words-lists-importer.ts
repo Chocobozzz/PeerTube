@@ -6,9 +6,10 @@ import { AbstractUserImporter } from './abstract-user-importer.js'
 
 type SanitizedObject = Pick<WatchedWordsListsJSON['watchedWordLists'][0], 'listName' | 'words'>
 
-// eslint-disable-next-line max-len
-export class WatchedWordsListsImporter extends AbstractUserImporter <WatchedWordsListsJSON, WatchedWordsListsJSON['watchedWordLists'][0], SanitizedObject> {
-
+// oxlint-disable-next-line max-len
+export class WatchedWordsListsImporter
+  extends AbstractUserImporter<WatchedWordsListsJSON, WatchedWordsListsJSON['watchedWordLists'][0], SanitizedObject>
+{
   protected getImportObjects (json: WatchedWordsListsJSON) {
     return json.watchedWordLists
   }

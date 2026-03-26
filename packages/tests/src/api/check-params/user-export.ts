@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { wait } from '@peertube/peertube-core-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
@@ -43,7 +43,6 @@ describe('Test user export API validators', function () {
   })
 
   describe('Request export', function () {
-
     it('Should fail if export is disabled', async function () {
       await server.config.disableUserExport()
 
@@ -134,7 +133,6 @@ describe('Test user export API validators', function () {
   })
 
   describe('List exports', function () {
-
     it('Should fail if export is disabled', async function () {
       await server.config.disableUserExport()
 
@@ -180,7 +178,6 @@ describe('Test user export API validators', function () {
   })
 
   describe('Deleting export', function () {
-
     before(async function () {
       const { export: { id } } = await server.userExports.request({ userId, withVideoFiles: true })
       userExportId = id
@@ -258,7 +255,6 @@ describe('Test user export API validators', function () {
   })
 
   describe('Downloading an export', function () {
-
     before(async function () {
       await server.userExports.request({ userId, withVideoFiles: true })
       await server.userExports.waitForCreation({ userId })

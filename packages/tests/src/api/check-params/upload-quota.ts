@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { randomInt } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoImportState, VideoPrivacy } from '@peertube/peertube-models'

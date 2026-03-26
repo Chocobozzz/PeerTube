@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+/* oxlint-disable @typescript-eslint/no-floating-promises */
 
 import { pick, queryParamsToObject } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, HttpStatusCodeType } from '@peertube/peertube-models'

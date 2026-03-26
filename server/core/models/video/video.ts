@@ -774,6 +774,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     },
     onDelete: 'cascade',
     hooks: true,
+    // oxlint-disable-next-line no-useless-computed-key
     ['separate' as any]: true
   })
   declare VideoCaptions: Awaited<VideoCaptionModel>[]

@@ -23,6 +23,6 @@ export interface LiveRTMPHLSTranscodingUpdatePayload {
 }
 
 export function isLiveRTMPHLSTranscodingUpdatePayload (value: RunnerJobUpdatePayload): value is LiveRTMPHLSTranscodingUpdatePayload {
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+  // oxlint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
   return !!(value as LiveRTMPHLSTranscodingUpdatePayload)?.videoChunkFilename
 }

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
 import { HttpStatusCode } from '@peertube/peertube-models'
@@ -26,7 +26,6 @@ describe('Test logs', function () {
   })
 
   describe('With the standard log file', function () {
-
     it('Should get logs with a start date', async function () {
       this.timeout(60000)
 
@@ -146,7 +145,6 @@ describe('Test logs', function () {
   })
 
   describe('With the audit log', function () {
-
     it('Should get logs with a start date', async function () {
       this.timeout(60000)
 
@@ -199,7 +197,6 @@ describe('Test logs', function () {
   })
 
   describe('When creating log from the client', function () {
-
     it('Should create a warn client log', async function () {
       const now = new Date()
 
@@ -263,7 +260,6 @@ describe('Test logs', function () {
   })
 
   describe('With some log options', function () {
-
     it('Should not crash when enabling `prettify_sql` config', async function () {
       await server.kill()
       await server.run({ log: { prettify_sql: true } })
