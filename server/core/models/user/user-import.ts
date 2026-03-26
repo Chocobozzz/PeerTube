@@ -1,10 +1,10 @@
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
-import { MUserImport } from '@server/types/models/index.js'
-import { SequelizeModel } from '../shared/index.js'
-import { UserModel } from './user.js'
 import type { UserImportResultSummary, UserImportStateType } from '@peertube/peertube-models'
+import { USER_IMPORT_FILE_PREFIX, USER_IMPORT_STATES } from '@server/initializers/constants.js'
+import { MUserImport } from '@server/types/models/index.js'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
+import { doesExist, SequelizeModel } from '../shared/index.js'
 import { getSort } from '../shared/sort.js'
-import { USER_IMPORT_STATES } from '@server/initializers/constants.js'
+import { UserModel } from './user.js'
 
 @Table({
   tableName: 'userImport',
@@ -68,11 +68,20 @@ export class UserImportModel extends SequelizeModel<UserImportModel> {
 
   // ---------------------------------------------------------------------------
 
+  static async doesOwnedFileExist (filename: string) {
+    const query = 'SELECT 1 FROM "userImport" ' +
+      `WHERE "filename" = $filename LIMIT 1`
+
+    return doesExist({ sequelize: this.sequelize, query, bind: { filename } })
+  }
+
+  // ---------------------------------------------------------------------------
+
   generateAndSetFilename () {
     if (!this.userId) throw new Error('Cannot generate filename without userId')
     if (!this.createdAt) throw new Error('Cannot generate filename without createdAt')
 
-    this.filename = `user-import-${this.userId}-${this.createdAt.toISOString()}.zip`
+    this.filename = `${USER_IMPORT_FILE_PREFIX}${this.userId}-${this.createdAt.toISOString()}.zip`
   }
 
   toFormattedJSON () {

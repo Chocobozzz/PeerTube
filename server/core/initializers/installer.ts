@@ -32,7 +32,6 @@ async function installApplication () {
           ])
         }),
 
-      // Directories
       removeTmpDirectory()
         .then(() => createDirectoriesIfNotExist())
     ])

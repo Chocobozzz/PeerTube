@@ -602,7 +602,9 @@ cd /var/www/peertube-docker; \
 
 **PeerTube >= 6.2**
 
-Use this script to recover disk space by removing remote files (thumbnails, avatars...) that can be re-fetched later by your PeerTube instance on-demand:
+Use this script to recover disk space by removing remote files (thumbnails, avatars...) that can be re-fetched later by your PeerTube instance on-demand.
+
+Restart PeerTube after running this script.
 
 ::: code-group
 
@@ -670,6 +672,22 @@ cd /var/www/peertube/peertube-latest; \
 ```bash [Docker]
 cd /var/www/peertube-docker; \
     docker compose exec -u peertube peertube npm run prune-storage
+```
+
+:::
+
+It's also possible to remove more local files if your stop PeerTube using the `--offline` option:
+
+::: code-group
+
+```bash [Classic installation]
+cd /var/www/peertube/peertube-latest; \
+    sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run prune-storage -- --offline
+```
+
+```bash [Docker]
+cd /var/www/peertube-docker; \
+    docker compose exec -u peertube peertube npm run prune-storage -- --offline
 ```
 
 :::
