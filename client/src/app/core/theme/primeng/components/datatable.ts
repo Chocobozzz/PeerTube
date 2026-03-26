@@ -1,4 +1,4 @@
-import { DataTableDesignTokens } from '@primeng/themes/types/datatable'
+import { DataTableDesignTokens } from '@primeuix/themes/types/datatable'
 
 export default {
   root: {

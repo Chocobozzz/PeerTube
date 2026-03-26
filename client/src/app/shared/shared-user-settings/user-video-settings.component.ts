@@ -6,7 +6,7 @@ import { NSFWFlag, NSFWFlagType, NSFWPolicyType, UserUpdateMe } from '@peertube/
 import { pick } from 'lodash-es'
 import { Subject, Subscription } from 'rxjs'
 import { first } from 'rxjs/operators'
-import { SelectOptionsItem } from 'src/types'
+import { SelectOptionsItem } from '@pt-types'
 import { BuildFormArgument } from '../form-validators/form-validator.model'
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
 import { SelectLanguagesComponent } from '../shared-forms/select/select-languages.component'

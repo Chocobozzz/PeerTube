@@ -12,7 +12,7 @@ import { Video, VideoCaption } from '@peertube/peertube-models'
 import { parse } from '@plussub/srt-vtt-parser'
 import debug from 'debug'
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs'
-import { SelectOptionsItem } from 'src/types'
+import { SelectOptionsItem } from '@pt-types'
 
 const debugLogger = debug('peertube:watch:VideoTranscriptionComponent')
 

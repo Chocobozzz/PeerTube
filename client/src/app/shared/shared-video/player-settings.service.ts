@@ -8,7 +8,7 @@ import {
   PlayerVideoSettingsUpdate
 } from '@peertube/peertube-models'
 import { catchError } from 'rxjs'
-import { environment } from 'src/environments/environment'
+import { environment } from '../../../environments/environment'
 import { VideoPasswordService } from '../shared-main/video/video-password.service'
 
 @Injectable()

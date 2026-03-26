@@ -15,7 +15,7 @@ import { NgbAccordionDirective, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-b
 import { getCompleteLocale, getExternalAuthHref } from '@peertube/peertube-core-utils'
 import { RegisteredExternalAuthConfig, ServerConfig, ServerErrorCode } from '@peertube/peertube-models'
 import { of, switchMap } from 'rxjs'
-import { environment } from 'src/environments/environment'
+import { environment } from '../../environments/environment'
 import { GlobalIconComponent } from '../shared/shared-icons/global-icon.component'
 import { InstanceBannerComponent } from '../shared/shared-instance/instance-banner.component'
 import { AutofocusDirective } from '../shared/shared-main/common/autofocus.directive'

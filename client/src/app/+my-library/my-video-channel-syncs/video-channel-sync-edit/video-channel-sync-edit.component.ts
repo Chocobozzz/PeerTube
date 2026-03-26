@@ -13,7 +13,7 @@ import { VideoChannelService } from '@app/shared/shared-main/channel/video-chann
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { VideoChannelSyncCreate } from '@peertube/peertube-models'
 import { mergeMap } from 'rxjs'
-import { SelectChannelItem } from 'src/types'
+import { SelectChannelItem } from '@pt-types'
 import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
 
 @Component({

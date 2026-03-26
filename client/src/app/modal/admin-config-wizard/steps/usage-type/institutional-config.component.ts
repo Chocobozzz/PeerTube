@@ -11,7 +11,7 @@ import {
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-options.component'
 import { ColorPickerModule } from 'primeng/colorpicker'
-import { SelectOptionsItem } from 'src/types'
+import { SelectOptionsItem } from '@pt-types'
 import { AuthType, EnabledDisabled, UsageType } from './usage-type.model'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 
@@ -32,7 +32,7 @@ type Form = {
     CdkStepperModule,
     SelectOptionsComponent,
     GlobalIconComponent
-]
+  ]
 })
 export class InstitutionalConfigComponent implements OnInit {
   private formReactiveService = inject(FormReactiveService)

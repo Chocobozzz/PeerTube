@@ -25,10 +25,11 @@ import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.serv
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { BroadcastMessageLevel, ConstantLabel, CustomConfig, VideoCommentPolicyType, VideoPrivacyType } from '@peertube/peertube-models'
+import { SelectOptionsItem } from '@pt-types'
 import merge from 'lodash-es/merge'
 import { Subscription } from 'rxjs'
 import { pairwise } from 'rxjs/operators'
-import { SelectOptionsItem } from 'src/types/select-options-item.model'
+import { PartialDeep } from 'type-fest'
 import { AdminConfigService } from '../../../shared/shared-admin/admin-config.service'
 import { MarkdownTextareaComponent } from '../../../shared/shared-forms/markdown-textarea.component'
 import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
@@ -39,7 +40,6 @@ import { SelectVideosSortComponent } from '../../../shared/shared-forms/select/s
 import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
 import { UserRealQuotaInfoComponent } from '../../shared/user-real-quota-info.component'
 import { AdminSaveBarComponent } from '../shared/admin-save-bar.component'
-import { PartialDeep } from 'type-fest'
 
 type DownloadPolicy = 'allowed' | 'disabled'
 

@@ -1,4 +1,4 @@
-import type { LaraBaseDesignTokens } from '@primeng/themes/lara/base'
+import type { LaraBaseDesignTokens } from '@primeuix/themes/lara/base'
 
 export default {
   primitive: {

@@ -1,4 +1,4 @@
-import { ColorPickerDesignTokens } from '@primeng/themes/types/colorpicker'
+import { ColorPickerDesignTokens } from '@primeuix/themes/types/colorpicker'
 
 export default {
   root: {

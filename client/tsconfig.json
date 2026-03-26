@@ -25,6 +25,9 @@
       ],
       "@root-helpers/*": [
         "./src/root-helpers/*"
+      ],
+      "@pt-types": [
+        "./src/types"
       ]
     }
   },

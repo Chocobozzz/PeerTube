@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core'
 import { RestExtractor } from '@app/core'
 import { AutomaticTagAvailable, CommentAutomaticTagPolicies } from '@peertube/peertube-models'
 import { catchError } from 'rxjs/operators'
-import { environment } from 'src/environments/environment'
+import { environment } from '../../../environments/environment'
 
 @Injectable({ providedIn: 'root' })
 export class AutomaticTagService {

@@ -3,7 +3,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { buildVideoEmbedLink, decorateVideoLink } from '@peertube/peertube-core-utils'
 import { Video } from '@peertube/peertube-models'
 import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
-import { environment } from 'src/environments/environment'
+import { environment } from '../../../../environments/environment'
 
 export type EmbedVideoInput = Pick<Video, 'name' | 'uuid'> & Partial<Pick<Video, 'aspectRatio'>>
 

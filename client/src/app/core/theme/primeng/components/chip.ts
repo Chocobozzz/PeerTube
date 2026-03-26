@@ -1,4 +1,4 @@
-import { ChipDesignTokens } from '@primeng/themes/types/chip'
+import { ChipDesignTokens } from '@primeuix/themes/types/chip'
 
 export default {
   root: {

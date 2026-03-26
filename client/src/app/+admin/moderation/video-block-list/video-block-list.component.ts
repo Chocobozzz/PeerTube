@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { ConfirmService, MarkdownService, Notifier, ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
+import { buildDropdownSimpleAndBulkActions } from '@app/shared/shared-main/buttons/action-dropdown-helpers'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
@@ -9,7 +10,7 @@ import { buildVideoEmbedLink, decorateVideoLink } from '@peertube/peertube-core-
 import { ResultList, VideoBlacklist as VideoBlacklistServer, VideoBlacklistType, VideoBlacklistType_Type } from '@peertube/peertube-models'
 import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
 import { switchMap } from 'rxjs/operators'
-import { environment } from 'src/environments/environment'
+import { environment } from '../../../../environments/environment'
 import { AdvancedFilterDef } from '../../../shared/shared-forms/advanced-input-filter.component'
 import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
 import { NumberFormatterPipe } from '../../../shared/shared-main/common/number-formatter.pipe'
@@ -17,7 +18,6 @@ import { EmbedComponent } from '../../../shared/shared-main/video/embed.componen
 import { DataLoaderOptionsBase, TableColumnInfo, TableComponent } from '../../../shared/shared-tables/table.component'
 import { VideoCellComponent } from '../../../shared/shared-tables/video-cell.component'
 import { VideoNSFWBadgeComponent } from '../../../shared/shared-video/video-nsfw-badge.component'
-import { buildDropdownSimpleAndBulkActions } from '@app/shared/shared-main/buttons/action-dropdown-helpers'
 
 type DataLoaderParameter = Parameters<VideoBlockListComponent['_dataLoader']>[0]
 type VideoBlacklist = VideoBlacklistServer & { reasonHtml?: string }

@@ -8,7 +8,7 @@ import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.serv
 import { VideoOwnershipService } from '@app/shared/shared-main/video/video-ownership.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { VideoChangeOwnership } from '@peertube/peertube-models'
-import { SelectChannelItem } from 'src/types/select-options-item.model'
+import { SelectChannelItem } from '@pt-types'
 import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 

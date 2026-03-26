@@ -10,7 +10,7 @@ import {
 } from '@peertube/peertube-models'
 import type { PeerTubePlayer, VideojsPlayer } from '@peertube/player'
 import { TranslationsManager } from '@root-helpers/translations-manager'
-import { PeerTubeServerError } from 'src/types'
+import { PeerTubeServerError } from '@pt-types'
 import type videojs from 'video.js'
 import { getParamString, logger, videoRequiresFileToken } from '../../root-helpers'
 import { PeerTubeEmbedApi } from './embed-api'

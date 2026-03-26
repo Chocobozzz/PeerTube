@@ -32,20 +32,20 @@ import { PeerTubeTemplateDirective } from '@app/shared/shared-main/common/peertu
 import { InstanceService } from '@app/shared/shared-main/instance/instance.service'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import {
+  ConstantLabel,
   HTMLServerConfig,
   RegisterClientFormFieldOptions,
   RegisterClientVideoFieldOptions,
-  ConstantLabel,
   VideoPrivacy,
   VideoPrivacyType
 } from '@peertube/peertube-models'
+import { SelectChannelItem } from '@pt-types'
 import { logger } from '@root-helpers/logger'
 import { PluginInfo } from '@root-helpers/plugins-manager'
 import debug from 'debug'
 import { DatePickerModule } from 'primeng/datepicker'
 import { forkJoin, Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
-import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { MarkdownHintComponent } from '../../../shared/shared-main/text/markdown-hint.component'
 import { I18nPrimengCalendarService } from '../common/i18n-primeng-calendar.service'
@@ -147,7 +147,6 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
 
   calendarTimezone: string
   calendarDateFormat: string
-  myYearRange: string
 
   serverConfig: HTMLServerConfig
 
@@ -169,7 +168,6 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
   constructor () {
     this.calendarTimezone = this.i18nPrimengCalendarService.getTimezone()
     this.calendarDateFormat = this.i18nPrimengCalendarService.getDateFormat()
-    this.myYearRange = this.i18nPrimengCalendarService.getVideoPublicationYearRange()
   }
 
   ngOnInit () {

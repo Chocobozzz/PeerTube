@@ -15,10 +15,10 @@ import {
   VideoPrivacyType,
   VideoState
 } from '@peertube/peertube-models'
+import { SelectOptionsItem } from '@pt-types'
 import debug from 'debug'
 import { DatePickerModule } from 'primeng/datepicker'
 import { Subscription } from 'rxjs'
-import { SelectOptionsItem } from 'src/types/select-options-item.model'
 import { InputTextComponent } from '../../../shared/shared-forms/input-text.component'
 import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
 import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
@@ -87,7 +87,6 @@ export class VideoLiveSettingsComponent implements OnInit, OnDestroy {
   videoEdit: VideoEdit
 
   calendarDateFormat: string
-  myYearRange: string
 
   replayPrivacies: ConstantLabel<VideoPrivacyType>[] = []
 
@@ -115,7 +114,6 @@ export class VideoLiveSettingsComponent implements OnInit, OnDestroy {
 
   constructor () {
     this.calendarDateFormat = this.i18nPrimengCalendarService.getDateFormat()
-    this.myYearRange = this.i18nPrimengCalendarService.getVideoPublicationYearRange()
   }
 
   ngOnInit () {
