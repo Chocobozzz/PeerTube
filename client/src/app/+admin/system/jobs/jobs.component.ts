@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common'
 import { Component, inject, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { RouterLink } from '@angular/router'
-import { RestPagination } from '@app/core'
+import { RestPagination, ServerService } from '@app/core'
 import { AdvancedFilterDef } from '@app/shared/shared-forms/advanced-input-filter.component'
 import { PeerTubeBadgeService } from '@app/shared/shared-main/common/peertube-badge.service'
 import { Job, JobState, JobType } from '@peertube/peertube-models'
@@ -27,6 +27,7 @@ type DataLoaderParameter = Parameters<JobsComponent['_dataLoader']>[0]
   ]
 })
 export class JobsComponent {
+  private server = inject(ServerService)
   private jobsService = inject(JobService)
   private peertubeBadgeService = inject(PeerTubeBadgeService)
 
@@ -158,6 +159,10 @@ export class JobsComponent {
 
   getTypeFilterTitle (type: string) {
     return $localize`Filter by type: ${type.toLocaleUpperCase()}`
+  }
+
+  isRunnerEnabled () {
+    return this.server.isRemoteRunnersEnabled()
   }
 
   private _dataLoader (options: {

@@ -102,6 +102,18 @@ export class ServerService {
     return this.htmlConfig
   }
 
+  isRemoteRunnersEnabled () {
+    const config = this.getHTMLConfig()
+
+    return config.transcoding.remoteRunners.enabled ||
+      config.live.transcoding.remoteRunners.enabled ||
+      config.videoStudio.remoteRunners.enabled ||
+      config.videoTranscription.remoteRunners.enabled ||
+      config.storyboards.remoteRunners.enabled
+  }
+
+  // ---------------------------------------------------------------------------
+
   getCommentPolicies () {
     return of([
       {
