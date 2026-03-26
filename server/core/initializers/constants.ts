@@ -516,7 +516,8 @@ export const CONSTRAINTS_FIELDS = {
   },
   VIDEO_STUDIO: {
     TASKS: { min: 1, max: 10 }, // Number of tasks
-    CUT_TIME: { min: 0 } // Value
+    CUT_TIME_START: { min: 0 }, // Value
+    CUT_TIME_END: { min: 1 } // Value
   },
   LOGS: {
     CLIENT_MESSAGE: { min: 1, max: 1000 }, // Length

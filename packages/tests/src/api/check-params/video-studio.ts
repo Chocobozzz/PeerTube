@@ -249,12 +249,16 @@ describe('Test video studio API validator', function () {
         await cut(2, 2)
       })
 
-      it('Should fail with inconsistents start/end', async function () {
+      it('Should fail with inconsistent start/end', async function () {
         await cut(2, 1)
       })
 
       it('Should fail without start and end', async function () {
         await cut(undefined, undefined)
+      })
+
+      it('Should fail with a bad end', async function () {
+        await cut(undefined, 0)
       })
 
       it('Should succeed with the correct params', async function () {
