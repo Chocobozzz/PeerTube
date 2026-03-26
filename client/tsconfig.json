@@ -19,13 +19,12 @@
     "typeRoots": [
       "node_modules/@types"
     ],
-    "baseUrl": "./",
     "paths": {
       "@app/*": [
-        "src/app/*"
+        "./src/app/*"
       ],
       "@root-helpers/*": [
-        "src/root-helpers/*"
+        "./src/root-helpers/*"
       ]
     }
   },
@@ -35,12 +34,12 @@
     { "path": "../packages/typescript-utils" }
   ],
   "include": [
-    "src/polyfills.ts",
-    "src/environments/*.ts",
-    "src/main*.ts",
-    "src/**/*.d.ts",
-    "src/app/**/*.ts",
-    "src/shims/*.ts"
+    "./src/polyfills.ts",
+    "./src/environments/*.ts",
+    "./src/main*.ts",
+    "./src/**/*.d.ts",
+    "./src/app/**/*.ts",
+    "./src/shims/*.ts"
   ],
   "angularCompilerOptions": {
     "strictInjectionParameters": true,

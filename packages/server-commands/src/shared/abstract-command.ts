@@ -1,8 +1,10 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
 
+import { pick } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, HttpStatusCodeType } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath, getFileSize } from '@peertube/peertube-node-utils'
 import { expect } from 'chai'
+import { createReadStream } from 'fs'
 import got, { Response as GotResponse } from 'got'
 import { isAbsolute } from 'path'
 import {
@@ -14,9 +16,6 @@ import {
   unwrapBody,
   unwrapText
 } from '../requests/requests.js'
-
-import { pick } from '@peertube/peertube-core-utils'
-import { createReadStream } from 'fs'
 import type { PeerTubeServer } from '../server/server.js'
 
 export interface OverrideCommandOptions {

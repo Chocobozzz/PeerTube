@@ -123,10 +123,12 @@ export async function checkExportFileExists (options: {
 
   if (exists === true) {
     if (withObjectStorage) {
-      return makeRawRequest({ url: redirectedUrl, expectedStatus: HttpStatusCode.OK_200 })
+      await makeRawRequest({ url: redirectedUrl, expectedStatus: HttpStatusCode.OK_200 })
+    } else {
+      await testFileExistsOnFSOrNot(server, 'tmp-persistent', filename, true)
     }
 
-    return testFileExistsOnFSOrNot(server, 'tmp-persistent', filename, true)
+    return
   }
 
   await testFileExistsOnFSOrNot(server, 'tmp-persistent', filename, false)

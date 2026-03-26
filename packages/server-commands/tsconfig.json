@@ -5,6 +5,7 @@
     "rootDir": "src",
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
+
   "references": [
     { "path": "../models" },
     { "path": "../core-utils" },

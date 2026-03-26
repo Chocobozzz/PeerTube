@@ -158,8 +158,8 @@ export async function testImageSize (options: {
 
 // ---------------------------------------------------------------------------
 
-export function checkBadStartPagination (url: string, path: string, token?: string, query = {}) {
-  return makeGetRequest({
+export async function checkBadStartPagination (url: string, path: string, token?: string, query = {}) {
+  await makeGetRequest({
     url,
     path,
     token,
@@ -186,8 +186,8 @@ export async function checkBadCountPagination (url: string, path: string, token?
   })
 }
 
-export function checkBadSort (url: string, path: string, token?: string, query = {}) {
-  return makeGetRequest({
+export async function checkBadSort (url: string, path: string, token?: string, query = {}) {
+  await makeGetRequest({
     url,
     path,
     token,

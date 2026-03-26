@@ -7,11 +7,11 @@
     "outDir": "../packages/types-generator/dist-tmp/client/",
     "emitDeclarationOnly": true,
     "composite": true,
-    "rootDir": "src/",
+    "rootDir": "./src/",
     "tsBuildInfoFile": "../packages/types-generator/dist-tmp/tsconfig.client.tsbuildinfo"
   },
-  "files": [ "src/types/index.ts" ],
+  "files": [ "./src/types/index.ts" ],
   "include": [
-    "src/types/**/*"
+    "./src/types/**/*"
   ]
 }

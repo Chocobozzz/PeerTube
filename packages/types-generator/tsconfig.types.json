@@ -6,7 +6,6 @@
     "emitDeclarationOnly": true,
     "sourceMap": false,
     "outDir": "./dist-tmp/",
-    "baseUrl": "./",
     "rootDir": "./src",
     "tsBuildInfoFile": "./dist-tmp/tsconfig.server.types.tsbuildinfo",
     "paths": {

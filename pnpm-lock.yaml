@@ -214,7 +214,7 @@ importers:
         version: 0.1.7
       i18next:
         specifier: ^25.8.13
-        version: 25.8.13(typescript@5.9.3)
+        version: 25.8.13(typescript@6.0.2)
       i18next-icu:
         specifier: ^2.4.3
         version: 2.4.3(intl-messageformat@11.1.2)
@@ -365,7 +365,7 @@ importers:
     devDependencies:
       '@peertube/resolve-tspaths':
         specifier: ^0.8.14
-        version: 0.8.14(typescript@5.9.3)
+        version: 0.8.14(typescript@6.0.2)
       '@stylistic/eslint-plugin':
         specifier: ^5.9.0
         version: 5.9.0(eslint@9.39.3(jiti@2.6.1))
@@ -497,7 +497,7 @@ importers:
         version: 5.5.6
       i18next-cli:
         specifier: ^1.47.3
-        version: 1.47.3(@types/node@22.14.1)(i18next@25.8.13(typescript@5.9.3))(typescript@5.9.3)
+        version: 1.47.3(@types/node@22.14.1)(i18next@25.8.13(typescript@6.0.2))(typescript@6.0.2)
       jszip:
         specifier: ^3.10.1
         version: 3.10.1
@@ -524,7 +524,7 @@ importers:
         version: 4.59.0
       rollup-plugin-dts:
         specifier: ^6.3.0
-        version: 6.3.0(rollup@4.59.0)(typescript@5.9.3)
+        version: 6.3.0(rollup@4.59.0)(typescript@6.0.2)
       socket.io-client:
         specifier: ^4.8.3
         version: 4.8.3(bufferutil@4.1.0)(utf-8-validate@6.0.6)
@@ -533,7 +533,7 @@ importers:
         version: 4.0.4(openapi-types@12.1.3)
       tsc-watch:
         specifier: ^7.2.0
-        version: 7.2.0(typescript@5.9.3)
+        version: 7.2.0(typescript@6.0.2)
       tsx:
         specifier: ^4.21.0
         version: 4.21.0
@@ -541,8 +541,8 @@ importers:
         specifier: ^5.4.4
         version: 5.4.4
       typescript:
-        specifier: ~5.9.3
-        version: 5.9.3
+        specifier: ~6.0.2
+        version: 6.0.2
     optionalDependencies:
       webtorrent:
         specifier: ^2.8.5
@@ -883,8 +883,8 @@ importers:
         specifier: ^8.1.9
         version: 8.1.9
       '@types/supertest':
-        specifier: ^6.0.3
-        version: 6.0.3
+        specifier: ^7.2.0
+        version: 7.2.0
       supertest:
         specifier: ^7.2.2
         version: 7.2.2
@@ -4448,6 +4448,9 @@ packages:
 
   '@types/supertest@6.0.3':
     resolution: {integrity: sha512-8WzXq62EXFhJ7QsH3Ocb/iKQ/Ty9ZVWnVzoTKc9tyyFRRF3a74Tk2+TLFgaFFw364Ere+npzHKEJ6ga2LzIL7w==}
+
+  '@types/supertest@7.2.0':
+    resolution: {integrity: sha512-uh2Lv57xvggst6lCqNdFAmDSvoMG7M/HDtX4iUCquxQ5EGPtaPM5PL5Hmi7LCvOG8db7YaCPNJEeoI8s/WzIQw==}
 
   '@types/triple-beam@1.3.5':
     resolution: {integrity: sha512-6WaYesThRMCl19iryMYP7/x2OVgCtbIVflDGFpWnb9irXI3UjYE4AzmYuiUKY1AJstGijoY+MgUszMgRxIYTYw==}
@@ -10848,6 +10851,11 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
+  typescript@6.0.2:
+    resolution: {integrity: sha512-bGdAIrZ0wiGDo5l8c++HWtbaNCWTS4UTv7RaTH/ThVIgjkveJt83m74bBHMJkuCbslY8ixgLBVZJIOiQlQTjfQ==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
   ua-is-frozen@0.1.2:
     resolution: {integrity: sha512-RwKDW2p3iyWn4UbaxpP2+VxwqXh0jpvdxsYpZ5j/MLLiQOfbsV5shpgQiw93+KMYQPcteeMQ289MaAFzs3G9pw==}
 
@@ -14103,12 +14111,12 @@ snapshots:
       smtp-server: 3.18.1
       wildstring: 1.0.9
 
-  '@peertube/resolve-tspaths@0.8.14(typescript@5.9.3)':
+  '@peertube/resolve-tspaths@0.8.14(typescript@6.0.2)':
     dependencies:
       ansi-colors: 4.1.3
       commander: 11.0.0
       fast-glob: 3.3.1
-      typescript: 5.9.3
+      typescript: 6.0.2
 
   '@peertube/xliffmerge@2.0.4':
     dependencies:
@@ -15347,6 +15355,11 @@ snapshots:
       form-data: 4.0.5
 
   '@types/supertest@6.0.3':
+    dependencies:
+      '@types/methods': 1.1.4
+      '@types/superagent': 8.1.9
+
+  '@types/supertest@7.2.0':
     dependencies:
       '@types/methods': 1.1.4
       '@types/superagent': 8.1.9
@@ -19131,7 +19144,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  i18next-cli@1.47.3(@types/node@22.14.1)(i18next@25.8.13(typescript@5.9.3))(typescript@5.9.3):
+  i18next-cli@1.47.3(@types/node@22.14.1)(i18next@25.8.13(typescript@6.0.2))(typescript@6.0.2):
     dependencies:
       '@croct/json5-parser': 0.2.2
       '@swc/core': 1.15.17
@@ -19147,7 +19160,7 @@ snapshots:
       minimatch: 10.2.4
       ora: 9.3.0
       react: 19.2.4
-      react-i18next: 16.5.4(i18next@25.8.13(typescript@5.9.3))(react@19.2.4)(typescript@5.9.3)
+      react-i18next: 16.5.4(i18next@25.8.13(typescript@6.0.2))(react@19.2.4)(typescript@6.0.2)
       yaml: 2.8.2
     transitivePeerDependencies:
       - '@swc/helpers'
@@ -19170,11 +19183,11 @@ snapshots:
     transitivePeerDependencies:
       - '@swc/helpers'
 
-  i18next@25.8.13(typescript@5.9.3):
+  i18next@25.8.13(typescript@6.0.2):
     dependencies:
       '@babel/runtime': 7.28.6
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 6.0.2
 
   iconv-lite@0.4.24:
     dependencies:
@@ -21725,15 +21738,15 @@ snapshots:
     dependencies:
       setimmediate: 1.0.5
 
-  react-i18next@16.5.4(i18next@25.8.13(typescript@5.9.3))(react@19.2.4)(typescript@5.9.3):
+  react-i18next@16.5.4(i18next@25.8.13(typescript@6.0.2))(react@19.2.4)(typescript@6.0.2):
     dependencies:
       '@babel/runtime': 7.28.6
       html-parse-stringify: 3.0.1
-      i18next: 25.8.13(typescript@5.9.3)
+      i18next: 25.8.13(typescript@6.0.2)
       react: 19.2.4
       use-sync-external-store: 1.6.0(react@19.2.4)
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 6.0.2
 
   react-is@18.3.1: {}
 
@@ -22023,11 +22036,11 @@ snapshots:
       '@rolldown/binding-win32-arm64-msvc': 1.0.0-rc.5
       '@rolldown/binding-win32-x64-msvc': 1.0.0-rc.5
 
-  rollup-plugin-dts@6.3.0(rollup@4.59.0)(typescript@5.9.3):
+  rollup-plugin-dts@6.3.0(rollup@4.59.0)(typescript@6.0.2):
     dependencies:
       magic-string: 0.30.21
       rollup: 4.59.0
-      typescript: 5.9.3
+      typescript: 6.0.2
     optionalDependencies:
       '@babel/code-frame': 7.29.0
 
@@ -23221,13 +23234,13 @@ snapshots:
     optionalDependencies:
       '@swc/core': 1.15.17
 
-  tsc-watch@7.2.0(typescript@5.9.3):
+  tsc-watch@7.2.0(typescript@6.0.2):
     dependencies:
       cross-spawn: 7.0.6
       node-cleanup: 2.1.2
       ps-tree: 1.2.0
       string-argv: 0.3.2
-      typescript: 5.9.3
+      typescript: 6.0.2
 
   tsconfig-paths@3.15.0:
     dependencies:
@@ -23370,6 +23383,8 @@ snapshots:
       - supports-color
 
   typescript@5.9.3: {}
+
+  typescript@6.0.2: {}
 
   ua-is-frozen@0.1.2: {}
 
