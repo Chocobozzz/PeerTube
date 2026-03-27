@@ -223,7 +223,7 @@ p-table {
       flex-wrap: wrap;
       gap: 0.5rem;
 
-      .left-buttons {
+      .left-block {
         color: pvar(--fg-300);
 
         @include font-size(22px);
@@ -268,37 +268,35 @@ p-table {
     text-transform: uppercase;
   }
 
-  p-paginator {
-    .p-paginator {
-      padding-top: 1rem;
+  .p-paginator {
+    padding-top: 1rem;
 
-      border-top: 1px solid pvar(--bg-secondary-400) !important;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+    border-top: 1px solid pvar(--bg-secondary-400) !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-    .p-paginator-first {
-      margin-left: auto;
-    }
+  .p-paginator-first {
+    margin-left: auto;
+  }
 
-    .p-paginator-last {
-      margin-right: auto;
-    }
+  .p-paginator-last {
+    margin-right: auto;
+  }
 
-    .p-iconwrapper {
-      color: pvar(--fg-300);
-    }
+  .p-iconwrapper {
+    color: pvar(--fg-300);
+  }
 
-    .p-paginator-page-selected {
-      font-weight: $font-bold !important;
-    }
+  .p-paginator-page-selected {
+    font-weight: $font-bold !important;
+  }
 
-    .p-paginator-content-end {
-      color: pvar(--fg-300);
+  .p-paginator-content-end {
+    color: pvar(--fg-300);
 
-      @include margin-left(0);
-    }
+    @include margin-left(0);
   }
 
   @media screen and (max-width: $small-view) {
@@ -308,26 +306,22 @@ p-table {
       }
     }
 
-    p-paginator {
-      .p-paginator-current {
-        display: none !important;
-      }
+    .p-paginator-current {
+      display: none !important;
     }
   }
 
   @media screen and (max-width: $mobile-view) {
-    p-paginator {
-      .p-paginator-page:not(.p-paginator-page-selected) {
-        display: none;
-      }
+    .p-paginator-page:not(.p-paginator-page-selected) {
+      display: none;
+    }
 
-      .p-paginator-rpp-dropdown {
-        display: none;
-      }
+    .p-paginator-rpp-dropdown {
+      display: none;
+    }
 
-      .p-paginator-content-end {
-        display: none;
-      }
+    .p-paginator-content-end {
+      display: none;
     }
 
     .p-datatable-header .caption > * {
