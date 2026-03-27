@@ -326,7 +326,7 @@
           {
             "lib": "never",
             "path": "never",
-            "types": "never"
+            "types": "prefer-import"
           }
         ],
         "@typescript-eslint/unbound-method": "off",

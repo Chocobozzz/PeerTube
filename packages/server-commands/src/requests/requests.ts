@@ -1,5 +1,5 @@
 // Fix typing issue because superagent is referenced by supertest
-import 'superagent'
+/// <reference types="superagent" />
 
 import { pick, queryParamsToObject } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, HttpStatusCodeType } from '@peertube/peertube-models'
