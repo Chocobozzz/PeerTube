@@ -11,9 +11,11 @@ import {
   getPlayerSessionId,
   getStoredLastSubtitle,
   getStoredMute,
+  getStoredPlaybackRate,
   getStoredVolume,
   saveLastSubtitle,
   saveMuteInStore,
+  savePlaybackRateInStore,
   savePreferredSubtitle,
   saveVideoWatchHistory,
   saveVolumeInStore
@@ -103,6 +105,7 @@ class PeerTubePlugin extends Plugin {
 
     this.player.on('ratechange', () => {
       this.currentPlaybackRate = this.player.playbackRate()
+      savePlaybackRateInStore(this.currentPlaybackRate)
 
       this.player.defaultPlaybackRate(this.currentPlaybackRate)
     })
@@ -115,6 +118,13 @@ class PeerTubePlugin extends Plugin {
 
       const muted = playerOptions.muted !== undefined ? playerOptions.muted : getStoredMute()
       if (muted !== undefined) this.player.muted(muted)
+
+      const savedPlaybackRate = getStoredPlaybackRate()
+      if (savedPlaybackRate !== undefined) {
+        this.currentPlaybackRate = savedPlaybackRate
+        this.player.playbackRate(this.currentPlaybackRate)
+        this.player.defaultPlaybackRate(this.currentPlaybackRate)
+      }
 
       this.player.addClass('vjs-can-play')
     })
