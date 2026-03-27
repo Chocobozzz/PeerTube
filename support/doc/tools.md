@@ -676,21 +676,6 @@ cd /var/www/peertube-docker; \
 
 :::
 
-It's also possible to remove more local files if your stop PeerTube using the `--offline` option:
-
-::: code-group
-
-```bash [Classic installation]
-cd /var/www/peertube/peertube-latest; \
-    sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run prune-storage -- --offline
-```
-
-```bash [Docker]
-cd /var/www/peertube-docker; \
-    docker compose exec -u peertube peertube npm run prune-storage -- --offline
-```
-
-:::
 
 ### Update PeerTube instance domain name
 
