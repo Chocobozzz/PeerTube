@@ -130,7 +130,7 @@ export const listRunnerJobsValidator = [
 
   query('typeOneOf')
     .optional()
-    .customSanitizer(arrayify)
+    .customSanitizer(toArray)
     .custom(isRunnerJobArrayOfTypeValid),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {

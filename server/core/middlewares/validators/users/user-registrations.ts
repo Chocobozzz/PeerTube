@@ -1,6 +1,6 @@
-import { arrayify, pick } from '@peertube/peertube-core-utils'
+import { pick } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, UserRegister, UserRegistrationRequest, UserRegistrationState } from '@peertube/peertube-models'
-import { exists, isBooleanValid, isIdValid, toBooleanOrNull } from '@server/helpers/custom-validators/misc.js'
+import { exists, isBooleanValid, isIdValid, toArray, toBooleanOrNull } from '@server/helpers/custom-validators/misc.js'
 import {
   isRegistrationModerationResponseValid,
   isRegistrationReasonValid,
@@ -169,7 +169,7 @@ const listRegistrationsValidator = [
 
   query('stateOneOf')
     .optional()
-    .customSanitizer(arrayify)
+    .customSanitizer(toArray)
     .custom(isRegistrationStateArrayValid),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
