@@ -807,6 +807,7 @@ paths:
         - $ref: '#/components/parameters/hasWebVideoFiles'
         - $ref: '#/components/parameters/host'
         - $ref: '#/components/parameters/autoTagOneOfVideo'
+        - $ref: '#/components/parameters/stateOneOfVideo'
         - $ref: '#/components/parameters/privacyOneOf'
         - $ref: '#/components/parameters/excludeAlreadyWatched'
         - $ref: '#/components/parameters/search'
@@ -2419,6 +2420,7 @@ paths:
         - $ref: '#/components/parameters/hasWebVideoFiles'
         - $ref: '#/components/parameters/host'
         - $ref: '#/components/parameters/autoTagOneOfVideo'
+        - $ref: '#/components/parameters/stateOneOfVideo'
         - $ref: '#/components/parameters/privacyOneOf'
         - $ref: '#/components/parameters/excludeAlreadyWatched'
         - $ref: '#/components/parameters/search'
@@ -2526,6 +2528,7 @@ paths:
         - $ref: '#/components/parameters/hasWebVideoFiles'
         - $ref: '#/components/parameters/host'
         - $ref: '#/components/parameters/autoTagOneOfVideo'
+        - $ref: '#/components/parameters/stateOneOfVideo'
         - $ref: '#/components/parameters/privacyOneOf'
         - $ref: '#/components/parameters/excludeAlreadyWatched'
         - $ref: '#/components/parameters/search'
@@ -3111,6 +3114,7 @@ paths:
         - $ref: '#/components/parameters/hasWebVideoFiles'
         - $ref: '#/components/parameters/host'
         - $ref: '#/components/parameters/autoTagOneOfVideo'
+        - $ref: '#/components/parameters/stateOneOfVideo'
         - $ref: '#/components/parameters/privacyOneOf'
         - $ref: '#/components/parameters/excludeAlreadyWatched'
         - $ref: '#/components/parameters/search'
@@ -4991,6 +4995,7 @@ paths:
         - $ref: '#/components/parameters/hasWebVideoFiles'
         - $ref: '#/components/parameters/host'
         - $ref: '#/components/parameters/autoTagOneOfVideo'
+        - $ref: '#/components/parameters/stateOneOfVideo'
         - $ref: '#/components/parameters/privacyOneOf'
         - $ref: '#/components/parameters/excludeAlreadyWatched'
         - $ref: '#/components/parameters/search'
@@ -6207,6 +6212,7 @@ paths:
         - $ref: '#/components/parameters/hasWebVideoFiles'
         - $ref: '#/components/parameters/host'
         - $ref: '#/components/parameters/autoTagOneOfVideo'
+        - $ref: '#/components/parameters/stateOneOfVideo'
         - $ref: '#/components/parameters/privacyOneOf'
         - $ref: '#/components/parameters/excludeAlreadyWatched'
         - name: startDate
@@ -8501,6 +8507,19 @@ components:
         - type: array
           items:
             type: string
+      style: form
+      explode: true
+    stateOneOfVideo:
+      name: stateOneOf
+      in: query
+      required: false
+      description: "**PeerTube >= 8.2** **Admins and moderators only** filter on videos that have one of these states"
+      schema:
+        oneOf:
+        - $ref: '#/components/schemas/VideoStateConstant/properties/id'
+        - type: array
+          items:
+            $ref: '#/components/schemas/VideoStateConstant/properties/id'
       style: form
       explode: true
     channelNameOneOf:

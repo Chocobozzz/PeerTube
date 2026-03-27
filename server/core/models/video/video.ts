@@ -1135,6 +1135,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
     autoTagOneOf?: string[]
 
+    stateOneOf?: VideoStateType[]
+
     includeCollaborations?: boolean // default false
   }) {
     VideoModel.throwIfPrivateIncludeWithoutUser(options)
@@ -1156,6 +1158,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         'languageOneOf',
         'host',
         'autoTagOneOf',
+        'stateOneOf',
         'tagsOneOf',
         'tagsAllOf',
         'privacyOneOf',

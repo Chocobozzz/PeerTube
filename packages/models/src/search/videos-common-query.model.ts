@@ -1,5 +1,6 @@
 import { VideoIncludeType } from '../videos/video-include.enum.js'
 import { VideoPrivacyType } from '../videos/video-privacy.enum.js'
+import { VideoStateType } from '../videos/video-state.enum.js'
 import { BooleanBothQuery } from './boolean-both-query.model.js'
 
 // These query parameters can be used with any endpoint that list videos
@@ -42,6 +43,7 @@ export interface VideosCommonQuery {
   // Only available with special user right
   autoTagOneOf?: string[]
   privacyOneOf?: VideoPrivacyType[]
+  stateOneOf?: VideoStateType[]
 }
 
 export interface VideosCommonQueryAfterSanitize extends VideosCommonQuery {

@@ -666,6 +666,7 @@ export class VideosCommand extends AbstractCommand {
       'include',
       'skipCount',
       'autoTagOneOf',
+      'stateOneOf',
       'search',
       'includeScheduledLive'
     ])

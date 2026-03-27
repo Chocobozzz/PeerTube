@@ -572,6 +572,10 @@ export const commonVideosFiltersValidatorFactory = (options: {
       .optional()
       .customSanitizer(toArray)
       .custom(isStringArray).withMessage('Should have a valid autoTagOneOf array'),
+    query('stateOneOf')
+      .optional()
+      .customSanitizer(toArray)
+      .custom(isNumberArray).withMessage('Should have a valid stateOneOf array'),
     query('host')
       .optional()
       .custom(isHostValid),
@@ -591,10 +595,12 @@ export const commonVideosFiltersValidatorFactory = (options: {
       const user = res.locals.oauth?.token.User
 
       if ((user?.hasRight(UserRight.SEE_ALL_VIDEOS) !== true)) {
-        if (query.include || (options.allowPrivacyFilterForAllUsers !== true && query.privacyOneOf) || query.autoTagOneOf) {
+        if (
+          query.include || (options.allowPrivacyFilterForAllUsers !== true && query.privacyOneOf) || query.autoTagOneOf || query.stateOneOf
+        ) {
           return res.fail({
             status: HttpStatusCode.UNAUTHORIZED_401,
-            message: req.t('You are not allowed to see all videos, specify a custom include or auto tags filter')
+            message: req.t('You are not allowed to see all videos, specify a custom include, auto tags or state filter')
           })
         }
       }

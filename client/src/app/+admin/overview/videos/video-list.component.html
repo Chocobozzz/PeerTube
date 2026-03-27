@@ -38,7 +38,7 @@
         <my-video-nsfw-badge [video]="video" theme="red"></my-video-nsfw-badge>
 
         @if (isUnpublished(video)) {
-          <span class="pt-badge badge-yellow">{{ video.state.label }}</span>
+          <span [class]="getVideoStateBadgeClass(video.state.id)">{{ video.state.label }}</span>
         }
 
         @if (isAccountBlocked(video)) {

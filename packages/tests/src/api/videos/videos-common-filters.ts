@@ -11,6 +11,7 @@ import {
   VideoIncludeType,
   VideoPrivacy,
   VideoPrivacyType,
+  VideoState,
   VideosCommonQuery
 } from '@peertube/peertube-models'
 import {
@@ -111,6 +112,7 @@ describe('Test videos filter', function () {
             'categoryOneOf',
             'languageOneOf',
             'privacyOneOf',
+            'stateOneOf',
             'excludeAlreadyWatched',
             'host',
             'search'
@@ -547,6 +549,20 @@ describe('Test videos filter', function () {
         const foundVideo = videos.find(video => video.id === id)
 
         expect(foundVideo).to.be.undefined
+      }
+    })
+
+    it('Should filter by stateOneOf', async function () {
+      for (const path of paths) {
+        {
+          const videos = await listVideos({ server: servers[0], path, stateOneOf: [ VideoState.PUBLISHED ] })
+          expect(videos.length).to.be.at.least(1)
+        }
+
+        {
+          const videos = await listVideos({ server: servers[0], path, stateOneOf: [ VideoState.TO_TRANSCODE ] })
+          expect(videos).to.have.lengthOf(0)
+        }
       }
     })
   })
