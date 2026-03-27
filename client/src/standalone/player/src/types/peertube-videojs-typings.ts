@@ -94,6 +94,8 @@ export type PeerTubePluginOptions = {
     cssPlayerPortraitModeVariable: string
   }
 
+  playbackRate: number
+
   hasAutoplay: () => VideojsAutoplay
 
   videoViewUrl: () => string

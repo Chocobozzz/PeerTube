@@ -10,6 +10,15 @@ export function getParamString (params: URLSearchParams, name: string, defaultVa
     : defaultValue
 }
 
+export function getParamFloat (params: URLSearchParams, name: string, defaultValue?: number) {
+  if (!params.has(name)) return defaultValue
+
+  const value = parseFloat(params.get(name))
+  if (isNaN(value)) return defaultValue
+
+  return value
+}
+
 export function objectToUrlEncoded (obj: any) {
   const str: string[] = []
   for (const key of Object.keys(obj)) {

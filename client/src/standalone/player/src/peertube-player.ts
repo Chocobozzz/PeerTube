@@ -237,10 +237,6 @@ export class PeerTubePlayer {
     this.player = videojs(this.options.playerElement(), videojsOptions) as VideojsPlayer
 
     this.player.ready(() => {
-      if (!isNaN(+this.options.playbackRate)) {
-        this.player.playbackRate(+this.options.playbackRate)
-      }
-
       let alreadyFallback = false
 
       const handleError = () => {
@@ -431,6 +427,7 @@ export class PeerTubePlayer {
 
         poster: () => poster,
 
+        playbackRate: this.options.playbackRate,
         autoPlayerRatio: this.options.autoPlayerRatio
       },
       metrics: {

@@ -103,13 +103,6 @@ class PeerTubePlugin extends Plugin {
       if (isIOS() || isSafari()) this.player.hasStarted(false)
     })
 
-    this.player.on('ratechange', () => {
-      this.currentPlaybackRate = this.player.playbackRate()
-      savePlaybackRateInStore(this.currentPlaybackRate)
-
-      this.player.defaultPlaybackRate(this.currentPlaybackRate)
-    })
-
     this.player.one('canplay', () => {
       const playerOptions = this.player.options_ as VideojsPlayerOptions
 
@@ -119,7 +112,7 @@ class PeerTubePlugin extends Plugin {
       const muted = playerOptions.muted !== undefined ? playerOptions.muted : getStoredMute()
       if (muted !== undefined) this.player.muted(muted)
 
-      const savedPlaybackRate = getStoredPlaybackRate()
+      const savedPlaybackRate = this.options.playbackRate ?? getStoredPlaybackRate()
       if (savedPlaybackRate !== undefined) {
         this.currentPlaybackRate = savedPlaybackRate
         this.player.playbackRate(this.currentPlaybackRate)
@@ -133,6 +126,16 @@ class PeerTubePlugin extends Plugin {
       this.player.on('volumechange', () => {
         saveVolumeInStore(this.player.volume())
         saveMuteInStore(this.player.muted())
+      })
+
+      this.player.on('ratechange', () => {
+        this.currentPlaybackRate = this.player.playbackRate()
+        this.player.defaultPlaybackRate(this.currentPlaybackRate)
+
+        // Don't save in store if the rate change is not a user action
+        if (this.currentPlaybackRate !== this.options.playbackRate) {
+          savePlaybackRateInStore(this.currentPlaybackRate)
+        }
       })
 
       this.player.textTracks().addEventListener('change', () => {

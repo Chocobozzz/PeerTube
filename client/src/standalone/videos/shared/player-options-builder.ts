@@ -16,6 +16,7 @@ import {
 } from '@peertube/peertube-models'
 import {
   getBoolOrDefault,
+  getParamFloat,
   getParamString,
   getParamToggle,
   isP2PEnabled,
@@ -47,7 +48,7 @@ export class PlayerOptionsBuilder {
   private enableApi = false
   private startTime: number | string = 0
   private stopTime: number | string
-  private playbackRate: number | string
+  private playbackRate: number
 
   private title: boolean
   private warningTitle: boolean
@@ -129,7 +130,7 @@ export class PlayerOptionsBuilder {
       this.controls = getParamToggle(params, 'controls', true)
       this.controlBar = getParamToggle(params, 'controlBar', true)
 
-      this.muted = getParamToggle(params, 'muted', undefined)
+      this.muted = getParamToggle(params, 'muted')
       this.loop = getParamToggle(params, 'loop', false)
       this.title = getParamToggle(params, 'title', true)
       this.enableApi = getParamToggle(params, 'api', this.enableApi)
@@ -141,7 +142,7 @@ export class PlayerOptionsBuilder {
       this.subtitle = getParamString(params, 'subtitle')
       this.startTime = getParamString(params, 'start')
       this.stopTime = getParamString(params, 'stop')
-      this.playbackRate = getParamString(params, 'playbackRate')
+      this.playbackRate = getParamFloat(params, 'playbackRate')
 
       this.bigPlayBackgroundColor = getParamString(params, 'bigPlayBackgroundColor')
       this.foregroundColor = getParamString(params, 'foregroundColor')

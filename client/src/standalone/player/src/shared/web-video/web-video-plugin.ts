@@ -72,7 +72,6 @@ class WebVideoPlugin extends Plugin {
     debugLogger('Updating web video file to ' + this.currentVideoFile.fileUrl)
 
     const paused = this.player.paused()
-    const playbackRate = this.player.playbackRate()
     const currentTime = this.player.currentTime()
 
     if (!this.onErrorHandler) {
@@ -97,7 +96,6 @@ class WebVideoPlugin extends Plugin {
     }
 
     this.onPlayHandler = () => {
-      this.player.playbackRate(playbackRate)
       this.player.currentTime(currentTime)
 
       this.player.trigger('resolution-change', {
