@@ -1,4 +1,3 @@
-import { arrayify } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
   ServerErrorCode,
@@ -24,6 +23,7 @@ import {
   isFileValid,
   isIdValid,
   isNotEmptyIntArray,
+  toArray,
   toBooleanOrNull,
   toIntArray,
   toIntOrNull,
@@ -503,27 +503,27 @@ export const commonVideosFiltersValidatorFactory = (options: {
   return [
     query('categoryOneOf')
       .optional()
-      .customSanitizer(arrayify)
+      .customSanitizer(toArray)
       .custom(isNumberArray).withMessage('Should have a valid categoryOneOf array'),
     query('licenceOneOf')
       .optional()
-      .customSanitizer(arrayify)
+      .customSanitizer(toArray)
       .custom(isNumberArray).withMessage('Should have a valid licenceOneOf array'),
     query('languageOneOf')
       .optional()
-      .customSanitizer(arrayify)
+      .customSanitizer(toArray)
       .custom(isStringArray).withMessage('Should have a valid languageOneOf array'),
     query('privacyOneOf')
       .optional()
-      .customSanitizer(arrayify)
+      .customSanitizer(toArray)
       .custom(isNumberArray).withMessage('Should have a valid privacyOneOf array'),
     query('tagsOneOf')
       .optional()
-      .customSanitizer(arrayify)
+      .customSanitizer(toArray)
       .custom(isStringArray).withMessage('Should have a valid tagsOneOf array'),
     query('tagsAllOf')
       .optional()
-      .customSanitizer(arrayify)
+      .customSanitizer(toArray)
       .custom(isStringArray).withMessage('Should have a valid tagsAllOf array'),
     query('nsfw')
       .optional()
@@ -572,7 +572,7 @@ export const commonVideosFiltersValidatorFactory = (options: {
       .isBoolean().withMessage('Should be a valid excludeAlreadyWatched boolean'),
     query('autoTagOneOf')
       .optional()
-      .customSanitizer(arrayify)
+      .customSanitizer(toArray)
       .custom(isStringArray).withMessage('Should have a valid autoTagOneOf array'),
     query('host')
       .optional()

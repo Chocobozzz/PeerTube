@@ -1,4 +1,4 @@
-import { arrayify, forceNumber } from '@peertube/peertube-core-utils'
+import { forceNumber } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
   UserRight,
@@ -21,6 +21,7 @@ import {
   isIdOrUUIDValid,
   isIdValid,
   isUUIDValid,
+  toArray,
   toBooleanOrNull,
   toCompleteUUID,
   toIntArray,
@@ -236,7 +237,7 @@ export const videoPlaylistsAccountValidator = [
 
   query('channelNameOneOf')
     .optional()
-    .customSanitizer(arrayify)
+    .customSanitizer(toArray)
     .custom(isStringArray).withMessage('Should have a valid channelNameOneOf array'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {

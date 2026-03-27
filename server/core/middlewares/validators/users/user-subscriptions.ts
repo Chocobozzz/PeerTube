@@ -1,7 +1,7 @@
+import { FollowState, HttpStatusCode } from '@peertube/peertube-models'
+import { toArray } from '@server/helpers/custom-validators/misc.js'
 import express from 'express'
 import { body, param, query } from 'express-validator'
-import { arrayify } from '@peertube/peertube-core-utils'
-import { FollowState, HttpStatusCode } from '@peertube/peertube-models'
 import { areValidActorHandles, isValidActorHandle } from '../../../helpers/custom-validators/activitypub/actor.js'
 import { WEBSERVER } from '../../../initializers/constants.js'
 import { ActorFollowModel } from '../../../models/actor/actor-follow.js'
@@ -32,7 +32,7 @@ const userSubscriptionAddValidator = [
 
 const areSubscriptionsExistValidator = [
   query('uris')
-    .customSanitizer(arrayify)
+    .customSanitizer(toArray)
     .custom(areValidActorHandles).withMessage('Should have a valid array of URIs'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -70,10 +70,10 @@ const userSubscriptionDeleteValidator = [
 
 export {
   areSubscriptionsExistValidator,
-  userSubscriptionListValidator,
   userSubscriptionAddValidator,
+  userSubscriptionDeleteValidator,
   userSubscriptionGetValidator,
-  userSubscriptionDeleteValidator
+  userSubscriptionListValidator
 }
 
 // ---------------------------------------------------------------------------
