@@ -1,10 +1,9 @@
-import express from 'express'
-import { body, query } from 'express-validator'
+import { HttpStatusCode } from '@peertube/peertube-models'
 import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 import { isStringArray } from '@server/helpers/custom-validators/search.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { arrayify } from '@peertube/peertube-core-utils'
-import { HttpStatusCode } from '@peertube/peertube-models'
+import express from 'express'
+import { body, query } from 'express-validator'
 import {
   isValidClientLogLevel,
   isValidClientLogMessage,
@@ -13,7 +12,7 @@ import {
   isValidClientLogUserAgent,
   isValidLogLevel
 } from '../../helpers/custom-validators/logs.js'
-import { isDateValid } from '../../helpers/custom-validators/misc.js'
+import { isDateValid, toArray } from '../../helpers/custom-validators/misc.js'
 import { areValidationErrors } from './shared/index.js'
 
 const createClientLogValidator = [
@@ -57,7 +56,7 @@ const getLogsValidator = [
     .custom(isValidLogLevel),
   query('tagsOneOf')
     .optional()
-    .customSanitizer(arrayify)
+    .customSanitizer(toArray)
     .custom(isStringArray).withMessage('Should have a valid tags one of array'),
   query('endDate')
     .optional()
@@ -87,7 +86,7 @@ const getAuditLogsValidator = [
 // ---------------------------------------------------------------------------
 
 export {
-  getLogsValidator,
+  createClientLogValidator,
   getAuditLogsValidator,
-  createClientLogValidator
+  getLogsValidator
 }

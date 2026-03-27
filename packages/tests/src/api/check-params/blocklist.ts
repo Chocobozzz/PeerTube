@@ -545,6 +545,19 @@ describe('Test blocklist API validators', function () {
         },
         expectedStatus: HttpStatusCode.OK_200
       })
+
+      let i = 0
+      let j = 0
+
+      await makeGetRequest({
+        url: server.url,
+        path,
+        query: {
+          hosts: new Array(101).map(() => i++ && 'example.com'),
+          accounts: new Array(101).map(() => j++ && 'john@example.com')
+        },
+        expectedStatus: HttpStatusCode.OK_200
+      })
     })
   })
 

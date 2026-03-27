@@ -1,8 +1,7 @@
-import { arrayify } from '@peertube/peertube-core-utils'
 import { isNumberArray } from '@server/helpers/custom-validators/search.js'
 import express from 'express'
 import { body, query } from 'express-validator'
-import { isNotEmptyIntArray, toBooleanOrNull } from '../../../helpers/custom-validators/misc.js'
+import { isNotEmptyIntArray, toArray, toBooleanOrNull } from '../../../helpers/custom-validators/misc.js'
 import { isUserNotificationSettingValid } from '../../../helpers/custom-validators/user-notifications.js'
 import { areValidationErrors } from '../shared/index.js'
 
@@ -14,7 +13,7 @@ export const listUserNotificationsValidator = [
 
   query('typeOneOf')
     .optional()
-    .customSanitizer(arrayify)
+    .customSanitizer(toArray)
     .custom(isNumberArray).withMessage('Should have a valid typeOneOf array'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {

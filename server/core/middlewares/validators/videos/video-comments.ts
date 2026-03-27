@@ -1,4 +1,3 @@
-import { arrayify } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, UserRight, VideoCommentPolicy } from '@peertube/peertube-models'
 import { isStringArray } from '@server/helpers/custom-validators/search.js'
 import { canVideoBeFederated } from '@server/lib/activitypub/videos/federate.js'
@@ -11,6 +10,7 @@ import {
   isBooleanValid,
   isIdOrUUIDValid,
   isIdValid,
+  toArray,
   toBooleanOrNull,
   toCompleteUUID,
   toIntOrNull
@@ -387,7 +387,7 @@ function getCommonVideoCommentsValidators () {
 
     query('autoTagOneOf')
       .optional()
-      .customSanitizer(arrayify)
+      .customSanitizer(toArray)
       .custom(isStringArray).withMessage('Should have a valid autoTagOneOf array')
   ]
 }
