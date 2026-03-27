@@ -25,7 +25,7 @@ const blockAccountValidator = [
     if (user.Account.id === accountToBlock.id) {
       res.fail({
         status: HttpStatusCode.CONFLICT_409,
-        message: 'You cannot block yourself.'
+        message: req.t('You cannot block yourself.')
       })
       return
     }
@@ -78,7 +78,7 @@ const blockServerValidator = [
     if (host === WEBSERVER.HOST) {
       return res.fail({
         status: HttpStatusCode.CONFLICT_409,
-        message: 'You cannot block your own server.'
+        message: req.t('You cannot block your own server.')
       })
     }
 

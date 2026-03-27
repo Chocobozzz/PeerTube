@@ -27,6 +27,8 @@
               </div>
             </div>
           </a>
+
+          <my-account-block-badges class="d-inline-block ms-3" [account]="abuse.reporterAccount"></my-account-block-badges>
         } @else {
           <span i18n>Deleted account</span>
         }
@@ -78,11 +80,15 @@
       </td>
     } @else if(abuse.flaggedAccount) {
       <td>
-        <a [href]="getAccountUrl(abuse)"  class="table-account-link" target="_blank" rel="noopener noreferrer">
-          <span>{{ abuse.flaggedAccount.displayName }}</span>
+        <div>
+        <a [href]="getAccountUrl(abuse)" class="table-account-link d-inline-block" target="_blank" rel="noopener noreferrer">
+          <div>{{ abuse.flaggedAccount.displayName }}</div>
 
-          <span class="account-flagged-handle">{{ abuse.flaggedAccount.nameWithHostForced }}</span>
+          <div class="account-flagged-handle">{{ abuse.flaggedAccount.nameWithHostForced }}</div>
         </a>
+
+        <my-account-block-badges class="d-inline-block ms-3 align-top" [account]="abuse.flaggedAccount"></my-account-block-badges>
+        </div>
       </td>
     } @else {
       <td i18n>Account deleted</td>

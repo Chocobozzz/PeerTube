@@ -5,19 +5,20 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { AbuseState, AbuseStateType, AdminAbuse, ResultList } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import debug from 'debug'
-import { switchMap } from 'rxjs'
+import { map, switchMap } from 'rxjs'
 import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
 import { AdvancedFilterDef } from '../shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { Account } from '../shared-main/account/account.model'
 import { Actor } from '../shared-main/account/actor.model'
-import { ActionDropdownComponent, DropdownAction } from '../shared-main/buttons/action-dropdown.component'
 import { buildDropdownSimpleAndBulkActions } from '../shared-main/buttons/action-dropdown-helpers'
+import { ActionDropdownComponent, DropdownAction } from '../shared-main/buttons/action-dropdown.component'
 import { PTDatePipe } from '../shared-main/common/date.pipe'
 import { NumberFormatterPipe } from '../shared-main/common/number-formatter.pipe'
 import { Video } from '../shared-main/video/video.model'
 import { VideoService } from '../shared-main/video/video.service'
 import { AbuseService } from '../shared-moderation/abuse.service'
+import { AccountBlockBadgesComponent } from '../shared-moderation/account-block-badges.component'
 import { BlocklistService } from '../shared-moderation/blocklist.service'
 import { VideoBlockService } from '../shared-moderation/video-block.service'
 import { TableColumnInfo, TableComponent } from '../shared-tables/table.component'
@@ -66,7 +67,8 @@ type DropdownActionForBuilder<T, D = never> =
     AbuseMessageModalComponent,
     PTDatePipe,
     TableComponent,
-    NumberFormatterPipe
+    NumberFormatterPipe,
+    AccountBlockBadgesComponent
   ]
 })
 export class AbuseListTableComponent implements OnInit, OnDestroy {
@@ -277,45 +279,66 @@ export class AbuseListTableComponent implements OnInit, OnDestroy {
       ? this.abuseService.listAdminAbuses(options)
       : this.abuseService.listUserAbuses(options)
 
-    return observable.pipe(switchMap(async (resultList: ResultList<ProcessedAbuse>) => {
-      const abuses: ProcessedAbuse[] = []
+    return observable.pipe(
+      switchMap(async (resultList: ResultList<ProcessedAbuse>) => {
+        const abuses: ProcessedAbuse[] = []
 
-      for (const abuse of resultList.data) {
-        abuse.reasonHtml = await this.toHtml(abuse.reason)
+        for (const abuse of resultList.data) {
+          abuse.reasonHtml = await this.toHtml(abuse.reason)
 
-        if (abuse.moderationComment) {
-          abuse.moderationCommentHtml = await this.toHtml(abuse.moderationComment)
-        }
-
-        if (abuse.video) {
-          if (abuse.video.channel?.ownerAccount) {
-            abuse.video.channel.ownerAccount = new Account(abuse.video.channel.ownerAccount)
+          if (abuse.moderationComment) {
+            abuse.moderationCommentHtml = await this.toHtml(abuse.moderationComment)
           }
-        }
 
-        if (abuse.comment) {
-          if (abuse.comment.deleted) {
-            abuse.commentHTML = $localize`Deleted comment`
-          } else {
-            abuse.commentHTML = await this.markdownRenderer.textMarkdownToHTML({ markdown: abuse.comment.text, withHtml: true })
+          if (abuse.video) {
+            if (abuse.video.channel?.ownerAccount) {
+              abuse.video.channel.ownerAccount = new Account(abuse.video.channel.ownerAccount)
+            }
           }
+
+          if (abuse.comment) {
+            if (abuse.comment.deleted) {
+              abuse.commentHTML = $localize`Deleted comment`
+            } else {
+              abuse.commentHTML = await this.markdownRenderer.textMarkdownToHTML({ markdown: abuse.comment.text, withHtml: true })
+            }
+          }
+
+          if (abuse.reporterAccount) {
+            abuse.reporterAccount = new Account(abuse.reporterAccount)
+          }
+
+          if (abuse.flaggedAccount) {
+            abuse.flaggedAccount = new Account(abuse.flaggedAccount)
+          }
+
+          if (abuse.updatedAt === abuse.createdAt) delete abuse.updatedAt
+
+          abuses.push(abuse)
         }
 
-        if (abuse.reporterAccount) {
-          abuse.reporterAccount = new Account(abuse.reporterAccount)
-        }
+        return { total: resultList.total, data: abuses }
+      }),
+      switchMap(({ data, total }) => {
+        const accounts = data.map(abuse => abuse.reporterAccount)
+          .concat(data.map(abuse => abuse.flaggedAccount))
+          .filter((account): account is Account => !!account)
 
-        if (abuse.flaggedAccount) {
-          abuse.flaggedAccount = new Account(abuse.flaggedAccount)
-        }
+        const handlesSet = new Set(accounts.map(account => account.nameWithHostForced))
+        const hostsSet = new Set(accounts.map(account => account.host).filter(host => !!host))
 
-        if (abuse.updatedAt === abuse.createdAt) delete abuse.updatedAt
+        return this.blocklistService.getStatus({ accounts: Array.from(handlesSet), hosts: Array.from(hostsSet) }).pipe(
+          map(blockStatus => {
+            for (const account of accounts) {
+              account.mutedByInstance = blockStatus.accounts[account.nameWithHostForced].blockedByServer
+              account.mutedServerByInstance = blockStatus.hosts[account.host].blockedByServer
+            }
 
-        abuses.push(abuse)
-      }
-
-      return { total: resultList.total, data: abuses }
-    }))
+            return { total, data }
+          })
+        )
+      })
+    )
   }
 
   private buildInternalActions (): DropdownActionForBuilder<ProcessedAbuse>[] {
