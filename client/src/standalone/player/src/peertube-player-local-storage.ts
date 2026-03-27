@@ -53,6 +53,20 @@ export function getAverageBandwidthInStore () {
 
 // ---------------------------------------------------------------------------
 
+export function savePreferredResolution (resolution: number) {
+  return setLocalStorage('preferred-resolution', resolution.toString())
+}
+
+export function getStoredPreferredResolution () {
+  return parseLocalStorageInt(getLocalStorage('preferred-resolution'))
+}
+
+export function clearStoredPreferredResolution () {
+  return removeLocalStorage('preferred-resolution')
+}
+
+// ---------------------------------------------------------------------------
+
 export function saveLastSubtitle (language: string) {
   return setLocalStorage('last-subtitle', language)
 }
@@ -150,6 +164,10 @@ function getLocalStorage (key: string) {
 
 function setLocalStorage (key: string, value: string) {
   peertubeLocalStorage.setItem(KEY_PREFIX + key, value)
+}
+
+function removeLocalStorage (key: string) {
+  peertubeLocalStorage.removeItem(KEY_PREFIX + key)
 }
 
 function getSessionStorage (key: string) {
