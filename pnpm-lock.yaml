@@ -471,6 +471,9 @@ importers:
       '@types/yauzl':
         specifier: ^2.10.3
         version: 2.10.3
+      ajv:
+        specifier: ^8.17.1
+        version: 8.20.0
       autocannon:
         specifier: ^8.0.0
         version: 8.0.0
