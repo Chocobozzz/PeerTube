@@ -1,0 +1,3027 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "title": "PeerTube Configuration",
+  "description": "Full configuration schema for a PeerTube server instance. Corresponds to the YAML configuration files (default.yaml / production.yaml). Useful for generating UIs or validating NixOS settings modules (RFC 42 pattern).",
+  "type": "object",
+  "properties": {
+    "listen": {
+      "type": "object",
+      "properties": {
+        "hostname": {
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "port": {
+          "type": "integer",
+          "default": 9000
+        }
+      },
+      "additionalProperties": false
+    },
+    "webserver": {
+      "description": "Correspond to your reverse proxy server_name/listen configuration (i.e., your public PeerTube instance URL)",
+      "type": "object",
+      "properties": {
+        "https": {
+          "type": "boolean",
+          "default": false
+        },
+        "hostname": {
+          "type": "string",
+          "default": "localhost"
+        },
+        "port": {
+          "type": "integer",
+          "default": 9000
+        }
+      },
+      "additionalProperties": false
+    },
+    "secrets": {
+      "description": "Secrets you need to generate the first time you run PeerTube Mainly used to sign JWT tokens and TOTP",
+      "type": "object",
+      "properties": {
+        "peertube": {
+          "description": "Generate one using `openssl rand -hex 32`",
+          "type": "string",
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    },
+    "http_timeouts": {
+      "description": "How long PeerTube should wait to receive the entire request",
+      "type": "object",
+      "properties": {
+        "request": {
+          "type": "string",
+          "default": "5 minutes"
+        }
+      },
+      "additionalProperties": false
+    },
+    "rates_limit": {
+      "type": "object",
+      "properties": {
+        "api": {
+          "type": "object",
+          "properties": {
+            "window": {
+              "description": "50 attempts in 10 seconds",
+              "type": "string",
+              "default": "10 seconds"
+            },
+            "max": {
+              "type": "integer",
+              "default": 50
+            }
+          },
+          "additionalProperties": false
+        },
+        "login": {
+          "type": "object",
+          "properties": {
+            "window": {
+              "description": "15 attempts in 5 min",
+              "type": "string",
+              "default": "5 minutes"
+            },
+            "max": {
+              "type": "integer",
+              "default": 15
+            }
+          },
+          "additionalProperties": false
+        },
+        "signup": {
+          "type": "object",
+          "properties": {
+            "window": {
+              "description": "2 attempts in 5 min (only succeeded attempts are taken into account)",
+              "type": "string",
+              "default": "5 minutes"
+            },
+            "max": {
+              "type": "integer",
+              "default": 2
+            }
+          },
+          "additionalProperties": false
+        },
+        "ask_send_email": {
+          "type": "object",
+          "properties": {
+            "window": {
+              "description": "3 attempts in 5 min",
+              "type": "string",
+              "default": "5 minutes"
+            },
+            "max": {
+              "type": "integer",
+              "default": 3
+            }
+          },
+          "additionalProperties": false
+        },
+        "receive_client_log": {
+          "type": "object",
+          "properties": {
+            "window": {
+              "description": "1 attempt every 2 seconds",
+              "type": "string",
+              "default": "1 minute"
+            },
+            "max": {
+              "type": "integer",
+              "default": 30
+            }
+          },
+          "additionalProperties": false
+        },
+        "plugins": {
+          "type": "object",
+          "properties": {
+            "window": {
+              "description": "500 attempts in 10 seconds (we also serve plugin static files)",
+              "type": "string",
+              "default": "10 seconds"
+            },
+            "max": {
+              "type": "integer",
+              "default": 500
+            }
+          },
+          "additionalProperties": false
+        },
+        "well_known": {
+          "type": "object",
+          "properties": {
+            "window": {
+              "description": "200 attempts in 10 seconds",
+              "type": "string",
+              "default": "10 seconds"
+            },
+            "max": {
+              "type": "integer",
+              "default": 200
+            }
+          },
+          "additionalProperties": false
+        },
+        "feeds": {
+          "type": "object",
+          "properties": {
+            "window": {
+              "description": "50 attempts in 10 seconds",
+              "type": "string",
+              "default": "10 seconds"
+            },
+            "max": {
+              "type": "integer",
+              "default": 50
+            }
+          },
+          "additionalProperties": false
+        },
+        "activity_pub": {
+          "type": "object",
+          "properties": {
+            "window": {
+              "description": "500 attempts in 10 seconds (we can have many AP requests)",
+              "type": "string",
+              "default": "10 seconds"
+            },
+            "max": {
+              "type": "integer",
+              "default": 500
+            }
+          },
+          "additionalProperties": false
+        },
+        "client": {
+          "description": "HTML files generated by PeerTube",
+          "type": "object",
+          "properties": {
+            "window": {
+              "description": "500 attempts in 10 seconds (to not break crawlers)",
+              "type": "string",
+              "default": "10 seconds"
+            },
+            "max": {
+              "type": "integer",
+              "default": 500
+            }
+          },
+          "additionalProperties": false
+        },
+        "download_generate_video": {
+          "description": "A light FFmpeg process is used to generate videos (to merge audio and video streams for example)",
+          "type": "object",
+          "properties": {
+            "window": {
+              "description": "5 attempts in 5 seconds",
+              "type": "string",
+              "default": "5 seconds"
+            },
+            "max": {
+              "type": "integer",
+              "default": 5
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "oauth2": {
+      "type": "object",
+      "properties": {
+        "token_lifetime": {
+          "type": "object",
+          "properties": {
+            "access_token": {
+              "type": "string",
+              "default": "1 day"
+            },
+            "refresh_token": {
+              "type": "string",
+              "default": "2 weeks"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "trust_proxy": {
+      "description": "Proxies to trust to get real client IP If you run PeerTube just behind a local proxy (nginx), keep 'loopback' If you run PeerTube behind a remote proxy, add the proxy IP address (or subnet)",
+      "type": "array",
+      "default": [
+        "loopback"
+      ],
+      "items": {
+        "type": "string",
+        "default": "loopback"
+      }
+    },
+    "database": {
+      "description": "Your database name will be database.name OR 'peertube'+database.suffix",
+      "type": "object",
+      "properties": {
+        "hostname": {
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "port": {
+          "type": "integer",
+          "default": 5432
+        },
+        "ssl": {
+          "type": "boolean",
+          "default": false
+        },
+        "ssl_settings": {
+          "type": "object",
+          "properties": {
+            "reject_unauthorized": {
+              "type": "boolean",
+              "default": false
+            },
+            "ca": {
+              "description": "'/absolute/path/to/server-certificates/root.crt'",
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            },
+            "cert": {
+              "description": "'/absolute/path/to/client-certificates/postgresql.crt'",
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            },
+            "key": {
+              "description": "'/absolute/path/to/client-key/postgresql.key'",
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            }
+          },
+          "additionalProperties": false
+        },
+        "suffix": {
+          "type": "string",
+          "default": "_dev"
+        },
+        "username": {
+          "type": "string",
+          "default": "peertube"
+        },
+        "password": {
+          "type": "string",
+          "default": "peertube"
+        },
+        "pool": {
+          "type": "object",
+          "properties": {
+            "max": {
+              "type": "integer",
+              "default": 5
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "redis": {
+      "description": "Redis server for short time storage You can also specify a 'socket' path to a unix socket but first need to set 'hostname' and 'port' to null",
+      "type": "object",
+      "properties": {
+        "hostname": {
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "port": {
+          "type": "integer",
+          "default": 6379
+        },
+        "auth": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        "db": {
+          "type": "integer",
+          "default": 0
+        },
+        "enable_tls": {
+          "type": "boolean",
+          "default": false
+        },
+        "tls_settings": {
+          "type": "object",
+          "properties": {
+            "reject_unauthorized": {
+              "type": "boolean",
+              "default": false
+            },
+            "ca": {
+              "description": "'/absolute/path/to/server-certificates/root.crt'",
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            },
+            "cert": {
+              "description": "'/absolute/path/to/client-certificates/redis.crt'",
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            },
+            "key": {
+              "description": "'/absolute/path/to/client-key/redis.key'",
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            }
+          },
+          "additionalProperties": false
+        },
+        "sentinel": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false
+            },
+            "enable_tls": {
+              "type": "boolean",
+              "default": false
+            },
+            "tls_settings": {
+              "type": "object",
+              "properties": {
+                "reject_unauthorized": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "ca": {
+                  "description": "'/absolute/path/to/server-certificates/root.crt'",
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "default": null
+                },
+                "cert": {
+                  "description": "'/absolute/path/to/client-certificates/redis.crt'",
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "default": null
+                },
+                "key": {
+                  "description": "'/absolute/path/to/client-key/redis.key'",
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "default": null
+                }
+              },
+              "additionalProperties": false
+            },
+            "master_name": {
+              "type": "string",
+              "default": ""
+            },
+            "password": {
+              "type": "string",
+              "default": ""
+            },
+            "sentinels": {
+              "type": "array",
+              "default": [
+                "host: ''"
+              ],
+              "items": {
+                "type": "string",
+                "default": "host: ''"
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "smtp": {
+      "description": "SMTP server to send emails",
+      "type": "object",
+      "properties": {
+        "transport": {
+          "description": "smtp or sendmail",
+          "type": "string",
+          "default": "smtp"
+        },
+        "sendmail": {
+          "description": "Path to sendmail command. Required if you use sendmail transport",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        "hostname": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        "port": {
+          "description": "If you use StartTLS: 587",
+          "type": "integer",
+          "default": 465
+        },
+        "username": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        "password": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        "tls": {
+          "description": "If you use StartTLS: false",
+          "type": "boolean",
+          "default": true
+        },
+        "disable_starttls": {
+          "type": "boolean",
+          "default": false
+        },
+        "ca_file": {
+          "description": "Used for self signed certificates",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        "from_address": {
+          "type": "string",
+          "default": "admin@example.com"
+        }
+      },
+      "additionalProperties": false
+    },
+    "storage": {
+      "description": "From the project root directory",
+      "type": "object",
+      "properties": {
+        "tmp": {
+          "description": "Use to download data (imports etc), store uploaded files before and during processing...",
+          "type": "string",
+          "default": "storage/tmp/"
+        },
+        "tmp_persistent": {
+          "description": "As tmp but the directory is not cleaned up between PeerTube restarts",
+          "type": "string",
+          "default": "storage/tmp-persistent/"
+        },
+        "bin": {
+          "type": "string",
+          "default": "storage/bin/"
+        },
+        "avatars": {
+          "type": "string",
+          "default": "storage/avatars/"
+        },
+        "web_videos": {
+          "type": "string",
+          "default": "storage/web-videos/"
+        },
+        "streaming_playlists": {
+          "type": "string",
+          "default": "storage/streaming-playlists/"
+        },
+        "original_video_files": {
+          "type": "string",
+          "default": "storage/original-video-files/"
+        },
+        "redundancy": {
+          "type": "string",
+          "default": "storage/redundancy/"
+        },
+        "logs": {
+          "type": "string",
+          "default": "storage/logs/"
+        },
+        "previews": {
+          "type": "string",
+          "default": "storage/previews/"
+        },
+        "thumbnails": {
+          "type": "string",
+          "default": "storage/thumbnails/"
+        },
+        "storyboards": {
+          "type": "string",
+          "default": "storage/storyboards/"
+        },
+        "torrents": {
+          "type": "string",
+          "default": "storage/torrents/"
+        },
+        "captions": {
+          "type": "string",
+          "default": "storage/captions/"
+        },
+        "cache": {
+          "type": "string",
+          "default": "storage/cache/"
+        },
+        "plugins": {
+          "type": "string",
+          "default": "storage/plugins/"
+        },
+        "well_known": {
+          "type": "string",
+          "default": "storage/well-known/"
+        },
+        "uploads": {
+          "description": "Various admin/user uploads that are not suitable for the folders above",
+          "type": "string",
+          "default": "storage/uploads/"
+        },
+        "client_overrides": {
+          "description": "Overridable client files in client/dist/assets/images: - default-avatar-account-48x48.png - default-avatar-account.png - default-avatar-video-channel-48x48.png - default-avatar-video-channel.png - default-playlist.jpg Could contain for example \"assets/images/default-playlist.jpg\" If the file exists, peertube will serve it If not, peertube will fallback to the default file",
+          "type": "string",
+          "default": "storage/client-overrides/"
+        }
+      },
+      "additionalProperties": false
+    },
+    "static_files": {
+      "type": "object",
+      "properties": {
+        "private_files_require_auth": {
+          "description": "Require and check user authentication when accessing private files (internal/private video files)",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "object_storage": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "endpoint": {
+          "description": "Without protocol, will default to HTTPS Your S3 provider must support virtual hosting of buckets as PeerTube doesn't support path style requests 's3.amazonaws.com' or 's3.fr-par.scw.cloud' for example",
+          "type": "string",
+          "default": ""
+        },
+        "region": {
+          "type": "string",
+          "default": "us-east-1"
+        },
+        "force_path_style": {
+          "description": "Use path style requests if the S3 provider does not support virtual hosting of buckets",
+          "type": "boolean",
+          "default": false
+        },
+        "upload_acl": {
+          "type": "object",
+          "properties": {
+            "public": {
+              "description": "Set this ACL on each uploaded object of public/unlisted videos Use null if your S3 provider does not support object ACL",
+              "type": "string",
+              "default": "public-read"
+            },
+            "private": {
+              "description": "Set this ACL on each uploaded object of private/internal videos PeerTube can proxify requests to private objects so your users can access them Use null if your S3 provider does not support object ACL",
+              "type": "string",
+              "default": "private"
+            }
+          },
+          "additionalProperties": false
+        },
+        "proxy": {
+          "type": "object",
+          "properties": {
+            "proxify_private_files": {
+              "description": "If private files (private/internal video files) have a private ACL, users can't access directly the ressource PeerTube can proxify requests between your object storage service and your users If you disable PeerTube proxy, ensure you use your own proxy that is able to access the private files Or you can also set a public ACL for private files in object storage if you don't want to use a proxy",
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "credentials": {
+          "type": "object",
+          "properties": {
+            "access_key_id": {
+              "description": "You can also use AWS_ACCESS_KEY_ID env variable",
+              "type": "string",
+              "default": ""
+            },
+            "secret_access_key": {
+              "description": "You can also use AWS_SECRET_ACCESS_KEY env variable",
+              "type": "string",
+              "default": ""
+            }
+          },
+          "additionalProperties": false
+        },
+        "max_upload_part": {
+          "description": "Maximum amount to upload in one request to object storage",
+          "type": "string",
+          "default": "100MB"
+        },
+        "max_request_attempts": {
+          "description": "Maximum number of attempts to make a request to object storage Some object storage providers (for instance Backblaze) expects the client to retry upload upon 5xx errors If you're using such a provider then you can increase this value",
+          "type": "integer",
+          "default": 3
+        },
+        "streaming_playlists": {
+          "type": "object",
+          "properties": {
+            "bucket_name": {
+              "description": "Bucket name created on your object storage provider PeerTube will access it via {bucket_name}.example.com",
+              "type": "string",
+              "default": "peertube"
+            },
+            "prefix": {
+              "description": "Allows setting all buckets to the same value but with a different prefix",
+              "type": "string",
+              "default": "streaming-playlists/"
+            },
+            "base_url": {
+              "description": "Base url for object URL generation, scheme and host will be replaced by this URL Useful when you want to use a CDN/external proxy Example: 'https://mirror.example.com'",
+              "type": "string",
+              "default": ""
+            },
+            "store_live_streams": {
+              "description": "PeerTube makes many small requests to the object storage provider to upload/delete/update live chunks which can be a problem depending on your object storage provider You can also choose to disable this feature to reduce live streams latency Live stream replays are not affected by this setting, so they are uploaded in object storage as regular VOD videos",
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "web_videos": {
+          "type": "object",
+          "properties": {
+            "bucket_name": {
+              "type": "string",
+              "default": "peertube"
+            },
+            "prefix": {
+              "type": "string",
+              "default": "web-videos/"
+            },
+            "base_url": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          "additionalProperties": false
+        },
+        "user_exports": {
+          "type": "object",
+          "properties": {
+            "bucket_name": {
+              "type": "string",
+              "default": "peertube"
+            },
+            "prefix": {
+              "type": "string",
+              "default": "user-exports/"
+            },
+            "base_url": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          "additionalProperties": false
+        },
+        "original_video_files": {
+          "description": "Same settings but for original video files",
+          "type": "object",
+          "properties": {
+            "bucket_name": {
+              "type": "string",
+              "default": "peertube"
+            },
+            "prefix": {
+              "type": "string",
+              "default": "original-video-files/"
+            },
+            "base_url": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          "additionalProperties": false
+        },
+        "captions": {
+          "description": "Video captions",
+          "type": "object",
+          "properties": {
+            "bucket_name": {
+              "type": "string",
+              "default": "peertube"
+            },
+            "prefix": {
+              "type": "string",
+              "default": "captions/"
+            },
+            "base_url": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "log": {
+      "type": "object",
+      "properties": {
+        "level": {
+          "description": "'debug' | 'info' | 'warn' | 'error'",
+          "type": "string",
+          "default": "info"
+        },
+        "rotation": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Enabled by default, if disabled make sure that 'storage.logs' is pointing to a folder handled by logrotate",
+              "type": "boolean",
+              "default": true
+            },
+            "max_file_size": {
+              "type": "string",
+              "default": "12MB"
+            },
+            "max_files": {
+              "type": "integer",
+              "default": 20
+            }
+          },
+          "additionalProperties": false
+        },
+        "anonymize_ip": {
+          "type": "boolean",
+          "default": false
+        },
+        "log_ping_requests": {
+          "type": "boolean",
+          "default": true
+        },
+        "log_tracker_unknown_infohash": {
+          "type": "boolean",
+          "default": true
+        },
+        "log_http_requests": {
+          "description": "If you have many concurrent requests, you can disable HTTP requests logging to reduce PeerTube CPU load",
+          "type": "boolean",
+          "default": true
+        },
+        "prettify_sql": {
+          "type": "boolean",
+          "default": false
+        },
+        "accept_client_log": {
+          "description": "Accept warn/error logs coming from the client",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "open_telemetry": {
+      "description": "Support of Open Telemetry metrics and tracing For more information: https://docs.joinpeertube.org/maintain/observability",
+      "type": "object",
+      "properties": {
+        "metrics": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false
+            },
+            "playback_stats_interval": {
+              "description": "How often viewers send playback stats to server",
+              "type": "string",
+              "default": "15 seconds"
+            },
+            "http_request_duration": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "description": "You can disable HTTP request duration metric that can have a high tag cardinality",
+                  "type": "boolean",
+                  "default": false
+                }
+              },
+              "additionalProperties": false
+            },
+            "prometheus_exporter": {
+              "description": "Create a prometheus exporter server on this port so prometheus server can scrape PeerTube metrics",
+              "type": "object",
+              "properties": {
+                "hostname": {
+                  "type": "string",
+                  "default": "127.0.0.1"
+                },
+                "port": {
+                  "type": "integer",
+                  "default": 9091
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "tracing": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "If tracing is enabled, you must provide --experimental-loader=@opentelemetry/instrumentation/hook.mjs flag to the node binary",
+              "type": "boolean",
+              "default": false
+            },
+            "jaeger_exporter": {
+              "description": "Send traces to a Jaeger compatible endpoint",
+              "type": "object",
+              "properties": {
+                "endpoint": {
+                  "type": "string",
+                  "default": ""
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "trending": {
+      "type": "object",
+      "properties": {
+        "videos": {
+          "type": "object",
+          "properties": {
+            "interval_days": {
+              "description": "Compute trending videos for the last x days for 'most-viewed' algorithm",
+              "type": "integer",
+              "default": 7
+            },
+            "algorithms": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "array",
+                  "default": [
+                    "hot",
+                    "most-viewed",
+                    "most-liked"
+                  ],
+                  "items": {
+                    "type": "string",
+                    "default": "hot"
+                  }
+                },
+                "default": {
+                  "type": "string",
+                  "default": "hot"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "redundancy": {
+      "description": "Cache remote videos on your server, to help other instances to broadcast the video You can define multiple caches using different sizes/strategies Once you have defined your strategies, choose which instances you want to cache in admin -> manage follows -> following",
+      "type": "object",
+      "properties": {
+        "videos": {
+          "type": "object",
+          "properties": {
+            "check_interval": {
+              "description": "How often you want to check new videos to cache",
+              "type": "string",
+              "default": "1 hour"
+            },
+            "strategies": {
+              "description": "Just uncomment strategies you want",
+              "type": "array",
+              "items": {},
+              "default": []
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "remote_redundancy": {
+      "description": "Other instances that duplicate your content",
+      "type": "object",
+      "properties": {
+        "videos": {
+          "type": "object",
+          "properties": {
+            "accept_from": {
+              "description": "PeerTube doesn't remove existing redundancies when you change this setting You can remove them in the web interface: https://docs.joinpeertube.org/admin/following-instances#instances-redundancy Available values: * nobody: Do not accept remote redundancies * followings: Accept redundancies from instance followings * anybody: Accept remote redundancies from anybody",
+              "type": "string",
+              "default": "anybody"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "csp": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "report_only": {
+          "description": "CSP directives are still being tested, so disable the report only mode at your own risk!",
+          "type": "boolean",
+          "default": true
+        },
+        "report_uri": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        }
+      },
+      "additionalProperties": false
+    },
+    "security": {
+      "type": "object",
+      "properties": {
+        "frameguard": {
+          "description": "Set the X-Frame-Options header to help to mitigate clickjacking attacks",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "powered_by_header": {
+          "description": "Set x-powered-by HTTP header to \"PeerTube\" Can help remote software to know this is a PeerTube instance",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "tracker": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "description": "If you disable the tracker, you disable the P2P on your PeerTube instance",
+          "type": "boolean",
+          "default": true
+        },
+        "private": {
+          "description": "Only handle requests on your videos If you set this to false it means you have a public tracker Then, it is possible that clients overload your instance with external torrents",
+          "type": "boolean",
+          "default": true
+        },
+        "reject_too_many_announces": {
+          "description": "Reject peers that do a lot of announces (could improve privacy of TCP/UDP peers)",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "history": {
+      "type": "object",
+      "properties": {
+        "videos": {
+          "type": "object",
+          "properties": {
+            "max_age": {
+              "description": "If you want to limit users videos history -1 means there is no limitations Other values could be '6 months' or '30 days' etc (PeerTube will periodically delete old entries from database)",
+              "type": "integer",
+              "default": -1
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "views": {
+      "type": "object",
+      "properties": {
+        "videos": {
+          "type": "object",
+          "properties": {
+            "remote": {
+              "description": "PeerTube creates a database entry every hour for each video to track views over a period of time This is used in particular by the Trending/Hot algorithms PeerTube can remove views from remote videos if you want to reduce your database size (video view counter will not be altered) -1 means no cleanup Other values could be '6 months' or '30 days' etc (PeerTube will periodically delete old entries from database)",
+              "type": "object",
+              "properties": {
+                "max_age": {
+                  "type": "string",
+                  "default": "30 days"
+                }
+              },
+              "additionalProperties": false
+            },
+            "local": {
+              "description": "PeerTube can also remove views informations from local videos Local views are used by the Trending/Hot algorithms, as remote views, but they are also used to display view stats to video makers Video view counter will not be altered, but video makers won't be able to see views stats of their videos before \"max_age\" -1 means no cleanup Other values could be '6 months' or '30 days' etc (PeerTube will periodically delete old entries from database)",
+              "type": "object",
+              "properties": {
+                "max_age": {
+                  "type": "integer",
+                  "default": -1
+                }
+              },
+              "additionalProperties": false
+            },
+            "local_buffer_update_interval": {
+              "description": "PeerTube buffers local video views before updating and federating the video",
+              "type": "string",
+              "default": "30 minutes"
+            },
+            "view_expiration": {
+              "description": "How long does it take to count again a view from the same user",
+              "type": "string",
+              "default": "1 hour"
+            },
+            "count_view_after": {
+              "description": "Minimum amount of time the viewer has to watch the video before PeerTube adds a view",
+              "type": "string",
+              "default": "10 seconds"
+            },
+            "trust_viewer_session_id": {
+              "description": "Player can send a session id string to track the user Since this can be spoofed by users to create fake views, you have the option to disable this feature If disabled, PeerTube will use the IP address to track the same user (default behavior before PeerTube 6.1)",
+              "type": "boolean",
+              "default": true
+            },
+            "watching_interval": {
+              "description": "How often the web browser sends \"is watching\" information to the server Increase the value or set null to disable it if you plan to have many viewers",
+              "type": "object",
+              "properties": {
+                "anonymous": {
+                  "description": "Non logged-in viewers",
+                  "type": "string",
+                  "default": "5 seconds"
+                },
+                "users": {
+                  "description": "Logged-in users of your instance Unlike anonymous viewers, this endpoint is also used to store the \"last watched video timecode\" for your users Increasing this value reduces the accuracy of the video resume",
+                  "type": "string",
+                  "default": "5 seconds"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "geo_ip": {
+      "description": "Used to get country location of views of local videos",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "country": {
+          "type": "object",
+          "properties": {
+            "database_url": {
+              "type": "string",
+              "default": "https://dbip.mirror.framasoft.org/files/dbip-country-lite-latest.mmdb"
+            }
+          },
+          "additionalProperties": false
+        },
+        "city": {
+          "type": "object",
+          "properties": {
+            "database_url": {
+              "type": "string",
+              "default": "https://dbip.mirror.framasoft.org/files/dbip-city-lite-latest.mmdb"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "plugins": {
+      "type": "object",
+      "properties": {
+        "index": {
+          "description": "The website PeerTube will ask for available PeerTube plugins and themes This is an unmoderated plugin index, so only install plugins/themes you trust",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "check_latest_versions_interval": {
+              "description": "How often you want to check new plugins/themes versions",
+              "type": "string",
+              "default": "4 hours"
+            },
+            "url": {
+              "type": "string",
+              "default": "https://packages.joinpeertube.org"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "federation": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "description": "Enable ActivityPub endpoints (inbox/outbox)",
+          "type": "boolean",
+          "default": true
+        },
+        "prevent_ssrf": {
+          "description": "Prevent SSRF requests (requests to your internal network for example) by checking the request IP address More information about SSRF: https://portswigger.net/web-security/ssrf",
+          "type": "boolean",
+          "default": true
+        },
+        "sign_federated_fetches": {
+          "description": "Some federated software such as Mastodon may require an HTTP signature to access content",
+          "type": "boolean",
+          "default": true
+        },
+        "videos": {
+          "type": "object",
+          "properties": {
+            "federate_unlisted": {
+              "type": "boolean",
+              "default": false
+            },
+            "cleanup_remote_interactions": {
+              "description": "Add a weekly job that cleans up remote AP interactions on local videos (shares, rates and comments) It removes objects that do not exist anymore, and potentially fix their URLs",
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "peertube": {
+      "type": "object",
+      "properties": {
+        "check_latest_version": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Check and notify admins of new PeerTube versions",
+              "type": "boolean",
+              "default": true
+            },
+            "url": {
+              "description": "You can use a custom URL if your want, that respect the format behind https://joinpeertube.org/api/v1/versions.json",
+              "type": "string",
+              "default": "https://joinpeertube.org/api/v1/versions.json"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "webadmin": {
+      "type": "object",
+      "properties": {
+        "configuration": {
+          "type": "object",
+          "properties": {
+            "edition": {
+              "type": "object",
+              "properties": {
+                "allowed": {
+                  "description": "Set this to false if you don't want to allow config edition in the web interface by instance admins",
+                  "type": "boolean",
+                  "default": true
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "feeds": {
+      "description": "XML, Atom or JSON feeds",
+      "type": "object",
+      "properties": {
+        "videos": {
+          "type": "object",
+          "properties": {
+            "count": {
+              "description": "Default number of videos displayed in feeds",
+              "type": "integer",
+              "default": 20
+            }
+          },
+          "additionalProperties": false
+        },
+        "comments": {
+          "type": "object",
+          "properties": {
+            "count": {
+              "description": "Default number of comments displayed in feeds",
+              "type": "integer",
+              "default": 20
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "remote_runners": {
+      "type": "object",
+      "properties": {
+        "stalled_jobs": {
+          "description": "Consider jobs that are processed by a remote runner as stalled after this period of time without any update",
+          "type": "object",
+          "properties": {
+            "live": {
+              "type": "string",
+              "default": "30 seconds"
+            },
+            "vod": {
+              "type": "string",
+              "default": "2 minutes"
+            },
+            "studio": {
+              "type": "string",
+              "default": "2 minutes"
+            },
+            "transcription": {
+              "type": "string",
+              "default": "2 minutes"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "thumbnails": {
+      "type": "object",
+      "properties": {
+        "generation_from_video": {
+          "description": "When automatically generating a thumbnail from the video",
+          "type": "object",
+          "properties": {
+            "frames_to_analyze": {
+              "description": "How many frames to analyze at the middle of the video to select the most appropriate one Increasing this value will increase CPU and memory usage when generating the thumbnail, especially for high video resolution Minimum value is 2",
+              "type": "integer",
+              "default": 50
+            }
+          },
+          "additionalProperties": false
+        },
+        "sizes": {
+          "type": "array",
+          "default": [
+            {
+              "width": 280,
+              "height": 157,
+              "aspect_ratio": "16:9"
+            },
+            {
+              "width": 850,
+              "height": 480,
+              "aspect_ratio": "16:9"
+            },
+            {
+              "width": 1280,
+              "height": 720,
+              "aspect_ratio": "16:9"
+            },
+            {
+              "width": 1920,
+              "height": 1080,
+              "aspect_ratio": "16:9"
+            },
+            {
+              "width": 1400,
+              "height": 1400,
+              "aspect_ratio": "1:1"
+            }
+          ],
+          "items": {
+            "type": "object",
+            "properties": {
+              "width": {
+                "type": "integer",
+                "default": 280
+              },
+              "height": {
+                "type": "integer",
+                "default": 157
+              },
+              "aspect_ratio": {
+                "type": "string",
+                "default": "16:9"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "stats": {
+      "type": "object",
+      "properties": {
+        "registration_requests": {
+          "description": "Display registration requests stats (average response time, total requests...)",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "abuses": {
+          "description": "Display abuses stats (average response time, total abuses...)",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "total_moderators": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "total_admins": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "webrtc": {
+      "type": "object",
+      "properties": {
+        "stun_servers": {
+          "description": "STUN servers used by web browser to discover its public IP address, used by the player to establish P2P connections You can add or replace these STUN server URLs, or install your own",
+          "type": "array",
+          "default": [
+            "stun:stunserver2025.stunprotocol.org",
+            "stun:stun.framasoft.org",
+            "stun:stun.ekiga.net",
+            "stun:stun.freeswitch.org"
+          ],
+          "items": {
+            "type": "string",
+            "default": "stun:stunserver2025.stunprotocol.org"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "nsfw_flags_settings": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "description": "Allow logged-in/anonymous users to have a more granular control over their NSFW policy using NSFW flags (violent content, etc.) set by video authors",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "download_generate_video": {
+      "type": "object",
+      "properties": {
+        "max_parallel_downloads": {
+          "description": "Max parallel downloads on your instance Each download spawns an ffmpeg process The ffmpeg process ends when users have downloaded the entire file or cancelled the download",
+          "type": "integer",
+          "default": 100
+        }
+      },
+      "additionalProperties": false
+    },
+    "admin": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "description": "Used to generate the root user at first startup And to receive emails from the contact form",
+          "type": "string",
+          "default": "admin@example.com"
+        }
+      },
+      "additionalProperties": false
+    },
+    "contact_form": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "signup": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "limit": {
+          "description": "When the total number of users in your instance reaches this limit, registrations are disabled. -1 == unlimited",
+          "type": "integer",
+          "default": 10
+        },
+        "minimum_age": {
+          "description": "Used to configure the signup form",
+          "type": "integer",
+          "default": 16
+        },
+        "requires_approval": {
+          "description": "Users fill a form to register so moderators can accept/reject the registration",
+          "type": "boolean",
+          "default": true
+        },
+        "requires_email_verification": {
+          "type": "boolean",
+          "default": false
+        },
+        "filters": {
+          "type": "object",
+          "properties": {
+            "cidr": {
+              "description": "You can specify CIDR ranges to whitelist (empty = no filtering) or blacklist",
+              "type": "object",
+              "properties": {
+                "whitelist": {
+                  "type": "string",
+                  "default": "[]"
+                },
+                "blacklist": {
+                  "type": "string",
+                  "default": "[]"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "user": {
+      "type": "object",
+      "properties": {
+        "history": {
+          "type": "object",
+          "properties": {
+            "videos": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "description": "Enable or disable video history by default for new users",
+                  "type": "boolean",
+                  "default": true
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "video_quota": {
+          "description": "Default value of maximum video bytes the user can upload Does not take into account transcoded files or account export archives (that can include user uploaded files) Byte format is supported (\"1GB\" etc) -1 == unlimited",
+          "type": "integer",
+          "default": -1
+        },
+        "video_quota_daily": {
+          "type": "integer",
+          "default": -1
+        },
+        "default_channel_name": {
+          "description": "The placeholder $1 is used to represent the user's username",
+          "type": "string",
+          "default": "Main $1 channel"
+        },
+        "password_constraints": {
+          "type": "object",
+          "properties": {
+            "min_length": {
+              "type": "integer",
+              "default": 8
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "video_channels": {
+      "type": "object",
+      "properties": {
+        "max_per_user": {
+          "description": "Allows each user to create up to 20 video channels",
+          "type": "integer",
+          "default": 20
+        },
+        "max_collaborators_per_channel": {
+          "type": "integer",
+          "default": 20
+        }
+      },
+      "additionalProperties": false
+    },
+    "transcoding": {
+      "description": "If enabled, the video will be transcoded to mp4 (x264) with `faststart` flag In addition, if some resolutions are enabled the mp4 video file will be transcoded to these new resolutions Please, do not disable transcoding since many uploaded videos will not work",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "original_file": {
+          "type": "object",
+          "properties": {
+            "keep": {
+              "description": "If false the uploaded file is deleted after transcoding If yes it is not deleted but moved in a dedicated folder or object storage",
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "allow_additional_extensions": {
+          "description": "Allow your users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, m2ts, .mxf, .nut videos",
+          "type": "boolean",
+          "default": true
+        },
+        "allow_audio_files": {
+          "description": "If a user uploads an audio file, PeerTube will create a video by merging the preview file and the audio file",
+          "type": "boolean",
+          "default": true
+        },
+        "remote_runners": {
+          "description": "Enable remote runners to transcode your videos If enabled, your instance won't transcode the videos itself At least 1 remote runner must be configured to transcode your videos",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "threads": {
+          "description": "Amount of threads used by ffmpeg for 1 local transcoding job",
+          "type": "integer",
+          "default": 1
+        },
+        "concurrency": {
+          "description": "Amount of local transcoding jobs to execute in parallel",
+          "type": "integer",
+          "default": 1
+        },
+        "profile": {
+          "description": "Choose the local transcoding profile New profiles can be added by plugins Available in core PeerTube: 'default'",
+          "type": "string",
+          "default": "default"
+        },
+        "resolutions": {
+          "description": "Only created if the original video has a higher resolution, uses more storage!",
+          "type": "object",
+          "properties": {
+            "0p": {
+              "description": "audio-only (creates mp4 without video stream)",
+              "type": "boolean",
+              "default": false
+            },
+            "144p": {
+              "type": "boolean",
+              "default": false
+            },
+            "240p": {
+              "type": "boolean",
+              "default": false
+            },
+            "360p": {
+              "type": "boolean",
+              "default": false
+            },
+            "480p": {
+              "type": "boolean",
+              "default": false
+            },
+            "720p": {
+              "type": "boolean",
+              "default": false
+            },
+            "1080p": {
+              "type": "boolean",
+              "default": false
+            },
+            "1440p": {
+              "type": "boolean",
+              "default": false
+            },
+            "2160p": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "always_transcode_original_resolution": {
+          "description": "Transcode and keep original resolution, even if it's above your maximum enabled resolution",
+          "type": "boolean",
+          "default": true
+        },
+        "always_transcode_podcast_optimized_audio": {
+          "description": "If web_videos transcoding is not enabled, some podcast applications may not be able to correctly play the HLS audio file Enabling this option ensures that PeerTube always produces an audio file in a format compatible with podcasts even if web_videos transcoding or audio resolution are disabled",
+          "type": "boolean",
+          "default": true
+        },
+        "fps": {
+          "type": "object",
+          "properties": {
+            "max": {
+              "description": "Cap transcoded video FPS Max resolution file still keeps the original FPS",
+              "type": "integer",
+              "default": 60
+            }
+          },
+          "additionalProperties": false
+        },
+        "web_videos": {
+          "description": "Generate videos in a web compatible format If you also enabled the hls format, it will multiply videos storage by 2",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "hls": {
+          "description": "/!\\ Requires ffmpeg >= 4.1 Generate HLS playlists and fragmented MP4 files. Better playback than with Web Videos: * Resolution change is smoother * Faster playback in particular with long videos * More stable playback (less bugs/infinite loading) If you also enabled the web videos format, it will multiply videos storage by 2",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "split_audio_and_video": {
+              "description": "Store the audio stream in a separate file from the video This option adds the ability for the HLS player to propose the \"Audio only\" quality to users It also saves disk space by not duplicating the audio stream in each resolution file /!\\ If enabled, remote PeerTube instances < 6.3.0 won't be able to play these videos",
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "live": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "max_duration": {
+          "description": "Limit lives duration -1 == unlimited For example: '5 hours'",
+          "type": "integer",
+          "default": -1
+        },
+        "max_instance_lives": {
+          "description": "Limit max number of live videos created on your instance -1 == unlimited",
+          "type": "integer",
+          "default": 20
+        },
+        "max_user_lives": {
+          "description": "Limit max number of live videos created by a user on your instance -1 == unlimited",
+          "type": "integer",
+          "default": 3
+        },
+        "allow_replay": {
+          "description": "Allow your users to save a replay of their live PeerTube will transcode segments in a video file If the user daily/total quota is reached, PeerTube will stop the live /!\\ transcoding.enabled (and not live.transcoding.enabled) has to be true to create a replay",
+          "type": "boolean",
+          "default": true
+        },
+        "dvr": {
+          "description": "Allows viewers to rewind live streams",
+          "type": "object",
+          "properties": {
+            "max_window": {
+              "description": "Set 0 to disable DVR",
+              "type": "string",
+              "default": "1 hour"
+            }
+          },
+          "additionalProperties": false
+        },
+        "latency_setting": {
+          "description": "Allow your users to change latency settings (small latency/default/high latency) Small latency live streams cannot use P2P High latency live streams can increase P2P ratio",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "rtmp": {
+          "description": "Your firewall should accept traffic from this port in TCP if you enable live",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "hostname": {
+              "description": "Listening hostname/port for RTMP server '::' to listen on IPv6 and IPv4, '0.0.0.0' to listen on IPv4 Use null to automatically listen on '::' if IPv6 is available, or '0.0.0.0' otherwise",
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            },
+            "port": {
+              "type": "integer",
+              "default": 1935
+            },
+            "public_hostname": {
+              "description": "Public hostname of your RTMP server Use null to use the same value than `webserver.hostname`",
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            }
+          },
+          "additionalProperties": false
+        },
+        "rtmps": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false
+            },
+            "hostname": {
+              "description": "Listening hostname/port for RTMPS server '::' to listen on IPv6 and IPv4, '0.0.0.0' to listen on IPv4 Use null to automatically listen on '::' if IPv6 is available, or '0.0.0.0' otherwise",
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            },
+            "port": {
+              "type": "integer",
+              "default": 1936
+            },
+            "key_file": {
+              "description": "Absolute paths",
+              "type": "string",
+              "default": ""
+            },
+            "cert_file": {
+              "type": "string",
+              "default": ""
+            },
+            "public_hostname": {
+              "description": "Public hostname of your RTMPS server Use null to use the same value than `webserver.hostname`",
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            }
+          },
+          "additionalProperties": false
+        },
+        "transcoding": {
+          "description": "Allow to transcode the live streaming in multiple live resolutions",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "remote_runners": {
+              "description": "Enable remote runners to transcode your videos If enabled, your instance won't transcode the videos itself At least 1 remote runner must be configured to transcode your videos",
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": false
+                }
+              },
+              "additionalProperties": false
+            },
+            "threads": {
+              "description": "Amount of threads used by ffmpeg per live when using local transcoding",
+              "type": "integer",
+              "default": 2
+            },
+            "profile": {
+              "description": "Choose the local transcoding profile New profiles can be added by plugins Available in core PeerTube: 'default'",
+              "type": "string",
+              "default": "default"
+            },
+            "resolutions": {
+              "type": "object",
+              "properties": {
+                "0p": {
+                  "description": "Audio only",
+                  "type": "boolean",
+                  "default": false
+                },
+                "144p": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "240p": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "360p": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "480p": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "720p": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "1080p": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "1440p": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "2160p": {
+                  "type": "boolean",
+                  "default": false
+                }
+              },
+              "additionalProperties": false
+            },
+            "always_transcode_original_resolution": {
+              "description": "Also transcode original resolution, even if it's above your maximum enabled resolution",
+              "type": "boolean",
+              "default": true
+            },
+            "fps": {
+              "type": "object",
+              "properties": {
+                "max": {
+                  "description": "Cap transcoded live FPS Max resolution stream still keeps the original FPS",
+                  "type": "integer",
+                  "default": 60
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "video_studio": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "description": "Enable video edition by users (cut, add intro/outro, add watermark etc) If enabled, users can create transcoding tasks as they wish",
+          "type": "boolean",
+          "default": false
+        },
+        "remote_runners": {
+          "description": "Enable remote runners to transcode studio tasks If enabled, your instance won't transcode the videos itself At least 1 remote runner must be configured to transcode your videos",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "video_transcription": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "description": "Enable automatic transcription of videos",
+          "type": "boolean",
+          "default": false
+        },
+        "engine": {
+          "description": "Choose engine for local transcription Supported: 'openai-whisper' or 'whisper-ctranslate2'",
+          "type": "string",
+          "default": "whisper-ctranslate2"
+        },
+        "engine_path": {
+          "description": "You can set a custom engine path for local transcription If not provided, PeerTube will try to automatically install it in the PeerTube bin directory",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        "model": {
+          "description": "Choose engine model for local transcription Available for 'openai-whisper' and 'whisper-ctranslate2': 'tiny', 'base', 'small', 'medium', 'large-v2' or 'large-v3'",
+          "type": "string",
+          "default": "small"
+        },
+        "model_path": {
+          "description": "Or specify the model path: * PyTorch model file path for 'openai-whisper' * CTranslate2 Whisper model directory path for 'whisper-ctranslate2' If not provided, PeerTube will automatically download the model",
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
+        },
+        "timeout": {
+          "description": "Increase this value if you plan to transcribe long videos and if your video doesn't have a GPU",
+          "type": "string",
+          "default": "6 hours"
+        },
+        "remote_runners": {
+          "description": "Enable remote runners to transcribe videos If enabled, your instance won't transcribe the videos itself At least 1 remote runner must be configured to transcribe your videos",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "video_file": {
+      "type": "object",
+      "properties": {
+        "update": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Add ability for users to replace the video file of an existing video",
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "import": {
+      "type": "object",
+      "properties": {
+        "videos": {
+          "description": "Add ability for your users to import remote videos (from YouTube, torrent...)",
+          "type": "object",
+          "properties": {
+            "concurrency": {
+              "description": "Amount of import jobs to execute in parallel",
+              "type": "integer",
+              "default": 1
+            },
+            "timeout": {
+              "description": "Set a custom video import timeout to not block import queue",
+              "type": "string",
+              "default": "2 hours"
+            },
+            "max_attempts": {
+              "description": "Number of attempts a user or the channel sync process can do to import a video if an error occurs during the import process",
+              "type": "integer",
+              "default": 5
+            },
+            "http": {
+              "description": "Classic HTTP or all sites supported by youtube-dl https://rg3.github.io/youtube-dl/supportedsites.html",
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "description": "We recommend to use a HTTP proxy if you enable HTTP import to prevent private URL access from this server See https://docs.joinpeertube.org/maintain/configuration#security for more information",
+                  "type": "boolean",
+                  "default": false
+                },
+                "youtube_dl_release": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "description": "Direct download URL to youtube-dl binary Github releases API is also supported Platform-independent examples: * https://api.github.com/repos/ytdl-org/youtube-dl/releases * https://api.github.com/repos/yt-dlp/yt-dlp/releases * https://yt-dl.org/downloads/latest/youtube-dl You can also use a youtube-dl standalone binary (requires python_path: null) GNU/Linux binaries with support for impersonating browser requests (required by some platforms such as Vimeo) examples: * https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux (x64) * https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux_armv7l.zip (ARMv7) * https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux_aarch64 (ARMv8/AArch64/ARM64)",
+                      "type": "string",
+                      "default": "https://api.github.com/repos/yt-dlp/yt-dlp/releases"
+                    },
+                    "name": {
+                      "description": "Release binary name: 'yt-dlp' or 'youtube-dl'",
+                      "type": "string",
+                      "default": "yt-dlp"
+                    },
+                    "python_path": {
+                      "description": "Path to the python binary to execute for youtube-dl or yt-dlp Set to null if you use a youtube-dl executable",
+                      "type": "string",
+                      "default": "/usr/bin/python3"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "force_ipv4": {
+                  "description": "IPv6 is very strongly rate-limited on most sites supported by youtube-dl",
+                  "type": "boolean",
+                  "default": true
+                },
+                "proxies": {
+                  "description": "By default PeerTube uses HTTP_PROXY and HTTPS_PROXY environment variables But you can specify custom proxies for youtube-dl because remote websites (like YouTube) may block your server IP address PeerTube will randomly select a proxy from the following list You may need to use a standalone youtube-dl binary (see `url` key comment above) to use this feature",
+                  "type": "array",
+                  "items": {},
+                  "default": []
+                }
+              },
+              "additionalProperties": false
+            },
+            "torrent": {
+              "description": "Magnet URI or torrent file (use classic TCP/UDP/WebSeed to download the file)",
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "description": "We recommend to only enable magnet URI/torrent import if you trust your users See https://docs.joinpeertube.org/maintain/configuration#security for more information",
+                  "type": "boolean",
+                  "default": false
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "video_channel_synchronization": {
+          "description": "Add ability for your users to synchronize their channels with external channels, playlists, etc",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false
+            },
+            "max_per_user": {
+              "type": "integer",
+              "default": 10
+            },
+            "check_interval": {
+              "type": "string",
+              "default": "1 hour"
+            },
+            "videos_limit_per_synchronization": {
+              "description": "Number of latest published videos to check and to potentially import when syncing a channel",
+              "type": "integer",
+              "default": 10
+            },
+            "full_sync_videos_limit": {
+              "description": "Max number of videos to import when the user asks for full sync",
+              "type": "integer",
+              "default": 1000
+            }
+          },
+          "additionalProperties": false
+        },
+        "users": {
+          "description": "Add ability for your users to import a PeerTube archive file to automatically create videos, channels, captions, etc",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Video quota is checked on import so the user doesn't upload a too big archive file Video quota (daily quota is not taken into account) is also checked for each video when PeerTube is processing the import",
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "export": {
+      "type": "object",
+      "properties": {
+        "users": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Allow users to export their PeerTube data in a .zip for backup or re-import Only one export at a time is allowed per user",
+              "type": "boolean",
+              "default": true
+            },
+            "max_user_video_quota": {
+              "description": "Max size of the current user quota to accept or not the export Goal of this setting is to not store too big archive file on your server disk",
+              "type": "string",
+              "default": "10GB"
+            },
+            "export_expiration": {
+              "description": "How long PeerTube should keep the user export",
+              "type": "string",
+              "default": "2 days"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "auto_blacklist": {
+      "type": "object",
+      "properties": {
+        "videos": {
+          "description": "New videos automatically blacklisted so moderators can review before publishing",
+          "type": "object",
+          "properties": {
+            "of_users": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": false
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "instance": {
+      "description": "Instance settings",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "default": "PeerTube"
+        },
+        "short_description": {
+          "type": "string",
+          "default": "PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser."
+        },
+        "description": {
+          "description": "Support markdown",
+          "type": "string",
+          "default": "Welcome to this PeerTube instance!"
+        },
+        "terms": {
+          "description": "Support markdown",
+          "type": "string",
+          "default": "No terms for now."
+        },
+        "code_of_conduct": {
+          "description": "Supports markdown",
+          "type": "string",
+          "default": ""
+        },
+        "moderation_information": {
+          "description": "Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc Supports markdown",
+          "type": "string",
+          "default": ""
+        },
+        "creation_reason": {
+          "description": "Why did you create this instance? Supports Markdown",
+          "type": "string",
+          "default": ""
+        },
+        "administrator": {
+          "description": "Who is behind the instance? A single person? A non profit? Supports Markdown",
+          "type": "string",
+          "default": ""
+        },
+        "maintenance_lifetime": {
+          "description": "How long do you plan to maintain this instance? Supports Markdown",
+          "type": "string",
+          "default": ""
+        },
+        "business_model": {
+          "description": "How will you pay the PeerTube instance server? With your own funds? With users donations? Advertising? Supports Markdown",
+          "type": "string",
+          "default": ""
+        },
+        "hardware_information": {
+          "description": "If you want to explain on what type of hardware your PeerTube instance runs Example: '2 vCore, 2GB RAM...' Supports Markdown",
+          "type": "string",
+          "default": ""
+        },
+        "default_language": {
+          "description": "Default language of your instance, used in emails for example The web interface still uses the web browser preferred language",
+          "type": "string",
+          "default": "en"
+        },
+        "languages": {
+          "description": "Describe the languages spoken on your instance, to interact with your users for example Uncomment or add the languages you want List of supported languages: https://peertube.cpy.re/api/v1/videos/languages PeerTube plugins can add additional languages to the official list of supported languages",
+          "type": "array",
+          "items": {},
+          "default": []
+        },
+        "categories": {
+          "description": "Describe the main categories of your instance (to explain for example that your instance is dedicated to music, gaming, etc.) Uncomment categories you want List of supported categories: https://peertube.cpy.re/api/v1/videos/categories PeerTube plugins can add additional categories to the official list of supported categories",
+          "type": "array",
+          "items": {},
+          "default": []
+        },
+        "default_client_route": {
+          "type": "string",
+          "default": "/videos/browse"
+        },
+        "is_nsfw": {
+          "description": "Whether or not the instance is dedicated to NSFW content Enabling it will allow other administrators to know that you are mainly federating sensitive content Moreover, the NSFW checkbox on video upload will be automatically checked by default",
+          "type": "boolean",
+          "default": false
+        },
+        "default_nsfw_policy": {
+          "description": "By default, `do_not_list`, `blur`, `warn` or `display` NSFW videos Could be overridden per user with a setting",
+          "type": "string",
+          "default": "do_not_list"
+        },
+        "server_country": {
+          "description": "PeerTube uses this setting to explain to your users which law they must follow in the \"About\" instance pages Example: \"France\", \"United States\", \"España\"",
+          "type": "string",
+          "default": ""
+        },
+        "support": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "description": "Explain to your users how to support your instance If set, PeerTube will display a \"Support\" button in \"About\" instance pages Supports Markdown",
+              "type": "string",
+              "default": ""
+            }
+          },
+          "additionalProperties": false
+        },
+        "social": {
+          "description": "If set, PeerTube will display buttons in \"About\" instance pages",
+          "type": "object",
+          "properties": {
+            "external_link": {
+              "description": "Link to your main website",
+              "type": "string",
+              "default": ""
+            },
+            "mastodon_link": {
+              "description": "Mastodon",
+              "type": "string",
+              "default": ""
+            },
+            "bluesky_link": {
+              "description": "Bluesky",
+              "type": "string",
+              "default": ""
+            },
+            "x_link": {
+              "description": "X",
+              "type": "string",
+              "default": ""
+            }
+          },
+          "additionalProperties": false
+        },
+        "customizations": {
+          "type": "object",
+          "properties": {
+            "javascript": {
+              "description": "Directly your JavaScript code (without <script> tags). Will be eval at runtime",
+              "type": "string",
+              "default": ""
+            },
+            "css": {
+              "description": "Directly your CSS code (without <style> tags). Will be injected at runtime",
+              "type": "string",
+              "default": ""
+            }
+          },
+          "additionalProperties": false
+        },
+        "robots": {
+          "description": "Robot.txt rules. To disallow robots to crawl your instance and disallow indexation of your site, add `/` to `Disallow:`",
+          "type": "string",
+          "default": "User-agent: *\nDisallow:\n"
+        },
+        "securitytxt": {
+          "description": "/.well-known/security.txt rules. This endpoint is cached, so you may have to wait a few hours before viewing your changes To discourage researchers from testing your instance and disable security.txt integration, set this to an empty string",
+          "type": "string",
+          "default": "Contact: https://github.com/Chocobozzz/PeerTube/blob/develop/SECURITY.md\nExpires: 2025-12-31T11:00:00.000Z\n"
+        }
+      },
+      "additionalProperties": false
+    },
+    "services": {
+      "type": "object",
+      "properties": {
+        "twitter": {
+          "description": "Cards configuration to format video in Twitter/X All other social media (Facebook, Mastodon, etc.) are supported out of the box",
+          "type": "object",
+          "properties": {
+            "username": {
+              "description": "Indicates the Twitter/X account for the website or platform where the content was published This is just an information injected in HTML that is required by Twitter/X",
+              "type": "string",
+              "default": "@Chocobozzz"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "followers": {
+      "type": "object",
+      "properties": {
+        "instance": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Allow remote actors to follow your instance This setting is not retroactive: current followers of your instance will not be affected",
+              "type": "boolean",
+              "default": true
+            },
+            "manual_approval": {
+              "description": "Whether or not an administrator must manually validate a new follower",
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "channels": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Allow remote actors to follow channels/accounts of your instance This setting is not retroactive: current followers of local channels/accounts will not be affected",
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "followings": {
+      "type": "object",
+      "properties": {
+        "instance": {
+          "type": "object",
+          "properties": {
+            "auto_follow_back": {
+              "description": "If you want to automatically follow back new instance followers If this option is enabled, use the mute feature instead of deleting followings /!\\ Don't enable this if you don't have a reactive moderation team /!\\",
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": false
+                }
+              },
+              "additionalProperties": false
+            },
+            "auto_follow_index": {
+              "description": "If you want to automatically follow instances of the public index If this option is enabled, use the mute feature instead of deleting followings /!\\ Don't enable this if you don't have a reactive moderation team /!\\",
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "index_url": {
+                  "description": "Host your own using https://framagit.org/framasoft/peertube/instances-peertube#peertube-auto-follow",
+                  "type": "string",
+                  "default": ""
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "theme": {
+      "type": "object",
+      "properties": {
+        "default": {
+          "type": "string",
+          "default": "default"
+        },
+        "customization": {
+          "description": "Easily redefine the client UI when the user is using your default instance theme Use null to keep the default values If you need more advanced customizations, install or develop a dedicated theme: https://docs.joinpeertube.org/contribute/plugins",
+          "type": "object",
+          "properties": {
+            "primary_color": {
+              "description": "Hex color. Example: '#FF8F37'",
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            },
+            "on_primary_color": {
+              "description": "Hex color",
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            },
+            "foreground_color": {
+              "description": "Hex color",
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            },
+            "background_color": {
+              "description": "Hex color",
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            },
+            "background_secondary_color": {
+              "description": "Hex color",
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            },
+            "menu_foreground_color": {
+              "description": "Hex color",
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            },
+            "menu_background_color": {
+              "description": "Hex color",
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            },
+            "menu_border_radius": {
+              "description": "Pixels. Example: '5px'",
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            },
+            "header_background_color": {
+              "description": "Hex color",
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            },
+            "header_foreground_color": {
+              "description": "Hex color",
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            },
+            "input_border_radius": {
+              "description": "Pixels",
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "broadcast_message": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "message": {
+          "description": "Support markdown",
+          "type": "string",
+          "default": ""
+        },
+        "level": {
+          "description": "'info' | 'warning' | 'error'",
+          "type": "string",
+          "default": "info"
+        },
+        "dismissable": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "search": {
+      "type": "object",
+      "properties": {
+        "remote_uri": {
+          "description": "Add ability to fetch remote videos/actors by their URI, that may not be federated with your instance If enabled, the associated group will be able to \"escape\" from the instance follows That means they will be able to follow channels, watch videos, list videos of non followed instances",
+          "type": "object",
+          "properties": {
+            "users": {
+              "type": "boolean",
+              "default": true
+            },
+            "anonymous": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "search_index": {
+          "description": "Use a third party index instead of your local index, only for search results Useful to discover content outside of your instance If you enable search_index, you must enable remote_uri search for users If you do not enable remote_uri search for anonymous user, your instance will redirect the user on the origin instance instead of loading the video locally",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false
+            },
+            "url": {
+              "description": "URL of the search index, which should use the same search API and routes as PeerTube: https://docs.joinpeertube.org/api-rest-reference.html You can deploy your own with https://framagit.org/framasoft/peertube/search-index, or you can use the official one: https://sepiasearch.org. But keep in mind it is an unmoderated search index",
+              "type": "string",
+              "default": "https://sepiasearch.org"
+            },
+            "disable_local_search": {
+              "description": "You can disable local search in the client, so users only use the search index",
+              "type": "boolean",
+              "default": false
+            },
+            "is_default_search": {
+              "description": "If you did not disable local search in the client, you can decide to use the search index by default",
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "client": {
+      "description": "PeerTube client/interface configuration",
+      "type": "object",
+      "properties": {
+        "new_features_info": {
+          "description": "Display modals to inform users of new features after a PeerTube update",
+          "type": "boolean",
+          "default": true
+        },
+        "header": {
+          "type": "object",
+          "properties": {
+            "hide_instance_name": {
+              "description": "Hide the instance name in the header on desktop Useful if your logo already contains the instance name",
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "videos": {
+          "type": "object",
+          "properties": {
+            "miniature": {
+              "type": "object",
+              "properties": {
+                "prefer_author_display_name": {
+                  "description": "By default PeerTube client displays author username",
+                  "type": "boolean",
+                  "default": false
+                }
+              },
+              "additionalProperties": false
+            },
+            "resumable_upload": {
+              "type": "object",
+              "properties": {
+                "max_chunk_size": {
+                  "description": "Max size of upload chunks, e.g. '90MB' If null, it will be calculated based on network speed",
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "default": null
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "browse_videos": {
+          "type": "object",
+          "properties": {
+            "default_sort": {
+              "description": "Default sort option Available options: '-publishedAt' '-originallyPublishedAt' 'name' '-trending' (requires the 'most-viewed' trending videos algorithm to be enabled) '-hot' (requires the 'hot' trending videos algorithm to be enabled) '-likes' (requires the 'most-liked' trending videos algorithm to be enabled) '-views'",
+              "type": "string",
+              "default": "-publishedAt"
+            },
+            "default_scope": {
+              "description": "Default scope option Available options: 'local' or 'federated'",
+              "type": "string",
+              "default": "federated"
+            }
+          },
+          "additionalProperties": false
+        },
+        "menu": {
+          "type": "object",
+          "properties": {
+            "login": {
+              "type": "object",
+              "properties": {
+                "redirect_on_single_external_auth": {
+                  "description": "If you enable only one external auth plugin You can automatically redirect your users on this external platform when they click on the login button",
+                  "type": "boolean",
+                  "default": false
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "open_in_app": {
+          "type": "object",
+          "properties": {
+            "android": {
+              "type": "object",
+              "properties": {
+                "intent": {
+                  "description": "Use an intent URL: https://developer.chrome.com/docs/android/intents",
+                  "type": "object",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "host": {
+                      "description": "Host registered by the mobile app",
+                      "type": "string",
+                      "default": "joinpeertube.org"
+                    },
+                    "scheme": {
+                      "description": "Scheme registered by the mobile app",
+                      "type": "string",
+                      "default": "peertube"
+                    },
+                    "fallback_url": {
+                      "description": "If not having the app on the mobile device, open this page F-Droid alternative: https://f-droid.org/packages/org.framasoft.peertube/",
+                      "type": "string",
+                      "default": "https://play.google.com/store/apps/details?id=org.framasoft.peertube"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "additionalProperties": false
+            },
+            "ios": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "description": "We use a timeout for iOS: if the app is not opened after a few seconds, open the fallback URL",
+                  "type": "boolean",
+                  "default": true
+                },
+                "host": {
+                  "description": "Host registered by the mobile app",
+                  "type": "string",
+                  "default": "joinpeertube.org"
+                },
+                "scheme": {
+                  "description": "Scheme registered by the mobile app",
+                  "type": "string",
+                  "default": "peertube"
+                },
+                "fallback_url": {
+                  "description": "If not having the app on the mobile device, open this page",
+                  "type": "string",
+                  "default": "https://apps.apple.com/fr/app/peertube/id6737834858"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "storyboards": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "description": "Generate storyboards of local videos using ffmpeg so users can see the video preview in the player while scrubbing the video",
+          "type": "boolean",
+          "default": true
+        },
+        "remote_runners": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Use remote runners to generate storyboards instead of processing them locally",
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "defaults": {
+      "description": "Update default PeerTube values Set by API when the field is not provided and put as default value in client",
+      "type": "object",
+      "properties": {
+        "publish": {
+          "description": "Change default values when publishing a video (upload/import/go Live)",
+          "type": "object",
+          "properties": {
+            "download_enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "comments_policy": {
+              "description": "enabled = 1, disabled = 2, requires_approval = 3",
+              "type": "integer",
+              "default": 1
+            },
+            "privacy": {
+              "description": "public = 1, unlisted = 2, private = 3, internal = 4",
+              "type": "integer",
+              "default": 1
+            },
+            "licence": {
+              "description": "CC-BY = 1, CC-SA = 2, CC-ND = 3, CC-NC = 4, CC-NC-SA = 5, CC-NC-ND = 6, Public Domain = 7 You can also choose a custom licence value added by a plugin No licence by default",
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            }
+          },
+          "additionalProperties": false
+        },
+        "live": {
+          "type": "object",
+          "properties": {
+            "save_replay": {
+              "description": "Default value for \"automatically publish a replay when your live ends\" checkbox when creating a new live video If live.allow_replay is false, this setting has no effect",
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "p2p": {
+          "type": "object",
+          "properties": {
+            "webapp": {
+              "description": "Enable P2P by default in PeerTube client Can be enabled/disabled by anonymous users and logged in users",
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true
+                }
+              },
+              "additionalProperties": false
+            },
+            "embed": {
+              "description": "Enable P2P by default in PeerTube embed Can be enabled/disabled by URL option",
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "player": {
+          "type": "object",
+          "properties": {
+            "theme": {
+              "description": "'galaxy' | 'lucide'",
+              "type": "string",
+              "default": "lucide"
+            },
+            "auto_play": {
+              "description": "By default, playback starts automatically when opening a video",
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "email": {
+      "type": "object",
+      "properties": {
+        "body": {
+          "type": "object",
+          "properties": {
+            "signature": {
+              "description": "Support {{instanceName}} template variable",
+              "type": "string",
+              "default": ""
+            }
+          },
+          "additionalProperties": false
+        },
+        "subject": {
+          "type": "object",
+          "properties": {
+            "prefix": {
+              "description": "Support {{instanceName}} template variable",
+              "type": "string",
+              "default": "[{{instanceName}}] "
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "video_comments": {
+      "type": "object",
+      "properties": {
+        "accept_remote_comments": {
+          "description": "Accept or not comments from remote instances This setting is not retroactive: current comments from remote platforms will not be deleted",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

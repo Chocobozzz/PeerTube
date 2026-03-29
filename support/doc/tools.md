@@ -455,6 +455,22 @@ sudo systemctl restart prunner.service
 Server tools are scripts that interact directly with the code of your PeerTube instance.
 They must be run on the server, in `peertube-latest` directory.
 
+### Generate configuration JSON schema
+
+PeerTube ships a script that converts `config/default.yaml` into a [JSON Schema Draft 7](https://json-schema.org/draft-07/schema) document at `config/config-schema.json`.
+
+The schema covers **all** configuration keys (not just the subset exposed in the web admin panel), which makes it useful for:
+
+- Generating configuration UIs for the full YAML configuration file.
+- Feeding documentation generators or editor integrations.
+- Validating NixOS service module configuration without having to declare every option explicitly.
+
+The generated file is committed to the repository at `config/config-schema.json` and should be regenerated whenever `config/default.yaml` changes:
+
+```bash
+npm run generate-config-schema
+```
+
 ### Parse logs
 
 To parse PeerTube last log file:
