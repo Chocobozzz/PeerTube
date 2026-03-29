@@ -21,6 +21,8 @@
   "typings": "*.d.ts",
   "scripts": {
     "install-node-dependencies": "pnpm install --frozen-lockfile",
+    "generate-config-schema": "tsx --conditions=peertube:tsx ./scripts/generate-config-schema.ts",
+    "validate-config-schema": "tsx --conditions=peertube:tsx ./scripts/validate-config-schema.ts",
     "benchmark-server": "tsx --conditions=peertube:tsx ./scripts/benchmark.ts",
     "benchmark-transcription": "tsx --conditions=peertube:tsx --tsconfig ./packages/transcription/tsconfig.json ./packages/transcription/src/benchmark.ts",
     "build:client": "bash ./scripts/build/client.sh",
@@ -205,6 +207,7 @@
   },
   "devDependencies": {
     "@peertube/resolve-tspaths": "^0.8.14",
+    "ajv": "^8.17.1",
     "@stylistic/eslint-plugin": "^5.10.0",
     "@types/archiver": "^7.0.0",
     "@types/bcrypt": "^6.0.0",

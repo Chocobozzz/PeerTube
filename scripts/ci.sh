@@ -148,6 +148,12 @@ elif [ "$1" = "lint" ]; then
 
     npm run swagger-cli -- validate support/doc/api/openapi.yaml
 
+    npm run generate-config-schema
+    git diff --exit-code config/config-schema.json || \
+        { echo "config/config-schema.json is stale. Run 'npm run generate-config-schema' and commit the result."; exit 1; }
+
+    npm run validate-config-schema
+
     ( cd client && npm run lint )
 elif [ "$1" = "transcription" ]; then
     pnpm run --filter=@peertube/tests install-dependencies:transcription

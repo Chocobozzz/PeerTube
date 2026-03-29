@@ -78,3 +78,25 @@ Some of these may be optional (for example your new endpoint may not need to sen
    - Create your test file in `server/core/tests/api` to test your new endpoints
    - Add your notification test in `server/core/tests/api/notifications`
  * Update REST API documentation in `support/doc/api/openapi.yaml`
+
+## Configuration JSON schema
+
+PeerTube ships a script that converts `config/default.yaml` into a [JSON Schema Draft 7](https://json-schema.org/draft-07/schema) document at `config/config-schema.json`.
+
+The schema covers **all** configuration keys (not just the subset exposed in the web admin panel), which makes it useful for:
+
+- Generating configuration UIs for the full YAML configuration file.
+- Feeding documentation generators or editor integrations.
+- Validating NixOS service module configuration without having to declare every option explicitly.
+
+The generated file is committed to the repository at `config/config-schema.json` and should be regenerated whenever `config/default.yaml` changes:
+
+```bash
+npm run generate-config-schema
+```
+
+The schema is also used by CI to validate `config/default.yaml` and `support/docker/production/config/production.yaml`. Run the check locally with:
+
+```bash
+npm run validate-config-schema
+```
