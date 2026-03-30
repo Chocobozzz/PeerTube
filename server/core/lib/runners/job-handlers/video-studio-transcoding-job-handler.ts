@@ -13,18 +13,14 @@ import {
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { logger } from '@server/helpers/logger.js'
+import { sequelizeTypescript } from '@server/initializers/database.js'
 import { onVideoStudioEnded, safeCleanupStudioTMPFiles } from '@server/lib/video-studio.js'
 import { MVideoWithFile } from '@server/types/models/index.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
 import { basename } from 'path'
-import {
-  generateRunnerEditionTranscodingVideoInputFileUrl,
-  generateRunnerTranscodingAudioInputFileUrl,
-  generateRunnerTranscodingVideoInputFileUrl
-} from '../runner-urls.js'
+import { generateRunnerEditionTranscodingVideoInputFileUrl, generateRunnerTranscodingInputFileUrl } from '../runner-urls.js'
 import { AbstractJobHandler } from './abstract-job-handler.js'
 import { loadRunnerVideo } from './shared/utils.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
 
 type CreateOptions = {
   video: MVideoWithFile
@@ -44,10 +40,10 @@ export class VideoStudioTranscodingJobHandler
 
     const payload: RunnerJobStudioTranscodingPayload = {
       input: {
-        videoFileUrl: generateRunnerTranscodingVideoInputFileUrl(jobUUID, video.uuid),
+        videoFileUrl: generateRunnerTranscodingInputFileUrl({ jobUUID, videoUUID: video.uuid, type: 'video' }),
 
         separatedAudioFileUrl: separatedAudioFile
-          ? [ generateRunnerTranscodingAudioInputFileUrl(jobUUID, video.uuid) ]
+          ? [ generateRunnerTranscodingInputFileUrl({ jobUUID, videoUUID: video.uuid, type: 'audio' }) ]
           : []
       },
       output: {},

@@ -1,6 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 import { getAllFiles, wait } from '@peertube/peertube-core-utils'
-import { VideoPrivacy, VideoResolution } from '@peertube/peertube-models'
+import {
+  RunnerJobVODHLSTranscodingPayload,
+  RunnerJobVODWebVideoTranscodingPayload,
+  VideoPrivacy,
+  VideoResolution
+} from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
@@ -278,6 +283,22 @@ describe('Test VOD transcoding in peertube-runner program', function () {
         objectStorageBaseUrl: objectStorageBaseUrlHLS,
         resolutions
       })
+    })
+
+    it('Should use the appropriate input file URL', async function () {
+      const { data } = await servers[0].runnerJobs.list({ start: 0, count: 100 })
+
+      for (const job of data) {
+        if (job.type === 'vod-web-video-transcoding' || job.type === 'vod-hls-transcoding') {
+          const payload = job.payload as RunnerJobVODHLSTranscodingPayload | RunnerJobVODWebVideoTranscodingPayload
+
+          if (payload.output.resolution === 0) {
+            expect(payload.input.videoFileUrl).to.match(new RegExp(`/max-quality/audio$`))
+          } else {
+            expect(payload.input.videoFileUrl).to.match(new RegExp(`/max-quality$`))
+          }
+        }
+      }
     })
   }
 

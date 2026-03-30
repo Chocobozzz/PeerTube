@@ -21,7 +21,7 @@ runnerJobFilesRouter.post(
   apiRateLimiter,
   asyncMiddleware(jobOfRunnerGetValidatorFactory([ RunnerJobState.PROCESSING ])),
   asyncMiddleware(runnerJobGetVideoTranscodingFileValidator),
-  asyncMiddleware(getMaxQualitySeparatedAudioFile)
+  asyncMiddleware(getMaxQualityAudioFile)
 )
 
 runnerJobFilesRouter.post(
@@ -57,7 +57,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function getMaxQualitySeparatedAudioFile (req: express.Request, res: express.Response) {
+async function getMaxQualityAudioFile (req: express.Request, res: express.Response) {
   const runnerJob = res.locals.runnerJob
   const runner = runnerJob.Runner
   const video = res.locals.videoAll
