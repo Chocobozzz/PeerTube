@@ -6,6 +6,7 @@
 
 $slider-height: 3px;
 $slider-hover-height: 5px;
+$chapter-marker-size: 9px;
 
 .vjs-peertube-skin.has-chapter {
   .vjs-time-tooltip {
@@ -14,6 +15,29 @@ $slider-hover-height: 5px;
     padding-top: 4px;
     padding-bottom: 4px;
     top: -4.9em;
+  }
+}
+
+.vjs-chapter-marker {
+  position: absolute;
+
+  top: math.floor(math.div($chapter-marker-size - $slider-height, 2)) * -1;
+
+  height: $chapter-marker-size;
+  width: $chapter-marker-size;
+  border-radius: $chapter-marker-size;
+  margin-left: math.div($chapter-marker-size, 2) * -1;
+
+  background-color: #fff;
+  cursor: pointer;
+  transition: transform 50ms ease-in-out, border-color 50ms ease-in-out;
+  border: 2px solid transparent;
+  z-index: 101;
+
+  &:hover {
+    transform: scale(1.5);
+
+    border-color: pvar(--primary);
   }
 }
 
@@ -248,7 +272,7 @@ $slider-hover-height: 5px;
   }
 
   .vjs-slider {
-    background-color: transparent;
+    background-color: rgba(255, 255, 255, 0.2);
 
     .vjs-play-progress {
       background: pvar(--pt-player-fg);
@@ -277,27 +301,6 @@ $slider-hover-height: 5px;
 
   .vjs-caption-toggle-control {
     width: var(--button-width);
-  }
-
-  // ---------------------------------------------------------------------------
-  // Chapters
-  // ---------------------------------------------------------------------------
-
-  .vjs-progress .vjs-progress-holder .vjs-chapters-progress {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    height: 100%;
-    pointer-events: none;
-  }
-
-  .vjs-progress-holder .vjs-chapters-progress-part {
-    position: absolute;
-    top: 0;
-    height: 100%;
-    opacity: 0.35;
-    background-color: #fff;
   }
 }
 
