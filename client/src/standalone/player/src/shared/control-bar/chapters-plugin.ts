@@ -1,47 +1,45 @@
 import { VideoChapter } from '@peertube/peertube-models'
 import videojs from 'video.js'
 import { ChaptersOptions, VideojsPlayer, VideojsPlugin } from '../../types'
-import { ProgressBarMarkerComponent } from './progress-bar-marker-component'
+import ChaptersProgressBar from './chapters-progress-bar'
 
 const Plugin = videojs.getPlugin('plugin') as typeof VideojsPlugin
 
 class ChaptersPlugin extends Plugin {
   declare private chapters: VideoChapter[]
-  declare private markers: ProgressBarMarkerComponent[]
+  declare private progressBar: ChaptersProgressBar
 
   private activeChapter: VideoChapter
 
   constructor (player: VideojsPlayer, options: ChaptersOptions) {
     super(player)
 
-    this.markers = []
     this.chapters = options.chapters
 
     this.player.ready(() => {
       player.addClass('vjs-chapters')
 
-      for (const chapter of this.chapters) {
-        if (chapter.timecode === 0) continue
+      this.progressBar = new ChaptersProgressBar(player, { chapters: this.chapters })
+      const seekBar = this.getSeekBar()
+      const playProgressBar = seekBar.getChild('playProgressBar')
 
-        const marker = new ProgressBarMarkerComponent(player, { timecode: chapter.timecode })
-
-        marker.on('mouseenter', () => {
-          this.activeChapter = chapter
-        })
-
-        marker.on('mouseleave', () => {
-          this.activeChapter = undefined
-        })
-
-        this.markers.push(marker)
-        this.getSeekBar().addChild(marker)
+      if (playProgressBar) {
+        const playIndex = seekBar.children().indexOf(playProgressBar)
+        if (playIndex >= 0) {
+          seekBar.addChild(this.progressBar, {}, playIndex)
+        } else {
+          seekBar.addChild(this.progressBar)
+        }
+      } else {
+        seekBar.addChild(this.progressBar)
       }
     })
   }
 
   dispose () {
-    for (const marker of this.markers) {
-      this.getSeekBar().removeChild(marker)
+    if (this.progressBar) {
+      this.getSeekBar().removeChild(this.progressBar)
+      this.progressBar = undefined
     }
 
     super.dispose()
