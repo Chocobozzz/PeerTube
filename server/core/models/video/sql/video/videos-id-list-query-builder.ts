@@ -230,10 +230,12 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     }
 
     // Only list published videos
-    if (!(options.include & VideoInclude.NOT_PUBLISHED_STATE)) {
+    if (!(options.include & VideoInclude.NOT_PUBLISHED_STATE) && !options.stateOneOf) {
       if (options.includeScheduledLive) this.joinLiveSchedules()
 
       this.whereStateAvailable({ includeScheduledLive: options.includeScheduledLive ?? false })
+    } else if (options.stateOneOf) {
+      this.whereStateOneOf(options.stateOneOf)
     }
 
     if (options.videoPlaylistId) {
@@ -288,10 +290,6 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     if (options.autoTagOneOf) {
       this.whereAutoTagOneOf(options.autoTagOneOf)
-    }
-
-    if (options.stateOneOf) {
-      this.whereStateOneOf(options.stateOneOf)
     }
 
     if (options.privacyOneOf) {
