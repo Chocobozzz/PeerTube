@@ -63,7 +63,8 @@ const determineSignupMode = [
       'filter:api.user.signup.requires-approval.result',
       {
         body: pick(req.body, [ 'username', 'email', 'registrationReason' ]),
-        headers: req.headers
+        headers: req.headers,
+        ip: req.ip
       }
     )
 

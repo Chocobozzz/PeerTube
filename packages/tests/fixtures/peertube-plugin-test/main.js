@@ -344,9 +344,9 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
 
   registerHook({
     target: 'filter:api.user.signup.requires-approval.result',
-    handler: ({ requiresApproval, registrationReason }, { body, headers }) => {
+    handler: ({ requiresApproval, registrationReason }, { body, headers, ip }) => {
       return {
-        requiresApproval: body.username === 'waiting_john',
+        requiresApproval: ip !== undefined && body.username === 'waiting_john',
         registrationReason: 'Marked as spam'
       }
     }
