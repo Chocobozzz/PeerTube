@@ -3,6 +3,7 @@ import {
   RunnerJobUpdatePayload,
   RunnerJobVODWebVideoTranscodingPayload,
   RunnerJobVODWebVideoTranscodingPrivatePayload,
+  VideoResolution,
   VODWebVideoTranscodingSuccess
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
@@ -10,7 +11,7 @@ import { logger } from '@server/helpers/logger.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { MVideoWithFile } from '@server/types/models/index.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
-import { generateRunnerTranscodingAudioInputFileUrl, generateRunnerTranscodingVideoInputFileUrl } from '../runner-urls.js'
+import { generateRunnerTranscodingInputFileUrl } from '../runner-urls.js'
 import { AbstractVODTranscodingJobHandler } from './abstract-vod-transcoding-job-handler.js'
 import { loadRunnerVideo, onVODWebVideoOrAudioMergeTranscodingJob } from './shared/utils.js'
 
@@ -37,10 +38,16 @@ export class VODWebVideoTranscodingJobHandler
 
     const payload: RunnerJobVODWebVideoTranscodingPayload = {
       input: {
-        videoFileUrl: generateRunnerTranscodingVideoInputFileUrl(jobUUID, video.uuid),
+        videoFileUrl: generateRunnerTranscodingInputFileUrl({
+          jobUUID,
+          videoUUID: video.uuid,
+          type: resolution === VideoResolution.H_NOVIDEO
+            ? 'audio'
+            : 'video'
+        }),
 
         separatedAudioFileUrl: separatedAudioFile
-          ? [ generateRunnerTranscodingAudioInputFileUrl(jobUUID, video.uuid) ]
+          ? [ generateRunnerTranscodingInputFileUrl({ jobUUID, videoUUID: video.uuid, type: 'audio' }) ]
           : []
       },
       output: {

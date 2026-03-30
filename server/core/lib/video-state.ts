@@ -74,6 +74,11 @@ export function moveToNextState (options: {
         return true
       }
 
+      // Keep video in failed transcoding state
+      if (videoDatabase.state === VideoState.TRANSCODING_FAILED) {
+        return true
+      }
+
       throw new Error('Unknown next state for video ' + videoDatabase.uuid + ': ' + newState)
     })
   })
