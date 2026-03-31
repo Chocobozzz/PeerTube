@@ -1,5 +1,5 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
 
 my-timestamp-input {
   display: block;
@@ -70,7 +70,8 @@ h3 {
   border-radius: 5px;
   width: fit-content;
 
-  @include padding-left(10px);
+  @include padding-left(0.75rem);
+  @include padding-right(0.75rem);
 
   .form-group,
   .description {
@@ -97,4 +98,32 @@ my-embed {
 my-reactive-file {
   display: block;
   width: fit-content;
+}
+
+.remove-segment {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid pvar(--border-secondary);
+
+  &:last-of-type {
+    border-bottom: 0;
+  }
+}
+
+.remove-segment-label {
+  display: block;
+  font-weight: $font-semibold;
+  margin-bottom: 0.5rem;
+}
+
+.remove-segment-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+
+  @include rfs(1.5rem, gap);
+
+  .form-group {
+    margin: 0;
+  }
 }

@@ -6,6 +6,7 @@ import {
   VideoStudioTaskIntroPayload,
   VideoStudioTaskOutroPayload,
   VideoStudioTaskPayload,
+  VideoStudioTaskRemoveSegmentsPayload,
   VideoStudioTaskWatermarkPayload,
   VideoStudioTranscodingSuccess
 } from '@peertube/peertube-models'
@@ -101,7 +102,7 @@ export async function processStudioTranscoding (options: ProcessOptions<RunnerJo
 // Private
 // ---------------------------------------------------------------------------
 
-type TaskProcessorOptions <T extends VideoStudioTaskPayload = VideoStudioTaskPayload> = {
+type TaskProcessorOptions<T extends VideoStudioTaskPayload = VideoStudioTaskPayload> = {
   videoInputPath: string
   separatedAudioInputPath: string
 
@@ -116,7 +117,8 @@ const taskProcessors: { [id in VideoStudioTask['name']]: (options: TaskProcessor
   'add-intro': processAddIntroOutro,
   'add-outro': processAddIntroOutro,
   'cut': processCut,
-  'add-watermark': processAddWatermark
+  'add-watermark': processAddWatermark,
+  'remove-segments': processRemoveSegments
 }
 
 async function processTask (options: TaskProcessorOptions) {
@@ -162,6 +164,18 @@ function processCut (options: TaskProcessorOptions<VideoStudioTaskCutPayload>) {
   })
 }
 
+function processRemoveSegments (options: TaskProcessorOptions<VideoStudioTaskRemoveSegmentsPayload>) {
+  const { videoInputPath, task } = options
+
+  logger.debug(`Removing segments from ${videoInputPath}`)
+
+  return buildFFmpegEdition().removeSegments({
+    ...pick(options, [ 'videoInputPath', 'separatedAudioInputPath', 'outputPath' ]),
+
+    segments: task.options.segments
+  })
+}
+
 async function processAddWatermark (options: TaskProcessorOptions<VideoStudioTaskWatermarkPayload>) {
   const { videoInputPath, task, runnerToken, job } = options
 
@@ -177,7 +191,7 @@ async function processAddWatermark (options: TaskProcessorOptions<VideoStudioTas
 
       videoFilters: {
         watermarkSizeRatio: task.options.watermarkSizeRatio,
-        horitonzalMarginRatio: task.options.horitonzalMarginRatio,
+        horizontalMarginRatio: task.options.horizontalMarginRatio,
         verticalMarginRatio: task.options.verticalMarginRatio
       }
     })

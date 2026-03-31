@@ -57,3 +57,32 @@ export function isStudioTaskAddWatermarkValid (options: {
   return task.name === 'add-watermark' &&
     file && isVideoImageValid([ file ], null, true)
 }
+
+export function isStudioRemoveSegmentsTaskValid (options: {
+  task: VideoStudioTask
+}) {
+  const { task } = options
+
+  if (task.name !== 'remove-segments') return false
+  if (!task.options?.segments) return false
+
+  const { segments } = task.options
+
+  if (!isArray(segments)) return false
+  if (segments.length < CONSTRAINTS_FIELDS.VIDEO_STUDIO.REMOVE_SEGMENTS.min) return false
+  if (segments.length > CONSTRAINTS_FIELDS.VIDEO_STUDIO.REMOVE_SEGMENTS.max) return false
+
+  let previousEnd = -1
+
+  for (const segment of segments) {
+    if (!validator.default.isInt(segment.start + '', CONSTRAINTS_FIELDS.VIDEO_STUDIO.REMOVE_SEGMENT_TIME_START)) return false
+    if (!validator.default.isInt(segment.end + '', CONSTRAINTS_FIELDS.VIDEO_STUDIO.REMOVE_SEGMENT_TIME_END)) return false
+
+    if (forceNumber(segment.start) >= forceNumber(segment.end)) return false
+    if (forceNumber(segment.start) <= previousEnd) return false
+
+    previousEnd = forceNumber(segment.end)
+  }
+
+  return true
+}

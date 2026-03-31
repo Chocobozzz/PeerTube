@@ -26,7 +26,7 @@ const supportedMatrix: { [id in RunnerJobType]: (payload: RunnerJobPayload) => b
   },
   'video-studio-transcoding': (payload: RunnerJobStudioTranscodingPayload) => {
     const tasks = payload?.tasks
-    const supported = new Set<VideoStudioTaskPayload['name']>([ 'add-intro', 'add-outro', 'add-watermark', 'cut' ])
+    const supported = new Set<VideoStudioTaskPayload['name']>([ 'add-intro', 'add-outro', 'add-watermark', 'cut', 'remove-segments' ])
 
     if (!Array.isArray(tasks)) return false
 

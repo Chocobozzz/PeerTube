@@ -24,6 +24,7 @@ import {
   VideoStateType,
   VideoStudioTask,
   VideoStudioTaskCut,
+  VideoStudioTaskRemoveSegments,
   VideoUpdate
 } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
@@ -74,6 +75,7 @@ type StudioForm = {
   'add-intro'?: { file?: File }
   'add-outro'?: { file?: File }
   'add-watermark'?: { file?: File }
+  'remove-segments'?: { start?: number, end?: number }[]
 }
 
 type PlayerSettingsForm = PlayerVideoSettingsUpdate
@@ -868,6 +870,14 @@ export class VideoEdit {
         }
       })
     }
+
+    const removeSegments = (values['remove-segments'] ?? []).filter(s =>
+      exists(s.start) && exists(s.end)
+    ) as VideoStudioTaskRemoveSegments['options']['segments']
+
+    if (removeSegments.length > 0) {
+      this.studioTasks.push({ name: 'remove-segments', options: { segments: removeSegments } })
+    }
   }
 
   toStudioFormPatch (): Required<StudioForm> {
@@ -875,6 +885,7 @@ export class VideoEdit {
     const addIntro = this.studioTasks.find(t => t.name === 'add-intro')
     const addOutro = this.studioTasks.find(t => t.name === 'add-outro')
     const addWatermark = this.studioTasks.find(t => t.name === 'add-watermark')
+    const removeSegments = this.studioTasks.find(t => t.name === 'remove-segments')
 
     return {
       'cut': {
@@ -883,7 +894,8 @@ export class VideoEdit {
       },
       'add-intro': { file: addIntro?.options?.file as File ?? null },
       'add-outro': { file: addOutro?.options?.file as File },
-      'add-watermark': { file: addWatermark?.options?.file as File }
+      'add-watermark': { file: addWatermark?.options?.file as File },
+      'remove-segments': removeSegments?.options?.segments ?? []
     }
   }
 
@@ -970,37 +982,35 @@ export class VideoEdit {
   }
 
   getStudioTasksSummary () {
-    return this.getStudioTasks().map(t => {
+    const summary: string[] = []
+
+    for (const t of this.getStudioTasks()) {
       if (t.name === 'add-intro') {
-        return $localize`"${(t.options.file as File).name}" will be added at the beginning of the video`
-      }
-
-      if (t.name === 'add-outro') {
-        return $localize`"${(t.options.file as File).name}" will be added at the end of the video`
-      }
-
-      if (t.name === 'add-watermark') {
-        return $localize`"${(t.options.file as File).name}" image watermark will be added to the video`
-      }
-
-      if (t.name === 'cut') {
+        summary.push($localize`"${(t.options.file as File).name}" will be added at the beginning of the video`)
+      } else if (t.name === 'add-outro') {
+        summary.push($localize`"${(t.options.file as File).name}" will be added at the end of the video`)
+      } else if (t.name === 'add-watermark') {
+        summary.push($localize`"${(t.options.file as File).name}" image watermark will be added to the video`)
+      } else if (t.name === 'cut') {
         const { start, end } = t.options
 
         if (start !== undefined && end !== undefined) {
-          return $localize`Video will begin at ${secondsToTime(start)} and stop at ${secondsToTime(end)}`
+          summary.push($localize`Video will begin at ${secondsToTime(start)} and stop at ${secondsToTime(end)}`)
+        } else if (start !== undefined) {
+          summary.push($localize`Video will begin at ${secondsToTime(start)}`)
+        } else if (end !== undefined) {
+          summary.push($localize`Video will stop at ${secondsToTime(end)}`)
         }
+      } else if (t.name === 'remove-segments') {
+        for (let i = 1; i <= t.options.segments.length; i++) {
+          const parts = t.options.segments[i - 1]
 
-        if (start !== undefined) {
-          return $localize`Video will begin at ${secondsToTime(start)}`
-        }
-
-        if (end !== undefined) {
-          return $localize`Video will stop at ${secondsToTime(end)}`
+          summary.push($localize`Remove segment ${i} – ${secondsToTime(parts.start)} to ${secondsToTime(parts.end)}`)
         }
       }
+    }
 
-      return ''
-    })
+    return summary
   }
 
   // ---------------------------------------------------------------------------

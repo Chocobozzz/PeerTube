@@ -56,7 +56,7 @@ describe('Test studio transcoding in peertube-runner program', function () {
           }
         }
 
-        await checkVideoDuration(server, uuid, 9)
+        await checkVideoDuration(server, uuid, VideoStudioCommand.getComplexTaskVideoDuration())
       }
     })
 
@@ -74,7 +74,7 @@ describe('Test studio transcoding in peertube-runner program', function () {
         const video = await server.videos.get({ id: uuid })
         expect(video.files).to.have.lengthOf(0)
 
-        await checkVideoDuration(server, uuid, 9)
+        await checkVideoDuration(server, uuid, VideoStudioCommand.getComplexTaskVideoDuration())
 
         await completeCheckHlsPlaylist({
           servers,
@@ -137,7 +137,6 @@ describe('Test studio transcoding in peertube-runner program', function () {
   })
 
   describe('Check cleanup', function () {
-
     it('Should have an empty cache directory', async function () {
       await checkPeerTubeRunnerCacheIsEmpty(peertubeRunner, 'transcoding')
     })

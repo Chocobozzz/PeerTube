@@ -517,7 +517,10 @@ export const CONSTRAINTS_FIELDS = {
   VIDEO_STUDIO: {
     TASKS: { min: 1, max: 10 }, // Number of tasks
     CUT_TIME_START: { min: 0 }, // Value
-    CUT_TIME_END: { min: 1 } // Value
+    CUT_TIME_END: { min: 1 }, // Value
+    REMOVE_SEGMENT_TIME_START: { min: 0 }, // Value
+    REMOVE_SEGMENT_TIME_END: { min: 1 }, // Value
+    REMOVE_SEGMENTS: { min: 1, max: 10 } // Number of segments per remove-segments task
   },
   LOGS: {
     CLIENT_MESSAGE: { min: 1, max: 1000 }, // Length

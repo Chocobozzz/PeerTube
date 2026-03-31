@@ -254,8 +254,19 @@ export type VideoStudioTaskWatermarkPayload = {
     file: string
 
     watermarkSizeRatio: number
-    horitonzalMarginRatio: number
+    horizontalMarginRatio: number
     verticalMarginRatio: number
+  }
+}
+
+export type VideoStudioTaskRemoveSegmentsPayload = {
+  name: 'remove-segments'
+
+  options: {
+    segments: {
+      start: number
+      end: number
+    }[]
   }
 }
 
@@ -264,6 +275,7 @@ export type VideoStudioTaskPayload =
   | VideoStudioTaskIntroPayload
   | VideoStudioTaskOutroPayload
   | VideoStudioTaskWatermarkPayload
+  | VideoStudioTaskRemoveSegmentsPayload
 
 export interface VideoStudioEditionPayload {
   videoUUID: string

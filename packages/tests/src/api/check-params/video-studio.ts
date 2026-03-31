@@ -390,6 +390,74 @@ describe('Test video studio API validator', function () {
         }
       })
     })
+
+    describe('Remove segments task', function () {
+      async function removeSegments (
+        segments: { start: number, end: number }[],
+        expectedStatus: HttpStatusCodeType = HttpStatusCode.BAD_REQUEST_400
+      ) {
+        await command.createEditionTasks({
+          videoId: videoUUID,
+          tasks: [
+            {
+              name: 'remove-segments',
+              options: { segments }
+            }
+          ],
+          expectedStatus
+        })
+      }
+
+      it('Should fail with empty segments', async function () {
+        await removeSegments([])
+      })
+
+      it('Should fail with invalid segment start', async function () {
+        const invalidStarts = [ 'tintin', -1, undefined ] as any[]
+
+        for (const start of invalidStarts) {
+          await removeSegments([ { start, end: 5 } ])
+        }
+      })
+
+      it('Should fail with invalid segment end', async function () {
+        await removeSegments([ { start: 1, end: 0 } ])
+        await removeSegments([ { start: 1, end: -1 } ] as any)
+        await removeSegments([ { start: 1, end: 'tintin' } ] as any)
+      })
+
+      it('Should fail when start equals end', async function () {
+        await removeSegments([ { start: 3, end: 3 } ])
+      })
+
+      it('Should fail when start is greater than end', async function () {
+        await removeSegments([ { start: 5, end: 2 } ])
+      })
+
+      it('Should fail with overlapping segments', async function () {
+        await removeSegments([ { start: 1, end: 5 }, { start: 3, end: 7 } ])
+      })
+
+      it('Should fail with unordered overlapping segments', async function () {
+        await removeSegments([ { start: 5, end: 8 }, { start: 1, end: 6 } ])
+      })
+
+      it('Should succeed with a single valid segment', async function () {
+        this.timeout(360000)
+
+        await removeSegments([ { start: 1, end: 3 } ], HttpStatusCode.NO_CONTENT_204)
+
+        await waitJobs([ server ])
+      })
+
+      it('Should succeed with multiple valid non-overlapping segments', async function () {
+        this.timeout(360000)
+
+        await removeSegments([ { start: 1, end: 3 }, { start: 5, end: 7 } ], HttpStatusCode.NO_CONTENT_204)
+
+        await waitJobs([ server ])
+      })
+    })
   })
 
   after(async function () {

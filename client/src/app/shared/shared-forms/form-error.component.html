@@ -1,0 +1,5 @@
+@if (field().touched() && field().invalid()) {
+  @for (err of field().errors(); track err.kind) {
+    <div class="form-error" role="alert">{{ err.message }}</div>
+  }
+}
