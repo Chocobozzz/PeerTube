@@ -15,7 +15,7 @@ class VideoFilterMenuButton extends MenuButton {
 
   createMenu() {
     const menu = new Menu(this.player_, { menuButton: this })
-    menu.addItem(new VideoFilterMenuItem(this.player_, {label: "Mirror Video"}))
+    menu.addItem(new VideoFilterMenuItem(this.player_, {label: "Mirror Video", videoFilter: "video-flip-horizontally"}))
     return menu
   }
 }

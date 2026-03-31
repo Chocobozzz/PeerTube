@@ -6,17 +6,19 @@ const MenuItem = videojs.getComponent("MenuItem") as typeof VideojsMenuItem
 class VideoFilterMenuItem extends MenuItem {
   flipVideo: boolean
   label: string
+  videoFilter: string
 
   constructor(player: VideojsPlayer, options: VideojsMenuItemOptions) {
     super(player, options)
     this.flipVideo = false
+    this.videoFilter = options.videoFilter
   }
   handleClick(): void {
     this.flipVideo = !this.flipVideo
-    if (this.flipVideo) {
-      this.player_.trigger("video-flip-horizontally-on")
+    if (this.flipVideo && this.videoFilter) {
+      this.player_.trigger(`${this.videoFilter}-on`)
     } else {
-      this.player_.trigger("video-flip-horizontally-off")
+      this.player_.trigger(`${this.videoFilter}-off`)
     }
   }
 }
