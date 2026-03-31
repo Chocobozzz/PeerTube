@@ -31,6 +31,12 @@ export class AbstractRunQuery {
     return this.sequelize.query<any>(this.query, queryOptions)
   }
 
+  protected buildCTE (cte: string[]) {
+    if (!cte.length) return ''
+
+    return `WITH ${cte.join(', ')} `
+  }
+
   protected buildSelect (attributes: string[]) {
     return `SELECT ${attributes.join(', ')} `
   }

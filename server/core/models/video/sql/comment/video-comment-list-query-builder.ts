@@ -47,7 +47,6 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
   private builtVideoJoin = false
   private builtVideoChannelJoin = false
   private builtVideoChannelActorJoin = false
-  private builtVideoChannelCollaboratorsJoin = false
   private builtAccountAvatarJoin = false
   private builtChannelAvatarJoin = false
   private builtAutomaticTagsJoin = false
@@ -149,21 +148,40 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
     }
 
     if (this.options.videoAccountOwnerId) {
-      this.buildVideoChannelJoin()
-
       this.replacements.videoAccountOwnerId = this.options.videoAccountOwnerId
 
       if (this.options.videoAccountOwnerIncludeCollaborations !== true) {
+        this.buildVideoChannelJoin()
+
         where.push(`"Video->VideoChannel"."accountId" = :videoAccountOwnerId`)
       } else {
-        this.buildVideoChannelCollaboratorsJoin()
+        const base = 'SELECT "VideoCommentModel"."id"  FROM "videoComment" AS "VideoCommentModel" ' +
+          this.getVideoJoin() +
+          getChannelJoin({
+            base: 'Video->',
+            on: '"Video"."channelId"',
+            includeAccount: false,
+            includeAvatars: false,
+            includeActors: false,
+            required: true
+          })
 
-        where.push(
-          `(` +
-            `"Video->VideoChannel"."accountId" = :videoAccountOwnerId OR ` +
-            `"Video->VideoChannel->VideoChannelCollaborators"."accountId" = :videoAccountOwnerId` +
-            `)`
+        this.subQueryCTE.push(
+          '"candidates" AS (' +
+            `${base} WHERE "Video->VideoChannel"."accountId" = :videoAccountOwnerId ` +
+            `UNION ` +
+            `${base} ` +
+            'INNER JOIN "videoChannelCollaborator" "Video->VideoChannel->VideoChannelCollaborators" ' +
+            'ON "Video->VideoChannel->VideoChannelCollaborators"."channelId" = "Video->VideoChannel"."id" ' +
+            'AND "Video->VideoChannel->VideoChannelCollaborators"."state" = :channelCollaboratorState ' +
+            'AND "Video->VideoChannel->VideoChannelCollaborators"."accountId" = :videoAccountOwnerId ' +
+            ')'
         )
+
+        this.replacements.videoAccountOwnerId = this.options.videoAccountOwnerId
+        this.replacements.channelCollaboratorState = VideoChannelCollaboratorState.ACCEPTED
+
+        this.subQueryJoin += ' INNER JOIN "candidates" ON "candidates"."id" = "VideoCommentModel"."id" '
       }
     }
 
@@ -251,9 +269,13 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
   private buildVideoJoin () {
     if (this.builtVideoJoin) return
 
-    this.subQueryJoin += ' INNER JOIN "video" "Video" ON "Video"."id" = "VideoCommentModel"."videoId" '
+    this.subQueryJoin += this.getVideoJoin()
 
     this.builtVideoJoin = true
+  }
+
+  private getVideoJoin () {
+    return ' INNER JOIN "video" "Video" ON "Video"."id" = "VideoCommentModel"."videoId" '
   }
 
   private buildVideoChannelJoin () {
@@ -285,23 +307,6 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
     })
 
     this.builtVideoChannelActorJoin = true
-  }
-
-  private buildVideoChannelCollaboratorsJoin () {
-    if (this.builtVideoChannelCollaboratorsJoin) return
-
-    this.buildVideoChannelJoin()
-
-    this.subQueryJoin += ' LEFT JOIN "videoChannelCollaborator" "Video->VideoChannel->VideoChannelCollaborators" ' +
-      'ON "Video->VideoChannel->VideoChannelCollaborators"."channelId" = "Video->VideoChannel"."id" ' +
-      'AND "Video->VideoChannel->VideoChannelCollaborators"."state" = :channelCollaboratorState ' +
-      // Ensure we join with max 1 collaborator to not duplicate rows
-      'AND "Video->VideoChannel->VideoChannelCollaborators"."accountId" = :videoAccountOwnerId '
-
-    this.replacements.videoAccountOwnerId = this.options.videoAccountOwnerId
-    this.replacements.channelCollaboratorState = VideoChannelCollaboratorState.ACCEPTED
-
-    this.builtVideoChannelCollaboratorsJoin = true
   }
 
   private buildAutomaticTagsJoin () {

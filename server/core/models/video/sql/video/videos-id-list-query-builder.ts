@@ -19,6 +19,7 @@ import { createSafeIn, parseRowCountResult } from '../../../shared/index.js'
 
 /**
  * Build videos list SQL query to fetch rows
+ * We don't list classic SQL builder classes used by other models because for performance reasons
  */
 
 export type DisplayOnlyForFollowerOptions = {
