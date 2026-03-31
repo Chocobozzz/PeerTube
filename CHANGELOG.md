@@ -1,5 +1,20 @@
 # Changelog
 
+## v8.1.4
+
+### IMPORTANT NOTES
+
+ * Follow v8.1.0 IMPORTANT NOTES if you upgrade from PeerTube <= v8.0.2
+
+### Bug fixes
+
+ * Don't fetch too big image sizes for thumbnails
+ * Prevent the player from crashing when the user quits the watch page
+ * Prevent invalid start/end timecode when cutting the video in studio
+ * Fix blocklist error when listing many users
+ * Fix broken transcoding when remote runners is enabled
+
+
 ## v8.1.3
 
 ### IMPORTANT NOTES
