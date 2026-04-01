@@ -19,7 +19,6 @@ export type VideoThumbnailInput = Pick<
   | 'userHistory'
   | 'originallyPublishedAt'
   | 'liveSchedules'
-  | 'thumbnailUrl'
 >
 
 @Component({
