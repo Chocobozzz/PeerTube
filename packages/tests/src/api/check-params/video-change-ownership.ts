@@ -76,6 +76,15 @@ describe('Test video change ownership API validator', function () {
       await server.changeOwnership.create({ videoId: rootVideo2.id, username: 'user', token: rootEditorToken })
       await server.changeOwnership.create({ videoId: rootVideo.id, username: 'user' })
     })
+
+    it('Should fail to create a request for a video with a pending ownership change request', async function () {
+      await server.changeOwnership.create({
+        videoId: rootVideo2.id,
+        username: 'user',
+        token: rootEditorToken,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
   })
 
   describe('List ownership change requests', function () {
@@ -85,7 +94,7 @@ describe('Test video change ownership API validator', function () {
 
     it('Should succeed with valid params', async function () {
       const { data } = await server.changeOwnership.list({ token: userToken })
-      ownershipChangeId = data[0].id
+      ownershipChangeId = data.find(d => d.video.id === rootVideo2.id).id
     })
   })
 
@@ -103,7 +112,7 @@ describe('Test video change ownership API validator', function () {
     })
 
     it('Should fail with a ownership of another user', async function () {
-      for (const token of [ userEditorToken, anotherUserToken ]) {
+      for (const token of [ userEditorToken, anotherUserToken, rootEditorToken ]) {
         await server.changeOwnership.refuse({
           ownershipId: ownershipChangeId,
           token,
@@ -129,7 +138,7 @@ describe('Test video change ownership API validator', function () {
     let targetChannelId: number
 
     before(async function () {
-      await server.changeOwnership.create({ videoId: rootVideo.id, username: 'user' })
+      await server.changeOwnership.create({ videoId: rootVideo2.id, username: 'user' })
 
       const { data } = await server.changeOwnership.list({ token: userToken })
       ownershipChangeId = data[0].id

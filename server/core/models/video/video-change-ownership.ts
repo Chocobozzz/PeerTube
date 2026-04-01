@@ -6,7 +6,11 @@ import {
 } from '@server/types/models/video/video-change-ownership.js'
 import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { AccountModel } from '../account/account.js'
-import { SequelizeModel, getSort } from '../shared/index.js'
+import { SequelizeModel, buildSQLAttributes } from '../shared/index.js'
+import {
+  ListVideoChangeOwnershipOptions,
+  VideoChangeOwnershipListQueryBuilder
+} from './sql/change-ownership/video-change-ownership-list-query-builder.js'
 import { VideoModel, ScopeNames as VideoScopeNames } from './video.js'
 
 enum ScopeNames {
@@ -106,20 +110,21 @@ export class VideoChangeOwnershipModel extends SequelizeModel<VideoChangeOwnersh
   })
   declare Video: Awaited<VideoModel>
 
-  static listForApi (nextOwnerId: number, start: number, count: number, sort: string) {
-    const query = {
-      offset: start,
-      limit: count,
-      order: getSort(sort),
-      where: {
-        nextOwnerAccountId: nextOwnerId
-      }
-    }
+  static getSQLAttributes (tableName: string, aliasPrefix = '') {
+    return buildSQLAttributes({
+      model: this,
+      tableName,
+      aliasPrefix
+    })
+  }
 
+  // ---------------------------------------------------------------------------
+
+  static listForApi (options: ListVideoChangeOwnershipOptions) {
     return Promise.all([
-      VideoChangeOwnershipModel.count(query),
-      VideoChangeOwnershipModel.scope([ ScopeNames.WITH_ACCOUNTS, ScopeNames.WITH_VIDEO ]).findAll<MVideoChangeOwnershipFull>(query)
-    ]).then(([ count, rows ]) => ({ total: count, data: rows }))
+      new VideoChangeOwnershipListQueryBuilder(VideoChangeOwnershipModel.sequelize, options).list<MVideoChangeOwnershipFull>(),
+      new VideoChangeOwnershipListQueryBuilder(VideoChangeOwnershipModel.sequelize, options).count()
+    ]).then(([ rows, total ]) => ({ total, data: rows }))
   }
 
   static load (id: number): Promise<MVideoChangeOwnershipFull> {

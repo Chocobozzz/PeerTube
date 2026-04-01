@@ -1,6 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
+import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
 import {
   ChangeOwnershipCommand,
   cleanupTests,
@@ -12,7 +12,7 @@ import {
   setDefaultVideoChannel,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
+import { expect } from 'chai'
 
 describe('Test video change ownership - nominal', function () {
   let servers: PeerTubeServer[] = []
@@ -25,6 +25,11 @@ describe('Test video change ownership - nominal', function () {
 
   let secondUserToken = ''
   let secondUserChannelId: number
+
+  let unrelatedUserToken = ''
+
+  let firstUserEditorToken = ''
+  let secondUserEditorToken = ''
 
   let lastRequestId: number
 
@@ -52,6 +57,10 @@ describe('Test video change ownership - nominal', function () {
 
     firstUserToken = await servers[0].users.generateUserAndToken(firstUser)
     secondUserToken = await servers[0].users.generateUserAndToken(secondUser)
+    unrelatedUserToken = await servers[0].users.generateUserAndToken('unrelated')
+
+    firstUserEditorToken = await servers[0].channelCollaborators.createEditor('first_user_editor', firstUser + '_channel')
+    secondUserEditorToken = await servers[0].channelCollaborators.createEditor('second_user_editor', secondUser + '_channel')
 
     {
       const { videoChannels } = await servers[0].users.getMyInfo({ token: firstUserToken })
@@ -86,16 +95,8 @@ describe('Test video change ownership - nominal', function () {
   })
 
   it('Should not have video change ownership', async function () {
-    {
-      const body = await command.list({ token: firstUserToken })
-
-      expect(body.total).to.equal(0)
-      expect(body.data).to.be.an('array')
-      expect(body.data.length).to.equal(0)
-    }
-
-    {
-      const body = await command.list({ token: secondUserToken })
+    for (const token of [ firstUserToken, secondUserToken, unrelatedUserToken ]) {
+      const body = await command.list({ token })
 
       expect(body.total).to.equal(0)
       expect(body.data).to.be.an('array')
@@ -109,17 +110,17 @@ describe('Test video change ownership - nominal', function () {
     await command.create({ token: firstUserToken, videoId: servers[0].store.videoCreated.id, username: secondUser })
   })
 
-  it('Should only return a request to change ownership for the second user', async function () {
+  it('Should correctly list ownership change', async function () {
     {
-      const body = await command.list({ token: firstUserToken })
+      const body = await command.list({ token: unrelatedUserToken })
 
       expect(body.total).to.equal(0)
       expect(body.data).to.be.an('array')
       expect(body.data.length).to.equal(0)
     }
 
-    {
-      const body = await command.list({ token: secondUserToken })
+    for (const token of [ firstUserToken, secondUserToken ]) {
+      const body = await command.list({ token })
 
       expect(body.total).to.equal(1)
       expect(body.data).to.be.an('array')
@@ -127,18 +128,6 @@ describe('Test video change ownership - nominal', function () {
 
       lastRequestId = body.data[0].id
     }
-  })
-
-  it('Should accept the same change ownership request without crashing', async function () {
-    await command.create({ token: firstUserToken, videoId: servers[0].store.videoCreated.id, username: secondUser })
-  })
-
-  it('Should not create multiple change ownership requests while one is waiting', async function () {
-    const body = await command.list({ token: secondUserToken })
-
-    expect(body.total).to.equal(1)
-    expect(body.data).to.be.an('array')
-    expect(body.data.length).to.equal(1)
   })
 
   it('Should not be possible to refuse the change of ownership from first user', async function () {
@@ -150,22 +139,20 @@ describe('Test video change ownership - nominal', function () {
   })
 
   it('Should send a new request to change ownership of a video', async function () {
-    this.timeout(15000)
-
     await command.create({ token: firstUserToken, videoId: servers[0].store.videoCreated.id, username: secondUser })
   })
 
   it('Should return two requests to change ownership for the second user', async function () {
     {
-      const body = await command.list({ token: firstUserToken })
+      const body = await command.list({ token: unrelatedUserToken })
 
       expect(body.total).to.equal(0)
       expect(body.data).to.be.an('array')
       expect(body.data.length).to.equal(0)
     }
 
-    {
-      const body = await command.list({ token: secondUserToken })
+    for (const token of [ firstUserToken, secondUserToken ]) {
+      const body = await command.list({ token })
 
       expect(body.total).to.equal(2)
       expect(body.data).to.be.an('array')
@@ -173,6 +160,22 @@ describe('Test video change ownership - nominal', function () {
 
       lastRequestId = body.data[0].id
     }
+  })
+
+  it('Should list change ownership requests for collaborators', async function () {
+    const body = await command.list({ token: firstUserEditorToken })
+
+    expect(body.total).to.equal(2)
+    expect(body.data).to.be.an('array')
+    expect(body.data.length).to.equal(2)
+  })
+
+  it('Should list change ownership requests for collaborators of a channel of next owner', async function () {
+    const body = await command.list({ token: secondUserEditorToken })
+
+    expect(body.total).to.equal(0)
+    expect(body.data).to.be.an('array')
+    expect(body.data.length).to.equal(0)
   })
 
   it('Should not be possible to accept the change of ownership from first user', async function () {
@@ -201,8 +204,6 @@ describe('Test video change ownership - nominal', function () {
   })
 
   it('Should send a request to change ownership of a live', async function () {
-    this.timeout(15000)
-
     await command.create({ token: firstUserToken, videoId: liveId, username: secondUser })
 
     const body = await command.list({ token: secondUserToken })
@@ -271,32 +272,13 @@ describe('Test video change ownership - quota too small', function () {
   })
 
   it('Should send a request to change ownership of a video', async function () {
-    this.timeout(15000)
-
     await server.changeOwnership.create({ token: firstUserToken, videoId: server.store.videoCreated.id, username: secondUser })
   })
 
-  it('Should only return a request to change ownership for the second user', async function () {
-    {
-      const body = await server.changeOwnership.list({ token: firstUserToken })
-
-      expect(body.total).to.equal(0)
-      expect(body.data).to.be.an('array')
-      expect(body.data.length).to.equal(0)
-    }
-
-    {
-      const body = await server.changeOwnership.list({ token: secondUserToken })
-
-      expect(body.total).to.equal(1)
-      expect(body.data).to.be.an('array')
-      expect(body.data.length).to.equal(1)
-
-      lastRequestId = body.data[0].id
-    }
-  })
-
   it('Should not be possible to accept the change of ownership from second user because of exceeded quota', async function () {
+    const body = await server.changeOwnership.list({ token: secondUserToken })
+    lastRequestId = body.data[0].id
+
     const { videoChannels } = await server.users.getMyInfo({ token: secondUserToken })
     const channelId = videoChannels[0].id
 

@@ -41,7 +41,9 @@ export class ModelBuilder<T extends SequelizeModel> {
     VideoPlaylists: 'VideoPlaylistModel',
     NotificationSetting: 'UserNotificationSettingModel',
     VideoChannelCollaborators: 'VideoChannelCollaboratorModel',
-    Tags: 'TagModel'
+    Tags: 'TagModel',
+    Initiator: 'AccountModel',
+    NextOwner: 'AccountModel'
   }
 
   constructor (private readonly sequelize: Sequelize) {

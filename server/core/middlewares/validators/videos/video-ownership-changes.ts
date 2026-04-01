@@ -15,6 +15,7 @@ import {
   doesVideoExist,
   isValidVideoIdParam
 } from '../shared/index.js'
+import { VideoChangeOwnershipModel } from '@server/models/video/video-change-ownership.js'
 
 export const videosChangeOwnershipValidator = [
   isValidVideoIdParam('videoId'),
@@ -40,6 +41,15 @@ export const videosChangeOwnershipValidator = [
     if (!nextOwner) {
       res.fail({
         message: req.t('{username} does not exist on {instanceName}', { username: req.body.username, instanceName: CONFIG.INSTANCE.NAME })
+      })
+      return
+    }
+
+    const existing = await VideoChangeOwnershipModel.loadPendingByVideo(res.locals.videoWithRights.id)
+    if (existing) {
+      res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: req.t('There is already a pending ownership change request for this video')
       })
       return
     }

@@ -102,12 +102,12 @@ async function giveVideoOwnership (req: express.Request, res: express.Response) 
 async function listVideoOwnership (req: express.Request, res: express.Response) {
   const currentAccountId = res.locals.oauth.token.User.Account.id
 
-  const resultList = await VideoChangeOwnershipModel.listForApi(
-    currentAccountId,
-    req.query.start,
-    req.query.count,
-    req.query.sort || 'createdAt'
-  )
+  const resultList = await VideoChangeOwnershipModel.listForApi({
+    accountId: currentAccountId,
+    start: req.query.start,
+    count: req.query.count,
+    sort: req.query.sort || 'createdAt'
+  })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
