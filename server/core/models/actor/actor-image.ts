@@ -80,6 +80,15 @@ export class ActorImageModel extends SequelizeModel<ActorImageModel> {
 
   // ---------------------------------------------------------------------------
 
+  static getSQLAttributesJSON () {
+    return buildSQLAttributes({
+      model: this,
+      tableName: '',
+      aliasPrefix: '',
+      jsonMode: true
+    })
+  }
+
   static getSQLAttributes (tableName: string, aliasPrefix = '') {
     return buildSQLAttributes({
       model: this,

@@ -99,3 +99,25 @@ export function getAvatarsJoin (options: {
     `ON "${base}Avatars"."actorId" = ${on} ` +
     `AND "${base}Avatars"."type" = ${ActorImageType.AVATAR} `
 }
+
+/**
+ * Build JSON directly in PostgreSQL to reduce amount of rows transferred and processed in JS
+ */
+export function getAvatarsJSONJoin (options: {
+  attributes: string
+  base: string
+  on: string
+}) {
+  const { attributes, base, on } = options
+
+  return `LEFT JOIN LATERAL (` +
+    `SELECT json_agg(` +
+    `  jsonb_build_object(${attributes})` +
+    `) AS "Avatars"` +
+    ` FROM "actorImage" WHERE "actorId" = ${on} AND "type" = ${ActorImageType.AVATAR}` +
+    `) AS "${base}AvatarsJSON" ON TRUE `
+}
+
+export function getAvatarsJSONAttributes (base: string) {
+  return `"${base}AvatarsJSON"."Avatars" AS "${base.replace(/->/g, '.')}Avatars"`
+}

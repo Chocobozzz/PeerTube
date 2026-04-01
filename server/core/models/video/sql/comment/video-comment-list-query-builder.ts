@@ -1,6 +1,6 @@
 import { VideoChannelCollaboratorState, VideoPrivacy } from '@peertube/peertube-models'
 import { AbstractListQuery, AbstractListQueryOptions } from '@server/models/shared/abstract-list-query.js'
-import { getAccountJoin, getActorJoin, getAvatarsJoin, getChannelJoin } from '@server/models/shared/sql/actor-helpers.js'
+import { getAccountJoin, getActorJoin, getAvatarsJSONJoin, getChannelJoin } from '@server/models/shared/sql/actor-helpers.js'
 import { Sequelize } from 'sequelize'
 import { createSafeIn } from '../../../shared/index.js'
 import { VideoCommentTableAttributes } from './video-comment-table-attributes.js'
@@ -326,7 +326,8 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
   private buildAccountAvatarsJoin () {
     if (this.builtAccountAvatarJoin) return
 
-    this.join += getAvatarsJoin({
+    this.join += getAvatarsJSONJoin({
+      attributes: this.tableAttributes.getAvatarAttributesJSON(),
       base: 'Account->Actor->',
       on: '"VideoCommentModel"."Account.Actor.id"'
     })
@@ -337,7 +338,8 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
   private buildChannelAvatarsJoin () {
     if (this.builtChannelAvatarJoin) return
 
-    this.join += getAvatarsJoin({
+    this.join += getAvatarsJSONJoin({
+      attributes: this.tableAttributes.getAvatarAttributesJSON(),
       base: 'Video->VideoChannel->Actor->',
       on: '"VideoCommentModel"."Video.VideoChannel.Actor.id"'
     })

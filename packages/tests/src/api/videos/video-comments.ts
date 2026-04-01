@@ -524,6 +524,10 @@ describe('Test video comments', function () {
         expect(threads.total).to.equal(0)
       }
     })
+
+    after(async function () {
+      await cleanupTests([ server2, server3 ])
+    })
   })
 
   after(async function () {
