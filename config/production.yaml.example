@@ -67,7 +67,7 @@ rates_limit:
 oauth2:
   token_lifetime:
     access_token: '1 day'
-    refresh_token: '2 weeks'
+    refresh_token: '4 weeks'
 
 # Proxies to trust to get real client IP
 # If you run PeerTube just behind a local proxy (nginx), keep 'loopback'
