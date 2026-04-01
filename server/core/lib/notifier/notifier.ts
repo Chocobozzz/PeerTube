@@ -58,27 +58,36 @@ const lTags = loggerTagsFactory('notifier')
 class Notifier {
   private readonly notificationModels = {
     newVideoOrLive: [ NewVideoOrLiveForSubscribers ],
+
     publicationAfterTranscoding: [ OwnedPublicationAfterTranscoding ],
     publicationAfterScheduleUpdate: [ OwnedPublicationAfterScheduleUpdate ],
     publicationAfterAutoUnblacklist: [ OwnedPublicationAfterAutoUnblacklist ],
+    videoStudioEditionFinished: [ StudioEditionFinishedForOwner ],
+    videoTranscriptionGenerated: [ VideoTranscriptionGeneratedForOwner ],
+
     newComment: [ CommentMention, NewCommentForVideoOwner ],
     commentApproval: [ CommentMention ],
+
     newAbuse: [ NewAbuseForModerators ],
+    abuseStateChange: [ AbuseStateChangeForReporter ],
+    newAbuseMessage: [ NewAbuseMessageForReporter, NewAbuseMessageForModerators ],
+
     newBlacklist: [ NewBlacklistForOwner ],
+    newAutoBlacklist: [ NewAutoBlacklistForModerators ],
     unblacklist: [ UnblacklistForOwner ],
+
     importFinished: [ ImportFinishedForOwner ],
+
     directRegistration: [ DirectRegistrationForModerators ],
     registrationRequest: [ RegistrationRequestForModerators ],
+
     userFollow: [ FollowForUser ],
     instanceFollow: [ FollowForInstance ],
     autoInstanceFollow: [ AutoFollowForInstance ],
-    newAutoBlacklist: [ NewAutoBlacklistForModerators ],
-    abuseStateChange: [ AbuseStateChangeForReporter ],
-    newAbuseMessage: [ NewAbuseMessageForReporter, NewAbuseMessageForModerators ],
+
     newPeertubeVersion: [ NewPeerTubeVersionForAdmins ],
     newPluginVersion: [ NewPluginVersionForAdmins ],
-    videoStudioEditionFinished: [ StudioEditionFinishedForOwner ],
-    videoTranscriptionGenerated: [ VideoTranscriptionGeneratedForOwner ],
+
     channelCollaboratorInvitation: [ InvitedToCollaborateToChannel ],
     channelCollaborationAccepted: [ AcceptedToCollaborateToChannel ],
     channelCollaborationRefused: [ RefusedToCollaborateToChannel ]

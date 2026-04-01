@@ -2,6 +2,7 @@
 
 import { HttpStatusCode, VideoCreateResult } from '@peertube/peertube-models'
 import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@peertube/peertube-server-commands'
+import { expect } from 'chai'
 
 describe('Test video change ownership API validator', function () {
   let server: PeerTubeServer
@@ -95,6 +96,57 @@ describe('Test video change ownership API validator', function () {
     it('Should succeed with valid params', async function () {
       const { data } = await server.changeOwnership.list({ token: userToken })
       ownershipChangeId = data.find(d => d.video.id === rootVideo2.id).id
+    })
+  })
+
+  describe('List video ownership changes', function () {
+    it('Should fail if not authenticated', async function () {
+      await server.changeOwnership.listOfVideo({
+        videoId: rootVideo.id,
+        token: null,
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
+    })
+
+    it('Should fail with a non existing video', async function () {
+      await server.changeOwnership.listOfVideo({
+        videoId: 42,
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
+      })
+    })
+
+    it('Should fail with a video of another user', async function () {
+      for (const token of [ userToken, userEditorToken ]) {
+        await server.changeOwnership.listOfVideo({
+          videoId: rootVideo.id,
+          token,
+          expectedStatus: HttpStatusCode.FORBIDDEN_403
+        })
+      }
+    })
+
+    it('Should fail with an invalid state parameter', async function () {
+      await server.changeOwnership.listOfVideo({
+        videoId: rootVideo.id,
+        state: 'INVALID_STATE' as any,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should succeed with valid params', async function () {
+      const { data, total } = await server.changeOwnership.listOfVideo({
+        videoId: rootVideo.id
+      })
+      expect(total).to.be.a('number')
+      expect(data).to.be.an('array')
+    })
+
+    it('Should succeed with a state filter', async function () {
+      const { data } = await server.changeOwnership.listOfVideo({
+        videoId: rootVideo.id,
+        state: 'WAITING'
+      })
+      expect(data).to.be.an('array')
     })
   })
 

@@ -2967,6 +2967,7 @@ paths:
   /api/v1/videos/ownership:
     get:
       summary: List video ownership changes
+      description: List ownership change requests received by the authenticated user and requests sent by a channel managed by the authenticated user
       tags:
         - Video Ownership Change
       security:
@@ -2974,6 +2975,18 @@ paths:
       responses:
         '200':
           description: successful operation
+          content:
+            'application/json':
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VideoChangeOwnership'
 
   '/api/v1/videos/ownership/{id}/accept':
     post:
@@ -3008,6 +3021,49 @@ paths:
           description: cannot terminate an ownership change of another user
         '404':
           description: video ownership change not found
+
+  '/api/v1/videos/{id}/ownership':
+    get:
+      summary: List ownership change requests for a video
+      description: List all ownership change requests for a specific video. The authenticated user must be able to manage the video.
+      tags:
+        - Video Ownership Change
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+        - name: state
+          in: query
+          required: false
+          description: Filter by ownership change state (WAITING, ACCEPTED, REFUSED)
+          schema:
+            type: string
+            enum:
+              - WAITING
+              - ACCEPTED
+              - REFUSED
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            'application/json':
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VideoChangeOwnership'
+        '403':
+          description: cannot manage the video
+        '404':
+          description: video not found
 
   '/api/v1/videos/{id}/give-ownership':
     post:
@@ -9977,6 +10033,28 @@ components:
           type: integer
         nsfw:
           type: boolean
+    VideoChangeOwnership:
+      type: object
+      description: Representation of a video ownership change
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        status:
+          type: string
+          description: Status of the ownership change request
+          enum:
+            - WAITING
+            - ACCEPTED
+            - REFUSED
+        initiatorAccount:
+          $ref: '#/components/schemas/Account'
+        nextOwnerAccount:
+          $ref: '#/components/schemas/Account'
+        video:
+          $ref: '#/components/schemas/Video'
+        createdAt:
+          type: string
+          format: date-time
     VideoPlaylist:
       properties:
         id:

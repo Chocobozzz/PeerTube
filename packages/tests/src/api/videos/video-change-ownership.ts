@@ -105,8 +105,6 @@ describe('Test video change ownership - nominal', function () {
   })
 
   it('Should send a request to change ownership of a video', async function () {
-    this.timeout(15000)
-
     await command.create({ token: firstUserToken, videoId: servers[0].store.videoCreated.id, username: secondUser })
   })
 
@@ -215,8 +213,6 @@ describe('Test video change ownership - nominal', function () {
   })
 
   it('Should accept a live ownership change', async function () {
-    this.timeout(20000)
-
     await command.accept({ token: secondUserToken, ownershipId: lastRequestId, channelId: secondUserChannelId })
 
     await waitJobs(servers)
@@ -228,6 +224,28 @@ describe('Test video change ownership - nominal', function () {
       expect(video.channel.displayName).to.equal('Main second channel')
       expect(video.channel.name).to.equal('second_channel')
     }
+  })
+
+  it('Should list ownership changes for a specific video', async function () {
+    const body = await command.listOfVideo({ videoId: servers[0].store.videoCreated.id })
+
+    expect(body.total).to.equal(2)
+    expect(body.data).to.be.an('array')
+    expect(body.data.length).to.equal(2)
+    expect(body.data[0].video.id).to.equal(servers[0].store.videoCreated.id)
+
+    expect(body.data.map(i => i.status)).to.have.members([ 'ACCEPTED', 'REFUSED' ])
+  })
+
+  it('Should list ownership changes with state filter', async function () {
+    const body = await command.listOfVideo({
+      videoId: servers[0].store.videoCreated.id,
+      state: 'ACCEPTED'
+    })
+
+    expect(body.total).to.equal(1)
+
+    expect(body.data[0].status).to.equal('ACCEPTED')
   })
 
   after(async function () {

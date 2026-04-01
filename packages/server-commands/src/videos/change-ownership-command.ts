@@ -2,11 +2,12 @@ import { HttpStatusCode, ResultList, VideoChangeOwnership } from '@peertube/peer
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class ChangeOwnershipCommand extends AbstractCommand {
-
-  create (options: OverrideCommandOptions & {
-    videoId: number | string
-    username: string
-  }) {
+  create (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+      username: string
+    }
+  ) {
     const { videoId, username } = options
     const path = '/api/v1/videos/' + videoId + '/give-ownership'
 
@@ -33,10 +34,31 @@ export class ChangeOwnershipCommand extends AbstractCommand {
     })
   }
 
-  accept (options: OverrideCommandOptions & {
-    ownershipId: number
-    channelId: number
-  }) {
+  listOfVideo (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+      state?: string
+    }
+  ) {
+    const { videoId, state } = options
+    const path = '/api/v1/videos/' + videoId + '/ownership'
+
+    return this.getRequestBody<ResultList<VideoChangeOwnership>>({
+      ...options,
+
+      path,
+      query: { state, sort: '-createdAt' },
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
+  accept (
+    options: OverrideCommandOptions & {
+      ownershipId: number
+      channelId: number
+    }
+  ) {
     const { ownershipId, channelId } = options
     const path = '/api/v1/videos/ownership/' + ownershipId + '/accept'
 
@@ -50,9 +72,11 @@ export class ChangeOwnershipCommand extends AbstractCommand {
     })
   }
 
-  refuse (options: OverrideCommandOptions & {
-    ownershipId: number
-  }) {
+  refuse (
+    options: OverrideCommandOptions & {
+      ownershipId: number
+    }
+  ) {
     const { ownershipId } = options
     const path = '/api/v1/videos/ownership/' + ownershipId + '/refuse'
 

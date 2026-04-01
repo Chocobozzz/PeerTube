@@ -1,6 +1,6 @@
 import { CommonModule, NgClass } from '@angular/common'
 import { Component, inject, viewChild } from '@angular/core'
-import { Notifier } from '@app/core'
+import { AuthService, Notifier } from '@app/core'
 import { Account } from '@app/shared/shared-main/account/account.model'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { VideoOwnershipService } from '@app/shared/shared-main/video/video-ownership.service'
@@ -30,6 +30,7 @@ import { MyAcceptOwnershipComponent } from './my-accept-ownership/my-accept-owne
 export class MyOwnershipComponent {
   private notifier = inject(Notifier)
   private videoOwnershipService = inject(VideoOwnershipService)
+  private authService = inject(AuthService)
 
   readonly myAccountAcceptOwnershipComponent = viewChild<MyAcceptOwnershipComponent>('myAcceptOwnershipComponent')
   readonly table = viewChild<TableComponent<VideoChangeOwnership>>('table')
@@ -72,6 +73,10 @@ export class MyOwnershipComponent {
         next: () => this.table().loadData(),
         error: err => this.notifier.handleError(err)
       })
+  }
+
+  isReceiver (videoChangeOwnership: VideoChangeOwnership) {
+    return videoChangeOwnership.nextOwnerAccount.id === this.authService.getUser().account.id
   }
 
   private _dataLoader (options: DataLoaderOptionsBase) {

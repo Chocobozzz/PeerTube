@@ -1,11 +1,17 @@
-import { VideoChannelCollaboratorState } from '@peertube/peertube-models'
+import { VideoChangeOwnershipStatusType, VideoChannelCollaboratorState } from '@peertube/peertube-models'
 import { AbstractListQuery, AbstractListQueryOptions } from '@server/models/shared/abstract-list-query.js'
 import { getActorJoin, getAvatarsJoin, getChannelJoin } from '@server/models/shared/sql/actor-helpers.js'
 import { Sequelize } from 'sequelize'
 import { VideoChangeOwnershipTableAttributes } from './video-change-ownership-table-attributes.js'
 
 export interface ListVideoChangeOwnershipOptions extends AbstractListQueryOptions {
-  accountId: number
+  id?: number
+
+  accountId?: number
+
+  state?: VideoChangeOwnershipStatusType
+
+  videoId?: number
 }
 
 export class VideoChangeOwnershipListQueryBuilder extends AbstractListQuery {
@@ -31,16 +37,42 @@ export class VideoChangeOwnershipListQueryBuilder extends AbstractListQuery {
   // ---------------------------------------------------------------------------
 
   protected buildSubQueryWhere () {
-    this.buildChannelCollaboratorsJoin()
-    this.subQueryWhere = `WHERE "VideoChangeOwnershipModel"."nextOwnerAccountId" = :nextOwnerAccountId ` +
-      `OR (` +
-      `"Video->VideoChannel->VideoChannelCollaborators"."accountId" = :collaborationAccountId OR ` +
-      `"Video->VideoChannel->Account"."id" = :videoAccountId` +
-      `)`
+    const where: string[] = []
 
-    this.replacements.collaborationAccountId = this.options.accountId
-    this.replacements.videoAccountId = this.options.accountId
-    this.replacements.nextOwnerAccountId = this.options.accountId
+    if (this.options.accountId) {
+      this.buildChannelCollaboratorsJoin()
+
+      where.push(
+        `"VideoChangeOwnershipModel"."nextOwnerAccountId" = :nextOwnerAccountId ` +
+          `OR (` +
+          `"Video->VideoChannel->VideoChannelCollaborators"."accountId" = :collaborationAccountId OR ` +
+          `"Video->VideoChannel->Account"."id" = :videoAccountId` +
+          `)`
+      )
+
+      this.replacements.collaborationAccountId = this.options.accountId
+      this.replacements.videoAccountId = this.options.accountId
+      this.replacements.nextOwnerAccountId = this.options.accountId
+    }
+
+    if (this.options.state) {
+      where.push(`"VideoChangeOwnershipModel"."status" = :status`)
+      this.replacements.status = this.options.state
+    }
+
+    if (this.options.videoId) {
+      where.push(`"VideoChangeOwnershipModel"."videoId" = :videoId`)
+      this.replacements.videoId = this.options.videoId
+    }
+
+    if (this.options.id) {
+      where.push(`"VideoChangeOwnershipModel"."id" = :id`)
+      this.replacements.id = this.options.id
+    }
+
+    this.subQueryWhere = where.length !== 0
+      ? `WHERE ${where.join(' AND ')}`
+      : ''
   }
 
   // ---------------------------------------------------------------------------

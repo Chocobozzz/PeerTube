@@ -1,4 +1,4 @@
-import { HttpStatusCode, VideoChangeOwnershipStatus, VideoChannelActivityAction } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoChangeOwnershipStatus, VideoChangeOwnershipStatusType, VideoChannelActivityAction } from '@peertube/peertube-models'
 import { canVideoBeFederated } from '@server/lib/activitypub/videos/federate.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { MVideoFull } from '@server/types/models/index.js'
@@ -16,6 +16,7 @@ import {
   setDefaultPagination,
   videosAcceptChangeOwnershipValidator,
   videosChangeOwnershipValidator,
+  videosListVideoOwnershipChangesValidator,
   videosTerminateChangeOwnershipValidator
 } from '../../../middlewares/index.js'
 import { VideoChangeOwnershipModel } from '../../../models/video/video-change-ownership.js'
@@ -29,6 +30,15 @@ ownershipVideoRouter.post(
   authenticate,
   asyncMiddleware(videosChangeOwnershipValidator),
   asyncRetryTransactionMiddleware(giveVideoOwnership)
+)
+
+ownershipVideoRouter.get(
+  '/:videoId/ownership',
+  authenticate,
+  asyncMiddleware(videosListVideoOwnershipChangesValidator),
+  paginationValidator,
+  setDefaultPagination,
+  asyncRetryTransactionMiddleware(listVideoOwnershipChanges)
 )
 
 ownershipVideoRouter.get(
@@ -97,6 +107,21 @@ async function giveVideoOwnership (req: express.Request, res: express.Response) 
   logger.info('Ownership change for video %s created.', video.name)
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+}
+
+async function listVideoOwnershipChanges (req: express.Request, res: express.Response) {
+  const videoId = res.locals.videoWithRights.id
+  const state = req.query.state as VideoChangeOwnershipStatusType | undefined
+
+  const resultList = await VideoChangeOwnershipModel.listForApi({
+    videoId,
+    state,
+    start: req.query.start,
+    count: req.query.count,
+    sort: req.query.sort || 'createdAt'
+  })
+
+  return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
 async function listVideoOwnership (req: express.Request, res: express.Response) {

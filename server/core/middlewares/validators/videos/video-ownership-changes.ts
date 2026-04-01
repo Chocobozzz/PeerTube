@@ -4,7 +4,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { MUserAccountId, MVideoChangeOwnershipFull, MVideoWithAllFiles } from '@server/types/models/index.js'
 import express from 'express'
-import { param } from 'express-validator'
+import { param, query } from 'express-validator'
 import {
   areValidationErrors,
   checkCanManageAccount,
@@ -16,6 +16,7 @@ import {
   isValidVideoIdParam
 } from '../shared/index.js'
 import { VideoChangeOwnershipModel } from '@server/models/video/video-change-ownership.js'
+import { VideoModel } from '@server/models/video/video.js'
 
 export const videosChangeOwnershipValidator = [
   isValidVideoIdParam('videoId'),
@@ -98,9 +99,41 @@ export const videosAcceptChangeOwnershipValidator = [
 
     const videoChangeOwnership = res.locals.videoChangeOwnership
 
-    const video = videoChangeOwnership.Video
+    const video = await VideoModel.loadWithFiles(videoChangeOwnership.Video.id)
 
     if (!await checkCanAccept(video, req, res)) return
+
+    return next()
+  }
+]
+
+export const videosListVideoOwnershipChangesValidator = [
+  isValidVideoIdParam('videoId'),
+
+  query('state')
+    .optional()
+    .custom(value => {
+      if (!Object.values(VideoChangeOwnershipStatus).includes(value)) return false
+
+      return true
+    }),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+    if (!await doesVideoExist(req.params.videoId, res, 'with-rights')) return
+
+    // Check if the user who did the request is able to manage the video
+    if (
+      !await checkCanManageVideo({
+        user: res.locals.oauth.token.User,
+        video: res.locals.videoWithRights,
+        right: UserRight.CHANGE_VIDEO_OWNERSHIP,
+        checkIsOwner: false,
+        checkIsLocal: true,
+        req,
+        res
+      })
+    ) return
 
     return next()
   }
