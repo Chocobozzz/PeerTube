@@ -20,7 +20,7 @@ import { VideoChannelService } from '@app/shared/shared-main/channel/video-chann
 import { maxBy, minBy } from '@peertube/peertube-core-utils'
 import { ChartData, ChartOptions, TooltipItem, TooltipModel } from 'chart.js'
 import { ChartModule } from 'primeng/chart'
-import { Subject, first, switchMap } from 'rxjs'
+import { Subject, first, switchMap, tap } from 'rxjs'
 import { SelectOptionsItem } from '@pt-types'
 import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
 import { SearchInputComponent } from '../../shared/shared-forms/search-input.component'
@@ -175,51 +175,58 @@ export class MyVideoChannelsComponent implements OnInit {
     if (this.pagesDone.has(this.pagination.currentPage)) return
     this.pagesDone.add(this.pagination.currentPage)
 
-    return this.authService.userInformationLoaded
-      .pipe(
-        first(),
-        switchMap(() => {
-          return this.videoChannelService.listAccountChannels({
-            account: this.authService.getUser().account,
-            withStats: true,
-            search: this.search,
-            componentPagination: this.pagination,
-            includeCollaborations: this.displayFilter === 'all',
-            sort: '-updatedAt'
-          })
-        })
-      ).subscribe({
-        next: res => {
-          this.videoChannels = this.videoChannels.concat(res.data)
-          this.pagination.totalItems = res.total
+    const channelBaseOptions = {
+      account: this.authService.getUser().account,
+      search: this.search,
+      componentPagination: this.pagination,
+      includeCollaborations: this.displayFilter === 'all',
+      sort: '-updatedAt'
+    }
 
-          // chart data
-          this.videoChannelsChartData = this.videoChannels.map(v => ({
-            labels: v.viewsPerDay.map(day => day.date.toLocaleDateString()),
-            datasets: [
-              {
-                label: $localize`Views for the day`,
-                data: v.viewsPerDay.map(day => day.views),
-                fill: false,
-                borderColor: '#c6c6c6'
-              }
-            ],
+    const base = this.authService.userInformationLoaded.pipe(first())
 
-            total: v.viewsPerDay.map(day => day.views)
-              .reduce((p, c) => p + c, 0),
+    // Load channels without stats first to display something as soon as possible, then load stats in a second time
+    base.pipe(
+      switchMap(() => this.videoChannelService.listAccountChannels(channelBaseOptions)),
+      tap(res => {
+        this.videoChannels = this.videoChannels.concat(res.data)
+        this.pagination.totalItems = res.total
 
-            startDate: v.viewsPerDay.length !== 0
-              ? v.viewsPerDay[0].date.toLocaleDateString()
-              : ''
-          }))
+        this.onChannelDataSubject.next(res.data)
+      }),
+      switchMap(() => this.videoChannelService.listAccountChannels({ ...channelBaseOptions, withStats: true }))
+    ).subscribe({
+      next: res => {
+        for (const channelWithStats of res.data) {
+          const channel = this.videoChannels.find(c => c.id === channelWithStats.id)
 
-          this.buildChartOptions()
+          channel.viewsPerDay = channelWithStats.viewsPerDay
+        }
 
-          this.onChannelDataSubject.next(res.data)
-        },
+        this.videoChannelsChartData = this.videoChannels.map(v => ({
+          labels: v.viewsPerDay.map(day => day.date.toLocaleDateString()),
+          datasets: [
+            {
+              label: $localize`Views for the day`,
+              data: v.viewsPerDay.map(day => day.views),
+              fill: false,
+              borderColor: '#c6c6c6'
+            }
+          ],
 
-        error: err => this.notifier.handleError(err)
-      })
+          total: v.viewsPerDay.map(day => day.views)
+            .reduce((p, c) => p + c, 0),
+
+          startDate: v.viewsPerDay.length !== 0
+            ? v.viewsPerDay[0].date.toLocaleDateString()
+            : ''
+        }))
+
+        this.buildChartOptions()
+      },
+
+      error: err => this.notifier.handleError(err)
+    })
   }
 
   // ---------------------------------------------------------------------------
