@@ -142,6 +142,7 @@ export class TableComponent<
   readonly defaultInputFilterValues = input<Partial<DataLoaderOptions>>()
 
   private inputFilterValues: Partial<DataLoaderOptions> = {}
+  private defaultInputFilterValuesToLoad: Partial<DataLoaderOptions> = {}
 
   private loadDataSub: Subscription
 
@@ -200,6 +201,10 @@ export class TableComponent<
     this.pagination = {
       count: this.defaultRowsPerPage(),
       start: 0
+    }
+
+    if (this.defaultInputFilterValues()) {
+      this.defaultInputFilterValuesToLoad = this.defaultInputFilterValues()
     }
 
     this.loadTableSettings()
@@ -451,7 +456,12 @@ export class TableComponent<
     if (queryParams.sortField !== undefined) this.sort.field = queryParams.sortField
 
     if (this.inputFilters()) {
-      this.loadFilters(parseQueryParamsToAdvancedFilters(this.inputFilters(), this.route.snapshot.queryParams))
+      this.loadFilters(
+        parseQueryParamsToAdvancedFilters(this.inputFilters(), this.route.snapshot.queryParams, this.defaultInputFilterValuesToLoad)
+      )
+
+      // Only load default values when loading the page
+      this.defaultInputFilterValuesToLoad = {}
     }
 
     this.customParseQueryParams()(queryParams)

@@ -91,8 +91,6 @@ export class JobsComponent {
     }
   ]
 
-  defaultInputFilterValues: Partial<DataLoaderParameter>
-
   columns: TableColumnInfo<ColumnName>[] = [
     { id: 'id', class: 'job-id', label: $localize`ID`, sortable: false },
     { id: 'type', class: 'job-type', label: $localize`Type`, sortable: false },
