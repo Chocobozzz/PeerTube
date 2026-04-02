@@ -17,6 +17,8 @@ export function isActorEndpointsObjectValid (endpointObject: any) {
 }
 
 export function isActorPublicKeyObjectValid (publicKeyObject: any) {
+  if (!publicKeyObject) return false
+
   return isActivityPubUrlValid(publicKeyObject.id) &&
     isActivityPubUrlValid(publicKeyObject.owner) &&
     isActorPublicKeyValid(publicKeyObject.publicKeyPem)
