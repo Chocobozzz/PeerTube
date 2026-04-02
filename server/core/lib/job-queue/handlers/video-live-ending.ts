@@ -130,6 +130,16 @@ async function saveReplayToExternalVideo (options: {
   const liveVideo = await VideoModel.loadFull(options.liveVideo.id)
   const replaySettings = await VideoLiveReplaySettingModel.load(liveSession.replaySettingId)
 
+  if (!liveVideo || !replaySettings) {
+    logger.warn(
+      'Live video %d or its replay settings %d do not exist anymore, skipping external replay creation.',
+      options.liveVideo.id,
+      liveSession.replaySettingId,
+      lTags()
+    )
+    return
+  }
+
   const videoNameSuffix = ` - ${new Date(publishedAt).toLocaleString()}`
   const truncatedVideoName = peertubeTruncate(liveVideo.name, {
     length: CONSTRAINTS_FIELDS.VIDEOS.NAME.max - videoNameSuffix.length
@@ -255,6 +265,17 @@ async function replaceLiveByReplay (options: {
 
   const replaySettings = await VideoLiveReplaySettingModel.load(liveSession.replaySettingId)
   const videoWithFiles = await VideoModel.loadFull(liveVideo.id)
+
+  if (!videoWithFiles || !replaySettings) {
+    logger.warn(
+      'Live video %d or its replay settings %d do not exist anymore, skipping live-to-replay replacement.',
+      liveVideo.id,
+      liveSession.replaySettingId,
+      lTags()
+    )
+    return
+  }
+
   const hlsPlaylist = videoWithFiles.getHLSPlaylist()
   const replayInAnotherDirectory = isVideoInPublicDirectory(liveVideo.privacy) !== isVideoInPublicDirectory(replaySettings.privacy)
 
