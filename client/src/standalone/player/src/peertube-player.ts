@@ -150,7 +150,9 @@ export class PeerTubePlayer {
     if (!this.player) {
       const playerEl = this.options.playerElement()
 
-      const width = playerEl.clientWidth || window.innerWidth
+      // window.innerWidth returns sometimes 0 on firefox if we load the page in background
+      // So we fallback to screen.availWidth which seems more reliable, at least on desktop
+      const width = playerEl.clientWidth || window.innerWidth || screen.availWidth
 
       this.options.playerElement().poster = findAppropriateThumbnail(thumbnails, width, '16:9')?.fileUrl || ''
       return
