@@ -154,6 +154,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     // Get information about this video
     const stats = await stat(tmpVideoPath)
     const user = await UserModel.loadByVideoId(videoImport.videoId)
+    if (!user) throw new Error('Video does not exist anymore')
 
     const isAble = await isUserQuotaValid({ channelUserId: user.id, uploadSize: stats.size })
     if (isAble === false) {
