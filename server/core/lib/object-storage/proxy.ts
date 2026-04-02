@@ -27,7 +27,15 @@ export async function proxifyWebVideoFile (options: {
 
     setS3Headers(res, s3Response)
 
-    return stream.pipe(res)
+    return pipeline(
+      stream,
+      res,
+      err => {
+        if (!err) return
+
+        handleObjectStorageFailure(res, err)
+      }
+    )
   } catch (err) {
     return handleObjectStorageFailure(res, err)
   }
