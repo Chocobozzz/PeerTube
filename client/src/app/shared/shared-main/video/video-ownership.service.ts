@@ -41,11 +41,11 @@ export class VideoOwnershipService {
       .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
-  listFromVideo (videoId: number, status: VideoChangeOwnershipStatusType): Observable<ResultList<VideoChangeOwnership>> {
+  listFromVideo (videoId: number, state: VideoChangeOwnershipStatusType): Observable<ResultList<VideoChangeOwnership>> {
     const url = VideoOwnershipService.BASE_VIDEO_CHANGE_OWNERSHIP_URL + videoId + '/ownership'
 
     let params = new HttpParams()
-    params = params.set('status', status)
+    params = params.set('state', state)
 
     return this.authHttp.get<ResultList<VideoChangeOwnership>>(url, { params })
       .pipe(catchError(res => this.restExtractor.handleError(res)))

@@ -522,7 +522,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
     const res = await this.confirmService.confirm(message, $localize`Cancel request`)
     if (res === false) return
 
-    this.videoOwnershipService.cancel(this.videoEdit.getVideoAttributes().id)
+    this.videoOwnershipService.cancel(this.pendingOwnershipRequest.id)
       .subscribe({
         next: () => {
           this.notifier.success($localize`Ownership change request cancelled`)

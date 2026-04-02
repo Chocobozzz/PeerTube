@@ -53,7 +53,7 @@ ownershipVideoRouter.get(
   authenticate,
   paginationValidator,
   setDefaultPagination,
-  asyncRetryTransactionMiddleware(listVideoOwnership)
+  asyncRetryTransactionMiddleware(listAccountOwnershipChanges)
 )
 
 ownershipVideoRouter.post(
@@ -131,7 +131,7 @@ async function giveVideoOwnership (req: express.Request, res: express.Response) 
 
 async function listVideoOwnershipChanges (req: express.Request, res: express.Response) {
   const videoId = res.locals.videoWithRights.id
-  const state = req.query.state as VideoChangeOwnershipStatusType | undefined
+  const state = req.query.state as VideoChangeOwnershipStatusType
 
   const resultList = await VideoChangeOwnershipModel.listForApi({
     videoId,
@@ -144,7 +144,7 @@ async function listVideoOwnershipChanges (req: express.Request, res: express.Res
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function listVideoOwnership (req: express.Request, res: express.Response) {
+async function listAccountOwnershipChanges (req: express.Request, res: express.Response) {
   const currentAccountId = res.locals.oauth.token.User.Account.id
 
   const resultList = await VideoChangeOwnershipModel.listForApi({
