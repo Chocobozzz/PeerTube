@@ -27,15 +27,19 @@ import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-che
 import { SelectChannelComponent } from '@app/shared/shared-forms/select/select-channel.component'
 import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-options.component'
 import { SelectTagsComponent } from '@app/shared/shared-forms/select/select-tags.component'
+import { ButtonComponent } from '@app/shared/shared-main/buttons/button.component'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { PeerTubeTemplateDirective } from '@app/shared/shared-main/common/peertube-template.directive'
 import { InstanceService } from '@app/shared/shared-main/instance/instance.service'
+import { VideoOwnershipService } from '@app/shared/shared-main/video/video-ownership.service'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import {
   ConstantLabel,
   HTMLServerConfig,
   RegisterClientFormFieldOptions,
   RegisterClientVideoFieldOptions,
+  VideoChangeOwnership,
+  VideoChangeOwnershipStatus,
   VideoPrivacy,
   VideoPrivacyType
 } from '@peertube/peertube-models'
@@ -103,7 +107,8 @@ type Form = {
     MarkdownHintComponent,
     RouterLink,
     VideoChangeOwnershipComponent,
-    AlertComponent
+    AlertComponent,
+    ButtonComponent
   ]
 })
 export class VideoMainInfoComponent implements OnInit, OnDestroy {
@@ -122,6 +127,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
   private confirmService = inject(ConfirmService)
   private notifier = inject(Notifier)
   private router = inject(Router)
+  private videoOwnershipService = inject(VideoOwnershipService)
 
   readonly videoChangeOwnershipModal = viewChild<VideoChangeOwnershipComponent>('videoChangeOwnershipModal')
 
@@ -160,7 +166,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
   privacies: VideoPrivacyType[] = []
   videoEdit: VideoEdit
 
-  ownershipRequestSent: string
+  pendingOwnershipRequest: VideoChangeOwnership
 
   private schedulerInterval: any
   private updatedSub: Subscription
@@ -195,6 +201,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
 
     this.buildLanguages()
     this.buildPrivacies()
+    this.loadOwnershipRequest()
 
     this.ngZone.runOutsideAngular(() => {
       this.schedulerInterval = setInterval(() => this.minScheduledDate = new Date(), 1000 * 60) // Update every minute
@@ -505,8 +512,34 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
     this.videoChangeOwnershipModal().show()
   }
 
-  onChangeOwnershipRequest (username: string) {
-    this.ownershipRequestSent = username
+  onChangeOwnershipRequest (ownershipChange: VideoChangeOwnership) {
+    this.pendingOwnershipRequest = ownershipChange
+  }
+
+  async cancelOwnershipRequest () {
+    const message =
+      $localize`Are you sure you want to cancel the ownership change request to "${this.pendingOwnershipRequest.nextOwnerAccount.name}"?`
+    const res = await this.confirmService.confirm(message, $localize`Cancel request`)
+    if (res === false) return
+
+    this.videoOwnershipService.cancel(this.videoEdit.getVideoAttributes().id)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Ownership change request cancelled`)
+          this.pendingOwnershipRequest = null
+        },
+
+        error: err => this.notifier.handleError(err)
+      })
+  }
+
+  loadOwnershipRequest () {
+    this.videoOwnershipService.listFromVideo(this.videoEdit.getVideoAttributes().id, VideoChangeOwnershipStatus.WAITING)
+      .subscribe(({ data }) => {
+        if (data.length === 0) return
+
+        this.pendingOwnershipRequest = data[0]
+      })
   }
 
   // ---------------------------------------------------------------------------

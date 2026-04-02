@@ -267,6 +267,73 @@ describe('Test video change ownership API validator', function () {
     })
   })
 
+  describe('Delete ownership change request', function () {
+    let deleteOwnershipChangeId: number
+    let videoId: string
+
+    before(async function () {
+      const { uuid } = await server.videos.quickUpload({ name: 'video', token: userToken })
+      videoId = uuid
+
+      await server.changeOwnership.create({ videoId, username: 'another_user', token: userToken })
+
+      const { data } = await server.changeOwnership.listOfVideo({ videoId })
+      deleteOwnershipChangeId = data[0].id
+    })
+
+    it('Should fail if not authenticated', async function () {
+      await server.changeOwnership.delete({
+        ownershipId: deleteOwnershipChangeId,
+        token: null,
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
+    })
+
+    it('Should fail with a non existing ownership id', async function () {
+      await server.changeOwnership.delete({ ownershipId: 42, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+    })
+
+    it('Should fail with a video from another user', async function () {
+      await server.changeOwnership.delete({
+        ownershipId: deleteOwnershipChangeId,
+        token: anotherUserToken,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should succeed with valid params', async function () {
+      await server.changeOwnership.delete({
+        token: userEditorToken,
+        ownershipId: deleteOwnershipChangeId
+      })
+    })
+
+    it('Should fail to delete a non existing request', async function () {
+      await server.changeOwnership.delete({
+        ownershipId: deleteOwnershipChangeId,
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
+      })
+    })
+
+    it('Should fail with a non pending request', async function () {
+      await server.changeOwnership.create({ videoId, username: 'another_user', token: userToken })
+
+      const { data } = await server.changeOwnership.listOfVideo({ videoId })
+      const newOwnershipChangeId = data[0].id
+
+      await server.changeOwnership.accept({
+        ownershipId: newOwnershipChangeId,
+        token: anotherUserToken,
+        channelId: await server.channels.getDefaultId({ token: anotherUserToken })
+      })
+
+      await server.changeOwnership.delete({
+        ownershipId: newOwnershipChangeId,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+  })
+
   after(async function () {
     await cleanupTests([ server ])
   })

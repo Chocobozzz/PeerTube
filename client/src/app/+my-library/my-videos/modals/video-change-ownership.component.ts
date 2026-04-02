@@ -7,7 +7,9 @@ import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.serv
 import { UserAutoCompleteComponent } from '@app/shared/shared-forms/user-auto-complete.component'
 import { VideoOwnershipService } from '@app/shared/shared-main/video/video-ownership.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { VideoChangeOwnership, VideoChangeOwnershipStatus } from '@peertube/peertube-models'
 import { AutoCompleteModule } from 'primeng/autocomplete'
+import { switchMap } from 'rxjs'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 
 @Component({
@@ -23,7 +25,7 @@ export class VideoChangeOwnershipComponent extends FormReactive implements OnIni
   private modalService = inject(NgbModal)
 
   videoId = input.required<number>()
-  requestSent = output<string>()
+  requestSent = output<VideoChangeOwnership>()
 
   readonly modal = viewChild<ElementRef>('modal')
 
@@ -47,10 +49,11 @@ export class VideoChangeOwnershipComponent extends FormReactive implements OnIni
     const username = this.form.value['username']
 
     this.videoOwnershipService
-      .changeOwnership(this.videoId(), username)
+      .sendChangeRequest(this.videoId(), username)
+      .pipe(switchMap(() => this.videoOwnershipService.listFromVideo(this.videoId(), VideoChangeOwnershipStatus.WAITING)))
       .subscribe({
-        next: () => {
-          this.requestSent.emit(username)
+        next: ({ data }) => {
+          this.requestSent.emit(data[0])
         },
 
         error: err => this.notifier.handleError(err)

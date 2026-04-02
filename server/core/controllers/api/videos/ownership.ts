@@ -16,6 +16,7 @@ import {
   setDefaultPagination,
   videosAcceptChangeOwnershipValidator,
   videosChangeOwnershipValidator,
+  videosDeleteChangeOwnershipValidator,
   videosListVideoOwnershipChangesValidator,
   videosTerminateChangeOwnershipValidator
 } from '../../../middlewares/index.js'
@@ -62,6 +63,13 @@ ownershipVideoRouter.post(
   authenticate,
   asyncMiddleware(videosTerminateChangeOwnershipValidator),
   asyncRetryTransactionMiddleware(refuseOwnership)
+)
+
+ownershipVideoRouter.delete(
+  '/ownership/:id',
+  authenticate,
+  asyncMiddleware(videosDeleteChangeOwnershipValidator),
+  asyncRetryTransactionMiddleware(deleteOwnership)
 )
 
 // ---------------------------------------------------------------------------
@@ -192,6 +200,28 @@ function refuseOwnership (req: express.Request, res: express.Response) {
       targetAccount: videoChangeOwnership.NextOwner,
       transaction: t
     })
+
+    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  })
+}
+
+function deleteOwnership (req: express.Request, res: express.Response) {
+  return sequelizeTypescript.transaction(async t => {
+    const videoChangeOwnership = res.locals.videoChangeOwnership
+    const channel = await VideoChannelModel.loadAndPopulateAccount(videoChangeOwnership.Video.channelId, t)
+
+    await videoChangeOwnership.destroy({ transaction: t })
+
+    await VideoChannelActivityModel.addVideoOwnershipChangeActivity({
+      action: VideoChannelActivityAction.DELETE_OWNERSHIP_REQUEST,
+      user: res.locals.oauth.token.User,
+      channel,
+      video: videoChangeOwnership.Video,
+      targetAccount: videoChangeOwnership.NextOwner,
+      transaction: t
+    })
+
+    logger.info('Ownership change request %d deleted.', videoChangeOwnership.id)
 
     return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
   })

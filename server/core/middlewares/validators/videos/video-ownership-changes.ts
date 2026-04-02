@@ -139,6 +139,42 @@ export const videosListVideoOwnershipChangesValidator = [
   }
 ]
 
+export const videosDeleteChangeOwnershipValidator = [
+  param('id')
+    .custom(isIdValid),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+    if (!await doesChangeVideoOwnershipExist(req.params.id, req, res)) return
+
+    const videoChangeOwnership = res.locals.videoChangeOwnership
+
+    if (videoChangeOwnership.status !== VideoChangeOwnershipStatus.WAITING) {
+      res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: req.t('Ownership already accepted or refused')
+      })
+      return
+    }
+
+    const video = await VideoModel.loadWithRights(videoChangeOwnership.Video.id)
+
+    if (
+      !await checkCanManageVideo({
+        user: res.locals.oauth.token.User,
+        video,
+        right: UserRight.CHANGE_VIDEO_OWNERSHIP,
+        checkIsOwner: false,
+        checkIsLocal: true,
+        req,
+        res
+      })
+    ) return
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------

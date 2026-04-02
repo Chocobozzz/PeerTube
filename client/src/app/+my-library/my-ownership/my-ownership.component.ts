@@ -68,7 +68,7 @@ export class MyOwnershipComponent {
   }
 
   refuse (videoChangeOwnership: VideoChangeOwnership) {
-    this.videoOwnershipService.refuseOwnership(videoChangeOwnership.id)
+    this.videoOwnershipService.refuse(videoChangeOwnership.id)
       .subscribe({
         next: () => this.table().loadData(),
         error: err => this.notifier.handleError(err)
@@ -80,7 +80,7 @@ export class MyOwnershipComponent {
   }
 
   private _dataLoader (options: DataLoaderOptionsBase) {
-    return this.videoOwnershipService.getOwnershipChanges(options.pagination, options.sort)
+    return this.videoOwnershipService.list(options.pagination, options.sort)
       .pipe(
         map(resultList => ({
           data: resultList.data.map(change => ({

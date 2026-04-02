@@ -200,6 +200,12 @@
           <strong>{{ account }}</strong> updated embed policy of video <a [routerLink]="[ '/w', a.video.shortUUID ]">{{ a.video.name }}</a>
         </ng-container>
       }
+
+      @case (16) { <!-- VideoChannelActivityAction.DELETE_OWNERSHIP_REQUEST) -->
+        <ng-container i18n>
+          <strong>{{ account }}</strong> deleted an ownership request for video <a [routerLink]="[ '/w', a.video.shortUUID ]">{{ a.video.name }}</a>
+        </ng-container>
+      }
     }
   </div>
 

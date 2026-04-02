@@ -88,4 +88,21 @@ export class ChangeOwnershipCommand extends AbstractCommand {
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
+
+  delete (
+    options: OverrideCommandOptions & {
+      ownershipId: number
+    }
+  ) {
+    const { ownershipId } = options
+    const path = '/api/v1/videos/ownership/' + ownershipId
+
+    return this.deleteRequest({
+      ...options,
+
+      path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
 }

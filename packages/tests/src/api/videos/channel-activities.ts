@@ -834,6 +834,22 @@ describe('Test channel activities', function () {
       expect(a.video.name).to.equal('video for ownership change')
       expect(a.targetAccount.username).to.equal('user_ownership_change')
     })
+
+    it('Should delete an ownership request', async function () {
+      await server.changeOwnership.create({ videoId: video.id, username: 'user_ownership_change' })
+      const { data } = await server.changeOwnership.listOfVideo({ videoId: video.id })
+      const changeOwnershipId = data[0].id
+
+      const a = await getActivityAfterAction(async () => {
+        await server.changeOwnership.delete({ ownershipId: changeOwnershipId })
+      })
+
+      expect(a.action.id).to.equal(VideoChannelActivityAction.DELETE_OWNERSHIP_REQUEST)
+      expect(a.targetType.id).to.equal(VideoChannelActivityTarget.VIDEO)
+      expect(a.account.name).to.equal('root')
+      expect(a.video.name).to.equal('video for ownership change')
+      expect(a.targetAccount.username).to.equal('user_ownership_change')
+    })
   })
 
   describe('Common', function () {

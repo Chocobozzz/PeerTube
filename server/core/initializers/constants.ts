@@ -741,7 +741,8 @@ export const VIDEO_CHANNEL_ACTIVITY_ACTIONS: { [id in VideoChannelActivityAction
   [VideoChannelActivityAction.SEND_OWNERSHIP_REQUEST]: 'Send ownership request',
   [VideoChannelActivityAction.ACCEPT_OWNERSHIP_REQUEST]: 'Accept ownership request',
   [VideoChannelActivityAction.REFUSE_OWNERSHIP_REQUEST]: 'Refuse ownership request',
-  [VideoChannelActivityAction.UPDATE_EMBED_POLICY]: 'Update embed policy'
+  [VideoChannelActivityAction.UPDATE_EMBED_POLICY]: 'Update embed policy',
+  [VideoChannelActivityAction.DELETE_OWNERSHIP_REQUEST]: 'Delete ownership request'
 }
 
 export const VIDEO_CHANNEL_ACTIVITY_TARGETS: { [id in VideoChannelActivityTargetType]: string } = {

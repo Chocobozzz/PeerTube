@@ -3022,6 +3022,24 @@ paths:
         '404':
           description: video ownership change not found
 
+  '/api/v1/videos/ownership/{id}':
+    delete:
+      summary: Delete ownership change request
+      description: Delete an ownership change request. Only users who can manage the video can delete the request.
+      tags:
+        - Video Ownership Change
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '204':
+          description: successful operation
+        '403':
+          description: only users who can manage the video can delete an ownership change request
+        '404':
+          description: video ownership change not found
+
   '/api/v1/videos/{id}/ownership':
     get:
       summary: List ownership change requests for a video

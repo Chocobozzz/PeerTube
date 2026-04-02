@@ -1,6 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoChangeOwnershipStatus, VideoPrivacy } from '@peertube/peertube-models'
 import {
   ChangeOwnershipCommand,
   cleanupTests,
@@ -212,7 +212,21 @@ describe('Test video change ownership - nominal', function () {
     lastRequestId = body.data[0].id
   })
 
+  it('Should delete an ownership change request', async function () {
+    const { data } = await command.listOfVideo({ videoId: liveId })
+    const ownershipChangeId = data[0].id
+
+    await command.delete({ ownershipId: ownershipChangeId, token: firstUserToken })
+
+    const bodyAfterDelete = await command.listOfVideo({ videoId: liveId, state: VideoChangeOwnershipStatus.WAITING })
+    expect(bodyAfterDelete.total).to.equal(0)
+  })
+
   it('Should accept a live ownership change', async function () {
+    await command.create({ token: firstUserToken, videoId: liveId, username: secondUser })
+    const body = await command.list({ token: secondUserToken })
+    lastRequestId = body.data[0].id
+
     await command.accept({ token: secondUserToken, ownershipId: lastRequestId, channelId: secondUserChannelId })
 
     await waitJobs(servers)
