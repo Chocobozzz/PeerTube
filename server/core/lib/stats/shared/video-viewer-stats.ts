@@ -156,6 +156,12 @@ export class VideoViewerStats {
       for (const key of allKeys) {
         const stats: LocalViewerStats = await this.getLocalVideoViewerByKey(key)
 
+        if (!stats) {
+          logger.warn('Cannot read viewer stats for Redis key %s, removing invalid entry.', key, lTags())
+          await this.deleteLocalVideoViewersKeys(key)
+          continue
+        }
+
         // Process expired stats
         if (stats.lastUpdated > now - VIEW_LIFETIME.VIEWER_STATS) {
           continue
