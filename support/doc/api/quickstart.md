@@ -90,10 +90,10 @@ curl https://peertube.example.com/api/v1/videos
 
 ## Libraries
 
-[Convenience libraries](https://framagit.org/framasoft/peertube/clients) are generated automatically from the [OpenAPI specification](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/api/openapi.yaml) for the following languages:
+[Convenience libraries](https://framagit.org/framasoft/peertube/PeerTube/-/tree/develop/support/openapi) are generated automatically from the [OpenAPI specification](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/api/openapi.yaml) for the following languages:
 
-- [python](https://framagit.org/framasoft/peertube/clients/python)
-- [go](https://framagit.org/framasoft/peertube/clients/go)
-- [kotlin](https://framagit.org/framasoft/peertube/clients/kotlin)
+- [python](https://framagit.org/framasoft/peertube/PeerTube/-/tree/develop/support/openapi/python)
+- [go](https://framagit.org/framasoft/peertube/PeerTube/-/tree/develop/support/openapi/go)
+- [kotlin](https://framagit.org/framasoft/peertube/PeerTube/-/tree/develop/support/openapi/kotlin)
 
 Other [languages supported by the OpenAPI generator](https://openapi-generator.tech/docs/generators/#client-generators) can be added to the generation, provided they make a common enough use case.
