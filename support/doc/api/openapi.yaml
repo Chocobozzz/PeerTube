@@ -12453,6 +12453,12 @@ components:
         - 20
         - 21
         - 22
+        - 23
+        - 24
+        - 25
+        - 26
+        - 27
+        - 28
       description: >
         Notification type. One of the following values:
 
@@ -12499,6 +12505,18 @@ components:
           - `21` NEW_LIVE_FROM_SUBSCRIPTION
 
           - `22` MY_VIDEO_TRANSCRIPTION_GENERATED
+
+          - `23` INVITED_TO_COLLABORATE_TO_CHANNEL
+
+          - `24` ACCEPTED_TO_COLLABORATE_TO_CHANNEL
+
+          - `25` REFUSED_TO_COLLABORATE_TO_CHANNEL
+
+          - `26` VIDEO_OWNERSHIP_CHANGED_REQUEST
+
+          - `27` VIDEO_OWNERSHIP_CHANGED_ACCEPTED
+
+          - `28` VIDEO_OWNERSHIP_CHANGED_REJECTED
 
     NewFeatureInfoType:
       type: integer

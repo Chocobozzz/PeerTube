@@ -15,6 +15,7 @@ import {
   MPlugin,
   MVideoAccountLight,
   MVideoCaptionVideo,
+  MVideoChangeOwnershipFull,
   MVideoFull,
   MVideoWithSchedule
 } from '../../types/models/index.js'
@@ -52,6 +53,9 @@ import {
   UnblacklistForOwner,
   VideoTranscriptionGeneratedForOwner
 } from './shared/index.js'
+import { RequestVideoOwnershipChange } from './shared/video-ownership/request-video-ownership-change.js'
+import { VideoOwnershipChangeAccepted } from './shared/video-ownership/video-ownership-change-accepted.js'
+import { VideoOwnershipChangeRejected } from './shared/video-ownership/video-ownership-change-rejected.js'
 
 const lTags = loggerTagsFactory('notifier')
 
@@ -90,7 +94,11 @@ class Notifier {
 
     channelCollaboratorInvitation: [ InvitedToCollaborateToChannel ],
     channelCollaborationAccepted: [ AcceptedToCollaborateToChannel ],
-    channelCollaborationRefused: [ RefusedToCollaborateToChannel ]
+    channelCollaborationRefused: [ RefusedToCollaborateToChannel ],
+
+    videoOwnershipRequest: [ RequestVideoOwnershipChange ],
+    videoOwnershipAccepted: [ VideoOwnershipChangeAccepted ],
+    videoOwnershipRejected: [ VideoOwnershipChangeRejected ]
   }
 
   private static instance: Notifier
@@ -340,6 +348,37 @@ class Notifier {
 
     this.sendNotifications(models, { channel, collaborator })
       .catch(err => logger.error(`Cannot notify ${channelOwner} of refused invitation to collaborate to channel ${channelName}`, { err }))
+  }
+
+  // ---------------------------------------------------------------------------
+  // Video ownership change notifications
+  // ---------------------------------------------------------------------------
+
+  notifyOfRequestedVideoOwnershipChange (videoOwnership: MVideoChangeOwnershipFull) {
+    const models = this.notificationModels.videoOwnershipRequest
+
+    logger.debug('Notify on requested video ownership change', { id: videoOwnership.id, video: videoOwnership.Video.url, ...lTags() })
+
+    this.sendNotifications(models, videoOwnership)
+      .catch(err => logger.error('Cannot notify requested video ownership change %d.', videoOwnership.id, { err }))
+  }
+
+  notifyOfAcceptedVideoOwnershipChange (videoOwnership: MVideoChangeOwnershipFull) {
+    const models = this.notificationModels.videoOwnershipAccepted
+
+    logger.debug('Notify on accepted video ownership change', { id: videoOwnership.id, video: videoOwnership.Video.url, ...lTags() })
+
+    this.sendNotifications(models, videoOwnership)
+      .catch(err => logger.error('Cannot notify accepted video ownership change %d.', videoOwnership.id, { err }))
+  }
+
+  notifyOfRejectedVideoOwnershipChange (videoOwnership: MVideoChangeOwnershipFull) {
+    const models = this.notificationModels.videoOwnershipRejected
+
+    logger.debug('Notify on rejected video ownership change', { id: videoOwnership.id, video: videoOwnership.Video.url, ...lTags() })
+
+    this.sendNotifications(models, videoOwnership)
+      .catch(err => logger.error('Cannot notify rejected video ownership change %d.', videoOwnership.id, { err }))
   }
 
   // ---------------------------------------------------------------------------

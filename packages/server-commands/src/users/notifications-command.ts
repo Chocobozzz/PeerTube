@@ -2,10 +2,11 @@ import { HttpStatusCode, ResultList, UserNotification, UserNotificationSetting, 
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class NotificationsCommand extends AbstractCommand {
-
-  updateMySettings (options: OverrideCommandOptions & {
-    settings: UserNotificationSetting
-  }) {
+  updateMySettings (
+    options: OverrideCommandOptions & {
+      settings: UserNotificationSetting
+    }
+  ) {
     const path = '/api/v1/users/me/notification-settings'
 
     return this.putBodyRequest({
@@ -18,13 +19,15 @@ export class NotificationsCommand extends AbstractCommand {
     })
   }
 
-  list (options: OverrideCommandOptions & {
-    start?: number
-    count?: number
-    unread?: boolean
-    sort?: string
-    typeOneOf?: UserNotificationType_Type[]
-  }) {
+  list (
+    options: OverrideCommandOptions & {
+      start?: number
+      count?: number
+      unread?: boolean
+      sort?: string
+      typeOneOf?: UserNotificationType_Type[]
+    }
+  ) {
     const { start, count, unread, typeOneOf, sort = '-createdAt' } = options
     const path = '/api/v1/users/me/notifications'
 
@@ -44,9 +47,11 @@ export class NotificationsCommand extends AbstractCommand {
     })
   }
 
-  markAsRead (options: OverrideCommandOptions & {
-    ids: number[]
-  }) {
+  markAsRead (
+    options: OverrideCommandOptions & {
+      ids: number[]
+    }
+  ) {
     const { ids } = options
     const path = '/api/v1/users/me/notifications/read'
 
@@ -72,9 +77,15 @@ export class NotificationsCommand extends AbstractCommand {
     })
   }
 
-  async getLatest (options: OverrideCommandOptions = {}) {
+  async getLatest (options: OverrideCommandOptions & { type?: UserNotificationType_Type } = {}) {
+    const { type } = options
+
     const { total, data } = await this.list({
       ...options,
+
+      typeOneOf: type
+        ? [ type ]
+        : undefined,
       start: 0,
       count: 1,
       sort: '-createdAt'

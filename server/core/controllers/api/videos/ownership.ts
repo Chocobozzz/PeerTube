@@ -1,4 +1,9 @@
-import { HttpStatusCode, VideoChangeOwnershipStatus, VideoChangeOwnershipStatusType, VideoChannelActivityAction } from '@peertube/peertube-models'
+import {
+  HttpStatusCode,
+  VideoChangeOwnershipStatus,
+  VideoChangeOwnershipStatusType,
+  VideoChannelActivityAction
+} from '@peertube/peertube-models'
 import { canVideoBeFederated } from '@server/lib/activitypub/videos/federate.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { MVideoFull } from '@server/types/models/index.js'
@@ -8,6 +13,7 @@ import { getFormattedObjects } from '../../../helpers/utils.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import { sendUpdateVideo } from '../../../lib/activitypub/send/index.js'
 import { changeVideoChannelShare } from '../../../lib/activitypub/share.js'
+import { Notifier } from '../../../lib/notifier/notifier.js'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -85,8 +91,8 @@ async function giveVideoOwnership (req: express.Request, res: express.Response) 
   const initiatorAccountId = res.locals.oauth.token.User.Account.id
   const nextOwner = res.locals.videoChangeOwnershipNextOwner
 
-  await sequelizeTypescript.transaction(async t => {
-    await VideoChangeOwnershipModel.findOrCreate({
+  const ownershipChange = await sequelizeTypescript.transaction(async t => {
+    const [ ownershipChange ] = await VideoChangeOwnershipModel.findOrCreate({
       where: {
         initiatorAccountId,
         nextOwnerAccountId: nextOwner.id,
@@ -110,7 +116,13 @@ async function giveVideoOwnership (req: express.Request, res: express.Response) 
       targetAccount: nextOwner,
       transaction: t
     })
+
+    return ownershipChange
   })
+
+  const ownershipChangeFull = await VideoChangeOwnershipModel.load(ownershipChange.id)
+
+  Notifier.Instance.notifyOfRequestedVideoOwnershipChange(ownershipChangeFull)
 
   logger.info('Ownership change for video %s created.', video.name)
 
@@ -179,6 +191,8 @@ function acceptOwnership (req: express.Request, res: express.Response) {
       })
     }
 
+    Notifier.Instance.notifyOfAcceptedVideoOwnershipChange(videoChangeOwnership)
+
     return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
   })
 }
@@ -200,6 +214,8 @@ function refuseOwnership (req: express.Request, res: express.Response) {
       targetAccount: videoChangeOwnership.NextOwner,
       transaction: t
     })
+
+    Notifier.Instance.notifyOfRejectedVideoOwnershipChange(videoChangeOwnership)
 
     return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
   })

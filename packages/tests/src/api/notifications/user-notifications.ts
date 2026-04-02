@@ -14,7 +14,11 @@ import {
   checkNewVideoFromSubscription,
   checkVideoStudioEditionIsFinished
 } from '@tests/shared/notifications/check-video-notifications.js'
-import { prepareNotificationsTest, waitUntilNotification } from '@tests/shared/notifications/notifications-common.js'
+import {
+  getAllNotificationsSettings,
+  prepareNotificationsTest,
+  waitUntilNotification
+} from '@tests/shared/notifications/notifications-common.js'
 import { CheckerBaseParams } from '@tests/shared/notifications/shared/notification-checker.js'
 import { uploadRandomVideoOnServers } from '@tests/shared/videos.js'
 import { expect } from 'chai'
@@ -547,6 +551,103 @@ describe('Test user notifications', function () {
 
       const url = FIXTURE_URLS.goodVideo
       await checkMyVideoImportIsFinished({ ...baseParams, videoName: name, shortUUID, url, success: true, checkType: 'presence' })
+    })
+  })
+
+  describe('Video ownership change notifications', function () {
+    const nextOwner = 'ownership_request_target'
+    let nextOwnerToken: string
+
+    const videoName = 'ownership change'
+    let videoId: string
+
+    before(async function () {
+      nextOwnerToken = await servers[0].users.generateUserAndToken(nextOwner)
+
+      await servers[0].notifications.updateMySettings({ token: nextOwnerToken, settings: getAllNotificationsSettings() })
+      const { uuid } = await servers[0].videos.quickUpload({ name: videoName, privacy: VideoPrivacy.PRIVATE })
+
+      videoId = uuid
+    })
+
+    it('Should notify the next owner when ownership change is requested', async function () {
+      const requestDate = new Date()
+      await servers[0].changeOwnership.create({ videoId, username: nextOwner })
+
+      await waitUntilNotification({
+        server: servers[0],
+        token: nextOwnerToken,
+        notificationType: UserNotificationType.VIDEO_OWNERSHIP_CHANGED_REQUEST,
+        fromDate: requestDate
+      })
+
+      const notification = await servers[0].notifications.getLatest({
+        token: nextOwnerToken,
+        type: UserNotificationType.VIDEO_OWNERSHIP_CHANGED_REQUEST
+      })
+      expect(notification.type).to.equal(UserNotificationType.VIDEO_OWNERSHIP_CHANGED_REQUEST)
+      expect(notification.videoOwnership.id).to.exist
+      expect(notification.videoOwnership.video.name).to.equal(videoName)
+      expect(notification.videoOwnership.initiatorAccount.name).to.equal('root')
+      expect(notification.videoOwnership.nextOwnerAccount.name).to.equal(nextOwner)
+    })
+
+    it('Should notify the video owner when ownership change is accepted', async function () {
+      const { data } = await servers[0].changeOwnership.list({ token: nextOwnerToken })
+
+      const acceptedAt = new Date()
+      await servers[0].changeOwnership.accept({
+        token: nextOwnerToken,
+        ownershipId: data[0].id,
+        channelId: await servers[0].channels.getDefaultId({ token: nextOwnerToken })
+      })
+
+      await waitUntilNotification({
+        server: servers[0],
+        token: servers[0].accessToken,
+        notificationType: UserNotificationType.VIDEO_OWNERSHIP_CHANGED_ACCEPTED,
+        fromDate: acceptedAt
+      })
+
+      const notification = await servers[0].notifications.getLatest({ type: UserNotificationType.VIDEO_OWNERSHIP_CHANGED_ACCEPTED })
+      expect(notification.type).to.equal(UserNotificationType.VIDEO_OWNERSHIP_CHANGED_ACCEPTED)
+      expect(notification.videoOwnership.id).to.exist
+      expect(notification.videoOwnership.video.name).to.equal(videoName)
+      expect(notification.videoOwnership.initiatorAccount.name).to.equal('root')
+      expect(notification.videoOwnership.nextOwnerAccount.name).to.equal(nextOwner)
+    })
+
+    it('Should notify rejected channel collaborators when ownership change is rejected', async function () {
+      const collaboratorToken = await servers[0].channelCollaborators.createEditor('ownership_reject_collaborator', `${nextOwner}_channel`)
+
+      const nextNextOwner = 'ownership_reject_target'
+      const nextNextOwnerToken = await servers[0].users.generateUserAndToken(nextNextOwner)
+
+      await servers[0].changeOwnership.create({ videoId, username: nextNextOwner })
+      const { data } = await servers[0].changeOwnership.list({ token: nextNextOwnerToken })
+
+      const rejectedAt = new Date()
+      await servers[0].changeOwnership.refuse({
+        token: nextNextOwnerToken,
+        ownershipId: data[0].id
+      })
+
+      await waitUntilNotification({
+        server: servers[0],
+        token: collaboratorToken,
+        notificationType: UserNotificationType.VIDEO_OWNERSHIP_CHANGED_REJECTED,
+        fromDate: rejectedAt
+      })
+
+      const notification = await servers[0].notifications.getLatest({
+        token: collaboratorToken,
+        type: UserNotificationType.VIDEO_OWNERSHIP_CHANGED_REJECTED
+      })
+      expect(notification.type).to.equal(UserNotificationType.VIDEO_OWNERSHIP_CHANGED_REJECTED)
+      expect(notification.videoOwnership.id).to.exist
+      expect(notification.videoOwnership.video.name).to.equal(videoName)
+      expect(notification.videoOwnership.initiatorAccount.name).to.equal('root') // root made the request on behalf of the nextOwner user
+      expect(notification.videoOwnership.nextOwnerAccount.name).to.equal(nextNextOwner)
     })
   })
 

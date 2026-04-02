@@ -157,6 +157,12 @@ export class UserNotification {
         case UserNotificationType.REFUSED_TO_COLLABORATE_TO_CHANNEL:
           this.url = this.buildChannelUrl(payload.videoChannelCollaborator.channel)
           break
+
+        case UserNotificationType.VIDEO_OWNERSHIP_CHANGED_REQUEST:
+        case UserNotificationType.VIDEO_OWNERSHIP_CHANGED_ACCEPTED:
+        case UserNotificationType.VIDEO_OWNERSHIP_CHANGED_REJECTED:
+          this.url = '/my-library/ownership'
+          break
       }
     } catch (err) {
       this.payload.type = null
