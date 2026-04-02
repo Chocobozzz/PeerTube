@@ -103,7 +103,6 @@ export async function onVideoStudioEnded (options: {
 
     const outputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, newFile)
     await move(editionResultPath, outputPath)
-    videoFileMutexReleaser()
 
     await safeCleanupStudioTMPFiles(tasks)
 
