@@ -536,7 +536,7 @@ describe('Test videos search', function () {
     }
 
     {
-      const body = await command.advancedVideoSearch({ search: { search: 'remote', host: remoteServer.host } })
+      const body = await command.advancedVideoSearch({ search: { search: 'remote', host: remoteServer.host, sort: 'name' } })
       expect(body.total).to.equal(2)
       expect(body.data).to.have.lengthOf(2)
       expect(body.data[0].name).to.equal('remote video 1')
