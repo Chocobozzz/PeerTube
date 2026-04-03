@@ -1,7 +1,7 @@
 import { Account } from '../../actors/index.js'
 import { ConstantLabel } from '../../common/constant-label.model.js'
-import { VideoChannel } from '../channel/video-channel.model.js'
-import { Video } from '../video.model.js'
+import { VideoChannelSummary } from '../channel/video-channel.model.js'
+import { VideoSummary } from '../video.model.js'
 
 export interface ChangeOwnership {
   id: number
@@ -15,8 +15,8 @@ export interface ChangeOwnership {
   initiatorAccount: Account
   nextOwnerAccount: Account
 
-  video: Video
-  videoChannel: VideoChannel
+  video: VideoSummary
+  videoChannel: VideoChannelSummary
 
   createdAt: Date
 }

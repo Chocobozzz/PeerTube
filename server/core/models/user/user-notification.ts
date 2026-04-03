@@ -444,12 +444,11 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
           `INNER JOIN actor ON "actor"."accountId" = "account"."id" `
       ),
 
-      // Remove notifications from muted accounts that invited us to collaborate to a channel
+      // Remove notifications from muted accounts that sent ownership changer requests
       buildAccountWhereQuery(
         `SELECT "userNotification"."id" FROM "userNotification" ` +
-          `INNER JOIN "videoChannelCollaborator" ON "videoChannelCollaborator".id = "userNotification"."channelCollaboratorId" ` +
-          `INNER JOIN "videoChannel" ON "videoChannel".id = "videoChannelCollaborator"."channelId" ` +
-          `INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ` +
+          `INNER JOIN "changeOwnership" ON "changeOwnership".id = "userNotification"."changeOwnershipId" ` +
+          `INNER JOIN "account" ON "changeOwnership"."initiatorAccountId" = "account"."id" ` +
           `INNER JOIN actor ON "actor"."accountId" = "account"."id" `
       )
     ]
@@ -570,6 +569,10 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     const changeOwnership = this.ChangeOwnership
       ? {
         id: this.ChangeOwnership.id,
+        state: {
+          id: this.ChangeOwnership.state,
+          label: ChangeOwnershipModel.getStateLabel(this.ChangeOwnership.state)
+        },
         initiatorAccount: this.formatActor(this.ChangeOwnership.Initiator),
         nextOwnerAccount: this.formatActor(this.ChangeOwnership.NextOwner),
 

@@ -27,14 +27,24 @@ button {
   color: inherit;
 }
 
+.primary-button {
+  --co-fg: #{pvar(--on-primary-300)};
+  --co-active-fg: #{pvar(--on-primary)};
+}
+
+.secondary-button {
+  --co-fg: #{pvar(--fg-300)};
+  --co-active-fg: #{pvar(--fg)};
+}
+
 .dropdown-toggle {
-  color: pvar(--fg-300);
+  color: var(--co-fg);
 
   &:hover,
   &:active,
   &:focus,
   &:focus-visible {
-    color: pvar(--fg);
+    color: var(--co-active-fg);
   }
 
   &::after {

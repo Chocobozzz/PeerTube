@@ -926,7 +926,7 @@ describe('Test videos API validator', function () {
     it('Should fail with the channel of another user if the video has pending ownership change', async function () {
       const video = await server.videos.quickUpload({ name: 'video to transfer', channelId: channelIdEditor, token: editorToken })
 
-      await server.changeOwnership.create({ videoId: video.id, username: 'root', token: editorToken })
+      await server.changeOwnership.createVideo({ videoId: video.id, username: 'root', token: editorToken })
 
       // Can update video metadata
       await server.videos.update({ id: video.id, attributes: { name: 'video to transfer 2' }, token: editorToken })
@@ -941,8 +941,8 @@ describe('Test videos API validator', function () {
         token: editorToken
       })
 
-      const { data } = await server.changeOwnership.list()
-      await server.changeOwnership.refuse({ ownershipId: data[0].id })
+      const { data } = await server.changeOwnership.listVideos()
+      await server.changeOwnership.refuseVideo({ ownershipId: data[0].id })
 
       // Can update video channel to a channel of another user now there's no pending ownership change
       await server.videos.update({ id: video.id, attributes: { channelId }, token: editorToken })

@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject, OnDestroy, OnInit } from '@angular/core'
+import { Component, inject, OnDestroy, OnInit, viewChild } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { Router } from '@angular/router'
+import { AuthService, ConfirmService, Notifier } from '@app/core'
 import {
   BuildFormArgumentTyped,
   FormReactiveErrorsTyped,
@@ -14,14 +16,19 @@ import {
 } from '@app/shared/form-validators/video-channel-validators'
 import { ActorAvatarEditComponent } from '@app/shared/shared-actor-image-edit/actor-avatar-edit.component'
 import { ActorBannerEditComponent } from '@app/shared/shared-actor-image-edit/actor-banner-edit.component'
+import { ChangeOwnershipService } from '@app/shared/shared-change-ownership/change-ownership.service'
+import { SendChangeOwnershipComponent } from '@app/shared/shared-change-ownership/send-change-ownership.component'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { MarkdownTextareaComponent } from '@app/shared/shared-forms/markdown-textarea.component'
 import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
 import { SelectPlayerThemeComponent } from '@app/shared/shared-forms/select/select-player-theme.component'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
+import { ButtonComponent } from '@app/shared/shared-main/buttons/button.component'
 import { HelpComponent } from '@app/shared/shared-main/buttons/help.component'
+import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
+import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { MarkdownHintComponent } from '@app/shared/shared-main/text/markdown-hint.component'
-import { PlayerChannelSettings } from '@peertube/peertube-models'
+import { ChangeOwnership, ChangeOwnershipState, PlayerChannelSettings } from '@peertube/peertube-models'
 import { Subscription } from 'rxjs'
 import { EditMode, VideoChannelEditControllerService } from '../video-channel-edit-controller.service'
 import { VideoChannelEdit } from '../video-channel-edit.model'
@@ -50,18 +57,31 @@ type Form = {
     PeertubeCheckboxComponent,
     MarkdownHintComponent,
     SelectPlayerThemeComponent,
-    GlobalIconComponent
+    GlobalIconComponent,
+    AlertComponent,
+    ButtonComponent,
+    SendChangeOwnershipComponent
   ]
 })
 export class VideoChannelEditGeneralComponent implements OnInit, OnDestroy {
   private formReactiveService = inject(FormReactiveService)
   private editController = inject(VideoChannelEditControllerService)
+  private authService = inject(AuthService)
+  private confirmService = inject(ConfirmService)
+  private notifier = inject(Notifier)
+  private changeOwnershipService = inject(ChangeOwnershipService)
+  private channelService = inject(VideoChannelService)
+  private router = inject(Router)
+
+  readonly sendChangeOwnershipModal = viewChild<SendChangeOwnershipComponent>('sendChangeOwnershipModal')
 
   form: FormGroup<Form>
   formErrors: FormReactiveErrorsTyped<Form> = {}
   validationMessages: FormReactiveMessagesTyped<Form> = {}
   mode: EditMode
   videoChannelEdit: VideoChannelEdit
+
+  pendingOwnershipRequest: ChangeOwnership
 
   private formSub: Subscription
   private storeSub: Subscription
@@ -74,11 +94,14 @@ export class VideoChannelEditGeneralComponent implements OnInit, OnDestroy {
     this.mode = this.editController.getMode()
 
     this.videoChannelEdit = this.editController.getStore()
+    this.loadOwnershipRequestIfNeeded()
+
     this.buildForm()
 
     this.storeSub = this.editController.getStoreChangesObs()
       .subscribe(() => {
         this.videoChannelEdit = this.editController.getStore()
+        this.loadOwnershipRequestIfNeeded()
 
         this.buildForm()
       })
@@ -189,5 +212,77 @@ export class VideoChannelEditGeneralComponent implements OnInit, OnDestroy {
         }
       })
     })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  canBeDeletedOrTransferred () {
+    if (this.mode === 'create') return false
+
+    // Check is owner
+    return this.videoChannelEdit.apiInfo.ownerAccount.id === this.authService.getUser().account.id
+  }
+
+  showChangeOwnershipModal () {
+    this.sendChangeOwnershipModal().show()
+  }
+
+  onChangeOwnershipRequest (ownershipChange: ChangeOwnership) {
+    this.pendingOwnershipRequest = ownershipChange
+  }
+
+  async cancelOwnershipRequest () {
+    const message =
+      $localize`Are you sure you want to cancel the ownership change request to "${this.pendingOwnershipRequest.nextOwnerAccount.name}"?`
+    const res = await this.confirmService.confirm(message, $localize`Cancel request`)
+    if (res === false) return
+
+    this.changeOwnershipService.cancelChannel(this.pendingOwnershipRequest.id)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Ownership change request cancelled`)
+          this.pendingOwnershipRequest = null
+        },
+
+        error: err => this.notifier.handleError(err)
+      })
+  }
+
+  loadOwnershipRequestIfNeeded () {
+    if (this.mode !== 'update') return
+
+    this.changeOwnershipService.listFromChannel(this.videoChannelEdit.channel.name, ChangeOwnershipState.PENDING)
+      .subscribe(({ data }) => {
+        if (data.length === 0) {
+          this.pendingOwnershipRequest = undefined
+        } else {
+          this.pendingOwnershipRequest = data[0]
+        }
+      })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  deleteChannel () {
+    const channel = {
+      name: this.videoChannelEdit.channel.name,
+      nameWithHost: this.videoChannelEdit.channel.name,
+      displayName: this.videoChannelEdit.channel.displayName,
+
+      ...this.videoChannelEdit.apiInfo
+    }
+
+    this.channelService.removeWithConfirmation(channel)
+      .subscribe({
+        next: ({ removed }) => {
+          if (!removed) return
+
+          this.router.navigateByUrl('/my-library/video-channels')
+
+          this.notifier.success($localize`Video channel ${channel.displayName} deleted.`)
+        },
+
+        error: err => this.notifier.handleError(err)
+      })
   }
 }

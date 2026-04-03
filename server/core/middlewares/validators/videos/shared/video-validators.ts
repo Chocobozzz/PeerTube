@@ -38,7 +38,7 @@ export async function commonVideoFileChecks (options: {
     return false
   }
 
-  if (await checkUserQuota({ channelUser, videoFileSize, req, res }) === false) return false
+  if (await checkUserQuota({ channelUser, uploadSize: videoFileSize, req, res }) === false) return false
 
   return true
 }

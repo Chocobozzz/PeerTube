@@ -3,6 +3,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http'
 import {
   ApplicationRef,
   enableProdMode,
+  enableProfiling,
   importProvidersFrom,
   inject,
   provideAppInitializer,
@@ -61,12 +62,14 @@ export function loadConfigFactory (
 
 if (environment.production) {
   enableProdMode()
+} else {
+  enableProfiling()
 }
 
 logger.registerServerSending(environment.apiUrl)
 
-const bootstrap = () =>
-  bootstrapApplication(AppComponent, {
+const bootstrap = () => {
+  return bootstrapApplication(AppComponent, {
     providers: [
       provideZoneChangeDetection({ eventCoalescing: true }),
 
@@ -119,33 +122,32 @@ const bootstrap = () =>
         }
       })
     ]
+  }).then(bootstrapModule => {
+    if (!environment.production) {
+      const applicationRef = bootstrapModule.injector.get(ApplicationRef)
+      const componentRef = applicationRef.components[0]
+
+      // allows to run `ng.profiler.timeChangeDetection();`
+      enableDebugTools(componentRef)
+    }
+
+    return bootstrapModule
+  }).catch(err => {
+    try {
+      logger.error(err)
+    } catch (err2) {
+      console.error('Cannot log error', { err, err2 })
+    }
+
+    // Ensure we display an "incompatible message" on Angular bootstrap error
+    setTimeout(() => {
+      if (document.querySelector('my-app').innerHTML === '') {
+        throw err
+      }
+    }, 1000)
+
+    return null as any
   })
-    .then(bootstrapModule => {
-      if (!environment.production) {
-        const applicationRef = bootstrapModule.injector.get(ApplicationRef)
-        const componentRef = applicationRef.components[0]
-
-        // allows to run `ng.profiler.timeChangeDetection();`
-        enableDebugTools(componentRef)
-      }
-
-      return bootstrapModule
-    })
-    .catch(err => {
-      try {
-        logger.error(err)
-      } catch (err2) {
-        console.error('Cannot log error', { err, err2 })
-      }
-
-      // Ensure we display an "incompatible message" on Angular bootstrap error
-      setTimeout(() => {
-        if (document.querySelector('my-app').innerHTML === '') {
-          throw err
-        }
-      }, 1000)
-
-      return null as any
-    })
+}
 
 bootstrap()

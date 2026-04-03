@@ -8,6 +8,7 @@ import {
   VideosImportInChannelCreate
 } from '@peertube/peertube-models'
 import { pickCommonVideoQuery } from '@server/helpers/query.js'
+import { scheduleActorRefreshIfNeeded } from '@server/lib/activitypub/actors/refresh.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { reorderPlaylistOrElementsPosition, sendPlaylistPositionUpdateOfChannel } from '@server/lib/video-playlist.js'
 import { ActorFollowModel } from '@server/models/actor/actor-follow.js'
@@ -58,9 +59,9 @@ import { guessAdditionalAttributesFromQuery } from '../../../models/video/format
 import { VideoChannelModel } from '../../../models/video/video-channel.js'
 import { VideoPlaylistModel } from '../../../models/video/video-playlist.js'
 import { VideoModel } from '../../../models/video/video.js'
+import { ownershipChannelRouter } from './ownership.js'
 import { channelCollaborators } from './video-channel-collaborators.js'
 import { videoChannelLogosRouter } from './video-channel-logos.js'
-import { scheduleActorRefreshIfNeeded } from '@server/lib/activitypub/actors/refresh.js'
 
 const auditLogger = auditLoggerFactory('channels')
 
@@ -69,6 +70,7 @@ const videoChannelRouter = express.Router()
 videoChannelRouter.use(apiRateLimiter)
 videoChannelRouter.use(channelCollaborators)
 videoChannelRouter.use(videoChannelLogosRouter)
+videoChannelRouter.use(ownershipChannelRouter)
 
 videoChannelRouter.get(
   '/',

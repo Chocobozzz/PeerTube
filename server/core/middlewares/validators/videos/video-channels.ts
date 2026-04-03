@@ -161,7 +161,7 @@ export const videoChannelImportVideosValidator = [
     }
 
     const channelUser = { id: res.locals.videoChannel.Account.userId }
-    if (!await checkUserQuota({ channelUser, videoFileSize: 1, req, res })) return
+    if (!await checkUserQuota({ channelUser, uploadSize: 1, req, res })) return
 
     return next()
   }

@@ -96,7 +96,7 @@ describe('Test video change ownership - nominal', function () {
 
   it('Should not have video change ownership', async function () {
     for (const token of [ firstUserToken, secondUserToken, unrelatedUserToken ]) {
-      const body = await command.list({ token })
+      const body = await command.listVideos({ token })
 
       expect(body.total).to.equal(0)
       expect(body.data).to.be.an('array')
@@ -105,12 +105,12 @@ describe('Test video change ownership - nominal', function () {
   })
 
   it('Should send a request to change ownership of a video', async function () {
-    await command.create({ token: firstUserToken, videoId: servers[0].store.videoCreated.id, username: secondUser })
+    await command.createVideo({ token: firstUserToken, videoId: servers[0].store.videoCreated.id, username: secondUser })
   })
 
   it('Should correctly list ownership change', async function () {
     {
-      const body = await command.list({ token: unrelatedUserToken })
+      const body = await command.listVideos({ token: unrelatedUserToken })
 
       expect(body.total).to.equal(0)
       expect(body.data).to.be.an('array')
@@ -118,31 +118,47 @@ describe('Test video change ownership - nominal', function () {
     }
 
     for (const token of [ firstUserToken, secondUserToken ]) {
-      const body = await command.list({ token })
+      const body = await command.listVideos({ token })
 
       expect(body.total).to.equal(1)
       expect(body.data).to.be.an('array')
       expect(body.data.length).to.equal(1)
+
+      const entry = body.data[0]
+
+      expect(entry.createdAt).to.exist
+      expect(entry.id).to.exist
+      expect(entry.initiatorAccount.name).to.equal(firstUser)
+      expect(entry.nextOwnerAccount.name).to.equal(secondUser)
+
+      expect(entry.state.id).to.equal(ChangeOwnershipState.PENDING)
+      expect(entry.video.name).to.equal('my super name')
+      expect(entry.video.uuid).to.exist
+      expect(entry.video.shortUUID).to.exist
+      expect(entry.video.nsfw).to.be.true
+      expect(entry.video.isLive).to.be.false
+      expect(entry.video.publishedAt).to.exist
+      expect(entry.video.thumbnails).to.have.length.above(2)
 
       lastRequestId = body.data[0].id
     }
   })
 
   it('Should not be possible to refuse the change of ownership from first user', async function () {
-    await command.refuse({ token: firstUserToken, ownershipId: lastRequestId, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    await command.refuseVideo({ token: firstUserToken, ownershipId: lastRequestId, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
   })
 
   it('Should be possible to refuse the change of ownership from second user', async function () {
-    await command.refuse({ token: secondUserToken, ownershipId: lastRequestId })
+    await command.refuseVideo({ token: secondUserToken, ownershipId: lastRequestId })
   })
 
   it('Should send a new request to change ownership of a video', async function () {
-    await command.create({ token: firstUserToken, videoId: servers[0].store.videoCreated.id, username: secondUser })
+    await command.createVideo({ token: firstUserToken, videoId: servers[0].store.videoCreated.id, username: secondUser })
   })
 
   it('Should return two requests to change ownership for the second user', async function () {
     {
-      const body = await command.list({ token: unrelatedUserToken })
+      const body = await command.listVideos({ token: unrelatedUserToken })
 
       expect(body.total).to.equal(0)
       expect(body.data).to.be.an('array')
@@ -150,7 +166,7 @@ describe('Test video change ownership - nominal', function () {
     }
 
     for (const token of [ firstUserToken, secondUserToken ]) {
-      const body = await command.list({ token })
+      const body = await command.listVideos({ token })
 
       expect(body.total).to.equal(2)
       expect(body.data).to.be.an('array')
@@ -160,16 +176,27 @@ describe('Test video change ownership - nominal', function () {
     }
   })
 
+  it('Should correctly sort/paginate ownership change list', async function () {
+    const body = await command.listVideos({ token: secondUserToken, start: 1, count: 1, sort: 'createdAt' })
+
+    expect(body.total).to.equal(2)
+    expect(body.data).to.be.an('array')
+    expect(body.data.length).to.equal(1)
+
+    const entry = body.data[0]
+    expect(entry.state.id).to.equal(ChangeOwnershipState.PENDING)
+  })
+
   it('Should list change ownership requests for collaborators', async function () {
-    const body = await command.list({ token: firstUserEditorToken })
+    const body = await command.listVideos({ token: firstUserEditorToken })
 
     expect(body.total).to.equal(2)
     expect(body.data).to.be.an('array')
     expect(body.data.length).to.equal(2)
   })
 
-  it('Should list change ownership requests for collaborators of a channel of next owner', async function () {
-    const body = await command.list({ token: secondUserEditorToken })
+  it('Should not list change ownership requests for collaborators of a channel of next owner', async function () {
+    const body = await command.listVideos({ token: secondUserEditorToken })
 
     expect(body.total).to.equal(0)
     expect(body.data).to.be.an('array')
@@ -177,7 +204,7 @@ describe('Test video change ownership - nominal', function () {
   })
 
   it('Should not be possible to accept the change of ownership from first user', async function () {
-    await command.accept({
+    await command.acceptVideo({
       token: firstUserToken,
       ownershipId: lastRequestId,
       channelId: secondUserChannelId,
@@ -186,7 +213,7 @@ describe('Test video change ownership - nominal', function () {
   })
 
   it('Should be possible to accept the change of ownership from second user', async function () {
-    await command.accept({ token: secondUserToken, ownershipId: lastRequestId, channelId: secondUserChannelId })
+    await command.acceptVideo({ token: secondUserToken, ownershipId: lastRequestId, channelId: secondUserChannelId })
 
     await waitJobs(servers)
   })
@@ -202,9 +229,9 @@ describe('Test video change ownership - nominal', function () {
   })
 
   it('Should send a request to change ownership of a live', async function () {
-    await command.create({ token: firstUserToken, videoId: liveId, username: secondUser })
+    await command.createVideo({ token: firstUserToken, videoId: liveId, username: secondUser })
 
-    const body = await command.list({ token: secondUserToken })
+    const body = await command.listVideos({ token: secondUserToken })
 
     expect(body.total).to.equal(3)
     expect(body.data.length).to.equal(3)
@@ -216,18 +243,18 @@ describe('Test video change ownership - nominal', function () {
     const { data } = await command.listOfVideo({ videoId: liveId })
     const ownershipChangeId = data[0].id
 
-    await command.delete({ ownershipId: ownershipChangeId, token: firstUserToken })
+    await command.deleteVideo({ ownershipId: ownershipChangeId, token: firstUserToken })
 
     const bodyAfterDelete = await command.listOfVideo({ videoId: liveId, state: ChangeOwnershipState.PENDING })
     expect(bodyAfterDelete.total).to.equal(0)
   })
 
   it('Should accept a live ownership change', async function () {
-    await command.create({ token: firstUserToken, videoId: liveId, username: secondUser })
-    const body = await command.list({ token: secondUserToken })
+    await command.createVideo({ token: firstUserToken, videoId: liveId, username: secondUser })
+    const body = await command.listVideos({ token: secondUserToken })
     lastRequestId = body.data[0].id
 
-    await command.accept({ token: secondUserToken, ownershipId: lastRequestId, channelId: secondUserChannelId })
+    await command.acceptVideo({ token: secondUserToken, ownershipId: lastRequestId, channelId: secondUserChannelId })
 
     await waitJobs(servers)
 
@@ -308,17 +335,17 @@ describe('Test video change ownership - quota too small', function () {
   })
 
   it('Should send a request to change ownership of a video', async function () {
-    await server.changeOwnership.create({ token: firstUserToken, videoId: server.store.videoCreated.id, username: secondUser })
+    await server.changeOwnership.createVideo({ token: firstUserToken, videoId: server.store.videoCreated.id, username: secondUser })
   })
 
   it('Should not be possible to accept the change of ownership from second user because of exceeded quota', async function () {
-    const body = await server.changeOwnership.list({ token: secondUserToken })
+    const body = await server.changeOwnership.listVideos({ token: secondUserToken })
     lastRequestId = body.data[0].id
 
     const { videoChannels } = await server.users.getMyInfo({ token: secondUserToken })
     const channelId = videoChannels[0].id
 
-    await server.changeOwnership.accept({
+    await server.changeOwnership.acceptVideo({
       token: secondUserToken,
       ownershipId: lastRequestId,
       channelId,

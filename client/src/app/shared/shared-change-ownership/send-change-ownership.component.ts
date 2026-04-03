@@ -2,29 +2,31 @@ import { Component, ElementRef, OnInit, inject, input, output, viewChild } from 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { OWNERSHIP_CHANGE_USERNAME_VALIDATOR } from '@app/shared/form-validators/video-ownership-change-validators'
+import { ChangeOwnershipService } from '@app/shared/shared-change-ownership/change-ownership.service'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { UserAutoCompleteComponent } from '@app/shared/shared-forms/user-auto-complete.component'
-import { ChangeOwnershipService } from '@app/shared/shared-main/video/change-ownership.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { ChangeOwnership, ChangeOwnershipState } from '@peertube/peertube-models'
 import { AutoCompleteModule } from 'primeng/autocomplete'
 import { switchMap } from 'rxjs'
-import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 
 @Component({
-  selector: 'my-video-change-ownership',
-  templateUrl: './video-change-ownership.component.html',
-  styleUrls: [ './video-change-ownership.component.scss' ],
+  selector: 'my-send-change-ownership',
+  templateUrl: './send-change-ownership.component.html',
+  styleUrls: [ './send-change-ownership.component.scss' ],
   imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, AutoCompleteModule, UserAutoCompleteComponent ]
 })
-export class VideoChangeOwnershipComponent extends FormReactive implements OnInit {
+export class SendChangeOwnershipComponent extends FormReactive implements OnInit {
   protected formReactiveService = inject(FormReactiveService)
   private changeOwnershipService = inject(ChangeOwnershipService)
   private notifier = inject(Notifier)
   private modalService = inject(NgbModal)
 
-  videoId = input.required<number>()
+  videoId = input<number>()
+  channelName = input<string>()
+
   requestSent = output<ChangeOwnership>()
 
   readonly modal = viewChild<ElementRef>('modal')
@@ -46,11 +48,34 @@ export class VideoChangeOwnershipComponent extends FormReactive implements OnIni
   }
 
   changeOwnership () {
+    if (this.channelName()) {
+      return this.changeChannelOwnership()
+    }
+
+    return this.changeVideoOwnership()
+  }
+
+  private changeVideoOwnership () {
     const username = this.form.value['username']
 
     this.changeOwnershipService
       .sendVideoChangeRequest(this.videoId(), username)
       .pipe(switchMap(() => this.changeOwnershipService.listFromVideo(this.videoId(), ChangeOwnershipState.PENDING)))
+      .subscribe({
+        next: ({ data }) => {
+          this.requestSent.emit(data[0])
+        },
+
+        error: err => this.notifier.handleError(err)
+      })
+  }
+
+  private changeChannelOwnership () {
+    const username = this.form.value['username']
+
+    this.changeOwnershipService
+      .sendChannelChangeRequest(this.channelName(), username)
+      .pipe(switchMap(() => this.changeOwnershipService.listFromChannel(this.channelName(), ChangeOwnershipState.PENDING)))
       .subscribe({
         next: ({ data }) => {
           this.requestSent.emit(data[0])

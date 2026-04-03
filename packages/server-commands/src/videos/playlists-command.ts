@@ -195,11 +195,16 @@ export class PlaylistsCommand extends AbstractCommand {
     options: OverrideCommandOptions & {
       displayName: string
       privacy?: VideoPlaylistPrivacyType
+      channelId?: number
     }
   ) {
-    const { displayName, privacy = VideoPlaylistPrivacy.PUBLIC } = options
+    const { displayName, channelId, privacy = VideoPlaylistPrivacy.PUBLIC } = options
 
-    const { videoChannels } = await this.server.users.getMyInfo({ token: options.token })
+    let videoChannelId = channelId
+    if (!videoChannelId && privacy === VideoPlaylistPrivacy.PUBLIC) {
+      const { videoChannels } = await this.server.users.getMyInfo({ token: options.token })
+      videoChannelId = videoChannels[0].id
+    }
 
     return this.create({
       ...options,
@@ -207,9 +212,7 @@ export class PlaylistsCommand extends AbstractCommand {
       attributes: {
         displayName,
         privacy,
-        videoChannelId: privacy === VideoPlaylistPrivacy.PUBLIC
-          ? videoChannels[0].id
-          : undefined
+        videoChannelId
       }
     })
   }

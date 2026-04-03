@@ -5,12 +5,12 @@ import {
 } from '@peertube/peertube-models'
 import { CHANNEL_COLLABORATOR_STATE } from '@server/initializers/constants.js'
 import { MChannelCollaboratorAccount, MChannelId, MUserId } from '@server/types/models/index.js'
+import { Op, Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { AccountModel } from '../account/account.js'
 import { ActorModel } from '../actor/actor.js'
 import { SequelizeModel, buildSQLAttributes, doesExist, getSort } from '../shared/index.js'
 import { VideoChannelModel } from './video-channel.js'
-import { Op } from 'sequelize'
 
 enum ScopeNames {
   WITH_ACCOUNT = 'WITH_ACCOUNT'
@@ -147,8 +147,9 @@ export class VideoChannelCollaboratorModel extends SequelizeModel<VideoChannelCo
   static loadByCollaboratorAccountName (options: {
     channelId: number
     accountName: string
+    transaction?: Transaction
   }): Promise<MChannelCollaboratorAccount | null> {
-    const { channelId, accountName } = options
+    const { channelId, accountName, transaction } = options
 
     return VideoChannelCollaboratorModel.findOne({
       where: {
@@ -168,7 +169,8 @@ export class VideoChannelCollaboratorModel extends SequelizeModel<VideoChannelCo
             }
           ]
         }
-      ]
+      ],
+      transaction
     })
   }
 

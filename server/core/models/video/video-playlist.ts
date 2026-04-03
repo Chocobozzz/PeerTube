@@ -69,9 +69,9 @@ import {
 import { getNextPositionOf, increasePositionOf, reassignPositionOf } from '../shared/position.js'
 import { ListVideoPlaylistsOptions, VideoPlaylistListQueryBuilder } from './sql/playlist/video-playlist-list-query-builder.js'
 import { ThumbnailModel } from './thumbnail.js'
+import { VideoChannelCollaboratorModel } from './video-channel-collaborator.js'
 import { VideoChannelModel, ScopeNames as VideoChannelScopeNames } from './video-channel.js'
 import { VideoPlaylistElementModel } from './video-playlist-element.js'
-import { VideoChannelCollaboratorModel } from './video-channel-collaborator.js'
 
 enum ScopeNames {
   WITH_VIDEOS_LENGTH = 'WITH_VIDEOS_LENGTH',
@@ -550,6 +550,29 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
       videoChannelPosition: null
     }, query)
   }
+
+  // ---------------------------------------------------------------------------
+
+  static updateOwnerOfChannelPlaylists (options: {
+    currentOwnerId: number
+    videoChannelId: number
+    nextOwnerId: number
+    transaction: Transaction
+  }) {
+    const { currentOwnerId, nextOwnerId, videoChannelId, transaction } = options
+
+    const query = {
+      where: {
+        ownerAccountId: currentOwnerId,
+        videoChannelId
+      },
+      transaction
+    }
+
+    return VideoPlaylistModel.update({ ownerAccountId: nextOwnerId }, query)
+  }
+
+  // ---------------------------------------------------------------------------
 
   async setAndSaveThumbnail (thumbnail: MThumbnail, t: Transaction) {
     thumbnail.videoPlaylistId = this.id

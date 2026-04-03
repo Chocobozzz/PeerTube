@@ -3,15 +3,15 @@ import { inject, Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
 import {
   ChangeOwnership,
-  ChangeOwnershipAccept,
   ChangeOwnershipCreate,
   ChangeOwnershipStateType,
+  ChangeVideoOwnershipAccept,
   ResultList
 } from '@peertube/peertube-models'
 import { SortMeta } from 'primeng/api'
 import { from, Observable } from 'rxjs'
 import { catchError, concatMap, toArray } from 'rxjs/operators'
-import { environment } from '../../../../environments/environment'
+import { environment } from '../../../environments/environment'
 
 @Injectable()
 export class ChangeOwnershipService {
@@ -20,6 +20,7 @@ export class ChangeOwnershipService {
   private restExtractor = inject(RestExtractor)
 
   private static BASE_VIDEO_CHANGE_OWNERSHIP_URL = environment.apiUrl + '/api/v1/videos/'
+  private static BASE_CHANNEL_CHANGE_OWNERSHIP_URL = environment.apiUrl + '/api/v1/video-channels/'
 
   sendVideoChangeRequest (id: number, username: string) {
     const url = ChangeOwnershipService.BASE_VIDEO_CHANGE_OWNERSHIP_URL + id + '/give-ownership'
@@ -51,7 +52,7 @@ export class ChangeOwnershipService {
       .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
-  acceptVideo (ids: number[], input: ChangeOwnershipAccept) {
+  acceptVideo (ids: number[], input: ChangeVideoOwnershipAccept) {
     return from(ids)
       .pipe(
         concatMap(id => {
@@ -85,4 +86,65 @@ export class ChangeOwnershipService {
   }
 
   // ---------------------------------------------------------------------------
+
+  sendChannelChangeRequest (channelName: string, username: string) {
+    const url = ChangeOwnershipService.BASE_CHANNEL_CHANGE_OWNERSHIP_URL + channelName + '/give-ownership'
+    const body: ChangeOwnershipCreate = { username }
+
+    return this.authHttp.post(url, body)
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
+  }
+
+  listOfChannels (pagination: RestPagination, sort: SortMeta): Observable<ResultList<ChangeOwnership>> {
+    const url = ChangeOwnershipService.BASE_CHANNEL_CHANGE_OWNERSHIP_URL + 'ownership'
+
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination, sort)
+
+    return this.authHttp.get<ResultList<ChangeOwnership>>(url, { params })
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
+  }
+
+  listFromChannel (channelName: string, state: ChangeOwnershipStateType): Observable<ResultList<ChangeOwnership>> {
+    const url = ChangeOwnershipService.BASE_CHANNEL_CHANGE_OWNERSHIP_URL + channelName + '/ownership'
+
+    let params = new HttpParams()
+    params = params.set('state', state)
+
+    return this.authHttp.get<ResultList<ChangeOwnership>>(url, { params })
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
+  }
+
+  acceptChannel (ids: number[]) {
+    return from(ids)
+      .pipe(
+        concatMap(id => {
+          const url = ChangeOwnershipService.BASE_CHANNEL_CHANGE_OWNERSHIP_URL + 'ownership/' + id + '/accept'
+
+          return this.authHttp.post(url, {})
+        }),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
+      )
+  }
+
+  rejectChannel (ids: number[]) {
+    return from(ids)
+      .pipe(
+        concatMap(id => {
+          const url = ChangeOwnershipService.BASE_CHANNEL_CHANGE_OWNERSHIP_URL + 'ownership/' + id + '/refuse'
+
+          return this.authHttp.post(url, {})
+        }),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
+      )
+  }
+
+  cancelChannel (id: number) {
+    const url = ChangeOwnershipService.BASE_CHANNEL_CHANGE_OWNERSHIP_URL + 'ownership/' + id
+
+    return this.authHttp.delete(url)
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
 }

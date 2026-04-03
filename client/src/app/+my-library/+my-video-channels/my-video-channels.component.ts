@@ -18,10 +18,10 @@ import { CollaboratorStateComponent } from '@app/shared/shared-main/channel/coll
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
 import { maxBy, minBy } from '@peertube/peertube-core-utils'
+import { SelectOptionsItem } from '@pt-types'
 import { ChartData, ChartOptions, TooltipItem, TooltipModel } from 'chart.js'
 import { ChartModule } from 'primeng/chart'
 import { Subject, first, switchMap, tap } from 'rxjs'
-import { SelectOptionsItem } from '@pt-types'
 import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
 import { SearchInputComponent } from '../../shared/shared-forms/search-input.component'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
@@ -119,7 +119,6 @@ export class MyVideoChannelsComponent implements OnInit {
   }
 
   onSearch (search: string) {
-    console.log(search)
     this.search = search
 
     this.resetDataAndReload()
@@ -135,24 +134,12 @@ export class MyVideoChannelsComponent implements OnInit {
     this.loadMoreVideoChannels()
   }
 
-  async deleteVideoChannel (videoChannel: VideoChannel) {
-    const res = await this.confirmService.confirmWithExpectedInput(
-      $localize`Do you really want to delete ${videoChannel.displayName}?` +
-        `<br />` +
-        formatICU(
-          // eslint-disable-next-line max-len
-          $localize`It will delete {count, plural, =1 {1 video} other {{count} videos}} uploaded in this channel, and you will not be able to create another channel or account with the same name (${videoChannel.name})!`,
-          { count: videoChannel.videosCount }
-        ),
-      $localize`Please type the name of the video channel (${videoChannel.name}) to confirm`,
-      videoChannel.name,
-      $localize`Delete`
-    )
-    if (res === false) return
-
-    this.videoChannelService.remove(videoChannel)
+  deleteVideoChannel (videoChannel: VideoChannel) {
+    this.videoChannelService.removeWithConfirmation(videoChannel)
       .subscribe({
-        next: () => {
+        next: removed => {
+          if (!removed) return
+
           this.videoChannels = this.videoChannels.filter(c => c.id !== videoChannel.id)
           this.notifier.success($localize`Video channel ${videoChannel.displayName} deleted.`)
 
@@ -201,6 +188,8 @@ export class MyVideoChannelsComponent implements OnInit {
           const channel = this.videoChannels.find(c => c.id === channelWithStats.id)
 
           channel.viewsPerDay = channelWithStats.viewsPerDay
+          channel.videosCount = channelWithStats.videosCount
+          channel.totalViews = channelWithStats.totalViews
         }
 
         this.videoChannelsChartData = this.videoChannels.map(v => ({

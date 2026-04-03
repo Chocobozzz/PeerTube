@@ -3,9 +3,9 @@ import { AccountModel } from '@server/models/account/account.js'
 import { ActorImageModel } from '@server/models/actor/actor-image.js'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { ServerModel } from '@server/models/server/server.js'
+import { ChangeOwnershipModel } from '../../change-ownership.js'
 import { ThumbnailModel } from '../../thumbnail.js'
 import { VideoChannelModel } from '../../video-channel.js'
-import { ChangeOwnershipModel } from '../../change-ownership.js'
 import { VideoModel } from '../../video.js'
 
 export class VideoChangeOwnershipTableAttributes {
@@ -59,10 +59,12 @@ export class VideoChangeOwnershipTableAttributes {
   }
 
   // ---------------------------------------------------------------------------
+  // Video joins
+  // ---------------------------------------------------------------------------
 
   @Memoize()
   getVideoAttributes () {
-    return VideoModel.getSQLAttributes('Video', 'Video.').join(', ')
+    return VideoModel.getSQLSummaryAttributes('Video', 'Video.').join(', ')
   }
 
   // ---------------------------------------------------------------------------
@@ -90,35 +92,31 @@ export class VideoChangeOwnershipTableAttributes {
   // ---------------------------------------------------------------------------
 
   @Memoize()
-  getVideoChannelAccountAttributes () {
-    return AccountModel.getSQLSummaryAttributes('Video->VideoChannel->Account', 'Video.VideoChannel.Account.').join(', ')
-  }
-
-  @Memoize()
-  getVideoChannelAccountActorAttributes () {
-    return ActorModel.getSQLSummaryAttributes('Video->VideoChannel->Account->Actor', 'Video.VideoChannel.Account.Actor.').join(', ')
-  }
-
-  @Memoize()
-  getVideoChannelAccountServerAttributes () {
-    return ServerModel.getSQLSummaryAttributes(
-      'Video->VideoChannel->Account->Actor->Server',
-      'Video.VideoChannel.Account.Actor.Server.'
-    ).join(', ')
-  }
-
-  @Memoize()
-  getVideoChannelAccountAvatarAttributes () {
-    return ActorImageModel.getSQLAttributes(
-      'Video->VideoChannel->Account->Actor->Avatars',
-      'Video.VideoChannel.Account.Actor.Avatars.'
-    ).join(', ')
+  getThumbnailAttributes () {
+    return ThumbnailModel.getSQLAttributes('Video->Thumbnails', 'Video.Thumbnails.').join(', ')
   }
 
   // ---------------------------------------------------------------------------
+  // Channel joins
+  // ---------------------------------------------------------------------------
 
   @Memoize()
-  getThumbnailAttributes () {
-    return ThumbnailModel.getSQLAttributes('Video->Thumbnails', 'Video.Thumbnails.').join(', ')
+  getChannelAttributes () {
+    return VideoChannelModel.getSQLSummaryAttributes('VideoChannel', 'VideoChannel.').join(', ')
+  }
+
+  @Memoize()
+  getChannelActorAttributes () {
+    return ActorModel.getSQLSummaryAttributes('VideoChannel->Actor', 'VideoChannel.Actor.').join(', ')
+  }
+
+  @Memoize()
+  getChannelServerAttributes () {
+    return ServerModel.getSQLSummaryAttributes('VideoChannel->Actor->Server', 'VideoChannel.Actor.Server.').join(', ')
+  }
+
+  @Memoize()
+  getChannelAvatarAttributes () {
+    return ActorImageModel.getSQLAttributes('VideoChannel->Actor->Avatars', 'VideoChannel.Actor.Avatars.').join(', ')
   }
 }

@@ -39,6 +39,7 @@ export class VideoChannelEdit {
     ownerAccount: AccountSummary
     avatars: VideoChannel['avatars']
     followersCount: VideoChannel['followersCount']
+    videosCount: number
     bannerUrl: string
     support: string
   }
@@ -69,6 +70,7 @@ export class VideoChannelEdit {
       id: undefined,
       ownerAccount: user.account,
       avatars: [],
+      videosCount: 0,
       followersCount: 0,
       bannerUrl: undefined,
       support: undefined
@@ -101,6 +103,7 @@ export class VideoChannelEdit {
     this.apiInfo = {
       id: channel.id,
       avatars: channel.avatars,
+      videosCount: channel.videosCount,
       followersCount: channel.followersCount,
       bannerUrl: channel.bannerUrl,
       support: channel.support,

@@ -17,9 +17,13 @@ function schedulePlaylistRefreshIfNeeded (playlist: MVideoPlaylist) {
 }
 
 async function refreshVideoPlaylistIfNeeded (videoPlaylist: MVideoPlaylistOwnerDefault): Promise<MVideoPlaylistOwnerDefault> {
-  if (!videoPlaylist.isOutdated()) return videoPlaylist
-
   const lTags = loggerTagsFactory('ap', 'video-playlist', 'refresh', videoPlaylist.uuid, videoPlaylist.url)
+
+  if (!videoPlaylist.isOutdated()) {
+    logger.debug('Playlist ' + videoPlaylist.url + ' is not outdated, no need to refresh it.', lTags())
+
+    return videoPlaylist
+  }
 
   logger.info('Refreshing playlist %s.', videoPlaylist.url, lTags())
 

@@ -14,6 +14,7 @@ export interface ListChangeOwnershipOptions extends AbstractListQueryOptions {
   state?: ChangeOwnershipStateType
 
   videoId?: number
+  videoChannelId?: number
 }
 
 export class ChangeOwnershipListQueryBuilder extends AbstractListQuery {
@@ -21,13 +22,16 @@ export class ChangeOwnershipListQueryBuilder extends AbstractListQuery {
 
   private builtInitiatorJoin = false
   private builtNextOwnerJoin = false
-  private builtVideoJoin = false
   private builtInitiatorAvatarJoin = false
   private builtNextOwnerAvatarJoin = false
-  private builtChannelAvatarJoin = false
-  private builtChannelAccountAvatarJoin = false
+
+  private builtVideoJoin = false
+  private builtVideoChannelAvatarJoin = false
   private builtThumbnailJoin = false
+
+  private builtChannelJoin = false
   private builtChannelCollaboratorsJoin = false
+  private builtChannelAvatarJoin = false
 
   constructor (
     protected readonly sequelize: Sequelize,
@@ -48,19 +52,26 @@ export class ChangeOwnershipListQueryBuilder extends AbstractListQuery {
     }
 
     if (this.options.accountId) {
+      this.buildVideoJoin()
+      this.buildChannelJoin()
+
       this.buildChannelCollaboratorsJoin()
 
       where.push(
-        `"ChangeOwnershipModel"."nextOwnerAccountId" = :nextOwnerAccountId ` +
+        `(` +
+          `"ChangeOwnershipModel"."nextOwnerAccountId" = :nextOwnerAccountId ` +
           `OR (` +
-          `"Video->VideoChannel->VideoChannelCollaborators"."accountId" = :collaborationAccountId OR ` +
-          `"Video->VideoChannel->Account"."id" = :videoAccountId` +
+          `  "Video->VideoChannel->VideoChannelCollaborators"."accountId" = :collaborationAccountId OR ` +
+          `  "Video->VideoChannel"."accountId" = :videoAccountId` +
+          `)` +
+          `OR "VideoChannel"."accountId" = :videoChannelAccountId` +
           `)`
       )
 
       this.replacements.collaborationAccountId = this.options.accountId
       this.replacements.videoAccountId = this.options.accountId
       this.replacements.nextOwnerAccountId = this.options.accountId
+      this.replacements.videoChannelAccountId = this.options.accountId
     }
 
     if (this.options.state) {
@@ -71,6 +82,11 @@ export class ChangeOwnershipListQueryBuilder extends AbstractListQuery {
     if (this.options.videoId) {
       where.push(`"ChangeOwnershipModel"."videoId" = :videoId`)
       this.replacements.videoId = this.options.videoId
+    }
+
+    if (this.options.videoChannelId) {
+      where.push(`"ChangeOwnershipModel"."videoChannelId" = :videoChannelId`)
+      this.replacements.videoChannelId = this.options.videoChannelId
     }
 
     if (this.options.id) {
@@ -106,23 +122,36 @@ export class ChangeOwnershipListQueryBuilder extends AbstractListQuery {
   private buildVideoJoin () {
     if (this.builtVideoJoin) return
 
-    this.subQueryJoin += ' INNER JOIN "video" "Video" ON "Video"."id" = "ChangeOwnershipModel"."videoId" ' +
+    this.subQueryJoin += ' LEFT JOIN "video" "Video" ON "Video"."id" = "ChangeOwnershipModel"."videoId" ' +
       getChannelJoin({
         base: 'Video->',
         on: '"Video"."channelId"',
-        includeAccount: true,
+        includeAccount: false,
         includeActors: true,
         includeAvatars: false,
-        required: true
+        required: false
       })
 
     this.builtVideoJoin = true
   }
 
+  private buildChannelJoin () {
+    if (this.builtChannelJoin) return
+
+    this.subQueryJoin += getChannelJoin({
+      base: '',
+      on: '"ChangeOwnershipModel"."videoChannelId"',
+      includeAccount: false,
+      includeActors: true,
+      includeAvatars: false,
+      required: false
+    })
+
+    this.builtChannelJoin = true
+  }
+
   private buildChannelCollaboratorsJoin () {
     if (this.builtChannelCollaboratorsJoin) return
-
-    this.buildVideoJoin()
 
     this.subQueryJoin += ' LEFT JOIN "videoChannelCollaborator" "Video->VideoChannel->VideoChannelCollaborators" ' +
       'ON "Video->VideoChannel->VideoChannelCollaborators"."channelId" = "Video->VideoChannel"."id" ' +
@@ -154,20 +183,12 @@ export class ChangeOwnershipListQueryBuilder extends AbstractListQuery {
     this.builtNextOwnerAvatarJoin = true
   }
 
-  private buildChannelAvatarsJoin () {
-    if (this.builtChannelAvatarJoin) return
+  private buildVideoChannelAvatarsJoin () {
+    if (this.builtVideoChannelAvatarJoin) return
 
     this.join += getAvatarsJoin({ base: 'Video->VideoChannel->Actor->', on: '"Video.VideoChannel.Actor.id"' })
 
-    this.builtChannelAvatarJoin = true
-  }
-
-  private buildChannelAccountAvatarsJoin () {
-    if (this.builtChannelAccountAvatarJoin) return
-
-    this.join += getAvatarsJoin({ base: 'Video->VideoChannel->Account->Actor->', on: '"Video.VideoChannel.Account.Actor.id"' })
-
-    this.builtChannelAccountAvatarJoin = true
+    this.builtVideoChannelAvatarJoin = true
   }
 
   private buildThumbnailJoin () {
@@ -178,13 +199,21 @@ export class ChangeOwnershipListQueryBuilder extends AbstractListQuery {
     this.builtThumbnailJoin = true
   }
 
+  private buildChannelAvatarsJoin () {
+    if (this.builtChannelAvatarJoin) return
+
+    this.join += getAvatarsJoin({ base: 'VideoChannel->Actor->', on: '"VideoChannel.Actor.id"' })
+
+    this.builtChannelAvatarJoin = true
+  }
+
   // ---------------------------------------------------------------------------
 
   protected buildQueryJoin () {
     this.buildInitiatorAvatarsJoin()
     this.buildNextOwnerAvatarsJoin()
+    this.buildVideoChannelAvatarsJoin()
     this.buildChannelAvatarsJoin()
-    this.buildChannelAccountAvatarsJoin()
     this.buildThumbnailJoin()
   }
 
@@ -195,8 +224,8 @@ export class ChangeOwnershipListQueryBuilder extends AbstractListQuery {
       this.tableAttributes.getInitiatorAvatarAttributes(),
       this.tableAttributes.getNextOwnerAvatarAttributes(),
       this.tableAttributes.getVideoChannelAvatarAttributes(),
-      this.tableAttributes.getVideoChannelAccountAvatarAttributes(),
-      this.tableAttributes.getThumbnailAttributes()
+      this.tableAttributes.getThumbnailAttributes(),
+      this.tableAttributes.getChannelAvatarAttributes()
     ]
   }
 
@@ -204,6 +233,7 @@ export class ChangeOwnershipListQueryBuilder extends AbstractListQuery {
     this.buildInitiatorJoin()
     this.buildNextOwnerJoin()
     this.buildVideoJoin()
+    this.buildChannelJoin()
   }
 
   protected buildSubQueryAttributes () {
@@ -221,14 +251,13 @@ export class ChangeOwnershipListQueryBuilder extends AbstractListQuery {
       this.tableAttributes.getNextOwnerServerAttributes(),
 
       this.tableAttributes.getVideoAttributes(),
-
       this.tableAttributes.getVideoChannelAttributes(),
       this.tableAttributes.getVideoChannelActorAttributes(),
       this.tableAttributes.getVideoChannelServerAttributes(),
 
-      this.tableAttributes.getVideoChannelAccountAttributes(),
-      this.tableAttributes.getVideoChannelAccountActorAttributes(),
-      this.tableAttributes.getVideoChannelAccountServerAttributes()
+      this.tableAttributes.getChannelAttributes(),
+      this.tableAttributes.getChannelActorAttributes(),
+      this.tableAttributes.getChannelServerAttributes()
     ]
   }
 }

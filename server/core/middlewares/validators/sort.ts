@@ -29,6 +29,7 @@ export const availablePluginsSortValidator = checkSortFactory(SORTABLE_COLUMNS.A
 export const videoRedundanciesSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_REDUNDANCIES)
 export const videoChannelSyncsSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_CHANNEL_SYNCS)
 export const videoPasswordsSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_PASSWORDS)
+export const changeOwnershipSortValidator = checkSortFactory(SORTABLE_COLUMNS.CHANGE_OWNERSHIP)
 
 export const watchedWordsListsSortValidator = checkSortFactory(SORTABLE_COLUMNS.WATCHED_WORDS_LISTS)
 

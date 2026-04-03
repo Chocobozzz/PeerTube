@@ -212,19 +212,19 @@
             </div>
           </my-alert>
         }
-        </div>
-
-        <my-video-change-ownership
-          #videoChangeOwnershipModal
-          [videoId]="videoEdit.getVideoAttributes().id" (requestSent)="onChangeOwnershipRequest($event)"
-        ></my-video-change-ownership>
-
-        <div class="form-group">
-          <label i18n for="deleteVideo">Delete your video</label>
-          <div class="form-group-description" i18n>Warning: this is a definitive action!</div>
-
-          <button type="button" class="peertube-button danger-button" (click)="deleteVideo()" i18n>Delete</button>
-        </div>
       </div>
-    }
 
+      <my-send-change-ownership
+        #sendChangeOwnershipModal
+        [videoId]="videoEdit.getVideoAttributes().id" (requestSent)="onChangeOwnershipRequest($event)"
+      ></my-send-change-ownership>
+
+      <div class="form-group">
+        <label i18n for="delte-video-button">Delete your video</label>
+        <div class="form-group-description" i18n>Warning: this is a definitive action!</div>
+
+        <button type="button" id="delete-video-button" class="peertube-button danger-button" (click)="deleteVideo()" i18n>Delete</button>
+      </div>
+    </div>
+  }
+</form>

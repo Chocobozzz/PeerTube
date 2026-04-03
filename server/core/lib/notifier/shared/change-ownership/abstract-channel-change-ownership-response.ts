@@ -3,13 +3,13 @@ import { UserModel } from '@server/models/user/user.js'
 import { MUserWithNotificationSetting } from '@server/types/models/index.js'
 import { MChangeOwnershipFull } from '@server/types/models/video/change-ownership.js'
 import { AbstractNotification } from '../common/abstract-notification.js'
-import { buildVideoChangeOwnershipNotification } from './video-change-ownership-utils.js'
+import { buildChangeOwnershipNotification } from './change-ownership-utils.js'
 
-export abstract class AbstractVideoChangeOwnershipResponse extends AbstractNotification<MChangeOwnershipFull> {
+export abstract class AbstractChannelChangeOwnershipResponse extends AbstractNotification<MChangeOwnershipFull> {
   protected users: MUserWithNotificationSetting[] = []
 
   async prepare () {
-    this.users = await UserModel.listOwnerAndAcceptedCollaboratorsOfChannel(this.payload.Video.channelId)
+    this.users = await UserModel.listOwnerAndAcceptedCollaboratorsOfChannel(this.payload.videoChannelId)
   }
 
   isDisabled () {
@@ -25,7 +25,7 @@ export abstract class AbstractVideoChangeOwnershipResponse extends AbstractNotif
   }
 
   createNotification (user: MUserWithNotificationSetting) {
-    return buildVideoChangeOwnershipNotification({
+    return buildChangeOwnershipNotification({
       user,
       payload: this.payload,
       notificationType: this.getNotificationType()

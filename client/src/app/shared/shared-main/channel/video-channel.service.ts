@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable, inject } from '@angular/core'
-import { ComponentPaginationLight, RestExtractor, RestService, ServerService } from '@app/core'
+import { inject, Injectable } from '@angular/core'
+import { ComponentPaginationLight, ConfirmService, RestExtractor, RestService, ServerService } from '@app/core'
+import { formatICU } from '@app/helpers'
 import {
   ActorImage,
   ResultList,
@@ -11,8 +12,8 @@ import {
   VideoChannelUpdate,
   VideosImportInChannelCreate
 } from '@peertube/peertube-models'
-import { Observable, ReplaySubject } from 'rxjs'
-import { catchError, map, tap } from 'rxjs/operators'
+import { from, Observable, of, ReplaySubject } from 'rxjs'
+import { catchError, map, switchMap, tap } from 'rxjs/operators'
 import { environment } from '../../../../environments/environment'
 import { Account } from '../account/account.model'
 import { AccountService } from '../account/account.service'
@@ -24,6 +25,7 @@ export class VideoChannelService {
   private restService = inject(RestService)
   private restExtractor = inject(RestExtractor)
   private serverService = inject(ServerService)
+  private confirmService = inject(ConfirmService)
 
   static BASE_VIDEO_CHANNEL_URL = environment.apiUrl + '/api/v1/video-channels/'
 
@@ -89,9 +91,35 @@ export class VideoChannelService {
       .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  remove (channel: VideoChannel) {
-    return this.authHttp.delete(VideoChannelService.BASE_VIDEO_CHANNEL_URL + channel.nameWithHost)
-      .pipe(catchError(err => this.restExtractor.handleError(err)))
+  removeWithConfirmation (videoChannel: Pick<VideoChannel, 'name' | 'displayName' | 'videosCount' | 'nameWithHost'>) {
+    const msg = $localize`Do you really want to delete ${videoChannel.displayName}?` +
+      `<br />` +
+      formatICU(
+        // eslint-disable-next-line max-len
+        $localize`It will delete {count, plural, =1 {1 video} other {{count} videos}} uploaded in this channel, and you will not be able to create another channel or account with the same name (${videoChannel.name})!`,
+        { count: videoChannel.videosCount }
+      )
+
+    const confirmation = this.confirmService.confirmWithExpectedInput(
+      msg,
+      $localize`Please type the name of the video channel (${videoChannel.name}) to confirm`,
+      videoChannel.name,
+      $localize`Delete video channel`,
+      $localize`Delete`
+    )
+
+    return from(confirmation)
+      .pipe(
+        switchMap(confirmed => {
+          if (!confirmed) return of({ removed: false })
+
+          return this.authHttp.delete(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.nameWithHost)
+            .pipe(
+              map(() => ({ removed: true })),
+              catchError(err => this.restExtractor.handleError(err))
+            )
+        })
+      )
   }
 
   // ---------------------------------------------------------------------------

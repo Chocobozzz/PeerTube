@@ -126,7 +126,7 @@ export const channelDeleteCollaboratorsValidator = [
       user,
       account: res.locals.channelCollaborator.Account,
       req,
-      res,
+      res: null, // Don't return a failed response
       specialRight: UserRight.MANAGE_ANY_VIDEO_CHANNEL
     })
 

@@ -54,51 +54,34 @@ export class UserNotificationListQueryBuilder extends AbstractListQuery {
       `"UserNotificationModel"."createdAt"`,
       `"UserNotificationModel"."updatedAt"`,
 
-      `"Video"."id" AS "Video.id"`,
-      `"Video"."uuid" AS "Video.uuid"`,
-      `"Video"."name" AS "Video.name"`,
-      `"Video"."state" AS "Video.state"`,
+      ...this.getVideoAttributes('Video', 'Video'),
       ...this.getAccountOrChannelAttributes('Video->VideoChannel', 'Video.VideoChannel'),
 
       `"VideoComment"."id" AS "VideoComment.id"`,
       `"VideoComment"."originCommentId" AS "VideoComment.originCommentId"`,
       `"VideoComment"."heldForReview" AS "VideoComment.heldForReview"`,
-      `"VideoComment->Video"."id" AS "VideoComment.Video.id"`,
-      `"VideoComment->Video"."uuid" AS "VideoComment.Video.uuid"`,
-      `"VideoComment->Video"."name" AS "VideoComment.Video.name"`,
-      `"VideoComment->Video"."state" AS "VideoComment.Video.state"`,
+      ...this.getVideoAttributes('VideoComment->Video', 'VideoComment.Video'),
       ...this.getAccountOrChannelAttributes('VideoComment->Account', 'VideoComment.Account'),
 
       `"Abuse"."id" AS "Abuse.id"`,
       `"Abuse"."state" AS "Abuse.state"`,
       `"Abuse->VideoAbuse"."id" AS "Abuse.VideoAbuse.id"`,
-      `"Abuse->VideoAbuse->Video"."id" AS "Abuse.VideoAbuse.Video.id"`,
-      `"Abuse->VideoAbuse->Video"."uuid" AS "Abuse.VideoAbuse.Video.uuid"`,
-      `"Abuse->VideoAbuse->Video"."name" AS "Abuse.VideoAbuse.Video.name"`,
-      `"Abuse->VideoAbuse->Video"."state" AS "Abuse.VideoAbuse.Video.state"`,
+      ...this.getVideoAttributes('Abuse->VideoAbuse->Video', 'Abuse.VideoAbuse.Video'),
+
       `"Abuse->VideoCommentAbuse"."id" AS "Abuse.VideoCommentAbuse.id"`,
       `"Abuse->VideoCommentAbuse->VideoComment"."id" AS "Abuse.VideoCommentAbuse.VideoComment.id"`,
       `"Abuse->VideoCommentAbuse->VideoComment"."originCommentId" AS "Abuse.VideoCommentAbuse.VideoComment.originCommentId"`,
-      `"Abuse->VideoCommentAbuse->VideoComment->Video"."id" AS "Abuse.VideoCommentAbuse.VideoComment.Video.id"`,
-      `"Abuse->VideoCommentAbuse->VideoComment->Video"."name" AS "Abuse.VideoCommentAbuse.VideoComment.Video.name"`,
-      `"Abuse->VideoCommentAbuse->VideoComment->Video"."uuid" AS "Abuse.VideoCommentAbuse.VideoComment.Video.uuid"`,
-      `"Abuse->VideoCommentAbuse->VideoComment->Video"."state" AS "Abuse.VideoCommentAbuse.VideoComment.Video.state"`,
+      ...this.getVideoAttributes('Abuse->VideoCommentAbuse->VideoComment->Video', 'Abuse.VideoCommentAbuse.VideoComment.Video'),
       ...this.getAccountOrChannelAttributes('Abuse->FlaggedAccount', 'Abuse.FlaggedAccount'),
 
       `"VideoBlacklist"."id" AS "VideoBlacklist.id"`,
-      `"VideoBlacklist->Video"."id" AS "VideoBlacklist.Video.id"`,
-      `"VideoBlacklist->Video"."uuid" AS "VideoBlacklist.Video.uuid"`,
-      `"VideoBlacklist->Video"."name" AS "VideoBlacklist.Video.name"`,
-      `"VideoBlacklist->Video"."state" AS "VideoBlacklist.Video.state"`,
+      ...this.getVideoAttributes('VideoBlacklist->Video', 'VideoBlacklist.Video'),
 
       `"VideoImport"."id" AS "VideoImport.id"`,
       `"VideoImport"."magnetUri" AS "VideoImport.magnetUri"`,
       `"VideoImport"."targetUrl" AS "VideoImport.targetUrl"`,
       `"VideoImport"."torrentName" AS "VideoImport.torrentName"`,
-      `"VideoImport->Video"."id" AS "VideoImport.Video.id"`,
-      `"VideoImport->Video"."uuid" AS "VideoImport.Video.uuid"`,
-      `"VideoImport->Video"."name" AS "VideoImport.Video.name"`,
-      `"VideoImport->Video"."state" AS "VideoImport.Video.state"`,
+      ...this.getVideoAttributes('VideoImport->Video', 'VideoImport.Video'),
 
       `"Plugin"."id" AS "Plugin.id"`,
       `"Plugin"."name" AS "Plugin.name"`,
@@ -137,10 +120,7 @@ export class UserNotificationListQueryBuilder extends AbstractListQuery {
 
       `"VideoCaption"."id" AS "VideoCaption.id"`,
       `"VideoCaption"."language" AS "VideoCaption.language"`,
-      `"VideoCaption->Video"."id" AS "VideoCaption.Video.id"`,
-      `"VideoCaption->Video"."uuid" AS "VideoCaption.Video.uuid"`,
-      `"VideoCaption->Video"."name" AS "VideoCaption.Video.name"`,
-      `"VideoCaption->Video"."state" AS "VideoCaption.Video.state"`,
+      ...this.getVideoAttributes('VideoCaption->Video', 'VideoCaption.Video'),
 
       `"ChannelCollab"."id" AS "ChannelCollab.id"`,
       `"ChannelCollab"."state" AS "ChannelCollab.state"`,
@@ -149,13 +129,11 @@ export class UserNotificationListQueryBuilder extends AbstractListQuery {
       ...this.getAccountOrChannelAttributes('ChannelCollab->Channel', 'ChannelCollab.Channel'),
 
       `"ChangeOwnership"."id" AS "ChangeOwnership.id"`,
+      `"ChangeOwnership"."state" AS "ChangeOwnership.state"`,
       ...this.getAccountOrChannelAttributes('ChangeOwnership->Initiator', 'ChangeOwnership.Initiator'),
       ...this.getAccountOrChannelAttributes('ChangeOwnership->NextOwner', 'ChangeOwnership.NextOwner'),
-      `"ChangeOwnership->Video"."id" AS "ChangeOwnership.Video.id"`,
-      `"ChangeOwnership->Video"."uuid" AS "ChangeOwnership.Video.uuid"`,
-      `"ChangeOwnership->Video"."name" AS "ChangeOwnership.Video.name"`,
-      `"ChangeOwnership->Video"."state" AS "ChangeOwnership.Video.state"`,
-      ...this.getAccountOrChannelAttributes('ChangeOwnership->Channel', 'ChangeOwnership.Channel')
+      ...this.getVideoAttributes('ChangeOwnership->Video', 'ChangeOwnership.Video'),
+      ...this.getAccountOrChannelAttributes('ChangeOwnership->VideoChannel', 'ChangeOwnership.VideoChannel')
     ]
   }
 
@@ -237,7 +215,7 @@ export class UserNotificationListQueryBuilder extends AbstractListQuery {
       ${this.getAccountJoin({ tableName: 'ChangeOwnership', columnJoin: 'initiatorAccountId', aliasTableName: 'Initiator' })}
       ${this.getAccountJoin({ tableName: 'ChangeOwnership', columnJoin: 'nextOwnerAccountId', aliasTableName: 'NextOwner' })}
       LEFT JOIN "video" AS "ChangeOwnership->Video" ON "ChangeOwnership"."videoId" = "ChangeOwnership->Video"."id"
-      ${this.getChannelJoin({ tableName: 'ChangeOwnership', columnJoin: 'videoChannelId', aliasTableName: 'Channel', joinType: 'LEFT' })}
+      ${this.getChannelJoin({ tableName: 'ChangeOwnership', columnJoin: 'videoChannelId', joinType: 'LEFT' })}
     ) ON "UserNotificationModel"."changeOwnershipId" = "ChangeOwnership"."id"`
   }
 
@@ -255,6 +233,15 @@ export class UserNotificationListQueryBuilder extends AbstractListQuery {
       `"${tableName}->Actor->Avatars"."filename" AS "${alias}.Actor.Avatars.filename"`,
       `"${tableName}->Actor->Server"."id" AS "${alias}.Actor.Server.id"`,
       `"${tableName}->Actor->Server"."host" AS "${alias}.Actor.Server.host"`
+    ]
+  }
+
+  private getVideoAttributes (tableName: string, alias: string) {
+    return [
+      `"${tableName}"."id" AS "${alias}.id"`,
+      `"${tableName}"."uuid" AS "${alias}.uuid"`,
+      `"${tableName}"."name" AS "${alias}.name"`,
+      `"${tableName}"."state" AS "${alias}.state"`
     ]
   }
 

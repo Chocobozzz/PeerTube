@@ -161,6 +161,9 @@ export class UserNotification {
         case UserNotificationType.VIDEO_OWNERSHIP_CHANGED_REQUEST:
         case UserNotificationType.VIDEO_OWNERSHIP_CHANGED_ACCEPTED:
         case UserNotificationType.VIDEO_OWNERSHIP_CHANGED_REJECTED:
+        case UserNotificationType.CHANNEL_OWNERSHIP_CHANGED_REQUEST:
+        case UserNotificationType.CHANNEL_OWNERSHIP_CHANGED_ACCEPTED:
+        case UserNotificationType.CHANNEL_OWNERSHIP_CHANGED_REJECTED:
           this.url = '/my-library/ownership'
           break
       }

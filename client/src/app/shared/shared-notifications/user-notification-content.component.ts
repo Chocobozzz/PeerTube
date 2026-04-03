@@ -2,15 +2,16 @@ import { CommonModule } from '@angular/common'
 import { Component, inject, input, output } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService, Notifier } from '@app/core'
-import { AbuseState, VideoChannelCollaboratorState, VideoState } from '@peertube/peertube-models'
+import { AbuseState, ChangeOwnershipState, VideoChannelCollaboratorState, VideoState } from '@peertube/peertube-models'
 import { AccountOnChannelAvatarComponent } from '../shared-actor-image/account-on-channel-avatar.component'
 import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
+import { ChangeOwnershipService } from '../shared-change-ownership/change-ownership.service'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { ButtonComponent } from '../shared-main/buttons/button.component'
+import { CollaboratorStateComponent } from '../shared-main/channel/collaborator-state.component'
 import { VideoChannelService } from '../shared-main/channel/video-channel.service'
 import { FromNowPipe } from '../shared-main/date/from-now.pipe'
 import { UserNotification } from '../shared-main/users/user-notification.model'
-import { CollaboratorStateComponent } from '../shared-main/channel/collaborator-state.component'
 
 @Component({
   selector: 'my-user-notification-content',
@@ -30,6 +31,7 @@ export class UserNotificationContentComponent {
   readonly router = inject(Router)
   readonly notifier = inject(Notifier)
   readonly channelService = inject(VideoChannelService)
+  readonly changeOwnershipService = inject(ChangeOwnershipService)
   readonly authService = inject(AuthService)
 
   readonly notification = input.required<UserNotification>()
@@ -70,9 +72,11 @@ export class UserNotificationContentComponent {
     return notification.payload.videoChannelCollaborator.state.id === VideoChannelCollaboratorState.REJECTED
   }
 
-  acceptChannelCollab () {
+  acceptChannelCollab (event: Event) {
     const collab = this.n.payload.videoChannelCollaborator
 
+    event.preventDefault()
+    event.stopPropagation()
     this.buttonClicked.emit()
 
     this.channelService.acceptCollaboratorInvitation(collab.channel.name, collab.id)
@@ -89,15 +93,76 @@ export class UserNotificationContentComponent {
       })
   }
 
-  rejectChannelCollab () {
+  rejectChannelCollab (event: Event) {
     const collab = this.n.payload.videoChannelCollaborator
 
+    event.preventDefault()
+    event.stopPropagation()
     this.buttonClicked.emit()
 
     this.channelService.rejectCollaboratorInvitation(collab.channel.name, collab.id)
       .subscribe({
         next: () => {
           this.n.payload.videoChannelCollaborator.state.id = VideoChannelCollaboratorState.REJECTED
+        },
+
+        error: err => this.notifier.handleError(err)
+      })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  isOwnershipChangeRejected (notification: UserNotification) {
+    if (!notification.payload.changeOwnership) return false
+
+    return notification.payload.changeOwnership.state.id === ChangeOwnershipState.REJECTED
+  }
+
+  isOwnershipChangeAccepted (notification: UserNotification) {
+    if (!notification.payload.changeOwnership) return false
+
+    return notification.payload.changeOwnership.state.id === ChangeOwnershipState.ACCEPTED
+  }
+
+  isOwnershipChangeRequest (notification: UserNotification) {
+    if (!notification.payload.changeOwnership) return false
+
+    return notification.payload.changeOwnership.state.id === ChangeOwnershipState.PENDING
+  }
+
+  acceptChannelOwnershipChange (event: Event) {
+    const changeOwnership = this.n.payload.changeOwnership
+
+    event.preventDefault()
+    event.stopPropagation()
+    this.buttonClicked.emit()
+
+    this.changeOwnershipService.acceptChannel([ changeOwnership.id ])
+      .subscribe({
+        next: () => {
+          this.authService.refreshUserInformation()
+
+          this.n.payload.changeOwnership.state.id = ChangeOwnershipState.ACCEPTED
+          this.n.url = this.n.buildChannelUrl(changeOwnership.videoChannel)
+          this.router.navigate(this.n.url)
+          this.notifier.success($localize`You are now the owner of the channel ${changeOwnership.videoChannel.name}`)
+        },
+
+        error: err => this.notifier.handleError(err)
+      })
+  }
+
+  rejectChannelOwnershipChange (event: Event) {
+    const changeOwnership = this.n.payload.changeOwnership
+
+    event.preventDefault()
+    event.stopPropagation()
+    this.buttonClicked.emit()
+
+    this.changeOwnershipService.rejectChannel([ changeOwnership.id ])
+      .subscribe({
+        next: () => {
+          this.n.payload.changeOwnership.state.id = ChangeOwnershipState.REJECTED
         },
 
         error: err => this.notifier.handleError(err)

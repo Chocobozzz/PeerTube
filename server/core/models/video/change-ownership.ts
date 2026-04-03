@@ -121,6 +121,31 @@ export class ChangeOwnershipModel extends SequelizeModel<ChangeOwnershipModel> {
 
   // ---------------------------------------------------------------------------
 
+  static listForChannelApi (options: ListChangeOwnershipOptions) {
+    const queryOptions = { ...options, type: 'video-channel' as const }
+
+    return Promise.all([
+      new ChangeOwnershipListQueryBuilder(ChangeOwnershipModel.sequelize, queryOptions).list<MChangeOwnershipFull>(),
+      new ChangeOwnershipListQueryBuilder(ChangeOwnershipModel.sequelize, queryOptions).count()
+    ]).then(([ rows, total ]) => ({ total, data: rows }))
+  }
+
+  static loadPendingByChannel (videoChannelId: number): Promise<MChangeOwnership> {
+    return new ChangeOwnershipListQueryBuilder(ChangeOwnershipModel.sequelize, {
+      type: 'video-channel',
+      videoChannelId,
+      state: ChangeOwnershipState.PENDING
+    }).get<MChangeOwnershipFull>()
+  }
+
+  // ---------------------------------------------------------------------------
+
+  static getStateLabel (state: ChangeOwnershipStateType) {
+    return CHANGE_OWNERSHIP_STATES[state]
+  }
+
+  // ---------------------------------------------------------------------------
+
   toFormattedJSON (this: MChangeOwnershipFull): ChangeOwnership {
     let status: ChangeOwnership['status']
 
@@ -133,7 +158,7 @@ export class ChangeOwnershipModel extends SequelizeModel<ChangeOwnershipModel> {
 
       state: {
         id: this.state,
-        label: CHANGE_OWNERSHIP_STATES[this.state]
+        label: ChangeOwnershipModel.getStateLabel(this.state)
       },
 
       status,
@@ -141,8 +166,8 @@ export class ChangeOwnershipModel extends SequelizeModel<ChangeOwnershipModel> {
       initiatorAccount: this.Initiator.toFormattedJSON(),
       nextOwnerAccount: this.NextOwner.toFormattedJSON(),
 
-      video: this.Video?.toFormattedJSON(),
-      videoChannel: this.VideoChannel?.toFormattedJSON(),
+      video: this.Video?.toFormattedSummaryJSON(),
+      videoChannel: this.VideoChannel?.toFormattedSummaryJSON(),
 
       createdAt: this.createdAt
     }

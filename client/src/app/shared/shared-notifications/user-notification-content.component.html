@@ -242,8 +242,8 @@
         </div>
       } @else if (isChannelCollabInvitation(n)) {
         <div class="action-button">
-          <my-button small="true" icon="tick" (click)="acceptChannelCollab()" i18n theme="primary">Accept</my-button>
-          <my-button small="true" icon="cross" (click)="rejectChannelCollab()" i18n theme="secondary">Decline</my-button>
+          <my-button small="true" icon="tick" (click)="acceptChannelCollab($event)" i18n theme="primary">Accept</my-button>
+          <my-button small="true" icon="cross" (click)="rejectChannelCollab($event)" i18n theme="secondary">Decline</my-button>
         </div>
       } @else if (isChannelCollabAccepted(n)) {
         <div class="action-button">
@@ -274,7 +274,7 @@
       <my-global-icon iconName="user-add"></my-global-icon>
 
       <div class="message" i18n>
-        <strong>{{ n.payload.videoOwnership.initiatorAccount.displayName }}</strong> requested to transfer ownership of video <strong>{{ n.payload.videoOwnership.video.name }}</strong> to you
+        <strong>{{ n.payload.changeOwnership.initiatorAccount.displayName }}</strong> requested to transfer ownership of video <strong>{{ n.payload.changeOwnership.video.name }}</strong> to you
       </div>
     }
 
@@ -282,7 +282,7 @@
       <my-global-icon iconName="tick"></my-global-icon>
 
       <div class="message" i18n>
-        <strong>{{ n.payload.videoOwnership.nextOwnerAccount.displayName }}</strong> accepted the ownership change request for video <strong>{{ n.payload.videoOwnership.video.name }}</strong>
+        <strong>{{ n.payload.changeOwnership.nextOwnerAccount.displayName }}</strong> accepted the ownership change request for video <strong>{{ n.payload.changeOwnership.video.name }}</strong>
       </div>
     }
 
@@ -290,7 +290,50 @@
       <my-global-icon iconName="cross"></my-global-icon>
 
       <div class="message" i18n>
-        <strong>{{ n.payload.videoOwnership.nextOwnerAccount.displayName }}</strong> rejected the ownership change request for video <strong>{{ n.payload.videoOwnership.video.name }}</strong>
+        <strong>{{ n.payload.changeOwnership.nextOwnerAccount.displayName }}</strong> rejected the ownership change request for video <strong>{{ n.payload.changeOwnership.video.name }}</strong>
+      </div>
+    }
+
+    @case (29) { <!-- UserNotificationType.CHANNEL_OWNERSHIP_CHANGED_REQUEST -->
+      <my-global-icon iconName="user-add"></my-global-icon>
+
+      <div class="message" i18n>
+        <strong>{{ n.payload.changeOwnership.initiatorAccount.displayName }}</strong> requested to transfer ownership of channel <strong>{{ n.payload.changeOwnership.videoChannel.displayName }}</strong> to you
+      </div>
+
+      @if (isOwnershipChangeRejected(n)) {
+        <div class="action-button">
+          <my-global-icon iconName="cross"></my-global-icon>
+
+          <div i18n>Request declined</div>
+        </div>
+      } @else if (isOwnershipChangeRequest(n)) {
+        <div class="action-button">
+          <my-button small="true" icon="tick" (click)="acceptChannelOwnershipChange($event)" i18n theme="primary">Accept</my-button>
+          <my-button small="true" icon="cross" (click)="rejectChannelOwnershipChange($event)" i18n theme="secondary">Decline</my-button>
+        </div>
+      } @else if (isOwnershipChangeAccepted(n)) {
+        <div class="action-button">
+          <my-global-icon iconName="tick"></my-global-icon>
+
+          <div i18n>Request accepted</div>
+        </div>
+      }
+    }
+
+    @case (30) { <!-- UserNotificationType.CHANNEL_OWNERSHIP_CHANGED_ACCEPTED -->
+      <my-global-icon iconName="tick"></my-global-icon>
+
+      <div class="message" i18n>
+        <strong>{{ n.payload.changeOwnership.nextOwnerAccount.displayName }}</strong> accepted the ownership change request for channel <strong>{{ n.payload.changeOwnership.videoChannel.displayName }}</strong>
+      </div>
+    }
+
+    @case (31) { <!-- UserNotificationType.CHANNEL_OWNERSHIP_CHANGED_REJECTED -->
+      <my-global-icon iconName="cross"></my-global-icon>
+
+      <div class="message" i18n>
+        <strong>{{ n.payload.changeOwnership.nextOwnerAccount.displayName }}</strong> rejected the ownership change request for channel <strong>{{ n.payload.changeOwnership.videoChannel.displayName }}</strong>
       </div>
     }
 

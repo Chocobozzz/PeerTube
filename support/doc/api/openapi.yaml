@@ -350,7 +350,7 @@ x-tagGroups:
       - Video Rates
       - Video Playlists
       - Video Stats
-      - Video Ownership Change
+      - Ownership Change
       - Video Mirroring
       - Video Files
       - Video Transcoding
@@ -2969,9 +2969,20 @@ paths:
       summary: List video ownership changes
       description: List ownership change requests received by the authenticated user and requests sent by a channel managed by the authenticated user
       tags:
-        - Video Ownership Change
+        - Ownership Change
       security:
         - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - -createdAt
+              - createdAt
       responses:
         '200':
           description: successful operation
@@ -2987,21 +2998,39 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/ChangeOwnership'
+        '401':
+          description: authentication required
 
   '/api/v1/videos/ownership/{id}/accept':
     post:
       summary: Accept ownership change request
       tags:
-        - Video Ownership Change
+        - Ownership Change
       security:
         - OAuth2: []
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                channelId:
+                  type: integer
+                  description: Target channel id owned by the authenticated user
+              required:
+                - channelId
       responses:
         '204':
           description: successful operation
+        '400':
+          description: ownership change request already accepted/refused or invalid target channel id
         '403':
           description: cannot terminate an ownership change of another user
+        '413':
+          description: quota exceeded for the target account/channel
         '404':
           description: video ownership change not found
 
@@ -3009,7 +3038,7 @@ paths:
     post:
       summary: Refuse ownership change request
       tags:
-        - Video Ownership Change
+        - Ownership Change
       security:
         - OAuth2: []
       parameters:
@@ -3017,6 +3046,8 @@ paths:
       responses:
         '204':
           description: successful operation
+        '400':
+          description: ownership change request already accepted/refused
         '403':
           description: cannot terminate an ownership change of another user
         '404':
@@ -3027,7 +3058,7 @@ paths:
       summary: Delete ownership change request
       description: Delete an ownership change request. Only users who can manage the video can delete the request.
       tags:
-        - Video Ownership Change
+        - Ownership Change
       security:
         - OAuth2: []
       parameters:
@@ -3035,21 +3066,31 @@ paths:
       responses:
         '204':
           description: successful operation
+        '400':
+          description: ownership request already accepted or refused
         '403':
           description: only users who can manage the video can delete an ownership change request
         '404':
           description: video ownership change not found
 
-  '/api/v1/videos/{id}/ownership':
+  '/api/v1/videos/{videoId}/ownership':
     get:
       summary: List ownership change requests for a video
       description: List all ownership change requests for a specific video. The authenticated user must be able to manage the video.
       tags:
-        - Video Ownership Change
+        - Ownership Change
       security:
         - OAuth2: []
       parameters:
-        - $ref: '#/components/parameters/idOrUUID'
+        - name: videoId
+          in: path
+          required: true
+          description: The video id, uuid or short uuid
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/id'
+              - $ref: '#/components/schemas/UUIDv4'
+              - $ref: '#/components/schemas/shortUUID'
         - name: state
           in: query
           required: false
@@ -3058,7 +3099,14 @@ paths:
             $ref: '#/components/schemas/ChangeOwnershipState'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - -createdAt
+              - createdAt
       responses:
         '200':
           description: successful operation
@@ -3079,15 +3127,23 @@ paths:
         '404':
           description: video not found
 
-  '/api/v1/videos/{id}/give-ownership':
+  '/api/v1/videos/{videoId}/give-ownership':
     post:
       summary: Request ownership change
       tags:
-        - Video Ownership Change
+        - Ownership Change
       security:
         - OAuth2: []
       parameters:
-        - $ref: '#/components/parameters/idOrUUID'
+        - name: videoId
+          in: path
+          required: true
+          description: The video id, uuid or short uuid
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/id'
+              - $ref: '#/components/schemas/UUIDv4'
+              - $ref: '#/components/schemas/shortUUID'
       requestBody:
         required: true
         content:
@@ -3103,9 +3159,188 @@ paths:
         '204':
           description: successful operation
         '400':
-          description: changing video ownership to a remote account is not supported yet
+          description: changing video ownership to a remote account is not supported yet or there is already a pending ownership request
+        '403':
+          description: cannot change ownership of this video
         '404':
           description: video not found
+
+  /api/v1/video-channels/ownership:
+    get:
+      summary: List channel ownership changes
+      description: List ownership change requests received by the authenticated user and requests sent by channels managed by the authenticated user
+      tags:
+        - Ownership Change
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - -createdAt
+              - createdAt
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ChangeOwnership'
+        '401':
+          description: authentication required
+
+  '/api/v1/video-channels/ownership/{id}/accept':
+    post:
+      summary: Accept channel ownership change request
+      tags:
+        - Ownership Change
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: ownership change request already accepted/refused or request type mismatch
+        '403':
+          description: cannot terminate an ownership change of another user
+        '404':
+          description: channel ownership change not found
+        '409':
+          description: cannot accept transferring the last channel of the initiator account
+        '413':
+          description: quota exceeded for the target account
+
+  '/api/v1/video-channels/ownership/{id}/refuse':
+    post:
+      summary: Refuse channel ownership change request
+      tags:
+        - Ownership Change
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: ownership change request already accepted/refused or request type mismatch
+        '403':
+          description: cannot terminate an ownership change of another user
+        '404':
+          description: channel ownership change not found
+
+  '/api/v1/video-channels/ownership/{id}':
+    delete:
+      summary: Delete channel ownership change request
+      description: Delete a channel ownership change request. Only channel owners can delete the request.
+      tags:
+        - Ownership Change
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: ownership request already accepted/refused or request type mismatch
+        '403':
+          description: only channel owners can delete a channel ownership change request
+        '404':
+          description: channel ownership change not found
+
+  '/api/v1/video-channels/{channelHandle}/ownership':
+    get:
+      summary: List ownership change requests for a channel
+      description: List all ownership change requests for a specific channel. The authenticated user must be able to manage the channel.
+      tags:
+        - Ownership Change
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/channelHandle'
+        - name: state
+          in: query
+          required: false
+          description: Filter by ownership change state
+          schema:
+            $ref: '#/components/schemas/ChangeOwnershipState'
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - -createdAt
+              - createdAt
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ChangeOwnership'
+        '400':
+          description: invalid parameters
+        '403':
+          description: cannot manage the channel
+        '404':
+          description: channel not found
+
+  '/api/v1/video-channels/{channelHandle}/give-ownership':
+    post:
+      summary: Request channel ownership change
+      tags:
+        - Ownership Change
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/channelHandle'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+              required:
+                - username
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: changing channel ownership to this target is invalid or there is already a pending ownership request
+        '403':
+          description: cannot change ownership of this channel
+        '404':
+          description: channel not found
 
   '/api/v1/videos/{id}/token':
     post:
@@ -9389,6 +9624,35 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ActorImage'
+
+    VideoSummary:
+      properties:
+        id:
+          description: object id for the video
+          allOf:
+            - $ref: '#/components/schemas/id'
+        uuid:
+          description: universal identifier for the video, that can be used across instances
+          allOf:
+            - $ref: '#/components/schemas/UUIDv4'
+        shortUUID:
+          allOf:
+            - $ref: '#/components/schemas/shortUUID'
+        name:
+          type: string
+        isLive:
+          type: boolean
+        nsfw:
+          type: boolean
+        publishedAt:
+          type: string
+          format: date-time
+        thumbnails:
+          description: "**PeerTube >= 8.1** Array of thumbnails for the video"
+          type: array
+        channel:
+          $ref: '#/components/schemas/VideoChannelSummary'
+
     VideoChannelSummary:
       properties:
         id:
@@ -10064,7 +10328,9 @@ components:
         nextOwnerAccount:
           $ref: '#/components/schemas/Account'
         video:
-          $ref: '#/components/schemas/Video'
+          $ref: '#/components/schemas/VideoSummary'
+        videoChannel:
+          $ref: '#/components/schemas/VideoChannelSummary'
         createdAt:
           type: string
           format: date-time
@@ -12462,6 +12728,9 @@ components:
         - 26
         - 27
         - 28
+        - 29
+        - 30
+        - 31
       description: >
         Notification type. One of the following values:
 
@@ -12520,6 +12789,12 @@ components:
           - `27` VIDEO_OWNERSHIP_CHANGED_ACCEPTED
 
           - `28` VIDEO_OWNERSHIP_CHANGED_REJECTED
+
+          - `29` CHANNEL_OWNERSHIP_CHANGED_REQUEST
+
+          - `30` CHANNEL_OWNERSHIP_CHANGED_ACCEPTED
+
+          - `31` CHANNEL_OWNERSHIP_CHANGED_REJECTED
 
     NewFeatureInfoType:
       type: integer

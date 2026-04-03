@@ -112,6 +112,7 @@ export const SORTABLE_COLUMNS = {
   VIDEO_COMMENTS: [ 'createdAt' ],
 
   VIDEO_PASSWORDS: [ 'createdAt' ],
+  CHANGE_OWNERSHIP: [ 'createdAt' ],
 
   VIDEO_RATES: [ 'createdAt' ],
   BLACKLISTS: [ 'id', 'name', 'duration', 'views', 'likes', 'dislikes', 'uuid', 'createdAt' ],

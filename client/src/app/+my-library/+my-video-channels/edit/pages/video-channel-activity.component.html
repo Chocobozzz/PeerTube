@@ -179,19 +179,31 @@
 
       @case (12) { <!-- VideoChannelActivityAction.SEND_OWNERSHIP_REQUEST) -->
         <ng-container i18n>
-          <strong>{{ account }}</strong> sent an ownership request to {{ a.targetAccount.displayName }} for video <a [routerLink]="[ '/w', a.video.shortUUID ]">{{ a.video.name }}</a>
+          @if (a.video) {
+            <strong>{{ account }}</strong> sent an ownership change request to {{ a.targetAccount.displayName }} for video <a [routerLink]="[ '/w', a.video.shortUUID ]">{{ a.video.name }}</a>
+          } @else if (a.channel) {
+            <strong>{{ account }}</strong> sent an ownership change request to {{ a.targetAccount.displayName }} for this channel
+          }
         </ng-container>
       }
 
       @case (13) { <!-- VideoChannelActivityAction.ACCEPT_OWNERSHIP_REQUEST) -->
         <ng-container i18n>
-          <strong>{{ account }}</strong> accepted an ownership request for video <a [routerLink]="[ '/w', a.video.shortUUID ]">{{ a.video.name }}</a>
+          @if (a.video) {
+             <strong>{{ account }}</strong> accepted an ownership change request for video <a [routerLink]="[ '/w', a.video.shortUUID ]">{{ a.video.name }}</a>
+          } @else if (a.channel) {
+             <strong>{{ account }}</strong> accepted an ownership change request for this channel
+          }
         </ng-container>
       }
 
       @case (14) { <!-- VideoChannelActivityAction.REFUSE_OWNERSHIP_REQUEST) -->
         <ng-container i18n>
-          <strong>{{ account }}</strong> refused an ownership request for video <a [routerLink]="[ '/w', a.video.shortUUID ]">{{ a.video.name }}</a>
+          @if (a.video) {
+             <strong>{{ account }}</strong> refused an ownership change request for video <a [routerLink]="[ '/w', a.video.shortUUID ]">{{ a.video.name }}</a>
+          } @else if (a.channel) {
+             <strong>{{ account }}</strong> refused an ownership change request for this channel
+          }
         </ng-container>
       }
 

@@ -572,7 +572,7 @@ describe('Test user notifications', function () {
 
     it('Should notify the next owner when ownership change is requested', async function () {
       const requestDate = new Date()
-      await servers[0].changeOwnership.create({ videoId, username: nextOwner })
+      await servers[0].changeOwnership.createVideo({ videoId, username: nextOwner })
 
       await waitUntilNotification({
         server: servers[0],
@@ -593,10 +593,10 @@ describe('Test user notifications', function () {
     })
 
     it('Should notify the video owner when ownership change is accepted', async function () {
-      const { data } = await servers[0].changeOwnership.list({ token: nextOwnerToken })
+      const { data } = await servers[0].changeOwnership.listVideos({ token: nextOwnerToken })
 
       const acceptedAt = new Date()
-      await servers[0].changeOwnership.accept({
+      await servers[0].changeOwnership.acceptVideo({
         token: nextOwnerToken,
         ownershipId: data[0].id,
         channelId: await servers[0].channels.getDefaultId({ token: nextOwnerToken })
@@ -623,11 +623,11 @@ describe('Test user notifications', function () {
       const nextNextOwner = 'ownership_reject_target'
       const nextNextOwnerToken = await servers[0].users.generateUserAndToken(nextNextOwner)
 
-      await servers[0].changeOwnership.create({ videoId, username: nextNextOwner })
-      const { data } = await servers[0].changeOwnership.list({ token: nextNextOwnerToken })
+      await servers[0].changeOwnership.createVideo({ videoId, username: nextNextOwner })
+      const { data } = await servers[0].changeOwnership.listVideos({ token: nextNextOwnerToken })
 
       const rejectedAt = new Date()
-      await servers[0].changeOwnership.refuse({
+      await servers[0].changeOwnership.refuseVideo({
         token: nextNextOwnerToken,
         ownershipId: data[0].id
       })

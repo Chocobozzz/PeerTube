@@ -705,7 +705,7 @@ describe('Test channel activities', function () {
 
     it('Should send an ownership request', async function () {
       const a = await getActivityAfterAction(() => {
-        return server.changeOwnership.create({ videoId: video.id, username: 'user_ownership_change' })
+        return server.changeOwnership.createVideo({ videoId: video.id, username: 'user_ownership_change' })
       })
 
       expect(a.action.id).to.equal(VideoChannelActivityAction.SEND_OWNERSHIP_REQUEST)
@@ -721,10 +721,10 @@ describe('Test channel activities', function () {
     })
 
     it('Should refuse an ownership request', async function () {
-      const { data } = await server.changeOwnership.list({ token: userToken })
+      const { data } = await server.changeOwnership.listVideos({ token: userToken })
 
       const a = await getActivityAfterAction(async () => {
-        await server.changeOwnership.refuse({ ownershipId: data[0].id, token: userToken })
+        await server.changeOwnership.refuseVideo({ ownershipId: data[0].id, token: userToken })
       })
 
       expect(a.action.id).to.equal(VideoChannelActivityAction.REFUSE_OWNERSHIP_REQUEST)
@@ -735,11 +735,11 @@ describe('Test channel activities', function () {
     })
 
     it('Should accept an ownership request', async function () {
-      await server.changeOwnership.create({ videoId: video.id, username: 'user_ownership_change' })
-      const { data } = await server.changeOwnership.list({ token: userToken })
+      await server.changeOwnership.createVideo({ videoId: video.id, username: 'user_ownership_change' })
+      const { data } = await server.changeOwnership.listVideos({ token: userToken })
 
       const a = await getActivityAfterAction(async () => {
-        await server.changeOwnership.accept({
+        await server.changeOwnership.acceptVideo({
           ownershipId: data[0].id,
           channelId: await server.channels.getIdOf({ channelName: 'user_ownership_change_channel' }),
           token: userToken
@@ -756,12 +756,12 @@ describe('Test channel activities', function () {
     it('Should delete an ownership request', async function () {
       video = await server.videos.quickUpload({ name: 'video 2 for ownership change', channelId })
 
-      await server.changeOwnership.create({ videoId: video.id, username: 'user_ownership_change' })
+      await server.changeOwnership.createVideo({ videoId: video.id, username: 'user_ownership_change' })
       const { data } = await server.changeOwnership.listOfVideo({ videoId: video.id })
       const changeOwnershipId = data[0].id
 
       const a = await getActivityAfterAction(async () => {
-        await server.changeOwnership.delete({ ownershipId: changeOwnershipId })
+        await server.changeOwnership.deleteVideo({ ownershipId: changeOwnershipId })
       })
 
       expect(a.action.id).to.equal(VideoChannelActivityAction.DELETE_OWNERSHIP_REQUEST)

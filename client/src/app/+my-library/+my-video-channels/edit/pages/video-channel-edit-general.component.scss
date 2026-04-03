@@ -23,3 +23,11 @@ my-select-player-theme {
 
   @include responsive-width(340px);
 }
+
+.danger-zone {
+  h3 {
+    color: pvar(--red);
+    font-weight: $font-bold;
+    font-size: 1rem;
+  }
+}

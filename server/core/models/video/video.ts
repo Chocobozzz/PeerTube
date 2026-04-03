@@ -16,12 +16,14 @@ import {
   VideoRateType,
   VideoState,
   VideoStreamingPlaylistType,
+  VideoSummary,
   type VideoCommentPolicyType,
   type VideoEmbedPrivacyPolicyType,
   type VideoPrivacyType,
   type VideoStateType
 } from '@peertube/peertube-models'
 import { uuidToShort } from '@peertube/peertube-node-utils'
+import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { getPrivaciesForFederation } from '@server/helpers/video.js'
 import { isPrivacyForFederation } from '@server/lib/activitypub/videos/federate.js'
 import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
@@ -106,6 +108,7 @@ import {
   MVideoImmutable,
   MVideoOwned,
   MVideoSeo,
+  MVideoSummary,
   MVideoThumbnails,
   MVideoWithAllFiles,
   MVideoWithBlacklist,
@@ -136,9 +139,9 @@ import {
   setAsUpdated,
   throwIfNotValid
 } from '../shared/index.js'
+import { VideoStatModel } from '../stat/video-stat.js'
 import { UserVideoHistoryModel } from '../user/user-video-history.js'
 import { UserModel } from '../user/user.js'
-import { VideoStatModel } from '../stat/video-stat.js'
 import { videoModelToActivityPubObject } from './formatter/video-activity-pub-format.js'
 import {
   VideoFormattingJSONOptions,
@@ -173,6 +176,19 @@ import { VideoStreamingPlaylistModel } from './video-streaming-playlist.js'
 import { VideoTagModel } from './video-tag.js'
 
 const lTags = loggerTagsFactory('video')
+
+const videoSummaryAttributes = [
+  'id',
+  'name',
+  'uuid',
+  'nsfw',
+  'url',
+  'channelId',
+  'remote',
+  'state',
+  'isLive',
+  'publishedAt'
+] as const satisfies (keyof AttributesOnly<VideoModel>)[]
 
 export enum ScopeNames {
   FOR_API = 'FOR_API',
@@ -926,6 +942,15 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   }
 
   // ---------------------------------------------------------------------------
+
+  static getSQLSummaryAttributes (tableName: string, aliasPrefix = '') {
+    return buildSQLAttributes({
+      model: this,
+      tableName,
+      aliasPrefix,
+      includeAttributes: videoSummaryAttributes
+    })
+  }
 
   static getSQLAttributes (tableName: string, aliasPrefix = '') {
     return buildSQLAttributes({
@@ -2009,6 +2034,20 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
   getEmbedStaticUrl () {
     return WEBSERVER.URL + buildVideoEmbedPath({ shortUUID: uuidToShort(this.uuid) })
+  }
+
+  toFormattedSummaryJSON (this: MVideoSummary): VideoSummary {
+    return {
+      id: this.id,
+      uuid: this.uuid,
+      name: this.name,
+      nsfw: this.nsfw,
+      isLive: this.isLive,
+      shortUUID: uuidToShort(this.uuid),
+      publishedAt: this.publishedAt,
+      thumbnails: this.Thumbnails.map(t => t.toFormattedJSON()),
+      channel: this.VideoChannel.toFormattedSummaryJSON()
+    }
   }
 
   toFormattedJSON (this: MVideoFormattable, options?: VideoFormattingJSONOptions): Video {

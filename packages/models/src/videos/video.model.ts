@@ -138,3 +138,19 @@ export interface VideoDetails extends Video {
 
   embedPrivacyPolicy: ConstantLabel<VideoEmbedPrivacyPolicyType>
 }
+
+export type VideoSummary =
+  & Pick<
+    Video,
+    | 'id'
+    | 'uuid'
+    | 'shortUUID'
+    | 'name'
+    | 'nsfw'
+    | 'publishedAt'
+    | 'isLive'
+    | 'thumbnails'
+  >
+  & {
+    channel: VideoChannelSummary
+  }

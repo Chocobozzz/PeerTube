@@ -22,6 +22,9 @@ import {
 import { JobQueue } from '../job-queue/index.js'
 import { PeerTubeSocket } from '../peertube-socket.js'
 import { Hooks } from '../plugins/hooks.js'
+import { RequestVideoChangeOwnership } from './shared/change-ownership/request-video-change-ownership.js'
+import { VideoChangeOwnershipAccepted } from './shared/change-ownership/video-change-ownership-accepted.js'
+import { VideoChangeOwnershipRejected } from './shared/change-ownership/video-change-ownership-rejected.js'
 import { AcceptedToCollaborateToChannel } from './shared/channel/accepted-to-collaborate-to-channel.js'
 import { InvitedToCollaborateToChannel } from './shared/channel/invited-to-collaborate-to-channel.js'
 import { RefusedToCollaborateToChannel } from './shared/channel/refused-to-collaborate-to-channel.js'
@@ -29,6 +32,8 @@ import {
   AbstractNotification,
   AbuseStateChangeForReporter,
   AutoFollowForInstance,
+  ChannelChangeOwnershipAccepted,
+  ChannelChangeOwnershipRejected,
   CommentMention,
   DirectRegistrationForModerators,
   FollowForInstance,
@@ -49,13 +54,11 @@ import {
   OwnedPublicationAfterScheduleUpdate,
   OwnedPublicationAfterTranscoding,
   RegistrationRequestForModerators,
+  RequestChannelChangeOwnership,
   StudioEditionFinishedForOwner,
   UnblacklistForOwner,
   VideoTranscriptionGeneratedForOwner
 } from './shared/index.js'
-import { RequestVideoChangeOwnership } from './shared/video-change-ownership/request-video-change-ownership.js'
-import { VideoChangeOwnershipAccepted } from './shared/video-change-ownership/video-change-ownership-accepted.js'
-import { VideoChangeOwnershipRejected } from './shared/video-change-ownership/video-change-ownership-rejected.js'
 
 const lTags = loggerTagsFactory('notifier')
 
@@ -98,7 +101,11 @@ class Notifier {
 
     changeVideoOwnershipRequest: [ RequestVideoChangeOwnership ],
     changeVideoOwnershipAccepted: [ VideoChangeOwnershipAccepted ],
-    changeVideoOwnershipRejected: [ VideoChangeOwnershipRejected ]
+    changeVideoOwnershipRejected: [ VideoChangeOwnershipRejected ],
+
+    changeChannelOwnershipRequest: [ RequestChannelChangeOwnership ],
+    changeChannelOwnershipAccepted: [ ChannelChangeOwnershipAccepted ],
+    changeChannelOwnershipRejected: [ ChannelChangeOwnershipRejected ]
   }
 
   private static instance: Notifier
@@ -379,6 +386,43 @@ class Notifier {
 
     this.sendNotifications(models, changeOwnership)
       .catch(err => logger.error('Cannot notify rejected video ownership change %d.', changeOwnership.id, { err }))
+  }
+
+  // ---------------------------------------------------------------------------
+  // Channel ownership change notifications
+  // ---------------------------------------------------------------------------
+
+  notifyOfRequestedChannelOwnershipChange (changeOwnership: MChangeOwnershipFull) {
+    const models = this.notificationModels.changeChannelOwnershipRequest
+
+    const channelName = changeOwnership.VideoChannel.Actor.preferredUsername
+
+    logger.debug(`Notify on requested channel ${channelName} ownership change`, { id: changeOwnership.id, channelName, ...lTags() })
+
+    this.sendNotifications(models, changeOwnership)
+      .catch(err => logger.error('Cannot notify requested channel ownership change %d.', changeOwnership.id, { err }))
+  }
+
+  notifyOfAcceptedChannelOwnershipChange (changeOwnership: MChangeOwnershipFull) {
+    const models = this.notificationModels.changeChannelOwnershipAccepted
+
+    const channelName = changeOwnership.VideoChannel.Actor.preferredUsername
+
+    logger.debug(`Notify on accepted channel ${channelName} ownership change`, { id: changeOwnership.id, channelName, ...lTags() })
+
+    this.sendNotifications(models, changeOwnership)
+      .catch(err => logger.error('Cannot notify accepted channel ownership change %d.', changeOwnership.id, { err }))
+  }
+
+  notifyOfRejectedChannelOwnershipChange (changeOwnership: MChangeOwnershipFull) {
+    const models = this.notificationModels.changeChannelOwnershipRejected
+
+    const channelName = changeOwnership.VideoChannel.Actor.preferredUsername
+
+    logger.debug(`Notify on rejected channel ${channelName} ownership change`, { id: changeOwnership.id, channelName, ...lTags() })
+
+    this.sendNotifications(models, changeOwnership)
+      .catch(err => logger.error('Cannot notify rejected channel ownership change %d.', changeOwnership.id, { err }))
   }
 
   // ---------------------------------------------------------------------------

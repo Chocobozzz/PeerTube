@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common'
 import { ChangeDetectorRef, Component, inject, NgZone, OnDestroy, OnInit, viewChild } from '@angular/core'
 import { AbstractControl, FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { Router, RouterLink } from '@angular/router'
-import { VideoChangeOwnershipComponent } from '@app/+my-library/my-videos/modals/video-change-ownership.component'
 import { AuthService, ConfirmService, HooksService, Notifier, PluginService, ServerService } from '@app/core'
 import { BuildFormArgument, BuildFormValidator } from '@app/shared/form-validators/form-validator.model'
 import {
@@ -18,6 +17,8 @@ import {
   VIDEO_SUPPORT_VALIDATOR,
   VIDEO_TAGS_ARRAY_VALIDATOR
 } from '@app/shared/form-validators/video-validators'
+import { ChangeOwnershipService } from '@app/shared/shared-change-ownership/change-ownership.service'
+import { SendChangeOwnershipComponent } from '@app/shared/shared-change-ownership/send-change-ownership.component'
 import { DynamicFormFieldComponent } from '@app/shared/shared-forms/dynamic-form-field.component'
 import { FormReactiveErrors, FormReactiveMessages, FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { FormValidatorService } from '@app/shared/shared-forms/form-validator.service'
@@ -31,7 +32,6 @@ import { ButtonComponent } from '@app/shared/shared-main/buttons/button.componen
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { PeerTubeTemplateDirective } from '@app/shared/shared-main/common/peertube-template.directive'
 import { InstanceService } from '@app/shared/shared-main/instance/instance.service'
-import { ChangeOwnershipService } from '@app/shared/shared-main/video/change-ownership.service'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import {
   ChangeOwnership,
@@ -106,9 +106,9 @@ type Form = {
     GlobalIconComponent,
     MarkdownHintComponent,
     RouterLink,
-    VideoChangeOwnershipComponent,
     AlertComponent,
-    ButtonComponent
+    ButtonComponent,
+    SendChangeOwnershipComponent
   ]
 })
 export class VideoMainInfoComponent implements OnInit, OnDestroy {
@@ -129,7 +129,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
   private router = inject(Router)
   private changeOwnershipService = inject(ChangeOwnershipService)
 
-  readonly videoChangeOwnershipModal = viewChild<VideoChangeOwnershipComponent>('videoChangeOwnershipModal')
+  readonly sendChangeOwnershipModal = viewChild<SendChangeOwnershipComponent>('sendChangeOwnershipModal')
 
   form: FormGroup<Form>
   formErrors: FormReactiveErrors = {}
@@ -509,7 +509,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
   // ---------------------------------------------------------------------------
 
   showChangeOwnershipModal () {
-    this.videoChangeOwnershipModal().show()
+    this.sendChangeOwnershipModal().show()
   }
 
   onChangeOwnershipRequest (ownershipChange: ChangeOwnership) {

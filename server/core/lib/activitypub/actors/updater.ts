@@ -3,6 +3,7 @@ import { resetSequelizeInstance, runInReadCommittedTransaction } from '@server/h
 import { logger } from '@server/helpers/logger.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
+import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { MAccount, MActor, MActorFull, MChannel } from '@server/types/models/index.js'
 import { upsertAPPlayerSettings } from '../player-settings.js'
 import { getOrCreateAPOwner } from './get.js'
@@ -37,6 +38,19 @@ export class APActorUpdater {
         const channel = accountOrChannel as MChannel
 
         const owner = await getOrCreateAPOwner(this.actorObject, this.actorObject.id)
+
+        if (owner.accountId !== channel.accountId) {
+          logger.info(`Updating owner of channel ${channel.name} to ${owner.preferredUsername}`)
+
+          await runInReadCommittedTransaction(async t => {
+            await VideoPlaylistModel.updateOwnerOfChannelPlaylists({
+              currentOwnerId: channel.accountId,
+              nextOwnerId: owner.Account.id,
+              videoChannelId: channel.id,
+              transaction: t
+            })
+          })
+        }
 
         channel.accountId = owner.Account.id
         channel.support = this.actorObject.support

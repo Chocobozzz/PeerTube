@@ -325,6 +325,35 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
     }
   }
 
+  static async getChannelQuota (channelId: number) {
+    const webVideoFiles = 'SELECT "videoFile"."size" AS "size", "video"."id" AS "videoId" FROM "videoFile" ' +
+      'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" ' +
+      'AND "video"."isLive" IS FALSE AND "video"."channelId" = $channelId'
+
+    const hlsFiles = 'SELECT "videoFile"."size" AS "size", "video"."id" AS "videoId" FROM "videoFile" ' +
+      'INNER JOIN "videoStreamingPlaylist" ON "videoFile"."videoStreamingPlaylistId" = "videoStreamingPlaylist".id ' +
+      'INNER JOIN "video" ON "videoStreamingPlaylist"."videoId" = "video"."id" ' +
+      'AND "video"."isLive" IS FALSE AND "video"."channelId" = $channelId'
+
+    const sql = 'SELECT COALESCE(SUM("size"), 0) AS "total" ' +
+      'FROM (' +
+      `SELECT MAX("t1"."size") AS "size" FROM (${webVideoFiles} UNION ${hlsFiles}) t1 ` +
+      'GROUP BY "t1"."videoId"' +
+      ') t2'
+
+    const queryOptions = {
+      bind: { channelId },
+      type: QueryTypes.SELECT as QueryTypes.SELECT
+    }
+
+    const [ { total } ] = await VideoChannelModel.sequelize.query<{ total: string }>(sql, queryOptions)
+    if (!total) return 0
+
+    return parseInt(total, 10)
+  }
+
+  // ---------------------------------------------------------------------------
+
   static listLocalsForSitemap (sort: string): Promise<MChannelHost[]> {
     const query = {
       attributes: [],
@@ -392,6 +421,12 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
     }
 
     return VideoChannelModel.findAll(query)
+  }
+
+  // ---------------------------------------------------------------------------
+
+  static load (id: number, transaction?: Transaction): Promise<MChannel> {
+    return VideoChannelModel.unscoped().findByPk(id, { transaction })
   }
 
   static loadAndPopulateAccount (id: number, transaction?: Transaction): Promise<MChannelBannerAccountDefault> {
@@ -488,6 +523,8 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
       .scope([ ScopeNames.WITH_ACCOUNT ])
       .findOne(query)
   }
+
+  // ---------------------------------------------------------------------------
 
   toFormattedSummaryJSON (this: MChannelSummaryFormattable): VideoChannelSummary {
     const actor = this.Actor.toFormattedSummaryJSON()

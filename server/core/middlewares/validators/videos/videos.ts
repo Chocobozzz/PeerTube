@@ -271,7 +271,7 @@ export const videosUpdateValidator = getCommonVideoEditAttributes().concat([
 
       // Check quota of the target channel
       const channelUser = { id: targetChannel.Account.userId }
-      if (!await checkUserQuota({ channelUser, videoFileSize: video.getMaxQualityBytes(), req, res })) {
+      if (!await checkUserQuota({ channelUser, uploadSize: video.getMaxQualityBytes(), req, res })) {
         return false
       }
     }

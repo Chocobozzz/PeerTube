@@ -6,13 +6,18 @@ import { UserModel } from '@server/models/user/user.js'
 import { MUserDefault, MUserWithNotificationSetting } from '@server/types/models/index.js'
 import { MChangeOwnershipFull } from '@server/types/models/video/change-ownership.js'
 import { AbstractNotification } from '../common/abstract-notification.js'
-import { buildVideoChangeOwnershipNotification } from './video-change-ownership-utils.js'
+import { buildChangeOwnershipNotification } from './change-ownership-utils.js'
+import { AccountBlocklistModel } from '@server/models/account/account-blocklist.js'
 
 export class RequestVideoChangeOwnership extends AbstractNotification<MChangeOwnershipFull> {
   private user: MUserDefault
+  private channelAccountMuted: boolean
 
   async prepare () {
     this.user = await UserModel.loadByAccountId(this.payload.nextOwnerAccountId)
+
+    const hash = await AccountBlocklistModel.isAccountMutedByAccounts([ this.user.Account.id ], this.payload.initiatorAccountId)
+    this.channelAccountMuted = hash[this.user.Account.id] === true
   }
 
   log () {
@@ -24,6 +29,8 @@ export class RequestVideoChangeOwnership extends AbstractNotification<MChangeOwn
   }
 
   getSetting (_user: MUserWithNotificationSetting) {
+    if (this.channelAccountMuted) return UserNotificationSettingValue.NONE
+
     return UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL
   }
 
@@ -34,7 +41,7 @@ export class RequestVideoChangeOwnership extends AbstractNotification<MChangeOwn
   }
 
   createNotification (user: MUserWithNotificationSetting) {
-    return buildVideoChangeOwnershipNotification({
+    return buildChangeOwnershipNotification({
       user,
       payload: this.payload,
       notificationType: UserNotificationType.VIDEO_OWNERSHIP_CHANGED_REQUEST
@@ -55,7 +62,7 @@ export class RequestVideoChangeOwnership extends AbstractNotification<MChangeOwn
       locals: {
         action: {
           text: t('Review the request', language),
-          url: WEBSERVER.URL + '/my-account/notifications'
+          url: WEBSERVER.URL + '/my-library/ownership'
         }
       }
     }

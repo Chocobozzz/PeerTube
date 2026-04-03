@@ -16,7 +16,8 @@ import {
   MChannelAccountSummaryFormattable,
   MChannelActor,
   MChannelFormattable,
-  MChannelHostOnly
+  MChannelHostOnly,
+  MChannelSummary
 } from './video-channel.js'
 import { MVideoFile } from './video-file.js'
 import { MVideoLiveWithSchedules } from './video-live.js'
@@ -178,6 +179,14 @@ export type MVideoThumbnailAccountDefault =
 export type MVideoWithChannelActor =
   & MVideo
   & Use<'VideoChannel', MChannelActor>
+
+export type MVideoSummary =
+  & Pick<
+    MVideo,
+    'id' | 'uuid' | 'name' | 'nsfw' | 'url' | 'channelId' | 'publishedAt' | 'isLive' | 'remote' | 'state' | 'toFormattedSummaryJSON'
+  >
+  & Use<'VideoChannel', MChannelSummary>
+  & Use<'Thumbnails', MThumbnail[]>
 
 export type MVideoWithHost =
   & MVideo

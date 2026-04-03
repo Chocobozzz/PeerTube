@@ -305,11 +305,11 @@ export class VideoChannelActivityModel extends SequelizeModel<VideoChannelActivi
     }, { transaction })
   }
 
-  static async addOwnershipChangeActivity (options: {
+  static async addVideoOwnershipChangeActivity (options: {
     action: VideoChannelActivityActionType
     user: MUserAccountId
     channel: MChannelId
-    video: MVideo
+    video: Pick<MVideo, 'id' | 'name' | 'uuid' | 'url' | 'isLive'>
     targetAccount: MAccountNames & MAccountUrl
     transaction: Transaction
   }) {
@@ -336,6 +336,37 @@ export class VideoChannelActivityModel extends SequelizeModel<VideoChannelActivi
       accountId: user.Account.id,
       videoChannelId: channel.id,
       videoId: video.id
+    }, { transaction })
+  }
+
+  static async addChannelOwnershipChangeActivity (options: {
+    action: VideoChannelActivityActionType
+    user: MUserAccountId
+    channel: MChannelActivityFormattable['VideoChannel']
+    targetAccount: MAccountNames & MAccountUrl
+    transaction: Transaction
+  }) {
+    const { action, user, channel, targetAccount, transaction } = options
+
+    return this.create({
+      action,
+      targetType: VideoChannelActivityTarget.CHANNEL,
+      data: {
+        channel: {
+          id: channel.id,
+          name: channel.Actor.preferredUsername,
+          displayName: channel.name,
+          url: channel.Actor.url
+        },
+        targetAccount: {
+          username: targetAccount.Actor.preferredUsername,
+          displayName: targetAccount.name,
+          url: targetAccount.Actor.url
+        }
+      },
+      details: null,
+      accountId: user.Account.id,
+      videoChannelId: channel.id
     }, { transaction })
   }
 

@@ -3,7 +3,7 @@ import { UserNotificationModel } from '@server/models/user/user-notification.js'
 import { MUserId, UserNotificationModelForApi } from '@server/types/models/user/index.js'
 import { MChangeOwnershipFull } from '@server/types/models/video/change-ownership.js'
 
-export function buildVideoChangeOwnershipNotification (options: {
+export function buildChangeOwnershipNotification (options: {
   user: MUserId
   payload: MChangeOwnershipFull
   notificationType: UserNotificationType_Type

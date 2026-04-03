@@ -29,7 +29,6 @@ import {
 import { PrivacyBadgeComponent } from '../../shared/shared-video/privacy-badge.component'
 import { VideoNSFWBadgeComponent } from '../../shared/shared-video/video-nsfw-badge.component'
 import { VideoStateBadgeComponent } from '../../shared/shared-video/video-state-badge.component'
-import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.component'
 
 type ColumnName =
   | 'duration'
@@ -80,7 +79,6 @@ export class MyVideosComponent implements OnInit, OnDestroy {
   private headerService = inject(HeaderService)
   private badgeService = inject(PeerTubeBadgeService)
 
-  readonly videoChangeOwnershipModal = viewChild<VideoChangeOwnershipComponent>('videoChangeOwnershipModal')
   readonly table = viewChild<TableComponent<Video, DataLoaderParameter, ColumnName, QueryParams>>('table')
 
   videosContainedInPlaylists: VideosExistInPlaylists = {}

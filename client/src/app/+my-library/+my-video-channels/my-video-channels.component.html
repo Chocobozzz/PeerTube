@@ -53,7 +53,7 @@
               {videoChannel.followersCount, plural, =0 {No subscribers} =1 {1 subscriber} other {{{ videoChannel.followersCount }} subscribers}}
             </a>
 
-            <div class="videos-info">
+            <div class="videos-info" [class.opacity-0]="videoChannel.totalViews === undefined">
               <span i18n>{videoChannel.videosCount, plural, =0 {No videos} =1 {1 video} other {{{ videoChannel.videosCount }} videos}}</span>
               <span class="mx-1">·</span>
               <span i18n>{videoChannel.totalViews, plural, =0 {No views} =1 {1 view} other {{{ videoChannel.totalViews | myNumberFormatter }} views}}</span>

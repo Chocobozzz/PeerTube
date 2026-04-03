@@ -121,7 +121,7 @@ export namespace UserNotificationIncludes {
     & PickWith<VideoChannelCollaboratorModel, 'Channel', VideoChannelIncludeActorOwnerActor>
 
   export type ChangeOwnershipInclude =
-    & Pick<ChangeOwnershipModel, 'id'>
+    & Pick<ChangeOwnershipModel, 'id' | 'state'>
     & PickWith<ChangeOwnershipModel, 'Initiator', AccountIncludeActor>
     & PickWith<ChangeOwnershipModel, 'NextOwner', AccountIncludeActor>
     & PickWith<ChangeOwnershipModel, 'Video', VideoInclude>
