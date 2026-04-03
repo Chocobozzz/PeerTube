@@ -1,11 +1,11 @@
 import { UserNotificationSettingValue, UserNotificationType_Type } from '@peertube/peertube-models'
 import { UserModel } from '@server/models/user/user.js'
 import { MUserWithNotificationSetting } from '@server/types/models/index.js'
-import { MVideoChangeOwnershipFull } from '@server/types/models/video/video-change-ownership.js'
+import { MChangeOwnershipFull } from '@server/types/models/video/change-ownership.js'
 import { AbstractNotification } from '../common/abstract-notification.js'
-import { buildVideoOwnershipNotification } from './video-ownership-utils.js'
+import { buildVideoChangeOwnershipNotification } from './video-change-ownership-utils.js'
 
-export abstract class AbstractVideoOwnershipResponse extends AbstractNotification<MVideoChangeOwnershipFull> {
+export abstract class AbstractVideoChangeOwnershipResponse extends AbstractNotification<MChangeOwnershipFull> {
   protected users: MUserWithNotificationSetting[] = []
 
   async prepare () {
@@ -25,7 +25,7 @@ export abstract class AbstractVideoOwnershipResponse extends AbstractNotificatio
   }
 
   createNotification (user: MUserWithNotificationSetting) {
-    return buildVideoOwnershipNotification({
+    return buildVideoChangeOwnershipNotification({
       user,
       payload: this.payload,
       notificationType: this.getNotificationType()

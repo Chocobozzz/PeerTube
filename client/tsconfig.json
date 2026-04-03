@@ -1,7 +1,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "bundler",
@@ -16,6 +15,8 @@
     "strictBindCallApply": true,
     "target": "ES2022",
     "isolatedModules": true,
+    "strictPropertyInitialization": false,
+    "strictNullChecks": false,
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -46,7 +47,6 @@
   ],
   "angularCompilerOptions": {
     "strictInjectionParameters": true,
-    "fullTemplateTypeCheck": true,
     "strictTemplates": true,
     "enableI18nLegacyMessageIdFormat": false
   }

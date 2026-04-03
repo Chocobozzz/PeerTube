@@ -5,6 +5,8 @@ import {
   ActivityPubActorType,
   ActorImageType,
   ActorImageType_Type,
+  ChangeOwnershipState,
+  ChangeOwnershipStateType,
   FollowState,
   JobType,
   NSFWPolicyType,
@@ -60,7 +62,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 1015
+export const LAST_MIGRATION_VERSION = 1025
 
 // ---------------------------------------------------------------------------
 
@@ -757,6 +759,12 @@ export const VIDEO_EMBED_PRIVACY_POLICIES: { [id in VideoEmbedPrivacyPolicyType]
   [VideoEmbedPrivacyPolicy.ALL_ALLOWED]: 'All allowed',
   [VideoEmbedPrivacyPolicy.ALLOWLIST]: 'Allowlist',
   [VideoEmbedPrivacyPolicy.REMOTE_RESTRICTIONS]: 'Remote restrictions'
+}
+
+export const CHANGE_OWNERSHIP_STATES: { [id in ChangeOwnershipStateType]: string } = {
+  [ChangeOwnershipState.PENDING]: 'Pending',
+  [ChangeOwnershipState.ACCEPTED]: 'Accepted',
+  [ChangeOwnershipState.REJECTED]: 'Rejected'
 }
 
 export const MIMETYPES = {

@@ -305,7 +305,7 @@ export class VideoChannelActivityModel extends SequelizeModel<VideoChannelActivi
     }, { transaction })
   }
 
-  static async addVideoOwnershipChangeActivity (options: {
+  static async addOwnershipChangeActivity (options: {
     action: VideoChannelActivityActionType
     user: MUserAccountId
     channel: MChannelId

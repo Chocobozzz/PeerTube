@@ -61,7 +61,7 @@ import { TagModel } from '../models/video/tag.js'
 import { ThumbnailModel } from '../models/video/thumbnail.js'
 import { VideoBlacklistModel } from '../models/video/video-blacklist.js'
 import { VideoCaptionModel } from '../models/video/video-caption.js'
-import { VideoChangeOwnershipModel } from '../models/video/video-change-ownership.js'
+import { ChangeOwnershipModel } from '../models/video/change-ownership.js'
 import { VideoChannelModel } from '../models/video/video-channel.js'
 import { VideoCommentModel } from '../models/video/video-comment.js'
 import { VideoFileModel } from '../models/video/video-file.js'
@@ -160,7 +160,7 @@ export async function initDatabaseModels (silent: boolean) {
     VideoCommentAbuseModel,
     VideoAbuseModel,
     VideoModel,
-    VideoChangeOwnershipModel,
+    ChangeOwnershipModel,
     VideoChannelModel,
     VideoShareModel,
     VideoFileModel,

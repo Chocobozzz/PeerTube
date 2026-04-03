@@ -4,11 +4,11 @@ import { logger } from '@server/helpers/logger.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { UserModel } from '@server/models/user/user.js'
 import { MUserDefault, MUserWithNotificationSetting } from '@server/types/models/index.js'
-import { MVideoChangeOwnershipFull } from '@server/types/models/video/video-change-ownership.js'
+import { MChangeOwnershipFull } from '@server/types/models/video/change-ownership.js'
 import { AbstractNotification } from '../common/abstract-notification.js'
-import { buildVideoOwnershipNotification } from './video-ownership-utils.js'
+import { buildVideoChangeOwnershipNotification } from './video-change-ownership-utils.js'
 
-export class RequestVideoOwnershipChange extends AbstractNotification<MVideoChangeOwnershipFull> {
+export class RequestVideoChangeOwnership extends AbstractNotification<MChangeOwnershipFull> {
   private user: MUserDefault
 
   async prepare () {
@@ -34,7 +34,7 @@ export class RequestVideoOwnershipChange extends AbstractNotification<MVideoChan
   }
 
   createNotification (user: MUserWithNotificationSetting) {
-    return buildVideoOwnershipNotification({
+    return buildVideoChangeOwnershipNotification({
       user,
       payload: this.payload,
       notificationType: UserNotificationType.VIDEO_OWNERSHIP_CHANGED_REQUEST

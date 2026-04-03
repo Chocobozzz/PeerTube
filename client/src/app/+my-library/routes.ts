@@ -17,7 +17,7 @@ import { MyFollowersComponent } from './my-follows/my-followers.component'
 import { MySubscriptionsComponent } from './my-follows/my-subscriptions.component'
 import { MyHistoryComponent } from './my-history/my-history.component'
 import { MyLibraryComponent } from './my-library.component'
-import { MyOwnershipComponent } from './my-ownership/my-ownership.component'
+import { MyOwnershipChangesComponent } from './my-ownership-changes/my-ownership-changes.component'
 import { MyVideoChannelSyncsComponent } from './my-video-channel-syncs/my-video-channel-syncs.component'
 import { VideoChannelSyncEditComponent } from './my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component'
 import { MyVideoImportsComponent } from './my-video-imports/my-video-imports.component'
@@ -105,7 +105,7 @@ const videoSpaceRoutes = [
   },
   {
     path: 'ownership',
-    component: MyOwnershipComponent,
+    component: MyOwnershipChangesComponent,
     data: {
       meta: {
         title: $localize`Ownership changes`

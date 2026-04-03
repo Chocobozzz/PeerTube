@@ -1,11 +1,18 @@
-<a [routerLink]="routerLink" [title]="linkTitle">
+<a [routerLink]="routerLink" [title]="linkTitle" [target]="target()">
   <div class="chip two-lines">
     @if (displayAvatar()) {
       <my-actor-avatar [actor]="actor()" [actorType]="actorType()" size="32"></my-actor-avatar>
     }
 
     <div class="information">
-      <span class="fw-semibold">{{ actor().displayName }}</span>
+      <span class="fw-semibold">
+        {{ actor().displayName }}
+
+        @if (target() === '_blank') {
+          <my-global-icon iconName="external-link"></my-global-icon>
+        }
+      </span>
+
       @if (displayUsername()) {
         <span class="muted">{{ actor().name }}</span>
       }

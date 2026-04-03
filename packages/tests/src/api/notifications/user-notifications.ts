@@ -586,10 +586,10 @@ describe('Test user notifications', function () {
         type: UserNotificationType.VIDEO_OWNERSHIP_CHANGED_REQUEST
       })
       expect(notification.type).to.equal(UserNotificationType.VIDEO_OWNERSHIP_CHANGED_REQUEST)
-      expect(notification.videoOwnership.id).to.exist
-      expect(notification.videoOwnership.video.name).to.equal(videoName)
-      expect(notification.videoOwnership.initiatorAccount.name).to.equal('root')
-      expect(notification.videoOwnership.nextOwnerAccount.name).to.equal(nextOwner)
+      expect(notification.changeOwnership.id).to.exist
+      expect(notification.changeOwnership.video.name).to.equal(videoName)
+      expect(notification.changeOwnership.initiatorAccount.name).to.equal('root')
+      expect(notification.changeOwnership.nextOwnerAccount.name).to.equal(nextOwner)
     })
 
     it('Should notify the video owner when ownership change is accepted', async function () {
@@ -611,10 +611,10 @@ describe('Test user notifications', function () {
 
       const notification = await servers[0].notifications.getLatest({ type: UserNotificationType.VIDEO_OWNERSHIP_CHANGED_ACCEPTED })
       expect(notification.type).to.equal(UserNotificationType.VIDEO_OWNERSHIP_CHANGED_ACCEPTED)
-      expect(notification.videoOwnership.id).to.exist
-      expect(notification.videoOwnership.video.name).to.equal(videoName)
-      expect(notification.videoOwnership.initiatorAccount.name).to.equal('root')
-      expect(notification.videoOwnership.nextOwnerAccount.name).to.equal(nextOwner)
+      expect(notification.changeOwnership.id).to.exist
+      expect(notification.changeOwnership.video.name).to.equal(videoName)
+      expect(notification.changeOwnership.initiatorAccount.name).to.equal('root')
+      expect(notification.changeOwnership.nextOwnerAccount.name).to.equal(nextOwner)
     })
 
     it('Should notify rejected channel collaborators when ownership change is rejected', async function () {
@@ -644,10 +644,10 @@ describe('Test user notifications', function () {
         type: UserNotificationType.VIDEO_OWNERSHIP_CHANGED_REJECTED
       })
       expect(notification.type).to.equal(UserNotificationType.VIDEO_OWNERSHIP_CHANGED_REJECTED)
-      expect(notification.videoOwnership.id).to.exist
-      expect(notification.videoOwnership.video.name).to.equal(videoName)
-      expect(notification.videoOwnership.initiatorAccount.name).to.equal('root') // root made the request on behalf of the nextOwner user
-      expect(notification.videoOwnership.nextOwnerAccount.name).to.equal(nextNextOwner)
+      expect(notification.changeOwnership.id).to.exist
+      expect(notification.changeOwnership.video.name).to.equal(videoName)
+      expect(notification.changeOwnership.initiatorAccount.name).to.equal('root') // root made the request on behalf of the nextOwner user
+      expect(notification.changeOwnership.nextOwnerAccount.name).to.equal(nextNextOwner)
     })
   })
 

@@ -5,9 +5,9 @@ import { OWNERSHIP_CHANGE_USERNAME_VALIDATOR } from '@app/shared/form-validators
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { UserAutoCompleteComponent } from '@app/shared/shared-forms/user-auto-complete.component'
-import { VideoOwnershipService } from '@app/shared/shared-main/video/video-ownership.service'
+import { ChangeOwnershipService } from '@app/shared/shared-main/video/change-ownership.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { VideoChangeOwnership, VideoChangeOwnershipStatus } from '@peertube/peertube-models'
+import { ChangeOwnership, ChangeOwnershipState } from '@peertube/peertube-models'
 import { AutoCompleteModule } from 'primeng/autocomplete'
 import { switchMap } from 'rxjs'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
@@ -20,12 +20,12 @@ import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.co
 })
 export class VideoChangeOwnershipComponent extends FormReactive implements OnInit {
   protected formReactiveService = inject(FormReactiveService)
-  private videoOwnershipService = inject(VideoOwnershipService)
+  private changeOwnershipService = inject(ChangeOwnershipService)
   private notifier = inject(Notifier)
   private modalService = inject(NgbModal)
 
   videoId = input.required<number>()
-  requestSent = output<VideoChangeOwnership>()
+  requestSent = output<ChangeOwnership>()
 
   readonly modal = viewChild<ElementRef>('modal')
 
@@ -48,9 +48,9 @@ export class VideoChangeOwnershipComponent extends FormReactive implements OnIni
   changeOwnership () {
     const username = this.form.value['username']
 
-    this.videoOwnershipService
-      .sendChangeRequest(this.videoId(), username)
-      .pipe(switchMap(() => this.videoOwnershipService.listFromVideo(this.videoId(), VideoChangeOwnershipStatus.WAITING)))
+    this.changeOwnershipService
+      .sendVideoChangeRequest(this.videoId(), username)
+      .pipe(switchMap(() => this.changeOwnershipService.listFromVideo(this.videoId(), ChangeOwnershipState.PENDING)))
       .subscribe({
         next: ({ data }) => {
           this.requestSent.emit(data[0])

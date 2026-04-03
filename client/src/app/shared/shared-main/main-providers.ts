@@ -16,7 +16,7 @@ import { RedundancyService } from './video/redundancy.service'
 import { VideoChapterService } from './video/video-chapter.service'
 import { VideoFileTokenService } from './video/video-file-token.service'
 import { VideoImportService } from './video/video-import.service'
-import { VideoOwnershipService } from './video/video-ownership.service'
+import { ChangeOwnershipService } from './video/change-ownership.service'
 import { VideoPasswordService } from './video/video-password.service'
 import { VideoResolver } from './video/video.resolver'
 import { VideoService } from './video/video.service'
@@ -31,7 +31,7 @@ export function getMainProviders () {
     UserNotificationService,
     RedundancyService,
     VideoImportService,
-    VideoOwnershipService,
+    ChangeOwnershipService,
     VideoService,
     VideoFileTokenService,
     VideoResolver,

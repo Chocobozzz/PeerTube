@@ -1,6 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { HttpStatusCode, VideoChangeOwnershipStatus, VideoPrivacy } from '@peertube/peertube-models'
+import { ChangeOwnershipState, HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
 import {
   ChangeOwnershipCommand,
   cleanupTests,
@@ -218,7 +218,7 @@ describe('Test video change ownership - nominal', function () {
 
     await command.delete({ ownershipId: ownershipChangeId, token: firstUserToken })
 
-    const bodyAfterDelete = await command.listOfVideo({ videoId: liveId, state: VideoChangeOwnershipStatus.WAITING })
+    const bodyAfterDelete = await command.listOfVideo({ videoId: liveId, state: ChangeOwnershipState.PENDING })
     expect(bodyAfterDelete.total).to.equal(0)
   })
 
@@ -249,17 +249,21 @@ describe('Test video change ownership - nominal', function () {
     expect(body.data[0].video.id).to.equal(servers[0].store.videoCreated.id)
 
     expect(body.data.map(i => i.status)).to.have.members([ 'ACCEPTED', 'REFUSED' ])
+    expect(body.data.map(i => i.state.label)).to.have.members([ 'Accepted', 'Rejected' ])
+    expect(body.data.map(i => i.state.id)).to.have.members([ ChangeOwnershipState.ACCEPTED, ChangeOwnershipState.REJECTED ])
   })
 
   it('Should list ownership changes with state filter', async function () {
     const body = await command.listOfVideo({
       videoId: servers[0].store.videoCreated.id,
-      state: 'ACCEPTED'
+      state: ChangeOwnershipState.ACCEPTED
     })
 
     expect(body.total).to.equal(1)
 
     expect(body.data[0].status).to.equal('ACCEPTED')
+    expect(body.data[0].state.id).to.equal(ChangeOwnershipState.ACCEPTED)
+    expect(body.data[0].state.label).to.equal('Accepted')
   })
 
   after(async function () {

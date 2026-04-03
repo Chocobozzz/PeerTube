@@ -1,3 +1,3 @@
-export * from './video-change-ownership-accept.model.js'
-export * from './video-change-ownership-create.model.js'
-export * from './video-change-ownership.model.js'
+export * from './change-ownership-accept.model.js'
+export * from './change-ownership-create.model.js'
+export * from './change-ownership.model.js'

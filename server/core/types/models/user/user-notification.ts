@@ -7,9 +7,9 @@ import { ApplicationModel } from '@server/models/application/application.js'
 import { PluginModel } from '@server/models/server/plugin.js'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
 import { UserRegistrationModel } from '@server/models/user/user-registration.js'
+import { ChangeOwnershipModel } from '@server/models/video/change-ownership.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoChannelCollaboratorModel } from '@server/models/video/video-channel-collaborator.js'
-import { VideoChangeOwnershipModel } from '@server/models/video/video-change-ownership.js'
 import { AbuseModel } from '../../../models/abuse/abuse.js'
 import { AccountModel } from '../../../models/account/account.js'
 import { ActorFollowModel } from '../../../models/actor/actor-follow.js'
@@ -120,11 +120,12 @@ export namespace UserNotificationIncludes {
     & PickWith<VideoChannelCollaboratorModel, 'Account', AccountIncludeActor>
     & PickWith<VideoChannelCollaboratorModel, 'Channel', VideoChannelIncludeActorOwnerActor>
 
-  export type VideoOwnershipInclude =
-    & Pick<VideoChangeOwnershipModel, 'id'>
-    & PickWith<VideoChangeOwnershipModel, 'Initiator', AccountIncludeActor>
-    & PickWith<VideoChangeOwnershipModel, 'NextOwner', AccountIncludeActor>
-    & PickWith<VideoChangeOwnershipModel, 'Video', VideoInclude>
+  export type ChangeOwnershipInclude =
+    & Pick<ChangeOwnershipModel, 'id'>
+    & PickWith<ChangeOwnershipModel, 'Initiator', AccountIncludeActor>
+    & PickWith<ChangeOwnershipModel, 'NextOwner', AccountIncludeActor>
+    & PickWith<ChangeOwnershipModel, 'Video', VideoInclude>
+    & PickWith<ChangeOwnershipModel, 'VideoChannel', VideoChannelIncludeActor>
 }
 
 // ############################################################################
@@ -144,7 +145,7 @@ export type MUserNotification = Omit<
   | 'UserRegistration'
   | 'VideoCaption'
   | 'VideoChannelCollaborator'
-  | 'VideoOwnership'
+  | 'ChangeOwnership'
 >
 
 // ############################################################################
@@ -163,4 +164,4 @@ export type UserNotificationModelForApi =
   & Use<'UserRegistration', UserNotificationIncludes.UserRegistrationInclude>
   & Use<'VideoCaption', UserNotificationIncludes.VideoCaptionInclude>
   & Use<'VideoChannelCollaborator', UserNotificationIncludes.VideoChannelCollaboratorInclude>
-  & Use<'VideoOwnership', UserNotificationIncludes.VideoOwnershipInclude>
+  & Use<'ChangeOwnership', UserNotificationIncludes.ChangeOwnershipInclude>

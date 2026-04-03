@@ -5,13 +5,13 @@ import { ActorModel } from '@server/models/actor/actor.js'
 import { ServerModel } from '@server/models/server/server.js'
 import { ThumbnailModel } from '../../thumbnail.js'
 import { VideoChannelModel } from '../../video-channel.js'
-import { VideoChangeOwnershipModel } from '../../video-change-ownership.js'
+import { ChangeOwnershipModel } from '../../change-ownership.js'
 import { VideoModel } from '../../video.js'
 
 export class VideoChangeOwnershipTableAttributes {
   @Memoize()
   getChangeOwnershipAttributes () {
-    return VideoChangeOwnershipModel.getSQLAttributes('VideoChangeOwnershipModel').join(', ')
+    return ChangeOwnershipModel.getSQLAttributes('ChangeOwnershipModel').join(', ')
   }
 
   // ---------------------------------------------------------------------------

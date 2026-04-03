@@ -1,11 +1,11 @@
 import { UserNotificationType_Type } from '@peertube/peertube-models'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
 import { MUserId, UserNotificationModelForApi } from '@server/types/models/user/index.js'
-import { MVideoChangeOwnershipFull } from '@server/types/models/video/video-change-ownership.js'
+import { MChangeOwnershipFull } from '@server/types/models/video/change-ownership.js'
 
-export function buildVideoOwnershipNotification (options: {
+export function buildVideoChangeOwnershipNotification (options: {
   user: MUserId
-  payload: MVideoChangeOwnershipFull
+  payload: MChangeOwnershipFull
   notificationType: UserNotificationType_Type
 }): UserNotificationModelForApi {
   const { user, payload, notificationType } = options
@@ -13,10 +13,10 @@ export function buildVideoOwnershipNotification (options: {
   const notification = UserNotificationModel.build<UserNotificationModelForApi>({
     type: notificationType,
     userId: user.id,
-    videoOwnershipId: payload.id
+    changeOwnershipId: payload.id
   })
 
-  notification.VideoOwnership = payload
+  notification.ChangeOwnership = payload
 
   return notification
 }

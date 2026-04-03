@@ -10,7 +10,7 @@ import { isHostValid } from '@server/helpers/custom-validators/servers.js'
 import { VideoLoadType } from '@server/lib/model-loaders/video.js'
 import { Redis } from '@server/lib/redis.js'
 import { buildUploadXFile, safeUploadXCleanup } from '@server/lib/uploadx.js'
-import { VideoChangeOwnershipModel } from '@server/models/video/video-change-ownership.js'
+import { ChangeOwnershipModel } from '@server/models/video/change-ownership.js'
 import { ExpressPromiseHandler } from '@server/types/express-handler.js'
 import { MVideoFull } from '@server/types/models/index.js'
 import express from 'express'
@@ -258,7 +258,7 @@ export const videosUpdateValidator = getCommonVideoEditAttributes().concat([
 
     // Not the same account as original video channel
     if (targetChannel && targetChannel.accountId !== video.VideoChannel.accountId) {
-      const ownershipChange = await VideoChangeOwnershipModel.loadPendingByVideo(video.id)
+      const ownershipChange = await ChangeOwnershipModel.loadPendingByVideo(video.id)
 
       if (ownershipChange) {
         res.fail({

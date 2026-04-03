@@ -43,8 +43,7 @@ export class ModelBuilder<T extends SequelizeModel> {
     VideoChannelCollaborators: 'VideoChannelCollaboratorModel',
     Tags: 'TagModel',
     Initiator: 'AccountModel',
-    NextOwner: 'AccountModel',
-    VideoOwnership: 'VideoChangeOwnershipModel'
+    NextOwner: 'AccountModel'
   }
 
   constructor (private readonly sequelize: Sequelize) {

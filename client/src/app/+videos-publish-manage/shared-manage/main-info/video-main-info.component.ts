@@ -31,15 +31,15 @@ import { ButtonComponent } from '@app/shared/shared-main/buttons/button.componen
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { PeerTubeTemplateDirective } from '@app/shared/shared-main/common/peertube-template.directive'
 import { InstanceService } from '@app/shared/shared-main/instance/instance.service'
-import { VideoOwnershipService } from '@app/shared/shared-main/video/video-ownership.service'
+import { ChangeOwnershipService } from '@app/shared/shared-main/video/change-ownership.service'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import {
+  ChangeOwnership,
+  ChangeOwnershipState,
   ConstantLabel,
   HTMLServerConfig,
   RegisterClientFormFieldOptions,
   RegisterClientVideoFieldOptions,
-  VideoChangeOwnership,
-  VideoChangeOwnershipStatus,
   VideoPrivacy,
   VideoPrivacyType
 } from '@peertube/peertube-models'
@@ -127,7 +127,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
   private confirmService = inject(ConfirmService)
   private notifier = inject(Notifier)
   private router = inject(Router)
-  private videoOwnershipService = inject(VideoOwnershipService)
+  private changeOwnershipService = inject(ChangeOwnershipService)
 
   readonly videoChangeOwnershipModal = viewChild<VideoChangeOwnershipComponent>('videoChangeOwnershipModal')
 
@@ -166,7 +166,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
   privacies: VideoPrivacyType[] = []
   videoEdit: VideoEdit
 
-  pendingOwnershipRequest: VideoChangeOwnership
+  pendingOwnershipRequest: ChangeOwnership
 
   private schedulerInterval: any
   private updatedSub: Subscription
@@ -512,7 +512,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
     this.videoChangeOwnershipModal().show()
   }
 
-  onChangeOwnershipRequest (ownershipChange: VideoChangeOwnership) {
+  onChangeOwnershipRequest (ownershipChange: ChangeOwnership) {
     this.pendingOwnershipRequest = ownershipChange
   }
 
@@ -522,7 +522,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
     const res = await this.confirmService.confirm(message, $localize`Cancel request`)
     if (res === false) return
 
-    this.videoOwnershipService.cancel(this.pendingOwnershipRequest.id)
+    this.changeOwnershipService.cancelVideo(this.pendingOwnershipRequest.id)
       .subscribe({
         next: () => {
           this.notifier.success($localize`Ownership change request cancelled`)
@@ -534,7 +534,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
   }
 
   loadOwnershipRequest () {
-    this.videoOwnershipService.listFromVideo(this.videoEdit.getVideoAttributes().id, VideoChangeOwnershipStatus.WAITING)
+    this.changeOwnershipService.listFromVideo(this.videoEdit.getVideoAttributes().id, ChangeOwnershipState.PENDING)
       .subscribe(({ data }) => {
         if (data.length === 0) return
 

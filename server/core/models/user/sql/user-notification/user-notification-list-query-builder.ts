@@ -148,13 +148,14 @@ export class UserNotificationListQueryBuilder extends AbstractListQuery {
       ...this.getAccountOrChannelAttributes('ChannelCollab->Channel->Account', 'ChannelCollab.Channel.Account'),
       ...this.getAccountOrChannelAttributes('ChannelCollab->Channel', 'ChannelCollab.Channel'),
 
-      `"VideoOwnership"."id" AS "VideoOwnership.id"`,
-      ...this.getAccountOrChannelAttributes('VideoOwnership->Initiator', 'VideoOwnership.Initiator'),
-      ...this.getAccountOrChannelAttributes('VideoOwnership->NextOwner', 'VideoOwnership.NextOwner'),
-      `"VideoOwnership->Video"."id" AS "VideoOwnership.Video.id"`,
-      `"VideoOwnership->Video"."uuid" AS "VideoOwnership.Video.uuid"`,
-      `"VideoOwnership->Video"."name" AS "VideoOwnership.Video.name"`,
-      `"VideoOwnership->Video"."state" AS "VideoOwnership.Video.state"`
+      `"ChangeOwnership"."id" AS "ChangeOwnership.id"`,
+      ...this.getAccountOrChannelAttributes('ChangeOwnership->Initiator', 'ChangeOwnership.Initiator'),
+      ...this.getAccountOrChannelAttributes('ChangeOwnership->NextOwner', 'ChangeOwnership.NextOwner'),
+      `"ChangeOwnership->Video"."id" AS "ChangeOwnership.Video.id"`,
+      `"ChangeOwnership->Video"."uuid" AS "ChangeOwnership.Video.uuid"`,
+      `"ChangeOwnership->Video"."name" AS "ChangeOwnership.Video.name"`,
+      `"ChangeOwnership->Video"."state" AS "ChangeOwnership.Video.state"`,
+      ...this.getAccountOrChannelAttributes('ChangeOwnership->Channel', 'ChangeOwnership.Channel')
     ]
   }
 
@@ -162,12 +163,12 @@ export class UserNotificationListQueryBuilder extends AbstractListQuery {
     this.join = `
     LEFT JOIN (
       "video" AS "Video"
-      ${this.getChannelJoin('Video', 'channelId')}
+      ${this.getChannelJoin({ tableName: 'Video', columnJoin: 'channelId' })}
     ) ON "UserNotificationModel"."videoId" = "Video"."id"
 
     LEFT JOIN (
       "videoComment" AS "VideoComment"
-      ${this.getAccountJoin('VideoComment', 'accountId')}
+      ${this.getAccountJoin({ tableName: 'VideoComment', columnJoin: 'accountId' })}
       INNER JOIN "video" AS "VideoComment->Video" ON "VideoComment"."videoId" = "VideoComment->Video"."id"
     ) ON "UserNotificationModel"."commentId" = "VideoComment"."id"
 
@@ -181,7 +182,7 @@ export class UserNotificationListQueryBuilder extends AbstractListQuery {
       ON "Abuse->VideoCommentAbuse->VideoComment"."videoId" = "Abuse->VideoCommentAbuse->VideoComment->Video"."id"
     LEFT JOIN (
       "account" AS "Abuse->FlaggedAccount"
-      ${this.getActorJoin('Abuse->FlaggedAccount', 'accountId')}
+      ${this.getActorJoin({ tableName: 'Abuse->FlaggedAccount', column: 'accountId' })}
     ) ON "Abuse"."flaggedAccountId" = "Abuse->FlaggedAccount"."id"
 
     LEFT JOIN (
@@ -214,7 +215,7 @@ export class UserNotificationListQueryBuilder extends AbstractListQuery {
 
     LEFT JOIN (
       "account" AS "Account"
-      ${this.getActorJoin('Account', 'accountId')}
+      ${this.getActorJoin({ tableName: 'Account', column: 'accountId' })}
     ) ON "UserNotificationModel"."accountId" = "Account"."id"
 
     LEFT JOIN "userRegistration" as "UserRegistration" ON "UserNotificationModel"."userRegistrationId" = "UserRegistration"."id"
@@ -226,17 +227,18 @@ export class UserNotificationListQueryBuilder extends AbstractListQuery {
 
     LEFT JOIN (
       "videoChannelCollaborator" AS "ChannelCollab"
-      ${this.getAccountJoin('ChannelCollab', 'accountId')}
-      ${this.getChannelJoin('ChannelCollab', 'channelId', 'Channel')}
-      ${this.getAccountJoin('ChannelCollab->Channel', 'accountId')}
+      ${this.getAccountJoin({ tableName: 'ChannelCollab', columnJoin: 'accountId' })}
+      ${this.getChannelJoin({ tableName: 'ChannelCollab', columnJoin: 'channelId', aliasTableName: 'Channel' })}
+      ${this.getAccountJoin({ tableName: 'ChannelCollab->Channel', columnJoin: 'accountId' })}
     ) ON "UserNotificationModel"."channelCollaboratorId" = "ChannelCollab"."id"
 
     LEFT JOIN (
-      "videoChangeOwnership" AS "VideoOwnership"
-      ${this.getAccountJoin('VideoOwnership', 'initiatorAccountId', 'Initiator')}
-      ${this.getAccountJoin('VideoOwnership', 'nextOwnerAccountId', 'NextOwner')}
-      INNER JOIN "video" AS "VideoOwnership->Video" ON "VideoOwnership"."videoId" = "VideoOwnership->Video"."id"
-    ) ON "UserNotificationModel"."videoOwnershipId" = "VideoOwnership"."id"`
+      "changeOwnership" AS "ChangeOwnership"
+      ${this.getAccountJoin({ tableName: 'ChangeOwnership', columnJoin: 'initiatorAccountId', aliasTableName: 'Initiator' })}
+      ${this.getAccountJoin({ tableName: 'ChangeOwnership', columnJoin: 'nextOwnerAccountId', aliasTableName: 'NextOwner' })}
+      LEFT JOIN "video" AS "ChangeOwnership->Video" ON "ChangeOwnership"."videoId" = "ChangeOwnership->Video"."id"
+      ${this.getChannelJoin({ tableName: 'ChangeOwnership', columnJoin: 'videoChannelId', aliasTableName: 'Channel', joinType: 'LEFT' })}
+    ) ON "UserNotificationModel"."changeOwnershipId" = "ChangeOwnership"."id"`
   }
 
   // ---------------------------------------------------------------------------
@@ -256,19 +258,39 @@ export class UserNotificationListQueryBuilder extends AbstractListQuery {
     ]
   }
 
-  private getAccountJoin (tableName: string, columnJoin: string, aliasTableName = 'Account') {
-    return `INNER JOIN "account" AS "${tableName}->${aliasTableName}" ON "${tableName}"."${columnJoin}" = "${tableName}->${aliasTableName}"."id" ` +
-      this.getActorJoin(`${tableName}->${aliasTableName}`, 'accountId')
+  private getAccountJoin (options: {
+    tableName: string
+    columnJoin: string
+    aliasTableName?: string
+    joinType?: 'INNER' | 'LEFT'
+  }) {
+    const { tableName, columnJoin, aliasTableName = 'Account', joinType = 'INNER' } = options
+
+    return `${joinType} JOIN "account" AS "${tableName}->${aliasTableName}" ON "${tableName}"."${columnJoin}" = "${tableName}->${aliasTableName}"."id" ` +
+      this.getActorJoin({ tableName: `${tableName}->${aliasTableName}`, column: 'accountId', joinType })
   }
 
-  private getChannelJoin (tableName: string, columnJoin: string, aliasTableName = 'VideoChannel') {
+  private getChannelJoin (options: {
+    tableName: string
+    columnJoin: string
+    aliasTableName?: string
+    joinType?: 'INNER' | 'LEFT'
+  }) {
+    const { tableName, columnJoin, aliasTableName = 'VideoChannel', joinType = 'INNER' } = options
+
     // oxlint-disable-next-line max-len
-    return `INNER JOIN "videoChannel" AS "${tableName}->${aliasTableName}" ON "${tableName}"."${columnJoin}" = "${tableName}->${aliasTableName}".id ` +
-      this.getActorJoin(`${tableName}->${aliasTableName}`, 'videoChannelId')
+    return `${joinType} JOIN "videoChannel" AS "${tableName}->${aliasTableName}" ON "${tableName}"."${columnJoin}" = "${tableName}->${aliasTableName}".id ` +
+      this.getActorJoin({ tableName: `${tableName}->${aliasTableName}`, column: 'videoChannelId', joinType })
   }
 
-  private getActorJoin (tableName: string, column: string) {
-    return `INNER JOIN "actor" AS "${tableName}->Actor" ON "${tableName}"."id" = "${tableName}->Actor"."${column}" ` +
+  private getActorJoin (options: {
+    tableName: string
+    column: string
+    joinType?: 'INNER' | 'LEFT'
+  }) {
+    const { tableName, column, joinType = 'INNER' } = options
+
+    return `${joinType} JOIN "actor" AS "${tableName}->Actor" ON "${tableName}"."id" = "${tableName}->Actor"."${column}" ` +
       this.getActorImageJoin(`${tableName}->Actor`) +
       this.getActorServerJoin(`${tableName}->Actor`)
   }

@@ -2986,7 +2986,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/VideoChangeOwnership'
+                      $ref: '#/components/schemas/ChangeOwnership'
 
   '/api/v1/videos/ownership/{id}/accept':
     post:
@@ -3053,13 +3053,9 @@ paths:
         - name: state
           in: query
           required: false
-          description: Filter by ownership change state (WAITING, ACCEPTED, REFUSED)
+          description: Filter by ownership change state
           schema:
-            type: string
-            enum:
-              - WAITING
-              - ACCEPTED
-              - REFUSED
+            $ref: '#/components/schemas/ChangeOwnershipState'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
@@ -3077,7 +3073,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/VideoChangeOwnership'
+                      $ref: '#/components/schemas/ChangeOwnership'
         '403':
           description: cannot manage the video
         '404':
@@ -10051,19 +10047,18 @@ components:
           type: integer
         nsfw:
           type: boolean
-    VideoChangeOwnership:
+    ChangeOwnership:
       type: object
-      description: Representation of a video ownership change
+      description: Representation of a ownership change
       properties:
         id:
           $ref: '#/components/schemas/id'
-        status:
-          type: string
-          description: Status of the ownership change request
-          enum:
-            - WAITING
-            - ACCEPTED
-            - REFUSED
+        state:
+          properties:
+            id:
+              $ref: '#/components/schemas/ChangeOwnershipState'
+            label:
+              type: string
         initiatorAccount:
           $ref: '#/components/schemas/Account'
         nextOwnerAccount:
@@ -12002,6 +11997,14 @@ components:
         - 2
         - 3
       description: 'The registration state (Pending = `1`, Rejected = `2`, Accepted = `3`)'
+
+    ChangeOwnershipState:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+      description: 'The ownership change state (Pending = `1`, Rejected = `2`, Accepted = `3`)'
 
     UserRegistration:
       properties:

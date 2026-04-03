@@ -1,6 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { HttpStatusCode, VideoCreateResult } from '@peertube/peertube-models'
+import { ChangeOwnershipState, HttpStatusCode, VideoCreateResult } from '@peertube/peertube-models'
 import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@peertube/peertube-server-commands'
 import { expect } from 'chai'
 
@@ -144,7 +144,7 @@ describe('Test video change ownership API validator', function () {
     it('Should succeed with a state filter', async function () {
       const { data } = await server.changeOwnership.listOfVideo({
         videoId: rootVideo.id,
-        state: 'WAITING'
+        state: ChangeOwnershipState.PENDING
       })
       expect(data).to.be.an('array')
     })

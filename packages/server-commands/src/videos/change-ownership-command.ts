@@ -1,4 +1,4 @@
-import { HttpStatusCode, ResultList, VideoChangeOwnership } from '@peertube/peertube-models'
+import { ChangeOwnership, ChangeOwnershipStateType, HttpStatusCode, ResultList } from '@peertube/peertube-models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class ChangeOwnershipCommand extends AbstractCommand {
@@ -24,7 +24,7 @@ export class ChangeOwnershipCommand extends AbstractCommand {
   list (options: OverrideCommandOptions = {}) {
     const path = '/api/v1/videos/ownership'
 
-    return this.getRequestBody<ResultList<VideoChangeOwnership>>({
+    return this.getRequestBody<ResultList<ChangeOwnership>>({
       ...options,
 
       path,
@@ -37,13 +37,13 @@ export class ChangeOwnershipCommand extends AbstractCommand {
   listOfVideo (
     options: OverrideCommandOptions & {
       videoId: number | string
-      state?: string
+      state?: ChangeOwnershipStateType
     }
   ) {
     const { videoId, state } = options
     const path = '/api/v1/videos/' + videoId + '/ownership'
 
-    return this.getRequestBody<ResultList<VideoChangeOwnership>>({
+    return this.getRequestBody<ResultList<ChangeOwnership>>({
       ...options,
 
       path,

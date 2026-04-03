@@ -1,6 +1,6 @@
 <ng-template #modal let-close="close" let-dismiss="dismiss">
   <div class="modal-header">
-    <h1 i18n class="modal-title">Accept ownership</h1>
+    <h1 class="modal-title">{{ getModalTitle() }}</h1>
 
     <button class="border-0 p-0" title="Close this modal" i18n-title (click)="dismiss()">
       <my-global-icon iconName="cross"></my-global-icon>
@@ -9,7 +9,7 @@
 
   <div class="modal-body" [formGroup]="form">
     <div class="form-group">
-      <label i18n for="channel">Select a channel to receive the video</label>
+      <label i18n for="channel">{ ownershipChanges.length, plural, =1 {Select a channel to receive the video} other {Select a channel to receive the videos}}</label>
       <my-select-channel class="d-block" inputId="channel" formControlName="channel" [items]="videoChannels"></my-select-channel>
 
       @if (formErrors.channel) {

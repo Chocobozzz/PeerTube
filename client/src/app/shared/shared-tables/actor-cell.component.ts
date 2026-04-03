@@ -2,6 +2,7 @@ import { booleanAttribute, Component, inject, input, OnInit } from '@angular/cor
 import { RouterModule } from '@angular/router'
 import { AuthService } from '@app/core'
 import { ActorAvatarComponent, ActorAvatarInput } from '../shared-actor-image/actor-avatar.component'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { CollaboratorStateComponent } from '../shared-main/channel/collaborator-state.component'
 
 @Component({
@@ -11,7 +12,8 @@ import { CollaboratorStateComponent } from '../shared-main/channel/collaborator-
   imports: [
     RouterModule,
     CollaboratorStateComponent,
-    ActorAvatarComponent
+    ActorAvatarComponent,
+    GlobalIconComponent
   ]
 })
 export class ActorCellComponent implements OnInit {
@@ -21,6 +23,7 @@ export class ActorCellComponent implements OnInit {
   actorType = input.required<'channel' | 'account'>()
   displayAvatar = input(true, { transform: booleanAttribute })
   displayUsername = input(true, { transform: booleanAttribute })
+  target = input<'_blank' | ''>('')
 
   routerLink: string[]
   linkTitle: string

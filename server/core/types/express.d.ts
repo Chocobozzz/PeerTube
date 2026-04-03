@@ -21,7 +21,7 @@ import {
   MStreamingPlaylist,
   MUserAccountUrl,
   MUserExport,
-  MVideoChangeOwnershipFull,
+  MChangeOwnershipFull,
   MVideoEmbedDomain,
   MVideoFile,
   MVideoFormattableDetails,
@@ -207,8 +207,8 @@ declare module 'express' {
       follow?: MActorFollowActorsDefault
       subscription?: MActorFollowActorsDefaultSubscription
 
-      videoChangeOwnership?: MVideoChangeOwnershipFull
-      videoChangeOwnershipNextOwner?: MAccountDefault
+      changeOwnership?: MChangeOwnershipFull
+      changeOwnershipNextOwner?: MAccountDefault
 
       videoEmbedDomain?: MVideoEmbedDomain
 

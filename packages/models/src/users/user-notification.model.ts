@@ -174,7 +174,7 @@ export interface UserNotification {
     account: ActorInfo
   }
 
-  videoOwnership?: {
+  changeOwnership?: {
     id: number
     initiatorAccount: ActorInfo
     nextOwnerAccount: ActorInfo
