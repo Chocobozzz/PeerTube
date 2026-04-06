@@ -102,33 +102,33 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="855761351954776278" datatype="html">
+      <trans-unit id="855761351954776278" datatype="html" xml:space="preserve">
         <source>Why we created <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target state="new">Why we created <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target state="translated">למה יצרנו את <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-team.component.html</context>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6871360459693149470" datatype="html">
+      <trans-unit id="6871360459693149470" datatype="html" xml:space="preserve">
         <source>How long we plan to maintain <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target state="new">How long we plan to maintain <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target state="translated">למשך כמה זמן אנחנו מתכננים לתחזק את <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-team.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1808344369245431716" datatype="html">
+      <trans-unit id="1808344369245431716" datatype="html" xml:space="preserve">
         <source>How we will pay for keeping <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> running</source>
-        <target state="new">How we will pay for keeping <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> running</target>
+        <target state="translated">איך נממן את הפעילות של <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-team.component.html</context>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3076079242537393946" datatype="html">
+      <trans-unit id="3076079242537393946" datatype="html" xml:space="preserve">
         <source>Moderation information</source>
-        <target/>
+        <target state="translated">פרטי פיקוח</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-moderation.component.html</context>
           <context context-type="linenumber">5</context>
@@ -142,9 +142,9 @@
           <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4127416011499804250" datatype="html">
+      <trans-unit id="4127416011499804250" datatype="html" xml:space="preserve">
         <source>Code of conduct</source>
-        <target/>
+        <target state="translated">כללי התנהגות</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-moderation.component.html</context>
           <context context-type="linenumber">12</context>
@@ -158,41 +158,41 @@
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4281738631669138686" datatype="html">
+      <trans-unit id="4281738631669138686" datatype="html" xml:space="preserve">
         <source>Hardware information</source>
-        <target/>
+        <target state="translated">פרטי חומרה</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-tech.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2381859602529023966" datatype="html">
+      <trans-unit id="2381859602529023966" datatype="html" xml:space="preserve">
         <source>Instance</source>
-        <target/>
+        <target state="translated">עותק</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">254</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5066829276646988805" datatype="html">
+      <trans-unit id="5066829276646988805" datatype="html" xml:space="preserve">
         <source>PeerTube</source>
-        <target/>
+        <target state="translated">PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about.component.ts</context>
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1415060111017347427" datatype="html">
+      <trans-unit id="1415060111017347427" datatype="html" xml:space="preserve">
         <source>Network</source>
-        <target state="new">Network</target>
+        <target state="translated">רשת</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about.component.ts</context>
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8602814243662345124" datatype="html">
+      <trans-unit id="8602814243662345124" datatype="html" xml:space="preserve">
         <source>Email is required.</source>
-        <target/>
+        <target state="translated">יש למלא דוא״ל.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -202,9 +202,9 @@
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4591482207344282590" datatype="html">
+      <trans-unit id="4591482207344282590" datatype="html" xml:space="preserve">
         <source>Email must be valid.</source>
-        <target/>
+        <target state="translated">כתובת הדוא״ל חייבת להיות תקפה.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">8</context>
@@ -214,17 +214,17 @@
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4968369344159400023" datatype="html">
+      <trans-unit id="4968369344159400023" datatype="html" xml:space="preserve">
         <source>Your name is required.</source>
-        <target/>
+        <target state="translated">יש למלא שם.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5799695548385507586" datatype="html">
+      <trans-unit id="5799695548385507586" datatype="html" xml:space="preserve">
         <source>Your name must be at least 1 character long.</source>
-        <target/>
+        <target state="translated">השם שלך צריך להיות באורך של תו אחד לפחות.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">20</context>
