@@ -118,6 +118,13 @@ export class ThemeService {
     return instanceTheme
   }
 
+  isUsingDefaultTheme (options: {
+    currentTheme: string
+    config: Pick<ColorPaletteThemeConfig, 'default' | 'builtIn'>
+  }) {
+    return this.themeManager.isUsingDefaultTheme(options)
+  }
+
   private updateCurrentTheme () {
     const currentThemeName = this.getCurrentThemeName()
     if (this.oldThemeName === currentThemeName) return

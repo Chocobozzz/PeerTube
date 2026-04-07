@@ -9,7 +9,7 @@ const debugLogger = debug('peertube:theme')
 type ConfigCSSVariableMap = Record<keyof ServerConfig['theme']['customization'], string>
 
 export type ThemeCustomizationKey = keyof ConfigCSSVariableMap
-export type ColorPaletteThemeConfig = Pick<HTMLServerConfig['theme'], 'default' | 'customization'>
+export type ColorPaletteThemeConfig = Pick<HTMLServerConfig['theme'], 'default' | 'customization' | 'builtIn'>
 
 export class ThemeManager {
   private configVariablesStyle: HTMLStyleElement
@@ -54,8 +54,8 @@ export class ThemeManager {
     this.configuredCSSVariables.clear()
     this.configVariablesStyle.textContent = ''
 
-    // Only inject config variables for the default theme
-    if (currentTheme !== config.default) return
+    // Only inject config variables for the default theme, otherwise we may override the theme colors with wrong values
+    if (!this.isUsingDefaultTheme({ currentTheme, config })) return
 
     const computedStyle = getComputedStyle(document.documentElement)
 
@@ -146,6 +146,23 @@ export class ThemeManager {
 
   removeThemeLink (linkEl: HTMLLinkElement) {
     this.getHeadElement().removeChild(linkEl)
+  }
+
+  isUsingDefaultTheme (options: {
+    currentTheme: string
+    config: Pick<ColorPaletteThemeConfig, 'default' | 'builtIn'>
+  }) {
+    const { currentTheme, config } = options
+
+    if (currentTheme === config.default) return true
+
+    // Only inject config variables for the default theme
+    if (config.default === 'default') {
+      // Accept built-in themes
+      return config.builtIn.some(t => t.name === currentTheme)
+    }
+
+    return false
   }
 
   private canInjectCoreColorPalette () {

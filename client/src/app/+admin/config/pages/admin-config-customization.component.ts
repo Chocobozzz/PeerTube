@@ -196,7 +196,7 @@ export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, Can
   ngOnDestroy () {
     if (this.customConfigSub) this.customConfigSub.unsubscribe()
 
-    this.themeService.updateColorPalette(this.customConfig.theme)
+    this.themeService.updateColorPalette({ builtIn: this.serverService.getHTMLConfig().theme.builtIn, ...this.customConfig.theme })
   }
 
   canDeactivate () {
@@ -215,6 +215,8 @@ export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, Can
       currentAnimationFrame = requestAnimationFrame(() => {
         this.themeService.updateColorPalette({
           ...this.customConfig.theme,
+
+          builtIn: this.serverService.getHTMLConfig().theme.builtIn,
 
           customization: this.buildNewCustomization(formValues)
         })
@@ -321,6 +323,13 @@ export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, Can
     return this.availableThemes.find(t => t.id === this.getDefaultThemeName())?.label
   }
 
+  isUsingDefaultTheme () {
+    this.themeService.isUsingDefaultTheme({
+      currentTheme: this.getCurrentThemeName(),
+      config: this.serverService.getHTMLConfig().theme
+    })
+  }
+
   hasDefaultCustomizationValue (field: ThemeCustomizationKey) {
     return this.customizationResetFields.has(field)
   }
@@ -330,6 +339,8 @@ export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, Can
 
     this.themeService.updateColorPalette({
       ...this.customConfig.theme,
+
+      builtIn: this.serverService.getHTMLConfig().theme.builtIn,
 
       customization: this.buildNewCustomization(this.form.get('theme.customization').value)
     })
