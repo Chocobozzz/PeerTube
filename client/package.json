@@ -94,7 +94,7 @@
     "jschannel": "^1.0.2",
     "linkify-html": "^4.3.2",
     "linkifyjs": "^4.3.2",
-    "lodash-es": "^4.17.23",
+    "lodash-es": "^4.18.1",
     "markdown-it": "14.1.1",
     "markdown-it-emoji": "^3.0.0",
     "ngx-uploadx": "^7.0.1",
