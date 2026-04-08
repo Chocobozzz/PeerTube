@@ -349,6 +349,10 @@ export interface CustomConfig {
       licence: number
     }
 
+    live: {
+      saveReplay: boolean
+    }
+
     p2p: {
       webapp: {
         enabled: boolean

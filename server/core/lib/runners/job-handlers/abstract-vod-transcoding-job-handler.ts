@@ -13,9 +13,10 @@ import { MRunnerJob } from '@server/types/models/runners/index.js'
 import { AbstractJobHandler } from './abstract-job-handler.js'
 import { loadRunnerVideo } from './shared/utils.js'
 
-// eslint-disable-next-line max-len
-export abstract class AbstractVODTranscodingJobHandler <C, U extends RunnerJobUpdatePayload, S extends RunnerJobSuccessPayload> extends AbstractJobHandler<C, U, S> {
-
+// oxlint-disable-next-line max-len
+export abstract class AbstractVODTranscodingJobHandler<C, U extends RunnerJobUpdatePayload, S extends RunnerJobSuccessPayload>
+  extends AbstractJobHandler<C, U, S>
+{
   protected isAbortSupported () {
     return true
   }

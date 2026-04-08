@@ -1,4 +1,4 @@
-import { arrayify, forceNumber } from '@peertube/peertube-core-utils'
+import { forceNumber } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, ServerErrorCode, UserRole, UserUpdateMe } from '@peertube/peertube-models'
 import { isStringArray } from '@server/helpers/custom-validators/search.js'
 import { isNSFWFlagsValid } from '@server/helpers/custom-validators/videos.js'
@@ -7,7 +7,7 @@ import { Hooks } from '@server/lib/plugins/hooks.js'
 import { MUser } from '@server/types/models/user/user.js'
 import express from 'express'
 import { body, param, query } from 'express-validator'
-import { exists, isIdValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
+import { exists, isIdValid, toArray, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
 import { isThemeNameValid } from '../../../helpers/custom-validators/plugins.js'
 import {
   isUserAdminFlagsValid,
@@ -378,7 +378,7 @@ export const listMyVideosValidator = [
 
   query('channelNameOneOf')
     .optional()
-    .customSanitizer(arrayify)
+    .customSanitizer(toArray)
     .custom(isStringArray).withMessage('Should have a valid channelNameOneOf array'),
 
   query('includeCollaborations')

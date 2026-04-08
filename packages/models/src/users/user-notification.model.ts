@@ -46,7 +46,11 @@ export const UserNotificationType = {
 
   INVITED_TO_COLLABORATE_TO_CHANNEL: 23,
   ACCEPTED_TO_COLLABORATE_TO_CHANNEL: 24,
-  REFUSED_TO_COLLABORATE_TO_CHANNEL: 25
+  REFUSED_TO_COLLABORATE_TO_CHANNEL: 25,
+
+  VIDEO_OWNERSHIP_CHANGED_REQUEST: 26,
+  VIDEO_OWNERSHIP_CHANGED_ACCEPTED: 27,
+  VIDEO_OWNERSHIP_CHANGED_REJECTED: 28
 } as const
 
 export type UserNotificationType_Type = typeof UserNotificationType[keyof typeof UserNotificationType]
@@ -168,6 +172,13 @@ export interface UserNotification {
     channel: ActorInfo
     channelOwner: ActorInfo
     account: ActorInfo
+  }
+
+  videoOwnership?: {
+    id: number
+    initiatorAccount: ActorInfo
+    nextOwnerAccount: ActorInfo
+    video: VideoInfo
   }
 
   createdAt: string

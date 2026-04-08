@@ -206,7 +206,7 @@ export class LocalVideoCreator {
 
         if (this.videoAttributes.isLive) {
           const videoLive = new VideoLiveModel({
-            saveReplay: this.liveAttributes.saveReplay || false,
+            saveReplay: this.liveAttributes.saveReplay || CONFIG.DEFAULTS.LIVE.SAVE_REPLAY,
             permanentLive: this.liveAttributes.permanentLive || false,
             latencyMode: this.liveAttributes.latencyMode || LiveVideoLatencyMode.DEFAULT,
             dvrWindow: this.liveAttributes.dvrWindow ?? CONFIG.LIVE.DVR.MAX_WINDOW,
@@ -281,7 +281,7 @@ export class LocalVideoCreator {
         inputPath: this.options.thumbnail.path,
         video: this.video
       }).catch(err => {
-        // eslint-disable-next-line @typescript-eslint/only-throw-error
+        // oxlint-disable-next-line @typescript-eslint/only-throw-error
         throw PeerTubeError.fromError(err, 'INVALID_IMAGE_FILE')
       })
     }

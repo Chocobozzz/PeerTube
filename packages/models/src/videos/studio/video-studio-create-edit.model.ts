@@ -3,10 +3,11 @@ export interface VideoStudioCreateEdition {
 }
 
 export type VideoStudioTask =
-  VideoStudioTaskCut |
-  VideoStudioTaskIntro |
-  VideoStudioTaskOutro |
-  VideoStudioTaskWatermark
+  | VideoStudioTaskCut
+  | VideoStudioTaskIntro
+  | VideoStudioTaskOutro
+  | VideoStudioTaskWatermark
+  | VideoStudioTaskRemoveSegments
 
 export interface VideoStudioTaskCut {
   name: 'cut'
@@ -41,6 +42,17 @@ export interface VideoStudioTaskWatermark {
   }
 }
 
+export interface VideoStudioTaskRemoveSegments {
+  name: 'remove-segments'
+
+  options: {
+    segments: {
+      start: number
+      end: number
+    }[]
+  }
+}
+
 // ---------------------------------------------------------------------------
 
 export function isVideoStudioTaskIntro (v: VideoStudioTask): v is VideoStudioTaskIntro {
@@ -57,4 +69,8 @@ export function isVideoStudioTaskWatermark (v: VideoStudioTask): v is VideoStudi
 
 export function hasVideoStudioTaskFile (v: VideoStudioTask): v is VideoStudioTaskIntro | VideoStudioTaskOutro | VideoStudioTaskWatermark {
   return isVideoStudioTaskIntro(v) || isVideoStudioTaskOutro(v) || isVideoStudioTaskWatermark(v)
+}
+
+export function isVideoStudioTaskRemoveSegments (v: VideoStudioTask): v is VideoStudioTaskRemoveSegments {
+  return v.name === 'remove-segments'
 }

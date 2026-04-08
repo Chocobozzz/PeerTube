@@ -1,4 +1,6 @@
-<div class="muted" i18n>Some jobs are also processed by <a routerLink="/admin/settings/system/runners/jobs-list">remote runners</a>.</div>
+@if (isRunnerEnabled()) {
+  <div class="callout callout-primary mb-4" i18n>Some jobs are also processed by <a routerLink="/admin/settings/system/runners/jobs-list">remote runners</a>.</div>
+}
 
 <my-table
   #table
@@ -11,7 +13,7 @@
   [dataLoader]="dataLoader"
   [inputFilters]="inputFilters"
   refreshButton="true"
-  >
+>
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No job} =1 {1 job} other {{{ totalRecords | myNumberFormatter }} jobs}}</ng-container>
   </ng-template>
@@ -22,23 +24,29 @@
     }
 
     @if (table.isColumnDisplayed('type')) {
-      <td class="job-type" >
-        <span class="pt-badge ellipsis" [ngClass]="getRandomJobTypeBadge(job.type)">{{ job.type }}</span>
+      <td class="job-type">
+        <a routerLink="." [queryParams]="{ type: job.type }" [title]="getTypeFilterTitle(job.type)" class="pt-badge ellipsis" [ngClass]="getRandomJobTypeBadge(job.type)">{{ job.type }}</a>
       </td>
     }
 
     @if (table.isColumnDisplayed('priority')) {
-      <td class="job-priority" >{{ job.priority }}</td>
+      <td class="job-priority">{{ job.priority }}</td>
     }
 
     @if (table.isColumnDisplayed('state') && table.isColumnDisplayed('state')) {
-      <td class="job-state" >
-        <span class="ellipsis" [ngClass]="getJobStateClasses(job.state)">{{ job.state }}</span>
+      <td class="job-state">
+        <a
+          routerLink="."
+          [queryParams]="{ state: job.state }"
+          class="ellipsis"
+          [ngClass]="getJobStateClasses(job.state)"
+          [title]="getStateFilterTitle(job.state)"
+        >{{ job.state }}</a>
       </td>
     }
 
     @if (table.isColumnDisplayed('progress')) {
-      <td class="job-progress" >
+      <td class="job-progress">
         @if (hasProgress(job)) {
           {{ getProgress(job) }}
         }
@@ -46,13 +54,13 @@
     }
 
     @if (table.isColumnDisplayed('createdAt')) {
-      <td class="job-date" >{{ job.createdAt }}</td>
+      <td class="job-date">{{ job.createdAt }}</td>
     }
 
     @if (table.isColumnDisplayed('processed')) {
       <td class="fs-7">
         <div>{{ job.processedOn }}</div>
-        <div>{{ job.finishedOn}}</div>
+        <div>{{ job.finishedOn }}</div>
       </td>
     }
   </ng-template>
@@ -85,6 +93,4 @@
       }
     </div>
   </ng-template>
-
 </my-table>
-

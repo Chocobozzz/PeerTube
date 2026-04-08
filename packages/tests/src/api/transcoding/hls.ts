@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
@@ -141,7 +141,6 @@ describe('Test HLS videos', function () {
 
   for (const concurrency of [ 1, 2 ]) {
     describe(`With concurrency ${concurrency}`, function () {
-
       describe('With Web Video & HLS enabled', function () {
         runTestSuite({ hlsOnly: false, concurrency })
       })

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* oxlint-disable @typescript-eslint/no-unused-expressions */
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { PeerTubeServer, cleanupTests, waitJobs } from '@peertube/peertube-server-commands'
 import { prepareViewsServers, processViewersStats } from '@tests/shared/views.js'

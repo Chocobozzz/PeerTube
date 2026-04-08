@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { AccountBlock, BlockStatus, HttpStatusCode, ResultList, ServerBlock } from '@peertube/peertube-models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
@@ -13,7 +13,6 @@ type ListBlocklistOptions = OverrideCommandOptions & {
 }
 
 export class BlocklistCommand extends AbstractCommand {
-
   listMyAccountBlocklist (options: ListBlocklistOptions) {
     const path = '/api/v1/users/me/blocklist/accounts'
 
@@ -40,10 +39,12 @@ export class BlocklistCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  getStatus (options: OverrideCommandOptions & {
-    accounts?: string[]
-    hosts?: string[]
-  }) {
+  getStatus (
+    options: OverrideCommandOptions & {
+      accounts?: string[]
+      hosts?: string[]
+    }
+  ) {
     const { accounts, hosts } = options
 
     const path = '/api/v1/blocklist/status'
@@ -63,10 +64,12 @@ export class BlocklistCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  addToMyBlocklist (options: OverrideCommandOptions & {
-    account?: string
-    server?: string
-  }) {
+  addToMyBlocklist (
+    options: OverrideCommandOptions & {
+      account?: string
+      server?: string
+    }
+  ) {
     const { account, server } = options
 
     const path = account
@@ -86,10 +89,12 @@ export class BlocklistCommand extends AbstractCommand {
     })
   }
 
-  addToServerBlocklist (options: OverrideCommandOptions & {
-    account?: string
-    server?: string
-  }) {
+  addToServerBlocklist (
+    options: OverrideCommandOptions & {
+      account?: string
+      server?: string
+    }
+  ) {
     const { account, server } = options
 
     const path = account
@@ -111,10 +116,12 @@ export class BlocklistCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  removeFromMyBlocklist (options: OverrideCommandOptions & {
-    account?: string
-    server?: string
-  }) {
+  removeFromMyBlocklist (
+    options: OverrideCommandOptions & {
+      account?: string
+      server?: string
+    }
+  ) {
     const { account, server } = options
 
     const path = account
@@ -130,10 +137,12 @@ export class BlocklistCommand extends AbstractCommand {
     })
   }
 
-  removeFromServerBlocklist (options: OverrideCommandOptions & {
-    account?: string
-    server?: string
-  }) {
+  removeFromServerBlocklist (
+    options: OverrideCommandOptions & {
+      account?: string
+      server?: string
+    }
+  ) {
     const { account, server } = options
 
     const path = account
@@ -149,7 +158,7 @@ export class BlocklistCommand extends AbstractCommand {
     })
   }
 
-  private listBlocklist <T> (options: ListBlocklistOptions, path: string) {
+  private listBlocklist<T> (options: ListBlocklistOptions, path: string) {
     const { start, count, search, sort = '-createdAt' } = options
 
     return this.getRequestBody<ResultList<T>>({
@@ -161,5 +170,4 @@ export class BlocklistCommand extends AbstractCommand {
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
-
 }

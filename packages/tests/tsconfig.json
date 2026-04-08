@@ -4,6 +4,7 @@
     "outDir": "./dist",
     "rootDir": "src",
     "tsBuildInfoFile": "./dist/.tsbuildinfo",
+    "types": [ "node", "mocha" ],
     "paths": {
       "@tests/*": [ "./src/*" ],
       "@server/*": [ "../../server/core/*" ],

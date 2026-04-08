@@ -1,4 +1,4 @@
-import { MultiSelectDesignTokens } from '@primeng/themes/types/multiselect'
+import { MultiSelectDesignTokens } from '@primeuix/themes/types/multiselect'
 
 export default {
   root: {

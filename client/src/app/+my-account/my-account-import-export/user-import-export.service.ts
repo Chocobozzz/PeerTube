@@ -1,11 +1,11 @@
-import { catchError, map } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
 import { RestExtractor, ServerService } from '@app/core'
-import { environment } from 'src/environments/environment'
+import { peertubeTranslate } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, ResultList, UserExport, UserImport } from '@peertube/peertube-models'
 import { forkJoin, of } from 'rxjs'
-import { peertubeTranslate } from '@peertube/peertube-core-utils'
+import { catchError, map } from 'rxjs/operators'
+import { environment } from '../../../environments/environment'
 
 @Injectable()
 export class UserImportExportService {

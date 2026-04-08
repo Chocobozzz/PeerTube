@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
 import { getAudioStream, getVideoStreamDimensionsInfo } from '@peertube/peertube-ffmpeg'
@@ -53,7 +53,6 @@ describe('Test audio only video transcoding', function () {
 
   for (const concurrency of [ 1, 2 ]) {
     describe(`With transcoding concurrency ${concurrency}`, function () {
-
       before(async function () {
         await servers[0].config.setTranscodingConcurrency(concurrency)
       })

@@ -23,7 +23,7 @@
   >
   <ng-template #caption>
     <div class="caption">
-      <div class="left-buttons">
+      <div class="left-block">
         @if (isInSelectionMode()) {
           <my-action-dropdown i18n-label label="Batch actions" theme="primary" [actions]="bulkActions()" [entry]="selectedRows"></my-action-dropdown>
         } @else {

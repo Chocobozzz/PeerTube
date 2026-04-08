@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 import { sortBy } from '@peertube/peertube-core-utils'
 import { MoveVideoStoragePayload, RunnerJobType, RunnerJobVODPayload, VideoState } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'

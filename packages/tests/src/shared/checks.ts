@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
 
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
@@ -130,7 +130,7 @@ export async function testImage (options: {
       await writeFile(fixturePath, body)
     }
 
-    // eslint-disable-next-line preserve-caught-error
+    // oxlint-disable-next-line preserve-caught-error
     throw new Error(`${errorMsg}: ${err.message}`)
   }
 }
@@ -158,8 +158,8 @@ export async function testImageSize (options: {
 
 // ---------------------------------------------------------------------------
 
-export function checkBadStartPagination (url: string, path: string, token?: string, query = {}) {
-  return makeGetRequest({
+export async function checkBadStartPagination (url: string, path: string, token?: string, query = {}) {
+  await makeGetRequest({
     url,
     path,
     token,
@@ -186,8 +186,8 @@ export async function checkBadCountPagination (url: string, path: string, token?
   })
 }
 
-export function checkBadSort (url: string, path: string, token?: string, query = {}) {
-  return makeGetRequest({
+export async function checkBadSort (url: string, path: string, token?: string, query = {}) {
+  await makeGetRequest({
     url,
     path,
     token,

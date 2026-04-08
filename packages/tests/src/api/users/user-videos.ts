@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
 import { HttpStatusCode } from '@peertube/peertube-models'
@@ -111,11 +111,14 @@ describe('Test user videos', function () {
     it('Should be able to upload a video with a user', async function () {
       this.timeout(30000)
 
-      const attributes = {
-        name: 'super user video',
-        fixture: 'video_short.webm'
-      }
-      await server.videos.upload({ token, attributes })
+      await server.videos.upload({
+        token,
+        attributes: {
+          name: 'super user video',
+          fixture: 'video_short.webm',
+          tags: [ 'tag1', 'tag2' ]
+        }
+      })
 
       await server.channels.create({ token, attributes: { name: 'other_channel' } })
     })
@@ -139,6 +142,8 @@ describe('Test user videos', function () {
       const video = data[0]
       expect(video.name).to.equal('super user video')
       expect(video.thumbnails).to.have.lengthOf(5)
+
+      expect(video.tags).to.have.members([ 'tag1', 'tag2' ])
     })
 
     it('Should be able to filter by a specific channel in my videos', async function () {

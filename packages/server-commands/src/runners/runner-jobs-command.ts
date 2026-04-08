@@ -46,7 +46,7 @@ export class RunnerJobsCommand extends AbstractCommand {
       ...options,
 
       path,
-      query: pick(options, [ 'start', 'count', 'sort', 'search', 'stateOneOf' ]),
+      query: pick(options, [ 'start', 'count', 'sort', 'search', 'stateOneOf', 'typeOneOf' ]),
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })

@@ -5,13 +5,12 @@
       "node_modules/@types",
       "client/node_modules/@types"
     ],
-    "baseUrl": "./dist-tmp",
     "paths": {
-      "@server/*": [ "server/core/*" ],
-      "@client/*": [ "client/*" ],
-      "@peertube/peertube-models": [ "peertube-models" ],
-      "@peertube/peertube-typescript-utils": [ "peertube-typescript-utils" ],
-      "@peertube/peertube-transcription": [ "peertube-transcription" ]
+      "@server/*": [ "./dist-tmp/server/core/*" ],
+      "@client/*": [ "./dist-tmp/client/*" ],
+      "@peertube/peertube-models": [ "./dist-tmp/peertube-models" ],
+      "@peertube/peertube-typescript-utils": [ "./dist-tmp/peertube-typescript-utils" ],
+      "@peertube/peertube-transcription": [ "./dist-tmp/peertube-transcription" ]
     }
   }
 }

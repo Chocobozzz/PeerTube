@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions, max-len */
+/* oxlint-disable @typescript-eslint/no-unused-expressions, max-len */
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import { Ctranslate2Transcriber, OpenaiTranscriber, TranscriptFile, TranscriptionModel } from '@peertube/peertube-transcription'
 import { TranscriptFileEvaluator, levenshteinDistance } from '@peertube/peertube-transcription-devtools'

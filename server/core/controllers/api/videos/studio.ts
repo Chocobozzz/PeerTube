@@ -15,6 +15,7 @@ import {
   VideoStudioTaskIntro,
   VideoStudioTaskOutro,
   VideoStudioTaskPayload,
+  VideoStudioTaskRemoveSegments,
   VideoStudioTaskWatermark
 } from '@peertube/peertube-models'
 import { asyncMiddleware, authenticate, videoStudioAddEditionValidator } from '../../../middlewares/index.js'
@@ -105,7 +106,8 @@ const taskPayloadBuilders: {
   'add-intro': buildIntroOutroTask,
   'add-outro': buildIntroOutroTask,
   'cut': buildCutTask,
-  'add-watermark': buildWatermarkTask
+  'add-watermark': buildWatermarkTask,
+  'remove-segments': buildRemoveSegmentsTask
 }
 
 function buildTaskPayload (task: VideoStudioTask, indice: number, files: Express.Multer.File[]): Promise<VideoStudioTaskPayload> {
@@ -141,10 +143,19 @@ async function buildWatermarkTask (task: VideoStudioTaskWatermark, indice: numbe
     options: {
       file: destination,
       watermarkSizeRatio: VIDEO_FILTERS.WATERMARK.SIZE_RATIO,
-      horitonzalMarginRatio: VIDEO_FILTERS.WATERMARK.HORIZONTAL_MARGIN_RATIO,
+      horizontalMarginRatio: VIDEO_FILTERS.WATERMARK.HORIZONTAL_MARGIN_RATIO,
       verticalMarginRatio: VIDEO_FILTERS.WATERMARK.VERTICAL_MARGIN_RATIO
     }
   }
+}
+
+function buildRemoveSegmentsTask (task: VideoStudioTaskRemoveSegments) {
+  return Promise.resolve({
+    name: task.name as 'remove-segments',
+    options: {
+      segments: task.options.segments
+    }
+  })
 }
 
 async function moveStudioFileToPersistentTMP (file: string) {

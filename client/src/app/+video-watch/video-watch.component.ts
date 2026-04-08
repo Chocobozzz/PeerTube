@@ -713,7 +713,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       muted: urlOptions.muted,
       loop: urlOptions.loop,
 
-      playbackRate: urlOptions.playbackRate,
+      playbackRate: urlOptions.playbackRate !== undefined && !isNaN(parseFloat(urlOptions.playbackRate + ''))
+        ? parseFloat(urlOptions.playbackRate + '')
+        : undefined,
 
       instanceName: this.serverConfig.instance.name,
       language: this.localeId,

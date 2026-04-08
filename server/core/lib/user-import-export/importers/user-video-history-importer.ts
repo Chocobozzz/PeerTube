@@ -7,9 +7,10 @@ import { AbstractUserImporter } from './abstract-user-importer.js'
 
 type SanitizedObject = Pick<UserVideoHistoryExportJSON['watchedVideos'][0], 'videoUrl' | 'lastTimecode' | 'archiveFiles'>
 
-// eslint-disable-next-line max-len
-export class UserVideoHistoryImporter extends AbstractUserImporter <UserVideoHistoryExportJSON, UserVideoHistoryExportJSON['watchedVideos'][0], SanitizedObject> {
-
+// oxlint-disable-next-line max-len
+export class UserVideoHistoryImporter
+  extends AbstractUserImporter<UserVideoHistoryExportJSON, UserVideoHistoryExportJSON['watchedVideos'][0], SanitizedObject>
+{
   protected getImportObjects (json: UserVideoHistoryExportJSON) {
     return json.watchedVideos
   }

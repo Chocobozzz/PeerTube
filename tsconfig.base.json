@@ -31,6 +31,9 @@
     "noUnusedLocals": true,
     "skipLibCheck": true,
     "composite": true,
-    "declarationMap": true
+    "declarationMap": true,
+    "types": [
+      "node"
+    ]
   }
 }

@@ -310,16 +310,22 @@ Run the upgrade script (the password it asks is PeerTube's database user passwor
 
 ```bash [GNU/Linux]
 cd /var/www/peertube/peertube-latest/scripts && sudo -H -u peertube ./upgrade.sh
-sudo systemctl restart peertube # Or use your OS command to restart PeerTube if you don't use systemd
 ```
 
 ```bash [FreeBSD]
 cd /var/www/peertube/peertube-latest/scripts && sudo -H -u peertube ./upgrade.sh
 cd /var/www/peertube/peertube-latest && sudo -H -u peertube npm explore sharp -- npm run build
-sudo systemctl restart peertube # Or use your OS command to restart PeerTube if you don't use systemd
 ```
 
 :::
+
+If you have `git` installed on your system, the upgrade will create a `production.yaml.new` file with differences marked as merge conflicts.
+Review this file and replace your existing `production.yaml` with it before restarting.
+
+```bash
+# Make sure you first updated your configuration per the note above
+sudo systemctl restart peertube # Or use your OS command to restart PeerTube if you don't use systemd
+```
 
 You may want to run `sudo -u peertube pnpm store prune` after several upgrades to free up disk space.
 

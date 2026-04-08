@@ -1,4 +1,4 @@
-import { AutoCompleteDesignTokens } from '@primeng/themes/types/autocomplete'
+import { AutoCompleteDesignTokens } from '@primeuix/themes/types/autocomplete'
 
 export default {
   root: {

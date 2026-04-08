@@ -67,7 +67,7 @@ export class FFmpegEdition {
 
       videoFilters: {
         watermarkSizeRatio: number
-        horitonzalMarginRatio: number
+        horizontalMarginRatio: number
         verticalMarginRatio: number
       }
     }
@@ -115,7 +115,7 @@ export class FFmpegEdition {
         inputs: [ `[${videoInput}]`, '[watermark]' ],
         filter: 'overlay',
         options: {
-          x: `main_w - overlay_w - (main_h * ${videoFilters.horitonzalMarginRatio})`,
+          x: `main_w - overlay_w - (main_h * ${videoFilters.horizontalMarginRatio})`,
           y: `main_h * ${videoFilters.verticalMarginRatio}`
         }
       }
@@ -266,6 +266,118 @@ export class FFmpegEdition {
 
     complexFilter.push(concatFilter)
     command.complexFilter(complexFilter)
+
+    await this.commandWrapper.runCommand()
+  }
+
+  async removeSegments (
+    options: BaseStudioOptions & {
+      segments: { start: number, end: number }[]
+    }
+  ) {
+    const { videoInputPath, separatedAudioInputPath, outputPath, inputFileMutexReleaser, segments } = options
+
+    const mainProbe = await ffprobePromise(videoInputPath)
+    const fps = await getVideoStreamFPS(videoInputPath, mainProbe)
+    const { resolution } = await getVideoStreamDimensionsInfo(videoInputPath, mainProbe)
+    const duration = await getVideoStreamDuration(videoInputPath, mainProbe)
+
+    const mainHasAudio = await hasAudioStream(separatedAudioInputPath || videoInputPath)
+
+    const videoInput = 0
+    const audioInput = separatedAudioInputPath ? 1 : 0
+
+    // Compute keep intervals as the inverse of the delete segments
+    const sortedSegments = [ ...segments ].sort((a, b) => a.start - b.start)
+    const keepIntervals: { start: number, end: number }[] = []
+
+    let pos = 0
+    for (const seg of sortedSegments) {
+      if (seg.start > pos) keepIntervals.push({ start: pos, end: seg.start })
+      pos = seg.end
+    }
+    if (pos < duration) keepIntervals.push({ start: pos, end: duration })
+
+    if (keepIntervals.length === 0) throw new Error('No video content remains after applying remove segments')
+
+    const command = this.commandWrapper.buildCommand(this.buildInputs(options), inputFileMutexReleaser)
+      .output(outputPath)
+
+    await presetVOD({
+      commandWrapper: this.commandWrapper,
+
+      videoInputPath,
+      separatedAudioInputPath,
+
+      resolution,
+      videoStreamOnly: false,
+      fps,
+      canCopyAudio: false,
+      canCopyVideo: false
+    })
+
+    const N = keepIntervals.length
+    const complexFilter: FilterSpecification[] = []
+
+    // Split input streams so each keep interval gets its own copy
+    complexFilter.push({
+      inputs: [ `${videoInput}:v` ],
+      filter: 'split',
+      options: N,
+      outputs: keepIntervals.map((_, i) => `vsrc${i}`)
+    })
+
+    if (mainHasAudio) {
+      complexFilter.push({
+        inputs: [ `${audioInput}:a` ],
+        filter: 'asplit',
+        options: N,
+        outputs: keepIntervals.map((_, i) => `asrc${i}`)
+      })
+    }
+
+    // Trim each keep interval and reset timestamps
+    for (let i = 0; i < N; i++) {
+      const { start, end } = keepIntervals[i]
+
+      complexFilter.push(
+        { inputs: [ `vsrc${i}` ], filter: 'trim', options: { start, end }, outputs: [ `vtrimmed${i}` ] },
+        { inputs: [ `vtrimmed${i}` ], filter: 'setpts', options: 'PTS-STARTPTS', outputs: [ `v${i}` ] }
+      )
+
+      if (mainHasAudio) {
+        complexFilter.push(
+          { inputs: [ `asrc${i}` ], filter: 'atrim', options: { start, end }, outputs: [ `atrimmed${i}` ] },
+          { inputs: [ `atrimmed${i}` ], filter: 'asetpts', options: 'PTS-STARTPTS', outputs: [ `a${i}` ] }
+        )
+      }
+    }
+
+    // Concatenate all keep intervals
+    const concatInputs: string[] = []
+    for (let i = 0; i < N; i++) {
+      concatInputs.push(`v${i}`)
+      if (mainHasAudio) concatInputs.push(`a${i}`)
+    }
+
+    const concatOptions: Record<string, number> = { n: N, v: 1 }
+    const concatOutputs = [ 'vout' ]
+
+    if (mainHasAudio) {
+      concatOptions.a = 1
+      concatOutputs.push('aout')
+    }
+
+    complexFilter.push({
+      inputs: concatInputs,
+      filter: 'concat',
+      options: concatOptions,
+      outputs: concatOutputs
+    })
+
+    command.complexFilter(complexFilter)
+    command.outputOption('-map [vout]')
+    if (mainHasAudio) command.outputOption('-map [aout]')
 
     await this.commandWrapper.runCommand()
   }

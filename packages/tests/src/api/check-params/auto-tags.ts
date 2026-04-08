@@ -1,10 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { HttpStatusCode } from '@peertube/peertube-models'
 import {
   PeerTubeServer,
   cleanupTests,
-  createSingleServer, setAccessTokensToServers,
+  createSingleServer,
+  setAccessTokensToServers,
   setDefaultVideoChannel
 } from '@peertube/peertube-server-commands'
 
@@ -49,7 +50,6 @@ describe('Test auto tag policies API validator', function () {
   })
 
   describe('When getting available server auto tags', function () {
-
     it('Should fail without token', async function () {
       await server.autoTags.getServerAvailable({ token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })

@@ -1,6 +1,6 @@
 import { CommonModule, NgClass } from '@angular/common'
 import { Component, inject, viewChild } from '@angular/core'
-import { Notifier } from '@app/core'
+import { AuthService, Notifier } from '@app/core'
 import { Account } from '@app/shared/shared-main/account/account.model'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { VideoOwnershipService } from '@app/shared/shared-main/video/video-ownership.service'
@@ -30,6 +30,7 @@ import { MyAcceptOwnershipComponent } from './my-accept-ownership/my-accept-owne
 export class MyOwnershipComponent {
   private notifier = inject(Notifier)
   private videoOwnershipService = inject(VideoOwnershipService)
+  private authService = inject(AuthService)
 
   readonly myAccountAcceptOwnershipComponent = viewChild<MyAcceptOwnershipComponent>('myAcceptOwnershipComponent')
   readonly table = viewChild<TableComponent<VideoChangeOwnership>>('table')
@@ -67,15 +68,19 @@ export class MyOwnershipComponent {
   }
 
   refuse (videoChangeOwnership: VideoChangeOwnership) {
-    this.videoOwnershipService.refuseOwnership(videoChangeOwnership.id)
+    this.videoOwnershipService.refuse(videoChangeOwnership.id)
       .subscribe({
         next: () => this.table().loadData(),
         error: err => this.notifier.handleError(err)
       })
   }
 
+  isReceiver (videoChangeOwnership: VideoChangeOwnership) {
+    return videoChangeOwnership.nextOwnerAccount.id === this.authService.getUser().account.id
+  }
+
   private _dataLoader (options: DataLoaderOptionsBase) {
-    return this.videoOwnershipService.getOwnershipChanges(options.pagination, options.sort)
+    return this.videoOwnershipService.list(options.pagination, options.sort)
       .pipe(
         map(resultList => ({
           data: resultList.data.map(change => ({

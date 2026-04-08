@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { getAllFiles, getHLS } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoDetails } from '@peertube/peertube-models'
@@ -255,6 +255,8 @@ function runTestSuite (options: {
   if (options.useMockBaseUrl) {
     it('Should update streaming playlist infohash if object storage base url changed', async function () {
       const newBaseMockUrl = `http://example.com`
+
+      await waitJobs(servers)
 
       await servers[1].kill()
 

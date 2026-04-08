@@ -44,6 +44,10 @@ export class TimestampInputComponent implements ControlValueAccessor, OnInit {
     // empty
   }
 
+  onTouched = () => {
+    // empty
+  }
+
   writeValue (timestamp: number) {
     this.timestamp.set(timestamp)
     this.timestampString = this.formatter()(this.timestamp())
@@ -53,8 +57,8 @@ export class TimestampInputComponent implements ControlValueAccessor, OnInit {
     this.propagateChange = fn
   }
 
-  registerOnTouched () {
-    // Unused
+  registerOnTouched (fn: () => void) {
+    this.onTouched = fn
   }
 
   onModelChange () {
@@ -64,6 +68,8 @@ export class TimestampInputComponent implements ControlValueAccessor, OnInit {
   }
 
   onBlur () {
+    this.onTouched()
+
     const maxTimestamp = this.maxTimestamp()
     if (maxTimestamp && this.timestamp() > maxTimestamp) {
       this.writeValue(maxTimestamp)

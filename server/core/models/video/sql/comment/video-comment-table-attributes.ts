@@ -4,10 +4,11 @@ import { ActorImageModel } from '@server/models/actor/actor-image.js'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { CommentAutomaticTagModel } from '@server/models/automatic-tag/comment-automatic-tag.js'
 import { ServerModel } from '@server/models/server/server.js'
+import { getAvatarsJSONAttributes } from '@server/models/shared/sql/actor-helpers.js'
 import { buildSQLAttributes } from '@server/models/shared/table.js'
 import { AutomaticTagModel } from '../../../automatic-tag/automatic-tag.js'
-import { VideoCommentModel } from '../../video-comment.js'
 import { VideoChannelModel } from '../../video-channel.js'
+import { VideoCommentModel } from '../../video-comment.js'
 
 export class VideoCommentTableAttributes {
   @Memoize()
@@ -22,6 +23,13 @@ export class VideoCommentTableAttributes {
       `"Video"."uuid" AS "Video.uuid"`,
       `"Video"."name" AS "Video.name"`
     ].join(', ')
+  }
+
+  // ---------------------------------------------------------------------------
+
+  @Memoize()
+  getAvatarAttributesJSON () {
+    return ActorImageModel.getSQLAttributesJSON().join(', ')
   }
 
   // ---------------------------------------------------------------------------
@@ -43,7 +51,7 @@ export class VideoCommentTableAttributes {
 
   @Memoize()
   getAccountAvatarAttributes () {
-    return ActorImageModel.getSQLAttributes('Account->Actor->Avatars', 'Account.Actor.Avatars.').join(', ')
+    return getAvatarsJSONAttributes('Account->Actor->')
   }
 
   // ---------------------------------------------------------------------------
@@ -65,7 +73,7 @@ export class VideoCommentTableAttributes {
 
   @Memoize()
   getChannelAvatarAttributes () {
-    return ActorImageModel.getSQLAttributes('Video->VideoChannel->Actor->Avatars', 'Video.VideoChannel.Actor.Avatars.').join(', ')
+    return getAvatarsJSONAttributes('Video->VideoChannel->Actor->')
   }
 
   // ---------------------------------------------------------------------------

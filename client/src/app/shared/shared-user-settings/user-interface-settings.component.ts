@@ -10,7 +10,7 @@ import {
 import { I18N_LOCALES } from '@peertube/peertube-core-utils'
 import { HTMLServerConfig, User, UserUpdateMe } from '@peertube/peertube-models'
 import { of, Subject, Subscription, switchMap } from 'rxjs'
-import { SelectOptionsItem } from 'src/types'
+import { SelectOptionsItem } from '@pt-types'
 import { SelectOptionsComponent } from '../shared-forms/select/select-options.component'
 
 type Form = {

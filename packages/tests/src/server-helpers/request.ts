@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
 import { pathExists, remove } from 'fs-extra/esm'
@@ -27,7 +27,6 @@ describe('Request helpers', function () {
     try {
       await doRequestAndSaveToFile(FIXTURE_URLS.file4K, destPath1, { bodyKBLimit: 3 })
     } catch {
-
       await wait(500)
       expect(await pathExists(destPath1)).to.be.false
       return

@@ -3,6 +3,7 @@ import { VideoFile } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import debug from 'debug'
 import videojs from 'video.js'
+import { getStoredPreferredResolution } from '../../peertube-player-local-storage'
 import { PeerTubeResolution, PlayerNetworkInfo, VideojsPlayer, VideojsPlugin, WebVideoPluginOptions } from '../../types'
 
 const debugLogger = debug('peertube:player:web-video-plugin')
@@ -27,7 +28,7 @@ class WebVideoPlugin extends Plugin {
     this.videoFiles = options.videoFiles
     this.videoFileToken = options.videoFileToken
 
-    const videoFile = this.pickAverageVideoFile()
+    const videoFile = this.pickInitialVideoFile()
     if (videoFile) this.updateVideoFile({ videoFile, isUserResolutionChange: false })
 
     this.onLoadedMetadata = () => {
@@ -71,7 +72,6 @@ class WebVideoPlugin extends Plugin {
     debugLogger('Updating web video file to ' + this.currentVideoFile.fileUrl)
 
     const paused = this.player.paused()
-    const playbackRate = this.player.playbackRate()
     const currentTime = this.player.currentTime()
 
     if (!this.onErrorHandler) {
@@ -96,7 +96,6 @@ class WebVideoPlugin extends Plugin {
     }
 
     this.onPlayHandler = () => {
-      this.player.playbackRate(playbackRate)
       this.player.currentTime(currentTime)
 
       this.player.trigger('resolution-change', {
@@ -161,6 +160,24 @@ class WebVideoPlugin extends Plugin {
     return files[Math.floor(files.length / 2)]
   }
 
+  private pickInitialVideoFile () {
+    const preferredResolution = getStoredPreferredResolution()
+    if (preferredResolution === undefined) return this.pickAverageVideoFile()
+
+    const sortedVideoFiles = [ ...this.videoFiles ].sort((a, b) => a.resolution.id - b.resolution.id)
+
+    const exactMatch = sortedVideoFiles.find(videoFile => videoFile.resolution.id === preferredResolution)
+    if (exactMatch) return exactMatch
+
+    const nearestAbove = sortedVideoFiles.find(videoFile => videoFile.resolution.id >= preferredResolution)
+    if (nearestAbove) return nearestAbove
+
+    const nearestBelow = [ ...sortedVideoFiles ].reverse().find(videoFile => videoFile.resolution.id < preferredResolution)
+    if (nearestBelow) return nearestBelow
+
+    return this.pickAverageVideoFile()
+  }
+
   private buildQualities () {
     const resolutions: PeerTubeResolution[] = this.videoFiles.map(videoFile => ({
       id: videoFile.resolution.id,
@@ -175,10 +192,14 @@ class WebVideoPlugin extends Plugin {
 
   private setupNetworkInfoInterval () {
     this.networkInfoInterval = setInterval(() => {
-      return this.player.trigger('network-info', {
+      const player = this.player
+
+      if (!player) return
+
+      return player.trigger('network-info', {
         source: 'web-video',
         http: {
-          downloaded: this.player.bufferedPercent() * this.currentVideoFile?.size
+          downloaded: player.bufferedPercent() * this.currentVideoFile?.size
         }
       } as PlayerNetworkInfo)
     }, 1000)

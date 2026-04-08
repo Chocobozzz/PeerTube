@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common'
 import { booleanAttribute, Component, forwardRef, inject, input, model } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { ScreenService } from '@app/core'
-import { SelectRadioItem } from 'src/types'
+import { SelectRadioItem } from '@pt-types'
 
 @Component({
   selector: 'my-select-radio',

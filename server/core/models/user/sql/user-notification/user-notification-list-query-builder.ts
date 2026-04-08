@@ -146,7 +146,15 @@ export class UserNotificationListQueryBuilder extends AbstractListQuery {
       `"ChannelCollab"."state" AS "ChannelCollab.state"`,
       ...this.getAccountOrChannelAttributes('ChannelCollab->Account', 'ChannelCollab.Account'),
       ...this.getAccountOrChannelAttributes('ChannelCollab->Channel->Account', 'ChannelCollab.Channel.Account'),
-      ...this.getAccountOrChannelAttributes('ChannelCollab->Channel', 'ChannelCollab.Channel')
+      ...this.getAccountOrChannelAttributes('ChannelCollab->Channel', 'ChannelCollab.Channel'),
+
+      `"VideoOwnership"."id" AS "VideoOwnership.id"`,
+      ...this.getAccountOrChannelAttributes('VideoOwnership->Initiator', 'VideoOwnership.Initiator'),
+      ...this.getAccountOrChannelAttributes('VideoOwnership->NextOwner', 'VideoOwnership.NextOwner'),
+      `"VideoOwnership->Video"."id" AS "VideoOwnership.Video.id"`,
+      `"VideoOwnership->Video"."uuid" AS "VideoOwnership.Video.uuid"`,
+      `"VideoOwnership->Video"."name" AS "VideoOwnership.Video.name"`,
+      `"VideoOwnership->Video"."state" AS "VideoOwnership.Video.state"`
     ]
   }
 
@@ -221,7 +229,14 @@ export class UserNotificationListQueryBuilder extends AbstractListQuery {
       ${this.getAccountJoin('ChannelCollab', 'accountId')}
       ${this.getChannelJoin('ChannelCollab', 'channelId', 'Channel')}
       ${this.getAccountJoin('ChannelCollab->Channel', 'accountId')}
-    ) ON "UserNotificationModel"."channelCollaboratorId" = "ChannelCollab"."id"`
+    ) ON "UserNotificationModel"."channelCollaboratorId" = "ChannelCollab"."id"
+
+    LEFT JOIN (
+      "videoChangeOwnership" AS "VideoOwnership"
+      ${this.getAccountJoin('VideoOwnership', 'initiatorAccountId', 'Initiator')}
+      ${this.getAccountJoin('VideoOwnership', 'nextOwnerAccountId', 'NextOwner')}
+      INNER JOIN "video" AS "VideoOwnership->Video" ON "VideoOwnership"."videoId" = "VideoOwnership->Video"."id"
+    ) ON "UserNotificationModel"."videoOwnershipId" = "VideoOwnership"."id"`
   }
 
   // ---------------------------------------------------------------------------
@@ -241,13 +256,13 @@ export class UserNotificationListQueryBuilder extends AbstractListQuery {
     ]
   }
 
-  private getAccountJoin (tableName: string, columnJoin: string) {
-    return `INNER JOIN "account" AS "${tableName}->Account" ON "${tableName}"."${columnJoin}" = "${tableName}->Account"."id" ` +
-      this.getActorJoin(`${tableName}->Account`, 'accountId')
+  private getAccountJoin (tableName: string, columnJoin: string, aliasTableName = 'Account') {
+    return `INNER JOIN "account" AS "${tableName}->${aliasTableName}" ON "${tableName}"."${columnJoin}" = "${tableName}->${aliasTableName}"."id" ` +
+      this.getActorJoin(`${tableName}->${aliasTableName}`, 'accountId')
   }
 
   private getChannelJoin (tableName: string, columnJoin: string, aliasTableName = 'VideoChannel') {
-    // eslint-disable-next-line max-len
+    // oxlint-disable-next-line max-len
     return `INNER JOIN "videoChannel" AS "${tableName}->${aliasTableName}" ON "${tableName}"."${columnJoin}" = "${tableName}->${aliasTableName}".id ` +
       this.getActorJoin(`${tableName}->${aliasTableName}`, 'videoChannelId')
   }

@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
 import { decrypt, encrypt } from '@peertube/peertube-server/core/helpers/peertube-crypto.js'
 
 describe('Encrypt/Descrypt', function () {
-
   it('Should encrypt and decrypt the string', async function () {
     const secret = 'my_secret'
     const str = 'my super string'
@@ -24,7 +23,7 @@ describe('Encrypt/Descrypt', function () {
 
     try {
       decrypted = await decrypt(encrypted, 'my_sicret')
-    } catch { }
+    } catch {}
 
     expect(decrypted).to.not.equal(encrypted)
   })

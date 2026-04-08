@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* oxlint-disable @typescript-eslint/no-unused-expressions */
 import { ffprobePromise } from '@peertube/peertube-ffmpeg'
 import {
   ActivityCreate,
@@ -123,10 +123,12 @@ export async function checkExportFileExists (options: {
 
   if (exists === true) {
     if (withObjectStorage) {
-      return makeRawRequest({ url: redirectedUrl, expectedStatus: HttpStatusCode.OK_200 })
+      await makeRawRequest({ url: redirectedUrl, expectedStatus: HttpStatusCode.OK_200 })
+    } else {
+      await testFileExistsOnFSOrNot(server, 'tmp-persistent', filename, true)
     }
 
-    return testFileExistsOnFSOrNot(server, 'tmp-persistent', filename, true)
+    return
   }
 
   await testFileExistsOnFSOrNot(server, 'tmp-persistent', filename, false)
@@ -217,13 +219,13 @@ export async function prepareImportExportTests (options: {
   // Videos
   const externalVideo = await remoteServer.videos.quickUpload({ name: 'external video', privacy: VideoPrivacy.PUBLIC })
 
-  // eslint-disable-next-line max-len
+  // oxlint-disable-next-line max-len
   const noahPrivateVideo = await server.videos.quickUpload({ name: 'noah private video', token: noahToken, privacy: VideoPrivacy.PRIVATE })
 
   const noahVideo = await server.videos.quickUpload({ name: 'noah public video', token: noahToken, privacy: VideoPrivacy.PUBLIC })
   await server.playerSettings.updateForVideo({ videoId: noahVideo.uuid, theme: 'lucide' })
 
-  // eslint-disable-next-line max-len
+  // oxlint-disable-next-line max-len
   const noahVideo2 = await server.videos.upload({
     token: noahToken,
     attributes: {
@@ -302,7 +304,7 @@ export async function prepareImportExportTests (options: {
   const noahPlaylist = await server.playlists.quickCreate({ displayName: 'noah playlist 1', token: noahToken })
   await server.playlists.quickCreate({ displayName: 'noah playlist 2', token: noahToken, privacy: VideoPlaylistPrivacy.PRIVATE })
 
-  // eslint-disable-next-line max-len
+  // oxlint-disable-next-line max-len
   await server.playlists.addElement({
     playlistId: noahPlaylist.uuid,
     token: noahToken,

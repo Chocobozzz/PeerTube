@@ -1,13 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { HttpStatusCode } from '@peertube/peertube-models'
-import {
-  cleanupTests,
-  createSingleServer,
-  PeerTubeServer,
-  setAccessTokensToServers,
-  waitJobs
-} from '@peertube/peertube-server-commands'
+import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@peertube/peertube-server-commands'
 import { expect } from 'chai'
 
 describe('Test user import API validators', function () {

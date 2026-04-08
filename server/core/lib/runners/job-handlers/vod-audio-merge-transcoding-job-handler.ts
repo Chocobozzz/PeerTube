@@ -10,7 +10,7 @@ import { logger } from '@server/helpers/logger.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { MVideo } from '@server/types/models/index.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
-import { generateRunnerTranscodingVideoInputFileUrl, generateRunnerTranscodingVideoThumbnailFileUrl } from '../runner-urls.js'
+import { generateRunnerTranscodingInputFileUrl, generateRunnerTranscodingVideoThumbnailFileUrl } from '../runner-urls.js'
 import { AbstractVODTranscodingJobHandler } from './abstract-vod-transcoding-job-handler.js'
 import { loadRunnerVideo, onVODWebVideoOrAudioMergeTranscodingJob } from './shared/utils.js'
 
@@ -25,7 +25,7 @@ type CreateOptions = {
   dependsOnRunnerJob?: MRunnerJob
 }
 
-// eslint-disable-next-line max-len
+// oxlint-disable-next-line max-len
 export class VODAudioMergeTranscodingJobHandler
   extends AbstractVODTranscodingJobHandler<CreateOptions, RunnerJobUpdatePayload, VODAudioMergeTranscodingSuccess>
 {
@@ -35,7 +35,7 @@ export class VODAudioMergeTranscodingJobHandler
     const jobUUID = buildUUID()
     const payload: RunnerJobVODAudioMergeTranscodingPayload = {
       input: {
-        audioFileUrl: generateRunnerTranscodingVideoInputFileUrl(jobUUID, video.uuid),
+        audioFileUrl: generateRunnerTranscodingInputFileUrl({ jobUUID, videoUUID: video.uuid, type: 'audio' }),
         previewFileUrl: generateRunnerTranscodingVideoThumbnailFileUrl(jobUUID, video.uuid)
       },
       output: {

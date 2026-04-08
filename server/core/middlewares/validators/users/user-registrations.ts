@@ -1,9 +1,15 @@
+import { pick } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, UserRegister, UserRegistrationRequest, UserRegistrationState } from '@peertube/peertube-models'
-import { exists, isBooleanValid, isIdValid, toBooleanOrNull } from '@server/helpers/custom-validators/misc.js'
-import { isRegistrationModerationResponseValid, isRegistrationReasonValid } from '@server/helpers/custom-validators/user-registration.js'
+import { exists, isBooleanValid, isIdValid, toArray, toBooleanOrNull } from '@server/helpers/custom-validators/misc.js'
+import {
+  isRegistrationModerationResponseValid,
+  isRegistrationReasonValid,
+  isRegistrationStateArrayValid
+} from '@server/helpers/custom-validators/user-registration.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { loadReservedActorName } from '@server/lib/local-actor.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { asyncMiddleware } from '@server/middlewares/async.js'
 import express from 'express'
 import { body, param, query, ValidationChain } from 'express-validator'
 import { isUserDisplayNameValid, isUserPasswordValid, isUserUsernameValid } from '../../../helpers/custom-validators/users.js'
@@ -12,7 +18,13 @@ import { isSignupAllowed, isSignupAllowedForCurrentIP, SignupMode } from '../../
 import { areValidationErrors, checkUsernameOrEmailDoNotAlreadyExist } from '../shared/index.js'
 import { checkRegistrationHandlesDoNotAlreadyExist, checkRegistrationIdExist } from './shared/user-registrations.js'
 
-const usersDirectRegistrationValidator = usersCommonRegistrationValidatorFactory()
+const usersRegistrationValidator = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  if (res.locals.signupMode === 'direct-registration') {
+    return asyncMiddleware(usersCommonRegistrationValidatorFactory())(req, res, next)
+  }
+
+  return asyncMiddleware(usersRequestRegistrationValidator)(req, res, next)
+}
 
 const usersRequestRegistrationValidator = [
   ...usersCommonRegistrationValidatorFactory([
@@ -22,8 +34,10 @@ const usersRequestRegistrationValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const body: UserRegistrationRequest = req.body
+    // CONFIG.SIGNUP.REQUIRES_APPROVAL is only used for /registrations/request endpoint
+    const requiresApproval = (res.locals.signupMode === 'request-registration') || CONFIG.SIGNUP.REQUIRES_APPROVAL
 
-    if (CONFIG.SIGNUP.REQUIRES_APPROVAL !== true) {
+    if (requiresApproval !== true) {
       return res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
         message: req.t('Signup approval is not enabled on this instance')
@@ -39,8 +53,30 @@ const usersRequestRegistrationValidator = [
 
 // ---------------------------------------------------------------------------
 
-function ensureUserRegistrationAllowedFactory (signupMode: SignupMode) {
+const determineSignupMode = [
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const { registrationReason, requiresApproval } = await Hooks.wrapObject(
+      {
+        requiresApproval: CONFIG.SIGNUP.REQUIRES_APPROVAL,
+        registrationReason: req.body.registrationReason
+      },
+      'filter:api.user.signup.requires-approval.result',
+      {
+        body: pick(req.body, [ 'username', 'email', 'registrationReason' ]),
+        headers: req.headers
+      }
+    )
+
+    req.body.registrationReason = registrationReason
+    res.locals.signupMode = requiresApproval ? 'request-registration' : 'direct-registration'
+
+    return next()
+  }
+]
+
+function ensureUserRegistrationAllowedFactory (sm?: SignupMode) {
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const signupMode = sm || res.locals.signupMode // sm is provided by /registrations/request endpoint
     const allowedParams = {
       body: req.body,
       ip: req.ip,
@@ -131,6 +167,11 @@ const listRegistrationsValidator = [
     .optional()
     .custom(exists),
 
+  query('stateOneOf')
+    .optional()
+    .customSanitizer(toArray)
+    .custom(isRegistrationStateArrayValid),
+
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
@@ -142,11 +183,12 @@ const listRegistrationsValidator = [
 
 export {
   acceptOrRejectRegistrationValidator,
+  determineSignupMode,
   ensureUserRegistrationAllowedFactory,
   ensureUserRegistrationAllowedForIP,
   getRegistrationValidator,
   listRegistrationsValidator,
-  usersDirectRegistrationValidator,
+  usersRegistrationValidator,
   usersRequestRegistrationValidator
 }
 

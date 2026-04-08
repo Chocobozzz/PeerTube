@@ -146,7 +146,9 @@ export class PeerTubePlayer {
     if (!this.player) {
       const playerEl = this.options.playerElement()
 
-      const width = playerEl.clientWidth || window.innerWidth
+      // window.innerWidth returns sometimes 0 on firefox if we load the page in background
+      // So we fallback to screen.availWidth which seems more reliable, at least on desktop
+      const width = playerEl.clientWidth || window.innerWidth || screen.availWidth
 
       this.options.playerElement().poster = findAppropriateThumbnail(thumbnails, width, '16:9')?.fileUrl || ''
       return
@@ -237,10 +239,6 @@ export class PeerTubePlayer {
     this.player = videojs(this.options.playerElement(), videojsOptions) as VideojsPlayer
 
     this.player.ready(() => {
-      if (!isNaN(+this.options.playbackRate)) {
-        this.player.playbackRate(+this.options.playbackRate)
-      }
-
       let alreadyFallback = false
 
       const handleError = () => {
@@ -431,6 +429,7 @@ export class PeerTubePlayer {
 
         poster: () => poster,
 
+        playbackRate: this.options.playbackRate,
         autoPlayerRatio: this.options.autoPlayerRatio
       },
       metrics: {

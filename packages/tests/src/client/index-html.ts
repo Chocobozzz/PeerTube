@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { HttpStatusCode, VideoPlaylistCreateResult } from '@peertube/peertube-models'
 import { cleanupTests, makeGetRequest, makeHTMLRequest, PeerTubeServer } from '@peertube/peertube-server-commands'

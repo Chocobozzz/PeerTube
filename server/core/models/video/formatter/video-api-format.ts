@@ -11,8 +11,8 @@ import {
 import { uuidToShort } from '@peertube/peertube-node-utils'
 import { tracer } from '@server/lib/opentelemetry/tracing.js'
 import { getHLSResolutionPlaylistFilename } from '@server/lib/paths.js'
-import { getLocalVideoFileMetadataUrl } from '@server/lib/video-urls.js'
 import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
+import { getLocalVideoFileMetadataUrl } from '@server/lib/video-urls.js'
 import { generateMagnetUri } from '@server/lib/webtorrent.js'
 import { isArray } from '../../../helpers/custom-validators/misc.js'
 import {
@@ -41,6 +41,7 @@ export type VideoFormattingJSONOptions = {
     blockedOwner?: boolean
     automaticTags?: boolean
     liveSchedules?: boolean
+    tags?: boolean
   }
 }
 
@@ -57,6 +58,7 @@ export function guessAdditionalAttributesFromQuery (
       source: !!(query.include & VideoInclude.SOURCE),
       blockedOwner: !!(query.include & VideoInclude.BLOCKED_OWNER),
       automaticTags: !!(query.include & VideoInclude.AUTOMATIC_TAGS),
+      tags: !!(query.include & VideoInclude.TAGS),
       liveSchedules: query.includeScheduledLive
     }
   }
@@ -382,6 +384,10 @@ function buildAdditionalAttributes (video: MVideoFormattable, options: VideoForm
 
   if (add?.liveSchedules === true) {
     result.liveSchedules = (video.VideoLive?.LiveSchedules || []).map(s => s.toFormattedJSON())
+  }
+
+  if (add?.tags === true) {
+    result.tags = (video.Tags || []).map(t => t.name)
   }
 
   return result

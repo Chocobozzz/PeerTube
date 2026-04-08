@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 import { expect } from 'chai'
 import { omit } from '@peertube/peertube-core-utils'
 import { ActorImageType, CustomConfig, HttpStatusCode, LogoType } from '@peertube/peertube-models'

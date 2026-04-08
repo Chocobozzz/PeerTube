@@ -15,7 +15,8 @@ export const VideoChannelActivityAction = {
   SEND_OWNERSHIP_REQUEST: 12,
   ACCEPT_OWNERSHIP_REQUEST: 13,
   REFUSE_OWNERSHIP_REQUEST: 14,
-  UPDATE_EMBED_POLICY: 15
+  UPDATE_EMBED_POLICY: 15,
+  DELETE_OWNERSHIP_REQUEST: 16
 } as const
 
 export type VideoChannelActivityActionType = typeof VideoChannelActivityAction[keyof typeof VideoChannelActivityAction]

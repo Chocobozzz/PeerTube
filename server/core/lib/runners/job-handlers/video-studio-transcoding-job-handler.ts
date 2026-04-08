@@ -13,15 +13,12 @@ import {
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { logger } from '@server/helpers/logger.js'
+import { sequelizeTypescript } from '@server/initializers/database.js'
 import { onVideoStudioEnded, safeCleanupStudioTMPFiles } from '@server/lib/video-studio.js'
 import { MVideoWithFile } from '@server/types/models/index.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
 import { basename } from 'path'
-import {
-  generateRunnerEditionTranscodingVideoInputFileUrl,
-  generateRunnerTranscodingAudioInputFileUrl,
-  generateRunnerTranscodingVideoInputFileUrl
-} from '../runner-urls.js'
+import { generateRunnerEditionTranscodingVideoInputFileUrl, generateRunnerTranscodingInputFileUrl } from '../runner-urls.js'
 import { AbstractJobHandler } from './abstract-job-handler.js'
 import { loadRunnerVideo } from './shared/utils.js'
 
@@ -31,9 +28,10 @@ type CreateOptions = {
   priority: number
 }
 
-// dprint-ignore
-// eslint-disable-next-line max-len
-export class VideoStudioTranscodingJobHandler extends AbstractJobHandler<CreateOptions, RunnerJobUpdatePayload, VideoStudioTranscodingSuccess> {
+// oxlint-disable-next-line max-len
+export class VideoStudioTranscodingJobHandler
+  extends AbstractJobHandler<CreateOptions, RunnerJobUpdatePayload, VideoStudioTranscodingSuccess>
+{
   async create (options: CreateOptions) {
     const { video, priority, tasks } = options
 
@@ -42,10 +40,10 @@ export class VideoStudioTranscodingJobHandler extends AbstractJobHandler<CreateO
 
     const payload: RunnerJobStudioTranscodingPayload = {
       input: {
-        videoFileUrl: generateRunnerTranscodingVideoInputFileUrl(jobUUID, video.uuid),
+        videoFileUrl: generateRunnerTranscodingInputFileUrl({ jobUUID, videoUUID: video.uuid, type: 'video' }),
 
         separatedAudioFileUrl: separatedAudioFile
-          ? [ generateRunnerTranscodingAudioInputFileUrl(jobUUID, video.uuid) ]
+          ? [ generateRunnerTranscodingInputFileUrl({ jobUUID, videoUUID: video.uuid, type: 'audio' }) ]
           : []
       },
       output: {},
@@ -161,9 +159,11 @@ export class VideoStudioTranscodingJobHandler extends AbstractJobHandler<CreateO
     const payload = runnerJob.privatePayload as RunnerJobVideoStudioTranscodingPrivatePayload
     await safeCleanupStudioTMPFiles(payload.originalTasks)
 
-    const video = await loadRunnerVideo(options.runnerJob, this.lTags)
-    if (!video) return
+    await sequelizeTypescript.transaction(async transaction => {
+      const video = await loadRunnerVideo(options.runnerJob, this.lTags, transaction)
+      if (!video || video.state === VideoState.PUBLISHED) return
 
-    return video.setNewState(VideoState.PUBLISHED, false, undefined)
+      await video.setNewState(VideoState.PUBLISHED, false, transaction)
+    })
   }
 }

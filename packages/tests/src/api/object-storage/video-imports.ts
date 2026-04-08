@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
 import { expectStartWith } from '@tests/shared/checks.js'
@@ -49,7 +49,6 @@ describe('Object storage for video import', function () {
   })
 
   describe('Without transcoding', async function () {
-
     before(async function () {
       await server.config.disableTranscoding()
     })
@@ -73,7 +72,6 @@ describe('Object storage for video import', function () {
   })
 
   describe('With transcoding', async function () {
-
     before(async function () {
       await server.config.enableTranscoding({ webVideo: true, hls: true, resolutions: 'max' })
     })

@@ -6,7 +6,6 @@
     "emitDeclarationOnly": true,
     "outDir": "../../dist-tmp/client/",
     "rootDir": "./",
-    "baseUrl": "./",
     "tsBuildInfoFile": "../../dist-tmp/tsconfig.client.types.tsbuildinfo",
     "paths": {
       "@client/*": [ "../../../../client/src/*" ]

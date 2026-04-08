@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import { signAndContextify } from '@peertube/peertube-server/core/helpers/activity-pub-utils.js'

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
 
 import { uuidRegex } from '@peertube/peertube-core-utils'
 import { ffprobePromise } from '@peertube/peertube-ffmpeg'
@@ -360,7 +360,7 @@ export async function saveVideoInServers (servers: PeerTubeServer[], uuid: strin
 export function checkUploadVideoParam (options: {
   server: PeerTubeServer
   token: string
-  attributes: Partial<VideoEdit>
+  attributes: Partial<VideoEdit> & { filename?: string }
   expectedStatus?: HttpStatusCodeType
   completedExpectedStatus?: HttpStatusCodeType
   mode?: 'legacy' | 'resumable'
@@ -500,20 +500,20 @@ export async function checkThumbnails (options: {
     await testImageGeneratedByFFmpeg({ name: thumbnail.filename, url: videoThumbnail.fileUrl })
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-deprecated
+  // oxlint-disable-next-line @typescript-eslint/no-deprecated
   await testImageGeneratedByFFmpeg({
     name: thumbnails.find(t => t.width === 280 && t.height === 157).filename,
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
+    // oxlint-disable-next-line @typescript-eslint/no-deprecated
     url: server.url + entity.thumbnailPath
   })
 
   const preview = thumbnails.find(t => t.width === 1920 && t.height === 1080)
 
   if (video && preview) {
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
+    // oxlint-disable-next-line @typescript-eslint/no-deprecated
     await testImageGeneratedByFFmpeg({
       name: preview.filename,
-      // eslint-disable-next-line @typescript-eslint/no-deprecated
+      // oxlint-disable-next-line @typescript-eslint/no-deprecated
       url: server.url + video.previewPath
     })
   }

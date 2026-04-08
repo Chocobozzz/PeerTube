@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
 import { VideoCommentPolicy, VideoDetails, VideoPrivacy } from '@peertube/peertube-models'
 import {
   cleanupTests,
@@ -10,6 +9,7 @@ import {
   setDefaultVideoChannel
 } from '@peertube/peertube-server-commands'
 import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
+import { expect } from 'chai'
 
 describe('Test config defaults', function () {
   let server: PeerTubeServer
@@ -27,19 +27,21 @@ describe('Test config defaults', function () {
 
   describe('Default publish values', function () {
     before(async function () {
-      const overrideConfig = {
-        defaults: {
-          publish: {
-            comments_policy: 2,
-            download_enabled: false,
-            privacy: VideoPrivacy.INTERNAL,
-            licence: 4
+      await server.config.updateExistingConfig({
+        newConfig: {
+          defaults: {
+            publish: {
+              commentsPolicy: 2,
+              downloadEnabled: false,
+              privacy: VideoPrivacy.INTERNAL,
+              licence: 4
+            },
+            live: {
+              saveReplay: true
+            }
           }
         }
-      }
-
-      await server.kill()
-      await server.run(overrideConfig)
+      })
     })
 
     const attributes = {
@@ -110,12 +112,16 @@ describe('Test config defaults', function () {
       const { id } = await server.live.create({
         fields: {
           ...attributes,
+
           channelId
         }
       })
 
       const video = await server.videos.get({ id })
       checkVideo(video)
+
+      const live = await server.live.get({ videoId: id })
+      expect(live.saveReplay).to.be.true
     })
   })
 

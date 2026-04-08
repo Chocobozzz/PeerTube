@@ -107,6 +107,7 @@ export interface VideoAdditionalAttributes {
   videoSource: VideoSource
 
   automaticTags: string[]
+  tags: string[]
 
   liveSchedules: LiveVideoScheduleEdit[]
 }

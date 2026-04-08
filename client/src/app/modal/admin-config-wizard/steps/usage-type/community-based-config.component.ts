@@ -12,7 +12,7 @@ import {
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-options.component'
 import { ColorPickerModule } from 'primeng/colorpicker'
-import { SelectOptionsItem } from 'src/types'
+import { SelectOptionsItem } from '@pt-types'
 import { EnabledDisabled, RegistrationType, UsageType } from './usage-type.model'
 
 type Form = {
@@ -32,7 +32,7 @@ type Form = {
     ColorPickerModule,
     CdkStepperModule,
     SelectOptionsComponent
-]
+  ]
 })
 export class CommunityBasedConfigComponent implements OnInit {
   private formReactiveService = inject(FormReactiveService)

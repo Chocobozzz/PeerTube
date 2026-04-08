@@ -1,11 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { getAllFiles, getMaxTheoreticalBitrate, getMinTheoreticalBitrate } from '@peertube/peertube-core-utils'
-import {
-  getVideoStreamBitrate,
-  getVideoStreamDimensionsInfo,
-  getVideoStreamFPS
-} from '@peertube/peertube-ffmpeg'
+import { getVideoStreamBitrate, getVideoStreamDimensionsInfo, getVideoStreamFPS } from '@peertube/peertube-ffmpeg'
 import { VideoResolution } from '@peertube/peertube-models'
 import {
   cleanupTests,

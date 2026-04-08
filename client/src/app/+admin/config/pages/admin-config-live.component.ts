@@ -19,8 +19,8 @@ import {
 } from '@app/shared/form-validators/form-validator.model'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { CustomConfig } from '@peertube/peertube-models'
+import { SelectOptionsItem } from '@pt-types'
 import { Subscription } from 'rxjs'
-import { SelectOptionsItem } from 'src/types/select-options-item.model'
 import { AdminConfigService, FormResolutions, ResolutionOption } from '../../../shared/shared-admin/admin-config.service'
 import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
 import { SelectCustomValueComponent } from '../../../shared/shared-forms/select/select-custom-value.component'
@@ -60,6 +60,12 @@ type Form = {
     dvr: FormGroup<{
       enabled: FormControl<boolean>
       maxWindow: FormControl<number>
+    }>
+  }>
+
+  defaults: FormGroup<{
+    live: FormGroup<{
+      saveReplay: FormControl<boolean>
     }>
   }>
 }
@@ -163,6 +169,12 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
           enabled: null,
           maxWindow: MAX_DVR_WINDOW_MINUTES_VALIDATOR
         }
+      },
+
+      defaults: {
+        live: {
+          saveReplay: null
+        }
       }
     }
 
@@ -189,6 +201,10 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
 
   getLiveRTMPPort () {
     return this.server.getHTMLConfig().live.rtmp.port
+  }
+
+  get defaultsLiveSaveReplayControl () {
+    return this.form.controls.defaults.controls.live.controls.saveReplay
   }
 
   isLiveEnabled () {
@@ -237,6 +253,8 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
 
   save () {
     const value = {
+      ...this.form.value,
+
       live: {
         ...this.form.value.live,
 
@@ -268,6 +286,8 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
 
   private buildFormValue (customConfig: CustomConfig): FormDefaultTyped<Form> {
     return {
+      ...customConfig,
+
       live: {
         ...customConfig.live,
 

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { maxBy } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoCreateResult, VideoPlaylistCreateResult, VideoPrivacy } from '@peertube/peertube-models'

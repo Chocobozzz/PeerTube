@@ -1,4 +1,4 @@
-/* eslint-disable no-useless-call */
+/* oxlint-disable no-useless-call */
 
 /*
   Different from 'utils' because we don't import other PeerTube modules.

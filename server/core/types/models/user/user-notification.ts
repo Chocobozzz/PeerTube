@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/prefer-namespace-keyword */
+/* oxlint-disable @typescript-eslint/prefer-namespace-keyword */
 
 import { PickWith, PickWithOpt } from '@peertube/peertube-typescript-utils'
 import { VideoAbuseModel } from '@server/models/abuse/video-abuse.js'
@@ -9,6 +9,7 @@ import { UserNotificationModel } from '@server/models/user/user-notification.js'
 import { UserRegistrationModel } from '@server/models/user/user-registration.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoChannelCollaboratorModel } from '@server/models/video/video-channel-collaborator.js'
+import { VideoChangeOwnershipModel } from '@server/models/video/video-change-ownership.js'
 import { AbuseModel } from '../../../models/abuse/abuse.js'
 import { AccountModel } from '../../../models/account/account.js'
 import { ActorFollowModel } from '../../../models/actor/actor-follow.js'
@@ -118,6 +119,12 @@ export namespace UserNotificationIncludes {
     & Pick<VideoChannelCollaboratorModel, 'id' | 'state'>
     & PickWith<VideoChannelCollaboratorModel, 'Account', AccountIncludeActor>
     & PickWith<VideoChannelCollaboratorModel, 'Channel', VideoChannelIncludeActorOwnerActor>
+
+  export type VideoOwnershipInclude =
+    & Pick<VideoChangeOwnershipModel, 'id'>
+    & PickWith<VideoChangeOwnershipModel, 'Initiator', AccountIncludeActor>
+    & PickWith<VideoChangeOwnershipModel, 'NextOwner', AccountIncludeActor>
+    & PickWith<VideoChangeOwnershipModel, 'Video', VideoInclude>
 }
 
 // ############################################################################
@@ -137,6 +144,7 @@ export type MUserNotification = Omit<
   | 'UserRegistration'
   | 'VideoCaption'
   | 'VideoChannelCollaborator'
+  | 'VideoOwnership'
 >
 
 // ############################################################################
@@ -155,3 +163,4 @@ export type UserNotificationModelForApi =
   & Use<'UserRegistration', UserNotificationIncludes.UserRegistrationInclude>
   & Use<'VideoCaption', UserNotificationIncludes.VideoCaptionInclude>
   & Use<'VideoChannelCollaborator', UserNotificationIncludes.VideoChannelCollaboratorInclude>
+  & Use<'VideoOwnership', UserNotificationIncludes.VideoOwnershipInclude>

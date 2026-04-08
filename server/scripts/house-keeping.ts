@@ -113,4 +113,6 @@ async function deleteRemoteFiles () {
   }, { concurrency: 20 })
 
   console.log('Remote storyboard files deleted!')
+
+  console.log('All remote files deleted! Please restart PeerTube.')
 }

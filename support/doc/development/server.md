@@ -63,7 +63,7 @@ Some of these may be optional (for example your new endpoint may not need to sen
    - Add your notification to `server/core/lib/notifier/notifier.ts`
    - Create the email template in `server/core/assets/email-templates`:
      + A text version is automatically generated from the HTML
-     + The template usually extends `../common/grettings` that already says "Hi" and "Cheers". You just have to write the title and the content blocks that will be inserted in the appropriate places in the HTML template
+     + The template usually extends `../common/greetings` that already says "Hi" and "Cheers". You just have to write the title and the content blocks that will be inserted in the appropriate places in the HTML template
    - If you need to associate a new table with `userNotification`:
      + Associate the new table in `UserNotificationModel` (don't forget the index)
      + Add the object property in the API model definition (`packages/models/src/users/user-notification.model.ts`)
@@ -75,8 +75,6 @@ Some of these may be optional (for example your new endpoint may not need to sen
    - Add your command file in `index.ts` of current directory
    - Instantiate your command class in `packages/server-commands/src/server/core.ts`
    - Create your test file in `server/core/tests/api/check-params` to test middleware validators/authentification/user rights (offensive tests)
-   - Add it to `server/core/tests/api/check-params/index.ts`
    - Create your test file in `server/core/tests/api` to test your new endpoints
-   - Add it to `index.ts` of current directory
    - Add your notification test in `server/core/tests/api/notifications`
  * Update REST API documentation in `support/doc/api/openapi.yaml`

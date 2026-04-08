@@ -51,10 +51,11 @@ export class Video implements VideoServerModel {
   name: string
   serverHost: string
 
-  thumbnailPath: string
-  thumbnailUrl: string
-  previewPath: string
-  previewUrl: string
+  thumbnailPath: never
+  thumbnailUrl: never
+  previewPath: never
+  previewUrl: never
+
   thumbnails: Thumbnail[]
 
   aspectRatio: number
@@ -123,6 +124,7 @@ export class Video implements VideoServerModel {
 
   videoSource?: VideoSource
 
+  tags?: string[]
   automaticTags?: string[]
 
   comments: number
@@ -157,8 +159,6 @@ export class Video implements VideoServerModel {
       ? hash.liveSchedules.map(schedule => ({ startAt: new Date(schedule.startAt.toString()) }))
       : null
 
-    // Required for search index backward compatibility, as `thumbnails` was introduced in peertube 8.1
-    this.thumbnailUrl = hash.thumbnailUrl
     this.thumbnails = hash.thumbnails
 
     this.duration = hash.duration
@@ -228,6 +228,7 @@ export class Video implements VideoServerModel {
 
     this.aspectRatio = hash.aspectRatio
 
+    this.tags = hash.tags
     this.automaticTags = hash.automaticTags
 
     this.comments = hash.comments

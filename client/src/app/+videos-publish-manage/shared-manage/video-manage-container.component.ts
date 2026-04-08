@@ -112,6 +112,9 @@ export class VideoManageContainerComponent implements OnInit, OnDestroy {
 
     if (this.hasFormErrors()) {
       this.displayFormErrorsMsg = true
+
+      window.scrollTo({ top: 0, behavior: 'instant' })
+
       return
     }
 

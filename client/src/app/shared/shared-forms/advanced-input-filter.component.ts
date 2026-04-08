@@ -40,7 +40,8 @@ export type SelectFilterDef<ServiceParameters extends Record<string, any>> = {
     key: Key
     title: string
     items: SelectOptionsItem<ServiceParameters[Key]>[]
-    clearable?: boolean
+    clearable?: boolean // default true
+    filter?: boolean // default false
   }
 }[Extract<keyof ServiceParameters, string>]
 
@@ -169,14 +170,20 @@ export class AdvancedInputFilterComponent<ServiceParameters extends Record<strin
   readonly hasFilters = computed(() => this.filters().length > 0)
 
   private routeSub: Subscription
+  private defaultValuesToLoad: Partial<ServiceParameters> = {}
 
   // ---------------------------------------------------------------------------
   // Lifecycle
   // ---------------------------------------------------------------------------
 
   ngOnInit () {
+    this.defaultValuesToLoad = this.defaultValues() || {}
+
     this.routeSub = this.route.queryParams.subscribe(params => {
-      const initial = parseQueryParamsToAdvancedFilters(this.filters(), params, this.defaultValues())
+      const initial = parseQueryParamsToAdvancedFilters(this.filters(), params, this.defaultValuesToLoad)
+
+      // Only load defaults values on initial load
+      this.defaultValuesToLoad = {}
 
       this.filterState.set({ ...initial })
       this.activeFilters.set({ ...initial })
@@ -192,7 +199,9 @@ export class AdvancedInputFilterComponent<ServiceParameters extends Record<strin
   // ---------------------------------------------------------------------------
 
   isOptionSelected (def: OptionsFilterDef<ServiceParameters>, optionValue: string): boolean {
-    return this.filterState()[def.key] === optionValue
+    const current = this.filterState()[def.key]
+
+    return current === optionValue || current + '' === optionValue
   }
 
   onOptionClick (def: OptionsFilterDef<ServiceParameters>, optionValue: string) {
@@ -276,6 +285,7 @@ export class AdvancedInputFilterComponent<ServiceParameters extends Record<strin
 
   applyFilters (dropdown: NgbDropdown) {
     this.activeFilters.set({ ...this.filterState() })
+
     this.emitOutputs()
 
     dropdown.close()

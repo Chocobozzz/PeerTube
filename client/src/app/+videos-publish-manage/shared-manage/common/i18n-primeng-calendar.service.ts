@@ -83,8 +83,4 @@ export class I18nPrimengCalendarService {
   getDateFormat () {
     return $localize`:Date format in this locale.:yy-mm-dd`
   }
-
-  getVideoPublicationYearRange () {
-    return '1880:' + (new Date()).getFullYear()
-  }
 }

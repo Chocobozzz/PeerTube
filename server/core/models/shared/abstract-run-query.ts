@@ -8,7 +8,7 @@ import { Col } from 'sequelize/lib/utils'
 
 export class AbstractRunQuery {
   protected query: string
-  protected replacements: any = {}
+  protected replacements: Record<string, string | number | string[] | number[]> = {}
 
   protected queryConfig = ''
 
@@ -29,6 +29,12 @@ export class AbstractRunQuery {
     }
 
     return this.sequelize.query<any>(this.query, queryOptions)
+  }
+
+  protected buildCTE (cte: string[]) {
+    if (!cte.length) return ''
+
+    return `WITH ${cte.join(', ')} `
   }
 
   protected buildSelect (attributes: string[]) {

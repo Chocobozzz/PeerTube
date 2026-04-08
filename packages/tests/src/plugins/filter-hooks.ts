@@ -1,9 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import {
   HttpStatusCode,
   MyUser,
   PeerTubeProblemDocument,
+  UserRegistrationState,
   VideoDetails,
   VideoImportState,
   VideoPlaylist,
@@ -25,7 +26,7 @@ import {
   waitJobs
 } from '@peertube/peertube-server-commands'
 import { expectEndWith } from '@tests/shared/checks.js'
-import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
+import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
 import { expect } from 'chai'
 import { FIXTURE_URLS } from '../shared/fixture-urls.js'
 
@@ -70,7 +71,7 @@ describe('Test plugin filter hooks', function () {
     await servers[0].config.updateExistingConfig({
       newConfig: {
         live: { enabled: true },
-        signup: { enabled: true },
+        signup: { enabled: true, limit: -1 },
         videoFile: {
           update: {
             enabled: true
@@ -485,6 +486,27 @@ describe('Test plugin filter hooks', function () {
       const user = await servers[0].users.getMyInfo() as MyUser & { customParam: string }
 
       expect(user.customParam).to.equal('Customized')
+    })
+  })
+
+  describe('Should run filter:api.user.signup.requires-approval.result', function () {
+    before(async function () {
+      await servers[0].config.updateExistingConfig({ newConfig: { signup: { requiresApproval: false } } })
+    })
+
+    it('Should require approval', async function () {
+      await servers[0].registrations.register({ username: 'waiting_john' })
+      const registrations = await servers[0].registrations.list()
+
+      expect(registrations.data[0].username).to.equal('waiting_john')
+      expect(registrations.data[0].state.id).to.equal(UserRegistrationState.PENDING)
+    })
+
+    it('Should not require approval', async function () {
+      await servers[0].registrations.register({ username: 'anybody' })
+      const users = await servers[0].users.list()
+
+      expect(users.data.map(reg => reg.username)).to.contain('anybody')
     })
   })
 
@@ -906,7 +928,7 @@ describe('Test plugin filter hooks', function () {
       const { total } = await servers[0].channels.list({ start: 0, count: 1 })
 
       // plugin do +1 to the total parameter
-      expect(total).to.equal(6)
+      expect(total).to.equal(7)
     })
 
     it('Should run filter:api.video-channel.get.result', async function () {

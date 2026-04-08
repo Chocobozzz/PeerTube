@@ -188,7 +188,7 @@ export class LocalVideoViewerModel extends SequelizeModel<LocalVideoViewerModel>
 
       // Add viewers that were already here, before our start date
       const beforeWatchersQuery = startDate
-        // eslint-disable-next-line max-len
+        // oxlint-disable-next-line max-len
         ? `SELECT COUNT(*) AS "total" FROM "localVideoViewer" WHERE "localVideoViewer"."startDate" < :startDate AND "localVideoViewer"."endDate" >= :startDate`
         : `SELECT 0 AS "total"`
 

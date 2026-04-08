@@ -1,4 +1,3 @@
-
 import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ServerService } from '@app/core'
@@ -39,7 +38,7 @@ type Form = {
     PeertubeCheckboxComponent,
     GlobalIconComponent,
     SelectPlayerThemeComponent
-]
+  ]
 })
 export class VideoCustomizationComponent implements OnInit, OnDestroy {
   private formReactiveService = inject(FormReactiveService)
@@ -55,7 +54,6 @@ export class VideoCustomizationComponent implements OnInit, OnDestroy {
   videoChannel: Pick<VideoChannel, 'name' | 'displayName'>
 
   calendarDateFormat: string
-  myYearRange: string
 
   serverConfig: HTMLServerConfig
 
@@ -63,7 +61,6 @@ export class VideoCustomizationComponent implements OnInit, OnDestroy {
 
   constructor () {
     this.calendarDateFormat = this.i18nPrimengCalendarService.getDateFormat()
-    this.myYearRange = this.i18nPrimengCalendarService.getVideoPublicationYearRange()
   }
 
   ngOnInit () {

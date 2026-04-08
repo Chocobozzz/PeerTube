@@ -18,7 +18,7 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: master
           fetch-depth: 0
@@ -47,7 +47,7 @@ jobs:
     steps:
       -
         name: Checkout develop
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ matrix.ref }}
 

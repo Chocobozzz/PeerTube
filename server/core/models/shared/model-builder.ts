@@ -1,3 +1,4 @@
+import { arrayify } from '@peertube/peertube-core-utils'
 import { logger } from '@server/helpers/logger.js'
 import isPlainObject from 'lodash-es/isPlainObject.js'
 import { ModelStatic, Sequelize, Model as SequelizeModel } from 'sequelize'
@@ -40,7 +41,10 @@ export class ModelBuilder<T extends SequelizeModel> {
     VideoPlaylists: 'VideoPlaylistModel',
     NotificationSetting: 'UserNotificationSettingModel',
     VideoChannelCollaborators: 'VideoChannelCollaboratorModel',
-    Tags: 'TagModel'
+    Tags: 'TagModel',
+    Initiator: 'AccountModel',
+    NextOwner: 'AccountModel',
+    VideoOwnership: 'VideoChangeOwnershipModel'
   }
 
   constructor (private readonly sequelize: Sequelize) {
@@ -64,13 +68,14 @@ export class ModelBuilder<T extends SequelizeModel> {
     const { created, model } = this.createOrFindModel(json, rootTableName, keyPath)
 
     for (const key of Object.keys(json)) {
-      const value = json[key]
-      if (!value) continue
+      const valueOrArray = json[key]
+      if (!valueOrArray) continue
 
       const tableName = this.buildTableName(key)
 
-      // Child model
-      if (isPlainObject(value)) {
+      // Child model?
+      // Array of children or plain object
+      if ((Array.isArray(valueOrArray) && valueOrArray.length !== 0 && isPlainObject(valueOrArray[0])) || isPlainObject(valueOrArray)) {
         const Model = this.findModelBuilder(rootTableName)
         const association = Model.associations[tableName]
 
@@ -85,18 +90,22 @@ export class ModelBuilder<T extends SequelizeModel> {
           continue
         }
 
-        const { created, model: subModel } = this.createModel(value, tableName, `${keyPath}.${json.id}.${key}`)
+        const valueArray = arrayify(valueOrArray)
 
-        if (association.isMultiAssociation && !Array.isArray(model[tableName])) {
-          model[tableName] = []
-        }
+        for (const value of valueArray) {
+          const { created, model: subModel } = this.createModel(value, tableName, `${keyPath}.${json.id}.${key}`)
 
-        if (!created || !subModel) continue
+          if (association.isMultiAssociation && !Array.isArray(model[tableName])) {
+            model[tableName] = []
+          }
 
-        if (Array.isArray(model[tableName])) {
-          model[tableName].push(subModel)
-        } else {
-          model[tableName] = subModel
+          if (!created || !subModel) continue
+
+          if (Array.isArray(model[tableName])) {
+            model[tableName].push(subModel)
+          } else {
+            model[tableName] = subModel
+          }
         }
       }
     }

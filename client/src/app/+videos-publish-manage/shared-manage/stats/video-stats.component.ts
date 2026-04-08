@@ -21,7 +21,7 @@ import { ChartConfiguration, ChartData, defaults as ChartJSDefaults, ChartOption
 import zoomPlugin from 'chartjs-plugin-zoom'
 import { ChartModule } from 'primeng/chart'
 import { Observable, of } from 'rxjs'
-import { SelectOptionsItem } from 'src/types'
+import { SelectOptionsItem } from '@pt-types'
 import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'

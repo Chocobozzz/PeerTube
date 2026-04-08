@@ -1,5 +1,4 @@
 export * from './local-video-viewer-watch-section.js'
-export * from './local-video-viewer-watch-section.js'
 export * from './local-video-viewer.js'
 export * from './storyboard.js'
 export * from './schedule-video-update.js'

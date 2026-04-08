@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { VideoCreateResult } from '@peertube/peertube-models'
 import {
@@ -523,6 +523,10 @@ describe('Test video comments', function () {
         const threads = await server.comments.listThreads({ videoId: video3.uuid })
         expect(threads.total).to.equal(0)
       }
+    })
+
+    after(async function () {
+      await cleanupTests([ server2, server3 ])
     })
   })
 

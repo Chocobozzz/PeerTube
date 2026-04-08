@@ -16,7 +16,7 @@ import { MRunnerJob } from '@server/types/models/runners/index.js'
 import { move } from 'fs-extra/esm'
 import { join } from 'path'
 import { buildSpriteSize, buildTotalSprites, findGridSize, insertStoryboardInDatabase } from '../../storyboard.js'
-import { generateRunnerTranscodingVideoInputFileUrl } from '../runner-urls.js'
+import { generateRunnerTranscodingInputFileUrl } from '../runner-urls.js'
 import { AbstractJobHandler } from './abstract-job-handler.js'
 
 const lTagsBase = loggerTagsFactory('storyboard', 'runners')
@@ -48,7 +48,7 @@ export class VideoStoryboardJobHandler extends AbstractJobHandler<CreateOptions,
 
       const payload: RunnerJobGenerateStoryboardPayload = {
         input: {
-          videoFileUrl: generateRunnerTranscodingVideoInputFileUrl(jobUUID, videoUUID)
+          videoFileUrl: generateRunnerTranscodingInputFileUrl({ jobUUID, videoUUID, type: 'video' })
         },
         sprites: {
           size: { height: spriteHeight, width: spriteWidth },

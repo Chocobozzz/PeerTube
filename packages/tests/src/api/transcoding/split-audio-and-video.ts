@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { sortBy } from '@peertube/peertube-core-utils'
 import { HLSTranscodingPayload, HttpStatusCode } from '@peertube/peertube-models'

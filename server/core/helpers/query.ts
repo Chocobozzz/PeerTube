@@ -30,7 +30,8 @@ function pickCommonVideoQuery (query: VideosCommonQueryAfterSanitize) {
     'hasWebVideoFiles',
     'search',
     'excludeAlreadyWatched',
-    'autoTagOneOf'
+    'autoTagOneOf',
+    'stateOneOf'
   ])
 }
 

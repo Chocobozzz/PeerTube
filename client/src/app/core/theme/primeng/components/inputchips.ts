@@ -1,4 +1,4 @@
-import { InputChipsDesignTokens } from '@primeng/themes/types/inputchips'
+import { InputChipsDesignTokens } from '@primeuix/themes/types/inputchips'
 
 export default {
   root: {

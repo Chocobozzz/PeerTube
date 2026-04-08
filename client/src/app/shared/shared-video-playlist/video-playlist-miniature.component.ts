@@ -1,7 +1,7 @@
 import { NgClass } from '@angular/common'
 import { Component, OnInit, booleanAttribute, inject, input } from '@angular/core'
 import { MarkdownService } from '@app/core'
-import { LinkType } from 'src/types/link.type'
+import { LinkType } from '@pt-types'
 import { LinkComponent } from '../shared-main/common/link.component'
 import { FromNowPipe } from '../shared-main/date/from-now.pipe'
 import { VideoPlaylist } from './video-playlist.model'

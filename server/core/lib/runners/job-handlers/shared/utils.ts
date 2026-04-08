@@ -9,6 +9,7 @@ import { onWebVideoFileTranscoding } from '@server/lib/transcoding/web-transcodi
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideoFull } from '@server/types/models/index.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
+import { Transaction } from 'sequelize'
 
 export async function onVODWebVideoOrAudioMergeTranscodingJob (options: {
   video: MVideoFull
@@ -27,10 +28,10 @@ export async function onVODWebVideoOrAudioMergeTranscodingJob (options: {
   await onTranscodingEnded({ isNewVideo: privatePayload.isNewVideo, moveVideoToNextState: privatePayload.canMoveVideoState, video })
 }
 
-export async function loadRunnerVideo (runnerJob: MRunnerJob, lTags: LoggerTagsFn) {
+export async function loadRunnerVideo (runnerJob: MRunnerJob, lTags: LoggerTagsFn, transaction?: Transaction) {
   const videoUUID = runnerJob.privatePayload.videoUUID
 
-  const video = await VideoModel.loadFull(videoUUID)
+  const video = await VideoModel.loadFull(videoUUID, transaction)
   if (!video) {
     logger.info('Video %s does not exist anymore after runner job.', videoUUID, lTags(videoUUID))
     return undefined

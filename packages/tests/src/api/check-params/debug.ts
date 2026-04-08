@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { HttpStatusCode } from '@peertube/peertube-models'
 import {
@@ -32,7 +32,6 @@ describe('Test debug API validators', function () {
   })
 
   describe('When getting debug endpoint', function () {
-
     it('Should fail with a non authenticated user', async function () {
       await makeGetRequest({
         url: server.url,

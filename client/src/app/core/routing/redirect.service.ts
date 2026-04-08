@@ -4,9 +4,9 @@ import { VideoSortField } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { PluginsManager } from '@root-helpers/plugins-manager'
 import debug from 'debug'
-import { environment } from 'src/environments/environment'
 import { ServerService } from '../server'
 import { SessionStorageService } from '../wrappers/storage.service'
+import { environment } from '../../../environments/environment'
 
 const debugLogger = debug('peertube:router:RedirectService')
 

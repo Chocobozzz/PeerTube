@@ -8,11 +8,13 @@ import {
   VideoStudioTaskIntroPayload,
   VideoStudioTaskOutroPayload,
   VideoStudioTaskPayload,
+  VideoStudioTaskRemoveSegmentsPayload,
   VideoStudioTaskWatermarkPayload
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg/index.js'
 import { CONFIG } from '@server/initializers/config.js'
+import { sequelizeTypescript } from '@server/initializers/database.js'
 import { VideoTranscodingProfilesManager } from '@server/lib/transcoding/default-transcoding-profiles.js'
 import { isUserQuotaValid } from '@server/lib/user.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
@@ -94,8 +96,12 @@ async function processVideoStudioEdition (job: Job) {
     await safeCleanupStudioTMPFiles(payload.tasks)
 
     try {
-      const video = await VideoModel.loadFull(payload.videoUUID)
-      await video.setNewState(VideoState.PUBLISHED, false, undefined)
+      await sequelizeTypescript.transaction(async transaction => {
+        const video = await VideoModel.load(payload.videoUUID, transaction)
+        if (!video || video.state === VideoState.PUBLISHED) return
+
+        await video.setNewState(VideoState.PUBLISHED, false, transaction)
+      })
     } catch (err) {
       logger.error('Cannot reset video state after studio error', { err, ...lTags })
     }
@@ -130,7 +136,8 @@ const taskProcessors: { [id in VideoStudioTask['name']]: (options: TaskProcessor
   'add-intro': processAddIntroOutro,
   'add-outro': processAddIntroOutro,
   'cut': processCut,
-  'add-watermark': processAddWatermark
+  'add-watermark': processAddWatermark,
+  'remove-segments': processRemoveSegments
 }
 
 async function processTask (options: TaskProcessorOptions) {
@@ -172,6 +179,18 @@ function processCut (options: TaskProcessorOptions<VideoStudioTaskCutPayload>) {
   })
 }
 
+function processRemoveSegments (options: TaskProcessorOptions<VideoStudioTaskRemoveSegmentsPayload>) {
+  const { task, lTags } = options
+
+  logger.debug('Will remove segments from the video.', { options, ...lTags })
+
+  return buildFFmpegEdition().removeSegments({
+    ...pick(options, [ 'inputFileMutexReleaser', 'videoInputPath', 'separatedAudioInputPath', 'outputPath' ]),
+
+    segments: task.options.segments
+  })
+}
+
 function processAddWatermark (options: TaskProcessorOptions<VideoStudioTaskWatermarkPayload>) {
   const { task, lTags } = options
 
@@ -184,7 +203,7 @@ function processAddWatermark (options: TaskProcessorOptions<VideoStudioTaskWater
 
     videoFilters: {
       watermarkSizeRatio: task.options.watermarkSizeRatio,
-      horitonzalMarginRatio: task.options.horitonzalMarginRatio,
+      horizontalMarginRatio: task.options.horizontalMarginRatio,
       verticalMarginRatio: task.options.verticalMarginRatio
     }
   })

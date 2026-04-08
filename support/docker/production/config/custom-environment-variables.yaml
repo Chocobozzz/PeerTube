@@ -3,335 +3,1055 @@
 # See https://github.com/node-config/node-config/wiki/Environment-Variables#custom-environment-variables
 #
 
-webserver:
-  hostname: "PEERTUBE_WEBSERVER_HOSTNAME"
+listen:
+  hostname: PEERTUBE_LISTEN_HOSTNAME
   port:
-    __name: "PEERTUBE_WEBSERVER_PORT"
-    __format: "json"
-  https:
-    __name: "PEERTUBE_WEBSERVER_HTTPS"
-    __format: "json"
+    __name: PEERTUBE_LISTEN_PORT
+    __format: json
 
-federation:
-  sign_federated_fetches:
-    __name: "PEERTUBE_SIGN_FEDERATED_FETCHES"
-    __format: "json"
+webserver:
+  hostname: PEERTUBE_WEBSERVER_HOSTNAME
+  port:
+    __name: PEERTUBE_WEBSERVER_PORT
+    __format: json
+  https:
+    __name: PEERTUBE_WEBSERVER_HTTPS
+    __format: json
 
 secrets:
-  peertube: "PEERTUBE_SECRET"
+  peertube: PEERTUBE_SECRET
+
+http_timeouts:
+  request: PEERTUBE_HTTP_TIMEOUTS_REQUEST
+
+rates_limit:
+  api:
+    window: PEERTUBE_RATES_LIMIT_API_WINDOW
+    max:
+      __name: PEERTUBE_RATES_LIMIT_API_MAX
+      __format: json
+  login:
+    window: PEERTUBE_RATES_LIMIT_LOGIN_WINDOW
+    max:
+      __name: PEERTUBE_RATES_LIMIT_LOGIN_MAX
+      __format: json
+  signup:
+    window: PEERTUBE_RATES_LIMIT_SIGNUP_WINDOW
+    max:
+      __name: PEERTUBE_RATES_LIMIT_SIGNUP_MAX
+      __format: json
+  ask_send_email:
+    window: PEERTUBE_RATES_LIMIT_ASK_SEND_EMAIL_WINDOW
+    max:
+      __name: PEERTUBE_RATES_LIMIT_ASK_SEND_EMAIL_MAX
+      __format: json
+  receive_client_log:
+    window: PEERTUBE_RATES_LIMIT_RECEIVE_CLIENT_LOG_WINDOW
+    max:
+      __name: PEERTUBE_RATES_LIMIT_RECEIVE_CLIENT_LOG_MAX
+      __format: json
+  plugins:
+    window: PEERTUBE_RATES_LIMIT_PLUGINS_WINDOW
+    max:
+      __name: PEERTUBE_RATES_LIMIT_PLUGINS_MAX
+      __format: json
+  well_known:
+    window: PEERTUBE_RATES_LIMIT_WELL_KNOWN_WINDOW
+    max:
+      __name: PEERTUBE_RATES_LIMIT_WELL_KNOWN_MAX
+      __format: json
+  feeds:
+    window: PEERTUBE_RATES_LIMIT_FEEDS_WINDOW
+    max:
+      __name: PEERTUBE_RATES_LIMIT_FEEDS_MAX
+      __format: json
+  activity_pub:
+    window: PEERTUBE_RATES_LIMIT_ACTIVITY_PUB_WINDOW
+    max:
+      __name: PEERTUBE_RATES_LIMIT_ACTIVITY_PUB_MAX
+      __format: json
+  client:
+    window: PEERTUBE_RATES_LIMIT_CLIENT_WINDOW
+    max:
+      __name: PEERTUBE_RATES_LIMIT_CLIENT_MAX
+      __format: json
+  download_generate_video:
+    window: PEERTUBE_RATES_LIMIT_DOWNLOAD_GENERATE_VIDEO_WINDOW
+    max:
+      __name: PEERTUBE_RATES_LIMIT_DOWNLOAD_GENERATE_VIDEO_MAX
+      __format: json
+
+oauth2:
+  token_lifetime:
+    access_token: PEERTUBE_OAUTH2_TOKEN_LIFETIME_ACCESS_TOKEN
+    refresh_token: PEERTUBE_OAUTH2_TOKEN_LIFETIME_REFRESH_TOKEN
 
 trust_proxy:
-  __name: "PEERTUBE_TRUST_PROXY"
-  __format: "json"
+  __name: PEERTUBE_TRUST_PROXY
+  __format: json
 
 database:
-  hostname: "PEERTUBE_DB_HOSTNAME"
+  hostname: PEERTUBE_DB_HOSTNAME
   port:
-    __name: "PEERTUBE_DB_PORT"
-    __format: "json"
-  name: "PEERTUBE_DB_NAME"
-  suffix: "PEERTUBE_DB_SUFFIX"
-  username: "PEERTUBE_DB_USERNAME"
-  password: "PEERTUBE_DB_PASSWORD"
+    __name: PEERTUBE_DB_PORT
+    __format: json
+  name: PEERTUBE_DB_NAME
+  suffix: PEERTUBE_DB_SUFFIX
+  username: PEERTUBE_DB_USERNAME
+  password: PEERTUBE_DB_PASSWORD
   ssl:
-    __name: "PEERTUBE_DB_SSL"
-    __format: "json"
+    __name: PEERTUBE_DB_SSL
+    __format: json
+  ssl_settings:
+    reject_unauthorized:
+      __name: PEERTUBE_DATABASE_SSL_SETTINGS_REJECT_UNAUTHORIZED
+      __format: json
+    ca:
+      __name: PEERTUBE_DATABASE_SSL_SETTINGS_CA
+      __format: json
+    cert:
+      __name: PEERTUBE_DATABASE_SSL_SETTINGS_CERT
+      __format: json
+    key:
+      __name: PEERTUBE_DATABASE_SSL_SETTINGS_KEY
+      __format: json
+  pool:
+    max:
+      __name: PEERTUBE_DATABASE_POOL_MAX
+      __format: json
 
 redis:
-  hostname: "PEERTUBE_REDIS_HOSTNAME"
+  hostname: PEERTUBE_REDIS_HOSTNAME
   port:
-    __name: "PEERTUBE_REDIS_PORT"
-    __format: "json"
-  auth: "PEERTUBE_REDIS_AUTH"
+    __name: PEERTUBE_REDIS_PORT
+    __format: json
+  auth: PEERTUBE_REDIS_AUTH
+  db:
+    __name: PEERTUBE_REDIS_DB
+    __format: json
+  enable_tls:
+    __name: PEERTUBE_REDIS_ENABLE_TLS
+    __format: json
+  tls_settings:
+    reject_unauthorized:
+      __name: PEERTUBE_REDIS_TLS_SETTINGS_REJECT_UNAUTHORIZED
+      __format: json
+    ca:
+      __name: PEERTUBE_REDIS_TLS_SETTINGS_CA
+      __format: json
+    cert:
+      __name: PEERTUBE_REDIS_TLS_SETTINGS_CERT
+      __format: json
+    key:
+      __name: PEERTUBE_REDIS_TLS_SETTINGS_KEY
+      __format: json
+  sentinel:
+    enabled:
+      __name: PEERTUBE_REDIS_SENTINEL_ENABLED
+      __format: json
+    enable_tls:
+      __name: PEERTUBE_REDIS_SENTINEL_ENABLE_TLS
+      __format: json
+    tls_settings:
+      reject_unauthorized:
+        __name: PEERTUBE_REDIS_SENTINEL_TLS_SETTINGS_REJECT_UNAUTHORIZED
+        __format: json
+      ca:
+        __name: PEERTUBE_REDIS_SENTINEL_TLS_SETTINGS_CA
+        __format: json
+      cert:
+        __name: PEERTUBE_REDIS_SENTINEL_TLS_SETTINGS_CERT
+        __format: json
+      key:
+        __name: PEERTUBE_REDIS_SENTINEL_TLS_SETTINGS_KEY
+        __format: json
+    master_name: PEERTUBE_REDIS_SENTINEL_MASTER_NAME
+    password: PEERTUBE_REDIS_SENTINEL_PASSWORD
+    sentinels:
+      __name: PEERTUBE_REDIS_SENTINEL_SENTINELS
+      __format: json
 
 smtp:
-  hostname: "PEERTUBE_SMTP_HOSTNAME"
+  hostname: PEERTUBE_SMTP_HOSTNAME
   port:
-    __name: "PEERTUBE_SMTP_PORT"
-    __format: "json"
-  username: "PEERTUBE_SMTP_USERNAME"
-  password: "PEERTUBE_SMTP_PASSWORD"
+    __name: PEERTUBE_SMTP_PORT
+    __format: json
+  username: PEERTUBE_SMTP_USERNAME
+  password: PEERTUBE_SMTP_PASSWORD
   tls:
-    __name: "PEERTUBE_SMTP_TLS"
-    __format: "json"
+    __name: PEERTUBE_SMTP_TLS
+    __format: json
   disable_starttls:
-    __name: "PEERTUBE_SMTP_DISABLE_STARTTLS"
-    __format: "json"
-  from_address: "PEERTUBE_SMTP_FROM"
+    __name: PEERTUBE_SMTP_DISABLE_STARTTLS
+    __format: json
+  from_address: PEERTUBE_SMTP_FROM
+  transport: PEERTUBE_SMTP_TRANSPORT
+  sendmail:
+    __name: PEERTUBE_SMTP_SENDMAIL
+    __format: json
+  ca_file:
+    __name: PEERTUBE_SMTP_CA_FILE
+    __format: json
+
+storage:
+  tmp: PEERTUBE_STORAGE_TMP
+  tmp_persistent: PEERTUBE_STORAGE_TMP_PERSISTENT
+  bin: PEERTUBE_STORAGE_BIN
+  avatars: PEERTUBE_STORAGE_AVATARS
+  web_videos: PEERTUBE_STORAGE_WEB_VIDEOS
+  streaming_playlists: PEERTUBE_STORAGE_STREAMING_PLAYLISTS
+  original_video_files: PEERTUBE_STORAGE_ORIGINAL_VIDEO_FILES
+  redundancy: PEERTUBE_STORAGE_REDUNDANCY
+  logs: PEERTUBE_STORAGE_LOGS
+  previews: PEERTUBE_STORAGE_PREVIEWS
+  thumbnails: PEERTUBE_STORAGE_THUMBNAILS
+  storyboards: PEERTUBE_STORAGE_STORYBOARDS
+  torrents: PEERTUBE_STORAGE_TORRENTS
+  captions: PEERTUBE_STORAGE_CAPTIONS
+  cache: PEERTUBE_STORAGE_CACHE
+  plugins: PEERTUBE_STORAGE_PLUGINS
+  well_known: PEERTUBE_STORAGE_WELL_KNOWN
+  uploads: PEERTUBE_STORAGE_UPLOADS
+  client_overrides: PEERTUBE_STORAGE_CLIENT_OVERRIDES
+
+static_files:
+  private_files_require_auth:
+    __name: PEERTUBE_STATIC_FILES_PRIVATE_FILES_REQUIRE_AUTH
+    __format: json
 
 object_storage:
   enabled:
-    __name: "PEERTUBE_OBJECT_STORAGE_ENABLED"
-    __format: "json"
-
-  endpoint: "PEERTUBE_OBJECT_STORAGE_ENDPOINT"
-
-  region: "PEERTUBE_OBJECT_STORAGE_REGION"
-
+    __name: PEERTUBE_OBJECT_STORAGE_ENABLED
+    __format: json
+  endpoint: PEERTUBE_OBJECT_STORAGE_ENDPOINT
+  region: PEERTUBE_OBJECT_STORAGE_REGION
   force_path_style:
-    __name: "PEERTUBE_OBJECT_STORAGE_FORCE_PATH_STYLE"
-    __format: "json"
-
+    __name: PEERTUBE_OBJECT_STORAGE_FORCE_PATH_STYLE
+    __format: json
   upload_acl:
-    public: "PEERTUBE_OBJECT_STORAGE_UPLOAD_ACL_PUBLIC"
-    private: "PEERTUBE_OBJECT_STORAGE_UPLOAD_ACL_PRIVATE"
-
+    public: PEERTUBE_OBJECT_STORAGE_UPLOAD_ACL_PUBLIC
+    private: PEERTUBE_OBJECT_STORAGE_UPLOAD_ACL_PRIVATE
   proxy:
     proxify_private_files:
-      __name: "PEERTUBE_OBJECT_STORAGE_PROXY_PROXIFY_PRIVATE_FILES"
-      __format: "json"
-
+      __name: PEERTUBE_OBJECT_STORAGE_PROXY_PROXIFY_PRIVATE_FILES
+      __format: json
   credentials:
-    access_key_id: "PEERTUBE_OBJECT_STORAGE_CREDENTIALS_ACCESS_KEY_ID"
-    secret_access_key: 'PEERTUBE_OBJECT_STORAGE_CREDENTIALS_SECRET_ACCESS_KEY'
-
+    access_key_id: PEERTUBE_OBJECT_STORAGE_CREDENTIALS_ACCESS_KEY_ID
+    secret_access_key: PEERTUBE_OBJECT_STORAGE_CREDENTIALS_SECRET_ACCESS_KEY
   max_upload_part:
-    __name: "PEERTUBE_OBJECT_STORAGE_MAX_UPLOAD_PART"
-    __format: "json"
-
+    __name: PEERTUBE_OBJECT_STORAGE_MAX_UPLOAD_PART
+    __format: json
   max_request_attempts:
-    __name: "PEERTUBE_OBJECT_STORAGE_MAX_REQUEST_ATTEMPTS"
-    __format: "json"
-
+    __name: PEERTUBE_OBJECT_STORAGE_MAX_REQUEST_ATTEMPTS
+    __format: json
   streaming_playlists:
-    bucket_name: "PEERTUBE_OBJECT_STORAGE_STREAMING_PLAYLISTS_BUCKET_NAME"
-    prefix: "PEERTUBE_OBJECT_STORAGE_STREAMING_PLAYLISTS_PREFIX"
-    base_url: "PEERTUBE_OBJECT_STORAGE_STREAMING_PLAYLISTS_BASE_URL"
+    bucket_name: PEERTUBE_OBJECT_STORAGE_STREAMING_PLAYLISTS_BUCKET_NAME
+    prefix: PEERTUBE_OBJECT_STORAGE_STREAMING_PLAYLISTS_PREFIX
+    base_url: PEERTUBE_OBJECT_STORAGE_STREAMING_PLAYLISTS_BASE_URL
     store_live_streams:
-      __name: "PEERTUBE_OBJECT_STORAGE_STREAMING_PLAYLISTS_STORE_LIVE_STREAMS"
-      __format: "json"
-
+      __name: PEERTUBE_OBJECT_STORAGE_STREAMING_PLAYLISTS_STORE_LIVE_STREAMS
+      __format: json
   web_videos:
-    bucket_name: "PEERTUBE_OBJECT_STORAGE_WEB_VIDEOS_BUCKET_NAME"
-    prefix: "PEERTUBE_OBJECT_STORAGE_WEB_VIDEOS_PREFIX"
-    base_url: "PEERTUBE_OBJECT_STORAGE_WEB_VIDEOS_BASE_URL"
-
+    bucket_name: PEERTUBE_OBJECT_STORAGE_WEB_VIDEOS_BUCKET_NAME
+    prefix: PEERTUBE_OBJECT_STORAGE_WEB_VIDEOS_PREFIX
+    base_url: PEERTUBE_OBJECT_STORAGE_WEB_VIDEOS_BASE_URL
   user_exports:
-    bucket_name: "PEERTUBE_OBJECT_STORAGE_USER_EXPORTS_BUCKET_NAME"
-    prefix: "PEERTUBE_OBJECT_STORAGE_USER_EXPORTS_PREFIX"
-    base_url: "PEERTUBE_OBJECT_STORAGE_USER_EXPORTS_BASE_URL"
-
+    bucket_name: PEERTUBE_OBJECT_STORAGE_USER_EXPORTS_BUCKET_NAME
+    prefix: PEERTUBE_OBJECT_STORAGE_USER_EXPORTS_PREFIX
+    base_url: PEERTUBE_OBJECT_STORAGE_USER_EXPORTS_BASE_URL
   original_video_files:
-    bucket_name: "PEERTUBE_OBJECT_STORAGE_ORIGINAL_VIDEO_FILES_BUCKET_NAME"
-    prefix: "PEERTUBE_OBJECT_STORAGE_ORIGINAL_VIDEO_FILES_PREFIX"
-    base_url: "PEERTUBE_OBJECT_STORAGE_ORIGINAL_VIDEO_FILES_BASE_URL"
-
+    bucket_name: PEERTUBE_OBJECT_STORAGE_ORIGINAL_VIDEO_FILES_BUCKET_NAME
+    prefix: PEERTUBE_OBJECT_STORAGE_ORIGINAL_VIDEO_FILES_PREFIX
+    base_url: PEERTUBE_OBJECT_STORAGE_ORIGINAL_VIDEO_FILES_BASE_URL
   captions:
-    bucket_name: "PEERTUBE_OBJECT_STORAGE_CAPTIONS_BUCKET_NAME"
-    prefix: "PEERTUBE_OBJECT_STORAGE_CAPTIONS_PREFIX"
-    base_url: "PEERTUBE_OBJECT_STORAGE_CAPTIONS_BASE_URL"
+    bucket_name: PEERTUBE_OBJECT_STORAGE_CAPTIONS_BUCKET_NAME
+    prefix: PEERTUBE_OBJECT_STORAGE_CAPTIONS_PREFIX
+    base_url: PEERTUBE_OBJECT_STORAGE_CAPTIONS_BASE_URL
+
+log:
+  level: PEERTUBE_LOG_LEVEL
+  log_ping_requests:
+    __name: PEERTUBE_LOG_PING_REQUESTS
+    __format: json
+  rotation:
+    enabled:
+      __name: PEERTUBE_LOG_ROTATION_ENABLED
+      __format: json
+    max_file_size: PEERTUBE_LOG_ROTATION_MAX_FILE_SIZE
+    max_files:
+      __name: PEERTUBE_LOG_ROTATION_MAX_FILES
+      __format: json
+  anonymize_ip:
+    __name: PEERTUBE_LOG_ANONYMIZE_IP
+    __format: json
+  log_tracker_unknown_infohash:
+    __name: PEERTUBE_LOG_LOG_TRACKER_UNKNOWN_INFOHASH
+    __format: json
+  log_http_requests:
+    __name: PEERTUBE_LOG_LOG_HTTP_REQUESTS
+    __format: json
+  prettify_sql:
+    __name: PEERTUBE_LOG_PRETTIFY_SQL
+    __format: json
+  accept_client_log:
+    __name: PEERTUBE_LOG_ACCEPT_CLIENT_LOG
+    __format: json
+
+open_telemetry:
+  metrics:
+    enabled:
+      __name: PEERTUBE_OPEN_TELEMETRY_METRICS_ENABLED
+      __format: json
+    playback_stats_interval: PEERTUBE_OPEN_TELEMETRY_METRICS_PLAYBACK_STATS_INTERVAL
+    http_request_duration:
+      enabled:
+        __name: PEERTUBE_OPEN_TELEMETRY_METRICS_HTTP_REQUEST_DURATION_ENABLED
+        __format: json
+    prometheus_exporter:
+      hostname: PEERTUBE_OPEN_TELEMETRY_METRICS_PROMETHEUS_EXPORTER_HOSTNAME
+      port:
+        __name: PEERTUBE_OPEN_TELEMETRY_METRICS_PROMETHEUS_EXPORTER_PORT
+        __format: json
+  tracing:
+    enabled:
+      __name: PEERTUBE_OPEN_TELEMETRY_TRACING_ENABLED
+      __format: json
+    jaeger_exporter:
+      endpoint: PEERTUBE_OPEN_TELEMETRY_TRACING_JAEGER_EXPORTER_ENDPOINT
+
+trending:
+  videos:
+    interval_days:
+      __name: PEERTUBE_TRENDING_VIDEOS_INTERVAL_DAYS
+      __format: json
+    algorithms:
+      enabled:
+        __name: PEERTUBE_TRENDING_VIDEOS_ALGORITHMS_ENABLED
+        __format: json
+      default: PEERTUBE_TRENDING_VIDEOS_ALGORITHMS_DEFAULT
+
+redundancy:
+  videos:
+    check_interval: PEERTUBE_REDUNDANCY_VIDEOS_CHECK_INTERVAL
+    strategies:
+      __name: PEERTUBE_REDUNDANCY_VIDEOS_STRATEGIES
+      __format: json
+
+remote_redundancy:
+  videos:
+    accept_from: PEERTUBE_REMOTE_REDUNDANCY_VIDEOS_ACCEPT_FROM
+
+csp:
+  enabled:
+    __name: PEERTUBE_CSP_ENABLED
+    __format: json
+  report_only:
+    __name: PEERTUBE_CSP_REPORT_ONLY
+    __format: json
+  report_uri:
+    __name: PEERTUBE_CSP_REPORT_URI
+    __format: json
+
+security:
+  frameguard:
+    enabled:
+      __name: PEERTUBE_SECURITY_FRAMEGUARD_ENABLED
+      __format: json
+  powered_by_header:
+    enabled:
+      __name: PEERTUBE_SECURITY_POWERED_BY_HEADER_ENABLED
+      __format: json
+
+tracker:
+  enabled:
+    __name: PEERTUBE_TRACKER_ENABLED
+    __format: json
+  private:
+    __name: PEERTUBE_TRACKER_PRIVATE
+    __format: json
+  reject_too_many_announces:
+    __name: PEERTUBE_TRACKER_REJECT_TOO_MANY_ANNOUNCES
+    __format: json
+
+history:
+  videos:
+    max_age:
+      __name: PEERTUBE_HISTORY_VIDEOS_MAX_AGE
+      __format: json
+
+views:
+  videos:
+    remote:
+      max_age: PEERTUBE_VIEWS_VIDEOS_REMOTE_MAX_AGE
+    local:
+      max_age:
+        __name: PEERTUBE_VIEWS_VIDEOS_LOCAL_MAX_AGE
+        __format: json
+    local_buffer_update_interval: PEERTUBE_VIEWS_VIDEOS_LOCAL_BUFFER_UPDATE_INTERVAL
+    view_expiration: PEERTUBE_VIEWS_VIDEOS_VIEW_EXPIRATION
+    count_view_after: PEERTUBE_VIEWS_VIDEOS_COUNT_VIEW_AFTER
+    trust_viewer_session_id:
+      __name: PEERTUBE_VIEWS_VIDEOS_TRUST_VIEWER_SESSION_ID
+      __format: json
+    watching_interval:
+      anonymous: PEERTUBE_VIEWS_VIDEOS_WATCHING_INTERVAL_ANONYMOUS
+      users: PEERTUBE_VIEWS_VIDEOS_WATCHING_INTERVAL_USERS
+
+geo_ip:
+  enabled:
+    __name: PEERTUBE_GEO_IP_ENABLED
+    __format: json
+  country:
+    database_url: PEERTUBE_GEO_IP_COUNTRY_DATABASE_URL
+  city:
+    database_url: PEERTUBE_GEO_IP_CITY_DATABASE_URL
+
+plugins:
+  index:
+    enabled:
+      __name: PEERTUBE_PLUGINS_INDEX_ENABLED
+      __format: json
+    check_latest_versions_interval: PEERTUBE_PLUGINS_INDEX_CHECK_LATEST_VERSIONS_INTERVAL
+    url: PEERTUBE_PLUGINS_INDEX_URL
+
+federation:
+  sign_federated_fetches:
+    __name: PEERTUBE_SIGN_FEDERATED_FETCHES
+    __format: json
+  enabled:
+    __name: PEERTUBE_FEDERATION_ENABLED
+    __format: json
+  prevent_ssrf:
+    __name: PEERTUBE_FEDERATION_PREVENT_SSRF
+    __format: json
+  videos:
+    federate_unlisted:
+      __name: PEERTUBE_FEDERATION_VIDEOS_FEDERATE_UNLISTED
+      __format: json
+    cleanup_remote_interactions:
+      __name: PEERTUBE_FEDERATION_VIDEOS_CLEANUP_REMOTE_INTERACTIONS
+      __format: json
+
+peertube:
+  check_latest_version:
+    enabled:
+      __name: PEERTUBE_PEERTUBE_CHECK_LATEST_VERSION_ENABLED
+      __format: json
+    url: PEERTUBE_PEERTUBE_CHECK_LATEST_VERSION_URL
 
 webadmin:
   configuration:
     edition:
       allowed:
-        __name: "PEERTUBE_WEBADMIN_CONFIGURATION_EDITION_ALLOWED"
-        __format: "json"
+        __name: PEERTUBE_WEBADMIN_CONFIGURATION_EDITION_ALLOWED
+        __format: json
 
-log:
-  level: "PEERTUBE_LOG_LEVEL"
-  log_ping_requests:
-    __name: "PEERTUBE_LOG_PING_REQUESTS"
-    __format: "json"
+feeds:
+  videos:
+    count:
+      __name: PEERTUBE_FEEDS_VIDEOS_COUNT
+      __format: json
+  comments:
+    count:
+      __name: PEERTUBE_FEEDS_COMMENTS_COUNT
+      __format: json
 
-user:
-  video_quota:
-    __name: "PEERTUBE_USER_VIDEO_QUOTA"
-    __format: "json"
+remote_runners:
+  stalled_jobs:
+    live: PEERTUBE_REMOTE_RUNNERS_STALLED_JOBS_LIVE
+    vod: PEERTUBE_REMOTE_RUNNERS_STALLED_JOBS_VOD
+    studio: PEERTUBE_REMOTE_RUNNERS_STALLED_JOBS_STUDIO
+    transcription: PEERTUBE_REMOTE_RUNNERS_STALLED_JOBS_TRANSCRIPTION
+
+thumbnails:
+  generation_from_video:
+    frames_to_analyze:
+      __name: PEERTUBE_THUMBNAILS_GENERATION_FROM_VIDEO_FRAMES_TO_ANALYZE
+      __format: json
+  sizes:
+    __name: PEERTUBE_THUMBNAILS_SIZES
+    __format: json
+
+stats:
+  registration_requests:
+    enabled:
+      __name: PEERTUBE_STATS_REGISTRATION_REQUESTS_ENABLED
+      __format: json
+  abuses:
+    enabled:
+      __name: PEERTUBE_STATS_ABUSES_ENABLED
+      __format: json
+  total_moderators:
+    enabled:
+      __name: PEERTUBE_STATS_TOTAL_MODERATORS_ENABLED
+      __format: json
+  total_admins:
+    enabled:
+      __name: PEERTUBE_STATS_TOTAL_ADMINS_ENABLED
+      __format: json
+
+webrtc:
+  stun_servers:
+    __name: PEERTUBE_WEBRTC_STUN_SERVERS
+    __format: json
+
+nsfw_flags_settings:
+  enabled:
+    __name: PEERTUBE_NSFW_FLAGS_SETTINGS_ENABLED
+    __format: json
+
+download_generate_video:
+  max_parallel_downloads:
+    __name: PEERTUBE_DOWNLOAD_GENERATE_VIDEO_MAX_PARALLEL_DOWNLOADS
+    __format: json
 
 admin:
-  email: "PEERTUBE_ADMIN_EMAIL"
+  email: PEERTUBE_ADMIN_EMAIL
 
 contact_form:
   enabled:
-    __name: "PEERTUBE_CONTACT_FORM_ENABLED"
-    __format: "json"
+    __name: PEERTUBE_CONTACT_FORM_ENABLED
+    __format: json
 
 signup:
   enabled:
-    __name: "PEERTUBE_SIGNUP_ENABLED"
-    __format: "json"
+    __name: PEERTUBE_SIGNUP_ENABLED
+    __format: json
   limit:
-    __name: "PEERTUBE_SIGNUP_LIMIT"
-    __format: "json"
+    __name: PEERTUBE_SIGNUP_LIMIT
+    __format: json
+  minimum_age:
+    __name: PEERTUBE_SIGNUP_MINIMUM_AGE
+    __format: json
+  requires_approval:
+    __name: PEERTUBE_SIGNUP_REQUIRES_APPROVAL
+    __format: json
+  requires_email_verification:
+    __name: PEERTUBE_SIGNUP_REQUIRES_EMAIL_VERIFICATION
+    __format: json
+  filters:
+    cidr:
+      whitelist:
+        __name: PEERTUBE_SIGNUP_FILTERS_CIDR_WHITELIST
+        __format: json
+      blacklist:
+        __name: PEERTUBE_SIGNUP_FILTERS_CIDR_BLACKLIST
+        __format: json
 
-search:
-  remote_uri:
-    users:
-      __name: "PEERTUBE_SEARCH_REMOTEURI_USERS"
-      __format: "json"
-    anonymous:
-      __name: "PEERTUBE_SEARCH_REMOTEURI_ANONYMOUS"
-      __format: "json"
+user:
+  video_quota:
+    __name: PEERTUBE_USER_VIDEO_QUOTA
+    __format: json
+  history:
+    videos:
+      enabled:
+        __name: PEERTUBE_USER_HISTORY_VIDEOS_ENABLED
+        __format: json
+  video_quota_daily:
+    __name: PEERTUBE_USER_VIDEO_QUOTA_DAILY
+    __format: json
+  default_channel_name: PEERTUBE_USER_DEFAULT_CHANNEL_NAME
+  password_constraints:
+    min_length:
+      __name: PEERTUBE_USER_PASSWORD_CONSTRAINTS_MIN_LENGTH
+      __format: json
+
+video_channels:
+  max_per_user:
+    __name: PEERTUBE_VIDEO_CHANNELS_MAX_PER_USER
+    __format: json
+  max_collaborators_per_channel:
+    __name: PEERTUBE_VIDEO_CHANNELS_MAX_COLLABORATORS_PER_CHANNEL
+    __format: json
+
+transcoding:
+  enabled:
+    __name: PEERTUBE_TRANSCODING_ENABLED
+    __format: json
+  threads:
+    __name: PEERTUBE_TRANSCODING_THREADS
+    __format: json
+  resolutions:
+    144p:
+      __name: PEERTUBE_TRANSCODING_144P
+      __format: json
+    240p:
+      __name: PEERTUBE_TRANSCODING_240P
+      __format: json
+    360p:
+      __name: PEERTUBE_TRANSCODING_360P
+      __format: json
+    480p:
+      __name: PEERTUBE_TRANSCODING_480P
+      __format: json
+    720p:
+      __name: PEERTUBE_TRANSCODING_720P
+      __format: json
+    1080p:
+      __name: PEERTUBE_TRANSCODING_1080P
+      __format: json
+    1440p:
+      __name: PEERTUBE_TRANSCODING_1440P
+      __format: json
+    2160p:
+      __name: PEERTUBE_TRANSCODING_2160P
+      __format: json
+    0p:
+      __name: PEERTUBE_TRANSCODING_RESOLUTIONS_0P
+      __format: json
+  web_videos:
+    enabled:
+      __name: PEERTUBE_TRANSCODING_WEB_VIDEOS_ENABLED
+      __format: json
+  hls:
+    enabled:
+      __name: PEERTUBE_TRANSCODING_HLS_ENABLED
+      __format: json
+    split_audio_and_video:
+      __name: PEERTUBE_TRANSCODING_HLS_SPLIT_AUDIO_AND_VIDEO
+      __format: json
+  original_file:
+    keep:
+      __name: PEERTUBE_TRANSCODING_ORIGINAL_FILE_KEEP
+      __format: json
+  allow_additional_extensions:
+    __name: PEERTUBE_TRANSCODING_ALLOW_ADDITIONAL_EXTENSIONS
+    __format: json
+  allow_audio_files:
+    __name: PEERTUBE_TRANSCODING_ALLOW_AUDIO_FILES
+    __format: json
+  remote_runners:
+    enabled:
+      __name: PEERTUBE_TRANSCODING_REMOTE_RUNNERS_ENABLED
+      __format: json
+  concurrency:
+    __name: PEERTUBE_TRANSCODING_CONCURRENCY
+    __format: json
+  profile: PEERTUBE_TRANSCODING_PROFILE
+  always_transcode_original_resolution:
+    __name: PEERTUBE_TRANSCODING_ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
+    __format: json
+  always_transcode_podcast_optimized_audio:
+    __name: PEERTUBE_TRANSCODING_ALWAYS_TRANSCODE_PODCAST_OPTIMIZED_AUDIO
+    __format: json
+  fps:
+    max:
+      __name: PEERTUBE_TRANSCODING_FPS_MAX
+      __format: json
+
+live:
+  enabled:
+    __name: PEERTUBE_LIVE_ENABLED
+    __format: json
+  max_duration:
+    __name: PEERTUBE_LIVE_MAX_DURATION
+    __format: json
+  max_instance_lives:
+    __name: PEERTUBE_LIVE_MAX_INSTANCE_LIVES
+    __format: json
+  max_user_lives:
+    __name: PEERTUBE_LIVE_MAX_USER_LIVES
+    __format: json
+  allow_replay:
+    __name: PEERTUBE_LIVE_ALLOW_REPLAY
+    __format: json
+  latency_setting:
+    enabled:
+      __name: PEERTUBE_LIVE_LATENCY_SETTING_ENABLED
+      __format: json
+  rtmp:
+    enabled:
+      __name: PEERTUBE_LIVE_RTMP_ENABLED
+      __format: json
+    port:
+      __name: PEERTUBE_LIVE_RTMP_PORT
+      __format: json
+    hostname: PEERTUBE_LIVE_RTMP_HOSTNAME
+    public_hostname: PEERTUBE_LIVE_RTMP_PUBLIC_HOSTNAME
+  rtmps:
+    enabled:
+      __name: PEERTUBE_LIVE_RTMPS_ENABLED
+      __format: json
+    port:
+      __name: PEERTUBE_LIVE_RTMPS_PORT
+      __format: json
+    hostname: PEERTUBE_LIVE_RTMPS_HOSTNAME
+    public_hostname: PEERTUBE_LIVE_RTMPS_PUBLIC_HOSTNAME
+    key_file: PEERTUBE_LIVE_RTMPS_KEY_FILE
+    cert_file: PEERTUBE_LIVE_RTMPS_CERT_FILE
+  transcoding:
+    enabled:
+      __name: PEERTUBE_LIVE_TRANSCODING_ENABLED
+      __format: json
+    remote_runners:
+      enabled:
+        __name: PEERTUBE_LIVE_TRANSCODING_REMOTE_RUNNERS_ENABLED
+        __format: json
+    threads:
+      __name: PEERTUBE_LIVE_TRANSCODING_THREADS
+      __format: json
+    profile: PEERTUBE_LIVE_TRANSCODING_PROFILE
+    resolutions:
+      0p:
+        __name: PEERTUBE_LIVE_TRANSCODING_0P
+        __format: json
+      144p:
+        __name: PEERTUBE_LIVE_TRANSCODING_144P
+        __format: json
+      240p:
+        __name: PEERTUBE_LIVE_TRANSCODING_240P
+        __format: json
+      360p:
+        __name: PEERTUBE_LIVE_TRANSCODING_360P
+        __format: json
+      480p:
+        __name: PEERTUBE_LIVE_TRANSCODING_480P
+        __format: json
+      720p:
+        __name: PEERTUBE_LIVE_TRANSCODING_720P
+        __format: json
+      1080p:
+        __name: PEERTUBE_LIVE_TRANSCODING_1080P
+        __format: json
+      1440p:
+        __name: PEERTUBE_LIVE_TRANSCODING_1440P
+        __format: json
+      2160p:
+        __name: PEERTUBE_LIVE_TRANSCODING_2160P
+        __format: json
+    always_transcode_original_resolution:
+      __name: PEERTUBE_LIVE_TRANSCODING_ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
+      __format: json
+    fps:
+      max:
+        __name: PEERTUBE_LIVE_TRANSCODING_FPS_MAX
+        __format: json
+  dvr:
+    max_window: PEERTUBE_LIVE_DVR_MAX_WINDOW
+
+video_studio:
+  enabled:
+    __name: PEERTUBE_VIDEO_STUDIO_ENABLED
+    __format: json
+  remote_runners:
+    enabled:
+      __name: PEERTUBE_VIDEO_STUDIO_REMOTE_RUNNERS_ENABLED
+      __format: json
+
+video_transcription:
+  enabled:
+    __name: PEERTUBE_VIDEO_TRANSCRIPTION_ENABLED
+    __format: json
+  engine: PEERTUBE_VIDEO_TRANSCRIPTION_ENGINE
+  engine_path:
+    __name: PEERTUBE_VIDEO_TRANSCRIPTION_ENGINE_PATH
+    __format: json
+  model: PEERTUBE_VIDEO_TRANSCRIPTION_MODEL
+  model_path:
+    __name: PEERTUBE_VIDEO_TRANSCRIPTION_MODEL_PATH
+    __format: json
+  timeout: PEERTUBE_VIDEO_TRANSCRIPTION_TIMEOUT
+  remote_runners:
+    enabled:
+      __name: PEERTUBE_VIDEO_TRANSCRIPTION_REMOTE_RUNNERS_ENABLED
+      __format: json
+
+video_file:
+  update:
+    enabled:
+      __name: PEERTUBE_VIDEO_FILE_UPDATE_ENABLED
+      __format: json
 
 import:
   videos:
     http:
       enabled:
-        __name: "PEERTUBE_IMPORT_VIDEOS_HTTP"
-        __format: "json"
+        __name: PEERTUBE_IMPORT_VIDEOS_HTTP
+        __format: json
+      youtube_dl_release:
+        url: PEERTUBE_IMPORT_VIDEOS_HTTP_YOUTUBE_DL_RELEASE_URL
+        name: PEERTUBE_IMPORT_VIDEOS_HTTP_YOUTUBE_DL_RELEASE_NAME
+        python_path: PEERTUBE_IMPORT_VIDEOS_HTTP_YOUTUBE_DL_RELEASE_PYTHON_PATH
       force_ipv4:
-        __name: "PEERTUBE_IMPORT_VIDEOS_HTTP_FORCE_IPV4"
-        __format: "json"
+        __name: PEERTUBE_IMPORT_VIDEOS_HTTP_FORCE_IPV4
+        __format: json
       proxies:
-        __name: "PEERTUBE_IMPORT_VIDEOS_HTTP_PROXIES"
-        __format: "json"
+        __name: PEERTUBE_IMPORT_VIDEOS_HTTP_PROXIES
+        __format: json
       cookies:
         enabled:
-          __name: "PEERTUBE_IMPORT_VIDEOS_HTTP_COOKIES_ENABLED"
-          __format: "json"
-      youtube_dl_release:
-        url: "PEERTUBE_IMPORT_VIDEOS_HTTP_YOUTUBE_DL_RELEASE_URL"
-        name: "PEERTUBE_IMPORT_VIDEOS_HTTP_YOUTUBE_DL_RELEASE_NAME"
+          __name: PEERTUBE_IMPORT_VIDEOS_HTTP_COOKIES_ENABLED
+          __format: json
     torrent:
       enabled:
-        __name: "PEERTUBE_IMPORT_VIDEOS_TORRENT"
-        __format: "json"
+        __name: PEERTUBE_IMPORT_VIDEOS_TORRENT
+        __format: json
+    concurrency:
+      __name: PEERTUBE_IMPORT_VIDEOS_CONCURRENCY
+      __format: json
+    timeout: PEERTUBE_IMPORT_VIDEOS_TIMEOUT
+    max_attempts:
+      __name: PEERTUBE_IMPORT_VIDEOS_MAX_ATTEMPTS
+      __format: json
+  video_channel_synchronization:
+    enabled:
+      __name: PEERTUBE_IMPORT_VIDEO_CHANNEL_SYNCHRONIZATION_ENABLED
+      __format: json
+    max_per_user:
+      __name: PEERTUBE_IMPORT_VIDEO_CHANNEL_SYNCHRONIZATION_MAX_PER_USER
+      __format: json
+    check_interval: PEERTUBE_IMPORT_VIDEO_CHANNEL_SYNCHRONIZATION_CHECK_INTERVAL
+    videos_limit_per_synchronization:
+      __name: PEERTUBE_IMPORT_VIDEO_CHANNEL_SYNCHRONIZATION_VIDEOS_LIMIT_PER_SYNCHRONIZATION
+      __format: json
+    full_sync_videos_limit:
+      __name: PEERTUBE_IMPORT_VIDEO_CHANNEL_SYNCHRONIZATION_FULL_SYNC_VIDEOS_LIMIT
+      __format: json
+  users:
+    enabled:
+      __name: PEERTUBE_IMPORT_USERS_ENABLED
+      __format: json
 
-transcoding:
-  enabled:
-    __name: "PEERTUBE_TRANSCODING_ENABLED"
-    __format: "json"
-  threads:
-    __name: "PEERTUBE_TRANSCODING_THREADS"
-    __format: "json"
-  resolutions:
-    144p:
-      __name: "PEERTUBE_TRANSCODING_144P"
-      __format: "json"
-    240p:
-      __name: "PEERTUBE_TRANSCODING_240P"
-      __format: "json"
-    360p:
-      __name: "PEERTUBE_TRANSCODING_360P"
-      __format: "json"
-    480p:
-      __name: "PEERTUBE_TRANSCODING_480P"
-      __format: "json"
-    720p:
-      __name: "PEERTUBE_TRANSCODING_720P"
-      __format: "json"
-    1080p:
-      __name: "PEERTUBE_TRANSCODING_1080P"
-      __format: "json"
-    1440p:
-      __name: "PEERTUBE_TRANSCODING_1440P"
-      __format: "json"
-    2160p:
-      __name: "PEERTUBE_TRANSCODING_2160P"
-      __format: "json"
-  web_videos:
+export:
+  users:
     enabled:
-      __name: "PEERTUBE_TRANSCODING_WEB_VIDEOS_ENABLED"
-      __format: "json"
-  hls:
-    enabled:
-      __name: "PEERTUBE_TRANSCODING_HLS_ENABLED"
-      __format: "json"
+      __name: PEERTUBE_EXPORT_USERS_ENABLED
+      __format: json
+    max_user_video_quota: PEERTUBE_EXPORT_USERS_MAX_USER_VIDEO_QUOTA
+    export_expiration: PEERTUBE_EXPORT_USERS_EXPORT_EXPIRATION
+
+auto_blacklist:
+  videos:
+    of_users:
+      enabled:
+        __name: PEERTUBE_AUTO_BLACKLIST_VIDEOS_OF_USERS_ENABLED
+        __format: json
 
 instance:
-  name: "PEERTUBE_INSTANCE_NAME"
-  description: "PEERTUBE_INSTANCE_DESCRIPTION"
-  terms: "PEERTUBE_INSTANCE_TERMS"
+  name: PEERTUBE_INSTANCE_NAME
+  description: PEERTUBE_INSTANCE_DESCRIPTION
+  terms: PEERTUBE_INSTANCE_TERMS
+  short_description: PEERTUBE_INSTANCE_SHORT_DESCRIPTION
+  code_of_conduct: PEERTUBE_INSTANCE_CODE_OF_CONDUCT
+  moderation_information: PEERTUBE_INSTANCE_MODERATION_INFORMATION
+  creation_reason: PEERTUBE_INSTANCE_CREATION_REASON
+  administrator: PEERTUBE_INSTANCE_ADMINISTRATOR
+  maintenance_lifetime: PEERTUBE_INSTANCE_MAINTENANCE_LIFETIME
+  business_model: PEERTUBE_INSTANCE_BUSINESS_MODEL
+  hardware_information: PEERTUBE_INSTANCE_HARDWARE_INFORMATION
+  default_language: PEERTUBE_INSTANCE_DEFAULT_LANGUAGE
+  languages:
+    __name: PEERTUBE_INSTANCE_LANGUAGES
+    __format: json
+  categories:
+    __name: PEERTUBE_INSTANCE_CATEGORIES
+    __format: json
+  default_client_route: PEERTUBE_INSTANCE_DEFAULT_CLIENT_ROUTE
+  is_nsfw:
+    __name: PEERTUBE_INSTANCE_IS_NSFW
+    __format: json
+  default_nsfw_policy: PEERTUBE_INSTANCE_DEFAULT_NSFW_POLICY
+  server_country: PEERTUBE_INSTANCE_SERVER_COUNTRY
+  support:
+    text: PEERTUBE_INSTANCE_SUPPORT_TEXT
+  social:
+    external_link: PEERTUBE_INSTANCE_SOCIAL_EXTERNAL_LINK
+    mastodon_link: PEERTUBE_INSTANCE_SOCIAL_MASTODON_LINK
+    bluesky_link: PEERTUBE_INSTANCE_SOCIAL_BLUESKY_LINK
+    x_link: PEERTUBE_INSTANCE_SOCIAL_X_LINK
+  customizations:
+    javascript: PEERTUBE_INSTANCE_CUSTOMIZATIONS_JAVASCRIPT
+    css: PEERTUBE_INSTANCE_CUSTOMIZATIONS_CSS
+  robots: PEERTUBE_INSTANCE_ROBOTS
+  securitytxt: PEERTUBE_INSTANCE_SECURITYTXT
 
-live:
-  enabled:
-    __name: "PEERTUBE_LIVE_ENABLED"
-    __format: "json"
+services:
+  twitter:
+    username: PEERTUBE_SERVICES_TWITTER_USERNAME
 
-  max_duration:
-    __name: "PEERTUBE_LIVE_MAX_DURATION"
-    __format: "json"
-
-  max_instance_lives:
-    __name: "PEERTUBE_LIVE_MAX_INSTANCE_LIVES"
-    __format: "json"
-
-  max_user_lives:
-    __name: "PEERTUBE_LIVE_MAX_USER_LIVES"
-    __format: "json"
-
-  allow_replay:
-    __name: "PEERTUBE_LIVE_ALLOW_REPLAY"
-    __format: "json"
-
-  latency_setting:
+followers:
+  instance:
     enabled:
-      __name: "PEERTUBE_LIVE_LATENCY_SETTING_ENABLED"
-      __format: "json"
-
-  rtmp:
+      __name: PEERTUBE_FOLLOWERS_INSTANCE_ENABLED
+      __format: json
+    manual_approval:
+      __name: PEERTUBE_FOLLOWERS_INSTANCE_MANUAL_APPROVAL
+      __format: json
+  channels:
     enabled:
-      __name: "PEERTUBE_LIVE_RTMP_ENABLED"
-      __format: "json"
-    port:
-      __name: "PEERTUBE_LIVE_RTMP_PORT"
-      __format: "json"
-    hostname: "PEERTUBE_LIVE_RTMP_HOSTNAME"
-    public_hostname: "PEERTUBE_LIVE_RTMP_PUBLIC_HOSTNAME"
-  rtmps:
-    enabled:
-      __name: "PEERTUBE_LIVE_RTMPS_ENABLED"
-      __format: "json"
-    port:
-      __name: "PEERTUBE_LIVE_RTMPS_PORT"
-      __format: "json"
-    hostname: "PEERTUBE_LIVE_RTMPS_HOSTNAME"
-    public_hostname: "PEERTUBE_LIVE_RTMPS_PUBLIC_HOSTNAME"
-    key_file: "PEERTUBE_LIVE_RTMPS_KEY_FILE"
-    cert_file: "PEERTUBE_LIVE_RTMPS_CERT_FILE"
+      __name: PEERTUBE_FOLLOWERS_CHANNELS_ENABLED
+      __format: json
 
-  transcoding:
-    enabled:
-      __name: "PEERTUBE_LIVE_TRANSCODING_ENABLED"
-      __format: "json"
-
-    remote_runners:
+followings:
+  instance:
+    auto_follow_back:
       enabled:
-        __name: "PEERTUBE_LIVE_TRANSCODING_REMOTE_RUNNERS_ENABLED"
-        __format: "json"
+        __name: PEERTUBE_FOLLOWINGS_INSTANCE_AUTO_FOLLOW_BACK_ENABLED
+        __format: json
+    auto_follow_index:
+      enabled:
+        __name: PEERTUBE_FOLLOWINGS_INSTANCE_AUTO_FOLLOW_INDEX_ENABLED
+        __format: json
+      index_url: PEERTUBE_FOLLOWINGS_INSTANCE_AUTO_FOLLOW_INDEX_INDEX_URL
 
-    threads:
-      __name: "PEERTUBE_LIVE_TRANSCODING_THREADS"
-      __format: "json"
+theme:
+  default: PEERTUBE_THEME_DEFAULT
+  customization:
+    primary_color:
+      __name: PEERTUBE_THEME_CUSTOMIZATION_PRIMARY_COLOR
+      __format: json
+    on_primary_color:
+      __name: PEERTUBE_THEME_CUSTOMIZATION_ON_PRIMARY_COLOR
+      __format: json
+    foreground_color:
+      __name: PEERTUBE_THEME_CUSTOMIZATION_FOREGROUND_COLOR
+      __format: json
+    background_color:
+      __name: PEERTUBE_THEME_CUSTOMIZATION_BACKGROUND_COLOR
+      __format: json
+    background_secondary_color:
+      __name: PEERTUBE_THEME_CUSTOMIZATION_BACKGROUND_SECONDARY_COLOR
+      __format: json
+    menu_foreground_color:
+      __name: PEERTUBE_THEME_CUSTOMIZATION_MENU_FOREGROUND_COLOR
+      __format: json
+    menu_background_color:
+      __name: PEERTUBE_THEME_CUSTOMIZATION_MENU_BACKGROUND_COLOR
+      __format: json
+    menu_border_radius:
+      __name: PEERTUBE_THEME_CUSTOMIZATION_MENU_BORDER_RADIUS
+      __format: json
+    header_background_color:
+      __name: PEERTUBE_THEME_CUSTOMIZATION_HEADER_BACKGROUND_COLOR
+      __format: json
+    header_foreground_color:
+      __name: PEERTUBE_THEME_CUSTOMIZATION_HEADER_FOREGROUND_COLOR
+      __format: json
+    input_border_radius:
+      __name: PEERTUBE_THEME_CUSTOMIZATION_INPUT_BORDER_RADIUS
+      __format: json
 
-    profile: "PEERTUBE_LIVE_TRANSCODING_PROFILE"
+broadcast_message:
+  enabled:
+    __name: PEERTUBE_BROADCAST_MESSAGE_ENABLED
+    __format: json
+  message: PEERTUBE_BROADCAST_MESSAGE_MESSAGE
+  level: PEERTUBE_BROADCAST_MESSAGE_LEVEL
+  dismissable:
+    __name: PEERTUBE_BROADCAST_MESSAGE_DISMISSABLE
+    __format: json
 
-    resolutions:
-      0p:
-        __name: "PEERTUBE_LIVE_TRANSCODING_0P"
-        __format: "json"
-      144p:
-        __name: "PEERTUBE_LIVE_TRANSCODING_144P"
-        __format: "json"
-      240p:
-        __name: "PEERTUBE_LIVE_TRANSCODING_240P"
-        __format: "json"
-      360p:
-        __name: "PEERTUBE_LIVE_TRANSCODING_360P"
-        __format: "json"
-      480p:
-        __name: "PEERTUBE_LIVE_TRANSCODING_480P"
-        __format: "json"
-      720p:
-        __name: "PEERTUBE_LIVE_TRANSCODING_720P"
-        __format: "json"
-      1080p:
-        __name: "PEERTUBE_LIVE_TRANSCODING_1080P"
-        __format: "json"
-      1440p:
-        __name: "PEERTUBE_LIVE_TRANSCODING_1440P"
-        __format: "json"
-      2160p:
-        __name: "PEERTUBE_LIVE_TRANSCODING_2160P"
-        __format: "json"
+search:
+  remote_uri:
+    users:
+      __name: PEERTUBE_SEARCH_REMOTEURI_USERS
+      __format: json
+    anonymous:
+      __name: PEERTUBE_SEARCH_REMOTEURI_ANONYMOUS
+      __format: json
+  search_index:
+    enabled:
+      __name: PEERTUBE_SEARCH_SEARCH_INDEX_ENABLED
+      __format: json
+    url: PEERTUBE_SEARCH_SEARCH_INDEX_URL
+    disable_local_search:
+      __name: PEERTUBE_SEARCH_SEARCH_INDEX_DISABLE_LOCAL_SEARCH
+      __format: json
+    is_default_search:
+      __name: PEERTUBE_SEARCH_SEARCH_INDEX_IS_DEFAULT_SEARCH
+      __format: json
 
-    always_transcode_original_resolution:
-      __name: "PEERTUBE_LIVE_TRANSCODING_ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION"
-      __format: "json"
+client:
+  new_features_info:
+    __name: PEERTUBE_CLIENT_NEW_FEATURES_INFO
+    __format: json
+  header:
+    hide_instance_name:
+      __name: PEERTUBE_CLIENT_HEADER_HIDE_INSTANCE_NAME
+      __format: json
+  videos:
+    miniature:
+      prefer_author_display_name:
+        __name: PEERTUBE_CLIENT_VIDEOS_MINIATURE_PREFER_AUTHOR_DISPLAY_NAME
+        __format: json
+    resumable_upload:
+      max_chunk_size:
+        __name: PEERTUBE_CLIENT_VIDEOS_RESUMABLE_UPLOAD_MAX_CHUNK_SIZE
+        __format: json
+  browse_videos:
+    default_sort: PEERTUBE_CLIENT_BROWSE_VIDEOS_DEFAULT_SORT
+    default_scope: PEERTUBE_CLIENT_BROWSE_VIDEOS_DEFAULT_SCOPE
+  menu:
+    login:
+      redirect_on_single_external_auth:
+        __name: PEERTUBE_CLIENT_MENU_LOGIN_REDIRECT_ON_SINGLE_EXTERNAL_AUTH
+        __format: json
+  open_in_app:
+    android:
+      intent:
+        enabled:
+          __name: PEERTUBE_CLIENT_OPEN_IN_APP_ANDROID_INTENT_ENABLED
+          __format: json
+        host: PEERTUBE_CLIENT_OPEN_IN_APP_ANDROID_INTENT_HOST
+        scheme: PEERTUBE_CLIENT_OPEN_IN_APP_ANDROID_INTENT_SCHEME
+        fallback_url: PEERTUBE_CLIENT_OPEN_IN_APP_ANDROID_INTENT_FALLBACK_URL
+    ios:
+      enabled:
+        __name: PEERTUBE_CLIENT_OPEN_IN_APP_IOS_ENABLED
+        __format: json
+      host: PEERTUBE_CLIENT_OPEN_IN_APP_IOS_HOST
+      scheme: PEERTUBE_CLIENT_OPEN_IN_APP_IOS_SCHEME
+      fallback_url: PEERTUBE_CLIENT_OPEN_IN_APP_IOS_FALLBACK_URL
 
-    fps:
-      max:
-        __name: "PEERTUBE_LIVE_TRANSCODING_FPS_MAX"
-        __format: "json"
+storyboards:
+  enabled:
+    __name: PEERTUBE_STORYBOARDS_ENABLED
+    __format: json
+  remote_runners:
+    enabled:
+      __name: PEERTUBE_STORYBOARDS_REMOTE_RUNNERS_ENABLED
+      __format: json
 
+defaults:
+  publish:
+    download_enabled:
+      __name: PEERTUBE_DEFAULTS_PUBLISH_DOWNLOAD_ENABLED
+      __format: json
+    comments_policy:
+      __name: PEERTUBE_DEFAULTS_PUBLISH_COMMENTS_POLICY
+      __format: json
+    privacy:
+      __name: PEERTUBE_DEFAULTS_PUBLISH_PRIVACY
+      __format: json
+    licence:
+      __name: PEERTUBE_DEFAULTS_PUBLISH_LICENCE
+      __format: json
+  live:
+    save_replay:
+      __name: PEERTUBE_DEFAULTS_LIVE_SAVE_REPLAY
+      __format: json
+  p2p:
+    webapp:
+      enabled:
+        __name: PEERTUBE_DEFAULTS_P2P_WEBAPP_ENABLED
+        __format: json
+    embed:
+      enabled:
+        __name: PEERTUBE_DEFAULTS_P2P_EMBED_ENABLED
+        __format: json
+  player:
+    theme: PEERTUBE_DEFAULTS_PLAYER_THEME
+    auto_play:
+      __name: PEERTUBE_DEFAULTS_PLAYER_AUTO_PLAY
+      __format: json
+
+email:
+  body:
+    signature: PEERTUBE_EMAIL_BODY_SIGNATURE
+  subject:
+    prefix: PEERTUBE_EMAIL_SUBJECT_PREFIX
+
+video_comments:
+  accept_remote_comments:
+    __name: PEERTUBE_VIDEO_COMMENTS_ACCEPT_REMOTE_COMMENTS
+    __format: json

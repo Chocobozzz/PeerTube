@@ -201,14 +201,17 @@
         <label i18n for="deleteVideo">Change ownership of your video</label>
         <div class="form-group-description" i18n>A modal window will open for you to specify the local account to which you want to transfer your video</div>
 
-        <button class="peertube-button danger-button" (click)="showChangeOwnershipModal()" [disabled]="ownershipRequestSent" i18n>Transfer ownership</button>
+        <button type="button" class="peertube-button danger-button" (click)="showChangeOwnershipModal()" [disabled]="!!pendingOwnershipRequest" i18n>Transfer ownership</button>
 
-        @if (ownershipRequestSent) {
-          <my-alert class="d-block mt-3" type="success">
-            <ng-container i18n>
-            <a routerLink="/my-library/ownership">Ownership change request</a> sent to {{ ownershipRequestSent }}</ng-container>
-            </my-alert>
-          }
+        @if (pendingOwnershipRequest) {
+          <my-alert class="d-block mt-3 d-flex" type="success">
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+              <div i18n>Ownership change request sent to <strong>{{pendingOwnershipRequest.nextOwnerAccount.name}}</strong>, awaiting its approval.</div>
+
+              <my-button (click)="cancelOwnershipRequest()" theme="secondary">Cancel request</my-button>
+            </div>
+          </my-alert>
+        }
         </div>
 
         <my-video-change-ownership
@@ -220,7 +223,7 @@
           <label i18n for="deleteVideo">Delete your video</label>
           <div class="form-group-description" i18n>Warning: this is a definitive action!</div>
 
-          <button class="peertube-button danger-button" (click)="deleteVideo()" i18n>Delete</button>
+          <button type="button" class="peertube-button danger-button" (click)="deleteVideo()" i18n>Delete</button>
         </div>
       </div>
     }

@@ -1,4 +1,5 @@
 import { Component, OnInit, inject, viewChild } from '@angular/core'
+import { RouterLink } from '@angular/router'
 import { ConfirmService, Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { InstanceFollowService } from '@app/shared/shared-instance/instance-follow.service'
@@ -19,6 +20,7 @@ type DataLoaderParameter = Parameters<FollowingListComponent['_dataLoader']>[0]
   templateUrl: './following-list.component.html',
   styleUrls: [ './following-list.component.scss' ],
   imports: [
+    RouterLink,
     GlobalIconComponent,
     DeleteButtonComponent,
     RedundancyCheckboxComponent,

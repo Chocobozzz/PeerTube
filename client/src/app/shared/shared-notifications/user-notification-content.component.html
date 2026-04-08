@@ -270,6 +270,30 @@
       </div>
     }
 
+    @case (26) { <!-- UserNotificationType.VIDEO_OWNERSHIP_CHANGED_REQUEST -->
+      <my-global-icon iconName="user-add"></my-global-icon>
+
+      <div class="message" i18n>
+        <strong>{{ n.payload.videoOwnership.initiatorAccount.displayName }}</strong> requested to transfer ownership of video <strong>{{ n.payload.videoOwnership.video.name }}</strong> to you
+      </div>
+    }
+
+    @case (27) { <!-- UserNotificationType.VIDEO_OWNERSHIP_CHANGED_ACCEPTED -->
+      <my-global-icon iconName="tick"></my-global-icon>
+
+      <div class="message" i18n>
+        <strong>{{ n.payload.videoOwnership.nextOwnerAccount.displayName }}</strong> accepted the ownership change request for video <strong>{{ n.payload.videoOwnership.video.name }}</strong>
+      </div>
+    }
+
+    @case (28) { <!-- UserNotificationType.VIDEO_OWNERSHIP_CHANGED_REJECTED -->
+      <my-global-icon iconName="cross"></my-global-icon>
+
+      <div class="message" i18n>
+        <strong>{{ n.payload.videoOwnership.nextOwnerAccount.displayName }}</strong> rejected the ownership change request for video <strong>{{ n.payload.videoOwnership.video.name }}</strong>
+      </div>
+    }
+
     @default {
       <my-global-icon iconName="alert"></my-global-icon>
 

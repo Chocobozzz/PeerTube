@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { HttpStatusCode, UserNewFeatureInfo, UserRole, VideoCreateResult } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
@@ -13,7 +13,7 @@ import {
   UsersCommand
 } from '@peertube/peertube-server-commands'
 import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
-import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
+import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
 
 describe('Test my user API validators', function () {
   const path = '/api/v1/users/'

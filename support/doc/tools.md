@@ -602,7 +602,9 @@ cd /var/www/peertube-docker; \
 
 **PeerTube >= 6.2**
 
-Use this script to recover disk space by removing remote files (thumbnails, avatars...) that can be re-fetched later by your PeerTube instance on-demand:
+Use this script to recover disk space by removing remote files (thumbnails, avatars...) that can be re-fetched later by your PeerTube instance on-demand.
+
+Restart PeerTube after running this script.
 
 ::: code-group
 
@@ -673,6 +675,7 @@ cd /var/www/peertube-docker; \
 ```
 
 :::
+
 
 ### Update PeerTube instance domain name
 

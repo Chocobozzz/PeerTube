@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
 import { compareSemVer } from '@peertube/peertube-core-utils'
 
 describe('Version', function () {
-
   it('Should correctly compare two stable versions', async function () {
     expect(compareSemVer('3.4.0', '3.5.0')).to.be.below(0)
     expect(compareSemVer('3.5.0', '3.4.0')).to.be.above(0)

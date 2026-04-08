@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
-import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
+import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
 import { omit } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, UserAdminFlag, UserRole } from '@peertube/peertube-models'
 import {

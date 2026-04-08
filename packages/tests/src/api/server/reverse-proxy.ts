@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
 import { wait } from '@peertube/peertube-core-utils'
@@ -124,8 +124,7 @@ describe('Test application behind a reverse proxy', function () {
       await server.registrations.register({ username: 'test' + i, expectedStatus: HttpStatusCode.CONFLICT_409 })
     }
 
-    await server.registrations.register({ username: 'test43', expectedStatus: HttpStatusCode.NO_CONTENT_204 })
-
+    await server.registrations.register({ username: 'test43', expectedStatus: HttpStatusCode.OK_200 })
   })
 
   it('Should rate limit API calls', async function () {

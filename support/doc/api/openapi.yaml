@@ -807,6 +807,7 @@ paths:
         - $ref: '#/components/parameters/hasWebVideoFiles'
         - $ref: '#/components/parameters/host'
         - $ref: '#/components/parameters/autoTagOneOfVideo'
+        - $ref: '#/components/parameters/stateOneOfVideo'
         - $ref: '#/components/parameters/privacyOneOf'
         - $ref: '#/components/parameters/excludeAlreadyWatched'
         - $ref: '#/components/parameters/search'
@@ -2419,6 +2420,7 @@ paths:
         - $ref: '#/components/parameters/hasWebVideoFiles'
         - $ref: '#/components/parameters/host'
         - $ref: '#/components/parameters/autoTagOneOfVideo'
+        - $ref: '#/components/parameters/stateOneOfVideo'
         - $ref: '#/components/parameters/privacyOneOf'
         - $ref: '#/components/parameters/excludeAlreadyWatched'
         - $ref: '#/components/parameters/search'
@@ -2526,6 +2528,7 @@ paths:
         - $ref: '#/components/parameters/hasWebVideoFiles'
         - $ref: '#/components/parameters/host'
         - $ref: '#/components/parameters/autoTagOneOfVideo'
+        - $ref: '#/components/parameters/stateOneOfVideo'
         - $ref: '#/components/parameters/privacyOneOf'
         - $ref: '#/components/parameters/excludeAlreadyWatched'
         - $ref: '#/components/parameters/search'
@@ -2790,8 +2793,20 @@ paths:
       tags:
         - Register
       responses:
-        '204':
+        '200':
           description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  state:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/UserRegistrationState'
+                      label:
+                        type: string
         '400':
           description: request error
         '403':
@@ -2818,7 +2833,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserRegistration'
+                type: object
+                properties:
+                  state:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/UserRegistrationState'
+                      label:
+                        type: string
         '400':
           description: request error or signup approval is not enabled on the instance
         '403':
@@ -2918,6 +2941,13 @@ paths:
             - createdAt
             - state
             - -state
+        - name: stateOneOf
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/UserRegistrationState'
       responses:
         '200':
           description: successful operation
@@ -2937,6 +2967,7 @@ paths:
   /api/v1/videos/ownership:
     get:
       summary: List video ownership changes
+      description: List ownership change requests received by the authenticated user and requests sent by a channel managed by the authenticated user
       tags:
         - Video Ownership Change
       security:
@@ -2944,6 +2975,18 @@ paths:
       responses:
         '200':
           description: successful operation
+          content:
+            'application/json':
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VideoChangeOwnership'
 
   '/api/v1/videos/ownership/{id}/accept':
     post:
@@ -2978,6 +3021,67 @@ paths:
           description: cannot terminate an ownership change of another user
         '404':
           description: video ownership change not found
+
+  '/api/v1/videos/ownership/{id}':
+    delete:
+      summary: Delete ownership change request
+      description: Delete an ownership change request. Only users who can manage the video can delete the request.
+      tags:
+        - Video Ownership Change
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '204':
+          description: successful operation
+        '403':
+          description: only users who can manage the video can delete an ownership change request
+        '404':
+          description: video ownership change not found
+
+  '/api/v1/videos/{id}/ownership':
+    get:
+      summary: List ownership change requests for a video
+      description: List all ownership change requests for a specific video. The authenticated user must be able to manage the video.
+      tags:
+        - Video Ownership Change
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+        - name: state
+          in: query
+          required: false
+          description: Filter by ownership change state (WAITING, ACCEPTED, REFUSED)
+          schema:
+            type: string
+            enum:
+              - WAITING
+              - ACCEPTED
+              - REFUSED
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            'application/json':
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VideoChangeOwnership'
+        '403':
+          description: cannot manage the video
+        '404':
+          description: video not found
 
   '/api/v1/videos/{id}/give-ownership':
     post:
@@ -3084,6 +3188,7 @@ paths:
         - $ref: '#/components/parameters/hasWebVideoFiles'
         - $ref: '#/components/parameters/host'
         - $ref: '#/components/parameters/autoTagOneOfVideo'
+        - $ref: '#/components/parameters/stateOneOfVideo'
         - $ref: '#/components/parameters/privacyOneOf'
         - $ref: '#/components/parameters/excludeAlreadyWatched'
         - $ref: '#/components/parameters/search'
@@ -4964,6 +5069,7 @@ paths:
         - $ref: '#/components/parameters/hasWebVideoFiles'
         - $ref: '#/components/parameters/host'
         - $ref: '#/components/parameters/autoTagOneOfVideo'
+        - $ref: '#/components/parameters/stateOneOfVideo'
         - $ref: '#/components/parameters/privacyOneOf'
         - $ref: '#/components/parameters/excludeAlreadyWatched'
         - $ref: '#/components/parameters/search'
@@ -6180,6 +6286,7 @@ paths:
         - $ref: '#/components/parameters/hasWebVideoFiles'
         - $ref: '#/components/parameters/host'
         - $ref: '#/components/parameters/autoTagOneOfVideo'
+        - $ref: '#/components/parameters/stateOneOfVideo'
         - $ref: '#/components/parameters/privacyOneOf'
         - $ref: '#/components/parameters/excludeAlreadyWatched'
         - name: startDate
@@ -7567,6 +7674,13 @@ paths:
             type: array
             items:
               $ref: '#/components/schemas/RunnerJobState'
+        - name: typeOneOf
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/RunnerJobType'
       responses:
         '200':
           description: successful operation
@@ -8467,6 +8581,19 @@ components:
         - type: array
           items:
             type: string
+      style: form
+      explode: true
+    stateOneOfVideo:
+      name: stateOneOf
+      in: query
+      required: false
+      description: "**PeerTube >= 8.2** **Admins and moderators only** filter on videos that have one of these states"
+      schema:
+        oneOf:
+        - $ref: '#/components/schemas/VideoStateConstant/properties/id'
+        - type: array
+          items:
+            $ref: '#/components/schemas/VideoStateConstant/properties/id'
       style: form
       explode: true
     channelNameOneOf:
@@ -9924,6 +10051,28 @@ components:
           type: integer
         nsfw:
           type: boolean
+    VideoChangeOwnership:
+      type: object
+      description: Representation of a video ownership change
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        status:
+          type: string
+          description: Status of the ownership change request
+          enum:
+            - WAITING
+            - ACCEPTED
+            - REFUSED
+        initiatorAccount:
+          $ref: '#/components/schemas/Account'
+        nextOwnerAccount:
+          $ref: '#/components/schemas/Account'
+        video:
+          $ref: '#/components/schemas/Video'
+        createdAt:
+          type: string
+          format: date-time
     VideoPlaylist:
       properties:
         id:
@@ -11846,6 +11995,14 @@ components:
       required:
         - moderationResponse
 
+    UserRegistrationState:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+      description: 'The registration state (Pending = `1`, Rejected = `2`, Accepted = `3`)'
+
     UserRegistration:
       properties:
         id:
@@ -11854,12 +12011,7 @@ components:
           type: object
           properties:
             id:
-              type: integer
-              enum:
-                - 1
-                - 2
-                - 3
-              description: 'The registration state (Pending = `1`, Rejected = `2`, Accepted = `3`)'
+              $ref: '#/components/schemas/UserRegistrationState'
             label:
               type: string
         registrationReason:
@@ -12301,6 +12453,12 @@ components:
         - 20
         - 21
         - 22
+        - 23
+        - 24
+        - 25
+        - 26
+        - 27
+        - 28
       description: >
         Notification type. One of the following values:
 
@@ -12347,6 +12505,18 @@ components:
           - `21` NEW_LIVE_FROM_SUBSCRIPTION
 
           - `22` MY_VIDEO_TRANSCRIPTION_GENERATED
+
+          - `23` INVITED_TO_COLLABORATE_TO_CHANNEL
+
+          - `24` ACCEPTED_TO_COLLABORATE_TO_CHANNEL
+
+          - `25` REFUSED_TO_COLLABORATE_TO_CHANNEL
+
+          - `26` VIDEO_OWNERSHIP_CHANGED_REQUEST
+
+          - `27` VIDEO_OWNERSHIP_CHANGED_ACCEPTED
+
+          - `28` VIDEO_OWNERSHIP_CHANGED_REJECTED
 
     NewFeatureInfoType:
       type: integer
@@ -12684,6 +12854,34 @@ components:
                   file:
                     type: string
                     format: binary
+          -
+            title: remove-segments
+            type: object
+            properties:
+              name:
+                type: string
+                enum:
+                  - 'remove-segments'
+              options:
+                type: object
+                required:
+                  - segments
+                properties:
+                  segments:
+                    type: array
+                    minItems: 1
+                    items:
+                      type: object
+                      required:
+                        - start
+                        - end
+                      properties:
+                        start:
+                          type: integer
+                          minimum: 0
+                        end:
+                          type: integer
+                          minimum: 1
 
     LiveVideoSessionResponse:
       properties:

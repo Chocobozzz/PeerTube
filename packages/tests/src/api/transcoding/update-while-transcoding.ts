@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { wait } from '@peertube/peertube-core-utils'
 import { VideoPrivacy } from '@peertube/peertube-models'
@@ -20,7 +20,6 @@ describe('Test update video privacy while transcoding', function () {
   const videoUUIDs: string[] = []
 
   function runTestSuite (hlsOnly: boolean, objectStorageBaseUrl?: string) {
-
     it('Should not have an error while quickly updating a private video to public after upload #1', async function () {
       this.timeout(360_000)
 
@@ -102,7 +101,6 @@ describe('Test update video privacy while transcoding', function () {
   })
 
   describe('With only HLS enabled', function () {
-
     before(async function () {
       await servers[0].config.updateExistingConfig({
         newConfig: {

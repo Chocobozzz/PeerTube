@@ -41,8 +41,10 @@ async function run () {
   await remove(typesDistTMPPath)
 
   execSync(`npm run tsc -- -b ${typesTsConfigPath} --verbose`, { stdio: 'inherit' })
-  // eslint-disable-next-line max-len
-  execSync(`npm run resolve-tspaths -- --project ${distTmpTsConfigPath} --src ${typesDistTMPPath} --out ${typesDistTMPPath}`, { stdio: 'inherit' })
+  // oxlint-disable-next-line max-len
+  execSync(`npm run resolve-tspaths -- --project ${distTmpTsConfigPath} --src ${typesDistTMPPath} --out ${typesDistTMPPath}`, {
+    stdio: 'inherit'
+  })
 
   execSync(`./node_modules/.bin/rollup -c ${rollupConfig}`, { stdio: 'inherit' })
   await remove(typesDistTMPPath)

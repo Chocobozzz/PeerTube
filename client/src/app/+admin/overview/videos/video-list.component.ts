@@ -11,8 +11,17 @@ import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { VideoBlockComponent } from '@app/shared/shared-moderation/video-block.component'
 import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
 import { PrivacyBadgeComponent } from '@app/shared/shared-video/privacy-badge.component'
+import { getAllVideoStates, getVideoStateBadgeClass, getVideoStateLabel } from '@app/shared/shared-video/video-state-utils'
 import { getAllFiles } from '@peertube/peertube-core-utils'
-import { FileStorage, NSFWFlag, UserRight, VideoFile, VideoState, VideoStreamingPlaylistType } from '@peertube/peertube-models'
+import {
+  FileStorage,
+  NSFWFlag,
+  UserRight,
+  VideoFile,
+  VideoState,
+  VideoStateType,
+  VideoStreamingPlaylistType
+} from '@peertube/peertube-models'
 import { videoRequiresFileToken } from '@root-helpers/video'
 import { TableRowExpandEvent } from 'primeng/table'
 import { AdvancedFilterDef } from '../../../shared/shared-forms/advanced-input-filter.component'
@@ -169,6 +178,19 @@ export class VideoListComponent implements OnInit {
       },
 
       {
+        type: 'select',
+        key: 'state',
+        title: $localize`Video state`,
+        clearable: true,
+        filter: true,
+        items: getAllVideoStates().map(state => ({
+          id: state + '',
+          label: getVideoStateLabel(state).toLocaleUpperCase(),
+          classes: [ 'pt-badge', getVideoStateBadgeClass(state) ]
+        }))
+      },
+
+      {
         type: 'options',
         key: 'hasWebVideoFiles',
         title: $localize`Web files (local only)`,
@@ -314,6 +336,10 @@ export class VideoListComponent implements OnInit {
     return total
   }
 
+  getVideoStateBadgeClass (state: VideoStateType) {
+    return 'pt-badge ' + getVideoStateBadgeClass(state)
+  }
+
   async removeVideoFile (video: Video, file: VideoFile, type: 'hls' | 'web-videos') {
     const message = $localize`Are you sure you want to delete this ${file.resolution.label} file?`
     const res = await this.confirmService.confirm(message, $localize`Delete file`)
@@ -368,11 +394,19 @@ export class VideoListComponent implements OnInit {
 
   // ---------------------------------------------------------------------------
 
-  private _dataLoader (options: DataLoaderOptionsBase & Partial<Parameters<VideoAdminService['listAdminVideos']>[0]>) {
+  private _dataLoader (
+    options: DataLoaderOptionsBase & Partial<Parameters<VideoAdminService['listAdminVideos']>[0]> & {
+      state: VideoStateType | string
+    }
+  ) {
     return this.videoAdminService.listAdminVideos({
       // Always list NSFW video, overriding instance/user setting
       nsfwFlagsExcluded: NSFWFlag.NONE,
       nsfw: 'both',
+
+      stateOneOf: options.state
+        ? [ options.state as VideoStateType ]
+        : undefined,
 
       ...options
     })

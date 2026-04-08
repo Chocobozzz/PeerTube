@@ -59,16 +59,16 @@ export class RunnerService {
     sort: SortMeta
     search?: string
     stateOneOf?: RunnerJobStateType[]
-    jobType?: RunnerJobType
+    typeOneOf?: RunnerJobType[]
   }) {
-    const { pagination, sort, search, stateOneOf, jobType } = options
+    const { pagination, sort, search, stateOneOf, typeOneOf } = options
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
     if (search) params = params.append('search', search)
-    if (jobType) params = params.append('jobType', jobType)
-    if (stateOneOf) params = this.restService.addObjectParams(params, { stateOneOf })
+
+    params = this.restService.addObjectParams(params, { stateOneOf, typeOneOf })
 
     return forkJoin([
       this.authHttp.get<ResultList<RunnerJobAdmin>>(RunnerService.BASE_RUNNER_URL + '/jobs', { params }),

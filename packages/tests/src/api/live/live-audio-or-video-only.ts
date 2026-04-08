@@ -1,9 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { Video, VideoResolution } from '@peertube/peertube-models'
 import {
   PeerTubeServer,
-  cleanupTests, createMultipleServers,
+  cleanupTests,
+  createMultipleServers,
   doubleFollow,
   findExternalSavedVideo,
   setAccessTokensToServers,

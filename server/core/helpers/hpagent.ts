@@ -112,7 +112,8 @@ export class HttpsProxyAgent extends https.Agent {
     if (this.proxy.username || this.proxy.password) {
       const base64 = Buffer.from(
         `${decodeURIComponent(this.proxy.username || '')}:${decodeURIComponent(this.proxy.password || '')}
-      `).toString('base64')
+      `
+      ).toString('base64')
 
       requestOptions.headers['proxy-authorization'] = `Basic ${base64}`
     }
@@ -130,7 +131,7 @@ export class HttpsProxyAgent extends https.Agent {
       if (response.statusCode === 200) {
         try {
           // FIXME: typings doesn't include createConnection type in HTTP agent
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // oxlint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-expect-error
           const secureSocket = super.createConnection({ ...options, socket })
           callback(null, secureSocket)

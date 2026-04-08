@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
 import { VideoPrivacy } from '@peertube/peertube-models'
@@ -54,7 +54,6 @@ describe('Test users subscriptions', function () {
   })
 
   describe('Distinction between server videos and user videos', function () {
-
     it('Should display videos of server 2 on server 1', async function () {
       const { total } = await servers[0].videos.list()
 
@@ -89,7 +88,6 @@ describe('Test users subscriptions', function () {
   })
 
   describe('Subscription endpoints', function () {
-
     it('Should list subscriptions', async function () {
       {
         const body = await command.list()
@@ -174,7 +172,6 @@ describe('Test users subscriptions', function () {
   })
 
   describe('Subscription videos', function () {
-
     it('Should list subscription videos', async function () {
       {
         const body = await servers[0].videos.listMySubscriptionVideos()
@@ -308,7 +305,6 @@ describe('Test users subscriptions', function () {
   })
 
   describe('Existing subscription video update', function () {
-
     it('Should update a video of server 3 and see the updated video on server 1', async function () {
       this.timeout(30000)
 
@@ -322,7 +318,6 @@ describe('Test users subscriptions', function () {
   })
 
   describe('Subscription removal', function () {
-
     it('Should remove user of server 3 subscription', async function () {
       this.timeout(30000)
 
@@ -372,7 +367,6 @@ describe('Test users subscriptions', function () {
   })
 
   describe('Re-follow', function () {
-
     it('Should follow user of server 3 again', async function () {
       this.timeout(60000)
 
@@ -418,7 +412,6 @@ describe('Test users subscriptions', function () {
   })
 
   describe('Followers listing', function () {
-
     it('Should list user 3 followers', async function () {
       {
         const { total, data } = await servers[2].accounts.listFollowers({
@@ -582,7 +575,6 @@ describe('Test users subscriptions', function () {
   })
 
   describe('Subscription videos privacy', function () {
-
     it('Should update video as internal and not see from remote server', async function () {
       this.timeout(30000)
 

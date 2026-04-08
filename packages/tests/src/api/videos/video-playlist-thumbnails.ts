@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { VideoPlaylistPrivacy } from '@peertube/peertube-models'
 import {
@@ -214,7 +214,7 @@ describe('Playlist thumbnail', function () {
 
     for (const server of servers) {
       const p = await getPlaylistWithoutThumbnail(server)
-      // eslint-disable-next-line @typescript-eslint/no-deprecated
+      // oxlint-disable-next-line @typescript-eslint/no-deprecated
       expect(p.thumbnailPath).to.be.null
       expect(p.thumbnails).to.have.lengthOf(0)
     }

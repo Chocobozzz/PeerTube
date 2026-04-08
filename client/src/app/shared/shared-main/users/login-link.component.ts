@@ -1,7 +1,7 @@
 import { booleanAttribute, Component, inject, input } from '@angular/core'
 import { ServerService } from '@app/core'
 import { PluginsManager } from '@root-helpers/plugins-manager'
-import { environment } from 'src/environments/environment'
+import { environment } from '../../../../environments/environment'
 import { LinkComponent } from '../common/link.component'
 
 @Component({

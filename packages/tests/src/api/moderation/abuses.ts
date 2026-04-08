@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
 import { AbuseMessage, AbusePredefinedReasonsString, AbuseState, AdminAbuse, UserAbuse } from '@peertube/peertube-models'

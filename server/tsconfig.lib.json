@@ -3,10 +3,9 @@
   "compilerOptions": {
     "outDir": "./dist",
     "tsBuildInfoFile": "./dist/.tsbuildinfo",
-    "baseUrl": "../",
     "rootDir": ".",
     "paths": {
-      "@server/*": [ "server/core/*" ]
+      "@server/*": [ "./core/*" ]
     }
   }
 }

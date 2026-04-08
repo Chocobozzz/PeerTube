@@ -5,6 +5,8 @@ export function buildSQLAttributes<M extends Model> (options: {
   model: ModelStatic<M>
   tableName: string
 
+  jsonMode?: boolean // default false
+
   excludeAttributes?: readonly Exclude<keyof AttributesOnly<M>, symbol>[]
   includeAttributes?: readonly Exclude<keyof AttributesOnly<M>, symbol>[]
 
@@ -12,7 +14,7 @@ export function buildSQLAttributes<M extends Model> (options: {
 
   idBuilder?: string[]
 }) {
-  const { model, tableName, aliasPrefix = '', excludeAttributes, includeAttributes, idBuilder } = options
+  const { model, tableName, aliasPrefix = '', excludeAttributes, includeAttributes, idBuilder, jsonMode = false } = options
 
   const attributes = Object.keys(model.getAttributes()) as Exclude<keyof AttributesOnly<M>, symbol>[]
 
@@ -30,6 +32,10 @@ export function buildSQLAttributes<M extends Model> (options: {
       return false
     })
     .map(a => {
+      if (jsonMode) {
+        return `'${a}', "${a}"`
+      }
+
       return `"${tableName}"."${a}" AS "${aliasPrefix}${a}"`
     })
 

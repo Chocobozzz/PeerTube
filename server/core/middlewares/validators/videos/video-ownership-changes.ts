@@ -4,7 +4,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { MUserAccountId, MVideoChangeOwnershipFull, MVideoWithAllFiles } from '@server/types/models/index.js'
 import express from 'express'
-import { param } from 'express-validator'
+import { param, query } from 'express-validator'
 import {
   areValidationErrors,
   checkCanManageAccount,
@@ -15,6 +15,8 @@ import {
   doesVideoExist,
   isValidVideoIdParam
 } from '../shared/index.js'
+import { VideoChangeOwnershipModel } from '@server/models/video/video-change-ownership.js'
+import { VideoModel } from '@server/models/video/video.js'
 
 export const videosChangeOwnershipValidator = [
   isValidVideoIdParam('videoId'),
@@ -40,6 +42,15 @@ export const videosChangeOwnershipValidator = [
     if (!nextOwner) {
       res.fail({
         message: req.t('{username} does not exist on {instanceName}', { username: req.body.username, instanceName: CONFIG.INSTANCE.NAME })
+      })
+      return
+    }
+
+    const existing = await VideoChangeOwnershipModel.loadPendingByVideo(res.locals.videoWithRights.id)
+    if (existing) {
+      res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: req.t('There is already a pending ownership change request for this video')
       })
       return
     }
@@ -88,9 +99,77 @@ export const videosAcceptChangeOwnershipValidator = [
 
     const videoChangeOwnership = res.locals.videoChangeOwnership
 
-    const video = videoChangeOwnership.Video
+    const video = await VideoModel.loadWithFiles(videoChangeOwnership.Video.id)
 
     if (!await checkCanAccept(video, req, res)) return
+
+    return next()
+  }
+]
+
+export const videosListVideoOwnershipChangesValidator = [
+  isValidVideoIdParam('videoId'),
+
+  query('state')
+    .optional()
+    .custom(value => {
+      if (!Object.values(VideoChangeOwnershipStatus).includes(value)) return false
+
+      return true
+    }),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+    if (!await doesVideoExist(req.params.videoId, res, 'with-rights')) return
+
+    // Check if the user who did the request is able to manage the video
+    if (
+      !await checkCanManageVideo({
+        user: res.locals.oauth.token.User,
+        video: res.locals.videoWithRights,
+        right: UserRight.CHANGE_VIDEO_OWNERSHIP,
+        checkIsOwner: false,
+        checkIsLocal: true,
+        req,
+        res
+      })
+    ) return
+
+    return next()
+  }
+]
+
+export const videosDeleteChangeOwnershipValidator = [
+  param('id')
+    .custom(isIdValid),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+    if (!await doesChangeVideoOwnershipExist(req.params.id, req, res)) return
+
+    const videoChangeOwnership = res.locals.videoChangeOwnership
+
+    if (videoChangeOwnership.status !== VideoChangeOwnershipStatus.WAITING) {
+      res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: req.t('Ownership already accepted or refused')
+      })
+      return
+    }
+
+    const video = await VideoModel.loadWithRights(videoChangeOwnership.Video.id)
+
+    if (
+      !await checkCanManageVideo({
+        user: res.locals.oauth.token.User,
+        video,
+        right: UserRight.CHANGE_VIDEO_OWNERSHIP,
+        checkIsOwner: false,
+        checkIsLocal: true,
+        req,
+        res
+      })
+    ) return
 
     return next()
   }

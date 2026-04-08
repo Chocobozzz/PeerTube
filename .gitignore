@@ -59,8 +59,5 @@ node_modules
 # TypeScript
 *.tsbuildinfo
 
-# EsLint
-.eslintcache
-
 # Compiled output
 dist

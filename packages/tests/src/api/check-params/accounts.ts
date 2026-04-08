@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { HttpStatusCode } from '@peertube/peertube-models'

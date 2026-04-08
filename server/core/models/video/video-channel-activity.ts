@@ -10,7 +10,8 @@ import {
 import { uuidToShort } from '@peertube/peertube-node-utils'
 import { VIDEO_CHANNEL_ACTIVITY_ACTIONS, VIDEO_CHANNEL_ACTIVITY_TARGETS } from '@server/initializers/constants.js'
 import {
-  MAccountActor,
+  MAccountNames,
+  MAccountUrl,
   MChannelId,
   MChannelSync,
   MUserAccountId,
@@ -309,7 +310,7 @@ export class VideoChannelActivityModel extends SequelizeModel<VideoChannelActivi
     user: MUserAccountId
     channel: MChannelId
     video: MVideo
-    targetAccount: MAccountActor
+    targetAccount: MAccountNames & MAccountUrl
     transaction: Transaction
   }) {
     const { action, user, channel, video, targetAccount, transaction } = options
@@ -509,7 +510,7 @@ export class VideoChannelActivityModel extends SequelizeModel<VideoChannelActivi
   formatVideoImport (this: MChannelActivityFormattable): VideoChannelActivity['videoImport'] {
     if (this.targetType !== VideoChannelActivityTarget.VIDEO_IMPORT) return null
 
-    if (this.VideoImport && this.VideoImport.Video) {
+    if (this.VideoImport?.Video) {
       return {
         id: this.VideoImport.id,
         name: this.VideoImport.Video.name,

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { VideoStatsTimeserie, VideoStatsTimeserieMetric } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
@@ -31,9 +31,9 @@ describe('Test views timeserie stats', function () {
     let vodVideoId: string
 
     before(async function () {
-      this.timeout(240000);
+      this.timeout(240000)
 
-      ({ vodVideoId } = await prepareViewsVideos({ servers, live: false, vod: true }))
+      ;({ vodVideoId } = await prepareViewsVideos({ servers, live: false, vod: true }))
     })
 
     it('Should display empty metric stats', async function () {
@@ -82,7 +82,6 @@ describe('Test views timeserie stats', function () {
     }
 
     function runTests (options: { useSessionId: boolean }) {
-
       const generateSession = () => {
         if (!options.useSessionId) return undefined
 
@@ -90,9 +89,9 @@ describe('Test views timeserie stats', function () {
       }
 
       before(async function () {
-        this.timeout(240000);
+        this.timeout(240000)
 
-        ({ vodVideoId, liveVideoId, ffmpegCommand: command } = await prepareViewsVideos({ servers, live: true, vod: true }))
+        ;({ vodVideoId, liveVideoId, ffmpegCommand: command } = await prepareViewsVideos({ servers, live: true, vod: true }))
       })
 
       it('Should display appropriate viewers metrics', async function () {

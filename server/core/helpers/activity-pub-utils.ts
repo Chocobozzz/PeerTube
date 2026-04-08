@@ -255,7 +255,10 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
     },
 
     lemmy: 'https://join-lemmy.org/ns#',
-    postingRestrictedToMods: 'lemmy:postingRestrictedToMods'
+    postingRestrictedToMods: 'lemmy:postingRestrictedToMods',
+
+    toot: 'http://joinmastodon.org/ns#',
+    indexable: 'toot:indexable'
   }),
 
   WatchAction: buildContext({

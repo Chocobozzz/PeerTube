@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { getAllFiles } from '@peertube/peertube-core-utils'
 import { FileStorage, HttpStatusCode, HttpStatusCodeType, VideoPlaylistPrivacy, VideoPrivacy } from '@peertube/peertube-models'
@@ -71,7 +71,8 @@ describe('Test prune storage CLI', function () {
   })
 
   describe('On filesystem', function () {
-    const badNames: { [directory: string]: string[] } = {}
+    const badCommonNames: { [directory: string]: string[] } = {}
+    const badTmpPersistentNames: { [directory: string]: string[] } = {}
 
     async function assertNotExists (server: PeerTubeServer, directory: string, substring: string) {
       const files = await readdir(server.servers.buildDirectory(directory))
@@ -115,9 +116,6 @@ describe('Test prune storage CLI', function () {
 
       const captionsCount = await server.servers.countFiles('captions')
       expect(captionsCount).to.equal(1)
-
-      const userExportFilesCount = await server.servers.countFiles('tmp-persistent')
-      expect(userExportFilesCount).to.equal(1)
     }
 
     async function checkCacheFilesCountBeforeLazyLoad () {
@@ -137,6 +135,9 @@ describe('Test prune storage CLI', function () {
     it('Should have the files on the disk', async function () {
       await checkLocalFilesCount()
       await checkCacheFilesCountBeforeLazyLoad()
+
+      const userExportFilesCount = await servers[0].servers.countFiles('tmp-persistent')
+      expect(userExportFilesCount).to.equal(1)
     })
 
     it('Should lazy load remote files', async function () {
@@ -190,7 +191,7 @@ describe('Test prune storage CLI', function () {
           await createFile(join(basePrivate, n1))
           await createFile(join(basePrivate, n2))
 
-          badNames['web-videos'] = [ n1, n2 ]
+          badCommonNames['web-videos'] = [ n1, n2 ]
         }
 
         {
@@ -202,7 +203,7 @@ describe('Test prune storage CLI', function () {
           await createFile(join(base, n1))
           await createFile(join(base, n2))
 
-          badNames['torrents'] = [ n1, n2 ]
+          badCommonNames['torrents'] = [ n1, n2 ]
         }
 
         for (const name of [ 'thumbnails', 'avatars', 'storyboards' ]) {
@@ -214,7 +215,7 @@ describe('Test prune storage CLI', function () {
           await createFile(join(base, n1))
           await createFile(join(base, n2))
 
-          badNames[name] = [ n1, n2 ]
+          badCommonNames[name] = [ n1, n2 ]
         }
 
         {
@@ -225,7 +226,7 @@ describe('Test prune storage CLI', function () {
           const n1 = buildUUID()
           await createFile(join(basePublic, n1))
           await createFile(join(basePrivate, n1))
-          badNames[directory] = [ n1 ]
+          badCommonNames[directory] = [ n1 ]
         }
 
         {
@@ -234,7 +235,7 @@ describe('Test prune storage CLI', function () {
           const n1 = buildUUID() + '.mp4'
           await createFile(join(base, n1))
 
-          badNames['original-video-files'] = [ n1 ]
+          badCommonNames['original-video-files'] = [ n1 ]
         }
 
         {
@@ -246,7 +247,7 @@ describe('Test prune storage CLI', function () {
           await createFile(join(base, n1))
           await createFile(join(base, n2))
 
-          badNames['captions'] = [ n1, n2 ]
+          badCommonNames['captions'] = [ n1, n2 ]
         }
 
         {
@@ -258,7 +259,7 @@ describe('Test prune storage CLI', function () {
           await createFile(join(base, n1))
           await createFile(join(base, n2))
 
-          badNames['tmp-persistent'] = [ n1, n2 ]
+          badTmpPersistentNames['tmp-persistent'] = [ n1, n2 ]
         }
       }
     })
@@ -274,8 +275,31 @@ describe('Test prune storage CLI', function () {
       await checkLocalFilesCount()
       await checkCacheFilesCountAfterLazyLoad()
 
-      for (const directory of Object.keys(badNames)) {
-        for (const name of badNames[directory]) {
+      // Must use the --offline option to also remove files from this directory
+      const userExportFilesCount = await servers[0].servers.countFiles('tmp-persistent')
+      expect(userExportFilesCount).to.equal(3)
+
+      for (const directory of Object.keys(badCommonNames)) {
+        for (const name of badCommonNames[directory]) {
+          await assertNotExists(servers[0], directory, name)
+        }
+      }
+    })
+
+    it('Should remove files with `--offline` option', async function () {
+      const env = servers[0].cli.getEnv()
+
+      await CLICommand.exec(`echo y | ${env} npm run prune-storage -- --offline`)
+
+      await checkLocalFilesCount()
+      await checkCacheFilesCountAfterLazyLoad()
+
+      // Must use the --offline option to also remove files from this directory
+      const userExportFilesCount = await servers[0].servers.countFiles('tmp-persistent')
+      expect(userExportFilesCount).to.equal(1)
+
+      for (const directory of Object.keys(badTmpPersistentNames)) {
+        for (const name of badTmpPersistentNames[directory]) {
           await assertNotExists(servers[0], directory, name)
         }
       }

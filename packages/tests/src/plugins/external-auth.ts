@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
 import { wait } from '@peertube/peertube-core-utils'
@@ -79,7 +79,7 @@ describe('Test external auth plugins', function () {
     const auths = config.plugin.registeredExternalAuths
     expect(auths).to.have.lengthOf(10)
 
-    const auth2 = auths.find((a) => a.authName === 'external-auth-2')
+    const auth2 = auths.find(a => a.authName === 'external-auth-2')
     expect(auth2).to.exist
     expect(auth2.authDisplayName).to.equal('External Auth 2')
     expect(auth2.npmName).to.equal('peertube-plugin-test-external-auth-one')
@@ -402,7 +402,7 @@ describe('Test external auth plugins', function () {
     const auths = config.plugin.registeredExternalAuths
     expect(auths).to.have.lengthOf(8)
 
-    const auth2 = auths.find((a) => a.authName === 'external-auth-2')
+    const auth2 = auths.find(a => a.authName === 'external-auth-2')
     expect(auth2).to.not.exist
   })
 
@@ -435,7 +435,6 @@ describe('Test external auth plugins', function () {
   })
 
   it('Should redirect to an external site after login if externalRedirectUri is set', async function () {
-
     const res = await server.plugins.getExternalAuth({
       npmName: 'test-external-auth-three',
       npmVersion: '0.0.1',
@@ -448,9 +447,9 @@ describe('Test external auth plugins', function () {
 
     const location = res.header.location
     expect(location.startsWith('https://external.com/some/redirect/path?')).to.be.true
-    
+
     const searchParams = decodeQueryString(location)
-  
+
     expect(searchParams.externalAuthToken).to.exist
     expect(searchParams.username).to.equal('cid')
 

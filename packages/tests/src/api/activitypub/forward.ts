@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { PeerTubeServer, cleanupTests, createMultipleServers, setAccessTokensToServers, waitJobs } from '@peertube/peertube-server-commands'
 import { expect } from 'chai'

@@ -7,6 +7,7 @@ import Hlsjs, { ErrorData, Level, LevelSwitchingData, ManifestParsedData } from 
 import { HlsJsP2PEngine, HlsWithP2PInstance } from 'p2p-media-loader-hlsjs'
 import videojs from 'video.js'
 import Tech, { SourceObject } from 'video.js/dist/types/tech/tech'
+import { getStoredPreferredResolution } from '../../peertube-player-local-storage'
 import { HLSPluginOptions, HlsjsConfigHandlerOptions, PeerTubeResolution, VideoJSTechHLS, VideojsPlayer, VideojsPlugin } from '../../types'
 
 const HlsWithP2P = HlsJsP2PEngine.injectMixin(Hlsjs)
@@ -357,6 +358,7 @@ export class Html5Hlsjs {
 
       resolutions.push({
         id: -2, // -1 is for "Auto quality"
+        height: 0,
         label: this.player.localize('Audio only'),
         selected: false,
         selectCallback: () => {
@@ -376,6 +378,30 @@ export class Html5Hlsjs {
     })
 
     this.player.peertubeResolutions().add(resolutions)
+
+    const preferredResolution = this.pickPreferredResolution(resolutions)
+    if (preferredResolution) {
+      this.player.peertubeResolutions().select({ id: preferredResolution.id, fireCallback: true })
+    }
+  }
+
+  private pickPreferredResolution (resolutions: PeerTubeResolution[]) {
+    const preferredHeight = getStoredPreferredResolution()
+    if (preferredHeight === undefined) return undefined
+
+    const selectableResolutions = resolutions
+      .filter(r => r.id !== -1 && r.height !== undefined)
+      .sort((a, b) => a.height - b.height)
+
+    if (selectableResolutions.length === 0) return undefined
+
+    const exactMatch = selectableResolutions.find(r => r.height === preferredHeight)
+    if (exactMatch) return exactMatch
+
+    const nearestAbove = selectableResolutions.find(r => r.height >= preferredHeight)
+    if (nearestAbove) return nearestAbove
+
+    return selectableResolutions[selectableResolutions.length - 1]
   }
 
   private manuallySelectVideoLevel (index: number) {

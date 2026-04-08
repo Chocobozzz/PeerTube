@@ -1,18 +1,13 @@
 import { VideoChangeOwnership, VideoChangeOwnershipStatus, type VideoChangeOwnershipStatusType } from '@peertube/peertube-models'
-import {
-  MVideoChangeOwnership,
-  MVideoChangeOwnershipFormattable,
-  MVideoChangeOwnershipFull
-} from '@server/types/models/video/video-change-ownership.js'
-import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
+import { MVideoChangeOwnership, MVideoChangeOwnershipFull } from '@server/types/models/video/video-change-ownership.js'
+import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
 import { AccountModel } from '../account/account.js'
-import { SequelizeModel, getSort } from '../shared/index.js'
-import { VideoModel, ScopeNames as VideoScopeNames } from './video.js'
-
-enum ScopeNames {
-  WITH_ACCOUNTS = 'WITH_ACCOUNTS',
-  WITH_VIDEO = 'WITH_VIDEO'
-}
+import { SequelizeModel, buildSQLAttributes } from '../shared/index.js'
+import {
+  ListVideoChangeOwnershipOptions,
+  VideoChangeOwnershipListQueryBuilder
+} from './sql/change-ownership/video-change-ownership-list-query-builder.js'
+import { VideoModel } from './video.js'
 
 @Table({
   tableName: 'videoChangeOwnership',
@@ -28,35 +23,6 @@ enum ScopeNames {
     }
   ]
 })
-@Scopes(() => ({
-  [ScopeNames.WITH_ACCOUNTS]: {
-    include: [
-      {
-        model: AccountModel,
-        as: 'Initiator',
-        required: true
-      },
-      {
-        model: AccountModel,
-        as: 'NextOwner',
-        required: true
-      }
-    ]
-  },
-  [ScopeNames.WITH_VIDEO]: {
-    include: [
-      {
-        model: VideoModel.scope([
-          VideoScopeNames.WITH_THUMBNAILS,
-          VideoScopeNames.WITH_WEB_VIDEO_FILES,
-          VideoScopeNames.WITH_STREAMING_PLAYLISTS,
-          VideoScopeNames.WITH_ACCOUNT_DETAILS
-        ]),
-        required: true
-      }
-    ]
-  }
-}))
 export class VideoChangeOwnershipModel extends SequelizeModel<VideoChangeOwnershipModel> {
   @CreatedAt
   declare createdAt: Date
@@ -106,37 +72,37 @@ export class VideoChangeOwnershipModel extends SequelizeModel<VideoChangeOwnersh
   })
   declare Video: Awaited<VideoModel>
 
-  static listForApi (nextOwnerId: number, start: number, count: number, sort: string) {
-    const query = {
-      offset: start,
-      limit: count,
-      order: getSort(sort),
-      where: {
-        nextOwnerAccountId: nextOwnerId
-      }
-    }
-
-    return Promise.all([
-      VideoChangeOwnershipModel.count(query),
-      VideoChangeOwnershipModel.scope([ ScopeNames.WITH_ACCOUNTS, ScopeNames.WITH_VIDEO ]).findAll<MVideoChangeOwnershipFull>(query)
-    ]).then(([ count, rows ]) => ({ total: count, data: rows }))
-  }
-
-  static load (id: number): Promise<MVideoChangeOwnershipFull> {
-    return VideoChangeOwnershipModel.scope([ ScopeNames.WITH_ACCOUNTS, ScopeNames.WITH_VIDEO ])
-      .findByPk(id)
-  }
-
-  static loadPendingByVideo (videoId: number): Promise<MVideoChangeOwnership> {
-    return VideoChangeOwnershipModel.findOne({
-      where: {
-        videoId,
-        status: VideoChangeOwnershipStatus.WAITING
-      }
+  static getSQLAttributes (tableName: string, aliasPrefix = '') {
+    return buildSQLAttributes({
+      model: this,
+      tableName,
+      aliasPrefix
     })
   }
 
-  toFormattedJSON (this: MVideoChangeOwnershipFormattable): VideoChangeOwnership {
+  // ---------------------------------------------------------------------------
+
+  static listForApi (options: ListVideoChangeOwnershipOptions) {
+    return Promise.all([
+      new VideoChangeOwnershipListQueryBuilder(VideoChangeOwnershipModel.sequelize, options).list<MVideoChangeOwnershipFull>(),
+      new VideoChangeOwnershipListQueryBuilder(VideoChangeOwnershipModel.sequelize, options).count()
+    ]).then(([ rows, total ]) => ({ total, data: rows }))
+  }
+
+  static load (id: number): Promise<MVideoChangeOwnershipFull> {
+    return new VideoChangeOwnershipListQueryBuilder(VideoChangeOwnershipModel.sequelize, { id }).get<MVideoChangeOwnershipFull>()
+  }
+
+  static loadPendingByVideo (videoId: number): Promise<MVideoChangeOwnership> {
+    return new VideoChangeOwnershipListQueryBuilder(VideoChangeOwnershipModel.sequelize, {
+      videoId,
+      state: VideoChangeOwnershipStatus.WAITING
+    }).get<MVideoChangeOwnershipFull>()
+  }
+
+  // ---------------------------------------------------------------------------
+
+  toFormattedJSON (this: MVideoChangeOwnershipFull): VideoChangeOwnership {
     return {
       id: this.id,
       status: this.status,

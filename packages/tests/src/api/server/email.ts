@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { HttpStatusCode, VideoCreateResult } from '@peertube/peertube-models'
 import {
@@ -10,7 +10,7 @@ import {
   waitJobs
 } from '@peertube/peertube-server-commands'
 import { expectStartWith } from '@tests/shared/checks.js'
-import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
+import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
 import { config, expect } from 'chai'
 
@@ -337,12 +337,13 @@ describe('Test emails', function () {
     let registrationIdEmail: number
 
     before(async function () {
-      const { id } = await server.registrations.requestRegistration({
+      await server.registrations.requestRegistration({
         username: 'request_1',
         email: 'request_1@example.com',
         registrationReason: 'tt'
       })
-      registrationId = id
+      const registrations = await server.registrations.list()
+      registrationId = registrations.data[0].id
     })
 
     it('Should ask to send the verification email', async function () {

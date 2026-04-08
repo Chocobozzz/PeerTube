@@ -67,7 +67,7 @@ rates_limit:
 oauth2:
   token_lifetime:
     access_token: '1 day'
-    refresh_token: '2 weeks'
+    refresh_token: '4 weeks'
 
 # Proxies to trust to get real client IP
 # If you run PeerTube just behind a local proxy (nginx), keep 'loopback'
@@ -1237,6 +1237,12 @@ defaults:
     # You can also choose a custom licence value added by a plugin
     # No licence by default
     licence: null
+
+  live:
+    # Default value for "automatically publish a replay when your live ends" checkbox
+    # when creating a new live video
+    # If live.allow_replay is false, this setting has no effect
+    save_replay: false
 
   p2p:
     # Enable P2P by default in PeerTube client

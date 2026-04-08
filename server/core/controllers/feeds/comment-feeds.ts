@@ -1,10 +1,10 @@
 import { toSafeHtml } from '@server/helpers/markdown.js'
-import { cacheRouteFactory } from '@server/middlewares/index.js'
 import express from 'express'
 import { CONFIG } from '../../initializers/config.js'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers/constants.js'
 import {
   asyncMiddleware,
+  cacheRouteFactory,
   feedsAccountOrChannelFiltersValidator,
   feedsFormatValidator,
   setFeedFormatContentType,

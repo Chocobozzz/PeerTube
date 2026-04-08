@@ -7,7 +7,7 @@ import {
   timeToInt
 } from '@peertube/peertube-core-utils'
 import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
-import { environment } from 'src/environments/environment'
+import { environment } from '../../../../environments/environment'
 import { CustomMarkupComponent } from './shared'
 
 @Component({

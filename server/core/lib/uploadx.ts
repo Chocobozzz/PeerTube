@@ -41,7 +41,7 @@ export function safeUploadXCleanup (file: FileQuery) {
 
 export function buildUploadXFile<T extends UploadXMetadata> (reqBody: T) {
   return {
-    // eslint-disable-next-line @typescript-eslint/no-misused-spread
+    // oxlint-disable-next-line @typescript-eslint/no-misused-spread
     ...reqBody,
 
     path: getResumableUploadPath(reqBody.name),

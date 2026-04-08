@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+// Fix typing issue because superagent is referenced by supertest
+/// <reference types="superagent" />
 
 import { pick, queryParamsToObject } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, HttpStatusCodeType } from '@peertube/peertube-models'
@@ -186,7 +187,7 @@ export function makePutBodyRequest (options: {
   fields: { [fieldName: string]: any }
   expectedStatus?: HttpStatusCodeType
   headers?: { [name: string]: string }
-}) {
+}): request.Test {
   const req = request(options.url).put(options.path)
     .send(options.fields)
 

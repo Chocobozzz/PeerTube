@@ -2,7 +2,7 @@
 
   @if (thumbnail()) {
     <my-video-thumbnail
-      blur="false"
+      blur="false" sizes="139px"
       [video]="video()" [videoRouterLink]="getVideoUrl()" [ariaLabel]="video().name" playOverlay="false"
     ></my-video-thumbnail>
   }

@@ -28,11 +28,7 @@ export class ActorHostComponent implements OnChanges {
 
     const config = this.server.getHTMLConfig()
 
-    const useSearchIndex = this.auth.isLoggedIn()
-      ? config.search.remoteUri.users
-      : config.search.remoteUri.anonymous
-
-    this.searchTarget = useSearchIndex
+    this.searchTarget = config.search.searchIndex.enabled
       ? 'search-index'
       : 'local'
   }

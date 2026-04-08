@@ -774,6 +774,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     },
     onDelete: 'cascade',
     hooks: true,
+    // oxlint-disable-next-line no-useless-computed-key
     ['separate' as any]: true
   })
   declare VideoCaptions: Awaited<VideoCaptionModel>[]
@@ -1134,6 +1135,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
     autoTagOneOf?: string[]
 
+    stateOneOf?: VideoStateType[]
+
     includeCollaborations?: boolean // default false
   }) {
     VideoModel.throwIfPrivateIncludeWithoutUser(options)
@@ -1155,6 +1158,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         'languageOneOf',
         'host',
         'autoTagOneOf',
+        'stateOneOf',
         'tagsOneOf',
         'tagsAllOf',
         'privacyOneOf',
@@ -1202,6 +1206,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     tagsOneOf?: string[]
     tagsAllOf?: string[]
     privacyOneOf?: VideoPrivacyType[]
+    stateOneOf?: VideoStateType[]
     includeScheduledLive?: boolean
 
     displayOnlyForFollower: DisplayOnlyForFollowerOptions | null
@@ -1248,6 +1253,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         'autoTagOneOf',
         'tagsOneOf',
         'tagsAllOf',
+        'stateOneOf',
         'privacyOneOf',
         'user',
         'isLocal',

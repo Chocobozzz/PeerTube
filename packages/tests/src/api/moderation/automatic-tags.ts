@@ -1,8 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { VideoPrivacy } from '@peertube/peertube-models'
 import {
-  cleanupTests, createMultipleServers,
+  cleanupTests,
+  createMultipleServers,
   doubleFollow,
   PeerTubeServer,
   setAccessTokensToServers,
@@ -27,17 +28,15 @@ describe('Test automatic tags', function () {
 
     await servers[1].config.enableLive({ allowReplay: false })
 
-    await doubleFollow(servers[0], servers[1]);
+    await doubleFollow(servers[0], servers[1])
 
-    ({ uuid: videoUUID } = await servers[0].videos.quickUpload({ name: 'video' }))
+    ;({ uuid: videoUUID } = await servers[0].videos.quickUpload({ name: 'video' }))
 
     await waitJobs(servers)
   })
 
   describe('Automatic tags on comments', function () {
-
     describe('Built in external link auto tag', function () {
-
       it('Should not assign external-link automatic tag with no URL inside the comment', async function () {
         const tests = [
           'my super comment',
@@ -211,7 +210,6 @@ describe('Test automatic tags', function () {
     })
 
     describe('Searching comments with specific tags', function () {
-
       it('Should search in "comments on my videos" comments with specific automatic tags', async function () {
         {
           const { total, data } = await servers[0].comments.listCommentsOnMyVideos({ autoTagOneOf: [ 'unknown' ] })
@@ -251,11 +249,9 @@ describe('Test automatic tags', function () {
         }
       })
     })
-
   })
 
   describe('Automatic tags on videos', function () {
-
     before(async function () {
       await servers[0].videos.removeAll()
 
@@ -263,7 +259,6 @@ describe('Test automatic tags', function () {
     })
 
     describe('Built in external link auto tag', function () {
-
       it('Should not assign external-link automatic tag with no URL inside the video', async function () {
         const tests = [
           'my super video',
@@ -461,7 +456,6 @@ describe('Test automatic tags', function () {
     })
 
     describe('Searching videos with specific tags', function () {
-
       it('Should search in admin videos with specific automatic tags', async function () {
         {
           const { total, data } = await servers[0].videos.listAllForAdmin({ autoTagOneOf: [ 'picsou list' ] })
@@ -480,7 +474,6 @@ describe('Test automatic tags', function () {
         }
       })
     })
-
   })
 
   after(async function () {

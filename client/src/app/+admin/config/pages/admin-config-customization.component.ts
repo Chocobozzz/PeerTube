@@ -10,18 +10,18 @@ import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-che
 import { PeertubeColorPickerComponent } from '@app/shared/shared-forms/peertube-color-picker.component'
 import { SelectCustomValueComponent } from '@app/shared/shared-forms/select/select-custom-value.component'
 import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-options.component'
+import { SelectPlayerThemeComponent } from '@app/shared/shared-forms/select/select-player-theme.component'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
 import { CustomConfig, PlayerTheme } from '@peertube/peertube-models'
+import { SelectOptionsItem } from '@pt-types'
 import { capitalizeFirstLetter } from '@root-helpers/string'
 import { ColorPaletteThemeConfig, ThemeCustomizationKey } from '@root-helpers/theme-manager'
 import debug from 'debug'
 import { debounceTime, Subscription } from 'rxjs'
-import { SelectOptionsItem } from 'src/types'
 import { AdminConfigService } from '../../../shared/shared-admin/admin-config.service'
 import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
 import { AlertComponent } from '../../../shared/shared-main/common/alert.component'
 import { AdminSaveBarComponent } from '../shared/admin-save-bar.component'
-import { SelectPlayerThemeComponent } from '@app/shared/shared-forms/select/select-player-theme.component'
 
 const debugLogger = debug('peertube:config')
 

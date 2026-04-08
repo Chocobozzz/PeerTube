@@ -43,6 +43,7 @@ import { PassThrough, Readable } from 'stream'
 import { AbstractUserExporter, ExportResult } from './abstract-user-exporter.js'
 
 export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
+  // oxlint-disable-next-line no-useless-constructor
   constructor (
     private readonly options: ConstructorParameters<typeof AbstractUserExporter<VideoExportJSON>>[0] & {
       withVideoFiles: boolean

@@ -19,6 +19,7 @@ export abstract class AbstractListQuery extends AbstractRunQuery {
 
   private subQuery: string
 
+  protected subQueryCTE: string[] = []
   protected subQueryAttributes: string[] = []
   protected subQueryLateralJoin = ''
   protected subQueryJoin = ''
@@ -96,7 +97,8 @@ export abstract class AbstractListQuery extends AbstractRunQuery {
     this.buildSubQueryLateralJoin()
     this.buildSubQueryAttributes()
 
-    this.subQuery = `${this.buildSelect(this.subQueryAttributes)} ` +
+    this.subQuery = this.buildCTE(this.subQueryCTE) +
+      this.buildSelect(this.subQueryAttributes) +
       `FROM "${this.modelInfo.tableName}" AS "${this.modelInfo.modelName}" ` +
       `${this.subQueryJoin} ` +
       `${this.subQueryLateralJoin} ` +
@@ -116,7 +118,8 @@ export abstract class AbstractListQuery extends AbstractRunQuery {
   private buildCountQuery () {
     this.buildSubQueryWhere()
 
-    this.query = `SELECT COUNT(*) AS "total" ` +
+    this.query = this.buildCTE(this.subQueryCTE) +
+      `SELECT COUNT(*) AS "total" ` +
       `FROM "${this.modelInfo.tableName}" AS "${this.modelInfo.modelName}" ` +
       `${this.subQueryJoin} ` +
       `${this.subQueryWhere}`

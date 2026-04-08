@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { ServerHookName, VideoPlaylistPrivacy, VideoPrivacy } from '@peertube/peertube-models'
 import {
@@ -52,7 +52,6 @@ describe('Test plugin action hooks', function () {
   })
 
   describe('Videos hooks', function () {
-
     it('Should run action:api.video.uploaded', async function () {
       const { uuid } = await servers[0].videos.upload({ attributes: { name: 'video' } })
       videoUUID = uuid
@@ -113,7 +112,6 @@ describe('Test plugin action hooks', function () {
   })
 
   describe('Live hooks', function () {
-
     it('Should run action:api.live-video.created', async function () {
       const attributes = {
         name: 'live',
@@ -268,7 +266,6 @@ describe('Test plugin action hooks', function () {
   })
 
   describe('Notification hook', function () {
-
     it('Should run action:notifier.notification.created', async function () {
       await checkHook('action:notifier.notification.created', false)
     })

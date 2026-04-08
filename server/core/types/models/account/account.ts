@@ -12,7 +12,8 @@ import {
   MActorId,
   MActorSummary,
   MActorSummaryFormattable,
-  MActorUrl
+  MActorUrl,
+  MActorUsername
 } from '../actor/index.js'
 import { MChannelDefault } from '../video/video-channel.js'
 import { MAccountBlocklistId } from './account-blocklist.js'
@@ -71,7 +72,6 @@ export type MAccountLight =
 
 // ############################################################################
 
-// Full actor
 export type MAccountActor =
   & MAccount
   & Use<'Actor', MActor>
@@ -83,6 +83,10 @@ export type MAccountIdHost =
 export type MAccountHost =
   & MAccount
   & Use<'Actor', MActorHost>
+
+export type MAccountNames =
+  & Pick<MAccount, 'id' | 'name'>
+  & Use<'Actor', MActorUsername>
 
 // ############################################################################
 

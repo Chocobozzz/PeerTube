@@ -130,9 +130,9 @@ export class PluginModel extends SequelizeModel<PluginModel> {
 
     return PluginModel.findOne(query)
       .then(p => {
-        if (!p?.settings || p.settings === undefined) {
+        if (p?.settings?.[settingName] === undefined) {
           const registered = registeredSettings.find(s => s.name === settingName)
-          if (!registered || registered.default === undefined) return undefined
+          if (registered?.default === undefined) return undefined
 
           return registered.default
         }

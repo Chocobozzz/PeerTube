@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { HttpStatusCode, VideoDetails, VideoResolution } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'

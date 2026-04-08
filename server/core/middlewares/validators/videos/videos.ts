@@ -1,4 +1,3 @@
-import { arrayify } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
   ServerErrorCode,
@@ -24,6 +23,7 @@ import {
   isFileValid,
   isIdValid,
   isNotEmptyIntArray,
+  toArray,
   toBooleanOrNull,
   toIntArray,
   toIntOrNull,
@@ -501,27 +501,27 @@ export const commonVideosFiltersValidatorFactory = (options: {
   return [
     query('categoryOneOf')
       .optional()
-      .customSanitizer(arrayify)
+      .customSanitizer(toArray)
       .custom(isNumberArray).withMessage('Should have a valid categoryOneOf array'),
     query('licenceOneOf')
       .optional()
-      .customSanitizer(arrayify)
+      .customSanitizer(toArray)
       .custom(isNumberArray).withMessage('Should have a valid licenceOneOf array'),
     query('languageOneOf')
       .optional()
-      .customSanitizer(arrayify)
+      .customSanitizer(toArray)
       .custom(isStringArray).withMessage('Should have a valid languageOneOf array'),
     query('privacyOneOf')
       .optional()
-      .customSanitizer(arrayify)
+      .customSanitizer(toArray)
       .custom(isNumberArray).withMessage('Should have a valid privacyOneOf array'),
     query('tagsOneOf')
       .optional()
-      .customSanitizer(arrayify)
+      .customSanitizer(toArray)
       .custom(isStringArray).withMessage('Should have a valid tagsOneOf array'),
     query('tagsAllOf')
       .optional()
-      .customSanitizer(arrayify)
+      .customSanitizer(toArray)
       .custom(isStringArray).withMessage('Should have a valid tagsAllOf array'),
     query('nsfw')
       .optional()
@@ -570,8 +570,12 @@ export const commonVideosFiltersValidatorFactory = (options: {
       .isBoolean().withMessage('Should be a valid excludeAlreadyWatched boolean'),
     query('autoTagOneOf')
       .optional()
-      .customSanitizer(arrayify)
+      .customSanitizer(toArray)
       .custom(isStringArray).withMessage('Should have a valid autoTagOneOf array'),
+    query('stateOneOf')
+      .optional()
+      .customSanitizer(toArray)
+      .custom(isNumberArray).withMessage('Should have a valid stateOneOf array'),
     query('host')
       .optional()
       .custom(isHostValid),
@@ -590,11 +594,13 @@ export const commonVideosFiltersValidatorFactory = (options: {
 
       const user = res.locals.oauth?.token.User
 
-      if ((!user || user.hasRight(UserRight.SEE_ALL_VIDEOS) !== true)) {
-        if (query.include || (options.allowPrivacyFilterForAllUsers !== true && query.privacyOneOf) || query.autoTagOneOf) {
+      if ((user?.hasRight(UserRight.SEE_ALL_VIDEOS) !== true)) {
+        if (
+          query.include || (options.allowPrivacyFilterForAllUsers !== true && query.privacyOneOf) || query.autoTagOneOf || query.stateOneOf
+        ) {
           return res.fail({
             status: HttpStatusCode.UNAUTHORIZED_401,
-            message: req.t('You are not allowed to see all videos, specify a custom include or auto tags filter')
+            message: req.t('You are not allowed to see all videos, specify a custom include, auto tags or state filter')
           })
         }
       }

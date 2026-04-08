@@ -17,6 +17,7 @@ import { VideoBlacklistModel } from '../video/video-blacklist.js'
 import { VideoCaptionModel } from '../video/video-caption.js'
 import { VideoChannelCollaboratorModel } from '../video/video-channel-collaborator.js'
 import { VideoCommentModel } from '../video/video-comment.js'
+import { VideoChangeOwnershipModel } from '../video/video-change-ownership.js'
 import { VideoImportModel } from '../video/video-import.js'
 import { VideoModel } from '../video/video.js'
 import { UserNotificationListQueryBuilder } from './sql/user-notification/user-notification-list-query-builder.js'
@@ -121,6 +122,14 @@ import { UserModel } from './user.js'
       fields: [ 'videoCaptionId' ],
       where: {
         videoCaptionId: {
+          [Op.ne]: null
+        }
+      }
+    },
+    {
+      fields: [ 'videoOwnershipId' ],
+      where: {
+        videoOwnershipId: {
           [Op.ne]: null
         }
       }
@@ -305,6 +314,18 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     onDelete: 'cascade'
   })
   declare VideoChannelCollaborator: Awaited<VideoChannelCollaboratorModel>
+
+  @ForeignKey(() => VideoChangeOwnershipModel)
+  @Column
+  declare videoOwnershipId: number
+
+  @BelongsTo(() => VideoChangeOwnershipModel, {
+    foreignKey: {
+      allowNull: true
+    },
+    onDelete: 'cascade'
+  })
+  declare VideoOwnership: Awaited<VideoChangeOwnershipModel>
 
   static listForApi (options: {
     userId: number
@@ -537,6 +558,15 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
       }
       : undefined
 
+    const videoOwnership = this.VideoOwnership
+      ? {
+        id: this.VideoOwnership.id,
+        initiatorAccount: this.formatActor(this.VideoOwnership.Initiator),
+        nextOwnerAccount: this.formatActor(this.VideoOwnership.NextOwner),
+        video: this.formatVideo(this.VideoOwnership.Video)
+      }
+      : undefined
+
     return {
       id: this.id,
       type: this.type,
@@ -554,6 +584,7 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
       registration,
       videoCaption,
       videoChannelCollaborator,
+      videoOwnership,
       createdAt: this.createdAt.toISOString(),
       updatedAt: this.updatedAt.toISOString()
     }

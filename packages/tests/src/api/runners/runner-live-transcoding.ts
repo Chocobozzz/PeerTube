@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
 import { FfmpegCommand } from 'fluent-ffmpeg'
@@ -51,7 +51,6 @@ describe('Test runner live transcoding', function () {
   })
 
   describe('Without transcoding enabled', function () {
-
     before(async function () {
       await server.config.enableLive({
         allowReplay: false,
@@ -87,7 +86,6 @@ describe('Test runner live transcoding', function () {
     async function testPlaylistFile (fixture: string, expected: string) {
       const text = await server.streamingPlaylists.get({ url: `${baseUrl}/${video.uuid}/${fixture}` })
       expect(await readFile(buildAbsoluteFixturePath(expected), 'utf-8')).to.equal(text)
-
     }
 
     async function testTSFile (fixture: string, expected: string) {

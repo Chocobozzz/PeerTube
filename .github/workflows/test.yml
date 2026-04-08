@@ -65,7 +65,7 @@ jobs:
       YOUTUBE_DL_PROXY: ${{ secrets.YOUTUBE_DL_PROXY }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: './.github/actions/reusable-prepare-peertube-build'
         with:
@@ -74,7 +74,7 @@ jobs:
       - uses: './.github/actions/reusable-prepare-peertube-run'
 
       - name: Cache fixtures
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             fixtures
@@ -85,14 +85,14 @@ jobs:
             ${{ runner.OS }}-
 
       - name: Cache PeerTube pip directory
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.cache/pip
           key: ${{ runner.OS }}-${{ matrix.test_suite }}-pip-v1
 
       - name: Cache Hugging Face models
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.cache/huggingface

@@ -94,7 +94,7 @@ export function levenshteinDistance (a: string, b: string): number {
     dd = ++x
     for (y = 0; y < len; y += 2) {
       dy = vector[y]
-      // eslint-disable-next-line no-multi-assign
+      // oxlint-disable-next-line no-multi-assign
       vector[y] = dd = min(dy, d0, dd, bx0, vector[y + 1])
       d0 = dy
     }

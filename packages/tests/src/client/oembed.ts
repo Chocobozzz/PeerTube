@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
 import { HttpStatusCode, VideoPlaylistCreateResult } from '@peertube/peertube-models'
@@ -15,9 +15,9 @@ describe('Test oEmbed HTML tags', function () {
   let playlistIds: (string | number)[] = []
 
   before(async function () {
-    this.timeout(120000);
+    this.timeout(120000)
 
-    ({ servers, playlistIds, videoIds, playlist, playlistName } = await prepareClientTests())
+    ;({ servers, playlistIds, videoIds, playlist, playlistName } = await prepareClientTests())
   })
 
   it('Should have valid oEmbed discovery tags for videos', async function () {
@@ -31,8 +31,8 @@ describe('Test oEmbed HTML tags', function () {
         })
 
         const expectedLink = `<link rel="alternate" type="application/json+oembed" href="${servers[0].url}/services/oembed?` +
-        `url=http%3A%2F%2F${servers[0].hostname}%3A${servers[0].port}%2Fw%2F${servers[0].store.video.shortUUID}" ` +
-        `title="${servers[0].store.video.name}" />`
+          `url=http%3A%2F%2F${servers[0].hostname}%3A${servers[0].port}%2Fw%2F${servers[0].store.video.shortUUID}" ` +
+          `title="${servers[0].store.video.name}" />`
 
         expect(res.text).to.contain(expectedLink)
       }
@@ -71,8 +71,8 @@ describe('Test oEmbed HTML tags', function () {
     })
 
     const expectedLink = `<link rel="alternate" type="application/json+oembed" href="${servers[0].url}/services/oembed?` +
-    `url=http%3A%2F%2F${servers[0].hostname}%3A${servers[0].port}%2Fw%2F${servers[0].store.video.shortUUID}%3Fstart%3D1m2s" ` +
-    `title="${servers[0].store.video.name}" />`
+      `url=http%3A%2F%2F${servers[0].hostname}%3A${servers[0].port}%2Fw%2F${servers[0].store.video.shortUUID}%3Fstart%3D1m2s" ` +
+      `title="${servers[0].store.video.name}" />`
 
     expect(res.text).to.contain(expectedLink)
   })
@@ -90,8 +90,8 @@ describe('Test oEmbed HTML tags', function () {
     })
 
     const expectedLink = `<link rel="alternate" type="application/json+oembed" href="${servers[0].url}/services/oembed?` +
-    `url=http%3A%2F%2F${servers[0].hostname}%3A${servers[0].port}%2Fw%2Fp%2F${playlist.shortUUID}%3FplaylistPosition%3D415" ` +
-    `title="${playlistName}" />`
+      `url=http%3A%2F%2F${servers[0].hostname}%3A${servers[0].port}%2Fw%2Fp%2F${playlist.shortUUID}%3FplaylistPosition%3D415" ` +
+      `title="${playlistName}" />`
 
     expect(res.text).to.contain(expectedLink)
   })

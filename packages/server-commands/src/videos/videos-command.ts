@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
 
 import { getAllPrivacies, omit, pick, wait } from '@peertube/peertube-core-utils'
 import {
@@ -426,7 +426,7 @@ export class VideosCommand extends AbstractCommand {
   // ---------------------------------------------------------------------------
 
   async upload (options: OverrideCommandOptions & {
-    attributes?: VideoEdit
+    attributes?: VideoEdit & { filename?: string }
     mode?: 'legacy' | 'resumable' // default legacy
     waitTorrentGeneration?: boolean // default true
     completedExpectedStatus?: HttpStatusCodeType
@@ -666,6 +666,7 @@ export class VideosCommand extends AbstractCommand {
       'include',
       'skipCount',
       'autoTagOneOf',
+      'stateOneOf',
       'search',
       'includeScheduledLive'
     ])

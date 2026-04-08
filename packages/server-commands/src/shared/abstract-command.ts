@@ -1,8 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
+/* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
 
+import { pick } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, HttpStatusCodeType } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath, getFileSize } from '@peertube/peertube-node-utils'
 import { expect } from 'chai'
+import { createReadStream } from 'fs'
 import got, { Response as GotResponse } from 'got'
 import { isAbsolute } from 'path'
 import {
@@ -14,9 +16,6 @@ import {
   unwrapBody,
   unwrapText
 } from '../requests/requests.js'
-
-import { pick } from '@peertube/peertube-core-utils'
-import { createReadStream } from 'fs'
 import type { PeerTubeServer } from '../server/server.js'
 
 export interface OverrideCommandOptions {
@@ -419,7 +418,7 @@ export abstract class AbstractCommand {
             if (res.statusCode !== HttpStatusCode.PERMANENT_REDIRECT_308) {
               readable.off('data', onData)
 
-              // eslint-disable-next-line max-len
+              // oxlint-disable-next-line max-len
               const message =
                 `Incorrect transient behaviour sending intermediary chunks. Status code is ${res.statusCode} instead of ${expectedStatus}`
               return reject(new Error(message))

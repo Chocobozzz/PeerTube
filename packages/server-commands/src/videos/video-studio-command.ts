@@ -2,7 +2,6 @@ import { HttpStatusCode, VideoStudioTask } from '@peertube/peertube-models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class VideoStudioCommand extends AbstractCommand {
-
   static getComplexTask (): VideoStudioTask[] {
     return [
       // Total duration: 2
@@ -22,6 +21,17 @@ export class VideoStudioCommand extends AbstractCommand {
         }
       },
 
+      // Total duration: 4
+      {
+        name: 'remove-segments',
+        options: {
+          segments: [
+            { start: 0, end: 2 },
+            { start: 6, end: 7 }
+          ]
+        }
+      },
+
       {
         name: 'add-watermark',
         options: {
@@ -29,7 +39,7 @@ export class VideoStudioCommand extends AbstractCommand {
         }
       },
 
-      // Total duration: 9
+      // Total duration: 6
       {
         name: 'add-intro',
         options: {
@@ -39,10 +49,16 @@ export class VideoStudioCommand extends AbstractCommand {
     ]
   }
 
-  createEditionTasks (options: OverrideCommandOptions & {
-    videoId: number | string
-    tasks: VideoStudioTask[]
-  }) {
+  static getComplexTaskVideoDuration (baseDuration = 5) {
+    return baseDuration - 3 /* cut */ + 5 /* add-outro */ - 3 /* remove-segments */ + 2 /* add-intro */
+  }
+
+  createEditionTasks (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+      tasks: VideoStudioTask[]
+    }
+  ) {
     const path = '/api/v1/videos/' + options.videoId + '/studio/edit'
     const attaches: { [id: string]: any } = {}
 
