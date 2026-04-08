@@ -42,7 +42,6 @@ export function checkMissedConfig () {
     'storage.thumbnails',
     'storage.torrents',
     'storage.cache',
-    'storage.import',
     'storage.redundancy',
     'storage.tmp',
     'storage.streaming_playlists',

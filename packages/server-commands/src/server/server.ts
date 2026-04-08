@@ -408,7 +408,6 @@ export class PeerTubeServer {
         torrents: this.getDirectoryPath('torrents') + '/',
         captions: this.getDirectoryPath('captions') + '/',
         cache: this.getDirectoryPath('cache') + '/',
-        import: this.getDirectoryPath('import') + '/',
         plugins: this.getDirectoryPath('plugins') + '/',
         uploads: this.getDirectoryPath('uploads') + '/',
         well_known: this.getDirectoryPath('well-known') + '/'

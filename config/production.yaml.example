@@ -152,7 +152,6 @@ storage:
   torrents: '/var/www/peertube/storage/torrents/'
   captions: '/var/www/peertube/storage/captions/'
   cache: '/var/www/peertube/storage/cache/'
-  import: '/var/www/peertube/storage/import/'
   plugins: '/var/www/peertube/storage/plugins/'
   well_known: '/var/www/peertube/storage/well-known/'
   # Various admin/user uploads that are not suitable for the folders above
@@ -896,9 +895,12 @@ import:
 #        - "https://username:password@example.com:8888"
 
       cookies:
-        # Enable this to pass cookies to youtube-dl/yt-dlp
-        # Export cookies from your browser in Netscape-format and save them to storage/import/cookies.txt 
-        # Useful when the remote site requires a logged-in browser session, age verification or anti-bot cookies
+        # Enable this to pass cookies to yt-dlp. This can help when imports need a real browser session or when your server IP is limited
+        # Only enable this if you trust users allowed to trigger imports because PeerTube will import using the account from which these cookies were exported
+        # That account may be rate limited or temporarily blocked
+        # PeerTube expects a Netscape-format file at /var/www/peertube/storage/tmp-persistent/youtube-cookies.txt
+        # See https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp for cookie export instructions
+        # See https://docs.joinpeertube.org/maintain/configuration#cookies-for-youtube-imports for PeerTube-specific setup
         enabled: false
 
     # Magnet URI or torrent file (use classic TCP/UDP/WebSeed to download the file)
