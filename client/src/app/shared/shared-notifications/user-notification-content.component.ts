@@ -143,9 +143,9 @@ export class UserNotificationContentComponent {
           this.authService.refreshUserInformation()
 
           this.n.payload.changeOwnership.state.id = ChangeOwnershipState.ACCEPTED
-          this.n.url = this.n.buildChannelUrl(changeOwnership.videoChannel)
+          this.n.url = this.n.buildChannelUrl(changeOwnership.channel)
           this.router.navigate(this.n.url)
-          this.notifier.success($localize`You are now the owner of the channel ${changeOwnership.videoChannel.name}`)
+          this.notifier.success($localize`You are now the owner of the channel ${changeOwnership.channel.name}`)
         },
 
         error: err => this.notifier.handleError(err)

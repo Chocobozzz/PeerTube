@@ -580,7 +580,7 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
           ? this.formatVideo(this.ChangeOwnership.Video)
           : undefined,
 
-        videoChannel: this.ChangeOwnership.VideoChannel
+        channel: this.ChangeOwnership.VideoChannel
           ? this.formatActor(this.ChangeOwnership.VideoChannel)
           : undefined
       }

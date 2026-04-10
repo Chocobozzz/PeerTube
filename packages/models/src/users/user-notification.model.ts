@@ -187,7 +187,7 @@ export interface UserNotification {
     nextOwnerAccount: ActorInfo
 
     video: VideoInfo
-    videoChannel: ActorInfo
+    channel: ActorInfo
   }
 
   createdAt: string

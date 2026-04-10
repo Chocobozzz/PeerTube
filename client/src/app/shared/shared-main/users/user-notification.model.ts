@@ -1,6 +1,7 @@
 import { AuthUser } from '@app/core'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
 import {
+  ChangeOwnershipState,
   UserNotification as UserNotificationServer,
   UserNotificationType,
   UserRight,
@@ -161,13 +162,15 @@ export class UserNotification {
         case UserNotificationType.VIDEO_OWNERSHIP_CHANGED_REQUEST:
         case UserNotificationType.VIDEO_OWNERSHIP_CHANGED_ACCEPTED:
         case UserNotificationType.VIDEO_OWNERSHIP_CHANGED_REJECTED:
-        case UserNotificationType.CHANNEL_OWNERSHIP_CHANGED_REQUEST:
-        case UserNotificationType.CHANNEL_OWNERSHIP_CHANGED_ACCEPTED:
-        case UserNotificationType.CHANNEL_OWNERSHIP_CHANGED_REJECTED:
           this.url = '/my-library/ownership'
           break
+
+        case UserNotificationType.CHANNEL_OWNERSHIP_CHANGED_REQUEST:
+          if (payload.changeOwnership.state.id === ChangeOwnershipState.ACCEPTED) {
+            this.url = this.buildChannelUrl(payload.changeOwnership.channel)
+          } // Else, no URL: we have buttons instead to accept/decline the request
       }
-    } catch (err) {
+    } catch (err: any) {
       this.payload.type = null
       logger.error(err)
     }

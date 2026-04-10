@@ -298,7 +298,7 @@
       <my-global-icon iconName="user-add"></my-global-icon>
 
       <div class="message" i18n>
-        <strong>{{ n.payload.changeOwnership.initiatorAccount.displayName }}</strong> requested to transfer ownership of channel <strong>{{ n.payload.changeOwnership.videoChannel.displayName }}</strong> to you
+        <strong>{{ n.payload.changeOwnership.initiatorAccount.displayName }}</strong> requested to transfer ownership of channel <strong>{{ n.payload.changeOwnership.channel.displayName }}</strong> to you
       </div>
 
       @if (isOwnershipChangeRejected(n)) {
@@ -325,7 +325,7 @@
       <my-global-icon iconName="tick"></my-global-icon>
 
       <div class="message" i18n>
-        <strong>{{ n.payload.changeOwnership.nextOwnerAccount.displayName }}</strong> accepted the ownership change request for channel <strong>{{ n.payload.changeOwnership.videoChannel.displayName }}</strong>
+        <strong>{{ n.payload.changeOwnership.nextOwnerAccount.displayName }}</strong> accepted the ownership change request for channel <strong>{{ n.payload.changeOwnership.channel.displayName }}</strong>
       </div>
     }
 
@@ -333,7 +333,7 @@
       <my-global-icon iconName="cross"></my-global-icon>
 
       <div class="message" i18n>
-        <strong>{{ n.payload.changeOwnership.nextOwnerAccount.displayName }}</strong> rejected the ownership change request for channel <strong>{{ n.payload.changeOwnership.videoChannel.displayName }}</strong>
+        <strong>{{ n.payload.changeOwnership.nextOwnerAccount.displayName }}</strong> rejected the ownership change request for channel <strong>{{ n.payload.changeOwnership.channel.displayName }}</strong>
       </div>
     }
 
