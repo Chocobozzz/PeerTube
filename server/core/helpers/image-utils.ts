@@ -80,7 +80,7 @@ async function sharpProcessor (options: {
 
   const metadata = await sharpInstance.metadata()
 
-  if (metadata.pages > 200) {
+  if (animated && metadata.pages > 200) {
     logger.info('Too much frames in animated image ' + path + ', skipping animation')
 
     return sharpProcessor({ ...options, animated: false })

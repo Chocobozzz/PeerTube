@@ -1,5 +1,18 @@
 # Changelog
 
+## v8.1.5
+
+### IMPORTANT NOTES
+
+ * Follow v8.1.0 IMPORTANT NOTES if you upgrade from PeerTube <= v8.0.2
+
+### Bug fixes
+
+ * Fix infinite loop when processing some GIF images
+ * Correctly inject custom admin colors in dark theme
+ * Fix broken player when loading the page in background
+
+
 ## v8.1.4
 
 ### IMPORTANT NOTES

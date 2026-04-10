@@ -1,12 +1,13 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import { buildAbsoluteFixturePath, root } from '@peertube/peertube-node-utils'
+import { execPromise } from '@peertube/peertube-server/core/helpers/core-utils.js'
+import { processImage } from '@peertube/peertube-server/core/helpers/image-utils.js'
 import { expect } from 'chai'
 import { remove } from 'fs-extra/esm'
 import { readFile } from 'fs/promises'
 import { join } from 'path'
-import { buildAbsoluteFixturePath, root } from '@peertube/peertube-node-utils'
-import { execPromise } from '@peertube/peertube-server/core/helpers/core-utils.js'
-import { processImage } from '@peertube/peertube-server/core/helpers/image-utils.js'
+import sharp from 'sharp'
 
 async function checkBuffers (path1: string, path2: string, equals: boolean) {
   const [ buf1, buf2 ] = await Promise.all([
@@ -82,6 +83,38 @@ describe('Image helpers', function () {
 
     await processImage({ path: input, destination: imageDestPNG, newSize: thumbnailSize, keepOriginal: true })
     expect(await hasTitleExif(imageDestPNG)).to.be.false
+  })
+
+  it('Should process animated gif', async function () {
+    const ext = '.gif'
+
+    const input = buildAbsoluteFixturePath(`animated${ext}`)
+
+    const dest = join(imageDestDir, `animated${ext}`)
+    await processImage({ path: input, destination: dest, newSize: thumbnailSize, keepOriginal: true })
+
+    const inputBuffer = await readFile(dest)
+
+    const sharpInstance = sharp(inputBuffer, { animated: true })
+    const metadata = await sharpInstance.metadata()
+
+    expect(metadata.pages).to.equal(25)
+  })
+
+  it('Should not process animated gif/webp with too many frames', async function () {
+    const ext = '.gif'
+
+    const input = buildAbsoluteFixturePath(`animated-many-frames${ext}`)
+
+    const dest = join(imageDestDir, `animated-many-frames${ext}`)
+    await processImage({ path: input, destination: dest, newSize: thumbnailSize, keepOriginal: true })
+
+    const inputBuffer = await readFile(dest)
+
+    const sharpInstance = sharp(inputBuffer, { animated: true })
+    const metadata = await sharpInstance.metadata()
+
+    expect(metadata.pages).to.equal(1)
   })
 
   after(async function () {
