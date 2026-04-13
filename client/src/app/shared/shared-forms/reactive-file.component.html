@@ -14,7 +14,7 @@
   </div>
 
   @if (displayFilename() === true && filename) {
-    <div class="filename">{{ filename }}</div>
+    <div class="filename ellipsis">{{ filename }}</div>
   }
 
   @if (displayReset() && file) {
