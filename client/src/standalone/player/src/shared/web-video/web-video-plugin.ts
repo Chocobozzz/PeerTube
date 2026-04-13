@@ -28,6 +28,9 @@ class WebVideoPlugin extends Plugin {
     this.videoFiles = options.videoFiles
     this.videoFileToken = options.videoFileToken
 
+    const videoEl = this.player.tech(true)?.el()
+    if (videoEl) videoEl.setAttribute('crossorigin', 'anonymous')
+
     const videoFile = this.pickInitialVideoFile()
     if (videoFile) this.updateVideoFile({ videoFile, isUserResolutionChange: false })
 
