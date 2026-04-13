@@ -57,6 +57,44 @@ describe('Open Telemetry', function () {
       expect(res.text).to.contain('http_request_duration_ms_bucket{')
     })
 
+    it('Should have runner observer metrics', async function () {
+      await setAccessTokensToServers([ server ])
+
+      const runnerName = 'otel-runner'
+      const runnerVersion = '1.2.3'
+
+      const { data } = await server.runnerRegistrationTokens.list({ sort: 'createdAt' })
+      const registrationToken = data[0].registrationToken
+      const { runnerToken } = await server.runners.register({
+        name: runnerName,
+        version: runnerVersion,
+        registrationToken
+      })
+
+      try {
+        const res = await makeRawRequest({ url: metricsUrl, expectedStatus: HttpStatusCode.OK_200 })
+
+        expect(res.text).to.match(/peertube_runner_count\{[^}]*\} 1(\.0)?/)
+        expect(res.text).to.match(
+          new RegExp(`peertube_runner_info\\{[^}]*runnerName="${runnerName}"[^}]*version="${runnerVersion}"[^}]*\\} 1(\\.0)?`)
+        )
+
+        const secondsMatch = res.text.match(
+          new RegExp(`peertube_runner_seconds_since_last_contact\\{[^}]*runnerName="${runnerName}"[^}]*\\} ([0-9]+(?:\\.[0-9]+)?)`)
+        )
+        expect(secondsMatch).to.not.be.null
+
+        if (!secondsMatch) {
+          throw new Error('Could not find runner contact metric in OpenTelemetry output')
+        }
+
+        const seconds = Number.parseFloat(secondsMatch[1])
+        expect(seconds).to.be.at.least(0)
+      } finally {
+        await server.runners.unregister({ runnerToken })
+      }
+    })
+
     it('Should have playback metrics', async function () {
       await setAccessTokensToServers([ server ])
 
