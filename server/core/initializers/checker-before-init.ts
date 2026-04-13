@@ -119,6 +119,7 @@ export function checkMissedConfig () {
     'import.videos.timeout',
     'import.videos.http.force_ipv4',
     'import.videos.http.proxies',
+    'import.videos.http.cookies.enabled',
     'import.video_channel_synchronization.enabled',
     'import.video_channel_synchronization.max_per_user',
     'import.video_channel_synchronization.check_interval',

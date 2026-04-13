@@ -909,6 +909,12 @@ const CONFIG = {
 
         get PROXIES () {
           return config.get<string[]>('import.videos.http.proxies')
+        },
+
+        COOKIES: {
+          get ENABLED () {
+            return config.get<boolean>('import.videos.http.cookies.enabled')
+          }
         }
       },
       TORRENT: {

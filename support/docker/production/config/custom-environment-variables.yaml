@@ -778,6 +778,10 @@ import:
       proxies:
         __name: PEERTUBE_IMPORT_VIDEOS_HTTP_PROXIES
         __format: json
+      cookies:
+        enabled:
+          __name: PEERTUBE_IMPORT_VIDEOS_HTTP_COOKIES_ENABLED
+          __format: json
     torrent:
       enabled:
         __name: PEERTUBE_IMPORT_VIDEOS_TORRENT

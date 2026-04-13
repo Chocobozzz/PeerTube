@@ -884,6 +884,15 @@ import:
       proxies:
 #        - "https://username:password@example.com:8888"
 
+      cookies:
+        # Enable this to pass cookies to yt-dlp. This can help when imports need a real browser session or when your server IP is limited
+        # Only enable this if you trust users allowed to trigger imports because PeerTube will import using the account from which these cookies were exported
+        # That account may be rate limited or temporarily blocked
+        # PeerTube expects a Netscape-format file at storage/tmp-persistent/youtube-cookies.txt
+        # See https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp for cookie export instructions
+        # See https://docs.joinpeertube.org/maintain/configuration#cookies-for-youtube-imports for PeerTube-specific setup
+        enabled: false
+
     # Magnet URI or torrent file (use classic TCP/UDP/WebSeed to download the file)
     torrent:
       # We recommend to only enable magnet URI/torrent import if you trust your users

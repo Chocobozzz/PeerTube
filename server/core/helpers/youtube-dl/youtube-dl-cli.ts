@@ -215,6 +215,7 @@ export class YoutubeDLCLI {
 
     let completeArgs = this.wrapWithJSRuntimeOptions(args)
     completeArgs = this.wrapWithProxyOptions(completeArgs)
+    completeArgs = await this.wrapWithCookiesOptions(completeArgs)
     completeArgs = this.wrapWithIPOptions(completeArgs)
     completeArgs = this.wrapWithFFmpegOptions(completeArgs)
 
@@ -270,6 +271,28 @@ export class YoutubeDLCLI {
     }
 
     return args
+  }
+
+  private async wrapWithCookiesOptions (args: string[]) {
+    if (!CONFIG.IMPORT.VIDEOS.HTTP.COOKIES.ENABLED) {
+      return args
+    }
+
+    const cookiesPath = join(CONFIG.STORAGE.TMP_PERSISTENT_DIR, 'youtube-cookies.txt')
+
+    if (!await pathExists(cookiesPath)) {
+      logger.error(
+        'yt-dlp cookies are enabled but the cookies file %s does not exist. Continuing without cookies.',
+        cookiesPath,
+        lTags()
+      )
+
+      return args
+    }
+
+    logger.debug('Using cookies file %s for YoutubeDL', cookiesPath, lTags())
+
+    return [ '--cookies', cookiesPath ].concat(args)
   }
 
   private wrapWithFFmpegOptions (args: string[]) {
