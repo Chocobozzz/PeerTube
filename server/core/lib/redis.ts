@@ -525,7 +525,12 @@ class Redis {
     const value = await this.getValue(key)
     if (!value) return null
 
-    return JSON.parse(value)
+    try {
+      return JSON.parse(value)
+    } catch (err) {
+      logger.warn('Cannot parse Redis key %s.', key, { err, ...lTags() })
+      return null
+    }
   }
 
   private setObject (key: string, value: { [id: string]: number | string }, expirationMilliseconds?: number) {
