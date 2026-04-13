@@ -139,7 +139,7 @@ Object.values(VIDEO_CATEGORIES)
 
 // ISO 639 keys
 const languageKeys: any = {}
-const languages = buildLanguages()
+const languages = await buildLanguages()
 Object.keys(languages).forEach(k => {
   languageKeys[languages[k]] = languages[k]
 })
