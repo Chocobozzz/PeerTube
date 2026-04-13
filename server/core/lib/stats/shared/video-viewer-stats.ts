@@ -158,7 +158,11 @@ export class VideoViewerStats {
 
         if (!stats) {
           logger.warn('Cannot read viewer stats for Redis key %s, removing invalid entry.', key, lTags())
-          await this.deleteLocalVideoViewersKeys(key)
+          try {
+            await this.deleteLocalVideoViewersKeys(key)
+          } catch (err) {
+            logger.error('Cannot delete invalid viewer stats for Redis key %s.', key, { err, ...lTags() })
+          }
           continue
         }
 

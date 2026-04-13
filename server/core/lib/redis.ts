@@ -528,7 +528,7 @@ class Redis {
     try {
       return JSON.parse(value)
     } catch (err) {
-      logger.warn('Cannot parse Redis key %s.', key, { err })
+      logger.warn('Cannot parse Redis key %s.', key, { err, ...lTags() })
       return null
     }
   }
