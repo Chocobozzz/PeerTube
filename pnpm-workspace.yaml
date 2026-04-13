@@ -6,6 +6,8 @@ packages:
   - client/packages/*
   - client/src/standalone/player
 
+minimumReleaseAge: 1440
+
 ignoredBuiltDependencies:
   - sharp
 
