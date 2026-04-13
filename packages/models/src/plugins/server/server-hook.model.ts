@@ -154,8 +154,12 @@ export const serverFilterHookObject = {
   'filter:email.subject.result': true,
   'filter:email.template-path.result': true,
 
-  // Peertube >= 8.1
-  'filter:feed.videos.list.result': true,
+  // Filter notifications enabled state
+  // Peertube >= 8.2
+  'filter:notifier.notification.enabled.result': true,
+
+  // PeerTube >= 8.1
+  'filter:feed.videos.list.result': true
 }
 
 export type ServerFilterHookName = keyof typeof serverFilterHookObject
@@ -239,5 +243,5 @@ export const serverHookObject = Object.assign({}, serverFilterHookObject, server
 export type ServerHookName = keyof typeof serverHookObject
 
 export interface ServerHook {
-  runHook <T> (hookName: ServerHookName, result?: T, params?: any): Promise<T>
+  runHook<T>(hookName: ServerHookName, result?: T, params?: any): Promise<T>
 }

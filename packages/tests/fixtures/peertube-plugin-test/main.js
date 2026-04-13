@@ -533,6 +533,8 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
       'filter:api.overviews.videos.list.params',
       'filter:api.overviews.videos.list.result',
 
+      'filter:notifier.notification.enabled.result',
+
       'filter:job-queue.process.params',
       'filter:job-queue.process.result'
     ]

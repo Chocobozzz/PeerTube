@@ -442,9 +442,16 @@ class Notifier {
     for (const user of users) {
       const setting = object.getSetting(user)
 
-      const webNotificationEnabled = this.isWebNotificationEnabled(setting)
-      const emailNotificationEnabled = this.isEmailEnabled(user, setting)
       const notification = object.createNotification(user)
+
+      const { webNotificationEnabled, emailNotificationEnabled } = await Hooks.wrapObject(
+        {
+          webNotificationEnabled: this.isWebNotificationEnabled(setting),
+          emailNotificationEnabled: this.isEmailEnabled(user, setting)
+        },
+        'filter:notifier.notification.enabled.result',
+        { user, notification }
+      )
 
       if (webNotificationEnabled) {
         await notification.save()

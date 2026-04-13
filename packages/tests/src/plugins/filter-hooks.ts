@@ -988,6 +988,16 @@ describe('Test plugin filter hooks', function () {
     })
   })
 
+  describe('Notifications', function () {
+    it('Should run filter:notifier.notification.enabled.result', async function () {
+      await servers[0].videos.quickUpload({ name: 'notification hook video' })
+
+      await waitJobs(servers)
+
+      await servers[0].servers.waitUntilLog('Run hook filter:notifier.notification.enabled.result', 1, false)
+    })
+  })
+
   after(async function () {
     await MockSmtpServer.Instance.kill()
 
