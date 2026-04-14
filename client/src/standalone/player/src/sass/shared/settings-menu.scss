@@ -64,7 +64,7 @@ $setting-transition-easing: ease-out;
     .vjs-settings-panel-child {
       display: flex;
 
-      align-items: flex-end;
+      align-items: flex-start;
       white-space: nowrap;
 
       &:focus,
@@ -171,7 +171,8 @@ $setting-transition-easing: ease-out;
           }
         }
 
-        &.vjs-resolution-button {
+        &.vjs-resolution-button,
+        &.vjs-video-filter-button {
           .vjs-menu-item-text {
             @include margin-left(25px);
           }

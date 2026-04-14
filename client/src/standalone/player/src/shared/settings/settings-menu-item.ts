@@ -277,6 +277,8 @@ class SettingsMenuItem extends MenuItem {
     if (this.subMenu.name() === 'PlaybackRateMenuButton') {
       this.settingsSubMenuValueEl_.innerHTML = (this.subMenu as any).labelEl_.textContent
     } else {
+      let innerHTML = ''
+
       // Loop through the submenu items to find the selected child
       for (const subMenuItem of this.subMenu.menu.children_) {
         if (!(subMenuItem instanceof MenuItem)) {
@@ -287,13 +289,14 @@ class SettingsMenuItem extends MenuItem {
         if (subMenuItemExtended.isSelected_) {
           // Prefer to use the function
           if (typeof subMenuItemExtended.getLabel === 'function') {
-            this.settingsSubMenuValueEl_.innerHTML = subMenuItemExtended.getLabel()
-            break
+            innerHTML += subMenuItemExtended.getLabel()
+          } else {
+            innerHTML += this.player().localize(subMenuItemExtended.options_.label)
           }
-
-          this.settingsSubMenuValueEl_.innerHTML = this.player().localize(subMenuItemExtended.options_.label)
         }
       }
+
+      this.settingsSubMenuValueEl_.innerHTML = innerHTML
     }
 
     let target: HTMLElement = null

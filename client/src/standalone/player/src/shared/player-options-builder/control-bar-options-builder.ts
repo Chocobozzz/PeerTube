@@ -58,6 +58,7 @@ export class ControlBarOptionsBuilder {
     settingEntries.push('playbackRateMenuButton')
     settingEntries.push('captionsButton')
     settingEntries.push('resolutionMenuButton')
+    settingEntries.push('videoFilterMenuButton')
 
     return {
       settingsButton: {

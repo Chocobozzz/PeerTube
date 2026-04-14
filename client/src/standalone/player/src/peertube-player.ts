@@ -30,12 +30,14 @@ import './shared/nsfw/peertube-nsfw-plugin'
 import './shared/p2p-media-loader/hls-plugin'
 import './shared/p2p-media-loader/p2p-media-loader-plugin'
 import './shared/peertube/peertube-plugin'
+import './shared/video-filter/video-flip-horizontally-plugin'
 import { ControlBarOptionsBuilder, HLSOptionsBuilder, WebVideoOptionsBuilder } from './shared/player-options-builder'
 import './shared/playlist/playlist-plugin'
 import './shared/resolutions/peertube-resolutions-plugin'
 import './shared/settings/menu-focus-fixed'
 import './shared/settings/resolution-menu-button'
 import './shared/settings/resolution-menu-item'
+import './shared/video-filter/video-filter-menu-button'
 import './shared/settings/settings-dialog'
 import './shared/settings/settings-menu-button'
 import './shared/settings/settings-menu-item'
@@ -271,6 +273,7 @@ export class PeerTubePlayer {
     if (!this.player) return
 
     if (this.player.usingPlugin('peertubeMobile')) this.player.peertubeMobile().dispose()
+    if (this.player.usingPlugin('videoFlipHorizontallyPlugin')) this.player.videoFlipHorizontallyPlugin().dispose()
     if (this.player.usingPlugin('peerTubeHotkeysPlugin')) this.player.peerTubeHotkeysPlugin().dispose()
     if (this.player.usingPlugin('playlist')) this.player.playlist().dispose()
     if (this.player.usingPlugin('bezels')) this.player.bezels().dispose()
@@ -299,6 +302,8 @@ export class PeerTubePlayer {
       mode: this.currentLoadOptions.mode,
       p2pEnabled: this.currentLoadOptions.p2pEnabled
     })
+
+    this.player.videoFlipHorizontallyPlugin()
 
     if (this.options.enableHotkeys === true) {
       this.player.peerTubeHotkeysPlugin({
