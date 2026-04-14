@@ -37,7 +37,7 @@ import './shared/resolutions/peertube-resolutions-plugin'
 import './shared/settings/menu-focus-fixed'
 import './shared/settings/resolution-menu-button'
 import './shared/settings/resolution-menu-item'
-import './shared/settings/video-filter-menu-button'
+import './shared/video-filter/video-filter-menu-button'
 import './shared/settings/settings-dialog'
 import './shared/settings/settings-menu-button'
 import './shared/settings/settings-menu-item'
@@ -273,6 +273,7 @@ export class PeerTubePlayer {
     if (!this.player) return
 
     if (this.player.usingPlugin('peertubeMobile')) this.player.peertubeMobile().dispose()
+    if (this.player.usingPlugin('videoFlipHorizontallyPlugin')) this.player.videoFlipHorizontallyPlugin().dispose()
     if (this.player.usingPlugin('peerTubeHotkeysPlugin')) this.player.peerTubeHotkeysPlugin().dispose()
     if (this.player.usingPlugin('playlist')) this.player.playlist().dispose()
     if (this.player.usingPlugin('bezels')) this.player.bezels().dispose()
@@ -302,14 +303,14 @@ export class PeerTubePlayer {
       p2pEnabled: this.currentLoadOptions.p2pEnabled
     })
 
+    this.player.videoFlipHorizontallyPlugin()
+
     if (this.options.enableHotkeys === true) {
       this.player.peerTubeHotkeysPlugin({
         isLive: this.currentLoadOptions.isLive,
         liveDvrEnabled: this.currentLoadOptions.liveOptions?.dvrEnabled === true
       })
     }
-
-    this.player.videoFlipHorizontallyPlugin()
 
     if (this.currentLoadOptions.playlist) {
       this.player.playlist(this.currentLoadOptions.playlist)

@@ -1,4 +1,6 @@
-
-.vjs-vid-flip-h > video {
-  transform: scaleX(-1);
+.vjs-video-flip-horizontally {
+  video,
+  .vjs-poster img {
+    transform: scaleX(-1);
+  }
 }

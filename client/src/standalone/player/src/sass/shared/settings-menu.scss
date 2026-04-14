@@ -171,7 +171,8 @@ $setting-transition-easing: ease-out;
           }
         }
 
-        &.vjs-resolution-button {
+        &.vjs-resolution-button,
+        &.vjs-video-filter-button {
           .vjs-menu-item-text {
             @include margin-left(25px);
           }

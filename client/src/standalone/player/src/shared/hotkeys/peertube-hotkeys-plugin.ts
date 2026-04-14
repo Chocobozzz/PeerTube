@@ -154,6 +154,16 @@ class PeerTubeHotkeysPlugin extends Plugin {
           const dist = 1 / 30
           this.player.currentTime(this.player.currentTime() + dist)
         }
+      },
+
+      // Flip horizontally
+      {
+        accept: e => this.isNaked(e, 'h'),
+        cb: () => {
+          if (this.player.usingPlugin('videoFlipHorizontallyPlugin')) {
+            this.player.videoFlipHorizontallyPlugin().toggleFlip()
+          }
+        }
       }
     ]
 

@@ -99,7 +99,10 @@ const playerKeys = {
   'Download speed:': 'Download speed:',
   'Uploader note:': 'Uploader note:',
   'Close': 'Close',
-  '(skipped {1} buffers) ': '(skipped {1} buffers) '
+  '(skipped {1} buffers) ': '(skipped {1} buffers) ',
+  'Video Filter': 'Video Filter',
+  'Mirror Video': 'Mirror Video',
+  'Mirror': 'Mirror'
 }
 Object.assign(playerKeys, videojs)
 
