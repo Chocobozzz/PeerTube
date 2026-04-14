@@ -525,12 +525,12 @@ describe('Test plugin filter hooks', function () {
     })
 
     it('Should not allow a signup', async function () {
-      const res = await servers[0].registrations.register({
+      const body = await servers[0].registrations.register({
         username: 'jma 1',
         expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
 
-      expect((res.body as PeerTubeProblemDocument).detail).to.equal('No jma 1')
+      expect((body as unknown as PeerTubeProblemDocument).detail).to.equal('No jma 1')
     })
   })
 
