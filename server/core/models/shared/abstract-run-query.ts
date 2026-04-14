@@ -55,6 +55,8 @@ export class AbstractRunQuery {
 
       const direction = o[1]
 
+      if (columnName.includes(' ')) throw new Error('Invalid column name: ' + columnName)
+
       // Prefix with the table name if the column name isn't a full path
       // ("id", "displayName", etc. VS "ActorModel.id", "Server.redundancyAllowed", etc.)
       const prefix = calculatedAttributes.includes(columnName) || columnName.includes('.')
