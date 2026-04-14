@@ -1,15 +1,17 @@
-@if (account().mutedByUser) {
+@if (account().mutedByUser || (platformOnly() && account().mutedByInstance)) {
   <span class="pt-badge badge-danger" i18n>Muted</span>
 }
 
-@if (account().mutedServerByUser) {
+@if (account().mutedServerByUser || (platformOnly() && account().mutedServerByInstance)) {
   <span class="pt-badge badge-danger" i18n>Platform muted</span>
 }
 
-@if (account().mutedByInstance) {
-  <span class="pt-badge badge-danger" i18n>Muted by your platform</span>
-}
+@if (!platformOnly()) {
+  @if (account().mutedByInstance) {
+    <span class="pt-badge badge-danger" i18n>Muted by your platform</span>
+  }
 
-@if (account().mutedServerByInstance) {
-  <span class="pt-badge badge-danger" i18n>Platform muted by your platform</span>
+  @if (account().mutedServerByInstance) {
+    <span class="pt-badge badge-danger" i18n>Platform muted by your platform</span>
+  }
 }

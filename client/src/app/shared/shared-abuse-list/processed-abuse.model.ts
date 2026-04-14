@@ -3,7 +3,7 @@ import { Account } from '../shared-main/account/account.model'
 
 // Don't use an abuse model because we need external services to compute some properties
 // And this model is only used in this component
-export type ProcessedAbuse = AdminAbuse & {
+export type ProcessedAbuse = Omit<AdminAbuse, 'reporterAccount' | 'flaggedAccount'> & {
   moderationCommentHtml?: string
   reasonHtml?: string
   updatedAt?: Date

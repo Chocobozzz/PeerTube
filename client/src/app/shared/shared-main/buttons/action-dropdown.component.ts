@@ -8,7 +8,7 @@ import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
 import { CollaboratorStateType } from '../channel/collaborator-state.component'
 
 export type DropdownAction<T, D = never> = {
-  label: string
+  label: string | ((a: T) => string)
 
   iconName?: GlobalIconName
 
@@ -116,5 +116,11 @@ export class ActionDropdownComponent<T, D = never> implements OnChanges {
     if (action.isHeader && !this.areActionsDisplayed(allActions, entry)) return false
 
     return action.isDisplayed === undefined || action.isDisplayed(entry) === true
+  }
+
+  getActionLabel (action: DropdownAction<T, D>, entry: T) {
+    if (typeof action.label === 'function') return action.label(entry)
+
+    return action.label
   }
 }

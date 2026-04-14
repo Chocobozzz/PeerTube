@@ -171,6 +171,7 @@ export class TableComponent<
   readonly rowReorder = output<TableRowReorderEvent>()
   readonly filtersChange = output<Partial<DataLoaderOptions>>()
   readonly searchChange = output<string>()
+  readonly dataLoaded = output<Data[]>()
 
   selectedRows: Data[] = []
   expandedRows = {}
@@ -545,6 +546,8 @@ export class TableComponent<
             this.data = resultList.data
             this.totalRecords = resultList.total
             this.loaded = true
+
+            this.dataLoaded.emit(resultList.data)
 
             res()
           },

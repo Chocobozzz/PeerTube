@@ -10,6 +10,7 @@
   [inputFilters]="inputFilters"
   searchInput="true"
   refreshButton="true"
+  (dataLoaded)="onDataLoaded()"
   >
 
   <ng-template #totalTitle let-totalRecords>
@@ -45,15 +46,19 @@
 
     @if (table.isColumnDisplayed('account')) {
       <td>
-        <a routerLink="." [queryParams]="{ searchAccount: comment.account.name }" i18n-title title="Filter by this account">
-          <div class="chip two-lines">
-            <my-actor-avatar [actor]="comment.account" actorType="account" size="32"></my-actor-avatar>
-            <div>
-              {{ comment.account.displayName }}
-              <span>{{ comment.by }}</span>
+        <div class="d-flex flex-column gap-1">
+          <a routerLink="." [queryParams]="{ searchAccount: comment.account.name }" i18n-title title="Filter by this account">
+            <div class="chip two-lines">
+              <my-actor-avatar [actor]="comment.account" actorType="account" size="32"></my-actor-avatar>
+              <div>
+                {{ comment.account.displayName }}
+                <span>{{ comment.by }}</span>
+              </div>
             </div>
-          </div>
-        </a>
+          </a>
+
+          <my-account-block-badges [account]="comment.account" platformOnly="true"></my-account-block-badges>
+        </div>
       </td>
     }
 

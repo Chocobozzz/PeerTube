@@ -63,7 +63,14 @@ export class VideoCommentForAdminOrUser implements VideoCommentForAdminOrUserSer
   createdAt: Date | string
   updatedAt: Date | string
 
-  account: AccountInterface & { localUrl?: string }
+  account: AccountInterface & {
+    mutedByInstance: boolean
+    mutedServerByInstance: boolean
+
+    localUrl: string
+    nameWithHostForced: string
+  }
+
   localUrl: string
 
   video: {
@@ -108,12 +115,18 @@ export class VideoCommentForAdminOrUser implements VideoCommentForAdminOrUserSer
 
     this.localUrl = this.video.localUrl + ';threadId=' + this.threadId
 
-    this.account = hash.account
+    if (hash.account) {
+      this.by = Actor.CREATE_BY_STRING(hash.account.name, hash.account.host)
 
-    if (this.account) {
-      this.by = Actor.CREATE_BY_STRING(this.account.name, this.account.host)
+      this.account = {
+        ...hash.account,
 
-      this.account.localUrl = '/a/' + this.by
+        mutedByInstance: false,
+        mutedServerByInstance: false,
+
+        localUrl: '/a/' + this.by,
+        nameWithHostForced: Actor.CREATE_BY_STRING(hash.account.name, hash.account.host, true)
+      }
     }
   }
 }

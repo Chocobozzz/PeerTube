@@ -1,11 +1,11 @@
-import { SortMeta } from 'primeng/api'
-import { from } from 'rxjs'
-import { catchError, concatMap, map, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
 import { arrayify } from '@peertube/peertube-core-utils'
 import { AccountBlock as AccountBlockServer, BlockStatus, ResultList, ServerBlock } from '@peertube/peertube-models'
+import { SortMeta } from 'primeng/api'
+import { from } from 'rxjs'
+import { catchError, concatMap, map, toArray } from 'rxjs/operators'
 import { environment } from '../../../environments/environment'
 import { Account } from '../shared-main/account/account.model'
 import { AccountBlock } from './account-block.model'
@@ -129,11 +129,15 @@ export class BlocklistService {
       )
   }
 
-  unblockAccountByInstance (account: Pick<Account, 'nameWithHost'>) {
-    const path = BlocklistService.BASE_SERVER_BLOCKLIST_URL + '/accounts/' + account.nameWithHost
+  unblockAccountByInstance (accountsArg: Pick<Account, 'nameWithHost'> | Pick<Account, 'nameWithHost'>[]) {
+    const accounts = arrayify(accountsArg)
 
-    return this.authHttp.delete(path)
-      .pipe(catchError(err => this.restExtractor.handleError(err)))
+    return from(accounts)
+      .pipe(
+        concatMap(a => this.authHttp.delete(BlocklistService.BASE_SERVER_BLOCKLIST_URL + '/accounts/' + a.nameWithHost)),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   /** ********************* Instance -> Server blocklist ***********************/
@@ -161,11 +165,15 @@ export class BlocklistService {
       )
   }
 
-  unblockServerByInstance (host: string) {
-    const path = BlocklistService.BASE_SERVER_BLOCKLIST_URL + '/servers/' + host
+  unblockServerByInstance (hostsArg: string | string[]) {
+    const hosts = arrayify(hostsArg)
 
-    return this.authHttp.delete(path)
-      .pipe(catchError(err => this.restExtractor.handleError(err)))
+    return from(hosts)
+      .pipe(
+        concatMap(host => this.authHttp.delete(BlocklistService.BASE_SERVER_BLOCKLIST_URL + '/servers/' + host)),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   private formatAccountBlock (accountBlock: AccountBlockServer) {

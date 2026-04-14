@@ -55,13 +55,13 @@ export class MyVideoOwnershipChangesComponent {
     const { simpleActions, bulkActions } = buildDropdownSimpleAndBulkActions<ChangeOwnership>([
       [
         {
-          label: $localize`Accept`,
+          label: () => $localize`Accept`,
           handler: changeOwnership => this.openAcceptModal(changeOwnership),
           isDisplayed: changeOwnership => this.canAcceptOrReject(changeOwnership),
           enableBulk: true
         },
         {
-          label: $localize`Reject`,
+          label: () => $localize`Reject`,
           handler: changeOwnership => this.reject(changeOwnership),
           isDisplayed: changeOwnership => this.canAcceptOrReject(changeOwnership),
           enableBulk: true

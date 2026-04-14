@@ -98,7 +98,7 @@ export class RunnerJobListComponent implements OnInit {
     const { simpleActions, bulkActions } = buildDropdownSimpleAndBulkActions<RunnerJob>([
       [
         {
-          label: $localize`Cancel`,
+          label: () => $localize`Cancel`,
           handler: jobs => this.cancelJobs(jobs),
           isDisplayed: job => this.canCancelJob(job),
           enableBulk: true
@@ -106,7 +106,7 @@ export class RunnerJobListComponent implements OnInit {
       ],
       [
         {
-          label: $localize`Delete`,
+          label: () => $localize`Delete`,
           handler: jobs => this.removeJobs(jobs),
           enableBulk: true
         }

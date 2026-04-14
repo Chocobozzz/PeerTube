@@ -81,13 +81,13 @@ export class VideoBlockListComponent implements OnInit {
     const { simpleActions, bulkActions } = buildDropdownSimpleAndBulkActions<VideoBlacklist>([
       [
         {
-          label: $localize`Internal actions`,
+          label: () => $localize`Internal actions`,
           isHeader: true,
           isDisplayed: videoBlock => videoBlock.type === VideoBlacklistType.AUTO_BEFORE_PUBLISHED,
           enableBulk: true
         },
         {
-          label: $localize`Switch video block to manual`,
+          label: () => $localize`Switch to manual block`,
           handler: videoBlocks => this.switchVideosBlockToManual(videoBlocks),
           isDisplayed: videoBlock => videoBlock.type === VideoBlacklistType.AUTO_BEFORE_PUBLISHED,
           enableBulk: true
@@ -95,17 +95,17 @@ export class VideoBlockListComponent implements OnInit {
       ],
       [
         {
-          label: $localize`Actions for videos`,
+          label: () => $localize`Actions for videos`,
           isHeader: true,
           enableBulk: true
         },
         {
-          label: $localize`Unblock`,
+          label: () => $localize`Unblock`,
           handler: entries => this.unblockVideos(entries),
           enableBulk: true
         },
         {
-          label: $localize`Delete video`,
+          label: entries => formatICU($localize`{count, plural, =1 {Delete video} other {Delete videos}}`, { count: entries.length }),
           handler: entries => this.deleteVideos(entries),
           enableBulk: true
         }

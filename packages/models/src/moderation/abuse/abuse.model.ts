@@ -52,8 +52,8 @@ export interface AdminAbuse {
   reason: string
   predefinedReasons?: AbusePredefinedReasonsString[]
 
-  reporterAccount: Account
-  flaggedAccount: Account
+  reporterAccount?: Account
+  flaggedAccount?: Account
 
   state: ConstantLabel<AbuseStateType>
   moderationComment?: string

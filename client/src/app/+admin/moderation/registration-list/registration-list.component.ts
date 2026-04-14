@@ -88,13 +88,13 @@ export class RegistrationListComponent implements OnInit {
     const { simpleActions, bulkActions } = buildDropdownSimpleAndBulkActions<UserRegistration>([
       [
         {
-          label: $localize`Accept`,
+          label: () => $localize`Accept`,
           handler: registrations => this.openRegistrationRequestProcessModal(registrations, 'accept'),
           isDisplayed: registration => registration.state.id === UserRegistrationState.PENDING,
           enableBulk: true
         },
         {
-          label: $localize`Reject`,
+          label: () => $localize`Reject`,
           handler: registrations => this.openRegistrationRequestProcessModal(registrations, 'reject'),
           isDisplayed: registration => registration.state.id === UserRegistrationState.PENDING,
           enableBulk: true
@@ -102,7 +102,7 @@ export class RegistrationListComponent implements OnInit {
       ],
       [
         {
-          label: $localize`Remove`,
+          label: () => $localize`Remove`,
           description: $localize`Remove the request from the list. User can register again.`,
           handler: registrations => this.removeRegistrations(registrations),
           enableBulk: true

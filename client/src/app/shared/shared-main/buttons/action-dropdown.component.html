@@ -17,6 +17,7 @@
         <span class="dropdown-toggle me-2">
           <span class="d-inline-flex align-items-center gap-2">
             {{ label() }}
+
             @if (labelExtra) {
               <ng-template *ngTemplateOutlet="labelExtra"></ng-template>
             }
@@ -31,6 +32,7 @@
         <div class="chevron-down"></div>
       }
     </button>
+
     <div ngbDropdownMenu class="dropdown-menu">
       @for (actions of getActions(); track $index) {
         @for (action of actions; track action.label) {
@@ -45,7 +47,7 @@
 
                 <div class="item-label">
                   <span class="d-inline-flex align-items-center">
-                    {{ action.label }}
+                    {{ getActionLabel(action, entry()) }}
 
                     @if (dropdownItemExtra) {
                       <ng-template *ngTemplateOutlet="dropdownItemExtra; context: { action }"></ng-template>

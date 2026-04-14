@@ -1,19 +1,23 @@
 import { DropdownAction } from './action-dropdown.component'
 
-type DropdownActionForBuilder<T, D = never> =
-  & Omit<DropdownAction<T, D>, 'linkBuilder' | 'queryParamsBuilder' | 'handler'>
+export type DropdownActionForBuilder<T, D = never> =
+  & Omit<DropdownAction<T, D>, 'linkBuilder' | 'queryParamsBuilder' | 'handler' | 'label'>
   & {
     handler?: (a: T[]) => any
   }
   & (
     | {
       enableBulk: true
+      // Force label to be a function to avoid mistakes where the developer forgets to use the entry parameter
+      // which is often needed to build the label for bulk actions
+      label: (a: T[]) => string
 
       linkBuilder?: never
       queryParamsBuilder?: never
     }
     | {
       enableBulk: false
+      label: string | ((a: T[]) => string)
 
       linkBuilder?: DropdownAction<T, D>['linkBuilder']
       queryParamsBuilder?: DropdownAction<T, D>['queryParamsBuilder']
@@ -52,6 +56,11 @@ export function buildDropdownSimpleAndBulkActions<T, D = never> (
   for (const action of actions as DropdownActionForBuilder<T, D>[]) {
     simpleActions.push({
       ...action,
+
+      label: typeof action.label === 'string'
+        ? action.label
+        : (entry: T) => (action.label as ((a: T[]) => string))([ entry ]),
+
       handler: (a: T) => {
         if (action.handler) action.handler([ a ])
       }

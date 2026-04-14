@@ -1,8 +1,8 @@
-import { Component, OnDestroy, OnInit, inject, input, viewChild } from '@angular/core'
+import { Component, inject, input, OnDestroy, OnInit, viewChild } from '@angular/core'
 import { ConfirmService, HooksService, MarkdownService, Notifier, PluginService } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { AbuseState, AbuseStateType, AdminAbuse, ResultList } from '@peertube/peertube-models'
+import { AbuseState, AbuseStateType, AdminAbuse, ResultList, UserAbuse } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import debug from 'debug'
 import { map, switchMap } from 'rxjs'
@@ -11,7 +11,7 @@ import { AdvancedFilterDef } from '../shared-forms/advanced-input-filter.compone
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { Account } from '../shared-main/account/account.model'
 import { Actor } from '../shared-main/account/actor.model'
-import { buildDropdownSimpleAndBulkActions } from '../shared-main/buttons/action-dropdown-helpers'
+import { buildDropdownSimpleAndBulkActions, DropdownActionForBuilder } from '../shared-main/buttons/action-dropdown-helpers'
 import { ActionDropdownComponent, DropdownAction } from '../shared-main/buttons/action-dropdown.component'
 import { PTDatePipe } from '../shared-main/common/date.pipe'
 import { NumberFormatterPipe } from '../shared-main/common/number-formatter.pipe'
@@ -32,25 +32,6 @@ import { ProcessedAbuse } from './processed-abuse.model'
 const debugLogger = debug('peertube:moderation:AbuseListTableComponent')
 
 type DataLoaderParameter = Parameters<AbuseListTableComponent['_dataLoader']>[0]
-type DropdownActionForBuilder<T, D = never> =
-  & Omit<DropdownAction<T, D>, 'linkBuilder' | 'queryParamsBuilder' | 'handler'>
-  & {
-    handler?: (a: T[]) => any
-  }
-  & (
-    | {
-      enableBulk: true
-
-      linkBuilder?: never
-      queryParamsBuilder?: never
-    }
-    | {
-      enableBulk: false
-
-      linkBuilder?: DropdownAction<T, D>['linkBuilder']
-      queryParamsBuilder?: DropdownAction<T, D>['queryParamsBuilder']
-    }
-  )
 
 @Component({
   selector: 'my-abuse-list-table',
@@ -280,41 +261,54 @@ export class AbuseListTableComponent implements OnInit, OnDestroy {
       : this.abuseService.listUserAbuses(options)
 
     return observable.pipe(
-      switchMap(async (resultList: ResultList<ProcessedAbuse>) => {
+      switchMap(async (resultList: ResultList<UserAbuse | AdminAbuse>) => {
         const abuses: ProcessedAbuse[] = []
 
         for (const abuse of resultList.data) {
-          abuse.reasonHtml = await this.toHtml(abuse.reason)
+          const video = abuse.video as ProcessedAbuse['video']
 
-          if (abuse.moderationComment) {
-            abuse.moderationCommentHtml = await this.toHtml(abuse.moderationComment)
+          if (abuse.video?.channel?.ownerAccount) {
+            video.channel.ownerAccount = new Account(abuse.video.channel.ownerAccount)
           }
 
-          if (abuse.video) {
-            if (abuse.video.channel?.ownerAccount) {
-              abuse.video.channel.ownerAccount = new Account(abuse.video.channel.ownerAccount)
-            }
-          }
+          let commentHTML: string
 
           if (abuse.comment) {
             if (abuse.comment.deleted) {
-              abuse.commentHTML = $localize`Deleted comment`
+              commentHTML = $localize`Deleted comment`
             } else {
-              abuse.commentHTML = await this.markdownRenderer.textMarkdownToHTML({ markdown: abuse.comment.text, withHtml: true })
+              commentHTML = await this.markdownRenderer.textMarkdownToHTML({
+                markdown: abuse.comment.text,
+                withHtml: true
+              })
             }
-          }
-
-          if (abuse.reporterAccount) {
-            abuse.reporterAccount = new Account(abuse.reporterAccount)
-          }
-
-          if (abuse.flaggedAccount) {
-            abuse.flaggedAccount = new Account(abuse.flaggedAccount)
           }
 
           if (abuse.updatedAt === abuse.createdAt) delete abuse.updatedAt
 
-          abuses.push(abuse)
+          abuses.push({
+            ...abuse,
+
+            video,
+
+            commentHTML,
+
+            reasonHtml: abuse.reason
+              ? await this.toHtml(abuse.reason)
+              : undefined,
+
+            moderationCommentHtml: (abuse as AdminAbuse).moderationComment
+              ? await this.toHtml((abuse as AdminAbuse).moderationComment)
+              : undefined,
+
+            reporterAccount: (abuse as AdminAbuse).reporterAccount
+              ? new Account((abuse as AdminAbuse).reporterAccount)
+              : undefined,
+
+            flaggedAccount: abuse.flaggedAccount
+              ? new Account(abuse.flaggedAccount)
+              : undefined
+          })
         }
 
         return { total: resultList.total, data: abuses }
@@ -355,7 +349,7 @@ export class AbuseListTableComponent implements OnInit, OnDestroy {
 
     return [
       {
-        label: $localize`Internal actions`,
+        label: () => $localize`Internal actions`,
         isHeader: true,
         enableBulk: true
       },
@@ -363,25 +357,25 @@ export class AbuseListTableComponent implements OnInit, OnDestroy {
       messagesAction,
 
       {
-        label: $localize`Set internal note`,
+        label: () => $localize`Set internal note`,
         handler: abuses => this.openModerationCommentModal(abuses),
         isDisplayed: () => this.isAdminView(),
         enableBulk: true
       },
       {
-        label: $localize`Mark as accepted`,
+        label: () => $localize`Mark as accepted`,
         handler: abuses => this.updateAbusesState(abuses, AbuseState.ACCEPTED),
         isDisplayed: abuse => this.isAdminView() && !this.isAbuseAccepted(abuse),
         enableBulk: true
       },
       {
-        label: $localize`Mark as rejected`,
+        label: () => $localize`Mark as rejected`,
         handler: abuses => this.updateAbusesState(abuses, AbuseState.REJECTED),
         isDisplayed: abuse => this.isAdminView() && !this.isAbuseRejected(abuse),
         enableBulk: true
       },
       {
-        label: $localize`Delete report`,
+        label: abuses => formatICU($localize`{count, plural, =1 {Delete report} other {Delete reports}}`, { count: abuses.length }),
         handler: abuses => this.removeAbuses(abuses),
         isDisplayed: () => this.isAdminView(),
         enableBulk: true
@@ -394,21 +388,23 @@ export class AbuseListTableComponent implements OnInit, OnDestroy {
 
     return [
       {
-        label: $localize`Actions for the flagged account`,
+        label: entries => {
+          return formatICU($localize`Actions for the flagged {count, plural, =1 {account} other {accounts}}`, { count: entries.length })
+        },
         isHeader: true,
         isDisplayed: abuse => abuse.flaggedAccount && !abuse.comment && !abuse.video,
         enableBulk: true
       },
 
       {
-        label: $localize`Mute account`,
+        label: entries => formatICU($localize`Mute flagged {count, plural, =1 {account} other {accounts}}`, { count: entries.length }),
         isDisplayed: abuse => abuse.flaggedAccount && !abuse.comment && !abuse.video,
         handler: abuses => this.muteFlaggedAccounts(abuses),
         enableBulk: true
       },
 
       {
-        label: $localize`Mute server account`,
+        label: entries => formatICU($localize`Mute flagged {count, plural, =1 {platform} other {platforms}}`, { count: entries.length }),
         isDisplayed: abuse => abuse.flaggedAccount && !abuse.comment && !abuse.video,
         handler: abuses => this.muteFlaggedAccountServers(abuses),
         enableBulk: true
@@ -421,21 +417,21 @@ export class AbuseListTableComponent implements OnInit, OnDestroy {
 
     return [
       {
-        label: $localize`Actions for the reporter`,
+        label: entries => formatICU($localize`Actions for the {count, plural, =1 {reporter} other {reporters}}`, { count: entries.length }),
         isHeader: true,
         isDisplayed: abuse => !!abuse.reporterAccount,
         enableBulk: true
       },
 
       {
-        label: $localize`Mute reporter`,
+        label: entries => formatICU($localize`Mute {count, plural, =1 {reporter} other {reporters}}`, { count: entries.length }),
         isDisplayed: abuse => !!abuse.reporterAccount,
         handler: abuses => this.muteReporters(abuses),
         enableBulk: true
       },
 
       {
-        label: $localize`Mute reporter server`,
+        label: entries => formatICU($localize`Mute reporter {count, plural, =1 {platform} other {platforms}}`, { count: entries.length }),
         isDisplayed: abuse => abuse.reporterAccount && !abuse.reporterAccount.userId,
         handler: abuses => this.muteReporterServers(abuses),
         enableBulk: true
@@ -448,25 +444,25 @@ export class AbuseListTableComponent implements OnInit, OnDestroy {
 
     return [
       {
-        label: $localize`Actions for the video`,
+        label: entries => formatICU($localize`Actions for the {count, plural, =1 {video} other {videos}}`, { count: entries.length }),
         isHeader: true,
         isDisplayed: abuse => abuse.video && !abuse.video.deleted,
         enableBulk: true
       },
       {
-        label: $localize`Block video`,
+        label: entries => formatICU($localize`Block the {count, plural, =1 {video} other {videos}}`, { count: entries.length }),
         isDisplayed: abuse => abuse.video && !abuse.video.deleted && !abuse.video.blacklisted,
         handler: abuses => this.blockAbuseVideos(abuses),
         enableBulk: true
       },
       {
-        label: $localize`Unblock video`,
+        label: entries => formatICU($localize`Unblock the {count, plural, =1 {video} other {videos}}`, { count: entries.length }),
         isDisplayed: abuse => abuse.video && !abuse.video.deleted && abuse.video.blacklisted,
         handler: abuses => this.unblockAbuseVideos(abuses),
         enableBulk: true
       },
       {
-        label: $localize`Delete video`,
+        label: entries => formatICU($localize`Delete the {count, plural, =1 {video} other {videos}}`, { count: entries.length }),
         isDisplayed: abuse => abuse.video && !abuse.video.deleted,
         handler: abuses => this.deleteAbuseVideos(abuses),
         enableBulk: true
@@ -479,14 +475,16 @@ export class AbuseListTableComponent implements OnInit, OnDestroy {
 
     return [
       {
-        label: $localize`Actions for the comment`,
+        label: entries => {
+          return formatICU($localize`Actions for {count, plural, =1 {the comment} other {the comments}}`, { count: entries.length })
+        },
         isHeader: true,
         isDisplayed: abuse => abuse.comment && !abuse.comment.deleted,
         enableBulk: true
       },
 
       {
-        label: $localize`Delete comment`,
+        label: entries => formatICU($localize`Delete {count, plural, =1 {comment} other {comments}}`, { count: entries.length }),
         isDisplayed: abuse => abuse.comment && !abuse.comment.deleted,
         handler: abuses => this.deleteAbuseComments(abuses),
         enableBulk: true
