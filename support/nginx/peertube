@@ -213,6 +213,8 @@ server {
     proxy_set_header Host            $host; # Use $http_host if you use a non standard HTTP port
     proxy_set_header X-Real-IP       $remote_addr;
 
+    # Prevent too much proxying, which results in high disk write IO
+    proxy_max_temp_file_size 50M;
     proxy_limit_rate 5M;
 
     proxy_pass http://backend;
