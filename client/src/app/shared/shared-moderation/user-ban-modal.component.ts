@@ -29,7 +29,7 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
   private blocklistService = inject(BlocklistService)
 
   readonly modal = viewChild<NgbModal>('modal')
-  readonly userBanned = output<User | User[]>()
+  readonly userBanned = output<{ muted: boolean, user: User | User[] }>()
 
   private usersToBan: User | User[]
   private openedModal: NgbModalRef
@@ -78,7 +78,7 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
 
           this.notifier.success(message)
 
-          this.userBanned.emit(this.usersToBan)
+          this.userBanned.emit({ muted: mute, user: this.usersToBan })
 
           this.hide()
         },

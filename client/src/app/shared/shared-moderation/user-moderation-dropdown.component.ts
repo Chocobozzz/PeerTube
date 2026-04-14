@@ -81,7 +81,9 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
     this.userBanModal().openModal(user)
   }
 
-  onUserBanned () {
+  onUserBanned ({ muted }: { muted: boolean }) {
+    if (muted) this.account().mutedByInstance = true
+
     this.userChanged.emit()
   }
 
