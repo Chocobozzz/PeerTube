@@ -1,7 +1,7 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { HttpStatusCode } from '@peertube/peertube-models'
+import { HttpStatusCode, UserRegistrationState } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -22,7 +22,8 @@ describe('Official plugin Akismet', function () {
     await setAccessTokensToServers(servers)
 
     await servers[0].plugins.install({
-      npmName: 'peertube-plugin-akismet'
+      // npmName: 'peertube-plugin-akismet',
+      path: '/home/florian/Coding/NodeJS/peertube-official-plugins/peertube-plugin-akismet'
     })
 
     if (!process.env.AKISMET_KEY) throw new Error('Missing AKISMET_KEY from env')
@@ -44,11 +45,11 @@ describe('Official plugin Akismet', function () {
     })
 
     it('Should not detect a thread as spam', async function () {
-      await servers[0].comments.createThread({ videoId: videoUUID, text: 'comment' })
+      await servers[0].comments.createThread({ videoId: videoUUID, text: 'this is my comment' })
     })
 
     it('Should not detect a reply as spam', async function () {
-      await servers[0].comments.addReplyToLastThread({ text: 'reply' })
+      await servers[0].comments.addReplyToLastThread({ text: 'this is my reply to your comment' })
     })
 
     it('Should detect a thread as spam', async function () {
@@ -60,7 +61,6 @@ describe('Official plugin Akismet', function () {
     })
 
     it('Should detect a thread as spam', async function () {
-      await servers[0].comments.createThread({ videoId: videoUUID, text: 'comment' })
       await servers[0].comments.addReplyToLastThread({ text: 'akismet-guaranteed-spam', expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
   })
@@ -148,6 +148,25 @@ describe('Official plugin Akismet', function () {
         email: 'akismet-guaranteed-spam@example.com',
         expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
+    })
+
+    it('Should detect a signup as SPAM and set it as approval', async function () {
+      await servers[0].plugins.updateSettings({
+        npmName: 'peertube-plugin-akismet',
+        settings: {
+          'akismet-api-key': process.env.AKISMET_KEY,
+          'akismet-spam-marked-user-registration-strategy': 'mark-for-approval'
+        }
+      })
+
+      const { state } = await servers[0].registrations.register({
+        username: 'user2',
+        displayName: 'user 2',
+        email: 'akismet-guaranteed-spam@example.com',
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      expect(state.id).to.equal(UserRegistrationState.PENDING)
     })
   })
 

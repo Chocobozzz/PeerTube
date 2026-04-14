@@ -15,7 +15,7 @@ export class RegistrationsCommand extends AbstractCommand {
     const { password = 'password', email = options.username + '@example.com' } = options
     const path = '/api/v1/users/register'
 
-    return this.postBodyRequest({
+    return unwrapBody<{ state: { id: UserRegistrationStateType, label: string } }>(this.postBodyRequest({
       ...options,
 
       path,
@@ -27,7 +27,7 @@ export class RegistrationsCommand extends AbstractCommand {
       },
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
-    })
+    }))
   }
 
   requestRegistration (

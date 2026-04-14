@@ -101,6 +101,7 @@ export const serverFilterHookObject = {
   'filter:api.user.signup.allowed.result': true,
 
   // Filter result used to check if signup requires approval on the instance
+  // PeerTube >= 8.2
   'filter:api.user.signup.requires-approval.result': true,
 
   // Filter result used to check if a user can send a registration request on the instance
