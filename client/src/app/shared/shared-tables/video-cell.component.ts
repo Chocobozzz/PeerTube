@@ -5,6 +5,7 @@ import { AuthService, ScreenService } from '@app/core'
 import { CollaboratorStateComponent } from '../shared-main/channel/collaborator-state.component'
 import { VideoChannel } from '../shared-main/channel/video-channel.model'
 import { Video } from '../shared-main/video/video.model'
+import { AccountBlockBadgeInput, AccountBlockBadgesComponent } from '../shared-moderation/account-block-badges.component'
 import { VideoThumbnailComponent } from '../shared-thumbnail/video-thumbnail.component'
 
 @Component({
@@ -16,7 +17,8 @@ import { VideoThumbnailComponent } from '../shared-thumbnail/video-thumbnail.com
     CommonModule,
     RouterLink,
     VideoThumbnailComponent,
-    CollaboratorStateComponent
+    CollaboratorStateComponent,
+    AccountBlockBadgesComponent
   ]
 })
 export class VideoCellComponent implements OnInit {
@@ -28,6 +30,8 @@ export class VideoCellComponent implements OnInit {
   readonly thumbnail = input(true, { transform: booleanAttribute })
   readonly title = input(true, { transform: booleanAttribute })
   readonly displayEditorInfo = input(false, { transform: booleanAttribute })
+  readonly accountBlockBadges = input<AccountBlockBadgeInput>()
+  readonly accountBlockBadgesPlatformOnly = input(false, { transform: booleanAttribute })
 
   ellipsis: boolean
 

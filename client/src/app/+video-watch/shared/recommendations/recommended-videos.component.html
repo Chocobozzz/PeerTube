@@ -24,7 +24,7 @@
       }
       <my-video-miniature
         [displayOptions]="displayOptions" [video]="video" [user]="user" [displayAsRow]="displayAsRow()"
-        (videoBlocked)="onVideoRemoved()" (videoRemoved)="onVideoRemoved()" (videoAccountMuted)="onVideoRemoved()"
+        (videoBlocked)="onVideoRemoved()" (videoRemoved)="onVideoRemoved()" (muted)="onVideoRemoved()"
         actorImageSize="32" thumbnailSizes="201px"
         >
       </my-video-miniature>

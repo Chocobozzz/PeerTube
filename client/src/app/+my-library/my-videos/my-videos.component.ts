@@ -93,7 +93,8 @@ export class MyVideosComponent implements OnInit, OnDestroy {
     delete: true,
     report: false,
     duplicate: false,
-    mute: false,
+    muteByUser: false,
+    muteByServer: false,
     liveInfo: true,
     removeFiles: false,
     transcoding: false

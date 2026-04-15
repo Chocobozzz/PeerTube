@@ -1,13 +1,15 @@
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
-import { RestExtractor, RestPagination, RestService } from '@app/core'
+import { AuthUser, Notifier, RestExtractor, RestPagination, RestService } from '@app/core'
+import { formatICU } from '@app/helpers'
 import { arrayify } from '@peertube/peertube-core-utils'
-import { AccountBlock as AccountBlockServer, BlockStatus, ResultList, ServerBlock } from '@peertube/peertube-models'
+import { AccountBlock as AccountBlockServer, BlockStatus, ResultList, ServerBlock, UserRight } from '@peertube/peertube-models'
 import { SortMeta } from 'primeng/api'
 import { from } from 'rxjs'
-import { catchError, concatMap, map, toArray } from 'rxjs/operators'
+import { catchError, concatMap, map, tap, toArray } from 'rxjs/operators'
 import { environment } from '../../../environments/environment'
 import { Account } from '../shared-main/account/account.model'
+import { Actor } from '../shared-main/account/actor.model'
 import { AccountBlock } from './account-block.model'
 
 export enum BlocklistComponentType {
@@ -20,12 +22,31 @@ export class BlocklistService {
   private authHttp = inject(HttpClient)
   private restExtractor = inject(RestExtractor)
   private restService = inject(RestService)
+  private notifier = inject(Notifier)
 
   static BASE_BLOCKLIST_URL = environment.apiUrl + '/api/v1/blocklist'
   static BASE_USER_BLOCKLIST_URL = environment.apiUrl + '/api/v1/users/me/blocklist'
   static BASE_SERVER_BLOCKLIST_URL = environment.apiUrl + '/api/v1/server/blocklist'
 
-  /** ********************* Blocklist status ***********************/
+  canMuteAccountByAccount (user: AuthUser, account: Pick<Account, 'id'>) {
+    return user && account && user.account.id !== account.id
+  }
+
+  canMutePlatformByAccount (user: AuthUser, account: Pick<Account, 'host'>) {
+    return user && account && !Actor.IS_LOCAL(account.host)
+  }
+
+  canMuteAccountByInstance (user: AuthUser, account: Pick<Account, 'id'>) {
+    return user && account && user.account.id !== account.id && user.hasRight(UserRight.MANAGE_ACCOUNTS_BLOCKLIST)
+  }
+
+  canMutePlatformByInstance (user: AuthUser, account: Pick<Account, 'host'>) {
+    return user && account && !Actor.IS_LOCAL(account.host) && user.hasRight(UserRight.MANAGE_SERVERS_BLOCKLIST)
+  }
+
+  // ---------------------------------------------------------------------------
+  // Blocklist status
+  // ---------------------------------------------------------------------------
 
   getStatus (options: {
     accounts?: string[]
@@ -42,7 +63,9 @@ export class BlocklistService {
       .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  /** ********************* User -> Account blocklist ***********************/
+  // ---------------------------------------------------------------------------
+  // User -> Account blocklist
+  // ---------------------------------------------------------------------------
 
   getUserAccountBlocklist (options: { pagination: RestPagination, sort: SortMeta, search?: string }) {
     const { pagination, sort, search } = options
@@ -73,7 +96,9 @@ export class BlocklistService {
       .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  /** ********************* User -> Server blocklist ***********************/
+  // ---------------------------------------------------------------------------
+  // User -> Server blocklist
+  // ---------------------------------------------------------------------------
 
   getUserServerBlocklist (options: { pagination: RestPagination, sort: SortMeta, search?: string }) {
     const { pagination, sort, search } = options
@@ -101,7 +126,9 @@ export class BlocklistService {
       .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  /** ********************* Instance -> Account blocklist ***********************/
+  // ---------------------------------------------------------------------------
+  // Instance -> Account blocklist
+  // ---------------------------------------------------------------------------
 
   getInstanceAccountBlocklist (options: { pagination: RestPagination, sort: SortMeta, search?: string }) {
     const { pagination, sort, search } = options
@@ -118,6 +145,8 @@ export class BlocklistService {
       )
   }
 
+  // ---------------------------------------------------------------------------
+
   blockAccountByInstance (accountsArg: Pick<Account, 'nameWithHost'> | Pick<Account, 'nameWithHost'>[]) {
     const accounts = arrayify(accountsArg)
 
@@ -128,6 +157,24 @@ export class BlocklistService {
         catchError(err => this.restExtractor.handleError(err))
       )
   }
+
+  blockAccountByInstanceAndNotify (accountsArg: Pick<Account, 'nameWithHost'> | Pick<Account, 'nameWithHost'>[]) {
+    const accounts = arrayify(accountsArg)
+
+    return this.blockAccountByInstance(accounts)
+      .pipe(
+        tap(() => {
+          this.notifier.success(
+            formatICU(
+              $localize`{count, plural, =1 {Account muted} other {{count} accounts muted}}`,
+              { count: accounts.length }
+            )
+          )
+        })
+      )
+  }
+
+  // ---------------------------------------------------------------------------
 
   unblockAccountByInstance (accountsArg: Pick<Account, 'nameWithHost'> | Pick<Account, 'nameWithHost'>[]) {
     const accounts = arrayify(accountsArg)
@@ -140,7 +187,25 @@ export class BlocklistService {
       )
   }
 
-  /** ********************* Instance -> Server blocklist ***********************/
+  unblockAccountByInstanceAndNotify (accountsArg: Pick<Account, 'nameWithHost'> | Pick<Account, 'nameWithHost'>[]) {
+    const accounts = arrayify(accountsArg)
+
+    return this.unblockAccountByInstance(accounts)
+      .pipe(
+        tap(() => {
+          this.notifier.success(
+            formatICU(
+              $localize`{count, plural, =1 {Account unmuted} other {{count} accounts unmuted}}`,
+              { count: accounts.length }
+            )
+          )
+        })
+      )
+  }
+
+  // ---------------------------------------------------------------------------
+  // Instance -> Server blocklist
+  // ---------------------------------------------------------------------------
 
   getInstanceServerBlocklist (options: { pagination: RestPagination, sort: SortMeta, search?: string }) {
     const { pagination, sort, search } = options
@@ -154,6 +219,8 @@ export class BlocklistService {
       .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
+  // ---------------------------------------------------------------------------
+
   blockServerByInstance (hostsArg: string | string[]) {
     const hosts = arrayify(hostsArg)
 
@@ -165,6 +232,24 @@ export class BlocklistService {
       )
   }
 
+  blockServerByInstanceAndNotify (hostsArg: string | string[]) {
+    const hosts = arrayify(hostsArg)
+
+    return this.blockServerByInstance(hosts)
+      .pipe(
+        tap(() => {
+          this.notifier.success(
+            formatICU(
+              $localize`{count, plural, =1 {Server muted} other {{count} servers muted}}`,
+              { count: hosts.length }
+            )
+          )
+        })
+      )
+  }
+
+  // ---------------------------------------------------------------------------
+
   unblockServerByInstance (hostsArg: string | string[]) {
     const hosts = arrayify(hostsArg)
 
@@ -175,6 +260,24 @@ export class BlocklistService {
         catchError(err => this.restExtractor.handleError(err))
       )
   }
+
+  unblockServerByInstanceAndNotify (hostsArg: string | string[]) {
+    const hosts = arrayify(hostsArg)
+
+    return this.unblockServerByInstance(hosts)
+      .pipe(
+        tap(() => {
+          this.notifier.success(
+            formatICU(
+              $localize`{count, plural, =1 {Server unmuted} other {{count} servers unmuted}}`,
+              { count: hosts.length }
+            )
+          )
+        })
+      )
+  }
+
+  // ---------------------------------------------------------------------------
 
   private formatAccountBlock (accountBlock: AccountBlockServer) {
     return new AccountBlock(accountBlock)

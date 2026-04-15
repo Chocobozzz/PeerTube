@@ -29,6 +29,10 @@
             }
           }
         </a>
+
+        @if (accountBlockBadges()) {
+          <my-account-block-badges class="ms-2" [account]="accountBlockBadges()" [platformOnly]="accountBlockBadgesPlatformOnly()"></my-account-block-badges>
+        }
       }
     </div>
   }

@@ -86,7 +86,8 @@ export class VideoMiniatureComponent implements OnInit {
     delete: true,
     report: true,
     duplicate: true,
-    mute: true
+    muteByUser: true,
+    muteByServer: true
   })
 
   readonly actorImageSize = input(34, { transform: numberAttribute })
@@ -98,7 +99,7 @@ export class VideoMiniatureComponent implements OnInit {
   readonly videoBlocked = output()
   readonly videoUnblocked = output()
   readonly videoRemoved = output()
-  readonly videoAccountMuted = output()
+  readonly muted = output()
 
   showActions = false
   serverConfig: HTMLServerConfig
@@ -254,8 +255,8 @@ export class VideoMiniatureComponent implements OnInit {
     this.videoRemoved.emit()
   }
 
-  onVideoAccountMuted () {
-    this.videoAccountMuted.emit()
+  onMuted () {
+    this.muted.emit()
   }
 
   isUserLoggedIn () {

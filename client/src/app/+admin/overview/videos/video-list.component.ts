@@ -8,6 +8,8 @@ import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 import { VideoFileTokenService } from '@app/shared/shared-main/video/video-file-token.service'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { AccountBlockBadgeInput } from '@app/shared/shared-moderation/account-block-badges.component'
+import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
 import { VideoBlockComponent } from '@app/shared/shared-moderation/video-block.component'
 import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
 import { PrivacyBadgeComponent } from '@app/shared/shared-video/privacy-badge.component'
@@ -76,6 +78,7 @@ export class VideoListComponent implements OnInit {
   private videoCaptionService = inject(VideoCaptionService)
   private server = inject(ServerService)
   private videoFileTokenService = inject(VideoFileTokenService)
+  private blocklistService = inject(BlocklistService)
 
   readonly videoBlockModal = viewChild<VideoBlockComponent>('videoBlockModal')
   readonly table = viewChild<TableComponent<Video, DataLoaderParameter, ColumnName>>('table')
@@ -93,7 +96,8 @@ export class VideoListComponent implements OnInit {
     delete: true,
     report: false,
     duplicate: true,
-    mute: true,
+    muteByUser: false,
+    muteByServer: true,
     liveInfo: false,
     removeFiles: true,
     transcoding: true,
@@ -106,6 +110,9 @@ export class VideoListComponent implements OnInit {
     { id: 'localVideoFilesSize', label: $localize`Files`, sortable: true },
     { id: 'publishedAt', label: $localize`Published`, sortable: true }
   ]
+
+  // Key is account id
+  accountBlocklist = new Map<number, AccountBlockBadgeInput>()
 
   private videoFileTokens: { [videoId: number]: string } = {}
 
@@ -281,14 +288,6 @@ export class VideoListComponent implements OnInit {
     return video.state.id !== VideoState.LIVE_ENDED && video.state.id !== VideoState.PUBLISHED
   }
 
-  isAccountBlocked (video: Video) {
-    return video.blockedOwner
-  }
-
-  isServerBlocked (video: Video) {
-    return video.blockedServer
-  }
-
   isVideoBlocked (video: Video) {
     return video.blacklisted
   }
@@ -390,6 +389,49 @@ export class VideoListComponent implements OnInit {
     if (!token) return downloadUrl
 
     return downloadUrl + `?videoFileToken=${token}`
+  }
+
+  // ---------------------------------------------------------------------------
+
+  onDataLoaded () {
+    this.loadBlockStatus()
+  }
+
+  loadBlockStatus () {
+    const videos = this.table().data
+
+    const accounts = this.getUniqueAccounts(videos)
+    const hosts = this.getUniqueHosts(videos)
+
+    this.blocklistService.getStatus({ accounts: accounts.map(a => a.name + '@' + a.host), hosts })
+      .subscribe(status => {
+        this.accountBlocklist = new Map()
+
+        for (const a of accounts) {
+          const handle = a.name + '@' + a.host
+
+          this.accountBlocklist.set(a.id, {
+            mutedByInstance: status.accounts[handle].blockedByServer,
+            mutedServerByInstance: status.hosts[a.host].blockedByServer
+          })
+        }
+      })
+  }
+
+  private getUniqueAccounts (videos: Video[]) {
+    const accountsDone = new Set<number>()
+
+    return videos
+      .map(a => {
+        if (!a.account || accountsDone.has(a.account.id)) return null
+
+        accountsDone.add(a.account.id)
+        return a.account
+      }).filter(a => !!a)
+  }
+
+  private getUniqueHosts (videos: Video[]) {
+    return Array.from(new Set(videos.map(c => c.account.host)))
   }
 
   // ---------------------------------------------------------------------------

@@ -68,9 +68,9 @@ async function populateServerBlocklistStatus (options: {
   logger.debug('Got server blocklist status.', { serverBlocklistStatus, byAccountIds, hosts })
 
   for (const host of hosts) {
-    const block = serverBlocklistStatus.find(b => b.host === host)
+    const blocks = serverBlocklistStatus.filter(b => b.host === host)
 
-    status.hosts[host] = getStatus(block, serverActor, user)
+    status.hosts[host] = getStatus(blocks, serverActor, user)
   }
 }
 
@@ -92,15 +92,15 @@ async function populateAccountBlocklistStatus (options: {
   for (const account of accounts) {
     const sanitizedHandle = handleToNameAndHost(account)
 
-    const block = accountBlocklistStatus.find(b => b.name === sanitizedHandle.name && b.host === sanitizedHandle.host)
+    const blocks = accountBlocklistStatus.filter(b => b.name === sanitizedHandle.name && b.host === sanitizedHandle.host)
 
-    status.accounts[sanitizedHandle.handle] = getStatus(block, serverActor, user)
+    status.accounts[sanitizedHandle.handle] = getStatus(blocks, serverActor, user)
   }
 }
 
-function getStatus (block: { accountId: number }, serverActor: MActorAccountId, user?: MUserAccountId) {
+function getStatus (blocks: { accountId: number }[], serverActor: MActorAccountId, user?: MUserAccountId) {
   return {
-    blockedByServer: !!(block?.accountId === serverActor.Account.id),
-    blockedByUser: !!(block && block.accountId === user?.Account.id)
+    blockedByServer: blocks.some(block => block.accountId === serverActor.Account.id),
+    blockedByUser: blocks.some(block => block.accountId === user?.Account.id)
   }
 }

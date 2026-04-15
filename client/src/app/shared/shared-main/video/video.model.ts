@@ -90,8 +90,8 @@ export class Video implements VideoServerModel {
   blacklisted?: boolean
   blacklistedReason?: string
 
-  blockedOwner?: boolean
-  blockedServer?: boolean
+  blockedOwner?: never
+  blockedServer?: never
 
   account: {
     id: number
@@ -206,9 +206,6 @@ export class Video implements VideoServerModel {
 
     this.blacklisted = hash.blacklisted
     this.blacklistedReason = hash.blacklistedReason
-
-    this.blockedOwner = hash.blockedOwner
-    this.blockedServer = hash.blockedServer
 
     this.streamingPlaylists = hash.streamingPlaylists
     this.files = hash.files

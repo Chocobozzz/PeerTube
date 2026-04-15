@@ -102,10 +102,10 @@ export class VideoCommentService {
     options: Parameters<VideoCommentService['buildAdminVideoCommentsParams']>[0] & {
       isLocal?: boolean
       onLocalVideo?: boolean
-      includeMuted?: boolean
+      excludeMuted?: boolean
     }
   ): Observable<ResultList<VideoCommentForAdminOrUser>> {
-    const { isLocal, onLocalVideo, includeMuted } = options
+    const { isLocal, onLocalVideo, excludeMuted } = options
 
     const url = VideoCommentService.BASE_VIDEO_URL + 'comments'
 
@@ -119,8 +119,11 @@ export class VideoCommentService {
       params = params.set('onLocalVideo', '' + onLocalVideo)
     }
 
-    if (includeMuted !== undefined) {
-      params = params.set('includeMuted', '' + includeMuted)
+    // Include muted by default
+    if (excludeMuted === true) {
+      params = params.set('includeMuted', 'false')
+    } else {
+      params = params.set('includeMuted', 'true')
     }
 
     return this.authHttp.get<ResultList<VideoCommentForAdminOrUser>>(url, { params })

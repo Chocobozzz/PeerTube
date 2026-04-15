@@ -14,6 +14,7 @@
   searchInput="true"
   [inputFilters]="inputFilters"
   [defaultInputFilterValues]="defaultInputFilterValues"
+  (dataLoaded)="onDataLoaded()"
   >
 
   <ng-template #totalTitle let-totalRecords>
@@ -22,7 +23,10 @@
 
   <ng-template #tableCells let-video>
     <td>
-      <my-video-cell [video]="video" size="small"></my-video-cell>
+      <my-video-cell
+        [video]="video" [accountBlockBadges]="accountBlocklist.get(video.account.id)"
+        accountBlockBadgesPlatformOnly="true" size="small"
+      ></my-video-cell>
     </td>
 
     <td>
@@ -39,13 +43,6 @@
 
         @if (isUnpublished(video)) {
           <span [class]="getVideoStateBadgeClass(video.state.id)">{{ video.state.label }}</span>
-        }
-
-        @if (isAccountBlocked(video)) {
-          <span class="pt-badge badge-red" i18n>Account muted</span>
-        }
-        @if (isServerBlocked(video)) {
-          <span class="pt-badge badge-red" i18n>Server muted</span>
         }
 
         @if (isVideoBlocked(video)) {
@@ -93,8 +90,10 @@
 
   <ng-template #actionCell let-video>
     <my-video-actions-dropdown
-      placement="bottom auto" buttonIcon="more-horizontal" buttonStyled="true" [video]="video" [displayOptions]="videoActionsOptions"
+      placement="bottom auto" buttonIcon="more-horizontal" buttonStyled="true" [video]="video"
+      [displayOptions]="videoActionsOptions" [muteStatus]="accountBlocklist.get(video.account.id)"
       (videoRemoved)="table.loadData()" (videoFilesRemoved)="table.loadData()" (transcodingCreated)="table.loadData()"
+      (muted)="loadBlockStatus()" (unmuted)="loadBlockStatus()"
     ></my-video-actions-dropdown>
   </ng-template>
 

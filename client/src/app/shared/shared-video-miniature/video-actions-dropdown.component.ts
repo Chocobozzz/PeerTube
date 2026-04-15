@@ -15,6 +15,7 @@ import { RedundancyService } from '../shared-main/video/redundancy.service'
 import { VideoDetails } from '../shared-main/video/video-details.model'
 import { Video } from '../shared-main/video/video.model'
 import { VideoService } from '../shared-main/video/video.service'
+import { AccountBlockBadgeInput } from '../shared-moderation/account-block-badges.component'
 import { BlocklistService } from '../shared-moderation/blocklist.service'
 import { VideoReportComponent } from '../shared-moderation/report-modals'
 import { VideoBlockComponent } from '../shared-moderation/video-block.component'
@@ -30,7 +31,8 @@ export type VideoActionsDisplayType = {
   delete?: boolean
   report?: boolean
   duplicate?: boolean
-  mute?: boolean
+  muteByUser?: boolean
+  muteByServer?: boolean
   liveInfo?: boolean
   removeFiles?: boolean
   transcoding?: boolean
@@ -72,8 +74,9 @@ export class VideoActionsDropdownComponent implements OnChanges {
   readonly videoReportModal = viewChild<VideoReportComponent>('videoReportModal')
   readonly videoBlockModal = viewChild<VideoBlockComponent>('videoBlockModal')
 
-  readonly video = input<Video | VideoDetails>(undefined)
+  readonly video = input<Video | VideoDetails>()
   readonly videoCaptions = input<VideoCaption[]>([])
+  readonly muteStatus = input<AccountBlockBadgeInput>()
 
   readonly displayOptions = input<VideoActionsDisplayType>({
     playlist: false,
@@ -83,7 +86,8 @@ export class VideoActionsDropdownComponent implements OnChanges {
     delete: true,
     report: true,
     duplicate: true,
-    mute: true,
+    muteByUser: true,
+    muteByServer: true,
     liveInfo: false,
     removeFiles: false,
     transcoding: false,
@@ -108,7 +112,8 @@ export class VideoActionsDropdownComponent implements OnChanges {
   readonly videoRemoved = output()
   readonly videoUnblocked = output()
   readonly videoBlocked = output()
-  readonly videoAccountMuted = output()
+  readonly muted = output()
+  readonly unmuted = output()
   readonly transcodingCreated = output()
   readonly modalOpened = output()
   readonly videoExistsInPlaylistChange = output()
@@ -119,8 +124,6 @@ export class VideoActionsDropdownComponent implements OnChanges {
   videoActions: DropdownAction<{ video: Video }>[][] = []
 
   dropdownOpened = false
-
-  private hasMutedAccount = false
 
   get user () {
     return this.authService.getUser()
@@ -256,12 +259,6 @@ export class VideoActionsDropdownComponent implements OnChanges {
     return !video.isLive && video.canBeDuplicatedBy(this.user)
   }
 
-  isVideoAccountMutable () {
-    if (!this.user) return false
-
-    return this.video().account.id !== this.user.account.id
-  }
-
   canRemoveVideoFiles () {
     if (!this.user) return false
 
@@ -335,34 +332,121 @@ export class VideoActionsDropdownComponent implements OnChanges {
       })
   }
 
-  muteVideoAccount () {
-    const params = { nameWithHost: Actor.CREATE_BY_STRING(this.video().account.name, this.video().account.host) }
+  // ---------------------------------------------------------------------------
+
+  muteAccount () {
+    const params = { nameWithHost: this.video().account.name + '@' + this.video().account.host }
 
     this.blocklistService.blockAccountByUser(params)
       .subscribe({
         next: () => {
           this.notifier.success($localize`Account ${params.nameWithHost} muted.`)
-          this.hasMutedAccount = true
-          this.videoAccountMuted.emit()
+          this.muted.emit()
         },
 
         error: err => this.notifier.handleError(err)
       })
   }
 
-  unmuteVideoAccount () {
-    const params = { nameWithHost: Actor.CREATE_BY_STRING(this.video().account.name, this.video().account.host) }
+  unmuteAccount () {
+    const params = { nameWithHost: this.video().account.name + '@' + this.video().account.host }
 
     this.blocklistService.unblockAccountByUser(params)
       .subscribe({
         next: () => {
-          this.hasMutedAccount = false
+          this.unmuted.emit()
+
           this.notifier.success($localize`Account ${params.nameWithHost} unmuted.`)
         },
 
         error: err => this.notifier.handleError(err)
       })
   }
+
+  muteServer () {
+    const host = this.video().account.host
+
+    this.blocklistService.blockServerByUser(host)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Server ${host} muted.`)
+          this.muted.emit()
+        },
+
+        error: err => this.notifier.handleError(err)
+      })
+  }
+
+  unmuteServer () {
+    const host = this.video().account.host
+
+    this.blocklistService.unblockServerByUser(host)
+      .subscribe({
+        next: () => {
+          this.unmuted.emit()
+
+          this.notifier.success($localize`Server ${host} unmuted.`)
+        },
+
+        error: err => this.notifier.handleError(err)
+      })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  muteAccountByServer () {
+    const params = { nameWithHost: this.video().account.name + '@' + this.video().account.host }
+
+    this.blocklistService.blockAccountByInstanceAndNotify(params)
+      .subscribe({
+        next: () => {
+          this.muted.emit()
+        },
+
+        error: err => this.notifier.handleError(err)
+      })
+  }
+
+  unmuteAccountByServer () {
+    const params = { nameWithHost: this.video().account.name + '@' + this.video().account.host }
+
+    this.blocklistService.unblockAccountByInstanceAndNotify(params)
+      .subscribe({
+        next: () => {
+          this.unmuted.emit()
+        },
+
+        error: err => this.notifier.handleError(err)
+      })
+  }
+
+  muteServerByServer () {
+    const host = this.video().account.host
+
+    this.blocklistService.blockServerByInstanceAndNotify(host)
+      .subscribe({
+        next: () => {
+          this.muted.emit()
+        },
+
+        error: err => this.notifier.handleError(err)
+      })
+  }
+
+  unmuteServerByServer () {
+    const host = this.video().account.host
+
+    this.blocklistService.unblockServerByInstanceAndNotify(host)
+      .subscribe({
+        next: () => {
+          this.unmuted.emit()
+        },
+
+        error: err => this.notifier.handleError(err)
+      })
+  }
+
+  // ---------------------------------------------------------------------------
 
   async removeVideoFiles (video: Video, type: 'hls' | 'web-videos') {
     const confirmMessage = $localize`Do you really want to remove "${this.video().name}" files?`
@@ -546,19 +630,91 @@ export class VideoActionsDropdownComponent implements OnChanges {
           iconName: 'video-lang'
         }
       ],
-      [ // actions regarding the account/its server
+      [
         {
           label: $localize`Mute account`,
-          handler: () => this.muteVideoAccount(),
-          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions().mute && this.isVideoAccountMutable(),
+          handler: () => this.muteAccount(),
+          isDisplayed: () =>
+            this.authService.isLoggedIn() &&
+            this.displayOptions().muteByUser &&
+            this.muteStatus()?.mutedByUser === false &&
+            this.blocklistService.canMuteAccountByAccount(this.user, this.video().account),
           iconName: 'no'
         },
         {
           label: $localize`Unmute account`,
-          handler: () => this.unmuteVideoAccount(),
-          isDisplayed: () => {
-            return this.authService.isLoggedIn() && this.displayOptions().mute && this.isVideoAccountMutable() && this.hasMutedAccount
-          },
+          handler: () => this.unmuteAccount(),
+          isDisplayed: () =>
+            this.authService.isLoggedIn() &&
+            this.displayOptions().muteByUser &&
+            this.muteStatus()?.mutedByUser === true &&
+            this.blocklistService.canMuteAccountByAccount(this.user, this.video().account),
+
+          iconName: 'undo'
+        },
+        {
+          label: $localize`Mute platform`,
+          handler: () => this.muteServer(),
+          isDisplayed: () =>
+            this.authService.isLoggedIn() &&
+            this.displayOptions().muteByUser &&
+            this.muteStatus()?.mutedServerByUser === false &&
+            this.blocklistService.canMutePlatformByAccount(this.user, this.video().account),
+          iconName: 'no'
+        },
+        {
+          label: $localize`Unmute platform`,
+          handler: () => this.unmuteServer(),
+          isDisplayed: () =>
+            this.authService.isLoggedIn() &&
+            this.displayOptions().muteByUser &&
+            this.muteStatus()?.mutedServerByUser === true &&
+            this.blocklistService.canMutePlatformByAccount(this.user, this.video().account),
+
+          iconName: 'undo'
+        }
+      ],
+      [
+        {
+          label: $localize`Mute account by your platform`,
+          handler: () => this.muteAccountByServer(),
+          isDisplayed: () =>
+            this.authService.isLoggedIn() &&
+            this.displayOptions().muteByServer &&
+            this.muteStatus()?.mutedByInstance === false &&
+            this.blocklistService.canMuteAccountByInstance(this.user, this.video().account),
+          iconName: 'no'
+        },
+        {
+          label: $localize`Unmute account by your platform`,
+          handler: () => this.unmuteAccountByServer(),
+          isDisplayed: () =>
+            this.authService.isLoggedIn() &&
+            this.displayOptions().muteByServer &&
+            this.muteStatus()?.mutedByInstance === true &&
+            this.blocklistService.canMuteAccountByInstance(this.user, this.video().account),
+
+          iconName: 'undo'
+        },
+        {
+          label: $localize`Mute platform by your platform`,
+          handler: () => this.muteServerByServer(),
+          isDisplayed: () =>
+            this.authService.isLoggedIn() &&
+            this.displayOptions().muteByServer &&
+            this.muteStatus()?.mutedServerByInstance === false &&
+            this.blocklistService.canMutePlatformByInstance(this.user, this.video().account),
+          iconName: 'no'
+        },
+        {
+          label: $localize`Unmute platform by your platform`,
+          handler: () => this.unmuteServerByServer(),
+          isDisplayed: () =>
+            this.authService.isLoggedIn() &&
+            this.displayOptions().muteByServer &&
+            this.muteStatus()?.mutedServerByInstance === true &&
+            this.blocklistService.canMutePlatformByInstance(this.user, this.video().account),
+
           iconName: 'undo'
         }
       ]
