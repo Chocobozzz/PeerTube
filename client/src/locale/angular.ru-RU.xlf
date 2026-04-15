@@ -2037,9 +2037,9 @@
           <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4140366911638662173" datatype="html">
+      <trans-unit id="4140366911638662173" datatype="html" xml:space="preserve">
         <source>Do you really want to remove "<x id="PH" equiv-text="this.video.name"/>" files?</source>
-        <target state="translated">Вы действительно хотите удалить "<x id="PH" equiv-text="this.video.name"/>" файлы?</target>
+        <target state="translated">Вы действительно хотите удалить файлы для «<x id="PH" equiv-text="this.video.name"/>»?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">368</context>
@@ -27349,7 +27349,7 @@
       </trans-unit>
       <trans-unit id="7570883748440392027" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.instanceName"/> theme</source>
-        <target state="translated"><x id="PH" equiv-text="this.instanceName"/> тема</target>
+        <target state="translated">Тема инстанса <x id="PH" equiv-text="this.instanceName"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
           <context context-type="linenumber">64</context>
