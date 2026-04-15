@@ -15,43 +15,6 @@ p-select.small {
 }
 
 // ---------------------------------------------------------------------------
-// Input chips
-// ---------------------------------------------------------------------------
-
-.p-chip:has(.p-chip-remove-icon) {
-  // TODO: remove when https://github.com/primefaces/primeng/pull/18344 is released
-  padding-inline-end: var(--p-chip-padding-x) !important;
-}
-
-.p-inputchips-input {
-  gap: 1rem !important;
-
-  input::placeholder {
-    font-size: pvar(--input-placeholder-font-size);
-  }
-}
-
-.p-inputchips-input:has(.p-inputchips-chip) {
-  padding-left: pvar(--input-x-padding) !important;
-  padding-right: pvar(--input-x-padding) !important;
-}
-
-.p-inputchips.p-input-wrapper {
-  width: 100%;
-}
-
-p-chips.small {
-  .p-inputchips-input {
-    padding-left: calc(#{pvar(--input-x-padding)} / 2) !important;
-    padding-right: calc(#{pvar(--input-x-padding)} / 2) !important;
-  }
-
-  .p-inputchips-input {
-    gap: 0.25rem !important;
-  }
-}
-
-// ---------------------------------------------------------------------------
 // Multi Select
 // ---------------------------------------------------------------------------
 
