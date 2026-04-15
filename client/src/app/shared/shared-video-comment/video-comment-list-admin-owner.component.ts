@@ -244,6 +244,17 @@ export class VideoCommentListAdminOwnerComponent implements OnInit, OnDestroy {
             { value: false, label: $localize`Remote` }
           ]
         },
+
+        {
+          type: 'title',
+          title: $localize`Moderation`
+        },
+        {
+          type: 'checkbox',
+          key: 'includeMuted',
+          label: $localize`Include comments from muted accounts`
+        },
+
         {
           type: 'title',
           title: $localize`Commented video scope`

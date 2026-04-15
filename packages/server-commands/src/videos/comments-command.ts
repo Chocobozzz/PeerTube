@@ -30,12 +30,13 @@ export class CommentsCommand extends AbstractCommand {
   listForAdmin (options: OverrideCommandOptions & ListForAdminOrAccountCommonOptions & {
     isLocal?: boolean
     onLocalVideo?: boolean
+    includeMuted?: boolean
   } = {}) {
     const path = '/api/v1/videos/comments'
 
     const query = {
       ...this.buildListForAdminOrAccountQuery(options),
-      ...pick(options, [ 'isLocal', 'onLocalVideo' ])
+      ...pick(options, [ 'isLocal', 'onLocalVideo', 'includeMuted' ])
     }
 
     return this.getRequestBody<ResultList<VideoCommentForAdminOrUser>>({

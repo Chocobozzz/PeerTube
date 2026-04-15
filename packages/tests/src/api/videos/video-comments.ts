@@ -1,6 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { VideoCreateResult } from '@peertube/peertube-models'
+import { VideoCommentForAdminOrUser, VideoCreateResult } from '@peertube/peertube-models'
 import {
   CommentsCommand,
   PeerTubeServer,
@@ -313,6 +313,43 @@ describe('Test video comments', function () {
         expect(data).to.not.have.lengthOf(0)
         expect(total).to.not.equal(0)
       }
+    })
+
+    it('Should filter instance comments by includeMuted', async function () {
+      await server.blocklist.addToServerBlocklist({ account: 'user1@' + server.host })
+
+      const findUserComment = (data: VideoCommentForAdminOrUser[]) => data.find(c => c.account.name === 'user1')
+
+      {
+        const { total, data } = await command.listForAdmin({ includeMuted: false })
+
+        expect(total).to.be.greaterThan(0)
+        expect(data).to.have.lengthOf(total)
+
+        expect(findUserComment(data)).to.not.exist
+      }
+
+      {
+        const { total, data } = await command.listForAdmin({ includeMuted: true })
+
+        expect(total).to.be.greaterThan(0)
+        expect(data).to.have.lengthOf(total)
+
+        expect(findUserComment(data)).to.exist
+      }
+
+      // Default is false
+
+      {
+        const { total, data } = await command.listForAdmin()
+
+        expect(total).to.be.greaterThan(0)
+        expect(data).to.have.lengthOf(total)
+
+        expect(findUserComment(data)).to.not.exist
+      }
+
+      await server.blocklist.removeFromServerBlocklist({ account: 'user1@' + server.host })
     })
 
     it('Should search comments by account', async function () {

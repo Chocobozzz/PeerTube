@@ -106,6 +106,12 @@ export {
 // ---------------------------------------------------------------------------
 
 async function listComments (req: express.Request, res: express.Response) {
+  const serverActor = await getServerActor()
+
+  const blockerAccountIds = req.query.includeMuted !== true
+    ? await VideoCommentModel.buildBlockerAccountIds({ user: null })
+    : undefined
+
   const options = {
     ...pick(req.query, [
       'start',
@@ -121,7 +127,8 @@ async function listComments (req: express.Request, res: express.Response) {
 
     videoId: res.locals.videoImmutable?.id,
     videoChannelOwnerId: res.locals.videoChannel?.id,
-    autoTagOfAccountId: (await getServerActor()).Account.id,
+    autoTagOfAccountId: serverActor.Account.id,
+    blockerAccountIds,
     heldForReview: undefined
   }
 

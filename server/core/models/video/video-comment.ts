@@ -346,6 +346,8 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
     videoId?: number
     videoChannelId?: number
     autoTagOneOf?: string[]
+
+    blockerAccountIds?: number[]
   }) {
     const queryOptions: ListVideoCommentsOptions = {
       ...pick(parameters, [
@@ -364,7 +366,8 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
         'videoAccountOwnerId',
         'videoAccountOwnerIncludeCollaborations',
         'videoChannelOwnerId',
-        'heldForReview'
+        'heldForReview',
+        'blockerAccountIds'
       ]),
 
       selectType: 'api-list',
@@ -808,8 +811,8 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
     }
   }
 
-  private static async buildBlockerAccountIds (options: {
-    user: MUserAccountId
+  static async buildBlockerAccountIds (options: {
+    user: MUserAccountId | null
   }): Promise<number[]> {
     const { user } = options
 

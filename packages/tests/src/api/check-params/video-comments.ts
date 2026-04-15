@@ -507,7 +507,8 @@ describe('Test video comments API validator', function () {
         searchVideo: 'toto',
         videoId: video.uuid,
         videoChannelId: server.store.channel.id,
-        autoTagOneOf: [ 'external-link' ]
+        autoTagOneOf: [ 'external-link' ],
+        includeMuted: false
       }
 
       await server.comments.listForAdmin({ ...base, isLocal: false })

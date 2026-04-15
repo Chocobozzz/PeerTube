@@ -388,6 +388,12 @@ function getCommonVideoCommentsValidators () {
     query('autoTagOneOf')
       .optional()
       .customSanitizer(toArray)
-      .custom(isStringArray).withMessage('Should have a valid autoTagOneOf array')
+      .custom(isStringArray).withMessage('Should have a valid autoTagOneOf array'),
+
+    query('includeMuted')
+      .optional()
+      .customSanitizer(toBooleanOrNull)
+      .custom(isBooleanValid)
+      .withMessage('Should have a valid includeMuted boolean')
   ]
 }

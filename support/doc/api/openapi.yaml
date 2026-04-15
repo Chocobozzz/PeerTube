@@ -6304,6 +6304,7 @@ paths:
         - $ref: '#/components/parameters/autoTagOneOfComment'
         - $ref: '#/components/parameters/isLocal'
         - $ref: '#/components/parameters/onLocalVideo'
+        - $ref: '#/components/parameters/includeMuted'
 
       responses:
         '200':
@@ -9122,6 +9123,13 @@ components:
       schema:
         type: boolean
       description: 'Display only objects of local or remote videos'
+    includeMuted:
+      name: includeMuted
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: '**PeerTube >= 8.2** Include comments from muted accounts'
     videoChannelId:
       name: videoChannelId
       in: query
