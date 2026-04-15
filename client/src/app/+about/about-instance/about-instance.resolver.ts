@@ -47,7 +47,7 @@ export class AboutInstanceResolver {
   }
 
   private buildInstanceAboutObservable () {
-    return this.instanceService.getAbout()
+    return this.instanceService.getAboutWithCache()
       .pipe(
         switchMap(about => {
           return forkJoin([

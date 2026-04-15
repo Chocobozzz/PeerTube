@@ -250,7 +250,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
 
   private buildLanguages () {
     forkJoin([
-      this.instanceService.getAbout(),
+      this.instanceService.getAboutWithCache(),
       this.serverService.getVideoLanguages()
     ]).pipe(map(([ about, languages ]) => ({ about, languages })))
       .subscribe(({ about, languages }) => {

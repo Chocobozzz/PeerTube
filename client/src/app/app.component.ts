@@ -351,7 +351,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     forkJoin([
       this.serverService.getConfig().pipe(first()),
-      this.instanceService.getAbout().pipe(first())
+      this.instanceService.getAboutWithCache().pipe(first())
     ]).subscribe(([ config, about ]) => {
       const instanceConfigWarningModalValue = this.instanceConfigWarningModal()
       if (instanceConfigWarningModalValue.shouldAutoOpen(config, about)) {

@@ -4,8 +4,8 @@ import { MarkdownService, RestExtractor, ServerService } from '@app/core'
 import { objectKeysTyped, peertubeTranslate } from '@peertube/peertube-core-utils'
 import { About } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
-import { forkJoin } from 'rxjs'
-import { catchError, map } from 'rxjs/operators'
+import { forkJoin, Observable } from 'rxjs'
+import { catchError, map, shareReplay } from 'rxjs/operators'
 import { environment } from '../../../../environments/environment'
 
 export type AboutHTML = Pick<
@@ -30,9 +30,22 @@ export class InstanceService {
   static BASE_CONFIG_URL = environment.apiUrl + '/api/v1/config'
   static BASE_SERVER_URL = environment.apiUrl + '/api/v1/server'
 
-  getAbout () {
-    return this.authHttp.get<About>(InstanceService.BASE_CONFIG_URL + '/about')
-      .pipe(catchError(res => this.restExtractor.handleError(res)))
+  private aboutCache$: Observable<About> | null = null
+
+  getAboutWithCache () {
+    if (!this.aboutCache$) {
+      this.aboutCache$ = this.authHttp.get<About>(InstanceService.BASE_CONFIG_URL + '/about')
+        .pipe(
+          catchError(res => this.restExtractor.handleError(res)),
+          shareReplay(1)
+        )
+
+      setTimeout(() => {
+        this.aboutCache$ = null
+      }, 1000)
+    }
+
+    return this.aboutCache$
   }
 
   // ---------------------------------------------------------------------------

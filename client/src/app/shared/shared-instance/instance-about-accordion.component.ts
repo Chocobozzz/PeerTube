@@ -66,7 +66,7 @@ export class InstanceAboutAccordionComponent implements OnInit {
   pluginPanels: { id: string, title: string, html: string }[] = []
 
   async ngOnInit () {
-    this.instanceService.getAbout()
+    this.instanceService.getAboutWithCache()
       .subscribe({
         next: async about => {
           this.about = about
