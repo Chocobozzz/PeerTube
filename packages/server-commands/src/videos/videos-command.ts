@@ -57,12 +57,16 @@ export class VideosCommand extends AbstractCommand {
     })
   }
 
-  getLanguages (options: OverrideCommandOptions = {}) {
+  getLanguages (options: OverrideCommandOptions & {
+    scope?: 'subtitle'
+  } = {}) {
     const path = '/api/v1/videos/languages'
 
     return this.getRequestBody<{ [id: string]: string }>({
       ...options,
       path,
+
+      query: { scope: options.scope },
 
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200

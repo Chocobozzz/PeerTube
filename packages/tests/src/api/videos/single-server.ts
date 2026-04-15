@@ -118,6 +118,15 @@ describe('Test a single server', function () {
       expect(Object.keys(languages)).to.have.length.above(5)
 
       expect(languages['ru']).to.equal('Russian')
+      expect(languages['jsl']).to.not.be.undefined
+    })
+
+    it('Should list video text languages', async function () {
+      const languages = await server.videos.getLanguages({ scope: 'subtitle' })
+      expect(Object.keys(languages)).to.have.length.above(5)
+
+      expect(languages['ru']).to.equal('Russian')
+      expect(languages['jsl']).to.be.undefined
     })
 
     it('Should list video privacies', async function () {

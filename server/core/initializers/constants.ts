@@ -628,6 +628,7 @@ export const VIDEO_LICENCES: { [id in VideoLicenceType]: string } = {
 }
 
 export const VIDEO_LANGUAGES: { [id: string]: string } = {}
+export const VIDEO_TEXT_LANGUAGES: { [id: string]: string } = {}
 
 export const VIDEO_PRIVACIES: { [id in VideoPrivacyType]: string } = {
   [VideoPrivacy.PUBLIC]: 'Public',
@@ -1353,7 +1354,15 @@ registerConfigChangedHandler(() => {
 export async function loadLanguages () {
   if (Object.keys(VIDEO_LANGUAGES).length !== 0) return
 
-  Object.assign(VIDEO_LANGUAGES, await buildLanguages())
+  const { allLanguages, nonTextLanguages } = await buildLanguages()
+
+  Object.assign(VIDEO_LANGUAGES, allLanguages)
+
+  for (const [ code, name ] of Object.entries(allLanguages)) {
+    if (!nonTextLanguages[code]) {
+      VIDEO_TEXT_LANGUAGES[code] = name
+    }
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -1377,7 +1386,7 @@ export async function buildLanguages () {
 
   const languages: { [id: string]: string } = {}
 
-  const additionalLanguages = {
+  const nonTextLanguages = {
     sgn: true, // Sign languages (macro language)
     ase: true, // American sign language
     asq: true, // Austrian sign language
@@ -1396,6 +1405,12 @@ export async function buildLanguages () {
     rsl: true, // Russian sign language
     fse: true, // Finnish sign language
 
+    zxx: true // No linguistic content (ISO-639-2),
+  }
+
+  const additionalLanguages = {
+    ...nonTextLanguages,
+
     kab: true, // Kabyle
     gcf: true, // Guadeloupean
 
@@ -1405,8 +1420,6 @@ export async function buildLanguages () {
     tlh: true, // Klingon
     jbo: true, // Lojban
     avk: true, // Kotava
-
-    zxx: true, // No linguistic content (ISO-639-2),
 
     gsw: true // Swiss German (ISO-639-3)
   }
@@ -1445,7 +1458,7 @@ export async function buildLanguages () {
   languages['rcf'] = 'Réunion Creole French'
   languages['gcr'] = 'Guianese Creole French'
 
-  return languages
+  return { allLanguages: languages, nonTextLanguages }
 }
 
 // ---------------------------------------------------------------------------

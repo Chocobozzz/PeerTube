@@ -1,12 +1,12 @@
 import { UploadFilesForCheck } from 'express'
 import { readFile } from 'fs/promises'
 import { getFileSize } from '@peertube/peertube-node-utils'
-import { CONSTRAINTS_FIELDS, MIMETYPES, VIDEO_LANGUAGES } from '../../initializers/constants.js'
+import { CONSTRAINTS_FIELDS, MIMETYPES, VIDEO_TEXT_LANGUAGES } from '../../initializers/constants.js'
 import { logger } from '../logger.js'
 import { exists, isFileValid } from './misc.js'
 
 function isVideoCaptionLanguageValid (value: any) {
-  return exists(value) && VIDEO_LANGUAGES[value] !== undefined
+  return exists(value) && VIDEO_TEXT_LANGUAGES[value] !== undefined
 }
 
 // MacOS sends application/octet-stream

@@ -46,7 +46,7 @@ export class VideoCaptionAddModalComponent extends FormReactive implements OnIni
   }
 
   ngOnInit () {
-    this.serverService.getVideoLanguages()
+    this.serverService.getVideoTextLanguages()
       .subscribe(languages => this.videoCaptionLanguages = languages)
 
     this.buildForm({

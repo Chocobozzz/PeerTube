@@ -644,6 +644,19 @@ export function areErrorsInNSFW (req: express.Request, res: express.Response) {
   return false
 }
 
+export const videoLanguagesScopeValidator = [
+  query('scope')
+    .optional()
+    .isIn([ 'subtitle' ])
+    .withMessage('Should have a valid scope (subtitle)'),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------

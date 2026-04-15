@@ -36,7 +36,7 @@ import {
 import { isVideoCaptionLanguageValid } from '../../helpers/custom-validators/video-captions.js'
 import { logger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
-import { CONSTRAINTS_FIELDS, FILES_CACHE, LAZY_STATIC_PATHS, VIDEO_LANGUAGES, WEBSERVER } from '../../initializers/constants.js'
+import { CONSTRAINTS_FIELDS, FILES_CACHE, LAZY_STATIC_PATHS, VIDEO_TEXT_LANGUAGES, WEBSERVER } from '../../initializers/constants.js'
 import { SequelizeModel, buildWhereIdOrUUID, doesExist, throwIfNotValid } from '../shared/index.js'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist.js'
 import { VideoModel } from './video.js'
@@ -263,7 +263,7 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
   // ---------------------------------------------------------------------------
 
   static getLanguageLabel (language: string) {
-    return VIDEO_LANGUAGES[language] || 'Unknown'
+    return VIDEO_TEXT_LANGUAGES[language] || 'Unknown'
   }
 
   static generateCaptionName (language: string) {

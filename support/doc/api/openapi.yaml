@@ -3475,6 +3475,15 @@ paths:
       operationId: getLanguages
       tags:
         - Video
+      parameters:
+        - name: scope
+          in: query
+          description: "**PeerTube >= 8.2** Filter languages by scope. Use `subtitle` to exclude sign languages and other languages that don't make sense for subtitles."
+          required: false
+          schema:
+            type: string
+            enum:
+              - subtitle
       responses:
         '200':
           description: successful operation

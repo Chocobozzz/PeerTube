@@ -36,6 +36,7 @@ export class ServerService {
   private videoPrivaciesObservable: Observable<ConstantLabel<VideoPrivacyType>[]>
   private videoPlaylistPrivaciesObservable: Observable<ConstantLabel<VideoPlaylistPrivacyType>[]>
   private videoLanguagesObservable: Observable<ConstantLabel<string>[]>
+  private videoTextLanguagesObservable: Observable<ConstantLabel<string>[]>
   private configObservable: Observable<ServerConfig>
 
   private configLoaded = false
@@ -134,7 +135,11 @@ export class ServerService {
 
   getVideoCategories () {
     if (!this.videoCategoriesObservable) {
-      this.videoCategoriesObservable = this.loadAttributeEnum<number>(ServerService.BASE_VIDEO_URL, 'categories', true)
+      this.videoCategoriesObservable = this.loadAttributeEnum<number>({
+        baseUrl: ServerService.BASE_VIDEO_URL,
+        attributeName: 'categories',
+        sort: true
+      })
     }
 
     return this.videoCategoriesObservable.pipe(first())
@@ -142,7 +147,10 @@ export class ServerService {
 
   getVideoLicences () {
     if (!this.videoLicensesObservable) {
-      this.videoLicensesObservable = this.loadAttributeEnum<VideoLicenceType>(ServerService.BASE_VIDEO_URL, 'licences')
+      this.videoLicensesObservable = this.loadAttributeEnum<VideoLicenceType>({
+        baseUrl: ServerService.BASE_VIDEO_URL,
+        attributeName: 'licences'
+      })
     }
 
     return this.videoLicensesObservable.pipe(first())
@@ -150,15 +158,35 @@ export class ServerService {
 
   getVideoLanguages () {
     if (!this.videoLanguagesObservable) {
-      this.videoLanguagesObservable = this.loadAttributeEnum<string>(ServerService.BASE_VIDEO_URL, 'languages', true)
+      this.videoLanguagesObservable = this.loadAttributeEnum<string>({
+        baseUrl: ServerService.BASE_VIDEO_URL,
+        attributeName: 'languages',
+        sort: true
+      })
     }
 
     return this.videoLanguagesObservable.pipe(first())
   }
 
+  getVideoTextLanguages () {
+    if (!this.videoTextLanguagesObservable) {
+      this.videoTextLanguagesObservable = this.loadAttributeEnum<string>({
+        baseUrl: ServerService.BASE_VIDEO_URL,
+        attributeName: 'languages',
+        query: { scope: 'subtitle' },
+        sort: true
+      })
+    }
+
+    return this.videoTextLanguagesObservable.pipe(first())
+  }
+
   getVideoPrivacies () {
     if (!this.videoPrivaciesObservable) {
-      this.videoPrivaciesObservable = this.loadAttributeEnum<VideoPrivacyType>(ServerService.BASE_VIDEO_URL, 'privacies')
+      this.videoPrivaciesObservable = this.loadAttributeEnum<VideoPrivacyType>({
+        baseUrl: ServerService.BASE_VIDEO_URL,
+        attributeName: 'privacies'
+      })
     }
 
     return this.videoPrivaciesObservable.pipe(first())
@@ -167,8 +195,7 @@ export class ServerService {
   getVideoPlaylistPrivacies () {
     if (!this.videoPlaylistPrivaciesObservable) {
       this.videoPlaylistPrivaciesObservable = this.loadAttributeEnum<VideoPlaylistPrivacyType>(
-        ServerService.BASE_VIDEO_PLAYLIST_URL,
-        'privacies'
+        { baseUrl: ServerService.BASE_VIDEO_PLAYLIST_URL, attributeName: 'privacies' }
       )
     }
 
@@ -196,15 +223,18 @@ export class ServerService {
     return this.http.get<ServerStats>(ServerService.BASE_STATS_URL)
   }
 
-  private loadAttributeEnum<T extends string | number> (
-    baseUrl: string,
-    attributeName: 'categories' | 'licences' | 'languages' | 'privacies',
-    sort = false
-  ) {
+  private loadAttributeEnum<T extends string | number> (options: {
+    baseUrl: string
+    attributeName: 'categories' | 'licences' | 'languages' | 'privacies'
+    query?: Record<string, string>
+    sort?: boolean
+  }) {
+    const { baseUrl, attributeName, query, sort = false } = options
+
     return this.getServerLocale()
       .pipe(
         switchMap(translations => {
-          return this.http.get<{ [id: string]: string }>(baseUrl + attributeName)
+          return this.http.get<{ [id: string]: string }>(baseUrl + attributeName, { params: query })
             .pipe(map(data => ({ data, translations })))
         }),
         map(({ data, translations }) => {
