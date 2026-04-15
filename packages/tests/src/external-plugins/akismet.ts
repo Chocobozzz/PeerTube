@@ -22,8 +22,7 @@ describe('Official plugin Akismet', function () {
     await setAccessTokensToServers(servers)
 
     await servers[0].plugins.install({
-      // npmName: 'peertube-plugin-akismet',
-      path: '/home/florian/Coding/NodeJS/peertube-official-plugins/peertube-plugin-akismet'
+      npmName: 'peertube-plugin-akismet'
     })
 
     if (!process.env.AKISMET_KEY) throw new Error('Missing AKISMET_KEY from env')
