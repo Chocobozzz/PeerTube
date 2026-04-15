@@ -501,7 +501,8 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
             [Op.in]: literal(
               '(' +
                 'SELECT "videoId" FROM "videoStreamingPlaylist" ' +
-                'INNER JOIN "videoRedundancy" ON "videoRedundancy"."videoStreamingPlaylistId" = "videoStreamingPlaylist".id' +
+                'INNER JOIN "videoRedundancy" ON "videoRedundancy"."videoStreamingPlaylistId" = "videoStreamingPlaylist".id AND ' +
+                '  "videoRedundancy"."strategy" IS NOT NULL' +
                 ')'
             )
           }
