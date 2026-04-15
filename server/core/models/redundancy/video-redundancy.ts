@@ -454,11 +454,15 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
     const redundancyWhere: WhereOptions = {}
     const videosWhere: WhereOptions = {}
 
+    let countRedundancyJoinWhere = ''
+
     if (target === 'my-videos') {
       Object.assign(videosWhere, { remote: false })
     } else if (target === 'remote-videos') {
       Object.assign(videosWhere, { remote: true })
       Object.assign(redundancyWhere, { strategy: { [Op.ne]: null } })
+
+      countRedundancyJoinWhere = ' AND "videoRedundancy"."strategy" IS NOT NULL'
     }
 
     if (strategy) {
@@ -501,8 +505,8 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
             [Op.in]: literal(
               '(' +
                 'SELECT "videoId" FROM "videoStreamingPlaylist" ' +
-                'INNER JOIN "videoRedundancy" ON "videoRedundancy"."videoStreamingPlaylistId" = "videoStreamingPlaylist".id AND ' +
-                '  "videoRedundancy"."strategy" IS NOT NULL' +
+                'INNER JOIN "videoRedundancy" ON "videoRedundancy"."videoStreamingPlaylistId" = "videoStreamingPlaylist".id ' +
+                countRedundancyJoinWhere +
                 ')'
             )
           }
