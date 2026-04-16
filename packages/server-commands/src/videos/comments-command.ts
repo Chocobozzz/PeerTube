@@ -152,7 +152,7 @@ export class CommentsCommand extends AbstractCommand {
       defaultExpectedStatus: HttpStatusCode.OK_200
     }))
 
-    if (options.expectedStatus !== HttpStatusCode.OK_200) {
+    if (body.comment?.id) {
       this.lastThreadId = body.comment?.id
       this.lastVideoId = videoId
     }
@@ -181,7 +181,7 @@ export class CommentsCommand extends AbstractCommand {
       defaultExpectedStatus: HttpStatusCode.OK_200
     }))
 
-    if (options.expectedStatus !== HttpStatusCode.OK_200) {
+    if (body.comment?.id) {
       this.lastReplyId = body.comment?.id
     }
 
