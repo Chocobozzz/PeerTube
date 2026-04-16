@@ -1,10 +1,12 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { Video, VideoCommentPolicy, VideoPrivacy } from '@peertube/peertube-models'
+import { wait } from '@peertube/peertube-core-utils'
 import { PeerTubeServer, cleanupTests, createMultipleServers, setAccessTokensToServers, waitJobs } from '@peertube/peertube-server-commands'
 import { expectAccountFollows, expectChannelsFollows } from '@tests/shared/actors.js'
 import { testCaptionFile } from '@tests/shared/captions.js'
 import { dateIsValid } from '@tests/shared/checks.js'
+import { SQLCommand } from '@tests/shared/sql-command.js'
 import { completeVideoCheck } from '@tests/shared/videos.js'
 import { expect } from 'chai'
 
@@ -636,6 +638,72 @@ describe('Test follows', function () {
 
     after(async function () {
       await cleanupTests(servers)
+    })
+  })
+
+  describe('Periodic stale follow resend', function () {
+    let servers: PeerTubeServer[] = []
+    let sqlCommands: SQLCommand[] = []
+
+    const DAY_IN_MS = 24 * 60 * 60 * 1000
+
+    before(async function () {
+      this.timeout(120000)
+
+      servers = await createMultipleServers(2)
+      await setAccessTokensToServers(servers)
+
+      sqlCommands = servers.map(s => new SQLCommand(s))
+    })
+
+    it('Should resend stale follows and set updatedAt to now', async function () {
+      this.timeout(60000)
+
+      await servers[0].follows.follow({ hosts: [ servers[1].url ] })
+
+      await waitJobs(servers)
+
+      await sqlCommands[0].setActorFollowUpdatedAt(new Date(Date.now() - 8 * DAY_IN_MS).toISOString())
+
+      {
+        await sqlCommands[1].deleteAll('actorFollow')
+
+        const { data } = await servers[1].follows.getFollowers()
+        expect(data).to.have.lengthOf(0)
+      }
+
+      await wait(2500)
+      await waitJobs(servers)
+
+      const updatedAt = await sqlCommands[0].getFirstActorFollowUpdatedAt()
+      expect(updatedAt).to.exist
+
+      expect(new Date(updatedAt).getTime()).to.be.greaterThan(Date.now() - 2 * 60 * 1000)
+
+      const { data } = await servers[1].follows.getFollowers()
+      expect(data).to.have.lengthOf(1)
+    })
+
+    it('Should not resend follows that are fresher than 7 days', async function () {
+      this.timeout(60000)
+
+      await sqlCommands[0].setActorFollowUpdatedAt(new Date(Date.now() - 1 * DAY_IN_MS).toISOString())
+
+      await wait(2500)
+      await waitJobs(servers)
+
+      const updatedAt = await sqlCommands[0].getFirstActorFollowUpdatedAt()
+      expect(updatedAt).to.exist
+
+      expect(new Date(updatedAt).getTime()).to.be.lessThan(Date.now() - 12 * 60 * 60 * 1000)
+    })
+
+    after(async function () {
+      await cleanupTests(servers)
+
+      for (const command of sqlCommands) {
+        await command.cleanup()
+      }
     })
   })
 })

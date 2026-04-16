@@ -2,7 +2,7 @@ import { ensureDir } from 'fs-extra/esm'
 import { isGithubCI } from '@peertube/peertube-node-utils'
 import { PeerTubeServer, RunServerOptions } from './server.js'
 
-async function createSingleServer (serverNumber: number, configOverride?: object, options: RunServerOptions = {}) {
+export async function createSingleServer (serverNumber: number, configOverride?: object, options: RunServerOptions = {}) {
   const server = new PeerTubeServer({ serverNumber })
 
   await server.flushAndRun(configOverride, options)
@@ -10,7 +10,7 @@ async function createSingleServer (serverNumber: number, configOverride?: object
   return server
 }
 
-function createMultipleServers (totalServers: number, configOverride?: object, options: RunServerOptions = {}) {
+export function createMultipleServers (totalServers: number, configOverride?: object, options: RunServerOptions = {}) {
   const serverPromises: Promise<PeerTubeServer>[] = []
 
   for (let i = 1; i <= totalServers; i++) {
@@ -20,11 +20,11 @@ function createMultipleServers (totalServers: number, configOverride?: object, o
   return Promise.all(serverPromises)
 }
 
-function killallServers (servers: PeerTubeServer[]) {
+export function killallServers (servers: PeerTubeServer[]) {
   return Promise.all(servers.filter(s => !!s).map(s => s.kill()))
 }
 
-async function cleanupTests (servers: PeerTubeServer[]) {
+export async function cleanupTests (servers: PeerTubeServer[]) {
   await killallServers(servers)
 
   if (isGithubCI()) {
@@ -42,7 +42,7 @@ async function cleanupTests (servers: PeerTubeServer[]) {
   return Promise.all(p)
 }
 
-function getServerImportConfig (mode: 'youtube-dl' | 'yt-dlp') {
+export function getServerImportConfig (mode: 'youtube-dl' | 'yt-dlp') {
   return {
     import: {
       videos: {
@@ -58,14 +58,4 @@ function getServerImportConfig (mode: 'youtube-dl' | 'yt-dlp') {
       }
     }
   }
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  createSingleServer,
-  createMultipleServers,
-  cleanupTests,
-  killallServers,
-  getServerImportConfig
 }

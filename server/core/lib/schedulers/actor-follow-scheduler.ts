@@ -1,4 +1,6 @@
 import { isProdInstance, isTestOrDevInstance } from '@peertube/peertube-node-utils'
+import { sendFollow } from '@server/lib/activitypub/send/send-follow.js'
+import { setAsUpdated } from '@server/models/shared/update.js'
 import { logger, loggerTagsFactory } from '../../helpers/logger.js'
 import { ACTOR_FOLLOW_SCORE, SCHEDULER_INTERVALS_MS } from '../../initializers/constants.js'
 import { ActorFollowModel } from '../../models/actor/actor-follow.js'
@@ -6,6 +8,8 @@ import { ActorFollowHealthCache } from '../actor-follow-health-cache.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
 const lTags = loggerTagsFactory('schedulers')
+const FOLLOW_RESEND_STALE_MS = 1000 * 60 * 60 * 24 * 7 // 7 days
+const FOLLOW_RESEND_BATCH_SIZE = 100
 
 export class ActorFollowScheduler extends AbstractScheduler {
   private static instance: AbstractScheduler
@@ -25,6 +29,8 @@ export class ActorFollowScheduler extends AbstractScheduler {
     await this.processPendingScores()
 
     await this.removeBadActorFollows()
+
+    await this.resendStaleActorFollows()
   }
 
   private async processPendingScores () {
@@ -51,6 +57,31 @@ export class ActorFollowScheduler extends AbstractScheduler {
       await ActorFollowModel.removeBadActorFollows()
     } catch (err) {
       logger.error('Error in bad actor follows scheduler.', { err, ...lTags() })
+    }
+  }
+
+  private async resendStaleActorFollows () {
+    const olderThan = new Date(Date.now() - FOLLOW_RESEND_STALE_MS)
+
+    try {
+      const actorFollows = await ActorFollowModel.listOutgoingStaleForResend({
+        olderThan,
+        limit: FOLLOW_RESEND_BATCH_SIZE
+      })
+
+      if (actorFollows.length === 0) return
+
+      for (const actorFollow of actorFollows) {
+        sendFollow(actorFollow, undefined)
+
+        await setAsUpdated({ sequelize: ActorFollowModel.sequelize, table: 'actorFollow', id: actorFollow.id })
+      }
+
+      if (!isTestOrDevInstance()) {
+        logger.info('Queued %d stale actor follows for resend.', actorFollows.length, lTags())
+      }
+    } catch (err) {
+      logger.error('Error in stale actor follow resend scheduler.', { err, ...lTags() })
     }
   }
 

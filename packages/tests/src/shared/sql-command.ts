@@ -167,6 +167,20 @@ export class SQLCommand {
     return this.updateQuery(`UPDATE "actorFollow" SET "score" = :newScore`, { newScore })
   }
 
+  setActorFollowUpdatedAt (updatedAt: string) {
+    return this.updateQuery(`UPDATE "actorFollow" SET "updatedAt" = :updatedAt`, { updatedAt })
+  }
+
+  async getFirstActorFollowUpdatedAt () {
+    const rows = await this.selectQuery<{ updatedAt: string }>(
+      `SELECT "updatedAt" FROM "actorFollow" ORDER BY "id" ASC LIMIT 1`
+    )
+
+    return rows[0]?.updatedAt
+  }
+
+  // ---------------------------------------------------------------------------
+
   setTokenField (accessToken: string, field: string, value: string) {
     return this.updateQuery(
       `UPDATE "oAuthToken" SET ${this.escapeColumnName(field)} = :value WHERE "accessToken" = :accessToken`,

@@ -47,6 +47,7 @@ import { VideoChannelModel } from '../video/video-channel.js'
 import { ActorModel, unusedActorAttributesForAPI } from './actor.js'
 import { InstanceListFollowersQueryBuilder, ListFollowersOptions } from './sql/instance-list-followers-query-builder.js'
 import { InstanceListFollowingQueryBuilder, ListFollowingOptions } from './sql/instance-list-following-query-builder.js'
+import { isTestInstance } from '@peertube/peertube-node-utils'
 
 @Table({
   tableName: 'actorFollow',
@@ -502,6 +503,47 @@ export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
     const followedHosts = res.map(row => row.ActorFollowing.Server.host)
 
     return difference(hosts, followedHosts)
+  }
+
+  static listOutgoingStaleForResend (options: {
+    olderThan: Date
+    limit: number
+  }) {
+    const { olderThan, limit } = options
+
+    return ActorFollowModel.findAll<MActorFollowActors>({
+      logging: !isTestInstance(),
+      where: {
+        state: {
+          [Op.in]: [ 'pending', 'accepted' ]
+        },
+        updatedAt: {
+          [Op.lt]: olderThan
+        }
+      },
+      include: [
+        {
+          model: ActorModel.unscoped(),
+          required: true,
+          as: 'ActorFollower',
+          where: {
+            serverId: null
+          }
+        },
+        {
+          model: ActorModel.unscoped(),
+          required: true,
+          as: 'ActorFollowing',
+          where: {
+            serverId: {
+              [Op.ne]: null
+            }
+          }
+        }
+      ],
+      order: [ [ 'updatedAt', 'ASC' ] ],
+      limit
+    })
   }
 
   // ---------------------------------------------------------------------------

@@ -3,8 +3,9 @@ import { ActivityFollow } from '@peertube/peertube-models'
 import { logger } from '../../../helpers/logger.js'
 import { MActor, MActorFollowActors } from '../../../types/models/index.js'
 import { unicastTo } from './shared/send-utils.js'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 
-function sendFollow (actorFollow: MActorFollowActors, t: Transaction) {
+export function sendFollow (actorFollow: MActorFollowActors, t: Transaction | undefined) {
   const me = actorFollow.ActorFollower
   const following = actorFollow.ActorFollowing
 
@@ -15,23 +16,16 @@ function sendFollow (actorFollow: MActorFollowActors, t: Transaction) {
 
   const data = buildFollowActivity(actorFollow.url, me, following)
 
-  return t.afterCommit(() => {
+  afterCommitIfTransaction(t, () => {
     return unicastTo({ data, byActor: me, toActorUrl: following.inboxUrl, contextType: 'Follow' })
   })
 }
 
-function buildFollowActivity (url: string, byActor: MActor, targetActor: MActor): ActivityFollow {
+export function buildFollowActivity (url: string, byActor: MActor, targetActor: MActor): ActivityFollow {
   return {
     type: 'Follow',
     id: url,
     actor: byActor.url,
     object: targetActor.url
   }
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  sendFollow,
-  buildFollowActivity
 }
