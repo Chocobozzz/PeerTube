@@ -61,7 +61,7 @@ function generatePlaylistOEmbed (req: express.Request, res: express.Response) {
     channel: playlist.VideoChannel,
     title: playlist.name,
     embedPath: playlist.getEmbedStaticPath() + buildPlayerURLQuery(req.query.url),
-    thumbnail: playlist.Thumbnail,
+    thumbnail: playlist.getBestThumbnail('16:9', 1280),
     req
   })
 

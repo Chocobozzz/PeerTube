@@ -95,9 +95,8 @@ describe('Test prune storage CLI', function () {
       expect(torrentsCount).to.equal(12)
 
       const thumbnailsCount = await server.servers.countFiles('thumbnails')
-      // 15 of 3 local videos (5 sizes for each)
-      // 1 local playlist
-      expect(thumbnailsCount).to.equal(16)
+      // 15 of 3 local videos + 1 playlist (5 sizes for each)
+      expect(thumbnailsCount).to.equal(20)
 
       const avatarsCount = await server.servers.countFiles('avatars')
       expect(avatarsCount).to.equal(4)

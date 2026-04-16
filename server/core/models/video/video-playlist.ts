@@ -1,7 +1,7 @@
-import { buildPlaylistEmbedPath, buildPlaylistWatchPath } from '@peertube/peertube-core-utils'
+import { buildPlaylistEmbedPath, buildPlaylistWatchPath, maxBy } from '@peertube/peertube-core-utils'
 import {
-  ActivityIconObject,
   PlaylistObject,
+  ThumbnailAspectRatio,
   VideoPlaylist,
   VideoPlaylistPrivacy,
   VideoPlaylistType,
@@ -11,10 +11,14 @@ import {
 import { uuidToShort } from '@peertube/peertube-node-utils'
 import { generateImageFilename } from '@server/helpers/image-utils.js'
 import { activityPubCollectionPagination } from '@server/lib/activitypub/collection.js'
+import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 import { MAccountId, MChannelId, MVideoPlaylistElement } from '@server/types/models/index.js'
 import { join } from 'path'
 import { FindOptions, Op, Transaction, literal } from 'sequelize'
 import {
+  AfterCreate,
+  AfterDestroy,
+  AfterUpdate,
   AllowNull,
   BelongsTo,
   Column,
@@ -23,7 +27,6 @@ import {
   Default,
   ForeignKey,
   HasMany,
-  HasOne,
   Is,
   IsUUID,
   Scopes,
@@ -47,13 +50,14 @@ import {
 } from '../../initializers/constants.js'
 import { MThumbnail } from '../../types/models/video/thumbnail.js'
 import {
-  MVideoPlaylist,
   MVideoPlaylistAP,
   MVideoPlaylistAccountThumbnail,
   MVideoPlaylistFormattable,
   MVideoPlaylistFull,
   MVideoPlaylistFullSummary,
-  MVideoPlaylistSummaryWithElements
+  MVideoPlaylistSummaryWithElements,
+  MVideoPlaylistThumbnail,
+  type MVideoPlaylist
 } from '../../types/models/video/video-playlist.js'
 import { AccountModel, ScopeNames as AccountScopeNames } from '../account/account.js'
 import { ActorModel } from '../actor/actor.js'
@@ -229,7 +233,7 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
   })
   declare VideoPlaylistElements: Awaited<VideoPlaylistElementModel>[]
 
-  @HasOne(() => ThumbnailModel, {
+  @HasMany(() => ThumbnailModel, {
     foreignKey: {
       name: 'videoPlaylistId',
       allowNull: true
@@ -237,7 +241,24 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
     onDelete: 'CASCADE',
     hooks: true
   })
-  declare Thumbnail: Awaited<ThumbnailModel>
+  declare Thumbnails: Awaited<ThumbnailModel>[]
+
+  // ---------------------------------------------------------------------------
+
+  @AfterCreate
+  static notifyCreate (playlist: MVideoPlaylist) {
+    InternalEventEmitter.Instance.emit('playlist-created', { playlist })
+  }
+
+  @AfterUpdate
+  static notifyUpdate (playlist: MVideoPlaylist) {
+    InternalEventEmitter.Instance.emit('playlist-updated', { playlist })
+  }
+
+  @AfterDestroy
+  static notifyDestroy (playlist: MVideoPlaylist) {
+    InternalEventEmitter.Instance.emit('playlist-deleted', { playlist })
+  }
 
   // ---------------------------------------------------------------------------
 
@@ -379,6 +400,32 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
         limit: 150,
         transaction
       })
+  }
+
+  static async listLocalIds (): Promise<number[]> {
+    const rows = await VideoPlaylistModel.unscoped().findAll({
+      attributes: [ 'id' ],
+      raw: true,
+      include: [
+        {
+          attributes: [],
+          model: AccountModel.unscoped(),
+          required: true,
+          include: [
+            {
+              attributes: [],
+              model: ActorModel.unscoped(),
+              required: true,
+              where: {
+                serverId: null
+              }
+            }
+          ]
+        }
+      ]
+    })
+
+    return rows.map(r => r.id)
   }
 
   // ---------------------------------------------------------------------------
@@ -574,22 +621,45 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
 
   // ---------------------------------------------------------------------------
 
-  async setAndSaveThumbnail (thumbnail: MThumbnail, t: Transaction) {
-    thumbnail.videoPlaylistId = this.id
-
-    if (this.Thumbnail && thumbnail.id !== this.Thumbnail?.id) {
-      await this.Thumbnail.destroy({ transaction: t })
+  async replaceAndSaveThumbnails (thumbnails: MThumbnail[], transaction?: Transaction) {
+    if (thumbnails.length === 0) {
+      throw new Error('Cannot replace thumbnails with an empty array, at least one thumbnail is required')
     }
 
-    this.Thumbnail = await thumbnail.save({ transaction: t })
+    let oldThumbnails = Array.isArray(this.Thumbnails)
+      ? [ ...this.Thumbnails ]
+      : []
+
+    this.Thumbnails = []
+
+    for (const thumbnail of thumbnails) {
+      thumbnail.videoPlaylistId = this.id
+
+      const savedThumbnail = await thumbnail.save({ transaction })
+      oldThumbnails = oldThumbnails.filter(t => t.id !== savedThumbnail.id)
+
+      this.Thumbnails.push(savedThumbnail)
+    }
+
+    for (const oldThumbnail of oldThumbnails) {
+      await oldThumbnail.destroy({ transaction })
+    }
+  }
+
+  async removeThumbnails (t: Transaction) {
+    for (const thumbnail of this.Thumbnails) {
+      await thumbnail.destroy({ transaction: t })
+    }
+
+    this.Thumbnails = []
   }
 
   hasThumbnail () {
-    return !!this.Thumbnail
+    return this.Thumbnails.length !== 0
   }
 
   hasGeneratedThumbnail () {
-    return this.hasThumbnail() && this.Thumbnail.automaticallyGenerated === true
+    return this.Thumbnails.some(t => t.automaticallyGenerated === true)
   }
 
   shouldGenerateThumbnailWithNewElement (newElement: MVideoPlaylistElement) {
@@ -603,18 +673,36 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
     return 'playlist-' + generateImageFilename(extension)
   }
 
+  getBestThumbnail (
+    this: Pick<MVideoPlaylistThumbnail, 'Thumbnails' | 'filterThumbnails'>,
+    ratio: ThumbnailAspectRatio,
+    maxWidth?: number
+  ) {
+    if (!this.Thumbnails || this.Thumbnails.length === 0) return undefined
+
+    return maxBy(this.filterThumbnails(ratio, maxWidth), 'width')
+  }
+
+  filterThumbnails (this: Pick<MVideoPlaylistThumbnail, 'Thumbnails'>, ratio: ThumbnailAspectRatio, maxWidth?: number) {
+    if (!this.Thumbnails) return []
+
+    return this.Thumbnails.filter(t => t.aspectRatio === ratio && (!maxWidth || t.width <= maxWidth))
+  }
+
   // ---------------------------------------------------------------------------
 
   getThumbnailUrl () {
-    if (!this.hasThumbnail()) return null
+    const staticPath = this.getThumbnailStaticPath()
+    if (!staticPath) return null
 
-    return WEBSERVER.URL + LAZY_STATIC_PATHS.THUMBNAILS + this.Thumbnail.filename
+    return WEBSERVER.URL + staticPath
   }
 
   getThumbnailStaticPath () {
-    if (!this.hasThumbnail()) return null
+    const thumbnail = this.getBestThumbnail('16:9', 300)
+    if (!thumbnail) return null
 
-    return join(LAZY_STATIC_PATHS.THUMBNAILS, this.Thumbnail.filename)
+    return join(LAZY_STATIC_PATHS.THUMBNAILS, thumbnail.filename)
   }
 
   // ---------------------------------------------------------------------------
@@ -690,9 +778,7 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
       },
 
       thumbnailPath: this.getThumbnailStaticPath(),
-      thumbnails: this.Thumbnail
-        ? [ this.Thumbnail.toFormattedJSON() ]
-        : [],
+      thumbnails: this.Thumbnails.map(t => t.toFormattedJSON()),
 
       embedPath: this.getEmbedStaticPath(),
 
@@ -720,16 +806,11 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
       return VideoPlaylistElementModel.listUrlsOfForAP(this.id, start, count, t)
     }
 
-    let icon: ActivityIconObject
-    if (this.hasThumbnail()) {
-      icon = {
-        type: 'Image' as 'Image',
-        url: this.getThumbnailUrl(),
-        mediaType: 'image/jpeg' as 'image/jpeg',
-        width: this.Thumbnail.width,
-        height: this.Thumbnail.height
-      }
-    }
+    // TODO: send an array of icons in 9.0
+    const thumbnail = this.getBestThumbnail('16:9', 300)
+    const icon = thumbnail
+      ? thumbnail.toActivityPubObject()
+      : undefined
 
     return activityPubCollectionPagination(this.url, handler, page)
       .then(o => {

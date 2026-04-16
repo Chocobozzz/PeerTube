@@ -491,9 +491,9 @@ cd /var/www/peertube-docker; \
 
 :::
 
-### Regenerate video thumbnails
+### Regenerate video and playlist thumbnails
 
-Regenerating local video thumbnails could be useful because new PeerTube releases may increase thumbnail sizes:
+Regenerating local video and playlist thumbnails could be useful because new PeerTube releases may increase thumbnail sizes:
 
 ::: code-group
 

@@ -437,7 +437,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
   private joinPlaylist (playlistId: number) {
     this.joins.push(
-      'INNER JOIN "videoPlaylistElement" "video"."id" = "videoPlaylistElement"."videoId" ' +
+      'INNER JOIN "videoPlaylistElement" ON "video"."id" = "videoPlaylistElement"."videoId" ' +
         'AND "videoPlaylistElement"."videoPlaylistId" = :videoPlaylistId'
     )
 

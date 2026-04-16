@@ -5,9 +5,10 @@ import {
   VideoPrivacy,
   VideoPrivacyType
 } from '@peertube/peertube-models'
+import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 import { MUserAccountId } from '@server/types/models/index.js'
 import {
-  MVideoPlaylistElement,
+  type MVideoPlaylistElement,
   MVideoPlaylistElementAP,
   MVideoPlaylistElementFormattable,
   MVideoPlaylistElementVideoThumbnail,
@@ -16,6 +17,9 @@ import {
 } from '@server/types/models/video/video-playlist-element.js'
 import { ScopeOptions, Transaction } from 'sequelize'
 import {
+  AfterCreate,
+  AfterDestroy,
+  AfterUpdate,
   AllowNull,
   BelongsTo,
   Column,
@@ -107,6 +111,25 @@ export class VideoPlaylistElementModel extends SequelizeModel<VideoPlaylistEleme
     onDelete: 'set null'
   })
   declare Video: Awaited<VideoModel>
+
+  // ---------------------------------------------------------------------------
+
+  @AfterCreate
+  static notifyCreate (playlistElement: MVideoPlaylistElement) {
+    InternalEventEmitter.Instance.emit('playlist-element-created', { playlistElement })
+  }
+
+  @AfterUpdate
+  static notifyUpdate (playlistElement: MVideoPlaylistElement) {
+    InternalEventEmitter.Instance.emit('playlist-element-updated', { playlistElement })
+  }
+
+  @AfterDestroy
+  static notifyDestroy (playlistElement: MVideoPlaylistElement) {
+    InternalEventEmitter.Instance.emit('playlist-element-deleted', { playlistElement })
+  }
+
+  // ---------------------------------------------------------------------------
 
   static deleteAllOf (videoPlaylistId: number, transaction?: Transaction) {
     const query = {
@@ -274,6 +297,17 @@ export class VideoPlaylistElementModel extends SequelizeModel<VideoPlaylistEleme
       order: getSort('position'),
       limit: USER_EXPORT_MAX_ITEMS
     })
+  }
+
+  static listPlaylistIdsForVideoId (videoId: number): Promise<number[]> {
+    return VideoPlaylistElementModel.findAll({
+      attributes: [ 'videoPlaylistId' ],
+      raw: true,
+      where: {
+        videoId
+      },
+      limit: 1000
+    }).then(rows => rows.map(r => r.videoPlaylistId))
   }
 
   // ---------------------------------------------------------------------------

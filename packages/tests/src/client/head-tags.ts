@@ -372,6 +372,12 @@ describe('Test <head> HTML tags', function () {
       for (const path of getWatchPlaylistBasePaths()) {
         for (const id of playlistIds) {
           await commonPageTest(path + id)
+
+          const res = await makeGetRequest({ url: servers[0].url, path: path + id, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
+          const text = res.text
+
+          const feedUrl = `${servers[0].url}/feeds/podcast/videos.xml?playlistId=${playlist.id}`
+          expect(text).to.contain(`<link rel="alternate" type="application/rss+xml" title="${playlistName} - Podcast feed" href="${feedUrl}" />`)
         }
       }
     })

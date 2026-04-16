@@ -10384,7 +10384,7 @@ components:
           deprecated: true
           type: string
         thumbnails:
-          description: "**PeerTube >= 8.1** Array of thumbnails for the video"
+          description: "**PeerTube >= 8.1** Array of thumbnails for the playlist"
           type: array
           items:
             $ref: '#/components/schemas/Thumbnail'

@@ -160,7 +160,7 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
 
   protected includePlaylist (playlistId: number) {
     this.addJoin(
-      'INNER JOIN "videoPlaylistElement" as "VideoPlaylistElement" ON "videoPlaylistElement"."videoId" = "video"."id" ' +
+      'INNER JOIN "videoPlaylistElement" as "VideoPlaylistElement" ON "VideoPlaylistElement"."videoId" = "video"."id" ' +
         'AND "VideoPlaylistElement"."videoPlaylistId" = :videoPlaylistId'
     )
 

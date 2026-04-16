@@ -1,4 +1,4 @@
-import { getChannelPodcastFeed } from '@peertube/peertube-core-utils'
+import { getChannelPodcastFeed, getPlaylistPodcastFeed } from '@peertube/peertube-core-utils'
 import { VideoIncludeType } from '@peertube/peertube-models'
 import { mdToPlainText, toSafeHtml } from '@server/helpers/markdown.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -8,7 +8,7 @@ import { getServerActor } from '@server/models/application/application.js'
 import { getCategoryLabel } from '@server/models/video/formatter/index.js'
 import { DisplayOnlyForFollowerOptions } from '@server/models/video/sql/video/index.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MChannelHostOnly, MUserDefault } from '@server/types/models/index.js'
+import { MChannelHostOnly, MUserDefault, MVideoPlaylist } from '@server/types/models/index.js'
 
 export async function getVideosForFeeds (options: {
   sort: string
@@ -18,6 +18,7 @@ export async function getVideosForFeeds (options: {
 
   accountId?: number
   videoChannelId?: number
+  videoPlaylistId?: number
   displayOnlyForFollower?: DisplayOnlyForFollowerOptions
   user?: MUserDefault
 }) {
@@ -70,7 +71,7 @@ export function getCommonVideoFeedAttributes (video: VideoModel) {
   }
 }
 
-export function getPodcastFeedUrlCustomTag (videoChannel: MChannelHostOnly) {
+export function getPodcastChannelFeedUrlCustomTag (videoChannel: MChannelHostOnly) {
   return {
     name: 'podcast:txt',
     attributes: {
@@ -78,5 +79,16 @@ export function getPodcastFeedUrlCustomTag (videoChannel: MChannelHostOnly) {
     },
     // TODO: use remote channel podcast feed URL
     value: getChannelPodcastFeed(WEBSERVER.URL, videoChannel)
+  }
+}
+
+export function getPodcastPlaylistFeedUrlCustomTag (playlist: Pick<MVideoPlaylist, 'id'>) {
+  return {
+    name: 'podcast:txt',
+    attributes: {
+      purpose: 'p20url'
+    },
+    // TODO: use remote channel podcast feed URL
+    value: getPlaylistPodcastFeed(WEBSERVER.URL, playlist)
   }
 }

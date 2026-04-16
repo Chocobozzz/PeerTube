@@ -32,7 +32,7 @@ import { MIMETYPES, VIDEO_PLAYLIST_PRIVACIES } from '../../initializers/constant
 import { sequelizeTypescript } from '../../initializers/database.js'
 import { sendCreateVideoPlaylist, sendDeleteVideoPlaylist, sendUpdateVideoPlaylist } from '../../lib/activitypub/send/index.js'
 import { getLocalVideoPlaylistActivityPubUrl, getLocalVideoPlaylistElementActivityPubUrl } from '../../lib/activitypub/url.js'
-import { createLocalPlaylistThumbnailFromImage } from '../../lib/thumbnail.js'
+import { createLocalPlaylistThumbnailsFromImage } from '../../lib/thumbnail.js'
 import {
   apiRateLimiter,
   asyncMiddleware,
@@ -196,8 +196,8 @@ async function createVideoPlaylist (req: express.Request, res: express.Response)
   }
 
   const thumbnailField = req.files?.['thumbnailfile']
-  const thumbnailModel = thumbnailField
-    ? await createLocalPlaylistThumbnailFromImage({
+  const thumbnailModels = thumbnailField
+    ? await createLocalPlaylistThumbnailsFromImage({
       inputPath: thumbnailField[0].path,
       playlist: videoPlaylist,
       automaticallyGenerated: false
@@ -215,8 +215,8 @@ async function createVideoPlaylist (req: express.Request, res: express.Response)
 
       const videoPlaylistCreated = await videoPlaylist.save({ transaction: t }) as MVideoPlaylistFull
 
-      if (thumbnailModel) {
-        await videoPlaylistCreated.setAndSaveThumbnail(thumbnailModel, t)
+      if (thumbnailModels) {
+        await videoPlaylistCreated.replaceAndSaveThumbnails(thumbnailModels, t)
       }
 
       // We need more attributes for the federation
@@ -258,8 +258,8 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
   let removedFromChannel: { id: number, position: number }
 
   const thumbnailField = req.files?.['thumbnailfile']
-  const thumbnailModel = thumbnailField
-    ? await createLocalPlaylistThumbnailFromImage({
+  const thumbnailModels = thumbnailField
+    ? await createLocalPlaylistThumbnailsFromImage({
       inputPath: thumbnailField[0].path,
       playlist,
       automaticallyGenerated: false
@@ -329,9 +329,8 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
 
       const playlistUpdated = await playlist.save({ transaction: t })
 
-      if (thumbnailModel) {
-        thumbnailModel.automaticallyGenerated = false
-        await playlistUpdated.setAndSaveThumbnail(thumbnailModel, t)
+      if (thumbnailModels) {
+        await playlistUpdated.replaceAndSaveThumbnails(thumbnailModels, t)
       }
 
       const isNewPlaylist = wasPrivatePlaylist && playlistUpdated.privacy !== VideoPlaylistPrivacy.PRIVATE
@@ -611,8 +610,7 @@ async function listVideosOfPlaylist (req: express.Request, res: express.Response
 }
 
 async function regeneratePlaylistThumbnail (videoPlaylist: MVideoPlaylistThumbnail) {
-  await videoPlaylist.Thumbnail.destroy()
-  videoPlaylist.Thumbnail = null
+  await videoPlaylist.removeThumbnails(undefined)
 
   const firstElement = await VideoPlaylistElementModel.loadFirstElementWithVideoThumbnail(videoPlaylist.id)
   if (firstElement) await generateThumbnailForPlaylist(videoPlaylist, firstElement.Video)

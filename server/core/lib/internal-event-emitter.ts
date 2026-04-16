@@ -1,4 +1,4 @@
-import { MChannel, MVideo, MVideoImmutable } from '@server/types/models/index.js'
+import { MChannel, MVideo, MVideoImmutable, MVideoPlaylist, MVideoPlaylistElement } from '@server/types/models/index.js'
 import { EventEmitter } from 'events'
 
 export interface PeerTubeInternalEvents {
@@ -9,6 +9,14 @@ export interface PeerTubeInternalEvents {
   'channel-created': (options: { channel: MChannel }) => void
   'channel-updated': (options: { channel: MChannel }) => void
   'channel-deleted': (options: { channel: MChannel }) => void
+
+  'playlist-created': (options: { playlist: MVideoPlaylist }) => void
+  'playlist-updated': (options: { playlist: MVideoPlaylist }) => void
+  'playlist-deleted': (options: { playlist: MVideoPlaylist }) => void
+
+  'playlist-element-created': (options: { playlistElement: MVideoPlaylistElement }) => void
+  'playlist-element-updated': (options: { playlistElement: MVideoPlaylistElement }) => void
+  'playlist-element-deleted': (options: { playlistElement: MVideoPlaylistElement }) => void
 
   'chapters-updated': (options: { video: MVideoImmutable }) => void
 }

@@ -9,7 +9,14 @@ import { regenerateActorImageFiles } from '@server/lib/local-actor.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { UserModel } from '@server/models/user/user.js'
-import { MAccountDefault, MChannelBannerAccountDefault, MChannelDefault, MUser, MVideo } from '@server/types/models/index.js'
+import {
+  MAccountDefault,
+  MChannelBannerAccountDefault,
+  MChannelDefault,
+  MUser,
+  MVideo,
+  MVideoPlaylistFull
+} from '@server/types/models/index.js'
 import express from 'express'
 
 export async function initFeed (parameters: {
@@ -112,11 +119,12 @@ export function sendFeed (feed: Feed, req: express.Request, res: express.Respons
 }
 
 export async function buildFeedMetadata (options: {
+  videoPlaylist?: MVideoPlaylistFull
   videoChannel?: MChannelBannerAccountDefault
   account?: MAccountDefault
   video?: MVideo
 }) {
-  const { video, videoChannel, account } = options
+  const { videoPlaylist, video, videoChannel, account } = options
 
   let imageUrl = ServerConfigManager.Instance.getLogoUrl(await getServerActor(), 1500)
   let ownerImageUrl: string
@@ -127,14 +135,32 @@ export async function buildFeedMetadata (options: {
   let ownerLink: string
   let user: MUser
 
-  if (videoChannel) {
+  if (videoPlaylist) {
+    name = videoPlaylist.name
+    description = videoPlaylist.description
+    link = WEBSERVER.URL + videoPlaylist.getWatchStaticPath()
+
+    const thumbnail = videoPlaylist.getBestThumbnail('1:1')
+    if (thumbnail) {
+      imageUrl = thumbnail?.getLocalFileUrl()
+    }
+
+    const channel = videoPlaylist.VideoChannel
+    ownerLink = channel.getClientUrl()
+
+    if (channel.Actor.hasImage(ActorImageType.AVATAR)) {
+      ownerImageUrl = await getOrGenerateActorImageUrl(channel)
+    }
+
+    user = await UserModel.loadById(videoPlaylist.OwnerAccount.userId)
+  } else if (videoChannel) {
     name = videoChannel.getDisplayName()
     description = videoChannel.description
     ownerLink = videoChannel.getClientUrl()
     link = ownerLink
 
     if (videoChannel.Actor.hasImage(ActorImageType.AVATAR)) {
-      imageUrl = await getOrGenerateImageUrl(videoChannel)
+      imageUrl = await getOrGenerateActorImageUrl(videoChannel)
       ownerImageUrl = imageUrl
     }
 
@@ -146,7 +172,7 @@ export async function buildFeedMetadata (options: {
     link = ownerLink
 
     if (account.Actor.hasImage(ActorImageType.AVATAR)) {
-      imageUrl = await getOrGenerateImageUrl(account)
+      imageUrl = await getOrGenerateActorImageUrl(account)
       ownerImageUrl = imageUrl
     }
 
@@ -174,7 +200,7 @@ export async function buildFeedMetadata (options: {
 // Private
 // ---------------------------------------------------------------------------
 
-async function getOrGenerateImageUrl (accountOrChannel: MChannelDefault | MAccountDefault) {
+async function getOrGenerateActorImageUrl (accountOrChannel: MChannelDefault | MAccountDefault) {
   let image = accountOrChannel.Actor.getMaxQualityImage(ActorImageType.AVATAR)
   if (!image) throw new Error('No avatar image found for the account or channel')
 

@@ -30,7 +30,7 @@ import { LiveVideoService } from '@app/shared/shared-video-live/live-video.servi
 import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 import { PlayerSettingsService } from '@app/shared/shared-video/player-settings.service'
-import { getVideoRSSFeeds, timeToInt } from '@peertube/peertube-core-utils'
+import { getPlaylistRSSFeeds, getVideoRSSFeeds, timeToInt } from '@peertube/peertube-core-utils'
 import {
   HTMLServerConfig,
   HttpStatusCode,
@@ -1043,13 +1043,28 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.metaService.setDescription(video.description)
 
+    if (this.playlist?.isLocal) {
+      this.metaService.setRSSFeeds(
+        getPlaylistRSSFeeds({
+          url: getOriginUrl(),
+          playlist: this.playlist,
+          titles: {
+            instanceVideosFeed: $localize`${this.serverConfig.instance.name} - Videos feed`,
+            playlistPodcastFeed: $localize`${this.playlist.displayName} - Podcast feed`
+          }
+        })
+      )
+
+      return
+    }
+
     this.metaService.setRSSFeeds(
       getVideoRSSFeeds({
         url: getOriginUrl(),
         video: { ...video, privacy: video.privacy.id },
         titles: {
-          instanceVideosFeed: `${this.serverConfig.instance.name} - Videos feed`,
-          videoCommentsFeed: `${video.name} - Comments feed`
+          instanceVideosFeed: $localize`${this.serverConfig.instance.name} - Videos feed`,
+          videoCommentsFeed: $localize`${video.name} - Comments feed`
         }
       })
     )

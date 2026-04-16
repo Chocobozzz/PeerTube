@@ -1,8 +1,8 @@
 import { ActivityHtmlUrlObject } from '@peertube/peertube-models'
 import { CONFIG } from '@server/initializers/config.js'
 import validator from 'validator'
-import { CONSTRAINTS_FIELDS } from '../../../initializers/constants.js'
-import { exists } from '../misc.js'
+import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../../initializers/constants.js'
+import { exists, isArray } from '../misc.js'
 import { arrayify } from '@peertube/peertube-core-utils'
 
 export function isUrlValid (url: string) {
@@ -57,6 +57,21 @@ export function setValidAttributedTo (obj: any) {
   obj.attributedTo = arrayify(obj.attributedTo).filter(a => {
     return isActivityPubUrlValid(a) ||
       ((a.type === 'Group' || a.type === 'Person') && isActivityPubUrlValid(a.id))
+  })
+
+  return true
+}
+
+export function setValidRemoteIcon (entity: any) {
+  if (entity.icon && !isArray(entity.icon)) entity.icon = [ entity.icon ]
+  if (!entity.icon) entity.icon = []
+
+  entity.icon = entity.icon.filter(icon => {
+    return icon.type === 'Image' &&
+      isActivityPubUrlValid(icon.url) &&
+      !!MIMETYPES.IMAGE.MIMETYPE_EXT[icon.mediaType] &&
+      validator.default.isInt(icon.width + '', { min: 0 }) &&
+      validator.default.isInt(icon.height + '', { min: 0 })
   })
 
   return true

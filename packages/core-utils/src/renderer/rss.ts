@@ -62,3 +62,27 @@ export function getVideoRSSFeeds (options: {
 export function getChannelPodcastFeed (url: string, channel: { id: number }) {
   return `${url}/feeds/podcast/videos.xml?videoChannelId=${channel.id}`
 }
+
+export function getPlaylistRSSFeeds (options: {
+  url: string
+  playlist: { displayName: string, id: number }
+  titles: {
+    instanceVideosFeed: string
+    playlistPodcastFeed: string
+  }
+}) {
+  const { url, titles, playlist } = options
+
+  return [
+    {
+      url: getPlaylistPodcastFeed(url, playlist),
+      title: titles.playlistPodcastFeed
+    },
+
+    getInstanceRSSFeed({ url, title: titles.instanceVideosFeed })
+  ]
+}
+
+export function getPlaylistPodcastFeed (url: string, playlist: { id: number }) {
+  return `${url}/feeds/podcast/videos.xml?playlistId=${playlist.id}`
+}

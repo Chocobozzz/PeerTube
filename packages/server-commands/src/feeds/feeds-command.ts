@@ -35,16 +35,18 @@ export class FeedCommand extends AbstractCommand {
   getPodcastXML (
     options: OverrideCommandOptions & {
       ignoreCache: boolean
-      channelId: number
+      channelId?: number
+      playlistId?: number
     }
   ) {
-    const { ignoreCache, channelId } = options
+    const { ignoreCache, channelId, playlistId } = options
     const path = `/feeds/podcast/videos.xml`
 
     const query: { [id: string]: string } = {}
 
     if (ignoreCache) query.v = buildUUID()
     if (channelId) query.videoChannelId = channelId + ''
+    if (playlistId) query.playlistId = playlistId + ''
 
     return this.getRequestText({
       ...options,

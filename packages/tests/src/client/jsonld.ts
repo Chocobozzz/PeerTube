@@ -1,6 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { maxBy } from '@peertube/peertube-core-utils'
+import { maxBy, minBy } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoCreateResult, VideoPlaylistCreateResult, VideoPrivacy } from '@peertube/peertube-models'
 import {
   PeerTubeServer,
@@ -213,7 +213,7 @@ describe('Test JSONLD HTML tags', function () {
       for (const server of servers) {
         const jsonld = await getJSONLD(server, getWatchPlaylistBasePaths()[0] + publicPlaylist.uuid)
         const playlist = await server.playlists.get({ playlistId: publicPlaylist.uuid })
-        const thumbnailUrl = maxBy(playlist.thumbnails, 'width').fileUrl
+        const thumbnailUrl = minBy(playlist.thumbnails, 'width').fileUrl
 
         expect(jsonld).to.deep.equal({
           '@context': 'http://schema.org',

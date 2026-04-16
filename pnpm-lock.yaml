@@ -93,8 +93,8 @@ importers:
         specifier: ^11.1.2
         version: 11.1.2
       '@peertube/feed':
-        specifier: ^5.4.1
-        version: 5.4.1
+        specifier: ^5.5.0
+        version: 5.5.0
       '@peertube/peertube-core-utils':
         specifier: workspace:*
         version: link:packages/core-utils
@@ -3227,8 +3227,8 @@ packages:
     resolution: {integrity: sha512-PGKk9dAUVZwDUaGFsGFWwEEDY9C2biBXAkp4kQLnzqhGKw9Kesp5+Tug5rlb5IOpsnKei+DnA5n7XjAQ2xYVCA==}
     engines: {node: '>=16.0.0'}
 
-  '@peertube/feed@5.4.1':
-    resolution: {integrity: sha512-WgqTn5NuejZ+HSon8JzwTapDu3SzjR1FqajpbvpX/g20z8Bd8i4mO0jmrC6Zk4XVK2LrRN2Bx0jdAhBmtgLa/Q==}
+  '@peertube/feed@5.5.0':
+    resolution: {integrity: sha512-5+dUdm/9eqZzdg+UuO/9awUKWxh3cxf98bvQeeIsib6RRCA9DLgxnHN8QbrbkGSGnj1QWAeQynZixBeAXdkfKA==}
     engines: {node: '>=0.4.0'}
 
   '@peertube/maildev@1.2.0':
@@ -14103,7 +14103,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@peertube/feed@5.4.1':
+  '@peertube/feed@5.5.0':
     dependencies:
       xml-js: 1.6.11
 
@@ -15532,7 +15532,7 @@ snapshots:
       '@vitejs/devtools-rpc': 0.1.11(typescript@5.9.3)(ws@8.20.0(bufferutil@4.1.0)(utf-8-validate@6.0.6))
       birpc: 4.0.0
       ohash: 2.0.11
-      vite: 8.0.2(@types/node@20.19.33)(@vitejs/devtools@0.1.11)(esbuild@0.27.3)(jiti@2.6.1)(sass-embedded@1.97.3)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.2)
+      vite: 8.0.2(@types/node@25.3.0)(@vitejs/devtools@0.1.11)(esbuild@0.27.3)(jiti@2.6.1)(sass-embedded@1.97.3)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.2)
     transitivePeerDependencies:
       - typescript
       - ws
@@ -15621,7 +15621,7 @@ snapshots:
       perfect-debounce: 2.1.0
       sirv: 3.0.2
       tinyexec: 1.0.4
-      vite: 8.0.2(@types/node@20.19.33)(@vitejs/devtools@0.1.11)(esbuild@0.27.3)(jiti@2.6.1)(sass-embedded@1.97.3)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.2)
+      vite: 8.0.2(@types/node@25.3.0)(@vitejs/devtools@0.1.11)(esbuild@0.27.3)(jiti@2.6.1)(sass-embedded@1.97.3)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.2)
       vue: 3.5.30(typescript@5.9.3)
       ws: 8.20.0(bufferutil@4.1.0)(utf-8-validate@6.0.6)
     transitivePeerDependencies:
@@ -23688,6 +23688,24 @@ snapshots:
       tinyglobby: 0.2.15
     optionalDependencies:
       '@types/node': 20.19.33
+      '@vitejs/devtools': 0.1.11(@pnpm/logger@1001.0.1)(bufferutil@4.1.0)(ioredis@5.9.3)(typescript@5.9.3)(utf-8-validate@6.0.6)(vite@8.0.2)
+      esbuild: 0.27.3
+      fsevents: 2.3.3
+      jiti: 2.6.1
+      sass: 1.97.3
+      sass-embedded: 1.97.3
+      tsx: 4.21.0
+      yaml: 2.8.2
+
+  vite@8.0.2(@types/node@25.3.0)(@vitejs/devtools@0.1.11)(esbuild@0.27.3)(jiti@2.6.1)(sass-embedded@1.97.3)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.2):
+    dependencies:
+      lightningcss: 1.32.0
+      picomatch: 4.0.4
+      postcss: 8.5.8
+      rolldown: 1.0.0-rc.11
+      tinyglobby: 0.2.15
+    optionalDependencies:
+      '@types/node': 25.3.0
       '@vitejs/devtools': 0.1.11(@pnpm/logger@1001.0.1)(bufferutil@4.1.0)(ioredis@5.9.3)(typescript@5.9.3)(utf-8-validate@6.0.6)(vite@8.0.2)
       esbuild: 0.27.3
       fsevents: 2.3.3

@@ -1720,9 +1720,11 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
   // ---------------------------------------------------------------------------
 
-  static guessLanguageOrCategoryOfChannel (channelId: number, type: 'category'): Promise<number>
-  static guessLanguageOrCategoryOfChannel (channelId: number, type: 'language'): Promise<string>
-  static guessLanguageOrCategoryOfChannel (channelId: number, type: 'language' | 'category') {
+  static guessLanguageOrCategoryOf (type: 'category', options: { videoChannelId?: number, videoPlaylistId?: number }): Promise<number>
+  static guessLanguageOrCategoryOf (type: 'language', options: { videoChannelId?: number, videoPlaylistId?: number }): Promise<string>
+  static guessLanguageOrCategoryOf (type: 'language' | 'category', options: { videoChannelId?: number, videoPlaylistId?: number }) {
+    const { videoChannelId, videoPlaylistId } = options
+
     const queryOptions: BuildVideosListQueryOptions = {
       attributes: [ `COUNT("${type}") AS "total"`, `"${type}"` ],
       group: `GROUP BY "${type}"`,
@@ -1730,7 +1732,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       start: 0,
       count: 1,
       sort: '-total',
-      videoChannelId: channelId,
+      videoChannelId,
+      videoPlaylistId,
       displayOnlyForFollower: null,
       serverAccountIdForBlock: null,
       trendingDays: CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS
@@ -1750,9 +1753,18 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   }
 
   static channelHasNSFWContent (channelId: number) {
-    const query = 'SELECT 1 FROM "video" WHERE "nsfw" IS TRUE AND "channelId" = $channelId LIMIT 1'
+    const query = 'SELECT 1 FROM "video" WHERE "nsfw" IS TRUE AND "channelId" = $channelId AND privacy = $privacy LIMIT 1'
 
-    return doesExist({ sequelize: this.sequelize, query, bind: { channelId } })
+    return doesExist({ sequelize: this.sequelize, query, bind: { channelId, privacy: VideoPrivacy.PUBLIC } })
+  }
+
+  static playlistHasPublicNSFWContent (playlistId: number) {
+    const query = 'SELECT 1 FROM "video" ' +
+      'INNER JOIN "videoPlaylistElement" ON "videoPlaylistElement"."videoId" = "video"."id" ' +
+      'WHERE "video"."nsfw" IS TRUE AND "videoPlaylistElement"."videoPlaylistId" = $playlistId AND privacy = $privacy ' +
+      'LIMIT 1'
+
+    return doesExist({ sequelize: this.sequelize, query, bind: { playlistId, privacy: VideoPrivacy.PUBLIC } })
   }
 
   // ---------------------------------------------------------------------------

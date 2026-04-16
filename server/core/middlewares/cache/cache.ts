@@ -23,10 +23,16 @@ export function cacheRouteFactory (options: APICacheOptions = {}) {
 
 // ---------------------------------------------------------------------------
 
-export function buildPodcastGroupsCache (options: {
+export function buildPodcastChannelGroupsCache (options: {
   channelId: number
 }) {
-  return 'podcast-feed-' + options.channelId
+  return 'podcast-feed-channel-' + options.channelId
+}
+
+export function buildPodcastPlaylistGroupsCache (options: {
+  playlistId: number
+}) {
+  return 'podcast-feed-playlist-' + options.playlistId
 }
 
 export function buildAPVideoChaptersGroupsCache (options: {
@@ -40,7 +46,9 @@ export function buildAPVideoChaptersGroupsCache (options: {
 export const videoFeedsPodcastSetCacheKey = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (req.query.videoChannelId) {
-      res.locals.apicacheGroups = [ buildPodcastGroupsCache({ channelId: req.query.videoChannelId }) ]
+      res.locals.apicacheGroups = [ buildPodcastChannelGroupsCache({ channelId: req.query.videoChannelId }) ]
+    } else if (req.query.playlistId) {
+      res.locals.apicacheGroups = [ buildPodcastPlaylistGroupsCache({ playlistId: req.query.playlistId }) ]
     }
 
     return next()

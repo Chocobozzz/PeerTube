@@ -1,4 +1,5 @@
-import { HttpStatusCode, PlaylistObject } from '@peertube/peertube-models'
+import { guessAspectRatio } from '@peertube/peertube-core-utils'
+import { ActivityIconObject, HttpStatusCode, PlaylistObject } from '@peertube/peertube-models'
 import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
@@ -9,7 +10,7 @@ import { updateRemotePlaylistThumbnailFromUrl } from '@server/lib/thumbnail.js'
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { FilteredModelAttributes } from '@server/types/index.js'
-import { MAccountHost, MThumbnail, MVideoPlaylist, MVideoPlaylistFull, MVideoPlaylistVideosLength } from '@server/types/models/index.js'
+import { MAccountHost, MVideoPlaylist, MVideoPlaylistFull, MVideoPlaylistVideosLength } from '@server/types/models/index.js'
 import Bluebird from 'bluebird'
 import { getAPId } from '../activity.js'
 import { getOrCreateAPActor } from '../actors/index.js'
@@ -130,26 +131,25 @@ async function fetchElementUrls (playlistObject: PlaylistObject) {
 }
 
 async function updatePlaylistThumbnail (playlistObject: PlaylistObject, playlist: MVideoPlaylistFull) {
-  if (playlistObject.icon) {
-    let thumbnailModel: MThumbnail
+  // This field has been sanitized in the validator
+  const icons = playlistObject.icon as ActivityIconObject[]
 
-    try {
-      thumbnailModel = updateRemotePlaylistThumbnailFromUrl({ fileUrl: playlistObject.icon.url, playlist })
-      await playlist.setAndSaveThumbnail(thumbnailModel, undefined)
-    } catch (err) {
-      logger.warn('Cannot set thumbnail of %s.', playlistObject.id, { err, ...lTags(playlistObject.id, playlist.uuid, playlist.url) })
-
-      if (thumbnailModel) await thumbnailModel.removeFile()
-    }
+  // Playlist does not have an icon, destroy existing one
+  if (icons.length === 0) {
+    await playlist.removeThumbnails(undefined)
 
     return
   }
 
-  // Playlist does not have an icon, destroy existing one
-  if (playlist.hasThumbnail()) {
-    await playlist.Thumbnail.destroy()
-    playlist.Thumbnail = null
-  }
+  const thumbnails = icons.map(icon => {
+    return updateRemotePlaylistThumbnailFromUrl({
+      fileUrl: icon.url,
+      playlist,
+      size: { ...icon, aspectRatio: guessAspectRatio(icon.width, icon.height) }
+    })
+  })
+
+  await playlist.replaceAndSaveThumbnails(thumbnails, undefined)
 }
 
 async function rebuildVideoPlaylistElements (elementUrls: string[], playlist: MVideoPlaylist) {

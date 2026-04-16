@@ -111,7 +111,7 @@
     "@opentelemetry/sdk-trace-node": "^2.5.1",
     "@opentelemetry/semantic-conventions": "^1.39.0",
     "@peertube/bittorrent-tracker-server": "^11.1.2",
-    "@peertube/feed": "^5.4.1",
+    "@peertube/feed": "^5.5.0",
     "@peertube/peertube-core-utils": "workspace:*",
     "@peertube/peertube-ffmpeg": "workspace:*",
     "@peertube/peertube-models": "workspace:*",

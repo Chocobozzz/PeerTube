@@ -3,7 +3,6 @@ import { AuthService, ConfirmService, Notifier, ScreenService, ServerService } f
 import { NgbDropdown, NgbDropdownAnchor, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCaption } from '@peertube/peertube-models'
 import { of } from 'rxjs'
-import { Actor } from '../shared-main/account/actor.model'
 import {
   ActionDropdownComponent,
   DropdownAction,

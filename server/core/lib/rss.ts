@@ -1,6 +1,7 @@
 import {
   getChannelRSSFeeds as getChannelRSSFeedsCore,
   getInstanceRSSFeed as getDefaultRSSFeedCore,
+  getPlaylistRSSFeeds as getPlaylistRSSFeedsCore,
   getVideoRSSFeeds as getVideoWatchRSSFeedsCore
 } from '@peertube/peertube-core-utils'
 import { CONFIG } from '@server/initializers/config.js'
@@ -36,6 +37,17 @@ export function getVideoRSSFeeds (video: MVideo, req: express.Request) {
     titles: {
       instanceVideosFeed: req.t('{instanceName} - Videos feed', { instanceName: CONFIG.INSTANCE.NAME }),
       videoCommentsFeed: req.t('{videoName} - Comments feed', { videoName: video.name })
+    }
+  })
+}
+
+export function getPlaylistRSSFeeds (playlist: { displayName: string, id: number }, req: express.Request) {
+  return getPlaylistRSSFeedsCore({
+    url: WEBSERVER.URL,
+    playlist,
+    titles: {
+      instanceVideosFeed: req.t('{instanceName} - Videos feed', { instanceName: CONFIG.INSTANCE.NAME }),
+      playlistPodcastFeed: req.t('{name} - Podcast feed', { name: playlist.displayName })
     }
   })
 }

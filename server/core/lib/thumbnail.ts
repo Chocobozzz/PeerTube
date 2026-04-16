@@ -20,14 +20,36 @@ const lTags = loggerTagsFactory('thumbnail')
 
 type ImageSize = { height: number, width: number, aspectRatio: ThumbnailAspectRatio }
 
-export function createLocalPlaylistThumbnailFromImage (options: {
+export function createLocalPlaylistThumbnailsFromImage (options: {
   inputPath: string
   playlist: MVideoPlaylistThumbnail
   automaticallyGenerated: boolean
   keepOriginal?: boolean // default to false
 }) {
   const { inputPath, playlist, automaticallyGenerated, keepOriginal = false } = options
-  const size = CONFIG.THUMBNAILS.SIZES[0] // Minimum size
+
+  return Promise.all(
+    CONFIG.THUMBNAILS.SIZES.map((size, i) => {
+      return _createLocalPlaylistThumbnailFromImage({
+        inputPath,
+        playlist,
+        automaticallyGenerated,
+        size,
+        // Keep original image until the last thumbnail is generated
+        keepOriginal: keepOriginal || i !== CONFIG.THUMBNAILS.SIZES.length - 1
+      })
+    })
+  )
+}
+
+function _createLocalPlaylistThumbnailFromImage (options: {
+  inputPath: string
+  playlist: MVideoPlaylistThumbnail
+  automaticallyGenerated: boolean
+  size: ImageSize
+  keepOriginal: boolean
+}) {
+  const { inputPath, playlist, automaticallyGenerated, size, keepOriginal } = options
 
   const { filename, outputPath, height, width, aspectRatio } = buildMetadataFromPlaylist({
     playlist,
@@ -53,9 +75,10 @@ export function createLocalPlaylistThumbnailFromImage (options: {
 export function updateRemotePlaylistThumbnailFromUrl (options: {
   fileUrl: string
   playlist: MVideoPlaylistThumbnail
+  size: ImageSize
 }) {
-  const { fileUrl, playlist } = options
-  const size = CONFIG.THUMBNAILS.SIZES[0] // Minimum size
+  const { fileUrl, playlist, size } = options
+
   const extension = getImageExtension(fileUrl)
 
   const { filename: generatedFilename, height, width, aspectRatio, existingThumbnail } = buildMetadataFromPlaylist({
@@ -341,7 +364,9 @@ function buildMetadataFromPlaylist (options: {
   return {
     filename,
     basePath: CONFIG.STORAGE.THUMBNAILS_DIR,
-    existingThumbnail: playlist.Thumbnail,
+    existingThumbnail: Array.isArray(playlist.Thumbnails)
+      ? playlist.Thumbnails.find(t => t.height === size.height && t.width === size.width)
+      : undefined,
     outputPath: join(CONFIG.STORAGE.THUMBNAILS_DIR, filename),
     height: size.height,
     width: size.width,

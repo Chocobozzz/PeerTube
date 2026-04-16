@@ -115,8 +115,8 @@ describe('Test services', function () {
           expect(res.body.width).to.equal(560)
           expect(res.body.height).to.equal(315)
           expect(res.body.thumbnail_url).exist
-          expect(res.body.thumbnail_width).to.equal(280)
-          expect(res.body.thumbnail_height).to.equal(157)
+          expect(res.body.thumbnail_width).to.equal(1280)
+          expect(res.body.thumbnail_height).to.equal(720)
         }
       }
     })

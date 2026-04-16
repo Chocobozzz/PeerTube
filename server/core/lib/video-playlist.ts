@@ -13,7 +13,7 @@ import { MVideoPlaylistOwner, MVideoPlaylistThumbnail } from '../types/models/vi
 import { sendUpdateVideoPlaylist } from './activitypub/send/send-update.js'
 import { getLocalVideoPlaylistActivityPubUrl } from './activitypub/url.js'
 import downloadImage from './image-downloader.js'
-import { createLocalPlaylistThumbnailFromImage } from './thumbnail.js'
+import { createLocalPlaylistThumbnailsFromImage } from './thumbnail.js'
 
 export async function createWatchLaterPlaylist (account: MAccount, t: Transaction) {
   const videoPlaylist: MVideoPlaylistOwner = new VideoPlaylistModel({
@@ -49,24 +49,18 @@ export async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylis
     await downloadImage({
       url: videoThumbnail.fileUrl,
       destDir: CONFIG.STORAGE.TMP_DIR,
-      destName: tmpImageName,
-      size: {
-        height: videoThumbnail.height || 280,
-        width: videoThumbnail.width || 157
-      }
+      destName: tmpImageName
     })
   }
 
-  const thumbnailModel = await createLocalPlaylistThumbnailFromImage({
+  const thumbnails = await createLocalPlaylistThumbnailsFromImage({
     inputPath: join(CONFIG.STORAGE.TMP_DIR, tmpImageName),
     playlist: videoPlaylist,
     automaticallyGenerated: true,
     keepOriginal: false
   })
 
-  thumbnailModel.videoPlaylistId = videoPlaylist.id
-
-  videoPlaylist.Thumbnail = await thumbnailModel.save()
+  await videoPlaylist.replaceAndSaveThumbnails(thumbnails, undefined)
 }
 
 export async function reorderPlaylistOrElementsPosition<T extends typeof VideoPlaylistElementModel | typeof VideoPlaylistModel> (options: {

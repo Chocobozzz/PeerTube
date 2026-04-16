@@ -9,7 +9,7 @@ type Use<K extends keyof VideoPlaylistModel, M> = PickWith<VideoPlaylistModel, K
 
 // ############################################################################
 
-export type MVideoPlaylist = Omit<VideoPlaylistModel, 'OwnerAccount' | 'VideoChannel' | 'VideoPlaylistElements' | 'Thumbnail'>
+export type MVideoPlaylist = Omit<VideoPlaylistModel, 'OwnerAccount' | 'VideoChannel' | 'VideoPlaylistElements' | 'Thumbnails'>
 
 // ############################################################################
 
@@ -48,12 +48,12 @@ export type MVideoPlaylistOwnerDefault =
 
 export type MVideoPlaylistThumbnail =
   & MVideoPlaylist
-  & Use<'Thumbnail', MThumbnail>
+  & Use<'Thumbnails', MThumbnail[]>
 
 export type MVideoPlaylistAccountThumbnail =
   & MVideoPlaylist
   & Use<'OwnerAccount', MAccountDefault>
-  & Use<'Thumbnail', MThumbnail>
+  & Use<'Thumbnails', MThumbnail[]>
 
 // ############################################################################
 
@@ -72,7 +72,7 @@ export type MVideoPlaylistFull =
   & MVideoPlaylistVideosLength
   & Use<'OwnerAccount', MAccountDefault>
   & Use<'VideoChannel', MChannelDefault>
-  & Use<'Thumbnail', MThumbnail>
+  & Use<'Thumbnails', MThumbnail[]>
 
 // ############################################################################
 
@@ -85,7 +85,7 @@ export type MVideoPlaylistAccountChannelSummary =
 
 export type MVideoPlaylistFullSummary =
   & MVideoPlaylistVideosLength
-  & Use<'Thumbnail', MThumbnail>
+  & Use<'Thumbnails', MThumbnail[]>
   & Use<'OwnerAccount', MAccountSummary>
   & Use<'VideoChannel', MChannelSummary>
 
@@ -95,11 +95,11 @@ export type MVideoPlaylistFullSummary =
 
 export type MVideoPlaylistFormattable =
   & MVideoPlaylistVideosLength
-  & Use<'Thumbnail', MThumbnail>
+  & Use<'Thumbnails', MThumbnail[]>
   & Use<'OwnerAccount', MAccountSummaryFormattable>
   & Use<'VideoChannel', MChannelSummaryFormattable>
 
 export type MVideoPlaylistAP =
   & MVideoPlaylist
-  & Use<'Thumbnail', MThumbnail>
+  & Use<'Thumbnails', MThumbnail[]>
   & Use<'VideoChannel', MChannelUrl>

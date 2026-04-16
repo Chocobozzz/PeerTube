@@ -1,5 +1,6 @@
 import { VideoPlaylistPrivacyType } from '../../videos/playlist/video-playlist-privacy.model.js'
 import { VideoPlaylistType_Type } from '../../videos/playlist/video-playlist-type.model.js'
+import { ImageExportJSON } from './image-export.model.js'
 
 export interface VideoPlaylistsExportJSON {
   videoPlaylists: {
@@ -19,6 +20,7 @@ export interface VideoPlaylistsExportJSON {
     updatedAt: string
 
     thumbnailUrl: string
+    thumbnails: ImageExportJSON[]
 
     elements: {
       videoUrl: string

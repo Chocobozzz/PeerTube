@@ -39,8 +39,7 @@ export const thumbnailAPIAttributes = [
       fields: [ 'videoId' ]
     },
     {
-      fields: [ 'videoPlaylistId' ],
-      unique: true
+      fields: [ 'videoPlaylistId' ]
     },
     {
       fields: [ 'filename' ],

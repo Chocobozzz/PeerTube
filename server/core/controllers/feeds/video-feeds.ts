@@ -21,7 +21,7 @@ import {
 import {
   buildFeedMetadata,
   getCommonVideoFeedAttributes,
-  getPodcastFeedUrlCustomTag,
+  getPodcastChannelFeedUrlCustomTag,
   getVideosForFeeds,
   initFeed,
   sendFeed
@@ -90,7 +90,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
       }
     ],
     customTags: videoChannel
-      ? [ getPodcastFeedUrlCustomTag(videoChannel) ]
+      ? [ getPodcastChannelFeedUrlCustomTag(videoChannel) ]
       : []
   })
 

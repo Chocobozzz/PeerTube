@@ -1,7 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { HttpStatusCode, UserRegistrationState } from '@peertube/peertube-models'
+import { HttpStatusCode } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -10,6 +9,7 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { expect } from 'chai'
 
 describe('Official plugin Akismet', function () {
   let servers: PeerTubeServer[]

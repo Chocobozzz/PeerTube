@@ -84,7 +84,12 @@ describe('Playlist thumbnail', function () {
     for (const server of servers) {
       const p = await getPlaylistWithoutThumbnail(server)
 
-      await checkThumbnails({ server, playlist: p, thumbnails: [ 'thumbnail-playlist-280x157.jpg' ] })
+      await checkThumbnails({
+        server,
+        playlist: p,
+        thumbnails: [ 'thumbnail-playlist-280x157.jpg' ],
+        remotePlaylist: server !== servers[1]
+      })
     }
   })
 
@@ -112,7 +117,12 @@ describe('Playlist thumbnail', function () {
     for (const server of servers) {
       const p = await getPlaylistWithThumbnail(server)
 
-      await checkThumbnails({ server, playlist: p, thumbnails: [ 'custom-thumbnail-280x157.jpg' ] })
+      await checkThumbnails({
+        server,
+        playlist: p,
+        thumbnails: [ 'custom-thumbnail-280x157.jpg' ],
+        remotePlaylist: server !== servers[1]
+      })
     }
   })
 
@@ -138,7 +148,12 @@ describe('Playlist thumbnail', function () {
     for (const server of servers) {
       const p = await getPlaylistWithoutThumbnail(server)
 
-      await checkThumbnails({ server, playlist: p, thumbnails: [ 'thumbnail-playlist-280x157.jpg' ] })
+      await checkThumbnails({
+        server,
+        playlist: p,
+        thumbnails: [ 'thumbnail-playlist-280x157.jpg' ],
+        remotePlaylist: server !== servers[1]
+      })
     }
   })
 
@@ -164,7 +179,12 @@ describe('Playlist thumbnail', function () {
     for (const server of servers) {
       const p = await getPlaylistWithThumbnail(server)
 
-      await checkThumbnails({ server, playlist: p, thumbnails: [ 'custom-thumbnail-280x157.jpg' ] })
+      await checkThumbnails({
+        server,
+        playlist: p,
+        thumbnails: [ 'custom-thumbnail-280x157.jpg' ],
+        remotePlaylist: server !== servers[1]
+      })
     }
   })
 
@@ -181,7 +201,12 @@ describe('Playlist thumbnail', function () {
     for (const server of servers) {
       const p = await getPlaylistWithoutThumbnail(server)
 
-      await checkThumbnails({ server, playlist: p, thumbnails: [ 'thumbnail-playlist-280x157.jpg' ] })
+      await checkThumbnails({
+        server,
+        playlist: p,
+        thumbnails: [ 'thumbnail-playlist-280x157.jpg' ],
+        remotePlaylist: server !== servers[1]
+      })
     }
   })
 
@@ -198,7 +223,12 @@ describe('Playlist thumbnail', function () {
     for (const server of servers) {
       const p = await getPlaylistWithThumbnail(server)
 
-      await checkThumbnails({ server, playlist: p, thumbnails: [ 'custom-thumbnail-280x157.jpg' ] })
+      await checkThumbnails({
+        server,
+        playlist: p,
+        thumbnails: [ 'custom-thumbnail-280x157.jpg' ],
+        remotePlaylist: server !== servers[1]
+      })
     }
   })
 
@@ -233,7 +263,12 @@ describe('Playlist thumbnail', function () {
     for (const server of servers) {
       const p = await getPlaylistWithThumbnail(server)
 
-      await checkThumbnails({ server, playlist: p, thumbnails: [ 'custom-thumbnail-280x157.jpg' ] })
+      await checkThumbnails({
+        server,
+        playlist: p,
+        thumbnails: [ 'custom-thumbnail-280x157.jpg' ],
+        remotePlaylist: server !== servers[1]
+      })
     }
   })
 

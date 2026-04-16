@@ -1,5 +1,5 @@
 import { minBy } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, Thumbnail, Video } from '@peertube/peertube-models'
+import { HttpStatusCode, Thumbnail, Video, VideoPlaylist } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -22,18 +22,30 @@ async function testCurrentThumbnail (server: PeerTubeServer, videoId: number | s
   }
 }
 
+async function testCurrentPlaylistThumbnail (server: PeerTubeServer, playlistId: number | string) {
+  const playlist = await server.playlists.get({ playlistId })
+
+  for (const thumbnail of playlist.thumbnails) {
+    const { body } = await makeRawRequest({ url: thumbnail.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+    expect(body).to.not.have.lengthOf(0)
+  }
+}
+
 describe('Test regenerate thumbnails CLI', function () {
   let servers: PeerTubeServer[]
 
   let video1: Video
   let video2: Video
   let remoteVideo: Video
+  let playlist1: VideoPlaylist
 
   let localSmallestThumbnailPath: string
+  let localSmallestPlaylistThumbnailPath: string
   let remoteSmallestThumbnailPath: string
 
   function isTruncatedThumbnail (thumbnail: Thumbnail) {
     return basename(thumbnail.fileUrl) === basename(localSmallestThumbnailPath) ||
+      basename(thumbnail.fileUrl) === basename(localSmallestPlaylistThumbnailPath) ||
       basename(thumbnail.fileUrl) === basename(remoteSmallestThumbnailPath)
   }
 
@@ -54,6 +66,16 @@ describe('Test regenerate thumbnails CLI', function () {
 
       const videoUUID2 = (await servers[0].videos.quickUpload({ name: 'video 2' })).uuid
       video2 = await servers[0].videos.get({ id: videoUUID2 })
+
+      const playlistUUID = (await servers[0].playlists.quickCreate({ displayName: 'playlist 1' })).uuid
+      await servers[0].playlists.addElement({ playlistId: playlistUUID, attributes: { videoId: videoUUID1 } })
+
+      playlist1 = await servers[0].playlists.get({ playlistId: playlistUUID })
+
+      const smallestPlaylistThumbnail = minBy(playlist1.thumbnails, 'width')
+      localSmallestPlaylistThumbnailPath = join(
+        join(servers[0].servers.buildDirectory('thumbnails'), basename(smallestPlaylistThumbnail.fileUrl))
+      )
     }
 
     {
@@ -75,6 +97,7 @@ describe('Test regenerate thumbnails CLI', function () {
     }
 
     await writeFile(localSmallestThumbnailPath, '')
+    await writeFile(localSmallestPlaylistThumbnailPath, '')
     await writeFile(remoteSmallestThumbnailPath, '')
   })
 
@@ -93,6 +116,16 @@ describe('Test regenerate thumbnails CLI', function () {
       const { body } = await makeRawRequest({ url: thumbnail.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
       expect(body).to.not.have.lengthOf(0)
     }
+
+    for (const thumbnail of playlist1.thumbnails) {
+      const { body } = await makeRawRequest({ url: thumbnail.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+
+      if (isTruncatedThumbnail(thumbnail)) {
+        expect(body).to.have.lengthOf(0)
+      } else {
+        expect(body).to.not.have.lengthOf(0)
+      }
+    }
   })
 
   it('Should regenerate local thumbnails from the CLI', async function () {
@@ -102,10 +135,11 @@ describe('Test regenerate thumbnails CLI', function () {
   it('Should have generated new thumbnail files', async function () {
     await testCurrentThumbnail(servers[0], video1.uuid)
     await testCurrentThumbnail(servers[0], video2.uuid)
+    await testCurrentPlaylistThumbnail(servers[0], playlist1.uuid)
   })
 
-  it('Should have deleted old local thumbnail files', async function () {
-    for (const thumbnail of [ ...video1.thumbnails, ...video2.thumbnails ]) {
+  it('Should have deleted old local thumbnails files', async function () {
+    for (const thumbnail of [ ...video1.thumbnails, ...video2.thumbnails, ...playlist1.thumbnails ]) {
       await makeRawRequest({ url: thumbnail.fileUrl, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     }
   })
@@ -133,7 +167,7 @@ describe('Test regenerate thumbnails CLI', function () {
   })
 
   it('Should have the appropriate thumbnails count', async function () {
-    expect(await servers[0].servers.countFiles('thumbnails')).to.equal(10)
+    expect(await servers[0].servers.countFiles('thumbnails')).to.equal(15)
     expect(await servers[0].servers.countFiles('cache/thumbnails')).to.equal(5)
   })
 

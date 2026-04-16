@@ -60,7 +60,7 @@ export class VideoPlaylistTableAttributes {
   // ---------------------------------------------------------------------------
 
   @Memoize()
-  getThumbnailAttributes () {
-    return ThumbnailModel.getSQLAttributes('Thumbnail', 'Thumbnail.').join(', ')
+  getThumbnailsAttributes () {
+    return ThumbnailModel.getSQLAttributes('Thumbnails', 'Thumbnails.').join(', ')
   }
 }

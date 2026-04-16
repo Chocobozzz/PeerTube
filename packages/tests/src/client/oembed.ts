@@ -16,7 +16,6 @@ describe('Test oEmbed HTML tags', function () {
 
   before(async function () {
     this.timeout(120000)
-
     ;({ servers, playlistIds, videoIds, playlist, playlistName } = await prepareClientTests())
   })
 
@@ -77,7 +76,7 @@ describe('Test oEmbed HTML tags', function () {
     expect(res.text).to.contain(expectedLink)
   })
 
-  it('Should forward query params to playlist oEmbed discrovery URL', async function () {
+  it('Should forward query params to playlist oEmbed discovery URL', async function () {
     const res = await makeGetRequest({
       url: servers[0].url,
       path: '/w/p/' + playlistIds[0],

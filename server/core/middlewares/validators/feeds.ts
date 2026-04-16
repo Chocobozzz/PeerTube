@@ -1,4 +1,4 @@
-import { HttpStatusCode } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoPlaylistPrivacy } from '@peertube/peertube-models'
 import express from 'express'
 import { param, query } from 'express-validator'
 import { isValidRSSFeed } from '../../helpers/custom-validators/feeds.js'
@@ -10,6 +10,7 @@ import {
   doesAccountIdExist,
   doesChannelHandleExist,
   doesChannelIdExist,
+  doesVideoPlaylistExist,
   doesUserFeedTokenCorrespond,
   doesVideoExist
 } from './shared/index.js'
@@ -107,13 +108,27 @@ export const feedsAccountOrChannelFiltersValidator = [
 
 export const videoFeedsPodcastValidator = [
   query('videoChannelId')
+    .optional()
     .custom(isIdValid),
+
+  query('playlistId')
+    .optional()
+    .customSanitizer(toCompleteUUID)
+    .custom(isIdOrUUIDValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
+    if (!req.query.videoChannelId && !req.query.playlistId) {
+      return res.fail({ message: req.t('One of videoChannelId or playlistId is required.') })
+    }
+
+    if (req.query.videoChannelId && req.query.playlistId) {
+      return res.fail({ message: req.t('videoChannelId and playlistId cannot be mixed.') })
+    }
+
     if (
-      !await doesChannelIdExist({
+      req.query.videoChannelId && !await doesChannelIdExist({
         id: req.query.videoChannelId,
         checkCanManage: false,
         checkIsLocal: false,
@@ -122,6 +137,20 @@ export const videoFeedsPodcastValidator = [
         res
       })
     ) return
+
+    if (req.query.playlistId) {
+      if (!await doesVideoPlaylistExist({ id: req.query.playlistId, req, res, fetchType: 'all' })) return
+
+      const playlist = res.locals.videoPlaylistFull
+
+      if (playlist.privacy !== VideoPlaylistPrivacy.PUBLIC) {
+        return res.fail({ message: req.t('This playlist feed is only available for public playlists.') })
+      }
+
+      if (!playlist.VideoChannel) {
+        return res.fail({ message: req.t('The channel associated with this playlist could not be found.') })
+      }
+    }
 
     return next()
   }

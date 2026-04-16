@@ -8,7 +8,6 @@ import { VideoCommentService } from '@app/shared/shared-video-comment/video-comm
 import { BulkRemoveCommentsOfBody, UserRight } from '@peertube/peertube-models'
 import { switchMap } from 'rxjs'
 import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
-import { Actor } from '../shared-main/account/actor.model'
 import { AdvancedFilterDef } from '../shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { buildDropdownSimpleAndBulkActions } from '../shared-main/buttons/action-dropdown-helpers'

@@ -1,7 +1,7 @@
 import { addQueryParams, escapeHTML } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoPlaylistPrivacy } from '@peertube/peertube-models'
 import { Memoize } from '@server/helpers/memoize.js'
-import { getDefaultRSSFeeds } from '@server/lib/rss.js'
+import { getPlaylistRSSFeeds } from '@server/lib/rss.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { MVideoPlaylist, MVideoPlaylistFull } from '@server/types/models/index.js'
 import express from 'express'
@@ -88,6 +88,7 @@ export class PlaylistHtml {
   }) {
     const { req, html, playlist, addOG, addTwitterCard, isEmbed, currentQuery = {} } = options
     const escapedTruncatedDescription = TagsHtml.buildEscapedTruncatedDescription(playlist.description)
+    const thumbnail = playlist.getBestThumbnail('16:9')
 
     let htmlResult = TagsHtml.addTitleTag(html, playlist.name)
     htmlResult = TagsHtml.addDescriptionTag(htmlResult, escapedTruncatedDescription)
@@ -105,8 +106,8 @@ export class PlaylistHtml {
 
       embedIndexation: isEmbed,
 
-      image: playlist.hasThumbnail()
-        ? { url: playlist.getThumbnailUrl(), width: playlist.Thumbnail.width, height: playlist.Thumbnail.height }
+      image: thumbnail
+        ? { url: playlist.getThumbnailUrl(), width: thumbnail.width, height: thumbnail.height }
         : undefined,
 
       list: { numberOfItems: playlist.get('videosLength') as number },
@@ -136,7 +137,7 @@ export class PlaylistHtml {
       },
 
       rssFeeds: req
-        ? getDefaultRSSFeeds(req)
+        ? getPlaylistRSSFeeds({ displayName: playlist.name, id: playlist.id }, req)
         : []
     }, { playlist })
   }

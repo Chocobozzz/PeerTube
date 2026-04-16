@@ -141,6 +141,8 @@ export const serverFilterHookObject = {
   // Filter result to allow custom tags in podcast RSS feeds
   // Peertube >= 5.2
   'filter:feed.podcast.channel.create-custom-tags.result': true,
+  // Peertube >= 8.2
+  'filter:feed.podcast.video-playlist.create-custom-tags.result': true,
   // Peertube >= 5.2
   'filter:feed.podcast.video.create-custom-tags.result': true,
   // Peertube >= 6.1

@@ -20,9 +20,8 @@ export class VideoPlaylistsExporter extends AbstractUserExporter<VideoPlaylistsE
         thumbnail: null as string
       }
 
-      if (playlist.hasThumbnail()) {
-        const thumbnail = playlist.Thumbnail
-
+      const thumbnail = playlist.getBestThumbnail('16:9')
+      if (thumbnail) {
         staticFiles.push({
           archivePath: this.getArchiveThumbnailPath(playlist, thumbnail),
           readStreamFactory: () => Promise.resolve(createReadStream(thumbnail.getFSPath()))
@@ -47,7 +46,14 @@ export class VideoPlaylistsExporter extends AbstractUserExporter<VideoPlaylistsE
         createdAt: playlist.createdAt.toISOString(),
         updatedAt: playlist.updatedAt.toISOString(),
 
-        thumbnailUrl: playlist.Thumbnail?.getLocalFileUrl(),
+        thumbnailUrl: thumbnail?.getLocalFileUrl(),
+        thumbnails: playlist.Thumbnails.map(t => ({
+          width: t.width,
+          height: t.height,
+          url: t.getLocalFileUrl(),
+          createdAt: t.createdAt.toISOString(),
+          updatedAt: t.updatedAt.toISOString()
+        })),
 
         elements: elements.map(e => ({
           videoUrl: e.Video.url,

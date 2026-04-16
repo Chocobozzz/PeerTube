@@ -4,11 +4,18 @@ import { buildDownloadFilesUrl, getResolutionLabel, sortObjectComparator } from 
 import { ActorImageType, VideoFile, VideoInclude, VideoResolution, VideoState } from '@peertube/peertube-models'
 import { buildUUIDv5FromURL } from '@peertube/peertube-node-utils'
 import { buildNSFWFilters } from '@server/helpers/express-utils.js'
+import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { getVideoFileMimeType } from '@server/lib/video-file.js'
-import { buildPodcastGroupsCache, cacheRouteFactory, videoFeedsPodcastSetCacheKey } from '@server/middlewares/index.js'
+import {
+  buildPodcastChannelGroupsCache,
+  buildPodcastPlaylistGroupsCache,
+  cacheRouteFactory,
+  videoFeedsPodcastSetCacheKey
+} from '@server/middlewares/index.js'
+import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
 import { MVideo, MVideoCaptionVideo, MVideoFull } from '@server/types/models/index.js'
 import express from 'express'
 import { extname } from 'path'
@@ -16,7 +23,14 @@ import { MIMETYPES, ROUTE_CACHE_LIFETIME, VIDEO_CATEGORIES, WEBSERVER } from '..
 import { asyncMiddleware, setFeedPodcastContentType, videoFeedsPodcastValidator } from '../../middlewares/index.js'
 import { VideoCaptionModel } from '../../models/video/video-caption.js'
 import { VideoModel } from '../../models/video/video.js'
-import { buildFeedMetadata, getCommonVideoFeedAttributes, getPodcastFeedUrlCustomTag, getVideosForFeeds, initFeed } from './shared/index.js'
+import {
+  buildFeedMetadata,
+  getCommonVideoFeedAttributes,
+  getPodcastChannelFeedUrlCustomTag,
+  getPodcastPlaylistFeedUrlCustomTag,
+  getVideosForFeeds,
+  initFeed
+} from './shared/index.js'
 
 const videoPodcastFeedsRouter = express.Router()
 
@@ -27,16 +41,36 @@ const { middleware: podcastCacheRouteMiddleware, instance: podcastApiCache } = c
 })
 
 for (const event of ([ 'video-created', 'video-updated', 'video-deleted' ] as const)) {
-  InternalEventEmitter.Instance.on(event, ({ video }) => {
-    if (video.remote) return
+  InternalEventEmitter.Instance.on(event, async ({ video }) => {
+    podcastApiCache.clearGroupSafe(buildPodcastChannelGroupsCache({ channelId: video.channelId }))
 
-    podcastApiCache.clearGroupSafe(buildPodcastGroupsCache({ channelId: video.channelId }))
+    try {
+      const playlistIds = await VideoPlaylistElementModel.listPlaylistIdsForVideoId(video.id)
+
+      for (const playlistId of playlistIds) {
+        podcastApiCache.clearGroupSafe(buildPodcastPlaylistGroupsCache({ playlistId }))
+      }
+    } catch (err) {
+      logger.error('Error while clearing podcast feed cache after video update', { videoId: video.id, error: err })
+    }
   })
 }
 
 for (const event of ([ 'channel-updated', 'channel-deleted' ] as const)) {
   InternalEventEmitter.Instance.on(event, ({ channel }) => {
-    podcastApiCache.clearGroupSafe(buildPodcastGroupsCache({ channelId: channel.id }))
+    podcastApiCache.clearGroupSafe(buildPodcastChannelGroupsCache({ channelId: channel.id }))
+  })
+}
+
+for (const event of ([ 'playlist-updated', 'playlist-deleted' ] as const)) {
+  InternalEventEmitter.Instance.on(event, ({ playlist }) => {
+    podcastApiCache.clearGroupSafe(buildPodcastPlaylistGroupsCache({ playlistId: playlist.id }))
+  })
+}
+
+for (const event of ([ 'playlist-element-created', 'playlist-element-updated', 'playlist-element-deleted' ] as const)) {
+  InternalEventEmitter.Instance.on(event, ({ playlistElement }) => {
+    podcastApiCache.clearGroupSafe(buildPodcastPlaylistGroupsCache({ playlistId: playlistElement.videoPlaylistId }))
   })
 }
 
@@ -60,6 +94,16 @@ export {
 // ---------------------------------------------------------------------------
 
 async function generateVideoPodcastFeed (req: express.Request, res: express.Response) {
+  const playlist = res.locals.videoPlaylistFull
+
+  if (playlist) {
+    return generatePlaylistPodcastFeed(req, res)
+  }
+
+  return generateChannelPodcastFeed(req, res)
+}
+
+async function generateChannelPodcastFeed (req: express.Request, res: express.Response) {
   const videoChannel = res.locals.videoChannel
 
   const { name, description, imageUrl, ownerImageUrl, email, link, ownerLink } = await buildFeedMetadata({ videoChannel })
@@ -78,14 +122,14 @@ async function generateVideoPodcastFeed (req: express.Request, res: express.Resp
     videoChannelId: videoChannel?.id
   })
 
-  const language = await VideoModel.guessLanguageOrCategoryOfChannel(videoChannel.id, 'language')
-  const category = await VideoModel.guessLanguageOrCategoryOfChannel(videoChannel.id, 'category')
+  const language = await VideoModel.guessLanguageOrCategoryOf('language', { videoChannelId: videoChannel.id })
+  const category = await VideoModel.guessLanguageOrCategoryOf('category', { videoChannelId: videoChannel.id })
   const hasNSFW = nsfwOptions.nsfw !== false
     ? await VideoModel.channelHasNSFWContent(videoChannel.id)
     : false
 
   const customTags: CustomTag[] = await Hooks.wrapObject(
-    [ getPodcastFeedUrlCustomTag(videoChannel) ],
+    [ getPodcastChannelFeedUrlCustomTag(videoChannel) ],
     'filter:feed.podcast.channel.create-custom-tags.result',
     { videoChannel }
   )
@@ -124,6 +168,75 @@ async function generateVideoPodcastFeed (req: express.Request, res: express.Resp
   await addVideosToPodcastFeed(feed, data)
 
   // Now the feed generation is done, let's send it!
+  return res.send(feed.podcast()).end()
+}
+
+async function generatePlaylistPodcastFeed (req: express.Request, res: express.Response) {
+  const playlist = res.locals.videoPlaylistFull
+
+  const { name, description, imageUrl, ownerImageUrl, email, link, ownerLink } = await buildFeedMetadata({ videoPlaylist: playlist })
+
+  const nsfwOptions = buildNSFWFilters()
+
+  const data = await getVideosForFeeds({
+    ...nsfwOptions,
+
+    sort: '-publishedAt',
+
+    // Prevent podcast feeds from listing videos in other instances
+    // helps prevent duplicates when they are indexed -- only the author should control them
+    isLocal: true,
+    include: VideoInclude.FILES,
+    videoPlaylistId: playlist.id
+  })
+
+  const language = await VideoModel.guessLanguageOrCategoryOf('language', { videoPlaylistId: playlist.id })
+  const category = await VideoModel.guessLanguageOrCategoryOf('category', { videoPlaylistId: playlist.id })
+  const hasNSFW = nsfwOptions.nsfw !== false
+    ? await VideoModel.playlistHasPublicNSFWContent(playlist.id)
+    : false
+
+  const customTags: CustomTag[] = await Hooks.wrapObject(
+    [ getPodcastPlaylistFeedUrlCustomTag(playlist) ],
+    'filter:feed.podcast.video-playlist.create-custom-tags.result',
+    { videoPlaylist: playlist }
+  )
+
+  const customXMLNS: CustomXMLNS[] = await Hooks.wrapObject(
+    [],
+    'filter:feed.podcast.rss.create-custom-xmlns.result'
+  )
+
+  const channelName = playlist.VideoChannel.getDisplayName()
+
+  const feed = await initFeed({
+    name,
+    description,
+    link,
+    isPodcast: true,
+    imageUrl,
+
+    language: language || 'en',
+    category: categoryToItunes(category),
+    nsfw: hasNSFW,
+
+    guid: buildUUIDv5FromURL(playlist.url),
+
+    locked: email
+      ? { isLocked: true, email } // Default to true because we have no way of offering a redirect yet
+      : undefined,
+
+    person: [ { name: channelName, href: ownerLink, img: ownerImageUrl } ],
+    author: { name: channelName, link: ownerLink },
+    resourceType: 'videos',
+    queryString: new URL(WEBSERVER.URL + req.url).search,
+    medium: 'video',
+    customXMLNS,
+    customTags
+  })
+
+  await addVideosToPodcastFeed(feed, data)
+
   return res.send(feed.podcast()).end()
 }
 

@@ -316,19 +316,44 @@ describe('Test video playlists', function () {
         const playlist2 = body.data.find(p => p.displayName === 'playlist 2')
         expect(playlist2).to.not.be.undefined
 
-        await checkThumbnails({
-          server,
-          thumbnails: [ 'thumbnail-playlist-280x157.jpg' ],
-          playlist: playlist2
-        })
-
         const playlist3 = body.data.find(p => p.displayName === 'playlist 3')
         expect(playlist3).to.not.be.undefined
-        await checkThumbnails({
-          server,
-          thumbnails: [ 'custom-thumbnail-280x157.jpg' ],
-          playlist: playlist3
-        })
+
+        if (server === servers[1]) {
+          await checkThumbnails({
+            server,
+            thumbnails: [
+              'thumbnail-playlist-280x157.jpg',
+              'thumbnail-playlist-850x480.jpg',
+              'thumbnail-playlist-1280x720.jpg',
+              'thumbnail-playlist-1920x1080.jpg',
+              'thumbnail-playlist-1400x1400.jpg'
+            ],
+            playlist: playlist2
+          })
+
+          await checkThumbnails({
+            server,
+            thumbnails: [ 'custom-thumbnail-280x157.jpg' ],
+            playlist: playlist3
+          })
+        } else {
+          await checkThumbnails({
+            server,
+            thumbnails: [ 'thumbnail-playlist-280x157.jpg' ],
+            playlist: playlist2,
+
+            remotePlaylist: true
+          })
+
+          await checkThumbnails({
+            server,
+            thumbnails: [ 'custom-thumbnail-280x157.jpg' ],
+            playlist: playlist3,
+
+            remotePlaylist: true
+          })
+        }
       }
 
       const body = await servers[2].playlists.list({ start: 0, count: 5 })
@@ -350,7 +375,8 @@ describe('Test video playlists', function () {
       await checkThumbnails({
         server: servers[2],
         thumbnails: [ 'thumbnail-playlist-280x157.jpg' ],
-        playlist: playlist2
+        playlist: playlist2,
+        remotePlaylist: true
       })
 
       expect(body.data.find(p => p.displayName === 'playlist 3')).to.not.be.undefined
