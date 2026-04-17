@@ -23,6 +23,7 @@ import { VideoLiveModel } from '../../../video-live.js'
 import { VideoStreamingPlaylistModel } from '../../../video-streaming-playlist.js'
 import { VideoModel } from '../../../video.js'
 import { VideoTableAttributes } from './video-table-attributes.js'
+import { TableAttributeOptions } from './table-attributes-options.model.js'
 
 type SQLRow = { [id: string]: string | number }
 
@@ -54,6 +55,8 @@ export class VideoModelBuilder {
 
   private videos: VideoModel[]
 
+  private tableAttributeOptions: TableAttributeOptions
+
   private readonly buildOpts = { raw: true, isNewRecord: false }
 
   constructor (
@@ -68,8 +71,12 @@ export class VideoModelBuilder {
     include?: VideoIncludeType
     rowsWebVideoFiles?: SQLRow[]
     rowsStreamingPlaylist?: SQLRow[]
+
+    tableAttributes?: TableAttributeOptions
   }) {
-    const { rows, rowsWebVideoFiles, rowsStreamingPlaylist, include, addCaptions } = options
+    const { rows, rowsWebVideoFiles, rowsStreamingPlaylist, include, addCaptions, tableAttributes } = options
+
+    this.tableAttributeOptions = tableAttributes
 
     this.reinit()
 
@@ -168,7 +175,7 @@ export class VideoModelBuilder {
     this.videos = []
   }
 
-  private grabSeparateWebVideoFiles (rowsWebVideoFiles?: SQLRow[]) {
+  private grabSeparateWebVideoFiles (rowsWebVideoFiles: SQLRow[]) {
     if (!rowsWebVideoFiles) return
 
     for (const row of rowsWebVideoFiles) {
@@ -180,7 +187,7 @@ export class VideoModelBuilder {
     }
   }
 
-  private grabSeparateStreamingPlaylistFiles (rowsStreamingPlaylist?: SQLRow[]) {
+  private grabSeparateStreamingPlaylistFiles (rowsStreamingPlaylist: SQLRow[]) {
     if (!rowsStreamingPlaylist) return
 
     for (const row of rowsStreamingPlaylist) {
@@ -359,7 +366,7 @@ export class VideoModelBuilder {
 
     if (!id || this.redundancyDone.has(id)) return
 
-    const attributes = this.grab(row, this.tables.getRedundancyAttributes(), redundancyPrefix)
+    const attributes = this.grab(row, this.tables.getRedundancyAttributes(this.tableAttributeOptions), redundancyPrefix)
     const redundancyModel = new VideoRedundancyModel(attributes, this.buildOpts)
     to.RedundancyVideos.push(redundancyModel)
 

@@ -94,7 +94,6 @@ import {
   MStreamingPlaylist,
   MStreamingPlaylistFilesVideo,
   MUserAccountId,
-  MUserId,
   MVideoAP,
   MVideoAPLight,
   MVideoAccountLightBlacklistAllFiles,
@@ -153,6 +152,7 @@ import { ScheduleVideoUpdateModel } from './schedule-video-update.js'
 import {
   BuildVideosListQueryOptions,
   DisplayOnlyForFollowerOptions,
+  QueryVideosListOptions,
   VideoModelGetQueryBuilder,
   VideosIdListQueryBuilder,
   VideosModelListQueryBuilder
@@ -1109,63 +1109,60 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return result.map(v => v.uuid)
   }
 
-  static async listForApi (options: {
-    start: number
-    count: number
-    sort: string
+  static async listForApi (
+    options:
+      & {
+        start: number
+        count: number
+        sort: string
 
-    nsfw: boolean
-    nsfwFlagsIncluded?: number
-    nsfwFlagsExcluded?: number
+        nsfw: boolean
 
-    isLive?: boolean
-    isLocal?: boolean
-    include?: VideoIncludeType
-    includeScheduledLive?: boolean
+        countVideos?: boolean
 
-    hasFiles?: boolean // default false
-
-    hasWebVideoFiles?: boolean
-
-    hasHLSFiles?: boolean
-
-    categoryOneOf?: number[]
-    licenceOneOf?: number[]
-    languageOneOf?: string[]
-    tagsOneOf?: string[]
-    tagsAllOf?: string[]
-    privacyOneOf?: VideoPrivacyType[]
-
-    host?: string
-
-    accountId?: number
-
-    videoChannelId?: number
-    channelNameOneOf?: string[]
-
-    displayOnlyForFollower: DisplayOnlyForFollowerOptions | null
-
-    videoPlaylistId?: number
-
-    trendingDays?: number
-
-    user?: MUserAccountId
-    historyOfUser?: MUserId
-
-    countVideos?: boolean // default true
-
-    search?: string
-
-    excludeAlreadyWatched?: boolean // default false
-
-    autoTagOneOf?: string[]
-
-    stateOneOf?: VideoStateType[]
-
-    includeCollaborations?: boolean // default false
-  }) {
-    VideoModel.throwIfPrivateIncludeWithoutUser(options)
-    VideoModel.throwIfPrivacyOneOfWithoutUser(options)
+        skipPrivateIncludeCheck?: boolean
+      }
+      & Pick<
+        QueryVideosListOptions,
+        | 'nsfwFlagsIncluded'
+        | 'nsfwFlagsExcluded'
+        | 'isLive'
+        | 'categoryOneOf'
+        | 'licenceOneOf'
+        | 'languageOneOf'
+        | 'host'
+        | 'autoTagOneOf'
+        | 'stateOneOf'
+        | 'tagsOneOf'
+        | 'tagsAllOf'
+        | 'privacyOneOf'
+        | 'isLocal'
+        | 'include'
+        | 'includeScheduledLive'
+        | 'displayOnlyForFollower'
+        | 'hasFiles'
+        | 'accountId'
+        | 'includeCollaborations'
+        | 'videoChannelId'
+        | 'channelNameOneOf'
+        | 'videoPlaylistId'
+        | 'user'
+        | 'historyOfUser'
+        | 'hasHLSFiles'
+        | 'hasWebVideoFiles'
+        | 'search'
+        | 'excludeAlreadyWatched'
+        | 'hasRedundancy'
+        | 'redundancyStrategy'
+        | 'includeRedundancy'
+        | 'localRedundancy'
+        | 'tableAttributes'
+      >
+  ) {
+    if (options.skipPrivateIncludeCheck !== true) {
+      VideoModel.throwIfPrivateIncludeWithoutUser(options)
+      VideoModel.throwIfPrivacyOneOfWithoutUser(options)
+    }
 
     const serverActor = await getServerActor()
 
@@ -1202,7 +1199,12 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         'hasHLSFiles',
         'hasWebVideoFiles',
         'search',
-        'excludeAlreadyWatched'
+        'excludeAlreadyWatched',
+        'redundancyStrategy',
+        'hasRedundancy',
+        'localRedundancy',
+        'includeRedundancy',
+        'tableAttributes'
       ]),
 
       serverAccountIdForBlock: serverActor.Account.id,
@@ -1770,7 +1772,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   // ---------------------------------------------------------------------------
 
   private static async getAvailableForApi (
-    options: BuildVideosListQueryOptions,
+    options: QueryVideosListOptions,
     countVideos = true
   ): Promise<ResultList<VideoModel>> {
     const span = tracer.startSpan('peertube.VideoModel.getAvailableForApi')
@@ -1811,7 +1813,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
     if (!VideoModel.isPrivateInclude(include)) return
     if (user?.hasRight(UserRight.SEE_ALL_VIDEOS)) return
-    if (user.Account.id === accountId) return
+    if (accountId && user?.Account.id === accountId) return
 
     throw new Error('Try to include protected videos but user cannot see all videos')
   }
@@ -1825,7 +1827,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
     if (!privacyOneOf) return
     if (user?.hasRight(UserRight.SEE_ALL_VIDEOS)) return
-    if (user.Account.id === accountId) return
+    if (accountId && user?.Account.id === accountId) return
 
     throw new Error('Try to choose video privacies but user cannot see all videos')
   }

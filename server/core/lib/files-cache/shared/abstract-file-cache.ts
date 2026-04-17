@@ -35,7 +35,7 @@ export abstract class AbstractFileCache<M extends FileModel> {
     const { filename, res, next } = options
 
     if (this.filenameToPathCache.has(filename)) {
-      return res.sendFile(this.filenameToPathCache.get(filename), { maxAge: STATIC_MAX_AGE.SERVER })
+      return res.sendFile(this.filenameToPathCache.get(filename), { maxAge: STATIC_MAX_AGE.LAZY_SERVER })
     }
 
     const file = await this.lazyLoadIfNeeded(filename)

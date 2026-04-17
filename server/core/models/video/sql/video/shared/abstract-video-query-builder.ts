@@ -5,6 +5,7 @@ import validator from 'validator'
 import { AbstractRunQuery } from '../../../../shared/abstract-run-query.js'
 import { createSafeIn } from '../../../../shared/index.js'
 import { VideoTableAttributes } from './video-table-attributes.js'
+import { TableAttributeOptions } from './table-attributes-options.model.js'
 
 /**
  * Abstract builder to create SQL query and fetch video models
@@ -310,7 +311,7 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
     }
   }
 
-  protected includeStreamingPlaylistRedundancies () {
+  protected includeStreamingPlaylistRedundancies (tableAttributeOptions: TableAttributeOptions) {
     this.addJoin(
       'LEFT OUTER JOIN "videoRedundancy" AS "VideoStreamingPlaylists->RedundancyVideos" ' +
         'ON "VideoStreamingPlaylists"."id" = "VideoStreamingPlaylists->RedundancyVideos"."videoStreamingPlaylistId"'
@@ -319,7 +320,7 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
     this.attributes = {
       ...this.attributes,
 
-      ...this.buildAttributesObject('VideoStreamingPlaylists->RedundancyVideos', this.tables.getRedundancyAttributes())
+      ...this.buildAttributesObject('VideoStreamingPlaylists->RedundancyVideos', this.tables.getRedundancyAttributes(tableAttributeOptions))
     }
   }
 

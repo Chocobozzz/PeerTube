@@ -1,6 +1,7 @@
 import {
   CacheFileObject,
   RedundancyInformation,
+  VideoInclude,
   VideoPrivacy,
   VideoRedundanciesTarget,
   VideoRedundancy,
@@ -11,7 +12,7 @@ import { isTestInstance } from '@peertube/peertube-node-utils'
 import { getServerActor } from '@server/models/application/application.js'
 import { MActor, MVideoForRedundancyAPI, MVideoRedundancy, MVideoRedundancyAP, MVideoRedundancyVideo } from '@server/types/models/index.js'
 import sample from 'lodash-es/sample.js'
-import { literal, Op, QueryTypes, Transaction, WhereOptions } from 'sequelize'
+import { literal, Op, QueryTypes, Transaction } from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -31,12 +32,12 @@ import { CONFIG } from '../../initializers/config.js'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants.js'
 import { ActorModel } from '../actor/actor.js'
 import { ServerModel } from '../server/server.js'
-import { getSort, getVideoSort, parseAggregateResult, SequelizeModel, throwIfNotValid } from '../shared/index.js'
+import { getVideoSort, parseAggregateResult, SequelizeModel, throwIfNotValid } from '../shared/index.js'
 import { ScheduleVideoUpdateModel } from '../video/schedule-video-update.js'
 import { VideoChannelModel } from '../video/video-channel.js'
-import { VideoFileModel } from '../video/video-file.js'
 import { VideoStreamingPlaylistModel } from '../video/video-streaming-playlist.js'
 import { VideoModel } from '../video/video.js'
+import { getAllPrivacies } from '@peertube/peertube-core-utils'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO'
@@ -443,7 +444,7 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
     return VideoRedundancyModel.findAll(query)
   }
 
-  static listForApi (options: {
+  static async listForApi (options: {
     start: number
     count: number
     sort: string
@@ -451,68 +452,32 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
     strategy?: string
   }) {
     const { start, count, sort, target, strategy } = options
-    const redundancyWhere: WhereOptions = {}
-    const videosWhere: WhereOptions = {}
 
-    let countRedundancyJoinWhere = ''
+    return VideoModel.listForApi({
+      start,
+      count,
+      sort,
+      nsfw: null,
+      displayOnlyForFollower: null,
 
-    if (target === 'my-videos') {
-      Object.assign(videosWhere, { remote: false })
-    } else if (target === 'remote-videos') {
-      Object.assign(videosWhere, { remote: true })
-      Object.assign(redundancyWhere, { strategy: { [Op.ne]: null } })
+      include: VideoInclude.FILES | VideoInclude.BLACKLISTED | VideoInclude.NOT_PUBLISHED_STATE | VideoInclude.BLOCKED_OWNER,
+      privacyOneOf: getAllPrivacies(),
+      skipPrivateIncludeCheck: true,
 
-      countRedundancyJoinWhere = ' AND "videoRedundancy"."strategy" IS NOT NULL'
-    }
+      isLocal: target === 'my-videos'
+        ? true
+        : false,
 
-    if (strategy) {
-      Object.assign(redundancyWhere, { strategy })
-    }
-
-    // /!\ On video model /!\
-    const findOptions = {
-      offset: start,
-      limit: count,
-      order: getSort(sort),
-      where: videosWhere,
-      include: [
-        {
-          required: true,
-          model: VideoStreamingPlaylistModel.unscoped(),
-          include: [
-            {
-              model: VideoRedundancyModel.unscoped(),
-              required: true,
-              where: redundancyWhere
-            },
-            {
-              model: VideoFileModel,
-              required: true
-            }
-          ]
-        }
-      ]
-    }
-
-    return Promise.all([
-      VideoModel.findAll(findOptions),
-
-      VideoModel.count({
-        where: {
-          ...videosWhere,
-
-          id: {
-            [Op.in]: literal(
-              '(' +
-                'SELECT "videoId" FROM "videoStreamingPlaylist" ' +
-                'INNER JOIN "videoRedundancy" ON "videoRedundancy"."videoStreamingPlaylistId" = "videoStreamingPlaylist".id ' +
-                countRedundancyJoinWhere +
-                ')'
-            )
-          }
-        }
-      })
-    ]).then(([ data, total ]) => ({ total, data }))
+      redundancyStrategy: strategy,
+      localRedundancy: target === 'remote-videos'
+        ? true
+        : undefined,
+      includeRedundancy: true,
+      hasRedundancy: true,
+      tableAttributes: {
+        fullRedundancy: true
+      }
+    })
   }
 
   static async getStats (strategy: VideoRedundancyStrategyWithManual) {

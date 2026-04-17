@@ -4,6 +4,7 @@ import { AbstractVideoQueryBuilder } from './shared/abstract-video-query-builder
 import { VideoFileQueryBuilder } from './shared/video-file-query-builder.js'
 import { VideoModelBuilder } from './shared/video-model-builder.js'
 import { VideoTableAttributes } from './shared/video-table-attributes.js'
+import { TableAttributeOptions } from './shared/table-attributes-options.model.js'
 
 /**
  * Build a GET SQL query, fetch rows and create the video model
@@ -60,6 +61,8 @@ export type BuildVideoGetQueryOptions = {
   transaction?: Transaction
 
   logging?: boolean
+
+  tableAttributes?: TableAttributeOptions
 }
 
 export class VideoModelGetQueryBuilder {
@@ -79,7 +82,7 @@ export class VideoModelGetQueryBuilder {
 
   async queryVideo (options: BuildVideoGetQueryOptions) {
     const fileQueryOptions = {
-      ...pick(options, [ 'id', 'url', 'transaction', 'logging' ]),
+      ...pick(options, [ 'id', 'url', 'transaction', 'logging', 'tableAttributes' ]),
 
       includeRedundancy: this.shouldIncludeRedundancies(options)
     }

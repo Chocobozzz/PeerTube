@@ -105,6 +105,11 @@ export type BuildVideosListQueryOptions = {
   logging?: boolean
 
   excludeAlreadyWatched?: boolean
+
+  hasRedundancy?: boolean
+  redundancyStrategy?: string
+  includeRedundancy?: boolean
+  localRedundancy?: boolean
 }
 
 type SortDirection = 'ASC' | 'DESC'
@@ -366,6 +371,10 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       }
     }
 
+    if (options.hasRedundancy === true) {
+      this.whereRedundancyExists({ redundancyStrategy: options.redundancyStrategy, localRedundancy: options.localRedundancy })
+    }
+
     this.whereSearch(options)
 
     const cteString = this.cte.length !== 0
@@ -456,6 +465,28 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     this.builtChannelJoin = true
 
     this.joins.push('INNER JOIN "actor" "channelActor" ON "videoChannel"."id" = "channelActor"."videoChannelId"')
+  }
+
+  private whereRedundancyExists (options: {
+    redundancyStrategy?: string
+    localRedundancy?: boolean
+  }) {
+    let strategySql = ''
+
+    if (options.redundancyStrategy) {
+      strategySql = ' AND "videoRedundancy"."strategy" = :redundancyStrategy'
+      this.replacements.redundancyStrategy = options.redundancyStrategy
+    } else if (options.localRedundancy === true) {
+      strategySql = ' AND "videoRedundancy"."strategy" IS NOT NULL'
+    }
+
+    this.and.push(
+      'EXISTS (' +
+        'SELECT 1 FROM "videoStreamingPlaylist" ' +
+        'INNER JOIN "videoRedundancy" ON "videoRedundancy"."videoStreamingPlaylistId" = "videoStreamingPlaylist"."id" ' +
+        'WHERE "videoStreamingPlaylist"."videoId" = "video"."id"' + strategySql +
+        ')'
+    )
   }
 
   private whereStateAvailable (options: {

@@ -1,4 +1,5 @@
 import { thumbnailAPIAttributes } from '@server/models/video/thumbnail.js'
+import { TableAttributeOptions } from './table-attributes-options.model.js'
 
 /**
  * Class to build video attributes/join names we want to fetch from the database
@@ -212,7 +213,11 @@ export class VideoTableAttributes {
     return [ 'id', 'name' ]
   }
 
-  getRedundancyAttributes () {
+  getRedundancyAttributes (tableAttributeOptions: TableAttributeOptions) {
+    if (tableAttributeOptions?.fullRedundancy === true) {
+      return [ 'id', 'strategy', 'createdAt', 'updatedAt', 'expiresOn', 'fileUrl' ]
+    }
+
     return [ 'id', 'fileUrl' ]
   }
 

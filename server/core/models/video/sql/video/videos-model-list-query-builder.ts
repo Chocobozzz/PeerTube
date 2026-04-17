@@ -4,6 +4,7 @@ import { getServerActor } from '@server/models/application/application.js'
 import { MActorAccount } from '@server/types/models/index.js'
 import { Sequelize } from 'sequelize'
 import { AbstractVideoQueryBuilder } from './shared/abstract-video-query-builder.js'
+import { TableAttributeOptions } from './shared/table-attributes-options.model.js'
 import { VideoFileQueryBuilder } from './shared/video-file-query-builder.js'
 import { VideoModelBuilder } from './shared/video-model-builder.js'
 import { BuildVideosListQueryOptions, VideosIdListQueryBuilder } from './videos-id-list-query-builder.js'
@@ -11,6 +12,10 @@ import { BuildVideosListQueryOptions, VideosIdListQueryBuilder } from './videos-
 /**
  * Build videos list SQL query and create video models
  */
+
+export type QueryVideosListOptions = BuildVideosListQueryOptions & {
+  tableAttributes?: TableAttributeOptions
+}
 
 export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
   private innerQuery: string
@@ -29,7 +34,7 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
     this.streamingPlaylistFilesQueryBuilder = new VideoFileQueryBuilder(sequelize)
   }
 
-  async queryVideos (options: BuildVideosListQueryOptions) {
+  async queryVideos (options: QueryVideosListOptions) {
     const serverActor = await getServerActor()
 
     this.buildInnerQuery(options)
@@ -42,10 +47,10 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
 
       if (videoIds.length !== 0) {
         const fileQueryOptions = {
-          ...pick(options, [ 'transaction', 'logging' ]),
+          ...pick(options, [ 'transaction', 'logging', 'tableAttributes' ]),
 
           ids: videoIds,
-          includeRedundancy: false
+          includeRedundancy: options.includeRedundancy === true
         }
 
         const [ rowsWebVideoFiles, rowsStreamingPlaylist ] = await Promise.all([
@@ -56,6 +61,7 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
         return this.videoModelBuilder.buildVideosFromRows({
           rows,
           include: options.include,
+          tableAttributes: options.tableAttributes,
           addCaptions: false,
           rowsStreamingPlaylist,
           rowsWebVideoFiles
