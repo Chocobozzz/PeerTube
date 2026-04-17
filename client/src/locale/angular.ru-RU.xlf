@@ -1677,9 +1677,9 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8890926675057871150">
+      <trans-unit id="8890926675057871150" xml:space="preserve">
         <source>Delete from <x id="INTERPOLATION"/></source>
-        <target>Удалить с <x id="INTERPOLATION"/></target>
+        <target state="translated">Удалить из плейлиста «<x id="INTERPOLATION"/>»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.html</context>
           <context context-type="linenumber">136</context>
@@ -6264,7 +6264,7 @@
       </trans-unit>
       <trans-unit id="1061834486939635373" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete your video "<x id="PH" equiv-text="video.name"/>?</source>
-        <target state="translated">Вы уверены, что хотите удалить свое видео "<x id="PH" equiv-text="video.name"/>?</target>
+        <target state="translated">Вы действительно хотите удалить видео "<x id="PH" equiv-text="video.name"/>?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.ts</context>
           <context context-type="linenumber">492</context>
@@ -6441,7 +6441,7 @@
       </trans-unit>
       <trans-unit id="3011306880188617431" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete this <x id="PH" equiv-text="list.listName"/> list?</source>
-        <target state="translated">Вы уверены, что хотите удалить этот <x id="PH" equiv-text="list.listName"/> список?</target>
+        <target state="translated">Вы действительно удалить список «<x id="PH" equiv-text="list.listName"/>»?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-admin-owner.component.ts</context>
           <context context-type="linenumber">120</context>
@@ -7067,9 +7067,9 @@
           <context context-type="linenumber">170</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3959826834147169200">
+      <trans-unit id="3959826834147169200" xml:space="preserve">
         <source>Muted</source>
-        <target>Заглушено</target>
+        <target state="translated">По умолчанию без звука</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">40</context>
@@ -8033,9 +8033,9 @@
           <context context-type="linenumber">248</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7163633882758007711" datatype="html">
+      <trans-unit id="7163633882758007711" datatype="html" xml:space="preserve">
         <source>Do you really want to delete and re-draft this comment?</source>
-        <target state="translated">Вы действительно хотите удалить этот комментарий и изменить его черновик?</target>
+        <target state="translated">Вы действительно хотите удалить этот комментарий и отредактировать его?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.ts</context>
           <context context-type="linenumber">249</context>
@@ -8339,7 +8339,7 @@
       </trans-unit>
       <trans-unit id="3569169060435002504" datatype="html" xml:space="preserve">
         <source>Your muted accounts and servers</source>
-        <target state="translated">Ваши отключенные учетные записи и серверы</target>
+        <target state="translated">Заблокированные учетные записи и серверы</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">16</context>
@@ -8735,7 +8735,7 @@
       </trans-unit>
       <trans-unit id="960484622248716258" datatype="html" xml:space="preserve">
         <source>Redundancy allowed</source>
-        <target state="translated">Избыточность разрешена</target>
+        <target state="translated">Дублирование разрешено</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -9255,7 +9255,7 @@
       </trans-unit>
       <trans-unit id="5867580290622941314" datatype="html" xml:space="preserve">
         <source>Mutes</source>
-        <target state="translated">Заглушить</target>
+        <target state="translated">Блокировки</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-moderation.component.ts</context>
           <context context-type="linenumber">50</context>
@@ -9263,7 +9263,7 @@
       </trans-unit>
       <trans-unit id="7815838401315213887" xml:space="preserve">
         <source>Muted accounts</source>
-        <target state="translated">Отключенные учетные записи</target>
+        <target state="translated">Заблокированные учётные записи</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-moderation.component.ts</context>
           <context context-type="linenumber">57</context>
@@ -9283,7 +9283,7 @@
       </trans-unit>
       <trans-unit id="5668793810321242853" xml:space="preserve">
         <source>Muted servers</source>
-        <target state="translated">Отключенные серверы</target>
+        <target state="translated">Заблокированные серверы</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-moderation.component.ts</context>
           <context context-type="linenumber">64</context>
@@ -9351,7 +9351,7 @@
       </trans-unit>
       <trans-unit id="3279255412517973441" datatype="html" xml:space="preserve">
         <source>No redundancy strategy is enabled on your instance.</source>
-        <target state="translated">На вашем инстансе не включена стратегия резервирования.</target>
+        <target state="translated">На вашем инстансе не включена стратегия дублирования.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">74,75</context>
@@ -9375,7 +9375,7 @@
       </trans-unit>
       <trans-unit id="9214278301049416708" datatype="html" xml:space="preserve">
         <source>Redundancy strategy "<x id="PH" equiv-text="stats.strategy"/>". </source>
-        <target state="translated">Стратегия резервирования "<x id="PH" equiv-text="stats.strategy"/>". </target>
+        <target state="translated">Стратегия дублирования "<x id="PH" equiv-text="stats.strategy"/>". </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">132</context>
@@ -9973,9 +9973,9 @@
           <context context-type="linenumber">254</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6453471031802119612">
+      <trans-unit id="6453471031802119612" xml:space="preserve">
         <source>Unmute</source>
-        <target>Разглушить</target>
+        <target state="translated">Разблокировать</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/generic-account-blocklist.component.html</context>
           <context context-type="linenumber">33</context>
@@ -10031,7 +10031,7 @@
       </trans-unit>
       <trans-unit id="9025984970788474055" datatype="html" xml:space="preserve">
         <source>Platform <x id="PH" equiv-text="domain"/> muted.</source>
-        <target state="translated">Platform <x id="PH" equiv-text="domain"/> заблокирован.</target>
+        <target state="translated">Платформа <x id="PH" equiv-text="domain"/> заблокирована.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/generic-server-blocklist.component.ts</context>
           <context context-type="linenumber">78</context>
@@ -10039,7 +10039,7 @@
       </trans-unit>
       <trans-unit id="6750929335415365131" datatype="html" xml:space="preserve">
         <source>Platform <x id="PH" equiv-text="domain"/> muted by your platform.</source>
-        <target state="translated">Platform <x id="PH" equiv-text="domain"/> заблокирован вашей платформой.</target>
+        <target state="translated">Платформа <x id="PH" equiv-text="domain"/> заблокирована вашей платформой.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/generic-server-blocklist.component.ts</context>
           <context context-type="linenumber">79</context>
@@ -10077,9 +10077,9 @@
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4058814854824495833" datatype="html">
+      <trans-unit id="4058814854824495833" datatype="html" xml:space="preserve">
         <source>Mute domains</source>
-        <target state="translated">Отключить домены</target>
+        <target state="translated">Заблокировать домены</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/generic-server-blocklist.component.html</context>
           <context context-type="linenumber">18</context>
@@ -10363,7 +10363,7 @@
       </trans-unit>
       <trans-unit id="3327751240218085797" datatype="html" xml:space="preserve">
         <source>Delete all comments of this account</source>
-        <target state="translated">Удалить все комментарии этой учетной записи</target>
+        <target state="translated">Удалить все комментарии этой учётной записи</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">107</context>
@@ -10451,7 +10451,7 @@
       </trans-unit>
       <trans-unit id="289582790179344391" datatype="html" xml:space="preserve">
         <source>This view also shows comments from muted accounts.</source>
-        <target state="translated">В этом представлении также отображаются комментарии из отключенных учетных записей.</target>
+        <target state="translated">Здесь также отображаются комментарии от заблокированных аккаунтов.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context>
           <context context-type="linenumber">1</context>
@@ -14608,9 +14608,9 @@
           <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8676027102068252963" datatype="html">
+      <trans-unit id="8676027102068252963" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete all your video history?</source>
-        <target state="translated">Вы уверены, что хотите удалить всю историю видео?</target>
+        <target state="translated">Вы действительно хотите удалить всю историю видео?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">148</context>
@@ -17567,9 +17567,9 @@
           <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="397182597341363053" datatype="html">
+      <trans-unit id="397182597341363053" datatype="html" xml:space="preserve">
         <source>Redundancy</source>
-        <target state="translated">Избыточность</target>
+        <target state="translated">Дублирование</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/follows.routes.ts</context>
           <context context-type="linenumber">48</context>
@@ -17591,9 +17591,9 @@
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="135214224090612796">
+      <trans-unit id="135214224090612796" xml:space="preserve">
         <source>Redundancy for <x id="PH"/> is <x id="PH_1"/></source>
-        <target>Резервирование для <x id="PH"/> - <x id="PH_1"/></target>
+        <target state="translated">Дублирование для <x id="PH"/> <x id="PH_1"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/shared/redundancy-checkbox.component.ts</context>
           <context context-type="linenumber">25</context>
@@ -17609,23 +17609,23 @@
       </trans-unit>
       <trans-unit id="4721006293928712430" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No redundancy} =1 {1 redundancy} other {<x id="INTERPOLATION"/> redundancies}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Нет избыточности} =1 {1 избыточность} other {<x id="INTERPOLATION"/> избыточностей}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Нет дубликатов} one {<x id="INTERPOLATION"/> дубликат} few {<x id="INTERPOLATION"/> дубликата} other {<x id="INTERPOLATION"/> дубликатов}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5875705095657098468" datatype="html">
+      <trans-unit id="5875705095657098468" datatype="html" xml:space="preserve">
         <source>Do you really want to remove this video redundancy?</source>
-        <target state="translated">Вы действительно хотите удалить эту избыточность видео?</target>
+        <target state="translated">Вы действительно хотите удалить этот дубликат?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">171</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9098272570113000349" datatype="html">
+      <trans-unit id="9098272570113000349" datatype="html" xml:space="preserve">
         <source>Remove redundancy</source>
-        <target state="translated">Удалить подписчиков</target>
+        <target state="translated">Удалить дубликат</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">172</context>
@@ -19490,7 +19490,7 @@
       </trans-unit>
       <trans-unit id="7390990800435887351" xml:space="preserve">
         <source>Account <x id="PH"/> unmuted.</source>
-        <target state="translated">Учетная запись <x id="PH"/> был разглушена.</target>
+        <target state="translated">Учётная запись <x id="PH"/> разблокирована.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/generic-account-blocklist.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -19506,7 +19506,7 @@
       </trans-unit>
       <trans-unit id="6648970559549602356" datatype="html" xml:space="preserve">
         <source>Account <x id="PH" equiv-text="blockedAccount.nameWithHost"/> unmuted by your platform.</source>
-        <target state="translated">Учетная запись <x id="PH" equiv-text="blockedAccount.nameWithHost"/> разглушена вашей платформой.</target>
+        <target state="translated">Учётная запись <x id="PH" equiv-text="blockedAccount.nameWithHost"/> разблокирована на вашей платформе.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/generic-account-blocklist.component.ts</context>
           <context context-type="linenumber">52</context>
@@ -24705,7 +24705,7 @@
       </trans-unit>
       <trans-unit id="8150022485860412528" xml:space="preserve">
         <source>Account <x id="PH"/> muted.</source>
-        <target state="translated">Учетная запись <x id="PH"/> заглушена.</target>
+        <target state="translated">Учётная запись <x id="PH"/> заблокирована.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">153</context>
@@ -24717,7 +24717,7 @@
       </trans-unit>
       <trans-unit id="8327414932006661175" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="host"/> muted.</source>
-        <target state="translated"><x id="PH" equiv-text="host"/> заблокирован.</target>
+        <target state="translated">Сервер <x id="PH" equiv-text="host"/> заблокирован.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">181</context>
@@ -24779,17 +24779,17 @@
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4991892477258601737">
+      <trans-unit id="4991892477258601737" xml:space="preserve">
         <source>Instance <x id="PH"/> muted by the instance.</source>
-        <target>Сервер <x id="PH"/> заглушен сервером.</target>
+        <target state="translated">Сервер <x id="PH"/> заблокирован на вашей платформе.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">237</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4379430340167561220">
+      <trans-unit id="4379430340167561220" xml:space="preserve">
         <source>Instance <x id="PH"/> unmuted by the instance.</source>
-        <target>Сервер <x id="PH"/> разглушен сервером.</target>
+        <target state="translated">Сервер <x id="PH"/> разблокирован на вашей платформе.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">251</context>
@@ -24917,7 +24917,7 @@
       </trans-unit>
       <trans-unit id="5636556831757427625" datatype="html" xml:space="preserve">
         <source>Unmute the platform by your platform</source>
-        <target state="translated">Разблокировать платформу вашей платформой</target>
+        <target state="translated">Разблокировать этот сервер на вашей платформе</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">446</context>
@@ -24957,7 +24957,7 @@
       </trans-unit>
       <trans-unit id="1888272455383898478" xml:space="preserve">
         <source>Mute this account</source>
-        <target state="translated">Заглушить эту учетную запись</target>
+        <target state="translated">Заблокировать эту учётную запись</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">314</context>
@@ -24977,7 +24977,7 @@
       </trans-unit>
       <trans-unit id="4043508901590508211" xml:space="preserve">
         <source>Unmute this account</source>
-        <target state="translated">Разглушить эту учетную запись</target>
+        <target state="translated">Разблокировать эту учётную запись</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">320</context>
@@ -25203,25 +25203,25 @@
           <context context-type="linenumber">184</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9076535770939468902" datatype="html">
+      <trans-unit id="9076535770939468902" datatype="html" xml:space="preserve">
         <source>Platform muted</source>
-        <target state="new">Platform muted</target>
+        <target state="translated">Платформа заблокирована</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-block-badges.component.html</context>
           <context context-type="linenumber">6,9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2091437057461184519" datatype="html">
+      <trans-unit id="2091437057461184519" datatype="html" xml:space="preserve">
         <source>Muted by your platform</source>
-        <target state="new">Muted by your platform</target>
+        <target state="translated">Заблокирован на вашей платформе</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-block-badges.component.html</context>
           <context context-type="linenumber">10,13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7397658297443401496" datatype="html">
+      <trans-unit id="7397658297443401496" datatype="html" xml:space="preserve">
         <source>Platform muted by your platform</source>
-        <target state="new">Platform muted by your platform</target>
+        <target state="translated">Сервер заблокирован на вашей платформе</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-block-badges.component.html</context>
           <context context-type="linenumber">14,16</context>
@@ -26675,7 +26675,7 @@
       </trans-unit>
       <trans-unit id="4903651219400691248" datatype="html" xml:space="preserve">
         <source>Mute account</source>
-        <target state="translated">Отключить учетную запись</target>
+        <target state="translated">Не показывать видео этого автора</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">404</context>
@@ -27299,9 +27299,9 @@
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1795705931707209785" datatype="html">
+      <trans-unit id="1795705931707209785" datatype="html" xml:space="preserve">
         <source>Add to watch later</source>
-        <target state="translated">Добавить, чтобы посмотреть позже</target>
+        <target state="translated">Добавить в «Посмотреть позже»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -28179,9 +28179,9 @@
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2587910160708766081" datatype="html">
+      <trans-unit id="2587910160708766081" datatype="html" xml:space="preserve">
         <source>Toggle this date format to "<x id="PH" equiv-text="target"/>"</source>
-        <target state="translated">Измените этот формат даты на "<x id="PH" equiv-text="target"/>"</target>
+        <target state="translated">Изменить формат на «<x id="PH" equiv-text="target"/>»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/date-toggle.component.ts</context>
           <context context-type="linenumber">33</context>
