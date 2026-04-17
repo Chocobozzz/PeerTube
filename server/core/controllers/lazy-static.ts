@@ -115,7 +115,7 @@ async function getTorrent (req: express.Request, res: express.Response) {
   if (!file) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
   if (file.getVideo().isLocal()) {
-    return res.sendFile(join(CONFIG.STORAGE.TORRENTS_DIR, file.torrentFilename), { maxAge: STATIC_MAX_AGE.SERVER })
+    return res.sendFile(join(CONFIG.STORAGE.TORRENTS_DIR, file.torrentFilename), { maxAge: STATIC_MAX_AGE.LAZY_SERVER })
   }
 
   // Proxify remote request without cache

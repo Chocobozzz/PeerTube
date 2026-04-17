@@ -1000,7 +1000,7 @@ export const OBJECT_STORAGE_PROXY_PATHS = {
 // Cache control
 export const STATIC_MAX_AGE = {
   SERVER: '2h',
-  LAZY_SERVER: '2d',
+  LAZY_SERVER: '1y',
   CLIENT: '30d'
 }
 
