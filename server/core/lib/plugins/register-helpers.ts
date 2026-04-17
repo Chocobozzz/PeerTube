@@ -28,7 +28,7 @@ import { buildPluginHelpers } from './plugin-helpers-builder.js'
 
 export class RegisterHelpers {
   private readonly transcodingProfiles: {
-    [ npmName: string ]: {
+    [npmName: string]: {
       type: 'vod' | 'live'
       encoder: string
       profile: string
@@ -36,7 +36,7 @@ export class RegisterHelpers {
   } = {}
 
   private readonly transcodingEncoders: {
-    [ npmName: string ]: {
+    [npmName: string]: {
       type: 'vod' | 'live'
       streamType: 'audio' | 'video'
       encoder: string
@@ -286,7 +286,9 @@ export class RegisterHelpers {
     return {
       getData: (key: string) => PluginModel.getData(this.plugin.name, this.plugin.type, key),
 
-      storeData: (key: string, data: any) => PluginModel.storeData(this.plugin.name, this.plugin.type, key, data)
+      storeData: (key: string, data: any) => PluginModel.storeData(this.plugin.name, this.plugin.type, key, data),
+
+      deleteData: (key: string) => PluginModel.deleteData(this.plugin.name, this.plugin.type, key)
     }
   }
 

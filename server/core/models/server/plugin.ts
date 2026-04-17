@@ -229,6 +229,19 @@ export class PluginModel extends SequelizeModel<PluginModel> {
       .then(() => undefined)
   }
 
+  static deleteData (pluginName: string, pluginType: PluginType_Type, key: string) {
+    const query = 'UPDATE "plugin" SET "storage" = "storage" - :key ' +
+      'WHERE "name" = :pluginName AND "type" = :pluginType'
+
+    const options = {
+      replacements: { pluginName, pluginType, key },
+      type: QueryTypes.UPDATE
+    }
+
+    return PluginModel.sequelize.query(query, options)
+      .then(() => undefined)
+  }
+
   static listForApi (options: {
     pluginType?: PluginType_Type
     uninstalled?: boolean

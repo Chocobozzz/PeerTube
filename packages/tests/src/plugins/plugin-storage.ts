@@ -35,6 +35,10 @@ describe('Test plugin storage', function () {
       await server.servers.waitUntilLog('storedArrayKey isArray is true')
       await server.servers.waitUntilLog('storedArrayKey stored value is toto, toto2')
     })
+
+    it('Should correctly delete a key', async function () {
+      await server.servers.waitUntilLog('superkey has been deleted')
+    })
   })
 
   describe('Disk storage', function () {
