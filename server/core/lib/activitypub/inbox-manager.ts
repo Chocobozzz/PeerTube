@@ -27,7 +27,7 @@ export class InboxManager {
     signatureActor?: MActorSignature
     inboxActor?: MActorDefault
   }) {
-    const queue = param.activities.some(activity => this.parallelActivities.has(activity.type))
+    const queue = param.activities.every(activity => this.parallelActivities.has(activity.type))
       ? this.parallelInboxQueue
       : this.seqInboxQueue
 
