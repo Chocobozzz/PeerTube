@@ -464,9 +464,7 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
       privacyOneOf: getAllPrivacies(),
       skipPrivateIncludeCheck: true,
 
-      isLocal: target === 'my-videos'
-        ? true
-        : false,
+      isLocal: target === 'my-videos',
 
       redundancyStrategy: strategy,
       localRedundancy: target === 'remote-videos'
