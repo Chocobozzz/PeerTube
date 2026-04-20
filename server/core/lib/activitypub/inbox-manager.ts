@@ -2,17 +2,20 @@ import PQueue from 'p-queue'
 import { logger } from '@server/helpers/logger.js'
 import { SCHEDULER_INTERVALS_MS } from '@server/initializers/constants.js'
 import { MActorDefault, MActorSignature } from '@server/types/models/index.js'
-import { Activity } from '@peertube/peertube-models'
+import { Activity, ActivityType } from '@peertube/peertube-models'
 import { StatsManager } from '../stat-manager.js'
 import { processActivities } from './process/index.js'
 
 export class InboxManager {
-
   private static instance: InboxManager
-  private readonly inboxQueue: PQueue
+  private readonly seqInboxQueue: PQueue
+  private readonly parallelInboxQueue: PQueue
+
+  private readonly parallelActivities = new Set<ActivityType>([ 'View', 'Download' ])
 
   private constructor () {
-    this.inboxQueue = new PQueue({ concurrency: 1 })
+    this.seqInboxQueue = new PQueue({ concurrency: 1 })
+    this.parallelInboxQueue = new PQueue({ concurrency: 10 })
 
     setInterval(() => {
       StatsManager.Instance.updateInboxWaiting(this.getActivityPubMessagesWaiting())
@@ -24,7 +27,11 @@ export class InboxManager {
     signatureActor?: MActorSignature
     inboxActor?: MActorDefault
   }) {
-    this.inboxQueue.add(() => {
+    const queue = param.activities.some(activity => this.parallelActivities.has(activity.type))
+      ? this.parallelInboxQueue
+      : this.seqInboxQueue
+
+    queue.add(() => {
       const options = { signatureActor: param.signatureActor, inboxActor: param.inboxActor }
 
       return processActivities(param.activities, options)
@@ -32,7 +39,10 @@ export class InboxManager {
   }
 
   getActivityPubMessagesWaiting () {
-    return this.inboxQueue.size + this.inboxQueue.pending
+    return this.seqInboxQueue.size +
+      this.seqInboxQueue.pending +
+      this.parallelInboxQueue.size +
+      this.parallelInboxQueue.pending
   }
 
   static get Instance () {
