@@ -146,6 +146,9 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
 
   expect(data.storyboards.enabled).to.be.true
 
+  expect(data.download.maxTotalBytesPerSecond).to.equal(2 * 1024 * 1024)
+  expect(data.download.maxBytesPerIpPerSecond).to.be.null
+
   expect(data.export.users.enabled).to.be.true
   expect(data.export.users.exportExpiration).to.equal(1000 * 3600 * 48)
   expect(data.export.users.maxUserVideoQuota).to.equal(10737418240)
@@ -439,6 +442,10 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       remoteRunners: {
         enabled: true
       }
+    },
+    download: {
+      maxTotalBytesPerSecond: 3 * 1024 * 1024,
+      maxBytesPerIpPerSecond: 512 * 1024
     },
     export: {
       users: {

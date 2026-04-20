@@ -3,11 +3,12 @@ import { FileStorage } from '@peertube/peertube-models'
 import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg/ffmpeg-options.js'
 import { logger } from '@server/helpers/logger.js'
 import { buildRequestError, doRequestAndSaveToFile, generateRequestStream } from '@server/helpers/requests.js'
+import { ThrottleStream } from '@server/helpers/stream-throttle.js'
 import { REQUEST_TIMEOUTS } from '@server/initializers/constants.js'
 import { isWebVideoFile, MVideoFile, MVideoThumbnails } from '@server/types/models/index.js'
 import { createReadStream } from 'fs'
 import { remove } from 'fs-extra/esm'
-import { Readable, Writable } from 'stream'
+import { PassThrough, Readable, Writable } from 'stream'
 import { pipeline } from 'stream/promises'
 import { lTags } from './object-storage/shared/index.js'
 import {
@@ -39,8 +40,16 @@ export class VideoDownload {
     this.videoFiles = options.videoFiles
   }
 
-  async muxToMergeVideoFiles (output: Writable) {
+  async muxToMergeVideoFiles (output: Writable, options?: {
+    totalBytesPerSecond: number
+    bytesPerIpPerSecond: number
+    ip: string
+  }) {
     return new Promise<void>(async (res, rej) => {
+      const totalBytesPerSecond = options?.totalBytesPerSecond
+      const bytesPerIpPerSecond = options?.bytesPerIpPerSecond
+      const ip = options?.ip
+
       try {
         VideoDownload.totalDownloads++
 
@@ -63,21 +72,39 @@ export class VideoDownload {
             ? createReadStream(this.inputs[0])
             : this.inputs[0]
 
-          await pipeline(input, output)
+          const throttleStream = totalBytesPerSecond || bytesPerIpPerSecond
+            ? new ThrottleStream({ totalBytesPerSecond, bytesPerIpPerSecond, ip })
+            : new PassThrough()
+
+          await pipeline(input, throttleStream, output)
+
+          res()
         } else {
           logger.info(`Muxing files for video ${this.video.url}`, { inputs: this.inputsToLog(), ...lTags(this.video.uuid) })
 
           this.ffmpegContainer = new FFmpegContainer(getFFmpegCommandWrapperOptions('vod'))
 
+          const throttleStream = totalBytesPerSecond || bytesPerIpPerSecond
+            ? new ThrottleStream({ totalBytesPerSecond, bytesPerIpPerSecond, ip })
+            : undefined
+
+          const finalOutput = throttleStream ?? output
+
+          const throttlePipeline = throttleStream
+            ? pipeline(throttleStream, output)
+            : undefined
+
           try {
             await this.ffmpegContainer.mergeInputs({
               inputs: this.inputs,
-              output,
+              output: finalOutput,
               logError: false,
 
               // Include a cover if this is an audio file
               coverPath
             })
+
+            if (throttleStream) await throttlePipeline
 
             logger.info(`Mux ended for video ${this.video.url}`, { inputs: this.inputsToLog(), ...lTags(this.video.uuid) })
 

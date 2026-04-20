@@ -21,7 +21,9 @@ import contentDisposition from 'content-disposition'
 import cors from 'cors'
 import express from 'express'
 import { join } from 'path'
+import { createReadStream } from 'fs'
 import { pipeline } from 'stream/promises'
+import { ThrottleStream } from '@server/helpers/stream-throttle.js'
 import { DOWNLOAD_PATHS, WEBSERVER } from '../initializers/constants.js'
 import {
   asyncMiddleware,
@@ -178,7 +180,7 @@ async function downloadWebVideoFile (req: express.Request, res: express.Response
   }
 
   await VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(video), path => {
-    return res.download(path, downloadFilename)
+    return downloadLocalFileWithOptionalThrottle({ res, path, downloadFilename, ip: req.ip })
   })
 }
 
@@ -221,7 +223,7 @@ async function downloadHLSVideoFile (req: express.Request, res: express.Response
   }
 
   await VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(streamingPlaylist), path => {
-    return res.download(path, downloadFilename)
+    return downloadLocalFileWithOptionalThrottle({ res, path, downloadFilename, ip: req.ip })
   })
 }
 
@@ -291,7 +293,11 @@ async function downloadGeneratedVideoFile (req: express.Request, res: express.Re
     .catch(err => logger.error(`Cannot process local download stats for video ${video.uuid}`, { err, ...lTags(video.uuid) }))
 
   try {
-    await new VideoDownload({ video, videoFiles }).muxToMergeVideoFiles(res)
+    await new VideoDownload({ video, videoFiles }).muxToMergeVideoFiles(res, {
+      totalBytesPerSecond: CONFIG.DOWNLOAD.MAX_TOTAL_BYTES_PER_SECOND,
+      bytesPerIpPerSecond: CONFIG.DOWNLOAD.MAX_BYTES_PER_IP_PER_SECOND,
+      ip: req.ip
+    })
   } catch (err) {
     // muxToMergeVideoFiles has already logged the error
     res.fail({
@@ -313,8 +319,12 @@ function downloadUserExport (req: express.Request, res: express.Response) {
     return redirectUserExportToObjectStorage({ res, userExport, downloadFilename })
   }
 
-  res.download(getFSUserExportFilePath(userExport), downloadFilename)
-  return Promise.resolve()
+  return downloadLocalFileWithOptionalThrottle({
+    res,
+    path: getFSUserExportFilePath(userExport),
+    downloadFilename,
+    ip: req.ip
+  })
 }
 
 function downloadOriginalFile (req: express.Request, res: express.Response) {
@@ -326,8 +336,12 @@ function downloadOriginalFile (req: express.Request, res: express.Response) {
     return redirectOriginalFileToObjectStorage({ res, videoSource, downloadFilename })
   }
 
-  res.download(VideoPathManager.Instance.getFSOriginalVideoFilePath(videoSource.keptOriginalFilename), downloadFilename)
-  return Promise.resolve()
+  return downloadLocalFileWithOptionalThrottle({
+    res,
+    path: VideoPathManager.Instance.getFSOriginalVideoFilePath(videoSource.keptOriginalFilename),
+    downloadFilename,
+    ip: req.ip
+  })
 }
 
 // ---------------------------------------------------------------------------
@@ -384,6 +398,25 @@ function checkAllowResult (res: express.Response, allowParameters: any, result?:
   }
 
   return true
+}
+
+async function downloadLocalFileWithOptionalThrottle (options: {
+  res: express.Response
+  path: string
+  downloadFilename: string
+  ip?: string
+}) {
+  const { res, path, downloadFilename, ip } = options
+
+  const totalBytesPerSecond = CONFIG.DOWNLOAD.MAX_TOTAL_BYTES_PER_SECOND
+  const bytesPerIpPerSecond = CONFIG.DOWNLOAD.MAX_BYTES_PER_IP_PER_SECOND
+
+  if (!totalBytesPerSecond && !bytesPerIpPerSecond) return res.download(path, downloadFilename)
+
+  res.setHeader('Content-Disposition', contentDisposition(encodeURI(downloadFilename)))
+  res.setHeader('Content-Type', 'application/octet-stream')
+
+  await pipeline(createReadStream(path), new ThrottleStream({ totalBytesPerSecond, bytesPerIpPerSecond, ip }), res)
 }
 
 async function redirectVideoDownloadToObjectStorage (options: {

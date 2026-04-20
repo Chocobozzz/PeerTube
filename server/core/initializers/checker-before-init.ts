@@ -264,6 +264,8 @@ export function checkMissedConfig () {
     'storyboards.enabled',
     'webrtc.stun_servers',
     'nsfw_flags_settings.enabled',
+    'download.max_total_bytes_per_second',
+    'download.max_bytes_per_ip_per_second',
     'download_generate_video.max_parallel_downloads',
     'video_comments.accept_remote_comments'
   ]

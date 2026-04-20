@@ -124,6 +124,15 @@ const CONFIG = {
     ENABLED: config.get<boolean>('nsfw_flags_settings.enabled')
   },
 
+  DOWNLOAD: {
+    MAX_TOTAL_BYTES_PER_SECOND: config.get<string | number | null>('download.max_total_bytes_per_second') === null
+      ? null
+      : parseBytes(config.get<string | number>('download.max_total_bytes_per_second')),
+    MAX_BYTES_PER_IP_PER_SECOND: config.get<string | number | null>('download.max_bytes_per_ip_per_second') === null
+      ? null
+      : parseBytes(config.get<string | number>('download.max_bytes_per_ip_per_second'))
+  },
+
   DOWNLOAD_GENERATE_VIDEO: {
     MAX_PARALLEL_DOWNLOADS: config.get<number>('download_generate_video.max_parallel_downloads')
   },

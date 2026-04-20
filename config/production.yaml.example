@@ -18,6 +18,7 @@ secrets:
 http_timeouts:
   request: '5 minutes'
 
+# Limit number of HTTP requests per IP
 rates_limit:
   api:
     # 50 attempts in 10 seconds
@@ -552,6 +553,15 @@ nsfw_flags_settings:
   # Allow logged-in/anonymous users to have a more granular control over their NSFW policy
   # using NSFW flags (violent content, etc.) set by video authors
   enabled: true
+
+download:
+  # Max cumulative download speed in bytes/s for all download requests, set to null for unlimited
+  # Supports byte format ("500KB", etc.)
+  max_total_bytes_per_second: 5MB
+
+  # Max cumulative download speed in bytes/s for a specific IP, set to null for unlimited
+  # Supports byte format ("500KB", etc.)
+  max_bytes_per_ip_per_second: 2MB
 
 download_generate_video:
   # Max parallel downloads on your instance

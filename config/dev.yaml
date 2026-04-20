@@ -148,3 +148,6 @@ transcoding:
 user:
   password_constraints:
     min_length: 6
+
+download_generate_video:
+  max_parallel_downloads: 2
