@@ -450,6 +450,25 @@ describe('Test syndication feeds', () => {
           expect(items[0].title).to.equal('my super name for server 1')
         })
 
+        it('Should contain unlisted videos', async function () {
+          const unlisted = await servers[0].videos.quickUpload({ name: 'unlisted video for playlist', privacy: VideoPrivacy.UNLISTED })
+          await servers[0].playlists.addElement({ playlistId: podcastPlaylistId, attributes: { videoId: unlisted.id } })
+
+          const rss = await servers[0].feed.getPodcastXML({ ignoreCache: false, playlistId: podcastPlaylistId })
+          const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
+          const xmlDoc = parser.parse(rss)
+
+          const items = Array.isArray(xmlDoc.rss.channel.item)
+            ? xmlDoc.rss.channel.item
+            : [ xmlDoc.rss.channel.item ]
+
+          expect(items.length).to.equal(2)
+          expect(items.some((i: any) => i.title === 'unlisted video for playlist')).to.equal(true)
+
+          await servers[0].videos.remove({ id: unlisted.id })
+          await waitJobs(servers[0])
+        })
+
         it('Should have valid itunes metadata', async function () {
           const channel = xmlDoc.rss.channel
 

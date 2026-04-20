@@ -187,7 +187,8 @@ async function generatePlaylistPodcastFeed (req: express.Request, res: express.R
     // helps prevent duplicates when they are indexed -- only the author should control them
     isLocal: true,
     include: VideoInclude.FILES,
-    videoPlaylistId: playlist.id
+    videoPlaylistId: playlist.id,
+    allowUnlisted: true // Playlists should be able to list unlisted videos, otherwise they are not really usable
   })
 
   const language = await VideoModel.guessLanguageOrCategoryOf('language', { videoPlaylistId: playlist.id })

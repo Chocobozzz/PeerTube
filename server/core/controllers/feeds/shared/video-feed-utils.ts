@@ -1,5 +1,5 @@
 import { getChannelPodcastFeed, getPlaylistPodcastFeed } from '@peertube/peertube-core-utils'
-import { VideoIncludeType } from '@peertube/peertube-models'
+import { VideoIncludeType, VideoPrivacy } from '@peertube/peertube-models'
 import { mdToPlainText, toSafeHtml } from '@server/helpers/markdown.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
@@ -16,6 +16,7 @@ export async function getVideosForFeeds (options: {
   isLocal: boolean
   include: VideoIncludeType
 
+  allowUnlisted?: boolean // Default false
   accountId?: number
   videoChannelId?: number
   videoPlaylistId?: number
@@ -35,6 +36,11 @@ export async function getVideosForFeeds (options: {
       },
       hasFiles: true,
       countVideos: false,
+
+      privacyOneOf: options.allowUnlisted
+        ? [ VideoPrivacy.PUBLIC, VideoPrivacy.UNLISTED ]
+        : [ VideoPrivacy.PUBLIC ],
+      skipPrivateIncludeCheck: true,
 
       ...options
     },
