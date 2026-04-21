@@ -14,7 +14,10 @@ import { SelectOptionsComponent } from './select-options.component'
       multi: true
     }
   ],
-  imports: [ SelectOptionsComponent, FormsModule ]
+  imports: [ SelectOptionsComponent, FormsModule ],
+  host: {
+    '[class.has-custom-value]': 'isCustomValue()'
+  }
 })
 export class SelectCustomValueComponent implements ControlValueAccessor, OnChanges {
   readonly inputId = input.required<string>()

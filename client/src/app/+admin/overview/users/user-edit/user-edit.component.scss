@@ -20,10 +20,16 @@ my-input-text {
   @include responsive-width($form-base-input-width);
 }
 
-my-select-custom-value {
+my-select-custom-value:not(.has-custom-value) {
   display: block;
 
   @include responsive-width($form-base-input-width);
+}
+
+my-select-custom-value.has-custom-value {
+  display: block;
+
+  @include responsive-width($form-base-input-width + 140px);
 }
 
 .dashboard {
