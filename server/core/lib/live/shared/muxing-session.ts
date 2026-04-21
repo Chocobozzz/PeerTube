@@ -187,7 +187,11 @@ class MuxingSession extends EventEmitter implements MuxingSession {
 
     await this.transcodingWrapper.run()
 
-    this.filesWatcher = watch(this.outDirectory, { depth: 0 })
+    this.filesWatcher = watch(this.outDirectory, {
+      // Ignore 'segments-sha256.json' and 'segments-sha256.json.tmp' files that are frequently updated and not useful
+      ignored: path => path.endsWith('.json') || path.endsWith('json.tmp'),
+      depth: 0
+    })
 
     this.watchMasterFile()
     this.watchTSFiles()
