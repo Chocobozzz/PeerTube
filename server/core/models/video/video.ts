@@ -83,7 +83,7 @@ import {
 } from '../../helpers/custom-validators/videos.js'
 import { logger, loggerTagsFactory } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
-import { ACTIVITY_PUB, API_VERSION, CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants.js'
+import { ACTIVITY_PUB, CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants.js'
 import { sendDeleteVideo } from '../../lib/activitypub/send/index.js'
 import {
   MAccountId,
@@ -2157,10 +2157,6 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     }
 
     return files
-  }
-
-  getDescriptionAPIPath () {
-    return `/api/${API_VERSION}/videos/${this.uuid}/description`
   }
 
   getHLSPlaylist (): MStreamingPlaylistFilesVideo {

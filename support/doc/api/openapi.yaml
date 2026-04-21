@@ -3650,28 +3650,6 @@ paths:
         '204':
           description: successful operation
 
-  '/api/v1/videos/{id}/description':
-    get:
-      summary: Get complete video description
-      operationId: getVideoDesc
-      tags:
-        - Video
-      parameters:
-        - $ref: '#/components/parameters/idOrUUID'
-        - $ref: '#/components/parameters/videoPasswordHeader'
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                nullable: true
-                type: string
-                minLength: 3
-                maxLength: 10000
-                example: |
-                  **[Want to help to translate this video?](https://weblate.framasoft.org/projects/what-is-peertube-video/)**\r\n\r\n**Take back the control of your videos! [#JoinPeertube](https://joinpeertube.org)**
-
   '/api/v1/videos/{id}/views':
     post:
       summary: Notify user is watching a video
