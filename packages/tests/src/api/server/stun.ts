@@ -105,6 +105,8 @@ describe('STUN servers', function () {
   })
 
   it('Should have valid STUN servers configured', async function () {
+    this.retries(3)
+
     for (const stunUrl of stunServers) {
       await testStun(stunUrl)
     }
