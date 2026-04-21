@@ -67,7 +67,7 @@ export class MyFollowersComponent implements OnInit {
     this.search = search
     resetCurrentPage(this.pagination)
 
-    this.loadFollowers({ more: false })
+    this.loadFollowers({ reset: true })
   }
 
   onFilter (filters: {
@@ -76,7 +76,7 @@ export class MyFollowersComponent implements OnInit {
     this.channelFilter = filters.channel
     resetCurrentPage(this.pagination)
 
-    this.loadFollowers({ more: false })
+    this.loadFollowers({ reset: true })
   }
 
   isFollowingAccount (follow: ActorFollow) {
@@ -91,9 +91,9 @@ export class MyFollowersComponent implements OnInit {
   }
 
   private loadFollowers (options: {
-    more?: boolean
+    reset?: boolean
   } = {}) {
-    const { more = false } = options
+    const { reset = false } = options
 
     this.userSubscriptionService.listFollowers({
       pagination: this.pagination,
@@ -102,9 +102,10 @@ export class MyFollowersComponent implements OnInit {
       channel: this.channelFilter
     }).subscribe({
       next: res => {
-        this.follows = more
-          ? this.follows.concat(res.data)
-          : res.data
+        this.follows = reset
+          ? res.data
+          : this.follows.concat(res.data)
+
         this.pagination.totalItems = res.total
 
         this.onDataSubject.next(res.data)
