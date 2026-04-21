@@ -39,6 +39,8 @@ export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
 
   readonly videoShareModal = viewChild<VideoShareComponent>('videoShareModal')
 
+  private errored = false
+
   playlistElements: VideoPlaylistElement[] = []
   playlist: VideoPlaylist
 
@@ -177,18 +179,36 @@ export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
       'my-library',
       'filter:api.my-library.video-playlist-elements.list.params',
       'filter:api.my-library.video-playlist-elements.list.result'
-    ).subscribe(({ total, data }) => {
-      this.playlistElements = this.playlistElements.concat(data)
-      this.pagination.totalItems = total
+    ).subscribe({
+      next: ({ total, data }) => {
+        this.playlistElements = this.playlistElements.concat(data)
+        this.pagination.totalItems = total
 
-      this.onDataSubject.next(data)
+        this.onDataSubject.next(data)
+      },
+
+      error: err => {
+        if (!this.errored) {
+          this.notifier.handleError(err)
+          this.errored = true
+        }
+      }
     })
   }
 
   private loadPlaylistInfo () {
     this.videoPlaylistService.getVideoPlaylist(this.videoPlaylistId)
-      .subscribe(playlist => {
-        this.playlist = playlist
+      .subscribe({
+        next: playlist => {
+          this.playlist = playlist
+        },
+
+        error: err => {
+          if (!this.errored) {
+            this.notifier.handleError(err)
+            this.errored = true
+          }
+        }
       })
   }
 
