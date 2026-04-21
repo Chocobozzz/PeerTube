@@ -369,7 +369,7 @@ export class Emailer {
         return compiledTemplate(locals)
       },
       message: {
-        from: `"${fromDisplayName}" <${CONFIG.SMTP.FROM_ADDRESS}>`
+        from: CONFIG.SMTP.BARE_ADDRESS ? `<${CONFIG.SMTP.FROM_ADDRESS}>` : `"${fromDisplayName}" <${CONFIG.SMTP.FROM_ADDRESS}>`
       },
       transport: this.transporter,
       subjectPrefix: this.buildSubjectPrefix()

@@ -117,7 +117,8 @@ const CONFIG = {
     TLS: config.get<boolean>('smtp.tls'),
     DISABLE_STARTTLS: config.get<boolean>('smtp.disable_starttls'),
     CA_FILE: config.get<string>('smtp.ca_file'),
-    FROM_ADDRESS: config.get<string>('smtp.from_address')
+    FROM_ADDRESS: config.get<string>('smtp.from_address'),
+    BARE_ADDRESS: config.has('smtp.bare_address') ? config.get<bool>('smtp.bare_address') : 'false'
   },
 
   NSFW_FLAGS_SETTINGS: {
