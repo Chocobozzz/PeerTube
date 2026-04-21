@@ -92,19 +92,22 @@ export class VideoDownload {
 
           const throttlePipeline = throttleStream
             ? pipeline(throttleStream, output)
-            : undefined
+            : Promise.resolve()
 
           try {
-            await this.ffmpegContainer.mergeInputs({
-              inputs: this.inputs,
-              output: finalOutput,
-              logError: false,
+            // Run in parallel to prevent throttlePipeline unhandled rejection if an input stream errors
+            await Promise.all([
+              this.ffmpegContainer.mergeInputs({
+                inputs: this.inputs,
+                output: finalOutput,
+                logError: false,
 
-              // Include a cover if this is an audio file
-              coverPath
-            })
+                // Include a cover if this is an audio file
+                coverPath
+              }),
 
-            if (throttleStream) await throttlePipeline
+              throttlePipeline
+            ])
 
             logger.info(`Mux ended for video ${this.video.url}`, { inputs: this.inputsToLog(), ...lTags(this.video.uuid) })
 
