@@ -1,5 +1,5 @@
 export interface PluginStorageManager {
-  getData: (key: string) => Promise<string>
+  getData: <T = unknown>(key: string) => Promise<T | undefined>
 
   storeData: (key: string, data: any) => Promise<any>
 
