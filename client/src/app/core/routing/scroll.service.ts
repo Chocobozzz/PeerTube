@@ -1,6 +1,6 @@
 import { ViewportScroller } from '@angular/common'
 import { Injectable, inject } from '@angular/core'
-import { Scroll } from '@angular/router'
+import { NavigationSkipped, Scroll } from '@angular/router'
 import { logger } from '@root-helpers/logger'
 import debug from 'debug'
 import { pairwise } from 'rxjs'
@@ -96,7 +96,7 @@ export class ScrollService {
         return
       }
 
-      if (this.resetScroll) {
+      if (this.resetScroll && !(e.routerEvent instanceof NavigationSkipped)) {
         debugLogger('Reset scroll.', { e, resetScroll: this.resetScroll })
 
         return this.viewportScroller.scrollToPosition([ 0, 0 ])
