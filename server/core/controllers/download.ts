@@ -266,7 +266,7 @@ async function downloadGeneratedVideoFile (req: express.Request, res: express.Re
 
   if (!checkAllowResult(res, allowParameters, allowedResult)) return
 
-  if (VideoDownload.totalDownloads > CONFIG.DOWNLOAD_GENERATE_VIDEO.MAX_PARALLEL_DOWNLOADS) {
+  if (VideoDownload.totalDownloads >= CONFIG.DOWNLOAD_GENERATE_VIDEO.MAX_PARALLEL_DOWNLOADS) {
     return res.fail({
       status: HttpStatusCode.TOO_MANY_REQUESTS_429,
       message: req.t(`Too many parallel downloads on this server. Please try again later.`)
