@@ -302,8 +302,8 @@ async function downloadGeneratedVideoFile (req: express.Request, res: express.Re
     // muxToMergeVideoFiles has already logged the error
     res.fail({
       status: HttpStatusCode.SERVICE_UNAVAILABLE_503,
-      message: req.t('Cannot process video download at the moment. Please try again later.'),
-      data: err.message
+      title: req.t('Cannot process video download at the moment. Please try again later.'),
+      message: err.message
     })
   }
 }
