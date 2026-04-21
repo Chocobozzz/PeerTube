@@ -48,6 +48,7 @@ export function buildLogger (options: {
   handleExceptions?: boolean // default false
 }) {
   const { labelSuffix, handleExceptions = false } = options
+  const loggerTransports: transport[] = []
 
   const formatters = [
     format.timestamp({
@@ -60,30 +61,42 @@ export function buildLogger (options: {
   formatters.push(consoleLoggerFormat)
 
   const consoleTransport = new transports.Console({
-    handleExceptions,
+    handleExceptions: false,
     format: format.combine(...formatters)
   })
-
-  const fileLoggerOptions: FileTransportOptions = {
-    filename: join(CONFIG.STORAGE.LOG_DIR, LOG_FILENAME),
-    handleExceptions,
-    format: format.combine(
-      format.timestamp(),
-      jsonLoggerFormat
-    )
-  }
-
-  if (CONFIG.LOG.ROTATION.ENABLED) {
-    fileLoggerOptions.maxsize = CONFIG.LOG.ROTATION.MAX_FILE_SIZE
-    fileLoggerOptions.maxFiles = CONFIG.LOG.ROTATION.MAX_FILES
-  }
-
-  const loggerTransports: transport[] = []
 
   // Don't add file logger transport in worker threads in production
   // See https://github.com/winstonjs/winston/issues/2393
   if (isMainThread || isTestOrDevInstance()) {
-    loggerTransports.push(new transports.File(fileLoggerOptions))
+    const fileLoggerOptions: FileTransportOptions = {
+      filename: join(CONFIG.STORAGE.LOG_DIR, LOG_FILENAME),
+      handleExceptions: false,
+      format: format.combine(
+        format.timestamp(),
+        jsonLoggerFormat
+      )
+    }
+
+    if (CONFIG.LOG.ROTATION.ENABLED) {
+      fileLoggerOptions.maxsize = CONFIG.LOG.ROTATION.MAX_FILE_SIZE
+      fileLoggerOptions.maxFiles = CONFIG.LOG.ROTATION.MAX_FILES
+    }
+
+    const fileTransport = new transports.File(fileLoggerOptions)
+
+    loggerTransports.push(fileTransport)
+
+    if (isMainThread && handleExceptions) {
+      process.on('uncaughtException', err => {
+        logger.error('Uncaught exception.', { err })
+        exitOnCrash()
+      })
+
+      process.on('unhandledRejection', reason => {
+        logger.error('Unhandled rejection.', { reason })
+        exitOnCrash()
+      })
+    }
   }
 
   loggerTransports.push(consoleTransport)
@@ -105,8 +118,7 @@ export function buildLogger (options: {
       labelFormatter(labelSuffix),
       format.splat()
     ),
-    transports: loggerTransports,
-    exitOnError: true
+    transports: loggerTransports
   })
 }
 
@@ -229,4 +241,12 @@ function doesConsoleSupportColor () {
   if (isTestOrDevInstance()) return true
 
   return isatty(1) && process.env.TERM && process.env.TERM !== 'dumb'
+}
+
+function exitOnCrash () {
+  logger.on('finish', () => {
+    process.exit(1)
+  })
+
+  logger.end()
 }
