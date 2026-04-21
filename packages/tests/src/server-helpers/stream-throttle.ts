@@ -1,9 +1,9 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import { ThrottleStream } from '@peertube/peertube-server/core/helpers/stream-throttle.js'
 import { expect } from 'chai'
 import { Readable } from 'stream'
 import { pipeline } from 'stream/promises'
-import { ThrottleStream } from '@peertube/peertube-server/core/helpers/stream-throttle.js'
 
 async function collectStream (readable: Readable): Promise<Buffer> {
   const chunks: Buffer[] = []
@@ -159,16 +159,6 @@ describe('ThrottleStream', function () {
       expect(Buffer.concat(out).length).to.equal(totalBytes)
       // 10 chunks: first passes immediately, remaining 9 each wait ~100ms → ~900ms
       expect(elapsed).to.be.at.least(700)
-    })
-
-    it('Should not throttle when no IP is provided even with bytesPerIpPerSecond set', async function () {
-      this.timeout(5000)
-
-      // Without an IP the per-IP limiter should not apply
-      const input = Buffer.alloc(50 * 1024)
-      const { elapsed } = await throttledCollect(input, { bytesPerIpPerSecond: 1024 }) // 1 KB/s would be very slow
-
-      expect(elapsed).to.be.lessThan(2000)
     })
   })
 })

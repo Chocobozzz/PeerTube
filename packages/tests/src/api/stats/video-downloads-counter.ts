@@ -5,6 +5,7 @@ import { HttpStatusCode } from '@peertube/peertube-models'
 import {
   createMultipleServers,
   doubleFollow,
+  killallServers,
   makeRawRequest,
   PeerTubeServer,
   setAccessTokensToServers,
@@ -117,5 +118,9 @@ describe('Test video downloads stats', function () {
     })
 
     expect(data.reduce((sum, point) => sum + point.value, 0)).to.equal(3)
+  })
+
+  after(async function () {
+    await killallServers(servers)
   })
 })
