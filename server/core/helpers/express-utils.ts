@@ -135,7 +135,7 @@ export function createReqFiles (
     })
   }
 
-  return multer({ storage }).fields(fields)
+  return multer({ storage, defParamCharset: 'utf8' }).fields(fields)
 }
 
 export function createAnyReqFiles (
