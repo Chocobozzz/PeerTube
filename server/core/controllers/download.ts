@@ -135,7 +135,7 @@ async function downloadTorrent (req: express.Request, res: express.Response) {
 
   // Proxify remote request without cache
   res.type('application/x-bittorrent')
-  res.setHeader('Content-disposition', contentDisposition(encodeURI(downloadFilename)))
+  res.setHeader('Content-disposition', contentDisposition(downloadFilename))
 
   const remoteUrl = file.getRemoteTorrentUrl(video)
 
@@ -284,7 +284,7 @@ async function downloadGeneratedVideoFile (req: express.Request, res: express.Re
   const urlPath = new URL(req.originalUrl, WEBSERVER.URL).pathname
   if (!urlPath.endsWith('.mp4') && !urlPath.endsWith('.m4a')) {
     const downloadFilename = buildDownloadFilename({ video, extname })
-    res.setHeader('Content-disposition', contentDisposition(encodeURI(downloadFilename)))
+    res.setHeader('Content-disposition', contentDisposition(downloadFilename))
   }
 
   res.type(extname)
@@ -413,7 +413,7 @@ async function downloadLocalFileWithOptionalThrottle (options: {
 
   if (!totalBytesPerSecond && !bytesPerIpPerSecond) return res.download(path, downloadFilename)
 
-  res.setHeader('Content-Disposition', contentDisposition(encodeURI(downloadFilename)))
+  res.setHeader('Content-Disposition', contentDisposition(downloadFilename))
   res.setHeader('Content-Type', 'application/octet-stream')
 
   const readStream = createReadStream(path)
