@@ -534,6 +534,9 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
   }
 
   loadOwnershipRequest () {
+    // Still uploading the video
+    if (!this.videoEdit.getVideoAttributes().id) return
+
     this.changeOwnershipService.listFromVideo(this.videoEdit.getVideoAttributes().id, ChangeOwnershipState.PENDING)
       .subscribe(({ data }) => {
         if (data.length === 0) return
