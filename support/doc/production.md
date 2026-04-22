@@ -99,7 +99,8 @@ cd ./peertube-latest && sudo -H -u peertube npm run install-node-dependencies --
 cd /var/www/peertube
 sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest
 cd ./peertube-latest && sudo -H -u peertube npm run install-node-dependencies -- --production
-sudo -H -u peertube npm explore sharp -- npm run build
+sudo -u peertube pnpm add --workspace-root --no-lockfile --prod node-addon-api node-gyp
+sudo -u peertube SHARP_FORCE_GLOBAL_LIBVIPS=1 npm explore sharp -- npm run build
 ```
 
 :::
@@ -314,7 +315,8 @@ cd /var/www/peertube/peertube-latest/scripts && sudo -H -u peertube ./upgrade.sh
 
 ```bash [FreeBSD]
 cd /var/www/peertube/peertube-latest/scripts && sudo -H -u peertube ./upgrade.sh
-cd /var/www/peertube/peertube-latest && sudo -H -u peertube npm explore sharp -- npm run build
+sudo -u peertube pnpm add --workspace-root --no-lockfile --prod node-addon-api node-gyp
+sudo -u peertube SHARP_FORCE_GLOBAL_LIBVIPS=1 npm explore sharp -- npm run build
 ```
 
 :::
