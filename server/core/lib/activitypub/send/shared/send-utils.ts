@@ -22,20 +22,19 @@ import { getDirectAudience, getVideoAudience } from '../../audience.js'
 
 async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAudience) => Activity, options: {
   byActor: MActorLight
-  video: MVideoImmutable | MVideoAccountLight
+  video: MVideoAccountLight
   contextType: ContextType
   parallelizable?: boolean
   transaction?: Transaction
   skipPrivacyCheck?: boolean
 }) {
-  const { byActor, transaction, contextType, parallelizable, skipPrivacyCheck } = options
+  const { byActor, transaction, contextType, parallelizable, video, skipPrivacyCheck } = options
 
   // Send to origin
-  if (options.video.isLocal() === false) {
+  if (video.isLocal() === false) {
     return sendVideoRelatedActivityToOrigin(activityBuilder, options)
   }
 
-  const video = await VideoModel.loadByUrlAndPopulateAccount(options.video.url, transaction)
   const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, transaction)
 
   const audience = getVideoAudience({

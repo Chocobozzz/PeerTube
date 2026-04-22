@@ -1,9 +1,11 @@
 import { ActivityAudience, ActivityDownload } from '@peertube/peertube-models'
+import { VideoModel } from '@server/models/video/video.js'
 import { MActorAudience, MActorLight, MVideoImmutable, MVideoUrl } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 import { logger } from '../../../helpers/logger.js'
 import { audiencify, getPublicAudience } from '../audience.js'
 import { getDownloadsActivityPubUrl } from '../url.js'
+import { canVideoBeFederated } from '../videos/index.js'
 import { sendVideoRelatedActivity } from './shared/send-utils.js'
 
 async function sendDownload (options: {
@@ -11,7 +13,10 @@ async function sendDownload (options: {
   video: MVideoImmutable
   transaction?: Transaction
 }) {
-  const { byActor, video, transaction } = options
+  const { byActor, transaction } = options
+
+  const video = await VideoModel.loadWithRights(options.video.id, transaction)
+  if (!canVideoBeFederated(video)) return undefined
 
   logger.info('Creating job to send downloads of %s.', video.url)
 

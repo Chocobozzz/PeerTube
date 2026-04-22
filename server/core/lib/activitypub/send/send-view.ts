@@ -1,11 +1,13 @@
 import { ActivityAudience, ActivityView } from '@peertube/peertube-models'
 import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
+import { VideoModel } from '@server/models/video/video.js'
 import { MActorAudience, MActorLight, MVideoImmutable, MVideoUrl } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 import { logger } from '../../../helpers/logger.js'
 import { audiencify, getPublicAudience } from '../audience.js'
 import { getLocalVideoViewActivityPubUrl } from '../url.js'
 import { sendVideoRelatedActivity } from './shared/send-utils.js'
+import { canVideoBeFederated } from '../videos/index.js'
 
 async function sendView (options: {
   byActor: MActorLight
@@ -14,7 +16,10 @@ async function sendView (options: {
   viewersCount?: number
   transaction?: Transaction
 }) {
-  const { byActor, viewersCount, video, viewerIdentifier, transaction } = options
+  const { byActor, viewersCount, viewerIdentifier, transaction } = options
+
+  const video = await VideoModel.loadWithRights(options.video.id, transaction)
+  if (!canVideoBeFederated(video)) return undefined
 
   logger.info('Creating job to send %s of %s.', viewersCount !== undefined ? 'viewer' : 'view', video.url)
 
