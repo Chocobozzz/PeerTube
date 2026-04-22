@@ -144,8 +144,8 @@ async function listAccountChannelOwnershipChanges (req: express.Request, res: ex
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-function acceptOwnershipChange (req: express.Request, res: express.Response) {
-  return sequelizeTypescript.transaction(async t => {
+async function acceptOwnershipChange (req: express.Request, res: express.Response) {
+  await sequelizeTypescript.transaction(async t => {
     const changeOwnership = res.locals.changeOwnership
     const channel = await VideoChannelModel.load(changeOwnership.VideoChannel.id, t)
     const previousOwnerId = channel.accountId
@@ -184,13 +184,13 @@ function acceptOwnershipChange (req: express.Request, res: express.Response) {
     })
 
     Notifier.Instance.notifyOfAcceptedChannelOwnershipChange(changeOwnership)
-
-    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
   })
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
-function refuseOwnershipChange (req: express.Request, res: express.Response) {
-  return sequelizeTypescript.transaction(async t => {
+async function refuseOwnershipChange (req: express.Request, res: express.Response) {
+  await sequelizeTypescript.transaction(async t => {
     const changeOwnership = res.locals.changeOwnership
 
     changeOwnership.state = ChangeOwnershipState.REJECTED
@@ -207,13 +207,13 @@ function refuseOwnershipChange (req: express.Request, res: express.Response) {
     })
 
     Notifier.Instance.notifyOfRejectedChannelOwnershipChange(changeOwnership)
-
-    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
   })
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
-function deleteOwnershipChange (req: express.Request, res: express.Response) {
-  return sequelizeTypescript.transaction(async t => {
+async function deleteOwnershipChange (req: express.Request, res: express.Response) {
+  await sequelizeTypescript.transaction(async t => {
     const changeOwnership = res.locals.changeOwnership
     const channel = await VideoChannelModel.loadAndPopulateAccount(changeOwnership.videoChannelId, t)
 
@@ -228,7 +228,7 @@ function deleteOwnershipChange (req: express.Request, res: express.Response) {
     })
 
     logger.info('Channel ownership change request %d deleted.', changeOwnership.id)
-
-    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
   })
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
