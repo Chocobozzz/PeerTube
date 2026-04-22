@@ -7,10 +7,19 @@ export default defineConfig({
   entry: [ './src/peertube.ts' ],
   shims: true,
 
-  external: [
-    './lib-cov/fluent-ffmpeg',
-    'pg-hstore'
-  ],
+  // Use source files for internal PeerTube dependencies
+  inputOptions: {
+    resolve: {
+      conditionNames: [ 'peertube:tsx', 'import', 'node', 'default' ]
+    }
+  },
+
+  deps: {
+    neverBundle: [
+      './lib-cov/fluent-ffmpeg',
+      'pg-hstore'
+    ]
+  },
 
   define: {
     'process.env.PACKAGE_VERSION': `'${packageJSON.version}'`
